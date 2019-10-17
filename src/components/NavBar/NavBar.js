@@ -6,9 +6,10 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import BuildIcon from '@material-ui/icons/Build';
 import VideoLibraryIcon from '@material-ui/icons/VideoLibrary';
-import GroupIcon from '@material-ui/icons/Group';
+import CastForEducationIcon from '@material-ui/icons/CastForEducation';
 import VideogameAssetIcon from '@material-ui/icons/VideogameAsset';
 import InfoIcon from '@material-ui/icons/Info';
+
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import Toolbar from "@material-ui/core/Toolbar";
@@ -19,6 +20,8 @@ import Languages from "../languages/languages";
 import logoInvid from "./images/logo-invid.png";
 import logoWeVerify from "./images/logo-we-verify.png";
 import Tutorial from "../tutorial/tutorial";
+import Fade from "@material-ui/core/Fade";
+import ToolsMenu from "../tools/ToolsMenu/ToolsMenu";
 
 function TabPanel(props) {
     const {children, value, index, ...other} = props;
@@ -71,7 +74,7 @@ const useStyles = makeStyles(theme => ({
 
 const NavBar = () => {
     const classes = useStyles();
-    const [value, setValue] = React.useState(1);
+    const [value, setValue] = React.useState(0);
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
@@ -85,7 +88,7 @@ const NavBar = () => {
 
     return (
         <div className={classes.root}>
-            <AppBar position="static" color="default" title={logoInvid}>
+            <AppBar position="static" color="default">
                 <Toolbar>
                     <Box display={{xs: 'none', md: 'block'}}>
                         <img src={logoInvid} alt="logo" className={classes.logoLeft}/>
@@ -100,11 +103,11 @@ const NavBar = () => {
                         textColor="primary"
                         aria-label="scrollable force tabs example"
                     >
-                        <Tab label={keyword("navbar_tools")} icon={<BuildIcon/>} {...a11yProps(0)} />
-                        <Tab label={keyword("navbar_tuto")} icon={<VideoLibraryIcon/>} {...a11yProps(1)} />
-                        <Tab label={keyword("navbar_classroom")} icon={<GroupIcon/>} {...a11yProps(2)} />
-                        <Tab label={keyword("navbar_quiz")} icon={<VideogameAssetIcon/>} {...a11yProps(3)} />
-                        <Tab label={keyword("navbar_about")} icon={<InfoIcon/>} {...a11yProps(4)} />
+                        <Tab label={keyword("navbar_tools")} icon={<BuildIcon fontSize={"large"}/>} {...a11yProps(0)} />
+                        <Tab label={keyword("navbar_tuto")} icon={<VideoLibraryIcon fontSize={"large"}/>} {...a11yProps(1)} />
+                        <Tab label={keyword("navbar_classroom")} icon={<CastForEducationIcon fontSize={"large"}/>} {...a11yProps(2)} />
+                        <Tab label={keyword("navbar_quiz")} icon={<VideogameAssetIcon fontSize={"large"}/>} {...a11yProps(3)} />
+                        <Tab label={keyword("navbar_about")} icon={<InfoIcon fontSize={"large"}/>} {...a11yProps(4)} />
                     </Tabs>
                     <div className={classes.grow}/>
                     <Languages/>
@@ -114,10 +117,18 @@ const NavBar = () => {
                 </Toolbar>
             </AppBar>
             <TabPanel value={value} index={0}>
-                Item One
+                <Fade in={value === 0}>
+                    <div>
+                        <ToolsMenu/>
+                    </div>
+                </Fade>
             </TabPanel>
             <TabPanel value={value} index={1}>
-                <Tutorial/>
+                <Fade in={value === 1}>
+                    <div>
+                        <Tutorial/>
+                    </div>
+                </Fade>
             </TabPanel>
             <TabPanel value={value} index={2}>
                 Item Three
