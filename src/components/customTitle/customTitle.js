@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
-import Button from '@material-ui/core/Button';
 import { withStyles } from '@material-ui/core/styles';
 import Box from "@material-ui/core/Box";
 
@@ -15,6 +14,7 @@ const styles = {
         fontSize: 28,
         padding: '15px',
         width: "auto",
+        margin: 5,
     },
 };
 
