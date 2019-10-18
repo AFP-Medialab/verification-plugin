@@ -16,6 +16,7 @@ import SubscriptionsIcon from '@material-ui/icons/Subscriptions';
 import CopyrightIcon from '@material-ui/icons/Copyright';
 import ImageSearchIcon from '@material-ui/icons/ImageSearch';
 import Analysis from "../analysis/Analysis";
+import Keyframes from "../Keyframes/Keyframes";
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -66,7 +67,7 @@ const useStyles = makeStyles(theme => ({
 
 const ToolsMenu = ()  =>{
     const classes = useStyles();
-    const [value, setValue] = React.useState(0);
+    const [value, setValue] = React.useState(1);
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
@@ -107,7 +108,7 @@ const ToolsMenu = ()  =>{
                 <Analysis/>
             </TabPanel>
             <TabPanel value={value} index={1}>
-                Item Two
+                <Keyframes/>
             </TabPanel>
             <TabPanel value={value} index={2}>
                 Item Three

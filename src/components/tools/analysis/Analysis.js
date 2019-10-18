@@ -7,12 +7,29 @@ import CustomTile from "../../customTitle/customTitle"
 import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
 import videoUrl from "../../tutorial/images/VideoURLmenu.png";
+import TextField from "@material-ui/core/TextField";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Checkbox from "@material-ui/core/Checkbox";
+import Button from "@material-ui/core/Button";
 
 const useStyles = makeStyles(theme => ({
     root: {
         padding: theme.spacing(3, 2),
         textAlign: "center",
     },
+    textFiledError: {
+        '& .MuiOutlinedInput-root': {
+            '& fieldset': {
+                borderColor: theme.palette.error.main,
+            },
+            '&:hover fieldset': {
+                borderColor: 'yellow',
+            },
+        },
+    },
+    textFiledChanged:{
+
+    }
 }));
 
 const Analysis = () => {
@@ -24,21 +41,50 @@ const Analysis = () => {
 
     const classes = useStyles();
 
+    const [state, setState] = React.useState({
+        checkedBox: true,
+    });
+
+    const handleChange = name => event => {
+        setState({...state, [name]: event.target.checked});
+    };
+
+    const [textValid, setTextValid] = React.useState(true);
+    const textChange = (val) => {
+        setTextValid(val)
+    };
     return (
         <Paper className={classes.root}>
-            <Box justifyContent="center" display="flex" flexDirection="column">
-                <CustomTile> {keyword("api_title")}  </CustomTile>
-                <br/>
-                <Box item>
-                    <img src={videoUrl} alt={""} className={classes.media}/>
-                </Box>
-                <Typography variant="body1">{keyword("tuto_1")}</Typography>
-
-                <div className={"content"} dangerouslySetInnerHTML={{__html: keyword("tuto_2")}}></div>
-                <Typography variant="body1">{keyword("tuto_3")}</Typography>
-
-
-            </Box>
+            <CustomTile> {keyword("api_title")}  </CustomTile>
+            <br/>
+            <TextField
+                error={!textValid}
+                id="standard-full-width"
+                label={keyword("api_input")}
+                style={{ margin: 8 }}
+                placeholder="URL"
+                helperText=""
+                fullWidth
+                onChange={() => textChange(true)}
+                margin="normal"
+                InputLabelProps={{
+                    shrink: true,
+                }}
+            />
+            <FormControlLabel
+                control={
+                    <Checkbox
+                        checked={state.checkedBox}
+                        onChange={handleChange('checkedBox')}
+                        value="checkedBox"
+                        color="primary"
+                    />
+                }
+                label={keyword("api_repro")}
+            />
+            <Button variant="contained" color="primary">
+                {keyword("button_submit")}
+            </Button>
         </Paper>
     );
 };
