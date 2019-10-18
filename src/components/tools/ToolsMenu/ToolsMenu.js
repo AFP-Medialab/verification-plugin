@@ -16,7 +16,6 @@ import SubscriptionsIcon from '@material-ui/icons/Subscriptions';
 import CopyrightIcon from '@material-ui/icons/Copyright';
 import ImageSearchIcon from '@material-ui/icons/ImageSearch';
 import Analysis from "../analysis/Analysis";
-import Divider from "@material-ui/core/Divider";
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -53,10 +52,16 @@ const useStyles = makeStyles(theme => ({
         flexGrow: 1,
         backgroundColor: theme.palette.background.paper,
         display: 'flex',
+        paddingLeft: 0
     },
     tabs: {
         borderRight: `1px solid ${theme.palette.divider}`,
     },
+    tab:{
+        minWidth: 50,
+        paddingLeft: 0,
+        paddingRight: 0,
+    }
 }));
 
 const ToolsMenu = ()  =>{
@@ -87,14 +92,14 @@ const ToolsMenu = ()  =>{
                 indicatorColor="primary"
                 textColor="primary"
             >
-                <Tab label={keyword("navbar_analysis")} icon={<PlayCircleOutlineIcon fontSize={"large"}/>} {...a11yProps(0)} />
-                <Tab label={keyword("navbar_keyframes")} icon={<TheatersIcon fontSize={"large"}/>} {...a11yProps(1)} />
-                <Tab label={keyword("navbar_thumbnails")} icon={<YouTubeIcon fontSize={"large"}/>} {...a11yProps(2)} />
-                <Tab label={keyword("navbar_twitter")} icon={<TwitterIcon fontSize={"large"}/>} {...a11yProps(3)} />
-                <Tab label={keyword("navbar_magnifier")} icon={<SearchIcon fontSize={"large"}/>} {...a11yProps(4)} />
-                <Tab label={keyword("navbar_metadata")} icon={<SubscriptionsIcon fontSize={"large"}/>} {...a11yProps(5)} />
-                <Tab label={keyword("navbar_rights")} icon={<CopyrightIcon fontSize={"large"}/>} {...a11yProps(6)} />
-                <Tab label={keyword("navbar_forensic")} icon={<ImageSearchIcon fontSize={"large"}/>} {...a11yProps(7)} />
+                <Tab className={classes.tab} label={keyword("navbar_analysis")} icon={<PlayCircleOutlineIcon fontSize={"large"}/>} {...a11yProps(0)} />
+                <Tab className={classes.tab} label={keyword("navbar_keyframes")} icon={<TheatersIcon fontSize={"large"}/>} {...a11yProps(1)} />
+                <Tab className={classes.tab} label={keyword("navbar_thumbnails")} icon={<YouTubeIcon fontSize={"large"}/>} {...a11yProps(2)} />
+                <Tab className={classes.tab} label={keyword("navbar_twitter")} icon={<TwitterIcon fontSize={"large"}/>} {...a11yProps(3)} />
+                <Tab className={classes.tab} label={keyword("navbar_magnifier")} icon={<SearchIcon fontSize={"large"}/>} {...a11yProps(4)} />
+                <Tab className={classes.tab} label={keyword("navbar_metadata")} icon={<SubscriptionsIcon fontSize={"large"}/>} {...a11yProps(5)} />
+                <Tab className={classes.tab} label={keyword("navbar_rights")} icon={<CopyrightIcon fontSize={"large"}/>} {...a11yProps(6)} />
+                <Tab className={classes.tab} label={keyword("navbar_forensic")} icon={<ImageSearchIcon fontSize={"large"}/>} {...a11yProps(7)} />
             </Tabs>
             </Box>
             <Box>
