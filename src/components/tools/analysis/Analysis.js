@@ -7,7 +7,6 @@ import CustomTile from "../../customTitle/customTitle"
 import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
 import videoUrl from "../../tutorial/images/VideoURLmenu.png";
-import insta from "../../tutorial/images/InstagramDemo.png";
 
 const useStyles = makeStyles(theme => ({
     root: {
