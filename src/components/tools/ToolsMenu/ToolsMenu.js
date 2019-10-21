@@ -62,6 +62,9 @@ const useStyles = makeStyles(theme => ({
         minWidth: 50,
         paddingLeft: 0,
         paddingRight: 0,
+    },
+    grow : {
+        flexGrow: 1,
     }
 }));
 
@@ -103,7 +106,7 @@ const ToolsMenu = ()  =>{
                 <Tab className={classes.tab} label={keyword("navbar_forensic")} icon={<ImageSearchIcon fontSize={"large"}/>} {...a11yProps(7)} />
             </Tabs>
             </Box>
-            <Box>
+            <Box className={classes.grow}>
             <TabPanel value={value} index={0}>
                 <Analysis/>
             </TabPanel>
