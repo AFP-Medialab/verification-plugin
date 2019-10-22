@@ -2,6 +2,7 @@ import React from 'react';
 import NavBar from "./components/NavBar/NavBar";
 import {MuiThemeProvider} from "@material-ui/core";
 import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
+import Button from "@material-ui/core/Button";
 
 const theme = createMuiTheme({
     palette: {
@@ -13,7 +14,7 @@ const theme = createMuiTheme({
         secondary: {
             main: '#ffaf33',
         },
-        error:{
+        error: {
             main: 'rgb(198,57,59)'
         }
     },
@@ -22,12 +23,21 @@ const theme = createMuiTheme({
     },
 });
 
+const Testing = () => {
+    return (<Button onClick={() => {
+        window.open("popup.html#homepage");
+    }
+    }>Hello</Button>)
+};
+
 function App() {
     return (
         <MuiThemeProvider theme={theme}>
             <div className="App">
                 <header className="App-header">
-                    <NavBar/>
+                    {
+                        (window.location.hash === "#homepage") ? <NavBar/> : <Testing/>
+                    }
                 </header>
             </div>
         </MuiThemeProvider>
