@@ -1,4 +1,4 @@
-const languageReducer = (state = "fr", action) => {
+const languageReducer = (state = "en", action) => {
     switch (action.type) {
         case "CHANGE":
             return action.payload;
