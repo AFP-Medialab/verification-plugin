@@ -1,13 +1,12 @@
 import React from "react";
 import {useSelector} from "react-redux";
 import {Paper} from "@material-ui/core";
-
-import videoUrl from "./images/VideoURLmenu.png";
-import insta from "./images/InstagramDemo.png";
+import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import CustomTile from "../customTitle/customTitle";
-import Box from "@material-ui/core/Box";
+import videoUrl from "./images/VideoURLmenu.png";
+import insta from "./images/InstagramDemo.png";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -41,7 +40,7 @@ const Tutorial = () => {
                 <CustomTile> {keyword("tuto_title")}  </CustomTile>
                 <br/>
                 <Typography variant="h3">{keyword("tuto_h_1")}</Typography>
-                <Box item>
+                <Box item={"true"}>
                     <img src={videoUrl} alt={""} className={classes.media}/>
                 </Box>
                 <Typography variant="body1">{keyword("tuto_1")}</Typography>
@@ -49,7 +48,7 @@ const Tutorial = () => {
                 <div className={"content"} dangerouslySetInnerHTML={{__html: keyword("tuto_2")}}></div>
                 <Typography variant="body1">{keyword("tuto_3")}</Typography>
 
-                <Box item>
+                <Box item={"true"}>
                     <img src={insta} alt={""}  className={classes.media}/>
                 </Box>
                 <h2>{keyword("tuto_h_2")}</h2>
