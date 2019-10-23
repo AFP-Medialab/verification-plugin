@@ -19,7 +19,7 @@ const theme = createMuiTheme({
         }
     },
     typography: {
-        useNextVariants: true,
+        useNextVariants: 'true',
     },
 });
 
@@ -33,8 +33,8 @@ const Testing = () => {
 function App() {
     return (
         <MuiThemeProvider theme={theme}>
-            <div className="App">
-                <header className="App-header">
+            <div>
+                <header>
                     {
                         (window.location.hash === "#homepage") ? <NavBar/> : <Testing/>
                     }

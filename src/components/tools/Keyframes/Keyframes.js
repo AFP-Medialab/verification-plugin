@@ -1,18 +1,13 @@
 import React, {useState} from "react";
 import {useSelector} from "react-redux";
 import {Paper} from "@material-ui/core";
-
-import makeStyles from "@material-ui/core/styles/makeStyles";
-import CustomTile from "../../customTitle/customTitle"
 import Box from "@material-ui/core/Box";
-import Typography from "@material-ui/core/Typography";
-import videoUrl from "../../tutorial/images/VideoURLmenu.png";
 import TextField from "@material-ui/core/TextField";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
 import Button from "@material-ui/core/Button";
-import Divider from "@material-ui/core/Divider";
+import makeStyles from "@material-ui/core/styles/makeStyles";
+
 import LocalFile from "./LocalFile/LocalFile";
+import CustomTile from "../../customTitle/customTitle"
 
 const useStyles = makeStyles(theme => ({
     root: {

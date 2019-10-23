@@ -40,7 +40,7 @@ const Languages = () => {
 
     return (
         <div>
-            <Button color="primary" variant="outlined" size={"small"} aria-controls="simple-menu" aria-haspopup="true" fullWidth={"false"} onClick={handleClick}>
+            <Button color={"primary"} variant={"outlined"} size={"small"} aria-controls={"simple-menu"} aria-haspopup={true} fullWidth={false} onClick={handleClick}>
                 {keyword("lang_code") }
             </Button>
             <Menu
