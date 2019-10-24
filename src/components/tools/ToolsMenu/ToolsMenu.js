@@ -17,36 +17,7 @@ import CopyrightIcon from '@material-ui/icons/Copyright';
 import ImageSearchIcon from '@material-ui/icons/ImageSearch';
 import Analysis from "../analysis/Analysis";
 import Keyframes from "../Keyframes/Keyframes";
-
-function TabPanel(props) {
-    const { children, value, index, ...other } = props;
-
-    return (
-        <Typography
-            component="div"
-            role="tabpanel"
-            hidden={value !== index}
-            id={`vertical-tabpanel-${index}`}
-            aria-labelledby={`vertical-tab-${index}`}
-            {...other}
-        >
-            <Box p={3}>{children}</Box>
-        </Typography>
-    );
-}
-
-TabPanel.propTypes = {
-    children: PropTypes.node,
-    index: PropTypes.any.isRequired,
-    value: PropTypes.any.isRequired,
-};
-
-function a11yProps(index) {
-    return {
-        id: `vertical-tab-${index}`,
-        'aria-controls': `vertical-tabpanel-${index}`,
-    };
-}
+import Container from "@material-ui/core/Container";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -65,8 +36,41 @@ const useStyles = makeStyles(theme => ({
     },
     grow : {
         flexGrow: 1,
-    }
+    },
+
 }));
+
+
+
+function TabPanel(props) {
+    const { children, value, index, ...other } = props;
+    return (
+        <Container
+            maxWidth="xl"
+            role="tabpanel"
+            hidden={value !== index}
+            id={`vertical-tabpanel-${index}`}
+            aria-labelledby={`vertical-tab-${index}`}
+            {...other}
+        >
+           {children}
+        </Container>
+    );
+}
+
+TabPanel.propTypes = {
+    children: PropTypes.node,
+    index: PropTypes.any.isRequired,
+    value: PropTypes.any.isRequired,
+};
+
+function a11yProps(index) {
+    return {
+        id: `vertical-tab-${index}`,
+        'aria-controls': `vertical-tabpanel-${index}`,
+    };
+}
+
 
 const ToolsMenu = ()  =>{
     const classes = useStyles();

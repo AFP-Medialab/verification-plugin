@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {useSelector} from "react-redux";
 import axios from 'axios'
-import {Paper} from "@material-ui/core";
+import {CardContent, CardHeader, Paper} from "@material-ui/core";
 import TextField from "@material-ui/core/TextField";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
@@ -11,6 +11,11 @@ import makeStyles from "@material-ui/core/styles/makeStyles";
 import LinearProgress from "@material-ui/core/LinearProgress";
 
 import CustomTile from "../../customTitle/customTitle"
+import MySnackbar from "../../MySnackbar/MySnackbar";
+import Box from "@material-ui/core/Box";
+import Card from "@material-ui/core/Card";
+import CardMedia from "@material-ui/core/CardMedia";
+import Typography from "@material-ui/core/Typography";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -18,17 +23,6 @@ const useStyles = makeStyles(theme => ({
         marginTop: 5,
         textAlign: "center",
     },
-    textFiledError: {
-        '& .MuiOutlinedInput-root': {
-            '& fieldset': {
-                borderColor: theme.palette.error.main,
-            },
-            '&:hover fieldset': {
-                borderColor: 'yellow',
-            },
-        },
-    },
-    textFiledChanged: {},
     buttonSuccess: {
         backgroundColor: green[500],
         '&:hover': {
@@ -43,8 +37,21 @@ const useStyles = makeStyles(theme => ({
         marginTop: -12,
         marginLeft: -12,
     },
+    error: {
+        backgroundColor: theme.palette.error.main,
+    },
+    message: {
+        display: 'flex',
+        alignItems: 'center',
+    },
+    card: {
+        maxWidth: "60%",
+    },
+    media: {
+        height: 0,
+        paddingTop: '56.25%', // 16:9
+    },
 }));
-
 
 const Analysis = () => {
     const dictionary = useSelector(state => state.dictionary);
@@ -56,11 +63,8 @@ const Analysis = () => {
     const classes = useStyles();
 
     const [loading, setLoading] = useState(false);
-    const [status, setStatus] = useState("undefined");
-    const [success, setSuccess] = useState(false);
     const [errors, setErrors] = useState("");
     const [reprocess, setReprocess] = useState(false);
-    const [validUrl, setValidUrl] = useState(true);
     const [url, setUrl] = useState("");
 
     const [job, setJob] = useState(null);
@@ -70,18 +74,14 @@ const Analysis = () => {
         setReprocess(!reprocess);
     };
 
-    const delay = ms => new Promise(res => setTimeout(res, ms));
-
     const urlChange = (event) => {
         setUrl(event.target.value);
-        setValidUrl(true);
     };
 
-    const handleErrors = (errors) => {
-        setErrors(errors.toString());
-        setSuccess(false);
+    const handleErrors = (arg) => {
+        setErrors(arg);
+        setReport(null);
         setLoading(false);
-        setValidUrl(false);
     };
 
     const handleCreateJobs = (response) => {
@@ -89,19 +89,15 @@ const Analysis = () => {
             handleErrors(keyword("table_error_" + response["data"]["status"]));
         } else {
             console.log("set job id to =" + response["data"]["id"]);
-            setJob({"id" : response["data"]["id"]});
+            setJob({"id": response["data"]["id"]});
 
         }
     };
 
     const handleJobsStatus = (response) => {
-        if (keyword("table_error_" + response["data"]["status"]) !== undefined ) {
+        if (keyword("table_error_" + response["data"]["status"]) !== undefined) {
             handleErrors(keyword("table_error_" + response["data"]["status"]));
-        }
-        else if (response["data"]["status"] === "unavailable"){
-            handleErrors("bad url");
-        }
-        else {
+        } else {
             setJob(response["data"]);
             axios.get("http://mever.iti.gr/caa/api/v4/videos/reports/" + response["data"]["media_id"])
                 .then(response => handleMedia(response))
@@ -128,7 +124,6 @@ const Analysis = () => {
             handleErrors(keyword("table_error_" + response["data"]["status"]));
         } else {
             setReport(response["data"]);
-            setSuccess(true);
             setLoading(false);
         }
     };
@@ -136,7 +131,7 @@ const Analysis = () => {
 
     const submitForm = () => {
         if (!loading) {
-            setSuccess(false);
+            setReport(null);
             setLoading(true);
             setJob(null);
             setReport(null);
@@ -162,20 +157,14 @@ const Analysis = () => {
                 <CustomTile> {keyword("api_title")}  </CustomTile>
                 <br/>
                 <TextField
-                    error={!validUrl}
                     id="standard-full-width"
                     label={keyword("api_input")}
-                    style={{margin: 8}}
                     placeholder="URL"
-                    helperText=""
                     fullWidth
                     disabled={loading}
                     onChange={(e) => urlChange(e)}
-                    margin="normal"
-                    InputLabelProps={{
-                        shrink: true,
-                    }}
                 />
+                <Box m={2}/>
                 <FormControlLabel
                     control={
                         <Checkbox
@@ -196,21 +185,35 @@ const Analysis = () => {
                 >
                     {keyword("button_submit")}
                 </Button>
-                {loading && <LinearProgress/>}
+                <Box m={1}/>
+                <LinearProgress hidden={!loading}/>
 
+                {
+                    report != null &&
+                    report["thumbnails"]["preferred"]["url"] &&
+                    <Card className={classes.card}>
+                        <CardHeader
+                            title={report["video"]["title"]}
+                            subheader={report["video"]["publishedAt"]}
+                        />
+                        <CardMedia
+                            className={classes.media}
+                            image={report["thumbnails"]["preferred"]["url"]}
+                            title={report["video"]["title"]}
+                        />
+                        <CardContent>
+                            <Typography variant="body2" color="textSecondary" component="p">
+                                {
+                                    report["video"]["description"]
+                                }
+                            </Typography>
+                        </CardContent>
+                    </Card>
+                }
             </Paper>
             <div>
                 {
-                    success && <Paper className={classes.root}>
-                        <span>{report["video"]["title"]}</span>
-                    </Paper>
-                }
-            </div>
-            <div>
-                {
-                    (errors !== "") && <Paper className={classes.root}>
-                        <span>{errors}</span>
-                    </Paper>
+                    errors && <MySnackbar variant="error" message={errors}/>
                 }
             </div>
         </div>);
