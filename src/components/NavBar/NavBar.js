@@ -22,21 +22,22 @@ import logoWeVerify from "./images/logo-we-verify.png";
 import Tutorial from "../tutorial/tutorial";
 import Fade from "@material-ui/core/Fade";
 import ToolsMenu from "../tools/ToolsMenu/ToolsMenu";
+import {Container} from "@material-ui/core";
 
 function TabPanel(props) {
     const {children, value, index, ...other} = props;
 
     return (
-        <Typography
-            component="div"
+        <Container
+            maxWidth={"xl"}
             role="tabpanel"
             hidden={value !== index}
             id={`scrollable-force-tabpanel-${index}`}
             aria-labelledby={`scrollable-force-tab-${index}`}
             {...other}
         >
-            <Box>{children}</Box>
-        </Typography>
+            {children}
+        </Container>
     );
 }
 
