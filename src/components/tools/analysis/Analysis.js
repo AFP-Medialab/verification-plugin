@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {useSelector} from "react-redux";
 import axios from 'axios'
-import {CardContent, CardHeader, Paper} from "@material-ui/core";
+import { Paper} from "@material-ui/core";
 import TextField from "@material-ui/core/TextField";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
@@ -13,9 +13,7 @@ import LinearProgress from "@material-ui/core/LinearProgress";
 import CustomTile from "../../customTitle/customTitle"
 import MySnackbar from "../../MySnackbar/MySnackbar";
 import Box from "@material-ui/core/Box";
-import Card from "@material-ui/core/Card";
-import CardMedia from "@material-ui/core/CardMedia";
-import Typography from "@material-ui/core/Typography";
+import Results from "./Results/Results.js"
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -131,7 +129,6 @@ const Analysis = () => {
 
     const submitForm = () => {
         if (!loading) {
-            setReport(null);
             setLoading(true);
             setJob(null);
             setReport(null);
@@ -187,28 +184,11 @@ const Analysis = () => {
                 </Button>
                 <Box m={1}/>
                 <LinearProgress hidden={!loading}/>
-
+            </Paper>
+            <Paper>
                 {
-                    report != null &&
-                    report["thumbnails"]["preferred"]["url"] &&
-                    <Card className={classes.card}>
-                        <CardHeader
-                            title={report["video"]["title"]}
-                            subheader={report["video"]["publishedAt"]}
-                        />
-                        <CardMedia
-                            className={classes.media}
-                            image={report["thumbnails"]["preferred"]["url"]}
-                            title={report["video"]["title"]}
-                        />
-                        <CardContent>
-                            <Typography variant="body2" color="textSecondary" component="p">
-                                {
-                                    report["video"]["description"]
-                                }
-                            </Typography>
-                        </CardContent>
-                    </Card>
+                    report !== null &&
+                    <Results report={report}/>
                 }
             </Paper>
             <div>
