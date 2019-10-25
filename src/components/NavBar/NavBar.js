@@ -1,7 +1,5 @@
-import React from 'react';
 import PropTypes from 'prop-types';
-import {makeStyles} from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
+import {makeStyles, useTheme} from '@material-ui/core/styles';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import BuildIcon from '@material-ui/icons/Build';
@@ -9,59 +7,77 @@ import VideoLibraryIcon from '@material-ui/icons/VideoLibrary';
 import CastForEducationIcon from '@material-ui/icons/CastForEducation';
 import VideogameAssetIcon from '@material-ui/icons/VideogameAsset';
 import InfoIcon from '@material-ui/icons/Info';
-
-import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
-import Toolbar from "@material-ui/core/Toolbar";
-
 import {useSelector} from "react-redux";
 import Languages from "../languages/languages";
-
 import logoInvid from "./images/logo-invid.png";
 import logoWeVerify from "./images/logo-we-verify.png";
 import Tutorial from "../tutorial/tutorial";
 import Fade from "@material-ui/core/Fade";
-import ToolsMenu from "../tools/ToolsMenu/ToolsMenu";
 import {Container} from "@material-ui/core";
+import React from 'react';
+import clsx from 'clsx';
+import Drawer from '@material-ui/core/Drawer';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import List from '@material-ui/core/List';
+import Divider from '@material-ui/core/Divider';
+import IconButton from '@material-ui/core/IconButton';
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import PlayCircleOutlineIcon from '@material-ui/icons/PlayCircleOutline';
+import TheatersIcon from '@material-ui/icons/Theaters';
+import YouTubeIcon from '@material-ui/icons/YouTube';
+import TwitterIcon from '@material-ui/icons/Twitter';
+import SearchIcon from '@material-ui/icons/Search';
+import SubscriptionsIcon from '@material-ui/icons/Subscriptions';
+import CopyrightIcon from '@material-ui/icons/Copyright';
+import ImageSearchIcon from '@material-ui/icons/ImageSearch';
+import Analysis from "../tools/analysis/Analysis";
+import Keyframes from "../tools/Keyframes/Keyframes";
 
-function TabPanel(props) {
-    const {children, value, index, ...other} = props;
-
-    return (
-        <Container
-            maxWidth={"xl"}
-            role="tabpanel"
-            hidden={value !== index}
-            id={`scrollable-force-tabpanel-${index}`}
-            aria-labelledby={`scrollable-force-tab-${index}`}
-            {...other}
-        >
-            {children}
-        </Container>
-    );
-}
-
-TabPanel.propTypes = {
-    children: PropTypes.node,
-    index: PropTypes.any.isRequired,
-    value: PropTypes.any.isRequired,
-};
-
-function a11yProps(index) {
-    return {
-        id: `scrollable-force-tab-${index}`,
-        'aria-controls': `scrollable-force-tabpanel-${index}`,
-    };
-}
+const drawerWidth = 200;
 
 const useStyles = makeStyles(theme => ({
-    grow: {
-        flexGrow: 1,
-    },
     root: {
+        display: 'flex',
+    },
+    appBar: {
+        zIndex: theme.zIndex.drawer + 1,
+    },
+    hide: {
+        display: 'none',
+    },
+    drawer: {
+        width: drawerWidth,
+        flexShrink: 0,
+        whiteSpace: 'nowrap',
+    },
+    drawerOpen: {
+        width: drawerWidth,
+        transition: theme.transitions.create('width', {
+            easing: theme.transitions.easing.sharp,
+            duration: theme.transitions.duration.enteringScreen,
+        }),
+    },
+    drawerClose: {
+        transition: theme.transitions.create('width', {
+            easing: theme.transitions.easing.sharp,
+            duration: theme.transitions.duration.leavingScreen,
+        }),
+        overflowX: 'hidden',
+        width: theme.spacing(7) + 1,
+        [theme.breakpoints.up('sm')]: {
+            width: theme.spacing(9) + 1,
+        },
+    },
+    toolbar: theme.mixins.toolbar,
+    content: {
         flexGrow: 1,
-        width: '100%',
-        backgroundColor: theme.palette.background.paper,
+        padding: theme.spacing(3),
     },
     logoLeft: {
         marginRight: theme.spacing(2),
@@ -70,15 +86,32 @@ const useStyles = makeStyles(theme => ({
     logoRight: {
         marginLeft: theme.spacing(2),
         maxHeight: "70px",
-    }
+    },
+    grow: {
+        flexGrow: 1,
+    },
 }));
+
+
+function a11yProps(index) {
+    return {
+        id: `scrollable-force-tab-${index}`,
+        'aria-controls': `scrollable-force-tabpanel-${index}`,
+    };
+}
 
 const NavBar = () => {
     const classes = useStyles();
-    const [value, setValue] = React.useState(0);
+    const [open, setOpen] = React.useState(false);
 
+    const [tabValue, setTabValue] = React.useState(0);
     const handleChange = (event, newValue) => {
-        setValue(newValue);
+        setTabValue(newValue);
+    };
+
+    const [drawerValue, setDrawerValue] = React.useState(0);
+    const changeValue = (newValue) => {
+        setDrawerValue(newValue);
     };
 
     const dictionary = useSelector(state => state.dictionary);
@@ -87,28 +120,104 @@ const NavBar = () => {
         return (dictionary !== null) ? dictionary[lang][key] : "";
     };
 
+    const handleDrawerToggle = () => {
+        setOpen(!open);
+    };
+
+    const tabItems = [
+        {
+            title: "navbar_tools",
+            icon: <BuildIcon fontSize={"large"}/>,
+            content: <div>Item one</div>
+        },
+        {
+            title: "navbar_tuto",
+            icon: <VideoLibraryIcon fontSize={"large"}/>,
+            content: <Tutorial/>
+        },
+        {
+            title: "navbar_classroom",
+            icon: <CastForEducationIcon fontSize={"large"}/>,
+            content: <div>classroom</div>
+        },
+        {
+            title: "navbar_quiz",
+            icon: <VideogameAssetIcon fontSize={"large"}/>,
+            content: <div>Iinteractive</div>
+        },
+        {
+            title: "navbar_about",
+            icon: <InfoIcon fontSize={"large"}/>,
+            content: <div>About</div>
+        }
+    ];
+
+    const drawerItems = [
+        {
+            title: "navbar_analysis",
+            icon: <PlayCircleOutlineIcon fontSize={"large"}/>,
+            content: <Analysis/>
+        },
+        {
+            title: "navbar_keyframes",
+            icon: <TheatersIcon fontSize={"large"}/>,
+            content: <Keyframes/>
+        },
+        {
+            title: "navbar_thumbnails",
+            icon: <YouTubeIcon fontSize={"large"}/>,
+            content: <div>thumbnails</div>
+        },
+        {
+            title: "navbar_twitter",
+            icon: <TwitterIcon fontSize={"large"}/>,
+            content: <div>twitter</div>
+        },
+        {
+            title: "navbar_magnifier",
+            icon: <SearchIcon fontSize={"large"}/>,
+            content: <div>Magnifier</div>
+        },
+        {
+            title: "navbar_metadata",
+            icon: <SubscriptionsIcon fontSize={"large"}/>,
+            content: <div>Metadada</div>
+        },
+        {
+            title: "navbar_rights",
+            icon: <CopyrightIcon fontSize={"large"}/>,
+            content: <div>Copyrights</div>
+        },
+        {
+            title: "navbar_forensic",
+            icon: <ImageSearchIcon fontSize={"large"}/>,
+            content: <div>Forensic</div>
+        }
+    ];
+
     return (
         <div className={classes.root}>
-            <AppBar position="static" color="default">
-                <Toolbar>
+            <AppBar position="fixed" color="default" className={classes.appBar}>
+                <Toolbar className={classes.toolbar}>
                     <Box display={{xs: 'none', md: 'block'}}>
                         <img src={logoInvid} alt="logo" className={classes.logoLeft}/>
                     </Box>
                     <div className={classes.grow}/>
                     <Tabs
-                        value={value}
-                        onChange={handleChange}
+                        value={tabValue}
                         variant="scrollable"
+                        onChange={handleChange}
                         scrollButtons="on"
                         indicatorColor="primary"
                         textColor="primary"
                         aria-label="scrollable force tabs example"
                     >
-                        <Tab label={keyword("navbar_tools")} icon={<BuildIcon fontSize={"large"}/>} {...a11yProps(0)} />
-                        <Tab label={keyword("navbar_tuto")} icon={<VideoLibraryIcon fontSize={"large"}/>} {...a11yProps(1)} />
-                        <Tab label={keyword("navbar_classroom")} icon={<CastForEducationIcon fontSize={"large"}/>} {...a11yProps(2)} />
-                        <Tab label={keyword("navbar_quiz")} icon={<VideogameAssetIcon fontSize={"large"}/>} {...a11yProps(3)} />
-                        <Tab label={keyword("navbar_about")} icon={<InfoIcon fontSize={"large"}/>} {...a11yProps(4)} />
+                        {
+                            tabItems.map((item, index) => {
+                                return <Tab label={keyword(item.title)}
+                                            icon={item.icon} {...a11yProps(index)}/>
+                            })
+                        }
                     </Tabs>
                     <div className={classes.grow}/>
                     <Languages/>
@@ -117,35 +226,69 @@ const NavBar = () => {
                     </Box>
                 </Toolbar>
             </AppBar>
-            <TabPanel value={value} index={0}>
-                <Fade in={value === 0}>
-                    <div>
-                        <ToolsMenu/>
-                    </div>
-                </Fade>
-            </TabPanel>
-            <TabPanel value={value} index={1}>
-                <Fade in={value === 1}>
-                    <div>
-                        <Tutorial/>
-                    </div>
-                </Fade>
-            </TabPanel>
-            <TabPanel value={value} index={2}>
-                Item Three
-            </TabPanel>
-            <TabPanel value={value} index={3}>
-                Item Four
-            </TabPanel>
-            <TabPanel value={value} index={4}>
-                Item Five
-            </TabPanel>
-            <TabPanel value={value} index={5}>
-                Item Six
-            </TabPanel>
-            <TabPanel value={value} index={6}>
-                Item Seven
-            </TabPanel>
+            <Drawer hidden={tabValue !== 0}
+                    variant="permanent"
+                    className={clsx(classes.drawer, {
+                        [classes.drawerOpen]: open,
+                        [classes.drawerClose]: !open,
+                    })}
+                    classes={{
+                        paper: clsx({
+                            [classes.drawerOpen]: open,
+                            [classes.drawerClose]: !open,
+                        }),
+                    }}
+                    open={open}
+            >
+                <div className={classes.toolbar}/>
+                <IconButton onClick={handleDrawerToggle}>
+                    {!open ? <ChevronRightIcon/> : <ChevronLeftIcon/>}
+                </IconButton>
+                <Divider/>
+                <List>
+                    {
+                        drawerItems.map((item, key) => {
+                            return (
+                                <ListItem button key={key} onClick={() => changeValue(key)}>
+                                    <ListItemIcon>{item.icon}</ListItemIcon>
+                                    <ListItemText primary={keyword(item.title)}/>
+                                </ListItem>
+                            )
+                        })
+                    }
+                </List>
+            </Drawer>
+            <main className={classes.content}>
+                <div className={classes.toolbar}/>
+                {
+                    tabValue !== 0 &&
+                    tabItems.map((item, index) => {
+                        return (
+                            <Container value={index} hidden={tabValue !== index}>
+                                <Fade in={tabValue === index}>
+                                    <div>
+                                        {item.content}
+                                    </div>
+                                </Fade>
+                            </Container>
+                        );
+                    })
+                }
+                {
+                    tabValue === 0 &&
+                    drawerItems.map((item, index) => {
+                        return (
+                            <Container value={index} hidden={drawerValue !== index}>
+                                <Fade in={drawerValue === index}>
+                                    <div>
+                                        {item.content}
+                                    </div>
+                                </Fade>
+                            </Container>
+                        );
+                    })
+                }
+            </main>
         </div>
     );
 };
