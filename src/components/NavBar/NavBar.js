@@ -1,5 +1,4 @@
-import PropTypes from 'prop-types';
-import {makeStyles, useTheme} from '@material-ui/core/styles';
+import {makeStyles} from '@material-ui/core/styles';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import BuildIcon from '@material-ui/icons/Build';
@@ -28,6 +27,7 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
+import AppsIcon from '@material-ui/icons/Apps';
 import PlayCircleOutlineIcon from '@material-ui/icons/PlayCircleOutline';
 import TheatersIcon from '@material-ui/icons/Theaters';
 import YouTubeIcon from '@material-ui/icons/YouTube';
@@ -128,7 +128,7 @@ const NavBar = () => {
         {
             title: "navbar_tools",
             icon: <BuildIcon fontSize={"large"}/>,
-            content: <div>Item one</div>
+            content: <div/>
         },
         {
             title: "navbar_tuto",
@@ -153,6 +153,11 @@ const NavBar = () => {
     ];
 
     const drawerItems = [
+        {
+            title: "",
+            icon: <AppsIcon fontSize={"large"}/>,
+            content: <div>all apps</div>
+        },
         {
             title: "navbar_analysis",
             icon: <PlayCircleOutlineIcon fontSize={"large"}/>,
@@ -214,7 +219,7 @@ const NavBar = () => {
                     >
                         {
                             tabItems.map((item, index) => {
-                                return <Tab label={keyword(item.title)}
+                                return <Tab key={index} label={keyword(item.title)}
                                             icon={item.icon} {...a11yProps(index)}/>
                             })
                         }
@@ -264,7 +269,7 @@ const NavBar = () => {
                     tabValue !== 0 &&
                     tabItems.map((item, index) => {
                         return (
-                            <Container value={index} hidden={tabValue !== index}>
+                            <Container key={index} value={index} hidden={tabValue !== index}>
                                 <Fade in={tabValue === index}>
                                     <div>
                                         {item.content}
@@ -278,7 +283,7 @@ const NavBar = () => {
                     tabValue === 0 &&
                     drawerItems.map((item, index) => {
                         return (
-                            <Container value={index} hidden={drawerValue !== index}>
+                            <Container key={index} value={index} hidden={drawerValue !== index}>
                                 <Fade in={drawerValue === index}>
                                     <div>
                                         {item.content}
