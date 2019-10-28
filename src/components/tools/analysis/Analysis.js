@@ -134,6 +134,11 @@ const Analysis = () => {
             setJob(null);
             setReport(null);
             setErrors("");
+            if (!url || url === "")
+            {
+                handleErrors(keyword("table_error_empty_url"));
+                return;
+            }
 
             //encode video to avoid & problem arguments
             let video_url = url.replace("&", "%26");

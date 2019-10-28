@@ -38,6 +38,9 @@ import CopyrightIcon from '@material-ui/icons/Copyright';
 import ImageSearchIcon from '@material-ui/icons/ImageSearch';
 import Analysis from "../tools/analysis/Analysis";
 import Keyframes from "../tools/Keyframes/Keyframes";
+import ScrollTop from "../ScrollTop/ScrollTop";
+import Fab from "@material-ui/core/Fab";
+import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 
 const drawerWidth = 200;
 
@@ -105,7 +108,7 @@ function a11yProps(index) {
     };
 }
 
-const NavBar = () => {
+const NavBar = (props) => {
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
 
@@ -271,7 +274,7 @@ const NavBar = () => {
                 </List>
             </Drawer>
             <main className={classes.content}>
-                <div className={classes.toolbar}/>
+                <div className={classes.toolbar}  id="back-to-top-anchor"/>
                 {
                     tabValue !== 0 &&
                     tabItems.map((item, index) => {
@@ -300,6 +303,11 @@ const NavBar = () => {
                         );
                     })
                 }
+                <ScrollTop {...props}>
+                    <Fab color="secondary" size="small" aria-label="scroll back to top">
+                        <KeyboardArrowUpIcon />
+                    </Fab>
+                </ScrollTop>
             </main>
         </div>
     );
