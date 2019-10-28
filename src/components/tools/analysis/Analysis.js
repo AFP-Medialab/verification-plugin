@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {useSelector} from "react-redux";
 import axios from 'axios'
-import { Paper} from "@material-ui/core";
+import {Paper} from "@material-ui/core";
 import TextField from "@material-ui/core/TextField";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
@@ -9,11 +9,12 @@ import Button from "@material-ui/core/Button";
 import {green} from "@material-ui/core/colors";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import LinearProgress from "@material-ui/core/LinearProgress";
-
+import ImageReverseSearch from "../ImageReverseSearch";
 import CustomTile from "../../customTitle/customTitle"
 import MySnackbar from "../../MySnackbar/MySnackbar";
 import Box from "@material-ui/core/Box";
-import Results from "./Results/Results.js"
+import YoutubeResults from "./Results/YoutubeResults.js"
+import TwitterResults from "./Results/TwitterResults";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -185,12 +186,14 @@ const Analysis = () => {
                 <Box m={1}/>
                 <LinearProgress hidden={!loading}/>
             </Paper>
-            <Paper>
-                {
-                    report !== null &&
-                    <Results report={report}/>
-                }
-            </Paper>
+            {
+                report !== null && url != null && url.startsWith("https://www.youtube.com/") &&
+                <YoutubeResults report={report}/>
+            }
+            {
+                report !== null && url != null && url.startsWith("https://twitter.com/") &&
+                <TwitterResults report={report}/>
+            }
             <div>
                 {
                     errors && <MySnackbar variant="error" message={errors}/>
