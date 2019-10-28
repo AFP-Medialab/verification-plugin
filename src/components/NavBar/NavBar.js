@@ -90,6 +90,11 @@ const useStyles = makeStyles(theme => ({
     grow: {
         flexGrow: 1,
     },
+    selectedApp: {
+        color: theme.palette.primary.main
+    },
+    unSelectedApp: {
+    }
 }));
 
 
@@ -155,47 +160,47 @@ const NavBar = () => {
     const drawerItems = [
         {
             title: "",
-            icon: <AppsIcon fontSize={"large"}/>,
+            icon: <AppsIcon fontSize={"large"} className={(drawerValue === 0)? classes.selectedApp : classes.unSelectedApp}/>,
             content: <div>all apps</div>
         },
         {
             title: "navbar_analysis",
-            icon: <PlayCircleOutlineIcon fontSize={"large"}/>,
+            icon: <PlayCircleOutlineIcon fontSize={"large"} className={(drawerValue === 1)? classes.selectedApp : classes.unSelectedApp}/>,
             content: <Analysis/>
         },
         {
             title: "navbar_keyframes",
-            icon: <TheatersIcon fontSize={"large"}/>,
+            icon: <TheatersIcon fontSize={"large"} className={(drawerValue === 2)? classes.selectedApp : classes.unSelectedApp}/>,
             content: <Keyframes/>
         },
         {
             title: "navbar_thumbnails",
-            icon: <YouTubeIcon fontSize={"large"}/>,
+            icon: <YouTubeIcon fontSize={"large"} className={(drawerValue === 3)? classes.selectedApp : classes.unSelectedApp}/>,
             content: <div>thumbnails</div>
         },
         {
             title: "navbar_twitter",
-            icon: <TwitterIcon fontSize={"large"}/>,
+            icon: <TwitterIcon fontSize={"large"} className={(drawerValue === 4)? classes.selectedApp : classes.unSelectedApp}/>,
             content: <div>twitter</div>
         },
         {
             title: "navbar_magnifier",
-            icon: <SearchIcon fontSize={"large"}/>,
+            icon: <SearchIcon fontSize={"large"} className={(drawerValue === 5)? classes.selectedApp : classes.unSelectedApp}/>,
             content: <div>Magnifier</div>
         },
         {
             title: "navbar_metadata",
-            icon: <SubscriptionsIcon fontSize={"large"}/>,
+            icon: <SubscriptionsIcon fontSize={"large"} className={(drawerValue === 6)? classes.selectedApp : classes.unSelectedApp}/>,
             content: <div>Metadada</div>
         },
         {
             title: "navbar_rights",
-            icon: <CopyrightIcon fontSize={"large"}/>,
+            icon: <CopyrightIcon fontSize={"large"} className={(drawerValue === 7)? classes.selectedApp : classes.unSelectedApp}/>,
             content: <div>Copyrights</div>
         },
         {
             title: "navbar_forensic",
-            icon: <ImageSearchIcon fontSize={"large"}/>,
+            icon: <ImageSearchIcon fontSize={"large"} className={(drawerValue === 8)? classes.selectedApp : classes.unSelectedApp}/>,
             content: <div>Forensic</div>
         }
     ];
@@ -245,7 +250,7 @@ const NavBar = () => {
                     }}
                     open={open}
             >
-                <div className={classes.toolbar}/>
+                <Box m={5}/>
                 <IconButton onClick={handleDrawerToggle}>
                     {!open ? <ChevronRightIcon/> : <ChevronLeftIcon/>}
                 </IconButton>
@@ -254,8 +259,10 @@ const NavBar = () => {
                     {
                         drawerItems.map((item, key) => {
                             return (
-                                <ListItem button key={key} onClick={() => changeValue(key)}>
-                                    <ListItemIcon>{item.icon}</ListItemIcon>
+                                <ListItem button key={key} onClick={() => changeValue(key)} >
+                                    <ListItemIcon color="primary.main" >
+                                            {item.icon}
+                                    </ListItemIcon>
                                     <ListItemText primary={keyword(item.title)}/>
                                 </ListItem>
                             )
