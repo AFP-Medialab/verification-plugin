@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {useSelector} from "react-redux";
 import {Paper} from "@material-ui/core";
 import Box from "@material-ui/core/Box";
@@ -8,6 +8,7 @@ import makeStyles from "@material-ui/core/styles/makeStyles";
 
 import LocalFile from "./LocalFile/LocalFile";
 import CustomTile from "../../customTitle/customTitle"
+import axios from "axios";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -38,9 +39,9 @@ const Keyframes = () => {
 
     const classes = useStyles();
 
-    const [textValid, setTextValid] = React.useState(true);
-    const textChange = (val) => {
-        setTextValid(val)
+    const [url, setUrl] = React.useState("");
+    const urlChange = (event) => {
+        setUrl(event.target.value)
     };
 
     const [localFile, setLocalFile] = useState(false);
@@ -48,24 +49,49 @@ const Keyframes = () => {
         setLocalFile(!localFile);
     };
 
+    const [job, setJob] = useState(null);
+    const [result, setResult] = useState(null);
+
+    console.log(process.env.REACT_APP_KEYFRAME_TOKEN);
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+
+            if (job === null || job["status"] === "VIDEO_SEGMENTATION_ANALYSIS_COMPLETED") {
+                console.log("finished");
+                clearInterval(interval);
+            }
+            else if (job["status"] === "VIDEO_DOWNLOAD_FAILED"){
+                console.log("error download fail");
+            }
+            else {
+                axios.post("http://multimedia2.iti.gr/video_analysis/segmentation",
+                    {
+                        "video_url": url,
+                        "user_key": process.env.REACT_APP_KEYFRAME_TOKEN,
+                        "overwrite": 0
+
+                    })
+                    .then(response => {})
+                    .catch(errors => {});
+            }
+        }, 2000);
+        return () => clearInterval(interval);
+    }, [job]);
+
     return (
         <Paper className={classes.root}>
             <CustomTile> {keyword("keyframes_title")}  </CustomTile>
             <br/>
             <Box display={localFile ? "none" : "block"}>
                 <TextField
-                    error={!textValid}
                     id="standard-full-width"
                     label={keyword("keyframes_input")}
                     style={{margin: 8}}
                     placeholder="URL"
-                    helperText=""
                     fullWidth
-                    onChange={() => textChange(true)}
-                    margin="normal"
-                    InputLabelProps={{
-                        shrink: true,
-                    }}
+                    disabled={false}
+                    onChange={(e) => urlChange(e)}
                 />
                 <Box m={2}/>
                 <Button variant="contained" color="primary" onClick={toggleLocal}>
