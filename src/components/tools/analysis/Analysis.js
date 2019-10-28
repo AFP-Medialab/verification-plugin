@@ -59,6 +59,7 @@ const Analysis = () => {
         return (dictionary !== null) ? dictionary[lang][key] : "";
     };
 
+
     const classes = useStyles();
 
     const [loading, setLoading] = useState(false);
@@ -87,9 +88,9 @@ const Analysis = () => {
         if (keyword("table_error_" + response["data"]["status"]) !== undefined) {
             handleErrors(keyword("table_error_" + response["data"]["status"]));
         } else {
-            console.log("set job id to =" + response["data"]["id"]);
-            setJob({"id": response["data"]["id"]});
-
+            axios.get("http://mever.iti.gr/caa/api/v4/videos/jobs/" + response["data"]["id"])
+                .then(response => handleJobsStatus(response))
+                .catch(errors => handleErrors(errors));
         }
     };
 
@@ -106,6 +107,8 @@ const Analysis = () => {
 
     useEffect(() => {
         const interval = setInterval(() => {
+
+            console.log("called update " + JSON.stringify(job));
             if (job === null || job["status"] === "done" || job["status"] === "unavailable") {
                 console.log("finished");
                 clearInterval(interval);
@@ -139,7 +142,11 @@ const Analysis = () => {
                 handleErrors(keyword("table_error_empty_url"));
                 return;
             }
-
+            if (url.includes(" "))
+            {
+                handleErrors(keyword("table_error_unavailable"));
+                return;
+            }
             //encode video to avoid & problem arguments
             let video_url = url.replace("&", "%26");
             // construct the url for request
@@ -159,6 +166,7 @@ const Analysis = () => {
             <Paper className={classes.root}>
                 <CustomTile> {keyword("api_title")}  </CustomTile>
                 <br/>
+                <span>{errors}</span>
                 <TextField
                     id="standard-full-width"
                     label={keyword("api_input")}
@@ -201,7 +209,7 @@ const Analysis = () => {
             }
             <div>
                 {
-                    errors && <MySnackbar variant="error" message={errors}/>
+                    errors && <MySnackbar variant="error" message={errors} onClick={() => setErrors("")}/>
                 }
             </div>
         </div>);
