@@ -27,20 +27,10 @@ const KeyFramesResults = (props) => {
 
     const [detailed, setDetailed] = useState(false);
     const [simpleList, detailedList] = useKeyframes(props.result, [props.result]);
-    const [usedList, setUsedList] = useState(simpleList);
 
     const toggleDetail = () => {
         setDetailed(!detailed);
     };
-
-    useEffect(() => {
-        console.log("detail change");
-        if (detailed)
-            setUsedList(detailedList);
-        else
-            setUsedList(simpleList);
-    }, [detailed, detailedList, simpleList]);
-
     return (
         <div>
             <Paper className={classes.root}>
@@ -55,14 +45,13 @@ const KeyFramesResults = (props) => {
                 <Box m={2}/>
                 <Button color={"primary"} onClick={() => toggleDetail()}>
                     {
-                        detailed ? keyword("keyframe_title_get_detail")
+                        !detailed ? keyword("keyframe_title_get_detail")
                             : keyword("keyframe_title_get_simple")
                     }
                 </Button>
                 <Box m={2}/>
                 {
-                    usedList !== [] &&
-                    <ImageGridList list={usedList}/>
+                    (detailed) ? <ImageGridList list={detailedList}/> : <ImageGridList list={simpleList}/>
                 }
             </Paper>
         </div>

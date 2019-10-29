@@ -12,7 +12,7 @@ const useStyles = makeStyles(theme => ({
         backgroundColor: theme.palette.background.paper,
     },
     gridList: {
-        width: "auto",
+        width: "80%",
         height: "auto",
     },
 }));
