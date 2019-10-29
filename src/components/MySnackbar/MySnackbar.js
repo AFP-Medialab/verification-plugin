@@ -80,9 +80,6 @@ MySnackbarContentWrapper.propTypes = {
 // variant can bee : "success", "error", "warning", "info"
 const MySnackbar = (props) => {
     const [open, setOpen] = React.useState(true);
-
-    const dispatch = props.dispatch;
-
     const handleClose = (event, reason) => {
         if (reason === 'clickaway') {
             return;
