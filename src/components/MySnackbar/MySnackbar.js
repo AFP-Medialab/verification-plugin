@@ -96,7 +96,6 @@ const MySnackbar = (props) => {
                     horizontal: 'center',
                 }}
                 open={open}
-                autoHideDuration={6000}
                 onClose={handleClose}
             >
                 <MySnackbarContentWrapper
