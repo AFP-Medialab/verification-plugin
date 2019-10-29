@@ -94,6 +94,7 @@ const TwitterResults = (props) => {
                     <img
                         src={report["thumbnails"]["preferred"]["url"]}
                         className={classes.image}
+                        alt={"img"}
                     />
                     <Box m={2}/>
                     <Divider/>
@@ -163,7 +164,12 @@ const TwitterResults = (props) => {
                                         <TableCell align="right">
                                             {
                                                 report["video"]["urls"].map((value, key) => {
-                                                    return <a key={key} href={value} target={"_blank"}>{value}</a>
+                                                    return (
+                                                        <a key={key} href={value}
+                                                           rel="noopener noreferrer"
+                                                           target={"_blank"}>{value}
+                                                        </a>
+                                                    );
                                                 })
                                             }
                                         </TableCell>
@@ -200,6 +206,7 @@ const TwitterResults = (props) => {
                                             {keyword("twitter_video_name_10")}
                                         </TableCell>
                                         <TableCell align="right"><a href={report["thumbnails"]["preferred"]["url"]}
+                                                                    rel="noopener noreferrer"
                                                                     target={"_blank"}>{report["thumbnails"]["preferred"]["url"]}</a></TableCell>
                                     </TableRow>
                                 }
@@ -232,7 +239,7 @@ const TwitterResults = (props) => {
                                         <TableCell align="right">
                                             {
                                                 report["video"]["video_info"]["urls"].map((value, key) => {
-                                                    return <a key={key} href={value} target={"_blank"}>{value + " "}</a>
+                                                    return <a key={key} href={value} rel="noopener noreferrer" target={"_blank"}>{value + " "}</a>
                                                 })
                                             }
                                         </TableCell>
@@ -281,6 +288,7 @@ const TwitterResults = (props) => {
                                             </TableCell>
                                             <TableCell align="right"><a
                                                 href={report["source"]["url"]}
+                                                rel="noopener noreferrer"
                                                 target="_blank">{report["source"]["user_url"]}</a></TableCell>
                                         </TableRow>
                                     }
@@ -424,6 +432,7 @@ const TwitterResults = (props) => {
                                                             <TableRow key={key}>
                                                                 <TableCell component="th" scope="row">
                                                                     <a href={"https://www.youtube.com/channel/" + comment["comid"]}
+                                                                       rel="noopener noreferrer"
                                                                        target="_blank">{comment["authorDisplayName"]}</a>
                                                                 </TableCell>
                                                                 <TableCell

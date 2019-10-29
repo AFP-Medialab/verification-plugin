@@ -88,6 +88,7 @@ const YoutubeResults = (props) => {
                     <img
                         src={report["thumbnails"]["preferred"]["url"]}
                         title={report["video"]["title"]}
+                        alt={"img"}
                     />
                     <Box m={2}/>
                     <Divider/>
@@ -194,6 +195,7 @@ const YoutubeResults = (props) => {
                                             </TableCell>
                                             <TableCell align="right"><a
                                                 href={report["source"]["url"]}
+                                                rel="noopener noreferrer"
                                                 target="_blank">{report["source"]["url"]}</a></TableCell>
                                         </TableRow>
                                     }
@@ -270,6 +272,7 @@ const YoutubeResults = (props) => {
                                                             <TableRow key={key}>
                                                                 <TableCell component="th" scope="row">
                                                                     <a href={"https://www.youtube.com/channel/" + comment["comid"]}
+                                                                       rel="noopener noreferrer"
                                                                        target="_blank">{comment["authorDisplayName"]}</a>
                                                                 </TableCell>
                                                                 <TableCell
