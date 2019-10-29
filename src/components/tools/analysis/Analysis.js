@@ -9,7 +9,6 @@ import Button from "@material-ui/core/Button";
 import {green} from "@material-ui/core/colors";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import LinearProgress from "@material-ui/core/LinearProgress";
-import ImageReverseSearch from "../ImageReverseSearch";
 import CustomTile from "../../customTitle/customTitle"
 import MySnackbar from "../../MySnackbar/MySnackbar";
 import Box from "@material-ui/core/Box";
@@ -107,10 +106,7 @@ const Analysis = () => {
 
     useEffect(() => {
         const interval = setInterval(() => {
-
-            console.log("called update " + JSON.stringify(job));
             if (job === null || job["status"] === "done" || job["status"] === "unavailable") {
-                console.log("finished");
                 clearInterval(interval);
             } else {
                 axios.get("http://mever.iti.gr/caa/api/v4/videos/jobs/" + job["id"])
