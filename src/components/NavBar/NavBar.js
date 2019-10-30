@@ -41,6 +41,7 @@ import Keyframes from "../tools/Keyframes/Keyframes";
 import ScrollTop from "../ScrollTop/ScrollTop";
 import Fab from "@material-ui/core/Fab";
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
+import Thumbnails from "../tools/Thumbnails/Thumbnails";
 
 const drawerWidth = 200;
 
@@ -179,7 +180,7 @@ const NavBar = (props) => {
         {
             title: "navbar_thumbnails",
             icon: <YouTubeIcon fontSize={"large"} className={(drawerValue === 3)? classes.selectedApp : classes.unSelectedApp}/>,
-            content: <div>thumbnails</div>
+            content: <Thumbnails/>
         },
         {
             title: "navbar_twitter",
