@@ -51,7 +51,12 @@ const KeyFramesResults = (props) => {
                 </Button>
                 <Box m={2}/>
                 {
-                    (detailed) ? <ImageGridList list={detailedList}/> : <ImageGridList list={simpleList}/>
+                    detailed &&
+                    <ImageGridList list={detailedList}/>
+                }
+                {
+                    !detailed &&
+                    <ImageGridList list={simpleList}/>
                 }
             </Paper>
         </div>

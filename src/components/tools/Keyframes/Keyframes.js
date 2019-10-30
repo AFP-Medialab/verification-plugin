@@ -5,15 +5,14 @@ import Box from "@material-ui/core/Box";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import makeStyles from "@material-ui/core/styles/makeStyles";
-
 import LocalFile from "./LocalFile/LocalFile";
-import CustomTile from "../../customTitle/customTitle"
-import axios from "axios";
+import CustomTile from "../../customTitle/customTitle";
 import MySnackbar from "../../MySnackbar/MySnackbar";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import Typography from "@material-ui/core/Typography";
 import Divider from '@material-ui/core/Divider';
 import KeyFramesResults from "./Results/KeyFramesResults";
+import {useKeyframeWrapper} from "../../Hooks/useKeyframeWrapper";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -45,100 +44,32 @@ const Keyframes = () => {
 
     const classes = useStyles();
 
-    const [url, setUrl] = React.useState("");
-    const urlChange = (event) => {
-        setUrl(event.target.value)
-    };
-
+    // state used to toggle localFile view
     const [localFile, setLocalFile] = useState(false);
     const toggleLocal = () => {
         setLocalFile(!localFile);
     };
 
-    const [videoId, setVideoId] = useState(null);
-    const [job, setJob] = useState(null);
-    const [result, setResult] = useState(null);
-    const [errors, setErrors] = useState("");
-    const [loadingMessage, setLoadingMessage] = useState(null);
+    // State used to load images
+    const [errors, setErrors] = useState(null);
+    const [urlRef, setUrlRef] = React.useState(null);
+    const [submittedUrl, setSubmittedUrl] = useState(undefined);
+    const [data, error, isLoading, message] = useKeyframeWrapper(submittedUrl);
 
-    const updateJob = () => {
-        if (videoId === null)
-            return;
-        axios.get("http://multimedia2.iti.gr/video_analysis/status/" + videoId)
-            .then(response => {
-                setJob(response["data"]);
-                updateLoadingMessage(response["data"]);
-            })
-            .catch(errors => {
-                console.log("status error" + errors);
-                updateErrors(errors)
-            });
+    const getErrorText = (error) => {
+        if (keyword(error) !== undefined)
+            return keyword(error);
+        return keyword("keyframes_error_default")
     };
-
-    const updateErrors = (string) => {
-        if (keyword("keyframes_error_" + string) !== undefined)
-            setErrors(keyword("keyframes_error_" + string));
-        else
-            setErrors(keyword("keyframes_error_default"));
-        setLoadingMessage(null);
-    };
-
-    const updateLoadingMessage = (newJob) => {
-        if (keyword("keyframes_wait_" + newJob["status"]) !== undefined) {
-            setLoadingMessage(keyword("keyframes_wait_" + newJob["status"]));
-        } else if (newJob["status"].endsWith("STARTED")) {
-            setLoadingMessage(keyword("keyframes_wait_STARTED") + newJob["step"] + " (" + newJob["process"] + ") " + (newJob["progress"] === "N/A" ? "" : newJob["progress"]))
-        }
-    };
-
-    useEffect(() => {
-        const interval = setInterval(() => {
-            if (job === null) {
-                clearInterval(interval);
-            } else if (job["status"] !== undefined && keyword("keyframes_error_" + job["status"]) !== undefined) {
-                updateErrors(job["status"])
-            } else if (job["status"] === "VIDEO_SEGMENTATION_ANALYSIS_COMPLETED") {
-                axios.get("http://multimedia2.iti.gr/video_analysis/result/" + videoId + "_json")
-                    .then(response => {
-                        setResult(response["data"])
-                        setLoadingMessage(null);
-                    })
-                    .catch(errors => {
-                        console.log(" get result error " + errors);
-                        updateErrors(errors["status"])
-                    });
-                clearInterval(interval);
-            } else {
-                console.log("update job");
-                updateJob();
-            }
-        }, 2000);
-        return () => clearInterval(interval);
-    }, [job]);
-
 
     const submitUrl = () => {
-        setLoadingMessage("");
-        axios.post("http://multimedia2.iti.gr/video_analysis/segmentation",
-            {
-                "video_url": url,
-                "user_key": process.env.REACT_APP_KEYFRAME_TOKEN,
-                "overwrite": 0
-
-            })
-            .then(response => {
-                setVideoId(response["data"]["video_id"]);
-            })
-            .catch((errors) => {
-                console.log("segment error" + errors);
-                updateErrors("Service Unavailable")
-            });
+        setSubmittedUrl(urlRef.value);
     };
 
     useEffect(() => {
-        if (videoId !== null)
-            updateJob();
-    }, [videoId]);
+        if (error !== undefined)
+            setErrors(error);
+    }, [error]);
 
     return (
         <div>
@@ -152,22 +83,22 @@ const Keyframes = () => {
                     <Box m={2}/>
                     <Divider/>
                     <TextField
+                        inputRef={ref => setUrlRef(ref)}
                         id="standard-full-width"
                         label={keyword("keyframes_input")}
                         style={{margin: 8}}
                         placeholder="URL"
                         fullWidth
-                        disabled={loadingMessage !== null}
-                        onChange={(e) => urlChange(e)}
+                        disabled={isLoading}
                     />
                     <Box m={2}/>
-                    <Button variant="contained" color="primary" onClick={submitUrl} disabled={loadingMessage !== null}>
+                    <Button variant="contained" color="primary" onClick={submitUrl} disabled={isLoading}>
                         {keyword("button_submit")}
                     </Button>
                     <Box m={1}/>
-                    <LinearProgress hidden={loadingMessage === null}/>
-                    <Typography variant="body1" hidden={loadingMessage === null || loadingMessage === ""}>
-                        {loadingMessage}
+                    <LinearProgress hidden={!isLoading}/>
+                    <Typography variant="body1" hidden={!isLoading}>
+                        {message}
                     </Typography>
                 </Box>
                 <Box display={!localFile ? "none" : "block"}>
@@ -179,16 +110,16 @@ const Keyframes = () => {
             </Paper>
             <div>
                 {
-                    result &&
-                    <KeyFramesResults result={result}/>
+                    data &&
+                    <KeyFramesResults result={data}/>
                 }
             </div>
             <div>
                 {
-                    errors && <MySnackbar variant="error" message={errors} onClick={() => setErrors("")}/>
+                    errors && <MySnackbar variant="error" message={getErrorText(errors)} onClick={() => setErrors(null)}/>
                 }
             </div>
         </div>
     );
 };
-export default Keyframes;
+export default React.memo(Keyframes);
