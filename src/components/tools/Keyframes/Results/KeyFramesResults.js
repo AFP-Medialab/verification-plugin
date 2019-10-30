@@ -57,4 +57,4 @@ const KeyFramesResults = (props) => {
         </div>
     )
 };
-export default KeyFramesResults;
+export default React.memo(KeyFramesResults);
