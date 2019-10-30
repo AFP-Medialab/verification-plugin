@@ -19,6 +19,16 @@ const ImageReverseSearch = (type, urls) => {
         }
     };
     if( typeof urls === "string" ) urls = [urls];
+
+    if (type === "all")
+    {
+        ImageReverseSearch("baidu", urls);
+        ImageReverseSearch("bing", urls);
+        ImageReverseSearch("google", urls);
+        ImageReverseSearch("tineye", urls);
+        ImageReverseSearch("yandex", urls);
+        return;
+    }
     let urlStart = baseUrl[type].search;
     let urlEnd = ( baseUrl[type].end !== undefined ? baseUrl[type].end : "" );
     for (let image of urls)

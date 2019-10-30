@@ -162,7 +162,6 @@ const Analysis = () => {
             <Paper className={classes.root}>
                 <CustomTile> {keyword("api_title")}  </CustomTile>
                 <br/>
-                <span>{errors}</span>
                 <TextField
                     id="standard-full-width"
                     label={keyword("api_input")}
