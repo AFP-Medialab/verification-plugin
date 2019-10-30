@@ -14,6 +14,7 @@ const useStyles = makeStyles(theme => ({
     gridList: {
         width: "80%",
         height: "auto",
+        maxHeight: "500px"
     },
 }));
 
