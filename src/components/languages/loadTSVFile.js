@@ -1,4 +1,4 @@
-import {setDictionary} from "../../actions";
+import {setDictionary} from "../../redux/actions";
 import tsv from "./InVIDTraductions.tsv";
 
 /**
