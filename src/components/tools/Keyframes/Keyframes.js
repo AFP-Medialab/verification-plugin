@@ -12,7 +12,7 @@ import LinearProgress from "@material-ui/core/LinearProgress";
 import Typography from "@material-ui/core/Typography";
 import Divider from '@material-ui/core/Divider';
 import KeyFramesResults from "./Results/KeyFramesResults";
-import {useKeyframeWrapper} from "../../Hooks/useKeyframeWrapper";
+import {useKeyframeWrapper} from "./Hooks/useKeyframeWrapper";
 
 const useStyles = makeStyles(theme => ({
     root: {

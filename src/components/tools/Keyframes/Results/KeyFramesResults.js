@@ -7,7 +7,7 @@ import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import Divider from "@material-ui/core/Divider";
 import Button from "@material-ui/core/Button";
-import {useKeyframes} from "../../../Hooks/usekeyframes";
+import {useKeyframes} from "../Hooks/usekeyframes";
 
 const useStyles = makeStyles(theme => ({
     root: {
