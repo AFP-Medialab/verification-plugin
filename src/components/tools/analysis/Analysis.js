@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from "react";
 import {useSelector} from "react-redux";
-import axios from 'axios'
 import {Paper} from "@material-ui/core";
 import TextField from "@material-ui/core/TextField";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
@@ -14,6 +13,7 @@ import MySnackbar from "../../MySnackbar/MySnackbar";
 import Box from "@material-ui/core/Box";
 import YoutubeResults from "./Results/YoutubeResults.js"
 import TwitterResults from "./Results/TwitterResults";
+import {useAnalysisWrapper} from "./Hooks/useAnalysisWrapper";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -58,104 +58,28 @@ const Analysis = () => {
         return (dictionary !== null) ? dictionary[lang][key] : "";
     };
 
-
     const classes = useStyles();
 
-    const [loading, setLoading] = useState(false);
-    const [errors, setErrors] = useState("");
+    const [inputRef, setInputRef] = useState(null);
+    const [url, setUrl] = useState(null);
     const [reprocess, setReprocess] = useState(false);
-    const [url, setUrl] = useState("");
-
-    const [job, setJob] = useState(null);
-    const [report, setReport] = useState(null);
+    const [report, error, loading] = useAnalysisWrapper(url, reprocess);
+    const [errors, setErrors] = useState(null);
 
     const reprocessToggle = () => {
         setReprocess(!reprocess);
     };
 
-    const urlChange = (event) => {
-        setUrl(event.target.value);
-    };
-
-    const handleErrors = (arg) => {
-        setErrors(arg);
-        setReport(null);
-        setLoading(false);
-    };
-
-    const handleCreateJobs = (response) => {
-        if (keyword("table_error_" + response["data"]["status"]) !== undefined) {
-            handleErrors(keyword("table_error_" + response["data"]["status"]));
-        } else {
-            axios.get("http://mever.iti.gr/caa/api/v4/videos/jobs/" + response["data"]["id"])
-                .then(response => handleJobsStatus(response))
-                .catch(errors => handleErrors(errors));
-        }
-    };
-
-    const handleJobsStatus = (response) => {
-        if (keyword("table_error_" + response["data"]["status"]) !== undefined) {
-            handleErrors(keyword("table_error_" + response["data"]["status"]));
-        } else {
-            setJob(response["data"]);
-            axios.get("http://mever.iti.gr/caa/api/v4/videos/reports/" + response["data"]["media_id"])
-                .then(response => handleMedia(response))
-                .catch(errors => handleErrors(errors));
-        }
-    };
-
     useEffect(() => {
-        const interval = setInterval(() => {
-            if (job === null || job["status"] === "done" || job["status"] === "unavailable") {
-                clearInterval(interval);
-            } else {
-                axios.get("http://mever.iti.gr/caa/api/v4/videos/jobs/" + job["id"])
-                    .then(response => handleJobsStatus(response))
-                    .catch(errors => handleErrors(errors));
-            }
-        }, 2000);
-        return () => clearInterval(interval);
-    }, [job]);
-
-    const handleMedia = (response) => {
-        if (keyword("table_error_" + response["data"]["status"]) !== undefined) {
-            handleErrors(keyword("table_error_" + response["data"]["status"]));
-        } else {
-            setReport(response["data"]);
-            setLoading(false);
-        }
-    };
+        setErrors(error);
+    }, [error]);
 
 
     const submitForm = () => {
-        if (!loading) {
-            setLoading(true);
-            setJob(null);
-            setReport(null);
-            setErrors("");
-            if (!url || url === "")
-            {
-                handleErrors(keyword("table_error_empty_url"));
-                return;
-            }
-            if (url.includes(" "))
-            {
-                handleErrors(keyword("table_error_unavailable"));
-                return;
-            }
-            //encode video to avoid & problem arguments
-            let video_url = url.replace("&", "%26");
-            // construct the url for request
-            let analysis_url = "http://mever.iti.gr/caa/api/v4/videos/jobs?url=" + video_url;
-            if (reprocess)
-                analysis_url += "&reprocess=1";
-
-            axios.post(analysis_url)
-                .then(response => handleCreateJobs(response))
-                .catch(errors => handleErrors(errors));
-        }
+        if (!loading)
+            console.log(inputRef.value);
+            setUrl(inputRef.value);
     };
-
 
     return (
         <div>
@@ -163,12 +87,12 @@ const Analysis = () => {
                 <CustomTile> {keyword("api_title")}  </CustomTile>
                 <br/>
                 <TextField
+                    inputRef={ref => setInputRef(ref)}
                     id="standard-full-width"
                     label={keyword("api_input")}
                     placeholder="URL"
                     fullWidth
                     disabled={loading}
-                    onChange={(e) => urlChange(e)}
                 />
                 <Box m={2}/>
                 <FormControlLabel

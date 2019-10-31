@@ -1,9 +1,9 @@
 {
   "manifest_version": 2,
-  "name" :"Fake video news debunker by InVID",
+  "name" :"Fake news debunker by InVID & WeVerify",
   "version" :"0.73",
   "description" :"InVID extension",
-  "short_name": "Invid Plugin",
+  "short_name": "Invid WeVerify Plugin",
   "browser_action": {
     "default_title": "CRE",
     "default_popup": "popup.html"
