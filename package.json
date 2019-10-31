@@ -14,6 +14,7 @@
     "react-browser-extension-scripts": "0.1.2",
     "react-dom": "^16.10.2",
     "react-iframe": "^1.8.0",
+    "react-magnifier": "^3.0.4",
     "react-redux": "^7.1.1",
     "react-router-dom": "^5.1.2",
     "redux": "^4.0.4"
