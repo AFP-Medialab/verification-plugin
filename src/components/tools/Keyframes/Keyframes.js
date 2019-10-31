@@ -75,7 +75,7 @@ const Keyframes = () => {
         <div>
             <Paper className={classes.root}>
                 <CustomTile> {keyword("keyframes_title")}  </CustomTile>
-                <br/>
+                <Box m={1}/>
                 <Box display={localFile ? "none" : "block"}>
                     <Button variant="contained" color="primary" onClick={toggleLocal}>
                         {keyword("button_localfile")}
