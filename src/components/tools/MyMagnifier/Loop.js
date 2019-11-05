@@ -1,23 +1,10 @@
-import React, {useEffect} from "react";
+import React from "react";
 import Magnifier from "react-magnifier";
 
-const Loop = () => {
-
-    useEffect(() => {
-
-        const handleScroll = (e) => {
-            let scrollTop = window.scrollY;
-            console.log(scrollTop);
-        };
-
-        window.addEventListener("scroll", handleScroll);
-        return window.removeEventListener("scroll", handleScroll)
-    }, []);
-
-
+const Loop = (props) => {
     return (
         <div>
-            <Magnifier src={"https://picsum.photos/200"} width={200} />
+            <Magnifier src={props.src} width={200} />
         </div>
     )
 };
