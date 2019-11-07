@@ -4,7 +4,7 @@ import Magnifier from "react-magnifier";
 const Loop = (props) => {
     return (
         <div>
-            <Magnifier src={props.src} width={200} />
+            <Magnifier src={props.src} width={600} />
         </div>
     )
 };
