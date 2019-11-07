@@ -1311,6 +1311,13 @@
     "@svgr/plugin-svgo" "^4.3.1"
     loader-utils "^1.2.3"
 
+"@toast-ui/react-image-editor@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@toast-ui/react-image-editor/-/react-image-editor-1.0.1.tgz#f9a893dcbc7a0e4b0ced0e61b549005bac6e0eff"
+  integrity sha512-H+q/fTms2AqgGFmEdGwkTj/kQe6r+a8pW/CdE3fDIwMjY+Ki6onoLA+xxU+Xmz4KK4Iau8kzwUDjYotJ42k9Nw==
+  dependencies:
+    tui-image-editor "^3.4.0"
+
 "@types/babel__core@^7.1.0":
   version "7.1.3"
   resolved "https://registry.yarnpkg.com/@types/babel__core/-/babel__core-7.1.3.tgz#e441ea7df63cd080dfcd02ab199e6d16a735fc30"
@@ -2886,6 +2893,11 @@ core-js-compat@^3.1.1:
   dependencies:
     browserslist "^4.6.6"
     semver "^6.3.0"
+
+core-js@2.4.1:
+  version "2.4.1"
+  resolved "https://registry.yarnpkg.com/core-js/-/core-js-2.4.1.tgz#4de911e667b0eae9124e34254b53aea6fc618d3e"
+  integrity sha1-TekR5mew6ukSTjQlS1OupvxhjT4=
 
 core-js@3.2.1:
   version "3.2.1"
@@ -9873,6 +9885,27 @@ tty-browserify@0.0.0:
   version "0.0.0"
   resolved "https://registry.yarnpkg.com/tty-browserify/-/tty-browserify-0.0.0.tgz#a157ba402da24e9bf957f9aa69d524eed42901a6"
   integrity sha1-oVe6QC2iTpv5V/mqadUk7tQpAaY=
+
+tui-code-snippet@^1.5.0:
+  version "1.5.2"
+  resolved "https://registry.yarnpkg.com/tui-code-snippet/-/tui-code-snippet-1.5.2.tgz#f4b8f0f1ac996b0b5b621f77c9507af19a0de238"
+  integrity sha512-6UqTlQaaC1KLcmC0HAoq5dtl1G4Fib+R+NC7pmaV7kiIlZ7JqKhUmnOoGRcreAyzd81UTK/vCvhrw9QJskpCFQ==
+
+tui-color-picker@^2.2.0:
+  version "2.2.5"
+  resolved "https://registry.yarnpkg.com/tui-color-picker/-/tui-color-picker-2.2.5.tgz#4b3b3f943eb7cf3cc98244896e5c37ede3b570e7"
+  integrity sha512-pOQ+PurQtBhY2Yk5jKLI4yoDncj21w0xbpA10E17zBzD6B5HlSKayOsiqS97x4BNw19VMg5E9z9cTk7zAgwy9g==
+  dependencies:
+    tui-code-snippet "^1.5.0"
+
+tui-image-editor@^3.4.0:
+  version "3.7.0"
+  resolved "https://registry.yarnpkg.com/tui-image-editor/-/tui-image-editor-3.7.0.tgz#9585d5a9f26ad2c53213894729f027fcbc05911e"
+  integrity sha512-IrHvIWSAq1ejeiLpSC8i9sGbD0UGCq4wkuh8XADipaH+4LJ2ZQ/IICCM8i1OtLVzmOAsJYPYp5QU/OMl3qkQLQ==
+  dependencies:
+    core-js "2.4.1"
+    tui-code-snippet "^1.5.0"
+    tui-color-picker "^2.2.0"
 
 tunnel-agent@^0.6.0:
   version "0.6.0"
