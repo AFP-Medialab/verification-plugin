@@ -1,20 +1,17 @@
 import {Paper} from "@material-ui/core";
-import React, {createRef, useRef, useState, useEffect} from "react";
-import Loop from "./Loop";
+import React, {useEffect, useState} from "react";
 import CustomTile from "../../customTitle/customTitle";
 import Box from "@material-ui/core/Box";
 import {useSelector} from "react-redux";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
-import {useInput} from "../../Hooks/useInput";
 import makeStyles from "@material-ui/core/styles/makeStyles";
-import ReactCrop from "react-image-crop";
 import 'react-image-crop/dist/ReactCrop.css';
-import useFilter from "./useFilter";
-import {Filters} from "./Filters";
 import 'tui-image-editor/dist/tui-image-editor.css'
 import ImageResult from "./ImageResult";
-
+import FolderOpenIcon from '@material-ui/icons/FolderOpen';
+import MySnackbar from "../../MySnackbar/MySnackbar";
+import Typography from "@material-ui/core/Typography";
 
 
 const useStyles = makeStyles(theme => ({
@@ -40,22 +37,26 @@ const useStyles = makeStyles(theme => ({
 
 
 const MyMagnifier = () => {
-
-
     const classes = useStyles();
-
     const dictionary = useSelector(state => state.dictionary);
     const lang = useSelector(state => state.language);
     const keyword = (key) => {
         return (dictionary !== null) ? dictionary[lang][key] : "";
     };
 
-    const input = useInput("https://picsum.photos/200");
+    const [input, setInput] = useState("");
     const [image, setImage] = useState("");
+    const [errors, setErrors] = useState(null);
+
+    const getErrorText = (error) => {
+        if (keyword(error) !== undefined)
+            return keyword(error);
+        return "Please give a correct link (TSV change)"
+    };
+
 
     const submitUrl = () => {
         let img = new Image();
-        img.src = input.value;
         img.onload = () => {
             let canvas = document.createElement('canvas');
             canvas.width = img.width;
@@ -63,9 +64,14 @@ const MyMagnifier = () => {
             canvas.getContext('2d').drawImage(img, 0, 0);
 
             // Get raw image data
-            console.log("image : " + canvas.toDataURL('image/png'));
-           setImage(canvas.toDataURL('image/png'))
+            setImage("");
+            setImage(canvas.toDataURL('image/png'));
+            canvas.remove();
         };
+        img.onerror = (error) => {
+            setErrors("errors")
+        };
+        img.src = input;
     };
 
     return (
@@ -74,13 +80,23 @@ const MyMagnifier = () => {
                 <CustomTile> {keyword("magnifier_title")}  </CustomTile>
                 <Box m={1}/>
                 <TextField
+                    value={input}
                     id="standard-full-width"
                     label={keyword("magnifier_urlbox")}
                     style={{margin: 8}}
                     placeholder={""}
                     fullWidth
-                    {...input}
+                    onChange={e => {setInput(e.target.value)}}
                 />
+                <Button>
+                    <label htmlFor="fileInput">
+                        <FolderOpenIcon />
+                        <Typography variant={"subtitle2"}>{keyword("button_localfile")}</Typography>
+                    </label>
+                    <input id="fileInput" type="file" hidden={true} onChange={e => {
+                        setInput(URL.createObjectURL(e.target.files[0]))
+                    }}/>
+                </Button>
                 <Box m={2}/>
                 <Button variant="contained" color="primary" onClick={submitUrl}>
                     {keyword("button_submit")}
@@ -90,6 +106,11 @@ const MyMagnifier = () => {
                 image !== "" &&
                 <ImageResult image={image}/>
             }
+            <div>
+                {
+                    errors && <MySnackbar variant="error" message={getErrorText(errors)} onClick={() => setErrors(null)}/>
+                }
+            </div>
         </div>
     )
 };

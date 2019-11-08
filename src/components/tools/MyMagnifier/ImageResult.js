@@ -1,5 +1,5 @@
 import {Paper} from "@material-ui/core";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import Loop from "./Loop";
 import Box from "@material-ui/core/Box";
 import {useSelector} from "react-redux";
@@ -13,10 +13,11 @@ import Modal from "@material-ui/core/Modal";
 import Backdrop from '@material-ui/core/Backdrop';
 
 
-const icona = require("tui-image-editor/dist/svg/icon-a.svg");
-const iconb = require("tui-image-editor/dist/svg/icon-b.svg");
-const iconc = require("tui-image-editor/dist/svg/icon-c.svg");
-const icond = require("tui-image-editor/dist/svg/icon-d.svg");
+import icona from "tui-image-editor/dist/svg/icon-a.svg";
+import iconb from "tui-image-editor/dist/svg/icon-b.svg";
+import iconc from "tui-image-editor/dist/svg/icon-c.svg";
+import icond from "tui-image-editor/dist/svg/icon-d.svg";
+import Grid from "@material-ui/core/Grid";
 
 const myTheme = {
     "menu.backgroundColor": "white",
@@ -33,7 +34,7 @@ const myTheme = {
 const useStyles = makeStyles(theme => ({
     root: {
         padding: theme.spacing(3, 2),
-        marginTop: 5,
+        marginTop: 20,
         textAlign: "center",
     },
     textFiledError: {
@@ -57,12 +58,13 @@ const useStyles = makeStyles(theme => ({
     paper: {
         backgroundColor: "#151515",
         width: window.innerWidth * 0.9,
+
     },
     modalButton: {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-    }
+    },
 }));
 
 
@@ -74,19 +76,37 @@ const ImageResult = (props) => {
         return (dictionary !== null) ? dictionary[lang][key] : "";
     };
 
-    const [image, setImage] = useState(props.image);
+    const [sourceImage, setSourceImage] = useState(props.image);
+    const [resultImage, setResultImage] = useState(props.image);
     const imageEditor = React.createRef();
 
     const updateImage = () => {
         const imageEditorInst = imageEditor.current.imageEditorInst;
         const data = imageEditorInst.toDataURL();
-        setImage(data);
+        setSourceImage(data);
+        setResultImage(data);
     };
+
+    useEffect(() => {
+        setSourceImage(props.image);
+        setResultImage(props.image);
+    }, [props.image]);
 
     const [open, setOpen] = React.useState(false);
 
     const handleOpen = () => {
+        if (imageEditor !== null && imageEditor.current !== null) {
+            const imageEditorInst = imageEditor.current;
+            console.log("imageEdir");
+            console.log(imageEditorInst);
+            imageEditorInst.loadImageFromURL(sourceImage, 'image').then(result => {
+                console.log('old : ' + result.oldWidth + ', ' + result.oldHeight);
+                console.log('new : ' + result.newWidth + ', ' + result.newHeight);
+
+            }).catch((error) => console.log(error));
+        }
         setOpen(true);
+
     };
 
     const handleClose = () => {
@@ -94,6 +114,12 @@ const ImageResult = (props) => {
             updateImage()
         }
         setOpen(false);
+    };
+
+    const downLoadLink = (image) => {
+        let image_name = image.substring(image.lastIndexOf("/") + 1);
+        let index = image_name.indexOf("?");
+        return image_name.substring(0, image_name.lastIndexOf("."));
     };
 
     return (
@@ -114,7 +140,10 @@ const ImageResult = (props) => {
                     <div className={classes.paper}>
                         <ImageEditor
                             includeUI={{
-
+                                loadImage: {
+                                    path: sourceImage,
+                                    name: 'SampleImage'
+                                },
                                 theme: myTheme,
                                 menu: ["crop", "flip", "rotate", "filter"],
                                 initMenu: "",
@@ -123,8 +152,8 @@ const ImageResult = (props) => {
                                 },
                                 menuBarPosition: "bottom",
                             }}
-                            cssMaxHeight={window.innerHeight}
-                            cssMaxWidth={window.innerWidth}
+                            cssMaxHeight={window.innerHeight * 0.8}
+                            cssMaxWidth={window.innerWidth * 0.8}
                             selectionStyle={{
                                 cornerSize: 20,
                                 rotatingPointOffset: 70,
@@ -133,17 +162,36 @@ const ImageResult = (props) => {
                             ref={imageEditor}
                         />
                         <Box m={1}/>
+
                         <div className={classes.modalButton}>
-                            <Button variant="contained" color="secondary" onClick={handleClose}>Save</Button>
+                            <Button variant="contained" color="secondary" onClick={() => setOpen(false)}>Quit (add
+                                tsv)</Button>
+                            <div className={classes.grow}/>
+                            <Button variant="contained" color="secondary" onClick={handleClose}>Save (add tsv)</Button>
                         </div>
                     </div>
                 </Fade>
             </Modal>
 
             <Box m={1}/>
-            <Button  onClick={handleOpen}>Edit Image</Button>
+            <Grid
+                container
+                direction="row"
+                justify="center"
+                alignItems="center"
+                spacing={3}
+            >
+                <Grid item>
+                    <Button color="primary" variant="contained" onClick={handleOpen}>Edit Image add tsv</Button>
+                </Grid>
+                <Grid item>
+                    <a href={resultImage} download={downLoadLink(resultImage)}>
+                        <Button color="primary" variant="contained">Download</Button>
+                    </a>
+                </Grid>
+            </Grid>
             <Box m={1}/>
-            <Loop src={image}/>
+            <Loop src={resultImage}/>
         </Paper>
     )
 };
