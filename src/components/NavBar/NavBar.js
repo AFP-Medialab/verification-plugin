@@ -44,6 +44,7 @@ import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import Thumbnails from "../tools/Thumbnails/Thumbnails";
 import TwitterAdvancedSearch from "../tools/TwitterAdvancedSearch/TwitterAdvancedSearch";
 import Magnifier from "../tools/Magnifier/Magnifier";
+import Metadata from "../tools/Metadata/Metadata";
 
 const drawerWidth = 200;
 
@@ -197,7 +198,7 @@ const NavBar = (props) => {
         {
             title: "navbar_metadata",
             icon: <SubscriptionsIcon fontSize={"large"} className={(drawerValue === 6)? classes.selectedApp : classes.unSelectedApp}/>,
-            content: <div>Metadada</div>
+            content: <Metadata/>
         },
         {
             title: "navbar_rights",
