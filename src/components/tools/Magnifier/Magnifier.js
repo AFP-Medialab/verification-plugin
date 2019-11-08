@@ -36,7 +36,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-const MyMagnifier = () => {
+const Magnifier = () => {
     const classes = useStyles();
     const dictionary = useSelector(state => state.dictionary);
     const lang = useSelector(state => state.language);
@@ -114,4 +114,4 @@ const MyMagnifier = () => {
         </div>
     )
 };
-export default MyMagnifier;
+export default Magnifier;

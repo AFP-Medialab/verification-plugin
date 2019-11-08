@@ -43,7 +43,7 @@ import Fab from "@material-ui/core/Fab";
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import Thumbnails from "../tools/Thumbnails/Thumbnails";
 import TwitterAdvancedSearch from "../tools/TwitterAdvancedSearch/TwitterAdvancedSearch";
-import MyMagnifier from "../tools/MyMagnifier/MyMagnifier";
+import Magnifier from "../tools/Magnifier/Magnifier";
 
 const drawerWidth = 200;
 
@@ -192,7 +192,7 @@ const NavBar = (props) => {
         {
             title: "navbar_magnifier",
             icon: <SearchIcon fontSize={"large"} className={(drawerValue === 5)? classes.selectedApp : classes.unSelectedApp}/>,
-            content: <MyMagnifier/>
+            content: <Magnifier/>
         },
         {
             title: "navbar_metadata",
