@@ -89,11 +89,11 @@ const Magnifier = () => {
                     onChange={e => {setInput(e.target.value)}}
                 />
                 <Button>
-                    <label htmlFor="fileInput">
+                    <label htmlFor="fileInputMagnifier">
                         <FolderOpenIcon />
                         <Typography variant={"subtitle2"}>{keyword("button_localfile")}</Typography>
                     </label>
-                    <input id="fileInput" type="file" hidden={true} onChange={e => {
+                    <input id="fileInputMagnifier" type="file" hidden={true} onChange={e => {
                         setInput(URL.createObjectURL(e.target.files[0]))
                     }}/>
                 </Button>

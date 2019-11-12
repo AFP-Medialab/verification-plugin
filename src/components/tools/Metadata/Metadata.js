@@ -15,7 +15,9 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Radio from "@material-ui/core/Radio";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import Grid from "@material-ui/core/Grid";
-
+import EXIF from "exif-js/exif";
+import MetadataImageResult from "./MetadataImageResult";
+import * as mp4box from "mp4box";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -24,6 +26,14 @@ const useStyles = makeStyles(theme => ({
         textAlign: "center",
     },
 }));
+
+function isEmpty(obj) {
+    for (let key in obj) {
+        if (obj.hasOwnProperty(key))
+            return false;
+    }
+    return true;
+}
 
 
 const Metadata = () => {
@@ -37,15 +47,84 @@ const Metadata = () => {
     const [input, setInput] = useState("");
     const [radioImage, setRadioImage] = useState(true);
     const [errors, setErrors] = useState(null);
+    const [mediaUrl, setMediaUrl] = useState(null);
+    const [result, setResult] = useState(null);
 
     const getErrorText = (error) => {
         if (keyword(error) !== undefined)
             return keyword(error);
-        return "Please give a correct link (TSV change)"
+        return "Please give a correct file (TSV change)"
     };
 
 
+    useEffect(() => {
+        if (input === "")
+            return;
+        let imageTreatment = () => {
+            let img = new Image();
+            img.src = input;
+            img.onload = () => {
+                EXIF.getData(img, () => {
+                    let res = EXIF.getAllTags(img);
+                    if (!isEmpty(res))
+                        setResult(res);
+                    else
+                        setErrors("metadata_img_error_exif");
+                });
+            };
+            img.onerror = (error) => {
+                setErrors(error)
+            };
+        };
+
+        let videoTreatment = () => {
+            let video =  mp4box.createFile();
+            console.log(video);
+
+            video.onReady = (info) => {
+                console.log("video ")
+
+                console.log(info)
+            };
+
+            video.onError = (error) => {
+                console.log("mp4 error : " + error);
+                setErrors(getErrorText("metadata_table_error"))
+            };
+
+
+            let fileReader = new FileReader();
+            fileReader.onload = () => {
+                let arrayBuffer = fileReader.result;
+                arrayBuffer.fileStart = 0;
+                video.appendBuffer(arrayBuffer);
+                video.flush();
+            };
+
+            var blob = null;
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", mediaUrl);
+            xhr.responseType = "blob";
+            xhr.onload = function() {
+                blob = xhr.response; //xhr.response is now a blob object
+                fileReader.readAsArrayBuffer(blob);
+            };
+            xhr.send();
+        };
+
+        console.log(radioImage);
+        if (radioImage)
+            imageTreatment();
+        else
+            videoTreatment();
+
+    }, [mediaUrl]);
+
+
     const submitUrl = () => {
+        if (input){
+            setMediaUrl(input);
+        }
     };
 
     return (
@@ -65,11 +144,11 @@ const Metadata = () => {
                     }}
                 />
                 <Button>
-                    <label htmlFor="fileInput">
+                    <label htmlFor="fileInputMetadata">
                         <FolderOpenIcon/>
                         <Typography variant={"subtitle2"}>{keyword("button_localfile")}</Typography>
                     </label>
-                    <input id="fileInput" type="file" hidden={true} onChange={e => {
+                    <input id="fileInputMetadata" type="file" hidden={true} onChange={e => {
                         setInput(URL.createObjectURL(e.target.files[0]))
                     }}/>
                 </Button>
@@ -104,7 +183,10 @@ const Metadata = () => {
                     {keyword("button_submit")}
                 </Button>
             </Paper>
-
+            {
+                result &&
+                <MetadataImageResult result={result}/>
+            }
             <div>
                 {
                     errors &&
