@@ -10,6 +10,7 @@
     "@toast-ui/react-image-editor": "^1.0.1",
     "axios": "^0.19.0",
     "date-fns": "^2.6.0",
+    "exif-js": "^2.3.0",
     "fabric": "^3.4.0",
     "material-ui-image": "^3.2.2",
     "react": "^16.10.2",
@@ -43,5 +44,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "mp4box": "^0.3.20"
   }
 }
