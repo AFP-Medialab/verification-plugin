@@ -45,6 +45,7 @@ import Thumbnails from "../tools/Thumbnails/Thumbnails";
 import TwitterAdvancedSearch from "../tools/TwitterAdvancedSearch/TwitterAdvancedSearch";
 import Magnifier from "../tools/Magnifier/Magnifier";
 import Metadata from "../tools/Metadata/Metadata";
+import VideoRights from "../tools/VideoRights/VideoRights";
 
 const drawerWidth = 200;
 
@@ -203,7 +204,7 @@ const NavBar = (props) => {
         {
             title: "navbar_rights",
             icon: <CopyrightIcon fontSize={"large"} className={(drawerValue === 7)? classes.selectedApp : classes.unSelectedApp}/>,
-            content: <div>Copyrights</div>
+            content: <VideoRights/>
         },
         {
             title: "navbar_forensic",

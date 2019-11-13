@@ -13,6 +13,7 @@
     "exif-js": "^2.3.0",
     "fabric": "^3.4.0",
     "material-ui-image": "^3.2.2",
+    "querystring": "^0.2.0",
     "react": "^16.10.2",
     "react-browser-extension-scripts": "0.1.2",
     "react-dom": "^16.10.2",
