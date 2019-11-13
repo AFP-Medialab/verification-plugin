@@ -18,6 +18,9 @@ import Grid from "@material-ui/core/Grid";
 import EXIF from "exif-js/exif";
 import MetadataImageResult from "./MetadataImageResult";
 import * as mp4box from "mp4box";
+import MetadataVideoResult from "./MetadataVideoResult";
+import useImageTreatment from "./useImageTreatment";
+import useVideoTreatment from "./useVideoTreatment";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -26,14 +29,6 @@ const useStyles = makeStyles(theme => ({
         textAlign: "center",
     },
 }));
-
-function isEmpty(obj) {
-    for (let key in obj) {
-        if (obj.hasOwnProperty(key))
-            return false;
-    }
-    return true;
-}
 
 
 const Metadata = () => {
@@ -47,8 +42,12 @@ const Metadata = () => {
     const [input, setInput] = useState("");
     const [radioImage, setRadioImage] = useState(true);
     const [errors, setErrors] = useState(null);
-    const [mediaUrl, setMediaUrl] = useState(null);
-    const [result, setResult] = useState(null);
+
+    const [imageUrl, setImageurl] = useState(null);
+    const [videoUrl, setVideoUrl] = useState(null);
+
+    const [videoResult, videoErrors] = useVideoTreatment(videoUrl);
+    const [imageResult, imageErrors] = useImageTreatment(imageUrl);
 
     const getErrorText = (error) => {
         if (keyword(error) !== undefined)
@@ -58,72 +57,25 @@ const Metadata = () => {
 
 
     useEffect(() => {
-        if (input === "")
-            return;
-        let imageTreatment = () => {
-            let img = new Image();
-            img.src = input;
-            img.onload = () => {
-                EXIF.getData(img, () => {
-                    let res = EXIF.getAllTags(img);
-                    if (!isEmpty(res))
-                        setResult(res);
-                    else
-                        setErrors("metadata_img_error_exif");
-                });
-            };
-            img.onerror = (error) => {
-                setErrors(error)
-            };
-        };
-
-        let videoTreatment = () => {
-            let video =  mp4box.createFile();
-            console.log(video);
-
-            video.onReady = (info) => {
-                console.log("video ")
-
-                console.log(info)
-            };
-
-            video.onError = (error) => {
-                console.log("mp4 error : " + error);
-                setErrors(getErrorText("metadata_table_error"))
-            };
+        if (videoErrors)
+            setErrors(getErrorText(videoErrors));
+        if (imageErrors)
+            setErrors(getErrorText(imageErrors));
+    }, [videoErrors, imageErrors]);
 
 
-            let fileReader = new FileReader();
-            fileReader.onload = () => {
-                let arrayBuffer = fileReader.result;
-                arrayBuffer.fileStart = 0;
-                video.appendBuffer(arrayBuffer);
-                video.flush();
-            };
-
-            var blob = null;
-            var xhr = new XMLHttpRequest();
-            xhr.open("GET", mediaUrl);
-            xhr.responseType = "blob";
-            xhr.onload = function() {
-                blob = xhr.response; //xhr.response is now a blob object
-                fileReader.readAsArrayBuffer(blob);
-            };
-            xhr.send();
-        };
-
-        console.log(radioImage);
-        if (radioImage)
-            imageTreatment();
-        else
-            videoTreatment();
-
-    }, [mediaUrl]);
 
 
     const submitUrl = () => {
         if (input){
-            setMediaUrl(input);
+            if (radioImage) {
+                setVideoUrl(null);
+                setImageurl(input);
+            }
+            else {
+                setImageurl(null);
+                setVideoUrl(input);
+            }
         }
     };
 
@@ -184,8 +136,12 @@ const Metadata = () => {
                 </Button>
             </Paper>
             {
-                result &&
-                <MetadataImageResult result={result}/>
+                imageResult &&
+                <MetadataImageResult result={imageResult}/>
+            }
+            {
+                videoResult &&
+                 <MetadataVideoResult result={videoResult}/>
             }
             <div>
                 {

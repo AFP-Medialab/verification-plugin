@@ -29,7 +29,6 @@ const MetadataImageResult = (result) => {
     };
 
     const report = result["result"];
-    console.log(report);
 
     let softwareInfos = [
         {
