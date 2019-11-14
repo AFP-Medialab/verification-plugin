@@ -3,12 +3,15 @@ import CustomTile from "../../customTitle/customTitle";
 import Box from "@material-ui/core/Box";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
-import FolderOpenIcon from "@material-ui/core/SvgIcon/SvgIcon";
+import FolderOpenIcon from '@material-ui/icons/FolderOpen';
 import Typography from "@material-ui/core/Typography";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import {useSelector} from "react-redux";
 import MySnackbar from "../../MySnackbar/MySnackbar";
+import useGetImages from "./useGetImages";
+import LinearProgress from "@material-ui/core/LinearProgress";
+import ForensicResults from "./ForesnsicResult";
 
 
 const useStyles = makeStyles(theme => ({
@@ -45,30 +48,31 @@ const Forensic = () => {
     const [image, setImage] = useState("");
     const [errors, setErrors] = useState(null);
 
+    const [result, isLoading, getImageError] = useGetImages(image);
+
     const getErrorText = (error) => {
         if (keyword(error) !== undefined)
             return keyword(error);
         return "Please give a correct link (TSV change)"
     };
 
+    useEffect(() => {
+        if (getImageError) {
+            if (keyword(getImageError) !== undefined)
+                setErrors(keyword(getImageError));
+            else
+                setErrors(keyword("forensic_error_empty_parameter"))
+        }
+    }, [errors]);
+
+    useEffect(() => {
+        console.log(result);
+    }, [result]);
 
     const submitUrl = () => {
-        let img = new Image();
-        img.onload = () => {
-            let canvas = document.createElement('canvas');
-            canvas.width = img.width;
-            canvas.height = img.height;
-            canvas.getContext('2d').drawImage(img, 0, 0);
-
-            // Get raw image data
-            setImage("");
-            setImage(canvas.toDataURL('image/png'));
-            canvas.remove();
-        };
-        img.onerror = (error) => {
-            setErrors("errors")
-        };
-        img.src = input;
+        if (input && input !== ""){
+            setImage(input);
+        }
     };
 
     return (
@@ -83,22 +87,29 @@ const Forensic = () => {
                   style={{margin: 8}}
                   placeholder={""}
                   fullWidth
+                  disabled={isLoading}
                   onChange={e => {setInput(e.target.value)}}
               />
-              <Button>
-                  <label htmlFor="fileInputMagnifier">
+              <Button disabled={isLoading}>
+                  <label htmlFor="fileInputForensic">
                       <FolderOpenIcon />
                       <Typography variant={"subtitle2"}>{keyword("button_localfile")}</Typography>
                   </label>
-                  <input id="fileInputMagnifier" type="file" hidden={true} onChange={e => {
+                  <input id="fileInputForensic" type="file" hidden={true} onChange={e => {
                       setInput(URL.createObjectURL(e.target.files[0]))
                   }}/>
               </Button>
               <Box m={2}/>
-              <Button variant="contained" color="primary" onClick={submitUrl}>
+              <Button variant="contained" color="primary" onClick={submitUrl} disabled={isLoading}>
                   {keyword("button_submit")}
               </Button>
+              <Box m={2}/>
+              <LinearProgress hidden={!isLoading}/>
           </Paper>
+          {
+              result &&
+              <ForensicResults result={result}/>
+          }
 
           <div>
               {
@@ -108,3 +119,4 @@ const Forensic = () => {
       </div>
     );
 };
+export default Forensic;
