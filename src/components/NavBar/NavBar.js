@@ -47,6 +47,7 @@ import Magnifier from "../tools/Magnifier/Magnifier";
 import Metadata from "../tools/Metadata/Metadata";
 import VideoRights from "../tools/VideoRights/VideoRights";
 import Forensic from "../tools/Forensic/Forensic";
+import AllTools from "../tools/Alltools/AllTools";
 
 const drawerWidth = 200;
 
@@ -170,47 +171,77 @@ const NavBar = (props) => {
         {
             title: "",
             icon: <AppsIcon fontSize={"large"} className={(drawerValue === 0)? classes.selectedApp : classes.unSelectedApp}/>,
-            content: <div>all apps</div>
+            tsvPrefix: "all"
         },
         {
             title: "navbar_analysis",
             icon: <PlayCircleOutlineIcon fontSize={"large"} className={(drawerValue === 1)? classes.selectedApp : classes.unSelectedApp}/>,
-            content: <Analysis/>
+            tsvPrefix: "api"
         },
         {
             title: "navbar_keyframes",
             icon: <TheatersIcon fontSize={"large"} className={(drawerValue === 2)? classes.selectedApp : classes.unSelectedApp}/>,
-            content: <Keyframes/>
+            tsvPrefix: "keyframes"
         },
         {
             title: "navbar_thumbnails",
             icon: <YouTubeIcon fontSize={"large"} className={(drawerValue === 3)? classes.selectedApp : classes.unSelectedApp}/>,
-            content: <Thumbnails/>
+            tsvPrefix: "thumbnails"
         },
         {
             title: "navbar_twitter",
             icon: <TwitterIcon fontSize={"large"} className={(drawerValue === 4)? classes.selectedApp : classes.unSelectedApp}/>,
-            content: <TwitterAdvancedSearch/>
+            tsvPrefix: "twitter"
         },
         {
             title: "navbar_magnifier",
             icon: <SearchIcon fontSize={"large"} className={(drawerValue === 5)? classes.selectedApp : classes.unSelectedApp}/>,
-            content: <Magnifier/>
+            tsvPrefix: "magnifier"
         },
         {
             title: "navbar_metadata",
             icon: <SubscriptionsIcon fontSize={"large"} className={(drawerValue === 6)? classes.selectedApp : classes.unSelectedApp}/>,
-            content: <Metadata/>
+            tsvPrefix: "metadata"
         },
         {
             title: "navbar_rights",
             icon: <CopyrightIcon fontSize={"large"} className={(drawerValue === 7)? classes.selectedApp : classes.unSelectedApp}/>,
-            content: <VideoRights/>
+            tsvPrefix: "copyright"
         },
         {
             title: "navbar_forensic",
             icon: <ImageSearchIcon fontSize={"large"} className={(drawerValue === 8)? classes.selectedApp : classes.unSelectedApp}/>,
-            content: <Forensic/>
+            tsvPrefix: "forensic"
+        }
+    ];
+
+    const drawerItemsContent = [
+        {
+            content: <AllTools tools={drawerItems}/>,
+        },
+        {
+            content: <Analysis/>,
+        },
+        {
+            content: <Keyframes/>,
+        },
+        {
+            content: <Thumbnails/>,
+        },
+        {
+            content: <TwitterAdvancedSearch/>,
+        },
+        {
+            content: <Magnifier/>,
+        },
+        {
+            content: <Metadata/>,
+        },
+        {
+            content: <VideoRights/>,
+        },
+        {
+            content: <Forensic/>,
         }
     ];
 
@@ -288,7 +319,7 @@ const NavBar = (props) => {
                             <Container key={index} value={index} hidden={tabValue !== index}>
                                 <Fade in={tabValue === index}>
                                     <div>
-                                        {item.content}
+                                        {tabItems[index].content}
                                     </div>
                                 </Fade>
                             </Container>
@@ -302,7 +333,7 @@ const NavBar = (props) => {
                             <Container key={index} value={index} hidden={drawerValue !== index}>
                                 <Fade in={drawerValue === index}>
                                     <div>
-                                        {item.content}
+                                        {drawerItemsContent[index].content}
                                     </div>
                                 </Fade>
                             </Container>
