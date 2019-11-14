@@ -19,6 +19,7 @@
     "react-dom": "^16.10.2",
     "react-iframe": "^1.8.0",
     "react-image-crop": "^8.4.0",
+    "react-image-lightbox": "^5.1.1",
     "react-image-magnifiers": "^1.2.1",
     "react-redux": "^7.1.1",
     "react-router-dom": "^5.1.2",

@@ -46,6 +46,7 @@ import TwitterAdvancedSearch from "../tools/TwitterAdvancedSearch/TwitterAdvance
 import Magnifier from "../tools/Magnifier/Magnifier";
 import Metadata from "../tools/Metadata/Metadata";
 import VideoRights from "../tools/VideoRights/VideoRights";
+import Forensic from "../tools/Forensic/Forensic";
 
 const drawerWidth = 200;
 
@@ -209,7 +210,7 @@ const NavBar = (props) => {
         {
             title: "navbar_forensic",
             icon: <ImageSearchIcon fontSize={"large"} className={(drawerValue === 8)? classes.selectedApp : classes.unSelectedApp}/>,
-            content: <div>Forensic</div>
+            content: <Forensic/>
         }
     ];
 
