@@ -7,14 +7,14 @@ import CastForEducationIcon from '@material-ui/icons/CastForEducation';
 import VideogameAssetIcon from '@material-ui/icons/VideogameAsset';
 import InfoIcon from '@material-ui/icons/Info';
 import Box from '@material-ui/core/Box';
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import Languages from "../languages/languages";
 import logoInvid from "./images/logo-invid.png";
 import logoWeVerify from "./images/logo-we-verify.png";
 import Tutorial from "../tutorial/tutorial";
 import Fade from "@material-ui/core/Fade";
 import {Container} from "@material-ui/core";
-import React from 'react';
+import React, {useEffect} from 'react';
 import clsx from 'clsx';
 import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
@@ -48,6 +48,9 @@ import Metadata from "../tools/Metadata/Metadata";
 import VideoRights from "../tools/VideoRights/VideoRights";
 import Forensic from "../tools/Forensic/Forensic";
 import AllTools from "../tools/Alltools/AllTools";
+import {Link, Route, Switch} from 'react-router-dom'
+import history from '../History/History';
+import {selectPage, selectTool} from "../../redux/actions";
 
 const drawerWidth = 200;
 
@@ -103,8 +106,7 @@ const useStyles = makeStyles(theme => ({
     selectedApp: {
         color: theme.palette.primary.main
     },
-    unSelectedApp: {
-    }
+    unSelectedApp: {}
 }));
 
 
@@ -119,14 +121,19 @@ const NavBar = (props) => {
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
 
-    const [tabValue, setTabValue] = React.useState(0);
+    const tabValue = useSelector(state => state.nav);
+    const drawerValue = useSelector(state => state.tool);
+    const dispatch = useDispatch();
+
+
     const handleChange = (event, newValue) => {
-        setTabValue(newValue);
+        dispatch(selectPage(newValue));
+        history.push("/app" + tabItems[newValue].path)
     };
 
-    const [drawerValue, setDrawerValue] = React.useState(0);
     const changeValue = (newValue) => {
-        setDrawerValue(newValue);
+        dispatch(selectTool(newValue));
+        history.push("/app/tools" + drawerItems[newValue].path)
     };
 
     const dictionary = useSelector(state => state.dictionary);
@@ -139,79 +146,104 @@ const NavBar = (props) => {
         setOpen(!open);
     };
 
-    const tabItems = [
-        {
-            title: "navbar_tools",
-            icon: <BuildIcon fontSize={"large"}/>,
-            content: <div/>
-        },
-        {
-            title: "navbar_tuto",
-            icon: <VideoLibraryIcon fontSize={"large"}/>,
-            content: <Tutorial/>
-        },
-        {
-            title: "navbar_classroom",
-            icon: <CastForEducationIcon fontSize={"large"}/>,
-            content: <div>classroom</div>
-        },
-        {
-            title: "navbar_quiz",
-            icon: <VideogameAssetIcon fontSize={"large"}/>,
-            content: <div>Iinteractive</div>
-        },
-        {
-            title: "navbar_about",
-            icon: <InfoIcon fontSize={"large"}/>,
-            content: <div>About</div>
-        }
-    ];
 
     const drawerItems = [
         {
             title: "",
-            icon: <AppsIcon fontSize={"large"} className={(drawerValue === 0)? classes.selectedApp : classes.unSelectedApp}/>,
-            tsvPrefix: "all"
+            icon: <AppsIcon fontSize={"large"}
+                            className={(drawerValue === 0) ? classes.selectedApp : classes.unSelectedApp}/>,
+            tsvPrefix: "all",
+            path: "/all",
         },
         {
             title: "navbar_analysis",
-            icon: <PlayCircleOutlineIcon fontSize={"large"} className={(drawerValue === 1)? classes.selectedApp : classes.unSelectedApp}/>,
-            tsvPrefix: "api"
+            icon: <PlayCircleOutlineIcon fontSize={"large"}
+                                         className={(drawerValue === 1) ? classes.selectedApp : classes.unSelectedApp}/>,
+            tsvPrefix: "api",
+            path: "/analysis",
         },
         {
             title: "navbar_keyframes",
-            icon: <TheatersIcon fontSize={"large"} className={(drawerValue === 2)? classes.selectedApp : classes.unSelectedApp}/>,
-            tsvPrefix: "keyframes"
+            icon: <TheatersIcon fontSize={"large"}
+                                className={(drawerValue === 2) ? classes.selectedApp : classes.unSelectedApp}/>,
+            tsvPrefix: "keyframes",
+            path: "/keyframes",
         },
         {
             title: "navbar_thumbnails",
-            icon: <YouTubeIcon fontSize={"large"} className={(drawerValue === 3)? classes.selectedApp : classes.unSelectedApp}/>,
-            tsvPrefix: "thumbnails"
+            icon: <YouTubeIcon fontSize={"large"}
+                               className={(drawerValue === 3) ? classes.selectedApp : classes.unSelectedApp}/>,
+            tsvPrefix: "thumbnails",
+            path: "/thumbnails",
         },
         {
             title: "navbar_twitter",
-            icon: <TwitterIcon fontSize={"large"} className={(drawerValue === 4)? classes.selectedApp : classes.unSelectedApp}/>,
-            tsvPrefix: "twitter"
+            icon: <TwitterIcon fontSize={"large"}
+                               className={(drawerValue === 4) ? classes.selectedApp : classes.unSelectedApp}/>,
+            tsvPrefix: "twitter",
+            path: "/twitter",
         },
         {
             title: "navbar_magnifier",
-            icon: <SearchIcon fontSize={"large"} className={(drawerValue === 5)? classes.selectedApp : classes.unSelectedApp}/>,
-            tsvPrefix: "magnifier"
+            icon: <SearchIcon fontSize={"large"}
+                              className={(drawerValue === 5) ? classes.selectedApp : classes.unSelectedApp}/>,
+            tsvPrefix: "magnifier",
+            path: "/magnifier",
         },
         {
             title: "navbar_metadata",
-            icon: <SubscriptionsIcon fontSize={"large"} className={(drawerValue === 6)? classes.selectedApp : classes.unSelectedApp}/>,
-            tsvPrefix: "metadata"
+            icon: <SubscriptionsIcon fontSize={"large"}
+                                     className={(drawerValue === 6) ? classes.selectedApp : classes.unSelectedApp}/>,
+            tsvPrefix: "metadata",
+            path: "/metadata",
         },
         {
             title: "navbar_rights",
-            icon: <CopyrightIcon fontSize={"large"} className={(drawerValue === 7)? classes.selectedApp : classes.unSelectedApp}/>,
-            tsvPrefix: "copyright"
+            icon: <CopyrightIcon fontSize={"large"}
+                                 className={(drawerValue === 7) ? classes.selectedApp : classes.unSelectedApp}/>,
+            tsvPrefix: "copyright",
+            path: "/copyright",
         },
         {
             title: "navbar_forensic",
-            icon: <ImageSearchIcon fontSize={"large"} className={(drawerValue === 8)? classes.selectedApp : classes.unSelectedApp}/>,
-            tsvPrefix: "forensic"
+            icon: <ImageSearchIcon fontSize={"large"}
+                                   className={(drawerValue === 8) ? classes.selectedApp : classes.unSelectedApp}/>,
+            tsvPrefix: "forensic",
+            path: "/forensic",
+        }
+    ];
+
+
+    const tabItems = [
+        {
+            title: "navbar_tools",
+            icon: <BuildIcon fontSize={"large"}/>,
+            content: <div/>,
+            path: "/tools/all",
+        },
+        {
+            title: "navbar_tuto",
+            icon: <VideoLibraryIcon fontSize={"large"}/>,
+            content: <Tutorial/>,
+            path: "/tutorial",
+        },
+        {
+            title: "navbar_classroom",
+            icon: <CastForEducationIcon fontSize={"large"}/>,
+            content: <div>classroom</div>,
+            path: "/classroom",
+        },
+        {
+            title: "navbar_quiz",
+            icon: <VideogameAssetIcon fontSize={"large"}/>,
+            content: <div>Iinteractive</div>,
+            path: "/interactive",
+        },
+        {
+            title: "navbar_about",
+            icon: <InfoIcon fontSize={"large"}/>,
+            content: <div>About</div>,
+            path: "/about",
         }
     ];
 
@@ -244,6 +276,7 @@ const NavBar = (props) => {
             content: <Forensic/>,
         }
     ];
+
 
     return (
         <div className={classes.root}>
@@ -299,9 +332,9 @@ const NavBar = (props) => {
                     {
                         drawerItems.map((item, key) => {
                             return (
-                                <ListItem button key={key} onClick={() => changeValue(key)} >
-                                    <ListItemIcon color="primary.main" >
-                                            {item.icon}
+                                <ListItem button key={key} onClick={() => changeValue(key)}>
+                                    <ListItemIcon color="primary.main">
+                                        {item.icon}
                                     </ListItemIcon>
                                     <ListItemText primary={keyword(item.title)}/>
                                 </ListItem>
@@ -311,38 +344,48 @@ const NavBar = (props) => {
                 </List>
             </Drawer>
             <main className={classes.content}>
-                <div className={classes.toolbar}  id="back-to-top-anchor"/>
-                {
-                    tabValue !== 0 &&
-                    tabItems.map((item, index) => {
-                        return (
-                            <Container key={index} value={index} hidden={tabValue !== index}>
-                                <Fade in={tabValue === index}>
-                                    <div>
-                                        {tabItems[index].content}
-                                    </div>
-                                </Fade>
-                            </Container>
-                        );
-                    })
-                }
-                {
-                    tabValue === 0 &&
-                    drawerItems.map((item, index) => {
-                        return (
-                            <Container key={index} value={index} hidden={drawerValue !== index}>
-                                <Fade in={drawerValue === index}>
-                                    <div>
-                                        {drawerItemsContent[index].content}
-                                    </div>
-                                </Fade>
-                            </Container>
-                        );
-                    })
-                }
+                <div className={classes.toolbar} id="back-to-top-anchor"/>
+                <Switch>
+                    {
+                        tabItems.map((item, index) => {
+                            if (index !== 0)
+                                return (
+                                    <Route key={index} exact path={"/app" + item.path}>
+                                        <Container>
+                                            <Fade in={true}>
+                                                <div>
+                                                    {tabItems[index].content}
+                                                </div>
+                                            </Fade>
+                                        </Container>
+                                    </Route>
+                                );
+                        })
+                    }
+                    {
+                        drawerItems.map((item, index) => {
+                            return (
+                                <Route key={index} path={"/app/tools" + item.path}>
+                                    <Container>
+                                        <Fade in={true}>
+                                            <div>
+                                                {drawerItemsContent[index].content}
+                                            </div>
+                                        </Fade>
+                                    </Container>
+                                </Route>
+                            );
+                        })
+                    }
+                    <Route>
+                        {
+                            "Not Foun"
+                        }
+                    </Route>
+                </Switch>
                 <ScrollTop {...props}>
                     <Fab color="secondary" size="small" aria-label="scroll back to top">
-                        <KeyboardArrowUpIcon />
+                        <KeyboardArrowUpIcon/>
                     </Fab>
                 </ScrollTop>
             </main>

@@ -74,7 +74,7 @@ const AllTools = (props) => {
             </Grid>
             <Dialog
                 height={"400px"}
-                fullWidth={"100%"}
+                fullWidth
                 maxWidth={"md"}
                 open={videoUrl !== null}
                 onClose={() => setVideoUrl(null)}
