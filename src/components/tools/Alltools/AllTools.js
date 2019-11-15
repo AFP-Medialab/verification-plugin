@@ -3,10 +3,24 @@ import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
-import React from "react";
+import React, {useState} from "react";
 import {useSelector} from "react-redux";
 import makeStyles from "@material-ui/core/styles/makeStyles";
+import Tab from "@material-ui/core/Tab";
+import HelpIcon from '@material-ui/icons/Help';
+import IconButton from "@material-ui/core/IconButton";
+import CardContent from "@material-ui/core/CardContent";
+import Badge from "@material-ui/core/Badge";
+import CardActions from "@material-ui/core/CardActions";
 
+import ModalVideo from 'react-modal-video'
+import {useStaticState} from "@material-ui/pickers";
+import Button from "@material-ui/core/Button";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import DialogContent from "@material-ui/core/DialogContent";
+import Iframe from "react-iframe";
+import DialogActions from "@material-ui/core/DialogActions";
+import Dialog from "@material-ui/core/Dialog";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -15,24 +29,13 @@ const useStyles = makeStyles(theme => ({
         textAlign: "center",
     },
     card: {
-        width: "100%",
+        paddingRight: 0,
     },
-    media: {
-        height: 0,
-        paddingTop: '56.25%', // 16:9
-    },
+
     expand: {
-        transform: 'rotate(0deg)',
-        marginLeft: 'auto',
-        transition: theme.transitions.create('transform', {
-            duration: theme.transitions.duration.shortest,
-        }),
-    },
-    expandOpen: {
-        transform: 'rotate(180deg)',
+        float: "right",
     },
 }));
-
 
 
 const AllTools = (props) => {
@@ -44,6 +47,8 @@ const AllTools = (props) => {
     };
     const tools = props.tools;
 
+    const [videoUrl, setVideoUrl] = useState(null);
+
     return (
         <Paper className={classes.root}>
             <Grid container justify="center" spacing={2}>
@@ -51,20 +56,45 @@ const AllTools = (props) => {
                     tools.map((value, key) => {
                         if (key !== 0)
                             return (
-                                <Box key={key} m={1}>
-                                    <Card className={classes.card}>
-                                        <CardHeader
-                                            avatar={value.icon}
-                                            title={keyword(value.title)}
-                                            subheader=""
-                                        />
-
-                                    </Card>
+                                <Box key={key} m={3}>
+                                    <Paper className={classes.card}>
+                                        <Tab label={keyword(value.title)} className={classes.card}
+                                             icon={value.icon}
+                                             />
+                                        <IconButton aria-label="settings" className={classes.expand} size={"small"}
+                                                    onClick={() => setVideoUrl(keyword(value.tsvPrefix + "_help_video"))}
+                                                    >
+                                            <HelpIcon/>
+                                        </IconButton>
+                                    </Paper>
                                 </Box>
                             )
                     })
                 }
             </Grid>
+            <Dialog
+                height={"400px"}
+                fullWidth={"100%"}
+                maxWidth={"md"}
+                open={videoUrl !== null}
+                onClose={() => setVideoUrl(null)}
+                aria-labelledby="max-width-dialog-title"
+            >
+                <DialogContent>
+                    <Iframe
+                        frameBorder="0"
+                        url={videoUrl}
+                        allow="fullscreen"
+                        height="400"
+                        width="100%"
+                    />
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => setVideoUrl(null)} color="primary">
+                        {keyword("close")}
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </Paper>
     );
 };
