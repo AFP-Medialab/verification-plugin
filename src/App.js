@@ -3,6 +3,8 @@ import NavBar from "./components/NavBar/NavBar";
 import {MuiThemeProvider} from "@material-ui/core";
 import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
 import Button from "@material-ui/core/Button";
+import {HashRouter as Router, Route, Switch} from "react-router-dom";
+import history from "./components/History/History";
 
 const theme = createMuiTheme({
     palette: {
@@ -25,21 +27,33 @@ const theme = createMuiTheme({
 
 const Testing = () => {
     return (<Button onClick={() => {
-        window.open("popup.html#homepage");
+        window.open("/popup.html#/app/tools/all");
     }
-    }>Hello</Button>)
+    }>OPEN</Button>)
 };
 
 function App() {
     return (
         <MuiThemeProvider theme={theme}>
-            <div>
-                <header>
-                    {
-                        (window.location.hash === "#homepage") ? <NavBar/> : <Testing/>
-                    }
-                </header>
-            </div>
+            <Router history={history}>
+                <div>
+                    <header>
+                        <Switch>
+                            <Route exact path={"/"}>
+                                <Testing/>
+                            </Route>
+                            <Route path={"/app"}>
+                                <NavBar/>
+                            </Route>
+                            <Route>
+                                {
+                                    window.location.hash + "not found"
+                                }
+                            </Route>
+                        </Switch>
+                    </header>
+                </div>
+            </Router>
         </MuiThemeProvider>
     );
 }

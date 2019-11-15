@@ -11,3 +11,17 @@ export const setDictionary = (text) => {
         payload : text
     };
 };
+
+export const selectPage = (number) => {
+    return {
+        type: "SELECT_PAGE",
+        payload : number,
+    }
+};
+
+export const selectTool = (number) => {
+    return {
+        type : "SELECT_TOOL",
+        payload : number,
+    }
+};
