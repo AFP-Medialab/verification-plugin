@@ -77,7 +77,6 @@ const Analysis = () => {
 
     const submitForm = () => {
         if (!loading)
-            console.log(inputRef.value);
             setUrl(inputRef.value);
     };
 

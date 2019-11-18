@@ -21,6 +21,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import Iframe from "react-iframe";
 import DialogActions from "@material-ui/core/DialogActions";
 import Dialog from "@material-ui/core/Dialog";
+import history from "../../History/History";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -49,6 +50,10 @@ const AllTools = (props) => {
 
     const [videoUrl, setVideoUrl] = useState(null);
 
+    const handleClick = (path) => {
+        history.push("/app/tools/" + path)
+    };
+
     return (
         <Paper className={classes.root}>
             <Grid container justify="center" spacing={2}>
@@ -60,7 +65,7 @@ const AllTools = (props) => {
                                     <Paper className={classes.card}>
                                         <Tab label={keyword(value.title)} className={classes.card}
                                              icon={value.icon}
-                                             />
+                                             onClick={() => handleClick(value.path)}/>
                                         <IconButton aria-label="settings" className={classes.expand} size={"small"}
                                                     onClick={() => setVideoUrl(keyword(value.tsvPrefix + "_help_video"))}
                                                     >

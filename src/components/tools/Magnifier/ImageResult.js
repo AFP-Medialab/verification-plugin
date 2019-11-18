@@ -97,13 +97,8 @@ const ImageResult = (props) => {
     const handleOpen = () => {
         if (imageEditor !== null && imageEditor.current !== null) {
             const imageEditorInst = imageEditor.current;
-            console.log("imageEdir");
-            console.log(imageEditorInst);
-            imageEditorInst.loadImageFromURL(sourceImage, 'image').then(result => {
-                console.log('old : ' + result.oldWidth + ', ' + result.oldHeight);
-                console.log('new : ' + result.newWidth + ', ' + result.newHeight);
-
-            }).catch((error) => console.log(error));
+            imageEditorInst.loadImageFromURL(sourceImage, 'image')
+                .catch((error) => console.error(error));
         }
         setOpen(true);
 

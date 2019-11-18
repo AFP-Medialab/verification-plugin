@@ -2,22 +2,33 @@ import {Container} from "@material-ui/core";
 import Fade from "@material-ui/core/Fade";
 import React from "react";
 import {useParams} from 'react-router-dom'
-const DrawerItem = (props) => {
-    const {drawer} = useParams();
+import {useDispatch} from "react-redux";
+import {selectTool} from "../../../redux/actions";
 
-    return (
-        props.drawerItem.map((item, index) => {
-            if (drawer === item.path)
-                return (
-                    <Container>
-                        <Fade in={true}>
-                            <div>
-                                {props.drawerItem[index].content}
-                            </div>
-                        </Fade>
-                    </Container>
-                );
-        })
-    );
-};
+const DrawerItem = (props) => {
+        const {drawer} = useParams();
+
+        const dispatch = useDispatch();
+
+        return (
+            <div>
+                {
+                    props.drawerItems.map((item, index) => {
+                        if (drawer === item.path) {
+                            dispatch(selectTool(index));
+                            return (
+                                <Container key={index}>
+                                    <Fade in={true}>
+                                        <div>
+                                            {props.drawerItemsContent[index].content}
+                                        </div>
+                                    </Fade>
+                                </Container>
+                            );
+                        }
+                    })
+                }
+            </div>
+        );
+    };
 export default DrawerItem;

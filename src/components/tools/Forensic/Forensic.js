@@ -65,10 +65,6 @@ const Forensic = () => {
         }
     }, [errors]);
 
-    useEffect(() => {
-        console.log(result);
-    }, [result]);
-
     const submitUrl = () => {
         if (input && input !== ""){
             setImage(input);
