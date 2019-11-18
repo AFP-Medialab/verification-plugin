@@ -8,7 +8,6 @@ export const useKeyframes = (result, dependencies) => {
     useEffect(() => {
         let tmpDetailed = [];
         let tmpSimple = [];
-        console.log("loading lists")
         result["scenes"].map((scenesValue) => {
             return scenesValue["shots"].map((shotsValue) => {
                 return shotsValue["subshots"].map((subshotsValue) => {

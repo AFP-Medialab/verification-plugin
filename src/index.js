@@ -13,7 +13,7 @@ function saveToLocalStorage(state){
         localStorage.setItem('state', serializedState)
     }
     catch (e) {
-        console.log(e)
+        console.error(e)
     }
 }
 
@@ -25,7 +25,7 @@ function loadFromLocalStorage() {
         return JSON.parse(serializedState);
     }
     catch (e) {
-        console.log(e);
+        console.error(e);
         return undefined;
     }
 }

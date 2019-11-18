@@ -129,12 +129,15 @@ const NavBar = (props) => {
 
     const handleChange = (event, newValue) => {
         dispatch(selectPage(newValue));
-        history.push("/app" + tabItems[newValue].path)
+        if (tabItems[newValue].path === "tools")
+            history.push("/app/tools/" + drawerItems[newValue].path)
+        else
+            history.push("/app/" + tabItems[newValue].path)
     };
 
     const changeValue = (newValue) => {
         dispatch(selectTool(newValue));
-        history.push("/app/tools" + drawerItems[newValue].path)
+        history.push("/app/tools/" + drawerItems[newValue].path)
     };
 
     const dictionary = useSelector(state => state.dictionary);
@@ -150,7 +153,7 @@ const NavBar = (props) => {
 
     const drawerItems = [
         {
-            title: "",
+            title: "navbar_tools",
             icon: <AppsIcon fontSize={"large"}
                             className={(drawerValue === 0) ? classes.selectedApp : classes.unSelectedApp}/>,
             tsvPrefix: "all",
@@ -310,7 +313,7 @@ const NavBar = (props) => {
                     </Box>
                 </Toolbar>
             </AppBar>
-            <Drawer hidden={tabValue !== 0}
+            <Drawer hidden={tabValue !== 0 ||  (tabValue === 0 && drawerValue === 0)}
                     variant="permanent"
                     className={clsx(classes.drawer, {
                         [classes.drawerOpen]: open,
@@ -347,12 +350,12 @@ const NavBar = (props) => {
             <main className={classes.content}>
                 <div className={classes.toolbar} id="back-to-top-anchor"/>
                 <Switch>
-                    <Route path={"/app/:tabItem"}>
-                        <TabItem items={tabItems} drawerItems={drawerItems}/>
+                    <Route path={"/app/:tab"}>
+                        <TabItem tabItems={tabItems} drawerItems={drawerItems} drawerItemsContent={drawerItemsContent}/>
                     </Route>
                     <Route>
                         {
-                            "Not Foun"
+                            "Not Found"
                         }
                     </Route>
                 </Switch>
