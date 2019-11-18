@@ -52,6 +52,8 @@ import {Link, Route, Switch} from 'react-router-dom'
 import history from '../History/History';
 import {selectPage, selectTool} from "../../redux/actions";
 import TabItem from "./TabItem/TabItem";
+import ClassRoom from "../ClassRoom/ClassRoom";
+import Interactive from "../Interactive/Interactive";
 
 const drawerWidth = 200;
 
@@ -234,13 +236,13 @@ const NavBar = (props) => {
         {
             title: "navbar_classroom",
             icon: <CastForEducationIcon fontSize={"large"}/>,
-            content: <div>classroom</div>,
+            content: <ClassRoom/>,
             path: "classroom",
         },
         {
             title: "navbar_quiz",
             icon: <VideogameAssetIcon fontSize={"large"}/>,
-            content: <div>Iinteractive</div>,
+            content: <Interactive/>,
             path: "interactive",
         },
         {
