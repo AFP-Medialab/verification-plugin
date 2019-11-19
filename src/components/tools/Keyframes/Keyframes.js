@@ -35,7 +35,7 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const Keyframes = () => {
+const Keyframes = (props) => {
     const dictionary = useSelector(state => state.dictionary);
     const lang = useSelector(state => state.language);
     const keyword = (key) => {
@@ -71,6 +71,17 @@ const Keyframes = () => {
             setErrors(error);
     }, [error]);
 
+    useEffect(() => {
+        if (props.url !== undefined){
+            setSubmittedUrl(props.url);
+        }}, [props.url]);
+
+    const handleRefSetting = (ref) => {
+        setUrlRef(ref);
+        if (props.url !== undefined && ref !== null)
+            ref.value = props.url;
+    };
+
     return (
         <div>
             <Paper className={classes.root}>
@@ -83,7 +94,7 @@ const Keyframes = () => {
                     <Box m={2}/>
                     <Divider/>
                     <TextField
-                        inputRef={ref => setUrlRef(ref)}
+                        inputRef={ref => handleRefSetting(ref)}
                         id="standard-full-width"
                         label={keyword("keyframes_input")}
                         style={{margin: 8}}

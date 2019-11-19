@@ -21,12 +21,13 @@ import Grid from "@material-ui/core/Grid";
 import CastForEducationIcon from "@material-ui/core/SvgIcon/SvgIcon";
 import Button from "@material-ui/core/Button";
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import ImageReverseSearch from "../tools/ImageReverseSearch";
+import history from '../History/History';
 
 const useStyles = makeStyles(theme => ({
     root: {
         padding: theme.spacing(3, 2),
         textAlign: "center",
-
     },
     card: {
         maxWidth: "300px",
@@ -118,6 +119,7 @@ const Interactive = () => {
 
                 {
                     carousel.map((obj, key) => {
+                        const isImage = obj.ext == "jpg" || obj.ext == "jpeg" || obj.ext == "png" || obj.ext == "bmp" || obj.ext == "gif"
                         return (
 
                             <div key={key} hidden={key !== carouselIndex}>
@@ -126,7 +128,7 @@ const Interactive = () => {
                                        unmountOnExit>
                                     <div align={"center"}>
                                         {
-                                            (obj.ext == "jpg" || obj.ext == "jpeg" || obj.ext == "png" || obj.ext == "bmp" || obj.ext == "gif") ?
+                                            (isImage) ?
                                                 <img src={obj.url} className={classes.media}/>
                                                 :
                                                 <Iframe frameBorder="0" src={obj.url}
@@ -135,10 +137,36 @@ const Interactive = () => {
                                         }
                                     </div>
                                 </Slide>
-                                <Box m={3}>
+                                <Box m={3}/>
+                                {
+                                    (isImage) ?
+                                    <Grid container justify="center" spacing={2}
+                                          alignContent={"center"}>
+                                        <Grid item>
+                                            <Button p={3} variant="contained" color="primary" onClick={() => {
+                                                ImageReverseSearch("google", obj.url);
+                                            }}>
+                                                {keyword("quiz_similarity")}
+                                            </Button>
+                                        </Grid>
+                                        <Grid item>
+                                            <Button p={3} variant="contained" color="primary" onClick={() => {
+                                                history.push("tools/forensic/" + encodeURIComponent(obj.url))
+                                            }}>
+                                                {keyword("quiz_forensic")}
+                                            </Button>
+                                        </Grid>
+                                    </Grid>
+                                        :
+                                        <Button p={3} variant="contained" color="primary" onClick={() => {
+                                            history.push("tools/keyframes/" + encodeURIComponent(obj.url))
+                                        }}>
+                                            {keyword("quiz_keyframes")}
+                                        </Button>
 
+                                }
 
-                                </Box>
+                                <Box m={3}/>
                                 <Typography variant={"h5"}>{obj.title}</Typography>
                                 <ExpansionPanel expanded={answerExpanded} onChange={handleExpanded}>
                                     <ExpansionPanelSummary
