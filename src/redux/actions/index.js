@@ -25,3 +25,15 @@ export const selectTool = (number) => {
         payload : number,
     }
 };
+
+export const toggleHumanRightsCheckBox = () => {
+    return {
+        type : "TOGGLE_HUMAN_RIGHTS_CHECKBOX"
+    }
+};
+
+export const toggleUnlockExplanationCheckBox = () => {
+    return {
+        type : "TOGGLE_INTERACTIVE_EXPLANATION_CHECKBOX"
+    }
+};
