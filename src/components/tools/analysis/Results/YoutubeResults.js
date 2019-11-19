@@ -73,6 +73,52 @@ const YoutubeResults = (props) => {
         }
     };
 
+
+    const videoTable = [
+        {
+            title: keyword("youtube_video_name2_1"),
+            value: report["video"]["viewCount"]
+        },
+        {
+            title: keyword("youtube_video_name2_2"),
+            value: report["video"]["likeCount"]
+        },
+        {
+            title: keyword("youtube_video_name2_3"),
+            value: report["video"]["dislikeCount"]
+        },
+        {
+            title: keyword("youtube_video_name2_4"),
+            value: report["video"]["duration"]
+        },
+        {
+            title: keyword("youtube_video_name2_5"),
+            value: report["video"]["licensedContent"]
+        },
+    ];
+
+    const sourceTable = [
+        {
+            title: keyword("youtube_channel_name_2"),
+            value: report["source"]["publishedAt"]
+        },
+        {
+            title: keyword("youtube_channel_name_3"),
+            value: report["source"]["viewCount"]
+        },
+        {
+            title: keyword("youtube_channel_name_4"),
+            value: <a
+                href={report["source"]["url"]}
+                rel="noopener noreferrer"
+                target="_blank">{report["source"]["url"]}</a>
+        },
+        {
+            title: "comments count (add to tsv)",
+            value: report["source"]["subscriberCount"]
+        },
+    ];
+
     return (
         <div>
             {
@@ -108,49 +154,16 @@ const YoutubeResults = (props) => {
                         <Table className={classes.table} size="small" aria-label="a dense table">
                             <TableBody>
                                 {
-                                    report["video"]["viewCount"] &&
-                                    <TableRow>
-                                        <TableCell component="th" scope="row">
-                                            {keyword("youtube_video_name2_1")}
-                                        </TableCell>
-                                        <TableCell align="right">{report["video"]["viewCount"]}</TableCell>
-                                    </TableRow>
-                                }
-                                {
-                                    report["video"]["likeCount"] &&
-                                    <TableRow>
-                                        <TableCell component="th" scope="row">
-                                            {keyword("youtube_video_name2_2")}
-                                        </TableCell>
-                                        <TableCell align="right">{report["video"]["likeCount"]}</TableCell>
-                                    </TableRow>
-                                }
-                                {
-                                    report["video"]["dislikeCount"] &&
-                                    <TableRow>
-                                        <TableCell component="th" scope="row">
-                                            {keyword("youtube_video_name2_3")}
-                                        </TableCell>
-                                        <TableCell align="right">{report["video"]["dislikeCount"]}</TableCell>
-                                    </TableRow>
-                                }
-                                {
-                                    report["video"]["duration"] &&
-                                    <TableRow>
-                                        <TableCell component="th" scope="row">
-                                            {keyword("youtube_video_name2_4")}
-                                        </TableCell>
-                                        <TableCell align="right">{report["video"]["duration"]}</TableCell>
-                                    </TableRow>
-                                }
-                                {
-                                    report["video"]["licensedContent"] &&
-                                    <TableRow>
-                                        <TableCell component="th" scope="row">
-                                            {keyword("youtube_video_name2_5")}
-                                        </TableCell>
-                                        <TableCell align="right">{report["video"]["licensedContent"]}</TableCell>
-                                    </TableRow>
+                                    videoTable.map((obj, index) => {
+                                        return (
+                                            <TableRow key={index}>
+                                                <TableCell component="th" scope="row">
+                                                    {obj.title}
+                                                </TableCell>
+                                                <TableCell align="right">{obj.value}</TableCell>
+                                            </TableRow>
+                                        )
+                                    })
                                 }
                             </TableBody>
                         </Table>
@@ -170,43 +183,16 @@ const YoutubeResults = (props) => {
                             <Table className={classes.table} size="small" aria-label="a dense table">
                                 <TableBody>
                                     {
-                                        report["source"]["publishedAt"] &&
-                                        <TableRow>
-                                            <TableCell component="th" scope="row">
-                                                {keyword("youtube_channel_name_2")}
-                                            </TableCell>
-                                            <TableCell align="right">{report["source"]["publishedAt"]}</TableCell>
-                                        </TableRow>
-                                    }
-                                    {
-                                        report["source"]["viewCount"] &&
-                                        <TableRow>
-                                            <TableCell component="th" scope="row">
-                                                {keyword("youtube_channel_name_3")}
-                                            </TableCell>
-                                            <TableCell align="right">{report["source"]["viewCount"]}</TableCell>
-                                        </TableRow>
-                                    }
-                                    {
-                                        report["source"]["url"] &&
-                                        <TableRow>
-                                            <TableCell component="th" scope="row">
-                                                {keyword("youtube_channel_name_4")}
-                                            </TableCell>
-                                            <TableCell align="right"><a
-                                                href={report["source"]["url"]}
-                                                rel="noopener noreferrer"
-                                                target="_blank">{report["source"]["url"]}</a></TableCell>
-                                        </TableRow>
-                                    }
-                                    {
-                                        report["source"]["subscriberCount"] &&
-                                        <TableRow>
-                                            <TableCell component="th" scope="row">
-                                                {"comments count (add to tsv)"}
-                                            </TableCell>
-                                            <TableCell align="right">{report["source"]["subscriberCount"]}</TableCell>
-                                        </TableRow>
+                                        sourceTable.map((obj, index) => {
+                                            return (
+                                                <TableRow key={index}>
+                                                    <TableCell component="th" scope="row">
+                                                        {obj.title}
+                                                    </TableCell>
+                                                    <TableCell align="right">{obj.value}</TableCell>
+                                                </TableRow>
+                                            )
+                                        })
                                     }
                                 </TableBody>
                             </Table>
@@ -223,7 +209,7 @@ const YoutubeResults = (props) => {
                             <Table className={classes.table} size="small" aria-label="a dense table">
                                 <TableBody>
                                     {
-                                        report["pagination"]["total_comments"] &&
+                                        report["pagination"]["total_comments"] !== null &&
                                         <TableRow>
                                             <TableCell component="th" scope="row">
                                                 {keyword("youtube_comment_name_1")}
