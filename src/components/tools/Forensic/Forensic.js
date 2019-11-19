@@ -36,7 +36,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-const Forensic = () => {
+const Forensic = (props) => {
     const classes = useStyles();
     const dictionary = useSelector(state => state.dictionary);
     const lang = useSelector(state => state.language);
@@ -70,6 +70,12 @@ const Forensic = () => {
             setImage(input);
         }
     };
+
+    useEffect(() => {
+    if (props.url !== undefined){
+        setInput(props.url);
+        setImage(props.url);
+    }}, [props.url]);
 
     return (
       <div>

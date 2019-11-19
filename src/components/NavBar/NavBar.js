@@ -253,37 +253,6 @@ const NavBar = (props) => {
         }
     ];
 
-    const drawerItemsContent = [
-        {
-            content: <AllTools tools={drawerItems}/>,
-        },
-        {
-            content: <Analysis/>,
-        },
-        {
-            content: <Keyframes/>,
-        },
-        {
-            content: <Thumbnails/>,
-        },
-        {
-            content: <TwitterAdvancedSearch/>,
-        },
-        {
-            content: <Magnifier/>,
-        },
-        {
-            content: <Metadata/>,
-        },
-        {
-            content: <VideoRights/>,
-        },
-        {
-            content: <Forensic/>,
-        }
-    ];
-
-
     return (
         <div className={classes.root}>
             <AppBar position="fixed" color="default" className={classes.appBar}>
@@ -353,7 +322,7 @@ const NavBar = (props) => {
                 <div className={classes.toolbar} id="back-to-top-anchor"/>
                 <Switch>
                     <Route path={"/app/:tab"}>
-                        <TabItem tabItems={tabItems} drawerItems={drawerItems} drawerItemsContent={drawerItemsContent}/>
+                        <TabItem tabItems={tabItems} drawerItems={drawerItems}/>
                     </Route>
                     <Route>
                         {

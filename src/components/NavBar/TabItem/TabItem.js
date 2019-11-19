@@ -21,9 +21,8 @@ const TabItem = (props) => {
                         dispatch(selectPage(index));
                         if (tab === "tools") {
                             return (
-                                <Route key={index} path={"/app/tools/:drawer"}>
-                                    <DrawerItem drawerItems={props.drawerItems}
-                                                drawerItemsContent={props.drawerItemsContent}/>
+                                <Route key={index} path={"/app/tools/:drawer/:url?"}>
+                                    <DrawerItem drawerItems={props.drawerItems}/>
                                 </Route>
                             )
                         }
