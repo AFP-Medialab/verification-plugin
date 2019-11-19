@@ -126,7 +126,7 @@ const NavBar = (props) => {
     const [open, setOpen] = React.useState(false);
 
     const tabValue = useSelector(state => state.nav);
-    const drawerValue = useSelector(state => state.tool);
+    const drawerValue = useSelector(state => state.tool.selected);
     const dispatch = useDispatch();
 
 

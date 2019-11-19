@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {Paper} from "@material-ui/core";
 import TextField from "@material-ui/core/TextField";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
@@ -14,6 +14,7 @@ import Box from "@material-ui/core/Box";
 import YoutubeResults from "./Results/YoutubeResults.js"
 import TwitterResults from "./Results/TwitterResults";
 import {useAnalysisWrapper} from "./Hooks/useAnalysisWrapper";
+import {setAnalysisResult} from "../../../redux/actions";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -58,12 +59,16 @@ const Analysis = () => {
         return (dictionary !== null) ? dictionary[lang][key] : "";
     };
 
+    const resultUrl = useSelector(state => state.tool.analysis.url);
+    const resultData = useSelector(state => state.tool.analysis.result);
+    const dispatch = useDispatch();
+
     const classes = useStyles();
 
-    const [inputRef, setInputRef] = useState(null);
+    const [input, setInput] = useState(resultUrl);
     const [url, setUrl] = useState(null);
     const [reprocess, setReprocess] = useState(false);
-    const [report, error, loading] = useAnalysisWrapper(url, reprocess);
+    const [result, error, loading] = useAnalysisWrapper(url, reprocess);
     const [errors, setErrors] = useState(null);
 
     const reprocessToggle = () => {
@@ -74,10 +79,13 @@ const Analysis = () => {
         setErrors(error);
     }, [error]);
 
+    useEffect(() => {
+        dispatch(setAnalysisResult(url, result))
+    },[result] );
 
     const submitForm = () => {
         if (!loading)
-            setUrl(inputRef.value);
+            setUrl(input);
     };
 
     return (
@@ -86,7 +94,8 @@ const Analysis = () => {
                 <CustomTile> {keyword("api_title")}  </CustomTile>
                 <br/>
                 <TextField
-                    inputRef={ref => setInputRef(ref)}
+                    value={input}
+                    onChange={e => setInput(e.target.value)}
                     id="standard-full-width"
                     label={keyword("api_input")}
                     placeholder="URL"
@@ -118,12 +127,12 @@ const Analysis = () => {
                 <LinearProgress hidden={!loading}/>
             </Paper>
             {
-                report !== null && url != null && url.startsWith("https://www.youtube.com/") &&
-                <YoutubeResults report={report}/>
+                resultData !== null && resultUrl != null && resultUrl.startsWith("https://www.youtube.com/") &&
+                <YoutubeResults report={resultData}/>
             }
             {
-                report !== null && url != null && url.startsWith("https://twitter.com/") &&
-                <TwitterResults report={report}/>
+                resultData !== null && resultUrl != null && resultUrl.startsWith("https://twitter.com/") &&
+                <TwitterResults report={resultData}/>
             }
             <div>
                 {

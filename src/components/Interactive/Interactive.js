@@ -43,6 +43,7 @@ const useStyles = makeStyles(theme => ({
 const Interactive = () => {
     const dictionary = useSelector(state => state.dictionary);
     const lang = useSelector(state => state.language);
+    const answersAvailable = useSelector(state => state.interactiveExplanation)
     const keyword = (key) => {
         return (dictionary !== null) ? dictionary[lang][key] : "";
     };
@@ -73,7 +74,10 @@ const Interactive = () => {
     const [answerExpanded, setAnswerExpanded] = useState(false);
 
     const handleExpanded = () => {
-        setAnswerExpanded(!answerExpanded);
+        if (answersAvailable)
+            setAnswerExpanded(!answerExpanded);
+        else
+            alert(keyword("quiz_unlock_message"))
     };
 
     const previous = () => {
@@ -170,7 +174,7 @@ const Interactive = () => {
                                 <Typography variant={"h5"}>{obj.title}</Typography>
                                 <ExpansionPanel expanded={answerExpanded} onChange={handleExpanded}>
                                     <ExpansionPanelSummary
-                                        expandIcon={<ExpandMoreIcon/>}
+                                        expandIcon={(answersAvailable) ? <ExpandMoreIcon/> : null}
                                         aria-controls="panel4bh-content"
                                         id="panel4bh-header"
                                     >
@@ -181,9 +185,13 @@ const Interactive = () => {
                                                     className={classes.heading}>{keyword("quiz_explanations")}</Typography>
                                             </Grid>
                                             <Grid item>
-                                                <LockOpenIcon/>
+                                                {
+                                                    (answersAvailable) ?
+                                                        <LockOpenIcon/>
+                                                        :
+                                                        <LockOutlinedIcon/>
+                                                }
                                             </Grid>
-
                                         </Grid>
                                     </ExpansionPanelSummary>
                                     <ExpansionPanelDetails>
