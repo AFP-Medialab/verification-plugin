@@ -54,6 +54,7 @@ import {selectPage, selectTool} from "../../redux/actions";
 import TabItem from "./TabItem/TabItem";
 import ClassRoom from "../ClassRoom/ClassRoom";
 import Interactive from "../Interactive/Interactive";
+import About from "../About/About";
 
 const drawerWidth = 200;
 
@@ -248,7 +249,7 @@ const NavBar = (props) => {
         {
             title: "navbar_about",
             icon: <InfoIcon fontSize={"large"}/>,
-            content: <div>About</div>,
+            content: <About/>,
             path: "about",
         }
     ];
