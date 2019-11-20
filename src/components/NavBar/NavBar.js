@@ -8,12 +8,10 @@ import VideogameAssetIcon from '@material-ui/icons/VideogameAsset';
 import InfoIcon from '@material-ui/icons/Info';
 import Box from '@material-ui/core/Box';
 import {useDispatch, useSelector} from "react-redux";
-import Languages from "../languages/languages";
+import Languages from "../NavItems/languages/languages";
 import logoInvid from "./images/logo-invid.png";
 import logoWeVerify from "./images/logo-we-verify.png";
-import Tutorial from "../tutorial/tutorial";
-import Fade from "@material-ui/core/Fade";
-import {Container} from "@material-ui/core";
+import Tutorial from "../NavItems/tutorial/tutorial";
 import React, {useEffect} from 'react';
 import clsx from 'clsx';
 import Drawer from '@material-ui/core/Drawer';
@@ -36,83 +34,18 @@ import SearchIcon from '@material-ui/icons/Search';
 import SubscriptionsIcon from '@material-ui/icons/Subscriptions';
 import CopyrightIcon from '@material-ui/icons/Copyright';
 import ImageSearchIcon from '@material-ui/icons/ImageSearch';
-import Analysis from "../tools/analysis/Analysis";
-import Keyframes from "../tools/Keyframes/Keyframes";
-import ScrollTop from "../ScrollTop/ScrollTop";
+import ScrollTop from "../utility/ScrollTop/ScrollTop";
 import Fab from "@material-ui/core/Fab";
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
-import Thumbnails from "../tools/Thumbnails/Thumbnails";
-import TwitterAdvancedSearch from "../tools/TwitterAdvancedSearch/TwitterAdvancedSearch";
-import Magnifier from "../tools/Magnifier/Magnifier";
-import Metadata from "../tools/Metadata/Metadata";
-import VideoRights from "../tools/VideoRights/VideoRights";
-import Forensic from "../tools/Forensic/Forensic";
-import AllTools from "../tools/Alltools/AllTools";
-import {Link, Route, Switch} from 'react-router-dom'
-import history from '../History/History';
-import {selectPage, selectTool} from "../../redux/actions";
+import history from '../utility/History/History';
+import {cleanError, selectPage, selectTool} from "../../redux/actions";
 import TabItem from "./TabItem/TabItem";
-import ClassRoom from "../ClassRoom/ClassRoom";
-import Interactive from "../Interactive/Interactive";
-import About from "../About/About";
-
-const drawerWidth = 200;
-
-const useStyles = makeStyles(theme => ({
-    root: {
-        display: 'flex',
-    },
-    appBar: {
-        zIndex: theme.zIndex.drawer + 1,
-    },
-    hide: {
-        display: 'none',
-    },
-    drawer: {
-        width: drawerWidth,
-        flexShrink: 0,
-        whiteSpace: 'nowrap',
-    },
-    drawerOpen: {
-        width: drawerWidth,
-        transition: theme.transitions.create('width', {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.enteringScreen,
-        }),
-    },
-    drawerClose: {
-        transition: theme.transitions.create('width', {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.leavingScreen,
-        }),
-        overflowX: 'hidden',
-        width: theme.spacing(7) + 1,
-        [theme.breakpoints.up('sm')]: {
-            width: theme.spacing(9) + 1,
-        },
-    },
-    toolbar: theme.mixins.toolbar,
-    content: {
-        flexGrow: 1,
-        padding: theme.spacing(3),
-    },
-    logoLeft: {
-        marginRight: theme.spacing(2),
-        maxHeight: "60px",
-    },
-    logoRight: {
-        marginLeft: theme.spacing(2),
-        maxHeight: "70px",
-    },
-    grow: {
-        flexGrow: 1,
-    },
-    selectedApp: {
-        color: theme.palette.primary.main
-    },
-    unSelectedApp: {}
-}));
-
+import ClassRoom from "../NavItems/ClassRoom/ClassRoom";
+import Interactive from "../NavItems/Interactive/Interactive";
+import About from "../NavItems/About/About";
+import MySnackbar from "../MySnackbar/MySnackbar";
+import useMyStyles from "../utility/MaterialUiStyles/useMyStyles";
+import { useRouteMatch } from "react-router-dom";
 
 function a11yProps(index) {
     return {
@@ -122,7 +55,7 @@ function a11yProps(index) {
 }
 
 const NavBar = (props) => {
-    const classes = useStyles();
+    const classes = useMyStyles();
     const [open, setOpen] = React.useState(false);
 
     const tabValue = useSelector(state => state.nav);
@@ -131,20 +64,20 @@ const NavBar = (props) => {
 
 
     const handleChange = (event, newValue) => {
-        dispatch(selectPage(newValue));
         if (tabItems[newValue].path === "tools")
-            history.push("/app/tools/" + drawerItems[newValue].path)
+            history.push("/app/tools/" + drawerItems[newValue].path);
         else
             history.push("/app/" + tabItems[newValue].path)
     };
 
     const changeValue = (newValue) => {
-        dispatch(selectTool(newValue));
         history.push("/app/tools/" + drawerItems[newValue].path)
     };
 
     const dictionary = useSelector(state => state.dictionary);
     const lang = useSelector(state => state.language);
+    const error = useSelector(state => state.error);
+
     const keyword = (key) => {
         return (dictionary !== null) ? dictionary[lang][key] : "";
     };
@@ -255,7 +188,7 @@ const NavBar = (props) => {
     ];
 
     return (
-        <div className={classes.root}>
+        <div className={classes.flex}>
             <AppBar position="fixed" color="default" className={classes.appBar}>
                 <Toolbar className={classes.toolbar}>
                     <Box display={{xs: 'none', md: 'block'}}>
@@ -285,7 +218,7 @@ const NavBar = (props) => {
                     </Box>
                 </Toolbar>
             </AppBar>
-            <Drawer hidden={tabValue !== 0 ||  (tabValue === 0 && drawerValue === 0)}
+            <Drawer hidden={tabValue !== 0 || (tabValue === 0 && drawerValue === 0)}
                     variant="permanent"
                     className={clsx(classes.drawer, {
                         [classes.drawerOpen]: open,
@@ -321,21 +254,18 @@ const NavBar = (props) => {
             </Drawer>
             <main className={classes.content}>
                 <div className={classes.toolbar} id="back-to-top-anchor"/>
-                <Switch>
-                    <Route path={"/app/:tab"}>
-                        <TabItem tabItems={tabItems} drawerItems={drawerItems}/>
-                    </Route>
-                    <Route>
-                        {
-                            "Not Found"
-                        }
-                    </Route>
-                </Switch>
+                <TabItem tabItems={tabItems} drawerItems={drawerItems}/>
                 <ScrollTop {...props}>
                     <Fab color="secondary" size="small" aria-label="scroll back to top">
                         <KeyboardArrowUpIcon/>
                     </Fab>
                 </ScrollTop>
+                <div>
+                    {
+                        (error !== null) &&
+                        <MySnackbar variant="error" message={error} onClick={() => dispatch(cleanError())}/>
+                    }
+                </div>
             </main>
         </div>
     );

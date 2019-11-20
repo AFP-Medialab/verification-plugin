@@ -5,6 +5,7 @@ import navReducer from "./navReducer";
 import toolReducer from "./toolReducer";
 import humanRightsCheckBoxReducer from "./humanRightsCheckBoxReducer";
 import interactiveExplanationReducer from "./interactiveExplanationReducer";
+import errorReducer from "./errorReducer";
 
 const allReducers = combineReducers({
     language : languageReducer,
@@ -12,7 +13,8 @@ const allReducers = combineReducers({
     nav : navReducer,
     tool : toolReducer,
     humanRightsCheckBox : humanRightsCheckBoxReducer,
-    interactiveExplanation : interactiveExplanationReducer
+    interactiveExplanation : interactiveExplanationReducer,
+    error : errorReducer
 });
 
 export default allReducers;
