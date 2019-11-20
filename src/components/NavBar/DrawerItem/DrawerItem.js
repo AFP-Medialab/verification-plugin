@@ -1,74 +1,82 @@
 import {Container} from "@material-ui/core";
 import Fade from "@material-ui/core/Fade";
 import React from "react";
-import {useParams} from 'react-router-dom'
 import {useDispatch} from "react-redux";
-import {selectTool} from "../../../redux/actions";
-import AllTools from "../../tools/Alltools/AllTools";
-import Analysis from "../../tools/analysis/Analysis";
-import Keyframes from "../../tools/Keyframes/Keyframes";
-import Thumbnails from "../../tools/Thumbnails/Thumbnails";
-import TwitterAdvancedSearch from "../../tools/TwitterAdvancedSearch/TwitterAdvancedSearch";
-import Magnifier from "../../tools/Magnifier/Magnifier";
-import Metadata from "../../tools/Metadata/Metadata";
-import VideoRights from "../../tools/VideoRights/VideoRights";
-import Forensic from "../../tools/Forensic/Forensic";
+import {selectPage, selectTool} from "../../../redux/actions";
+import AllTools from "../../NavItems/tools/Alltools/AllTools";
+import Analysis from "../../NavItems/tools/analysis/Analysis";
+import Keyframes from "../../NavItems/tools/Keyframes/Keyframes";
+import Thumbnails from "../../NavItems/tools/Thumbnails/Thumbnails";
+import TwitterAdvancedSearch from "../../NavItems/tools/TwitterAdvancedSearch/TwitterAdvancedSearch";
+import Magnifier from "../../NavItems/tools/Magnifier/Magnifier";
+import Metadata from "../../NavItems/tools/Metadata/Metadata";
+import VideoRights from "../../NavItems/tools/VideoRights/VideoRights";
+import Forensic from "../../NavItems/tools/Forensic/Forensic";
+import {Route, Switch} from 'react-router-dom'
 
 const DrawerItem = (props) => {
-    const {drawer, url} = useParams();
-
-    const dispatch = useDispatch();
-    const uri = (url !== undefined) ? decodeURIComponent(url) : undefined;
 
     const drawerItemsContent = [
         {
             content: <AllTools tools={props.drawerItems}/>,
         },
         {
-            content: <Analysis url={uri}/>,
+            content: <Analysis/>,
         },
         {
-            content: <Keyframes url={uri}/>,
+            content: <Keyframes/>,
         },
         {
-            content: <Thumbnails url={uri}/>,
+            content: <Thumbnails/>,
         },
         {
-            content: <TwitterAdvancedSearch url={uri}/>,
+            content: <TwitterAdvancedSearch/>,
         },
         {
-            content: <Magnifier url={uri}/>,
+            content: <Magnifier/>,
         },
         {
-            content: <Metadata url={uri}/>,
+            content: <Metadata/>,
         },
         {
-            content: <VideoRights url={uri}/>,
+            content: <VideoRights/>,
         },
         {
-            content: <Forensic url={uri}/>,
+            content: <Forensic/>,
         }
     ];
 
+    const dispatch = useDispatch();
+
     return (
-        <div>
+        <Switch>
             {
                 props.drawerItems.map((item, index) => {
-                    if (drawer === item.path) {
-                        dispatch(selectTool(index));
+                    if (item.path) {
                         return (
-                            <Container key={index}>
-                                <Fade in={true}>
-                                    <div>
-                                        {drawerItemsContent[index].content}
-                                    </div>
-                                </Fade>
-                            </Container>
+                            <Route
+                                key={index}
+                                path={"/app/tools/" + item.path + "/:url?"}
+                                render={
+                                    () => {
+                                        dispatch(selectTool(index));
+                                        return (
+                                            <Container key={index}>
+                                                <Fade in={true}>
+                                                    <div>
+                                                        {drawerItemsContent[index].content}
+                                                    </div>
+                                                </Fade>
+                                            </Container>
+                                        )
+                                    }
+                                }
+                            />
                         );
                     }
                 })
             }
-        </div>
+        </Switch>
     );
 };
 export default DrawerItem;

@@ -9,6 +9,6 @@ export const useInput = (defaultValue) => {
 
     return {
         value : value,
-        onChange : handleChange
+        onChange : handleChange,
     }
 };
