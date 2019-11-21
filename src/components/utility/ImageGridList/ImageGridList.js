@@ -5,6 +5,7 @@ import GridListTile from '@material-ui/core/GridListTile';
 import Image from "material-ui-image"
 const useStyles = makeStyles(theme => ({
     root: {
+        width:"100%",
         display: 'flex',
         flexWrap: 'wrap',
         justifyContent: 'space-around',
@@ -12,9 +13,9 @@ const useStyles = makeStyles(theme => ({
         backgroundColor: theme.palette.background.paper,
     },
     gridList: {
-        width: "80%",
-        height: "auto",
-        maxHeight: "500px"
+        width: "100%",
+        maxHeight: "500px",
+        maxWidth: "500px",
     },
 }));
 
@@ -22,9 +23,9 @@ const ImageGridList = (props) => {
     const classes = useStyles();
     return (
         <div className={classes.root}>
-            <GridList cellHeight={160} className={classes.gridList} cols={3}>
-                {props.list.map(tile => (
-                    <GridListTile key={tile} cols={1}>
+            <GridList cellHeight={"auto"} className={classes.gridList} cols={3}>
+                {props.list.map((tile, index) => (
+                    <GridListTile height={"auto"} key={index} cols={1} rows={1}>
                         <Image src={tile} alt={tile} onClick={(e) => props.onClick(e)}/>
                     </GridListTile>
                 ))}

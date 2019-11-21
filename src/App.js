@@ -5,6 +5,7 @@ import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
 import Button from "@material-ui/core/Button";
 import {HashRouter as Router, Route, Switch} from "react-router-dom";
 import history from "./components/utility/History/History";
+import PopUp from "./components/PopUp/PopUp";
 
 const theme = createMuiTheme({
     palette: {
@@ -25,13 +26,6 @@ const theme = createMuiTheme({
     },
 });
 
-const Testing = () => {
-    return (<Button onClick={() => {
-        window.open("/popup.html#/app/tools/all");
-    }
-    }>OPEN</Button>)
-};
-
 const NotFound = () => {
     return (
         <div>404 not found</div>
@@ -44,7 +38,7 @@ function App() {
 
             <MuiThemeProvider theme={theme}>
                 <Switch>
-                    <Route exact path={"/"} component={Testing}/>
+                    <Route exact path={"/"} component={PopUp}/>
                     <Route path={"/app"} component={NavBar}/>
                     <Route component={NotFound}/>
                 </Switch>

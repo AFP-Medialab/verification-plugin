@@ -43,6 +43,7 @@ const useStyles1 = makeStyles(theme => ({
         display: 'flex',
         alignItems: 'center',
     },
+
 }));
 
 function MySnackbarContentWrapper(props) {
