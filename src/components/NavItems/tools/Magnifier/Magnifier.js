@@ -1,5 +1,5 @@
 import {Paper, Box, TextField, Button, Typography} from "@material-ui/core";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import CustomTile from "../../../utility/customTitle/customTitle";
 import {useDispatch, useSelector} from "react-redux";
 import 'react-image-crop/dist/ReactCrop.css';
@@ -9,8 +9,10 @@ import FolderOpenIcon from '@material-ui/icons/FolderOpen';
 import {useInput} from "../../../Hooks/useInput";
 import {setError, setMagnifierResult} from "../../../../redux/actions";
 import useMyStyles from "../../../utility/MaterialUiStyles/useMyStyles";
+import {useParams} from 'react-router-dom'
 
 const Magnifier = () => {
+    const {url} = useParams();
     const classes = useMyStyles();
     const dictionary = useSelector(state => state.dictionary);
     const lang = useSelector(state => state.language);
@@ -19,7 +21,7 @@ const Magnifier = () => {
     };
 
     const resultUrl = useSelector(state => state.tool.magnifier.url);
-    const resultResult = useSelector(state => state.tool.magnifier.url);
+    const resultResult = useSelector(state => state.tool.magnifier.result);
     const dispatch = useDispatch();
 
     const [input, setInput] = useState(resultUrl);
@@ -31,7 +33,7 @@ const Magnifier = () => {
     };
 
 
-    const submitUrl = () => {
+    const submitUrl = (src) => {
         let img = new Image();
         img.onload = () => {
             let canvas = document.createElement('canvas');
@@ -46,8 +48,17 @@ const Magnifier = () => {
         img.onerror = (error) => {
             dispatch(setError(getErrorText(error)));
         };
-        img.src = input;
+        img.src = src;
     };
+
+    useEffect(() => {
+        if (url !== undefined){
+            const uri = (url !== undefined) ? decodeURIComponent(url) : undefined;
+            setInput(uri);
+            submitUrl(uri)
+
+        }}, [url]);
+
 
     return (
         <div>
@@ -73,7 +84,7 @@ const Magnifier = () => {
                     }}/>
                 </Button>
                 <Box m={2}/>
-                <Button variant="contained" color="primary" onClick={submitUrl}>
+                <Button variant="contained" color="primary" onClick={() => submitUrl(input)}>
                     {keyword("button_submit")}
                 </Button>
             </Paper>

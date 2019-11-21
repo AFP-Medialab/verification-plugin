@@ -1,4 +1,4 @@
-import React, { useState} from "react";
+import React, {useEffect, useState} from "react";
 import { useSelector} from "react-redux";
 import {Paper} from "@material-ui/core";
 import TextField from "@material-ui/core/TextField";
@@ -12,9 +12,10 @@ import YoutubeResults from "./Results/YoutubeResults.js"
 import TwitterResults from "./Results/TwitterResults";
 import {useAnalysisWrapper} from "./Hooks/useAnalysisWrapper";
 import useMyStyles from "../../../utility/MaterialUiStyles/useMyStyles"
-import {useInput} from "../../../Hooks/useInput";
+import {useParams} from 'react-router-dom'
 
 const Analysis = () => {
+    const {url} = useParams();
     const classes = useMyStyles();
     const dictionary = useSelector(state => state.dictionary);
     const lang = useSelector(state => state.language);
@@ -26,7 +27,7 @@ const Analysis = () => {
     const resultData = useSelector(state => state.tool.analysis.result);
     const isLoading = useSelector(state => state.tool.analysis.loading);
 
-    const input = useInput((resultUrl)? resultUrl : "");
+    const [input, setInput] = useState((resultUrl)? resultUrl : "");
     const [submittedUrl, setSubmittedUrl] = useState(undefined);
     const [reprocess, setReprocess] = useState(false);
     const reprocessToggle = () => {
@@ -35,13 +36,20 @@ const Analysis = () => {
     useAnalysisWrapper(submittedUrl,reprocess);
 
     const submitForm = () => {
-        setSubmittedUrl(input.value);
+        setSubmittedUrl(input);
     };
+
+    useEffect(() => {
+        if (url !== undefined){
+            const uri = decodeURIComponent(url);
+            setInput(uri);
+            setSubmittedUrl(uri);
+        }}, [url]);
 
     return (
         <div>
             <Paper className={classes.root}>
-                <CustomTile> {keyword("api_title")}  </CustomTile>
+                <CustomTile>{keyword("api_title")} </CustomTile>
                 <br/>
                 <TextField
                     id="standard-full-width"
@@ -49,7 +57,8 @@ const Analysis = () => {
                     placeholder="URL"
                     fullWidth
                     disabled={isLoading}
-                    {...input}
+                    value={input}
+                    onChange={e => setInput(e.target.value)}
                 />
                 <Box m={2}/>
                 <FormControlLabel
