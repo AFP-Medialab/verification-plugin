@@ -82,6 +82,22 @@ const useMyStyles = makeStyles(theme => ({
     selectedApp: {
         color: theme.palette.primary.main
     },
-    unSelectedApp: {}
+    unSelectedApp: {},
+    fab: {
+        margin: theme.spacing(1),
+    },
+    heading: {
+        fontSize: theme.typography.pxToRem(15),
+        fontWeight: theme.typography.fontWeightRegular,
+    },
+    iconRoot: {
+        textAlign: 'center'
+    },
+    popUp:{
+        width: "300px",
+        padding: theme.spacing(3, 2),
+        marginTop: 5,
+        textAlign: "center",
+    }
 }));
 export default useMyStyles;
