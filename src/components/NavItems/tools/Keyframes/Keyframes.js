@@ -13,7 +13,6 @@ import Divider from '@material-ui/core/Divider';
 import KeyFramesResults from "./Results/KeyFramesResults";
 import {useKeyframeWrapper} from "./Hooks/useKeyframeWrapper";
 import useMyStyles from "../../../utility/MaterialUiStyles/useMyStyles";
-import {useInput} from "../../../Hooks/useInput";
 import {useParams} from 'react-router-dom'
 
 const Keyframes = (props) => {
