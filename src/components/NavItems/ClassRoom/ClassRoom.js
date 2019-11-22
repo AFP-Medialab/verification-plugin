@@ -127,7 +127,7 @@ const ClassRoom = () => {
                     {
                         EducationalResources.map((value, index) => {
                             return (
-                                <div>
+                                <div key={index}>
                                     <Box m={1}/>
                                     <Grid key={index} container justify="space-between" spacing={2}
                                           alignContent={"center"}>

@@ -25,7 +25,9 @@
     "react-modal-video": "^1.2.3",
     "react-redux": "^7.1.1",
     "react-router-dom": "^5.1.2",
+    "react-slack-feedback": "^2.1.0",
     "redux": "^4.0.4",
+    "styled-components": "^4.4.1",
     "tui-image-editor": "latest"
   },
   "scripts": {

@@ -224,7 +224,7 @@ const VideoRightsResults = (props) => {
             <Typography variant={"body2"}>
                 For other uses, it is recommended to contact the video uploader and <b>request permission</b>:
             </Typography>
-            <List component="nav" aria-label="main mailbox folders" textAlign={"center"}>
+            <List component="nav" aria-label="main mailbox folders">
                 <ListItem button>
                     <ListItemIcon>
                         <div>
