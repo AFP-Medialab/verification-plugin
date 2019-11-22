@@ -28,6 +28,7 @@ const TabItem = (props) => {
                                                     <Fade in={true}>
                                                         <div>
                                                             {props.tabItems[index].content}
+                                                            {props.tabItems[index].footer}
                                                         </div>
                                                     </Fade>
                                                 </Container>

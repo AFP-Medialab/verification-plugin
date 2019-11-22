@@ -11,14 +11,6 @@ import useVideoRightsTreatment from "./useVideoRightsTreatment";
 import useMyStyles from "../../../utility/MaterialUiStyles/useMyStyles";
 import VideoRightsResults from "./VideoRightsResults";
 
-const useStyles = makeStyles(theme => ({
-    root: {
-        padding: theme.spacing(3, 2),
-        marginTop: 5,
-        textAlign: "center",
-    },
-}));
-
 const VideoRights = () => {
     const classes = useMyStyles();
     const dictionary = useSelector(state => state.dictionary);
@@ -42,6 +34,35 @@ const VideoRights = () => {
             setSubmitted(input);
     };
 
+    let res =         {
+        kind : "youTubeVideos",
+        licence : "youtube",
+        user:{
+            url: "https://www.youtube.com/channel/UC_x5XG1OV2P6uZZ5FSM9Ttw",
+            name: "Google Developers"
+        },
+        RIGHTS_APP: "https://rights.invid.udl.cat/youtube",
+        id: "0fj7avs9k4Q",
+        terms: [
+            {
+                status : "Permitted",
+                action : "Embed",
+                description : "To insert media in Web pages without requiring authorisation from the content owner. It is based on the rights already granted to YouTube by the owner. Therefore, the embedding should be done following these instructions"
+            },
+            {
+                status : "Prohibited",
+                action : "Other reuse",
+                description : "Any other kinds of reuse, like re-broadcasting or re-publishing it"
+            },
+            {
+                status : "Required",
+                action : "test",
+                description : "Any other kinds of reuse, like re-broadcasting or re-publishing it"
+            },
+        ],
+        attribution : "Google Developers (2019, November 21). Sign in with Apple for Firebase Authentication, Go language turns 10, & much more!. Retrieved from https://www.youtube.com/watch?v=0fj7avs9k4Q"
+
+    };
 
     return (
         <div>
@@ -70,8 +91,8 @@ const VideoRights = () => {
                 <LinearProgress hidden={!isLoading}/>
             </Paper>
             {
-                resultResult &&
-                <VideoRightsResults result={resultResult}/>
+                res &&
+                <VideoRightsResults result={res}/>
             }
         </div>
     )
