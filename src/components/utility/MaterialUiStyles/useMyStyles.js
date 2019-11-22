@@ -132,5 +132,11 @@ const useMyStyles = makeStyles(theme => ({
             textAlign: "center",
             bottom: 0,
         },
+        feedback: {
+            position: 'fixed',
+            bottom: theme.spacing(2),
+            left: theme.spacing(2),
+            zIndex: theme.zIndex.drawer + 1,
+        },
     }));
 export default useMyStyles;

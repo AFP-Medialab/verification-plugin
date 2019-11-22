@@ -2,7 +2,6 @@ import React from 'react';
 import NavBar from "./components/NavBar/NavBar";
 import {MuiThemeProvider} from "@material-ui/core";
 import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
-import Button from "@material-ui/core/Button";
 import {HashRouter as Router, Route, Switch} from "react-router-dom";
 import history from "./components/utility/History/History";
 import PopUp from "./components/PopUp/PopUp";

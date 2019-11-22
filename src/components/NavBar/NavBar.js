@@ -47,6 +47,7 @@ import MySnackbar from "../MySnackbar/MySnackbar";
 import useMyStyles from "../utility/MaterialUiStyles/useMyStyles";
 import { useRouteMatch } from "react-router-dom";
 import Footer from "../Footer/Footer";
+import FeedBack from "../FeedBack/FeedBack";
 
 function a11yProps(index) {
     return {
@@ -272,6 +273,7 @@ const NavBar = (props) => {
                         <MySnackbar variant="error" message={error} onClick={() => dispatch(cleanError())}/>
                     }
                 </div>
+                <FeedBack/>
             </main>
         </div>
     );

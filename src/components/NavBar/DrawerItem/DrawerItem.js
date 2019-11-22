@@ -13,36 +13,46 @@ import Metadata from "../../NavItems/tools/Metadata/Metadata";
 import VideoRights from "../../NavItems/tools/VideoRights/VideoRights";
 import Forensic from "../../NavItems/tools/Forensic/Forensic";
 import {Route, Switch} from 'react-router-dom'
+import Footer from "../../Footer/Footer";
 
 const DrawerItem = (props) => {
 
     const drawerItemsContent = [
         {
             content: <AllTools tools={props.drawerItems}/>,
+            footer: <div/>
         },
         {
             content: <Analysis/>,
+            footer: <Footer content={"footer_analysis"}/>
         },
         {
             content: <Keyframes/>,
+            footer: <Footer content={"footer_keyframes"}/>
         },
         {
             content: <Thumbnails/>,
+            footer: <Footer content={"footer_thumbnails"}/>
         },
         {
             content: <TwitterAdvancedSearch/>,
+            footer: <Footer content={"footer_twitter"}/>
         },
         {
             content: <Magnifier/>,
+            footer: <Footer content={"footer_magnifier"}/>
         },
         {
             content: <Metadata/>,
+            footer: <Footer content={"footer_metadata"}/>
         },
         {
             content: <VideoRights/>,
+            footer: <Footer content={"footer_rights"}/>
         },
         {
             content: <Forensic/>,
+            footer: <Footer content={"footer_forensic"}/>
         }
     ];
 
@@ -65,6 +75,7 @@ const DrawerItem = (props) => {
                                                 <Fade in={true}>
                                                     <div>
                                                         {drawerItemsContent[index].content}
+                                                        {drawerItemsContent[index].footer}
                                                     </div>
                                                 </Fade>
                                             </Container>

@@ -14,9 +14,9 @@ const Footer = (props) => {
     };
 
     return (
-        <Typography variant={"body1"} className={classes.footer} fontWeight="fontWeightBold">
+        <div className={classes.footer}>
             <div className={"content"} dangerouslySetInnerHTML={{__html: keyword(props.content)}}/>
-        </Typography>
+        </div>
     )
 };
 export default Footer;

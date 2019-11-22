@@ -8,7 +8,8 @@ const useStyles = makeStyles(theme => ({
     root: {
         position: 'fixed',
         bottom: theme.spacing(2),
-        right: theme.spacing(2),
+        left: theme.spacing(2),
+        zIndex: theme.zIndex.drawer + 1,
     },
 }));
 
