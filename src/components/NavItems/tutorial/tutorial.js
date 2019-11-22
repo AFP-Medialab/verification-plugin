@@ -41,7 +41,7 @@ const Tutorial = () => {
                 <br/>
                 <Typography variant="h3">{keyword("tuto_h_1")}</Typography>
                 <Box item={"true"}>
-                    <img src={videoUrl} alt={""} className={classes.media}/>
+                    <img src={videoUrl} alt={""}/>
                 </Box>
                 <Typography variant="body1">{keyword("tuto_1")}</Typography>
 

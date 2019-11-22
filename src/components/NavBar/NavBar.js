@@ -46,6 +46,7 @@ import About from "../NavItems/About/About";
 import MySnackbar from "../MySnackbar/MySnackbar";
 import useMyStyles from "../utility/MaterialUiStyles/useMyStyles";
 import { useRouteMatch } from "react-router-dom";
+import Footer from "../Footer/Footer";
 
 function a11yProps(index) {
     return {
@@ -160,30 +161,35 @@ const NavBar = (props) => {
             icon: <BuildIcon fontSize={"large"}/>,
             content: <div/>,
             path: "tools",
+            footer: <div/>,
         },
         {
             title: "navbar_tuto",
             icon: <VideoLibraryIcon fontSize={"large"}/>,
             content: <Tutorial/>,
             path: "tutorial",
+            footer: <Footer content={"footer_tutorial"}/>
         },
         {
             title: "navbar_classroom",
             icon: <CastForEducationIcon fontSize={"large"}/>,
             content: <ClassRoom/>,
             path: "classroom",
+            footer: <Footer content={"footer_classroom"}/>
         },
         {
             title: "navbar_quiz",
             icon: <VideogameAssetIcon fontSize={"large"}/>,
             content: <Interactive/>,
             path: "interactive",
+            footer: <Footer content={"footer_about"}/>
         },
         {
             title: "navbar_about",
             icon: <InfoIcon fontSize={"large"}/>,
             content: <About/>,
             path: "about",
+            footer: <Footer content={"footer_about"}/>
         }
     ];
 
