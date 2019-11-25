@@ -89,7 +89,7 @@ const Magnifier = () => {
                 </Button>
             </Paper>
             {
-                resultResult !== "" &&
+                resultResult && resultResult !== "" &&
                 <ImageResult/>
             }
         </div>
