@@ -1,7 +1,7 @@
 const defaultState = {
     notification : false,
     loading : false,
-    url: "",
+    request: "",
     result: null,
 };
 

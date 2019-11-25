@@ -1,10 +1,10 @@
-export const setTwitterSnaResult = (url, result, notification, loading) => {
+export const setTwitterSnaResult = (request, result, notification, loading) => {
     return {
         type : "SET_TWITTER_SNA_RESULT",
         payload : {
             notification : notification,
             loading : loading,
-            url : url,
+            request : request,
             result : result,
         }
     }
