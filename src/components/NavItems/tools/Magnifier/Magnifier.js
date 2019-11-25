@@ -6,10 +6,10 @@ import 'react-image-crop/dist/ReactCrop.css';
 import 'tui-image-editor/dist/tui-image-editor.css'
 import ImageResult from "./ImageResult";
 import FolderOpenIcon from '@material-ui/icons/FolderOpen';
-import {useInput} from "../../../Hooks/useInput";
-import {setError, setMagnifierResult} from "../../../../redux/actions";
 import useMyStyles from "../../../utility/MaterialUiStyles/useMyStyles";
 import {useParams} from 'react-router-dom'
+import{setMagnifierResult} from "../../../../redux/actions/tools/magnifierActions";
+import {setError} from "../../../../redux/actions/errorActions";
 
 const Magnifier = () => {
     const {url} = useParams();
@@ -20,8 +20,8 @@ const Magnifier = () => {
         return (dictionary !== null) ? dictionary[lang][key] : "";
     };
 
-    const resultUrl = useSelector(state => state.tool.magnifier.url);
-    const resultResult = useSelector(state => state.tool.magnifier.result);
+    const resultUrl = useSelector(state => state.magnifier.url);
+    const resultResult = useSelector(state => state.magnifier.result);
     const dispatch = useDispatch();
 
     const [input, setInput] = useState(resultUrl);

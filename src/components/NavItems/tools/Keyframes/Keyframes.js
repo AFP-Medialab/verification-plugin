@@ -6,7 +6,6 @@ import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import LocalFile from "./LocalFile/LocalFile";
 import CustomTile from "../../../utility/customTitle/customTitle";
-import MySnackbar from "../../../MySnackbar/MySnackbar";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import Typography from "@material-ui/core/Typography";
 import Divider from '@material-ui/core/Divider';
@@ -32,10 +31,10 @@ const Keyframes = (props) => {
         setLocalFile(!localFile);
     };
 
-    const resultUrl = useSelector(state => state.tool.keyframes.url);
-    const resultData = useSelector(state => state.tool.keyframes.result);
-    const isLoading = useSelector(state => state.tool.keyframes.loading);
-    const message = useSelector(state => state.tool.keyframes.message);
+    const resultUrl = useSelector(state => state.keyframes.url);
+    const resultData = useSelector(state => state.keyframes.result);
+    const isLoading = useSelector(state => state.keyframes.loading);
+    const message = useSelector(state => state.keyframes.message);
 
     // State used to load images
     const [input, setInput] = useState((resultUrl) ? resultUrl : "");

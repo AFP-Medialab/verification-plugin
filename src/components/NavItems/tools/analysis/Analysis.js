@@ -23,9 +23,9 @@ const Analysis = () => {
         return (dictionary !== null) ? dictionary[lang][key] : "";
     };
 
-    const resultUrl = useSelector(state => state.tool.analysis.url);
-    const resultData = useSelector(state => state.tool.analysis.result);
-    const isLoading = useSelector(state => state.tool.analysis.loading);
+    const resultUrl = useSelector(state => state.analysis.url);
+    const resultData = useSelector(state => state.analysis.result);
+    const isLoading = useSelector(state => state.analysis.loading);
 
     const [input, setInput] = useState((resultUrl)? resultUrl : "");
     const [submittedUrl, setSubmittedUrl] = useState(undefined);

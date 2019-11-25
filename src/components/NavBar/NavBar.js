@@ -12,7 +12,7 @@ import Languages from "../NavItems/languages/languages";
 import logoInvid from "./images/logo-invid.png";
 import logoWeVerify from "./images/logo-we-verify.png";
 import Tutorial from "../NavItems/tutorial/tutorial";
-import React, {useEffect} from 'react';
+import React from 'react';
 import clsx from 'clsx';
 import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
@@ -38,14 +38,13 @@ import ScrollTop from "../utility/ScrollTop/ScrollTop";
 import Fab from "@material-ui/core/Fab";
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import history from '../utility/History/History';
-import {cleanError, selectPage, selectTool} from "../../redux/actions";
+import {cleanError} from "../../redux/actions/errorActions";
 import TabItem from "./TabItem/TabItem";
 import ClassRoom from "../NavItems/ClassRoom/ClassRoom";
 import Interactive from "../NavItems/Interactive/Interactive";
 import About from "../NavItems/About/About";
 import MySnackbar from "../MySnackbar/MySnackbar";
 import useMyStyles from "../utility/MaterialUiStyles/useMyStyles";
-import { useRouteMatch } from "react-router-dom";
 import Footer from "../Footer/Footer";
 import FeedBack from "../FeedBack/FeedBack";
 
@@ -152,6 +151,13 @@ const NavBar = (props) => {
                                    className={(drawerValue === 8) ? classes.selectedApp : classes.unSelectedApp}/>,
             tsvPrefix: "forensic",
             path: "forensic",
+        },
+        {
+            title: "twitter_sna_title",
+            icon: <TwitterIcon fontSize={"large"}
+                               className={(drawerValue === 9) ? classes.selectedApp : classes.unSelectedApp}/>,
+            tsvPrefix: "twitter_sna",
+            path: "twitterSna"
         }
     ];
 

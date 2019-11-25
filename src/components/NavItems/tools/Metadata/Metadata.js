@@ -1,15 +1,13 @@
 import {Paper} from "@material-ui/core";
-import React, {useEffect, useRef, useState} from "react";
+import React, {useState} from "react";
 import CustomTile from "../../../utility/customTitle/customTitle";
 import Box from "@material-ui/core/Box";
 import {useSelector} from "react-redux";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
-import makeStyles from "@material-ui/core/styles/makeStyles";
 import 'react-image-crop/dist/ReactCrop.css';
 import 'tui-image-editor/dist/tui-image-editor.css'
 import FolderOpenIcon from '@material-ui/icons/FolderOpen';
-import MySnackbar from "../../../MySnackbar/MySnackbar";
 import Typography from "@material-ui/core/Typography";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Radio from "@material-ui/core/Radio";
@@ -28,9 +26,9 @@ const Metadata = () => {
     const keyword = (key) => {
         return (dictionary !== null) ? dictionary[lang][key] : "";
     };
-    const resultUrl = useSelector(state => state.tool.metadata.url);
-    const resultData = useSelector(state => state.tool.metadata.result);
-    const resultIsImage = useSelector(state => state.tool.metadata.isImage);
+    const resultUrl = useSelector(state => state.metadata.url);
+    const resultData = useSelector(state => state.metadata.result);
+    const resultIsImage = useSelector(state => state.metadata.isImage);
 
 
     const [radioImage, setRadioImage] = useState(true);

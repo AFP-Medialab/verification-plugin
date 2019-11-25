@@ -1,8 +1,8 @@
-import {useEffect, useState} from "react";
+import {useEffect} from "react";
 import axios from "axios";
 import {useDispatch, useSelector} from "react-redux";
-import {setError, setKeyfranesLoading, setKeyfranesMessage, setKeyfranesResult} from "../../../../../redux/actions";
-
+import {setKeyframesResult, setKeyframesLoading, setKeyframesMessage} from "../../../../../redux/actions/tools/keyframesActions"
+import {setError} from "../../../../../redux/actions/errorActions"
 export const useKeyframeWrapper = (url) => {
     const dictionary = useSelector(state => state.dictionary);
     const lang = useSelector(state => state.language);
@@ -24,13 +24,13 @@ export const useKeyframeWrapper = (url) => {
                 dispatch(setError(keyword(e)));
             else
                 dispatch(setError(keyword("keyframes_error_default")));
-            dispatch(setKeyfranesLoading(false));
+            dispatch(setKeyframesLoading(false));
         };
 
         const lastGet = (url) => {
             axios.get(url)
                 .then(response => {
-                    dispatch(setKeyfranesResult(url, response.data, false, false))
+                    dispatch(setKeyframesResult(url, response.data, false, false))
                 })
                 .catch(error => handleError(error));
         };
@@ -52,9 +52,9 @@ export const useKeyframeWrapper = (url) => {
                         .then(response => {
                             data = response["data"];
                             if (keyword("keyframes_wait_" + data["status"]) !== undefined) {
-                                dispatch(setKeyfranesMessage(keyword("keyframes_wait_" + data["status"])));
+                                dispatch(setKeyframesMessage(keyword("keyframes_wait_" + data["status"])));
                             } else if (data["status"].endsWith("STARTED")) {
-                                dispatch(setKeyfranesMessage(keyword("keyframes_wait_STARTED") + data["step"] + " (" + data["process"] + ") " + (data["progress"] === "N/A" ? "" : data["progress"])))
+                                dispatch(setKeyframesMessage(keyword("keyframes_wait_STARTED") + data["step"] + " (" + data["process"] + ") " + (data["progress"] === "N/A" ? "" : data["progress"])))
                             }
                         })
                         .catch(errors => {
@@ -74,7 +74,7 @@ export const useKeyframeWrapper = (url) => {
 
         if (url === undefined || url === "")
             return;
-        dispatch(setKeyfranesLoading(true));
+        dispatch(setKeyframesLoading(true));
         postUrl("http://multimedia2.iti.gr/video_analysis/segmentation", jsonData);
     }, [url]);
 };

@@ -18,7 +18,7 @@ import iconb from "tui-image-editor/dist/svg/icon-b.svg";
 import iconc from "tui-image-editor/dist/svg/icon-c.svg";
 import icond from "tui-image-editor/dist/svg/icon-d.svg";
 import Grid from "@material-ui/core/Grid";
-import {setMagnifierResult} from "../../../../redux/actions";
+import{setMagnifierResult} from "../../../../redux/actions/tools/magnifierActions";
 import ImageReverseSearch from "../ImageReverseSearch";
 import history from "../../../utility/History/History";
 
@@ -79,8 +79,8 @@ const ImageResult = () => {
         return (dictionary !== null) ? dictionary[lang][key] : "";
     };
 
-    const original = useSelector(state => state.tool.magnifier.url);
-    const resultImage = useSelector(state => state.tool.magnifier.result);
+    const original = useSelector(state => state.magnifier.url);
+    const resultImage = useSelector(state => state.magnifier.result);
 
     const dispatch = useDispatch();
     const imageEditor = React.createRef();
