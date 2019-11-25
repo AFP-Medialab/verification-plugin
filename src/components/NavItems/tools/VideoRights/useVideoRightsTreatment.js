@@ -1,8 +1,7 @@
-import {useEffect, useState} from "react";
+import {useEffect} from "react";
 import axios from "axios";
-import * as querystring from "querystring";
 import {useDispatch, useSelector} from "react-redux";
-import {setAnalysisLoading, setError, setVideoRightsLoading, setVideoRightsResult} from "../../../../redux/actions";
+import {setError, setVideoRightsLoading, setVideoRightsResult} from "../../../../redux/actions";
 
 const useVideoRightsTreatment = (url) => {
     const dispatch = useDispatch();
@@ -21,6 +20,21 @@ const useVideoRightsTreatment = (url) => {
             dispatch(setVideoRightsLoading(false));
         };
 
+        const addTermsAndUsers = (result) => {
+            axios.get(result._links.reuseTerms.href)
+                .then(terms => {
+                    result.terms = terms.data._embedded.defaultReuseTerms;
+                        axios.get(result._links.user.href)
+                            .then(user => {
+                                result.user = user.data;
+                                dispatch(setVideoRightsResult(url, result, false, false));
+                            })
+                            .catch(handleError)
+                    }
+                )
+                .catch(handleError)
+        };
+
         let kind = "";
         if (url && url !== "" && url !== undefined) {
             let api_url = "https://rights-api.invid.udl.cat/";
@@ -34,15 +48,15 @@ const useVideoRightsTreatment = (url) => {
                 handleError("table_error_unavailable");
                 return;
             }
-            api_url += kind
+            api_url += kind;
 
             dispatch(setVideoRightsLoading(true));
-            axios.post(api_url, {"url" : url},  {headers: {ContentType: 'application/json'}})
+            axios.post(api_url, {"url": url}, {headers: {ContentType: 'application/json'}})
                 .then(response => {
                     let result = response.data;
                     result.kind = kind;
                     result.RIGHTS_APP = api_url;
-                    dispatch(setVideoRightsResult(url, result, false, false));
+                    addTermsAndUsers(result);
                 })
                 .catch(errors => {
                     handleError(errors)

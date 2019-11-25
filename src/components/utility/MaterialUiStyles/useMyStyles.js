@@ -93,7 +93,7 @@ const useMyStyles = makeStyles(theme => ({
         },
         iconRoot: {
             textAlign: 'center',
-            MaxHeight: "100%"
+            MaxHeight: "10px"
         },
         popUp: {
             width: "300px",
@@ -120,7 +120,7 @@ const useMyStyles = makeStyles(theme => ({
         imageIcon: {
             height: 'auto',
             width: '100%',
-
+            maxWidth: "60px",
         },
         textPaper: {
             elevation: 4,
@@ -138,5 +138,15 @@ const useMyStyles = makeStyles(theme => ({
             left: theme.spacing(2),
             zIndex: theme.zIndex.drawer + 1,
         },
+        listRoot:{
+            flexGrow: 1,
+            overflow: 'hidden',
+            padding: theme.spacing(0, 3),
+        },
+    listItem:{
+        maxWidth: 400,
+        margin: `${theme.spacing(1)}px auto`,
+        padding: theme.spacing(2),
+    }
     }));
 export default useMyStyles;
