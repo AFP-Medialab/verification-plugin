@@ -22,9 +22,9 @@ const Forensic = () => {
         return (dictionary !== null) ? dictionary[lang][key] : "";
     };
 
-    const resultUrl = useSelector(state => state.tool.forensic.url);
-    const resultData = useSelector(state => state.tool.forensic.result);
-    const isLoading = useSelector(state => state.tool.forensic.loading);
+    const resultUrl = useSelector(state => state.forensic.url);
+    const resultData = useSelector(state => state.forensic.result);
+    const isLoading = useSelector(state => state.forensic.loading);
 
 
     const [input, setInput] = useState(resultUrl);

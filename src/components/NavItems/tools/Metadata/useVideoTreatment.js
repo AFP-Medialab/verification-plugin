@@ -1,7 +1,8 @@
 import {useEffect, useState} from "react";
 import * as mp4box from "mp4box";
 import {useDispatch, useSelector} from "react-redux";
-import {setAnalysisLoading, setError, setKeyMetadadaResult, setMetadataIsImage} from "../../../../redux/actions";
+import {setMetadadaResult, setMetadadaLoading} from "../../../../redux/actions/tools/metadataActions";
+import {setError} from "../../../../redux/actions/errorActions";
 
 const useVideoTreatment = (mediaUrl) => {
     const dictionary = useSelector(state => state.dictionary);
@@ -18,14 +19,14 @@ const useVideoTreatment = (mediaUrl) => {
                 dispatch(setError((keyword(error))));
             else
                 dispatch(setError("Unknown error"));
-            dispatch(setAnalysisLoading(false));
+            dispatch(setMetadadaLoading(false));
         };
 
         let videoTreatment = () => {
             let video = mp4box.createFile();
 
             video.onReady = (info) => {
-                dispatch(setKeyMetadadaResult(mediaUrl, info, false, false, false));
+                dispatch(setMetadadaResult(mediaUrl, info, false, false, false));
             };
 
             video.onError = (error) => {

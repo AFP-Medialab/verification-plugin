@@ -3,8 +3,7 @@ import CustomTile from "../../../utility/customTitle/customTitle";
 import TextField from "@material-ui/core/TextField";
 import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
-import MySnackbar from "../../../MySnackbar/MySnackbar";
-import React, {useState} from "react";
+import React from "react";
 import ImageReverseSearch from "../ImageReverseSearch";
 import ImageGridList from "../../../utility/ImageGridList/ImageGridList";
 import {useDispatch, useSelector} from "react-redux";
@@ -14,7 +13,8 @@ import RadioGroup from "@material-ui/core/RadioGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import useMyStyles from "../../../utility/MaterialUiStyles/useMyStyles";
 import {useInput} from "../../../Hooks/useInput";
-import {setError, setThumbnailsResult} from "../../../../redux/actions";
+import {setThumbnailsResult} from "../../../../redux/actions/tools/thumbnailsActions"
+import {setError} from "../../../../redux/actions/errorActions"
 
 
 const Thumbnails = () => {
@@ -26,8 +26,8 @@ const Thumbnails = () => {
         return (dictionary !== null) ? dictionary[lang][key] : "";
     };
 
-    const resultUrl = useSelector(state => state.tool.thumbnails.url);
-    const resultData = useSelector(state => state.tool.thumbnails.result);
+    const resultUrl = useSelector(state => state.thumbnails.url);
+    const resultData = useSelector(state => state.thumbnails.result);
     const dispatch = useDispatch();
 
     const input = useInput(resultUrl);

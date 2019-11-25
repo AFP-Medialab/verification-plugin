@@ -1,12 +1,10 @@
-import {useEffect, useState} from "react";
+import {useEffect} from "react";
 import axios from "axios"
-import imagetracer from "tui-image-editor/src/js/helper/imagetracer";
 import {useDispatch, useSelector} from "react-redux";
-import {setError, setForensicsLoading, setForensicsResult} from "../../../../redux/actions";
-import useMyStyles from "../../../utility/MaterialUiStyles/useMyStyles";
+import{setForensicsLoading, setForensicsResult} from "../../../../redux/actions/tools/forensicActions";
+import {setError} from "../../../../redux/actions/errorActions";
 
 const useGetImages = (url) => {
-    const classes = useMyStyles();
     const dictionary = useSelector(state => state.dictionary);
     const lang = useSelector(state => state.language);
     const keyword = (key) => {

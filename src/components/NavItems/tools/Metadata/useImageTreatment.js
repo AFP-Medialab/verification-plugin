@@ -2,7 +2,8 @@ import {useEffect, useState} from "react";
 import EXIF from "exif-js/exif";
 import * as mp4box from "mp4box";
 import {useDispatch, useSelector} from "react-redux";
-import {setError, setKeyMetadadaResult, setMetadataIsImage} from "../../../../redux/actions";
+import {setMetadadaResult} from "../../../../redux/actions/tools/metadataActions";
+import {setError} from "../../../../redux/actions/errorActions";
 
 const useImageTreatment = (mediaUrl) => {
     const dictionary = useSelector(state => state.dictionary);
@@ -35,7 +36,7 @@ const useImageTreatment = (mediaUrl) => {
                 EXIF.getData(img, () => {
                     let res = EXIF.getAllTags(img);
                     if (!isEmpty(res)) {
-                        dispatch(setKeyMetadadaResult(mediaUrl, res, false, false, true));
+                        dispatch(setMetadadaResult(mediaUrl, res, false, false, true));
                     } else
                         handleErrors("metadata_img_error_exif");
                 });

@@ -1,6 +1,7 @@
 import axios from "axios"
 import {useDispatch, useSelector} from "react-redux";
-import {setAnalysisLoading, setAnalysisResult, setError} from "../../../../../redux/actions";
+import {setAnalysisLoading, setAnalysisResult} from "../../../../../redux/actions/tools/analysisActions";
+import {setError} from "../../../../../redux/actions/errorActions";
 import {useEffect} from "react";
 
 export const useAnalysisWrapper = (url, reprocess) => {

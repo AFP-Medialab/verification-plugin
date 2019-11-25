@@ -14,6 +14,7 @@ import VideoRights from "../../NavItems/tools/VideoRights/VideoRights";
 import Forensic from "../../NavItems/tools/Forensic/Forensic";
 import {Route, Switch} from 'react-router-dom'
 import Footer from "../../Footer/Footer";
+import TwitterSna from "../../NavItems/tools/TwitterSna/TwitterSna";
 
 const DrawerItem = (props) => {
 
@@ -53,6 +54,10 @@ const DrawerItem = (props) => {
         {
             content: <Forensic/>,
             footer: <Footer content={"footer_forensic"}/>
+        },
+        {
+            content: <TwitterSna/>,
+            footer: <Footer content={"footer_magnifier"}/>
         }
     ];
 

@@ -1,24 +1,17 @@
-import {Paper, Table, TableBody, TableCell, TableHead, TableRow} from "@material-ui/core";
+import {Paper} from "@material-ui/core";
 import useMyStyles from "../../../utility/MaterialUiStyles/useMyStyles";
 import React from "react";
 import Typography from "@material-ui/core/Typography";
-import Checkbox from "@material-ui/core/Checkbox";
 import BlockIcon from '@material-ui/icons/Block';
 import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
 import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
 import Button from "@material-ui/core/Button";
 import Box from "@material-ui/core/Box";
-
 import YouTubeIcon from '@material-ui/icons/YouTube';
 import TwitterIcon from '@material-ui/icons/Twitter';
 import FacebookIcon from '@material-ui/icons/Facebook';
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
 import Divider from "@material-ui/core/Divider";
 import invidLogo from "./images/InVID-logo.svg"
-import SvgIcon from "@material-ui/core/SvgIcon";
 import Icon from "@material-ui/core/Icon";
 import Grid from "@material-ui/core/Grid";
 
