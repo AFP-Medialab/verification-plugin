@@ -19,6 +19,8 @@ import iconc from "tui-image-editor/dist/svg/icon-c.svg";
 import icond from "tui-image-editor/dist/svg/icon-d.svg";
 import Grid from "@material-ui/core/Grid";
 import {setMagnifierResult} from "../../../../redux/actions";
+import ImageReverseSearch from "../ImageReverseSearch";
+import history from "../../../utility/History/History";
 
 const myTheme = {
     "menu.backgroundColor": "white",
@@ -182,8 +184,62 @@ const ImageResult = () => {
                     </a>
                 </Grid>
             </Grid>
-            <Box m={1}/>
+            <Box m={2}/>
             <Loop src={resultImage}/>
+            <Box m={2}/>
+            <Grid
+                container
+                direction="row"
+                justify="center"
+                alignItems="center"
+                spacing={3}
+            >
+                <Grid item>
+                    <Button color="primary"
+                            variant="contained"
+                            onClick={() => ImageReverseSearch("google", original)}>
+                        {
+                            keyword("magnifier_google")
+                        }
+                    </Button>
+                </Grid>
+                <Grid item>
+                    <Button color="primary"
+                            variant="contained"
+                            onClick={() => ImageReverseSearch("baidu", original)}>
+                        {
+                            keyword("magnifier_baidu")
+                        }
+                    </Button>
+                </Grid>
+                <Grid item>
+                    <Button color="primary"
+                            variant="contained"
+                            onClick={() => ImageReverseSearch("yandex", original)}>
+                        {
+                            keyword("magnifier_yandex")
+                        }
+                    </Button>
+                </Grid>
+                <Grid item>
+                    <Button color="primary"
+                            variant="contained"
+                            onClick={() => ImageReverseSearch("tineye", original)}>
+                        {
+                            keyword("magnifier_tineye")
+                        }
+                    </Button>
+                </Grid>
+                <Grid item>
+                    <Button color="primary"
+                            variant="contained"
+                            onClick={() => history.push("forensic/" + encodeURIComponent(original))}>
+                        {
+                            keyword("magnifier_forensic")
+                        }
+                    </Button>
+                </Grid>
+            </Grid>
         </Paper>
     )
 };

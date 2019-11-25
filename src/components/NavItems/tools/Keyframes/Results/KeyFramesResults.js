@@ -8,6 +8,7 @@ import Box from "@material-ui/core/Box";
 import Divider from "@material-ui/core/Divider";
 import Button from "@material-ui/core/Button";
 import {useKeyframes} from "../Hooks/usekeyframes";
+import ImageReverseSearch from "../../ImageReverseSearch";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -56,7 +57,7 @@ const KeyFramesResults = (props) => {
                 }
                 {
                     !detailed &&
-                    <ImageGridList list={simpleList}/>
+                    <ImageGridList list={simpleList} onClick={(url) => ImageReverseSearch("google", url)}/>
                 }
             </Paper>
         </div>
