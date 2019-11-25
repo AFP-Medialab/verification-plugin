@@ -33,7 +33,7 @@ const VideoRights = () => {
         if (!isLoading)
             setSubmitted(input);
     };
-
+/*
     let res =         {
         kind : "youTubeVideos",
         licence : "youtube",
@@ -64,6 +64,8 @@ const VideoRights = () => {
 
     };
 
+ */
+
     return (
         <div>
             <Paper className={classes.root}>
@@ -91,8 +93,8 @@ const VideoRights = () => {
                 <LinearProgress hidden={!isLoading}/>
             </Paper>
             {
-                res &&
-                <VideoRightsResults result={res}/>
+                resultResult &&
+                <VideoRightsResults result={resultResult}/>
             }
         </div>
     )
