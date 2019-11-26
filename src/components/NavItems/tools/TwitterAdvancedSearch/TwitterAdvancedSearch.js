@@ -13,6 +13,10 @@ import {
 import DateFnsUtils from "@date-io/date-fns";
 import {useInput} from "../../../Hooks/useInput";
 import {createUrl} from "./createUrl";
+import RadioGroup from "@material-ui/core/RadioGroup";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Radio from "@material-ui/core/Radio";
+import FormControl from "@material-ui/core/FormControl";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -51,6 +55,7 @@ const TwitterAdvancedSearch = () => {
     const geocode = useInput("");
     const near = useInput("");
     const within = useInput("");
+    const [localTime, setLocalTime] = useState("true");
 
     const largeInputList = [
         {
@@ -110,7 +115,7 @@ const TwitterAdvancedSearch = () => {
 
 
     const onSubmit = () => {
-        let url = createUrl(term.value, account.value, filter.value, tweetLang.value, geocode.value, near.value, within.value, fromDate, toDate);
+        let url = createUrl(term.value, account.value, filter.value, tweetLang.value, geocode.value, near.value, within.value, fromDate, toDate, localTime);
         window.open(url);
     };
 
@@ -167,6 +172,23 @@ const TwitterAdvancedSearch = () => {
                 }
                 </div>
             </Box>
+            <FormControl component="fieldset">
+                <RadioGroup aria-label="position" name="position" value={localTime}
+                            onChange={e => setLocalTime(e.target.value)} row>
+                    <FormControlLabel
+                        value={"true"}
+                        control={<Radio color="primary"/>}
+                        label={keyword("twitter_local_time")}
+                        labelPlacement="end"
+                    />
+                    <FormControlLabel
+                        value={"false"}
+                        control={<Radio color="primary"/>}
+                        label={keyword("twitter_sna_gmt")}
+                        labelPlacement="end"
+                    />
+                </RadioGroup>
+            </FormControl>
             <Box m={2}/>
             <Button variant="contained" color="primary" onClick={onSubmit}>
                 {keyword("button_submit")}

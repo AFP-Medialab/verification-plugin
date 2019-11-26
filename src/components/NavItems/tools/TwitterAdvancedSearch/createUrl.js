@@ -1,25 +1,11 @@
+import convertToGMT from "../../../utility/DataTimePicker/convertToGMT"
+
 function replaceAll(str, find, replace)
 {
     return str.replace( new RegExp(find, 'g'), replace );
 }
 
-function convertToEpoch(date)
-{
-    let epoch = new Date(date);
-    /*if( document.getElementById('gmt').checked ) {
-        epoch = new Date(Date.UTC(
-            epoch.getFullYear(),
-            epoch.getMonth(),
-            epoch.getDate(),
-            epoch.getHours(),
-            epoch.getMinutes()
-        ));
-    }*/
-    epoch = epoch.getTime()/1000;
-    return epoch;
-}
-
-export const createUrl = (term, account, filter, lang, geocode, near, within, from_date, to_date) =>
+export const createUrl = (term, account, filter, lang, geocode, near, within, from_date, to_date, localTime) =>
 {
     let twitter_url = "https://twitter.com/search?f=tweets&q=";
     twitter_url = twitter_url +  replaceAll(term, "#", "%23");
@@ -42,12 +28,13 @@ export const createUrl = (term, account, filter, lang, geocode, near, within, fr
         }
     }
     if (from_date){
-        let epoch = convertToEpoch(from_date);
-        twitter_url += "%20since%3A" + epoch;
+        let epoch = (localTime === "false") ? convertToGMT(from_date) : from_date;
+        console.log(epoch)
+        twitter_url += "%20since%3A" +  epoch.getTime() / 1000;
     }
     if (to_date) {
-        let epoch = convertToEpoch(to_date);
-        twitter_url += "%20until%3A" + epoch;
+        let epoch = (localTime === "false") ?  convertToGMT(to_date) : to_date;
+        twitter_url += "%20until%3A" + epoch.getTime() / 1000;
     }
     // twitter_url = twitter_url + "&src=typd"
     return twitter_url;

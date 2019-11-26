@@ -14,9 +14,18 @@ import Box from "@material-ui/core/Box";
 import FormLabel from "@material-ui/core/FormLabel";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
-import Link from "@material-ui/core/Link";
-import ListItem from "@material-ui/core/ListItem";
 import {setError} from "../../../../redux/actions/errorActions";
+import InputLabel from "@material-ui/core/InputLabel";
+import Select from "@material-ui/core/Select";
+import MenuItem from "@material-ui/core/MenuItem";
+import convertToGMT from "../../../utility/DataTimePicker/convertToGMT";
+import dateFormat from "dateformat"
+import useTwitterSnaRequest from "./useTwitterSnaRequest";
+import ExpansionPanel from "@material-ui/core/ExpansionPanel";
+import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import Typography from "@material-ui/core/Typography";
+import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
 
 const TwitterSna = () => {
     const classes = useMyStyles();
@@ -30,66 +39,66 @@ const TwitterSna = () => {
     const result = useSelector(state => state.twitterSna.result);
     const dispatch = useDispatch();
 
-    const [hashTagInput, setHashTagInput] = useState(request ? request.hashTag : "");
+    const [hashTagInput, setHashTagInput] = useState(request ? request.hashTag : "#fake");  // change default values
     const [hashTagError, setHashTagError] = useState(false);
-
     const [andInput, setAndInput] = useState(request ? request.and : "");
     const [orInput, setOrInput] = useState(request ? request.or : "");
     const [notInput, setNotInput] = useState(request ? request.not : "");
     const [usersInput, setUsersInput] = useState(request ? request.users : "");
-    const [since, setSince] = useState(request ? request.since : null);
-    const [until, setUntil] = useState(request ? request.until : null);
-    const [langInput, setLangInput] = useState(request ? request.lang : null);
+    const [since, setSince] = useState(request ? request.since : new Date("11-06-2019"));         // change default values
+    const [until, setUntil] = useState(request ? request.until : new Date("11-07-2019"));         // change default values
+    const [langInput, setLangInput] = useState(request ? request.lang : "lang_all");
+    const [openLangInput, setLangInputOpen] = React.useState(false);
     const [filters, setFilers] = useState(request ? request.filters : "none");
     const [verifiedUsers, setVerifiedUsers] = useState("false");
     const [localTime, setLocalTime] = useState("true");
 
-    const handleEror = (e) => {
+    const [submittedRequest, setSubmittedRequest] = useState(null);
+    useTwitterSnaRequest(submittedRequest);
+
+    const handleErrors = (e) => {
         dispatch(setError(e))
     };
 
+    function stringToList(string) {
+        let newStr = string.replace(/@/g, " ");
+        let res = newStr.split(" ");
+        return res.filter(function (el) {
+            return el !== "";
+        });
+    }
 
     const makeRequest = () => {
-        const newRequest = {};
-        //Mandatory Fields
-        if (hashTagInput !== "")
-            newRequest.hashTag = hashTagInput;
-        else{
-            dispatch(setError(keyword("twitterStatsErrorMessage")));
-            setHashTagError(true);
-            return;
-        }
-        if (since === null || since === ""){
-            dispatch(setError(keyword("twitterStatsErrorMessage")));
-            setSince("");
-            return;
-        }
-        else {
-            newRequest.since = since;
-        }
-        if (until === null || until === ""){
-            dispatch(setError(keyword("twitterStatsErrorMessage")));
-            setUntil("");
-            return;
-        }
-        else {
-            newRequest.since = since;
-        }
+        //Creating Request Object.
+        let and_list, or_list, not_list = null;
 
-        //Optional Fields
         if (andInput !== "")
-            newRequest.and = andInput;
+            and_list = andInput.trim().split(" ");
         if (orInput !== "")
-            newRequest.and = orInput;
+            or_list = orInput.trim().split(" ");
         if (notInput !== "")
-            newRequest.and = notInput;
-        if (usersInput !== "")
-            newRequest.and = usersInput;
+            not_list = notInput.trim().split(" ");
 
-        //handle TimeZone
+        let searchObj = {
+            "search": hashTagInput,
+            "and": and_list,
+            "or": or_list,
+            "not": not_list
+        };
 
+        const newFrom = (localTime === "false") ? convertToGMT(since) : since;
+        const newUntil = (localTime === "false") ? convertToGMT(until) : until;
 
-        console.log(newRequest);
+        return {
+            "search": searchObj,
+            "lang": (langInput === "lang_all") ? null : langInput.replace("lang_", ""),
+            "user_list": stringToList(usersInput),
+            "from": dateFormat(newFrom, "yyyy-mm-dd hh:MM:ss"),
+            "until": dateFormat(newUntil, "yyyy-mm-dd hh:MM:ss"),
+            "verified": verifiedUsers === "true",
+            "media": (filters === "none") ? null : filters,
+            "retweetsHandling": null
+        };
     };
 
     const handleSinceDateChange = (date) => {
@@ -109,202 +118,291 @@ const TwitterSna = () => {
     };
 
     const onSubmit = () => {
-        makeRequest()
+        //Mandatory Fields errors
+        if (hashTagInput === "") {
+            handleErrors(keyword("twitterStatsErrorMessage"));
+            setHashTagError(true);
+            return;
+        }
+        if (since === null || since === "") {
+            handleErrors(keyword("twitterStatsErrorMessage"));
+            setSince("");
+            return;
+        }
+        if (until === null || until === "") {
+            handleErrors(keyword("twitterStatsErrorMessage"));
+            setUntil("");
+            return;
+        }
+        const newRequest = makeRequest();
+        setSubmittedRequest(newRequest);
     };
 
     return (
-        <Paper className={classes.root}>
-            <CustomTile> {keyword("twitter_sna_title")}  </CustomTile>
-            <Box m={3}/>
-            <Grid container spacing={1}>
-                <Grid item className={classes.grow}>
-                    <TextField
-                        error={hashTagError}
-                        value={hashTagInput}
-                        onChange={e => {
-                            setHashTagInput(e.target.value);
-                            setHashTagError(false);
-                        }}
-                        id="standard-full-width"
-                        label={keyword("twitter_sna_search")}
-                        style={{margin: 8}}
-                        placeholder={"#example"}
-                        fullWidth
-                    />
-                </Grid>
-                <Grid item className={classes.grow}>
-                    <TextField
-                        value={andInput}
-                        onChange={e => setAndInput(e.target.value)}
-                        id="standard-full-width"
-                        label={keyword("twitter_sna_and")}
-                        style={{margin: 8}}
-                        placeholder={"word1 word2"}
-                        fullWidth
-                    />
-                </Grid>
-            </Grid>
-            <Grid container spacing={1}>
-                <Grid item className={classes.grow}>
-                    <TextField
-                        value={orInput}
-                        onChange={e => setOrInput(e.target.value)}
-                        id="standard-full-width"
-                        label={keyword("twitter_sna_or")}
-                        style={{margin: 8}}
-                        placeholder={"word3 word4"}
-                        fullWidth
-                    />
-                </Grid>
-                <Grid item className={classes.grow}>
-                    <TextField
-                        value={notInput}
-                        onChange={e => setNotInput(e.target.value)}
-                        id="standard-full-width"
-                        label={keyword("twitter_sna_not")}
-                        style={{margin: 8}}
-                        placeholder={"word6 word7"}
-                        fullWidth
-                    />
-                </Grid>
-            </Grid>
-            <TextField
-                value={notInput}
-                onChange={e => setNotInput(e.target.value)}
-                id="standard-full-width"
-                label={keyword("twitter_sna_user")}
-                style={{margin: 8}}
-                placeholder={"word6 word7"}
-                fullWidth
-            />
-            <Grid container spacing={1}>
-                <Grid item className={classes.grow}>
-                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                        <KeyboardDatePicker
-                            margin="normal"
-                            id="date-picker-dialog"
-                            label={keyword("twitter_sna_from_date")}
-                            format="MM-dd-yyyy"
-                            value={since}
-                            onChange={handleSinceDateChange}
-                            KeyboardButtonProps={{
-                                'aria-label': 'change date',
+        <div>
+            <Paper className={classes.root}>
+                <CustomTile> {keyword("twitter_sna_title")}  </CustomTile>
+                <Box m={3}/>
+                <Grid container spacing={1}>
+                    <Grid item className={classes.grow}>
+                        <TextField
+                            error={hashTagError}
+                            value={hashTagInput}
+                            onChange={e => {
+                                setHashTagInput(e.target.value);
+                                setHashTagError(false);
                             }}
+                            id="standard-full-width"
+                            label={keyword("twitter_sna_search")}
+                            style={{margin: 8}}
+                            placeholder={"#example"}
+                            fullWidth
                         />
-                        <KeyboardTimePicker
-                            margin="normal"
-                            id="time-picker"
-                            label="time (add to tsv)"
-                            value={since}
-                            onChange={handleSinceDateChange}
-                            KeyboardButtonProps={{
-                                'aria-label': 'change time',
-                            }}
+                    </Grid>
+                    <Grid item className={classes.grow}>
+                        <TextField
+                            value={andInput}
+                            onChange={e => setAndInput(e.target.value)}
+                            id="standard-full-width"
+                            label={keyword("twitter_sna_and")}
+                            style={{margin: 8}}
+                            placeholder={"word1 word2"}
+                            fullWidth
                         />
-                    </MuiPickersUtilsProvider>
+                    </Grid>
                 </Grid>
-                <Grid item className={classes.grow}>
-                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                        <KeyboardDatePicker
-                            margin="normal"
-                            id="date-picker-dialog"
-                            label={keyword("twitter_sna_until_date")}
-                            format="MM-dd-yyyy"
-                            value={until}
-                            onChange={handleUntilDateChange}
-                            KeyboardButtonProps={{
-                                'aria-label': 'change date',
-                            }}
+                <Grid container spacing={1}>
+                    <Grid item className={classes.grow}>
+                        <TextField
+                            value={orInput}
+                            onChange={e => setOrInput(e.target.value)}
+                            id="standard-full-width"
+                            label={keyword("twitter_sna_or")}
+                            style={{margin: 8}}
+                            placeholder={"word3 word4"}
+                            fullWidth
                         />
-                        <KeyboardTimePicker
-                            margin="normal"
-                            id="time-picker"
-                            label="time (add to tsv)"
-                            value={until}
-                            onChange={handleUntilDateChange}
-                            KeyboardButtonProps={{
-                                'aria-label': 'change time',
-                            }}
+                    </Grid>
+                    <Grid item className={classes.grow}>
+                        <TextField
+                            value={notInput}
+                            onChange={e => setNotInput(e.target.value)}
+                            id="standard-full-width"
+                            label={keyword("twitter_sna_not")}
+                            style={{margin: 8}}
+                            placeholder={"word6 word7"}
+                            fullWidth
                         />
-                    </MuiPickersUtilsProvider>
+                    </Grid>
                 </Grid>
-            </Grid>
-            <FormControl component="fieldset">
-                <RadioGroup aria-label="position" name="position" value={localTime}
-                            onChange={e => setLocalTime(e.target.value)} row>
-                    <FormControlLabel
-                        value={"true"}
-                        control={<Radio color="primary"/>}
-                        label={keyword("twitter_local_time")}
-                        labelPlacement="end"
-                    />
-                    <FormControlLabel
-                        value={"false"}
-                        control={<Radio color="primary"/>}
-                        label={keyword("twitter_sna_gmt")}
-                        labelPlacement="end"
-                    />
-                </RadioGroup>
-            </FormControl>
-            <Box m={2}/>
-            <Grid container justify={"space-around"} spacing={5}>
-                <Grid item>
-                    <FormControl component="fieldset">
-                        <FormLabel component="legend">{keyword("twitter_sna_media")}</FormLabel>
-                        <RadioGroup aria-label="position" name="position" value={filters} onChange={handleFiltersChange}
-                                    row>
-                            <FormControlLabel
-                                value={"none"}
-                                control={<Radio color="primary"/>}
-                                label={keyword("twitterStats_media_none")}
-                                labelPlacement="end"
+                <TextField
+                    value={notInput}
+                    onChange={e => setNotInput(e.target.value)}
+                    id="standard-full-width"
+                    label={keyword("twitter_sna_user")}
+                    style={{margin: 8}}
+                    placeholder={"word6 word7"}
+                    fullWidth
+                />
+                <Grid container spacing={1}>
+                    <Grid item className={classes.grow}>
+                        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                            <KeyboardDatePicker
+                                margin="normal"
+                                id="date-picker-dialog"
+                                label={keyword("twitter_sna_from_date")}
+                                format="MM-dd-yyyy"
+                                value={since}
+                                onChange={handleSinceDateChange}
+                                KeyboardButtonProps={{
+                                    'aria-label': 'change date',
+                                }}
                             />
-                            <FormControlLabel
-                                value={"pictures"}
-                                control={<Radio color="primary"/>}
-                                label={keyword("twitterStats_media_images")}
-                                labelPlacement="end"
+                            <KeyboardTimePicker
+                                margin="normal"
+                                id="time-picker"
+                                label="time (add to tsv)"
+                                value={since}
+                                onChange={handleSinceDateChange}
+                                KeyboardButtonProps={{
+                                    'aria-label': 'change time',
+                                }}
                             />
-                            <FormControlLabel
-                                value={"videos"}
-                                control={<Radio color="primary"/>}
-                                label={keyword("twitterStats_media_videos")}
-                                labelPlacement="end"
+                        </MuiPickersUtilsProvider>
+                    </Grid>
+                    <Grid item className={classes.grow}>
+                        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                            <KeyboardDatePicker
+                                margin="normal"
+                                id="date-picker-dialog"
+                                label={keyword("twitter_sna_until_date")}
+                                format="MM-dd-yyyy"
+                                value={until}
+                                onChange={handleUntilDateChange}
+                                KeyboardButtonProps={{
+                                    'aria-label': 'change date',
+                                }}
                             />
-                            <FormControlLabel
-                                value={"both"}
-                                control={<Radio color="primary"/>}
-                                label={keyword("twitterStats_media_both")}
-                                labelPlacement="end"
+                            <KeyboardTimePicker
+                                margin="normal"
+                                id="time-picker"
+                                label="time (add to tsv)"
+                                value={until}
+                                onChange={handleUntilDateChange}
+                                KeyboardButtonProps={{
+                                    'aria-label': 'change time',
+                                }}
                             />
-                        </RadioGroup>
-                    </FormControl>
+                        </MuiPickersUtilsProvider>
+                    </Grid>
                 </Grid>
-                <Grid item>
-                    <FormControl component="fieldset">
-                        <FormLabel component="legend">{keyword("twitter_sna_verified")}</FormLabel>
-                        <RadioGroup aria-label="position" name="position" value={verifiedUsers}
-                                    onChange={handleVerifiedUsersChange} row>
-                            <FormControlLabel
-                                value={"false"}
-                                control={<Radio color="primary"/>}
-                                label={keyword("twitterStats_verified_no")}
-                                labelPlacement="end"
-                            />
-                            <FormControlLabel
-                                value={"true"}
-                                control={<Radio color="primary"/>}
-                                label={keyword("twitterStats_verified_yes")}
-                                labelPlacement="end"
-                            />
-                        </RadioGroup>
-                    </FormControl>
+                <FormControl component="fieldset">
+                    <RadioGroup aria-label="position" name="position" value={localTime}
+                                onChange={e => setLocalTime(e.target.value)} row>
+                        <FormControlLabel
+                            value={"true"}
+                            control={<Radio color="primary"/>}
+                            label={keyword("twitter_local_time")}
+                            labelPlacement="end"
+                        />
+                        <FormControlLabel
+                            value={"false"}
+                            control={<Radio color="primary"/>}
+                            label={keyword("twitter_sna_gmt")}
+                            labelPlacement="end"
+                        />
+                    </RadioGroup>
+                </FormControl>
+                <Box m={2}/>
+
+                <Box m={2}/>
+                <Grid container justify={"space-around"} spacing={5}>
+                    <Grid item>
+                        <FormControl component="fieldset">
+                            <FormLabel component="legend">{keyword("twitter_sna_media")}</FormLabel>
+                            <RadioGroup aria-label="position" name="position" value={filters}
+                                        onChange={handleFiltersChange}
+                                        row>
+                                <FormControlLabel
+                                    value={"none"}
+                                    control={<Radio color="primary"/>}
+                                    label={keyword("twitterStats_media_none")}
+                                    labelPlacement="end"
+                                />
+                                <FormControlLabel
+                                    value={"image"}
+                                    control={<Radio color="primary"/>}
+                                    label={keyword("twitterStats_media_images")}
+                                    labelPlacement="end"
+                                />
+                                <FormControlLabel
+                                    value={"video"}
+                                    control={<Radio color="primary"/>}
+                                    label={keyword("twitterStats_media_videos")}
+                                    labelPlacement="end"
+                                />
+                                <FormControlLabel
+                                    value={"both"}
+                                    control={<Radio color="primary"/>}
+                                    label={keyword("twitterStats_media_both")}
+                                    labelPlacement="end"
+                                />
+                            </RadioGroup>
+                        </FormControl>
+                    </Grid>
+                    <Grid item>
+                        <FormControl component="fieldset">
+                            <FormLabel component="legend">{keyword("twitter_sna_verified")}</FormLabel>
+                            <RadioGroup aria-label="position" name="position" value={verifiedUsers}
+                                        onChange={handleVerifiedUsersChange} row>
+                                <FormControlLabel
+                                    value={"false"}
+                                    control={<Radio color="primary"/>}
+                                    label={keyword("twitterStats_verified_no")}
+                                    labelPlacement="end"
+                                />
+                                <FormControlLabel
+                                    value={"true"}
+                                    control={<Radio color="primary"/>}
+                                    label={keyword("twitterStats_verified_yes")}
+                                    labelPlacement="end"
+                                />
+                            </RadioGroup>
+                        </FormControl>
+                    </Grid>
+                    <Grid item>
+                        <FormControl className={classes.formControl}>
+                            <InputLabel id="demo-controlled-open-select-label">{keyword("lang_choices")}</InputLabel>
+                            <Select
+                                labelid="demo-controlled-open-select-label"
+                                id="demo-controlled-open-select"
+                                open={openLangInput}
+                                onClose={() => setLangInputOpen(false)}
+                                onOpen={() => setLangInputOpen(true)}
+                                value={langInput}
+                                onChange={e => setLangInput(e.target.value)}
+                            >
+                                <MenuItem value={"lang_all"}>{keyword("lang_all")}</MenuItem>
+                                <MenuItem value={"lang_fr"}>{keyword("lang_fr")}</MenuItem>
+                                <MenuItem value={"lang_en"}>{keyword("lang_en")}</MenuItem>
+                                <MenuItem value={"lang_es"}>{keyword("lang_es")}</MenuItem>
+                                <MenuItem value={"lang_ar"}>{keyword("lang_ar")}</MenuItem>
+                                <MenuItem value={"lang_de"}>{keyword("lang_de")}</MenuItem>
+                                <MenuItem value={"lang_it"}>{keyword("lang_it")}</MenuItem>
+                                <MenuItem value={"lang_id"}>{keyword("lang_id")}</MenuItem>
+                                <MenuItem value={"lang_pt"}>{keyword("lang_pt")}</MenuItem>
+                                <MenuItem value={"lang_ko"}>{keyword("lang_ko")}</MenuItem>
+                                <MenuItem value={"lang_tr"}>{keyword("lang_tr")}</MenuItem>
+                                <MenuItem value={"lang_ru"}>{keyword("lang_ru")}</MenuItem>
+                                <MenuItem value={"lang_nl"}>{keyword("lang_nl")}</MenuItem>
+                                <MenuItem value={"lang_hi"}>{keyword("lang_hi")}</MenuItem>
+                                <MenuItem value={"lang_no"}>{keyword("lang_no")}</MenuItem>
+                                <MenuItem value={"lang_sv"}>{keyword("lang_sv")}</MenuItem>
+                                <MenuItem value={"lang_fi"}>{keyword("lang_fi")}</MenuItem>
+                                <MenuItem value={"lang_da"}>{keyword("lang_da")}</MenuItem>
+                                <MenuItem value={"lang_pl"}>{keyword("lang_pl")}</MenuItem>
+                                <MenuItem value={"lang_hu"}>{keyword("lang_hu")}</MenuItem>
+                                <MenuItem value={"lang_fa"}>{keyword("lang_fa")}</MenuItem>
+                                <MenuItem value={"lang_he"}>{keyword("lang_he")}</MenuItem>
+                                <MenuItem value={"lang_ur"}>{keyword("lang_ur")}</MenuItem>
+                                <MenuItem value={"lang_th"}>{keyword("lang_th")}</MenuItem>
+                            </Select>
+                        </FormControl>
+                    </Grid>
                 </Grid>
-            </Grid>
-            <Box m={2}/>
-            <Button variant="contained" color="primary" onClick={onSubmit}>
-                {keyword("button_submit")}
-            </Button>
-        </Paper>)
+                <Box m={2}/>
+                <Button variant="contained" color="primary" onClick={onSubmit}>
+                    {keyword("button_submit")}
+                </Button>
+            </Paper>
+            {
+                result &&
+                <Paper className={classes.root}>
+                    {
+                        result.map((obj, index) => {
+                            return (
+                                <ExpansionPanel key={index}>
+                                    <ExpansionPanelSummary
+                                        expandIcon={<ExpandMoreIcon/>}
+                                        aria-controls="panel1a-content"
+                                        id="panel1a-header"
+                                    >
+                                        <Typography className={classes.heading}>{keyword(obj.title)}</Typography>
+                                    </ExpansionPanelSummary>
+                                    <ExpansionPanelDetails>
+                                        <Box alignItems="center" justifyContent="center" width={"100%"}>
+                                            {
+                                                obj.component
+                                            }
+                                        </Box>
+                                    </ExpansionPanelDetails>
+                                </ExpansionPanel>
+                            )
+                        })
+                    }
+
+                </Paper>
+            }
+        </div>)
 };
 export default TwitterSna;

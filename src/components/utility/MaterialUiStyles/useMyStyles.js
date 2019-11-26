@@ -147,6 +147,10 @@ const useMyStyles = makeStyles(theme => ({
         maxWidth: 400,
         margin: `${theme.spacing(1)}px auto`,
         padding: theme.spacing(2),
+    },
+    formControl:{
+        margin: theme.spacing(1),
+        minWidth: 200,
     }
     }));
 export default useMyStyles;
