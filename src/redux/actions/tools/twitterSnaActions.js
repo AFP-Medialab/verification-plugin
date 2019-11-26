@@ -10,7 +10,7 @@ export const setTwitterSnaResult = (request, result, notification, loading) => {
     }
 };
 
-export const setVideoRightsLoading = (loading) => {
+export const setTwitterSnaLoading = (loading) => {
     return {
         type : "SET_TWITTER_SNA_LOADING",
         payload : loading
