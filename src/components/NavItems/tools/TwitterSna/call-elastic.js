@@ -200,7 +200,7 @@ export function generateWordCloudPlotlyJson(param) {
 //URL array
 export function generateURLArrayHTML(param) {
 
-    let must = [constructMatchPhrase(param)]
+    let must = [constructMatchPhrase(param)];
     let aggs = constructAggs("urls");
 
     function getURLArray(json) {
@@ -223,22 +223,7 @@ export function generateURLArrayHTML(param) {
             }
         });
         const myJson = await response.json();
-
-
-        let array = getURLArray(myJson);
-
-        let arrayStr = '<table id="url_table">' +
-            '<tr>' +
-            '<td>url</td>' +
-            '<td>count</td>' +
-            '</tr>';
-        array.forEach(row => {
-            arrayStr += '<tr>' +
-                '<td><a href="' + row.url + '" target="_blank">' + row.url + '</a></td>' +
-                '<td>' + row.count + '</td></tr>';
-        });
-        arrayStr += '</table>';
-        return arrayStr;
+        return getURLArray(myJson);
     };
     return userAction();
 }
