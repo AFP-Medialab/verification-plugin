@@ -3,8 +3,14 @@ import {useDispatch, useSelector} from "react-redux";
 import {setError} from "../../../../redux/actions/errorActions";
 import {setTwitterSnaLoading, setTwitterSnaResult} from "../../../../redux/actions/tools/twitterSnaActions";
 import axios from "axios";
-import {generateDonutPlotlyJson, generateEssidHistogramPlotlyJson, generateURLArrayHTML} from "./call-elastic";
+import {
+    generateDonutPlotlyJson,
+    generateEssidHistogramPlotlyJson,
+    generateTweetCountPlotlyJson,
+    generateURLArrayHTML
+} from "./call-elastic";
 import Plot from 'react-plotly.js';
+import {setAnalysisLoading} from "../../../../redux/actions/tools/analysisActions";
 
 const useTwitterSnaRequest = (request) => {
     const TwintWrapperUrl = "http://185.249.140.38/twint-wrapper";
@@ -28,9 +34,7 @@ const useTwitterSnaRequest = (request) => {
             dispatch(setTwitterSnaLoading(false));
         };
 
-        const makeResult = (data, responseArrayOf6) => {
-            const result = {};
-
+        const createPieCharts = (data, responseArrayOf7) => {
             let cloudLayout = {
                 title: "",
                 automargin: true,
@@ -55,25 +59,71 @@ const useTwitterSnaRequest = (request) => {
                 "hashtag_cloud_chart_title"
             ];
 
-            result.pieCharts = [];
+            let pieCharts = [];
 
             for (let cpt = 0; cpt < titles.length; cpt++) {
                 cloudLayout.title = <div><b>{keyword(titles[cpt])}</b><br/> {titleEnd}</div>;
-                result.pieCharts.push(
+                pieCharts.push(
                     {
                         title: titles[cpt],
-                        json: responseArrayOf6[cpt],
+                        json: responseArrayOf7[cpt],
                         layout: cloudLayout,
                         config: config,
                     }
                 );
             }
+            return pieCharts;
+        };
 
-            result.urls = responseArrayOf6[4];
+        const createHistogram = (data, json, givenFrom, givenUntil) => {
+            let titleEnd = data.search.search + " " + data.from + " " + data.until;
+            let layout = {
+                title:  <div><b>{keyword("user_time_chart_title")}</b><br/> {titleEnd}</div>,
+                automargin: true,
+                xaxis: {
+                    range: [ data["from"], data["until"]],
+                    rangeslider: { range: [givenFrom, givenUntil] },
+                },
+                annotations: [{
+                    xref: 'paper',
+                    yref: 'paper',
+                    x: 1.2,
+                    xanchor: 'right',
+                    y: -0.4,
+                    yanchor: 'top',
+                    text: 'we-verify.eu',
+                    showarrow: false
+                }],
+                autosize: true,
+            };
 
-            console.log(result);
 
-            dispatch(setTwitterSnaResult(request, result, false, false))
+            let config = {
+                toImageButtonOptions: {
+                    format: 'png', // one of png, svg, jpeg, webp
+                    filename: data["search"]["search"] + "_" + data["from"] + "_" + data["until"] + "_Timeline",
+                    scale: 1 // Multiply title/legend/axis/canvas sizes by this factor
+                },
+
+                responsive: true,
+                modeBarButtons: [["toImage"]],
+                displaylogo: false
+            };
+            return {
+                title: "user_time_chart_title",
+                json: json,
+                layout:layout,
+                config:config,
+            }
+        };
+
+        const makeResult = (data, responseArrayOf7, givenFrom, givenUntil) => {
+            const result = {};
+            result.pieCharts = createPieCharts(data, responseArrayOf7);
+            result.urls = responseArrayOf7[4];
+            result.tweetCount = responseArrayOf7[5];
+            result.histogram = createHistogram(data, responseArrayOf7[6], givenFrom, givenUntil);
+            dispatch(setTwitterSnaResult(request, result, false, true))
         };
 
         const generateGraph = (data) => {
@@ -90,27 +140,30 @@ const useTwitterSnaRequest = (request) => {
                 session: data.session
             };
 
-            axios.all([
+            return axios.all([
                 generateDonutPlotlyJson(entries, "nretweets"),
                 generateDonutPlotlyJson(entries, "nlikes"),
                 generateDonutPlotlyJson(entries, "ntweets"),
                 generateDonutPlotlyJson(entries, "hashtags"),
                 generateURLArrayHTML(entries),
-                generateEssidHistogramPlotlyJson(entries, false, givenFrom, givenUntil)
+                generateTweetCountPlotlyJson(entries, givenFrom, givenUntil),
+                generateEssidHistogramPlotlyJson(entries, false, givenFrom, givenUntil),
             ])
-                .then(responseArrayOf6 => {
-                    makeResult(data.query, responseArrayOf6);
+                .then(responseArrayOf7 => {
+                    makeResult(data.query, responseArrayOf7, givenFrom, givenUntil);
                 });
+
         };
 
         const lastRenderCall = (sessionId) => {
-            console.log(sessionId);
             axios.get(TwintWrapperUrl + /status/ + sessionId)
                 .then(response => {
                     if (response.data.status === "Error")
                         handleErrors("twitterSnaErrorMessage");
                     else {
-                        generateGraph(response.data);
+                        generateGraph(response.data).then(() => {
+                            dispatch(setTwitterSnaLoading(false))
+                        });
                     }
                 })
                 .catch(e => handleErrors(e))
@@ -124,8 +177,9 @@ const useTwitterSnaRequest = (request) => {
                     else if (response.data.status === "Done")
                         lastRenderCall(sessionId);
                     else {
-                        generateGraph(response.data);
-                        setTimeout(() => getResutUntilsDone(sessionId), 2000)
+                        generateGraph(response.data).then(() => {
+                            setTimeout(() => getResutUntilsDone(sessionId), 2000)
+                        });
                     }
                 })
                 .catch(e => handleErrors(e))
