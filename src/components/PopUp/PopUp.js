@@ -25,10 +25,10 @@ const PopUp = () => {
 
     const createScript = (tag, field) => {
         let script =
-            "var array = [];" +
-            "for (var elt of document.getElementsByTagName('" + tag + "')) {" +
+            "let array = [];" +
+            "for (let elt of document.getElementsByTagName('" + tag + "')) {" +
             "	if (elt." + field + ") {" +
-            "    var url = elt." + field + ";" +
+            "    let url = elt." + field + ";" +
             "	 if (url.startsWith('blob'))" +
             "      continue;" +
             "	 if (!url.startsWith('http')) {" +

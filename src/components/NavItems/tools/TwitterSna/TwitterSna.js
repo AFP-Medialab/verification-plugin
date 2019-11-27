@@ -26,6 +26,11 @@ import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Typography from "@material-ui/core/Typography";
 import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
+import Plot from "react-plotly.js";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
+import TableCell from "@material-ui/core/TableCell";
+import CustomTable from "../../../utility/CustomTable/CustomTable";
 
 const TwitterSna = () => {
     const classes = useMyStyles();
@@ -39,18 +44,40 @@ const TwitterSna = () => {
     const result = useSelector(state => state.twitterSna.result);
     const dispatch = useDispatch();
 
-    const [hashTagInput, setHashTagInput] = useState(request ? request.hashTag : "#fake");  // change default values
+
+    const [hashTagInput, setHashTagInput] = useState(
+        request && request.search.search ?
+            request.search.search
+            : "#fake"
+    );
     const [hashTagError, setHashTagError] = useState(false);
-    const [andInput, setAndInput] = useState(request ? request.and : "");
-    const [orInput, setOrInput] = useState(request ? request.or : "");
-    const [notInput, setNotInput] = useState(request ? request.not : "");
-    const [usersInput, setUsersInput] = useState(request ? request.users : "");
-    const [since, setSince] = useState(request ? request.since : new Date("11-06-2019"));         // change default values
+
+    const [andInput, setAndInput] = useState(
+        request && request.search.and ?
+                request.search.and.join(" ")
+                : ""
+    );
+    const [orInput, setOrInput] = useState(
+        request && request.search.or ?
+            request.search.or.join(" ")
+            : ""
+    );
+    const [notInput, setNotInput] = useState(
+        request && request.search.not ?
+            request.search.not.join(" ")
+            : ""
+    );
+    const [usersInput, setUsersInput] = useState(
+        request && request.user_list ?
+            request.user_list.join(" ")
+            : ""
+    );
+    const [since, setSince] = useState(request ? request.from : new Date("11-06-2019"));         // change default values
     const [until, setUntil] = useState(request ? request.until : new Date("11-07-2019"));         // change default values
-    const [langInput, setLangInput] = useState(request ? request.lang : "lang_all");
+    const [langInput, setLangInput] = useState(request && request.lang ? "lang_" + request.lang : "lang_all");
     const [openLangInput, setLangInputOpen] = React.useState(false);
-    const [filters, setFilers] = useState(request ? request.filters : "none");
-    const [verifiedUsers, setVerifiedUsers] = useState("false");
+    const [filters, setFilers] = useState(request && request.media ? request.media : "none");
+    const [verifiedUsers, setVerifiedUsers] = useState(request && request.verified ? request.verified : "false");
     const [localTime, setLocalTime] = useState("true");
 
     const [submittedRequest, setSubmittedRequest] = useState(null);
@@ -196,8 +223,8 @@ const TwitterSna = () => {
                     </Grid>
                 </Grid>
                 <TextField
-                    value={notInput}
-                    onChange={e => setNotInput(e.target.value)}
+                    value={usersInput}
+                    onChange={e => setUsersInput(e.target.value)}
                     id="standard-full-width"
                     label={keyword("twitter_sna_user")}
                     style={{margin: 8}}
@@ -379,28 +406,27 @@ const TwitterSna = () => {
                 result &&
                 <Paper className={classes.root}>
                     {
-                        result.map((obj, index) => {
+                        result.pieCharts &&
+                        result.pieCharts.map((obj, index) => {
                             return (
                                 <ExpansionPanel key={index}>
                                     <ExpansionPanelSummary
                                         expandIcon={<ExpandMoreIcon/>}
-                                        aria-controls="panel1a-content"
-                                        id="panel1a-header"
+                                        aria-controls={"panel" + index + "a-content"}
+                                        id={"panel" + index + "a-header"}
                                     >
                                         <Typography className={classes.heading}>{keyword(obj.title)}</Typography>
                                     </ExpansionPanelSummary>
                                     <ExpansionPanelDetails>
                                         <Box alignItems="center" justifyContent="center" width={"100%"}>
-                                            {
-                                                obj.component
-                                            }
+                                            <Plot data={obj.json} layout={obj.layout} config={obj.config}/>
                                         </Box>
                                     </ExpansionPanelDetails>
                                 </ExpansionPanel>
                             )
                         })
                     }
-
+                    <CustomTable/>
                 </Paper>
             }
         </div>)

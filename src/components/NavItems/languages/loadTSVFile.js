@@ -8,11 +8,11 @@ import tsv from "./InVIDTraductions.tsv";
  */
 function array_to_json(array)
 {
-    var json = {};
-    for( var i = 1; i < array[0].length; ++i ) {
-        var lang = array[0][i].replace( "\r", "" );
+    let json = {};
+    for( let i = 1; i < array[0].length; ++i ) {
+        let lang = array[0][i].replace( "\r", "" );
         json[lang] = {};
-        for( var j = 1; j < array.length; ++j ) {
+        for( let j = 1; j < array.length; ++j ) {
             if( array[j] && array[j][i] && typeof array[j][i] !== undefined ) {
                 json[lang][array[j][0]] = array[j][i].replace( "\r", "" );
             } else {
