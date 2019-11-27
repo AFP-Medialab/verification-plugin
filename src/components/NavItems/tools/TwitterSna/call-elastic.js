@@ -1,3 +1,6 @@
+import React from "react";
+import index from "styled-components/dist/styled-components-macro.esm";
+
 let json = {};
 
 let elasticSearch_url = 'http://185.249.140.38/elk/twinttweets/_search';
@@ -114,7 +117,7 @@ export function generateTweetCountPlotlyJson(param) {
     let must = [
         constructMatchPhrase(param)
     ]
-    return getJson(param, {}, must).then(json => json["hits"]["total"]);
+    return getJson(param, {}, must).then(json => json.hits.total.value);
 }
 
 //Donut charts (Most liked, most retweeted, most used hashtags, most active users)
@@ -223,7 +226,16 @@ export function generateURLArrayHTML(param) {
             }
         });
         const myJson = await response.json();
-        return getURLArray(myJson);
+        const array = getURLArray(myJson);
+        let columns = [
+            {title: 'Url (add tsv)', field: 'url'},
+            {title: 'Count (add tsv)', field: 'count'},
+        ];
+
+        return {
+            columns: columns,
+            data: array,
+        }
     };
     return userAction();
 }
@@ -420,7 +432,6 @@ function constructAggs(field) {
 
 //To fetch all the tweets (Bypass the 10 000 limit with elastic search)
 async function getJson(param, aggs, must) {
-    console.log(JSON.stringify(buildQuery(aggs, must)).replace(/\\/g, "").replace(/\"{/g, "{").replace(/}\"/g, "}"));
     const response = await fetch(elasticSearch_url, {
         method: 'POST',
         body: JSON.stringify(buildQuery(aggs, must)).replace(/\\/g, "").replace(/\"{/g, "{").replace(/}\"/g, "}"),
@@ -443,13 +454,10 @@ async function getJson(param, aggs, must) {
             myJson = await completeJson(aggs, must2, myJson);
         } while (myJson.current_total_hits === 10000)
     }
-    json = myJson;
-    console.log(myJson);
     return myJson;
 }
 
 async function completeJson(aggs, must, myJson) {
-    console.log("ElasticSearch: Completing request");
     const response = await fetch(elasticSearch_url, {
         method: 'POST',
         body: JSON.stringify(buildQuery(aggs, must)).replace(/\\/g, "").replace(/\"{/g, "{").replace(/}\"/g, "}"),
