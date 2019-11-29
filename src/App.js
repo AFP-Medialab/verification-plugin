@@ -34,7 +34,6 @@ const NotFound = () => {
 function App() {
     return (
         <Router history={history}>
-
             <MuiThemeProvider theme={theme}>
                 <Switch>
                     <Route exact path={"/"} component={PopUp}/>

@@ -156,6 +156,9 @@ const useMyStyles = makeStyles(theme => ({
         width: "100%",
         height: "100%"
     },
-
+    twitterSnaResult : {
+        marginTop: 20,
+        textAlign: "center",
+    }
 }));
 export default useMyStyles;

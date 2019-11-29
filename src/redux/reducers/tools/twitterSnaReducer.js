@@ -1,6 +1,6 @@
 const defaultState = {
-    notification : false,
-    loading : false,
+    notification: false,
+    loading: false,
     request: "",
     result: null,
 };
