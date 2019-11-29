@@ -7,10 +7,8 @@ import {
     generateDonutPlotlyJson,
     generateEssidHistogramPlotlyJson,
     generateTweetCountPlotlyJson,
-    generateURLArrayHTML
+    generateURLArrayHTML,
 } from "./call-elastic";
-import Plot from 'react-plotly.js';
-import {setAnalysisLoading} from "../../../../redux/actions/tools/analysisActions";
 
 const useTwitterSnaRequest = (request) => {
     const TwintWrapperUrl = "http://185.249.140.38/twint-wrapper";
@@ -26,6 +24,7 @@ const useTwitterSnaRequest = (request) => {
     useEffect(() => {
         if (request === null)
             return;
+
         const handleErrors = (e) => {
             if (keyword(e) !== undefined)
                 dispatch(setError(keyword(e)));
@@ -55,7 +54,7 @@ const useTwitterSnaRequest = (request) => {
             let titles = [
                 "retweets_cloud_chart_title",
                 "likes_cloud_chart_title",
-                "tweetCounter_title",
+                "top_users_pie_chart_title",
                 "hashtag_cloud_chart_title"
             ];
 
@@ -75,13 +74,15 @@ const useTwitterSnaRequest = (request) => {
             return pieCharts;
         };
 
+
+
         const createHistogram = (data, json, givenFrom, givenUntil) => {
             let titleEnd = data.search.search + " " + data.from + " " + data.until;
             let layout = {
                 title:  <div><b>{keyword("user_time_chart_title")}</b><br/> {titleEnd}</div>,
                 automargin: true,
                 xaxis: {
-                    range: [ data["from"], data["until"]],
+                    range: [ data.from, data.until],
                     rangeslider: { range: [givenFrom, givenUntil] },
                 },
                 annotations: [{
@@ -114,6 +115,7 @@ const useTwitterSnaRequest = (request) => {
                 json: json,
                 layout:layout,
                 config:config,
+                tweetsView: null,
             }
         };
 
@@ -121,14 +123,15 @@ const useTwitterSnaRequest = (request) => {
             const result = {};
             result.pieCharts = createPieCharts(data, responseArrayOf7);
             result.urls = responseArrayOf7[4];
-            result.tweetCount = responseArrayOf7[5];
+            result.tweetCount = responseArrayOf7[5].value;
+            result.tweets = responseArrayOf7[5].tweets;
             result.histogram = createHistogram(data, responseArrayOf7[6], givenFrom, givenUntil);
             dispatch(setTwitterSnaResult(request, result, false, true))
         };
 
         const generateGraph = (data) => {
-            let givenFrom = data["query"]["from"];
-            let givenUntil = data["query"]["until"];
+            let givenFrom = data.query.from;
+            let givenUntil = data.query.until;
             let entries = {
                 from: request.from,
                 until: request.until,

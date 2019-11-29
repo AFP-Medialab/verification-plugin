@@ -1,6 +1,4 @@
 import React, {useEffect, useState} from 'react';
-import { forwardRef } from 'react';
-import { SvgIconProps } from '@material-ui/core/SvgIcon'
 import MaterialTable from 'material-table';
 import AddBox from '@material-ui/icons/AddBox';
 import ArrowUpward from '@material-ui/icons/ArrowUpward';
@@ -45,6 +43,7 @@ export default function CustomTable(props) {
             title: props.title,
             columns: props.colums,
             data: props.data,
+            actions: props.actions
         }
     );
 
@@ -53,15 +52,41 @@ export default function CustomTable(props) {
             title: props.title,
             columns: props.colums,
             data: props.data,
+            actions: props.actions
         })
     }, [JSON.stringify(props.data)]);
 
     return (
         <MaterialTable
+            //more custom info at https://material-table.com/#/docs/features/localization
+            localization={{
+                pagination: {
+                    firstTooltip: "First Page (add tsv)",
+                    previousTooltip: "Previous Page (add tsv)",
+                    nextTooltip: "Next Page (add tsv)",
+                    lastTooltip: "Last Page (add tsv)",
+                    labelRowsSelect: " (add tsv)",
+                    labelDisplayedRows: '{from}-{to} of {count} (add tsv)'
+                },
+                toolbar: {
+                    nRowsSelected: '{0} row(s) selected (add tsv)',
+                    searchPlaceholder: "Search (add tsv)"
+                },
+                header: {
+                    actions: 'Actions (add tsv)'
+                },
+                body: {
+                    emptyDataSourceMessage: 'No records to display (add tsv)',
+                    filterRow: {
+                        filterTooltip: 'Filter (add tsv)'
+                    }
+                }
+            }}
             icons={tableIcons}
             title={state.title}
             columns={state.columns}
             data={state.data}
+            actions={state.actions}
             options={{
                 search: true
             }}

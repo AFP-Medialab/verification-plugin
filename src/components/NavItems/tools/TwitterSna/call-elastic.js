@@ -1,5 +1,4 @@
 import React from "react";
-import index from "styled-components/dist/styled-components-macro.esm";
 
 let json = {};
 
@@ -114,10 +113,13 @@ export function generateEssidHistogramPlotlyJson(param, retweets, givenFrom, giv
 
 //Tweet count display
 export function generateTweetCountPlotlyJson(param) {
-    let must = [
-        constructMatchPhrase(param)
-    ]
-    return getJson(param, {}, must).then(json => json.hits.total.value);
+    let must = [constructMatchPhrase(param)];
+    return getJson(param, {}, must).then(json => {
+        return {
+            value: json.hits.total.value,
+            tweets: json.hits.hits
+        }
+    });
 }
 
 //Donut charts (Most liked, most retweeted, most used hashtags, most active users)

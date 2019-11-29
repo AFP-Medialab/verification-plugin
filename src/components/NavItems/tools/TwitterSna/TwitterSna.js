@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import useMyStyles from "../../../utility/MaterialUiStyles/useMyStyles";
 import {useDispatch, useSelector} from "react-redux";
 import {Paper} from "@material-ui/core";
@@ -21,14 +21,8 @@ import MenuItem from "@material-ui/core/MenuItem";
 import convertToGMT from "../../../utility/DataTimePicker/convertToGMT";
 import dateFormat from "dateformat"
 import useTwitterSnaRequest from "./useTwitterSnaRequest";
-import ExpansionPanel from "@material-ui/core/ExpansionPanel";
-import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import Typography from "@material-ui/core/Typography";
-import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
-import Plot from "react-plotly.js";
-import CustomTable from "../../../utility/CustomTable/CustomTable";
 import LinearProgress from "@material-ui/core/LinearProgress";
+import TwitterSnaResult from "./TwitterSnaResult/TwitterSnaResult";
 
 const TwitterSna = () => {
     const classes = useMyStyles();
@@ -39,10 +33,9 @@ const TwitterSna = () => {
     };
 
     const request = useSelector(state => state.twitterSna.request);
-    const result = useSelector(state => state.twitterSna.result);
+    const reduxResult = useSelector(state => state.twitterSna.result);
     const isLoading = useSelector(state => state.twitterSna.loading);
     const dispatch = useDispatch();
-
 
     const [hashTagInput, setHashTagInput] = useState(
         request && request.search.search ?
@@ -78,8 +71,6 @@ const TwitterSna = () => {
     const [filters, setFilers] = useState(request && request.media ? request.media : "none");
     const [verifiedUsers, setVerifiedUsers] = useState(request && request.verified ? request.verified : "false");
     const [localTime, setLocalTime] = useState("true");
-
-    const [histoVisible, setHistoVisible] = useState(true);
 
     const [submittedRequest, setSubmittedRequest] = useState(null);
     useTwitterSnaRequest(submittedRequest);
@@ -407,66 +398,7 @@ const TwitterSna = () => {
                 <Box m={2}/>
                 <LinearProgress hidden={!isLoading}/>
             </Paper>
-            {
-                result &&
-                <Paper className={classes.root}>
-                    <ExpansionPanel expanded={histoVisible} onChange={() => setHistoVisible(!histoVisible)}>
-                        <ExpansionPanelSummary
-                            expandIcon={<ExpandMoreIcon/>}
-                            aria-controls={"panel0a-content"}
-                            id={"panel0a-header"}
-                        >
-                            <Typography className={classes.heading}>{keyword(result.histogram.title)}</Typography>
-                        </ExpansionPanelSummary>
-                        <ExpansionPanelDetails>
-                            <div style={{width: '100%',}}>
-                                <Plot useResizeHandler
-                                      style={{width: '100%', height: '100%'}}
-                                      data={result.histogram.json}
-                                      layout={result.histogram.layout}
-                                      config={result.histogram.config}/>
-                            </div>
-                        </ExpansionPanelDetails>
-                    </ExpansionPanel>
-                    <ExpansionPanel>
-                        <ExpansionPanelSummary
-                            expandIcon={<ExpandMoreIcon/>}
-                            aria-controls={"panel0a-content"}
-                            id={"panel0a-header"}
-                        >
-                            <Typography className={classes.heading}>{keyword("tweetCounter_title")}</Typography>
-                        </ExpansionPanelSummary>
-                        <ExpansionPanelDetails>
-                            <Box alignItems="center" justifyContent="center" width={"100%"}>
-                                <Typography variant={"h3"}>{result.tweetCount}</Typography>
-                            </Box>
-                        </ExpansionPanelDetails>
-                    </ExpansionPanel>
-                    {
-                        result.pieCharts &&
-                        result.pieCharts.map((obj, index) => {
-                            return (
-                                <ExpansionPanel key={index}>
-                                    <ExpansionPanelSummary
-                                        expandIcon={<ExpandMoreIcon/>}
-                                        aria-controls={"panel" + index + "a-content"}
-                                        id={"panel" + index + "a-header"}
-                                    >
-                                        <Typography className={classes.heading}>{keyword(obj.title)}</Typography>
-                                    </ExpansionPanelSummary>
-                                    <ExpansionPanelDetails>
-                                        <Box alignItems="center" justifyContent="center" width={"100%"}>
-                                            <Plot data={obj.json} layout={obj.layout} config={obj.config}/>
-                                        </Box>
-                                    </ExpansionPanelDetails>
-                                </ExpansionPanel>
-                            )
-                        })
-                    }
-                    <Box m={3}/>
-                    <CustomTable title={"Linked Url (add tsv)"} colums={result.urls.columns} data={result.urls.data}/>
-                </Paper>
-            }
+            <TwitterSnaResult result={reduxResult}/>
         </div>)
 };
 export default TwitterSna;
