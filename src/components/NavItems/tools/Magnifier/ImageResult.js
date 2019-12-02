@@ -18,9 +18,10 @@ import iconb from "tui-image-editor/dist/svg/icon-b.svg";
 import iconc from "tui-image-editor/dist/svg/icon-c.svg";
 import icond from "tui-image-editor/dist/svg/icon-d.svg";
 import Grid from "@material-ui/core/Grid";
-import{setMagnifierResult} from "../../../../redux/actions/tools/magnifierActions";
+import {cleanMagnifierState, setMagnifierResult} from "../../../../redux/actions/tools/magnifierActions";
 import ImageReverseSearch from "../ImageReverseSearch";
 import history from "../../../utility/History/History";
+import CloseResult from "../../../CloseResult/CloseResult";
 
 const myTheme = {
     "menu.backgroundColor": "white",
@@ -118,6 +119,7 @@ const ImageResult = () => {
 
     return (
         <Paper className={classes.root}>
+            <CloseResult onClick={() => dispatch(cleanMagnifierState())}/>
             <Modal
                 aria-labelledby="transition-modal-title"
                 aria-describedby="transition-modal-description"

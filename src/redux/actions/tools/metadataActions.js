@@ -24,3 +24,9 @@ export const setMetadataIsImage = (bool) => {
         payload : bool
     }
 };
+
+export const cleanMetadataState = () => {
+    return {
+        type: "METADATA_CLEAN_STATE"
+    }
+}

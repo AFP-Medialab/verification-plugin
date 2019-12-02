@@ -53,6 +53,9 @@ const Keyframes = (props) => {
         }
     }, [url]);
 
+    useEffect(() => {
+        setSubmittedUrl(undefined)
+    }, [submittedUrl]);
 
     return (
         <div>

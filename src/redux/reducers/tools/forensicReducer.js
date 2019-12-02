@@ -13,7 +13,9 @@ const forensicReducer = (state = defaultState, action) => {
             state.loading = action.payload;
             return state;
         case "FORENSIC_CLEAN_STATE":
-            return defaultState;
+            state.url = "";
+            state.result = null;
+            return state;
         default:
             return state;
     }

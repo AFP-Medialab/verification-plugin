@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import Paper from "@material-ui/core/Paper";
 import makeStyles from "@material-ui/core/styles/makeStyles";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import ImageGridList from "../../../../utility/ImageGridList/ImageGridList";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
@@ -9,6 +9,9 @@ import Divider from "@material-ui/core/Divider";
 import Button from "@material-ui/core/Button";
 import {useKeyframes} from "../Hooks/usekeyframes";
 import ImageReverseSearch from "../../ImageReverseSearch";
+import CloseResult from "../../../../CloseResult/CloseResult";
+import {cleanForensicState} from "../../../../../redux/actions/tools/forensicActions";
+import {cleanKeyframesState} from "../../../../../redux/actions/tools/keyframesActions";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -25,6 +28,7 @@ const KeyFramesResults = (props) => {
     const keyword = (key) => {
         return (dictionary !== null) ? dictionary[lang][key] : "";
     };
+    const dispatch = useDispatch();
 
     const [detailed, setDetailed] = useState(false);
     const [simpleList, detailedList] = useKeyframes(props.result, [props.result]);
@@ -35,6 +39,7 @@ const KeyFramesResults = (props) => {
     return (
         <div>
             <Paper className={classes.root}>
+                <CloseResult onClick={() => dispatch(cleanKeyframesState())}/>
                 <Typography variant={"h5"}>
                     {keyword("keyframes_content_title")}
                 </Typography>

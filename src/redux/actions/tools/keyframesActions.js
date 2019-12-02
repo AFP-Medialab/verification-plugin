@@ -23,3 +23,9 @@ export const setKeyframesMessage = (message) => {
         payload : message
     }
 };
+
+export const cleanKeyframesState = () => {
+    return {
+        type : "KEYFRAMES_CLEAN_STATE"
+    }
+}

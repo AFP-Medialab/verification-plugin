@@ -156,9 +156,15 @@ const useMyStyles = makeStyles(theme => ({
         width: "100%",
         height: "100%"
     },
-    twitterSnaResult : {
+    twitterSnaResult: {
         marginTop: 20,
         textAlign: "center",
+    },
+    closeResult: {
+        cursor: "pointer",
+        marginRight: "-10px",
+        marginTop: "-20px",
+        textAlign: "right",
     }
 }));
 export default useMyStyles;

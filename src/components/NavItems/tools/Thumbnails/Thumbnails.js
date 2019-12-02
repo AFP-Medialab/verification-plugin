@@ -13,8 +13,10 @@ import RadioGroup from "@material-ui/core/RadioGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import useMyStyles from "../../../utility/MaterialUiStyles/useMyStyles";
 import {useInput} from "../../../Hooks/useInput";
-import {setThumbnailsResult} from "../../../../redux/actions/tools/thumbnailsActions"
+import {cleanThumbnailsState, setThumbnailsResult} from "../../../../redux/actions/tools/thumbnailsActions"
 import {setError} from "../../../../redux/actions/errorActions"
+import CloseResult from "../../../CloseResult/CloseResult";
+import {cleanMetadataState} from "../../../../redux/actions/tools/metadataActions";
 
 
 const Thumbnails = () => {
@@ -37,10 +39,6 @@ const Thumbnails = () => {
     };
 
     const searchEngines = [
-        {
-            title : "baidu",
-            text : "Baidu"
-        },
         {
             title : "bing",
             text : "Bing"
@@ -148,7 +146,8 @@ const Thumbnails = () => {
             {
                 resultData && resultData.length !== 0 &&
                 <Paper className={classes.root}>
-                    <ImageGridList list={resultData} onClick={imageClick}/>
+                    <CloseResult onClick={() => dispatch(cleanThumbnailsState())}/>
+                    <ImageGridList list={resultData} handleClick={imageClick}/>
                 </Paper>
             }
         </div>);

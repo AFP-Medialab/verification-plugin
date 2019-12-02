@@ -16,3 +16,9 @@ export const setMagnifierLoading = (loading) => {
         payload : loading
     }
 };
+
+export const cleanMagnifierState = () => {
+    return {
+        type: "MAGNIFIER_CLEAN_STATE"
+    }
+};

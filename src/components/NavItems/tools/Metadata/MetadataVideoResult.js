@@ -1,5 +1,5 @@
 import {Paper} from "@material-ui/core";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import React from "react";
 import Typography from "@material-ui/core/Typography";
 import TableBody from "@material-ui/core/TableBody";
@@ -9,6 +9,8 @@ import Table from "@material-ui/core/Table";
 import Box from "@material-ui/core/Box";
 import Tooltip from "@material-ui/core/Tooltip";
 import useMyStyles from "../../../utility/MaterialUiStyles/useMyStyles";
+import CloseResult from "../../../CloseResult/CloseResult";
+import {cleanMetadataState} from "../../../../redux/actions/tools/metadataActions";
 
 
 const MetadataVideoResult = (result) => {
@@ -257,8 +259,10 @@ const MetadataVideoResult = (result) => {
             },
         ];
 
+    const dispatch = useDispatch();
     return (
         <Paper className={classes.root}>
+            <CloseResult onClick={() => dispatch(cleanMetadataState())}/>
             <Typography variant={"h5"}>
                 {keyword("metadata_title")}
             </Typography>
