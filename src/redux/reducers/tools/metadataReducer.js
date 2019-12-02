@@ -17,7 +17,9 @@ const metadataReducer = (state = defaultState, action) => {
             state.isImage = action.payload;
             return state;
         case "METADATA_CLEAN_STATE":
-            return defaultState;
+            state.url = "";
+            state.result = null;
+            return state;
         default:
             return state;
     }

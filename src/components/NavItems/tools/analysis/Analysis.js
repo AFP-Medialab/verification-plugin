@@ -46,6 +46,10 @@ const Analysis = () => {
             setSubmittedUrl(uri);
         }}, [url]);
 
+    useEffect(() => {
+        setSubmittedUrl(undefined);
+    }, [submittedUrl]);
+
     return (
         <div>
             <Paper className={classes.root}>

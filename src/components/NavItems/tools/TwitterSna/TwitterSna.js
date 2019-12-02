@@ -87,6 +87,10 @@ const TwitterSna = () => {
         });
     }
 
+    useEffect(() => {
+        setSubmittedRequest(null)
+    }, [submittedRequest]);
+
     const makeRequest = () => {
         //Creating Request Object.
         let and_list, or_list, not_list = null;
@@ -398,7 +402,10 @@ const TwitterSna = () => {
                 <Box m={2}/>
                 <LinearProgress hidden={!isLoading}/>
             </Paper>
-            <TwitterSnaResult result={reduxResult}/>
+            {
+                reduxResult &&
+                <TwitterSnaResult result={reduxResult}/>
+            }
         </div>)
 };
 export default TwitterSna;

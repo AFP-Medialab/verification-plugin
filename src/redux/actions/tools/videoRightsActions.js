@@ -16,3 +16,9 @@ export const setVideoRightsLoading = (loading) => {
         payload : loading
     }
 };
+
+export const cleanVideoRightsState = () => {
+    return {
+        type: "VIDEO_RIGHTS_CLEAN_STATE"
+    }
+};

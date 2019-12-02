@@ -22,37 +22,42 @@ export const useAnalysisWrapper = (url, reprocess) => {
 
         const getReport = (id) => {
             axios.get("http://mever.iti.gr/caa/api/v4/videos/reports/" + id)
-                .then(response => dispatch(setAnalysisResult(url, response.data, false, false)))
+                .then(response => {
+                    if (keyword("table_error_" + response.data.status) !== undefined)
+                        handleError("table_error_" + response.data.status.status);
+                    else if (response.data.status !== "unavailable")
+                        dispatch(setAnalysisResult(url, response.data, false, false))
+                })
                 .catch(errors => handleError(errors));
         };
 
         const handleJob = (data) => {
-            if (keyword("table_error_" + data["status"]) !== undefined) {
-                handleError(keyword("table_error_" + data["status"]));
+            if (keyword("table_error_" + data.status) !== undefined) {
+                handleError("table_error_" + data.status);
             } else {
-                let job = null;
-                const interval = setInterval(() => {
-                    if (job && keyword("table_error_" + job.status) !== undefined) {
-                        handleError(keyword("table_error_" + job.status));
-                        clearInterval(interval);
-                    } else if (job && (job.status === "done" || job.status === "unavailable")) {
-
-                        dispatch(setAnalysisLoading(false));
-                        clearInterval(interval);
-                    } else {
-                        axios.get("http://mever.iti.gr/caa/api/v4/videos/jobs/" + data.id)
-                            .then(response => {
-                                job = response.data;
-                                getReport(job.media_id);
-                            })
-                            .catch(errors => {
-                                handleError(errors);
-                                clearInterval(interval);
-                            });
-                    }
-                }, 2000)
+                waitUntilDonne(data);
             }
         };
+
+
+        const waitUntilDonne = (data) => {
+            axios.get("http://mever.iti.gr/caa/api/v4/videos/jobs/" + data.id)
+                .then(response => {
+                    if (response.data.status === "done") {
+                        getReport(response.data.media_id)
+                    } else if ( keyword("table_error_" +  response.data.status) !== undefined) {
+                        handleError("table_error_" + response.data.status);
+                    } else if (response.data.status === "unavailable"){
+                        dispatch(setError("Url not available"));
+                        dispatch(setAnalysisLoading(false));
+                    }
+                    else {
+                        getReport(response.data.id);
+                        setTimeout(() => waitUntilDonne(response.data), 2000);
+                    }
+                })
+        };
+
 
         if (!url)
             return;

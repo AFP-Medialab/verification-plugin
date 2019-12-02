@@ -13,7 +13,9 @@ const analysisReducer = (state = defaultState, action) => {
             state.loading = action.payload;
             return state;
         case "ANALYSIS_CLEAN_STATE":
-            return defaultState;
+            state.result = null;
+            state.url = "";
+            return state;
         default:
             return state;
     }

@@ -1,5 +1,5 @@
 import {Paper} from "@material-ui/core";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import CustomTile from "../../../utility/customTitle/customTitle";
 import Box from "@material-ui/core/Box";
 import {useSelector} from "react-redux";
@@ -50,6 +50,14 @@ const Metadata = () => {
             }
         }
     };
+
+    useEffect(() => {
+        setVideoUrl(null)
+    },[videoUrl]);
+
+    useEffect(() => {
+        setImageurl(null)
+    }, [imageUrl]);
 
     return (
         <div>

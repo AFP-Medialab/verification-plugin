@@ -45,6 +45,10 @@ const Forensic = () => {
         setImage(uri);
     }}, [url]);
 
+    useEffect(() =>{
+        setImage("")
+    }, [image]);
+
     return (
       <div>
           <Paper className={classes.root}>

@@ -1,5 +1,5 @@
 import React from "react";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import makeStyles from "@material-ui/core/styles/makeStyles";
@@ -18,6 +18,8 @@ import GridList from "@material-ui/core/GridList";
 import GridListTile from "@material-ui/core/GridListTile";
 import Button from "@material-ui/core/Button";
 import ImageReverseSearch from "../../ImageReverseSearch";
+import CloseResult from "../../../../CloseResult/CloseResult";
+import {cleanAnalysisState} from "../../../../../redux/actions/tools/analysisActions";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -55,6 +57,7 @@ const YoutubeResults = (props) => {
     const keyword = (key) => {
         return (dictionary !== null) ? dictionary[lang][key] : "";
     };
+    const dispatch = useDispatch();
 
     const [expanded, setExpanded] = React.useState(false);
 
@@ -125,6 +128,7 @@ const YoutubeResults = (props) => {
                 report !== null && report["thumbnails"] !== undefined &&
                 report["thumbnails"]["preferred"]["url"] &&
                 <Paper className={classes.root}>
+                    <CloseResult onClick={() => dispatch(cleanAnalysisState())}/>
                     <Typography variant={"h5"}>
                         {report["video"]["title"]}
                     </Typography>

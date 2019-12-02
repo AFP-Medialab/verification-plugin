@@ -13,7 +13,9 @@ const twitterSnaReducer = (state = defaultState, action) => {
             state.loading = action.payload;
             return state;
         case "TWITTER_SNA_CLEAN_STATE":
-            return defaultState;
+            state.request = "";
+            state.result = null;
+            return state;
         default:
             return state;
     }

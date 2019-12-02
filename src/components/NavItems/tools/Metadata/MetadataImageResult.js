@@ -1,5 +1,5 @@
 import {Paper} from "@material-ui/core";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import React from "react";
 import Typography from "@material-ui/core/Typography";
 import TableBody from "@material-ui/core/TableBody";
@@ -11,6 +11,9 @@ import Button from "@material-ui/core/Button";
 import MapIcon from '@material-ui/icons/Map';
 import Tooltip from "@material-ui/core/Tooltip";
 import useMyStyles from "../../../utility/MaterialUiStyles/useMyStyles";
+import CloseResult from "../../../CloseResult/CloseResult";
+import {cleanMagnifierState} from "../../../../redux/actions/tools/magnifierActions";
+import {cleanMetadataState} from "../../../../redux/actions/tools/metadataActions";
 
 const MetadataImageResult = (result) => {
     const classes = useMyStyles();
@@ -256,9 +259,11 @@ const MetadataImageResult = (result) => {
             description: keyword("metadata_img_gps_desc_5")
         },
     ];
+    const dispatch = useDispatch();
 
     return (
         <Paper className={classes.root}>
+            <CloseResult onClick={() => dispatch(cleanMetadataState())}/>
             <Typography variant={"h5"}>
                 {keyword("metadata_img_software_title")}
             </Typography>

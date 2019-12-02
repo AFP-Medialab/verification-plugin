@@ -14,13 +14,16 @@ import Divider from "@material-ui/core/Divider";
 import invidLogo from "./images/InVID-logo.svg"
 import Icon from "@material-ui/core/Icon";
 import Grid from "@material-ui/core/Grid";
+import CloseResult from "../../../CloseResult/CloseResult";
+import {cleanVideoRightsState} from "../../../../redux/actions/tools/videoRightsActions";
+import {useDispatch} from "react-redux";
 
 const VideoRightsResults = (props) => {
-
     const classes = useMyStyles();
 
-    const result = props.result;
+    const dispatch = useDispatch();
 
+    const result = props.result;
     const permittedList = [];
     const prohibitedList = [];
     const requiredList = [];
@@ -69,6 +72,7 @@ const VideoRightsResults = (props) => {
 
     return (
         <Paper className={classes.root}>
+            <CloseResult onClick={() => dispatch(cleanVideoRightsState())}/>
             <Typography variant={"h5"}>{"Reuse Conditions"}</Typography>
             <Box m={2}/>
             {

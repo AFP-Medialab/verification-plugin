@@ -9,7 +9,7 @@ import Grid from "@material-ui/core/Grid";
 import Loop from "../Magnifier/Loop";
 import React, {useState} from "react";
 import makeStyles from "@material-ui/core/styles/makeStyles";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 import CardMedia from "@material-ui/core/CardMedia";
@@ -23,6 +23,8 @@ import Collapse from "@material-ui/core/Collapse";
 import clsx from 'clsx';
 import Lightbox from 'react-image-lightbox';
 import 'react-image-lightbox/style.css';
+import CloseResult from "../../../CloseResult/CloseResult";
+import {cleanForensicState} from "../../../../redux/actions/tools/forensicActions";
 
 
 const useStyles = makeStyles(theme => ({
@@ -62,6 +64,7 @@ const ForensicResults = (props) => {
     const keyword = (key) => {
         return (dictionary !== null) ? dictionary[lang][key] : "";
     };
+    const dispatch = useDispatch();
 
     const dataParams = ["dqReport", "elaReport", "dwNoiseReport", "blockingReport", "gridsReport", "gridsInversedReport", "medianNoiseReport"];
     const result = props.result;
@@ -82,6 +85,7 @@ const ForensicResults = (props) => {
 
     return (
         <Paper className={classes.root}>
+            <CloseResult onClick={() => dispatch(cleanForensicState())}/>
             <Grid container justify="center" spacing={2}>
                 {
                     dataParams.map((value, key) => {

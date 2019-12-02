@@ -13,7 +13,9 @@ const videoRightsReducer = (state = defaultState, action) => {
             state.loading = action.payload;
             return state;
         case "VIDEO_RIGHTS_CLEAN_STATE":
-            return defaultState;
+            state.url = "";
+            state.result = null;
+            return state;
         default:
             return state;
     }

@@ -16,3 +16,9 @@ export const setThumbnailsLoading = (loading) => {
         payload : loading
     }
 };
+
+export const cleanThumbnailsState = () => {
+    return {
+        type: "THUMBNAILS_CLEAN_STATE"
+    }
+}

@@ -16,3 +16,9 @@ export const setTwitterSnaLoading = (loading) => {
         payload : loading
     }
 };
+
+export const cleanTwitterSnaState = () => {
+    return {
+        type: "TWITTER_SNA_CLEAN_STATE"
+    }
+};

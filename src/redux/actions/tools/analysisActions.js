@@ -16,3 +16,9 @@ export const setAnalysisLoading = (loading) => {
         payload : loading
     }
 };
+
+export const cleanAnalysisState = () => {
+    return {
+        type : "ANALYSIS_CLEAN_STATE"
+    }
+};
