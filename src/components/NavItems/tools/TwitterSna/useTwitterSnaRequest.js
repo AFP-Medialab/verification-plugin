@@ -129,10 +129,8 @@ const useTwitterSnaRequest = (request) => {
             dispatch(setTwitterSnaResult(request, result, false, true))
         };
 
-        const generateGraph = (data) => {
-            let givenFrom = data.query.from;
-            let givenUntil = data.query.until;
-            let entries = {
+        const makeEntries = (data) => {
+            return {
                 from: request.from,
                 until: request.until,
                 search: {
@@ -142,6 +140,12 @@ const useTwitterSnaRequest = (request) => {
                 user_list: request.user_list,
                 session: data.session
             };
+        };
+
+        const generateGraph = (data) => {
+            let givenFrom = data.query.from;
+            let givenUntil = data.query.until;
+            let entries = makeEntries(data);
 
             return axios.all([
                 generateDonutPlotlyJson(entries, "nretweets"),
