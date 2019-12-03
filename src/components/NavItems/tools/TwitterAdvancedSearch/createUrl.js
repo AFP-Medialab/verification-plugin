@@ -1,6 +1,6 @@
 import convertToGMT from "../../../utility/DataTimePicker/convertToGMT"
 
-function replaceAll(str, find, replace)
+export function replaceAll(str, find, replace)
 {
     return str.replace( new RegExp(find, 'g'), replace );
 }

@@ -11,7 +11,8 @@ import {
 } from "./call-elastic";
 
 const useTwitterSnaRequest = (request) => {
-    const TwintWrapperUrl = "http://185.249.140.38/twint-wrapper";
+    //const TwintWrapperUrl = "http://185.249.140.38/twint-wrapper";
+    const TwintWrapperUrl = "http://localhost:8080/twint-wrapper";
 
 
     const dictionary = useSelector(state => state.dictionary);
@@ -133,11 +134,9 @@ const useTwitterSnaRequest = (request) => {
             return {
                 from: request.from,
                 until: request.until,
-                search: {
-                    search: request.search.search,
-                    and: request.search.and,
-                },
-                user_list: request.user_list,
+                keywordList : request.keywordList,
+                bannedWords : request.bannedWords,
+                userList: request.userList,
                 session: data.session
             };
         };
