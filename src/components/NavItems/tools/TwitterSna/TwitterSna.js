@@ -23,6 +23,7 @@ import dateFormat from "dateformat"
 import useTwitterSnaRequest from "./useTwitterSnaRequest";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import TwitterSnaResult from "./TwitterSnaResult/TwitterSnaResult";
+import {replaceAll} from "../TwitterAdvancedSearch/createUrl";
 
 const TwitterSna = () => {
     const classes = useMyStyles();
@@ -37,31 +38,21 @@ const TwitterSna = () => {
     const isLoading = useSelector(state => state.twitterSna.loading);
     const dispatch = useDispatch();
 
-    const [hashTagInput, setHashTagInput] = useState(
-        request && request.search.search ?
-            request.search.search
+    const [keyWords, setKeywords] = useState(
+        request && request.keywordList ?
+            request.keywordList.join(" ")
             : "#fake"
     );
-    const [hashTagError, setHashTagError] = useState(false);
+    const [keyWordsError, setKeyWordsError] = useState(false);
 
-    const [andInput, setAndInput] = useState(
-        request && request.search.and ?
-            request.search.and.join(" ")
-            : ""
-    );
-    const [orInput, setOrInput] = useState(
-        request && request.search.or ?
-            request.search.or.join(" ")
-            : ""
-    );
-    const [notInput, setNotInput] = useState(
-        request && request.search.not ?
-            request.search.not.join(" ")
+    const [bannedWords, setBannedWords] = useState(
+        request && request.bannedWords ?
+            request.bannedWords.join(" ")
             : ""
     );
     const [usersInput, setUsersInput] = useState(
-        request && request.user_list ?
-            request.user_list.join(" ")
+        request && request.userList ?
+            request.userList.join(" ")
             : ""
     );
     const [since, setSince] = useState(request ? request.from : new Date("11-06-2019"));         // change default values
@@ -93,29 +84,28 @@ const TwitterSna = () => {
 
     const makeRequest = () => {
         //Creating Request Object.
-        let and_list, or_list, not_list = null;
-
-        if (andInput !== "")
-            and_list = andInput.trim().split(" ");
-        if (orInput !== "")
-            or_list = orInput.trim().split(" ");
-        if (notInput !== "")
-            not_list = notInput.trim().split(" ");
-
-        let searchObj = {
-            "search": hashTagInput,
-            "and": and_list,
-            "or": or_list,
-            "not": not_list
+        const removeQuotes = (list) => {
+            let res = [];
+            list.map(string => {
+                res.push(replaceAll(string, "\"", ""));
+            });
+            return res;
         };
+
+        let trimedKeywords = removeQuotes(keyWords.trim().match(/("[^"]+"|[^"\s]+)/g));
+
+        let trimedBannedWords = null;
+        if (bannedWords.trim() !== "")
+            trimedBannedWords = removeQuotes(bannedWords.trim().match(/("[^"]+"|[^"\s]+)/g));
 
         const newFrom = (localTime === "false") ? convertToGMT(since) : since;
         const newUntil = (localTime === "false") ? convertToGMT(until) : until;
 
         return {
-            "search": searchObj,
+            "keywordList": trimedKeywords,
+            "bannedWords": trimedBannedWords,
             "lang": (langInput === "lang_all") ? null : langInput.replace("lang_", ""),
-            "user_list": stringToList(usersInput),
+            "userList": stringToList(usersInput),
             "from": dateFormat(newFrom, "yyyy-mm-dd hh:MM:ss"),
             "until": dateFormat(newUntil, "yyyy-mm-dd hh:MM:ss"),
             "verified": verifiedUsers === "true",
@@ -142,9 +132,9 @@ const TwitterSna = () => {
 
     const onSubmit = () => {
         //Mandatory Fields errors
-        if (hashTagInput === "") {
+        if (keyWords.trim() === "") {
             handleErrors(keyword("twitterStatsErrorMessage"));
-            setHashTagError(true);
+            setKeyWordsError(true);
             return;
         }
         if (since === null || since === "") {
@@ -157,7 +147,7 @@ const TwitterSna = () => {
             setUntil("");
             return;
         }
-        const newRequest = makeRequest();
+        let newRequest = makeRequest();
 
         if (JSON.stringify(newRequest) !== JSON.stringify(request))
             setSubmittedRequest(newRequest);
@@ -168,58 +158,31 @@ const TwitterSna = () => {
             <Paper className={classes.root}>
                 <CustomTile> {keyword("twitter_sna_title")}  </CustomTile>
                 <Box m={3}/>
-                <Grid container spacing={1}>
-                    <Grid item className={classes.grow}>
-                        <TextField
-                            error={hashTagError}
-                            value={hashTagInput}
-                            onChange={e => {
-                                setHashTagInput(e.target.value);
-                                setHashTagError(false);
-                            }}
-                            id="standard-full-width"
-                            label={keyword("twitter_sna_search")}
-                            style={{margin: 8}}
-                            placeholder={"#example"}
-                            fullWidth
-                        />
-                    </Grid>
-                    <Grid item className={classes.grow}>
-                        <TextField
-                            value={andInput}
-                            onChange={e => setAndInput(e.target.value)}
-                            id="standard-full-width"
-                            label={keyword("twitter_sna_and")}
-                            style={{margin: 8}}
-                            placeholder={"word1 word2"}
-                            fullWidth
-                        />
-                    </Grid>
-                </Grid>
-                <Grid container spacing={1}>
-                    <Grid item className={classes.grow}>
-                        <TextField
-                            value={orInput}
-                            onChange={e => setOrInput(e.target.value)}
-                            id="standard-full-width"
-                            label={keyword("twitter_sna_or")}
-                            style={{margin: 8}}
-                            placeholder={"word3 word4"}
-                            fullWidth
-                        />
-                    </Grid>
-                    <Grid item className={classes.grow}>
-                        <TextField
-                            value={notInput}
-                            onChange={e => setNotInput(e.target.value)}
-                            id="standard-full-width"
-                            label={keyword("twitter_sna_not")}
-                            style={{margin: 8}}
-                            placeholder={"word6 word7"}
-                            fullWidth
-                        />
-                    </Grid>
-                </Grid>
+
+                <TextField
+                    error={keyWordsError}
+                    value={keyWords}
+                    onChange={e => {
+                        setKeywords(e.target.value);
+                        setKeyWordsError(false);
+                    }}
+                    id="standard-full-width"
+                    label={keyword("twitter_sna_search")}
+                    style={{margin: 8}}
+                    placeholder={"#example"}
+                    fullWidth
+                />
+
+                <TextField
+                    value={bannedWords}
+                    onChange={e => setBannedWords(e.target.value)}
+                    id="standard-full-width"
+                    label={keyword("twitter_sna_not")}
+                    style={{margin: 8}}
+                    placeholder={"word6 word7"}
+                    fullWidth
+                />
+
                 <TextField
                     value={usersInput}
                     onChange={e => setUsersInput(e.target.value)}
