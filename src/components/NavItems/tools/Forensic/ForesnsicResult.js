@@ -25,7 +25,9 @@ import Lightbox from 'react-image-lightbox';
 import 'react-image-lightbox/style.css';
 import CloseResult from "../../../CloseResult/CloseResult";
 import {cleanForensicState} from "../../../../redux/actions/tools/forensicActions";
-
+import Radio from "@material-ui/core/Radio";
+import RadioButtonUncheckedIcon from '@material-ui/icons/RadioButtonUnchecked';
+import RadioButtonCheckedIcon from '@material-ui/icons/RadioButtonChecked';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -51,7 +53,7 @@ const useStyles = makeStyles(theme => ({
         transform: 'rotate(180deg)',
     },
     lightBox: {
-        overlay : {
+        overlay: {
             zIndex: theme.zIndex.drawer + 1,
         },
     }
@@ -70,7 +72,15 @@ const ForensicResults = (props) => {
     const result = props.result;
 
     const [expanded, setExpanded] = React.useState(dataParams.reduce((o, key, id) => ({...o, [id]: false}), {}));
-    const images = dataParams.map((value) => {return result[value]["map"];});
+    const images = dataParams.map((value) => {
+        return result[value]["map"];
+    });
+
+    const ghostImages = result.ghostReport.maps;
+    const [selectedGhostImage, setSelectedGhostImage] = useState("0");
+    const [ghostExpanded, setGhostExpand] = useState(false);
+    images.push(...ghostImages);
+
     const [photoIndex, setPhotoIndex] = useState(0);
     const [open, setOpen] = useState(false);
 
@@ -100,6 +110,10 @@ const ForensicResults = (props) => {
                                         className={classes.media}
                                         image={result[value]["map"]}
                                         title={keyword("forensic_title_" + value)}
+                                        onClick={() => {
+                                            setOpen(true);
+                                            setPhotoIndex(key)
+                                        }}
                                     />
                                     <CardActions disableSpacing>
                                         <IconButton aria-label="add to favorites"
@@ -133,6 +147,76 @@ const ForensicResults = (props) => {
                         )
                     })
                 }
+                <Box m={1} width={"30%"}>
+                    <Card className={classes.card}>
+                        <CardHeader
+                            title={keyword("forensic_title_ghostReport")}
+                            subheader=""
+                        />
+                        {
+                            ghostImages.map((image, index) => {
+                                return (
+                                    <Box hidden={selectedGhostImage !== index.toString()}>
+                                        <CardMedia
+                                            className={classes.media}
+                                            image={image}
+                                            onClick={() => {
+                                                setOpen(true);
+                                                setPhotoIndex(images.length  - ghostImages.length + index)
+                                            }}
+                                        />
+                                    </Box>
+                                )
+                            })
+                        }
+                        <div>
+                            {
+                                ghostImages.map((image, index) => {
+                                    return (
+                                        <Radio
+                                            key={index}
+                                            checked={selectedGhostImage === index.toString()}
+                                            onChange={() => setSelectedGhostImage(index.toString())}
+                                            value={index.toString()}
+                                            color="default"
+                                            name="radio-button-demo"
+                                            inputProps={{'aria-label': 'E'}}
+                                            icon={<RadioButtonUncheckedIcon fontSize="small"/>}
+                                            checkedIcon={<RadioButtonCheckedIcon fontSize="small"/>}
+                                        />
+                                    )
+                                })
+                            }
+                        </div>
+                        <CardActions disableSpacing>
+                            <IconButton aria-label="add to favorites"
+                                        onClick={() => {
+                                            setOpen(true)
+                                            setPhotoIndex(images.length  - ghostImages.length)
+                                        }}>
+                                <ZoomInIcon/>
+                            </IconButton>
+                            <IconButton
+                                className={clsx(classes.expand, {
+                                    [classes.expandOpen]: ghostExpanded,
+                                })}
+                                onClick={() => setGhostExpand(!ghostExpanded)}
+                                aria-expanded={ghostExpanded}
+                                aria-label="show more"
+                            >
+                                <ExpandMoreIcon/>
+                            </IconButton>
+                        </CardActions>
+                        <Collapse in={ghostExpanded} timeout="auto"
+                                  unmountOnExit>
+                            <CardContent>
+                                <Typography paragraph>
+                                    {keyword("forensic_card_ghostReport")}
+                                </Typography>
+                            </CardContent>
+                        </Collapse>
+                    </Card>
+                </Box>
             </Grid>
             {
                 open &&
@@ -146,7 +230,7 @@ const ForensicResults = (props) => {
                         setPhotoIndex((photoIndex + images.length - 1) % images.length)
                     }
                     onMoveNextRequest={() =>
-                        setPhotoIndex( (photoIndex + 1) % images.length)
+                        setPhotoIndex((photoIndex + 1) % images.length)
                     }
                 />
             }
