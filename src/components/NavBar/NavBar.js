@@ -200,12 +200,20 @@ const NavBar = (props) => {
         }
     ];
 
+    const handleImageClick = () => {
+        history.push("/app/tools/all");
+    };
+
     return (
         <div className={classes.flex}>
             <AppBar position="fixed" color="default" className={classes.appBar}>
                 <Toolbar className={classes.toolbar}>
                     <Box display={{xs: 'none', md: 'block'}}>
-                        <img src={logoInvid} alt="logo" className={classes.logoLeft}/>
+                        <img
+                            src={logoInvid} alt="logo"
+                            className={classes.logoLeft}
+                            onClick={handleImageClick}
+                        />
                     </Box>
                     <div className={classes.grow}/>
                     <Tabs
@@ -227,7 +235,12 @@ const NavBar = (props) => {
                     <div className={classes.grow}/>
                     <Languages/>
                     <Box display={{xs: 'none', md: 'block'}}>
-                        <img src={logoWeVerify} alt="logo" className={classes.logoRight}/>
+                        <img
+                            src={logoWeVerify}
+                            alt="logo"
+                            className={classes.logoRight}
+                            onClick={handleImageClick}
+                        />
                     </Box>
                 </Toolbar>
             </AppBar>

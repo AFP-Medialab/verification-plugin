@@ -59,7 +59,9 @@ export default function TwitterSnaResult(props) {
     const pieCharts = [pieCharts0, pieCharts1, pieCharts2, pieCharts3];
 
     useEffect(() => {
-        return () => {setResult(null) };
+        return () => {
+            setResult(null)
+        };
     }, []);
 
     useEffect(() => {
@@ -244,7 +246,7 @@ export default function TwitterSnaResult(props) {
                               layout={result.histogram.layout}
                               config={result.histogram.config}
                               onClick={(e) => onHistogramClick(e)}
-                              onPurge={(a,b) => {
+                              onPurge={(a, b) => {
                                   console.log(a);
                                   console.log(b);
                               }}
@@ -275,10 +277,12 @@ export default function TwitterSnaResult(props) {
                                 </Grid>
                                 <Box m={2}/>
                                 <Box hidden={!histoTweetsVisible}>
-                                    <CustomTable title={"Selected Tweets (add tsv)"}
-                                                 colums={histoTweets.columns}
-                                                 data={histoTweets.data}/>
-                                    actions={[]}
+                                    <CustomTable
+                                        title={"Selected Tweets (add tsv)"}
+                                        colums={histoTweets.columns}
+                                        data={histoTweets.data}
+                                        actions={[]}
+                                    />
                                 </Box>
                             </div>
                         }

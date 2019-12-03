@@ -73,10 +73,12 @@ const useMyStyles = makeStyles(theme => ({
         padding: theme.spacing(3),
     },
     logoLeft: {
+        cursor: "pointer",
         marginRight: theme.spacing(2),
         maxHeight: "60px",
     },
     logoRight: {
+        cursor: "pointer",
         marginLeft: theme.spacing(2),
         maxHeight: "70px",
     },

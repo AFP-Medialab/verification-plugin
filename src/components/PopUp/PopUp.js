@@ -16,12 +16,18 @@ import ImageGridList from "../utility/ImageGridList/ImageGridList";
 import Link from "@material-ui/core/Link";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
+import {useSelector} from "react-redux";
 
 const navigator = (window.browser) ? window.browser : window.chrome;
 
 
 const PopUp = () => {
     const classes = useMyStyles();
+    const dictionary = useSelector(state => state.dictionary);
+    const lang = useSelector(state => state.language);
+    const keyword = (key) => {
+        return (dictionary !== null) ? dictionary[lang][key] : "";
+    };
 
     const createScript = (tag, field) => {
         let script =
