@@ -9,7 +9,13 @@ import {Provider} from "react-redux"
 
 function saveToLocalStorage(state){
     try {
-        const serializedState = JSON.stringify(state);
+        const savedState = {
+            humanRightsCheckBox : state.humanRightsCheckBox,
+            interactiveExplanation: state.interactiveExplanation,
+            language: state.language,
+            dictionary: state.dictionary,
+        };
+        const serializedState = JSON.stringify(savedState);
         localStorage.setItem('state', serializedState)
     }
     catch (e) {
@@ -34,7 +40,7 @@ const persistedState = loadFromLocalStorage();
 
 const store = createStore(
     allReducers,
-    persistedState,
+    persistedState,  // uncomment to keep redux state on refresh
     //Useful for the chrome extension Redux devtool : https://chrome.google.com/webstore/detail/redux-devtools/lmhkpmbekcpmknklioeibfkpmmfibljd
     window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 );
