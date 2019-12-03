@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import { useSelector} from "react-redux";
+import {useSelector} from "react-redux";
 import {Paper} from "@material-ui/core";
 import TextField from "@material-ui/core/TextField";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
@@ -13,6 +13,8 @@ import TwitterResults from "./Results/TwitterResults";
 import {useAnalysisWrapper} from "./Hooks/useAnalysisWrapper";
 import useMyStyles from "../../../utility/MaterialUiStyles/useMyStyles"
 import {useParams} from 'react-router-dom'
+import Iframe from "react-iframe";
+import useFacebookHandler from "./Hooks/useFacebookHandler";
 
 const Analysis = () => {
     const {url} = useParams();
@@ -27,24 +29,29 @@ const Analysis = () => {
     const resultData = useSelector(state => state.analysis.result);
     const isLoading = useSelector(state => state.analysis.loading);
 
-    const [input, setInput] = useState((resultUrl)? resultUrl : "");
+    const [input, setInput] = useState((resultUrl) ? resultUrl : "");
     const [submittedUrl, setSubmittedUrl] = useState(undefined);
     const [reprocess, setReprocess] = useState(false);
     const reprocessToggle = () => {
         setReprocess(!reprocess);
     };
-    useAnalysisWrapper(submittedUrl,reprocess);
+
+    const [finalUrl, facebookToken, showFacebookIframe] = useFacebookHandler(submittedUrl);
+    useAnalysisWrapper(finalUrl, reprocess, facebookToken);
+
 
     const submitForm = () => {
         setSubmittedUrl(input);
     };
 
+
     useEffect(() => {
-        if (url !== undefined){
+        if (url !== undefined) {
             const uri = decodeURIComponent(url);
             setInput(uri);
             setSubmittedUrl(uri);
-        }}, [url]);
+        }
+    }, [url]);
 
     useEffect(() => {
         setSubmittedUrl(undefined);
@@ -87,12 +94,30 @@ const Analysis = () => {
                 </Button>
                 <Box m={1}/>
                 <LinearProgress hidden={!isLoading}/>
-            </Paper>{
+            </Paper>
+            {
+                showFacebookIframe &&
+                <Box m={4}>
+                    <Iframe
+                        frameBorder="0"
+                        url={"https://caa.iti.gr/plugin_login_fb"}
+                        allow="fullscreen"
+                        height="400"
+                        width="100%"
+                    />
+                </Box>
+            }
+            {
                 (resultData !== null && resultUrl != null && resultUrl.startsWith("https://www.youtube.com/")) ?
-                <YoutubeResults report={resultData}/> : null
-            }{
+                    <YoutubeResults report={resultData}/> : null
+            }
+            {
                 (resultData !== null && resultUrl != null && resultUrl.startsWith("https://twitter.com/")) ?
-                <TwitterResults report={resultData}/> : null
+                    <TwitterResults report={resultData}/> : null
+            }
+            {
+                (resultData !== null && resultUrl != null && resultUrl.startsWith("https://www.facebook.com/")) ?
+                    <div report={resultData}>facebook Report</div> : null
             }
         </div>);
 };

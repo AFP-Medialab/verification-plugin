@@ -4,7 +4,7 @@ import {setAnalysisLoading, setAnalysisResult} from "../../../../../redux/action
 import {setError} from "../../../../../redux/actions/errorActions";
 import {useEffect} from "react";
 
-export const useAnalysisWrapper = (url, reprocess) => {
+export const useAnalysisWrapper = (url, reprocess, facebookToken) => {
     const dictionary = useSelector(state => state.dictionary);
     const lang = useSelector(state => state.language);
     const keyword = (key) => {
@@ -15,8 +15,7 @@ export const useAnalysisWrapper = (url, reprocess) => {
         const handleError = (error) => {
             if (keyword(error) !== undefined)
                 dispatch(setError((keyword(error))));
-            else
-                dispatch(setError("Unknown error"));
+            dispatch(setError(error.toString()));
             dispatch(setAnalysisLoading(false));
         };
 
@@ -69,11 +68,21 @@ export const useAnalysisWrapper = (url, reprocess) => {
             let analysis_url = "http://mever.iti.gr/caa/api/v4/videos/jobs?url=" + url.replace("&", "%26");
             if (reprocess)
                 analysis_url += "&reprocess=1";
+
+            if (url.startsWith("https://www.facebook.com/")){
+                if (facebookToken === null) {
+                    return;
+                }
+                else{
+                    analysis_url+= "&fb_access_token="+ facebookToken;
+                }
+            }
+
             dispatch(setAnalysisLoading(true));
             axios.post(analysis_url)
                 .then(response => handleJob(response["data"]))
                 .catch(error => handleError(error))
         }
 
-    }, [url]);
+    }, [url, facebookToken]);
 };
