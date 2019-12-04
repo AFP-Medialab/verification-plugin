@@ -28,8 +28,6 @@ export default function TwitterSnaResult(props) {
     const dispatch = useDispatch();
 
     const [histoVisible, setHistoVisible] = useState(true);
-    const [histoTweetsVisible, setHistoTweetsVisible] = useState(true);
-
     const [result, setResult] = useState(null);
 
     const [histoTweets, setHistoTweets] = useState(null);
@@ -65,13 +63,12 @@ export default function TwitterSnaResult(props) {
     }, []);
 
     useEffect(() => {
-        console.log("was");
-        console.log(result);
-        if (result === null) {
-            setResult(props.result);
-            console.log("will set to");
-            console.log(props.result);
-        }
+        setResult(props.result);
+        setHistoTweets(null);
+        setPieCharts0(null);
+        setPieCharts1(null);
+        setPieCharts2(null);
+        setPieCharts3(null);
     }, [JSON.stringify(props.result)]);
 
     if (result === null)
@@ -230,65 +227,66 @@ export default function TwitterSnaResult(props) {
     return (
         <Paper className={classes.root}>
             <CloseResult onClick={() => dispatch(cleanTwitterSnaState())}/>
-            <ExpansionPanel expanded={histoVisible} onChange={() => setHistoVisible(!histoVisible)}>
-                <ExpansionPanelSummary
-                    expandIcon={<ExpandMoreIcon/>}
-                    aria-controls={"panel0a-content"}
-                    id={"panel0a-header"}
-                >
-                    <Typography className={classes.heading}>{keyword(result.histogram.title)}</Typography>
-                </ExpansionPanelSummary>
-                <ExpansionPanelDetails>
-                    <div style={{width: '100%',}}>
-                        <Plot useResizeHandler
-                              style={{width: '100%', height: "450px"}}
-                              data={result.histogram.json}
-                              layout={result.histogram.layout}
-                              config={result.histogram.config}
-                              onClick={(e) => onHistogramClick(e)}
-                              onPurge={(a, b) => {
-                                  console.log(a);
-                                  console.log(b);
-                              }}
-                        />
-                        <Box m={2}/>
-                        {
-                            histoTweets &&
-                            <div>
-                                <Grid container justify="space-between" spacing={2}
-                                      alignContent={"center"}>
-                                    <Grid item>
-                                        <Button
-                                            variant={"contained"}
-                                            color={"secondary"}
-                                            onClick={() => setHistoTweets(null)}
-                                        >
-                                            Hide (add tsv)
-                                        </Button>
+            {
+                result.histogram &&
+                <ExpansionPanel expanded={histoVisible} onChange={() => setHistoVisible(!histoVisible)}>
+                    <ExpansionPanelSummary
+                        expandIcon={<ExpandMoreIcon/>}
+                        aria-controls={"panel0a-content"}
+                        id={"panel0a-header"}
+                    >
+                        <Typography className={classes.heading}>{keyword(result.histogram.title)}</Typography>
+                    </ExpansionPanelSummary>
+                    <ExpansionPanelDetails>
+                        <div style={{width: '100%',}}>
+                            <Plot useResizeHandler
+                                  style={{width: '100%', height: "450px"}}
+                                  data={result.histogram.json}
+                                  layout={result.histogram.layout}
+                                  config={result.histogram.config}
+                                  onClick={(e) => onHistogramClick(e)}
+                                  onPurge={(a, b) => {
+                                      console.log(a);
+                                      console.log(b);
+                                  }}
+                            />
+                            <Box m={2}/>
+                            {
+                                histoTweets &&
+                                <div>
+                                    <Grid container justify="space-between" spacing={2}
+                                          alignContent={"center"}>
+                                        <Grid item>
+                                            <Button
+                                                variant={"contained"}
+                                                color={"secondary"}
+                                                onClick={() => setHistoTweets(null)}
+                                            >
+                                                Hide (add tsv)
+                                            </Button>
+                                        </Grid>
+                                        <Grid item>
+                                            <Button
+                                                variant={"contained"}
+                                                color={"primary"}
+                                                onClick={() => downloadClick(histoTweets.csvArr)}>
+                                                Download (add tsv)
+                                            </Button>
+                                        </Grid>
                                     </Grid>
-                                    <Grid item>
-                                        <Button
-                                            variant={"contained"}
-                                            color={"primary"}
-                                            onClick={() => downloadClick(histoTweets.csvArr)}>
-                                            Download (add tsv)
-                                        </Button>
-                                    </Grid>
-                                </Grid>
-                                <Box m={2}/>
-                                <Box hidden={!histoTweetsVisible}>
+                                    <Box m={2}/>
                                     <CustomTable
                                         title={"Selected Tweets (add tsv)"}
                                         colums={histoTweets.columns}
                                         data={histoTweets.data}
                                         actions={[]}
                                     />
-                                </Box>
-                            </div>
-                        }
-                    </div>
-                </ExpansionPanelDetails>
-            </ExpansionPanel>
+                                </div>
+                            }
+                        </div>
+                    </ExpansionPanelDetails>
+                </ExpansionPanel>
+            }
             <ExpansionPanel>
                 <ExpansionPanelSummary
                     expandIcon={<ExpandMoreIcon/>}
@@ -348,14 +346,11 @@ export default function TwitterSnaResult(props) {
                                                 </Grid>
                                             </Grid>
                                             <Box m={2}/>
-
-                                            <Box hidden={!histoTweetsVisible}>
-                                                <CustomTable title={"Selected Tweets (add tsv)"}
-                                                             colums={pieCharts[index].columns}
-                                                             data={pieCharts[index].data}
-                                                             ations={pieCharts[index].actions}
-                                                />
-                                            </Box>
+                                            <CustomTable title={"Selected Tweets (add tsv)"}
+                                                         colums={pieCharts[index].columns}
+                                                         data={pieCharts[index].data}
+                                                         ations={pieCharts[index].actions}
+                                            />
                                         </div>
                                     }
                                 </Box>
@@ -365,20 +360,23 @@ export default function TwitterSnaResult(props) {
                 })
             }
             <Box m={3}/>
-            <CustomTable
-                title={"Linked Url (add tsv)"}
-                colums={result.urls.columns}
-                data={result.urls.data}
-                actions={[
-                    {
-                        icon: LinkIcon,
-                        tooltip: 'Go to url (add tsv)',
-                        onClick: (event, rowData) => {
-                            window.open(rowData.url, '_blank');
+            {
+                result.urls &&
+                <CustomTable
+                    title={"Linked Url (add tsv)"}
+                    colums={result.urls.columns}
+                    data={result.urls.data}
+                    actions={[
+                        {
+                            icon: LinkIcon,
+                            tooltip: 'Go to url (add tsv)',
+                            onClick: (event, rowData) => {
+                                window.open(rowData.url, '_blank');
+                            }
                         }
-                    }
-                ]}
-            />
+                    ]}
+                />
+            }
         </Paper>
     );
 };
