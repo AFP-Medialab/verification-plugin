@@ -11,10 +11,7 @@ import {
 } from "./call-elastic";
 
 const useTwitterSnaRequest = (request) => {
-    //const TwintWrapperUrl = "http://185.249.140.38/twint-wrapper";
-    const TwintWrapperUrl = "http://localhost:8080/twint-wrapper";
-
-
+    const TwintWrapperUrl = process.env.REACT_APP_TWINT_WRAPPER_URL;
     const dictionary = useSelector(state => state.dictionary);
     const lang = useSelector(state => state.language);
     const keyword = (key) => {
@@ -45,13 +42,13 @@ const useTwitterSnaRequest = (request) => {
             let config = {
                 toImageButtonOptions: {
                     format: 'png', // one of png, svg, jpeg, webp
-                    filename: data.search.search + "_" + data.from + "_" + data.until + "_Tweets",
+                    filename: data.keywordList.join("&") + "_" + data.from + "_" + data.until + "_Tweets",
                     scale: 1 // Multiply title/legend/axis/canvas sizes by this factor
                 },
                 modeBarButtons: [["toImage"]],
                 displaylogo: false
             };
-            let titleEnd = data.search.search + " " + data.from + " " + data.until;
+            let titleEnd = data.keywordList.join("&") + " " + data.from + " " + data.until;
             let titles = [
                 "retweets_cloud_chart_title",
                 "likes_cloud_chart_title",
@@ -78,7 +75,7 @@ const useTwitterSnaRequest = (request) => {
 
 
         const createHistogram = (data, json, givenFrom, givenUntil) => {
-            let titleEnd = data.search.search + " " + data.from + " " + data.until;
+            let titleEnd = data.keywordList.join("&") + " " + data.from + " " + data.until;
             let layout = {
                 title:  <div><b>{keyword("user_time_chart_title")}</b><br/> {titleEnd}</div>,
                 automargin: true,
@@ -103,7 +100,7 @@ const useTwitterSnaRequest = (request) => {
             let config = {
                 toImageButtonOptions: {
                     format: 'png', // one of png, svg, jpeg, webp
-                    filename: data["search"]["search"] + "_" + data["from"] + "_" + data["until"] + "_Timeline",
+                    filename: data.keywordList.join("&") + "_" + data["from"] + "_" + data["until"] + "_Timeline",
                     scale: 1 // Multiply title/legend/axis/canvas sizes by this factor
                 },
 

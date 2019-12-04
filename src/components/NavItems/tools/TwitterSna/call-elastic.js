@@ -2,12 +2,7 @@ import React from "react";
 
 let json = {};
 
-let elasticSearch_url = 'http://185.249.140.38/elk/twinttweets/_search';
-
-let dev = false;
-if (dev) {
-    elasticSearch_url = 'http://localhost:9200/twinttweets/_search';
-}
+let elasticSearch_url = process.env.REACT_APP_ELK_URL;
 
 //Functions calling elastic search and return a JSON plotly can use
 
@@ -34,8 +29,8 @@ export function generateEssidHistogramPlotlyJson(param, retweets, givenFrom, giv
 
 
     let aggs = constructAggs(interval);
-    let must = [constructMatchPhrase(param, givenFrom, givenUntil)];
-    let mustNot = [constructMatchNotPhrase(param, givenFrom, givenUntil)];
+    let must = constructMatchPhrase(param, givenFrom, givenUntil);
+    let mustNot = constructMatchNotPhrase(param, givenFrom, givenUntil);
 
     function usersGet(dateObj, infos) {
 
@@ -73,6 +68,7 @@ export function generateEssidHistogramPlotlyJson(param, retweets, givenFrom, giv
             }
         });
         const myJson = await response.json();
+
         if (myJson["error"] === undefined) {
             if (retweets)
                 return getPlotlyJsonHisto(myJson, retweetsGet);
@@ -80,12 +76,12 @@ export function generateEssidHistogramPlotlyJson(param, retweets, givenFrom, giv
                 return getPlotlyJsonHisto(myJson, usersGet);
         } else
             window.alert("There was a problem calling elastic search");
-    }
+    };
     return userAction(buildQuery(aggs, must, mustNot)).then(plotlyJSON => {
 
         if (reProcess) {
             let aggs = constructAggs("1h");
-            let must = [constructMatchPhrase(param, queryStart, queryEnd)]
+            let must = constructMatchPhrase(param, queryStart, queryEnd);
             return (userAction(buildQuery(aggs, must, mustNot)).then(plotlyJSON2 => {
 
                 let i = 0;
@@ -114,8 +110,8 @@ export function generateEssidHistogramPlotlyJson(param, retweets, givenFrom, giv
 
 //Tweet count display
 export function generateTweetCountPlotlyJson(param) {
-    let must = [constructMatchPhrase(param)];
-    let mustNot = [constructMatchNotPhrase(param)];
+    let must = constructMatchPhrase(param);
+    let mustNot = constructMatchNotPhrase(param);
     return getJson(param, {}, must, mustNot).then(json => {
         return {
             value: json.hits.total.value,
@@ -126,12 +122,12 @@ export function generateTweetCountPlotlyJson(param) {
 
 //Donut charts (Most liked, most retweeted, most used hashtags, most active users)
 export function generateDonutPlotlyJson(param, field) {
-    let keywords = param.keywords;
-    let bannedWords = param.keywords;
+    let keywordList = param.keywordList;
+    let bannedWords = param.bannedWords;
 
     let aggs = constructAggs(field);
-    let must = [constructMatchPhrase(param)];
-    let mustNot = [constructMatchNotPhrase(param)];
+    let must = constructMatchPhrase(param);
+    let mustNot = constructMatchNotPhrase(param);
 
 
     function hashtagsGet(key, values, labels, parents, mainKey) {
@@ -168,11 +164,11 @@ export function generateDonutPlotlyJson(param, field) {
         });
         const myJson = await response.json();
         if (field === "hashtags") {
-            return getPlotlyJsonCloud(myJson, keywords, bannedWords, hashtagsGet);
+            return getPlotlyJsonCloud(myJson, keywordList, bannedWords, hashtagsGet);
         } else if (field === "nretweets" || field == "nlikes")
-            return getPlotlyJsonCloud(myJson, keywords, bannedWords, mostRetweetGet);
+            return getPlotlyJsonCloud(myJson, keywordList, bannedWords, mostRetweetGet);
         else
-            return getPlotlyJsonCloud(myJson, keywords, bannedWords, mostTweetsGet);
+            return getPlotlyJsonCloud(myJson, keywordList, bannedWords, mostTweetsGet);
 
     };
 
@@ -182,8 +178,8 @@ export function generateDonutPlotlyJson(param, field) {
 // Words cloud chart
 export function generateWordCloudPlotlyJson(param) {
 
-    let must = [constructMatchPhrase(param)];
-    let mustNot = [constructMatchNotPhrase(param)];
+    let must = constructMatchPhrase(param);
+    let mustNot = constructMatchNotPhrase(param);
 
     let query = JSON.stringify(buildQuery({}, must, mustNot)).replace(/\\/g, "").replace(/\"{/g, "{").replace(/}\"/g, "}");
     const userAction = async () => {
@@ -208,8 +204,8 @@ export function generateWordCloudPlotlyJson(param) {
 //URL array
 export function generateURLArrayHTML(param) {
 
-    let must = [constructMatchPhrase(param)];
-    let mustNot = [constructMatchNotPhrase(param)];
+    let must = constructMatchPhrase(param);
+    let mustNot = constructMatchNotPhrase(param);
     let aggs = constructAggs("urls");
 
     function getURLArray(json) {
@@ -276,17 +272,17 @@ function buildQuery(aggs, must, mustNot) {
 
 //Construct the match phrase (filter for tweets)
 function constructMatchNotPhrase(param, startDate, endDate) {
-    if (startDate === undefined) {
-        startDate = param["from"];
-        endDate = param["until"];
-    }
 
     let match_phrases = "";
 
+    if (param.bannedWords === null || param.bannedWords === undefined)
+        return [];
     // KEYWORDS ARGS MATCH
     param.bannedWords.forEach(arg => {
+        if (match_phrases !== "")
+            match_phrases += ",";
         if (arg[0] === '#') {
-            match_phrases += ',{' +
+            match_phrases += '{' +
                 '"match_phrase": {' +
                 '"hashtags": {' +
                 '"query":"' + arg + '"' +
@@ -294,7 +290,7 @@ function constructMatchNotPhrase(param, startDate, endDate) {
                 '}' +
                 '}'
         } else {
-            match_phrases += ',{' +
+            match_phrases += '{' +
                 '"match_phrase": {' +
                 '"tweet": {' +
                 '"query":"' + arg + '"' +
@@ -304,7 +300,7 @@ function constructMatchNotPhrase(param, startDate, endDate) {
         }
     });
 
-    return match_phrases
+    return [match_phrases]
 }
 
 
@@ -336,7 +332,7 @@ function constructMatchPhrase(param, startDate, endDate) {
         '}';
 
     // KEYWORDS ARGS MATCH
-    param.keywords.forEach(arg => {
+    param.keywordList.forEach(arg => {
         if (arg[0] === '#') {
             match_phrases += ',{' +
                 '"match_phrase": {' +
@@ -380,7 +376,7 @@ function constructMatchPhrase(param, startDate, endDate) {
             }
         }
     });
-    return match_phrases
+    return [match_phrases]
 }
 
 //Construct the aggregations (chose what information we will have in the response)
