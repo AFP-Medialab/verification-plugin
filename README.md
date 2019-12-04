@@ -21,7 +21,6 @@ To setup this project you need to run:
 
 #### You will also need a `.env` File containing :
 
-    REACT_APP_CHOKIDAR_USEPOLLING=true
     REACT_APP_ELK_URL=http://185.249.140.38/elk/twinttweets/_search
     REACT_APP_TWINT_WRAPPER_URL=http://185.249.140.38/twint-wrapper2
     REACT_APP_KEYFRAME_TOKEN=<yourKeyframeToken>
