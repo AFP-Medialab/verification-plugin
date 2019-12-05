@@ -8,9 +8,9 @@ import TableCell from "@material-ui/core/TableCell";
 import Table from "@material-ui/core/Table";
 import Box from "@material-ui/core/Box";
 import Tooltip from "@material-ui/core/Tooltip";
-import useMyStyles from "../../../utility/MaterialUiStyles/useMyStyles";
-import CloseResult from "../../../CloseResult/CloseResult";
-import {cleanMetadataState} from "../../../../redux/actions/tools/metadataActions";
+import useMyStyles from "../../../../utility/MaterialUiStyles/useMyStyles";
+import CloseResult from "../../../../CloseResult/CloseResult";
+import {cleanMetadataState} from "../../../../../redux/actions/tools/metadataActions";
 
 
 const MetadataVideoResult = (result) => {
@@ -283,6 +283,7 @@ const MetadataVideoResult = (result) => {
                                             <TableCell align="right">{value.value}</TableCell>
                                         </TableRow>
                                     );
+                                return null;
                             })
                         }
                     </TableBody>
@@ -310,6 +311,7 @@ const MetadataVideoResult = (result) => {
                                             <TableCell align="right">{value.value}</TableCell>
                                         </TableRow>
                                     );
+                                return null;
                             })
                         }
                     </TableBody>
@@ -337,6 +339,7 @@ const MetadataVideoResult = (result) => {
                                             <TableCell align="right">{value.value}</TableCell>
                                         </TableRow>
                                     );
+                                return null;
                             })
                         }
                     </TableBody>

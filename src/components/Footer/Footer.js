@@ -1,8 +1,6 @@
-import {Box} from "@material-ui/core";
 import React from "react";
 import useMyStyles from "../utility/MaterialUiStyles/useMyStyles";
 import {useSelector} from "react-redux";
-import Typography from "@material-ui/core/Typography";
 
 
 const Footer = (props) => {

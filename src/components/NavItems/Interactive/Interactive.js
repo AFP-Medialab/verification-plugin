@@ -101,7 +101,7 @@ const Interactive = () => {
                         {
                             carousel.map((obj, key) => {
                                 return (
-                                    <Slide key={key} direction="right" in={key === carouselIndex} key={key} mountOnEnter
+                                    <Slide key={key} direction="right" in={key === carouselIndex} mountOnEnter
                                            unmountOnExit>
                                         <div>
                                             {obj.title}
@@ -120,7 +120,7 @@ const Interactive = () => {
 
                 {
                     carousel.map((obj, key) => {
-                        const isImage = obj.ext == "jpg" || obj.ext == "jpeg" || obj.ext == "png" || obj.ext == "bmp" || obj.ext == "gif"
+                        const isImage = obj.ext === "jpg" || obj.ext === "jpeg" || obj.ext === "png" || obj.ext === "bmp" || obj.ext === "gif"
                         return (
 
                             <div key={key} hidden={key !== carouselIndex}>
@@ -130,7 +130,7 @@ const Interactive = () => {
                                     <div align={"center"}>
                                         {
                                             (isImage) ?
-                                                <img src={obj.url} className={classes.media}/>
+                                                <img src={obj.url} className={classes.media} alt={obj.url}/>
                                                 :
                                                 <Iframe frameBorder="0" src={obj.url}
                                                         width="80%"

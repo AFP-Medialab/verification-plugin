@@ -1,33 +1,30 @@
 import React, {useState} from "react";
 import useMyStyles from "../utility/MaterialUiStyles/useMyStyles";
 import {Typography} from "@material-ui/core";
-import Box from "@material-ui/core/Box";
-import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
 import inVidLogo from "./images/InVID-logo.svg";
 import ExpansionPanel from "@material-ui/core/ExpansionPanel";
 import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
-import Icon from "@material-ui/core/Icon";
-import Fab from "@material-ui/core/Fab";
 import Grid from "@material-ui/core/Grid";
 import ImageGridList from "../utility/ImageGridList/ImageGridList";
 import Link from "@material-ui/core/Link";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
-import {useSelector} from "react-redux";
+//import {useSelector} from "react-redux";
 
 const navigator = (window.browser) ? window.browser : window.chrome;
 
 
 const PopUp = () => {
     const classes = useMyStyles();
-    const dictionary = useSelector(state => state.dictionary);
+    /*const dictionary = useSelector(state => state.dictionary);
     const lang = useSelector(state => state.language);
     const keyword = (key) => {
         return (dictionary !== null) ? dictionary[lang][key] : "";
     };
+    */
 
     const createScript = (tag, field) => {
         let script =
@@ -94,7 +91,7 @@ const PopUp = () => {
                     <Grid container alignContent={"center"}
                           spacing={3} alignItems={"center"}>
                         <Grid item>
-                            <img src={inVidLogo} style={{width: "60px"}}/>
+                            <img src={inVidLogo} alt={inVidLogo} style={{width: "60px"}}/>
                         </Grid>
                         <Grid item>
                             Open InVid (add tsv)

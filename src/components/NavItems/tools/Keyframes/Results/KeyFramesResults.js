@@ -10,7 +10,6 @@ import Button from "@material-ui/core/Button";
 import {useKeyframes} from "../Hooks/usekeyframes";
 import ImageReverseSearch from "../../ImageReverseSearch";
 import CloseResult from "../../../../CloseResult/CloseResult";
-import {cleanForensicState} from "../../../../../redux/actions/tools/forensicActions";
 import {cleanKeyframesState} from "../../../../../redux/actions/tools/keyframesActions";
 
 const useStyles = makeStyles(theme => ({
@@ -31,7 +30,7 @@ const KeyFramesResults = (props) => {
     const dispatch = useDispatch();
 
     const [detailed, setDetailed] = useState(false);
-    const [simpleList, detailedList] = useKeyframes(props.result, [props.result]);
+    const [simpleList, detailedList] = useKeyframes(props.result);
 
     const toggleDetail = () => {
         setDetailed(!detailed);

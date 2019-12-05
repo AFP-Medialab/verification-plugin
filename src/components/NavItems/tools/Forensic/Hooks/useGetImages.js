@@ -1,15 +1,15 @@
-import {useEffect} from "react";
+import {useCallback, useEffect} from "react";
 import axios from "axios"
 import {useDispatch, useSelector} from "react-redux";
-import{setForensicsLoading, setForensicsResult} from "../../../../redux/actions/tools/forensicActions";
-import {setError} from "../../../../redux/actions/errorActions";
+import{setForensicsLoading, setForensicsResult} from "../../../../../redux/actions/tools/forensicActions";
+import {setError} from "../../../../../redux/actions/errorActions";
 
 const useGetImages = (url) => {
     const dictionary = useSelector(state => state.dictionary);
     const lang = useSelector(state => state.language);
-    const keyword = (key) => {
+    const keyword = useCallback( (key) => {
         return (dictionary !== null) ? dictionary[lang][key] : "";
-    };
+    }, [dictionary, lang]);
 
     const dispatch = useDispatch();
 
@@ -25,7 +25,7 @@ const useGetImages = (url) => {
         };
 
         const getResult = (hash) => {
-            axios.get("https://reveal-mklab.iti.gr/" + "imageforensicsv3/getreport?hash=" + hash)
+            axios.get("https://reveal-mklab.iti.gr/imageforensicsv3/getreport?hash=" + hash)
                 .then(response => {
                     if (response.data.status === "completed") {
                         dispatch(setForensicsResult(url, response.data, false, false));
@@ -39,7 +39,7 @@ const useGetImages = (url) => {
         };
 
         const waitUntilFinish = (hash) => {
-            axios.get("https://reveal-mklab.iti.gr/" + "imageforensicsv3/generatereport?hash=" + hash)
+            axios.get("https://reveal-mklab.iti.gr/imageforensicsv3/generatereport?hash=" + hash)
                 .then((response) => {
                     if (response.data.status === "processing") {
                         setTimeout(function () {
@@ -69,12 +69,12 @@ const useGetImages = (url) => {
 
         if (url) {
             dispatch(setForensicsLoading(true));
-            axios.get("https://reveal-mklab.iti.gr/" + "imageforensicsv3/addurl?url=" + encodeURIComponent(url))
+            axios.get("https://reveal-mklab.iti.gr/imageforensicsv3/addurl?url=" + encodeURIComponent(url))
                 .then(response => newForensicRequest(response.data))
                 .catch(error => {
                     handleError("forensic_error_" + error.status);
                 })
         }
-    }, [url]);
+    }, [url, keyword]);
 };
 export default useGetImages;

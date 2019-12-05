@@ -4,11 +4,11 @@ import CustomTile from "../../../utility/customTitle/customTitle";
 import {useDispatch, useSelector} from "react-redux";
 import 'react-image-crop/dist/ReactCrop.css';
 import 'tui-image-editor/dist/tui-image-editor.css'
-import ImageResult from "./ImageResult";
+import ImageResult from "./Results/ImageResult";
 import FolderOpenIcon from '@material-ui/icons/FolderOpen';
 import useMyStyles from "../../../utility/MaterialUiStyles/useMyStyles";
 import {useParams} from 'react-router-dom'
-import{setMagnifierResult} from "../../../../redux/actions/tools/magnifierActions";
+import {setMagnifierResult} from "../../../../redux/actions/tools/magnifierActions";
 import {setError} from "../../../../redux/actions/errorActions";
 
 const Magnifier = () => {
@@ -52,12 +52,12 @@ const Magnifier = () => {
     };
 
     useEffect(() => {
-        if (url !== undefined){
-            const uri = (url !== undefined) ? decodeURIComponent(url) : undefined;
+        if (url !== undefined) {
+            const uri = (url !== null) ? decodeURIComponent(url) : undefined;
             setInput(uri);
             submitUrl(uri)
-
-        }}, [url]);
+        }
+    }, [url]);
 
 
     return (
