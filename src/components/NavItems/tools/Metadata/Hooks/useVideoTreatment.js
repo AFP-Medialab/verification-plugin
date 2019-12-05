@@ -1,15 +1,15 @@
-import {useEffect, useState} from "react";
+import {useCallback, useEffect} from "react";
 import * as mp4box from "mp4box";
 import {useDispatch, useSelector} from "react-redux";
-import {setMetadadaResult, setMetadadaLoading} from "../../../../redux/actions/tools/metadataActions";
-import {setError} from "../../../../redux/actions/errorActions";
+import {setMetadadaResult, setMetadadaLoading} from "../../../../../redux/actions/tools/metadataActions";
+import {setError} from "../../../../../redux/actions/errorActions";
 
 const useVideoTreatment = (mediaUrl) => {
     const dictionary = useSelector(state => state.dictionary);
     const lang = useSelector(state => state.language);
-    const keyword = (key) => {
+    const keyword = useCallback( (key) => {
         return (dictionary !== null) ? dictionary[lang][key] : "";
-    };
+    }, [dictionary, lang]);
 
     const dispatch = useDispatch();
 
@@ -64,7 +64,7 @@ const useVideoTreatment = (mediaUrl) => {
 
         if (mediaUrl)
             videoTreatment();
-    }, [mediaUrl]);
+    }, [mediaUrl, keyword]);
 
 };
 export default useVideoTreatment;

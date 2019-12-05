@@ -33,7 +33,7 @@ const useFacebookHandler = (url) => {
                 setFacebookIframe(false);
         }
         setFinalUrl(url);
-    }, [url]);
+    }, [url, facebookToken]);
 
 
 

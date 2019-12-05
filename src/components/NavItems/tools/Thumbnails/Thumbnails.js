@@ -16,7 +16,6 @@ import {useInput} from "../../../Hooks/useInput";
 import {cleanThumbnailsState, setThumbnailsResult} from "../../../../redux/actions/tools/thumbnailsActions"
 import {setError} from "../../../../redux/actions/errorActions"
 import CloseResult from "../../../CloseResult/CloseResult";
-import {cleanMetadataState} from "../../../../redux/actions/tools/metadataActions";
 
 
 const Thumbnails = () => {

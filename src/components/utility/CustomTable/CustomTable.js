@@ -49,10 +49,8 @@ export default function CustomTable(props) {
 
     useEffect(() => {
         setState({
-            title: props.title,
-            columns: props.colums,
+            ...state,
             data: props.data,
-            actions: props.actions
         })
     }, [JSON.stringify(props.data)]);
 

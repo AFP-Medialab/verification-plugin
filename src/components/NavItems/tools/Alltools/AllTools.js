@@ -64,7 +64,8 @@ const AllTools = (props) => {
                                         </IconButton>
                                     </Paper>
                                 </Box>
-                            )
+                            );
+                        return null;
                     })
                 }
             </Grid>

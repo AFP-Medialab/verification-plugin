@@ -5,10 +5,10 @@ import TextField from "@material-ui/core/TextField";
 import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
 import LinearProgress from "@material-ui/core/LinearProgress";
-import React, {useEffect, useState} from "react";
-import useVideoRightsTreatment from "./useVideoRightsTreatment";
+import React, {useState} from "react";
+import useVideoRightsTreatment from "./Hooks/useVideoRightsTreatment";
 import useMyStyles from "../../../utility/MaterialUiStyles/useMyStyles";
-import VideoRightsResults from "./VideoRightsResults";
+import VideoRightsResults from "./Results/VideoRightsResults";
 
 const VideoRights = () => {
     const classes = useMyStyles();

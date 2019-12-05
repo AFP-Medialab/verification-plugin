@@ -10,10 +10,9 @@ import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
 import MapIcon from '@material-ui/icons/Map';
 import Tooltip from "@material-ui/core/Tooltip";
-import useMyStyles from "../../../utility/MaterialUiStyles/useMyStyles";
-import CloseResult from "../../../CloseResult/CloseResult";
-import {cleanMagnifierState} from "../../../../redux/actions/tools/magnifierActions";
-import {cleanMetadataState} from "../../../../redux/actions/tools/metadataActions";
+import useMyStyles from "../../../../utility/MaterialUiStyles/useMyStyles";
+import CloseResult from "../../../../CloseResult/CloseResult";
+import {cleanMetadataState} from "../../../../../redux/actions/tools/metadataActions";
 
 const MetadataImageResult = (result) => {
     const classes = useMyStyles();
@@ -217,7 +216,7 @@ const MetadataImageResult = (result) => {
 
         let dd = GPStitude[0] + (GPStitude[1] / 60) + (GPStitude[2] / 3600);
 
-        if (direction == "S" || direction == "W") {
+        if (direction === "S" || direction === "W") {
             dd = dd * -1;
         }
 
@@ -283,6 +282,7 @@ const MetadataImageResult = (result) => {
                                             <TableCell align="right">{value.value}</TableCell>
                                         </TableRow>
                                     );
+                                return null;
                             })
                         }
                     </TableBody>
@@ -309,6 +309,7 @@ const MetadataImageResult = (result) => {
                                             <TableCell align="right">{value.value}</TableCell>
                                         </TableRow>
                                     );
+                                return null;
                             })
                         }
                     </TableBody>
@@ -338,6 +339,7 @@ const MetadataImageResult = (result) => {
                                                     <TableCell align="right">{value.value}</TableCell>
                                                 </TableRow>
                                             );
+                                        return null;
                                     })
                                 }
                             </TableBody>

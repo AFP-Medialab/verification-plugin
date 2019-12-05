@@ -1,5 +1,5 @@
 import {Paper} from "@material-ui/core";
-import React, {useEffect, useState} from "react";
+import React from "react";
 import Loop from "./Loop";
 import Box from "@material-ui/core/Box";
 import {useDispatch, useSelector} from "react-redux";
@@ -18,10 +18,10 @@ import iconb from "tui-image-editor/dist/svg/icon-b.svg";
 import iconc from "tui-image-editor/dist/svg/icon-c.svg";
 import icond from "tui-image-editor/dist/svg/icon-d.svg";
 import Grid from "@material-ui/core/Grid";
-import {cleanMagnifierState, setMagnifierResult} from "../../../../redux/actions/tools/magnifierActions";
-import ImageReverseSearch from "../ImageReverseSearch";
-import history from "../../../utility/History/History";
-import CloseResult from "../../../CloseResult/CloseResult";
+import {cleanMagnifierState, setMagnifierResult} from "../../../../../redux/actions/tools/magnifierActions";
+import ImageReverseSearch from "../../ImageReverseSearch";
+import history from "../../../../utility/History/History";
+import CloseResult from "../../../../CloseResult/CloseResult";
 
 const myTheme = {
     "menu.backgroundColor": "white",
@@ -113,7 +113,6 @@ const ImageResult = () => {
 
     const downLoadLink = (image) => {
         let image_name = image.substring(image.lastIndexOf("/") + 1);
-        let index = image_name.indexOf("?");
         return image_name.substring(0, image_name.lastIndexOf("."));
     };
 

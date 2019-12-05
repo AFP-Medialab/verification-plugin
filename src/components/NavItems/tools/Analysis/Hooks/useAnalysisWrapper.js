@@ -2,15 +2,16 @@ import axios from "axios"
 import {useDispatch, useSelector} from "react-redux";
 import {setAnalysisLoading, setAnalysisResult} from "../../../../../redux/actions/tools/analysisActions";
 import {setError} from "../../../../../redux/actions/errorActions";
-import {useEffect} from "react";
+import {useCallback, useEffect} from "react";
 
 export const useAnalysisWrapper = (url, reprocess, facebookToken) => {
     const dictionary = useSelector(state => state.dictionary);
     const lang = useSelector(state => state.language);
-    const keyword = (key) => {
+    const keyword = useCallback( (key) => {
         return (dictionary !== null) ? dictionary[lang][key] : "";
-    };
+    }, [dictionary, lang]);
     const dispatch = useDispatch();
+
     useEffect(() => {
         const handleError = (error) => {
             if (keyword(error) !== undefined)
@@ -84,5 +85,5 @@ export const useAnalysisWrapper = (url, reprocess, facebookToken) => {
                 .catch(error => handleError(error))
         }
 
-    }, [url, facebookToken]);
+    }, [url, facebookToken, dispatch, reprocess, keyword]);
 };

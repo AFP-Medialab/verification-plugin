@@ -7,9 +7,9 @@ import FolderOpenIcon from '@material-ui/icons/FolderOpen';
 import Typography from "@material-ui/core/Typography";
 import React, {useEffect, useState} from "react";
 import {useSelector} from "react-redux";
-import useGetImages from "./useGetImages";
+import useGetImages from "./Hooks/useGetImages";
 import LinearProgress from "@material-ui/core/LinearProgress";
-import ForensicResults from "./ForesnsicResult";
+import ForensicResults from "./Results/ForesnsicResult";
 import useMyStyles from "../../../utility/MaterialUiStyles/useMyStyles";
 import {useParams} from 'react-router-dom'
 

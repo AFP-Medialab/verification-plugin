@@ -14,7 +14,6 @@ import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import LinkIcon from '@material-ui/icons/Link';
 import CloseResult from "../../../../CloseResult/CloseResult";
-import {cleanThumbnailsState} from "../../../../../redux/actions/tools/thumbnailsActions";
 import {cleanTwitterSnaState} from "../../../../../redux/actions/tools/twitterSnaActions";
 
 export default function TwitterSnaResult(props) {
@@ -69,7 +68,7 @@ export default function TwitterSnaResult(props) {
         setPieCharts1(null);
         setPieCharts2(null);
         setPieCharts3(null);
-    }, [JSON.stringify(props.result)]);
+    }, [JSON.stringify(props.result), props.result]);
 
     if (result === null)
         return <div/>;

@@ -1,14 +1,8 @@
 import React from "react";
-import SpeakerNotesIcon from "@material-ui/core/SvgIcon/SvgIcon";
 import SlackFeedback from "react-slack-feedback";
 import feedBackTheme from "./feedBackTheme";
-import axios from "axios"
-import useMyStyles from "../utility/MaterialUiStyles/useMyStyles";
 
 const FeedBack = () => {
-
-    const classes = useMyStyles();
-
     const API_URL = process.env.REACT_APP_MY_WEB_HOOK_URL;
 
     const sendToSlack = (payload, success, error) => {
@@ -23,7 +17,6 @@ const FeedBack = () => {
                     error(res);
                     throw res
                 }
-
                 return res
             })
             .then(success)

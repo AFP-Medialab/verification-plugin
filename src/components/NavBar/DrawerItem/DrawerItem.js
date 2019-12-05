@@ -2,9 +2,9 @@ import {Container} from "@material-ui/core";
 import Fade from "@material-ui/core/Fade";
 import React from "react";
 import {useDispatch} from "react-redux";
-import {selectPage, selectTool} from "../../../redux/actions";
+import {selectTool} from "../../../redux/actions";
 import AllTools from "../../NavItems/tools/Alltools/AllTools";
-import Analysis from "../../NavItems/tools/analysis/Analysis";
+import Analysis from "../../NavItems/tools/Analysis/Analysis";
 import Keyframes from "../../NavItems/tools/Keyframes/Keyframes";
 import Thumbnails from "../../NavItems/tools/Thumbnails/Thumbnails";
 import TwitterAdvancedSearch from "../../NavItems/tools/TwitterAdvancedSearch/TwitterAdvancedSearch";
@@ -90,6 +90,7 @@ const DrawerItem = (props) => {
                             />
                         );
                     }
+                    return null;
                 })
             }
         </Switch>

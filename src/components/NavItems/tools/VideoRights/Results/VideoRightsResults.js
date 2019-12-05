@@ -1,5 +1,5 @@
 import {Paper} from "@material-ui/core";
-import useMyStyles from "../../../utility/MaterialUiStyles/useMyStyles";
+import useMyStyles from "../../../../utility/MaterialUiStyles/useMyStyles";
 import React from "react";
 import Typography from "@material-ui/core/Typography";
 import BlockIcon from '@material-ui/icons/Block';
@@ -11,11 +11,11 @@ import YouTubeIcon from '@material-ui/icons/YouTube';
 import TwitterIcon from '@material-ui/icons/Twitter';
 import FacebookIcon from '@material-ui/icons/Facebook';
 import Divider from "@material-ui/core/Divider";
-import invidLogo from "./images/InVID-logo.svg"
+import invidLogo from "../images/InVID-logo.svg"
 import Icon from "@material-ui/core/Icon";
 import Grid from "@material-ui/core/Grid";
-import CloseResult from "../../../CloseResult/CloseResult";
-import {cleanVideoRightsState} from "../../../../redux/actions/tools/videoRightsActions";
+import CloseResult from "../../../../CloseResult/CloseResult";
+import {cleanVideoRightsState} from "../../../../../redux/actions/tools/videoRightsActions";
 import {useDispatch} from "react-redux";
 
 const VideoRightsResults = (props) => {
@@ -37,15 +37,15 @@ const VideoRightsResults = (props) => {
             switch (term.status) {
                 case "Permitted":
                     permittedList.push(component);
-                    return;
+                    return null;
                 case "Prohibited":
                     prohibitedList.push(component);
-                    return;
+                    return null;
                 case "Required":
                     requiredList.push(component);
-                    return;
+                    return null;
                 default:
-                    return;
+                    return null;
             }
         });
 
@@ -206,7 +206,7 @@ const VideoRightsResults = (props) => {
                 {
                     result.user !== undefined &&
 
-                    <Paper className={classes.listItem} >
+                    <Paper className={classes.listItem}>
                         <Grid container wrap="nowrap" spacing={2} alignItems={"center"}>
                             <Grid item>
                                 {
@@ -223,7 +223,7 @@ const VideoRightsResults = (props) => {
                                 }
                             </Grid>
                             <Grid item xs>
-                                <a href={result.user.url} target="_blank"> {result.user.name}</a>
+                                <a href={result.user.url} target="_blank" rel="noopener noreferrer"> {result.user.name}</a>
                             </Grid>
                         </Grid>
                     </Paper>
@@ -232,11 +232,11 @@ const VideoRightsResults = (props) => {
                     <Grid container wrap="nowrap" spacing={2} alignItems={"center"}>
                         <Grid item>
                             <Icon classes={{root: classes.iconRoot}}>
-                                <img className={classes.imageIcon} src={invidLogo}/>
+                                <img className={classes.imageIcon} src={invidLogo} alt={invidLogo}/>
                             </Icon>
                         </Grid>
                         <Grid item xs>
-                            Or try: <a href={result.RIGHTS_APP + "/" + result.id} target="_blank">
+                            Or try: <a href={result.RIGHTS_APP + "/" + result.id} target="_blank" rel="noopener noreferrer">
                             InVID Rights Management Tool
                         </a>.
                         </Grid>
@@ -251,9 +251,11 @@ const VideoRightsResults = (props) => {
             <Typography variant={"body2"}>
                 <b>Exceptionally</b>, in some jurisdictions, this video might be directly reused to report about
                 <b>current events</b> under <b>copyright exceptions</b> like
-                <a href="http://copyrightexceptions.eu/#Art. 5.3(c)" target="_blank"><b> use by the press</b></a> or
+                <a href="http://copyrightexceptions.eu/#Art. 5.3(c)" target="_blank" rel="noopener noreferrer"><b> use by the press</b></a> or
                 <a href="http://infojustice.org/wp-content/uploads/2015/03/fair-use-handbook-march-2015.pdf"
-                   target="_blank">
+                   target="_blank"
+                   rel="noopener noreferrer"
+                >
                     <b> fair user/fair dealing</b></a>. This reuse is under your or your organization sole
                 responsibility
                 and,

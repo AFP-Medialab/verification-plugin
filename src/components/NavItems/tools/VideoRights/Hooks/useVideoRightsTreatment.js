@@ -1,8 +1,8 @@
 import {useEffect} from "react";
 import axios from "axios";
 import {useDispatch, useSelector} from "react-redux";
-import {setVideoRightsResult, setVideoRightsLoading} from "../../../../redux/actions/tools/videoRightsActions"
-import {setError} from "../../../../redux/actions/errorActions"
+import {setVideoRightsResult, setVideoRightsLoading} from "../../../../../redux/actions/tools/videoRightsActions"
+import {setError} from "../../../../../redux/actions/errorActions"
 
 const useVideoRightsTreatment = (url) => {
     const dispatch = useDispatch();

@@ -14,12 +14,10 @@ import DialogContent from "@material-ui/core/DialogContent";
 import Iframe from "react-iframe";
 import DialogActions from "@material-ui/core/DialogActions";
 import Button from "@material-ui/core/Button";
-import history from "../../utility/History/History";
 import CastForEducationIcon from '@material-ui/icons/CastForEducation';
 import Divider from "@material-ui/core/Divider";
 import TextField from "@material-ui/core/TextField";
 import youCheckImage from "../../../Images/youCheck.png"
-import ImageComponent from "material-ui-image";
 
 
 const useStyles = makeStyles(theme => ({
@@ -192,7 +190,7 @@ const ClassRoom = () => {
                     </Typography>
                 </TabPanel>
             </Box>
-            <img src={youCheckImage} width={"20%"}/>
+            <img src={youCheckImage} width={"20%"} alt={youCheckImage}/>
             <Dialog
                 height={"400px"}
                 fullWidth

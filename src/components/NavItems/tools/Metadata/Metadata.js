@@ -13,10 +13,10 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Radio from "@material-ui/core/Radio";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import Grid from "@material-ui/core/Grid";
-import MetadataImageResult from "./MetadataImageResult";
-import MetadataVideoResult from "./MetadataVideoResult";
-import useImageTreatment from "./useImageTreatment";
-import useVideoTreatment from "./useVideoTreatment";
+import MetadataImageResult from "./Results/MetadataImageResult";
+import MetadataVideoResult from "./Results/MetadataVideoResult";
+import useImageTreatment from "./Hooks/useImageTreatment";
+import useVideoTreatment from "./Hooks/useVideoTreatment";
 import useMyStyles from "../../../utility/MaterialUiStyles/useMyStyles";
 
 const Metadata = () => {
