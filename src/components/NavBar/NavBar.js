@@ -1,10 +1,5 @@
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import BuildIcon from '@material-ui/icons/Build';
-import VideoLibraryIcon from '@material-ui/icons/VideoLibrary';
-import CastForEducationIcon from '@material-ui/icons/CastForEducation';
-import VideogameAssetIcon from '@material-ui/icons/VideogameAsset';
-import InfoIcon from '@material-ui/icons/Info';
 import Box from '@material-ui/core/Box';
 import {useDispatch, useSelector} from "react-redux";
 import Languages from "../NavItems/languages/languages";
@@ -25,14 +20,6 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import AppsIcon from '@material-ui/icons/Apps';
-import PlayCircleOutlineIcon from '@material-ui/icons/PlayCircleOutline';
-import TheatersIcon from '@material-ui/icons/Theaters';
-import YouTubeIcon from '@material-ui/icons/YouTube';
-import TwitterIcon from '@material-ui/icons/Twitter';
-import SearchIcon from '@material-ui/icons/Search';
-import SubscriptionsIcon from '@material-ui/icons/Subscriptions';
-import CopyrightIcon from '@material-ui/icons/Copyright';
-import ImageSearchIcon from '@material-ui/icons/ImageSearch';
 import ScrollTop from "../utility/ScrollTop/ScrollTop";
 import Fab from "@material-ui/core/Fab";
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
@@ -54,7 +41,32 @@ import classRoomIcon from "./images/navbar/classroom-off.png"
 import interactiveIcon from "./images/navbar/quiz-off.png"
 import aboutIcon from "./images/navbar/about-off.png"
 
+import analysisIconOn from "./images/tools/video_logoOn.png"
+import analysisIconOff from "./images/tools/video_logoOff.png"
 
+import keyframesIconOn from "./images/tools/keyframesOn.png"
+import keyframesIconOff from "./images/tools/keyframesOff.png"
+
+import thumbnailsIconOn from "./images/tools/youtubeOn.png"
+import thumbnailsIconOff from "./images/tools/youtubeOff.png"
+
+import twitterSearchIconOn from "./images/tools/twitterOn.png"
+import twitterSearchIconOff from "./images/tools/twitterOff.png"
+
+import magnifierIconOn from "./images/tools/magnifierOn.png"
+import magnifierIconOff from "./images/tools/magnifierOff.png"
+
+import metadataIconOn from "./images/tools/metadataOn.png"
+import metadataIconOff from "./images/tools/metadataOff.png"
+
+import videoRightsIconOn from "./images/tools/copyrightOn.png"
+import videoRightsIconOff from "./images/tools/copyrightOff.png"
+
+import forensicIconOn from "./images/tools/forensic_logoOn.png"
+import forensicIconOff from "./images/tools/forensic_logoOff.png"
+
+import twitterSnaIconOn from "./images/tools/twitter-sna-on.png"
+import twitterSnaIconOff from "./images/tools/twitter-sna-off.png"
 
 
 function a11yProps(index) {
@@ -107,64 +119,55 @@ const NavBar = (props) => {
         },
         {
             title: "navbar_analysis",
-            icon: <PlayCircleOutlineIcon fontSize={"large"}
-                                         className={(drawerValue === 1) ? classes.selectedApp : classes.unSelectedApp}/>,
+            icon: (drawerValue === 1) ? analysisIconOn : analysisIconOff,
             tsvPrefix: "api",
             path: "analysis",
         },
         {
             title: "navbar_keyframes",
-            icon: <TheatersIcon fontSize={"large"}
-                                className={(drawerValue === 2) ? classes.selectedApp : classes.unSelectedApp}/>,
+            icon: (drawerValue === 2) ? keyframesIconOn : keyframesIconOff,
             tsvPrefix: "keyframes",
             path: "keyframes",
         },
         {
             title: "navbar_thumbnails",
-            icon: <YouTubeIcon fontSize={"large"}
-                               className={(drawerValue === 3) ? classes.selectedApp : classes.unSelectedApp}/>,
+            icon: (drawerValue === 3) ? thumbnailsIconOn : thumbnailsIconOff,
             tsvPrefix: "thumbnails",
             path: "thumbnails",
         },
         {
             title: "navbar_twitter",
-            icon: <TwitterIcon fontSize={"large"}
-                               className={(drawerValue === 4) ? classes.selectedApp : classes.unSelectedApp}/>,
+            icon: (drawerValue === 4) ? twitterSearchIconOn : twitterSearchIconOff,
             tsvPrefix: "twitter",
             path: "twitter",
         },
         {
             title: "navbar_magnifier",
-            icon: <SearchIcon fontSize={"large"}
-                              className={(drawerValue === 5) ? classes.selectedApp : classes.unSelectedApp}/>,
+            icon: (drawerValue === 5) ? magnifierIconOn : magnifierIconOff,
             tsvPrefix: "magnifier",
             path: "magnifier",
         },
         {
             title: "navbar_metadata",
-            icon: <SubscriptionsIcon fontSize={"large"}
-                                     className={(drawerValue === 6) ? classes.selectedApp : classes.unSelectedApp}/>,
+            icon: (drawerValue === 6) ? metadataIconOn : metadataIconOff,
             tsvPrefix: "metadata",
             path: "metadata",
         },
         {
             title: "navbar_rights",
-            icon: <CopyrightIcon fontSize={"large"}
-                                 className={(drawerValue === 7) ? classes.selectedApp : classes.unSelectedApp}/>,
+            icon: (drawerValue === 7) ? videoRightsIconOn : videoRightsIconOff,
             tsvPrefix: "copyright",
             path: "copyright",
         },
         {
             title: "navbar_forensic",
-            icon: <ImageSearchIcon fontSize={"large"}
-                                   className={(drawerValue === 8) ? classes.selectedApp : classes.unSelectedApp}/>,
+            icon: (drawerValue === 8) ? forensicIconOn : forensicIconOff,
             tsvPrefix: "forensic",
             path: "forensic",
         },
         {
             title: "twitter_sna_title",
-            icon: <TwitterIcon fontSize={"large"}
-                               className={(drawerValue === 9) ? classes.selectedApp : classes.unSelectedApp}/>,
+            icon: (drawerValue === 9) ? twitterSnaIconOn : twitterSnaIconOff,
             tsvPrefix: "twitter_sna",
             path: "twitterSna"
         }
@@ -175,8 +178,8 @@ const NavBar = (props) => {
         {
             title: "navbar_tools",
             icon:
-                <Icon classes={{root: classes.iconRootDrawer}} fontSize={"large"}>
-                    <img className={classes.imageIconDrawer} src={toolIcon}/>
+                <Icon classes={{root: classes.iconRootTab}} fontSize={"large"}>
+                    <img className={classes.imageIconTab} src={toolIcon}/>
                 </Icon>,
             content: <div/>,
             path: "tools",
@@ -185,8 +188,8 @@ const NavBar = (props) => {
         {
             title: "navbar_tuto",
             icon:
-                <Icon classes={{root: classes.iconRootDrawer}} fontSize={"large"}>
-                    <img className={classes.imageIconDrawer} src={tutorialIcon}/>
+                <Icon classes={{root: classes.iconRootTab}} fontSize={"large"}>
+                    <img className={classes.imageIconTab} src={tutorialIcon}/>
                 </Icon>,
             content: <Tutorial/>,
             path: "tutorial",
@@ -195,8 +198,8 @@ const NavBar = (props) => {
         {
             title: "navbar_classroom",
             icon:
-                <Icon classes={{root: classes.iconRootDrawer}} fontSize={"large"} color={'primary'}>
-                    <img className={classes.imageIconDrawer} src={classRoomIcon}/>
+                <Icon classes={{root: classes.iconRootTab}} fontSize={"large"} color={'primary'}>
+                    <img className={classes.imageIconTab} src={classRoomIcon}/>
                 </Icon>,
             content: <ClassRoom/>,
             path: "classroom",
@@ -205,8 +208,8 @@ const NavBar = (props) => {
         {
             title: "navbar_quiz",
             icon:
-                <Icon classes={{root: classes.iconRootDrawer}} fontSize={"large"}>
-                    <img className={classes.imageIconDrawer} src={interactiveIcon}/>
+                <Icon classes={{root: classes.iconRootTab}} fontSize={"large"}>
+                    <img className={classes.imageIconTab} src={interactiveIcon}/>
                 </Icon>,
             content: <Interactive/>,
             path: "interactive",
@@ -215,8 +218,8 @@ const NavBar = (props) => {
         {
             title: "navbar_about",
             icon:
-                <Icon classes={{root: classes.iconRootDrawer}} fontSize={"large"}>
-                    <img className={classes.imageIconDrawer} src={aboutIcon}/>
+                <Icon classes={{root: classes.iconRootTab}} fontSize={"large"}>
+                    <img className={classes.imageIconTab} src={aboutIcon}/>
                 </Icon>,
             content: <About/>,
             path: "about",
@@ -293,7 +296,14 @@ const NavBar = (props) => {
                             return (
                                 <ListItem button key={key} onClick={() => changeValue(key)}>
                                     <ListItemIcon color="primary.main">
-                                        {item.icon}
+                                        {
+                                            (key === 0)?
+                                                item.icon
+                                                :
+                                                <Icon className={classes.iconRootDrawer} fontSize={"large"}>
+                                                    <img className={classes.imageIconDrawer} src={item.icon}/>
+                                                </Icon>
+                                        }
                                     </ListItemIcon>
                                     <ListItemText primary={keyword(item.title)}/>
                                 </ListItem>
