@@ -16,6 +16,8 @@ import LinkIcon from '@material-ui/icons/Link';
 import CloseResult from "../../../../CloseResult/CloseResult";
 import {cleanThumbnailsState} from "../../../../../redux/actions/tools/thumbnailsActions";
 import {cleanTwitterSnaState} from "../../../../../redux/actions/tools/twitterSnaActions";
+import ReactWordcloud from "react-wordcloud";
+import { select } from 'd3-selection';
 
 export default function TwitterSnaResult(props) {
 
@@ -31,6 +33,7 @@ export default function TwitterSnaResult(props) {
     const [result, setResult] = useState(null);
 
     const [histoTweets, setHistoTweets] = useState(null);
+    const [cloudTweets, setCloudTweets] = useState(null);
     const [pieCharts0, setPieCharts0] = useState(null);
     const [pieCharts1, setPieCharts1] = useState(null);
     const [pieCharts2, setPieCharts2] = useState(null);
@@ -65,6 +68,7 @@ export default function TwitterSnaResult(props) {
     useEffect(() => {
         setResult(props.result);
         setHistoTweets(null);
+        setCloudTweets(null);
         setPieCharts0(null);
         setPieCharts1(null);
         setPieCharts2(null);
@@ -150,6 +154,45 @@ export default function TwitterSnaResult(props) {
         });
     };
 
+    function displayTweetsOfWord(word) {
+        let columns = [
+            {title: 'Username (add tsv)', field: 'username'},
+            {title: 'Date (add tsv)', field: 'date'},
+            {title: 'Tweet (add tsv)', field: 'tweet'},
+            {title: 'Nb of retweets (add tsv)', field: 'retweetNb'},
+            {title: 'Nb of likes (Add TSV', field: 'likeNb'}
+        ];
+        let csvArr = "data:text/csv;charset=utf-8,";
+    
+        word = word.replace(/_/g, " ");
+       
+        let resData = [];
+        csvArr += "Username,Date,Tweet,Nb of retweets, Nb of likes\n";
+
+        result.tweets.forEach(tweetObj => {
+          
+            if (tweetObj._source.tweet.toLowerCase().includes(word)){ //.match(new RegExp('(.)*[\.\(\)0-9\!\?\'\’\‘\"\:\,\/\\\%\>\<\«\»\ ^#]' + word + '[\.\(\)\!\?\'\’\‘\"\:\,\/\>\<\«\»\ ](.)*', "i"))) {
+                
+            var date = new Date(tweetObj._source.date);
+                let tmpObj = {
+                    username: tweetObj._source.username,
+                    date: date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear() + ' ' + date.getHours() + ':' + date.getMinutes(),
+                    tweet: tweetObj._source.tweet,
+                    retweetNb: tweetObj._source.nretweets,
+                    likeNb: tweetObj._source.nlikes
+                }
+                resData.push(tmpObj);
+                csvArr += tweetObj._source.username + ',' +
+                date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear() + ' ' + date.getHours() + ':' + date.getMinutes() + ',"' +
+                    tweetObj._source.tweet + '",' + tweetObj._source.nretweets + ',' + tweetObj._source.nlikes + '\n';
+            }
+        });
+        setCloudTweets({
+            data: resData,
+            columns: columns,
+            csvArr: csvArr
+        });
+    }
     const onPieChartClick = (data, nbType, index) => {
         if (index === 3) {
             window.open("https://twitter.com/search?q=" + data.points[0].label.replace('#', "%23"), '_blank');
@@ -224,6 +267,32 @@ export default function TwitterSnaResult(props) {
         }
     };
 
+    const getCallback = (callback) => {
+        return function(word, event) {
+          const isActive = callback !== "onWordMouseOut";
+          const element = event.target;
+          const text = select(element);
+          text
+            .on("click", () => {
+              if (isActive) {
+                displayTweetsOfWord(element.innerHTML)
+              }
+            })
+            .transition()
+            .attr("background", "white")
+            .attr("text-decoration", isActive ? "underline" : "none");
+        };
+      }
+
+    const callbacks = {
+        getWordColor: word => word.color,
+        getWordTooltip: word =>
+            `The word "${word.text}" appears ${word.value} times and is a ${word.entity}.`,
+        onWordClick: getCallback("onWordClick"),
+        onWordMouseOut: getCallback("onWordMouseOut"),
+        onWordMouseOver: getCallback("onWordMouseOver")
+        };
+    
     return (
         <Paper className={classes.root}>
             <CloseResult onClick={() => dispatch(cleanTwitterSnaState())}/>
@@ -358,6 +427,59 @@ export default function TwitterSnaResult(props) {
                         </ExpansionPanel>
                     )
                 })
+            }
+            {
+                result && result.cloudChart &&
+              <ExpansionPanel>
+                    <ExpansionPanelSummary
+                        expandIcon={<ExpandMoreIcon/>}
+                        aria-controls={"panel0a-content"}
+                        id={"panel0a-header"}
+                    >
+                        <Typography className={classes.heading}>{keyword(result.cloudChart.title)}</Typography>
+                    </ExpansionPanelSummary>
+                    <ExpansionPanelDetails>
+                        <Box alignItems="center" justifyContent="center" width={"100%"}>
+                            <div style={{ height: 800, width: 800 }}>
+                                <ReactWordcloud options={result.cloudChart.options} callbacks={callbacks} words={result.cloudChart.json} />
+                            </div>
+                            <Box m={2}/>
+                                {
+                                    cloudTweets &&
+                                    <div>
+                                        <Grid container justify="space-between" spacing={2}
+                                            alignContent={"center"}>
+                                            <Grid item>
+                                                <Button
+                                                    variant={"contained"}
+                                                    color={"secondary"}
+                                                    onClick={() => setCloudTweets(null)}
+                                                >
+                                                    Hide (add tsv)
+                                                </Button>
+                                            </Grid>
+                                            <Grid item>
+                                                <Button
+                                                    variant={"contained"}
+                                                    color={"primary"}
+                                                    onClick={() => downloadClick(cloudTweets.csvArr)}>
+                                                    Download (add tsv)
+                                                </Button>
+                                            </Grid>
+                                        </Grid>
+                                        <Box m={2}/>
+                                        <CustomTable
+                                            title={"Selected Tweets (add tsv)"}
+                                            colums={cloudTweets.columns}
+                                            data={cloudTweets.data}
+                                            actions={[]}
+                                        />
+                                    </div>
+                                }
+                            </Box>
+                    </ExpansionPanelDetails>
+
+                </ExpansionPanel>
             }
             <Box m={3}/>
             {
