@@ -13,6 +13,12 @@ import Iframe from "react-iframe";
 import DialogActions from "@material-ui/core/DialogActions";
 import Dialog from "@material-ui/core/Dialog";
 import history from "../../../utility/History/History";
+import Icon from "@material-ui/core/Icon";
+import classRoomIcon from "../../../NavBar/images/navbar/classroom-off.png";
+import Tabs from "@material-ui/core/Tabs";
+import Toolbar from "@material-ui/core/Toolbar";
+import Typography from "@material-ui/core/Typography";
+import {Image} from "@material-ui/icons";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -45,25 +51,43 @@ const AllTools = (props) => {
         history.push("/app/tools/" + path)
     };
 
+
     return (
         <Paper className={classes.root}>
-            <Grid container justify="center" spacing={2}>
+            <Grid container justify="center" spacing={10}>
                 {
                     tools.map((value, key) => {
                         if (key !== 0)
                             return (
-                                <Box key={key} m={3}>
-                                    <Paper className={classes.card}>
-                                        <Tab label={keyword(value.title)} className={classes.card}
-                                             icon={value.icon}
-                                             onClick={() => handleClick(value.path)}/>
-                                        <IconButton aria-label="settings" className={classes.expand} size={"small"}
-                                                    onClick={() => setVideoUrl(keyword(value.tsvPrefix + "_help_video"))}
+                                <Grid item>
+                                    <Grid justify="center">
+                                        <Grid item onClick={() => handleClick(value.path)}>
+                                            <img
+                                                style={{
+                                                    maxWidth: 100,
+                                                    height: "auto"
+                                                }}
+                                                src={value.icon}
+                                                alt={value.icon}
+                                            />
+                                        </Grid>
+                                        <Grid item>
+                                            <Grid>
+                                                <Typography variant={"body1"}>
+                                                    {keyword(value.title)}
+                                                    <IconButton
+                                                        aria-label="settings"
+                                                        size={"small"}
+                                                        onClick={() => setVideoUrl(keyword(value.tsvPrefix + "_help_video"))}
                                                     >
-                                            <HelpIcon/>
-                                        </IconButton>
-                                    </Paper>
-                                </Box>
+                                                        <HelpIcon/>
+                                                    </IconButton>
+                                                </Typography>
+
+                                            </Grid>
+                                        </Grid>
+                                    </Grid>
+                                </Grid>
                             );
                         return null;
                     })
