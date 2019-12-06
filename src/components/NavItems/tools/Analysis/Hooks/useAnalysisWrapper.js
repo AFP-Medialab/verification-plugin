@@ -52,9 +52,11 @@ export const useAnalysisWrapper = (url, reprocess, facebookToken) => {
                         dispatch(setAnalysisLoading(false));
                     }
                     else {
-                        getReport(response.data.id);
                         setTimeout(() => waitUntilDonne(response.data), 2000);
                     }
+                })
+                .catch(error => {
+                    console.log(error)
                 })
         };
 
