@@ -189,6 +189,6 @@ const useMyStyles = makeStyles(theme => ({
         maxWidth: "300px",
         height: "auto",
         width: "100px",
-    }
+    },
 }));
 export default useMyStyles;

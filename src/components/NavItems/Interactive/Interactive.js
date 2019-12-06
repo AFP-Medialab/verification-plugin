@@ -12,8 +12,8 @@ import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import LockOpenIcon from '@material-ui/icons/LockOpen';
 import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
-import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
-import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
+import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
+import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import Fab from "@material-ui/core/Fab";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
@@ -92,9 +92,9 @@ const Interactive = () => {
                 <CustomTile> {keyword("quiz_title")}  </CustomTile>
                 <Grid container justify="space-between" spacing={2}
                       alignContent={"center"}>
-                    <Grid item>
-                        <Fab color={"primary"} onClick={previous}>
-                            <ArrowBackIosIcon/>
+                    <Grid item justify={"center"}>
+                        <Fab color={"primary"} onClick={previous} >
+                            <NavigateBeforeIcon fontSize={"large"} style={{ color: "white" }}/>
                         </Fab>
                     </Grid>
                     <Grid item align="center">
@@ -111,9 +111,9 @@ const Interactive = () => {
                             })
                         }
                     </Grid>
-                    <Grid item>
-                        <Fab color={"primary"} onClick={next}>
-                            <ArrowForwardIosIcon/>
+                    <Grid item justify={"center"}>
+                        <Fab color={"primary"} onClick={next} >
+                            <NavigateNextIcon fontSize={"large"} style={{ color: "white" }}/>
                         </Fab>
                     </Grid>
                 </Grid>
@@ -124,40 +124,36 @@ const Interactive = () => {
                         return (
 
                             <div key={key} hidden={key !== carouselIndex}>
-
-                                <Slide direction="right" in={key === carouselIndex} key={key} mountOnEnter
-                                       unmountOnExit>
-                                    <div align={"center"}>
-                                        {
-                                            (isImage) ?
-                                                <img src={obj.url} className={classes.media} alt={obj.url}/>
-                                                :
-                                                <Iframe frameBorder="0" src={obj.url}
-                                                        width="80%"
-                                                        height={window.innerHeight / 2}/>
-                                        }
-                                    </div>
-                                </Slide>
+                                <div align={"center"}>
+                                    {
+                                        (isImage) ?
+                                            <img src={obj.url} className={classes.media} alt={obj.url}/>
+                                            :
+                                            <Iframe frameBorder="0" src={obj.url}
+                                                    width="80%"
+                                                    height={window.innerHeight / 2}/>
+                                    }
+                                </div>
                                 <Box m={3}/>
                                 {
                                     (isImage) ?
-                                    <Grid container justify="center" spacing={2}
-                                          alignContent={"center"}>
-                                        <Grid item>
-                                            <Button p={3} variant="contained" color="primary" onClick={() => {
-                                                ImageReverseSearch("google", obj.url);
-                                            }}>
-                                                {keyword("quiz_similarity")}
-                                            </Button>
+                                        <Grid container justify="center" spacing={2}
+                                              alignContent={"center"}>
+                                            <Grid item>
+                                                <Button p={3} variant="contained" color="primary" onClick={() => {
+                                                    ImageReverseSearch("google", obj.url);
+                                                }}>
+                                                    {keyword("quiz_similarity")}
+                                                </Button>
+                                            </Grid>
+                                            <Grid item>
+                                                <Button p={3} variant="contained" color="primary" onClick={() => {
+                                                    history.push("tools/forensic/" + encodeURIComponent(obj.url))
+                                                }}>
+                                                    {keyword("quiz_forensic")}
+                                                </Button>
+                                            </Grid>
                                         </Grid>
-                                        <Grid item>
-                                            <Button p={3} variant="contained" color="primary" onClick={() => {
-                                                history.push("tools/forensic/" + encodeURIComponent(obj.url))
-                                            }}>
-                                                {keyword("quiz_forensic")}
-                                            </Button>
-                                        </Grid>
-                                    </Grid>
                                         :
                                         <Button p={3} variant="contained" color="primary" onClick={() => {
                                             history.push("tools/keyframes/" + encodeURIComponent(obj.url))
