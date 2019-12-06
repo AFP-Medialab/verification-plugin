@@ -64,6 +64,7 @@ const AllTools = (props) => {
                                         <Grid item onClick={() => handleClick(value.path)}>
                                             <img
                                                 style={{
+                                                    cursor: "pointer",
                                                     maxWidth: 100,
                                                     height: "auto"
                                                 }}
