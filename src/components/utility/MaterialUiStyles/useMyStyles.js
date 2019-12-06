@@ -167,6 +167,12 @@ const useMyStyles = makeStyles(theme => ({
         marginRight: "-10px",
         marginTop: "-20px",
         textAlign: "right",
+    },
+    imageIconDrawer: {
+        width: "100%"
+    },
+    iconRootDrawer: {
+        overflow: "visible"
     }
 }));
 export default useMyStyles;
