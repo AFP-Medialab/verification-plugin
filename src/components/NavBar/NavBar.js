@@ -166,7 +166,7 @@ const NavBar = (props) => {
             path: "forensic",
         },
         {
-            title: "twitter_sna_title",
+            title: "navbar_twitter_sna",
             icon: (drawerValue === 9) ? twitterSnaIconOn : twitterSnaIconOff,
             tsvPrefix: "twitter_sna",
             path: "twitterSna"
