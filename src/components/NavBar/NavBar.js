@@ -46,6 +46,16 @@ import MySnackbar from "../MySnackbar/MySnackbar";
 import useMyStyles from "../utility/MaterialUiStyles/useMyStyles";
 import Footer from "../Footer/Footer";
 import FeedBack from "../FeedBack/FeedBack";
+import Icon from "@material-ui/core/Icon";
+
+import toolIcon from "./images/navbar/tools-off.png"
+import tutorialIcon from "./images/navbar/tutorial-off.png"
+import classRoomIcon from "./images/navbar/classroom-off.png"
+import interactiveIcon from "./images/navbar/quiz-off.png"
+import aboutIcon from "./images/navbar/about-off.png"
+
+
+
 
 function a11yProps(index) {
     return {
@@ -164,35 +174,50 @@ const NavBar = (props) => {
     const tabItems = [
         {
             title: "navbar_tools",
-            icon: <BuildIcon fontSize={"large"}/>,
+            icon:
+                <Icon classes={{root: classes.iconRootDrawer}} fontSize={"large"}>
+                    <img className={classes.imageIconDrawer} src={toolIcon}/>
+                </Icon>,
             content: <div/>,
             path: "tools",
             footer: <div/>,
         },
         {
             title: "navbar_tuto",
-            icon: <VideoLibraryIcon fontSize={"large"}/>,
+            icon:
+                <Icon classes={{root: classes.iconRootDrawer}} fontSize={"large"}>
+                    <img className={classes.imageIconDrawer} src={tutorialIcon}/>
+                </Icon>,
             content: <Tutorial/>,
             path: "tutorial",
             footer: <Footer content={"footer_tutorial"}/>
         },
         {
             title: "navbar_classroom",
-            icon: <CastForEducationIcon fontSize={"large"}/>,
+            icon:
+                <Icon classes={{root: classes.iconRootDrawer}} fontSize={"large"} color={'primary'}>
+                    <img className={classes.imageIconDrawer} src={classRoomIcon}/>
+                </Icon>,
             content: <ClassRoom/>,
             path: "classroom",
             footer: <Footer content={"footer_classroom"}/>
         },
         {
             title: "navbar_quiz",
-            icon: <VideogameAssetIcon fontSize={"large"}/>,
+            icon:
+                <Icon classes={{root: classes.iconRootDrawer}} fontSize={"large"}>
+                    <img className={classes.imageIconDrawer} src={interactiveIcon}/>
+                </Icon>,
             content: <Interactive/>,
             path: "interactive",
             footer: <Footer content={"footer_about"}/>
         },
         {
             title: "navbar_about",
-            icon: <InfoIcon fontSize={"large"}/>,
+            icon:
+                <Icon classes={{root: classes.iconRootDrawer}} fontSize={"large"}>
+                    <img className={classes.imageIconDrawer} src={aboutIcon}/>
+                </Icon>,
             content: <About/>,
             path: "about",
             footer: <Footer content={"footer_about"}/>
