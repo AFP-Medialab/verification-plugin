@@ -20,6 +20,7 @@
     "querystring": "^0.2.0",
     "react": "^16.10.2",
     "react-browser-extension-scripts": "0.1.2",
+    "react-d3-library": "^1.1.8",
     "react-dom": "^16.10.2",
     "react-iframe": "^1.8.0",
     "react-image-crop": "^8.4.0",
