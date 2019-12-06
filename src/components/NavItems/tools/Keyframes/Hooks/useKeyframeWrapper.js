@@ -27,8 +27,8 @@ export const useKeyframeWrapper = (url) => {
             dispatch(setKeyframesLoading(false));
         };
 
-        const lastGet = (url) => {
-            axios.get(url)
+        const lastGet = (itiUrl) => {
+            axios.get(itiUrl)
                 .then(response => {
                     dispatch(setKeyframesResult(url, response.data, false, false))
                 })

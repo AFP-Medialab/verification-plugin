@@ -23,6 +23,13 @@ const theme = createMuiTheme({
     typography: {
         useNextVariants: 'true',
     },
+    overrides: {
+        MuiButton: {
+            containedPrimary: {
+                color: 'white',
+            },
+        },
+    }
 });
 
 const NotFound = () => {

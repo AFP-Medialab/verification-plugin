@@ -24,8 +24,11 @@ const useFacebookHandler = (url) => {
     }, []);
 
     useEffect(()=> {
-        if (!url || url === "")
+        if (!url || url === "") {
+            setFinalUrl(undefined);
+            setFacebookIframe(false);
             return;
+        }
         if (url && url.startsWith("https://www.facebook.com")){
             if (facebookToken === null)
                 setFacebookIframe(true);
