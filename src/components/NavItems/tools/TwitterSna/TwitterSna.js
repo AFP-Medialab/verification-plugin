@@ -24,6 +24,7 @@ import useTwitterSnaRequest from "./useTwitterSnaRequest";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import TwitterSnaResult from "./TwitterSnaResult/TwitterSnaResult";
 import {replaceAll} from "../TwitterAdvancedSearch/createUrl";
+import { setTwitterSnaResult } from "../../../../redux/actions/tools/twitterSnaActions";
 
 const TwitterSna = () => {
     const classes = useMyStyles();
@@ -35,13 +36,14 @@ const TwitterSna = () => {
 
     const request = useSelector(state => state.twitterSna.request);
     const reduxResult = useSelector(state => state.twitterSna.result);
+    
     const isLoading = useSelector(state => state.twitterSna.loading);
     const dispatch = useDispatch();
 
     const [keyWords, setKeywords] = useState(
         request && request.keywordList ?
             request.keywordList.join(" ")
-            : "#fake"
+            : "#test"
     );
     const [keyWordsError, setKeyWordsError] = useState(false);
 
@@ -65,7 +67,7 @@ const TwitterSna = () => {
 
     const [submittedRequest, setSubmittedRequest] = useState(null);
     useTwitterSnaRequest(submittedRequest);
-
+    
     const handleErrors = (e) => {
         dispatch(setError(e))
     };
