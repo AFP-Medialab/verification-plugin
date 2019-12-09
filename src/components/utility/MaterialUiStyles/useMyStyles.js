@@ -83,7 +83,7 @@ const useMyStyles = makeStyles(theme => ({
         maxHeight: "70px",
     },
     selectedApp: {
-        color: theme.palette.primary.main
+        color: theme.palette.primary.main,
     },
     unSelectedApp: {},
     fab: {
@@ -168,11 +168,27 @@ const useMyStyles = makeStyles(theme => ({
         marginTop: "-20px",
         textAlign: "right",
     },
+    iconRootDrawer: {
+        textAlign: "center",
+        overflow: "visible"
+    },
     imageIconDrawer: {
+        width: "auto",
+        height:"100%",
+    },
+
+    imageIconTab: {
+        height:"auto",
         width: "100%"
     },
-    iconRootDrawer: {
-        overflow: "visible"
-    }
+    iconRootTab: {
+        overflow: "visible",
+        textAlign: "center",
+    },
+    imageIconAllTools:{
+        maxWidth: "300px",
+        height: "auto",
+        width: "100px",
+    },
 }));
 export default useMyStyles;
