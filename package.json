@@ -22,6 +22,7 @@
     "react": "^16.10.2",
     "react-browser-extension-scripts": "0.1.2",
     "react-d3-library": "^1.1.8",
+    "react-datetime": "^2.16.3",
     "react-dom": "^16.10.2",
     "react-iframe": "^1.8.0",
     "react-image-crop": "^8.4.0",

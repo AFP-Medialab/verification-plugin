@@ -5,18 +5,13 @@ import {useSelector} from "react-redux";
 import CustomTile from "../../../utility/customTitle/customTitle";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
-
-import {
-    KeyboardTimePicker,
-    KeyboardDatePicker, MuiPickersUtilsProvider,
-} from '@material-ui/pickers';
-import DateFnsUtils from "@date-io/date-fns";
 import {useInput} from "../../../Hooks/useInput";
 import {createUrl} from "./createUrl";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Radio from "@material-ui/core/Radio";
 import FormControl from "@material-ui/core/FormControl";
+import DateTimePicker from "../../../DateTimePicker/DateTimePicker";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -59,60 +54,69 @@ const TwitterAdvancedSearch = () => {
 
     const largeInputList = [
         {
-            label : "twitter_termbox",
-            props : term
+            label: "twitter_termbox",
+            props: term
         },
         {
-            label : "twitter_tw-account",
-            props : account
+            label: "twitter_tw-account",
+            props: account
         },
         {
-            label : "twitter_filter",
-            props : filter
+            label: "twitter_filter",
+            props: filter
         },
         {
-            label : "twitter_lang",
-            props : tweetLang
+            label: "twitter_lang",
+            props: tweetLang
         },
         {
-            label : "twitter_geocode",
-            props : geocode
+            label: "twitter_geocode",
+            props: geocode
         },
         {
-            label : "twitter_near",
-            props : near
+            label: "twitter_near",
+            props: near
         },
         {
-            label : "twitter_within",
-            props : within
+            label: "twitter_within",
+            props: within
         },
     ];
 
-
     const [fromDate, setSelectedFromDate] = useState(null);
+    const [fromDatError, setSelectedFromDateError] = useState(false);
 
     const handleFromDateChange = (date) => {
+        setSelectedFromDateError(date === null);
+        if (toDate && date >= toDate)
+            setSelectedFromDateError(true);
         setSelectedFromDate(date);
     };
+
+    const fromDateIsValid = (momentDate) => {
+        const itemDate = momentDate.toDate();
+        const currentDate = new Date();
+        if (toDate)
+            return itemDate <= currentDate && itemDate < toDate;
+        return itemDate <= currentDate;
+    };
     const [toDate, setSelectedToDate] = useState(null);
+    const [toDateError, setSelectedToDateError] = useState(null);
 
     const handleToDateChange = (date) => {
+        setSelectedToDateError(date === null);
+        if (fromDate && date <= fromDate)
+            setSelectedToDateError(true);
         setSelectedToDate(date);
     };
 
-    const smallInputList = [
-        {
-            label : "twitter_from-date",
-            selectedDate : fromDate,
-            handleDateChange : handleFromDateChange,
-        },
-        {
-            label : "twitter_to-date",
-            selectedDate : toDate,
-            handleDateChange : handleToDateChange,
-        }
-    ];
-
+    const toDateIsValid = (momentDate) => {
+        const itemDate = momentDate.toDate();
+        const currentDate = new Date();
+        if (fromDate)
+            return itemDate <= currentDate && fromDate < itemDate ;
+        return itemDate <= currentDate;
+    };
 
     const onSubmit = () => {
         let url = createUrl(term.value, account.value, filter.value, tweetLang.value, geocode.value, near.value, within.value, fromDate, toDate, localTime);
@@ -139,37 +143,26 @@ const TwitterAdvancedSearch = () => {
                     })
                 }
                 <div>
-                {
-                    smallInputList.map((value, key) => {
-                        return (
-                            <div key={key}>
-                                <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                                        <KeyboardDatePicker
-                                            margin="normal"
-                                            id="date-picker-dialog"
-                                            label={keyword(value.label)}
-                                            format="MM-dd-yyyy"
-                                            value={value.selectedDate}
-                                            onChange={value.handleDateChange}
-                                            KeyboardButtonProps={{
-                                                'aria-label': 'change date',
-                                            }}
-                                        />
-                                        <KeyboardTimePicker
-                                            margin="normal"
-                                            id="time-picker"
-                                            label="time (add to tsv)"
-                                            value={value.selectedDate}
-                                            onChange={value.handleDateChange}
-                                            KeyboardButtonProps={{
-                                                'aria-label': 'change time',
-                                            }}
-                                        />
-                                </MuiPickersUtilsProvider>
-                            </div>
-                        )
-                    })
-                }
+                    <DateTimePicker
+                        input={true}
+                        isValidDate={fromDateIsValid}
+                        label={keyword("twitter_from-date")}
+                        dateFormat={"YYYY-MM-DD"}
+                        timeFormat={"HH:mm:ss"}
+                        handleChange={handleFromDateChange}
+                        error={fromDatError}
+                    />
+                </div>
+                <div>
+                    <DateTimePicker
+                        input={true}
+                        isValidDate={toDateIsValid}
+                        label={keyword("twitter_to-date")}
+                        dateFormat={"YYYY-MM-DD"}
+                        timeFormat={"HH:mm:ss"}
+                        handleChange={handleToDateChange}
+                        error={toDateError}
+                    />
                 </div>
             </Box>
             <FormControl component="fieldset">
