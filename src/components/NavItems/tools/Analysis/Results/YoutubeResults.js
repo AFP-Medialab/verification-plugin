@@ -2,7 +2,6 @@ import React from "react";
 import {useDispatch, useSelector} from "react-redux";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
-import makeStyles from "@material-ui/core/styles/makeStyles";
 import Divider from "@material-ui/core/Divider";
 import Box from "@material-ui/core/Box";
 import Table from "@material-ui/core/Table";
@@ -20,38 +19,10 @@ import Button from "@material-ui/core/Button";
 import ImageReverseSearch from "../../ImageReverseSearch";
 import CloseResult from "../../../../CloseResult/CloseResult";
 import {cleanAnalysisState} from "../../../../../redux/actions/tools/analysisActions";
-
-const useStyles = makeStyles(theme => ({
-    root: {
-        padding: theme.spacing(3, 2),
-        marginTop: 5,
-        textAlign: "center",
-    },
-    text: {
-        overflow: "hidden",
-        textOverflow: "ellipsis"
-    },
-    secondaryHeading: {
-        fontSize: theme.typography.pxToRem(15),
-        color: theme.palette.text.secondary,
-    }, gridList: {
-        width: 500,
-        height: 450,
-    },
-    imagesRoot: {
-        display: 'flex',
-        flexWrap: 'wrap',
-        justifyContent: 'space-around',
-        overflow: 'hidden',
-        backgroundColor: theme.palette.background.paper,
-    },
-    button: {
-        margin: theme.spacing(1),
-    }
-}));
+import useMyStyles from "../../../../utility/MaterialUiStyles/useMyStyles";
 
 const YoutubeResults = (props) => {
-    const classes = useStyles();
+    const classes = useMyStyles();
     const dictionary = useSelector(state => state.dictionary);
     const lang = useSelector(state => state.language);
     const keyword = (key) => {
@@ -235,6 +206,7 @@ const YoutubeResults = (props) => {
                             </Table>
                             <Box m={2}/>
                             {
+                                verificationComments.length > 0 &&
                                 <ExpansionPanel expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
                                     <ExpansionPanelSummary
                                         expandIcon={<ExpandMoreIcon/>}
