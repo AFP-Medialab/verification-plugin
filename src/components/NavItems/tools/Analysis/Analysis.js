@@ -15,6 +15,7 @@ import useMyStyles from "../../../utility/MaterialUiStyles/useMyStyles"
 import {useParams} from 'react-router-dom'
 import Iframe from "react-iframe";
 import useFacebookHandler from "./Hooks/useFacebookHandler";
+import FacebookResults from "./Results/FacebookResults";
 
 const Analysis = () => {
     const {url} = useParams();
@@ -39,11 +40,11 @@ const Analysis = () => {
     const [finalUrl, facebookToken, showFacebookIframe] = useFacebookHandler(submittedUrl);
     useAnalysisWrapper(finalUrl, reprocess, facebookToken);
 
-
     const submitForm = () => {
         setSubmittedUrl(input);
     };
 
+    console.log(resultData)
 
     useEffect(() => {
         if (url !== undefined) {
@@ -54,7 +55,7 @@ const Analysis = () => {
     }, [url]);
 
     useEffect(() => {
-        setSubmittedUrl(undefined);
+        //setSubmittedUrl(undefined);
     }, [submittedUrl]);
 
     return (
@@ -117,7 +118,7 @@ const Analysis = () => {
             }
             {
                 (resultData !== null && resultUrl != null && resultUrl.startsWith("https://www.facebook.com/")) ?
-                    <div report={resultData}>facebook Report</div> : null
+                    <FacebookResults report={resultData}/> : null
             }
         </div>);
 };
