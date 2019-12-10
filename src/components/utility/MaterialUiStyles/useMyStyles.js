@@ -190,5 +190,32 @@ const useMyStyles = makeStyles(theme => ({
         height: "auto",
         width: "100px",
     },
+    text: {
+        overflow: "hidden",
+        textOverflow: "ellipsis"
+    },
+    secondaryHeading: {
+        fontSize: theme.typography.pxToRem(15),
+        color: theme.palette.text.secondary,
+    }, gridList: {
+        width: 500,
+        height: 450,
+    },
+    imagesRoot: {
+        display: 'flex',
+        flexWrap: 'wrap',
+        justifyContent: 'space-around',
+        overflow: 'hidden',
+        backgroundColor: theme.palette.background.paper,
+    },
+    button: {
+        margin: theme.spacing(1),
+    },
+    image: {
+        height: "auto",
+        width: "auto",
+        maxWidth: "300px",
+        maxHeight: "300px"
+    }
 }));
 export default useMyStyles;

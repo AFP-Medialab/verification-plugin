@@ -2,7 +2,6 @@ import React from "react";
 import {useDispatch, useSelector} from "react-redux";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
-import makeStyles from "@material-ui/core/styles/makeStyles";
 import Divider from "@material-ui/core/Divider";
 import Box from "@material-ui/core/Box";
 import Table from "@material-ui/core/Table";
@@ -20,44 +19,10 @@ import Button from "@material-ui/core/Button";
 import ImageReverseSearch from "../../ImageReverseSearch";
 import CloseResult from "../../../../CloseResult/CloseResult";
 import {cleanAnalysisState} from "../../../../../redux/actions/tools/analysisActions";
-
-const useStyles = makeStyles(theme => ({
-    root: {
-        padding: theme.spacing(3, 2),
-        marginTop: 5,
-        textAlign: "center",
-    },
-    text: {
-        overflow: "hidden",
-        textOverflow: "ellipsis"
-    },
-    secondaryHeading: {
-        fontSize: theme.typography.pxToRem(15),
-        color: theme.palette.text.secondary,
-    }, gridList: {
-        width: 500,
-        height: 450,
-    },
-    imagesRoot: {
-        display: 'flex',
-        flexWrap: 'wrap',
-        justifyContent: 'space-around',
-        overflow: 'hidden',
-        backgroundColor: theme.palette.background.paper,
-    },
-    button: {
-        margin: theme.spacing(1),
-    },
-    image: {
-        height: "auto",
-        width: "auto",
-        maxWidth: "300px",
-        maxHeight: "300px"
-    }
-}));
+import useMyStyles from "../../../../utility/MaterialUiStyles/useMyStyles";
 
 const TwitterResults = (props) => {
-    const classes = useStyles();
+    const classes = useMyStyles();
     const dictionary = useSelector(state => state.dictionary);
     const lang = useSelector(state => state.language);
     const keyword = (key) => {
@@ -106,11 +71,14 @@ const TwitterResults = (props) => {
                     <Typography variant={"h6"}>
                         {keyword("youtube_video_name1_2")}
                     </Typography>
-                    <Typography variant="body2" color="textSecondary" component="p" className={classes.text}>
-                        {
-                            report["video"]["full_text"]
-                        }
-                    </Typography>
+                    {
+                        report["video"] &&
+                        <Typography variant="body2" color="textSecondary" component="p" className={classes.text}>
+                            {
+                                report["video"]["full_text"]
+                            }
+                        </Typography>
+                    }
                     <Box m={2}/>
                     <Divider/>
                     {
@@ -118,136 +86,138 @@ const TwitterResults = (props) => {
                         <Table className={classes.table} size="small" aria-label="a dense table">
                             <TableBody>
                                 {
-                                    report["video"]["source"] &&
-                                    <TableRow>
-                                        <TableCell component="th" scope="row">
-                                            {keyword("twitter_video_name_3")}
-                                        </TableCell>
-                                        <TableCell align="right">{report["video"]["source"]}</TableCell>
-                                    </TableRow>
+                                    (!report["video"]["source"]) ? null :
+                                        <TableRow>
+                                            <TableCell component="th" scope="row">
+                                                {keyword("twitter_video_name_3")}
+                                            </TableCell>
+                                            <TableCell align="right">{report["video"]["source"]}</TableCell>
+                                        </TableRow>
                                 }
                                 {
-                                    report["video"]["favorite_count"] &&
-                                    <TableRow>
-                                        <TableCell component="th" scope="row">
-                                            {keyword("twitter_video_name_4")}
-                                        </TableCell>
-                                        <TableCell align="right">{report["video"]["favorite_count"]}</TableCell>
-                                    </TableRow>
+                                    (!report["video"]["favorite_count"]) ? null :
+                                        <TableRow>
+                                            <TableCell component="th" scope="row">
+                                                {keyword("twitter_video_name_4")}
+                                            </TableCell>
+                                            <TableCell align="right">{report["video"]["favorite_count"]}</TableCell>
+                                        </TableRow>
                                 }
                                 {
-                                    report["video"]["retweet_count"] &&
-                                    <TableRow>
-                                        <TableCell component="th" scope="row">
-                                            {keyword("twitter_video_name_5")}
-                                        </TableCell>
-                                        <TableCell align="right">{report["video"]["retweet_count"]}</TableCell>
-                                    </TableRow>
+                                    (!report["video"]["retweet_count"]) ? null :
+                                        <TableRow>
+                                            <TableCell component="th" scope="row">
+                                                {keyword("twitter_video_name_5")}
+                                            </TableCell>
+                                            <TableCell align="right">{report["video"]["retweet_count"]}</TableCell>
+                                        </TableRow>
                                 }
                                 {
-                                    report["video"]["hashtags"] && report["video"]["hashtags".length > 0] &&
-                                    <TableRow>
-                                        <TableCell component="th" scope="row">
-                                            {keyword("twitter_video_name_7")}
-                                        </TableCell>
-                                        <TableCell align="right">
-                                            {
-                                                report["video"]["hashtags"].map((value, key) => {
-                                                    return <span key={key}>{value}</span>
-                                                })
-                                            }
-                                        </TableCell>
-                                    </TableRow>
+                                    (!(report["video"]["hashtags"] && report["video"]["hashtags".length > 0])) ? null :
+                                        <TableRow>
+                                            <TableCell component="th" scope="row">
+                                                {keyword("twitter_video_name_7")}
+                                            </TableCell>
+                                            <TableCell align="right">
+                                                {
+                                                    report["video"]["hashtags"].map((value, key) => {
+                                                        return <span key={key}>{value}</span>
+                                                    })
+                                                }
+                                            </TableCell>
+                                        </TableRow>
                                 }
                                 {
-                                    report["video"]["urls"] && report["video"]["urls"].length > 0 &&
-                                    <TableRow>
-                                        <TableCell component="th" scope="row">
-                                            {keyword("twitter_video_name_7")}
-                                        </TableCell>
-                                        <TableCell align="right">
-                                            {
-                                                report["video"]["urls"].map((value, key) => {
-                                                    return (
-                                                        <a key={key} href={value}
-                                                           rel="noopener noreferrer"
-                                                           target={"_blank"}>{value}
-                                                        </a>
-                                                    );
-                                                })
-                                            }
-                                        </TableCell>
-                                    </TableRow>
+                                    (!(report["video"]["urls"] && report["video"]["urls"].length > 0)) ? null :
+                                        <TableRow>
+                                            <TableCell component="th" scope="row">
+                                                {keyword("twitter_video_name_7")}
+                                            </TableCell>
+                                            <TableCell align="right">
+                                                {
+                                                    report["video"]["urls"].map((value, key) => {
+                                                        return (
+                                                            <a key={key} href={value}
+                                                               rel="noopener noreferrer"
+                                                               target={"_blank"}>{value}
+                                                            </a>
+                                                        );
+                                                    })
+                                                }
+                                            </TableCell>
+                                        </TableRow>
                                 }
                                 {
-                                    report["video"]["user_mentions"] && report["video"]["user_mentions".length > 0] &&
-                                    <TableRow>
-                                        <TableCell component="th" scope="row">
-                                            {keyword("twitter_video_name_8")}
-                                        </TableCell>
-                                        <TableCell align="right">
-                                            {
-                                                report["video"]["user_mentions"].map((value, key) => {
-                                                    return <span key={key}>{value + " "}</span>
-                                                })
-                                            }
-                                        </TableCell>
-                                    </TableRow>
+                                    (!(report["video"]["user_mentions"] && report["video"]["user_mentions".length > 0])) ? null :
+                                        <TableRow>
+                                            <TableCell component="th" scope="row">
+                                                {keyword("twitter_video_name_8")}
+                                            </TableCell>
+                                            <TableCell align="right">
+                                                {
+                                                    report["video"]["user_mentions"].map((value, key) => {
+                                                        return <span key={key}>{value + " "}</span>
+                                                    })
+                                                }
+                                            </TableCell>
+                                        </TableRow>
                                 }
                                 {
-                                    report["video"]["lang"] &&
-                                    <TableRow>
-                                        <TableCell component="th" scope="row">
-                                            {keyword("twitter_video_name_9")}
-                                        </TableCell>
-                                        <TableCell align="right">{report["video"]["lang"]}</TableCell>
-                                    </TableRow>
+                                    (!report["video"]["lang"]) ? null :
+                                        <TableRow>
+                                            <TableCell component="th" scope="row">
+                                                {keyword("twitter_video_name_9")}
+                                            </TableCell>
+                                            <TableCell align="right">{report["video"]["lang"]}</TableCell>
+                                        </TableRow>
                                 }
                                 {
-                                    report["thumbnails"]["preferred"]["url"] &&
-                                    <TableRow>
-                                        <TableCell component="th" scope="row">
-                                            {keyword("twitter_video_name_10")}
-                                        </TableCell>
-                                        <TableCell align="right"><a href={report["thumbnails"]["preferred"]["url"]}
-                                                                    rel="noopener noreferrer"
-                                                                    target={"_blank"}>{report["thumbnails"]["preferred"]["url"]}</a></TableCell>
-                                    </TableRow>
+                                    (!report["thumbnails"]["preferred"]["url"]) ? null :
+                                        <TableRow>
+                                            <TableCell component="th" scope="row">
+                                                {keyword("twitter_video_name_10")}
+                                            </TableCell>
+                                            <TableCell align="right"><a href={report["thumbnails"]["preferred"]["url"]}
+                                                                        rel="noopener noreferrer"
+                                                                        target={"_blank"}>{report["thumbnails"]["preferred"]["url"]}</a></TableCell>
+                                        </TableRow>
                                 }
                                 {
-                                    report["video"]["video_info"] && report["video"]["video_info"]["aspect_ratio"] &&
-                                    <TableRow>
-                                        <TableCell component="th" scope="row">
-                                            {keyword("twitter_video_name_11")}
-                                        </TableCell>
-                                        <TableCell
-                                            align="right">{report["video"]["video_info"]["aspect_ratio"]}</TableCell>
-                                    </TableRow>
+                                    (!(report["video"]["video_info"] && report["video"]["video_info"]["aspect_ratio"])) ? null :
+                                        <TableRow>
+                                            <TableCell component="th" scope="row">
+                                                {keyword("twitter_video_name_11")}
+                                            </TableCell>
+                                            <TableCell
+                                                align="right">{report["video"]["video_info"]["aspect_ratio"]}</TableCell>
+                                        </TableRow>
                                 }
                                 {
-                                    report["video"]["video_info"] && report["video"]["video_info"]["duration"] &&
-                                    <TableRow>
-                                        <TableCell component="th" scope="row">
-                                            {keyword("twitter_video_name_12")}
-                                        </TableCell>
-                                        <TableCell align="right">{report["video"]["video_info"]["duration"]}</TableCell>
-                                    </TableRow>
+                                    (!(report["video"]["video_info"] && report["video"]["video_info"]["duration"])) ? null :
+                                        <TableRow>
+                                            <TableCell component="th" scope="row">
+                                                {keyword("twitter_video_name_12")}
+                                            </TableCell>
+                                            <TableCell
+                                                align="right">{report["video"]["video_info"]["duration"]}</TableCell>
+                                        </TableRow>
                                 }
                                 {
-                                    report["video"]["video_info"] && report["video"]["video_info"]["urls"] &&
-                                    report["video"]["video_info"]["urls"].length > 0 &&
-                                    <TableRow>
-                                        <TableCell component="th" scope="row">
-                                            {keyword("twitter_video_name_16")}
-                                        </TableCell>
-                                        <TableCell align="right">
-                                            {
-                                                report["video"]["video_info"]["urls"].map((value, key) => {
-                                                    return <a key={key} href={value} rel="noopener noreferrer" target={"_blank"}>{value + " "}</a>
-                                                })
-                                            }
-                                        </TableCell>
-                                    </TableRow>
+                                    (!(report["video"]["video_info"] && report["video"]["video_info"]["urls"] &&
+                                        report["video"]["video_info"]["urls"].length > 0)) ? null :
+                                        <TableRow>
+                                            <TableCell component="th" scope="row">
+                                                {keyword("twitter_video_name_16")}
+                                            </TableCell>
+                                            <TableCell align="right">
+                                                {
+                                                    report["video"]["video_info"]["urls"].map((value, key) => {
+                                                        return <a key={key} href={value} rel="noopener noreferrer"
+                                                                  target={"_blank"}>{value + " "}</a>
+                                                    })
+                                                }
+                                            </TableCell>
+                                        </TableRow>
                                 }
                             </TableBody>
                         </Table>
@@ -267,110 +237,114 @@ const TwitterResults = (props) => {
                             <Table className={classes.table} size="small" aria-label="a dense table">
                                 <TableBody>
                                     {
-                                        report["source"]["user_screen_name"] &&
-                                        <TableRow>
-                                            <TableCell component="th" scope="row">
-                                                {keyword("twitter_user_name_2")}
-                                            </TableCell>
-                                            <TableCell align="right">{report["source"]["user_screen_name"]}</TableCell>
-                                        </TableRow>
+                                        (!report["source"]["user_screen_name"]) ? null :
+                                            <TableRow>
+                                                <TableCell component="th" scope="row">
+                                                    {keyword("twitter_user_name_2")}
+                                                </TableCell>
+                                                <TableCell
+                                                    align="right">{report["source"]["user_screen_name"]}</TableCell>
+                                            </TableRow>
                                     }
                                     {
-                                        report["source"]["user_location"] &&
-                                        <TableRow>
-                                            <TableCell component="th" scope="row">
-                                                {keyword("twitter_user_name_3")}
-                                            </TableCell>
-                                            <TableCell align="right">{report["source"]["user_location"]}</TableCell>
-                                        </TableRow>
+                                        (!report["source"]["user_location"]) ? null :
+                                            <TableRow>
+                                                <TableCell component="th" scope="row">
+                                                    {keyword("twitter_user_name_3")}
+                                                </TableCell>
+                                                <TableCell align="right">{report["source"]["user_location"]}</TableCell>
+                                            </TableRow>
                                     }
                                     {
-                                        report["source"]["user_url"] &&
-                                        <TableRow>
-                                            <TableCell component="th" scope="row">
-                                                {keyword("twitter_user_name_4")}
-                                            </TableCell>
-                                            <TableCell align="right"><a
-                                                href={report["source"]["url"]}
-                                                rel="noopener noreferrer"
-                                                target="_blank">{report["source"]["user_url"]}</a></TableCell>
-                                        </TableRow>
+                                        (!report["source"]["user_url"]) ? null :
+                                            <TableRow>
+                                                <TableCell component="th" scope="row">
+                                                    {keyword("twitter_user_name_4")}
+                                                </TableCell>
+                                                <TableCell align="right"><a
+                                                    href={report["source"]["url"]}
+                                                    rel="noopener noreferrer"
+                                                    target="_blank">{report["source"]["user_url"]}</a></TableCell>
+                                            </TableRow>
                                     }
                                     {
-                                        report["source"]["user_protected"] &&
-                                        <TableRow>
-                                            <TableCell component="th" scope="row">
-                                                {keyword("twitter_user_name_6")}
-                                            </TableCell>
-                                            <TableCell align="right">{report["source"]["user_protected"]}</TableCell>
-                                        </TableRow>
+                                        (!report["source"]["user_protected"]) ? null :
+                                            <TableRow>
+                                                <TableCell component="th" scope="row">
+                                                    {keyword("twitter_user_name_6")}
+                                                </TableCell>
+                                                <TableCell
+                                                    align="right">{report["source"]["user_protected"]}</TableCell>
+                                            </TableRow>
                                     }
                                     {
-                                        report["source"]["user_verified"] &&
-                                        <TableRow>
-                                            <TableCell component="th" scope="row">
-                                                {keyword("twitter_user_name_7")}
-                                            </TableCell>
-                                            <TableCell align="right">{report["source"]["user_verified"]}</TableCell>
-                                        </TableRow>
+                                        (!report["source"]["user_verified"]) ? null :
+                                            <TableRow>
+                                                <TableCell component="th" scope="row">
+                                                    {keyword("twitter_user_name_7")}
+                                                </TableCell>
+                                                <TableCell align="right">{report["source"]["user_verified"]}</TableCell>
+                                            </TableRow>
                                     }
                                     {
-                                        report["source"]["user_followers_count"] &&
-                                        <TableRow>
-                                            <TableCell component="th" scope="row">
-                                                {keyword("twitter_user_name_8")}
-                                            </TableCell>
-                                            <TableCell
-                                                align="right">{report["source"]["user_followers_count"]}</TableCell>
-                                        </TableRow>
+                                        (!report["source"]["user_followers_count"]) ? null :
+                                            <TableRow>
+                                                <TableCell component="th" scope="row">
+                                                    {keyword("twitter_user_name_8")}
+                                                </TableCell>
+                                                <TableCell
+                                                    align="right">{report["source"]["user_followers_count"]}</TableCell>
+                                            </TableRow>
                                     }
                                     {
-                                        report["source"]["user_friends_count"] &&
-                                        <TableRow>
-                                            <TableCell component="th" scope="row">
-                                                {keyword("twitter_user_name_9")}
-                                            </TableCell>
-                                            <TableCell
-                                                align="right">{report["source"]["user_friends_count"]}</TableCell>
-                                        </TableRow>
+                                        (!report["source"]["user_friends_count"]) ? null :
+                                            <TableRow>
+                                                <TableCell component="th" scope="row">
+                                                    {keyword("twitter_user_name_9")}
+                                                </TableCell>
+                                                <TableCell
+                                                    align="right">{report["source"]["user_friends_count"]}</TableCell>
+                                            </TableRow>
                                     }
                                     {
-                                        report["source"]["user_listed_count"] &&
-                                        <TableRow>
-                                            <TableCell component="th" scope="row">
-                                                {keyword("twitter_user_name_10")}
-                                            </TableCell>
-                                            <TableCell align="right">{report["source"]["user_listed_count"]}</TableCell>
-                                        </TableRow>
+                                        (!report["source"]["user_listed_count"]) ? null :
+                                            <TableRow>
+                                                <TableCell component="th" scope="row">
+                                                    {keyword("twitter_user_name_10")}
+                                                </TableCell>
+                                                <TableCell
+                                                    align="right">{report["source"]["user_listed_count"]}</TableCell>
+                                            </TableRow>
                                     }
                                     {
-                                        report["source"]["user_favourites_count"] &&
-                                        <TableRow>
-                                            <TableCell component="th" scope="row">
-                                                {keyword("twitter_user_name_11")}
-                                            </TableCell>
-                                            <TableCell
-                                                align="right">{report["source"]["user_favourites_count"]}</TableCell>
-                                        </TableRow>
+                                        (!report["source"]["user_favourites_count"]) ? null :
+                                            <TableRow>
+                                                <TableCell component="th" scope="row">
+                                                    {keyword("twitter_user_name_11")}
+                                                </TableCell>
+                                                <TableCell
+                                                    align="right">{report["source"]["user_favourites_count"]}</TableCell>
+                                            </TableRow>
                                     }
                                     {
-                                        report["source"]["user_statuses_count"] &&
-                                        <TableRow>
-                                            <TableCell component="th" scope="row">
-                                                {keyword("twitter_user_name_12")}
-                                            </TableCell>
-                                            <TableCell
-                                                align="right">{report["source"]["user_statuses_count"]}</TableCell>
-                                        </TableRow>
+                                        (!report["source"]["user_statuses_count"]) ? null :
+                                            <TableRow>
+                                                <TableCell component="th" scope="row">
+                                                    {keyword("twitter_user_name_12")}
+                                                </TableCell>
+                                                <TableCell
+                                                    align="right">{report["source"]["user_statuses_count"]}</TableCell>
+                                            </TableRow>
                                     }
                                     {
-                                        report["source"]["user_created_at"] &&
-                                        <TableRow>
-                                            <TableCell component="th" scope="row">
-                                                {keyword("twitter_user_name_13")}
-                                            </TableCell>
-                                            <TableCell align="right">{report["source"]["user_created_at"]}</TableCell>
-                                        </TableRow>
+                                        (!report["source"]["user_created_at"]) ? null :
+                                            <TableRow>
+                                                <TableCell component="th" scope="row">
+                                                    {keyword("twitter_user_name_13")}
+                                                </TableCell>
+                                                <TableCell
+                                                    align="right">{report["source"]["user_created_at"]}</TableCell>
+                                            </TableRow>
                                     }
                                 </TableBody>
                             </Table>
@@ -387,28 +361,29 @@ const TwitterResults = (props) => {
                             <Table className={classes.table} size="small" aria-label="a dense table">
                                 <TableBody>
                                     {
-                                        report["pagination"]["total_comments"] &&
-                                        <TableRow>
-                                            <TableCell component="th" scope="row">
-                                                {keyword("youtube_comment_name_1")}
-                                            </TableCell>
-                                            <TableCell
-                                                align="right">{report["pagination"]["total_comments"]}</TableCell>
-                                        </TableRow>
+                                        (!report["pagination"]["total_comments"]) ? null :
+                                            <TableRow>
+                                                <TableCell component="th" scope="row">
+                                                    {keyword("youtube_comment_name_1")}
+                                                </TableCell>
+                                                <TableCell
+                                                    align="right">{report["pagination"]["total_comments"]}</TableCell>
+                                            </TableRow>
                                     }
                                     {
-                                        verificationComments !== undefined &&
-                                        <TableRow>
-                                            <TableCell component="th" scope="row">
-                                                {keyword("youtube_comment_name_2")}
-                                            </TableCell>
-                                            <TableCell align="right">{verificationComments.length}</TableCell>
-                                        </TableRow>
+                                        (!verificationComments !== undefined) ? null :
+                                            <TableRow>
+                                                <TableCell component="th" scope="row">
+                                                    {keyword("youtube_comment_name_2")}
+                                                </TableCell>
+                                                <TableCell align="right">{verificationComments.length}</TableCell>
+                                            </TableRow>
                                     }
                                 </TableBody>
                             </Table>
                             <Box m={2}/>
                             {
+                                verificationComments.length > 0 &&
                                 <ExpansionPanel expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
                                     <ExpansionPanelSummary
                                         expandIcon={<ExpandMoreIcon/>}
