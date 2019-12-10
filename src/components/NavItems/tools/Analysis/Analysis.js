@@ -43,9 +43,6 @@ const Analysis = () => {
     const submitForm = () => {
         setSubmittedUrl(input);
     };
-
-    console.log(resultData)
-
     useEffect(() => {
         if (url !== undefined) {
             const uri = decodeURIComponent(url);
