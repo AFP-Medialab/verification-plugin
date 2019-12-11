@@ -25,6 +25,7 @@ To setup this project you need to run:
 
     REACT_APP_ELK_URL=http://185.249.140.38/elk/twinttweets/_search
     REACT_APP_TWINT_WRAPPER_URL=http://185.249.140.38/twint-wrapper2
+    REACT_APP_TRANSLATION_GITHUB=https://raw.githubusercontent.com/AFP-Medialab/InVID-Translations/react/
     REACT_APP_KEYFRAME_TOKEN=<yourKeyframeToken>
     REACT_APP_MY_WEB_HOOK_URL=<yourSlackAppUrlHook>
     REACT_APP_GOOGLE_ANALYTICS_KEY=<yourGoogleAnaliticsToken>
