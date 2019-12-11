@@ -215,6 +215,14 @@ const useMyStyles = makeStyles(theme => ({
         width: "auto",
         maxWidth: "300px",
         maxHeight: "300px"
+    },
+    onClickInfo : {
+        borderColor: "grey",
+        borderRadius: '10px',
+        borderStyle: "solid",
+        borderWidth: "2px",
+        paddingTop: "10px",
+        paddingBottom: "10px"
     }
 }));
 export default useMyStyles;

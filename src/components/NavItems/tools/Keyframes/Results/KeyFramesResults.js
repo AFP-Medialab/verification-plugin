@@ -11,6 +11,7 @@ import {useKeyframes} from "../Hooks/usekeyframes";
 import ImageReverseSearch from "../../ImageReverseSearch";
 import CloseResult from "../../../../CloseResult/CloseResult";
 import {cleanKeyframesState} from "../../../../../redux/actions/tools/keyframesActions";
+import OnClickInfo from "../../../../OnClickInfo/OnClickInfo";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -42,9 +43,7 @@ const KeyFramesResults = (props) => {
                 <Typography variant={"h5"}>
                     {keyword("keyframes_content_title")}
                 </Typography>
-                <Typography variant={"body1"}>
-                    {keyword("keyframes_tip")}
-                </Typography>
+                <OnClickInfo/>
                 <Box m={2}/>
                 <Divider/>
                 <Box m={2}/>
