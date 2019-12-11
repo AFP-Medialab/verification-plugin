@@ -1,4 +1,4 @@
-import useMyStyles from "../utility/MaterialUiStyles/useMyStyles";
+import useMyStyles from "../MaterialUiStyles/useMyStyles";
 import {useSelector} from "react-redux";
 import React from "react";
 import Typography from "@material-ui/core/Typography";

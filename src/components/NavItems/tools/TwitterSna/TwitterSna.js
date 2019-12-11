@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from "react";
-import useMyStyles from "../../../utility/MaterialUiStyles/useMyStyles";
+import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import {useDispatch, useSelector} from "react-redux";
 import {Paper} from "@material-ui/core";
-import CustomTile from "../../../utility/customTitle/customTitle";
+import CustomTile from "../../../Shared/CustomTitle/CustomTitle";
 import TextField from "@material-ui/core/TextField";
 import {KeyboardDatePicker, KeyboardTimePicker, MuiPickersUtilsProvider} from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
@@ -18,14 +18,14 @@ import {setError} from "../../../../redux/actions/errorActions";
 import InputLabel from "@material-ui/core/InputLabel";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
-import convertToGMT from "../../../utility/DataTimePicker/convertToGMT";
+import convertToGMT from "../../../Shared/DateTimePicker/convertToGMT";
 import dateFormat from "dateformat"
 import useTwitterSnaRequest from "./useTwitterSnaRequest";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import TwitterSnaResult from "./TwitterSnaResult/TwitterSnaResult";
 import {replaceAll} from "../TwitterAdvancedSearch/createUrl";
 import {setTwitterSnaResult} from "../../../../redux/actions/tools/twitterSnaActions";
-import DateTimePicker from "../../../DateTimePicker/DateTimePicker";
+import DateTimePicker from "../../../Shared/DateTimePicker/DateTimePicker";
 
 const TwitterSna = () => {
     const classes = useMyStyles();

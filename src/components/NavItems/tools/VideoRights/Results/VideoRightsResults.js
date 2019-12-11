@@ -1,5 +1,5 @@
 import {Paper} from "@material-ui/core";
-import useMyStyles from "../../../../utility/MaterialUiStyles/useMyStyles";
+import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 import React from "react";
 import Typography from "@material-ui/core/Typography";
 import BlockIcon from '@material-ui/icons/Block';
@@ -14,7 +14,7 @@ import Divider from "@material-ui/core/Divider";
 import invidLogo from "../images/InVID-logo.svg"
 import Icon from "@material-ui/core/Icon";
 import Grid from "@material-ui/core/Grid";
-import CloseResult from "../../../../CloseResult/CloseResult";
+import CloseResult from "../../../../Shared/CloseResult/CloseResult";
 import {cleanVideoRightsState} from "../../../../../redux/actions/tools/videoRightsActions";
 import {useDispatch} from "react-redux";
 

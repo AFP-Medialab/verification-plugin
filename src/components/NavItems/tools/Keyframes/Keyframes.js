@@ -5,13 +5,13 @@ import Box from "@material-ui/core/Box";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import LocalFile from "./LocalFile/LocalFile";
-import CustomTile from "../../../utility/customTitle/customTitle";
+import CustomTile from "../../../Shared/CustomTitle/CustomTitle";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import Typography from "@material-ui/core/Typography";
 import Divider from '@material-ui/core/Divider';
 import KeyFramesResults from "./Results/KeyFramesResults";
 import {useKeyframeWrapper} from "./Hooks/useKeyframeWrapper";
-import useMyStyles from "../../../utility/MaterialUiStyles/useMyStyles";
+import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import {useParams} from 'react-router-dom'
 
 const Keyframes = (props) => {

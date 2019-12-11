@@ -10,8 +10,8 @@ import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
 import MapIcon from '@material-ui/icons/Map';
 import Tooltip from "@material-ui/core/Tooltip";
-import useMyStyles from "../../../../utility/MaterialUiStyles/useMyStyles";
-import CloseResult from "../../../../CloseResult/CloseResult";
+import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
+import CloseResult from "../../../../Shared/CloseResult/CloseResult";
 import {cleanMetadataState} from "../../../../../redux/actions/tools/metadataActions";
 
 const MetadataImageResult = (result) => {

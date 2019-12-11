@@ -1,6 +1,6 @@
 import CancelIcon from '@material-ui/icons/Cancel';
 import React from "react";
-import useMyStyles from "../utility/MaterialUiStyles/useMyStyles";
+import useMyStyles from "../MaterialUiStyles/useMyStyles";
 
 const CloseResult = (props) => {
     const classes = useMyStyles();

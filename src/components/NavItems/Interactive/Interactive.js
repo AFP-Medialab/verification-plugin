@@ -3,7 +3,7 @@ import Slide from "@material-ui/core/Slide";
 import {Paper} from "@material-ui/core";
 import {useSelector} from "react-redux";
 import Box from "@material-ui/core/Box";
-import CustomTile from "../../utility/customTitle/customTitle";
+import CustomTile from "../../Shared/CustomTitle/CustomTitle";
 import Typography from "@material-ui/core/Typography";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import Iframe from "react-iframe";
@@ -19,7 +19,7 @@ import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ImageReverseSearch from "../tools/ImageReverseSearch";
-import history from '../../utility/History/History';
+import history from '../../Shared/History/History';
 
 const useStyles = makeStyles(theme => ({
     root: {

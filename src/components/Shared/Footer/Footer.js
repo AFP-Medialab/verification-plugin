@@ -1,5 +1,5 @@
 import React from "react";
-import useMyStyles from "../utility/MaterialUiStyles/useMyStyles";
+import useMyStyles from "../MaterialUiStyles/useMyStyles";
 import {useSelector} from "react-redux";
 
 
