@@ -187,7 +187,7 @@ const useTwitterSnaRequest = (request) => {
                 enableTooltip: true,
                 deterministic: true,
                 fontFamily: 'impact',
-                fontSizes: [12, 60],
+                fontSizes: [15, 150],
                 fontStyle: 'normal',
                 fontWeight: 'normal',
                 padding: 1,
