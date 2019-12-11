@@ -193,7 +193,7 @@ export default function TwitterSnaResult(props) {
             csvArr: csvArr
         });
     }
-    
+
     const onPieChartClick = (data, nbType, index) => {
         if (index === 3) {
             window.open("https://twitter.com/search?q=" + data.points[0].label.replace('#', "%23"), '_blank');
@@ -441,7 +441,7 @@ export default function TwitterSnaResult(props) {
                     </ExpansionPanelSummary>
                     <ExpansionPanelDetails>
                         <Box alignItems="center" justifyContent="center" width={"100%"}>
-                            <div style={{ height: 800, width: 800 }}>
+                            <div width={"100%"} > 
                                 <ReactWordcloud options={result.cloudChart.options} callbacks={callbacks} words={result.cloudChart.json} />
                             </div>
                             <Box m={2}/>
