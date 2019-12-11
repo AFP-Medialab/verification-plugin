@@ -345,6 +345,7 @@ const MetadataImageResult = (result) => {
                             </TableBody>
                         </Table>
                     </div>
+                    <Box m={2}/>
                     <Button
                         variant="contained"
                         color="primary"
