@@ -43,7 +43,7 @@ const TwitterSna = () => {
     const [keyWords, setKeywords] = useState(
         request && request.keywordList ?
             request.keywordList.join(" ")
-            : "#test"
+            : "fake news"
     );
     const [keyWordsError, setKeyWordsError] = useState(false);
 
@@ -55,10 +55,10 @@ const TwitterSna = () => {
     const [usersInput, setUsersInput] = useState(
         request && request.userList ?
             request.userList.join(" ")
-            : ""
+            : "realDonaldTrump"
     );
-    const [since, setSince] = useState(request ? request.from : new Date("11-06-2019"));         // change default values
-    const [until, setUntil] = useState(request ? request.until : new Date("11-07-2019"));         // change default values
+    const [since, setSince] = useState(request ? request.from : new Date("12-01-2016"));         // change default values
+    const [until, setUntil] = useState(request ? request.until : new Date("11-30-2019"));         // change default values
     const [langInput, setLangInput] = useState(request && request.lang ? "lang_" + request.lang : "lang_all");
     const [openLangInput, setLangInputOpen] = React.useState(false);
     const [filters, setFilers] = useState(request && request.media ? request.media : "none");

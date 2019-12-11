@@ -22,8 +22,10 @@ const includeWordObj = (wordObj, wordsArray) =>
     return -1;
 }
 
-function getnMax(map, n) {
-    return map.sort((a, b) => b[1] - a[1]).splice(0, n);
+function getnMax(objArr, n) {
+    let sorted = [...(objArr.sort((a, b) => b.nbOccurences - a.nbOccurences))];
+    console.log(sorted);
+    return sorted.splice(0, n);
 }
 
 function getColor(entity) {
@@ -55,7 +57,6 @@ const useTwitterSnaRequest = (request) => {
 
         const getAllWordsMap = (elasticResponse) => {
             let hits = Array.from(elasticResponse.hits.hits);
-            console.log(hits);
             let wordsMap = [];
 
             for (let i = 0; i < hits.length; i++) {
@@ -64,16 +65,23 @@ const useTwitterSnaRequest = (request) => {
 
 
                 let tweetWordsmap = hits[i]._source.wit;
-                
-                tweetWordsmap.map(word => {
-                    if (includeWordObj(word, wordsMap) !== -1)
-                        wordsMap[i].nbOccurences += word.nbOccurences;
+                var arr = Array.from(tweetWordsmap);
+
+                arr.forEach(word => {
+                    let j = includeWordObj(word, wordsMap) 
+                    if (j !== -1)
+                    {
+                        wordsMap[j].nbOccurences += word.nbOccurences;
+
+                    }
                     else
+                    {
+
                         wordsMap.push(word);
+                    }
                 });
 
             }
-
             return getnMax(wordsMap, 100);
         }
 
