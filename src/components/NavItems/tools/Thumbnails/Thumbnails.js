@@ -16,6 +16,9 @@ import {useInput} from "../../../Hooks/useInput";
 import {cleanThumbnailsState, setThumbnailsResult} from "../../../../redux/actions/tools/thumbnailsActions"
 import {setError} from "../../../../redux/actions/errorActions"
 import CloseResult from "../../../CloseResult/CloseResult";
+import Checkbox from "@material-ui/core/Checkbox";
+import FormGroup from "@material-ui/core/FormGroup";
+import Grid from "@material-ui/core/Grid";
 
 
 const Thumbnails = () => {
@@ -32,27 +35,36 @@ const Thumbnails = () => {
     const dispatch = useDispatch();
 
     const input = useInput(resultUrl);
-    const [selectedValue, setSelectedValue] = React.useState('google');
+    const [selectedValue, setSelectedValue] = React.useState({
+        'google': true,
+        'bing': false,
+        'tineye': false,
+        'yandex': false,
+    });
+
     const handleChange = event => {
-        setSelectedValue(event.target.value);
+        setSelectedValue({
+            ...selectedValue,
+            [event.target.value]: event.target.checked
+        });
     };
 
     const searchEngines = [
         {
-            title : "bing",
-            text : "Bing"
+            title: "bing",
+            text: "Bing"
         },
         {
-            title : "google",
-            text : "Google"
+            title: "google",
+            text: "Google"
         },
         {
-            title : "tineye",
-            text : "Tineye"
+            title: "tineye",
+            text: "Tineye"
         },
         {
-            title : "yandex",
-            text : "Yandex"
+            title: "yandex",
+            text: "Yandex"
         },
     ];
 
@@ -93,13 +105,19 @@ const Thumbnails = () => {
         let url = input.value.replace("?rel=0", "");
         if (url !== null && url !== "" && isYtUrl(url)) {
             dispatch(setThumbnailsResult(url, get_images(url), false, false));
-        }
-        else
+        } else
             dispatch(setError("Please use a valid Youtube Url (add to tsv)"));
     };
 
     const imageClick = (event) => {
-        ImageReverseSearch(selectedValue, event.target.src)
+        if (selectedValue.google)
+            ImageReverseSearch("google", event.target.src)
+        if (selectedValue.yandex)
+            ImageReverseSearch("yandex", event.target.src)
+        if (selectedValue.bing)
+            ImageReverseSearch("bing", event.target.src)
+        if (selectedValue.tineye)
+            ImageReverseSearch("tineye", event.target.src)
     };
 
     return (
@@ -116,21 +134,27 @@ const Thumbnails = () => {
                 />
                 <Box m={2}/>
                 <FormControl component="fieldset">
-                    <RadioGroup aria-label="position" name="position" value={selectedValue} onChange={handleChange} row>
+                    <FormGroup row>
                         {
                             searchEngines.map((item, key) => {
                                 return (
                                     <FormControlLabel
                                         key={key}
-                                        value={item.title}
-                                        control={<Radio color="primary" />}
+                                        control={
+                                            <Checkbox
+                                                checked={selectedValue[item.title]}
+                                                value={item.title}
+                                                onChange={e => handleChange(e)}
+                                                color="primary"
+                                            />
+                                        }
                                         label={item.text}
                                         labelPlacement="end"
                                     />
                                 );
                             })
                         }
-                    </RadioGroup>
+                    </FormGroup>
                 </FormControl>
                 <Box m={2}/>
                 <Button
