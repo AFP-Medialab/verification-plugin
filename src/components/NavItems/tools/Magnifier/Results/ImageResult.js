@@ -20,8 +20,8 @@ import icond from "tui-image-editor/dist/svg/icon-d.svg";
 import Grid from "@material-ui/core/Grid";
 import {cleanMagnifierState, setMagnifierResult} from "../../../../../redux/actions/tools/magnifierActions";
 import ImageReverseSearch from "../../ImageReverseSearch";
-import history from "../../../../utility/History/History";
-import CloseResult from "../../../../CloseResult/CloseResult";
+import history from "../../../../Shared/History/History";
+import CloseResult from "../../../../Shared/CloseResult/CloseResult";
 
 const myTheme = {
     "menu.backgroundColor": "white",

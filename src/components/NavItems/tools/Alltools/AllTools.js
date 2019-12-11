@@ -1,10 +1,7 @@
 import {Paper} from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
-import Box from "@material-ui/core/Box";
 import React, {useState} from "react";
-import {useSelector} from "react-redux";
 import makeStyles from "@material-ui/core/styles/makeStyles";
-import Tab from "@material-ui/core/Tab";
 import HelpIcon from '@material-ui/icons/Help';
 import IconButton from "@material-ui/core/IconButton";
 import Button from "@material-ui/core/Button";
@@ -12,13 +9,10 @@ import DialogContent from "@material-ui/core/DialogContent";
 import Iframe from "react-iframe";
 import DialogActions from "@material-ui/core/DialogActions";
 import Dialog from "@material-ui/core/Dialog";
-import history from "../../../utility/History/History";
-import Icon from "@material-ui/core/Icon";
-import classRoomIcon from "../../../NavBar/images/navbar/classroom-off.png";
-import Tabs from "@material-ui/core/Tabs";
-import Toolbar from "@material-ui/core/Toolbar";
+import history from "../../../Shared/History/History";
 import Typography from "@material-ui/core/Typography";
-import {Image} from "@material-ui/icons";
+import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
+import tsv from "../../../../LocalDictionary/components/NavItems/tools/Alltools.tsv";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -38,11 +32,7 @@ const useStyles = makeStyles(theme => ({
 
 const AllTools = (props) => {
     const classes = useStyles();
-    const dictionary = useSelector(state => state.dictionary);
-    const lang = useSelector(state => state.language);
-    const keyword = (key) => {
-        return (dictionary !== null) ? dictionary[lang][key] : "";
-    };
+    const keyword = useLoadLanguage("components/NavItems/tools/Alltools.tsv", tsv);
     const tools = props.tools;
 
     const [videoUrl, setVideoUrl] = useState(null);
@@ -59,8 +49,8 @@ const AllTools = (props) => {
                     tools.map((value, key) => {
                         if (key !== 0)
                             return (
-                                <Grid item>
-                                    <Grid justify="center">
+                                <Grid item key={key}>
+                                    <Grid>
                                         <Grid item onClick={() => handleClick(value.path)}>
                                             <img
                                                 style={{

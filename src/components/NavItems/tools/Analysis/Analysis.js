@@ -6,12 +6,12 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
 import Button from "@material-ui/core/Button";
 import LinearProgress from "@material-ui/core/LinearProgress";
-import CustomTile from "../../../utility/customTitle/customTitle"
+import CustomTile from "../../../Shared/CustomTitle/CustomTitle"
 import Box from "@material-ui/core/Box";
 import YoutubeResults from "./Results/YoutubeResults.js"
 import TwitterResults from "./Results/TwitterResults";
 import {useAnalysisWrapper} from "./Hooks/useAnalysisWrapper";
-import useMyStyles from "../../../utility/MaterialUiStyles/useMyStyles"
+import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles"
 import {useParams} from 'react-router-dom'
 import Iframe from "react-iframe";
 import useFacebookHandler from "./Hooks/useFacebookHandler";

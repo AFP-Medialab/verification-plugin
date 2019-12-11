@@ -2,15 +2,16 @@ import React, {useState} from "react";
 import Paper from "@material-ui/core/Paper";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import {useDispatch, useSelector} from "react-redux";
-import ImageGridList from "../../../../utility/ImageGridList/ImageGridList";
+import ImageGridList from "../../../../Shared/ImageGridList/ImageGridList";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import Divider from "@material-ui/core/Divider";
 import Button from "@material-ui/core/Button";
 import {useKeyframes} from "../Hooks/usekeyframes";
 import ImageReverseSearch from "../../ImageReverseSearch";
-import CloseResult from "../../../../CloseResult/CloseResult";
+import CloseResult from "../../../../Shared/CloseResult/CloseResult";
 import {cleanKeyframesState} from "../../../../../redux/actions/tools/keyframesActions";
+import OnClickInfo from "../../../../Shared/OnClickInfo/OnClickInfo";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -42,9 +43,7 @@ const KeyFramesResults = (props) => {
                 <Typography variant={"h5"}>
                     {keyword("keyframes_content_title")}
                 </Typography>
-                <Typography variant={"body1"}>
-                    {keyword("keyframes_tip")}
-                </Typography>
+                <OnClickInfo/>
                 <Box m={2}/>
                 <Divider/>
                 <Box m={2}/>

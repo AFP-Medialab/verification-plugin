@@ -17,9 +17,10 @@ import GridList from "@material-ui/core/GridList";
 import GridListTile from "@material-ui/core/GridListTile";
 import Button from "@material-ui/core/Button";
 import ImageReverseSearch from "../../ImageReverseSearch";
-import CloseResult from "../../../../CloseResult/CloseResult";
+import CloseResult from "../../../../Shared/CloseResult/CloseResult";
 import {cleanAnalysisState} from "../../../../../redux/actions/tools/analysisActions";
-import useMyStyles from "../../../../utility/MaterialUiStyles/useMyStyles";
+import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
+import OnClickInfo from "../../../../Shared/OnClickInfo/OnClickInfo";
 
 const TwitterResults = (props) => {
     const classes = useMyStyles();
@@ -438,6 +439,8 @@ const TwitterResults = (props) => {
                             <Typography variant={"h6"}>
                                 {keyword("navbar_thumbnails")}
                             </Typography>
+                            <Box m={1}/>
+                            <OnClickInfo/>
                             <Box m={1}/>
                             <div className={classes.imagesRoot}>
                                 <GridList cellHeight={160} className={classes.gridList} cols={3}>

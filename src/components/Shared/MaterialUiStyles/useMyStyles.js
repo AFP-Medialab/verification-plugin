@@ -100,7 +100,6 @@ const useMyStyles = makeStyles(theme => ({
     popUp: {
         width: "300px",
         padding: theme.spacing(3, 2),
-        marginTop: 5,
         textAlign: "center",
     },
     grow: {
@@ -216,6 +215,14 @@ const useMyStyles = makeStyles(theme => ({
         width: "auto",
         maxWidth: "300px",
         maxHeight: "300px"
+    },
+    onClickInfo : {
+        borderColor: "grey",
+        borderRadius: '10px',
+        borderStyle: "solid",
+        borderWidth: "2px",
+        paddingTop: "10px",
+        paddingBottom: "10px"
     }
 }));
 export default useMyStyles;
