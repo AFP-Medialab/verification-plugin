@@ -100,7 +100,6 @@ const useMyStyles = makeStyles(theme => ({
     popUp: {
         width: "300px",
         padding: theme.spacing(3, 2),
-        marginTop: 5,
         textAlign: "center",
     },
     grow: {
