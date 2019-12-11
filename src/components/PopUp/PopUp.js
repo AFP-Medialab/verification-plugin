@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import useMyStyles from "../utility/MaterialUiStyles/useMyStyles";
+import useMyStyles from "../Shared/MaterialUiStyles/useMyStyles";
 import {Typography} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import weVerifyLogo from "./images/logo-we-verify.png";
@@ -8,7 +8,7 @@ import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
 import Grid from "@material-ui/core/Grid";
-import ImageGridList from "../utility/ImageGridList/ImageGridList";
+import ImageGridList from "../Shared/ImageGridList/ImageGridList";
 import Link from "@material-ui/core/Link";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";

@@ -1,5 +1,5 @@
 import {Paper} from "@material-ui/core";
-import CustomTile from "../../../utility/customTitle/customTitle";
+import CustomTile from "../../../Shared/CustomTitle/CustomTitle";
 import Box from "@material-ui/core/Box";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
@@ -10,7 +10,7 @@ import {useSelector} from "react-redux";
 import useGetImages from "./Hooks/useGetImages";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import ForensicResults from "./Results/ForesnsicResult";
-import useMyStyles from "../../../utility/MaterialUiStyles/useMyStyles";
+import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import {useParams} from 'react-router-dom'
 
 const Forensic = () => {

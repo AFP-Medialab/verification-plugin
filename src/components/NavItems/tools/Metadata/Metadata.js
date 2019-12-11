@@ -1,6 +1,6 @@
 import {Paper} from "@material-ui/core";
 import React, {useEffect, useState} from "react";
-import CustomTile from "../../../utility/customTitle/customTitle";
+import CustomTile from "../../../Shared/CustomTitle/CustomTitle";
 import Box from "@material-ui/core/Box";
 import {useSelector} from "react-redux";
 import TextField from "@material-ui/core/TextField";
@@ -17,7 +17,7 @@ import MetadataImageResult from "./Results/MetadataImageResult";
 import MetadataVideoResult from "./Results/MetadataVideoResult";
 import useImageTreatment from "./Hooks/useImageTreatment";
 import useVideoTreatment from "./Hooks/useVideoTreatment";
-import useMyStyles from "../../../utility/MaterialUiStyles/useMyStyles";
+import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 
 const Metadata = () => {
     const classes = useMyStyles();

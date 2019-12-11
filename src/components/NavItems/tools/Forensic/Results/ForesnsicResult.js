@@ -17,7 +17,7 @@ import Collapse from "@material-ui/core/Collapse";
 import clsx from 'clsx';
 import Lightbox from 'react-image-lightbox';
 import 'react-image-lightbox/style.css';
-import CloseResult from "../../../../CloseResult/CloseResult";
+import CloseResult from "../../../../Shared/CloseResult/CloseResult";
 import {cleanForensicState} from "../../../../../redux/actions/tools/forensicActions";
 import Radio from "@material-ui/core/Radio";
 import RadioButtonUncheckedIcon from '@material-ui/icons/RadioButtonUnchecked';

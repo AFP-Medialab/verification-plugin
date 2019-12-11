@@ -17,10 +17,10 @@ import GridList from "@material-ui/core/GridList";
 import GridListTile from "@material-ui/core/GridListTile";
 import Button from "@material-ui/core/Button";
 import ImageReverseSearch from "../../ImageReverseSearch";
-import CloseResult from "../../../../CloseResult/CloseResult";
+import CloseResult from "../../../../Shared/CloseResult/CloseResult";
 import {cleanAnalysisState} from "../../../../../redux/actions/tools/analysisActions";
-import useMyStyles from "../../../../utility/MaterialUiStyles/useMyStyles";
-import OnClickInfo from "../../../../OnClickInfo/OnClickInfo";
+import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
+import OnClickInfo from "../../../../Shared/OnClickInfo/OnClickInfo";
 
 const YoutubeResults = (props) => {
     const classes = useMyStyles();

@@ -1,12 +1,12 @@
 import {Paper, Box, TextField, Button, Typography} from "@material-ui/core";
 import React, {useEffect, useState} from "react";
-import CustomTile from "../../../utility/customTitle/customTitle";
+import CustomTile from "../../../Shared/CustomTitle/CustomTitle";
 import {useDispatch, useSelector} from "react-redux";
 import 'react-image-crop/dist/ReactCrop.css';
 import 'tui-image-editor/dist/tui-image-editor.css'
 import ImageResult from "./Results/ImageResult";
 import FolderOpenIcon from '@material-ui/icons/FolderOpen';
-import useMyStyles from "../../../utility/MaterialUiStyles/useMyStyles";
+import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import {useParams} from 'react-router-dom'
 import {setMagnifierResult} from "../../../../redux/actions/tools/magnifierActions";
 import {setError} from "../../../../redux/actions/errorActions";

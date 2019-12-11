@@ -3,7 +3,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {Paper} from "@material-ui/core";
 import Box from "@material-ui/core/Box";
 import makeStyles from "@material-ui/core/styles/makeStyles";
-import CustomTile from "../../utility/customTitle/customTitle";
+import CustomTile from "../../Shared/CustomTitle/CustomTitle";
 import europeImage from "./images/logo_EUh2020_horizontal.png"
 import itiImage from "./images/iti.jpg"
 import afpImage from "./images/Logo-AFP-384.png"

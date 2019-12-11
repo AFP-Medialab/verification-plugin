@@ -1,21 +1,21 @@
 import {Paper} from "@material-ui/core";
-import CustomTile from "../../../utility/customTitle/customTitle";
+import CustomTile from "../../../Shared/CustomTitle/CustomTitle";
 import TextField from "@material-ui/core/TextField";
 import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
 import React from "react";
 import ImageReverseSearch from "../ImageReverseSearch";
-import ImageGridList from "../../../utility/ImageGridList/ImageGridList";
+import ImageGridList from "../../../Shared/ImageGridList/ImageGridList";
 import {useDispatch, useSelector} from "react-redux";
 import Radio from "@material-ui/core/Radio";
 import FormControl from "@material-ui/core/FormControl";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
-import useMyStyles from "../../../utility/MaterialUiStyles/useMyStyles";
-import {useInput} from "../../../Hooks/useInput";
+import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
+import {useInput} from "../../../../Hooks/useInput";
 import {cleanThumbnailsState, setThumbnailsResult} from "../../../../redux/actions/tools/thumbnailsActions"
 import {setError} from "../../../../redux/actions/errorActions"
-import CloseResult from "../../../CloseResult/CloseResult";
+import CloseResult from "../../../Shared/CloseResult/CloseResult";
 import Checkbox from "@material-ui/core/Checkbox";
 import FormGroup from "@material-ui/core/FormGroup";
 import Grid from "@material-ui/core/Grid";

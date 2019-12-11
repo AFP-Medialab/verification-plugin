@@ -13,7 +13,7 @@ import Metadata from "../../NavItems/tools/Metadata/Metadata";
 import VideoRights from "../../NavItems/tools/VideoRights/VideoRights";
 import Forensic from "../../NavItems/tools/Forensic/Forensic";
 import {Route, Switch} from 'react-router-dom'
-import Footer from "../../Footer/Footer";
+import Footer from "../../Shared/Footer/Footer";
 import TwitterSna from "../../NavItems/tools/TwitterSna/TwitterSna";
 
 const DrawerItem = (props) => {
