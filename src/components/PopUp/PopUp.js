@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import useMyStyles from "../utility/MaterialUiStyles/useMyStyles";
 import {Typography} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
-import inVidLogo from "./images/InVID-logo.svg";
+import weVerifyLogo from "./images/logo-we-verify.png";
 import ExpansionPanel from "@material-ui/core/ExpansionPanel";
 import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
@@ -84,21 +84,21 @@ const PopUp = () => {
 
     return (
         <div className={classes.popUp}>
-            <ExpansionPanel>
-                <Button fullWidth={true} width={"100%"} onClick={
-                    () => window.open("/popup.html#/app/tools/all")
-                }>
-                    <Grid container alignContent={"center"}
-                          spacing={3} alignItems={"center"}>
-                        <Grid item>
-                            <img src={inVidLogo} alt={inVidLogo} style={{width: "60px"}}/>
-                        </Grid>
-                        <Grid item>
-                            Open InVid (add tsv)
-                        </Grid>
-                    </Grid>
-                </Button>
-            </ExpansionPanel>
+            <Grid justify={"center"}
+                  spacing={3} alignItems={"center"}>
+                <Grid item>
+                    <img src={weVerifyLogo} alt={weVerifyLogo} style={{width: "100px"}}/>
+                </Grid>
+                <Grid item>
+                    <Button variant="outlined" color="primary" fullWidth={true} width={"100%"} onClick={
+                        () => window.open("/popup.html#/app/tools/all")
+                    }>
+                        Open WebSite (add tsv)
+                    </Button>
+                </Grid>
+            </Grid>
+
+
             <ExpansionPanel onClick={videoClick}>
                 <ExpansionPanelSummary
                     expandIcon={<ExpandMoreIcon/>}
@@ -114,7 +114,7 @@ const PopUp = () => {
                                 videoList.map((url, index) => {
                                     return (
                                         <ListItem key={index}>
-                                            <Grid  container alignContent={"center"}
+                                            <Grid container alignContent={"center"}
                                                   spacing={1} alignItems={"center"}>
                                                 <Grid item>
                                                     <Button variant="outlined" size="small" color={"primary"}
@@ -123,7 +123,7 @@ const PopUp = () => {
                                                     </Button>
                                                 </Grid>
                                                 <Grid item>
-                                                    <Link  onClick={() => window.open(url)} variant="body2">
+                                                    <Link onClick={() => window.open(url)} variant="body2">
                                                         {url.substring(0, 20) + "..."}
                                                     </Link>
                                                 </Grid>
