@@ -20,6 +20,7 @@ import ImageReverseSearch from "../../ImageReverseSearch";
 import CloseResult from "../../../../CloseResult/CloseResult";
 import {cleanAnalysisState} from "../../../../../redux/actions/tools/analysisActions";
 import useMyStyles from "../../../../utility/MaterialUiStyles/useMyStyles";
+import OnClickInfo from "../../../../OnClickInfo/OnClickInfo";
 
 const TwitterResults = (props) => {
     const classes = useMyStyles();
@@ -438,6 +439,8 @@ const TwitterResults = (props) => {
                             <Typography variant={"h6"}>
                                 {keyword("navbar_thumbnails")}
                             </Typography>
+                            <Box m={1}/>
+                            <OnClickInfo/>
                             <Box m={1}/>
                             <div className={classes.imagesRoot}>
                                 <GridList cellHeight={160} className={classes.gridList} cols={3}>
