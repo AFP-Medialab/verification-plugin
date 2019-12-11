@@ -2,16 +2,16 @@ import {Box, Paper} from "@material-ui/core";
 import React, {useState} from "react";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import {useSelector} from "react-redux";
-import CustomTile from "../../../utility/customTitle/customTitle";
+import CustomTile from "../../../Shared/CustomTitle/CustomTitle";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
-import {useInput} from "../../../Hooks/useInput";
+import {useInput} from "../../../../Hooks/useInput";
 import {createUrl} from "./createUrl";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Radio from "@material-ui/core/Radio";
 import FormControl from "@material-ui/core/FormControl";
-import DateTimePicker from "../../../DateTimePicker/DateTimePicker";
+import DateTimePicker from "../../../Shared/DateTimePicker/DateTimePicker";
 
 const useStyles = makeStyles(theme => ({
     root: {

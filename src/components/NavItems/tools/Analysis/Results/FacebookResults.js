@@ -1,8 +1,8 @@
 import {useDispatch, useSelector} from "react-redux";
-import useMyStyles from "../../../../utility/MaterialUiStyles/useMyStyles";
+import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 import Paper from "@material-ui/core/Paper";
 import React from "react";
-import CloseResult from "../../../../CloseResult/CloseResult";
+import CloseResult from "../../../../Shared/CloseResult/CloseResult";
 import {cleanAnalysisState} from "../../../../../redux/actions/tools/analysisActions";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
@@ -20,6 +20,7 @@ import GridList from "@material-ui/core/GridList";
 import GridListTile from "@material-ui/core/GridListTile";
 import Button from "@material-ui/core/Button";
 import ImageReverseSearch from "../../ImageReverseSearch";
+import OnClickInfo from "../../../../Shared/OnClickInfo/OnClickInfo";
 
 const FacebookResults = (props) => {
     const classes = useMyStyles();
@@ -234,6 +235,8 @@ const FacebookResults = (props) => {
                             <Typography variant={"h6"}>
                                 {keyword("navbar_thumbnails")}
                             </Typography>
+                            <Box m={1}/>
+                            <OnClickInfo/>
                             <Box m={1}/>
                             <div className={classes.imagesRoot}>
                                 <GridList cellHeight={160} className={classes.gridList} cols={3}>

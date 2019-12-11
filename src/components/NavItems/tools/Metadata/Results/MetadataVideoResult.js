@@ -8,9 +8,11 @@ import TableCell from "@material-ui/core/TableCell";
 import Table from "@material-ui/core/Table";
 import Box from "@material-ui/core/Box";
 import Tooltip from "@material-ui/core/Tooltip";
-import useMyStyles from "../../../../utility/MaterialUiStyles/useMyStyles";
-import CloseResult from "../../../../CloseResult/CloseResult";
+import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
+import CloseResult from "../../../../Shared/CloseResult/CloseResult";
 import {cleanMetadataState} from "../../../../../redux/actions/tools/metadataActions";
+import Button from "@material-ui/core/Button";
+import MapIcon from "@material-ui/icons/Map";
 
 
 const MetadataVideoResult = (result) => {
@@ -22,6 +24,54 @@ const MetadataVideoResult = (result) => {
     };
 
     const report = result["result"];
+
+    const convertDMSToDD = (GPStitude, direction) => {
+        if (!GPStitude || !direction)
+            return null;
+
+        let dd = GPStitude[0] + (GPStitude[1] / 60) + (GPStitude[2] / 3600);
+
+        if (direction === "S" || direction === "W") {
+            dd = dd * -1;
+        }
+
+        return dd;
+    };
+
+    const getGoogleMapsLink = (latitue, latitudeRef, longitude, longitudeRef) => {
+        let url = "https://www.google.com/maps/place/" //38%C2%B054'35.4%22N+1%C2%B026'19.2%22E/
+        let lat = latitue[0] + "%C2%B0" + latitue[1] + "'" + latitue[2] + "%22" + latitudeRef;
+        let long = longitude[0] + "%C2%B0" + longitude[1] + "'" + longitude[2] + "%22" + longitudeRef;
+        return url + lat + "+" + long
+    };
+
+    let gpsInfo = [
+        {
+            title: keyword("metadata_img_gps_fields_1"),
+            value: report.GPSLatitudeRef,
+            description: keyword("metadata_img_gps_desc_1")
+        },
+        {
+            title: keyword("metadata_img_gps_fields_2"),
+            value: convertDMSToDD(report.GPSLatitude, report.GPSLatitudeRef),
+            description: keyword("metadata_img_gps_desc_2")
+        },
+        {
+            title: keyword("metadata_img_gps_fields_3"),
+            value: report.GPSLongitudeRef,
+            description: keyword("metadata_img_gps_desc_3")
+        },
+        {
+            title: keyword("metadata_img_gps_fields_4"),
+            value: convertDMSToDD(report.GPSLongitude, report.GPSLongitudeRef),
+            description: keyword("metadata_img_gps_desc_4")
+        },
+        {
+            title: keyword("metadata_img_gps_fields_5"),
+            value: (report.GPSTimeStamp) ? report.GPSTimeStamp[0] + ":" + report.GPSTimeStamp[1] + ":" + report.GPSTimeStamp[2] : null,
+            description: keyword("metadata_img_gps_desc_5")
+        },
+    ];
 
     let videoMetadata = [
         {
@@ -318,33 +368,78 @@ const MetadataVideoResult = (result) => {
                 </Table>
             </div>
             <Box m={3}/>
-            <Typography variant={"h5"}>
-                {keyword("audio_title")}
-            </Typography>
-            <div>
-                <Table size="small" aria-label="a dense table">
-                    <TableBody>
-                        {
-                            audioTrack &&
-                            audioTrack.map((value, key) => {
-                                if (value.value)
-                                    return (
-                                        value.value &&
-                                        <TableRow key={key}>
-                                            <Tooltip title={value.description} placement="right">
-                                                <TableCell component="th" scope="row">
-                                                    {value.title}
-                                                </TableCell>
-                                            </Tooltip>
-                                            <TableCell align="right">{value.value}</TableCell>
-                                        </TableRow>
-                                    );
-                                return null;
-                            })
-                        }
-                    </TableBody>
-                </Table>
-            </div>
+            {
+                audioTrack &&
+                <div>
+                    <Typography variant={"h5"}>
+                        {keyword("audio_title")}
+                    </Typography>
+                    <div>
+                        <Table size="small" aria-label="a dense table">
+                            <TableBody>
+                                {
+                                    audioTrack.map((value, key) => {
+                                        if (value.value)
+                                            return (
+                                                value.value &&
+                                                <TableRow key={key}>
+                                                    <Tooltip title={value.description} placement="right">
+                                                        <TableCell component="th" scope="row">
+                                                            {value.title}
+                                                        </TableCell>
+                                                    </Tooltip>
+                                                    <TableCell align="right">{value.value}</TableCell>
+                                                </TableRow>
+                                            );
+                                        return null;
+                                    })
+                                }
+                            </TableBody>
+                        </Table>
+                    </div>
+                </div>
+            }
+            {
+                report.GPSLatitudeRef &&
+                <div>
+                    <Box m={3}/>
+                    <Typography variant={"h5"}>
+                        {keyword("metadata_img_gps_title")}
+                    </Typography>
+                    <div>
+                        <Table size="small" aria-label="a dense table">
+                            <TableBody>
+                                {
+                                    gpsInfo.map((value, key) => {
+                                        if (value.value)
+                                            return (
+                                                value.value &&
+                                                <TableRow key={key}>
+                                                    <Tooltip title={value.description} placement="right">
+                                                        <TableCell component="th" scope="row">
+                                                            {value.title}
+                                                        </TableCell>
+                                                    </Tooltip>
+                                                    <TableCell align="right">{value.value}</TableCell>
+                                                </TableRow>
+                                            );
+                                        return null;
+                                    })
+                                }
+                            </TableBody>
+                        </Table>
+                    </div>
+                    <Box m={2}/>
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={() => window.open(getGoogleMapsLink(report.GPSLatitude, report.GPSLatitudeRef, report.GPSLongitude, report.GPSLongitudeRef), "_blank")}
+                    >
+                        <MapIcon/>
+                        <Typography variant={"subtitle2"}>{keyword("metadata_gps_button")}</Typography>
+                    </Button>
+                </div>
+            }
         </Paper>
     );
 };

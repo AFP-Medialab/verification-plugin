@@ -1,4 +1,4 @@
-import convertToGMT from "../../../utility/DataTimePicker/convertToGMT"
+import convertToGMT from "../../../Shared/DateTimePicker/convertToGMT"
 
 export function replaceAll(str, find, replace)
 {
