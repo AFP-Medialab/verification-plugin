@@ -20,7 +20,6 @@ import {useDispatch} from "react-redux";
 
 const VideoRightsResults = (props) => {
     const classes = useMyStyles();
-
     const dispatch = useDispatch();
 
     const result = props.result;

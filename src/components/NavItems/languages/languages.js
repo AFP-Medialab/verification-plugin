@@ -10,10 +10,10 @@ const Languages = () => {
     const dictionary = useSelector(state => state.dictionary);
     const lang = useSelector(state => state.language);
     const keyword = (key) => {
-        return (dictionary !==  null)? dictionary[lang][key]: "";
+        return (dictionary && dictionary[lang])? dictionary[lang][key]: "";
     };
     const keywordByLang = (language, key) => {
-        return (dictionary !==  null)? dictionary[language][key]: "";
+        return (dictionary && dictionary[language])? dictionary[language][key]: "";
     };
 
     const dispatch = useDispatch();
