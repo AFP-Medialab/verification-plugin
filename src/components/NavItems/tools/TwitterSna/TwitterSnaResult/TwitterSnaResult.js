@@ -61,10 +61,17 @@ export default function TwitterSnaResult(props) {
 
     useEffect(() => {
         setResult(props.result);
-        setHistoTweets(null);
-        setCloudTweets(null);
         
     }, [JSON.stringify(props.result), props.result]);
+
+    useEffect(() => {
+        setHistoTweets(null);
+        setCloudTweets(null);
+        setPieCharts0(null);
+        setPieCharts1(null);
+        setPieCharts2(null);
+        setPieCharts3(null);
+    }, [JSON.stringify(props.request), props.request])
 
     if (result === null)
         return <div/>;
@@ -187,7 +194,7 @@ export default function TwitterSnaResult(props) {
         });
     }
 
-    console.log(pieCharts3);
+    console.log(props.request);
     const onPieChartClick = (data, nbType, index) => {
         if (index === 3) {
             console.log("CLICKED");
