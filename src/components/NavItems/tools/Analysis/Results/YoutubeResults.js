@@ -1,5 +1,5 @@
 import React from "react";
-import {useDispatch, useSelector} from "react-redux";
+import {useDispatch} from "react-redux";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
@@ -21,14 +21,12 @@ import CloseResult from "../../../../Shared/CloseResult/CloseResult";
 import {cleanAnalysisState} from "../../../../../redux/actions/tools/analysisActions";
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 import OnClickInfo from "../../../../Shared/OnClickInfo/OnClickInfo";
+import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
+import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Analysis.tsv";
 
 const YoutubeResults = (props) => {
     const classes = useMyStyles();
-    const dictionary = useSelector(state => state.dictionary);
-    const lang = useSelector(state => state.language);
-    const keyword = (key) => {
-        return (dictionary !== null) ? dictionary[lang][key] : "";
-    };
+    const keyword = useLoadLanguage("components/NavItems/tools/Analysis.tsv", tsv);
     const dispatch = useDispatch();
 
     const [expanded, setExpanded] = React.useState(false);
@@ -89,7 +87,7 @@ const YoutubeResults = (props) => {
                 target="_blank">{report["source"]["url"]}</a>
         },
         {
-            title: "comments count (add to tsv)",
+            title: "youtube_channel_name_5",
             value: report["source"]["subscriberCount"]
         },
     ];

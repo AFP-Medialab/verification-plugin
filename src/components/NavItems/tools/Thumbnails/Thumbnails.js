@@ -18,17 +18,12 @@ import {setError} from "../../../../redux/actions/errorActions"
 import CloseResult from "../../../Shared/CloseResult/CloseResult";
 import Checkbox from "@material-ui/core/Checkbox";
 import FormGroup from "@material-ui/core/FormGroup";
-import Grid from "@material-ui/core/Grid";
-
+import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
+import tsv from "../../../../LocalDictionary/components/NavItems/tools/Thumbnails.tsv";
 
 const Thumbnails = () => {
     const classes = useMyStyles();
-
-    const dictionary = useSelector(state => state.dictionary);
-    const lang = useSelector(state => state.language);
-    const keyword = (key) => {
-        return (dictionary !== null) ? dictionary[lang][key] : "";
-    };
+    const keyword = useLoadLanguage("components/NavItems/tools/Thumbnails.tsv", tsv);
 
     const resultUrl = useSelector(state => state.thumbnails.url);
     const resultData = useSelector(state => state.thumbnails.result);

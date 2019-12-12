@@ -1,7 +1,6 @@
 import {Paper} from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 import React, {useState} from "react";
-import makeStyles from "@material-ui/core/styles/makeStyles";
 import HelpIcon from '@material-ui/icons/Help';
 import IconButton from "@material-ui/core/IconButton";
 import Button from "@material-ui/core/Button";
@@ -13,25 +12,10 @@ import history from "../../../Shared/History/History";
 import Typography from "@material-ui/core/Typography";
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/Alltools.tsv";
-
-const useStyles = makeStyles(theme => ({
-    root: {
-        padding: theme.spacing(3, 2),
-        marginTop: 20,
-        textAlign: "center",
-    },
-    card: {
-        paddingRight: 0,
-    },
-
-    expand: {
-        float: "right",
-    },
-}));
-
+import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 
 const AllTools = (props) => {
-    const classes = useStyles();
+    const classes = useMyStyles();
     const keyword = useLoadLanguage("components/NavItems/tools/Alltools.tsv", tsv);
     const tools = props.tools;
 
@@ -40,7 +24,6 @@ const AllTools = (props) => {
     const handleClick = (path) => {
         history.push("/app/tools/" + path)
     };
-
 
     return (
         <Paper className={classes.root}>

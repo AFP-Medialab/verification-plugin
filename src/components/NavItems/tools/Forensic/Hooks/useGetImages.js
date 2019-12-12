@@ -3,14 +3,11 @@ import axios from "axios"
 import {useDispatch, useSelector} from "react-redux";
 import{setForensicsLoading, setForensicsResult} from "../../../../../redux/actions/tools/forensicActions";
 import {setError} from "../../../../../redux/actions/errorActions";
+import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
+import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Forensic.tsv";
 
 const useGetImages = (url) => {
-    const dictionary = useSelector(state => state.dictionary);
-    const lang = useSelector(state => state.language);
-    const keyword = useCallback( (key) => {
-        return (dictionary !== null) ? dictionary[lang][key] : "";
-    }, [dictionary, lang]);
-
+    const keyword = useLoadLanguage("components/NavItems/tools/Forensic.tsv", tsv);
     const dispatch = useDispatch();
 
 
@@ -20,7 +17,7 @@ const useGetImages = (url) => {
             if (keyword(e) !== undefined)
                 dispatch(setError(keyword(e)));
             else
-                dispatch(setError("Please give a correct link (TSV change)"));
+                dispatch(setError(keyword("please_give_a_correct_link")));
             dispatch(setForensicsLoading(false));
         };
 

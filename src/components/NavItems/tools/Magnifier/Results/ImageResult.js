@@ -4,15 +4,12 @@ import Loop from "./Loop";
 import Box from "@material-ui/core/Box";
 import {useDispatch, useSelector} from "react-redux";
 import Button from "@material-ui/core/Button";
-import makeStyles from "@material-ui/core/styles/makeStyles";
 import 'react-image-crop/dist/ReactCrop.css';
 import 'tui-image-editor/dist/tui-image-editor.css'
 import ImageEditor from '@toast-ui/react-image-editor'
 import Fade from '@material-ui/core/Fade';
 import Modal from "@material-ui/core/Modal";
 import Backdrop from '@material-ui/core/Backdrop';
-
-
 import icona from "tui-image-editor/dist/svg/icon-a.svg";
 import iconb from "tui-image-editor/dist/svg/icon-b.svg";
 import iconc from "tui-image-editor/dist/svg/icon-c.svg";
@@ -22,6 +19,9 @@ import {cleanMagnifierState, setMagnifierResult} from "../../../../../redux/acti
 import ImageReverseSearch from "../../ImageReverseSearch";
 import history from "../../../../Shared/History/History";
 import CloseResult from "../../../../Shared/CloseResult/CloseResult";
+import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
+import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Magnifier.tsv";
+import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 
 const myTheme = {
     "menu.backgroundColor": "white",
@@ -35,50 +35,9 @@ const myTheme = {
     "menu.hoverIcon.path": iconc,
 };
 
-const useStyles = makeStyles(theme => ({
-    root: {
-        padding: theme.spacing(3, 2),
-        marginTop: 20,
-        textAlign: "center",
-    },
-    textFiledError: {
-        MuiInput: {
-            underline: {
-                borderBottom: theme.palette.error.main,
-            },
-            '&:hover fieldset': {
-                borderBottom: 'yellow',
-            },
-        },
-    },
-    grow: {
-        flexGrow: 1,
-    },
-    modal: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    paper: {
-        backgroundColor: "#151515",
-        width: window.innerWidth * 0.9,
-
-    },
-    modalButton: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-}));
-
-
 const ImageResult = () => {
-    const classes = useStyles();
-    const dictionary = useSelector(state => state.dictionary);
-    const lang = useSelector(state => state.language);
-    const keyword = (key) => {
-        return (dictionary !== null) ? dictionary[lang][key] : "";
-    };
+    const classes = useMyStyles();
+    const keyword = useLoadLanguage("components/NavItems/tools/Magnifier.tsv", tsv);
 
     const original = useSelector(state => state.magnifier.url);
     const resultImage = useSelector(state => state.magnifier.result);

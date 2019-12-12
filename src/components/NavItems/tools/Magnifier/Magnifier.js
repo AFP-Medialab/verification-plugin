@@ -10,15 +10,14 @@ import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import {useParams} from 'react-router-dom'
 import {setMagnifierResult} from "../../../../redux/actions/tools/magnifierActions";
 import {setError} from "../../../../redux/actions/errorActions";
+import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
+import tsv from "../../../../LocalDictionary/components/NavItems/tools/Magnifier.tsv";
 
 const Magnifier = () => {
     const {url} = useParams();
     const classes = useMyStyles();
-    const dictionary = useSelector(state => state.dictionary);
-    const lang = useSelector(state => state.language);
-    const keyword = (key) => {
-        return (dictionary !== null) ? dictionary[lang][key] : "";
-    };
+    const keyword = useLoadLanguage("components/NavItems/tools/Magnifier.tsv", tsv);
+
 
     const resultUrl = useSelector(state => state.magnifier.url);
     const resultResult = useSelector(state => state.magnifier.result);
@@ -29,7 +28,7 @@ const Magnifier = () => {
     const getErrorText = (error) => {
         if (keyword(error) !== undefined)
             return keyword(error);
-        return "Please give a correct link (TSV change)"
+        return keyword("please_give_a_correct_link");
     };
 
 

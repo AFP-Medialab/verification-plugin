@@ -16,15 +16,13 @@ import {useParams} from 'react-router-dom'
 import Iframe from "react-iframe";
 import useFacebookHandler from "./Hooks/useFacebookHandler";
 import FacebookResults from "./Results/FacebookResults";
+import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
+import tsv from "../../../../LocalDictionary/components/NavItems/tools/Analysis.tsv";
 
 const Analysis = () => {
     const {url} = useParams();
     const classes = useMyStyles();
-    const dictionary = useSelector(state => state.dictionary);
-    const lang = useSelector(state => state.language);
-    const keyword = (key) => {
-        return (dictionary !== null) ? dictionary[lang][key] : "";
-    };
+    const keyword = useLoadLanguage("components/NavItems/tools/Analysis.tsv", tsv);
 
     const resultUrl = useSelector(state => state.analysis.url);
     const resultData = useSelector(state => state.analysis.result);

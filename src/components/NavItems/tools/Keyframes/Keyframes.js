@@ -13,17 +13,14 @@ import KeyFramesResults from "./Results/KeyFramesResults";
 import {useKeyframeWrapper} from "./Hooks/useKeyframeWrapper";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import {useParams} from 'react-router-dom'
+import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
+import tsv from "../../../../LocalDictionary/components/NavItems/tools/Keyframes.tsv";
 
 const Keyframes = (props) => {
     const {url} = useParams();
 
     const classes = useMyStyles();
-    const dictionary = useSelector(state => state.dictionary);
-    const lang = useSelector(state => state.language);
-    const keyword = (key) => {
-        return (dictionary !== null) ? dictionary[lang][key] : "";
-    };
-
+    const keyword = useLoadLanguage("components/NavItems/tools/Keyframes.tsv", tsv);
 
     // state used to toggle localFile view
     const [localFile, setLocalFile] = useState(false);

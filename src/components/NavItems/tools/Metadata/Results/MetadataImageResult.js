@@ -13,14 +13,12 @@ import Tooltip from "@material-ui/core/Tooltip";
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 import CloseResult from "../../../../Shared/CloseResult/CloseResult";
 import {cleanMetadataState} from "../../../../../redux/actions/tools/metadataActions";
+import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
+import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Metadata.tsv";
 
 const MetadataImageResult = (result) => {
     const classes = useMyStyles();
-    const dictionary = useSelector(state => state.dictionary);
-    const lang = useSelector(state => state.language);
-    const keyword = (key) => {
-        return (dictionary !== null) ? dictionary[lang][key] : "";
-    };
+    const keyword = useLoadLanguage("components/NavItems/tools/Metadata.tsv", tsv);
 
     const report = result["result"];
 

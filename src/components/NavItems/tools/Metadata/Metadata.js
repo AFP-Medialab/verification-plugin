@@ -18,23 +18,18 @@ import MetadataVideoResult from "./Results/MetadataVideoResult";
 import useImageTreatment from "./Hooks/useImageTreatment";
 import useVideoTreatment from "./Hooks/useVideoTreatment";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
+import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
+import tsv from "../../../../LocalDictionary/components/NavItems/tools/Metadata.tsv";
 
 const Metadata = () => {
     const classes = useMyStyles();
-    const dictionary = useSelector(state => state.dictionary);
-    const lang = useSelector(state => state.language);
-    const keyword = (key) => {
-        return (dictionary !== null) ? dictionary[lang][key] : "";
-    };
+    const keyword = useLoadLanguage("components/NavItems/tools/Metadata.tsv", tsv);
     const resultUrl = useSelector(state => state.metadata.url);
     const resultData = useSelector(state => state.metadata.result);
     const resultIsImage = useSelector(state => state.metadata.isImage);
 
-
     const [radioImage, setRadioImage] = useState(true);
-
     const [input, setInput] = useState((resultUrl) ? resultUrl : "");
-
     const [imageUrl, setImageurl] = useState(null);
     const [videoUrl, setVideoUrl] = useState(null);
 
