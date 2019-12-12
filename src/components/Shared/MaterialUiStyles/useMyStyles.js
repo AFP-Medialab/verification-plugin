@@ -232,7 +232,6 @@ const useMyStyles = makeStyles(theme => ({
     paper: {
         backgroundColor: "#151515",
         width: window.innerWidth * 0.9,
-
     },
     modalButton: {
         display: 'flex',
