@@ -171,7 +171,7 @@ export default function TwitterSnaResult(props) {
 
         result.tweets.forEach(tweetObj => {
           
-            if (tweetObj._source.tweet.toLowerCase().includes(word)){ //.match(new RegExp('(.)*[\.\(\)0-9\!\?\'\’\‘\"\:\,\/\\\%\>\<\«\»\ ^#]' + word + '[\.\(\)\!\?\'\’\‘\"\:\,\/\>\<\«\»\ ](.)*', "i"))) {
+            if (tweetObj._source.tweet.toLowerCase().match(new RegExp('(.)*[\.\(\)0-9\!\?\'\’\‘\"\:\,\/\\\%\>\<\«\»\ ^#]' + word + '[\.\(\)\!\?\'\’\‘\"\:\,\/\>\<\«\»\ ](.)*', "i"))) {
                 
             var date = new Date(tweetObj._source.date);
                 let tmpObj = {
