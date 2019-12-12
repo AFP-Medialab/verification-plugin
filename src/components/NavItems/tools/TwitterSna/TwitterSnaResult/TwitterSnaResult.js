@@ -58,20 +58,12 @@ export default function TwitterSnaResult(props) {
     };
     const pieCharts = [pieCharts0, pieCharts1, pieCharts2, pieCharts3];
 
-    useEffect(() => {
-        return () => {
-            setResult(null)
-        };
-    }, []);
 
     useEffect(() => {
         setResult(props.result);
         setHistoTweets(null);
         setCloudTweets(null);
-        setPieCharts0(null);
-        setPieCharts1(null);
-        setPieCharts2(null);
-        setPieCharts3(null);
+        
     }, [JSON.stringify(props.result), props.result]);
 
     if (result === null)
@@ -134,6 +126,10 @@ export default function TwitterSnaResult(props) {
                                 retweetNb: tweetObj._source.nretweets,
                             }
                         );
+                        csvArr += point.data.name + ',' +
+                        date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear() + '_' + date.getHours() + 'h' + date.getMinutes() + ',"' +
+                        tweetObj._source.tweet + '",' + tweetObj._source.nretweets + '\n';
+
 
                         if (minDate > objDate) {
                             minDate = objDate
@@ -168,7 +164,6 @@ export default function TwitterSnaResult(props) {
         csvArr += "Username,Date,Tweet,Nb of retweets, Nb of likes\n";
 
         result.tweets.forEach(tweetObj => {
-          console.log(tweetObj._source.tweet);
             if (tweetObj._source.tweet.toLowerCase().match(new RegExp('(^|((.)*[\.\(\)0-9\!\?\'\’\‘\"\:\,\/\\\%\>\<\«\»\ ^#]))' + word + '(([\.\(\)\!\?\'\’\‘\"\:\,\/\>\<\«\»\ ](.)*)|$)', "i"))) {
                 
             var date = new Date(tweetObj._source.date);
@@ -185,7 +180,6 @@ export default function TwitterSnaResult(props) {
                     tweetObj._source.tweet + '",' + tweetObj._source.nretweets + ',' + tweetObj._source.nlikes + '\n';
             }
         });
-        console.log(resData);
         callback({
             data: resData,
             columns: columns,
@@ -193,6 +187,7 @@ export default function TwitterSnaResult(props) {
         });
     }
 
+    console.log(pieCharts3);
     const onPieChartClick = (data, nbType, index) => {
         if (index === 3) {
             console.log("CLICKED");
@@ -267,6 +262,7 @@ export default function TwitterSnaResult(props) {
                 break;
 
         }
+        
     };
 
     const getCallback = (callback) => {
