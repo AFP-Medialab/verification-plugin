@@ -223,6 +223,21 @@ const useMyStyles = makeStyles(theme => ({
         borderWidth: "2px",
         paddingTop: "10px",
         paddingBottom: "10px"
-    }
+    },
+    modal: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    paper: {
+        backgroundColor: "#151515",
+        width: window.innerWidth * 0.9,
+
+    },
+    modalButton: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
 }));
 export default useMyStyles;
