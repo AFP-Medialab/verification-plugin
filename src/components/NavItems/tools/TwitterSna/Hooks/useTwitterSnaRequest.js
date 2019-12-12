@@ -1,7 +1,7 @@
 import React, {useEffect} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {setError} from "../../../../redux/actions/errorActions";
-import {setTwitterSnaLoading, setTwitterSnaResult} from "../../../../redux/actions/tools/twitterSnaActions";
+import {setError} from "../../../../../redux/actions/errorActions";
+import {setTwitterSnaLoading, setTwitterSnaResult} from "../../../../../redux/actions/tools/twitterSnaActions";
 import axios from "axios";
 
 
@@ -11,9 +11,9 @@ import {
     generateTweetCountPlotlyJson,
     generateURLArrayHTML,
     generateWordCloudPlotlyJson
-} from "./call-elastic";
-import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
-import tsv from "../../../../LocalDictionary/components/NavItems/tools/TwitterSna.tsv";
+} from "../Results/call-elastic";
+import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
+import tsv from "../../../../../LocalDictionary/components/NavItems/tools/TwitterSna.tsv";
 
 const includeWordObj = (wordObj, wordsArray) =>
 {
