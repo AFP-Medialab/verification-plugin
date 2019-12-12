@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react"
 
-export const useKeyframes = (result, dependencies) => {
+export const useKeyframes = (result) => {
 
     const [simpleList, setSimpleList] = useState([]);
     const [detailedList, setDetailedList] = useState([]);
@@ -8,7 +8,9 @@ export const useKeyframes = (result, dependencies) => {
     useEffect(() => {
         let tmpDetailed = [];
         let tmpSimple = [];
-        result["scenes"].map((scenesValue) => {
+        if (!result || !result.scenes)
+            return;
+        result.scenes.map((scenesValue) => {
             return scenesValue["shots"].map((shotsValue) => {
                 return shotsValue["subshots"].map((subshotsValue) => {
                     return subshotsValue["keyframes"].map((keyframesValue, key) => {
@@ -22,8 +24,6 @@ export const useKeyframes = (result, dependencies) => {
         });
         setDetailedList(tmpDetailed);
         setSimpleList(tmpSimple);
-    }, dependencies);
-
-
+    }, [JSON.stringify(result)]);
     return [simpleList, detailedList];
 };

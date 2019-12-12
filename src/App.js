@@ -3,9 +3,8 @@ import NavBar from "./components/NavBar/NavBar";
 import {MuiThemeProvider} from "@material-ui/core";
 import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
 import {HashRouter as Router, Route, Switch} from "react-router-dom";
-import history from "./components/utility/History/History";
+import history from "./components/Shared/History/History";
 import PopUp from "./components/PopUp/PopUp";
-
 const theme = createMuiTheme({
     palette: {
         primary: {
@@ -23,6 +22,13 @@ const theme = createMuiTheme({
     typography: {
         useNextVariants: 'true',
     },
+    overrides: {
+        MuiButton: {
+            containedPrimary: {
+                color: 'white',
+            },
+        },
+    }
 });
 
 const NotFound = () => {

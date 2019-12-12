@@ -2,10 +2,8 @@ import React from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {Paper} from "@material-ui/core";
 import Box from "@material-ui/core/Box";
-import Typography from "@material-ui/core/Typography";
 import makeStyles from "@material-ui/core/styles/makeStyles";
-import CustomTile from "../../utility/customTitle/customTitle";
-import {Image} from "@material-ui/icons";
+import CustomTile from "../../Shared/CustomTitle/CustomTitle";
 import europeImage from "./images/logo_EUh2020_horizontal.png"
 import itiImage from "./images/iti.jpg"
 import afpImage from "./images/Logo-AFP-384.png"
@@ -67,10 +65,10 @@ const About = () => {
                     })
                 }
             </Box>
-            <img className={classes.media} src={afpImage}/>
+            <img className={classes.media} src={afpImage} alt={afpImage}/>
             <Box m={1}/>
-            <img className={classes.media} src={itiImage}/>
-            <img className={classes.media} src={europeImage}/>
+            <img className={classes.media} src={itiImage}  alt={itiImage}/>
+            <img className={classes.media} src={europeImage} alt={europeImage}/>
             <Box m={1}/>
             <FormControlLabel
                 control={

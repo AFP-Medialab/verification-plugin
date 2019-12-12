@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from "react";
-import useMyStyles from "../../../utility/MaterialUiStyles/useMyStyles";
+import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import {useDispatch, useSelector} from "react-redux";
 import {Paper} from "@material-ui/core";
-import CustomTile from "../../../utility/customTitle/customTitle";
+import CustomTile from "../../../Shared/CustomTitle/CustomTitle";
 import TextField from "@material-ui/core/TextField";
 import {KeyboardDatePicker, KeyboardTimePicker, MuiPickersUtilsProvider} from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
@@ -18,13 +18,14 @@ import {setError} from "../../../../redux/actions/errorActions";
 import InputLabel from "@material-ui/core/InputLabel";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
-import convertToGMT from "../../../utility/DataTimePicker/convertToGMT";
+import convertToGMT from "../../../Shared/DateTimePicker/convertToGMT";
 import dateFormat from "dateformat"
 import useTwitterSnaRequest from "./useTwitterSnaRequest";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import TwitterSnaResult from "./TwitterSnaResult/TwitterSnaResult";
 import {replaceAll} from "../TwitterAdvancedSearch/createUrl";
-import { setTwitterSnaResult } from "../../../../redux/actions/tools/twitterSnaActions";
+import {setTwitterSnaResult} from "../../../../redux/actions/tools/twitterSnaActions";
+import DateTimePicker from "../../../Shared/DateTimePicker/DateTimePicker";
 
 const TwitterSna = () => {
     const classes = useMyStyles();
@@ -36,7 +37,7 @@ const TwitterSna = () => {
 
     const request = useSelector(state => state.twitterSna.request);
     const reduxResult = useSelector(state => state.twitterSna.result);
-    
+
     const isLoading = useSelector(state => state.twitterSna.loading);
     const dispatch = useDispatch();
 
@@ -57,8 +58,11 @@ const TwitterSna = () => {
             request.userList.join(" ")
             : "realDonaldTrump"
     );
-    const [since, setSince] = useState(request ? request.from : new Date("12-01-2016"));         // change default values
-    const [until, setUntil] = useState(request ? request.until : new Date("11-30-2019"));         // change default values
+    const [since, setSince] = useState(request ? request.from : null);         // change default values
+    const [sinceError, setSinceError] = useState(false);
+    const [until, setUntil] = useState(request ? request.until : null);         // change default values
+    const [untilError, setUntilError] = useState(false);
+
     const [langInput, setLangInput] = useState(request && request.lang ? "lang_" + request.lang : "lang_all");
     const [openLangInput, setLangInputOpen] = React.useState(false);
     const [filters, setFilers] = useState(request && request.media ? request.media : "none");
@@ -67,7 +71,7 @@ const TwitterSna = () => {
 
     const [submittedRequest, setSubmittedRequest] = useState(null);
     useTwitterSnaRequest(submittedRequest);
-    
+
     const handleErrors = (e) => {
         dispatch(setError(e))
     };
@@ -116,11 +120,34 @@ const TwitterSna = () => {
         };
     };
 
+    const sinceDateIsValid = (momentDate) => {
+        const itemDate = momentDate.toDate();
+        const currentDate = new Date();
+        if (until)
+            return itemDate <= currentDate && itemDate < until;
+        return itemDate <= currentDate;
+    };
+
     const handleSinceDateChange = (date) => {
+        setSinceError(date === null);
+        if (until && date >= until)
+            setSinceError(true);
         setSince(date);
     };
 
+    const untilDateIsValid = (momentDate) => {
+        const itemDate = momentDate.toDate();
+        const currentDate = new Date();
+        if (since)
+            return itemDate <= currentDate && since < itemDate;
+        return itemDate <= currentDate;
+    };
+
+
     const handleUntilDateChange = (date) => {
+        setUntilError(date === null);
+        if (since && date <= since)
+            setUntilError(true);
         setUntil(date);
     };
 
@@ -162,6 +189,7 @@ const TwitterSna = () => {
                 <Box m={3}/>
 
                 <TextField
+                    disabled={isLoading}
                     error={keyWordsError}
                     value={keyWords}
                     onChange={e => {
@@ -176,6 +204,7 @@ const TwitterSna = () => {
                 />
 
                 <TextField
+                    disabled={isLoading}
                     value={bannedWords}
                     onChange={e => setBannedWords(e.target.value)}
                     id="standard-full-width"
@@ -186,6 +215,7 @@ const TwitterSna = () => {
                 />
 
                 <TextField
+                    disabled={isLoading}
                     value={usersInput}
                     onChange={e => setUsersInput(e.target.value)}
                     id="standard-full-width"
@@ -194,59 +224,35 @@ const TwitterSna = () => {
                     placeholder={"word6 word7"}
                     fullWidth
                 />
-                <Grid container spacing={1}>
-                    <Grid item className={classes.grow}>
-                        <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                            <KeyboardDatePicker
-                                margin="normal"
-                                id="date-picker-dialog"
-                                label={keyword("twitter_sna_from_date")}
-                                format="MM-dd-yyyy"
-                                value={since}
-                                onChange={handleSinceDateChange}
-                                KeyboardButtonProps={{
-                                    'aria-label': 'change date',
-                                }}
-                            />
-                            <KeyboardTimePicker
-                                margin="normal"
-                                id="time-picker"
-                                label="time (add to tsv)"
-                                value={since}
-                                onChange={handleSinceDateChange}
-                                KeyboardButtonProps={{
-                                    'aria-label': 'change time',
-                                }}
-                            />
-                        </MuiPickersUtilsProvider>
+                <Grid container justify={"center"} spacing={4} className={classes.grow}>
+                    <Grid item>
+                        <DateTimePicker
+                            input={true}
+                            isValidDate={sinceDateIsValid}
+                            label={keyword("twitter_sna_from_date")}
+                            dateFormat={"YYYY-MM-DD"}
+                            timeFormat={"HH:mm:ss"}
+                            handleChange={handleSinceDateChange}
+                            error={sinceError}
+                            disabled={isLoading}
+                        />
                     </Grid>
-                    <Grid item className={classes.grow}>
-                        <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                            <KeyboardDatePicker
-                                margin="normal"
-                                id="date-picker-dialog"
-                                label={keyword("twitter_sna_until_date")}
-                                format="MM-dd-yyyy"
-                                value={until}
-                                onChange={handleUntilDateChange}
-                                KeyboardButtonProps={{
-                                    'aria-label': 'change date',
-                                }}
-                            />
-                            <KeyboardTimePicker
-                                margin="normal"
-                                id="time-picker"
-                                label="time (add to tsv)"
-                                value={until}
-                                onChange={handleUntilDateChange}
-                                KeyboardButtonProps={{
-                                    'aria-label': 'change time',
-                                }}
-                            />
-                        </MuiPickersUtilsProvider>
+                    <Grid item>
+                        <DateTimePicker
+                            input={true}
+                            isValidDate={untilDateIsValid}
+                            label={keyword("twitter_sna_until_date")}
+                            dateFormat={"YYYY-MM-DD"}
+                            timeFormat={"HH:mm:ss"}
+                            handleChange={handleUntilDateChange}
+                            error={untilError}
+                            disabled={isLoading}
+                        />
                     </Grid>
                 </Grid>
-                <FormControl component="fieldset">
+                <FormControl component="fieldset"
+                             disabled={isLoading}
+                >
                     <RadioGroup aria-label="position" name="position" value={localTime}
                                 onChange={e => setLocalTime(e.target.value)} row>
                         <FormControlLabel
@@ -268,7 +274,9 @@ const TwitterSna = () => {
                 <Box m={2}/>
                 <Grid container justify={"space-around"} spacing={5}>
                     <Grid item>
-                        <FormControl component="fieldset">
+                        <FormControl component="fieldset"
+                                     disabled={isLoading}
+                        >
                             <FormLabel component="legend">{keyword("twitter_sna_media")}</FormLabel>
                             <RadioGroup aria-label="position" name="position" value={filters}
                                         onChange={handleFiltersChange}
@@ -301,7 +309,9 @@ const TwitterSna = () => {
                         </FormControl>
                     </Grid>
                     <Grid item>
-                        <FormControl component="fieldset">
+                        <FormControl component="fieldset"
+                                     disabled={isLoading}
+                        >
                             <FormLabel component="legend">{keyword("twitter_sna_verified")}</FormLabel>
                             <RadioGroup aria-label="position" name="position" value={verifiedUsers}
                                         onChange={handleVerifiedUsersChange} row>
@@ -321,7 +331,9 @@ const TwitterSna = () => {
                         </FormControl>
                     </Grid>
                     <Grid item>
-                        <FormControl className={classes.formControl}>
+                        <FormControl className={classes.formControl}
+                                     disabled={isLoading}
+                        >
                             <InputLabel id="demo-controlled-open-select-label">{keyword("lang_choices")}</InputLabel>
                             <Select
                                 labelid="demo-controlled-open-select-label"
@@ -361,7 +373,9 @@ const TwitterSna = () => {
                     </Grid>
                 </Grid>
                 <Box m={2}/>
-                <Button variant="contained" color="primary" onClick={onSubmit}>
+                <Button variant="contained" color="primary" onClick={onSubmit}
+                        disabled={isLoading || keyWordsError || sinceError || untilError}
+                >
                     {keyword("button_submit")}
                 </Button>
                 <Box m={2}/>

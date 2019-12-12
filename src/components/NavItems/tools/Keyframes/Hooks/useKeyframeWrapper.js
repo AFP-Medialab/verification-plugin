@@ -1,4 +1,4 @@
-import {useEffect} from "react";
+import {useCallback, useEffect} from "react";
 import axios from "axios";
 import {useDispatch, useSelector} from "react-redux";
 import {setKeyframesResult, setKeyframesLoading, setKeyframesMessage} from "../../../../../redux/actions/tools/keyframesActions"
@@ -6,9 +6,9 @@ import {setError} from "../../../../../redux/actions/errorActions"
 export const useKeyframeWrapper = (url) => {
     const dictionary = useSelector(state => state.dictionary);
     const lang = useSelector(state => state.language);
-    const keyword = (key) => {
+    const keyword = useCallback( (key) => {
         return (dictionary !== null) ? dictionary[lang][key] : "";
-    };
+    }, [dictionary, lang]);
     const dispatch = useDispatch();
 
     let jsonData = {
@@ -27,8 +27,8 @@ export const useKeyframeWrapper = (url) => {
             dispatch(setKeyframesLoading(false));
         };
 
-        const lastGet = (url) => {
-            axios.get(url)
+        const lastGet = (itiUrl) => {
+            axios.get(itiUrl)
                 .then(response => {
                     dispatch(setKeyframesResult(url, response.data, false, false))
                 })
@@ -76,5 +76,5 @@ export const useKeyframeWrapper = (url) => {
             return;
         dispatch(setKeyframesLoading(true));
         postUrl("http://multimedia2.iti.gr/video_analysis/segmentation", jsonData);
-    }, [url]);
+    }, [url, keyword]);
 };

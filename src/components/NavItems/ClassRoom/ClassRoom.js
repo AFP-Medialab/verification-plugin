@@ -4,7 +4,7 @@ import {Paper} from "@material-ui/core";
 import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
 import makeStyles from "@material-ui/core/styles/makeStyles";
-import CustomTile from "../../utility/customTitle/customTitle";
+import CustomTile from "../../Shared/CustomTitle/CustomTitle";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import PropTypes from 'prop-types';
@@ -14,12 +14,10 @@ import DialogContent from "@material-ui/core/DialogContent";
 import Iframe from "react-iframe";
 import DialogActions from "@material-ui/core/DialogActions";
 import Button from "@material-ui/core/Button";
-import history from "../../utility/History/History";
 import CastForEducationIcon from '@material-ui/icons/CastForEducation';
 import Divider from "@material-ui/core/Divider";
 import TextField from "@material-ui/core/TextField";
 import youCheckImage from "../../../Images/youCheck.png"
-import ImageComponent from "material-ui-image";
 
 
 const useStyles = makeStyles(theme => ({
@@ -192,7 +190,7 @@ const ClassRoom = () => {
                     </Typography>
                 </TabPanel>
             </Box>
-            <img src={youCheckImage} width={"20%"}/>
+            <img src={youCheckImage} width={"20%"} alt={youCheckImage}/>
             <Dialog
                 height={"400px"}
                 fullWidth
