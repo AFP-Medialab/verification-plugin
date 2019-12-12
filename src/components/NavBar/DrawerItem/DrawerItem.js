@@ -2,9 +2,9 @@ import {Container} from "@material-ui/core";
 import Fade from "@material-ui/core/Fade";
 import React from "react";
 import {useDispatch} from "react-redux";
-import {selectPage, selectTool} from "../../../redux/actions";
+import {selectTool} from "../../../redux/actions";
 import AllTools from "../../NavItems/tools/Alltools/AllTools";
-import Analysis from "../../NavItems/tools/analysis/Analysis";
+import Analysis from "../../NavItems/tools/Analysis/Analysis";
 import Keyframes from "../../NavItems/tools/Keyframes/Keyframes";
 import Thumbnails from "../../NavItems/tools/Thumbnails/Thumbnails";
 import TwitterAdvancedSearch from "../../NavItems/tools/TwitterAdvancedSearch/TwitterAdvancedSearch";
@@ -13,7 +13,7 @@ import Metadata from "../../NavItems/tools/Metadata/Metadata";
 import VideoRights from "../../NavItems/tools/VideoRights/VideoRights";
 import Forensic from "../../NavItems/tools/Forensic/Forensic";
 import {Route, Switch} from 'react-router-dom'
-import Footer from "../../Footer/Footer";
+import Footer from "../../Shared/Footer/Footer";
 import TwitterSna from "../../NavItems/tools/TwitterSna/TwitterSna";
 
 const DrawerItem = (props) => {
@@ -90,6 +90,7 @@ const DrawerItem = (props) => {
                             />
                         );
                     }
+                    return null;
                 })
             }
         </Switch>

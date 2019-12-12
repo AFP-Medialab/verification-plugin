@@ -1,5 +1,3 @@
-import React from "react";
-
 let json = {};
 
 let elasticSearch_url = process.env.REACT_APP_ELK_URL;
@@ -58,7 +56,7 @@ export function generateEssidHistogramPlotlyJson(param, retweets, givenFrom, giv
     }
 
     const userAction = async (query) => {
-        let str_query = JSON.stringify(query).replace(/\\/g, "").replace(/\"{/g, "{").replace(/}\"/g, "}");
+        let str_query = JSON.stringify(query).replace(/\\/g, "").replace(/"{/g, "{").replace(/}"/g, "}");
         const response = await fetch(elasticSearch_url, {
             method: 'POST',
             body:
@@ -152,7 +150,7 @@ export function generateDonutPlotlyJson(param, field) {
         }
     }
 
-    let query = JSON.stringify(buildQuery(aggs, must, mustNot)).replace(/\\/g, "").replace(/\"{/g, "{").replace(/}\"/g, "}");
+    let query = JSON.stringify(buildQuery(aggs, must, mustNot)).replace(/\\/g, "").replace(/"{/g, "{").replace(/}"/g, "}");
     const userAction = async () => {
         const response = await fetch(elasticSearch_url, {
             method: 'POST',
@@ -165,7 +163,7 @@ export function generateDonutPlotlyJson(param, field) {
         const myJson = await response.json();
         if (field === "hashtags") {
             return getPlotlyJsonCloud(myJson, keywordList, bannedWords, hashtagsGet);
-        } else if (field === "nretweets" || field == "nlikes")
+        } else if (field === "nretweets" || field === "nlikes")
             return getPlotlyJsonCloud(myJson, keywordList, bannedWords, mostRetweetGet);
         else
             return getPlotlyJsonCloud(myJson, keywordList, bannedWords, mostTweetsGet);
@@ -181,7 +179,7 @@ export function generateWordCloudPlotlyJson(param) {
     let must = constructMatchPhrase(param);
     let mustNot = constructMatchNotPhrase(param);
 
-    let query = JSON.stringify(buildQuery({}, must, mustNot)).replace(/\\/g, "").replace(/\"{/g, "{").replace(/}\"/g, "}");
+    let query = JSON.stringify(buildQuery({}, must, mustNot)).replace(/\\/g, "").replace(/"{/g, "{").replace(/}"/g, "}");
     const userAction = async () => {
         const response = await fetch(elasticSearch_url, {
             method: 'POST',
@@ -217,7 +215,7 @@ export function generateURLArrayHTML(param) {
         return urlArray;
     }
 
-    let query = JSON.stringify(buildQuery(aggs, must, mustNot)).replace(/\\/g, "").replace(/\"{/g, "{").replace(/}\"/g, "}");
+    let query = JSON.stringify(buildQuery(aggs, must, mustNot)).replace(/\\/g, "").replace(/"{/g, "{").replace(/}"/g, "}");
     const userAction = async () => {
         const response = await fetch(elasticSearch_url, {
             method: 'POST',
@@ -465,7 +463,7 @@ function constructAggs(field) {
 async function getJson(param, aggs, must, mustNot) {
     const response = await fetch(elasticSearch_url, {
         method: 'POST',
-        body: JSON.stringify(buildQuery(aggs, must, mustNot)).replace(/\\/g, "").replace(/\"{/g, "{").replace(/}\"/g, "}"),
+        body: JSON.stringify(buildQuery(aggs, must, mustNot)).replace(/\\/g, "").replace(/"{/g, "{").replace(/}"/g, "}"),
         headers: {
             'Content-Type': 'application/json'
         }
@@ -497,7 +495,7 @@ async function getJson(param, aggs, must, mustNot) {
 async function completeJson(aggs, must, mustNot, myJson) {
     const response = await fetch(elasticSearch_url, {
         method: 'POST',
-        body: JSON.stringify(buildQuery(aggs, must, mustNot)).replace(/\\/g, "").replace(/\"{/g, "{").replace(/}\"/g, "}"),
+        body: JSON.stringify(buildQuery(aggs, must, mustNot)).replace(/\\/g, "").replace(/"{/g, "{").replace(/}"/g, "}"),
         headers: {
             'Content-Type': 'application/json'
         }
@@ -572,9 +570,7 @@ function getPlotlyJsonHisto(json, specificGet) {
         });
     });
     let lines = [];
-    let i = 0;
     while (infos.length !== 0) {
-
         let info = infos.pop();
         let date = info.date;
         let nb = info.nb;
@@ -586,7 +582,7 @@ function getPlotlyJsonHisto(json, specificGet) {
             name: info.key,
             x: [],
             y: []
-        }
+        };
 
         for (let i = 0; i < infos.length; ++i) {
             if (infos[i].key === info.key) {

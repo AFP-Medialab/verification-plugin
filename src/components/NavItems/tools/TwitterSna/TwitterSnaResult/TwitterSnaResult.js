@@ -1,4 +1,4 @@
-import useMyStyles from "../../../../utility/MaterialUiStyles/useMyStyles";
+import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 import {useDispatch, useSelector} from "react-redux";
 import React, {useEffect, useState} from "react";
 import {Paper} from "@material-ui/core";
@@ -9,12 +9,11 @@ import Typography from "@material-ui/core/Typography";
 import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
 import Plot from "react-plotly.js";
 import Box from "@material-ui/core/Box";
-import CustomTable from "../../../../utility/CustomTable/CustomTable";
+import CustomTable from "../../../../Shared/CustomTable/CustomTable";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import LinkIcon from '@material-ui/icons/Link';
-import CloseResult from "../../../../CloseResult/CloseResult";
-import {cleanThumbnailsState} from "../../../../../redux/actions/tools/thumbnailsActions";
+import CloseResult from "../../../../Shared/CloseResult/CloseResult";
 import {cleanTwitterSnaState} from "../../../../../redux/actions/tools/twitterSnaActions";
 import ReactWordcloud from "react-wordcloud";
 import { select } from 'd3-selection';
@@ -73,7 +72,7 @@ export default function TwitterSnaResult(props) {
         setPieCharts1(null);
         setPieCharts2(null);
         setPieCharts3(null);
-    }, [JSON.stringify(props.result)]);
+    }, [JSON.stringify(props.result), props.result]);
 
     if (result === null)
         return <div/>;
