@@ -154,7 +154,7 @@ export default function TwitterSnaResult(props) {
         });
     };
 
-    function displayTweetsOfWord(word) {
+    function displayTweetsOfWord(word, callback) {
         let columns = [
             {title: 'Username (add tsv)', field: 'username'},
             {title: 'Date (add tsv)', field: 'date'},
@@ -165,13 +165,12 @@ export default function TwitterSnaResult(props) {
         let csvArr = "data:text/csv;charset=utf-8,";
     
         word = word.replace(/_/g, " ");
-       
         let resData = [];
         csvArr += "Username,Date,Tweet,Nb of retweets, Nb of likes\n";
 
         result.tweets.forEach(tweetObj => {
-          
-            if (tweetObj._source.tweet.toLowerCase().match(new RegExp('(.)*[\.\(\)0-9\!\?\'\’\‘\"\:\,\/\\\%\>\<\«\»\ ^#]' + word + '[\.\(\)\!\?\'\’\‘\"\:\,\/\>\<\«\»\ ](.)*', "i"))) {
+          console.log(tweetObj._source.tweet);
+            if (tweetObj._source.tweet.toLowerCase().match(new RegExp('(^|((.)*[\.\(\)0-9\!\?\'\’\‘\"\:\,\/\\\%\>\<\«\»\ ^#]))' + word + '(([\.\(\)\!\?\'\’\‘\"\:\,\/\>\<\«\»\ ](.)*)|$)', "i"))) {
                 
             var date = new Date(tweetObj._source.date);
                 let tmpObj = {
@@ -187,7 +186,8 @@ export default function TwitterSnaResult(props) {
                     tweetObj._source.tweet + '",' + tweetObj._source.nretweets + ',' + tweetObj._source.nlikes + '\n';
             }
         });
-        setCloudTweets({
+        console.log(resData);
+        callback({
             data: resData,
             columns: columns,
             csvArr: csvArr
@@ -196,7 +196,9 @@ export default function TwitterSnaResult(props) {
 
     const onPieChartClick = (data, nbType, index) => {
         if (index === 3) {
-            window.open("https://twitter.com/search?q=" + data.points[0].label.replace('#', "%23"), '_blank');
+            console.log("CLICKED");
+           // window.open("https://twitter.com/search?q=" + data.points[0].label.replace('#', "%23"), '_blank');
+           displayTweetsOfWord( data.points[0].label, setPieCharts3);
             return;
         }
 
@@ -276,7 +278,7 @@ export default function TwitterSnaResult(props) {
           text
             .on("click", () => {
               if (isActive) {
-                displayTweetsOfWord(element.innerHTML)
+                displayTweetsOfWord(element.innerHTML, setCloudTweets)
               }
             })
             .transition()
