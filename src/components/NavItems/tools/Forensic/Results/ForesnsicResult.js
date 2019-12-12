@@ -22,6 +22,8 @@ import {cleanForensicState} from "../../../../../redux/actions/tools/forensicAct
 import Radio from "@material-ui/core/Radio";
 import RadioButtonUncheckedIcon from '@material-ui/icons/RadioButtonUnchecked';
 import RadioButtonCheckedIcon from '@material-ui/icons/RadioButtonChecked';
+import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
+import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Forensic.tsv";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -55,11 +57,7 @@ const useStyles = makeStyles(theme => ({
 
 const ForensicResults = (props) => {
     const classes = useStyles();
-    const dictionary = useSelector(state => state.dictionary);
-    const lang = useSelector(state => state.language);
-    const keyword = (key) => {
-        return (dictionary !== null) ? dictionary[lang][key] : "";
-    };
+    const keyword = useLoadLanguage("components/NavItems/tools/Forensic.tsv", tsv);
     const dispatch = useDispatch();
 
     const dataParams = ["dqReport", "elaReport", "dwNoiseReport", "blockingReport", "gridsReport", "gridsInversedReport", "medianNoiseReport"];
