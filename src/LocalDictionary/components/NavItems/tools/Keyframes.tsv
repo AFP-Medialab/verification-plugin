@@ -1,0 +1,20 @@
+	en	fr	es
+keyframes_title	Video fragmentation and reverse image search	Fragmentation vidéo et recherche inversée d'image	Fragmentación del video y búsqueda inversa de imagen
+button_localfile	Local file	Fichier local	Fichero local
+keyframes_input	Insert the video URL	Adresse de la vidéo	Enlace del video
+button_submit	Submit	Envoyer	Enviar
+forensic_card_back	Back	Retour	Volver
+keyframes_error_VIDEO_DOWNLOAD_FAILED	Video cache failed. Try with another video	La mise en cache de la vidéo à échoué. Veuillez essayer avec une autre vidéo	Falló el almacenamiento en caché del video. Inténtalo con otro vídeo
+keyframes_error_VIDEO_DOWNLOAD_TIMEOUT	Video cache failed. The video cache has timed out	La mise en cache de la vidéo à échoué. La vidéo a mis trop de temps à charger	Falló el almacenamiento en caché del video. El tiempo de espera se ha agotado.
+keyframes_error_VIDEO_SEGMENTATION_FAILED	Video segmentation analysis failed	L'analyse de segmentation vidéo à échoué	Fallo en el análisis de segmentación de vídeo
+keyframes_error_PROCESS_INTERRUPTED	Video analysis interrupted due to unknown cause. Please re-submit the video	L'analyse de la vidéo à été interrompue dû à une cause inconnue. Veuillez ré-envoyer la vidéo	El análisis de vídeo se interrumpió debido a una causa desconocida. Por favor, vuelva a enviar el vídeo
+keyframes_error_ANALYSIS_STOPPED_CORRUPTED_VIDEO_FILE	Video analysis quitted due to corrupted video file	L'analyse de la vidéo s'est arrêté dû à des fichiers vidéos corrompus	El análisis de vídeo se ha interrumpido debido a que el archivo de vídeo está dañado.
+keyframes_error_ANALYSIS_STOPPED_UNSUPPORTED_FILE_EXTENSION	Video analysis quitted due to unsupported file extension	L'analyse de la vidéo s'est arrêté dû à un format vidéo non supporté	El análisis de vídeo se ha interrumpido debido a que la extensión del archivo no es compatible.
+keyframes_error_unavailable	The service is currently unavailable. Try again later	Le service est actuellement indisponible. Veuillez réessayez plus tard	El servicio no está disponible en este momento. Inténtalo de nuevo más tarde
+keyframes_error_default	Unknown error occured. Please try again later or with another video.	Une erreur inconnue s'est produite. Veuillez réessayer plus tard ou avec une autre vidéo.	Se ha producido un error desconocido. Por favor, inténtelo de nuevo más tarde o con otro vídeo.
+keyframes_wait_VIDEO_WAITING_IN_QUEUE	Video in queue for analysis. The analysis of your video will start immediately after all preceding videos in the queue have been processed	Vidéo en file d'attente pour analyse. L'analyse de votre vidéo commencera immédiatement après que toutes les vidéos précédentes de la file d'attente auront été traitées	Vídeo en cola para análisis. El análisis de su vídeo se iniciará inmediatamente después de que se hayan procesado todos los vídeos anteriores de la cola.
+keyframes_wait_VIDEO_DOWNLOAD_STARTED	The video is being cached before its analysis	La vidéo est en train d'être téléchargé avant analyse	El video está siendo descargado antes de su análisis
+keyframes_wait_STARTED	Video analysis running. Step	Analyse de la vidéo en cours. Etape	Análisis de vídeo en marcha. Paso
+keyframes_content_title	Video keyframes	Images clés de la vidéo	Imágenes claves del video
+keyframe_title_get_detail	+ Show detailed view	+ Afficher la vue détaillée	+ Mostrar la vista detallada
+keyframe_title_get_simple	- Show simple view	- Afficher la vue minimal	- Mostrar vista simple
