@@ -12,6 +12,8 @@ import {
     generateURLArrayHTML,
     generateWordCloudPlotlyJson
 } from "./call-elastic";
+import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
+import tsv from "../../../../LocalDictionary/components/NavItems/tools/TwitterSna.tsv";
 
 const includeWordObj = (wordObj, wordsArray) =>
 {
@@ -39,12 +41,8 @@ function getColor(entity) {
 const useTwitterSnaRequest = (request) => {
 
     const TwintWrapperUrl = process.env.REACT_APP_TWINT_WRAPPER_URL;
-    const dictionary = useSelector(state => state.dictionary);
-    const lang = useSelector(state => state.language);
+    const keyword = useLoadLanguage("components/NavItems/tools/TwitterSna.tsv", tsv);
 
-    const keyword = (key) => {
-        return (dictionary !== null) ? dictionary[lang][key] : "";
-    };
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -81,13 +79,13 @@ const useTwitterSnaRequest = (request) => {
 
             }
             return getnMax(wordsMap, 100);
-        }
+        };
 
         const handleErrors = (e) => {
             if (keyword(e) !== undefined)
                 dispatch(setError(keyword(e)));
             else
-                dispatch(setError("default twitter sna error (Add tsv)"));
+                dispatch(setError(keyword("default_sna_error")));
             dispatch(setTwitterSnaLoading(false));
         };
 

@@ -4,8 +4,6 @@ import {useDispatch, useSelector} from "react-redux";
 import {Paper} from "@material-ui/core";
 import CustomTile from "../../../Shared/CustomTitle/CustomTitle";
 import TextField from "@material-ui/core/TextField";
-import {KeyboardDatePicker, KeyboardTimePicker, MuiPickersUtilsProvider} from "@material-ui/pickers";
-import DateFnsUtils from "@date-io/date-fns";
 import FormControl from "@material-ui/core/FormControl";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
@@ -24,16 +22,14 @@ import useTwitterSnaRequest from "./useTwitterSnaRequest";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import TwitterSnaResult from "./TwitterSnaResult/TwitterSnaResult";
 import {replaceAll} from "../TwitterAdvancedSearch/createUrl";
-import {setTwitterSnaResult} from "../../../../redux/actions/tools/twitterSnaActions";
 import DateTimePicker from "../../../Shared/DateTimePicker/DateTimePicker";
+import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
+import tsv from "../../../../LocalDictionary/components/NavItems/tools/TwitterSna.tsv";
 
 const TwitterSna = () => {
     const classes = useMyStyles();
-    const dictionary = useSelector(state => state.dictionary);
-    const lang = useSelector(state => state.language);
-    const keyword = (key) => {
-        return (dictionary !== null) ? dictionary[lang][key] : "";
-    };
+    const keyword = useLoadLanguage("components/NavItems/tools/TwitterSna.tsv", tsv);
+
 
     const request = useSelector(state => state.twitterSna.request);
     const reduxResult = useSelector(state => state.twitterSna.result);
