@@ -12,36 +12,13 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Radio from "@material-ui/core/Radio";
 import FormControl from "@material-ui/core/FormControl";
 import DateTimePicker from "../../../Shared/DateTimePicker/DateTimePicker";
-
-const useStyles = makeStyles(theme => ({
-    root: {
-        padding: theme.spacing(3, 2),
-        marginTop: 5,
-        textAlign: "center",
-    },
-    textFiledError: {
-        MuiInput: {
-            underline: {
-                borderBottom: theme.palette.error.main,
-            },
-            '&:hover fieldset': {
-                borderBottom: 'yellow',
-            },
-        },
-    },
-    grow: {
-        flexGrow: 1,
-    },
-}));
+import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
+import tsv from "../../../../LocalDictionary/components/NavItems/tools/Thumbnails.tsv";
+import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 
 const TwitterAdvancedSearch = () => {
-    const classes = useStyles();
-
-    const dictionary = useSelector(state => state.dictionary);
-    const lang = useSelector(state => state.language);
-    const keyword = (key) => {
-        return (dictionary !== null) ? dictionary[lang][key] : "";
-    };
+    const classes = useMyStyles();
+    const keyword = useLoadLanguage("components/NavItems/tools/TwitterAdvancedSearch.tsv", tsv);
 
     const term = useInput("");
     const account = useInput("");
@@ -146,7 +123,7 @@ const TwitterAdvancedSearch = () => {
                     <DateTimePicker
                         input={true}
                         isValidDate={fromDateIsValid}
-                        label={keyword("twitter_from-date")}
+                        label={keyword("twitter_from_date")}
                         dateFormat={"YYYY-MM-DD"}
                         timeFormat={"HH:mm:ss"}
                         handleChange={handleFromDateChange}
@@ -157,7 +134,7 @@ const TwitterAdvancedSearch = () => {
                     <DateTimePicker
                         input={true}
                         isValidDate={toDateIsValid}
-                        label={keyword("twitter_to-date")}
+                        label={keyword("twitter_to_date")}
                         dateFormat={"YYYY-MM-DD"}
                         timeFormat={"HH:mm:ss"}
                         handleChange={handleToDateChange}
@@ -177,7 +154,7 @@ const TwitterAdvancedSearch = () => {
                     <FormControlLabel
                         value={"false"}
                         control={<Radio color="primary"/>}
-                        label={keyword("twitter_sna_gmt")}
+                        label={keyword("twitter_gmt")}
                         labelPlacement="end"
                     />
                 </RadioGroup>
