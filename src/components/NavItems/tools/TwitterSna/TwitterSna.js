@@ -383,7 +383,7 @@ const TwitterSna = () => {
             </Paper>
             {
                 reduxResult &&
-                <TwitterSnaResult result={reduxResult}/>
+                <TwitterSnaResult result={reduxResult} request={request}/>
             }
         </div>)
 };
