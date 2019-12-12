@@ -9,20 +9,16 @@ import React, {useState} from "react";
 import useVideoRightsTreatment from "./Hooks/useVideoRightsTreatment";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import VideoRightsResults from "./Results/VideoRightsResults";
+import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
+import tsv from "../../../../LocalDictionary/components/NavItems/tools/VideoRights.tsv";
 
 const VideoRights = () => {
     const classes = useMyStyles();
-    const dictionary = useSelector(state => state.dictionary);
-    const lang = useSelector(state => state.language);
-    const keyword = (key) => {
-        return (dictionary !== null) ? dictionary[lang][key] : "";
-    };
-
+    const keyword = useLoadLanguage("components/NavItems/tools/VideoRights.tsv", tsv);
 
     const resultUrl = useSelector(state => state.videoRights.url);
     const resultResult = useSelector(state => state.videoRights.result);
     const isLoading = useSelector(state => state.videoRights.loading);
-
 
     const [input, setInput] = useState(resultUrl);
     const [submitted, setSubmitted] = useState(null);

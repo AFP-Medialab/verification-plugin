@@ -3,21 +3,20 @@ import axios from "axios";
 import {useDispatch, useSelector} from "react-redux";
 import {setVideoRightsResult, setVideoRightsLoading} from "../../../../../redux/actions/tools/videoRightsActions"
 import {setError} from "../../../../../redux/actions/errorActions"
+import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
+import tsv from "../../../../../LocalDictionary/components/NavItems/tools/VideoRights.tsv";
 
 const useVideoRightsTreatment = (url) => {
     const dispatch = useDispatch();
-    const dictionary = useSelector(state => state.dictionary);
-    const lang = useSelector(state => state.language);
-    const keyword = (key) => {
-        return (dictionary !== null) ? dictionary[lang][key] : "";
-    };
+    const keyword = useLoadLanguage("components/NavItems/tools/VideoRights.tsv", tsv);
+
 
     useEffect(() => {
         const handleError = (error) => {
             if (keyword(error) !== undefined)
                 dispatch(setError((keyword(error))));
             else
-                dispatch(setError("Unknown error"));
+                dispatch(setError(keyword("keyframes_error_default")));
             dispatch(setVideoRightsLoading(false));
         };
 
