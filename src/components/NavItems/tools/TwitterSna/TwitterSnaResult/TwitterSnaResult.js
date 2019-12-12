@@ -17,15 +17,14 @@ import CloseResult from "../../../../Shared/CloseResult/CloseResult";
 import {cleanTwitterSnaState} from "../../../../../redux/actions/tools/twitterSnaActions";
 import ReactWordcloud from "react-wordcloud";
 import { select } from 'd3-selection';
+import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
+import tsv from "../../../../../LocalDictionary/components/NavItems/tools/TwitterSna.tsv";
 
 export default function TwitterSnaResult(props) {
 
     const classes = useMyStyles();
-    const dictionary = useSelector(state => state.dictionary);
-    const lang = useSelector(state => state.language);
-    const keyword = (key) => {
-        return (dictionary !== null) ? dictionary[lang][key] : "";
-    };
+    const keyword = useLoadLanguage("components/NavItems/tools/TwitterSna.tsv", tsv);
+
     const dispatch = useDispatch();
 
     const [histoVisible, setHistoVisible] = useState(true);
@@ -101,10 +100,10 @@ export default function TwitterSnaResult(props) {
 
     const onHistogramClick = (data) => {
         let columns = [
-            {title: 'Username (add tsv)', field: 'username'},
-            {title: 'Date (add tsv)', field: 'date'},
-            {title: 'Tweet (add tsv)', field: 'tweet'},
-            {title: 'Nb of retweets (add tsv)', field: 'retweetNb'},
+            {title: keyword('sna_result_username'), field: 'username'},
+            {title: keyword('sna_result_date'), field: 'date'},
+            {title: keyword('sna_result_tweet'), field: 'tweet'},
+            {title: keyword('sna_result_retweet_nb'), field: 'retweetNb'},
         ];
 
         let resData = [];
@@ -158,17 +157,21 @@ export default function TwitterSnaResult(props) {
 
     function displayTweetsOfWord(word, callback) {
         let columns = [
-            {title: 'Username (add tsv)', field: 'username'},
-            {title: 'Date (add tsv)', field: 'date'},
-            {title: 'Tweet (add tsv)', field: 'tweet'},
-            {title: 'Nb of retweets (add tsv)', field: 'retweetNb'},
-            {title: 'Nb of likes (Add TSV', field: 'likeNb'}
+            {title: keyword('sna_result_username'), field: 'username'},
+            {title: keyword('sna_result_date'), field: 'date'},
+            {title: keyword('sna_result_tweet'), field: 'tweet'},
+            {title: keyword('sna_result_retweet_nb'), field: 'retweetNb'},
+            {title: keyword('sna_result_like_nb'), field: 'likeNb'}
         ];
         let csvArr = "data:text/csv;charset=utf-8,";
     
         word = word.replace(/_/g, " ");
         let resData = [];
-        csvArr += "Username,Date,Tweet,Nb of retweets, Nb of likes\n";
+        csvArr += keyword('sna_result_username') + "," +
+                keyword('sna_result_date') + "," +
+                keyword('sna_result_tweet') + "," +
+                keyword('sna_result_retweet_nb') + "," +
+                keyword('sna_result_like_nb') + "\n";
 
         result.tweets.forEach(tweetObj => {
             if (tweetObj._source.tweet.toLowerCase().match(new RegExp('(^|((.)*[\.\(\)0-9\!\?\'\’\‘\"\:\,\/\\\%\>\<\«\»\ ^#]))' + word + '(([\.\(\)\!\?\'\’\‘\"\:\,\/\>\<\«\»\ ](.)*)|$)', "i"))) {
@@ -180,7 +183,7 @@ export default function TwitterSnaResult(props) {
                     tweet: tweetObj._source.tweet,
                     retweetNb: tweetObj._source.nretweets,
                     likeNb: tweetObj._source.nlikes
-                }
+                };
                 resData.push(tmpObj);
                 csvArr += tweetObj._source.username + ',' +
                 date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear() + ' ' + date.getHours() + ':' + date.getMinutes() + ',"' +
@@ -204,23 +207,23 @@ export default function TwitterSnaResult(props) {
         }
 
         let columns = [
-            {title: 'Date (add tsv)', field: 'date'},
-            {title: 'Tweet (add tsv)', field: 'tweet'},
+            {title: keyword('sna_result_username'), field: 'date'},
+            {title: keyword('sna_result_tweet'), field: 'tweet'},
         ];
         let csvArr = "data:text/csv;charset=utf-8,Date,Tweet";
         if (nbType !== "retweets_cloud_chart_title") {
             columns.push({
-                title: "Nb of likes (add tsv)",
+                title: keyword('sna_result_tweet'),
                 field: "nbLikes"
             });
-            csvArr += ',Nb of likes';
+            csvArr += ',' + keyword('sna_result_like_nb');
         }
         if (nbType !== "likes_cloud_chart_title") {
             columns.push({
-                title: "Nb of retweets (add tsv)",
+                title:  keyword('sna_result_retweet_nb'),
                 field: "nbReteets"
             });
-            csvArr += ',Nb of retweets';
+            csvArr += ',' +  keyword('sna_result_retweet_nb');
         }
         csvArr += "\n";
 
@@ -336,7 +339,9 @@ export default function TwitterSnaResult(props) {
                                                 color={"secondary"}
                                                 onClick={() => setHistoTweets(null)}
                                             >
-                                                Hide (add tsv)
+                                                {
+                                                    keyword('sna_result_hide')
+                                                }
                                             </Button>
                                         </Grid>
                                         <Grid item>
@@ -344,13 +349,15 @@ export default function TwitterSnaResult(props) {
                                                 variant={"contained"}
                                                 color={"primary"}
                                                 onClick={() => downloadClick(histoTweets.csvArr)}>
-                                                Download (add tsv)
+                                                {
+                                                    keyword('sna_result_download')
+                                                }
                                             </Button>
                                         </Grid>
                                     </Grid>
                                     <Box m={2}/>
                                     <CustomTable
-                                        title={"Selected Tweets (add tsv)"}
+                                        title={keyword("sna_result_slected_tweets")}
                                         colums={histoTweets.columns}
                                         data={histoTweets.data}
                                         actions={[]}
@@ -407,7 +414,9 @@ export default function TwitterSnaResult(props) {
                                                         variant={"contained"}
                                                         color={"secondary"}
                                                         onClick={() => hidePieChartTweetsView(index)}>
-                                                        Hide (add tsv)
+                                                        {
+                                                            keyword('sna_result_hide')
+                                                        }
                                                     </Button>
                                                 </Grid>
                                                 <Grid item>
@@ -415,12 +424,14 @@ export default function TwitterSnaResult(props) {
                                                         variant={"contained"}
                                                         color={"primary"}
                                                         onClick={() => downloadClick(pieCharts[index].csvArr)}>
-                                                        Download (add tsv)
+                                                        {
+                                                            keyword('sna_result_download')
+                                                        }
                                                     </Button>
                                                 </Grid>
                                             </Grid>
                                             <Box m={2}/>
-                                            <CustomTable title={"Selected Tweets (add tsv)"}
+                                            <CustomTable title={keyword("sna_result_slected_tweets")}
                                                          colums={pieCharts[index].columns}
                                                          data={pieCharts[index].data}
                                                          ations={pieCharts[index].actions}
@@ -460,7 +471,9 @@ export default function TwitterSnaResult(props) {
                                                     color={"secondary"}
                                                     onClick={() => setCloudTweets(null)}
                                                 >
-                                                    Hide (add tsv)
+                                                    {
+                                                        keyword('sna_result_hide')
+                                                    }
                                                 </Button>
                                             </Grid>
                                             <Grid item>
@@ -468,13 +481,15 @@ export default function TwitterSnaResult(props) {
                                                     variant={"contained"}
                                                     color={"primary"}
                                                     onClick={() => downloadClick(cloudTweets.csvArr)}>
-                                                    Download (add tsv)
+                                                    {
+                                                        keyword('sna_result_download')
+                                                    }
                                                 </Button>
                                             </Grid>
                                         </Grid>
                                         <Box m={2}/>
                                         <CustomTable
-                                            title={"Selected Tweets (add tsv)"}
+                                            title={keyword("sna_result_slected_tweets")}
                                             colums={cloudTweets.columns}
                                             data={cloudTweets.data}
                                             actions={[]}
@@ -490,13 +505,13 @@ export default function TwitterSnaResult(props) {
             {
                 result.urls &&
                 <CustomTable
-                    title={"Linked Url (add tsv)"}
+                    title={keyword("sna_result_url_in_tweets")}
                     colums={result.urls.columns}
                     data={result.urls.data}
                     actions={[
                         {
                             icon: LinkIcon,
-                            tooltip: 'Go to url (add tsv)',
+                            tooltip: keyword("sna_result_go_to"),
                             onClick: (event, rowData) => {
                                 window.open(rowData.url, '_blank');
                             }

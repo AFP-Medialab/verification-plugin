@@ -228,8 +228,8 @@ export function generateURLArrayHTML(param) {
         const myJson = await response.json();
         const array = getURLArray(myJson);
         let columns = [
-            {title: 'Url (add tsv)', field: 'url'},
-            {title: 'Count (add tsv)', field: 'count'},
+            {title: 'elastic_url', field: 'url'},
+            {title: 'elastic_count', field: 'count'},
         ];
 
         return {
