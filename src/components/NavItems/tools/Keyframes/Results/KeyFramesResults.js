@@ -12,6 +12,8 @@ import ImageReverseSearch from "../../ImageReverseSearch";
 import CloseResult from "../../../../Shared/CloseResult/CloseResult";
 import {cleanKeyframesState} from "../../../../../redux/actions/tools/keyframesActions";
 import OnClickInfo from "../../../../Shared/OnClickInfo/OnClickInfo";
+import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
+import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Keyframes.tsv";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -23,11 +25,7 @@ const useStyles = makeStyles(theme => ({
 
 const KeyFramesResults = (props) => {
     const classes = useStyles();
-    const dictionary = useSelector(state => state.dictionary);
-    const lang = useSelector(state => state.language);
-    const keyword = (key) => {
-        return (dictionary !== null) ? dictionary[lang][key] : "";
-    };
+    const keyword = useLoadLanguage("components/NavItems/tools/Keyframes.tsv", tsv);
     const dispatch = useDispatch();
 
     const [detailed, setDetailed] = useState(false);

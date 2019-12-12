@@ -3,12 +3,10 @@ import axios from "axios";
 import {useDispatch, useSelector} from "react-redux";
 import {setKeyframesResult, setKeyframesLoading, setKeyframesMessage} from "../../../../../redux/actions/tools/keyframesActions"
 import {setError} from "../../../../../redux/actions/errorActions"
+import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
+import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Keyframes.tsv";
 export const useKeyframeWrapper = (url) => {
-    const dictionary = useSelector(state => state.dictionary);
-    const lang = useSelector(state => state.language);
-    const keyword = useCallback( (key) => {
-        return (dictionary !== null) ? dictionary[lang][key] : "";
-    }, [dictionary, lang]);
+    const keyword = useLoadLanguage("components/NavItems/tools/Keyframes.tsv", tsv);
     const dispatch = useDispatch();
 
     let jsonData = {
