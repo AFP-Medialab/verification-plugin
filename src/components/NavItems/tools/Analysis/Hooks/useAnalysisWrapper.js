@@ -1,15 +1,13 @@
 import axios from "axios"
-import {useDispatch, useSelector} from "react-redux";
+import {useDispatch} from "react-redux";
 import {setAnalysisLoading, setAnalysisResult} from "../../../../../redux/actions/tools/analysisActions";
 import {setError} from "../../../../../redux/actions/errorActions";
-import {useCallback, useEffect} from "react";
+import {useEffect} from "react";
+import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
+import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Analysis.tsv"
 
 export const useAnalysisWrapper = (url, reprocess, facebookToken) => {
-    const dictionary = useSelector(state => state.dictionary);
-    const lang = useSelector(state => state.language);
-    const keyword = useCallback( (key) => {
-        return (dictionary !== null) ? dictionary[lang][key] : "";
-    }, [dictionary, lang]);
+    const keyword = useLoadLanguage("components/NavItems/tools/Analysis.tsv", tsv);
     const dispatch = useDispatch();
 
     useEffect(() => {

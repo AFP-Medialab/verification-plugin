@@ -21,14 +21,13 @@ import CloseResult from "../../../../Shared/CloseResult/CloseResult";
 import {cleanAnalysisState} from "../../../../../redux/actions/tools/analysisActions";
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 import OnClickInfo from "../../../../Shared/OnClickInfo/OnClickInfo";
+import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
+import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Analysis.tsv";
 
 const TwitterResults = (props) => {
     const classes = useMyStyles();
-    const dictionary = useSelector(state => state.dictionary);
-    const lang = useSelector(state => state.language);
-    const keyword = (key) => {
-        return (dictionary !== null) ? dictionary[lang][key] : "";
-    };
+    const keyword = useLoadLanguage("components/NavItems/tools/Analysis.tsv", tsv);
+
     const dispatch = useDispatch();
 
     const [expanded, setExpanded] = React.useState(false);
@@ -117,7 +116,7 @@ const TwitterResults = (props) => {
                                     (!(report["video"]["hashtags"] && report["video"]["hashtags".length > 0])) ? null :
                                         <TableRow>
                                             <TableCell component="th" scope="row">
-                                                {keyword("twitter_video_name_7")}
+                                                {keyword("twitter_video_name_6")}
                                             </TableCell>
                                             <TableCell align="right">
                                                 {

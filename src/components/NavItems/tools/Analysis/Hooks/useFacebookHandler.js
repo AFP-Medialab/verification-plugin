@@ -5,7 +5,6 @@ const useFacebookHandler = (url) => {
     const [facebookToken, setFacebookToken] = useState(null);
     const [showFacebookIframe, setFacebookIframe] = useState(false);
 
-    console.log(facebookToken)
     useEffect(() => {
         window.addEventListener("message", (e) => {
             if (e.origin === "https://caa.iti.gr") {
