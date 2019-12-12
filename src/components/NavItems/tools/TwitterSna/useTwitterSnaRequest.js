@@ -24,7 +24,6 @@ const includeWordObj = (wordObj, wordsArray) =>
 
 function getnMax(objArr, n) {
     let sorted = [...(objArr.sort((a, b) => b.nbOccurences - a.nbOccurences))];
-    console.log(sorted);
     return sorted.splice(0, n);
 }
 
@@ -40,7 +39,6 @@ function getColor(entity) {
 const useTwitterSnaRequest = (request) => {
 
     const TwintWrapperUrl = process.env.REACT_APP_TWINT_WRAPPER_URL;
-    console.log(TwintWrapperUrl);
     const dictionary = useSelector(state => state.dictionary);
     const lang = useSelector(state => state.language);
 
@@ -181,7 +179,6 @@ const useTwitterSnaRequest = (request) => {
 
             let mostUsedWords = getAllWordsMap(plotlyJson);
             mostUsedWords = mostUsedWords.map(word => { return {'text': word.word, 'value': word.nbOccurences, 'entity': word.entity, 'color': getColor(word.entity)}; });
-            console.log(mostUsedWords);
             const options = {
               //  colors: ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b'],
                 enableTooltip: true,
@@ -233,9 +230,7 @@ const useTwitterSnaRequest = (request) => {
         const generateGraph = (data, final) => {
             let givenFrom = data.query.from;
             let givenUntil = data.query.until;
-            console.log(data);
             let entries = makeEntries(data);
-            console.log(entries);
             let generateList = [
                 generateDonutPlotlyJson(entries, "nretweets"),
                 generateDonutPlotlyJson(entries, "nlikes"),
@@ -261,7 +256,6 @@ const useTwitterSnaRequest = (request) => {
                         handleErrors("twitterSnaErrorMessage");
                     else {
                         generateGraph(response.data, true).then(() => {
-                            console.log("FINISHED");
                             dispatch(setTwitterSnaLoading(false));
                         });
                     }
