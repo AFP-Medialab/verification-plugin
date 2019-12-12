@@ -13,18 +13,14 @@ import CloseResult from "../../../../Shared/CloseResult/CloseResult";
 import {cleanMetadataState} from "../../../../../redux/actions/tools/metadataActions";
 import Button from "@material-ui/core/Button";
 import MapIcon from "@material-ui/icons/Map";
-
+import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
+import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Metadata.tsv";
 
 const MetadataVideoResult = (result) => {
     const classes = useMyStyles();
-    const dictionary = useSelector(state => state.dictionary);
-    const lang = useSelector(state => state.language);
-    const keyword = (key) => {
-        return (dictionary !== null) ? dictionary[lang][key] : "";
-    };
+    const keyword = useLoadLanguage("components/NavItems/tools/Metadata.tsv", tsv);
 
     const report = result["result"];
-
     const convertDMSToDD = (GPStitude, direction) => {
         if (!GPStitude || !direction)
             return null;
@@ -39,7 +35,7 @@ const MetadataVideoResult = (result) => {
     };
 
     const getGoogleMapsLink = (latitue, latitudeRef, longitude, longitudeRef) => {
-        let url = "https://www.google.com/maps/place/" //38%C2%B054'35.4%22N+1%C2%B026'19.2%22E/
+        let url = "https://www.google.com/maps/place/";
         let lat = latitue[0] + "%C2%B0" + latitue[1] + "'" + latitue[2] + "%22" + latitudeRef;
         let long = longitude[0] + "%C2%B0" + longitude[1] + "'" + longitude[2] + "%22" + longitudeRef;
         return url + lat + "+" + long

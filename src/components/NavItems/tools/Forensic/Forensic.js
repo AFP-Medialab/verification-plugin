@@ -12,15 +12,13 @@ import LinearProgress from "@material-ui/core/LinearProgress";
 import ForensicResults from "./Results/ForesnsicResult";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import {useParams} from 'react-router-dom'
+import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
+import tsv from "../../../../LocalDictionary/components/NavItems/tools/Forensic.tsv";
 
 const Forensic = () => {
     const {url} = useParams();
     const classes = useMyStyles();
-    const dictionary = useSelector(state => state.dictionary);
-    const lang = useSelector(state => state.language);
-    const keyword = (key) => {
-        return (dictionary !== null) ? dictionary[lang][key] : "";
-    };
+    const keyword = useLoadLanguage("components/NavItems/tools/Forensic.tsv", tsv);
 
     const resultUrl = useSelector(state => state.forensic.url);
     const resultData = useSelector(state => state.forensic.result);
@@ -40,7 +38,7 @@ const Forensic = () => {
 
     useEffect(() => {
     if (url !== undefined){
-        const uri = (url !== undefined) ? decodeURIComponent(url) : undefined;
+        const uri = decodeURIComponent(url);
         setInput(uri);
         setImage(uri);
     }}, [url]);
