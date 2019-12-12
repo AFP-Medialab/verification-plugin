@@ -18,9 +18,9 @@ import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import convertToGMT from "../../../Shared/DateTimePicker/convertToGMT";
 import dateFormat from "dateformat"
-import useTwitterSnaRequest from "./useTwitterSnaRequest";
+import useTwitterSnaRequest from "./Hooks/useTwitterSnaRequest";
 import LinearProgress from "@material-ui/core/LinearProgress";
-import TwitterSnaResult from "./TwitterSnaResult/TwitterSnaResult";
+import TwitterSnaResult from "./Results/TwitterSnaResult";
 import {replaceAll} from "../TwitterAdvancedSearch/createUrl";
 import DateTimePicker from "../../../Shared/DateTimePicker/DateTimePicker";
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
