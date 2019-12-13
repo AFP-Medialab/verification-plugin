@@ -40,7 +40,7 @@ const TwitterSna = () => {
     const [keyWords, setKeywords] = useState(
         request && request.keywordList ?
             request.keywordList.join(" ")
-            : "fake news"
+            : "#pactesurlesmigrations"
     );
     const [keyWordsError, setKeyWordsError] = useState(false);
 
@@ -52,7 +52,7 @@ const TwitterSna = () => {
     const [usersInput, setUsersInput] = useState(
         request && request.userList ?
             request.userList.join(" ")
-            : "realDonaldTrump"
+            : ""
     );
     const [since, setSince] = useState(request ? request.from : null);         // change default values
     const [sinceError, setSinceError] = useState(false);

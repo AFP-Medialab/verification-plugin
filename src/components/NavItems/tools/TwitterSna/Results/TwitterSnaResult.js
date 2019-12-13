@@ -165,7 +165,7 @@ export default function TwitterSnaResult(props) {
         ];
         let csvArr = "data:text/csv;charset=utf-8,";
 
-        word = word.replace(/_/g, " ");
+       // word = word.replace(/_/g, " ");
         let resData = [];
         csvArr += keyword('sna_result_username') + "," +
             keyword('sna_result_date') + "," +

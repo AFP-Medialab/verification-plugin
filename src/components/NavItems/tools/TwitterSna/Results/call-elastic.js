@@ -33,13 +33,11 @@ export function generateEssidHistogramPlotlyJson(param, retweets, givenFrom, giv
     function usersGet(dateObj, infos) {
 
         dateObj["3"]["buckets"].forEach(obj => {
-            if (obj["1"]["value"] > 5) {
                 infos.push({
                     date: dateObj['key_as_string'],
                     key: obj["key"],
                     nb: obj["1"]["value"]
                 })
-            }
         });
 
         return infos;
@@ -66,7 +64,7 @@ export function generateEssidHistogramPlotlyJson(param, retweets, givenFrom, giv
             }
         });
         const myJson = await response.json();
-
+        console.log(myJson);
         if (myJson["error"] === undefined) {
             if (retweets)
                 return getPlotlyJsonHisto(myJson, retweetsGet);
@@ -190,7 +188,6 @@ export function generateWordCloudPlotlyJson(param) {
             }
         });
         const myJson = await response.json();
-
         return myJson;
 
     };
@@ -554,7 +551,7 @@ function getPlotlyJsonCloud(json, keywords, bannedWords, specificGetCallBack) {
 function getPlotlyJsonHisto(json, specificGet) {
     let dates = json["aggregations"]["2"]["buckets"];
 
-    let infos = [];
+    var infos = [];
 
     dates.forEach(dateObj => {
         specificGet(dateObj, infos);
@@ -569,12 +566,13 @@ function getPlotlyJsonHisto(json, specificGet) {
             nb: dateObj["1"]["value"]
         });
     });
-    let lines = [];
+    var lines = [];
     while (infos.length !== 0) {
+
         let info = infos.pop();
         let date = info.date;
         let nb = info.nb;
-        let type = "markers";
+        var type = "markers";
         if (info.key === "Tweets" || info.key === "Retweets")
             type = 'lines';
         let plotlyInfo = {
@@ -582,7 +580,7 @@ function getPlotlyJsonHisto(json, specificGet) {
             name: info.key,
             x: [],
             y: []
-        };
+        }
 
         for (let i = 0; i < infos.length; ++i) {
             if (infos[i].key === info.key) {
