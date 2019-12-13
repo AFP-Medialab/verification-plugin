@@ -20,26 +20,8 @@ import TextField from "@material-ui/core/TextField";
 import youCheckImage from "../../../Images/youCheck.png"
 import useLoadLanguage from "../../../Hooks/useLoadLanguage";
 import tsv from "../../../LocalDictionary/components/NavItems/ClassRoom.tsv";
+import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
 
-
-const useStyles = makeStyles(theme => ({
-    root: {
-        padding: theme.spacing(3, 2),
-        textAlign: "center",
-    },
-    card: {
-        maxWidth: "300px",
-        textAlign: "center",
-    },
-    media: {
-        height: "auto",
-        width: "auto",
-        maxWidth: "60%",
-    },
-    grow: {
-        flewGrow: 1,
-    }
-}));
 
 function TabPanel(props) {
     const {children, value, index, ...other} = props;
@@ -72,8 +54,9 @@ function a11yProps(index) {
 }
 
 const ClassRoom = () => {
-
+    const classes = useMyStyles();
     const keyword = useLoadLanguage("components/NavItems/ClassRoom.tsv", tsv);
+
     const [value, setValue] = React.useState(0);
 
     const handleChange = (event, newValue) => {
@@ -82,7 +65,6 @@ const ClassRoom = () => {
 
     const [videoUrl, setVideoUrl] = useState(null);
     const [inputRef, setInputRef] = useState(null);
-    const classes = useStyles();
 
     const EducationalResources = () => {
         let res = [];
@@ -97,7 +79,6 @@ const ClassRoom = () => {
         }
         return res;
     };
-
 
     return (
         <Paper className={classes.root}>
@@ -202,8 +183,6 @@ const ClassRoom = () => {
                     </Button>
                 </DialogActions>
             </Dialog>
-
-
         </Paper>
     );
 };
