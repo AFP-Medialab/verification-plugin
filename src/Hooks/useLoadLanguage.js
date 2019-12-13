@@ -83,7 +83,7 @@ const useLoadLanguage = (onlineTsv, localTsv) => {
     }, [gitHubFullUrl, localTsv, dictionary]);
 
     return (key) => {
-        return (dictionary && dictionary[gitHubFullUrl] && dictionary[gitHubFullUrl][lang]) ? dictionary[gitHubFullUrl][lang][key] : "";
+        return (dictionary && dictionary[gitHubFullUrl] && dictionary[gitHubFullUrl][lang]) ? dictionary[gitHubFullUrl][lang][key] : undefined;
     };
 };
 export default useLoadLanguage;

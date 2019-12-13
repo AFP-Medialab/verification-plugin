@@ -238,5 +238,10 @@ const useMyStyles = makeStyles(theme => ({
         alignItems: 'center',
         justifyContent: 'center',
     },
+    AboutMedia: {
+        height: "auto",
+        width: "auto",
+        maxWidth: "60%",
+    },
 }));
 export default useMyStyles;
