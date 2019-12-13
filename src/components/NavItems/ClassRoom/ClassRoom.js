@@ -18,13 +18,14 @@ import CastForEducationIcon from '@material-ui/icons/CastForEducation';
 import Divider from "@material-ui/core/Divider";
 import TextField from "@material-ui/core/TextField";
 import youCheckImage from "../../../Images/youCheck.png"
+import useLoadLanguage from "../../../Hooks/useLoadLanguage";
+import tsv from "../../../LocalDictionary/components/NavItems/ClassRoom.tsv";
 
 
 const useStyles = makeStyles(theme => ({
     root: {
         padding: theme.spacing(3, 2),
         textAlign: "center",
-
     },
     card: {
         maxWidth: "300px",
@@ -71,12 +72,8 @@ function a11yProps(index) {
 }
 
 const ClassRoom = () => {
-    const dictionary = useSelector(state => state.dictionary);
-    const lang = useSelector(state => state.language);
-    const keyword = (key) => {
-        return (dictionary &&  dictionary[lang]) ? dictionary[lang][key] : "";
-    };
 
+    const keyword = useLoadLanguage("components/NavItems/ClassRoom.tsv", tsv);
     const [value, setValue] = React.useState(0);
 
     const handleChange = (event, newValue) => {
@@ -87,28 +84,19 @@ const ClassRoom = () => {
     const [inputRef, setInputRef] = useState(null);
     const classes = useStyles();
 
-    const EducationalResources = [
+    const EducationalResources = () => {
+        let res = [];
+        for (let i = 1; keyword("classroom_title_" + i) !== undefined &&  keyword("classroom_title_" + i) !== "" ; i++)
         {
-            title: keyword("classroom_title_1"),
-            url: "(tsv Fix)"
-        },
-        {
-            title: keyword("classroom_title_2"),
-            url: "(tsv Fix)"
-        },
-        {
-            title: keyword("classroom_title_3"),
-            url: "(tsv Fix)"
-        },
-        {
-            title: keyword("classroom_title_4"),
-            url: "(tsv Fix)"
-        },
-        {
-            title: keyword("classroom_title_5"),
-            url: "(tsv Fix)"
-        },
-    ];
+            res.push(
+                {
+                    title: keyword("classroom_title_" + i),
+                    url: keyword("classroom_url_" + i)
+                }
+            );
+        }
+        return res;
+    };
 
 
     return (
@@ -123,7 +111,7 @@ const ClassRoom = () => {
                 <TabPanel value={value} index={0}>
                     <Divider/>
                     {
-                        EducationalResources.map((value, index) => {
+                        EducationalResources().map((value, index) => {
                             return (
                                 <div key={index}>
                                     <Box m={1}/>
@@ -143,7 +131,7 @@ const ClassRoom = () => {
                                             <Button
                                                 variant="contained"
                                                 color="primary"
-                                                onClick={() => setVideoUrl(keyword(value.tsvPrefix + "_help_video"))}>
+                                                onClick={() => setVideoUrl(value.url)}>
                                                 {
                                                     keyword("display")
                                                 }

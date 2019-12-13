@@ -5,13 +5,14 @@ import MenuItem from '@material-ui/core/MenuItem';
 import {useSelector, useDispatch} from "react-redux";
 import {changeLanguage} from "../../../redux/actions";
 import loadTSVFile from "./loadTSVFile";
+import useLoadLanguage from "../../../Hooks/useLoadLanguage";
+import tsv from "../../../LocalDictionary/components/NavItems/languages.tsv";
 
 const Languages = () => {
     const dictionary = useSelector(state => state.dictionary);
-    const lang = useSelector(state => state.language);
-    const keyword = (key) => {
-        return (dictionary && dictionary[lang])? dictionary[lang][key]: "";
-    };
+    const onlineTsv = process.env.REACT_APP_TRANSLATION_GITHUB + "components/NavItems/languages.tsv";
+    const keyword = useLoadLanguage("components/NavItems/languages.tsv", tsv);
+
     const keywordByLang = (language, key) => {
         return (dictionary && dictionary[language])? dictionary[language][key]: "";
     };
@@ -36,7 +37,7 @@ const Languages = () => {
         setAnchorEl(null);
     };
 
-    const language_list = (dictionary !== null)? Object.keys(dictionary) : [];
+    const language_list = (dictionary && dictionary[onlineTsv])? Object.keys(dictionary[onlineTsv]) : [];
 
     return (
         <div>
