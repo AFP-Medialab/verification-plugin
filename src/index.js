@@ -13,7 +13,6 @@ function saveToLocalStorage(state){
             humanRightsCheckBox : state.humanRightsCheckBox,
             interactiveExplanation: state.interactiveExplanation,
             language: state.language,
-            dictionary: state.dictionary,
         };
         const serializedState = JSON.stringify(savedState);
         localStorage.setItem('state', serializedState)
