@@ -99,7 +99,7 @@ const useMyStyles = makeStyles(theme => ({
     },
     popUp: {
         width: "300px",
-        padding: theme.spacing(3, 2),
+        padding: theme.spacing(1, 2),
         textAlign: "center",
     },
     grow: {

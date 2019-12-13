@@ -21,7 +21,6 @@ const navigator = (window.browser) ? window.browser : window.chrome;
 const PopUp = () => {
     const classes = useMyStyles();
     const keyword = useLoadLanguage("components/PopUp.tsv", tsv);
-
     const createScript = (tag, field) => {
         let script =
             "let array = [];" +
@@ -50,8 +49,6 @@ const PopUp = () => {
         navigator.tabs.executeScript({
             code: script
         }, (result) => {
-            console.log("result");
-            console.log(result);
             if (result) {
                 for (let url of result[0])
                     urlList.push(url);
@@ -80,8 +77,7 @@ const PopUp = () => {
 
     return (
         <div className={classes.popUp}>
-            <Grid justify={"center"}
-                  spacing={3} alignItems={"center"}>
+            <Grid>
                 <Grid item>
                     <img src={weVerifyLogo} alt={weVerifyLogo} style={{width: "100px"}}/>
                 </Grid>
@@ -95,7 +91,6 @@ const PopUp = () => {
                     </Button>
                 </Grid>
             </Grid>
-
 
             <ExpansionPanel onClick={videoClick}>
                 <ExpansionPanelSummary
@@ -149,7 +144,7 @@ const PopUp = () => {
                 >
                     <Typography className={classes.heading}>
                         {
-                            keyword("images")
+                            keyword("images_url")
                         }
                     </Typography>
                 </ExpansionPanelSummary>

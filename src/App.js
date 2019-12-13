@@ -44,7 +44,7 @@ function App() {
                 <Switch>
                     <Route exact path={"/"} component={PopUp}/>
                     <Route path={"/app"} component={NavBar}/>
-                    <Route component={NotFound}/>
+                    <Route component={PopUp}/>
                 </Switch>
             </MuiThemeProvider>
         </Router>

@@ -9,15 +9,14 @@ import {setDictionary} from "../redux/actions";
  * @array the array representation of the csv
  * @return the json representation of the csv
  */
-function array_to_json(array)
-{
+function array_to_json(array) {
     let json = {};
-    for( let i = 1; i < array[0].length; ++i ) {
-        let lang = array[0][i].replace( "\r", "" );
+    for (let i = 1; i < array[0].length; ++i) {
+        let lang = array[0][i].replace("\r", "");
         json[lang] = {};
-        for( let j = 1; j < array.length; ++j ) {
-            if( array[j] && array[j][i] && typeof array[j][i] !== undefined ) {
-                json[lang][array[j][0]] = array[j][i].replace( "\r", "" );
+        for (let j = 1; j < array.length; ++j) {
+            if (array[j] && array[j][i] && typeof array[j][i] !== undefined) {
+                json[lang][array[j][0]] = array[j][i].replace("\r", "");
             } else {
                 json[lang][array[j][0]] = "";
             }
@@ -31,11 +30,10 @@ function array_to_json(array)
  * @csv csv string
  * @return array representation of csv string
  */
-function csv_to_array(csv)
-{
-    let rows = csv.split( "\n" );
-    return rows.map( function( row ) {
-        return row.split( "\t" );
+function csv_to_array(csv) {
+    let rows = csv.split("\n");
+    return rows.map(function (row) {
+        return row.split("\t");
     });
 }
 
@@ -45,7 +43,7 @@ function csv_to_array(csv)
  */
 function translate_csv(text) {
     let lang_array_csv = csv_to_array(text);
-    return  array_to_json(lang_array_csv);
+    return array_to_json(lang_array_csv);
 }
 
 const useLoadLanguage = (onlineTsv, localTsv) => {
@@ -57,27 +55,35 @@ const useLoadLanguage = (onlineTsv, localTsv) => {
     useEffect(() => {
         if (dictionary && dictionary[gitHubFullUrl])
             return;
+
+        const backUpLocal = () => {
+            axios.get(localTsv)
+                .then(result => {
+                    dispatch(setDictionary({
+                        ...dictionary,
+                        [gitHubFullUrl]: translate_csv(result.data)
+                    }))
+                })
+                .catch(error => console.error(error))
+        };
+
         axios.get(gitHubFullUrl)
             .then(result => {
-                dispatch(setDictionary({
-                    ...dictionary,
-                    [gitHubFullUrl] : translate_csv(result.data)
-                }))
+                if (result.data === "")
+                    backUpLocal();
+                else
+                    dispatch(setDictionary({
+                        ...dictionary,
+                        [gitHubFullUrl]: translate_csv(result.data)
+                    }))
             })
             .catch(() => {
-                axios.get(localTsv)
-                    .then(result => {
-                        dispatch(setDictionary({
-                            ...dictionary,
-                            [gitHubFullUrl] : translate_csv(result.data)
-                    }))
-                    })
-                    .catch(error => console.error(error))
+                backUpLocal();
             })
     }, [gitHubFullUrl, localTsv, dictionary]);
 
     return (key) => {
-        return (dictionary && dictionary[gitHubFullUrl] && dictionary[gitHubFullUrl][lang] ) ? dictionary[gitHubFullUrl][lang][key] : "";
+        return (dictionary && dictionary[gitHubFullUrl] && dictionary[gitHubFullUrl][lang]) ? dictionary[gitHubFullUrl][lang][key] : "";
     };
 };
 export default useLoadLanguage;
