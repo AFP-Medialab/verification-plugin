@@ -75,11 +75,11 @@ export default function TwitterSnaResult(props) {
     if (result === null)
         return <div/>;
 
-    const downloadClick = (csvArr) => {
+    const downloadClick = (csvArr, name, histo) => {
         let encodedUri = encodeURI(csvArr);
         let link = document.createElement("a");
         link.setAttribute("href", encodedUri);
-        link.setAttribute("download", "tweets.csv");
+        link.setAttribute("download", "tweets_" + props.request.keywordList.join('&') + '_'  + name + ((!histo)?(props.request.from + "_" + props.request.until):"") + ".csv");
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
@@ -193,11 +193,11 @@ export default function TwitterSnaResult(props) {
         callback({
             data: resData,
             columns: columns,
-            csvArr: csvArr
+            csvArr: csvArr,
+            word: word
         });
     }
 
-    console.log(props.request);
     const onPieChartClick = (data, nbType, index) => {
         if (index === 3) {
             console.log("CLICKED");
@@ -253,7 +253,8 @@ export default function TwitterSnaResult(props) {
         let newRes = {
             data: resData,
             columns: columns,
-            csvArr: csvArr
+            csvArr: csvArr,
+            username: data.points[0].label
         };
         switch (index) {
             case 0:
@@ -301,6 +302,7 @@ export default function TwitterSnaResult(props) {
         onWordMouseOver: getCallback("onWordMouseOver")
         };
     
+            console.log(props.request.from);
     return (
         <Paper className={classes.root}>
             <CloseResult onClick={() => dispatch(cleanTwitterSnaState())}/>
@@ -348,7 +350,7 @@ export default function TwitterSnaResult(props) {
                                             <Button
                                                 variant={"contained"}
                                                 color={"primary"}
-                                                onClick={() => downloadClick(histoTweets.csvArr)}>
+                                                onClick={() => downloadClick(histoTweets.csvArr, histoTweets.data[0].date.split(' ')[0], true)}>
                                                 {
                                                     keyword('sna_result_download')
                                                 }
@@ -423,7 +425,7 @@ export default function TwitterSnaResult(props) {
                                                     <Button
                                                         variant={"contained"}
                                                         color={"primary"}
-                                                        onClick={() => downloadClick(pieCharts[index].csvArr)}>
+                                                        onClick={() => downloadClick(pieCharts[index].csvArr, (index < 3)?pieCharts[index].username:pieCharts3.word)}>
                                                         {
                                                             keyword('sna_result_download')
                                                         }
@@ -480,7 +482,7 @@ export default function TwitterSnaResult(props) {
                                                 <Button
                                                     variant={"contained"}
                                                     color={"primary"}
-                                                    onClick={() => downloadClick(cloudTweets.csvArr)}>
+                                                    onClick={() => downloadClick(cloudTweets.csvArr, cloudTweets.word)}>
                                                     {
                                                         keyword('sna_result_download')
                                                     }
