@@ -66,19 +66,19 @@ export default function CustomTable(props) {
                     nextTooltip: keyword("next_page"),
                     lastTooltip: keyword("last_page"),
                     labelRowsSelect: keyword(""),
-                    labelDisplayedRows: keyword('{from}-{to} of {count} (add tsv)')
+                    labelDisplayedRows: keyword("from_to_text")
                 },
                 toolbar: {
-                    nRowsSelected: '{0} row(s) selected (add tsv)',
-                    searchPlaceholder: "Search (add tsv)"
+                    nRowsSelected: keyword('{0} row(s) selected (add tsv)'),
+                    searchPlaceholder: keyword("search")
                 },
                 header: {
-                    actions: 'Actions (add tsv)'
+                    actions: ""
                 },
                 body: {
-                    emptyDataSourceMessage: 'No records to display (add tsv)',
+                    emptyDataSourceMessage: keyword('no_records'),
                     filterRow: {
-                        filterTooltip: 'Filter (add tsv)'
+                        filterTooltip: keyword("filter")
                     }
                 }
             }}
