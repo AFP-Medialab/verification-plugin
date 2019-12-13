@@ -176,7 +176,7 @@ const useTwitterSnaRequest = (request) => {
         const createWordCloud = (plotlyJson) => {
 
             let mostUsedWords = getAllWordsMap(plotlyJson);
-            mostUsedWords = mostUsedWords.map(word => { return {'text': word.word, 'value': word.nbOccurences, 'entity': word.entity, 'color': getColor(word.entity)}; });
+            mostUsedWords = mostUsedWords.map(word => { return {'text': word.word.replace(/_/g, " "), 'value': word.nbOccurences, 'entity': word.entity, 'color': getColor(word.entity)}; });
             const options = {
               //  colors: ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b'],
                 enableTooltip: true,
