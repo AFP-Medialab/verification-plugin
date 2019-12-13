@@ -131,6 +131,7 @@ const useTwitterSnaRequest = (request) => {
         };
 
         const createHistogram = (data, json, givenFrom, givenUntil) => {
+            console.log(json);
             let titleEnd = data.keywordList.join("&") + " " + data.from + " " + data.until;
             let layout = {
                 title:  <div><b>{keyword("user_time_chart_title")}</b><br/> {titleEnd}</div>,
