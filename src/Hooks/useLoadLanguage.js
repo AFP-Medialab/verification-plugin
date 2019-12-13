@@ -52,16 +52,16 @@ const useLoadLanguage = (onlineTsv, localTsv) => {
     const lang = useSelector(state => state.language);
     const dictionary = useSelector(state => state.dictionary);
     const dispatch = useDispatch();
-    const gitHubFullBase = process.env.REACT_APP_TRANSLATION_GITHUB + onlineTsv;
+    const gitHubFullUrl = process.env.REACT_APP_TRANSLATION_GITHUB + onlineTsv;
 
     useEffect(() => {
-        if (dictionary && dictionary[onlineTsv])
+        if (dictionary && dictionary[gitHubFullUrl])
             return;
-        axios.get(gitHubFullBase)
+        axios.get(gitHubFullUrl)
             .then(result => {
                 dispatch(setDictionary({
                     ...dictionary,
-                    [gitHubFullBase] : translate_csv(result.data)
+                    [gitHubFullUrl] : translate_csv(result.data)
                 }))
             })
             .catch(() => {
@@ -69,15 +69,15 @@ const useLoadLanguage = (onlineTsv, localTsv) => {
                     .then(result => {
                         dispatch(setDictionary({
                             ...dictionary,
-                            [gitHubFullBase] : translate_csv(result.data)
+                            [gitHubFullUrl] : translate_csv(result.data)
                     }))
                     })
                     .catch(error => console.error(error))
             })
-    }, [gitHubFullBase, localTsv]);
+    }, [gitHubFullUrl, localTsv, dictionary]);
 
     return (key) => {
-        return (dictionary && dictionary[gitHubFullBase] && dictionary[gitHubFullBase][lang] ) ? dictionary[gitHubFullBase][lang][key] : "";
+        return (dictionary && dictionary[gitHubFullUrl] && dictionary[gitHubFullUrl][lang] ) ? dictionary[gitHubFullUrl][lang][key] : "";
     };
 };
 export default useLoadLanguage;

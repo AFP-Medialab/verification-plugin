@@ -18,7 +18,8 @@ const AllTools = (props) => {
     const classes = useMyStyles();
     const keyword = useLoadLanguage("components/NavItems/tools/Alltools.tsv", tsv);
     const tools = props.tools;
-
+    console.log("All app loaded");
+    console.log(keyword);
     const [videoUrl, setVideoUrl] = useState(null);
 
     const handleClick = (path) => {
