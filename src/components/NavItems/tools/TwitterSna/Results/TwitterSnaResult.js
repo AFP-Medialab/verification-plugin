@@ -19,6 +19,7 @@ import ReactWordcloud from "react-wordcloud";
 import { select } from 'd3-selection';
 import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../../LocalDictionary/components/NavItems/tools/TwitterSna.tsv";
+import { ta } from "date-fns/locale";
 
 export default function TwitterSnaResult(props) {
 
@@ -155,11 +156,30 @@ export default function TwitterSnaResult(props) {
         });
     };
 
+    function getTweetWithClickableLink(tweet, link) {
+        tweet = tweet.replace(
+            /((http|https|ftp|ftps)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?|pic\.twitter\.com\/([-a-zA-Z0-9()@:%_\+.~#?&//=]*))/g,
+            ' <a key={$1} href={$1}>{$1}</a>');
+    
+        tweet = tweet.replace(
+            /(pic\.twitter\.com\/)/g,
+            'http://pic.twitter.com/');
+
+        tweet += '<div align="right"><a href="' + link + '" target="_blank" ><img src="img/twitter_logo.png" style="height: 40px"/></a></div>';
+        return tweet;
+    }
+
     function displayTweetsOfWord(word, callback) {
         let columns = [
             { title: keyword('sna_result_username'), field: 'username' },
             { title: keyword('sna_result_date'), field: 'date' },
-            { title: keyword('sna_result_tweet'), field: 'tweet' },
+            { title: keyword('sna_result_tweet'), field: 'tweet', render: ( cellData ) => {
+                let urls = cellData.tweet.match(/((http|https|ftp|ftps)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?|pic\.twitter\.com\/([-a-zA-Z0-9()@:%_\+.~#?&//=]*))/g);
+                let tweetText = cellData.tweet.split(urls[0])
+                console.log(tweetText);
+            let element = <div>{tweetText[0]} <a href={urls[0]}>{urls[0]}</a>{tweetText[1]}</div>;
+                return element;
+        }},
             { title: keyword('sna_result_retweet_nb'), field: 'retweetNb' },
             { title: keyword('sna_result_like_nb'), field: 'likeNb' }
         ];
@@ -177,6 +197,8 @@ export default function TwitterSnaResult(props) {
             if (tweetObj._source.tweet.toLowerCase().match(new RegExp('(^|((.)*[\.\(\)0-9\!\?\'\’\‘\"\:\,\/\\\%\>\<\«\»\ ^#]))' + word + '(([\.\(\)\!\?\'\’\‘\"\:\,\/\>\<\«\»\ ](.)*)|$)', "i"))) {
 
                 var date = new Date(tweetObj._source.date);
+                //let tweet = getTweetWithClickableLink(tweetObj._source.tweet,tweetObj._source.link);
+                console.log(tweetObj._source.tweet)
                 let tmpObj = {
                     username: tweetObj._source.username,
                     date: date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear() + ' ' + date.getHours() + ':' + date.getMinutes(),
