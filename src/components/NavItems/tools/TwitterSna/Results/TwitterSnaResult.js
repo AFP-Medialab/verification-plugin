@@ -224,6 +224,7 @@ export default function TwitterSnaResult(props) {
             window.open(rowData.link, '_blank');
         }
     }]
+
     const onPieChartClick = (data, nbType, index) => {
         if (index === 3) {
             // window.open("https://twitter.com/search?q=" + data.points[0].label.replace('#', "%23"), '_blank');
@@ -325,7 +326,7 @@ export default function TwitterSnaResult(props) {
         else
             return "The word " + word.text + " appears " + word.value + " times" + ".";
     }
-    
+
     const callbacks = {
         getWordColor: word => word.color,
         getWordTooltip: word =>
@@ -493,7 +494,7 @@ export default function TwitterSnaResult(props) {
                             <div width={"100%"} >
                                 <ReactWordcloud options={result.cloudChart.options} callbacks={callbacks} words={result.cloudChart.json} />
                             </div>
-                            <Box m={2} />
+                            <Box m={2} width={"100%"}/>
                             {
                                 cloudTweets &&
                                 <div>
