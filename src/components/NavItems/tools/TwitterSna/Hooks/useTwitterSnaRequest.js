@@ -98,6 +98,7 @@ const useTwitterSnaRequest = (request) => {
             };
 
             let config = {
+                displayModeBar: true,
                 toImageButtonOptions: {
                     format: 'png', // one of png, svg, jpeg, webp
                     filename: data.keywordList.join("&") + "_" + data.from + "_" + data.until + "_Tweets",
@@ -131,7 +132,6 @@ const useTwitterSnaRequest = (request) => {
         };
 
         const createHistogram = (data, json, givenFrom, givenUntil) => {
-            console.log(json);
             let titleEnd = data.keywordList.join("&") + " " + data.from + " " + data.until;
             let layout = {
                 title:  <div><b>{keyword("user_time_chart_title")}</b><br/> {titleEnd}</div>,
@@ -155,6 +155,7 @@ const useTwitterSnaRequest = (request) => {
 
 
             let config = {
+                displayModeBar: true,
                 toImageButtonOptions: {
                     format: 'png', // one of png, svg, jpeg, webp
                     filename: data.keywordList.join("&") + "_" + data["from"] + "_" + data["until"] + "_Timeline",
@@ -163,7 +164,7 @@ const useTwitterSnaRequest = (request) => {
 
                 responsive: true,
                 modeBarButtons: [["toImage"]],
-                displaylogo: false
+                displaylogo: false,
             };
             return {
                 title: "user_time_chart_title",
@@ -181,14 +182,14 @@ const useTwitterSnaRequest = (request) => {
             const options = {
               //  colors: ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b'],
                 enableTooltip: true,
-                deterministic: true,
+                deterministic: false,
                 fontFamily: 'impact',
-                fontSizes: [25, 200],
+                fontSizes: [20, 170],
                 fontStyle: 'normal',
                 fontWeight: 'normal',
                 padding: 1,
                 rotations: 3,
-                rotationAngles: [0, 50],
+                rotationAngles: [0, 30],
                 scale: 'sqrt',
                 spiral: 'rectangular',
                 transitionDuration: 1000,
@@ -211,7 +212,10 @@ const useTwitterSnaRequest = (request) => {
             result.tweets = responseArrayOf7[5].tweets;
             result.histogram = createHistogram(data, responseArrayOf7[6], givenFrom, givenUntil);
             if (final)
+            {
+                console.log(data);
                 result.cloudChart = createWordCloud(responseArrayOf7[7]);
+            }
             dispatch(setTwitterSnaResult(request, result, false, true))
         };
 
@@ -226,6 +230,7 @@ const useTwitterSnaRequest = (request) => {
             };
         };
 
+        
         const generateGraph = (data, final) => {
             let givenFrom = data.query.from;
             let givenUntil = data.query.until;
@@ -290,5 +295,26 @@ const useTwitterSnaRequest = (request) => {
             })
             .catch(e => handleErrors(e))
     }, [JSON.stringify(request)])
+
+   /* useEffect(() => {
+        
+        function unrotateMainHashtag(search) {
+            console.log(document.getElementsByClassName("slicetext"));
+            [...document.getElementsByClassName("slicetext")].forEach(slice => {
+                console.log(slice);
+                if (slice.dataset.unformatted === search) {
+                    var transform = slice.getAttribute("transform");
+        
+                    let translates = transform.split(/rotate\(...\)/);
+                    let newTransform = "";
+                    translates.forEach(translate => newTransform += translate);
+                    slice.setAttribute("transform", newTransform);
+                }
+            })
+        }
+
+        console.log(request);
+        unrotateMainHashtag(request.keywordList.join(","));
+    }, [JSON.stringify(request)])*/
 };
 export default useTwitterSnaRequest;

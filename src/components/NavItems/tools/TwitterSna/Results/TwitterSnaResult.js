@@ -166,7 +166,9 @@ export default function TwitterSnaResult(props) {
         let tweetText = cellData.tweet.split(urls[0]);
         let element = <div>{tweetText[0]} <a href={urls[0]} target="_blank">{urls[0]}</a>{tweetText[1]}</div>;
         return element;
-}
+    }
+
+  
 
 //        tweet += '<div align="right"><a href="' + link + '" target="_blank" ><img src="img/twitter_logo.png" style="height: 40px"/></a></div>';
        // return tweet;
