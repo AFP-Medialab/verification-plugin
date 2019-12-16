@@ -44,7 +44,7 @@ const About = () => {
                     {
                         keyword("source_part_1")
                     }
-                    <Link href={keyword("mit_licence_link")}>
+                    <Link target="_blank" href={keyword("mit_licence_link")}>
                         {
                             keyword("mit_licence_link_label")
                         }
@@ -58,7 +58,7 @@ const About = () => {
                     {
                         keyword("feedBack_part_1")
                     }
-                    <Link href={"mailto:" + keyword("invid_email")}>
+                    <Link target="_blank" href={"mailto:" + keyword("invid_email")}>
                         {
                             keyword("invid_email")
                         }
@@ -92,7 +92,7 @@ const About = () => {
                     {
                         keyword("info_invid_part_1")
                     }
-                    <Link href={keyword("info_invid_website")}>
+                    <Link target="_blank" href={keyword("info_invid_website")}>
                         {
                             keyword("info_invid_website")
                         }
@@ -100,7 +100,7 @@ const About = () => {
                     {
                         keyword("info_invid_part_2")
                     }
-                    <Link href={keyword("info_invid_link_twitter")}>
+                    <Link target="_blank" href={keyword("info_invid_link_twitter")}>
                         {
                             keyword("twitter")
                         }
@@ -113,7 +113,7 @@ const About = () => {
                     {
                         keyword("info_weverify_part_1")
                     }
-                    <Link href={keyword("info_weverify_link_website")}>
+                    <Link target="_blank" href={keyword("info_weverify_link_website")}>
                         {
                             keyword("info_weverify_website")
                         }
@@ -121,7 +121,7 @@ const About = () => {
                     {
                         keyword("info_weverify_part_2")
                     }
-                    <Link href={keyword("info_invid_link_twitter")}>
+                    <Link target="_blank" href={keyword("info_invid_link_twitter")}>
                         {
                             keyword("twitter")
                         }
@@ -134,7 +134,7 @@ const About = () => {
                     {
                         keyword("developed_text_part_1")
                     }
-                    <Link href={keyword("medialab_link")}>
+                    <Link target="_blank" href={keyword("medialab_link")}>
                         {
                             keyword("medialab_link_label")
                         }
@@ -142,7 +142,7 @@ const About = () => {
                     {
                         keyword("developed_text_part_2")
                     }
-                    <Link href={keyword("iti_link")}>
+                    <Link target="_blank" href={keyword("iti_link")}>
                         {
                             keyword("iti_link_label")
                         }
@@ -150,7 +150,7 @@ const About = () => {
                     {
                         keyword("developed_text_part_3")
                     }
-                    <Link href={keyword("lleida_link")}>
+                    <Link target="_blank" href={keyword("lleida_link")}>
                         {
                             keyword("lleida_link_label")
                         }
