@@ -132,6 +132,7 @@ export default function TwitterSnaResult(props) {
                                 date: date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear() + ' ' + date.getHours() + ':' + date.getMinutes(),
                                 tweet: tweetObj._source.tweet,
                                 retweetNb: tweetObj._source.nretweets,
+                                link: tweetObj._source.link
                             }
                         );
                         csvArr += point.data.name + ',' +
@@ -216,6 +217,13 @@ export default function TwitterSnaResult(props) {
         });
     }
 
+    let goToTweetAction = [{
+        icon: TwitterIcon,
+        tooltip: keyword("sna_result_go_to_tweet"),
+        onClick: (event, rowData) => {
+            window.open(rowData.link, '_blank');
+        }
+    }]
     const onPieChartClick = (data, nbType, index) => {
         if (index === 3) {
             // window.open("https://twitter.com/search?q=" + data.points[0].label.replace('#', "%23"), '_blank');
@@ -251,6 +259,7 @@ export default function TwitterSnaResult(props) {
                 let tmpObj = {
                     date: date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear() + ' ' + date.getHours() + ':' + date.getMinutes(),
                     tweet: tweetObj._source.tweet,
+                    link: tweetObj._source.link
                 };
                 csvArr += date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear() + '_' + date.getHours() + 'h' + date.getMinutes() + ',"' + tweetObj._source.tweet + '",';
 
@@ -378,7 +387,7 @@ export default function TwitterSnaResult(props) {
                                         title={keyword("sna_result_slected_tweets")}
                                         colums={histoTweets.columns}
                                         data={histoTweets.data}
-                                        actions={[]}
+                                        actions={goToTweetAction}
                                     />
                                 </div>
                             }
@@ -452,7 +461,7 @@ export default function TwitterSnaResult(props) {
                                             <CustomTable title={keyword("sna_result_slected_tweets")}
                                                 colums={pieCharts[index].columns}
                                                 data={pieCharts[index].data}
-                                                ations={pieCharts[index].actions}
+                                                actions={goToTweetAction}
                                             />
                                         </div>
                                     }
@@ -510,15 +519,7 @@ export default function TwitterSnaResult(props) {
                                         title={keyword("sna_result_slected_tweets")}
                                         colums={cloudTweets.columns}
                                         data={cloudTweets.data}
-                                        actions={[
-                                            {
-                                                icon: TwitterIcon,
-                                                tooltip: keyword("sna_result_go_to_tweet"),
-                                                onClick: (event, rowData) => {
-                                                    window.open(rowData.link, '_blank');
-                                                }
-                                            }
-                                        ]}
+                                        actions={goToTweetAction}
                                     />
                                 </div>
                             }
