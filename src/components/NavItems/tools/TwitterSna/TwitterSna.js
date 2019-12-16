@@ -181,7 +181,7 @@ const TwitterSna = () => {
     return (
         <div>
             <Paper className={classes.root}>
-                <CustomTile> {keyword("twitter_sna_title")}  </CustomTile>
+                <CustomTile text={keyword("twitter_sna_title")}/>
                 <Box m={3}/>
 
                 <TextField

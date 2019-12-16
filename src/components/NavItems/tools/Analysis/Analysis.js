@@ -56,7 +56,7 @@ const Analysis = () => {
     return (
         <div>
             <Paper className={classes.root}>
-                <CustomTile>{keyword("api_title")} </CustomTile>
+                <CustomTile text={keyword("api_title")}/>
                 <br/>
                 <TextField
                     id="standard-full-width"

@@ -38,7 +38,7 @@ const About = () => {
     return (
         <Paper className={classes.root}>
             <Box justifyContent="center" display="flex" flexDirection="column" align={"center"} >
-                <CustomTile> {keyword("about_title")}  </CustomTile>
+                <CustomTile text={keyword("about_title")}/>
                 <Box m={3}/>
                 <Typography variant={"body2"}>
                     {

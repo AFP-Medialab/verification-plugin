@@ -23,29 +23,12 @@ import history from '../../Shared/History/History';
 import useLoadLanguage from "../../../Hooks/useLoadLanguage";
 import tsv from "../../../LocalDictionary/components/NavItems/Interactive.tsv";
 import Link from "@material-ui/core/Link";
-
-const useStyles = makeStyles(theme => ({
-    root: {
-        padding: theme.spacing(3, 2),
-        textAlign: "center",
-    },
-    card: {
-        maxWidth: "300px",
-        textAlign: "center",
-    },
-    media: {
-        maxWidth: "80%",
-        maxHeight: window.innerHeight / 2,
-    },
-}));
-
+import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
 
 const Interactive = () => {
+    const classes = useMyStyles();
     const keyword = useLoadLanguage("components/NavItems/Interactive.tsv", tsv);
     const answersAvailable = useSelector(state => state.interactiveExplanation);
-
-    const classes = useStyles();
-
 
     const carouselItems = () => {
         let res = [];
@@ -89,7 +72,7 @@ const Interactive = () => {
     return (
         <Paper className={classes.root}>
             <Box justifyContent="center" display="flex" flexDirection="column">
-                <CustomTile> {keyword("quiz_title")}  </CustomTile>
+                <CustomTile text={keyword("quiz_title")}/>
                 <Grid container justify="space-between" spacing={2}
                       alignContent={"center"}>
                     <Grid item justify={"center"}>
@@ -127,7 +110,7 @@ const Interactive = () => {
                                 <div align={"center"}>
                                     {
                                         (isImage) ?
-                                            <img src={obj.url} className={classes.media} alt={obj.url}/>
+                                            <img src={obj.url} className={classes.InteractiveMedia} alt={obj.url}/>
                                             :
                                             <Iframe frameBorder="0" src={obj.url}
                                                     width="80%"

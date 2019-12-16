@@ -83,7 +83,7 @@ const ClassRoom = () => {
     return (
         <Paper className={classes.root}>
             <Box justifyContent="center" display="flex" flexDirection="column">
-                <CustomTile> {keyword("classroom_title")}  </CustomTile>
+                <CustomTile text={keyword("classroom_title")}/>
                 <Box m={1}/>
                 <Tabs value={value} onChange={handleChange} aria-label="simple tabs example">
                     <Tab label={keyword("remote_resources_title")} {...a11yProps(0)} />

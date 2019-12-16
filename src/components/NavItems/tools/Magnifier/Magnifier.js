@@ -62,7 +62,7 @@ const Magnifier = () => {
     return (
         <div>
             <Paper className={classes.root}>
-                <CustomTile> {keyword("magnifier_title")}  </CustomTile>
+                <CustomTile text={keyword("magnifier_title")}/>
                 <Box m={1}/>
                 <TextField
                     id="standard-full-width"
