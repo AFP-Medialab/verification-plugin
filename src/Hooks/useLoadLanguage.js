@@ -1,7 +1,6 @@
 import {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import axios from "axios";
-import tsv from "../components/NavItems/languages/InVIDTraductions.tsv";
 import {setDictionary} from "../redux/actions";
 
 /**
@@ -52,6 +51,8 @@ const useLoadLanguage = (onlineTsv, localTsv) => {
     const dispatch = useDispatch();
     const gitHubFullUrl = process.env.REACT_APP_TRANSLATION_GITHUB + onlineTsv;
 
+    const actualDictionary = (dictionary)? dictionary[gitHubFullUrl] : undefined;
+
     useEffect(() => {
         if (dictionary && dictionary[gitHubFullUrl])
             return;
@@ -80,10 +81,10 @@ const useLoadLanguage = (onlineTsv, localTsv) => {
             .catch(() => {
                 backUpLocal();
             })
-    }, [gitHubFullUrl, localTsv, dictionary]);
+    }, [gitHubFullUrl, localTsv, actualDictionary]);
 
     return (key) => {
-        return (dictionary && dictionary[gitHubFullUrl] && dictionary[gitHubFullUrl][lang]) ? dictionary[gitHubFullUrl][lang][key] : undefined;
+        return (dictionary && dictionary[gitHubFullUrl] && dictionary[gitHubFullUrl][lang]) ? dictionary[gitHubFullUrl][lang][key] : "";
     };
 };
 export default useLoadLanguage;

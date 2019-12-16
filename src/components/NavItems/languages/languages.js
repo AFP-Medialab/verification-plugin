@@ -4,7 +4,6 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import {useSelector, useDispatch} from "react-redux";
 import {changeLanguage} from "../../../redux/actions";
-import loadTSVFile from "./loadTSVFile";
 import useLoadLanguage from "../../../Hooks/useLoadLanguage";
 import tsv from "../../../LocalDictionary/components/NavItems/languages.tsv";
 
@@ -13,14 +12,11 @@ const Languages = () => {
     const onlineTsv = process.env.REACT_APP_TRANSLATION_GITHUB + "components/NavItems/languages.tsv";
     const keyword = useLoadLanguage("components/NavItems/languages.tsv", tsv);
 
-    const keywordByLang = (language, key) => {
-        return (dictionary && dictionary[language])? dictionary[language][key]: "";
+    const keywordByLang = (language) => {
+        return (dictionary && dictionary[onlineTsv] && dictionary[onlineTsv][language])? dictionary[onlineTsv][language]["lang_label"]: "";
     };
 
     const dispatch = useDispatch();
-    if (dictionary === null) {
-        loadTSVFile(dispatch);
-    }
 
     const [anchorEl, setAnchorEl] = useState(null);
 
@@ -42,7 +38,7 @@ const Languages = () => {
     return (
         <div>
             <Button color={"primary"} variant={"outlined"} size={"small"} aria-controls={"simple-menu"} aria-haspopup={true} fullWidth={false} onClick={handleClick}>
-                {keyword("lang_code") }
+                {keyword("lang_code") || ""}
             </Button>
             <Menu
                 id="simple-menu"
@@ -53,7 +49,7 @@ const Languages = () => {
             >
                 {
                     language_list.map((key) => {
-                        return <MenuItem key={key} onClick={() => handleCloseItem(key)}> {keywordByLang(key,"name") } </MenuItem>
+                        return <MenuItem key={key} onClick={() => handleCloseItem(key)}> {keywordByLang(key) } </MenuItem>
                     })
                 }
             </Menu>
