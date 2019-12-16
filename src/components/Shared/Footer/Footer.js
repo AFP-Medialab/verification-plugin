@@ -51,12 +51,16 @@ const Footer = (props) => {
                 {
                     provideBy
                 }
-                <Link target="_blank" href={link}>
-                    {
-                        linkLabel
-                    }
-                </Link>
+                {
+                    linkLabel && link &&
+                    <Link target="_blank" href={link}>
+                        {
+                            linkLabel
+                        }
+                    </Link>
+                }
             </Typography>
+
             <Typography variant={"body2"}>
                 {
                     contactUs

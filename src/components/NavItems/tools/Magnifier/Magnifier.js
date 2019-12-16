@@ -83,9 +83,9 @@ const Magnifier = () => {
                     }}/>
                 </Button>
                 <Box m={2}/>
-                <Button variant="contained" color="primary" onClick={() => submitUrl(input)}>
-                    {keyword("button_submit")}
-                </Button>
+                    <Button variant="contained" color="primary" onClick={() => submitUrl(input)}>
+                        {keyword("button_submit") || ""}
+                    </Button>
             </Paper>
             {
                 resultResult && resultResult !== "" &&
