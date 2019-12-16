@@ -58,7 +58,7 @@ const About = () => {
                     {
                         keyword("feedBack_part_1")
                     }
-                    <Link href={keyword("invid_email")}>
+                    <Link href={"mailto:" + keyword("invid_email")}>
                         {
                             keyword("invid_email")
                         }
