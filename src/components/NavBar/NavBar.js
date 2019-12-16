@@ -191,7 +191,7 @@ const NavBar = (props) => {
                 </Icon>,
             content: <Tutorial/>,
             path: "tutorial",
-            footer: <Footer content={"footer_tutorial"}/>
+            footer: <Footer type={"afp"}/>
         },
         {
             title: "navbar_classroom",
@@ -201,7 +201,7 @@ const NavBar = (props) => {
                 </Icon>,
             content: <ClassRoom/>,
             path: "classroom",
-            footer: <Footer content={"footer_classroom"}/>
+            footer: <Footer type={"afp"}/>
         },
         {
             title: "navbar_quiz",
@@ -211,7 +211,7 @@ const NavBar = (props) => {
                 </Icon>,
             content: <Interactive/>,
             path: "interactive",
-            footer: <Footer content={"footer_about"}/>
+            footer: <Footer type={"afp"}/>
         },
         {
             title: "navbar_about",
@@ -221,7 +221,7 @@ const NavBar = (props) => {
                 </Icon>,
             content: <About/>,
             path: "about",
-            footer: <Footer content={"footer_about"}/>
+            footer: <Footer type={"afp"}/>
         }
     ];
 
