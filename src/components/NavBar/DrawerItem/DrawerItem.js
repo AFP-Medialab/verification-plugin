@@ -25,39 +25,39 @@ const DrawerItem = (props) => {
         },
         {
             content: <Analysis/>,
-            footer: <Footer content={"footer_analysis"}/>
+            footer: <Footer type={"iti"}/>
         },
         {
             content: <Keyframes/>,
-            footer: <Footer content={"footer_keyframes"}/>
+            footer: <Footer type={"iti"}/>
         },
         {
             content: <Thumbnails/>,
-            footer: <Footer content={"footer_thumbnails"}/>
+            footer: <Footer type={"afp"}/>
         },
         {
             content: <TwitterAdvancedSearch/>,
-            footer: <Footer content={"footer_twitter"}/>
+            footer: <Footer type={"afp"}/>
         },
         {
             content: <Magnifier/>,
-            footer: <Footer content={"footer_magnifier"}/>
+            footer: <Footer type={"afp"}/>
         },
         {
             content: <Metadata/>,
-            footer: <Footer content={"footer_metadata"}/>
+            footer: <Footer type={"afp"}/>
         },
         {
             content: <VideoRights/>,
-            footer: <Footer content={"footer_rights"}/>
+            footer: <Footer type={"GRIHO"}/>
         },
         {
             content: <Forensic/>,
-            footer: <Footer content={"footer_forensic"}/>
+            footer: <Footer type={"iti"}/>
         },
         {
             content: <TwitterSna/>,
-            footer: <Footer content={"footer_magnifier"}/>
+            footer: <Footer type={"afp"}/>
         }
     ];
 
