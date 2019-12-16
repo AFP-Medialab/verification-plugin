@@ -243,5 +243,19 @@ const useMyStyles = makeStyles(theme => ({
         width: "auto",
         maxWidth: "60%",
     },
+    InteractiveMedia: {
+        maxWidth: "80%",
+        maxHeight: window.innerHeight / 2,
+    },
+    customTitle : {
+        background: theme.palette.primary.main,
+        borderRadius: 5,
+        textAlign: "center",
+        color: 'white',
+        fontSize: 28,
+        padding: '15px',
+        width: "auto",
+        margin: 5,
+    }
 }));
 export default useMyStyles;

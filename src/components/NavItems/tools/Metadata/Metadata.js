@@ -57,7 +57,7 @@ const Metadata = () => {
     return (
         <div>
             <Paper className={classes.root}>
-                <CustomTile> {keyword("metadata_content_title")}  </CustomTile>
+                <CustomTile text={keyword("metadata_content_title")}/>
                 <Box m={1}/>
                 <TextField
                     value={input}
