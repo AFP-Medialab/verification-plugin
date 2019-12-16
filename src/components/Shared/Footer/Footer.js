@@ -31,11 +31,10 @@ const Footer = (props) => {
                         {
                             keyword("GRIHO_part_2")
                         }
-                        <Link target="_blank" href={"mailto:" + keyword("GRIHO_email")}>
+                        <Link href={"mailto:" + keyword("GRIHO_email")}>
                             {keyword("GRIHO_email")}
                         </Link>
                     </Typography>
-
                 </div>
             );
         default:
