@@ -20,6 +20,9 @@ import Button from "@material-ui/core/Button";
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ImageReverseSearch from "../tools/ImageReverseSearch";
 import history from '../../Shared/History/History';
+import useLoadLanguage from "../../../Hooks/useLoadLanguage";
+import tsv from "../../../LocalDictionary/components/NavItems/Interactive.tsv";
+import Link from "@material-ui/core/Link";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -38,12 +41,8 @@ const useStyles = makeStyles(theme => ({
 
 
 const Interactive = () => {
-    const dictionary = useSelector(state => state.dictionary);
-    const lang = useSelector(state => state.language);
-    const answersAvailable = useSelector(state => state.interactiveExplanation)
-    const keyword = (key) => {
-        return (dictionary !== null) ? dictionary[lang][key] : "";
-    };
+    const keyword = useLoadLanguage("components/NavItems/Interactive.tsv", tsv);
+    const answersAvailable = useSelector(state => state.interactiveExplanation);
 
     const classes = useStyles();
 
@@ -57,6 +56,7 @@ const Interactive = () => {
                     url: keyword("quiz_item_url_" + cpt),
                     title: keyword("quiz_item_title_" + cpt),
                     answer: keyword("quiz_item_answer_" + cpt),
+                    answerUrl: keyword("quiz_item_answer_" + cpt + "_url"),
                     ext: keyword("quiz_item_url_" + cpt).split(".").pop()
                 }
             );
@@ -174,8 +174,9 @@ const Interactive = () => {
                                         <Grid container justify="space-between" spacing={2}
                                               alignContent={"center"}>
                                             <Grid item>
-                                                <Typography
-                                                    className={classes.heading}>{keyword("quiz_explanations")}</Typography>
+                                                <Typography className={classes.heading}>
+                                                    {keyword("quiz_explanations")}
+                                                </Typography>
                                             </Grid>
                                             <Grid item>
                                                 {
@@ -190,6 +191,9 @@ const Interactive = () => {
                                     <ExpansionPanelDetails>
                                         <Typography>
                                             {obj.answer}
+                                            <Link target="_blank" href={obj.answerUrl}>
+                                                {obj.answerUrl}
+                                            </Link>
                                         </Typography>
                                     </ExpansionPanelDetails>
                                 </ExpansionPanel>
