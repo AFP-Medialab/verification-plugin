@@ -13,6 +13,7 @@ import CustomTable from "../../../../Shared/CustomTable/CustomTable";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import LinkIcon from '@material-ui/icons/Link';
+import TwitterIcon from '@material-ui/icons/Twitter';
 import CloseResult from "../../../../Shared/CloseResult/CloseResult";
 import { cleanTwitterSnaState } from "../../../../../redux/actions/tools/twitterSnaActions";
 import ReactWordcloud from "react-wordcloud";
@@ -161,9 +162,8 @@ export default function TwitterSnaResult(props) {
         if (urls === null)
             return cellData.tweet;
 
-        let tweetText = cellData.tweet.split(urls[0])
-        console.log(tweetText);
-        let element = <div>{tweetText[0]} <a href={urls[0]}>{urls[0]}</a>{tweetText[1]}</div>;
+        let tweetText = cellData.tweet.split(urls[0]);
+        let element = <div>{tweetText[0]} <a href={urls[0]} target="_blank">{urls[0]}</a>{tweetText[1]}</div>;
         return element;
 }
 
@@ -194,13 +194,13 @@ export default function TwitterSnaResult(props) {
 
                 var date = new Date(tweetObj._source.date);
                 //let tweet = getTweetWithClickableLink(tweetObj._source.tweet,tweetObj._source.link);
-                console.log(tweetObj._source.tweet)
                 let tmpObj = {
                     username: tweetObj._source.username,
                     date: date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear() + ' ' + date.getHours() + ':' + date.getMinutes(),
                     tweet: tweetObj._source.tweet,
                     retweetNb: tweetObj._source.nretweets,
-                    likeNb: tweetObj._source.nlikes
+                    likeNb: tweetObj._source.nlikes,
+                    link: tweetObj._source.link
                 };
                 resData.push(tmpObj);
                 csvArr += tweetObj._source.username + ',' +
@@ -510,7 +510,15 @@ export default function TwitterSnaResult(props) {
                                         title={keyword("sna_result_slected_tweets")}
                                         colums={cloudTweets.columns}
                                         data={cloudTweets.data}
-                                        actions={[]}
+                                        actions={[
+                                            {
+                                                icon: TwitterIcon,
+                                                tooltip: keyword("sna_result_go_to_tweet"),
+                                                onClick: (event, rowData) => {
+                                                    window.open(rowData.link, '_blank');
+                                                }
+                                            }
+                                        ]}
                                     />
                                 </div>
                             }
