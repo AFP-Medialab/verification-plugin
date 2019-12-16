@@ -319,10 +319,17 @@ export default function TwitterSnaResult(props) {
         };
     }
 
+    const tooltip = word => {
+        if (word.entity !== null)
+            return "The word " + word.text + " appears " + word.value + " times" + " and is a " + word.entity + ".";
+        else
+            return "The word " + word.text + " appears " + word.value + " times" + ".";
+    }
+    
     const callbacks = {
         getWordColor: word => word.color,
         getWordTooltip: word =>
-            `The word "${word.text}" appears ${word.value} times and is a ${word.entity}.`,
+           tooltip(word),
         onWordClick: getCallback("onWordClick"),
         onWordMouseOut: getCallback("onWordMouseOut"),
         onWordMouseOver: getCallback("onWordMouseOver")
