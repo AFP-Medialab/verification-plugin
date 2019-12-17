@@ -341,18 +341,19 @@ export default function TwitterSnaResult(props) {
     };
 
     //Download as PNG
-    function downloadAsPNG(param)
+    function downloadAsPNG()
     {
         let svg = document.getElementById("top_words_cloud_chart");
-        let name = 'WordCloud_' + param.request.keywordList.join("&") + "_" + param.request.from + "_" + param.request.until + '.png';
-        console.log(param);
+        let name = 'WordCloud_' + props.request.keywordList.join("&") + "_" + props.request.from + "_" + props.request.until + '.png';
         saveSvgAsPng(svg.children[1].children[0], name, {backgroundColor: "white"});
       
         
     }
     //Download as SVG
-    function downloadAsSVG(name) {
-        var svgEl = document.getElementById("top_words_cloud_chart");
+    function downloadAsSVG() {
+
+        let name = 'WordCloud_' + props.request.keywordList.join("&") + "_" + props.request.from + "_" + props.request.until + '.svg';
+        var svgEl = document.getElementById("top_words_cloud_chart").children[1].children[0];
       //  d3.select("#we-verify").attr("style", "font-size: 20px;");
         svgEl.setAttribute("xmlns", "http://www.w3.org/2000/svg");
         var svgData = svgEl.outerHTML;
@@ -529,7 +530,7 @@ export default function TwitterSnaResult(props) {
                                         <Button
                                             variant={"contained"}
                                             color={"secondary"}
-                                            onClick={() => downloadAsPNG(props)}>
+                                            onClick={() => downloadAsPNG()}>
                                             {
                                                 keyword('sna_result_download_png')
                                             }
@@ -539,7 +540,7 @@ export default function TwitterSnaResult(props) {
                                         <Button
                                             variant={"contained"}
                                             color={"primary"}
-                                            onClick={() => downloadAsSVG("NAME")}>
+                                            onClick={() => downloadAsSVG()}>
                                             {
                                                 keyword('sna_result_download_svg')
                                             }
