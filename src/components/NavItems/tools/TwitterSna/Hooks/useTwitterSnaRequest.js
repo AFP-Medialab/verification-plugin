@@ -182,17 +182,17 @@ const useTwitterSnaRequest = (request) => {
             const options = {
               //  colors: ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b'],
                 enableTooltip: true,
-                deterministic: false,
+                deterministic: true,
                 fontFamily: 'impact',
-                fontSizes: [20, 170],
+                fontSizes: [18, 150],
                 fontStyle: 'normal',
                 fontWeight: 'normal',
-                padding: 1,
+                padding: 3,
                 rotations: 3,
                 rotationAngles: [0, 30],
-                scale: 'sqrt',
-                spiral: 'rectangular',
-                transitionDuration: 1000,
+                //scale: 'sqrt',
+                //spiral: 'rectangular',
+               // transitionDuration: 1000,
               };
             
             return {

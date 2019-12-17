@@ -21,8 +21,7 @@ import { select } from 'd3-selection';
 import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../../LocalDictionary/components/NavItems/tools/TwitterSna.tsv";
 import { saveSvgAsPng } from 'save-svg-as-png';
-import { saveAs, self } from 'file-saver';
-import { ta, sv } from "date-fns/locale";
+import { CSVLink } from "react-csv";
 
 export default function TwitterSnaResult(props) {
 
@@ -33,6 +32,9 @@ export default function TwitterSnaResult(props) {
 
     const [histoVisible, setHistoVisible] = useState(true);
     const [result, setResult] = useState(null);
+    const [CSVheaders, setCSVheaders] = useState([{label: keyword('sna_result_word'), key: "word"}, {label: keyword("sna_result_nb_occ"), key: "nb_occ"}, {label: keyword("sna_result_entity"), key: "entity"}]);
+    const [CSVdata, setCSVdata] = useState(null);
+    const [filesNames, setfilesNames] = useState(null);
 
     const [histoTweets, setHistoTweets] = useState(null);
     const [cloudTweets, setCloudTweets] = useState(null);
@@ -61,12 +63,20 @@ export default function TwitterSnaResult(props) {
     };
     const pieCharts = [pieCharts0, pieCharts1, pieCharts2, pieCharts3];
 
+    useEffect(() => {
+        setfilesNames('WordCloud_' + props.request.keywordList.join("&") + "_" + props.request.from + "_" + props.request.until);
+    }, [JSON.stringify(props.request), props.request]);
 
     useEffect(() => {
         setResult(props.result);
+        if (props.result.cloudChart)
+            setCSVdata(props.result.cloudChart.json.map(wordObj => {return {word: wordObj.text, nb_occ: wordObj.value, entity: wordObj.entity}}));
+
 
     }, [JSON.stringify(props.result), props.result]);
 
+  
+   
     useEffect(() => {
         setHistoTweets(null);
         setCloudTweets(null);
@@ -344,15 +354,16 @@ export default function TwitterSnaResult(props) {
     function downloadAsPNG()
     {
         let svg = document.getElementById("top_words_cloud_chart");
-        let name = 'WordCloud_' + props.request.keywordList.join("&") + "_" + props.request.from + "_" + props.request.until + '.png';
+        let name = filesNames + '.png';
         saveSvgAsPng(svg.children[1].children[0], name, {backgroundColor: "white"});
       
         
     }
+
     //Download as SVG
     function downloadAsSVG() {
 
-        let name = 'WordCloud_' + props.request.keywordList.join("&") + "_" + props.request.from + "_" + props.request.until + '.svg';
+        let name = filesNames + '.svg';
         var svgEl = document.getElementById("top_words_cloud_chart").children[1].children[0];
       //  d3.select("#we-verify").attr("style", "font-size: 20px;");
         svgEl.setAttribute("xmlns", "http://www.w3.org/2000/svg");
@@ -367,6 +378,12 @@ export default function TwitterSnaResult(props) {
 
       //  d3.select("#we-verify").attr("style", "display: none");
     }
+
+ /*   function downloadAsCSV() {
+        let headers = [{label: keyword('sna_result_word'), key: "word"}, {label: "sna_result_nb_occ", key: "nb_occ"}, {label: "sna_result_entity", key: "entity"}];
+        let data = result.cloudChart.json.map(wordObj => {return {word: wordObj.text, nb_occ: wordObj.value, entity: wordObj.entity}})
+        return {head: headers, data: data};
+    }*/
 
     return (
         <Paper className={classes.root}>
@@ -522,19 +539,28 @@ export default function TwitterSnaResult(props) {
                         <Typography className={classes.heading}>{keyword(result.cloudChart.title)}</Typography>
                     </ExpansionPanelSummary>
                     <ExpansionPanelDetails>
-                        <Box alignItems="center" justifyContent="center" width={"100%"}>
-                            <div id="top_words_cloud_chart" width={"100%"} >
+                        <Box alignItems="center" justifyContent="center" height={"fit-content"} width={"100%"}>
+                            <div id="top_words_cloud_chart" height={"fit-content"} width={"100%"} >
                                 <Grid container justify="space-between" spacing={2}
                                     alignContent={"center"}>
                                     <Grid item>
                                         <Button
                                             variant={"contained"}
-                                            color={"secondary"}
+                                            color={"primary"}
                                             onClick={() => downloadAsPNG()}>
                                             {
                                                 keyword('sna_result_download_png')
                                             }
                                         </Button>
+                                    </Grid>
+                                    <Grid item>
+                                        <CSVLink
+                                           data={CSVdata} headers={CSVheaders} filename={filesNames + ".csv"} className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary">
+                                            {
+                                                "CSV"
+                                               // keyword('sna_result_download_csv')
+                                            }
+                                        </CSVLink>
                                     </Grid>
                                     <Grid item>
                                         <Button
