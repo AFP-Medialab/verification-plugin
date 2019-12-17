@@ -68,7 +68,7 @@ const ClassRoom = () => {
 
     const EducationalResources = () => {
         let res = [];
-        for (let i = 1; keyword("classroom_title_" + i) !== undefined &&  keyword("classroom_title_" + i) !== "" ; i++)
+        for (let i = 1; keyword("classroom_title_" + i) !== "" ; i++)
         {
             res.push(
                 {

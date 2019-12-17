@@ -27,13 +27,12 @@ const About = () => {
     const additionalDangerousContent = () => {
         let res = [];
         let cpt = 1;
-        while (keyword("additional_about_" + cpt) !== undefined){
+        while (keyword("additional_about_" + cpt) !== ""){
             res.push("additional_about_" + cpt);
             cpt++;
         }
         return res;
     };
-
 
     return (
         <Paper className={classes.root}>

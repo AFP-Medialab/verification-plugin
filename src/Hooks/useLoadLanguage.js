@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import axios from "axios";
-import {setDictionary} from "../redux/actions";
+import {addDictionary, setDictionary} from "../redux/actions";
 
 /**
  * @func transform array in json representation of translation (access this way: json[global_language][id_translate])
@@ -46,24 +46,19 @@ function translate_csv(text) {
 }
 
 const useLoadLanguage = (onlineTsv, localTsv) => {
-    const lang = useSelector(state => state.language);
-    const dictionary = useSelector(state => state.dictionary);
-    const dispatch = useDispatch();
     const gitHubFullUrl = process.env.REACT_APP_TRANSLATION_GITHUB + onlineTsv;
-
-    const actualDictionary = (dictionary)? dictionary[gitHubFullUrl] : undefined;
+    const lang = useSelector(state => state.language);
+    const dictionary = useSelector(state => state.dictionary[gitHubFullUrl]);
+    const dispatch = useDispatch();
 
     useEffect(() => {
-        if (dictionary && dictionary[gitHubFullUrl])
+        if (dictionary)
             return;
 
         const backUpLocal = () => {
             axios.get(localTsv)
                 .then(result => {
-                    dispatch(setDictionary({
-                        ...dictionary,
-                        [gitHubFullUrl]: translate_csv(result.data)
-                    }))
+                    dispatch(addDictionary(gitHubFullUrl, translate_csv(result.data)));
                 })
                 .catch(error => console.error(error))
         };
@@ -73,18 +68,15 @@ const useLoadLanguage = (onlineTsv, localTsv) => {
                 if (result.data === "")
                     backUpLocal();
                 else
-                    dispatch(setDictionary({
-                        ...dictionary,
-                        [gitHubFullUrl]: translate_csv(result.data)
-                    }))
+                    dispatch(addDictionary(gitHubFullUrl, translate_csv(result.data)));
             })
             .catch(() => {
                 backUpLocal();
             })
-    }, [gitHubFullUrl, localTsv, actualDictionary]);
+    }, [gitHubFullUrl, localTsv, dictionary]);
 
     return (key) => {
-        return (dictionary && dictionary[gitHubFullUrl] && dictionary[gitHubFullUrl][lang]) ? dictionary[gitHubFullUrl][lang][key] : "";
+        return (dictionary && dictionary[lang] && dictionary[lang][key]) ? dictionary[lang][key] : "";
     };
 };
 export default useLoadLanguage;

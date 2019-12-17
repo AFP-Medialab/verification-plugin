@@ -12,7 +12,7 @@ export const useAnalysisWrapper = (url, reprocess, facebookToken) => {
 
     useEffect(() => {
         const handleError = (error) => {
-            if (keyword(error) !== undefined)
+            if (keyword(error) !== "")
                 dispatch(setError((keyword(error))));
             dispatch(setError(error.toString()));
             dispatch(setAnalysisLoading(false));
@@ -21,7 +21,7 @@ export const useAnalysisWrapper = (url, reprocess, facebookToken) => {
         const getReport = (id) => {
             axios.get("http://mever.iti.gr/caa/api/v4/videos/reports/" + id)
                 .then(response => {
-                    if (keyword("table_error_" + response.data.status) !== undefined)
+                    if (keyword("table_error_" + response.data.status) !== "")
                         handleError("table_error_" + response.data.status.status);
                     else if (response.data.status !== "unavailable")
                         dispatch(setAnalysisResult(url, response.data, false, false))
@@ -30,7 +30,7 @@ export const useAnalysisWrapper = (url, reprocess, facebookToken) => {
         };
 
         const handleJob = (data) => {
-            if (keyword("table_error_" + data.status) !== undefined) {
+            if (keyword("table_error_" + data.status) !== "") {
                 handleError("table_error_" + data.status);
             } else {
                 waitUntilDonne(data);
@@ -43,7 +43,7 @@ export const useAnalysisWrapper = (url, reprocess, facebookToken) => {
                 .then(response => {
                     if (response.data.status === "done") {
                         getReport(response.data.media_id)
-                    } else if ( keyword("table_error_" +  response.data.status) !== undefined) {
+                    } else if ( keyword("table_error_" +  response.data.status) !== "") {
                         handleError("table_error_" + response.data.status);
                     } else if (response.data.status === "unavailable"){
                         dispatch(setError("Url not available"));
