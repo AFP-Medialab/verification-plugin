@@ -20,7 +20,9 @@ import ReactWordcloud from "react-wordcloud";
 import { select } from 'd3-selection';
 import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../../LocalDictionary/components/NavItems/tools/TwitterSna.tsv";
-import { ta } from "date-fns/locale";
+import { saveSvgAsPng } from 'save-svg-as-png';
+import { saveAs, self } from 'file-saver';
+import { ta, sv } from "date-fns/locale";
 
 export default function TwitterSnaResult(props) {
 
@@ -338,6 +340,33 @@ export default function TwitterSnaResult(props) {
         onWordMouseOver: getCallback("onWordMouseOver")
     };
 
+    //Download as PNG
+    function downloadAsPNG(param)
+    {
+        let svg = document.getElementById("top_words_cloud_chart");
+        let name = 'WordCloud_' + param.request.keywordList.join("&") + "_" + param.request.from + "_" + param.request.until + '.png';
+        console.log(param);
+        saveSvgAsPng(svg.children[1].children[0], name, {backgroundColor: "white"});
+      
+        
+    }
+    //Download as SVG
+    function downloadAsSVG(name) {
+        var svgEl = document.getElementById("top_words_cloud_chart");
+      //  d3.select("#we-verify").attr("style", "font-size: 20px;");
+        svgEl.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+        var svgData = svgEl.outerHTML;
+        var preface = '<?xml version="1.0" standalone="no"?>\r\n';
+        var svgBlob = new Blob([preface, svgData], { type: "image/svg+xml;charset=utf-8" });
+        var svgUrl = URL.createObjectURL(svgBlob);
+        var downloadLink = document.createElement("a");
+        downloadLink.href = svgUrl;
+        downloadLink.download = name;
+        downloadLink.click();
+
+      //  d3.select("#we-verify").attr("style", "display: none");
+    }
+
     return (
         <Paper className={classes.root}>
             <CloseResult onClick={() => dispatch(cleanTwitterSnaState())} />
@@ -493,7 +522,31 @@ export default function TwitterSnaResult(props) {
                     </ExpansionPanelSummary>
                     <ExpansionPanelDetails>
                         <Box alignItems="center" justifyContent="center" width={"100%"}>
-                            <div width={"100%"} >
+                            <div id="top_words_cloud_chart" width={"100%"} >
+                                <Grid container justify="space-between" spacing={2}
+                                    alignContent={"center"}>
+                                    <Grid item>
+                                        <Button
+                                            variant={"contained"}
+                                            color={"secondary"}
+                                            onClick={() => downloadAsPNG(props)}>
+                                            {
+                                                keyword('sna_result_download_png')
+                                            }
+                                        </Button>
+                                    </Grid>
+                                    <Grid item>
+                                        <Button
+                                            variant={"contained"}
+                                            color={"primary"}
+                                            onClick={() => downloadAsSVG("NAME")}>
+                                            {
+                                                keyword('sna_result_download_svg')
+                                            }
+                                        </Button>
+                                    </Grid>
+                                </Grid>
+                                    
                                 <ReactWordcloud options={result.cloudChart.options} callbacks={callbacks} words={result.cloudChart.json} />
                             </div>
                             <Box m={2} width={"100%"}/>
