@@ -21,7 +21,7 @@ const useImageTreatment = (mediaUrl) => {
         }
 
         const handleErrors = (error) => {
-            if (keyword(error) !== undefined)
+            if (keyword(error) !== "")
                 dispatch(setError(keyword(error)));
             dispatch(setError("please_give_a_correct_link"))
         };

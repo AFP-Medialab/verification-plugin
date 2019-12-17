@@ -26,7 +26,7 @@ const Magnifier = () => {
     const [input, setInput] = useState(resultUrl);
 
     const getErrorText = (error) => {
-        if (keyword(error) !== undefined)
+        if (keyword(error) !== "")
             return keyword(error);
         return keyword("please_give_a_correct_link");
     };

@@ -33,7 +33,7 @@ const Interactive = () => {
     const carouselItems = () => {
         let res = [];
         let cpt = 1;
-        while (keyword("quiz_item_url_" + cpt) !== undefined && keyword("quiz_item_url_" + cpt) !== "") {
+        while (keyword("quiz_item_url_" + cpt) !== "") {
             res.push(
                 {
                     url: keyword("quiz_item_url_" + cpt),
