@@ -37,7 +37,7 @@ const AllTools = (props) => {
                                             <img
                                                 style={{
                                                     cursor: "pointer",
-                                                    maxWidth: 100,
+                                                    maxWidth: 60,
                                                     height: "auto"
                                                 }}
                                                 src={value.icon}
