@@ -176,20 +176,23 @@ const useTwitterSnaRequest = (request) => {
         const createWordCloud = (plotlyJson) => {
 
             let mostUsedWords = getAllWordsMap(plotlyJson);
-            mostUsedWords = mostUsedWords.map(word => { return { 'text': word.word.replace(/_/g, " "), 'value': word.nbOccurences, 'entity': word.entity, 'color': getColor(word.entity) }; });
+            mostUsedWords = mostUsedWords.map(word => {
+                 let w = ((word.word.includes('@')?word.word:word.word.replace(/_/g, " "))); 
+                 return { 'text': w, 'value': word.nbOccurences, 'entity': word.entity, 'color': getColor(word.entity) };
+                });
             const options = {
                 //  colors: ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b'],
                 enableTooltip: true,
                 deterministic: true,
                 fontFamily: 'impact',
-                fontSizes: [18, 140],
+                fontSizes: [15, 80],
                 fontStyle: 'normal',
                 fontWeight: 'normal',
                 padding: 1,
                 rotations: 3,
                 rotationAngles: [0, 30],
-                //scale: 'sqrt',
-                //spiral: 'rectangular',
+                scale: 'sqrt',
+                spiral: 'rectangular',
                 // transitionDuration: 1000,
             };
 
