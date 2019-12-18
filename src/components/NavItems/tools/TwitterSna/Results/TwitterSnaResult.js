@@ -377,6 +377,8 @@ export default function TwitterSnaResult(props) {
     }
 
     function getCSVData() {
+        if (!props.result.cloudChart)
+            return "";
        let csvData = props.result.cloudChart.json.map(wordObj => {return {word: wordObj.text, nb_occ: wordObj.value, entity: wordObj.entity}});
        return csvData;
     }
@@ -587,7 +589,7 @@ export default function TwitterSnaResult(props) {
                                         </Button>
                                     </Grid>
                                 </Grid>
-                                <div  width={"100%"}>
+                                <div  height={"300%"} width={"100%"}>
                                 <ReactWordcloud options={result.cloudChart.options} callbacks={callbacks} words={result.cloudChart.json} />
                                 </div>
                             </div>
