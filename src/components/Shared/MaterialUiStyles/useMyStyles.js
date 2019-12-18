@@ -67,7 +67,9 @@ const useMyStyles = makeStyles(theme => ({
             width: theme.spacing(9) + 1,
         },
     },
-    toolbar: theme.mixins.toolbar,
+    toolbar: {
+        ...theme.mixins.toolbar,
+    },
     content: {
         flexGrow: 1,
         padding: theme.spacing(3),
@@ -256,6 +258,48 @@ const useMyStyles = makeStyles(theme => ({
         padding: '15px',
         width: "auto",
         margin: 5,
-    }
+    },
+    forensicCard: {
+        width: "100%",
+    },
+    forensicMedia: {
+        height: 0,
+        paddingTop: '56.25%', // 16:9
+    },
+    expand: {
+        transform: 'rotate(0deg)',
+        marginLeft: 'auto',
+        transition: theme.transitions.create('transform', {
+            duration: theme.transitions.duration.shortest,
+        }),
+    },
+    expandOpen: {
+        transform: 'rotate(180deg)',
+    },
+    lightBox: {
+        overlay: {
+            zIndex: theme.zIndex.drawer + 1,
+        },
+    },
+    imgMagnifierContainer:{
+        position: "relative",
+        cursor: "none",
+        margin: 0,
+        padding: 0,
+    },
+    imgMagnifierGlass: {
+        width: "175px",
+        height: "175px",
+        position: "absolute",
+        borderRadius: "100%",
+        boxShadow: "0 0 0 7px rgba(255, 255, 255, 0.85), 0 0 7px 7px rgba(0, 0, 0, 0.25), inset 0 0 40px 2px rgba(0, 0, 0, 0.25)",
+        /*hide the glass by default*/
+        display: "none",
+    },
+    imgMagnifierImg: {
+        position: "relative",
+        cursor: "none",
+        display: "block",
+    },
 }));
 export default useMyStyles;
