@@ -79,7 +79,6 @@ const useTwitterSnaRequest = (request) => {
         };
 
         const handleErrors = (e) => {
-            console.log(e);
             if (keyword(e) !== undefined)
                 dispatch(setError(keyword(e)));
             else
@@ -130,12 +129,12 @@ const useTwitterSnaRequest = (request) => {
         };
 
         const createHistogram = (data, json, givenFrom, givenUntil) => {
-            let titleEnd = data.keywordList.join("&") + " " + data.from + " " + data.until;
+            let titleEnd = request.keywordList.join("&") + " " + request.from + " " + request.until;
             let layout = {
                 title: <div><b>{keyword("user_time_chart_title")}</b><br /> {titleEnd}</div>,
                 automargin: true,
                 xaxis: {
-                    range: [data.from, data.until],
+                    range: [request.from, request.until],
                     rangeslider: { range: [givenFrom, givenUntil] },
                 },
                 annotations: [{
@@ -216,7 +215,6 @@ const useTwitterSnaRequest = (request) => {
             result.tweets = responseArrayOf7[5].tweets;
             result.histogram = createHistogram(data, responseArrayOf7[6], givenFrom, givenUntil);
             if (final) {
-                console.log(data);
                 result.cloudChart = createWordCloud(responseArrayOf7[7]);
             }
             dispatch(setTwitterSnaResult(request, result, false, true))
@@ -264,7 +262,6 @@ const useTwitterSnaRequest = (request) => {
                     else {
                         generateGraph(response.data, true).then(() => {
                             dispatch(setTwitterSnaLoading(false));
-                            console.log("Graphs generated");
                         });
                     }
                 })
@@ -292,7 +289,6 @@ const useTwitterSnaRequest = (request) => {
         dispatch(setTwitterSnaLoading(true));
         axios.post(TwintWrapperUrl + "/collect", request)
             .then(response => {
-                console.log(response.data.status);
                 if (response.data.status === "Error")
                     handleErrors("twitterSnaErrorMessage");
                 else if (response.data.status === "Done")
