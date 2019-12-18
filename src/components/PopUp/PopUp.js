@@ -3,6 +3,7 @@ import useMyStyles from "../Shared/MaterialUiStyles/useMyStyles";
 import {Typography} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import weVerifyLogo from "./images/logo-we-verify.png";
+import invidLogo from "./images/InVID-logo.svg";
 import ExpansionPanel from "@material-ui/core/ExpansionPanel";
 import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
@@ -79,6 +80,7 @@ const PopUp = () => {
         <div className={classes.popUp}>
             <Grid>
                 <Grid item>
+                    <img src={invidLogo} alt={invidLogo} style={{width: "100px"}}/>
                     <img src={weVerifyLogo} alt={weVerifyLogo} style={{width: "100px"}}/>
                 </Grid>
                 <Grid item>
