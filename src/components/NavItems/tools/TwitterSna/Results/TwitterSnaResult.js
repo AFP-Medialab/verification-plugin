@@ -69,9 +69,6 @@ export default function TwitterSnaResult(props) {
 
     useEffect(() => {
         setResult(props.result);
-        if (props.result.cloudChart)
-            setCSVdata(props.result.cloudChart.json.map(wordObj => {return {word: wordObj.text, nb_occ: wordObj.value, entity: wordObj.entity}}));
-
 
     }, [JSON.stringify(props.result), props.result]);
 
@@ -379,12 +376,10 @@ export default function TwitterSnaResult(props) {
       //  d3.select("#we-verify").attr("style", "display: none");
     }
 
- /*   function downloadAsCSV() {
-        let headers = [{label: keyword('sna_result_word'), key: "word"}, {label: "sna_result_nb_occ", key: "nb_occ"}, {label: "sna_result_entity", key: "entity"}];
-        let data = result.cloudChart.json.map(wordObj => {return {word: wordObj.text, nb_occ: wordObj.value, entity: wordObj.entity}})
-        return {head: headers, data: data};
-    }*/
-
+    function getCSVData() {
+       let csvData = props.result.cloudChart.json.map(wordObj => {return {word: wordObj.text, nb_occ: wordObj.value, entity: wordObj.entity}});
+       return csvData;
+    }
     return (
         <Paper className={classes.root}>
             <CloseResult onClick={() => dispatch(cleanTwitterSnaState())} />
@@ -452,20 +447,39 @@ export default function TwitterSnaResult(props) {
                     </ExpansionPanelDetails>
                 </ExpansionPanel>
             }
-            <ExpansionPanel>
-                <ExpansionPanelSummary
-                    expandIcon={<ExpandMoreIcon />}
-                    aria-controls={"panel0a-content"}
-                    id={"panel0a-header"}
-                >
-                    <Typography className={classes.heading}>{keyword("tweetCounter_title")}</Typography>
-                </ExpansionPanelSummary>
-                <ExpansionPanelDetails>
-                    <Box alignItems="center" justifyContent="center" width={"100%"}>
-                        <Typography variant={"h3"}>{result.tweetCount}</Typography>
-                    </Box>
-                </ExpansionPanelDetails>
-            </ExpansionPanel>
+
+            { 
+                result && result.tweetCount &&
+                <ExpansionPanel>
+                    <ExpansionPanelSummary
+                        expandIcon={<ExpandMoreIcon />}
+                        aria-controls={"panel0a-content"}
+                        id={"panel0a-header"}
+                    >
+                        <Typography className={classes.heading} >{keyword("tweetCounter_title")}</Typography>
+                    </ExpansionPanelSummary>
+                    <ExpansionPanelDetails>
+                        <Box alignItems="center" justifyContent="center" width={"100%"}>
+                        <Grid container justify="space-around" spacing={2}
+                            alignContent={"center"}>
+                            <Grid item>
+                                <Typography variant={"h5"}>Tweets</Typography>
+                                <Typography variant={"h2"}>{result.tweetCount.count}</Typography>
+                            </Grid>
+                            <Grid item>
+                                <Typography variant={"h5"}>Retweets</Typography>
+                                <Typography variant={"h2"}>{result.tweetCount.retweet}</Typography>
+                            </Grid> 
+                            <Grid item>
+                                <Typography variant={"h5"}>Likes</Typography>
+                                <Typography variant={"h2"}>{result.tweetCount.like}</Typography>
+                            </Grid>
+                        </Grid>
+                            
+                        </Box>
+                    </ExpansionPanelDetails>
+                </ExpansionPanel>
+            }
             {
                 result.pieCharts &&
                 result.pieCharts.map((obj, index) => {
@@ -539,8 +553,8 @@ export default function TwitterSnaResult(props) {
                         <Typography className={classes.heading}>{keyword(result.cloudChart.title)}</Typography>
                     </ExpansionPanelSummary>
                     <ExpansionPanelDetails>
-                        <Box alignItems="center" justifyContent="center" height={"fit-content"} width={"100%"}>
-                            <div id="top_words_cloud_chart" height={"fit-content"} width={"100%"} >
+                        <Box alignItems="center" justifyContent="center" width={"100%"}>
+                            <div id="top_words_cloud_chart" height={"500"} width={"100%"} >
                                 <Grid container justify="space-between" spacing={2}
                                     alignContent={"center"}>
                                     <Grid item>
@@ -555,7 +569,7 @@ export default function TwitterSnaResult(props) {
                                     </Grid>
                                     <Grid item>
                                         <CSVLink
-                                           data={CSVdata} headers={CSVheaders} filename={filesNames + ".csv"} className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary">
+                                           data={getCSVData()} headers={CSVheaders} filename={filesNames + ".csv"} className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary">
                                             {
                                                 "CSV"
                                                // keyword('sna_result_download_csv')
@@ -573,10 +587,11 @@ export default function TwitterSnaResult(props) {
                                         </Button>
                                     </Grid>
                                 </Grid>
-                                    
+                                <div  width={"100%"}>
                                 <ReactWordcloud options={result.cloudChart.options} callbacks={callbacks} words={result.cloudChart.json} />
+                                </div>
                             </div>
-                            <Box m={2} width={"100%"}/>
+                            <Box m={2}/>
                             {
                                 cloudTweets &&
                                 <div>

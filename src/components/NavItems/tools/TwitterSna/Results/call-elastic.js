@@ -108,9 +108,13 @@ export function generateEssidHistogramPlotlyJson(param, retweets, givenFrom, giv
 export function generateTweetCountPlotlyJson(param) {
     let must = constructMatchPhrase(param);
     let mustNot = constructMatchNotPhrase(param);
-    return getJson(param, {}, must, mustNot).then(json => {
+    let aggs = constructAggs("glob");
+    return getJson(param, aggs, must, mustNot).then(json => {
+        console.log(json);
         return {
             value: json.hits.total.value,
+            retweets: json.aggregations.retweets.value,
+            likes: json.aggregations.likes.value,
             tweets: json.hits.hits
         }
     });
@@ -348,8 +352,9 @@ function constructMatchPhrase(param, startDate, endDate) {
     });
 
     // USERNAME MATCH
-    if (param["user_list"] !== undefined) {
-        param["user_list"].forEach(user => {
+    console.log(param);
+    if (param["userList"] !== undefined) {
+        param["userList"].forEach(user => {
             if (user !== "") {
                 match_phrases += ',{' +
                     '"match_phrase": {' +
@@ -377,9 +382,8 @@ function constructMatchPhrase(param, startDate, endDate) {
 //Construct the aggregations (chose what information we will have in the response)
 function constructAggs(field) {
 
+    let fieldInfo = ((field === "glob")? '{"retweets":' : '{"2":');
 
-    let fieldInfo = '{' +
-        '"2":'
     if (field === "hashtags" || field === "urls") {
         fieldInfo += JSON.stringify({
             "terms": {
@@ -390,7 +394,9 @@ function constructAggs(field) {
                 "size": 20
             }
         })
-    } else if (field === "nretweets" || field === "nlikes") {
+    }
+    else if (field === "nretweets" || field === "nlikes") {
+
         fieldInfo += JSON.stringify({
             "terms": {
                 "field": "username",
@@ -407,7 +413,9 @@ function constructAggs(field) {
                 }
             }
         })
-    } else if (field.includes('1')) {
+
+    }
+    else if (field.includes('1')) {
         fieldInfo += JSON.stringify({
             "date_histogram": {
                 "field": "date",
@@ -439,20 +447,27 @@ function constructAggs(field) {
                 }
             }
         });
-    } else {
-        fieldInfo += JSON.stringify({
-            "terms": {
-                "field": "username",
-                "order": {
-                    "_count": "desc"
-                },
-                "size": 14
-            }
-        });
     }
+    else if (field === "glob")
+    {
+        fieldInfo += "{" +
+            '"sum" :' +
+                '{"field":"nretweets"}},"likes": {"sum":{"field":"nlikes"}}';
+    }
+    else {
+        fieldInfo += JSON.stringify({
+                "terms": {
+                    "field": "username",
+                    "order": {
+                        "_count": "desc"
+                    },
+                    "size": 14
+                }
+            });
+        }
 
-    fieldInfo += '}'
-    return fieldInfo;
+        fieldInfo += '}'
+        return fieldInfo;
 }
 
 
@@ -466,7 +481,7 @@ async function getJson(param, aggs, must, mustNot) {
         }
     });
     let myJson = await response.json();
-
+    console.log(myJson)
     if (myJson["hits"]["total"]["value"] === 10000) {
         do {
             let must2 = [
