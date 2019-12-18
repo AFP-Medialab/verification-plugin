@@ -439,7 +439,7 @@ const TwitterResults = (props) => {
                                 {keyword("navbar_thumbnails")}
                             </Typography>
                             <Box m={1}/>
-                            <OnClickInfo/>
+                            <OnClickInfo keyword={"keyframes_tip"}/>
                             <Box m={1}/>
                             <div className={classes.imagesRoot}>
                                 <GridList cellHeight={160} className={classes.gridList} cols={3}>

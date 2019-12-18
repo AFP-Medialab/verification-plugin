@@ -28,7 +28,7 @@
     "react-iframe": "^1.8.0",
     "react-image-crop": "^8.4.0",
     "react-image-lightbox": "^5.1.1",
-    "react-image-magnifiers": "^1.2.1",
+    "react-magnifier": "^3.0.4",
     "react-modal-video": "^1.2.3",
     "react-plotly.js": "^2.4.0",
     "react-redux": "^7.1.1",

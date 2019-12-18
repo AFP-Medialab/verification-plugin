@@ -41,7 +41,7 @@ const KeyFramesResults = (props) => {
                 <Typography variant={"h5"}>
                     {keyword("keyframes_content_title")}
                 </Typography>
-                <OnClickInfo/>
+                <OnClickInfo keyword={"keyframes_tip"}/>
                 <Box m={2}/>
                 <Divider/>
                 <Box m={2}/>
