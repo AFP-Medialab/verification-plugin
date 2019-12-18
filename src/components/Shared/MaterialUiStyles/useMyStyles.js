@@ -175,18 +175,18 @@ const useMyStyles = makeStyles(theme => ({
     },
     imageIconDrawer: {
         width: "auto",
-        height:"100%",
+        height: "100%",
     },
 
     imageIconTab: {
-        height:"auto",
+        height: "auto",
         width: "100%"
     },
     iconRootTab: {
         overflow: "visible",
         textAlign: "center",
     },
-    imageIconAllTools:{
+    imageIconAllTools: {
         maxWidth: "300px",
         height: "auto",
         width: "100px",
@@ -218,7 +218,7 @@ const useMyStyles = makeStyles(theme => ({
         maxWidth: "300px",
         maxHeight: "300px"
     },
-    onClickInfo : {
+    onClickInfo: {
         borderColor: "grey",
         borderRadius: '10px',
         borderStyle: "solid",
@@ -249,12 +249,13 @@ const useMyStyles = makeStyles(theme => ({
         maxWidth: "80%",
         maxHeight: window.innerHeight / 2,
     },
-    customTitle : {
+    customTitle: {
         background: theme.palette.primary.main,
         borderRadius: 5,
         textAlign: "center",
         color: 'white',
         fontSize: 28,
+        fontWeight: "bold",
         padding: '15px',
         width: "auto",
         margin: 5,
@@ -281,7 +282,7 @@ const useMyStyles = makeStyles(theme => ({
             zIndex: theme.zIndex.drawer + 1,
         },
     },
-    imgMagnifierContainer:{
+    imgMagnifierContainer: {
         position: "relative",
         cursor: "none",
         margin: 0,

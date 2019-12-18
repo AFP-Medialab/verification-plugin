@@ -23,6 +23,8 @@ import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 import OnClickInfo from "../../../../Shared/OnClickInfo/OnClickInfo";
 import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Analysis.tsv";
+import TimeToLocalTime from "./TimeToLocalTime";
+import Map from "./Map";
 
 const YoutubeResults = (props) => {
     const classes = useMyStyles();
@@ -68,12 +70,16 @@ const YoutubeResults = (props) => {
             title: keyword("youtube_video_name2_5"),
             value: report["video"]["licensedContent"]
         },
+        {
+            title: keyword("youtube_video_name2_6"),
+            value: <TimeToLocalTime time={report["video"]["publishedAt"]}/>
+        }
     ];
 
     const sourceTable = [
         {
             title: keyword("youtube_channel_name_2"),
-            value: report["source"]["publishedAt"]
+            value: <TimeToLocalTime time={report["source"]["publishedAt"]}/>
         },
         {
             title: keyword("youtube_channel_name_3"),
@@ -252,6 +258,7 @@ const YoutubeResults = (props) => {
                         </div>
                     }
                     <Box m={4}/>
+
                     {
                         thumbnails !== undefined &&
                         <div>
