@@ -87,7 +87,7 @@ const YoutubeResults = (props) => {
                 target="_blank">{report["source"]["url"]}</a>
         },
         {
-            title: "youtube_channel_name_5",
+            title: keyword("youtube_channel_name_5"),
             value: report["source"]["subscriberCount"]
         },
     ];
@@ -97,7 +97,7 @@ const YoutubeResults = (props) => {
             {
                 report !== null && report["thumbnails"] !== undefined &&
                 report["thumbnails"]["preferred"]["url"] &&
-                <Paper className={classes.root}>
+                <Paper className={classes.root} >
                     <CloseResult onClick={() => dispatch(cleanAnalysisState())}/>
                     <Typography variant={"h5"}>
                         {report["video"]["title"]}
@@ -116,7 +116,7 @@ const YoutubeResults = (props) => {
                     <Typography variant={"h6"}>
                         {keyword("youtube_video_name1_2")}
                     </Typography>
-                    <Typography variant="body2" color="textSecondary" component="p" className={classes.text}>
+                    <Typography variant="body2" component="p" className={classes.text}>
                         {
                             report["video"]["description"]
                         }
@@ -203,7 +203,6 @@ const YoutubeResults = (props) => {
                                     }
                                 </TableBody>
                             </Table>
-                            <Box m={2}/>
                             {
                                 verificationComments.length > 0 &&
                                 <ExpansionPanel expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
