@@ -64,7 +64,6 @@ export function generateEssidHistogramPlotlyJson(param, retweets, givenFrom, giv
             }
         });
         const myJson = await response.json();
-        console.log(myJson);
         if (myJson["error"] === undefined) {
             if (retweets)
                 return getPlotlyJsonHisto(myJson, retweetsGet);
@@ -110,7 +109,6 @@ export function generateTweetCountPlotlyJson(param) {
     let mustNot = constructMatchNotPhrase(param);
     let aggs = constructAggs("glob");
     return getJson(param, aggs, must, mustNot).then(json => {
-        console.log(json);
         return {
             value: json.hits.total.value,
             retweets: json.aggregations.retweets.value,
@@ -133,7 +131,7 @@ export function generateDonutPlotlyJson(param, field) {
     function hashtagsGet(key, values, labels, parents, mainKey) {
         values.push(key["doc_count"]);
         labels.push(key["key"]);
-        parents.push(mainKey["key"]);
+        parents.push(mainKey);
     }
 
     function mostTweetsGet(key, values, labels, parents, mainKey) {
@@ -302,7 +300,6 @@ function constructMatchNotPhrase(param, startDate, endDate) {
     return [match_phrases]
 }
 
-
 //Construct the match phrase (filter for tweets)
 function constructMatchPhrase(param, startDate, endDate) {
     if (startDate === undefined) {
@@ -352,7 +349,6 @@ function constructMatchPhrase(param, startDate, endDate) {
     });
 
     // USERNAME MATCH
-    console.log(param);
     if (param["userList"] !== undefined) {
         param["userList"].forEach(user => {
             if (user !== "") {
@@ -470,7 +466,6 @@ function constructAggs(field) {
         return fieldInfo;
 }
 
-
 //To fetch all the tweets (Bypass the 10 000 limit with elastic search)
 async function getJson(param, aggs, must, mustNot) {
     const response = await fetch(elasticSearch_url, {
@@ -481,7 +476,6 @@ async function getJson(param, aggs, must, mustNot) {
         }
     });
     let myJson = await response.json();
-    console.log(myJson)
     if (myJson["hits"]["total"]["value"] === 10000) {
         do {
             let must2 = [
@@ -537,22 +531,23 @@ function getPlotlyJsonCloud(json, keywords, bannedWords, specificGetCallBack) {
 
     if (keys.length === 0)
         return null;
-    let mainKey = keys[0];
+   // let mainKey = keys[0];
 
-    if (mainKey["key"].charAt(0) === '#') {
-        labels.push(mainKey["key"]);
-        keys.shift();
-    } else {
-        mainKey = keywords;
+   // if (mainKey["key"].charAt(0) === '#') {
+     //   labels.push(mainKey["key"]);
+       // keys.shift();
+    //} else {
+       // mainKey = keywords;
         labels.push(keywords);
-    }
+    //}
 
     parents.push("");
     value.push(0);
 
     keys.forEach(key => {
-        specificGetCallBack(key, value, labels, parents, mainKey);
+        specificGetCallBack(key, value, labels, parents, keywords);
     });
+    
     let obj = [{
         type: "sunburst",
         labels: labels,

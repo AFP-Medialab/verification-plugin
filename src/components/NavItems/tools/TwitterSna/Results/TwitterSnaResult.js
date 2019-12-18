@@ -352,7 +352,9 @@ export default function TwitterSnaResult(props) {
     {
         let svg = document.getElementById("top_words_cloud_chart");
         let name = filesNames + '.png';
-        saveSvgAsPng(svg.children[1].children[0], name, {backgroundColor: "white"});
+        console.log(svg.children[1].children[0].children[0]);
+        console.log(name);
+        saveSvgAsPng(svg.children[1].children[0].children[0], name, {backgroundColor: "white"});
       
         
     }
@@ -361,7 +363,7 @@ export default function TwitterSnaResult(props) {
     function downloadAsSVG() {
 
         let name = filesNames + '.svg';
-        var svgEl = document.getElementById("top_words_cloud_chart").children[1].children[0];
+        var svgEl = document.getElementById("top_words_cloud_chart").children[1].children[0].children[0];
       //  d3.select("#we-verify").attr("style", "font-size: 20px;");
         svgEl.setAttribute("xmlns", "http://www.w3.org/2000/svg");
         var svgData = svgEl.outerHTML;
@@ -465,15 +467,15 @@ export default function TwitterSnaResult(props) {
                         <Grid container justify="space-around" spacing={2}
                             alignContent={"center"}>
                             <Grid item>
-                                <Typography variant={"h5"}>Tweets</Typography>
+                                <Typography variant={"h6"}>Tweets</Typography>
                                 <Typography variant={"h2"}>{result.tweetCount.count}</Typography>
                             </Grid>
                             <Grid item>
-                                <Typography variant={"h5"}>Retweets</Typography>
+                                <Typography variant={"h6"}>Retweets</Typography>
                                 <Typography variant={"h2"}>{result.tweetCount.retweet}</Typography>
                             </Grid> 
                             <Grid item>
-                                <Typography variant={"h5"}>Likes</Typography>
+                                <Typography variant={"h6"}>Likes</Typography>
                                 <Typography variant={"h2"}>{result.tweetCount.like}</Typography>
                             </Grid>
                         </Grid>
@@ -485,6 +487,7 @@ export default function TwitterSnaResult(props) {
             {
                 result.pieCharts &&
                 result.pieCharts.map((obj, index) => {
+                    if (!(props.request.username !== null && (index != 3 && obj.json !== null)))
                     return (
                         <ExpansionPanel key={index}>
                             <ExpansionPanelSummary
