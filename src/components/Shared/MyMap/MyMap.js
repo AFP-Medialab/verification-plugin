@@ -47,7 +47,7 @@ const MyMap = (props) => {
     return (
         <ReactMapGL
             {...view}
-            mapboxApiAccessToken={process.env.REACT_APP_TOKEN}
+            mapboxApiAccessToken={process.env.REACT_APP_MAP_TOKEN}
             onViewportChange={view => setView(view)}
             mapStyle={"mapbox://styles/teebolt16/ck4cj4f5y13gw1cmmtboiklua"}
         >
