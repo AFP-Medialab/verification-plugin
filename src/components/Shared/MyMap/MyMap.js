@@ -1,14 +1,27 @@
-import Map from 'pigeon-maps'
-import Marker from 'pigeon-marker/react'
 import React, {useEffect, useState} from "react";
 import axios from "axios";
-
+import ReactMapGL, {Marker} from "react-map-gl"
+import LocationOnIcon from '@material-ui/icons/LocationOn';
 
 const MyMap = (props) => {
 
-    const [lat, setLat] = useState(null);
-    const [lon, setLon] = useState(null);
+    const default_lat = 0;
+    const default_long = 0;
+
+    const [view, setView] = useState(
+        {
+            latitude: default_lat,
+            longitude: default_long,
+            width: "100%",
+            height: "400px",
+            zoom: 10
+        }
+    );
+
+    const [markerLat, setMarkerLat] = useState(default_lat);
+    const [markerLon, setMarkerLon] = useState(default_long);
     const [infoLink, setInfoLink] = useState("");
+
 
     useEffect(() => {
         if (!props.locations)
@@ -19,35 +32,34 @@ const MyMap = (props) => {
         axios.get("https://nominatim.openstreetmap.org/search?q=" + locationName + "&format=json")
             .then(response => {
                 if (response.data.length > 0) {
-                    setLat(response.data[0].lat);
-                    setLon(response.data[0].lon);
+                    let newViewport = view;
+                    newViewport.latitude = parseFloat(response.data[0].lat);
+                    newViewport.longitude = parseFloat(response.data[0].lon);
+                    setView(newViewport);
+                    setMarkerLat(parseFloat(response.data[0].lat));
+                    setMarkerLon(parseFloat(response.data[0].lon));
                 }
             })
             .catch(error => console.log(error))
     }, [(props.locations) ? props.locations.length : 0]);
 
 
-    const handleMarkerClick = ({event, payload, anchor}) => {
-        window.open(infoLink, "_blank")
-    };
-
-    console.log(lat, lon, infoLink)
-
     return (
-        <div>
-            <Map
-                center={[lat, lon]}
-                zoom={12}
-                width={600}
-                height={400}
+        <ReactMapGL
+            {...view}
+            mapboxApiAccessToken={process.env.REACT_APP_TOKEN}
+            onViewportChange={view => setView(view)}
+            mapStyle={"mapbox://styles/teebolt16/ck4cj4f5y13gw1cmmtboiklua"}
+        >
+            <Marker
+                latitude={markerLat}
+                longitude={markerLon}
             >
-                <Marker
-                    anchor={[lat, lon]}
-                    payload={1}
-                    onClick={handleMarkerClick}
+                <LocationOnIcon
+                    onClick={() => window.open(infoLink, "_blank")}
                 />
-            </Map>
-        </div>
-    );
+            </Marker>
+        </ReactMapGL>
+    )
 };
 export default MyMap;
