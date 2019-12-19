@@ -54,6 +54,8 @@ const MyMap = (props) => {
             <Marker
                 latitude={markerLat}
                 longitude={markerLon}
+                offsetTop={-24}
+                offsetLeft={-12}
             >
                 <LocationOnIcon
                     onClick={() => window.open(infoLink, "_blank")}
