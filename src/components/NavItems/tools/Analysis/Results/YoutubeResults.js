@@ -24,7 +24,6 @@ import OnClickInfo from "../../../../Shared/OnClickInfo/OnClickInfo";
 import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Analysis.tsv";
 import TimeToLocalTime from "./TimeToLocalTime";
-import Map from "./Map";
 
 const YoutubeResults = (props) => {
     const classes = useMyStyles();
