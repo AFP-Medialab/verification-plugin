@@ -28,6 +28,14 @@ const theme = createMuiTheme({
                 color: 'white',
             },
         },
+        MuiIcon:{
+            root: {
+                overflow: "visible"
+            }
+        }
+    },
+    zIndex:{
+        drawer: 1099
     }
 });
 
