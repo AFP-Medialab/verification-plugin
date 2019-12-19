@@ -57,7 +57,7 @@ const Analysis = () => {
     };
 
     const submitForm = () => {
-        setSubmittedUrl(input);
+        setSubmittedUrl(input.trim());
     };
 
     console.log(resultData)

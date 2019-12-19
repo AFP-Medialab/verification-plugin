@@ -47,8 +47,7 @@ export const useAnalysisWrapper = (apiUrl, videoUrl) => {
                     } else if ( keyword("table_error_" +  response.data.status) !== "") {
                         handleError("table_error_" + response.data.status);
                     } else if (response.data.status === "unavailable"){
-                        dispatch(setError("Url not available"));
-                        dispatch(setAnalysisLoading(false));
+                        handleError("table_error_unavailable")
                     }
                     else {
                         setTimeout(() => waitUntilDonne(response.data), 2000);
