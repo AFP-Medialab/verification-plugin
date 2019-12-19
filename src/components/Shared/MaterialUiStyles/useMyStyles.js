@@ -185,6 +185,7 @@ const useMyStyles = makeStyles(theme => ({
     iconRootTab: {
         overflow: "visible",
         textAlign: "center",
+        fontSize: "2.25rem"
     },
     imageIconAllTools: {
         maxWidth: "300px",
