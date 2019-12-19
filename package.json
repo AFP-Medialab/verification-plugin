@@ -18,6 +18,7 @@
     "history": "^4.10.1",
     "material-table": "^1.54.1",
     "material-ui-image": "^3.2.2",
+    "pigeon-maps": "^0.14.0",
     "plotly.js": "^1.51.2",
     "querystring": "^0.2.0",
     "react": "^16.10.2",
@@ -61,6 +62,7 @@
   },
   "devDependencies": {
     "mp4box": "^0.3.20",
+    "pigeon-marker": "^0.3.4",
     "react-wordcloud": "^1.1.1"
   }
 }

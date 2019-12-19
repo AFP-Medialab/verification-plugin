@@ -24,6 +24,7 @@ import OnClickInfo from "../../../../Shared/OnClickInfo/OnClickInfo";
 import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Analysis.tsv";
 import TimeToLocalTime from "./TimeToLocalTime";
+import MyMap from "../../../../Shared/MyMap/MyMap";
 
 const YoutubeResults = (props) => {
     const classes = useMyStyles();
@@ -257,6 +258,16 @@ const YoutubeResults = (props) => {
                         </div>
                     }
                     <Box m={4}/>
+                    {
+                        report.mentioned_locations &&
+                        report.mentioned_locations.detected_locations &&
+                        report.mentioned_locations.detected_locations.length > 0 &&
+                        <div>
+                        <MyMap locations={report.mentioned_locations.detected_locations}/>
+                        <Box m={4}/>
+                        </div>
+                    }
+
 
                     {
                         thumbnails !== undefined &&
