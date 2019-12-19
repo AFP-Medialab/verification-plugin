@@ -68,8 +68,7 @@ const ClassRoom = () => {
 
     const EducationalResources = () => {
         let res = [];
-        for (let i = 1; keyword("classroom_title_" + i) !== "" ; i++)
-        {
+        for (let i = 1; keyword("classroom_title_" + i) !== ""; i++) {
             res.push(
                 {
                     title: keyword("classroom_title_" + i),
@@ -147,15 +146,25 @@ const ClassRoom = () => {
                             }
                         </Button>
                     </div>
-                    <Typography variant="body1">
-                        Youtube: https://www.youtube.com/embed/5wRv8boqIEc
+                    <Typography variant="body1" color="textSecondary">
+                        {
+                            keyword("examples")
+                        }
                     </Typography>
-                    <Typography variant="body1">
-                        Twitter:
-                        https://video.twimg.com/amplify_video/1055750649462308866/vid/640x360/yqQIZj-jHZRxl0i2.mp4
+                    <Typography variant="body1" color="textSecondary">
+                        {
+                            keyword("youtube_example")
+                        }
                     </Typography>
-                    <Typography variant="body1">
-                        iframe : https://www.youtube.com/embed/5wRv8boqIEc
+                    <Typography variant="body1" color="textSecondary">
+                        {
+                            keyword("twitter_example")
+                        }
+                    </Typography>
+                    <Typography variant="body1" color="textSecondary">
+                        {
+                            keyword("website_example")
+                        }
                     </Typography>
                 </TabPanel>
             </Box>

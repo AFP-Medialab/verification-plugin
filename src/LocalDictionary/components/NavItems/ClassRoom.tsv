@@ -14,6 +14,10 @@ remote_resources_title	Educational Resources	Ressources pédagogiques	Recursos e
 user_resources_title	Your educational content	Votre contenu pédagogique	Tu contenido educativo
 display	Display	Afficher	Visualización
 user_resources_intro	This section allows you to broadcast your own lessons stored on Internet	Cette section vous permet de diffuser vos propres cours stockés sur Internet.	Esta sección le permite transmitir sus propios videos de Internet.
-user_resources_intro_remote	Enter the url of a YouTube, Twitter, Facebook public video or an iframe (see examples below):	Indiquez l'url d'une vidéo YouTube, Twitter, Facebook (public) ou une iframe (voir les exemples ci-dessous):	Ponga la url de un video de YouTube, Twitter, Facebook (público) o un iframe (ver ejemplos abajo):
+user_resources_intro_remote	Enter the url of a YouTube, Twitter, Facebook public video or an website (see examples below):	Indiquez l'url d'une vidéo YouTube, Twitter, Facebook (public) ou un site web (voir les exemples ci-dessous):	Ponga la url de un video de YouTube, Twitter, Facebook (público) o un sitio web (ver ejemplos abajo):
 api_input	Copy and paste a Youtube, Facebook or Twitter url	Copier et coller une adresse YouTube, Facebook ou Twitter	Copiar y pegar un enlace de YouTube, Facebook o Twitter
 close	Close	Fermer	Cerrar
+examples	Examples :	Exemples :	Ejemplos :
+youtube_example	Youtube: https://www.youtube.com/embed/5wRv8boqIEc	Youtube: https://www.youtube.com/embed/5wRv8boqIEc	Youtube: https://www.youtube.com/embed/5wRv8boqIEc
+twitter_example	Twitter: https://video.twimg.com/amplify_video/1055750649462308866/vid/640x360/yqQIZj-jHZRxl0i2.mp4	Twitter: https://video.twimg.com/amplify_video/1055750649462308866/vid/640x360/yqQIZj-jHZRxl0i2.mp4	Twitter: https://video.twimg.com/amplify_video/1055750649462308866/vid/640x360/yqQIZj-jHZRxl0i2.mp4
+website_example	Website: https://www.invid-project.eu/tools-and-services/invid-verification-plugin/	Site web: https://www.invid-project.eu/tools-and-services/invid-verification-plugin/	Sitio web: https://www.invid-project.eu/tools-and-services/invid-verification-plugin/
