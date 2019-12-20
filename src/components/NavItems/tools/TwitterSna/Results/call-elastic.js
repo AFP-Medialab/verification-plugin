@@ -538,14 +538,15 @@ function getPlotlyJsonCloud(json, keywords, bannedWords, specificGetCallBack) {
        // keys.shift();
     //} else {
        // mainKey = keywords;
-        labels.push(keywords);
+        labels.push(keywords.join(', ').replace(/#/g, ''));
     //}
 
     parents.push("");
     value.push(0);
-
+    if (keys[0]['key'].charAt(0) === '#')
+        keys.shift();
     keys.forEach(key => {
-        specificGetCallBack(key, value, labels, parents, keywords);
+        specificGetCallBack(key, value, labels, parents, keywords.join(', ').replace(/#/g, ''));
     });
     
     let obj = [{
@@ -555,6 +556,7 @@ function getPlotlyJsonCloud(json, keywords, bannedWords, specificGetCallBack) {
         values: value,
         outsidetextfont: {size: 20, color: "#377eb8"},
     }];
+    
     return obj;
 }
 

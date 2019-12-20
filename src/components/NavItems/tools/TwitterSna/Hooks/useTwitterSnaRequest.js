@@ -192,7 +192,7 @@ const useTwitterSnaRequest = (request) => {
                 rotationAngles: [0, 30],
                 scale: 'sqrt',
                 spiral: 'rectangular',
-                // transitionDuration: 1000,
+                 transitionDuration: 1000,
             };
 
             return {
