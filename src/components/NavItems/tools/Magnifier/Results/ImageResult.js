@@ -16,12 +16,11 @@ import iconc from "tui-image-editor/dist/svg/icon-c.svg";
 import icond from "tui-image-editor/dist/svg/icon-d.svg";
 import Grid from "@material-ui/core/Grid";
 import {cleanMagnifierState, setMagnifierResult} from "../../../../../redux/actions/tools/magnifierActions";
-import ImageReverseSearch from "../../ImageReverseSearch";
-import history from "../../../../Shared/History/History";
 import CloseResult from "../../../../Shared/CloseResult/CloseResult";
 import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Magnifier.tsv";
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
+import OnClickInfo from "../../../../Shared/OnClickInfo/OnClickInfo";
 
 const myTheme = {
     "menu.backgroundColor": "white",
@@ -75,6 +74,20 @@ const ImageResult = () => {
         return image_name.substring(0, image_name.lastIndexOf("."));
     };
 
+    const copyToClipBoard = (string) => {
+        let textArea = document.createElement("textarea");
+        textArea.innerHTML = string;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand('copy');
+        textArea.remove();
+    };
+
+    const GoogleClick = () => {
+        copyToClipBoard(resultImage);
+        window.open("https://www.google.com/imghp?sbi=1", "_blank");
+    };
+
     return (
         <Paper className={classes.root}>
             <CloseResult onClick={() => dispatch(cleanMagnifierState())}/>
@@ -118,10 +131,17 @@ const ImageResult = () => {
                         <Box m={1}/>
 
                         <div className={classes.modalButton}>
-                            <Button variant="contained" color="secondary" onClick={() => setOpen(false)}>Quit (add
-                                tsv)</Button>
+                            <Button variant="contained" color="secondary" onClick={() => setOpen(false)}>
+                                {
+                                    keyword("quit")
+                                }
+                            </Button>
                             <div className={classes.grow}/>
-                            <Button variant="contained" color="secondary" onClick={handleClose}>Save (add tsv)</Button>
+                            <Button variant="contained" color="secondary" onClick={handleClose}>
+                                {
+                                    keyword("save")
+                                }
+                            </Button>
                         </div>
                     </div>
                 </Fade>
@@ -136,7 +156,11 @@ const ImageResult = () => {
                 spacing={3}
             >
                 <Grid item>
-                    <Button color="primary" variant="contained" onClick={handleOpen}>Edit Image add tsv</Button>
+                    <Button color="primary" variant="contained" onClick={handleOpen}>
+                        {
+                            keyword("edit_image")
+                        }
+                    </Button>
                 </Grid>
                 <Grid item>
                     <a href={resultImage} download={downLoadLink(resultImage)}>
@@ -155,47 +179,14 @@ const ImageResult = () => {
                 spacing={3}
             >
                 <Grid item>
+                    <OnClickInfo keyword={"magnifier_tip"}/>
+                </Grid>
+                <Grid item>
                     <Button color="primary"
                             variant="contained"
-                            onClick={() => ImageReverseSearch("google", original)}>
+                            onClick={GoogleClick}>
                         {
                             keyword("magnifier_google")
-                        }
-                    </Button>
-                </Grid>
-                <Grid item>
-                    <Button color="primary"
-                            variant="contained"
-                            onClick={() => ImageReverseSearch("baidu", original)}>
-                        {
-                            keyword("magnifier_baidu")
-                        }
-                    </Button>
-                </Grid>
-                <Grid item>
-                    <Button color="primary"
-                            variant="contained"
-                            onClick={() => ImageReverseSearch("yandex", original)}>
-                        {
-                            keyword("magnifier_yandex")
-                        }
-                    </Button>
-                </Grid>
-                <Grid item>
-                    <Button color="primary"
-                            variant="contained"
-                            onClick={() => ImageReverseSearch("tineye", original)}>
-                        {
-                            keyword("magnifier_tineye")
-                        }
-                    </Button>
-                </Grid>
-                <Grid item>
-                    <Button color="primary"
-                            variant="contained"
-                            onClick={() => history.push("forensic/" + encodeURIComponent(original))}>
-                        {
-                            keyword("magnifier_forensic")
                         }
                     </Button>
                 </Grid>

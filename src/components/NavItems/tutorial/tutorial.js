@@ -3,53 +3,79 @@ import {useSelector} from "react-redux";
 import {Paper} from "@material-ui/core";
 import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
-import makeStyles from "@material-ui/core/styles/makeStyles";
 import CustomTile from "../../Shared/CustomTitle/CustomTitle";
-import videoUrl from "./images/VideoURLmenu.png";
 import insta from "./images/InstagramDemo.png";
+import useLoadLanguage from "../../../Hooks/useLoadLanguage";
+import tsv from "../../../LocalDictionary/components/NavItems/Tutorial.tsv";
+import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
 
-const useStyles = makeStyles(theme => ({
-    root: {
-        padding: theme.spacing(3, 2),
-        textAlign: "center",
-
-    },
-    card: {
-        maxWidth: "300px",
-        textAlign: "center",
-    },
-    media: {
-        height: "auto",
-        width: "auto",
-        maxWidth: "60%",
-    },
-}));
+import popUpEn from "./images/popUpImage/popUp_EN.png";
+import popUpFr from "./images/popUpImage/popUp_FR.png";
+import popUpEs from "./images/popUpImage/popUp_ES.png";
+import ListItemText from "@material-ui/core/ListItemText";
+import ListItem from "@material-ui/core/ListItem";
+import List from "@material-ui/core/List";
 
 const Tutorial = () => {
-    const dictionary = useSelector(state => state.dictionary);
-    const lang = useSelector(state => state.language);
-    const keyword = (key) => {
-        return (dictionary !== null) ? dictionary[lang][key] : "";
-    };
+    const classes = useMyStyles();
+    const keyword = useLoadLanguage("components/NavItems/Tutorial.tsv", tsv);
+    const language = useSelector(state => state.language);
 
-    const classes = useStyles();
+    let popImg;
+    switch (language) {
+        case "fr":
+            popImg = popUpFr;
+            break;
+        case "es":
+            popImg = popUpEs;
+            break;
+        default:
+            popImg  = popUpEn;
+            break;
+    }
 
     return (
         <Paper className={classes.root}>
             <Box justifyContent="center" display="flex" flexDirection="column">
-                <CustomTile> {keyword("tuto_title")}  </CustomTile>
+                <CustomTile text={keyword("tuto_title")}/>
                 <br/>
                 <Typography variant="h3">{keyword("tuto_h_1")}</Typography>
                 <Box item={"true"}>
-                    <img src={videoUrl} alt={""}/>
+                    <img src={popImg} alt={""} className={classes.InteractiveMedia}/>
                 </Box>
                 <Typography variant="body1">{keyword("tuto_1")}</Typography>
 
-                <div className={"content"} dangerouslySetInnerHTML={{__html: keyword("tuto_2")}}></div>
-                <Typography variant="body1">{keyword("tuto_3")}</Typography>
 
+                <List justify={"center"}>
+                    <ListItem  >
+                        <ListItemText>
+                            {keyword("open_website")}
+                        </ListItemText>
+                        <ListItemText>
+                            {keyword("open_website_description")}
+                        </ListItemText>
+                    </ListItem>
+                    <ListItem >
+                        <ListItemText>
+                            {keyword("video_urls")}
+                        </ListItemText>
+                        <ListItemText>
+                            {keyword("video_urls_description")}
+                        </ListItemText>
+                    </ListItem>
+                    <ListItem >
+                        <ListItemText>
+                            {keyword("images_url")}
+                        </ListItemText>
+                        <ListItemText>
+                            {keyword("images_url_description")}
+                        </ListItemText>
+                    </ListItem>
+                </List>
+
+                <Typography variant="body1">{keyword("tuto_3")}</Typography>
                 <Box item={"true"}>
-                    <img src={insta} alt={""}  className={classes.media}/>
+                    <img src={insta} alt={""}  className={classes.InteractiveMedia}/>
                 </Box>
                 <h2>{keyword("tuto_h_2")}</h2>
                 <div className={"content"} dangerouslySetInnerHTML={{__html: keyword("tuto_4")}}></div>

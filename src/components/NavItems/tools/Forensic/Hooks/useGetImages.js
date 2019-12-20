@@ -14,7 +14,7 @@ const useGetImages = (url) => {
     useEffect(() => {
 
         const handleError = (e) => {
-            if (keyword(e) !== undefined)
+            if (keyword(e) !== "")
                 dispatch(setError(keyword(e)));
             else
                 dispatch(setError(keyword("please_give_a_correct_link")));

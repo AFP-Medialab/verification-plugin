@@ -50,7 +50,7 @@ const Forensic = () => {
     return (
       <div>
           <Paper className={classes.root}>
-              <CustomTile> {keyword("forensic_title")}  </CustomTile>
+              <CustomTile text={keyword("forensic_title")}/>
               <Box m={1}/>
               <TextField
                   value={input}

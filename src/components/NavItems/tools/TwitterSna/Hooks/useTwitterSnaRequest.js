@@ -98,7 +98,7 @@ const useTwitterSnaRequest = (request) => {
         };
 
         const handleErrors = (e) => {
-            if (keyword(e) !== undefined)
+            if (keyword(e) !== "")
                 dispatch(setError(keyword(e)));
             else
                 dispatch(setError(keyword("default_sna_error")));
