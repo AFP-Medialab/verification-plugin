@@ -621,18 +621,12 @@ export default function TwitterSnaResult(props) {
                                     </Grid>
                                 </Grid>
                                 {
-                                    !cloudTweets &&
                                     <div height={"300%"} width={"100%"}>
-                                        <ReactWordcloud options={result.cloudChart.options} callbacks={call} words={result.cloudChart.json} />
+                                        <ReactWordcloud key={JSON.stringify(result)} options={result.cloudChart.options} callbacks={call} words={result.cloudChart.json} />
                                     </div>
                                    
                                 }
-                                {
-                                     cloudTweets &&
-                                     <div height={"300%"} width={"100%"}>
-                                         <ReactWordcloud options={result.cloudChart.options} callbacks={call} words={result.cloudChart.json} />
-                                     </div>
-                                }
+
                             </div>
                             <Box m={2} />
                             {
