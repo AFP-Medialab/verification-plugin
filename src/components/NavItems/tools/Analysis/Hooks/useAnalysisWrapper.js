@@ -6,31 +6,32 @@ import {useEffect} from "react";
 import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Analysis.tsv"
 
-export const useAnalysisWrapper = (url, reprocess, facebookToken) => {
+export const useAnalysisWrapper = (apiUrl, videoUrl) => {
     const keyword = useLoadLanguage("components/NavItems/tools/Analysis.tsv", tsv);
     const dispatch = useDispatch();
 
     useEffect(() => {
         const handleError = (error) => {
-            if (keyword(error) !== undefined)
+            if (keyword(error) !== "")
                 dispatch(setError((keyword(error))));
-            dispatch(setError(error.toString()));
+            else
+                dispatch(setError(error.toString()));
             dispatch(setAnalysisLoading(false));
         };
 
         const getReport = (id) => {
             axios.get("http://mever.iti.gr/caa/api/v4/videos/reports/" + id)
                 .then(response => {
-                    if (keyword("table_error_" + response.data.status) !== undefined)
+                    if (keyword("table_error_" + response.data.status) !== "")
                         handleError("table_error_" + response.data.status.status);
                     else if (response.data.status !== "unavailable")
-                        dispatch(setAnalysisResult(url, response.data, false, false))
+                        dispatch(setAnalysisResult(videoUrl, response.data, false, false))
                 })
                 .catch(errors => handleError(errors));
         };
 
         const handleJob = (data) => {
-            if (keyword("table_error_" + data.status) !== undefined) {
+            if (keyword("table_error_" + data.status) !== "") {
                 handleError("table_error_" + data.status);
             } else {
                 waitUntilDonne(data);
@@ -43,11 +44,10 @@ export const useAnalysisWrapper = (url, reprocess, facebookToken) => {
                 .then(response => {
                     if (response.data.status === "done") {
                         getReport(response.data.media_id)
-                    } else if ( keyword("table_error_" +  response.data.status) !== undefined) {
+                    } else if ( keyword("table_error_" +  response.data.status) !== "") {
                         handleError("table_error_" + response.data.status);
                     } else if (response.data.status === "unavailable"){
-                        dispatch(setError("Url not available"));
-                        dispatch(setAnalysisLoading(false));
+                        handleError("table_error_unavailable")
                     }
                     else {
                         setTimeout(() => waitUntilDonne(response.data), 2000);
@@ -59,31 +59,17 @@ export const useAnalysisWrapper = (url, reprocess, facebookToken) => {
         };
 
 
-        if (!url)
+        if (!apiUrl)
             return;
-        if (url === "")
+        if (apiUrl === "")
             handleError("table_error_empty_url");
-        else if (url.includes(" "))
+        else if (apiUrl.includes(" "))
             handleError("table_error_unavailable");
         else {
-            let analysis_url = "http://mever.iti.gr/caa/api/v4/videos/jobs?url=" + url.replace("&", "%26");
-            if (reprocess)
-                analysis_url += "&reprocess=1";
-
-            if (url.startsWith("https://www.facebook.com/")){
-                if (facebookToken === null) {
-                    return;
-                }
-                else{
-                    analysis_url+= "&fb_access_token="+ facebookToken;
-                }
-            }
-
             dispatch(setAnalysisLoading(true));
-            axios.post(analysis_url)
+            axios.post(apiUrl)
                 .then(response => handleJob(response["data"]))
                 .catch(error => handleError(error))
         }
-
-    }, [url, facebookToken, dispatch, reprocess, keyword]);
+    }, [apiUrl]);
 };

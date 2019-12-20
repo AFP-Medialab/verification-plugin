@@ -12,6 +12,16 @@ export const setDictionary = (text) => {
     };
 };
 
+export const addDictionary = (label, json) => {
+    return {
+        type : "ADD",
+        payload : {
+            label: label,
+            json: json
+        }
+    };
+};
+
 export const selectPage = (number) => {
     return {
         type: "SELECT_PAGE",

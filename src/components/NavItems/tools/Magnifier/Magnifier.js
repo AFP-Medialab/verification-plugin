@@ -26,7 +26,7 @@ const Magnifier = () => {
     const [input, setInput] = useState(resultUrl);
 
     const getErrorText = (error) => {
-        if (keyword(error) !== undefined)
+        if (keyword(error) !== "")
             return keyword(error);
         return keyword("please_give_a_correct_link");
     };
@@ -62,7 +62,7 @@ const Magnifier = () => {
     return (
         <div>
             <Paper className={classes.root}>
-                <CustomTile> {keyword("magnifier_title")}  </CustomTile>
+                <CustomTile text={keyword("magnifier_title")}/>
                 <Box m={1}/>
                 <TextField
                     id="standard-full-width"
@@ -83,9 +83,9 @@ const Magnifier = () => {
                     }}/>
                 </Button>
                 <Box m={2}/>
-                <Button variant="contained" color="primary" onClick={() => submitUrl(input)}>
-                    {keyword("button_submit")}
-                </Button>
+                    <Button variant="contained" color="primary" onClick={() => submitUrl(input)}>
+                        {keyword("button_submit") || ""}
+                    </Button>
             </Paper>
             {
                 resultResult && resultResult !== "" &&

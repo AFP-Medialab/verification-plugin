@@ -23,6 +23,7 @@ import ImageReverseSearch from "../../ImageReverseSearch";
 import OnClickInfo from "../../../../Shared/OnClickInfo/OnClickInfo";
 import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Analysis.tsv";
+import MyMap from "../../../../Shared/MyMap/MyMap";
 
 const FacebookResults = (props) => {
     const classes = useMyStyles();
@@ -228,6 +229,15 @@ const FacebookResults = (props) => {
                     </div>
                     <Box m={4}/>
                     {
+                        report.mentioned_locations &&
+                        report.mentioned_locations.detected_locations &&
+                        report.mentioned_locations.detected_locations.length > 0 &&
+                        <div>
+                            <MyMap locations={report.mentioned_locations.detected_locations}/>
+                            <Box m={4}/>
+                        </div>
+                    }
+                    {
                         thumbnails !== undefined &&
                         <div>
                             <Box m={4}/>
@@ -235,7 +245,7 @@ const FacebookResults = (props) => {
                                 {keyword("navbar_thumbnails")}
                             </Typography>
                             <Box m={1}/>
-                            <OnClickInfo/>
+                            <OnClickInfo keyword={"keyframes_tip"}/>
                             <Box m={1}/>
                             <div className={classes.imagesRoot}>
                                 <GridList cellHeight={160} className={classes.gridList} cols={3}>

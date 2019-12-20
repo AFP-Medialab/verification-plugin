@@ -1,16 +1,17 @@
 import React from "react";
-import {
-    GlassMagnifier,
-} from "react-image-magnifiers";
+import Magnifier from "react-magnifier";
+
 
 const Loop = (props) => {
     return (
         <div>
             <div>
-                <GlassMagnifier
-                    imageSrc={props.src}
-                    imageAlt="Example"
-                    magnifierSize={"40%"}
+                <Magnifier
+                    src={props.src}
+                    width={"60%"}
+                    zoomFactor={"2"}
+                    mgWidth={200}
+                    mgHeight={200}
                 />
             </div>
         </div>

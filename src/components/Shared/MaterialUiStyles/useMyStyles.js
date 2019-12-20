@@ -67,7 +67,9 @@ const useMyStyles = makeStyles(theme => ({
             width: theme.spacing(9) + 1,
         },
     },
-    toolbar: theme.mixins.toolbar,
+    toolbar: {
+        ...theme.mixins.toolbar,
+    },
     content: {
         flexGrow: 1,
         padding: theme.spacing(3),
@@ -99,7 +101,7 @@ const useMyStyles = makeStyles(theme => ({
     },
     popUp: {
         width: "300px",
-        padding: theme.spacing(3, 2),
+        padding: theme.spacing(1, 2),
         textAlign: "center",
     },
     grow: {
@@ -173,18 +175,19 @@ const useMyStyles = makeStyles(theme => ({
     },
     imageIconDrawer: {
         width: "auto",
-        height:"100%",
+        height: "100%",
     },
 
     imageIconTab: {
-        height:"auto",
+        height: "auto",
         width: "100%"
     },
     iconRootTab: {
         overflow: "visible",
         textAlign: "center",
+        fontSize: "2.25rem"
     },
-    imageIconAllTools:{
+    imageIconAllTools: {
         maxWidth: "300px",
         height: "auto",
         width: "100px",
@@ -216,7 +219,7 @@ const useMyStyles = makeStyles(theme => ({
         maxWidth: "300px",
         maxHeight: "300px"
     },
-    onClickInfo : {
+    onClickInfo: {
         borderColor: "grey",
         borderRadius: '10px',
         borderStyle: "solid",
@@ -237,6 +240,68 @@ const useMyStyles = makeStyles(theme => ({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
+    },
+    AboutMedia: {
+        height: "auto",
+        width: "auto",
+        maxWidth: "60%",
+    },
+    InteractiveMedia: {
+        maxWidth: "80%",
+        maxHeight: window.innerHeight / 2,
+    },
+    customTitle: {
+        background: theme.palette.primary.main,
+        borderRadius: 5,
+        textAlign: "center",
+        color: 'white',
+        fontSize: 28,
+        fontWeight: "bold",
+        padding: '15px',
+        width: "auto",
+        margin: 5,
+    },
+    forensicCard: {
+        width: "100%",
+    },
+    forensicMedia: {
+        height: 0,
+        paddingTop: '56.25%', // 16:9
+    },
+    expand: {
+        transform: 'rotate(0deg)',
+        marginLeft: 'auto',
+        transition: theme.transitions.create('transform', {
+            duration: theme.transitions.duration.shortest,
+        }),
+    },
+    expandOpen: {
+        transform: 'rotate(180deg)',
+    },
+    lightBox: {
+        overlay: {
+            zIndex: theme.zIndex.drawer + 1,
+        },
+    },
+    imgMagnifierContainer: {
+        position: "relative",
+        cursor: "none",
+        margin: 0,
+        padding: 0,
+    },
+    imgMagnifierGlass: {
+        width: "175px",
+        height: "175px",
+        position: "absolute",
+        borderRadius: "100%",
+        boxShadow: "0 0 0 7px rgba(255, 255, 255, 0.85), 0 0 7px 7px rgba(0, 0, 0, 0.25), inset 0 0 40px 2px rgba(0, 0, 0, 0.25)",
+        /*hide the glass by default*/
+        display: "none",
+    },
+    imgMagnifierImg: {
+        position: "relative",
+        cursor: "none",
+        display: "block",
     },
 }));
 export default useMyStyles;
