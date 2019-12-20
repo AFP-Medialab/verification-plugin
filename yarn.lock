@@ -13228,6 +13228,11 @@ react-browser-extension-scripts@0.1.2:
   optionalDependencies:
     fsevents "2.0.7"
 
+react-csv@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/react-csv/-/react-csv-1.1.2.tgz#6cb47e625f51878d24bb68a120efb45a30ad243a"
+  integrity sha512-pTOTYntW+gQWzCxyEGfS5ZeOfQw4Mu3B+DJd4jrJKNuAWFQ+EEyF2Earfg0+FVEkPwMr62OLtbYCHmc6vQWj2w==
+
 react-d3-library@^1.1.8:
   version "1.1.8"
   resolved "https://registry.yarnpkg.com/react-d3-library/-/react-d3-library-1.1.8.tgz#b452c41c0901158033a2abfc82d0cfce5318f5d4"
@@ -14358,6 +14363,11 @@ sass-loader@7.2.0:
     neo-async "^2.5.0"
     pify "^4.0.1"
     semver "^5.5.0"
+
+save-svg-as-png@^1.4.14:
+  version "1.4.14"
+  resolved "https://registry.yarnpkg.com/save-svg-as-png/-/save-svg-as-png-1.4.14.tgz#d5017bb9746adf00c146a17e63ed4badd1e10b40"
+  integrity sha512-hJqOFSdRvhBVD2pQSM+mJStvQGfnvQCCF6ULtAxdjF4lDwXYfWZ9Eug0fcRl05YyPL2yknCDBEOpbO4Fkw5qmg==
 
 sax@^1.2.4, sax@~1.2.4:
   version "1.2.4"
