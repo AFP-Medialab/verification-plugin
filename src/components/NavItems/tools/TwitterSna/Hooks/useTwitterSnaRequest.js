@@ -10,7 +10,8 @@ import {
     generateEssidHistogramPlotlyJson,
     generateTweetCountPlotlyJson,
     generateURLArrayHTML,
-    generateWordCloudPlotlyJson
+    generateWordCloudPlotlyJson,
+    getTweets
 } from "../Results/call-elastic";
 import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../../LocalDictionary/components/NavItems/tools/TwitterSna.tsv";
@@ -21,6 +22,24 @@ const includeWordObj = (wordObj, wordsArray) => {
             return i;
     }
     return -1;
+}
+
+function getNbTweetsInHour(date, bucket)
+{
+    var nbTweets = 0;
+    var day = date.toLocaleDateString();
+    var hour = date.getHours();
+    //TODO
+    bucket.forEach(tweet => {
+        var tweetDate = new Date(tweet._source.date);
+        var TweetDay = tweetDate.toLocaleDateString();
+        var tweetHour = tweetDate.getHours();
+
+        if (day === TweetDay && tweetHour == hour)
+            nbTweets++;
+    //    console.log(tweetDate);
+    });
+    return nbTweets;
 }
 
 function getnMax(objArr, n) {
@@ -214,11 +233,61 @@ const useTwitterSnaRequest = (request) => {
             result.tweetCount.like = responseArrayOf7[5].likes.toString().replace(/(?=(\d{3})+(?!\d))/g, " ");
             result.tweets = responseArrayOf7[5].tweets;
             result.histogram = createHistogram(data, responseArrayOf7[6], givenFrom, givenUntil);
+            result.heatMap = createHeatMap(data);
             if (final) {
                 result.cloudChart = createWordCloud(responseArrayOf7[7]);
             }
             dispatch(setTwitterSnaResult(request, result, false, true))
         };
+
+        function createHeatMap(param)
+        {
+            let entries = makeEntries(param);
+            var hits = getTweets();
+            console.log(hits);
+            var firstDate = new Date(entries.from);
+            firstDate.setHours(1);
+            firstDate.setMinutes(0);
+            firstDate.setSeconds(0);
+            var firstArrElt = new Date(firstDate); 
+            var lastDate = new Date(entries.until);
+            lastDate.setHours(1);
+            lastDate.setMinutes(0);
+            lastDate.setSeconds(0);
+            var datesX = [firstArrElt];
+            while (firstDate.getTime() !== lastDate.getTime())
+            {
+                var newDate = new Date(firstDate); 
+                firstDate.setDate(firstDate.getDate() + 1);
+                newDate.setDate(newDate.getDate() + 1);
+            // console.log(firstDate);
+                datesX = [...datesX, newDate]
+            }
+    
+        var hoursY = ['12:00:00 AM', '1:00:00 AM', '2:00:00 AM', '3:00:00 AM', '4:00:00 AM', '5:00:00 AM', '6:00:00 AM', '7:00:00 AM', '8:00:00 AM', '9:00:00 AM', '10:00:00 AM', '11:00:00 AM', '12:00:00 PM','1:00:00 PM', '2:00:00 PM', '3:00:00 PM', '4:00:00 PM', '5:00:00 PM', '6:00:00 PM', '7:00:00 PM', '8:00:00 PM', '9:00:00 PM', '10:00:00 PM', '11:00:00 PM'];
+           
+        var nbTweetsZ = [];
+        var i = 0;
+        
+        hoursY.forEach(time => {
+            nbTweetsZ.push([])
+            datesX.forEach(date => {
+              //  console.log(date);
+                date.setHours(i);
+                nbTweetsZ[i].push(getNbTweetsInHour(date, hits));
+            });
+            i++;
+        });
+        console.log(nbTweetsZ);
+        return [{
+            z: nbTweetsZ,
+            x: datesX,
+            y: hoursY,
+            colorscale: 'Reds',
+            type: 'heatmap'
+          }];
+        }
+
 
         const makeEntries = (data) => {
             return {
