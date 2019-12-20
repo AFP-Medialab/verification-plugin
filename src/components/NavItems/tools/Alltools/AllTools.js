@@ -18,7 +18,6 @@ const AllTools = (props) => {
     const classes = useMyStyles();
     const keyword = useLoadLanguage("components/NavItems/tools/Alltools.tsv", tsv);
     const tools = props.tools;
-
     const [videoUrl, setVideoUrl] = useState(null);
 
     const handleClick = (path) => {
@@ -38,7 +37,7 @@ const AllTools = (props) => {
                                             <img
                                                 style={{
                                                     cursor: "pointer",
-                                                    maxWidth: 100,
+                                                    maxWidth: 60,
                                                     height: "auto"
                                                 }}
                                                 src={value.icon}

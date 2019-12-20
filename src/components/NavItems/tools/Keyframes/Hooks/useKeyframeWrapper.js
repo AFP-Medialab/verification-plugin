@@ -49,7 +49,7 @@ export const useKeyframeWrapper = (url) => {
                     axios.get(url)
                         .then(response => {
                             data = response["data"];
-                            if (keyword("keyframes_wait_" + data["status"]) !== undefined) {
+                            if (keyword("keyframes_wait_" + data["status"]) !== "") {
                                 dispatch(setKeyframesMessage(keyword("keyframes_wait_" + data["status"])));
                             } else if (data["status"].endsWith("STARTED")) {
                                 dispatch(setKeyframesMessage(keyword("keyframes_wait_STARTED") + data["step"] + " (" + data["process"] + ") " + (data["progress"] === "N/A" ? "" : data["progress"])))

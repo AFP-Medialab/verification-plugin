@@ -2,8 +2,7 @@ import {Paper} from "@material-ui/core";
 import Box from "@material-ui/core/Box";
 import Grid from "@material-ui/core/Grid";
 import React, {useState} from "react";
-import makeStyles from "@material-ui/core/styles/makeStyles";
-import {useDispatch, useSelector} from "react-redux";
+import {useDispatch} from "react-redux";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 import CardMedia from "@material-ui/core/CardMedia";
@@ -24,39 +23,10 @@ import RadioButtonUncheckedIcon from '@material-ui/icons/RadioButtonUnchecked';
 import RadioButtonCheckedIcon from '@material-ui/icons/RadioButtonChecked';
 import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Forensic.tsv";
-
-const useStyles = makeStyles(theme => ({
-    root: {
-        padding: theme.spacing(3, 2),
-        marginTop: 20,
-        textAlign: "center",
-    },
-    card: {
-        width: "100%",
-    },
-    media: {
-        height: 0,
-        paddingTop: '56.25%', // 16:9
-    },
-    expand: {
-        transform: 'rotate(0deg)',
-        marginLeft: 'auto',
-        transition: theme.transitions.create('transform', {
-            duration: theme.transitions.duration.shortest,
-        }),
-    },
-    expandOpen: {
-        transform: 'rotate(180deg)',
-    },
-    lightBox: {
-        overlay: {
-            zIndex: theme.zIndex.drawer + 1,
-        },
-    }
-}));
+import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 
 const ForensicResults = (props) => {
-    const classes = useStyles();
+    const classes = useMyStyles();
     const keyword = useLoadLanguage("components/NavItems/tools/Forensic.tsv", tsv);
     const dispatch = useDispatch();
 
@@ -93,13 +63,13 @@ const ForensicResults = (props) => {
                     dataParams.map((value, key) => {
                         return (
                             <Box key={key} m={1} width={"30%"}>
-                                <Card className={classes.card}>
+                                <Card className={classes.forensicCard}>
                                     <CardHeader
                                         title={keyword("forensic_title_" + value)}
                                         subheader=""
                                     />
                                     <CardMedia
-                                        className={classes.media}
+                                        className={classes.forensicMedia}
                                         image={result[value]["map"]}
                                         title={keyword("forensic_title_" + value)}
                                         onClick={() => {
@@ -140,7 +110,7 @@ const ForensicResults = (props) => {
                     })
                 }
                 <Box m={1} width={"30%"}>
-                    <Card className={classes.card}>
+                    <Card className={classes.forensicCard}>
                         <CardHeader
                             title={keyword("forensic_title_ghostReport")}
                             subheader=""
@@ -150,7 +120,7 @@ const ForensicResults = (props) => {
                                 return (
                                     <Box hidden={selectedGhostImage !== index.toString()}>
                                         <CardMedia
-                                            className={classes.media}
+                                            className={classes.forensicMedia}
                                             image={image}
                                             onClick={() => {
                                                 setOpen(true);

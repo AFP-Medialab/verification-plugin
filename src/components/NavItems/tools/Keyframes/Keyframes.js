@@ -57,7 +57,7 @@ const Keyframes = (props) => {
     return (
         <div>
             <Paper className={classes.root}>
-                <CustomTile> {keyword("keyframes_title")}  </CustomTile>
+                <CustomTile text={keyword("keyframes_title")}/>
                 <Box m={1}/>
                 <Box display={localFile ? "none" : "block"}>
                     <Button variant="contained" color="primary" onClick={toggleLocal}>

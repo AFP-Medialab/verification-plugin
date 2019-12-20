@@ -15,6 +15,8 @@ import Remove from '@material-ui/icons/Remove';
 import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
+import useLoadLanguage from "../../../Hooks/useLoadLanguage";
+import tsv from "../../../LocalDictionary/components/Shared/CustomTable.tsv";
 
 const tableIcons = {
     Add: AddBox,
@@ -37,7 +39,6 @@ const tableIcons = {
 };
 
 export default function CustomTable(props) {
-
     const [state, setState] = useState(
         {
             title: props.title,
@@ -46,6 +47,7 @@ export default function CustomTable(props) {
             actions: props.actions
         }
     );
+    const keyword = useLoadLanguage("components/Shared/CustomTable.tsv", tsv);
 
     useEffect(() => {
         setState({
@@ -59,24 +61,24 @@ export default function CustomTable(props) {
             //more custom info at https://material-table.com/#/docs/features/localization
             localization={{
                 pagination: {
-                    firstTooltip: "First Page (add tsv)",
-                    previousTooltip: "Previous Page (add tsv)",
-                    nextTooltip: "Next Page (add tsv)",
-                    lastTooltip: "Last Page (add tsv)",
-                    labelRowsSelect: " (add tsv)",
-                    labelDisplayedRows: '{from}-{to} of {count} (add tsv)'
+                    firstTooltip: keyword("first_page"),
+                    previousTooltip: keyword("previous_page"),
+                    nextTooltip: keyword("next_page"),
+                    lastTooltip: keyword("last_page"),
+                    labelRowsSelect: keyword(""),
+                    labelDisplayedRows: keyword("from_to_text")
                 },
                 toolbar: {
-                    nRowsSelected: '{0} row(s) selected (add tsv)',
-                    searchPlaceholder: "Search (add tsv)"
+                    nRowsSelected: keyword('{0} row(s) selected (add tsv)'),
+                    searchPlaceholder: keyword("search")
                 },
                 header: {
-                    actions: 'Actions (add tsv)'
+                    actions: ""
                 },
                 body: {
-                    emptyDataSourceMessage: 'No records to display (add tsv)',
+                    emptyDataSourceMessage: keyword('no_records'),
                     filterRow: {
-                        filterTooltip: 'Filter (add tsv)'
+                        filterTooltip: keyword("filter")
                     }
                 }
             }}

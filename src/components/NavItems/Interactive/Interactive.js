@@ -20,43 +20,26 @@ import Button from "@material-ui/core/Button";
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ImageReverseSearch from "../tools/ImageReverseSearch";
 import history from '../../Shared/History/History';
-
-const useStyles = makeStyles(theme => ({
-    root: {
-        padding: theme.spacing(3, 2),
-        textAlign: "center",
-    },
-    card: {
-        maxWidth: "300px",
-        textAlign: "center",
-    },
-    media: {
-        maxWidth: "80%",
-        maxHeight: window.innerHeight / 2,
-    },
-}));
-
+import useLoadLanguage from "../../../Hooks/useLoadLanguage";
+import tsv from "../../../LocalDictionary/components/NavItems/Interactive.tsv";
+import Link from "@material-ui/core/Link";
+import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
 
 const Interactive = () => {
-    const dictionary = useSelector(state => state.dictionary);
-    const lang = useSelector(state => state.language);
-    const answersAvailable = useSelector(state => state.interactiveExplanation)
-    const keyword = (key) => {
-        return (dictionary !== null) ? dictionary[lang][key] : "";
-    };
-
-    const classes = useStyles();
-
+    const classes = useMyStyles();
+    const keyword = useLoadLanguage("components/NavItems/Interactive.tsv", tsv);
+    const answersAvailable = useSelector(state => state.interactiveExplanation);
 
     const carouselItems = () => {
         let res = [];
         let cpt = 1;
-        while (keyword("quiz_item_url_" + cpt) !== undefined && keyword("quiz_item_url_" + cpt) !== "") {
+        while (keyword("quiz_item_url_" + cpt) !== "") {
             res.push(
                 {
                     url: keyword("quiz_item_url_" + cpt),
                     title: keyword("quiz_item_title_" + cpt),
                     answer: keyword("quiz_item_answer_" + cpt),
+                    answerUrl: keyword("quiz_item_answer_" + cpt + "_url"),
                     ext: keyword("quiz_item_url_" + cpt).split(".").pop()
                 }
             );
@@ -89,7 +72,7 @@ const Interactive = () => {
     return (
         <Paper className={classes.root}>
             <Box justifyContent="center" display="flex" flexDirection="column">
-                <CustomTile> {keyword("quiz_title")}  </CustomTile>
+                <CustomTile text={keyword("quiz_title")}/>
                 <Grid container justify="space-between" spacing={2}
                       alignContent={"center"}>
                     <Grid item justify={"center"}>
@@ -127,7 +110,7 @@ const Interactive = () => {
                                 <div align={"center"}>
                                     {
                                         (isImage) ?
-                                            <img src={obj.url} className={classes.media} alt={obj.url}/>
+                                            <img src={obj.url} className={classes.InteractiveMedia} alt={obj.url}/>
                                             :
                                             <Iframe frameBorder="0" src={obj.url}
                                                     width="80%"
@@ -174,8 +157,9 @@ const Interactive = () => {
                                         <Grid container justify="space-between" spacing={2}
                                               alignContent={"center"}>
                                             <Grid item>
-                                                <Typography
-                                                    className={classes.heading}>{keyword("quiz_explanations")}</Typography>
+                                                <Typography className={classes.heading}>
+                                                    {keyword("quiz_explanations")}
+                                                </Typography>
                                             </Grid>
                                             <Grid item>
                                                 {
@@ -190,6 +174,9 @@ const Interactive = () => {
                                     <ExpansionPanelDetails>
                                         <Typography>
                                             {obj.answer}
+                                            <Link target="_blank" href={obj.answerUrl}>
+                                                {obj.answerUrl}
+                                            </Link>
                                         </Typography>
                                     </ExpansionPanelDetails>
                                 </ExpansionPanel>

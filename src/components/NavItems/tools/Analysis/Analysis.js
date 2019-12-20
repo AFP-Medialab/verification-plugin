@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {useSelector} from "react-redux";
 import {Paper} from "@material-ui/core";
 import TextField from "@material-ui/core/TextField";
@@ -14,12 +14,29 @@ import {useAnalysisWrapper} from "./Hooks/useAnalysisWrapper";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles"
 import {useParams} from 'react-router-dom'
 import Iframe from "react-iframe";
-import useFacebookHandler from "./Hooks/useFacebookHandler";
+import useGenerateApiUrl from "./Hooks/useGenerateApiUrl";
 import FacebookResults from "./Results/FacebookResults";
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/Analysis.tsv";
 
+function useTraceUpdate(props) {
+    const prev = useRef(props);
+    useEffect(() => {
+        const changedProps = Object.entries(props).reduce((ps, [k, v]) => {
+            if (prev.current[k] !== v) {
+                ps[k] = [prev.current[k], v];
+            }
+            return ps;
+        }, {});
+        if (Object.keys(changedProps).length > 0) {
+            console.log('Changed props:', changedProps);
+        }
+        prev.current = props;
+    });
+}
+
 const Analysis = () => {
+
     const {url} = useParams();
     const classes = useMyStyles();
     const keyword = useLoadLanguage("components/NavItems/tools/Analysis.tsv", tsv);
@@ -31,16 +48,20 @@ const Analysis = () => {
     const [input, setInput] = useState((resultUrl) ? resultUrl : "");
     const [submittedUrl, setSubmittedUrl] = useState(undefined);
     const [reprocess, setReprocess] = useState(false);
+
+    const [finalUrl, showFacebookIframe] = useGenerateApiUrl(submittedUrl, reprocess);
+    useAnalysisWrapper(finalUrl, submittedUrl);
+
     const reprocessToggle = () => {
         setReprocess(!reprocess);
     };
 
-    const [finalUrl, facebookToken, showFacebookIframe] = useFacebookHandler(submittedUrl);
-    useAnalysisWrapper(finalUrl, reprocess, facebookToken);
-
     const submitForm = () => {
-        setSubmittedUrl(input);
+        setSubmittedUrl(input.trim());
     };
+
+    console.log(resultData)
+
     useEffect(() => {
         if (url !== undefined) {
             const uri = decodeURIComponent(url);
@@ -50,13 +71,13 @@ const Analysis = () => {
     }, [url]);
 
     useEffect(() => {
-        //setSubmittedUrl(undefined);
-    }, [submittedUrl]);
+        setSubmittedUrl(undefined);
+    }, [finalUrl]);
 
     return (
         <div>
             <Paper className={classes.root}>
-                <CustomTile>{keyword("api_title")} </CustomTile>
+                <CustomTile text={keyword("api_title")}/>
                 <br/>
                 <TextField
                     id="standard-full-width"

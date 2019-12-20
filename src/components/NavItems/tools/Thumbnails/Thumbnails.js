@@ -118,7 +118,7 @@ const Thumbnails = () => {
     return (
         <div>
             <Paper className={classes.root}>
-                <CustomTile> {keyword("youtube_title")}  </CustomTile>
+                <CustomTile text={keyword("youtube_title")}/>
                 <br/>
                 <TextField
                     id="standard-full-width"

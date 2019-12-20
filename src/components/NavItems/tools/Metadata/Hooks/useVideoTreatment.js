@@ -12,7 +12,7 @@ const useVideoTreatment = (mediaUrl) => {
 
     useEffect(() => {
         const handleError = (error) => {
-            if (keyword(error) !== undefined)
+            if (keyword(error) !== "")
                 dispatch(setError((keyword(error))));
             else
                 dispatch(setError("Unknown error"));

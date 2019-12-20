@@ -67,6 +67,8 @@ import forensicIconOff from "./images/tools/forensic_logoOff.png"
 
 import twitterSnaIconOn from "./images/tools/twitter-sna-on.png"
 import twitterSnaIconOff from "./images/tools/twitter-sna-off.png"
+import useLoadLanguage from "../../Hooks/useLoadLanguage";
+import tsv from "../../LocalDictionary/components/NavBar.tsv";
 
 
 function a11yProps(index) {
@@ -96,13 +98,9 @@ const NavBar = (props) => {
         history.push("/app/tools/" + drawerItems[newValue].path)
     };
 
-    const dictionary = useSelector(state => state.dictionary);
-    const lang = useSelector(state => state.language);
     const error = useSelector(state => state.error);
+    const keyword = useLoadLanguage("components/NavBar.tsv", tsv);
 
-    const keyword = (key) => {
-        return (dictionary !== null) ? dictionary[lang][key] : "";
-    };
 
     const handleDrawerToggle = () => {
         setOpen(!open);
@@ -193,7 +191,7 @@ const NavBar = (props) => {
                 </Icon>,
             content: <Tutorial/>,
             path: "tutorial",
-            footer: <Footer content={"footer_tutorial"}/>
+            footer: <Footer type={"afp"}/>
         },
         {
             title: "navbar_classroom",
@@ -203,7 +201,7 @@ const NavBar = (props) => {
                 </Icon>,
             content: <ClassRoom/>,
             path: "classroom",
-            footer: <Footer content={"footer_classroom"}/>
+            footer: <Footer type={"afp"}/>
         },
         {
             title: "navbar_quiz",
@@ -213,7 +211,7 @@ const NavBar = (props) => {
                 </Icon>,
             content: <Interactive/>,
             path: "interactive",
-            footer: <Footer content={"footer_about"}/>
+            footer: <Footer type={"afp"}/>
         },
         {
             title: "navbar_about",
@@ -223,7 +221,7 @@ const NavBar = (props) => {
                 </Icon>,
             content: <About/>,
             path: "about",
-            footer: <Footer content={"footer_about"}/>
+            footer: <Footer type={"afp"}/>
         }
     ];
 

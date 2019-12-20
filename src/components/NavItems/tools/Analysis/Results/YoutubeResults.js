@@ -23,6 +23,8 @@ import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 import OnClickInfo from "../../../../Shared/OnClickInfo/OnClickInfo";
 import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Analysis.tsv";
+import TimeToLocalTime from "./TimeToLocalTime";
+import MyMap from "../../../../Shared/MyMap/MyMap";
 
 const YoutubeResults = (props) => {
     const classes = useMyStyles();
@@ -68,12 +70,16 @@ const YoutubeResults = (props) => {
             title: keyword("youtube_video_name2_5"),
             value: report["video"]["licensedContent"]
         },
+        {
+            title: keyword("youtube_video_name2_6"),
+            value: <TimeToLocalTime time={report["video"]["publishedAt"]}/>
+        }
     ];
 
     const sourceTable = [
         {
             title: keyword("youtube_channel_name_2"),
-            value: report["source"]["publishedAt"]
+            value: <TimeToLocalTime time={report["source"]["publishedAt"]}/>
         },
         {
             title: keyword("youtube_channel_name_3"),
@@ -87,7 +93,7 @@ const YoutubeResults = (props) => {
                 target="_blank">{report["source"]["url"]}</a>
         },
         {
-            title: "youtube_channel_name_5",
+            title: keyword("youtube_channel_name_5"),
             value: report["source"]["subscriberCount"]
         },
     ];
@@ -97,7 +103,7 @@ const YoutubeResults = (props) => {
             {
                 report !== null && report["thumbnails"] !== undefined &&
                 report["thumbnails"]["preferred"]["url"] &&
-                <Paper className={classes.root}>
+                <Paper className={classes.root} >
                     <CloseResult onClick={() => dispatch(cleanAnalysisState())}/>
                     <Typography variant={"h5"}>
                         {report["video"]["title"]}
@@ -116,7 +122,7 @@ const YoutubeResults = (props) => {
                     <Typography variant={"h6"}>
                         {keyword("youtube_video_name1_2")}
                     </Typography>
-                    <Typography variant="body2" color="textSecondary" component="p" className={classes.text}>
+                    <Typography variant="body2" component="p" className={classes.text}>
                         {
                             report["video"]["description"]
                         }
@@ -203,7 +209,6 @@ const YoutubeResults = (props) => {
                                     }
                                 </TableBody>
                             </Table>
-                            <Box m={2}/>
                             {
                                 verificationComments.length > 0 &&
                                 <ExpansionPanel expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
@@ -254,6 +259,17 @@ const YoutubeResults = (props) => {
                     }
                     <Box m={4}/>
                     {
+                        report.mentioned_locations &&
+                        report.mentioned_locations.detected_locations &&
+                        report.mentioned_locations.detected_locations.length > 0 &&
+                        <div>
+                        <MyMap locations={report.mentioned_locations.detected_locations}/>
+                        <Box m={4}/>
+                        </div>
+                    }
+
+
+                    {
                         thumbnails !== undefined &&
                         <div>
                             <Box m={4}/>
@@ -261,7 +277,7 @@ const YoutubeResults = (props) => {
                                 {keyword("navbar_thumbnails")}
                             </Typography>
                             <Box m={1}/>
-                            <OnClickInfo/>
+                            <OnClickInfo keyword={"keyframes_tip"}/>
                             <Box m={1}/>
                             <div className={classes.imagesRoot}>
                                 <GridList cellHeight={160} className={classes.gridList} cols={3}>

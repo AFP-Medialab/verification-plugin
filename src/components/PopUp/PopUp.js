@@ -3,6 +3,7 @@ import useMyStyles from "../Shared/MaterialUiStyles/useMyStyles";
 import {Typography} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import weVerifyLogo from "./images/logo-we-verify.png";
+import invidLogo from "./images/InVID-logo.svg";
 import ExpansionPanel from "@material-ui/core/ExpansionPanel";
 import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
@@ -12,20 +13,15 @@ import ImageGridList from "../Shared/ImageGridList/ImageGridList";
 import Link from "@material-ui/core/Link";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
-//import {useSelector} from "react-redux";
+import useLoadLanguage from "../../Hooks/useLoadLanguage";
+import tsv from "../../LocalDictionary/components/PopUp.tsv";
 
 const navigator = (window.browser) ? window.browser : window.chrome;
 
 
 const PopUp = () => {
     const classes = useMyStyles();
-    /*const dictionary = useSelector(state => state.dictionary);
-    const lang = useSelector(state => state.language);
-    const keyword = (key) => {
-        return (dictionary !== null) ? dictionary[lang][key] : "";
-    };
-    */
-
+    const keyword = useLoadLanguage("components/PopUp.tsv", tsv);
     const createScript = (tag, field) => {
         let script =
             "let array = [];" +
@@ -54,8 +50,6 @@ const PopUp = () => {
         navigator.tabs.executeScript({
             code: script
         }, (result) => {
-            console.log("result");
-            console.log(result);
             if (result) {
                 for (let url of result[0])
                     urlList.push(url);
@@ -84,20 +78,21 @@ const PopUp = () => {
 
     return (
         <div className={classes.popUp}>
-            <Grid justify={"center"}
-                  spacing={3} alignItems={"center"}>
+            <Grid>
                 <Grid item>
+                    <img src={invidLogo} alt={invidLogo} style={{width: "100px"}}/>
                     <img src={weVerifyLogo} alt={weVerifyLogo} style={{width: "100px"}}/>
                 </Grid>
                 <Grid item>
                     <Button variant="outlined" color="primary" fullWidth={true} width={"100%"} onClick={
                         () => window.open("/popup.html#/app/tools/all")
                     }>
-                        Open WebSite (add tsv)
+                        {
+                            keyword("open_website")
+                        }
                     </Button>
                 </Grid>
             </Grid>
-
 
             <ExpansionPanel onClick={videoClick}>
                 <ExpansionPanelSummary
@@ -105,7 +100,11 @@ const PopUp = () => {
                     aria-controls="panel1a-content"
                     id="panel1a-header"
                 >
-                    <Typography className={classes.heading}>Video Urls (add tsv)</Typography>
+                    <Typography className={classes.heading}>
+                        {
+                            keyword("video_urls")
+                        }
+                    </Typography>
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails>
                     <List>
@@ -119,7 +118,9 @@ const PopUp = () => {
                                                 <Grid item>
                                                     <Button variant="outlined" size="small" color={"primary"}
                                                             onClick={() => copyToClipBoard(url)}>
-                                                        Copy
+                                                        {
+                                                            keyword("copy")
+                                                        }
                                                     </Button>
                                                 </Grid>
                                                 <Grid item>
@@ -132,7 +133,7 @@ const PopUp = () => {
                                     )
                                 })
                                 :
-                                "No video found (add tsv)"
+                                keyword("no_video_found")
                         }
                     </List>
                 </ExpansionPanelDetails>
@@ -143,14 +144,18 @@ const PopUp = () => {
                     aria-controls="panel2a-content"
                     id="panel2a-header"
                 >
-                    <Typography className={classes.heading}>Images Urls (add tsv)</Typography>
+                    <Typography className={classes.heading}>
+                        {
+                            keyword("images_url")
+                        }
+                    </Typography>
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails p={0}>
                     {
                         (imageList && imageList.length > 0) ?
                             <ImageGridList list={imageList}/>
                             :
-                            "No images found (add tsv)"
+                            keyword("no_images")
                     }
                 </ExpansionPanelDetails>
             </ExpansionPanel>

@@ -102,7 +102,7 @@ const TwitterAdvancedSearch = () => {
 
     return (
         <Paper className={classes.root}>
-            <CustomTile> {keyword("twitter_title")}  </CustomTile>
+            <CustomTile text={keyword("twitter_title")}/>
             <Box m={2}>
                 {
                     largeInputList.map((value, key) => {
