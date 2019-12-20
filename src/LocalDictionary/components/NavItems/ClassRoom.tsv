@@ -1,0 +1,23 @@
+	en	fr	es
+classroom_title	Classroom	Salle de cours	Aula
+classroom_title_1	Five ways to spot fake news (Quartz)	C'est quoi une fake news ? (RTS)	¿Qué hacemos con tanta noticia falsa?
+classroom_url_1	https://www.youtube.com/embed/y7eCB2F89K8?rel=0	https://www.rts.ch/play/tv/popupvideoplayer?id=9965541	https://www.youtube.com/embed/-FI1Tv-R7ZA?rel=0
+classroom_title_2	Helping students fighting disinformation	Comment vérifier une vidéo sur Facebook (France 24)	Guía para identificar noticias falsas
+classroom_url_2	https://www.youtube.com/embed/xf8mjbVRqao?rel=0	https://video.twimg.com/amplify_video/1055750649462308866/vid/640x360/yqQIZj-jHZRxl0i2.mp4	https://www.youtube.com/embed/Y42V_qjptLA?rel=0
+classroom_title_3	How to spot fake news (Factcheck.org)	C'est quoi une fake news ? (1 jour, 1 question)	¿Cómo identificar noticias falsas en redes sociales para no confundir a la sociedad?
+classroom_url_3	https://www.youtube.com/embed/AkwWcHekMdo?rel=0	https://www.youtube.com/embed/pAa80STbngQ?rel=0	https://www.youtube.com/embed/WsbS4S5ehaU?rel=0
+classroom_title_4	How disinformation works (WIRED)	Comment se répand une fausse information? (RTBF)	Conoce las noticias falsas que marcaron la agenda de este 2018
+classroom_url_4	https://www.youtube.com/embed/frjITitjisY?rel=0	https://www.rtbf.be/embed/m?id=2149801&autoplay=0	https://www.youtube.com/embed/jDcI3akPjCE?rel=0
+classroom_title_5	Figthing disinformation in the classroom (CBC News)	5 conseils pour débusquer les fakes news (Kombini)	El negocio de las noticias falsas
+classroom_url_5	https://www.youtube.com/embed/MeMp_E5dl4M?rel=0	https://www.youtube.com/embed/-5BoejLNc9A?rel=0	https://www.youtube.com/embed/b78JI7-pEVY?rel=0
+remote_resources_title	Educational Resources	Ressources pédagogiques	Recursos educativos
+user_resources_title	Your educational content	Votre contenu pédagogique	Tu contenido educativo
+display	Display	Afficher	Visualización
+user_resources_intro	This section allows you to broadcast your own lessons stored on Internet	Cette section vous permet de diffuser vos propres cours stockés sur Internet.	Esta sección le permite transmitir sus propios videos de Internet.
+user_resources_intro_remote	Enter the url of a YouTube, Twitter, Facebook public video or an website (see examples below):	Indiquez l'url d'une vidéo YouTube, Twitter, Facebook (public) ou un site web (voir les exemples ci-dessous):	Ponga la url de un video de YouTube, Twitter, Facebook (público) o un sitio web (ver ejemplos abajo):
+api_input	Copy and paste a Youtube, Facebook or Twitter url	Copier et coller une adresse YouTube, Facebook ou Twitter	Copiar y pegar un enlace de YouTube, Facebook o Twitter
+close	Close	Fermer	Cerrar
+examples	Examples :	Exemples :	Ejemplos :
+youtube_example	Youtube: https://www.youtube.com/embed/5wRv8boqIEc	Youtube: https://www.youtube.com/embed/5wRv8boqIEc	Youtube: https://www.youtube.com/embed/5wRv8boqIEc
+twitter_example	Twitter: https://video.twimg.com/amplify_video/1055750649462308866/vid/640x360/yqQIZj-jHZRxl0i2.mp4	Twitter: https://video.twimg.com/amplify_video/1055750649462308866/vid/640x360/yqQIZj-jHZRxl0i2.mp4	Twitter: https://video.twimg.com/amplify_video/1055750649462308866/vid/640x360/yqQIZj-jHZRxl0i2.mp4
+website_example	Website: https://www.invid-project.eu/tools-and-services/invid-verification-plugin/	Site web: https://www.invid-project.eu/tools-and-services/invid-verification-plugin/	Sitio web: https://www.invid-project.eu/tools-and-services/invid-verification-plugin/

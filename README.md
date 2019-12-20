@@ -29,6 +29,8 @@ To setup this project you need to run:
     REACT_APP_KEYFRAME_TOKEN=<yourKeyframeToken>
     REACT_APP_MY_WEB_HOOK_URL=<yourSlackAppUrlHook>
     REACT_APP_GOOGLE_ANALYTICS_KEY=<yourGoogleAnaliticsToken>
+    REACT_APP_MAP_TOKEN=pk.eyJ1IjoidGVlYm9sdDE2IiwiYSI6ImNrNGNwYXJjZjAwN2MzbXF0ZXJmeWcwaXkifQ.X_WXzcFosq5MLva9s3gTIA
+
 
 ####Then you need to load the extension in your browser: 
 

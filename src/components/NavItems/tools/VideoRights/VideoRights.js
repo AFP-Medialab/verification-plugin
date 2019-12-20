@@ -32,7 +32,7 @@ const VideoRights = () => {
     return (
         <div>
             <Paper className={classes.root}>
-                <CustomTile> {keyword("copyright_title")}  </CustomTile>
+                <CustomTile text={keyword("copyright_title")}/>
                 <br/>
                 <TextField
                     value={input}

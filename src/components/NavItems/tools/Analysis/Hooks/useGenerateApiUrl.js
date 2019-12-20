@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
 
-const useFacebookHandler = (url) => {
+const useGenerateApiUrl = (url, reprocess) => {
     const [finalUrl, setFinalUrl] = useState(undefined);
     const [facebookToken, setFacebookToken] = useState(null);
     const [showFacebookIframe, setFacebookIframe] = useState(false);
@@ -25,22 +25,32 @@ const useFacebookHandler = (url) => {
     useEffect(() => {
         if (!url || url === "") {
             setFinalUrl(undefined);
-            //setFacebookIframe(false);
+            setFacebookIframe(false);
             return;
         }
+
+        let analysis_url = "http://mever.iti.gr/caa/api/v4/videos/jobs?url=" + url.replace("&", "%26");
+        if (reprocess)
+            analysis_url += "&reprocess=1";
+
         if (url && url.startsWith("https://www.facebook.com")) {
-            if (facebookToken === null)
+            if (facebookToken === null) {
                 setFacebookIframe(true);
-            else
+                return;
+            }
+            else {
+                analysis_url += "&fb_access_token="+ facebookToken;
                 setFacebookIframe(false);
+                setFinalUrl(analysis_url);
+            }
         }
         else{
-            setFacebookIframe(false)
+            setFacebookIframe(false);
+            setFinalUrl(analysis_url);
         }
-        setFinalUrl(url);
-    }, [url, facebookToken]);
+    }, [url, facebookToken, reprocess]);
 
 
-    return [finalUrl, facebookToken, showFacebookIframe]
+    return [finalUrl, showFacebookIframe]
 };
-export default useFacebookHandler;
+export default useGenerateApiUrl;

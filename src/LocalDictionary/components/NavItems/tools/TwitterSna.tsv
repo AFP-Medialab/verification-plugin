@@ -1,0 +1,68 @@
+	en	fr	es
+twitterStatsErrorMessage	Please fill the required fields (＊)	Veuillez remplir les champs requis (＊)	Rellene los campos requeridos (＊)
+twitter_sna_title	Twitter Social network analysis	Analyse des réseaux sociaux sur Twitter	Twitter Análisis de redes sociales
+twitter_sna_search	＊Keyword or #	＊Mot clé ou #	＊Palabra clave o #
+twitter_sna_not	Words to exclude in the query	Mots à exclure de la requête	Palabras a excluir en la consulta
+twitter_sna_user	Tweeted by (Twitter account name)	Tweeté par (Nom de compte Twitter)	Twiteado por (Nombre de una cuenta de Twitter)
+twitter_sna_from_date	Since	Depuis	Desde
+twitter_sna_until_date	Until	Jusqu'à	Hasta
+twitter_local_time	Local time	Heure locale	Hora local
+twitter_sna_gmt	GMT	GMT	GMT
+twitter_sna_media	Filters :	Filtres :	Filtros :
+twitterStats_media_none	none	aucune	ninguna
+twitterStats_media_images	pictures	images	fotos
+twitterStats_media_videos	videos	vidéos	vídeo
+twitterStats_media_both	both	les deux	tanto
+twitterStats_media_both	both	les deux	tanto
+twitterStats_verified_no	no	non	no
+twitterStats_verified_yes	yes	oui	si
+lang_choices	Filter on language :	Filtre de langue :	Filtro de lengua :
+lang_all	none	aucun	ninguno
+lang_fr	French	Français	Francés
+lang_en	English	Anglais	Inglés
+lang_es	Spanish	Espagnol	Español
+lang_ar	Arab	Arabe	Árabe
+lang_de	German	Allemand	Alemán
+lang_it	Italian	Italien	Italiano
+lang_id	Indonesian	Indonésien	Indonesio
+lang_pt	Portuguese	Portugais	Portugués
+lang_ko	Korean	Coréen	Coreano
+lang_tr	Turkish	Turc	Turco
+lang_ru	Russian	Russe	Ruso
+lang_nl	Dutch	Néerlandais	Holandés
+lang_hi	Hindi	Indou	Hindú
+lang_no	Norwegian	Norvégien	Noruego
+lang_sv	Swedish	Suédois	Sueco
+lang_fi	Finnish	Finlandais	Finlandés
+lang_da	Danish	Danois	Danés
+lang_pl	Polish	Polonais	Polaco
+lang_hu	Hungarian	Hongrois	Húngaro
+lang_fa	Farsi	Persan	Farsi
+lang_he	Hebrew	Hébreu	Hebreo
+lang_ur	Urdu	Ourdou	Urdu
+lang_th	Thai	Thaï	Tailandés
+button_submit	Submit	Envoyer	Enviar
+default_sna_error	Twitter analysis interrupted due to unknown cause. Please re-submit the video.	L'analyse de Twitter a été interrompue dû à une cause inconnue. Veuillez ré-envoyer la vidéo.	El análisis de Twitter se ha interrumpido por una causa inconocida. Inténtalo con otro video.
+twitterSnaErrorMessage	An error occurred while processing tweets	Une erreur s'est produite lors du traitement des tweets	Se produjo un error en el procesamiento de tweets
+top_users_pie_chart_title	Most active users	Utilisateurs les plus actifs	Usuarios más activos
+user_time_chart_title	Propagation timeline	Frise chronologique de propagation	Línea de tiempo de propagación
+hashtag_cloud_chart_title	Most associated hashtags	Hashtags les plus associés	Hashtags más Asociados
+retweets_cloud_chart_title	Most retweeted users	Utilisateurs les plus retweetés	Usuarios más retweeteados
+likes_cloud_chart_title	Most liked users	Utilisateurs les plus likés	Usuarios más retweeteados
+top_words_cloud_chart_title	Most used words in tweets	Mots les plus utilisés dans les tweets	Palabras más utilizadas en tweets
+tweetCounter_title	Tweets number	Nombre de tweets	Número de Tweet
+elastic_url	Url	Url	Url
+elastic_count	Count	Compte	Recuento
+sna_result_username	Username	Nom d'utilisateur	Nombre de usuario
+sna_result_date	Date	Date	Fetcha
+sna_result_tweet	Tweet	Tweet	Tweet
+sna_result_retweet_nb	Retweet number	Nombre de retweets	Candidad de retweet
+sna_result_like_nb	Like number	Nombre de likes	Candidad de ''me gusta''
+sna_result_hide	Hide	Ferme	Cerca
+sna_result_download	Download	Télécharger 	Escarga
+sna_result_slected_tweets	Selected Tweets	Tweets selectionnés	Tweets selectionados
+sna_result_url_in_tweets	Urls in tweets	Urls dans les tweets	Urls en tweets
+sna_result_go_to	Go to url	Ouvrir le lien	Ir a la pagina
+sna_result_go_to_tweet	Go to tweet	Ouvrir le tweet	Ir a tweet
+sna_result_download_png	Download as PNG	Télécharger en tant que PNG	Descargar como PNG
+sna_result_download_svg	Download as SVG	Télécharger en tant que SVG	Descargar como SVG

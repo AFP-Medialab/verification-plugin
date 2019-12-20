@@ -13,7 +13,7 @@ const useVideoRightsTreatment = (url) => {
 
     useEffect(() => {
         const handleError = (error) => {
-            if (keyword(error) !== undefined)
+            if (keyword(error) !== "")
                 dispatch(setError((keyword(error))));
             else
                 dispatch(setError(keyword("keyframes_error_default")));
