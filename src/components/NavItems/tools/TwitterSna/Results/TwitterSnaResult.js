@@ -37,6 +37,7 @@ export default function TwitterSnaResult(props) {
 
     const [histoTweets, setHistoTweets] = useState(null);
     const [cloudTweets, setCloudTweets] = useState(null);
+    const [heatMapTweets, setheatMapTweets] = useState(null);
     const [pieCharts0, setPieCharts0] = useState(null);
     const [pieCharts1, setPieCharts1] = useState(null);
     const [pieCharts2, setPieCharts2] = useState(null);
@@ -62,10 +63,12 @@ export default function TwitterSnaResult(props) {
     };
     const pieCharts = [pieCharts0, pieCharts1, pieCharts2, pieCharts3];
 
+    //Set the file name for wordsCloud export
     useEffect(() => {
         setfilesNames('WordCloud_' + props.request.keywordList.join("&") + "_" + props.request.from + "_" + props.request.until);
     }, [JSON.stringify(props.request), props.request]);
 
+    //Set result 
     useEffect(() => {
 
         setResult(props.result);
@@ -74,16 +77,17 @@ export default function TwitterSnaResult(props) {
 
     }, [JSON.stringify(props.result), props.result]);
 
-
-
+    //Initialize tweets arrays
     useEffect(() => {
         setHistoTweets(null);
         setCloudTweets(null);
+        setheatMapTweets(null);
         setPieCharts0(null);
         setPieCharts1(null);
         setPieCharts2(null);
         setPieCharts3(null);
     }, [JSON.stringify(props.request), props.request])
+
 
     const displayTweetsOfWord = (word, callback) => {
         
@@ -511,6 +515,63 @@ export default function TwitterSnaResult(props) {
                         </Box>
                     </ExpansionPanelDetails>
                 </ExpansionPanel>
+            }
+                 {
+                result.heatMap &&
+                            <ExpansionPanel>
+                                <ExpansionPanelSummary
+                                    expandIcon={<ExpandMoreIcon />}
+                                >
+                                    <Typography className={classes.heading}>{keyword('sna_result_heatMap') + "ADD TSV"}</Typography>
+                                </ExpansionPanelSummary>
+                                <ExpansionPanelDetails>
+                                    <Box alignItems="center" justifyContent="center" width={"100%"}>
+                                        <Plot
+                                         style={{ width: '100%', height: "450px" }}
+                                         data={result.heatMap.json}
+                                         layout={result.heatMap.layout}
+                                         config={result.heatMap.config}
+                                         onClick={(e) => onHistogramClick(e)}
+                                        />
+                                        {
+                                            heatMapTweets &&
+                                            <div>
+                                                <Grid container justify="space-between" spacing={2}
+                                                    alignContent={"center"}>
+                                                    <Grid item>
+                                                        <Button
+                                                            variant={"contained"}
+                                                            color={"secondary"}
+                                                            onClick={() => setheatMapTweets(null)}>
+                                                            {
+                                                                keyword('sna_result_hide')
+                                                            }
+                                                        </Button>
+                                                    </Grid>
+                                                    <Grid item>
+                                                        <Button
+                                                            variant={"contained"}
+                                                            color={"primary"}
+                                                            onClick={() => downloadClick(heatMapTweets.csvArr, "NAME OF FILE")}>
+                                                            {
+                                                                keyword('sna_result_download')
+                                                            }
+                                                        </Button>
+                                                    </Grid>
+                                                </Grid>
+                                                <Box m={2} />
+                                                <CustomTable title={keyword("sna_result_slected_tweets")}
+                                                    colums={heatMapTweets.columns}
+                                                    data={heatMapTweets.data}
+                                                    actions={goToTweetAction}
+                                                />
+                                            </div>
+                                        }
+                                    </Box>
+                                </ExpansionPanelDetails>
+                            </ExpansionPanel>
+                        
+                })
             }
             {
                 result.pieCharts &&

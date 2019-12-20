@@ -612,5 +612,6 @@ function getPlotlyJsonHisto(json, specificGet) {
 
 //To access tweets collection
 export function getTweets() {
+    console.log(json);
     return json
 }
