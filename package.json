@@ -22,6 +22,7 @@
     "querystring": "^0.2.0",
     "react": "^16.10.2",
     "react-browser-extension-scripts": "0.1.2",
+    "react-csv": "^1.1.2",
     "react-d3-library": "^1.1.8",
     "react-datetime": "^2.16.3",
     "react-dom": "^16.10.2",
@@ -36,6 +37,7 @@
     "react-router-dom": "^5.1.2",
     "react-slack-feedback": "^2.1.0",
     "redux": "^4.0.4",
+    "save-svg-as-png": "^1.4.14",
     "styled-components": "^4.4.1",
     "tui-image-editor": "^3.7.1"
   },
