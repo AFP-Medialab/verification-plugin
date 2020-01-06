@@ -5,7 +5,6 @@ import Box from "@material-ui/core/Box";
 import {useSelector} from "react-redux";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
-import 'react-image-crop/dist/ReactCrop.css';
 import 'tui-image-editor/dist/tui-image-editor.css'
 import FolderOpenIcon from '@material-ui/icons/FolderOpen';
 import Typography from "@material-ui/core/Typography";
