@@ -29,7 +29,7 @@ function getNbTweetsInHour(date, bucket)
     var nbTweets = 0;
     var day = date.toLocaleDateString();
     var hour = date.getHours();
-    //TODO
+    
     bucket.forEach(tweet => {
         var tweetDate = new Date(tweet._source.date);
         var TweetDay = tweetDate.toLocaleDateString();
@@ -37,7 +37,6 @@ function getNbTweetsInHour(date, bucket)
 
         if (day === TweetDay && tweetHour == hour)
             nbTweets++;
-    //    console.log(tweetDate);
     });
     return nbTweets;
 }
@@ -79,6 +78,8 @@ const useTwitterSnaRequest = (request) => {
 
 
                 let tweetWordsmap = hits[i]._source.wit;
+                if (tweetWordsmap === null)
+                    return [];
                 var arr = Array.from(tweetWordsmap);
 
                 arr.forEach(word => {
@@ -233,18 +234,15 @@ const useTwitterSnaRequest = (request) => {
             result.tweetCount.like = responseArrayOf7[5].likes.toString().replace(/(?=(\d{3})+(?!\d))/g, " ");
             result.tweets = responseArrayOf7[5].tweets;
             result.histogram = createHistogram(data, responseArrayOf7[6], givenFrom, givenUntil);
-            result.heatMap = createHeatMap(data);
             if (final) {
                 result.cloudChart = createWordCloud(responseArrayOf7[7]);
+                createHeatMap(request, responseArrayOf7[5].tweets).then(heatMap => result.heatMap = heatMap);
             }
             dispatch(setTwitterSnaResult(request, result, false, true))
         };
 
-        function createHeatMap(param)
+        async function createHeatMap(entries, hits)
         {
-            let entries = makeEntries(param);
-            var hits = getTweets();
-            console.log(hits);
             var firstDate = new Date(entries.from);
             firstDate.setHours(1);
             firstDate.setMinutes(0);
@@ -254,38 +252,43 @@ const useTwitterSnaRequest = (request) => {
             lastDate.setHours(1);
             lastDate.setMinutes(0);
             lastDate.setSeconds(0);
-            var datesX = [firstArrElt];
+            var dates = [firstArrElt];
             while (firstDate.getTime() !== lastDate.getTime())
             {
                 var newDate = new Date(firstDate); 
                 firstDate.setDate(firstDate.getDate() + 1);
                 newDate.setDate(newDate.getDate() + 1);
-            // console.log(firstDate);
-                datesX = [...datesX, newDate]
+                dates = [...dates, newDate]
             }
-    
-        var hoursY = ['12:00:00 AM', '1:00:00 AM', '2:00:00 AM', '3:00:00 AM', '4:00:00 AM', '5:00:00 AM', '6:00:00 AM', '7:00:00 AM', '8:00:00 AM', '9:00:00 AM', '10:00:00 AM', '11:00:00 AM', '12:00:00 PM','1:00:00 PM', '2:00:00 PM', '3:00:00 PM', '4:00:00 PM', '5:00:00 PM', '6:00:00 PM', '7:00:00 PM', '8:00:00 PM', '9:00:00 PM', '10:00:00 PM', '11:00:00 PM'];
-           
-        var nbTweetsZ = [];
-        var i = 0;
-        
-        hoursY.forEach(time => {
-            nbTweetsZ.push([])
-            datesX.forEach(date => {
-              //  console.log(date);
-                date.setHours(i);
-                nbTweetsZ[i].push(getNbTweetsInHour(date, hits));
+            var hoursY = ['12:00:00 AM', '1:00:00 AM', '2:00:00 AM', '3:00:00 AM', '4:00:00 AM', '5:00:00 AM', '6:00:00 AM', '7:00:00 AM', '8:00:00 AM', '9:00:00 AM', '10:00:00 AM', '11:00:00 AM', '12:00:00 PM','1:00:00 PM', '2:00:00 PM', '3:00:00 PM', '4:00:00 PM', '5:00:00 PM', '6:00:00 PM', '7:00:00 PM', '8:00:00 PM', '9:00:00 PM', '10:00:00 PM', '11:00:00 PM'];
+            
+            var nbTweetsZ = [];
+            var i = 0;
+            let datesX = [];
+            dates.forEach(date => {
+                hoursY.forEach(time => {
+                    nbTweetsZ.push([])
+                
+                    date.setHours(i);
+                    nbTweetsZ[i].push(getNbTweetsInHour(date, hits));
+
+                    i++;
+                    });
+                i = 0;
+                datesX = [...datesX, date.toDateString()];
+                console.log(date);
             });
-            i++;
-        });
-        console.log(nbTweetsZ);
-        return [{
-            z: nbTweetsZ,
-            x: datesX,
-            y: hoursY,
-            colorscale: 'Reds',
-            type: 'heatmap'
-          }];
+
+            console.log(datesX)
+            console.log("FINISHED Building heatMap");
+            return [{
+                z: nbTweetsZ,
+                x: datesX,
+                y: hoursY,
+                colorscale: 'Reds',
+                type: 'heatmap'
+            }];
+        
         }
 
 
