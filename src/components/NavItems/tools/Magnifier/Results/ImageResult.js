@@ -3,9 +3,7 @@ import React from "react";
 import Loop from "./Loop";
 import Box from "@material-ui/core/Box";
 import {useDispatch, useSelector} from "react-redux";
-import Button from "@material-ui/core/Button";
-import 'react-image-crop/dist/ReactCrop.css';
-import 'tui-image-editor/dist/tui-image-editor.css'
+import Button from "@material-ui/core/Button";import 'tui-image-editor/dist/tui-image-editor.css'
 import ImageEditor from '@toast-ui/react-image-editor'
 import Fade from '@material-ui/core/Fade';
 import Modal from "@material-ui/core/Modal";

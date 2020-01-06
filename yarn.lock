@@ -4157,7 +4157,7 @@ clone@^1.0.2:
   resolved "https://registry.yarnpkg.com/clone/-/clone-1.0.4.tgz#da309cc263df15994c688ca902179ca3c7cd7c7e"
   integrity sha1-2jCcwmPfFZlMaIypAheco8fNfH4=
 
-clsx@^1.0.2, clsx@^1.0.4:
+clsx@^1.0.2:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/clsx/-/clsx-1.0.4.tgz#0c0171f6d5cb2fe83848463c15fcc26b4df8c2ec"
   integrity sha512-1mQ557MIZTrL/140j+JVdRM6e31/OA4vTYxXgqIIZlndyfjHpyawKZia1Im05Vp9BWmImkcNrNtFYQMyFcgJDg==
@@ -4573,7 +4573,7 @@ core-js@^2.4.0, core-js@^2.5.0, core-js@^2.6.5:
   resolved "https://registry.yarnpkg.com/core-js/-/core-js-2.6.10.tgz#8a5b8391f8cc7013da703411ce5b585706300d7f"
   integrity sha512-I39t74+4t+zau64EN1fE5v2W31Adtc/REhzWN+gWRRXg6WH5qAsZm62DHpQ1+Yhe4047T55jvzz7MUqF/dBBlA==
 
-core-js@^3.4.1, core-js@^3.4.2:
+core-js@^3.4.1:
   version "3.4.7"
   resolved "https://registry.yarnpkg.com/core-js/-/core-js-3.4.7.tgz#57c35937da80fe494fbc3adcf9cf3dc00eb86b34"
   integrity sha512-qaPVGw30J1wQ0GR3GvoPqlGf9GZfKKF4kFC7kiHlcsPTqH3txrs9crCp3ZiMAXuSenhz89Jnl4GZs/67S5VOSg==
@@ -11909,11 +11909,6 @@ pify@^4.0.1:
   resolved "https://registry.yarnpkg.com/pify/-/pify-4.0.1.tgz#4b2cd25c50d598735c50292224fd8c6df41e3231"
   integrity sha512-uB80kBFb/tfd68bVleG9T5GGsGPjJrLAUpR5PZIrhBnIaRTQRjqdJSsIKkOP6OAIFbj7GOrcudc5pNjZ+geV2g==
 
-pigeon-marker@^0.3.4:
-  version "0.3.4"
-  resolved "https://registry.yarnpkg.com/pigeon-marker/-/pigeon-marker-0.3.4.tgz#bd00dd15a4e7622a77dc43fb746e256af5fa5f47"
-  integrity sha512-6sQoSI8Mii7eWWz3TorssbNmptVoP4heKMDt27AeU8I//MFQfQZS6JfCmW3zXF4a6dk4uisr4m26akUYSblfnQ==
-
 pinkie-promise@^2.0.0:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/pinkie-promise/-/pinkie-promise-2.0.1.tgz#2135d6dfa7a358c069ac9b178776288228450ffa"
@@ -13314,15 +13309,6 @@ react-iframe@^1.8.0:
   integrity sha512-NYi89+rEqREwQxW9sDf+akh6/dtwWd3bOjByoVEIQ7SicOxVawRMer3pLdWjFaHXpuxTB9NqobPf/Ohj2iAKkg==
   dependencies:
     object-assign "^4.1.1"
-
-react-image-crop@^8.4.0:
-  version "8.4.2"
-  resolved "https://registry.yarnpkg.com/react-image-crop/-/react-image-crop-8.4.2.tgz#93573d45160277661c192d6b483e349337b4e5bc"
-  integrity sha512-JSi/L7fxCeipW481rhWnXpvluIns9VCE6K+hImJK48rldge7l1/5eMyRuXa1W/BJLQh5Z3ynCEsUHHWYJ6NEnQ==
-  dependencies:
-    clsx "^1.0.4"
-    core-js "^3.4.2"
-    prop-types "^15.7.2"
 
 react-image-lightbox@^5.1.1:
   version "5.1.1"
