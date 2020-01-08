@@ -103,6 +103,7 @@ const TwitterSna = () => {
         if (bannedWords.trim() !== "")
             trimedBannedWords = removeQuotes(bannedWords.trim().match(/("[^"]+"|[^"\s]+)/g));
 
+            console.log(since);
         const newFrom = (localTime === "false") ? convertToGMT(since) : since;
         const newUntil = (localTime === "false") ? convertToGMT(until) : until;
 
@@ -111,8 +112,8 @@ const TwitterSna = () => {
             "bannedWords": trimedBannedWords,
             "lang": (langInput === "lang_all") ? null : langInput.replace("lang_", ""),
             "userList": stringToList(usersInput),
-            "from": dateFormat(newFrom, "yyyy-mm-dd hh:MM:ss"),
-            "until": dateFormat(newUntil, "yyyy-mm-dd hh:MM:ss"),
+            "from": dateFormat(newFrom, "yyyy-mm-dd HH:MM:ss"),
+            "until": dateFormat(newUntil, "yyyy-mm-dd HH:MM:ss"),
             "verified": verifiedUsers === "true",
             "media": (filters === "none") ? null : filters,
             "retweetsHandling": null
@@ -145,7 +146,7 @@ const TwitterSna = () => {
 
     const handleUntilDateChange = (date) => {
         setUntilError(date === null);
-        if (since && date <= since)
+        if (since && date < since)
             setUntilError(true);
         setUntil(date);
     };

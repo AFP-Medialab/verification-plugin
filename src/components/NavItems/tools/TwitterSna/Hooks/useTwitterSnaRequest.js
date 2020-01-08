@@ -345,25 +345,27 @@ const useTwitterSnaRequest = (request) => {
             axios.get(TwintWrapperUrl + /status/ + sessionId)
                 .then(response => {
                     console.log(response.data);
-                    if (response.data.status === "Error")
-                        handleErrors("twitterSnaErrorMessage");
-                    else if (response.data.status === "Done")
-                    {
-                        lastRenderCall(sessionId);
-                        dispatch(setTwitterSnaLoadingMessage(""));
-                    }
-                    else if (response.data.status === "CountingWords")
-                    {
-                        dispatch(setTwitterSnaLoadingMessage("Counting Words ADD TSV"));
-                        getResultUntilsDone(sessionId);
-                    }
-                    else {
-                        generateGraph(response.data, false).then(() => {
-                            setTimeout(() => getResultUntilsDone(sessionId), 5000)
+                    generateGraph(response.data, false).then(() => {
+                        if (response.data.status === "Error")
+                            handleErrors("twitterSnaErrorMessage");
+                        else if (response.data.status === "Done")
+                        {
+                            lastRenderCall(sessionId);
+                            dispatch(setTwitterSnaLoadingMessage(""));
+                        }
+                        else if (response.data.status === "CountingWords")
+                        {
+                            dispatch(setTwitterSnaLoadingMessage("Counting Words ADD TSV"));
+                            setTimeout(() => getResultUntilsDone(sessionId), 3000);
+                        }
+                        else {
+                            generateGraph(response.data, false).then(() => {
+                                setTimeout(() => getResultUntilsDone(sessionId), 5000)
 
-                            dispatch(setTwitterSnaLoadingMessage("Fetching Tweets ADD TSV"));
-                        });
-                    }
+                                dispatch(setTwitterSnaLoadingMessage("Fetching Tweets ADD TSV"));
+                            });
+                        }
+                    })
                 })
                 .catch(e => handleErrors(e))
         };
