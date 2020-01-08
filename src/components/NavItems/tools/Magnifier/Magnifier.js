@@ -11,6 +11,7 @@ import {setMagnifierResult} from "../../../../redux/actions/tools/magnifierActio
 import {setError} from "../../../../redux/actions/errorActions";
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/Magnifier.tsv";
+import {submissionEvent} from "../../../Shared/GoogleAnalytics/GoogleAnalytics";
 
 const Magnifier = () => {
     const {url} = useParams();
@@ -32,6 +33,7 @@ const Magnifier = () => {
 
 
     const submitUrl = (src) => {
+        submissionEvent(src);
         let img = new Image();
         img.onload = () => {
             let canvas = document.createElement('canvas');

@@ -19,6 +19,7 @@ import useVideoTreatment from "./Hooks/useVideoTreatment";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/Metadata.tsv";
+import {submissionEvent} from "../../../Shared/GoogleAnalytics/GoogleAnalytics";
 
 const Metadata = () => {
     const classes = useMyStyles();
@@ -37,6 +38,7 @@ const Metadata = () => {
 
     const submitUrl = () => {
         if (input) {
+            submissionEvent(input);
             if (radioImage) {
                 setImageurl(input);
             } else {

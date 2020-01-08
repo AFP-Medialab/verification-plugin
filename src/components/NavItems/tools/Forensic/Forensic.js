@@ -14,6 +14,7 @@ import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import {useParams} from 'react-router-dom'
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/Forensic.tsv";
+import {submissionEvent} from "../../../Shared/GoogleAnalytics/GoogleAnalytics";
 
 const Forensic = () => {
     const {url} = useParams();
@@ -32,6 +33,7 @@ const Forensic = () => {
 
     const submitUrl = () => {
         if (input && input !== ""){
+            submissionEvent(input);
             setImage(input);
         }
     };

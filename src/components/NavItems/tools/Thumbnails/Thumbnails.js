@@ -20,6 +20,7 @@ import Checkbox from "@material-ui/core/Checkbox";
 import FormGroup from "@material-ui/core/FormGroup";
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/Thumbnails.tsv";
+import {submissionEvent} from "../../../Shared/GoogleAnalytics/GoogleAnalytics";
 
 const Thumbnails = () => {
     const classes = useMyStyles();
@@ -99,6 +100,7 @@ const Thumbnails = () => {
     const submitForm = () => {
         let url = input.value.replace("?rel=0", "");
         if (url !== null && url !== "" && isYtUrl(url)) {
+            submissionEvent(url);
             dispatch(setThumbnailsResult(url, get_images(url), false, false));
         } else
             dispatch(setError("Please use a valid Youtube Url (add to tsv)"));
