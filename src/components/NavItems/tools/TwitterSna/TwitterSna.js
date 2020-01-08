@@ -25,6 +25,7 @@ import {replaceAll} from "../TwitterAdvancedSearch/createUrl";
 import DateTimePicker from "../../../Shared/DateTimePicker/DateTimePicker";
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/TwitterSna.tsv";
+import Typography from "@material-ui/core/Typography";
 
 const TwitterSna = () => {
     const classes = useMyStyles();
@@ -35,6 +36,8 @@ const TwitterSna = () => {
     const reduxResult = useSelector(state => state.twitterSna.result);
 
     const isLoading = useSelector(state => state.twitterSna.loading);
+    const loadingMessage = useSelector(state => state.twitterSna.loadingMessage);
+
     const dispatch = useDispatch();
 
     const [keyWords, setKeywords] = useState(
@@ -375,6 +378,8 @@ const TwitterSna = () => {
                     {keyword("button_submit")}
                 </Button>
                 <Box m={2}/>
+
+                <Typography>{loadingMessage}</Typography>
                 <LinearProgress hidden={!isLoading}/>
             </Paper>
             {

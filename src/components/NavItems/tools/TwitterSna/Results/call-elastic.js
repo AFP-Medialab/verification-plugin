@@ -65,12 +65,11 @@ export function generateEssidHistogramPlotlyJson(param, retweets, givenFrom, giv
         });
         const myJson = await response.json();
         if (myJson["error"] === undefined) {
-            if (retweets)
-                return getPlotlyJsonHisto(myJson, retweetsGet);
-            else
-                return getPlotlyJsonHisto(myJson, usersGet);
+            json = getPlotlyJsonHisto(myJson, usersGet);
+                return json; //getPlotlyJsonHisto(myJson, usersGet);
         } else
-            window.alert("There was a problem calling elastic search");
+            return json;
+            //window.alert("There was a problem calling elastic search");
     };
     return userAction(buildQuery(aggs, must, mustNot)).then(plotlyJSON => {
 
@@ -612,6 +611,5 @@ function getPlotlyJsonHisto(json, specificGet) {
 
 //To access tweets collection
 export function getTweets() {
-    console.log(json);
     return json
 }
