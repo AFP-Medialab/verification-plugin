@@ -66,7 +66,8 @@ export function generateEssidHistogramPlotlyJson(param, retweets, givenFrom, giv
         const myJson = await response.json();
         if (myJson["error"] === undefined) {
             json = getPlotlyJsonHisto(myJson, usersGet);
-                return json; //getPlotlyJsonHisto(myJson, usersGet);
+            console.log(json);
+            return json; //getPlotlyJsonHisto(myJson, usersGet);
         } else
             return json;
             //window.alert("There was a problem calling elastic search");
