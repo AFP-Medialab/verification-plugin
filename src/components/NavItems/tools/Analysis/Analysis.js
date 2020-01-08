@@ -18,6 +18,7 @@ import useGenerateApiUrl from "./Hooks/useGenerateApiUrl";
 import FacebookResults from "./Results/FacebookResults";
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/Analysis.tsv";
+import {submissionEvent} from "../../../Shared/GoogleAnalytics/GoogleAnalytics";
 
 function useTraceUpdate(props) {
     const prev = useRef(props);
@@ -57,6 +58,7 @@ const Analysis = () => {
     };
 
     const submitForm = () => {
+        submissionEvent(input.trim());
         setSubmittedUrl(input.trim());
     };
 

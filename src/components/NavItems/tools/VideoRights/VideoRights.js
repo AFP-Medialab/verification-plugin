@@ -11,6 +11,7 @@ import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import VideoRightsResults from "./Results/VideoRightsResults";
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/VideoRights.tsv";
+import {submissionEvent} from "../../../Shared/GoogleAnalytics/GoogleAnalytics";
 
 const VideoRights = () => {
     const classes = useMyStyles();
@@ -25,8 +26,10 @@ const VideoRights = () => {
     useVideoRightsTreatment(submitted);
 
     const submitForm = () => {
-        if (!isLoading)
+        if (!isLoading) {
+            submissionEvent(input);
             setSubmitted(input);
+        }
     };
 
     return (
