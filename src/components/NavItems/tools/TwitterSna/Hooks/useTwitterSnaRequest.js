@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setError } from "../../../../../redux/actions/errorActions";
-import { setTwitterSnaLoading, setTwitterSnaResult } from "../../../../../redux/actions/tools/twitterSnaActions";
+import { setTwitterSnaLoading, setTwitterSnaResult, setTwitterSnaLoadingMessage } from "../../../../../redux/actions/tools/twitterSnaActions";
 import axios from "axios";
 
 
@@ -78,7 +78,7 @@ const useTwitterSnaRequest = (request) => {
 
 
                 let tweetWordsmap = hits[i]._source.wit;
-                if (tweetWordsmap === null)
+                if (tweetWordsmap === null || tweetWordsmap === undefined)
                     return [];
                 var arr = Array.from(tweetWordsmap);
 
@@ -241,6 +241,8 @@ const useTwitterSnaRequest = (request) => {
             dispatch(setTwitterSnaResult(request, result, false, true))
         };
 
+    
+
         async function createHeatMap(entries, hits)
         {
             var firstDate = new Date(entries.from);
@@ -276,10 +278,8 @@ const useTwitterSnaRequest = (request) => {
                     });
                 i = 0;
                 datesX = [...datesX, date.toDateString()];
-                console.log(date);
             });
 
-            console.log(datesX)
             console.log("FINISHED Building heatMap");
             return [{
                 z: nbTweetsZ,
@@ -341,16 +341,27 @@ const useTwitterSnaRequest = (request) => {
 
         };
 
-        const getResutUntilsDone = (sessionId) => {
+        const getResultUntilsDone = (sessionId) => {
             axios.get(TwintWrapperUrl + /status/ + sessionId)
                 .then(response => {
+                    console.log(response.data);
                     if (response.data.status === "Error")
                         handleErrors("twitterSnaErrorMessage");
                     else if (response.data.status === "Done")
+                    {
                         lastRenderCall(sessionId);
+                        dispatch(setTwitterSnaLoadingMessage(""));
+                    }
+                    else if (response.data.status === "CountingWords")
+                    {
+                        dispatch(setTwitterSnaLoadingMessage("Counting Words ADD TSV"));
+                        getResultUntilsDone(sessionId);
+                    }
                     else {
                         generateGraph(response.data, false).then(() => {
-                            setTimeout(() => getResutUntilsDone(sessionId), 2000)
+                            setTimeout(() => getResultUntilsDone(sessionId), 5000)
+
+                            dispatch(setTwitterSnaLoadingMessage("Fetching Tweets ADD TSV"));
                         });
                     }
                 })
@@ -366,7 +377,7 @@ const useTwitterSnaRequest = (request) => {
                 else if (response.data.status === "Done")
                     lastRenderCall(response.data.session);
                 else
-                    getResutUntilsDone(response.data.session)
+                    getResultUntilsDone(response.data.session)
 
             })
             .catch(e => handleErrors(e))

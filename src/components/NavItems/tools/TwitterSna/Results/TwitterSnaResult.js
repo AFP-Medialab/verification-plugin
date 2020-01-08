@@ -152,8 +152,6 @@ export default function TwitterSnaResult(props) {
     };
 
     function isInRange(pointDate, objDate, periode) {
-        console.log(periode);
-        console.log(pointDate);
         if (periode === "isHours")
             return ((((pointDate.getDate() === objDate.getDate()
                 && (pointDate.getHours() >= objDate.getHours() -2 && pointDate.getHours() <= objDate.getHours() + 1)))
@@ -186,14 +184,14 @@ export default function TwitterSnaResult(props) {
         let maxDate;
         let csvArr = "data:text/csv;charset=utf-8," + keyword("sna_result_username") + "," + keyword("sna_result_date") + "," + keyword("sna_result_tweet") + "," + keyword("sna_result_retweet_nb") + "," + keyword("elastic_url") + "\n";
         let isDays = (((new Date(data.points[0].data.x[0])).getDate() - (new Date(data.points[0].data.x[1])).getDate()) !== 0)? "isDays":"isHours";
-        if (!fromHisto) {console.log("CHANGING IS DAY");isDays = "isHour"}
-        let i = 0;
+        if (!fromHisto) {isDays = "isHour"}
         data.points.forEach(point => {
 
             let pointDate = new Date(fromHisto?point.x:(point.x + ' ' + point.y));
-
+           // let i = 0;
             result.tweets.forEach(tweetObj => {
                 if (tweetObj._source.username === point.data.name || !fromHisto) {
+
                     let objDate = new Date(tweetObj._source.date);
                     if (isInRange(pointDate, objDate, isDays)) {
                         if (minDate === undefined)
@@ -225,7 +223,7 @@ export default function TwitterSnaResult(props) {
                     }
                }
             });
-            i++;
+         //  i++;
         });
         return {
             data: resData,
@@ -237,9 +235,9 @@ export default function TwitterSnaResult(props) {
     const onHistogramClick = (data) => {
         setHistoTweets(displayTweetsOfDate(data, true));
     }
+
     const onHeatMapClick = (data) => {
         let truc = displayTweetsOfDate(data, false);
-        console.log(data);
         setheatMapTweets(truc);
     }
 
@@ -591,8 +589,7 @@ export default function TwitterSnaResult(props) {
                                 </ExpansionPanelDetails>
                             </ExpansionPanel>
                         
-                })
-            }
+                }
             {
                 result.pieCharts &&
                 result.pieCharts.map((obj, index) => {
