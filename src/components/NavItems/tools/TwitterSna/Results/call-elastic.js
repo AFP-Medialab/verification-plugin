@@ -65,11 +65,10 @@ export function generateEssidHistogramPlotlyJson(param, retweets, givenFrom, giv
         });
         const myJson = await response.json();
         if (myJson["error"] === undefined) {
-            json = getPlotlyJsonHisto(myJson, usersGet);
-            console.log(json);
-            return json; //getPlotlyJsonHisto(myJson, usersGet);
+            json.histo = getPlotlyJsonHisto(myJson, usersGet);
+            return json.histo; //getPlotlyJsonHisto(myJson, usersGet);
         } else
-            return json;
+            return json.histo;
             //window.alert("There was a problem calling elastic search");
     };
     return userAction(buildQuery(aggs, must, mustNot)).then(plotlyJSON => {
@@ -425,8 +424,7 @@ function constructAggs(field) {
                         "field": "username",
                         "order": {
                             "1": "desc"
-                        },
-                        "size": 5
+                        }
                     },
                     "aggs": {
                         "1": {
@@ -495,6 +493,7 @@ async function getJson(param, aggs, must, mustNot) {
             myJson = await completeJson(aggs, must2, mustNot2, myJson);
         } while (myJson.current_total_hits === 10000)
     }
+    
     return myJson;
 }
 
@@ -565,6 +564,7 @@ function getPlotlyJsonHisto(json, specificGet) {
 
     var infos = [];
 
+    console.log(dates);
     dates.forEach(dateObj => {
         specificGet(dateObj, infos);
         infos.push({
@@ -578,6 +578,7 @@ function getPlotlyJsonHisto(json, specificGet) {
             nb: dateObj["1"]["value"]
         });
     });
+
     var lines = [];
     while (infos.length !== 0) {
 
@@ -606,11 +607,12 @@ function getPlotlyJsonHisto(json, specificGet) {
         plotlyInfo.y.push(nb);
         lines.push(plotlyInfo);
     }
+
     return lines;
 }
 
 
 //To access tweets collection
 export function getTweets() {
-    return json
+    return json.tweets;
 }
