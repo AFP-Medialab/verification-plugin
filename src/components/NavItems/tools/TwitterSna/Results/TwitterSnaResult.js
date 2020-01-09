@@ -172,7 +172,7 @@ export default function TwitterSnaResult(props) {
                 && pointDate.getMonth() === objDate.getMonth()
                 && pointDate.getFullYear() === objDate.getFullYear());
         }      
-         else 
+        else 
         {
             return (((pointDate.getDate() === objDate.getDate()
                 && pointDate.getHours() === objDate.getHours()))
@@ -463,6 +463,9 @@ export default function TwitterSnaResult(props) {
                     </ExpansionPanelSummary>
                     <ExpansionPanelDetails>
                         <div style={{ width: '100%', }}>
+                            { ((result.histogram.json === []) &&
+                                 <Typography variant={"body2"}>No data available ADDTSV</Typography>) }
+                                 {(result.histogram.json !== []) &&
                             <Plot useResizeHandler
                                 style={{ width: '100%', height: "450px" }}
                                 data={result.histogram.json}
@@ -474,6 +477,7 @@ export default function TwitterSnaResult(props) {
                                     console.log(b);
                                 }}
                             />
+}
                             <Box m={2} />
                             {
                                 histoTweets &&
@@ -510,6 +514,7 @@ export default function TwitterSnaResult(props) {
                                         actions={goToTweetAction}
                                     />
                                 </div>
+                                            
                             }
                         </div>
                     </ExpansionPanelDetails>
@@ -618,6 +623,10 @@ export default function TwitterSnaResult(props) {
                                 </ExpansionPanelSummary>
                                 <ExpansionPanelDetails>
                                     <Box alignItems="center" justifyContent="center" width={"100%"}>
+                                    { 
+                                    (((obj.json === []) &&
+                                        <Typography variant={"body2"}>No data available ADDTSV</Typography>))}
+                                        {(obj.json !== []) &&
                                         <Plot
                                             data={obj.json}
                                             layout={obj.layout}
@@ -626,6 +635,7 @@ export default function TwitterSnaResult(props) {
                                                 onPieChartClick(e, obj.title, index)
                                             }}
                                         />
+                                        }
                                         {
                                             pieCharts[index] &&
                                             <div>

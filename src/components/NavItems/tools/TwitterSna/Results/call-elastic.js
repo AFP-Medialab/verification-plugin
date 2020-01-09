@@ -563,8 +563,7 @@ function getPlotlyJsonHisto(json, specificGet) {
     let dates = json["aggregations"]["2"]["buckets"];
 
     var infos = [];
-
-    console.log(dates);
+    
     dates.forEach(dateObj => {
         specificGet(dateObj, infos);
         infos.push({
