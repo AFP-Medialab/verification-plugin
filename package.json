@@ -37,6 +37,7 @@
     "react-router-dom": "^5.1.2",
     "react-slack-feedback": "^2.1.0",
     "redux": "^4.0.4",
+    "rss-parser": "^3.7.3",
     "save-svg-as-png": "^1.4.14",
     "styled-components": "^4.4.1",
     "tui-image-editor": "^3.7.1"
