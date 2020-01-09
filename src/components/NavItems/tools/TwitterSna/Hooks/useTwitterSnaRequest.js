@@ -341,11 +341,12 @@ const useTwitterSnaRequest = (request) => {
 
         };
 
-        const getResultUntilsDone = (sessionId) => {
-            axios.get(TwintWrapperUrl + /status/ + sessionId)
-                .then(response => {
-                    console.log(response.data);
-                    generateGraph(response.data, false).then(() => {
+        const getResultUntilsDone = async (sessionId, isFirst) => {
+            
+            await axios.get(TwintWrapperUrl + /status/ + sessionId)
+                .then(async response => {
+                    if (isFirst)
+                        await generateGraph(response.data, false);
                         if (response.data.status === "Error")
                             handleErrors("twitterSnaErrorMessage");
                         else if (response.data.status === "Done")
@@ -356,17 +357,16 @@ const useTwitterSnaRequest = (request) => {
                         else if (response.data.status === "CountingWords")
                         {
                             dispatch(setTwitterSnaLoadingMessage("Counting Words ADD TSV"));
-                            setTimeout(() => getResultUntilsDone(sessionId), 3000);
+                            setTimeout(() => getResultUntilsDone(sessionId, false), 3000);
                         }
                         else {
                             generateGraph(response.data, false).then(() => {
-                                setTimeout(() => getResultUntilsDone(sessionId), 5000)
+                                setTimeout(() => getResultUntilsDone(sessionId, false), 5000)
 
                                 dispatch(setTwitterSnaLoadingMessage("Fetching Tweets ADD TSV"));
                             });
                         }
                     })
-                })
                 .catch(e => handleErrors(e))
         };
 
@@ -377,9 +377,10 @@ const useTwitterSnaRequest = (request) => {
                 if (response.data.status === "Error")
                     handleErrors("twitterSnaErrorMessage");
                 else if (response.data.status === "Done")
-                    lastRenderCall(response.data.session);
+                    
+                lastRenderCall(response.data.session);
                 else
-                    getResultUntilsDone(response.data.session)
+                getResultUntilsDone(response.data.session, true)
 
             })
             .catch(e => handleErrors(e))

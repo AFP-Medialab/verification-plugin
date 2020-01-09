@@ -103,7 +103,6 @@ const TwitterSna = () => {
         if (bannedWords.trim() !== "")
             trimedBannedWords = removeQuotes(bannedWords.trim().match(/("[^"]+"|[^"\s]+)/g));
 
-            console.log(since);
         const newFrom = (localTime === "false") ? convertToGMT(since) : since;
         const newUntil = (localTime === "false") ? convertToGMT(until) : until;
 
