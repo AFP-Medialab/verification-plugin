@@ -165,10 +165,17 @@ export default function TwitterSnaResult(props) {
                 && pointDate.getMonth() === objDate.getMonth()
                 && pointDate.getFullYear() === objDate.getFullYear());
         }
-        else
+        else if (periode === "isHoursb")
         {
             return (((pointDate.getDate() === objDate.getDate()
                 && pointDate.getHours() -1 === objDate.getHours()))
+                && pointDate.getMonth() === objDate.getMonth()
+                && pointDate.getFullYear() === objDate.getFullYear());
+        }      
+         else 
+        {
+            return (((pointDate.getDate() === objDate.getDate()
+                && pointDate.getHours() === objDate.getHours()))
                 && pointDate.getMonth() === objDate.getMonth()
                 && pointDate.getFullYear() === objDate.getFullYear());
         }
@@ -187,14 +194,14 @@ export default function TwitterSnaResult(props) {
         let minDate;
         let maxDate;
         let csvArr = "data:text/csv;charset=utf-8," + keyword("sna_result_username") + "," + keyword("sna_result_date") + "," + keyword("sna_result_tweet") + "," + keyword("sna_result_retweet_nb") + "," + keyword("elastic_url") + "\n";
-        let isDays = (((new Date(data.points[0].data.x[0])).getDate() - (new Date(data.points[0].data.x[1])).getDate()) === 0)? "isHours":"isDays";
-        if (!fromHisto || data.points[0].data.x[1] === undefined) {isDays = "isHours"}
+        let isDays = (((new Date(props.request.until) - new Date(props.request.from)) / (1000 * 3600 * 24)) < 14)? "isHoursb":"isDays";
+        if (data.points[0].data.x[1] === undefined) {isDays = "isHoursb"}
+        if (!fromHisto) {isDays = "isHours"}
+        console.log(props);
         //data.points.forEach(point => {
 
             let pointDate = new Date(fromHisto?data.points[0].x:(data.points[0].x + ' ' + data.points[0].y));
            // let i = 0;
-           console.log(result.tweets);
-           console.log(data.points[0].data);
             result.tweets.forEach(tweetObj => {
              //   if (tweetObj._source.username === data.points[0].data.name || !fromHisto) {
 
