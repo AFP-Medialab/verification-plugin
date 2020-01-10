@@ -113,7 +113,7 @@ const Metadata = () => {
                 (resultData) ?
                     (
                         (resultIsImage) ?
-                        <MetadataImageResult result={resultData}/>
+                        <MetadataImageResult result={resultData} image={resultUrl}/>
                         :
                         <MetadataVideoResult result={resultData}/>
                         )
