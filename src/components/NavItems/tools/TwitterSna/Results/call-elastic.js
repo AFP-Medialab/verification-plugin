@@ -44,14 +44,14 @@ export function generateEssidHistogramPlotlyJson(param, retweets, givenFrom, giv
     }
 
 
-    function retweetsGet(dateObj, infos) {
+  /*  function retweetsGet(dateObj, infos) {
         infos.push({
             date: dateObj['key_as_string'],
             key: "Retweets",
             nb: dateObj["1"].value
         });
         return infos;
-    }
+    }*/
 
     const userAction = async (query) => {
         let str_query = JSON.stringify(query).replace(/\\/g, "").replace(/"{/g, "{").replace(/}"/g, "}");
@@ -563,7 +563,7 @@ function getPlotlyJsonHisto(json, specificGet) {
     let dates = json["aggregations"]["2"]["buckets"];
 
     var infos = [];
-    
+
     dates.forEach(dateObj => {
         specificGet(dateObj, infos);
         infos.push({

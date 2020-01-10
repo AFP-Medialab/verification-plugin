@@ -262,17 +262,19 @@ const useTwitterSnaRequest = (request) => {
                 newDate.setDate(newDate.getDate() + 1);
                 dates = [...dates, newDate]
             }
-            var hoursY = ['12:00:00 AM', '1:00:00 AM', '2:00:00 AM', '3:00:00 AM', '4:00:00 AM', '5:00:00 AM', '6:00:00 AM', '7:00:00 AM', '8:00:00 AM', '9:00:00 AM', '10:00:00 AM', '11:00:00 AM', '12:00:00 PM','1:00:00 PM', '2:00:00 PM', '3:00:00 PM', '4:00:00 PM', '5:00:00 PM', '6:00:00 PM', '7:00:00 PM', '8:00:00 PM', '9:00:00 PM', '10:00:00 PM', '11:00:00 PM'];
-            
-            var nbTweetsZ = [];
-            var i = 0;
+            let hoursY = ['12:00:00 AM', '1:00:00 AM', '2:00:00 AM', '3:00:00 AM', '4:00:00 AM', '5:00:00 AM', '6:00:00 AM', '7:00:00 AM', '8:00:00 AM', '9:00:00 AM', '10:00:00 AM', '11:00:00 AM', '12:00:00 PM','1:00:00 PM', '2:00:00 PM', '3:00:00 PM', '4:00:00 PM', '5:00:00 PM', '6:00:00 PM', '7:00:00 PM', '8:00:00 PM', '9:00:00 PM', '10:00:00 PM', '11:00:00 PM'];
+            let isAllnul = true;
+            let nbTweetsZ = [];
+            let i = 0;
             let datesX = [];
             dates.forEach(date => {
                 hoursY.forEach(time => {
                     nbTweetsZ.push([])
-                
+                    let nbTweets = getNbTweetsInHour(date, hits)
+                    if (nbTweets !== 0)
+                        isAllnul = false;
                     date.setHours(i);
-                    nbTweetsZ[i].push(getNbTweetsInHour(date, hits));
+                    nbTweetsZ[i].push(nbTweets);
 
                     i++;
                     });
@@ -281,13 +283,16 @@ const useTwitterSnaRequest = (request) => {
             });
 
             console.log("FINISHED Building heatMap");
-            return [{
+            return {
+                plot: [{
                 z: nbTweetsZ,
                 x: datesX,
                 y: hoursY,
                 colorscale: 'Reds',
                 type: 'heatmap'
-            }];
+            }],
+            isAllnul: isAllnul
+        };
         
         }
 
@@ -347,6 +352,7 @@ const useTwitterSnaRequest = (request) => {
                 .then(async response => {
                     if (isFirst)
                         await generateGraph(response.data, false);
+
                         if (response.data.status === "Error")
                             handleErrors("twitterSnaErrorMessage");
                         else if (response.data.status === "Done")
