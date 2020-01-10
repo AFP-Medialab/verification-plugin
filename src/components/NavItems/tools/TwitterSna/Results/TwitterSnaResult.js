@@ -197,11 +197,9 @@ export default function TwitterSnaResult(props) {
         let isDays = (((new Date(props.request.until) - new Date(props.request.from)) / (1000 * 3600 * 24)) < 14)? "isHoursb":"isDays";
         if (data.points[0].data.x[1] === undefined) {isDays = "isHoursb"}
         if (!fromHisto) {isDays = "isHours"}
-        console.log(props);
-        //data.points.forEach(point => {
 
-            let pointDate = new Date(fromHisto?data.points[0].x:(data.points[0].x + ' ' + data.points[0].y));
-           // let i = 0;
+            let pointDate = new Date(fromHisto? data.points[0].x : (data.points[0].x + ' ' + data.points[0].y));
+
             result.tweets.forEach(tweetObj => {
              //   if (tweetObj._source.username === data.points[0].data.name || !fromHisto) {
 
@@ -462,10 +460,11 @@ export default function TwitterSnaResult(props) {
                         <Typography className={classes.heading}>{keyword(result.histogram.title)}</Typography>
                     </ExpansionPanelSummary>
                     <ExpansionPanelDetails>
+                        {}
                         <div style={{ width: '100%', }}>
-                            { ((result.histogram.json === []) &&
+                            { ((result.histogram.json.length === 0) &&
                                  <Typography variant={"body2"}>No data available ADDTSV</Typography>) }
-                                 {(result.histogram.json !== []) &&
+                                 {(result.histogram.json.length !== 0) &&
                             <Plot useResizeHandler
                                 style={{ width: '100%', height: "450px" }}
                                 data={result.histogram.json}
@@ -563,12 +562,19 @@ export default function TwitterSnaResult(props) {
                                 </ExpansionPanelSummary>
                                 <ExpansionPanelDetails>
                                     <Box alignItems="center" justifyContent="center" width={"100%"}>
+                                    { 
+                                        ((result.heatMap.isAllnul) &&
+                                        <Typography variant={"body2"}>No data available ADDTSV</Typography>)
+                                    }
+                                    {
+                                        (!result.heatMap.isAllnul) &&
                                         <Plot
                                          style={{ width: '100%', height: "450px" }}
-                                         data={result.heatMap}
+                                         data={result.heatMap.plot}
                                          
                                          onClick={(e) => onHeatMapClick(e)}
                                         />
+                                    }
                                         {
                                             heatMapTweets &&
                                             <div>
@@ -624,9 +630,9 @@ export default function TwitterSnaResult(props) {
                                 <ExpansionPanelDetails>
                                     <Box alignItems="center" justifyContent="center" width={"100%"}>
                                     { 
-                                    (((obj.json === []) &&
-                                        <Typography variant={"body2"}>No data available ADDTSV</Typography>))}
-                                        {(obj.json !== []) &&
+                                    ((obj.json === null) &&
+                                    <Typography variant={"body2"}>No data available ADDTSV</Typography>)}
+                                        {(obj.json !== null) &&
                                         <Plot
                                             data={obj.json}
                                             layout={obj.layout}
@@ -689,6 +695,10 @@ export default function TwitterSnaResult(props) {
                     <ExpansionPanelDetails>
                         <Box alignItems="center" justifyContent="center" width={"100%"}>
                             <div id="top_words_cloud_chart" height={"500"} width={"100%"} >
+                            { 
+                                    (console.log(result.cloudChart.json) || (result.cloudChart.json.length === 0) &&
+                                    <Typography variant={"body2"}>No data available ADDTSV</Typography>)}
+                                        {(result.cloudChart.json.length !== 0) &&
                                 <Grid container justify="space-between" spacing={2}
                                     alignContent={"center"}>
                                     <Grid item>
@@ -721,7 +731,9 @@ export default function TwitterSnaResult(props) {
                                         </Button>
                                     </Grid>
                                 </Grid>
+                                }
                                 {
+                                    (result.cloudChart.json.length !== 0) &&
                                     <div height={"300%"} width={"100%"}>
                                         <ReactWordcloud key={JSON.stringify(result)} options={result.cloudChart.options} callbacks={call} words={result.cloudChart.json} />
                                     </div>
