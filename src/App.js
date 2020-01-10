@@ -53,7 +53,7 @@ function App() {
     useEffect(() => {
         const trackingId = process.env.REACT_APP_GOOGLE_ANALYTICS_KEY;
         ReactGA.initialize(trackingId, {
-            debug: true,
+            //debug: true,
             titleCase: false,
         });
         ReactGA.ga('set', 'checkProtocolTask', ()=>{});
