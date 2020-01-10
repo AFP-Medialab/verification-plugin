@@ -40,6 +40,21 @@ const myTheme = {
     "menu.activeIcon.path": iconb,
     "menu.disabledIcon.path": icona,
     "menu.hoverIcon.path": iconc,
+
+
+    // submenu icons
+    'submenu.normalIcon.path': '../dist/svg/icon-a.svg',
+    'submenu.normalIcon.name': 'icon-a',
+    'submenu.activeIcon.path': '../dist/svg/icon-c.svg',
+    'submenu.activeIcon.name': 'icon-c',
+    'submenu.iconSize.width': '64px',
+    'submenu.iconSize.height': '64px',
+
+// submenu labels
+    'submenu.normalLabel.color': '#fff',
+    'submenu.normalLabel.fontWeight': 'bold',
+    'submenu.activeLabel.color': '#858585',
+    'submenu.activeLabel.fontWeight': 'bold',
 };
 
 const ImageResult = () => {
