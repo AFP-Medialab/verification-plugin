@@ -31,8 +31,8 @@ export function generateEssidHistogramPlotlyJson(param, retweets, givenFrom, giv
     let mustNot = constructMatchNotPhrase(param, givenFrom, givenUntil);
 
     function usersGet(dateObj, infos) {
-
         dateObj["3"]["buckets"].forEach(obj => {
+
                 infos.push({
                     date: dateObj['key_as_string'],
                     key: obj["key"],
@@ -68,7 +68,11 @@ export function generateEssidHistogramPlotlyJson(param, retweets, givenFrom, giv
             json.histo = getPlotlyJsonHisto(myJson, usersGet);
             return json.histo; //getPlotlyJsonHisto(myJson, usersGet);
         } else
-            return json.histo;
+        {
+            let res = setTimeout(() => userAction(query), 5000);
+           return res;
+//return json.histo;
+        }
             //window.alert("There was a problem calling elastic search");
     };
     return userAction(buildQuery(aggs, must, mustNot)).then(plotlyJSON => {
@@ -466,7 +470,6 @@ function constructAggs(field) {
 
 //To fetch all the tweets (Bypass the 10 000 limit with elastic search)
 async function getJson(param, aggs, must, mustNot) {
-    console.log(JSON.stringify(buildQuery(aggs, must, mustNot)).replace(/\\/g, "").replace(/"{/g, "{").replace(/}"/g, "}"));
     const response = await fetch(elasticSearch_url, {
         method: 'POST',
         body: JSON.stringify(buildQuery(aggs, must, mustNot)).replace(/\\/g, "").replace(/"{/g, "{").replace(/}"/g, "}"),
@@ -495,7 +498,6 @@ async function getJson(param, aggs, must, mustNot) {
 }
 
 async function completeJson(aggs, must, mustNot, myJson) {
-    console.log( JSON.stringify(buildQuery(aggs, must, mustNot)).replace(/\\/g, "").replace(/"{/g, "{").replace(/}"/g, "}"));
     const response = await fetch(elasticSearch_url, {
         method: 'POST',
         body: JSON.stringify(buildQuery(aggs, must, mustNot)).replace(/\\/g, "").replace(/"{/g, "{").replace(/}"/g, "}"),

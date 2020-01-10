@@ -42,7 +42,6 @@ export default function TwitterSnaResult(props) {
     const [pieCharts1, setPieCharts1] = useState(null);
     const [pieCharts2, setPieCharts2] = useState(null);
     const [pieCharts3, setPieCharts3] = useState(null);
-
     const hidePieChartTweetsView = (index) => {
         switch (index) {
             case 0:
@@ -165,17 +164,17 @@ export default function TwitterSnaResult(props) {
                 && pointDate.getMonth() === objDate.getMonth()
                 && pointDate.getFullYear() === objDate.getFullYear());
         }
-        else if (periode === "isHoursb")
+       else if (periode === "isHours")
         {
             return (((pointDate.getDate() === objDate.getDate()
                 && pointDate.getHours() -1 === objDate.getHours()))
                 && pointDate.getMonth() === objDate.getMonth()
                 && pointDate.getFullYear() === objDate.getFullYear());
-        }      
+        }     
         else 
         {
             return (((pointDate.getDate() === objDate.getDate()
-                && pointDate.getHours() === objDate.getHours()))
+                && pointDate.getHours() -2 === objDate.getHours()))
                 && pointDate.getMonth() === objDate.getMonth()
                 && pointDate.getFullYear() === objDate.getFullYear());
         }
@@ -463,7 +462,7 @@ export default function TwitterSnaResult(props) {
                         {}
                         <div style={{ width: '100%', }}>
                             { ((result.histogram.json.length === 0) &&
-                                 <Typography variant={"body2"}>No data available ADDTSV</Typography>) }
+                                 <Typography variant={"body2"}>{keyword("sna_no_data")}</Typography>) }
                                  {(result.histogram.json.length !== 0) &&
                             <Plot useResizeHandler
                                 style={{ width: '100%', height: "450px" }}
@@ -558,16 +557,14 @@ export default function TwitterSnaResult(props) {
                                 <ExpansionPanelSummary
                                     expandIcon={<ExpandMoreIcon />}
                                 >
-                                    <Typography className={classes.heading}>{/*keyword('sna_result_heatMap') + */"ADD TSV"}</Typography>
+                                    <Typography className={classes.heading}>{keyword('sna_result_heatMap')}</Typography>
                                 </ExpansionPanelSummary>
                                 <ExpansionPanelDetails>
                                     <Box alignItems="center" justifyContent="center" width={"100%"}>
                                     { 
                                         ((result.heatMap.isAllnul) &&
-                                        <Typography variant={"body2"}>No data available ADDTSV</Typography>)
-                                    }
-                                    {
-                                        (!result.heatMap.isAllnul) &&
+                                        <Typography variant={"body2"}>{keyword("sna_no_data")}</Typography>) ||
+
                                         <Plot
                                          style={{ width: '100%', height: "450px" }}
                                          data={result.heatMap.plot}
@@ -631,7 +628,7 @@ export default function TwitterSnaResult(props) {
                                     <Box alignItems="center" justifyContent="center" width={"100%"}>
                                     { 
                                     ((obj.json === null) &&
-                                    <Typography variant={"body2"}>No data available ADDTSV</Typography>)}
+                                    <Typography variant={"body2"}>{keyword("sna_no_data")}</Typography>)}
                                         {(obj.json !== null) &&
                                         <Plot
                                             data={obj.json}
@@ -696,8 +693,8 @@ export default function TwitterSnaResult(props) {
                         <Box alignItems="center" justifyContent="center" width={"100%"}>
                             <div id="top_words_cloud_chart" height={"500"} width={"100%"} >
                             { 
-                                    (console.log(result.cloudChart.json) || (result.cloudChart.json.length === 0) &&
-                                    <Typography variant={"body2"}>No data available ADDTSV</Typography>)}
+                                    (console.log(result.cloudChart) || (result.cloudChart.json.length === 0) &&
+                                    <Typography variant={"body2"}>{keyword("sna_no_data")}</Typography>)}
                                         {(result.cloudChart.json.length !== 0) &&
                                 <Grid container justify="space-between" spacing={2}
                                     alignContent={"center"}>
