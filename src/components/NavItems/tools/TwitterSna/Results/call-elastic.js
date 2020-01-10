@@ -466,6 +466,7 @@ function constructAggs(field) {
 
 //To fetch all the tweets (Bypass the 10 000 limit with elastic search)
 async function getJson(param, aggs, must, mustNot) {
+    console.log(JSON.stringify(buildQuery(aggs, must, mustNot)).replace(/\\/g, "").replace(/"{/g, "{").replace(/}"/g, "}"));
     const response = await fetch(elasticSearch_url, {
         method: 'POST',
         body: JSON.stringify(buildQuery(aggs, must, mustNot)).replace(/\\/g, "").replace(/"{/g, "{").replace(/}"/g, "}"),
@@ -476,20 +477,16 @@ async function getJson(param, aggs, must, mustNot) {
     let myJson = await response.json();
     if (myJson["hits"]["total"]["value"] === 10000) {
         do {
-            let must2 = [
-                constructMatchPhrase({
+            let must2 = constructMatchPhrase({
                     ...param,
                     "from": myJson.hits.hits[myJson.hits.hits.length - 1]._source.date,
                     "until": param["until"],
-                })
-            ];
-            let mustNot2 = [
-                constructMatchNotPhrase({
+                });
+            let mustNot2 = constructMatchNotPhrase({
                     ...param,
                     "from": myJson.hits.hits[myJson.hits.hits.length - 1]._source.date,
                     "until": param["until"],
-                })
-            ];
+                });
             myJson = await completeJson(aggs, must2, mustNot2, myJson);
         } while (myJson.current_total_hits === 10000)
     }
@@ -498,6 +495,7 @@ async function getJson(param, aggs, must, mustNot) {
 }
 
 async function completeJson(aggs, must, mustNot, myJson) {
+    console.log( JSON.stringify(buildQuery(aggs, must, mustNot)).replace(/\\/g, "").replace(/"{/g, "{").replace(/}"/g, "}"));
     const response = await fetch(elasticSearch_url, {
         method: 'POST',
         body: JSON.stringify(buildQuery(aggs, must, mustNot)).replace(/\\/g, "").replace(/"{/g, "{").replace(/}"/g, "}"),
