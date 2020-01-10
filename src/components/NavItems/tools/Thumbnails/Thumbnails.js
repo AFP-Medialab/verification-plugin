@@ -167,7 +167,7 @@ const Thumbnails = () => {
                 resultData && resultData.length !== 0 &&
                 <Paper className={classes.root}>
                     <CloseResult onClick={() => dispatch(cleanThumbnailsState())}/>
-                    <ImageGridList list={resultData} handleClick={imageClick}/>
+                    <ImageGridList list={resultData} handleClick={imageClick} height={160}/>
                 </Paper>
             }
         </div>);

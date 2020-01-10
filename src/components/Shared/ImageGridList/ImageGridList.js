@@ -15,7 +15,6 @@ const useStyles = makeStyles(theme => ({
     gridList: {
         width: "100%",
         maxHeight: "500px",
-        maxWidth: "500px",
     },
 }));
 
@@ -23,10 +22,10 @@ const ImageGridList = (props) => {
     const classes = useStyles();
     return (
         <div className={classes.root}>
-            <GridList cellHeight={"auto"} className={classes.gridList} cols={3}>
+            <GridList cellHeight={props.height} className={classes.gridList} cols={3}>
                 {props.list.map((tile, index) => (
-                    <GridListTile height={"auto"} key={index} cols={1} rows={1}>
-                        <Image src={tile} alt={tile} onClick={(e) => props.handleClick(e)}/>
+                    <GridListTile  key={index} cols={1} >
+                        <img src={tile} alt={tile} onClick={(e) => props.handleClick(e)}/>
                     </GridListTile>
                 ))}
             </GridList>
