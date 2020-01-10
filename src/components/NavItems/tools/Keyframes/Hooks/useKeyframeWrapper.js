@@ -18,7 +18,7 @@ export const useKeyframeWrapper = (url) => {
     useEffect(() => {
 
         const handleError = (e) => {
-            if (keyword(e) !== undefined)
+            if (keyword(e) !== "")
                 dispatch(setError(keyword(e)));
             else
                 dispatch(setError(keyword("keyframes_error_default")));
@@ -41,7 +41,7 @@ export const useKeyframeWrapper = (url) => {
                     lastGet("http://multimedia2.iti.gr/video_analysis/result/" + video_id + "_json");
                     clearInterval(interval);
                 }
-                else if (data && data["status"] !== undefined && keyword("keyframes_error_" + data["status"]) !== undefined) {
+                else if (data && data["status"] !== undefined && keyword("keyframes_error_" + data["status"]) !== "") {
                     handleError("keyframes_error_" + data["status"]);
                     clearInterval(interval);
                 }
@@ -62,8 +62,8 @@ export const useKeyframeWrapper = (url) => {
             }, 2000);
         };
 
-        const postUrl = (url, data) => {
-            axios.post(url, data)
+        const postUrl = (multimediaUrl, data) => {
+            axios.post(multimediaUrl, data)
                 .then(response => {
                     getUntil("http://multimedia2.iti.gr/video_analysis/status/" + response.data.video_id, response.data.video_id)
                 })
