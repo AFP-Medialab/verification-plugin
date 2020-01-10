@@ -21,11 +21,21 @@ import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 import OnClickInfo from "../../../../Shared/OnClickInfo/OnClickInfo";
 
 const myTheme = {
+    'loadButton.backgroundColor': "#151515",
+    'loadButton.border': '0px',
+    'loadButton.color': "#151515",
+    'loadButton.fontFamily': 'NotoSans, sans-serif',
+    'loadButton.fontSize': '0px',
+
+    'downloadButton.backgroundColor': "#151515",
+    'downloadButton.border': '0px',
+    'downloadButton.color': "#151515",
+    'downloadButton.fontFamily': 'NotoSans, sans-serif',
+    'downloadButton.fontSize': '0px',
+
+
     "menu.backgroundColor": "white",
     "common.backgroundColor": "#151515",
-    "downloadButton.backgroundColor": "white",
-    "downloadButton.borderColor": "white",
-    "downloadButton.color": "black",
     "menu.normalIcon.path": icond,
     "menu.activeIcon.path": iconb,
     "menu.disabledIcon.path": icona,
@@ -161,8 +171,12 @@ const ImageResult = () => {
                     </Button>
                 </Grid>
                 <Grid item>
-                    <a href={resultImage} download={downLoadLink(resultImage)}>
-                        <Button color="primary" variant="contained">Download</Button>
+                    <a style={{"text-decoration": "none"}} href={resultImage} download={downLoadLink(resultImage)}>
+                        <Button color="primary" variant="contained">
+                            {
+                                keyword("download")
+                            }
+                        </Button>
                     </a>
                 </Grid>
             </Grid>
