@@ -180,7 +180,7 @@ const useTwitterSnaRequest = (request) => {
                 },
 
                 responsive: true,
-                modeBarButtons: [["toImage"]],
+                modeBarButtons: [["toImage"], ["resetScale2d"]],
                 displaylogo: false,
             };
             return {
