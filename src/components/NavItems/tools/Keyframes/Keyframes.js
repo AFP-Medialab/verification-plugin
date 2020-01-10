@@ -40,7 +40,7 @@ const Keyframes = (props) => {
     useKeyframeWrapper(submittedUrl);
 
     const submitUrl = () => {
-        submissionEvent(input)
+        submissionEvent(input);
         setSubmittedUrl(input);
     };
 

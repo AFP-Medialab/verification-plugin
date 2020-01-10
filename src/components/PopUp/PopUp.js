@@ -153,7 +153,7 @@ const PopUp = () => {
                 <ExpansionPanelDetails p={0}>
                     {
                         (imageList && imageList.length > 0) ?
-                            <ImageGridList list={imageList}/>
+                            <ImageGridList list={imageList} height={60}/>
                             :
                             keyword("no_images")
                     }

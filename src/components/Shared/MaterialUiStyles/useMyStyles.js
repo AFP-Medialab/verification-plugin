@@ -199,9 +199,10 @@ const useMyStyles = makeStyles(theme => ({
     secondaryHeading: {
         fontSize: theme.typography.pxToRem(15),
         color: theme.palette.text.secondary,
-    }, gridList: {
-        width: 500,
-        height: 450,
+    },
+    gridList: {
+        width: "100%",
+        maxHeight: "500px",
     },
     imagesRoot: {
         display: 'flex',
