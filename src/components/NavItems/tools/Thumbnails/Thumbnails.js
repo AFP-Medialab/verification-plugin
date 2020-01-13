@@ -168,7 +168,7 @@ const Thumbnails = () => {
                                     color="primary"
                                 />
                             }
-                            label={"open Tabs"}
+                            label={keyword("openTabs")}
                             labelPlacement="end"
                         />
                     </FormGroup>
