@@ -13,6 +13,9 @@ import CustomTile from "../../Shared/CustomTitle/CustomTitle";
 import Box from "@material-ui/core/Box";
 import useLoadLanguage from "../../../Hooks/useLoadLanguage";
 import tsv from "../../../LocalDictionary/components/NavItems/FactCheck.tsv";
+import Link from "@material-ui/core/Link";
+import afpImage from "../About/images/Logo-AFP-384.png"
+
 
 const FactCheck = () => {
     const classes = useMyStyles();
@@ -48,7 +51,7 @@ const FactCheck = () => {
 
     const finishXMLParsing = (str) => {
         return str.replace(/&#039;/g, "'").replace(/&quot;/g, "\"")
-    }
+    };
 
     return (
         <Paper className={classes.root}>
@@ -62,24 +65,28 @@ const FactCheck = () => {
                             <Grid item key={key}>
                                 <Card className={classes.FactCheckCard}>
                                     <CardContent>
+                                        <img src={afpImage} className={classes.factCheckLogos}/>
                                         <Typography className={classes.title} color="textSecondary" gutterBottom>
                                             {finishXMLParsing(val.pubDate)}
                                         </Typography>
-                                        <Typography variant="h5" component="h2">
+                                        <Link href="#" component="h2" onClick={() => window.open(val.link, "_blank")} variant="h5">
                                             {finishXMLParsing(val.title)}
-                                        </Typography>
+                                        </Link>
                                         <Typography className={classes.pos} color="textSecondary">
                                             {keyword("author") + finishXMLParsing(val.creator)}
                                         </Typography>
                                         <Typography variant="body2" component="p">
                                             {finishXMLParsing(val.content)}
                                         </Typography>
-                                    </CardContent>
-                                    <CardActions>
-                                        <Button onClick={() => window.open(val.link, "_blank")} size="small">
+                                        <Box m={1}/>
+                                        <Button onClick={() => window.open(val.link, "_blank")}
+                                                size="small"
+                                                variant={"contained"}
+                                                color={"primary"}
+                                        >
                                             {keyword("learn_more")}
                                         </Button>
-                                    </CardActions>
+                                    </CardContent>
                                 </Card>
                             </Grid>
                         )
