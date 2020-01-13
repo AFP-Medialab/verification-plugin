@@ -209,7 +209,7 @@ const TwitterSna = () => {
                     id="standard-full-width"
                     label={keyword("twitter_sna_not")}
                     style={{margin: 8}}
-                    placeholder={"word6 word7"}
+                    placeholder={"word word2"}
                     fullWidth
                 />
 
@@ -220,7 +220,7 @@ const TwitterSna = () => {
                     id="standard-full-width"
                     label={keyword("twitter_sna_user")}
                     style={{margin: 8}}
-                    placeholder={"word6 word7"}
+                    placeholder={keyword("user_placeholder")}
                     fullWidth
                 />
                 <Grid container justify={"center"} spacing={4} className={classes.grow}>
