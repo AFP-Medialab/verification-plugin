@@ -318,5 +318,8 @@ const useMyStyles = makeStyles(theme => ({
     pos: {
         marginBottom: 12,
     },
+    factCheckLogos : {
+        width: "20%"
+    }
 }));
 export default useMyStyles;
