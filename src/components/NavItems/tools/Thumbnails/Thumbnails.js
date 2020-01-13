@@ -105,7 +105,8 @@ const Thumbnails = () => {
             submissionEvent(url);
             dispatch(setThumbnailsResult(url, get_images(url), false, false));
             if (selectedValue.openTabs)
-                imageClickUrl(url);
+                resultData.map(value => imageClickUrl(value))
+
         } else
             dispatch(setError("Please use a valid Youtube Url (add to tsv)"));
     };
