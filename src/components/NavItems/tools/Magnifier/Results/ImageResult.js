@@ -3,9 +3,7 @@ import React from "react";
 import Loop from "./Loop";
 import Box from "@material-ui/core/Box";
 import {useDispatch, useSelector} from "react-redux";
-import Button from "@material-ui/core/Button";
-import 'react-image-crop/dist/ReactCrop.css';
-import 'tui-image-editor/dist/tui-image-editor.css'
+import Button from "@material-ui/core/Button";import 'tui-image-editor/dist/tui-image-editor.css'
 import ImageEditor from '@toast-ui/react-image-editor'
 import Fade from '@material-ui/core/Fade';
 import Modal from "@material-ui/core/Modal";
@@ -23,15 +21,40 @@ import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 import OnClickInfo from "../../../../Shared/OnClickInfo/OnClickInfo";
 
 const myTheme = {
+    'loadButton.backgroundColor': "#151515",
+    'loadButton.border': '0px',
+    'loadButton.color': "#151515",
+    'loadButton.fontFamily': 'NotoSans, sans-serif',
+    'loadButton.fontSize': '0px',
+
+    'downloadButton.backgroundColor': "#151515",
+    'downloadButton.border': '0px',
+    'downloadButton.color': "#151515",
+    'downloadButton.fontFamily': 'NotoSans, sans-serif',
+    'downloadButton.fontSize': '0px',
+
+
     "menu.backgroundColor": "white",
     "common.backgroundColor": "#151515",
-    "downloadButton.backgroundColor": "white",
-    "downloadButton.borderColor": "white",
-    "downloadButton.color": "black",
     "menu.normalIcon.path": icond,
     "menu.activeIcon.path": iconb,
     "menu.disabledIcon.path": icona,
     "menu.hoverIcon.path": iconc,
+
+
+    // submenu icons
+    'submenu.normalIcon.path': '../dist/svg/icon-a.svg',
+    'submenu.normalIcon.name': 'icon-a',
+    'submenu.activeIcon.path': '../dist/svg/icon-c.svg',
+    'submenu.activeIcon.name': 'icon-c',
+    'submenu.iconSize.width': '64px',
+    'submenu.iconSize.height': '64px',
+
+// submenu labels
+    'submenu.normalLabel.color': '#fff',
+    'submenu.normalLabel.fontWeight': 'bold',
+    'submenu.activeLabel.color': '#858585',
+    'submenu.activeLabel.fontWeight': 'bold',
 };
 
 const ImageResult = () => {
@@ -163,8 +186,12 @@ const ImageResult = () => {
                     </Button>
                 </Grid>
                 <Grid item>
-                    <a href={resultImage} download={downLoadLink(resultImage)}>
-                        <Button color="primary" variant="contained">Download</Button>
+                    <a style={{"text-decoration": "none"}} href={resultImage} download={downLoadLink(resultImage)}>
+                        <Button color="primary" variant="contained">
+                            {
+                                keyword("download")
+                            }
+                        </Button>
                     </a>
                 </Grid>
             </Grid>

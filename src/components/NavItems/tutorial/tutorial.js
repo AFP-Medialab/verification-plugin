@@ -78,7 +78,7 @@ const Tutorial = () => {
                     <img src={insta} alt={""}  className={classes.InteractiveMedia}/>
                 </Box>
                 <h2>{keyword("tuto_h_2")}</h2>
-                <div className={"content"} dangerouslySetInnerHTML={{__html: keyword("tuto_4")}}></div>
+                <div className={"content"}  dangerouslySetInnerHTML={{__html: keyword("tuto_4")}}></div>
                 <div className={"content"} dangerouslySetInnerHTML={{__html: keyword("tuto_5")}}></div>
                 <div className={"content"} dangerouslySetInnerHTML={{__html: keyword("tuto_6")}}></div>
                 <div className={"content"} dangerouslySetInnerHTML={{__html: keyword("tuto_7")}}></div>

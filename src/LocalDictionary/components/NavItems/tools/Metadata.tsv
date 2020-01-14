@@ -6,7 +6,7 @@ metadata_radio_image	Image	Image	Imagen
 metadata_radio_video	Video	Vidéo	Video
 button_submit	Submit	Envoyer	Enviar
 please_give_a_correct_link	Please give a correct link	Donner un lien valide s'il vous plaît	Por favor, dé un enlace válido
-metadata_img_error_exif	No EXIF Metadata was found.<br><strong>Note:</strong> The EXIF standard applies only to .jpg and .tiff images	Aucune métadonnée EXIF n'a été trouvée.<br><strong>Note:</strong> Le Format EXIF s'applique uniquement aux images .jpg et .tiff	No se encontraron metadatos EXIF.<br><strong>Note:</strong> El estándar EXIF se aplica sólo a imágenes.jpg y.tiff
+metadata_img_error_exif	No EXIF Metadata was found. Note: The EXIF standard applies only to .jpg and .tiff images	Aucune métadonnée EXIF n'a été trouvée. Note: Le Format EXIF s'applique uniquement aux images .jpg et .tiff	No se encontraron metadatos EXIF. Note: El estándar EXIF se aplica sólo a imágenes.jpg y.tiff
 metadata_table_error	Video failed loading. Check the URL and try again	Vidéo impossible à charger. Veuillez verifier l'URL et réessayer	Fue imposible descargar el video. Verifica el URL y vuelve a intentarlo
 metadata_img_software_fields_1	Make	Marque	Marca
 metadata_img_software_fields_2	Model	Modèle	Modelo

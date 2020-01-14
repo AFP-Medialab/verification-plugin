@@ -16,11 +16,12 @@ import {cleanMetadataState} from "../../../../../redux/actions/tools/metadataAct
 import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Metadata.tsv";
 
-const MetadataImageResult = (result) => {
+const MetadataImageResult = (props) => {
     const classes = useMyStyles();
     const keyword = useLoadLanguage("components/NavItems/tools/Metadata.tsv", tsv);
 
-    const report = result["result"];
+    const report = props["result"];
+
 
     let softwareInfos = [
         {
@@ -261,6 +262,7 @@ const MetadataImageResult = (result) => {
     return (
         <Paper className={classes.root}>
             <CloseResult onClick={() => dispatch(cleanMetadataState())}/>
+            <img src={props.image} alt={props.image}/>
             <Typography variant={"h5"}>
                 {keyword("metadata_img_software_title")}
             </Typography>

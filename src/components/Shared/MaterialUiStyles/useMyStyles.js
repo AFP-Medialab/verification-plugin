@@ -199,9 +199,10 @@ const useMyStyles = makeStyles(theme => ({
     secondaryHeading: {
         fontSize: theme.typography.pxToRem(15),
         color: theme.palette.text.secondary,
-    }, gridList: {
-        width: 500,
-        height: 450,
+    },
+    gridList: {
+        width: "100%",
+        maxHeight: "500px",
     },
     imagesRoot: {
         display: 'flex',
@@ -303,5 +304,22 @@ const useMyStyles = makeStyles(theme => ({
         cursor: "none",
         display: "block",
     },
+    FactCheckCard : {
+        maxWidth: "80%"
+    },
+    bullet: {
+        display: 'inline-block',
+        margin: '0 2px',
+        transform: 'scale(0.8)',
+    },
+    title: {
+        fontSize: 14,
+    },
+    pos: {
+        marginBottom: 12,
+    },
+    factCheckLogos : {
+        width: "20%"
+    }
 }));
 export default useMyStyles;

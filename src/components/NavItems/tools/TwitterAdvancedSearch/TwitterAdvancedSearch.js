@@ -15,6 +15,7 @@ import DateTimePicker from "../../../Shared/DateTimePicker/DateTimePicker";
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/Thumbnails.tsv";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
+import {submissionEvent} from "../../../Shared/GoogleAnalytics/GoogleAnalytics";
 
 const TwitterAdvancedSearch = () => {
     const classes = useMyStyles();
@@ -97,6 +98,7 @@ const TwitterAdvancedSearch = () => {
 
     const onSubmit = () => {
         let url = createUrl(term.value, account.value, filter.value, tweetLang.value, geocode.value, near.value, within.value, fromDate, toDate, localTime);
+        submissionEvent(url);
         window.open(url);
     };
 

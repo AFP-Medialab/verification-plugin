@@ -20,6 +20,8 @@ import Checkbox from "@material-ui/core/Checkbox";
 import FormGroup from "@material-ui/core/FormGroup";
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/Thumbnails.tsv";
+import {submissionEvent} from "../../../Shared/GoogleAnalytics/GoogleAnalytics";
+import OnClickInfo from "../../../Shared/OnClickInfo/OnClickInfo";
 
 const Thumbnails = () => {
     const classes = useMyStyles();
@@ -35,6 +37,7 @@ const Thumbnails = () => {
         'bing': false,
         'tineye': false,
         'yandex': false,
+        'openTabs': false,
     });
 
     const handleChange = event => {
@@ -99,20 +102,28 @@ const Thumbnails = () => {
     const submitForm = () => {
         let url = input.value.replace("?rel=0", "");
         if (url !== null && url !== "" && isYtUrl(url)) {
+            submissionEvent(url);
             dispatch(setThumbnailsResult(url, get_images(url), false, false));
+            if (selectedValue.openTabs)
+                resultData.map(value => imageClickUrl(value))
+
         } else
             dispatch(setError("Please use a valid Youtube Url (add to tsv)"));
     };
 
     const imageClick = (event) => {
+        imageClickUrl(event.target.value);
+    };
+
+    const imageClickUrl = (url) => {
         if (selectedValue.google)
-            ImageReverseSearch("google", event.target.src)
+            ImageReverseSearch("google",url);
         if (selectedValue.yandex)
-            ImageReverseSearch("yandex", event.target.src)
+            ImageReverseSearch("yandex", url);
         if (selectedValue.bing)
-            ImageReverseSearch("bing", event.target.src)
+            ImageReverseSearch("bing", url);
         if (selectedValue.tineye)
-            ImageReverseSearch("tineye", event.target.src)
+            ImageReverseSearch("tineye", url)
     };
 
     return (
@@ -149,6 +160,18 @@ const Thumbnails = () => {
                                 );
                             })
                         }
+                        <FormControlLabel
+                            control={
+                                <Checkbox
+                                    checked={selectedValue["openTabs"]}
+                                    value={"openTabs"}
+                                    onChange={e => handleChange(e)}
+                                    color="primary"
+                                />
+                            }
+                            label={keyword("openTabs")}
+                            labelPlacement="end"
+                        />
                     </FormGroup>
                 </FormControl>
                 <Box m={2}/>
@@ -165,7 +188,9 @@ const Thumbnails = () => {
                 resultData && resultData.length !== 0 &&
                 <Paper className={classes.root}>
                     <CloseResult onClick={() => dispatch(cleanThumbnailsState())}/>
-                    <ImageGridList list={resultData} handleClick={imageClick}/>
+                    <OnClickInfo keyword={"thumbnails_tip"}/>
+                    <Box m={2}/>
+                    <ImageGridList list={resultData} handleClick={imageClick} height={160}/>
                 </Paper>
             }
         </div>);

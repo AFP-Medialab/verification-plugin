@@ -5,7 +5,6 @@ import Box from "@material-ui/core/Box";
 import {useSelector} from "react-redux";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
-import 'react-image-crop/dist/ReactCrop.css';
 import 'tui-image-editor/dist/tui-image-editor.css'
 import FolderOpenIcon from '@material-ui/icons/FolderOpen';
 import Typography from "@material-ui/core/Typography";
@@ -20,6 +19,7 @@ import useVideoTreatment from "./Hooks/useVideoTreatment";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/Metadata.tsv";
+import {submissionEvent} from "../../../Shared/GoogleAnalytics/GoogleAnalytics";
 
 const Metadata = () => {
     const classes = useMyStyles();
@@ -38,6 +38,7 @@ const Metadata = () => {
 
     const submitUrl = () => {
         if (input) {
+            submissionEvent(input);
             if (radioImage) {
                 setImageurl(input);
             } else {
@@ -112,7 +113,7 @@ const Metadata = () => {
                 (resultData) ?
                     (
                         (resultIsImage) ?
-                        <MetadataImageResult result={resultData}/>
+                        <MetadataImageResult result={resultData} image={resultUrl}/>
                         :
                         <MetadataVideoResult result={resultData}/>
                         )

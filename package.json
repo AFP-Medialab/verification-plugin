@@ -26,8 +26,8 @@
     "react-d3-library": "^1.1.8",
     "react-datetime": "^2.16.3",
     "react-dom": "^16.10.2",
+    "react-ga": "^2.7.0",
     "react-iframe": "^1.8.0",
-    "react-image-crop": "^8.4.0",
     "react-image-lightbox": "^5.1.1",
     "react-magnifier": "^3.0.4",
     "react-map-gl": "^5.1.5",
@@ -37,13 +37,14 @@
     "react-router-dom": "^5.1.2",
     "react-slack-feedback": "^2.1.0",
     "redux": "^4.0.4",
+    "rss-parser": "^3.7.3",
     "save-svg-as-png": "^1.4.14",
     "styled-components": "^4.4.1",
     "tui-image-editor": "^3.7.1"
   },
   "scripts": {
-    "start": "export NODE_OPTIONS=\"--max-old-space-size=2048\" & react-scripts start",
-    "build": "react-scripts build",
+    "start": "export NODE_OPTIONS=\"--max-old-space-size=4096\" & react-scripts start",
+    "build": "react-scripts --max-old-space-size=4096 build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
@@ -64,7 +65,6 @@
   },
   "devDependencies": {
     "mp4box": "^0.3.20",
-    "pigeon-marker": "^0.3.4",
     "react-wordcloud": "^1.1.1"
   }
 }
