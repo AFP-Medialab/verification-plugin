@@ -198,6 +198,7 @@ const ClassRoom = () => {
                                                 obj.definition
                                             }
                                         </Typography>
+                                        <Box m={2}/>
                                     </div>
                                 )
                             })
