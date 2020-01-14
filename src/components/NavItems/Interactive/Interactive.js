@@ -73,34 +73,6 @@ const Interactive = () => {
         <Paper className={classes.root}>
             <Box justifyContent="center" display="flex" flexDirection="column">
                 <CustomTile text={keyword("quiz_title")}/>
-                <Grid container justify="space-between" spacing={2}
-                      alignContent={"center"}>
-                    <Grid item justify={"center"}>
-                        <Fab color={"primary"} onClick={previous} >
-                            <NavigateBeforeIcon fontSize={"large"} style={{ color: "white" }}/>
-                        </Fab>
-                    </Grid>
-                    <Grid item align="center">
-                        {
-                            carousel.map((obj, key) => {
-                                return (
-                                    <Slide key={key} direction="right" in={key === carouselIndex} mountOnEnter
-                                           unmountOnExit>
-                                        <div>
-                                            {obj.title}
-                                        </div>
-                                    </Slide>
-                                )
-                            })
-                        }
-                    </Grid>
-                    <Grid item justify={"center"}>
-                        <Fab color={"primary"} onClick={next} >
-                            <NavigateNextIcon fontSize={"large"} style={{ color: "white" }}/>
-                        </Fab>
-                    </Grid>
-                </Grid>
-
                 {
                     carousel.map((obj, key) => {
                         const isImage = obj.ext === "jpg" || obj.ext === "jpeg" || obj.ext === "png" || obj.ext === "bmp" || obj.ext === "gif"
@@ -117,7 +89,22 @@ const Interactive = () => {
                                                     height={window.innerHeight / 2}/>
                                     }
                                 </div>
-                                <Box m={3}/>
+                                <Grid container justify="space-between" spacing={2}
+                                      alignContent={"center"}>
+                                    <Grid item justify={"center"}>
+                                        <Fab color={"primary"} onClick={previous} >
+                                            <NavigateBeforeIcon fontSize={"large"} style={{ color: "white" }}/>
+                                        </Fab>
+                                    </Grid>
+                                    <Grid item align="center">
+
+                                    </Grid>
+                                    <Grid item justify={"center"}>
+                                        <Fab color={"primary"} onClick={next} >
+                                            <NavigateNextIcon fontSize={"large"} style={{ color: "white" }}/>
+                                        </Fab>
+                                    </Grid>
+                                </Grid>
                                 {
                                     (isImage) ?
                                         <Grid container justify="center" spacing={2}
