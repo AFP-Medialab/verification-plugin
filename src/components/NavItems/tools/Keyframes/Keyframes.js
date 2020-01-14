@@ -15,6 +15,7 @@ import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import {useParams} from 'react-router-dom'
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/Keyframes.tsv";
+import {submissionEvent} from "../../../Shared/GoogleAnalytics/GoogleAnalytics";
 
 const Keyframes = (props) => {
     const {url} = useParams();
@@ -39,6 +40,7 @@ const Keyframes = (props) => {
     useKeyframeWrapper(submittedUrl);
 
     const submitUrl = () => {
+        submissionEvent(input);
         setSubmittedUrl(input);
     };
 

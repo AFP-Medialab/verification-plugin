@@ -40,6 +40,7 @@ import tutorialIcon from "./images/navbar/tutorial-off.png"
 import classRoomIcon from "./images/navbar/classroom-off.png"
 import interactiveIcon from "./images/navbar/quiz-off.png"
 import aboutIcon from "./images/navbar/about-off.png"
+import ImageSearchIcon from '@material-ui/icons/ImageSearch';
 
 import analysisIconOn from "./images/tools/video_logoOn.png"
 import analysisIconOff from "./images/tools/video_logoOff.png"
@@ -67,8 +68,10 @@ import forensicIconOff from "./images/tools/forensic_logoOff.png"
 
 import twitterSnaIconOn from "./images/tools/twitter-sna-on.png"
 import twitterSnaIconOff from "./images/tools/twitter-sna-off.png"
+
 import useLoadLanguage from "../../Hooks/useLoadLanguage";
 import tsv from "../../LocalDictionary/components/NavBar.tsv";
+import FactCheck from "../NavItems/FactCheck/FactCheck";
 
 
 function a11yProps(index) {
@@ -222,6 +225,13 @@ const NavBar = (props) => {
             content: <About/>,
             path: "about",
             footer: <Footer type={"afp"}/>
+        },
+        {
+            title: "navbar_factCheck",
+            icon: <ImageSearchIcon fontSize={"large"}/>,
+            content: <FactCheck/>,
+            path: "factCheck",
+            footer: <Footer type={"afp"}/>
         }
     ];
 
@@ -295,7 +305,7 @@ const NavBar = (props) => {
                                 <ListItem button key={key} onClick={() => changeValue(key)}>
                                     <ListItemIcon color="primary.main">
                                         {
-                                            (key === 0)?
+                                            (key === 0) ?
                                                 item.icon
                                                 :
                                                 <Icon className={classes.iconRootDrawer} fontSize={"large"}>

@@ -1,10 +1,13 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import NavBar from "./components/NavBar/NavBar";
 import {MuiThemeProvider} from "@material-ui/core";
 import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
 import {HashRouter as Router, Route, Switch} from "react-router-dom";
 import history from "./components/Shared/History/History";
 import PopUp from "./components/PopUp/PopUp";
+import ReactGA from 'react-ga';
+//import auth from './auth.ts'; // Sample authentication provider
+
 const theme = createMuiTheme({
     palette: {
         primary: {
@@ -46,6 +49,21 @@ const NotFound = () => {
 };
 
 function App() {
+
+    useEffect(() => {
+        const trackingId = process.env.REACT_APP_GOOGLE_ANALYTICS_KEY;
+        ReactGA.initialize(trackingId, {
+            //debug: true,
+            titleCase: false,
+        });
+        ReactGA.ga('set', 'checkProtocolTask', ()=>{});
+        ReactGA.pageview('/popup.html');
+        history.listen(location => {
+            ReactGA.set({ page: location.pathname }); // Update the user's current page
+            ReactGA.pageview(location.pathname); // Record a pageview for the given page
+        });
+    }, []);
+
     return (
         <Router history={history}>
             <MuiThemeProvider theme={theme}>

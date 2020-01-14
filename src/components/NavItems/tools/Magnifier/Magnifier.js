@@ -2,7 +2,6 @@ import {Paper, Box, TextField, Button, Typography} from "@material-ui/core";
 import React, {useEffect, useState} from "react";
 import CustomTile from "../../../Shared/CustomTitle/CustomTitle";
 import {useDispatch, useSelector} from "react-redux";
-import 'react-image-crop/dist/ReactCrop.css';
 import 'tui-image-editor/dist/tui-image-editor.css'
 import ImageResult from "./Results/ImageResult";
 import FolderOpenIcon from '@material-ui/icons/FolderOpen';
@@ -12,6 +11,7 @@ import {setMagnifierResult} from "../../../../redux/actions/tools/magnifierActio
 import {setError} from "../../../../redux/actions/errorActions";
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/Magnifier.tsv";
+import {submissionEvent} from "../../../Shared/GoogleAnalytics/GoogleAnalytics";
 
 const Magnifier = () => {
     const {url} = useParams();
@@ -33,6 +33,7 @@ const Magnifier = () => {
 
 
     const submitUrl = (src) => {
+        submissionEvent(src);
         let img = new Image();
         img.onload = () => {
             let canvas = document.createElement('canvas');

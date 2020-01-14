@@ -26,6 +26,7 @@ import DateTimePicker from "../../../Shared/DateTimePicker/DateTimePicker";
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/TwitterSna.tsv";
 import Typography from "@material-ui/core/Typography";
+import {submissionEvent} from "../../../Shared/GoogleAnalytics/GoogleAnalytics";
 
 const TwitterSna = () => {
     const classes = useMyStyles();
@@ -177,8 +178,10 @@ const TwitterSna = () => {
         }
         let newRequest = makeRequest();
 
-        if (JSON.stringify(newRequest) !== JSON.stringify(request))
+        if (JSON.stringify(newRequest) !== JSON.stringify(request)) {
+            submissionEvent(JSON.stringify(newRequest));
             setSubmittedRequest(newRequest);
+        }
     };
 
     return (
