@@ -36,7 +36,7 @@ const useImageTreatment = (mediaUrl) => {
                     if (!isEmpty(res)) {
                         dispatch(setMetadadaResult(mediaUrl, res, false, false, true));
                     } else
-                        handleErrors("metadata_img_error_exif");
+                        dispatch(setMetadadaResult(mediaUrl, {message: "metadata_img_error_exif"}, false, false, true));
                 });
             };
             img.onerror = (error) => {

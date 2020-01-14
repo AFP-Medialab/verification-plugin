@@ -21,7 +21,17 @@ const MetadataImageResult = (props) => {
     const keyword = useLoadLanguage("components/NavItems/tools/Metadata.tsv", tsv);
 
     const report = props["result"];
-
+    const dispatch = useDispatch();
+    if (report.message === "metadata_img_error_exif")
+        return (
+            <Paper className={classes.root}>
+                <CloseResult onClick={() => dispatch(cleanMetadataState())}/>
+                <img src={props.image} alt={props.image}/>
+                <Typography variant={"h5"}>
+                    {keyword("metadata_img_error_exif")}
+                </Typography>
+            </Paper>
+        );
 
     let softwareInfos = [
         {
@@ -257,7 +267,7 @@ const MetadataImageResult = (props) => {
             description: keyword("metadata_img_gps_desc_5")
         },
     ];
-    const dispatch = useDispatch();
+
 
     return (
         <Paper className={classes.root}>
