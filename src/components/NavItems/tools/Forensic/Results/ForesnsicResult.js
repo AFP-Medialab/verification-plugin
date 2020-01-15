@@ -10,11 +10,10 @@ import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
 import CardActions from "@material-ui/core/CardActions";
 import IconButton from "@material-ui/core/IconButton";
-import ZoomInIcon from '@material-ui/icons/ZoomIn';
+import VisibilityIcon from '@material-ui/icons/Visibility';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Collapse from "@material-ui/core/Collapse";
 import clsx from 'clsx';
-import Lightbox from 'react-image-lightbox';
 import 'react-image-lightbox/style.css';
 import CloseResult from "../../../../Shared/CloseResult/CloseResult";
 import {cleanForensicState} from "../../../../../redux/actions/tools/forensicActions";
@@ -24,6 +23,9 @@ import RadioButtonCheckedIcon from '@material-ui/icons/RadioButtonChecked';
 import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Forensic.tsv";
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
+import ReactCompareImage from 'react-compare-image';
+import Toolbar from "@material-ui/core/Toolbar";
+
 
 const ForensicResults = (props) => {
     const classes = useMyStyles();
@@ -43,9 +45,6 @@ const ForensicResults = (props) => {
     const [ghostExpanded, setGhostExpand] = useState(false);
     images.push(...ghostImages);
 
-    const [photoIndex, setPhotoIndex] = useState(0);
-    const [open, setOpen] = useState(false);
-
     const handleExpandClick = (key) => {
         const previous = expanded[key];
         setExpanded({
@@ -54,10 +53,32 @@ const ForensicResults = (props) => {
         });
     };
 
+    const [filteredImage, setFilteredImage] = useState(images[0]);
+    const [filterName, setFilterName] = useState("forensic_title_dqReport");
+
+    const changeFilter = (index, text) => {
+        setFilteredImage(images[index]);
+        setFilterName(text);
+        scrollToTop();
+    };
+
+    const scrollToTop = () => window.scrollTo(0, 320)
+
 
     return (
         <Paper className={classes.root}>
             <CloseResult onClick={() => dispatch(cleanForensicState())}/>
+            <div style={{maxWidth: '640px', margin: "0 auto"}}>
+                <ReactCompareImage
+                    leftImage={result.displayImage}
+                    rightImage={filteredImage}
+                    handle={<React.Fragment/>}
+                    sliderLineWidth={0}
+                />
+            </div>
+            <Box m={1}/>
+            <Typography variant={"h4"}>{keyword("applied_filter") + keyword(filterName)}</Typography>
+            <Box m={2}/>
             <Grid container justify="center" spacing={2}>
                 {
                     dataParams.map((value, key) => {
@@ -72,18 +93,14 @@ const ForensicResults = (props) => {
                                         className={classes.forensicMedia}
                                         image={result[value]["map"]}
                                         title={keyword("forensic_title_" + value)}
-                                        onClick={() => {
-                                            setOpen(true);
-                                            setPhotoIndex(key)
-                                        }}
+                                        onClick={() => changeFilter(key, "forensic_title_" + value)}
                                     />
                                     <CardActions disableSpacing>
                                         <IconButton aria-label="add to favorites"
                                                     onClick={() => {
-                                                        setOpen(true);
-                                                        setPhotoIndex(key)
+                                                        changeFilter(key, "forensic_title_" + value)
                                                     }}>
-                                            <ZoomInIcon/>
+                                            <VisibilityIcon/>
                                         </IconButton>
                                         <IconButton
                                             className={clsx(classes.expand, {
@@ -118,14 +135,11 @@ const ForensicResults = (props) => {
                         {
                             ghostImages.map((image, index) => {
                                 return (
-                                    <Box hidden={selectedGhostImage !== index.toString()}>
+                                    <Box key={index} hidden={selectedGhostImage !== index.toString()}>
                                         <CardMedia
                                             className={classes.forensicMedia}
                                             image={image}
-                                            onClick={() => {
-                                                setOpen(true);
-                                                setPhotoIndex(images.length  - ghostImages.length + index)
-                                            }}
+                                            onClick={() => changeFilter(images.length - ghostImages.length + index, "forensic_title_ghostReport")}
                                         />
                                     </Box>
                                 )
@@ -152,11 +166,8 @@ const ForensicResults = (props) => {
                         </div>
                         <CardActions disableSpacing>
                             <IconButton aria-label="add to favorites"
-                                        onClick={() => {
-                                            setOpen(true)
-                                            setPhotoIndex(images.length  - ghostImages.length)
-                                        }}>
-                                <ZoomInIcon/>
+                                        onClick={() => changeFilter(images.length - ghostImages.length, "forensic_title_ghostReport")}>
+                                <VisibilityIcon/>
                             </IconButton>
                             <IconButton
                                 className={clsx(classes.expand, {
@@ -180,22 +191,6 @@ const ForensicResults = (props) => {
                     </Card>
                 </Box>
             </Grid>
-            {
-                open &&
-                <Lightbox
-                    reactModalStyle={{overlay: {zIndex: 9999999}}}
-                    mainSrc={images[photoIndex]}
-                    nextSrc={images[(photoIndex + 1) % images.length]}
-                    prevSrc={images[(photoIndex + images.length - 1) % images.length]}
-                    onCloseRequest={() => setOpen(false)}
-                    onMovePrevRequest={() =>
-                        setPhotoIndex((photoIndex + images.length - 1) % images.length)
-                    }
-                    onMoveNextRequest={() =>
-                        setPhotoIndex((photoIndex + 1) % images.length)
-                    }
-                />
-            }
         </Paper>
     )
 };
