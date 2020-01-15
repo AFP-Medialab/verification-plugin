@@ -4740,6 +4740,11 @@ css-declaration-sorter@^4.0.1:
     postcss "^7.0.1"
     timsort "^0.3.0"
 
+css-element-queries@^1.0.2:
+  version "1.2.3"
+  resolved "https://registry.yarnpkg.com/css-element-queries/-/css-element-queries-1.2.3.tgz#e14940b1fcd4bf0da60ea4145d05742d7172e516"
+  integrity sha512-QK9uovYmKTsV2GXWQiMOByVNrLn2qz6m3P7vWpOR4IdD6I3iXoDw5qtgJEN3Xq7gIbdHVKvzHjdAtcl+4Arc4Q==
+
 css-font-size-keywords@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/css-font-size-keywords/-/css-font-size-keywords-1.0.0.tgz#854875ace9aca6a8d2ee0d345a44aae9bb6db6cb"
@@ -13222,6 +13227,14 @@ react-browser-extension-scripts@0.1.2:
     write-file-webpack-plugin "4.5.0"
   optionalDependencies:
     fsevents "2.0.7"
+
+react-compare-image@^2.0.3:
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/react-compare-image/-/react-compare-image-2.0.3.tgz#652aa8c477fe401720b3e9e8fcd7154c6f341375"
+  integrity sha512-yWrT8yBXtsJ9Yyihxn7J2kR41tpR1OI2hCp2kcLyP6OM2l0bZHnuOW9uCDz62Uwvd/mQFZ9qm/7s5cFt1+Pv7Q==
+  dependencies:
+    css-element-queries "^1.0.2"
+    prop-types "^15.7.2"
 
 react-csv@^1.1.2:
   version "1.1.2"
