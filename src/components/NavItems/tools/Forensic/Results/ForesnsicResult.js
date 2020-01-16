@@ -72,8 +72,8 @@ const ForensicResults = (props) => {
                 <ReactCompareImage
                     leftImage={result.displayImage}
                     rightImage={filteredImage}
-                    handle={<React.Fragment/>}
-                    sliderLineWidth={0}
+                    //handle={<React.Fragment/>}
+                    sliderLineWidth={0.5}
                 />
             </div>
             <Box m={1}/>
