@@ -25,6 +25,8 @@ import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Forens
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 import ReactCompareImage from 'react-compare-image';
 import Toolbar from "@material-ui/core/Toolbar";
+import Tooltip from "@material-ui/core/Tooltip";
+import Button from "@material-ui/core/Button";
 
 
 const ForensicResults = (props) => {
@@ -53,8 +55,8 @@ const ForensicResults = (props) => {
         });
     };
 
-    const [filteredImage, setFilteredImage] = useState(images[0]);
-    const [filterName, setFilterName] = useState("forensic_title_dqReport");
+    const [filteredImage, setFilteredImage] = useState(result.displayImage);
+    const [filterName, setFilterName] = useState("forensic_title_none");
 
     const changeFilter = (index, text) => {
         setFilteredImage(images[index]);
@@ -72,12 +74,27 @@ const ForensicResults = (props) => {
                 <ReactCompareImage
                     leftImage={result.displayImage}
                     rightImage={filteredImage}
-                    //handle={<React.Fragment/>}
-                    sliderLineWidth={0.5}
+                    handle={(result.displayImage !== filteredImage) ? null : <React.Fragment/>}
+                    sliderLineWidth={(result.displayImage === filteredImage) ? 0 : 0.6}
                 />
             </div>
             <Box m={1}/>
             <Typography variant={"h4"}>{keyword("applied_filter") + keyword(filterName)}</Typography>
+            {
+                (result.displayImage !== filteredImage) &&
+                <Button
+                    variant={"contained"}
+                    color={"primary"}
+                    onClick={() => {
+                        setFilteredImage(result.displayImage);
+                        setFilterName("forensic_title_none")
+                    }}
+                >
+                    {
+                        keyword("clear_filter")
+                    }
+                </Button>
+            }
             <Box m={2}/>
             <Grid container justify="center" spacing={2}>
                 {
@@ -89,19 +106,23 @@ const ForensicResults = (props) => {
                                         title={keyword("forensic_title_" + value)}
                                         subheader=""
                                     />
-                                    <CardMedia
-                                        className={classes.forensicMedia}
-                                        image={result[value]["map"]}
-                                        title={keyword("forensic_title_" + value)}
-                                        onClick={() => changeFilter(key, "forensic_title_" + value)}
-                                    />
+                                    <Tooltip title={keyword("apply_filter")} placement="bottom">
+                                        <CardMedia
+                                            className={classes.forensicMedia}
+                                            image={result[value]["map"]}
+                                            title={keyword("forensic_title_" + value)}
+                                            onClick={() => changeFilter(key, "forensic_title_" + value)}
+                                        />
+                                    </Tooltip>
                                     <CardActions disableSpacing>
-                                        <IconButton aria-label="add to favorites"
-                                                    onClick={() => {
-                                                        changeFilter(key, "forensic_title_" + value)
-                                                    }}>
-                                            <VisibilityIcon/>
-                                        </IconButton>
+                                        <Tooltip title={keyword("apply_filter")} placement="bottom">
+                                            <IconButton aria-label="add to favorites"
+                                                        onClick={() => {
+                                                            changeFilter(key, "forensic_title_" + value)
+                                                        }}>
+                                                <VisibilityIcon/>
+                                            </IconButton>
+                                        </Tooltip>
                                         <IconButton
                                             className={clsx(classes.expand, {
                                                 [classes.expandOpen]: expanded[value],
@@ -136,11 +157,13 @@ const ForensicResults = (props) => {
                             ghostImages.map((image, index) => {
                                 return (
                                     <Box key={index} hidden={selectedGhostImage !== index.toString()}>
-                                        <CardMedia
-                                            className={classes.forensicMedia}
-                                            image={image}
-                                            onClick={() => changeFilter(images.length - ghostImages.length + index, "forensic_title_ghostReport")}
-                                        />
+                                        <Tooltip title={keyword("apply_filter")} placement="bottom">
+                                            <CardMedia
+                                                className={classes.forensicMedia}
+                                                image={image}
+                                                onClick={() => changeFilter(images.length - ghostImages.length + index, "forensic_title_ghostReport")}
+                                            />
+                                        </Tooltip>
                                     </Box>
                                 )
                             })
@@ -165,10 +188,12 @@ const ForensicResults = (props) => {
                             }
                         </div>
                         <CardActions disableSpacing>
-                            <IconButton aria-label="add to favorites"
-                                        onClick={() => changeFilter(images.length - ghostImages.length, "forensic_title_ghostReport")}>
-                                <VisibilityIcon/>
-                            </IconButton>
+                            <Tooltip title={keyword("apply_filter")} placement="bottom">
+                                <IconButton aria-label="add to favorites"
+                                            onClick={() => changeFilter(images.length - ghostImages.length, "forensic_title_ghostReport")}>
+                                    <VisibilityIcon/>
+                                </IconButton>
+                            </Tooltip>
                             <IconButton
                                 className={clsx(classes.expand, {
                                     [classes.expandOpen]: ghostExpanded,
