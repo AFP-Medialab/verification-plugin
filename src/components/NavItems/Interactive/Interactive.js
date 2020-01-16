@@ -91,15 +91,14 @@ const Interactive = () => {
                                 </div>
                                 <Grid container justify="space-between" spacing={2}
                                       alignContent={"center"}>
-                                    <Grid item justify={"center"}>
+                                    <Grid item>
                                         <Fab color={"primary"} onClick={previous} >
                                             <NavigateBeforeIcon fontSize={"large"} style={{ color: "white" }}/>
                                         </Fab>
                                     </Grid>
                                     <Grid item align="center">
-
                                     </Grid>
-                                    <Grid item justify={"center"}>
+                                    <Grid item>
                                         <Fab color={"primary"} onClick={next} >
                                             <NavigateNextIcon fontSize={"large"} style={{ color: "white" }}/>
                                         </Fab>

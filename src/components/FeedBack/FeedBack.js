@@ -2,12 +2,12 @@ import React from "react";
 import SlackFeedback from "react-slack-feedback";
 import feedBackTheme from "./feedBackTheme";
 import useLoadLanguage from "../../Hooks/useLoadLanguage";
-import tsv from "../../LocalDictionary/components/Feedback.tsv";
+import tsv from "../../LocalDictionary/components/FeedBack.tsv";
 
 
 const FeedBack = () => {
     const API_URL = process.env.REACT_APP_MY_WEB_HOOK_URL;
-    const keyword = useLoadLanguage("components/Feedback.tsv", tsv);
+    const keyword = useLoadLanguage("components/FeedBack.tsv", tsv);
     const translationJson = {
         "checkbox.option": "Send url with feedback",
         "close": keyword("close"),
