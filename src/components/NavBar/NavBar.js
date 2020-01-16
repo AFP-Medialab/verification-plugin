@@ -217,6 +217,13 @@ const NavBar = (props) => {
             footer: <Footer type={"afp"}/>
         },
         {
+            title: "navbar_factCheck",
+            icon: <ImageSearchIcon fontSize={"large"}/>,
+            content: <FactCheck/>,
+            path: "factCheck",
+            footer: <Footer type={"afp"}/>
+        },
+        {
             title: "navbar_about",
             icon:
                 <Icon classes={{root: classes.iconRootTab}} fontSize={"large"}>
@@ -224,13 +231,6 @@ const NavBar = (props) => {
                 </Icon>,
             content: <About/>,
             path: "about",
-            footer: <Footer type={"afp"}/>
-        },
-        {
-            title: "navbar_factCheck",
-            icon: <ImageSearchIcon fontSize={"large"}/>,
-            content: <FactCheck/>,
-            path: "factCheck",
             footer: <Footer type={"afp"}/>
         }
     ];
