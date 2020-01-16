@@ -40,7 +40,7 @@ const Languages = () => {
 
     return (
         <div>
-            <Tooltip title={keyword("apply_filter")} placement="bottom">
+            <Tooltip title={keyword("translations")} placement="bottom">
                 <IconButton aria-label="add to favorites"
                             onClick={handleClick}
                 >
