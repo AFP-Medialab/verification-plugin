@@ -12,7 +12,7 @@ ReactGA.pageview('/popup.html');
 
 
 
-export function rightClickEvent (toolName, media) {
+function rightClickEvent (toolName, media) {
     ga('send', 'event',
         'Contextual menu',
         'Contextual menu click on :' + toolName + " for "+ media,
