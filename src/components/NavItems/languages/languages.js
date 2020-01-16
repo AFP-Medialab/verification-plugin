@@ -6,6 +6,9 @@ import {useSelector, useDispatch} from "react-redux";
 import {changeLanguage} from "../../../redux/actions";
 import useLoadLanguage from "../../../Hooks/useLoadLanguage";
 import tsv from "../../../LocalDictionary/components/NavItems/languages.tsv";
+import TranslateIcon from '@material-ui/icons/Translate';
+import Tooltip from "@material-ui/core/Tooltip";
+import IconButton from "@material-ui/core/IconButton";
 
 const Languages = () => {
     const dictionary = useSelector(state => state.dictionary);
@@ -37,9 +40,13 @@ const Languages = () => {
 
     return (
         <div>
-            <Button color={"primary"} variant={"outlined"} size={"small"} aria-controls={"simple-menu"} aria-haspopup={true} fullWidth={false} onClick={handleClick}>
-                {keyword("lang_code") || ""}
-            </Button>
+            <Tooltip title={keyword("apply_filter")} placement="bottom">
+                <IconButton aria-label="add to favorites"
+                            onClick={handleClick}
+                >
+                    <TranslateIcon/>
+                </IconButton>
+            </Tooltip>
             <Menu
                 id="simple-menu"
                 anchorEl={anchorEl}
