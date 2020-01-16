@@ -78,12 +78,14 @@ const PopUp = () => {
 
     return (
         <div className={classes.popUp}>
-            <Grid>
-                <Grid item>
+            <Grid container>
+                <Grid item xs={6}>
                     <img src={invidLogo} alt={invidLogo} style={{width: "100px"}}/>
+                </Grid>
+                <Grid item xs={6}>
                     <img src={weVerifyLogo} alt={weVerifyLogo} style={{width: "100px"}}/>
                 </Grid>
-                <Grid item>
+                <Grid item xs={12}>
                     <Button variant="outlined" color="primary" fullWidth={true} width={"100%"} onClick={
                         () => window.open("/popup.html#/app/tools/all")
                     }>
