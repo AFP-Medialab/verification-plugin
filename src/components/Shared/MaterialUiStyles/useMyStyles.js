@@ -320,6 +320,12 @@ const useMyStyles = makeStyles(theme => ({
     },
     factCheckLogos : {
         width: "20%"
+    },
+    tab: {
+        [theme.breakpoints.up('sm')]: {
+            fontSize: theme.typography.pxToRem(13),
+            minWidth: 100,
+        },
     }
 }));
 export default useMyStyles;

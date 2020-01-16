@@ -1,6 +1,28 @@
 // If your extension doesn't need a background script, just leave this file empty
-
+import ReactGA, {ga} from "react-ga"
 let page_name = 'popup.html';
+
+const trackingId = process.env.REACT_APP_GOOGLE_ANALYTICS_KEY;
+ReactGA.initialize(trackingId, {
+    //debug: true,
+    titleCase: false,
+});
+ReactGA.ga('set', 'checkProtocolTask', ()=>{});
+ReactGA.pageview('/popup.html');
+
+
+
+export function rightClickEvent (toolName, media) {
+    ga('send', 'event',
+        'Contextual menu',
+        'Contextual menu click on :' + toolName + " for "+ media,
+        JSON.stringify( {
+            toolName : toolName,
+            media : media,
+        })
+    );
+    return true;
+}
 
 const get_images = (url) => {
     let video_id = url.split('v=')[1].split('&')[0];
@@ -21,7 +43,7 @@ const karmadecaySearch = function(word){
     if (url !== "") {
         window.chrome.tabs.create({ url: search_url + url});
         //Google analytics
-        //ga("send", "event", "Contextual Menu - Reddit", "click", url);
+        rightClickEvent("Image Reverse Search Reddit", url)
     }
 };
 
@@ -33,6 +55,7 @@ const thumbnailsSearch = function(word){
             window.chrome.tabs.create({url:lst[index]});
         }
         // Google analytics
+        rightClickEvent("YouTubeThumbnails", url)
         //ga("send", "event", "ContextualMenu - ThumbnailYouTube", "click", url);
     }
 };
@@ -48,6 +71,7 @@ const analysisVideo = function(word){
     if (url !== "") {
         window.chrome.tabs.create({url:page_name+"#/app/tools/Analysis/" + encodeURIComponent(url)});
         // Google analytics
+        rightClickEvent("Analysis", url)
         //ga("send", "event", "ContextualMenu - AnalysisVideo", "click", url);
     }
 };
@@ -57,6 +81,7 @@ const imageMagnifier = function(word){
     if (url !== "") {
         window.chrome.tabs.create({url:page_name+"#/app/tools/magnifier/" + encodeURIComponent(url)});
         // Google analytics
+        rightClickEvent("Magnifier", url)
         //ga("send", "event", "ContextualMenu - Magnifier", "click", url);
     }
 };
@@ -68,6 +93,8 @@ const imageReversesearch = function(word){
     if (url !== ""){
         window.chrome.tabs.create({url:search_url + url});
         // Google analytics
+        let bool = rightClickEvent("Image Reverse Search Google", url)
+        console.error("right Click : " + bool)
         //ga("send", "event", "ContextualMenu - Google", "click", url);
     }
 };
@@ -77,6 +104,7 @@ const imageForensic = function(word){
     if (url !== ""){
         window.chrome.tabs.create({url:page_name+"#/app/tools/forensic/" + encodeURIComponent(url)});
         // Google analytics
+        rightClickEvent("Forensic", url)
         //ga("send", "event", "ContextualMenu - Forensic", "click", url);
     }
 };
@@ -87,6 +115,7 @@ const imageReversesearchBaidu = function(word){
     if (url !== ""){
         window.chrome.tabs.create({url:search_url + url + "&fm=index&uptype=urlsearch"});
         // Google analytics
+        rightClickEvent("Image Reverse Search Baidu", url)
         //ga("send", "event", "ContextualMenu - Baidu", "click", url);
     }
 };
@@ -97,6 +126,7 @@ const imageReversesearchYandex = function(word){
     if (url !== ""){
         window.chrome.tabs.create({url:search_url + url + "&rpt=imageview"});
         // Google analytics
+        rightClickEvent("Image Reverse Search Yandex", url)
         //ga("send", "event", "ContextualMenu - Yandex", "click", url);
     }
 };
@@ -107,6 +137,8 @@ const imageReversesearchTineye = function(word){
     if (url !== "") {
         window.chrome.tabs.create({url:search_url + url});
         // Google analytics
+        rightClickEvent("Image Reverse Search Tineye", url)
+
         //ga("send", "event", "ContextualMenu - Tineye", "click", url);
     }
 };
@@ -117,11 +149,13 @@ const imageReversesearchBing = function(word){
     if (url !== "") {
         window.chrome.tabs.create({url:search_url + url + "&view=detailv2&iss=sbi"});
         // Google analytics
+        rightClickEvent("Image Reverse Search Bing", url)
         //ga("send", "event", "ContextualMenu - Bing", "click", url);
     }
 };
 
 const imageReversesearchAll = function(word){
+    rightClickEvent("Image Reverse Search All", getUrlImg(word));
     imageReversesearch(word);
     imageReversesearchBaidu(word);
     imageReversesearchBing(word);

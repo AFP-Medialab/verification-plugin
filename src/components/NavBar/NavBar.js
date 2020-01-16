@@ -265,6 +265,7 @@ const NavBar = (props) => {
                                 return <Tab key={index}
                                             label={keyword(item.title)}
                                             icon={item.icon}
+                                            className={classes.tab}
                                             {...a11yProps(index)}/>
                             })
                         }

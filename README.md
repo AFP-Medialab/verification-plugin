@@ -108,8 +108,7 @@ This file contains all the different components that are used in this project.
 
 - First go to `src/components/Navbar/Navbar.js` file. Add an object to the `tabItems` list like so :
 
-```jsx harmony
-
+```
 import yourImage from "./path/to/your/image";
 
 const tabItems = [
@@ -153,7 +152,7 @@ const tabItems = [
 
 - First go to `src/components/Navbar/Navbar.js` file. Add an object to the `drawerItems` list like so :
 
-```jsx harmony
+```
 const drawerItems = [
         {
             title: "navbar_tools",
@@ -187,7 +186,7 @@ const drawerItems = [
 ###⚠
 
 - go to `src/components/NavBar/DrawerItem/DrawerItem.js` file. Add an object to the `drawerItemsContent` list like so :
-```jsx harmony
+```
 const drawerItemsContent = [
         {
             content: <AllTools tools={props.drawerItems}/>,
@@ -227,7 +226,7 @@ This function takes two parameters: `defaultState` and `action`
 This function should contain a switch for `action.type`.
 This function returns the state value.
 
-```js
+```
 const defaultState = true;
 const exampleReducer = (state = defaultState, action) => {
     switch (action.type) {
@@ -259,7 +258,7 @@ reducers can be more complex and use objects as default state. have a look to `s
 
 import it and add it to the `allReducers`  variable.
 
-```js
+```
 // imports...
 import exampleReducer from "./your/path";
 
@@ -283,7 +282,7 @@ For example, I used `SET_TRUE`, `SET_FALSE`,`SET_CUSTOM`,`TOGGLE_STATE`.
 
 I will create : 
 
-```js
+```
 export const setTrue = () => {
     return {
         type : "SET_TRUE",
@@ -313,7 +312,7 @@ export const toggleState = () => {
 
 - You can then use these actions in anny component like this :
 
-```jsx harmony
+```
 import React from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {setTrue, setFale, setCustom, toggleState} from "./path/to/exampleActions.js";
