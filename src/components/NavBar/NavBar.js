@@ -262,8 +262,10 @@ const NavBar = (props) => {
                     >
                         {
                             tabItems.map((item, index) => {
-                                return <Tab key={index} label={keyword(item.title)}
-                                            icon={item.icon} {...a11yProps(index)}/>
+                                return <Tab key={index}
+                                            label={keyword(item.title)}
+                                            icon={item.icon}
+                                            {...a11yProps(index)}/>
                             })
                         }
                     </Tabs>
