@@ -79,7 +79,7 @@ const ForensicResults = (props) => {
                 />
             </div>
             <Box m={1}/>
-            <Typography variant={"h4"}>{keyword("applied_filter") + keyword(filterName)}</Typography>
+            <Typography variant={"h5"}>{keyword("applied_filter") + keyword(filterName)}</Typography>
             {
                 (result.displayImage !== filteredImage) &&
                 <Button
