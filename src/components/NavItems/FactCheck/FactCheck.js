@@ -75,7 +75,7 @@ const FactCheck = () => {
                                         <Typography className={classes.pos} color="textSecondary">
                                             {keyword("author") + finishXMLParsing(val.creator)}
                                         </Typography>
-                                        <Typography variant="body2" component="p">
+                                        <Typography variant="body2" component="p" align={"justify"}>
                                             {finishXMLParsing(val.content)}
                                         </Typography>
                                         <Box m={1}/>

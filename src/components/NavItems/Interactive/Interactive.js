@@ -143,7 +143,7 @@ const Interactive = () => {
                                         <Grid container justify="space-between" spacing={2}
                                               alignContent={"center"}>
                                             <Grid item>
-                                                <Typography className={classes.heading}>
+                                                <Typography className={classes.heading} align={"justify"}>
                                                     {keyword("quiz_explanations")}
                                                 </Typography>
                                             </Grid>
@@ -158,7 +158,7 @@ const Interactive = () => {
                                         </Grid>
                                     </ExpansionPanelSummary>
                                     <ExpansionPanelDetails>
-                                        <Typography>
+                                        <Typography align={"justify"}>
                                             {obj.answer}
                                             <Link target="_blank" href={obj.answerUrl}>
                                                 {obj.answerUrl}

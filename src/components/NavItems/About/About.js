@@ -41,7 +41,7 @@ const About = () => {
             <Box justifyContent="center" display="flex" flexDirection="column" align={"center"} >
                 <CustomTile text={keyword("about_title")}/>
                 <Box m={3}/>
-                <Typography variant={"body2"}>
+                <Typography variant={"body2"} align={"justify"}>
                     {
                         keyword("source_part_1")
                     }
@@ -54,8 +54,8 @@ const About = () => {
                         keyword("source_part_2")
                     }
                 </Typography>
-                <Typography variant={"body2"}>{keyword("description")}</Typography>
-                <Typography variant={"body2"}>
+                <Typography variant={"body2"} align={"justify"}>{keyword("description")}</Typography>
+                <Typography variant={"body2"} align={"justify"}>
                     {
                         keyword("feedBack_part_1")
                     }
@@ -76,20 +76,20 @@ const About = () => {
                 </Typography>
                 <Box m={3}/>
                 <Typography variant={"h6"}>{keyword("disclaimer")}</Typography>
-                <Typography variant={"body2"}>
+                <Typography variant={"body2"} align={"justify"}>
                     {
                         keyword("disclaimer_text")
                     }
                 </Typography>
                 <Box m={3}/>
                 <Typography variant={"h6"}>{keyword("privacy")}</Typography>
-                <Typography variant={"body2"}>
+                <Typography variant={"body2"} align={"justify"}>
                     {
                         keyword("privacy_text")
                     }
                 </Typography>
                 <Box m={3}/>
-                <Typography variant={"body2"}>
+                <Typography variant={"body2"} align={"justify"}>
                     {
                         keyword("info_invid_part_1")
                     }
@@ -110,7 +110,7 @@ const About = () => {
                         keyword("info_invid_part_3")
                     }
                 </Typography>
-                <Typography variant={"body2"}>
+                <Typography variant={"body2"} align={"justify"}>
                     {
                         keyword("info_weverify_part_1")
                     }
@@ -131,7 +131,7 @@ const About = () => {
                         keyword("info_weverify_part_3")
                     }
                 </Typography>
-                <Typography variant={"body2"}>
+                <Typography variant={"body2"} align={"justify"}>
                     {
                         keyword("developed_text_part_1")
                     }
