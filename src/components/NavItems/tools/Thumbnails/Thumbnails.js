@@ -3,7 +3,7 @@ import CustomTile from "../../../Shared/CustomTitle/CustomTitle";
 import TextField from "@material-ui/core/TextField";
 import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
-import React from "react";
+import React, {useEffect} from "react";
 import ImageReverseSearch from "../ImageReverseSearch";
 import ImageGridList from "../../../Shared/ImageGridList/ImageGridList";
 import {useDispatch, useSelector} from "react-redux";
@@ -30,6 +30,11 @@ const Thumbnails = () => {
     const resultUrl = useSelector(state => state.thumbnails.url);
     const resultData = useSelector(state => state.thumbnails.result);
     const dispatch = useDispatch();
+
+    useEffect(() => {
+        if (selectedValue.openTabs)
+            resultData.map(value => imageClickUrl(value))
+    }, [resultUrl]);
 
     const input = useInput(resultUrl);
     const [selectedValue, setSelectedValue] = React.useState({
@@ -110,8 +115,7 @@ const Thumbnails = () => {
         if (url !== null && url !== "" && isYtUrl(url)) {
             submissionEvent(url);
             dispatch(setThumbnailsResult(url, get_images(url), false, false));
-            if (selectedValue.openTabs)
-                resultData.map(value => imageClickUrl(value))
+
 
         } else
             dispatch(setError("Please use a valid Youtube Url (add to tsv)"));
