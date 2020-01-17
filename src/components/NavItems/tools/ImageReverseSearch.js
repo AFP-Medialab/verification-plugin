@@ -16,6 +16,9 @@ const ImageReverseSearch = (type, urls) => {
         yandex: {
             search: "https://yandex.com/images/search?url=",
             end: "&rpt=imageview"
+        },
+        reddit : {
+            search: "http://karmadecay.com/search?kdtoolver=b1&q="
         }
     };
     if( typeof urls === "string" ) urls = [urls];
@@ -27,6 +30,7 @@ const ImageReverseSearch = (type, urls) => {
         ImageReverseSearch("google", urls);
         ImageReverseSearch("tineye", urls);
         ImageReverseSearch("yandex", urls);
+        ImageReverseSearch("reddit", urls);
         return;
     }
     let urlStart = baseUrl[type].search;
