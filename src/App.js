@@ -6,6 +6,7 @@ import {HashRouter as Router, Route, Switch} from "react-router-dom";
 import history from "./components/Shared/History/History";
 import PopUp from "./components/PopUp/PopUp";
 import ReactGA from 'react-ga';
+import {useSelector} from "react-redux";
 //import auth from './auth.ts'; // Sample authentication provider
 
 const theme = createMuiTheme({
@@ -31,13 +32,13 @@ const theme = createMuiTheme({
                 color: 'white',
             },
         },
-        MuiIcon:{
+        MuiIcon: {
             root: {
                 overflow: "visible"
             }
         }
     },
-    zIndex:{
+    zIndex: {
         drawer: 1099
     }
 });
@@ -50,19 +51,31 @@ const NotFound = () => {
 
 function App() {
 
+    const cookies = useSelector(state => state.cookies);
+
     useEffect(() => {
         const trackingId = process.env.REACT_APP_GOOGLE_ANALYTICS_KEY;
         ReactGA.initialize(trackingId, {
             //debug: true,
             titleCase: false,
         });
-        ReactGA.ga('set', 'checkProtocolTask', ()=>{});
+        ReactGA.ga('set', 'checkProtocolTask', () => {
+        });
         ReactGA.pageview('/popup.html');
         history.listen(location => {
-            ReactGA.set({ page: location.pathname }); // Update the user's current page
+            ReactGA.set({page: location.pathname}); // Update the user's current page
             ReactGA.pageview(location.pathname); // Record a pageview for the given page
         });
     }, []);
+
+    useEffect(() => {
+        if (cookies !== null && cookies) {
+            window['ga-disable-' + process.env.REACT_APP_GOOGLE_ANALYTICS_KEY] = false;
+        } else {
+            window['ga-disable-' + process.env.REACT_APP_GOOGLE_ANALYTICS_KEY] = true;
+        }
+
+    }, [cookies]);
 
     return (
         <Router history={history}>

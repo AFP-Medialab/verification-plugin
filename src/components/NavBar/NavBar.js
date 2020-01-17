@@ -72,6 +72,9 @@ import twitterSnaIconOff from "./images/tools/twitter-sna-off.png"
 import useLoadLanguage from "../../Hooks/useLoadLanguage";
 import tsv from "../../LocalDictionary/components/NavBar.tsv";
 import FactCheck from "../NavItems/FactCheck/FactCheck";
+import Snackbar from "@material-ui/core/Snackbar";
+import {setFalse, setTrue} from "../../redux/actions/cookiesActions";
+import Button from "@material-ui/core/Button";
 
 
 function a11yProps(index) {
@@ -87,6 +90,8 @@ const NavBar = (props) => {
 
     const tabValue = useSelector(state => state.nav);
     const drawerValue = useSelector(state => state.tool.selected);
+    const cookiesUsage = useSelector(state => state.cookies);
+
     const dispatch = useDispatch();
 
 
@@ -331,12 +336,25 @@ const NavBar = (props) => {
                         <KeyboardArrowUpIcon/>
                     </Fab>
                 </ScrollTop>
-                <div>
-                    {
-                        (error !== null) &&
-                        <MySnackbar variant="error" message={error} onClick={() => dispatch(cleanError())}/>
+                {
+                    (error !== null) &&
+                    <MySnackbar variant="error" message={error} onClick={() => dispatch(cleanError())}/>
+                }
+                {
+                    cookiesUsage === null &&
+                    <Snackbar
+                        anchorOrigin={{
+                            vertical: 'top',
+                            horizontal: 'center',
+                        }}
+                        open={true}
+                        message={keyword("cookies_message")}
+                        action={[
+                            <Button color={"secondary"} size={"small"} onClick={() => dispatch(setFalse())}> {keyword("cookies_decline")} </Button>,
+                            <Button color={"primary"} size={"small"} onClick={() => dispatch(setTrue())}> {keyword("cookies_accept")} </Button>,
+                        ]}
+                    />
                     }
-                </div>
                 <FeedBack/>
             </main>
         </div>
