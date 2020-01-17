@@ -38,6 +38,8 @@ const Thumbnails = () => {
         'tineye': false,
         'yandex': false,
         'openTabs': false,
+        'reddit': false,
+
     });
 
     const handleChange = event => {
@@ -63,6 +65,10 @@ const Thumbnails = () => {
         {
             title: "yandex",
             text: "Yandex"
+        },
+        {
+            title: "reddit",
+            text: "Reddit"
         },
     ];
 
@@ -112,18 +118,20 @@ const Thumbnails = () => {
     };
 
     const imageClick = (event) => {
-        imageClickUrl(event.target.value);
+        imageClickUrl(event.target.src);
     };
 
     const imageClickUrl = (url) => {
         if (selectedValue.google)
-            ImageReverseSearch("google",url);
+            ImageReverseSearch("google", [url]);
         if (selectedValue.yandex)
-            ImageReverseSearch("yandex", url);
+            ImageReverseSearch("yandex", [url]);
         if (selectedValue.bing)
-            ImageReverseSearch("bing", url);
+            ImageReverseSearch("bing", [url]);
         if (selectedValue.tineye)
-            ImageReverseSearch("tineye", url)
+            ImageReverseSearch("tineye", [url]);
+        if (selectedValue.reddit)
+            ImageReverseSearch("reddit", [url]);
     };
 
     return (
