@@ -14,6 +14,7 @@ import tsv from "../../../LocalDictionary/components/NavItems/About.tsv";
 import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
 import Link from "@material-ui/core/Link";
 import Typography from "@material-ui/core/Typography";
+import {toggleState} from "../../../redux/actions/cookiesActions";
 
 
 
@@ -22,6 +23,7 @@ const About = () => {
     const keyword = useLoadLanguage("components/NavItems/About.tsv", tsv);
     const humanRights = useSelector(state => state.humanRightsCheckBox);
     const interactiveExplanation = useSelector(state => state.interactiveExplanation);
+    const cookiesUsage = useSelector(state => state.cookies);
     const dispatch = useDispatch();
 
     const additionalDangerousContent = () => {
@@ -194,6 +196,20 @@ const About = () => {
                 }
                 label={keyword("quiz_unlock_explanations")}
             />
+            {
+                cookiesUsage !== null &&
+                <FormControlLabel
+                    control={
+                        <Checkbox
+                            checked={cookiesUsage}
+                            onChange={() => dispatch(toggleState())}
+                            value="checkedBox"
+                            color="primary"
+                        />
+                    }
+                    label={keyword("cookies_usage")}
+                />
+            }
         </Paper>
     );
 };

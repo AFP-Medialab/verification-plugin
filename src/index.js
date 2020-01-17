@@ -6,18 +6,20 @@ import * as serviceWorker from './serviceWorker';
 import {createStore} from "redux";
 import allReducers from "./redux/reducers/index"
 import {Provider} from "react-redux"
+import {elementOrEmpty} from "react-csv/src/core";
 
-function saveToLocalStorage(state){
+function saveToLocalStorage(state) {
     try {
         const savedState = {
-            humanRightsCheckBox : state.humanRightsCheckBox,
+            humanRightsCheckBox: state.humanRightsCheckBox,
             interactiveExplanation: state.interactiveExplanation,
             language: state.language,
+            cookies: state.cookies
         };
         const serializedState = JSON.stringify(savedState);
         localStorage.setItem('state', serializedState)
-    }
-    catch (e) {
+
+    } catch (e) {
         console.error(e)
     }
 }
@@ -28,8 +30,7 @@ function loadFromLocalStorage() {
         if (serializedState === null)
             return undefined;
         return JSON.parse(serializedState);
-    }
-    catch (e) {
+    } catch (e) {
         console.error(e);
         return undefined;
     }
@@ -44,11 +45,16 @@ const store = createStore(
     window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 );
 
-store.subscribe(() => saveToLocalStorage(store.getState()));
+store.subscribe(() => {
+    if (store.getState().cookies !== null && store.getState().cookies)
+        saveToLocalStorage(store.getState());
+    else
+        localStorage.removeItem('state');
+});
 
 ReactDOM.render(
     <Provider store={store}>
-        <App />
+        <App/>
     </Provider>,
     document.getElementById('root'));
 

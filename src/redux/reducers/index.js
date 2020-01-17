@@ -14,6 +14,7 @@ import metadataReducer from "./tools/metadataReducer";
 import thumbnailsReducer from "./tools/thumbnailsReducer";
 import twitterSnaReducer from "./tools/twitterSnaReducer";
 import videoRightsReducer from "./tools/videoRightsReducer";
+import cookiesReducer from "./cookiesReducers";
 
 const allReducers = combineReducers({
     language : languageReducer,
@@ -31,6 +32,7 @@ const allReducers = combineReducers({
     thumbnails : thumbnailsReducer,
     twitterSna : twitterSnaReducer,
     videoRights : videoRightsReducer,
+    cookies : cookiesReducer,
 });
 
 export default allReducers;
