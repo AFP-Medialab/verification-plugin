@@ -15,6 +15,10 @@ import popUpEs from "./images/popUpImage/popUp_ES.png";
 import ListItemText from "@material-ui/core/ListItemText";
 import ListItem from "@material-ui/core/ListItem";
 import List from "@material-ui/core/List";
+import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
+import ExpansionPanel from "@material-ui/core/ExpansionPanel";
 
 
 // from https://material-ui.com/customization/default-theme/
@@ -58,8 +62,10 @@ const Tutorial = () => {
                     <img src={popImg} alt={""} className={classes.InteractiveMedia}/>
                 </Box>
                 <Box m={1}/>
-                <div className={"content"} style={dangerousDivStyle} dangerouslySetInnerHTML={{__html: keyword("tuto_1")}}></div>
-                <div className={"content"} style={dangerousDivStyle} dangerouslySetInnerHTML={{__html: keyword("tuto_2")}}></div>
+                <div className={"content"} style={dangerousDivStyle}
+                     dangerouslySetInnerHTML={{__html: keyword("tuto_1")}}></div>
+                <div className={"content"} style={dangerousDivStyle}
+                     dangerouslySetInnerHTML={{__html: keyword("tuto_2")}}></div>
 
                 <Typography variant="body1">{keyword("tuto_3")}</Typography>
                 <Box item={"true"}>
@@ -68,23 +74,176 @@ const Tutorial = () => {
                 <Box m={1}/>
                 <Typography variant="h3">{keyword("tuto_h_2")}</Typography>
                 <Box m={1}/>
-                <div className={"content"} style={dangerousDivStyle} dangerouslySetInnerHTML={{__html: keyword("tuto_4")}}></div>
-                <Box m={1}/>
-                <div className={"content"} style={dangerousDivStyle} dangerouslySetInnerHTML={{__html: keyword("tuto_5")}}></div>
-                <Box m={1}/>
-                <div className={"content"} style={dangerousDivStyle} dangerouslySetInnerHTML={{__html: keyword("tuto_6")}}></div>
-                <Box m={1}/>
-                <div className={"content"} style={dangerousDivStyle} dangerouslySetInnerHTML={{__html: keyword("tuto_7")}}></div>
-                <Box m={1}/>
-                <div className={"content"} style={dangerousDivStyle} dangerouslySetInnerHTML={{__html: keyword("tuto_8")}}></div>
-                <Box m={1}/>
-                <div className={"content"} style={dangerousDivStyle} dangerouslySetInnerHTML={{__html: keyword("tuto_9")}}></div>
-                <Box m={1}/>
-                <div className={"content"} style={dangerousDivStyle} dangerouslySetInnerHTML={{__html: keyword("tuto_10")}}></div>
-                <Box m={1}/>
-                <div className={"content"} style={dangerousDivStyle} dangerouslySetInnerHTML={{__html: keyword("tuto_11")}}></div>
-                <Box m={1}/>
-                <div className={"content"} style={dangerousDivStyle} dangerouslySetInnerHTML={{__html: keyword("tuto_12")}}></div>
+                <ExpansionPanel>
+                    <ExpansionPanelSummary
+                        expandIcon={<ExpandMoreIcon/>}
+                        aria-controls="panel1a-content"
+                        id="panel1a-header"
+                    >
+                        <Typography className={classes.heading}>
+                            {
+                                keyword("analysis_title")
+                            }
+                        </Typography>
+                    </ExpansionPanelSummary>
+                    <ExpansionPanelDetails>
+                        <div className={"content"} style={dangerousDivStyle}
+                             dangerouslySetInnerHTML={{__html: keyword("tuto_4")}}></div>
+                    </ExpansionPanelDetails>
+                </ExpansionPanel>
+                <ExpansionPanel>
+                    <ExpansionPanelSummary
+                        expandIcon={<ExpandMoreIcon/>}
+                        aria-controls="panel1a-content"
+                        id="panel1a-header"
+                    >
+                        <Typography className={classes.heading}>
+                            {
+                                keyword("keyframes_title")
+                            }
+                        </Typography>
+                    </ExpansionPanelSummary>
+                    <ExpansionPanelDetails>
+                        <div className={"content"} style={dangerousDivStyle}
+                             dangerouslySetInnerHTML={{__html: keyword("tuto_5")}}></div>
+                    </ExpansionPanelDetails>
+                </ExpansionPanel>
+                <ExpansionPanel>
+                    <ExpansionPanelSummary
+                        expandIcon={<ExpandMoreIcon/>}
+                        aria-controls="panel1a-content"
+                        id="panel1a-header"
+                    >
+                        <Typography className={classes.heading}>
+                            {
+                                keyword("youtube_title")
+                            }
+                        </Typography>
+                    </ExpansionPanelSummary>
+                    <ExpansionPanelDetails>
+                        <div className={"content"} style={dangerousDivStyle}
+                             dangerouslySetInnerHTML={{__html: keyword("tuto_6")}}></div>
+                    </ExpansionPanelDetails>
+                </ExpansionPanel>
+                <ExpansionPanel>
+                    <ExpansionPanelSummary
+                        expandIcon={<ExpandMoreIcon/>}
+                        aria-controls="panel1a-content"
+                        id="panel1a-header"
+                    >
+                        <Typography className={classes.heading}>
+                            {
+                                keyword("twitter_title")
+                            }
+                        </Typography>
+                    </ExpansionPanelSummary>
+                    <ExpansionPanelDetails>
+                        <div className={"content"} style={dangerousDivStyle}
+                             dangerouslySetInnerHTML={{__html: keyword("tuto_7")}}></div>
+                    </ExpansionPanelDetails>
+                </ExpansionPanel>
+                <ExpansionPanel>
+                    <ExpansionPanelSummary
+                        expandIcon={<ExpandMoreIcon/>}
+                        aria-controls="panel1a-content"
+                        id="panel1a-header"
+                    >
+                        <Typography className={classes.heading}>
+                            {
+                                keyword("magnifier_title")
+                            }
+                        </Typography>
+                    </ExpansionPanelSummary>
+                    <ExpansionPanelDetails>
+                        <div className={"content"} style={dangerousDivStyle}
+                             dangerouslySetInnerHTML={{__html: keyword("tuto_8")}}></div>
+                    </ExpansionPanelDetails>
+                </ExpansionPanel>
+                <ExpansionPanel>
+                    <ExpansionPanelSummary
+                        expandIcon={<ExpandMoreIcon/>}
+                        aria-controls="panel1a-content"
+                        id="panel1a-header"
+                    >
+                        <Typography className={classes.heading}>
+                            {
+                                keyword("metadata_title")
+                            }
+                        </Typography>
+                    </ExpansionPanelSummary>
+                    <ExpansionPanelDetails>
+                        <div className={"content"} style={dangerousDivStyle}
+                             dangerouslySetInnerHTML={{__html: keyword("tuto_9")}}></div>
+                    </ExpansionPanelDetails>
+                </ExpansionPanel>
+                <ExpansionPanel>
+                    <ExpansionPanelSummary
+                        expandIcon={<ExpandMoreIcon/>}
+                        aria-controls="panel1a-content"
+                        id="panel1a-header"
+                    >
+                        <Typography className={classes.heading}>
+                            {
+                                keyword("copyright_title")
+                            }
+                        </Typography>
+                    </ExpansionPanelSummary>
+                    <ExpansionPanelDetails>
+                        <div className={"content"} style={dangerousDivStyle}
+                             dangerouslySetInnerHTML={{__html: keyword("tuto_10")}}></div>
+                    </ExpansionPanelDetails>
+                </ExpansionPanel>
+                <ExpansionPanel>
+                    <ExpansionPanelSummary
+                        expandIcon={<ExpandMoreIcon/>}
+                        aria-controls="panel1a-content"
+                        id="panel1a-header"
+                    >
+                        <Typography className={classes.heading}>
+                            {
+                                keyword("forensic_title")
+                            }
+                        </Typography>
+                    </ExpansionPanelSummary>
+                    <ExpansionPanelDetails>
+                        <div className={"content"} style={dangerousDivStyle}
+                             dangerouslySetInnerHTML={{__html: keyword("tuto_11")}}></div>
+                    </ExpansionPanelDetails>
+                </ExpansionPanel>
+                <ExpansionPanel>
+                    <ExpansionPanelSummary
+                        expandIcon={<ExpandMoreIcon/>}
+                        aria-controls="panel1a-content"
+                        id="panel1a-header"
+                    >
+                        <Typography className={classes.heading}>
+                            {
+                                keyword("twitter_sna_title")
+                            }
+                        </Typography>
+                    </ExpansionPanelSummary>
+                    <ExpansionPanelDetails>
+                        <div className={"content"} style={dangerousDivStyle}
+                             dangerouslySetInnerHTML={{__html: keyword("tuto_13")}}></div>
+                    </ExpansionPanelDetails>
+                </ExpansionPanel>
+                <ExpansionPanel>
+                    <ExpansionPanelSummary
+                        expandIcon={<ExpandMoreIcon/>}
+                        aria-controls="panel1a-content"
+                        id="panel1a-header"
+                    >
+                        <Typography className={classes.heading}>
+                            {
+                                keyword("contextual_menu_title")
+                            }
+                        </Typography>
+                    </ExpansionPanelSummary>
+                    <ExpansionPanelDetails>
+                        <div className={"content"} style={dangerousDivStyle}
+                             dangerouslySetInnerHTML={{__html: keyword("tuto_12")}}></div>
+                    </ExpansionPanelDetails>
+                </ExpansionPanel>
             </Box>
         </Paper>
     );
