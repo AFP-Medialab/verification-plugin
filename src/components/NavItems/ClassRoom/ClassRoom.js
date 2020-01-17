@@ -140,9 +140,9 @@ const ClassRoom = () => {
                     </TabPanel>
                     <TabPanel value={value} index={1}>
                         <Typography variant={"h5"}>{keyword("user_resources_intro")}</Typography>
-                        <Typography variant="body1">{keyword("user_resources_intro_remote")}</Typography>
-                        <div className={classes.root}>
-
+                        <Box m={2}/>
+                        <Typography variant="body1" align={"justify"}>{keyword("user_resources_intro_remote")}</Typography>
+                        <div>
                             <TextField
                                 inputRef={ref => setInputRef(ref)}
                                 id="standard-full-width"
@@ -160,22 +160,22 @@ const ClassRoom = () => {
                                 }
                             </Button>
                         </div>
-                        <Typography variant="body1" color="textSecondary">
+                        <Typography variant="body1" color="textSecondary" align={"justify"}>
                             {
                                 keyword("examples")
                             }
                         </Typography>
-                        <Typography variant="body1" color="textSecondary">
+                        <Typography variant="body1" color="textSecondary" align={"justify"}>
                             {
                                 keyword("youtube_example")
                             }
                         </Typography>
-                        <Typography variant="body1" color="textSecondary">
+                        <Typography variant="body1" color="textSecondary" align={"justify"}>
                             {
                                 keyword("twitter_example")
                             }
                         </Typography>
-                        <Typography variant="body1" color="textSecondary">
+                        <Typography variant="body1" color="textSecondary" align={"justify"}>
                             {
                                 keyword("website_example")
                             }
@@ -191,7 +191,7 @@ const ClassRoom = () => {
                                                 obj.word +" : "
                                             }
                                         </Typography>
-                                        <Typography variant="body1" display="inline">
+                                        <Typography variant="body1" display="inline" align={"justify"}>
                                             {
                                                 obj.definition
                                             }
