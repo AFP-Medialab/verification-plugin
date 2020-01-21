@@ -251,6 +251,8 @@ const useTwitterSnaRequest = (request) => {
             firstDate.setSeconds(0);
             var firstArrElt = new Date(firstDate); 
             var lastDate = new Date(entries.until);
+            if (lastDate.getHours() === 0 && lastDate.getMinutes() === 0)
+                lastDate.setDate(lastDate.getDate() -1);
             lastDate.setHours(1);
             lastDate.setMinutes(0);
             lastDate.setSeconds(0);

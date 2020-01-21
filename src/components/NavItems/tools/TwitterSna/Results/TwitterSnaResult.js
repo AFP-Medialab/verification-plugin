@@ -691,7 +691,7 @@ export default function TwitterSnaResult(props) {
                         )
                 })
             }
-            {
+            {/*
                 <ExpansionPanel>
                     <ExpansionPanelSummary
                         expandIcon={<ExpandMoreIcon />}
@@ -709,7 +709,7 @@ export default function TwitterSnaResult(props) {
                     </Box>
                     </ExpansionPanelDetails>
 
-                </ExpansionPanel>
+                </ExpansionPanel>*/
             }
             {
                 result && result.cloudChart &&
