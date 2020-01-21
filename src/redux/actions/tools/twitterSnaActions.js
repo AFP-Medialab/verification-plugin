@@ -17,6 +17,13 @@ export const setTwitterSnaLoading = (loading) => {
     }
 };
 
+export const setTwitterSnaLoadingMessage = (message) => {
+    return {
+        type: "SET_TWITTER_SNA_LOADING_MSG",
+        payload: message
+    }
+}
+
 export const cleanTwitterSnaState = () => {
     return {
         type: "TWITTER_SNA_CLEAN_STATE"
