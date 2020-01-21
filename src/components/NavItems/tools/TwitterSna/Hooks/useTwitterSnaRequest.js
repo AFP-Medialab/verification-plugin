@@ -4,7 +4,6 @@ import { setError } from "../../../../../redux/actions/errorActions";
 import { setTwitterSnaLoading, setTwitterSnaResult, setTwitterSnaLoadingMessage } from "../../../../../redux/actions/tools/twitterSnaActions";
 import axios from "axios";
 
-
 import {
     generateDonutPlotlyJson,
     generateEssidHistogramPlotlyJson,
@@ -15,6 +14,8 @@ import {
 } from "../Results/call-elastic";
 import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../../LocalDictionary/components/NavItems/tools/TwitterSna.tsv";
+
+
 
 const includeWordObj = (wordObj, wordsArray) => {
     for (let i = 0; i < wordsArray.length; i++) {
@@ -364,14 +365,14 @@ const useTwitterSnaRequest = (request) => {
                         }
                         else if (response.data.status === "CountingWords")
                         {
-                            dispatch(setTwitterSnaLoadingMessage("Counting Words ADD TSV"));
+                            dispatch(setTwitterSnaLoadingMessage(keyword("sna_counting_words")));
                             setTimeout(() => getResultUntilsDone(sessionId, false), 3000);
                         }
                         else {
                             generateGraph(response.data, false).then(() => {
                                 setTimeout(() => getResultUntilsDone(sessionId, false), 5000)
 
-                                dispatch(setTwitterSnaLoadingMessage("Fetching Tweets ADD TSV"));
+                                dispatch(setTwitterSnaLoadingMessage(keyword("sna_fetching_tweets")));
                             });
                         }
                     })
