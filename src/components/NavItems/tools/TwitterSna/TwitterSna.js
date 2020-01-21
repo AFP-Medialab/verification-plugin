@@ -25,6 +25,7 @@ import {replaceAll} from "../TwitterAdvancedSearch/createUrl";
 import DateTimePicker from "../../../Shared/DateTimePicker/DateTimePicker";
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/TwitterSna.tsv";
+import Typography from "@material-ui/core/Typography";
 import {submissionEvent} from "../../../Shared/GoogleAnalytics/GoogleAnalytics";
 
 const TwitterSna = () => {
@@ -36,6 +37,8 @@ const TwitterSna = () => {
     const reduxResult = useSelector(state => state.twitterSna.result);
 
     const isLoading = useSelector(state => state.twitterSna.loading);
+    const loadingMessage = useSelector(state => state.twitterSna.loadingMessage);
+
     const dispatch = useDispatch();
 
     const [keyWords, setKeywords] = useState(
@@ -109,8 +112,8 @@ const TwitterSna = () => {
             "bannedWords": trimedBannedWords,
             "lang": (langInput === "lang_all") ? null : langInput.replace("lang_", ""),
             "userList": stringToList(usersInput),
-            "from": dateFormat(newFrom, "yyyy-mm-dd hh:MM:ss"),
-            "until": dateFormat(newUntil, "yyyy-mm-dd hh:MM:ss"),
+            "from": dateFormat(newFrom, "yyyy-mm-dd HH:MM:ss"),
+            "until": dateFormat(newUntil, "yyyy-mm-dd HH:MM:ss"),
             "verified": verifiedUsers === "true",
             "media": (filters === "none") ? null : filters,
             "retweetsHandling": null
@@ -143,7 +146,7 @@ const TwitterSna = () => {
 
     const handleUntilDateChange = (date) => {
         setUntilError(date === null);
-        if (since && date <= since)
+        if (since && date < since)
             setUntilError(true);
         setUntil(date);
     };
@@ -209,7 +212,7 @@ const TwitterSna = () => {
                     id="standard-full-width"
                     label={keyword("twitter_sna_not")}
                     style={{margin: 8}}
-                    placeholder={"word6 word7"}
+                    placeholder={"word word2"}
                     fullWidth
                 />
 
@@ -220,7 +223,7 @@ const TwitterSna = () => {
                     id="standard-full-width"
                     label={keyword("twitter_sna_user")}
                     style={{margin: 8}}
-                    placeholder={"word6 word7"}
+                    placeholder={keyword("user_placeholder")}
                     fullWidth
                 />
                 <Grid container justify={"center"} spacing={4} className={classes.grow}>
@@ -378,6 +381,8 @@ const TwitterSna = () => {
                     {keyword("button_submit")}
                 </Button>
                 <Box m={2}/>
+
+                <Typography>{loadingMessage}</Typography>
                 <LinearProgress hidden={!isLoading}/>
             </Paper>
             {

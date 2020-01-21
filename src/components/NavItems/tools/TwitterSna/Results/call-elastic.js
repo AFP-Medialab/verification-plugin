@@ -31,8 +31,8 @@ export function generateEssidHistogramPlotlyJson(param, retweets, givenFrom, giv
     let mustNot = constructMatchNotPhrase(param, givenFrom, givenUntil);
 
     function usersGet(dateObj, infos) {
-
         dateObj["3"]["buckets"].forEach(obj => {
+
                 infos.push({
                     date: dateObj['key_as_string'],
                     key: obj["key"],
@@ -44,14 +44,14 @@ export function generateEssidHistogramPlotlyJson(param, retweets, givenFrom, giv
     }
 
 
-    function retweetsGet(dateObj, infos) {
+  /*  function retweetsGet(dateObj, infos) {
         infos.push({
             date: dateObj['key_as_string'],
             key: "Retweets",
             nb: dateObj["1"].value
         });
         return infos;
-    }
+    }*/
 
     const userAction = async (query) => {
         let str_query = JSON.stringify(query).replace(/\\/g, "").replace(/"{/g, "{").replace(/}"/g, "}");
@@ -65,12 +65,15 @@ export function generateEssidHistogramPlotlyJson(param, retweets, givenFrom, giv
         });
         const myJson = await response.json();
         if (myJson["error"] === undefined) {
-            if (retweets)
-                return getPlotlyJsonHisto(myJson, retweetsGet);
-            else
-                return getPlotlyJsonHisto(myJson, usersGet);
+            json.histo = getPlotlyJsonHisto(myJson, usersGet);
+            return json.histo; //getPlotlyJsonHisto(myJson, usersGet);
         } else
-            window.alert("There was a problem calling elastic search");
+        {
+            let res = setTimeout(() => userAction(query), 5000);
+           return res;
+//return json.histo;
+        }
+            //window.alert("There was a problem calling elastic search");
     };
     return userAction(buildQuery(aggs, must, mustNot)).then(plotlyJSON => {
 
@@ -425,8 +428,7 @@ function constructAggs(field) {
                         "field": "username",
                         "order": {
                             "1": "desc"
-                        },
-                        "size": 5
+                        }
                     },
                     "aggs": {
                         "1": {
@@ -478,23 +480,20 @@ async function getJson(param, aggs, must, mustNot) {
     let myJson = await response.json();
     if (myJson["hits"]["total"]["value"] === 10000) {
         do {
-            let must2 = [
-                constructMatchPhrase({
+            let must2 = constructMatchPhrase({
                     ...param,
                     "from": myJson.hits.hits[myJson.hits.hits.length - 1]._source.date,
                     "until": param["until"],
-                })
-            ];
-            let mustNot2 = [
-                constructMatchNotPhrase({
+                });
+            let mustNot2 = constructMatchNotPhrase({
                     ...param,
                     "from": myJson.hits.hits[myJson.hits.hits.length - 1]._source.date,
                     "until": param["until"],
-                })
-            ];
+                });
             myJson = await completeJson(aggs, must2, mustNot2, myJson);
         } while (myJson.current_total_hits === 10000)
     }
+    
     return myJson;
 }
 
@@ -578,6 +577,7 @@ function getPlotlyJsonHisto(json, specificGet) {
             nb: dateObj["1"]["value"]
         });
     });
+
     var lines = [];
     while (infos.length !== 0) {
 
@@ -606,11 +606,12 @@ function getPlotlyJsonHisto(json, specificGet) {
         plotlyInfo.y.push(nb);
         lines.push(plotlyInfo);
     }
+
     return lines;
 }
 
 
 //To access tweets collection
 export function getTweets() {
-    return json
+    return json.tweets;
 }

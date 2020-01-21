@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setError } from "../../../../../redux/actions/errorActions";
-import { setTwitterSnaLoading, setTwitterSnaResult } from "../../../../../redux/actions/tools/twitterSnaActions";
+import { setTwitterSnaLoading, setTwitterSnaResult, setTwitterSnaLoadingMessage } from "../../../../../redux/actions/tools/twitterSnaActions";
 import axios from "axios";
 
 
@@ -10,7 +10,8 @@ import {
     generateEssidHistogramPlotlyJson,
     generateTweetCountPlotlyJson,
     generateURLArrayHTML,
-    generateWordCloudPlotlyJson
+    generateWordCloudPlotlyJson,
+    getTweets
 } from "../Results/call-elastic";
 import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../../LocalDictionary/components/NavItems/tools/TwitterSna.tsv";
@@ -21,6 +22,23 @@ const includeWordObj = (wordObj, wordsArray) => {
             return i;
     }
     return -1;
+}
+
+function getNbTweetsInHour(date, bucket)
+{
+    var nbTweets = 0;
+    var day = date.toLocaleDateString();
+    var hour = date.getHours();
+    
+    bucket.forEach(tweet => {
+        var tweetDate = new Date(tweet._source.date);
+        var TweetDay = tweetDate.toLocaleDateString();
+        var tweetHour = tweetDate.getHours();
+
+        if (day === TweetDay && tweetHour == hour)
+            nbTweets++;
+    });
+    return nbTweets;
 }
 
 function getnMax(objArr, n) {
@@ -60,6 +78,8 @@ const useTwitterSnaRequest = (request) => {
 
 
                 let tweetWordsmap = hits[i]._source.wit;
+                if (tweetWordsmap === null || tweetWordsmap === undefined)
+                    return [];
                 var arr = Array.from(tweetWordsmap);
 
                 arr.forEach(word => {
@@ -160,7 +180,7 @@ const useTwitterSnaRequest = (request) => {
                 },
 
                 responsive: true,
-                modeBarButtons: [["toImage"]],
+                modeBarButtons: [["toImage"], ["resetScale2d"]],
                 displaylogo: false,
             };
             return {
@@ -216,9 +236,68 @@ const useTwitterSnaRequest = (request) => {
             result.histogram = createHistogram(data, responseArrayOf7[6], givenFrom, givenUntil);
             if (final) {
                 result.cloudChart = createWordCloud(responseArrayOf7[7]);
+                createHeatMap(request, responseArrayOf7[5].tweets).then(heatMap => result.heatMap = heatMap);
             }
             dispatch(setTwitterSnaResult(request, result, false, true))
         };
+
+    
+
+        async function createHeatMap(entries, hits)
+        {
+            var firstDate = new Date(entries.from);
+            firstDate.setHours(1);
+            firstDate.setMinutes(0);
+            firstDate.setSeconds(0);
+            var firstArrElt = new Date(firstDate); 
+            var lastDate = new Date(entries.until);
+            if (lastDate.getHours() === 0 && lastDate.getMinutes() === 0)
+                lastDate.setDate(lastDate.getDate() -1);
+            lastDate.setHours(1);
+            lastDate.setMinutes(0);
+            lastDate.setSeconds(0);
+            var dates = [firstArrElt];
+            while (firstDate.getTime() !== lastDate.getTime())
+            {
+                var newDate = new Date(firstDate); 
+                firstDate.setDate(firstDate.getDate() + 1);
+                newDate.setDate(newDate.getDate() + 1);
+                dates = [...dates, newDate]
+            }
+            let hoursY = ['12:00:00 AM', '1:00:00 AM', '2:00:00 AM', '3:00:00 AM', '4:00:00 AM', '5:00:00 AM', '6:00:00 AM', '7:00:00 AM', '8:00:00 AM', '9:00:00 AM', '10:00:00 AM', '11:00:00 AM', '12:00:00 PM','1:00:00 PM', '2:00:00 PM', '3:00:00 PM', '4:00:00 PM', '5:00:00 PM', '6:00:00 PM', '7:00:00 PM', '8:00:00 PM', '9:00:00 PM', '10:00:00 PM', '11:00:00 PM'];
+            let isAllnul = true;
+            let nbTweetsZ = [];
+            let i = 0;
+            let datesX = [];
+            dates.forEach(date => {
+                hoursY.forEach(time => {
+                    nbTweetsZ.push([])
+                    let nbTweets = getNbTweetsInHour(date, hits)
+                    if (nbTweets !== 0)
+                        isAllnul = false;
+                    date.setHours(i);
+                    nbTweetsZ[i].push(nbTweets);
+
+                    i++;
+                    });
+                i = 0;
+                datesX = [...datesX, date.toDateString()];
+            });
+
+            console.log("FINISHED Building heatMap");
+            return {
+                plot: [{
+                z: nbTweetsZ,
+                x: datesX,
+                y: hoursY,
+                colorscale: 'Reds',
+                type: 'heatmap'
+            }],
+            isAllnul: isAllnul
+        };
+        
+        }
+
 
         const makeEntries = (data) => {
             return {
@@ -269,19 +348,33 @@ const useTwitterSnaRequest = (request) => {
 
         };
 
-        const getResutUntilsDone = (sessionId) => {
-            axios.get(TwintWrapperUrl + /status/ + sessionId)
-                .then(response => {
-                    if (response.data.status === "Error")
-                        handleErrors("twitterSnaErrorMessage");
-                    else if (response.data.status === "Done")
-                        lastRenderCall(sessionId);
-                    else {
-                        generateGraph(response.data, false).then(() => {
-                            setTimeout(() => getResutUntilsDone(sessionId), 2000)
-                        });
-                    }
-                })
+        const getResultUntilsDone = async (sessionId, isFirst) => {
+            
+            await axios.get(TwintWrapperUrl + /status/ + sessionId)
+                .then(async response => {
+                    if (isFirst)
+                        await generateGraph(response.data, false);
+
+                        if (response.data.status === "Error")
+                            handleErrors("twitterSnaErrorMessage");
+                        else if (response.data.status === "Done")
+                        {
+                            lastRenderCall(sessionId);
+                            dispatch(setTwitterSnaLoadingMessage(""));
+                        }
+                        else if (response.data.status === "CountingWords")
+                        {
+                            dispatch(setTwitterSnaLoadingMessage("Counting Words ADD TSV"));
+                            setTimeout(() => getResultUntilsDone(sessionId, false), 3000);
+                        }
+                        else {
+                            generateGraph(response.data, false).then(() => {
+                                setTimeout(() => getResultUntilsDone(sessionId, false), 5000)
+
+                                dispatch(setTwitterSnaLoadingMessage("Fetching Tweets ADD TSV"));
+                            });
+                        }
+                    })
                 .catch(e => handleErrors(e))
         };
 
@@ -292,9 +385,10 @@ const useTwitterSnaRequest = (request) => {
                 if (response.data.status === "Error")
                     handleErrors("twitterSnaErrorMessage");
                 else if (response.data.status === "Done")
-                    lastRenderCall(response.data.session);
+                    
+                lastRenderCall(response.data.session);
                 else
-                    getResutUntilsDone(response.data.session)
+                getResultUntilsDone(response.data.session, true)
 
             })
             .catch(e => handleErrors(e))

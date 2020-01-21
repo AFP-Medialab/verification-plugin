@@ -22,6 +22,12 @@ import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../../LocalDictionary/components/NavItems/tools/TwitterSna.tsv";
 import { saveSvgAsPng } from 'save-svg-as-png';
 import { CSVLink } from "react-csv";
+import Cytoscape from 'cytoscape';
+import Fcose from 'cytoscape-fcose';
+
+import CytoscapeComponent from 'react-cytoscapejs';
+
+Cytoscape.use( Fcose );
 
 export default function TwitterSnaResult(props) {
 
@@ -37,11 +43,11 @@ export default function TwitterSnaResult(props) {
 
     const [histoTweets, setHistoTweets] = useState(null);
     const [cloudTweets, setCloudTweets] = useState(null);
+    const [heatMapTweets, setheatMapTweets] = useState(null);
     const [pieCharts0, setPieCharts0] = useState(null);
     const [pieCharts1, setPieCharts1] = useState(null);
     const [pieCharts2, setPieCharts2] = useState(null);
     const [pieCharts3, setPieCharts3] = useState(null);
-
     const hidePieChartTweetsView = (index) => {
         switch (index) {
             case 0:
@@ -62,28 +68,30 @@ export default function TwitterSnaResult(props) {
     };
     const pieCharts = [pieCharts0, pieCharts1, pieCharts2, pieCharts3];
 
+    //Set the file name for wordsCloud export
     useEffect(() => {
         setfilesNames('WordCloud_' + props.request.keywordList.join("&") + "_" + props.request.from + "_" + props.request.until);
     }, [JSON.stringify(props.request), props.request]);
 
+    //Set result 
     useEffect(() => {
 
         setResult(props.result);
 
-        
 
     }, [JSON.stringify(props.result), props.result]);
 
-
-
+    //Initialize tweets arrays
     useEffect(() => {
         setHistoTweets(null);
         setCloudTweets(null);
+        setheatMapTweets(null);
         setPieCharts0(null);
         setPieCharts1(null);
         setPieCharts2(null);
         setPieCharts3(null);
     }, [JSON.stringify(props.request), props.request])
+
 
     const displayTweetsOfWord = (word, callback) => {
         
@@ -148,20 +156,38 @@ export default function TwitterSnaResult(props) {
         document.body.removeChild(link);
     };
 
-    function isInRange(pointDate, objDate, isDays) {
-        if (!isDays)
+    function isInRange(pointDate, objDate, periode) {
+      /* if (periode === "isHours")
             return ((((pointDate.getDate() === objDate.getDate()
-                && (pointDate.getHours() >= objDate.getHours() - 2 && pointDate.getHours() <= objDate.getHours() + 2)))
-                || (pointDate.getDate() === objDate.getDate() + 1 && objDate.getHours() >= 22 && pointDate.getHours() <= 2))
+                && (pointDate.getHours() >= objDate.getHours() -2 && pointDate.getHours() <= objDate.getHours() + 1)))
+                || (pointDate.getDate() === objDate.getDate() + 1 && objDate.getHours() >= 23 && pointDate.getHours() <= 1))
                 && pointDate.getMonth() === objDate.getMonth()
-                && pointDate.getFullYear() === objDate.getFullYear());
-        else
+                && pointDate.getFullYear() === objDate.getFullYear());*/
+                
+        if (periode === "isDays")
+        {
             return (pointDate.getDate() === objDate.getDate()
                 && pointDate.getMonth() === objDate.getMonth()
                 && pointDate.getFullYear() === objDate.getFullYear());
+        }
+       else if (periode === "isHours")
+        {
+            return (((pointDate.getDate() === objDate.getDate()
+                && pointDate.getHours() -1 === objDate.getHours()))
+                && pointDate.getMonth() === objDate.getMonth()
+                && pointDate.getFullYear() === objDate.getFullYear());
+        }     
+        else 
+        {
+            return (((pointDate.getDate() === objDate.getDate()
+                && pointDate.getHours() -2 === objDate.getHours()))
+                && pointDate.getMonth() === objDate.getMonth()
+                && pointDate.getFullYear() === objDate.getFullYear());
+        }
+
     }
 
-    const onHistogramClick = (data) => {
+    const displayTweetsOfDate = (data, fromHisto) => {
         let columns = [
             { title: keyword('sna_result_username'), field: 'username' },
             { title: keyword('sna_result_date'), field: 'date' },
@@ -173,12 +199,15 @@ export default function TwitterSnaResult(props) {
         let minDate;
         let maxDate;
         let csvArr = "data:text/csv;charset=utf-8," + keyword("sna_result_username") + "," + keyword("sna_result_date") + "," + keyword("sna_result_tweet") + "," + keyword("sna_result_retweet_nb") + "," + keyword("elastic_url") + "\n";
-        let isDays = (((new Date(data.points[0].data.x[0])).getDate() - (new Date(data.points[0].data.x[1])).getDate()) !== 0);
-        let i = 0;
-        data.points.forEach(point => {
-            let pointDate = new Date(point.x);
+        let isDays = (((new Date(props.request.until) - new Date(props.request.from)) / (1000 * 3600 * 24)) < 14)? "isHoursb":"isDays";
+        if (data.points[0].data.x[1] === undefined) {isDays = "isHoursb"}
+        if (!fromHisto) {isDays = "isHours"}
+
+            let pointDate = new Date(fromHisto? data.points[0].x : (data.points[0].x + ' ' + data.points[0].y));
+
             result.tweets.forEach(tweetObj => {
-                if (tweetObj._source.username === point.data.name) {
+             //   if (tweetObj._source.username === data.points[0].data.name || !fromHisto) {
+
                     let objDate = new Date(tweetObj._source.date);
                     if (isInRange(pointDate, objDate, isDays)) {
                         if (minDate === undefined)
@@ -188,15 +217,15 @@ export default function TwitterSnaResult(props) {
                         let date = new Date(tweetObj._source.date);
                         resData.push(
                             {
-                                username: <a href={"https://twitter.com/" + point.data.name}
-                                    target="_blank">{point.data.name}</a>,
+                                username: <a href={"https://twitter.com/" + tweetObj._source.username}
+                                    target="_blank">{tweetObj._source.username}</a>,
                                 date: date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear() + ' ' + date.getHours() + ':' + date.getMinutes(),
                                 tweet: tweetObj._source.tweet,
                                 retweetNb: tweetObj._source.nretweets,
                                 link: tweetObj._source.link
                             }
                         );
-                        csvArr += point.data.name + ',' +
+                        csvArr += tweetObj._source.username + ',' +
                             date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear() + '_' + date.getHours() + 'h' + date.getMinutes() + ',"' +
                             tweetObj._source.tweet + '",' + tweetObj._source.nretweets + "," + tweetObj._source.link + '\n';
 
@@ -208,16 +237,25 @@ export default function TwitterSnaResult(props) {
                             maxDate = objDate;
                         }
                     }
-                }
+             //  }
             });
-            i++;
-        });
-        setHistoTweets({
+         //  i++;
+      //  });
+        return {
             data: resData,
             columns: columns,
             csvArr: csvArr,
-        });
+        };
     };
+
+    const onHistogramClick = (data) => {
+        setHistoTweets(displayTweetsOfDate(data, true));
+    }
+
+    const onHeatMapClick = (data) => {
+        let truc = displayTweetsOfDate(data, false);
+        setheatMapTweets(truc);
+    }
 
     const getTweetWithClickableLink = (cellData) => {
         let urls = cellData.tweet.match(/((http|https|ftp|ftps)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?|pic\.twitter\.com\/([-a-zA-Z0-9()@:%_\+.~#?&//=]*))/g);
@@ -306,6 +344,7 @@ export default function TwitterSnaResult(props) {
             csvArr: csvArr,
             username: data.points[0].label
         };
+
         switch (index) {
             case 0:
                 setPieCharts0(newRes);
@@ -408,7 +447,13 @@ export default function TwitterSnaResult(props) {
 
     
     
-    
+    const elements = [
+        { data: { id: 'one', label: 'Node 1' }, position: { x: 0, y: 0 } },
+        { data: { id: 'two', label: 'Node 2' }, position: { x: 100, y: 0 } }
+        ];
+        
+         const edges = [ { data: { source: 'one', target: 'two', label: 'Edge from Node1 to Node2' } }]
+    const layout = { name: 'random' };
     
 
     let call = getCallbacks();
@@ -426,7 +471,11 @@ export default function TwitterSnaResult(props) {
                         <Typography className={classes.heading}>{keyword(result.histogram.title)}</Typography>
                     </ExpansionPanelSummary>
                     <ExpansionPanelDetails>
+                        {}
                         <div style={{ width: '100%', }}>
+                            { ((result.histogram.json.length === 0) &&
+                                 <Typography variant={"body2"}>{keyword("sna_no_data")}</Typography>) }
+                                 {(result.histogram.json.length !== 0) &&
                             <Plot useResizeHandler
                                 style={{ width: '100%', height: "450px" }}
                                 data={result.histogram.json}
@@ -438,6 +487,7 @@ export default function TwitterSnaResult(props) {
                                     console.log(b);
                                 }}
                             />
+}
                             <Box m={2} />
                             {
                                 histoTweets &&
@@ -474,6 +524,7 @@ export default function TwitterSnaResult(props) {
                                         actions={goToTweetAction}
                                     />
                                 </div>
+                                            
                             }
                         </div>
                     </ExpansionPanelDetails>
@@ -512,6 +563,66 @@ export default function TwitterSnaResult(props) {
                     </ExpansionPanelDetails>
                 </ExpansionPanel>
             }
+                 {
+                result.heatMap &&
+                            <ExpansionPanel>
+                                <ExpansionPanelSummary
+                                    expandIcon={<ExpandMoreIcon />}
+                                >
+                                    <Typography className={classes.heading}>{keyword('sna_result_heatMap')}</Typography>
+                                </ExpansionPanelSummary>
+                                <ExpansionPanelDetails>
+                                    <Box alignItems="center" justifyContent="center" width={"100%"}>
+                                    { 
+                                        ((result.heatMap.isAllnul) &&
+                                        <Typography variant={"body2"}>{keyword("sna_no_data")}</Typography>) ||
+
+                                        <Plot
+                                         style={{ width: '100%', height: "450px" }}
+                                         data={result.heatMap.plot}
+                                         config={result.histogram.config}
+                                         onClick={(e) => onHeatMapClick(e)}
+                                        />
+                                    }
+                                        {
+                                            heatMapTweets &&
+                                            <div>
+                                                <Grid container justify="space-between" spacing={2}
+                                                    alignContent={"center"}>
+                                                    <Grid item>
+                                                        <Button
+                                                            variant={"contained"}
+                                                            color={"secondary"}
+                                                            onClick={() => setheatMapTweets(null)}>
+                                                            {
+                                                                keyword('sna_result_hide')
+                                                            }
+                                                        </Button>
+                                                    </Grid>
+                                                    <Grid item>
+                                                        <Button
+                                                            variant={"contained"}
+                                                            color={"primary"}
+                                                            onClick={() => downloadClick(heatMapTweets.csvArr, "NAME OF FILE")}>
+                                                            {
+                                                                keyword('sna_result_download')
+                                                            }
+                                                        </Button>
+                                                    </Grid>
+                                                </Grid>
+                                                <Box m={2} />
+                                                <CustomTable title={keyword("sna_result_slected_tweets")}
+                                                    colums={heatMapTweets.columns}
+                                                    data={heatMapTweets.data}
+                                                    actions={goToTweetAction}
+                                                />
+                                            </div>
+                                        }
+                                    </Box>
+                                </ExpansionPanelDetails>
+                            </ExpansionPanel>
+                        
+                }
             {
                 result.pieCharts &&
                 result.pieCharts.map((obj, index) => {
@@ -527,6 +638,10 @@ export default function TwitterSnaResult(props) {
                                 </ExpansionPanelSummary>
                                 <ExpansionPanelDetails>
                                     <Box alignItems="center" justifyContent="center" width={"100%"}>
+                                    { 
+                                    ((obj.json === null) &&
+                                    <Typography variant={"body2"}>{keyword("sna_no_data")}</Typography>)}
+                                        {(obj.json !== null) &&
                                         <Plot
                                             data={obj.json}
                                             layout={obj.layout}
@@ -535,6 +650,7 @@ export default function TwitterSnaResult(props) {
                                                 onPieChartClick(e, obj.title, index)
                                             }}
                                         />
+                                        }
                                         {
                                             pieCharts[index] &&
                                             <div>
@@ -575,6 +691,26 @@ export default function TwitterSnaResult(props) {
                         )
                 })
             }
+            {/*
+                <ExpansionPanel>
+                    <ExpansionPanelSummary
+                        expandIcon={<ExpandMoreIcon />}
+                        aria-controls={"panel0a-content"}
+                        id={"panel0a-header"}
+                    >
+                        <Typography className={classes.heading}>{"Graph ADD TSV"}</Typography>
+                    </ExpansionPanelSummary>
+                    <ExpansionPanelDetails>
+                    <Box>
+                        <div>
+                        <CytoscapeComponent elements={CytoscapeComponent.normalizeElements({
+                            nodes: elements, edges: edges})} layout={layout} style={ { width: '600px', height: '600px' } } />
+                        </div>
+                    </Box>
+                    </ExpansionPanelDetails>
+
+                </ExpansionPanel>*/
+            }
             {
                 result && result.cloudChart &&
                 <ExpansionPanel>
@@ -588,6 +724,10 @@ export default function TwitterSnaResult(props) {
                     <ExpansionPanelDetails>
                         <Box alignItems="center" justifyContent="center" width={"100%"}>
                             <div id="top_words_cloud_chart" height={"500"} width={"100%"} >
+                            { 
+                                    (console.log(result.cloudChart) || (result.cloudChart.json.length === 0) &&
+                                    <Typography variant={"body2"}>{keyword("sna_no_data")}</Typography>)}
+                                        {(result.cloudChart.json.length !== 0) &&
                                 <Grid container justify="space-between" spacing={2}
                                     alignContent={"center"}>
                                     <Grid item>
@@ -620,7 +760,9 @@ export default function TwitterSnaResult(props) {
                                         </Button>
                                     </Grid>
                                 </Grid>
+                                }
                                 {
+                                    (result.cloudChart.json.length !== 0) &&
                                     <div height={"300%"} width={"100%"}>
                                         <ReactWordcloud key={JSON.stringify(result)} options={result.cloudChart.options} callbacks={call} words={result.cloudChart.json} />
                                     </div>
