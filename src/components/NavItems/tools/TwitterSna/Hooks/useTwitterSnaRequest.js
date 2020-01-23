@@ -194,7 +194,6 @@ const useTwitterSnaRequest = (request) => {
         };
 
         const createWordCloud = (plotlyJson) => {
-
             let mostUsedWords = getAllWordsMap(plotlyJson);
             mostUsedWords = mostUsedWords.map(word => {
                  let w = ((word.word.includes('@')?word.word:word.word.replace(/_/g, " "))); 
@@ -224,28 +223,9 @@ const useTwitterSnaRequest = (request) => {
 
         }
 
-        const makeResult = (data, responseArrayOf7, givenFrom, givenUntil, final) => {
-
-            const result = {};
-            result.pieCharts = createPieCharts(data, responseArrayOf7);
-            result.urls = responseArrayOf7[4];
-            result.tweetCount = {};
-            result.tweetCount.count = responseArrayOf7[5].value.toString().replace(/(?=(\d{3})+(?!\d))/g, " ");
-            result.tweetCount.retweet = responseArrayOf7[5].retweets.toString().replace(/(?=(\d{3})+(?!\d))/g, " ");
-            result.tweetCount.like = responseArrayOf7[5].likes.toString().replace(/(?=(\d{3})+(?!\d))/g, " ");
-            result.tweets = responseArrayOf7[5].tweets;
-            result.histogram = createHistogram(data, responseArrayOf7[6], givenFrom, givenUntil);
-            if (final) {
-                result.cloudChart = createWordCloud(responseArrayOf7[7]);
-                createHeatMap(request, responseArrayOf7[5].tweets).then(heatMap => result.heatMap = heatMap);
-            }
-            dispatch(setTwitterSnaResult(request, result, false, true))
-        };
-
-    
-
         async function createHeatMap(entries, hits)
         {
+           
             var firstDate = new Date(entries.from);
             firstDate.setHours(1);
             firstDate.setMinutes(0);
@@ -258,6 +238,7 @@ const useTwitterSnaRequest = (request) => {
             lastDate.setMinutes(0);
             lastDate.setSeconds(0);
             var dates = [firstArrElt];
+
             while (firstDate.getTime() !== lastDate.getTime())
             {
                 var newDate = new Date(firstDate); 
@@ -286,6 +267,7 @@ const useTwitterSnaRequest = (request) => {
             });
 
             console.log("FINISHED Building heatMap");
+
             return {
                 plot: [{
                 z: nbTweetsZ,
@@ -299,6 +281,25 @@ const useTwitterSnaRequest = (request) => {
         
         }
 
+
+
+        const makeResult = (data, responseArrayOf7, givenFrom, givenUntil, final) => {
+            const result = {};
+            result.pieCharts = createPieCharts(data, responseArrayOf7);
+            result.urls = responseArrayOf7[4];
+            result.tweetCount = {};
+            result.tweetCount.count = responseArrayOf7[5].value.toString().replace(/(?=(\d{3})+(?!\d))/g, " ");
+            result.tweetCount.retweet = responseArrayOf7[5].retweets.toString().replace(/(?=(\d{3})+(?!\d))/g, " ");
+            result.tweetCount.like = responseArrayOf7[5].likes.toString().replace(/(?=(\d{3})+(?!\d))/g, " ");
+            result.tweets = responseArrayOf7[5].tweets;
+            result.histogram = createHistogram(data, responseArrayOf7[6], givenFrom, givenUntil);
+            if (final) {
+                result.cloudChart = createWordCloud(responseArrayOf7[7]);
+
+                result.heatMap = createHeatMap(request, responseArrayOf7[5].tweets); // .then(heatMap => { = heatMap; });
+            }
+            dispatch(setTwitterSnaResult(request, result, false, true))
+        };
 
         const makeEntries = (data) => {
             return {
@@ -321,7 +322,7 @@ const useTwitterSnaRequest = (request) => {
                 generateDonutPlotlyJson(entries, "nlikes"),
                 generateDonutPlotlyJson(entries, "ntweets"),
                 generateDonutPlotlyJson(entries, "hashtags"),
-                generateURLArrayHTML(entries),
+                generateURLArrayHTML(entries, keyword("elastic_url"), keyword("elastic_count")),
                 generateTweetCountPlotlyJson(entries, givenFrom, givenUntil),
                 generateEssidHistogramPlotlyJson(entries, false, givenFrom, givenUntil)
             ];
@@ -335,6 +336,7 @@ const useTwitterSnaRequest = (request) => {
         };
 
         const lastRenderCall = (sessionId) => {
+            dispatch(setTwitterSnaLoadingMessage(keyword('sna_builting_heatMap')));
             axios.get(TwintWrapperUrl + /status/ + sessionId)
                 .then(response => {
                     if (response.data.status === "Error")
@@ -356,26 +358,25 @@ const useTwitterSnaRequest = (request) => {
                     if (isFirst)
                         await generateGraph(response.data, false);
 
-                        if (response.data.status === "Error")
-                            handleErrors("twitterSnaErrorMessage");
-                        else if (response.data.status === "Done")
-                        {
-                            lastRenderCall(sessionId);
-                            dispatch(setTwitterSnaLoadingMessage(""));
-                        }
-                        else if (response.data.status === "CountingWords")
-                        {
-                            dispatch(setTwitterSnaLoadingMessage(keyword("sna_counting_words")));
-                            setTimeout(() => getResultUntilsDone(sessionId, false), 3000);
-                        }
-                        else {
-                            generateGraph(response.data, false).then(() => {
-                                setTimeout(() => getResultUntilsDone(sessionId, false), 5000)
+                    if (response.data.status === "Error")
+                        handleErrors("twitterSnaErrorMessage");
+                    else if (response.data.status === "Done")
+                    {
+                        lastRenderCall(sessionId);
+                    }
+                    else if (response.data.status === "CountingWords")
+                    {
+                        dispatch(setTwitterSnaLoadingMessage(keyword("sna_counting_words")));
+                        setTimeout(() => getResultUntilsDone(sessionId, false), 3000);
+                    }
+                    else {
+                        generateGraph(response.data, false).then(() => {
+                            setTimeout(() => getResultUntilsDone(sessionId, false), 5000)
 
-                                dispatch(setTwitterSnaLoadingMessage(keyword("sna_fetching_tweets")));
-                            });
-                        }
-                    })
+                            dispatch(setTwitterSnaLoadingMessage(keyword("sna_fetching_tweets")));
+                        });
+                    }
+                })
                 .catch(e => handleErrors(e))
         };
 

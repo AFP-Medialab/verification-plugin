@@ -1,3 +1,5 @@
+
+
 let json = {};
 
 let elasticSearch_url = process.env.REACT_APP_ELK_URL;
@@ -202,7 +204,7 @@ export function generateWordCloudPlotlyJson(param) {
 }
 
 //URL array
-export function generateURLArrayHTML(param) {
+export function generateURLArrayHTML(param, elastic_url, elastic_count ) {
 
     let must = constructMatchPhrase(param);
     let mustNot = constructMatchNotPhrase(param);
@@ -218,6 +220,7 @@ export function generateURLArrayHTML(param) {
     }
 
     let query = JSON.stringify(buildQuery(aggs, must, mustNot)).replace(/\\/g, "").replace(/"{/g, "{").replace(/}"/g, "}");
+
     const userAction = async () => {
         const response = await fetch(elasticSearch_url, {
             method: 'POST',
@@ -230,8 +233,8 @@ export function generateURLArrayHTML(param) {
         const myJson = await response.json();
         const array = getURLArray(myJson);
         let columns = [
-            {title: 'elastic_url', field: 'url'},
-            {title: 'elastic_count', field: 'count'},
+            {title: elastic_url, field: 'url'},
+            {title: elastic_count, field: 'count'},
         ];
 
         return {
