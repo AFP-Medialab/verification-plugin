@@ -296,7 +296,7 @@ const useTwitterSnaRequest = (request) => {
             if (final) {
                 result.cloudChart = createWordCloud(responseArrayOf7[7]);
 
-                result.heatMap = createHeatMap(request, responseArrayOf7[5].tweets); // .then(heatMap => { = heatMap; });
+                createHeatMap(request, responseArrayOf7[5].tweets).then(heatMap => { result.heatMap = heatMap; });
             }
             dispatch(setTwitterSnaResult(request, result, false, true))
         };

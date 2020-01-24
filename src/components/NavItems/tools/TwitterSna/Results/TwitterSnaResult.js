@@ -461,7 +461,7 @@ export default function TwitterSnaResult(props) {
         <Paper className={classes.root}>
             <CloseResult onClick={() => dispatch(cleanTwitterSnaState())} />
             {
-                result.histogram &&
+                console.log(result.histogram) || result.histogram &&
                 <ExpansionPanel expanded={histoVisible} onChange={() => setHistoVisible(!histoVisible)}>
                     <ExpansionPanelSummary
                         expandIcon={<ExpandMoreIcon />}
@@ -564,7 +564,7 @@ export default function TwitterSnaResult(props) {
                 </ExpansionPanel>
             }
                  {
-                result.heatMap &&
+                    result.heatMap &&
                             <ExpansionPanel>
                                 <ExpansionPanelSummary
                                     expandIcon={<ExpandMoreIcon />}
@@ -725,8 +725,8 @@ export default function TwitterSnaResult(props) {
                         <Box alignItems="center" justifyContent="center" width={"100%"}>
                             <div id="top_words_cloud_chart" height={"500"} width={"100%"} >
                             { 
-                                    (console.log(result.cloudChart) || (result.cloudChart.json.length === 0) &&
-                                    <Typography variant={"body2"}>{keyword("sna_no_data")}</Typography>)}
+                                    (result.cloudChart.json.length === 0) &&
+                                    <Typography variant={"body2"}>{keyword("sna_no_data")}</Typography>}
                                         {(result.cloudChart.json.length !== 0) &&
                                 <Grid container justify="space-between" spacing={2}
                                     alignContent={"center"}>
