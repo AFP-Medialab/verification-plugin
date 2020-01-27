@@ -24,6 +24,7 @@
     "react-browser-extension-scripts": "0.1.2",
     "react-compare-image": "^2.0.3",
     "react-csv": "^1.1.2",
+    "react-cytoscapejs": "^1.2.1",
     "react-d3-library": "^1.1.8",
     "react-datetime": "^2.16.3",
     "react-dom": "^16.10.2",
