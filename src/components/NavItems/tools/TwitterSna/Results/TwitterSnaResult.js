@@ -818,7 +818,7 @@ export default function TwitterSnaResult(props) {
                        
  {
                         result.cloudChart.json === undefined &&
-                            <CircularProgress />
+                            <CircularProgress className={classes.circularProgress}/>
                     }
                     </ExpansionPanelDetails>
              
