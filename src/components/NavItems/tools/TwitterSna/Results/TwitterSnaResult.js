@@ -25,8 +25,6 @@ import { CSVLink } from "react-csv";
 import Cytoscape from 'cytoscape';
 import Fcose from 'cytoscape-fcose';
 
-import CytoscapeComponent from 'react-cytoscapejs';
-
 Cytoscape.use( Fcose );
 
 export default function TwitterSnaResult(props) {
@@ -443,18 +441,6 @@ export default function TwitterSnaResult(props) {
 
     if (result === null)
         return <div />;
-
-
-    
-    
-    const elements = [
-        { data: { id: 'one', label: 'Node 1' }, position: { x: 0, y: 0 } },
-        { data: { id: 'two', label: 'Node 2' }, position: { x: 100, y: 0 } }
-        ];
-        
-         const edges = [ { data: { source: 'one', target: 'two', label: 'Edge from Node1 to Node2' } }]
-    const layout = { name: 'random' };
-    
 
     let call = getCallbacks();
     return (
