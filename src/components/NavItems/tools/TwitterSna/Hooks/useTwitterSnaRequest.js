@@ -25,12 +25,11 @@ const includeWordObj = (wordObj, wordsArray) => {
     return -1;
 }
 
-function getNbTweetsInHour(date, bucket)
-{
+function getNbTweetsInHour(date, bucket) {
     var nbTweets = 0;
     var day = date.toLocaleDateString();
     var hour = date.getHours();
-    
+
     bucket.forEach(tweet => {
         var tweetDate = new Date(tweet._source.date);
         var TweetDay = tweetDate.toLocaleDateString();
@@ -196,9 +195,9 @@ const useTwitterSnaRequest = (request) => {
         const createWordCloud = (plotlyJson) => {
             let mostUsedWords = getAllWordsMap(plotlyJson);
             mostUsedWords = mostUsedWords.map(word => {
-                 let w = ((word.word.includes('@')?word.word:word.word.replace(/_/g, " "))); 
-                 return { 'text': w, 'value': word.nbOccurences, 'entity': word.entity, 'color': getColor(word.entity) };
-                });
+                let w = ((word.word.includes('@') ? word.word : word.word.replace(/_/g, " ")));
+                return { 'text': w, 'value': word.nbOccurences, 'entity': word.entity, 'color': getColor(word.entity) };
+            });
             const options = {
                 //  colors: ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b'],
                 enableTooltip: true,
@@ -212,7 +211,7 @@ const useTwitterSnaRequest = (request) => {
                 rotationAngles: [0, 30],
                 scale: 'sqrt',
                 spiral: 'rectangular',
-                 transitionDuration: 1000,
+                transitionDuration: 1000,
             };
 
             return {
@@ -223,30 +222,28 @@ const useTwitterSnaRequest = (request) => {
 
         }
 
-        async function createHeatMap(entries, hits)
-        {
-           
+        async function createHeatMap(entries, hits) {
+
             var firstDate = new Date(entries.from);
             firstDate.setHours(1);
             firstDate.setMinutes(0);
             firstDate.setSeconds(0);
-            var firstArrElt = new Date(firstDate); 
+            var firstArrElt = new Date(firstDate);
             var lastDate = new Date(entries.until);
             if (lastDate.getHours() === 0 && lastDate.getMinutes() === 0)
-                lastDate.setDate(lastDate.getDate() -1);
+                lastDate.setDate(lastDate.getDate() - 1);
             lastDate.setHours(1);
             lastDate.setMinutes(0);
             lastDate.setSeconds(0);
             var dates = [firstArrElt];
 
-            while (firstDate.getTime() !== lastDate.getTime())
-            {
-                var newDate = new Date(firstDate); 
+            while (firstDate.getTime() !== lastDate.getTime()) {
+                var newDate = new Date(firstDate);
                 firstDate.setDate(firstDate.getDate() + 1);
                 newDate.setDate(newDate.getDate() + 1);
                 dates = [...dates, newDate]
             }
-            let hoursY = ['12:00:00 AM', '1:00:00 AM', '2:00:00 AM', '3:00:00 AM', '4:00:00 AM', '5:00:00 AM', '6:00:00 AM', '7:00:00 AM', '8:00:00 AM', '9:00:00 AM', '10:00:00 AM', '11:00:00 AM', '12:00:00 PM','1:00:00 PM', '2:00:00 PM', '3:00:00 PM', '4:00:00 PM', '5:00:00 PM', '6:00:00 PM', '7:00:00 PM', '8:00:00 PM', '9:00:00 PM', '10:00:00 PM', '11:00:00 PM'];
+            let hoursY = ['12:00:00 AM', '1:00:00 AM', '2:00:00 AM', '3:00:00 AM', '4:00:00 AM', '5:00:00 AM', '6:00:00 AM', '7:00:00 AM', '8:00:00 AM', '9:00:00 AM', '10:00:00 AM', '11:00:00 AM', '12:00:00 PM', '1:00:00 PM', '2:00:00 PM', '3:00:00 PM', '4:00:00 PM', '5:00:00 PM', '6:00:00 PM', '7:00:00 PM', '8:00:00 PM', '9:00:00 PM', '10:00:00 PM', '11:00:00 PM'];
             let isAllnul = true;
             let nbTweetsZ = [];
             let i = 0;
@@ -261,7 +258,7 @@ const useTwitterSnaRequest = (request) => {
                     nbTweetsZ[i].push(nbTweets);
 
                     i++;
-                    });
+                });
                 i = 0;
                 datesX = [...datesX, date.toDateString()];
             });
@@ -270,20 +267,22 @@ const useTwitterSnaRequest = (request) => {
 
             return {
                 plot: [{
-                z: nbTweetsZ,
-                x: datesX,
-                y: hoursY,
-                colorscale: 'Reds',
-                type: 'heatmap'
-            }],
-            isAllnul: isAllnul
-        };
-        
+                    z: nbTweetsZ,
+                    x: datesX,
+                    y: hoursY,
+                    colorscale: 'Reds',
+                    type: 'heatmap'
+                }],
+                isAllnul: isAllnul
+            };
+
         }
 
 
 
         const makeResult = (data, responseArrayOf7, givenFrom, givenUntil, final) => {
+
+            console.log(data);
             const result = {};
             result.pieCharts = createPieCharts(data, responseArrayOf7);
             result.urls = responseArrayOf7[4];
@@ -296,9 +295,18 @@ const useTwitterSnaRequest = (request) => {
             if (final) {
                 result.cloudChart = createWordCloud(responseArrayOf7[7]);
 
-                createHeatMap(request, responseArrayOf7[5].tweets).then(heatMap => { result.heatMap = heatMap; });
+                const dateEndQuery = new Date(data.until);
+                const dateStartQuery = new Date(data.from);
+                if ((dateEndQuery - dateStartQuery) / (1000 * 3600 * 24) <= 7)
+                    createHeatMap(request, responseArrayOf7[5].tweets).then((heatmap) => result.heatMap = heatmap);
+                else
+                    result.heatMap = "tooLarge"
+
             }
-            dispatch(setTwitterSnaResult(request, result, false, true))
+            else
+                result.cloudChart = { title: "top_words_cloud_chart_title"}
+            dispatch(setTwitterSnaResult(request, result, false, true));
+            return result;
         };
 
         const makeEntries = (data) => {
@@ -331,6 +339,10 @@ const useTwitterSnaRequest = (request) => {
             )
                 .then(responseArrayOf8 => {
                     makeResult(data.query, responseArrayOf8, givenFrom, givenUntil, final);
+                    // dispatch(setTwitterSnaResult(request, result, false, true));
+                    if (final) {
+
+                    }
                 });
 
         };
@@ -352,7 +364,7 @@ const useTwitterSnaRequest = (request) => {
         };
 
         const getResultUntilsDone = async (sessionId, isFirst) => {
-            
+
             await axios.get(TwintWrapperUrl + /status/ + sessionId)
                 .then(async response => {
                     if (isFirst)
@@ -360,12 +372,10 @@ const useTwitterSnaRequest = (request) => {
 
                     if (response.data.status === "Error")
                         handleErrors("twitterSnaErrorMessage");
-                    else if (response.data.status === "Done")
-                    {
+                    else if (response.data.status === "Done") {
                         lastRenderCall(sessionId);
                     }
-                    else if (response.data.status === "CountingWords")
-                    {
+                    else if (response.data.status === "CountingWords") {
                         dispatch(setTwitterSnaLoadingMessage(keyword("sna_counting_words")));
                         setTimeout(() => getResultUntilsDone(sessionId, false), 3000);
                     }
@@ -380,17 +390,17 @@ const useTwitterSnaRequest = (request) => {
                 .catch(e => handleErrors(e))
         };
 
-        
+
         dispatch(setTwitterSnaLoading(true));
         axios.post(TwintWrapperUrl + "/collect", request)
             .then(response => {
                 if (response.data.status === "Error")
                     handleErrors("twitterSnaErrorMessage");
                 else if (response.data.status === "Done")
-                    
-                lastRenderCall(response.data.session);
+
+                    lastRenderCall(response.data.session);
                 else
-                getResultUntilsDone(response.data.session, true)
+                    getResultUntilsDone(response.data.session, true)
 
             })
             .catch(e => handleErrors(e))

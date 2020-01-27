@@ -10,10 +10,14 @@ const useMyStyles = makeStyles(theme => ({
         textAlign: "center",
        
     },
+    circularProgress: {
+        margin: "auto",
+        display: "block"
+    },
     neededField: {
         '& label': 
         {
-            color: "red"
+            color: "rgb(0,170,180)"
         }
     },
     buttonSuccess: {
