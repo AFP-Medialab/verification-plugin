@@ -27,6 +27,8 @@ import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/TwitterSna.tsv";
 import Typography from "@material-ui/core/Typography";
 import {submissionEvent} from "../../../Shared/GoogleAnalytics/GoogleAnalytics";
+import { makeStyles } from "@material-ui/core/styles";
+
 
 const TwitterSna = () => {
     const classes = useMyStyles();
@@ -189,22 +191,21 @@ const TwitterSna = () => {
             <Paper className={classes.root}>
                 <CustomTile text={keyword("twitter_sna_title")}/>
                 <Box m={3}/>
-
-                <TextField
-                    disabled={isLoading}
-                    error={keyWordsError}
-                    value={keyWords}
-                    onChange={e => {
-                        setKeywords(e.target.value);
-                        setKeyWordsError(false);
-                    }}
-                    id="standard-full-width"
-                    label={keyword("twitter_sna_search")}
-                    style={{margin: 8}}
-                    placeholder={"#example"}
-                    fullWidth
-                />
-
+                    <TextField
+                        disabled={isLoading}
+                        error={keyWordsError}
+                        value={keyWords}
+                        onChange={e => {
+                            setKeywords(e.target.value);
+                            setKeyWordsError(false);
+                        }}
+                        id="standard-full-width"
+                        label={'*  ' + keyword("twitter_sna_search")}
+                        className={classes.neededField}
+                        style={{margin: 8}}
+                        placeholder={"#example"}
+                        fullWidth
+                    />
                 <TextField
                     disabled={isLoading}
                     value={bannedWords}
@@ -231,7 +232,8 @@ const TwitterSna = () => {
                         <DateTimePicker
                             input={true}
                             isValidDate={sinceDateIsValid}
-                            label={keyword("twitter_sna_from_date")}
+                            label={'*  ' + keyword("twitter_sna_from_date")}
+                            className={classes.neededField}
                             dateFormat={"YYYY-MM-DD"}
                             timeFormat={"HH:mm:ss"}
                             handleChange={handleSinceDateChange}
@@ -243,7 +245,8 @@ const TwitterSna = () => {
                         <DateTimePicker
                             input={true}
                             isValidDate={untilDateIsValid}
-                            label={keyword("twitter_sna_until_date")}
+                            label={'*  ' + keyword("twitter_sna_until_date")}
+                            className={classes.neededField}
                             dateFormat={"YYYY-MM-DD"}
                             timeFormat={"HH:mm:ss"}
                             handleChange={handleUntilDateChange}

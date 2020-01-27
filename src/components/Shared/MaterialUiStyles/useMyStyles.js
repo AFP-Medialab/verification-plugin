@@ -8,6 +8,13 @@ const useMyStyles = makeStyles(theme => ({
         padding: theme.spacing(3, 2),
         marginTop: 5,
         textAlign: "center",
+       
+    },
+    neededField: {
+        '& label': 
+        {
+            color: "red"
+        }
     },
     buttonSuccess: {
         backgroundColor: green[500],
