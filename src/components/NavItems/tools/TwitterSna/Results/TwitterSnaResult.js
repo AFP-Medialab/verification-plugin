@@ -25,6 +25,8 @@ import { CSVLink } from "react-csv";
 import Cytoscape from 'cytoscape';
 import Fcose from 'cytoscape-fcose';
 
+import CircularProgress from "@material-ui/core/CircularProgress";
+
 Cytoscape.use( Fcose );
 
 export default function TwitterSnaResult(props) {
@@ -432,7 +434,7 @@ export default function TwitterSnaResult(props) {
     }
 
     function getCSVData() {
-        if (!props.result.cloudChart)
+        if (!props.result.cloudChart.json)
             return "";
         let csvData = props.result.cloudChart.json.map(wordObj => { return { word: wordObj.text, nb_occ: wordObj.value, entity: wordObj.entity } });
         return csvData;
@@ -447,7 +449,7 @@ export default function TwitterSnaResult(props) {
         <Paper className={classes.root}>
             <CloseResult onClick={() => dispatch(cleanTwitterSnaState())} />
             {
-                console.log(result.histogram) || result.histogram &&
+                result.histogram &&
                 <ExpansionPanel expanded={histoVisible} onChange={() => setHistoVisible(!histoVisible)}>
                     <ExpansionPanelSummary
                         expandIcon={<ExpandMoreIcon />}
@@ -459,9 +461,9 @@ export default function TwitterSnaResult(props) {
                     <ExpansionPanelDetails>
                         {}
                         <div style={{ width: '100%', }}>
-                            { ((result.histogram.json.length === 0) &&
+                            { (result.histogram.json && (result.histogram.json.length === 0) &&
                                  <Typography variant={"body2"}>{keyword("sna_no_data")}</Typography>) }
-                                 {(result.histogram.json.length !== 0) &&
+                                 {(result.histogram.json && result.histogram.json.length !== 0) &&
                             <Plot useResizeHandler
                                 style={{ width: '100%', height: "450px" }}
                                 data={result.histogram.json}
@@ -550,7 +552,7 @@ export default function TwitterSnaResult(props) {
                 </ExpansionPanel>
             }
                  {
-                    result.heatMap &&
+                   
                             <ExpansionPanel>
                                 <ExpansionPanelSummary
                                     expandIcon={<ExpandMoreIcon />}
@@ -558,18 +560,21 @@ export default function TwitterSnaResult(props) {
                                     <Typography className={classes.heading}>{keyword('sna_result_heatMap')}</Typography>
                                 </ExpansionPanelSummary>
                                 <ExpansionPanelDetails>
-                                    <Box alignItems="center" justifyContent="center" width={"100%"}>
-                                    { 
-                                        ((result.heatMap.isAllnul) &&
-                                        <Typography variant={"body2"}>{keyword("sna_no_data")}</Typography>) ||
+                                    {
+                                        result.heatMap && result.heatMap !== "tooLarge" &&
+                                        <Box alignItems="center" justifyContent="center" width={"100%"}>
+                                        { 
+                                            ((result.heatMap.isAllnul) &&
+                                            <Typography variant={"body2"}>{keyword("sna_no_data")}</Typography>) ||
 
-                                        <Plot
-                                         style={{ width: '100%', height: "450px" }}
-                                         data={result.heatMap.plot}
-                                         config={result.histogram.config}
-                                         onClick={(e) => onHeatMapClick(e)}
-                                        />
-                                    }
+                                            <Plot
+                                            style={{ width: '100%', height: "450px" }}
+                                            data={result.heatMap.plot}
+                                            config={result.histogram.config}
+                                            onClick={(e) => onHeatMapClick(e)}
+                                            />
+                                        }
+                                    
                                         {
                                             heatMapTweets &&
                                             <div>
@@ -604,7 +609,20 @@ export default function TwitterSnaResult(props) {
                                                 />
                                             </div>
                                         }
-                                    </Box>
+                                        </Box>
+                                    }
+                                    {
+                                        console.log(result.heatMap) || result.heatMap && result.heatMap === "tooLarge" &&
+                                        <Typography variant='body2'>The periode you chose is too large to display heatmap, please make a request under 7 days (ADD TSV)</Typography>
+
+                                    }
+                                    {
+                                        result.heatMap === undefined &&
+                                        (//<Typography variant='body2'>The heatmap is still loading please wait (ADD TSV)</Typography>
+
+                                        <CircularProgress className={classes.circularProgress}/>)
+
+                                    }
                                 </ExpansionPanelDetails>
                             </ExpansionPanel>
                         
@@ -698,7 +716,7 @@ export default function TwitterSnaResult(props) {
                 </ExpansionPanel>*/
             }
             {
-                result && result.cloudChart &&
+                
                 <ExpansionPanel>
                     <ExpansionPanelSummary
                         expandIcon={<ExpandMoreIcon />}
@@ -708,12 +726,14 @@ export default function TwitterSnaResult(props) {
                         <Typography className={classes.heading}>{keyword(result.cloudChart.title)}</Typography>
                     </ExpansionPanelSummary>
                     <ExpansionPanelDetails>
+                    {
+                        result && result.cloudChart &&
                         <Box alignItems="center" justifyContent="center" width={"100%"}>
                             <div id="top_words_cloud_chart" height={"500"} width={"100%"} >
                             { 
-                                    (result.cloudChart.json.length === 0) &&
+                                    (result.cloudChart.json && result.cloudChart.json.length === 0) &&
                                     <Typography variant={"body2"}>{keyword("sna_no_data")}</Typography>}
-                                        {(result.cloudChart.json.length !== 0) &&
+                                        {(result.cloudChart.json && result.cloudChart.json.length !== 0) &&
                                 <Grid container justify="space-between" spacing={2}
                                     alignContent={"center"}>
                                     <Grid item>
@@ -747,16 +767,16 @@ export default function TwitterSnaResult(props) {
                                     </Grid>
                                 </Grid>
                                 }
-                                {
-                                    (result.cloudChart.json.length !== 0) &&
+                               
+                            </div>
+                            <Box m={2} />
+                            {
+                                    result.cloudChart.json && (result.cloudChart.json.length !== 0) &&
                                     <div height={"300%"} width={"100%"}>
                                         <ReactWordcloud key={JSON.stringify(result)} options={result.cloudChart.options} callbacks={call} words={result.cloudChart.json} />
                                     </div>
                                    
                                 }
-
-                            </div>
-                            <Box m={2} />
                             {
                                 cloudTweets &&
                                 <div>
@@ -794,10 +814,18 @@ export default function TwitterSnaResult(props) {
                                 </div>
                             }
                         </Box>
+                        }
+                       
+ {
+                        result.cloudChart.json === undefined &&
+                            <CircularProgress />
+                    }
                     </ExpansionPanelDetails>
-
+             
+                   
                 </ExpansionPanel>
             }
+          
             <Box m={3} />
             {
                 result.urls &&
