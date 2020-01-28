@@ -281,7 +281,7 @@ function buildQuery(aggs, must, mustNot) {
 function constructMatchNotPhrase(param) {
 
     let match_phrases;
-    if (param.media === "video" || param.media === "both") {
+    if (param.media === "video") {
         match_phrases = JSON.stringify({
             "match_phrase": {
                 "video": 
@@ -397,8 +397,9 @@ function constructMatchPhrase(param, startDate, endDate) {
     });
 
     console.log(param.media)
+
     // FILTERS MATCH
-    if (param.media === "image" || param.media === "both") {
+    if (param.media === "image") {
         match_phrases += ',' + JSON.stringify({
             "exists": {
                 "field": "photos"
@@ -414,7 +415,6 @@ function constructMatchPhrase(param, startDate, endDate) {
     console.log(match_phrases);
     return [match_phrases]
 }
-
 //Construct the aggregations (chose what information we will have in the response)
 function constructAggs(field) {
 

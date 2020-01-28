@@ -304,12 +304,7 @@ const TwitterSna = () => {
                                     label={keyword("twitterStats_media_videos")}
                                     labelPlacement="end"
                                 />
-                                <FormControlLabel
-                                    value={"both"}
-                                    control={<Radio color="primary"/>}
-                                    label={keyword("twitterStats_media_both")}
-                                    labelPlacement="end"
-                                />
+                              
                             </RadioGroup>
                         </FormControl>
                     </Grid>
