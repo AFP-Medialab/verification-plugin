@@ -612,7 +612,7 @@ export default function TwitterSnaResult(props) {
                                         </Box>
                                     }
                                     {
-                                        console.log(result.heatMap) || result.heatMap && result.heatMap === "tooLarge" &&
+                                        result.heatMap && result.heatMap === "tooLarge" &&
                                         <Typography variant='body2'>The periode you chose is too large to display heatmap, please make a request under 7 days (ADD TSV)</Typography>
 
                                     }

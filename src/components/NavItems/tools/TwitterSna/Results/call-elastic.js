@@ -30,8 +30,10 @@ export function generateEssidHistogramPlotlyJson(param, retweets, givenFrom, giv
 
     let aggs = constructAggs(interval);
     let must = constructMatchPhrase(param, givenFrom, givenUntil);
-    let mustNot = constructMatchNotPhrase(param, givenFrom, givenUntil);
+    let mustNot = constructMatchNotPhrase(param);
 
+    console.log(mustNot)
+    
     function usersGet(dateObj, infos) {
         dateObj["3"]["buckets"].forEach(obj => {
 
@@ -174,7 +176,7 @@ export function generateDonutPlotlyJson(param, field) {
             return getPlotlyJsonCloud(myJson, keywordList, bannedWords, mostTweetsGet);
 
     };
-
+    console.log("generated donuts");
     return userAction();
 }
 
@@ -198,6 +200,7 @@ export function generateWordCloudPlotlyJson(param) {
         return myJson;
 
     };
+    console.log("generated wordCloud");
     return userAction();
 
 
@@ -242,6 +245,7 @@ export function generateURLArrayHTML(param, elastic_url, elastic_count ) {
             data: array,
         }
     };
+    console.log("generate URL Arr");
     return userAction();
 }
 
@@ -274,12 +278,24 @@ function buildQuery(aggs, must, mustNot) {
 }
 
 //Construct the match phrase (filter for tweets)
-function constructMatchNotPhrase(param, startDate, endDate) {
+function constructMatchNotPhrase(param) {
 
-    let match_phrases = "";
-
-    if (param.bannedWords === null || param.bannedWords === undefined)
+    let match_phrases;
+    if (param.media === "video" || param.media === "both") {
+        match_phrases = JSON.stringify({
+            "match_phrase": {
+                "video": 
+                {
+                    "query": "0"
+                }
+            }
+        })
+    }
+    if ((param.bannedWords === null || param.bannedWords === undefined) && (param.media === "none" || param.media === "image"))
         return [];
+    if (param.bannedWords === null || param.bannedWords === undefined)
+        return [match_phrases];
+        
     // KEYWORDS ARGS MATCH
     param.bannedWords.forEach(arg => {
         if (match_phrases !== "")
@@ -287,22 +303,23 @@ function constructMatchNotPhrase(param, startDate, endDate) {
         if (arg[0] === '#') {
             match_phrases += '{' +
                 '"match_phrase": {' +
-                '"hashtags": {' +
-                '"query":"' + arg + '"' +
-                '}' +
-                '}' +
+                    '"hashtags": {' +
+                        '"query":"' + arg + '"' +
+                        '}' +
+                    '}' +
                 '}'
         } else {
             match_phrases += '{' +
                 '"match_phrase": {' +
-                '"tweet": {' +
-                '"query":"' + arg + '"' +
-                '}' +
-                '}' +
+                    '"tweet": {' +
+                        '"query":"' + arg + '"' +
+                        '}' +
+                    '}' +
                 '}';
         }
     });
-
+    
+    console.log(match_phrases);
     return [match_phrases]
 }
 
@@ -325,31 +342,31 @@ function constructMatchPhrase(param, startDate, endDate) {
         });
 
     // SESSID MATCH
-    match_phrases += ",{" +
+   /* match_phrases += ",{" +
         '"match_phrase": {' +
-        '"essid": {' +
-        '"query":"' + param["session"] + '"' +
-        '}' +
-        '}' +
-        '}';
+            '"essid": {' +
+                '"query":"' + param["session"] + '"' +
+                '}' +
+            '}' +
+        '}';*/
 
     // KEYWORDS ARGS MATCH
     param.keywordList.forEach(arg => {
         if (arg[0] === '#') {
             match_phrases += ',{' +
                 '"match_phrase": {' +
-                '"hashtags": {' +
-                '"query":"' + arg + '"' +
-                '}' +
-                '}' +
+                    '"hashtags": {' +
+                        '"query":"' + arg + '"' +
+                        '}' +
+                    '}' +
                 '}'
         } else {
             match_phrases += ',{' +
                 '"match_phrase": {' +
-                '"tweet": {' +
-                '"query":"' + arg + '"' +
-                '}' +
-                '}' +
+                    '"tweet": {' +
+                        '"query":"' + arg + '"' +
+                        '}' +
+                    '}' +
                 '}';
         }
     });
@@ -360,10 +377,10 @@ function constructMatchPhrase(param, startDate, endDate) {
             if (user !== "") {
                 match_phrases += ',{' +
                     '"match_phrase": {' +
-                    '"username": {' +
-                    '"query":"' + user + '"' +
-                    '}' +
-                    '}' +
+                        '"username": {' +
+                            '"query":"' + user + '"' +
+                            '}' +
+                        '}' +
                     '}';
             }
         })
@@ -378,6 +395,23 @@ function constructMatchPhrase(param, startDate, endDate) {
             }
         }
     });
+
+    console.log(param.media)
+    // FILTERS MATCH
+    if (param.media === "image" || param.media === "both") {
+        match_phrases += ',' + JSON.stringify({
+            "exists": {
+                "field": "photos"
+            }
+        })
+    }
+
+    // VERIFIED ACCOUNT ?
+
+
+    // LANGUAGE MATCH
+
+    console.log(match_phrases);
     return [match_phrases]
 }
 
@@ -497,6 +531,7 @@ async function getJson(param, aggs, must, mustNot) {
         } while (myJson.current_total_hits === 10000)
     }
     
+    console.log("generated count");
     return myJson;
 }
 

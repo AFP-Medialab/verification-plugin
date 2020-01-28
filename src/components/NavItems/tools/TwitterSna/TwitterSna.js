@@ -108,7 +108,6 @@ const TwitterSna = () => {
 
         const newFrom = (localTime === "false") ? convertToGMT(since) : since;
         const newUntil = (localTime === "false") ? convertToGMT(until) : until;
-
         return {
             "keywordList": trimedKeywords,
             "bannedWords": trimedBannedWords,
@@ -116,7 +115,7 @@ const TwitterSna = () => {
             "userList": stringToList(usersInput),
             "from": dateFormat(newFrom, "yyyy-mm-dd HH:MM:ss"),
             "until": dateFormat(newUntil, "yyyy-mm-dd HH:MM:ss"),
-            "verified": verifiedUsers === "true",
+            "verified": Boolean(verifiedUsers),
             "media": (filters === "none") ? null : filters,
             "retweetsHandling": null
         };
@@ -180,6 +179,7 @@ const TwitterSna = () => {
         }
         let newRequest = makeRequest();
 
+        console.log(newRequest)
         if (JSON.stringify(newRequest) !== JSON.stringify(request)) {
             submissionEvent(JSON.stringify(newRequest));
             setSubmittedRequest(newRequest);
