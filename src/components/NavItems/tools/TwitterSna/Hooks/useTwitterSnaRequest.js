@@ -12,6 +12,7 @@ import {
     generateWordCloudPlotlyJson,
     getTweets
 } from "../Results/call-elastic";
+import { getRequest } from '../TwitterSna'
 import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../../LocalDictionary/components/NavItems/tools/TwitterSna.tsv";
 
@@ -282,7 +283,6 @@ const useTwitterSnaRequest = (request) => {
 
         const makeResult = (data, responseArrayOf7, givenFrom, givenUntil, final) => {
 
-            console.log(data);
             const result = {};
             result.pieCharts = createPieCharts(data, responseArrayOf7);
             result.urls = responseArrayOf7[4];
@@ -316,15 +316,20 @@ const useTwitterSnaRequest = (request) => {
                 keywordList: request.keywordList,
                 bannedWords: request.bannedWords,
                 userList: request.userList,
-                session: data.session
+                session: data.session,
+                media: (data.media)?data.media:"none",
+                lang: (data.lang)?data.lang:"none",
+                verified:data.verified
             };
         };
 
 
         const generateGraph = (data, final) => {
-            let givenFrom = data.query.from;
-            let givenUntil = data.query.until;
+            console.log("generating graph");
+            let givenFrom = data.from;
+            let givenUntil = data.until;
             let entries = makeEntries(data);
+            console.log(entries);
             let generateList = [
                 generateDonutPlotlyJson(entries, "nretweets"),
                 generateDonutPlotlyJson(entries, "nlikes"),
@@ -334,11 +339,13 @@ const useTwitterSnaRequest = (request) => {
                 generateTweetCountPlotlyJson(entries, givenFrom, givenUntil),
                 generateEssidHistogramPlotlyJson(entries, false, givenFrom, givenUntil)
             ];
+            console.log(generateList);
             return axios.all(
                 (final) ? [...generateList, generateWordCloudPlotlyJson(entries)] : generateList
             )
                 .then(responseArrayOf8 => {
-                    makeResult(data.query, responseArrayOf8, givenFrom, givenUntil, final);
+                    console.log("generated graph");
+                    makeResult(data, responseArrayOf8, givenFrom, givenUntil, final);
                     // dispatch(setTwitterSnaResult(request, result, false, true));
                     if (final) {
 
@@ -347,41 +354,45 @@ const useTwitterSnaRequest = (request) => {
 
         };
 
-        const lastRenderCall = (sessionId) => {
+        const lastRenderCall = (sessionId, request) => {
+
+            console.log("LAST CALLING");
             dispatch(setTwitterSnaLoadingMessage(keyword('sna_builting_heatMap')));
-            axios.get(TwintWrapperUrl + /status/ + sessionId)
-                .then(response => {
-                    if (response.data.status === "Error")
-                        handleErrors("twitterSnaErrorMessage");
-                    else {
-                        generateGraph(response.data, true).then(() => {
+            //axios.get(TwintWrapperUrl + /status/ + sessionId)
+               // .then(response => {
+                 //   if (response.data.status === "Error")
+                //        handleErrors("twitterSnaErrorMessage");
+                  //  else {
+                        generateGraph(request, true).then(() => {
                             dispatch(setTwitterSnaLoading(false));
                         });
-                    }
-                })
-                .catch(e => handleErrors(e))
+                //    }
+              //  })
+               // .catch(e => handleErrors(e))
 
         };
 
-        const getResultUntilsDone = async (sessionId, isFirst) => {
+        const getResultUntilsDone = async (sessionId, isFirst, request) => {
 
+            console.log("CALLING");
             await axios.get(TwintWrapperUrl + /status/ + sessionId)
                 .then(async response => {
+                    console.log(response);
                     if (isFirst)
-                        await generateGraph(response.data, false);
+                        await generateGraph(request, false);
 
                     if (response.data.status === "Error")
                         handleErrors("twitterSnaErrorMessage");
                     else if (response.data.status === "Done") {
-                        lastRenderCall(sessionId);
+                        lastRenderCall(sessionId, request);
                     }
                     else if (response.data.status === "CountingWords") {
                         dispatch(setTwitterSnaLoadingMessage(keyword("sna_counting_words")));
-                        setTimeout(() => getResultUntilsDone(sessionId, false), 3000);
+                        setTimeout(() => getResultUntilsDone(sessionId, false, request), 3000);
                     }
                     else {
-                        generateGraph(response.data, false).then(() => {
-                            setTimeout(() => getResultUntilsDone(sessionId, false), 5000)
+                        generateGraph(request, false).then(() => {
+                            setTimeout(() => getResultUntilsDone(sessionId, false, request), 5000)
 
                             dispatch(setTwitterSnaLoadingMessage(keyword("sna_fetching_tweets")));
                         });
@@ -398,9 +409,9 @@ const useTwitterSnaRequest = (request) => {
                     handleErrors("twitterSnaErrorMessage");
                 else if (response.data.status === "Done")
 
-                    lastRenderCall(response.data.session);
+                    lastRenderCall(response.data.session, request);
                 else
-                    getResultUntilsDone(response.data.session, true)
+                    getResultUntilsDone(response.data.session, true, request)
 
             })
             .catch(e => handleErrors(e))
