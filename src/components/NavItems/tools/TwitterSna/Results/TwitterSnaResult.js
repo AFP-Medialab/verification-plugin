@@ -727,7 +727,7 @@ export default function TwitterSnaResult(props) {
                     </ExpansionPanelSummary>
                     <ExpansionPanelDetails>
                     {
-                        result && result.cloudChart &&
+                        result && result.cloudChart && result.cloudChart.json &&
                         <Box alignItems="center" justifyContent="center" width={"100%"}>
                             <div id="top_words_cloud_chart" height={"500"} width={"100%"} >
                             { 
@@ -816,7 +816,7 @@ export default function TwitterSnaResult(props) {
                         </Box>
                         }
                        
- {
+                        {
                         result.cloudChart.json === undefined &&
                             <CircularProgress className={classes.circularProgress}/>
                     }

@@ -12,7 +12,7 @@ const useMyStyles = makeStyles(theme => ({
     },
     circularProgress: {
         margin: "auto",
-        display: "block"
+        width: "100%"
     },
     neededField: {
         '& label': 
