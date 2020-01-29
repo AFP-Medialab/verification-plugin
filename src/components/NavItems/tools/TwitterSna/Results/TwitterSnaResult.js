@@ -208,13 +208,9 @@ export default function TwitterSnaResult(props) {
         let maxDate;
         let csvArr = "data:text/csv;charset=utf-8," + keyword("sna_result_username") + "," + keyword("sna_result_date") + "," + keyword("sna_result_tweet") + "," + keyword("sna_result_retweet_nb") + "," + keyword("elastic_url") + "\n";
         let isDays = "isDays";
-       // if (data.points[0].data.x[1] === undefined) {isDays = "isHoursb"}
         if (!fromHisto) {isDays = "isHours"}
 
-           // let pointDate = new Date(fromHisto? data.points[0].x : (data.points[0].x + ' ' + data.points[0].y));
-
             result.tweets.forEach(tweetObj => {
-             //   if (tweetObj._source.username === data.points[0].data.name || !fromHisto) {
 
                 let objDate = new Date(tweetObj._source.date);
                 for (let i = 0; i < data.points.length; i++){

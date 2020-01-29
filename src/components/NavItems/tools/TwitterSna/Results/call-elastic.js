@@ -73,9 +73,7 @@ export function generateEssidHistogramPlotlyJson(param, retweets, givenFrom, giv
         {
             let res = setTimeout(() => userAction(query), 5000);
            return res;
-//return json.histo;
         }
-            //window.alert("There was a problem calling elastic search");
     };
     return userAction(buildQuery(aggs, must, mustNot)).then(plotlyJSON => {
 
