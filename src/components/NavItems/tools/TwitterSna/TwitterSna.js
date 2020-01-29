@@ -179,7 +179,6 @@ const TwitterSna = () => {
         }
         let newRequest = makeRequest();
 
-        console.log(newRequest)
         if (JSON.stringify(newRequest) !== JSON.stringify(request)) {
             submissionEvent(JSON.stringify(newRequest));
             setSubmittedRequest(newRequest);

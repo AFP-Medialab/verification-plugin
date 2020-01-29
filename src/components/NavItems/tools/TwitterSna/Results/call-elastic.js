@@ -35,7 +35,6 @@ export function generateEssidHistogramPlotlyJson(param, retweets, givenFrom, giv
     
     function usersGet(dateObj, infos) {
         dateObj["3"]["buckets"].forEach(obj => {
-                console.log(obj);
                 infos.push({
                     date:  obj["2"]['buckets']['0']['key_as_string'],
                     key: obj["key"],
@@ -187,7 +186,6 @@ export function generateWordCloudPlotlyJson(param) {
     let query = JSON.stringify(buildQuery({}, must, mustNot)).replace(/\\/g, "").replace(/"{/g, "{").replace(/}"/g, "}");
     const userAction = async () => {
 
-        console.log("HERE")
         const response = await fetch(elasticSearch_url, {
             method: 'POST',
             body:
@@ -198,11 +196,9 @@ export function generateWordCloudPlotlyJson(param) {
         });
         const myJson = await response.json();
 
-        console.log(myJson)
         return myJson;
 
     };
-    console.log("generated wordCloud");
     return userAction();
 
 
@@ -418,6 +414,7 @@ function constructAggs(field) {
 
     let fieldInfo = ((field === "glob")? '{"retweets":' : '{"2":');
 
+    //Hashtag donut & Urls Array
     if (field === "hashtags" || field === "urls") {
         fieldInfo += JSON.stringify({
             "terms": {
@@ -429,6 +426,7 @@ function constructAggs(field) {
             }
         })
     }
+    //Retweets & Likes users donuts
     else if (field === "nretweets" || field === "nlikes") {
 
         fieldInfo += JSON.stringify({
@@ -449,6 +447,7 @@ function constructAggs(field) {
         })
 
     }
+    //Histogram
     else if (field.includes('1')) {
         fieldInfo += JSON.stringify({
             "date_histogram": {
@@ -487,6 +486,7 @@ function constructAggs(field) {
             }
         });
     }
+    //Count
     else if (field === "glob")
     {
         fieldInfo += "{" +
@@ -535,7 +535,6 @@ async function getJson(param, aggs, must, mustNot) {
         } while (myJson.current_total_hits === 10000)
     }
     
-    console.log("generated count");
     return myJson;
 }
 
