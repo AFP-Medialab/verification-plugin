@@ -194,6 +194,7 @@ const useTwitterSnaRequest = (request) => {
         };
 
         const createWordCloud = (plotlyJson) => {
+            console.log(plotlyJson);
             let mostUsedWords = getAllWordsMap(plotlyJson);
             mostUsedWords = mostUsedWords.map(word => {
                 let w = ((word.word.includes('@') ? word.word : word.word.replace(/_/g, " ")));
@@ -295,6 +296,7 @@ const useTwitterSnaRequest = (request) => {
             if (final) {
                 result.cloudChart = createWordCloud(responseArrayOf7[7]);
 
+                console.log(result.cloudChart)
                 const dateEndQuery = new Date(data.until);
                 const dateStartQuery = new Date(data.from);
                 if ((dateEndQuery - dateStartQuery) / (1000 * 3600 * 24) <= 7)
@@ -325,11 +327,9 @@ const useTwitterSnaRequest = (request) => {
 
 
         const generateGraph = (data, final) => {
-            console.log("generating graph");
             let givenFrom = data.from;
             let givenUntil = data.until;
             let entries = makeEntries(data);
-            console.log(entries);
             let generateList = [
                 generateDonutPlotlyJson(entries, "nretweets"),
                 generateDonutPlotlyJson(entries, "nlikes"),
@@ -339,12 +339,10 @@ const useTwitterSnaRequest = (request) => {
                 generateTweetCountPlotlyJson(entries, givenFrom, givenUntil),
                 generateEssidHistogramPlotlyJson(entries, false, givenFrom, givenUntil)
             ];
-            console.log(generateList);
             return axios.all(
                 (final) ? [...generateList, generateWordCloudPlotlyJson(entries)] : generateList
             )
                 .then(responseArrayOf8 => {
-                    console.log("generated graph");
                     makeResult(data, responseArrayOf8, givenFrom, givenUntil, final);
                     // dispatch(setTwitterSnaResult(request, result, false, true));
                     if (final) {
@@ -356,7 +354,6 @@ const useTwitterSnaRequest = (request) => {
 
         const lastRenderCall = (sessionId, request) => {
 
-            console.log("LAST CALLING");
             dispatch(setTwitterSnaLoadingMessage(keyword('sna_builting_heatMap')));
             //axios.get(TwintWrapperUrl + /status/ + sessionId)
                // .then(response => {
@@ -374,10 +371,8 @@ const useTwitterSnaRequest = (request) => {
 
         const getResultUntilsDone = async (sessionId, isFirst, request) => {
 
-            console.log("CALLING");
             await axios.get(TwintWrapperUrl + /status/ + sessionId)
                 .then(async response => {
-                    console.log(response);
                     if (isFirst)
                         await generateGraph(request, false);
 

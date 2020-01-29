@@ -32,13 +32,12 @@ export function generateEssidHistogramPlotlyJson(param, retweets, givenFrom, giv
     let must = constructMatchPhrase(param, givenFrom, givenUntil);
     let mustNot = constructMatchNotPhrase(param);
 
-    console.log(mustNot)
     
     function usersGet(dateObj, infos) {
         dateObj["3"]["buckets"].forEach(obj => {
-
+                console.log(obj);
                 infos.push({
-                    date: dateObj['key_as_string'],
+                    date:  obj["2"]['buckets']['0']['key_as_string'],
                     key: obj["key"],
                     nb: obj["1"]["value"]
                 })
@@ -176,7 +175,6 @@ export function generateDonutPlotlyJson(param, field) {
             return getPlotlyJsonCloud(myJson, keywordList, bannedWords, mostTweetsGet);
 
     };
-    console.log("generated donuts");
     return userAction();
 }
 
@@ -188,6 +186,8 @@ export function generateWordCloudPlotlyJson(param) {
 
     let query = JSON.stringify(buildQuery({}, must, mustNot)).replace(/\\/g, "").replace(/"{/g, "{").replace(/}"/g, "}");
     const userAction = async () => {
+
+        console.log("HERE")
         const response = await fetch(elasticSearch_url, {
             method: 'POST',
             body:
@@ -197,6 +197,8 @@ export function generateWordCloudPlotlyJson(param) {
             }
         });
         const myJson = await response.json();
+
+        console.log(myJson)
         return myJson;
 
     };
@@ -245,7 +247,6 @@ export function generateURLArrayHTML(param, elastic_url, elastic_count ) {
             data: array,
         }
     };
-    console.log("generate URL Arr");
     return userAction();
 }
 
@@ -318,8 +319,6 @@ function constructMatchNotPhrase(param) {
                 '}';
         }
     });
-    
-    console.log(match_phrases);
     return [match_phrases]
 }
 
@@ -396,7 +395,6 @@ function constructMatchPhrase(param, startDate, endDate) {
         }
     });
 
-    console.log(param.media)
 
     // FILTERS MATCH
     if (param.media === "image") {
@@ -412,9 +410,9 @@ function constructMatchPhrase(param, startDate, endDate) {
 
     // LANGUAGE MATCH
 
-    console.log(match_phrases);
     return [match_phrases]
 }
+
 //Construct the aggregations (chose what information we will have in the response)
 function constructAggs(field) {
 
@@ -472,8 +470,14 @@ function constructAggs(field) {
                             "sum": {
                                 "field": "nretweets"
                             }
+                        },
+                        "2": {
+                            "terms": {
+                                "field": "date"
+                            }
                         }
-                    }
+                    },
+                    
                 },
                 "1": {
                     "sum": {
