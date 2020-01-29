@@ -166,28 +166,31 @@ export default function TwitterSnaResult(props) {
                 && pointDate.getMonth() === objDate.getMonth()
                 && pointDate.getFullYear() === objDate.getFullYear());*/
                 
-                
-                console.log(periode);
-        if (periode === "isDays")
-        {
-            return (pointDate.getDate() === objDate.getDate()
-                && pointDate.getMonth() === objDate.getMonth()
-                && pointDate.getFullYear() === objDate.getFullYear());
-        }
-       else if (periode === "isHours")
+                if (periode === "isHours")
         {
             return (((pointDate.getDate() === objDate.getDate()
                 && pointDate.getHours() -1 === objDate.getHours()))
                 && pointDate.getMonth() === objDate.getMonth()
                 && pointDate.getFullYear() === objDate.getFullYear());
-        }     
+        }   
+        //if (periode === "isDays")
+        //{
+            else {
+            if (pointDate.getDate() === objDate.getDate()){
+            console.log(pointDate);
+            console.log(objDate)}
+            return (pointDate - objDate) === 0;/*(pointDate.getDate() === objDate.getDate()
+                && pointDate.getMonth() === objDate.getMonth()
+                && pointDate.getFullYear() === objDate.getFullYear());*/
+        }/*
+       else   
         else 
         {
             return (((pointDate.getDate() === objDate.getDate()
                 && pointDate.getHours() -2 === objDate.getHours()))
                 && pointDate.getMonth() === objDate.getMonth()
                 && pointDate.getFullYear() === objDate.getFullYear());
-        }
+        }*/
 
     }
 
@@ -204,17 +207,19 @@ export default function TwitterSnaResult(props) {
         let minDate;
         let maxDate;
         let csvArr = "data:text/csv;charset=utf-8," + keyword("sna_result_username") + "," + keyword("sna_result_date") + "," + keyword("sna_result_tweet") + "," + keyword("sna_result_retweet_nb") + "," + keyword("elastic_url") + "\n";
-        let isDays = (((new Date(props.request.until) - new Date(props.request.from)) / (1000 * 3600 * 24)) < 14)? "isHoursb":"isDays";
-        if (data.points[0].data.x[1] === undefined) {isDays = "isHoursb"}
+        let isDays = "isDays";
+       // if (data.points[0].data.x[1] === undefined) {isDays = "isHoursb"}
         if (!fromHisto) {isDays = "isHours"}
 
-            let pointDate = new Date(fromHisto? data.points[0].x : (data.points[0].x + ' ' + data.points[0].y));
+           // let pointDate = new Date(fromHisto? data.points[0].x : (data.points[0].x + ' ' + data.points[0].y));
 
             result.tweets.forEach(tweetObj => {
              //   if (tweetObj._source.username === data.points[0].data.name || !fromHisto) {
 
-                    let objDate = new Date(tweetObj._source.date);
-                    if (isInRange(pointDate, objDate, isDays)) {
+                let objDate = new Date(tweetObj._source.date);
+                for (let i = 0; i < data.points.length; i++){
+                    let pointDate = new Date(fromHisto? data.points[i].x : (data.points[i].x + ' ' + data.points[i].y));
+                    if (data.points[i].data.mode !== "lines" && isInRange(pointDate, objDate, isDays)) {
                         if (minDate === undefined)
                             minDate = objDate;
                         if (maxDate === undefined)
@@ -242,7 +247,7 @@ export default function TwitterSnaResult(props) {
                             maxDate = objDate;
                         }
                     }
-             //  }
+               }
             });
          //  i++;
       //  });
