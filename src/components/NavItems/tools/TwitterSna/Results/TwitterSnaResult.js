@@ -176,9 +176,6 @@ export default function TwitterSnaResult(props) {
         //if (periode === "isDays")
         //{
             else {
-            if (pointDate.getDate() === objDate.getDate()){
-            console.log(pointDate);
-            console.log(objDate)}
             return (pointDate - objDate) === 0;/*(pointDate.getDate() === objDate.getDate()
                 && pointDate.getMonth() === objDate.getMonth()
                 && pointDate.getFullYear() === objDate.getFullYear());*/
@@ -195,7 +192,6 @@ export default function TwitterSnaResult(props) {
     }
 
     const displayTweetsOfDate = (data, fromHisto) => {
-        console.log(data);
         let columns = [
             { title: keyword('sna_result_username'), field: 'username' },
             { title: keyword('sna_result_date'), field: 'date' },
@@ -619,7 +615,7 @@ export default function TwitterSnaResult(props) {
                                     }
                                     {
                                         result.heatMap && result.heatMap === "tooLarge" &&
-                                        <Typography variant='body2'>The periode you chose is too large to display heatmap, please make a request under 7 days (ADD TSV)</Typography>
+                                    <Typography variant='body2'>{keyword("sna_too_long_for_heatMap")}</Typography>
 
                                     }
                                     {

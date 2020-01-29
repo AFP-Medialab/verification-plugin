@@ -71,7 +71,6 @@ const useTwitterSnaRequest = (request) => {
 
         const getAllWordsMap = (elasticResponse) => {
             let hits = Array.from(elasticResponse.hits.hits);
-            console.log(hits)
             let wordsMap = [];
 
             for (let i = 0; i < hits.length; i++) {
@@ -98,7 +97,6 @@ const useTwitterSnaRequest = (request) => {
 
             }
         }
-            console.log(wordsMap)
             return getnMax(wordsMap, 100);
         };
 
@@ -197,9 +195,7 @@ const useTwitterSnaRequest = (request) => {
         };
 
         const createWordCloud = (plotlyJson) => {
-            console.log(plotlyJson)
             let mostUsedWords = getAllWordsMap(plotlyJson);
-            console.log(mostUsedWords);
             mostUsedWords = mostUsedWords.map(word => {
                 let w = ((word.word.includes('@') ? word.word : word.word.replace(/_/g, " ")));
                 return { 'text': w, 'value': word.nbOccurences, 'entity': word.entity, 'color': getColor(word.entity) };
@@ -308,7 +304,6 @@ const useTwitterSnaRequest = (request) => {
             }
             else
                 result.cloudChart = { title: "top_words_cloud_chart_title"}
-                console.log(result)
             dispatch(setTwitterSnaResult(request, result, false, true));
             return result;
         };
