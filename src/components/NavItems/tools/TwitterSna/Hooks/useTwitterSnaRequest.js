@@ -194,7 +194,6 @@ const useTwitterSnaRequest = (request) => {
         };
 
         const createWordCloud = (plotlyJson) => {
-            console.log(plotlyJson);
             let mostUsedWords = getAllWordsMap(plotlyJson);
             mostUsedWords = mostUsedWords.map(word => {
                 let w = ((word.word.includes('@') ? word.word : word.word.replace(/_/g, " ")));
@@ -265,8 +264,6 @@ const useTwitterSnaRequest = (request) => {
                 datesX = [...datesX, date.toDateString()];
             });
 
-            console.log("FINISHED Building heatMap");
-
             return {
                 plot: [{
                     z: nbTweetsZ,
@@ -296,7 +293,6 @@ const useTwitterSnaRequest = (request) => {
             if (final) {
                 result.cloudChart = createWordCloud(responseArrayOf7[7]);
 
-                console.log(result.cloudChart)
                 const dateEndQuery = new Date(data.until);
                 const dateStartQuery = new Date(data.from);
                 if ((dateEndQuery - dateStartQuery) / (1000 * 3600 * 24) <= 7)

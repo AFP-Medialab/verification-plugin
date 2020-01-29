@@ -48,6 +48,7 @@ export default function TwitterSnaResult(props) {
     const [pieCharts1, setPieCharts1] = useState(null);
     const [pieCharts2, setPieCharts2] = useState(null);
     const [pieCharts3, setPieCharts3] = useState(null);
+
     const hidePieChartTweetsView = (index) => {
         switch (index) {
             case 0:
@@ -66,6 +67,7 @@ export default function TwitterSnaResult(props) {
                 break;
         }
     };
+
     const pieCharts = [pieCharts0, pieCharts1, pieCharts2, pieCharts3];
 
     //Set the file name for wordsCloud export
@@ -164,6 +166,8 @@ export default function TwitterSnaResult(props) {
                 && pointDate.getMonth() === objDate.getMonth()
                 && pointDate.getFullYear() === objDate.getFullYear());*/
                 
+                
+                console.log(periode);
         if (periode === "isDays")
         {
             return (pointDate.getDate() === objDate.getDate()
@@ -188,6 +192,7 @@ export default function TwitterSnaResult(props) {
     }
 
     const displayTweetsOfDate = (data, fromHisto) => {
+        console.log(data);
         let columns = [
             { title: keyword('sna_result_username'), field: 'username' },
             { title: keyword('sna_result_date'), field: 'date' },
@@ -409,7 +414,7 @@ export default function TwitterSnaResult(props) {
         let name = filesNames + '.png';
         
         
-        saveSvgAsPng(svg.children[1].children[0].children[0], name, { backgroundColor: "white" });
+        saveSvgAsPng(svg.children[0].children[0], name, { backgroundColor: "white", scale: 2 });
 
 
     }
@@ -418,7 +423,7 @@ export default function TwitterSnaResult(props) {
     function downloadAsSVG() {
 
         let name = filesNames + '.svg';
-        var svgEl = document.getElementById("top_words_cloud_chart").children[1].children[0].children[0];
+        var svgEl = document.getElementById("top_words_cloud_chart").children[0].children[0];
         //  d3.select("#we-verify").attr("style", "font-size: 20px;");
         svgEl.setAttribute("xmlns", "http://www.w3.org/2000/svg");
         var svgData = svgEl.outerHTML;
@@ -729,7 +734,7 @@ export default function TwitterSnaResult(props) {
                     {
                         result && result.cloudChart && result.cloudChart.json &&
                         <Box alignItems="center" justifyContent="center" width={"100%"}>
-                            <div id="top_words_cloud_chart" height={"500"} width={"100%"} >
+                            <div height={"500"} width={"100%"} >
                             { 
                                     (result.cloudChart.json && result.cloudChart.json.length === 0) &&
                                     <Typography variant={"body2"}>{keyword("sna_no_data")}</Typography>}
@@ -772,7 +777,7 @@ export default function TwitterSnaResult(props) {
                             <Box m={2} />
                             {
                                     result.cloudChart.json && (result.cloudChart.json.length !== 0) &&
-                                    <div height={"300%"} width={"100%"}>
+                                    <div id="top_words_cloud_chart" height={"100%"} width={"100%"}>
                                         <ReactWordcloud key={JSON.stringify(result)} options={result.cloudChart.options} callbacks={call} words={result.cloudChart.json} />
                                     </div>
                                    
