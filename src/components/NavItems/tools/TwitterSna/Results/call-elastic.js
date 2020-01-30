@@ -45,16 +45,6 @@ export function generateEssidHistogramPlotlyJson(param, retweets, givenFrom, giv
         return infos;
     }
 
-
-  /*  function retweetsGet(dateObj, infos) {
-        infos.push({
-            date: dateObj['key_as_string'],
-            key: "Retweets",
-            nb: dateObj["1"].value
-        });
-        return infos;
-    }*/
-
     const userAction = async (query) => {
         let str_query = JSON.stringify(query).replace(/\\/g, "").replace(/"{/g, "{").replace(/}"/g, "}");
         const response = await fetch(elasticSearch_url, {
@@ -66,6 +56,7 @@ export function generateEssidHistogramPlotlyJson(param, retweets, givenFrom, giv
             }
         });
         const myJson = await response.json();
+        console.log(response);
         if (myJson["error"] === undefined) {
             json.histo = getPlotlyJsonHisto(myJson, usersGet);
             return json.histo; //getPlotlyJsonHisto(myJson, usersGet);

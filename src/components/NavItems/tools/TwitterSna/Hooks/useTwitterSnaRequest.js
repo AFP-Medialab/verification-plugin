@@ -20,7 +20,7 @@ import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Twitte
 
 const includeWordObj = (wordObj, wordsArray) => {
     for (let i = 0; i < wordsArray.length; i++) {
-        if (wordsArray[i].word === wordObj.word)
+        if (wordsArray[i].word === wordObj)
             return i;
     }
     return -1;
@@ -56,6 +56,7 @@ function getColor(entity) {
     return '#35347B';
 }
 
+
 const useTwitterSnaRequest = (request) => {
 
     const TwintWrapperUrl = process.env.REACT_APP_TWINT_WRAPPER_URL;
@@ -84,7 +85,7 @@ const useTwitterSnaRequest = (request) => {
                 var arr = Array.from(tweetWordsmap);
 
                 arr.forEach(word => {
-                    let j = includeWordObj(word, wordsMap)
+                    let j = includeWordObj(word.word, wordsMap)
                     if (j !== -1) {
                         wordsMap[j].nbOccurences += word.nbOccurences;
 
@@ -97,6 +98,21 @@ const useTwitterSnaRequest = (request) => {
 
             }
         }
+        let toRemove = request.keywordList.map(word => word.replace('#', ''));
+        
+        console.log(toRemove)
+        
+        toRemove.forEach(wordToRemove => {
+            wordsMap.splice(includeWordObj(wordToRemove, wordsMap), 1)
+        });
+
+        console.log(wordsMap);
+       /* for (let word in wordsMap)
+        {
+                if (word.word === wordToRemove)
+                    wordsMap
+            })
+        }*/
             return getnMax(wordsMap, 100);
         };
 
