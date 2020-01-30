@@ -100,19 +100,10 @@ const useTwitterSnaRequest = (request) => {
         }
         let toRemove = request.keywordList.map(word => word.replace('#', ''));
         
-        console.log(toRemove)
         
         toRemove.forEach(wordToRemove => {
             wordsMap.splice(includeWordObj(wordToRemove, wordsMap), 1)
         });
-
-        console.log(wordsMap);
-       /* for (let word in wordsMap)
-        {
-                if (word.word === wordToRemove)
-                    wordsMap
-            })
-        }*/
             return getnMax(wordsMap, 100);
         };
 
@@ -413,6 +404,7 @@ const useTwitterSnaRequest = (request) => {
         dispatch(setTwitterSnaLoading(true));
         axios.post(TwintWrapperUrl + "/collect", request)
             .then(response => {
+                console.log(request);
                 if (response.data.status === "Error")
                     handleErrors("twitterSnaErrorMessage");
                 else if (response.data.status === "Done")

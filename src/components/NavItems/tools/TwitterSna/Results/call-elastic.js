@@ -103,6 +103,7 @@ export function generateTweetCountPlotlyJson(param) {
     let mustNot = constructMatchNotPhrase(param);
     let aggs = constructAggs("glob");
     return getJson(param, aggs, must, mustNot).then(json => {
+        console.log(json);
         return {
             value: json.hits.total.value,
             retweets: json.aggregations.retweets.value,
