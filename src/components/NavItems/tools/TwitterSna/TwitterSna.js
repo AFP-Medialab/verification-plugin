@@ -72,6 +72,7 @@ const TwitterSna = () => {
     const [localTime, setLocalTime] = useState("true");
 
     const [submittedRequest, setSubmittedRequest] = useState(null);
+    console.log(submittedRequest);
     useTwitterSnaRequest(submittedRequest);
 
     const handleErrors = (e) => {
@@ -106,6 +107,8 @@ const TwitterSna = () => {
         if (bannedWords.trim() !== "")
             trimedBannedWords = removeQuotes(bannedWords.trim().match(/("[^"]+"|[^"\s]+)/g));
 
+        console.log(String(verifiedUsers) === "true" )
+
         const newFrom = (localTime === "false") ? convertToGMT(since) : since;
         const newUntil = (localTime === "false") ? convertToGMT(until) : until;
         return {
@@ -115,7 +118,7 @@ const TwitterSna = () => {
             "userList": stringToList(usersInput),
             "from": dateFormat(newFrom, "yyyy-mm-dd HH:MM:ss"),
             "until": dateFormat(newUntil, "yyyy-mm-dd HH:MM:ss"),
-            "verified": Boolean(verifiedUsers),
+            "verified": String(verifiedUsers) === "true",
             "media": (filters === "none") ? null : filters,
             "retweetsHandling": null
         };
@@ -179,6 +182,7 @@ const TwitterSna = () => {
         }
         let newRequest = makeRequest();
 
+        console.log(newRequest)
         if (JSON.stringify(newRequest) !== JSON.stringify(request)) {
             submissionEvent(JSON.stringify(newRequest));
             setSubmittedRequest(newRequest);
