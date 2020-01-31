@@ -5,13 +5,13 @@ import { setTwitterSnaLoading, setTwitterSnaResult, setTwitterSnaLoadingMessage 
 import axios from "axios";
 
 import {
-    generateDonutPlotlyJson,
-    generateEssidHistogramPlotlyJson,
-    generateTweetCountPlotlyJson,
-    generateURLArrayHTML,
-    generateWordCloudPlotlyJson,
-    getTweets
+    getPlotlyJsonDonuts,
+    getPlotlyJsonHisto,
+    getJsonCounts,
+    getReactArrayURL,
+    generateWordCloudPlotlyJson
 } from "../Results/call-elastic";
+
 import { getRequest } from '../TwitterSna'
 import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../../LocalDictionary/components/NavItems/tools/TwitterSna.tsv";
@@ -200,7 +200,73 @@ const useTwitterSnaRequest = (request) => {
                 tweetsView: null,
             }
         };
+        const makeResult = (data, responseArrayOf7, givenFrom, givenUntil, final) => {
 
+            const result = {};
+            result.pieCharts = createPieCharts(data, responseArrayOf7);
+            result.urls = responseArrayOf7[4];
+            result.tweetCount = {};
+            result.tweetCount.count = responseArrayOf7[5].value.toString().replace(/(?=(\d{3})+(?!\d))/g, " ");
+            result.tweetCount.retweet = responseArrayOf7[5].retweets.toString().replace(/(?=(\d{3})+(?!\d))/g, " ");
+            result.tweetCount.like = responseArrayOf7[5].likes.toString().replace(/(?=(\d{3})+(?!\d))/g, " ");
+            result.tweets = responseArrayOf7[5].tweets;
+            result.histogram = createHistogram(data, responseArrayOf7[6], givenFrom, givenUntil);
+            if (final) {
+                result.cloudChart = createWordCloud(responseArrayOf7[7]);
+        
+                const dateEndQuery = new Date(data.until);
+                const dateStartQuery = new Date(data.from);
+                if ((dateEndQuery - dateStartQuery) / (1000 * 3600 * 24) <= 7)
+                    createHeatMap(request, responseArrayOf7[5].tweets).then((heatmap) => result.heatMap = heatmap);
+                else
+                    result.heatMap = "tooLarge"
+        
+            }
+            else
+                result.cloudChart = { title: "top_words_cloud_chart_title"}
+            dispatch(setTwitterSnaResult(request, result, false, true));
+            return result;
+        };
+        
+        const makeEntries = (data) => {
+            return {
+                from: request.from,
+                until: request.until,
+                keywordList: request.keywordList,
+                bannedWords: request.bannedWords,
+                userList: request.userList,
+                session: data.session,
+                media: (data.media)?data.media:"none",
+                lang: (data.lang)?data.lang:"none",
+                verified: data.verified
+            };
+        };
+        
+        
+        const generateGraph = (data, final) => {
+            console.log("generate graph");
+            let givenFrom = data.from;
+            let givenUntil = data.until;
+            let entries = makeEntries(data);
+            let generateList = [
+                getPlotlyJsonDonuts(entries, "nretweets"),
+                getPlotlyJsonDonuts(entries, "nlikes"),
+                getPlotlyJsonDonuts(entries, "ntweets"),
+                getPlotlyJsonDonuts(entries, "hashtags"),
+                getReactArrayURL(entries,  keyword("elastic_url"), keyword("elastic_count")),
+                getJsonCounts(entries),
+                getPlotlyJsonHisto(entries, givenFrom, givenUntil)
+            ];
+            console.log(generateList);
+            return axios.all(
+                (final) ? [...generateList, generateWordCloudPlotlyJson(entries)] : generateList
+            )
+                .then(responseArrayOf8 => {
+                    makeResult(data, responseArrayOf8, givenFrom, givenUntil, final);
+                });
+        
+        };
+        
         const createWordCloud = (plotlyJson) => {
             let mostUsedWords = getAllWordsMap(plotlyJson);
             mostUsedWords = mostUsedWords.map(word => {
@@ -287,74 +353,6 @@ const useTwitterSnaRequest = (request) => {
 
 
 
-        const makeResult = (data, responseArrayOf7, givenFrom, givenUntil, final) => {
-
-            const result = {};
-            result.pieCharts = createPieCharts(data, responseArrayOf7);
-            result.urls = responseArrayOf7[4];
-            result.tweetCount = {};
-            result.tweetCount.count = responseArrayOf7[5].value.toString().replace(/(?=(\d{3})+(?!\d))/g, " ");
-            result.tweetCount.retweet = responseArrayOf7[5].retweets.toString().replace(/(?=(\d{3})+(?!\d))/g, " ");
-            result.tweetCount.like = responseArrayOf7[5].likes.toString().replace(/(?=(\d{3})+(?!\d))/g, " ");
-            result.tweets = responseArrayOf7[5].tweets;
-            result.histogram = createHistogram(data, responseArrayOf7[6], givenFrom, givenUntil);
-            if (final) {
-                result.cloudChart = createWordCloud(responseArrayOf7[7]);
-
-                const dateEndQuery = new Date(data.until);
-                const dateStartQuery = new Date(data.from);
-                if ((dateEndQuery - dateStartQuery) / (1000 * 3600 * 24) <= 7)
-                    createHeatMap(request, responseArrayOf7[5].tweets).then((heatmap) => result.heatMap = heatmap);
-                else
-                    result.heatMap = "tooLarge"
-
-            }
-            else
-                result.cloudChart = { title: "top_words_cloud_chart_title"}
-            dispatch(setTwitterSnaResult(request, result, false, true));
-            return result;
-        };
-
-        const makeEntries = (data) => {
-            return {
-                from: request.from,
-                until: request.until,
-                keywordList: request.keywordList,
-                bannedWords: request.bannedWords,
-                userList: request.userList,
-                session: data.session,
-                media: (data.media)?data.media:"none",
-                lang: (data.lang)?data.lang:"none",
-                verified:data.verified
-            };
-        };
-
-
-        const generateGraph = (data, final) => {
-            let givenFrom = data.from;
-            let givenUntil = data.until;
-            let entries = makeEntries(data);
-            let generateList = [
-                generateDonutPlotlyJson(entries, "nretweets"),
-                generateDonutPlotlyJson(entries, "nlikes"),
-                generateDonutPlotlyJson(entries, "ntweets"),
-                generateDonutPlotlyJson(entries, "hashtags"),
-                generateURLArrayHTML(entries, keyword("elastic_url"), keyword("elastic_count")),
-                generateTweetCountPlotlyJson(entries, givenFrom, givenUntil),
-                generateEssidHistogramPlotlyJson(entries, givenFrom, givenUntil)
-            ];
-            return axios.all(
-                (final) ? [...generateList, generateWordCloudPlotlyJson(entries)] : generateList
-            )
-                .then(responseArrayOf8 => {
-                    makeResult(data, responseArrayOf8, givenFrom, givenUntil, final);
-                    // dispatch(setTwitterSnaResult(data, result, false, true));
-                    if (final) {
-
-                    }
-                });
-
-        };
 
         const lastRenderCall = (sessionId, request) => {
 
