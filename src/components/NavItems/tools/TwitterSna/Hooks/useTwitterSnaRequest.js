@@ -341,7 +341,7 @@ const useTwitterSnaRequest = (request) => {
                 generateDonutPlotlyJson(entries, "hashtags"),
                 generateURLArrayHTML(entries, keyword("elastic_url"), keyword("elastic_count")),
                 generateTweetCountPlotlyJson(entries, givenFrom, givenUntil),
-                generateEssidHistogramPlotlyJson(entries, false, givenFrom, givenUntil)
+                generateEssidHistogramPlotlyJson(entries, givenFrom, givenUntil)
             ];
             return axios.all(
                 (final) ? [...generateList, generateWordCloudPlotlyJson(entries)] : generateList
