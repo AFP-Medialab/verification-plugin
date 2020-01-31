@@ -56,7 +56,6 @@ export function generateEssidHistogramPlotlyJson(param, retweets, givenFrom, giv
             }
         });
         const myJson = await response.json();
-        console.log(response);
         if (myJson["error"] === undefined) {
             json.histo = getPlotlyJsonHisto(myJson, usersGet);
             return json.histo; //getPlotlyJsonHisto(myJson, usersGet);
@@ -103,7 +102,6 @@ export function generateTweetCountPlotlyJson(param) {
     let mustNot = constructMatchNotPhrase(param);
     let aggs = constructAggs("glob");
     return getJson(param, aggs, must, mustNot).then(json => {
-        console.log(json);
         return {
             value: json.hits.total.value,
             retweets: json.aggregations.retweets.value,
@@ -157,11 +155,11 @@ export function generateDonutPlotlyJson(param, field) {
         });
         const myJson = await response.json();
         if (field === "hashtags") {
-            return getPlotlyJsonCloud(myJson, keywordList, bannedWords, hashtagsGet);
+            return getPlotlyJsonDonut(myJson, keywordList, bannedWords, hashtagsGet);
         } else if (field === "nretweets" || field === "nlikes")
-            return getPlotlyJsonCloud(myJson, keywordList, bannedWords, mostRetweetGet);
+            return getPlotlyJsonDonut(myJson, keywordList, bannedWords, mostRetweetGet);
         else
-            return getPlotlyJsonCloud(myJson, keywordList, bannedWords, mostTweetsGet);
+            return getPlotlyJsonDonut(myJson, keywordList, bannedWords, mostTweetsGet);
 
     };
     return userAction();
@@ -552,7 +550,7 @@ async function completeJson(aggs, must, mustNot, myJson) {
 
 
 //To build the PlotlyJSON from elastic response
-function getPlotlyJsonCloud(json, keywords, bannedWords, specificGetCallBack) {
+function getPlotlyJsonDonut(json, keywords, bannedWords, specificGetCallBack) {
     let labels = [];
     let parents = [];
     let value = [];

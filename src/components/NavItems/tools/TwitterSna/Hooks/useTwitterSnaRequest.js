@@ -348,7 +348,7 @@ const useTwitterSnaRequest = (request) => {
             )
                 .then(responseArrayOf8 => {
                     makeResult(data, responseArrayOf8, givenFrom, givenUntil, final);
-                  //   dispatch(setTwitterSnaResult(data, result, false, true));
+                    // dispatch(setTwitterSnaResult(data, result, false, true));
                     if (final) {
 
                     }
@@ -404,7 +404,6 @@ const useTwitterSnaRequest = (request) => {
         dispatch(setTwitterSnaLoading(true));
         axios.post(TwintWrapperUrl + "/collect", request)
             .then(response => {
-                console.log(request);
                 if (response.data.status === "Error")
                     handleErrors("twitterSnaErrorMessage");
                 else if (response.data.status === "Done")
