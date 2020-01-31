@@ -366,7 +366,6 @@ let elasticSearch_url = process.env.REACT_APP_ELK_URL;
                 }
             });
             const elasticResponse = await response.json();
-            console.log(elasticResponse);
             return elasticResponse;
 
         
@@ -392,7 +391,6 @@ let elasticSearch_url = process.env.REACT_APP_ELK_URL;
             {title: countTrad, field: 'count'},
         ];
 
-        console.log("URL");
         return {
             columns: columns,
             data: array,
@@ -583,6 +581,7 @@ function constructAggs(field) {
             }
         })
     }
+    
     //Retweets & Likes users donuts
     else if (field === "nretweets" || field === "nlikes") {
 
@@ -604,6 +603,7 @@ function constructAggs(field) {
         })
 
     }
+
     //Histogram
     else if (field.includes('1')) {
         fieldInfo += JSON.stringify({
@@ -643,6 +643,7 @@ function constructAggs(field) {
             }
         });
     }
+
     //Count
     else if (field === "glob")
     {

@@ -147,49 +147,6 @@ export default function TwitterSnaResult(props) {
         
         callback(tmp);
     }
-    
-    const downloadClick = (csvArr, name, histo) => {
-        let encodedUri = encodeURI(csvArr);
-        let link = document.createElement("a");
-        link.setAttribute("href", encodedUri);
-        link.setAttribute("download", "tweets_" + props.request.keywordList.join('&') + '_' + name + ((!histo) ? (props.request.from + "_" + props.request.until) : "") + ".csv");
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-    };
-
-    function isInRange(pointDate, objDate, periode) {
-      /* if (periode === "isHours")
-            return ((((pointDate.getDate() === objDate.getDate()
-                && (pointDate.getHours() >= objDate.getHours() -2 && pointDate.getHours() <= objDate.getHours() + 1)))
-                || (pointDate.getDate() === objDate.getDate() + 1 && objDate.getHours() >= 23 && pointDate.getHours() <= 1))
-                && pointDate.getMonth() === objDate.getMonth()
-                && pointDate.getFullYear() === objDate.getFullYear());*/
-                
-                if (periode === "isHours")
-        {
-            return (((pointDate.getDate() === objDate.getDate()
-                && pointDate.getHours() -1 === objDate.getHours()))
-                && pointDate.getMonth() === objDate.getMonth()
-                && pointDate.getFullYear() === objDate.getFullYear());
-        }   
-        //if (periode === "isDays")
-        //{
-            else {
-            return (pointDate - objDate) === 0;/*(pointDate.getDate() === objDate.getDate()
-                && pointDate.getMonth() === objDate.getMonth()
-                && pointDate.getFullYear() === objDate.getFullYear());*/
-        }/*
-       else   
-        else 
-        {
-            return (((pointDate.getDate() === objDate.getDate()
-                && pointDate.getHours() -2 === objDate.getHours()))
-                && pointDate.getMonth() === objDate.getMonth()
-                && pointDate.getFullYear() === objDate.getFullYear());
-        }*/
-
-    }
 
     const displayTweetsOfDate = (data, fromHisto) => {
         let columns = [
@@ -250,53 +207,8 @@ export default function TwitterSnaResult(props) {
         };
     };
 
-    const onHistogramClick = (data) => {
-        setHistoTweets(displayTweetsOfDate(data, true));
-    }
-
-    const onHeatMapClick = (data) => {
-        let truc = displayTweetsOfDate(data, false);
-        setheatMapTweets(truc);
-    }
-
-    const getTweetWithClickableLink = (cellData) => {
-        let urls = cellData.tweet.match(/((http|https|ftp|ftps)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?|pic\.twitter\.com\/([-a-zA-Z0-9()@:%_\+.~#?&//=]*))/g);
-        if (urls === null)
-            return cellData.tweet;
-
-        console.log(urls[0]);
-        let tweetText = cellData.tweet.split(urls[0]);
-        if (urls[0].match(/pic\.twitter\.com\/([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/))
-            urls[0] = "https://" + urls[0];
-        let element = <div>{tweetText[0]} <a href={urls[0]} target="_blank">{urls[0]}</a>{tweetText[1]}</div>;
-        return element;
-    }
-
-
-
-    //        tweet += '<div align="right"><a href="' + link + '" target="_blank" ><img src="img/twitter_logo.png" style="height: 40px"/></a></div>';
-    // return tweet;
-    //}
-
-   
-
-    let goToTweetAction = [{
-        icon: TwitterIcon,
-        tooltip: keyword("sna_result_go_to_tweet"),
-        onClick: (event, rowData) => {
-            window.open(rowData.link, '_blank');
-        }
-    }]
-
-    const onPieChartClick = (data, nbType, index) => {
-
-        if (index === 3) {
-            // window.open("https://twitter.com/search?q=" + data.points[0].label.replace('#', "%23"), '_blank');
-            displayTweetsOfWord(data.points[0].label, setPieCharts3);
-            return;
-        }
-
-
+    const displayTweetsOfUser = (data, nbType, index) =>
+    {
         let columns = [
             { title: keyword('sna_result_date'), field: 'date' },
             { title: keyword('sna_result_tweet'), field: 'tweet', render: getTweetWithClickableLink },
@@ -319,8 +231,9 @@ export default function TwitterSnaResult(props) {
         csvArr += ',' + keyword('elastic_url') + "\n";
 
         let resData = [];
+
         result.tweets.forEach(tweetObj => {
-            if (tweetObj._source.username === data.points[0].label) {
+            if (tweetObj._source.username.toLowerCase() === data.points[0].label) {
                 let date = new Date(tweetObj._source.date);
                 let tmpObj = {
                     date: date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear() + ' ' + date.getHours() + ':' + date.getMinutes(),
@@ -367,8 +280,76 @@ export default function TwitterSnaResult(props) {
                 break;
 
         }
+    }
+
+    const downloadClick = (csvArr, name, histo) => {
+        let encodedUri = encodeURI(csvArr);
+        let link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", "tweets_" + props.request.keywordList.join('&') + '_' + name + ((!histo) ? (props.request.from + "_" + props.request.until) : "") + ".csv");
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    };
+
+    function isInRange(pointDate, objDate, periode) {
+                
+        if (periode === "isHours")
+        {
+            return (((pointDate.getDate() === objDate.getDate()
+                && pointDate.getHours() -1 === objDate.getHours()))
+                && pointDate.getMonth() === objDate.getMonth()
+                && pointDate.getFullYear() === objDate.getFullYear());
+        }   
+        else {
+            return (pointDate - objDate) === 0;
+        }
+    }
+
+
+
+    const onHistogramClick = (data) => {
+        setHistoTweets(displayTweetsOfDate(data, true));
+    }
+
+    const onHeatMapClick = (data) => {
+        setheatMapTweets(displayTweetsOfDate(data, false));
+    }
+
+    const onDonutsClick = (data, nbType, index) => {
+
+        //For hashtag donuts
+        if (index === 3) {
+            displayTweetsOfWord(data.points[0].label, setPieCharts3);
+        }
+        else
+        {
+            displayTweetsOfUser(data, nbType, index);
+        }
+
+
 
     };
+    const getTweetWithClickableLink = (cellData) => {
+        let urls = cellData.tweet.match(/((http|https|ftp|ftps)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?|pic\.twitter\.com\/([-a-zA-Z0-9()@:%_\+.~#?&//=]*))/g);
+        if (urls === null)
+            return cellData.tweet;
+
+        let tweetText = cellData.tweet.split(urls[0]);
+        if (urls[0].match(/pic\.twitter\.com\/([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/))
+            urls[0] = "https://" + urls[0];
+        let element = <div>{tweetText[0]} <a href={urls[0]} target="_blank">{urls[0]}</a>{tweetText[1]}</div>;
+        return element;
+    }
+
+    let goToTweetAction = [{
+        icon: TwitterIcon,
+        tooltip: keyword("sna_result_go_to_tweet"),
+        onClick: (event, rowData) => {
+            window.open(rowData.link, '_blank');
+        }
+    }]
+
 
     const getCallback = useCallback((callback) => {
 
@@ -413,10 +394,7 @@ export default function TwitterSnaResult(props) {
         let svg = document.getElementById("top_words_cloud_chart");
         let name = filesNames + '.png';
         
-        
         saveSvgAsPng(svg.children[0].children[0], name, { backgroundColor: "white", scale: 2 });
-
-
     }
 
     //Download as SVG
@@ -424,7 +402,6 @@ export default function TwitterSnaResult(props) {
 
         let name = filesNames + '.svg';
         var svgEl = document.getElementById("top_words_cloud_chart").children[0].children[0];
-        //  d3.select("#we-verify").attr("style", "font-size: 20px;");
         svgEl.setAttribute("xmlns", "http://www.w3.org/2000/svg");
         var svgData = svgEl.outerHTML;
         var preface = '<?xml version="1.0" standalone="no"?>\r\n';
@@ -435,7 +412,6 @@ export default function TwitterSnaResult(props) {
         downloadLink.download = name;
         downloadLink.click();
 
-        //  d3.select("#we-verify").attr("style", "display: none");
     }
 
     function getCSVData() {
@@ -656,7 +632,7 @@ export default function TwitterSnaResult(props) {
                                             layout={obj.layout}
                                             config={obj.config}
                                             onClick={e => {
-                                                onPieChartClick(e, obj.title, index)
+                                                onDonutsClick(e, obj.title, index)
                                             }}
                                         />
                                         }
