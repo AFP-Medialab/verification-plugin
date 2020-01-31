@@ -244,7 +244,6 @@ const useTwitterSnaRequest = (request) => {
         
         
         const generateGraph = (data, final) => {
-            console.log("generate graph");
             let givenFrom = data.from;
             let givenUntil = data.until;
             let entries = makeEntries(data);
@@ -257,7 +256,6 @@ const useTwitterSnaRequest = (request) => {
                 getJsonCounts(entries),
                 getPlotlyJsonHisto(entries, givenFrom, givenUntil)
             ];
-            console.log(generateList);
             return axios.all(
                 (final) ? [...generateList, generateWordCloudPlotlyJson(entries)] : generateList
             )
