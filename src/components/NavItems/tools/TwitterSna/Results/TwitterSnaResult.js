@@ -264,7 +264,10 @@ export default function TwitterSnaResult(props) {
         if (urls === null)
             return cellData.tweet;
 
+        console.log(urls[0]);
         let tweetText = cellData.tweet.split(urls[0]);
+        if (urls[0].match(/pic\.twitter\.com\/([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/))
+            urls[0] = "https://" + urls[0];
         let element = <div>{tweetText[0]} <a href={urls[0]} target="_blank">{urls[0]}</a>{tweetText[1]}</div>;
         return element;
     }
@@ -696,26 +699,6 @@ export default function TwitterSnaResult(props) {
                             </ExpansionPanel>
                         )
                 })
-            }
-            {/*
-                <ExpansionPanel>
-                    <ExpansionPanelSummary
-                        expandIcon={<ExpandMoreIcon />}
-                        aria-controls={"panel0a-content"}
-                        id={"panel0a-header"}
-                    >
-                        <Typography className={classes.heading}>{"Graph ADD TSV"}</Typography>
-                    </ExpansionPanelSummary>
-                    <ExpansionPanelDetails>
-                    <Box>
-                        <div>
-                        <CytoscapeComponent elements={CytoscapeComponent.normalizeElements({
-                            nodes: elements, edges: edges})} layout={layout} style={ { width: '600px', height: '600px' } } />
-                        </div>
-                    </Box>
-                    </ExpansionPanelDetails>
-
-                </ExpansionPanel>*/
             }
             {
                 
