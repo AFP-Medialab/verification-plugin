@@ -322,7 +322,7 @@ let elasticSearch_url = process.env.REACT_APP_ELK_URL;
         let must = constructMatchPhrase(param);
         let mustNot = constructMatchNotPhrase(param);
 
-        let query = JSON.stringify(buildQuery({}, must, mustNot, 0)).replace(/\\/g, "").replace(/"{/g, "{").replace(/}"/g, "}");
+        let query = JSON.stringify(buildQuery({}, must, mustNot, 10000)).replace(/\\/g, "").replace(/"{/g, "{").replace(/}"/g, "}");
         const userAction = async () => {
 
             const response = await fetch(elasticSearch_url, {
@@ -334,7 +334,7 @@ let elasticSearch_url = process.env.REACT_APP_ELK_URL;
                 }
             });
             const myJson = await response.json();
-
+            console.log(myJson)
             return myJson;
 
         };
