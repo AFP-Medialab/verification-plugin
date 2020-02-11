@@ -1,8 +1,17 @@
 import React, {useEffect, useState} from "react";
-import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
+
 import {useDispatch, useSelector} from "react-redux";
-import {Paper} from "@material-ui/core";
-import CustomTile from "../../../Shared/CustomTitle/CustomTitle";
+import {setError} from "../../../../redux/actions/errorActions";
+
+import dateFormat from "dateformat"
+
+import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
+import { makeStyles } from "@material-ui/core/styles";
+import Paper from "@material-ui/core/Paper";
+import ExpansionPanel from '@material-ui/core/ExpansionPanel';
+import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
+import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import TextField from "@material-ui/core/TextField";
 import FormControl from "@material-ui/core/FormControl";
 import RadioGroup from "@material-ui/core/RadioGroup";
@@ -12,22 +21,35 @@ import Box from "@material-ui/core/Box";
 import FormLabel from "@material-ui/core/FormLabel";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
-import {setError} from "../../../../redux/actions/errorActions";
 import InputLabel from "@material-ui/core/InputLabel";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
-import convertToGMT from "../../../Shared/DateTimePicker/convertToGMT";
-import dateFormat from "dateformat"
-import useTwitterSnaRequest from "./Hooks/useTwitterSnaRequest";
 import LinearProgress from "@material-ui/core/LinearProgress";
+import Typography from "@material-ui/core/Typography";
+import Divider from '@material-ui/core/Divider';
+
+// import PersonIcon from '@material-ui/icons/Person';
+import PersonAddIcon from '@material-ui/icons/PersonAdd';
+// import AccountBoxIcon from '@material-ui/icons/AccountBox';
+// import HowToRegIcon from '@material-ui/icons/HowToReg';
+
+// import EmailIcon from '@material-ui/icons/Email';
+import SendIcon from '@material-ui/icons/Send';
+
+import LockOpenIcon from '@material-ui/icons/LockOpen';
+// import VpnKeyIcon from '@material-ui/icons/VpnKey';
+
+import SearchIcon from '@material-ui/icons/Search';
+
+import CustomTile from "../../../Shared/CustomTitle/CustomTitle";
+import DateTimePicker from "../../../Shared/DateTimePicker/DateTimePicker";
+import convertToGMT from "../../../Shared/DateTimePicker/convertToGMT";
+import useTwitterSnaRequest from "./Hooks/useTwitterSnaRequest";
 import TwitterSnaResult from "./Results/TwitterSnaResult";
 import {replaceAll} from "../TwitterAdvancedSearch/createUrl";
-import DateTimePicker from "../../../Shared/DateTimePicker/DateTimePicker";
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/TwitterSna.tsv";
-import Typography from "@material-ui/core/Typography";
 import {submissionEvent} from "../../../Shared/GoogleAnalytics/GoogleAnalytics";
-import { makeStyles } from "@material-ui/core/styles";
 
 
 const TwitterSna = () => {
@@ -70,6 +92,10 @@ const TwitterSna = () => {
     const [filters, setFilers] = useState(request && request.media ? request.media : "none");
     const [verifiedUsers, setVerifiedUsers] = useState(request && request.verified ? request.verified : "false");
     const [localTime, setLocalTime] = useState("true");
+
+    // TODO: get "login" state
+    const userSessionActive = false;
+    const searchFormDisabled = isLoading || !userSessionActive;
 
     const [submittedRequest, setSubmittedRequest] = useState(null);
     useTwitterSnaRequest(submittedRequest);
@@ -190,24 +216,122 @@ const TwitterSna = () => {
         <div>
             <Paper className={classes.root}>
                 <CustomTile text={keyword("twitter_sna_title")}/>
+
+                <ExpansionPanel>
+                    <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+                        <Typography variant="caption">You must be logged in to use this service.</Typography>
+                    </ExpansionPanelSummary>
+                    <ExpansionPanelDetails>
+                        <Grid container justify="center" spacing={4} className={classes.grow}>
+                            <Grid
+                                item xs={12} sm={6}
+                                container justify="center" spacing={2}
+                            >
+                                <Grid item xs={12}>
+                                    <Typography variant="body2">Not already registered? Request an access to the service:</Typography>
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <TextField
+                                        label="Email address"
+                                        fullWidth
+                                    />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <TextField
+                                        label="First name"
+                                        fullWidth
+                                    />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <TextField
+                                        label="Last name"
+                                        fullWidth
+                                    />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <TextField
+                                        label="Company"
+                                        fullWidth
+                                    />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <TextField
+                                        label="Position"
+                                        fullWidth
+                                    />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <Box mt={2}>
+                                        <Button variant="contained" color="primary" startIcon={<PersonAddIcon />}>
+                                            Request an access
+                                        </Button>
+                                    </Box>
+                                </Grid>
+                            </Grid>
+                            <Grid item xs>
+                                <Divider orientation="vertical" />
+                            </Grid>
+                            <Grid item xs={12} sm={5}>
+                                <Grid container justify="center" spacing={2}>
+                                    <Grid item xs={12}>
+                                        <Typography variant="body2">Already registered? Get an access code:</Typography>
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <TextField
+                                            label="Email address"
+                                            fullWidth
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <Box mt={2}>
+                                            <Button variant="contained" color="primary" startIcon={<SendIcon />}>
+                                                Get an access code
+                                            </Button>
+                                        </Box>
+                                    </Grid>
+                                </Grid>
+                                <Box m={8}/>
+                                <Grid container justify="center" spacing={2}>
+                                    <Grid item xs={12}>
+                                        <Typography variant="body2">Login using your access code:</Typography>
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <TextField
+                                            label="Access code"
+                                            fullWidth
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <Box mt={2}>
+                                            <Button variant="contained" color="primary" startIcon={<LockOpenIcon />}>
+                                                Log in
+                                            </Button>
+                                        </Box>
+                                    </Grid>
+                                </Grid>
+                            </Grid>
+                        </Grid>
+                    </ExpansionPanelDetails>
+                </ExpansionPanel>
+
                 <Box m={3}/>
-                    <TextField
-                        disabled={isLoading}
-                        error={keyWordsError}
-                        value={keyWords}
-                        onChange={e => {
-                            setKeywords(e.target.value);
-                            setKeyWordsError(false);
-                        }}
-                        id="standard-full-width"
-                        label={'*  ' + keyword("twitter_sna_search")}
-                        className={classes.neededField}
-                        style={{margin: 8}}
-                        placeholder={"#example"}
-                        fullWidth
-                    />
                 <TextField
-                    disabled={isLoading}
+                    disabled={searchFormDisabled}
+                    error={keyWordsError}
+                    value={keyWords}
+                    onChange={e => {
+                        setKeywords(e.target.value);
+                        setKeyWordsError(false);
+                    }}
+                    id="standard-full-width"
+                    label={'*  ' + keyword("twitter_sna_search")}
+                    className={classes.neededField}
+                    style={{margin: 8}}
+                    placeholder={"#example"}
+                    fullWidth
+                />
+                <TextField
+                    disabled={searchFormDisabled}
                     value={bannedWords}
                     onChange={e => setBannedWords(e.target.value)}
                     id="standard-full-width"
@@ -216,9 +340,8 @@ const TwitterSna = () => {
                     placeholder={"word word2"}
                     fullWidth
                 />
-
                 <TextField
-                    disabled={isLoading}
+                    disabled={searchFormDisabled}
                     value={usersInput}
                     onChange={e => setUsersInput(e.target.value)}
                     id="standard-full-width"
@@ -230,6 +353,7 @@ const TwitterSna = () => {
                 <Grid container justify={"center"} spacing={4} className={classes.grow}>
                     <Grid item>
                         <DateTimePicker
+                            disabled={searchFormDisabled}
                             input={true}
                             isValidDate={sinceDateIsValid}
                             label={'*  ' + keyword("twitter_sna_from_date")}
@@ -238,11 +362,11 @@ const TwitterSna = () => {
                             timeFormat={"HH:mm:ss"}
                             handleChange={handleSinceDateChange}
                             error={sinceError}
-                            disabled={isLoading}
                         />
                     </Grid>
                     <Grid item>
                         <DateTimePicker
+                            disabled={searchFormDisabled}
                             input={true}
                             isValidDate={untilDateIsValid}
                             label={'*  ' + keyword("twitter_sna_until_date")}
@@ -251,15 +375,14 @@ const TwitterSna = () => {
                             timeFormat={"HH:mm:ss"}
                             handleChange={handleUntilDateChange}
                             error={untilError}
-                            disabled={isLoading}
                         />
                     </Grid>
                 </Grid>
                 <FormControl component="fieldset"
-                             disabled={isLoading}
+                    disabled={searchFormDisabled}
                 >
                     <RadioGroup aria-label="position" name="position" value={localTime}
-                                onChange={e => setLocalTime(e.target.value)} row>
+                            onChange={e => setLocalTime(e.target.value)} row>
                         <FormControlLabel
                             value={"true"}
                             control={<Radio color="primary"/>}
@@ -275,17 +398,16 @@ const TwitterSna = () => {
                     </RadioGroup>
                 </FormControl>
                 <Box m={2}/>
-
                 <Box m={2}/>
                 <Grid container justify={"space-around"} spacing={5}>
                     <Grid item>
                         <FormControl component="fieldset"
-                                     disabled={isLoading}
+                            disabled={searchFormDisabled}
                         >
                             <FormLabel component="legend">{keyword("twitter_sna_media")}</FormLabel>
                             <RadioGroup aria-label="position" name="position" value={filters}
-                                        onChange={handleFiltersChange}
-                                        row>
+                                    onChange={handleFiltersChange}
+                                    row>
                                 <FormControlLabel
                                     value={"none"}
                                     control={<Radio color="primary"/>}
@@ -304,17 +426,16 @@ const TwitterSna = () => {
                                     label={keyword("twitterStats_media_videos")}
                                     labelPlacement="end"
                                 />
-                              
                             </RadioGroup>
                         </FormControl>
                     </Grid>
                     <Grid item>
                         <FormControl component="fieldset"
-                                     disabled={isLoading}
+                            disabled={searchFormDisabled}
                         >
                             <FormLabel component="legend">{keyword("twitter_sna_verified")}</FormLabel>
                             <RadioGroup aria-label="position" name="position" value={verifiedUsers}
-                                        onChange={handleVerifiedUsersChange} row>
+                                    onChange={handleVerifiedUsersChange} row>
                                 <FormControlLabel
                                     value={"false"}
                                     control={<Radio color="primary"/>}
@@ -332,7 +453,7 @@ const TwitterSna = () => {
                     </Grid>
                     <Grid item>
                         <FormControl className={classes.formControl}
-                                     disabled={isLoading}
+                            disabled={searchFormDisabled}
                         >
                             <InputLabel id="demo-controlled-open-select-label">{keyword("lang_choices")}</InputLabel>
                             <Select
@@ -373,13 +494,15 @@ const TwitterSna = () => {
                     </Grid>
                 </Grid>
                 <Box m={2}/>
-                <Button variant="contained" color="primary" onClick={onSubmit}
-                        disabled={isLoading || keyWordsError || sinceError || untilError}
+
+                <Button variant="contained" color="primary" startIcon={<SearchIcon />}
+                    onClick={onSubmit}
+                    disabled={searchFormDisabled || keyWordsError || sinceError || untilError}
                 >
                     {keyword("button_submit")}
                 </Button>
-                <Box m={2}/>
 
+                <Box m={2}/>
                 <Typography>{loadingMessage}</Typography>
                 <LinearProgress hidden={!isLoading}/>
             </Paper>
