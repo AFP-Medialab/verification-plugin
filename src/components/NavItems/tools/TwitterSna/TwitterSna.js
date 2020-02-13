@@ -26,18 +26,6 @@ import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import Typography from "@material-ui/core/Typography";
-import Divider from '@material-ui/core/Divider';
-
-// import PersonIcon from '@material-ui/icons/Person';
-import PersonAddIcon from '@material-ui/icons/PersonAdd';
-// import AccountBoxIcon from '@material-ui/icons/AccountBox';
-// import HowToRegIcon from '@material-ui/icons/HowToReg';
-
-// import EmailIcon from '@material-ui/icons/Email';
-import SendIcon from '@material-ui/icons/Send';
-
-import LockOpenIcon from '@material-ui/icons/LockOpen';
-// import VpnKeyIcon from '@material-ui/icons/VpnKey';
 
 import SearchIcon from '@material-ui/icons/Search';
 
@@ -50,6 +38,7 @@ import {replaceAll} from "../TwitterAdvancedSearch/createUrl";
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/TwitterSna.tsv";
 import {submissionEvent} from "../../../Shared/GoogleAnalytics/GoogleAnalytics";
+import AuthenticationCard from "../../../Shared/Authentication/AuthenticationCard";
 
 
 const TwitterSna = () => {
@@ -222,95 +211,7 @@ const TwitterSna = () => {
                         <Typography variant="caption">You must be logged in to use this service.</Typography>
                     </ExpansionPanelSummary>
                     <ExpansionPanelDetails>
-                        <Grid container justify="center" spacing={4} className={classes.grow}>
-                            <Grid
-                                item xs={12} sm={6}
-                                container justify="center" spacing={2}
-                            >
-                                <Grid item xs={12}>
-                                    <Typography variant="body2">Not already registered? Request an access to the service:</Typography>
-                                </Grid>
-                                <Grid item xs={12}>
-                                    <TextField
-                                        label="Email address"
-                                        fullWidth
-                                    />
-                                </Grid>
-                                <Grid item xs={12}>
-                                    <TextField
-                                        label="First name"
-                                        fullWidth
-                                    />
-                                </Grid>
-                                <Grid item xs={12}>
-                                    <TextField
-                                        label="Last name"
-                                        fullWidth
-                                    />
-                                </Grid>
-                                <Grid item xs={12}>
-                                    <TextField
-                                        label="Company"
-                                        fullWidth
-                                    />
-                                </Grid>
-                                <Grid item xs={12}>
-                                    <TextField
-                                        label="Position"
-                                        fullWidth
-                                    />
-                                </Grid>
-                                <Grid item xs={12}>
-                                    <Box mt={2}>
-                                        <Button variant="contained" color="primary" startIcon={<PersonAddIcon />}>
-                                            Request an access
-                                        </Button>
-                                    </Box>
-                                </Grid>
-                            </Grid>
-                            <Grid item xs>
-                                <Divider orientation="vertical" />
-                            </Grid>
-                            <Grid item xs={12} sm={5}>
-                                <Grid container justify="center" spacing={2}>
-                                    <Grid item xs={12}>
-                                        <Typography variant="body2">Already registered? Get an access code:</Typography>
-                                    </Grid>
-                                    <Grid item xs={12}>
-                                        <TextField
-                                            label="Email address"
-                                            fullWidth
-                                        />
-                                    </Grid>
-                                    <Grid item xs={12}>
-                                        <Box mt={2}>
-                                            <Button variant="contained" color="primary" startIcon={<SendIcon />}>
-                                                Get an access code
-                                            </Button>
-                                        </Box>
-                                    </Grid>
-                                </Grid>
-                                <Box m={8}/>
-                                <Grid container justify="center" spacing={2}>
-                                    <Grid item xs={12}>
-                                        <Typography variant="body2">Login using your access code:</Typography>
-                                    </Grid>
-                                    <Grid item xs={12}>
-                                        <TextField
-                                            label="Access code"
-                                            fullWidth
-                                        />
-                                    </Grid>
-                                    <Grid item xs={12}>
-                                        <Box mt={2}>
-                                            <Button variant="contained" color="primary" startIcon={<LockOpenIcon />}>
-                                                Log in
-                                            </Button>
-                                        </Box>
-                                    </Grid>
-                                </Grid>
-                            </Grid>
-                        </Grid>
+                        <AuthenticationCard />
                     </ExpansionPanelDetails>
                 </ExpansionPanel>
 
