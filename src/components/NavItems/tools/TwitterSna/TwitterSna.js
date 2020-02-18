@@ -81,9 +81,9 @@ const TwitterSna = () => {
     const [verifiedUsers, setVerifiedUsers] = useState(request && request.verified ? request.verified : "false");
     const [localTime, setLocalTime] = useState("true");
 
-    // Get user authentication state
-    const userAuthenticated = useSelector(state => state.userSession.userAuthenticated);
-    const searchFormDisabled = isLoading || !userAuthenticated;
+    // Authentication Redux state
+    const userSession = useSelector(state => state.userSession);
+    const searchFormDisabled = isLoading || !userSession.userAuthenticated;
 
     const [submittedRequest, setSubmittedRequest] = useState(null);
     useTwitterSnaRequest(submittedRequest);
@@ -207,7 +207,13 @@ const TwitterSna = () => {
 
                 <ExpansionPanel>
                     <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-                        <Typography variant="caption">You must be logged in to use this service.</Typography>
+                        <Typography variant="caption">
+                            {
+                                userSession.userAuthenticated
+                                ? `You are logged as ${userSession.user.firstName} ${userSession.user.lastName} (${userSession.user.email})`
+                                : "You must be logged in to use this service."
+                            }
+                        </Typography>
                     </ExpansionPanelSummary>
                     <ExpansionPanelDetails>
                         <AuthenticationCard />
