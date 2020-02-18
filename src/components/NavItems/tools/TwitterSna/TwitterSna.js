@@ -45,7 +45,6 @@ const TwitterSna = () => {
     const classes = useMyStyles();
     const keyword = useLoadLanguage("components/NavItems/tools/TwitterSna.tsv", tsv);
 
-
     const request = useSelector(state => state.twitterSna.request);
     const reduxResult = useSelector(state => state.twitterSna.result);
 
@@ -82,9 +81,9 @@ const TwitterSna = () => {
     const [verifiedUsers, setVerifiedUsers] = useState(request && request.verified ? request.verified : "false");
     const [localTime, setLocalTime] = useState("true");
 
-    // TODO: get "login" state
-    const userSessionActive = false;
-    const searchFormDisabled = isLoading || !userSessionActive;
+    // Get user authentication state
+    const userAuthenticated = useSelector(state => state.userSession.userAuthenticated);
+    const searchFormDisabled = isLoading || !userAuthenticated;
 
     const [submittedRequest, setSubmittedRequest] = useState(null);
     useTwitterSnaRequest(submittedRequest);
