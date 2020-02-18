@@ -1,4 +1,5 @@
-import {combineReducers} from "redux";
+import { combineReducers } from "redux";
+
 import languageReducer from "./languagesReducer";
 import dictionaryReducer from "./dictionaryReducer";
 import navReducer from "./navReducer";
@@ -6,6 +7,7 @@ import toolReducer from "./tools/toolReducer";
 import humanRightsCheckBoxReducer from "./humanRightsCheckBoxReducer";
 import interactiveExplanationReducer from "./interactiveExplanationReducer";
 import errorReducer from "./errorReducer";
+import authenticationReducer from './authenticationReducer';
 import analysisReducer from "./tools/analysisReducer";
 import forensicReducer from "./tools/forensicReducer";
 import keyframesReducer from "./tools/keyframesReducer";
@@ -24,6 +26,7 @@ const allReducers = combineReducers({
     humanRightsCheckBox : humanRightsCheckBoxReducer,
     interactiveExplanation : interactiveExplanationReducer,
     error : errorReducer,
+    userSession: authenticationReducer,
     analysis: analysisReducer,
     forensic : forensicReducer,
     keyframes : keyframesReducer,
@@ -32,7 +35,7 @@ const allReducers = combineReducers({
     thumbnails : thumbnailsReducer,
     twitterSna : twitterSnaReducer,
     videoRights : videoRightsReducer,
-    cookies : cookiesReducer,
+    cookies : cookiesReducer
 });
 
 export default allReducers;
