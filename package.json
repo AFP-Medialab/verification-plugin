@@ -17,6 +17,7 @@
     "exif-js": "^2.3.0",
     "fabric": "^3.4.0",
     "history": "^4.10.1",
+    "jwt-decode": "^2.2.0",
     "material-table": "^1.54.1",
     "material-ui-image": "^3.2.2",
     "plotly.js": "^1.51.2",
