@@ -8,7 +8,7 @@ import jwtDecode from "jwt-decode";
 
 import { ERR_AUTH_INVALID_PARAMS, ERR_AUTH_BAD_REQUEST, ERR_AUTH_SERVER_ERROR, ERR_AUTH_UNKNOWN_ERROR, ERR_AUTH_INVALID_TOKEN, ERR_AUTH_INVALID_CREDENTIALS, ERR_AUTH_INVALID_USER_STATE, ERR_AUTH_USER_EXPIRED, ERR_AUTH_SESSION_EXPIRED } from "./authenticationErrors";
 
-import { userRegistrationSentAction, userAccessCodeRequestSentAction, userLoginAction, userTokenRefreshed } from '../../../redux/actions/authenticationActions';
+import { userRegistrationSentAction, userAccessCodeRequestSentAction, userLoginAction, userTokenRefreshed, userSessionExpired } from '../../../redux/actions/authenticationActions';
 
 
 // Global REST client parameters
@@ -183,16 +183,18 @@ export function login(store, request) {
     timeout: defaultTimeout
   }).then(response => {
     const accessToken = response.data.token;
+    const userInfo = response.data.user;
     // Decode JWT token
     try {
       const tokenContent = decodeJWTToken(accessToken);
-      store.dispatch(userLoginAction(accessToken, tokenContent.accessTokenExpiry, tokenContent.user));
+      _.merge(userInfo, tokenContent.user);
+      store.dispatch(userLoginAction(accessToken, tokenContent.accessTokenExpiry, userInfo));
       return Promise.resolve({
         status: response.status,
         data: {
           accessToken: accessToken,
           accessTokenExpiry: tokenContent.accessTokenExpiry,
-          user: tokenContent.user
+          user: userInfo
         }
       });
     } catch (jwtError) {
@@ -291,6 +293,7 @@ function refreshToken(store) {
       });
     } catch (jwtError) {
       // Invalid token
+      store.dispatch(userSessionExpired());
       return Promise.reject({
         error: {
           code: ERR_AUTH_INVALID_TOKEN,
@@ -299,6 +302,9 @@ function refreshToken(store) {
       });
     }
   }, error => {
+    // Logout user
+    store.dispatch(userSessionExpired());
+    // Reject with error
     if (error.response) {
       switch (error.response.status) {
         case 400:
