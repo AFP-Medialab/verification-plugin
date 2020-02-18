@@ -48,9 +48,6 @@ const AuthenticationCard = (props) => {
     }
   };
 
-  // Authentication Redux state
-  const userSession = useSelector(state => state.userSession);
-
   // User Registration form
   const [regEmail, setRegEmail] = useState(null);
 
