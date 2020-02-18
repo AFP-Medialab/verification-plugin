@@ -26,6 +26,10 @@ export const AUTH_TOKEN_INVALID = "AUTH_TOKEN_INVALID";
  * Authentication token refreshed event.
  */
 export const AUTH_TOKEN_REFRESHED = "AUTH_TOKEN_REFRESHED";
+/**
+ * User session expired event.
+ */
+export const AUTH_USER_SESSION_EXPIRED = "AUTH_USER_SESSION_EXPIRED";
 
 /**
  * TODO
@@ -66,12 +70,11 @@ export function userLoginAction(accessToken, accessTokenExpiry, user) {
       user
     }
   };
-}
+};
 
 /**
  * TODO
  *
- * @export
  * @param {*} accessToken
  * @param {*} accessTokenExpiry
  * @param {*} user
@@ -86,11 +89,23 @@ export function userTokenRefreshed(accessToken, accessTokenExpiry, user) {
       user
     }
   };
-}
+};
+
+/**
+ * TODO
+ *
+ * @returns
+ */
+export function userSessionExpired() {
+  return {
+    type: AUTH_USER_SESSION_EXPIRED
+  };
+};
 
 export default {
   userRegistrationSentAction,
   userAccessCodeRequestSentAction,
   userLoginAction,
-  userTokenRefreshed
+  userTokenRefreshed,
+  userSessionExpired
 };
