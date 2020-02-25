@@ -8,10 +8,6 @@ import dateFormat from "dateformat"
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
-import ExpansionPanel from '@material-ui/core/ExpansionPanel';
-import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
-import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import TextField from "@material-ui/core/TextField";
 import FormControl from "@material-ui/core/FormControl";
 import RadioGroup from "@material-ui/core/RadioGroup";
@@ -82,8 +78,8 @@ const TwitterSna = () => {
     const [localTime, setLocalTime] = useState("true");
 
     // Authentication Redux state
-    const userSession = useSelector(state => state.userSession);
-    const searchFormDisabled = isLoading || !userSession.userAuthenticated;
+    const userAuthenticated = useSelector(state => state.userSession && state.userSession.userAuthenticated);
+    const searchFormDisabled = isLoading || !userAuthenticated;
 
     const [submittedRequest, setSubmittedRequest] = useState(null);
     useTwitterSnaRequest(submittedRequest);
@@ -205,20 +201,7 @@ const TwitterSna = () => {
             <Paper className={classes.root}>
                 <CustomTile text={keyword("twitter_sna_title")}/>
 
-                <ExpansionPanel>
-                    <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-                        <Typography variant="caption">
-                            {
-                                userSession.userAuthenticated
-                                ? `You are logged as ${userSession.user.firstName} ${userSession.user.lastName} (${userSession.user.email})`
-                                : "You must be logged in to use this service."
-                            }
-                        </Typography>
-                    </ExpansionPanelSummary>
-                    <ExpansionPanelDetails>
-                        <AuthenticationCard />
-                    </ExpansionPanelDetails>
-                </ExpansionPanel>
+                <AuthenticationCard />
 
                 <Box m={3}/>
                 <TextField

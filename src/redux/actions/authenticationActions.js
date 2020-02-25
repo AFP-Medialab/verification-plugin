@@ -80,7 +80,7 @@ export function userLoginAction(accessToken, accessTokenExpiry, user) {
  * @param {*} user
  * @returns
  */
-export function userTokenRefreshed(accessToken, accessTokenExpiry, user) {
+export function userTokenRefreshedAction(accessToken, accessTokenExpiry, user) {
   return {
     type: AUTH_TOKEN_REFRESHED,
     payload: {
@@ -96,7 +96,7 @@ export function userTokenRefreshed(accessToken, accessTokenExpiry, user) {
  *
  * @returns
  */
-export function userSessionExpired() {
+export function userSessionExpiredAction() {
   return {
     type: AUTH_USER_SESSION_EXPIRED
   };
@@ -106,6 +106,6 @@ export default {
   userRegistrationSentAction,
   userAccessCodeRequestSentAction,
   userLoginAction,
-  userTokenRefreshed,
-  userSessionExpired
+  userTokenRefreshed: userTokenRefreshedAction,
+  userSessionExpired: userSessionExpiredAction
 };
