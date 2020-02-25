@@ -4,12 +4,16 @@ import { useStore, useSelector, useDispatch } from 'react-redux';
 
 import useMyStyles from "../MaterialUiStyles/useMyStyles";
 
-import authenticationAPI from "./authenticationAPI";
+import useAuthenticationAPI from './useAuthenticationAPI';
 import { ERR_AUTH_UNKNOWN_ERROR } from './authenticationErrors';
 import { setError } from "../../../redux/actions/errorActions";
 import useLoadLanguage from "../../../Hooks/useLoadLanguage";
 import tsv from "../../../LocalDictionary/components/Shared/Authentication.tsv";
 
+import ExpansionPanel from '@material-ui/core/ExpansionPanel';
+import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
+import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Card from "@material-ui/core/Card";
 // import CardContent from '@material-ui/core/CardContent';
 import Grid from '@material-ui/core/Grid';
@@ -33,19 +37,23 @@ const AuthenticationCard = (props) => {
   const classes = useMyStyles();
 
   // Redux store
-  const store = useStore();
   const dispatch = useDispatch();
+  const userAuthenticated = useSelector(state => state.userSession && state.userSession.userAuthenticated);
+  const user = useSelector(state => state.userSession && state.userSession.user);
 
-  // Events functions
+  // i18n
   const messageI18NResolver = useLoadLanguage("components/Shared/Authentication.tsv", tsv);
+
+  // Authentication API
+  const authenticationAPI = useAuthenticationAPI();
 
   // Error handler
   const handleError = (errorKey) => {
-    if (messageI18NResolver(errorKey) !== "") {
-      dispatch(setError((messageI18NResolver(errorKey))));
-    } else {
-      dispatch(setError(messageI18NResolver(ERR_AUTH_UNKNOWN_ERROR)));
+    let errMsg = messageI18NResolver(errorKey);
+    if (errMsg === "") {
+      errMsg = messageI18NResolver(ERR_AUTH_UNKNOWN_ERROR);
     }
+    dispatch(setError(errMsg));
   };
 
   // User Registration form
@@ -54,7 +62,7 @@ const AuthenticationCard = (props) => {
   // Access Code form
   const [acEmail, setACEmail] = useState(null);
   const acOnSubmit = () => {
-    authenticationAPI.requestAccessCode(store, {
+    authenticationAPI.requestAccessCode({
         email: acEmail
     }).catch(error => {
       handleError(error.error ? error.error.code : ERR_AUTH_UNKNOWN_ERROR);
@@ -64,117 +72,135 @@ const AuthenticationCard = (props) => {
   // Login form
   const [loginAccessCode, setLoginAccessCode] = useState(null);
   const loginOnSubmit = () => {
-    authenticationAPI.login(store, {
+    authenticationAPI.login({
       accessCode: loginAccessCode
     }).catch(error => {
       handleError(error.error ? error.error.code : ERR_AUTH_UNKNOWN_ERROR);
     });
   }
 
+  if (userAuthenticated) {
+    return (
+      <Typography variant="caption">
+        {
+          `You are logged as ${user && user.firstName} ${user && user.lastName} (${user && user.email})`
+        }
+      </Typography>
+    )
+  }
+
   return (
-    <Card raised={false} elevation={0}>
-      {/* <CardContent> */}
-        <Grid container justify="center" spacing={4} className={classes.grow}>
-          <Grid
-              item xs={12} sm={6}
-              container justify="center" spacing={2}
-          >
-              <Grid item xs={12}>
-                  <Typography variant="body2">Not already registered? Register for an access to the service:</Typography>
-              </Grid>
-              <Grid item xs={12}>
-                  <TextField
-                      label="Email address"
-                      required
-                      fullWidth
-                  />
-              </Grid>
-              <Grid item xs={12}>
-                  <TextField
-                      label="First name"
-                      required
-                      fullWidth
-                  />
-              </Grid>
-              <Grid item xs={12}>
-                  <TextField
-                      label="Last name"
-                      required
-                      fullWidth
-                  />
-              </Grid>
-              <Grid item xs={12}>
-                  <TextField
-                      label="Company"
-                      fullWidth
-                  />
-              </Grid>
-              <Grid item xs={12}>
-                  <TextField
-                      label="Position"
-                      required
-                      fullWidth
-                  />
-              </Grid>
-              <Grid item xs={12}>
-                  <Box mt={2}>
-                      <Button variant="contained" color="primary" startIcon={<PersonAddIcon />}
-                          // style={{ marginTop: 16 }}
-                      >
-                          Register
-                      </Button>
-                  </Box>
-              </Grid>
-          </Grid>
-          <Grid item xs>
-              <Divider orientation="vertical" style={{ marginRight: "auto", marginLeft: "auto" }} />
-          </Grid>
-          <Grid item xs={12} sm={5}>
-              <Grid container justify="center" spacing={2}>
+    <ExpansionPanel>
+      <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+        <Typography variant="caption">You must be logged in to use this service.</Typography>
+      </ExpansionPanelSummary>
+      <ExpansionPanelDetails>
+        <Card raised={false} elevation={0}>
+          {/* <CardContent> */}
+            <Grid container justify="center" spacing={4} className={classes.grow}>
+              <Grid
+                  item xs={12} sm={6}
+                  container justify="center" spacing={2}
+              >
                   <Grid item xs={12}>
-                      <Typography variant="body2">Already registered? Get an access code:</Typography>
+                      <Typography variant="body2">Not already registered? Register for an access to the service:</Typography>
                   </Grid>
                   <Grid item xs={12}>
                       <TextField
                           label="Email address"
                           required
                           fullWidth
-                          onChange={e => setACEmail(e.target.value)}
                       />
-                  </Grid>
-                  <Grid item xs={12}>
-                      <Box mt={2}>
-                          <Button variant="contained" color="primary" startIcon={<SendIcon />} onClick={acOnSubmit}>
-                              Get an access code
-                          </Button>
-                      </Box>
-                  </Grid>
-              </Grid>
-              <Box m={8}/>
-              <Grid container justify="center" spacing={2}>
-                  <Grid item xs={12}>
-                      <Typography variant="body2">Login using your access code:</Typography>
                   </Grid>
                   <Grid item xs={12}>
                       <TextField
-                          label="Access code"
+                          label="First name"
                           required
                           fullWidth
-                          onChange={e => setLoginAccessCode(e.target.value)}
+                      />
+                  </Grid>
+                  <Grid item xs={12}>
+                      <TextField
+                          label="Last name"
+                          required
+                          fullWidth
+                      />
+                  </Grid>
+                  <Grid item xs={12}>
+                      <TextField
+                          label="Company"
+                          fullWidth
+                      />
+                  </Grid>
+                  <Grid item xs={12}>
+                      <TextField
+                          label="Position"
+                          required
+                          fullWidth
                       />
                   </Grid>
                   <Grid item xs={12}>
                       <Box mt={2}>
-                          <Button variant="contained" color="primary" startIcon={<LockOpenIcon />} onClick={loginOnSubmit}>
-                              Log in
+                          <Button variant="contained" color="primary" startIcon={<PersonAddIcon />}
+                              // style={{ marginTop: 16 }}
+                          >
+                              Register
                           </Button>
                       </Box>
                   </Grid>
               </Grid>
-          </Grid>
-        </Grid>
-      {/* </CardContent> */}
-    </Card>
+              <Grid item xs>
+                  <Divider orientation="vertical" style={{ marginRight: "auto", marginLeft: "auto" }} />
+              </Grid>
+              <Grid item xs={12} sm={5}>
+                  <Grid container justify="center" spacing={2}>
+                      <Grid item xs={12}>
+                          <Typography variant="body2">Already registered? Get an access code:</Typography>
+                      </Grid>
+                      <Grid item xs={12}>
+                          <TextField
+                              label="Email address"
+                              required
+                              fullWidth
+                              onChange={e => setACEmail(e.target.value)}
+                          />
+                      </Grid>
+                      <Grid item xs={12}>
+                          <Box mt={2}>
+                              <Button variant="contained" color="primary" startIcon={<SendIcon />} onClick={acOnSubmit}>
+                                  Get an access code
+                              </Button>
+                          </Box>
+                      </Grid>
+                  </Grid>
+                  <Box m={8}/>
+                  <Grid container justify="center" spacing={2}>
+                      <Grid item xs={12}>
+                          <Typography variant="body2">Login using your access code:</Typography>
+                      </Grid>
+                      <Grid item xs={12}>
+                          <TextField
+                              label="Access code"
+                              required
+                              fullWidth
+                              onChange={e => setLoginAccessCode(e.target.value)}
+                          />
+                      </Grid>
+                      <Grid item xs={12}>
+                          <Box mt={2}>
+                              <Button variant="contained" color="primary" startIcon={<LockOpenIcon />} onClick={loginOnSubmit}>
+                                  Log in
+                              </Button>
+                          </Box>
+                      </Grid>
+                  </Grid>
+              </Grid>
+            </Grid>
+          {/* </CardContent> */}
+        </Card>
+      </ExpansionPanelDetails>
+    </ExpansionPanel>
+
   )
 }
 
