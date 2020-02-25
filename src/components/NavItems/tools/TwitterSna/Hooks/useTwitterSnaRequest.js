@@ -16,6 +16,8 @@ import { getRequest } from '../TwitterSna'
 import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../../LocalDictionary/components/NavItems/tools/TwitterSna.tsv";
 
+import useAuthenticatedRequest from '../../../../Shared/Authentication/useAuthenticatedRequest';
+
 
 
 const includeWordObj = (wordObj, wordsArray) => {
@@ -63,6 +65,7 @@ const useTwitterSnaRequest = (request) => {
     const keyword = useLoadLanguage("components/NavItems/tools/TwitterSna.tsv", tsv);
 
     const dispatch = useDispatch();
+    const authenticatedRequest = useAuthenticatedRequest();
 
     useEffect(() => {
         if (request === null)
@@ -370,8 +373,13 @@ const useTwitterSnaRequest = (request) => {
         };
 
         const getResultUntilsDone = async (sessionId, isFirst, request) => {
-
-            await axios.get(TwintWrapperUrl + /status/ + sessionId)
+            const axiosConfig = {
+                method: 'get',
+                baseURL: TwintWrapperUrl,
+                url: `/status/${sessionId}`
+            }
+            await authenticatedRequest(axiosConfig)
+            // await axios.get(TwintWrapperUrl + /status/ + sessionId)
                 .then(async response => {
                     if (isFirst)
                         await generateGraph(request, false);
@@ -398,18 +406,24 @@ const useTwitterSnaRequest = (request) => {
 
 
         dispatch(setTwitterSnaLoading(true));
-        axios.post(TwintWrapperUrl + "/collect", request)
+        const axiosConfig = {
+            method: 'post',
+            baseURL: TwintWrapperUrl,
+            url: '/collect',
+            data: request
+        }
+        // axios.post(TwintWrapperUrl + "/collect", request)
+        authenticatedRequest(axiosConfig)
             .then(response => {
                 if (response.data.status === "Error")
                     handleErrors("twitterSnaErrorMessage");
                 else if (response.data.status === "Done")
-
                     lastRenderCall(response.data.session, request);
                 else
-                    getResultUntilsDone(response.data.session, true, request)
-
-            })
-            .catch(e => handleErrors(e))
+                    getResultUntilsDone(response.data.session, true, request);
+            }).catch(error => {
+                handleErrors(error);
+            });
     }, [JSON.stringify(request)])
 
     /* useEffect(() => {
