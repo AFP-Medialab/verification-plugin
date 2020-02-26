@@ -1,7 +1,7 @@
-import {useCallback, useEffect} from "react";
+import {useEffect} from "react";
 import axios from "axios";
-import {useDispatch, useSelector} from "react-redux";
-import {setKeyframesResult, setKeyframesLoading, setKeyframesMessage} from "../../../../../redux/actions/tools/keyframesActions"
+import {useDispatch} from "react-redux";
+import {setKeyframesResult, setKeyframesLoading, setKeyframesMessage, cleanKeyframesState} from "../../../../../redux/actions/tools/keyframesActions"
 import {setError} from "../../../../../redux/actions/errorActions"
 import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Keyframes.tsv";
@@ -36,7 +36,7 @@ export const useKeyframeWrapper = (url) => {
         const getUntil = (url, video_id) => {
             let data = null;
             const interval = setInterval(() => {
-                if (data && data["status"] === "VIDEO_SEGMENTATION_ANALYSIS_COMPLETED")
+                if (data && data["status"].endsWith("COMPLETED"))
                 {
                     lastGet("http://multimedia2.iti.gr/video_analysis/result/" + video_id + "_json");
                     clearInterval(interval);
@@ -72,8 +72,9 @@ export const useKeyframeWrapper = (url) => {
 
         if (url === undefined || url === "")
             return;
+        dispatch(cleanKeyframesState());
         dispatch(setKeyframesLoading(true));
-        postUrl("http://multimedia2.iti.gr/video_analysis/subshot", jsonData);
-       // postUrl("http://multimedia2.iti.gr/video_analysis/segmentation", jsonData);
-    }, [url, keyword]);
+        //postUrl("http://multimedia2.iti.gr/video_analysis/subshot", jsonData);
+        postUrl("http://multimedia2.iti.gr/video_analysis/segmentation", jsonData);
+    }, [url, keyword, jsonData, dispatch]);
 };
