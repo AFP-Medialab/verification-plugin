@@ -21,7 +21,7 @@ export default function useAuthenticationAPI() {
   const authSrvBaseURL = `${process.env.REACT_APP_AUTH_BASE_URL}/api/v1/auth`;
   
   // Services URL
-  const AUTH_SRV_REGISTER_USER_URL = "/user";
+  const AUTH_SRV_REGISTER_USER_URL = "/registration";
   const AUTH_SRV_REQUEST_ACCESS_CODE_URL = "/accesscode";
   const AUTH_SRV_LOGIN_URL = "/login";
   const AUTH_SRV_LOGOUT_URL = "/logout";
