@@ -18,7 +18,7 @@ REGISTRATIONFORM_FIRSTNAME_ERR_REQUIRED	Firstname is required	Veuillez saisir vo
 REGISTRATIONFORM_LASTNAME_LABEL	Last name	Nom
 REGISTRATIONFORM_LASTNAME_PLACEHOLDER	Enter your last name	Saisissez votre nom
 REGISTRATIONFORM_LASTNAME_ERR_REQUIRED	Lastname is required	Veuillez saisir votre nom
-REGISTRATIONFORM_COMPANY_LABEL	Compnay	Entreprise
+REGISTRATIONFORM_COMPANY_LABEL	Company	Entreprise
 REGISTRATIONFORM_COMPANY_PLACEHOLDER	Enter your company name	Saisissez le nom de votre entreprise
 REGISTRATIONFORM_COMPANY_ERR_REQUIRED	Company is required	Veuillez saisir le nom de votre entreprise
 REGISTRATIONFORM_POSITION_LABEL	Position	Qualité
