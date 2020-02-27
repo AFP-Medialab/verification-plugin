@@ -1,14 +1,12 @@
 import {useEffect} from "react";
 import axios from "axios";
-import {useDispatch, useSelector} from "react-redux";
-import {setKeyframesResult, setKeyframesLoading, setKeyframesMessage} from "../../../../../redux/actions/tools/keyframesActions"
+import {useDispatch} from "react-redux";
+import {setKeyframesResult, setKeyframesLoading, setKeyframesMessage, cleanKeyframesState} from "../../../../../redux/actions/tools/keyframesActions"
 import {setError} from "../../../../../redux/actions/errorActions"
+import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
+import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Keyframes.tsv";
 export const useKeyframeWrapper = (url) => {
-    const dictionary = useSelector(state => state.dictionary);
-    const lang = useSelector(state => state.language);
-    const keyword = (key) => {
-        return (dictionary !== null) ? dictionary[lang][key] : "";
-    };
+    const keyword = useLoadLanguage("components/NavItems/tools/Keyframes.tsv", tsv);
     const dispatch = useDispatch();
 
     let jsonData = {
@@ -20,15 +18,15 @@ export const useKeyframeWrapper = (url) => {
     useEffect(() => {
 
         const handleError = (e) => {
-            if (keyword(e) !== undefined)
+            if (keyword(e) !== "")
                 dispatch(setError(keyword(e)));
             else
                 dispatch(setError(keyword("keyframes_error_default")));
             dispatch(setKeyframesLoading(false));
         };
 
-        const lastGet = (url) => {
-            axios.get(url)
+        const lastGet = (itiUrl) => {
+            axios.get(itiUrl)
                 .then(response => {
                     dispatch(setKeyframesResult(url, response.data, false, false))
                 })
@@ -38,12 +36,12 @@ export const useKeyframeWrapper = (url) => {
         const getUntil = (url, video_id) => {
             let data = null;
             const interval = setInterval(() => {
-                if (data && data["status"] === "VIDEO_SEGMENTATION_ANALYSIS_COMPLETED")
+                if (data && data["status"].endsWith("COMPLETED"))
                 {
                     lastGet("http://multimedia2.iti.gr/video_analysis/result/" + video_id + "_json");
                     clearInterval(interval);
                 }
-                else if (data && data["status"] !== undefined && keyword("keyframes_error_" + data["status"]) !== undefined) {
+                else if (data && data["status"] !== undefined && keyword("keyframes_error_" + data["status"]) !== "") {
                     handleError("keyframes_error_" + data["status"]);
                     clearInterval(interval);
                 }
@@ -51,7 +49,7 @@ export const useKeyframeWrapper = (url) => {
                     axios.get(url)
                         .then(response => {
                             data = response["data"];
-                            if (keyword("keyframes_wait_" + data["status"]) !== undefined) {
+                            if (keyword("keyframes_wait_" + data["status"]) !== "") {
                                 dispatch(setKeyframesMessage(keyword("keyframes_wait_" + data["status"])));
                             } else if (data["status"].endsWith("STARTED")) {
                                 dispatch(setKeyframesMessage(keyword("keyframes_wait_STARTED") + data["step"] + " (" + data["process"] + ") " + (data["progress"] === "N/A" ? "" : data["progress"])))
@@ -64,8 +62,8 @@ export const useKeyframeWrapper = (url) => {
             }, 2000);
         };
 
-        const postUrl = (url, data) => {
-            axios.post(url, data)
+        const postUrl = (multimediaUrl, data) => {
+            axios.post(multimediaUrl, data)
                 .then(response => {
                     getUntil("http://multimedia2.iti.gr/video_analysis/status/" + response.data.video_id, response.data.video_id)
                 })
@@ -74,7 +72,9 @@ export const useKeyframeWrapper = (url) => {
 
         if (url === undefined || url === "")
             return;
+        dispatch(cleanKeyframesState());
         dispatch(setKeyframesLoading(true));
-        postUrl("http://multimedia2.iti.gr/video_analysis/segmentation", jsonData);
-    }, [url]);
+        postUrl("http://multimedia2.iti.gr/video_analysis/subshot", jsonData);
+        //postUrl("http://multimedia2.iti.gr/video_analysis/segmentation", jsonData);
+    }, [url, keyword, jsonData, dispatch]);
 };

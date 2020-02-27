@@ -1,17 +1,19 @@
 import React, {useState} from "react";
 import Paper from "@material-ui/core/Paper";
 import makeStyles from "@material-ui/core/styles/makeStyles";
-import {useDispatch, useSelector} from "react-redux";
-import ImageGridList from "../../../../utility/ImageGridList/ImageGridList";
+import {useDispatch} from "react-redux";
+import ImageGridList from "../../../../Shared/ImageGridList/ImageGridList";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import Divider from "@material-ui/core/Divider";
 import Button from "@material-ui/core/Button";
 import {useKeyframes} from "../Hooks/usekeyframes";
 import ImageReverseSearch from "../../ImageReverseSearch";
-import CloseResult from "../../../../CloseResult/CloseResult";
-import {cleanForensicState} from "../../../../../redux/actions/tools/forensicActions";
+import CloseResult from "../../../../Shared/CloseResult/CloseResult";
 import {cleanKeyframesState} from "../../../../../redux/actions/tools/keyframesActions";
+import OnClickInfo from "../../../../Shared/OnClickInfo/OnClickInfo";
+import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
+import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Keyframes.tsv";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -23,15 +25,11 @@ const useStyles = makeStyles(theme => ({
 
 const KeyFramesResults = (props) => {
     const classes = useStyles();
-    const dictionary = useSelector(state => state.dictionary);
-    const lang = useSelector(state => state.language);
-    const keyword = (key) => {
-        return (dictionary !== null) ? dictionary[lang][key] : "";
-    };
+    const keyword = useLoadLanguage("components/NavItems/tools/Keyframes.tsv", tsv);
     const dispatch = useDispatch();
 
     const [detailed, setDetailed] = useState(false);
-    const [simpleList, detailedList] = useKeyframes(props.result, [props.result]);
+    const [simpleList, detailedList] = useKeyframes(props.result);
 
     const toggleDetail = () => {
         setDetailed(!detailed);
@@ -43,9 +41,7 @@ const KeyFramesResults = (props) => {
                 <Typography variant={"h5"}>
                     {keyword("keyframes_content_title")}
                 </Typography>
-                <Typography variant={"body1"}>
-                    {keyword("keyframes_tip")}
-                </Typography>
+                <OnClickInfo keyword={"keyframes_tip"}/>
                 <Box m={2}/>
                 <Divider/>
                 <Box m={2}/>
@@ -58,11 +54,11 @@ const KeyFramesResults = (props) => {
                 <Box m={2}/>
                 {
                     detailed &&
-                    <ImageGridList list={detailedList}/>
+                    <ImageGridList list={detailedList} height={160} onClick={(url) => ImageReverseSearch("google", url)}/>
                 }
                 {
                     !detailed &&
-                    <ImageGridList list={simpleList} onClick={(url) => ImageReverseSearch("google", url)}/>
+                    <ImageGridList list={simpleList}  height={160} onClick={(url) => ImageReverseSearch("google", url)}/>
                 }
             </Paper>
         </div>

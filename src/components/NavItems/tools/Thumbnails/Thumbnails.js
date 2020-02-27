@@ -1,59 +1,79 @@
 import {Paper} from "@material-ui/core";
-import CustomTile from "../../../utility/customTitle/customTitle";
+import CustomTile from "../../../Shared/CustomTitle/CustomTitle";
 import TextField from "@material-ui/core/TextField";
 import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
-import React from "react";
+import React, {useEffect} from "react";
 import ImageReverseSearch from "../ImageReverseSearch";
-import ImageGridList from "../../../utility/ImageGridList/ImageGridList";
+import ImageGridList from "../../../Shared/ImageGridList/ImageGridList";
 import {useDispatch, useSelector} from "react-redux";
 import Radio from "@material-ui/core/Radio";
 import FormControl from "@material-ui/core/FormControl";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
-import useMyStyles from "../../../utility/MaterialUiStyles/useMyStyles";
-import {useInput} from "../../../Hooks/useInput";
+import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
+import {useInput} from "../../../../Hooks/useInput";
 import {cleanThumbnailsState, setThumbnailsResult} from "../../../../redux/actions/tools/thumbnailsActions"
 import {setError} from "../../../../redux/actions/errorActions"
-import CloseResult from "../../../CloseResult/CloseResult";
-import {cleanMetadataState} from "../../../../redux/actions/tools/metadataActions";
-
+import CloseResult from "../../../Shared/CloseResult/CloseResult";
+import Checkbox from "@material-ui/core/Checkbox";
+import FormGroup from "@material-ui/core/FormGroup";
+import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
+import tsv from "../../../../LocalDictionary/components/NavItems/tools/Thumbnails.tsv";
+import {submissionEvent} from "../../../Shared/GoogleAnalytics/GoogleAnalytics";
+import OnClickInfo from "../../../Shared/OnClickInfo/OnClickInfo";
 
 const Thumbnails = () => {
     const classes = useMyStyles();
-
-    const dictionary = useSelector(state => state.dictionary);
-    const lang = useSelector(state => state.language);
-    const keyword = (key) => {
-        return (dictionary !== null) ? dictionary[lang][key] : "";
-    };
+    const keyword = useLoadLanguage("components/NavItems/tools/Thumbnails.tsv", tsv);
 
     const resultUrl = useSelector(state => state.thumbnails.url);
     const resultData = useSelector(state => state.thumbnails.result);
     const dispatch = useDispatch();
 
+    useEffect(() => {
+        if (selectedValue.openTabs)
+            resultData.map(value => imageClickUrl(value))
+    }, [resultUrl]);
+
     const input = useInput(resultUrl);
-    const [selectedValue, setSelectedValue] = React.useState('google');
+    const [selectedValue, setSelectedValue] = React.useState({
+        'google': true,
+        'bing': false,
+        'tineye': false,
+        'yandex': false,
+        'openTabs': false,
+        'reddit': false,
+
+    });
+
     const handleChange = event => {
-        setSelectedValue(event.target.value);
+        setSelectedValue({
+            ...selectedValue,
+            [event.target.value]: event.target.checked
+        });
     };
 
     const searchEngines = [
         {
-            title : "bing",
-            text : "Bing"
+            title: "bing",
+            text: "Bing"
         },
         {
-            title : "google",
-            text : "Google"
+            title: "google",
+            text: "Google"
         },
         {
-            title : "tineye",
-            text : "Tineye"
+            title: "tineye",
+            text: "Tineye"
         },
         {
-            title : "yandex",
-            text : "Yandex"
+            title: "yandex",
+            text: "Yandex"
+        },
+        {
+            title: "reddit",
+            text: "Reddit"
         },
     ];
 
@@ -93,20 +113,35 @@ const Thumbnails = () => {
     const submitForm = () => {
         let url = input.value.replace("?rel=0", "");
         if (url !== null && url !== "" && isYtUrl(url)) {
+            submissionEvent(url);
             dispatch(setThumbnailsResult(url, get_images(url), false, false));
-        }
-        else
+
+
+        } else
             dispatch(setError("Please use a valid Youtube Url (add to tsv)"));
     };
 
     const imageClick = (event) => {
-        ImageReverseSearch(selectedValue, event.target.src)
+        imageClickUrl(event.target.src);
+    };
+
+    const imageClickUrl = (url) => {
+        if (selectedValue.google)
+            ImageReverseSearch("google", [url]);
+        if (selectedValue.yandex)
+            ImageReverseSearch("yandex", [url]);
+        if (selectedValue.bing)
+            ImageReverseSearch("bing", [url]);
+        if (selectedValue.tineye)
+            ImageReverseSearch("tineye", [url]);
+        if (selectedValue.reddit)
+            ImageReverseSearch("reddit", [url]);
     };
 
     return (
         <div>
             <Paper className={classes.root}>
-                <CustomTile> {keyword("youtube_title")}  </CustomTile>
+                <CustomTile text={keyword("youtube_title")}/>
                 <br/>
                 <TextField
                     id="standard-full-width"
@@ -117,21 +152,39 @@ const Thumbnails = () => {
                 />
                 <Box m={2}/>
                 <FormControl component="fieldset">
-                    <RadioGroup aria-label="position" name="position" value={selectedValue} onChange={handleChange} row>
+                    <FormGroup row>
                         {
                             searchEngines.map((item, key) => {
                                 return (
                                     <FormControlLabel
                                         key={key}
-                                        value={item.title}
-                                        control={<Radio color="primary" />}
+                                        control={
+                                            <Checkbox
+                                                checked={selectedValue[item.title]}
+                                                value={item.title}
+                                                onChange={e => handleChange(e)}
+                                                color="primary"
+                                            />
+                                        }
                                         label={item.text}
                                         labelPlacement="end"
                                     />
                                 );
                             })
                         }
-                    </RadioGroup>
+                        <FormControlLabel
+                            control={
+                                <Checkbox
+                                    checked={selectedValue["openTabs"]}
+                                    value={"openTabs"}
+                                    onChange={e => handleChange(e)}
+                                    color="primary"
+                                />
+                            }
+                            label={keyword("openTabs")}
+                            labelPlacement="end"
+                        />
+                    </FormGroup>
                 </FormControl>
                 <Box m={2}/>
                 <Button
@@ -147,7 +200,9 @@ const Thumbnails = () => {
                 resultData && resultData.length !== 0 &&
                 <Paper className={classes.root}>
                     <CloseResult onClick={() => dispatch(cleanThumbnailsState())}/>
-                    <ImageGridList list={resultData} handleClick={imageClick}/>
+                    <OnClickInfo keyword={"thumbnails_tip"}/>
+                    <Box m={2}/>
+                    <ImageGridList list={resultData} handleClick={imageClick} height={160}/>
                 </Paper>
             }
         </div>);

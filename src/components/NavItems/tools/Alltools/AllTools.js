@@ -1,10 +1,6 @@
 import {Paper} from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
-import Box from "@material-ui/core/Box";
 import React, {useState} from "react";
-import {useSelector} from "react-redux";
-import makeStyles from "@material-ui/core/styles/makeStyles";
-import Tab from "@material-ui/core/Tab";
 import HelpIcon from '@material-ui/icons/Help';
 import IconButton from "@material-ui/core/IconButton";
 import Button from "@material-ui/core/Button";
@@ -12,33 +8,16 @@ import DialogContent from "@material-ui/core/DialogContent";
 import Iframe from "react-iframe";
 import DialogActions from "@material-ui/core/DialogActions";
 import Dialog from "@material-ui/core/Dialog";
-import history from "../../../utility/History/History";
-
-const useStyles = makeStyles(theme => ({
-    root: {
-        padding: theme.spacing(3, 2),
-        marginTop: 20,
-        textAlign: "center",
-    },
-    card: {
-        paddingRight: 0,
-    },
-
-    expand: {
-        float: "right",
-    },
-}));
-
+import history from "../../../Shared/History/History";
+import Typography from "@material-ui/core/Typography";
+import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
+import tsv from "../../../../LocalDictionary/components/NavItems/tools/Alltools.tsv";
+import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 
 const AllTools = (props) => {
-    const classes = useStyles();
-    const dictionary = useSelector(state => state.dictionary);
-    const lang = useSelector(state => state.language);
-    const keyword = (key) => {
-        return (dictionary !== null) ? dictionary[lang][key] : "";
-    };
+    const classes = useMyStyles();
+    const keyword = useLoadLanguage("components/NavItems/tools/Alltools.tsv", tsv);
     const tools = props.tools;
-
     const [videoUrl, setVideoUrl] = useState(null);
 
     const handleClick = (path) => {
@@ -47,24 +26,43 @@ const AllTools = (props) => {
 
     return (
         <Paper className={classes.root}>
-            <Grid container justify="center" spacing={2}>
+            <Grid container justify="center" spacing={10}>
                 {
                     tools.map((value, key) => {
                         if (key !== 0)
                             return (
-                                <Box key={key} m={3}>
-                                    <Paper className={classes.card}>
-                                        <Tab label={keyword(value.title)} className={classes.card}
-                                             icon={value.icon}
-                                             onClick={() => handleClick(value.path)}/>
-                                        <IconButton aria-label="settings" className={classes.expand} size={"small"}
-                                                    onClick={() => setVideoUrl(keyword(value.tsvPrefix + "_help_video"))}
+                                <Grid item key={key}>
+                                    <Grid>
+                                        <Grid item onClick={() => handleClick(value.path)}>
+                                            <img
+                                                style={{
+                                                    cursor: "pointer",
+                                                    maxWidth: 60,
+                                                    height: "auto"
+                                                }}
+                                                src={value.icon}
+                                                alt={value.icon}
+                                            />
+                                        </Grid>
+                                        <Grid item>
+                                            <Grid>
+                                                <Typography variant={"body1"}>
+                                                    {keyword(value.title)}
+                                                    <IconButton
+                                                        aria-label="settings"
+                                                        size={"small"}
+                                                        onClick={() => setVideoUrl(keyword(value.tsvPrefix + "_help_video"))}
                                                     >
-                                            <HelpIcon/>
-                                        </IconButton>
-                                    </Paper>
-                                </Box>
-                            )
+                                                        <HelpIcon/>
+                                                    </IconButton>
+                                                </Typography>
+
+                                            </Grid>
+                                        </Grid>
+                                    </Grid>
+                                </Grid>
+                            );
+                        return null;
                     })
                 }
             </Grid>

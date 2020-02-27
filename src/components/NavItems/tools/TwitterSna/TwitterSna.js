@@ -1,11 +1,9 @@
 import React, {useEffect, useState} from "react";
-import useMyStyles from "../../../utility/MaterialUiStyles/useMyStyles";
+import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import {useDispatch, useSelector} from "react-redux";
 import {Paper} from "@material-ui/core";
-import CustomTile from "../../../utility/customTitle/customTitle";
+import CustomTile from "../../../Shared/CustomTitle/CustomTitle";
 import TextField from "@material-ui/core/TextField";
-import {KeyboardDatePicker, KeyboardTimePicker, MuiPickersUtilsProvider} from "@material-ui/pickers";
-import DateFnsUtils from "@date-io/date-fns";
 import FormControl from "@material-ui/core/FormControl";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
@@ -18,54 +16,55 @@ import {setError} from "../../../../redux/actions/errorActions";
 import InputLabel from "@material-ui/core/InputLabel";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
-import convertToGMT from "../../../utility/DataTimePicker/convertToGMT";
+import convertToGMT from "../../../Shared/DateTimePicker/convertToGMT";
 import dateFormat from "dateformat"
-import useTwitterSnaRequest from "./useTwitterSnaRequest";
+import useTwitterSnaRequest from "./Hooks/useTwitterSnaRequest";
 import LinearProgress from "@material-ui/core/LinearProgress";
-import TwitterSnaResult from "./TwitterSnaResult/TwitterSnaResult";
+import TwitterSnaResult from "./Results/TwitterSnaResult";
+import {replaceAll} from "../TwitterAdvancedSearch/createUrl";
+import DateTimePicker from "../../../Shared/DateTimePicker/DateTimePicker";
+import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
+import tsv from "../../../../LocalDictionary/components/NavItems/tools/TwitterSna.tsv";
+import Typography from "@material-ui/core/Typography";
+import {submissionEvent} from "../../../Shared/GoogleAnalytics/GoogleAnalytics";
+import { makeStyles } from "@material-ui/core/styles";
+
 
 const TwitterSna = () => {
     const classes = useMyStyles();
-    const dictionary = useSelector(state => state.dictionary);
-    const lang = useSelector(state => state.language);
-    const keyword = (key) => {
-        return (dictionary !== null) ? dictionary[lang][key] : "";
-    };
+    const keyword = useLoadLanguage("components/NavItems/tools/TwitterSna.tsv", tsv);
+
 
     const request = useSelector(state => state.twitterSna.request);
     const reduxResult = useSelector(state => state.twitterSna.result);
+
     const isLoading = useSelector(state => state.twitterSna.loading);
+    const loadingMessage = useSelector(state => state.twitterSna.loadingMessage);
+
     const dispatch = useDispatch();
 
-    const [hashTagInput, setHashTagInput] = useState(
-        request && request.search.search ?
-            request.search.search
-            : "#fake"
+    const [keyWords, setKeywords] = useState(
+        request && request.keywordList ?
+            request.keywordList.join(" ")
+            : ""
     );
-    const [hashTagError, setHashTagError] = useState(false);
+    const [keyWordsError, setKeyWordsError] = useState(false);
 
-    const [andInput, setAndInput] = useState(
-        request && request.search.and ?
-            request.search.and.join(" ")
-            : ""
-    );
-    const [orInput, setOrInput] = useState(
-        request && request.search.or ?
-            request.search.or.join(" ")
-            : ""
-    );
-    const [notInput, setNotInput] = useState(
-        request && request.search.not ?
-            request.search.not.join(" ")
+    const [bannedWords, setBannedWords] = useState(
+        request && request.bannedWords ?
+            request.bannedWords.join(" ")
             : ""
     );
     const [usersInput, setUsersInput] = useState(
-        request && request.user_list ?
-            request.user_list.join(" ")
+        request && request.userList ?
+            request.userList.join(" ")
             : ""
     );
-    const [since, setSince] = useState(request ? request.from : new Date("11-06-2019"));         // change default values
-    const [until, setUntil] = useState(request ? request.until : new Date("11-07-2019"));         // change default values
+    const [since, setSince] = useState(request ? request.from : null);         // change default values
+    const [sinceError, setSinceError] = useState(false);
+    const [until, setUntil] = useState(request ? request.until : null);         // change default values
+    const [untilError, setUntilError] = useState(false);
+
     const [langInput, setLangInput] = useState(request && request.lang ? "lang_" + request.lang : "lang_all");
     const [openLangInput, setLangInputOpen] = React.useState(false);
     const [filters, setFilers] = useState(request && request.media ? request.media : "none");
@@ -93,42 +92,64 @@ const TwitterSna = () => {
 
     const makeRequest = () => {
         //Creating Request Object.
-        let and_list, or_list, not_list = null;
-
-        if (andInput !== "")
-            and_list = andInput.trim().split(" ");
-        if (orInput !== "")
-            or_list = orInput.trim().split(" ");
-        if (notInput !== "")
-            not_list = notInput.trim().split(" ");
-
-        let searchObj = {
-            "search": hashTagInput,
-            "and": and_list,
-            "or": or_list,
-            "not": not_list
+        const removeQuotes = (list) => {
+            let res = [];
+            list.map(string => {
+                res.push(replaceAll(string, "\"", ""));
+            });
+            return res;
         };
+
+        let trimedKeywords = removeQuotes(keyWords.trim().match(/("[^"]+"|[^"\s]+)/g));
+
+        let trimedBannedWords = null;
+        if (bannedWords.trim() !== "")
+            trimedBannedWords = removeQuotes(bannedWords.trim().match(/("[^"]+"|[^"\s]+)/g));
+
 
         const newFrom = (localTime === "false") ? convertToGMT(since) : since;
         const newUntil = (localTime === "false") ? convertToGMT(until) : until;
-
         return {
-            "search": searchObj,
+            "keywordList": trimedKeywords,
+            "bannedWords": trimedBannedWords,
             "lang": (langInput === "lang_all") ? null : langInput.replace("lang_", ""),
-            "user_list": stringToList(usersInput),
-            "from": dateFormat(newFrom, "yyyy-mm-dd hh:MM:ss"),
-            "until": dateFormat(newUntil, "yyyy-mm-dd hh:MM:ss"),
-            "verified": verifiedUsers === "true",
+            "userList": stringToList(usersInput),
+            "from": dateFormat(newFrom, "yyyy-mm-dd HH:MM:ss"),
+            "until": dateFormat(newUntil, "yyyy-mm-dd HH:MM:ss"),
+            "verified": String(verifiedUsers) === "true",
             "media": (filters === "none") ? null : filters,
             "retweetsHandling": null
         };
     };
 
+    const sinceDateIsValid = (momentDate) => {
+        const itemDate = momentDate.toDate();
+        const currentDate = new Date();
+        if (until)
+            return itemDate <= currentDate && itemDate < until;
+        return itemDate <= currentDate;
+    };
+
     const handleSinceDateChange = (date) => {
+        setSinceError(date === null);
+        if (until && date >= until)
+            setSinceError(true);
         setSince(date);
     };
 
+    const untilDateIsValid = (momentDate) => {
+        const itemDate = momentDate.toDate();
+        const currentDate = new Date();
+        if (since)
+            return itemDate <= currentDate && since < itemDate;
+        return itemDate <= currentDate;
+    };
+
+
     const handleUntilDateChange = (date) => {
+        setUntilError(date === null);
+        if (since && date < since)
+            setUntilError(true);
         setUntil(date);
     };
 
@@ -142,9 +163,9 @@ const TwitterSna = () => {
 
     const onSubmit = () => {
         //Mandatory Fields errors
-        if (hashTagInput === "") {
+        if (keyWords.trim() === "") {
             handleErrors(keyword("twitterStatsErrorMessage"));
-            setHashTagError(true);
+            setKeyWordsError(true);
             return;
         }
         if (since === null || since === "") {
@@ -157,131 +178,86 @@ const TwitterSna = () => {
             setUntil("");
             return;
         }
-        const newRequest = makeRequest();
+        let newRequest = makeRequest();
 
-        if (JSON.stringify(newRequest) !== JSON.stringify(request))
+        if (JSON.stringify(newRequest) !== JSON.stringify(request)) {
+            submissionEvent(JSON.stringify(newRequest));
             setSubmittedRequest(newRequest);
+        }
     };
 
     return (
         <div>
             <Paper className={classes.root}>
-                <CustomTile> {keyword("twitter_sna_title")}  </CustomTile>
+                <CustomTile text={keyword("twitter_sna_title")}/>
                 <Box m={3}/>
-                <Grid container spacing={1}>
-                    <Grid item className={classes.grow}>
-                        <TextField
-                            error={hashTagError}
-                            value={hashTagInput}
-                            onChange={e => {
-                                setHashTagInput(e.target.value);
-                                setHashTagError(false);
-                            }}
-                            id="standard-full-width"
-                            label={keyword("twitter_sna_search")}
-                            style={{margin: 8}}
-                            placeholder={"#example"}
-                            fullWidth
-                        />
-                    </Grid>
-                    <Grid item className={classes.grow}>
-                        <TextField
-                            value={andInput}
-                            onChange={e => setAndInput(e.target.value)}
-                            id="standard-full-width"
-                            label={keyword("twitter_sna_and")}
-                            style={{margin: 8}}
-                            placeholder={"word1 word2"}
-                            fullWidth
-                        />
-                    </Grid>
-                </Grid>
-                <Grid container spacing={1}>
-                    <Grid item className={classes.grow}>
-                        <TextField
-                            value={orInput}
-                            onChange={e => setOrInput(e.target.value)}
-                            id="standard-full-width"
-                            label={keyword("twitter_sna_or")}
-                            style={{margin: 8}}
-                            placeholder={"word3 word4"}
-                            fullWidth
-                        />
-                    </Grid>
-                    <Grid item className={classes.grow}>
-                        <TextField
-                            value={notInput}
-                            onChange={e => setNotInput(e.target.value)}
-                            id="standard-full-width"
-                            label={keyword("twitter_sna_not")}
-                            style={{margin: 8}}
-                            placeholder={"word6 word7"}
-                            fullWidth
-                        />
-                    </Grid>
-                </Grid>
+                    <TextField
+                        disabled={isLoading}
+                        error={keyWordsError}
+                        value={keyWords}
+                        onChange={e => {
+                            setKeywords(e.target.value);
+                            setKeyWordsError(false);
+                        }}
+                        id="standard-full-width"
+                        label={'*  ' + keyword("twitter_sna_search")}
+                        className={classes.neededField}
+                        style={{margin: 8}}
+                        placeholder={"#example"}
+                        fullWidth
+                    />
                 <TextField
+                    disabled={isLoading}
+                    value={bannedWords}
+                    onChange={e => setBannedWords(e.target.value)}
+                    id="standard-full-width"
+                    label={keyword("twitter_sna_not")}
+                    style={{margin: 8}}
+                    placeholder={"word word2"}
+                    fullWidth
+                />
+
+                <TextField
+                    disabled={isLoading}
                     value={usersInput}
                     onChange={e => setUsersInput(e.target.value)}
                     id="standard-full-width"
                     label={keyword("twitter_sna_user")}
                     style={{margin: 8}}
-                    placeholder={"word6 word7"}
+                    placeholder={keyword("user_placeholder")}
                     fullWidth
                 />
-                <Grid container spacing={1}>
-                    <Grid item className={classes.grow}>
-                        <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                            <KeyboardDatePicker
-                                margin="normal"
-                                id="date-picker-dialog"
-                                label={keyword("twitter_sna_from_date")}
-                                format="MM-dd-yyyy"
-                                value={since}
-                                onChange={handleSinceDateChange}
-                                KeyboardButtonProps={{
-                                    'aria-label': 'change date',
-                                }}
-                            />
-                            <KeyboardTimePicker
-                                margin="normal"
-                                id="time-picker"
-                                label="time (add to tsv)"
-                                value={since}
-                                onChange={handleSinceDateChange}
-                                KeyboardButtonProps={{
-                                    'aria-label': 'change time',
-                                }}
-                            />
-                        </MuiPickersUtilsProvider>
+                <Grid container justify={"center"} spacing={4} className={classes.grow}>
+                    <Grid item>
+                        <DateTimePicker
+                            input={true}
+                            isValidDate={sinceDateIsValid}
+                            label={'*  ' + keyword("twitter_sna_from_date")}
+                            className={classes.neededField}
+                            dateFormat={"YYYY-MM-DD"}
+                            timeFormat={"HH:mm:ss"}
+                            handleChange={handleSinceDateChange}
+                            error={sinceError}
+                            disabled={isLoading}
+                        />
                     </Grid>
-                    <Grid item className={classes.grow}>
-                        <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                            <KeyboardDatePicker
-                                margin="normal"
-                                id="date-picker-dialog"
-                                label={keyword("twitter_sna_until_date")}
-                                format="MM-dd-yyyy"
-                                value={until}
-                                onChange={handleUntilDateChange}
-                                KeyboardButtonProps={{
-                                    'aria-label': 'change date',
-                                }}
-                            />
-                            <KeyboardTimePicker
-                                margin="normal"
-                                id="time-picker"
-                                label="time (add to tsv)"
-                                value={until}
-                                onChange={handleUntilDateChange}
-                                KeyboardButtonProps={{
-                                    'aria-label': 'change time',
-                                }}
-                            />
-                        </MuiPickersUtilsProvider>
+                    <Grid item>
+                        <DateTimePicker
+                            input={true}
+                            isValidDate={untilDateIsValid}
+                            label={'*  ' + keyword("twitter_sna_until_date")}
+                            className={classes.neededField}
+                            dateFormat={"YYYY-MM-DD"}
+                            timeFormat={"HH:mm:ss"}
+                            handleChange={handleUntilDateChange}
+                            error={untilError}
+                            disabled={isLoading}
+                        />
                     </Grid>
                 </Grid>
-                <FormControl component="fieldset">
+                <FormControl component="fieldset"
+                             disabled={isLoading}
+                >
                     <RadioGroup aria-label="position" name="position" value={localTime}
                                 onChange={e => setLocalTime(e.target.value)} row>
                         <FormControlLabel
@@ -303,7 +279,9 @@ const TwitterSna = () => {
                 <Box m={2}/>
                 <Grid container justify={"space-around"} spacing={5}>
                     <Grid item>
-                        <FormControl component="fieldset">
+                        <FormControl component="fieldset"
+                                     disabled={isLoading}
+                        >
                             <FormLabel component="legend">{keyword("twitter_sna_media")}</FormLabel>
                             <RadioGroup aria-label="position" name="position" value={filters}
                                         onChange={handleFiltersChange}
@@ -326,17 +304,14 @@ const TwitterSna = () => {
                                     label={keyword("twitterStats_media_videos")}
                                     labelPlacement="end"
                                 />
-                                <FormControlLabel
-                                    value={"both"}
-                                    control={<Radio color="primary"/>}
-                                    label={keyword("twitterStats_media_both")}
-                                    labelPlacement="end"
-                                />
+                              
                             </RadioGroup>
                         </FormControl>
                     </Grid>
                     <Grid item>
-                        <FormControl component="fieldset">
+                        <FormControl component="fieldset"
+                                     disabled={isLoading}
+                        >
                             <FormLabel component="legend">{keyword("twitter_sna_verified")}</FormLabel>
                             <RadioGroup aria-label="position" name="position" value={verifiedUsers}
                                         onChange={handleVerifiedUsersChange} row>
@@ -356,7 +331,9 @@ const TwitterSna = () => {
                         </FormControl>
                     </Grid>
                     <Grid item>
-                        <FormControl className={classes.formControl}>
+                        <FormControl className={classes.formControl}
+                                     disabled={isLoading}
+                        >
                             <InputLabel id="demo-controlled-open-select-label">{keyword("lang_choices")}</InputLabel>
                             <Select
                                 labelid="demo-controlled-open-select-label"
@@ -396,15 +373,19 @@ const TwitterSna = () => {
                     </Grid>
                 </Grid>
                 <Box m={2}/>
-                <Button variant="contained" color="primary" onClick={onSubmit}>
+                <Button variant="contained" color="primary" onClick={onSubmit}
+                        disabled={isLoading || keyWordsError || sinceError || untilError}
+                >
                     {keyword("button_submit")}
                 </Button>
                 <Box m={2}/>
+
+                <Typography>{loadingMessage}</Typography>
                 <LinearProgress hidden={!isLoading}/>
             </Paper>
             {
                 reduxResult &&
-                <TwitterSnaResult result={reduxResult}/>
+                <TwitterSnaResult result={reduxResult} request={request}/>
             }
         </div>)
 };
