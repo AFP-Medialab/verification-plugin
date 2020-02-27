@@ -40,7 +40,7 @@ In the project directory, you can run:
 ### `npm start` or `yarn start`
 
 Runs the app in the development mode.<br>
-The extension will reload if you make edits.<br>
+The page will reload if you make edits.<br>
 You will also see any lint errors in the console.
 
 ### `npm run build` or `yarn build`
