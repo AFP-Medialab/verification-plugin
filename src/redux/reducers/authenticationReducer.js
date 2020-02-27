@@ -2,6 +2,8 @@
  * Authentication Redux reducer function.
  */
 
+ import _ from "lodash";
+
 import { AUTH_USER_REGISTRATION_SENT, AUTH_ACCESS_CODE_REQUEST_SENT, AUHT_USER_LOGIN, AUHT_USER_LOGOUT, AUTH_TOKEN_INVALID, AUTH_TOKEN_REFRESHED, AUTH_USER_SESSION_EXPIRED } from "../actions/authenticationActions";
 
 const defaultState = {
@@ -73,6 +75,11 @@ function authenticationReducer(state = defaultState, action) {
 
     case AUTH_TOKEN_REFRESHED:
       // TODO
+      state.userAuthenticated = true;
+      state.accessToken = action.payload.accessToken;
+      state.accessTokenExpiry = action.payload.accessTokenExpiry;
+      // state.user = action.payload.user;
+      _.merge(state.user, action.payload.user);
       break;
 
     case AUTH_USER_SESSION_EXPIRED:
