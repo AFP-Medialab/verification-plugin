@@ -74,7 +74,7 @@ export const useKeyframeWrapper = (url) => {
             return;
         dispatch(cleanKeyframesState());
         dispatch(setKeyframesLoading(true));
-        //postUrl("http://multimedia2.iti.gr/video_analysis/subshot", jsonData);
-        postUrl("http://multimedia2.iti.gr/video_analysis/segmentation", jsonData);
+        postUrl("http://multimedia2.iti.gr/video_analysis/subshot", jsonData);
+        //postUrl("http://multimedia2.iti.gr/video_analysis/segmentation", jsonData);
     }, [url, keyword, jsonData, dispatch]);
 };
