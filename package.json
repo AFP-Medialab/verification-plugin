@@ -32,6 +32,7 @@
     "react-datetime": "^2.16.3",
     "react-dom": "^16.10.2",
     "react-ga": "^2.7.0",
+    "react-hook-form": "^4.9.8",
     "react-iframe": "^1.8.0",
     "react-image-lightbox": "^5.1.1",
     "react-magnifier": "^3.0.4",
@@ -45,7 +46,8 @@
     "rss-parser": "^3.7.3",
     "save-svg-as-png": "^1.4.14",
     "styled-components": "^4.4.1",
-    "tui-image-editor": "^3.7.1"
+    "tui-image-editor": "^3.7.1",
+    "yup": "^0.28.1"
   },
   "scripts": {
     "start": "export NODE_OPTIONS=\"--max-old-space-size=4096\" & react-scripts start",
