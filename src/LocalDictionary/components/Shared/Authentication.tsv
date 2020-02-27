@@ -8,3 +8,29 @@ ERR_AUTH_INVALID_CREDENTIALS	Invalid authentifcation information	Les information
 ERR_AUTH_INVALID_USER_STATE	User account's state is invalid	L'état du compte utilisateur est invalide
 ERR_AUTH_USER_EXPIRED	User account is expired	Le compte utilisateur a expiré
 ERR_AUTH_SESSION_EXPIRED	Your session has expired	Votre session a expirée
+REGISTRATIONFORM_EMAIL_LABEL	Email	Email
+REGISTRATIONFORM_EMAIL_PLACEHOLDER	Enter your email address	Saisissez votre adresse mail
+REGISTRATIONFORM_EMAIL_ERR_REQUIRED	Email address is required	Veuillez saisir une address mail
+REGISTRATIONFORM_EMAIL_ERR_EMAIL	Email address must be valid	L'adresse email est invalide
+REGISTRATIONFORM_FIRSTNAME_LABEL	First name	Prénom
+REGISTRATIONFORM_FIRSTNAME_PLACEHOLDER	Enter your first name	Saisissez votre prénom
+REGISTRATIONFORM_FIRSTNAME_ERR_REQUIRED	Firstname is required	Veuillez saisir votre prénom
+REGISTRATIONFORM_LASTNAME_LABEL	Last name	Nom
+REGISTRATIONFORM_LASTNAME_PLACEHOLDER	Enter your last name	Saisissez votre nom
+REGISTRATIONFORM_LASTNAME_ERR_REQUIRED	Lastname is required	Veuillez saisir votre nom
+REGISTRATIONFORM_COMPANY_LABEL	Compnay	Entreprise
+REGISTRATIONFORM_COMPANY_PLACEHOLDER	Enter your company name	Saisissez le nom de votre entreprise
+REGISTRATIONFORM_COMPANY_ERR_REQUIRED	Company is required	Veuillez saisir le nom de votre entreprise
+REGISTRATIONFORM_POSITION_LABEL	Position	Qualité
+REGISTRATIONFORM_POSITION_PLACEHOLDER	Enter your position	Saisissez votre qualité
+REGISTRATIONFORM_POSITION_ERR_REQUIRED	Position is required	Veuillez saisir votre qualité
+REGISTRATIONFORM_BUTTON_LABEL	Register	S'enregistrer
+ACCESSCODEFORM_EMAIL_LABEL	Email	Email
+ACCESSCODEFORM_EMAIL_PLACEHOLDER	Enter your email address	Saisissez votre adresse mail
+ACCESSCODEFORM_EMAIL_ERR_REQUIRED	Email address is required	Veuillez saisir une addresse mail
+ACCESSCODEFORM_EMAIL_ERR_EMAIL	Email address must be valid	L'adresse mail est invalide
+ACCESSCODEFORM_BUTTON_LABEL	Get an Access Code	Obtenir un code d'accès
+LOGINFORM_ACCESSCODE_LABEL	Access Code	Code d'accès
+LOGINFORM_ACCESSCODE_PLACEHOLDER	Enter your access code	Saisissez votre code d'accès
+LOGINFORM_ACCESSCODE_ERR_REQUIRED	Access code is required	Veuillez saisir un code d'accès
+LOGINFORM_BUTTON_LABEL	Log in	S'identifier
