@@ -1,11 +1,10 @@
 import {Paper} from "@material-ui/core";
 import React, {useEffect, useState} from "react";
-import CustomTile from "../../../utility/customTitle/customTitle";
+import CustomTile from "../../../Shared/CustomTitle/CustomTitle";
 import Box from "@material-ui/core/Box";
 import {useSelector} from "react-redux";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
-import 'react-image-crop/dist/ReactCrop.css';
 import 'tui-image-editor/dist/tui-image-editor.css'
 import FolderOpenIcon from '@material-ui/icons/FolderOpen';
 import Typography from "@material-ui/core/Typography";
@@ -13,28 +12,24 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Radio from "@material-ui/core/Radio";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import Grid from "@material-ui/core/Grid";
-import MetadataImageResult from "./MetadataImageResult";
-import MetadataVideoResult from "./MetadataVideoResult";
-import useImageTreatment from "./useImageTreatment";
-import useVideoTreatment from "./useVideoTreatment";
-import useMyStyles from "../../../utility/MaterialUiStyles/useMyStyles";
+import MetadataImageResult from "./Results/MetadataImageResult";
+import MetadataVideoResult from "./Results/MetadataVideoResult";
+import useImageTreatment from "./Hooks/useImageTreatment";
+import useVideoTreatment from "./Hooks/useVideoTreatment";
+import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
+import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
+import tsv from "../../../../LocalDictionary/components/NavItems/tools/Metadata.tsv";
+import {submissionEvent} from "../../../Shared/GoogleAnalytics/GoogleAnalytics";
 
 const Metadata = () => {
     const classes = useMyStyles();
-    const dictionary = useSelector(state => state.dictionary);
-    const lang = useSelector(state => state.language);
-    const keyword = (key) => {
-        return (dictionary !== null) ? dictionary[lang][key] : "";
-    };
+    const keyword = useLoadLanguage("components/NavItems/tools/Metadata.tsv", tsv);
     const resultUrl = useSelector(state => state.metadata.url);
     const resultData = useSelector(state => state.metadata.result);
     const resultIsImage = useSelector(state => state.metadata.isImage);
 
-
     const [radioImage, setRadioImage] = useState(true);
-
     const [input, setInput] = useState((resultUrl) ? resultUrl : "");
-
     const [imageUrl, setImageurl] = useState(null);
     const [videoUrl, setVideoUrl] = useState(null);
 
@@ -43,6 +38,7 @@ const Metadata = () => {
 
     const submitUrl = () => {
         if (input) {
+            submissionEvent(input);
             if (radioImage) {
                 setImageurl(input);
             } else {
@@ -62,7 +58,7 @@ const Metadata = () => {
     return (
         <div>
             <Paper className={classes.root}>
-                <CustomTile> {keyword("metadata_content_title")}  </CustomTile>
+                <CustomTile text={keyword("metadata_content_title")}/>
                 <Box m={1}/>
                 <TextField
                     value={input}
@@ -117,7 +113,7 @@ const Metadata = () => {
                 (resultData) ?
                     (
                         (resultIsImage) ?
-                        <MetadataImageResult result={resultData}/>
+                        <MetadataImageResult result={resultData} image={resultUrl}/>
                         :
                         <MetadataVideoResult result={resultData}/>
                         )

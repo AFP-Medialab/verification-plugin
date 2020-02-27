@@ -1,15 +1,39 @@
 import React from "react";
-import SpeakerNotesIcon from "@material-ui/core/SvgIcon/SvgIcon";
 import SlackFeedback from "react-slack-feedback";
 import feedBackTheme from "./feedBackTheme";
-import axios from "axios"
-import useMyStyles from "../utility/MaterialUiStyles/useMyStyles";
+import useLoadLanguage from "../../Hooks/useLoadLanguage";
+import tsv from "../../LocalDictionary/components/FeedBack.tsv";
+
 
 const FeedBack = () => {
-
-    const classes = useMyStyles();
-
     const API_URL = process.env.REACT_APP_MY_WEB_HOOK_URL;
+    const keyword = useLoadLanguage("components/FeedBack.tsv", tsv);
+    const translationJson = {
+        "checkbox.option": "Send url with feedback",
+        "close": keyword("close"),
+        "error.archived": keyword("archived"),
+        "error.badrequest": keyword("badrequest"),
+        "error.forbidden": keyword("forbidden"),
+        "error.internal": keyword("internal"),
+        "error.notfound": keyword("notfound"),
+        "error.unexpected":  keyword("unexpected"),
+        "error.upload": "Error uploading image!",
+        "feedback.type.improvement": keyword("improvement"),
+        "feedback.type.bug": keyword("bug"),
+        "feedback.type.feature": keyword("feature"),
+        "header.title": keyword("title"),
+        "image.remove": keyword("remove"),
+        "label.channel": "Channel",
+        "label.message": keyword("message"),
+        "label.type": keyword("type"),
+        "placeholder": keyword("placeholder"),
+        "submit.sending": keyword("sending"),
+        "submit.sent": keyword("sent"),
+        "submit.text": keyword("submit_text"),
+        "upload.text": "Attach Image",
+        "trigger.text": keyword("button"),
+        "footer.text": "React Slack Feedback"
+    };
 
     const sendToSlack = (payload, success, error) => {
 
@@ -23,7 +47,6 @@ const FeedBack = () => {
                     error(res);
                     throw res
                 }
-
                 return res
             })
             .then(success)
@@ -46,6 +69,7 @@ const FeedBack = () => {
                     sendToSlack(payload, success, error)
                 }
                 user={"Invid Feed Back"}
+                translations={translationJson}
             />
         </div>
     )

@@ -1,0 +1,14 @@
+	en	fr	es
+twitter_title	Twitter advanced search	Recherche avancée Twitter	Búsqueda avanzada Twitter
+twitter_termbox	Keyword or #	Mot clé ou #	Palabra clave o #
+twitter_tw-account	From (Twitter account name)	De (Nom de compte Twitter)	De (Nombre de una cuenta de Twitter)
+twitter_filter	Filter (e.g. safe, media, retweets, native_video, periscope, vine, images, twimg or links)	Filtre (ex. safe, media, retweets, native_video, periscope, vine, images, twimg or links)	Filtro (ej. safe, media, retweets, native_video, periscope, vine, images, twimg or links)
+twitter_lang	Language (e.g. en, fr, de, es, ru, ja, zh...)	Langue (ex: en, fr, de, es ru, ja, zh...)	Idioma (ej: en, fr, de, es ru, ja, zh...)
+twitter_geocode	Geocode (e.g. -22.912214,-43.230182,1km or -22.912214,-43.230182,1mi)	Geocode (ex: -22.912214,-43.230182,1km ou -22.912214,-43.230182,1mi)	Geocodigo (ej: -22.912214,-43.230182,1km ou -22.912214,-43.230182,1mi)
+twitter_near	Near (city name)	Proche de : (nom de ville)	Cerca de (nombre de ciudad)
+twitter_within	Within (e.g. 15mi or 15km)	Dans (ex: 15mi ou 15km)	Dentro de (ej: 15mi o 15 km)
+twitter_from_date	Since	Depuis	Desde
+twitter_to_date	Until	Jusqu'à	Hasta
+twitter_local_time	Local time	Heure locale	Hora local
+twitter_gmt	GMT	GMT	GMT
+button_submit	Submit	Envoyer	Enviar

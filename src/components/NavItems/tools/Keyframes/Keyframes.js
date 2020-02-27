@@ -5,25 +5,23 @@ import Box from "@material-ui/core/Box";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import LocalFile from "./LocalFile/LocalFile";
-import CustomTile from "../../../utility/customTitle/customTitle";
+import CustomTile from "../../../Shared/CustomTitle/CustomTitle";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import Typography from "@material-ui/core/Typography";
 import Divider from '@material-ui/core/Divider';
 import KeyFramesResults from "./Results/KeyFramesResults";
 import {useKeyframeWrapper} from "./Hooks/useKeyframeWrapper";
-import useMyStyles from "../../../utility/MaterialUiStyles/useMyStyles";
+import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import {useParams} from 'react-router-dom'
+import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
+import tsv from "../../../../LocalDictionary/components/NavItems/tools/Keyframes.tsv";
+import {submissionEvent} from "../../../Shared/GoogleAnalytics/GoogleAnalytics";
 
 const Keyframes = (props) => {
     const {url} = useParams();
 
     const classes = useMyStyles();
-    const dictionary = useSelector(state => state.dictionary);
-    const lang = useSelector(state => state.language);
-    const keyword = (key) => {
-        return (dictionary !== null) ? dictionary[lang][key] : "";
-    };
-
+    const keyword = useLoadLanguage("components/NavItems/tools/Keyframes.tsv", tsv);
 
     // state used to toggle localFile view
     const [localFile, setLocalFile] = useState(false);
@@ -42,6 +40,7 @@ const Keyframes = (props) => {
     useKeyframeWrapper(submittedUrl);
 
     const submitUrl = () => {
+        submissionEvent(input);
         setSubmittedUrl(input);
     };
 
@@ -60,7 +59,7 @@ const Keyframes = (props) => {
     return (
         <div>
             <Paper className={classes.root}>
-                <CustomTile> {keyword("keyframes_title")}  </CustomTile>
+                <CustomTile text={keyword("keyframes_title")}/>
                 <Box m={1}/>
                 <Box display={localFile ? "none" : "block"}>
                     <Button variant="contained" color="primary" onClick={toggleLocal}>

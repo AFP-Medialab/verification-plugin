@@ -1,0 +1,69 @@
+	en	fr	es
+api_title	Video contextual verification	Vérification du contexte de la vidéo	Verificación del contexto del video
+api_input	Copy and paste a Youtube, Facebook or Twitter url	Copier et coller une adresse YouTube, Facebook ou Twitter	Copiar y pegar un enlace de YouTube, Facebook o Twitter
+api_repro	Reprocess	Retraiter	Volver a procesar
+api_comments	Verification comments	Commentaires de vérification	Comentarios de verificación
+button_submit	Submit	Envoyer	Enviar
+facebook_video_name_1	Video id	Identifiant de la vidéo	Identificación del video
+facebook_video_name_2	Video title	Titre de la vidéo	Títular del video
+facebook_video_name_3	Duration	Durée	Duración
+facebook_video_name_4	Content category	Catégorie du contenu	Categoría del contenido
+facebook_video_name_5	Content tags	Tag du contenu	Tag del contenido
+facebook_video_name_6	Video description	Description de la vidéo	Descripción del video
+facebook_video_name_7	Like count	Nombre de ''j'aime''	Número de ''me gusta''
+facebook_video_name_8	Updated time	Date de mise en ligne	Fecha de puesta en línea
+facebook_video_name_9	Created time	Date de création	Fecha de creación
+facebook_comment_title	Comments	Commentaires sur la vidéo	Comentarios
+facebook_comment_name_1	Video comment count	Nbre de commentaires	Comentarios sobre el video
+facebook_comment_name_2	Number verification comments	Nbre de commentaires vérifiés	Número de comentarios verificados
+twitter_user_name_13	Created	Date de création	Fecha de creación
+twitter_user_name_4	Profile	Profil	Perfil
+button_reverse_google	Google Image reverse search	Recherche inversée Google image	Búsqueda inversa de imagen Google
+button_reverse_yandex	Yandex Image reverse search	Recherche inversée Yandex image	Búsqueda inversa de imagen Yandex
+button_reverse_tineye	Tineye Image reverse search	Recherche inversée Tineye	Búsqueda inversa de imagen Tineye
+button_reverse_twitter	Twitter video search	Recherche sur Twitter	Búsqueda en Twitter
+youtube_video_name1_2	Video description	Description de la vidéo	Descripción del video
+twitter_video_name_3	Origin	Origine	Origen
+twitter_video_name_4	Likes count	Nombre de ''j'aime''	Número de ''me gusta''
+twitter_video_name_5	Retweets count	Nombre de retweets	Número de retweets
+twitter_video_name_6	Hashtags	Hashtags	Hashtags
+twitter_video_name_7	Urls included	Urls incluses	Urls incluidas
+twitter_video_name_8	Mentionned by	Mentionné par	Mencionado por
+twitter_video_name_9	Language	Langue	Lengua
+twitter_video_name_10	Thumbnail	Imagette	Miniaturas
+twitter_video_name_11	Size	Taille	Talla
+twitter_video_name_12	Duration	Durée	Duración
+twitter_video_name_13	Locations mentioned	Lieux mentionnés	Lugares mencionados
+twitter_video_name_14	Embedded YouTube	Incorporé de YouTube	Integrable desde YouTube
+twitter_video_name_15	Created	Date de création	Fecha de creación
+twitter_video_name_16	Video	Vidéo	Video
+twitter_user_title	User	Utilisateur	Usuario
+twitter_user_name_2	Screen name	Pseudonyme	Nombre de usuario
+twitter_user_name_3	Location	Localisation	Lugar
+twitter_user_name_4	Profile	Profil	Perfil
+twitter_user_name_5	Description	Description	Descripción
+twitter_user_name_6	Protected user	Utilisateur protégé	Usuario protegido
+twitter_user_name_7	Verified user	Utilisateur vérifié	Usuario verificado
+twitter_user_name_8	Followers	Nombre d'abonnés	Seguidores
+twitter_user_name_9	Following	Nombre d'abonnements	Seguidos
+twitter_user_name_10	Lists	Listes	Listas
+twitter_user_name_11	Tweets liked	Tweets ''aimés''	Tweets ''likeados''
+twitter_user_name_12	Tweets count	Nombre de tweets	Número de tweets
+twitter_user_name_13	Created	Date de création	Fecha de creación
+youtube_comment_title	Comments	Commentaires sur la vidéo:	Comentarios sobre el video
+youtube_comment_name_2	Verification comments number	Nbre de com. pour vérification	Número de comentarios para verificación
+navbar_thumbnails	Thumbnails	Imagettes	Miniaturas
+youtube_video_name2_1	Video view count	Nombre de vues	Número de vistas
+youtube_video_name2_2	Like count	Nombre de ''j'aime''	Número de ''me gusta''
+youtube_video_name2_3	Dislike count	Nombre de ''je n'aime pas''	Número de ''no me gusta''
+youtube_video_name2_4	Duration	Durée	Duración
+youtube_video_name2_5	Licensed content	Contenu sous license	Contenido bajo licencia
+youtube_video_name2_6	Upload time	Date de mise en ligne	Fecha de puesta en línea
+youtube_channel_name_2	Channel created time	Date de la création de la chaîne	Fecha de la creación de la cadena
+youtube_channel_name_3	Channel view count	Nombre de vues de la chaine	Número de vistas de la cadena
+youtube_channel_name_4	Channel page	Page de la chaîne	Página de la cadena
+youtube_channel_name_5	Comments number	Nbre de commentaires	Número de comentarios
+youtube_channel_title	Channel:	Chaîne:	Cadena:
+youtube_comment_name_1	Video comment count	Nombre de commentaires	Número de comentarios
+convert_to_local_time	 Convert to local time	 Convertir à l'heure locale	 Pasar a la hora local
+table_error_unavailable	This url is not valid	Cette URL n'est pas valide	Esta url no es válida
