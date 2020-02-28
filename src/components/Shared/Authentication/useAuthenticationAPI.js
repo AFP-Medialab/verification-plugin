@@ -16,7 +16,7 @@ import { userRegistrationSentAction, userAccessCodeRequestSentAction, userLoginA
 export default function useAuthenticationAPI() {
 
   // Global REST client parameters
-  const defaultTimeout = 3000;
+  const defaultTimeout = 5000;
   const jsonContentType = "application/json";
   const authSrvBaseURL = `${process.env.REACT_APP_AUTH_BASE_URL}/api/v1/auth`;
   
@@ -210,6 +210,7 @@ export default function useAuthenticationAPI() {
         });
       }
     }, error => {
+      console.log("Error calling loggin service: ", error);
       if (error.response) {
         switch (error.response.status) {
           case 400:
