@@ -254,6 +254,14 @@ export default function useAuthenticationAPI() {
               }
             });
         }
+      } else if (error.code && error.code === "ECONNABORTED") {
+        // Timeout or abort error
+        return Promise.reject({
+          error: {
+            code: ERR_AUTH_ABORT_ERROR,
+            message: error.message
+          }
+        });
       }
       return Promise.reject({
         error: {

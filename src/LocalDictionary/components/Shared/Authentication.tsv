@@ -1,5 +1,6 @@
 	en	fr
 ERR_AUTH_UNKNOWN_ERROR	Application has raised an unknown error	L'application a rencontré une erreur inconnue
+ERR_AUTH_ABORT_ERROR	Server is not responding	Le service ne répond pas
 ERR_AUTH_INVALID_PARAMS	Invalid parameters	Paramètres invalides
 ERR_AUTH_BAD_REQUEST	Invalid request sent to the service	Requête invalide envoyée au service
 ERR_AUTH_SERVER_ERROR	Service not available or in error state	Service indisponible ou en erreur
