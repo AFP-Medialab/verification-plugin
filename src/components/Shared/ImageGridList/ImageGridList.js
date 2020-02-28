@@ -2,7 +2,7 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
-import Image from "material-ui-image"
+
 const useStyles = makeStyles(theme => ({
     root: {
         width:"100%",
@@ -25,7 +25,7 @@ const ImageGridList = (props) => {
             <GridList cellHeight={props.height} className={classes.gridList} cols={3}>
                 {props.list.map((tile, index) => (
                     <GridListTile  key={index} cols={1} >
-                        <img src={tile} alt={tile} onClick={(e) => props.handleClick(e)}/>
+                        <img src={tile} alt={tile}/>
                     </GridListTile>
                 ))}
             </GridList>

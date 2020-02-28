@@ -6,7 +6,7 @@ import {useSelector, useDispatch} from "react-redux";
 import {changeLanguage} from "../../../redux/actions";
 import useLoadLanguage from "../../../Hooks/useLoadLanguage";
 import tsv from "../../../LocalDictionary/components/NavItems/languages.tsv";
-import TranslateIcon from '@material-ui/icons/Translate';
+import TranslateIcon from '@material-ui/icons/Language';
 import Tooltip from "@material-ui/core/Tooltip";
 import IconButton from "@material-ui/core/IconButton";
 
