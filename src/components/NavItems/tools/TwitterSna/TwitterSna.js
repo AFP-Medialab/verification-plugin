@@ -79,7 +79,7 @@ const TwitterSna = () => {
       request.from :
       userAuthenticated ?
         null :
-        new Date("2016-12-24T00:00:00")
+        new Date("2016-12-10T00:00:00")
   );
   const [sinceError, setSinceError] = useState(false);
   const [until, setUntil] = useState(
@@ -87,7 +87,7 @@ const TwitterSna = () => {
       request.until :
       userAuthenticated ?
         null :
-        new Date("2020-02-25T00:00:00")
+        new Date("2020-01-01T00:00:00")
   );
   const [untilError, setUntilError] = useState(false);
   const [langInput, setLangInput] = useState(
@@ -281,6 +281,7 @@ const TwitterSna = () => {
               className={classes.neededField}
               dateFormat={"YYYY-MM-DD"}
               timeFormat={"HH:mm:ss"}
+              value={since}
               handleChange={handleSinceDateChange}
               error={sinceError}
             />
@@ -294,6 +295,7 @@ const TwitterSna = () => {
               className={classes.neededField}
               dateFormat={"YYYY-MM-DD"}
               timeFormat={"HH:mm:ss"}
+              value={until}
               handleChange={handleUntilDateChange}
               error={untilError}
             />
