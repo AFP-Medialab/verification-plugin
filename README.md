@@ -23,13 +23,15 @@ To setup this project you need to run:
 
 #### You will also need a `.env` File containing :
 
-    REACT_APP_ELK_URL=http://185.249.140.38/elk/twinttweets/_search
-    REACT_APP_TWINT_WRAPPER_URL=http://185.249.140.38/twint-wrapper2
+    REACT_APP_ELK_URL=<ELK-URL>/twinttweets/_search
+    REACT_APP_TWINT_WRAPPER_URL=<TWINT-WRAPPER-URL>
+    REACT_APP_FACEBOOK_APP_ID=<REACT_ID>
     REACT_APP_TRANSLATION_GITHUB=https://raw.githubusercontent.com/AFP-Medialab/InVID-Translations/react/
     REACT_APP_KEYFRAME_TOKEN=<yourKeyframeToken>
     REACT_APP_MY_WEB_HOOK_URL=<yourSlackAppUrlHook>
     REACT_APP_GOOGLE_ANALYTICS_KEY=<yourGoogleAnaliticsToken>
-    REACT_APP_MAP_TOKEN=pk.eyJ1IjoidGVlYm9sdDE2IiwiYSI6ImNrNGNwYXJjZjAwN2MzbXF0ZXJmeWcwaXkifQ.X_WXzcFosq5MLva9s3gTIA
+    REACT_APP_MAP_TOKEN=<MAP_TOKEN>
+    REACT_APP_AUTH_BASE_URL=<TWINT-WRAPPER-URL>
 
 
 ####Then you need to load the extension in your browser: 
