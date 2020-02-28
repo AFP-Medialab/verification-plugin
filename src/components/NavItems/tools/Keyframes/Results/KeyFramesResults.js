@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import Paper from "@material-ui/core/Paper";
 import makeStyles from "@material-ui/core/styles/makeStyles";
-import {useDispatch, useSelector} from "react-redux";
+import {useDispatch} from "react-redux";
 import ImageGridList from "../../../../Shared/ImageGridList/ImageGridList";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
