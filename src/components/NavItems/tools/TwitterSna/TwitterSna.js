@@ -55,57 +55,57 @@ const TwitterSna = () => {
 
   // Component state (default sample values if not authenticated)
   const [keyWords, setKeywords] = useState(
-    request && request.keywordList
-      ? request.keywordList.join(" ")
-      : userAuthenticated
-        ? ""
-        : "\"fake news\""
+    request && request.keywordList ?
+      request.keywordList.join(" ") :
+      userAuthenticated ?
+        "" :
+        "\"fake news\""
   );
   const [keyWordsError, setKeyWordsError] = useState(false);
   const [bannedWords, setBannedWords] = useState(
-    request && request.bannedWords
-      ? request.bannedWords.join(" ")
-      : ""
+    request && request.bannedWords ?
+      request.bannedWords.join(" ") :
+      ""
   );
   const [usersInput, setUsersInput] = useState(
-    request && request.userList
-      ? request.userList.join(" ")
-      : userAuthenticated
-        ? ""
-        : "@realDonaldTrump"
+    request && request.userList ?
+      request.userList.join(" ") :
+      userAuthenticated ?
+        "" :
+        "@realDonaldTrump"
   );
   const [since, setSince] = useState(
-    request
-      ? request.from
-      : userAuthenticated
-        ? null
-        : new Date("2016-12-24T00:00:00")
+    request ?
+      request.from :
+      userAuthenticated ?
+        null :
+        new Date("2016-12-24T00:00:00")
   );
   const [sinceError, setSinceError] = useState(false);
   const [until, setUntil] = useState(
-    request
-      ? request.until
-      : userAuthenticated
-        ? null
-        : new Date("2020-02-25T00:00:00")
+    request ?
+      request.until :
+      userAuthenticated ?
+        null :
+        new Date("2020-02-25T00:00:00")
   );
   const [untilError, setUntilError] = useState(false);
   const [langInput, setLangInput] = useState(
-    request && request.lang
-      ? "lang_" + request.lang
-      : userAuthenticated
-        ? "lang_all"
-        : "lang_en"
+    request && request.lang ?
+      "lang_" + request.lang :
+      userAuthenticated ?
+        "lang_all" :
+        "lang_en"
   );
   const [openLangInput, setLangInputOpen] = React.useState(false);
   const [filters, setFilers] = useState(
-    request && request.media
-      ? request.media
-      : "none"
+    request && request.media ?
+      request.media :
+      "none"
   );
   const [verifiedUsers, setVerifiedUsers] = useState(
-    request && request.verified
-      ? request.verified :
+    request && request.verified ?
+      request.verified :
       "false"
   );
   const [localTime, setLocalTime] = useState("true");
