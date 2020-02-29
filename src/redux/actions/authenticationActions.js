@@ -3,21 +3,33 @@
 */
 
 /**
+ * User registration loading event.
+ */
+export const AUTH_USER_REGISTRATION_LOADING = "AUTH_USER_REGISTRATION_LOADING";
+/**
  * User registration sent event.
  */
 export const AUTH_USER_REGISTRATION_SENT = "AUTH_USER_REGISTRATION_SENT";
+/**
+ * Access code request loading event.
+ */
+export const AUTH_ACCESS_CODE_REQUEST_LOADING = "AUTH_ACCESS_CODE_REQUEST_LOADING";
 /**
  * Access code request sent event.
  */
 export const AUTH_ACCESS_CODE_REQUEST_SENT = "AUTH_ACCESS_CODE_REQUEST_SENT";
 /**
+ * User login loading event.
+ */
+export const AUTH_USER_LOGIN_LOADING = "AUTH_USER_LOGIN_LOADING";
+/**
  * User logged in event.
  */
-export const AUHT_USER_LOGIN = "AUHT_USER_LOGIN";
+export const AUTH_USER_LOGIN = "AUTH_USER_LOGIN";
 /**
  * User logged out event.
  */
-export const AUHT_USER_LOGOUT = "AUHT_USER_LOGOUT";
+export const AUTH_USER_LOGOUT = "AUTH_USER_LOGOUT";
 /**
  * Authentication token invalid event.
  */
@@ -31,39 +43,83 @@ export const AUTH_TOKEN_REFRESHED = "AUTH_TOKEN_REFRESHED";
  */
 export const AUTH_USER_SESSION_EXPIRED = "AUTH_USER_SESSION_EXPIRED";
 
+
+/**
+ *
+ *
+ * @param {boolean} [loading=true]
+ * @returns
+ */
+export function userRegistrationLoadingAction(loading = true) {
+  return {
+    type: AUTH_USER_REGISTRATION_LOADING,
+    payload: loading
+  };
+}
+
 /**
  * TODO
  *
+ * @param {boolean} [sent=true]
  * @returns
  */
-export function userRegistrationSentAction() {
+export function userRegistrationSentAction(sent = true) {
   return {
-    type: AUTH_USER_REGISTRATION_SENT
+    type: AUTH_USER_REGISTRATION_SENT,
+    payload: sent
   };
 };
 
 /**
  * TODO
  *
+ * @param {boolean} [loading=true]
  * @returns
  */
-export function userAccessCodeRequestSentAction() {
+export function userAccessCodeRequestLoadingAction(loading = true) {
   return {
-    type: AUTH_ACCESS_CODE_REQUEST_SENT
+    type: AUTH_ACCESS_CODE_REQUEST_LOADING,
+    payload: loading
   };
 };
 
 /**
  * TODO
  *
- * @param {*} accessToken User's JWT access token.
- * @param {*} accessTokenExpiry The JWT access token expiry date.
- * @param {*} user Logged in user information.
+ * @param {boolean} [sent=true]
+ * @returns
+ */
+export function userAccessCodeRequestSentAction(sent = true) {
+  return {
+    type: AUTH_ACCESS_CODE_REQUEST_SENT,
+    payload: sent
+  };
+};
+
+/**
+ * TODO
+ *
+ * @param {boolean} [loading=true]
+ * @returns
+ */
+export function userLoginLoadingAction(loading = true) {
+  return {
+    type: AUTH_USER_LOGIN_LOADING,
+    payload: loading
+  };
+};
+
+/**
+ * TODO
+ *
+ * @param {String} accessToken User's JWT access token.
+ * @param {Date} accessTokenExpiry The JWT access token expiry date.
+ * @param {Object} user Logged in user information.
  * @returns
  */
 export function userLoginAction(accessToken, accessTokenExpiry, user) {
   return {
-    type: AUHT_USER_LOGIN,
+    type: AUTH_USER_LOGIN,
     payload: {
       accessToken,
       accessTokenExpiry,
@@ -75,9 +131,20 @@ export function userLoginAction(accessToken, accessTokenExpiry, user) {
 /**
  * TODO
  *
- * @param {*} accessToken
- * @param {*} accessTokenExpiry
- * @param {*} user
+ * @returns
+ */
+export function userLogoutAction() {
+  return {
+    type: AUTH_USER_LOGOUT
+  };
+}
+
+/**
+ * TODO
+ *
+ * @param {String} accessToken
+ * @param {Date} accessTokenExpiry
+ * @param {Object} user
  * @returns
  */
 export function userTokenRefreshedAction(accessToken, accessTokenExpiry, user) {
@@ -103,7 +170,9 @@ export function userSessionExpiredAction() {
 };
 
 export default {
+  userRegistrationLoadingAction,
   userRegistrationSentAction,
+  userAccessCodeRequestLoadingAction,
   userAccessCodeRequestSentAction,
   userLoginAction,
   userTokenRefreshed: userTokenRefreshedAction,
