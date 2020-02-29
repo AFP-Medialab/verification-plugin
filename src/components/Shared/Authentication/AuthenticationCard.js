@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, Fragment } from "react";
+import PropTypes from 'prop-types';
 
 import { useStore, useSelector, useDispatch } from 'react-redux';
 
@@ -19,7 +20,6 @@ import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Card from "@material-ui/core/Card";
-// import CardContent from '@material-ui/core/CardContent';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
@@ -29,6 +29,10 @@ import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import Divider from '@material-ui/core/Divider';
 import SendIcon from '@material-ui/icons/Send';
 import LockOpenIcon from '@material-ui/icons/LockOpen';
+import LockIcon from '@material-ui/icons/Lock';
+import Toolbar from "@material-ui/core/Toolbar";
+
+import { userRegistrationSentAction, userAccessCodeRequestSentAction } from "../../../redux/actions/authenticationActions";
 
 
 const registrationValidationSchema = yup.object().shape({
@@ -63,6 +67,9 @@ const loginValidationSchema = yup.object().shape({
  * @returns
  */
 const AuthenticationCard = (props) => {
+  // Component props
+  const { requireAuthMsg } = props;
+
   // Defs
   const classes = useMyStyles();
 
@@ -70,13 +77,18 @@ const AuthenticationCard = (props) => {
   const dispatch = useDispatch();
   const userAuthenticated = useSelector(state => state.userSession && state.userSession.userAuthenticated);
   const user = useSelector(state => state.userSession && state.userSession.user);
+  const userRegistrationLoading = useSelector(state => state.userSession && state.userSession.userRegistrationLoading);
+  const userRegistrationSent = useSelector(state => state.userSession && state.userSession.userRegistrationSent);
+  const accessCodeRequestLoading = useSelector(state => state.userSession && state.userSession.accessCodeRequestLoading);
+  const accessCodeRequestSent = useSelector(state => state.userSession && state.userSession.accessCodeRequestSent);
+  const userLoginLoading = useSelector(state => state.userSession && state.userSession.userLoginLoading);
 
   // i18n
   const messageI18NResolver = useLoadLanguage("components/Shared/Authentication.tsv", tsv);
-  
+
   // Authentication API
   const authenticationAPI = useAuthenticationAPI();
-  
+
   // Error handler
   const handleError = (errorKey) => {
     let errMsg = messageI18NResolver(errorKey);
@@ -100,9 +112,15 @@ const AuthenticationCard = (props) => {
       lastName: data.lastName,
       company: data.company,
       position: data.position
+    }).then(result => {
+      registrationForm.reset();
     }).catch(error => {
       handleError(error.error ? error.error.code : ERR_AUTH_UNKNOWN_ERROR);
     });
+  };
+  const registrationFormSubmitDisabled = registrationForm.formState.isSubmitting || userRegistrationLoading;
+  const registrationSentMsgReset = (e) => {
+    dispatch(userRegistrationSentAction(false));
   };
 
   // Access Code form
@@ -113,9 +131,15 @@ const AuthenticationCard = (props) => {
   const accessCodeOnSubmit = (data) => {
     authenticationAPI.requestAccessCode({
       email: data.email
+    }).then(result => {
+      accessCodeForm.reset();
     }).catch(error => {
       handleError(error.error ? error.error.code : ERR_AUTH_UNKNOWN_ERROR);
     });
+  };
+  const accessCodeFormSubmitDisabled = accessCodeForm.formState.isSubmitting || accessCodeRequestLoading;
+  const accessCodeSentMsgReset = (e) => {
+    dispatch(userAccessCodeRequestSentAction(false));
   };
 
   // Login form
@@ -126,198 +150,283 @@ const AuthenticationCard = (props) => {
   const loginOnSubmit = (data) => {
     authenticationAPI.login({
       accessCode: data.accessCode
+    }).then(result => {
+      loginForm.reset();
     }).catch(error => {
       handleError(error.error ? error.error.code : ERR_AUTH_UNKNOWN_ERROR);
     });
   };
-  
+  const loginFormSubmitDisabled = loginForm.formState.isSubmitting || userLoginLoading;
+
+  const logoutOnClick = () => {
+    authenticationAPI.logout().catch(error => {
+      handleError(error.error ? error.error.code : ERR_AUTH_UNKNOWN_ERROR);
+    });
+  };
+
   // If authenticated
   if (userAuthenticated) {
+    const logUserMsg = _.template(messageI18NResolver("LOGUSER_TEMPLATE") || "Wellcome <%= user.firstName %> <%= user.lastName %> (<%= user.email %>)")({ user });
+    // `You are logged as ${user && user.firstName} ${user && user.lastName} (${user && user.email})`
     return (
-      <Typography variant="caption">
-        {
-          `You are logged as ${user && user.firstName} ${user && user.lastName} (${user && user.email})`
-        }
-      </Typography>
+      <Fragment>
+        <Toolbar>
+          <Typography variant="body2">
+            {
+              logUserMsg
+            }
+          </Typography>
+          <div style={{ flexGrow: 1 }} />
+          <Button variant="contained" color="secondary" startIcon={<LockIcon />} onClick={logoutOnClick}>
+            { messageI18NResolver("LOGUSER_LOGOUT_LABEL") || "Logout" }
+          </Button>
+        </Toolbar>
+      </Fragment>
     );
   }
 
   // Else
+
+  const requireAuthMsgComp = (requireAuthMsg && !_.isString(requireAuthMsg)) ?
+    (
+      requireAuthMsg
+    ) :
+    (
+      <Typography variant="body2">
+        {
+          requireAuthMsg || messageI18NResolver("AUTHCARD_REQUIREAUTH_TEXT") || "You must be logged to use this service."
+        }
+      </Typography>
+    );
+  const explanationText = messageI18NResolver("AUTHCARD_EXPLANATION_TEXT");
+
   return (
     <ExpansionPanel>
       <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-        <Typography variant="caption">You must be logged in to use this service.</Typography>
+        {
+          requireAuthMsgComp
+        }
       </ExpansionPanelSummary>
       <ExpansionPanelDetails>
         <Card raised={false} elevation={0}>
-          {/* <CardContent> */}
+          {
+            explanationText && !(_.toString(explanationText).trim() === "") &&
+            <Box mb={4}>
+              <Typography variant="caption" display="block" align="justify">{explanationText}</Typography>
+            </Box>
+          }
           <Grid container justify="center" spacing={4} className={classes.grow}>
             <Grid item xs={12} sm={6}>
-              <form onSubmit={registrationForm.handleSubmit(registrationOnSubmit)}>
-                <Grid container justify="center" spacing={2}>
-                  <Grid item xs={12}>
-                    <Typography variant="body2">Not already registered? Register for an access to the service:</Typography>
-                  </Grid>
-                  <Grid item xs={12}>
-                    <Controller
-                      name="email"
-                      as={
-                        <TextField
-                          id="registration-email"
-                          label={messageI18NResolver("REGISTRATIONFORM_EMAIL_LABEL") || "Email address"}
-                          placeholder={messageI18NResolver("REGISTRATIONFORM_EMAIL_PLACEHOLDER") || "Enter your email address"}
-                          fullWidth
-                          autoComplete="email"
-                          required
-                          error={_.hasIn(registrationForm.errors, "email")}
-                          helperText={registrationForm.errors.email
-                            && (messageI18NResolver(registrationForm.errors.email.message) || "Email address is required")}
+              {
+                userRegistrationSent &&
+                <Fragment>
+                  <Typography variant="body2">
+                    {messageI18NResolver("REGISTRATIONFORM_SUCCESS_TEXT") || "Your registration request has been sent successfully and will be reviewed shortly by our service. You will receive a notification by email once your account is activated."}
+                  </Typography>
+                  <Box mt={4}>
+                    <Button variant="contained" color="primary" startIcon={<PersonAddIcon />}
+                      onClick={registrationSentMsgReset}
+                    >
+                      {messageI18NResolver("REGISTRATIONFORM_SUCCESS_RESET_LABEL") || "New request"}
+                    </Button>
+                  </Box>
+                </Fragment>
+              }
+              {
+                !userRegistrationSent &&
+                <Fragment>
+                  <form onSubmit={registrationForm.handleSubmit(registrationOnSubmit)}>
+                    <Grid container justify="center" spacing={2}>
+                      <Grid item xs={12}>
+                        <Typography variant="body2">
+                          {messageI18NResolver("REGISTRATIONFORM_TITLE") || "Not already registered? Register for an access to the service:"}
+                        </Typography>
+                      </Grid>
+                      <Grid item xs={12}>
+                        <Controller
+                          name="email"
+                          as={
+                            <TextField
+                              id="registration-email"
+                              label={messageI18NResolver("REGISTRATIONFORM_EMAIL_LABEL") || "Email address"}
+                              placeholder={messageI18NResolver("REGISTRATIONFORM_EMAIL_PLACEHOLDER") || "Enter your email address"}
+                              fullWidth
+                              autoComplete="email"
+                              required
+                              error={_.hasIn(registrationForm.errors, "email")}
+                              helperText={registrationForm.errors.email
+                                && (messageI18NResolver(registrationForm.errors.email.message) || "A valid email address is required")}
+                            />
+                          }
+                          control={registrationForm.control}
+                          defaultValue=""
                         />
-                      }
-                      control={registrationForm.control}
-                      defaultValue=""
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <Controller
-                      name="firstName"
-                      as={
-                        <TextField
-                          id="registration-firstName"
-                          label={messageI18NResolver("REGISTRATIONFORM_FIRSTNAME_LABEL") || "First name"}
-                          placeholder={messageI18NResolver("REGISTRATIONFORM_FIRSTNAME_PLACEHOLDER") || "Enter your first name"}
-                          fullWidth
-                          autoComplete="given-name"
-                          required
-                          error={_.hasIn(registrationForm.errors, "firstName")}
-                          helperText={registrationForm.errors.firstName
-                            && (messageI18NResolver(registrationForm.errors.firstName.message) || "First name is required")}
+                      </Grid>
+                      <Grid item xs={12}>
+                        <Controller
+                          name="firstName"
+                          as={
+                            <TextField
+                              id="registration-firstName"
+                              label={messageI18NResolver("REGISTRATIONFORM_FIRSTNAME_LABEL") || "First name"}
+                              placeholder={messageI18NResolver("REGISTRATIONFORM_FIRSTNAME_PLACEHOLDER") || "Enter your first name"}
+                              fullWidth
+                              autoComplete="given-name"
+                              required
+                              error={_.hasIn(registrationForm.errors, "firstName")}
+                              helperText={registrationForm.errors.firstName
+                                && (messageI18NResolver(registrationForm.errors.firstName.message) || "First name is required")}
+                            />
+                          }
+                          control={registrationForm.control}
+                          defaultValue=""
                         />
-                      }
-                      control={registrationForm.control}
-                      defaultValue=""
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <Controller
-                      name="lastName"
-                      as={
-                        <TextField
-                          id="registration-lastName"
-                          label={messageI18NResolver("REGISTRATIONFORM_LASTNAME_LABEL") || "Last name"}
-                          placeholder={messageI18NResolver("REGISTRATIONFORM_LASTNAME_PLACEHOLDER") || "Enter your last name"}
-                          fullWidth
-                          autoComplete="family-name"
-                          required
-                          error={_.hasIn(registrationForm.errors, "lastName")}
-                          helperText={registrationForm.errors.lastName
-                            && (messageI18NResolver(registrationForm.errors.lastName.message) || "Last name is required")}
+                      </Grid>
+                      <Grid item xs={12}>
+                        <Controller
+                          name="lastName"
+                          as={
+                            <TextField
+                              id="registration-lastName"
+                              label={messageI18NResolver("REGISTRATIONFORM_LASTNAME_LABEL") || "Last name"}
+                              placeholder={messageI18NResolver("REGISTRATIONFORM_LASTNAME_PLACEHOLDER") || "Enter your last name"}
+                              fullWidth
+                              autoComplete="family-name"
+                              required
+                              error={_.hasIn(registrationForm.errors, "lastName")}
+                              helperText={registrationForm.errors.lastName
+                                && (messageI18NResolver(registrationForm.errors.lastName.message) || "Last name is required")}
+                            />
+                          }
+                          control={registrationForm.control}
+                          defaultValue=""
                         />
-                      }
-                      control={registrationForm.control}
-                      defaultValue=""
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <Controller
-                      name="company"
-                      as={
-                        <TextField
-                          id="registration-company"
-                          label={messageI18NResolver("REGISTRATIONFORM_COMPANY_LABEL") || "Company"}
-                          placeholder={messageI18NResolver("REGISTRATIONFORM_COMPANY_PLACEHOLDER") || "Enter your company name"}
-                          fullWidth
-                          autoComplete="organization"
-                          required
-                          error={_.hasIn(registrationForm.errors, "company")}
-                          helperText={registrationForm.errors.company
-                            && (messageI18NResolver(registrationForm.errors.company.message) || "Company is required")}
+                      </Grid>
+                      <Grid item xs={12}>
+                        <Controller
+                          name="company"
+                          as={
+                            <TextField
+                              id="registration-company"
+                              label={messageI18NResolver("REGISTRATIONFORM_COMPANY_LABEL") || "Company"}
+                              placeholder={messageI18NResolver("REGISTRATIONFORM_COMPANY_PLACEHOLDER") || "Enter your company name"}
+                              fullWidth
+                              autoComplete="organization"
+                              required
+                              error={_.hasIn(registrationForm.errors, "company")}
+                              helperText={registrationForm.errors.company
+                                && (messageI18NResolver(registrationForm.errors.company.message) || "Company name is required")}
+                            />
+                          }
+                          control={registrationForm.control}
+                          defaultValue=""
                         />
-                      }
-                      control={registrationForm.control}
-                      defaultValue=""
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <Controller
-                      name="position"
-                      as={
-                        <TextField
-                          id="registration-position"
-                          label={messageI18NResolver("REGISTRATIONFORM_POSITION_LABEL") || "Position"}
-                          placeholder={messageI18NResolver("REGISTRATIONFORM_POSITION_PLACEHOLDER") || "Enter your position"}
-                          fullWidth
-                          autoComplete="organization-title"
-                          required
-                          error={_.hasIn(registrationForm.errors, "position")}
-                          helperText={registrationForm.errors.position
-                            && (messageI18NResolver(registrationForm.errors.position.message) || "Position is required")}
+                      </Grid>
+                      <Grid item xs={12}>
+                        <Controller
+                          name="position"
+                          as={
+                            <TextField
+                              id="registration-position"
+                              label={messageI18NResolver("REGISTRATIONFORM_POSITION_LABEL") || "Position"}
+                              placeholder={messageI18NResolver("REGISTRATIONFORM_POSITION_PLACEHOLDER") || "Enter your position"}
+                              fullWidth
+                              autoComplete="organization-title"
+                              required
+                              error={_.hasIn(registrationForm.errors, "position")}
+                              helperText={registrationForm.errors.position
+                                && (messageI18NResolver(registrationForm.errors.position.message) || "Position is required")}
+                            />
+                          }
+                          control={registrationForm.control}
+                          defaultValue=""
                         />
-                      }
-                      control={registrationForm.control}
-                      defaultValue=""
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <Box mt={2}>
-                      <Button variant="contained" color="primary" startIcon={<PersonAddIcon />}
-                        type="submit"
-                        disabled={!(registrationForm.formState.isValid || registrationForm.formState.isSubmitting)}
-                      >
-                        {messageI18NResolver("REGISTRATIONFORM_BUTTON_LABEL") || "Register"}
-                      </Button>
-                    </Box>
-                  </Grid>
-                </Grid>
-              </form>
+                      </Grid>
+                      <Grid item xs={12}>
+                        <Box mt={2}>
+                          <Button variant="contained" color="primary" startIcon={<PersonAddIcon />}
+                            type="submit"
+                            disabled={registrationFormSubmitDisabled}
+                          >
+                            {messageI18NResolver("REGISTRATIONFORM_SUBMIT_LABEL") || "Register"}
+                          </Button>
+                        </Box>
+                      </Grid>
+                    </Grid>
+                  </form>
+                </Fragment>
+              }
             </Grid>
             <Grid item xs>
               <Divider orientation="vertical" style={{ marginRight: "auto", marginLeft: "auto" }} />
             </Grid>
             <Grid item xs={12} sm={5}>
-              <form onSubmit={accessCodeForm.handleSubmit(accessCodeOnSubmit)}>
-                <Grid container justify="center" spacing={2}>
-                  <Grid item xs={12}>
-                    <Typography variant="body2">Already registered? Get an access code:</Typography>
-                  </Grid>
-                  <Grid item xs={12}>
-                    <Controller
-                      name="email"
-                      as={
-                        <TextField
-                          id="access-code-email"
-                          label={messageI18NResolver("ACCESSCODEFORM_EMAIL_LABEL") || "Email address"}
-                          placeholder={messageI18NResolver("ACCESSCODEFORM_EMAIL_PLACEHOLDER") || "Enter your email address"}
-                          fullWidth
-                          autoComplete="email"
-                          required
-                          error={_.hasIn(accessCodeForm.errors, "email")}
-                          helperText={accessCodeForm.errors.email
-                            && (messageI18NResolver(accessCodeForm.errors.email.message) || "Email address is required")}
+              {
+                accessCodeRequestSent &&
+                <Fragment>
+                  <Typography variant="body2">
+                    {messageI18NResolver("ACCESSCODEFORM_SUCCESS_TEXT") || "Your access code request has been sent successfully. If your account is valid, you should receive your access code by email in a few minutes."}
+                  </Typography>
+                  <Box mt={4}>
+                    <Button variant="contained" color="primary" startIcon={<SendIcon />}
+                      onClick={accessCodeSentMsgReset}
+                    >
+                      {messageI18NResolver("ACCESSCODEFORM_SUCCESS_RESET_LABEL") || "New request"}
+                    </Button>
+                  </Box>
+                </Fragment>
+              }
+              {
+                !accessCodeRequestSent &&
+                <Fragment>
+                  <form onSubmit={accessCodeForm.handleSubmit(accessCodeOnSubmit)}>
+                    <Grid container justify="center" spacing={2}>
+                      <Grid item xs={12}>
+                        <Typography variant="body2">
+                          {messageI18NResolver("ACCESSCODEFORM_TITLE") || "Already registered? Get an access code:"}
+                        </Typography>
+                      </Grid>
+                      <Grid item xs={12}>
+                        <Controller
+                          name="email"
+                          as={
+                            <TextField
+                              id="access-code-email"
+                              label={messageI18NResolver("ACCESSCODEFORM_EMAIL_LABEL") || "Email address"}
+                              placeholder={messageI18NResolver("ACCESSCODEFORM_EMAIL_PLACEHOLDER") || "Enter your email address"}
+                              fullWidth
+                              autoComplete="email"
+                              required
+                              error={_.hasIn(accessCodeForm.errors, "email")}
+                              helperText={accessCodeForm.errors.email
+                                && (messageI18NResolver(accessCodeForm.errors.email.message) || "Email address is required")}
+                            />
+                          }
+                          control={accessCodeForm.control}
+                          defaultValue=""
                         />
-                      }
-                      control={accessCodeForm.control}
-                      defaultValue=""
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <Box mt={2}>
-                      <Button variant="contained" color="primary" startIcon={<SendIcon />}
-                        // onClick={acOnSubmit}
-                        type="submit"
-                        disabled={!(accessCodeForm.formState.isValid || accessCodeForm.formState.isSubmitting)}
-                      >
-                        {messageI18NResolver("ACCESSCODEFORM_BUTTON_LABEL") || "Get an access code"}
-                      </Button>
-                    </Box>
-                  </Grid>
-                </Grid>
-              </form>
+                      </Grid>
+                      <Grid item xs={12}>
+                        <Box mt={2}>
+                          <Button variant="contained" color="primary" startIcon={<SendIcon />}
+                            type="submit"
+                            disabled={accessCodeFormSubmitDisabled}
+                          >
+                            {messageI18NResolver("ACCESSCODEFORM_SUBMIT_LABEL") || "Get an access code"}
+                          </Button>
+                        </Box>
+                      </Grid>
+                    </Grid>
+                  </form>
+                </Fragment>
+              }
               <Box m={8} />
               <form onSubmit={loginForm.handleSubmit(loginOnSubmit)}>
                 <Grid container justify="center" spacing={2}>
                   <Grid item xs={12}>
-                    <Typography variant="body2">Login using your access code:</Typography>
+                    <Typography variant="body2">
+                      {messageI18NResolver("LOGINFORM_TITLE") || "Login using your access code:"}
+                    </Typography>
                   </Grid>
                   <Grid item xs={12}>
                     <Controller
@@ -344,9 +453,9 @@ const AuthenticationCard = (props) => {
                       <Button variant="contained" color="primary" startIcon={<LockOpenIcon />}
                         // onClick={loginOnSubmit}
                         type="submit"
-                        disabled={!(loginForm.formState.isValid || loginForm.formState.isSubmitting)}
+                        disabled={loginFormSubmitDisabled}
                       >
-                        {messageI18NResolver("LOGINFORM_BUTTON_LABEL") || "Log in"}
+                        {messageI18NResolver("LOGINFORM_SUBMIT_LABEL") || "Login"}
                       </Button>
                     </Box>
                   </Grid>
@@ -354,12 +463,19 @@ const AuthenticationCard = (props) => {
               </form>
             </Grid>
           </Grid>
-          {/* </CardContent> */}
         </Card>
       </ExpansionPanelDetails>
     </ExpansionPanel>
 
   );
+};
+
+AuthenticationCard.propTypes = {
+  requireAuthMsg: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.func,
+    PropTypes.element
+  ])
 };
 
 export default AuthenticationCard;

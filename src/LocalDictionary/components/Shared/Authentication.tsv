@@ -9,6 +9,9 @@ ERR_AUTH_INVALID_CREDENTIALS	Invalid authentifcation information	Les information
 ERR_AUTH_INVALID_USER_STATE	User account's state is invalid	L'état du compte utilisateur est invalide
 ERR_AUTH_USER_EXPIRED	User account is expired	Le compte utilisateur a expiré
 ERR_AUTH_SESSION_EXPIRED	Your session has expired	Votre session a expirée
+AUTHCARD_REQUIREAUTH_TEXT	Please login in order to access this service.	Veuillez vous identifier pour accéder au service.
+AUTHCARD_EXPLANATION_TEXT	To access the service, you need to create an account. During registration, your demand will be reviewed and validated by our service before account activation. Once your account activated, you'll be able to request an access code to login.	Vous devez créer un compte pour accédder au service. Après réception de votre demande d'enregistrement, celle-ci sera analysée et validée par nos services avant l'activation de votre compte. Une fois votre compte activé, vous serez averti par email et vous pourrez demander un code d'accès pour vous identifier.
+REGISTRATIONFORM_TITLE	Not already registered? Register for an access to the service:	Pas encore de compte ? Demandez un accès au service:
 REGISTRATIONFORM_EMAIL_LABEL	Email	Email
 REGISTRATIONFORM_EMAIL_PLACEHOLDER	Enter your email address	Saisissez votre adresse mail
 REGISTRATIONFORM_EMAIL_ERR_REQUIRED	Email address is required	Veuillez saisir une address mail
@@ -25,13 +28,21 @@ REGISTRATIONFORM_COMPANY_ERR_REQUIRED	Company is required	Veuillez saisir le nom
 REGISTRATIONFORM_POSITION_LABEL	Position	Qualité
 REGISTRATIONFORM_POSITION_PLACEHOLDER	Enter your position	Saisissez votre qualité
 REGISTRATIONFORM_POSITION_ERR_REQUIRED	Position is required	Veuillez saisir votre qualité
-REGISTRATIONFORM_BUTTON_LABEL	Register	S'enregistrer
+REGISTRATIONFORM_SUBMIT_LABEL	Register	S'enregistrer
+REGISTRATIONFORM_SUCCESS_TEXT	Your registration request has been sent successfully and will be reviewed shortly by our service. You will receive a notification by email once your account is activated.	Nous avons bien reçu votre demande de compte d'accès et allons la traiter dans les plus brefs délais. Vous serez notifié par email lorsque votre compte sera activé.
+REGISTRATIONFORM_SUCCESS_RESET_LABEL	New request	Nouvelle demande
+ACCESSCODEFORM_TITLE	Already registered? Get an access code:	Déjà inscrit ? Demandez un code d'accès :
 ACCESSCODEFORM_EMAIL_LABEL	Email	Email
 ACCESSCODEFORM_EMAIL_PLACEHOLDER	Enter your email address	Saisissez votre adresse mail
 ACCESSCODEFORM_EMAIL_ERR_REQUIRED	Email address is required	Veuillez saisir une addresse mail
 ACCESSCODEFORM_EMAIL_ERR_EMAIL	Email address must be valid	L'adresse mail est invalide
-ACCESSCODEFORM_BUTTON_LABEL	Get an Access Code	Obtenir un code d'accès
+ACCESSCODEFORM_SUBMIT_LABEL	Get an Access Code	Obtenir un code d'accès
+ACCESSCODEFORM_SUCCESS_TEXT	Your access code request has been sent successfully. If your account is valid, you should receive your access code by email in a few minutes.	Nous avons bien reçu votre demande de code d'accès. Si votre compte est actif, vous recevrez votre code par email dans quelques minutes.
+ACCESSCODEFORM_SUCCESS_RESET_LABEL	New request	Nouvelle demande
+LOGINFORM_TITLE	Login using your access code:	S'identifier avec un code d'accès :
 LOGINFORM_ACCESSCODE_LABEL	Access Code	Code d'accès
 LOGINFORM_ACCESSCODE_PLACEHOLDER	Enter your access code	Saisissez votre code d'accès
 LOGINFORM_ACCESSCODE_ERR_REQUIRED	Access code is required	Veuillez saisir un code d'accès
-LOGINFORM_BUTTON_LABEL	Log in	S'identifier
+LOGINFORM_SUBMIT_LABEL	Login	S'identifier
+LOGUSER_TEMPLATE	Wellcome <%= user.firstName %> <%= user.lastName %> (<%= user.email %>)	Bonjour <%= user.firstName %> <%= user.lastName %> (<%= user.email %>)
+LOGUSER_LOGOUT_LABEL	Logout	Deconnexion
