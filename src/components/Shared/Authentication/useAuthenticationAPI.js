@@ -10,16 +10,22 @@ import { ERR_AUTH_INVALID_PARAMS, ERR_AUTH_BAD_REQUEST, ERR_AUTH_SERVER_ERROR, E
 
 import { useDispatch, useSelector } from "react-redux";
 
-import { userRegistrationSentAction, userAccessCodeRequestSentAction, userLoginAction, userTokenRefreshedAction, userSessionExpiredAction } from '../../../redux/actions/authenticationActions';
+import { userRegistrationSentAction, userAccessCodeRequestSentAction, userLoginAction, userTokenRefreshedAction, userSessionExpiredAction, userRegistrationLoadingAction, userAccessCodeRequestLoadingAction, userLoginLoadingAction, userLogoutAction } from '../../../redux/actions/authenticationActions';
 
 
+/**
+ * Authentication API hook.
+ *
+ * @returns
+ */
 export default function useAuthenticationAPI() {
 
   // Global REST client parameters
   const defaultTimeout = 5000;
+  const loginTimeout = 30000;
   const jsonContentType = "application/json";
   const authSrvBaseURL = `${process.env.REACT_APP_AUTH_BASE_URL}/api/v1/auth`;
-  
+
   // Services URL
   const AUTH_SRV_REGISTER_USER_URL = "/registration";
   const AUTH_SRV_REQUEST_ACCESS_CODE_URL = "/accesscode";
@@ -47,7 +53,7 @@ export default function useAuthenticationAPI() {
         }
       });
     }
-  
+
     // Service request
     const srvRequest = {
       email: request.email,
@@ -55,11 +61,12 @@ export default function useAuthenticationAPI() {
       lastName: request.lastName,
       company: request.company,
       position: request.position,
-      preferredLanguages: request.preferredLanguages || [ lang ],
+      preferredLanguages: request.preferredLanguages || [lang],
       timezone: request.timezone || Intl.DateTimeFormat().resolvedOptions().timeZone
     };
-  
+
     // Make service call
+    dispatch(userRegistrationLoadingAction());
     return axios.post(AUTH_SRV_REGISTER_USER_URL, srvRequest, {
       baseURL: authSrvBaseURL,
       headers: {
@@ -72,6 +79,7 @@ export default function useAuthenticationAPI() {
         status: response.status
       });
     }, error => {
+      dispatch(userRegistrationLoadingAction(false));
       if (error.response) {
         if (error.response.status === 400) {
           return Promise.reject({
@@ -119,6 +127,7 @@ export default function useAuthenticationAPI() {
     };
 
     // Call service
+    dispatch(userAccessCodeRequestLoadingAction());
     return axios.post(AUTH_SRV_REQUEST_ACCESS_CODE_URL, srvRequest, {
       baseURL: authSrvBaseURL,
       headers: {
@@ -131,6 +140,7 @@ export default function useAuthenticationAPI() {
         status: response.status
       });
     }, error => {
+      dispatch(userAccessCodeRequestLoadingAction(false));
       if (error.response) {
         if (error.response.status === 400) {
           return Promise.reject({
@@ -178,12 +188,13 @@ export default function useAuthenticationAPI() {
     };
 
     // Call service
+    dispatch(userLoginLoadingAction());
     return axios.post(AUTH_SRV_LOGIN_URL, srvRequest, {
       baseURL: authSrvBaseURL,
       headers: {
         ContentType: jsonContentType
       },
-      timeout: defaultTimeout
+      timeout: loginTimeout
     }).then(response => {
       const accessToken = response.data.token;
       const userInfo = response.data.user;
@@ -201,6 +212,7 @@ export default function useAuthenticationAPI() {
           }
         });
       } catch (jwtError) {
+        dispatch(userLoginLoadingAction(false));
         // Invalid token
         return Promise.reject({
           error: {
@@ -210,7 +222,8 @@ export default function useAuthenticationAPI() {
         });
       }
     }, error => {
-      console.log("Error calling loggin service: ", error);
+      // console.log("Error calling loggin service: ", error);
+      dispatch(userLoginLoadingAction(false));
       if (error.response) {
         switch (error.response.status) {
           case 400:
@@ -272,10 +285,17 @@ export default function useAuthenticationAPI() {
     });
   };
 
+  /**
+   * Logout current user.
+   *
+   * @returns {Promise<Object>} Result as a Promise.
+   */
   const logout = () => {
-    // TODO
-  }
-  
+    // TODO: logout on authentication server to invalidate token and refresh token
+    dispatch(userLogoutAction());
+    return Promise.resolve();
+  };
+
   /**
    * Refresh the JWT access token.
    *
@@ -287,7 +307,8 @@ export default function useAuthenticationAPI() {
       // headers: {
       //   ContentType: jsonContentType
       // },
-      timeout: defaultTimeout
+      // timeout: defaultTimeout
+      timeout: 10000
     }).then(response => {
       const accessToken = response.data.token;
       // Decode JWT token
@@ -359,7 +380,7 @@ export default function useAuthenticationAPI() {
     login,
     logout,
     refreshToken
-  }
+  };
 };
 
 /**

@@ -2,13 +2,16 @@
  * Authentication Redux reducer function.
  */
 
- import _ from "lodash";
+import _ from "lodash";
 
-import { AUTH_USER_REGISTRATION_SENT, AUTH_ACCESS_CODE_REQUEST_SENT, AUHT_USER_LOGIN, AUHT_USER_LOGOUT, AUTH_TOKEN_INVALID, AUTH_TOKEN_REFRESHED, AUTH_USER_SESSION_EXPIRED } from "../actions/authenticationActions";
+import { AUTH_USER_REGISTRATION_LOADING, AUTH_USER_REGISTRATION_SENT, AUTH_ACCESS_CODE_REQUEST_LOADING, AUTH_ACCESS_CODE_REQUEST_SENT, AUTH_USER_LOGIN_LOADING, AUTH_USER_LOGIN, AUTH_USER_LOGOUT, AUTH_TOKEN_INVALID, AUTH_TOKEN_REFRESHED, AUTH_USER_SESSION_EXPIRED } from "../actions/authenticationActions";
 
 const defaultState = {
+  userRegistrationLoading: false,
   userRegistrationSent: false,
+  accessCodeRequestLoading: false,
   accessCodeRequestSent: false,
+  userLoginLoading: false,
   userAuthenticated: false,
   accessToken: null,
   accessTokenExpiry: null,
@@ -32,16 +35,31 @@ const defaultState = {
 function authenticationReducer(state = defaultState, action) {
   switch (action.type) {
 
+    case AUTH_USER_REGISTRATION_LOADING:
+      state.userRegistrationLoading = action.payload;
+      break;
+
     case AUTH_USER_REGISTRATION_SENT:
-      state.userRegistrationSent = true;
+      state.userRegistrationLoading = false;
+      state.userRegistrationSent = action.payload;
+      break;
+
+    case AUTH_ACCESS_CODE_REQUEST_LOADING:
+      state.accessCodeRequestLoading = action.payload;
       break;
 
     case AUTH_ACCESS_CODE_REQUEST_SENT:
-      state.accessCodeRequestSent = true;
+      state.accessCodeRequestLoading = false;
+      state.accessCodeRequestSent = action.payload;
       break;
 
-    case AUHT_USER_LOGIN:
+    case AUTH_USER_LOGIN_LOADING:
+      state.userLoginLoading = action.payload;
+      break;
+
+    case AUTH_USER_LOGIN:
       // State user as logged in and add user authentication information.
+      state.userLoginLoading = false;
       state.userAuthenticated = true;
       state.accessToken = action.payload.accessToken;
       state.accessTokenExpiry = action.payload.accessTokenExpiry;
@@ -55,7 +73,7 @@ function authenticationReducer(state = defaultState, action) {
       state.user = action.payload.user;
       break;
 
-    case AUHT_USER_LOGOUT:
+    case AUTH_USER_LOGOUT:
       // State user as not logged and remove user authentication information.
       state.userAuthenticated = false;
       state.accessToken = null;
@@ -97,7 +115,7 @@ function authenticationReducer(state = defaultState, action) {
       break;
   }
 
-    return state;
+  return state;
 };
 
 export default authenticationReducer;
