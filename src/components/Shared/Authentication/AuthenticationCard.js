@@ -22,8 +22,9 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Card from "@material-ui/core/Card";
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
-import TextField from '@material-ui/core/TextField';
 import Box from '@material-ui/core/Box';
+import TextField from '@material-ui/core/TextField';
+import MenuItem from '@material-ui/core/MenuItem';
 import Button from '@material-ui/core/Button';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import Divider from '@material-ui/core/Divider';
@@ -43,10 +44,15 @@ const registrationValidationSchema = yup.object().shape({
     .required("REGISTRATIONFORM_FIRSTNAME_ERR_REQUIRED"),
   lastName: yup.string()
     .required("REGISTRATIONFORM_LASTNAME_ERR_REQUIRED"),
-  company: yup.string()
-    .required("REGISTRATIONFORM_COMPANY_ERR_REQUIRED"),
-  position: yup.string()
-    .required("REGISTRATIONFORM_POSITION_ERR_REQUIRED")
+  organization: yup.string()
+    .required("REGISTRATIONFORM_ORGANIZATION_ERR_REQUIRED"),
+  organizationRole: yup.string()
+    .required("REGISTRATIONFORM_ORGANIZATIONROLE_ERR_REQUIRED"),
+  organizationRoleOther: yup.string().when('organizationRole', {
+    is: 'OTHER',
+    then: yup.string().required("REGISTRATIONFORM_ORGANIZATIONROLEOTHER_ERR_REQUIRED"),
+    otherwise: yup.string().notRequired()
+  })
 });
 
 const accessCodeValidationSchema = yup.object().shape({
@@ -110,8 +116,9 @@ const AuthenticationCard = (props) => {
       email: data.email,
       firstName: data.firstName,
       lastName: data.lastName,
-      company: data.company,
-      position: data.position
+      organization: data.organization,
+      organizationRole: data.organizationRole,
+      organizationRoleOther: data.organizationRoleOther
     }).then(result => {
       registrationForm.reset();
     }).catch(error => {
@@ -167,7 +174,6 @@ const AuthenticationCard = (props) => {
   // If authenticated
   if (userAuthenticated) {
     const logUserMsg = _.template(messageI18NResolver("LOGUSER_TEMPLATE") || "Wellcome <%= user.firstName %> <%= user.lastName %> (<%= user.email %>)")({ user });
-    // `You are logged as ${user && user.firstName} ${user && user.lastName} (${user && user.email})`
     return (
       <Fragment>
         <Toolbar>
@@ -178,7 +184,7 @@ const AuthenticationCard = (props) => {
           </Typography>
           <div style={{ flexGrow: 1 }} />
           <Button variant="contained" color="secondary" startIcon={<LockIcon />} onClick={logoutOnClick}>
-            { messageI18NResolver("LOGUSER_LOGOUT_LABEL") || "Logout" }
+            {messageI18NResolver("LOGUSER_LOGOUT_LABEL") || "Logout"}
           </Button>
         </Toolbar>
       </Fragment>
@@ -304,18 +310,18 @@ const AuthenticationCard = (props) => {
                       </Grid>
                       <Grid item xs={12}>
                         <Controller
-                          name="company"
+                          name="organization"
                           as={
                             <TextField
-                              id="registration-company"
-                              label={messageI18NResolver("REGISTRATIONFORM_COMPANY_LABEL") || "Company"}
-                              placeholder={messageI18NResolver("REGISTRATIONFORM_COMPANY_PLACEHOLDER") || "Enter your company name"}
+                              id="registration-organization"
+                              label={messageI18NResolver("REGISTRATIONFORM_ORGANIZATION_LABEL") || "Organization"}
+                              placeholder={messageI18NResolver("REGISTRATIONFORM_ORGANIZATION_PLACEHOLDER") || "Enter your organization name"}
                               fullWidth
                               autoComplete="organization"
                               required
-                              error={_.hasIn(registrationForm.errors, "company")}
-                              helperText={registrationForm.errors.company
-                                && (messageI18NResolver(registrationForm.errors.company.message) || "Company name is required")}
+                              error={_.hasIn(registrationForm.errors, "organization")}
+                              helperText={registrationForm.errors.organization
+                                && (messageI18NResolver(registrationForm.errors.organization.message) || "Organization name is required")}
                             />
                           }
                           control={registrationForm.control}
@@ -324,18 +330,43 @@ const AuthenticationCard = (props) => {
                       </Grid>
                       <Grid item xs={12}>
                         <Controller
-                          name="position"
+                          name="organizationRole"
                           as={
                             <TextField
-                              id="registration-position"
-                              label={messageI18NResolver("REGISTRATIONFORM_POSITION_LABEL") || "Position"}
-                              placeholder={messageI18NResolver("REGISTRATIONFORM_POSITION_PLACEHOLDER") || "Enter your position"}
+                              id="registration-organizationRole"
+                              label={messageI18NResolver("REGISTRATIONFORM_ORGANIZATIONROLE_LABEL") || "Role"}
+                              placeholder={messageI18NResolver("REGISTRATIONFORM_ORGANIZATIONROLE_PLACEHOLDER") || "Select your role within organization"}
+                              select
                               fullWidth
                               autoComplete="organization-title"
                               required
-                              error={_.hasIn(registrationForm.errors, "position")}
-                              helperText={registrationForm.errors.position
-                                && (messageI18NResolver(registrationForm.errors.position.message) || "Position is required")}
+                              error={_.hasIn(registrationForm.errors, "organizationRole")}
+                              helperText={registrationForm.errors.organizationRole
+                                && (messageI18NResolver(registrationForm.errors.organizationRole.message) || "Role within organization is required")}
+                            >
+                              <MenuItem key="REPORTER" value="REPORTER">{messageI18NResolver("REGISTRATIONFORM_ORGANIZATIONROLE_REPORTER_LABEL") || "Reporter"}</MenuItem>
+                              <MenuItem key="FAKE_NEWS_CHECKER" value="FAKE_NEWS_CHECKER">{messageI18NResolver("REGISTRATIONFORM_ORGANIZATIONROLE_FAKENEWSCHECKER_LABEL") || "Fake news checker"}</MenuItem>
+                              <MenuItem key="OTHER" value="OTHER">{messageI18NResolver("REGISTRATIONFORM_ORGANIZATIONROLE_OTHER_LABEL") || "Other"}</MenuItem>
+                            </TextField>
+                          }
+                          control={registrationForm.control}
+                          defaultValue=""
+                        />
+                      </Grid>
+                      <Grid item xs={12}>
+                        <Controller
+                          name="organizationRoleOther"
+                          as={
+                            <TextField
+                              id="registration-organizationRoleOther"
+                              label={messageI18NResolver("REGISTRATIONFORM_ORGANIZATIONROLEOTHER_LABEL") || "Role (other)"}
+                              placeholder={messageI18NResolver("REGISTRATIONFORM_ORGANIZATIONROLEOTHER_PLACEHOLDER") || "Enter your role within organization"}
+                              fullWidth
+                              autoComplete="organization-title"
+                              // required
+                              error={_.hasIn(registrationForm.errors, "organizationRoleOther")}
+                              helperText={registrationForm.errors.organizationRoleOther
+                                && (messageI18NResolver(registrationForm.errors.organizationRoleOther.message) || "Please fill in your role within organization")}
                             />
                           }
                           control={registrationForm.control}

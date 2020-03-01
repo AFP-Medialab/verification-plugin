@@ -22,12 +22,18 @@ REGISTRATIONFORM_FIRSTNAME_ERR_REQUIRED	Firstname is required	Veuillez saisir vo
 REGISTRATIONFORM_LASTNAME_LABEL	Last name	Nom
 REGISTRATIONFORM_LASTNAME_PLACEHOLDER	Enter your last name	Saisissez votre nom
 REGISTRATIONFORM_LASTNAME_ERR_REQUIRED	Lastname is required	Veuillez saisir votre nom
-REGISTRATIONFORM_COMPANY_LABEL	Company	Entreprise
-REGISTRATIONFORM_COMPANY_PLACEHOLDER	Enter your company name	Saisissez le nom de votre entreprise
-REGISTRATIONFORM_COMPANY_ERR_REQUIRED	Company is required	Veuillez saisir le nom de votre entreprise
-REGISTRATIONFORM_POSITION_LABEL	Position	Qualité
-REGISTRATIONFORM_POSITION_PLACEHOLDER	Enter your position	Saisissez votre qualité
-REGISTRATIONFORM_POSITION_ERR_REQUIRED	Position is required	Veuillez saisir votre qualité
+REGISTRATIONFORM_ORGANIZATION_LABEL	Organization	Organisation
+REGISTRATIONFORM_ORGANIZATION_PLACEHOLDER	Enter your organization name	Saisissez le nom de votre organisation
+REGISTRATIONFORM_ORGANIZATION_ERR_REQUIRED	Organization is required	Veuillez saisir le nom de votre organisation
+REGISTRATIONFORM_ORGANIZATIONROLE_LABEL	Role	Role
+REGISTRATIONFORM_ORGANIZATIONROLE_REPORTER_LABEL	Reporter	Journaliste
+REGISTRATIONFORM_ORGANIZATIONROLE_FAKENEWSCHECKER_LABEL	Fake news checker	Controleur de Fake News
+REGISTRATIONFORM_ORGANIZATIONROLE_OTHER_LABEL	Other	Autre
+REGISTRATIONFORM_ORGANIZATIONROLE_PLACEHOLDER	Select your role within organization	Sélectionnez votre role au sein de l'organisation
+REGISTRATIONFORM_ORGANIZATIONROLE_ERR_REQUIRED	Role within organization is required	Veuillez sélectionner votre role au sein de l'organisation
+REGISTRATIONFORM_ORGANIZATIONROLEOTHER_LABEL	Role (Other)	Role (Autre)
+REGISTRATIONFORM_ORGANIZATIONROLEOTHER_PLACEHOLDER	Enter your role within organization	Saisissez votre role au sein de l'organisation
+REGISTRATIONFORM_ORGANIZATIONROLEOTHER_ERR_REQUIRED	Please fill in your role within organization	Veuillez saisir votre role au sein de l'organisation
 REGISTRATIONFORM_SUBMIT_LABEL	Register	S'enregistrer
 REGISTRATIONFORM_SUCCESS_TEXT	Your registration request has been sent successfully and will be reviewed shortly by our service. You will receive a notification by email once your account is activated.	Nous avons bien reçu votre demande de compte d'accès et allons la traiter dans les plus brefs délais. Vous serez notifié par email lorsque votre compte sera activé.
 REGISTRATIONFORM_SUCCESS_RESET_LABEL	New request	Nouvelle demande
