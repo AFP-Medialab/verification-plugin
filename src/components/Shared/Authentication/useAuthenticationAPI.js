@@ -59,8 +59,9 @@ export default function useAuthenticationAPI() {
       email: request.email,
       firstName: request.firstName,
       lastName: request.lastName,
-      company: request.company,
-      position: request.position,
+      organization: request.organization,
+      organizationRole: request.organizationRole,
+      organizationRoleOther: request.organizationRoleOther,
       preferredLanguages: request.preferredLanguages || [lang],
       timezone: request.timezone || Intl.DateTimeFormat().resolvedOptions().timeZone
     };
