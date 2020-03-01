@@ -222,9 +222,10 @@ const TwitterSna = () => {
   };
 
   // const [submittedRequest, setSubmittedRequest] = useState(null);
-  const [submittedRequest, setSubmittedRequest] = useState(userAuthenticated
-    ? null
-    : makeRequest()
+  const [submittedRequest, setSubmittedRequest] = useState(
+    userAuthenticated ?
+      null :
+      makeRequest()
   );
   useTwitterSnaRequest(submittedRequest);
 
