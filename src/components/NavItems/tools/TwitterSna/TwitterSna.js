@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setError } from "../../../../redux/actions/errorActions";
 
 import dateFormat from "dateformat";
+import _ from "lodash";
 
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import { makeStyles } from "@material-ui/core/styles";
@@ -35,6 +36,7 @@ import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/TwitterSna.tsv";
 import { submissionEvent } from "../../../Shared/GoogleAnalytics/GoogleAnalytics";
 import AuthenticationCard from "../../../Shared/Authentication/AuthenticationCard";
+import { setTwitterSnaResult } from '../../../../redux/actions/tools/twitterSnaActions';
 
 
 const TwitterSna = () => {
@@ -55,11 +57,13 @@ const TwitterSna = () => {
 
   // Component state (default sample values if not authenticated)
   const [keyWords, setKeywords] = useState(
-    request && request.keywordList ?
-      request.keywordList.join(" ") :
-      userAuthenticated ?
-        "" :
-        "\"fake news\""
+    userAuthenticated ?
+      (
+        request && request.keywordList ?
+          request.keywordList.join(" ") :
+          ""
+      ) :
+      "\"fake news\""
   );
   const [keyWordsError, setKeyWordsError] = useState(false);
   const [bannedWords, setBannedWords] = useState(
@@ -68,34 +72,42 @@ const TwitterSna = () => {
       ""
   );
   const [usersInput, setUsersInput] = useState(
-    request && request.userList ?
-      request.userList.join(" ") :
-      userAuthenticated ?
-        "" :
-        "@realDonaldTrump"
+    userAuthenticated ?
+      (
+        request && request.userList ?
+          request.userList.join(" ") :
+          ""
+      ) :
+      "@realDonaldTrump"
   );
   const [since, setSince] = useState(
-    request ?
-      request.from :
-      userAuthenticated ?
-        null :
-        new Date("2016-12-10T00:00:00")
+    userAuthenticated ?
+      (
+        request ?
+          request.from :
+          null
+      ) :
+      new Date("2016-12-10T00:00:00")
   );
   const [sinceError, setSinceError] = useState(false);
   const [until, setUntil] = useState(
-    request ?
-      request.until :
-      userAuthenticated ?
-        null :
-        new Date("2020-01-01T00:00:00")
+    userAuthenticated ?
+      (
+        request ?
+          request.until :
+          null
+      ) :
+      new Date("2020-01-01T00:00:00")
   );
   const [untilError, setUntilError] = useState(false);
   const [langInput, setLangInput] = useState(
-    request && request.lang ?
-      "lang_" + request.lang :
-      userAuthenticated ?
-        "lang_all" :
-        "lang_en"
+    userAuthenticated ?
+      (
+        request && request.lang ?
+          "lang_" + request.lang :
+          "lang_all"
+      ) :
+      "lang_en"
   );
   const [openLangInput, setLangInputOpen] = React.useState(false);
   const [filters, setFilers] = useState(
@@ -125,36 +137,41 @@ const TwitterSna = () => {
     });
   }
 
-  const makeRequest = () => {
+  const makeRequestParams = (keywordsP, bannedWordsP, usersInputP, sinceP, untilP, localTimeP, langInputP, filtersP, verifiedUsersP) => {
     //Creating Request Object.
     const removeQuotes = (list) => {
       let res = [];
-      list.map(string => {
-        res.push(replaceAll(string, "\"", ""));
-      });
+      !_.isNil(list) &&
+        list.map(string => {
+          res.push(replaceAll(string, "\"", ""));
+        });
       return res;
     };
 
-    let trimedKeywords = removeQuotes(keyWords.trim().match(/("[^"]+"|[^"\s]+)/g));
+    let trimedKeywords = !_.isNil(keywordsP) ? removeQuotes(keywordsP.trim().match(/("[^"]+"|[^"\s]+)/g)) : [];
 
     let trimedBannedWords = null;
-    if (bannedWords.trim() !== "")
-      trimedBannedWords = removeQuotes(bannedWords.trim().match(/("[^"]+"|[^"\s]+)/g));
+    if (!_.isNil(bannedWordsP) && bannedWordsP.trim() !== "")
+      trimedBannedWords = removeQuotes(bannedWordsP.trim().match(/("[^"]+"|[^"\s]+)/g));
 
+    const newFrom = (localTimeP === "false") ? convertToGMT(sinceP) : sinceP;
+    const newUntil = (localTimeP === "false") ? convertToGMT(untilP) : untilP;
 
-    const newFrom = (localTime === "false") ? convertToGMT(since) : since;
-    const newUntil = (localTime === "false") ? convertToGMT(until) : until;
     return {
       "keywordList": trimedKeywords,
       "bannedWords": trimedBannedWords,
-      "lang": (langInput === "lang_all") ? null : langInput.replace("lang_", ""),
-      "userList": stringToList(usersInput),
+      "lang": (langInputP === "lang_all") ? null : langInputP.replace("lang_", ""),
+      "userList": stringToList(usersInputP),
       "from": dateFormat(newFrom, "yyyy-mm-dd HH:MM:ss"),
       "until": dateFormat(newUntil, "yyyy-mm-dd HH:MM:ss"),
-      "verified": String(verifiedUsers) === "true",
-      "media": (filters === "none") ? null : filters,
+      "verified": String(verifiedUsersP) === "true",
+      "media": (filtersP === "none") ? null : filtersP,
       "retweetsHandling": null
     };
+  };
+
+  const makeRequest = () => {
+    return makeRequestParams(keyWords, bannedWords, usersInput, since, until, localTime, langInput, filters, verifiedUsers);
   };
 
   const sinceDateIsValid = (momentDate) => {
@@ -228,6 +245,63 @@ const TwitterSna = () => {
       makeRequest()
   );
   useTwitterSnaRequest(submittedRequest);
+
+  // Reset form & result when user login
+  useEffect(() => {
+    console.log("Auth change (authenticated: ", userAuthenticated, "), updating fields");
+
+    setKeywords(userAuthenticated ?
+      "" :
+      "\"fake news\""
+    );
+    setBannedWords("");
+    setUsersInput(userAuthenticated ?
+      "" :
+      "@realDonaldTrump"
+    );
+    setSince(userAuthenticated ?
+      null :
+      new Date("2016-12-10T00:00:00")
+    );
+    setUntil(userAuthenticated ?
+      null :
+      new Date("2020-01-01T00:00:00")
+    );
+    setLocalTime("true");
+    setLangInput(userAuthenticated ?
+      "lang_all" :
+      "lang_en"
+    );
+    setFilers("none");
+    setVerifiedUsers("false");
+
+    // console.log("Keywords: ", keyWords);
+    // console.log("UsersInput: ", usersInput);
+
+    const newSubmittedRequest = makeRequestParams(
+      userAuthenticated ?
+        "" :
+        "\"fake news\"",
+      "",
+      userAuthenticated ?
+        "" :
+        "@realDonaldTrump",
+      userAuthenticated ?
+        null :
+        new Date("2016-12-10T00:00:00"),
+      userAuthenticated ?
+        null :
+        new Date("2020-01-01T00:00:00"),
+      "true",
+      userAuthenticated ?
+        "lang_all" :
+        "lang_en",
+      "none",
+      "false"
+    );
+    console.log("Updating submittedRequest: ", newSubmittedRequest);
+    setSubmittedRequest(newSubmittedRequest);
+  }, [userAuthenticated]);
 
   return (
     <div>
