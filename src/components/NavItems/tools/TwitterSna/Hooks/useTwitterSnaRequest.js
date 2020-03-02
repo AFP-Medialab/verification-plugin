@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setError } from "../../../../../redux/actions/errorActions";
 import { setTwitterSnaLoading, setTwitterSnaResult, setTwitterSnaLoadingMessage } from "../../../../../redux/actions/tools/twitterSnaActions";
 import axios from "axios";
+import _ from "lodash";
 
 import {
   getPlotlyJsonDonuts,
@@ -72,8 +73,16 @@ const useTwitterSnaRequest = (request) => {
   useEffect(() => {
     // console.log("useTwitterSnaRequest.useEffect request: ", request);
 
-    if (request === null)
+    // Check request
+    if (_.isNil(request)
+      || (_.isNil(request.keywordList) || _.isEmpty(request.keywordList))
+      || (_.isNil(request.userList) || _.isEmpty(request.userList))
+      || _.isNil(request.from)
+      || _.isNil(request.until)) {
+      console.log("Empty request, resetting result: ", request);
+      dispatch(setTwitterSnaResult(request, null, false, false));
       return;
+    }
 
     let tweetIE = { text: "" };
 
