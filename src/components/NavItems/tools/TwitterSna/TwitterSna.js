@@ -248,7 +248,7 @@ const TwitterSna = () => {
 
   // Reset form & result when user login
   useEffect(() => {
-    console.log("Auth change (authenticated: ", userAuthenticated, "), updating fields");
+    // console.log("Auth change (authenticated: ", userAuthenticated, "), updating fields");
 
     setKeywords(userAuthenticated ?
       "" :
@@ -275,9 +275,6 @@ const TwitterSna = () => {
     setFilers("none");
     setVerifiedUsers("false");
 
-    // console.log("Keywords: ", keyWords);
-    // console.log("UsersInput: ", usersInput);
-
     const newSubmittedRequest = makeRequestParams(
       userAuthenticated ?
         "" :
@@ -299,7 +296,7 @@ const TwitterSna = () => {
       "none",
       "false"
     );
-    console.log("Updating submittedRequest: ", newSubmittedRequest);
+    // console.log("Updating submittedRequest: ", newSubmittedRequest);
     setSubmittedRequest(newSubmittedRequest);
   }, [userAuthenticated]);
 
