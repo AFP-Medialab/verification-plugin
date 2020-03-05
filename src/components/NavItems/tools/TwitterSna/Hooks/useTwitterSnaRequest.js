@@ -76,10 +76,10 @@ const useTwitterSnaRequest = (request) => {
     // Check request
     if (_.isNil(request)
       || (_.isNil(request.keywordList) || _.isEmpty(request.keywordList))
-      || (_.isNil(request.userList) || _.isEmpty(request.userList))
+      // || (_.isNil(request.userList) || _.isEmpty(request.userList))
       || _.isNil(request.from)
       || _.isNil(request.until)) {
-      console.log("Empty request, resetting result: ", request);
+      // console.log("Empty request, resetting result: ", request);
       dispatch(setTwitterSnaResult(request, null, false, false));
       return;
     }
