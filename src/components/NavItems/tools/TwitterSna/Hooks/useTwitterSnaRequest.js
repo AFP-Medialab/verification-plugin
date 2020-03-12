@@ -227,6 +227,7 @@ const useTwitterSnaRequest = (request) => {
       result.tweetCount.like = responseArrayOf7[5].likes.toString().replace(/(?=(\d{3})+(?!\d))/g, " ");
       result.tweets = responseArrayOf7[5].tweets;
       result.histogram = createHistogram(data, responseArrayOf7[6], givenFrom, givenUntil);
+      result.communityGraph = { title: "Community graph", "tmpdata": responseArrayOf7[5] };
       if (final) {
         result.cloudChart = createWordCloud(responseArrayOf7[7]);
 

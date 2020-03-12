@@ -24,10 +24,11 @@ import { saveSvgAsPng } from 'save-svg-as-png';
 import { CSVLink } from "react-csv";
 import Cytoscape from 'cytoscape';
 import Fcose from 'cytoscape-fcose';
+import CytoscapeComponent from 'react-cytoscapejs';
 
 import CircularProgress from "@material-ui/core/CircularProgress";
 
-Cytoscape.use( Fcose );
+Cytoscape.use(Fcose);
 
 export default function TwitterSnaResult(props) {
 
@@ -96,7 +97,7 @@ export default function TwitterSnaResult(props) {
 
 
     const displayTweetsOfWord = (word, callback) => {
-        
+
         let columns = [
             { title: keyword('sna_result_username'), field: 'username' },
             { title: keyword('sna_result_date'), field: 'date' },
@@ -106,7 +107,7 @@ export default function TwitterSnaResult(props) {
         ];
         let csvArr = "data:text/csv;charset=utf-8,";
 
-        
+
         // word = word.replace(/_/g, " ");
         let resData = [];
         csvArr += keyword('sna_result_username') + "," +
@@ -116,12 +117,12 @@ export default function TwitterSnaResult(props) {
             keyword('sna_result_like_nb') + "," +
             keyword('elastic_url') + "\n";
 
-        
+
         result.tweets.forEach(tweetObj => {
-            
+
             if (tweetObj._source.tweet.toLowerCase().match(new RegExp('(^|((.)*[\.\(\)0-9\!\?\'\’\‘\"\:\,\/\\\%\>\<\«\»\ ^#]))' + word + '(([\.\(\)\!\?\'\’\‘\"\:\,\/\>\<\«\»\ ](.)*)|$)', "i"))) {
 
-                
+
                 var date = new Date(tweetObj._source.date);
                 //let tweet = getTweetWithClickableLink(tweetObj._source.tweet,tweetObj._source.link);
                 let tmpObj = {
@@ -144,7 +145,7 @@ export default function TwitterSnaResult(props) {
             csvArr: csvArr,
             word: word
         };
-        
+
         callback(tmp);
     }
 
@@ -161,45 +162,45 @@ export default function TwitterSnaResult(props) {
         let maxDate;
         let csvArr = "data:text/csv;charset=utf-8," + keyword("sna_result_username") + "," + keyword("sna_result_date") + "," + keyword("sna_result_tweet") + "," + keyword("sna_result_retweet_nb") + "," + keyword("elastic_url") + "\n";
         let isDays = "isDays";
-        if (!fromHisto) {isDays = "isHours"}
+        if (!fromHisto) { isDays = "isHours" }
 
-            result.tweets.forEach(tweetObj => {
+        result.tweets.forEach(tweetObj => {
 
-                let objDate = new Date(tweetObj._source.date);
-                for (let i = 0; i < data.points.length; i++){
-                    let pointDate = new Date(fromHisto? data.points[i].x : (data.points[i].x + ' ' + data.points[i].y));
-                    if (data.points[i].data.mode !== "lines" && isInRange(pointDate, objDate, isDays)) {
-                        if (minDate === undefined)
-                            minDate = objDate;
-                        if (maxDate === undefined)
-                            maxDate = objDate;
-                        let date = new Date(tweetObj._source.date);
-                        resData.push(
-                            {
-                                username: <a href={"https://twitter.com/" + tweetObj._source.username}
-                                    target="_blank">{tweetObj._source.username}</a>,
-                                date: date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear() + ' ' + date.getHours() + ':' + date.getMinutes(),
-                                tweet: tweetObj._source.tweet,
-                                retweetNb: tweetObj._source.nretweets,
-                                link: tweetObj._source.link
-                            }
-                        );
-                        csvArr += tweetObj._source.username + ',' +
-                            date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear() + '_' + date.getHours() + 'h' + date.getMinutes() + ',"' +
-                            tweetObj._source.tweet + '",' + tweetObj._source.nretweets + "," + tweetObj._source.link + '\n';
-
-
-                        if (minDate > objDate) {
-                            minDate = objDate
+            let objDate = new Date(tweetObj._source.date);
+            for (let i = 0; i < data.points.length; i++) {
+                let pointDate = new Date(fromHisto ? data.points[i].x : (data.points[i].x + ' ' + data.points[i].y));
+                if (data.points[i].data.mode !== "lines" && isInRange(pointDate, objDate, isDays)) {
+                    if (minDate === undefined)
+                        minDate = objDate;
+                    if (maxDate === undefined)
+                        maxDate = objDate;
+                    let date = new Date(tweetObj._source.date);
+                    resData.push(
+                        {
+                            username: <a href={"https://twitter.com/" + tweetObj._source.username}
+                                target="_blank">{tweetObj._source.username}</a>,
+                            date: date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear() + ' ' + date.getHours() + ':' + date.getMinutes(),
+                            tweet: tweetObj._source.tweet,
+                            retweetNb: tweetObj._source.nretweets,
+                            link: tweetObj._source.link
                         }
-                        if (maxDate < objDate) {
-                            maxDate = objDate;
-                        }
+                    );
+                    csvArr += tweetObj._source.username + ',' +
+                        date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear() + '_' + date.getHours() + 'h' + date.getMinutes() + ',"' +
+                        tweetObj._source.tweet + '",' + tweetObj._source.nretweets + "," + tweetObj._source.link + '\n';
+
+
+                    if (minDate > objDate) {
+                        minDate = objDate
                     }
-               }
-            });
-         //  i++;
-      //  });
+                    if (maxDate < objDate) {
+                        maxDate = objDate;
+                    }
+                }
+            }
+        });
+        //  i++;
+        //  });
         return {
             data: resData,
             columns: columns,
@@ -207,8 +208,7 @@ export default function TwitterSnaResult(props) {
         };
     };
 
-    const displayTweetsOfUser = (data, nbType, index) =>
-    {
+    const displayTweetsOfUser = (data, nbType, index) => {
         let columns = [
             { title: keyword('sna_result_date'), field: 'date' },
             { title: keyword('sna_result_tweet'), field: 'tweet', render: getTweetWithClickableLink },
@@ -255,7 +255,7 @@ export default function TwitterSnaResult(props) {
             }
         });
 
-        
+
         let newRes = {
             data: resData,
             columns: columns,
@@ -293,14 +293,13 @@ export default function TwitterSnaResult(props) {
     };
 
     function isInRange(pointDate, objDate, periode) {
-                
-        if (periode === "isHours")
-        {
+
+        if (periode === "isHours") {
             return (((pointDate.getDate() === objDate.getDate()
-                && pointDate.getHours() -1 === objDate.getHours()))
+                && pointDate.getHours() - 1 === objDate.getHours()))
                 && pointDate.getMonth() === objDate.getMonth()
                 && pointDate.getFullYear() === objDate.getFullYear());
-        }   
+        }
         else {
             return (pointDate - objDate) === 0;
         }
@@ -322,8 +321,7 @@ export default function TwitterSnaResult(props) {
         if (index === 3) {
             displayTweetsOfWord(data.points[0].label, setPieCharts3);
         }
-        else
-        {
+        else {
             displayTweetsOfUser(data, nbType, index);
         }
 
@@ -354,14 +352,14 @@ export default function TwitterSnaResult(props) {
     const getCallback = useCallback((callback) => {
 
         return function (word, event) {
-            
+
             const isActive = callback !== "onWordMouseOut";
             const element = event.target;
             const text = select(element);
             text
                 .on("click", () => {
                     if (isActive) {
-                        
+
                         displayTweetsOfWord(word.text, setCloudTweets)
                     }
                 })
@@ -393,7 +391,7 @@ export default function TwitterSnaResult(props) {
     function downloadAsPNG() {
         let svg = document.getElementById("top_words_cloud_chart");
         let name = filesNames + '.png';
-        
+
         saveSvgAsPng(svg.children[0].children[0], name, { backgroundColor: "white", scale: 2 });
     }
 
@@ -421,6 +419,7 @@ export default function TwitterSnaResult(props) {
         return csvData;
     }
 
+    let myCy = "tempPropsForCommunityGraph";
 
     if (result === null)
         return <div />;
@@ -442,21 +441,21 @@ export default function TwitterSnaResult(props) {
                     <ExpansionPanelDetails>
                         {}
                         <div style={{ width: '100%', }}>
-                            { (result.histogram.json && (result.histogram.json.length === 0) &&
-                                 <Typography variant={"body2"}>{keyword("sna_no_data")}</Typography>) }
-                                 {(result.histogram.json && result.histogram.json.length !== 0) &&
-                            <Plot useResizeHandler
-                                style={{ width: '100%', height: "450px" }}
-                                data={result.histogram.json}
-                                layout={result.histogram.layout}
-                                config={result.histogram.config}
-                                onClick={(e) => onHistogramClick(e)}
-                                onPurge={(a, b) => {
-                                    console.log(a);
-                                    console.log(b);
-                                }}
-                            />
-}
+                            {(result.histogram.json && (result.histogram.json.length === 0) &&
+                                <Typography variant={"body2"}>{keyword("sna_no_data")}</Typography>)}
+                            {(result.histogram.json && result.histogram.json.length !== 0) &&
+                                <Plot useResizeHandler
+                                    style={{ width: '100%', height: "450px" }}
+                                    data={result.histogram.json}
+                                    layout={result.histogram.layout}
+                                    config={result.histogram.config}
+                                    onClick={(e) => onHistogramClick(e)}
+                                    onPurge={(a, b) => {
+                                        console.log(a);
+                                        console.log(b);
+                                    }}
+                                />
+                            }
                             <Box m={2} />
                             {
                                 histoTweets &&
@@ -493,7 +492,7 @@ export default function TwitterSnaResult(props) {
                                         actions={goToTweetAction}
                                     />
                                 </div>
-                                            
+
                             }
                         </div>
                     </ExpansionPanelDetails>
@@ -532,82 +531,82 @@ export default function TwitterSnaResult(props) {
                     </ExpansionPanelDetails>
                 </ExpansionPanel>
             }
-                 {
-                   
-                            <ExpansionPanel>
-                                <ExpansionPanelSummary
-                                    expandIcon={<ExpandMoreIcon />}
-                                >
-                                    <Typography className={classes.heading}>{keyword('sna_result_heatMap')}</Typography>
-                                </ExpansionPanelSummary>
-                                <ExpansionPanelDetails>
-                                    {
-                                        result.heatMap && result.heatMap !== "tooLarge" &&
-                                        <Box alignItems="center" justifyContent="center" width={"100%"}>
-                                        { 
-                                            ((result.heatMap.isAllnul) &&
-                                            <Typography variant={"body2"}>{keyword("sna_no_data")}</Typography>) ||
+            {
 
-                                            <Plot
-                                            style={{ width: '100%', height: "450px" }}
-                                            data={result.heatMap.plot}
-                                            config={result.histogram.config}
-                                            onClick={(e) => onHeatMapClick(e)}
-                                            />
-                                        }
-                                    
-                                        {
-                                            heatMapTweets &&
-                                            <div>
-                                                <Grid container justify="space-between" spacing={2}
-                                                    alignContent={"center"}>
-                                                    <Grid item>
-                                                        <Button
-                                                            variant={"contained"}
-                                                            color={"secondary"}
-                                                            onClick={() => setheatMapTweets(null)}>
-                                                            {
-                                                                keyword('sna_result_hide')
-                                                            }
-                                                        </Button>
-                                                    </Grid>
-                                                    <Grid item>
-                                                        <Button
-                                                            variant={"contained"}
-                                                            color={"primary"}
-                                                            onClick={() => downloadClick(heatMapTweets.csvArr, "NAME OF FILE")}>
-                                                            {
-                                                                keyword('sna_result_download')
-                                                            }
-                                                        </Button>
-                                                    </Grid>
-                                                </Grid>
-                                                <Box m={2} />
-                                                <CustomTable title={keyword("sna_result_slected_tweets")}
-                                                    colums={heatMapTweets.columns}
-                                                    data={heatMapTweets.data}
-                                                    actions={goToTweetAction}
-                                                />
-                                            </div>
-                                        }
-                                        </Box>
-                                    }
-                                    {
-                                        result.heatMap && result.heatMap === "tooLarge" &&
-                                    <Typography variant='body2'>{keyword("sna_too_long_for_heatMap")}</Typography>
+                <ExpansionPanel>
+                    <ExpansionPanelSummary
+                        expandIcon={<ExpandMoreIcon />}
+                    >
+                        <Typography className={classes.heading}>{keyword('sna_result_heatMap')}</Typography>
+                    </ExpansionPanelSummary>
+                    <ExpansionPanelDetails>
+                        {
+                            result.heatMap && result.heatMap !== "tooLarge" &&
+                            <Box alignItems="center" justifyContent="center" width={"100%"}>
+                                {
+                                    ((result.heatMap.isAllnul) &&
+                                        <Typography variant={"body2"}>{keyword("sna_no_data")}</Typography>) ||
 
-                                    }
-                                    {
-                                        result.heatMap === undefined &&
-                                        (//<Typography variant='body2'>The heatmap is still loading please wait (ADD TSV)</Typography>
+                                    <Plot
+                                        style={{ width: '100%', height: "450px" }}
+                                        data={result.heatMap.plot}
+                                        config={result.histogram.config}
+                                        onClick={(e) => onHeatMapClick(e)}
+                                    />
+                                }
 
-                                        <CircularProgress className={classes.circularProgress}/>)
+                                {
+                                    heatMapTweets &&
+                                    <div>
+                                        <Grid container justify="space-between" spacing={2}
+                                            alignContent={"center"}>
+                                            <Grid item>
+                                                <Button
+                                                    variant={"contained"}
+                                                    color={"secondary"}
+                                                    onClick={() => setheatMapTweets(null)}>
+                                                    {
+                                                        keyword('sna_result_hide')
+                                                    }
+                                                </Button>
+                                            </Grid>
+                                            <Grid item>
+                                                <Button
+                                                    variant={"contained"}
+                                                    color={"primary"}
+                                                    onClick={() => downloadClick(heatMapTweets.csvArr, "NAME OF FILE")}>
+                                                    {
+                                                        keyword('sna_result_download')
+                                                    }
+                                                </Button>
+                                            </Grid>
+                                        </Grid>
+                                        <Box m={2} />
+                                        <CustomTable title={keyword("sna_result_slected_tweets")}
+                                            colums={heatMapTweets.columns}
+                                            data={heatMapTweets.data}
+                                            actions={goToTweetAction}
+                                        />
+                                    </div>
+                                }
+                            </Box>
+                        }
+                        {
+                            result.heatMap && result.heatMap === "tooLarge" &&
+                            <Typography variant='body2'>{keyword("sna_too_long_for_heatMap")}</Typography>
 
-                                    }
-                                </ExpansionPanelDetails>
-                            </ExpansionPanel>
-                        
-                }
+                        }
+                        {
+                            result.heatMap === undefined &&
+                            (//<Typography variant='body2'>The heatmap is still loading please wait (ADD TSV)</Typography>
+
+                                <CircularProgress className={classes.circularProgress} />)
+
+                        }
+                    </ExpansionPanelDetails>
+                </ExpansionPanel>
+
+            }
             {
                 result.pieCharts &&
                 result.pieCharts.map((obj, index) => {
@@ -623,18 +622,18 @@ export default function TwitterSnaResult(props) {
                                 </ExpansionPanelSummary>
                                 <ExpansionPanelDetails>
                                     <Box alignItems="center" justifyContent="center" width={"100%"}>
-                                    { 
-                                    ((obj.json === null) &&
-                                    <Typography variant={"body2"}>{keyword("sna_no_data")}</Typography>)}
+                                        {
+                                            ((obj.json === null) &&
+                                                <Typography variant={"body2"}>{keyword("sna_no_data")}</Typography>)}
                                         {(obj.json !== null) &&
-                                        <Plot
-                                            data={obj.json}
-                                            layout={obj.layout}
-                                            config={obj.config}
-                                            onClick={e => {
-                                                onDonutsClick(e, obj.title, index)
-                                            }}
-                                        />
+                                            <Plot
+                                                data={obj.json}
+                                                layout={obj.layout}
+                                                config={obj.config}
+                                                onClick={e => {
+                                                    onDonutsClick(e, obj.title, index)
+                                                }}
+                                            />
                                         }
                                         {
                                             pieCharts[index] &&
@@ -677,7 +676,7 @@ export default function TwitterSnaResult(props) {
                 })
             }
             {
-                
+
                 <ExpansionPanel>
                     <ExpansionPanelSummary
                         expandIcon={<ExpandMoreIcon />}
@@ -687,106 +686,138 @@ export default function TwitterSnaResult(props) {
                         <Typography className={classes.heading}>{keyword(result.cloudChart.title)}</Typography>
                     </ExpansionPanelSummary>
                     <ExpansionPanelDetails>
-                    {
-                        result && result.cloudChart && result.cloudChart.json &&
-                        <Box alignItems="center" justifyContent="center" width={"100%"}>
-                            <div height={"500"} width={"100%"} >
-                            { 
-                                    (result.cloudChart.json && result.cloudChart.json.length === 0) &&
-                                    <Typography variant={"body2"}>{keyword("sna_no_data")}</Typography>}
-                                        {(result.cloudChart.json && result.cloudChart.json.length !== 0) &&
-                                <Grid container justify="space-between" spacing={2}
-                                    alignContent={"center"}>
-                                    <Grid item>
-                                        <Button
-                                            variant={"contained"}
-                                            color={"primary"}
-                                            onClick={() => downloadAsPNG()}>
-                                            {
-                                                keyword('sna_result_download_png')
-                                            }
-                                        </Button>
-                                    </Grid>
-                                    <Grid item>
-                                        <CSVLink
-                                            data={getCSVData()} headers={CSVheaders} filename={filesNames + ".csv"} className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary">
-                                            {
-                                                "CSV"
-                                                // keyword('sna_result_download_csv')
-                                            }
-                                        </CSVLink>
-                                    </Grid>
-                                    <Grid item>
-                                        <Button
-                                            variant={"contained"}
-                                            color={"primary"}
-                                            onClick={() => downloadAsSVG()}>
-                                            {
-                                                keyword('sna_result_download_svg')
-                                            }
-                                        </Button>
-                                    </Grid>
-                                </Grid>
-                                }
-                               
-                            </div>
-                            <Box m={2} />
-                            {
+                        {
+                            result && result.cloudChart && result.cloudChart.json &&
+                            <Box alignItems="center" justifyContent="center" width={"100%"}>
+                                <div height={"500"} width={"100%"} >
+                                    {
+                                        (result.cloudChart.json && result.cloudChart.json.length === 0) &&
+                                        <Typography variant={"body2"}>{keyword("sna_no_data")}</Typography>}
+                                    {(result.cloudChart.json && result.cloudChart.json.length !== 0) &&
+                                        <Grid container justify="space-between" spacing={2}
+                                            alignContent={"center"}>
+                                            <Grid item>
+                                                <Button
+                                                    variant={"contained"}
+                                                    color={"primary"}
+                                                    onClick={() => downloadAsPNG()}>
+                                                    {
+                                                        keyword('sna_result_download_png')
+                                                    }
+                                                </Button>
+                                            </Grid>
+                                            <Grid item>
+                                                <CSVLink
+                                                    data={getCSVData()} headers={CSVheaders} filename={filesNames + ".csv"} className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary">
+                                                    {
+                                                        "CSV"
+                                                        // keyword('sna_result_download_csv')
+                                                    }
+                                                </CSVLink>
+                                            </Grid>
+                                            <Grid item>
+                                                <Button
+                                                    variant={"contained"}
+                                                    color={"primary"}
+                                                    onClick={() => downloadAsSVG()}>
+                                                    {
+                                                        keyword('sna_result_download_svg')
+                                                    }
+                                                </Button>
+                                            </Grid>
+                                        </Grid>
+                                    }
+
+                                </div>
+                                <Box m={2} />
+                                {
                                     result.cloudChart.json && (result.cloudChart.json.length !== 0) &&
                                     <div id="top_words_cloud_chart" height={"100%"} width={"100%"}>
                                         <ReactWordcloud key={JSON.stringify(result)} options={result.cloudChart.options} callbacks={call} words={result.cloudChart.json} />
                                     </div>
-                                   
+
                                 }
-                            {
-                                cloudTweets &&
-                                <div>
-                                    <Grid container justify="space-between" spacing={2}
-                                        alignContent={"center"}>
-                                        <Grid item>
-                                            <Button
-                                                variant={"contained"}
-                                                color={"secondary"}
-                                                onClick={() => setCloudTweets(null)}
-                                            >
-                                                {
-                                                    keyword('sna_result_hide')
-                                                }
-                                            </Button>
+                                {
+                                    cloudTweets &&
+                                    <div>
+                                        <Grid container justify="space-between" spacing={2}
+                                            alignContent={"center"}>
+                                            <Grid item>
+                                                <Button
+                                                    variant={"contained"}
+                                                    color={"secondary"}
+                                                    onClick={() => setCloudTweets(null)}
+                                                >
+                                                    {
+                                                        keyword('sna_result_hide')
+                                                    }
+                                                </Button>
+                                            </Grid>
+                                            <Grid item>
+                                                <Button
+                                                    variant={"contained"}
+                                                    color={"primary"}
+                                                    onClick={() => downloadClick(cloudTweets.csvArr, cloudTweets.word)}>
+                                                    {
+                                                        keyword('sna_result_download')
+                                                    }
+                                                </Button>
+                                            </Grid>
                                         </Grid>
-                                        <Grid item>
-                                            <Button
-                                                variant={"contained"}
-                                                color={"primary"}
-                                                onClick={() => downloadClick(cloudTweets.csvArr, cloudTweets.word)}>
-                                                {
-                                                    keyword('sna_result_download')
-                                                }
-                                            </Button>
-                                        </Grid>
-                                    </Grid>
-                                    <Box m={2} />
-                                    <CustomTable
-                                        title={keyword("sna_result_slected_tweets")}
-                                        colums={cloudTweets.columns}
-                                        data={cloudTweets.data}
-                                        actions={goToTweetAction}
-                                    />
-                                </div>
-                            }
-                        </Box>
+                                        <Box m={2} />
+                                        <CustomTable
+                                            title={keyword("sna_result_slected_tweets")}
+                                            colums={cloudTweets.columns}
+                                            data={cloudTweets.data}
+                                            actions={goToTweetAction}
+                                        />
+                                    </div>
+                                }
+                            </Box>
                         }
-                       
+
                         {
-                        result.cloudChart.json === undefined &&
-                            <CircularProgress className={classes.circularProgress}/>
-                    }
+                            result.cloudChart.json === undefined &&
+                            <CircularProgress className={classes.circularProgress} />
+                        }
                     </ExpansionPanelDetails>
-             
-                   
                 </ExpansionPanel>
             }
-          
+            {
+                <ExpansionPanel>
+                    <ExpansionPanelSummary
+                        expandIcon={<ExpandMoreIcon />}
+                    >
+                        <Typography className={classes.heading}>{result.communityGraph.title}</Typography>
+                    </ExpansionPanelSummary>
+                    <ExpansionPanelDetails>
+                        <div style={{ width: '100%' }}>
+                            {/* {(result.histogram.json && (result.histogram.json.length === 0) &&
+                                <Typography variant={"body2"}>{keyword("sna_no_data")}</Typography>)} */}
+
+                            {(result.histogram.json && result.histogram.json.length !== 0) &&
+                                <CytoscapeComponent
+                                    elements={CytoscapeComponent.normalizeElements({
+                                        nodes: [
+                                            { data: { id: 'one', label: 'Node 1' }, position: { x: 100, y: 100 } },
+                                            { data: { id: 'two', label: 'Node 2' }, position: { x: 200, y: 200 } },
+                                            { data: { id: 'three', label: 'Node 3' }, position: { x: 300, y: 400 } }
+                                        ],
+                                        edges: [
+                                            { data: { source: 'one', target: 'two', label: 'Edge from Node1 to Node2' } },
+                                            { data: { source: 'one', target: 'three', label: 'Edge from Node1 to Node3' } }
+                                        ]
+                                    })}
+                                    style={{ textAlign: 'left', width: '100%', height: '500px' }}
+                                    cy={(cy) => { myCy = cy }}
+                                />
+
+                            }
+                        </div>
+                    </ExpansionPanelDetails>
+                </ExpansionPanel>
+            }
+
             <Box m={3} />
             {
                 result.urls &&
