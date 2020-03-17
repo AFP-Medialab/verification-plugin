@@ -333,14 +333,15 @@ const useTwitterSnaRequest = (request) => {
         newDate.setDate(newDate.getDate() + 1);
         dates = [...dates, newDate];
       }
-      let hoursY = ['12:00:00 AM', '1:00:00 AM', '2:00:00 AM', '3:00:00 AM', '4:00:00 AM', '5:00:00 AM', '6:00:00 AM', '7:00:00 AM', '8:00:00 AM', '9:00:00 AM', '10:00:00 AM', '11:00:00 AM', '12:00:00 PM', '1:00:00 PM', '2:00:00 PM', '3:00:00 PM', '4:00:00 PM', '5:00:00 PM', '6:00:00 PM', '7:00:00 PM', '8:00:00 PM', '9:00:00 PM', '10:00:00 PM', '11:00:00 PM'];
+      
+      let hoursY = ['00:00', '01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00'];
       let isAllnul = true;
-      let nbTweetsZ = [];
+      let nbTweetsZ = [...Array(24)].map(x=>Array());
+
       let i = 0;
       let datesX = [];
       dates.forEach(date => {
         hoursY.forEach(time => {
-          nbTweetsZ.push([]);
           let nbTweets = getNbTweetsInHour(date, hits);
           if (nbTweets !== 0)
             isAllnul = false;
@@ -353,12 +354,16 @@ const useTwitterSnaRequest = (request) => {
         datesX = [...datesX, date.toDateString()];
       });
 
+      let transposeNbTweetsZ = nbTweetsZ[0].map((col, i) => nbTweetsZ.map(row => row[i]));
+
       return {
         plot: [{
-          z: nbTweetsZ,
-          x: datesX,
-          y: hoursY,
-          colorscale: 'Reds',
+          z: transposeNbTweetsZ,
+          x: hoursY,
+          y: datesX,
+          colorscale: [[0.0, 'rgb(247,251,255)'], [0.125, 'rgb(222,235,247)'], [0.25, 'rgb(198,219,239)'],
+          [0.375, 'rgb(158,202,225)'], [0.5, 'rgb(107,174,214)'], [0.625, 'rgb(66,146,198)'],
+          [0.75, 'rgb(33,113,181)'],[0.875, 'rgb(8,81,156)'], [1.0, 'rgb(8,48,107)']],
           type: 'heatmap'
         }],
         isAllnul: isAllnul
