@@ -59,6 +59,10 @@ function getColor(entity) {
   return '#35347B';
 }
 
+function dayOfWeekAsString(dayIndex) {
+  // return ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"][dayIndex];
+  return ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"][dayIndex];
+}
 
 const useTwitterSnaRequest = (request) => {
   // console.log("useTwitterSnaRequest request: ", request);
@@ -351,7 +355,8 @@ const useTwitterSnaRequest = (request) => {
           i++;
         });
         i = 0;
-        datesX = [...datesX, date.toDateString()];
+        // datesX = [...datesX, date.toDateString()];
+        datesX = [...datesX, dayOfWeekAsString(date.getDay())];
       });
 
       let transposeNbTweetsZ = nbTweetsZ[0].map((col, i) => nbTweetsZ.map(row => row[i]));
