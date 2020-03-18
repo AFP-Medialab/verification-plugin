@@ -1,6 +1,6 @@
 import {useEffect} from "react";
 import axios from "axios";
-import {useDispatch, useSelector} from "react-redux";
+import {useDispatch} from "react-redux";
 import {setVideoRightsResult, setVideoRightsLoading} from "../../../../../redux/actions/tools/videoRightsActions"
 import {setError} from "../../../../../redux/actions/errorActions"
 import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
@@ -62,6 +62,7 @@ const useVideoRightsTreatment = (url) => {
                     handleError(errors)
                 });
         }
+         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [url]);
 };
 export default useVideoRightsTreatment
