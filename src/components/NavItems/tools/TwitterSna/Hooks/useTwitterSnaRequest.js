@@ -61,8 +61,44 @@ function getColor(entity) {
 
 function dayOfWeekAsString(dayIndex) {
   // return ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"][dayIndex];
-  return ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"][dayIndex];
+  return ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][dayIndex];
 }
+
+// Group by nbTweetsArr by day of week, then sum these arrays
+function sumGroupedNbTweetsArrByDayOfWeek(nbTweets2DArr, dayOfWeek1DArr) {
+
+  let newNbTweets2DArr = dayOfWeek1DArr.reduce(function (result, value) {
+
+    let groupbyArrs = [];
+
+    let idx = dayOfWeek1DArr.indexOf(value);
+    while (idx !== -1) {
+      groupbyArrs.push(nbTweets2DArr[idx]);
+      idx = dayOfWeek1DArr.indexOf(value, idx + 1);
+    };
+
+    let sumArr = groupbyArrs[0];
+    if (groupbyArrs.length > 0) {
+      for (let i = 1; i < groupbyArrs.length; i++) {
+        sumArr = sumArr.SumArray(groupbyArrs[i]);
+      };
+    };
+
+    result[value] = sumArr;
+    return result;
+
+  }, {});
+
+  return newNbTweets2DArr;
+}
+
+Array.prototype.SumArray = function (arr) {
+  var sum = this.map(function (num, idx) {
+    return num + arr[idx];
+  });
+  return sum;
+}
+
 
 const useTwitterSnaRequest = (request) => {
   // console.log("useTwitterSnaRequest request: ", request);
@@ -337,38 +373,49 @@ const useTwitterSnaRequest = (request) => {
         newDate.setDate(newDate.getDate() + 1);
         dates = [...dates, newDate];
       }
-      
-      let hoursY = ['00:00', '01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00'];
+
+      let hourAxis = ['00:00', '01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00'];
+      let dayOfWeekAxis = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+      let nbTweets2DArr = [...Array(hourAxis.length)].map(x => Array());
       let isAllnul = true;
-      let nbTweetsZ = [...Array(24)].map(x=>Array());
 
       let i = 0;
-      let datesX = [];
+      let days = [];
       dates.forEach(date => {
-        hoursY.forEach(time => {
+        hourAxis.forEach(time => {
           let nbTweets = getNbTweetsInHour(date, hits);
           if (nbTweets !== 0)
             isAllnul = false;
           date.setHours(i);
-          nbTweetsZ[i].push(nbTweets);
+          nbTweets2DArr[i].push(nbTweets);
 
           i++;
         });
         i = 0;
-        // datesX = [...datesX, date.toDateString()];
-        datesX = [...datesX, dayOfWeekAsString(date.getDay())];
+        days = [...days, dayOfWeekAsString(date.getDay())];
       });
 
-      let transposeNbTweetsZ = nbTweetsZ[0].map((col, i) => nbTweetsZ.map(row => row[i]));
+      let transposedNbTweets2DArr = nbTweets2DArr[0].map((col, i) => nbTweets2DArr.map(row => row[i]));
 
+      let groupedNbTweets2DArr = sumGroupedNbTweetsArrByDayOfWeek(transposedNbTweets2DArr, days);
+
+      let mondayToSundayOfNbTweets2DArr = [];
+      dayOfWeekAxis.forEach(day => {
+        if (groupedNbTweets2DArr[day] === undefined) {
+          mondayToSundayOfNbTweets2DArr.push(new Array(hourAxis.length).fill(0));
+        } else {
+          mondayToSundayOfNbTweets2DArr.push(groupedNbTweets2DArr[day]);
+        }
+      });
+      
       return {
         plot: [{
-          z: transposeNbTweetsZ,
-          x: hoursY,
-          y: datesX,
+          z: mondayToSundayOfNbTweets2DArr,
+          x: hourAxis,
+          y: dayOfWeekAxis,
           colorscale: [[0.0, 'rgb(247,251,255)'], [0.125, 'rgb(222,235,247)'], [0.25, 'rgb(198,219,239)'],
-          [0.375, 'rgb(158,202,225)'], [0.5, 'rgb(107,174,214)'], [0.625, 'rgb(66,146,198)'],
-          [0.75, 'rgb(33,113,181)'],[0.875, 'rgb(8,81,156)'], [1.0, 'rgb(8,48,107)']],
+                      [0.375, 'rgb(158,202,225)'], [0.5, 'rgb(107,174,214)'], [0.625, 'rgb(66,146,198)'],
+                      [0.75, 'rgb(33,113,181)'], [0.875, 'rgb(8,81,156)'], [1.0, 'rgb(8,48,107)']],
           type: 'heatmap'
         }],
         isAllnul: isAllnul
