@@ -13,6 +13,7 @@ import {
   generateWordCloudPlotlyJson
 } from "../Results/call-elastic";
 
+import { getRequest } from '../TwitterSna';
 import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../../LocalDictionary/components/NavItems/tools/TwitterSna.tsv";
 
@@ -38,7 +39,7 @@ function getNbTweetsInHour(date, bucket) {
     var TweetDay = tweetDate.toLocaleDateString();
     var tweetHour = tweetDate.getHours();
 
-    if (day === TweetDay && tweetHour === hour)
+    if (day === TweetDay && tweetHour == hour)
       nbTweets++;
   });
   return nbTweets;
@@ -441,7 +442,6 @@ const useTwitterSnaRequest = (request) => {
     } else {
       lastRenderCall(null, request);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [JSON.stringify(request)]);
 
   /* useEffect(() => {

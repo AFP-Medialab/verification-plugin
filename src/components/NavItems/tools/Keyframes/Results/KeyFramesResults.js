@@ -34,9 +34,6 @@ const KeyFramesResults = (props) => {
     const toggleDetail = () => {
         setDetailed(!detailed);
     };
-    const imageClick = (event) => {
-       
-    };
     return (
         <div>
             <Paper className={classes.root}>
@@ -57,13 +54,11 @@ const KeyFramesResults = (props) => {
                 <Box m={2}/>
                 {
                     detailed &&
-                    //<ImageGridList list={detailedList} height={160} onClick={(url) => ImageReverseSearch("google", url)}/>
-                    <ImageGridList list={detailedList} height={160} handleClick={imageClick}/>
+                    <ImageGridList list={detailedList} height={160} onClick={(url) => ImageReverseSearch("google", url)}/>
                 }
                 {
                     !detailed &&
-                    //<ImageGridList list={simpleList}  height={160} onClick={(url) => ImageReverseSearch("google", url)}/>
-                    <ImageGridList list={simpleList}  height={160} handleClick={imageClick}/>
+                    <ImageGridList list={simpleList}  height={160} onClick={(url) => ImageReverseSearch("google", url)}/>
                 }
             </Paper>
         </div>

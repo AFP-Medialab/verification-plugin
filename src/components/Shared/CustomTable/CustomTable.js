@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import MaterialTable from 'material-table';
+import MaterialTable, { MTableToolbar } from 'material-table';
 import AddBox from '@material-ui/icons/AddBox';
 import ArrowUpward from '@material-ui/icons/ArrowUpward';
 import Check from '@material-ui/icons/Check';
@@ -54,7 +54,6 @@ export default function CustomTable(props) {
             ...state,
             data: props.data,
         })
-         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [JSON.stringify(props.data)]);
 
     return (

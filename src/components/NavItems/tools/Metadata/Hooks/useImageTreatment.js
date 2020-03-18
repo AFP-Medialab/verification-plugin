@@ -1,6 +1,6 @@
-import {useEffect} from "react";
+import {useCallback, useEffect} from "react";
 import EXIF from "exif-js/exif";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {setMetadadaResult} from "../../../../../redux/actions/tools/metadataActions";
 import {setError} from "../../../../../redux/actions/errorActions";
 import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
@@ -46,7 +46,6 @@ const useImageTreatment = (mediaUrl) => {
 
         if (mediaUrl)
             imageTreatment();
-         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [mediaUrl, keyword]);
 };
 export default useImageTreatment;

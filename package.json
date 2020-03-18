@@ -24,7 +24,7 @@
     "plotly.js": "^1.52.3",
     "querystring": "^0.2.0",
     "react": "^16.13.0",
-    "react-browser-extension-scripts": "^3.3.1",
+    "react-browser-extension-scripts": "0.1.2",
     "react-compare-image": "^2.0.3",
     "react-csv": "^1.1.2",
     "react-cytoscapejs": "^1.2.1",
@@ -72,7 +72,6 @@
   },
   "devDependencies": {
     "mp4box": "^0.3.20",
-    "react-wordcloud": "^1.2.0",
-    "remote-redux-devtools": "^0.5.16"
+    "react-wordcloud": "^1.2.0"
   }
 }
