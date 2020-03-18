@@ -1,7 +1,7 @@
-import {useEffect, useState} from "react";
+import {useEffect} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import axios from "axios";
-import {addDictionary, setDictionary} from "../redux/actions";
+import {addDictionary} from "../redux/actions";
 
 /**
  * @func transform array in json representation of translation (access this way: json[global_language][id_translate])
@@ -73,6 +73,7 @@ const useLoadLanguage = (onlineTsv, localTsv) => {
             .catch(() => {
                 backUpLocal();
             })
+         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [gitHubFullUrl, localTsv, dictionary]);
 
     return (key) => {

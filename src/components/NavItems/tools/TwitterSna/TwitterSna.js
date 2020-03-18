@@ -7,7 +7,6 @@ import dateFormat from "dateformat";
 import _ from "lodash";
 
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
-import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import TextField from "@material-ui/core/TextField";
 import FormControl from "@material-ui/core/FormControl";
@@ -36,7 +35,6 @@ import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/TwitterSna.tsv";
 import { submissionEvent } from "../../../Shared/GoogleAnalytics/GoogleAnalytics";
 import AuthenticationCard from "../../../Shared/Authentication/AuthenticationCard";
-import { setTwitterSnaResult } from '../../../../redux/actions/tools/twitterSnaActions';
 
 
 const TwitterSna = () => {
@@ -299,6 +297,7 @@ const TwitterSna = () => {
     );
     // console.log("Updating submittedRequest: ", newSubmittedRequest);
     setSubmittedRequest(newSubmittedRequest);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userAuthenticated]);
 
   return (

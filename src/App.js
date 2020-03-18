@@ -7,7 +7,7 @@ import history from "./components/Shared/History/History";
 import PopUp from "./components/PopUp/PopUp";
 import ReactGA from 'react-ga';
 import { useSelector } from "react-redux";
-import { userLoginAction } from './redux/actions/authenticationActions';
+
 //import auth from './auth.ts'; // Sample authentication provider
 import useAuthenticationAPI from './components/Shared/Authentication/useAuthenticationAPI';
 

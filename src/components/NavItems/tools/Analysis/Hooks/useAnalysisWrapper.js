@@ -71,5 +71,6 @@ export const useAnalysisWrapper = (apiUrl, videoUrl) => {
                 .then(response => handleJob(response["data"]))
                 .catch(error => handleError(error))
         }
+         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [apiUrl]);
 };
