@@ -1,4 +1,4 @@
-import ReactGA from "react-ga";
+import ReactGA, {ga} from "react-ga";
 import history from "../History/History";
 
 export function submissionEvent (payload) {

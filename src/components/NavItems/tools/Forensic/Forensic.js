@@ -3,6 +3,8 @@ import CustomTile from "../../../Shared/CustomTitle/CustomTitle";
 import Box from "@material-ui/core/Box";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
+import FolderOpenIcon from '@material-ui/icons/FolderOpen';
+import Typography from "@material-ui/core/Typography";
 import React, {useEffect, useState} from "react";
 import {useSelector} from "react-redux";
 import useGetImages from "./Hooks/useGetImages";

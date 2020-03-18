@@ -1,6 +1,6 @@
-import { useEffect} from "react";
+import {useCallback, useEffect} from "react";
 import axios from "axios"
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import{setForensicsLoading, setForensicsResult} from "../../../../../redux/actions/tools/forensicActions";
 import {setError} from "../../../../../redux/actions/errorActions";
 import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
@@ -72,7 +72,6 @@ const useGetImages = (url) => {
                     handleError("forensic_error_" + error.status);
                 })
         }
-         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [url, keyword]);
 };
 export default useGetImages;

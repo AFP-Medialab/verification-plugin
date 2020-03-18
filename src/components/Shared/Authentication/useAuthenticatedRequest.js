@@ -2,7 +2,7 @@
  * Make authenticated requests hook.
  */
 
-import { useStore } from "react-redux";
+import { useDispatch, useSelector, useStore } from "react-redux";
 
 import useAuthenticationAPI from "./useAuthenticationAPI";
 import axios from "axios";
@@ -14,6 +14,7 @@ import axios from "axios";
  */
 export default function useAuthenticatedRequest() {
 
+  const dispatch = useDispatch();
   const authenticationAPI = useAuthenticationAPI();
   const store = useStore();
 

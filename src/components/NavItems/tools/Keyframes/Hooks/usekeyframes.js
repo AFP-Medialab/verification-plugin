@@ -36,7 +36,6 @@ export const useKeyframes = (result) => {
             });
         setDetailedList(tmpDetailed);
         setSimpleList(tmpSimple);
-         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [jsonResult]);
     return [simpleList, detailedList];
 };

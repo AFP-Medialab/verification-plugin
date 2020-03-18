@@ -34,9 +34,9 @@ const KeyFramesResults = (props) => {
     const toggleDetail = () => {
         setDetailed(!detailed);
     };
-    const imageClick = (event) => {
-       
+    const imageClick = (event) => { 
     };
+
     return (
         <div>
             <Paper className={classes.root}>

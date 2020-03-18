@@ -1,4 +1,7 @@
 
+
+let json = {};
+
 let elasticSearch_url = process.env.REACT_APP_ELK_URL;
 
 //Functions calling elastic search and return a JSON plotly can use
