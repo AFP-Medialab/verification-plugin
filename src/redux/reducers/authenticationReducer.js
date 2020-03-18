@@ -113,6 +113,8 @@ function authenticationReducer(state = defaultState, action) {
         roles: []
       };
       break;
+    default:
+      break;
   }
 
   return state;
