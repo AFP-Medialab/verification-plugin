@@ -50,5 +50,5 @@ LOGINFORM_ACCESSCODE_LABEL	Access Code	Code d'accès
 LOGINFORM_ACCESSCODE_PLACEHOLDER	Enter your access code	Saisissez votre code d'accès
 LOGINFORM_ACCESSCODE_ERR_REQUIRED	Access code is required	Veuillez saisir un code d'accès
 LOGINFORM_SUBMIT_LABEL	Login	S'identifier
-LOGUSER_TEMPLATE	Wellcome <%= user.firstName %> <%= user.lastName %> (<%= user.email %>)	Bonjour <%= user.firstName %> <%= user.lastName %> (<%= user.email %>)
+LOGUSER_TEMPLATE	Welcome <%= user.firstName %> <%= user.lastName %> (<%= user.email %>)	Bonjour <%= user.firstName %> <%= user.lastName %> (<%= user.email %>)
 LOGUSER_LOGOUT_LABEL	Logout	Deconnexion

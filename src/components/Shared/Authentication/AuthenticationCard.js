@@ -173,7 +173,7 @@ const AuthenticationCard = (props) => {
 
   // If authenticated
   if (userAuthenticated) {
-    const logUserMsg = _.template(messageI18NResolver("LOGUSER_TEMPLATE") || "Wellcome <%= user.firstName %> <%= user.lastName %> (<%= user.email %>)")({ user });
+    const logUserMsg = _.template(messageI18NResolver("LOGUSER_TEMPLATE") || "Welcome <%= user.firstName %> <%= user.lastName %> (<%= user.email %>)")({ user });
     return (
       <Fragment>
         <Toolbar>
