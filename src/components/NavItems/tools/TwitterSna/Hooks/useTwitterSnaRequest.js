@@ -29,20 +29,35 @@ const includeWordObj = (wordObj, wordsArray) => {
   return -1;
 };
 
-function getNbTweetsInHour(date, bucket) {
-  var nbTweets = 0;
-  var day = date.toLocaleDateString();
-  var hour = date.getHours();
 
-  bucket.forEach(tweet => {
-    var tweetDate = new Date(tweet._source.date);
-    var TweetDay = tweetDate.toLocaleDateString();
-    var tweetHour = tweetDate.getHours();
+// Count tweets by hour and day
+function getNbTweetsByHourDay(dayArr, hourArr, bucket) {
 
-    if (day === TweetDay && tweetHour == hour)
-      nbTweets++;
+  // 1D-array with elements as day_hour 
+  let dayHourArr = bucket.map(function(val, ind) { 
+    let date = new Date(val._source.date);
+    return `${date.getDay()}_${date.getHours()}`;
   });
-  return nbTweets;
+  
+  // Groupby day_hour
+  let nbTweetArr = _.countBy(dayHourArr);
+
+  // Convert 1D-array to 2D-array
+  let nbTweetArr2D = [...Array(dayArr.length)].map(e => Array(hourArr.length).fill(0));
+  Object.entries(nbTweetArr).forEach(nbTweet => {
+    let day = parseInt(nbTweet[0].split("_")[0]);
+    let hour = parseInt(nbTweet[0].split("_")[1]);
+    nbTweetArr2D[day][hour] = nbTweet[1];
+  });
+
+  // Re-order rows according to dayArr
+  let orderedNbTweetArr2D = [];
+  dayArr.forEach(dayStr => {
+    let dayInt = getDayAsInt(dayStr);
+    orderedNbTweetArr2D.push(nbTweetArr2D[dayInt])
+  });
+  
+  return orderedNbTweetArr2D;
 }
 
 function getnMax(objArr, n) {
@@ -59,44 +74,8 @@ function getColor(entity) {
   return '#35347B';
 }
 
-function dayOfWeekAsString(dayIndex) {
-  // return ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"][dayIndex];
-  return ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][dayIndex];
-}
-
-// Group by nbTweetsArr by day of week, then sum these arrays
-function sumGroupedNbTweetsArrByDayOfWeek(nbTweets2DArr, dayOfWeek1DArr) {
-
-  let newNbTweets2DArr = dayOfWeek1DArr.reduce(function (result, value) {
-
-    let groupbyArrs = [];
-
-    let idx = dayOfWeek1DArr.indexOf(value);
-    while (idx !== -1) {
-      groupbyArrs.push(nbTweets2DArr[idx]);
-      idx = dayOfWeek1DArr.indexOf(value, idx + 1);
-    };
-
-    let sumArr = groupbyArrs[0];
-    if (groupbyArrs.length > 0) {
-      for (let i = 1; i < groupbyArrs.length; i++) {
-        sumArr = sumArr.SumArray(groupbyArrs[i]);
-      };
-    };
-
-    result[value] = sumArr;
-    return result;
-
-  }, {});
-
-  return newNbTweets2DArr;
-}
-
-Array.prototype.SumArray = function (arr) {
-  var sum = this.map(function (num, idx) {
-    return num + arr[idx];
-  });
-  return sum;
+function getDayAsInt(dayString) {
+  return ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].indexOf(dayString);
 }
 
 
@@ -354,65 +333,23 @@ const useTwitterSnaRequest = (request) => {
 
     async function createHeatMap(entries, hits) {
 
-      var firstDate = new Date(entries.from);
-      firstDate.setHours(1);
-      firstDate.setMinutes(0);
-      firstDate.setSeconds(0);
-      var firstArrElt = new Date(firstDate);
-      var lastDate = new Date(entries.until);
-      if (lastDate.getHours() === 0 && lastDate.getMinutes() === 0)
-        lastDate.setDate(lastDate.getDate() - 1);
-      lastDate.setHours(1);
-      lastDate.setMinutes(0);
-      lastDate.setSeconds(0);
-      var dates = [firstArrElt];
+      let hourAxis = ['00:00', '01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00', '10:00', '11:00',
+                     '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00'];
+      let dayAxis = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+      let isAllnul = true; // All cells are null
 
-      while (firstDate.getTime() !== lastDate.getTime()) {
-        var newDate = new Date(firstDate);
-        firstDate.setDate(firstDate.getDate() + 1);
-        newDate.setDate(newDate.getDate() + 1);
-        dates = [...dates, newDate];
+      if (hits.length !== 0) {
+        isAllnul = false;
       }
 
-      let hourAxis = ['00:00', '01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00'];
-      let dayOfWeekAxis = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
-      let nbTweets2DArr = [...Array(hourAxis.length)].map(x => Array());
-      let isAllnul = true;
+      // 2D-array with cells as number of tweets by day and hour
+      let nbTweetArr2D = getNbTweetsByHourDay(dayAxis, hourAxis, hits);
 
-      let i = 0;
-      let days = [];
-      dates.forEach(date => {
-        hourAxis.forEach(time => {
-          let nbTweets = getNbTweetsInHour(date, hits);
-          if (nbTweets !== 0)
-            isAllnul = false;
-          date.setHours(i);
-          nbTweets2DArr[i].push(nbTweets);
-
-          i++;
-        });
-        i = 0;
-        days = [...days, dayOfWeekAsString(date.getDay())];
-      });
-
-      let transposedNbTweets2DArr = nbTweets2DArr[0].map((col, i) => nbTweets2DArr.map(row => row[i]));
-
-      let groupedNbTweets2DArr = sumGroupedNbTweetsArrByDayOfWeek(transposedNbTweets2DArr, days);
-
-      let mondayToSundayOfNbTweets2DArr = [];
-      dayOfWeekAxis.forEach(day => {
-        if (groupedNbTweets2DArr[day] === undefined) {
-          mondayToSundayOfNbTweets2DArr.push(new Array(hourAxis.length).fill(0));
-        } else {
-          mondayToSundayOfNbTweets2DArr.push(groupedNbTweets2DArr[day]);
-        }
-      });
-      
       return {
         plot: [{
-          z: mondayToSundayOfNbTweets2DArr,
+          z: nbTweetArr2D,
           x: hourAxis,
-          y: dayOfWeekAxis,
+          y: dayAxis,
           colorscale: [[0.0, 'rgb(247,251,255)'], [0.125, 'rgb(222,235,247)'], [0.25, 'rgb(198,219,239)'],
                       [0.375, 'rgb(158,202,225)'], [0.5, 'rgb(107,174,214)'], [0.625, 'rgb(66,146,198)'],
                       [0.75, 'rgb(33,113,181)'], [0.875, 'rgb(8,81,156)'], [1.0, 'rgb(8,48,107)']],
