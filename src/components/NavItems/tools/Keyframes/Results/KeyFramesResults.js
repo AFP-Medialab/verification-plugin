@@ -8,7 +8,6 @@ import Box from "@material-ui/core/Box";
 import Divider from "@material-ui/core/Divider";
 import Button from "@material-ui/core/Button";
 import {useKeyframes} from "../Hooks/usekeyframes";
-import ImageReverseSearch from "../../ImageReverseSearch";
 import CloseResult from "../../../../Shared/CloseResult/CloseResult";
 import {cleanKeyframesState} from "../../../../../redux/actions/tools/keyframesActions";
 import OnClickInfo from "../../../../Shared/OnClickInfo/OnClickInfo";

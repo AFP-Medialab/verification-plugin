@@ -1,7 +1,5 @@
 import {Box, Paper} from "@material-ui/core";
 import React, {useState} from "react";
-import makeStyles from "@material-ui/core/styles/makeStyles";
-import {useSelector} from "react-redux";
 import CustomTile from "../../../Shared/CustomTitle/CustomTitle";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";

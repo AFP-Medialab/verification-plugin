@@ -1,7 +1,7 @@
-import React, { useState, Fragment } from "react";
+import React, { Fragment } from "react";
 import PropTypes from 'prop-types';
 
-import { useStore, useSelector, useDispatch } from 'react-redux';
+import {useSelector, useDispatch } from 'react-redux';
 
 import useMyStyles from "../MaterialUiStyles/useMyStyles";
 
