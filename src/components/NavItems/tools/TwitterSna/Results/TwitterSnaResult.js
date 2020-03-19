@@ -208,6 +208,56 @@ export default function TwitterSnaResult(props) {
         };
     };
 
+    function getDayAsString(dayInt) {
+    return ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][dayInt];
+    }
+    
+    function getHourAsString(hourInt) {
+    return ['00:00', '01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00', '10:00', '11:00', 
+            '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00'][hourInt];
+    }
+
+    const displayTweetsOfDateHeatMap = (data) => {
+        let columns = [
+            { title: keyword('sna_result_username'), field: 'username' },
+            { title: keyword('sna_result_date'), field: 'date' },
+            { title: keyword('sna_result_tweet'), field: 'tweet', render: getTweetWithClickableLink },
+            { title: keyword('sna_result_retweet_nb'), field: 'retweetNb' },
+        ];
+        let resData = [];
+        let csvArr = keyword("sna_result_username") + ',' + keyword("sna_result_date") + ',' + keyword("sna_result_tweet") + ',' + keyword("sna_result_retweet_nb") + ',' + keyword("elastic_url") + '\n';
+
+        debugger;
+        const filteredTweets = result.tweets.filter(function(tweetObj) {
+            const date = new Date(tweetObj._source.date);
+            const day = getDayAsString(date.getDay());
+            const hour = getHourAsString(date.getHours());
+            return hour === data.points[0].x && day === data.points[0].y;
+        });
+
+        filteredTweets.forEach(tweetObj => {
+            const date = new Date(tweetObj._source.date);
+            resData.push(
+                {
+                    username: <a href={"https://twitter.com/" + tweetObj._source.username} target="_blank">{tweetObj._source.username}</a>,
+                    date: date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear() + ' ' + date.getHours() + ':' + date.getMinutes(),
+                    tweet: tweetObj._source.tweet,
+                    retweetNb: tweetObj._source.nretweets,
+                    link: tweetObj._source.link
+                }
+            );
+            csvArr += tweetObj._source.username + ',' +
+                date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear() + '_' + date.getHours() + 'h' + date.getMinutes() + ',"' +
+                tweetObj._source.tweet + '",' + tweetObj._source.nretweets + ',' + tweetObj._source.link + '\n';
+        });
+
+        return {
+            data: resData,
+            columns: columns,
+            csvArr: csvArr,
+        };
+    };
+
     const displayTweetsOfUser = (data, nbType, index) => {
         let columns = [
             { title: keyword('sna_result_date'), field: 'date' },
@@ -292,6 +342,16 @@ export default function TwitterSnaResult(props) {
         document.body.removeChild(link);
     };
 
+    function downloadClickHeatMap(csvArr, name, histo) {
+        let encodedUri = encodeURIComponent(csvArr);
+        let link = document.createElement("a");
+        link.setAttribute("href", 'data:text/plain;charset=utf-8,' + encodedUri);
+        link.setAttribute("download", "tweets_" + props.request.keywordList.join('&') + '_' + name + ((!histo) ? (props.request.from + "_" + props.request.until) : "") + ".csv");
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
+
     function isInRange(pointDate, objDate, periode) {
 
         if (periode === "isHours") {
@@ -312,7 +372,7 @@ export default function TwitterSnaResult(props) {
     }
 
     const onHeatMapClick = (data) => {
-        setheatMapTweets(displayTweetsOfDate(data, false));
+        setheatMapTweets(displayTweetsOfDateHeatMap(data));
     }
 
     const onDonutsClick = (data, nbType, index) => {
@@ -574,7 +634,7 @@ export default function TwitterSnaResult(props) {
                                                 <Button
                                                     variant={"contained"}
                                                     color={"primary"}
-                                                    onClick={() => downloadClick(heatMapTweets.csvArr, "NAME OF FILE")}>
+                                                    onClick={() => downloadClickHeatMap(heatMapTweets.csvArr, "heatMap", false)}>
                                                     {
                                                         keyword('sna_result_download')
                                                     }
