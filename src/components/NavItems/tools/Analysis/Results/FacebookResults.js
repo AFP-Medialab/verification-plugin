@@ -38,7 +38,7 @@ const FacebookResults = (props) => {
 
     const dispatch = useDispatch();
     const report = props.report;
-    const verificationComments = (report.verification_comments) ? report.verification_comments : [];
+    const verificationComments = (report.comments) ? report.comments : [];
     const thumbnails = (report.thumbnails.others);
 
     return (
@@ -173,7 +173,7 @@ const FacebookResults = (props) => {
                                         </TableRow>
                                     }
                                     {
-                                        report.verification_cues.num_verification_comments &&
+                                        report.verification_cues.num_verification_comments != 0 &&
                                         <TableRow>
                                             <TableCell component="th" scope="row">
                                                 {keyword("facebook_comment_name_2")}
