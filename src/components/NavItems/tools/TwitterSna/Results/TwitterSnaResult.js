@@ -105,7 +105,7 @@ export default function TwitterSnaResult(props) {
             { title: keyword('sna_result_retweet_nb'), field: 'retweetNb' },
             { title: keyword('sna_result_like_nb'), field: 'likeNb' }
         ];
-        let csvArr = "data:text/csv;charset=utf-8,";
+        let csvArr = "";
 
 
         // word = word.replace(/_/g, " ");
@@ -160,7 +160,7 @@ export default function TwitterSnaResult(props) {
         let resData = [];
         let minDate;
         let maxDate;
-        let csvArr = "data:text/csv;charset=utf-8," + keyword("sna_result_username") + "," + keyword("sna_result_date") + "," + keyword("sna_result_tweet") + "," + keyword("sna_result_retweet_nb") + "," + keyword("elastic_url") + "\n";
+        let csvArr = keyword("sna_result_username") + "," + keyword("sna_result_date") + "," + keyword("sna_result_tweet") + "," + keyword("sna_result_retweet_nb") + "," + keyword("elastic_url") + "\n";
         let isDays = "isDays";
         if (!fromHisto) { isDays = "isHours" }
 
@@ -227,7 +227,6 @@ export default function TwitterSnaResult(props) {
         let resData = [];
         let csvArr = keyword("sna_result_username") + ',' + keyword("sna_result_date") + ',' + keyword("sna_result_tweet") + ',' + keyword("sna_result_retweet_nb") + ',' + keyword("elastic_url") + '\n';
 
-        debugger;
         const filteredTweets = result.tweets.filter(function(tweetObj) {
             const date = new Date(tweetObj._source.date);
             const day = getDayAsString(date.getDay());
@@ -263,7 +262,7 @@ export default function TwitterSnaResult(props) {
             { title: keyword('sna_result_date'), field: 'date' },
             { title: keyword('sna_result_tweet'), field: 'tweet', render: getTweetWithClickableLink },
         ];
-        let csvArr = "data:text/csv;charset=utf-8," + keyword('sna_result_date') + "," + keyword('sna_result_tweet');
+        let csvArr = keyword('sna_result_date') + "," + keyword('sna_result_tweet');
         if (nbType !== "retweets_cloud_chart_title") {
             columns.push({
                 title: keyword('sna_result_like_nb'),
@@ -332,17 +331,7 @@ export default function TwitterSnaResult(props) {
         }
     }
 
-    const downloadClick = (csvArr, name, histo) => {
-        let encodedUri = encodeURI(csvArr);
-        let link = document.createElement("a");
-        link.setAttribute("href", encodedUri);
-        link.setAttribute("download", "tweets_" + props.request.keywordList.join('&') + '_' + name + ((!histo) ? (props.request.from + "_" + props.request.until) : "") + ".csv");
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-    };
-
-    function downloadClickHeatMap(csvArr, name, histo) {
+    function downloadClick(csvArr, name, histo) {
         let encodedUri = encodeURIComponent(csvArr);
         let link = document.createElement("a");
         link.setAttribute("href", 'data:text/plain;charset=utf-8,' + encodedUri);
@@ -634,7 +623,11 @@ export default function TwitterSnaResult(props) {
                                                 <Button
                                                     variant={"contained"}
                                                     color={"primary"}
-                                                    onClick={() => downloadClickHeatMap(heatMapTweets.csvArr, "heatMap", false)}>
+                                                    onClick={() => {
+                                                        let date = new Date(heatMapTweets.data[0].date);
+                                                        let dayHourStr = getDayAsString(date.getDay()) + date.getHours() + "h_";
+                                                        downloadClick(heatMapTweets.csvArr, dayHourStr, false);
+                                                    }}>
                                                     {
                                                         keyword('sna_result_download')
                                                     }
