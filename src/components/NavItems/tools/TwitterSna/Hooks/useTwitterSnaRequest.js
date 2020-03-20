@@ -252,10 +252,11 @@ const useTwitterSnaRequest = (request) => {
 
         const dateEndQuery = new Date(data.until);
         const dateStartQuery = new Date(data.from);
-        if ((dateEndQuery - dateStartQuery) / (1000 * 3600 * 24) <= 7)
-          createHeatMap(request, responseArrayOf7[5].tweets).then((heatmap) => result.heatMap = heatmap);
-        else
-          result.heatMap = "tooLarge";
+        // if ((dateEndQuery - dateStartQuery) / (1000 * 3600 * 24) <= 7)
+        //   createHeatMap(request, responseArrayOf7[5].tweets).then((heatmap) => result.heatMap = heatmap);
+        // else
+        //   result.heatMap = "tooLarge";
+        createHeatMap(request, responseArrayOf7[5].tweets).then((heatmap) => result.heatMap = heatmap);
 
       }
       else
