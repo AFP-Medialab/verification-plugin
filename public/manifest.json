@@ -18,9 +18,11 @@
     }
   ],
   "icons": {
+    "src": "favicon.ico",
+    "sizes": "32x32 16x16",
     "16": "img/icon-16.png",
     "48": "img/icon-48.png",
-    "128": "img/icon-128.png"
+    "128": "img/icon-128.png",
   },
   "permissions": ["activeTab", "tabs", "all_urls", "contextMenus"],
   "content_security_policy": "script-src 'self' 'unsafe-eval' https://www.google-analytics.com; object-src 'self'",

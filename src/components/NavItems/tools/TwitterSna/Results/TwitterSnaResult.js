@@ -43,7 +43,7 @@ export default function TwitterSnaResult(props) {
 
     const [histoTweets, setHistoTweets] = useState(null);
     const [cloudTweets, setCloudTweets] = useState(null);
-    const [heatMapTweets, setheatMapTweets] = useState(null);
+    //const [heatMapTweets, setheatMapTweets] = useState(null);
     const [pieCharts0, setPieCharts0] = useState(null);
     const [pieCharts1, setPieCharts1] = useState(null);
     const [pieCharts2, setPieCharts2] = useState(null);
@@ -87,7 +87,7 @@ export default function TwitterSnaResult(props) {
     useEffect(() => {
         setHistoTweets(null);
         setCloudTweets(null);
-        setheatMapTweets(null);
+        //setheatMapTweets(null);
         setPieCharts0(null);
         setPieCharts1(null);
         setPieCharts2(null);
@@ -312,9 +312,9 @@ export default function TwitterSnaResult(props) {
         setHistoTweets(displayTweetsOfDate(data, true));
     }
 
-    const onHeatMapClick = (data) => {
-        setheatMapTweets(displayTweetsOfDate(data, false));
-    }
+    //const onHeatMapClick = (data) => {
+    //    setheatMapTweets(displayTweetsOfDate(data, false));
+    //}
 
     const onDonutsClick = (data, nbType, index) => {
 
@@ -528,22 +528,22 @@ export default function TwitterSnaResult(props) {
                                 </Grid>
                             </Grid>
 
-                        </Box>
+                          </Box>
                     </ExpansionPanelDetails>
                 </ExpansionPanel>
             }
-                 {
+                 {/*
                    
-                            <ExpansionPanel>
-                                <ExpansionPanelSummary
-                                    expandIcon={<ExpandMoreIcon />}
+                              <ExpansionPanel>
+                                  <ExpansionPanelSummary
+                                      expandIcon={<ExpandMoreIcon />}
                                 >
                                     <Typography className={classes.heading}>{keyword('sna_result_heatMap')}</Typography>
-                                </ExpansionPanelSummary>
-                                <ExpansionPanelDetails>
+                                  </ExpansionPanelSummary>
+                                  <ExpansionPanelDetails>
                                     {
                                         result.heatMap && result.heatMap !== "tooLarge" &&
-                                        <Box alignItems="center" justifyContent="center" width={"100%"}>
+                                       <Box alignItems="center" justifyContent="center" width={"100%"}>
                                         { 
                                             ((result.heatMap.isAllnul) &&
                                             <Typography variant={"body2"}>{keyword("sna_no_data")}</Typography>) ||
@@ -607,7 +607,7 @@ export default function TwitterSnaResult(props) {
                                 </ExpansionPanelDetails>
                             </ExpansionPanel>
                         
-                }
+               */ } 
             {
                 result.pieCharts &&
                 result.pieCharts.map((obj, index) => {
