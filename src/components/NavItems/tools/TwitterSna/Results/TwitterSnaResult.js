@@ -24,6 +24,7 @@ import { saveSvgAsPng } from 'save-svg-as-png';
 import { CSVLink } from "react-csv";
 import Cytoscape from 'cytoscape';
 import Fcose from 'cytoscape-fcose';
+import {Sigma, RandomizeNodePositions, RelativeSize} from 'react-sigma';
 
 import CircularProgress from "@material-ui/core/CircularProgress";
 
@@ -421,6 +422,9 @@ export default function TwitterSnaResult(props) {
         return csvData;
     }
 
+    const onNodeClick = e => {
+        console.log("Clicked on a node");
+    }
 
     if (result === null)
         return <div />;
@@ -786,7 +790,55 @@ export default function TwitterSnaResult(props) {
                    
                 </ExpansionPanel>
             }
-          
+            {
+                <ExpansionPanel>
+                    <ExpansionPanelSummary
+                        expandIcon={<ExpandMoreIcon />}
+                    >
+                        <Typography className={classes.heading}>{result.communityGraph.title}</Typography>
+                    </ExpansionPanelSummary>
+                    <ExpansionPanelDetails>
+                        <div style={{ width: '100%'}}>
+                            {/* {(result.histogram.json && (result.histogram.json.length === 0) &&
+                                <Typography variant={"body2"}>{keyword("sna_no_data")}</Typography>)} */}
+
+                            {(result.histogram.json && result.histogram.json.length !== 0) &&
+                                /* <CytoscapeComponent
+                                    elements={CytoscapeComponent.normalizeElements({
+                                        nodes: [
+                                            { data: { id: 'one', label: 'Node 1' }, position: { x: 100, y: 100 } },
+                                            { data: { id: 'two', label: 'Node 2' }, position: { x: 200, y: 200 } },
+                                            { data: { id: 'three', label: 'Node 3' }, position: { x: 300, y: 400 } }
+                                        ],
+                                        edges: [
+                                            { data: { source: 'one', target: 'two', label: 'Edge from Node1 to Node2' } },
+                                            { data: { source: 'one', target: 'three', label: 'Edge from Node1 to Node3' } }
+                                        ]
+                                    })}
+                                    style={{ textAlign: 'left', width: '100%', height: '500px' }}
+                                    cy={(cy) => { myCy = cy }}
+                                /> 
+                                 <Sigma renderer="canvas" style={{ textAlign: 'left', width: '100%', height: '500px' }} onClickNode={e => {onNodeClick(e);}}>
+                                    <LoadGEXF path= {String(generatedGefx)}>
+                                        <RelativeSize initialSize={15}/>
+                                        <RandomizeNodePositions/>
+                                    </LoadGEXF>
+                                </Sigma> */
+
+                                <Sigma graph={result.communityGraph.hashtagGraph}
+                                        style={{ textAlign: 'left', width: '100%', height: '500px' }} 
+                                        onClickNode={e => {onNodeClick(e);}}>
+                                    <RelativeSize initialSize={15}/>
+                                    <RandomizeNodePositions/>
+                                </Sigma>
+
+                                    
+
+                            }
+                        </div>
+                    </ExpansionPanelDetails>
+                </ExpansionPanel>
+            }
             <Box m={3} />
             {
                 result.urls &&

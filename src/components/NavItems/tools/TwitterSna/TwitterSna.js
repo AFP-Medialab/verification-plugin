@@ -42,9 +42,9 @@ const TwitterSna = () => {
   const keyword = useLoadLanguage("components/NavItems/tools/TwitterSna.tsv", tsv);
 
   const request = useSelector(state => state.twitterSna.request);
-  // console.log("Redux request: ", request);
+  console.log("Redux request: ", request);
   const reduxResult = useSelector(state => state.twitterSna.result);
-
+  console.log("reduxResult: ", reduxResult);
   const isLoading = useSelector(state => state.twitterSna.loading);
   const loadingMessage = useSelector(state => state.twitterSna.loadingMessage);
 

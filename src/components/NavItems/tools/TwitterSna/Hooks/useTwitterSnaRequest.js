@@ -58,6 +58,48 @@ function getColor(entity) {
   return '#35347B';
 }
 
+function getNodesUserTweets(hits) {
+  let usernameOfTweets = hits.tweets.map(function(val) { return val._source.username;});
+  let uniqUsername = [...new Set(usernameOfTweets)];
+  let nodes = uniqUsername.map((username) => { return {id: username, label: username}});
+  return nodes;
+}
+
+function getNodesUserMentions(hits) {
+  let usernameOfMentions = hits.tweets.filter(tweet => tweet._source.mentions !== undefined)
+                                      .map((tweet) => {return tweet._source.mentions})
+                                      .flat();
+  let uniqUsername = [...new Set(usernameOfMentions)];
+  let nodes = uniqUsername.map((username) => { return {id: username, label: username}});
+  return nodes;
+}
+
+function getEdgesCombinationNodes(nodes) {
+  let edges = [];
+
+  for (let i = 0; i < nodes.length - 1; i++) {
+    for (let j = i + 1; j < nodes.length; j++) {
+      edges.push({id: nodes[i].id + '_and_' + nodes[j].id, source: nodes[i].id, target: nodes[j].id});
+    }
+  }
+
+  return edges;
+}
+
+function getEdgesMentions(hits) {
+  let tweetsMentions = hits.tweets.filter(tweet => tweet._source.mentions !== undefined);
+
+  let edges = tweetsMentions.map((tweet) => {
+    let edgesMention = [];
+    let username = tweet._source.username;
+    tweet._source.mentions.forEach(mention => {
+      edgesMention.push({id: username + "_and_" + mention, source: username, target: mention});
+    })
+    return edgesMention;
+  }).flat();
+
+  return _.uniqWith(edges, _.isEqual);
+}
 
 const useTwitterSnaRequest = (request) => {
   // console.log("useTwitterSnaRequest request: ", request);
@@ -226,6 +268,7 @@ const useTwitterSnaRequest = (request) => {
       result.tweetCount.like = responseArrayOf7[5].likes.toString().replace(/(?=(\d{3})+(?!\d))/g, " ");
       result.tweets = responseArrayOf7[5].tweets;
       result.histogram = createHistogram(data, responseArrayOf7[6], givenFrom, givenUntil);
+      result.communityGraph = { title: "Community graph", "tmpdata": responseArrayOf7[5], hashtagGraph: createHashtagGraph(data, responseArrayOf7[5]) };
       if (final) {
         result.cloudChart = createWordCloud(responseArrayOf7[7]);
 
@@ -365,7 +408,24 @@ const useTwitterSnaRequest = (request) => {
     }
 
 
+    const createHashtagGraph = (request, hits) => {
+      let myGraph = {nodes:[{id:"n1", label:"Alice"}, {id:"n2", label:"Rabbit"}], edges:[{id:"e1",source:"n1",target:"n2"}]};
 
+      let usernameTweets = getNodesUserTweets(hits);
+      let usernameMentions = getNodesUserMentions(hits);
+
+      let nodes = [...new Set(usernameTweets.concat(usernameMentions))];
+      let edges = getEdgesMentions(hits);
+      // let nodes = getNodesUserTweets(hits);
+      // let edges = getEdgesCombinationNodes(nodes);
+
+      let graph = {
+        nodes: nodes,
+        edges: edges
+      };
+
+      return graph;
+    }
 
     const lastRenderCall = (sessionId, request) => {
 
