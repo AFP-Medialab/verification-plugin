@@ -49,6 +49,7 @@ export default function TwitterSnaResult(props) {
     const [pieCharts1, setPieCharts1] = useState(null);
     const [pieCharts2, setPieCharts2] = useState(null);
     const [pieCharts3, setPieCharts3] = useState(null);
+    const [hashtagGraph, setHashtagGraph] = useState(null);
 
     const hidePieChartTweetsView = (index) => {
         switch (index) {
@@ -79,10 +80,13 @@ export default function TwitterSnaResult(props) {
     //Set result 
     useEffect(() => {
 
-        setResult(props.result);
-
+        setResult(props.result);       
 
     }, [JSON.stringify(props.result), props.result]);
+
+    // useEffect(()=>{
+    //      setHashtagGraph(props.result.communityGraph.hashtagGraph);
+    // }, [JSON.stringify(props.result.communityGraph.hashtagGraph), props.result.communityGraph.hashtagGraph])
 
     //Initialize tweets arrays
     useEffect(() => {
@@ -93,6 +97,7 @@ export default function TwitterSnaResult(props) {
         setPieCharts1(null);
         setPieCharts2(null);
         setPieCharts3(null);
+        setHashtagGraph(null);
     }, [JSON.stringify(props.request), props.request])
 
 
@@ -422,12 +427,44 @@ export default function TwitterSnaResult(props) {
         return csvData;
     }
 
-    const onNodeClick = e => {
-        console.log("Clicked on a node");
+    function doubleSizeNode(node) {
+        let newNode = node;
+        newNode.size = node.size * 2;
+        return newNode;
+    }
+
+    function onNodeClick (e, result) {
+        console.log("Clicked on a node", e);
+        console.log("Clicked on a props", props);
+
+        // let newGraph = result.communityGraph.hashtagGraph;
+
+        // result.communityGraph.hashtagGraph.edges.forEach(edge => {
+        //     let dropedObj = e.data.renderer.graph.dropEdge(edge.id);
+        //     newGraph = { nodes: dropedObj.nodesArray, edges: dropedObj.edgesArray };
+        // });
+
+        updateGraph();
+
+        console.log("new hashtagGraph: ", hashtagGraph);
+    }
+
+    function updateGraph() {
+        let newGraph = { nodes:[{id:"n1", label:"Alice"}, {id:"n2", label:"Rabbit"}], edges:[{id:"e1",source:"n1",target:"n2",label:"SEES"}] };
+        console.log("newGraph: ", newGraph);
+        
+        console.log("old hashtagGraph: ", hashtagGraph);
+
+        debugger;
+
+        setHashtagGraph(newGraph);
     }
 
     if (result === null)
         return <div />;
+    
+    // if (result.communityGraph.hashtagGraph.length !== 0)
+    //     setHashtagGraph({nodes: result.communityGraph.hashtagGraph.nodes, edges: []});
 
     let call = getCallbacks();
     return (
@@ -629,51 +666,52 @@ export default function TwitterSnaResult(props) {
                                     <Box alignItems="center" justifyContent="center" width={"100%"}>
                                     { 
                                     ((obj.json === null) &&
-                                    <Typography variant={"body2"}>{keyword("sna_no_data")}</Typography>)}
-                                        {(obj.json !== null) &&
-                                        <Plot
-                                            data={obj.json}
-                                            layout={obj.layout}
-                                            config={obj.config}
-                                            onClick={e => {
-                                                onDonutsClick(e, obj.title, index)
-                                            }}
-                                        />
-                                        }
-                                        {
-                                            pieCharts[index] &&
-                                            <div>
-                                                <Grid container justify="space-between" spacing={2}
-                                                    alignContent={"center"}>
-                                                    <Grid item>
-                                                        <Button
-                                                            variant={"contained"}
-                                                            color={"secondary"}
-                                                            onClick={() => hidePieChartTweetsView(index)}>
-                                                            {
-                                                                keyword('sna_result_hide')
-                                                            }
-                                                        </Button>
-                                                    </Grid>
-                                                    <Grid item>
-                                                        <Button
-                                                            variant={"contained"}
-                                                            color={"primary"}
-                                                            onClick={() => downloadClick(pieCharts[index].csvArr, (index < 3) ? pieCharts[index].username : pieCharts3.word)}>
-                                                            {
-                                                                keyword('sna_result_download')
-                                                            }
-                                                        </Button>
-                                                    </Grid>
+                                    <Typography variant={"body2"}>{keyword("sna_no_data")}</Typography>)
+                                    }
+                                    {(obj.json !== null) &&
+                                    <Plot
+                                        data={obj.json}
+                                        layout={obj.layout}
+                                        config={obj.config}
+                                        onClick={e => {
+                                            onDonutsClick(e, obj.title, index)
+                                        }}
+                                    />
+                                    }
+                                    {
+                                        pieCharts[index] &&
+                                        <div>
+                                            <Grid container justify="space-between" spacing={2}
+                                                alignContent={"center"}>
+                                                <Grid item>
+                                                    <Button
+                                                        variant={"contained"}
+                                                        color={"secondary"}
+                                                        onClick={() => hidePieChartTweetsView(index)}>
+                                                        {
+                                                            keyword('sna_result_hide')
+                                                        }
+                                                    </Button>
                                                 </Grid>
-                                                <Box m={2} />
-                                                <CustomTable title={keyword("sna_result_slected_tweets")}
-                                                    colums={pieCharts[index].columns}
-                                                    data={pieCharts[index].data}
-                                                    actions={goToTweetAction}
-                                                />
-                                            </div>
-                                        }
+                                                <Grid item>
+                                                    <Button
+                                                        variant={"contained"}
+                                                        color={"primary"}
+                                                        onClick={() => downloadClick(pieCharts[index].csvArr, (index < 3) ? pieCharts[index].username : pieCharts3.word)}>
+                                                        {
+                                                            keyword('sna_result_download')
+                                                        }
+                                                    </Button>
+                                                </Grid>
+                                            </Grid>
+                                            <Box m={2} />
+                                            <CustomTable title={keyword("sna_result_slected_tweets")}
+                                                colums={pieCharts[index].columns}
+                                                data={pieCharts[index].data}
+                                                actions={goToTweetAction}
+                                            />
+                                        </div>
+                                    }
                                     </Box>
                                 </ExpansionPanelDetails>
                             </ExpansionPanel>
@@ -802,38 +840,16 @@ export default function TwitterSnaResult(props) {
                             {/* {(result.histogram.json && (result.histogram.json.length === 0) &&
                                 <Typography variant={"body2"}>{keyword("sna_no_data")}</Typography>)} */}
 
-                            {(result.histogram.json && result.histogram.json.length !== 0) &&
-                                /* <CytoscapeComponent
-                                    elements={CytoscapeComponent.normalizeElements({
-                                        nodes: [
-                                            { data: { id: 'one', label: 'Node 1' }, position: { x: 100, y: 100 } },
-                                            { data: { id: 'two', label: 'Node 2' }, position: { x: 200, y: 200 } },
-                                            { data: { id: 'three', label: 'Node 3' }, position: { x: 300, y: 400 } }
-                                        ],
-                                        edges: [
-                                            { data: { source: 'one', target: 'two', label: 'Edge from Node1 to Node2' } },
-                                            { data: { source: 'one', target: 'three', label: 'Edge from Node1 to Node3' } }
-                                        ]
-                                    })}
-                                    style={{ textAlign: 'left', width: '100%', height: '500px' }}
-                                    cy={(cy) => { myCy = cy }}
-                                /> 
-                                 <Sigma renderer="canvas" style={{ textAlign: 'left', width: '100%', height: '500px' }} onClickNode={e => {onNodeClick(e);}}>
-                                    <LoadGEXF path= {String(generatedGefx)}>
-                                        <RelativeSize initialSize={15}/>
-                                        <RandomizeNodePositions/>
-                                    </LoadGEXF>
-                                </Sigma> */
+                            {(result.communityGraph.hashtagGraph && result.communityGraph.hashtagGraph.node !== 0) &&
 
-                                <Sigma graph={result.communityGraph.hashtagGraph}
+                                //<Sigma graph={ {nodes:[{id:"n1", label:"Alice"}, {id:"n2", label:"Rabbit"}], edges:[{id:"e1",source:"n1",target:"n2",label:"SEES"}]} }
+                                
+                                <Sigma graph = { result.communityGraph.hashtagGraph }
                                         style={{ textAlign: 'left', width: '100%', height: '500px' }} 
-                                        onClickNode={e => {onNodeClick(e);}}>
+                                        onClickNode={e => {onNodeClick(e, result);}}>
                                     <RelativeSize initialSize={15}/>
                                     <RandomizeNodePositions/>
                                 </Sigma>
-
-                                    
-
                             }
                         </div>
                     </ExpansionPanelDetails>

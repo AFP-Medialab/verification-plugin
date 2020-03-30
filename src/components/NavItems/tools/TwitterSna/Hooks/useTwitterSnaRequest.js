@@ -61,7 +61,8 @@ function getColor(entity) {
 function getNodesUserTweets(hits) {
   let usernameOfTweets = hits.tweets.map(function(val) { return val._source.username;});
   let uniqUsername = [...new Set(usernameOfTweets)];
-  let nodes = uniqUsername.map((username) => { return {id: username, label: username}});
+  // let nodes = uniqUsername.map((username) => { return {id: username, label: username}});
+  let nodes = uniqUsername.map((username) => { return {id: username, label: username, size: 1}});
   return nodes;
 }
 
@@ -70,7 +71,8 @@ function getNodesUserMentions(hits) {
                                       .map((tweet) => {return tweet._source.mentions})
                                       .flat();
   let uniqUsername = [...new Set(usernameOfMentions)];
-  let nodes = uniqUsername.map((username) => { return {id: username, label: username}});
+  // let nodes = uniqUsername.map((username) => { return {id: username, label: username}});
+  let nodes = uniqUsername.map((username) => { return {id: username, label: username, size: 1}});
   return nodes;
 }
 
@@ -93,7 +95,8 @@ function getEdgesMentions(hits) {
     let edgesMention = [];
     let username = tweet._source.username;
     tweet._source.mentions.forEach(mention => {
-      edgesMention.push({id: username + "_and_" + mention, source: username, target: mention});
+      // edgesMention.push({id: username + "_and_" + mention, source: username, target: mention});
+      edgesMention.push({id: username + "_and_" + mention, source: username, target: mention, size: 1});
     })
     return edgesMention;
   }).flat();
@@ -414,10 +417,12 @@ const useTwitterSnaRequest = (request) => {
       let usernameTweets = getNodesUserTweets(hits);
       let usernameMentions = getNodesUserMentions(hits);
 
-      let nodes = [...new Set(usernameTweets.concat(usernameMentions))];
-      let edges = getEdgesMentions(hits);
-      // let nodes = getNodesUserTweets(hits);
-      // let edges = getEdgesCombinationNodes(nodes);
+      // let nodes = [...new Set(usernameTweets.concat(usernameMentions))];
+      // let edges = getEdgesMentions(hits);
+      let nodes = getNodesUserTweets(hits);
+      let edges = getEdgesCombinationNodes(nodes);
+
+      // let edges = [];
 
       let graph = {
         nodes: nodes,
