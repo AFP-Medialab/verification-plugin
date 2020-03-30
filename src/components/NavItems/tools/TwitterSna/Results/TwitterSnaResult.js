@@ -837,7 +837,7 @@ export default function TwitterSnaResult(props) {
                 </ExpansionPanel>
             }
             {
-                <ExpansionPanel>
+                /* <ExpansionPanel>
                     <ExpansionPanelSummary
                         expandIcon={<ExpandMoreIcon />}
                     >
@@ -846,9 +846,9 @@ export default function TwitterSnaResult(props) {
                     <ExpansionPanelDetails>
                         <div style={{ width: '100%' }}>
                             {/* {(result.histogram.json && (result.histogram.json.length === 0) &&
-                                <Typography variant={"body2"}>{keyword("sna_no_data")}</Typography>)} */}
+                                <Typography variant={"body2"}>{keyword("sna_no_data")}</Typography>)} */
 
-                            {(result.histogram.json && result.histogram.json.length !== 0) &&
+                            /* {(result.histogram.json && result.histogram.json.length !== 0) &&
                                 <CytoscapeComponent
                                     elements={CytoscapeComponent.normalizeElements({
                                         nodes: [
@@ -863,12 +863,12 @@ export default function TwitterSnaResult(props) {
                                     })}
                                     style={{ textAlign: 'left', width: '100%', height: '500px' }}
                                     cy={(cy) => { myCy = cy }}
-                                />
+                                /> }*/
 
-                            }
-                        </div>
+                            
+                        /* </div>
                     </ExpansionPanelDetails>
-                </ExpansionPanel>
+                </ExpansionPanel> */ 
             }
 
             <Box m={3} />
