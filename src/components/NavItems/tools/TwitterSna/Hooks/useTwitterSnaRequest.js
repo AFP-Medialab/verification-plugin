@@ -61,8 +61,8 @@ function getColor(entity) {
 function getNodesUserTweets(hits) {
   let usernameOfTweets = hits.tweets.map(function(val) { return val._source.username;});
   let uniqUsername = [...new Set(usernameOfTweets)];
-  // let nodes = uniqUsername.map((username) => { return {id: username, label: username}});
-  let nodes = uniqUsername.map((username) => { return {id: username, label: username, size: 1}});
+  let nodes = uniqUsername.map((username) => { return {id: username, label: username}});
+  console.log("usernameOfTweets: ", uniqUsername)
   return nodes;
 }
 
@@ -71,8 +71,7 @@ function getNodesUserMentions(hits) {
                                       .map((tweet) => {return tweet._source.mentions})
                                       .flat();
   let uniqUsername = [...new Set(usernameOfMentions)];
-  // let nodes = uniqUsername.map((username) => { return {id: username, label: username}});
-  let nodes = uniqUsername.map((username) => { return {id: username, label: username, size: 1}});
+  let nodes = uniqUsername.map((username) => { return {id: username, label: username}});
   return nodes;
 }
 
@@ -95,13 +94,20 @@ function getEdgesMentions(hits) {
     let edgesMention = [];
     let username = tweet._source.username;
     tweet._source.mentions.forEach(mention => {
-      // edgesMention.push({id: username + "_and_" + mention, source: username, target: mention});
-      edgesMention.push({id: username + "_and_" + mention, source: username, target: mention, size: 1});
+      edgesMention.push({id: username + "_and_" + mention, source: username, target: mention});
     })
     return edgesMention;
   }).flat();
 
   return _.uniqWith(edges, _.isEqual);
+}
+
+function mergeUniq2ArrOfJsonsById(arr1, arr2) {
+  let uniqArr = Object.values(arr1.concat(arr2).reduce((r,o) => {
+    r[o.id] = o;
+    return r;
+  },{}));
+  return uniqArr;
 }
 
 const useTwitterSnaRequest = (request) => {
@@ -412,22 +418,23 @@ const useTwitterSnaRequest = (request) => {
 
 
     const createHashtagGraph = (request, hits) => {
-      let myGraph = {nodes:[{id:"n1", label:"Alice"}, {id:"n2", label:"Rabbit"}], edges:[{id:"e1",source:"n1",target:"n2"}]};
+      // let myGraph = {
+      //   nodes:[{id:"n1", label:"N1"}, {id:"n2", label:"N2"}, {id:"n3", label:"N3"}, {id:"n4", label:"N4"}, {id:"n5", label:"N5"},], 
+      //   edges:[{id:"e12",source:"n1",target:"n2"}, {id:"e13",source:"n1",target:"n3"}, {id:"e34",source:"n3",target:"n4"}]
+      // };
 
       let usernameTweets = getNodesUserTweets(hits);
       let usernameMentions = getNodesUserMentions(hits);
 
-      // let nodes = [...new Set(usernameTweets.concat(usernameMentions))];
-      // let edges = getEdgesMentions(hits);
-      let nodes = getNodesUserTweets(hits);
-      let edges = getEdgesCombinationNodes(nodes);
-
-      // let edges = [];
+      let nodes = mergeUniq2ArrOfJsonsById(usernameTweets, usernameMentions);
+      let edges = getEdgesMentions(hits);
 
       let graph = {
         nodes: nodes,
         edges: edges
       };
+
+      console.log("new graph: ", graph);
 
       return graph;
     }

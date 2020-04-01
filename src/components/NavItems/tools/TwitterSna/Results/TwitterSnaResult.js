@@ -427,27 +427,15 @@ export default function TwitterSnaResult(props) {
         return csvData;
     }
 
-    function doubleSizeNode(node) {
-        let newNode = node;
-        newNode.size = node.size * 2;
-        return newNode;
-    }
-
     function onClickNode (e) {
         setHashtagGraph(createGraphWhenClickANode(e));
     }
 
     function createGraphWhenClickANode(e) {
         let selectedNode = e.data.node;
-        // let newGraph = { nodes:[{id:"n1", label:"Alice"}, {id:"n2", label:"Rabbit"}], edges:[{id:"e1",source:"n1",target:"n2",label:"SEES"}] };
         
         let neighborNodes = e.data.renderer.graph.adjacentNodes(selectedNode.id);
         let neighborEdges = e.data.renderer.graph.adjacentEdges(selectedNode.id);
-
-        // neighborEdges.forEach(edge => {
-        //     edge.size = 100;
-        //     delete edge["read_cam0:size"];
-        // });
 
         neighborNodes.push(selectedNode);
         
@@ -457,11 +445,6 @@ export default function TwitterSnaResult(props) {
         }
 
         console.log("newGraph", newGraph);
-
-        // let z = e.data.renderer.graph.dropEdge("TechNative_and_iTGuru");
-
-        // let connectedNodes = graphSelectedNodeAndItsNeighbors.nodesArray;
-        // let connectedEdges = graphSelectedNodeAndItsNeighbors.edgesArray;
         return newGraph;
     }
 
@@ -842,6 +825,7 @@ export default function TwitterSnaResult(props) {
 
                             {(hashtagGraph === null && result.communityGraph.hashtagGraph && result.communityGraph.hashtagGraph.node !== 0) &&
                                 <Sigma graph = { result.communityGraph.hashtagGraph }
+                                        renderer = { "canvas" }
                                         style={{ textAlign: 'left', width: '100%', height: '500px'}} 
                                         onClickNode={(e) => onClickNode(e)}
                                         settings = {{ defaultNodeColor: "#3388AA",
@@ -850,18 +834,28 @@ export default function TwitterSnaResult(props) {
                                                         labelThreshold: 12,
                                                         hoverFontStyle: "text-size: 11",
                                                         batchEdgesDrawing: true,
-                                                        drawEdges: false,
-                                                        drawEdgeLabels: false }}>
+                                                        drawEdges: true,
+                                                        drawEdgeLabels: false,
+                                                        minNodeSize: 5,
+                                                        minEdgeSize: 5,
+                                                        maxEdgeSize: 10 }}>
                                     <RelativeSize initialSize={15}/>
                                     <RandomizeNodePositions/>
                                 </Sigma>
                             }
                             { hashtagGraph &&
                                 <Sigma graph = { hashtagGraph }
-                                        renderer = { "svg" }
+                                        renderer = { "canvas" }
                                         onClickNode={(e) => onClickNode(e)}
                                         style={{ textAlign: 'left', width: '100%', height: '500px' }}
-                                        >
+                                        settings = {{ defaultNodeColor: "#3388AA",
+                                                        defaultLabelSize: 8,
+                                                        defaultLabelColor: "#777",
+                                                        labelThreshold: 0,
+                                                        hoverFontStyle: "text-size: 11",
+                                                        batchEdgesDrawing: true,
+                                                        minNodeSize: 5 }}
+                                                        >
                                 </Sigma>
                             }
                         </div>
