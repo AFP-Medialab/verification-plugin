@@ -433,38 +433,40 @@ export default function TwitterSnaResult(props) {
         return newNode;
     }
 
-    function onNodeClick (e, result) {
-        console.log("Clicked on a node", e);
-        console.log("Clicked on a props", props);
-
-        // let newGraph = result.communityGraph.hashtagGraph;
-
-        // result.communityGraph.hashtagGraph.edges.forEach(edge => {
-        //     let dropedObj = e.data.renderer.graph.dropEdge(edge.id);
-        //     newGraph = { nodes: dropedObj.nodesArray, edges: dropedObj.edgesArray };
-        // });
-
-        updateGraph();
-
-        console.log("new hashtagGraph: ", hashtagGraph);
+    function onClickNode (e) {
+        setHashtagGraph(createGraphWhenClickANode(e));
     }
 
-    function updateGraph() {
-        let newGraph = { nodes:[{id:"n1", label:"Alice"}, {id:"n2", label:"Rabbit"}], edges:[{id:"e1",source:"n1",target:"n2",label:"SEES"}] };
-        console.log("newGraph: ", newGraph);
+    function createGraphWhenClickANode(e) {
+        let selectedNode = e.data.node;
+        // let newGraph = { nodes:[{id:"n1", label:"Alice"}, {id:"n2", label:"Rabbit"}], edges:[{id:"e1",source:"n1",target:"n2",label:"SEES"}] };
         
-        console.log("old hashtagGraph: ", hashtagGraph);
+        let neighborNodes = e.data.renderer.graph.adjacentNodes(selectedNode.id);
+        let neighborEdges = e.data.renderer.graph.adjacentEdges(selectedNode.id);
 
-        debugger;
+        // neighborEdges.forEach(edge => {
+        //     edge.size = 100;
+        //     delete edge["read_cam0:size"];
+        // });
 
-        setHashtagGraph(newGraph);
+        neighborNodes.push(selectedNode);
+        
+        let newGraph = {
+            nodes: neighborNodes,
+            edges: neighborEdges
+        }
+
+        console.log("newGraph", newGraph);
+
+        // let z = e.data.renderer.graph.dropEdge("TechNative_and_iTGuru");
+
+        // let connectedNodes = graphSelectedNodeAndItsNeighbors.nodesArray;
+        // let connectedEdges = graphSelectedNodeAndItsNeighbors.edgesArray;
+        return newGraph;
     }
 
     if (result === null)
         return <div />;
-    
-    // if (result.communityGraph.hashtagGraph.length !== 0)
-    //     setHashtagGraph({nodes: result.communityGraph.hashtagGraph.nodes, edges: []});
 
     let call = getCallbacks();
     return (
@@ -837,19 +839,54 @@ export default function TwitterSnaResult(props) {
                     </ExpansionPanelSummary>
                     <ExpansionPanelDetails>
                         <div style={{ width: '100%'}}>
-                            {/* {(result.histogram.json && (result.histogram.json.length === 0) &&
-                                <Typography variant={"body2"}>{keyword("sna_no_data")}</Typography>)} */}
 
-                            {(result.communityGraph.hashtagGraph && result.communityGraph.hashtagGraph.node !== 0) &&
-
-                                //<Sigma graph={ {nodes:[{id:"n1", label:"Alice"}, {id:"n2", label:"Rabbit"}], edges:[{id:"e1",source:"n1",target:"n2",label:"SEES"}]} }
-                                
+                            {(hashtagGraph === null && result.communityGraph.hashtagGraph && result.communityGraph.hashtagGraph.node !== 0) &&
                                 <Sigma graph = { result.communityGraph.hashtagGraph }
-                                        style={{ textAlign: 'left', width: '100%', height: '500px' }} 
-                                        onClickNode={e => {onNodeClick(e, result);}}>
+                                        style={{ textAlign: 'left', width: '100%', height: '500px'}} 
+                                        onClickNode={(e) => onClickNode(e)}
+                                        settings = {{ defaultNodeColor: "#3388AA",
+                                                        defaultLabelSize: 8,
+                                                        defaultLabelColor: "#777",
+                                                        labelThreshold: 12,
+                                                        hoverFontStyle: "text-size: 11",
+                                                        batchEdgesDrawing: true,
+                                                        drawEdges: false,
+                                                        drawEdgeLabels: false }}>
                                     <RelativeSize initialSize={15}/>
                                     <RandomizeNodePositions/>
                                 </Sigma>
+                            }
+                            { hashtagGraph &&
+                                <Sigma graph = { hashtagGraph }
+                                        renderer = { "svg" }
+                                        onClickNode={(e) => onClickNode(e)}
+                                        style={{ textAlign: 'left', width: '100%', height: '500px' }}
+                                        >
+                                </Sigma>
+                            }
+                        </div>
+                    </ExpansionPanelDetails>
+                </ExpansionPanel>
+            }
+            {
+                <ExpansionPanel>
+                    <ExpansionPanelSummary
+                        expandIcon={<ExpandMoreIcon />}
+                    >
+                        <Typography className={classes.heading}>{result.communityGraph.title}</Typography>
+                    </ExpansionPanelSummary>
+                    <ExpansionPanelDetails>
+                        <div style={{ width: '100%'}}>
+
+                            {(hashtagGraph === null && result.communityGraph.hashtagGraph && result.communityGraph.hashtagGraph.node !== 0) &&
+                                <Button
+                                    variant={"contained"}
+                                    color={"primary"}
+                                    onClick={(e) => onClickNode(e) }>
+                                    {
+                                        keyword('sna_result_download')
+                                    }
+                                </Button>
                             }
                         </div>
                     </ExpansionPanelDetails>
