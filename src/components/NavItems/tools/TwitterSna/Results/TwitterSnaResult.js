@@ -49,7 +49,8 @@ export default function TwitterSnaResult(props) {
     const [pieCharts1, setPieCharts1] = useState(null);
     const [pieCharts2, setPieCharts2] = useState(null);
     const [pieCharts3, setPieCharts3] = useState(null);
-    const [hashtagGraph, setHashtagGraph] = useState(null);
+    const [graphReset, setGraphReset] = useState(null);
+    const [graphClickNode, setGraphClickNode] = useState(null);
 
     const hidePieChartTweetsView = (index) => {
         switch (index) {
@@ -84,10 +85,6 @@ export default function TwitterSnaResult(props) {
 
     }, [JSON.stringify(props.result), props.result]);
 
-    // useEffect(()=>{
-    //      setHashtagGraph(props.result.communityGraph.hashtagGraph);
-    // }, [JSON.stringify(props.result.communityGraph.hashtagGraph), props.result.communityGraph.hashtagGraph])
-
     //Initialize tweets arrays
     useEffect(() => {
         setHistoTweets(null);
@@ -97,7 +94,8 @@ export default function TwitterSnaResult(props) {
         setPieCharts1(null);
         setPieCharts2(null);
         setPieCharts3(null);
-        setHashtagGraph(null);
+        setGraphReset(null);
+        setGraphClickNode(null);
     }, [JSON.stringify(props.request), props.request])
 
 
@@ -428,12 +426,40 @@ export default function TwitterSnaResult(props) {
     }
 
     function onClickNode (e) {
-        setHashtagGraph(createGraphWhenClickANode(e));
+        
+        // Save the init graph before clicking to use later
+        setGraphReset(() => {
+            let resetGraph = {
+                nodes: e.data.renderer.nodesOnScreen,
+                edges: e.data.renderer.edgesOnScreen,
+            };
+            return resetGraph;
+        });
+
+        console.log("onClickNode, setGraphReset = graph before click");
+        console.log("onClickNode, setGraphClickNode = new graph after click");
+
+        // Set new graph (which has only the clicked node and its neighbors) after clicking
+        setGraphClickNode(createGraphWhenClickANode(e));
+    }
+
+    function onClickStage(e) {
+        // console.log("click stage: ", e);
+        // console.log("initHashtagGraph: ", initHashtagGraph);
+        // setHashtagGraph(() => {
+        //    console.log("reset background");
+        //    return initHashtagGraph;
+        // });
+        setGraphClickNode(() => {
+            console.log("onClickStage: setGraphClickNode NULL");
+            return null;
+        });
     }
 
     function createGraphWhenClickANode(e) {
-        let selectedNode = e.data.node;
         
+        let selectedNode = e.data.node;
+
         let neighborNodes = e.data.renderer.graph.adjacentNodes(selectedNode.id);
         let neighborEdges = e.data.renderer.graph.adjacentEdges(selectedNode.id);
 
@@ -823,7 +849,10 @@ export default function TwitterSnaResult(props) {
                     <ExpansionPanelDetails>
                         <div style={{ width: '100%'}}>
 
-                            {(hashtagGraph === null && result.communityGraph.hashtagGraph && result.communityGraph.hashtagGraph.node !== 0) &&
+                            {
+                                /* (hashtagGraph === null && result.communityGraph.hashtagGraph && result.communityGraph.hashtagGraph.node !== 0) && */
+                                (graphReset === null && graphClickNode === null &&
+                                result.communityGraph.hashtagGraph && result.communityGraph.hashtagGraph.node !== 0) &&
                                 <Sigma graph = { result.communityGraph.hashtagGraph }
                                         renderer = { "canvas" }
                                         style={{ textAlign: 'left', width: '100%', height: '500px'}} 
@@ -843,10 +872,11 @@ export default function TwitterSnaResult(props) {
                                     <RandomizeNodePositions/>
                                 </Sigma>
                             }
-                            { hashtagGraph &&
-                                <Sigma graph = { hashtagGraph }
+                            { graphReset !== null && graphClickNode !== null &&
+                                <Sigma graph = { graphClickNode }
                                         renderer = { "canvas" }
-                                        onClickNode={(e) => onClickNode(e)}
+                                        // onClickNode={(e) => onClickNode(e)}
+                                        onClickStage={(e) => onClickStage(e)}
                                         style={{ textAlign: 'left', width: '100%', height: '500px' }}
                                         settings = {{ defaultNodeColor: "#3388AA",
                                                         defaultLabelSize: 8,
@@ -855,37 +885,34 @@ export default function TwitterSnaResult(props) {
                                                         hoverFontStyle: "text-size: 11",
                                                         batchEdgesDrawing: true,
                                                         minNodeSize: 5 }}
-                                                        >
+                                >
+                                </Sigma>
+                            }
+                            { graphReset !== null && graphClickNode === null &&
+                                <Sigma graph = { result.communityGraph.hashtagGraph }
+                                        renderer = { "canvas" }
+                                        style={{ textAlign: 'left', width: '100%', height: '500px'}} 
+                                        onClickNode={(e) => onClickNode(e)}
+                                        settings = {{ defaultNodeColor: "#3388AA",
+                                                        defaultLabelSize: 8,
+                                                        defaultLabelColor: "#777",
+                                                        labelThreshold: 12,
+                                                        hoverFontStyle: "text-size: 11",
+                                                        batchEdgesDrawing: true,
+                                                        drawEdges: true,
+                                                        drawEdgeLabels: false,
+                                                        minNodeSize: 5,
+                                                        minEdgeSize: 5,
+                                                        maxEdgeSize: 10 }}>
+                                    <RelativeSize initialSize={15}/>
+                                    <RandomizeNodePositions/>
                                 </Sigma>
                             }
                         </div>
                     </ExpansionPanelDetails>
                 </ExpansionPanel>
             }
-            {
-                <ExpansionPanel>
-                    <ExpansionPanelSummary
-                        expandIcon={<ExpandMoreIcon />}
-                    >
-                        <Typography className={classes.heading}>{result.communityGraph.title}</Typography>
-                    </ExpansionPanelSummary>
-                    <ExpansionPanelDetails>
-                        <div style={{ width: '100%'}}>
 
-                            {(hashtagGraph === null && result.communityGraph.hashtagGraph && result.communityGraph.hashtagGraph.node !== 0) &&
-                                <Button
-                                    variant={"contained"}
-                                    color={"primary"}
-                                    onClick={(e) => onClickNode(e) }>
-                                    {
-                                        keyword('sna_result_download')
-                                    }
-                                </Button>
-                            }
-                        </div>
-                    </ExpansionPanelDetails>
-                </ExpansionPanel>
-            }
             <Box m={3} />
             {
                 result.urls &&
