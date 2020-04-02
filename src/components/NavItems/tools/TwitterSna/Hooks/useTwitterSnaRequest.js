@@ -489,8 +489,13 @@ const useTwitterSnaRequest = (request) => {
 
       let hashtagNodes = getNodesHashtag(hits, request);
       let userTweetNodes = getNodesUserTweets(hits);
+      let userMentionNodes = getNodesUserMentions(hits);
       let nodes = mergeUniq2ArrOfJsonsById(hashtagNodes, userTweetNodes);
-      let edges = getEdgesUserHashtag(hits);
+      nodes = mergeUniq2ArrOfJsonsById(nodes, userMentionNodes);
+
+      let userMentionEdges = getEdgesUserMention(hits);
+      let userHashtagEdges = getEdgesUserHashtag(hits);
+      let edges = mergeUniq2ArrOfJsonsById(userMentionEdges, userHashtagEdges);
       let hashtagGraph = {
         nodes: nodes,
         edges: edges
