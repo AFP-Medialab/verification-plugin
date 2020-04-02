@@ -844,16 +844,16 @@ export default function TwitterSnaResult(props) {
                     <ExpansionPanelSummary
                         expandIcon={<ExpandMoreIcon />}
                     >
-                        <Typography className={classes.heading}>{result.communityGraph.title}</Typography>
+                        <Typography className={classes.heading}>{result.netGraph.title}</Typography>
                     </ExpansionPanelSummary>
                     <ExpansionPanelDetails>
                         <div style={{ width: '100%'}}>
 
                             {
-                                /* (hashtagGraph === null && result.communityGraph.hashtagGraph && result.communityGraph.hashtagGraph.node !== 0) && */
+                                /* (hashtagGraph === null && result.netGraph.hashtagGraph && result.netGraph.hashtagGraph.node !== 0) && */
                                 (graphReset === null && graphClickNode === null &&
-                                result.communityGraph.hashtagGraph && result.communityGraph.hashtagGraph.node !== 0) &&
-                                <Sigma graph = { result.communityGraph.hashtagGraph }
+                                result.netGraph.hashtagGraph && result.netGraph.hashtagGraph.node !== 0) &&
+                                <Sigma graph = { result.netGraph.hashtagGraph }
                                         renderer = { "canvas" }
                                         style={{ textAlign: 'left', width: '100%', height: '500px'}} 
                                         onClickNode={(e) => onClickNode(e)}
@@ -863,11 +863,11 @@ export default function TwitterSnaResult(props) {
                                                         labelThreshold: 12,
                                                         hoverFontStyle: "text-size: 11",
                                                         batchEdgesDrawing: true,
-                                                        drawEdges: true,
+                                                        drawEdges: false,
                                                         drawEdgeLabels: false,
-                                                        minNodeSize: 5,
-                                                        minEdgeSize: 5,
-                                                        maxEdgeSize: 10 }}>
+                                                        minNodeSize: 2,
+                                                        maxNodeSize: 20
+                                                        }}>
                                     <RelativeSize initialSize={15}/>
                                     <RandomizeNodePositions/>
                                 </Sigma>
@@ -884,12 +884,15 @@ export default function TwitterSnaResult(props) {
                                                         labelThreshold: 0,
                                                         hoverFontStyle: "text-size: 11",
                                                         batchEdgesDrawing: true,
-                                                        minNodeSize: 5 }}
+                                                        minNodeSize: 2,
+                                                        maxNodeSize: 20
+                                                    }}
                                 >
+                                    {/* <RelativeSize initialSize={15}/> */}
                                 </Sigma>
                             }
                             { graphReset !== null && graphClickNode === null &&
-                                <Sigma graph = { result.communityGraph.hashtagGraph }
+                                <Sigma graph = { result.netGraph.hashtagGraph }
                                         renderer = { "canvas" }
                                         style={{ textAlign: 'left', width: '100%', height: '500px'}} 
                                         onClickNode={(e) => onClickNode(e)}
@@ -899,11 +902,11 @@ export default function TwitterSnaResult(props) {
                                                         labelThreshold: 12,
                                                         hoverFontStyle: "text-size: 11",
                                                         batchEdgesDrawing: true,
-                                                        drawEdges: true,
+                                                        drawEdges: false,
                                                         drawEdgeLabels: false,
-                                                        minNodeSize: 5,
-                                                        minEdgeSize: 5,
-                                                        maxEdgeSize: 10 }}>
+                                                        minNodeSize: 2,
+                                                        maxNodeSize: 20
+                                                    }}>
                                     <RelativeSize initialSize={15}/>
                                     <RandomizeNodePositions/>
                                 </Sigma>

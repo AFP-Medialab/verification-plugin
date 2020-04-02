@@ -62,7 +62,6 @@ function getNodesUserTweets(hits) {
   let usernameOfTweets = hits.tweets.map(function(val) { return val._source.username;});
   let uniqUsername = [...new Set(usernameOfTweets)];
   let nodes = uniqUsername.map((username) => { return {id: username, label: username}});
-  console.log("usernameOfTweets: ", uniqUsername)
   return nodes;
 }
 
@@ -72,6 +71,47 @@ function getNodesUserMentions(hits) {
                                       .flat();
   let uniqUsername = [...new Set(usernameOfMentions)];
   let nodes = uniqUsername.map((username) => { return {id: username, label: username}});
+  return nodes;
+}
+
+function getNodesHashtag(hits, request) {
+  let tweetHashtags = hits.tweets.filter(tweet => tweet._source.hashtags !== undefined)
+                              .map((tweet) => {return tweet._source.hashtags})
+                              .flat();
+  let uniqHashtags = [...new Set(tweetHashtags)];
+
+  // let sortedUniqHashtags = hashtags.filter((key, idx) => hashtags.lastIndexOf(key) === idx).sort((a, b) => a < b ? -1 : 1);
+
+  // let colors = [];
+  // let nbColors = 20;
+  // let count = 0;
+  // sortedUniqHashtags.forEach(hashtag => {
+  //   if (count < nbColors) {
+  //     colors[hashtag] = '#'+(Math.random()*0xFFFFFF<<0).toString(16);
+  //     count += 1;
+  //   } else {
+  //     colors[hashtag] = '#C0C0C0';
+  //   }
+  // });
+
+  let colors = []
+  let requestHashtags = request.keywordList.filter((word) => word.startsWith("#"));
+  requestHashtags.forEach(hashtag => { colors[hashtag] = '#'+(Math.random()*0xFFFFFF<<0).toString(16); });
+    
+
+  // let nodes = sortedUniqHashtags.map((hashtag) => { 
+  //   return {id: hashtag, label: hashtag, color: colors[hashtag], type: 'star'}
+  // });
+
+  let nodes = uniqHashtags.map((hashtag) => { 
+    if (requestHashtags.includes(hashtag)) {
+      return {id: hashtag, label: hashtag, color: colors[hashtag], type: 'star'}
+    } else {
+      return {id: hashtag, label: hashtag, color: '#C0C0C0', type: 'star'}
+    }
+    
+  });
+
   return nodes;
 }
 
@@ -87,7 +127,7 @@ function getEdgesCombinationNodes(nodes) {
   return edges;
 }
 
-function getEdgesMentions(hits) {
+function getEdgesUserMention(hits) {
   let tweetsMentions = hits.tweets.filter(tweet => tweet._source.mentions !== undefined);
 
   let edges = tweetsMentions.map((tweet) => {
@@ -97,6 +137,21 @@ function getEdgesMentions(hits) {
       edgesMention.push({id: username + "_and_" + mention, source: username, target: mention});
     })
     return edgesMention;
+  }).flat();
+
+  return _.uniqWith(edges, _.isEqual);
+}
+
+function getEdgesUserHashtag(hits) {
+  let tweetsHashtag = hits.tweets.filter(tweet => tweet._source.hashtags !== undefined);
+
+  let edges = tweetsHashtag.map((tweet) => {
+    let edgesUserHashtag = [];
+    let username = tweet._source.username;
+    tweet._source.hashtags.forEach(hashtag => {
+      edgesUserHashtag.push({id: username + "_and_" + hashtag, source: username, target: hashtag});
+    })
+    return edgesUserHashtag;
   }).flat();
 
   return _.uniqWith(edges, _.isEqual);
@@ -277,7 +332,7 @@ const useTwitterSnaRequest = (request) => {
       result.tweetCount.like = responseArrayOf7[5].likes.toString().replace(/(?=(\d{3})+(?!\d))/g, " ");
       result.tweets = responseArrayOf7[5].tweets;
       result.histogram = createHistogram(data, responseArrayOf7[6], givenFrom, givenUntil);
-      result.communityGraph = { title: "Community graph", "tmpdata": responseArrayOf7[5], hashtagGraph: createHashtagGraph(data, responseArrayOf7[5]) };
+      result.netGraph = { title: "Community graph", "tmpdata": responseArrayOf7[5], hashtagGraph: createHashtagGraph(data, responseArrayOf7[5]) };
       if (final) {
         result.cloudChart = createWordCloud(responseArrayOf7[7]);
 
@@ -417,26 +472,31 @@ const useTwitterSnaRequest = (request) => {
     }
 
 
-    const createHashtagGraph = (request, hits) => {
+    function createHashtagGraph (request, hits) {
       // let myGraph = {
       //   nodes:[{id:"n1", label:"N1"}, {id:"n2", label:"N2"}, {id:"n3", label:"N3"}, {id:"n4", label:"N4"}, {id:"n5", label:"N5"},], 
       //   edges:[{id:"e12",source:"n1",target:"n2"}, {id:"e13",source:"n1",target:"n3"}, {id:"e34",source:"n3",target:"n4"}]
       // };
 
-      let usernameTweets = getNodesUserTweets(hits);
-      let usernameMentions = getNodesUserMentions(hits);
+      // let usernameTweets = getNodesUserTweets(hits);
+      // let usernameMentions = getNodesUserMentions(hits);
+      // let nodes = mergeUniq2ArrOfJsonsById(usernameTweets, usernameMentions);
+      // let edges = getEdgesUserMention(hits);
+      // let graph = {
+      //   nodes: nodes,
+      //   edges: edges
+      // };
 
-      let nodes = mergeUniq2ArrOfJsonsById(usernameTweets, usernameMentions);
-      let edges = getEdgesMentions(hits);
-
-      let graph = {
+      let hashtagNodes = getNodesHashtag(hits, request);
+      let userTweetNodes = getNodesUserTweets(hits);
+      let nodes = mergeUniq2ArrOfJsonsById(hashtagNodes, userTweetNodes);
+      let edges = getEdgesUserHashtag(hits);
+      let hashtagGraph = {
         nodes: nodes,
         edges: edges
-      };
+      }
 
-      console.log("new graph: ", graph);
-
-      return graph;
+      return hashtagGraph;
     }
 
     const lastRenderCall = (sessionId, request) => {
