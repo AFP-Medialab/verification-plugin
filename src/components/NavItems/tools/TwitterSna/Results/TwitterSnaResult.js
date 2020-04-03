@@ -849,18 +849,18 @@ export default function TwitterSnaResult(props) {
                                 result.netGraph.hashtagGraph && result.netGraph.hashtagGraph.node !== 0) &&
                                 <Sigma graph = { result.netGraph.hashtagGraph }
                                         renderer = { "canvas" }
-                                        style={{ textAlign: 'left', width: '100%', height: '500px'}} 
+                                        style={{ textAlign: 'left', width: '100%', height: '700px'}} 
                                         onClickNode={(e) => onClickNode(e, result.netGraph.hashtagGraph)}
                                         settings = {{ defaultNodeColor: "#3388AA",
                                                         defaultLabelSize: 8,
                                                         defaultLabelColor: "#777",
-                                                        labelThreshold: 12,
-                                                        hoverFontStyle: "text-size: 14",
+                                                        labelThreshold: 13,
+                                                        hoverFontStyle: "text-size: 11",
                                                         batchEdgesDrawing: true,
                                                         drawEdges: false,
                                                         drawEdgeLabels: false,
-                                                        minNodeSize: 2,
-                                                        maxNodeSize: 8
+                                                        minNodeSize: 5,
+                                                        maxNodeSize: 12
                                                         }}>
                                     <RelativeSize initialSize={15}/>
                                     <RandomizeNodePositions/>
@@ -869,17 +869,16 @@ export default function TwitterSnaResult(props) {
                             { graphReset !== null && graphClickNode !== null && 
                                 <Sigma graph = { graphClickNode }
                                         renderer = { "canvas" }
-                                        // onClickNode={(e) => onClickNode(e)}
                                         onClickStage={(e) => onClickStage(e)}
-                                        style={{ textAlign: 'left', width: '100%', height: '500px' }}
+                                        style={{ textAlign: 'left', width: '100%', height: '700px' }}
                                         settings = {{ defaultNodeColor: "#3388AA",
                                                         defaultLabelSize: 8,
                                                         defaultLabelColor: "#777",
-                                                        labelThreshold: 12,
-                                                        hoverFontStyle: "text-size: 14",
+                                                        labelThreshold: 13,
+                                                        hoverFontStyle: "text-size: 11",
                                                         batchEdgesDrawing: true,
-                                                        minNodeSize: 3,
-                                                        maxNodeSize: 8,
+                                                        minNodeSize: 5,
+                                                        maxNodeSize: 12,
                                                         drawEdgeLabels: true
                                                     }}
                                 >
@@ -889,18 +888,18 @@ export default function TwitterSnaResult(props) {
                             { graphReset !== null && graphClickNode === null &&  
                                 <Sigma graph = { graphReset }
                                         renderer = { "canvas" }
-                                        style={{ textAlign: 'left', width: '100%', height: '500px'}} 
+                                        style={{ textAlign: 'left', width: '100%', height: '700px'}} 
                                         onClickNode={(e) => onClickNode(e, graphReset)}
                                         settings = {{ defaultNodeColor: "#3388AA",
                                                         defaultLabelSize: 8,
                                                         defaultLabelColor: "#777",
-                                                        labelThreshold: 12,
-                                                        hoverFontStyle: "text-size: 14",
+                                                        labelThreshold: 13,
+                                                        hoverFontStyle: "text-size: 11",
                                                         batchEdgesDrawing: true,
                                                         drawEdges: false,
                                                         drawEdgeLabels: false,
-                                                        minNodeSize: 3,
-                                                        maxNodeSize: 8
+                                                        minNodeSize: 5,
+                                                        maxNodeSize: 12
                                                     }}>
                                 </Sigma>
                             }
