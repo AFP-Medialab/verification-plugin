@@ -866,7 +866,7 @@ export default function TwitterSnaResult(props) {
                                                         drawEdges: false,
                                                         drawEdgeLabels: false,
                                                         minNodeSize: 2,
-                                                        maxNodeSize: 20
+                                                        maxNodeSize: 8
                                                         }}>
                                     <RelativeSize initialSize={15}/>
                                     <RandomizeNodePositions/>
@@ -881,11 +881,12 @@ export default function TwitterSnaResult(props) {
                                         settings = {{ defaultNodeColor: "#3388AA",
                                                         defaultLabelSize: 8,
                                                         defaultLabelColor: "#777",
-                                                        labelThreshold: 0,
+                                                        labelThreshold: 12,
                                                         hoverFontStyle: "text-size: 11",
                                                         batchEdgesDrawing: true,
                                                         minNodeSize: 2,
-                                                        maxNodeSize: 20
+                                                        maxNodeSize: 8,
+                                                        drawEdgeLabels: true
                                                     }}
                                 >
                                     {/* <RelativeSize initialSize={15}/> */}
@@ -905,7 +906,7 @@ export default function TwitterSnaResult(props) {
                                                         drawEdges: false,
                                                         drawEdgeLabels: false,
                                                         minNodeSize: 2,
-                                                        maxNodeSize: 20
+                                                        maxNodeSize: 8
                                                     }}>
                                     <RelativeSize initialSize={15}/>
                                     <RandomizeNodePositions/>
