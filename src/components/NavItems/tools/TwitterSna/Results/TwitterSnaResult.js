@@ -51,6 +51,7 @@ export default function TwitterSnaResult(props) {
     const [pieCharts3, setPieCharts3] = useState(null);
     const [graphReset, setGraphReset] = useState(null);
     const [graphClickNode, setGraphClickNode] = useState(null);
+    const [graphGoState3, setGraphGoState3] = useState(null);
 
     const hidePieChartTweetsView = (index) => {
         switch (index) {
@@ -96,6 +97,7 @@ export default function TwitterSnaResult(props) {
         setPieCharts3(null);
         setGraphReset(null);
         setGraphClickNode(null);
+        setGraphGoState3(null);
     }, [JSON.stringify(props.request), props.request])
 
 
@@ -425,31 +427,23 @@ export default function TwitterSnaResult(props) {
         return csvData;
     }
 
-    function onClickNode (e) {
-        
-        // Save the init graph before clicking to use later
-        setGraphReset(() => {
-            let resetGraph = {
-                nodes: e.data.renderer.nodesOnScreen,
-                edges: e.data.renderer.edgesOnScreen,
-            };
-            return resetGraph;
-        });
+    function getGraphFromScreen(e, graphData) {
+        let resetGraph = {
+            nodes: e.data.renderer.nodesOnScreen,
+            edges: graphData.edges
+        };
+        return resetGraph;
+    }
 
-        console.log("onClickNode, setGraphReset = graph before click");
-        console.log("onClickNode, setGraphClickNode = new graph after click");
+    function onClickNode (e, graphData) {
 
         // Set new graph (which has only the clicked node and its neighbors) after clicking
         setGraphClickNode(createGraphWhenClickANode(e));
+
+        setGraphReset(getGraphFromScreen(e, graphData));
     }
 
     function onClickStage(e) {
-        // console.log("click stage: ", e);
-        // console.log("initHashtagGraph: ", initHashtagGraph);
-        // setHashtagGraph(() => {
-        //    console.log("reset background");
-        //    return initHashtagGraph;
-        // });
         setGraphClickNode(() => {
             console.log("onClickStage: setGraphClickNode NULL");
             return null;
@@ -856,12 +850,12 @@ export default function TwitterSnaResult(props) {
                                 <Sigma graph = { result.netGraph.hashtagGraph }
                                         renderer = { "canvas" }
                                         style={{ textAlign: 'left', width: '100%', height: '500px'}} 
-                                        onClickNode={(e) => onClickNode(e)}
+                                        onClickNode={(e) => onClickNode(e, result.netGraph.hashtagGraph)}
                                         settings = {{ defaultNodeColor: "#3388AA",
                                                         defaultLabelSize: 8,
                                                         defaultLabelColor: "#777",
                                                         labelThreshold: 12,
-                                                        hoverFontStyle: "text-size: 11",
+                                                        hoverFontStyle: "text-size: 14",
                                                         batchEdgesDrawing: true,
                                                         drawEdges: false,
                                                         drawEdgeLabels: false,
@@ -872,7 +866,7 @@ export default function TwitterSnaResult(props) {
                                     <RandomizeNodePositions/>
                                 </Sigma>
                             }
-                            { graphReset !== null && graphClickNode !== null &&
+                            { graphReset !== null && graphClickNode !== null && 
                                 <Sigma graph = { graphClickNode }
                                         renderer = { "canvas" }
                                         // onClickNode={(e) => onClickNode(e)}
@@ -882,34 +876,32 @@ export default function TwitterSnaResult(props) {
                                                         defaultLabelSize: 8,
                                                         defaultLabelColor: "#777",
                                                         labelThreshold: 12,
-                                                        hoverFontStyle: "text-size: 11",
+                                                        hoverFontStyle: "text-size: 14",
                                                         batchEdgesDrawing: true,
-                                                        minNodeSize: 2,
+                                                        minNodeSize: 3,
                                                         maxNodeSize: 8,
                                                         drawEdgeLabels: true
                                                     }}
                                 >
-                                    {/* <RelativeSize initialSize={15}/> */}
+                                    <RelativeSize initialSize={15}/>
                                 </Sigma>
                             }
-                            { graphReset !== null && graphClickNode === null &&
-                                <Sigma graph = { result.netGraph.hashtagGraph }
+                            { graphReset !== null && graphClickNode === null &&  
+                                <Sigma graph = { graphReset }
                                         renderer = { "canvas" }
                                         style={{ textAlign: 'left', width: '100%', height: '500px'}} 
-                                        onClickNode={(e) => onClickNode(e)}
+                                        onClickNode={(e) => onClickNode(e, graphReset)}
                                         settings = {{ defaultNodeColor: "#3388AA",
                                                         defaultLabelSize: 8,
                                                         defaultLabelColor: "#777",
                                                         labelThreshold: 12,
-                                                        hoverFontStyle: "text-size: 11",
+                                                        hoverFontStyle: "text-size: 14",
                                                         batchEdgesDrawing: true,
                                                         drawEdges: false,
                                                         drawEdgeLabels: false,
-                                                        minNodeSize: 2,
+                                                        minNodeSize: 3,
                                                         maxNodeSize: 8
                                                     }}>
-                                    <RelativeSize initialSize={15}/>
-                                    <RandomizeNodePositions/>
                                 </Sigma>
                             }
                         </div>
