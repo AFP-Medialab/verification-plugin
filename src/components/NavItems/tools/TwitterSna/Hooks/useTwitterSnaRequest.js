@@ -4,6 +4,7 @@ import { setError } from "../../../../../redux/actions/errorActions";
 import { setTwitterSnaLoading, setTwitterSnaResult, setTwitterSnaLoadingMessage } from "../../../../../redux/actions/tools/twitterSnaActions";
 import axios from "axios";
 import _ from "lodash";
+import { jLouvain } from 'jlouvain';
 
 import {
   getPlotlyJsonDonuts,
@@ -501,7 +502,30 @@ const useTwitterSnaRequest = (request) => {
         edges: edges
       }
 
-      return hashtagGraph;
+      let graph = createCommunity(hashtagGraph);
+
+      return graph;
+    }
+
+    function createCommunity(graph) {
+      let nodeIdArr = [];
+      graph.nodes.forEach(node => {
+        nodeIdArr.push(node.id);
+      });
+      var community = jLouvain().nodes(nodeIdArr).edges(graph.edges);
+      var result  = community();
+      console.log("community: ", result);
+
+      let uniqCommunity = [...new Set(Object.values(result))]; 
+      let colors = []
+      uniqCommunity.forEach(com => {
+        colors[com] = '#'+(Math.random()*0xFFFFFF<<0).toString(16);
+      });
+
+      graph.nodes.forEach(node => {
+        node.color = colors[result[node.id]];
+      });
+      return graph;
     }
 
     const lastRenderCall = (sessionId, request) => {
