@@ -59,55 +59,108 @@ function getColor(entity) {
   return '#35347B';
 }
 
-function getNodesUserTweets(hits) {
-  let usernameOfTweets = hits.tweets.map(function(val) { return val._source.username;});
-  let uniqUsername = [...new Set(usernameOfTweets)];
-  let nodes = uniqUsername.map((username) => { return {id: username, label: username}});
+function getUniqValuesOfField(hits, field) {
+  let nodeIds = hits.tweets.filter(tweet => tweet._source[field] !== undefined)
+                          .map((tweet) => {return tweet._source[field]})
+                          .flat();
+  let uniqNodeIds = _.uniqWith(nodeIds, _.isEqual);
+  return uniqNodeIds;
+}
+
+function getNodesAsUsername(hits) {
+  let nodes = getUniqValuesOfField(hits, "username").map((val) => { return {id: val, label: val}});
   return nodes;
 }
 
-function getNodesUserMentions(hits) {
-  let usernameOfMentions = hits.tweets.filter(tweet => tweet._source.mentions !== undefined)
-                                      .map((tweet) => {return tweet._source.mentions})
-                                      .flat();
-  let uniqUsername = [...new Set(usernameOfMentions)];
-  let nodes = uniqUsername.map((username) => { return {id: username, label: username}});
+function getNodesAsMentions(hits) {
+  let nodes = getUniqValuesOfField(hits, "mentions").map((val) => { return {id: val, label: val}});
   return nodes;
 }
 
-function getNodesHashtag(hits, request) {
-  let tweetHashtags = hits.tweets.filter(tweet => tweet._source.hashtags !== undefined)
-                              .map((tweet) => {return tweet._source.hashtags})
-                              .flat();
-  let uniqHashtags = [...new Set(tweetHashtags)];
+function getNodesAsURLs(hits) {
+  let nodes = getUniqValuesOfField(hits, "urls").map((val) => { return {id: val, label: val}});
+  return nodes;
+}
 
+function getNodesAsReplyTo(hits) {
+  let nodes = getUniqValuesOfField(hits, "reply_to").map((val) => { return {id: val.username, label: val.username} } );
+  // let uniqNodes = uniqueJsonsArrById(nodes);
+  // return uniqNodes;
+  return nodes;
+}
+
+function getNodesAsTweets(hits) {
+  let tweetNodes = hits.tweets.map((tweet) => { return { id: tweet._source.id, label: tweet._source.tweet }; });
+  let uniqNodes = _.uniqBy(tweetNodes, 'id');
+  return uniqNodes;
+}
+
+function getNodesAsHashtags(hits, request) {
+  let uniqHashtags = getUniqValuesOfField(hits, "hashtags");
+  let searchedHashtags = request.keywordList.filter((word) => word.startsWith("#"));
+  
   let colors = []
-  let requestHashtags = request.keywordList.filter((word) => word.startsWith("#"));
-  requestHashtags.forEach(hashtag => { colors[hashtag] = '#'+(Math.random()*0xFFFFFF<<0).toString(16); });
+  searchedHashtags.forEach(hashtag => { colors[hashtag] = '#'+(Math.random()*0xFFFFFF<<0).toString(16); });
 
   let nodes = uniqHashtags.map((hashtag) => { 
-    if (requestHashtags.includes(hashtag)) {
+    if (searchedHashtags.includes(hashtag)) {
       return {id: hashtag, label: hashtag, color: colors[hashtag], type: 'star'}
     } else {
       return {id: hashtag, label: hashtag, color: '#C0C0C0', type: 'star'}
     }
-    
   });
-
   return nodes;
 }
 
-function getNodesTweets(hits) {
-  let tweetNodes = hits.tweets.map(function(val) { 
-    return {
-      id: val._source.id,
-      label: val._source.tweet
-    };
+function getEdgesCombinationNodes(nodes, edgeLabel) {
+  let edges = [];
+  for (let i = 0; i < nodes.length - 1; i++) {
+    for (let j = i + 1; j < nodes.length; j++) {
+      edges.push({id: nodes[i].id + '_and_' + nodes[j].id, source: nodes[i].id, target: nodes[j].id, label: edgeLabel});
+    }
+  }
+  return edges;
+}
+
+function getEdgesTweetToTweet(hits, fieldArr = "hashtags") {
+  let uniqFieldVals = getUniqValuesOfField(hits, fieldArr);
+  let edges = [];
+  uniqFieldVals.forEach(val => {
+    let nodesTweet = hits.tweets.filter(tweet => tweet._source[fieldArr] !== undefined)
+                              .filter(tweet => tweet._source[fieldArr].includes(val))
+                              .map((tweet) => { return { id: tweet._source.id, label: val }; });
+    let edgesTweet = getEdgesCombinationNodes(nodesTweet, val);
+    edges.push(edgesTweet);
   });
 
-  let uniqNodes = uniqueJsonsArrById(tweetNodes);
+  return _.uniqBy(edges.flat(), 'id');;
+}
 
-  return uniqNodes;
+function getEdgesUsernameToField(hits, fieldArr = "hashtags") {
+  let tweets = hits.tweets.filter(tweet => tweet._source[fieldArr] !== undefined);
+
+  let edges = tweets.map((tweet) => {
+    let edgesFieldElement = [];
+    let username = tweet._source.username;
+
+    switch (fieldArr) {
+      case "reply_to":
+        tweet._source[fieldArr].forEach(element => {
+          edgesFieldElement.push({id: username + "_and_" + element.username, source: username, target: element.username});
+        });
+        break;
+      default:
+        tweet._source[fieldArr].forEach(element => {
+          edgesFieldElement.push({id: username + "_and_" + element, source: username, target: element});
+        });
+        break;
+    }
+
+    return edgesFieldElement;
+
+  }).flat();
+
+  return _.uniqBy(edges, 'id');
 }
 
 function getEdgesTweetsSharingHashtag(hits) {
@@ -124,52 +177,8 @@ function getEdgesTweetsSharingHashtag(hits) {
   edges.push(edgesHashtag);
   });
 
-  let uniqEdges = uniqueJsonsArrById(edges.flat());
-
+  let uniqEdges = _.uniqBy(edges.flat(), 'id');
   return uniqEdges;
-
-}
-
-function getEdgesCombinationNodes(nodes, edgeLabel) {
-  let edges = [];
-
-  for (let i = 0; i < nodes.length - 1; i++) {
-    for (let j = i + 1; j < nodes.length; j++) {
-      edges.push({id: nodes[i].id + '_and_' + nodes[j].id, source: nodes[i].id, target: nodes[j].id, label: edgeLabel});
-    }
-  }
-
-  return edges;
-}
-
-function getEdgesUserMention(hits) {
-  let tweetsMentions = hits.tweets.filter(tweet => tweet._source.mentions !== undefined);
-
-  let edges = tweetsMentions.map((tweet) => {
-    let edgesMention = [];
-    let username = tweet._source.username;
-    tweet._source.mentions.forEach(mention => {
-      edgesMention.push({id: username + "_and_" + mention, source: username, target: mention});
-    })
-    return edgesMention;
-  }).flat();
-
-  return _.uniqWith(edges, _.isEqual);
-}
-
-function getEdgesUserHashtag(hits) {
-  let tweetsHashtag = hits.tweets.filter(tweet => tweet._source.hashtags !== undefined);
-
-  let edges = tweetsHashtag.map((tweet) => {
-    let edgesUserHashtag = [];
-    let username = tweet._source.username;
-    tweet._source.hashtags.forEach(hashtag => {
-      edgesUserHashtag.push({id: username + "_and_" + hashtag, source: username, target: hashtag});
-    })
-    return edgesUserHashtag;
-  }).flat();
-
-  return _.uniqWith(edges, _.isEqual);
 }
 
 function mergeUniq2ArrOfJsonsById(arr1, arr2) {
@@ -178,13 +187,6 @@ function mergeUniq2ArrOfJsonsById(arr1, arr2) {
     return r;
   },{}));
   return uniqArr;
-}
-
-function uniqueJsonsArrById(jsonsArr) {
-  let ids = [...new Set( jsonsArr.map((e) => {return e.id}) )];
-  let uniqJsonsArr = [];
-  ids.forEach(id => { uniqJsonsArr.push( jsonsArr.filter(obj => obj.id === id )[0] ) })
-  return uniqJsonsArr;
 }
 
 const useTwitterSnaRequest = (request) => {
@@ -497,7 +499,7 @@ const useTwitterSnaRequest = (request) => {
     function createHashtagGraph (request, hits) {
 
       // let hashtagNodes = getNodesHashtag(hits, request);
-      // let userTweetNodes = getNodesUserTweets(hits);
+      // let userTweetNodes = getNodesAsUsername(hits);
       // let userMentionNodes = getNodesUserMentions(hits);
       // let nodes = mergeUniq2ArrOfJsonsById(hashtagNodes, userTweetNodes);
       // nodes = mergeUniq2ArrOfJsonsById(nodes, userMentionNodes);
@@ -512,7 +514,7 @@ const useTwitterSnaRequest = (request) => {
 
       // let graph = createCommunity(hashtagGraph);
 
-      let nodes = getNodesTweets(hits);
+      let nodes = getNodesAsTweets(hits);
       let edges = getEdgesTweetsSharingHashtag(hits);
 
       let hashtagGraph = {
@@ -522,7 +524,30 @@ const useTwitterSnaRequest = (request) => {
 
       let graph = createCommunity(hashtagGraph);
 
-      return graph;
+      let nodesUsername = getNodesAsUsername(hits);
+      let nodesMention = getNodesAsMentions(hits);
+      let nodesURL = getNodesAsURLs(hits);
+      let nodesReplyTo= getNodesAsReplyTo(hits);
+      let nodesHashtag = getNodesAsHashtags(hits, request);
+      let nodesTweet = getNodesAsTweets(hits);
+
+
+      let edgesTweetToTweetOnHashtag = getEdgesTweetToTweet(hits, "hashtags");
+      let edgesTweetToTweetOnURL = getEdgesTweetToTweet(hits, "urls");
+      let edgesUsernameToHashtag = getEdgesUsernameToField(hits, "hashtags");
+      let edgesUsernameToMention = getEdgesUsernameToField(hits, "mentions");
+
+      let graphTweetsHashtag = {
+        nodes: nodesTweet,
+        edges: edgesTweetToTweetOnHashtag
+      }
+
+      let graphTweetsURL = {
+        nodes: nodesTweet,
+        edges: edgesTweetToTweetOnURL
+      }
+
+      return createCommunity(graphTweetsURL);
     }
 
     function createCommunity(graph) {
