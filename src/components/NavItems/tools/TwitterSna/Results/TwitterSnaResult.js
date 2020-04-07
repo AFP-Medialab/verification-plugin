@@ -862,7 +862,7 @@ export default function TwitterSnaResult(props) {
                                                         minNodeSize: 5,
                                                         maxNodeSize: 12
                                                         }}>
-                                    <RelativeSize initialSize={15}/>
+                                    {/* <RelativeSize initialSize={15}/> */}
                                     <RandomizeNodePositions/>
                                 </Sigma>
                             }
@@ -882,7 +882,7 @@ export default function TwitterSnaResult(props) {
                                                         drawEdgeLabels: true
                                                     }}
                                 >
-                                    <RelativeSize initialSize={15}/>
+                                    {/* <RelativeSize initialSize={15}/> */}
                                 </Sigma>
                             }
                             { graphReset !== null && graphClickNode === null &&  

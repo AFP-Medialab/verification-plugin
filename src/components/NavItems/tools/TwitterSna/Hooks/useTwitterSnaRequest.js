@@ -182,6 +182,26 @@ function getEdgesUsernameToField(hits, fieldArr = "hashtags") {
   return _.uniqBy(edges, 'id');
 }
 
+function getSizeOfUsernames(hits, field = 'nretweets') {
+  let sizeInTweets = hits.tweets.map((tweet) => {
+    let obj = {};
+    obj['username'] = tweet._source.username;
+    obj[field] = tweet._source[field];
+    return obj;
+  });
+  let sizeInUsernames = groupbyThenSum(sizeInTweets, 'username', [], [field], []);
+
+  // Size of a node cannot be 0, therefore, increase nodes's size by 1
+  let sizeInNodes = sizeInUsernames.map(obj => { 
+    let newObj = {}; 
+    newObj['username'] = obj['username']; 
+    newObj['size'] = obj[field] + 1; 
+    return newObj; 
+  });
+
+  return sizeInNodes;
+}
+
 function createCommunity(graph) {
   let nodeIdArr = [];
   graph.nodes.forEach(node => {
@@ -550,6 +570,13 @@ const useTwitterSnaRequest = (request) => {
       let nodesUsername = getNodesAsUsername(hits);
       let edgesUserToUserOnHashtag = getEdgesUsernameToUsername(hits, "hashtags");
       
+      let nodesSize = getSizeOfUsernames(hits, 'nretweets');
+      nodesUsername.map((node) => {
+        let size = nodesSize.find((e) => { return e.username === node.id }).size;
+        node.size = (size !== undefined) ? size : 1;
+        return node;
+      });
+
       let graph = {
         nodes: nodesUsername,
         edges: edgesUserToUserOnHashtag
