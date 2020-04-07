@@ -137,11 +137,10 @@ function getEdgesTweetToTweet(hits, fieldArr = "hashtags") {
 }
 
 function getEdgesUsernameToUsername(hits, fieldArr = "hashtags") {
-  let uniqFieldVals = getUniqValuesOfField(hits, fieldArr);
-  
-  // Get edges between users based on each value of the given field
+  // Get edges between users based on each value of the given fieldArr
+  let uniqElements = getUniqValuesOfField(hits, fieldArr);
   let edges = [];
-  uniqFieldVals.forEach(val => {
+  uniqElements.forEach(val => {
     let nodesUsername = hits.tweets.filter(tweet => tweet._source[fieldArr] !== undefined)
                                     .filter(tweet => tweet._source[fieldArr].includes(val))
                                     .map((tweet) => { return { id: tweet._source.username, label: tweet._source.username }; });
@@ -150,17 +149,8 @@ function getEdgesUsernameToUsername(hits, fieldArr = "hashtags") {
     edges.push(edgesUsername);
   });
 
-  // Set weight as minimun frequency two users (source user and target user of an edge) sharing the same hashtags/urls/...
-  let weightedEdges = [];
-  edges.flat().reduce(function(res, value) {
-    if (!res[value.id]) {
-      res[value.id] = { id: value.id, source: value.source, target: value.target, label: '', weight: 0 };
-      weightedEdges.push(res[value.id])
-    }
-    res[value.id].weight += value.weight;
-    res[value.id].label += value.label;
-    return res;
-  }, {});
+  // Set weight as number of hashtags/co-urls... source user and target user of an edge shared together
+  let weightedEdges = groupbyThenSum(edges.flat(), 'id', ['label'], ['weight'], ['source', 'target']);
 
   return weightedEdges;
 }
@@ -210,12 +200,60 @@ function getEdgesTweetsSharingHashtag(hits) {
   return uniqEdges;
 }
 
+function createCommunity(graph) {
+  let nodeIdArr = [];
+  graph.nodes.forEach(node => {
+    nodeIdArr.push(node.id);
+  });
+  var community = jLouvain().nodes(nodeIdArr).edges(graph.edges);
+  var result  = community();
+  console.log("community: ", result);
+
+  let uniqCommunity = [...new Set(Object.values(result))]; 
+  let colors = []
+  uniqCommunity.forEach(com => {
+    colors[com] = '#'+(Math.random()*0xFFFFFF<<0).toString(16);
+  });
+
+  graph.nodes.forEach(node => {
+    node.color = colors[result[node.id]];
+  });
+  return graph;
+}
+
 function mergeUniq2ArrOfJsonsById(arr1, arr2) {
   let uniqArr = Object.values(arr1.concat(arr2).reduce((r,o) => {
     r[o.id] = o;
     return r;
   },{}));
   return uniqArr;
+}
+
+function groupbyThenSum(arrOfObjects, key, attrToSumStr, attrToSumNum, attrToSkip) {
+  let results = [];
+  arrOfObjects.reduce((res, value) => {
+    if (!res[value[key]]) {
+      let obj = {};
+      obj[key] = value[key];
+      if (attrToSkip.length > 0) { attrToSkip.forEach(attr => { obj[attr] = value[attr]; }); }
+      if (attrToSumStr.length > 0) { attrToSumStr.forEach(attr => { obj[attr] = ''; }); }
+      if (attrToSumNum.length > 0) { attrToSumNum.forEach(attr => { obj[attr] = 0; }); }
+      res[value[key]] = obj;
+      results.push(res[value[key]])
+    }
+    if (attrToSumNum.length > 0) {
+      attrToSumNum.forEach(attr => { 
+        res[value[key]][attr] += value[attr];
+      });
+    }
+    if (attrToSumStr.length > 0) {
+      attrToSumStr.forEach(attr => { 
+        res[value[key]][attr] += value[attr];
+      });
+    }
+    return res;
+  }, {});
+  return results;
 }
 
 const useTwitterSnaRequest = (request) => {
@@ -534,29 +572,8 @@ const useTwitterSnaRequest = (request) => {
         nodes: nodesUsername,
         edges: edgesUserToUserOnHashtag
       }
-      
+
       return createCommunity(graph);
-    }
-
-    function createCommunity(graph) {
-      let nodeIdArr = [];
-      graph.nodes.forEach(node => {
-        nodeIdArr.push(node.id);
-      });
-      var community = jLouvain().nodes(nodeIdArr).edges(graph.edges);
-      var result  = community();
-      console.log("community: ", result);
-
-      let uniqCommunity = [...new Set(Object.values(result))]; 
-      let colors = []
-      uniqCommunity.forEach(com => {
-        colors[com] = '#'+(Math.random()*0xFFFFFF<<0).toString(16);
-      });
-
-      graph.nodes.forEach(node => {
-        node.color = colors[result[node.id]];
-      });
-      return graph;
     }
 
     const lastRenderCall = (sessionId, request) => {
