@@ -116,7 +116,7 @@ function getEdgesCombinationNodes(nodes, edgeLabel) {
   let edges = [];
   for (let i = 0; i < nodes.length - 1; i++) {
     for (let j = i + 1; j < nodes.length; j++) {
-      edges.push({id: nodes[i].id + '_and_' + nodes[j].id, source: nodes[i].id, target: nodes[j].id, label: edgeLabel});
+      edges.push({id: nodes[i].id + '_and_' + nodes[j].id, source: nodes[i].id, target: nodes[j].id, label: edgeLabel, weight: 1});
     }
   }
   return edges;
@@ -136,6 +136,35 @@ function getEdgesTweetToTweet(hits, fieldArr = "hashtags") {
   return _.uniqBy(edges.flat(), 'id');;
 }
 
+function getEdgesUsernameToUsername(hits, fieldArr = "hashtags") {
+  let uniqFieldVals = getUniqValuesOfField(hits, fieldArr);
+  
+  // Get edges between users based on each value of the given field
+  let edges = [];
+  uniqFieldVals.forEach(val => {
+    let nodesUsername = hits.tweets.filter(tweet => tweet._source[fieldArr] !== undefined)
+                                    .filter(tweet => tweet._source[fieldArr].includes(val))
+                                    .map((tweet) => { return { id: tweet._source.username, label: tweet._source.username }; });
+    let uniqNodesUsername = _.uniqBy(nodesUsername, 'id');
+    let edgesUsername = getEdgesCombinationNodes(uniqNodesUsername, val);
+    edges.push(edgesUsername);
+  });
+
+  // Set weight as minimun frequency two users (source user and target user of an edge) sharing the same hashtags/urls/...
+  let weightedEdges = [];
+  edges.flat().reduce(function(res, value) {
+    if (!res[value.id]) {
+      res[value.id] = { id: value.id, source: value.source, target: value.target, label: '', weight: 0 };
+      weightedEdges.push(res[value.id])
+    }
+    res[value.id].weight += value.weight;
+    res[value.id].label += value.label;
+    return res;
+  }, {});
+
+  return weightedEdges;
+}
+
 function getEdgesUsernameToField(hits, fieldArr = "hashtags") {
   let tweets = hits.tweets.filter(tweet => tweet._source[fieldArr] !== undefined);
 
@@ -146,12 +175,12 @@ function getEdgesUsernameToField(hits, fieldArr = "hashtags") {
     switch (fieldArr) {
       case "reply_to":
         tweet._source[fieldArr].forEach(element => {
-          edgesFieldElement.push({id: username + "_and_" + element.username, source: username, target: element.username});
+          edgesFieldElement.push({id: username + "_and_" + element.username, source: username, target: element.username, label: fieldArr, type: "arrow"});
         });
         break;
       default:
         tweet._source[fieldArr].forEach(element => {
-          edgesFieldElement.push({id: username + "_and_" + element, source: username, target: element});
+          edgesFieldElement.push({id: username + "_and_" + element, source: username, target: element, label: fieldArr, type: "arrow"});
         });
         break;
     }
@@ -498,56 +527,15 @@ const useTwitterSnaRequest = (request) => {
 
     function createHashtagGraph (request, hits) {
 
-      // let hashtagNodes = getNodesHashtag(hits, request);
-      // let userTweetNodes = getNodesAsUsername(hits);
-      // let userMentionNodes = getNodesUserMentions(hits);
-      // let nodes = mergeUniq2ArrOfJsonsById(hashtagNodes, userTweetNodes);
-      // nodes = mergeUniq2ArrOfJsonsById(nodes, userMentionNodes);
-
-      // let userMentionEdges = getEdgesUserMention(hits);
-      // let userHashtagEdges = getEdgesUserHashtag(hits);
-      // let edges = mergeUniq2ArrOfJsonsById(userMentionEdges, userHashtagEdges);
-      // let hashtagGraph = {
-      //   nodes: nodes,
-      //   edges: edges
-      // }
-
-      // let graph = createCommunity(hashtagGraph);
-
-      let nodes = getNodesAsTweets(hits);
-      let edges = getEdgesTweetsSharingHashtag(hits);
-
-      let hashtagGraph = {
-        nodes: nodes,
-        edges: edges
-      }
-
-      let graph = createCommunity(hashtagGraph);
-
       let nodesUsername = getNodesAsUsername(hits);
-      let nodesMention = getNodesAsMentions(hits);
-      let nodesURL = getNodesAsURLs(hits);
-      let nodesReplyTo= getNodesAsReplyTo(hits);
-      let nodesHashtag = getNodesAsHashtags(hits, request);
-      let nodesTweet = getNodesAsTweets(hits);
-
-
-      let edgesTweetToTweetOnHashtag = getEdgesTweetToTweet(hits, "hashtags");
-      let edgesTweetToTweetOnURL = getEdgesTweetToTweet(hits, "urls");
-      let edgesUsernameToHashtag = getEdgesUsernameToField(hits, "hashtags");
-      let edgesUsernameToMention = getEdgesUsernameToField(hits, "mentions");
-
-      let graphTweetsHashtag = {
-        nodes: nodesTweet,
-        edges: edgesTweetToTweetOnHashtag
+      let edgesUserToUserOnHashtag = getEdgesUsernameToUsername(hits, "hashtags");
+      
+      let graph = {
+        nodes: nodesUsername,
+        edges: edgesUserToUserOnHashtag
       }
-
-      let graphTweetsURL = {
-        nodes: nodesTweet,
-        edges: edgesTweetToTweetOnURL
-      }
-
-      return createCommunity(graphTweetsURL);
+      
+      return createCommunity(graph);
     }
 
     function createCommunity(graph) {
