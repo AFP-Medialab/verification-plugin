@@ -5,15 +5,17 @@ import TextField from "@material-ui/core/TextField";
 import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
 import LinearProgress from "@material-ui/core/LinearProgress";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import useVideoRightsTreatment from "./Hooks/useVideoRightsTreatment";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import VideoRightsResults from "./Results/VideoRightsResults";
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/VideoRights.tsv";
 import {submissionEvent} from "../../../Shared/GoogleAnalytics/GoogleAnalytics";
+import {useParams} from "react-router-dom";
 
 const VideoRights = () => {
+    const {url} = useParams();
     const classes = useMyStyles();
     const keyword = useLoadLanguage("components/NavItems/tools/VideoRights.tsv", tsv);
 
@@ -31,6 +33,13 @@ const VideoRights = () => {
             setSubmitted(input);
         }
     };
+
+    useEffect(() => {
+        if (url !== undefined) {
+            const uri = (url !== null) ? decodeURIComponent(url) : undefined;
+            setInput(uri);
+        }
+    }, [url]);
 
     return (
         <div>

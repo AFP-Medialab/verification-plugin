@@ -337,6 +337,15 @@ const useMyStyles = makeStyles(theme => ({
             fontSize: theme.typography.pxToRem(13),
             minWidth: 100,
         },
-    }
+    },
+    assistantCards: {
+        backgroundColor: "#F8F8F8",
+        width: "100%",
+        marginBottom: 2,
+        textAlign: "centre",
+        '&:hover': {
+            backgroundColor: "#a9e8ef",
+        },
+    },
 }));
 export default useMyStyles;

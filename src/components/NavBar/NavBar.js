@@ -29,6 +29,7 @@ import TabItem from "./TabItem/TabItem";
 import ClassRoom from "../NavItems/ClassRoom/ClassRoom";
 import Interactive from "../NavItems/Interactive/Interactive";
 import About from "../NavItems/About/About";
+import Assistant from "../NavItems/Assistant/Assistant";
 import MySnackbar from "../MySnackbar/MySnackbar";
 import useMyStyles from "../Shared/MaterialUiStyles/useMyStyles";
 import Footer from "../Shared/Footer/Footer";
@@ -41,6 +42,7 @@ import classRoomIcon from "./images/navbar/classroom-off.png"
 import interactiveIcon from "./images/navbar/quiz-off.png"
 import aboutIcon from "./images/navbar/about-off.png"
 import ImageSearchIcon from '@material-ui/icons/ImageSearch';
+import FaceIcon from '@material-ui/icons/Face';
 
 import analysisIconOn from "./images/tools/video_logoOn.png"
 import analysisIconOff from "./images/tools/video_logoOff.png"
@@ -236,6 +238,13 @@ const NavBar = (props) => {
                 </Icon>,
             content: <About/>,
             path: "about",
+            footer: <Footer type={"afp"}/>
+        },
+        {
+            title: "navbar_assistant",
+            icon: <FaceIcon fontSize={"large"}/>,
+            content: <Assistant/>,
+            path: "assistant",
             footer: <Footer type={"afp"}/>
         }
     ];
