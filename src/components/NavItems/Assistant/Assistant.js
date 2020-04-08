@@ -2,6 +2,8 @@ import "react-devtools";
 import {useParams} from 'react-router-dom'
 import React, {useEffect, useState} from "react";
 import {Paper, Box, TextField, Button} from "@material-ui/core";
+import FaceIcon from "@material-ui/icons/Face";
+import Typography from "@material-ui/core/Typography";
 import {useDispatch, useSelector} from "react-redux";
 import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
 import CustomTile from "../../Shared/CustomTitle/CustomTitle";
@@ -267,18 +269,24 @@ const Assistant = () => {
         <div>
             <Paper className={classes.root}>
                 <CustomTile text={keyword("assistant_title")}/>
-                <Box m={1}/>
-                <TextField
-                    id="standard-full-width"
-                    label={keyword("assistant_urlbox")}
-                    style={{margin: 8}}
-                    placeholder={""}
-                    fullWidth
-                    value={input}
-                    onChange={e => setInput(e.target.value)}
-                />
-                <Box m={2}/>
+                <Box m={5}/>
+                <div className={classes.assistantText}>
+                    <Typography variant={"h6"} >
+                        <FaceIcon fontSize={"small"}/> {keyword("assistant_intro")}
+                    </Typography>
 
+                    <Box m={2}/>
+                    <TextField
+                        id="standard-full-width"
+                        label={keyword("assistant_urlbox")}
+                        style={{margin: 8}}
+                        placeholder={""}
+                        fullWidth
+                        value={input}
+                        onChange={e => setInput(e.target.value)}
+                    />
+                    <Box m={2}/>
+                </div>
                 <Button variant="contained" color="primary" onClick={() => submitUrl(input)}>
                     {keyword("button_submit") || ""}
                 </Button>

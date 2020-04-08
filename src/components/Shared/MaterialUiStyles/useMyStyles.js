@@ -347,5 +347,10 @@ const useMyStyles = makeStyles(theme => ({
             backgroundColor: "#a9e8ef",
         },
     },
+    assistantText: {
+        width: "100%",
+        marginBottom: 2,
+        textAlign: "left",
+    }
 }));
 export default useMyStyles;

@@ -36,4 +36,5 @@ forensic_text	The forensic tool can be used to detect any image manipulation	Tem
 twitter_sna_text	The twitter sna tool can be used	Temp	Temp
 no_action_text	No actions have been found for this media. Please try another URL.	Temp	Temp
 please_give_a_correct_link	This is not a valid URL. Please try another URL.	Temp	Temp
+assistant_intro	Enter the URL of the media you would like to process	Temp	Temp
 
