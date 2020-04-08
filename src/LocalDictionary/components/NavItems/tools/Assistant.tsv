@@ -1,18 +1,14 @@
 	en	fr	es
 assistant_title	Assistant	temp	temp
+assistant_intro	Enter the URL of the media you would like to process	Temp	Temp
 assistant_urlbox	URL	Adresse	URL
 assistant_error	No media was found through the link used. Please try another URL.	Test	Test
+please_give_a_correct_link	This is not a valid URL. Please try another URL.	Temp	Temp
 button_submit	Submit	Envoyer	Enviar
 please_give_a_correct_link	Please give a correct link	Donner un lien valide s'il vous plaît	Por favor, dé un enlace válido
 quit	Quit	Quitter	Salir
 save	Save	Enregistrer	Gardar
-assistant_tools	Tools	Temp	Temp
-navbar_tools	Tools	Outils	Herramientas
-navbar_about	About	A propos	Sobre nosotros
-navbar_tuto	Tutorial	Tutoriel	Tutorial
-navbar_twitter_sna	Twitter SNA.	Twitter SNA.	Twitter SNA.
-navbar_classroom	Classroom	Salle de cours	Aula
-navbar_quiz	Interactive	Interactif	Interactivo
+
 navbar_analysis	Analysis	Analyse	Análisis
 navbar_keyframes	Keyframes	Images clés	Imágenes claves
 navbar_thumbnails	Thumbnails	Imagettes	Miniaturas
@@ -24,6 +20,7 @@ navbar_forensic	Forensic	Forensic	Forensic
 navbar_twitter_sna	Fact Check	Factuel	Factual
 navbar_no_action	Assistant	Temp	Temp
 navbar_assistant	Assistant	Temp	Temp
+
 things_you_can_do_header	Potential Tools	Temp	Temp
 things_you_can_do	Below are the tools you can use on this media type	Temp	Temp
 analysis_text	The analysis feature  can be used to retrieve contextual information about the video	Temp	Temp
@@ -36,6 +33,4 @@ rights_text	The video rights tool can be used can be used to retrieve informatio
 forensic_text	The forensic tool can be used to detect any image manipulation	Temp	Temp
 twitter_sna_text	The twitter sna tool can be used	Temp	Temp
 no_action_text	No actions have been found for this media. Please try another URL.	Temp	Temp
-please_give_a_correct_link	This is not a valid URL. Please try another URL.	Temp	Temp
-assistant_intro	Enter the URL of the media you would like to process	Temp	Temp
 
