@@ -24,7 +24,8 @@ navbar_forensic	Forensic	Forensic	Forensic
 navbar_twitter_sna	Fact Check	Factuel	Factual
 navbar_no_action	Assistant	Temp	Temp
 navbar_assistant	Assistant	Temp	Temp
-things_you_can_do	Potential Tools	Temp	Temp
+things_you_can_do_header	Potential Tools	Temp	Temp
+things_you_can_do	Below are the tools you can use on this media type	Temp	Temp
 analysis_text	The analysis feature  can be used to retrieve contextual information about the video	Temp	Temp
 keyframes_text	The keyframes feature can be used to fragment the video	Temp	Temp
 thumbnails_text	The YouTube thumbnail feature can be used to reverse search on thumbnails from the video	Temp    Temp

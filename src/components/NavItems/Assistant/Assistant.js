@@ -94,14 +94,6 @@ const Assistant = () => {
                 }
             }
         }
-        //if there is no action can be taken, then display noAction available option.
-        if (possibleActions.length == 0) {
-            //get no action option.
-            const currentAction = drawerItems.find(
-                x => x.title === "navbar_no_action"
-            );
-            possibleActions.push(currentAction);
-        }
         return possibleActions;
     }
 
@@ -252,15 +244,6 @@ const Assistant = () => {
             icon:  twitterSnaIconOff,
             tsvPrefix: "twitter_sna",
             path: "tools/twitterSna"
-        },
-        {
-            title: "navbar_no_action",
-            domains: new Array(),
-            ctypes: [],
-            text: "no_action_text",
-            icon: twitterSnaIconOff,
-            tsvPrefix: "twitter_sna",
-            path: "assistant"
         },
     ];
 

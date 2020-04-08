@@ -6,6 +6,7 @@ import Card from "@material-ui/core/Card";
 import CardActionArea from "@material-ui/core/CardActionArea";
 import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
+import FaceIcon from "@material-ui/icons/Face";
 import Grid from "@material-ui/core/Grid";
 import Icon from "@material-ui/core/Icon";
 import Iframe from "react-iframe";
@@ -30,15 +31,17 @@ const AssistantResult = (props) => {
     // handle error
     if (result.length == 0)
         return (
-            <Paper className={classes.root}>
+            <Paper>
+                <box m={3}/>
                 <CloseResult onClick={() => dispatch(cleanAssistantState())}/>
-                <img src={report.url} alt={report.url}/>
-                <Typography variant={"h5"}>
-                    {keyword("assistant_error")}
-                </Typography>
+                <Card><CardContent className={classes.assistantText}>
+                    <Typography variant={"h6"} align={"left"}>
+                        <FaceIcon size={"small"}/> {keyword("assistant_error")}
+                    </Typography>
+                </CardContent></Card>
+
             </Paper>
         );
-
 
     // handle valid push
     const handleClick = (path, url) => {
@@ -87,13 +90,13 @@ const AssistantResult = (props) => {
                     </Card>
                 </Grid>
                 <Grid  item xs = {6}>
-                    <Card>
+                    <Card variant = "outlined">
                         <Box m = {2} >
                             <Typography variant="h5" component="h2" color="black">
-                                {keyword("things_you_can_do")}
+                                {keyword("things_you_can_do_header")}
                             </Typography>
                             <Typography className={classes.title} color="primary">
-                                Below are the tools you can use on this media type.
+                                {keyword("things_you_can_do")}
                             </Typography>
                         </Box>
                         <Box m = {2}>
@@ -103,21 +106,18 @@ const AssistantResult = (props) => {
                                         <Grid container m = {4}>
                                             <Card className={classes.assistantCards}  variant = "outlined"
                                                   onClick={() => handleClick(action.path, report.url) }>
-                                                <CardActionArea>
-                                                    <CardContent>
-                                                        <Typography className={classes.title} m={2}>
-                                                            {keyword(action.text)}
-                                                        </Typography>
-
+                                                <CardActionArea><CardContent>
+                                                        <Typography className={classes.title} m={2}>{keyword(action.text)}</Typography>
                                                         <Button aria-colspan={2} size = "medium">
                                                             {<Icon className={classes.iconRootDrawer} fontSize={"large"}>
                                                                 <img className={classes.imageIconDrawer} src={action.icon}/>
                                                             </Icon>}
-                                                        {keyword(action.title)}
+                                                            {keyword(action.title)}
                                                         </Button>
-                                                    </CardContent></CardActionArea>
+                                                </CardContent></CardActionArea>
                                             </Card>
-                                        </Grid>)})}
+                                        </Grid>
+                                    )})}
                             </Grid>
                         </Box>
                     </Card>
