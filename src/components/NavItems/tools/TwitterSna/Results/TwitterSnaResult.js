@@ -113,7 +113,7 @@ export default function TwitterSnaResult(props) {
             { title: keyword('sna_result_retweet_nb'), field: 'retweetNb' },
             { title: keyword('sna_result_like_nb'), field: 'likeNb' }
         ];
-        let csvArr = "data:text/csv;charset=utf-8,";
+        let csvArr = "";
 
         
         // word = word.replace(/_/g, " ");
@@ -168,7 +168,7 @@ export default function TwitterSnaResult(props) {
         let resData = [];
         let minDate;
         let maxDate;
-        let csvArr = "data:text/csv;charset=utf-8," + keyword("sna_result_username") + "," + keyword("sna_result_date") + "," + keyword("sna_result_tweet") + "," + keyword("sna_result_retweet_nb") + "," + keyword("elastic_url") + "\n";
+        let csvArr = keyword("sna_result_username") + "," + keyword("sna_result_date") + "," + keyword("sna_result_tweet") + "," + keyword("sna_result_retweet_nb") + "," + keyword("elastic_url") + "\n";
         let isDays = "isDays";
         if (!fromHisto) {isDays = "isHours"}
 
@@ -222,7 +222,7 @@ export default function TwitterSnaResult(props) {
             { title: keyword('sna_result_date'), field: 'date' },
             { title: keyword('sna_result_tweet'), field: 'tweet', render: getTweetWithClickableLink },
         ];
-        let csvArr = "data:text/csv;charset=utf-8," + keyword('sna_result_date') + "," + keyword('sna_result_tweet');
+        let csvArr = keyword('sna_result_date') + "," + keyword('sna_result_tweet');
         if (nbType !== "retweets_cloud_chart_title") {
             columns.push({
                 title: keyword('sna_result_like_nb'),
@@ -260,13 +260,13 @@ export default function TwitterSnaResult(props) {
 
                 if (nbType !== "retweets_cloud_chart_title") {
                     tmpObj.nbLikes = tweetObj._source.nlikes;
-                    csvArr += tmpObj.nbLikes;
+                    csvArr += tmpObj.nbLikes + ',';
                 }
                 if (nbType !== "likes_cloud_chart_title") {
                     tmpObj.nbReteets = tweetObj._source.nretweets;
-                    csvArr += tmpObj.nbReteets;
+                    csvArr += tmpObj.nbReteets + ',';
                 }
-                csvArr += ',' + tmpObj.link + '\n';
+                csvArr += tmpObj.link + '\n';
                 resData.push(tmpObj);
             }
         });
@@ -301,15 +301,15 @@ export default function TwitterSnaResult(props) {
         }
     }
 
-    const downloadClick = (csvArr, name, histo) => {
-        let encodedUri = encodeURI(csvArr);
+    function downloadClick(csvArr, name, histo) {
+        let encodedUri = encodeURIComponent(csvArr);
         let link = document.createElement("a");
-        link.setAttribute("href", encodedUri);
+        link.setAttribute("href", 'data:text/plain;charset=utf-8,' + encodedUri);
         link.setAttribute("download", "tweets_" + props.request.keywordList.join('&') + '_' + name + ((!histo) ? (props.request.from + "_" + props.request.until) : "") + ".csv");
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
-    };
+      }
 
     function isInRange(pointDate, objDate, periode) {
                 
@@ -454,7 +454,7 @@ export default function TwitterSnaResult(props) {
         setGraphClickNode(createGraphWhenClickANode(e));
 
         setGraphReset(getGraphFromScreen(e, graphData));
-        
+
         displayTweetsOfUser(e, '', 4);
     }
 
