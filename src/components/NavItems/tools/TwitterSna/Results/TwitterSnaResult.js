@@ -460,9 +460,9 @@ export default function TwitterSnaResult(props) {
 
     function onClickStage(e) {
         setGraphClickNode(() => {
-            console.log("onClickStage: setGraphClickNode NULL");
             return null;
         });
+        hideTweetsView(4);
     }
 
     function createGraphWhenClickANode(e) {
