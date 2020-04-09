@@ -51,9 +51,9 @@ export default function TwitterSnaResult(props) {
     const [pieCharts3, setPieCharts3] = useState(null);
     const [graphReset, setGraphReset] = useState(null);
     const [graphClickNode, setGraphClickNode] = useState(null);
-    const [graphGoState3, setGraphGoState3] = useState(null);
+    const [graphTweets, setGraphTweets] = useState(null);
 
-    const hidePieChartTweetsView = (index) => {
+    const hideTweetsView = (index) => {
         switch (index) {
             case 0:
                 setPieCharts0(null);
@@ -66,6 +66,9 @@ export default function TwitterSnaResult(props) {
                 break;
             case 3:
                 setPieCharts3(null);
+                break;
+            case 4:
+                setGraphTweets(null);
                 break;
             default:
                 break;
@@ -97,7 +100,7 @@ export default function TwitterSnaResult(props) {
         setPieCharts3(null);
         setGraphReset(null);
         setGraphClickNode(null);
-        setGraphGoState3(null);
+        setGraphTweets(null);
     }, [JSON.stringify(props.request), props.request])
 
 
@@ -238,8 +241,15 @@ export default function TwitterSnaResult(props) {
 
         let resData = [];
 
+        let selectedUser = null;
+        if (index === 4) {
+            selectedUser = data.data.node.id.toLowerCase();
+        } else {
+            selectedUser = data.points[0].label;
+        }
+
         result.tweets.forEach(tweetObj => {
-            if (tweetObj._source.username.toLowerCase() === data.points[0].label) {
+            if (tweetObj._source.username.toLowerCase() === selectedUser) {
                 let date = new Date(tweetObj._source.date);
                 let tmpObj = {
                     date: date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear() + ' ' + date.getHours() + ':' + date.getMinutes(),
@@ -266,7 +276,7 @@ export default function TwitterSnaResult(props) {
             data: resData,
             columns: columns,
             csvArr: csvArr,
-            username: data.points[0].label
+            username: selectedUser
         };
 
         switch (index) {
@@ -281,6 +291,9 @@ export default function TwitterSnaResult(props) {
                 break;
             case 3:
                 setPieCharts3(newRes);
+                break;
+            case 4:
+                setGraphTweets(newRes);
                 break;
             default:
                 break;
@@ -441,6 +454,8 @@ export default function TwitterSnaResult(props) {
         setGraphClickNode(createGraphWhenClickANode(e));
 
         setGraphReset(getGraphFromScreen(e, graphData));
+        
+        displayTweetsOfUser(e, '', 4);
     }
 
     function onClickStage(e) {
@@ -692,7 +707,7 @@ export default function TwitterSnaResult(props) {
                                                     <Button
                                                         variant={"contained"}
                                                         color={"secondary"}
-                                                        onClick={() => hidePieChartTweetsView(index)}>
+                                                        onClick={() => hideTweetsView(index)}>
                                                         {
                                                             keyword('sna_result_hide')
                                                         }
@@ -902,6 +917,40 @@ export default function TwitterSnaResult(props) {
                                                         maxNodeSize: 12
                                                     }}>
                                 </Sigma>
+                            }
+                            {
+                                graphTweets &&
+                                <div>
+                                    <Grid container justify="space-between" spacing={2}
+                                        alignContent={"center"}>
+                                        <Grid item>
+                                            <Button
+                                                variant={"contained"}
+                                                color={"secondary"}
+                                                onClick={() => hideTweetsView(4)}>
+                                                {
+                                                    keyword('sna_result_hide')
+                                                }
+                                            </Button>
+                                        </Grid>
+                                        <Grid item>
+                                            <Button
+                                                variant={"contained"}
+                                                color={"primary"}
+                                                onClick={() => downloadClick(graphTweets.csvArr, graphTweets.username)}>
+                                                {
+                                                    keyword('sna_result_download')
+                                                }
+                                            </Button>
+                                        </Grid>
+                                    </Grid>
+                                    <Box m={2} />
+                                    <CustomTable title={keyword("sna_result_slected_tweets")}
+                                        colums={graphTweets.columns}
+                                        data={graphTweets.data}
+                                        actions={goToTweetAction}
+                                    />
+                                </div>
                             }
                         </div>
                     </ExpansionPanelDetails>
