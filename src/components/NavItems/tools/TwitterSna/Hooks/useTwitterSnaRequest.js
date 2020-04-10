@@ -202,6 +202,38 @@ function getSizeOfUsernames(hits, field = 'nretweets') {
   return sizeInNodes;
 }
 
+function getInteractionOfUsernames(hits, types = ['reply_to', 'mentions']) {
+  let interactionsTweets = hits.tweets.map((tweet) => {
+    let username = tweet._source.username;
+    let interactedEntities = [];
+    types.forEach(type => {
+      let interactedUsers = null;
+      if (type === 'reply_to' && tweet._source[type] !== undefined) {
+        interactedUsers = [...new Set(tweet._source[type].map((repliedUser) => { return repliedUser.username; }))];
+      } else if (type !== 'reply_to' && tweet._source[type] !== undefined) {
+        interactedUsers = [...new Set(tweet._source[type])];
+      }
+      // Exlude owner of the tweet in interaction list
+      interactedEntities.push(_.without(interactedUsers, username));
+    });
+    return {username: username, interactedEntities: interactedEntities.flat()}
+  });
+
+  let groupbyUsers = _.groupBy(interactionsTweets, 'username');
+
+  let results = [];
+  Object.keys(groupbyUsers).forEach(user => {
+    let interactions = groupbyUsers[user].map((interactEachTweet) => { return interactEachTweet.interactedEntities; });
+    let flattedInteractions = [].concat(interactions).flat();
+
+    if (flattedInteractions.length > 0) {
+      results.push( { username: user, interacted: _.countBy(flattedInteractions) });
+    } 
+});
+
+  return results;
+}
+
 function createCommunity(graph) {
   let nodeIdArr = [];
   graph.nodes.forEach(node => {
@@ -425,7 +457,11 @@ const useTwitterSnaRequest = (request) => {
       result.tweetCount.like = responseArrayOf7[5].likes.toString().replace(/(?=(\d{3})+(?!\d))/g, " ");
       result.tweets = responseArrayOf7[5].tweets;
       result.histogram = createHistogram(data, responseArrayOf7[6], givenFrom, givenUntil);
-      result.netGraph = { title: "Community graph", "tmpdata": responseArrayOf7[5], hashtagGraph: createHashtagGraph(data, responseArrayOf7[5]) };
+      result.netGraph = { title: "Community graph", 
+                          tmpdata: responseArrayOf7[5], 
+                          hashtagGraph: createHashtagGraph(data, responseArrayOf7[5]),
+                          userInteraction: getInteractionOfUsernames(responseArrayOf7[5], ['mentions'])
+                        };
       if (final) {
         result.cloudChart = createWordCloud(responseArrayOf7[7]);
 

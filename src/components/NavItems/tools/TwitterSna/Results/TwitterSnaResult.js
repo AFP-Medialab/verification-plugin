@@ -14,6 +14,7 @@ import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import LinkIcon from '@material-ui/icons/Link';
 import TwitterIcon from '@material-ui/icons/Twitter';
+import { TableContainer, Table, TableBody, TableRow, TableCell } from '@material-ui/core';
 import CloseResult from "../../../../Shared/CloseResult/CloseResult";
 import { cleanTwitterSnaState } from "../../../../../redux/actions/tools/twitterSnaActions";
 import ReactWordcloud from "react-wordcloud";
@@ -52,6 +53,7 @@ export default function TwitterSnaResult(props) {
     const [graphReset, setGraphReset] = useState(null);
     const [graphClickNode, setGraphClickNode] = useState(null);
     const [graphTweets, setGraphTweets] = useState(null);
+    const [graphInteraction, setGraphInteraction] = useState(null);
 
     const hideTweetsView = (index) => {
         switch (index) {
@@ -101,6 +103,7 @@ export default function TwitterSnaResult(props) {
         setGraphReset(null);
         setGraphClickNode(null);
         setGraphTweets(null);
+        setGraphInteraction(null);
     }, [JSON.stringify(props.request), props.request])
 
 
@@ -301,6 +304,32 @@ export default function TwitterSnaResult(props) {
         }
     }
 
+    const displayUserInteraction = (e) => {
+
+        let columns = [
+            { title: keyword('sna_result_username'), field: 'username' },
+            { title: 'Interaction', field: 'nbInteraction', render: getTweetWithClickableLink },
+        ];
+
+        let interaction = result.netGraph.userInteraction.find((element) => element.username === e.data.node.id);
+        let resData = [];
+        let sortedInteraction = [];
+        if (interaction !== undefined) {
+            sortedInteraction = Object.entries(interaction.interacted).sort((a, b) => { return a[1] - b[1]; });
+            sortedInteraction.forEach(x => {
+                resData.push({ username: x[0], nbInteraction: x[1] }); 
+            });
+        }
+
+        let newRes = {
+            username: e.data.node.id,
+            data: resData,
+            columns: columns
+        };
+        debugger;
+        setGraphInteraction(newRes);
+    }
+
     function downloadClick(csvArr, name, histo) {
         let encodedUri = encodeURIComponent(csvArr);
         let link = document.createElement("a");
@@ -456,6 +485,8 @@ export default function TwitterSnaResult(props) {
         setGraphReset(getGraphFromScreen(e, graphData));
 
         displayTweetsOfUser(e, '', 4);
+
+        displayUserInteraction(e);
     }
 
     function onClickStage(e) {
@@ -463,6 +494,8 @@ export default function TwitterSnaResult(props) {
             return null;
         });
         hideTweetsView(4);
+
+        setGraphInteraction(null);
     }
 
     function createGraphWhenClickANode(e) {
@@ -857,9 +890,7 @@ export default function TwitterSnaResult(props) {
                     </ExpansionPanelSummary>
                     <ExpansionPanelDetails>
                         <div style={{ width: '100%'}}>
-
                             {
-                                /* (hashtagGraph === null && result.netGraph.hashtagGraph && result.netGraph.hashtagGraph.node !== 0) && */
                                 (graphReset === null && graphClickNode === null &&
                                 result.netGraph.hashtagGraph && result.netGraph.hashtagGraph.node !== 0) &&
                                 <Sigma graph = { result.netGraph.hashtagGraph }
@@ -877,7 +908,6 @@ export default function TwitterSnaResult(props) {
                                                         minNodeSize: 5,
                                                         maxNodeSize: 12
                                                         }}>
-                                    {/* <RelativeSize initialSize={15}/> */}
                                     <RandomizeNodePositions/>
                                 </Sigma>
                             }
@@ -897,7 +927,6 @@ export default function TwitterSnaResult(props) {
                                                         drawEdgeLabels: true
                                                     }}
                                 >
-                                    {/* <RelativeSize initialSize={15}/> */}
                                 </Sigma>
                             }
                             { graphReset !== null && graphClickNode === null &&  
@@ -952,6 +981,56 @@ export default function TwitterSnaResult(props) {
                                     />
                                 </div>
                             }
+                            {
+                                graphInteraction && 
+                                <div style= { { position: 'absolute', top: 0, right: 0 } }>
+                                    <Paper style= { { width:300 } }>
+                                    <TableContainer>
+                                    <Table>
+                                            <TableBody>
+                                                <TableRow>
+                                                    <TableCell align="center" style={ { 'font-size': 18, 'font-weight': 'bold', 'line-height': 21, color: '#428bca', 'border-bottom': 'none' } }>
+                                                    { graphInteraction.username } 
+                                                    </TableCell>
+                                                </TableRow>
+                                                <TableRow>
+                                                    <TableCell align="center" style={ { 'font-size': 18, 'font-weight': 'bold', 'line-height': 21, 'border-bottom': 'none' } }>
+                                                    Mostly conntected with:
+                                                    </TableCell>
+                                                </TableRow>
+                                                <TableRow>
+                                                    <TableCell align="center" style={{color: '#6a6a6a', 'border-bottom': 'none'}}>
+                                                    TODO later
+                                                    </TableCell>
+                                                </TableRow>
+                                                <TableRow>
+                                                    <TableCell align="center" style={ { 'font-size': 18, 'font-weight': 'bold', 'line-height': 21, 'border-bottom': 'none' } }>
+                                                    Mostly interacted with:
+                                                </TableCell>
+                                                </TableRow>
+                                            </TableBody>
+                                        </Table>
+                                    </TableContainer>
+                                    <TableContainer style= { { maxHeight: 150} } >
+                                        <Table stickyHeader aria-label="sticky table">
+                                            <TableBody>
+                                                {
+                                                    graphInteraction.data.map((row) => {
+                                                        return (
+                                                            <TableRow key={row.username}>
+                                                                <TableCell align="center" style={{color: '#6a6a6a', 'border-bottom': 'none'}} > {row.username} </TableCell>
+                                                                <TableCell align="center" style={{color: '#6a6a6a', 'border-bottom': 'none'}} > {row.nbInteraction} </TableCell>
+                                                            </TableRow>
+                                                            );
+                                                    })
+                                                }
+                                            </TableBody>
+                                        </Table>
+                                    </TableContainer>
+                                    </Paper>
+                                </div>
+                            }
+                            
                         </div>
                     </ExpansionPanelDetails>
                 </ExpansionPanel>
