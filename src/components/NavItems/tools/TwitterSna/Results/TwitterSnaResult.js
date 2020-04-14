@@ -15,6 +15,14 @@ import Grid from "@material-ui/core/Grid";
 import LinkIcon from '@material-ui/icons/Link';
 import TwitterIcon from '@material-ui/icons/Twitter';
 import { TableContainer, Table, TableBody, TableRow, TableCell } from '@material-ui/core';
+import { Avatar } from '@material-ui/core'; 
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import ListItemAvatar from '@material-ui/core/ListItemAvatar';
+import ImageIcon from '@material-ui/icons/Image';
+import WorkIcon from '@material-ui/icons/Work';
+import BeachAccessIcon from '@material-ui/icons/BeachAccess';
 import CloseResult from "../../../../Shared/CloseResult/CloseResult";
 import { cleanTwitterSnaState } from "../../../../../redux/actions/tools/twitterSnaActions";
 import ReactWordcloud from "react-wordcloud";
@@ -986,48 +994,54 @@ export default function TwitterSnaResult(props) {
                                 graphInteraction && 
                                 <div style= { { position: 'absolute', top: 0, right: 0 } }>
                                     <Paper style= { { width:300 } }>
-                                    <TableContainer>
-                                    <Table>
+                                    <Paper style={{"background": "http://abs.twimg.com/images/themes/theme1/bg.png"}}>
+                                    </Paper>
+                                    <div style={{height: 65, backgroundSize: 'cover', backgroundImage: `url(${"http://abs.twimg.com/images/themes/theme1/bg.png"})`}}></div>
+                                    <div>
+                                    <List style={{ position: 'absolute', top: 40, width: '100%' }}>
+                                    <ListItem>
+                                        <ListItemAvatar>
+                                        <Avatar alt= {graphInteraction.username} src= { "http://avatars.io/twitter/" + graphInteraction.username } variant='rounded' style={{ width: 65, height: 65 }}/>
+                                            </ListItemAvatar>
+                                            <ListItemText classes={{primary:{fontWeight: 'bold'}}} primary={graphInteraction.username} style={{ marginLeft: 10, color: '#428bca'}} />
+                                        </ListItem>
+                                    </List>
+                                    </div>
+                                    <TableContainer style={{ marginTop: 60 }}>
+                                    <Table size="small">
                                             <TableBody>
                                                 <TableRow>
-                                                    <TableCell align="center" style={ { 'font-size': 18, 'font-weight': 'bold', 'line-height': 21, color: '#428bca', 'border-bottom': 'none' } }>
-                                                    { graphInteraction.username } 
-                                                    </TableCell>
-                                                </TableRow>
-                                                <TableRow>
-                                                    <TableCell align="center" style={ { 'font-size': 18, 'font-weight': 'bold', 'line-height': 21, 'border-bottom': 'none' } }>
+                                                    <TableCell colSpan={2} align="center" style={ { 'font-size': 18, 'font-weight': 'bold', 'line-height': 21, 'border-bottom': 'none' } }>
                                                     Mostly conntected with:
                                                     </TableCell>
                                                 </TableRow>
                                                 <TableRow>
-                                                    <TableCell align="center" style={{color: '#6a6a6a', 'border-bottom': 'none'}}>
+                                                    <TableCell colSpan={2} align="center" style={{color: '#6a6a6a', 'border-bottom': 'none'}}>
                                                     TODO later
                                                     </TableCell>
                                                 </TableRow>
                                                 <TableRow>
-                                                    <TableCell align="center" style={ { 'font-size': 18, 'font-weight': 'bold', 'line-height': 21, 'border-bottom': 'none' } }>
+                                                    <TableCell colSpan={2} align="center" style={ { 'font-size': 18, 'font-weight': 'bold', 'line-height': 21, 'border-bottom': 'none' } }>
                                                     Mostly interacted with:
                                                 </TableCell>
                                                 </TableRow>
                                             </TableBody>
                                         </Table>
                                     </TableContainer>
-                                    <TableContainer style= { { maxHeight: 150} } >
-                                        <Table stickyHeader aria-label="sticky table">
-                                            <TableBody>
-                                                {
-                                                    graphInteraction.data.map((row) => {
-                                                        return (
-                                                            <TableRow key={row.username}>
-                                                                <TableCell align="center" style={{color: '#6a6a6a', 'border-bottom': 'none'}} > {row.username} </TableCell>
-                                                                <TableCell align="center" style={{color: '#6a6a6a', 'border-bottom': 'none'}} > {row.nbInteraction} </TableCell>
-                                                            </TableRow>
-                                                            );
-                                                    })
-                                                }
-                                            </TableBody>
-                                        </Table>
-                                    </TableContainer>
+                                    <List className={classes.root} style={{overflow: 'auto', maxHeight: 150}}>
+                                        {
+                                            graphInteraction.data.map((row) => {
+                                                return (
+                                                    <ListItem>
+                                                        <ListItemAvatar>
+                                                        <Avatar alt= {row.username} src= { "http://avatars.io/twitter/" + row.username } />
+                                                        </ListItemAvatar>
+                                                        <ListItemText primary={row.username} secondary={"Interactions: " + row.nbInteraction} />
+                                                    </ListItem>
+                                                    );
+                                            })
+                                        }
+                                    </List>
                                     </Paper>
                                 </div>
                             }
