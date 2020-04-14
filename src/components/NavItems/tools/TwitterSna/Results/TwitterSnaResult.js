@@ -25,7 +25,7 @@ import { saveSvgAsPng } from 'save-svg-as-png';
 import { CSVLink } from "react-csv";
 import Cytoscape from 'cytoscape';
 import Fcose from 'cytoscape-fcose';
-import {Sigma, RandomizeNodePositions, RelativeSize} from 'react-sigma';
+import {Sigma, RandomizeNodePositions, ForceAtlas2, RelativeSize} from 'react-sigma';
 
 import CircularProgress from "@material-ui/core/CircularProgress";
 
@@ -326,7 +326,6 @@ export default function TwitterSnaResult(props) {
             data: resData,
             columns: columns
         };
-        debugger;
         setGraphInteraction(newRes);
     }
 
@@ -908,7 +907,9 @@ export default function TwitterSnaResult(props) {
                                                         minNodeSize: 5,
                                                         maxNodeSize: 12
                                                         }}>
-                                    <RandomizeNodePositions/>
+                                    <RandomizeNodePositions>
+                                    <ForceAtlas2 iterationsPerRender={1} timeout={6000}/>
+                                    </RandomizeNodePositions>
                                 </Sigma>
                             }
                             { graphReset !== null && graphClickNode !== null && 
