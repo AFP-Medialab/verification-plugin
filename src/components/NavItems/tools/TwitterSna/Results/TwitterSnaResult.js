@@ -24,11 +24,10 @@ import { saveSvgAsPng } from 'save-svg-as-png';
 import { CSVLink } from "react-csv";
 import Cytoscape from 'cytoscape';
 import Fcose from 'cytoscape-fcose';
-import CytoscapeComponent from 'react-cytoscapejs';
 
 import CircularProgress from "@material-ui/core/CircularProgress";
 
-Cytoscape.use(Fcose);
+Cytoscape.use( Fcose );
 
 export default function TwitterSnaResult(props) {
 
@@ -97,7 +96,7 @@ export default function TwitterSnaResult(props) {
 
 
     const displayTweetsOfWord = (word, callback) => {
-
+        
         let columns = [
             { title: keyword('sna_result_username'), field: 'username' },
             { title: keyword('sna_result_date'), field: 'date' },
@@ -107,7 +106,7 @@ export default function TwitterSnaResult(props) {
         ];
         let csvArr = "";
 
-
+        
         // word = word.replace(/_/g, " ");
         let resData = [];
         csvArr += keyword('sna_result_username') + "," +
@@ -117,12 +116,12 @@ export default function TwitterSnaResult(props) {
             keyword('sna_result_like_nb') + "," +
             keyword('elastic_url') + "\n";
 
-
+        
         result.tweets.forEach(tweetObj => {
-
+            
             if (tweetObj._source.tweet.toLowerCase().match(new RegExp('(^|((.)*[\.\(\)0-9\!\?\'\’\‘\"\:\,\/\\\%\>\<\«\»\ ^#]))' + word + '(([\.\(\)\!\?\'\’\‘\"\:\,\/\>\<\«\»\ ](.)*)|$)', "i"))) {
 
-
+                
                 var date = new Date(tweetObj._source.date);
                 //let tweet = getTweetWithClickableLink(tweetObj._source.tweet,tweetObj._source.link);
                 let tmpObj = {
@@ -145,7 +144,7 @@ export default function TwitterSnaResult(props) {
             csvArr: csvArr,
             word: word
         };
-
+        
         callback(tmp);
     }
 
@@ -162,45 +161,45 @@ export default function TwitterSnaResult(props) {
         let maxDate;
         let csvArr = keyword("sna_result_username") + "," + keyword("sna_result_date") + "," + keyword("sna_result_tweet") + "," + keyword("sna_result_retweet_nb") + "," + keyword("elastic_url") + "\n";
         let isDays = "isDays";
-        if (!fromHisto) { isDays = "isHours" }
+        if (!fromHisto) {isDays = "isHours"}
 
-        result.tweets.forEach(tweetObj => {
+            result.tweets.forEach(tweetObj => {
 
-            let objDate = new Date(tweetObj._source.date);
-            for (let i = 0; i < data.points.length; i++) {
-                let pointDate = new Date(fromHisto ? data.points[i].x : (data.points[i].x + ' ' + data.points[i].y));
-                if (data.points[i].data.mode !== "lines" && isInRange(pointDate, objDate, isDays)) {
-                    if (minDate === undefined)
-                        minDate = objDate;
-                    if (maxDate === undefined)
-                        maxDate = objDate;
-                    let date = new Date(tweetObj._source.date);
-                    resData.push(
-                        {
-                            username: <a href={"https://twitter.com/" + tweetObj._source.username}
-                                target="_blank">{tweetObj._source.username}</a>,
-                            date: date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear() + ' ' + date.getHours() + ':' + date.getMinutes(),
-                            tweet: tweetObj._source.tweet,
-                            retweetNb: tweetObj._source.nretweets,
-                            link: tweetObj._source.link
+                let objDate = new Date(tweetObj._source.date);
+                for (let i = 0; i < data.points.length; i++){
+                    let pointDate = new Date(fromHisto? data.points[i].x : (data.points[i].x + ' ' + data.points[i].y));
+                    if (data.points[i].data.mode !== "lines" && isInRange(pointDate, objDate, isDays)) {
+                        if (minDate === undefined)
+                            minDate = objDate;
+                        if (maxDate === undefined)
+                            maxDate = objDate;
+                        let date = new Date(tweetObj._source.date);
+                        resData.push(
+                            {
+                                username: <a href={"https://twitter.com/" + tweetObj._source.username}
+                                    target="_blank">{tweetObj._source.username}</a>,
+                                date: date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear() + ' ' + date.getHours() + ':' + date.getMinutes(),
+                                tweet: tweetObj._source.tweet,
+                                retweetNb: tweetObj._source.nretweets,
+                                link: tweetObj._source.link
+                            }
+                        );
+                        csvArr += tweetObj._source.username + ',' +
+                            date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear() + '_' + date.getHours() + 'h' + date.getMinutes() + ',"' +
+                            tweetObj._source.tweet + '",' + tweetObj._source.nretweets + "," + tweetObj._source.link + '\n';
+
+
+                        if (minDate > objDate) {
+                            minDate = objDate
                         }
-                    );
-                    csvArr += tweetObj._source.username + ',' +
-                        date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear() + '_' + date.getHours() + 'h' + date.getMinutes() + ',"' +
-                        tweetObj._source.tweet + '",' + tweetObj._source.nretweets + "," + tweetObj._source.link + '\n';
-
-
-                    if (minDate > objDate) {
-                        minDate = objDate
+                        if (maxDate < objDate) {
+                            maxDate = objDate;
+                        }
                     }
-                    if (maxDate < objDate) {
-                        maxDate = objDate;
-                    }
-                }
-            }
-        });
-        //  i++;
-        //  });
+               }
+            });
+         //  i++;
+      //  });
         return {
             data: resData,
             columns: columns,
@@ -343,7 +342,8 @@ export default function TwitterSnaResult(props) {
 
     function isInRange(pointDate, objDate, periode) {
 
-        if (periode === "isHours") {
+        if (periode === "isHours")
+        {
             return (((pointDate.getDate() === objDate.getDate()
                 && pointDate.getHours() - 1 === objDate.getHours()))
                 && pointDate.getMonth() === objDate.getMonth()
@@ -468,7 +468,6 @@ export default function TwitterSnaResult(props) {
         return csvData;
     }
 
-    let myCy = "tempPropsForCommunityGraph";
 
     if (result === null)
         return <div />;

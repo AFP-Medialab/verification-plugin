@@ -8,7 +8,6 @@ import Box from "@material-ui/core/Box";
 import Divider from "@material-ui/core/Divider";
 import Button from "@material-ui/core/Button";
 import {useKeyframes} from "../Hooks/usekeyframes";
-import ImageReverseSearch from "../../ImageReverseSearch";
 import CloseResult from "../../../../Shared/CloseResult/CloseResult";
 import {cleanKeyframesState} from "../../../../../redux/actions/tools/keyframesActions";
 import OnClickInfo from "../../../../Shared/OnClickInfo/OnClickInfo";
@@ -34,6 +33,9 @@ const KeyFramesResults = (props) => {
     const toggleDetail = () => {
         setDetailed(!detailed);
     };
+    const imageClick = (event) => { 
+    };
+
     return (
         <div>
             <Paper className={classes.root}>
@@ -54,11 +56,13 @@ const KeyFramesResults = (props) => {
                 <Box m={2}/>
                 {
                     detailed &&
-                    <ImageGridList list={detailedList} height={160} onClick={(url) => ImageReverseSearch("google", url)}/>
+                    //<ImageGridList list={detailedList} height={160} onClick={(url) => ImageReverseSearch("google", url)}/>
+                    <ImageGridList list={detailedList} height={160} handleClick={imageClick}/>
                 }
                 {
                     !detailed &&
-                    <ImageGridList list={simpleList}  height={160} onClick={(url) => ImageReverseSearch("google", url)}/>
+                    //<ImageGridList list={simpleList}  height={160} onClick={(url) => ImageReverseSearch("google", url)}/>
+                    <ImageGridList list={simpleList}  height={160} handleClick={imageClick}/>
                 }
             </Paper>
         </div>

@@ -6,7 +6,6 @@ import * as serviceWorker from './serviceWorker';
 import {createStore} from "redux";
 import allReducers from "./redux/reducers/index"
 import {Provider} from "react-redux"
-import {elementOrEmpty} from "react-csv/src/core";
 
 function saveToLocalStorage(state) {
     try {

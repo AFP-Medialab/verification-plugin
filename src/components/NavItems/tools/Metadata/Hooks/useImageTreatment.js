@@ -1,6 +1,6 @@
-import {useCallback, useEffect} from "react";
+import {useEffect} from "react";
 import EXIF from "exif-js/exif";
-import {useDispatch, useSelector} from "react-redux";
+import {useDispatch} from "react-redux";
 import {setMetadadaResult} from "../../../../../redux/actions/tools/metadataActions";
 import {setError} from "../../../../../redux/actions/errorActions";
 import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";

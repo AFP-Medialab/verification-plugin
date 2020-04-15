@@ -1,7 +1,7 @@
-import React, { useState, Fragment } from "react";
+import React, { Fragment } from "react";
 import PropTypes from 'prop-types';
 
-import { useStore, useSelector, useDispatch } from 'react-redux';
+import {useSelector, useDispatch } from 'react-redux';
 
 import useMyStyles from "../MaterialUiStyles/useMyStyles";
 
@@ -173,7 +173,7 @@ const AuthenticationCard = (props) => {
 
   // If authenticated
   if (userAuthenticated) {
-    const logUserMsg = _.template(messageI18NResolver("LOGUSER_TEMPLATE") || "Wellcome <%= user.firstName %> <%= user.lastName %> (<%= user.email %>)")({ user });
+    const logUserMsg = _.template(messageI18NResolver("LOGUSER_TEMPLATE") || "Welcome <%= user.firstName %> <%= user.lastName %> (<%= user.email %>)")({ user });
     return (
       <Fragment>
         <Toolbar>

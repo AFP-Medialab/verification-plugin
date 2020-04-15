@@ -13,7 +13,6 @@ import {
   generateWordCloudPlotlyJson
 } from "../Results/call-elastic";
 
-import { getRequest } from '../TwitterSna';
 import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../../LocalDictionary/components/NavItems/tools/TwitterSna.tsv";
 

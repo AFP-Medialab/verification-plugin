@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {useSelector} from "react-redux";
 import {Paper} from "@material-ui/core";
 import TextField from "@material-ui/core/TextField";
@@ -20,7 +20,7 @@ import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/Analysis.tsv";
 import {submissionEvent} from "../../../Shared/GoogleAnalytics/GoogleAnalytics";
 
-function useTraceUpdate(props) {
+/*function useTraceUpdate(props) {
     const prev = useRef(props);
     useEffect(() => {
         const changedProps = Object.entries(props).reduce((ps, [k, v]) => {
@@ -34,7 +34,7 @@ function useTraceUpdate(props) {
         }
         prev.current = props;
     });
-}
+}*/
 
 const Analysis = () => {
 

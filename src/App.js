@@ -2,12 +2,12 @@ import React, { useEffect } from 'react';
 import NavBar from "./components/NavBar/NavBar";
 import { MuiThemeProvider } from "@material-ui/core";
 import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
-import { HashRouter as Router, Route, Switch } from "react-router-dom";
+import { Router, Route, Switch } from "react-router-dom";
 import history from "./components/Shared/History/History";
 import PopUp from "./components/PopUp/PopUp";
 import ReactGA from 'react-ga';
 import { useSelector } from "react-redux";
-import { userLoginAction } from './redux/actions/authenticationActions';
+
 //import auth from './auth.ts'; // Sample authentication provider
 import useAuthenticationAPI from './components/Shared/Authentication/useAuthenticationAPI';
 

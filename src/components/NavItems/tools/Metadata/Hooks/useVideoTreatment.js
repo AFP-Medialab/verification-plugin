@@ -1,6 +1,6 @@
-import {useCallback, useEffect} from "react";
+import { useEffect} from "react";
 import * as mp4box from "mp4box";
-import {useDispatch, useSelector} from "react-redux";
+import {useDispatch} from "react-redux";
 import {setMetadadaResult, setMetadadaLoading} from "../../../../../redux/actions/tools/metadataActions";
 import {setError} from "../../../../../redux/actions/errorActions";
 import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
