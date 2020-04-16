@@ -972,6 +972,7 @@ export default function TwitterSnaResult(props) {
                                         minNodeSize: 5,
                                         maxNodeSize: 12,
                                         drawEdgeLabels: true,
+                                        edgeColor: 'target'
                                     }}
                                 >
                                 </Sigma>
@@ -1028,8 +1029,6 @@ export default function TwitterSnaResult(props) {
                                 graphInteraction &&
                                 <div style={{ position: 'absolute', top: 0, right: 0 }}>
                                     <Paper style={{ width: 300 }}>
-                                        <Paper style={{ "background": "http://abs.twimg.com/images/themes/theme1/bg.png" }}>
-                                        </Paper>
                                         <div style={{
                                             height: 65,
                                             backgroundSize: 'cover',
