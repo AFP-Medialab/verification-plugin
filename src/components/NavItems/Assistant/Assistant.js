@@ -98,11 +98,11 @@ const Assistant = () => {
             const domains = currentAction.domains;
             if (domains.includes(domainEnum)) {
                 const ctypes = currentAction.ctypes;
-                //const restrictions = currentAction.type_restriction;
+                const restrictions = currentAction.type_restriction;
                 if (ctypes.includes(CTYPE.ALL) || ctypes.includes(cTypeEnum)) {
-                    //if (restrictions.size == 0 || (url.match(restrictions))) {
+                    if (restrictions.size == 0 || (url.match(restrictions[0]))) {
                         possibleActions.push(currentAction);
-                    //}
+                    }
                 }
             }
         }
