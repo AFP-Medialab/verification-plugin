@@ -227,6 +227,55 @@ export default function TwitterSnaResult(props) {
         };
     };
 
+    function getDayAsString(dayInt) {
+        return ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][dayInt];
+        }
+        
+        function getHourAsString(hourInt) {
+        return ['00:00', '01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00', '10:00', '11:00', 
+                '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00'][hourInt];
+        }
+    
+    const displayTweetsOfDateHeatMap = (data) => {
+        let columns = [
+            { title: keyword('sna_result_username'), field: 'username' },
+            { title: keyword('sna_result_date'), field: 'date' },
+            { title: keyword('sna_result_tweet'), field: 'tweet', render: getTweetWithClickableLink },
+            { title: keyword('sna_result_retweet_nb'), field: 'retweetNb' },
+        ];
+        let resData = [];
+        let csvArr = keyword("sna_result_username") + ',' + keyword("sna_result_date") + ',' + keyword("sna_result_tweet") + ',' + keyword("sna_result_retweet_nb") + ',' + keyword("elastic_url") + '\n';
+
+        const filteredTweets = result.tweets.filter(function(tweetObj) {
+            const date = new Date(tweetObj._source.date);
+            const day = getDayAsString(date.getDay());
+            const hour = getHourAsString(date.getHours());
+            return hour === data.points[0].x && day === data.points[0].y;
+        });
+
+        filteredTweets.forEach(tweetObj => {
+            const date = new Date(tweetObj._source.date);
+            resData.push(
+                {
+                    username: <a href={"https://twitter.com/" + tweetObj._source.username} target="_blank">{tweetObj._source.username}</a>,
+                    date: date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear() + ' ' + date.getHours() + ':' + date.getMinutes(),
+                    tweet: tweetObj._source.tweet,
+                    retweetNb: tweetObj._source.nretweets,
+                    link: tweetObj._source.link
+                }
+            );
+            csvArr += tweetObj._source.username + ',' +
+                date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear() + '_' + date.getHours() + 'h' + date.getMinutes() + ',"' +
+                tweetObj._source.tweet + '",' + tweetObj._source.nretweets + ',' + tweetObj._source.link + '\n';
+        });
+
+        return {
+            data: resData,
+            columns: columns,
+            csvArr: csvArr,
+        };
+    };
+    
     const displayTweetsOfUser = (data, nbType, index) => {
         let columns = [
             { title: keyword('sna_result_date'), field: 'date' },
@@ -366,7 +415,7 @@ export default function TwitterSnaResult(props) {
     }
 
     const onHeatMapClick = (data) => {
-        setheatMapTweets(displayTweetsOfDate(data, false));
+        setheatMapTweets(displayTweetsOfDateHeatMap(data, false));
     }
 
     const onDonutsClick = (data, nbType, index) => {
@@ -631,82 +680,6 @@ export default function TwitterSnaResult(props) {
                 </ExpansionPanel>
             }
             {
-
-                <ExpansionPanel>
-                    <ExpansionPanelSummary
-                        expandIcon={<ExpandMoreIcon />}
-                    >
-                        <Typography className={classes.heading}>{keyword('sna_result_heatMap')}</Typography>
-                    </ExpansionPanelSummary>
-                    <ExpansionPanelDetails>
-                        {
-                            result.heatMap && result.heatMap !== "tooLarge" &&
-                            <Box alignItems="center" justifyContent="center" width={"100%"}>
-                                {
-                                    ((result.heatMap.isAllnul) &&
-                                        <Typography variant={"body2"}>{keyword("sna_no_data")}</Typography>) ||
-
-                                    <Plot
-                                        style={{ width: '100%', height: "450px" }}
-                                        data={result.heatMap.plot}
-                                        config={result.histogram.config}
-                                        onClick={(e) => onHeatMapClick(e)}
-                                    />
-                                }
-
-                                {
-                                    heatMapTweets &&
-                                    <div>
-                                        <Grid container justify="space-between" spacing={2}
-                                            alignContent={"center"}>
-                                            <Grid item>
-                                                <Button
-                                                    variant={"contained"}
-                                                    color={"secondary"}
-                                                    onClick={() => setheatMapTweets(null)}>
-                                                    {
-                                                        keyword('sna_result_hide')
-                                                    }
-                                                </Button>
-                                            </Grid>
-                                            <Grid item>
-                                                <Button
-                                                    variant={"contained"}
-                                                    color={"primary"}
-                                                    onClick={() => downloadClick(heatMapTweets.csvArr, "NAME OF FILE")}>
-                                                    {
-                                                        keyword('sna_result_download')
-                                                    }
-                                                </Button>
-                                            </Grid>
-                                        </Grid>
-                                        <Box m={2} />
-                                        <CustomTable title={keyword("sna_result_slected_tweets")}
-                                            colums={heatMapTweets.columns}
-                                            data={heatMapTweets.data}
-                                            actions={goToTweetAction}
-                                        />
-                                    </div>
-                                }
-                            </Box>
-                        }
-                        {
-                            result.heatMap && result.heatMap === "tooLarge" &&
-                            <Typography variant='body2'>{keyword("sna_too_long_for_heatMap")}</Typography>
-
-                        }
-                        {
-                            result.heatMap === undefined &&
-                            (//<Typography variant='body2'>The heatmap is still loading please wait (ADD TSV)</Typography>
-
-                                <CircularProgress className={classes.circularProgress} />)
-
-                        }
-                    </ExpansionPanelDetails>
-                </ExpansionPanel>
-
-            }
-            {
                 result.pieCharts &&
                 result.pieCharts.map((obj, index) => {
                     if ((props.request.userList.length === 0 || index === 3))
@@ -890,6 +863,81 @@ export default function TwitterSnaResult(props) {
                     <ExpansionPanelSummary
                         expandIcon={<ExpandMoreIcon />}
                     >
+                        <Typography className={classes.heading}>{keyword('sna_result_heatMap')}</Typography>
+                    </ExpansionPanelSummary>
+                    <ExpansionPanelDetails>
+                        {
+                            result.heatMap && result.heatMap !== "tooLarge" &&
+                            <Box alignItems="center" justifyContent="center" width={"100%"}>
+                                {
+                                    ((result.heatMap.isAllnul) &&
+                                        <Typography variant={"body2"}>{keyword("sna_no_data")}</Typography>) ||
+
+                                    <Plot
+                                        style={{ width: '100%', height: "450px" }}
+                                        data={result.heatMap.plot}
+                                        config={result.histogram.config}
+                                        onClick={(e) => onHeatMapClick(e)}
+                                    />
+                                }
+                                {
+                                    heatMapTweets &&
+                                    <div>
+                                        <Grid container justify="space-between" spacing={2}
+                                            alignContent={"center"}>
+                                            <Grid item>
+                                                <Button
+                                                    variant={"contained"}
+                                                    color={"secondary"}
+                                                    onClick={() => setheatMapTweets(null)}>
+                                                    {
+                                                        keyword('sna_result_hide')
+                                                    }
+                                                </Button>
+                                            </Grid>
+                                            <Grid item>
+                                                <Button
+                                                    variant={"contained"}
+                                                    color={"primary"}
+                                                    onClick={() => {
+                                                        let date = new Date(heatMapTweets.data[0].date);
+                                                        let dayHourStr = getDayAsString(date.getDay()) + date.getHours() + "h_";
+                                                        downloadClick(heatMapTweets.csvArr, dayHourStr, false);
+                                                    }}>
+                                                    {
+                                                        keyword('sna_result_download')
+                                                    }
+                                                </Button>
+                                            </Grid>
+                                        </Grid>
+                                        <Box m={2} />
+                                        <CustomTable title={keyword("sna_result_slected_tweets")}
+                                            colums={heatMapTweets.columns}
+                                            data={heatMapTweets.data}
+                                            actions={goToTweetAction}
+                                        />
+                                    </div>
+                                }
+                            </Box>
+                        }
+                        {
+                            result.heatMap && result.heatMap === "tooLarge" &&
+                            <Typography variant='body2'>{keyword("sna_too_long_for_heatMap")}</Typography>
+                        }
+                        {
+                            result.heatMap === undefined &&
+                            (//<Typography variant='body2'>The heatmap is still loading please wait (ADD TSV)</Typography>
+
+                                <CircularProgress className={classes.circularProgress} />)
+                        }
+                    </ExpansionPanelDetails>
+                </ExpansionPanel>
+            }
+            {
+                <ExpansionPanel>
+                    <ExpansionPanelSummary
+                        expandIcon={<ExpandMoreIcon />}
+                    >
                         <Typography className={classes.heading}>{result.netGraph.title}</Typography>
                     </ExpansionPanelSummary>
                     <ExpansionPanelDetails>
@@ -902,12 +950,7 @@ export default function TwitterSnaResult(props) {
                                     style={{ textAlign: 'left', width: '100%', height: '700px' }}
                                     onClickNode={(e) => onClickNode(e, result.netGraph.hashtagGraph)}
                                     settings={{
-                                        defaultNodeColor: "#3388AA",
-                                        defaultLabelSize: 8,
-                                        defaultLabelColor: "#777",
                                         labelThreshold: 13,
-                                        hoverFontStyle: "text-size: 11",
-                                        batchEdgesDrawing: true,
                                         drawEdges: false,
                                         drawEdgeLabels: false,
                                         minNodeSize: 5,
@@ -924,15 +967,11 @@ export default function TwitterSnaResult(props) {
                                     onClickStage={(e) => onClickStage(e)}
                                     style={{ textAlign: 'left', width: '100%', height: '700px' }}
                                     settings={{
-                                        defaultNodeColor: "#3388AA",
-                                        defaultLabelSize: 8,
                                         defaultLabelColor: "#777",
                                         labelThreshold: 13,
-                                        hoverFontStyle: "text-size: 11",
-                                        batchEdgesDrawing: true,
                                         minNodeSize: 5,
                                         maxNodeSize: 12,
-                                        drawEdgeLabels: true
+                                        drawEdgeLabels: true,
                                     }}
                                 >
                                 </Sigma>
@@ -943,12 +982,7 @@ export default function TwitterSnaResult(props) {
                                     style={{ textAlign: 'left', width: '100%', height: '700px' }}
                                     onClickNode={(e) => onClickNode(e, graphReset)}
                                     settings={{
-                                        defaultNodeColor: "#3388AA",
-                                        defaultLabelSize: 8,
-                                        defaultLabelColor: "#777",
                                         labelThreshold: 13,
-                                        hoverFontStyle: "text-size: 11",
-                                        batchEdgesDrawing: true,
                                         drawEdges: false,
                                         drawEdgeLabels: false,
                                         minNodeSize: 5,
@@ -1011,9 +1045,8 @@ export default function TwitterSnaResult(props) {
                                                             variant='rounded'
                                                             style={{ width: 65, height: 65 }} />
                                                     </ListItemAvatar>
-                                                    <ListItemText classes={{ primary: { fontWeight: 'bold' } }}
-                                                        primary={graphInteraction.username}
-                                                        style={{ marginLeft: 10, color: '#428bca' }} />
+                                                    <ListItemText primary={graphInteraction.username}
+                                                                    style={{ marginLeft: 10, color: '#428bca' }} />
                                                 </ListItem>
                                             </List>
                                         </div>
@@ -1023,21 +1056,23 @@ export default function TwitterSnaResult(props) {
                                                     <TableRow>
                                                         <TableCell colSpan={2}
                                                             align="center"
-                                                            style={{ 'font-size': 18, 'font-weight': 'bold', 'line-height': 21, 'border-bottom': 'none' }}>
+                                                            style={{ fontSize: 18, fontWeight: 'bold', borderBottom: 'none' }}
+                                                            >
                                                             Mostly conntected with:
                                                     </TableCell>
                                                     </TableRow>
                                                     <TableRow>
                                                         <TableCell colSpan={2}
                                                             align="center"
-                                                            style={{ color: '#6a6a6a', 'border-bottom': 'none' }}>
+                                                            style={{ color: '#6a6a6a', borderBottom: 'none' }}>
                                                             TODO later
                                                     </TableCell>
                                                     </TableRow>
                                                     <TableRow>
                                                         <TableCell colSpan={2}
                                                             align="center"
-                                                            style={{ 'font-size': 18, 'font-weight': 'bold', 'line-height': 21, 'border-bottom': 'none' }}>
+                                                            style={{ fontSize: 18, fontWeight: 'bold', borderBottom: 'none' }}
+                                                            >
                                                             Mostly interacted with:
                                                 </TableCell>
                                                     </TableRow>
@@ -1048,7 +1083,7 @@ export default function TwitterSnaResult(props) {
                                         {
                                             graphInteraction.data.length !== 0  && graphInteraction.data.map((row) => {
                                                 return (
-                                                    <ListItem>
+                                                    <ListItem key={row.username}>
                                                         <ListItemAvatar>
                                                             <Avatar alt={row.username}
                                                                 src={"http://avatars.io/twitter/" + row.username} />
