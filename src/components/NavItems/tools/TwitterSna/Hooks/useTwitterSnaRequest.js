@@ -29,20 +29,31 @@ const includeWordObj = (wordObj, wordsArray) => {
   return -1;
 };
 
-function getNbTweetsInHour(date, bucket) {
-  var nbTweets = 0;
-  var day = date.toLocaleDateString();
-  var hour = date.getHours();
-
-  bucket.forEach(tweet => {
-    var tweetDate = new Date(tweet._source.date);
-    var TweetDay = tweetDate.toLocaleDateString();
-    var tweetHour = tweetDate.getHours();
-
-    if (day === TweetDay && tweetHour === hour)
-      nbTweets++;
+// Count tweets by hour and day
+function getNbTweetsByHourDay(dayArr, hourArr, bucket) {
+  // 1D-array with elements as day_hour 
+  let dayHourArr = bucket.map(function(val, ind) { 
+    let date = new Date(val._source.date);
+    return `${date.getDay()}_${date.getHours()}`;
   });
-  return nbTweets;
+  
+  // Groupby day_hour
+  let nbTweetArr = _.countBy(dayHourArr);
+  // Convert 1D-array to 2D-array
+  let nbTweetArr2D = [...Array(dayArr.length)].map(e => Array(hourArr.length).fill(0));
+  Object.entries(nbTweetArr).forEach(nbTweet => {
+    let day = parseInt(nbTweet[0].split("_")[0]);
+    let hour = parseInt(nbTweet[0].split("_")[1]);
+    nbTweetArr2D[day][hour] = nbTweet[1];
+  });
+  // Re-order rows according to dayArr
+  let orderedNbTweetArr2D = [];
+  dayArr.forEach(dayStr => {
+    let dayInt = getDayAsInt(dayStr);
+    orderedNbTweetArr2D.push(nbTweetArr2D[dayInt])
+  });
+  
+  return orderedNbTweetArr2D;
 }
 
 function getnMax(objArr, n) {
@@ -57,6 +68,10 @@ function getColor(entity) {
   if (entity === "Location") return '#BB7042';
 
   return '#35347B';
+}
+
+function getDayAsInt(dayString) {
+  return ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].indexOf(dayString);
 }
 
 function getUniqValuesOfField(hits, field) {
@@ -290,6 +305,23 @@ function groupbyThenSum(arrOfObjects, key, attrToSumStr, attrToSumNum, attrToSki
   return results;
 }
 
+function getInsensativeCase(hits, field='hashtags') {
+  let newHits = hits.tweets.map((tweet) => {
+    if (tweet._source[field] !== undefined) {
+      if (Array.isArray(tweet._source[field])) {
+        let newArr = tweet._source[field].map((element) => { 
+          return element.toLowerCase(); 
+        });
+        tweet._source[field] = [...new Set(newArr)];
+      } else {
+        tweet._source[field] = tweet._source[field].toLowerCase(); 
+      }
+    }
+    return tweet;
+  });
+  return newHits;
+}
+
 const useTwitterSnaRequest = (request) => {
   // console.log("useTwitterSnaRequest request: ", request);
 
@@ -457,6 +489,7 @@ const useTwitterSnaRequest = (request) => {
       result.tweetCount.like = responseArrayOf7[5].likes.toString().replace(/(?=(\d{3})+(?!\d))/g, " ");
       result.tweets = responseArrayOf7[5].tweets;
       result.histogram = createHistogram(data, responseArrayOf7[6], givenFrom, givenUntil);
+      let insensativeHits = getInsensativeCase(responseArrayOf7[5], 'hashtags');
       result.netGraph = { title: "Community graph", 
                           tmpdata: responseArrayOf7[5], 
                           hashtagGraph: createHashtagGraph(data, responseArrayOf7[5]),
@@ -464,14 +497,7 @@ const useTwitterSnaRequest = (request) => {
                         };
       if (final) {
         result.cloudChart = createWordCloud(responseArrayOf7[7]);
-
-        const dateEndQuery = new Date(data.until);
-        const dateStartQuery = new Date(data.from);
-        if ((dateEndQuery - dateStartQuery) / (1000 * 3600 * 24) <= 7)
-          createHeatMap(request, responseArrayOf7[5].tweets).then((heatmap) => result.heatMap = heatmap);
-        else
-          result.heatMap = "tooLarge";
-
+        createHeatMap(request, responseArrayOf7[5].tweets).then((heatmap) => result.heatMap = heatmap);
       }
       else
         result.cloudChart = { title: "top_words_cloud_chart_title" };
@@ -548,57 +574,28 @@ const useTwitterSnaRequest = (request) => {
 
     async function createHeatMap(entries, hits) {
 
-      var firstDate = new Date(entries.from);
-      firstDate.setHours(1);
-      firstDate.setMinutes(0);
-      firstDate.setSeconds(0);
-      var firstArrElt = new Date(firstDate);
-      var lastDate = new Date(entries.until);
-      if (lastDate.getHours() === 0 && lastDate.getMinutes() === 0)
-        lastDate.setDate(lastDate.getDate() - 1);
-      lastDate.setHours(1);
-      lastDate.setMinutes(0);
-      lastDate.setSeconds(0);
-      var dates = [firstArrElt];
-
-      while (firstDate.getTime() !== lastDate.getTime()) {
-        var newDate = new Date(firstDate);
-        firstDate.setDate(firstDate.getDate() + 1);
-        newDate.setDate(newDate.getDate() + 1);
-        dates = [...dates, newDate];
+      let hourAxis = ['00:00', '01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00', '10:00', '11:00',
+                     '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00'];
+      let dayAxis = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+      let isAllnul = true; // All cells are null
+      if (hits.length !== 0) {
+        isAllnul = false;
       }
-      let hoursY = ['12:00:00 AM', '1:00:00 AM', '2:00:00 AM', '3:00:00 AM', '4:00:00 AM', '5:00:00 AM', '6:00:00 AM', '7:00:00 AM', '8:00:00 AM', '9:00:00 AM', '10:00:00 AM', '11:00:00 AM', '12:00:00 PM', '1:00:00 PM', '2:00:00 PM', '3:00:00 PM', '4:00:00 PM', '5:00:00 PM', '6:00:00 PM', '7:00:00 PM', '8:00:00 PM', '9:00:00 PM', '10:00:00 PM', '11:00:00 PM'];
-      let isAllnul = true;
-      let nbTweetsZ = [];
-      let i = 0;
-      let datesX = [];
-      dates.forEach(date => {
-        hoursY.forEach(time => {
-          nbTweetsZ.push([]);
-          let nbTweets = getNbTweetsInHour(date, hits);
-          if (nbTweets !== 0)
-            isAllnul = false;
-          date.setHours(i);
-          nbTweetsZ[i].push(nbTweets);
-
-          i++;
-        });
-        i = 0;
-        datesX = [...datesX, date.toDateString()];
-      });
-
+      // 2D-array with cells as number of tweets by day and hour
+      let nbTweetArr2D = getNbTweetsByHourDay(dayAxis, hourAxis, hits);
       return {
         plot: [{
-          z: nbTweetsZ,
-          x: datesX,
-          y: hoursY,
-          colorscale: 'Reds',
-          type: 'heatmap'
-        }],
-        isAllnul: isAllnul
+          z: nbTweetArr2D,
+          x: hourAxis,
+          y: dayAxis,
+          colorscale: [[0.0, 'rgb(247,251,255)'], [0.125, 'rgb(222,235,247)'], [0.25, 'rgb(198,219,239)'],
+                      [0.375, 'rgb(158,202,225)'], [0.5, 'rgb(107,174,214)'], [0.625, 'rgb(66,146,198)'],
+                      [0.75, 'rgb(33,113,181)'], [0.875, 'rgb(8,81,156)'], [1.0, 'rgb(8,48,107)']],
+                      type: 'heatmap'
+                    }],
+                    isAllnul: isAllnul
       };
-
-    }
+  }
 
 
     function createHashtagGraph (request, hits) {
