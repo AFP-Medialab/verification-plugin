@@ -24,11 +24,10 @@ const AssistantResult = (props) => {
 
     const classes = useMyStyles();
     const keyword = useLoadLanguage("components/NavItems/tools/Assistant.tsv", tsv);
-    const report = props["result"];
-    const result = report.result;
+    const result = props["result"];
+    const url = props["image"];
     const dispatch = useDispatch();
-
-    // handle error
+    
     if (result.length == 0)
         return (
             <Paper>
@@ -43,7 +42,6 @@ const AssistantResult = (props) => {
             </Paper>
         );
 
-    // handle valid push
     const handleClick = (path, url) => {
         history.push("/app/" + path + "/" + encodeURIComponent(url))
     };
@@ -67,25 +65,25 @@ const AssistantResult = (props) => {
         <Paper className={classes.root}>
             <CloseResult onClick={() => dispatch(cleanAssistantState())}/>
             <Grid container spacing={2}>
-                <Grid item xs = {6}>
+                <Grid item xs = {6} hidden={url==""}>
                     <Card variant = "outlined">
                         <CardContent>
                             <Typography variant="h5" component="h2" color="black">
                                 Media to Process
                             </Typography>
                             <Typography className={classes.title} color="primary">
-                               {report.url}
+                               {url}
                             </Typography>
                         </CardContent>
                         <CardMedia>
                             <Iframe
                                 frameBorder="0"
-                                url = {preprocessLinkForEmbed(report.url)}
+                                url = {preprocessLinkForEmbed(url)}
                                 allow="fullscreen"
                                 height="400"
                                 width="100%"
                             />
-                            <div data-href={report.url}/>
+                            <div data-href={url}/>
                         </CardMedia>
                     </Card>
                 </Grid>
@@ -105,7 +103,7 @@ const AssistantResult = (props) => {
                                     return (
                                         <Grid container m = {4}>
                                             <Card className={classes.assistantCards}  variant = "outlined"
-                                                  onClick={() => handleClick(action.path, report.url) }>
+                                                  onClick={() => handleClick(action.path, url) }>
                                                 <CardActionArea><CardContent>
                                                         <Typography className={classes.title} m={2}>{keyword(action.text)}</Typography>
                                                         <Button aria-colspan={2} size = "medium">

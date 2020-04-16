@@ -12,7 +12,7 @@ import 'tui-image-editor/dist/tui-image-editor.css'
 
 import useLoadLanguage from "../../../Hooks/useLoadLanguage";
 import AssistantResult from "./AssistantResult";
-import {setAssistantResult} from "../../../redux/actions/tools/assistantActions";
+import {cleanAssistantState, setAssistantResult} from "../../../redux/actions/tools/assistantActions";
 import tsv from "../../../LocalDictionary/components/NavItems/tools/Assistant.tsv";
 
 import analysisIconOff from "../../NavBar/images/tools/video_logoOff.png";
@@ -25,6 +25,7 @@ import videoRightsIconOff from "../../NavBar/images/tools/copyrightOff.png";
 import forensicIconOff from "../../NavBar/images/tools/forensic_logoOff.png";
 import twitterSnaIconOff from "../../NavBar/images/tools/twitter-sna-off.png";
 import {setError} from "../../../redux/actions/errorActions";
+import CloseResult from "../../Shared/CloseResult/CloseResult";
 
 /*
 * TODO: figure out weird navbar issue with translations
@@ -40,9 +41,11 @@ const Assistant = () => {
 
     const resultUrl = useSelector(state => state.assistant.url);
     const resultData = useSelector(state => state.assistant.result);
+    const resultProcessUrl = useSelector(state => state.assistant.processUrl);
     const dispatch = useDispatch();
 
     const [input, setInput] = useState(resultUrl);
+    const [urlToBeProcessed, setProcessUrl] = useState(resultProcessUrl);
 
     const getErrorText = (error) => {
         if (keyword(error) !== "")
@@ -53,18 +56,24 @@ const Assistant = () => {
     const submitUrl = (src) => {
         submissionEvent(src);
         try {
-            let parsed_url = new URL(src);
-
             let content_type = matchPattern(src, ctypePatterns);
-            let domain = matchPattern(parsed_url.host, domainPatterns);
-            let actions = loadActions(domain, content_type);
+            let domain = matchPattern(src, domainPatterns);
+            let actions = loadActions(domain, content_type, src);
 
-            dispatch(setAssistantResult(src, actions, false, false));
+            dispatch(setAssistantResult(src, actions, urlToBeProcessed));
         }
         catch(error){
             dispatch((setError(getErrorText(error))));
         }
     };
+
+    const submitUpload = (type) => {
+        let content_type = type;
+        let domain = DOMAIN.OWN;
+
+        let actions = loadActions(domain, content_type, null);
+        dispatch(setAssistantResult("", actions, urlToBeProcessed));
+    }
 
     const matchPattern = (to_match, patternArray) => {
         let match = null;
@@ -81,16 +90,19 @@ const Assistant = () => {
         return match;
     }
 
-    const loadActions = (domainEnum, cTypeEnum) => {
+    const loadActions = (domainEnum, cTypeEnum, url) => {
         let possibleActions = [];
         for (let i = 0; i < drawerItems.length; i++) {
             let currentAction = drawerItems[i];
             //check if the domains are matching
             const domains = currentAction.domains;
-            if (domains.includes(DOMAIN.ALL) || domains.includes(domainEnum)) {
+            if (domains.includes(domainEnum)) {
                 const ctypes = currentAction.ctypes;
+                //const restrictions = currentAction.type_restriction;
                 if (ctypes.includes(CTYPE.ALL) || ctypes.includes(cTypeEnum)) {
-                    possibleActions.push(currentAction);
+                    //if (restrictions.size == 0 || (url.match(restrictions))) {
+                        possibleActions.push(currentAction);
+                    //}
                 }
             }
         }
@@ -119,6 +131,7 @@ const Assistant = () => {
         FACEBOOK: { type: "FACEBOOK", name: "Facebook"},
         YOUTUBE: { type: "YOUTUBE", name: "Youtube"},
         TWITTER: { type: "TWITTER", name: "Twitter"},
+        OWN: { type: "OWN", name: "Own"},
         ALL: { type: "ALL", name: "website"}
     });
 
@@ -159,6 +172,10 @@ const Assistant = () => {
         {
             key: DOMAIN.TWITTER,
             patterns: ["^(https?:/{2})?(www.)?twitter.com|twimg.com"]
+        },
+        {
+            key: DOMAIN.ALL,
+            patterns: ["https?:/{2}(www.)?[-a-zA-Z0-9@:%._+~#=]{2,256}.[a-z]{2,4}\\b([-a-zA-Z0-9@:%_+.~#?&//=]*)"]
         }
     ];
 
@@ -169,6 +186,7 @@ const Assistant = () => {
             icon: analysisIconOff,
             domains: new Array(DOMAIN.YOUTUBE, DOMAIN.FACEBOOK, DOMAIN.TWITTER),
             ctypes: [CTYPE.VIDEO],
+            type_restriction: [],
             text: "analysis_text",
             tsvPrefix: "api",
             path: "tools/analysis",
@@ -176,8 +194,9 @@ const Assistant = () => {
         {
             title: "navbar_keyframes",
             icon:  keyframesIconOff,
-            domains: new Array(DOMAIN.YOUTUBE, DOMAIN.FACEBOOK, DOMAIN.TWITTER),
+            domains: new Array(DOMAIN.YOUTUBE, DOMAIN.FACEBOOK, DOMAIN.TWITTER, DOMAIN.OWN),
             ctypes: [CTYPE.VIDEO],
+            type_restriction: [],
             text: "keyframes_text",
             tsvPrefix: "keyframes",
             path: "tools/keyframes",
@@ -187,6 +206,7 @@ const Assistant = () => {
             icon: thumbnailsIconOff,
             domains: new Array(DOMAIN.YOUTUBE),
             ctypes: [CTYPE.VIDEO],
+            type_restriction: [],
             text: "thumbnails_text",
             tsvPrefix: "thumbnails",
             path: "tools/thumbnails",
@@ -196,6 +216,7 @@ const Assistant = () => {
             icon: twitterSearchIconOff,
             domains: new Array(DOMAIN.TWITTER),
             ctypes: [CTYPE.TEXT],
+            type_restriction: [],
             text: "twitter_text",
             tsvPrefix: "twitter",
             path: "tools/twitter",
@@ -203,8 +224,9 @@ const Assistant = () => {
         {
             title: "navbar_magnifier",
             icon: magnifierIconOff,
-            domains: new Array(DOMAIN.ALL),
+            domains: new Array(DOMAIN.ALL, DOMAIN.OWN),
             ctypes: [CTYPE.IMAGE],
+            type_restriction: [],
             text: "magnifier_text",
             tsvPrefix: "magnifier",
             path: "tools/magnifier",
@@ -212,8 +234,9 @@ const Assistant = () => {
         {
             title: "navbar_metadata",
             icon: metadataIconOff,
-            domains: new Array(DOMAIN.ALL),
+            domains: new Array(DOMAIN.ALL, DOMAIN.OWN),
             ctypes: [CTYPE.IMAGE, CTYPE.VIDEO],
+            type_restriction: [/(jpg|jpeg|mp4|mp4v)(\?.*)?$/i],
             text: "metadata_text",
             tsvPrefix: "metadata",
             path: "tools/metadata",
@@ -223,6 +246,7 @@ const Assistant = () => {
             icon:  videoRightsIconOff,
             domains: new Array(DOMAIN.YOUTUBE, DOMAIN.FACEBOOK, DOMAIN.TWITTER),
             ctypes: [CTYPE.VIDEO],
+            type_restriction: [],
             text: "rights_text",
             tsvPrefix: "copyright",
             path: "tools/copyright",
@@ -230,8 +254,9 @@ const Assistant = () => {
         {
             title: "navbar_forensic",
             icon: forensicIconOff,
-            domains: new Array(DOMAIN.ALL),
+            domains: new Array(DOMAIN.ALL, DOMAIN.OWN),
             ctypes: [CTYPE.IMAGE],
+            type_restriction: [],
             text: "forensic_text",
             tsvPrefix: "forensic",
             path: "tools/forensic",
@@ -240,6 +265,7 @@ const Assistant = () => {
             title: "navbar_twitter_sna",
             domains: new Array(),
             ctypes: [],
+            type_restriction: [],
             text: "sna_text",
             icon:  twitterSnaIconOff,
             tsvPrefix: "twitter_sna",
@@ -253,31 +279,60 @@ const Assistant = () => {
             <Paper className={classes.root}>
                 <CustomTile text={keyword("assistant_title")}/>
                 <Box m={5}/>
-                <div className={classes.assistantText}>
-                    <Typography variant={"h6"} >
-                        <FaceIcon fontSize={"small"}/> {keyword("assistant_intro")}
-                    </Typography>
 
+                <div className={classes.assistantText} hidden={urlToBeProcessed!=null}>
+                    <Typography variant={"h6"} >
+                        <FaceIcon fontSize={"small"}/> {keyword("assistant_real_intro")}
+                    </Typography>
                     <Box m={2}/>
-                    <TextField
-                        id="standard-full-width"
-                        label={keyword("assistant_urlbox")}
-                        style={{margin: 8}}
-                        placeholder={""}
-                        fullWidth
-                        value={input}
-                        onChange={e => setInput(e.target.value)}
-                    />
-                    <Box m={2}/>
+                    <Button className={classes.button} variant = "contained" color="primary" onClick={() => setProcessUrl(true)}>
+                        {keyword("process_url") || ""}
+                    </Button>
+                    <Button className={classes.button} variant="contained" color="primary"  onClick={() => setProcessUrl(false)}>
+                        {keyword("submit_own_file") || ""}
+                    </Button>
                 </div>
-                <Button variant="contained" color="primary" onClick={() => submitUrl(input)}>
-                    {keyword("button_submit") || ""}
-                </Button>
+
+                    { (urlToBeProcessed!=null) ?
+                        (urlToBeProcessed) ?
+                            (<div className={classes.assistantText} hidden={false}>
+                                <CloseResult onClick={() => {setProcessUrl(null); dispatch(cleanAssistantState());}}/>
+                                <Typography variant={"h6"} >
+                                    <FaceIcon fontSize={"small"}/> {keyword("assistant_intro")}
+                                </Typography>
+                                <Box m={2}/>
+                                <TextField
+                                    id="standard-full-width"
+                                    label={keyword("assistant_urlbox")}
+                                    style={{margin: 8}}
+                                    placeholder={""}
+                                    fullWidth
+                                    value={input}
+                                    onChange={e => setInput(e.target.value)}
+                                />
+                                <Box m={2}/>
+                                <Button variant="contained" color="primary" align={"center"} onClick={() => submitUrl(input)}>
+                                    {keyword("button_submit") || ""}
+                                </Button>
+                            </div>)
+                            :
+                            ( <div className={classes.assistantText}>
+                                <CloseResult onClick={() => {setProcessUrl(null); dispatch(cleanAssistantState());}}/>
+                                <Typography variant={"h6"} >
+                                    <FaceIcon fontSize={"small"}/> {keyword("upload_type_question")}
+                                </Typography>
+                                <Box m={2}/>
+                                <Button className={classes.button} variant="contained" color="primary" onClick={() => submitUpload(CTYPE.VIDEO)}>
+                                    {keyword("upload_video") || ""}
+                                </Button>
+                                <Button className={classes.button} variant="contained" color="primary"  onClick={() => submitUpload(CTYPE.IMAGE)}>
+                                    {keyword("upload_image") || ""}
+                                </Button>
+                            </div>)
+                        : null
+                    }
             </Paper>
-        {
-            (resultData) ?
-                (<AssistantResult result={resultData} image={resultUrl}/>) : null
-        }
+            {(resultData) ? (<AssistantResult result={resultData} image={resultUrl}/>) : null}
         </div>
     )
 };

@@ -1,14 +1,20 @@
 	en	fr	es
 assistant_title	Assistant	temp	temp
+assistant_real_intro    Would you like to process a URL of upload your own file?	Temp	Temp
+process_url	Process URL	Temp	Temp
+submit_own_file	Upload File	Temp	Temp
+upload_video	Video	Temp	Temp
+upload_image	Image	Temp	Temp
+assistant_real_intro	Would you like to process a URL or upload your own file?	Temp	Temp
 assistant_intro	Enter the URL of the media you would like to process	Temp	Temp
 assistant_urlbox	URL	Adresse	URL
+upload_type_question	What type of file do you want to upload?	Temp  Temp
 assistant_error	No media was found through the link used. Please try another URL.	Test	Test
 please_give_a_correct_link	This is not a valid URL. Please try another URL.	Temp	Temp
 button_submit	Submit	Envoyer	Enviar
 please_give_a_correct_link	Please give a correct link	Donner un lien valide s'il vous plaît	Por favor, dé un enlace válido
 quit	Quit	Quitter	Salir
 save	Save	Enregistrer	Gardar
-
 navbar_analysis	Analysis	Analyse	Análisis
 navbar_keyframes	Keyframes	Images clés	Imágenes claves
 navbar_thumbnails	Thumbnails	Imagettes	Miniaturas
@@ -24,7 +30,7 @@ navbar_assistant	Assistant	Temp	Temp
 things_you_can_do_header	Potential Tools	Temp	Temp
 things_you_can_do	Below are the tools you can use on this media type	Temp	Temp
 analysis_text	The analysis feature  can be used to retrieve contextual information about the video	Temp	Temp
-keyframes_text	The keyframes feature can be used to fragment the video	Temp	Temp
+keyframes_text	The keyframes feature can be used to fragment a video	Temp	Temp
 thumbnails_text	The YouTube thumbnail feature can be used to reverse search on thumbnails from the video	Temp    Temp
 twitter_text	The twitter search tool can be used	Temp	Temp
 magnifier_text	The magnifier tool can be used to examine the image thoroughly	Temp	Temp

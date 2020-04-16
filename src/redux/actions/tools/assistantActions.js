@@ -1,19 +1,11 @@
-export const setAssistantResult = (url, result, mediatype, notification, loading) => {
+export const setAssistantResult = (url, result, processUrl) => {
     return {
         type : "SET_ASSISTANT_RESULT",
         payload : {
-            notification : notification,
-            loading : loading,
             url : url,
             result : result,
+            processUrl : processUrl
         }
-    }
-};
-
-export const setAssistantLoading = (loading) => {
-    return {
-        type : "SET_ASSITANT_LOADING",
-        payload : loading
     }
 };
 

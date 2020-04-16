@@ -3,16 +3,13 @@ const defaultState = {
     loading : false,
     url: "",
     result: "",
+    processUrl : null,
 };
 
 const assistantReducer = (state = defaultState, action) => {
     switch (action.type) {
         case "SET_ASSISTANT_RESULT":
-            state.result = action.payload;
-            return state;
-        case "SET_ASSISTANT_LOADING":
-            state.loading = action.payload;
-            return state;
+            return action.payload;
         case "ASSISTANT_CLEAN_STATE":
             state.notification = false;
             state.loading = false;
