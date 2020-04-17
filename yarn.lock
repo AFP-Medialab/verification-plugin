@@ -9256,6 +9256,11 @@ jest@24.8.0:
     import-local "^2.0.0"
     jest-cli "^24.8.0"
 
+jlouvain@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/jlouvain/-/jlouvain-2.0.0.tgz#2718f0e58911cb337ae981b9e65253c3c0606019"
+  integrity sha1-Jxjw5YkRyzN66YG55lJTw8BgYBk=
+
 js-levenshtein@^1.1.3:
   version "1.1.6"
   resolved "https://registry.yarnpkg.com/js-levenshtein/-/js-levenshtein-1.1.6.tgz#c6cee58eb3550372df8deb85fad5ce66ce01d59d"
@@ -13521,6 +13526,11 @@ react-router@5.1.2:
     react-is "^16.6.0"
     tiny-invariant "^1.0.2"
     tiny-warning "^1.0.0"
+
+react-sigma@^1.2.34:
+  version "1.2.34"
+  resolved "https://registry.yarnpkg.com/react-sigma/-/react-sigma-1.2.34.tgz#053f28e88c072b2f1bc0ab6f3a1ad34d53c58371"
+  integrity sha512-GYyZptmLLR+Q9AqjC8cKo6xxoyrhXz1dCrhYHRP26xZQA0oAkiNrWA4g8X7VsGn1uanqmrmR5IaLM20FZrObKA==
 
 react-slack-feedback@^2.1.0:
   version "2.1.0"
