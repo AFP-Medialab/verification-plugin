@@ -556,12 +556,20 @@ export default function TwitterSnaResult(props) {
 
         let neighborNodes = e.data.renderer.graph.adjacentNodes(selectedNode.id);
         let neighborEdges = e.data.renderer.graph.adjacentEdges(selectedNode.id);
+        let directedNeighborEdges = neighborEdges.map((edge) => {
+            let newEdge= JSON.parse(JSON.stringify(edge));
+            if (newEdge.source !== selectedNode.id) {
+                newEdge.target = edge.source;
+                newEdge.source = selectedNode.id;
+            }
+            return newEdge;
+        });
 
         neighborNodes.push(selectedNode);
 
         let newGraph = {
             nodes: neighborNodes,
-            edges: neighborEdges
+            edges: directedNeighborEdges
         }
 
         console.log("newGraph", newGraph);
@@ -922,10 +930,6 @@ export default function TwitterSnaResult(props) {
                                     </div>
                                 }
                             </Box>
-                        }
-                        {
-                            result.heatMap && result.heatMap === "tooLarge" &&
-                            <Typography variant='body2'>{keyword("sna_too_long_for_heatMap")}</Typography>
                         }
                         {
                             result.heatMap === undefined &&
