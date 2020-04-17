@@ -115,7 +115,7 @@ function getNodesAsHashtags(hits, request) {
   let searchedHashtags = request.keywordList.filter((word) => word.startsWith("#"));
   
   let colors = []
-  searchedHashtags.forEach(hashtag => { colors[hashtag] = '#'+(Math.random()*0xFFFFFF<<0).toString(16); });
+  searchedHashtags.forEach(hashtag => { colors[hashtag] = "#000000".replace(/0/g,function(){return (~~(Math.random()*16)).toString(16);}); });
 
   let nodes = uniqHashtags.map((hashtag) => { 
     if (searchedHashtags.includes(hashtag)) {
@@ -268,7 +268,7 @@ function createCommunity(graph) {
   let uniqCommunity = [...new Set(Object.values(result))]; 
   let colors = []
   uniqCommunity.forEach(com => {
-    colors[com] = '#'+(Math.random()*0xFFFFFF<<0).toString(16);
+    colors[com] = "#000000".replace(/0/g,function(){return (~~(Math.random()*16)).toString(16);});
   });
 
   graph.nodes.forEach(node => {
