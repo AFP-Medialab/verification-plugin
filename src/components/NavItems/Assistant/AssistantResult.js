@@ -67,8 +67,8 @@ const AssistantResult = () => {
                 <Grid item xs = {6} hidden={resultUrl==""}>
                     <Card variant = "outlined">
                         <CardContent>
-                            <Typography variant="h5" component="h2" color="black">
-                                Media to Process
+                            <Typography variant="h5" component="h2">
+                                {keyword("media_to_process")}
                             </Typography>
                             <Typography className={classes.title} color="primary">
                                {resultUrl}
