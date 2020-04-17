@@ -1,5 +1,4 @@
 import "react-devtools";
-import {useParams} from 'react-router-dom'
 import React, {useEffect, useState} from "react";
 import {Paper, Box, TextField, Button} from "@material-ui/core";
 import FaceIcon from "@material-ui/icons/Face";
@@ -41,12 +40,10 @@ const Assistant = () => {
     const resultUrl = useSelector(state => state.assistant.url);
     const resultData = useSelector(state => state.assistant.result);
     const resultProcessUrl = useSelector(state => state.assistant.processUrl);
-    const resultProcessType = useSelector(state => state.assistant.processType);
     const dispatch = useDispatch();
 
     const [input, setInput] = useState(resultUrl);
     const [urlToBeProcessed, setProcessUrl] = useState(resultProcessUrl);
-    const [typeToBeProcessed, setProcessType] = useState(resultProcessType);
 
     const getErrorText = (error) => {
         if (keyword(error) !== "")
@@ -60,8 +57,7 @@ const Assistant = () => {
             let content_type = matchPattern(src, ctypePatterns);
             let domain = matchPattern(src, domainPatterns);
             let actions = loadActions(domain, content_type, src);
-            setProcessType(content_type);
-            dispatch(setAssistantResult(src, actions, urlToBeProcessed));
+            dispatch(setAssistantResult(src, actions, urlToBeProcessed, content_type));
         }
         catch(error){
             dispatch((setError(getErrorText(error))));
@@ -73,7 +69,7 @@ const Assistant = () => {
         let domain = DOMAIN.OWN;
 
         let actions = loadActions(domain, content_type, "");
-        dispatch(setAssistantResult("", actions, urlToBeProcessed));
+    dispatch(setAssistantResult("", actions, urlToBeProcessed, content_type));
     }
 
     const matchPattern = (to_match, patternArray) => {

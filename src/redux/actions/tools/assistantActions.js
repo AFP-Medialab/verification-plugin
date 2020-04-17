@@ -5,7 +5,7 @@ export const setAssistantResult = (url, result, processUrl, processType) => {
             url : url,
             result : result,
             processUrl : processUrl,
-            processImage : processType,
+            processType : processType,
         }
     }
 };
