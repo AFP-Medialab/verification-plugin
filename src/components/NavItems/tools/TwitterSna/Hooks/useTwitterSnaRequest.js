@@ -151,9 +151,16 @@ function getEdgesTweetToTweet(hits, fieldArr = "hashtags") {
   return _.uniqBy(edges.flat(), 'id');;
 }
 
-function getEdgesUsernameToUsername(hits, fieldArr = "hashtags") {
+function getEdgesUsernameToUsername(hits, request, fieldArr = "hashtags") {
   // Get edges between users based on each value of the given fieldArr
   let uniqElements = getUniqValuesOfField(hits, fieldArr);
+
+  if (fieldArr === "hashtags") {
+    let requestedHashtags = request.keywordList.filter((element) => element.startsWith("#"))
+    let toRemove = (requestedHashtags.length > 0) ? [...new Set(requestedHashtags.map((hashtag) => { return hashtag.toLowerCase(); }))] : [] ;
+    uniqElements = uniqElements.filter(element => !toRemove.includes(element));
+  }
+
   let edges = [];
   uniqElements.forEach(val => {
     let nodesUsername = hits.tweets.filter(tweet => tweet._source[fieldArr] !== undefined)
@@ -320,20 +327,26 @@ function groupbyThenSum(arrOfObjects, key, attrToSumStr, attrToSumNum, attrToSki
 }
 
 function getInsensativeCase(hits, field='hashtags') {
-  let newHits = hits.tweets.map((tweet) => {
-    if (tweet._source[field] !== undefined) {
-      if (Array.isArray(tweet._source[field])) {
-        let newArr = tweet._source[field].map((element) => { 
+  let newTweets = hits.tweets.map((tweet) => {
+    let tweetObj = JSON.parse(JSON.stringify(tweet));
+    if (tweetObj._source[field] !== undefined) {
+      if (Array.isArray(tweetObj._source[field])) {
+        let newArr = tweetObj._source[field].map((element) => { 
           return element.toLowerCase(); 
         });
-        tweet._source[field] = [...new Set(newArr)];
+        tweetObj._source[field] = [...new Set(newArr)];
       } else {
-        tweet._source[field] = tweet._source[field].toLowerCase(); 
+        tweetObj._source[field] = tweetObj._source[field].toLowerCase(); 
       }
     }
-    return tweet;
+    return tweetObj;
   });
-  return newHits;
+  return {
+    value: hits.value,
+    retweets: hits.retweets,
+    likes: hits.likes,
+    tweets: newTweets
+  };
 }
 
 const useTwitterSnaRequest = (request) => {
@@ -503,12 +516,12 @@ const useTwitterSnaRequest = (request) => {
       result.tweetCount.like = responseArrayOf7[5].likes.toString().replace(/(?=(\d{3})+(?!\d))/g, " ");
       result.tweets = responseArrayOf7[5].tweets;
       result.histogram = createHistogram(data, responseArrayOf7[6], givenFrom, givenUntil);
-      // let insensativeHits = getInsensativeCase(responseArrayOf7[5], 'hashtags');
-      let communityGraph = createHashtagGraph(data, responseArrayOf7[5]);
+      let insensativeHits = getInsensativeCase(responseArrayOf7[5], 'hashtags');
+      let communityGraph = createHashtagGraph(data, insensativeHits);
       result.netGraph = { title: "Community graph", 
-                          tmpdata: responseArrayOf7[5], 
+                          tmpdata: insensativeHits, 
                           hashtagGraph: communityGraph,
-                          userInteraction: getInteractionOfUsernames(responseArrayOf7[5], ['mentions']),
+                          userInteraction: getInteractionOfUsernames(insensativeHits, ['mentions']),
                           legend: getLegendOfGraph(communityGraph)
                         };
       if (final) {
@@ -617,7 +630,7 @@ const useTwitterSnaRequest = (request) => {
     function createHashtagGraph (request, hits) {
 
       let nodesUsername = getNodesAsUsername(hits);
-      let edgesUserToUserOnHashtag = getEdgesUsernameToUsername(hits, "hashtags");
+      let edgesUserToUserOnHashtag = getEdgesUsernameToUsername(hits,request, "hashtags");
       
       let nodesSize = getSizeOfUsernames(hits, 'nretweets');
       nodesUsername.map((node) => {
