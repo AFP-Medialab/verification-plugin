@@ -18,11 +18,9 @@ import { TableContainer, Table, TableBody, TableRow, TableCell } from '@material
 import { Avatar } from '@material-ui/core';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import ImageIcon from '@material-ui/icons/Image';
-import WorkIcon from '@material-ui/icons/Work';
-import BeachAccessIcon from '@material-ui/icons/BeachAccess';
 import CloseResult from "../../../../Shared/CloseResult/CloseResult";
 import { cleanTwitterSnaState } from "../../../../../redux/actions/tools/twitterSnaActions";
 import ReactWordcloud from "react-wordcloud";
@@ -569,6 +567,10 @@ export default function TwitterSnaResult(props) {
         return newGraph;
     }
 
+    function demo() {
+        return 0;
+    }
+
     if (result === null)
         return <div />;
 
@@ -990,6 +992,27 @@ export default function TwitterSnaResult(props) {
                                         maxNodeSize: 12
                                     }}>
                                 </Sigma>
+                            }
+                            {
+                                result.netGraph.legend && result.netGraph.legend !== 0 && 
+                                <div >
+                                    <Paper style={{ height: 300, width: 300 }}>
+                                        {
+                                            result.netGraph.legend.map((community) => {
+                                                return (
+                                                    <ListItem key={community.communityColor}>
+                                                    <ListItemIcon>
+                                                    <div className="legendcolor" 
+                                                        style={{backgroundColor:community.communityColor, width: 18, height: 18, borderRadius: '50%'}}>
+                                                    </div>
+                                                    </ListItemIcon>
+                                                    <ListItemText primary={ community.legend } />
+                                                    </ListItem>
+                                                );
+                                            })
+                                        }
+                                    </Paper>
+                                </div>
                             }
                             {
                                 graphTweets &&

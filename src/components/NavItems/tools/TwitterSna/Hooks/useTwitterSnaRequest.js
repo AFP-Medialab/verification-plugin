@@ -270,6 +270,20 @@ function createCommunity(graph) {
   return graph;
 }
 
+function getLegendOfGraph(communityGraph) {
+  let communitiesColor = [...new Set(communityGraph.nodes.map((node) => { return node.color; }))];
+  let legends = communitiesColor.map((color) => {
+    let nodesId = communityGraph.nodes.filter((node) => {return node.color === color}).map((node) => { return node.id });
+    let first3NodeIds = nodesId.slice(0, 3).toString().replace(/,/g, " ");
+    let other = nodesId.length > 2 ? " and " + (nodesId.length - 3) + " others" : "";
+    return {
+      communityColor: color,
+      legend: first3NodeIds + other
+    }
+  });
+  return legends;
+}
+
 function mergeUniq2ArrOfJsonsById(arr1, arr2) {
   let uniqArr = Object.values(arr1.concat(arr2).reduce((r,o) => {
     r[o.id] = o;
@@ -489,11 +503,13 @@ const useTwitterSnaRequest = (request) => {
       result.tweetCount.like = responseArrayOf7[5].likes.toString().replace(/(?=(\d{3})+(?!\d))/g, " ");
       result.tweets = responseArrayOf7[5].tweets;
       result.histogram = createHistogram(data, responseArrayOf7[6], givenFrom, givenUntil);
-      let insensativeHits = getInsensativeCase(responseArrayOf7[5], 'hashtags');
+      // let insensativeHits = getInsensativeCase(responseArrayOf7[5], 'hashtags');
+      let communityGraph = createHashtagGraph(data, responseArrayOf7[5]);
       result.netGraph = { title: "Community graph", 
                           tmpdata: responseArrayOf7[5], 
-                          hashtagGraph: createHashtagGraph(data, responseArrayOf7[5]),
-                          userInteraction: getInteractionOfUsernames(responseArrayOf7[5], ['mentions'])
+                          hashtagGraph: communityGraph,
+                          userInteraction: getInteractionOfUsernames(responseArrayOf7[5], ['mentions']),
+                          legend: getLegendOfGraph(communityGraph)
                         };
       if (final) {
         result.cloudChart = createWordCloud(responseArrayOf7[7]);
