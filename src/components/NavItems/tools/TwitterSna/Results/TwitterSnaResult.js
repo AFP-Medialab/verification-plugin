@@ -17,6 +17,7 @@ import TwitterIcon from '@material-ui/icons/Twitter';
 import { TableContainer, Table, TableBody, TableRow, TableCell } from '@material-ui/core';
 import { Avatar } from '@material-ui/core';
 import List from '@material-ui/core/List';
+import ListSubheader from '@material-ui/core/ListSubheader';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -997,20 +998,23 @@ export default function TwitterSnaResult(props) {
                                 result.netGraph.legend && result.netGraph.legend !== 0 && 
                                 <div >
                                     <Paper style={{ height: 300, width: 300 }}>
-                                        {
-                                            result.netGraph.legend.map((community) => {
-                                                return (
-                                                    <ListItem key={community.communityColor}>
-                                                    <ListItemIcon>
-                                                    <div className="legendcolor" 
-                                                        style={{backgroundColor:community.communityColor, width: 18, height: 18, borderRadius: '50%'}}>
-                                                    </div>
-                                                    </ListItemIcon>
-                                                    <ListItemText primary={ community.legend } />
-                                                    </ListItem>
-                                                );
-                                            })
-                                        }
+                                        <ListSubheader component="div" style={{ fontSize: 18, fontWeight: 'bold' }}> Legend </ListSubheader>
+                                        <List className={classes.root} style={{ overflow: 'auto', maxHeight: 200}}>
+                                            {
+                                                result.netGraph.legend.map((community) => {
+                                                    return (
+                                                        <ListItem key={community.communityColor}>
+                                                        <ListItemIcon>
+                                                        <div className="legendcolor" 
+                                                            style={{backgroundColor:community.communityColor, width: 18, height: 18, borderRadius: '50%'}}>
+                                                        </div>
+                                                        </ListItemIcon>
+                                                        <ListItemText primary={ community.legend } />
+                                                        </ListItem>
+                                                    );
+                                                })
+                                            }
+                                        </List>
                                     </Paper>
                                 </div>
                             }

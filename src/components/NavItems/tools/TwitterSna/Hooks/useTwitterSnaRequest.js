@@ -278,7 +278,9 @@ function createCommunity(graph) {
 }
 
 function getLegendOfGraph(communityGraph) {
-  let communitiesColor = [...new Set(communityGraph.nodes.map((node) => { return node.color; }))];
+  let sizeCommunities = _.countBy(communityGraph.nodes.map(node => {return node.color;}));
+  let sortedBySize = _.fromPairs(_.sortBy(_.toPairs(sizeCommunities), 1).reverse());
+  let communitiesColor = Object.keys(sortedBySize);
   let legends = communitiesColor.map((color) => {
     let nodesId = communityGraph.nodes.filter((node) => {return node.color === color}).map((node) => { return node.id });
     let first3NodeIds = nodesId.slice(0, 3).toString().replace(/,/g, " ");
