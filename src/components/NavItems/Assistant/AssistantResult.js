@@ -38,7 +38,6 @@ const AssistantResult = (props) => {
                         <FaceIcon size={"small"}/> {keyword("assistant_error")}
                     </Typography>
                 </CardContent></Card>
-
             </Paper>
         );
 
@@ -52,7 +51,6 @@ const AssistantResult = (props) => {
             let ids = embedURL.match("(v=|youtu.be\/)([a-zA-Z0-9_-]+)[&|\?]?");
             if (ids) {
                 let id = ids[ids.length-1];
-                console.log("ID:", id);
                 embedURL = "http://www.youtube.com/embed/" + id;
             }
         }

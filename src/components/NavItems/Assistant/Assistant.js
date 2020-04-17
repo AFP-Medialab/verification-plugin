@@ -71,7 +71,7 @@ const Assistant = () => {
         let content_type = type;
         let domain = DOMAIN.OWN;
 
-        let actions = loadActions(domain, content_type, null);
+        let actions = loadActions(domain, content_type, "");
         dispatch(setAssistantResult("", actions, urlToBeProcessed));
     }
 
