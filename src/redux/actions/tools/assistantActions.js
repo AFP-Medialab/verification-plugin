@@ -1,10 +1,11 @@
-export const setAssistantResult = (url, result, processUrl) => {
+export const setAssistantResult = (url, result, processUrl, processType) => {
     return {
         type : "SET_ASSISTANT_RESULT",
         payload : {
             url : url,
             result : result,
-            processUrl : processUrl
+            processUrl : processUrl,
+            processImage : processType,
         }
     }
 };

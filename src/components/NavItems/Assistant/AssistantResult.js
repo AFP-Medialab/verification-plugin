@@ -1,5 +1,5 @@
 import React from "react";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
 import Card from "@material-ui/core/Card";
@@ -20,15 +20,16 @@ import {cleanAssistantState} from "../../../redux/actions/tools/assistantActions
 import history from "../../Shared/History/History";
 import tsv from "../../../LocalDictionary/components/NavItems/tools/Assistant.tsv";
 
-const AssistantResult = (props) => {
+const AssistantResult = () => {
 
     const classes = useMyStyles();
     const keyword = useLoadLanguage("components/NavItems/tools/Assistant.tsv", tsv);
-    const result = props["result"];
-    const url = props["image"];
+    const resultUrl = useSelector(state => state.assistant.url);
+    const resultData = useSelector(state => state.assistant.result);
+
     const dispatch = useDispatch();
     
-    if (result.length == 0)
+    if (resultData.length == 0)
         return (
             <Paper>
                 <box m={3}/>
@@ -41,12 +42,12 @@ const AssistantResult = (props) => {
             </Paper>
         );
 
-    const handleClick = (path, url) => {
-        history.push("/app/" + path + "/" + encodeURIComponent(url))
+    const handleClick = (path, resultUrl) => {
+        history.push("/app/" + path + "/" + encodeURIComponent(resultUrl))
     };
 
-    const preprocessLinkForEmbed = (url) => {
-        let embedURL = url;
+    const preprocessLinkForEmbed = (resultUrl) => {
+        let embedURL = resultUrl;
         if (!embedURL.includes("/embed/")) {
             let ids = embedURL.match("(v=|youtu.be\/)([a-zA-Z0-9_-]+)[&|\?]?");
             if (ids) {
@@ -63,25 +64,24 @@ const AssistantResult = (props) => {
         <Paper className={classes.root}>
             <CloseResult onClick={() => dispatch(cleanAssistantState())}/>
             <Grid container spacing={2}>
-                <Grid item xs = {6} hidden={url==""}>
+                <Grid item xs = {6} hidden={resultUrl==""}>
                     <Card variant = "outlined">
                         <CardContent>
                             <Typography variant="h5" component="h2" color="black">
                                 Media to Process
                             </Typography>
                             <Typography className={classes.title} color="primary">
-                               {url}
+                               {resultUrl}
                             </Typography>
                         </CardContent>
                         <CardMedia>
                             <Iframe
                                 frameBorder="0"
-                                url = {preprocessLinkForEmbed(url)}
+                                url = {preprocessLinkForEmbed(resultUrl)}
                                 allow="fullscreen"
                                 height="400"
                                 width="100%"
                             />
-                            <div data-href={url}/>
                         </CardMedia>
                     </Card>
                 </Grid>
@@ -97,11 +97,11 @@ const AssistantResult = (props) => {
                         </Box>
                         <Box m = {2}>
                             <Grid container spacing={2}>
-                                {result.map((action) => {
+                                {resultData.map((action) => {
                                     return (
                                         <Grid container m = {4}>
                                             <Card className={classes.assistantCards}  variant = "outlined"
-                                                  onClick={() => handleClick(action.path, url) }>
+                                                  onClick={() => handleClick(action.path, resultUrl) }>
                                                 <CardActionArea><CardContent>
                                                         <Typography className={classes.title} m={2}>{keyword(action.text)}</Typography>
                                                         <Button aria-colspan={2} size = "medium">

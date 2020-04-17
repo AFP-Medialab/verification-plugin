@@ -35,17 +35,18 @@ import CloseResult from "../../Shared/CloseResult/CloseResult";
 * */
 const Assistant = () => {
 
-    const {url} = useParams();
     const classes = useMyStyles();
     const keyword = useLoadLanguage("components/NavItems/tools/Assistant.tsv", tsv);
 
     const resultUrl = useSelector(state => state.assistant.url);
     const resultData = useSelector(state => state.assistant.result);
     const resultProcessUrl = useSelector(state => state.assistant.processUrl);
+    const resultProcessType = useSelector(state => state.assistant.processType);
     const dispatch = useDispatch();
 
     const [input, setInput] = useState(resultUrl);
     const [urlToBeProcessed, setProcessUrl] = useState(resultProcessUrl);
+    const [typeToBeProcessed, setProcessType] = useState(resultProcessType);
 
     const getErrorText = (error) => {
         if (keyword(error) !== "")
@@ -59,7 +60,7 @@ const Assistant = () => {
             let content_type = matchPattern(src, ctypePatterns);
             let domain = matchPattern(src, domainPatterns);
             let actions = loadActions(domain, content_type, src);
-
+            setProcessType(content_type);
             dispatch(setAssistantResult(src, actions, urlToBeProcessed));
         }
         catch(error){
@@ -109,14 +110,9 @@ const Assistant = () => {
         return possibleActions;
     }
 
-
     useEffect(() => {
-        if (url !== undefined) {
-            const uri = (url !== null) ? decodeURIComponent(url) : undefined;
-            setInput(uri);
-            submitUrl(uri)
-        }
-    }, [url]);
+        setInput(resultUrl);
+    }, [resultUrl]);
 
     const CTYPE = Object.freeze({
         VIDEO: "Video",
@@ -332,7 +328,7 @@ const Assistant = () => {
                         : null
                     }
             </Paper>
-            {(resultData) ? (<AssistantResult result={resultData} image={resultUrl}/>) : null}
+            {(resultData) ? (<AssistantResult/>) : null}
         </div>
     )
 };

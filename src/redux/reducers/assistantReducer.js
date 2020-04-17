@@ -4,6 +4,7 @@ const defaultState = {
     url: "",
     result: "",
     processUrl : null,
+    processType : null,
 };
 
 const assistantReducer = (state = defaultState, action) => {
@@ -11,11 +12,7 @@ const assistantReducer = (state = defaultState, action) => {
         case "SET_ASSISTANT_RESULT":
             return action.payload;
         case "ASSISTANT_CLEAN_STATE":
-            state.notification = false;
-            state.loading = false;
-            state.url = "";
-            state.result = "";
-            return state;
+            return defaultState;
         default:
             return state;
     }
