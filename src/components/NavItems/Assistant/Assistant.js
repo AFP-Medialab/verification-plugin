@@ -159,7 +159,7 @@ const Assistant = () => {
         },
         {
             key: DOMAIN.YOUTUBE,
-            patterns: ["^(https?:/{2})?(www.)?youtube|youtu.be|i\.ytimg"]
+            patterns: ["^(https?:/{2})?(www.)?youtube|youtu.be|i.ytimg"]
         },
         {
             key: DOMAIN.TWITTER,
@@ -216,7 +216,7 @@ const Assistant = () => {
         {
             title: "navbar_magnifier",
             icon: magnifierIconOff,
-            domains: new Array(DOMAIN.ALL, DOMAIN.OWN),
+            domains: new Array(DOMAIN.ALL, DOMAIN.OWN, DOMAIN.YOUTUBE, DOMAIN.FACEBOOK, DOMAIN.TWITTER),
             ctypes: [CTYPE.IMAGE],
             type_restriction: [],
             text: "magnifier_text",
@@ -226,7 +226,7 @@ const Assistant = () => {
         {
             title: "navbar_metadata",
             icon: metadataIconOff,
-            domains: new Array(DOMAIN.ALL, DOMAIN.OWN),
+            domains: new Array(DOMAIN.ALL, DOMAIN.OWN, DOMAIN.YOUTUBE, DOMAIN.FACEBOOK, DOMAIN.TWITTER),
             ctypes: [CTYPE.IMAGE, CTYPE.VIDEO],
             type_restriction: [/(jpg|jpeg|mp4|mp4v)(\?.*)?$/i],
             text: "metadata_text",
@@ -246,7 +246,7 @@ const Assistant = () => {
         {
             title: "navbar_forensic",
             icon: forensicIconOff,
-            domains: new Array(DOMAIN.ALL, DOMAIN.OWN),
+            domains: new Array(DOMAIN.ALL, DOMAIN.OWN, DOMAIN.YOUTUBE, DOMAIN.FACEBOOK, DOMAIN.TWITTER),
             ctypes: [CTYPE.IMAGE],
             type_restriction: [],
             text: "forensic_text",
