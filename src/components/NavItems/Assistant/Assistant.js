@@ -1,4 +1,3 @@
-import "react-devtools";
 import React, {useEffect, useState} from "react";
 import {Paper, Box, TextField, Button} from "@material-ui/core";
 import FaceIcon from "@material-ui/icons/Face";
