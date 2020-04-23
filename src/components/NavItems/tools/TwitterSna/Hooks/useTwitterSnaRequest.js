@@ -518,17 +518,10 @@ const useTwitterSnaRequest = (request) => {
       result.tweetCount.like = responseArrayOf7[5].likes.toString().replace(/(?=(\d{3})+(?!\d))/g, " ");
       result.tweets = responseArrayOf7[5].tweets;
       result.histogram = createHistogram(data, responseArrayOf7[6], givenFrom, givenUntil);
-      let insensativeHits = getInsensativeCase(responseArrayOf7[5], 'hashtags');
-      let communityGraph = createHashtagGraph(data, insensativeHits);
-      result.netGraph = { title: "Community graph", 
-                          tmpdata: insensativeHits, 
-                          hashtagGraph: communityGraph,
-                          userInteraction: getInteractionOfUsernames(insensativeHits, ['mentions']),
-                          legend: getLegendOfGraph(communityGraph)
-                        };
       if (final) {
         result.cloudChart = createWordCloud(responseArrayOf7[7]);
         createHeatMap(request, responseArrayOf7[5].tweets).then((heatmap) => result.heatMap = heatmap);
+        result.netGraph = createHashtagGraph(request, responseArrayOf7[5]);
       }
       else
         result.cloudChart = { title: "top_words_cloud_chart_title" };
@@ -631,10 +624,12 @@ const useTwitterSnaRequest = (request) => {
 
     function createHashtagGraph (request, hits) {
 
-      let nodesUsername = getNodesAsUsername(hits);
-      let edgesUserToUserOnHashtag = getEdgesUsernameToUsername(hits,request, "hashtags");
+      let insensativeHits = getInsensativeCase(hits, 'hashtags');
+
+      let nodesUsername = getNodesAsUsername(insensativeHits);
+      let edgesUserToUserOnHashtag = getEdgesUsernameToUsername(insensativeHits,request, "hashtags");
       
-      let nodesSize = getSizeOfUsernames(hits, 'nretweets');
+      let nodesSize = getSizeOfUsernames(insensativeHits, 'nretweets');
       nodesUsername.map((node) => {
         let size = nodesSize.find((e) => { return e.username === node.id }).size;
         node.size = (size !== undefined) ? size : 1;
@@ -646,7 +641,17 @@ const useTwitterSnaRequest = (request) => {
         edges: edgesUserToUserOnHashtag
       }
 
-      return createCommunity(graph);
+      let communityGraph = createCommunity(graph);
+      let userInteraction = getInteractionOfUsernames(insensativeHits, ['mentions']);
+      let legend = getLegendOfGraph(communityGraph);
+
+      return { 
+                title: "Community graph", 
+                tmpdata: insensativeHits,
+                hashtagGraph: communityGraph,
+                userInteraction: userInteraction,
+                legend: legend
+              };
     }
 
     const lastRenderCall = (sessionId, request) => {

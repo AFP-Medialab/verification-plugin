@@ -878,7 +878,7 @@ export default function TwitterSnaResult(props) {
                     </ExpansionPanelSummary>
                     <ExpansionPanelDetails>
                         {
-                            result.heatMap && result.heatMap !== "tooLarge" &&
+                            result && result.heatMap &&
                             <Box alignItems="center" justifyContent="center" width={"100%"}>
                                 {
                                     ((result.heatMap.isAllnul) &&
@@ -945,194 +945,202 @@ export default function TwitterSnaResult(props) {
                     <ExpansionPanelSummary
                         expandIcon={<ExpandMoreIcon />}
                     >
-                        <Typography className={classes.heading}>{result.netGraph.title}</Typography>
+                        <Typography className={classes.heading}>{"Graph"}</Typography>
                     </ExpansionPanelSummary>
                     <ExpansionPanelDetails>
-                        <div style={{ width: '100%' }}>
-                            {
-                                (graphReset === null && graphClickNode === null &&
-                                    result.netGraph.hashtagGraph && result.netGraph.hashtagGraph.node !== 0) &&
-                                <Sigma graph={result.netGraph.hashtagGraph}
-                                    renderer={"canvas"}
-                                    style={{ textAlign: 'left', width: '100%', height: '700px' }}
-                                    onClickNode={(e) => onClickNode(e, result.netGraph.hashtagGraph)}
-                                    settings={{
-                                        labelThreshold: 13,
-                                        drawEdges: false,
-                                        drawEdgeLabels: false,
-                                        minNodeSize: 5,
-                                        maxNodeSize: 12
-                                    }}>
-                                    <RandomizeNodePositions>
-                                        <ForceAtlas2 iterationsPerRender={1} timeout={6000} />
-                                    </RandomizeNodePositions>
-                                </Sigma>
-                            }
-                            {graphReset !== null && graphClickNode !== null &&
-                                <Sigma graph={graphClickNode}
-                                    renderer={"canvas"}
-                                    onClickStage={(e) => onClickStage(e)}
-                                    style={{ textAlign: 'left', width: '100%', height: '700px' }}
-                                    settings={{
-                                        defaultLabelColor: "#777",
-                                        labelThreshold: 13,
-                                        minNodeSize: 5,
-                                        maxNodeSize: 12,
-                                        drawEdgeLabels: true,
-                                        edgeColor: 'target'
-                                    }}
-                                >
-                                </Sigma>
-                            }
-                            {graphReset !== null && graphClickNode === null &&
-                                <Sigma graph={graphReset}
-                                    renderer={"canvas"}
-                                    style={{ textAlign: 'left', width: '100%', height: '700px' }}
-                                    onClickNode={(e) => onClickNode(e, graphReset)}
-                                    settings={{
-                                        labelThreshold: 13,
-                                        drawEdges: false,
-                                        drawEdgeLabels: false,
-                                        minNodeSize: 5,
-                                        maxNodeSize: 12
-                                    }}>
-                                </Sigma>
-                            }
-                            {
-                                result.netGraph.legend && result.netGraph.legend !== 0 && 
-                                <div >
-                                    <Paper style={{ height: 300, width: 300 }}>
-                                        <ListSubheader component="div" style={{ fontSize: 18, fontWeight: 'bold' }}> Legend </ListSubheader>
-                                        <List className={classes.root} style={{ overflow: 'auto', maxHeight: 200}}>
+                        {
+                            result && result.netGraph &&
+                            <div style={{ width: '100%' }}>
+                                {
+                                    (graphReset === null && graphClickNode === null &&
+                                        result.netGraph.hashtagGraph && result.netGraph.hashtagGraph.nodes.length !== 0) &&
+                                    <Sigma graph={result.netGraph.hashtagGraph}
+                                        renderer={"canvas"}
+                                        style={{ textAlign: 'left', width: '100%', height: '700px' }}
+                                        onClickNode={(e) => onClickNode(e, result.netGraph.hashtagGraph)}
+                                        settings={{
+                                            labelThreshold: 13,
+                                            drawEdges: false,
+                                            drawEdgeLabels: false,
+                                            minNodeSize: 5,
+                                            maxNodeSize: 12
+                                        }}>
+                                        <RandomizeNodePositions>
+                                            <ForceAtlas2 iterationsPerRender={1} timeout={6000} />
+                                        </RandomizeNodePositions>
+                                    </Sigma>
+                                }
+                                {graphReset !== null && graphClickNode !== null &&
+                                    <Sigma graph={graphClickNode}
+                                        renderer={"canvas"}
+                                        onClickStage={(e) => onClickStage(e)}
+                                        style={{ textAlign: 'left', width: '100%', height: '700px' }}
+                                        settings={{
+                                            defaultLabelColor: "#777",
+                                            labelThreshold: 13,
+                                            minNodeSize: 5,
+                                            maxNodeSize: 12,
+                                            drawEdgeLabels: true,
+                                            edgeColor: 'target'
+                                        }}
+                                    >
+                                    </Sigma>
+                                }
+                                {graphReset !== null && graphClickNode === null &&
+                                    <Sigma graph={graphReset}
+                                        renderer={"canvas"}
+                                        style={{ textAlign: 'left', width: '100%', height: '700px' }}
+                                        onClickNode={(e) => onClickNode(e, graphReset)}
+                                        settings={{
+                                            labelThreshold: 13,
+                                            drawEdges: false,
+                                            drawEdgeLabels: false,
+                                            minNodeSize: 5,
+                                            maxNodeSize: 12
+                                        }}>
+                                    </Sigma>
+                                }
+                                {
+                                    result.netGraph.legend && result.netGraph.legend !== 0 && 
+                                    <div >
+                                        <Paper style={{ height: 300, width: 300 }}>
+                                            <ListSubheader component="div" style={{ fontSize: 18, fontWeight: 'bold' }}> Legend </ListSubheader>
+                                            <List className={classes.root} style={{ overflow: 'auto', maxHeight: 200}}>
+                                                {
+                                                    result.netGraph.legend.map((community) => {
+                                                        return (
+                                                            <ListItem key={community.communityColor}>
+                                                            <ListItemIcon>
+                                                            <div className="legendcolor" 
+                                                                style={{backgroundColor:community.communityColor, width: 18, height: 18, borderRadius: '50%'}}>
+                                                            </div>
+                                                            </ListItemIcon>
+                                                            <ListItemText primary={ community.legend } />
+                                                            </ListItem>
+                                                        );
+                                                    })
+                                                }
+                                            </List>
+                                        </Paper>
+                                    </div>
+                                }
+                                {
+                                    graphTweets &&
+                                    <div>
+                                        <Grid container justify="space-between" spacing={2}
+                                            alignContent={"center"}>
+                                            <Grid item>
+                                                <Button
+                                                    variant={"contained"}
+                                                    color={"secondary"}
+                                                    onClick={() => hideTweetsView(4)}>
+                                                    {
+                                                        keyword('sna_result_hide')
+                                                    }
+                                                </Button>
+                                            </Grid>
+                                            <Grid item>
+                                                <Button
+                                                    variant={"contained"}
+                                                    color={"primary"}
+                                                    onClick={() => downloadClick(graphTweets.csvArr, graphTweets.username)}>
+                                                    {
+                                                        keyword('sna_result_download')
+                                                    }
+                                                </Button>
+                                            </Grid>
+                                        </Grid>
+                                        <Box m={2} />
+                                        <CustomTable title={keyword("sna_result_slected_tweets")}
+                                            colums={graphTweets.columns}
+                                            data={graphTweets.data}
+                                            actions={goToTweetAction}
+                                        />
+                                    </div>
+                                }
+                                {
+                                    graphInteraction &&
+                                    <div style={{ position: 'absolute', top: 0, right: 0 }}>
+                                        <Paper style={{ width: 300 }}>
+                                            <div style={{
+                                                height: 65,
+                                                backgroundSize: 'cover',
+                                                backgroundImage: `url(${"http://abs.twimg.com/images/themes/theme1/bg.png"})`
+                                            }}>
+                                            </div>
+                                            <div>
+                                                <List style={{ position: 'absolute', top: 40, width: '100%' }}>
+                                                    <ListItem>
+                                                        <ListItemAvatar>
+                                                            <Avatar alt={graphInteraction.username}
+                                                                src={"http://avatars.io/twitter/" + graphInteraction.username}
+                                                                variant='rounded'
+                                                                style={{ width: 65, height: 65 }} />
+                                                        </ListItemAvatar>
+                                                        <ListItemText primary={graphInteraction.username}
+                                                                        style={{ marginLeft: 10, color: '#428bca' }} />
+                                                    </ListItem>
+                                                </List>
+                                            </div>
+                                            <TableContainer style={{ marginTop: 60 }}>
+                                                <Table size="small">
+                                                    <TableBody>
+                                                        <TableRow>
+                                                            <TableCell colSpan={2}
+                                                                align="center"
+                                                                style={{ fontSize: 18, fontWeight: 'bold', borderBottom: 'none' }}
+                                                                >
+                                                                Mostly conntected with:
+                                                        </TableCell>
+                                                        </TableRow>
+                                                        <TableRow>
+                                                            <TableCell colSpan={2}
+                                                                align="center"
+                                                                style={{ color: '#6a6a6a', borderBottom: 'none' }}>
+                                                                TODO later
+                                                        </TableCell>
+                                                        </TableRow>
+                                                        <TableRow>
+                                                            <TableCell colSpan={2}
+                                                                align="center"
+                                                                style={{ fontSize: 18, fontWeight: 'bold', borderBottom: 'none' }}
+                                                                >
+                                                                Mostly interacted with:
+                                                    </TableCell>
+                                                        </TableRow>
+                                                    </TableBody>
+                                                </Table>
+                                            </TableContainer>
+                                            <List className={classes.root} style={{ overflow: 'auto', maxHeight: 150 }}>
                                             {
-                                                result.netGraph.legend.map((community) => {
+                                                graphInteraction.data.length !== 0  && graphInteraction.data.map((row) => {
                                                     return (
-                                                        <ListItem key={community.communityColor}>
-                                                        <ListItemIcon>
-                                                        <div className="legendcolor" 
-                                                            style={{backgroundColor:community.communityColor, width: 18, height: 18, borderRadius: '50%'}}>
-                                                        </div>
-                                                        </ListItemIcon>
-                                                        <ListItemText primary={ community.legend } />
+                                                        <ListItem key={row.username}>
+                                                            <ListItemAvatar>
+                                                                <Avatar alt={row.username}
+                                                                    src={"http://avatars.io/twitter/" + row.username} />
+                                                            </ListItemAvatar>
+                                                            <ListItemText primary={row.username}
+                                                                secondary={"Interactions: " + row.nbInteraction} />
                                                         </ListItem>
                                                     );
                                                 })
                                             }
-                                        </List>
-                                    </Paper>
-                                </div>
-                            }
-                            {
-                                graphTweets &&
-                                <div>
-                                    <Grid container justify="space-between" spacing={2}
-                                        alignContent={"center"}>
-                                        <Grid item>
-                                            <Button
-                                                variant={"contained"}
-                                                color={"secondary"}
-                                                onClick={() => hideTweetsView(4)}>
-                                                {
-                                                    keyword('sna_result_hide')
-                                                }
-                                            </Button>
-                                        </Grid>
-                                        <Grid item>
-                                            <Button
-                                                variant={"contained"}
-                                                color={"primary"}
-                                                onClick={() => downloadClick(graphTweets.csvArr, graphTweets.username)}>
-                                                {
-                                                    keyword('sna_result_download')
-                                                }
-                                            </Button>
-                                        </Grid>
-                                    </Grid>
-                                    <Box m={2} />
-                                    <CustomTable title={keyword("sna_result_slected_tweets")}
-                                        colums={graphTweets.columns}
-                                        data={graphTweets.data}
-                                        actions={goToTweetAction}
-                                    />
-                                </div>
-                            }
-                            {
-                                graphInteraction &&
-                                <div style={{ position: 'absolute', top: 0, right: 0 }}>
-                                    <Paper style={{ width: 300 }}>
-                                        <div style={{
-                                            height: 65,
-                                            backgroundSize: 'cover',
-                                            backgroundImage: `url(${"http://abs.twimg.com/images/themes/theme1/bg.png"})`
-                                        }}>
-                                        </div>
-                                        <div>
-                                            <List style={{ position: 'absolute', top: 40, width: '100%' }}>
-                                                <ListItem>
-                                                    <ListItemAvatar>
-                                                        <Avatar alt={graphInteraction.username}
-                                                            src={"http://avatars.io/twitter/" + graphInteraction.username}
-                                                            variant='rounded'
-                                                            style={{ width: 65, height: 65 }} />
-                                                    </ListItemAvatar>
-                                                    <ListItemText primary={graphInteraction.username}
-                                                                    style={{ marginLeft: 10, color: '#428bca' }} />
-                                                </ListItem>
+                                            {
+                                                graphInteraction.data.length === 0  && "No interaction"
+                                            }
                                             </List>
-                                        </div>
-                                        <TableContainer style={{ marginTop: 60 }}>
-                                            <Table size="small">
-                                                <TableBody>
-                                                    <TableRow>
-                                                        <TableCell colSpan={2}
-                                                            align="center"
-                                                            style={{ fontSize: 18, fontWeight: 'bold', borderBottom: 'none' }}
-                                                            >
-                                                            Mostly conntected with:
-                                                    </TableCell>
-                                                    </TableRow>
-                                                    <TableRow>
-                                                        <TableCell colSpan={2}
-                                                            align="center"
-                                                            style={{ color: '#6a6a6a', borderBottom: 'none' }}>
-                                                            TODO later
-                                                    </TableCell>
-                                                    </TableRow>
-                                                    <TableRow>
-                                                        <TableCell colSpan={2}
-                                                            align="center"
-                                                            style={{ fontSize: 18, fontWeight: 'bold', borderBottom: 'none' }}
-                                                            >
-                                                            Mostly interacted with:
-                                                </TableCell>
-                                                    </TableRow>
-                                                </TableBody>
-                                            </Table>
-                                        </TableContainer>
-                                        <List className={classes.root} style={{ overflow: 'auto', maxHeight: 150 }}>
-                                        {
-                                            graphInteraction.data.length !== 0  && graphInteraction.data.map((row) => {
-                                                return (
-                                                    <ListItem key={row.username}>
-                                                        <ListItemAvatar>
-                                                            <Avatar alt={row.username}
-                                                                src={"http://avatars.io/twitter/" + row.username} />
-                                                        </ListItemAvatar>
-                                                        <ListItemText primary={row.username}
-                                                            secondary={"Interactions: " + row.nbInteraction} />
-                                                    </ListItem>
-                                                );
-                                            })
-                                        }
-                                        {
-                                            graphInteraction.data.length === 0  && "No interaction"
-                                        }
-                                        </List>
-                                    </Paper>
-                                </div>
-                            }
+                                        </Paper>
+                                    </div>
+                                }
 
-                        </div>
+                            </div>
+                        }
+                        {
+                            result.netGraph === undefined &&
+                            <CircularProgress className={classes.circularProgress} />
+                        }
+                        
                     </ExpansionPanelDetails>
                 </ExpansionPanel>
             }
