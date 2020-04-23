@@ -1003,9 +1003,9 @@ export default function TwitterSnaResult(props) {
                                 {
                                     result.netGraph.legend && result.netGraph.legend !== 0 && 
                                     <div >
-                                        <Paper style={{ height: 300, width: 300 }}>
+                                        <Paper >
                                             <ListSubheader component="div" style={{ fontSize: 18, fontWeight: 'bold' }}> Legend </ListSubheader>
-                                            <List className={classes.root} style={{ overflow: 'auto', maxHeight: 200}}>
+                                            <List className={classes.root} >
                                                 {
                                                     result.netGraph.legend.map((community) => {
                                                         return (

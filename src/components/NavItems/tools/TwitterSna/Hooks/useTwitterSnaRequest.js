@@ -264,18 +264,32 @@ function createCommunity(graph) {
   var community = jLouvain().nodes(nodeIdArr).edges(graph.edges);
   var result  = community();
   console.log("community: ", result);
+  
+  graph.nodes.forEach(node => {
+    node.community = result[node.id];
+  });
 
-  let uniqCommunity = [...new Set(Object.values(result))]; 
+  let sizeOfCommunities = _.countBy(Object.values(result));
+  let communitiesHas1Node = Object.entries(sizeOfCommunities).filter(([, v]) => v === 1).map(([k]) => k);
+
+  let filteredNodes = graph.nodes.filter((node) =>
+    ( !communitiesHas1Node.includes(node.community.toString()) || ( communitiesHas1Node.includes(node.community.toString()) && (node.size > 30) ))
+  ); 
+
+  let uniqCommunity = [...new Set( filteredNodes.map((node) => {return node.community;}) )]; 
   let colors = []
   uniqCommunity.forEach(com => {
     colors[com] = "#000000".replace(/0/g,function(){return (~~(Math.random()*16)).toString(16);});
   });
 
-  graph.nodes.forEach(node => {
+  filteredNodes.forEach(node => {
     node.color = colors[result[node.id]];
-    node.community = result[node.id];
   });
-  return graph;
+
+  let filteredNodesId = filteredNodes.map((node) => { return node.id;});
+  let filteredEdges = graph.edges.filter((edge) => _.difference([edge.source, edge.target], filteredNodesId).length ===0 );
+
+  return {nodes: filteredNodes, edges: filteredEdges};
 }
 
 function getLegendOfGraph(communityGraph, hits, request) {
@@ -283,19 +297,37 @@ function getLegendOfGraph(communityGraph, hits, request) {
   let sortedBySize = _.fromPairs(_.sortBy(_.toPairs(sizeCommunities), 1).reverse());
   let communitiesColor = Object.keys(sortedBySize);
   let legends = communitiesColor.map((color) => {
-    let nodesId = communityGraph.nodes.filter((node) => {return node.color === color}).map((node) => { return node.id });
+    let nodesId = communityGraph.nodes.filter(node => node.color === color).map((node) => { return node.id });
 
-    let edgesInside = communityGraph.edges.filter((edge) => _.difference([edge.source, edge.target], nodesId).length ===0 );
+    let hashtagsCommunity = [];
+    nodesId.forEach(nodeId => {
+      let tweetsByUser = hits.tweets.filter(tweet => tweet._source.username === nodeId);
+      let hashtagsUser = tweetsByUser.filter(tweet => tweet._source.hashtags !== undefined)
+                                      .map((tweet) => {return tweet._source.hashtags;});
+      hashtagsCommunity.push(hashtagsUser.flat());
+    });
 
-    let legend = "";
+    let freqHashtags = _.countBy(hashtagsCommunity.flat());
+    let sortedHashtags = _.fromPairs(_.sortBy(_.toPairs(freqHashtags), 1).reverse());
+    let legend = Object.keys(sortedHashtags).slice(0, 20).join(" ");
+    
+    
 
-    if (edgesInside.length !== 0) {
-      let freqHashtagsInEdges = _.countBy(edgesInside.map((edge) => {return edge.label.split(/(?=#)/);}).flat());
-      let sortedHashtags = _.fromPairs(_.sortBy(_.toPairs(freqHashtagsInEdges), 1).reverse());
-      legend = Object.keys(sortedHashtags).slice(0, 20).join(" ");
-    } else {
-      legend = request.keywordList.filter((word) => word.startsWith("#")).join(" ");
-    }
+    // let edgesInside = communityGraph.edges.filter((edge) => _.difference([edge.source, edge.target], nodesId).length ===0 );
+
+    // let legend = "";
+    // let hashtagCloud = null;
+
+    // if (edgesInside.length !== 0) {
+    //   let freqHashtagsInEdges = _.countBy(edgesInside.map((edge) => {return edge.label.split(/(?=#)/);}).flat());
+    //   let sortedHashtags = _.fromPairs(_.sortBy(_.toPairs(freqHashtagsInEdges), 1).reverse());
+    //   hashtagCloud = Object.keys(sortedHashtags).map((hashtag) => {return {text: hashtag, value: sortedHashtags[hashtag]};})
+    //   legend = Object.keys(sortedHashtags).slice(0, 20).join(" ");
+    // } else {
+    //   let requestHashtags = request.keywordList.filter((word) => word.startsWith("#"));
+    //   legend = requestHashtags.join(" ");
+    //   hashtagCloud = requestHashtags.map((hashtag) => { return {text: hashtag, value: 1}; });
+    // }
 
     return {
       communityColor: color,
