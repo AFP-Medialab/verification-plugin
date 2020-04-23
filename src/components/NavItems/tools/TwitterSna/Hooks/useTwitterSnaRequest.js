@@ -273,21 +273,42 @@ function createCommunity(graph) {
 
   graph.nodes.forEach(node => {
     node.color = colors[result[node.id]];
+    node.community = result[node.id];
   });
   return graph;
 }
 
-function getLegendOfGraph(communityGraph) {
+function getLegendOfGraph(communityGraph, hits, request) {
   let sizeCommunities = _.countBy(communityGraph.nodes.map(node => {return node.color;}));
   let sortedBySize = _.fromPairs(_.sortBy(_.toPairs(sizeCommunities), 1).reverse());
   let communitiesColor = Object.keys(sortedBySize);
+  // let legends = communitiesColor.map((color) => {
+  //   let nodesId = communityGraph.nodes.filter((node) => {return node.color === color}).map((node) => { return node.id });
+  //   let first3NodeIds = nodesId.slice(0, 3).toString().replace(/,/g, " ");
+  //   let other = nodesId.length > 2 ? " and " + (nodesId.length - 3) + " others" : "";
+  //   return {
+  //     communityColor: color,
+  //     legend: first3NodeIds + other
+  //   }
+  // });
   let legends = communitiesColor.map((color) => {
     let nodesId = communityGraph.nodes.filter((node) => {return node.color === color}).map((node) => { return node.id });
-    let first3NodeIds = nodesId.slice(0, 3).toString().replace(/,/g, " ");
-    let other = nodesId.length > 2 ? " and " + (nodesId.length - 3) + " others" : "";
+
+    let edgesInside = communityGraph.edges.filter((edge) => _.difference([edge.source, edge.target], nodesId).length ===0 );
+
+    let legend = "";
+
+    if (edgesInside.length !== 0) {
+      let freqHashtagsInEdges = _.countBy(edgesInside.map((edge) => {return edge.label.split(/(?=#)/);}).flat());
+      let sortedHashtags = _.fromPairs(_.sortBy(_.toPairs(freqHashtagsInEdges), 1).reverse());
+      legend = Object.keys(sortedHashtags).join(" ");
+    } else {
+      legend = request.keywordList.filter((word) => word.startsWith("#")).join(" ");
+    }
+
     return {
       communityColor: color,
-      legend: first3NodeIds + other
+      legend: legend
     }
   });
   return legends;
@@ -643,7 +664,7 @@ const useTwitterSnaRequest = (request) => {
 
       let communityGraph = createCommunity(graph);
       let userInteraction = getInteractionOfUsernames(insensativeHits, ['mentions']);
-      let legend = getLegendOfGraph(communityGraph);
+      let legend = getLegendOfGraph(communityGraph, insensativeHits, request);
 
       return { 
                 title: "Community graph", 
