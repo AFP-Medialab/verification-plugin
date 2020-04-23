@@ -966,7 +966,7 @@ export default function TwitterSnaResult(props) {
                                             maxNodeSize: 12
                                         }}>
                                         <RandomizeNodePositions>
-                                            <ForceAtlas2 iterationsPerRender={1} timeout={6000} />
+                                            <ForceAtlas2 iterationsPerRender={1} timeout={60000} />
                                         </RandomizeNodePositions>
                                     </Sigma>
                                 }
