@@ -501,7 +501,6 @@ function getLegendOfGraph2(communityGraph, hits, request) {
   //   }
   // });
   let legends = [];
-  debugger;
   communitiesColor.forEach(element => {
     legends.push( { communityColor: element.split("__")[1], legend: element.split("__")[0] } )
   })
@@ -738,6 +737,7 @@ const useTwitterSnaRequest = (request) => {
         createHeatMap(request, responseArrayOf7[5].tweets).then((heatmap) => result.heatMap = heatmap);
         // result.netGraph = createHashtagGraph(request, responseArrayOf7[5]);
         result.netGraph = createHashtagGraph2(request, responseArrayOf7[5]);
+        result.csvArrHashtags = createCsvArrHashtags(responseArrayOf7[5], request);
       }
       else
         result.cloudChart = { title: "top_words_cloud_chart_title" };
@@ -905,6 +905,27 @@ const useTwitterSnaRequest = (request) => {
                 userInteraction: userInteraction,
                 legend: legend
               };
+    }
+
+    function createCsvArrHashtags(hits, request) {
+      let hashtagArr = hits.tweets.filter(tweet => tweet._source.hashtags !== undefined).map((tweet) => {
+        return tweet._source.hashtags;
+      }).flat();
+      let freqHashtags = _.countBy(hashtagArr);
+      let sortedHashtags = _.fromPairs(_.sortBy(_.toPairs(freqHashtags), 1).reverse());
+
+      let csvArr = "Hashtag,Count" + '\n';
+      for (let [key, value] of Object.entries(sortedHashtags)) {
+        csvArr += key + "," + value + "\n";
+      }
+
+      let filename = request.from.split(" ")[0].replace(/\D/g,'') + request.until.split(" ")[0].replace(/\D/g,'');
+
+      return {
+          csvArr: csvArr,
+          filename: filename
+      };
+
     }
 
     const lastRenderCall = (sessionId, request) => {

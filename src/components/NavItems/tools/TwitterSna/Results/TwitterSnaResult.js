@@ -1144,6 +1144,40 @@ export default function TwitterSnaResult(props) {
                     </ExpansionPanelDetails>
                 </ExpansionPanel>
             }
+            {
+                <ExpansionPanel>
+                    <ExpansionPanelSummary
+                        expandIcon={<ExpandMoreIcon />}
+                        aria-controls={"panel0a-content"}
+                        id={"panel0a-header"}
+                    >
+                        <Typography className={classes.heading} >Download hashtags csv</Typography>
+                    </ExpansionPanelSummary>
+                    <ExpansionPanelDetails>
+                    {
+                        result && result.csvArrHashtags &&
+                        <Box alignItems="center" justifyContent="center" width={"100%"}>
+                            <Grid container justify="space-around" spacing={2}
+                                alignContent={"center"}>
+                                <Grid item>
+                                        <Button
+                                                variant={"contained"}
+                                                color={"secondary"}
+                                                onClick={() => downloadClick(result.csvArrHashtags.csvArr, result.csvArrHashtags.filename, false)}
+                                            >
+                                                Download
+                                        </Button>
+                                </Grid>
+                            </Grid>
+                        </Box>
+                    }
+                    {
+                        result.netGraph === undefined &&
+                        <CircularProgress className={classes.circularProgress} />
+                    }
+                    </ExpansionPanelDetails>
+                </ExpansionPanel>
+            }
 
             <Box m={3} />
             {
