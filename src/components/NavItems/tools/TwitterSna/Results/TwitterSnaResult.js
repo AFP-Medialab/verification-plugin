@@ -1009,7 +1009,7 @@ export default function TwitterSnaResult(props) {
                                                 {
                                                     result.netGraph.legend.map((community) => {
                                                         return (
-                                                            <ListItem key={community.communityColor}>
+                                                            <ListItem key={community.communityColor + (Math.random())}>
                                                             <ListItemIcon>
                                                             <div className="legendcolor" 
                                                                 style={{backgroundColor:community.communityColor, width: 18, height: 18, borderRadius: '50%'}}>

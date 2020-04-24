@@ -364,7 +364,7 @@ function createCommunity2(graph, filteredHits) {
   let communitiesHas1Node = Object.entries(sizeOfCommunities).filter(([, v]) => v === 1).map(([k]) => k);
   
   let filteredNodes = commNodes.filter((node) =>
-    ( !communitiesHas1Node.includes(node.community.toString()) || ( communitiesHas1Node.includes(node.community.toString()) && (node.size > 30) ))
+    ( !communitiesHas1Node.includes(node.community.toString()) || ( communitiesHas1Node.includes(node.community.toString()) && (node.size > 1) ))
   ); 
 
   let uniqFilteredCommunities = [...new Set( filteredNodes.map((node) => {return node.community;}) )]; 
@@ -379,6 +379,7 @@ function createCommunity2(graph, filteredHits) {
   });
 
   let filteredNodesId = filteredNodes.map((node) => { return node.id;});
+
 
   let duplicatedNodesId = filteredNodesId.filter(name => name.includes('__#'));
   let edges = graph.edges.map((edge) => {
@@ -400,6 +401,21 @@ function createCommunity2(graph, filteredHits) {
     }
     return duplicateEdges;
   }).flat();
+
+  let uniqDuplicatNodesId = [...new Set(duplicatedNodesId.map((nodeId) => {return nodeId.split("__#")[0];}))];
+  let colorsForDuplicates = [];
+  uniqDuplicatNodesId.forEach(nodeId => {
+    colorsForDuplicates.push([nodeId, "#000000".replace(/0/g,function(){return (~~(Math.random()*16)).toString(16);})]);
+  });
+
+  filteredNodes = filteredNodes.map((node) => {
+    colorsForDuplicates.forEach(dupUsername => {
+      if ( node.id.startsWith(dupUsername[0]) ) {
+        node.color = dupUsername[1];
+      }
+    });
+    return node;
+  })
 
   let filteredEdges = edges.filter((edge) => _.difference([edge.source, edge.target], filteredNodesId).length ===0 );
 
@@ -452,8 +468,14 @@ function getLegendOfGraph(communityGraph, hits, request) {
 }
 
 function getLegendOfGraph2(communityGraph, hits, request) {
-  debugger;
-  let sizeCommunities = _.countBy(communityGraph.nodes.map(node => {return node.community+ "__" + node.color;}));
+
+  let sizeCommunities = _.countBy(communityGraph.nodes.map(node => {
+      if (node.id.includes("__#")) { 
+        return node.id.split("__#")[0]+ "__" + node.color; 
+      } else {
+        return node.community+ "__" + node.color;
+      }
+    }));
   let sortedBySize = _.fromPairs(_.sortBy(_.toPairs(sizeCommunities), 1).reverse());
   let communitiesColor = Object.keys(sortedBySize);
   // let legends = communitiesColor.map((color) => {
@@ -479,6 +501,7 @@ function getLegendOfGraph2(communityGraph, hits, request) {
   //   }
   // });
   let legends = [];
+  debugger;
   communitiesColor.forEach(element => {
     legends.push( { communityColor: element.split("__")[1], legend: element.split("__")[0] } )
   })
@@ -871,7 +894,7 @@ const useTwitterSnaRequest = (request) => {
 
       
       let communityGraph = createCommunity2(graph, filteredHits);
-      debugger;
+      
       let userInteraction = getInteractionOfUsernames(filteredHits, ['mentions']);
       let legend = getLegendOfGraph2(communityGraph, filteredHits, request);
 
