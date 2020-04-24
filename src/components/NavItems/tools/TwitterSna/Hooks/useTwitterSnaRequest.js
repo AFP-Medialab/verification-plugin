@@ -919,7 +919,7 @@ const useTwitterSnaRequest = (request) => {
         csvArr += key + "," + value + "\n";
       }
 
-      let filename = request.from.split(" ")[0].replace(/\D/g,'') + request.until.split(" ")[0].replace(/\D/g,'');
+      let filename = "_";
 
       return {
           csvArr: csvArr,
