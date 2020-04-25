@@ -328,7 +328,9 @@ function createCommunity(graph) {
 
 function createCommunity2(graph, filteredHits) {
 
-  let communities = filteredHits.tweets.map((tweet) => {return { id: tweet._source.username, community: tweet._source.hashtags[0] }; });
+  let communities = filteredHits.tweets.filter(tweet => tweet._source.hashtags.length!==0)
+                                        .map((tweet) => {return { id: tweet._source.username, community: tweet._source.hashtags[0] }; });
+
   let uniqCommunities = [...new Set(communities.map((obj) => { return obj.community; }))];
 
   let nodeIdArr = [];
@@ -347,7 +349,10 @@ function createCommunity2(graph, filteredHits) {
     let commArr = communities.filter(element => element.id === node.id).map((obj) => {return obj.community;});
     let uniqCommArr = [...new Set(commArr)];
     let nodes = []
-    if (uniqCommArr.length <= 1) { 
+    if (uniqCommArr.length === 0) { 
+      node.community = "NoHashtags";
+      nodes.push(node); 
+    } else if (uniqCommArr.length === 1) { 
       node.community = uniqCommArr[0];
       nodes.push(node); 
     } else { 
@@ -368,7 +373,7 @@ function createCommunity2(graph, filteredHits) {
   let communitiesHas1Node = Object.entries(sizeOfCommunities).filter(([, v]) => v === 1).map(([k]) => k);
   
   let filteredNodes = commNodes.filter((node) =>
-    ( !communitiesHas1Node.includes(node.community.toString()) || ( communitiesHas1Node.includes(node.community.toString()) && (node.size > 1) ))
+    ( !communitiesHas1Node.includes(node.community.toString()) || ( communitiesHas1Node.includes(node.community.toString()) && (node.size >= 1) ))
   ); 
 
   let uniqFilteredCommunities = [...new Set( filteredNodes.map((node) => {return node.community;}) )]; 
@@ -471,7 +476,6 @@ function getLegendOfGraph(communityGraph, hits, request) {
       }
     });
   } else {
-    debugger;
     communityGraph.nodes.map((node) => {node.color = "#3388AA"; return node;});
     legends = [
       {
@@ -752,8 +756,8 @@ const useTwitterSnaRequest = (request) => {
       if (final) {
         result.cloudChart = createWordCloud(responseArrayOf7[7]);
         createHeatMap(request, responseArrayOf7[5].tweets).then((heatmap) => result.heatMap = heatmap);
-        result.netGraph = createHashtagGraph(request, responseArrayOf7[5]);
-        // result.netGraph = createHashtagGraph2(request, responseArrayOf7[5]);
+        // result.netGraph = createHashtagGraph(request, responseArrayOf7[5]);
+        result.netGraph = createHashtagGraph2(request, responseArrayOf7[5]);
         result.csvArrHashtags = createCsvArrHashtags(responseArrayOf7[5], request);
       }
       else
