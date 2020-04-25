@@ -33,6 +33,7 @@ import { CSVLink } from "react-csv";
 import Cytoscape from 'cytoscape';
 import Fcose from 'cytoscape-fcose';
 import { Sigma, RandomizeNodePositions, ForceAtlas2, RelativeSize } from 'react-sigma';
+import Plotly from 'plotly.js-dist';
 
 import CircularProgress from "@material-ui/core/CircularProgress";
 
@@ -490,11 +491,21 @@ export default function TwitterSnaResult(props) {
     };
 
     //Download as PNG
-    function downloadAsPNG() {
-        let svg = document.getElementById("top_words_cloud_chart");
-        let name = filesNames + '.png';
+    function downloadAsPNG(elementId) {
+        let element = document.getElementById(elementId);
 
-        saveSvgAsPng(svg.children[0].children[0], name, { backgroundColor: "white", scale: 2 });
+        if (elementId === "top_words_cloud_chart") {
+            let name = filesNames + '.png';    
+            saveSvgAsPng(element.children[0].children[0], name, { backgroundColor: "white", scale: 2 });
+        } else {
+            let positionInfo = element.getBoundingClientRect();
+            let height = positionInfo.height;
+            let width = positionInfo.width;
+            let name = elementId + filesNames.replace("WordCloud", "") + '.png';
+            Plotly.downloadImage(elementId,
+                { format: 'png', width: width*1.2, height: height*1.2, filename: name }
+              );
+        }
     }
 
     //Download as SVG
@@ -709,15 +720,52 @@ export default function TwitterSnaResult(props) {
                                             ((obj.json === null) &&
                                                 <Typography variant={"body2"}>{keyword("sna_no_data")}</Typography>)
                                         }
-                                        {(obj.json !== null) &&
-                                            <Plot
-                                                data={obj.json}
-                                                layout={obj.layout}
-                                                config={obj.config}
-                                                onClick={e => {
-                                                    onDonutsClick(e, obj.title, index)
-                                                }}
-                                            />
+                                        {
+                                            (index === 3 && result.csvArrHashtags) &&
+                                            <Grid container justify="space-between" spacing={2}
+                                                alignContent={"center"}>
+                                                <Grid item>
+                                                    <Button
+                                                        variant={"contained"}
+                                                        color={"primary"}
+                                                        onClick={() => downloadAsPNG(obj.title)}>
+                                                        {
+                                                            keyword('sna_result_download_png')
+                                                        }
+                                                    </Button>
+                                                </Grid>
+                                                <Grid item>
+                                                    <CSVLink
+                                                        data={getCSVData()} headers={CSVheaders} filename={filesNames + ".csv"} className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary">
+                                                        {
+                                                            "CSV"
+                                                            // keyword('sna_result_download_csv')
+                                                        }
+                                                    </CSVLink>
+                                                </Grid>
+                                                <Grid item>
+                                                    <Button
+                                                        variant={"contained"}
+                                                        color={"primary"}
+                                                        onClick={() => downloadAsSVG()}>
+                                                        {
+                                                            keyword('sna_result_download_svg')
+                                                        }
+                                                    </Button>
+                                                </Grid>
+                                            </Grid>
+                                        }
+                                        {
+                                            (obj.json !== null) &&
+                                                <Plot
+                                                    data={obj.json}
+                                                    layout={obj.layout}
+                                                    config={obj.config}
+                                                    onClick={e => {
+                                                        onDonutsClick(e, obj.title, index)
+                                                    }}
+                                                    divId={obj.title}
+                                                />
                                         }
                                         {
                                             pieCharts[index] &&
@@ -784,7 +832,7 @@ export default function TwitterSnaResult(props) {
                                                 <Button
                                                     variant={"contained"}
                                                     color={"primary"}
-                                                    onClick={() => downloadAsPNG()}>
+                                                    onClick={() => downloadAsPNG("top_words_cloud_chart")}>
                                                     {
                                                         keyword('sna_result_download_png')
                                                     }
