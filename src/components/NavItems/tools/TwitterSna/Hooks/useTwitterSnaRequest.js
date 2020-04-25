@@ -916,13 +916,18 @@ const useTwitterSnaRequest = (request) => {
         return tweet._source.hashtags;
       }).flat();
       let freqHashtags = _.countBy(hashtagArr);
-      let sortedHashtags = _.fromPairs(_.sortBy(_.toPairs(freqHashtags), 1).reverse());
+
+      let freqHashtagsArr = Object.entries(freqHashtags).map(([key, value]) => ({key,value}));
+      let sortedArr = freqHashtagsArr.sort(function(a, b) {
+          return b["value"] - a["value"] || a.key.localeCompare(b.key);
+      });
 
       let csvArr = "Hashtag,Count" + '\n';
-      for (let [key, value] of Object.entries(sortedHashtags)) {
-        csvArr += key + "," + value + "\n";
-      }
 
+      sortedArr.forEach(obj => {
+        csvArr += obj.key + "," + obj.value + "\n";
+      })
+      
       let filename = "_";
 
       return {
