@@ -509,19 +509,30 @@ export default function TwitterSnaResult(props) {
     }
 
     //Download as SVG
-    function downloadAsSVG() {
+    function downloadAsSVG(elementId) {
 
-        let name = filesNames + '.svg';
-        var svgEl = document.getElementById("top_words_cloud_chart").children[0].children[0];
-        svgEl.setAttribute("xmlns", "http://www.w3.org/2000/svg");
-        var svgData = svgEl.outerHTML;
-        var preface = '<?xml version="1.0" standalone="no"?>\r\n';
-        var svgBlob = new Blob([preface, svgData], { type: "image/svg+xml;charset=utf-8" });
-        var svgUrl = URL.createObjectURL(svgBlob);
-        var downloadLink = document.createElement("a");
-        downloadLink.href = svgUrl;
-        downloadLink.download = name;
-        downloadLink.click();
+        if (elementId === "top_words_cloud_chart") {
+            let name = filesNames + '.svg';
+            var svgEl = document.getElementById("top_words_cloud_chart").children[0].children[0];
+            svgEl.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+            var svgData = svgEl.outerHTML;
+            var preface = '<?xml version="1.0" standalone="no"?>\r\n';
+            var svgBlob = new Blob([preface, svgData], { type: "image/svg+xml;charset=utf-8" });
+            var svgUrl = URL.createObjectURL(svgBlob);
+            var downloadLink = document.createElement("a");
+            downloadLink.href = svgUrl;
+            downloadLink.download = name;
+            downloadLink.click();
+        } else {
+            let element = document.getElementById(elementId);
+            let positionInfo = element.getBoundingClientRect();
+            let height = positionInfo.height;
+            let width = positionInfo.width;
+            let name = "Hashtags" + filesNames.replace("WordCloud", "") + '.svg';
+            Plotly.downloadImage(elementId,
+                { format: 'svg', width: width*1.2, height: height*1.2, filename: name }
+              );
+        }
 
     }
 
@@ -747,7 +758,7 @@ export default function TwitterSnaResult(props) {
                                                     <Button
                                                         variant={"contained"}
                                                         color={"primary"}
-                                                        onClick={() => downloadAsSVG()}>
+                                                        onClick={() => downloadAsSVG(obj.title)}>
                                                         {
                                                             keyword('sna_result_download_svg')
                                                         }
@@ -851,7 +862,7 @@ export default function TwitterSnaResult(props) {
                                                 <Button
                                                     variant={"contained"}
                                                     color={"primary"}
-                                                    onClick={() => downloadAsSVG()}>
+                                                    onClick={() => downloadAsSVG("top_words_cloud_chart")}>
                                                     {
                                                         keyword('sna_result_download_svg')
                                                     }
