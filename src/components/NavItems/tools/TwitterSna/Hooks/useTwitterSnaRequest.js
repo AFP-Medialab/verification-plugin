@@ -758,7 +758,7 @@ const useTwitterSnaRequest = (request) => {
         createHeatMap(request, responseArrayOf7[5].tweets).then((heatmap) => result.heatMap = heatmap);
         // result.netGraph = createHashtagGraph(request, responseArrayOf7[5]);
         result.netGraph = createHashtagGraph2(request, responseArrayOf7[5]);
-        result.csvArrHashtags = createCsvArrHashtags(responseArrayOf7[5], request);
+        result.csvArrHashtags = createCsvArrHashtags(responseArrayOf7[5]);
       }
       else
         result.cloudChart = { title: "top_words_cloud_chart_title" };
@@ -928,8 +928,9 @@ const useTwitterSnaRequest = (request) => {
               };
     }
 
-    function createCsvArrHashtags(hits, request) {
-      let hashtagArr = hits.tweets.filter(tweet => tweet._source.hashtags !== undefined).map((tweet) => {
+    function createCsvArrHashtags(hits) {
+      let insensativeHits = getInsensativeCase(hits, 'hashtags');
+      let hashtagArr = insensativeHits.tweets.filter(tweet => tweet._source.hashtags !== undefined).map((tweet) => {
         return tweet._source.hashtags;
       }).flat();
       let freqHashtags = _.countBy(hashtagArr);

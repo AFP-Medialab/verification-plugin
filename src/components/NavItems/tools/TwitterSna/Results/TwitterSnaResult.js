@@ -385,11 +385,11 @@ export default function TwitterSnaResult(props) {
         setGraphInteraction(newRes);
     }
 
-    function downloadClick(csvArr, name, histo) {
+    function downloadClick(csvArr, name, histo, type="tweets_") {
         let encodedUri = encodeURIComponent(csvArr);
         let link = document.createElement("a");
         link.setAttribute("href", 'data:text/plain;charset=utf-8,' + encodedUri);
-        link.setAttribute("download", "tweets_" + props.request.keywordList.join('&') + '_' + name + ((!histo) ? (props.request.from + "_" + props.request.until) : "") + ".csv");
+        link.setAttribute("download", type + props.request.keywordList.join('&') + '_' + name + ((!histo) ? (props.request.from + "_" + props.request.until) : "") + ".csv");
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
@@ -501,7 +501,7 @@ export default function TwitterSnaResult(props) {
             let positionInfo = element.getBoundingClientRect();
             let height = positionInfo.height;
             let width = positionInfo.width;
-            let name = elementId + filesNames.replace("WordCloud", "") + '.png';
+            let name = "Hashtags" + filesNames.replace("WordCloud", "") + '.png';
             Plotly.downloadImage(elementId,
                 { format: 'png', width: width*1.2, height: height*1.2, filename: name }
               );
@@ -733,15 +733,15 @@ export default function TwitterSnaResult(props) {
                                                             keyword('sna_result_download_png')
                                                         }
                                                     </Button>
+                                                    
                                                 </Grid>
                                                 <Grid item>
-                                                    <CSVLink
-                                                        data={getCSVData()} headers={CSVheaders} filename={filesNames + ".csv"} className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary">
-                                                        {
-                                                            "CSV"
-                                                            // keyword('sna_result_download_csv')
-                                                        }
-                                                    </CSVLink>
+                                                    <Button
+                                                        variant={"contained"}
+                                                        color={"primary"}
+                                                        onClick={() => downloadClick(result.csvArrHashtags.csvArr, result.csvArrHashtags.filename, false, "hashtags_")}>
+                                                            CSV
+                                                    </Button>
                                                 </Grid>
                                                 <Grid item>
                                                     <Button
@@ -1189,40 +1189,6 @@ export default function TwitterSnaResult(props) {
                             <CircularProgress className={classes.circularProgress} />
                         }
                         
-                    </ExpansionPanelDetails>
-                </ExpansionPanel>
-            }
-            {
-                <ExpansionPanel>
-                    <ExpansionPanelSummary
-                        expandIcon={<ExpandMoreIcon />}
-                        aria-controls={"panel0a-content"}
-                        id={"panel0a-header"}
-                    >
-                        <Typography className={classes.heading} >Download hashtags csv</Typography>
-                    </ExpansionPanelSummary>
-                    <ExpansionPanelDetails>
-                    {
-                        result && result.csvArrHashtags &&
-                        <Box alignItems="center" justifyContent="center" width={"100%"}>
-                            <Grid container justify="space-around" spacing={2}
-                                alignContent={"center"}>
-                                <Grid item>
-                                        <Button
-                                                variant={"contained"}
-                                                color={"secondary"}
-                                                onClick={() => downloadClick(result.csvArrHashtags.csvArr, result.csvArrHashtags.filename, false)}
-                                            >
-                                                Download
-                                        </Button>
-                                </Grid>
-                            </Grid>
-                        </Box>
-                    }
-                    {
-                        result.netGraph === undefined &&
-                        <CircularProgress className={classes.circularProgress} />
-                    }
                     </ExpansionPanelDetails>
                 </ExpansionPanel>
             }
