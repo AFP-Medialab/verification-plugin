@@ -428,46 +428,59 @@ function createCommunity2(graph, filteredHits) {
 
 function getLegendOfGraph(communityGraph, hits, request) {
   let sizeCommunities = _.countBy(communityGraph.nodes.map(node => {return node.color;}));
-  let sortedBySize = _.fromPairs(_.sortBy(_.toPairs(sizeCommunities), 1).reverse());
-  let communitiesColor = Object.keys(sortedBySize);
-  let legends = communitiesColor.map((color) => {
-    let nodesId = communityGraph.nodes.filter(node => node.color === color).map((node) => { return node.id });
+  let legends = [];
+  if (sizeCommunities.undefined === undefined) {
+    let sortedBySize = _.fromPairs(_.sortBy(_.toPairs(sizeCommunities), 1).reverse());
+    let communitiesColor = Object.keys(sortedBySize);
+    legends = communitiesColor.map((color) => {
+      let nodesId = communityGraph.nodes.filter(node => node.color === color).map((node) => { return node.id });
 
-    let hashtagsCommunity = [];
-    nodesId.forEach(nodeId => {
-      let tweetsByUser = hits.tweets.filter(tweet => tweet._source.username === nodeId);
-      let hashtagsUser = tweetsByUser.filter(tweet => tweet._source.hashtags !== undefined)
-                                      .map((tweet) => {return tweet._source.hashtags;});
-      hashtagsCommunity.push(hashtagsUser.flat());
+      let hashtagsCommunity = [];
+      nodesId.forEach(nodeId => {
+        let tweetsByUser = hits.tweets.filter(tweet => tweet._source.username === nodeId);
+        let hashtagsUser = tweetsByUser.filter(tweet => tweet._source.hashtags !== undefined)
+                                        .map((tweet) => {return tweet._source.hashtags;});
+        hashtagsCommunity.push(hashtagsUser.flat());
+      });
+
+      let freqHashtags = _.countBy(hashtagsCommunity.flat());
+      let sortedHashtags = _.fromPairs(_.sortBy(_.toPairs(freqHashtags), 1).reverse());
+      let legend = Object.keys(sortedHashtags).slice(0, 20).join(" ");
+      
+      
+
+      // let edgesInside = communityGraph.edges.filter((edge) => _.difference([edge.source, edge.target], nodesId).length ===0 );
+
+      // let legend = "";
+      // let hashtagCloud = null;
+
+      // if (edgesInside.length !== 0) {
+      //   let freqHashtagsInEdges = _.countBy(edgesInside.map((edge) => {return edge.label.split(/(?=#)/);}).flat());
+      //   let sortedHashtags = _.fromPairs(_.sortBy(_.toPairs(freqHashtagsInEdges), 1).reverse());
+      //   hashtagCloud = Object.keys(sortedHashtags).map((hashtag) => {return {text: hashtag, value: sortedHashtags[hashtag]};})
+      //   legend = Object.keys(sortedHashtags).slice(0, 20).join(" ");
+      // } else {
+      //   let requestHashtags = request.keywordList.filter((word) => word.startsWith("#"));
+      //   legend = requestHashtags.join(" ");
+      //   hashtagCloud = requestHashtags.map((hashtag) => { return {text: hashtag, value: 1}; });
+      // }
+
+      return {
+        communityColor: color,
+        legend: legend
+      }
     });
-
-    let freqHashtags = _.countBy(hashtagsCommunity.flat());
-    let sortedHashtags = _.fromPairs(_.sortBy(_.toPairs(freqHashtags), 1).reverse());
-    let legend = Object.keys(sortedHashtags).slice(0, 20).join(" ");
-    
-    
-
-    // let edgesInside = communityGraph.edges.filter((edge) => _.difference([edge.source, edge.target], nodesId).length ===0 );
-
-    // let legend = "";
-    // let hashtagCloud = null;
-
-    // if (edgesInside.length !== 0) {
-    //   let freqHashtagsInEdges = _.countBy(edgesInside.map((edge) => {return edge.label.split(/(?=#)/);}).flat());
-    //   let sortedHashtags = _.fromPairs(_.sortBy(_.toPairs(freqHashtagsInEdges), 1).reverse());
-    //   hashtagCloud = Object.keys(sortedHashtags).map((hashtag) => {return {text: hashtag, value: sortedHashtags[hashtag]};})
-    //   legend = Object.keys(sortedHashtags).slice(0, 20).join(" ");
-    // } else {
-    //   let requestHashtags = request.keywordList.filter((word) => word.startsWith("#"));
-    //   legend = requestHashtags.join(" ");
-    //   hashtagCloud = requestHashtags.map((hashtag) => { return {text: hashtag, value: 1}; });
-    // }
-
-    return {
-      communityColor: color,
-      legend: legend
-    }
-  });
+  } else {
+    debugger;
+    communityGraph.nodes.map((node) => {node.color = "#3388AA"; return node;});
+    legends = [
+      {
+        communityColor: "#3388AA",
+        legend: "Nodes (no community found)"
+      }
+    ]
+  }
+  
   return legends;
 }
 
@@ -927,7 +940,7 @@ const useTwitterSnaRequest = (request) => {
       sortedArr.forEach(obj => {
         csvArr += obj.key + "," + obj.value + "\n";
       })
-      
+
       let filename = "_";
 
       return {
