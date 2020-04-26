@@ -35,10 +35,27 @@ const CovidSearch = () => {
   const keyword = useLoadLanguage("components/NavItems/tools/CovidSearch.tsv", tsv);
   console.log("kedddd", keyword);
 
-  // Authentication Redux state
-  const userAuthenticated = useSelector(state => state.userSession && state.userSession.userAuthenticated);
+  const searchEngines = [
+    "https://cse.google.com/cse.js?cx=000556916517770601014:i0sxs8kmmzr",
+    "https://cse.google.com/cse.js?cx=000556916517770601014:jff3t29fxeq",
+    "https://cse.google.com/cse.js?cx=000556916517770601014:3imsvcumevz"
+  ]
 
-  const dispatch = useDispatch();
+  useEffect(() => {
+
+    searchEngines.forEach(engine => {
+      const script = document.createElement('script');
+      script.src = engine;
+      script.async = true;
+    
+      document.body.appendChild(script);
+    
+      return () => {
+        document.head.removeChild(script);
+      }
+    });
+    
+  }, []);
 
 console.log("nnnnn", keyword("covid_search_title"));
   return (
