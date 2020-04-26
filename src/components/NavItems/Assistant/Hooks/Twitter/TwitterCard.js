@@ -41,31 +41,38 @@ const TwitterCard = (props) => {
     useTwint().runTwintQuery(twitterUrl);
 
     const dbPress = () => {
+
+        const inputForGpl = tweetTag.substring(1);
+        //const inputForGpl = "covid";
         setDbPressed(true);
-        client
-            .query({
-                query: gql`
-         {
-          claim (where: {dateCreated: {GT: "2020-01-01T00:00:00"}}){ 
-            id
-            name
-            dateCreated
-            review (where: {reviewBody: {IRE: "tweetTag"}}){
-              dateCreated
-              reviewBody 
-            }
-            appearance{
-              url
-            }
-          }}`
+        const query = gql`
+              query claim($name: String) {
+                  claim(where: {AND: [{name: {IRE: $name}}, {dateCreated: {GT: "2020-01-01T00:00:00"}}]}) {
+                    id
+                    name
+                    dateCreated
+                    review {
+                      dateCreated
+                      reviewBody 
+                    }
+                    appearance{
+                      url
+                    }
+                  }
+                }`;
+
+            client.query({
+                query: query,
+                variables:{name: inputForGpl}
             }).then(result => {
-            let claims = result.data.claim;
-            let claimedList = claims.map(claim => {
-                return [claim.name, claim.appearance[0] == null ? "" : claim.appearance[0].url ]
-            });
-                console.log(claimedList);
-                setResult(claimedList.slice(0,4))}
-            );};
+                    let claims = result.data.claim;
+                    let claimedList = claims.map(claim => {
+                        return [claim.name, claim.appearance[0] == null ? "" : claim.appearance[0].url ]
+                    });
+                        console.log(claimedList);
+                        setResult(claimedList.slice(0,4))}
+                    );
+        };
 
 
     return <Paper className={classes.root}>
@@ -132,10 +139,10 @@ const TwitterCard = (props) => {
                         <Card variant = "outlined" hidden = {!dbPressed}>
                             <CardContent>
                                 <Typography variant="h5" component="h2">
-                                    Appearances
+                                    Appearances in the DBKF
                                 </Typography>
                                 <Typography className={classes.title} color="primary">
-                                    Search carried out against: {tweetTag}
+                                    Claims made and debunked concerning topics in this tweet have been listed. Search carried out against topic: {tweetTag}
                                 </Typography>
                                 <Typography align={"left"} aria-rowspan={1}>
                                     {dbResult.map((claim) =>
