@@ -69,6 +69,9 @@ import forensicIconOff from "./images/tools/forensic_logoOff.png"
 import twitterSnaIconOn from "./images/tools/twitter-sna-on.png"
 import twitterSnaIconOff from "./images/tools/twitter-sna-off.png"
 
+import covidSearchIconOn from "./images/tools/covid_search_logoOn.png"
+import covidSearchIconOff from "./images/tools/covid_search_logoOff.png"
+
 import useLoadLanguage from "../../Hooks/useLoadLanguage";
 import tsv from "../../LocalDictionary/components/NavBar.tsv";
 import FactCheck from "../NavItems/FactCheck/FactCheck";
@@ -176,6 +179,12 @@ const NavBar = (props) => {
             icon: (drawerValue === 9) ? twitterSnaIconOn : twitterSnaIconOff,
             tsvPrefix: "twitter_sna",
             path: "twitterSna"
+        },
+        {
+            title: "navbar_covidsearch",
+            icon: (drawerValue === 10) ? covidSearchIconOn : covidSearchIconOff,
+            tsvPrefix: "covidsearch",
+            path: "covidSearch"
         }
     ];
 
