@@ -48,7 +48,7 @@ const CovidSearch = () => {
       script.src = engine;
       script.async = true;
     
-      document.body.appendChild(script);
+      document.head.appendChild(script);
     
       return () => {
         document.head.removeChild(script);
