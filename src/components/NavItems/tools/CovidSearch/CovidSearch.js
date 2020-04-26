@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 
-import _ from "lodash";
 
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import Paper from "@material-ui/core/Paper";
@@ -16,9 +15,10 @@ const CovidSearch = () => {
   const keyword = useLoadLanguage("components/NavItems/tools/CovidSearch.tsv", tsv);
 
   useEffect(() => {
-
+      
       const script = document.createElement('script');
       script.src = "https://cse.google.com/cse.js?cx=000556916517770601014:" + keyword("covidsearch_engines");
+      console.log(script.src);
       script.async = true;
     
       document.head.appendChild(script);
@@ -27,7 +27,7 @@ const CovidSearch = () => {
         document.head.removeChild(script);
       }
     
-  }, []);
+  }, [keyword]);
 
   return (
     <div>
