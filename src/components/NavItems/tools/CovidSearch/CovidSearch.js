@@ -14,14 +14,6 @@ import RadioGroup from "@material-ui/core/RadioGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Radio from "@material-ui/core/Radio";
 import Box from "@material-ui/core/Box";
-import FormLabel from "@material-ui/core/FormLabel";
-import Button from "@material-ui/core/Button";
-import Grid from "@material-ui/core/Grid";
-import InputLabel from "@material-ui/core/InputLabel";
-import Select from "@material-ui/core/Select";
-import MenuItem from "@material-ui/core/MenuItem";
-import LinearProgress from "@material-ui/core/LinearProgress";
-import Typography from "@material-ui/core/Typography";
 
 import SearchIcon from '@material-ui/icons/Search';
 
@@ -57,11 +49,10 @@ const CovidSearch = () => {
     
   }, []);
 
-console.log("nnnnn", keyword("covid_search_title"));
   return (
     <div>
       <Paper className={classes.root}>
-       <CustomTile text={keyword("covid_search_title")} />
+       <CustomTile text={keyword("navbar_covidsearch")} />
 
         <Box m={3} />
         <div className="gcse-search"></div>

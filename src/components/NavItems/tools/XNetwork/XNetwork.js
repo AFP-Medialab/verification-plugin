@@ -55,11 +55,10 @@ const XNetwork = () => {
     
   }, []);
 
-console.log("nnnnn", keyword("covid_search_title"));
   return (
     <div>
       <Paper className={classes.root}>
-       <CustomTile text={keyword("covid_search_title")} />
+       <CustomTile text={keyword("navbar_xnetwork")} />
 
         <Box m={3} />
         <div className="gcse-search"></div>
