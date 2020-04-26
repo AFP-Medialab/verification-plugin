@@ -72,6 +72,9 @@ import twitterSnaIconOff from "./images/tools/twitter-sna-off.png"
 import covidSearchIconOn from "./images/tools/covid_search_logoOn.png"
 import covidSearchIconOff from "./images/tools/covid_search_logoOff.png"
 
+import xnetworkIconOn from "./images/tools/xnetwork_logoOn.svg"
+import xnetworkIconOff from "./images/tools/xnetwork_logoOff.svg"
+
 import useLoadLanguage from "../../Hooks/useLoadLanguage";
 import tsv from "../../LocalDictionary/components/NavBar.tsv";
 import FactCheck from "../NavItems/FactCheck/FactCheck";
@@ -185,6 +188,12 @@ const NavBar = (props) => {
             icon: (drawerValue === 10) ? covidSearchIconOn : covidSearchIconOff,
             tsvPrefix: "covidsearch",
             path: "covidSearch"
+        },
+        {
+            title: "navbar_xnetwork",
+            icon: (drawerValue === 11) ? xnetworkIconOn : xnetworkIconOff,
+            tsvPrefix: "xnetwork",
+            path: "xnetwork"
         }
     ];
 
