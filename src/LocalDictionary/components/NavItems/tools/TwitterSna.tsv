@@ -22,7 +22,7 @@ lang_all	none	aucun	ninguno
 lang_fr	French	Français	Francés
 lang_en	English	Anglais	Inglés
 lang_es	Spanish	Espagnol	Español
-lang_ar	Arab	Arabe	Árabe
+lang_ar	Arabic	Arabe	Árabe
 lang_de	German	Allemand	Alemán
 lang_it	Italian	Italien	Italiano
 lang_id	Indonesian	Indonésien	Indonesio
@@ -43,7 +43,7 @@ lang_he	Hebrew	Hébreu	Hebreo
 lang_ur	Urdu	Ourdou	Urdu
 lang_th	Thai	Thaï	Tailandés
 button_submit	Submit	Envoyer	Enviar
-default_sna_error	Twitter analysis interrupted due to unknown cause. Please re-submit the video.	L'analyse de Twitter a été interrompue dû à une cause inconnue. Veuillez ré-envoyer la vidéo.	El análisis de Twitter se ha interrumpido por una causa inconocida. Inténtalo con otro video.
+default_sna_error	Twitter analysis failed due to an unknown cause.	L'analyse de Twitter a été interrompue pour une raison inconnue.	El análisis de Twitter se ha interrumpido por una causa desconocida.
 twitterSnaErrorMessage	An error occurred while processing tweets	Une erreur s'est produite lors du traitement des tweets	Se produjo un error en el procesamiento de tweets
 top_users_pie_chart_title	Most active users	Utilisateurs les plus actifs	Usuarios más activos
 user_time_chart_title	Propagation timeline	Frise chronologique de propagation	Línea de tiempo de propagación
@@ -60,10 +60,21 @@ sna_result_tweet	Tweet	Tweet	Tweet
 sna_result_retweet_nb	Retweet number	Nombre de retweets	Candidad de retweet
 sna_result_like_nb	Like number	Nombre de likes	Candidad de ''me gusta''
 sna_result_hide	Hide	Ferme	Cerca
-sna_result_download	Download	Télécharger 	Escarga
+sna_result_download	Download	Télécharger	Escarga
 sna_result_slected_tweets	Selected Tweets	Tweets selectionnés	Tweets selectionados
 sna_result_url_in_tweets	Urls in tweets	Urls dans les tweets	Urls en tweets
 sna_result_go_to	Go to url	Ouvrir le lien	Ir a la pagina
 sna_result_go_to_tweet	Go to tweet	Ouvrir le tweet	Ir a tweet
 sna_result_download_png	Download as PNG	Télécharger en tant que PNG	Descargar como PNG
 sna_result_download_svg	Download as SVG	Télécharger en tant que SVG	Descargar como SVG
+sna_result_word	Word	Mot	Palabra
+sna_result_nb_occ	Number of occurrences	Nombre d'occurrences	Cantidad de ocurrencias
+sna_result_entity	Named entity	Entité nommée	Entidad nombrada
+sna_no_data	No data available	Aucune donnée disponible	Datos no disponibles
+sna_result_heatMap	Distribution of tweets	Distribution des tweets	Distribución de tweets
+user_placeholder	user	utilisateur	usuario
+elastic_url	URL	URL	URL
+elastic_count 	Number	Nombre	Candidad
+sna_counting_words 	Counting Words	Comptage des mots	Contando palabras
+sna_fetching_tweets	Fetching tweets	Récupération des tweets	Recuperando tweets
+sna_builting_heatMap	Building graphs	Construction des graphes	Construyendo el gráfico
