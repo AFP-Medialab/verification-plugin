@@ -72,8 +72,8 @@ import twitterSnaIconOff from "./images/tools/twitter-sna-off.png"
 import covidSearchIconOn from "./images/tools/covid_search_logoOn.png"
 import covidSearchIconOff from "./images/tools/covid_search_logoOff.png"
 
-import xnetworkIconOn from "./images/tools/xnetwork_logoOn.svg"
-import xnetworkIconOff from "./images/tools/xnetwork_logoOff.svg"
+import xnetworkIconOn from "./images/tools/xnetwork_logoOn.png"
+import xnetworkIconOff from "./images/tools/xnetwork_logoOff.png"
 
 import useLoadLanguage from "../../Hooks/useLoadLanguage";
 import tsv from "../../LocalDictionary/components/NavBar.tsv";
