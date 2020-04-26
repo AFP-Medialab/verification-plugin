@@ -7,6 +7,7 @@ const defaultState = {
     resultData: null,
     tweet: "",
     mediaUrl: "",
+    tag: "",
 };
 
 const twitterReducer = (state = defaultState, action) => {
@@ -18,6 +19,9 @@ const twitterReducer = (state = defaultState, action) => {
             return state;
         case "SET_TWITTER_URL":
             state.url = action.payload;
+            return state;
+        case "SET_TWEET_TAG":
+            state.tag = action.payload;
             return state;
         case "SET_TWITTER_TWEET":
             state.tweet = action.payload;
