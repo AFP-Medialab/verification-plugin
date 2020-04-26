@@ -47,7 +47,7 @@ console.log("nnnnn", keyword("covid_search_title"));
        <CustomTile text={keyword("covid_search_title")} />
 
         <Box m={3} />
-        <div class="gcse-search"></div>
+        <div className="gcse-search"></div>
         
       </Paper>
       
