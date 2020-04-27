@@ -32,8 +32,9 @@ import { saveSvgAsPng } from 'save-svg-as-png';
 import { CSVLink } from "react-csv";
 import Cytoscape from 'cytoscape';
 import Fcose from 'cytoscape-fcose';
-import { Sigma, RandomizeNodePositions, ForceAtlas2, RelativeSize } from 'react-sigma';
+import { Sigma, RandomizeNodePositions, ForceAtlas2, SigmaEnableWebGL } from 'react-sigma';
 import Plotly from 'plotly.js-dist';
+import RefreshGraph from './RefreshGraph';
 
 import CircularProgress from "@material-ui/core/CircularProgress";
 
@@ -1005,7 +1006,7 @@ export default function TwitterSnaResult(props) {
                     <ExpansionPanelSummary
                         expandIcon={<ExpandMoreIcon />}
                     >
-                        <Typography className={classes.heading}>{"Graph"}</Typography>
+                        <Typography className={classes.heading}>{"Graph 1"}</Typography>
                     </ExpansionPanelSummary>
                     <ExpansionPanelDetails>
                         {
@@ -1194,6 +1195,44 @@ export default function TwitterSnaResult(props) {
                                     </div>
                                 }
 
+                            </div>
+                        }
+                        {
+                            result.netGraph === undefined &&
+                            <CircularProgress className={classes.circularProgress} />
+                        }
+                        
+                    </ExpansionPanelDetails>
+                </ExpansionPanel>
+            }
+
+            {
+                <ExpansionPanel>
+                    <ExpansionPanelSummary
+                        expandIcon={<ExpandMoreIcon />}
+                    >
+                        <Typography className={classes.heading}>{"Graph 2"}</Typography>
+                    </ExpansionPanelSummary>
+                    <ExpansionPanelDetails>
+                        {
+                            result && result.netGraph.hashtagGraph &&
+                            <div style={{ width: '100%' }}>
+                                    <Sigma 
+                                        renderer={"svg"}
+                                        style={{ textAlign: 'left', width: '100%', height: '700px' }}
+                                        settings={{
+                                            labelThreshold: 13,
+                                            drawEdges: false,
+                                            drawEdgeLabels: false,
+                                            minNodeSize: 5,
+                                            maxNodeSize: 12
+                                        }}>
+                                        <RefreshGraph graph={result.netGraph.hashtagGraph}>
+                                        <RandomizeNodePositions>
+                                            <ForceAtlas2 iterationsPerRender={1} timeout={5000} />
+                                        </RandomizeNodePositions>
+                                        </RefreshGraph>
+                                    </Sigma>
                             </div>
                         }
                         {
