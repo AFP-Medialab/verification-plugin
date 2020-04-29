@@ -4,7 +4,8 @@ import tsv from "../../../../../LocalDictionary/components/Twitter.tsv";
 import {useDispatch} from "react-redux";
 import bigInt from "big-integer";
 import {
-    setTweetMedia, setTweetTag,
+    cleanTwitterState,
+    setTweetMedia,
     setTweetText,
     setTwitterLoading,
     setTwitterLoadingMessage, setTwitterUrl
@@ -47,10 +48,6 @@ export default function  useTwint() {
     const processResult = (tweetId, result) => {
         if (result!=null && result.hits.total.value == 1) {
             dispatch(setTweetText(result.hits.hits[0]._source.tweet));
-
-            if(result.hits.hits[0]._source.hashtags !=null ) {
-                dispatch(setTweetTag(result.hits.hits[0]._source.hashtags[0]));
-            }
 
             if(result.hits.hits[0]._source.photos != null){
                 dispatch(setTweetMedia(result.hits.hits[0]._source.photos[0]));

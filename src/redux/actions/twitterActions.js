@@ -45,13 +45,6 @@ export const setTweetText = (message) => {
     }
 }
 
-export const setTweetTag = (message) => {
-    return {
-        type: "SET_TWEET_TAG",
-        payload: message
-    }
-}
-
 export const setTweetMedia = (message) => {
     return {
         type: "SET_TWITTER_MEDIA",
