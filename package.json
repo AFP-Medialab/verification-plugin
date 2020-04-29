@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "big-integer": "^3.5.2",
     "@date-io/date-fns": "^1.3.13",
     "@material-ui/core": "^4.9.5",
     "@material-ui/icons": "^4.9.1",

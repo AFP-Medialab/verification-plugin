@@ -18,7 +18,6 @@ import twitterSnaReducer from "./tools/twitterSnaReducer";
 import videoRightsReducer from "./tools/videoRightsReducer";
 import cookiesReducer from "./cookiesReducers";
 import assistantReducer from "./assistantReducer";
-import twitterReducer from "./twitterReducer";
 
 
 const allReducers = combineReducers({
@@ -39,8 +38,7 @@ const allReducers = combineReducers({
     twitterSna : twitterSnaReducer,
     videoRights : videoRightsReducer,
     cookies : cookiesReducer,
-    assistant : assistantReducer,
-    twitter : twitterReducer,
+    assistant : assistantReducer
 });
 
 export default allReducers;

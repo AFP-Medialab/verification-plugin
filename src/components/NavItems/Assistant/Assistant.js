@@ -10,10 +10,7 @@ import 'tui-image-editor/dist/tui-image-editor.css'
 
 import useLoadLanguage from "../../../Hooks/useLoadLanguage";
 import AssistantResult from "./AssistantResult";
-import {
-    cleanAssistantState,
-    setAssistantResult
-} from "../../../redux/actions/tools/assistantActions";
+import {cleanAssistantState, setAssistantResult} from "../../../redux/actions/tools/assistantActions";
 import tsv from "../../../LocalDictionary/components/NavItems/tools/Assistant.tsv";
 
 import analysisIconOff from "../../NavBar/images/tools/video_logoOff.png";
@@ -27,24 +24,24 @@ import forensicIconOff from "../../NavBar/images/tools/forensic_logoOff.png";
 import twitterSnaIconOff from "../../NavBar/images/tools/twitter-sna-off.png";
 import {setError} from "../../../redux/actions/errorActions";
 import CloseResult from "../../Shared/CloseResult/CloseResult";
-import TwitterCard from "./Hooks/Twitter/TwitterCard";
-import {setTwitterTweet, setTwitterUrl} from "../../../redux/actions/twitterActions";
 
-
+/*
+* TODO: figure out weird navbar issue with translations
+*  try new tab/get all images and videos
+*  fix issue where not all redirects set url on state
+*  change
+* */
 const Assistant = () => {
 
     const classes = useMyStyles();
     const keyword = useLoadLanguage("components/NavItems/tools/Assistant.tsv", tsv);
+
     const resultUrl = useSelector(state => state.assistant.url);
     const resultData = useSelector(state => state.assistant.result);
-    const twitterUrl = useSelector(state => state.twitter.mediaUrl);
     const resultProcessUrl = useSelector(state => state.assistant.processUrl);
     const dispatch = useDispatch();
 
-    const [input, setInput] = useState(null);
-    const [mainUrl, setMainUrl] = useState(null);
-    const [isTweetLink, setTweetLink] = useState(false);
-    const [isFirstCollect, setFirstCollect] = useState(true);
+    const [input, setInput] = useState(resultUrl);
     const [urlToBeProcessed, setProcessUrl] = useState(resultProcessUrl);
 
     const getErrorText = (error) => {
@@ -53,39 +50,25 @@ const Assistant = () => {
         return keyword("please_give_a_correct_link");
     };
 
-    const checkIfTwitterStatus = (url) => {
-        return url.match("((https?:/{2})?(www.)?twitter.com/\\w{1,15}/status/\\d*)")!=null;
-    };
-
     const submitUrl = (src) => {
-        //submissionEvent(src);
-        if(checkIfTwitterStatus(src)){
-            setTweetLink(true);
-            setInput(src)
-        }
-        else {
-            setInput(src);
-        }
-    };
-
-    const getAssistantResults = () => {
+        submissionEvent(src);
         try {
-            let content_type = matchPattern(input, ctypePatterns);
-            let domain = matchPattern(input, domainPatterns);
-            let actions = loadActions(domain, content_type, input);
-            dispatch(setAssistantResult(input, actions, urlToBeProcessed, content_type));
+            let content_type = matchPattern(src, ctypePatterns);
+            let domain = matchPattern(src, domainPatterns);
+            let actions = loadActions(domain, content_type, src);
+            dispatch(setAssistantResult(src, actions, urlToBeProcessed, content_type));
         }
         catch(error){
             dispatch((setError(getErrorText(error))));
         }
-    }
+    };
 
     const submitUpload = (type) => {
         let content_type = type;
         let domain = DOMAIN.OWN;
 
         let actions = loadActions(domain, content_type, "");
-        dispatch(setAssistantResult("", actions, urlToBeProcessed, content_type));
+    dispatch(setAssistantResult("", actions, urlToBeProcessed, content_type));
     }
 
     const matchPattern = (to_match, patternArray) => {
@@ -122,17 +105,9 @@ const Assistant = () => {
         return possibleActions;
     }
 
-
     useEffect(() => {
-        if ((twitterUrl!="")) {
-            setInput(twitterUrl);
-            //setFirstCollect(false);
-       }
-    }, [twitterUrl]);
-
-    useEffect(() => {
-        if (input!=null) {getAssistantResults();}
-    }, [input]);
+        setInput(resultUrl);
+    }, [resultUrl]);
 
     const CTYPE = Object.freeze({
         VIDEO: "Video",
@@ -295,6 +270,7 @@ const Assistant = () => {
             <Paper className={classes.root}>
                 <CustomTile text={keyword("assistant_title")}/>
                 <Box m={5}/>
+
                 <div className={classes.assistantText} hidden={urlToBeProcessed!=null}>
                     <Typography variant={"h6"} >
                         <FaceIcon fontSize={"small"}/> {keyword("assistant_real_intro")}
@@ -307,15 +283,11 @@ const Assistant = () => {
                         {keyword("submit_own_file") || ""}
                     </Button>
                 </div>
+
                     { (urlToBeProcessed!=null) ?
                         (urlToBeProcessed) ?
                             (<div className={classes.assistantText} hidden={false}>
-                                <CloseResult onClick={() => {
-
-                                    setProcessUrl(null);
-                                    setTweetLink(false);
-                                    setFirstCollect(true);
-                                    dispatch(cleanAssistantState()); dispatch(setTwitterTweet("")); dispatch(setTwitterUrl(""));}}/>
+                                <CloseResult onClick={() => {setProcessUrl(null); dispatch(cleanAssistantState());}}/>
                                 <Typography variant={"h6"} >
                                     <FaceIcon fontSize={"small"}/> {keyword("assistant_intro")}
                                 </Typography>
@@ -326,16 +298,17 @@ const Assistant = () => {
                                     style={{margin: 8}}
                                     placeholder={""}
                                     fullWidth
-                                    onChange={e => {setMainUrl(e.target.value);}}
+                                    value={input}
+                                    onChange={e => setInput(e.target.value)}
                                 />
                                 <Box m={2}/>
-                                <Button variant="contained" color="primary" align={"center"} onClick={() => submitUrl(mainUrl)}>
+                                <Button variant="contained" color="primary" align={"center"} onClick={() => submitUrl(input)}>
                                     {keyword("button_submit") || ""}
                                 </Button>
                             </div>)
                             :
                             ( <div className={classes.assistantText}>
-                                <CloseResult onClick={() => {setProcessUrl(null); dispatch(cleanAssistantState()); }}/>
+                                <CloseResult onClick={() => {setProcessUrl(null); dispatch(cleanAssistantState());}}/>
                                 <Typography variant={"h6"} >
                                     <FaceIcon fontSize={"small"}/> {keyword("upload_type_question")}
                                 </Typography>
@@ -350,8 +323,6 @@ const Assistant = () => {
                         : null
                     }
             </Paper>
-            {(isTweetLink) ? (<TwitterCard url={input}/>) : null}
-            <Box m={3}/>
             {(resultData) ? (<AssistantResult/>) : null}
         </div>
     )

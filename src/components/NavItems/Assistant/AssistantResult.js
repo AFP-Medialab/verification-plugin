@@ -20,6 +20,7 @@ import tsv from "../../../LocalDictionary/components/NavItems/tools/Assistant.ts
 import AssistantImageResult from "./AssistantImageResult";
 import AssistantVideoResult from "./AssistantVideoResult";
 
+
 const AssistantResult = () => {
 
     const classes = useMyStyles();
@@ -30,43 +31,37 @@ const AssistantResult = () => {
     const resultIsImage = resultProcessType === "Image";
 
     const dispatch = useDispatch();
-
-    const checkIfTwitterStatus = (url) => {
-        return url.match("((https?:/{2})?(www.)?twitter.com/\\w{1,15}/status/\\d*)")!=null;
-    };
-
-    if (resultData.length == 0) {
-        if (checkIfTwitterStatus(resultUrl)) { return null }
-        else {
-            return (
-                <Paper>
-                    <Box m={3}/>
-                    <CloseResult onClick={() => dispatch(cleanAssistantState())}/>
-                    <Card><CardContent className={classes.assistantText}>
-                        <Typography variant={"h6"} align={"left"}>
-                            <FaceIcon size={"small"}/> {keyword("assistant_error")}
-                        </Typography>
-                    </CardContent></Card>
-                </Paper>
-            );
-        }
-        }
-    //}
+    
+    if (resultData.length == 0)
+        return (
+            <Paper>
+                <box m={3}/>
+                <CloseResult onClick={() => dispatch(cleanAssistantState())}/>
+                <Card><CardContent className={classes.assistantText}>
+                    <Typography variant={"h6"} align={"left"}>
+                        <FaceIcon size={"small"}/> {keyword("assistant_error")}
+                    </Typography>
+                </CardContent></Card>
+            </Paper>
+        );
 
     const handleClick = (path, resultUrl) => {
         history.push("/app/" + path + "/" + encodeURIComponent(resultUrl))
     };
 
+
+
     // some .. very nested code for results
     // explore cleaner code!
     return (
         <Paper className={classes.root}>
+            <CloseResult onClick={() => dispatch(cleanAssistantState())}/>
             <Grid container spacing={2}>
                 {(resultIsImage) ? <AssistantImageResult/> : <AssistantVideoResult/>}
                 <Grid  item xs = {6}>
                     <Card variant = "outlined">
                         <Box m = {2} >
-                            <Typography variant="h5" component="h2">
+                            <Typography variant="h5" component="h2" color="black">
                                 {keyword("things_you_can_do_header")}
                             </Typography>
                             <Typography className={classes.title} color="primary">
