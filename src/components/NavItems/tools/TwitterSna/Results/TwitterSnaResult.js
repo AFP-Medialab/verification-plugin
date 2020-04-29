@@ -1215,7 +1215,7 @@ export default function TwitterSnaResult(props) {
                     </ExpansionPanelSummary>
                     <ExpansionPanelDetails>
                         {
-                            result && result.netGraph.hashtagGraph &&
+                            result && result.netGraph &&
                             <div style={{ width: '100%' }}>
                                     <Sigma 
                                         renderer={"svg"}
@@ -1228,9 +1228,10 @@ export default function TwitterSnaResult(props) {
                                             maxNodeSize: 12
                                         }}>
                                         <RefreshGraph graph={result.netGraph.hashtagGraph}>
-                                        <RandomizeNodePositions>
+                                        <RandomizeNodePositions/>
+                                        {/* <RandomizeNodePositions>
                                             <ForceAtlas2 iterationsPerRender={1} timeout={5000} />
-                                        </RandomizeNodePositions>
+                                        </RandomizeNodePositions> */}
                                         </RefreshGraph>
                                     </Sigma>
                             </div>
