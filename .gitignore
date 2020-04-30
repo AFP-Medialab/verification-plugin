@@ -25,4 +25,4 @@ yarn-error.log*
 .env
 .zip
 yarn.lock
-
+package-lock.json
