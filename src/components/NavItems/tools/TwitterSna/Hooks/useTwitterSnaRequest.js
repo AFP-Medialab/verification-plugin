@@ -5,6 +5,7 @@ import { setTwitterSnaLoading, setTwitterSnaResult, setTwitterSnaLoadingMessage 
 import axios from "axios";
 import _ from "lodash";
 import { jLouvain } from 'jlouvain';
+import Infomap from "@mapequation/infomap";
 
 import {
   getPlotlyJsonDonuts,
@@ -286,39 +287,33 @@ function getInteractionOfUsernames(hits, types = ['reply_to', 'mentions']) {
   return results;
 }
 
-function createCommunity(graph) {
-  let nodeIdArr = [];
-  graph.nodes.forEach(node => {
-    nodeIdArr.push(node.id);
-  });
-  var community = jLouvain().nodes(nodeIdArr).edges(graph.edges);
-  var result  = community();
-  console.log("community: ", result);
-  
-  if (result === undefined) {
+function colorizeAndFilterCommunity(graph, commObj) {
+  if (commObj === undefined) {
     return graph;
   } else {
+    // Set communities for nodes
     graph.nodes.forEach(node => {
-      node.community = result[node.id];
+      node.community = commObj[node.id];
     });
   
-    let sizeOfCommunities = _.countBy(Object.values(result));
+    // Filter nodes
+    let sizeOfCommunities = _.countBy(Object.values(commObj));
     let communitiesHas1Node = Object.entries(sizeOfCommunities).filter(([, v]) => v === 1).map(([k]) => k);
-  
     let filteredNodes = graph.nodes.filter((node) =>
       ( !communitiesHas1Node.includes(node.community.toString()) || ( communitiesHas1Node.includes(node.community.toString()) && (node.size > 30) ))
     ); 
 
+    // Generate colors for communities
     let uniqCommunity = [...new Set( filteredNodes.map((node) => {return node.community;}) )]; 
     let colors = []
     uniqCommunity.forEach(com => {
       colors[com] = "#000000".replace(/0/g,function(){return (~~(Math.random()*16)).toString(16);});
     });
-  
     filteredNodes.forEach(node => {
-      node.color = colors[result[node.id]];
+      node.color = colors[commObj[node.id]];
     });
   
+    // Filter edges because of filtering nodes
     let filteredNodesId = filteredNodes.map((node) => { return node.id;});
     let filteredEdges = graph.edges.filter((edge) => _.difference([edge.source, edge.target], filteredNodesId).length ===0 );
   
@@ -757,9 +752,14 @@ const useTwitterSnaRequest = (request) => {
         result.csvArrHashtags = createCsvArrHashtags(responseArrayOf7[5]);
         result.cloudChart = createWordCloud(responseArrayOf7[7]);
         result.heatMap = createHeatMap(request, responseArrayOf7[5].tweets);
-        // result.netGraph = createHashtagGraph(request, responseArrayOf7[5]);
-        // debugger;
+        // result.netGraph = createHashtagGraphLouvain(request, responseArrayOf7[5]);
         result.netGraph = createHashtagGraph2(request, responseArrayOf7[5]);
+        // let [network, graph, insensativeHits] = createInputInfomap(responseArrayOf7[5]);
+        // let infomap = new Infomap()
+        //   .on("data", data => console.log(data))
+        //   .on("error", err => console.warn(err))
+        //   .on("finished", content => result.netGraph = createHashtagGraphInfomap(content, graph, insensativeHits, request));
+        // infomap.run(network);
       }
       else
         result.cloudChart = { title: "top_words_cloud_chart_title" };
@@ -860,7 +860,7 @@ const useTwitterSnaRequest = (request) => {
   }
 
 
-    function createHashtagGraph (request, hits) {
+    function createHashtagGraphLouvain (request, hits) {
 
       let insensativeHits = getInsensativeCase(hits, 'hashtags');
 
@@ -879,7 +879,15 @@ const useTwitterSnaRequest = (request) => {
         edges: edgesUserToUserOnHashtag
       }
 
-      let communityGraph = createCommunity(graph);
+      let nodeIdArr = [];
+      graph.nodes.forEach(node => {
+        nodeIdArr.push(node.id);
+      });
+      var community = jLouvain().nodes(nodeIdArr).edges(graph.edges);
+      var commObj  = community();
+      console.log("community: ", commObj);
+
+      let communityGraph = colorizeAndFilterCommunity(graph, commObj);
       let userInteraction = getInteractionOfUsernames(insensativeHits, ['mentions']);
       let legend = getLegendOfGraph(communityGraph, insensativeHits, request);
 
@@ -890,6 +898,62 @@ const useTwitterSnaRequest = (request) => {
                 userInteraction: userInteraction,
                 legend: legend
               };
+    }
+
+    function createHashtagGraphInfomap(infomapFinished, graph, insensativeHits, request) {
+
+      var commObj  = createCommunityInfomap(infomapFinished);
+      console.log("community: ", commObj);
+      let communityGraph = colorizeAndFilterCommunity(graph, commObj);
+      let userInteraction = getInteractionOfUsernames(insensativeHits, ['mentions']);
+      let legend = getLegendOfGraph(communityGraph, insensativeHits, request);
+
+      return { 
+                title: "Community graph", 
+                tmpdata: insensativeHits,
+                hashtagGraph: communityGraph,
+                userInteraction: userInteraction,
+                legend: legend
+              };
+    }
+
+    function createCommunityInfomap(content) {
+      let result = content.tree.split("\n").filter(line => !line.startsWith("#"))
+                                .map((line) => {return line.split(" ");})
+                                .filter(arr => arr.length > 1);
+      let commObj = {};
+      result.forEach(arr => commObj[arr[2].replace(/"/g, '')] = parseInt(arr[0].split(":")[0]) );
+      return commObj;
+    }
+
+    function createInputInfomap(hits) {
+      let insensativeHits = getInsensativeCase(hits, 'hashtags');
+
+      let nodesUsername = getNodesAsUsername(insensativeHits);
+      let edgesUserToUserOnHashtag = getEdgesUsernameToUsername(insensativeHits,request, "hashtags");
+      
+      let nodesSize = getSizeOfUsernames(insensativeHits, 'nretweets');
+      nodesUsername.map((node) => {
+        let size = nodesSize.find((e) => { return e.username === node.id }).size;
+        node.size = (size !== undefined) ? size : 1;
+        return node;
+      });
+
+      let graph = {
+        nodes: nodesUsername,
+        edges: edgesUserToUserOnHashtag
+      }
+
+      let nodeIdArr = graph.nodes.map((node) => {return node.id;}).sort();
+      let vertices = "*Vertices " + nodeIdArr.length.toString() + "\n";
+      for (const [index, element] of nodeIdArr.entries())
+        vertices += index.toString() + " " + element + "\n";
+      let edges = "*Edges " + graph.edges.length.toString() + "\n" + "# source target [weight]\n";
+      graph.edges.forEach(edge => 
+        edges += nodeIdArr.indexOf(edge.source) + " " + nodeIdArr.indexOf(edge.target) + " " + edge.weight + "\n"
+      );
+      let inputInfomap = "# A network in Pajek format\n" + vertices + edges;
+      return [inputInfomap, graph, insensativeHits];
     }
 
     function createHashtagGraph2 (request, hits) {
