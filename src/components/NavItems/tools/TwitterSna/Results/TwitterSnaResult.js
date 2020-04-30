@@ -1207,7 +1207,7 @@ export default function TwitterSnaResult(props) {
             }
 
             {
-                <ExpansionPanel>
+                {/* <ExpansionPanel>
                     <ExpansionPanelSummary
                         expandIcon={<ExpandMoreIcon />}
                     >
@@ -1229,9 +1229,6 @@ export default function TwitterSnaResult(props) {
                                         }}>
                                         <RefreshGraph graph={result.netGraph.hashtagGraph}>
                                         <RandomizeNodePositions/>
-                                        {/* <RandomizeNodePositions>
-                                            <ForceAtlas2 iterationsPerRender={1} timeout={5000} />
-                                        </RandomizeNodePositions> */}
                                         </RefreshGraph>
                                     </Sigma>
                             </div>
@@ -1242,7 +1239,7 @@ export default function TwitterSnaResult(props) {
                         }
                         
                     </ExpansionPanelDetails>
-                </ExpansionPanel>
+                </ExpansionPanel> */}
             }
 
             <Box m={3} />
