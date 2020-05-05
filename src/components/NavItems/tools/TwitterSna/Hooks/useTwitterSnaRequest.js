@@ -680,7 +680,7 @@ const useTwitterSnaRequest = (request) => {
         result.cloudChart = createWordCloud(responseArrayOf7[7]);
         result.heatMap = createHeatMap(request, responseArrayOf7[5].tweets);
         result.netGraph = createHashtagGraphLouvain(request, responseArrayOf7[5]);
-        result.netGraph = createHashtagGraph2(request, responseArrayOf7[5]);
+        // result.netGraph = createHashtagGraph2(request, responseArrayOf7[5]);
 
         // let [network, graph, insensativeHits] = createInputInfomap(responseArrayOf7[5], request);
         

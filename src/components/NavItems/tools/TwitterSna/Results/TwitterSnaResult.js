@@ -28,16 +28,15 @@ import ReactWordcloud from "react-wordcloud";
 import { select } from 'd3-selection';
 import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../../LocalDictionary/components/NavItems/tools/TwitterSna.tsv";
+import gexfFile from "../GexfFiles/graph-3872654592156710875.gexf";
 import { saveSvgAsPng } from 'save-svg-as-png';
 import { CSVLink } from "react-csv";
 import Cytoscape from 'cytoscape';
 import Fcose from 'cytoscape-fcose';
-import { Sigma, RandomizeNodePositions, ForceAtlas2, SigmaEnableWebGL } from 'react-sigma';
+import { Sigma, RandomizeNodePositions, ForceAtlas2, SigmaEnableWebGL, LoadGEXF, RelativeSize } from 'react-sigma';
 import Plotly from 'plotly.js-dist';
 import RefreshGraph from './RefreshGraph';
-
 import CircularProgress from "@material-ui/core/CircularProgress";
-
 Cytoscape.use(Fcose);
 
 export default function TwitterSnaResult(props) {
@@ -1189,42 +1188,28 @@ export default function TwitterSnaResult(props) {
                     </ExpansionPanelDetails>
                 </ExpansionPanel>
             }
-
-            {/* {
+            {
                 <ExpansionPanel>
                     <ExpansionPanelSummary
                         expandIcon={<ExpandMoreIcon />}
                     >
-                        <Typography className={classes.heading}>{"Graph 2"}</Typography>
+                        <Typography className={classes.heading}>{"Load GEXF file"}</Typography>
                     </ExpansionPanelSummary>
                     <ExpansionPanelDetails>
-                        {
-                            result && result.netGraph &&
-                            <div style={{ width: '100%' }}>
-                                    <Sigma 
-                                        renderer={"svg"}
-                                        style={{ textAlign: 'left', width: '100%', height: '700px' }}
-                                        settings={{
-                                            labelThreshold: 13,
-                                            drawEdges: false,
-                                            drawEdgeLabels: false,
-                                            minNodeSize: 5,
-                                            maxNodeSize: 12
-                                        }}>
-                                        <RefreshGraph graph={result.netGraph.hashtagGraph}>
-                                        <RandomizeNodePositions/>
-                                        </RefreshGraph>
-                                    </Sigma>
-                            </div>
-                        }
-                        {
-                            result.netGraph === undefined &&
-                            <CircularProgress className={classes.circularProgress} />
-                        }
-                        
+                        <Sigma graph={result.netGraph.hashtagGraph}
+                                renderer={"canvas"}
+                                style={{ textAlign: 'left', width: '100%', height: '700px' }}
+                        >
+                            <LoadGEXF path={gexfFile}>
+                                <RandomizeNodePositions>
+                                    <ForceAtlas2 iterationsPerRender={1} timeout={120000} />
+                                </RandomizeNodePositions>
+                                <RelativeSize initialSize={30}/>
+                            </LoadGEXF>
+                        </Sigma> 
                     </ExpansionPanelDetails>
                 </ExpansionPanel>
-            } */}
+            }
 
             <Box m={3} />
             {
