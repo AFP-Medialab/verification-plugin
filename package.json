@@ -51,7 +51,9 @@
     "save-svg-as-png": "^1.4.17",
     "styled-components": "^5.1.0",
     "tui-image-editor": "^3.9.0",
-    "yup": "^0.28.3"
+    "yup": "^0.28.3",
+    "moment": "2.24.0",
+    "moment-timezone": "0.5.28"
   },
   "scripts": {
     "start": "export NODE_OPTIONS=\"--max-old-space-size=4096\" & react-scripts start",
