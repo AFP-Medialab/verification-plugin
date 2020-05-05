@@ -38,7 +38,7 @@ import RefreshGraph from './RefreshGraph';
 
 import CircularProgress from "@material-ui/core/CircularProgress";
 
-Cytoscape.use( Fcose );
+Cytoscape.use(Fcose);
 
 export default function TwitterSnaResult(props) {
 
@@ -115,9 +115,8 @@ export default function TwitterSnaResult(props) {
         setGraphInteraction(null);
     }, [JSON.stringify(props.request), props.request])
 
-
     const displayTweetsOfWord = (word, callback) => {
-        
+
         let columns = [
             { title: keyword('sna_result_username'), field: 'username' },
             { title: keyword('sna_result_date'), field: 'date' },
@@ -127,7 +126,6 @@ export default function TwitterSnaResult(props) {
         ];
         let csvArr = "";
 
-        
         // word = word.replace(/_/g, " ");
         let resData = [];
         csvArr += keyword('sna_result_username') + "," +
@@ -137,12 +135,10 @@ export default function TwitterSnaResult(props) {
             keyword('sna_result_like_nb') + "," +
             keyword('elastic_url') + "\n";
 
-        
         result.tweets.forEach(tweetObj => {
-            
+
             if (tweetObj._source.tweet.toLowerCase().match(new RegExp('(^|((.)*[\.\(\)0-9\!\?\'\’\‘\"\:\,\/\\\%\>\<\«\»\ ^#]))' + word + '(([\.\(\)\!\?\'\’\‘\"\:\,\/\>\<\«\»\ ](.)*)|$)', "i"))) {
 
-                
                 var date = new Date(tweetObj._source.date);
                 //let tweet = getTweetWithClickableLink(tweetObj._source.tweet,tweetObj._source.link);
                 let tmpObj = {
@@ -165,7 +161,7 @@ export default function TwitterSnaResult(props) {
             csvArr: csvArr,
             word: word
         };
-        
+
         callback(tmp);
     }
 
@@ -209,7 +205,6 @@ export default function TwitterSnaResult(props) {
                         date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear() + '_' + date.getHours() + 'h' + date.getMinutes() + ',"' +
                         tweetObj._source.tweet + '",' + tweetObj._source.nretweets + "," + tweetObj._source.link + '\n';
 
-
                     if (minDate > objDate) {
                         minDate = objDate
                     }
@@ -230,13 +225,13 @@ export default function TwitterSnaResult(props) {
 
     function getDayAsString(dayInt) {
         return ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][dayInt];
-        }
-        
-        function getHourAsString(hourInt) {
-        return ['00:00', '01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00', '10:00', '11:00', 
-                '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00'][hourInt];
-        }
-    
+    }
+
+    function getHourAsString(hourInt) {
+        return ['00:00', '01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00', '10:00', '11:00',
+            '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00'][hourInt];
+    }
+
     const displayTweetsOfDateHeatMap = (data) => {
         let columns = [
             { title: keyword('sna_result_username'), field: 'username' },
@@ -247,7 +242,7 @@ export default function TwitterSnaResult(props) {
         let resData = [];
         let csvArr = keyword("sna_result_username") + ',' + keyword("sna_result_date") + ',' + keyword("sna_result_tweet") + ',' + keyword("sna_result_retweet_nb") + ',' + keyword("elastic_url") + '\n';
 
-        const filteredTweets = result.tweets.filter(function(tweetObj) {
+        const filteredTweets = result.tweets.filter(function (tweetObj) {
             const date = new Date(tweetObj._source.date);
             const day = getDayAsString(date.getDay());
             const hour = getHourAsString(date.getHours());
@@ -276,7 +271,7 @@ export default function TwitterSnaResult(props) {
             csvArr: csvArr,
         };
     };
-    
+
     const displayTweetsOfUser = (data, nbType, index) => {
         let columns = [
             { title: keyword('sna_result_date'), field: 'date' },
@@ -331,7 +326,6 @@ export default function TwitterSnaResult(props) {
             }
         });
 
-        
         let newRes = {
             data: resData,
             columns: columns,
@@ -386,7 +380,7 @@ export default function TwitterSnaResult(props) {
         setGraphInteraction(newRes);
     }
 
-    function downloadClick(csvArr, name, histo, type="tweets_") {
+    function downloadClick(csvArr, name, histo, type = "tweets_") {
         let encodedUri = encodeURIComponent(csvArr);
         let link = document.createElement("a");
         link.setAttribute("href", 'data:text/plain;charset=utf-8,' + encodedUri);
@@ -397,9 +391,8 @@ export default function TwitterSnaResult(props) {
     };
 
     function isInRange(pointDate, objDate, periode) {
-                
-        if (periode === "isHours")
-        {
+
+        if (periode === "isHours") {
             return (((pointDate.getDate() === objDate.getDate()
                 && pointDate.getHours() - 1 === objDate.getHours()))
                 && pointDate.getMonth() === objDate.getMonth()
@@ -409,8 +402,6 @@ export default function TwitterSnaResult(props) {
             return (pointDate - objDate) === 0;
         }
     }
-
-
 
     const onHistogramClick = (data) => {
         setHistoTweets(displayTweetsOfDate(data, true));
@@ -429,8 +420,6 @@ export default function TwitterSnaResult(props) {
         else {
             displayTweetsOfUser(data, nbType, index);
         }
-
-
 
     };
     const getTweetWithClickableLink = (cellData) => {
@@ -453,18 +442,17 @@ export default function TwitterSnaResult(props) {
         }
     }]
 
-
     const getCallback = useCallback((callback) => {
 
         return function (word, event) {
-            
+
             const isActive = callback !== "onWordMouseOut";
             const element = event.target;
             const text = select(element);
             text
                 .on("click", () => {
                     if (isActive) {
-                        
+
                         displayTweetsOfWord(word.text, setCloudTweets)
                     }
                 })
@@ -497,7 +485,7 @@ export default function TwitterSnaResult(props) {
         let element = document.getElementById(elementId);
 
         if (elementId === "top_words_cloud_chart") {
-            let name = filesNames + '.png';    
+            let name = filesNames + '.png';
             saveSvgAsPng(element.children[0].children[0], name, { backgroundColor: "white", scale: 2 });
         } else {
             let positionInfo = element.getBoundingClientRect();
@@ -505,8 +493,8 @@ export default function TwitterSnaResult(props) {
             let width = positionInfo.width;
             let name = "Hashtags" + filesNames.replace("WordCloud", "") + '.png';
             Plotly.downloadImage(elementId,
-                { format: 'png', width: width*1.2, height: height*1.2, filename: name }
-              );
+                { format: 'png', width: width * 1.2, height: height * 1.2, filename: name }
+            );
         }
     }
 
@@ -532,8 +520,8 @@ export default function TwitterSnaResult(props) {
             let width = positionInfo.width;
             let name = "Hashtags" + filesNames.replace("WordCloud", "") + '.svg';
             Plotly.downloadImage(elementId,
-                { format: 'svg', width: width*1.2, height: height*1.2, filename: name }
-              );
+                { format: 'svg', width: width * 1.2, height: height * 1.2, filename: name }
+            );
         }
 
     }
@@ -581,7 +569,7 @@ export default function TwitterSnaResult(props) {
         let neighborNodes = e.data.renderer.graph.adjacentNodes(selectedNode.id);
         let neighborEdges = e.data.renderer.graph.adjacentEdges(selectedNode.id);
         let directedNeighborEdges = neighborEdges.map((edge) => {
-            let newEdge= JSON.parse(JSON.stringify(edge));
+            let newEdge = JSON.parse(JSON.stringify(edge));
             if (newEdge.source !== selectedNode.id) {
                 newEdge.target = edge.source;
                 newEdge.source = selectedNode.id;
@@ -675,13 +663,11 @@ export default function TwitterSnaResult(props) {
                                         actions={goToTweetAction}
                                     />
                                 </div>
-                                            
                             }
                         </div>
                     </ExpansionPanelDetails>
                 </ExpansionPanel>
             }
-
             {
                 result && result.tweetCount &&
                 <ExpansionPanel>
@@ -746,14 +732,14 @@ export default function TwitterSnaResult(props) {
                                                             keyword('sna_result_download_png')
                                                         }
                                                     </Button>
-                                                    
+
                                                 </Grid>
                                                 <Grid item>
                                                     <Button
                                                         variant={"contained"}
                                                         color={"primary"}
                                                         onClick={() => downloadClick(result.csvArrHashtags.csvArr, result.csvArrHashtags.filename, false, "hashtags_")}>
-                                                            CSV
+                                                        CSV
                                                     </Button>
                                                 </Grid>
                                                 <Grid item>
@@ -770,15 +756,15 @@ export default function TwitterSnaResult(props) {
                                         }
                                         {
                                             (obj.json !== null) &&
-                                                <Plot
-                                                    data={obj.json}
-                                                    layout={obj.layout}
-                                                    config={obj.config}
-                                                    onClick={e => {
-                                                        onDonutsClick(e, obj.title, index)
-                                                    }}
-                                                    divId={obj.title}
-                                                />
+                                            <Plot
+                                                data={obj.json}
+                                                layout={obj.layout}
+                                                config={obj.config}
+                                                onClick={e => {
+                                                    onDonutsClick(e, obj.title, index)
+                                                }}
+                                                divId={obj.title}
+                                            />
                                         }
                                         {
                                             pieCharts[index] &&
@@ -880,7 +866,7 @@ export default function TwitterSnaResult(props) {
                                     <div id="top_words_cloud_chart" height={"100%"} width={"100%"}>
                                         <ReactWordcloud key={JSON.stringify(result)} options={result.cloudChart.options} callbacks={call} words={result.cloudChart.json} />
                                     </div>
-                                   
+
                                 }
                                 {
                                     cloudTweets &&
@@ -920,14 +906,11 @@ export default function TwitterSnaResult(props) {
                                 }
                             </Box>
                         }
-                       
                         {
                             result.cloudChart.json === undefined &&
                             <CircularProgress className={classes.circularProgress} />
                         }
                     </ExpansionPanelDetails>
-             
-                   
                 </ExpansionPanel>
             }
             {
@@ -1013,8 +996,7 @@ export default function TwitterSnaResult(props) {
                             result && result.netGraph &&
                             <div style={{ width: '100%' }}>
                                 {
-                                    (graphReset === null && graphClickNode === null &&
-                                        result.netGraph.hashtagGraph && result.netGraph.hashtagGraph.nodes.length !== 0) &&
+                                    (graphReset === null && graphClickNode === null && result.netGraph.hashtagGraph && result.netGraph.hashtagGraph.nodes.length !== 0) &&
                                     <Sigma graph={result.netGraph.hashtagGraph}
                                         renderer={"canvas"}
                                         style={{ textAlign: 'left', width: '100%', height: '700px' }}
@@ -1031,7 +1013,8 @@ export default function TwitterSnaResult(props) {
                                         </RandomizeNodePositions>
                                     </Sigma>
                                 }
-                                {graphReset !== null && graphClickNode !== null &&
+                                {
+                                    graphReset !== null && graphClickNode !== null &&
                                     <Sigma graph={graphClickNode}
                                         renderer={"canvas"}
                                         onClickStage={(e) => onClickStage(e)}
@@ -1047,7 +1030,8 @@ export default function TwitterSnaResult(props) {
                                     >
                                     </Sigma>
                                 }
-                                {graphReset !== null && graphClickNode === null &&
+                                {
+                                    graphReset !== null && graphClickNode === null &&
                                     <Sigma graph={graphReset}
                                         renderer={"canvas"}
                                         style={{ textAlign: 'left', width: '100%', height: '700px' }}
@@ -1062,7 +1046,7 @@ export default function TwitterSnaResult(props) {
                                     </Sigma>
                                 }
                                 {
-                                    result.netGraph.legend && result.netGraph.legend !== 0 && 
+                                    result.netGraph.legend && result.netGraph.legend !== 0 &&
                                     <div >
                                         <Paper >
                                             <ListSubheader component="div" style={{ fontSize: 18, fontWeight: 'bold' }}> Legend </ListSubheader>
@@ -1071,12 +1055,12 @@ export default function TwitterSnaResult(props) {
                                                     result.netGraph.legend.map((community) => {
                                                         return (
                                                             <ListItem key={community.communityColor + (Math.random())}>
-                                                            <ListItemIcon>
-                                                            <div className="legendcolor" 
-                                                                style={{backgroundColor:community.communityColor, width: 18, height: 18, borderRadius: '50%'}}>
-                                                            </div>
-                                                            </ListItemIcon>
-                                                            <ListItemText primary={ community.legend } />
+                                                                <ListItemIcon>
+                                                                    <div className="legendcolor"
+                                                                        style={{ backgroundColor: community.communityColor, width: 18, height: 18, borderRadius: '50%' }}>
+                                                                    </div>
+                                                                </ListItemIcon>
+                                                                <ListItemText primary={community.legend} />
                                                             </ListItem>
                                                         );
                                                     })
@@ -1139,7 +1123,7 @@ export default function TwitterSnaResult(props) {
                                                                 style={{ width: 65, height: 65 }} />
                                                         </ListItemAvatar>
                                                         <ListItemText primary={graphInteraction.username}
-                                                                        style={{ marginLeft: 10, color: '#428bca' }} />
+                                                            style={{ marginLeft: 10, color: '#428bca' }} />
                                                     </ListItem>
                                                 </List>
                                             </div>
@@ -1150,7 +1134,7 @@ export default function TwitterSnaResult(props) {
                                                             <TableCell colSpan={2}
                                                                 align="center"
                                                                 style={{ fontSize: 18, fontWeight: 'bold', borderBottom: 'none' }}
-                                                                >
+                                                            >
                                                                 Mostly conntected with:
                                                         </TableCell>
                                                         </TableRow>
@@ -1165,7 +1149,7 @@ export default function TwitterSnaResult(props) {
                                                             <TableCell colSpan={2}
                                                                 align="center"
                                                                 style={{ fontSize: 18, fontWeight: 'bold', borderBottom: 'none' }}
-                                                                >
+                                                            >
                                                                 Mostly interacted with:
                                                     </TableCell>
                                                         </TableRow>
@@ -1173,23 +1157,23 @@ export default function TwitterSnaResult(props) {
                                                 </Table>
                                             </TableContainer>
                                             <List className={classes.root} style={{ overflow: 'auto', maxHeight: 150 }}>
-                                            {
-                                                graphInteraction.data.length !== 0  && graphInteraction.data.map((row) => {
-                                                    return (
-                                                        <ListItem key={row.username}>
-                                                            <ListItemAvatar>
-                                                                <Avatar alt={row.username}
-                                                                    src={"http://avatars.io/twitter/" + row.username} />
-                                                            </ListItemAvatar>
-                                                            <ListItemText primary={row.username}
-                                                                secondary={"Interactions: " + row.nbInteraction} />
-                                                        </ListItem>
-                                                    );
-                                                })
-                                            }
-                                            {
-                                                graphInteraction.data.length === 0  && "No interaction"
-                                            }
+                                                {
+                                                    graphInteraction.data.length !== 0 && graphInteraction.data.map((row) => {
+                                                        return (
+                                                            <ListItem key={row.username}>
+                                                                <ListItemAvatar>
+                                                                    <Avatar alt={row.username}
+                                                                        src={"http://avatars.io/twitter/" + row.username} />
+                                                                </ListItemAvatar>
+                                                                <ListItemText primary={row.username}
+                                                                    secondary={"Interactions: " + row.nbInteraction} />
+                                                            </ListItem>
+                                                        );
+                                                    })
+                                                }
+                                                {
+                                                    graphInteraction.data.length === 0 && "No interaction"
+                                                }
                                             </List>
                                         </Paper>
                                     </div>
@@ -1201,7 +1185,7 @@ export default function TwitterSnaResult(props) {
                             result.netGraph === undefined &&
                             <CircularProgress className={classes.circularProgress} />
                         }
-                        
+
                     </ExpansionPanelDetails>
                 </ExpansionPanel>
             }
