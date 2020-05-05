@@ -1006,7 +1006,7 @@ export default function TwitterSnaResult(props) {
                     <ExpansionPanelSummary
                         expandIcon={<ExpandMoreIcon />}
                     >
-                        <Typography className={classes.heading}>{"Graph 1"}</Typography>
+                        <Typography className={classes.heading}>{"Graph"}</Typography>
                     </ExpansionPanelSummary>
                     <ExpansionPanelDetails>
                         {
@@ -1206,8 +1206,8 @@ export default function TwitterSnaResult(props) {
                 </ExpansionPanel>
             }
 
-            {
-                {/* <ExpansionPanel>
+            {/* {
+                <ExpansionPanel>
                     <ExpansionPanelSummary
                         expandIcon={<ExpandMoreIcon />}
                     >
@@ -1239,8 +1239,8 @@ export default function TwitterSnaResult(props) {
                         }
                         
                     </ExpansionPanelDetails>
-                </ExpansionPanel> */}
-            }
+                </ExpansionPanel>
+            } */}
 
             <Box m={3} />
             {
