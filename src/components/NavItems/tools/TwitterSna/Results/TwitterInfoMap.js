@@ -97,16 +97,15 @@ export default class TwitterInfoMap extends React.Component {
     }
 
     createHashtagGraphInfomap(infomapFinished, graph, insensitiveHits) {
-        var commObj = this.createCommunityInfomap(infomapFinished);
-        // console.log("community: ", commObj);
-        let communityGraph = this.colorizeAndFilterCommunity(graph, commObj);
+        var commObj = this.extractCommunityFromInfomapOutput(infomapFinished);
+        let commGraph = this.processCommunityGraph(graph, commObj);
         let userInteraction = this.getInteractionOfUsernames(insensitiveHits, ['mentions']);
-        let legend = this.getLegendOfGraph(communityGraph, insensitiveHits);
+        let legend = this.getLegendOfGraph(commGraph, insensitiveHits);
 
         return {
             title: "Community graph",
             tmpdata: insensitiveHits,
-            hashtagGraph: communityGraph,
+            hashtagGraph: commGraph,
             userInteraction: userInteraction,
             legend: legend
         };
@@ -183,41 +182,47 @@ export default class TwitterInfoMap extends React.Component {
         return results;
     }
 
-    colorizeAndFilterCommunity(graph, commObj) {
+    filterCommunities(graph, sizeToRm=1) {
+        if (graph.nodes[0].community === undefined) {
+            return graph;
+        } else {
+            let commSize = _.countBy(graph.nodes.map((node) => { return node.community; }));
+            let filteredComm = Object.entries(commSize).filter(([, v]) => v > sizeToRm).map(([k]) => k);
+            let filteredNodes = graph.nodes.filter(node => filteredComm.includes(node.community.toString()));
+            let filteredNodesId = filteredNodes.map((node) => { return node.id; });
+            let filteredEdges = graph.edges.filter(edge => _.difference([edge.source, edge.target], filteredNodesId).length === 0);
+            return {
+                nodes: filteredNodes,
+                edges: filteredEdges
+            }
+        }
+    }
+
+    generateColorsForCommunities(graph) {
+        let uniqCommunity = [...new Set(graph.nodes.map((node) => { return node.community; }))];
+        let colors = []
+        uniqCommunity.forEach(com => {
+            colors[com] = "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); });
+        });
+        graph.nodes.forEach(node => {
+            node.color = colors[node.community];
+        });
+        return graph;
+    }
+
+    processCommunityGraph(graph, commObj) {
         if (commObj === undefined) {
             return graph;
         } else {
             // Set communities for nodes
-            graph.nodes.forEach(node => {
-                node.community = commObj[node.id];
-            });
-
-            // Filter nodes
-            let sizeOfCommunities = _.countBy(Object.values(commObj));
-            let communitiesHas1Node = Object.entries(sizeOfCommunities).filter(([, v]) => v === 1).map(([k]) => k);
-            let filteredNodes = graph.nodes.filter((node) =>
-                (!communitiesHas1Node.includes(node.community.toString()) || (communitiesHas1Node.includes(node.community.toString()) && (node.size > 30)))
-            );
-
-            // Generate colors for communities
-            let uniqCommunity = [...new Set(filteredNodes.map((node) => { return node.community; }))];
-            let colors = []
-            uniqCommunity.forEach(com => {
-                colors[com] = "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); });
-            });
-            filteredNodes.forEach(node => {
-                node.color = colors[commObj[node.id]];
-            });
-
-            // Filter edges because of filtering nodes
-            let filteredNodesId = filteredNodes.map((node) => { return node.id; });
-            let filteredEdges = graph.edges.filter((edge) => _.difference([edge.source, edge.target], filteredNodesId).length === 0);
-
-            return { nodes: filteredNodes, edges: filteredEdges };
+            graph.nodes.forEach(node => { node.community = commObj[node.id];});
+            let filteredGraph = this.filterCommunities(graph, 1);
+            let coloredGraph = this.generateColorsForCommunities(filteredGraph);
+            return coloredGraph;
         }
     }
 
-    createCommunityInfomap(content) {
+    extractCommunityFromInfomapOutput(content) {
         let result = content.tree.split("\n").filter(line => !line.startsWith("#"))
             .map((line) => { return line.split(" "); })
             .filter(arr => arr.length > 1);

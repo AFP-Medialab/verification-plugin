@@ -205,38 +205,44 @@ function getInteractionOfUsernames(hits, types = ['reply_to', 'mentions']) {
   return results;
 }
 
-function colorizeAndFilterCommunity(graph, commObj) {
+function processCommunityGraph(graph, commObj) {
   if (commObj === undefined) {
     return graph;
   } else {
-    // Set communities for nodes
-    graph.nodes.forEach(node => {
-      node.community = commObj[node.id];
-    });
-  
-    // Filter nodes
-    let sizeOfCommunities = _.countBy(Object.values(commObj));
-    let communitiesHas1Node = Object.entries(sizeOfCommunities).filter(([, v]) => v === 1).map(([k]) => k);
-    let filteredNodes = graph.nodes.filter((node) =>
-      ( !communitiesHas1Node.includes(node.community.toString()) || ( communitiesHas1Node.includes(node.community.toString()) && (node.size > 30) ))
-    ); 
-
-    // Generate colors for communities
-    let uniqCommunity = [...new Set( filteredNodes.map((node) => {return node.community;}) )]; 
-    let colors = []
-    uniqCommunity.forEach(com => {
-      colors[com] = "#000000".replace(/0/g,function(){return (~~(Math.random()*16)).toString(16);});
-    });
-    filteredNodes.forEach(node => {
-      node.color = colors[commObj[node.id]];
-    });
-  
-    // Filter edges because of filtering nodes
-    let filteredNodesId = filteredNodes.map((node) => { return node.id;});
-    let filteredEdges = graph.edges.filter((edge) => _.difference([edge.source, edge.target], filteredNodesId).length ===0 );
-  
-    return {nodes: filteredNodes, edges: filteredEdges};
+      // Set communities for nodes
+      graph.nodes.forEach(node => { node.community = commObj[node.id];});
+      let filteredGraph = filterCommunities(graph, 1);
+      let coloredGraph = generateColorsForCommunities(filteredGraph);
+      return coloredGraph;
   }
+}
+
+function filterCommunities(graph, sizeToRm=1) {
+  if (graph.nodes[0].community === undefined) {
+      return graph;
+  } else {
+      let commSize = _.countBy(graph.nodes.map((node) => { return node.community; }));
+      let filteredComm = Object.entries(commSize).filter(([, v]) => v > sizeToRm).map(([k]) => k);
+      let filteredNodes = graph.nodes.filter(node => filteredComm.includes(node.community.toString()));
+      let filteredNodesId = filteredNodes.map((node) => { return node.id; });
+      let filteredEdges = graph.edges.filter(edge => _.difference([edge.source, edge.target], filteredNodesId).length === 0);
+      return {
+          nodes: filteredNodes,
+          edges: filteredEdges
+      }
+  }
+}
+
+function generateColorsForCommunities(graph) {
+  let uniqCommunity = [...new Set(graph.nodes.map((node) => { return node.community; }))];
+  let colors = []
+  uniqCommunity.forEach(com => {
+      colors[com] = "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); });
+  });
+  graph.nodes.forEach(node => {
+      node.color = colors[node.community];
+  });
+  return graph;
 }
 
 function createCommunity2(graph, filteredHits) {
@@ -748,16 +754,14 @@ const useTwitterSnaRequest = (request) => {
       });
       var community = jLouvain().nodes(nodeIdArr).edges(graph.edges);
       var commObj  = community();
-      console.log("community: ", commObj);
-
-      let communityGraph = colorizeAndFilterCommunity(graph, commObj);
+      let commGraph = processCommunityGraph(graph, commObj);
       let userInteraction = getInteractionOfUsernames(insensativeHits, ['mentions']);
-      let legend = getLegendOfGraph(communityGraph, insensativeHits, request);
+      let legend = getLegendOfGraph(commGraph, insensativeHits, request);
 
       return { 
                 title: "Community graph", 
                 tmpdata: insensativeHits,
-                hashtagGraph: communityGraph,
+                hashtagGraph: commGraph,
                 userInteraction: userInteraction,
                 legend: legend
               };
