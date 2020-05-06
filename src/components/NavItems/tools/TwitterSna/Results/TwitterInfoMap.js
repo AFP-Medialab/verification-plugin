@@ -3,13 +3,20 @@ import { Sigma, RandomizeNodePositions, ForceAtlas2 } from "react-sigma";
 import Infomap from "@mapequation/infomap";
 import _ from "lodash";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import List from '@material-ui/core/List';
+import ListSubheader from '@material-ui/core/ListSubheader';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import { Paper } from "@material-ui/core";
 // import SigmaForceUpdate from "../../../../Shared/Graph/SigmaForceUpdate"
 
 export default class TwitterInfoMap extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            hashtagGraph: undefined
+            hashtagGraph: undefined,
+            legend: undefined
         };
         this.network = "";
         this.graph = {
@@ -77,7 +84,8 @@ export default class TwitterInfoMap extends React.Component {
         if (this.infomapContent === undefined || this.infomapContent.net !== content.net) {
             let newNetGraph = this.createHashtagGraphInfomap(content, graph, insensitiveHits);
             this.setState({
-                hashtagGraph: newNetGraph.hashtagGraph
+                hashtagGraph: newNetGraph.hashtagGraph,
+                legend: newNetGraph.legend
             });
             this.infomapContent = content;
 
@@ -106,11 +114,11 @@ export default class TwitterInfoMap extends React.Component {
 
     getLegendOfGraph(communityGraph, hits) {
         let sizeCommunities = _.countBy(communityGraph.nodes.map(node => { return node.color; }));
-        let legends = [];
+        let legend = [];
         if (sizeCommunities.undefined === undefined) {
             let sortedBySize = _.fromPairs(_.sortBy(_.toPairs(sizeCommunities), 1).reverse());
             let communitiesColor = Object.keys(sortedBySize);
-            legends = communitiesColor.map((color) => {
+            legend = communitiesColor.map((color) => {
                 let nodesId = communityGraph.nodes.filter(node => node.color === color).map((node) => { return node.id });
 
                 let hashtagsCommunity = [];
@@ -132,7 +140,7 @@ export default class TwitterInfoMap extends React.Component {
             });
         } else {
             communityGraph.nodes.map((node) => { node.color = "#3388AA"; return node; });
-            legends = [
+            legend = [
                 {
                     communityColor: "#3388AA",
                     legend: "Nodes (no community found)"
@@ -140,7 +148,7 @@ export default class TwitterInfoMap extends React.Component {
             ]
         }
 
-        return legends;
+        return legend;
     }
 
     getInteractionOfUsernames(hits, types = ['reply_to', 'mentions']) {
@@ -386,6 +394,27 @@ export default class TwitterInfoMap extends React.Component {
                                     <ForceAtlas2 iterationsPerRender={1} timeout={120000} />
                                 </RandomizeNodePositions>
                             </Sigma>
+                            <div >
+                                <Paper >
+                                    <ListSubheader component="div" style={{ fontSize: 18, fontWeight: 'bold' }}> Legend </ListSubheader>
+                                    <List >
+                                        {
+                                            this.state.legend.map((community) => {
+                                                return (
+                                                    <ListItem key={community.communityColor + (Math.random())}>
+                                                        <ListItemIcon>
+                                                            <div className="legendcolor"
+                                                                style={{ backgroundColor: community.communityColor, width: 18, height: 18, borderRadius: '50%' }}>
+                                                            </div>
+                                                        </ListItemIcon>
+                                                        <ListItemText primary={community.legend} />
+                                                    </ListItem>
+                                                );
+                                            })
+                                        }
+                                    </List>
+                                </Paper>
+                            </div>
                         </div>
             )
         } else {
