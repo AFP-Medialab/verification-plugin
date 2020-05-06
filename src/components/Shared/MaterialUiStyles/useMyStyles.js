@@ -1,5 +1,6 @@
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import {green} from "@material-ui/core/colors";
+import React from "react";
 
 const drawerWidth = 200;
 
@@ -351,6 +352,21 @@ const useMyStyles = makeStyles(theme => ({
         width: "100%",
         marginBottom: 2,
         textAlign: "left",
+    },
+    twitterIcon: {
+        color: theme.palette.secondary.main,
+        position: "relative",
+        top: theme.spacing.unit,
+        width: theme.typography.h5.fontSize,
+        height: theme.typography.h5.fontSize,
+        marginRight: 3
+    },
+    twitterHeading: {
+        fontSize: theme.typography.h5.fontSize,
+        color: theme.palette.primary.main,
+        textAlign: "left",
+        marginBottom: 25
     }
+
 }));
 export default useMyStyles;
