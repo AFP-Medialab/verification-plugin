@@ -443,62 +443,6 @@ function getInsensativeCase(hits, field='hashtags') {
   };
 }
 
-function createHashtagGraphInfomap(infomapFinished, graph, insensativeHits, request) {
-
-  var commObj  = createCommunityInfomap(infomapFinished);
-  console.log("community: ", commObj);
-  let communityGraph = colorizeAndFilterCommunity(graph, commObj);
-  let userInteraction = getInteractionOfUsernames(insensativeHits, ['mentions']);
-  let legend = getLegendOfGraph(communityGraph, insensativeHits, request);
-
-  return { 
-            title: "Community graph", 
-            tmpdata: insensativeHits,
-            hashtagGraph: communityGraph,
-            userInteraction: userInteraction,
-            legend: legend
-          };
-}
-
-function createCommunityInfomap(content) {
-  let result = content.tree.split("\n").filter(line => !line.startsWith("#"))
-                            .map((line) => {return line.split(" ");})
-                            .filter(arr => arr.length > 1);
-  let commObj = {};
-  result.forEach(arr => commObj[arr[2].replace(/"/g, '')] = parseInt(arr[0].split(":")[0]) );
-  return commObj;
-}
-
-function createInputInfomap(hits, request) {
-  let insensativeHits = getInsensativeCase(hits, 'hashtags');
-
-  let nodesUsername = getNodesAsUsername(insensativeHits);
-  let edgesUserToUserOnHashtag = getEdgesUsernameToUsername(insensativeHits, request, "hashtags");
-  
-  let nodesSize = getSizeOfUsernames(insensativeHits, 'nretweets');
-  nodesUsername.map((node) => {
-    let size = nodesSize.find((e) => { return e.username === node.id }).size;
-    node.size = (size !== undefined) ? size : 1;
-    return node;
-  });
-
-  let graph = {
-    nodes: nodesUsername,
-    edges: edgesUserToUserOnHashtag
-  }
-
-  let nodeIdArr = graph.nodes.map((node) => {return node.id;}).sort();
-  let vertices = "*Vertices " + nodeIdArr.length.toString() + "\n";
-  for (const [index, element] of nodeIdArr.entries())
-    vertices += index.toString() + " " + element + "\n";
-  let edges = "*Edges " + graph.edges.length.toString() + "\n" + "# source target [weight]\n";
-  graph.edges.forEach(edge => 
-    edges += nodeIdArr.indexOf(edge.source) + " " + nodeIdArr.indexOf(edge.target) + " " + edge.weight + "\n"
-  );
-  let inputInfomap = "# A network in Pajek format\n" + vertices + edges;
-  return [inputInfomap, graph, insensativeHits];
-}
-
 const useTwitterSnaRequest = (request) => {
   // console.log("useTwitterSnaRequest request: ", request);
 
@@ -508,15 +452,6 @@ const useTwitterSnaRequest = (request) => {
   const dispatch = useDispatch();
   const authenticatedRequest = useAuthenticatedRequest();
   const userAuthenticated = useSelector(state => state.userSession && state.userSession.userAuthenticated);
-
-
-  const onFinishedInfomap = useCallback((result, content, graph, insensativeHits, request, final) => {
-    console.log("Finished event");
-    let commGraph = createHashtagGraphInfomap(content, graph, insensativeHits, request);
-    result.netGraph = commGraph;
-    dispatch(setTwitterSnaResult(request, result, false, true));
-    return result;
-  }, [JSON.stringify(request), request]);
 
   useEffect(() => {
     // console.log("useTwitterSnaRequest.useEffect request: ", request);
@@ -681,14 +616,8 @@ const useTwitterSnaRequest = (request) => {
         result.heatMap = createHeatMap(request, responseArrayOf7[5].tweets);
         result.netGraph = createHashtagGraphLouvain(request, responseArrayOf7[5]);
         // result.netGraph = createHashtagGraph2(request, responseArrayOf7[5]);
-
-        // let [network, graph, insensativeHits] = createInputInfomap(responseArrayOf7[5], request);
         
-        // let infomap = new Infomap()
-        // //   .on("data", data => console.log(data))
-        // //   .on("error", err => console.warn(err))
-        //   .on("finished", content => onFinishedInfomap(result, content, graph, insensativeHits, request, final));
-        // infomap.run(network);
+        result.hits = responseArrayOf7[5];
       }
       else
         result.cloudChart = { title: "top_words_cloud_chart_title" };

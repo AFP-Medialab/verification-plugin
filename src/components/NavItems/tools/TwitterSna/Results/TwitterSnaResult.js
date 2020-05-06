@@ -36,6 +36,7 @@ import Fcose from 'cytoscape-fcose';
 import { Sigma, RandomizeNodePositions, ForceAtlas2, SigmaEnableWebGL, LoadGEXF, RelativeSize } from 'react-sigma';
 import Plotly from 'plotly.js-dist';
 import RefreshGraph from './RefreshGraph';
+import TwitterInfoMap from "./TwitterInfoMap";
 import CircularProgress from "@material-ui/core/CircularProgress";
 Cytoscape.use(Fcose);
 
@@ -988,11 +989,11 @@ export default function TwitterSnaResult(props) {
                     <ExpansionPanelSummary
                         expandIcon={<ExpandMoreIcon />}
                     >
-                        <Typography className={classes.heading}>{"Graph"}</Typography>
+                        <Typography className={classes.heading}>{"Graph using Louvain"}</Typography>
                     </ExpansionPanelSummary>
                     <ExpansionPanelDetails>
                         {
-                            result && result.netGraph &&
+                            result && result.netGraph && result.netGraph.hashtagGraph &&
                             <div style={{ width: '100%' }}>
                                 {
                                     (graphReset === null && graphClickNode === null && result.netGraph.hashtagGraph && result.netGraph.hashtagGraph.nodes.length !== 0) &&
@@ -1190,13 +1191,27 @@ export default function TwitterSnaResult(props) {
             }
             {
                 <ExpansionPanel>
+                    <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+                        <Typography>Graph using Infomap</Typography>
+                    </ExpansionPanelSummary>
+                    <ExpansionPanelDetails>
+                    {
+                        result && result.hits &&
+                        <TwitterInfoMap result={result} request={props.request} />
+                    }
+                    </ExpansionPanelDetails>
+                </ExpansionPanel>
+                
+            }
+            {
+                <ExpansionPanel>
                     <ExpansionPanelSummary
                         expandIcon={<ExpandMoreIcon />}
                     >
                         <Typography className={classes.heading}>{"Load GEXF file"}</Typography>
                     </ExpansionPanelSummary>
                     <ExpansionPanelDetails>
-                        <Sigma graph={result.netGraph.hashtagGraph}
+                        <Sigma
                                 renderer={"canvas"}
                                 style={{ textAlign: 'left', width: '100%', height: '700px' }}
                         >
