@@ -1209,7 +1209,7 @@ export default function TwitterSnaResult(props) {
                     </ExpansionPanelSummary>
                     <ExpansionPanelDetails>
                     {
-                        result && result.hits &&
+                        result && result.tweets &&
                         <TwitterInfoMap result={result} request={props.request} />
                     }
                     </ExpansionPanelDetails>

@@ -621,8 +621,6 @@ const useTwitterSnaRequest = (request) => {
         result.heatMap = createHeatMap(request, responseArrayOf7[5].tweets);
         result.netGraph = createHashtagGraphLouvain(request, responseArrayOf7[5]);
         // result.netGraph = createHashtagGraph2(request, responseArrayOf7[5]);
-        
-        result.hits = responseArrayOf7[5];
       }
       else
         result.cloudChart = { title: "top_words_cloud_chart_title" };
@@ -746,6 +744,8 @@ const useTwitterSnaRequest = (request) => {
         nodes: nodesUsername,
         edges: edgesUserToUserOnHashtag
       }
+
+      console.log("Louvain graph: ", graph);
 
       let nodeIdArr = [];
       graph.nodes.forEach(node => {

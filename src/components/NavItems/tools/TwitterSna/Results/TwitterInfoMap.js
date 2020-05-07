@@ -23,12 +23,7 @@ export default class TwitterInfoMap extends React.Component {
             nodes: undefined,
             edges: undefined
         };
-        this.insensitiveHits = {
-            value: undefined,
-            retweets: undefined,
-            likes: undefined,
-            tweets: undefined
-        }
+        this.lcTweets = undefined;
         this.infomapContent = undefined;
         this.infomap = new Infomap();
     }
@@ -36,27 +31,21 @@ export default class TwitterInfoMap extends React.Component {
     // START LIFE CYCLES METHODS
 
     componentDidMount() {
-        console.log("COMPONENT DID MOUNT");
-        this.infomap.on("data", data => console.log("DATA CREATED"))
+        this.infomap.on("data", data => console.log("Infomap data created"))
             .on("error", err => console.warn(err))
-            .on("finished", content => this.handleInfoMapData(content, this.graph, this.insensitiveHits));
+            .on("finished", content => this.handleInfoMapData(content, this.graph, this.lcTweets));
 
-        this.insensitiveHits = this.createInputInfomap(this.props.result.hits);
+        this.lcTweets = this.createInputInfomap(this.props.result.tweets);
         this.infomap.run(this.network);
     }
 
     componentDidUpdate() {
-        console.log("COMPONENT DID UPDATE");
-
-        console.log("HITS: ");
-        console.log(this.props.result.hits);
-
-        this.insensitiveHits = this.createInputInfomap(this.props.result.hits);
+        this.lcTweets = this.createInputInfomap(this.props.result.tweets);
         this.infomap.run(this.network);
     }
 
     shouldComponentUpdate(newProps, newState) {
-        if (this.areHitsEqual(this.props.result.hits, newProps.result.hits) === false
+        if (this.areTweetsEqual(this.props.result.tweets, newProps.result.tweets) === false
             || _.isEqual(this.state.hashtagGraph, newState.hashtagGraph) === false) {
             return true;
         }
@@ -66,52 +55,44 @@ export default class TwitterInfoMap extends React.Component {
 
     // OTHER METHODS
 
-    areHitsEqual(hitsFromCurrentState, hitsFromNewState) {
-        if (hitsFromCurrentState.likes === hitsFromNewState.likes) {
-            if (hitsFromCurrentState.retweets === hitsFromNewState.retweets) {
-                if (hitsFromCurrentState.value === hitsFromNewState.value) {
-                    if (hitsFromCurrentState.tweets.length === hitsFromNewState.tweets.length) {
-                        return true;
-                    }
-                }
-            }
+    areTweetsEqual(tweetsFromCurrentState, tweetsFromNewState) {
+        if (tweetsFromCurrentState.length === tweetsFromNewState.length) {
+            return true;
         }
-
         return false;
     }
 
-    handleInfoMapData(content, graph, insensitiveHits) {
+    handleInfoMapData(content, graph, lcTweets) {
         if (this.infomapContent === undefined || this.infomapContent.net !== content.net) {
-            let newNetGraph = this.createHashtagGraphInfomap(content, graph, insensitiveHits);
+            let newNetGraph = this.createHashtagGraphInfomap(content, graph, lcTweets);
             this.setState({
                 hashtagGraph: newNetGraph.hashtagGraph,
                 legend: newNetGraph.legend
             });
             this.infomapContent = content;
 
-            console.log("NEW STATE: Force render");
             // console.log(this.state.hashtagGraph);
 
             // this.forceUpdate();
         }
     }
 
-    createHashtagGraphInfomap(infomapFinished, graph, insensitiveHits) {
+    createHashtagGraphInfomap(infomapFinished, graph, lcTweets) {
         var commObj = this.extractCommunityFromInfomapOutput(infomapFinished);
         let commGraph = this.processCommunityGraph(graph, commObj);
-        let userInteraction = this.getInteractionOfUsernames(insensitiveHits, ['mentions']);
-        let legend = this.getLegendOfGraph(commGraph, insensitiveHits);
+        let userInteraction = this.getInteractionOfUsernames(lcTweets, ['mentions']);
+        let legend = this.getLegendOfGraph(commGraph, lcTweets);
 
         return {
             title: "Community graph",
-            tmpdata: insensitiveHits,
+            tmpdata: lcTweets,
             hashtagGraph: commGraph,
             userInteraction: userInteraction,
             legend: legend
         };
     }
 
-    getLegendOfGraph(communityGraph, hits) {
+    getLegendOfGraph(communityGraph, tweets) {
         let sizeCommunities = _.countBy(communityGraph.nodes.map(node => { return node.color; }));
         let legend = [];
         if (sizeCommunities.undefined === undefined) {
@@ -122,7 +103,7 @@ export default class TwitterInfoMap extends React.Component {
 
                 let hashtagsCommunity = [];
                 nodesId.forEach(nodeId => {
-                    let tweetsByUser = hits.tweets.filter(tweet => tweet._source.username === nodeId);
+                    let tweetsByUser = tweets.filter(tweet => tweet._source.username === nodeId);
                     let hashtagsUser = tweetsByUser.filter(tweet => tweet._source.hashtags !== undefined)
                         .map((tweet) => { return tweet._source.hashtags; });
                     hashtagsCommunity.push(hashtagsUser.flat());
@@ -150,8 +131,8 @@ export default class TwitterInfoMap extends React.Component {
         return legend;
     }
 
-    getInteractionOfUsernames(hits, types = ['reply_to', 'mentions']) {
-        let interactionsTweets = hits.tweets.map((tweet) => {
+    getInteractionOfUsernames(tweets, types = ['reply_to', 'mentions']) {
+        let interactionsTweets = tweets.map((tweet) => {
             let username = tweet._source.username;
             let interactedEntities = [];
             types.forEach(type => {
@@ -231,13 +212,13 @@ export default class TwitterInfoMap extends React.Component {
         return commObj;
     }
 
-    createInputInfomap(hits) {
-        let insensitiveHits = this.getInsensitiveCase(hits, 'hashtags');
+    createInputInfomap(tweets) {
+        let lcTweets = this.lowercaseHashtagInTweets(tweets, 'hashtags');
 
-        let nodesUsername = this.getNodesAsUsername(insensitiveHits);
-        let edgesUserToUserOnHashtag = this.getEdgesUsernameToUsername(insensitiveHits, "hashtags");
+        let nodesUsername = this.getNodesAsUsername(lcTweets);
+        let edgesUserToUserOnHashtag = this.getEdgesUsernameToUsernameOnHashtagsExcept1st(lcTweets, this.props.request, "hashtags");
 
-        let nodesSize = this.getSizeOfUsernames(insensitiveHits, 'nretweets');
+        let nodesSize = this.getSizeOfUsernames(lcTweets, 'nretweets');
         nodesUsername.map((node) => {
             let size = nodesSize.find((e) => { return e.username === node.id }).size;
             node.size = (size !== undefined) ? size : 1;
@@ -249,6 +230,8 @@ export default class TwitterInfoMap extends React.Component {
             edges: edgesUserToUserOnHashtag
         }
 
+        console.log("Info graph: ", this.graph);
+
         let nodeIdArr = this.graph.nodes.map((node) => { return node.id; }).sort();
         let vertices = "*Vertices " + nodeIdArr.length.toString() + "\n";
         for (const [index, element] of nodeIdArr.entries())
@@ -258,11 +241,11 @@ export default class TwitterInfoMap extends React.Component {
             edges += nodeIdArr.indexOf(edge.source) + " " + nodeIdArr.indexOf(edge.target) + " " + edge.weight + "\n"
         );
         this.network = "# A network in Pajek format\n" + vertices + edges;
-        return insensitiveHits;
+        return lcTweets;
     }
 
-    getInsensitiveCase(hits, field = 'hashtags') {
-        let newTweets = hits.tweets.map((tweet) => {
+    lowercaseHashtagInTweets(tweets, field = 'hashtags') {
+        let newTweets = tweets.map((tweet) => {
             let tweetObj = JSON.parse(JSON.stringify(tweet));
             if (tweetObj._source[field] !== undefined) {
                 if (Array.isArray(tweetObj._source[field])) {
@@ -276,47 +259,44 @@ export default class TwitterInfoMap extends React.Component {
             }
             return tweetObj;
         });
-        return {
-            value: hits.value,
-            retweets: hits.retweets,
-            likes: hits.likes,
-            tweets: newTweets
-        };
+        return newTweets;
     }
 
-    getNodesAsUsername(hits) {
-        let nodes = this.getUniqValuesOfField(hits, "username").map((val) => { return { id: val, label: val } });
+    getNodesAsUsername(tweets) {
+        let nodes = this.getUniqValuesOfField(tweets, "username").map((val) => { return { id: val, label: val } });
         return nodes;
     }
 
-    getEdgesUsernameToUsername(hits, fieldArr = "hashtags") {
+    getEdgesUsernameToUsernameOnHashtagsExcept1st(tweets, request, fieldArr = "hashtags") {
         // Get edges between users based on each value of the given fieldArr
-        let uniqElements = this.getUniqValuesOfField(hits, fieldArr);
-
+        let rm1stHashtagTweets = tweets.filter(tweet => tweet._source.hashtags.length > 1)
+                                          .map((tweet) => {tweet._source.hashtags.splice(0, 1); return tweet;});
+        let uniqElements = this.getUniqValuesOfField(rm1stHashtagTweets, fieldArr);
+        
         if (fieldArr === "hashtags") {
-            let requestedHashtags = this.props.request.keywordList.filter((element) => element.startsWith("#"))
-            let toRemove = (requestedHashtags.length > 0) ? [...new Set(requestedHashtags.map((hashtag) => { return hashtag.toLowerCase(); }))] : [];
-            uniqElements = uniqElements.filter(element => !toRemove.includes(element));
+          let requestedHashtags = request.keywordList.filter((element) => element.startsWith("#"));
+          let toRemove = (requestedHashtags.length > 0) ? [...new Set(requestedHashtags.map((hashtag) => { return hashtag.toLowerCase(); }))] : [] ;
+          uniqElements = uniqElements.filter(element => !toRemove.includes(element));
         }
-
+      
         let edges = [];
         uniqElements.forEach(val => {
-            let nodesUsername = hits.tweets.filter(tweet => tweet._source[fieldArr] !== undefined)
-                .filter(tweet => tweet._source[fieldArr].includes(val))
-                .map((tweet) => { return { id: tweet._source.username, label: tweet._source.username }; });
-            let uniqNodesUsername = _.uniqBy(nodesUsername, 'id');
-            let edgesUsername = this.getEdgesCombinationNodes(uniqNodesUsername, val);
-            edges.push(edgesUsername);
+          let nodesUsername = tweets.filter(tweet => tweet._source[fieldArr] !== undefined)
+                                          .filter(tweet => tweet._source[fieldArr].includes(val))
+                                          .map((tweet) => { return { id: tweet._source.username, label: tweet._source.username }; });
+          let uniqNodesUsername = _.uniqBy(nodesUsername, 'id');
+          let edgesUsername = this.getEdgesCombinationNodes(uniqNodesUsername, val);
+          edges.push(edgesUsername);
         });
-
+      
         // Set weight as number of hashtags/co-urls... source user and target user of an edge shared together
         let weightedEdges = this.groupByThenSum(edges.flat(), 'id', ['label'], ['weight'], ['source', 'target']);
-
+      
         return weightedEdges;
-    }
+      }
 
-    getSizeOfUsernames(hits, field = 'nretweets') {
-        let sizeInTweets = hits.tweets.map((tweet) => {
+    getSizeOfUsernames(tweets, field = 'nretweets') {
+        let sizeInTweets = tweets.map((tweet) => {
             let obj = {};
             obj['username'] = tweet._source.username;
             obj[field] = tweet._source[field];
@@ -335,8 +315,8 @@ export default class TwitterInfoMap extends React.Component {
         return sizeInNodes;
     }
 
-    getUniqValuesOfField(hits, field) {
-        let nodeIds = hits.tweets.filter(tweet => tweet._source[field] !== undefined)
+    getUniqValuesOfField(tweets, field) {
+        let nodeIds = tweets.filter(tweet => tweet._source[field] !== undefined)
             .map((tweet) => { return tweet._source[field] })
             .flat();
         let uniqNodeIds = _.uniqWith(nodeIds, _.isEqual);
