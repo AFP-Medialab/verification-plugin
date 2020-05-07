@@ -233,11 +233,25 @@ function filterCommunities(graph, sizeToRm = 1) {
 }
 
 function generateColorsForCommunities(graph) {
-  let uniqCommunity = [...new Set(graph.nodes.map((node) => { return node.community; }))];
-  let colors = []
-  uniqCommunity.forEach(com => {
-    colors[com] = "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); });
-  });
+  let defaultColors = ["#1F77B4","#FF7F0E","#2CA02C","#D62728","#9467BD","#8C564B","#E377B2","#7F7F7F","#BCBD22","#17BECF",
+                      "#00FE35","#FED4C4","#0DF9FF","#F6F926","#DC587D","#B68E00","#22FFA7","#E48F72","#222A2A","#90AD1C",
+                      "#85660D","#1C8356","#16FF32","#F7E1A0","#FEAF16","#F8Q19F","#1CFFCE","#2ED9FF","#C075A6","#B00068",
+                      "#0D2A63","#FECB52","#00CC96","#990099","#0099C6","#B82E2E","#72B7B2","#778AAE","#BAB0AC","#E3EE9E"];
+  
+  let sizeCommunities = _.countBy(graph.nodes.map(node => { return node.community; }));
+  let sortedCommunities = Object.keys(sizeCommunities).sort((a,b) => sizeCommunities[b]-sizeCommunities[a])
+  let uniqCommunity = sortedCommunities.map((comm) => { return parseInt(comm); });
+  let colors = [];
+
+  for (let i = 0; i < uniqCommunity.length; i++) {
+    if (defaultColors[i] !== undefined) {
+      colors[uniqCommunity[i]] = defaultColors[i];
+    } else {
+      colors[uniqCommunity[i]] = "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); });
+    }
+    
+  }
+  
   graph.nodes.forEach(node => {
     node.color = colors[node.community];
   });
