@@ -362,7 +362,7 @@ export default function TwitterSnaResult(props) {
             { title: 'Interaction', field: 'nbInteraction', render: getTweetWithClickableLink },
         ];
 
-        let interaction = result.netGraph.userInteraction.find((element) => element.username === e.data.node.id);
+        let interaction = result.networkGraph.userInteraction.find((element) => element.username === e.data.node.id);
         let resData = [];
         let sortedInteraction = [];
         if (interaction !== undefined) {
@@ -381,7 +381,6 @@ export default function TwitterSnaResult(props) {
     }
 
     function createCSVFromPieChart(obj) {
-        // let csvArr = "Hashtag,Count" + '\n';
         let csvArr = "Sector,Count\n";
         for (let i = 1; i < obj.json[0].labels.length; i++) {
             csvArr += obj.json[0].labels[i] + "," + obj.json[0].values[i] + "\n";
@@ -1006,14 +1005,14 @@ export default function TwitterSnaResult(props) {
                     </ExpansionPanelSummary>
                     <ExpansionPanelDetails>
                         {
-                            result && result.netGraph && result.netGraph.hashtagGraph &&
+                            result && result.networkGraph && result.networkGraph.data &&
                             <div style={{ width: '100%' }}>
                                 {
-                                    (graphReset === null && graphClickNode === null && result.netGraph.hashtagGraph && result.netGraph.hashtagGraph.nodes.length !== 0) &&
-                                    <Sigma graph={result.netGraph.hashtagGraph}
+                                    (graphReset === null && graphClickNode === null && result.networkGraph.data && result.networkGraph.data.nodes.length !== 0) &&
+                                    <Sigma graph={result.networkGraph.data}
                                         renderer={"canvas"}
                                         style={{ textAlign: 'left', width: '100%', height: '700px' }}
-                                        onClickNode={(e) => onClickNode(e, result.netGraph.hashtagGraph)}
+                                        onClickNode={(e) => onClickNode(e, result.networkGraph.data)}
                                         settings={{
                                             labelThreshold: 13,
                                             drawEdges: false,
@@ -1059,13 +1058,13 @@ export default function TwitterSnaResult(props) {
                                     </Sigma>
                                 }
                                 {
-                                    result.netGraph.legend && result.netGraph.legend !== 0 &&
+                                    result.networkGraph.legend && result.networkGraph.legend !== 0 &&
                                     <div >
                                         <Paper >
                                             <ListSubheader component="div" style={{ fontSize: 18, fontWeight: 'bold' }}> Legend </ListSubheader>
                                             <List className={classes.root} >
                                                 {
-                                                    result.netGraph.legend.map((community) => {
+                                                    result.networkGraph.legend.map((community) => {
                                                         return (
                                                             <ListItem key={community.communityColor + (Math.random())}>
                                                                 <ListItemIcon>
@@ -1195,7 +1194,7 @@ export default function TwitterSnaResult(props) {
                             </div>
                         }
                         {
-                            result.netGraph === undefined &&
+                            result.networkGraph === undefined &&
                             <CircularProgress className={classes.circularProgress} />
                         }
 

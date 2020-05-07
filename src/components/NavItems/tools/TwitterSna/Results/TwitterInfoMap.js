@@ -230,8 +230,6 @@ export default class TwitterInfoMap extends React.Component {
             edges: edgesUserToUserOnHashtag
         }
 
-        console.log("Info graph: ", this.graph);
-
         let nodeIdArr = this.graph.nodes.map((node) => { return node.id; }).sort();
         let vertices = "*Vertices " + nodeIdArr.length.toString() + "\n";
         for (const [index, element] of nodeIdArr.entries())
