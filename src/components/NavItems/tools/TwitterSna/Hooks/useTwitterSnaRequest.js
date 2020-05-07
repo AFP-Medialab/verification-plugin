@@ -617,7 +617,6 @@ const useTwitterSnaRequest = (request) => {
       result.tweets = responseArrayOf7[5].tweets;
       result.histogram = createHistogram(data, responseArrayOf7[6], givenFrom, givenUntil);
       if (final) {
-        result.csvArrHashtags = createCsvArrHashtags(responseArrayOf7[5]);
         result.cloudChart = createWordCloud(responseArrayOf7[7]);
         result.heatMap = createHeatMap(request, responseArrayOf7[5].tweets);
         result.netGraph = createHashtagGraphLouvain(request, responseArrayOf7[5]);
@@ -802,33 +801,6 @@ const useTwitterSnaRequest = (request) => {
                 userInteraction: userInteraction,
                 legend: legend
               };
-    }
-
-    function createCsvArrHashtags(hits) {
-      let insensativeHits = getInsensativeCase(hits, 'hashtags');
-      let hashtagArr = insensativeHits.tweets.filter(tweet => tweet._source.hashtags !== undefined).map((tweet) => {
-        return tweet._source.hashtags;
-      }).flat();
-      let freqHashtags = _.countBy(hashtagArr);
-
-      let freqHashtagsArr = Object.entries(freqHashtags).map(([key, value]) => ({key,value}));
-      let sortedArr = freqHashtagsArr.sort(function(a, b) {
-          return b["value"] - a["value"] || a.key.localeCompare(b.key);
-      });
-
-      let csvArr = "Hashtag,Count" + '\n';
-
-      sortedArr.forEach(obj => {
-        csvArr += obj.key + "," + obj.value + "\n";
-      })
-
-      let filename = "_";
-
-      return {
-          csvArr: csvArr,
-          filename: filename
-      };
-
     }
 
     const lastRenderCall = (sessionId, request) => {

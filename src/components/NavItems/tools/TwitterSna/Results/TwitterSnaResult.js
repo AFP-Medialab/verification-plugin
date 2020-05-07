@@ -380,11 +380,20 @@ export default function TwitterSnaResult(props) {
         setGraphInteraction(newRes);
     }
 
+    function createCSVFromPieChart(obj) {
+        // let csvArr = "Hashtag,Count" + '\n';
+        let csvArr = "Sector,Count\n";
+        for (let i = 1; i < obj.json[0].labels.length; i++) {
+            csvArr += obj.json[0].labels[i] + "," + obj.json[0].values[i] + "\n";
+        }
+        return csvArr;
+    }
+
     function downloadClick(csvArr, name, histo, type = "tweets_") {
         let encodedUri = encodeURIComponent(csvArr);
         let link = document.createElement("a");
         link.setAttribute("href", 'data:text/plain;charset=utf-8,' + encodedUri);
-        link.setAttribute("download", type + props.request.keywordList.join('&') + '_' + name + ((!histo) ? (props.request.from + "_" + props.request.until) : "") + ".csv");
+        link.setAttribute("download", type + name + "_" + props.request.keywordList.join('&') + '_' + ((!histo) ? (props.request.from + "_" + props.request.until) : "") + ".csv");
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
@@ -491,7 +500,7 @@ export default function TwitterSnaResult(props) {
             let positionInfo = element.getBoundingClientRect();
             let height = positionInfo.height;
             let width = positionInfo.width;
-            let name = "Hashtags" + filesNames.replace("WordCloud", "") + '.png';
+            let name = keyword(elementId) + filesNames.replace("WordCloud", "") + '.png';
             Plotly.downloadImage(elementId,
                 { format: 'png', width: width * 1.2, height: height * 1.2, filename: name }
             );
@@ -518,7 +527,7 @@ export default function TwitterSnaResult(props) {
             let positionInfo = element.getBoundingClientRect();
             let height = positionInfo.height;
             let width = positionInfo.width;
-            let name = "Hashtags" + filesNames.replace("WordCloud", "") + '.svg';
+            let name = keyword(elementId) + filesNames.replace("WordCloud", "");
             Plotly.downloadImage(elementId,
                 { format: 'svg', width: width * 1.2, height: height * 1.2, filename: name }
             );
@@ -720,7 +729,7 @@ export default function TwitterSnaResult(props) {
                                                 <Typography variant={"body2"}>{keyword("sna_no_data")}</Typography>)
                                         }
                                         {
-                                            (index === 3 && result.csvArrHashtags) &&
+                                            obj.json !== null &&
                                             <Grid container justify="space-between" spacing={2}
                                                 alignContent={"center"}>
                                                 <Grid item>
@@ -738,7 +747,12 @@ export default function TwitterSnaResult(props) {
                                                     <Button
                                                         variant={"contained"}
                                                         color={"primary"}
-                                                        onClick={() => downloadClick(result.csvArrHashtags.csvArr, result.csvArrHashtags.filename, false, "hashtags_")}>
+                                                        onClick={() => downloadClick(createCSVFromPieChart(obj), 
+                                                                                    keyword(obj.title), 
+                                                                                    false, 
+                                                                                    "", 
+                                                                                    obj)}>
+                                                        
                                                         CSV
                                                     </Button>
                                                 </Grid>
@@ -807,7 +821,6 @@ export default function TwitterSnaResult(props) {
                 })
             }
             {
-
                 <ExpansionPanel>
                     <ExpansionPanelSummary
                         expandIcon={<ExpandMoreIcon />}
@@ -1201,7 +1214,6 @@ export default function TwitterSnaResult(props) {
                     }
                     </ExpansionPanelDetails>
                 </ExpansionPanel>
-                
             }
             {
                 <ExpansionPanel>

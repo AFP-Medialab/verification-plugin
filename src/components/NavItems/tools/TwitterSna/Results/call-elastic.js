@@ -260,7 +260,7 @@ let elasticSearch_url = process.env.REACT_APP_ELK_URL;
             //Initialisation
         labels.push(keywords.join(', ').replace(/#/g, ''));
         parents.push("");
-        value.push(0);
+        value.push("");
 
         if (keys[0]['key'].charAt(0) === '#')
             keys.shift();
@@ -273,6 +273,7 @@ let elasticSearch_url = process.env.REACT_APP_ELK_URL;
             labels: labels,
             parents: parents,
             values: value,
+            textinfo: "label+value",
             outsidetextfont: {size: 20, color: "#377eb8"},
         }];
         return obj;
