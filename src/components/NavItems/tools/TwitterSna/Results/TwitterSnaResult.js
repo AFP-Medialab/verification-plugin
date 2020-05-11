@@ -98,7 +98,7 @@ export default function TwitterSnaResult(props) {
 
         setResult(props.result);
 
-    }, [JSON.stringify(props.result), props.result]);
+    }, [JSON.stringify(props.result), props.result, props.result.networkGraph]);
 
     //Initialize tweets arrays
     useEffect(() => {
