@@ -541,20 +541,17 @@ export default function TwitterSnaResult(props) {
         return csvData;
     }
 
-    function getGraphFromScreen(e, graphData) {
-        let resetGraph = {
-            nodes: e.data.renderer.nodesOnScreen,
-            edges: graphData.edges
-        };
-        return resetGraph;
-    }
+    function onClickNode(e) {
 
-    function onClickNode(e, graphData) {
+        let initGraph = {
+            nodes: e.data.renderer.graph.nodes(),
+            edges: e.data.renderer.graph.edges()
+        }
 
         // Set new graph (which has only the clicked node and its neighbors) after clicking
         setGraphClickNode(createGraphWhenClickANode(e));
 
-        setGraphReset(getGraphFromScreen(e, graphData));
+        setGraphReset(initGraph);
 
         displayTweetsOfUser(e, '', 4);
 
@@ -1012,7 +1009,7 @@ export default function TwitterSnaResult(props) {
                                     <Sigma graph={result.networkGraph.data}
                                         renderer={"canvas"}
                                         style={{ textAlign: 'left', width: '100%', height: '700px' }}
-                                        onClickNode={(e) => onClickNode(e, result.networkGraph.data)}
+                                        onClickNode={(e) => onClickNode(e)}
                                         settings={{
                                             labelThreshold: 13,
                                             drawEdges: false,
@@ -1047,7 +1044,7 @@ export default function TwitterSnaResult(props) {
                                     <Sigma graph={graphReset}
                                         renderer={"canvas"}
                                         style={{ textAlign: 'left', width: '100%', height: '700px' }}
-                                        onClickNode={(e) => onClickNode(e, graphReset)}
+                                        onClickNode={(e) => onClickNode(e)}
                                         settings={{
                                             labelThreshold: 13,
                                             drawEdges: false,
