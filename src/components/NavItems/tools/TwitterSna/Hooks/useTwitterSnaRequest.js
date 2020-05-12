@@ -88,6 +88,11 @@ function getNodesAsUsername(tweets) {
   return nodes;
 }
 
+function getNodesAsHashtag(tweets) {
+  let nodes = getUniqValuesOfField(tweets, "hashtags").map((val) => { return { id: val, label: val } });
+  return nodes;
+}
+
 function getEdgesCombinationNodes(nodes, edgeLabel) {
   let edges = [];
   for (let i = 0; i < nodes.length - 1; i++) {
@@ -152,7 +157,27 @@ function getEdgesUsernameToUsernameOnHashtagsExcept1st(tweets, request, fieldArr
   return weightedEdges;
 }
 
-function getSizeOfUsernames(tweets, field = 'nretweets') {
+function getEdgesCoHashtag(tweets) {
+  let coHashtagArr = tweets.filter(tweet => tweet._source.hashtags.length > 1)
+                            .map((tweet) => { return tweet._source.hashtags });
+  let edges = [];
+  coHashtagArr.forEach(arr => {
+    for (let i = 0; i < arr.length - 1; i++) {
+      for (let j = i + 1; j < arr.length; j++) {
+        let sortedVertices = [arr[i], arr[j]].sort();
+        edges.push({ id: sortedVertices.join(""), 
+                    source: sortedVertices[0], 
+                    target: sortedVertices[1],
+                    label: sortedVertices.join(""), 
+                    weight: 1 });
+      }
+    }
+  });
+  let uniqEdges = groupByThenSum(edges, 'id', [], ['weight'], ['source', 'target', 'label']);
+  return uniqEdges;
+}
+
+function getSizeOfUserBySum(tweets, field = 'nretweets') {
   let sizeInTweets = tweets.map((tweet) => {
     let obj = {};
     obj['username'] = tweet._source.username;
@@ -170,6 +195,14 @@ function getSizeOfUsernames(tweets, field = 'nretweets') {
   });
 
   return sizeInNodes;
+}
+
+function getSizeOfField(tweets, field) {
+  let valueArr = tweets.filter(tweet => tweet._source[field] !== undefined)
+                      .map((tweet) => { return tweet._source[field] })
+                      .flat();
+  let sizeObj = _.countBy(valueArr);
+  return sizeObj;
 }
 
 function getInteractionOfUsernames(tweets, types = ['reply_to', 'mentions']) {
@@ -457,6 +490,7 @@ function lowercaseHashtagInTweets(tweets, field = 'hashtags') {
   return newTweets;
 }
 
+
 const useTwitterSnaRequest = (request) => {
 
   const TwintWrapperUrl = process.env.REACT_APP_TWINT_WRAPPER_URL;
@@ -626,8 +660,9 @@ const useTwitterSnaRequest = (request) => {
       if (final) {
         result.cloudChart = createWordCloud(responseArrayOf7[7]);
         result.heatMap = createHeatMap(request, responseArrayOf7[5].tweets);
-        result.networkGraph = createHashtagGraphLouvain(request, responseArrayOf7[5].tweets);
-        // result.networkGraph = createHashtagGraph2(request, responseArrayOf7[5].tweets);
+        result.userGraph = createUserGraphBasedHashtagLouvain(request, responseArrayOf7[5].tweets);
+        // result.userGraph = createUserGraphBasedHashtag2(request, responseArrayOf7[5].tweets);
+        result.cohashtagGraph = createCoHashtagGraph(responseArrayOf7[5].tweets);
       }
       else
         result.cloudChart = { title: "top_words_cloud_chart_title" };
@@ -728,7 +763,7 @@ const useTwitterSnaRequest = (request) => {
     }
 
 
-    function createHashtagGraphLouvain(request, tweets) {
+    function createUserGraphBasedHashtagLouvain(request, tweets) {
 
       let lcTweets = lowercaseHashtagInTweets(tweets, 'hashtags');
 
@@ -739,7 +774,7 @@ const useTwitterSnaRequest = (request) => {
       let nodesUsername = getNodesAsUsername(filteredTweets);
       let edgesUserToUserOnHashtag = getEdgesUsernameToUsernameOnHashtagsExcept1st(filteredTweets, request, "hashtags");
 
-      let nodesSize = getSizeOfUsernames(lcTweets, 'nretweets');
+      let nodesSize = getSizeOfUserBySum(lcTweets, 'nretweets');
       nodesUsername.map((node) => {
         let size = nodesSize.find((e) => { return e.username === node.id }).size;
         node.size = (size !== undefined) ? size : 1;
@@ -768,7 +803,7 @@ const useTwitterSnaRequest = (request) => {
       };
     }
 
-    function createHashtagGraph2(request, tweets) {
+    function createUserGraphBasedHashtag2(request, tweets) {
 
       let lcTweets = lowercaseHashtagInTweets(tweets, 'hashtags');
       let filteredTweets = lcTweets.filter(tweet => tweet._source.hashtags !== undefined);
@@ -777,7 +812,7 @@ const useTwitterSnaRequest = (request) => {
 
       let edgesUserToUserOnHashtag = getEdgesUsernameToUsernameOnHashtagsExcept1st(filteredTweets, request, "hashtags");
 
-      let nodesSize = getSizeOfUsernames(filteredTweets, 'nretweets');
+      let nodesSize = getSizeOfUserBySum(filteredTweets, 'nretweets');
       nodesUsername.map((node) => {
         let size = nodesSize.find((e) => { return e.username === node.id }).size;
         node.size = (size !== undefined) ? size : 1;
@@ -800,6 +835,21 @@ const useTwitterSnaRequest = (request) => {
         hashtagGraph: communityGraph,
         userInteraction: userInteraction,
         legend: legend
+      };
+    }
+
+    function createCoHashtagGraph(tweets) {
+      let lcTweets = lowercaseHashtagInTweets(tweets);
+      let nodes = getNodesAsHashtag(lcTweets);
+      let sizeObj = getSizeOfField(lcTweets, "hashtags");
+      nodes.map((node) => { node.size= sizeObj[node.id]; return node;});
+      let edges = getEdgesCoHashtag(lcTweets);
+      let graph = {
+        nodes: nodes,
+        edges: edges
+      }
+      return {
+        data: graph
       };
     }
 

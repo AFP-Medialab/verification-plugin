@@ -98,7 +98,7 @@ export default function TwitterSnaResult(props) {
 
         setResult(props.result);
 
-    }, [JSON.stringify(props.result), props.result, props.result.networkGraph]);
+    }, [JSON.stringify(props.result), props.result, props.result.userGraph]);
 
     //Initialize tweets arrays
     useEffect(() => {
@@ -362,7 +362,7 @@ export default function TwitterSnaResult(props) {
             { title: 'Interaction', field: 'nbInteraction', render: getTweetWithClickableLink },
         ];
 
-        let interaction = result.networkGraph.userInteraction.find((element) => element.username === e.data.node.id);
+        let interaction = result.userGraph.userInteraction.find((element) => element.username === e.data.node.id);
         let resData = [];
         let sortedInteraction = [];
         if (interaction !== undefined) {
@@ -591,10 +591,6 @@ export default function TwitterSnaResult(props) {
 
         console.log("newGraph", newGraph);
         return newGraph;
-    }
-
-    function demo() {
-        return 0;
     }
 
     if (result === null)
@@ -1002,11 +998,11 @@ export default function TwitterSnaResult(props) {
                     </ExpansionPanelSummary>
                     <ExpansionPanelDetails>
                         {
-                            result && result.networkGraph && result.networkGraph.data &&
+                            result && result.userGraph && result.userGraph.data &&
                             <div style={{ width: '100%' }}>
                                 {
-                                    (graphReset === null && graphClickNode === null && result.networkGraph.data && result.networkGraph.data.nodes.length !== 0) &&
-                                    <Sigma graph={result.networkGraph.data}
+                                    (graphReset === null && graphClickNode === null && result.userGraph.data && result.userGraph.data.nodes.length !== 0) &&
+                                    <Sigma graph={result.userGraph.data}
                                         renderer={"canvas"}
                                         style={{ textAlign: 'left', width: '100%', height: '700px' }}
                                         onClickNode={(e) => onClickNode(e)}
@@ -1055,13 +1051,13 @@ export default function TwitterSnaResult(props) {
                                     </Sigma>
                                 }
                                 {
-                                    result.networkGraph.legend && result.networkGraph.legend !== 0 &&
+                                    result.userGraph.legend && result.userGraph.legend !== 0 &&
                                     <div >
                                         <Paper >
                                             <ListSubheader component="div" style={{ fontSize: 18, fontWeight: 'bold' }}> Legend </ListSubheader>
                                             <List className={classes.root} >
                                                 {
-                                                    result.networkGraph.legend.map((community) => {
+                                                    result.userGraph.legend.map((community) => {
                                                         return (
                                                             <ListItem key={community.communityColor + (Math.random())}>
                                                                 <ListItemIcon>
@@ -1191,7 +1187,7 @@ export default function TwitterSnaResult(props) {
                             </div>
                         }
                         {
-                            result.networkGraph === undefined &&
+                            result.userGraph === undefined &&
                             <CircularProgress className={classes.circularProgress} />
                         }
 
@@ -1230,6 +1226,41 @@ export default function TwitterSnaResult(props) {
                                 <RelativeSize initialSize={30}/>
                             </LoadGEXF>
                         </Sigma> 
+                    </ExpansionPanelDetails>
+                </ExpansionPanel>
+            }
+            {
+                <ExpansionPanel>
+                    <ExpansionPanelSummary
+                        expandIcon={<ExpandMoreIcon />}
+                    >
+                        <Typography className={classes.heading}>{"Co-Hashtag Graph"}</Typography>
+                    </ExpansionPanelSummary>
+                    <ExpansionPanelDetails>
+                    {
+                            result && result.cohashtagGraph && result.cohashtagGraph.data &&
+                            <div style={{ width: '100%' }}>
+                                <Sigma graph={result.cohashtagGraph.data}
+                                    renderer={"canvas"}
+                                    style={{ textAlign: 'left', width: '100%', height: '700px' }}
+                                    settings={{
+                                        // labelThreshold: 13,
+                                        drawEdges: true,
+                                        drawEdgeLabels: false,
+                                        minNodeSize: 5,
+                                        maxNodeSize: 12,
+                                        defaultNodeColor: "#3388AA",
+                                    }}>
+                                    <RandomizeNodePositions>
+                                        <ForceAtlas2 iterationsPerRender={1} timeout={120000} />
+                                    </RandomizeNodePositions>
+                                </Sigma>
+                            </div>
+                        }
+                        {
+                            result.cohashtagGraph === undefined &&
+                            <CircularProgress className={classes.circularProgress} />
+                        }
                     </ExpansionPanelDetails>
                 </ExpansionPanel>
             }
