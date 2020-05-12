@@ -674,7 +674,7 @@ const useTwitterSnaRequest = (request) => {
         result.heatMap = createHeatMap(request, responseArrayOf7[5].tweets);
         result.userGraph = createUserGraphBasedHashtagLouvain(request, responseArrayOf7[5].tweets);
         // result.userGraph = createUserGraphBasedHashtag2(request, responseArrayOf7[5].tweets);
-        result.cohashtagGraph = createCoHashtagGraph(responseArrayOf7[5].tweets);
+        result.coHashtagGraph = createCoHashtagGraph(responseArrayOf7[5].tweets);
       }
       else
         result.cloudChart = { title: "top_words_cloud_chart_title" };

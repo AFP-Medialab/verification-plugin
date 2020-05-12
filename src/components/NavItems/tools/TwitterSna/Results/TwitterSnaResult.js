@@ -59,10 +59,11 @@ export default function TwitterSnaResult(props) {
     const [pieCharts1, setPieCharts1] = useState(null);
     const [pieCharts2, setPieCharts2] = useState(null);
     const [pieCharts3, setPieCharts3] = useState(null);
-    const [graphReset, setGraphReset] = useState(null);
-    const [graphClickNode, setGraphClickNode] = useState(null);
-    const [graphTweets, setGraphTweets] = useState(null);
-    const [graphInteraction, setGraphInteraction] = useState(null);
+    const [userGraphReset, setUserGraphReset] = useState(null);
+    const [userGraphClickNode, setUserGraphClickNode] = useState(null);
+    const [userGraphTweets, setUserGraphTweets] = useState(null);
+    const [userGraphInteraction, setUserGraphInteraction] = useState(null);
+    const [coHashtagGraphTweets, setCoHashtagGraphTweets] = useState(null);
 
     const hideTweetsView = (index) => {
         switch (index) {
@@ -79,7 +80,10 @@ export default function TwitterSnaResult(props) {
                 setPieCharts3(null);
                 break;
             case 4:
-                setGraphTweets(null);
+                setUserGraphTweets(null);
+                break;
+            case 5:
+                setCoHashtagGraphTweets(null);
                 break;
             default:
                 break;
@@ -109,10 +113,11 @@ export default function TwitterSnaResult(props) {
         setPieCharts1(null);
         setPieCharts2(null);
         setPieCharts3(null);
-        setGraphReset(null);
-        setGraphClickNode(null);
-        setGraphTweets(null);
-        setGraphInteraction(null);
+        setUserGraphReset(null);
+        setUserGraphClickNode(null);
+        setUserGraphTweets(null);
+        setUserGraphInteraction(null);
+        setCoHashtagGraphTweets(null);
     }, [JSON.stringify(props.request), props.request])
 
     const displayTweetsOfWord = (word, callback) => {
@@ -347,7 +352,7 @@ export default function TwitterSnaResult(props) {
                 setPieCharts3(newRes);
                 break;
             case 4:
-                setGraphTweets(newRes);
+                setUserGraphTweets(newRes);
                 break;
             default:
                 break;
@@ -377,7 +382,7 @@ export default function TwitterSnaResult(props) {
             data: resData,
             columns: columns
         };
-        setGraphInteraction(newRes);
+        setUserGraphInteraction(newRes);
     }
 
     function createCSVFromPieChart(obj) {
@@ -541,7 +546,7 @@ export default function TwitterSnaResult(props) {
         return csvData;
     }
 
-    function onClickNode(e) {
+    function onClickNodeUserGraph(e) {
 
         let initGraph = {
             nodes: e.data.renderer.graph.nodes(),
@@ -549,22 +554,27 @@ export default function TwitterSnaResult(props) {
         }
 
         // Set new graph (which has only the clicked node and its neighbors) after clicking
-        setGraphClickNode(createGraphWhenClickANode(e));
+        setUserGraphClickNode(createGraphWhenClickANode(e));
 
-        setGraphReset(initGraph);
+        setUserGraphReset(initGraph);
 
         displayTweetsOfUser(e, '', 4);
 
         displayUserInteraction(e);
     }
 
+    function onClickNodeCoHashtagGraph(e) {
+
+        displayTweetsOfWord(e.data.node.id, setCoHashtagGraphTweets);
+    }
+
     function onClickStage(e) {
-        setGraphClickNode(() => {
+        setUserGraphClickNode(() => {
             return null;
         });
         hideTweetsView(4);
 
-        setGraphInteraction(null);
+        setUserGraphInteraction(null);
     }
 
     function createGraphWhenClickANode(e) {
@@ -994,6 +1004,80 @@ export default function TwitterSnaResult(props) {
                     <ExpansionPanelSummary
                         expandIcon={<ExpandMoreIcon />}
                     >
+                        <Typography className={classes.heading}>{"Co-Hashtag Graph"}</Typography>
+                    </ExpansionPanelSummary>
+                    <ExpansionPanelDetails>
+                    {
+                            result && result.coHashtagGraph && result.coHashtagGraph.data && result.coHashtagGraph.data.nodes.length !== 0 &&
+                            <div style={{ width: '100%' }}>
+                                <Sigma graph={result.coHashtagGraph.data}
+                                    renderer={"canvas"}
+                                    style={{ textAlign: 'left', width: '100%', height: '700px' }}
+                                    onClickNode={(e) => onClickNodeCoHashtagGraph(e)}
+                                    settings={{
+                                        drawEdges: true,
+                                        drawEdgeLabels: false,
+                                        minNodeSize: 10,
+                                        maxNodeSize: 30,
+                                        minEdgeSize: 1,
+                                        maxEdgeSize: 10,
+                                        defaultNodeColor: "#3388AA",
+                                        defaultEdgeColor: "#C0C0C0",
+                                        edgeColor: "default"
+                                    }}
+                                    >
+                                    <RandomizeNodePositions>
+                                        <ForceAtlas2 iterationsPerRender={1} timeout={15000} />
+                                    </RandomizeNodePositions>
+                                </Sigma>
+                                {
+                                    coHashtagGraphTweets &&
+                                    <div>
+                                        <Grid container justify="space-between" spacing={2}
+                                            alignContent={"center"}>
+                                            <Grid item>
+                                                <Button
+                                                    variant={"contained"}
+                                                    color={"secondary"}
+                                                    onClick={() => hideTweetsView(5)}>
+                                                    {
+                                                        keyword('sna_result_hide')
+                                                    }
+                                                </Button>
+                                            </Grid>
+                                            <Grid item>
+                                                <Button
+                                                    variant={"contained"}
+                                                    color={"primary"}
+                                                    onClick={() => downloadClick(coHashtagGraphTweets.csvArr, coHashtagGraphTweets.word)}>
+                                                    {
+                                                        keyword('sna_result_download')
+                                                    }
+                                                </Button>
+                                            </Grid>
+                                        </Grid>
+                                        <Box m={2} />
+                                        <CustomTable title={keyword("sna_result_slected_tweets")}
+                                            colums={coHashtagGraphTweets.columns}
+                                            data={coHashtagGraphTweets.data}
+                                            actions={goToTweetAction}
+                                        />
+                                    </div>
+                                }
+                            </div>
+                        }
+                        {
+                            result.coHashtagGraph === undefined &&
+                            <CircularProgress className={classes.circularProgress} />
+                        }
+                    </ExpansionPanelDetails>
+                </ExpansionPanel>
+            }
+            {
+                <ExpansionPanel>
+                    <ExpansionPanelSummary
+                        expandIcon={<ExpandMoreIcon />}
+                    >
                         <Typography className={classes.heading}>{"Graph using Louvain"}</Typography>
                     </ExpansionPanelSummary>
                     <ExpansionPanelDetails>
@@ -1001,11 +1085,11 @@ export default function TwitterSnaResult(props) {
                             result && result.userGraph && result.userGraph.data &&
                             <div style={{ width: '100%' }}>
                                 {
-                                    (graphReset === null && graphClickNode === null && result.userGraph.data && result.userGraph.data.nodes.length !== 0) &&
+                                    (userGraphReset === null && userGraphClickNode === null && result.userGraph.data && result.userGraph.data.nodes.length !== 0) &&
                                     <Sigma graph={result.userGraph.data}
                                         renderer={"canvas"}
                                         style={{ textAlign: 'left', width: '100%', height: '700px' }}
-                                        onClickNode={(e) => onClickNode(e)}
+                                        onClickNode={(e) => onClickNodeUserGraph(e)}
                                         settings={{
                                             labelThreshold: 13,
                                             drawEdges: false,
@@ -1019,8 +1103,8 @@ export default function TwitterSnaResult(props) {
                                     </Sigma>
                                 }
                                 {
-                                    graphReset !== null && graphClickNode !== null &&
-                                    <Sigma graph={graphClickNode}
+                                    userGraphReset !== null && userGraphClickNode !== null &&
+                                    <Sigma graph={userGraphClickNode}
                                         renderer={"canvas"}
                                         onClickStage={(e) => onClickStage(e)}
                                         style={{ textAlign: 'left', width: '100%', height: '700px' }}
@@ -1036,11 +1120,11 @@ export default function TwitterSnaResult(props) {
                                     </Sigma>
                                 }
                                 {
-                                    graphReset !== null && graphClickNode === null &&
-                                    <Sigma graph={graphReset}
+                                    userGraphReset !== null && userGraphClickNode === null &&
+                                    <Sigma graph={userGraphReset}
                                         renderer={"canvas"}
                                         style={{ textAlign: 'left', width: '100%', height: '700px' }}
-                                        onClickNode={(e) => onClickNode(e)}
+                                        onClickNode={(e) => onClickNodeUserGraph(e)}
                                         settings={{
                                             labelThreshold: 13,
                                             drawEdges: false,
@@ -1075,7 +1159,7 @@ export default function TwitterSnaResult(props) {
                                     </div>
                                 }
                                 {
-                                    graphTweets &&
+                                    userGraphTweets &&
                                     <div>
                                         <Grid container justify="space-between" spacing={2}
                                             alignContent={"center"}>
@@ -1093,7 +1177,7 @@ export default function TwitterSnaResult(props) {
                                                 <Button
                                                     variant={"contained"}
                                                     color={"primary"}
-                                                    onClick={() => downloadClick(graphTweets.csvArr, graphTweets.username)}>
+                                                    onClick={() => downloadClick(userGraphTweets.csvArr, userGraphTweets.username)}>
                                                     {
                                                         keyword('sna_result_download')
                                                     }
@@ -1102,14 +1186,14 @@ export default function TwitterSnaResult(props) {
                                         </Grid>
                                         <Box m={2} />
                                         <CustomTable title={keyword("sna_result_slected_tweets")}
-                                            colums={graphTweets.columns}
-                                            data={graphTweets.data}
+                                            colums={userGraphTweets.columns}
+                                            data={userGraphTweets.data}
                                             actions={goToTweetAction}
                                         />
                                     </div>
                                 }
                                 {
-                                    graphInteraction &&
+                                    userGraphInteraction &&
                                     <div style={{ position: 'absolute', top: 0, right: 0 }}>
                                         <Paper style={{ width: 300 }}>
                                             <div style={{
@@ -1122,12 +1206,12 @@ export default function TwitterSnaResult(props) {
                                                 <List style={{ position: 'absolute', top: 40, width: '100%' }}>
                                                     <ListItem>
                                                         <ListItemAvatar>
-                                                            <Avatar alt={graphInteraction.username}
-                                                                src={"http://avatars.io/twitter/" + graphInteraction.username}
+                                                            <Avatar alt={userGraphInteraction.username}
+                                                                src={"http://avatars.io/twitter/" + userGraphInteraction.username}
                                                                 variant='rounded'
                                                                 style={{ width: 65, height: 65 }} />
                                                         </ListItemAvatar>
-                                                        <ListItemText primary={graphInteraction.username}
+                                                        <ListItemText primary={userGraphInteraction.username}
                                                             style={{ marginLeft: 10, color: '#428bca' }} />
                                                     </ListItem>
                                                 </List>
@@ -1163,7 +1247,7 @@ export default function TwitterSnaResult(props) {
                                             </TableContainer>
                                             <List className={classes.root} style={{ overflow: 'auto', maxHeight: 150 }}>
                                                 {
-                                                    graphInteraction.data.length !== 0 && graphInteraction.data.map((row) => {
+                                                    userGraphInteraction.data.length !== 0 && userGraphInteraction.data.map((row) => {
                                                         return (
                                                             <ListItem key={row.username}>
                                                                 <ListItemAvatar>
@@ -1177,7 +1261,7 @@ export default function TwitterSnaResult(props) {
                                                     })
                                                 }
                                                 {
-                                                    graphInteraction.data.length === 0 && "No interaction"
+                                                    userGraphInteraction.data.length === 0 && "No interaction"
                                                 }
                                             </List>
                                         </Paper>
@@ -1226,46 +1310,6 @@ export default function TwitterSnaResult(props) {
                                 <RelativeSize initialSize={30}/>
                             </LoadGEXF>
                         </Sigma> 
-                    </ExpansionPanelDetails>
-                </ExpansionPanel>
-            }
-            {
-                <ExpansionPanel>
-                    <ExpansionPanelSummary
-                        expandIcon={<ExpandMoreIcon />}
-                    >
-                        <Typography className={classes.heading}>{"Co-Hashtag Graph"}</Typography>
-                    </ExpansionPanelSummary>
-                    <ExpansionPanelDetails>
-                    {
-                            result && result.cohashtagGraph && result.cohashtagGraph.data &&
-                            <div style={{ width: '100%' }}>
-                                <Sigma graph={result.cohashtagGraph.data}
-                                    renderer={"canvas"}
-                                    style={{ textAlign: 'left', width: '100%', height: '700px' }}
-                                    settings={{
-                                        // labelThreshold: 10,
-                                        drawEdges: true,
-                                        drawEdgeLabels: false,
-                                        minNodeSize: 10,
-                                        maxNodeSize: 30,
-                                        minEdgeSize: 1,
-                                        maxEdgeSize: 10,
-                                        defaultNodeColor: "#3388AA",
-                                        defaultEdgeColor: "#C0C0C0",
-                                        edgeColor: "default"
-                                    }}
-                                    >
-                                    <RandomizeNodePositions>
-                                        <ForceAtlas2 iterationsPerRender={1} timeout={30000} />
-                                    </RandomizeNodePositions>
-                                </Sigma>
-                            </div>
-                        }
-                        {
-                            result.cohashtagGraph === undefined &&
-                            <CircularProgress className={classes.circularProgress} />
-                        }
                     </ExpansionPanelDetails>
                 </ExpansionPanel>
             }
