@@ -301,7 +301,7 @@ let elasticSearch_url = process.env.REACT_APP_ELK_URL;
                 parents.push(mainKey);
             }
         }
-        if (field === "hashtags") {
+        if (field === "hashtags" || field === "mentions") {
             return generatePlotlyJsonFromElasticResponseDonuts(await getElasticReponseDonuts(param, field), param.keywordList,  hashtagsGet);
         } else if (field === "nretweets" || field === "nlikes"){
             return generatePlotlyJsonFromElasticResponseDonuts(await getElasticReponseDonuts(param, field), param.keywordList,  mostRetweetGet);
@@ -576,6 +576,19 @@ function constructAggs(field) {
                     "_count": "desc"
                 },
                 "size": 20
+            }
+        })
+    }
+
+    // Mentions donut
+    else if (field === "mentions") {
+        fieldInfo += JSON.stringify({
+            "terms": {
+                "field": field,
+                "order": {
+                    "_count": "desc"
+                },
+                "size": 14
             }
         })
     }

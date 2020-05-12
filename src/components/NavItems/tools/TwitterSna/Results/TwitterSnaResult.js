@@ -59,6 +59,7 @@ export default function TwitterSnaResult(props) {
     const [pieCharts1, setPieCharts1] = useState(null);
     const [pieCharts2, setPieCharts2] = useState(null);
     const [pieCharts3, setPieCharts3] = useState(null);
+    const [pieCharts4, setPieCharts4] = useState(null);
     const [userGraphReset, setUserGraphReset] = useState(null);
     const [userGraphClickNode, setUserGraphClickNode] = useState(null);
     const [userGraphTweets, setUserGraphTweets] = useState(null);
@@ -80,9 +81,12 @@ export default function TwitterSnaResult(props) {
                 setPieCharts3(null);
                 break;
             case 4:
+                setPieCharts4(null);
+                break;
+            case "userGraphIdx":
                 setUserGraphTweets(null);
                 break;
-            case 5:
+            case "coHashtagGraphIdx":
                 setCoHashtagGraphTweets(null);
                 break;
             default:
@@ -90,7 +94,7 @@ export default function TwitterSnaResult(props) {
         }
     };
 
-    const pieCharts = [pieCharts0, pieCharts1, pieCharts2, pieCharts3];
+    const pieCharts = [pieCharts0, pieCharts1, pieCharts2, pieCharts3, pieCharts4];
 
     //Set the file name for wordsCloud export
     useEffect(() => {
@@ -113,6 +117,7 @@ export default function TwitterSnaResult(props) {
         setPieCharts1(null);
         setPieCharts2(null);
         setPieCharts3(null);
+        setPieCharts4(null);
         setUserGraphReset(null);
         setUserGraphClickNode(null);
         setUserGraphTweets(null);
@@ -302,7 +307,7 @@ export default function TwitterSnaResult(props) {
         let resData = [];
 
         let selectedUser = null;
-        if (index === 4) {
+        if (index === "userGraphIdx") {
             selectedUser = data.data.node.id.toLowerCase();
         } else {
             selectedUser = data.points[0].label;
@@ -348,16 +353,75 @@ export default function TwitterSnaResult(props) {
             case 2:
                 setPieCharts2(newRes);
                 break;
-            case 3:
-                setPieCharts3(newRes);
-                break;
             case 4:
+                setPieCharts4(newRes);
+                break;
+            case "userGraphIdx":
                 setUserGraphTweets(newRes);
                 break;
             default:
                 break;
 
         }
+    }
+
+    const displayTweetsOfMention = (selectedUser, nbType, index) => {
+        let columns = [
+            { title: keyword('sna_result_date'), field: 'date' },
+            { title: keyword('sna_result_tweet'), field: 'tweet', render: getTweetWithClickableLink },
+        ];
+        let csvArr = keyword('sna_result_date') + "," + keyword('sna_result_tweet');
+        if (nbType !== "retweets_cloud_chart_title") {
+            columns.push({
+                title: keyword('sna_result_like_nb'),
+                field: "nbLikes"
+            });
+            csvArr += ',' + keyword('sna_result_like_nb');
+        }
+        if (nbType !== "likes_cloud_chart_title") {
+            columns.push({
+                title: keyword('sna_result_retweet_nb'),
+                field: "nbReteets"
+            });
+            csvArr += ',' + keyword('sna_result_retweet_nb');
+        }
+        csvArr += ',' + keyword('elastic_url') + "\n";
+
+        let resData = [];
+
+        let mentionTweets = result.tweets.filter(tweet => tweet._source.mentions !== undefined);
+        mentionTweets.forEach(tweetObj => {
+            let lcMentionArr = tweetObj._source.mentions.map(v => v.toLowerCase());
+            if (lcMentionArr.includes(selectedUser)) {
+                let date = new Date(tweetObj._source.date);
+                let tmpObj = {
+                    date: date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear() + ' ' + date.getHours() + ':' + date.getMinutes(),
+                    tweet: tweetObj._source.tweet,
+                    link: tweetObj._source.link
+                };
+                csvArr += date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear() + '_' + date.getHours() + 'h' + date.getMinutes() + ',"' + tweetObj._source.tweet + '",';
+
+                if (nbType !== "retweets_cloud_chart_title") {
+                    tmpObj.nbLikes = tweetObj._source.nlikes;
+                    csvArr += tmpObj.nbLikes + ',';
+                }
+                if (nbType !== "likes_cloud_chart_title") {
+                    tmpObj.nbReteets = tweetObj._source.nretweets;
+                    csvArr += tmpObj.nbReteets + ',';
+                }
+                csvArr += tmpObj.link + '\n';
+                resData.push(tmpObj);
+            }
+        });
+
+        let newRes = {
+            data: resData,
+            columns: columns,
+            csvArr: csvArr,
+            username: selectedUser
+        };
+
+        setPieCharts3(newRes);
     }
 
     const displayUserInteraction = (e) => {
@@ -426,10 +490,15 @@ export default function TwitterSnaResult(props) {
 
     const onDonutsClick = (data, nbType, index) => {
 
-        //For hashtag donuts
+        //For mention donuts
         if (index === 3) {
-            displayTweetsOfWord(data.points[0].label, setPieCharts3);
+            displayTweetsOfMention(data.points[0].label, setPieCharts3)
         }
+        // For hashtag donut
+        else if (index === 4) {
+            displayTweetsOfWord(data.points[0].label, setPieCharts4);
+        }
+        // For retweets, likes, top_user donut
         else {
             displayTweetsOfUser(data, nbType, index);
         }
@@ -558,7 +627,7 @@ export default function TwitterSnaResult(props) {
 
         setUserGraphReset(initGraph);
 
-        displayTweetsOfUser(e, '', 4);
+        displayTweetsOfUser(e, '', "userGraphIdx");
 
         displayUserInteraction(e);
     }
@@ -572,7 +641,7 @@ export default function TwitterSnaResult(props) {
         setUserGraphClickNode(() => {
             return null;
         });
-        hideTweetsView(4);
+        hideTweetsView("userGraphIdx");
 
         setUserGraphInteraction(null);
     }
@@ -1039,7 +1108,7 @@ export default function TwitterSnaResult(props) {
                                                 <Button
                                                     variant={"contained"}
                                                     color={"secondary"}
-                                                    onClick={() => hideTweetsView(5)}>
+                                                    onClick={() => hideTweetsView("coHashtagGraphIdx")}>
                                                     {
                                                         keyword('sna_result_hide')
                                                     }
@@ -1167,7 +1236,7 @@ export default function TwitterSnaResult(props) {
                                                 <Button
                                                     variant={"contained"}
                                                     color={"secondary"}
-                                                    onClick={() => hideTweetsView(4)}>
+                                                    onClick={() => hideTweetsView("userGraphIdx")}>
                                                     {
                                                         keyword('sna_result_hide')
                                                     }

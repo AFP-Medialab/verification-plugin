@@ -484,7 +484,7 @@ function groupByThenSum(arrOfObjects, key, attrToSumStr, attrToSumNum, attrToSki
   return results;
 }
 
-function lowercaseHashtagInTweets(tweets, field = 'hashtags') {
+function lowercaseFieldInTweets(tweets, field = 'hashtags') {
   let newTweets = tweets.map((tweet) => {
     let tweetObj = JSON.parse(JSON.stringify(tweet));
     if (tweetObj._source[field] !== undefined) {
@@ -573,7 +573,7 @@ const useTwitterSnaRequest = (request) => {
       dispatch(setTwitterSnaLoading(false));
     };
 
-    const createPieCharts = (data, responseArrayOf7) => {
+    const createPieCharts = (data, responseArrayOf9) => {
       let cloudLayout = {
         title: "",
         automargin: true,
@@ -596,6 +596,7 @@ const useTwitterSnaRequest = (request) => {
         "retweets_cloud_chart_title",
         "likes_cloud_chart_title",
         "top_users_pie_chart_title",
+        "mention_cloud_chart_title",
         "hashtag_cloud_chart_title"
       ];
 
@@ -606,7 +607,7 @@ const useTwitterSnaRequest = (request) => {
         pieCharts.push(
           {
             title: titles[cpt],
-            json: responseArrayOf7[cpt],
+            json: responseArrayOf9[cpt],
             layout: cloudLayout,
             config: config,
           }
@@ -658,23 +659,23 @@ const useTwitterSnaRequest = (request) => {
         tweetsView: null,
       };
     };
-    const makeResult = (data, responseArrayOf7, givenFrom, givenUntil, final) => {
+    const makeResult = (data, responseArrayOf9, givenFrom, givenUntil, final) => {
 
       const result = {};
-      result.pieCharts = createPieCharts(data, responseArrayOf7);
-      result.urls = responseArrayOf7[4];
+      result.pieCharts = createPieCharts(data, responseArrayOf9);
+      result.urls = responseArrayOf9[5];
       result.tweetCount = {};
-      result.tweetCount.count = responseArrayOf7[5].value.toString().replace(/(?=(\d{3})+(?!\d))/g, " ");
-      result.tweetCount.retweet = responseArrayOf7[5].retweets.toString().replace(/(?=(\d{3})+(?!\d))/g, " ");
-      result.tweetCount.like = responseArrayOf7[5].likes.toString().replace(/(?=(\d{3})+(?!\d))/g, " ");
-      result.tweets = responseArrayOf7[5].tweets;
-      result.histogram = createHistogram(data, responseArrayOf7[6], givenFrom, givenUntil);
+      result.tweetCount.count = responseArrayOf9[6].value.toString().replace(/(?=(\d{3})+(?!\d))/g, " ");
+      result.tweetCount.retweet = responseArrayOf9[6].retweets.toString().replace(/(?=(\d{3})+(?!\d))/g, " ");
+      result.tweetCount.like = responseArrayOf9[6].likes.toString().replace(/(?=(\d{3})+(?!\d))/g, " ");
+      result.tweets = responseArrayOf9[6].tweets;
+      result.histogram = createHistogram(data, responseArrayOf9[7], givenFrom, givenUntil);
       if (final) {
-        result.cloudChart = createWordCloud(responseArrayOf7[7]);
-        result.heatMap = createHeatMap(request, responseArrayOf7[5].tweets);
-        result.userGraph = createUserGraphBasedHashtagLouvain(request, responseArrayOf7[5].tweets);
-        // result.userGraph = createUserGraphBasedHashtag2(request, responseArrayOf7[5].tweets);
-        result.coHashtagGraph = createCoHashtagGraph(responseArrayOf7[5].tweets);
+        result.cloudChart = createWordCloud(responseArrayOf9[8]);
+        result.heatMap = createHeatMap(request, responseArrayOf9[6].tweets);
+        result.userGraph = createUserGraphBasedHashtagLouvain(request, responseArrayOf9[6].tweets);
+        // result.userGraph = createUserGraphBasedHashtag2(request, responseArrayOf9[5].tweets);
+        result.coHashtagGraph = createCoHashtagGraph(responseArrayOf9[6].tweets);
       }
       else
         result.cloudChart = { title: "top_words_cloud_chart_title" };
@@ -705,6 +706,7 @@ const useTwitterSnaRequest = (request) => {
         getPlotlyJsonDonuts(entries, "nretweets"),
         getPlotlyJsonDonuts(entries, "nlikes"),
         getPlotlyJsonDonuts(entries, "ntweets"),
+        getPlotlyJsonDonuts(entries, "mentions"),
         getPlotlyJsonDonuts(entries, "hashtags"),
         getReactArrayURL(entries, keyword("elastic_url"), keyword("elastic_count")),
         getJsonCounts(entries),
@@ -713,8 +715,8 @@ const useTwitterSnaRequest = (request) => {
       return axios.all(
         (final) ? [...generateList, generateWordCloudPlotlyJson(entries)] : generateList
       )
-        .then(responseArrayOf8 => {
-          makeResult(data, responseArrayOf8, givenFrom, givenUntil, final);
+        .then(responseArrayOf9 => {
+          makeResult(data, responseArrayOf9, givenFrom, givenUntil, final);
         });
 
     };
@@ -777,7 +779,7 @@ const useTwitterSnaRequest = (request) => {
 
     function createUserGraphBasedHashtagLouvain(request, tweets) {
 
-      let lcTweets = lowercaseHashtagInTweets(tweets, 'hashtags');
+      let lcTweets = lowercaseFieldInTweets(tweets, 'hashtags');
 
       // let nodesUsername = getNodesAsUsername(lcTweets);
       // let edgesUserToUserOnHashtag = getEdgesUsernameToUsername(lcTweets,request, "hashtags");
@@ -817,7 +819,7 @@ const useTwitterSnaRequest = (request) => {
 
     function createUserGraphBasedHashtag2(request, tweets) {
 
-      let lcTweets = lowercaseHashtagInTweets(tweets, 'hashtags');
+      let lcTweets = lowercaseFieldInTweets(tweets, 'hashtags');
       let filteredTweets = lcTweets.filter(tweet => tweet._source.hashtags !== undefined);
 
       let nodesUsername = getNodesAsUsername(filteredTweets);
@@ -851,7 +853,7 @@ const useTwitterSnaRequest = (request) => {
     }
 
     function createCoHashtagGraph(tweets) {
-      let lcTweets = lowercaseHashtagInTweets(tweets);
+      let lcTweets = lowercaseFieldInTweets(tweets);
       let nodes = getNodesAsHashtag(lcTweets);
       let sizeObj = getSizeOfField(lcTweets, "hashtags");
       nodes.map((node) => { 
