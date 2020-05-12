@@ -49,13 +49,15 @@ const AssistantResult = () => {
         history.push("/app/" + path + "/" + encodeURIComponent(resultUrl))
     };
 
+    const cleanAssistant = () => {
+        history.push("/app/assistant/");
+        dispatch(cleanAssistantState());
+    }
 
 
-    // some .. very nested code for results
-    // explore cleaner code!
     return (
         <Paper className={classes.root}>
-            <CloseResult onClick={() => dispatch(cleanAssistantState())}/>
+            <CloseResult onClick={() => cleanAssistant()}/>
             <Grid container spacing={2}>
                 {(resultIsImage) ? <AssistantImageResult/> : <AssistantVideoResult/>}
                 <Grid  item xs = {6}>

@@ -244,7 +244,7 @@ const NavBar = (props) => {
             title: "navbar_assistant",
             icon: <FaceIcon fontSize={"large"}/>,
             content: <Assistant/>,
-            path: "assistant",
+            path: "assistant" + "/:url?",
             footer: <Footer type={"afp"}/>
         }
     ];

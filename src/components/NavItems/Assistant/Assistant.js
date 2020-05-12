@@ -7,6 +7,7 @@ import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
 import CustomTile from "../../Shared/CustomTitle/CustomTitle";
 import {submissionEvent} from "../../Shared/GoogleAnalytics/GoogleAnalytics";
 import 'tui-image-editor/dist/tui-image-editor.css'
+import {useParams} from "react-router-dom";
 
 import useLoadLanguage from "../../../Hooks/useLoadLanguage";
 import AssistantResult from "./AssistantResult";
@@ -22,17 +23,13 @@ import metadataIconOff from "../../NavBar/images/tools/metadataOff.png";
 import videoRightsIconOff from "../../NavBar/images/tools/copyrightOff.png";
 import forensicIconOff from "../../NavBar/images/tools/forensic_logoOff.png";
 import twitterSnaIconOff from "../../NavBar/images/tools/twitter-sna-off.png";
+import history from "../../Shared/History/History";
 import {setError} from "../../../redux/actions/errorActions";
 import CloseResult from "../../Shared/CloseResult/CloseResult";
 
-/*
-* TODO: figure out weird navbar issue with translations
-*  try new tab/get all images and videos
-*  fix issue where not all redirects set url on state
-*  change
-* */
 const Assistant = () => {
 
+    const {url} = useParams();
     const classes = useMyStyles();
     const keyword = useLoadLanguage("components/NavItems/tools/Assistant.tsv", tsv);
 
@@ -68,7 +65,13 @@ const Assistant = () => {
         let domain = DOMAIN.OWN;
 
         let actions = loadActions(domain, content_type, "");
-    dispatch(setAssistantResult("", actions, urlToBeProcessed, content_type));
+        dispatch(setAssistantResult("", actions, urlToBeProcessed, content_type));
+    }
+
+    const cleanAssistant = () => {
+        history.push("/app/assistant/");
+        dispatch(cleanAssistantState());
+        setProcessUrl(null);
     }
 
     const matchPattern = (to_match, patternArray) => {
@@ -105,9 +108,16 @@ const Assistant = () => {
         return possibleActions;
     }
 
+
     useEffect(() => {
-        setInput(resultUrl);
-    }, [resultUrl]);
+        if (url !== undefined) {
+            setProcessUrl(true);
+            const uri = (url !== null) ? decodeURIComponent(url) : undefined;
+            setInput(uri);
+            submitUrl(uri);
+        }
+        else {setInput(resultUrl);}
+    }, [resultUrl, url]);
 
     const CTYPE = Object.freeze({
         VIDEO: "Video",
@@ -287,7 +297,7 @@ const Assistant = () => {
                     { (urlToBeProcessed!=null) ?
                         (urlToBeProcessed) ?
                             (<div className={classes.assistantText} hidden={false}>
-                                <CloseResult onClick={() => {setProcessUrl(null); dispatch(cleanAssistantState());}}/>
+                                <CloseResult onClick={() => cleanAssistant()}/>
                                 <Typography variant={"h6"} >
                                     <FaceIcon fontSize={"small"}/> {keyword("assistant_intro")}
                                 </Typography>
@@ -308,7 +318,7 @@ const Assistant = () => {
                             </div>)
                             :
                             ( <div className={classes.assistantText}>
-                                <CloseResult onClick={() => {setProcessUrl(null); dispatch(cleanAssistantState());}}/>
+                                <CloseResult onClick={() => cleanAssistant()}/>
                                 <Typography variant={"h6"} >
                                     <FaceIcon fontSize={"small"}/> {keyword("upload_type_question")}
                                 </Typography>

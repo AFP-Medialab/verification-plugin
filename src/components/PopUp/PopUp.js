@@ -1,6 +1,7 @@
 import React, {useState} from "react";
 import useMyStyles from "../Shared/MaterialUiStyles/useMyStyles";
 import {Typography} from "@material-ui/core";
+import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
 import weVerifyLogo from "./images/logo-we-verify.png";
 import invidLogo from "./images/InVID-logo.svg";
@@ -94,8 +95,19 @@ const PopUp = () => {
                         }
                     </Button>
                 </Grid>
+                <Box m={1}/>
+                <Grid item xs={12}>
+                    <Button variant="outlined" color="primary" fullWidth={true} width={"100%"} onClick={
+                        () => window.open("/popup.html#/app/assistant/")
+                    }>
+                        {
+                            "Open Assistant" //keyword("open_assistant"), TODO
+                        }
+                    </Button>
+                </Grid>
             </Grid>
 
+            <Box m={1}/>
             <ExpansionPanel onClick={videoClick}>
                 <ExpansionPanelSummary
                     expandIcon={<ExpandMoreIcon/>}
