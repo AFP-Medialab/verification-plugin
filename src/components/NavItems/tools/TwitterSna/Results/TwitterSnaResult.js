@@ -1244,15 +1244,20 @@ export default function TwitterSnaResult(props) {
                                     renderer={"canvas"}
                                     style={{ textAlign: 'left', width: '100%', height: '700px' }}
                                     settings={{
-                                        // labelThreshold: 13,
+                                        // labelThreshold: 10,
                                         drawEdges: true,
                                         drawEdgeLabels: false,
-                                        minNodeSize: 5,
-                                        maxNodeSize: 12,
+                                        minNodeSize: 10,
+                                        maxNodeSize: 30,
+                                        minEdgeSize: 1,
+                                        maxEdgeSize: 10,
                                         defaultNodeColor: "#3388AA",
-                                    }}>
+                                        defaultEdgeColor: "#C0C0C0",
+                                        edgeColor: "default"
+                                    }}
+                                    >
                                     <RandomizeNodePositions>
-                                        <ForceAtlas2 iterationsPerRender={1} timeout={120000} />
+                                        <ForceAtlas2 iterationsPerRender={1} timeout={30000} />
                                     </RandomizeNodePositions>
                                 </Sigma>
                             </div>

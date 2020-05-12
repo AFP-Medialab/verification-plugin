@@ -169,11 +169,12 @@ function getEdgesCoHashtag(tweets) {
                     source: sortedVertices[0], 
                     target: sortedVertices[1],
                     label: sortedVertices.join(""), 
-                    weight: 1 });
+                    weight: 1,
+                    size: 1 });
       }
     }
   });
-  let uniqEdges = groupByThenSum(edges, 'id', [], ['weight'], ['source', 'target', 'label']);
+  let uniqEdges = groupByThenSum(edges, 'id', [], ['size', 'weight'], ['source', 'target', 'label']);
   return uniqEdges;
 }
 
@@ -262,6 +263,17 @@ function filterCommunities(graph, sizeToRm = 1) {
       nodes: filteredNodes,
       edges: filteredEdges
     }
+  }
+}
+
+function getTopNodeGraph(graph, prop="size", top=15) {
+  let sortNodes = _.sortBy(graph.nodes, ["size"]).reverse();
+  let topNodes = sortNodes.slice(0, top);
+  let topNodesId = topNodes.map((node) => { return node.id; });
+  let filteredEdges = graph.edges.filter(edge => _.difference([edge.source, edge.target], topNodesId).length === 0);
+  return {
+    nodes: topNodes,
+    edges: filteredEdges
   }
 }
 
@@ -842,14 +854,20 @@ const useTwitterSnaRequest = (request) => {
       let lcTweets = lowercaseHashtagInTweets(tweets);
       let nodes = getNodesAsHashtag(lcTweets);
       let sizeObj = getSizeOfField(lcTweets, "hashtags");
-      nodes.map((node) => { node.size= sizeObj[node.id]; return node;});
+      nodes.map((node) => { 
+        node.size= sizeObj[node.id];
+        node.label = node.label + ": " + sizeObj[node.id].toString();
+        return node;
+      });
+
       let edges = getEdgesCoHashtag(lcTweets);
       let graph = {
         nodes: nodes,
         edges: edges
       }
+      let topNodeGraph = getTopNodeGraph(graph, "size", 15);
       return {
-        data: graph
+        data: topNodeGraph
       };
     }
 
