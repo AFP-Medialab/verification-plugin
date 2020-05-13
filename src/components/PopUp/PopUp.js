@@ -45,6 +45,9 @@ const PopUp = () => {
     const [imageList, setImageList] = useState(null);
     const [videoList, setVideoList] = useState(null);
 
+    //todo: figure out how to actually get the page url...
+    const pageUrl = navigator.tabs.url;
+
     const getUrls = (tag, field, setFunction) => {
         let urlList = [];
         const script = createScript(tag, field);
@@ -90,19 +93,23 @@ const PopUp = () => {
                     <Button variant="outlined" color="primary" fullWidth={true} width={"100%"} onClick={
                         () => window.open("/popup.html#/app/tools/all")
                     }>
-                        {
-                            keyword("open_website")
-                        }
+                        {keyword("open_website")}
                     </Button>
                 </Grid>
                 <Box m={1}/>
                 <Grid item xs={12}>
                     <Button variant="outlined" color="primary" fullWidth={true} width={"100%"} onClick={
-                        () => window.open("/popup.html#/app/assistant/")
-                    }>
-                        {
-                            "Open Assistant" //keyword("open_assistant"), TODO
-                        }
+                        () => window.open("/popup.html#/app/assistant/")}>
+                        {/*TODO: keyword("open_assistant")*/}
+                        {"Get Assistance"}
+                    </Button>
+                </Grid>
+                <Box m={1}/>
+                <Grid item xs={12}>
+                    <Button variant="outlined" color="primary" fullWidth={true} width={"100%"} onClick={
+                        () => window.open("/popup.html#/app/assistant/" + encodeURIComponent(pageUrl))}>
+                        {/*TODO: keyword("open_assistant_on_page")*/}
+                        {"Assistant for Current Page"}
                     </Button>
                 </Grid>
             </Grid>
