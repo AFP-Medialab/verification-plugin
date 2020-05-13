@@ -40,9 +40,9 @@ const Footer = (props) => {
             break;
         case "usfd":
             provideBy = "Provided by "//keyword("usfd_part_1");
-            link = "https://www.sheffield.ac.uk/dcs/research/groups/natural-language-processing"//keyword("usfd_link");
+            link = "https://gate.ac.uk/"//keyword("usfd_link");
             linkLabel = "USFD "//keyword("usfd_link_label");
-            contactUs = "To contact us ..."//keyword("usfd_part_2");
+            contactUs = "To contact us ..."//keyword("usfd_part_2"), to be updated to gate contacts;
             break;
         default:
             provideBy = keyword("apf_part_1");
