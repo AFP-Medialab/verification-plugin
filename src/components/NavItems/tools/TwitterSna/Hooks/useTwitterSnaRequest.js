@@ -599,6 +599,13 @@ const useTwitterSnaRequest = (request) => {
         "mention_cloud_chart_title",
         "hashtag_cloud_chart_title"
       ];
+      let tips = [
+        "twittersna_mots_retweet_tip",
+        "twittersna_most_likes_tip",
+        "twittersna_most_active_tip",
+        "twittersna_most_mentions_tip",
+        "twittersna_most_hashtag_tip"
+      ]
 
       let pieCharts = [];
 
@@ -610,6 +617,7 @@ const useTwitterSnaRequest = (request) => {
             json: responseArrayOf9[cpt],
             layout: cloudLayout,
             config: config,
+            tip: tips[cpt]
           }
         );
       }

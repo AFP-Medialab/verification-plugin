@@ -1,4 +1,5 @@
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
+import OnClickInfo from "../../../../Shared/OnClickInfo/OnClickInfo";
 import { useDispatch, useSelector } from "react-redux";
 import React, { useEffect, useState, useCallback } from "react";
 import { Paper } from "@material-ui/core";
@@ -707,6 +708,8 @@ export default function TwitterSnaResult(props) {
                                     }}
                                 />
                             }
+                            <Box m={1} />
+                            <OnClickInfo keyword={"twittersna_timeline_tip"}/>
                             <Box m={2} />
                             {
                                 histoTweets &&
@@ -775,7 +778,8 @@ export default function TwitterSnaResult(props) {
                                     <Typography variant={"h2"}>{result.tweetCount.like}</Typography>
                                 </Grid>
                             </Grid>
-
+                            <Box m={3}/>
+                            <OnClickInfo keyword={"twittersna_tweetnb_tip"}/>
                         </Box>
                     </ExpansionPanelDetails>
                 </ExpansionPanel>
@@ -841,15 +845,19 @@ export default function TwitterSnaResult(props) {
                                         }
                                         {
                                             (obj.json !== null) &&
-                                            <Plot
-                                                data={obj.json}
-                                                layout={obj.layout}
-                                                config={obj.config}
-                                                onClick={e => {
-                                                    onDonutsClick(e, obj.title, index)
-                                                }}
-                                                divId={obj.title}
-                                            />
+                                            <div>
+                                                <Plot
+                                                    data={obj.json}
+                                                    layout={obj.layout}
+                                                    config={obj.config}
+                                                    onClick={e => {
+                                                        onDonutsClick(e, obj.title, index)
+                                                    }}
+                                                    divId={obj.title}
+                                                />
+                                                <Box m={1} />
+                                                <OnClickInfo keyword={obj.tip}/>
+                                            </div>
                                         }
                                         {
                                             pieCharts[index] &&
@@ -949,6 +957,8 @@ export default function TwitterSnaResult(props) {
                                     result.cloudChart.json && (result.cloudChart.json.length !== 0) &&
                                     <div id="top_words_cloud_chart" height={"100%"} width={"100%"}>
                                         <ReactWordcloud key={JSON.stringify(result)} options={result.cloudChart.options} callbacks={call} words={result.cloudChart.json} />
+                                        <Box m={1}/>
+                                        <OnClickInfo keyword={"twittersna_wordcloud_tip"}/>
                                     </div>
 
                                 }
@@ -1011,13 +1021,16 @@ export default function TwitterSnaResult(props) {
                                 {
                                     ((result.heatMap.isAllnul) &&
                                         <Typography variant={"body2"}>{keyword("sna_no_data")}</Typography>) ||
-
-                                    <Plot
-                                        style={{ width: '100%', height: "450px" }}
-                                        data={result.heatMap.plot}
-                                        config={result.histogram.config}
-                                        onClick={(e) => onHeatMapClick(e)}
-                                    />
+                                    <div>
+                                        <Plot
+                                            style={{ width: '100%', height: "450px" }}
+                                            data={result.heatMap.plot}
+                                            config={result.histogram.config}
+                                            onClick={(e) => onHeatMapClick(e)}
+                                        />
+                                        <Box m={1}/>
+                                        <OnClickInfo keyword={"twittersna_heatmap_tip"}/>
+                                    </div>
                                 }
                                 {
                                     heatMapTweets &&
@@ -1099,6 +1112,9 @@ export default function TwitterSnaResult(props) {
                                         <ForceAtlas2 iterationsPerRender={1} timeout={15000} />
                                     </RandomizeNodePositions>
                                 </Sigma>
+                                <Box m={1}/>
+                                <OnClickInfo keyword={"twittersna_hashtag_graph_tip"}/>
+                                <Box m={2}/>
                                 {
                                     coHashtagGraphTweets &&
                                     <div>
@@ -1156,53 +1172,65 @@ export default function TwitterSnaResult(props) {
                             <div style={{ width: '100%' }}>
                                 {
                                     (userGraphReset === null && userGraphClickNode === null && result.userGraph.data.nodes.length !== 0) &&
-                                    <Sigma graph={result.userGraph.data}
-                                        renderer={"canvas"}
-                                        style={{ textAlign: 'left', width: '100%', height: '700px' }}
-                                        onClickNode={(e) => onClickNodeUserGraph(e)}
-                                        settings={{
-                                            labelThreshold: 13,
-                                            drawEdges: false,
-                                            drawEdgeLabels: false,
-                                            minNodeSize: 5,
-                                            maxNodeSize: 12
-                                        }}>
-                                        <RandomizeNodePositions>
-                                            <ForceAtlas2 iterationsPerRender={1} timeout={120000} />
-                                        </RandomizeNodePositions>
-                                    </Sigma>
+                                    <div>
+                                        <Sigma graph={result.userGraph.data}
+                                            renderer={"canvas"}
+                                            style={{ textAlign: 'left', width: '100%', height: '700px' }}
+                                            onClickNode={(e) => onClickNodeUserGraph(e)}
+                                            settings={{
+                                                labelThreshold: 13,
+                                                drawEdges: false,
+                                                drawEdgeLabels: false,
+                                                minNodeSize: 5,
+                                                maxNodeSize: 12
+                                            }}>
+                                            <RandomizeNodePositions>
+                                                <ForceAtlas2 iterationsPerRender={1} timeout={120000} />
+                                            </RandomizeNodePositions>
+                                        </Sigma>
+                                        <Box m={1}/>
+                                        <OnClickInfo keyword={"twittersna_user_graph_tip"}/>
+                                    </div>
                                 }
                                 {
                                     userGraphReset !== null && userGraphClickNode !== null &&
-                                    <Sigma graph={userGraphClickNode}
-                                        renderer={"canvas"}
-                                        onClickStage={(e) => onClickStage(e)}
-                                        style={{ textAlign: 'left', width: '100%', height: '700px' }}
-                                        settings={{
-                                            defaultLabelColor: "#777",
-                                            labelThreshold: 13,
-                                            minNodeSize: 5,
-                                            maxNodeSize: 12,
-                                            drawEdgeLabels: true,
-                                            edgeColor: 'target'
-                                        }}
-                                    >
-                                    </Sigma>
+                                    <div>
+                                        <Sigma graph={userGraphClickNode}
+                                            renderer={"canvas"}
+                                            onClickStage={(e) => onClickStage(e)}
+                                            style={{ textAlign: 'left', width: '100%', height: '700px' }}
+                                            settings={{
+                                                defaultLabelColor: "#777",
+                                                labelThreshold: 13,
+                                                minNodeSize: 5,
+                                                maxNodeSize: 12,
+                                                drawEdgeLabels: true,
+                                                edgeColor: 'target'
+                                            }}
+                                        >
+                                        </Sigma>
+                                        <Box m={1}/>
+                                        <OnClickInfo keyword={"twittersna_user_graph_tip"}/>
+                                    </div>
                                 }
                                 {
                                     userGraphReset !== null && userGraphClickNode === null &&
-                                    <Sigma graph={userGraphReset}
-                                        renderer={"canvas"}
-                                        style={{ textAlign: 'left', width: '100%', height: '700px' }}
-                                        onClickNode={(e) => onClickNodeUserGraph(e)}
-                                        settings={{
-                                            labelThreshold: 13,
-                                            drawEdges: false,
-                                            drawEdgeLabels: false,
-                                            minNodeSize: 5,
-                                            maxNodeSize: 12
-                                        }}>
-                                    </Sigma>
+                                    <div>
+                                        <Sigma graph={userGraphReset}
+                                            renderer={"canvas"}
+                                            style={{ textAlign: 'left', width: '100%', height: '700px' }}
+                                            onClickNode={(e) => onClickNodeUserGraph(e)}
+                                            settings={{
+                                                labelThreshold: 13,
+                                                drawEdges: false,
+                                                drawEdgeLabels: false,
+                                                minNodeSize: 5,
+                                                maxNodeSize: 12
+                                            }}>
+                                        </Sigma>
+                                        <Box m={1}/>
+                                            <OnClickInfo keyword={"twittersna_user_graph_tip"}/>
+                                    </div>
                                 }
                                 {
                                     result.userGraph.legend.length !== 0 &&
@@ -1381,7 +1409,7 @@ export default function TwitterSnaResult(props) {
                                 </RandomizeNodePositions>
                                 <RelativeSize initialSize={30}/>
                             </LoadGEXF>
-                        </Sigma> 
+                        </Sigma>
                     </ExpansionPanelDetails>
                 </ExpansionPanel>
             }
@@ -1389,20 +1417,24 @@ export default function TwitterSnaResult(props) {
             <Box m={3} />
             {
                 result.urls &&
-                <CustomTable
-                    title={keyword("sna_result_url_in_tweets")}
-                    colums={result.urls.columns}
-                    data={result.urls.data}
-                    actions={[
-                        {
-                            icon: LinkIcon,
-                            tooltip: keyword("sna_result_go_to"),
-                            onClick: (event, rowData) => {
-                                window.open(rowData.url, '_blank');
+                <div>
+                    <CustomTable
+                        title={keyword("sna_result_url_in_tweets")}
+                        colums={result.urls.columns}
+                        data={result.urls.data}
+                        actions={[
+                            {
+                                icon: LinkIcon,
+                                tooltip: keyword("sna_result_go_to"),
+                                onClick: (event, rowData) => {
+                                    window.open(rowData.url, '_blank');
+                                }
                             }
-                        }
-                    ]}
-                />
+                        ]}
+                    />
+                    <Box m={1}/>
+                    <OnClickInfo keyword={"twittersna_urls_tip"}/>
+                </div>
             }
         </Paper>
     );
