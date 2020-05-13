@@ -783,7 +783,7 @@ export default function TwitterSnaResult(props) {
             {
                 result.pieCharts &&
                 result.pieCharts.map((obj, index) => {
-                    if ((props.request.userList.length === 0 || index === 3))
+                    if ((props.request.userList.length === 0 || index === 3 || index === 4))
                         return (
                             <ExpansionPanel key={index}>
                                 <ExpansionPanelSummary
@@ -1077,7 +1077,7 @@ export default function TwitterSnaResult(props) {
                     </ExpansionPanelSummary>
                     <ExpansionPanelDetails>
                     {
-                            result && result.coHashtagGraph && result.coHashtagGraph.data && result.coHashtagGraph.data.nodes.length !== 0 &&
+                        result && result.coHashtagGraph && result.coHashtagGraph.data.nodes.length !== 0 &&
                             <div style={{ width: '100%' }}>
                                 <Sigma graph={result.coHashtagGraph.data}
                                     renderer={"canvas"}
@@ -1143,6 +1143,7 @@ export default function TwitterSnaResult(props) {
                 </ExpansionPanel>
             }
             {
+                props.request.userList.length === 0 && result &&
                 <ExpansionPanel>
                     <ExpansionPanelSummary
                         expandIcon={<ExpandMoreIcon />}
@@ -1151,10 +1152,10 @@ export default function TwitterSnaResult(props) {
                     </ExpansionPanelSummary>
                     <ExpansionPanelDetails>
                         {
-                            result && result.userGraph && result.userGraph.data &&
+                            result.userGraph &&
                             <div style={{ width: '100%' }}>
                                 {
-                                    (userGraphReset === null && userGraphClickNode === null && result.userGraph.data && result.userGraph.data.nodes.length !== 0) &&
+                                    (userGraphReset === null && userGraphClickNode === null && result.userGraph.data.nodes.length !== 0) &&
                                     <Sigma graph={result.userGraph.data}
                                         renderer={"canvas"}
                                         style={{ textAlign: 'left', width: '100%', height: '700px' }}
@@ -1204,7 +1205,7 @@ export default function TwitterSnaResult(props) {
                                     </Sigma>
                                 }
                                 {
-                                    result.userGraph.legend && result.userGraph.legend !== 0 &&
+                                    result.userGraph.legend.length !== 0 &&
                                     <div >
                                         <Paper >
                                             <ListSubheader component="div" style={{ fontSize: 18, fontWeight: 'bold' }}> Legend </ListSubheader>
@@ -1348,19 +1349,21 @@ export default function TwitterSnaResult(props) {
                 </ExpansionPanel>
             }
             {
+                props.request.userList.length === 0 && result &&
                 <ExpansionPanel>
                     <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
                         <Typography>Graph using Infomap</Typography>
                     </ExpansionPanelSummary>
                     <ExpansionPanelDetails>
                     {
-                        result && result.tweets &&
+                        result.tweets &&
                         <TwitterInfoMap result={result} request={props.request} />
                     }
                     </ExpansionPanelDetails>
                 </ExpansionPanel>
             }
             {
+                props.request.userList.length === 0 && result &&
                 <ExpansionPanel>
                     <ExpansionPanelSummary
                         expandIcon={<ExpandMoreIcon />}
