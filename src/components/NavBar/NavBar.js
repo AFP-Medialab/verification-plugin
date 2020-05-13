@@ -245,7 +245,7 @@ const NavBar = (props) => {
             icon: <FaceIcon fontSize={"large"}/>,
             content: <Assistant/>,
             path: "assistant",
-            footer: <Footer type={"afp"}/>
+            footer: <Footer type={"usfd"}/>
         }
     ];
 
