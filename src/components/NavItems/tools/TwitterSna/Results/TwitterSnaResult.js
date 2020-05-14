@@ -11,6 +11,7 @@ import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
 import Plot from "react-plotly.js";
 import Box from "@material-ui/core/Box";
 import CustomTable from "../../../../Shared/CustomTable/CustomTable";
+import CustomTableURL from "../../../../Shared/CustomTable/CustomTableURL";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import LinkIcon from '@material-ui/icons/Link';
@@ -1396,6 +1397,29 @@ export default function TwitterSnaResult(props) {
             }
             {
                 props.request.userList.length === 0 && result &&
+                <ExpansionPanel>
+                    <ExpansionPanelSummary
+                        expandIcon={<ExpandMoreIcon />}
+                    >
+                        <Typography className={classes.heading}>{"Load GEXF file"}</Typography>
+                    </ExpansionPanelSummary>
+                    <ExpansionPanelDetails>
+                        <Sigma
+                                renderer={"canvas"}
+                                style={{ textAlign: 'left', width: '100%', height: '700px' }}
+                        >
+                            <LoadGEXF path={gexfFile}>
+                                <RandomizeNodePositions>
+                                    <ForceAtlas2 iterationsPerRender={1} timeout={120000} />
+                                </RandomizeNodePositions>
+                                <RelativeSize initialSize={30}/>
+                            </LoadGEXF>
+                        </Sigma>
+                    </ExpansionPanelDetails>
+                </ExpansionPanel>
+            }
+            {
+                props.request.userList.length === 0 && result &&
                 <Paper>
                     <Toolbar>
                         <Typography className={classes.heading}>Graph visualization</Typography>
@@ -1425,35 +1449,12 @@ export default function TwitterSnaResult(props) {
                     </Box>
                 </Paper>
             }
-            {
-                props.request.userList.length === 0 && result &&
-                <ExpansionPanel>
-                    <ExpansionPanelSummary
-                        expandIcon={<ExpandMoreIcon />}
-                    >
-                        <Typography className={classes.heading}>{"Load GEXF file"}</Typography>
-                    </ExpansionPanelSummary>
-                    <ExpansionPanelDetails>
-                        <Sigma
-                                renderer={"canvas"}
-                                style={{ textAlign: 'left', width: '100%', height: '700px' }}
-                        >
-                            <LoadGEXF path={gexfFile}>
-                                <RandomizeNodePositions>
-                                    <ForceAtlas2 iterationsPerRender={1} timeout={120000} />
-                                </RandomizeNodePositions>
-                                <RelativeSize initialSize={30}/>
-                            </LoadGEXF>
-                        </Sigma>
-                    </ExpansionPanelDetails>
-                </ExpansionPanel>
-            }
 
             <Box m={3} />
             {
                 result.urls &&
                 <div>
-                    <CustomTable
+                    <CustomTableURL
                         title={keyword("sna_result_url_in_tweets")}
                         colums={result.urls.columns}
                         data={result.urls.data}
@@ -1462,7 +1463,7 @@ export default function TwitterSnaResult(props) {
                                 icon: LinkIcon,
                                 tooltip: keyword("sna_result_go_to"),
                                 onClick: (event, rowData) => {
-                                    window.open(rowData.url, '_blank');
+                                    window.open("/popup.html#/app/tools/twitterSna");
                                 }
                             }
                         ]}
