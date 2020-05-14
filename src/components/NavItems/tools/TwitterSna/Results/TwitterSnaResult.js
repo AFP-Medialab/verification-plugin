@@ -1091,7 +1091,7 @@ export default function TwitterSnaResult(props) {
                     <ExpansionPanelSummary
                         expandIcon={<ExpandMoreIcon />}
                     >
-                        <Typography className={classes.heading}>{keyword("hashtag_graph_title")}</Typography>
+                        <Typography className={classes.heading}>{keyword("twittersna_user_graph_title")}</Typography>
                     </ExpansionPanelSummary>
                     <ExpansionPanelDetails>
                     {
@@ -1422,7 +1422,7 @@ export default function TwitterSnaResult(props) {
                 props.request.userList.length === 0 && result &&
                 <Paper>
                     <Toolbar>
-                        <Typography className={classes.heading}>Graph visualization</Typography>
+                        <Typography className={classes.heading}>{keyword("twittersna_export_graph_title")}</Typography>
                         <div style={{ flexGrow: 1 }}/>
                         <Button
                             aria-label="download"
