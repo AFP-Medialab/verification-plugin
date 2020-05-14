@@ -59,38 +59,40 @@ const AssistantResult = () => {
         <Paper className={classes.root}>
             <CloseResult onClick={() => cleanAssistant()}/>
             <Grid container spacing={2}>
+
                 {(resultIsImage) ? <AssistantImageResult/> : <AssistantVideoResult/>}
+
                 <Grid  item xs = {6}>
                     <Card variant = "outlined">
-                        <Box m = {2} >
-                            <Typography variant="h5" component="h2" color="black">
-                                {keyword("things_you_can_do_header")}
-                            </Typography>
-                            <Typography className={classes.title} color="primary">
-                                {keyword("things_you_can_do")}
-                            </Typography>
-                        </Box>
-                        <Box m = {2}>
-                            <Grid container spacing={2}>
-                                {resultData.map((action) => {
-                                    return (
-                                        <Grid container m = {4}>
-                                            <Card className={classes.assistantCards}  variant = "outlined"
-                                                  onClick={() => handleClick(action.path, resultUrl) }>
-                                                <CardActionArea><CardContent>
-                                                        <Typography className={classes.title} m={2}>{keyword(action.text)}</Typography>
-                                                        <Button aria-colspan={2} size = "medium">
-                                                            {<Icon className={classes.iconRootDrawer} fontSize={"large"}>
-                                                                <img className={classes.imageIconDrawer} src={action.icon}/>
-                                                            </Icon>}
-                                                            {keyword(action.title)}
-                                                        </Button>
-                                                </CardContent></CardActionArea>
-                                            </Card>
-                                        </Grid>
-                                    )})}
-                            </Grid>
-                        </Box>
+
+                        <Box m = {2}/>
+                        <Typography variant="h5" component="h2" color="black">
+                            {keyword("things_you_can_do_header")}
+                        </Typography>
+                        <Typography className={classes.title} color="primary">
+                            {keyword("things_you_can_do")}
+                        </Typography>
+                        <Box m = {2}/>
+
+                        <Grid container spacing={2}>
+                            {resultData.map((action) => {return (
+                                <Grid container m = {4}>
+                                    <Card className={classes.assistantCards}  variant = "outlined"
+                                          onClick={() => handleClick(action.path, resultUrl) }>
+                                        <CardActionArea><CardContent>
+                                                <Typography className={classes.title} m={2}>{keyword(action.text)}</Typography>
+                                                <Button aria-colspan={2} size = "medium">
+                                                    {<Icon className={classes.iconRootDrawer} fontSize={"large"}>
+                                                        <img className={classes.imageIconDrawer} src={action.icon}/>
+                                                    </Icon>}
+                                                    {keyword(action.title)}
+                                                </Button>
+                                        </CardContent></CardActionArea>
+                                    </Card>
+                                </Grid>
+                            )})}
+                        </Grid>
+
                     </Card>
                 </Grid>
             </Grid>

@@ -23,7 +23,7 @@ const AssistantImageResult = () => {
                         {keyword("media_to_process")}
                     </Typography>
                     <Typography className={classes.title} color="primary">
-                        {resultUrl}
+                        {<a href={resultUrl} target="_blank"> {resultUrl} </a>}
                     </Typography>
                 </CardContent>
                 <CardMedia>
