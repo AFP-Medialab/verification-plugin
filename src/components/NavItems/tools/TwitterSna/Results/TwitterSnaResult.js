@@ -15,6 +15,9 @@ import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import LinkIcon from '@material-ui/icons/Link';
 import TwitterIcon from '@material-ui/icons/Twitter';
+import SaveIcon from '@material-ui/icons/Save';
+import BubbleChartIcon from '@material-ui/icons/BubbleChart';
+import Toolbar from "@material-ui/core/Toolbar";
 import { TableContainer, Table, TableBody, TableRow, TableCell } from '@material-ui/core';
 import { Avatar } from '@material-ui/core';
 import List from '@material-ui/core/List';
@@ -38,6 +41,7 @@ import { Sigma, RandomizeNodePositions, ForceAtlas2, SigmaEnableWebGL, LoadGEXF,
 import Plotly from 'plotly.js-dist';
 import RefreshGraph from './RefreshGraph';
 import TwitterInfoMap from "./TwitterInfoMap";
+import _ from "lodash";
 import CircularProgress from "@material-ui/core/CircularProgress";
 Cytoscape.use(Fcose);
 
@@ -1086,7 +1090,7 @@ export default function TwitterSnaResult(props) {
                     <ExpansionPanelSummary
                         expandIcon={<ExpandMoreIcon />}
                     >
-                        <Typography className={classes.heading}>{"Co-Hashtag Graph"}</Typography>
+                        <Typography className={classes.heading}>{keyword("hashtag_graph_title")}</Typography>
                     </ExpansionPanelSummary>
                     <ExpansionPanelDetails>
                     {
@@ -1389,6 +1393,37 @@ export default function TwitterSnaResult(props) {
                     }
                     </ExpansionPanelDetails>
                 </ExpansionPanel>
+            }
+            {
+                props.request.userList.length === 0 && result &&
+                <Paper>
+                    <Toolbar>
+                        <Typography className={classes.heading}>Graph visualization</Typography>
+                        <div style={{ flexGrow: 1 }}/>
+                        <Button
+                            aria-label="download"
+                            disabled={_.isEmpty(result.gexf)}
+                            startIcon={<SaveIcon />}
+                            href={result.gexf ? result.gexf.getUrl : undefined}
+                            tooltip="Download gexf file">
+                            Donwload
+                        </Button>
+                    </Toolbar>
+                    <Box pb={3}>
+                        <Button
+                            variant={"contained"}
+                            color={"primary"}
+                            startIcon={<BubbleChartIcon />}
+                            disabled={_.isEmpty(result.gexf)}
+                            href={result.gexf ? result.gexf.visualizationUrl : undefined}
+                            target="_blank"
+                            rel="noopener"
+                            tooltip="View the network of tweets"
+                        >
+                            View Graph
+                        </Button>
+                    </Box>
+                </Paper>
             }
             {
                 props.request.userList.length === 0 && result &&

@@ -12,7 +12,8 @@ import {
   getPlotlyJsonHisto,
   getJsonCounts,
   getReactArrayURL,
-  generateWordCloudPlotlyJson
+  generateWordCloudPlotlyJson,
+  getESQuery4Gexf
 } from "../Results/call-elastic";
 
 import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
@@ -573,7 +574,7 @@ const useTwitterSnaRequest = (request) => {
       dispatch(setTwitterSnaLoading(false));
     };
 
-    const createPieCharts = (data, responseArrayOf9) => {
+    const createPieCharts = (data, responseArrayOf10) => {
       let cloudLayout = {
         title: "",
         automargin: true,
@@ -614,7 +615,7 @@ const useTwitterSnaRequest = (request) => {
         pieCharts.push(
           {
             title: titles[cpt],
-            json: responseArrayOf9[cpt],
+            json: responseArrayOf10[cpt],
             layout: cloudLayout,
             config: config,
             tip: tips[cpt]
@@ -667,23 +668,24 @@ const useTwitterSnaRequest = (request) => {
         tweetsView: null,
       };
     };
-    const makeResult = (data, responseArrayOf9, givenFrom, givenUntil, final) => {
+    const makeResult = (data, responseArrayOf10, givenFrom, givenUntil, final) => {
 
       const result = {};
-      result.pieCharts = createPieCharts(data, responseArrayOf9);
-      result.urls = responseArrayOf9[5];
+      result.pieCharts = createPieCharts(data, responseArrayOf10);
+      result.urls = responseArrayOf10[5];
       result.tweetCount = {};
-      result.tweetCount.count = responseArrayOf9[6].value.toString().replace(/(?=(\d{3})+(?!\d))/g, " ");
-      result.tweetCount.retweet = responseArrayOf9[6].retweets.toString().replace(/(?=(\d{3})+(?!\d))/g, " ");
-      result.tweetCount.like = responseArrayOf9[6].likes.toString().replace(/(?=(\d{3})+(?!\d))/g, " ");
-      result.tweets = responseArrayOf9[6].tweets;
-      result.histogram = createHistogram(data, responseArrayOf9[7], givenFrom, givenUntil);
+      result.tweetCount.count = responseArrayOf10[6].value.toString().replace(/(?=(\d{3})+(?!\d))/g, " ");
+      result.tweetCount.retweet = responseArrayOf10[6].retweets.toString().replace(/(?=(\d{3})+(?!\d))/g, " ");
+      result.tweetCount.like = responseArrayOf10[6].likes.toString().replace(/(?=(\d{3})+(?!\d))/g, " ");
+      result.tweets = responseArrayOf10[6].tweets;
+      result.histogram = createHistogram(data, responseArrayOf10[7], givenFrom, givenUntil);
       if (final) {
-        result.cloudChart = createWordCloud(responseArrayOf9[8]);
-        result.heatMap = createHeatMap(request, responseArrayOf9[6].tweets);
-        result.userGraph = createUserGraphBasedHashtagLouvain(request, responseArrayOf9[6].tweets);
-        // result.userGraph = createUserGraphBasedHashtag2(request, responseArrayOf9[5].tweets);
-        result.coHashtagGraph = createCoHashtagGraph(responseArrayOf9[6].tweets);
+        result.cloudChart = createWordCloud(responseArrayOf10[8]);
+        result.heatMap = createHeatMap(request, responseArrayOf10[6].tweets);
+        result.userGraph = createUserGraphBasedHashtagLouvain(request, responseArrayOf10[6].tweets);
+        // result.userGraph = createUserGraphBasedHashtag2(request, responseArrayOf10[5].tweets);
+        result.coHashtagGraph = createCoHashtagGraph(responseArrayOf10[6].tweets);
+        result.gexf = responseArrayOf10[9];
       }
       else
         result.cloudChart = { title: "top_words_cloud_chart_title" };
@@ -721,10 +723,10 @@ const useTwitterSnaRequest = (request) => {
         getPlotlyJsonHisto(entries, givenFrom, givenUntil)
       ];
       return axios.all(
-        (final) ? [...generateList, generateWordCloudPlotlyJson(entries)] : generateList
+        (final) ? [...generateList, generateWordCloudPlotlyJson(entries), getESQuery4Gexf(entries)] : generateList
       )
-        .then(responseArrayOf9 => {
-          makeResult(data, responseArrayOf9, givenFrom, givenUntil, final);
+        .then(responseArrayOf10 => {
+          makeResult(data, responseArrayOf10, givenFrom, givenUntil, final);
         });
 
     };
