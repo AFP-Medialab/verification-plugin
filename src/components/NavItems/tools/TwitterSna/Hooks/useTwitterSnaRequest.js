@@ -601,7 +601,7 @@ const useTwitterSnaRequest = (request) => {
         "hashtag_cloud_chart_title"
       ];
       let tips = [
-        "twittersna_mots_retweet_tip",
+        "twittersna_most_retweet_tip",
         "twittersna_most_likes_tip",
         "twittersna_most_active_tip",
         "twittersna_most_mentions_tip",
