@@ -62,6 +62,13 @@ const PopUp = () => {
         })
     };
 
+    const urlOpenAssistant = () => {
+        navigator.tabs.query({active: true, lastFocusedWindow: true}, tabs => {
+            let url = tabs[0].url;
+            window.open("/popup.html#/app/assistant/" + encodeURIComponent(url))
+        })
+    }
+
     const imageClick = () => {
         getUrls("img", "src", setImageList);
     };
@@ -101,13 +108,13 @@ const PopUp = () => {
                     <Button variant="outlined" color="primary" fullWidth={true} width={"100%"} onClick={
                         () => window.open("/popup.html#/app/assistant/")}>
                         {/*TODO: keyword("open_assistant")*/}
-                        {"Get Assistance"}
+                        {"Assistant"}
                     </Button>
                 </Grid>
                 <Box m={1}/>
                 <Grid item xs={12}>
                     <Button variant="outlined" color="primary" fullWidth={true} width={"100%"} onClick={
-                        () => window.open("/popup.html#/app/assistant/" + encodeURIComponent(pageUrl))}>
+                        () => urlOpenAssistant()}>
                         {/*TODO: keyword("open_assistant_on_page")*/}
                         {"Assistant for Current Page"}
                     </Button>
