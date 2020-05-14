@@ -646,7 +646,7 @@ function constructAggs(field) {
                 "order": {
                     "_count": "desc"
                 },
-                "size": 14
+                "size": 20
             }
         })
     }
@@ -660,7 +660,7 @@ function constructAggs(field) {
                 "order": {
                     "1": "desc"
                 },
-                "size": 14
+                "size": 20
             },
             "aggs": {
                 "1": {
@@ -727,7 +727,7 @@ function constructAggs(field) {
                     "order": {
                         "_count": "desc"
                     },
-                    "size": 14
+                    "size": 20
                 }
             });
         }
