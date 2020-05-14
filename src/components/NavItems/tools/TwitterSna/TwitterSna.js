@@ -48,6 +48,9 @@ const TwitterSna = () => {
   const isLoading = useSelector(state => state.twitterSna.loading);
   const loadingMessage = useSelector(state => state.twitterSna.loadingMessage);
 
+  const windowUrl = window.location.href;
+  let urlObj = extractUrlSearch(windowUrl);
+
   // Authentication Redux state
   const userAuthenticated = useSelector(state => state.userSession && state.userSession.userAuthenticated);
 
@@ -121,7 +124,7 @@ const TwitterSna = () => {
   const [localTime, setLocalTime] = useState("true");
 
   // Form disabled?
-  const searchFormDisabled = isLoading || !userAuthenticated;
+  const searchFormDisabled = isLoading || !userAuthenticated || urlObj.isUrlSearch;
 
   const handleErrors = (e) => {
     dispatch(setError(e));
@@ -133,6 +136,27 @@ const TwitterSna = () => {
     return res.filter(function (el) {
       return el !== "";
     });
+  }
+
+  function extractUrlSearch(windowUrl) {
+    // const isUrlSearch = windowUrl.split("/twitterSna?url=").length > 1 ? true : false;
+    let part = windowUrl.split("/twitterSna?url=")[1];
+    if (part === undefined) {
+      return {
+        url: null,
+        request: null,
+        isUrlSearch: false
+      }
+    } else {
+      let url = part.split("&request=")[0];
+      let request = JSON.parse(unescape(part.split("&request=")[1]));
+      let isUrlSearch = (!url || !request) ? false : true;
+      return {
+        url: url,
+        request: request,
+        isUrlSearch: isUrlSearch
+      }
+    }
   }
 
   const makeRequestParams = (keywordsP, bannedWordsP, usersInputP, sinceP, untilP, localTimeP, langInputP, filtersP, verifiedUsersP) => {
@@ -248,55 +272,116 @@ const TwitterSna = () => {
   // Reset form & result when user login
   useEffect(() => {
     // console.log("Auth change (authenticated: ", userAuthenticated, "), updating fields");
-
-    setKeywords(userAuthenticated ?
-      "" :
-      "\"fake news\""
-    );
-    setBannedWords("");
-    setUsersInput(userAuthenticated ?
-      "" :
-      "@realDonaldTrump"
-    );
-    setSince(userAuthenticated ?
-      null :
-      new Date("2016-12-10T00:00:00")
-    );
-    setUntil(userAuthenticated ?
-      null :
-      new Date("2020-01-01T00:00:00")
-    );
-    setLocalTime("true");
-    setLangInput(userAuthenticated ?
-      "lang_all" :
-      "lang_en"
-    );
-    setFilers("none");
-    setVerifiedUsers("false");
-
-    const newSubmittedRequest = makeRequestParams(
-      userAuthenticated ?
+    if (urlObj.isUrlSearch) {
+      setKeywords(userAuthenticated ?
+        urlObj.url ? urlObj.url : "" :
+        "\"fake news\""
+      );
+      setBannedWords(userAuthenticated ?
+        urlObj.request.bannedWords ? urlObj.request.bannedWords.join(" ") : "" :
+        "");
+      setUsersInput(userAuthenticated ?
+        urlObj.request.userList ? urlObj.request.userList.join(" ") : "" :
+        "@realDonaldTrump"
+      );
+      setSince(userAuthenticated ?
+        urlObj.request.from ? urlObj.request.from : null :
+        new Date("2016-12-10T00:00:00")
+      );
+      setUntil(userAuthenticated ?
+        urlObj.request.until ? urlObj.request.until : null :
+        new Date("2020-01-01T00:00:00")
+      );
+      setLocalTime(userAuthenticated ?
+        urlObj.request.localTime ? urlObj.request.localTime : "true" :
+        "true"
+      );
+      setLangInput(userAuthenticated ?
+        urlObj.request.lang ? "lang_" + urlObj.request.lang : "lang_all" :
+        "lang_en"
+      );
+      setFilers(userAuthenticated ?
+        urlObj.request.media ? urlObj.request.media : "none" :
+        "none"
+      );
+      setVerifiedUsers(userAuthenticated ?
+        urlObj.request.verified ? urlObj.request.verified : "false" :
+        "false"
+      );
+  
+      const newSubmittedRequest = makeRequestParams(
+        userAuthenticated ?
+          urlObj.url ? urlObj.url : "" :
+          "\"fake news\"",
+        "",
+        userAuthenticated ?
+          urlObj.request.userList ? urlObj.request.userList.join(" ") : "" :
+          "@realDonaldTrump",
+        userAuthenticated ?
+          urlObj.request.from ? urlObj.request.from : null :
+          new Date("2016-12-10T00:00:00"),
+        userAuthenticated ?
+          urlObj.request.until ? urlObj.request.until : null :
+          new Date("2020-01-01T00:00:00"),
+        "true",
+        userAuthenticated ?
+          "lang_all" :
+          "lang_en",
+        "none",
+        "false"
+      );
+      // console.log("Updating submittedRequest: ", newSubmittedRequest);
+      setSubmittedRequest(newSubmittedRequest);
+    } else {
+      setKeywords(userAuthenticated ?
         "" :
-        "\"fake news\"",
-      "",
-      userAuthenticated ?
+        "\"fake news\""
+      );
+      setBannedWords("");
+      setUsersInput(userAuthenticated ?
         "" :
-        "@realDonaldTrump",
-      userAuthenticated ?
+        "@realDonaldTrump"
+      );
+      setSince(userAuthenticated ?
         null :
-        new Date("2016-12-10T00:00:00"),
-      userAuthenticated ?
+        new Date("2016-12-10T00:00:00")
+      );
+      setUntil(userAuthenticated ?
         null :
-        new Date("2020-01-01T00:00:00"),
-      "true",
-      userAuthenticated ?
+        new Date("2020-01-01T00:00:00")
+      );
+      setLocalTime("true");
+      setLangInput(userAuthenticated ?
         "lang_all" :
-        "lang_en",
-      "none",
-      "false"
-    );
-    // console.log("Updating submittedRequest: ", newSubmittedRequest);
-    setSubmittedRequest(newSubmittedRequest);
+        "lang_en"
+      );
+      setFilers("none");
+      setVerifiedUsers("false");
+  
+      const newSubmittedRequest = makeRequestParams(
+        userAuthenticated ?
+          "" :
+          "\"fake news\"",
+        "",
+        userAuthenticated ?
+          "" :
+          "@realDonaldTrump",
+        userAuthenticated ?
+          null :
+          new Date("2016-12-10T00:00:00"),
+        userAuthenticated ?
+          null :
+          new Date("2020-01-01T00:00:00"),
+        "true",
+        userAuthenticated ?
+          "lang_all" :
+          "lang_en",
+        "none",
+        "false"
+      );
+      // console.log("Updating submittedRequest: ", newSubmittedRequest);
+      setSubmittedRequest(newSubmittedRequest);
+    }
   }, [userAuthenticated]);
 
   return (

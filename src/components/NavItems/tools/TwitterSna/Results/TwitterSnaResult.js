@@ -1463,7 +1463,7 @@ export default function TwitterSnaResult(props) {
                                 icon: LinkIcon,
                                 tooltip: keyword("sna_result_go_to"),
                                 onClick: (event, rowData) => {
-                                    window.open("/popup.html#/app/tools/twitterSna");
+                                    window.open("/popup.html#/app/tools/twitterSna?url=https://www.change.org/&request=" + JSON.stringify(props.request));
                                 }
                             }
                         ]}
