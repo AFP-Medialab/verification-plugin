@@ -811,11 +811,11 @@ export default function TwitterSnaResult(props) {
                                 <ExpansionPanelDetails>
                                     <Box alignItems="center" justifyContent="center" width={"100%"}>
                                         {
-                                            ((obj.json === null) &&
-                                                <Typography variant={"body2"}>{keyword("sna_no_data")}</Typography>)
+                                            (obj.json === null || (obj.json[0].values.length === 1 && obj.json[0].values[0] === "")) &&
+                                                <Typography variant={"body2"}>{keyword("sna_no_data")}</Typography>
                                         }
                                         {
-                                            obj.json !== null &&
+                                            obj.json !== null && !(obj.json[0].values.length === 1 && obj.json[0].values[0] === "") &&
                                             <Grid container justify="space-between" spacing={2}
                                                 alignContent={"center"}>
                                                 <Grid item>
@@ -855,7 +855,7 @@ export default function TwitterSnaResult(props) {
                                             </Grid>
                                         }
                                         {
-                                            (obj.json !== null) &&
+                                            (obj.json !== null) && !(obj.json[0].values.length === 1 && obj.json[0].values[0] === "") &&
                                             <div>
                                                 <Plot
                                                     data={obj.json}
