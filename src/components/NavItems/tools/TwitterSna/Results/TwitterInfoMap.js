@@ -78,18 +78,26 @@ export default class TwitterInfoMap extends React.Component {
     }
 
     createHashtagGraphInfomap(infomapFinished, graph, lcTweets) {
-        var commObj = this.extractCommunityFromInfomapOutput(infomapFinished);
-        let commGraph = this.processCommunityGraph(graph, commObj);
-        let userInteraction = this.getInteractionOfUsernames(lcTweets, ['mentions']);
-        let legend = this.getLegendOfGraph(commGraph, lcTweets);
-
-        return {
-            title: "Community graph",
-            tmpdata: lcTweets,
-            hashtagGraph: commGraph,
-            userInteraction: userInteraction,
-            legend: legend
-        };
+        let infomapResult = infomapFinished.tree;
+        if (infomapResult === undefined) {
+            var commObj = this.extractCommunityFromInfomapOutput(infomapResult);
+            let commGraph = this.processCommunityGraph(graph, commObj);
+            let userInteraction = this.getInteractionOfUsernames(lcTweets, ['mentions']);
+            let legend = this.getLegendOfGraph(commGraph, lcTweets);
+            return {
+                hashtagGraph: commGraph,
+                userInteraction: userInteraction,
+                legend: legend
+            };
+        } else {
+            let userInteraction = this.getInteractionOfUsernames(lcTweets, ['mentions']);
+            let legend = this.getLegendOfGraph(graph, lcTweets);
+            return {
+                hashtagGraph: graph,
+                userInteraction: userInteraction,
+                legend: legend
+            };
+        }
     }
 
     getLegendOfGraph(communityGraph, tweets) {
@@ -123,7 +131,7 @@ export default class TwitterInfoMap extends React.Component {
             legend = [
                 {
                     communityColor: "#3388AA",
-                    legend: "Nodes (no community found)"
+                    legend: this.props.keyword.noCommunity
                 }
             ]
         }
@@ -218,7 +226,7 @@ export default class TwitterInfoMap extends React.Component {
     }
 
     extractCommunityFromInfomapOutput(content) {
-        let result = content.tree.split("\n").filter(line => !line.startsWith("#"))
+        let result = content.split("\n").filter(line => !line.startsWith("#"))
             .map((line) => { return line.split(" "); })
             .filter(arr => arr.length > 1);
         let commObj = {};
@@ -416,7 +424,7 @@ export default class TwitterInfoMap extends React.Component {
             )
         } else {
             return (
-                <CircularProgress />
+                <CircularProgress className={this.props.cirProgClassName}/>
             )
         }
 

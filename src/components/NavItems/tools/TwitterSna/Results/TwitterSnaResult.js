@@ -1175,7 +1175,7 @@ export default function TwitterSnaResult(props) {
                     <ExpansionPanelSummary
                         expandIcon={<ExpandMoreIcon />}
                     >
-                        <Typography className={classes.heading}>{"Graph using Louvain"}</Typography>
+                        <Typography className={classes.heading}>{keyword("twittersna_user_graph_title")}</Typography>
                     </ExpansionPanelSummary>
                     <ExpansionPanelDetails>
                         {
@@ -1391,12 +1391,15 @@ export default function TwitterSnaResult(props) {
                 props.request.userList.length === 0 && result &&
                 <ExpansionPanel>
                     <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-                        <Typography>Graph using Infomap</Typography>
+                        <Typography>{keyword("twittersna_user_graph_title")}</Typography>
                     </ExpansionPanelSummary>
                     <ExpansionPanelDetails>
                     {
                         result.tweets &&
-                        <TwitterInfoMap result={result} request={props.request} />
+                        <TwitterInfoMap result={result} 
+                                        request={props.request} 
+                                        keyword={{noCommunity: keyword("sna_no_community_graph"), noData: keyword("sna_no_data")}}
+                                        cirProgClassName={classes.circularProgress} />
                     }
                     </ExpansionPanelDetails>
                 </ExpansionPanel>
@@ -1407,7 +1410,7 @@ export default function TwitterSnaResult(props) {
                     <ExpansionPanelSummary
                         expandIcon={<ExpandMoreIcon />}
                     >
-                        <Typography className={classes.heading}>{"Load GEXF file"}</Typography>
+                        <Typography className={classes.heading}>{keyword("twittersna_user_graph_title")}</Typography>
                     </ExpansionPanelSummary>
                     <ExpansionPanelDetails>
                         <Sigma
