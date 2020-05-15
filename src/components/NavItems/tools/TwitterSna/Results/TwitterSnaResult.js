@@ -678,6 +678,12 @@ export default function TwitterSnaResult(props) {
         return newGraph;
     }
 
+    function goToTwitterSnaWithUrlSearch(event, rowData) {
+        rowData.forEach(data => 
+            window.open("/popup.html#/app/tools/twitterSna?url=" + data.url + "&request=" + JSON.stringify(props.request))
+        );
+    }
+
     if (result === null)
         return <div />;
 
@@ -1461,9 +1467,9 @@ export default function TwitterSnaResult(props) {
                         actions={[
                             {
                                 icon: LinkIcon,
-                                tooltip: keyword("sna_result_go_to"),
+                                tooltip: keyword("sna_result_go_to_search_url"),
                                 onClick: (event, rowData) => {
-                                    window.open("/popup.html#/app/tools/twitterSna?url=https://www.change.org/&request=" + JSON.stringify(props.request));
+                                    goToTwitterSnaWithUrlSearch(event, rowData)
                                 }
                             }
                         ]}
