@@ -48,7 +48,7 @@ twitterSnaErrorMessage	An error occurred while processing tweets	Une erreur s'es
 top_users_pie_chart_title	Most active users	Utilisateurs les plus actifs	Usuarios más activos
 mention_cloud_chart_title	Most mentioned accounts	Compte les plus mentionnés	Usuarios más mencionados
 user_time_chart_title	Propagation timeline	Frise chronologique de propagation	Línea de tiempo de propagación
-hashtag_cloud_chart_title	Most associated hashtags	Hashtags les plus associés	Hashtags más Asociados
+twittersna_hashtag_graph_title	Most associated hashtags	Hashtags les plus associés	Hashtags más Asociados
 retweets_cloud_chart_title	Most retweeted users	Utilisateurs les plus retweetés	Usuarios más retweeteados
 likes_cloud_chart_title	Most liked users	Utilisateurs les plus likés	Usuarios más retweeteados
 top_words_cloud_chart_title	Most used words in tweets	Mots les plus utilisés dans les tweets	Palabras más utilizadas en tweets
@@ -79,3 +79,6 @@ sna_fetching_tweets	Fetching tweets	Récupération des tweets	Recuperando tweets
 sna_builting_heatMap	Building graphs	Construction des graphes	Construyendo el gráfico
 twittersna_user_graph_title	User accounts graph	Graphe de comptes utilisateurs	Grafo de cuentas de usuarios
 twittersna_export_graph_title	Export Gexf graph	Exporter un graphe au format Gexf	Exportar el grafo en formato Gexf
+sna_result_submit_twitter_sna	Submit to Twitter SNA	Envoyer à Twitter SNA	Enviar a Twitter SNA
+sna_result_view_graph	View graph	Voir le graphe	Ver el grafo
+sna_no_community	No community detected	Pas de communauté détectée	No se encontro comunidad
