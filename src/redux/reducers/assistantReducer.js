@@ -1,6 +1,7 @@
 const defaultState = {
     notification : false,
     loading : false,
+    input: "",
     url: "",
     result: "",
     processUrl : null,

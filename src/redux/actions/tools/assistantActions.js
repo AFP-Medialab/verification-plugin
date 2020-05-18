@@ -1,7 +1,8 @@
-export const setAssistantResult = (url, result, processUrl, processType) => {
+export const setAssistantResult = (input, url, result, processUrl, processType) => {
     return {
         type : "SET_ASSISTANT_RESULT",
         payload : {
+            input: input,
             url : url,
             result : result,
             processUrl : processUrl,

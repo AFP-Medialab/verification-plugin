@@ -1,18 +1,20 @@
 import React, {useEffect, useState} from "react";
-import {Paper, Box, TextField, Button} from "@material-ui/core";
 import FaceIcon from "@material-ui/icons/Face";
+import {Paper, Box, TextField, Button} from "@material-ui/core";
+import {submissionEvent} from "../../Shared/GoogleAnalytics/GoogleAnalytics";
+import 'tui-image-editor/dist/tui-image-editor.css'
 import Typography from "@material-ui/core/Typography";
 import {useDispatch, useSelector} from "react-redux";
 import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
-import CustomTile from "../../Shared/CustomTitle/CustomTitle";
-import {submissionEvent} from "../../Shared/GoogleAnalytics/GoogleAnalytics";
-import 'tui-image-editor/dist/tui-image-editor.css'
 import {useParams} from "react-router-dom";
 
-import useLoadLanguage from "../../../Hooks/useLoadLanguage";
 import AssistantResult from "./AssistantResult";
+import CloseResult from "../../Shared/CloseResult/CloseResult";
+import CustomTile from "../../Shared/CustomTitle/CustomTitle";
 import {cleanAssistantState, setAssistantResult} from "../../../redux/actions/tools/assistantActions";
+import {setError} from "../../../redux/actions/errorActions";
 import tsv from "../../../LocalDictionary/components/NavItems/tools/Assistant.tsv";
+import useLoadLanguage from "../../../Hooks/useLoadLanguage";
 
 import analysisIconOff from "../../NavBar/images/tools/video_logoOff.png";
 import keyframesIconOff from "../../NavBar/images/tools/keyframesOff.png";
@@ -24,22 +26,30 @@ import videoRightsIconOff from "../../NavBar/images/tools/copyrightOff.png";
 import forensicIconOff from "../../NavBar/images/tools/forensic_logoOff.png";
 import twitterSnaIconOff from "../../NavBar/images/tools/twitter-sna-off.png";
 import history from "../../Shared/History/History";
-import {setError} from "../../../redux/actions/errorActions";
-import CloseResult from "../../Shared/CloseResult/CloseResult";
+import AuthenticationCard from "../../Shared/Authentication/AuthenticationCard";
+import useTwitterApi from "../../Scrapers/Twitter/useTwitterApi";
+import LinearProgress from "@material-ui/core/LinearProgress";
+import {twitterResetAction} from "../../../redux/actions/scrapers/twitterActions";
 
 const Assistant = () => {
 
     const {url} = useParams();
     const classes = useMyStyles();
+    const twitterApi = useTwitterApi();
     const keyword = useLoadLanguage("components/NavItems/tools/Assistant.tsv", tsv);
 
+    const inputUrl = useSelector(state => state.assistant.input);
     const resultUrl = useSelector(state => state.assistant.url);
     const resultData = useSelector(state => state.assistant.result);
     const resultProcessUrl = useSelector(state => state.assistant.processUrl);
+    const twitterRequestLoading = useSelector(state => state.twitter.twitterRequestLoading);
+    const userAuthenticated = useSelector(state => state.userSession.userAuthenticated)
     const dispatch = useDispatch();
 
-    const [input, setInput] = useState(resultUrl);
+    const [input, setInput] = useState(null);
     const [urlToBeProcessed, setProcessUrl] = useState(resultProcessUrl);
+    const [requireLogIn, setRequireLogIn] = useState(false);
+
 
     const getErrorText = (error) => {
         if (keyword(error) !== "")
@@ -47,13 +57,30 @@ const Assistant = () => {
         return keyword("please_give_a_correct_link");
     };
 
-    const submitUrl = (src) => {
-        submissionEvent(src);
-        try {
-            let content_type = matchPattern(src, ctypePatterns);
-            let domain = matchPattern(src, domainPatterns);
-            let actions = loadActions(domain, content_type, src);
-            dispatch(setAssistantResult(src, actions, urlToBeProcessed, content_type));
+    const checkForTwitter = async (src) => {
+        if(src.match("((https?:/{2})?(www.)?twitter.com/\\w{1,15}/status/\\d*)")!=null && !userAuthenticated){
+            setRequireLogIn(true);
+            throw new Error("twitter_error");
+        }
+        else if (src.match("((https?:/{2})?(www.)?twitter.com/\\w{1,15}/status/\\d*)") && userAuthenticated){
+            setRequireLogIn(true);
+            dispatch(twitterResetAction());
+            const finalTweet = await twitterApi.getTweet(src);
+            if(finalTweet.imageUrl!=null) {return finalTweet.imageUrl;}
+            else if(finalTweet.videoUrl!=null) {return finalTweet.videoUrl;}
+            else {throw new Error("twitter_error_media")}
+        }
+        return src;
+    }
+
+    const submitUrl = async (src) => {
+
+        try{
+            const updatedSrc = await checkForTwitter(src);
+            let content_type = matchPattern(updatedSrc, ctypePatterns);
+            let domain = matchPattern(updatedSrc, domainPatterns);
+            let actions = loadActions(domain, content_type, updatedSrc);
+            dispatch(setAssistantResult(src, updatedSrc, actions, urlToBeProcessed, content_type));
         }
         catch(error){
             dispatch((setError(getErrorText(error))));
@@ -116,7 +143,9 @@ const Assistant = () => {
             setInput(uri);
             submitUrl(uri);
         }
-        else {setInput(resultUrl);}
+        else {
+            setInput(inputUrl);
+        }
     }, [resultUrl, url]);
 
     const CTYPE = Object.freeze({
@@ -278,8 +307,8 @@ const Assistant = () => {
     return (
         <div>
             <Paper className={classes.root}>
-                <CustomTile text={keyword("assistant_title")}/>
-                <Box m={5}/>
+                <CustomTile text={keyword("assistant_title")}/><Box m={2}/>
+                {requireLogIn ? <AuthenticationCard/> : null}
 
                 <div className={classes.assistantText} hidden={urlToBeProcessed!=null}>
                     <Typography variant={"h6"} >
@@ -297,6 +326,7 @@ const Assistant = () => {
                     { (urlToBeProcessed!=null) ?
                         (urlToBeProcessed) ?
                             (<div className={classes.assistantText} hidden={false}>
+                                <Box m={4}/>
                                 <CloseResult onClick={() => cleanAssistant()}/>
                                 <Typography variant={"h6"} >
                                     <FaceIcon fontSize={"small"}/> {keyword("assistant_intro")}
@@ -311,6 +341,7 @@ const Assistant = () => {
                                     value={input}
                                     onChange={e => setInput(e.target.value)}
                                 />
+                                <LinearProgress color={"secondary"} hidden={!twitterRequestLoading}/><Box m={3}/>
                                 <Box m={2}/>
                                 <Button variant="contained" color="primary" align={"center"} onClick={() => submitUrl(input)}>
                                     {keyword("button_submit") || ""}
