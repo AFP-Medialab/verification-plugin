@@ -463,6 +463,14 @@ export default function TwitterSnaResult(props) {
         return csvArr;
     }
 
+    function createCSVFromURLTable(urls) {
+        let csvArr = "Url,Count\n";
+        urls.data.forEach(row => 
+            csvArr += row.url + "," + row.count + "\n"
+        );
+        return csvArr;
+    }
+
     function downloadClick(csvArr, name, histo, type = "tweets_") {
         let encodedUri = encodeURIComponent(csvArr);
         let link = document.createElement("a");
@@ -836,8 +844,7 @@ export default function TwitterSnaResult(props) {
                                                         onClick={() => downloadClick(createCSVFromPieChart(obj), 
                                                                                     keyword(obj.title), 
                                                                                     false, 
-                                                                                    "", 
-                                                                                    obj)}>
+                                                                                    "")}>
                                                         
                                                         CSV
                                                     </Button>
@@ -1097,7 +1104,7 @@ export default function TwitterSnaResult(props) {
                     <ExpansionPanelSummary
                         expandIcon={<ExpandMoreIcon />}
                     >
-                        <Typography className={classes.heading}>{keyword("twittersna_user_graph_title")}</Typography>
+                        <Typography className={classes.heading}>{keyword("twittersna_hashtag_graph_title")}</Typography>
                     </ExpansionPanelSummary>
                     <ExpansionPanelDetails>
                     {
@@ -1398,7 +1405,7 @@ export default function TwitterSnaResult(props) {
                         result.tweets &&
                         <TwitterInfoMap result={result} 
                                         request={props.request} 
-                                        keyword={{noCommunity: keyword("sna_no_community_graph"), noData: keyword("sna_no_data")}}
+                                        keyword={{noCommunity: keyword("sna_no_community"), noData: keyword("sna_no_data")}}
                                         cirProgClassName={classes.circularProgress} />
                     }
                     </ExpansionPanelDetails>
@@ -1438,8 +1445,8 @@ export default function TwitterSnaResult(props) {
                             disabled={_.isEmpty(result.gexf)}
                             startIcon={<SaveIcon />}
                             href={result.gexf ? result.gexf.getUrl : undefined}
-                            tooltip="Download gexf file">
-                            Donwload
+                            tooltip={keyword("sna_result_download")}>
+                            {keyword("sna_result_download")}
                         </Button>
                     </Toolbar>
                     <Box pb={3}>
@@ -1451,9 +1458,9 @@ export default function TwitterSnaResult(props) {
                             href={result.gexf ? result.gexf.visualizationUrl : undefined}
                             target="_blank"
                             rel="noopener"
-                            tooltip="View the network of tweets"
+                            tooltip={keyword("sna_result_view_graph")}
                         >
-                            View Graph
+                            {keyword("sna_result_view_graph")}
                         </Button>
                     </Box>
                 </Paper>
@@ -1462,15 +1469,32 @@ export default function TwitterSnaResult(props) {
             <Box m={3} />
             {
                 result.urls &&
-                <div>
+                <Paper>
+                    <Box pb={3}>
+                        <Button
+                            variant={"contained"}
+                            color={"primary"}
+                            onClick={() => downloadClick(createCSVFromURLTable(result.urls), "Urls", false, "")}
+                        >
+                            CSV
+                        </Button>
+                    </Box>
                     <CustomTableURL
                         title={keyword("sna_result_url_in_tweets")}
                         colums={result.urls.columns}
                         data={result.urls.data}
                         actions={[
                             {
-                                icon: LinkIcon,
-                                tooltip: keyword("sna_result_go_to_search_url"),
+                                icon: props => (<span className="MuiButtonBase-root 
+                                                                MuiButton-root 
+                                                                MuiButton-contained 
+                                                                MuiButton-containedPrimary"
+                                                    >
+                                                    {
+                                                        keyword('sna_result_submit_twitter_sna')
+                                                    }
+                                                    </span>),
+                                tooltip: keyword("sna_result_submit_twitter_sna"),
                                 onClick: (event, rowData) => {
                                     goToTwitterSnaWithUrlSearch(event, rowData)
                                 }
@@ -1479,7 +1503,7 @@ export default function TwitterSnaResult(props) {
                     />
                     <Box m={1}/>
                     <OnClickInfo keyword={"twittersna_urls_tip"}/>
-                </div>
+                </Paper>
             }
         </Paper>
     );
