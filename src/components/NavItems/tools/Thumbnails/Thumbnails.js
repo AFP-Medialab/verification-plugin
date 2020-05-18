@@ -107,9 +107,9 @@ const Thumbnails = () => {
         let url = input.value.replace("?rel=0", "");
         if (url !== null && url !== "" && isYtUrl(url)) {
             submissionEvent(url);
-            dispatch(setThumbnailsResult(url, get_images(url), false, false));
-
-
+            let images = get_images(url);
+            dispatch(setThumbnailsResult(url, images, false, false));
+            images.forEach(img => imageClickUrl(img));
         } else
             dispatch(setError("Please use a valid Youtube Url (add to tsv)"));
     };
