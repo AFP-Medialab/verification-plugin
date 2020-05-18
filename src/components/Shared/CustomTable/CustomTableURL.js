@@ -17,6 +17,7 @@ import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
 import useLoadLanguage from "../../../Hooks/useLoadLanguage";
 import tsv from "../../../LocalDictionary/components/Shared/CustomTable.tsv";
+import { Paper } from "@material-ui/core";
 
 import Link from "@material-ui/core/Link";
 
@@ -60,6 +61,7 @@ export default function CustomTableURL(props) {
 
     return (
         <MaterialTable
+            components={{Container: props => <Paper {...props} elevation={0}/>}}
             //more custom info at https://material-table.com/#/docs/features/localization
             localization={{
                 pagination: {
