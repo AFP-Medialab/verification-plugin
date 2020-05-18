@@ -27,7 +27,7 @@ import ReactCompareImage from 'react-compare-image';
 import Toolbar from "@material-ui/core/Toolbar";
 import Tooltip from "@material-ui/core/Tooltip";
 import Button from "@material-ui/core/Button";
-
+import OnClickInfo from "../../../../Shared/OnClickInfo/OnClickInfo";
 
 const ForensicResults = (props) => {
     const classes = useMyStyles();
@@ -70,6 +70,9 @@ const ForensicResults = (props) => {
     return (
         <Paper className={classes.root}>
             <CloseResult onClick={() => dispatch(cleanForensicState())}/>
+            <Box m={1}/>
+            <OnClickInfo keyword={"forensic_tip"}/>
+            <Box m={3}/>
             <div style={{maxWidth: '640px', margin: "0 auto"}}>
                 <ReactCompareImage
                     leftImage={result.displayImage}
