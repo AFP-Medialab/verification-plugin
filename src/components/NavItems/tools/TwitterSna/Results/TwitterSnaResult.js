@@ -65,7 +65,6 @@ export default function TwitterSnaResult(props) {
     const [pieCharts1, setPieCharts1] = useState(null);
     const [pieCharts2, setPieCharts2] = useState(null);
     const [pieCharts3, setPieCharts3] = useState(null);
-    const [pieCharts4, setPieCharts4] = useState(null);
     const [userGraphReset, setUserGraphReset] = useState(null);
     const [userGraphClickNode, setUserGraphClickNode] = useState(null);
     const [userGraphTweets, setUserGraphTweets] = useState(null);
@@ -86,9 +85,6 @@ export default function TwitterSnaResult(props) {
             case 3:
                 setPieCharts3(null);
                 break;
-            case 4:
-                setPieCharts4(null);
-                break;
             case "userGraphIdx":
                 setUserGraphTweets(null);
                 break;
@@ -100,7 +96,7 @@ export default function TwitterSnaResult(props) {
         }
     };
 
-    const pieCharts = [pieCharts0, pieCharts1, pieCharts2, pieCharts3, pieCharts4];
+    const pieCharts = [pieCharts0, pieCharts1, pieCharts2, pieCharts3];
 
     //Set the file name for wordsCloud export
     useEffect(() => {
@@ -123,7 +119,6 @@ export default function TwitterSnaResult(props) {
         setPieCharts1(null);
         setPieCharts2(null);
         setPieCharts3(null);
-        setPieCharts4(null);
         setUserGraphReset(null);
         setUserGraphClickNode(null);
         setUserGraphTweets(null);
@@ -359,9 +354,6 @@ export default function TwitterSnaResult(props) {
             case 2:
                 setPieCharts2(newRes);
                 break;
-            case 4:
-                setPieCharts4(newRes);
-                break;
             case "userGraphIdx":
                 setUserGraphTweets(newRes);
                 break;
@@ -507,10 +499,6 @@ export default function TwitterSnaResult(props) {
         //For mention donuts
         if (index === 3) {
             displayTweetsOfMention(data.points[0].label, setPieCharts3)
-        }
-        // For hashtag donut
-        else if (index === 4) {
-            displayTweetsOfWord(data.points[0].label, setPieCharts4);
         }
         // For retweets, likes, top_user donut
         else {
@@ -806,7 +794,7 @@ export default function TwitterSnaResult(props) {
             {
                 result.pieCharts &&
                 result.pieCharts.map((obj, index) => {
-                    if ((props.request.userList.length === 0 || index === 3 || index === 4))
+                    if ((props.request.userList.length === 0 || index === 3))
                         return (
                             <ExpansionPanel key={index}>
                                 <ExpansionPanelSummary
