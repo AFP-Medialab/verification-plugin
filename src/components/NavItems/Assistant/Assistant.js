@@ -31,6 +31,7 @@ import useTwitterApi from "../../Scrapers/Twitter/useTwitterApi";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import {twitterResetAction} from "../../../redux/actions/scrapers/twitterActions";
 
+//todo: better twitter error handling (centralise it a bit?) and a better message for when tweet is being extracted
 const Assistant = () => {
 
     const {url} = useParams();
