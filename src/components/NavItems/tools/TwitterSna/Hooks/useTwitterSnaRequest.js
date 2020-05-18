@@ -400,7 +400,7 @@ function createCommunity2(graph, filteredTweets) {
   return { nodes: filteredNodes, edges: filteredEdges };
 }
 
-function getLegendOfGraph(communityGraph, tweets, request) {
+function getLegendOfGraph(communityGraph, tweets, noCommunityMsg) {
   let sizeCommunities = _.countBy(communityGraph.nodes.map(node => { return node.color; }));
   let legends = [];
   if (sizeCommunities.undefined === undefined) {
@@ -431,7 +431,7 @@ function getLegendOfGraph(communityGraph, tweets, request) {
     legends = [
       {
         communityColor: "#3388AA",
-        legend: "Nodes (no community found)"
+        legend: noCommunityMsg
       }
     ]
   }
@@ -818,7 +818,7 @@ const useTwitterSnaRequest = (request) => {
       var commObj = community();
       let commGraph = processCommunityGraph(graph, commObj);
       let userInteraction = getInteractionOfUsernames(lcTweets, ['mentions']);
-      let legend = getLegendOfGraph(commGraph, lcTweets, request);
+      let legend = getLegendOfGraph(commGraph, lcTweets, keyword("sna_no_community"));
 
       return {
         data: commGraph,
