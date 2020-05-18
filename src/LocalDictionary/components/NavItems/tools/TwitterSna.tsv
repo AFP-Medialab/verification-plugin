@@ -1,7 +1,7 @@
 	en	fr	es
 twitterStatsErrorMessage	Please fill the required fields (＊)	Veuillez remplir les champs requis (＊)	Rellene los campos requeridos (＊)
 twitter_sna_title	Twitter Social network analysis	Analyse des réseaux sociaux sur Twitter	Twitter Análisis de redes sociales
-twitter_sna_search	＊Keyword or #	＊Mot clé ou #	＊Palabra clave o #
+twitter_sna_search	Keyword, URL or #	Mot clé, URL ou #	Palabra clave, URL o #
 twitter_sna_not	Words to exclude in the query	Mots à exclure de la requête	Palabras a excluir en la consulta
 twitter_sna_user	Tweeted by (Twitter account name)	Tweeté par (Nom de compte Twitter)	Twiteado por (Nombre de una cuenta de Twitter)
 twitter_sna_from_date	Since	Depuis	Desde
@@ -12,12 +12,12 @@ twitter_sna_media	Filters :	Filtres :	Filtros :
 twitterStats_media_none	none	aucune	ninguna
 twitterStats_media_images	pictures	images	fotos
 twitterStats_media_videos	videos	vidéos	vídeo
-twitterStats_media_both	both	les deux	tanto
-twitterStats_media_both	both	les deux	tanto
+twitterStats_media_both	both	les deux	ambos
+twitterStats_media_both	both	les deux	ambos
 twitter_sna_verified	Verified users Only :	Utilisateurs verifiés uniquement :	Usuarios verificados únicamente :
 twitterStats_verified_no	no	non	no
 twitterStats_verified_yes	yes	oui	si
-lang_choices	Filter on language :	Filtre de langue :	Filtro de lengua :
+lang_choices	Language :	Langue :	Lengua :
 lang_all	none	aucun	ninguno
 lang_fr	French	Français	Francés
 lang_en	English	Anglais	Inglés
@@ -46,6 +46,7 @@ button_submit	Submit	Envoyer	Enviar
 default_sna_error	Twitter analysis failed due to an unknown cause.	L'analyse de Twitter a été interrompue pour une raison inconnue.	El análisis de Twitter se ha interrumpido por una causa desconocida.
 twitterSnaErrorMessage	An error occurred while processing tweets	Une erreur s'est produite lors du traitement des tweets	Se produjo un error en el procesamiento de tweets
 top_users_pie_chart_title	Most active users	Utilisateurs les plus actifs	Usuarios más activos
+mention_cloud_chart_title	Most mentioned accounts	Compte les plus mentionnés	Usuarios más mencionados
 user_time_chart_title	Propagation timeline	Frise chronologique de propagation	Línea de tiempo de propagación
 hashtag_cloud_chart_title	Most associated hashtags	Hashtags les plus associés	Hashtags más Asociados
 retweets_cloud_chart_title	Most retweeted users	Utilisateurs les plus retweetés	Usuarios más retweeteados
@@ -55,13 +56,13 @@ tweetCounter_title	Tweets number	Nombre de tweets	Número de Tweet
 elastic_url	Url	Url	Url
 elastic_count	Count	Compte	Recuento
 sna_result_username	Username	Nom d'utilisateur	Nombre de usuario
-sna_result_date	Date	Date	Fetcha
+sna_result_date	Date	Date	Fecha
 sna_result_tweet	Tweet	Tweet	Tweet
-sna_result_retweet_nb	Retweet number	Nombre de retweets	Candidad de retweet
+sna_result_retweet_nb	Retweet number	Nombre de retweets	Candidad de retweets
 sna_result_like_nb	Like number	Nombre de likes	Candidad de ''me gusta''
-sna_result_hide	Hide	Ferme	Cerca
-sna_result_download	Download	Télécharger	Escarga
-sna_result_slected_tweets	Selected Tweets	Tweets selectionnés	Tweets selectionados
+sna_result_hide	Hide	Fermer	Ocultar
+sna_result_download	Download	Télécharger	Descargar
+sna_result_slected_tweets	Selected Tweets	Tweets selectionnés	Tweets seleccionados
 sna_result_url_in_tweets	Urls in tweets	Urls dans les tweets	Urls en tweets
 sna_result_go_to	Go to url	Ouvrir le lien	Ir a la pagina
 sna_result_go_to_tweet	Go to tweet	Ouvrir le tweet	Ir a tweet
@@ -71,10 +72,10 @@ sna_result_word	Word	Mot	Palabra
 sna_result_nb_occ	Number of occurrences	Nombre d'occurrences	Cantidad de ocurrencias
 sna_result_entity	Named entity	Entité nommée	Entidad nombrada
 sna_no_data	No data available	Aucune donnée disponible	Datos no disponibles
-sna_result_heatMap	Distribution of tweets	Distribution des tweets	Distribución de tweets
+sna_result_heatMap	Heatmap of tweets distribution	Cartographie d'activité	Mapa de actividad
 user_placeholder	user	utilisateur	usuario
-elastic_url	URL	URL	URL
-elastic_count 	Number	Nombre	Candidad
-sna_counting_words 	Counting Words	Comptage des mots	Contando palabras
+sna_counting_words	Counting Words	Comptage des mots	Contando palabras
 sna_fetching_tweets	Fetching tweets	Récupération des tweets	Recuperando tweets
 sna_builting_heatMap	Building graphs	Construction des graphes	Construyendo el gráfico
+twittersna_user_graph_title	User accounts graph	Graphe de comptes utilisateurs	Grafo de cuentas de usuarios
+twittersna_export_graph_title	Export Gexf graph	Exporter un graphe au format Gexf	Exportar el grafo en formato Gexf
