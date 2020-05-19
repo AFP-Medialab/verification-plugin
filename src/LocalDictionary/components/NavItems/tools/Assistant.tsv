@@ -10,7 +10,8 @@ assistant_intro	Enter the URL of the media you would like to process	Temp	Temp
 upload_type_question	What type of file do you want to upload?	Temp  Temp
 assistant_urlbox	URL	Adresse	URL
 assistant_error	No media was found through the link used. Please try another URL.	Test	Test
-twitter_error	In order to retrieve tweet media from tweet you must request access and/or log in.	Temp	Temp
+extracting_tweet_media  Extracting tweet media...   Temp... Temp...
+twitter_error_login	In order to retrieve tweet media from tweet you must request access and/or log in.	Temp	Temp
 twitter_error_media The tweet has been retrieved, but no linked media has been found    Temp    Temp
 please_give_a_correct_link	Please give a correct link	Donner un lien valide s'il vous plaît	Por favor, dé un enlace válido
 button_submit	Submit	Envoyer	Enviar

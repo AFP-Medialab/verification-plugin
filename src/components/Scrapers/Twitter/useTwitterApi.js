@@ -29,6 +29,23 @@ export default function useTwitterApi() {
             "disableTimeRange":true }
     }
 
+    const runQuery = async (user, tweetId) =>{
+        let axiosConfig = {
+            method: 'post',
+            baseURL: TWINT_WRAPPER_URL,
+            url: '/collect',
+            data: createQuery(user, tweetId)
+        };
+
+        try{
+            const response = await authenticatedRequest(axiosConfig);
+            return response;
+        }
+        catch(errror){
+            throw new Error("twitter_processing_error")
+        }
+    }
+
     const getQueryStatus = async (sessionId) =>{
 
         let axiosConfig = {
@@ -49,9 +66,8 @@ export default function useTwitterApi() {
             }
             else if (sessionStatus == "Done"){isDone = true;}
             else {
-                dispatch(twitterRequestLoadingAction(false));
-                dispatch(setError(keyword("twitter_error")));
                 isDone = true;
+                throw new Error("twitter_processing_error");
             }
         }
     }
@@ -74,7 +90,7 @@ export default function useTwitterApi() {
             return finalTweet;
         }
         else {
-            dispatch(setError(keyword("twitter_no_tweet_found")));
+            throw new Error("twitter_no_tweet_found")
         }
     }
 
@@ -93,23 +109,16 @@ export default function useTwitterApi() {
         let user = splitUrl[3];
         let tweetId = splitUrl[5];
 
-        let axiosConfig = {
-            method: 'post',
-            baseURL: TWINT_WRAPPER_URL,
-            url: '/collect',
-            data: createQuery(user, tweetId)
-        };
-
-        const response = await authenticatedRequest(axiosConfig);
 
         try {
+            const response = await runQuery(user, tweetId);
             await getQueryStatus(response.data.session);
             const finalTweet = await getElkResult(tweetId);
             return finalTweet;
         }
         catch (error) {
             dispatch(twitterRequestLoadingAction(false));
-            dispatch(setError(error.message + keyword("twitter_log_in")))
+            dispatch(setError(keyword(error.message)));
         }
     }
 

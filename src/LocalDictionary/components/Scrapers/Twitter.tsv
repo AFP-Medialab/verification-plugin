@@ -15,4 +15,4 @@ twitter_enter_url	Enter the URL of the tweet you would like to extract	Temp	Temp
 twitter_invalid_url	Invalid URL	Temp	Temp
 twitter_log_in	. Error with scraper. Please ensure you are logged in to access this service	Temp	Temp
 twitter_no_tweet_found	No tweets were found with this tweet ID	Temp	Temp
-twitter_error	An error occurred while processing tweets	Temp	Temp
+twitter_processing_error	An unknown error occurred while processing tweets. Please contact us for help.	Temp	Temp

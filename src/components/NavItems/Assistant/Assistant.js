@@ -31,7 +31,6 @@ import useTwitterApi from "../../Scrapers/Twitter/useTwitterApi";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import {twitterResetAction} from "../../../redux/actions/scrapers/twitterActions";
 
-//todo: better twitter error handling (centralise it a bit?) and a better message for when tweet is being extracted
 const Assistant = () => {
 
     const {url} = useParams();
@@ -51,25 +50,20 @@ const Assistant = () => {
     const [urlToBeProcessed, setProcessUrl] = useState(resultProcessUrl);
     const [requireLogIn, setRequireLogIn] = useState(false);
 
-
-    const getErrorText = (error) => {
-        if (keyword(error) !== "")
-            return keyword(error);
-        return keyword("please_give_a_correct_link");
-    };
-
     const checkForTwitter = async (src) => {
         if(src.match("((https?:/{2})?(www.)?twitter.com/\\w{1,15}/status/\\d*)")!=null && !userAuthenticated){
             setRequireLogIn(true);
-            throw new Error("twitter_error");
+            throw new Error("twitter_error_login");
         }
         else if (src.match("((https?:/{2})?(www.)?twitter.com/\\w{1,15}/status/\\d*)") && userAuthenticated){
-            setRequireLogIn(true);
+            setRequireLogIn(false);
             dispatch(twitterResetAction());
             const finalTweet = await twitterApi.getTweet(src);
-            if(finalTweet.imageUrl!=null) {return finalTweet.imageUrl;}
-            else if(finalTweet.videoUrl!=null) {return finalTweet.videoUrl;}
-            else {throw new Error("twitter_error_media")}
+            if(finalTweet!=null) {
+                if (finalTweet.imageUrl != null) {return finalTweet.imageUrl;}
+                else if (finalTweet.videoUrl != null) {return finalTweet.videoUrl;}
+                else {throw new Error("twitter_error_media");}
+            }
         }
         return src;
     }
@@ -84,7 +78,7 @@ const Assistant = () => {
             dispatch(setAssistantResult(src, updatedSrc, actions, urlToBeProcessed, content_type));
         }
         catch(error){
-            dispatch((setError(getErrorText(error))));
+            dispatch((setError(keyword(error.message))));
         }
     };
 
@@ -342,7 +336,11 @@ const Assistant = () => {
                                     value={input}
                                     onChange={e => setInput(e.target.value)}
                                 />
-                                <LinearProgress color={"secondary"} hidden={!twitterRequestLoading}/><Box m={3}/>
+                                <Typography hidden={!twitterRequestLoading}>
+                                    <LinearProgress color={"secondary"}/>
+                                    {keyword("extracting_tweet_media")}
+                                    <Box m={3}/>
+                                </Typography>
                                 <Box m={2}/>
                                 <Button variant="contained" color="primary" align={"center"} onClick={() => submitUrl(input)}>
                                     {keyword("button_submit") || ""}
