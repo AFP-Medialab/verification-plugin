@@ -23,6 +23,8 @@
     "lodash": "^4.17.15",
     "material-table": "^1.57.2",
     "material-ui-image": "^3.2.3",
+    "moment": "2.24.0",
+    "moment-timezone": "0.5.28",
     "plotly.js": "^1.53.0",
     "plotly.js-dist": "^1.53.0",
     "querystring": "^0.2.0",
@@ -38,6 +40,7 @@
     "react-hook-form": "^5.4.2",
     "react-iframe": "^1.8.0",
     "react-image-lightbox": "^5.1.1",
+    "react-linkify": "^1.0.0-alpha",
     "react-magnifier": "^3.0.4",
     "react-map-gl": "^5.2.3",
     "react-modal-video": "^1.2.3",
@@ -51,9 +54,7 @@
     "save-svg-as-png": "^1.4.17",
     "styled-components": "^5.1.0",
     "tui-image-editor": "^3.9.0",
-    "yup": "^0.28.3",
-    "moment": "2.24.0",
-    "moment-timezone": "0.5.28"
+    "yup": "^0.28.3"
   },
   "scripts": {
     "start": "export NODE_OPTIONS=\"--max-old-space-size=4096\" & react-scripts start",

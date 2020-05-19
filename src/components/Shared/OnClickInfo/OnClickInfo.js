@@ -4,6 +4,7 @@ import Typography from "@material-ui/core/Typography";
 import WbIncandescentIcon from '@material-ui/icons/WbIncandescent';
 import useLoadLanguage from "../../../Hooks/useLoadLanguage";
 import tsv from "../../../LocalDictionary/components/Shared/OnClickInfo.tsv";
+import Linkify from 'react-linkify';
 
 const OnClickInfo = (props) => {
     const classes = useMyStyles();
@@ -25,7 +26,7 @@ const OnClickInfo = (props) => {
             {
                 checked === true &&
                 <div className={classes.onClickInfo}>
-                    <Typography variant={"body2"}>{keyword(props.keyword)}</Typography>
+                    <Typography variant={"body2"}><Linkify>{keyword(props.keyword)}</Linkify></Typography>
                 </div>
             }
         </div>
