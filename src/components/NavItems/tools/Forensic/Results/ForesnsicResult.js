@@ -24,7 +24,6 @@ import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Forensic.tsv";
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 import ReactCompareImage from 'react-compare-image';
-import Toolbar from "@material-ui/core/Toolbar";
 import Tooltip from "@material-ui/core/Tooltip";
 import Button from "@material-ui/core/Button";
 import OnClickInfo from "../../../../Shared/OnClickInfo/OnClickInfo";

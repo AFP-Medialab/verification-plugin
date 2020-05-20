@@ -3,7 +3,7 @@ import CustomTile from "../../../Shared/CustomTitle/CustomTitle";
 import TextField from "@material-ui/core/TextField";
 import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
-import React, {useCallback} from "react";
+import React from "react";
 import ImageReverseSearch from "../ImageReverseSearch";
 import ImageGridList from "../../../Shared/ImageGridList/ImageGridList";
 import {useDispatch, useSelector} from "react-redux";
@@ -130,17 +130,6 @@ const Thumbnails = () => {
         if (selectedValue.reddit)
             ImageReverseSearch("reddit", [url]);
     };
-    useCallback(() => {
-        if (selectedValue.openTabs)
-            resultData.map(value => imageClickUrl(value))
-        console.log(resultData);
-    }, [imageClick, imageClickUrl, resultData, selectedValue.openTabs]);
-    /*useEffect(() => {
-        
-        if (selectedValue.openTabs)
-            resultData.map(value => imageClickUrl(value))
-        
-    }, [resultUrl, imageClickUrl, resultData, selectedValue.openTabs]);*/
 
     return (
         <div>

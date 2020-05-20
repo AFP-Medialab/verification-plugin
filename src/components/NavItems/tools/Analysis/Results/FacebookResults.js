@@ -1,4 +1,4 @@
-import {useDispatch, useSelector} from "react-redux";
+import {useDispatch} from "react-redux";
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 import Paper from "@material-ui/core/Paper";
 import React from "react";
@@ -173,7 +173,7 @@ const FacebookResults = (props) => {
                                         </TableRow>
                                     }
                                     {
-                                        report.verification_cues.num_verification_comments != 0 &&
+                                        report.verification_cues.num_verification_comments !== 0 &&
                                         <TableRow>
                                             <TableCell component="th" scope="row">
                                                 {keyword("facebook_comment_name_2")}

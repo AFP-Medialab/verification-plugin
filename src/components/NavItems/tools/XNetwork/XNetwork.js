@@ -1,7 +1,5 @@
 import React, { useEffect } from "react";
 
-import _ from "lodash";
-
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import Paper from "@material-ui/core/Paper";
 import Box from "@material-ui/core/Box";
