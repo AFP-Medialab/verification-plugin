@@ -1,6 +1,6 @@
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 import OnClickInfo from "../../../../Shared/OnClickInfo/OnClickInfo";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import React, { useEffect, useState, useCallback } from "react";
 import { Paper } from "@material-ui/core";
 import ExpansionPanel from "@material-ui/core/ExpansionPanel";
@@ -43,7 +43,6 @@ export default function TwitterSnaResult(props) {
 
     const [histoVisible, setHistoVisible] = useState(true);
     const [result, setResult] = useState(null);
-    const [CSVheaders, setCSVheaders] = useState([{ label: keyword('sna_result_word'), key: "word" }, { label: keyword("sna_result_nb_occ"), key: "nb_occ" }, { label: keyword("sna_result_entity"), key: "entity" }]);
     const [filesNames, setfilesNames] = useState(null);
 
     const [histoTweets, setHistoTweets] = useState(null);
@@ -54,6 +53,8 @@ export default function TwitterSnaResult(props) {
     const [pieCharts2, setPieCharts2] = useState(null);
     const [pieCharts3, setPieCharts3] = useState(null);
     const [coHashtagGraphTweets, setCoHashtagGraphTweets] = useState(null);
+
+    const CSVheaders = [{ label: keyword('sna_result_word'), key: "word" }, { label: keyword("sna_result_nb_occ"), key: "nb_occ" }, { label: keyword("sna_result_entity"), key: "entity" }];
 
     const hideTweetsView = (index) => {
         switch (index) {
@@ -82,6 +83,7 @@ export default function TwitterSnaResult(props) {
     //Set the file name for wordsCloud export
     useEffect(() => {
         setfilesNames('WordCloud_' + props.request.keywordList.join("&") + "_" + props.request.from + "_" + props.request.until);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [JSON.stringify(props.request), props.request]);
 
     //Set result 
@@ -89,6 +91,7 @@ export default function TwitterSnaResult(props) {
 
         setResult(props.result);
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [JSON.stringify(props.result), props.result, props.result.userGraph]);
 
     //Initialize tweets arrays
@@ -101,6 +104,7 @@ export default function TwitterSnaResult(props) {
         setPieCharts2(null);
         setPieCharts3(null);
         setCoHashtagGraphTweets(null);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [JSON.stringify(props.request), props.request])
 
     const displayTweetsOfWord = (word, callback) => {
@@ -125,7 +129,7 @@ export default function TwitterSnaResult(props) {
 
         result.tweets.forEach(tweetObj => {
 
-            if (tweetObj._source.tweet.toLowerCase().match(new RegExp('(^|((.)*[\.\(\)0-9\!\?\'\’\‘\"\:\,\/\\\%\>\<\«\»\ ^#]))' + word + '(([\.\(\)\!\?\'\’\‘\"\:\,\/\>\<\«\»\ ](.)*)|$)', "i"))) {
+            if (tweetObj._source.tweet.toLowerCase().match(new RegExp('(^|((.)*[.()0-9!?\'’‘":,/\\%><«» ^#]))' + word + '(([.()!?\'’‘":,/><«» ](.)*)|$)', "i"))) {
 
                 var date = new Date(tweetObj._source.date);
                 //let tweet = getTweetWithClickableLink(tweetObj._source.tweet,tweetObj._source.link);
@@ -182,7 +186,7 @@ export default function TwitterSnaResult(props) {
                     resData.push(
                         {
                             username: <a href={"https://twitter.com/" + tweetObj._source.username}
-                                target="_blank">{tweetObj._source.username}</a>,
+                                target="_blank" rel="noopener noreferrer">{tweetObj._source.username}</a>,
                             date: date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear() + ' ' + date.getHours() + ':' + date.getMinutes(),
                             tweet: tweetObj._source.tweet,
                             retweetNb: tweetObj._source.nretweets,
@@ -202,8 +206,7 @@ export default function TwitterSnaResult(props) {
                 }
             }
         });
-        //  i++;
-        //  });
+
         return {
             data: resData,
             columns: columns,
@@ -241,7 +244,7 @@ export default function TwitterSnaResult(props) {
             const date = new Date(tweetObj._source.date);
             resData.push(
                 {
-                    username: <a href={"https://twitter.com/" + tweetObj._source.username} target="_blank">{tweetObj._source.username}</a>,
+                    username: <a href={"https://twitter.com/" + tweetObj._source.username} target="_blank" rel="noopener noreferrer">{tweetObj._source.username}</a>,
                     date: date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear() + ' ' + date.getHours() + ':' + date.getMinutes(),
                     tweet: tweetObj._source.tweet,
                     retweetNb: tweetObj._source.nretweets,
@@ -456,14 +459,14 @@ export default function TwitterSnaResult(props) {
 
     };
     const getTweetWithClickableLink = (cellData) => {
-        let urls = cellData.tweet.match(/((http|https|ftp|ftps)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?|pic\.twitter\.com\/([-a-zA-Z0-9()@:%_\+.~#?&//=]*))/g);
+        let urls = cellData.tweet.match(/((http|https|ftp|ftps):\/\/[a-zA-Z0-9\-.]+\.[a-zA-Z]{2,3}(\/\S*)?|pic\.twitter\.com\/([-a-zA-Z0-9()@:%_+.~#?&//=]*))/g);
         if (urls === null)
             return cellData.tweet;
 
         let tweetText = cellData.tweet.split(urls[0]);
-        if (urls[0].match(/pic\.twitter\.com\/([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/))
+        if (urls[0].match(/pic\.twitter\.com\/([-a-zA-Z0-9()@:%_+.~#?&//=]*)/))
             urls[0] = "https://" + urls[0];
-        let element = <div>{tweetText[0]} <a href={urls[0]} target="_blank">{urls[0]}</a>{tweetText[1]}</div>;
+        let element = <div>{tweetText[0]} <a href={urls[0]} target="_blank" rel="noopener noreferrer">{urls[0]}</a>{tweetText[1]}</div>;
         return element;
     }
 
@@ -493,13 +496,14 @@ export default function TwitterSnaResult(props) {
                 .attr("background", "white")
                 .attr("text-decoration", isActive ? "underline" : "none");
         };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [JSON.stringify(result)]);
 
     const tooltip = word => {
         if (word.entity !== null)
-            return "The word " + word.text + " appears " + word.value + " times" + " and is a " + word.entity + ".";
+            return "The word " + word.text + " appears " + word.value + " times and is a " + word.entity + ".";
         else
-            return "The word " + word.text + " appears " + word.value + " times" + ".";
+            return "The word " + word.text + " appears " + word.value + " times.";
     }
 
     const getCallbacks = () => {
@@ -800,6 +804,8 @@ export default function TwitterSnaResult(props) {
                                 </ExpansionPanelDetails>
                             </ExpansionPanel>
                         )
+                    else
+                        return null;
                 })
             }
             {
