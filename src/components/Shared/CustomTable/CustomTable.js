@@ -54,6 +54,7 @@ export default function CustomTable(props) {
             ...state,
             data: props.data,
         })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [JSON.stringify(props.data)]);
 
     return (

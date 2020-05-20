@@ -42,9 +42,7 @@ const TwitterSna = () => {
   const keyword = useLoadLanguage("components/NavItems/tools/TwitterSna.tsv", tsv);
 
   const request = useSelector(state => state.twitterSna.request);
-  console.log("Redux request: ", request);
   const reduxResult = useSelector(state => state.twitterSna.result);
-  console.log("reduxResult: ", reduxResult);
   const isLoading = useSelector(state => state.twitterSna.loading);
   const loadingMessage = useSelector(state => state.twitterSna.loadingMessage);
 
@@ -164,7 +162,7 @@ const TwitterSna = () => {
     const removeQuotes = (list) => {
       let res = [];
       !_.isNil(list) &&
-        list.map(string => {
+        list.forEach(string => {
           res.push(replaceAll(string, "\"", ""));
         });
       return res;
@@ -382,6 +380,7 @@ const TwitterSna = () => {
       // console.log("Updating submittedRequest: ", newSubmittedRequest);
       setSubmittedRequest(newSubmittedRequest);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userAuthenticated]);
 
   return (
