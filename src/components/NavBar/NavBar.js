@@ -203,7 +203,7 @@ const NavBar = (props) => {
             title: "navbar_tools",
             icon:
                 <Icon classes={{root: classes.iconRootTab}} fontSize={"large"}>
-                    <img className={classes.imageIconTab} src={toolIcon}/>
+                    <img className={classes.imageIconTab} src={toolIcon} alt={keyword("navbar_tools")} />
                 </Icon>,
             content: <div/>,
             path: "tools",
@@ -213,7 +213,7 @@ const NavBar = (props) => {
             title: "navbar_tuto",
             icon:
                 <Icon classes={{root: classes.iconRootTab}} fontSize={"large"}>
-                    <img className={classes.imageIconTab} src={tutorialIcon}/>
+                    <img className={classes.imageIconTab} src={tutorialIcon} alt={keyword("navbar_tuto")}/>
                 </Icon>,
             content: <Tutorial/>,
             path: "tutorial",
@@ -223,7 +223,7 @@ const NavBar = (props) => {
             title: "navbar_classroom",
             icon:
                 <Icon classes={{root: classes.iconRootTab}} fontSize={"large"} color={'primary'}>
-                    <img className={classes.imageIconTab} src={classRoomIcon}/>
+                    <img className={classes.imageIconTab} src={classRoomIcon} alt={keyword("navbar_classroom")} />
                 </Icon>,
             content: <ClassRoom/>,
             path: "classroom",
@@ -233,7 +233,7 @@ const NavBar = (props) => {
             title: "navbar_quiz",
             icon:
                 <Icon classes={{root: classes.iconRootTab}} fontSize={"large"}>
-                    <img className={classes.imageIconTab} src={interactiveIcon}/>
+                    <img className={classes.imageIconTab} src={interactiveIcon} alt={keyword("navbar_quiz")} />
                 </Icon>,
             content: <Interactive/>,
             path: "interactive",
@@ -250,7 +250,7 @@ const NavBar = (props) => {
             title: "navbar_about",
             icon:
                 <Icon classes={{root: classes.iconRootTab}} fontSize={"large"}>
-                    <img className={classes.imageIconTab} src={aboutIcon}/>
+                    <img className={classes.imageIconTab} src={aboutIcon} alt={keyword("navbar_about")} />
                 </Icon>,
             content: <About/>,
             path: "about",
@@ -335,7 +335,7 @@ const NavBar = (props) => {
                                                 item.icon
                                                 :
                                                 <Icon className={classes.iconRootDrawer} fontSize={"large"}>
-                                                    <img className={classes.imageIconDrawer} src={item.icon}/>
+                                                    <img className={classes.imageIconDrawer} src={item.icon} alt={keyword(item.title)}/>
                                                 </Icon>
                                         }
                                     </ListItemIcon>
