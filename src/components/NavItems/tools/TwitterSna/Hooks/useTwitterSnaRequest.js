@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setError } from "../../../../../redux/actions/errorActions";
 import { setTwitterSnaLoading, setTwitterSnaResult, setTwitterSnaLoadingMessage } from "../../../../../redux/actions/tools/twitterSnaActions";
@@ -183,7 +183,6 @@ const useTwitterSnaRequest = (request) => {
   const userAuthenticated = useSelector(state => state.userSession && state.userSession.userAuthenticated);
 
   useEffect(() => {
-    // console.log("useTwitterSnaRequest.useEffect request: ", request);
 
     // Check request
     if (_.isNil(request)
@@ -545,6 +544,7 @@ const useTwitterSnaRequest = (request) => {
     } else {
       lastRenderCall(null, request);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [JSON.stringify(request)]);
 
 };

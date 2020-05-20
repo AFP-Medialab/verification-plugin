@@ -71,5 +71,5 @@ export const useAnalysisWrapper = (apiUrl, videoUrl) => {
                 .then(response => handleJob(response["data"]))
                 .catch(error => handleError(error))
         }
-    }, [apiUrl]);
+    }, [apiUrl, keyword, dispatch, videoUrl]);
 };
