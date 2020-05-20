@@ -20,13 +20,19 @@ const OnClickInfo = (props) => {
         setChecked((prev) => !prev);
     };
 
+    const componentDecorator = (href, text, key) => (
+        <a href={href} key={key} target="_blank" rel="noopener noreferrer">
+          {text}
+        </a>
+    );
+
     return (
         <div>
             <WbIncandescentIcon fontSize={"large"} onClick={handleClick}/>
             {
                 checked === true &&
                 <div className={classes.onClickInfo}>
-                    <Typography variant={"body2"}><Linkify>{keyword(props.keyword)}</Linkify></Typography>
+                    <Typography variant={"body2"}><Linkify componentDecorator={componentDecorator}>{keyword(props.keyword)}</Linkify></Typography>
                 </div>
             }
         </div>
