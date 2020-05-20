@@ -62,6 +62,6 @@ const useVideoRightsTreatment = (url) => {
                     handleError(errors)
                 });
         }
-    }, [url]);
+    }, [dispatch, keyword, url]);
 };
 export default useVideoRightsTreatment

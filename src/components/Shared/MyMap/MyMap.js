@@ -41,7 +41,9 @@ const MyMap = (props) => {
                 }
             })
             .catch(error => console.log(error))
-    }, [(props.locations) ? props.locations.length : 0]);
+    
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [(props.locations) ? props.locations.length : 0, view, props.locations]);
 
 
     return (
