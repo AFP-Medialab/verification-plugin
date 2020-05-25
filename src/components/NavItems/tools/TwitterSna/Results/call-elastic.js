@@ -633,7 +633,7 @@ function constructAggs(field) {
     if (field === "hashtags" || field === "urls") {
         fieldInfo += JSON.stringify({
             "terms": {
-                "field": field,
+                "field": field + ".keyword",
                 "order": {
                     "_count": "desc"
                 },
