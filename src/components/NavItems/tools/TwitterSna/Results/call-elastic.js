@@ -512,7 +512,7 @@ function constructMatchNotPhrase(param) {
             match_phrases += '{' +
                 '"match_phrase": {' +
                     '"hashtags": {' +
-                        '"query":"' + arg + '"' +
+                        '"query":"' + arg.substr(1) + '"' +
                         '}' +
                     '}' +
                 '}'
@@ -562,7 +562,7 @@ function constructMatchPhrase(param, startDate, endDate) {
             match_phrases += ',{' +
                 '"match_phrase": {' +
                     '"hashtags": {' +
-                        '"query":"' + arg + '"' +
+                        '"query":"' + arg.substr(1) + '"' +
                         '}' +
                     '}' +
                 '}'
