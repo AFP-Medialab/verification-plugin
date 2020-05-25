@@ -304,7 +304,7 @@ let gexfGen_url = process.env.REACT_APP_GEXF_GENERATOR_URL;
         }
         if (field === "hashtags" || field === "mentions") {
             return generatePlotlyJsonFromElasticResponseDonuts(await getElasticReponseDonuts(param, field), param.keywordList,  hashtagsGet);
-        } else if (field === "retweet_count" || field === "nlikes"){
+        } else if (field === "retweet_count" || field === "favorite_count"){
             return generatePlotlyJsonFromElasticResponseDonuts(await getElasticReponseDonuts(param, field), param.keywordList,  mostRetweetGet);
         }
         else{
@@ -656,7 +656,7 @@ function constructAggs(field) {
     }
     
     //Retweets & Likes users donuts
-    else if (field === "retweet_count" || field === "nlikes") {
+    else if (field === "retweet_count" || field === "favorite_count") {
 
         fieldInfo += JSON.stringify({
             "terms": {
@@ -722,7 +722,7 @@ function constructAggs(field) {
     {
         fieldInfo += "{" +
             '"sum" :' +
-                '{"field":"retweet_count"}},"likes": {"sum":{"field":"nlikes"}}';
+                '{"field":"retweet_count"}},"likes": {"sum":{"field":"favorite_count"}}';
     }
     else {
         fieldInfo += JSON.stringify({
