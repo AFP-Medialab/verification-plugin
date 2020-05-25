@@ -449,7 +449,7 @@ let gexfGen_url = process.env.REACT_APP_GEXF_GENERATOR_URL;
                 }
             },
             "sort": [
-                {"date": {"order": "asc"}}
+                {"datetimestamp": {"order": "asc"}}
             ]
         };
         return query;
@@ -477,7 +477,7 @@ function buildQuery(aggs, must, mustNot, size) {
             }
         },
         "sort": [
-            {"date": {"order": "asc"}}
+            {"datetimestamp": {"order": "asc"}}
         ]
     };
     return query;
@@ -535,6 +535,10 @@ function constructMatchPhrase(param, startDate, endDate) {
         startDate = param["from"];
         endDate = param["until"];
     }
+    let startDateObj = new Date(startDate);
+    let startDateEpochSeconds = startDateObj.getTime()/1000;
+    let endDateObj = new Date(endDate);
+    let endDateEpochSeconds = endDateObj.getTime()/1000;
 
     let match_phrases = JSON.stringify({
             "query_string": {
@@ -594,10 +598,10 @@ function constructMatchPhrase(param, startDate, endDate) {
     // RANGE SETUP
     match_phrases += "," + JSON.stringify({
         "range": {
-            "date": {
-                "format": "yyyy-MM-dd HH:mm:ss||yyyy-MM-dd||epoch_millis",
-                "gte": startDate,
-                "lte": endDate
+            "datetimestamp": {
+                "format": "epoch_second",
+                "gte": startDateEpochSeconds,
+                "lte": endDateEpochSeconds
             }
         }
     });
@@ -677,7 +681,7 @@ function constructAggs(field) {
     else if (field.includes('1')) {
         fieldInfo += JSON.stringify({
             "date_histogram": {
-                "field": "date",
+                "field": "datetimestamp",
                 "calendar_interval": field,
                 "time_zone": "Europe/Paris",
                 "min_doc_count": 1
@@ -698,7 +702,7 @@ function constructAggs(field) {
                         },
                         "2": {
                             "terms": {
-                                "field": "date"
+                                "field": "datetimestamp"
                             }
                         }
                     },
