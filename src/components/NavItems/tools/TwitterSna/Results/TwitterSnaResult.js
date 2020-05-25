@@ -129,22 +129,22 @@ export default function TwitterSnaResult(props) {
 
         result.tweets.forEach(tweetObj => {
 
-            if (tweetObj._source.tweet.toLowerCase().match(new RegExp('(^|((.)*[.()0-9!?\'’‘":,/\\%><«» ^#]))' + word + '(([.()!?\'’‘":,/><«» ](.)*)|$)', "i"))) {
+            if (tweetObj._source.full_text.toLowerCase().match(new RegExp('(^|((.)*[.()0-9!?\'’‘":,/\\%><«» ^#]))' + word + '(([.()!?\'’‘":,/><«» ](.)*)|$)', "i"))) {
 
-                var date = new Date(tweetObj._source.date);
-                //let tweet = getTweetWithClickableLink(tweetObj._source.tweet,tweetObj._source.link);
+                var date = new Date(tweetObj._source.datetimestamp * 1000);
+                //let tweet = getTweetWithClickableLink(tweetObj._source.full_text,tweetObj._source.link);
                 let tmpObj = {
                     screen_name: tweetObj._source.screen_name,
                     date: date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear() + ' ' + date.getHours() + ':' + date.getMinutes(),
-                    tweet: tweetObj._source.tweet,
+                    tweet: tweetObj._source.full_text,
                     retweetNb: tweetObj._source.retweet_count,
                     likeNb: tweetObj._source.favorite_count,
-                    link: tweetObj._source.link
+                    link: "https://twitter.com/" + tweetObj._source.screen_name + "/status/" + tweetObj._source.conversation_id_str
                 };
                 resData.push(tmpObj);
                 csvArr += tweetObj._source.screen_name + ',' +
                     date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear() + ' ' + date.getHours() + ':' + date.getMinutes() + ',"' +
-                    tweetObj._source.tweet + '",' + tweetObj._source.retweet_count + ',' + tweetObj._source.favorite_count + ',' + tweetObj._source.link + '\n';
+                    tweetObj._source.full_text + '",' + tweetObj._source.retweet_count + ',' + tweetObj._source.favorite_count + ',' + tweetObj._source.link + '\n';
             }
         });
         let tmp = {
@@ -174,7 +174,7 @@ export default function TwitterSnaResult(props) {
 
         result.tweets.forEach(tweetObj => {
 
-            let objDate = new Date(tweetObj._source.date);
+            let objDate = new Date(tweetObj._source.datetimestamp * 1000);
             for (let i = 0; i < data.points.length; i++) {
                 let pointDate = new Date(fromHisto ? data.points[i].x : (data.points[i].x + ' ' + data.points[i].y));
                 if (data.points[i].data.mode !== "lines" && isInRange(pointDate, objDate, isDays)) {
@@ -182,20 +182,20 @@ export default function TwitterSnaResult(props) {
                         minDate = objDate;
                     if (maxDate === undefined)
                         maxDate = objDate;
-                    let date = new Date(tweetObj._source.date);
+                    let date = new Date(tweetObj._source.datetimestamp * 1000);
                     resData.push(
                         {
                             screen_name: <a href={"https://twitter.com/" + tweetObj._source.screen_name}
                                 target="_blank" rel="noopener noreferrer">{tweetObj._source.screen_name}</a>,
                             date: date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear() + ' ' + date.getHours() + ':' + date.getMinutes(),
-                            tweet: tweetObj._source.tweet,
+                            tweet: tweetObj._source.full_text,
                             retweetNb: tweetObj._source.retweet_count,
-                            link: tweetObj._source.link
+                            link: "https://twitter.com/" + tweetObj._source.screen_name + "/status/" + tweetObj._source.conversation_id_str
                         }
                     );
                     csvArr += tweetObj._source.screen_name + ',' +
                         date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear() + '_' + date.getHours() + 'h' + date.getMinutes() + ',"' +
-                        tweetObj._source.tweet + '",' + tweetObj._source.retweet_count + "," + tweetObj._source.link + '\n';
+                        tweetObj._source.full_text + '",' + tweetObj._source.retweet_count + "," + tweetObj._source.link + '\n';
 
                     if (minDate > objDate) {
                         minDate = objDate
@@ -234,26 +234,26 @@ export default function TwitterSnaResult(props) {
         let csvArr = keyword("sna_result_username") + ',' + keyword("sna_result_date") + ',' + keyword("sna_result_tweet") + ',' + keyword("sna_result_retweet_nb") + ',' + keyword("elastic_url") + '\n';
 
         const filteredTweets = result.tweets.filter(function (tweetObj) {
-            const date = new Date(tweetObj._source.date);
+            const date = new Date(tweetObj._source.datetimestamp * 1000);
             const day = getDayAsString(date.getDay());
             const hour = getHourAsString(date.getHours());
             return hour === data.points[0].x && day === data.points[0].y;
         });
 
         filteredTweets.forEach(tweetObj => {
-            const date = new Date(tweetObj._source.date);
+            const date = new Date(tweetObj._source.datetimestamp * 1000);
             resData.push(
                 {
                     screen_name: <a href={"https://twitter.com/" + tweetObj._source.screen_name} target="_blank" rel="noopener noreferrer">{tweetObj._source.screen_name}</a>,
                     date: date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear() + ' ' + date.getHours() + ':' + date.getMinutes(),
-                    tweet: tweetObj._source.tweet,
+                    tweet: tweetObj._source.full_text,
                     retweetNb: tweetObj._source.retweet_count,
-                    link: tweetObj._source.link
+                    link: "https://twitter.com/" + tweetObj._source.screen_name + "/status/" + tweetObj._source.conversation_id_str
                 }
             );
             csvArr += tweetObj._source.screen_name + ',' +
                 date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear() + '_' + date.getHours() + 'h' + date.getMinutes() + ',"' +
-                tweetObj._source.tweet + '",' + tweetObj._source.retweet_count + ',' + tweetObj._source.link + '\n';
+                tweetObj._source.full_text + '",' + tweetObj._source.retweet_count + ',' + tweetObj._source.link + '\n';
         });
 
         return {
@@ -289,20 +289,20 @@ export default function TwitterSnaResult(props) {
 
         let selectedUser = null;
         if (index === "userGraphIdx") {
-            selectedUser = data.data.node.id.toLowerCase();
+            selectedUser = data.data.node.id;
         } else {
             selectedUser = data.points[0].label;
         }
 
         result.tweets.forEach(tweetObj => {
-            if (tweetObj._source.screen_name.toLowerCase() === selectedUser) {
-                let date = new Date(tweetObj._source.date);
+            if (tweetObj._source.screen_name.toLowerCase() === selectedUser.toLowerCase()) {
+                let date = new Date(tweetObj._source.datetimestamp * 1000);
                 let tmpObj = {
                     date: date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear() + ' ' + date.getHours() + ':' + date.getMinutes(),
-                    tweet: tweetObj._source.tweet,
-                    link: tweetObj._source.link
+                    tweet: tweetObj._source.full_text,
+                    link: "https://twitter.com/" + tweetObj._source.screen_name + "/status/" + tweetObj._source.conversation_id_str
                 };
-                csvArr += date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear() + '_' + date.getHours() + 'h' + date.getMinutes() + ',"' + tweetObj._source.tweet + '",';
+                csvArr += date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear() + '_' + date.getHours() + 'h' + date.getMinutes() + ',"' + tweetObj._source.full_text + '",';
 
                 if (nbType !== "retweets_cloud_chart_title") {
                     tmpObj.nbLikes = tweetObj._source.favorite_count;
@@ -368,13 +368,13 @@ export default function TwitterSnaResult(props) {
         mentionTweets.forEach(tweetObj => {
             let lcMentionArr = tweetObj._source.mentions.map(v => v.toLowerCase());
             if (lcMentionArr.includes(selectedUser)) {
-                let date = new Date(tweetObj._source.date);
+                let date = new Date(tweetObj._source.datetimestamp * 1000);
                 let tmpObj = {
                     date: date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear() + ' ' + date.getHours() + ':' + date.getMinutes(),
-                    tweet: tweetObj._source.tweet,
-                    link: tweetObj._source.link
+                    tweet: tweetObj._source.full_text,
+                    link: "https://twitter.com/" + tweetObj._source.screen_name + "/status/" + tweetObj._source.conversation_id_str
                 };
-                csvArr += date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear() + '_' + date.getHours() + 'h' + date.getMinutes() + ',"' + tweetObj._source.tweet + '",';
+                csvArr += date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear() + '_' + date.getHours() + 'h' + date.getMinutes() + ',"' + tweetObj._source.full_text + '",';
 
                 if (nbType !== "retweets_cloud_chart_title") {
                     tmpObj.nbLikes = tweetObj._source.favorite_count;

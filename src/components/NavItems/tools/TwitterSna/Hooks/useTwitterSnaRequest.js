@@ -312,8 +312,6 @@ const useTwitterSnaRequest = (request) => {
         }],
         autosize: true,
       };
-
-
       let config = {
         displayModeBar: true,
         toImageButtonOptions: {
@@ -326,6 +324,10 @@ const useTwitterSnaRequest = (request) => {
         modeBarButtons: [["toImage"], ["resetScale2d"]],
         displaylogo: false,
       };
+      json.map((obj) => {
+        obj.x = obj.x.map((timestamp) => {return new Date(parseInt(timestamp) * 1000)});
+        return obj;
+      })
       return {
         title: "user_time_chart_title",
         json: json,
