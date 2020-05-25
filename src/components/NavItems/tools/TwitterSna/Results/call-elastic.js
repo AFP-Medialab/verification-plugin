@@ -587,7 +587,7 @@ function constructMatchPhrase(param, startDate, endDate) {
             if (user !== "") {
                 match_phrases += ',{' +
                     '"match_phrase": {' +
-                        '"username": {' +
+                        '"screen_name": {' +
                             '"query":"' + user + '"' +
                             '}' +
                         '}' +
@@ -660,7 +660,7 @@ function constructAggs(field) {
 
         fieldInfo += JSON.stringify({
             "terms": {
-                "field": "username",
+                "field": "screen_name.keyword",
                 "order": {
                     "1": "desc"
                 },
@@ -689,7 +689,7 @@ function constructAggs(field) {
             "aggs": {
                 "3": {
                     "terms": {
-                        "field": "username",
+                        "field": "screen_name.keyword",
                         "order": {
                             "1": "desc"
                         }
@@ -727,7 +727,7 @@ function constructAggs(field) {
     else {
         fieldInfo += JSON.stringify({
                 "terms": {
-                    "field": "username",
+                    "field": "screen_name.keyword",
                     "order": {
                         "_count": "desc"
                     },
