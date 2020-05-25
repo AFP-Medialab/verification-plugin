@@ -33,7 +33,7 @@ const includeWordObj = (wordObj, wordsArray) => {
 function getNbTweetsByHourDay(dayArr, hourArr, bucket) {
   // 1D-array with elements as day_hour 
   let dayHourArr = bucket.map(function (val, ind) {
-    let date = new Date(val._source.date);
+    let date = new Date(val._source.datetimestamp * 1000);
     return `${date.getDay()}_${date.getHours()}`;
   });
 
