@@ -302,7 +302,7 @@ let gexfGen_url = process.env.REACT_APP_GEXF_GENERATOR_URL;
                 parents.push(mainKey);
             }
         }
-        if (field === "hashtags" || field === "mentions") {
+        if (field === "hashtags" || field === "user_mentions") {
             return generatePlotlyJsonFromElasticResponseDonuts(await getElasticReponseDonuts(param, field), param.keywordList,  hashtagsGet);
         } else if (field === "retweet_count" || field === "favorite_count"){
             return generatePlotlyJsonFromElasticResponseDonuts(await getElasticReponseDonuts(param, field), param.keywordList,  mostRetweetGet);
@@ -643,10 +643,10 @@ function constructAggs(field) {
     }
 
     // Mentions donut
-    else if (field === "mentions") {
+    else if (field === "user_mentions") {
         fieldInfo += JSON.stringify({
             "terms": {
-                "field": field,
+                "field": field + ".screen_name.keyword",
                 "order": {
                     "_count": "desc"
                 },
