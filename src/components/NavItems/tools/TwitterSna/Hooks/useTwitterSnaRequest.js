@@ -377,7 +377,7 @@ const useTwitterSnaRequest = (request) => {
       let givenUntil = data.until;
       let entries = makeEntries(data);
       let generateList = [
-        getPlotlyJsonDonuts(entries, "nretweets"),
+        getPlotlyJsonDonuts(entries, "retweet_count"),
         getPlotlyJsonDonuts(entries, "nlikes"),
         getPlotlyJsonDonuts(entries, "ntweets"),
         getPlotlyJsonDonuts(entries, "mentions"),

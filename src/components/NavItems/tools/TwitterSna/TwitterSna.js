@@ -43,6 +43,8 @@ const TwitterSna = () => {
 
   const request = useSelector(state => state.twitterSna.request);
   const reduxResult = useSelector(state => state.twitterSna.result);
+  console.log("request: ", request);
+  console.log("reduxResult: ", reduxResult);
   const isLoading = useSelector(state => state.twitterSna.loading);
   const loadingMessage = useSelector(state => state.twitterSna.loadingMessage);
 

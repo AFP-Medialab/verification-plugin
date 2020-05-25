@@ -137,14 +137,14 @@ export default function TwitterSnaResult(props) {
                     username: tweetObj._source.username,
                     date: date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear() + ' ' + date.getHours() + ':' + date.getMinutes(),
                     tweet: tweetObj._source.tweet,
-                    retweetNb: tweetObj._source.nretweets,
+                    retweetNb: tweetObj._source.retweet_count,
                     likeNb: tweetObj._source.nlikes,
                     link: tweetObj._source.link
                 };
                 resData.push(tmpObj);
                 csvArr += tweetObj._source.username + ',' +
                     date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear() + ' ' + date.getHours() + ':' + date.getMinutes() + ',"' +
-                    tweetObj._source.tweet + '",' + tweetObj._source.nretweets + ',' + tweetObj._source.nlikes + ',' + tweetObj._source.link + '\n';
+                    tweetObj._source.tweet + '",' + tweetObj._source.retweet_count + ',' + tweetObj._source.nlikes + ',' + tweetObj._source.link + '\n';
             }
         });
         let tmp = {
@@ -189,13 +189,13 @@ export default function TwitterSnaResult(props) {
                                 target="_blank" rel="noopener noreferrer">{tweetObj._source.username}</a>,
                             date: date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear() + ' ' + date.getHours() + ':' + date.getMinutes(),
                             tweet: tweetObj._source.tweet,
-                            retweetNb: tweetObj._source.nretweets,
+                            retweetNb: tweetObj._source.retweet_count,
                             link: tweetObj._source.link
                         }
                     );
                     csvArr += tweetObj._source.username + ',' +
                         date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear() + '_' + date.getHours() + 'h' + date.getMinutes() + ',"' +
-                        tweetObj._source.tweet + '",' + tweetObj._source.nretweets + "," + tweetObj._source.link + '\n';
+                        tweetObj._source.tweet + '",' + tweetObj._source.retweet_count + "," + tweetObj._source.link + '\n';
 
                     if (minDate > objDate) {
                         minDate = objDate
@@ -247,13 +247,13 @@ export default function TwitterSnaResult(props) {
                     username: <a href={"https://twitter.com/" + tweetObj._source.username} target="_blank" rel="noopener noreferrer">{tweetObj._source.username}</a>,
                     date: date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear() + ' ' + date.getHours() + ':' + date.getMinutes(),
                     tweet: tweetObj._source.tweet,
-                    retweetNb: tweetObj._source.nretweets,
+                    retweetNb: tweetObj._source.retweet_count,
                     link: tweetObj._source.link
                 }
             );
             csvArr += tweetObj._source.username + ',' +
                 date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear() + '_' + date.getHours() + 'h' + date.getMinutes() + ',"' +
-                tweetObj._source.tweet + '",' + tweetObj._source.nretweets + ',' + tweetObj._source.link + '\n';
+                tweetObj._source.tweet + '",' + tweetObj._source.retweet_count + ',' + tweetObj._source.link + '\n';
         });
 
         return {
@@ -309,7 +309,7 @@ export default function TwitterSnaResult(props) {
                     csvArr += tmpObj.nbLikes + ',';
                 }
                 if (nbType !== "likes_cloud_chart_title") {
-                    tmpObj.nbReteets = tweetObj._source.nretweets;
+                    tmpObj.nbReteets = tweetObj._source.retweet_count;
                     csvArr += tmpObj.nbReteets + ',';
                 }
                 csvArr += tmpObj.link + '\n';
@@ -381,7 +381,7 @@ export default function TwitterSnaResult(props) {
                     csvArr += tmpObj.nbLikes + ',';
                 }
                 if (nbType !== "likes_cloud_chart_title") {
-                    tmpObj.nbReteets = tweetObj._source.nretweets;
+                    tmpObj.nbReteets = tweetObj._source.retweet_count;
                     csvArr += tmpObj.nbReteets + ',';
                 }
                 csvArr += tmpObj.link + '\n';
