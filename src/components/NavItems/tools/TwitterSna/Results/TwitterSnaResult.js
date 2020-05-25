@@ -110,7 +110,7 @@ export default function TwitterSnaResult(props) {
     const displayTweetsOfWord = (word, callback) => {
 
         let columns = [
-            { title: keyword('sna_result_username'), field: 'username' },
+            { title: keyword('sna_result_username'), field: 'screen_name' },
             { title: keyword('sna_result_date'), field: 'date' },
             { title: keyword('sna_result_tweet'), field: 'tweet', render: getTweetWithClickableLink },
             { title: keyword('sna_result_retweet_nb'), field: 'retweetNb' },
@@ -134,7 +134,7 @@ export default function TwitterSnaResult(props) {
                 var date = new Date(tweetObj._source.date);
                 //let tweet = getTweetWithClickableLink(tweetObj._source.tweet,tweetObj._source.link);
                 let tmpObj = {
-                    username: tweetObj._source.username,
+                    screen_name: tweetObj._source.screen_name,
                     date: date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear() + ' ' + date.getHours() + ':' + date.getMinutes(),
                     tweet: tweetObj._source.tweet,
                     retweetNb: tweetObj._source.retweet_count,
@@ -142,7 +142,7 @@ export default function TwitterSnaResult(props) {
                     link: tweetObj._source.link
                 };
                 resData.push(tmpObj);
-                csvArr += tweetObj._source.username + ',' +
+                csvArr += tweetObj._source.screen_name + ',' +
                     date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear() + ' ' + date.getHours() + ':' + date.getMinutes() + ',"' +
                     tweetObj._source.tweet + '",' + tweetObj._source.retweet_count + ',' + tweetObj._source.favorite_count + ',' + tweetObj._source.link + '\n';
             }
@@ -159,7 +159,7 @@ export default function TwitterSnaResult(props) {
 
     const displayTweetsOfDate = (data, fromHisto) => {
         let columns = [
-            { title: keyword('sna_result_username'), field: 'username' },
+            { title: keyword('sna_result_username'), field: 'screen_name' },
             { title: keyword('sna_result_date'), field: 'date' },
             { title: keyword('sna_result_tweet'), field: 'tweet', render: getTweetWithClickableLink },
             { title: keyword('sna_result_retweet_nb'), field: 'retweetNb' },
@@ -185,15 +185,15 @@ export default function TwitterSnaResult(props) {
                     let date = new Date(tweetObj._source.date);
                     resData.push(
                         {
-                            username: <a href={"https://twitter.com/" + tweetObj._source.username}
-                                target="_blank" rel="noopener noreferrer">{tweetObj._source.username}</a>,
+                            screen_name: <a href={"https://twitter.com/" + tweetObj._source.screen_name}
+                                target="_blank" rel="noopener noreferrer">{tweetObj._source.screen_name}</a>,
                             date: date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear() + ' ' + date.getHours() + ':' + date.getMinutes(),
                             tweet: tweetObj._source.tweet,
                             retweetNb: tweetObj._source.retweet_count,
                             link: tweetObj._source.link
                         }
                     );
-                    csvArr += tweetObj._source.username + ',' +
+                    csvArr += tweetObj._source.screen_name + ',' +
                         date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear() + '_' + date.getHours() + 'h' + date.getMinutes() + ',"' +
                         tweetObj._source.tweet + '",' + tweetObj._source.retweet_count + "," + tweetObj._source.link + '\n';
 
@@ -225,7 +225,7 @@ export default function TwitterSnaResult(props) {
 
     const displayTweetsOfDateHeatMap = (data) => {
         let columns = [
-            { title: keyword('sna_result_username'), field: 'username' },
+            { title: keyword('sna_result_username'), field: 'screen_name' },
             { title: keyword('sna_result_date'), field: 'date' },
             { title: keyword('sna_result_tweet'), field: 'tweet', render: getTweetWithClickableLink },
             { title: keyword('sna_result_retweet_nb'), field: 'retweetNb' },
@@ -244,14 +244,14 @@ export default function TwitterSnaResult(props) {
             const date = new Date(tweetObj._source.date);
             resData.push(
                 {
-                    username: <a href={"https://twitter.com/" + tweetObj._source.username} target="_blank" rel="noopener noreferrer">{tweetObj._source.username}</a>,
+                    screen_name: <a href={"https://twitter.com/" + tweetObj._source.screen_name} target="_blank" rel="noopener noreferrer">{tweetObj._source.screen_name}</a>,
                     date: date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear() + ' ' + date.getHours() + ':' + date.getMinutes(),
                     tweet: tweetObj._source.tweet,
                     retweetNb: tweetObj._source.retweet_count,
                     link: tweetObj._source.link
                 }
             );
-            csvArr += tweetObj._source.username + ',' +
+            csvArr += tweetObj._source.screen_name + ',' +
                 date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear() + '_' + date.getHours() + 'h' + date.getMinutes() + ',"' +
                 tweetObj._source.tweet + '",' + tweetObj._source.retweet_count + ',' + tweetObj._source.link + '\n';
         });
@@ -295,7 +295,7 @@ export default function TwitterSnaResult(props) {
         }
 
         result.tweets.forEach(tweetObj => {
-            if (tweetObj._source.username.toLowerCase() === selectedUser) {
+            if (tweetObj._source.screen_name.toLowerCase() === selectedUser) {
                 let date = new Date(tweetObj._source.date);
                 let tmpObj = {
                     date: date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear() + ' ' + date.getHours() + ':' + date.getMinutes(),
@@ -321,7 +321,7 @@ export default function TwitterSnaResult(props) {
             data: resData,
             columns: columns,
             csvArr: csvArr,
-            username: selectedUser
+            screen_name: selectedUser
         };
 
         switch (index) {
@@ -393,7 +393,7 @@ export default function TwitterSnaResult(props) {
             data: resData,
             columns: columns,
             csvArr: csvArr,
-            username: selectedUser
+            screen_name: selectedUser
         };
 
         setPieCharts3(newRes);
@@ -785,7 +785,7 @@ export default function TwitterSnaResult(props) {
                                                         <Button
                                                             variant={"contained"}
                                                             color={"primary"}
-                                                            onClick={() => downloadClick(pieCharts[index].csvArr, (index < 3) ? pieCharts[index].username : pieCharts3.word)}>
+                                                            onClick={() => downloadClick(pieCharts[index].csvArr, (index < 3) ? pieCharts[index].screen_name : pieCharts3.word)}>
                                                             {
                                                                 keyword('sna_result_download')
                                                             }
