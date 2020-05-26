@@ -366,6 +366,12 @@ const useMyStyles = makeStyles(theme => ({
         color: theme.palette.primary.main,
         textAlign: "left",
         marginBottom: 25
+    },
+    newAssistantGrid: {
+        width: "100%",
+        marginBottom: 2,
+        textAlign: "left",
+        font: theme.typography.h6.fontSize
     }
 
 }));

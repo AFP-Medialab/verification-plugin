@@ -1,370 +1,205 @@
-import React, {useEffect, useState} from "react";
-import FaceIcon from "@material-ui/icons/Face";
-import {Paper, Box, TextField, Button} from "@material-ui/core";
-import {submissionEvent} from "../../Shared/GoogleAnalytics/GoogleAnalytics";
-import 'tui-image-editor/dist/tui-image-editor.css'
-import Typography from "@material-ui/core/Typography";
+import React, {useEffect, useRef, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
 import {useParams} from "react-router-dom";
 
+import {Box, Button, Paper, TextField} from "@material-ui/core";
+import Grid from "@material-ui/core/Grid";
+import FaceIcon from "@material-ui/icons/Face";
+import LinearProgress from "@material-ui/core/LinearProgress";
+import Typography from "@material-ui/core/Typography";
+
 import AssistantResult from "./AssistantResult";
+import AuthenticationCard from "../../Shared/Authentication/AuthenticationCard";
 import CloseResult from "../../Shared/CloseResult/CloseResult";
 import CustomTile from "../../Shared/CustomTitle/CustomTitle";
-import {cleanAssistantState, setAssistantResult} from "../../../redux/actions/tools/assistantActions";
 import {setError} from "../../../redux/actions/errorActions";
 import tsv from "../../../LocalDictionary/components/NavItems/tools/Assistant.tsv";
+import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
 import useLoadLanguage from "../../../Hooks/useLoadLanguage";
-
-import analysisIconOff from "../../NavBar/images/tools/video_logoOff.png";
-import keyframesIconOff from "../../NavBar/images/tools/keyframesOff.png";
-import thumbnailsIconOff from "../../NavBar/images/tools/youtubeOff.png";
-import twitterSearchIconOff from "../../NavBar/images/tools/twitterOff.png";
-import magnifierIconOff from "../../NavBar/images/tools/magnifierOff.png";
-import metadataIconOff from "../../NavBar/images/tools/metadataOff.png";
-import videoRightsIconOff from "../../NavBar/images/tools/copyrightOff.png";
-import forensicIconOff from "../../NavBar/images/tools/forensic_logoOff.png";
-import twitterSnaIconOff from "../../NavBar/images/tools/twitter-sna-off.png";
-import history from "../../Shared/History/History";
-import AuthenticationCard from "../../Shared/Authentication/AuthenticationCard";
 import useTwitterApi from "../../Scrapers/Twitter/useTwitterApi";
-import LinearProgress from "@material-ui/core/LinearProgress";
-import {twitterResetAction} from "../../../redux/actions/scrapers/twitterActions";
+
+import {cleanAssistantState, setProcessUrlActions, setRequireLogin, setUrlMode}
+    from "../../../redux/actions/tools/assistantActions";
+import {ASSISTANT_ACTIONS, CONTENT_TYPE, DOMAIN, DOMAIN_PATTERNS, SCRAPER, SCRAPERS, TYPE_PATTERNS}
+    from "./AssistantRuleBook";
+import history from "../../Shared/History/History";
 
 const Assistant = () => {
 
-    const {url} = useParams();
+    // styles, language, dispatch, scrapers
     const classes = useMyStyles();
+    const dispatch = useDispatch();
     const twitterApi = useTwitterApi();
     const keyword = useLoadLanguage("components/NavItems/tools/Assistant.tsv", tsv);
 
-    const inputUrl = useSelector(state => state.assistant.input);
-    const resultUrl = useSelector(state => state.assistant.url);
-    const resultData = useSelector(state => state.assistant.result);
-    const resultProcessUrl = useSelector(state => state.assistant.processUrl);
-    const twitterRequestLoading = useSelector(state => state.twitter.twitterRequestLoading);
+    //assistant state values
+    const {url} = useParams();
+    const urlMode = useSelector(state=>state.assistant.urlMode);
+    const requireLogIn = useSelector(state=>state.assistant.requireLogIn);
+    const inputUrl = useSelector(state=>state.assistant.inputUrl);
+    const processUrl = useSelector(state=>state.assistant.processUrl);
+    const imageList = useSelector(state=>state.assistant.imageList);
+    const videoList = useSelector(state=>state.assistant.videoList);
+    const processUrlActions = useSelector(state=>state.assistant.processUrlActions)
+
+    //other state values
+    const [formInput, setFormInput] = useState(null);
     const userAuthenticated = useSelector(state => state.userSession.userAuthenticated)
-    const dispatch = useDispatch();
+    const twitterRequestLoading = useSelector(state => state.twitter.twitterRequestLoading);
 
-    const [input, setInput] = useState(null);
-    const [urlToBeProcessed, setProcessUrl] = useState(resultProcessUrl);
-    const [requireLogIn, setRequireLogIn] = useState(false);
+    const submitUrl = async (userInput) => {
+        try {
+            let updatedInput = await checkForScrapers(userInput);
+            let contentType = matchPattern(updatedInput, TYPE_PATTERNS);
+            let domain = matchPattern(updatedInput, DOMAIN_PATTERNS);
 
-    const checkForTwitter = async (src) => {
-        if(src.match("((https?:/{2})?(www.)?twitter.com/\\w{1,15}/status/\\d*)")!=null && !userAuthenticated){
-            setRequireLogIn(true);
-            throw new Error("twitter_error_login");
-        }
-        else if (src.match("((https?:/{2})?(www.)?twitter.com/\\w{1,15}/status/\\d*)") && userAuthenticated){
-            setRequireLogIn(false);
-            dispatch(twitterResetAction());
-            const finalTweet = await twitterApi.getTweet(src);
-            if(finalTweet!=null) {
-                if (finalTweet.imageUrl != null) {return finalTweet.imageUrl;}
-                else if (finalTweet.videoUrl != null) {return finalTweet.videoUrl;}
-                else {throw new Error("twitter_error_media");}
-            }
-        }
-        return src;
-    }
-
-    const submitUrl = async (src) => {
-
-        try{
-            const updatedSrc = await checkForTwitter(src);
-            let content_type = matchPattern(updatedSrc, ctypePatterns);
-            let domain = matchPattern(updatedSrc, domainPatterns);
-            let actions = loadActions(domain, content_type, updatedSrc);
-            dispatch(setAssistantResult(src, updatedSrc, actions, urlToBeProcessed, content_type));
+            let actions = loadActions(domain, contentType, updatedInput);
+            dispatch(setProcessUrlActions(userInput, updatedInput, contentType, actions))
         }
         catch(error){
-            dispatch((setError(keyword(error.message))));
+            dispatch(setError(error.message));
         }
-    };
+    }
 
-    const submitUpload = (type) => {
-        let content_type = type;
+    const submitUpload = (contentType) => {
         let domain = DOMAIN.OWN;
+        let inputUrl = "";
+        let updatedInput = "";
+        let actions = loadActions(domain, contentType, inputUrl);
+        dispatch(setProcessUrlActions(inputUrl, updatedInput, contentType, actions))
+    }
 
-        let actions = loadActions(domain, content_type, "");
-        dispatch(setAssistantResult("", actions, urlToBeProcessed, content_type));
+    const matchPattern = (toMatch, matchObject) => {
+        // find the record where from the regex patterns in said record, one of them matches "toMatch"
+        let match = matchObject.find(record=>record.patterns.some((rgxpattern)=>toMatch.match(rgxpattern)!=null));
+        return match !=null ? match.key : null;
+    }
+
+    const loadActions = (domain, contentType, url) => {
+        let possibleActions =
+        ASSISTANT_ACTIONS.filter(action=>
+            action.domains.includes(domain) &&
+            (action.ctypes.includes(contentType) || action.ctypes==CONTENT_TYPE.ALL) &&
+            (action.type_restriction.size==0 || url.match(action.type_restriction[0])));
+
+        return possibleActions;
+    }
+
+    const checkForScrapers = async (userInput) => {
+        let scraperToUse = SCRAPERS.find(scraper=>((userInput.match(scraper.patterns))!=null));
+
+        if(scraperToUse != undefined && scraperToUse.key == SCRAPER.TWITTER) {
+            if (scraperToUse.requireLogIn && !userAuthenticated) {
+                dispatch(setRequireLogin(true));
+                throw new Error("twitter_error_login");
+            }
+            else {
+                dispatch(setRequireLogin(false));
+                let scrapedMedia = await twitterApi.getTweet(userInput);
+                if(scrapedMedia != null) {
+                    if (scrapedMedia.imageUrl!=null) return scrapedMedia.imageUrl;
+                    else if (scrapedMedia.videoUrl!=null) return scrapedMedia.videoUrl;
+                    else {throw new Error("twitter_error_media")}
+                }
+            }
+        }
+        return userInput;
     }
 
     const cleanAssistant = () => {
         history.push("/app/assistant/");
         dispatch(cleanAssistantState());
-        setProcessUrl(null);
+        setFormInput("");
     }
 
-    const matchPattern = (to_match, patternArray) => {
-        let match = null;
-        outer: for (let i = 0; i < patternArray.length; i++) {
-            const patterns = patternArray[i].patterns;
-            for (let j = 0; j < patterns.length; j++) {
-                const pattern = patterns[j];
-                if (to_match.match(pattern)) {
-                    match = patternArray[i].key;
-                    break outer;
-                }
-            }
-        }
-        return match;
-    }
-
-    const loadActions = (domainEnum, cTypeEnum, url) => {
-        let possibleActions = [];
-        for (let i = 0; i < drawerItems.length; i++) {
-            let currentAction = drawerItems[i];
-            //check if the domains are matching
-            const domains = currentAction.domains;
-            if (domains.includes(domainEnum)) {
-                const ctypes = currentAction.ctypes;
-                const restrictions = currentAction.type_restriction;
-                if (ctypes.includes(CTYPE.ALL) || ctypes.includes(cTypeEnum)) {
-                    if (restrictions.size == 0 || (url.match(restrictions[0]))) {
-                        possibleActions.push(currentAction);
-                    }
-                }
-            }
-        }
-        return possibleActions;
-    }
-
-
+    // set the input to either the current url param, or whatever the assistant state value is
     useEffect(() => {
         if (url !== undefined) {
-            setProcessUrl(true);
-            const uri = (url !== null) ? decodeURIComponent(url) : undefined;
-            setInput(uri);
+            dispatch(setUrlMode(true));
+            let uri = ( url!== null) ? decodeURIComponent(url) : undefined;
+            setFormInput(uri);
             submitUrl(uri);
         }
         else {
-            setInput(inputUrl);
+            setFormInput(inputUrl);
         }
-    }, [resultUrl, url]);
-
-    const CTYPE = Object.freeze({
-        VIDEO: "Video",
-        IMAGE: "Image",
-        PDF: "PDF",
-        AUDIO: "Audio",
-        TEXT: "Text",
-        ALL: "All"
-    });
-
-    const DOMAIN = Object.freeze({
-        FACEBOOK: { type: "FACEBOOK", name: "Facebook"},
-        YOUTUBE: { type: "YOUTUBE", name: "Youtube"},
-        TWITTER: { type: "TWITTER", name: "Twitter"},
-        OWN: { type: "OWN", name: "Own"},
-        ALL: { type: "ALL", name: "website"}
-    });
-
-    const ctypePatterns = [
-        {
-            key: CTYPE.VIDEO,
-            patterns: [/(mp4|webm|avi|mov|wmv|ogv|mpg|flv|mkv)(\?.*)?$/i,
-                /(facebook\.com\/.*\/videos\/)/,/(twitter\.com\/.*\/video)/,
-                /((y2u|youtube|youtu\.be).*(?!\')[0-9A-Za-z_-]{10}[048AEIMQUYcgkosw](?=))/]
-        },
-        {
-            key: CTYPE.IMAGE,
-            patterns: [
-                /(jpg|jpeg|png|gif|svg)(\?.*)?$/i,
-                /(facebook\.com\/.*\/photos\/)/,
-                /(pbs\.twimg\.com\/)/, /(twitter\.com\/.*\/photo)/,
-                /(i\.ytimg\.com)/]
-        },
-        {
-            key: CTYPE.PDF,
-            patterns: [/^.*\.pdf(\?.*)?(\#.*)?/]
-        },
-        {
-            key: CTYPE.AUDIO,
-            patterns: [/(mp3|wav|m4a)(\?.*)?$/i]
-        }
-    ];
-
-    const domainPatterns = [
-        {
-            key: DOMAIN.FACEBOOK,
-            patterns: ["^(https?:/{2})?(www.)?facebook.com|fbcdn.net"]
-        },
-        {
-            key: DOMAIN.YOUTUBE,
-            patterns: ["^(https?:/{2})?(www.)?youtube|youtu.be|i.ytimg"]
-        },
-        {
-            key: DOMAIN.TWITTER,
-            patterns: ["^(https?:/{2})?(www.)?twitter.com|twimg.com"]
-        },
-        {
-            key: DOMAIN.ALL,
-            patterns: ["https?:/{2}(www.)?[-a-zA-Z0-9@:%._+~#=]{2,256}.[a-z]{2,4}\\b([-a-zA-Z0-9@:%_+.~#?&//=]*)"]
-        }
-    ];
-
-
-    const drawerItems = [
-        {
-            title: "navbar_analysis",
-            icon: analysisIconOff,
-            domains: new Array(DOMAIN.YOUTUBE, DOMAIN.FACEBOOK, DOMAIN.TWITTER),
-            ctypes: [CTYPE.VIDEO],
-            type_restriction: [],
-            text: "analysis_text",
-            tsvPrefix: "api",
-            path: "tools/analysis",
-        },
-        {
-            title: "navbar_keyframes",
-            icon:  keyframesIconOff,
-            domains: new Array(DOMAIN.YOUTUBE, DOMAIN.FACEBOOK, DOMAIN.TWITTER, DOMAIN.OWN),
-            ctypes: [CTYPE.VIDEO],
-            type_restriction: [],
-            text: "keyframes_text",
-            tsvPrefix: "keyframes",
-            path: "tools/keyframes",
-        },
-        {
-            title: "navbar_thumbnails",
-            icon: thumbnailsIconOff,
-            domains: new Array(DOMAIN.YOUTUBE),
-            ctypes: [CTYPE.VIDEO],
-            type_restriction: [],
-            text: "thumbnails_text",
-            tsvPrefix: "thumbnails",
-            path: "tools/thumbnails",
-        },
-        {
-            title: "navbar_twitter",
-            icon: twitterSearchIconOff,
-            domains: new Array(DOMAIN.TWITTER),
-            ctypes: [CTYPE.TEXT],
-            type_restriction: [],
-            text: "twitter_text",
-            tsvPrefix: "twitter",
-            path: "tools/twitter",
-        },
-        {
-            title: "navbar_magnifier",
-            icon: magnifierIconOff,
-            domains: new Array(DOMAIN.ALL, DOMAIN.OWN, DOMAIN.YOUTUBE, DOMAIN.FACEBOOK, DOMAIN.TWITTER),
-            ctypes: [CTYPE.IMAGE],
-            type_restriction: [],
-            text: "magnifier_text",
-            tsvPrefix: "magnifier",
-            path: "tools/magnifier",
-        },
-        {
-            title: "navbar_metadata",
-            icon: metadataIconOff,
-            domains: new Array(DOMAIN.ALL, DOMAIN.OWN, DOMAIN.YOUTUBE, DOMAIN.FACEBOOK, DOMAIN.TWITTER),
-            ctypes: [CTYPE.IMAGE, CTYPE.VIDEO],
-            type_restriction: [/(jpg|jpeg|mp4|mp4v)(\?.*)?$/i],
-            text: "metadata_text",
-            tsvPrefix: "metadata",
-            path: "tools/metadata",
-        },
-        {
-            title: "navbar_rights",
-            icon:  videoRightsIconOff,
-            domains: new Array(DOMAIN.YOUTUBE, DOMAIN.FACEBOOK, DOMAIN.TWITTER),
-            ctypes: [CTYPE.VIDEO],
-            type_restriction: [],
-            text: "rights_text",
-            tsvPrefix: "copyright",
-            path: "tools/copyright",
-        },
-        {
-            title: "navbar_forensic",
-            icon: forensicIconOff,
-            domains: new Array(DOMAIN.ALL, DOMAIN.OWN, DOMAIN.YOUTUBE, DOMAIN.FACEBOOK, DOMAIN.TWITTER),
-            ctypes: [CTYPE.IMAGE],
-            type_restriction: [],
-            text: "forensic_text",
-            tsvPrefix: "forensic",
-            path: "tools/forensic",
-        },
-        {
-            title: "navbar_twitter_sna",
-            domains: new Array(),
-            ctypes: [],
-            type_restriction: [],
-            text: "sna_text",
-            icon:  twitterSnaIconOff,
-            tsvPrefix: "twitter_sna",
-            path: "tools/twitterSna"
-        },
-    ];
-
+    }, [url, inputUrl])
 
     return (
-        <div>
-            <Paper className={classes.root}>
-                <CustomTile text={keyword("assistant_title")}/><Box m={2}/>
-                {requireLogIn ? <AuthenticationCard/> : null}
+        <Paper className = {classes.root}>
+            <CustomTile text={keyword("assistant_title")}/>
+            <Box m={3}/>
+            {requireLogIn==true ? <AuthenticationCard/> : null}
 
-                <div className={classes.assistantText} hidden={urlToBeProcessed!=null}>
-                    <Typography variant={"h6"} >
+
+            <Grid container spacing={2}>
+                <Grid item xs = {12} className={classes.newAssistantGrid}  hidden={urlMode!=null}>
+                    <Typography component={"span"} variant={"h6"} >
                         <FaceIcon fontSize={"small"}/> {keyword("assistant_real_intro")}
                     </Typography>
                     <Box m={2}/>
-                    <Button className={classes.button} variant = "contained" color="primary" onClick={() => setProcessUrl(true)}>
+                    <Button className={classes.button} variant = "contained" color="primary" onClick={() =>dispatch(setUrlMode(true))}>
                         {keyword("process_url") || ""}
                     </Button>
-                    <Button className={classes.button} variant="contained" color="primary"  onClick={() => setProcessUrl(false)}>
+                    <Button className={classes.button} variant="contained" color="primary"  onClick={() => dispatch(setUrlMode(false))}>
                         {keyword("submit_own_file") || ""}
                     </Button>
-                </div>
+                </Grid>
 
-                    { (urlToBeProcessed!=null) ?
-                        (urlToBeProcessed) ?
-                            (<div className={classes.assistantText} hidden={false}>
-                                <Box m={4}/>
-                                <CloseResult onClick={() => cleanAssistant()}/>
-                                <Typography variant={"h6"} >
-                                    <FaceIcon fontSize={"small"}/> {keyword("assistant_intro")}
-                                </Typography>
-                                <Box m={2}/>
-                                <TextField
-                                    id="standard-full-width"
-                                    label={keyword("assistant_urlbox")}
-                                    style={{margin: 8}}
-                                    placeholder={""}
-                                    fullWidth
-                                    value={input}
-                                    onChange={e => setInput(e.target.value)}
-                                />
-                                <Typography hidden={!twitterRequestLoading}>
-                                    <LinearProgress color={"secondary"}/>
-                                    {keyword("extracting_tweet_media")}
-                                    <Box m={3}/>
-                                </Typography>
-                                <Box m={2}/>
-                                <Button variant="contained" color="primary" align={"center"} onClick={() => submitUrl(input)}>
-                                    {keyword("button_submit") || ""}
-                                </Button>
-                            </div>)
-                            :
-                            ( <div className={classes.assistantText}>
-                                <CloseResult onClick={() => cleanAssistant()}/>
-                                <Typography variant={"h6"} >
-                                    <FaceIcon fontSize={"small"}/> {keyword("upload_type_question")}
-                                </Typography>
-                                <Box m={2}/>
-                                <Button className={classes.button} variant="contained" color="primary" onClick={() => submitUpload(CTYPE.VIDEO)}>
-                                    {keyword("upload_video") || ""}
-                                </Button>
-                                <Button className={classes.button} variant="contained" color="primary"  onClick={() => submitUpload(CTYPE.IMAGE)}>
-                                    {keyword("upload_image") || ""}
-                                </Button>
-                            </div>)
-                        : null
-                    }
-            </Paper>
-            {(resultData) ? (<AssistantResult/>) : null}
-        </div>
+                <Grid item xs = {12} className={classes.newAssistantGrid}  hidden={urlMode==null || urlMode==false}>
+                    <Box m={5}/>
+                    <CloseResult hidden={urlMode==null || urlMode==false} onClick={() => cleanAssistant()}/>
+
+                    <Typography component={"span"} variant={"h6"} >
+                        <FaceIcon fontSize={"small"}/> {keyword("assistant_intro")}
+                    </Typography>
+
+                    <Box m={2}/>
+                    <TextField
+                        id="standard-full-width"
+                        variant="outlined"
+                        label={keyword("assistant_urlbox")}
+                        style={{margin: 8}}
+                        placeholder={""}
+                        fullWidth
+                        value={formInput}
+                        onChange={e => setFormInput(e.target.value)}
+                    />
+
+                    <Typography  component={"span"} hidden={!twitterRequestLoading}>
+                        <LinearProgress color={"secondary"}/>
+                        {keyword("extracting_tweet_media")}
+                        <Box m={3}/>
+                    </Typography>
+
+                    <Box m={2}/>
+                    <Button variant="contained" color="primary" align={"center"} onClick={() => {submitUrl(formInput)}}>
+                        {keyword("button_submit") || ""}
+                    </Button>
+                </Grid>
+
+                <Grid item xs = {12} className={classes.newAssistantGrid}  hidden={urlMode==null || urlMode==true}>
+                    <Box m={5}/>
+                    <CloseResult hidden={urlMode==null || urlMode==false} onClick={() => dispatch(cleanAssistantState())}/>
+                    <Typography component={"span"} variant={"h6"} >
+                        <FaceIcon fontSize={"small"}/> {keyword("upload_type_question")}
+                    </Typography>
+                    <Box m={2}/>
+                    <Button className={classes.button} variant="contained" color="primary" onClick={()=>{submitUpload(CONTENT_TYPE.VIDEO)}}>
+                        {keyword("upload_video") || ""}
+                    </Button>
+                    <Button className={classes.button} variant="contained" color="primary" onClick={()=>{submitUpload(CONTENT_TYPE.IMAGE)}}>
+                        {keyword("upload_image") || ""}
+                    </Button>
+                </Grid>
+
+                <Grid item xs={12}>
+                    {processUrl!=null ?  <AssistantResult/> : null}
+                </Grid>
+            </Grid>
+        </Paper>
     )
+
 };
+
 export default Assistant;

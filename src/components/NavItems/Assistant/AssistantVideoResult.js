@@ -14,7 +14,7 @@ import tsv from "../../../LocalDictionary/components/NavItems/tools/Assistant.ts
 const AssistantVideoResult = () => {
     const classes = useMyStyles();
     const keyword = useLoadLanguage("components/NavItems/tools/Assistant.tsv", tsv);
-    const resultUrl = useSelector(state => state.assistant.url);
+    const resultUrl = useSelector(state => state.assistant.processUrl);
 
     const preprocessLinkForEmbed = (resultUrl) => {
         let embedURL = resultUrl;

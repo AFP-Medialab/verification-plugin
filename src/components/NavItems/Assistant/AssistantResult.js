@@ -25,9 +25,9 @@ const AssistantResult = () => {
 
     const classes = useMyStyles();
     const keyword = useLoadLanguage("components/NavItems/tools/Assistant.tsv", tsv);
-    const resultUrl = useSelector(state => state.assistant.url);
-    const resultData = useSelector(state => state.assistant.result);
-    const resultProcessType = useSelector(state => state.assistant.processType);
+    const resultUrl = useSelector(state => state.assistant.processUrl);
+    const resultData = useSelector(state => state.assistant.processUrlActions);
+    const resultProcessType = useSelector(state => state.assistant.processUrlType);
     const resultIsImage = resultProcessType === "Image";
 
     const dispatch = useDispatch();
