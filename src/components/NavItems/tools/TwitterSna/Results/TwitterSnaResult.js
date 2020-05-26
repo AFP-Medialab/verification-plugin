@@ -364,10 +364,10 @@ export default function TwitterSnaResult(props) {
 
         let resData = [];
 
-        let mentionTweets = result.tweets.filter(tweet => tweet._source.mentions !== undefined);
+        let mentionTweets = result.tweets.filter(tweet => tweet._source.user_mentions.length > 0);
         mentionTweets.forEach(tweetObj => {
-            let lcMentionArr = tweetObj._source.mentions.map(v => v.toLowerCase());
-            if (lcMentionArr.includes(selectedUser)) {
+            let lcMentionArr = tweetObj._source.user_mentions.map(v => v.screen_name.toLowerCase());
+            if (lcMentionArr.includes(selectedUser.toLowerCase())) {
                 let date = new Date(tweetObj._source.datetimestamp * 1000);
                 let tmpObj = {
                     date: date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear() + ' ' + date.getHours() + ':' + date.getMinutes(),
