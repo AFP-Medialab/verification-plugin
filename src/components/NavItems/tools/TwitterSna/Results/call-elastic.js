@@ -449,7 +449,8 @@ let gexfGen_url = process.env.REACT_APP_GEXF_GENERATOR_URL;
                 }
             },
             "sort": [
-                {"datetimestamp": {"order": "asc"}}
+                {"datetimestamp": {"order": "asc"}},
+                {"id_str":{"order": "asc"}}
             ]
         };
         return query;
