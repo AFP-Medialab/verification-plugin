@@ -411,8 +411,7 @@ let gexfGen_url = process.env.REACT_APP_GEXF_GENERATOR_URL;
             "retweets":true,
             "replies":true,
             "trim":false,
-            "twint":true,
-            "tweep":false,
+            "tweetJson":"TWINTPLUS", //values can be TWINTPLUS, TWINT, TWEEP
             "flow":false,
             "esQuery":buildQuery4Gexf(must, mustNot,size)
         }).replace(/\\/g, "").replace(/"{/g, "{").replace(/}"/g, "}");
