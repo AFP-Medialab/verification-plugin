@@ -13,10 +13,10 @@ const navigator = (window.browser) ? window.browser : window.chrome;
 const PopUp = () => {
     const classes = useMyStyles();
     const keyword = useLoadLanguage("components/PopUp.tsv", tsv);
-    const createScript = (tag, field) => {
+    const createScript = (tag, field, varName) => {
         let script =
-            "if (!weVerifyMediaList){" +
-            "var weVerifyMediaList = [];" +
+            "if (!" + varName +"){" +
+            "var "+ varName+" = [];" +
             "for (let elt of document.getElementsByTagName('" + tag + "')) {" +
             "	if (elt." + field + ") {" +
             "    let url = elt." + field + ";" +
@@ -25,12 +25,12 @@ const PopUp = () => {
             "	 if (!url.startsWith('http')) {" +
             "		url = new URL(url).href;" +
             "	 }" +
-            "    if (!weVerifyMediaList.includes(url))" +
-            "      weVerifyMediaList.push(url);" +
+            "    if (!"+varName+".includes(url))" +
+            "      "  +varName+".push(url);" +
             "  }" +
             "}" +
             "}" +
-            "weVerifyMediaList;";
+            varName + ";";
         return script;
     };
 
@@ -38,9 +38,9 @@ const PopUp = () => {
     const [videoList, setVideoList] = useState(null);
 
 
-    const getUrls = (tag, field, setFunction) => {
+    const getUrls = (tag, field, varName, setFunction) => {
         let urlList = [];
-        const script = createScript(tag, field);
+        const script = createScript(tag, field, varName);
         navigator.tabs.executeScript({
             code: script
         }, (result) => {
@@ -68,8 +68,8 @@ const PopUp = () => {
     }
 
     const loadData = () => {
-        if (imageList == null) {getUrls("img", "src", setImageList)};
-        if (videoList == null) {getUrls("video", "src", setVideoList)};
+        if (imageList == null) {getUrls("img", "src", "wvImageList", setImageList)};
+        if (videoList == null) {getUrls("video", "src", "wvVideoList", setVideoList)};
     }
 
 

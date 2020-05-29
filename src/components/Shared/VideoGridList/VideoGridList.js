@@ -1,24 +1,29 @@
 import React from 'react';
 import {makeStyles} from '@material-ui/core/styles';
-import Button from "@material-ui/core/Button";
 import GridList from '@material-ui/core/GridList';
-import ListItem from "@material-ui/core/ListItem";
+import GridListTile from "@material-ui/core/GridListTile";
 import Link from "@material-ui/core/Link";
-import List from "@material-ui/core/List";
 import LinkIcon from '@material-ui/icons/Link';
 
 const useStyles = makeStyles(theme => ({
     root: {
-        width:"100%",
+        width: "100%",
         display: 'flex',
         flexWrap: 'wrap',
-        justifyContent: 'space-around',
         overflow: 'hidden',
         backgroundColor: theme.palette.background.paper,
     },
     gridList: {
         width: "100%",
         maxHeight: "500px",
+    },
+    icon: {
+        color: theme.palette.secondary.main,
+        position: "relative",
+        top: theme.spacing.unit,
+        width: theme.typography.h5.fontSize,
+        height: theme.typography.h5.fontSize,
+        marginRight: 3
     },
 }));
 
@@ -27,15 +32,15 @@ const VideoGridList = (props) => {
 
     return (
         <div className={classes.root}>
-            <GridList className={classes.gridList} cols={1}>
-                <List>
-                    {props.list.map((tile, index) => (
-                        <ListItem key={index} value={tile} onClick={()=>{props.handleClick(tile)}}>
-                            <Button variant={"outlined"} color={"primary"}><LinkIcon fontSize={"small"} color={"primary"}/></Button>
-                           <Link variant="body2" href={tile}>{tile}</Link>
-                        </ListItem>
-                    ))}
-                </List>
+            <GridList cellHeight={"100%"} className={classes.gridList} cols={1}>
+                {props.list.map((tile, index) => (
+                    <GridListTile key={index} cols={1}>
+                        <LinkIcon className={classes.icon}/>
+                        <Link variant="body2" onClick={() => {
+                            props.handleClick(tile)
+                        }}>{tile}</Link>
+                    </GridListTile>
+                ))}
             </GridList>
         </div>
     );

@@ -255,6 +255,7 @@ const Assistant = () => {
                                 <InfoIcon className={classes.twitterIcon}/> Videos
                                 <Divider variant={"middle"}/>
                             </Typography>
+                            <Box m={2}/>
                             <VideoGridList list={videoList} handleClick={(vidLink)=>{submitMediaToProcess(vidLink)}}/>
                         </Card>
                     </Grid>
