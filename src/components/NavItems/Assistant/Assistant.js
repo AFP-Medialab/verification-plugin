@@ -18,11 +18,14 @@ import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
 import useLoadLanguage from "../../../Hooks/useLoadLanguage";
 import useTwitterApi from "../../Scrapers/Twitter/useTwitterApi";
 
-import {cleanAssistantState, setProcessUrlActions, setRequireLogin, setUrlMode}
+import {cleanAssistantState, setInputUrl, setMediaLists, setProcessUrlActions, setRequireLogin, setUrlMode}
     from "../../../redux/actions/tools/assistantActions";
 import {ASSISTANT_ACTIONS, CONTENT_TYPE, DOMAIN, DOMAIN_PATTERNS, SCRAPER, SCRAPERS, TYPE_PATTERNS}
     from "./AssistantRuleBook";
 import history from "../../Shared/History/History";
+import ImageGridList from "../../Shared/ImageGridList/ImageGridList";
+import VideoGridList from "../../Shared/VideoGridList/VideoGridList";
+
 
 const Assistant = () => {
 
@@ -46,6 +49,8 @@ const Assistant = () => {
     const [formInput, setFormInput] = useState(null);
     const userAuthenticated = useSelector(state => state.userSession.userAuthenticated)
     const twitterRequestLoading = useSelector(state => state.twitter.twitterRequestLoading);
+
+
 
     const submitUrl = async (userInput) => {
         try {
@@ -106,8 +111,25 @@ const Assistant = () => {
         return userInput;
     }
 
+    const handleMediaLists = () => {
+        let urlImageList = window.localStorage.getItem("imageList");
+        let urlVideoList = window.localStorage.getItem("videoList");
+
+        if (urlImageList != null || urlVideoList != null){
+            urlImageList = urlImageList!=null  ? urlImageList.split(",") : [];
+            urlVideoList = urlVideoList!=null ? urlVideoList.split(",") : [];
+            dispatch(setMediaLists(urlImageList, urlVideoList));
+        }
+    }
+
+    const selectMedia = (url) =>{
+        setFormInput(url);
+        submitUrl(url);
+    }
+
     const cleanAssistant = () => {
-        history.push("/app/assistant/");
+        window.localStorage.removeItem("imageList");
+        window.localStorage.removeItem("videoList");
         dispatch(cleanAssistantState());
         setFormInput("");
     }
@@ -115,10 +137,12 @@ const Assistant = () => {
     // set the input to either the current url param, or whatever the assistant state value is
     useEffect(() => {
         if (url !== undefined) {
+            handleMediaLists();
             dispatch(setUrlMode(true));
             let uri = ( url!== null) ? decodeURIComponent(url) : undefined;
             setFormInput(uri);
             submitUrl(uri);
+            history.push("/app/assistant/");
         }
         else {
             setFormInput(inputUrl);
@@ -144,6 +168,32 @@ const Assistant = () => {
                     <Button className={classes.button} variant="contained" color="primary"  onClick={() => dispatch(setUrlMode(false))}>
                         {keyword("submit_own_file") || ""}
                     </Button>
+                </Grid>
+
+                <Grid container={2}>
+                    <Grid item xs = {12} className={classes.newAssistantGrid} hidden={urlMode==null || urlMode==false}>
+                        <Typography component={"span"} variant={"h6"} >
+                            <FaceIcon fontSize={"small"}/> Input URL: <Button> {inputUrl} </Button>
+                        </Typography>
+
+                        <Box m={2}/>
+
+                        <Typography component={"span"} variant={"h6"} >
+                            <FaceIcon fontSize={"small"}/> Here are the images and videos found on this page
+                        </Typography>
+                    </Grid>
+
+                    <Grid item xs = {6} className={classes.newAssistantGrid} hidden={urlMode==null || urlMode==false}>
+                        <Box m={5}/>
+                        <Typography>Image List</Typography>
+                        <ImageGridList list={imageList} height={50} handleClick={(event)=>{selectMedia(event.target.src)}}/>
+                    </Grid>
+
+                    <Grid item xs = {6} className={classes.newAssistantGrid} hidden={ urlMode==null || urlMode==false}>
+                        <Box m={5}/>
+                        <Typography>Video List</Typography>
+                        <VideoGridList list={videoList} handleClick={(event)=>{selectMedia(event.target.name)}}/>
+                    </Grid>
                 </Grid>
 
                 <Grid item xs = {12} className={classes.newAssistantGrid}  hidden={urlMode==null || urlMode==false}>

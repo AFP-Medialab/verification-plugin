@@ -41,10 +41,22 @@ export const setProcessUrl = (processUrl) => {
 export const setMediaLists = (imageList, videoList) => {
     return {
         type : "SET_MEDIA_LISTS",
-        payload : {
-            imageList: imageList,
-            videoList: videoList
-        }
+        imageList: imageList,
+        videoList: videoList
+    }
+};
+
+export const setImageList = (imageList) => {
+    return {
+        type : "SET_IMAGE_LIST",
+        imageList: imageList,
+    }
+};
+
+export const setVideoList = (videoList) => {
+    return {
+        type : "SET_VIDEO_LIST",
+        videoList: videoList,
     }
 };
 

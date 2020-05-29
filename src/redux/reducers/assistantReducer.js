@@ -21,7 +21,17 @@ const assistantReducer = (state = defaultState, action) => {
             return state;
 
         case "SET_MEDIA_LISTS":
-            return action.payload;
+            state.imageList = action.imageList;
+            state.videoList = action.videoList;
+            return state;
+
+        case "SET_IMAGE_LIST":
+            state.imageList = action.imageList;
+            return state;
+
+        case "SET_VIDEO_LIST":
+            state.videoList = action.videoList;
+            return state;
 
         case "SET_PROCESS_URL_ACTIONS":
             state.inputUrl = action.inputUrl;
