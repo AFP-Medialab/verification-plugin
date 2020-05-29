@@ -10,9 +10,12 @@ import Typography from "@material-ui/core/Typography";
 
 import AssistantResult from "./AssistantResult";
 import AuthenticationCard from "../../Shared/Authentication/AuthenticationCard";
+import Card from "@material-ui/core/Card";
 import CloseResult from "../../Shared/CloseResult/CloseResult";
 import CustomTile from "../../Shared/CustomTitle/CustomTitle";
+import Divider from "@material-ui/core/Divider";
 import ImageGridList from "../../Shared/ImageGridList/ImageGridList";
+import InfoIcon from "@material-ui/icons/Info";
 import VideoGridList from "../../Shared/VideoGridList/VideoGridList";
 import {setError} from "../../../redux/actions/errorActions";
 import tsv from "../../../LocalDictionary/components/NavItems/tools/Assistant.tsv";
@@ -42,8 +45,6 @@ import {
 }
     from "./AssistantRuleBook";
 import history from "../../Shared/History/History";
-
-
 
 const Assistant = () => {
 
@@ -217,23 +218,36 @@ const Assistant = () => {
                     </Button>
                 </Grid>
 
-                <Grid container={2}>
-                    <Box m={2}/>
-                    <Grid item xs = {12} className={classes.newAssistantGrid} hidden={urlMode==null || urlMode==false || imageList.length == 0}>
-
-                        <Typography component={"span"} variant={"h6"} >
-                            <FaceIcon fontSize={"small"}/> Here are the images and videos found on page: {inputUrl}
+                <Grid container ={2}>
+                    <Grid item xs = {12} className={classes.newAssistantGrid} hidden={imageList.length == 0 && videoList.length==0}>
+                        <Box m={2}/>
+                        <Typography component={"span"} className={classes.twitterHeading}>
+                            Input URL: {inputUrl}
                         </Typography>
+                        <Box m={1}/>
+                        <Typography> The media from this URL is shown below. Please select one to see which tools can be used. </Typography>
+                        <Box m={3}/>
                     </Grid>
 
-                    <Grid item xs = {6} className={classes.newAssistantGrid} hidden={urlMode==null || urlMode==false || imageList.length == 0}>
-                        <Typography>Image List</Typography>
-                        <ImageGridList list={imageList} height={40} handleClick={(event)=>{submitMediaToProcess(event.target.src)}}/>
+                    <Grid item xs = {6} className={classes.newAssistantGrid} hidden={imageList.length == 0}>
+                        <Card>
+                            <Typography component={"span"} className={classes.twitterHeading}>
+                                <InfoIcon className={classes.twitterIcon}/> Images
+                                <Divider variant={"middle"}/>
+                            </Typography>
+                            <Box m={2}/>
+                            <ImageGridList list={imageList} height={60} cols={5} handleClick={(event)=>{submitMediaToProcess(event.target.src)}}/>
+                        </Card>
                     </Grid>
 
-                    <Grid item xs = {6} className={classes.newAssistantGrid} hidden={ urlMode==null || urlMode==false || videoList.length == 0}>
-                        <Typography>Video List</Typography>
-                        <VideoGridList list={videoList} handleClick={(vidLink)=>{submitMediaToProcess(vidLink)}}/>
+                    <Grid item xs = {6} className={classes.newAssistantGrid} hidden={videoList.length == 0}>
+                        <Card>
+                            <Typography component={"span"} className={classes.twitterHeading}>
+                                <InfoIcon className={classes.twitterIcon}/> Videos
+                                <Divider variant={"middle"}/>
+                            </Typography>
+                            <VideoGridList list={videoList} handleClick={(vidLink)=>{submitMediaToProcess(vidLink)}}/>
+                        </Card>
                     </Grid>
                 </Grid>
 
