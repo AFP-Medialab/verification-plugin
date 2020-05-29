@@ -1,5 +1,6 @@
 
 let elasticSearch_url = process.env.REACT_APP_ELK_URL;
+let elasticSearchUser_url = process.env.REACT_APP_ES_USER_URL;
 let gexfGen_url = process.env.REACT_APP_GEXF_GENERATOR_URL;
 
 //Functions calling elastic search and return a JSON plotly can use
@@ -456,6 +457,27 @@ let gexfGen_url = process.env.REACT_APP_GEXF_GENERATOR_URL;
     }
 
 
+    // User account array
+    export function getUserAccounts(usernameArray) {
+        let query = buildQueryMultipleMatchPhrase ("screen_name", usernameArray);
+
+        const userAction = async () => {
+
+            const response = await fetch(elasticSearchUser_url, {
+                method: 'POST',
+                body:
+                query,
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            const esResponse = await response.json();
+            return esResponse;
+
+        };
+        return userAction();
+    }
+    
 //Build a query for elastic search
 function buildQuery(aggs, must, mustNot, size) {
     let query = {
@@ -738,4 +760,17 @@ function constructAggs(field) {
 
         fieldInfo += '}'
         return fieldInfo;
+}
+
+// Build a query to get documents matching any value in the given array
+function buildQueryMultipleMatchPhrase (field, arr) {
+    let match_phrases = [];
+    arr.forEach((value) => {
+        let match_phrase = '{ "match_phrase": {"' + field + '": "' + value + '" }}';
+        match_phrases.push(match_phrase);
+    });
+    match_phrases = match_phrases.join(",");
+
+    let query = '{ "size": 10000, "query": { "bool": { "should": [' + match_phrases + ' ] } } }';
+    return query;
 }

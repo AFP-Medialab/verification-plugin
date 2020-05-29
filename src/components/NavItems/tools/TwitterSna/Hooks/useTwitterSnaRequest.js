@@ -11,7 +11,8 @@ import {
   getJsonCounts,
   getReactArrayURL,
   generateWordCloudPlotlyJson,
-  getESQuery4Gexf
+  getESQuery4Gexf,
+  getUserAccounts
 } from "../Results/call-elastic";
 
 import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
@@ -352,6 +353,10 @@ const useTwitterSnaRequest = (request) => {
         result.heatMap = createHeatMap(request, responseArrayOf9[5].tweets);
         result.coHashtagGraph = createCoHashtagGraph(responseArrayOf9[5].tweets);
         result.gexf = responseArrayOf9[8];
+        if (result.pieCharts[2].json[0].labels.length > 1) {
+          // hello().then((value) => console.log(value))
+          getUserAccounts(result.pieCharts[2].json[0].labels.slice(1)).then((data) => result.infoUsers = data.hits.hits);
+        }
       }
       else
         result.cloudChart = { title: "top_words_cloud_chart_title" };
