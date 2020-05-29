@@ -14,7 +14,7 @@ import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
 
 import useLoadLanguage from "../../../Hooks/useLoadLanguage";
 import CloseResult from "../../Shared/CloseResult/CloseResult";
-import {cleanAssistantState} from "../../../redux/actions/tools/assistantActions";
+import {cleanAssistantState, setProcessUrl, setProcessUrlActions} from "../../../redux/actions/tools/assistantActions";
 import history from "../../Shared/History/History";
 import tsv from "../../../LocalDictionary/components/NavItems/tools/Assistant.tsv";
 import AssistantImageResult from "./AssistantImageResult";
@@ -49,15 +49,15 @@ const AssistantResult = () => {
         history.push("/app/" + path + "/" + encodeURIComponent(resultUrl))
     };
 
-    const cleanAssistant = () => {
-        history.push("/app/assistant/");
-        dispatch(cleanAssistantState());
+    const cleanAssistantResult = () => {
+        dispatch(setProcessUrl(null));
+        dispatch(setProcessUrlActions(null, []))
     }
 
 
     return (
         <Paper className={classes.root}>
-            <CloseResult onClick={() => cleanAssistant()}/>
+            <CloseResult onClick={() => cleanAssistantResult()}/>
             <Grid container spacing={2}>
 
                 {(resultIsImage) ? <AssistantImageResult/> : <AssistantVideoResult/>}

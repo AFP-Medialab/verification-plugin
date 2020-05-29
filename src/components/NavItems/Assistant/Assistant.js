@@ -69,14 +69,23 @@ const Assistant = () => {
     const userAuthenticated = useSelector(state => state.userSession.userAuthenticated)
     const twitterRequestLoading = useSelector(state => state.twitter.twitterRequestLoading);
 
+
+    const validateUrl = (userInput) => {
+        //https://stackoverflow.com/questions/3809401/what-is-a-good-regular-expression-to-match-a-url
+        let urlRegex = "(http(s)?:\/\/.)?(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{2,256}\\.[a-z]{2,6}\\b([-a-zA-Z0-9@:%_\\+.~#?&//=]*)";
+        if (!userInput.match(urlRegex)) throw new Error(keyword("please_give_a_correct_link"))
+    }
+
     // given a direct user input, scrape or set the correct image/video list
     const submitInputUrl = async (userInput) => {
         try {
+            validateUrl(userInput);
             let updatedInput = await handleScraping(userInput);
             let contentType = matchPattern(updatedInput, TYPE_PATTERNS);
 
             if(contentType == CONTENT_TYPE.IMAGE){dispatch(setImageList([updatedInput]))}
             else if(contentType == CONTENT_TYPE.VIDEO){dispatch(setVideoList([updatedInput]))}
+            else {dispatch(setProcessUrl(""))}
             dispatch(setInputUrl(userInput));
         }
         catch(error){
