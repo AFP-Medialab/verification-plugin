@@ -137,15 +137,25 @@ const Assistant = () => {
         return userInput;
     }
 
-    // check for image/video lists which may have come from popup.js
+    /* check for image/video lists which may have come from popup.js
+    *  todo: rethink confusing logic (if null vals, this was from context menu. if non null vals, these were scraper.)
+    *  probably better to stop mixing content menu and scraper button menu use of url altogether
+    * */
     const checkForMediaLists = () => {
         let urlImageList = window.localStorage.getItem("imageList");
         let urlVideoList = window.localStorage.getItem("videoList");
 
-        if (urlImageList != null || urlVideoList != null){
-            urlImageList = urlImageList!=null  ? urlImageList.split(",") : [];
-            urlVideoList = urlVideoList!=null ? urlVideoList.split(",") : [];
+        if(urlImageList == null && urlVideoList == null) {
+            return;
+        }
+
+        if (urlImageList != "" || urlVideoList != ""){
+            urlImageList = urlImageList!="" ? urlImageList.split(",") : [];
+            urlVideoList = urlVideoList!="" ? urlVideoList.split(",") : [];
             dispatch(setMediaLists(urlImageList, urlVideoList));
+        }
+        else {
+            dispatch(setProcessUrl(""));
         }
     }
 
