@@ -12,19 +12,37 @@ import AssistantResult from "./AssistantResult";
 import AuthenticationCard from "../../Shared/Authentication/AuthenticationCard";
 import CloseResult from "../../Shared/CloseResult/CloseResult";
 import CustomTile from "../../Shared/CustomTitle/CustomTitle";
+import ImageGridList from "../../Shared/ImageGridList/ImageGridList";
+import VideoGridList from "../../Shared/VideoGridList/VideoGridList";
 import {setError} from "../../../redux/actions/errorActions";
 import tsv from "../../../LocalDictionary/components/NavItems/tools/Assistant.tsv";
 import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
 import useLoadLanguage from "../../../Hooks/useLoadLanguage";
 import useTwitterApi from "../../Scrapers/Twitter/useTwitterApi";
 
-import {cleanAssistantState, setInputUrl, setMediaLists, setProcessUrlActions, setRequireLogin, setUrlMode}
+import {
+    cleanAssistantState, setImageList,
+    setInputUrl,
+    setMediaLists,
+    setProcessUrl,
+    setProcessUrlActions,
+    setRequireLogin,
+    setUrlMode, setVideoList
+}
     from "../../../redux/actions/tools/assistantActions";
-import {ASSISTANT_ACTIONS, CONTENT_TYPE, DOMAIN, DOMAIN_PATTERNS, SCRAPER, SCRAPERS, TYPE_PATTERNS}
+import {
+    CONTENT_TYPE,
+    DOMAIN,
+    DOMAIN_PATTERNS,
+    matchPattern,
+    SCRAPER,
+    SCRAPERS,
+    selectCorrectActions,
+    TYPE_PATTERNS
+}
     from "./AssistantRuleBook";
 import history from "../../Shared/History/History";
-import ImageGridList from "../../Shared/ImageGridList/ImageGridList";
-import VideoGridList from "../../Shared/VideoGridList/VideoGridList";
+
 
 
 const Assistant = () => {
@@ -50,49 +68,47 @@ const Assistant = () => {
     const userAuthenticated = useSelector(state => state.userSession.userAuthenticated)
     const twitterRequestLoading = useSelector(state => state.twitter.twitterRequestLoading);
 
-
-
-    const submitUrl = async (userInput) => {
+    // given a direct user input, scrape or set the correct image/video list
+    const submitInputUrl = async (userInput) => {
         try {
-            let updatedInput = await checkForScrapers(userInput);
+            let updatedInput = await handleScraping(userInput);
             let contentType = matchPattern(updatedInput, TYPE_PATTERNS);
-            let domain = matchPattern(updatedInput, DOMAIN_PATTERNS);
 
-            let actions = loadActions(domain, contentType, updatedInput);
-            dispatch(setProcessUrlActions(userInput, updatedInput, contentType, actions))
+            if(contentType == CONTENT_TYPE.IMAGE){dispatch(setImageList([updatedInput]))}
+            else if(contentType == CONTENT_TYPE.VIDEO){dispatch(setVideoList([updatedInput]))}
+            dispatch(setInputUrl(userInput));
         }
         catch(error){
             dispatch(setError(error.message));
         }
     }
 
+    // if the user wants to upload a file, give them tools where this is an option
     const submitUpload = (contentType) => {
+        //todo: fix video bug
         let domain = DOMAIN.OWN;
-        let inputUrl = "";
-        let updatedInput = "";
-        let actions = loadActions(domain, contentType, inputUrl);
-        dispatch(setProcessUrlActions(inputUrl, updatedInput, contentType, actions))
+        let actions = selectCorrectActions(domain, contentType, "");
+        dispatch(setProcessUrlActions(contentType, actions))
+        dispatch(setProcessUrl(""));
     }
 
-    const matchPattern = (toMatch, matchObject) => {
-        // find the record where from the regex patterns in said record, one of them matches "toMatch"
-        let match = matchObject.find(record=>record.patterns.some((rgxpattern)=>toMatch.match(rgxpattern)!=null));
-        return match !=null ? match.key : null;
+    // select the correct media to process, then load actions possible
+    const submitMediaToProcess = (url) =>{
+        dispatch(setProcessUrl(url));
+        loadProcessUrlActions();
     }
 
-    const loadActions = (domain, contentType, url) => {
-        let possibleActions =
-        ASSISTANT_ACTIONS.filter(action=>
-            action.domains.includes(domain) &&
-            (action.ctypes.includes(contentType) || action.ctypes==CONTENT_TYPE.ALL) &&
-            (action.type_restriction.size==0 || url.match(action.type_restriction[0])));
-
-        return possibleActions;
+    // load possible actions for selected media url
+    const loadProcessUrlActions = () => {
+        let contentType = matchPattern(processUrl, TYPE_PATTERNS);
+        let domain = matchPattern(processUrl, DOMAIN_PATTERNS);
+        let actions = selectCorrectActions(domain, contentType, processUrl);
+        dispatch(setProcessUrlActions(contentType, actions))
     }
 
-    const checkForScrapers = async (userInput) => {
+    // handle case of user giving a very specific type of twitter link
+    const handleScraping = async (userInput) => {
         let scraperToUse = SCRAPERS.find(scraper=>((userInput.match(scraper.patterns))!=null));
-
         if(scraperToUse != undefined && scraperToUse.key == SCRAPER.TWITTER) {
             if (scraperToUse.requireLogIn && !userAuthenticated) {
                 dispatch(setRequireLogin(true));
@@ -111,7 +127,8 @@ const Assistant = () => {
         return userInput;
     }
 
-    const handleMediaLists = () => {
+    // check for image/video lists which may have come from popup.js
+    const checkForMediaLists = () => {
         let urlImageList = window.localStorage.getItem("imageList");
         let urlVideoList = window.localStorage.getItem("videoList");
 
@@ -122,11 +139,7 @@ const Assistant = () => {
         }
     }
 
-    const selectMedia = (url) =>{
-        setFormInput(url);
-        submitUrl(url);
-    }
-
+    // clean assistant state
     const cleanAssistant = () => {
         window.localStorage.removeItem("imageList");
         window.localStorage.removeItem("videoList");
@@ -137,17 +150,18 @@ const Assistant = () => {
     // set the input to either the current url param, or whatever the assistant state value is
     useEffect(() => {
         if (url !== undefined) {
-            handleMediaLists();
-            dispatch(setUrlMode(true));
+            checkForMediaLists();
             let uri = ( url!== null) ? decodeURIComponent(url) : undefined;
-            setFormInput(uri);
-            submitUrl(uri);
+            dispatch(setUrlMode(true));
+            dispatch(setInputUrl(uri));
             history.push("/app/assistant/");
         }
-        else {
-            setFormInput(inputUrl);
-        }
+        else {setFormInput(inputUrl);}
     }, [url, inputUrl])
+
+    useEffect(() => {
+        if (processUrl!=null){loadProcessUrlActions();}
+    }, [processUrl]);
 
     return (
         <Paper className = {classes.root}>
@@ -170,31 +184,6 @@ const Assistant = () => {
                     </Button>
                 </Grid>
 
-                <Grid container={2}>
-                    <Grid item xs = {12} className={classes.newAssistantGrid} hidden={urlMode==null || urlMode==false}>
-                        <Typography component={"span"} variant={"h6"} >
-                            <FaceIcon fontSize={"small"}/> Input URL: <Button> {inputUrl} </Button>
-                        </Typography>
-
-                        <Box m={2}/>
-
-                        <Typography component={"span"} variant={"h6"} >
-                            <FaceIcon fontSize={"small"}/> Here are the images and videos found on this page
-                        </Typography>
-                    </Grid>
-
-                    <Grid item xs = {6} className={classes.newAssistantGrid} hidden={urlMode==null || urlMode==false}>
-                        <Box m={5}/>
-                        <Typography>Image List</Typography>
-                        <ImageGridList list={imageList} height={50} handleClick={(event)=>{selectMedia(event.target.src)}}/>
-                    </Grid>
-
-                    <Grid item xs = {6} className={classes.newAssistantGrid} hidden={ urlMode==null || urlMode==false}>
-                        <Box m={5}/>
-                        <Typography>Video List</Typography>
-                        <VideoGridList list={videoList} handleClick={(event)=>{selectMedia(event.target.name)}}/>
-                    </Grid>
-                </Grid>
 
                 <Grid item xs = {12} className={classes.newAssistantGrid}  hidden={urlMode==null || urlMode==false}>
                     <Box m={5}/>
@@ -223,10 +212,31 @@ const Assistant = () => {
                     </Typography>
 
                     <Box m={2}/>
-                    <Button variant="contained" color="primary" align={"center"} onClick={() => {submitUrl(formInput)}}>
+                    <Button variant="contained" color="primary" align={"center"} onClick={() => {submitInputUrl(formInput)}}>
                         {keyword("button_submit") || ""}
                     </Button>
                 </Grid>
+
+                <Grid container={2}>
+                    <Box m={2}/>
+                    <Grid item xs = {12} className={classes.newAssistantGrid} hidden={urlMode==null || urlMode==false || imageList.length == 0}>
+
+                        <Typography component={"span"} variant={"h6"} >
+                            <FaceIcon fontSize={"small"}/> Here are the images and videos found on page: {inputUrl}
+                        </Typography>
+                    </Grid>
+
+                    <Grid item xs = {6} className={classes.newAssistantGrid} hidden={urlMode==null || urlMode==false || imageList.length == 0}>
+                        <Typography>Image List</Typography>
+                        <ImageGridList list={imageList} height={40} handleClick={(event)=>{submitMediaToProcess(event.target.src)}}/>
+                    </Grid>
+
+                    <Grid item xs = {6} className={classes.newAssistantGrid} hidden={ urlMode==null || urlMode==false || videoList.length == 0}>
+                        <Typography>Video List</Typography>
+                        <VideoGridList list={videoList} handleClick={(vidLink)=>{submitMediaToProcess(vidLink)}}/>
+                    </Grid>
+                </Grid>
+
 
                 <Grid item xs = {12} className={classes.newAssistantGrid}  hidden={urlMode==null || urlMode==true}>
                     <Box m={5}/>

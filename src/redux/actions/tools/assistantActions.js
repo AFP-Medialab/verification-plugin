@@ -19,11 +19,9 @@ export const setInputUrl = (inputUrl) => {
     }
 };
 
-export const setProcessUrlActions = (inputUrl, processUrl, processUrlType, actions) => {
+export const setProcessUrlActions = (processUrlType, actions) => {
     return {
         type : "SET_PROCESS_URL_ACTIONS",
-        inputUrl: inputUrl,
-        processUrl: processUrl,
         processUrlType: processUrlType,
         payload : actions
     }

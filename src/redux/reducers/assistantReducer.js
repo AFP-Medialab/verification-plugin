@@ -34,8 +34,6 @@ const assistantReducer = (state = defaultState, action) => {
             return state;
 
         case "SET_PROCESS_URL_ACTIONS":
-            state.inputUrl = action.inputUrl;
-            state.processUrl = action.processUrl;
             state.processUrlType = action.processUrlType;
             state.processUrlActions = action.payload;
             return state;

@@ -35,7 +35,7 @@ const AssistantResult = () => {
     if (resultData.length == 0)
         return (
             <Paper>
-                <box m={3}/>
+                <Box m={3}/>
                 <CloseResult onClick={() => dispatch(cleanAssistantState())}/>
                 <Card><CardContent className={classes.assistantText}>
                     <Typography variant={"h6"} align={"left"}>
@@ -64,9 +64,8 @@ const AssistantResult = () => {
 
                 <Grid  item xs = {6}>
                     <Card variant = "outlined">
-
                         <Box m = {2}/>
-                        <Typography variant="h5" component="h2" color="black">
+                        <Typography variant="h5" component="h2">
                             {keyword("things_you_can_do_header")}
                         </Typography>
                         <Typography className={classes.title} color="primary">

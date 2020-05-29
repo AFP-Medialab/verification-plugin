@@ -173,3 +173,20 @@ export const ASSISTANT_ACTIONS = [
         path: "tools/twitterSna"
     },
 ];
+
+export const selectCorrectActions = (domain, contentType, url) => {
+    let possibleActions =
+        ASSISTANT_ACTIONS.filter(action=>
+            action.domains.includes(domain) &&
+            (action.ctypes.includes(contentType) || action.ctypes==CONTENT_TYPE.ALL) &&
+            (action.type_restriction.size==0 || url.match(action.type_restriction[0])));
+
+    return possibleActions;
+}
+
+
+export const matchPattern = (toMatch, matchObject) => {
+    // find the record where from the regex patterns in said record, one of them matches "toMatch"
+    let match = matchObject.find(record=>record.patterns.some((rgxpattern)=>toMatch.match(rgxpattern)!=null));
+    return match !=null ? match.key : null;
+}
