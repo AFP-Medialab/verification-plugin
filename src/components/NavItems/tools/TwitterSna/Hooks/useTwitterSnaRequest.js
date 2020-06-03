@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setError } from "../../../../../redux/actions/errorActions";
-import { setTwitterSnaLoading, setTwitterSnaResult, setTwitterSnaLoadingMessage } from "../../../../../redux/actions/tools/twitterSnaActions";
+import { setTwitterSnaLoading, setTwitterSnaResult, setTwitterSnaLoadingMessage, setUserProfileTopActiveAuthors, setUserProfileAllAuthors } from "../../../../../redux/actions/tools/twitterSnaActions";
 import axios from "axios";
 import _ from "lodash";
 
@@ -353,9 +353,15 @@ const useTwitterSnaRequest = (request) => {
         result.heatMap = createHeatMap(request, responseArrayOf9[5].tweets);
         result.coHashtagGraph = createCoHashtagGraph(responseArrayOf9[5].tweets);
         result.gexf = responseArrayOf9[8];
+        
         if (result.pieCharts[2].json[0].labels.length > 1) {
-          // hello().then((value) => console.log(value))
-          getUserAccounts(result.pieCharts[2].json[0].labels.slice(1)).then((data) => result.infoUsers = data.hits.hits);
+          getUserAccounts(result.pieCharts[2].json[0].labels.slice(1))
+            .then((data) => dispatch(setUserProfileTopActiveAuthors(data.hits.hits)));
+        }
+
+        let authors = [...new Set(result.tweets.map((tweet) => { return tweet._source.screen_name.toLowerCase(); }))];
+        if (authors.length > 0) {
+          getUserAccounts(authors).then((data) => dispatch(setUserProfileAllAuthors(data.hits.hits)))
         }
       }
       else
