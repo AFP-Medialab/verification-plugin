@@ -49,7 +49,7 @@ const TwitterSna = () => {
   const loadingMessage = useSelector(state => state.twitterSna.loadingMessage);
 
   const upTopActiveAuthors = useSelector(state => state.twitterSna.upTopActiveAuthors);
-  const upAllAuthors = useSelector(state => state.twitterSna.upAllAuthors);
+  const topUserProfile = useSelector(state => state.twitterSna.topUserProfile);
 
   const windowUrl = window.location.href;
   let urlObj = extractUrlSearch(windowUrl);
@@ -594,7 +594,7 @@ const TwitterSna = () => {
         <TwitterSnaResult result={reduxResult} 
                           request={request} 
                           upTopActiveAuthors={upTopActiveAuthors}
-                          upAllAuthors={upAllAuthors}
+                          topUserProfile={topUserProfile}
                           />
       }
     </div>);

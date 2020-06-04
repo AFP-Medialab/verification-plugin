@@ -30,16 +30,9 @@ export const cleanTwitterSnaState = () => {
     }
 };
 
-export const setUserProfileTopActiveAuthors = (data) => {
+export const setUserProfileMostActive = (data) => {
     return {
-        type : "SET_TWITTER_SNA_USER_PROFILE_MOST_ACTIVE_AUTHORS",
-        payload : data
-    }
-};
-
-export const setUserProfileAllAuthors = (data) => {
-    return {
-        type : "SET_TWITTER_SNA_USER_PROFILE_ALL_AUTHORS",
+        type : "SET_TWITTER_SNA_USER_PROFILE_MOST_ACTIVE",
         payload : data
     }
 };

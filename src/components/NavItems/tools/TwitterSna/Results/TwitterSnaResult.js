@@ -53,6 +53,9 @@ export default function TwitterSnaResult(props) {
     const [pieCharts2, setPieCharts2] = useState(null);
     const [pieCharts3, setPieCharts3] = useState(null);
     const [coHashtagGraphTweets, setCoHashtagGraphTweets] = useState(null);
+    const [bubbleTweets, setBubbleTweets] = useState(null);
+
+    const [topUserProfile, setTopUserProfile] = useState(null);
 
     const CSVheaders = [{ label: keyword('sna_result_word'), key: "word" }, { label: keyword("sna_result_nb_occ"), key: "nb_occ" }, { label: keyword("sna_result_entity"), key: "entity" }];
 
@@ -94,6 +97,11 @@ export default function TwitterSnaResult(props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [JSON.stringify(props.result), props.result, props.result.userGraph]);
 
+    useEffect(() => {
+        setTopUserProfile(props.topUserProfile);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [JSON.stringify(props.topUserProfile), props.topUserProfile]);
+
     //Initialize tweets arrays
     useEffect(() => {
         setHistoTweets(null);
@@ -104,6 +112,7 @@ export default function TwitterSnaResult(props) {
         setPieCharts2(null);
         setPieCharts3(null);
         setCoHashtagGraphTweets(null);
+        setBubbleTweets(null);
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [JSON.stringify(props.request), props.request])
 
@@ -263,7 +272,7 @@ export default function TwitterSnaResult(props) {
         };
     };
 
-    const displayTweetsOfUser = (data, nbType, index) => {
+    const displayTweetsOfUser = (selectedUser, nbType, index) => {
         let columns = [
             { title: keyword('sna_result_date'), field: 'date' },
             { title: keyword('sna_result_tweet'), field: 'tweet', render: getTweetWithClickableLink },
@@ -286,13 +295,6 @@ export default function TwitterSnaResult(props) {
         csvArr += ',' + keyword('elastic_url') + "\n";
 
         let resData = [];
-
-        let selectedUser = null;
-        if (index === "userGraphIdx") {
-            selectedUser = data.data.node.id;
-        } else {
-            selectedUser = data.points[0].label;
-        }
 
         result.tweets.forEach(tweetObj => {
             if (tweetObj._source.screen_name.toLowerCase() === selectedUser.toLowerCase()) {
@@ -333,6 +335,9 @@ export default function TwitterSnaResult(props) {
                 break;
             case 2:
                 setPieCharts2(newRes);
+                break;
+            case "bubbleIdx":
+                setBubbleTweets(newRes);
                 break;
             default:
                 break;
@@ -454,10 +459,15 @@ export default function TwitterSnaResult(props) {
         }
         // For retweets, likes, top_user donut
         else {
-            displayTweetsOfUser(data, nbType, index);
+            displayTweetsOfUser(data.points[0].label, nbType, index);
         }
 
     };
+
+    const onBubbleChartClick = (data, nbType, index) => {
+        // setBubbleTweets(displayTweetsOfUser(data, nbType, index))
+    }
+
     const getTweetWithClickableLink = (cellData) => {
         let urls = cellData.tweet.match(/((http|https|ftp|ftps):\/\/[a-zA-Z0-9\-.]+\.[a-zA-Z]{2,3}(\/\S*)?|pic\.twitter\.com\/([-a-zA-Z0-9()@:%_+.~#?&//=]*))/g);
         if (urls === null)
@@ -579,6 +589,90 @@ export default function TwitterSnaResult(props) {
         rowData.forEach(data => 
             window.open("/popup.html#/app/tools/twitterSna?url=" + data.url + "&request=" + JSON.stringify(props.request))
         );
+    }
+
+    function createTimeSeriesOfCreatedDate(userProfile) {
+        let dateArr = userProfile.map((obj) => { return obj._source.datetimestamp; });
+        let sortedDateArr = _.sortBy(dateArr, function(num) { return num; });
+
+        let dateStrArr = sortedDateArr.map((element) => {
+            let date = new Date(element * 1000);
+            let dateStr = date.getFullYear() + "-" + date.getMonth() + "-" + date.getDate();
+            return dateStr;
+        })
+        let groupByDate = _.countBy(dateStrArr);
+        let x = [];
+        let y = [];
+        Object.entries(groupByDate).forEach((arr) => { 
+            x.push(arr[0]); 
+            y.push(arr[1]);
+        });
+        return [{
+            type: 'scatter',
+            mode: "lines",
+            x: x,
+            y: y,
+            line: {color: '#17BECF'}
+        }];
+    }
+
+    function getColorOfMostActiveUserBubble(value) {
+        switch (true) {
+            case (value < 5):
+                // return "#5da4d6";
+                return "#2f7fb8";
+            case (value < 15):
+                return "#ff900e";
+            default:
+                return "#ff3636";
+        }
+    }
+    function createBubbleChartOfMostActiveUsers(userProfile, request) {
+        let tweetCountObj = _.countBy(result.tweets.map((tweet) => {return tweet._source.screen_name.toLowerCase(); }));
+        let nbDays = Math.floor(( Date.parse(request['until']) - Date.parse(request['from']) ) / 86400000)
+        let objArr = userProfile.map((obj) => {
+            return {
+                screen_name: obj._source.screen_name,
+                followers_count: obj._source.followers_count,
+                datetimestamp: obj._source.datetimestamp
+            }; 
+        });
+        let sortedObjArr = _.orderBy(objArr, ['datetimestamp', 'screen_name'], ['asc', 'asc']);
+
+        let x = [];
+        let y = [];
+        let text = [];
+        let color = []
+        let size = [];
+
+        sortedObjArr.forEach((obj) => {
+            let date = new Date(obj.datetimestamp * 1000);
+            let dateStr = date.getFullYear() + "-" + date.getMonth() + "-" + date.getDate();
+            let nbTweets = tweetCountObj[obj.screen_name.toLowerCase()];
+            let avgTweetsPerDate = nbTweets/nbDays;
+
+            x.push(dateStr);
+            y.push(obj.followers_count);
+            text.push('@' + obj.screen_name + '<br>Posted <b>' + nbTweets + '</b> tweets in ' + nbDays + ' days');
+            color.push(getColorOfMostActiveUserBubble(avgTweetsPerDate));
+            size.push(nbTweets);
+        });
+
+        return [
+            { 
+                mode: "markers",
+                x: x, 
+                y: y, 
+                text: text,
+                hovertemplate: '%{text}<br>Account created: %{x}<br>Followers: %{y}<br>',
+                marker: { 
+                    color: color,
+                    size: size,
+                    // sizeref: 10 * Math.max(...size) / (100**2),
+                    // sizemode: 'area'
+                } 
+            } 
+        ]
     }
 
     if (result === null)
@@ -1099,6 +1193,96 @@ export default function TwitterSnaResult(props) {
                     <Box m={1}/>
                     <OnClickInfo keyword={"twittersna_export_graph_tip"}/>
                 </Paper>
+            }
+            {
+                result && result.tweets &&
+                <ExpansionPanel>
+                    <ExpansionPanelSummary
+                        expandIcon={<ExpandMoreIcon />}
+                        aria-controls={"panel0a-content"}
+                        id={"panel0a-header"}
+                    >
+                        <Typography className={classes.heading}>Count of account creation date</Typography>
+                    </ExpansionPanelSummary>
+                    <ExpansionPanelDetails>
+                        <div style={{ width: '100%', }}>
+                            {
+                                topUserProfile && topUserProfile.length === 0 &&
+                                <Typography variant={"body2"}>{keyword("sna_no_data")}</Typography>
+                            }
+                            {
+                                topUserProfile && topUserProfile.length !== 0 &&
+                                <Plot useResizeHandler
+                                    style={{ width: '100%', height: "450px" }}
+                                    data={createTimeSeriesOfCreatedDate(topUserProfile)}
+                                />
+                            }
+                            <Box m={1} />
+                            <OnClickInfo keyword={""} />
+                            <Box m={2} />
+                        </div>
+                        {
+                            !topUserProfile &&
+                            <CircularProgress className={classes.circularProgress} />
+                        }
+                    </ExpansionPanelDetails>
+                </ExpansionPanel>
+            }
+            {
+                result && result.tweets &&
+                <ExpansionPanel>
+                    <ExpansionPanelSummary
+                        expandIcon={<ExpandMoreIcon />}
+                        aria-controls={"panel0a-content"}
+                        id={"panel0a-header"}
+                    >
+                        <Typography className={classes.heading}>Bubble chart: Top 100 most active accounts</Typography>
+                    </ExpansionPanelSummary>
+                    <ExpansionPanelDetails>
+                        {
+                            topUserProfile &&
+                            <div style={{ width: '100%', }}>
+                                {
+                                    topUserProfile.length === 0 &&
+                                    <Typography variant={"body2"}>{keyword("sna_no_data")}</Typography>
+                                }
+                                {
+                                    topUserProfile.length !== 0 &&
+                                    <Plot useResizeHandler
+                                        style={{ width: '100%', height: "600px" }}
+                                        data={createBubbleChartOfMostActiveUsers(topUserProfile, props.request)}
+                                        layout={{
+                                            xaxis: {
+                                                title: 'Account Creation Date',
+                                                titlefont: {
+                                                    family: 'Arial, sans-serif',
+                                                    size: 18,
+                                                    color: '#C0C0C0'
+                                                },
+                                            },
+                                            yaxis: {
+                                                title: 'Followers',
+                                                titlefont: {
+                                                    family: 'Arial, sans-serif',
+                                                    size: 18,
+                                                    color: '#C0C0C0'
+                                                },
+                                            }
+                                        }}
+                                        onClick={(e) => onBubbleChartClick(e, "", "bubbleIdx")}
+                                    />
+                                }
+                                <Box m={1} />
+                                <OnClickInfo keyword={""} />
+                                <Box m={2} />
+                            </div>
+                        }
+                        {
+                            !topUserProfile &&
+                            <CircularProgress className={classes.circularProgress} />
+                        }
+                    </ExpansionPanelDetails>
+                </ExpansionPanel>
             }
 
             <Box m={3} />

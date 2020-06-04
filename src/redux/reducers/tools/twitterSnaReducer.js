@@ -21,11 +21,8 @@ const twitterSnaReducer = (state = defaultState, action) => {
           //  state.loadingMessage = "";
             state.result = null;
             return state;
-        case "SET_TWITTER_SNA_USER_PROFILE_MOST_ACTIVE_AUTHORS":
-            state.upTopActiveAuthors = action.payload;
-            return state;
-        case "SET_TWITTER_SNA_USER_PROFILE_ALL_AUTHORS":
-            state.upAllAuthors = action.payload;
+        case "SET_TWITTER_SNA_USER_PROFILE_MOST_ACTIVE":
+            state.topUserProfile = action.payload;
             return state;
         default:
             return state;

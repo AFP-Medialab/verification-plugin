@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setError } from "../../../../../redux/actions/errorActions";
-import { setTwitterSnaLoading, setTwitterSnaResult, setTwitterSnaLoadingMessage, setUserProfileTopActiveAuthors, setUserProfileAllAuthors } from "../../../../../redux/actions/tools/twitterSnaActions";
+import { setTwitterSnaLoading, setTwitterSnaResult, setTwitterSnaLoadingMessage, setUserProfileMostActive } from "../../../../../redux/actions/tools/twitterSnaActions";
 import axios from "axios";
 import _ from "lodash";
 
@@ -173,6 +173,13 @@ function lowercaseFieldInTweets(tweets, field = 'hashtags') {
   return newTweets;
 }
 
+function getTopActiveUsers(tweets, topN) {
+  let tweetCountObj = _.countBy(tweets.map((tweet) => {return tweet._source.screen_name.toLowerCase(); }));
+  let topUsers2DArr = _.sortBy(Object.entries(tweetCountObj), [function(o) { return o[1]; }])
+                        .reverse()
+                        .slice(0, topN);
+  return topUsers2DArr;
+}
 
 const useTwitterSnaRequest = (request) => {
 
@@ -354,14 +361,9 @@ const useTwitterSnaRequest = (request) => {
         result.coHashtagGraph = createCoHashtagGraph(responseArrayOf9[5].tweets);
         result.gexf = responseArrayOf9[8];
         
-        if (result.pieCharts[2].json[0].labels.length > 1) {
-          getUserAccounts(result.pieCharts[2].json[0].labels.slice(1))
-            .then((data) => dispatch(setUserProfileTopActiveAuthors(data.hits.hits)));
-        }
-
-        let authors = [...new Set(result.tweets.map((tweet) => { return tweet._source.screen_name.toLowerCase(); }))];
+        let authors = getTopActiveUsers(result.tweets, 100).map((arr) => {return arr[0];});
         if (authors.length > 0) {
-          getUserAccounts(authors).then((data) => dispatch(setUserProfileAllAuthors(data.hits.hits)))
+          getUserAccounts(authors).then((data) => dispatch(setUserProfileMostActive(data.hits.hits)))
         }
       }
       else
