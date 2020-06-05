@@ -76,6 +76,9 @@ export default function TwitterSnaResult(props) {
             case "coHashtagGraphIdx":
                 setCoHashtagGraphTweets(null);
                 break;
+            case "bubbleIdx":
+                setBubbleTweets(null);
+                break;
             default:
                 break;
         }
@@ -465,7 +468,8 @@ export default function TwitterSnaResult(props) {
     };
 
     const onBubbleChartClick = (data, nbType, index) => {
-        // setBubbleTweets(displayTweetsOfUser(data, nbType, index))
+        let selectedUser = data.points[0].text.split("<br>")[0].replace("@","");
+        displayTweetsOfUser(selectedUser, nbType, index);
     }
 
     const getTweetWithClickableLink = (cellData) => {
@@ -1275,6 +1279,40 @@ export default function TwitterSnaResult(props) {
                                 <Box m={1} />
                                 <OnClickInfo keyword={""} />
                                 <Box m={2} />
+                                {
+                                    bubbleTweets &&
+                                    <div>
+                                        <Grid container justify="space-between" spacing={2}
+                                            alignContent={"center"}>
+                                            <Grid item>
+                                                <Button
+                                                    variant={"contained"}
+                                                    color={"secondary"}
+                                                    onClick={() => hideTweetsView("bubbleIdx")}>
+                                                    {
+                                                        keyword('sna_result_hide')
+                                                    }
+                                                </Button>
+                                            </Grid>
+                                            <Grid item>
+                                                <Button
+                                                    variant={"contained"}
+                                                    color={"primary"}
+                                                    onClick={() => downloadClick(bubbleTweets.csvArr, bubbleTweets.screen_name)}>
+                                                    {
+                                                        keyword('sna_result_download')
+                                                    }
+                                                </Button>
+                                            </Grid>
+                                        </Grid>
+                                        <Box m={2} />
+                                        <CustomTable title={keyword("sna_result_slected_tweets")}
+                                            colums={bubbleTweets.columns}
+                                            data={bubbleTweets.data}
+                                            actions={goToTweetAction}
+                                        />
+                                    </div>
+                                }
                             </div>
                         }
                         {
