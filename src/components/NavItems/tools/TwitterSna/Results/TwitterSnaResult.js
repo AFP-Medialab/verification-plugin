@@ -1195,7 +1195,7 @@ export default function TwitterSnaResult(props) {
                 </Paper>
             }
             {
-                result && result.tweets &&
+                props.request.userList.length === 0 && result && result.tweets &&
                 <ExpansionPanel>
                     <ExpansionPanelSummary
                         expandIcon={<ExpandMoreIcon />}
@@ -1229,7 +1229,7 @@ export default function TwitterSnaResult(props) {
                 </ExpansionPanel>
             }
             {
-                result && result.tweets &&
+                props.request.userList.length === 0 && result && result.tweets &&
                 <ExpansionPanel>
                     <ExpansionPanelSummary
                         expandIcon={<ExpandMoreIcon />}
