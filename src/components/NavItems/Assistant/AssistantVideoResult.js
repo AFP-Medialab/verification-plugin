@@ -36,7 +36,7 @@ const AssistantVideoResult = () => {
                         {keyword("media_to_process")}
                     </Typography>
                     <Typography className={classes.title} color="primary">
-                        {<a href={resultUrl} target="_blank"> {resultUrl} </a>}
+                        {<a href={resultUrl} target="_blank"> {resultUrl.length>100 ? resultUrl.substring(0,100) + "...": resultUrl} </a>}
                     </Typography>
                 </CardContent>
                 <CardMedia>
