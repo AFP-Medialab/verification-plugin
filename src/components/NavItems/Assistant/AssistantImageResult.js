@@ -13,21 +13,21 @@ import tsv from "../../../LocalDictionary/components/NavItems/tools/Assistant.ts
 const AssistantImageResult = () => {
     const classes = useMyStyles();
     const keyword = useLoadLanguage("components/NavItems/tools/Assistant.tsv", tsv);
-    const resultUrl = useSelector(state => state.assistant.processUrl);
+    const processUrl = useSelector(state => state.assistant.processUrl);
     
     return (
-        <Grid item xs = {6} hidden={resultUrl==""}>
+        <Grid item xs = {6} hidden={processUrl==""} >
             <Card variant = "outlined">
                 <CardContent>
                     <Typography variant="h5" component="h2">
                         {keyword("media_to_process")}
                     </Typography>
                     <Typography className={classes.title} color="primary">
-                        {<a href={resultUrl} target="_blank"> {resultUrl.length>100 ? resultUrl.substring(0,100) + "...": resultUrl} </a>}
+                        {<a href={processUrl} target="_blank"> {processUrl.length>100 ? processUrl.substring(0,100) + "...": processUrl} </a>}
                     </Typography>
                 </CardContent>
                 <CardMedia>
-                    <img src={resultUrl} height={"100%"} width={"100%"}/>
+                    <img src={processUrl} height={"100%"} width={"100%"}/>
                 </CardMedia>
             </Card>
         </Grid>

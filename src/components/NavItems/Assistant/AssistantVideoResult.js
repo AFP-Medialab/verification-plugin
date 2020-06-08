@@ -14,7 +14,7 @@ import tsv from "../../../LocalDictionary/components/NavItems/tools/Assistant.ts
 const AssistantVideoResult = () => {
     const classes = useMyStyles();
     const keyword = useLoadLanguage("components/NavItems/tools/Assistant.tsv", tsv);
-    const resultUrl = useSelector(state => state.assistant.processUrl);
+    const processUrl = useSelector(state => state.assistant.processUrl);
 
     const preprocessLinkForEmbed = (resultUrl) => {
         let embedURL = resultUrl;
@@ -29,20 +29,20 @@ const AssistantVideoResult = () => {
     }
 
     return (
-        <Grid item xs = {6} hidden={resultUrl==""}>
+        <Grid item xs = {6} hidden={processUrl==""}>
             <Card variant = "outlined">
                 <CardContent>
                     <Typography variant="h5" component="h2">
                         {keyword("media_to_process")}
                     </Typography>
                     <Typography className={classes.title} color="primary">
-                        {<a href={resultUrl} target="_blank"> {resultUrl.length>100 ? resultUrl.substring(0,100) + "...": resultUrl} </a>}
+                        {<a href={processUrl} target="_blank"> {processUrl.length>100 ? processUrl.substring(0,100) + "...": processUrl} </a>}
                     </Typography>
                 </CardContent>
                 <CardMedia>
                     <Iframe
                         frameBorder="0"
-                        url = {preprocessLinkForEmbed(resultUrl)}
+                        url = {preprocessLinkForEmbed(processUrl)}
                         allow="fullscreen"
                         height="400"
                         width="100%"

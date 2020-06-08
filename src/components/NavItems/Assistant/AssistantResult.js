@@ -14,7 +14,12 @@ import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
 
 import useLoadLanguage from "../../../Hooks/useLoadLanguage";
 import CloseResult from "../../Shared/CloseResult/CloseResult";
-import {cleanAssistantState, setProcessUrl, setProcessUrlActions} from "../../../redux/actions/tools/assistantActions";
+import {
+    cleanAssistantState,
+    setImageVideoSelected,
+    setProcessUrl,
+    setProcessUrlActions
+} from "../../../redux/actions/tools/assistantActions";
 import history from "../../Shared/History/History";
 import tsv from "../../../LocalDictionary/components/NavItems/tools/Assistant.tsv";
 import AssistantImageResult from "./AssistantImageResult";
@@ -25,14 +30,15 @@ const AssistantResult = () => {
 
     const classes = useMyStyles();
     const keyword = useLoadLanguage("components/NavItems/tools/Assistant.tsv", tsv);
-    const resultUrl = useSelector(state => state.assistant.processUrl);
-    const resultData = useSelector(state => state.assistant.processUrlActions);
+    const processUrl = useSelector(state => state.assistant.processUrl);
+    const processUrlActions = useSelector(state => state.assistant.processUrlActions);
     const resultProcessType = useSelector(state => state.assistant.processUrlType);
+    const imageVideoSelected = useSelector(state => state.assistant.imageVideoSelected);
     const resultIsImage = resultProcessType === "Image";
 
     const dispatch = useDispatch();
     
-    if (resultData.length == 0)
+    if (processUrlActions.length == 0)
         return (
             <Paper>
                 <Box m={3}/>
@@ -51,16 +57,16 @@ const AssistantResult = () => {
 
     const cleanAssistantResult = () => {
         dispatch(setProcessUrl(null));
+        dispatch(setImageVideoSelected(false));
         dispatch(setProcessUrlActions(null, []))
     }
-
 
     return (
         <Paper className={classes.root}>
             <CloseResult onClick={() => cleanAssistantResult()}/>
             <Grid container spacing={2}>
 
-                {(resultIsImage) ? <AssistantImageResult/> : <AssistantVideoResult/>}
+                {(!imageVideoSelected) ? ((resultIsImage) ? <AssistantImageResult/> : <AssistantVideoResult/>) : null}
 
                 <Grid  item xs = {6}>
                     <Card variant = "outlined">
@@ -74,10 +80,10 @@ const AssistantResult = () => {
                         <Box m = {2}/>
 
                         <Grid container spacing={2}>
-                            {resultData.map((action) => {return (
+                            {processUrlActions.map((action) => {return (
                                 <Grid container m = {4}>
                                     <Card className={classes.assistantCards}  variant = "outlined"
-                                          onClick={() => handleClick(action.path, resultUrl) }>
+                                          onClick={() => handleClick(action.path, processUrl) }>
                                         <CardActionArea><CardContent>
                                                 <Typography className={classes.title} m={2}>{keyword(action.text)}</Typography>
                                                 <Button aria-colspan={2} size = "medium">

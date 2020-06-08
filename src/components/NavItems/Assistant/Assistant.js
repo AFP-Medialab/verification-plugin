@@ -24,7 +24,7 @@ import useLoadLanguage from "../../../Hooks/useLoadLanguage";
 import useTwitterApi from "../../Scrapers/Twitter/useTwitterApi";
 
 import {
-    cleanAssistantState, setImageList,
+    cleanAssistantState, setImageList, setImageVideoSelected,
     setInputUrl,
     setMediaLists,
     setProcessUrl,
@@ -57,12 +57,12 @@ const Assistant = () => {
     //assistant state values
     const {url} = useParams();
     const urlMode = useSelector(state=>state.assistant.urlMode);
+    const imageVideoSelected = useSelector(state=>state.assistant.imageVideoSelected);
     const requireLogIn = useSelector(state=>state.assistant.requireLogIn);
     const inputUrl = useSelector(state=>state.assistant.inputUrl);
     const processUrl = useSelector(state=>state.assistant.processUrl);
     const imageList = useSelector(state=>state.assistant.imageList);
     const videoList = useSelector(state=>state.assistant.videoList);
-    const processUrlActions = useSelector(state=>state.assistant.processUrlActions)
 
     //other state values
     const [formInput, setFormInput] = useState(null);
@@ -98,8 +98,8 @@ const Assistant = () => {
         //todo: fix video bug
         let domain = DOMAIN.OWN;
         let actions = selectCorrectActions(domain, contentType, "");
-        dispatch(setProcessUrlActions(contentType, actions))
-        dispatch(setProcessUrl(""));
+        dispatch(setProcessUrlActions(contentType, actions));
+        dispatch(setImageVideoSelected(true));
     }
 
     // select the correct media to process, then load actions possible
@@ -288,7 +288,7 @@ const Assistant = () => {
                 </Grid>
 
                 <Grid item xs={12}>
-                    {processUrl!=null ?  <AssistantResult/> : null}
+                    {processUrl!=null || imageVideoSelected == true ?  <AssistantResult/> : null}
                 </Grid>
             </Grid>
         </Paper>

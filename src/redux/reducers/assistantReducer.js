@@ -1,5 +1,6 @@
 const defaultState = {
     urlMode: null,
+    imageVideoSelected: false,
     requireLogIn: false,
     inputUrl: null,
     processUrl: null,
@@ -42,6 +43,10 @@ const assistantReducer = (state = defaultState, action) => {
             state.urlMode = action.payload;
             return state;
 
+        case "SET_IMAGE_VIDEO_SELECTED":
+            state.imageVideoSelected = action.payload;
+            return state;
+
         case "SET_REQUIRE_LOGIN":
             state.requireLogIn = action.payload;
             return state;
@@ -49,6 +54,7 @@ const assistantReducer = (state = defaultState, action) => {
         case "CLEAN_STATE":
             state = {
                 urlMode: null,
+                imageVideoSelected: false,
                 requireLogIn: false,
                 inputUrl: null,
                 processUrl: null,

@@ -5,6 +5,13 @@ export const setUrlMode = (mode) => {
     }
 };
 
+export const setImageVideoSelected = (imageVideoSelected) => {
+    return {
+        type: "SET_IMAGE_VIDEO_SELECTED",
+        payload: imageVideoSelected
+    }
+}
+
 export const setRequireLogin = (requireLogin) => {
     return {
         type : "SET_REQUIRE_LOGIN",
