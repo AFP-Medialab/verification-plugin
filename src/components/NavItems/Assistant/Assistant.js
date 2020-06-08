@@ -95,7 +95,6 @@ const Assistant = () => {
 
     // if the user wants to upload a file, give them tools where this is an option
     const submitUpload = (contentType) => {
-        //todo: fix video bug
         let domain = DOMAIN.OWN;
         let actions = selectCorrectActions(domain, contentType, "");
         dispatch(setProcessUrlActions(contentType, actions));
