@@ -34,6 +34,7 @@ const PopUp = () => {
         return script;
     };
 
+    const [pageUrl, setPageUrl] = useState(null);
     const [imageList, setImageList] = useState(null);
     const [videoList, setVideoList] = useState(null);
 
@@ -59,19 +60,20 @@ const PopUp = () => {
         window.localStorage.setItem("imageList", stringImageList);
         window.localStorage.setItem("videoList", stringVideoList);
 
-        {
-            navigator.tabs.query({active: true, lastFocusedWindow: true}, tabs => {
-                let url = tabs[0].url;
-                window.open("/popup.html#/app/assistant/" + encodeURIComponent(url));
-            })
-        }
+        window.open("/popup.html#/app/assistant/" + encodeURIComponent(pageUrl))
     }
 
     const loadData = () => {
+        // get images and videos
         if (imageList == null) {getUrls("img", "src", "wvImageList", setImageList)};
         if (videoList == null) {getUrls("video", "src", "wvVideoList", setVideoList)};
-    }
 
+        //get url of window
+        navigator.tabs.query({active: true, lastFocusedWindow: true}, tabs => {
+            let url = tabs[0].url;
+            setPageUrl(url);
+        })
+    }
 
     return (
         <div className={classes.popUp}>
