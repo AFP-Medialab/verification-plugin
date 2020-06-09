@@ -14,8 +14,9 @@ import Card from "@material-ui/core/Card";
 import CloseResult from "../../Shared/CloseResult/CloseResult";
 import CustomTile from "../../Shared/CustomTitle/CustomTitle";
 import Divider from "@material-ui/core/Divider";
+import DuoIcon from '@material-ui/icons/Duo';
+import ImageIcon from '@material-ui/icons/Image';
 import ImageGridList from "../../Shared/ImageGridList/ImageGridList";
-import InfoIcon from "@material-ui/icons/Info";
 import VideoGridList from "../../Shared/VideoGridList/VideoGridList";
 import {setError} from "../../../redux/actions/errorActions";
 import tsv from "../../../LocalDictionary/components/NavItems/tools/Assistant.tsv";
@@ -250,7 +251,7 @@ const Assistant = () => {
                     <Grid item xs = {6} className={classes.newAssistantGrid} hidden={imageList.length == 0}>
                         <Card>
                             <Typography component={"span"} className={classes.twitterHeading}>
-                                <InfoIcon className={classes.twitterIcon}/> Images
+                                <ImageIcon className={classes.twitterIcon}/> Images
                                 <Divider variant={"middle"}/>
                             </Typography>
                             <Box m={2}/>
@@ -261,7 +262,7 @@ const Assistant = () => {
                     <Grid item xs = {6} className={classes.newAssistantGrid} hidden={videoList.length == 0}>
                         <Card>
                             <Typography component={"span"} className={classes.twitterHeading}>
-                                <InfoIcon className={classes.twitterIcon}/> Videos
+                                <DuoIcon className={classes.twitterIcon}/> Videos
                                 <Divider variant={"middle"}/>
                             </Typography>
                             <Box m={2}/>
