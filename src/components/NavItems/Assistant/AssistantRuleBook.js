@@ -137,7 +137,7 @@ export const ASSISTANT_ACTIONS = [
         icon: metadataIconOff,
         domains: new Array(DOMAIN.OTHER, DOMAIN.OWN),
         ctypes: [CONTENT_TYPE.IMAGE, CONTENT_TYPE.VIDEO],
-        type_restriction: [/(jpg|jpeg|mp4|mp4v)(\?.*)?$/i],
+        type_restriction: [/(jpg|jpeg|mp4|mp4v|instagram)(\?.*)?$/i],
         text: "metadata_text",
         tsvPrefix: "metadata",
         path: "tools/metadata",
