@@ -52,7 +52,9 @@ const AssistantResult = () => {
         );
 
     const handleClick = (path, resultUrl) => {
-        history.push("/app/" + path + "/" + encodeURIComponent(resultUrl))
+        if(resultUrl!=null) {history.push("/app/" + path + "/" + encodeURIComponent(resultUrl))}
+        // in case of image/video upload being selected
+        else{history.push("/app/" + path)}
     };
 
     const cleanAssistantResult = () => {
