@@ -22,7 +22,7 @@ export const DOMAIN ={
     YOUTUBE: "Youtube",
     TWITTER: "Twitter",
     OWN: "Own",
-    ALL: "website"
+    OTHER: "website"
 };
 
 export const SCRAPER = {
@@ -68,7 +68,7 @@ export const DOMAIN_PATTERNS = [
         patterns: ["^(https?:/{2})?(www.)?twitter.com|twimg.com"]
     },
     {
-        key: DOMAIN.ALL,
+        key: DOMAIN.OTHER,
         patterns: ["https?:/{2}(www.)?[-a-zA-Z0-9@:%._+~#=]{2,256}.[a-z]{2,4}\\b([-a-zA-Z0-9@:%_+.~#?&//=]*)"]
     }
 ];
@@ -125,7 +125,7 @@ export const ASSISTANT_ACTIONS = [
     {
         title: "navbar_magnifier",
         icon: magnifierIconOff,
-        domains: new Array(DOMAIN.ALL, DOMAIN.OWN, DOMAIN.YOUTUBE, DOMAIN.FACEBOOK, DOMAIN.TWITTER),
+        domains: new Array(DOMAIN.OTHER, DOMAIN.OWN, DOMAIN.YOUTUBE, DOMAIN.FACEBOOK, DOMAIN.TWITTER),
         ctypes: [CONTENT_TYPE.IMAGE],
         type_restriction: [],
         text: "magnifier_text",
@@ -135,7 +135,7 @@ export const ASSISTANT_ACTIONS = [
     {
         title: "navbar_metadata",
         icon: metadataIconOff,
-        domains: new Array(DOMAIN.ALL, DOMAIN.OWN, DOMAIN.YOUTUBE, DOMAIN.FACEBOOK, DOMAIN.TWITTER),
+        domains: new Array(DOMAIN.OTHER, DOMAIN.OWN),
         ctypes: [CONTENT_TYPE.IMAGE, CONTENT_TYPE.VIDEO],
         type_restriction: [/(jpg|jpeg|mp4|mp4v)(\?.*)?$/i],
         text: "metadata_text",
@@ -155,7 +155,7 @@ export const ASSISTANT_ACTIONS = [
     {
         title: "navbar_forensic",
         icon: forensicIconOff,
-        domains: new Array(DOMAIN.ALL, DOMAIN.OWN, DOMAIN.YOUTUBE, DOMAIN.FACEBOOK, DOMAIN.TWITTER),
+        domains: new Array(DOMAIN.OTHER, DOMAIN.OWN, DOMAIN.YOUTUBE, DOMAIN.FACEBOOK, DOMAIN.TWITTER),
         ctypes: [CONTENT_TYPE.IMAGE],
         type_restriction: [],
         text: "forensic_text",
