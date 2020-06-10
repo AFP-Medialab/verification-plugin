@@ -37,19 +37,6 @@ const AssistantResult = () => {
     const resultIsImage = resultProcessType === "Image";
 
     const dispatch = useDispatch();
-    
-    if (processUrlActions.length == 0)
-        return (
-            <Paper>
-                <Box m={3}/>
-                <CloseResult onClick={() => dispatch(cleanAssistantState())}/>
-                <Card><CardContent className={classes.assistantText}>
-                    <Typography variant={"h6"} align={"left"}>
-                        <FaceIcon size={"small"}/> {keyword("assistant_error")}
-                    </Typography>
-                </CardContent></Card>
-            </Paper>
-        );
 
     const handleClick = (path, resultUrl) => {
         if(resultUrl!=null) {history.push("/app/" + path + "/" + encodeURIComponent(resultUrl))}

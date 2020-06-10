@@ -11,6 +11,7 @@ import Typography from "@material-ui/core/Typography";
 import AssistantResult from "./AssistantResult";
 import AuthenticationCard from "../../Shared/Authentication/AuthenticationCard";
 import Card from "@material-ui/core/Card";
+import CardContent from "@material-ui/core/CardContent";
 import CloseResult from "../../Shared/CloseResult/CloseResult";
 import CustomTile from "../../Shared/CustomTitle/CustomTitle";
 import Divider from "@material-ui/core/Divider";
@@ -70,11 +71,17 @@ const Assistant = () => {
     const userAuthenticated = useSelector(state => state.userSession.userAuthenticated)
     const twitterRequestLoading = useSelector(state => state.twitter.twitterRequestLoading);
 
-
     const validateUrl = (userInput) => {
         //https://stackoverflow.com/questions/3809401/what-is-a-good-regular-expression-to-match-a-url
         let urlRegex = "(http(s)?:\/\/.)?(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{2,256}\\.[a-z]{2,6}\\b([-a-zA-Z0-9@:%_\\+.~#?&//=]*)";
         if (!userInput.match(urlRegex)) throw new Error(keyword("please_give_a_correct_link"))
+    }
+
+    // create temp list by prepending elementToAdd to listToAddTo
+    const prependMediaList = (elementToAdd, listToAddTo) => {
+        let tempList = listToAddTo;
+        tempList.unshift(elementToAdd);
+        return tempList;
     }
 
     // given a direct user input, scrape or set the correct image/video list
@@ -84,9 +91,8 @@ const Assistant = () => {
             let updatedInput = await handleScraping(userInput);
             let contentType = matchPattern(updatedInput, TYPE_PATTERNS);
 
-            if(contentType == CONTENT_TYPE.IMAGE){dispatch(setImageList([updatedInput]))}
-            else if(contentType == CONTENT_TYPE.VIDEO){dispatch(setVideoList([updatedInput]))}
-            else {dispatch(setProcessUrl(""))}
+            if(contentType == CONTENT_TYPE.IMAGE){dispatch(setImageList(prependMediaList(updatedInput, imageList)))}
+            else if(contentType == CONTENT_TYPE.VIDEO){dispatch(setVideoList(prependMediaList(updatedInput, videoList)))}
             dispatch(setInputUrl(userInput));
         }
         catch(error){
@@ -154,9 +160,6 @@ const Assistant = () => {
             urlVideoList = urlVideoList!="" ? urlVideoList.split(",") : [];
             dispatch(setMediaLists(urlImageList, urlVideoList));
         }
-        else {
-            dispatch(setProcessUrl(""));
-        }
     }
 
     // clean assistant state
@@ -173,7 +176,7 @@ const Assistant = () => {
             checkForMediaLists();
             let uri = ( url!== null) ? decodeURIComponent(url) : undefined;
             dispatch(setUrlMode(true));
-            dispatch(setInputUrl(uri));
+            submitInputUrl(uri);
             history.push("/app/assistant/");
         }
         else {setFormInput(inputUrl);}
@@ -269,8 +272,8 @@ const Assistant = () => {
                             <VideoGridList list={videoList} handleClick={(vidLink)=>{submitMediaToProcess(vidLink)}}/>
                         </Card>
                     </Grid>
-                </Grid>
 
+                </Grid>
 
                 <Grid item xs = {12} className={classes.newAssistantGrid}  hidden={urlMode==null || urlMode==true}>
                     <Box m={5}/>
@@ -285,6 +288,14 @@ const Assistant = () => {
                     <Button className={classes.button} variant="contained" color="primary" onClick={()=>{submitUpload(CONTENT_TYPE.IMAGE)}}>
                         {keyword("upload_image") || ""}
                     </Button>
+                </Grid>
+
+                <Grid item xs={12} hidden={inputUrl==null||(inputUrl!=null && imageList.length!=0 || videoList.length!=0)}>
+                    <Card><CardContent className={classes.assistantText}>
+                        <Typography variant={"h6"} align={"left"}>
+                            <FaceIcon size={"small"}/> {keyword("assistant_error")}
+                        </Typography>
+                    </CardContent></Card>
                 </Grid>
 
                 <Grid item xs={12}>
