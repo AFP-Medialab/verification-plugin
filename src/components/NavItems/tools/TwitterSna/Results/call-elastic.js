@@ -457,20 +457,28 @@ let gexfGen_url = process.env.REACT_APP_GEXF_GENERATOR_URL;
     }
 
 
+    function timeout(ms, promise) {
+        return new Promise(function(resolve, reject) {
+          setTimeout(function() {
+            reject(new Error("timeout"))
+          }, ms)
+          promise.then(resolve, reject)
+        })
+      }
     // User account array
     export function getUserAccounts(usernameArray) {
         let query = buildQueryMultipleMatchPhrase ("screen_name", usernameArray);
 
         const userAction = async () => {
 
-            const response = await fetch(elasticSearchUser_url, {
+            const response = await timeout(300000, fetch(elasticSearchUser_url, {
                 method: 'POST',
                 body:
                 query,
                 headers: {
                     'Content-Type': 'application/json'
                 }
-            });
+            }));
             const esResponse = await response.json();
             return esResponse;
 
