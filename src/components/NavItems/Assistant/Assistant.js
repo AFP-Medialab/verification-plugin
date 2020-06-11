@@ -211,7 +211,7 @@ const Assistant = () => {
                         style={{margin: 8}}
                         placeholder={""}
                         fullWidth
-                        value={formInput}
+                        value={formInput || ""}
                         onChange={e => setFormInput(e.target.value)}
                     />
 
@@ -253,7 +253,6 @@ const Assistant = () => {
 
 
                     <Grid item xs = {6} className={classes.newAssistantGrid} hidden={imageList.length == 0}>
-                        <Box m={3}/>
                         <Card>
                             <Typography component={"span"} className={classes.twitterHeading}>
                                 <ImageIcon className={classes.twitterIcon}/> Images
