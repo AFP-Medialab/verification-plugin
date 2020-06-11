@@ -2,21 +2,23 @@ import React, {useEffect, useRef, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {useParams} from "react-router-dom";
 
-import {Box, Button, Paper, TextField} from "@material-ui/core";
+import {Box, Button, ExpansionPanel, ExpansionPanelDetails, Paper, TextField} from "@material-ui/core";
+import Card from "@material-ui/core/Card";
+import CardContent from "@material-ui/core/CardContent";
+import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
+import DuoIcon from '@material-ui/icons/Duo';
+import Divider from "@material-ui/core/Divider";
 import Grid from "@material-ui/core/Grid";
+import ImageIcon from '@material-ui/icons/Image';
 import FaceIcon from "@material-ui/icons/Face";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import Typography from "@material-ui/core/Typography";
+import WarningIcon from '@material-ui/icons/Warning';
 
 import AssistantResult from "./AssistantResult";
 import AuthenticationCard from "../../Shared/Authentication/AuthenticationCard";
-import Card from "@material-ui/core/Card";
-import CardContent from "@material-ui/core/CardContent";
 import CloseResult from "../../Shared/CloseResult/CloseResult";
 import CustomTile from "../../Shared/CustomTitle/CustomTitle";
-import Divider from "@material-ui/core/Divider";
-import DuoIcon from '@material-ui/icons/Duo';
-import ImageIcon from '@material-ui/icons/Image';
 import ImageGridList from "../../Shared/ImageGridList/ImageGridList";
 import VideoGridList from "../../Shared/VideoGridList/VideoGridList";
 import {setError} from "../../../redux/actions/errorActions";
@@ -24,6 +26,7 @@ import tsv from "../../../LocalDictionary/components/NavItems/tools/Assistant.ts
 import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
 import useLoadLanguage from "../../../Hooks/useLoadLanguage";
 import useTwitterApi from "../../Scrapers/Twitter/useTwitterApi";
+
 import {
     cleanAssistantState, setImageVideoSelected,
     setInputUrl, setMediaLists, setProcessUrl, setProcessUrlActions,
@@ -115,16 +118,12 @@ const Assistant = () => {
         if (scraperToUse != undefined && scraperToUse.key == SCRAPER.TWITTER) {
             if (scraperToUse.requireLogIn && !userAuthenticated) {
                 dispatch(setRequireLogin(true));
-                throw new Error("twitter_error_login");
             } else {
                 dispatch(setRequireLogin(false));
                 let scrapedMedia = await twitterApi.getTweet(userInput);
                 if (scrapedMedia != null) {
                     if (scrapedMedia.imageUrl != null) return scrapedMedia.imageUrl;
                     else if (scrapedMedia.videoUrl != null) return scrapedMedia.videoUrl;
-                    else {
-                        throw new Error("twitter_error_media")
-                    }
                 }
             }
         }
@@ -180,8 +179,6 @@ const Assistant = () => {
         <Paper className = {classes.root}>
             <CustomTile text={keyword("assistant_title")}/>
             <Box m={3}/>
-            {requireLogIn==true ? <AuthenticationCard/> : null}
-
 
             <Grid container spacing={2}>
                 <Grid item xs = {12} className={classes.newAssistantGrid}  hidden={urlMode!=null}>
@@ -231,17 +228,33 @@ const Assistant = () => {
                 </Grid>
 
                 <Grid container ={2}>
+
+                    {/* for demo purposes only!*/}
+                    <Grid item xs = {12} className={classes.newAssistantGrid} hidden={requireLogIn!=true}>
+                        <ExpansionPanel>
+                            <ExpansionPanelSummary expandIcon={<WarningIcon className={classes.twitterIcon}/>}>
+                                <Typography> Warnings present for URL </Typography>
+                            </ExpansionPanelSummary>
+                            <ExpansionPanelDetails>
+                                Our dedicated scrapers may be able to pick up more media.
+                                Please log in and try again to ensure all media has been picked up.
+                                <AuthenticationCard/>
+                            </ExpansionPanelDetails>
+                        </ExpansionPanel>
+                    </Grid>
+
                     <Grid item xs = {12} className={classes.newAssistantGrid} hidden={imageList.length == 0 && videoList.length==0}>
-                        <Box m={2}/>
+                        <Box m={5}/>
                         <Typography component={"span"} className={classes.twitterHeading}>
                             Input URL: {inputUrl}
                         </Typography>
                         <Box m={1}/>
                         <Typography> The media from this URL is shown below. Please select one to see which tools can be used. </Typography>
-                        <Box m={3}/>
                     </Grid>
 
+
                     <Grid item xs = {6} className={classes.newAssistantGrid} hidden={imageList.length == 0}>
+                        <Box m={3}/>
                         <Card>
                             <Typography component={"span"} className={classes.twitterHeading}>
                                 <ImageIcon className={classes.twitterIcon}/> Images
@@ -263,6 +276,14 @@ const Assistant = () => {
                         </Card>
                     </Grid>
 
+                    <Grid item xs={12} hidden={inputUrl==null||(inputUrl!=null && imageList.length!=0 || videoList.length!=0)}>
+                        <Card><CardContent className={classes.assistantText}>
+                            <Typography variant={"h6"} align={"left"}>
+                                <FaceIcon size={"small"}/> {keyword("assistant_error")}
+                            </Typography>
+                        </CardContent></Card>
+                    </Grid>
+
                 </Grid>
 
                 <Grid item xs = {12} className={classes.newAssistantGrid}  hidden={urlMode==null || urlMode==true}>
@@ -278,14 +299,6 @@ const Assistant = () => {
                     <Button className={classes.button} variant="contained" color="primary" onClick={()=>{submitUpload(CONTENT_TYPE.IMAGE)}}>
                         {keyword("upload_image") || ""}
                     </Button>
-                </Grid>
-
-                <Grid item xs={12} hidden={inputUrl==null||(inputUrl!=null && imageList.length!=0 || videoList.length!=0)}>
-                    <Card><CardContent className={classes.assistantText}>
-                        <Typography variant={"h6"} align={"left"}>
-                            <FaceIcon size={"small"}/> {keyword("assistant_error")}
-                        </Typography>
-                    </CardContent></Card>
                 </Grid>
 
                 <Grid item xs={12}>
