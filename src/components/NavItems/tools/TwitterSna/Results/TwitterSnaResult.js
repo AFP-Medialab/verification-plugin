@@ -1605,7 +1605,7 @@ export default function TwitterSnaResult(props) {
                                     </RandomizeNodePositions>
                                 </Sigma>
                                 <Box m={1}/>
-                                <OnClickInfo keyword={"sna_sosem_graph_tip"}/>
+                                <OnClickInfo keyword={"twittersna_sosem_graph_tip"}/>
                                 <Box m={2}/>
                                 {
                                     socioSemanticGraphTweets &&
@@ -1674,7 +1674,7 @@ export default function TwitterSnaResult(props) {
                                 />
                             }
                             <Box m={1} />
-                            <OnClickInfo keyword={"sna_acd_ts_tip"} />
+                            <OnClickInfo keyword={"twittersna_acd_ts_tip"} />
                             <Box m={2} />
                         </div>
                         {
@@ -1729,7 +1729,7 @@ export default function TwitterSnaResult(props) {
                                     />
                                 }
                                 <Box m={1} />
-                                <OnClickInfo keyword={"sna_bubble_chart_tip"} />
+                                <OnClickInfo keyword={"twittersna_bubble_chart_tip"} />
                                 <Box m={2} />
                                 {
                                     bubbleTweets &&
