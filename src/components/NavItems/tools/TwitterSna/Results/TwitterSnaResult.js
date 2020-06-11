@@ -1577,7 +1577,7 @@ export default function TwitterSnaResult(props) {
                     <ExpansionPanelSummary
                         expandIcon={<ExpandMoreIcon />}
                     >
-                        <Typography className={classes.heading}>Socio-Semantic Graph (Co-occurences of hashtags and mentioned users)</Typography>
+                        <Typography className={classes.heading}>{keyword("sna_sosem_graph_title")}</Typography>
                     </ExpansionPanelSummary>
                     <ExpansionPanelDetails>
                     {
@@ -1605,7 +1605,7 @@ export default function TwitterSnaResult(props) {
                                     </RandomizeNodePositions>
                                 </Sigma>
                                 <Box m={1}/>
-                                <OnClickInfo keyword={"twittersna_hashtag_graph_tip"}/>
+                                <OnClickInfo keyword={"sna_sosem_graph_tip"}/>
                                 <Box m={2}/>
                                 {
                                     socioSemanticGraphTweets &&
@@ -1658,7 +1658,7 @@ export default function TwitterSnaResult(props) {
                         aria-controls={"panel0a-content"}
                         id={"panel0a-header"}
                     >
-                        <Typography className={classes.heading}>Count of account creation date</Typography>
+                        <Typography className={classes.heading}>{keyword("sna_acd_ts_title")}</Typography>
                     </ExpansionPanelSummary>
                     <ExpansionPanelDetails>
                         <div style={{ width: '100%', }}>
@@ -1674,7 +1674,7 @@ export default function TwitterSnaResult(props) {
                                 />
                             }
                             <Box m={1} />
-                            <OnClickInfo keyword={""} />
+                            <OnClickInfo keyword={"sna_acd_ts_tip"} />
                             <Box m={2} />
                         </div>
                         {
@@ -1692,7 +1692,7 @@ export default function TwitterSnaResult(props) {
                         aria-controls={"panel0a-content"}
                         id={"panel0a-header"}
                     >
-                        <Typography className={classes.heading}>Bubble chart: Top 100 most active accounts</Typography>
+                        <Typography className={classes.heading}>{keyword("sna_bubble_chart_title")}</Typography>
                     </ExpansionPanelSummary>
                     <ExpansionPanelDetails>
                         {
@@ -1709,7 +1709,7 @@ export default function TwitterSnaResult(props) {
                                         data={createBubbleChartOfMostActiveUsers(topUserProfile, props.request)}
                                         layout={{
                                             xaxis: {
-                                                title: 'Account Creation Date',
+                                                title: keyword("sna_acd"),
                                                 titlefont: {
                                                     family: 'Arial, sans-serif',
                                                     size: 18,
@@ -1717,7 +1717,7 @@ export default function TwitterSnaResult(props) {
                                                 },
                                             },
                                             yaxis: {
-                                                title: 'Followers',
+                                                title: keyword("sna_nb_followers"),
                                                 titlefont: {
                                                     family: 'Arial, sans-serif',
                                                     size: 18,
@@ -1729,7 +1729,7 @@ export default function TwitterSnaResult(props) {
                                     />
                                 }
                                 <Box m={1} />
-                                <OnClickInfo keyword={""} />
+                                <OnClickInfo keyword={"sna_bubble_chart_tip"} />
                                 <Box m={2} />
                                 {
                                     bubbleTweets &&
