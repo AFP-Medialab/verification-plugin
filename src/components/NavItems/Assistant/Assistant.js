@@ -227,8 +227,7 @@ const Assistant = () => {
                     </Button>
                 </Grid>
 
-                <Grid container ={2}>
-
+                <Grid container spacing={2}>
                     {/* for demo purposes only!*/}
                     <Grid item xs = {12} className={classes.newAssistantGrid} hidden={requireLogIn!=true}>
                         <ExpansionPanel>

@@ -32,7 +32,7 @@ const VideoGridList = (props) => {
 
     return (
         <div className={classes.root}>
-            <GridList cellHeight={"100%"} className={classes.gridList} cols={1}>
+            <GridList cellHeight={'auto'} className={classes.gridList} cols={1}>
                 {props.list.map((tile, index) => (
                     <GridListTile key={index} cols={1}>
                         <LinkIcon className={classes.icon}/>
