@@ -32,6 +32,7 @@ import ReactWordcloud from "react-wordcloud";
 import { select } from 'd3-selection';
 import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../../LocalDictionary/components/NavItems/tools/TwitterSna.tsv";
+import gexfFile from "../GexfFiles/graph-65108767955444131.gexf";
 import { saveSvgAsPng } from 'save-svg-as-png';
 import { CSVLink } from "react-csv";
 import Cytoscape from 'cytoscape';
@@ -39,6 +40,8 @@ import Fcose from 'cytoscape-fcose';
 import { Sigma, RandomizeNodePositions, ForceAtlas2, SigmaEnableWebGL, LoadGEXF, RelativeSize, EdgeShapes } from 'react-sigma';
 import Plotly from 'plotly.js-dist';
 import _ from "lodash";
+import EdgeColor from './EdgeColor';
+import NodeColor from './NodeColor';
 import CircularProgress from "@material-ui/core/CircularProgress";
 Cytoscape.use(Fcose);
 
@@ -1289,6 +1292,39 @@ export default function TwitterSnaResult(props) {
             }
             {
                 props.request.userList.length === 0 && result &&
+                <Paper>
+                    <Toolbar>
+                        <Typography className={classes.heading}>{keyword("twittersna_export_graph_title")}</Typography>
+                        <div style={{ flexGrow: 1 }}/>
+                        <Button
+                            aria-label="download"
+                            disabled={_.isEmpty(result.gexf)}
+                            startIcon={<SaveIcon />}
+                            href={result.gexf ? result.gexf.getUrl : undefined}
+                            tooltip={keyword("sna_result_download")}>
+                            {keyword("sna_result_download")}
+                        </Button>
+                    </Toolbar>
+                    <Box pb={3}>
+                        <Button
+                            variant={"contained"}
+                            color={"primary"}
+                            startIcon={<BubbleChartIcon />}
+                            disabled={_.isEmpty(result.gexf)}
+                            href={result.gexf ? result.gexf.visualizationUrl : undefined}
+                            target="_blank"
+                            rel="noopener"
+                            tooltip={keyword("sna_result_view_graph")}
+                        >
+                            {keyword("sna_result_view_graph")}
+                        </Button>
+                    </Box>
+                    <Box m={1}/>
+                    <OnClickInfo keyword={"twittersna_export_graph_tip"}/>
+                </Paper>
+            }
+            {
+                props.request.userList.length === 0 && result &&
                 <ExpansionPanel>
                     <ExpansionPanelSummary
                         expandIcon={<ExpandMoreIcon />}
@@ -1507,36 +1543,33 @@ export default function TwitterSnaResult(props) {
             }
             {
                 props.request.userList.length === 0 && result &&
-                <Paper>
-                    <Toolbar>
-                        <Typography className={classes.heading}>{keyword("twittersna_export_graph_title")}</Typography>
-                        <div style={{ flexGrow: 1 }}/>
-                        <Button
-                            aria-label="download"
-                            disabled={_.isEmpty(result.gexf)}
-                            startIcon={<SaveIcon />}
-                            href={result.gexf ? result.gexf.getUrl : undefined}
-                            tooltip={keyword("sna_result_download")}>
-                            {keyword("sna_result_download")}
-                        </Button>
-                    </Toolbar>
-                    <Box pb={3}>
-                        <Button
-                            variant={"contained"}
-                            color={"primary"}
-                            startIcon={<BubbleChartIcon />}
-                            disabled={_.isEmpty(result.gexf)}
-                            href={result.gexf ? result.gexf.visualizationUrl : undefined}
-                            target="_blank"
-                            rel="noopener"
-                            tooltip={keyword("sna_result_view_graph")}
+                <ExpansionPanel>
+                    <ExpansionPanelSummary
+                        expandIcon={<ExpandMoreIcon />}
+                    >
+                        <Typography className={classes.heading}>Differentiate users based on merely mention/reply/... of its edges (>50%)</Typography>
+                    </ExpansionPanelSummary>
+                    <ExpansionPanelDetails>
+                        <Sigma
+                                renderer={"canvas"}
+                                style={{ textAlign: 'left', width: '100%', height: '700px' }}
+                                settings={{defaultEdgeColor: "#c0c0c0",
+                                            edgeColor: "default",
+                                            defaultNodeColor: "#3388AA",
+                                            }}
                         >
-                            {keyword("sna_result_view_graph")}
-                        </Button>
-                    </Box>
-                    <Box m={1}/>
-                    <OnClickInfo keyword={"twittersna_export_graph_tip"}/>
-                </Paper>
+                            <LoadGEXF path={gexfFile}>
+                            {/* <EdgeColor /> */}
+                            <EdgeShapes default="curve" />
+                            <NodeColor />
+                                <RandomizeNodePositions>
+                                    <ForceAtlas2 iterationsPerRender={1} timeout={120000} />
+                                </RandomizeNodePositions>
+                                <RelativeSize initialSize={30}/>
+                            </LoadGEXF>
+                        </Sigma>
+                    </ExpansionPanelDetails>
+                </ExpansionPanel>
             }
             {
                 props.request.userList.length === 0 && result &&
