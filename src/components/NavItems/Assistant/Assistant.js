@@ -24,28 +24,15 @@ import tsv from "../../../LocalDictionary/components/NavItems/tools/Assistant.ts
 import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
 import useLoadLanguage from "../../../Hooks/useLoadLanguage";
 import useTwitterApi from "../../Scrapers/Twitter/useTwitterApi";
-
 import {
-    cleanAssistantState, setImageList, setImageVideoSelected,
-    setInputUrl,
-    setMediaLists,
-    setProcessUrl,
-    setProcessUrlActions,
-    setRequireLogin,
-    setUrlMode, setVideoList
-}
-    from "../../../redux/actions/tools/assistantActions";
+    cleanAssistantState, setImageVideoSelected,
+    setInputUrl, setMediaLists, setProcessUrl, setProcessUrlActions,
+    setRequireLogin, setUrlMode,
+} from "../../../redux/actions/tools/assistantActions";
 import {
-    CONTENT_TYPE,
-    DOMAIN,
-    DOMAIN_PATTERNS,
-    matchPattern,
-    SCRAPER,
-    SCRAPERS,
-    selectCorrectActions,
-    TYPE_PATTERNS
-}
-    from "./AssistantRuleBook";
+    CONTENT_TYPE, DOMAIN, DOMAIN_PATTERNS, SCRAPER, SCRAPERS, TYPE_PATTERNS,
+    matchPattern, selectCorrectActions,
+} from "./AssistantRuleBook";
 import history from "../../Shared/History/History";
 
 const Assistant = () => {
@@ -58,18 +45,22 @@ const Assistant = () => {
 
     //assistant state values
     const {url} = useParams();
-    const urlMode = useSelector(state=>state.assistant.urlMode);
-    const imageVideoSelected = useSelector(state=>state.assistant.imageVideoSelected);
-    const requireLogIn = useSelector(state=>state.assistant.requireLogIn);
-    const inputUrl = useSelector(state=>state.assistant.inputUrl);
-    const processUrl = useSelector(state=>state.assistant.processUrl);
-    const imageList = useSelector(state=>state.assistant.imageList);
-    const videoList = useSelector(state=>state.assistant.videoList);
+    const urlMode = useSelector(state => state.assistant.urlMode);
+    const imageVideoSelected = useSelector(state => state.assistant.imageVideoSelected);
+    const requireLogIn = useSelector(state => state.assistant.requireLogIn);
+    const inputUrl = useSelector(state => state.assistant.inputUrl);
+    const processUrl = useSelector(state => state.assistant.processUrl);
+    const imageList = useSelector(state => state.assistant.imageList);
+    const videoList = useSelector(state => state.assistant.videoList);
 
     //other state values
     const [formInput, setFormInput] = useState(null);
     const userAuthenticated = useSelector(state => state.userSession.userAuthenticated)
     const twitterRequestLoading = useSelector(state => state.twitter.twitterRequestLoading);
+
+    //refs
+    const imageListRef = useRef([]);
+    const videoListRef = useRef([]);
 
     const validateUrl = (userInput) => {
         //https://stackoverflow.com/questions/3809401/what-is-a-good-regular-expression-to-match-a-url
@@ -77,25 +68,21 @@ const Assistant = () => {
         if (!userInput.match(urlRegex)) throw new Error(keyword("please_give_a_correct_link"))
     }
 
-    // create temp list by prepending elementToAdd to listToAddTo
-    const prependMediaList = (elementToAdd, listToAddTo) => {
-        let tempList = listToAddTo;
-        tempList.unshift(elementToAdd);
-        return tempList;
-    }
-
-    // given a direct user input, scrape or set the correct image/video list
+    // check the input url for data. create new image/video lists or add to existing
     const submitInputUrl = async (userInput) => {
         try {
             validateUrl(userInput);
-            let updatedInput = await handleScraping(userInput);
+
+            let updatedInput = await handleInternalScraping(userInput);
             let contentType = matchPattern(updatedInput, TYPE_PATTERNS);
 
-            if(contentType == CONTENT_TYPE.IMAGE){dispatch(setImageList(prependMediaList(updatedInput, imageList)))}
-            else if(contentType == CONTENT_TYPE.VIDEO){dispatch(setVideoList(prependMediaList(updatedInput, videoList)))}
+            if (contentType == CONTENT_TYPE.IMAGE) {imageListRef.current.unshift(updatedInput);}
+            else if (contentType == CONTENT_TYPE.VIDEO) {videoListRef.current.unshift(updatedInput);}
+
+            dispatch(setMediaLists(imageListRef.current, videoListRef.current));
             dispatch(setInputUrl(userInput));
         }
-        catch(error){
+        catch (error) {
             dispatch(setError(error.message));
         }
     }
@@ -109,7 +96,7 @@ const Assistant = () => {
     }
 
     // select the correct media to process, then load actions possible
-    const submitMediaToProcess = (url) =>{
+    const submitMediaToProcess = (url) => {
         dispatch(setProcessUrl(url));
         loadProcessUrlActions();
     }
@@ -123,54 +110,57 @@ const Assistant = () => {
     }
 
     // handle case of user giving a very specific type of twitter link
-    const handleScraping = async (userInput) => {
-        let scraperToUse = SCRAPERS.find(scraper=>((userInput.match(scraper.patterns))!=null));
-        if(scraperToUse != undefined && scraperToUse.key == SCRAPER.TWITTER) {
+    const handleInternalScraping = async (userInput) => {
+        let scraperToUse = SCRAPERS.find(scraper => ((userInput.match(scraper.patterns)) != null));
+        if (scraperToUse != undefined && scraperToUse.key == SCRAPER.TWITTER) {
             if (scraperToUse.requireLogIn && !userAuthenticated) {
                 dispatch(setRequireLogin(true));
                 throw new Error("twitter_error_login");
-            }
-            else {
+            } else {
                 dispatch(setRequireLogin(false));
                 let scrapedMedia = await twitterApi.getTweet(userInput);
-                if(scrapedMedia != null) {
-                    if (scrapedMedia.imageUrl!=null) return scrapedMedia.imageUrl;
-                    else if (scrapedMedia.videoUrl!=null) return scrapedMedia.videoUrl;
-                    else {throw new Error("twitter_error_media")}
+                if (scrapedMedia != null) {
+                    if (scrapedMedia.imageUrl != null) return scrapedMedia.imageUrl;
+                    else if (scrapedMedia.videoUrl != null) return scrapedMedia.videoUrl;
+                    else {
+                        throw new Error("twitter_error_media")
+                    }
                 }
             }
         }
         return userInput;
     }
 
-    /* check for image/video lists which may have come from popup.js
-    *  todo: rethink confusing logic (if null vals, this was from context menu. if non null vals, these were scraper.)
-    *  probably better to stop mixing content menu and scraper button menu use of url altogether
-    * */
+    // check if the browser has any stored media lists. these are generated by popup.js.
     const checkForMediaLists = () => {
         let urlImageList = window.localStorage.getItem("imageList");
         let urlVideoList = window.localStorage.getItem("videoList");
 
-        if(urlImageList == null && urlVideoList == null) {
+        if (urlImageList == null && urlVideoList == null) {
             return;
         }
 
-        if (urlImageList != "" || urlVideoList != ""){
-            urlImageList = urlImageList!="" ? urlImageList.split(",") : [];
-            urlVideoList = urlVideoList!="" ? urlVideoList.split(",") : [];
-            dispatch(setMediaLists(urlImageList, urlVideoList));
+        if (urlImageList != "" || urlVideoList != "") {
+            imageListRef.current = urlImageList != "" ? urlImageList.split(",") : [];
+            videoListRef.current = urlVideoList != "" ? urlVideoList.split(",") : [];
         }
     }
 
     // clean assistant state
     const cleanAssistant = () => {
+        //clean stored browser vars and refs
         window.localStorage.removeItem("imageList");
         window.localStorage.removeItem("videoList");
+        imageListRef.current = [];
+        videoListRef.current = [];
+
+        //clean state and input
         dispatch(cleanAssistantState());
         setFormInput("");
     }
 
     // set the input to either the current url param, or whatever the assistant state value is
+    // note: img/vid lists updated twice. due to stale closure(state values from prev render always used), refs set up
     useEffect(() => {
         if (url !== undefined) {
             checkForMediaLists();
