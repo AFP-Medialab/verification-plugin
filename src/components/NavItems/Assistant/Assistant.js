@@ -101,7 +101,6 @@ const Assistant = () => {
     // select the correct media to process, then load actions possible
     const submitMediaToProcess = (url) => {
         dispatch(setProcessUrl(url));
-        loadProcessUrlActions();
     }
 
     // load possible actions for selected media url
