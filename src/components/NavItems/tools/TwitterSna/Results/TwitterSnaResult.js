@@ -18,6 +18,14 @@ import TwitterIcon from '@material-ui/icons/Twitter';
 import SaveIcon from '@material-ui/icons/Save';
 import BubbleChartIcon from '@material-ui/icons/BubbleChart';
 import Toolbar from "@material-ui/core/Toolbar";
+import { TableContainer, Table, TableBody, TableRow, TableCell } from '@material-ui/core';
+import { Avatar } from '@material-ui/core';
+import List from '@material-ui/core/List';
+import ListSubheader from '@material-ui/core/ListSubheader';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import CloseResult from "../../../../Shared/CloseResult/CloseResult";
 import { cleanTwitterSnaState } from "../../../../../redux/actions/tools/twitterSnaActions";
 import ReactWordcloud from "react-wordcloud";
@@ -28,7 +36,7 @@ import { saveSvgAsPng } from 'save-svg-as-png';
 import { CSVLink } from "react-csv";
 import Cytoscape from 'cytoscape';
 import Fcose from 'cytoscape-fcose';
-import { Sigma, RandomizeNodePositions, ForceAtlas2 } from 'react-sigma';
+import { Sigma, RandomizeNodePositions, ForceAtlas2, SigmaEnableWebGL, LoadGEXF, RelativeSize, EdgeShapes } from 'react-sigma';
 import Plotly from 'plotly.js-dist';
 import _ from "lodash";
 import CircularProgress from "@material-ui/core/CircularProgress";
@@ -52,7 +60,12 @@ export default function TwitterSnaResult(props) {
     const [pieCharts1, setPieCharts1] = useState(null);
     const [pieCharts2, setPieCharts2] = useState(null);
     const [pieCharts3, setPieCharts3] = useState(null);
+    const [userGraphReset, setUserGraphReset] = useState(null);
+    const [userGraphClickNode, setUserGraphClickNode] = useState(null);
+    const [userGraphTweets, setUserGraphTweets] = useState(null);
+    const [userGraphInteraction, setUserGraphInteraction] = useState(null);
     const [coHashtagGraphTweets, setCoHashtagGraphTweets] = useState(null);
+    const [socioSemanticGraphTweets, setSocioSemanticGraphTweets] = useState(null);
     const [bubbleTweets, setBubbleTweets] = useState(null);
 
     const [topUserProfile, setTopUserProfile] = useState(null);
@@ -73,8 +86,14 @@ export default function TwitterSnaResult(props) {
             case 3:
                 setPieCharts3(null);
                 break;
+            case "userGraphIdx":
+                setUserGraphTweets(null);
+                break;
             case "coHashtagGraphIdx":
                 setCoHashtagGraphTweets(null);
+                break;
+            case "socioSemanticGraphIdx":
+                setSocioSemanticGraphTweets(null);
                 break;
             case "bubbleIdx":
                 setBubbleTweets(null);
@@ -114,7 +133,12 @@ export default function TwitterSnaResult(props) {
         setPieCharts1(null);
         setPieCharts2(null);
         setPieCharts3(null);
+        setUserGraphReset(null);
+        setUserGraphClickNode(null);
+        setUserGraphTweets(null);
+        setUserGraphInteraction(null);
         setCoHashtagGraphTweets(null);
+        setSocioSemanticGraphTweets(null);
         setBubbleTweets(null);
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [JSON.stringify(props.request), props.request])
@@ -339,6 +363,9 @@ export default function TwitterSnaResult(props) {
             case 2:
                 setPieCharts2(newRes);
                 break;
+            case "userGraphIdx":
+                setUserGraphTweets(newRes);
+                break;
             case "bubbleIdx":
                 setBubbleTweets(newRes);
                 break;
@@ -404,7 +431,41 @@ export default function TwitterSnaResult(props) {
             screen_name: selectedUser
         };
 
-        setPieCharts3(newRes);
+        switch (index) {
+            case 3:
+                setPieCharts3(newRes);
+                break;
+            case "socioSemanticGraphIdx":
+                setSocioSemanticGraphTweets(newRes);
+                break;
+            default:
+                break;
+        }
+    }
+
+    const displayUserInteraction = (e) => {
+
+        let columns = [
+            { title: keyword('sna_result_username'), field: 'username' },
+            { title: 'Interaction', field: 'nbInteraction', render: getTweetWithClickableLink },
+        ];
+
+        let interaction = result.userGraph.userInteraction.find((element) => element.username === e.data.node.id);
+        let resData = [];
+        let sortedInteraction = [];
+        if (interaction !== undefined) {
+            sortedInteraction = Object.entries(interaction.interacted).sort((a, b) => { return a[1] - b[1]; });
+            sortedInteraction.forEach(x => {
+                resData.push({ username: x[0], nbInteraction: x[1] });
+            });
+        }
+
+        let newRes = {
+            username: e.data.node.id,
+            data: resData,
+            columns: columns
+        };
+        setUserGraphInteraction(newRes);
     }
 
     function createCSVFromPieChart(obj) {
@@ -458,7 +519,7 @@ export default function TwitterSnaResult(props) {
 
         //For mention donuts
         if (index === 3) {
-            displayTweetsOfMention(data.points[0].label, setPieCharts3)
+            displayTweetsOfMention(data.points[0].label, "", 3)
         }
         // For retweets, likes, top_user donut
         else {
@@ -584,9 +645,69 @@ export default function TwitterSnaResult(props) {
         return csvData;
     }
 
+    function onClickNodeUserGraph(e) {
+
+        let initGraph = {
+            nodes: e.data.renderer.graph.nodes(),
+            edges: e.data.renderer.graph.edges()
+        }
+
+        // Set new graph (which has only the clicked node and its neighbors) after clicking
+        setUserGraphClickNode(createGraphWhenClickANode(e));
+
+        setUserGraphReset(initGraph);
+
+        displayTweetsOfUser(e.data.node.id, '', "userGraphIdx");
+
+        displayUserInteraction(e);
+    }
+
     function onClickNodeCoHashtagGraph(e) {
 
         displayTweetsOfWord(e.data.node.id, setCoHashtagGraphTweets);
+    }
+
+    function onClickNodeSocioSemanticGraph(e) {
+        if (e.data.node.type === "Hashtag") {
+            displayTweetsOfWord(e.data.node.id, setSocioSemanticGraphTweets);
+        } else if (e.data.node.type === "Mention") {
+            displayTweetsOfMention(e.data.node.id, "", "socioSemanticGraphIdx");
+        }
+    }
+
+    function onClickStage(e) {
+        setUserGraphClickNode(() => {
+            return null;
+        });
+        hideTweetsView("userGraphIdx");
+
+        setUserGraphInteraction(null);
+    }
+
+    function createGraphWhenClickANode(e) {
+
+        let selectedNode = e.data.node;
+
+        let neighborNodes = e.data.renderer.graph.adjacentNodes(selectedNode.id);
+        let neighborEdges = e.data.renderer.graph.adjacentEdges(selectedNode.id);
+        let directedNeighborEdges = neighborEdges.map((edge) => {
+            let newEdge = JSON.parse(JSON.stringify(edge));
+            if (newEdge.source !== selectedNode.id) {
+                newEdge.target = edge.source;
+                newEdge.source = selectedNode.id;
+            }
+            return newEdge;
+        });
+
+        neighborNodes.push(selectedNode);
+
+        let newGraph = {
+            nodes: neighborNodes,
+            edges: directedNeighborEdges
+        }
+
+        console.log("newGraph", newGraph);
+        return newGraph;
     }
 
     function goToTwitterSnaWithUrlSearch(event, rowData) {
@@ -1109,12 +1230,13 @@ export default function TwitterSnaResult(props) {
                                         minNodeSize: 10,
                                         maxNodeSize: 30,
                                         minEdgeSize: 1,
-                                        maxEdgeSize: 10,
+                                        maxEdgeSize: 20,
                                         defaultNodeColor: "#3388AA",
                                         defaultEdgeColor: "#C0C0C0",
                                         edgeColor: "default"
                                     }}
                                     >
+                                    <EdgeShapes default="curve" />
                                     <RandomizeNodePositions>
                                         <ForceAtlas2 iterationsPerRender={1} timeout={15000} />
                                     </RandomizeNodePositions>
@@ -1167,6 +1289,224 @@ export default function TwitterSnaResult(props) {
             }
             {
                 props.request.userList.length === 0 && result &&
+                <ExpansionPanel>
+                    <ExpansionPanelSummary
+                        expandIcon={<ExpandMoreIcon />}
+                    >
+                        <Typography className={classes.heading}>{keyword("twittersna_user_graph_title")} using Louvain</Typography>
+                    </ExpansionPanelSummary>
+                    <ExpansionPanelDetails>
+                        {
+                            result.userGraph &&
+                            <div style={{ width: '100%' }}>
+                                {
+                                    (userGraphReset === null && userGraphClickNode === null && result.userGraph.data.nodes.length !== 0) &&
+                                    <div>
+                                        <Sigma graph={result.userGraph.data}
+                                            renderer={"canvas"}
+                                            style={{ textAlign: 'left', width: '100%', height: '700px' }}
+                                            onClickNode={(e) => onClickNodeUserGraph(e)}
+                                            settings={{
+                                                labelThreshold: 13,
+                                                drawEdges: false,
+                                                drawEdgeLabels: false,
+                                                minNodeSize: 5,
+                                                maxNodeSize: 12
+                                            }}>
+                                            <RandomizeNodePositions>
+                                                <ForceAtlas2 iterationsPerRender={1} timeout={120000} />
+                                            </RandomizeNodePositions>
+                                        </Sigma>
+                                        <Box m={1}/>
+                                        <OnClickInfo keyword={"twittersna_user_graph_tip"}/>
+                                    </div>
+                                }
+                                {
+                                    userGraphReset !== null && userGraphClickNode !== null &&
+                                    <div>
+                                        <Sigma graph={userGraphClickNode}
+                                            renderer={"canvas"}
+                                            onClickStage={(e) => onClickStage(e)}
+                                            style={{ textAlign: 'left', width: '100%', height: '700px' }}
+                                            settings={{
+                                                defaultLabelColor: "#777",
+                                                labelThreshold: 13,
+                                                minNodeSize: 5,
+                                                maxNodeSize: 12,
+                                                drawEdgeLabels: true,
+                                                edgeColor: 'target'
+                                            }}
+                                        >
+                                        </Sigma>
+                                        <Box m={1}/>
+                                        <OnClickInfo keyword={"twittersna_user_graph_tip"}/>
+                                    </div>
+                                }
+                                {
+                                    userGraphReset !== null && userGraphClickNode === null &&
+                                    <div>
+                                        <Sigma graph={userGraphReset}
+                                            renderer={"canvas"}
+                                            style={{ textAlign: 'left', width: '100%', height: '700px' }}
+                                            onClickNode={(e) => onClickNodeUserGraph(e)}
+                                            settings={{
+                                                labelThreshold: 13,
+                                                drawEdges: false,
+                                                drawEdgeLabels: false,
+                                                minNodeSize: 5,
+                                                maxNodeSize: 12
+                                            }}>
+                                        </Sigma>
+                                        <Box m={1}/>
+                                            <OnClickInfo keyword={"twittersna_user_graph_tip"}/>
+                                    </div>
+                                }
+                                {
+                                    result.userGraph.legend.length !== 0 &&
+                                    <div >
+                                        <Paper >
+                                            <ListSubheader component="div" style={{ fontSize: 18, fontWeight: 'bold' }}> Legend </ListSubheader>
+                                            <List className={classes.root} >
+                                                {
+                                                    result.userGraph.legend.map((community) => {
+                                                        return (
+                                                            <ListItem key={community.communityColor + (Math.random())}>
+                                                                <ListItemIcon>
+                                                                    <div className="legendcolor"
+                                                                        style={{ backgroundColor: community.communityColor, width: 18, height: 18, borderRadius: '50%' }}>
+                                                                    </div>
+                                                                </ListItemIcon>
+                                                                <ListItemText primary={community.legend} />
+                                                            </ListItem>
+                                                        );
+                                                    })
+                                                }
+                                            </List>
+                                        </Paper>
+                                    </div>
+                                }
+                                {
+                                    userGraphTweets &&
+                                    <div>
+                                        <Grid container justify="space-between" spacing={2}
+                                            alignContent={"center"}>
+                                            <Grid item>
+                                                <Button
+                                                    variant={"contained"}
+                                                    color={"secondary"}
+                                                    onClick={() => hideTweetsView("userGraphIdx")}>
+                                                    {
+                                                        keyword('sna_result_hide')
+                                                    }
+                                                </Button>
+                                            </Grid>
+                                            <Grid item>
+                                                <Button
+                                                    variant={"contained"}
+                                                    color={"primary"}
+                                                    onClick={() => downloadClick(userGraphTweets.csvArr, userGraphTweets.username)}>
+                                                    {
+                                                        keyword('sna_result_download')
+                                                    }
+                                                </Button>
+                                            </Grid>
+                                        </Grid>
+                                        <Box m={2} />
+                                        <CustomTable title={keyword("sna_result_slected_tweets")}
+                                            colums={userGraphTweets.columns}
+                                            data={userGraphTweets.data}
+                                            actions={goToTweetAction}
+                                        />
+                                    </div>
+                                }
+                                {
+                                    userGraphInteraction &&
+                                    <div style={{ position: 'absolute', top: 0, right: 0 }}>
+                                        <Paper style={{ width: 300 }}>
+                                            <div style={{
+                                                height: 65,
+                                                backgroundSize: 'cover',
+                                                backgroundImage: `url(${"http://abs.twimg.com/images/themes/theme1/bg.png"})`
+                                            }}>
+                                            </div>
+                                            <div>
+                                                <List style={{ position: 'absolute', top: 40, width: '100%' }}>
+                                                    <ListItem>
+                                                        <ListItemAvatar>
+                                                            <Avatar alt={userGraphInteraction.username}
+                                                                src={"http://avatars.io/twitter/" + userGraphInteraction.username}
+                                                                variant='rounded'
+                                                                style={{ width: 65, height: 65 }} />
+                                                        </ListItemAvatar>
+                                                        <ListItemText primary={userGraphInteraction.username}
+                                                            style={{ marginLeft: 10, color: '#428bca' }} />
+                                                    </ListItem>
+                                                </List>
+                                            </div>
+                                            <TableContainer style={{ marginTop: 60 }}>
+                                                <Table size="small">
+                                                    <TableBody>
+                                                        <TableRow>
+                                                            <TableCell colSpan={2}
+                                                                align="center"
+                                                                style={{ fontSize: 18, fontWeight: 'bold', borderBottom: 'none' }}
+                                                            >
+                                                                Mostly conntected with:
+                                                        </TableCell>
+                                                        </TableRow>
+                                                        <TableRow>
+                                                            <TableCell colSpan={2}
+                                                                align="center"
+                                                                style={{ color: '#6a6a6a', borderBottom: 'none' }}>
+                                                                TODO later
+                                                        </TableCell>
+                                                        </TableRow>
+                                                        <TableRow>
+                                                            <TableCell colSpan={2}
+                                                                align="center"
+                                                                style={{ fontSize: 18, fontWeight: 'bold', borderBottom: 'none' }}
+                                                            >
+                                                                Mostly interacted with:
+                                                    </TableCell>
+                                                        </TableRow>
+                                                    </TableBody>
+                                                </Table>
+                                            </TableContainer>
+                                            <List className={classes.root} style={{ overflow: 'auto', maxHeight: 150 }}>
+                                                {
+                                                    userGraphInteraction.data.length !== 0 && userGraphInteraction.data.map((row) => {
+                                                        return (
+                                                            <ListItem key={row.username}>
+                                                                <ListItemAvatar>
+                                                                    <Avatar alt={row.username}
+                                                                        src={"http://avatars.io/twitter/" + row.username} />
+                                                                </ListItemAvatar>
+                                                                <ListItemText primary={row.username}
+                                                                    secondary={"Interactions: " + row.nbInteraction} />
+                                                            </ListItem>
+                                                        );
+                                                    })
+                                                }
+                                                {
+                                                    userGraphInteraction.data.length === 0 && "No interaction"
+                                                }
+                                            </List>
+                                        </Paper>
+                                    </div>
+                                }
+
+                            </div>
+                        }
+                        {
+                            result.userGraph === undefined &&
+                            <CircularProgress className={classes.circularProgress} />
+                        }
+
+                    </ExpansionPanelDetails>
+                </ExpansionPanel>
+            }
+            {
+                props.request.userList.length === 0 && result &&
                 <Paper>
                     <Toolbar>
                         <Typography className={classes.heading}>{keyword("twittersna_export_graph_title")}</Typography>
@@ -1197,6 +1537,85 @@ export default function TwitterSnaResult(props) {
                     <Box m={1}/>
                     <OnClickInfo keyword={"twittersna_export_graph_tip"}/>
                 </Paper>
+            }
+            {
+                props.request.userList.length === 0 && result &&
+                <ExpansionPanel>
+                    <ExpansionPanelSummary
+                        expandIcon={<ExpandMoreIcon />}
+                    >
+                        <Typography className={classes.heading}>Socio-Semantic Graph (Co-occurences of hashtags and mentioned users)</Typography>
+                    </ExpansionPanelSummary>
+                    <ExpansionPanelDetails>
+                    {
+                        result && result.socioSemanticGraph && result.socioSemanticGraph.data.nodes.length !== 0 &&
+                            <div style={{ width: '100%' }}>
+                                <Sigma graph={result.socioSemanticGraph.data}
+                                    renderer={"canvas"}
+                                    style={{ textAlign: 'left', width: '100%', height: '700px' }}
+                                    onClickNode={(e) => onClickNodeSocioSemanticGraph(e)}
+                                    settings={{
+                                        drawEdges: true,
+                                        drawEdgeLabels: false,
+                                        minNodeSize: 10,
+                                        maxNodeSize: 30,
+                                        minEdgeSize: 1,
+                                        maxEdgeSize: 20,
+                                        defaultNodeColor: "#3388AA",
+                                        defaultEdgeColor: "#C0C0C0",
+                                        edgeColor: "default"
+                                    }}
+                                    >
+                                    <EdgeShapes default="curve" />
+                                    <RandomizeNodePositions>
+                                        <ForceAtlas2 iterationsPerRender={1} timeout={15000} />
+                                    </RandomizeNodePositions>
+                                </Sigma>
+                                <Box m={1}/>
+                                <OnClickInfo keyword={"twittersna_hashtag_graph_tip"}/>
+                                <Box m={2}/>
+                                {
+                                    socioSemanticGraphTweets &&
+                                    <div>
+                                        <Grid container justify="space-between" spacing={2}
+                                            alignContent={"center"}>
+                                            <Grid item>
+                                                <Button
+                                                    variant={"contained"}
+                                                    color={"secondary"}
+                                                    onClick={() => hideTweetsView("socioSemanticGraphIdx")}>
+                                                    {
+                                                        keyword('sna_result_hide')
+                                                    }
+                                                </Button>
+                                            </Grid>
+                                            <Grid item>
+                                                <Button
+                                                    variant={"contained"}
+                                                    color={"primary"}
+                                                    onClick={() => downloadClick(socioSemanticGraphTweets.csvArr, socioSemanticGraphTweets.word)}>
+                                                    {
+                                                        keyword('sna_result_download')
+                                                    }
+                                                </Button>
+                                            </Grid>
+                                        </Grid>
+                                        <Box m={2} />
+                                        <CustomTable title={keyword("sna_result_slected_tweets")}
+                                            colums={socioSemanticGraphTweets.columns}
+                                            data={socioSemanticGraphTweets.data}
+                                            actions={goToTweetAction}
+                                        />
+                                    </div>
+                                }
+                            </div>
+                        }
+                        {
+                            result.socioSemanticGraph === undefined &&
+                            <CircularProgress className={classes.circularProgress} />
+                        }
+                    </ExpansionPanelDetails>
+                </ExpansionPanel>
             }
             {
                 props.request.userList.length === 0 && result && result.tweets &&

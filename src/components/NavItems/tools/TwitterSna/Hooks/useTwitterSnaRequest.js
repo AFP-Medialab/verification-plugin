@@ -4,6 +4,7 @@ import { setError } from "../../../../../redux/actions/errorActions";
 import { setTwitterSnaLoading, setTwitterSnaResult, setTwitterSnaLoadingMessage, setUserProfileMostActive } from "../../../../../redux/actions/tools/twitterSnaActions";
 import axios from "axios";
 import _ from "lodash";
+import { jLouvain } from 'jlouvain';
 
 import {
   getPlotlyJsonDonuts,
@@ -83,9 +84,52 @@ function getUniqValuesOfField(tweets, field) {
   return uniqNodeIds;
 }
 
+function getNodesAsUsername(tweets) {
+  let nodes = getUniqValuesOfField(tweets, "screen_name").map((val) => { return { id: val, label: val } });
+  return nodes;
+}
+
 function getNodesAsHashtag(tweets) {
   let nodes = getUniqValuesOfField(tweets, "hashtags").map((val) => { return { id: val, label: val } });
   return nodes;
+}
+
+function getEdgesCombinationNodes(nodes, edgeLabel) {
+  let edges = [];
+  for (let i = 0; i < nodes.length - 1; i++) {
+    for (let j = i + 1; j < nodes.length; j++) {
+      edges.push({ id: nodes[i].id + '___and___' + nodes[j].id, source: nodes[i].id, target: nodes[j].id, label: edgeLabel, weight: 1 });
+    }
+  }
+  return edges;
+}
+
+function getEdgesUsernameToUsernameOnHashtagsExcept1st(tweets, request, fieldArr = "hashtags") {
+  // Get edges between users based on each value of the given fieldArr
+  let rm1stHashtagTweets = tweets.filter(tweet => tweet._source.hashtags.length > 1)
+                                  .map((tweet) => { tweet._source.hashtags.splice(0, 1); return tweet; });
+  let uniqElements = getUniqValuesOfField(rm1stHashtagTweets, fieldArr);
+
+  if (fieldArr === "hashtags") {
+    let requestedHashtags = request.keywordList.filter((element) => element.startsWith("#"));
+    let toRemove = (requestedHashtags.length > 0) ? [...new Set(requestedHashtags.map((hashtag) => { return hashtag.replace("#","").toLowerCase(); }))] : [];
+    uniqElements = uniqElements.filter(element => !toRemove.includes(element));
+  }
+
+  let edges = [];
+  uniqElements.forEach(val => {
+    let nodesUsername = tweets.filter(tweet => tweet._source[fieldArr] !== undefined)
+                              .filter(tweet => tweet._source[fieldArr].includes(val))
+                              .map((tweet) => { return { id: tweet._source.screen_name, label: tweet._source.screen_name }; });
+    let uniqNodesUsername = _.uniqBy(nodesUsername, 'id');
+    let edgesUsername = getEdgesCombinationNodes(uniqNodesUsername, val);
+    edges.push(edgesUsername);
+  });
+
+  // Set weight as number of hashtags/co-urls... source user and target user of an edge shared together
+  let weightedEdges = groupByThenSum(edges.flat(), 'id', ['label'], ['weight'], ['source', 'target']);
+
+  return weightedEdges;
 }
 
 function getEdgesCoHashtag(tweets) {
@@ -109,12 +153,64 @@ function getEdgesCoHashtag(tweets) {
   return uniqEdges;
 }
 
+function getSizeOfUserBySum(tweets, field = 'retweet_count') {
+  let sizeInTweets = tweets.map((tweet) => {
+    let obj = {};
+    obj['screen_name'] = tweet._source.screen_name;
+    obj[field] = tweet._source[field];
+    return obj;
+  });
+  let sizeInUsernames = groupByThenSum(sizeInTweets, 'screen_name', [], [field], []);
+
+  // Size of a node cannot be 0, therefore, increase nodes's size by 1
+  let sizeInNodes = sizeInUsernames.map(obj => {
+    let newObj = {};
+    newObj['screen_name'] = obj['screen_name'];
+    newObj['size'] = obj[field] + 1;
+    return newObj;
+  });
+
+  return sizeInNodes;
+}
+
 function getSizeOfField(tweets, field) {
   let valueArr = tweets.filter(tweet => tweet._source[field] !== undefined)
                       .map((tweet) => { return tweet._source[field] })
                       .flat();
   let sizeObj = _.countBy(valueArr);
   return sizeObj;
+}
+
+function getInteractionOfUsernames(tweets, types = ['in_reply_to_screen_name', 'user_mentions']) {
+  let interactionsTweets = tweets.map((tweet) => {
+    let screen_name = tweet._source.screen_name;
+    let interactedEntities = [];
+    types.forEach(type => {
+      let interactedUsers = null;
+      if (type === 'user_mentions' && tweet._source[type] !== undefined) {
+        interactedUsers = [...new Set(tweet._source[type].map((mentionedUser) => { return mentionedUser.screen_name; }))];
+      } else if (type !== 'user_mentions' && tweet._source[type] !== undefined) {
+        interactedUsers = [...new Set(tweet._source[type])];
+      }
+      // Exlude owner of the tweet in interaction list
+      interactedEntities.push(_.without(interactedUsers, screen_name));
+    });
+    return { screen_name: screen_name, interactedEntities: interactedEntities.flat() }
+  });
+
+  let groupbyUsers = _.groupBy(interactionsTweets, 'screen_name');
+
+  let results = [];
+  Object.keys(groupbyUsers).forEach(user => {
+    let interactions = groupbyUsers[user].map((interactEachTweet) => { return interactEachTweet.interactedEntities; });
+    let flattedInteractions = [].concat(interactions).flat();
+
+    if (flattedInteractions.length > 0) {
+      results.push({ username: user, interacted: _.countBy(flattedInteractions) });
+    }
+  });
+
+  return results;
 }
 
 function getTopNodeGraph(graph, prop="size", top=15) {
@@ -126,6 +222,99 @@ function getTopNodeGraph(graph, prop="size", top=15) {
     nodes: topNodes,
     edges: filteredEdges
   }
+}
+
+function processCommunityGraph(graph, commObj) {
+  if (commObj === undefined) {
+    return graph;
+  } else {
+    // Set communities for nodes
+    graph.nodes.forEach(node => { node.community = commObj[node.id]; });
+    let filteredGraph = filterCommunities(graph, 1);
+    let coloredGraph = generateColorsForCommunities(filteredGraph);
+    return coloredGraph;
+  }
+}
+
+function filterCommunities(graph, sizeToRm = 1) {
+  if (graph.nodes[0].community === undefined) {
+    return graph;
+  } else {
+    let commSize = _.countBy(graph.nodes.map((node) => { return node.community; }));
+    let filteredComm = Object.entries(commSize).filter(([, v]) => v > sizeToRm).map(([k]) => k);
+    let filteredNodes = graph.nodes.filter(node => filteredComm.includes(node.community.toString()));
+    let filteredNodesId = filteredNodes.map((node) => { return node.id; });
+    let filteredEdges = graph.edges.filter(edge => _.difference([edge.source, edge.target], filteredNodesId).length === 0);
+    return {
+      nodes: filteredNodes,
+      edges: filteredEdges
+    }
+  }
+}
+
+function generateColorsForCommunities(graph) {
+  let defaultColors = ["#1F77B4","#FF7F0E","#2CA02C","#D62728","#9467BD","#8C564B","#E377B2","#7F7F7F","#BCBD22","#17BECF",
+                      "#00FE35","#FED4C4","#0DF9FF","#F6F926","#DC587D","#B68E00","#22FFA7","#E48F72","#222A2A","#90AD1C",
+                      "#85660D","#1C8356","#16FF32","#F7E1A0","#FEAF16","#F8Q19F","#1CFFCE","#2ED9FF","#C075A6","#B00068",
+                      "#0D2A63","#FECB52","#00CC96","#990099","#0099C6","#B82E2E","#72B7B2","#778AAE","#BAB0AC","#E3EE9E"];
+  
+  let sizeCommunities = _.countBy(graph.nodes.map(node => { return node.community; }));
+  let sortedCommunities = Object.keys(sizeCommunities).sort((a,b) => sizeCommunities[b]-sizeCommunities[a])
+  let uniqCommunity = sortedCommunities.map((comm) => { return parseInt(comm); });
+  let colors = [];
+
+  for (let i = 0; i < uniqCommunity.length; i++) {
+    if (defaultColors[i] !== undefined) {
+      colors[uniqCommunity[i]] = defaultColors[i];
+    } else {
+      colors[uniqCommunity[i]] = "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); });
+    }
+    
+  }
+  
+  graph.nodes.forEach(node => {
+    node.color = colors[node.community];
+  });
+  return graph;
+}
+
+function getLegendOfGraph(communityGraph, tweets, noCommunityMsg) {
+  let sizeCommunities = _.countBy(communityGraph.nodes.map(node => { return node.color; }));
+  let legends = [];
+  if (sizeCommunities.undefined === undefined) {
+    let sortedBySize = _.fromPairs(_.sortBy(_.toPairs(sizeCommunities), 1).reverse());
+    let communitiesColor = Object.keys(sortedBySize);
+    legends = communitiesColor.map((color) => {
+      let nodesId = communityGraph.nodes.filter(node => node.color === color).map((node) => { return node.id });
+
+      let hashtagsCommunity = [];
+      nodesId.forEach(nodeId => {
+        let tweetsByUser = tweets.filter(tweet => tweet._source.screen_name === nodeId);
+        let hashtagsUser = tweetsByUser.filter(tweet => tweet._source.hashtags !== undefined)
+          .map((tweet) => { return tweet._source.hashtags; });
+        hashtagsCommunity.push(hashtagsUser.flat());
+      });
+
+      let freqHashtags = _.countBy(hashtagsCommunity.flat());
+      let sortedHashtags = _.fromPairs(_.sortBy(_.toPairs(freqHashtags), 1).reverse());
+      let legend = Object.keys(sortedHashtags).slice(0, 20).join(" ");
+
+      return {
+        communityColor: color,
+        legend: legend
+      }
+    });
+  } else {
+    communityGraph.nodes.map((node) => { node.color = "#3388AA"; return node; });
+    legends = [
+      {
+        communityColor: "#3388AA",
+        legend: noCommunityMsg
+      }
+    ]
+  }
+
+  return legends;
 }
 
 function groupByThenSum(arrOfObjects, key, attrToSumStr, attrToSumNum, attrToSkip) {
@@ -161,7 +350,13 @@ function lowercaseFieldInTweets(tweets, field = 'hashtags') {
     if (tweetObj._source[field] !== undefined) {
       if (Array.isArray(tweetObj._source[field])) {
         let newArr = tweetObj._source[field].map((element) => {
-          return element.toLowerCase();
+          if(field === "user_mentions") {
+            element.screen_name = element.screen_name.toLowerCase();
+            element.name = element.name.toLowerCase();
+            return element;
+          } else {
+            return element.toLowerCase();
+          }
         });
         tweetObj._source[field] = [...new Set(newArr)];
       } else {
@@ -171,6 +366,75 @@ function lowercaseFieldInTweets(tweets, field = 'hashtags') {
     return tweetObj;
   });
   return newTweets;
+}
+
+function getTweetAttrObjArr(tweets) {
+  let tweetAttrObjArr = tweets.map((tweet) => {
+    let hashtags = (tweet._source.hashtags !== undefined) ? tweet._source.hashtags : [];
+    let user_mentions = (tweet._source.user_mentions !== undefined) ? tweet._source.user_mentions.map((obj) => { return obj.screen_name;}) : [];
+    let obj = {
+      hashtags: [...new Set(hashtags)],
+      user_mentions: [...new Set(user_mentions)],
+      username: tweet._source.screen_name
+    }
+    return obj;
+  });
+  return tweetAttrObjArr;
+}
+
+function getCoOccurCombinationFrom1Arr(arr) {
+  let occurences = [];
+  for (let i = 0; i < arr.length - 1; i++) {
+    for (let j = i + 1; j < arr.length; j++) {
+      let sortedArr = [arr[i], arr[j]].sort()
+      occurences.push({ id: sortedArr[0] + '___and___' + sortedArr[1], count: 1 });
+    }
+  }
+  return occurences;
+}
+
+function getCombinationFrom2Arrs(arr1, arr2) {
+  let occurences = [];
+  for (let i = 0; i < arr1.length; i++) {
+    for (let j = 0; j < arr2.length; j++) {
+      occurences.push({ id: arr1[i] + '___and___' + arr2[j], count: 1 });
+    }
+  }
+  return occurences;
+}
+
+function getCoOccurenceHashtagMention(tweetAttrObjArr) {
+  let coOccur = [];
+  tweetAttrObjArr.forEach((obj) => {
+    if (obj.hashtags.length > 0) {
+      coOccur.push(getCoOccurCombinationFrom1Arr(obj.hashtags));
+    }
+    if (obj.user_mentions.length > 0) {
+      coOccur.push(getCoOccurCombinationFrom1Arr(obj.user_mentions));
+    }
+    if (obj.hashtags.length > 0 && obj.user_mentions.length > 0) {
+      coOccur.push(getCombinationFrom2Arrs(obj.hashtags, obj.user_mentions));
+    }
+  })
+  let coOccurGroupedBy = groupByThenSum(coOccur.flat(), 'id', [], ['count'], []);
+  return coOccurGroupedBy;
+}
+
+function getEdgesFromCoOcurObjArr(coOccurObjArr) {
+  let edges = [];
+  coOccurObjArr.forEach((obj) => {
+    let [first, second] =  obj.id.split("___and___");
+    edges.push(
+      {
+        id: obj.id, 
+        label: obj.id, 
+        source: first,
+        target: second,
+        size: obj.count, 
+        weight: obj.count
+    });
+  });
+  return edges;
 }
 
 function getTopActiveUsers(tweets, topN) {
@@ -358,8 +622,10 @@ const useTwitterSnaRequest = (request) => {
       if (final) {
         result.cloudChart = createWordCloud(responseArrayOf9[7]);
         result.heatMap = createHeatMap(request, responseArrayOf9[5].tweets);
+        result.userGraph = createUserGraphBasedHashtagLouvain(request, responseArrayOf9[5].tweets);
         result.coHashtagGraph = createCoHashtagGraph(responseArrayOf9[5].tweets);
         result.gexf = responseArrayOf9[8];
+        result.socioSemanticGraph = createSocioSemanticGraph(responseArrayOf9[5].tweets);
         
         let authors = getTopActiveUsers(result.tweets, 100).map((arr) => {return arr[0];});
         if (authors.length > 0) {
@@ -464,6 +730,43 @@ const useTwitterSnaRequest = (request) => {
       };
     }
 
+    function createUserGraphBasedHashtagLouvain(request, tweets) {
+
+      let lcTweets = lowercaseFieldInTweets(tweets, 'hashtags');
+
+      let filteredTweets = lcTweets.filter(tweet => tweet._source.hashtags !== undefined);
+      let nodesUsername = getNodesAsUsername(filteredTweets);
+      let edgesUserToUserOnHashtag = getEdgesUsernameToUsernameOnHashtagsExcept1st(filteredTweets, request, "hashtags");
+
+      let nodesSize = getSizeOfUserBySum(lcTweets, 'retweet_count');
+      nodesUsername.map((node) => {
+        let size = nodesSize.find((e) => { return e.screen_name === node.id }).size;
+        node.size = (size !== undefined) ? size : 1;
+        return node;
+      });
+
+      let graph = {
+        nodes: nodesUsername,
+        edges: edgesUserToUserOnHashtag
+      }
+
+      let nodeIdArr = [];
+      graph.nodes.forEach(node => {
+        nodeIdArr.push(node.id);
+      });
+      var community = jLouvain().nodes(nodeIdArr).edges(graph.edges);
+      var commObj = community();
+      let commGraph = processCommunityGraph(graph, commObj);
+      let userInteraction = getInteractionOfUsernames(lcTweets, ['user_mentions']);
+      let legend = getLegendOfGraph(commGraph, lcTweets, keyword("sna_no_community"));
+
+      return {
+        data: commGraph,
+        userInteraction: userInteraction,
+        legend: legend
+      };
+    }
+
     function createCoHashtagGraph(tweets) {
       let lcTweets = lowercaseFieldInTweets(tweets);
       let nodes = getNodesAsHashtag(lcTweets);
@@ -480,6 +783,27 @@ const useTwitterSnaRequest = (request) => {
         edges: edges
       }
       let topNodeGraph = getTopNodeGraph(graph, "size", 15);
+      return {
+        data: topNodeGraph
+      };
+    }
+
+    const createSocioSemanticGraph = (tweets) => {
+      let lcTweets = lowercaseFieldInTweets(tweets, 'hashtags');
+      lcTweets = lowercaseFieldInTweets(lcTweets, 'user_mentions');
+      lcTweets = lowercaseFieldInTweets(lcTweets, 'screen_name');
+      
+      let tweetAttrObjArr = getTweetAttrObjArr(lcTweets);
+      let coOccurObjArr = getCoOccurenceHashtagMention(tweetAttrObjArr);
+      let edges = getEdgesFromCoOcurObjArr(coOccurObjArr);
+      
+      let nodes = [];
+      let freqHashtagObj = _.countBy(tweetAttrObjArr.map((obj) => { return obj.hashtags; }).flat());
+      let freqMentionObj = _.countBy(tweetAttrObjArr.map((obj) => { return obj.user_mentions; }).flat());
+      Object.entries(freqHashtagObj).forEach(arr => nodes.push({ id: arr[0], label: arr[0] + ": " + arr[1], size: arr[1], color: getColor("Hashtag"), type: "Hashtag" }));
+      Object.entries(freqMentionObj).forEach(arr => nodes.push({ id: arr[0], label: "@" + arr[0] + ": " + arr[1], size: arr[1], color: getColor("UserID"), type: "Mention" }));
+
+      let topNodeGraph = getTopNodeGraph({ nodes: nodes, edges: edges}, "size", 20);
       return {
         data: topNodeGraph
       };
