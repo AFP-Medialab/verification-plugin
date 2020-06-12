@@ -370,12 +370,12 @@ function lowercaseFieldInTweets(tweets, field = 'hashtags') {
 
 function getTweetAttrObjArr(tweets) {
   let tweetAttrObjArr = tweets.map((tweet) => {
-    let hashtags = (tweet._source.hashtags !== undefined) ? tweet._source.hashtags : [];
-    let user_mentions = (tweet._source.user_mentions !== undefined) ? tweet._source.user_mentions.map((obj) => { return obj.screen_name;}) : [];
+    let hashtags = (tweet._source.hashtags !== undefined) ? tweet._source.hashtags.map((hashtag) => {return "#" + hashtag;}) : [];
+    let user_mentions = (tweet._source.user_mentions !== undefined) ? tweet._source.user_mentions.map((obj) => { return "MT:@" + obj.screen_name;}) : [];
     let obj = {
       hashtags: [...new Set(hashtags)],
       user_mentions: [...new Set(user_mentions)],
-      username: tweet._source.screen_name
+      username: "AU:@" + tweet._source.screen_name
     }
     return obj;
   });
@@ -801,9 +801,9 @@ const useTwitterSnaRequest = (request) => {
       let freqHashtagObj = _.countBy(tweetAttrObjArr.map((obj) => { return obj.hashtags; }).flat());
       let freqMentionObj = _.countBy(tweetAttrObjArr.map((obj) => { return obj.user_mentions; }).flat());
       Object.entries(freqHashtagObj).forEach(arr => nodes.push({ id: arr[0], label: arr[0] + ": " + arr[1], size: arr[1], color: getColor("Hashtag"), type: "Hashtag" }));
-      Object.entries(freqMentionObj).forEach(arr => nodes.push({ id: arr[0], label: "@" + arr[0] + ": " + arr[1], size: arr[1], color: getColor("UserID"), type: "Mention" }));
+      Object.entries(freqMentionObj).forEach(arr => nodes.push({ id: arr[0], label: arr[0] + ": " + arr[1], size: arr[1], color: getColor("UserID"), type: "Mention" }));
 
-      let topNodeGraph = getTopNodeGraph({ nodes: nodes, edges: edges}, "size", 20);
+      let topNodeGraph = getTopNodeGraph({ nodes: nodes, edges: edges}, "size", 100);
       return {
         data: topNodeGraph
       };
