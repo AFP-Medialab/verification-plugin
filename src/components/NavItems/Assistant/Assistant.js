@@ -75,7 +75,6 @@ const Assistant = () => {
     const submitInputUrl = async (userInput) => {
         try {
             validateUrl(userInput);
-
             let updatedInput = await handleInternalScraping(userInput);
             let contentType = matchPattern(updatedInput, TYPE_PATTERNS);
 
@@ -244,17 +243,17 @@ const Assistant = () => {
                     <Grid item xs = {12} className={classes.newAssistantGrid} hidden={imageList.length == 0 && videoList.length==0}>
                         <Box m={5}/>
                         <Typography component={"span"} className={classes.twitterHeading}>
-                            Input URL: {inputUrl}
+                            {keyword("input_url_label")} {inputUrl}
                         </Typography>
                         <Box m={1}/>
-                        <Typography> The media from this URL is shown below. Please select one to see which tools can be used. </Typography>
+                        <Typography>{keyword("media_below")}</Typography>
                     </Grid>
 
 
                     <Grid item xs = {6} className={classes.newAssistantGrid} hidden={imageList.length == 0}>
                         <Card>
                             <Typography component={"span"} className={classes.twitterHeading}>
-                                <ImageIcon className={classes.twitterIcon}/> Images
+                                <ImageIcon className={classes.twitterIcon}/> {keyword("images_label")}
                                 <Divider variant={"middle"}/>
                             </Typography>
                             <Box m={2}/>
@@ -265,7 +264,7 @@ const Assistant = () => {
                     <Grid item xs = {6} className={classes.newAssistantGrid} hidden={videoList.length == 0}>
                         <Card>
                             <Typography component={"span"} className={classes.twitterHeading}>
-                                <DuoIcon className={classes.twitterIcon}/> Videos
+                                <DuoIcon className={classes.twitterIcon}/> {keyword("videos_label")}
                                 <Divider variant={"middle"}/>
                             </Typography>
                             <Box m={2}/>

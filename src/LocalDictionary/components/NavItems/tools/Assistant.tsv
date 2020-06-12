@@ -7,6 +7,10 @@ upload_video	Video	Temp	Temp
 upload_image	Image	Temp	Temp
 assistant_real_intro	Would you like to process a URL or upload your own file?	Temp	Temp
 assistant_intro	Enter the URL of the media you would like to process	Temp	Temp
+media_below	The media from this URL is shown below. Please select one to see which tools can be used.	Temp	Temp
+input_url_label	Input URL:	Temp	Temp
+images_label	Images	Temp	Temp
+videos_label	Videos	Temp	Temp
 upload_type_question	What type of file do you want to upload?	Temp  Temp
 assistant_urlbox	URL	Adresse	URL
 assistant_error	No media was found through the link used. Please try another URL.	Test	Test
