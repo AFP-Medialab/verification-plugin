@@ -48,37 +48,42 @@ twitterSnaErrorMessage	An error occurred while processing tweets	Une erreur s'es
 top_users_pie_chart_title	Most active users	Utilisateurs les plus actifs	Usuarios más activos
 mention_cloud_chart_title	Most mentioned accounts	Compte les plus mentionnés	Usuarios más mencionados
 user_time_chart_title	Propagation timeline	Frise chronologique de propagation	Línea de tiempo de propagación
-twittersna_hashtag_graph_title	Most associated hashtags	Hashtags les plus associés	Hashtags más Asociados
+hashtag_graph_title	Most associated hashtags	Hashtags les plus associés	Hashtags más Asociados
 retweets_cloud_chart_title	Most retweeted users	Utilisateurs les plus retweetés	Usuarios más retweeteados
 likes_cloud_chart_title	Most liked users	Utilisateurs les plus likés	Usuarios más retweeteados
 top_words_cloud_chart_title	Most used words in tweets	Mots les plus utilisés dans les tweets	Palabras más utilizadas en tweets
 tweetCounter_title	Tweets number	Nombre de tweets	Número de Tweet
+sosem_graph_title	Social-semantic graph (hashtags and mentioned users)	Graphe socio-sémantique (hashtags et utilisateurs mentionnés)	Grafo socio-semantico (hashtags y usuarios mencionados)
+account_creation_date_chart_title	Count of account creation date chart	Graphique des créations de compte	Gráfico de fechas de creación de cuentas
+bubble_chart_title	Bubble chart of top 100 most active accounts	Graphique des 100 comptes les plus actifs	Gráfico de las 100 cuentas más activas
+user_graph_title	User accounts graph	Graphe de comptes utilisateurs	Grafo de cuentas de usuarios
+export_graph_title	Export Interaction graph (gexf format)	Exporter un graphe des interactions au format Gexf	Exportar el grafo de interacciones en formato Gexf
+heatmap_chart_title	Heatmap of tweets distribution	Cartographie d'activité	Mapa de actividad
 elastic_url	Url	Url	Url
-elastic_count	Count	Compte	Recuento
-sna_result_username	Username	Nom d'utilisateur	Nombre de usuario
-sna_result_date	Date	Date	Fecha
-sna_result_tweet	Tweet	Tweet	Tweet
-sna_result_retweet_nb	Retweet number	Nombre de retweets	Candidad de retweets
-sna_result_like_nb	Like number	Nombre de likes	Candidad de ''me gusta''
-sna_result_hide	Hide	Fermer	Ocultar
-sna_result_download	Download	Télécharger	Descargar
-sna_result_slected_tweets	Selected Tweets	Tweets selectionnés	Tweets seleccionados
-sna_result_url_in_tweets	Urls in tweets	Urls dans les tweets	Urls en tweets
-sna_result_go_to	Go to url	Ouvrir le lien	Ir a la pagina
-sna_result_go_to_tweet	Go to tweet	Ouvrir le tweet	Ir a tweet
-sna_result_download_png	Download as PNG	Télécharger en tant que PNG	Descargar como PNG
-sna_result_download_svg	Download as SVG	Télécharger en tant que SVG	Descargar como SVG
-sna_result_word	Word	Mot	Palabra
-sna_result_nb_occ	Number of occurrences	Nombre d'occurrences	Cantidad de ocurrencias
-sna_result_entity	Named entity	Entité nommée	Entidad nombrada
-sna_no_data	No data available	Aucune donnée disponible	Datos no disponibles
-sna_result_heatMap	Heatmap of tweets distribution	Cartographie d'activité	Mapa de actividad
+elastic_count	Number	Nombre	Candidad
+twittersna_result_username	Username	Nom d'utilisateur	Nombre de usuario
+twittersna_result_date	Date	Date	Fecha
+twittersna_result_tweet	Tweet	Tweet	Tweet
+twittersna_result_retweet_nb	Retweet number	Nombre de retweets	Candidad de retweets
+twittersna_result_like_nb	Like number	Nombre de likes	Candidad de ''me gusta''
+twittersna_result_hide	Hide	Fermer	Ocultar
+twittersna_result_download	Download	Télécharger	Descargar
+twittersna_result_slected_tweets	Selected Tweets	Tweets selectionnés	Tweets seleccionados
+twittersna_result_url_in_tweets	Urls in tweets	Urls dans les tweets	Urls en tweets
+twittersna_result_go_to	Go to url	Ouvrir le lien	Ir a la pagina
+twittersna_result_go_to_tweet	Go to tweet	Ouvrir le tweet	Ir a tweet
+twittersna_result_download_png	Download as PNG	Télécharger en tant que PNG	Descargar como PNG
+twittersna_result_download_svg	Download as SVG	Télécharger en tant que SVG	Descargar como SVG
+twittersna_result_word	Word	Mot	Palabra
+twittersna_result_nb_occ	Number of occurrences	Nombre d'occurrences	Cantidad de ocurrencias
+twittersna_result_entity	Named entity	Entité nommée	Entidad nombrada
+twittersna_no_data	No data available	Aucune donnée disponible	Datos no disponibles
 user_placeholder	user	utilisateur	usuario
-sna_counting_words	Counting Words	Comptage des mots	Contando palabras
-sna_fetching_tweets	Fetching tweets	Récupération des tweets	Recuperando tweets
-sna_builting_heatMap	Building graphs	Construction des graphes	Construyendo el gráfico
-twittersna_user_graph_title	User accounts graph	Graphe de comptes utilisateurs	Grafo de cuentas de usuarios
-twittersna_export_graph_title	Export Gexf graph	Exporter un graphe au format Gexf	Exportar el grafo en formato Gexf
-sna_result_submit_twitter_sna	Submit to Twitter SNA	Envoyer à Twitter SNA	Enviar a Twitter SNA
-sna_result_view_graph	View graph	Voir le graphe	Ver el grafo
-sna_no_community	No community detected	Pas de communauté détectée	No se encontro comunidad
+twittersna_counting_words	Counting Words	Comptage des mots	Contando palabras
+twittersna_fetching_tweets	Fetching tweets	Récupération des tweets	Recuperando tweets
+twittersna_building_graphs	Building graphs	Construction des graphes	Construyendo el gráfico
+twittersna_result_submit_twitter_sna	Submit to Twitter SNA	Envoyer à Twitter SNA	Enviar a Twitter SNA
+twittersna_result_view_graph	View graph	Voir le graphe	Ver el grafo
+twittersna_no_community	No community detected	Pas de communauté détectée	No se encontro comunidad
+twittersna_acd	Account Creation Date	Date de création du compte	Fecha de creación de la cuenta
+twittersna_nb_followers	Number of followers	Nombre d'abonnés	Número de abonados
