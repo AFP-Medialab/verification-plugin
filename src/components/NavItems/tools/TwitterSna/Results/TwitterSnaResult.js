@@ -1296,28 +1296,36 @@ export default function TwitterSnaResult(props) {
                     <Toolbar>
                         <Typography className={classes.heading}>{keyword("export_graph_title")}</Typography>
                         <div style={{ flexGrow: 1 }}/>
+                        {result.gexf.map((gexfRes, index) => (
                         <Button
+                            key ={index}
                             aria-label="download"
                             disabled={_.isEmpty(result.gexf)}
                             startIcon={<SaveIcon />}
-                            href={result.gexf ? result.gexf.getUrl : undefined}
+                            href={result.gexf ? gexfRes.getUrl : undefined}
                             tooltip={keyword("twittersna_result_download")}>
-                            {keyword("twittersna_result_download")}
+                            {keyword("twittersna_result_download")+" " + gexfRes.title}
                         </Button>
+                        ))}
                     </Toolbar>
                     <Box pb={3}>
+                    {
+                        result.gexf.map((gexfRes, index) => (
                         <Button
+                            key ={index}
                             variant={"contained"}
                             color={"primary"}
                             startIcon={<BubbleChartIcon />}
                             disabled={_.isEmpty(result.gexf)}
-                            href={result.gexf ? result.gexf.visualizationUrl : undefined}
+                            href={result.gexf ? gexfRes.visualizationUrl: undefined}
                             target="_blank"
                             rel="noopener"
-                            tooltip={keyword("twittersna_result_view_graph")}
+                            tooltip={result.gexf ? gexfRes.message: undefined}
                         >
-                            {keyword("twittersna_result_view_graph")}
+                            { gexfRes.title/* {keyword("twittersna_result_view_graph")} */}
                         </Button>
+                        ))
+                    }
                     </Box>
                     <Box m={1}/>
                     <OnClickInfo keyword={"twittersna_export_graph_tip"}/>
