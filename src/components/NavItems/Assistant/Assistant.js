@@ -2,21 +2,17 @@ import React, {useEffect, useRef, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {useParams} from "react-router-dom";
 
-import {Box, Button, ExpansionPanel, ExpansionPanelDetails, Paper, TextField} from "@material-ui/core";
+import {Box, Button,Paper, TextField} from "@material-ui/core";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
-import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
 import DuoIcon from '@material-ui/icons/Duo';
 import Divider from "@material-ui/core/Divider";
 import Grid from "@material-ui/core/Grid";
 import ImageIcon from '@material-ui/icons/Image';
 import FaceIcon from "@material-ui/icons/Face";
-import LinearProgress from "@material-ui/core/LinearProgress";
 import Typography from "@material-ui/core/Typography";
-import WarningIcon from '@material-ui/icons/Warning';
 
 import AssistantResult from "./AssistantResult";
-import AuthenticationCard from "../../Shared/Authentication/AuthenticationCard";
 import CloseResult from "../../Shared/CloseResult/CloseResult";
 import CustomTile from "../../Shared/CustomTitle/CustomTitle";
 import ImageGridList from "../../Shared/ImageGridList/ImageGridList";
@@ -25,15 +21,14 @@ import {setError} from "../../../redux/actions/errorActions";
 import tsv from "../../../LocalDictionary/components/NavItems/tools/Assistant.tsv";
 import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
 import useLoadLanguage from "../../../Hooks/useLoadLanguage";
-import useTwitterApi from "../../Scrapers/Twitter/useTwitterApi";
 
 import {
     cleanAssistantState, setImageVideoSelected,
     setInputUrl, setMediaLists, setProcessUrl, setProcessUrlActions,
-    setRequireLogin, setUrlMode,
+    setUrlMode,
 } from "../../../redux/actions/tools/assistantActions";
 import {
-    CONTENT_TYPE, DOMAIN, DOMAIN_PATTERNS, SCRAPER, SCRAPERS, TYPE_PATTERNS,
+    CONTENT_TYPE, DOMAIN, DOMAIN_PATTERNS,TYPE_PATTERNS,
     matchPattern, selectCorrectActions,
 } from "./AssistantRuleBook";
 import history from "../../Shared/History/History";
@@ -43,22 +38,20 @@ const Assistant = () => {
     // styles, language, dispatch, scrapers
     const classes = useMyStyles();
     const dispatch = useDispatch();
-    const twitterApi = useTwitterApi();
     const keyword = useLoadLanguage("components/NavItems/tools/Assistant.tsv", tsv);
 
     //assistant state values
     const {url} = useParams();
     const urlMode = useSelector(state => state.assistant.urlMode);
     const imageVideoSelected = useSelector(state => state.assistant.imageVideoSelected);
-    const requireLogIn = useSelector(state => state.assistant.requireLogIn);
     const inputUrl = useSelector(state => state.assistant.inputUrl);
     const processUrl = useSelector(state => state.assistant.processUrl);
+    const processUrlActions = useSelector(state => state.assistant.processUrlActions);
     const imageList = useSelector(state => state.assistant.imageList);
     const videoList = useSelector(state => state.assistant.videoList);
 
     //other state values
     const [formInput, setFormInput] = useState(null);
-    const userAuthenticated = useSelector(state => state.userSession.userAuthenticated)
     const twitterRequestLoading = useSelector(state => state.twitter.twitterRequestLoading);
 
     //refs
@@ -75,14 +68,17 @@ const Assistant = () => {
     const submitInputUrl = async (userInput) => {
         try {
             validateUrl(userInput);
-            let updatedInput = await handleInternalScraping(userInput);
-            let contentType = matchPattern(updatedInput, TYPE_PATTERNS);
+            let contentType = matchPattern(userInput, TYPE_PATTERNS);
 
-            if (contentType == CONTENT_TYPE.IMAGE) {imageListRef.current.unshift(updatedInput);}
-            else if (contentType == CONTENT_TYPE.VIDEO) {videoListRef.current.unshift(updatedInput);}
+            if(contentType!=null) {
+                if (contentType == CONTENT_TYPE.IMAGE) imageListRef.current = [userInput];
+                else if (contentType == CONTENT_TYPE.VIDEO) videoListRef.current = [userInput];
+            }
+            else{checkForMediaLists();}
 
             dispatch(setMediaLists(imageListRef.current, videoListRef.current));
             dispatch(setInputUrl(userInput));
+            dispatch(setProcessUrl(userInput));
         }
         catch (error) {
             dispatch(setError(error.message));
@@ -108,24 +104,6 @@ const Assistant = () => {
         let domain = matchPattern(processUrl, DOMAIN_PATTERNS);
         let actions = selectCorrectActions(domain, contentType, processUrl);
         dispatch(setProcessUrlActions(contentType, actions))
-    }
-
-    // handle case of user giving a very specific type of twitter link
-    const handleInternalScraping = async (userInput) => {
-        let scraperToUse = SCRAPERS.find(scraper => ((userInput.match(scraper.patterns)) != null));
-        if (scraperToUse != undefined && scraperToUse.key == SCRAPER.TWITTER) {
-            if (scraperToUse.requireLogIn && !userAuthenticated) {
-                dispatch(setRequireLogin(true));
-            } else {
-                dispatch(setRequireLogin(false));
-                let scrapedMedia = await twitterApi.getTweet(userInput);
-                if (scrapedMedia != null) {
-                    if (scrapedMedia.imageUrl != null) return scrapedMedia.imageUrl;
-                    else if (scrapedMedia.videoUrl != null) return scrapedMedia.videoUrl;
-                }
-            }
-        }
-        return userInput;
     }
 
     // check if the browser has any stored media lists. these are generated by popup.js.
@@ -156,18 +134,18 @@ const Assistant = () => {
         setFormInput("");
     }
 
-    // set the input to either the current url param, or whatever the assistant state value is
-    // note: img/vid lists updated twice. due to stale closure(state values from prev render always used), refs set up
     useEffect(() => {
         if (url !== undefined) {
-            checkForMediaLists();
             let uri = ( url!== null) ? decodeURIComponent(url) : undefined;
             dispatch(setUrlMode(true));
             submitInputUrl(uri);
             history.push("/app/assistant/");
         }
-        else {setFormInput(inputUrl);}
-    }, [url, inputUrl])
+    }, [url])
+
+    useEffect(() => {
+        setFormInput(inputUrl)
+    },[inputUrl])
 
     useEffect(() => {
         if (processUrl!=null){loadProcessUrlActions();}
@@ -213,55 +191,40 @@ const Assistant = () => {
                         onChange={e => setFormInput(e.target.value)}
                     />
 
-                    <Typography  component={"span"} hidden={!twitterRequestLoading}>
-                        <LinearProgress color={"secondary"}/>
-                        {keyword("extracting_tweet_media")}
-                        <Box m={3}/>
-                    </Typography>
-
                     <Box m={2}/>
-                    <Button variant="contained" color="primary" align={"center"} onClick={() => {submitInputUrl(formInput)}}>
+                    <Button variant="contained" color="primary"
+                            align={"center"} onClick={() => {submitInputUrl(formInput)}}>
                         {keyword("button_submit") || ""}
                     </Button>
                 </Grid>
 
                 <Grid container spacing={2}>
-                    {/* for demo purposes only!*/}
-                    <Grid item xs = {12} className={classes.newAssistantGrid} hidden={requireLogIn!=true}>
-                        <ExpansionPanel>
-                            <ExpansionPanelSummary expandIcon={<WarningIcon className={classes.twitterIcon}/>}>
-                                <Typography> Warnings present for URL </Typography>
-                            </ExpansionPanelSummary>
-                            <ExpansionPanelDetails>
-                                Our dedicated scrapers may be able to pick up more media.
-                                Please log in and try again to ensure all media has been picked up.
-                                <AuthenticationCard/>
-                            </ExpansionPanelDetails>
-                        </ExpansionPanel>
-                    </Grid>
-
-                    <Grid item xs = {12} className={classes.newAssistantGrid} hidden={imageList.length == 0 && videoList.length==0}>
+                    <Grid item xs = {12}
+                          className={classes.newAssistantGrid}
+                          hidden={imageList.length<=1 && videoList.length<=1}>
                         <Box m={5}/>
-                        <Typography component={"span"} className={classes.twitterHeading}>
-                            {keyword("input_url_label")} {inputUrl}
+                        <Typography component={"span"} variant={"h6"} >
+                            <FaceIcon fontSize={"small"}/> {keyword("media_below")}
                         </Typography>
-                        <Box m={1}/>
-                        <Typography>{keyword("media_below")}</Typography>
                     </Grid>
 
-
-                    <Grid item xs = {6} className={classes.newAssistantGrid} hidden={imageList.length == 0}>
+                    <Grid item xs = {6}
+                          className={classes.newAssistantGrid}
+                          hidden={(imageList.length==0 )||(imageList.length<=1 && videoList.length<=1)}>
                         <Card>
                             <Typography component={"span"} className={classes.twitterHeading}>
                                 <ImageIcon className={classes.twitterIcon}/> {keyword("images_label")}
                                 <Divider variant={"middle"}/>
                             </Typography>
                             <Box m={2}/>
-                            <ImageGridList list={imageList} height={60} cols={5} handleClick={(event)=>{submitMediaToProcess(event.target.src)}}/>
+                            <ImageGridList list={imageList} height={60} cols={5}
+                                           handleClick={(event)=>{submitMediaToProcess(event.target.src)}}/>
                         </Card>
                     </Grid>
 
-                    <Grid item xs = {6} className={classes.newAssistantGrid} hidden={videoList.length == 0}>
+                    <Grid item xs = {6}
+                          className={classes.newAssistantGrid}
+                          hidden={(videoList.length==0 )||(imageList.length<=1 && videoList.length<=1)}>
                         <Card>
                             <Typography component={"span"} className={classes.twitterHeading}>
                                 <DuoIcon className={classes.twitterIcon}/> {keyword("videos_label")}
@@ -272,7 +235,8 @@ const Assistant = () => {
                         </Card>
                     </Grid>
 
-                    <Grid item xs={12} hidden={inputUrl==null||(inputUrl!=null && imageList.length!=0 || videoList.length!=0)}>
+                    <Grid item xs={12}
+                          hidden={inputUrl==null||(inputUrl!=null && imageList.length!=0 || videoList.length!=0)}>
                         <Card><CardContent className={classes.assistantText}>
                             <Typography variant={"h6"} align={"left"}>
                                 <FaceIcon size={"small"}/> {keyword("assistant_error")}
@@ -298,7 +262,7 @@ const Assistant = () => {
                 </Grid>
 
                 <Grid item xs={12}>
-                    {processUrl!=null || imageVideoSelected == true ?  <AssistantResult/> : null}
+                    {processUrlActions.length!=0 || imageVideoSelected == true ?  <AssistantResult/> : null}
                 </Grid>
             </Grid>
         </Paper>

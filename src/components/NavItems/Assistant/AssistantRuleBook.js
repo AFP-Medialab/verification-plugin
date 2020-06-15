@@ -22,7 +22,7 @@ export const DOMAIN ={
     YOUTUBE: "Youtube",
     TWITTER: "Twitter",
     OWN: "Own",
-    OTHER: "website"
+    OTHER: "Misc"
 };
 
 export const SCRAPER = {

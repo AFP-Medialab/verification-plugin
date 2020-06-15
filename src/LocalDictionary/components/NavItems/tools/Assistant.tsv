@@ -7,7 +7,7 @@ upload_video	Video	Temp	Temp
 upload_image	Image	Temp	Temp
 assistant_real_intro	Would you like to process a URL or upload your own file?	Temp	Temp
 assistant_intro	Enter the URL of the media you would like to process	Temp	Temp
-media_below	The media from this URL is shown below. Please select one to see which tools can be used.	Temp	Temp
+media_below	Select the media you would like to verify	Temp	Temp
 input_url_label	Input URL:	Temp	Temp
 images_label	Images	Temp	Temp
 videos_label	Videos	Temp	Temp
