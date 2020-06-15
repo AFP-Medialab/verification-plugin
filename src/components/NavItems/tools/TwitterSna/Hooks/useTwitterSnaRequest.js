@@ -224,17 +224,17 @@ function getInteractionOfUsernames(tweets, types = ['in_reply_to_screen_name', '
 //   }
 // }
 
-function getTopNodeGraph(graph, sortByProp=["size"], top=15, types=["Hashtag", "Mention"]) {
+function getTopNodeGraph(graph, sortByProp=["size"], topByType=[20, 20], types=["Hashtag", "Mention"]) {
   let sortNodes = _.sortBy(graph.nodes, sortByProp).reverse();
   let topNodes = []
   if (types.length !== 0) {
-    types.forEach((type) => {
-      let topNodesType = sortNodes.filter(node => node.type === type).slice(0, top);
+    types.forEach((type, idx) => {
+      let topNodesType = sortNodes.filter(node => node.type === type).slice(0, topByType[idx]);
       topNodes.push(topNodesType);
     })
     topNodes = topNodes.flat();
   } else {
-    topNodes = sortNodes.slice(0, top);
+    topNodes = sortNodes.slice(0, topByType[0]);
   }
   let topNodesId = topNodes.map((node) => { return node.id; });
   let filteredEdges = graph.edges.filter(edge => _.difference([edge.source, edge.target], topNodesId).length === 0);
@@ -802,7 +802,7 @@ const useTwitterSnaRequest = (request) => {
         nodes: nodes,
         edges: edges
       }
-      let topNodeGraph = getTopNodeGraph(graph, "size", 15, []);
+      let topNodeGraph = getTopNodeGraph(graph, ["size"], [15], []);
       return {
         data: topNodeGraph
       };
@@ -823,7 +823,7 @@ const useTwitterSnaRequest = (request) => {
       Object.entries(freqHashtagObj).forEach(arr => nodes.push({ id: arr[0], label: arr[0] + ": " + arr[1], size: arr[1], color: getColor("Hashtag"), type: "Hashtag" }));
       Object.entries(freqMentionObj).forEach(arr => nodes.push({ id: arr[0], label: arr[0] + ": " + arr[1], size: arr[1], color: getColor("UserID"), type: "Mention" }));
 
-      let topNodeGraph = getTopNodeGraph({ nodes: nodes, edges: edges}, "size", 20, ['Hashtag', 'Mention']);
+      let topNodeGraph = getTopNodeGraph({ nodes: nodes, edges: edges}, ["size"], [20, 10], ['Hashtag', 'Mention']);
       return {
         data: topNodeGraph
       };
