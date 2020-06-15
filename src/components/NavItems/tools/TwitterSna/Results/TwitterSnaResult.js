@@ -755,6 +755,7 @@ export default function TwitterSnaResult(props) {
                 return "#ff3636";
         }
     }
+
     function createBubbleChartOfMostActiveUsers(userProfile, request) {
         let tweetCountObj = _.countBy(result.tweets.map((tweet) => {return tweet._source.screen_name.toLowerCase(); }));
         let nbDays = Math.floor(( Date.parse(request['until']) - Date.parse(request['from']) ) / 86400000)
@@ -786,7 +787,7 @@ export default function TwitterSnaResult(props) {
             size.push(nbTweets);
         });
 
-        return [
+        let data = [
             { 
                 mode: "markers",
                 x: x, 
@@ -795,12 +796,56 @@ export default function TwitterSnaResult(props) {
                 hovertemplate: '%{text}<br>Account created: %{x}<br>Followers: %{y}<br>',
                 marker: { 
                     color: color,
-                    size: size,
-                    // sizeref: 10 * Math.max(...size) / (100**2),
-                    // sizemode: 'area'
+                    size: size
                 } 
             } 
         ]
+
+        let layout = {
+            xaxis: {
+                title: keyword("twittersna_acd"),
+                titlefont: {
+                    family: 'Arial, sans-serif',
+                    size: 18,
+                    color: '#C0C0C0'
+                },
+            },
+            yaxis: {
+                title: keyword("twittersna_nb_followers"),
+                titlefont: {
+                    family: 'Arial, sans-serif',
+                    size: 18,
+                    color: '#C0C0C0'
+                },
+            }
+        }
+
+        let config = {
+            displayModeBar: true,
+            toImageButtonOptions: {
+                format: 'png', // one of png, svg, jpeg, webp
+                filename: request.keywordList.join("&") + "_" + request["from"] + "_" + request["until"] + "_Bubble",
+              },
+            modeBarButtons: [
+                ["toImage"], 
+                ["zoom2d"],
+                ["pan2d"],
+                ["resetScale2d"],
+                ['drawline'],
+                ['drawopenpath'],
+                ['drawclosedpath'],
+                ['drawcircle'],
+                ['drawrect'],
+                ['eraseshape']
+            ],
+            displaylogo: false,
+        }
+
+        return {
+            data: data,
+            layout: layout,
+            config: config
+        }
     }
 
     if (result === null)
@@ -1714,34 +1759,24 @@ export default function TwitterSnaResult(props) {
                                     <Typography variant={"body2"}>{keyword("twittersna_no_data")}</Typography>
                                 }
                                 {
-                                    topUserProfile.length !== 0 &&
-                                    <Plot useResizeHandler
-                                        style={{ width: '100%', height: "600px" }}
-                                        data={createBubbleChartOfMostActiveUsers(topUserProfile, props.request)}
-                                        layout={{
-                                            xaxis: {
-                                                title: keyword("twittersna_acd"),
-                                                titlefont: {
-                                                    family: 'Arial, sans-serif',
-                                                    size: 18,
-                                                    color: '#C0C0C0'
-                                                },
-                                            },
-                                            yaxis: {
-                                                title: keyword("twittersna_nb_followers"),
-                                                titlefont: {
-                                                    family: 'Arial, sans-serif',
-                                                    size: 18,
-                                                    color: '#C0C0C0'
-                                                },
-                                            }
-                                        }}
-                                        onClick={(e) => onBubbleChartClick(e, "", "bubbleIdx")}
-                                    />
+                                    topUserProfile.length !== 0 && 
+                                    [createBubbleChartOfMostActiveUsers(topUserProfile, props.request)].map((bubbdleChart) => {
+                                        return (
+                                            <div key={Math.random()}>
+                                                <Plot useResizeHandler
+                                                    style={{ width: '100%', height: "600px" }}
+                                                    data={bubbdleChart.data}
+                                                    layout={bubbdleChart.layout}
+                                                    config={bubbdleChart.config}
+                                                    onClick={(e) => onBubbleChartClick(e, "", "bubbleIdx")}
+                                                />
+                                                <Box m={1} />
+                                                <OnClickInfo keyword={"twittersna_bubble_chart_tip"} />
+                                                <Box m={2} />
+                                            </div>
+                                        )
+                                    })
                                 }
-                                <Box m={1} />
-                                <OnClickInfo keyword={"twittersna_bubble_chart_tip"} />
-                                <Box m={2} />
                                 {
                                     bubbleTweets &&
                                     <div>
