@@ -28,7 +28,7 @@ import { saveSvgAsPng } from 'save-svg-as-png';
 import { CSVLink } from "react-csv";
 import Cytoscape from 'cytoscape';
 import Fcose from 'cytoscape-fcose';
-import { Sigma, RandomizeNodePositions, ForceAtlas2 } from 'react-sigma';
+import { Sigma, RandomizeNodePositions, ForceAtlas2, EdgeShapes } from 'react-sigma';
 import Plotly from 'plotly.js-dist';
 import _ from "lodash";
 import CircularProgress from "@material-ui/core/CircularProgress";
@@ -54,7 +54,7 @@ export default function TwitterSnaResult(props) {
     const [pieCharts3, setPieCharts3] = useState(null);
     const [coHashtagGraphTweets, setCoHashtagGraphTweets] = useState(null);
 
-    const CSVheaders = [{ label: keyword('sna_result_word'), key: "word" }, { label: keyword("sna_result_nb_occ"), key: "nb_occ" }, { label: keyword("sna_result_entity"), key: "entity" }];
+    const CSVheaders = [{ label: keyword('twittersna_result_word'), key: "word" }, { label: keyword("twittersna_result_nb_occ"), key: "nb_occ" }, { label: keyword("twittersna_result_entity"), key: "entity" }];
 
     const hideTweetsView = (index) => {
         switch (index) {
@@ -110,21 +110,21 @@ export default function TwitterSnaResult(props) {
     const displayTweetsOfWord = (word, callback) => {
 
         let columns = [
-            { title: keyword('sna_result_username'), field: 'screen_name' },
-            { title: keyword('sna_result_date'), field: 'date' },
-            { title: keyword('sna_result_tweet'), field: 'tweet', render: getTweetWithClickableLink },
-            { title: keyword('sna_result_retweet_nb'), field: 'retweetNb' },
-            { title: keyword('sna_result_like_nb'), field: 'likeNb' }
+            { title: keyword('twittersna_result_username'), field: 'screen_name' },
+            { title: keyword('twittersna_result_date'), field: 'date' },
+            { title: keyword('twittersna_result_tweet'), field: 'tweet', render: getTweetWithClickableLink },
+            { title: keyword('twittersna_result_retweet_nb'), field: 'retweetNb' },
+            { title: keyword('twittersna_result_like_nb'), field: 'likeNb' }
         ];
         let csvArr = "";
 
         // word = word.replace(/_/g, " ");
         let resData = [];
-        csvArr += keyword('sna_result_username') + "," +
-            keyword('sna_result_date') + "," +
-            keyword('sna_result_tweet') + "," +
-            keyword('sna_result_retweet_nb') + "," +
-            keyword('sna_result_like_nb') + "," +
+        csvArr += keyword('twittersna_result_username') + "," +
+            keyword('twittersna_result_date') + "," +
+            keyword('twittersna_result_tweet') + "," +
+            keyword('twittersna_result_retweet_nb') + "," +
+            keyword('twittersna_result_like_nb') + "," +
             keyword('elastic_url') + "\n";
 
         result.tweets.forEach(tweetObj => {
@@ -159,16 +159,16 @@ export default function TwitterSnaResult(props) {
 
     const displayTweetsOfDate = (data, fromHisto) => {
         let columns = [
-            { title: keyword('sna_result_username'), field: 'screen_name' },
-            { title: keyword('sna_result_date'), field: 'date' },
-            { title: keyword('sna_result_tweet'), field: 'tweet', render: getTweetWithClickableLink },
-            { title: keyword('sna_result_retweet_nb'), field: 'retweetNb' },
+            { title: keyword('twittersna_result_username'), field: 'screen_name' },
+            { title: keyword('twittersna_result_date'), field: 'date' },
+            { title: keyword('twittersna_result_tweet'), field: 'tweet', render: getTweetWithClickableLink },
+            { title: keyword('twittersna_result_retweet_nb'), field: 'retweetNb' },
         ];
 
         let resData = [];
         let minDate;
         let maxDate;
-        let csvArr = keyword("sna_result_username") + "," + keyword("sna_result_date") + "," + keyword("sna_result_tweet") + "," + keyword("sna_result_retweet_nb") + "," + keyword("elastic_url") + "\n";
+        let csvArr = keyword("twittersna_result_username") + "," + keyword("twittersna_result_date") + "," + keyword("twittersna_result_tweet") + "," + keyword("twittersna_result_retweet_nb") + "," + keyword("elastic_url") + "\n";
         let isDays = "isDays";
         if (!fromHisto) { isDays = "isHours" }
 
@@ -225,13 +225,13 @@ export default function TwitterSnaResult(props) {
 
     const displayTweetsOfDateHeatMap = (data) => {
         let columns = [
-            { title: keyword('sna_result_username'), field: 'screen_name' },
-            { title: keyword('sna_result_date'), field: 'date' },
-            { title: keyword('sna_result_tweet'), field: 'tweet', render: getTweetWithClickableLink },
-            { title: keyword('sna_result_retweet_nb'), field: 'retweetNb' },
+            { title: keyword('twittersna_result_username'), field: 'screen_name' },
+            { title: keyword('twittersna_result_date'), field: 'date' },
+            { title: keyword('twittersna_result_tweet'), field: 'tweet', render: getTweetWithClickableLink },
+            { title: keyword('twittersna_result_retweet_nb'), field: 'retweetNb' },
         ];
         let resData = [];
-        let csvArr = keyword("sna_result_username") + ',' + keyword("sna_result_date") + ',' + keyword("sna_result_tweet") + ',' + keyword("sna_result_retweet_nb") + ',' + keyword("elastic_url") + '\n';
+        let csvArr = keyword("twittersna_result_username") + ',' + keyword("twittersna_result_date") + ',' + keyword("twittersna_result_tweet") + ',' + keyword("twittersna_result_retweet_nb") + ',' + keyword("elastic_url") + '\n';
 
         const filteredTweets = result.tweets.filter(function (tweetObj) {
             const date = new Date(tweetObj._source.datetimestamp * 1000);
@@ -265,23 +265,23 @@ export default function TwitterSnaResult(props) {
 
     const displayTweetsOfUser = (data, nbType, index) => {
         let columns = [
-            { title: keyword('sna_result_date'), field: 'date' },
-            { title: keyword('sna_result_tweet'), field: 'tweet', render: getTweetWithClickableLink },
+            { title: keyword('twittersna_result_date'), field: 'date' },
+            { title: keyword('twittersna_result_tweet'), field: 'tweet', render: getTweetWithClickableLink },
         ];
-        let csvArr = keyword('sna_result_date') + "," + keyword('sna_result_tweet');
+        let csvArr = keyword('twittersna_result_date') + "," + keyword('twittersna_result_tweet');
         if (nbType !== "retweets_cloud_chart_title") {
             columns.push({
-                title: keyword('sna_result_like_nb'),
+                title: keyword('twittersna_result_like_nb'),
                 field: "nbLikes"
             });
-            csvArr += ',' + keyword('sna_result_like_nb');
+            csvArr += ',' + keyword('twittersna_result_like_nb');
         }
         if (nbType !== "likes_cloud_chart_title") {
             columns.push({
-                title: keyword('sna_result_retweet_nb'),
+                title: keyword('twittersna_result_retweet_nb'),
                 field: "nbReteets"
             });
-            csvArr += ',' + keyword('sna_result_retweet_nb');
+            csvArr += ',' + keyword('twittersna_result_retweet_nb');
         }
         csvArr += ',' + keyword('elastic_url') + "\n";
 
@@ -342,23 +342,23 @@ export default function TwitterSnaResult(props) {
 
     const displayTweetsOfMention = (selectedUser, nbType, index) => {
         let columns = [
-            { title: keyword('sna_result_date'), field: 'date' },
-            { title: keyword('sna_result_tweet'), field: 'tweet', render: getTweetWithClickableLink },
+            { title: keyword('twittersna_result_date'), field: 'date' },
+            { title: keyword('twittersna_result_tweet'), field: 'tweet', render: getTweetWithClickableLink },
         ];
-        let csvArr = keyword('sna_result_date') + "," + keyword('sna_result_tweet');
+        let csvArr = keyword('twittersna_result_date') + "," + keyword('twittersna_result_tweet');
         if (nbType !== "retweets_cloud_chart_title") {
             columns.push({
-                title: keyword('sna_result_like_nb'),
+                title: keyword('twittersna_result_like_nb'),
                 field: "nbLikes"
             });
-            csvArr += ',' + keyword('sna_result_like_nb');
+            csvArr += ',' + keyword('twittersna_result_like_nb');
         }
         if (nbType !== "likes_cloud_chart_title") {
             columns.push({
-                title: keyword('sna_result_retweet_nb'),
+                title: keyword('twittersna_result_retweet_nb'),
                 field: "nbReteets"
             });
-            csvArr += ',' + keyword('sna_result_retweet_nb');
+            csvArr += ',' + keyword('twittersna_result_retweet_nb');
         }
         csvArr += ',' + keyword('elastic_url') + "\n";
 
@@ -472,7 +472,7 @@ export default function TwitterSnaResult(props) {
 
     let goToTweetAction = [{
         icon: TwitterIcon,
-        tooltip: keyword("sna_result_go_to_tweet"),
+        tooltip: keyword("twittersna_result_go_to_tweet"),
         onClick: (event, rowData) => {
             window.open(rowData.link, '_blank');
         }
@@ -602,7 +602,7 @@ export default function TwitterSnaResult(props) {
                         {}
                         <div style={{ width: '100%', }}>
                             {(result.histogram.json && (result.histogram.json.length === 0) &&
-                                <Typography variant={"body2"}>{keyword("sna_no_data")}</Typography>)}
+                                <Typography variant={"body2"}>{keyword("twittersna_no_data")}</Typography>)}
                             {(result.histogram.json && result.histogram.json.length !== 0) &&
                                 <Plot useResizeHandler
                                     style={{ width: '100%', height: "450px" }}
@@ -631,7 +631,7 @@ export default function TwitterSnaResult(props) {
                                                 onClick={() => setHistoTweets(null)}
                                             >
                                                 {
-                                                    keyword('sna_result_hide')
+                                                    keyword('twittersna_result_hide')
                                                 }
                                             </Button>
                                         </Grid>
@@ -641,14 +641,14 @@ export default function TwitterSnaResult(props) {
                                                 color={"primary"}
                                                 onClick={() => downloadClick(histoTweets.csvArr, histoTweets.data[0].date.split(' ')[0], true)}>
                                                 {
-                                                    keyword('sna_result_download')
+                                                    keyword('twittersna_result_download')
                                                 }
                                             </Button>
                                         </Grid>
                                     </Grid>
                                     <Box m={2} />
                                     <CustomTable
-                                        title={keyword("sna_result_slected_tweets")}
+                                        title={keyword("twittersna_result_slected_tweets")}
                                         colums={histoTweets.columns}
                                         data={histoTweets.data}
                                         actions={goToTweetAction}
@@ -709,7 +709,7 @@ export default function TwitterSnaResult(props) {
                                     <Box alignItems="center" justifyContent="center" width={"100%"}>
                                         {
                                             (obj.json === null || (obj.json[0].values.length === 1 && obj.json[0].values[0] === "")) &&
-                                                <Typography variant={"body2"}>{keyword("sna_no_data")}</Typography>
+                                                <Typography variant={"body2"}>{keyword("twittersna_no_data")}</Typography>
                                         }
                                         {
                                             obj.json !== null && !(obj.json[0].values.length === 1 && obj.json[0].values[0] === "") &&
@@ -721,7 +721,7 @@ export default function TwitterSnaResult(props) {
                                                         color={"primary"}
                                                         onClick={() => downloadAsPNG(obj.title)}>
                                                         {
-                                                            keyword('sna_result_download_png')
+                                                            keyword('twittersna_result_download_png')
                                                         }
                                                     </Button>
 
@@ -744,7 +744,7 @@ export default function TwitterSnaResult(props) {
                                                         color={"primary"}
                                                         onClick={() => downloadAsSVG(obj.title)}>
                                                         {
-                                                            keyword('sna_result_download_svg')
+                                                            keyword('twittersna_result_download_svg')
                                                         }
                                                     </Button>
                                                 </Grid>
@@ -777,7 +777,7 @@ export default function TwitterSnaResult(props) {
                                                             color={"secondary"}
                                                             onClick={() => hideTweetsView(index)}>
                                                             {
-                                                                keyword('sna_result_hide')
+                                                                keyword('twittersna_result_hide')
                                                             }
                                                         </Button>
                                                     </Grid>
@@ -787,13 +787,13 @@ export default function TwitterSnaResult(props) {
                                                             color={"primary"}
                                                             onClick={() => downloadClick(pieCharts[index].csvArr, (index < 3) ? pieCharts[index].screen_name : pieCharts3.word)}>
                                                             {
-                                                                keyword('sna_result_download')
+                                                                keyword('twittersna_result_download')
                                                             }
                                                         </Button>
                                                     </Grid>
                                                 </Grid>
                                                 <Box m={2} />
-                                                <CustomTable title={keyword("sna_result_slected_tweets")}
+                                                <CustomTable title={keyword("twittersna_result_slected_tweets")}
                                                     colums={pieCharts[index].columns}
                                                     data={pieCharts[index].data}
                                                     actions={goToTweetAction}
@@ -824,7 +824,7 @@ export default function TwitterSnaResult(props) {
                                 <div height={"500"} width={"100%"} >
                                     {
                                         (result.cloudChart.json && result.cloudChart.json.length === 0) &&
-                                        <Typography variant={"body2"}>{keyword("sna_no_data")}</Typography>}
+                                        <Typography variant={"body2"}>{keyword("twittersna_no_data")}</Typography>}
                                     {(result.cloudChart.json && result.cloudChart.json.length !== 0) &&
                                         <Grid container justify="space-between" spacing={2}
                                             alignContent={"center"}>
@@ -834,7 +834,7 @@ export default function TwitterSnaResult(props) {
                                                     color={"primary"}
                                                     onClick={() => downloadAsPNG("top_words_cloud_chart")}>
                                                     {
-                                                        keyword('sna_result_download_png')
+                                                        keyword('twittersna_result_download_png')
                                                     }
                                                 </Button>
                                             </Grid>
@@ -843,7 +843,7 @@ export default function TwitterSnaResult(props) {
                                                     data={getCSVData()} headers={CSVheaders} filename={filesNames + ".csv"} className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary">
                                                     {
                                                         "CSV"
-                                                        // keyword('sna_result_download_csv')
+                                                        // keyword('twittersna_result_download_csv')
                                                     }
                                                 </CSVLink>
                                             </Grid>
@@ -853,7 +853,7 @@ export default function TwitterSnaResult(props) {
                                                     color={"primary"}
                                                     onClick={() => downloadAsSVG("top_words_cloud_chart")}>
                                                     {
-                                                        keyword('sna_result_download_svg')
+                                                        keyword('twittersna_result_download_svg')
                                                     }
                                                 </Button>
                                             </Grid>
@@ -883,7 +883,7 @@ export default function TwitterSnaResult(props) {
                                                     onClick={() => setCloudTweets(null)}
                                                 >
                                                     {
-                                                        keyword('sna_result_hide')
+                                                        keyword('twittersna_result_hide')
                                                     }
                                                 </Button>
                                             </Grid>
@@ -893,14 +893,14 @@ export default function TwitterSnaResult(props) {
                                                     color={"primary"}
                                                     onClick={() => downloadClick(cloudTweets.csvArr, cloudTweets.word)}>
                                                     {
-                                                        keyword('sna_result_download')
+                                                        keyword('twittersna_result_download')
                                                     }
                                                 </Button>
                                             </Grid>
                                         </Grid>
                                         <Box m={2} />
                                         <CustomTable
-                                            title={keyword("sna_result_slected_tweets")}
+                                            title={keyword("twittersna_result_slected_tweets")}
                                             colums={cloudTweets.columns}
                                             data={cloudTweets.data}
                                             actions={goToTweetAction}
@@ -921,7 +921,7 @@ export default function TwitterSnaResult(props) {
                     <ExpansionPanelSummary
                         expandIcon={<ExpandMoreIcon />}
                     >
-                        <Typography className={classes.heading}>{keyword('sna_result_heatMap')}</Typography>
+                        <Typography className={classes.heading}>{keyword('heatmap_chart_title')}</Typography>
                     </ExpansionPanelSummary>
                     <ExpansionPanelDetails>
                         {
@@ -929,7 +929,7 @@ export default function TwitterSnaResult(props) {
                             <Box alignItems="center" justifyContent="center" width={"100%"}>
                                 {
                                     ((result.heatMap.isAllnul) &&
-                                        <Typography variant={"body2"}>{keyword("sna_no_data")}</Typography>) ||
+                                        <Typography variant={"body2"}>{keyword("twittersna_no_data")}</Typography>) ||
                                     <div>
                                         <Plot
                                             style={{ width: '100%', height: "450px" }}
@@ -952,7 +952,7 @@ export default function TwitterSnaResult(props) {
                                                     color={"secondary"}
                                                     onClick={() => setheatMapTweets(null)}>
                                                     {
-                                                        keyword('sna_result_hide')
+                                                        keyword('twittersna_result_hide')
                                                     }
                                                 </Button>
                                             </Grid>
@@ -966,13 +966,13 @@ export default function TwitterSnaResult(props) {
                                                         downloadClick(heatMapTweets.csvArr, dayHourStr, false);
                                                     }}>
                                                     {
-                                                        keyword('sna_result_download')
+                                                        keyword('twittersna_result_download')
                                                     }
                                                 </Button>
                                             </Grid>
                                         </Grid>
                                         <Box m={2} />
-                                        <CustomTable title={keyword("sna_result_slected_tweets")}
+                                        <CustomTable title={keyword("twittersna_result_slected_tweets")}
                                             colums={heatMapTweets.columns}
                                             data={heatMapTweets.data}
                                             actions={goToTweetAction}
@@ -995,7 +995,7 @@ export default function TwitterSnaResult(props) {
                     <ExpansionPanelSummary
                         expandIcon={<ExpandMoreIcon />}
                     >
-                        <Typography className={classes.heading}>{keyword("twittersna_hashtag_graph_title")}</Typography>
+                        <Typography className={classes.heading}>{keyword("hashtag_graph_title")}</Typography>
                     </ExpansionPanelSummary>
                     <ExpansionPanelDetails>
                     {
@@ -1017,6 +1017,7 @@ export default function TwitterSnaResult(props) {
                                         edgeColor: "default"
                                     }}
                                     >
+                                    <EdgeShapes default="curve" />
                                     <RandomizeNodePositions>
                                         <ForceAtlas2 iterationsPerRender={1} timeout={15000} />
                                     </RandomizeNodePositions>
@@ -1035,7 +1036,7 @@ export default function TwitterSnaResult(props) {
                                                     color={"secondary"}
                                                     onClick={() => hideTweetsView("coHashtagGraphIdx")}>
                                                     {
-                                                        keyword('sna_result_hide')
+                                                        keyword('twittersna_result_hide')
                                                     }
                                                 </Button>
                                             </Grid>
@@ -1045,13 +1046,13 @@ export default function TwitterSnaResult(props) {
                                                     color={"primary"}
                                                     onClick={() => downloadClick(coHashtagGraphTweets.csvArr, coHashtagGraphTweets.word)}>
                                                     {
-                                                        keyword('sna_result_download')
+                                                        keyword('twittersna_result_download')
                                                     }
                                                 </Button>
                                             </Grid>
                                         </Grid>
                                         <Box m={2} />
-                                        <CustomTable title={keyword("sna_result_slected_tweets")}
+                                        <CustomTable title={keyword("twittersna_result_slected_tweets")}
                                             colums={coHashtagGraphTweets.columns}
                                             data={coHashtagGraphTweets.data}
                                             actions={goToTweetAction}
@@ -1071,15 +1072,15 @@ export default function TwitterSnaResult(props) {
                 props.request.userList.length === 0 && result &&
                 <Paper>
                     <Toolbar>
-                        <Typography className={classes.heading}>{keyword("twittersna_export_graph_title")}</Typography>
+                        <Typography className={classes.heading}>{keyword("export_graph_title")}</Typography>
                         <div style={{ flexGrow: 1 }}/>
                         <Button
                             aria-label="download"
                             disabled={_.isEmpty(result.gexf)}
                             startIcon={<SaveIcon />}
                             href={result.gexf ? result.gexf.getUrl : undefined}
-                            tooltip={keyword("sna_result_download")}>
-                            {keyword("sna_result_download")}
+                            tooltip={keyword("twittersna_result_download")}>
+                            {keyword("twittersna_result_download")}
                         </Button>
                     </Toolbar>
                     <Box pb={3}>
@@ -1091,9 +1092,9 @@ export default function TwitterSnaResult(props) {
                             href={result.gexf ? result.gexf.visualizationUrl : undefined}
                             target="_blank"
                             rel="noopener"
-                            tooltip={keyword("sna_result_view_graph")}
+                            tooltip={keyword("twittersna_result_view_graph")}
                         >
-                            {keyword("sna_result_view_graph")}
+                            {keyword("twittersna_result_view_graph")}
                         </Button>
                     </Box>
                     <Box m={1}/>
@@ -1115,7 +1116,7 @@ export default function TwitterSnaResult(props) {
                         </Button>
                     </Box>
                     <CustomTableURL
-                        title={keyword("sna_result_url_in_tweets")}
+                        title={keyword("twittersna_result_url_in_tweets")}
                         colums={result.urls.columns}
                         data={result.urls.data}
                         actions={[
@@ -1126,10 +1127,10 @@ export default function TwitterSnaResult(props) {
                                                                 MuiButton-containedPrimary"
                                                     >
                                                     {
-                                                        keyword('sna_result_submit_twitter_sna')
+                                                        keyword('twittersna_result_submit_twitter_sna')
                                                     }
                                                     </span>),
-                                tooltip: keyword("sna_result_submit_twitter_sna"),
+                                tooltip: keyword("twittersna_result_submit_twitter_sna"),
                                 onClick: (event, rowData) => {
                                     goToTwitterSnaWithUrlSearch(event, rowData)
                                 }
