@@ -1646,7 +1646,7 @@ export default function TwitterSnaResult(props) {
                                         minNodeSize: 10,
                                         maxNodeSize: 30,
                                         minEdgeSize: 1,
-                                        maxEdgeSize: 20,
+                                        maxEdgeSize: 10,
                                         defaultNodeColor: "#3388AA",
                                         defaultEdgeColor: "#C0C0C0",
                                         edgeColor: "default"
