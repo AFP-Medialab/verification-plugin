@@ -555,7 +555,7 @@ function constructMatchNotPhrase(param) {
         } else {
             match_phrases += '{' +
                 '"match_phrase": {' +
-                    '"tweet": {' +
+                    '"full_text": {' +
                         '"query":"' + arg + '"' +
                         '}' +
                     '}' +
@@ -609,7 +609,7 @@ function constructMatchPhrase(param, startDate, endDate) {
         } else {
             match_phrases += ',{' +
                 '"match_phrase": {' +
-                    '"tweet": {' +
+                    '"full_text": {' +
                         '"query":"' + arg + '"' +
                         '}' +
                     '}' +
