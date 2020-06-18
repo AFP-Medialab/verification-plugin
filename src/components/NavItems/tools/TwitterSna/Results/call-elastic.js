@@ -665,8 +665,8 @@ function constructAggs(field) {
 
     let fieldInfo = ((field === "glob")? '{"retweets":' : '{"2":');
 
-    //Hashtag donut & Urls Array
-    if (field === "hashtags" || field === "urls") {
+    //Hashtag donut
+    if (field === "hashtags") {
         fieldInfo += JSON.stringify({
             "terms": {
                 "field": field + ".keyword",
@@ -677,6 +677,19 @@ function constructAggs(field) {
             }
         })
     }
+
+        //Urls Array
+        if (field === "urls") {
+            fieldInfo += JSON.stringify({
+                "terms": {
+                    "field": field + ".keyword",
+                    "order": {
+                        "_count": "desc"
+                    },
+                    "size": 25
+                }
+            })
+        }
 
     // Mentions donut
     else if (field === "user_mentions") {
