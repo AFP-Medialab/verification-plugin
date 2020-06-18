@@ -949,70 +949,44 @@ export default function TwitterSnaResult(props) {
                 })
             }
             {
+                props.request.userList.length === 0 && result && result.tweets &&
                 <ExpansionPanel>
                     <ExpansionPanelSummary
                         expandIcon={<ExpandMoreIcon />}
                         aria-controls={"panel0a-content"}
                         id={"panel0a-header"}
                     >
-                        <Typography className={classes.heading}>{keyword(result.cloudChart.title)}</Typography>
+                        <Typography className={classes.heading}>{keyword("bubble_chart_title")}</Typography>
                     </ExpansionPanelSummary>
                     <ExpansionPanelDetails>
                         {
-                            result && result.cloudChart && result.cloudChart.json &&
-                            <Box alignItems="center" justifyContent="center" width={"100%"}>
-                                <div height={"500"} width={"100%"} >
-                                    {
-                                        (result.cloudChart.json && result.cloudChart.json.length === 0) &&
-                                        <Typography variant={"body2"}>{keyword("twittersna_no_data")}</Typography>}
-                                    {(result.cloudChart.json && result.cloudChart.json.length !== 0) &&
-                                        <Grid container justify="space-between" spacing={2}
-                                            alignContent={"center"}>
-                                            <Grid item>
-                                                <Button
-                                                    variant={"contained"}
-                                                    color={"primary"}
-                                                    onClick={() => downloadAsPNG("top_words_cloud_chart")}>
-                                                    {
-                                                        keyword('twittersna_result_download_png')
-                                                    }
-                                                </Button>
-                                            </Grid>
-                                            <Grid item>
-                                                <CSVLink
-                                                    data={getCSVData()} headers={CSVheaders} filename={filesNames + ".csv"} className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary">
-                                                    {
-                                                        "CSV"
-                                                        // keyword('twittersna_result_download_csv')
-                                                    }
-                                                </CSVLink>
-                                            </Grid>
-                                            <Grid item>
-                                                <Button
-                                                    variant={"contained"}
-                                                    color={"primary"}
-                                                    onClick={() => downloadAsSVG("top_words_cloud_chart")}>
-                                                    {
-                                                        keyword('twittersna_result_download_svg')
-                                                    }
-                                                </Button>
-                                            </Grid>
-                                        </Grid>
-                                    }
-
-                                </div>
-                                <Box m={2} />
+                            topUserProfile &&
+                            <div style={{ width: '100%', }}>
                                 {
-                                    result.cloudChart.json && (result.cloudChart.json.length !== 0) &&
-                                    <div id="top_words_cloud_chart" height={"100%"} width={"100%"}>
-                                        <ReactWordcloud key={JSON.stringify(result)} options={result.cloudChart.options} callbacks={call} words={result.cloudChart.json} />
-                                        <Box m={1}/>
-                                        <OnClickInfo keyword={"twittersna_wordcloud_tip"}/>
-                                    </div>
-
+                                    topUserProfile.length === 0 &&
+                                    <Typography variant={"body2"}>{keyword("twittersna_no_data")}</Typography>
                                 }
                                 {
-                                    cloudTweets &&
+                                    topUserProfile.length !== 0 && 
+                                    [createBubbleChartOfMostActiveUsers(topUserProfile, props.request)].map((bubbdleChart) => {
+                                        return (
+                                            <div key={Math.random()}>
+                                                <Plot useResizeHandler
+                                                    style={{ width: '100%', height: "600px" }}
+                                                    data={bubbdleChart.data}
+                                                    layout={bubbdleChart.layout}
+                                                    config={bubbdleChart.config}
+                                                    onClick={(e) => onBubbleChartClick(e, "", "bubbleIdx")}
+                                                />
+                                                <Box m={1} />
+                                                <OnClickInfo keyword={"twittersna_bubble_chart_tip"} />
+                                                <Box m={2} />
+                                            </div>
+                                        )
+                                    })
+                                }
+                                {
+                                    bubbleTweets &&
                                     <div>
                                         <Grid container justify="space-between" spacing={2}
                                             alignContent={"center"}>
@@ -1020,8 +994,7 @@ export default function TwitterSnaResult(props) {
                                                 <Button
                                                     variant={"contained"}
                                                     color={"secondary"}
-                                                    onClick={() => setCloudTweets(null)}
-                                                >
+                                                    onClick={() => hideTweetsView("bubbleIdx")}>
                                                     {
                                                         keyword('twittersna_result_hide')
                                                     }
@@ -1031,7 +1004,7 @@ export default function TwitterSnaResult(props) {
                                                 <Button
                                                     variant={"contained"}
                                                     color={"primary"}
-                                                    onClick={() => downloadClick(cloudTweets.csvArr, cloudTweets.word)}>
+                                                    onClick={() => downloadClick(bubbleTweets.csvArr, bubbleTweets.screen_name)}>
                                                     {
                                                         keyword('twittersna_result_download')
                                                     }
@@ -1039,18 +1012,17 @@ export default function TwitterSnaResult(props) {
                                             </Grid>
                                         </Grid>
                                         <Box m={2} />
-                                        <CustomTable
-                                            title={keyword("twittersna_result_slected_tweets")}
-                                            colums={cloudTweets.columns}
-                                            data={cloudTweets.data}
+                                        <CustomTable title={keyword("twittersna_result_slected_tweets")}
+                                            colums={bubbleTweets.columns}
+                                            data={bubbleTweets.data}
                                             actions={goToTweetAction}
                                         />
                                     </div>
                                 }
-                            </Box>
+                            </div>
                         }
                         {
-                            result.cloudChart.json === undefined &&
+                            !topUserProfile &&
                             <CircularProgress className={classes.circularProgress} />
                         }
                     </ExpansionPanelDetails>
@@ -1296,44 +1268,70 @@ export default function TwitterSnaResult(props) {
                 </ExpansionPanel>
             }
             {
-                props.request.userList.length === 0 && result && result.tweets &&
                 <ExpansionPanel>
                     <ExpansionPanelSummary
                         expandIcon={<ExpandMoreIcon />}
                         aria-controls={"panel0a-content"}
                         id={"panel0a-header"}
                     >
-                        <Typography className={classes.heading}>{keyword("bubble_chart_title")}</Typography>
+                        <Typography className={classes.heading}>{keyword(result.cloudChart.title)}</Typography>
                     </ExpansionPanelSummary>
                     <ExpansionPanelDetails>
                         {
-                            topUserProfile &&
-                            <div style={{ width: '100%', }}>
+                            result && result.cloudChart && result.cloudChart.json &&
+                            <Box alignItems="center" justifyContent="center" width={"100%"}>
+                                <div height={"500"} width={"100%"} >
+                                    {
+                                        (result.cloudChart.json && result.cloudChart.json.length === 0) &&
+                                        <Typography variant={"body2"}>{keyword("twittersna_no_data")}</Typography>}
+                                    {(result.cloudChart.json && result.cloudChart.json.length !== 0) &&
+                                        <Grid container justify="space-between" spacing={2}
+                                            alignContent={"center"}>
+                                            <Grid item>
+                                                <Button
+                                                    variant={"contained"}
+                                                    color={"primary"}
+                                                    onClick={() => downloadAsPNG("top_words_cloud_chart")}>
+                                                    {
+                                                        keyword('twittersna_result_download_png')
+                                                    }
+                                                </Button>
+                                            </Grid>
+                                            <Grid item>
+                                                <CSVLink
+                                                    data={getCSVData()} headers={CSVheaders} filename={filesNames + ".csv"} className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary">
+                                                    {
+                                                        "CSV"
+                                                        // keyword('twittersna_result_download_csv')
+                                                    }
+                                                </CSVLink>
+                                            </Grid>
+                                            <Grid item>
+                                                <Button
+                                                    variant={"contained"}
+                                                    color={"primary"}
+                                                    onClick={() => downloadAsSVG("top_words_cloud_chart")}>
+                                                    {
+                                                        keyword('twittersna_result_download_svg')
+                                                    }
+                                                </Button>
+                                            </Grid>
+                                        </Grid>
+                                    }
+
+                                </div>
+                                <Box m={2} />
                                 {
-                                    topUserProfile.length === 0 &&
-                                    <Typography variant={"body2"}>{keyword("twittersna_no_data")}</Typography>
+                                    result.cloudChart.json && (result.cloudChart.json.length !== 0) &&
+                                    <div id="top_words_cloud_chart" height={"100%"} width={"100%"}>
+                                        <ReactWordcloud key={JSON.stringify(result)} options={result.cloudChart.options} callbacks={call} words={result.cloudChart.json} />
+                                        <Box m={1}/>
+                                        <OnClickInfo keyword={"twittersna_wordcloud_tip"}/>
+                                    </div>
+
                                 }
                                 {
-                                    topUserProfile.length !== 0 && 
-                                    [createBubbleChartOfMostActiveUsers(topUserProfile, props.request)].map((bubbdleChart) => {
-                                        return (
-                                            <div key={Math.random()}>
-                                                <Plot useResizeHandler
-                                                    style={{ width: '100%', height: "600px" }}
-                                                    data={bubbdleChart.data}
-                                                    layout={bubbdleChart.layout}
-                                                    config={bubbdleChart.config}
-                                                    onClick={(e) => onBubbleChartClick(e, "", "bubbleIdx")}
-                                                />
-                                                <Box m={1} />
-                                                <OnClickInfo keyword={"twittersna_bubble_chart_tip"} />
-                                                <Box m={2} />
-                                            </div>
-                                        )
-                                    })
-                                }
-                                {
-                                    bubbleTweets &&
+                                    cloudTweets &&
                                     <div>
                                         <Grid container justify="space-between" spacing={2}
                                             alignContent={"center"}>
@@ -1341,7 +1339,8 @@ export default function TwitterSnaResult(props) {
                                                 <Button
                                                     variant={"contained"}
                                                     color={"secondary"}
-                                                    onClick={() => hideTweetsView("bubbleIdx")}>
+                                                    onClick={() => setCloudTweets(null)}
+                                                >
                                                     {
                                                         keyword('twittersna_result_hide')
                                                     }
@@ -1351,7 +1350,7 @@ export default function TwitterSnaResult(props) {
                                                 <Button
                                                     variant={"contained"}
                                                     color={"primary"}
-                                                    onClick={() => downloadClick(bubbleTweets.csvArr, bubbleTweets.screen_name)}>
+                                                    onClick={() => downloadClick(cloudTweets.csvArr, cloudTweets.word)}>
                                                     {
                                                         keyword('twittersna_result_download')
                                                     }
@@ -1359,17 +1358,18 @@ export default function TwitterSnaResult(props) {
                                             </Grid>
                                         </Grid>
                                         <Box m={2} />
-                                        <CustomTable title={keyword("twittersna_result_slected_tweets")}
-                                            colums={bubbleTweets.columns}
-                                            data={bubbleTweets.data}
+                                        <CustomTable
+                                            title={keyword("twittersna_result_slected_tweets")}
+                                            colums={cloudTweets.columns}
+                                            data={cloudTweets.data}
                                             actions={goToTweetAction}
                                         />
                                     </div>
                                 }
-                            </div>
+                            </Box>
                         }
                         {
-                            !topUserProfile &&
+                            result.cloudChart.json === undefined &&
                             <CircularProgress className={classes.circularProgress} />
                         }
                     </ExpansionPanelDetails>
