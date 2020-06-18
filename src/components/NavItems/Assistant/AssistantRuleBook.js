@@ -25,8 +25,10 @@ export const DOMAIN ={
     OTHER: "Misc"
 };
 
-export const SCRAPER = {
-    TWITTER: "Twitter"
+export const KNOWN_LINKS = {
+    TWITTER: "Twitter",
+    INSTAGRAM: "Instagram",
+    TIKTOK: "Tiktok"
 }
 
 export const TYPE_PATTERNS = [
@@ -34,7 +36,8 @@ export const TYPE_PATTERNS = [
         key: CONTENT_TYPE.VIDEO,
         patterns: [/(mp4|webm|avi|mov|wmv|ogv|mpg|flv|mkv)(\?.*)?$/i,
             /(facebook\.com\/.*\/videos\/)/,/(twitter\.com\/.*\/video)/,
-            /((y2u|youtube|youtu\.be).*(?!\')[0-9A-Za-z_-]{10}[048AEIMQUYcgkosw](?=))/]
+            /((y2u|youtube|youtu\.be).*(?!\')[0-9A-Za-z_-]{10}[048AEIMQUYcgkosw](?=))/,
+            /(tiktokcdn\.com\/.*\/.*\/video\/)/]
     },
     {
         key: CONTENT_TYPE.IMAGE,
@@ -73,11 +76,18 @@ export const DOMAIN_PATTERNS = [
     }
 ];
 
-export const SCRAPERS = [
+export const KNOWN_LINK_PATTERNS = [
     {
-        key: SCRAPER.TWITTER,
-        patterns: "((https?:/{2})?(www.)?twitter.com/\\w{1,15}/status/\\d*)",
-        requireLogIn: true,
+        key: KNOWN_LINKS.TWITTER,
+        patterns: ["((https?:/{2})?(www.)?twitter.com/\\w{1,15}/status/\\d*)"],
+    },
+    {
+        key: KNOWN_LINKS.TIKTOK,
+        patterns:["((https?:\\/{2})?(www.)?tiktok.com\\/.*\\/video\\/\\d*\\?lang)"]
+    },
+    {
+        key: KNOWN_LINKS.INSTAGRAM,
+        patterns: ["((https?:\\/{2})?(www.)?instagram.com\\/p\\/.*)"]
     }
 ]
 
