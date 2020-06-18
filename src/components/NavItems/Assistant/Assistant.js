@@ -261,6 +261,9 @@ const Assistant = () => {
                             <Typography variant={"h6"} align={"left"}>
                                 <FaceIcon size={"small"}/> {keyword("assistant_error")}
                             </Typography>
+                            <Typography variant={"h6"} align={"left"}>
+                                {keyword("assistant_alternative")}
+                            </Typography>
                         </CardContent></Card>
                     </Grid>
 

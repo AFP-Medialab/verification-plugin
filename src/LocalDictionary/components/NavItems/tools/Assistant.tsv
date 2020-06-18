@@ -14,6 +14,7 @@ videos_label	Videos	Temp	Temp
 upload_type_question	What type of file do you want to upload?	Temp  Temp
 assistant_urlbox	URL	Adresse	URL
 assistant_error	No media was found through the link used. Please try another URL.	Test	Test
+assistant_alternative	Alternatively, try navigating to the input URL and using the "Open with Assistant" option on the toolbar popup	Temp	Temp
 extracting_tweet_media  Extracting tweet media...   Temp... Temp...
 twitter_error_login	In order to retrieve tweet media from tweet you must request access and/or log in.	Temp	Temp
 twitter_error_media The tweet has been retrieved, but no linked media has been found    Temp    Temp
@@ -39,11 +40,11 @@ things_you_can_do_header	Potential Tools	Temp	Temp
 things_you_can_do	Below are the tools you can use on this media type	Temp	Temp
 analysis_text	The analysis feature  can be used to retrieve contextual information about the video	Temp	Temp
 keyframes_text	The keyframes feature can be used to fragment a video	Temp	Temp
-thumbnails_text	The YouTube thumbnail feature can be used to reverse search on thumbnails from the video	Temp    Temp
+thumbnails_text	The YouTube thumbnail feature can be used to reverse search on thumbnails from the video	Temp	Temp
 twitter_text	The twitter search tool can be used	Temp	Temp
 magnifier_text	The magnifier tool can be used to examine the image thoroughly	Temp	Temp
 metadata_text	The metadata tool can be used to retrieve image/video metadata	Temp	Temp
-rights_text	The video rights tool can be used can be used to retrieve information solely about video rights Temp	Temp
+rights_text	The video rights tool can be used can be used to retrieve information solely about video rights	Temp	Temp
 forensic_text	The forensic tool can be used to detect any image manipulation	Temp	Temp
 twitter_sna_text	The twitter sna tool can be used	Temp	Temp
 no_action_text	No actions have been found for this media. Please try another URL.	Temp	Temp
