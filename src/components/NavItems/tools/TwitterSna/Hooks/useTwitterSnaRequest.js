@@ -88,7 +88,7 @@ function getNodesAsHashtag(tweets) {
 }
 
 function getEdgesCoHashtag(tweets) {
-  let coHashtagArr = tweets.filter(tweet => tweet._source.hashtags.length > 1)
+  let coHashtagArr = tweets.filter(tweet => tweet._source.hashtags !== undefined)
                             .map((tweet) => { return tweet._source.hashtags });
   let edges = [];
   coHashtagArr.forEach(arr => {
