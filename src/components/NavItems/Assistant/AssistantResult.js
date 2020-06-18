@@ -30,6 +30,7 @@ const AssistantResult = () => {
 
     const classes = useMyStyles();
     const keyword = useLoadLanguage("components/NavItems/tools/Assistant.tsv", tsv);
+    const inputUrl = useSelector(state => state.assistant.inputUrl);
     const processUrl = useSelector(state => state.assistant.processUrl);
     const processUrlActions = useSelector(state => state.assistant.processUrlActions);
     const resultProcessType = useSelector(state => state.assistant.processUrlType);
@@ -72,7 +73,9 @@ const AssistantResult = () => {
                             {processUrlActions.map((action) => {return (
                                 <Grid container m = {4}>
                                     <Card className={classes.assistantCards}  variant = "outlined"
-                                          onClick={() => handleClick(action.path, processUrl) }>
+                                          onClick={
+                                              () => handleClick(action.path, action.use_known_url ? inputUrl : processUrl)
+                                          }>
                                         <CardActionArea><CardContent>
                                                 <Typography className={classes.title} m={2}>{keyword(action.text)}</Typography>
                                                 <Button aria-colspan={2} size = "medium">

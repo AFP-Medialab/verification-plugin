@@ -98,6 +98,7 @@ export const ASSISTANT_ACTIONS = [
         domains: new Array(DOMAIN.YOUTUBE, DOMAIN.FACEBOOK, DOMAIN.TWITTER),
         ctypes: [CONTENT_TYPE.VIDEO],
         type_restriction: [],
+        use_known_url: true,
         text: "analysis_text",
         tsvPrefix: "api",
         path: "tools/analysis",
@@ -108,6 +109,7 @@ export const ASSISTANT_ACTIONS = [
         domains: new Array(DOMAIN.YOUTUBE, DOMAIN.FACEBOOK, DOMAIN.TWITTER, DOMAIN.OWN),
         ctypes: [CONTENT_TYPE.VIDEO],
         type_restriction: [],
+        use_known_url: true,
         text: "keyframes_text",
         tsvPrefix: "keyframes",
         path: "tools/keyframes",
@@ -118,6 +120,7 @@ export const ASSISTANT_ACTIONS = [
         domains: new Array(DOMAIN.YOUTUBE),
         ctypes: [CONTENT_TYPE.VIDEO],
         type_restriction: [],
+        use_known_url: true,
         text: "thumbnails_text",
         tsvPrefix: "thumbnails",
         path: "tools/thumbnails",
@@ -128,6 +131,7 @@ export const ASSISTANT_ACTIONS = [
         domains: new Array(DOMAIN.TWITTER),
         ctypes: [CONTENT_TYPE.TEXT],
         type_restriction: [],
+        use_known_url: false,
         text: "twitter_text",
         tsvPrefix: "twitter",
         path: "tools/twitter",
@@ -137,7 +141,8 @@ export const ASSISTANT_ACTIONS = [
         icon: magnifierIconOff,
         domains: new Array(DOMAIN.OTHER, DOMAIN.OWN, DOMAIN.YOUTUBE, DOMAIN.FACEBOOK, DOMAIN.TWITTER),
         ctypes: [CONTENT_TYPE.IMAGE],
-        type_restriction: [],
+        type_restriction: [[/(jpg|jpeg|png)(\?.*)?$/i]],
+        use_known_url: false,
         text: "magnifier_text",
         tsvPrefix: "magnifier",
         path: "tools/magnifier",
@@ -148,6 +153,7 @@ export const ASSISTANT_ACTIONS = [
         domains: new Array(DOMAIN.OTHER, DOMAIN.OWN),
         ctypes: [CONTENT_TYPE.IMAGE, CONTENT_TYPE.VIDEO],
         type_restriction: [/(jpg|jpeg|mp4|mp4v|instagram)(\?.*)?$/i],
+        use_known_url: false,
         text: "metadata_text",
         tsvPrefix: "metadata",
         path: "tools/metadata",
@@ -158,6 +164,7 @@ export const ASSISTANT_ACTIONS = [
         domains: new Array(DOMAIN.YOUTUBE, DOMAIN.FACEBOOK, DOMAIN.TWITTER),
         ctypes: [CONTENT_TYPE.VIDEO],
         type_restriction: [],
+        use_known_url: true,
         text: "rights_text",
         tsvPrefix: "copyright",
         path: "tools/copyright",
@@ -168,6 +175,7 @@ export const ASSISTANT_ACTIONS = [
         domains: new Array(DOMAIN.OTHER, DOMAIN.OWN, DOMAIN.YOUTUBE, DOMAIN.FACEBOOK, DOMAIN.TWITTER),
         ctypes: [CONTENT_TYPE.IMAGE],
         type_restriction: [],
+        use_known_url: false,
         text: "forensic_text",
         tsvPrefix: "forensic",
         path: "tools/forensic",
@@ -177,6 +185,7 @@ export const ASSISTANT_ACTIONS = [
         domains: new Array(),
         ctypes: [],
         type_restriction: [],
+        use_known_url: false,
         text: "sna_text",
         icon:  twitterSnaIconOff,
         tsvPrefix: "twitter_sna",
@@ -189,7 +198,8 @@ export const selectCorrectActions = (domain, contentType, url) => {
         ASSISTANT_ACTIONS.filter(action=>
             action.domains.includes(domain) &&
             (action.ctypes.includes(contentType) || action.ctypes==CONTENT_TYPE.ALL) &&
-            (action.type_restriction.size==0 || url.match(action.type_restriction[0])));
+            (action.type_restriction.size==0 || url.match(action.type_restriction[0]) || action.domains.includes(DOMAIN.OWN))
+        );
 
     return possibleActions;
 }
