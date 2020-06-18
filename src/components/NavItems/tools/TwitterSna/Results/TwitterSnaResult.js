@@ -1395,24 +1395,33 @@ export default function TwitterSnaResult(props) {
                             ))
                         }
                     </Toolbar>
-                    <Box pb={3}>
-                    {
-                        result.gexf && result.gexf.map((gexfRes, index) => (
-                            <Button
-                                key={index}
-                                variant={"contained"}
-                                color={"primary"}
-                                startIcon={<BubbleChartIcon />}
-                                disabled={_.isEmpty(result.gexf)}
-                                href={result.gexf ? gexfRes.visualizationUrl : undefined}
-                                target="_blank"
-                                rel="noopener"
-                                tooltip={result.gexf ? gexfRes.message : undefined}
-                            >
-                                {gexfRes.title/* {keyword("twittersna_result_view_graph")} */}
-                            </Button>
-                        ))
-                    }
+                    <Box pb={2}>
+                    <Box alignItems="center" justifyContent="center" width={"100%"}>
+                        <div style={{margin: 20}}>
+                            <Grid container justify="space-between" spacing={2}
+                                alignContent={"center"}>
+                                {
+                                    result.gexf && result.gexf.map((gexfRes, index) => (
+                                        <Grid item key={Math.random()}>
+                                            <Button
+                                                key={index}
+                                                variant={"contained"}
+                                                color={"primary"}
+                                                startIcon={<BubbleChartIcon />}
+                                                disabled={_.isEmpty(result.gexf)}
+                                                href={result.gexf ? gexfRes.visualizationUrl : undefined}
+                                                target="_blank"
+                                                rel="noopener"
+                                                tooltip={result.gexf ? gexfRes.message : undefined}
+                                            >
+                                                {gexfRes.title/* {keyword("twittersna_result_view_graph")} */}
+                                            </Button>
+                                        </Grid>
+                                    ))
+                                }
+                            </Grid>
+                        </div>
+                    </Box>
                     {
                         (result.gexf === undefined) &&
                         <CircularProgress className={classes.circularProgress} />
