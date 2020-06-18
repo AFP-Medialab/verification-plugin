@@ -18,17 +18,26 @@ import TwitterIcon from '@material-ui/icons/Twitter';
 import SaveIcon from '@material-ui/icons/Save';
 import BubbleChartIcon from '@material-ui/icons/BubbleChart';
 import Toolbar from "@material-ui/core/Toolbar";
+import { TableContainer, Table, TableBody, TableRow, TableCell } from '@material-ui/core';
+import { Avatar } from '@material-ui/core';
+import List from '@material-ui/core/List';
+import ListSubheader from '@material-ui/core/ListSubheader';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import CloseResult from "../../../../Shared/CloseResult/CloseResult";
 import { cleanTwitterSnaState } from "../../../../../redux/actions/tools/twitterSnaActions";
 import ReactWordcloud from "react-wordcloud";
 import { select } from 'd3-selection';
 import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../../LocalDictionary/components/NavItems/tools/TwitterSna.tsv";
+import gexfFile from "../GexfFiles/graph-65108767955444131.gexf";
 import { saveSvgAsPng } from 'save-svg-as-png';
 import { CSVLink } from "react-csv";
 import Cytoscape from 'cytoscape';
 import Fcose from 'cytoscape-fcose';
-import { Sigma, RandomizeNodePositions, ForceAtlas2, EdgeShapes } from 'react-sigma';
+import { Sigma, RandomizeNodePositions, ForceAtlas2, SigmaEnableWebGL, RelativeSize, EdgeShapes } from 'react-sigma';
 import Plotly from 'plotly.js-dist';
 import _ from "lodash";
 import CircularProgress from "@material-ui/core/CircularProgress";
@@ -53,6 +62,10 @@ export default function TwitterSnaResult(props) {
     const [pieCharts2, setPieCharts2] = useState(null);
     const [pieCharts3, setPieCharts3] = useState(null);
     const [coHashtagGraphTweets, setCoHashtagGraphTweets] = useState(null);
+    const [socioSemanticGraphTweets, setSocioSemanticGraphTweets] = useState(null);
+    const [bubbleTweets, setBubbleTweets] = useState(null);
+
+    const [topUserProfile, setTopUserProfile] = useState(null);
 
     const CSVheaders = [{ label: keyword('twittersna_result_word'), key: "word" }, { label: keyword("twittersna_result_nb_occ"), key: "nb_occ" }, { label: keyword("twittersna_result_entity"), key: "entity" }];
 
@@ -72,6 +85,12 @@ export default function TwitterSnaResult(props) {
                 break;
             case "coHashtagGraphIdx":
                 setCoHashtagGraphTweets(null);
+                break;
+            case "socioSemanticGraphIdx":
+                setSocioSemanticGraphTweets(null);
+                break;
+            case "bubbleIdx":
+                setBubbleTweets(null);
                 break;
             default:
                 break;
@@ -94,6 +113,11 @@ export default function TwitterSnaResult(props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [JSON.stringify(props.result), props.result, props.result.userGraph]);
 
+    useEffect(() => {
+        setTopUserProfile(props.topUserProfile);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [JSON.stringify(props.topUserProfile), props.topUserProfile]);
+
     //Initialize tweets arrays
     useEffect(() => {
         setHistoTweets(null);
@@ -104,6 +128,8 @@ export default function TwitterSnaResult(props) {
         setPieCharts2(null);
         setPieCharts3(null);
         setCoHashtagGraphTweets(null);
+        setSocioSemanticGraphTweets(null);
+        setBubbleTweets(null);
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [JSON.stringify(props.request), props.request])
 
@@ -263,7 +289,7 @@ export default function TwitterSnaResult(props) {
         };
     };
 
-    const displayTweetsOfUser = (data, nbType, index) => {
+    const displayTweetsOfUser = (selectedUser, nbType, index) => {
         let columns = [
             { title: keyword('twittersna_result_date'), field: 'date' },
             { title: keyword('twittersna_result_tweet'), field: 'tweet', render: getTweetWithClickableLink },
@@ -286,13 +312,6 @@ export default function TwitterSnaResult(props) {
         csvArr += ',' + keyword('elastic_url') + "\n";
 
         let resData = [];
-
-        let selectedUser = null;
-        if (index === "userGraphIdx") {
-            selectedUser = data.data.node.id;
-        } else {
-            selectedUser = data.points[0].label;
-        }
 
         result.tweets.forEach(tweetObj => {
             if (tweetObj._source.screen_name.toLowerCase() === selectedUser.toLowerCase()) {
@@ -334,6 +353,9 @@ export default function TwitterSnaResult(props) {
             case 2:
                 setPieCharts2(newRes);
                 break;
+            case "bubbleIdx":
+                setBubbleTweets(newRes);
+                break;
             default:
                 break;
 
@@ -364,7 +386,7 @@ export default function TwitterSnaResult(props) {
 
         let resData = [];
 
-        let mentionTweets = result.tweets.filter(tweet => tweet._source.user_mentions.length > 0);
+        let mentionTweets = result.tweets.filter(tweet => tweet._source.user_mentions !== undefined && tweet._source.user_mentions.length > 0);
         mentionTweets.forEach(tweetObj => {
             let lcMentionArr = tweetObj._source.user_mentions.map(v => v.screen_name.toLowerCase());
             if (lcMentionArr.includes(selectedUser.toLowerCase())) {
@@ -396,7 +418,16 @@ export default function TwitterSnaResult(props) {
             screen_name: selectedUser
         };
 
-        setPieCharts3(newRes);
+        switch (index) {
+            case 3:
+                setPieCharts3(newRes);
+                break;
+            case "socioSemanticGraphIdx":
+                setSocioSemanticGraphTweets(newRes);
+                break;
+            default:
+                break;
+        }
     }
 
     function createCSVFromPieChart(obj) {
@@ -450,14 +481,20 @@ export default function TwitterSnaResult(props) {
 
         //For mention donuts
         if (index === 3) {
-            displayTweetsOfMention(data.points[0].label, setPieCharts3)
+            displayTweetsOfMention(data.points[0].label, "", 3)
         }
         // For retweets, likes, top_user donut
         else {
-            displayTweetsOfUser(data, nbType, index);
+            displayTweetsOfUser(data.points[0].label, nbType, index);
         }
 
     };
+
+    const onBubbleChartClick = (data, nbType, index) => {
+        let selectedUser = data.points[0].text.split("<br>")[0].replace("@","");
+        displayTweetsOfUser(selectedUser, nbType, index);
+    }
+
     const getTweetWithClickableLink = (cellData) => {
         let urls = cellData.tweet.match(/((http|https|ftp|ftps):\/\/[a-zA-Z0-9\-.]+\.[a-zA-Z]{2,3}(\/\S*)?|pic\.twitter\.com\/([-a-zA-Z0-9()@:%_+.~#?&//=]*))/g);
         if (urls === null)
@@ -575,10 +612,122 @@ export default function TwitterSnaResult(props) {
         displayTweetsOfWord(e.data.node.id, setCoHashtagGraphTweets);
     }
 
+    function onClickNodeSocioSemanticGraph(e) {
+        if (e.data.node.type === "Hashtag") {
+            displayTweetsOfWord(e.data.node.id, setSocioSemanticGraphTweets);
+        } else if (e.data.node.type === "Mention") {
+            displayTweetsOfMention(e.data.node.id, "", "socioSemanticGraphIdx");
+        }
+    }
+
     function goToTwitterSnaWithUrlSearch(event, rowData) {
         rowData.forEach(data => 
             window.open("/popup.html#/app/tools/twitterSna?url=" + data.url + "&request=" + JSON.stringify(props.request))
         );
+    }
+
+    function getColorOfMostActiveUserBubble(value) {
+        switch (true) {
+            case (value < 5):
+                // return "#5da4d6";
+                return "#2f7fb8";
+            case (value < 15):
+                return "#ff900e";
+            default:
+                return "#ff3636";
+        }
+    }
+
+    function createBubbleChartOfMostActiveUsers(userProfile, request) {
+        let tweetCountObj = _.countBy(result.tweets.map((tweet) => {return tweet._source.screen_name.toLowerCase(); }));
+        let nbDays = Math.floor(( Date.parse(request['until']) - Date.parse(request['from']) ) / 86400000)
+        let objArr = userProfile.map((obj) => {
+            return {
+                screen_name: obj._source.screen_name,
+                followers_count: obj._source.followers_count,
+                datetimestamp: obj._source.datetimestamp
+            }; 
+        });
+        let sortedObjArr = _.orderBy(objArr, ['datetimestamp', 'screen_name'], ['asc', 'asc']);
+
+        let x = [];
+        let y = [];
+        let text = [];
+        let color = []
+        let size = [];
+
+        sortedObjArr.forEach((obj) => {
+            let date = new Date(obj.datetimestamp * 1000);
+            let dateStr = date.getFullYear() + "-" + date.getMonth() + "-" + date.getDate();
+            let nbTweets = tweetCountObj[obj.screen_name.toLowerCase()];
+            let avgTweetsPerDate = nbTweets/nbDays;
+
+            x.push(dateStr);
+            y.push(obj.followers_count);
+            text.push('@' + obj.screen_name + '<br>Posted <b>' + nbTweets + '</b> tweets in ' + nbDays + ' days');
+            color.push(getColorOfMostActiveUserBubble(avgTweetsPerDate));
+            size.push(nbTweets);
+        });
+
+        let data = [
+            { 
+                mode: "markers",
+                x: x, 
+                y: y, 
+                text: text,
+                hovertemplate: '%{text}<br>Account created: %{x}<br>Followers: %{y}<br>',
+                marker: { 
+                    color: color,
+                    size: size
+                } 
+            } 
+        ]
+
+        let layout = {
+            xaxis: {
+                title: keyword("twittersna_acd"),
+                titlefont: {
+                    family: 'Arial, sans-serif',
+                    size: 18,
+                    color: '#C0C0C0'
+                },
+            },
+            yaxis: {
+                title: keyword("twittersna_nb_followers"),
+                titlefont: {
+                    family: 'Arial, sans-serif',
+                    size: 18,
+                    color: '#C0C0C0'
+                },
+            }
+        }
+
+        let config = {
+            displayModeBar: true,
+            toImageButtonOptions: {
+                format: 'png', // one of png, svg, jpeg, webp
+                filename: request.keywordList.join("&") + "_" + request["from"] + "_" + request["until"] + "_Bubble",
+              },
+            modeBarButtons: [
+                ["toImage"], 
+                ["zoom2d"],
+                ["pan2d"],
+                ["resetScale2d"],
+                ['drawline'],
+                ['drawopenpath'],
+                ['drawclosedpath'],
+                ['drawcircle'],
+                ['drawrect'],
+                ['eraseshape']
+            ],
+            displaylogo: false,
+        }
+
+        return {
+            data: data,
+            layout: layout,
+            config: config
+        }
     }
 
     if (result === null)
@@ -999,12 +1148,95 @@ export default function TwitterSnaResult(props) {
                     </ExpansionPanelSummary>
                     <ExpansionPanelDetails>
                     {
+                        result && result.coHashtagGraph && result.coHashtagGraph.data.nodes.length === 0 &&
+                        <Typography variant={"body2"}>{keyword("twittersna_no_data")}</Typography>
+                    }
+                    {
                         result && result.coHashtagGraph && result.coHashtagGraph.data.nodes.length !== 0 &&
+                        <div style={{ width: '100%' }}>
+                            <Sigma graph={result.coHashtagGraph.data}
+                                renderer={"canvas"}
+                                style={{ textAlign: 'left', width: '100%', height: '700px' }}
+                                onClickNode={(e) => onClickNodeCoHashtagGraph(e)}
+                                settings={{
+                                    drawEdges: true,
+                                    drawEdgeLabels: false,
+                                    minNodeSize: 10,
+                                    maxNodeSize: 30,
+                                    minEdgeSize: 1,
+                                    maxEdgeSize: 20,
+                                    defaultNodeColor: "#3388AA",
+                                    defaultEdgeColor: "#C0C0C0",
+                                    edgeColor: "default"
+                                }}
+                            >
+                                <EdgeShapes default="curve" />
+                                <RandomizeNodePositions>
+                                    <ForceAtlas2 iterationsPerRender={1} timeout={15000} />
+                                </RandomizeNodePositions>
+                            </Sigma>
+                            <Box m={1} />
+                            <OnClickInfo keyword={"twittersna_hashtag_graph_tip"} />
+                            <Box m={2} />
+                            {
+                                coHashtagGraphTweets &&
+                                <div>
+                                    <Grid container justify="space-between" spacing={2}
+                                        alignContent={"center"}>
+                                        <Grid item>
+                                            <Button
+                                                variant={"contained"}
+                                                color={"secondary"}
+                                                onClick={() => hideTweetsView("coHashtagGraphIdx")}>
+                                                {
+                                                    keyword('twittersna_result_hide')
+                                                }
+                                            </Button>
+                                        </Grid>
+                                        <Grid item>
+                                            <Button
+                                                variant={"contained"}
+                                                color={"primary"}
+                                                onClick={() => downloadClick(coHashtagGraphTweets.csvArr, coHashtagGraphTweets.word)}>
+                                                {
+                                                    keyword('twittersna_result_download')
+                                                }
+                                            </Button>
+                                        </Grid>
+                                    </Grid>
+                                    <Box m={2} />
+                                    <CustomTable title={keyword("twittersna_result_slected_tweets")}
+                                        colums={coHashtagGraphTweets.columns}
+                                        data={coHashtagGraphTweets.data}
+                                        actions={goToTweetAction}
+                                    />
+                                </div>
+                            }
+                        </div>
+                    }
+                    {
+                        result.coHashtagGraph === undefined &&
+                        <CircularProgress className={classes.circularProgress} />
+                    }
+                    </ExpansionPanelDetails>
+                </ExpansionPanel>
+            }
+            {
+                props.request.userList.length === 0 && result &&
+                <ExpansionPanel>
+                    <ExpansionPanelSummary
+                        expandIcon={<ExpandMoreIcon />}
+                    >
+                        <Typography className={classes.heading}>{keyword("sosem_graph_title")}</Typography>
+                    </ExpansionPanelSummary>
+                    <ExpansionPanelDetails>
+                    {
+                        result.socioSemanticGraph && result.socioSemanticGraph.data.nodes.length !== 0 &&
                             <div style={{ width: '100%' }}>
-                                <Sigma graph={result.coHashtagGraph.data}
+                                <Sigma graph={result.socioSemanticGraph.data}
                                     renderer={"canvas"}
                                     style={{ textAlign: 'left', width: '100%', height: '700px' }}
-                                    onClickNode={(e) => onClickNodeCoHashtagGraph(e)}
+                                    onClickNode={(e) => onClickNodeSocioSemanticGraph(e)}
                                     settings={{
                                         drawEdges: true,
                                         drawEdgeLabels: false,
@@ -1023,10 +1255,10 @@ export default function TwitterSnaResult(props) {
                                     </RandomizeNodePositions>
                                 </Sigma>
                                 <Box m={1}/>
-                                <OnClickInfo keyword={"twittersna_hashtag_graph_tip"}/>
+                                <OnClickInfo keyword={"twittersna_sosem_graph_tip"}/>
                                 <Box m={2}/>
                                 {
-                                    coHashtagGraphTweets &&
+                                    socioSemanticGraphTweets &&
                                     <div>
                                         <Grid container justify="space-between" spacing={2}
                                             alignContent={"center"}>
@@ -1034,7 +1266,7 @@ export default function TwitterSnaResult(props) {
                                                 <Button
                                                     variant={"contained"}
                                                     color={"secondary"}
-                                                    onClick={() => hideTweetsView("coHashtagGraphIdx")}>
+                                                    onClick={() => hideTweetsView("socioSemanticGraphIdx")}>
                                                     {
                                                         keyword('twittersna_result_hide')
                                                     }
@@ -1044,7 +1276,7 @@ export default function TwitterSnaResult(props) {
                                                 <Button
                                                     variant={"contained"}
                                                     color={"primary"}
-                                                    onClick={() => downloadClick(coHashtagGraphTweets.csvArr, coHashtagGraphTweets.word)}>
+                                                    onClick={() => downloadClick(socioSemanticGraphTweets.csvArr, socioSemanticGraphTweets.word)}>
                                                     {
                                                         keyword('twittersna_result_download')
                                                     }
@@ -1053,8 +1285,8 @@ export default function TwitterSnaResult(props) {
                                         </Grid>
                                         <Box m={2} />
                                         <CustomTable title={keyword("twittersna_result_slected_tweets")}
-                                            colums={coHashtagGraphTweets.columns}
-                                            data={coHashtagGraphTweets.data}
+                                            colums={socioSemanticGraphTweets.columns}
+                                            data={socioSemanticGraphTweets.data}
                                             actions={goToTweetAction}
                                         />
                                     </div>
@@ -1062,7 +1294,91 @@ export default function TwitterSnaResult(props) {
                             </div>
                         }
                         {
-                            result.coHashtagGraph === undefined &&
+                            result.socioSemanticGraph && result.socioSemanticGraph.data.nodes.length === 0 &&
+                            <Typography variant={"body2"}>{keyword("twittersna_no_data")}</Typography>
+                        }
+                        {
+                            result.socioSemanticGraph === undefined &&
+                            <CircularProgress className={classes.circularProgress} />
+                        }
+                    </ExpansionPanelDetails>
+                </ExpansionPanel>
+            }
+            {
+                props.request.userList.length === 0 && result && result.tweets &&
+                <ExpansionPanel>
+                    <ExpansionPanelSummary
+                        expandIcon={<ExpandMoreIcon />}
+                        aria-controls={"panel0a-content"}
+                        id={"panel0a-header"}
+                    >
+                        <Typography className={classes.heading}>{keyword("bubble_chart_title")}</Typography>
+                    </ExpansionPanelSummary>
+                    <ExpansionPanelDetails>
+                        {
+                            topUserProfile &&
+                            <div style={{ width: '100%', }}>
+                                {
+                                    topUserProfile.length === 0 &&
+                                    <Typography variant={"body2"}>{keyword("twittersna_no_data")}</Typography>
+                                }
+                                {
+                                    topUserProfile.length !== 0 && 
+                                    [createBubbleChartOfMostActiveUsers(topUserProfile, props.request)].map((bubbdleChart) => {
+                                        return (
+                                            <div key={Math.random()}>
+                                                <Plot useResizeHandler
+                                                    style={{ width: '100%', height: "600px" }}
+                                                    data={bubbdleChart.data}
+                                                    layout={bubbdleChart.layout}
+                                                    config={bubbdleChart.config}
+                                                    onClick={(e) => onBubbleChartClick(e, "", "bubbleIdx")}
+                                                />
+                                                <Box m={1} />
+                                                <OnClickInfo keyword={"twittersna_bubble_chart_tip"} />
+                                                <Box m={2} />
+                                            </div>
+                                        )
+                                    })
+                                }
+                                {
+                                    bubbleTweets &&
+                                    <div>
+                                        <Grid container justify="space-between" spacing={2}
+                                            alignContent={"center"}>
+                                            <Grid item>
+                                                <Button
+                                                    variant={"contained"}
+                                                    color={"secondary"}
+                                                    onClick={() => hideTweetsView("bubbleIdx")}>
+                                                    {
+                                                        keyword('twittersna_result_hide')
+                                                    }
+                                                </Button>
+                                            </Grid>
+                                            <Grid item>
+                                                <Button
+                                                    variant={"contained"}
+                                                    color={"primary"}
+                                                    onClick={() => downloadClick(bubbleTweets.csvArr, bubbleTweets.screen_name)}>
+                                                    {
+                                                        keyword('twittersna_result_download')
+                                                    }
+                                                </Button>
+                                            </Grid>
+                                        </Grid>
+                                        <Box m={2} />
+                                        <CustomTable title={keyword("twittersna_result_slected_tweets")}
+                                            colums={bubbleTweets.columns}
+                                            data={bubbleTweets.data}
+                                            actions={goToTweetAction}
+                                        />
+                                    </div>
+                                }
+                            </div>
+                        }
+                        {
+                            !topUserProfile &&
                             <CircularProgress className={classes.circularProgress} />
                         }
                     </ExpansionPanelDetails>
@@ -1073,35 +1389,48 @@ export default function TwitterSnaResult(props) {
                 <Paper>
                     <Toolbar>
                         <Typography className={classes.heading}>{keyword("export_graph_title")}</Typography>
-                        <div style={{ flexGrow: 1 }}/>
-                        <Button
-                            aria-label="download"
-                            disabled={_.isEmpty(result.gexf)}
-                            startIcon={<SaveIcon />}
-                            href={result.gexf ? result.gexf.getUrl : undefined}
-                            tooltip={keyword("twittersna_result_download")}>
-                            {keyword("twittersna_result_download")}
-                        </Button>
+                        <div style={{ flexGrow: 1 }} />
+                        {
+                            result.gexf && result.gexf.map((gexfRes, index) => (
+                                <Button
+                                    key={index}
+                                    aria-label="download"
+                                    disabled={_.isEmpty(result.gexf)}
+                                    startIcon={<SaveIcon />}
+                                    href={result.gexf ? gexfRes.getUrl : undefined}
+                                    tooltip={keyword("twittersna_result_download")}>
+                                    {keyword("twittersna_result_download") + " " + gexfRes.title}
+                                </Button>
+                            ))
+                        }
                     </Toolbar>
                     <Box pb={3}>
-                        <Button
-                            variant={"contained"}
-                            color={"primary"}
-                            startIcon={<BubbleChartIcon />}
-                            disabled={_.isEmpty(result.gexf)}
-                            href={result.gexf ? result.gexf.visualizationUrl : undefined}
-                            target="_blank"
-                            rel="noopener"
-                            tooltip={keyword("twittersna_result_view_graph")}
-                        >
-                            {keyword("twittersna_result_view_graph")}
-                        </Button>
+                    {
+                        result.gexf && result.gexf.map((gexfRes, index) => (
+                            <Button
+                                key={index}
+                                variant={"contained"}
+                                color={"primary"}
+                                startIcon={<BubbleChartIcon />}
+                                disabled={_.isEmpty(result.gexf)}
+                                href={result.gexf ? gexfRes.visualizationUrl : undefined}
+                                target="_blank"
+                                rel="noopener"
+                                tooltip={result.gexf ? gexfRes.message : undefined}
+                            >
+                                {gexfRes.title/* {keyword("twittersna_result_view_graph")} */}
+                            </Button>
+                        ))
+                    }
+                    {
+                        (result.gexf === undefined) &&
+                        <CircularProgress className={classes.circularProgress} />
+                    }
                     </Box>
-                    <Box m={1}/>
-                    <OnClickInfo keyword={"twittersna_export_graph_tip"}/>
+                    <Box m={1} />
+                    <OnClickInfo keyword={"twittersna_export_graph_tip"} />
                 </Paper>
             }
-
             <Box m={3} />
             {
                 result.urls &&

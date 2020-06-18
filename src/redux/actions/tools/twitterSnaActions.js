@@ -29,3 +29,10 @@ export const cleanTwitterSnaState = () => {
         type: "TWITTER_SNA_CLEAN_STATE"
     }
 };
+
+export const setUserProfileMostActive = (data) => {
+    return {
+        type : "SET_TWITTER_SNA_USER_PROFILE_MOST_ACTIVE",
+        payload : data
+    }
+};

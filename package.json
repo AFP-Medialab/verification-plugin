@@ -25,7 +25,7 @@
     "material-ui-image": "^3.2.3",
     "moment": "2.24.0",
     "moment-timezone": "0.5.28",
-    "plotly.js": "^1.53.0",
+    "plotly.js": "^1.54.3",
     "plotly.js-dist": "^1.53.0",
     "querystring": "^0.2.0",
     "react": "^16.13.1",

@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setError } from "../../../../../redux/actions/errorActions";
-import { setTwitterSnaLoading, setTwitterSnaResult, setTwitterSnaLoadingMessage } from "../../../../../redux/actions/tools/twitterSnaActions";
+import { setTwitterSnaLoading, setTwitterSnaResult, setTwitterSnaLoadingMessage, setUserProfileMostActive } from "../../../../../redux/actions/tools/twitterSnaActions";
 import axios from "axios";
 import _ from "lodash";
 
@@ -11,7 +11,8 @@ import {
   getJsonCounts,
   getReactArrayURL,
   generateWordCloudPlotlyJson,
-  getESQuery4Gexf
+  getESQuery4Gexf,
+  getUserAccounts
 } from "../Results/call-elastic";
 
 import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
@@ -82,13 +83,18 @@ function getUniqValuesOfField(tweets, field) {
   return uniqNodeIds;
 }
 
+function getNodesAsUsername(tweets) {
+  let nodes = getUniqValuesOfField(tweets, "screen_name").map((val) => { return { id: val, label: val } });
+  return nodes;
+}
+
 function getNodesAsHashtag(tweets) {
   let nodes = getUniqValuesOfField(tweets, "hashtags").map((val) => { return { id: val, label: val } });
   return nodes;
 }
 
 function getEdgesCoHashtag(tweets) {
-  let coHashtagArr = tweets.filter(tweet => tweet._source.hashtags !== undefined)
+  let coHashtagArr = tweets.filter(tweet => tweet._source.hashtags !== undefined && tweet._source.hashtags.length > 1)
                             .map((tweet) => { return tweet._source.hashtags });
   let edges = [];
   coHashtagArr.forEach(arr => {
@@ -116,9 +122,18 @@ function getSizeOfField(tweets, field) {
   return sizeObj;
 }
 
-function getTopNodeGraph(graph, prop="size", top=15) {
-  let sortNodes = _.sortBy(graph.nodes, ["size"]).reverse();
-  let topNodes = sortNodes.slice(0, top);
+function getTopNodeGraph(graph, sortByProp=["size"], topByType=[20, 20], types=["Hashtag", "Mention"]) {
+  let sortNodes = _.sortBy(graph.nodes, sortByProp).reverse();
+  let topNodes = []
+  if (types.length !== 0) {
+    types.forEach((type, idx) => {
+      let topNodesType = sortNodes.filter(node => node.type === type).slice(0, topByType[idx]);
+      topNodes.push(topNodesType);
+    })
+    topNodes = topNodes.flat();
+  } else {
+    topNodes = sortNodes.slice(0, topByType[0]);
+  }
   let topNodesId = topNodes.map((node) => { return node.id; });
   let filteredEdges = graph.edges.filter(edge => _.difference([edge.source, edge.target], topNodesId).length === 0);
   return {
@@ -160,7 +175,13 @@ function lowercaseFieldInTweets(tweets, field = 'hashtags') {
     if (tweetObj._source[field] !== undefined) {
       if (Array.isArray(tweetObj._source[field])) {
         let newArr = tweetObj._source[field].map((element) => {
-          return element.toLowerCase();
+          if(field === "user_mentions") {
+            element.screen_name = element.screen_name.toLowerCase();
+            element.name = element.name.toLowerCase();
+            return element;
+          } else {
+            return element.toLowerCase();
+          }
         });
         tweetObj._source[field] = [...new Set(newArr)];
       } else {
@@ -172,6 +193,82 @@ function lowercaseFieldInTweets(tweets, field = 'hashtags') {
   return newTweets;
 }
 
+function getTweetAttrObjArr(tweets) {
+  let tweetAttrObjArr = tweets.map((tweet) => {
+    let hashtags = (tweet._source.hashtags !== undefined) ? tweet._source.hashtags.map((hashtag) => {return "#" + hashtag;}) : [];
+    let user_mentions = (tweet._source.user_mentions !== undefined) ? tweet._source.user_mentions.map((obj) => { return "MT:@" + obj.screen_name;}) : [];
+    let obj = {
+      hashtags: [...new Set(hashtags)],
+      user_mentions: [...new Set(user_mentions)],
+      username: "AU:@" + tweet._source.screen_name
+    }
+    return obj;
+  });
+  return tweetAttrObjArr;
+}
+
+function getCoOccurCombinationFrom1Arr(arr) {
+  let occurences = [];
+  for (let i = 0; i < arr.length - 1; i++) {
+    for (let j = i + 1; j < arr.length; j++) {
+      let sortedArr = [arr[i], arr[j]].sort()
+      occurences.push({ id: sortedArr[0] + '___and___' + sortedArr[1], count: 1 });
+    }
+  }
+  return occurences;
+}
+
+function getCombinationFrom2Arrs(arr1, arr2) {
+  let occurences = [];
+  for (let i = 0; i < arr1.length; i++) {
+    for (let j = 0; j < arr2.length; j++) {
+      occurences.push({ id: arr1[i] + '___and___' + arr2[j], count: 1 });
+    }
+  }
+  return occurences;
+}
+
+function getCoOccurenceHashtagMention(tweetAttrObjArr) {
+  let coOccur = [];
+  tweetAttrObjArr.forEach((obj) => {
+    if (obj.hashtags.length > 0) {
+      coOccur.push(getCoOccurCombinationFrom1Arr(obj.hashtags));
+    }
+    if (obj.user_mentions.length > 0) {
+      coOccur.push(getCoOccurCombinationFrom1Arr(obj.user_mentions));
+    }
+    if (obj.hashtags.length > 0 && obj.user_mentions.length > 0) {
+      coOccur.push(getCombinationFrom2Arrs(obj.hashtags, obj.user_mentions));
+    }
+  })
+  let coOccurGroupedBy = groupByThenSum(coOccur.flat(), 'id', [], ['count'], []);
+  return coOccurGroupedBy;
+}
+
+function getEdgesFromCoOcurObjArr(coOccurObjArr) {
+  let edges = [];
+  coOccurObjArr.forEach((obj) => {
+    let [first, second] =  obj.id.split("___and___");
+    edges.push(
+      {
+        id: obj.id, 
+        label: obj.id, 
+        source: first,
+        target: second,
+        size: obj.count, 
+        weight: obj.count
+    });
+  });
+  return edges;
+}
+
+function getTopActiveUsers(tweets, topN) {
+  let tweetCountObj = _.countBy(tweets.map((tweet) => {return tweet._source.screen_name.toLowerCase(); }));
+  let topUsers2DArr = _.sortBy(Object.entries(tweetCountObj), [function(o) { return o[1]; }])
+                        .reverse()
+                        .slice(0, topN);
+  return topUsers2DArr;
+}
 
 const useTwitterSnaRequest = (request) => {
 
@@ -352,6 +449,12 @@ const useTwitterSnaRequest = (request) => {
         result.heatMap = createHeatMap(request, responseArrayOf9[5].tweets);
         result.coHashtagGraph = createCoHashtagGraph(responseArrayOf9[5].tweets);
         result.gexf = responseArrayOf9[8];
+        result.socioSemanticGraph = createSocioSemanticGraph(responseArrayOf9[5].tweets);
+        
+        let authors = getTopActiveUsers(result.tweets, 100).map((arr) => {return arr[0];});
+        if (authors.length > 0) {
+          getUserAccounts(authors).then((data) => dispatch(setUserProfileMostActive(data.hits.hits)))
+        }
       }
       else
         result.cloudChart = { title: "top_words_cloud_chart_title" };
@@ -466,7 +569,28 @@ const useTwitterSnaRequest = (request) => {
         nodes: nodes,
         edges: edges
       }
-      let topNodeGraph = getTopNodeGraph(graph, "size", 15);
+      let topNodeGraph = getTopNodeGraph(graph, ["size"], [15], []);
+      return {
+        data: topNodeGraph
+      };
+    }
+
+    const createSocioSemanticGraph = (tweets) => {
+      let lcTweets = lowercaseFieldInTweets(tweets, 'hashtags');
+      lcTweets = lowercaseFieldInTweets(lcTweets, 'user_mentions');
+      lcTweets = lowercaseFieldInTweets(lcTweets, 'screen_name');
+      
+      let tweetAttrObjArr = getTweetAttrObjArr(lcTweets);
+      let coOccurObjArr = getCoOccurenceHashtagMention(tweetAttrObjArr);
+      let edges = getEdgesFromCoOcurObjArr(coOccurObjArr);
+      
+      let nodes = [];
+      let freqHashtagObj = _.countBy(tweetAttrObjArr.map((obj) => { return obj.hashtags; }).flat());
+      let freqMentionObj = _.countBy(tweetAttrObjArr.map((obj) => { return obj.user_mentions; }).flat());
+      Object.entries(freqHashtagObj).forEach(arr => nodes.push({ id: arr[0], label: arr[0] + ": " + arr[1], size: arr[1], color: getColor("Hashtag"), type: "Hashtag" }));
+      Object.entries(freqMentionObj).forEach(arr => nodes.push({ id: arr[0], label: arr[0] + ": " + arr[1], size: arr[1], color: getColor("UserID"), type: "Mention" }));
+
+      let topNodeGraph = getTopNodeGraph({ nodes: nodes, edges: edges}, ["size"], [20, 10], ['Hashtag', 'Mention']);
       return {
         data: topNodeGraph
       };
@@ -474,7 +598,7 @@ const useTwitterSnaRequest = (request) => {
 
     const lastRenderCall = (sessionId, request) => {
 
-      dispatch(setTwitterSnaLoadingMessage(keyword('twittertwittersna_building_graphs')));
+      dispatch(setTwitterSnaLoadingMessage(keyword('twittersna_building_graphs')));
       //axios.get(TwintWrapperUrl + /status/ + sessionId)
       // .then(response => {
       //   if (response.data.status === "Error")
