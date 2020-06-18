@@ -402,7 +402,7 @@ export default function TwitterSnaResult(props) {
 
         let resData = [];
 
-        let mentionTweets = result.tweets.filter(tweet => tweet._source.user_mentions.length > 0);
+        let mentionTweets = result.tweets.filter(tweet => tweet._source.user_mentions !== undefined && tweet._source.user_mentions.length > 0);
         mentionTweets.forEach(tweetObj => {
             let lcMentionArr = tweetObj._source.user_mentions.map(v => v.screen_name.toLowerCase());
             if (lcMentionArr.includes(selectedUser.toLowerCase())) {
@@ -1266,72 +1266,76 @@ export default function TwitterSnaResult(props) {
                     </ExpansionPanelSummary>
                     <ExpansionPanelDetails>
                     {
+                        result && result.coHashtagGraph && result.coHashtagGraph.data.nodes.length === 0 &&
+                        <Typography variant={"body2"}>{keyword("twittersna_no_data")}</Typography>
+                    }
+                    {
                         result && result.coHashtagGraph && result.coHashtagGraph.data.nodes.length !== 0 &&
-                            <div style={{ width: '100%' }}>
-                                <Sigma graph={result.coHashtagGraph.data}
-                                    renderer={"canvas"}
-                                    style={{ textAlign: 'left', width: '100%', height: '700px' }}
-                                    onClickNode={(e) => onClickNodeCoHashtagGraph(e)}
-                                    settings={{
-                                        drawEdges: true,
-                                        drawEdgeLabels: false,
-                                        minNodeSize: 10,
-                                        maxNodeSize: 30,
-                                        minEdgeSize: 1,
-                                        maxEdgeSize: 20,
-                                        defaultNodeColor: "#3388AA",
-                                        defaultEdgeColor: "#C0C0C0",
-                                        edgeColor: "default"
-                                    }}
-                                    >
-                                    <EdgeShapes default="curve" />
-                                    <RandomizeNodePositions>
-                                        <ForceAtlas2 iterationsPerRender={1} timeout={15000} />
-                                    </RandomizeNodePositions>
-                                </Sigma>
-                                <Box m={1}/>
-                                <OnClickInfo keyword={"twittersna_hashtag_graph_tip"}/>
-                                <Box m={2}/>
-                                {
-                                    coHashtagGraphTweets &&
-                                    <div>
-                                        <Grid container justify="space-between" spacing={2}
-                                            alignContent={"center"}>
-                                            <Grid item>
-                                                <Button
-                                                    variant={"contained"}
-                                                    color={"secondary"}
-                                                    onClick={() => hideTweetsView("coHashtagGraphIdx")}>
-                                                    {
-                                                        keyword('twittersna_result_hide')
-                                                    }
-                                                </Button>
-                                            </Grid>
-                                            <Grid item>
-                                                <Button
-                                                    variant={"contained"}
-                                                    color={"primary"}
-                                                    onClick={() => downloadClick(coHashtagGraphTweets.csvArr, coHashtagGraphTweets.word)}>
-                                                    {
-                                                        keyword('twittersna_result_download')
-                                                    }
-                                                </Button>
-                                            </Grid>
+                        <div style={{ width: '100%' }}>
+                            <Sigma graph={result.coHashtagGraph.data}
+                                renderer={"canvas"}
+                                style={{ textAlign: 'left', width: '100%', height: '700px' }}
+                                onClickNode={(e) => onClickNodeCoHashtagGraph(e)}
+                                settings={{
+                                    drawEdges: true,
+                                    drawEdgeLabels: false,
+                                    minNodeSize: 10,
+                                    maxNodeSize: 30,
+                                    minEdgeSize: 1,
+                                    maxEdgeSize: 20,
+                                    defaultNodeColor: "#3388AA",
+                                    defaultEdgeColor: "#C0C0C0",
+                                    edgeColor: "default"
+                                }}
+                            >
+                                <EdgeShapes default="curve" />
+                                <RandomizeNodePositions>
+                                    <ForceAtlas2 iterationsPerRender={1} timeout={15000} />
+                                </RandomizeNodePositions>
+                            </Sigma>
+                            <Box m={1} />
+                            <OnClickInfo keyword={"twittersna_hashtag_graph_tip"} />
+                            <Box m={2} />
+                            {
+                                coHashtagGraphTweets &&
+                                <div>
+                                    <Grid container justify="space-between" spacing={2}
+                                        alignContent={"center"}>
+                                        <Grid item>
+                                            <Button
+                                                variant={"contained"}
+                                                color={"secondary"}
+                                                onClick={() => hideTweetsView("coHashtagGraphIdx")}>
+                                                {
+                                                    keyword('twittersna_result_hide')
+                                                }
+                                            </Button>
                                         </Grid>
-                                        <Box m={2} />
-                                        <CustomTable title={keyword("twittersna_result_slected_tweets")}
-                                            colums={coHashtagGraphTweets.columns}
-                                            data={coHashtagGraphTweets.data}
-                                            actions={goToTweetAction}
-                                        />
-                                    </div>
-                                }
-                            </div>
-                        }
-                        {
-                            result.coHashtagGraph === undefined &&
-                            <CircularProgress className={classes.circularProgress} />
-                        }
+                                        <Grid item>
+                                            <Button
+                                                variant={"contained"}
+                                                color={"primary"}
+                                                onClick={() => downloadClick(coHashtagGraphTweets.csvArr, coHashtagGraphTweets.word)}>
+                                                {
+                                                    keyword('twittersna_result_download')
+                                                }
+                                            </Button>
+                                        </Grid>
+                                    </Grid>
+                                    <Box m={2} />
+                                    <CustomTable title={keyword("twittersna_result_slected_tweets")}
+                                        colums={coHashtagGraphTweets.columns}
+                                        data={coHashtagGraphTweets.data}
+                                        actions={goToTweetAction}
+                                    />
+                                </div>
+                            }
+                        </div>
+                    }
+                    {
+                        result.coHashtagGraph === undefined &&
+                        <CircularProgress className={classes.circularProgress} />
+                    }
                     </ExpansionPanelDetails>
                 </ExpansionPanel>
             }
@@ -1340,40 +1344,46 @@ export default function TwitterSnaResult(props) {
                 <Paper>
                     <Toolbar>
                         <Typography className={classes.heading}>{keyword("export_graph_title")}</Typography>
-                        <div style={{ flexGrow: 1 }}/>
-                        {result.gexf.map((gexfRes, index) => (
-                        <Button
-                            key ={index}
-                            aria-label="download"
-                            disabled={_.isEmpty(result.gexf)}
-                            startIcon={<SaveIcon />}
-                            href={result.gexf ? gexfRes.getUrl : undefined}
-                            tooltip={keyword("twittersna_result_download")}>
-                            {keyword("twittersna_result_download")+" " + gexfRes.title}
-                        </Button>
-                        ))}
+                        <div style={{ flexGrow: 1 }} />
+                        {
+                            result.gexf && result.gexf.map((gexfRes, index) => (
+                                <Button
+                                    key={index}
+                                    aria-label="download"
+                                    disabled={_.isEmpty(result.gexf)}
+                                    startIcon={<SaveIcon />}
+                                    href={result.gexf ? gexfRes.getUrl : undefined}
+                                    tooltip={keyword("twittersna_result_download")}>
+                                    {keyword("twittersna_result_download") + " " + gexfRes.title}
+                                </Button>
+                            ))
+                        }
                     </Toolbar>
                     <Box pb={3}>
                     {
-                        result.gexf.map((gexfRes, index) => (
-                        <Button
-                            key ={index}
-                            variant={"contained"}
-                            color={"primary"}
-                            startIcon={<BubbleChartIcon />}
-                            disabled={_.isEmpty(result.gexf)}
-                            href={result.gexf ? gexfRes.visualizationUrl: undefined}
-                            target="_blank"
-                            rel="noopener"
-                            tooltip={result.gexf ? gexfRes.message: undefined}
-                        >
-                            { gexfRes.title/* {keyword("twittersna_result_view_graph")} */}
-                        </Button>
+                        result.gexf && result.gexf.map((gexfRes, index) => (
+                            <Button
+                                key={index}
+                                variant={"contained"}
+                                color={"primary"}
+                                startIcon={<BubbleChartIcon />}
+                                disabled={_.isEmpty(result.gexf)}
+                                href={result.gexf ? gexfRes.visualizationUrl : undefined}
+                                target="_blank"
+                                rel="noopener"
+                                tooltip={result.gexf ? gexfRes.message : undefined}
+                            >
+                                {gexfRes.title/* {keyword("twittersna_result_view_graph")} */}
+                            </Button>
                         ))
                     }
+                    {
+                        (result.gexf === undefined) &&
+                        <CircularProgress className={classes.circularProgress} />
+                    }
                     </Box>
-                    <Box m={1}/>
-                    <OnClickInfo keyword={"twittersna_export_graph_tip"}/>
+                    <Box m={1} />
+                    <OnClickInfo keyword={"twittersna_export_graph_tip"} />
                 </Paper>
             }
             {
@@ -1583,7 +1593,10 @@ export default function TwitterSnaResult(props) {
                                         </Paper>
                                     </div>
                                 }
-
+                                {
+                                    (result.userGraph.data.nodes.length !== 0) &&
+                                    <Typography variant={"body2"}>{keyword("twittersna_no_data")}</Typography>
+                                }
                             </div>
                         }
                         {
@@ -1634,7 +1647,7 @@ export default function TwitterSnaResult(props) {
                     </ExpansionPanelSummary>
                     <ExpansionPanelDetails>
                     {
-                        result && result.socioSemanticGraph && result.socioSemanticGraph.data.nodes.length !== 0 &&
+                        result.socioSemanticGraph && result.socioSemanticGraph.data.nodes.length !== 0 &&
                             <div style={{ width: '100%' }}>
                                 <Sigma graph={result.socioSemanticGraph.data}
                                     renderer={"canvas"}
@@ -1695,6 +1708,10 @@ export default function TwitterSnaResult(props) {
                                     </div>
                                 }
                             </div>
+                        }
+                        {
+                            result.socioSemanticGraph && result.socioSemanticGraph.data.nodes.length === 0 &&
+                            <Typography variant={"body2"}>{keyword("twittersna_no_data")}</Typography>
                         }
                         {
                             result.socioSemanticGraph === undefined &&

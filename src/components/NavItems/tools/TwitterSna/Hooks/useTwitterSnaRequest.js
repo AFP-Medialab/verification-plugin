@@ -106,7 +106,7 @@ function getEdgesCombinationNodes(nodes, edgeLabel) {
 
 function getEdgesUsernameToUsernameOnHashtagsExcept1st(tweets, request, fieldArr = "hashtags") {
   // Get edges between users based on each value of the given fieldArr
-  let rm1stHashtagTweets = tweets.filter(tweet => tweet._source.hashtags.length > 1)
+  let rm1stHashtagTweets = tweets.filter(tweet => tweet._source.hashtags !== undefined && tweet._source.hashtags.length > 1)
                                   .map((tweet) => { tweet._source.hashtags.splice(0, 1); return tweet; });
   let uniqElements = getUniqValuesOfField(rm1stHashtagTweets, fieldArr);
 
@@ -133,7 +133,7 @@ function getEdgesUsernameToUsernameOnHashtagsExcept1st(tweets, request, fieldArr
 }
 
 function getEdgesCoHashtag(tweets) {
-  let coHashtagArr = tweets.filter(tweet => tweet._source.hashtags.length > 1)
+  let coHashtagArr = tweets.filter(tweet => tweet._source.hashtags !== undefined && tweet._source.hashtags.length > 1)
                             .map((tweet) => { return tweet._source.hashtags });
   let edges = [];
   coHashtagArr.forEach(arr => {
@@ -309,7 +309,7 @@ function getLegendOfGraph(communityGraph, tweets, noCommunityMsg) {
 
       let hashtagsCommunity = [];
       nodesId.forEach(nodeId => {
-        let tweetsByUser = tweets.filter(tweet => tweet._source.screen_name === nodeId);
+        let tweetsByUser = tweets.filter(tweet => tweet._source.screen_name !== undefined && tweet._source.screen_name === nodeId);
         let hashtagsUser = tweetsByUser.filter(tweet => tweet._source.hashtags !== undefined)
           .map((tweet) => { return tweet._source.hashtags; });
         hashtagsCommunity.push(hashtagsUser.flat());
