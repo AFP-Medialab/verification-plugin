@@ -36,3 +36,10 @@ export const setUserProfileMostActive = (data) => {
         payload : data
     }
 };
+
+export const setGexfExport = (data) => {
+    return {
+        type : "SET_TWITTER_SNA_GEXF_EXPORT",
+        payload : data
+    }
+};

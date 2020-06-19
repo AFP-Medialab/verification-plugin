@@ -57,6 +57,7 @@ export default function TwitterSnaResult(props) {
     const [bubbleTweets, setBubbleTweets] = useState(null);
 
     const [topUserProfile, setTopUserProfile] = useState(null);
+    const [gexfExport, setGexfExport] = useState(null);
 
     const CSVheaders = [{ label: keyword('twittersna_result_word'), key: "word" }, { label: keyword("twittersna_result_nb_occ"), key: "nb_occ" }, { label: keyword("twittersna_result_entity"), key: "entity" }];
 
@@ -108,6 +109,11 @@ export default function TwitterSnaResult(props) {
         setTopUserProfile(props.topUserProfile);
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [JSON.stringify(props.topUserProfile), props.topUserProfile]);
+
+    useEffect(() => {
+        setGexfExport(props.gexfExport);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [JSON.stringify(props.gexfExport), props.gexfExport]);
 
     //Initialize tweets arrays
     useEffect(() => {
@@ -1382,13 +1388,13 @@ export default function TwitterSnaResult(props) {
                         <Typography className={classes.heading}>{keyword("export_graph_title")}</Typography>
                         <div style={{ flexGrow: 1 }} />
                         {
-                            result.gexf && result.gexf.map((gexfRes, index) => (
+                            gexfExport && gexfExport.map((gexfRes, index) => (
                                 <Button
                                     key={index}
                                     aria-label="download"
-                                    disabled={_.isEmpty(result.gexf)}
+                                    disabled={_.isEmpty(gexfExport)}
                                     startIcon={<SaveIcon />}
-                                    href={result.gexf ? gexfRes.getUrl : undefined}
+                                    href={gexfExport ? gexfRes.getUrl : undefined}
                                     tooltip={keyword("twittersna_result_download")}>
                                     {keyword("twittersna_result_download") + " " + gexfRes.title}
                                 </Button>
@@ -1401,18 +1407,18 @@ export default function TwitterSnaResult(props) {
                             <Grid container justify="space-between" spacing={2}
                                 alignContent={"center"}>
                                 {
-                                    result.gexf && result.gexf.map((gexfRes, index) => (
+                                    gexfExport && gexfExport.map((gexfRes, index) => (
                                         <Grid item key={Math.random()}>
                                             <Button
                                                 key={index}
                                                 variant={"contained"}
                                                 color={"primary"}
                                                 startIcon={<BubbleChartIcon />}
-                                                disabled={_.isEmpty(result.gexf)}
-                                                href={result.gexf ? gexfRes.visualizationUrl : undefined}
+                                                disabled={_.isEmpty(gexfExport)}
+                                                href={gexfExport ? gexfRes.visualizationUrl : undefined}
                                                 target="_blank"
                                                 rel="noopener"
-                                                tooltip={result.gexf ? gexfRes.message : undefined}
+                                                tooltip={gexfExport ? gexfRes.message : undefined}
                                             >
                                                 {gexfRes.title/* {keyword("twittersna_result_view_graph")} */}
                                             </Button>
@@ -1423,7 +1429,7 @@ export default function TwitterSnaResult(props) {
                         </div>
                     </Box>
                     {
-                        (result.gexf === undefined) &&
+                        (gexfExport === undefined) &&
                         <CircularProgress className={classes.circularProgress} />
                     }
                     </Box>

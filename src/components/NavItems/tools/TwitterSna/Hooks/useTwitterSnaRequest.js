@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setError } from "../../../../../redux/actions/errorActions";
-import { setTwitterSnaLoading, setTwitterSnaResult, setTwitterSnaLoadingMessage, setUserProfileMostActive } from "../../../../../redux/actions/tools/twitterSnaActions";
+import { setTwitterSnaLoading, setTwitterSnaResult, setTwitterSnaLoadingMessage, setUserProfileMostActive, setGexfExport } from "../../../../../redux/actions/tools/twitterSnaActions";
 import axios from "axios";
 import _ from "lodash";
 
@@ -443,7 +443,7 @@ const useTwitterSnaRequest = (request) => {
         result.cloudChart = createWordCloud(responseArrayOf9[7]);
         result.heatMap = createHeatMap(request, responseArrayOf9[5].tweets);
         result.coHashtagGraph = createCoHashtagGraph(responseArrayOf9[5].tweets);
-        result.gexf = responseArrayOf9[8];
+        // result.gexf = responseArrayOf9[8];
         result.socioSemanticGraph = createSocioSemanticGraph(responseArrayOf9[5].tweets);
         
         let authors = getTopActiveUsers(result.tweets, 100).map((arr) => {return arr[0];});
@@ -485,8 +485,14 @@ const useTwitterSnaRequest = (request) => {
         getJsonCounts(entries),
         getPlotlyJsonHisto(entries, givenFrom, givenUntil)
       ];
+      if (final) {
+        axios.all([getESQuery4Gexf(entries)])
+        .then(response => {
+          dispatch(setGexfExport(response));
+        })
+      }
       return axios.all(
-        (final) ? [...generateList, generateWordCloudPlotlyJson(entries), getESQuery4Gexf(entries)] : generateList
+        (final) ? [...generateList, generateWordCloudPlotlyJson(entries)] : generateList
       )
         .then(responseArrayOf9 => {
           makeResult(data, responseArrayOf9, givenFrom, givenUntil, final);

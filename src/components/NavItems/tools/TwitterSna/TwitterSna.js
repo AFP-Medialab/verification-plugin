@@ -48,7 +48,7 @@ const TwitterSna = () => {
   const isLoading = useSelector(state => state.twitterSna.loading);
   const loadingMessage = useSelector(state => state.twitterSna.loadingMessage);
 
-  const upTopActiveAuthors = useSelector(state => state.twitterSna.upTopActiveAuthors);
+  const gexfExport = useSelector(state => state.twitterSna.gexfExport);
   const topUserProfile = useSelector(state => state.twitterSna.topUserProfile);
 
   const windowUrl = window.location.href;
@@ -593,7 +593,7 @@ const TwitterSna = () => {
         reduxResult &&
         <TwitterSnaResult result={reduxResult} 
                           request={request} 
-                          upTopActiveAuthors={upTopActiveAuthors}
+                          gexfExport={gexfExport}
                           topUserProfile={topUserProfile}
                           />
       }
