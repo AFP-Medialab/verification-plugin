@@ -18,3 +18,4 @@ keyframes_wait_STARTED	Video analysis running. Step	Analyse de la vidéo en cour
 keyframes_content_title	Video keyframes	Images clés de la vidéo	Imágenes claves del video
 keyframe_title_get_detail	+ Show detailed view	+ Afficher la vue détaillée	+ Mostrar la vista detallada
 keyframe_title_get_simple	- Show simple view	- Afficher la vue minimal	- Mostrar vista simple
+keyframes_download_subshots	Download keyframes	Télecharger les images clés	Descargar imágenes claves

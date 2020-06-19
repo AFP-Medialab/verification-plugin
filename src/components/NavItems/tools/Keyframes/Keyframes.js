@@ -33,11 +33,28 @@ const Keyframes = (props) => {
     const resultData = useSelector(state => state.keyframes.result);
     const isLoading = useSelector(state => state.keyframes.loading);
     const message = useSelector(state => state.keyframes.message);
+    const video_id = useSelector(state => state.keyframes.video_id);
 
     // State used to load images
     const [input, setInput] = useState((resultUrl) ? resultUrl : "");
     const [submittedUrl, setSubmittedUrl] = useState(undefined);
     useKeyframeWrapper(submittedUrl);
+
+    //human right
+    const downloadShubshots = useSelector(state => state.humanRightsCheckBox)
+    //download subshots results
+    const downloadAction = () => {
+        let downloadlink = "http://multimedia2.iti.gr/video_analysis/keyframes/" + video_id + "/Subshots";
+        fetch(downloadlink).then(
+            response => {
+                response.blob().then(blob => {
+					let url = window.URL.createObjectURL(blob);
+					let a = document.createElement('a');
+                    a.href = url;
+                    a.click()});
+            });
+
+    }
 
     const submitUrl = () => {
         submissionEvent(input);
@@ -99,6 +116,14 @@ const Keyframes = (props) => {
                     resultData &&
                     <KeyFramesResults result={resultData}/>
                 }
+            </div>
+            <div>
+                {
+                    (resultData && downloadShubshots) ? 
+                    <Button color="primary" onClick={downloadAction}>
+                        {keyword("keyframes_download_subshots")}
+                    </Button> : <div/>
+                }            
             </div>
         </div>
     );

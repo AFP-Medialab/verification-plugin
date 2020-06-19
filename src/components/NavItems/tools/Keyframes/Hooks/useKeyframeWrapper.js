@@ -25,10 +25,10 @@ export const useKeyframeWrapper = (url) => {
             dispatch(setKeyframesLoading(false));
         };
 
-        const lastGet = (itiUrl) => {
+        const lastGet = (itiUrl, video_id) => {
             axios.get(itiUrl)
                 .then(response => {
-                    dispatch(setKeyframesResult(url, response.data, false, false))
+                    dispatch(setKeyframesResult(url, response.data, false, false, video_id))
                 })
                 .catch(error => handleError(error));
         };
@@ -38,7 +38,7 @@ export const useKeyframeWrapper = (url) => {
             const interval = setInterval(() => {
                 if (data && data["status"].endsWith("COMPLETED"))
                 {
-                    lastGet("http://multimedia2.iti.gr/video_analysis/result/" + video_id + "_json");
+                    lastGet("http://multimedia2.iti.gr/video_analysis/result/" + video_id + "_json", video_id);
                     clearInterval(interval);
                 }
                 else if (data && data["status"] !== undefined && keyword("keyframes_error_" + data["status"]) !== "") {

@@ -1,4 +1,4 @@
-export const setKeyframesResult = (url, result, notification, loading) => {
+export const setKeyframesResult = (url, result, notification, loading, video_id) => {
     return {
         type : "SET_KEYFRAMES_RESULT",
         payload : {
@@ -6,6 +6,7 @@ export const setKeyframesResult = (url, result, notification, loading) => {
             loading : loading,
             url : url,
             result : result,
+            video_id : video_id
         }
     }
 };
