@@ -83,11 +83,6 @@ function getUniqValuesOfField(tweets, field) {
   return uniqNodeIds;
 }
 
-function getNodesAsUsername(tweets) {
-  let nodes = getUniqValuesOfField(tweets, "screen_name").map((val) => { return { id: val, label: val } });
-  return nodes;
-}
-
 function getNodesAsHashtag(tweets) {
   let nodes = getUniqValuesOfField(tweets, "hashtags").map((val) => { return { id: val, label: val } });
   return nodes;
@@ -638,6 +633,7 @@ const useTwitterSnaRequest = (request) => {
             generateGraph(request, false).then(() => {
               setTimeout(() => getResultUntilsDone(sessionId, false, request), 5000);
 
+              dispatch(setTwitterSnaLoading(true));
               dispatch(setTwitterSnaLoadingMessage(keyword("twittersna_fetching_tweets")));
             });
           }
