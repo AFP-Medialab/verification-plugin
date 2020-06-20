@@ -112,6 +112,7 @@ export default function TwitterSnaResult(props) {
 
     useEffect(() => {
         setGexfExport(props.gexfExport);
+        console.log("setGexfExport: ", gexfExport);
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [JSON.stringify(props.gexfExport), props.gexfExport]);
 
@@ -1388,17 +1389,19 @@ export default function TwitterSnaResult(props) {
                         <Typography className={classes.heading}>{keyword("export_graph_title")}</Typography>
                         <div style={{ flexGrow: 1 }} />
                         {
-                            gexfExport && gexfExport.map((gexfRes, index) => (
-                                <Button
-                                    key={index}
-                                    aria-label="download"
-                                    disabled={_.isEmpty(gexfExport)}
-                                    startIcon={<SaveIcon />}
-                                    href={gexfExport ? gexfRes.getUrl : undefined}
-                                    tooltip={keyword("twittersna_result_download")}>
-                                    {keyword("twittersna_result_download") + " " + gexfRes.title}
-                                </Button>
-                            ))
+                            gexfExport && gexfExport.map((gexfRes, index) => {
+                                return (
+                                    <Button
+                                        key={index}
+                                        aria-label="download"
+                                        disabled={_.isEmpty(gexfExport)}
+                                        startIcon={<SaveIcon />}
+                                        href={gexfExport ? gexfRes.getUrl : undefined}
+                                        tooltip={keyword("twittersna_result_download")}>
+                                        {keyword("twittersna_result_download") + " " + gexfRes.title}
+                                    </Button>
+                                )
+                            })
                         }
                     </Toolbar>
                     <Box pb={2}>
@@ -1407,23 +1410,25 @@ export default function TwitterSnaResult(props) {
                             <Grid container justify="space-between" spacing={2}
                                 alignContent={"center"}>
                                 {
-                                    gexfExport && gexfExport.map((gexfRes, index) => (
-                                        <Grid item key={Math.random()}>
-                                            <Button
-                                                key={index}
-                                                variant={"contained"}
-                                                color={"primary"}
-                                                startIcon={<BubbleChartIcon />}
-                                                disabled={_.isEmpty(gexfExport)}
-                                                href={gexfExport ? gexfRes.visualizationUrl : undefined}
-                                                target="_blank"
-                                                rel="noopener"
-                                                tooltip={gexfExport ? gexfRes.message : undefined}
-                                            >
-                                                {gexfRes.title/* {keyword("twittersna_result_view_graph")} */}
-                                            </Button>
-                                        </Grid>
-                                    ))
+                                    gexfExport && gexfExport.map((gexfRes, index) => {
+                                        return (
+                                            <Grid item key={Math.random()}>
+                                                <Button
+                                                    key={index}
+                                                    variant={"contained"}
+                                                    color={"primary"}
+                                                    startIcon={<BubbleChartIcon />}
+                                                    disabled={_.isEmpty(gexfExport)}
+                                                    href={gexfExport ? gexfRes.visualizationUrl : undefined}
+                                                    target="_blank"
+                                                    rel="noopener"
+                                                    tooltip={gexfExport ? gexfRes.message : undefined}
+                                                >
+                                                    {gexfRes.title/* {keyword("twittersna_result_view_graph")} */}
+                                                </Button>
+                                            </Grid>
+                                        )
+                                    })
                                 }
                             </Grid>
                         </div>

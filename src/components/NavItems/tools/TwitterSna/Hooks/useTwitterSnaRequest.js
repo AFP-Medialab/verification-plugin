@@ -488,7 +488,7 @@ const useTwitterSnaRequest = (request) => {
       if (final) {
         axios.all([getESQuery4Gexf(entries)])
         .then(response => {
-          dispatch(setGexfExport(response));
+          dispatch(setGexfExport(response[0]));
         })
       }
       return axios.all(
