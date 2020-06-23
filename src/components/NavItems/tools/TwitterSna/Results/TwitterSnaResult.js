@@ -468,7 +468,9 @@ export default function TwitterSnaResult(props) {
     }
 
     const onHistogramClick = (data) => {
-        setHistoTweets(displayTweetsOfDate(data, true));
+        if (result.tweets !== undefined) {
+            setHistoTweets(displayTweetsOfDate(data, true));
+        }
     }
 
     const onHeatMapClick = (data) => {
@@ -479,11 +481,15 @@ export default function TwitterSnaResult(props) {
 
         //For mention donuts
         if (index === 3) {
-            displayTweetsOfMention(data.points[0].label, "", 3)
+            if (result.tweets !== undefined) {
+                displayTweetsOfMention(data.points[0].label, "", 3)
+            }
         }
         // For retweets, likes, top_user donut
         else {
-            displayTweetsOfUser(data.points[0].label, nbType, index);
+            if (result.tweets !== undefined) {
+                displayTweetsOfUser(data.points[0].label, nbType, index);
+            }
         }
 
     };
