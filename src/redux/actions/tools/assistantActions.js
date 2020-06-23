@@ -26,6 +26,13 @@ export const setInputUrl = (inputUrl) => {
     }
 };
 
+export const setHelpMessage = (messageKeyword) => {
+    return {
+        type: "SET_HELP_MESSAGE",
+        payload: messageKeyword,
+    }
+}
+
 export const setProcessUrlActions = (processUrlType, actions) => {
     return {
         type : "SET_PROCESS_URL_ACTIONS",

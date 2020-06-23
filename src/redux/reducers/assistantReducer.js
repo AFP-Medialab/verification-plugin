@@ -8,7 +8,8 @@ const defaultState = {
     videoList: [],
     processUrlActions : [],
     processUrlType: null,
-    inputUrlActions: null
+    inputUrlActions: null,
+    helpMessage: "assistant_alternative"
 };
 
 const assistantReducer = (state = defaultState, action) => {
@@ -51,6 +52,10 @@ const assistantReducer = (state = defaultState, action) => {
             state.requireLogIn = action.payload;
             return state;
 
+        case "SET_HELP_MESSAGE":
+            state.helpMessage = action.payload;
+            return state;
+
         case "CLEAN_STATE":
             state = {
                 urlMode: null,
@@ -62,7 +67,8 @@ const assistantReducer = (state = defaultState, action) => {
                 videoList: [],
                 processUrlActions : [],
                 processUrlType: null,
-                inputUrlActions: null
+                inputUrlActions: null,
+                helpMessage: "assistant_alternative"
             };
             return state;
 

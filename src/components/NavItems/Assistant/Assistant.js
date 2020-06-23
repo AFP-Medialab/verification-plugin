@@ -23,12 +23,12 @@ import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
 import useLoadLanguage from "../../../Hooks/useLoadLanguage";
 
 import {
-    cleanAssistantState, setImageVideoSelected,
+    cleanAssistantState, setHelpMessage, setImageVideoSelected,
     setInputUrl, setMediaLists, setProcessUrl, setProcessUrlActions,
     setUrlMode,
 } from "../../../redux/actions/tools/assistantActions";
 import {
-    CONTENT_TYPE, DOMAIN, DOMAIN_PATTERNS, TYPE_PATTERNS,
+    CONTENT_TYPE, TYPE_PATTERNS,
     matchPattern, selectCorrectActions, KNOWN_LINK_PATTERNS, KNOWN_LINKS,
 } from "./AssistantRuleBook";
 import history from "../../Shared/History/History";
@@ -49,52 +49,87 @@ const Assistant = () => {
     const processUrlActions = useSelector(state => state.assistant.processUrlActions);
     const imageList = useSelector(state => state.assistant.imageList);
     const videoList = useSelector(state => state.assistant.videoList);
+    const helpMessage = useSelector(state => state.assistant.helpMessage);
 
     //other state values
     const [formInput, setFormInput] = useState(null);
 
     //refs
-    const imageListRef = useRef([]);
-    const videoListRef = useRef([]);
-
-    const validateUrl = (userInput) => {
-        //https://stackoverflow.com/questions/3809401/what-is-a-good-regular-expression-to-match-a-url
-        let urlRegex = "(http(s)?:\/\/.)?(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{2,256}\\.[a-z]{2,6}\\b([-a-zA-Z0-9@:%_\\+.~#?&//=]*)";
-        if (!userInput.match(urlRegex)) throw new Error(keyword("please_give_a_correct_link"))
-    }
+    const imageListRef = useRef(imageList);
+    const videoListRef = useRef(videoList);
 
     // check the input url for data. create new image/video lists or add to existing
     const submitInputUrl = async (userInput) => {
         try {
-            validateUrl(userInput);
-            let contentType = matchPattern(userInput, TYPE_PATTERNS);
+            // get url type and set media lists according to url
+            let urlType = matchPattern(userInput, KNOWN_LINK_PATTERNS);
+            setMediaListsByUrl(urlType, userInput);
 
-            if(contentType!=null) {
-                if (contentType == CONTENT_TYPE.IMAGE) imageListRef.current = [userInput];
-                else if (contentType == CONTENT_TYPE.VIDEO) videoListRef.current = [userInput];
-            }
-            else{checkForMediaLists(userInput);}
-
-            dispatch(setMediaLists(imageListRef.current, videoListRef.current));
+            // set assistant state to reflect media lists
+            dispatch(setMediaLists(imageListRef.current, videoListRef.current))
             dispatch(setInputUrl(userInput));
 
-            if (imageListRef.current.length == 1 && videoListRef.current.length==0) {
-                dispatch(setProcessUrl(imageListRef.current[0]))
-            }
-            else if(videoListRef.current.length == 1 && imageListRef.current.length==0){
-                console.log(videoListRef.current);
-                dispatch(setProcessUrl(videoListRef.current[0]))
-            }
+            // if only one image/video exists, set this to be processed with an intermediate step
+            handleOneMediaListResult();
         }
         catch (error) {
             dispatch(setError(error.message));
         }
     }
 
+    // if there is only one image/video, set this to be processed
+    const handleOneMediaListResult = () => {
+        if (imageListRef.current.length == 1 && videoListRef.current.length==0) {
+            dispatch(setProcessUrl(imageListRef.current[0]))}
+        else if(videoListRef.current.length == 1 && imageListRef.current.length==0){
+            dispatch(setProcessUrl(videoListRef.current[0]))}
+    }
+
+    // handle specific urls in specific ways to pupulate image/video lists
+    const setMediaListsByUrl = (urlType, userInput) => {
+        switch(urlType) {
+            case KNOWN_LINKS.YOUTUBE:
+            case KNOWN_LINKS.LIVELEAK:
+            case KNOWN_LINKS.VIMEO:
+            case KNOWN_LINKS.DAILYMOTION:
+                videoListRef.current = [userInput];
+                break;
+            case KNOWN_LINKS.TIKTOK:
+                checkForMediaLists(userInput);
+                imageListRef.current = [];
+                break;
+            case KNOWN_LINKS.INSTAGRAM:
+                checkForMediaLists(userInput);
+                if(videoListRef.current.length == 1){imageListRef.current = []}
+                else {imageListRef.current = imageListRef.current.length>0 ?  [imageListRef.current[1]] : []}
+                dispatch(setHelpMessage("assistant_handled_site"))
+                break;
+            case KNOWN_LINKS.FACEBOOK:
+                checkForMediaLists(userInput);
+                dispatch(setHelpMessage("assistant_handled_site"))
+                break;
+            case KNOWN_LINKS.TWITTER:
+                checkForMediaLists(userInput);
+                dispatch(setHelpMessage("assistant_handled_site"))
+                break;
+            case KNOWN_LINKS.MISC:
+                let contentType = matchPattern(userInput, TYPE_PATTERNS);
+                if(contentType!=null) {
+                    if (contentType == CONTENT_TYPE.IMAGE) imageListRef.current = [userInput];
+                    else if (contentType == CONTENT_TYPE.VIDEO) videoListRef.current = [userInput];
+                }
+                else{checkForMediaLists();}
+                break;
+            default:
+                throw new Error(keyword("please_give_a_correct_link"));
+        }
+
+    }
+
     // if the user wants to upload a file, give them tools where this is an option
     const submitUpload = (contentType) => {
-        let domain = DOMAIN.OWN;
-        let actions = selectCorrectActions(domain, contentType, "");
+        let known_link = KNOWN_LINKS.OWN;
+        let actions = selectCorrectActions(contentType, known_link, known_link, "");
         dispatch(setProcessUrlActions(contentType, actions));
         dispatch(setImageVideoSelected(true));
     }
@@ -106,43 +141,34 @@ const Assistant = () => {
 
     // load possible actions for selected media url
     const loadProcessUrlActions = () => {
-        let contentType = matchPattern(processUrl, TYPE_PATTERNS);
-        let domain = matchPattern(processUrl, DOMAIN_PATTERNS);
-        let actions = selectCorrectActions(domain, contentType, processUrl);
+        let contentType = null;
+
+        if(imageListRef.current.includes(processUrl)) {contentType = CONTENT_TYPE.IMAGE}
+        else if (videoListRef.current.includes(processUrl)) {contentType = CONTENT_TYPE.VIDEO};
+
+        let knownInputLink = matchPattern(inputUrl, KNOWN_LINK_PATTERNS);
+        let knownProcessLink = matchPattern(processUrl, KNOWN_LINK_PATTERNS);
+        let actions = selectCorrectActions(contentType, knownInputLink, knownProcessLink, processUrl);
+
         dispatch(setProcessUrlActions(contentType, actions))
     }
 
     // check if the browser has any stored media lists. these are generated by popup.js.
-    const checkForMediaLists = (userInput) => {
+    const checkForMediaLists = () => {
+
         let urlImageList = window.localStorage.getItem("imageList");
         let urlVideoList = window.localStorage.getItem("videoList");
 
-        if (urlImageList == null && urlVideoList == null) {
-            return;
-        }
-
-        if (urlImageList != "" || urlVideoList != "") {
+        if (urlImageList == null && urlVideoList == null) {return;}
+        else if (urlImageList != "" || urlVideoList != "") {
             imageListRef.current = urlImageList != "" ? urlImageList.split(",") : [];
             videoListRef.current = urlVideoList != "" ? urlVideoList.split(",") : [];
-            handleURLSpecificAlterations(userInput);
-        }
-    }
-
-    const handleURLSpecificAlterations = (userInput) => {
-        let known_link = matchPattern(userInput, KNOWN_LINK_PATTERNS)
-        if (known_link){
-            if (known_link == KNOWN_LINKS.INSTAGRAM){
-                if(videoListRef.current.length == 1){imageListRef.current = []}
-                else {imageListRef.current = [imageListRef.current[1]]}
-            }
-            else if (known_link == KNOWN_LINKS.TIKTOK){
-                imageListRef.current = [];
-            }
         }
     }
 
     // clean assistant state
     const cleanAssistant = () => {
+
         //clean stored browser vars and refs
         window.localStorage.removeItem("imageList");
         window.localStorage.removeItem("videoList");
@@ -262,7 +288,7 @@ const Assistant = () => {
                                 <FaceIcon size={"small"}/> {keyword("assistant_error")}
                             </Typography>
                             <Typography variant={"h6"} align={"left"}>
-                                {keyword("assistant_alternative")}
+                                {keyword(helpMessage)}
                             </Typography>
                         </CardContent></Card>
                     </Grid>

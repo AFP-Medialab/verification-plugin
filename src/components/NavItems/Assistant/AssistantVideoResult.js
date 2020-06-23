@@ -10,6 +10,7 @@ import {useSelector} from "react-redux";
 import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
 import useLoadLanguage from "../../../Hooks/useLoadLanguage";
 import tsv from "../../../LocalDictionary/components/NavItems/tools/Assistant.tsv";
+import {CONTENT_TYPE, KNOWN_LINK_PATTERNS, KNOWN_LINKS, matchPattern, TYPE_PATTERNS} from "./AssistantRuleBook";
 
 const AssistantVideoResult = () => {
     const classes = useMyStyles();
@@ -18,13 +19,31 @@ const AssistantVideoResult = () => {
 
     const preprocessLinkForEmbed = (resultUrl) => {
         let embedURL = resultUrl;
-        if (!embedURL.includes("/embed/")) {
-            let ids = embedURL.match("(v=|youtu.be\/)([a-zA-Z0-9_-]+)[&|\?]?");
-            if (ids) {
-                let id = ids[ids.length-1];
-                embedURL = "http://www.youtube.com/embed/" + id;
-            }
+        let linkType = matchPattern(resultUrl, KNOWN_LINK_PATTERNS);
+
+        switch(linkType){
+            case KNOWN_LINKS.YOUTUBE:
+                if (!embedURL.includes("/embed/")) {
+                    let ids = embedURL.match("(v=|youtu.be\/)([a-zA-Z0-9_-]+)[&|\?]?");
+                    if (ids) {
+                        let id = ids[ids.length-1];
+                        embedURL = "http://www.youtube.com/embed/" + id;
+                    }
+                }
+                break;
+            case KNOWN_LINKS.VIMEO:
+                var stringToMatch = "vimeo.com/"
+                var positionOne = resultUrl.indexOf(stringToMatch);
+                var positionTwo = positionOne + stringToMatch.length;
+                embedURL = embedURL.slice(0, positionOne) + "player." + embedURL.slice(positionOne, positionTwo) + "video/"  + embedURL.slice(positionTwo);
+                break;
+            case KNOWN_LINKS.DAILYMOTION:
+                var stringToMatch = "dailymotion.com/";
+                var positionOne = resultUrl.indexOf(stringToMatch) + stringToMatch.length;
+                embedURL = embedURL.slice(0, positionOne) + "embed/" + embedURL.slice(positionOne);
+                break;
         }
+
         return embedURL;
     }
 

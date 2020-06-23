@@ -74,7 +74,7 @@ const AssistantResult = () => {
                                 <Grid container m = {4}>
                                     <Card className={classes.assistantCards}  variant = "outlined"
                                           onClick={
-                                              () => handleClick(action.path, action.use_known_url ? inputUrl : processUrl)
+                                              () => handleClick(action.path, action.useInputUrl ? inputUrl : processUrl)
                                           }>
                                         <CardActionArea><CardContent>
                                                 <Typography className={classes.title} m={2}>{keyword(action.text)}</Typography>
