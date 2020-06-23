@@ -6,11 +6,8 @@ import axios from "axios";
 import _ from "lodash";
 
 import {
-  getPlotlyJsonDonuts,
-  getPlotlyJsonHisto,
-  getJsonCounts,
-  getReactArrayURL,
-  generateWordCloudPlotlyJson,
+  getAggregationData,
+  getTweets,
   getESQuery4Gexf,
   getUserAccounts
 } from "../Results/call-elastic";
@@ -290,7 +287,7 @@ const useTwitterSnaRequest = (request) => {
     let tweetIE = { text: "" };
 
     const getAllWordsMap = (elasticResponse) => {
-      let hits = Array.from(elasticResponse.hits.hits);
+      let hits = Array.from(elasticResponse);
       let wordsMap = [];
 
       for (let i = 0; i < hits.length; i++) {
@@ -334,56 +331,7 @@ const useTwitterSnaRequest = (request) => {
       dispatch(setTwitterSnaLoading(false));
     };
 
-    const createPieCharts = (data, responseArrayOf9) => {
-      let cloudLayout = {
-        title: "",
-        automargin: true,
-        width: 500,
-        height: 500
-      };
-
-      let config = {
-        displayModeBar: true,
-        toImageButtonOptions: {
-          format: 'png', // one of png, svg, jpeg, webp
-          filename: data.keywordList.join("&") + "_" + data.from + "_" + data.until + "_Tweets",
-          scale: 1 // Multiply title/legend/axis/canvas sizes by this factor
-        },
-        modeBarButtons: [["toImage"]],
-        displaylogo: false
-      };
-      let titleEnd = data.keywordList.join("&") + " " + data.from + " " + data.until;
-      let titles = [
-        "retweets_cloud_chart_title",
-        "likes_cloud_chart_title",
-        "top_users_pie_chart_title",
-        "mention_cloud_chart_title"
-      ];
-      let tips = [
-        "twittersna_most_retweet_tip",
-        "twittersna_most_likes_tip",
-        "twittersna_most_active_tip",
-        "twittersna_most_mentions_tip"
-      ]
-
-      let pieCharts = [];
-
-      for (let cpt = 0; cpt < titles.length; cpt++) {
-        cloudLayout.title = <div><b>{keyword(titles[cpt])}</b><br /> {titleEnd}</div>;
-        pieCharts.push(
-          {
-            title: titles[cpt],
-            json: responseArrayOf9[cpt],
-            layout: cloudLayout,
-            config: config,
-            tip: tips[cpt]
-          }
-        );
-      }
-      return pieCharts;
-    };
-
-    const createHistogram = (data, json, givenFrom, givenUntil) => {
+    const createTimeLineChart = (request, json, givenFrom, givenUntil) => {
       let titleEnd = request.keywordList.join("&") + " " + request.from + " " + request.until;
       let layout = {
         title: <div><b>{keyword("user_time_chart_title")}</b><br /> {titleEnd}</div>,
@@ -408,7 +356,7 @@ const useTwitterSnaRequest = (request) => {
         displayModeBar: true,
         toImageButtonOptions: {
           format: 'png', // one of png, svg, jpeg, webp
-          filename: data.keywordList.join("&") + "_" + data["from"] + "_" + data["until"] + "_Timeline",
+          filename: request.keywordList.join("&") + "_" + request["from"] + "_" + request["until"] + "_Timeline",
           scale: 1 // Multiply title/legend/axis/canvas sizes by this factor
         },
 
@@ -428,23 +376,227 @@ const useTwitterSnaRequest = (request) => {
         tweetsView: null,
       };
     };
-    const makeResult = (data, responseArrayOf9, givenFrom, givenUntil, final) => {
+
+    const createPieCharts = (request, jsonPieCharts) => {
+      let cloudLayout = {
+        title: "",
+        automargin: true,
+        width: 500,
+        height: 500
+      };
+
+      let config = {
+        displayModeBar: true,
+        toImageButtonOptions: {
+          format: 'png', // one of png, svg, jpeg, webp
+          filename: request.keywordList.join("&") + "_" + request.from + "_" + request.until + "_Tweets",
+          scale: 1 // Multiply title/legend/axis/canvas sizes by this factor
+        },
+        modeBarButtons: [["toImage"]],
+        displaylogo: false
+      };
+      let titleEnd = request.keywordList.join("&") + " " + request.from + " " + request.until;
+      let titles = [
+        "retweets_cloud_chart_title",
+        "likes_cloud_chart_title",
+        "top_users_pie_chart_title",
+        "mention_cloud_chart_title"
+      ];
+      let tips = [
+        "twittersna_most_retweet_tip",
+        "twittersna_most_likes_tip",
+        "twittersna_most_active_tip",
+        "twittersna_most_mentions_tip"
+      ]
+
+      let pieCharts = [];
+
+      for (let cpt = 0; cpt < titles.length; cpt++) {
+        cloudLayout.title = <div><b>{keyword(titles[cpt])}</b><br /> {titleEnd}</div>;
+        pieCharts.push(
+          {
+            title: titles[cpt],
+            json: jsonPieCharts[cpt],
+            layout: cloudLayout,
+            config: config,
+            tip: tips[cpt]
+          }
+        );
+      }
+      return pieCharts;
+    };
+
+    const getJsonDataForTimeLineChart = (dataResponse) => {
+      let dates = dataResponse;
+
+      var infos = [];
+
+      const usersGet = (dateObj, infos) => {
+        dateObj["3"]["buckets"].forEach(obj => {
+          infos.push({
+            date: obj["dt"]['buckets']['0']['key_as_string'],
+            key: obj["key"],
+            nb: obj["rt"]["value"]
+          })
+        });
+
+        return infos;
+      }
+
+
+      dates.forEach(dateObj => {
+        usersGet(dateObj, infos);
+        infos.push({
+          date: dateObj['key_as_string'],
+          key: "Tweets",
+          nb: dateObj["doc_count"],
+        });
+        infos.push({
+          date: dateObj['key_as_string'],
+          key: "Retweets",
+          nb: dateObj["1"]["value"]
+        });
+      });
+
+      var lines = [];
+      while (infos.length !== 0) {
+
+        let info = infos.pop();
+        let date = info.date;
+        let nb = info.nb;
+        var type = "markers";
+        if (info.key === "Tweets" || info.key === "Retweets")
+          type = 'lines';
+        let plotlyInfo = {
+          mode: type,
+          name: info.key,
+          x: [],
+          y: []
+        }
+
+        for (let i = 0; i < infos.length; ++i) {
+          if (infos[i].key === info.key) {
+            plotlyInfo.x.push(infos[i].date);
+            plotlyInfo.y.push(infos[i].nb);
+            infos.splice(i, 1);
+            i--;
+          }
+        }
+        plotlyInfo.x.push(date);
+        plotlyInfo.y.push(nb);
+        lines.push(plotlyInfo);
+      }
+
+      return lines;
+    }
+
+    const getJsonDataForPieChart = (dataResponse, paramKeywordList, specificGetCallBack) => {
+
+      let labels = [];
+      let parents = [];
+      let value = [];
+
+      let keys = dataResponse;
+
+      if (keys.length === 0)
+          return null;
+  
+          //Initialisation
+      labels.push(paramKeywordList.join(', ').replace(/#/g, ''));
+      parents.push("");
+      value.push("");
+
+      if (keys[0]['key'].charAt(0) === '#')
+          keys.shift();
+      keys.forEach(key => {
+          specificGetCallBack(key, value, labels, parents, paramKeywordList.join(', ').replace(/#/g, ''));
+      });
+      
+      let obj = [{
+          type: "sunburst",
+          labels: labels,
+          parents: parents,
+          values: value,
+          textinfo: "label+value",
+          outsidetextfont: {size: 20, color: "#377eb8"},
+      }];
+      return obj;
+    }
+
+    const getJsonDataForPieCharts = (esResponse, paramKeywordList) => {
+
+      function topByCount(key, values, labels, parents, mainKey) {
+        if (key["doc_count"] > 0) {
+          values.push(key["doc_count"]);
+          labels.push(key["key"]);
+          parents.push(mainKey);
+        }
+      }
+
+      function topBySum(key, values, labels, parents, mainKey) {
+        if (key["_1"]["value"] > 10) {
+          values.push(key["_1"]["value"]);
+          labels.push(key["key"]);
+          parents.push(mainKey);
+        }
+      }
+
+      let jsonPieCharts = [];
+      if (esResponse["top_user_retweet"]) {
+        jsonPieCharts.push(getJsonDataForPieChart(esResponse["top_user_retweet"]["buckets"], paramKeywordList, topBySum));
+      }
+      if (esResponse["top_user_favorite"]) {
+        jsonPieCharts.push(getJsonDataForPieChart(esResponse["top_user_favorite"]["buckets"], paramKeywordList, topBySum));
+      }
+      if (esResponse["top_user"]) {
+        jsonPieCharts.push(getJsonDataForPieChart(esResponse["top_user"]["buckets"], paramKeywordList, topByCount));
+      }
+      if (esResponse["top_user_mentions"]) {
+        jsonPieCharts.push(getJsonDataForPieChart(esResponse["top_user_mentions"]["buckets"], paramKeywordList, topByCount));
+      }
+
+      return jsonPieCharts;
+    }
+
+    const getJsonDataForURLTable = (dataResponse) => {
+      let columns = [
+        { title: keyword("elastic_url"), field: 'url' },
+        { title: keyword("elastic_count"), field: 'count' },
+      ];
+
+      let data = dataResponse.map((obj) => {
+        let newObj = {};
+        newObj['url'] = obj['key'];
+        newObj['count'] = obj['doc_count'];
+        return newObj;
+      })
+
+      return {
+        columns: columns,
+        data: data,
+      }
+    }
+
+    const makeResult = (request, responseArrayOf9, givenFrom, givenUntil, final) => {
+
+      let responseAggs = responseArrayOf9[0]['aggregations']
 
       const result = {};
-      result.pieCharts = createPieCharts(data, responseArrayOf9);
-      result.urls = responseArrayOf9[4];
+      result.histogram = createTimeLineChart(request, getJsonDataForTimeLineChart(responseAggs['date_histo']['buckets']), givenFrom, givenUntil);
       result.tweetCount = {};
-      result.tweetCount.count = responseArrayOf9[5].value.toString().replace(/(?=(\d{3})+(?!\d))/g, " ");
-      result.tweetCount.retweet = responseArrayOf9[5].retweets.toString().replace(/(?=(\d{3})+(?!\d))/g, " ");
-      result.tweetCount.like = responseArrayOf9[5].likes.toString().replace(/(?=(\d{3})+(?!\d))/g, " ");
-      result.tweets = responseArrayOf9[5].tweets;
-      result.histogram = createHistogram(data, responseArrayOf9[6], givenFrom, givenUntil);
+      result.tweetCount.count = responseAggs['tweet_count']['value'].toString().replace(/(?=(\d{3})+(?!\d))/g, " ");
+      result.tweetCount.retweet = responseAggs['retweets']['value'].toString().replace(/(?=(\d{3})+(?!\d))/g, " ");
+      result.tweetCount.like = responseAggs['likes']['value'].toString().replace(/(?=(\d{3})+(?!\d))/g, " ");
+      result.pieCharts = createPieCharts(request, getJsonDataForPieCharts(responseAggs, request.keywordList));
+      result.urls = getJsonDataForURLTable(responseAggs['top_url_keyword']['buckets']);
+
+      result.cloudChart = { title: "top_words_cloud_chart_title" };
       if (final) {
-        result.cloudChart = createWordCloud(responseArrayOf9[7]);
-        result.heatMap = createHeatMap(request, responseArrayOf9[5].tweets);
-        result.coHashtagGraph = createCoHashtagGraph(responseArrayOf9[5].tweets);
-        // result.gexf = responseArrayOf9[8];
-        result.socioSemanticGraph = createSocioSemanticGraph(responseArrayOf9[5].tweets);
+        result.tweets = responseArrayOf9[1].tweets;
+        result.heatMap = createHeatMap(request, result.tweets);
+        result.coHashtagGraph = createCoHashtagGraph(result.tweets);
+        result.socioSemanticGraph = createSocioSemanticGraph(result.tweets);
+        result.cloudChart = createWordCloud(result.tweets);
         
         let authors = getTopActiveUsers(result.tweets, 100).map((arr) => {return arr[0];});
         if (authors.length > 0) {
@@ -476,15 +628,11 @@ const useTwitterSnaRequest = (request) => {
       let givenFrom = data.from;
       let givenUntil = data.until;
       let entries = makeEntries(data);
-      let generateList = [
-        getPlotlyJsonDonuts(entries, "retweet_count"),
-        getPlotlyJsonDonuts(entries, "favorite_count"),
-        getPlotlyJsonDonuts(entries, "ntweets"),
-        getPlotlyJsonDonuts(entries, "user_mentions"),
-        getReactArrayURL(entries, keyword("elastic_url"), keyword("elastic_count")),
-        getJsonCounts(entries),
-        getPlotlyJsonHisto(entries, givenFrom, givenUntil)
-      ];
+      // let generateList = [
+      //   getReactArrayURL(entries, keyword("elastic_url"), keyword("elastic_count")),
+      //   getJsonCounts(entries),
+      //   getPlotlyJsonHisto(entries, givenFrom, givenUntil)
+      // ];
       if (final) {
         axios.all([getESQuery4Gexf(entries)])
         .then(response => {
@@ -492,7 +640,7 @@ const useTwitterSnaRequest = (request) => {
         })
       }
       return axios.all(
-        (final) ? [...generateList, generateWordCloudPlotlyJson(entries)] : generateList
+        (final) ? [getAggregationData(entries), getTweets(entries)] : [getAggregationData(entries)]
       )
         .then(responseArrayOf9 => {
           makeResult(data, responseArrayOf9, givenFrom, givenUntil, final);

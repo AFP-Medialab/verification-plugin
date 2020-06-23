@@ -1,161 +1,11 @@
-
 let elasticSearch_url = process.env.REACT_APP_ELK_URL;
 let elasticSearchUser_url = process.env.REACT_APP_ES_USER_URL;
 let gexfGen_url = process.env.REACT_APP_GEXF_GENERATOR_URL;
 
 //Functions calling elastic search and return a JSON plotly can use
 
-    //Timeline chart
-    function getElasticReponseHisto(param, givenFrom, givenUntil) {
-        let queryStart = param["from"];
-        let queryEnd = param["until"];
-
-        let dateEndQuery = new Date(queryEnd);
-        let dateStartQuery = new Date(queryStart);
-
-        let dateGivenFrom = new Date(givenFrom);
-        let dateGivenUntil = new Date(givenUntil);
-
-        let reProcess = false;
-        let diff = (dateGivenUntil - dateGivenFrom) / (1000 * 3600 * 24);
-        let interval = "";
-        if (diff > 14) {
-            interval = "1d";
-            if ((dateEndQuery - dateStartQuery) / (1000 * 3600 * 24) < 14)
-                reProcess = true;
-        } else
-            interval = "1h";
-
-
-        let aggs = constructAggs(interval);
-        let must = constructMatchPhrase(param, givenFrom, givenUntil);
-        let mustNot = constructMatchNotPhrase(param);
-
-        
-        const userAction = async (query) => {
-            let str_query = JSON.stringify(query).replace(/\\/g, "").replace(/"{/g, "{").replace(/}"/g, "}");
-
-            const response = await fetch(elasticSearch_url, {
-                method: 'POST',
-                body:
-                str_query,
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
-            const elasticResponse = await response.json();
-            if (elasticResponse["error"] !== undefined)
-            {
-                let res = setTimeout(() => userAction(query), 5000);
-            return res;
-            }
-            return elasticResponse;
-        };
-        
-        return userAction(buildQuery(aggs, must, mustNot, 0)).then(plotlyJSON => {
-
-            if (reProcess) {
-                let aggs = constructAggs("1h");
-                let must = constructMatchPhrase(param, queryStart, queryEnd);
-                return (userAction(buildQuery(aggs, must, mustNot, 0)).then(plotlyJSON2 => {
-
-                    let i = 0;
-
-                    plotlyJSON2.forEach(plot => {
-                        if (i++ > 1) {
-                            plotlyJSON.forEach(plot2 => {
-
-                                if (plot.name === plot2.name) {
-                                    plot2.x = [...plot2.x, ...plot.x];
-                                    plot2.y = [...plot2.y, ...plot.y];
-                                }
-
-                            });
-                        }
-                    });
-                    return plotlyJSON;
-                }));
-            }
-
-            return plotlyJSON;
-
-        });
-
-    }
-
-    function generatePlotlyJsonFromElasticResponseHisto(elasticResponse) {
-        let dates = elasticResponse["aggregations"]["2"]["buckets"];
-
-        var infos = [];
-
-        const usersGet = (dateObj, infos) => {
-            dateObj["3"]["buckets"].forEach(obj => {
-                    infos.push({
-                        date:  obj["2"]['buckets']['0']['key_as_string'],
-                        key: obj["key"],
-                        nb: obj["1"]["value"]
-                    })
-            });
-
-            return infos;
-        }
-
-
-        dates.forEach(dateObj => {
-            usersGet(dateObj, infos);
-            infos.push({
-                date: dateObj['key_as_string'],
-                key: "Tweets",
-                nb: dateObj["doc_count"],
-            });
-            infos.push({
-                date: dateObj['key_as_string'],
-                key: "Retweets",
-                nb: dateObj["1"]["value"]
-            });
-        });
-
-        var lines = [];
-        while (infos.length !== 0) {
-
-            let info = infos.pop();
-            let date = info.date;
-            let nb = info.nb;
-            var type = "markers";
-            if (info.key === "Tweets" || info.key === "Retweets")
-                type = 'lines';
-            let plotlyInfo = {
-                mode: type,
-                name: info.key,
-                x: [],
-                y: []
-            }
-
-            for (let i = 0; i < infos.length; ++i) {
-                if (infos[i].key === info.key) {
-                    plotlyInfo.x.push(infos[i].date);
-                    plotlyInfo.y.push(infos[i].nb);
-                    infos.splice(i, 1);
-                    i--;
-                }
-            }
-            plotlyInfo.x.push(date);
-            plotlyInfo.y.push(nb);
-            lines.push(plotlyInfo);
-        }
-
-        return lines;
-    }
-
-    export async function getPlotlyJsonHisto(request, givenFrom, givenUntil) {
-        return generatePlotlyJsonFromElasticResponseHisto(await getElasticReponseHisto(request, givenFrom, givenUntil));
-    }
-
-
-
-
-    //Tweet count display
-    async function getElasticReponseCounts(param, aggs, must, mustNot) {
+    //Get tweets
+    async function queryTweetsFromES(param, aggs, must, mustNot) {
         const response = await fetch(elasticSearch_url, {
             method: 'POST',
             body: JSON.stringify(buildQuery(aggs, must, mustNot, 10000)).replace(/\\/g, "").replace(/"{/g, "{").replace(/}"/g, "}"),
@@ -164,237 +14,58 @@ let gexfGen_url = process.env.REACT_APP_GEXF_GENERATOR_URL;
             }
         });
         let elasticResponse = await response.json();
-        if (elasticResponse["hits"]["total"]["value"] === 10000) {
+
+        let isMore10kRecords = (elasticResponse["hits"]["total"]["value"] === 10000 && elasticResponse["hits"]["total"]["relation"] === "gte") ? true : false;
+
+        if (isMore10kRecords) {
             do {
-                let tweets = elasticResponse.hits.hits
-                let must2 = constructMatchPhrase({
-                        ...param,
-                        "from": tweets[tweets.length - 1]._source.date,
-                        "until": param["until"],
-                    });
-                let mustNot2 = constructMatchNotPhrase({
-                        ...param,
-                        "from": tweets[tweets.length - 1]._source.date,
-                        "until": param["until"],
-                    });
-                    elasticResponse = await completeElasticReponseCounts(aggs, must2, mustNot2, elasticResponse);
-            } while (elasticResponse.current_total_hits === 10000)
+                let tweets = elasticResponse.hits.hits;
+                let searchAfter = tweets[tweets.length - 1]["sort"];
+
+                elasticResponse = await continueQueryTweetsFromESWhenMore10k(aggs, must, mustNot, searchAfter, elasticResponse);
+            } while (elasticResponse["current_hits_length"] !== 0)
+
+            return elasticResponse;
+
+        } else {
+            return elasticResponse;
         }
-        
-        return elasticResponse;
     }
 
-    async function completeElasticReponseCounts(aggs, must, mustNot, elasticResponse) {
+    async function continueQueryTweetsFromESWhenMore10k(aggs, must, mustNot, searchAfter, elasticResponse) {
+        let arr = Array.from(elasticResponse.hits.hits);
+
         const response = await fetch(elasticSearch_url, {
             method: 'POST',
-            body: JSON.stringify(buildQuery(aggs, must, mustNot, 10000)).replace(/\\/g, "").replace(/"{/g, "{").replace(/}"/g, "}"),
+            body: JSON.stringify(buildQuerySearchAfter(aggs, must, mustNot, 10000, searchAfter)).replace(/\\/g, "").replace(/"{/g, "{").replace(/}"/g, "}"),
             headers: {
                 'Content-Type': 'application/json'
             }
         });
-        let arr = Array.from(elasticResponse.hits.hits);
-        let id_arr = arr.map(elt => elt._id);
 
-        const elasticResponseComplement = await response.json();
-        Array.from(elasticResponseComplement.hits.hits).forEach(hit => {
+        const newElasticResponse = await response.json();
+
+        let id_arr = arr.map(elt => elt._id);
+        Array.from(newElasticResponse.hits.hits).forEach(hit => {
             if (!id_arr.includes(hit._id)) {
                 arr.push(hit);
             }
         })
-        elasticResponse["current_total_hits"] = elasticResponseComplement.hits.total.value;
+        elasticResponse["current_hits_length"] = newElasticResponse.hits.hits.length;
         elasticResponse.hits.hits = arr;
         elasticResponse.hits.total.value = arr.length;
         return elasticResponse;
     }
 
-    export function getJsonCounts(param) {
+    export function getTweets(param) {
         let must = constructMatchPhrase(param);
         let mustNot = constructMatchNotPhrase(param);
-        let aggs = constructAggs("glob");
-        return getElasticReponseCounts(param, aggs, must, mustNot).then(elasticResponse => {
+        let aggs = {};
+        return queryTweetsFromES(param, aggs, must, mustNot).then(elasticResponse => {
             return {
-                value: elasticResponse.hits.total.value,
-                retweets: elasticResponse.aggregations.retweets.value,
-                likes: elasticResponse.aggregations.likes.value,
                 tweets: elasticResponse.hits.hits
             }
         });
-    }
-
-
-
-
-    //Donut charts (Most liked, most retweeted, most used hashtags, most active users)
-    function getElasticReponseDonuts(param, field) {
-        let aggs = constructAggs(field);
-        let must = constructMatchPhrase(param);
-        let mustNot = constructMatchNotPhrase(param);
-
-
-        let query = JSON.stringify(buildQuery(aggs, must, mustNot, 0)).replace(/\\/g, "").replace(/"{/g, "{").replace(/}"/g, "}");
-
-        const userAction = async () => {
-            const response = await fetch(elasticSearch_url, {
-                method: 'POST',
-                body:
-                query,
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
-            const elasticResponse = await response.json();
-            return elasticResponse;
-        
-        };
-        return userAction();
-    }
-
-    function generatePlotlyJsonFromElasticResponseDonuts(elasticResponse, keywords, specificGetCallBack) {
-        let labels = [];
-        let parents = [];
-        let value = [];
-
-        let keys = elasticResponse["aggregations"]["2"]["buckets"];
-
-        if (keys.length === 0)
-            return null;
-    
-            //Initialisation
-        labels.push(keywords.join(', ').replace(/#/g, ''));
-        parents.push("");
-        value.push("");
-
-        if (keys[0]['key'].charAt(0) === '#')
-            keys.shift();
-        keys.forEach(key => {
-            specificGetCallBack(key, value, labels, parents, keywords.join(', ').replace(/#/g, ''));
-        });
-        
-        let obj = [{
-            type: "sunburst",
-            labels: labels,
-            parents: parents,
-            values: value,
-            textinfo: "label+value",
-            outsidetextfont: {size: 20, color: "#377eb8"},
-        }];
-        return obj;
-    }
-
-    export async function getPlotlyJsonDonuts(param, field) {
-        function hashtagsGet(key, values, labels, parents, mainKey) {
-            values.push(key["doc_count"]);
-            labels.push(key["key"]);
-            parents.push(mainKey);
-        }
-        
-        function mostTweetsGet(key, values, labels, parents, mainKey) {
-            if (key["doc_count"] > 0) {
-                values.push(key["doc_count"]);
-                labels.push(key["key"]);
-                parents.push(mainKey);
-            }
-        }
-        
-        function mostRetweetGet(key, values, labels, parents, mainKey) {
-            if (key["1"]["value"] > 10) {
-                values.push(key["1"]["value"]);
-                labels.push(key["key"]);
-                parents.push(mainKey);
-            }
-        }
-        if (field === "hashtags" || field === "user_mentions") {
-            return generatePlotlyJsonFromElasticResponseDonuts(await getElasticReponseDonuts(param, field), param.keywordList,  hashtagsGet);
-        } else if (field === "retweet_count" || field === "favorite_count"){
-            return generatePlotlyJsonFromElasticResponseDonuts(await getElasticReponseDonuts(param, field), param.keywordList,  mostRetweetGet);
-        }
-        else{
-            return generatePlotlyJsonFromElasticResponseDonuts(await getElasticReponseDonuts(param, field), param.keywordList,  mostTweetsGet);
-        }
-
-    }
-
-
-
-    // Words cloud chart
-    export function generateWordCloudPlotlyJson(param) {
-
-        let must = constructMatchPhrase(param);
-        let mustNot = constructMatchNotPhrase(param);
-
-        let query = JSON.stringify(buildQuery({}, must, mustNot, 10000)).replace(/\\/g, "").replace(/"{/g, "{").replace(/}"/g, "}");
-        const userAction = async () => {
-
-            const response = await fetch(elasticSearch_url, {
-                method: 'POST',
-                body:
-                query,
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
-            const myJson = await response.json();
-            console.log(myJson)
-            return myJson;
-
-        };
-        return userAction();
-
-
-    }
-
-
-
-    //URL array
-    function getElasticReponseURLs(param) {
-
-        let must = constructMatchPhrase(param);
-        let mustNot = constructMatchNotPhrase(param);
-        let aggs = constructAggs("urls");
-
-    
-
-        let query = JSON.stringify(buildQuery(aggs, must, mustNot, 0)).replace(/\\/g, "").replace(/"{/g, "{").replace(/}"/g, "}");
-
-        const userAction = async () => {
-            const response = await fetch(elasticSearch_url, {
-                method: 'POST',
-                body:
-                query,
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
-            const elasticResponse = await response.json();
-            return elasticResponse;
-
-        
-        };
-        return userAction();
-    }
-
-    function generateArrayFromElasticResponseURLs(elasticResponse) {
-        let urlArray = [];
-
-        let buckets = elasticResponse["aggregations"]["2"]["buckets"];
-
-        buckets.forEach(bucket => {
-            urlArray.push({url: bucket["key"], count: bucket["doc_count"]});
-        });
-        return urlArray;
-    }
-
-    export async function getReactArrayURL(param, urlTrad, countTrad){
-        const array = generateArrayFromElasticResponseURLs(await getElasticReponseURLs(param));
-        let columns = [
-            {title: urlTrad, field: 'url'},
-            {title: countTrad, field: 'count'},
-        ];
-
-        return {
-            columns: columns,
-            data: array,
-        }
     }
 
     // Export gexf file
@@ -492,6 +163,29 @@ let gexfGen_url = process.env.REACT_APP_GEXF_GENERATOR_URL;
         return userAction();
     }
     
+    // Aggregation data for pie charts, timelime chart,...
+    export function getAggregationData(param) {
+        let must = constructMatchPhrase(param);
+        let mustNot = constructMatchNotPhrase(param);
+        let aggs = constructAggs(param);
+
+        let query = JSON.stringify(buildQuery(aggs, must, mustNot, 0)).replace(/\\/g, "").replace(/"{/g, "{").replace(/}"/g, "}");
+
+        const userAction = async () => {
+            const response = await fetch(elasticSearch_url, {
+                method: 'POST',
+                body:
+                query,
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            const elasticResponse = await response.json();
+            return elasticResponse;
+        };
+        return userAction();
+    }
+
 //Build a query for elastic search
 function buildQuery(aggs, must, mustNot, size) {
     let query = {
@@ -512,6 +206,34 @@ function buildQuery(aggs, must, mustNot, size) {
                 "must_not": mustNot
             }
         },
+        "sort": [
+            {"datetimestamp": {"order": "asc"}}
+        ]
+    };
+    return query;
+}
+
+//Build a query for elastic search
+function buildQuerySearchAfter(aggs, must, mustNot, size, searchAfter) {
+    let query = {
+        "aggs": aggs,
+        "size": size,
+        "_source": {
+            "excludes": []
+        },
+        "stored_fields": [
+            "*"
+        ],
+        "script_fields": {},
+        "query": {
+            "bool": {
+                "must": must,
+                "filter": [],
+                "should": [],
+                "must_not": mustNot
+            }
+        },
+        "search_after": searchAfter,
         "sort": [
             {"datetimestamp": {"order": "asc"}}
         ]
@@ -661,132 +383,130 @@ function constructMatchPhrase(param, startDate, endDate) {
 }
 
 //Construct the aggregations (chose what information we will have in the response)
-function constructAggs(field) {
+function constructAggs(param) {
 
-    let fieldInfo = ((field === "glob")? '{"retweets":' : '{"2":');
+    let timelineInterval = getIntervalForTimeLineChart(param);
 
-    //Hashtag donut
-    if (field === "hashtags") {
-        fieldInfo += JSON.stringify({
+    let aggs = {
+        "retweets": constructAggForSum("retweet_count"),
+        "likes": constructAggForSum("favorite_count"),
+        "tweet_count": constructAggForCount("_id"),
+        "top_user": constructAggForTop("screen_name", "desc", 20, "_count", null),
+        "top_user_favorite": constructAggForTop("screen_name", "desc", 20, "sum", "favorite_count"),
+        "top_user_retweet": constructAggForTop("screen_name", "desc", 20, "sum", "retweet_count"),
+        "top_user_mentions": constructAggForTop("user_mentions.screen_name", "desc", 20, "_count", null),
+        "top_url_keyword": constructAggForTop("urls", "desc", 25, "_count", null),
+        "date_histo" : constructAggForTimeLineChart(timelineInterval)
+    }
+    return aggs;
+}
+
+function constructAggForSum(field) {
+    let agg = {
+        "sum": {
+            "field": field
+        }
+    }
+    return agg;
+}
+
+function constructAggForCount(field) {
+    let agg = {
+        "value_count": {
+            "field": field
+        }
+    }
+    return agg;
+}
+
+function constructAggForTop(field, order, size, typeAgg, fieldAgg) {
+    let agg = {}
+
+    if (typeAgg === "sum") {
+        agg = {
             "terms": {
                 "field": field + ".keyword",
                 "order": {
-                    "_count": "desc"
+                    "_1": order
                 },
-                "size": 20
-            }
-        })
-    }
-
-        //Urls Array
-        if (field === "urls") {
-            fieldInfo += JSON.stringify({
-                "terms": {
-                    "field": field + ".keyword",
-                    "order": {
-                        "_count": "desc"
-                    },
-                    "size": 25
+                "size": size
+            },
+            "aggs": {
+                "_1": {
+                    "sum": {
+                        "field": fieldAgg
+                    }
                 }
-            })
+            }
         }
-
-    // Mentions donut
-    else if (field === "user_mentions") {
-        fieldInfo += JSON.stringify({
+    } else if (typeAgg === "_count") {
+        agg = {
             "terms": {
-                "field": field + ".screen_name.keyword",
+                "field": field + ".keyword",
                 "order": {
-                    "_count": "desc"
+                    "_count": order
                 },
-                "size": 20
+                "size": size
             }
-        })
+        }
     }
-    
-    //Retweets & Likes users donuts
-    else if (field === "retweet_count" || field === "favorite_count") {
+    return agg;
+}
 
-        fieldInfo += JSON.stringify({
-            "terms": {
-                "field": "screen_name.keyword",
-                "order": {
-                    "1": "desc"
-                },
-                "size": 20
-            },
-            "aggs": {
-                "1": {
-                    "sum": {
-                        "field": field
-                    }
+function constructAggForTimeLineChart(calendar_interval) {
+    let agg = {
+        "date_histogram": {
+            "field": "datetimestamp",
+            "calendar_interval": calendar_interval,
+            "time_zone": "Europe/Paris",
+            "min_doc_count": 1
+        },
+        "aggs": {
+            "1": {
+                "sum": {
+                    "field": "retweet_count"
                 }
-            }
-        })
-
-    }
-
-    //Histogram
-    else if (field.includes('1')) {
-        fieldInfo += JSON.stringify({
-            "date_histogram": {
-                "field": "datetimestamp",
-                "calendar_interval": field,
-                "time_zone": "Europe/Paris",
-                "min_doc_count": 1
             },
-            "aggs": {
-                "3": {
-                    "terms": {
-                        "field": "screen_name.keyword",
-                        "order": {
-                            "1": "desc"
-                        }
-                    },
-                    "aggs": {
-                        "1": {
-                            "sum": {
-                                "field": "retweet_count"
-                            }
-                        },
-                        "2": {
-                            "terms": {
-                                "field": "datetimestamp"
-                            }
-                        }
-                    },
-                    
-                },
-                "1": {
-                    "sum": {
-                        "field": "retweet_count"
-                    }
-                }
-            }
-        });
-    }
-
-    //Count
-    else if (field === "glob")
-    {
-        fieldInfo += "{" +
-            '"sum" :' +
-                '{"field":"retweet_count"}},"likes": {"sum":{"field":"favorite_count"}}';
-    }
-    else {
-        fieldInfo += JSON.stringify({
+            "3": {
                 "terms": {
                     "field": "screen_name.keyword",
                     "order": {
-                        "_count": "desc"
+                        "rt": "desc"
+                    }
+                },
+                "aggs": {
+                    "rt": {
+                        "sum": {
+                            "field": "retweet_count"
+                        }
                     },
-                    "size": 20
+                    "dt": {
+                        "terms": {
+                            "field": "datetimestamp"
+                        }
+                    }
                 }
-            });
+            }
         }
+    }
+    return agg;
+}
 
-        fieldInfo += '}'
-        return fieldInfo;
+function getIntervalForTimeLineChart(param) {
+    let queryStart = param["from"];
+    let queryEnd = param["until"];
+
+    let dateEndQuery = new Date(queryEnd);
+    let dateStartQuery = new Date(queryStart);
+
+    let diff = (dateEndQuery - dateStartQuery) / (1000 * 3600 * 24);
+    let interval = "";
+    if (diff > 14) {
+        interval = "1d";
+    } else {
+        interval = "1h";
+    }
+    return interval;
 }
 
 // Build a query to get documents matching any value in the given array
