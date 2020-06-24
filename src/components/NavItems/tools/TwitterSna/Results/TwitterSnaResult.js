@@ -973,14 +973,9 @@ export default function TwitterSnaResult(props) {
                     </ExpansionPanelSummary>
                     <ExpansionPanelDetails>
                         {
-                            topUserProfile &&
+                            topUserProfile && topUserProfile.length !== 0 &&
                             <div style={{ width: '100%', }}>
-                                {
-                                    topUserProfile.length === 0 &&
-                                    <Typography variant={"body2"}>{keyword("twittersna_no_data")}</Typography>
-                                }
-                                {
-                                    topUserProfile.length !== 0 && 
+                                { 
                                     [createBubbleChartOfMostActiveUsers(topUserProfile, props.request)].map((bubbdleChart) => {
                                         return (
                                             <div key={Math.random()}>
@@ -1035,7 +1030,11 @@ export default function TwitterSnaResult(props) {
                             </div>
                         }
                         {
-                            !topUserProfile &&
+                            ((topUserProfile && topUserProfile.length === 0) || result.tweetCount.count === "0") &&
+                            <Typography variant={"body2"}>{keyword("twittersna_no_data")}</Typography>
+                        }
+                        {
+                            (!topUserProfile && result.tweetCount.count !== "0") &&
                             <CircularProgress className={classes.circularProgress} />
                         }
                     </ExpansionPanelDetails>
@@ -1440,7 +1439,7 @@ export default function TwitterSnaResult(props) {
                         </div>
                     </Box>
                     {
-                        (gexfExport === undefined) &&
+                        (!gexfExport && result.tweetCount.count !== "0") &&
                         <CircularProgress className={classes.circularProgress} />
                     }
                     </Box>
