@@ -54,7 +54,7 @@ export const KNOWN_LINK_PATTERNS = [
     },
     {
         key: KNOWN_LINKS.YOUTUBE,
-        patterns: ["^(?:.+?)?(?:\\/v\\/|watch\\/|\\?v=|\\&v=|youtu\\.be\\/|\\/v=|^youtu\\.be\\/)([a-zA-Z0-9_-]{11})+"]
+        patterns: ["(https?:\\/{2})?(www.)?((youtube.com\\/watch\\?v=)|youtu.be\\/)([a-zA-Z0-9_-]{11})"]
     },
     {
         key: KNOWN_LINKS.VIMEO,
@@ -126,7 +126,7 @@ export const ASSISTANT_ACTIONS = [
         icon: metadataIconOff,
         linksAccepted: new Array(KNOWN_LINKS.MISC, KNOWN_LINKS.OWN),
         cTypes: [CONTENT_TYPE.IMAGE, CONTENT_TYPE.VIDEO],
-        exceptions:  [/(pbs.twimg.com)|(youtu.be\/|\/v=|^youtube\/)|(instagram)|(vimeo)/],
+        exceptions:  [/(pbs.twimg.com)|(youtu.be|youtube)|(instagram)|(fbcdn.net)|(vimeo)/],
         useInputUrl: false,
         text: "metadata_text",
         tsvPrefix: "metadata",

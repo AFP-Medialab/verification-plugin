@@ -42,6 +42,9 @@ const AssistantVideoResult = () => {
                 var positionOne = resultUrl.indexOf(stringToMatch) + stringToMatch.length;
                 embedURL = embedURL.slice(0, positionOne) + "embed/" + embedURL.slice(positionOne);
                 break;
+            case KNOWN_LINKS.FACEBOOK:
+                embedURL = "https://www.facebook.com/plugins/video.php?href=" + encodeURIComponent(embedURL);
+                break;
         }
 
         return embedURL;

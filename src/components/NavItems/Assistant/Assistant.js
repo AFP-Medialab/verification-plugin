@@ -85,7 +85,7 @@ const Assistant = () => {
             dispatch(setProcessUrl(videoListRef.current[0]))}
     }
 
-    // handle specific urls in specific ways to pupulate image/video lists
+    // handle specific urls in specific ways to populate image/video lists
     const setMediaListsByUrl = (urlType, userInput) => {
         switch(urlType) {
             case KNOWN_LINKS.YOUTUBE:
@@ -105,12 +105,18 @@ const Assistant = () => {
                 dispatch(setHelpMessage("assistant_handled_site"))
                 break;
             case KNOWN_LINKS.FACEBOOK:
-                checkForMediaLists(userInput);
+                if(userInput.includes("/photos/")){
+                    checkForMediaLists(userInput);
+                }
+                else if(userInput.includes("/videos/")){
+                    videoListRef.current = [userInput];
+                    imageListRef.current = [];
+                }
                 dispatch(setHelpMessage("assistant_handled_site"))
                 break;
             case KNOWN_LINKS.TWITTER:
                 checkForMediaLists(userInput);
-                dispatch(setHelpMessage("assistant_handled_site"))
+                dispatch(setHelpMessage("assistant_handled_site"));
                 break;
             case KNOWN_LINKS.MISC:
                 let contentType = matchPattern(userInput, TYPE_PATTERNS);
