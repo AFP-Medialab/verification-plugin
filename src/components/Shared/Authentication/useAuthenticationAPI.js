@@ -302,12 +302,12 @@ export default function useAuthenticationAPI() {
    *
    * @returns {Promise<Object>} Result as a Promise.
    */
-  const refreshToken = () => {
-    return axios.post(AUTH_SRV_REFRESH_TOKEN_URL, null, {
+  const refreshToken = (accessToken) => {
+    return axios.post(AUTH_SRV_REFRESH_TOKEN_URL, "\""+accessToken+"\"", {
       baseURL: authSrvBaseURL,
-      // headers: {
-      //   ContentType: jsonContentType
-      // },
+       headers: {
+         ContentType: jsonContentType
+       },
       // timeout: defaultTimeout
       timeout: 10000
     }).then(response => {

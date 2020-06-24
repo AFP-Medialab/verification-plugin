@@ -501,7 +501,7 @@ function getIntervalForTimeLineChart(param) {
 
     let diff = (dateEndQuery - dateStartQuery) / (1000 * 3600 * 24);
     let interval = "";
-    if (diff > 14) {
+    if (diff > 7) {
         interval = "1d";
     } else {
         interval = "1h";

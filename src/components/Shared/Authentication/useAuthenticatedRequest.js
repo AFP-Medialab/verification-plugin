@@ -48,7 +48,7 @@ export default function useAuthenticatedRequest() {
       // If unauthorized
       if (error.response && error.response.status === 401) {
         // Refresh token
-        return authenticationAPI.refreshToken().then(response => {
+        return authenticationAPI.refreshToken(accessToken).then(response => {
           // TODO: get token (refresh return axios response??)
           const newAccessToken = response.data.accessToken;
           // Update access token header
