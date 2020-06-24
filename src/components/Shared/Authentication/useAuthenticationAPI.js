@@ -70,9 +70,6 @@ export default function useAuthenticationAPI() {
     dispatch(userRegistrationLoadingAction());
     return axios.post(AUTH_SRV_REGISTER_USER_URL, srvRequest, {
       baseURL: authSrvBaseURL,
-      headers: {
-        ContentType: jsonContentType
-      },
       timeout: defaultTimeout
     }).then(response => {
       dispatch(userRegistrationSentAction());
@@ -131,9 +128,6 @@ export default function useAuthenticationAPI() {
     dispatch(userAccessCodeRequestLoadingAction());
     return axios.post(AUTH_SRV_REQUEST_ACCESS_CODE_URL, srvRequest, {
       baseURL: authSrvBaseURL,
-      headers: {
-        ContentType: jsonContentType
-      },
       timeout: defaultTimeout
     }).then(response => {
       dispatch(userAccessCodeRequestSentAction());
@@ -306,7 +300,7 @@ export default function useAuthenticationAPI() {
     return axios.post(AUTH_SRV_REFRESH_TOKEN_URL, "\""+accessToken+"\"", {
       baseURL: authSrvBaseURL,
        headers: {
-         ContentType: jsonContentType
+         "Content-Type": jsonContentType
        },
       // timeout: defaultTimeout
       timeout: 10000
