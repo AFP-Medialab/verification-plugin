@@ -10,7 +10,7 @@ import {useSelector} from "react-redux";
 import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
 import useLoadLanguage from "../../../Hooks/useLoadLanguage";
 import tsv from "../../../LocalDictionary/components/NavItems/tools/Assistant.tsv";
-import {CONTENT_TYPE, KNOWN_LINK_PATTERNS, KNOWN_LINKS, matchPattern, TYPE_PATTERNS} from "./AssistantRuleBook";
+import {KNOWN_LINK_PATTERNS, KNOWN_LINKS, matchPattern} from "./AssistantRuleBook";
 
 const AssistantVideoResult = () => {
     const classes = useMyStyles();
