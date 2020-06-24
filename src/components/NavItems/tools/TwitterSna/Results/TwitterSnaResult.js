@@ -671,8 +671,11 @@ export default function TwitterSnaResult(props) {
                 hovertemplate: '%{text}<br>Account created: %{x}<br>Followers: %{y}<br>',
                 marker: { 
                     color: color,
-                    size: size
-                } 
+                    size: size,
+                    sizeref: 2.0 * Math.max(...size) / (100**2),
+                    sizemode: 'area'
+                },
+                name: ""
             } 
         ]
 
@@ -692,6 +695,8 @@ export default function TwitterSnaResult(props) {
                     size: 18,
                     color: '#C0C0C0'
                 },
+                range:[0, Math.max(...y) + 10],
+                rangemode: 'tozero'
             }
         }
 
@@ -951,7 +956,7 @@ export default function TwitterSnaResult(props) {
                 })
             }
             {
-                props.request.userList.length === 0 && result && result.tweets &&
+                props.request.userList.length === 0 && result &&
                 <ExpansionPanel>
                     <ExpansionPanelSummary
                         expandIcon={<ExpandMoreIcon />}
