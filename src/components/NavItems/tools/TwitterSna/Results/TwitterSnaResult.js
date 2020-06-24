@@ -1,6 +1,6 @@
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 import OnClickInfo from "../../../../Shared/OnClickInfo/OnClickInfo";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import React, { useEffect, useState, useCallback } from "react";
 import { Paper } from "@material-ui/core";
 import ExpansionPanel from "@material-ui/core/ExpansionPanel";
@@ -56,9 +56,6 @@ export default function TwitterSnaResult(props) {
     const [socioSemanticGraphTweets, setSocioSemanticGraphTweets] = useState(null);
     const [bubbleTweets, setBubbleTweets] = useState(null);
 
-    const [topUserProfile, setTopUserProfile] = useState(null);
-    const [gexfExport, setGexfExport] = useState(null);
-
     const CSVheaders = [{ label: keyword('twittersna_result_word'), key: "word" }, { label: keyword("twittersna_result_nb_occ"), key: "nb_occ" }, { label: keyword("twittersna_result_entity"), key: "entity" }];
 
     const hideTweetsView = (index) => {
@@ -91,6 +88,9 @@ export default function TwitterSnaResult(props) {
 
     const pieCharts = [pieCharts0, pieCharts1, pieCharts2, pieCharts3];
 
+    const topUserProfile = useSelector(state => state.twitterSna.topUserProfile);
+    const gexfExport = useSelector(state => state.twitterSna.gexfExport);
+
     //Set the file name for wordsCloud export
     useEffect(() => {
         setfilesNames('WordCloud_' + props.request.keywordList.join("&") + "_" + props.request.from + "_" + props.request.until);
@@ -104,17 +104,6 @@ export default function TwitterSnaResult(props) {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [JSON.stringify(props.result), props.result, props.result.userGraph]);
-
-    useEffect(() => {
-        setTopUserProfile(props.topUserProfile);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [JSON.stringify(props.topUserProfile), props.topUserProfile]);
-
-    useEffect(() => {
-        setGexfExport(props.gexfExport);
-        console.log("setGexfExport: ", gexfExport);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [JSON.stringify(props.gexfExport), props.gexfExport]);
 
     //Initialize tweets arrays
     useEffect(() => {
