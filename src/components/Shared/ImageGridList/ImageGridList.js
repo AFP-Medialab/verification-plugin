@@ -15,6 +15,7 @@ const useStyles = makeStyles(theme => ({
     gridList: {
         width: "100%",
         maxHeight: "500px",
+        paddingBottom: "10px"
     },
 }));
 
