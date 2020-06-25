@@ -17,9 +17,10 @@ const AssistantVideoResult = () => {
     const keyword = useLoadLanguage("components/NavItems/tools/Assistant.tsv", tsv);
     const processUrl = useSelector(state => state.assistant.processUrl);
 
-    const preprocessLinkForEmbed = (resultUrl) => {
-        let embedURL = resultUrl;
-        let linkType = matchPattern(resultUrl, KNOWN_LINK_PATTERNS);
+    // todo: error handling
+    const preprocessLinkForEmbed = (processUrl) => {
+        let embedURL = processUrl;
+        let linkType = matchPattern(processUrl, KNOWN_LINK_PATTERNS);
 
         switch(linkType){
             case KNOWN_LINKS.YOUTUBE:
@@ -27,19 +28,19 @@ const AssistantVideoResult = () => {
                     let ids = embedURL.match("(v=|youtu.be\/)([a-zA-Z0-9_-]+)[&|\?]?");
                     if (ids) {
                         let id = ids[ids.length-1];
-                        embedURL = "http://www.youtube.com/embed/" + id;
-                    }
+                        embedURL = "http://www.youtube.com/embed/" + id;}
                 }
                 break;
             case KNOWN_LINKS.VIMEO:
                 var stringToMatch = "vimeo.com/"
-                var positionOne = resultUrl.indexOf(stringToMatch);
+                var positionOne = processUrl.indexOf(stringToMatch);
                 var positionTwo = positionOne + stringToMatch.length;
-                embedURL = embedURL.slice(0, positionOne) + "player." + embedURL.slice(positionOne, positionTwo) + "video/"  + embedURL.slice(positionTwo);
+                embedURL = embedURL.slice(0, positionOne) + "player." + embedURL.slice(positionOne, positionTwo) +
+                    "video/"  + embedURL.slice(positionTwo);
                 break;
             case KNOWN_LINKS.DAILYMOTION:
                 var stringToMatch = "dailymotion.com/";
-                var positionOne = resultUrl.indexOf(stringToMatch) + stringToMatch.length;
+                var positionOne = processUrl.indexOf(stringToMatch) + stringToMatch.length;
                 embedURL = embedURL.slice(0, positionOne) + "embed/" + embedURL.slice(positionOne);
                 break;
             case KNOWN_LINKS.FACEBOOK:
