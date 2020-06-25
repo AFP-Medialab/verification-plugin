@@ -120,63 +120,6 @@ export default function TwitterSnaResult(props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [JSON.stringify(props.request), props.request])
 
-    const displayTweetsOfDate = (data, fromHisto) => {
-        let columns = [
-            { title: keyword('twittersna_result_username'), field: 'screen_name' },
-            { title: keyword('twittersna_result_date'), field: 'date' },
-            { title: keyword('twittersna_result_tweet'), field: 'tweet', render: getTweetWithClickableLink },
-            { title: keyword('twittersna_result_retweet_nb'), field: 'retweetNb' },
-        ];
-
-        let resData = [];
-        let minDate;
-        let maxDate;
-        let csvArr = keyword("twittersna_result_username") + "," + keyword("twittersna_result_date") + "," + keyword("twittersna_result_tweet") + "," + keyword("twittersna_result_retweet_nb") + "," + keyword("elastic_url") + "\n";
-        let isDays = "isDays";
-        if (!fromHisto) { isDays = "isHours" }
-
-        result.tweets.forEach(tweetObj => {
-
-            let objDate = new Date(tweetObj._source.datetimestamp * 1000);
-            for (let i = 0; i < data.points.length; i++) {
-                let pointDate = new Date(fromHisto ? data.points[i].x : (data.points[i].x + ' ' + data.points[i].y));
-                if (data.points[i].data.mode !== "lines" && isInRange(pointDate, objDate, isDays)) {
-                    if (minDate === undefined)
-                        minDate = objDate;
-                    if (maxDate === undefined)
-                        maxDate = objDate;
-                    let date = new Date(tweetObj._source.datetimestamp * 1000);
-                    resData.push(
-                        {
-                            screen_name: <a href={"https://twitter.com/" + tweetObj._source.screen_name}
-                                target="_blank" rel="noopener noreferrer">{tweetObj._source.screen_name}</a>,
-                            date: date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear() + ' ' + date.getHours() + ':' + date.getMinutes(),
-                            tweet: tweetObj._source.full_text,
-                            retweetNb: tweetObj._source.retweet_count,
-                            link: "https://twitter.com/" + tweetObj._source.screen_name + "/status/" + tweetObj._source.conversation_id_str
-                        }
-                    );
-                    csvArr += tweetObj._source.screen_name + ',' +
-                        date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear() + '_' + date.getHours() + 'h' + date.getMinutes() + ',"' +
-                        tweetObj._source.full_text + '",' + tweetObj._source.retweet_count + "," + tweetObj._source.link + '\n';
-
-                    if (minDate > objDate) {
-                        minDate = objDate
-                    }
-                    if (maxDate < objDate) {
-                        maxDate = objDate;
-                    }
-                }
-            }
-        });
-
-        return {
-            data: resData,
-            columns: columns,
-            csvArr: csvArr,
-        };
-    };
-
     function getDayAsString(dayInt) {
         return ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][dayInt];
     }
@@ -269,9 +212,23 @@ export default function TwitterSnaResult(props) {
         }
     }
 
+    function filterTweetsForTimeLine(tweetDate, selectedPoints) {
+        for (let i = 0; i < selectedPoints.length; i++) {
+            let pointedDate = new Date(selectedPoints[i].x);
+            if (selectedPoints[i].data.mode !== "lines" && isInRange(pointedDate, tweetDate, "isDays")) {
+                return true;
+            };
+        }
+    }
+
     const onHistogramClick = (data) => {
         if (result.tweets !== undefined) {
-            setHistoTweets(displayTweetsOfDate(data, true));
+            let selectedPoints = data.points;
+            let filteredTweets = result.tweets.filter(function(tweet) {
+                let tweetDate = new Date(tweet._source.datetimestamp * 1000);
+                return filterTweetsForTimeLine(tweetDate, selectedPoints);
+            });
+            setHistoTweets(displayTweets(filteredTweets));
         }
     }
 
