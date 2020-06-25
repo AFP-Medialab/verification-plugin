@@ -709,7 +709,7 @@ const useTwitterSnaRequest = (request) => {
       let sizeObj = getSizeOfField(lcTweets, "hashtags");
       nodes.map((node) => { 
         node.size= sizeObj[node.id];
-        node.label = node.label + ": " + sizeObj[node.id].toString();
+        node.label = "#" + node.label + ": " + sizeObj[node.id].toString();
         return node;
       });
 

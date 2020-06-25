@@ -120,56 +120,6 @@ export default function TwitterSnaResult(props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [JSON.stringify(props.request), props.request])
 
-    const displayTweetsOfWord = (word, callback) => {
-
-        let columns = [
-            { title: keyword('twittersna_result_username'), field: 'screen_name' },
-            { title: keyword('twittersna_result_date'), field: 'date' },
-            { title: keyword('twittersna_result_tweet'), field: 'tweet', render: getTweetWithClickableLink },
-            { title: keyword('twittersna_result_retweet_nb'), field: 'retweetNb' },
-            { title: keyword('twittersna_result_like_nb'), field: 'likeNb' }
-        ];
-        let csvArr = "";
-
-        // word = word.replace(/_/g, " ");
-        let resData = [];
-        csvArr += keyword('twittersna_result_username') + "," +
-            keyword('twittersna_result_date') + "," +
-            keyword('twittersna_result_tweet') + "," +
-            keyword('twittersna_result_retweet_nb') + "," +
-            keyword('twittersna_result_like_nb') + "," +
-            keyword('elastic_url') + "\n";
-
-        result.tweets.forEach(tweetObj => {
-
-            if (tweetObj._source.full_text.toLowerCase().match(new RegExp('(^|((.)*[.()0-9!?\'’‘":,/\\%><«» ^#]))' + word + '(([.()!?\'’‘":,/><«» ](.)*)|$)', "i"))) {
-
-                var date = new Date(tweetObj._source.datetimestamp * 1000);
-                //let tweet = getTweetWithClickableLink(tweetObj._source.full_text,tweetObj._source.link);
-                let tmpObj = {
-                    screen_name: tweetObj._source.screen_name,
-                    date: date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear() + ' ' + date.getHours() + ':' + date.getMinutes(),
-                    tweet: tweetObj._source.full_text,
-                    retweetNb: tweetObj._source.retweet_count,
-                    likeNb: tweetObj._source.favorite_count,
-                    link: "https://twitter.com/" + tweetObj._source.screen_name + "/status/" + tweetObj._source.conversation_id_str
-                };
-                resData.push(tmpObj);
-                csvArr += tweetObj._source.screen_name + ',' +
-                    date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear() + ' ' + date.getHours() + ':' + date.getMinutes() + ',"' +
-                    tweetObj._source.full_text + '",' + tweetObj._source.retweet_count + ',' + tweetObj._source.favorite_count + ',' + tweetObj._source.link + '\n';
-            }
-        });
-        let tmp = {
-            data: resData,
-            columns: columns,
-            csvArr: csvArr,
-            word: word
-        };
-
-        callback(tmp);
-    }
-
     const displayTweetsOfDate = (data, fromHisto) => {
         let columns = [
             { title: keyword('twittersna_result_username'), field: 'screen_name' },
@@ -236,37 +186,41 @@ export default function TwitterSnaResult(props) {
             '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00'][hourInt];
     }
 
-    const displayTweetsOfDateHeatMap = (data) => {
+    const displayTweets = (filteredTweets) => {
         let columns = [
-            { title: keyword('twittersna_result_username'), field: 'screen_name' },
             { title: keyword('twittersna_result_date'), field: 'date' },
+            { title: keyword('twittersna_result_username'), field: 'screen_name' },
             { title: keyword('twittersna_result_tweet'), field: 'tweet', render: getTweetWithClickableLink },
-            { title: keyword('twittersna_result_retweet_nb'), field: 'retweetNb' },
+            { title: keyword('twittersna_result_like_nb'), field: "nbLikes"},
+            { title: keyword('twittersna_result_retweet_nb'), field: 'retweetNb' }
         ];
+
+        let csvArr = keyword("twittersna_result_date") + ',' 
+                    + keyword("twittersna_result_username") + ',' 
+                    + keyword("twittersna_result_tweet") + ',' 
+                    + keyword('twittersna_result_like_nb') + ',' 
+                    + keyword("twittersna_result_retweet_nb") + ',' 
+                    + keyword("elastic_url") +'\n';
+
         let resData = [];
-        let csvArr = keyword("twittersna_result_username") + ',' + keyword("twittersna_result_date") + ',' + keyword("twittersna_result_tweet") + ',' + keyword("twittersna_result_retweet_nb") + ',' + keyword("elastic_url") + '\n';
-
-        const filteredTweets = result.tweets.filter(function (tweetObj) {
-            const date = new Date(tweetObj._source.datetimestamp * 1000);
-            const day = getDayAsString(date.getDay());
-            const hour = getHourAsString(date.getHours());
-            return hour === data.points[0].x && day === data.points[0].y;
-        });
-
         filteredTweets.forEach(tweetObj => {
             const date = new Date(tweetObj._source.datetimestamp * 1000);
             resData.push(
                 {
-                    screen_name: <a href={"https://twitter.com/" + tweetObj._source.screen_name} target="_blank" rel="noopener noreferrer">{tweetObj._source.screen_name}</a>,
                     date: date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear() + ' ' + date.getHours() + ':' + date.getMinutes(),
+                    screen_name: <a href={"https://twitter.com/" + tweetObj._source.screen_name} target="_blank" rel="noopener noreferrer">{tweetObj._source.screen_name}</a>,
                     tweet: tweetObj._source.full_text,
+                    nbLikes: tweetObj._source.favorite_count,
                     retweetNb: tweetObj._source.retweet_count,
-                    link: "https://twitter.com/" + tweetObj._source.screen_name + "/status/" + tweetObj._source.conversation_id_str
+                    link: "https://twitter.com/" + tweetObj._source.screen_name + "/status/" + tweetObj._source.id_str
                 }
             );
-            csvArr += tweetObj._source.screen_name + ',' +
-                date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear() + '_' + date.getHours() + 'h' + date.getMinutes() + ',"' +
-                tweetObj._source.full_text + '",' + tweetObj._source.retweet_count + ',' + tweetObj._source.link + '\n';
+            csvArr += date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear() + '_' + date.getHours() + 'h' + date.getMinutes() + ',' +
+                        tweetObj._source.screen_name + ',"' 
+                        + tweetObj._source.full_text + '",' 
+                        + tweetObj._source.favorite_count + ','
+                        + tweetObj._source.retweet_count + ',' 
+                        + "https://twitter.com/" + tweetObj._source.screen_name + "/status/" + tweetObj._source.id_str + '\n';
         });
 
         return {
@@ -274,147 +228,6 @@ export default function TwitterSnaResult(props) {
             columns: columns,
             csvArr: csvArr,
         };
-    };
-
-    const displayTweetsOfUser = (selectedUser, nbType, index) => {
-        let columns = [
-            { title: keyword('twittersna_result_date'), field: 'date' },
-            { title: keyword('twittersna_result_tweet'), field: 'tweet', render: getTweetWithClickableLink },
-        ];
-        let csvArr = keyword('twittersna_result_date') + "," + keyword('twittersna_result_tweet');
-        if (nbType !== "retweets_cloud_chart_title") {
-            columns.push({
-                title: keyword('twittersna_result_like_nb'),
-                field: "nbLikes"
-            });
-            csvArr += ',' + keyword('twittersna_result_like_nb');
-        }
-        if (nbType !== "likes_cloud_chart_title") {
-            columns.push({
-                title: keyword('twittersna_result_retweet_nb'),
-                field: "nbReteets"
-            });
-            csvArr += ',' + keyword('twittersna_result_retweet_nb');
-        }
-        csvArr += ',' + keyword('elastic_url') + "\n";
-
-        let resData = [];
-
-        result.tweets.forEach(tweetObj => {
-            if (tweetObj._source.screen_name.toLowerCase() === selectedUser.toLowerCase()) {
-                let date = new Date(tweetObj._source.datetimestamp * 1000);
-                let tmpObj = {
-                    date: date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear() + ' ' + date.getHours() + ':' + date.getMinutes(),
-                    tweet: tweetObj._source.full_text,
-                    link: "https://twitter.com/" + tweetObj._source.screen_name + "/status/" + tweetObj._source.conversation_id_str
-                };
-                csvArr += date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear() + '_' + date.getHours() + 'h' + date.getMinutes() + ',"' + tweetObj._source.full_text + '",';
-
-                if (nbType !== "retweets_cloud_chart_title") {
-                    tmpObj.nbLikes = tweetObj._source.favorite_count;
-                    csvArr += tmpObj.nbLikes + ',';
-                }
-                if (nbType !== "likes_cloud_chart_title") {
-                    tmpObj.nbReteets = tweetObj._source.retweet_count;
-                    csvArr += tmpObj.nbReteets + ',';
-                }
-                csvArr += tmpObj.link + '\n';
-                resData.push(tmpObj);
-            }
-        });
-
-        let newRes = {
-            data: resData,
-            columns: columns,
-            csvArr: csvArr,
-            screen_name: selectedUser
-        };
-
-        switch (index) {
-            case 0:
-                setPieCharts0(newRes);
-                break;
-            case 1:
-                setPieCharts1(newRes);
-                break;
-            case 2:
-                setPieCharts2(newRes);
-                break;
-            case "bubbleIdx":
-                setBubbleTweets(newRes);
-                break;
-            default:
-                break;
-
-        }
-    }
-
-    const displayTweetsOfMention = (selectedUser, nbType, index) => {
-        let columns = [
-            { title: keyword('twittersna_result_date'), field: 'date' },
-            { title: keyword('twittersna_result_tweet'), field: 'tweet', render: getTweetWithClickableLink },
-        ];
-        let csvArr = keyword('twittersna_result_date') + "," + keyword('twittersna_result_tweet');
-        if (nbType !== "retweets_cloud_chart_title") {
-            columns.push({
-                title: keyword('twittersna_result_like_nb'),
-                field: "nbLikes"
-            });
-            csvArr += ',' + keyword('twittersna_result_like_nb');
-        }
-        if (nbType !== "likes_cloud_chart_title") {
-            columns.push({
-                title: keyword('twittersna_result_retweet_nb'),
-                field: "nbReteets"
-            });
-            csvArr += ',' + keyword('twittersna_result_retweet_nb');
-        }
-        csvArr += ',' + keyword('elastic_url') + "\n";
-
-        let resData = [];
-
-        let mentionTweets = result.tweets.filter(tweet => tweet._source.user_mentions !== undefined && tweet._source.user_mentions.length > 0);
-        mentionTweets.forEach(tweetObj => {
-            let lcMentionArr = tweetObj._source.user_mentions.map(v => v.screen_name.toLowerCase());
-            if (lcMentionArr.includes(selectedUser.toLowerCase())) {
-                let date = new Date(tweetObj._source.datetimestamp * 1000);
-                let tmpObj = {
-                    date: date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear() + ' ' + date.getHours() + ':' + date.getMinutes(),
-                    tweet: tweetObj._source.full_text,
-                    link: "https://twitter.com/" + tweetObj._source.screen_name + "/status/" + tweetObj._source.conversation_id_str
-                };
-                csvArr += date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear() + '_' + date.getHours() + 'h' + date.getMinutes() + ',"' + tweetObj._source.full_text + '",';
-
-                if (nbType !== "retweets_cloud_chart_title") {
-                    tmpObj.nbLikes = tweetObj._source.favorite_count;
-                    csvArr += tmpObj.nbLikes + ',';
-                }
-                if (nbType !== "likes_cloud_chart_title") {
-                    tmpObj.nbReteets = tweetObj._source.retweet_count;
-                    csvArr += tmpObj.nbReteets + ',';
-                }
-                csvArr += tmpObj.link + '\n';
-                resData.push(tmpObj);
-            }
-        });
-
-        let newRes = {
-            data: resData,
-            columns: columns,
-            csvArr: csvArr,
-            screen_name: selectedUser
-        };
-
-        switch (index) {
-            case 3:
-                setPieCharts3(newRes);
-                break;
-            case "socioSemanticGraphIdx":
-                setSocioSemanticGraphTweets(newRes);
-                break;
-            default:
-                break;
-        }
     }
 
     function createCSVFromPieChart(obj) {
@@ -433,7 +246,7 @@ export default function TwitterSnaResult(props) {
         return csvArr;
     }
 
-    function downloadClick(csvArr, name, histo, type = "tweets_") {
+    function downloadClick(csvArr, name, histo, type = "Tweets_") {
         let encodedUri = encodeURIComponent(csvArr);
         let link = document.createElement("a");
         link.setAttribute("href", 'data:text/plain;charset=utf-8,' + encodedUri);
@@ -463,29 +276,110 @@ export default function TwitterSnaResult(props) {
     }
 
     const onHeatMapClick = (data) => {
-        setheatMapTweets(displayTweetsOfDateHeatMap(data, false));
+        let selectedHour = data.points[0].x;
+        let selectedDay = data.points[0].y;
+        let filteredTweets = result.tweets.filter(function (tweetObj) {
+            let date = new Date(tweetObj._source.datetimestamp * 1000);
+            let day = getDayAsString(date.getDay());
+            let hour = getHourAsString(date.getHours());
+            return hour === selectedHour && day === selectedDay;
+        });
+        setheatMapTweets(displayTweets(filteredTweets));
     }
 
-    const onDonutsClick = (data, nbType, index) => {
+    const onDonutsClick = (data, index) => {
 
         //For mention donuts
         if (index === 3) {
             if (result.tweets !== undefined) {
-                displayTweetsOfMention(data.points[0].label, "", 3)
+                let selectedUser = data.points[0].label;
+                let filteredTweets = result.tweets.filter(tweet => tweet._source.user_mentions !== undefined && tweet._source.user_mentions.length > 0)
+                    .filter(function (tweet) {
+                        let lcMentionArr = tweet._source.user_mentions.map(v => v.screen_name.toLowerCase());
+                        return lcMentionArr.includes(selectedUser.toLowerCase());
+                    });
+                let dataToDisplay = displayTweets(filteredTweets);
+                dataToDisplay["selected"] = selectedUser;
+                setPieCharts3(dataToDisplay);
             }
         }
         // For retweets, likes, top_user donut
         else {
             if (result.tweets !== undefined) {
-                displayTweetsOfUser(data.points[0].label, nbType, index);
+                let selectedUser = data.points[0].label;
+                let filteredTweets = result.tweets.filter(function (tweetObj) {
+                    return tweetObj._source.screen_name.toLowerCase() === selectedUser.toLowerCase();
+                });
+                let dataToDisplay = displayTweets(filteredTweets);
+                dataToDisplay["selected"] = selectedUser;
+                switch (index) {
+                    case 0:
+                        setPieCharts0(dataToDisplay);
+                        break;
+                    case 1:
+                        setPieCharts1(dataToDisplay);
+                        break;
+                    case 2:
+                        setPieCharts2(dataToDisplay);
+                        break;
+                    default:
+                        break;
+                }
             }
         }
 
     };
 
-    const onBubbleChartClick = (data, nbType, index) => {
+    const onBubbleChartClick = (data) => {
         let selectedUser = data.points[0].text.split("<br>")[0].replace("@","");
-        displayTweetsOfUser(selectedUser, nbType, index);
+        let filteredTweets = result.tweets.filter(function (tweetObj) {
+            return tweetObj._source.screen_name.toLowerCase() === selectedUser.toLowerCase();
+        });
+        setBubbleTweets(displayTweets(filteredTweets));
+
+    }
+
+    const onClickNodeCoHashtagGraph = (data) => {
+        let selectedHashtag = data.data.node.id;
+        let filteredTweets = result.tweets.filter(tweet => tweet._source.hashtags !== undefined && tweet._source.hashtags.length > 0)
+            .filter(function (tweet) {
+                let hashtagArr = tweet._source.hashtags.map((v) => { return v.toLowerCase();});
+                return hashtagArr.includes(selectedHashtag.toLowerCase());
+            });
+        let dataToDisplay = displayTweets(filteredTweets);
+        dataToDisplay["selected"] = selectedHashtag;
+        setCoHashtagGraphTweets(dataToDisplay);
+    }
+
+    const onClickNodeSocioSemanticGraph = (data) => {
+        if (data.data.node.type === "Hashtag") {
+            let selectedHashtag = data.data.node.id.replace("#", "");
+            let filteredTweets = result.tweets.filter(tweet => tweet._source.hashtags !== undefined && tweet._source.hashtags.length > 0)
+                .filter(function (tweet) {
+                    let hashtagArr = tweet._source.hashtags.map((v) => { return v.toLowerCase(); });
+                    return hashtagArr.includes(selectedHashtag.toLowerCase());
+                });
+            let dataToDisplay = displayTweets(filteredTweets);
+            dataToDisplay["selected"] = data.data.node.id;
+            setSocioSemanticGraphTweets(dataToDisplay);
+        } else if (data.data.node.type === "Mention") {
+            let selectedUser = data.data.node.id.replace("MT:@", "");
+                let filteredTweets = result.tweets.filter(tweet => tweet._source.user_mentions !== undefined && tweet._source.user_mentions.length > 0)
+                    .filter(function (tweet) {
+                        let lcMentionArr = tweet._source.user_mentions.map(v => v.screen_name.toLowerCase());
+                        return lcMentionArr.includes(selectedUser.toLowerCase());
+                    });
+                let dataToDisplay = displayTweets(filteredTweets);
+                dataToDisplay["selected"] = data.data.node.id;
+                setSocioSemanticGraphTweets(dataToDisplay);
+        }
+    }
+
+    function filterTweetsGivenWord(word) {
+        let filteredTweets = result.tweets.filter(function (tweetObj) {
+            return tweetObj._source.full_text.toLowerCase().match(new RegExp('(^|((.)*[.()0-9!?\'’‘":,/\\%><«» ^#]))' + word + '(([.()!?\'’‘":,/><«» ](.)*)|$)', "i"));
+        });
+        return filteredTweets;
     }
 
     const getTweetWithClickableLink = (cellData) => {
@@ -518,8 +412,12 @@ export default function TwitterSnaResult(props) {
             text
                 .on("click", () => {
                     if (isActive) {
+                        let selectedWord = word.text;
+                        let filteredTweets = filterTweetsGivenWord(selectedWord);
+                        let dataToDisplay = displayTweets(filteredTweets);
+                        dataToDisplay["selected"] = selectedWord;
+                        setCloudTweets(dataToDisplay);
 
-                        displayTweetsOfWord(word.text, setCloudTweets)
                     }
                 })
                 .transition()
@@ -598,19 +496,6 @@ export default function TwitterSnaResult(props) {
             return "";
         let csvData = props.result.cloudChart.json.map(wordObj => { return { word: wordObj.text, nb_occ: wordObj.value, entity: wordObj.entity } });
         return csvData;
-    }
-
-    function onClickNodeCoHashtagGraph(e) {
-
-        displayTweetsOfWord(e.data.node.id, setCoHashtagGraphTweets);
-    }
-
-    function onClickNodeSocioSemanticGraph(e) {
-        if (e.data.node.type === "Hashtag") {
-            displayTweetsOfWord(e.data.node.id, setSocioSemanticGraphTweets);
-        } else if (e.data.node.type === "Mention") {
-            displayTweetsOfMention(e.data.node.id, "", "socioSemanticGraphIdx");
-        }
     }
 
     function goToTwitterSnaWithUrlSearch(event, rowData) {
@@ -905,7 +790,7 @@ export default function TwitterSnaResult(props) {
                                                     layout={obj.layout}
                                                     config={obj.config}
                                                     onClick={e => {
-                                                        onDonutsClick(e, obj.title, index)
+                                                        onDonutsClick(e, index)
                                                     }}
                                                     divId={obj.title}
                                                 />
@@ -932,7 +817,7 @@ export default function TwitterSnaResult(props) {
                                                         <Button
                                                             variant={"contained"}
                                                             color={"primary"}
-                                                            onClick={() => downloadClick(pieCharts[index].csvArr, (index < 3) ? pieCharts[index].screen_name : pieCharts3.word)}>
+                                                            onClick={() => downloadClick(pieCharts[index].csvArr, (index === 3) ? "mentioned_" + pieCharts[index].selected : pieCharts[index].selected)}>
                                                             {
                                                                 keyword('twittersna_result_download')
                                                             }
@@ -978,7 +863,7 @@ export default function TwitterSnaResult(props) {
                                                     data={bubbdleChart.data}
                                                     layout={bubbdleChart.layout}
                                                     config={bubbdleChart.config}
-                                                    onClick={(e) => onBubbleChartClick(e, "", "bubbleIdx")}
+                                                    onClick={(e) => onBubbleChartClick(e)}
                                                 />
                                                 <Box m={1} />
                                                 <OnClickInfo keyword={"twittersna_bubble_chart_tip"} />
@@ -1006,7 +891,7 @@ export default function TwitterSnaResult(props) {
                                                 <Button
                                                     variant={"contained"}
                                                     color={"primary"}
-                                                    onClick={() => downloadClick(bubbleTweets.csvArr, bubbleTweets.screen_name)}>
+                                                    onClick={() => downloadClick(bubbleTweets.csvArr, bubbleTweets.selected)}>
                                                     {
                                                         keyword('twittersna_result_download')
                                                     }
@@ -1166,7 +1051,7 @@ export default function TwitterSnaResult(props) {
                                             <Button
                                                 variant={"contained"}
                                                 color={"primary"}
-                                                onClick={() => downloadClick(coHashtagGraphTweets.csvArr, coHashtagGraphTweets.word)}>
+                                                onClick={() => downloadClick(coHashtagGraphTweets.csvArr, "#" + coHashtagGraphTweets.selected)}>
                                                 {
                                                     keyword('twittersna_result_download')
                                                 }
@@ -1245,7 +1130,7 @@ export default function TwitterSnaResult(props) {
                                                 <Button
                                                     variant={"contained"}
                                                     color={"primary"}
-                                                    onClick={() => downloadClick(socioSemanticGraphTweets.csvArr, socioSemanticGraphTweets.word)}>
+                                                    onClick={() => downloadClick(socioSemanticGraphTweets.csvArr, socioSemanticGraphTweets.selected)}>
                                                     {
                                                         keyword('twittersna_result_download')
                                                     }
@@ -1356,7 +1241,7 @@ export default function TwitterSnaResult(props) {
                                                 <Button
                                                     variant={"contained"}
                                                     color={"primary"}
-                                                    onClick={() => downloadClick(cloudTweets.csvArr, cloudTweets.word)}>
+                                                    onClick={() => downloadClick(cloudTweets.csvArr, "word_" + cloudTweets.selected)}>
                                                     {
                                                         keyword('twittersna_result_download')
                                                     }
