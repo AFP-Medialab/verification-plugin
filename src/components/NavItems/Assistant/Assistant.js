@@ -107,6 +107,10 @@ const Assistant = () => {
             case KNOWN_LINKS.FACEBOOK:
                 if(userInput.includes("/photos/")){
                     checkForMediaLists(userInput);
+                    videoListRef.current = [];
+                    imageListRef.current =
+                        imageListRef.current.filter(imageUrl => imageUrl.includes("//scontent") &&
+                        !(imageUrl.includes("/cp0/")));
                 }
                 else if(userInput.includes("/videos/")){
                     videoListRef.current = [userInput];
@@ -116,6 +120,8 @@ const Assistant = () => {
                 break;
             case KNOWN_LINKS.TWITTER:
                 checkForMediaLists(userInput);
+                imageListRef.current = imageListRef.current.filter(imageUrl => imageUrl.includes("/media"));
+                videoListRef.current = [];
                 dispatch(setHelpMessage("assistant_handled_site"));
                 break;
             case KNOWN_LINKS.MISC:

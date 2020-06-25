@@ -27,11 +27,11 @@ export const KNOWN_LINKS = {
 export const TYPE_PATTERNS = [
     {
         key: CONTENT_TYPE.VIDEO,
-        patterns: [/.(mp4|mkv)(\?.*)?$/i]
+        patterns: [/.(mp4|mkv)(.*)?$/i]
     },
     {
         key: CONTENT_TYPE.IMAGE,
-        patterns: [/.(jpg|jpeg|png)(\?.*)?$/i]
+        patterns: [/.(jpg|jpeg|png)(.*)?$/i]
     }
 ];
 
