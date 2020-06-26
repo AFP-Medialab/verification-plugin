@@ -101,7 +101,7 @@ const NavBar = (props) => {
     const dispatch = useDispatch();
 
 
-    const handleChange = (event, newValue) => {
+    const handleChange = (newValue) => {
         if (tabItems[newValue].path === "tools")
             history.push("/app/tools/" + drawerItems[newValue].path);
         else
@@ -368,8 +368,8 @@ const NavBar = (props) => {
                         open={true}
                         message={keyword("cookies_message")}
                         action={[
-                            <Button color={"secondary"} size={"small"} onClick={() => dispatch(setFalse())}> {keyword("cookies_decline")} </Button>,
-                            <Button color={"primary"} size={"small"} onClick={() => dispatch(setTrue())}> {keyword("cookies_accept")} </Button>,
+                            <Button key={"cookies_decline"} color={"secondary"} size={"small"} onClick={() => dispatch(setFalse())}> {keyword("cookies_decline")} </Button>,
+                            <Button key={"cookies_accept"} color={"primary"} size={"small"} onClick={() => dispatch(setTrue())}> {keyword("cookies_accept")} </Button>,
                         ]}
                     />
                     }
@@ -378,4 +378,4 @@ const NavBar = (props) => {
         </div>
     );
 };
-export default NavBar;
+export default React.memo(NavBar);
