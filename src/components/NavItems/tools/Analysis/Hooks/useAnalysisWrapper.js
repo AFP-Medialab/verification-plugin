@@ -6,8 +6,7 @@ import {useEffect} from "react";
 import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Analysis.tsv"
 
-export const useAnalysisWrapper = (apiUrl, videoUrl) => {
-    console.log("call wrapper", apiUrl, videoUrl);
+export const useAnalysisWrapper = (apiUrl, videoUrl) => {    
     const keyword = useLoadLanguage("components/NavItems/tools/Analysis.tsv", tsv);
     const dispatch = useDispatch();
 

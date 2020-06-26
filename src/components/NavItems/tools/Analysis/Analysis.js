@@ -66,8 +66,7 @@ const Analysis = () => {
         dispatch(cleanAnalysisState());
     };
     
-    useEffect(() => {
-        console.log("appel ...", finalUrl)
+    useEffect(() => {       
         if (finalUrl !== undefined) {
             setSubmittedUrl(undefined);
         }
