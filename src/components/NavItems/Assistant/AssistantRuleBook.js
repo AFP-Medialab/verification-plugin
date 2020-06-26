@@ -50,7 +50,7 @@ export const KNOWN_LINK_PATTERNS = [
     },
     {
         key: KNOWN_LINKS.FACEBOOK,
-        patterns: ["^(https?:/{2})?(www.)?facebook.com/.*/(videos|photos)/.*"]
+        patterns: ["^(https?:/{2})?(www.)?facebook.com/.*/(videos|photos)/.*/"]
     },
     {
         key: KNOWN_LINKS.YOUTUBE,
