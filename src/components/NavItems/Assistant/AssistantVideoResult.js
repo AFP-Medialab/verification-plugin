@@ -25,10 +25,8 @@ const AssistantVideoResult = () => {
         switch(linkType){
             case KNOWN_LINKS.YOUTUBE:
                 if (!embedURL.includes("/embed/")) {
-                    let ids = embedURL.match("(v=|youtu.be\/)([a-zA-Z0-9_-]+)[&|\?]?");
-                    if (ids) {
-                        let id = ids[ids.length-1];
-                        embedURL = "http://www.youtube.com/embed/" + id;}
+                    let ids = embedURL.match("(?<=v=|youtu.be\/)([a-zA-Z0-9_-]+)[&|\?]?");
+                    if (ids) {embedURL = "http://www.youtube.com/embed/" + ids[0];}
                 }
                 break;
             case KNOWN_LINKS.VIMEO:
