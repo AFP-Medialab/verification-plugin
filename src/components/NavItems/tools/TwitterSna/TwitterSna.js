@@ -387,12 +387,11 @@ const TwitterSna = () => {
 
   return (
     <div>
-      <Paper className={classes.root}>
+      <Paper className={classes.root} style={{margin: "0px", padding: "0px"}}>
         <CustomTile text={keyword("twitter_sna_title")} />
 
         <AuthenticationCard />
 
-        <Box m={3} />
         <TextField
           disabled={searchFormDisabled}
           error={keyWordsError}
@@ -404,7 +403,7 @@ const TwitterSna = () => {
           id="standard-full-width"
           label={'*  ' + keyword("twitter_sna_search")}
           className={classes.neededField}
-          style={{ margin: 8 }}
+          style={{ marginTop: 0, marginBottom:0, marginLeft: 8, marginRight: 8 }}
           placeholder={"#example"}
           fullWidth
         />
@@ -414,7 +413,7 @@ const TwitterSna = () => {
           onChange={e => setBannedWords(e.target.value)}
           id="standard-full-width"
           label={keyword("twitter_sna_not")}
-          style={{ margin: 8 }}
+          style={{ marginTop: 0, marginBottom:0, marginLeft: 8, marginRight: 8 }}
           placeholder={"word word2"}
           fullWidth
         />
@@ -424,7 +423,7 @@ const TwitterSna = () => {
           onChange={e => setUsersInput(e.target.value)}
           id="standard-full-width"
           label={keyword("twitter_sna_user")}
-          style={{ margin: 8 }}
+          style={{ marginTop: 0, marginBottom:0, marginLeft: 8, marginRight: 8 }}
           placeholder={keyword("user_placeholder")}
           fullWidth
         />

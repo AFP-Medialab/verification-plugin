@@ -176,7 +176,7 @@ const AuthenticationCard = (props) => {
     const logUserMsg = _.template(messageI18NResolver("LOGUSER_TEMPLATE") || "Welcome <%= user.firstName %> <%= user.lastName %> (<%= user.email %>)")({ user });
     return (
       <Fragment>
-        <Toolbar>
+        <Toolbar style={{minHeight: "40px"}}>
           <Typography variant="body2">
             {
               logUserMsg
