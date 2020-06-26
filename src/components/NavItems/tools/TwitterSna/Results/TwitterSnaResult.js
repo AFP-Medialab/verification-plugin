@@ -480,10 +480,25 @@ export default function TwitterSnaResult(props) {
             return {
                 screen_name: obj._source.screen_name,
                 followers_count: obj._source.followers_count,
-                datetimestamp: obj._source.datetimestamp
+                datetimestamp: obj._source.datetimestamp,
+                indexedat: obj._source.indexedat
             }; 
         });
-        let sortedObjArr = _.orderBy(objArr, ['datetimestamp', 'screen_name'], ['asc', 'asc']);
+
+        let groupByUserArr = objArr.reduce((r, a) => {
+            r[a.screen_name] = [...r[a.screen_name] || [], a];
+            return r;
+           }, {});
+        let closestDateObjArr = Object.entries(groupByUserArr).map((row) => { 
+            let filteredUndef = row[1].filter(obj => obj.indexedat !== undefined);
+            filteredUndef.map((obj) => {
+                obj.distanceDateTime = Math.abs((Date.parse(request['until']) / 1000) - obj.indexedat);
+                return obj;
+            });
+            return _.orderBy(filteredUndef, ['distanceDateTime'], ['asc'])[0];
+         })
+
+        let sortedObjArr = _.orderBy(closestDateObjArr, ['datetimestamp', 'screen_name'], ['asc', 'asc']);
 
         let x = [];
         let y = [];
