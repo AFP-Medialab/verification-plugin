@@ -89,7 +89,10 @@ const Assistant = () => {
 
         if (urlImageList == null && urlVideoList == null) {return;}
         else if (urlImageList != "" || urlVideoList != "") {
+            // filter out any duplicated images and images we can't process
             imageListRef.current = urlImageList != "" ? urlImageList.split(",") : [];
+            imageListRef.current = imageListRef.current.filter(imageUrl => matchPattern(imageUrl, TYPE_PATTERNS));
+
             videoListRef.current = urlVideoList != "" ? urlVideoList.split(",") : [];
         }
     }
