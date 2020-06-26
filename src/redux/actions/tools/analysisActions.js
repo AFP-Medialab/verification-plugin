@@ -5,7 +5,7 @@ export const setAnalysisResult = (url, result, notification, loading) => {
             notification : notification,
             loading : loading,
             url : url,
-            result : result,
+            result : result
         }
     }
 };

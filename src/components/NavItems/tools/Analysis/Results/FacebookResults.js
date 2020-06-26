@@ -86,7 +86,7 @@ const FacebookResults = (props) => {
                                     </TableRow>
                                 }
                                 {
-                                    report.video.title &&
+                                    //report.video.title &&
                                     <TableRow>
                                         <TableCell component="th" scope="row">
                                             {keyword("facebook_video_name_2")}
@@ -160,7 +160,6 @@ const FacebookResults = (props) => {
                         {
                             report.verification_cues &&
                             <Table className={classes.table} size="small" aria-label="a dense table">
-
                                 <TableBody>
                                     {
                                         report.verification_cues.num_comments &&
