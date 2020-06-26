@@ -18,6 +18,18 @@ import ViewColumn from '@material-ui/icons/ViewColumn';
 import useLoadLanguage from "../../../Hooks/useLoadLanguage";
 import tsv from "../../../LocalDictionary/components/Shared/CustomTable.tsv";
 
+import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
+
+const theme = createMuiTheme({
+  overrides: {
+      MuiTableSortLabel: {
+          icon: {
+              opacity: 0.5
+          }
+      }
+  }
+});
+
 const tableIcons = {
     Add: AddBox,
     Check: Check,
@@ -58,6 +70,7 @@ export default function CustomTable(props) {
     }, [JSON.stringify(props.data)]);
 
     return (
+        <MuiThemeProvider theme={theme}>
         <MaterialTable
             //more custom info at https://material-table.com/#/docs/features/localization
             localization={{
@@ -92,5 +105,6 @@ export default function CustomTable(props) {
                 search: true
             }}
         />
+        </MuiThemeProvider>
     );
 }

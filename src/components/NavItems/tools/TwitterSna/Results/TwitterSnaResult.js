@@ -131,11 +131,11 @@ export default function TwitterSnaResult(props) {
 
     const displayTweets = (filteredTweets) => {
         let columns = [
-            { title: keyword('twittersna_result_date'), field: 'date' },
-            { title: keyword('twittersna_result_username'), field: 'screen_name' },
+            { title: keyword('twittersna_result_date'), field: 'date', defaultSort: "asc" },
+            { title: keyword('twittersna_result_username'), field: 'screen_name'},
             { title: keyword('twittersna_result_tweet'), field: 'tweet', render: getTweetWithClickableLink },
             { title: keyword('twittersna_result_like_nb'), field: "nbLikes"},
-            { title: keyword('twittersna_result_retweet_nb'), field: 'retweetNb' }
+            { title: keyword('twittersna_result_retweet_nb'), field: 'retweetNb'}
         ];
 
         let csvArr = keyword("twittersna_result_date") + ',' 
