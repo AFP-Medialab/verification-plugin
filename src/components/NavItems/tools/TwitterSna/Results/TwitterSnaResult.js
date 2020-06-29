@@ -134,14 +134,33 @@ export default function TwitterSnaResult(props) {
             '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00'][hourInt];
     }
 
-    const displayTweets = (filteredTweets) => {
-        let columns = [
-            { title: keyword('twittersna_result_date'), field: 'date', defaultSort: "asc" },
-            { title: keyword('twittersna_result_username'), field: 'screen_name'},
-            { title: keyword('twittersna_result_tweet'), field: 'tweet', render: getTweetWithClickableLink },
-            { title: keyword('twittersna_result_like_nb'), field: "nbLikes"},
-            { title: keyword('twittersna_result_retweet_nb'), field: 'retweetNb'}
-        ];
+    const displayTweets = (filteredTweets, sortedColumn) => {
+        let columns = [];
+        if (sortedColumn === "nbLikes") {
+            columns = [
+                { title: keyword('twittersna_result_date'), field: 'date'},
+                { title: keyword('twittersna_result_username'), field: 'screen_name'},
+                { title: keyword('twittersna_result_tweet'), field: 'tweet', render: getTweetWithClickableLink },
+                { title: keyword('twittersna_result_like_nb'), field: "nbLikes", defaultSort: "desc" },
+                { title: keyword('twittersna_result_retweet_nb'), field: 'retweetNb'}
+            ];
+        } else if (sortedColumn === "retweetNb") {
+            columns = [
+                { title: keyword('twittersna_result_date'), field: 'date'},
+                { title: keyword('twittersna_result_username'), field: 'screen_name'},
+                { title: keyword('twittersna_result_tweet'), field: 'tweet', render: getTweetWithClickableLink },
+                { title: keyword('twittersna_result_like_nb'), field: "nbLikes"},
+                { title: keyword('twittersna_result_retweet_nb'), field: 'retweetNb', defaultSort: "desc" }
+            ];
+        } else {
+            columns = [
+                { title: keyword('twittersna_result_date'), field: 'date', defaultSort: "asc" },
+                { title: keyword('twittersna_result_username'), field: 'screen_name'},
+                { title: keyword('twittersna_result_tweet'), field: 'tweet', render: getTweetWithClickableLink },
+                { title: keyword('twittersna_result_like_nb'), field: "nbLikes"},
+                { title: keyword('twittersna_result_retweet_nb'), field: 'retweetNb'}
+            ];
+        }
 
         let csvArr = keyword("twittersna_result_date") + ',' 
                     + keyword("twittersna_result_username") + ',' 
@@ -272,7 +291,8 @@ export default function TwitterSnaResult(props) {
                 let filteredTweets = result.tweets.filter(function (tweetObj) {
                     return tweetObj._source.screen_name.toLowerCase() === selectedUser.toLowerCase();
                 });
-                let dataToDisplay = displayTweets(filteredTweets);
+                let dataToDisplay = index === 0 ? displayTweets(filteredTweets, "retweetNb") : (index === 1 ? displayTweets(filteredTweets, "nbLikes") : displayTweets(filteredTweets));
+
                 dataToDisplay["selected"] = selectedUser;
                 switch (index) {
                     case 0:
