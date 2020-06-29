@@ -387,7 +387,7 @@ const TwitterSna = () => {
 
   return (
     <div>
-      <Paper className={classes.root} style={{marginTop: "0px", marginBottom: "0px", paddingTop: "0px", paddingBottom: "0px"}}>
+      <Paper className={classes.root} style={{marginTop: "0px", marginBottom: "0px", paddingTop: "0px"}}>
         <CustomTile text={keyword("twitter_sna_title")} />
 
         <AuthenticationCard />
