@@ -1054,10 +1054,10 @@ export default function TwitterSnaResult(props) {
                                 settings={{
                                     drawEdges: true,
                                     drawEdgeLabels: false,
-                                    minNodeSize: 10,
-                                    maxNodeSize: 30,
+                                    minNodeSize: 6,
+                                    maxNodeSize: 20,
                                     minEdgeSize: 1,
-                                    maxEdgeSize: 20,
+                                    maxEdgeSize: 5,
                                     defaultNodeColor: "#3388AA",
                                     defaultEdgeColor: "#C0C0C0",
                                     edgeColor: "default"
@@ -1133,10 +1133,10 @@ export default function TwitterSnaResult(props) {
                                     settings={{
                                         drawEdges: true,
                                         drawEdgeLabels: false,
-                                        minNodeSize: 10,
-                                        maxNodeSize: 30,
+                                        minNodeSize: 6,
+                                        maxNodeSize: 20,
                                         minEdgeSize: 1,
-                                        maxEdgeSize: 10,
+                                        maxEdgeSize: 5,
                                         defaultNodeColor: "#3388AA",
                                         defaultEdgeColor: "#C0C0C0",
                                         edgeColor: "default"
@@ -1144,7 +1144,7 @@ export default function TwitterSnaResult(props) {
                                     >
                                     <EdgeShapes default="curve" />
                                     <RandomizeNodePositions>
-                                        <ForceAtlas2 iterationsPerRender={1} timeout={15000} />
+                                        <ForceAtlas2 iterationsPerRender={1} timeout={15000} scalingRatio={2} />
                                     </RandomizeNodePositions>
                                 </Sigma>
                                 <Box m={1}/>
@@ -1216,10 +1216,10 @@ export default function TwitterSnaResult(props) {
                                     settings={{
                                         drawEdges: true,
                                         drawEdgeLabels: false,
-                                        minNodeSize: 10,
-                                        maxNodeSize: 30,
+                                        minNodeSize: 6,
+                                        maxNodeSize: 20,
                                         minEdgeSize: 1,
-                                        maxEdgeSize: 10,
+                                        maxEdgeSize: 5,
                                         defaultNodeColor: "#3388AA",
                                         defaultEdgeColor: "#C0C0C0",
                                         edgeColor: "default"
@@ -1227,7 +1227,7 @@ export default function TwitterSnaResult(props) {
                                     >
                                     <EdgeShapes default="curve" />
                                     <RandomizeNodePositions>
-                                        <ForceAtlas2 iterationsPerRender={1} timeout={15000} />
+                                        <ForceAtlas2 iterationsPerRender={1} timeout={15000} scalingRatio={2} />
                                     </RandomizeNodePositions>
                                 </Sigma>
                                 <Box m={1}/>
