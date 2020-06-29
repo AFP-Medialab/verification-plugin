@@ -542,7 +542,8 @@ export default function TwitterSnaResult(props) {
 
     function createBubbleChartOfMostActiveUsers(userProfile, request) {
         let tweetCountObj = _.countBy(result.tweets.map((tweet) => {return tweet._source.screen_name.toLowerCase(); }));
-        let nbDays = Math.floor(( Date.parse(request['until']) - Date.parse(request['from']) ) / 86400000)
+        let nbDays = Math.floor(( Date.parse(request['until']) - Date.parse(request['from']) ) / 86400000);
+        nbDays = nbDays > 1 ? nbDays : 1;
         let objArr = userProfile.map((obj) => {
             return {
                 screen_name: obj._source.screen_name,
@@ -596,8 +597,9 @@ export default function TwitterSnaResult(props) {
                 marker: { 
                     color: color,
                     size: size,
-                    sizeref: 2.0 * Math.max(...size) / (100**2),
-                    sizemode: 'area'
+                    sizeref: (Math.max(...size) < 10 ? 1 : 2 * Math.max(...size) / (60**2)),
+                    sizemode: 'area',
+                    sizemin: 5
                 },
                 name: ""
             } 
