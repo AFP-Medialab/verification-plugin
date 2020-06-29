@@ -65,6 +65,11 @@ function getColor(entity) {
   if (entity === "UserID") return '#42BB9E';
   if (entity === "Location") return '#BB7042';
 
+  if (entity === "Hashtag") return '#3388AA';
+  if (entity === "Mention") return '#88d8b0';
+  if (entity === "RetweetWC") return '#ff6f69';
+  if (entity === "Reply") return '#ffeead';
+
   return '#35347B';
 }
 
@@ -164,7 +169,7 @@ function groupByThenSum(arrOfObjects, key, attrToSumStr, attrToSumNum, attrToSki
 function lowercaseFieldInTweets(tweets, field = 'hashtags') {
   let newTweets = tweets.map((tweet) => {
     let tweetObj = JSON.parse(JSON.stringify(tweet));
-    if (tweetObj._source[field] !== undefined) {
+    if (tweetObj._source[field] !== undefined && tweetObj._source[field] !== null) {
       if (Array.isArray(tweetObj._source[field])) {
         let newArr = tweetObj._source[field].map((element) => {
           if(field === "user_mentions") {
@@ -185,14 +190,40 @@ function lowercaseFieldInTweets(tweets, field = 'hashtags') {
   return newTweets;
 }
 
+// function getTweetAttrObjArr(tweets) {
+//   let tweetAttrObjArr = tweets.map((tweet) => {
+//     let hashtags = (tweet._source.hashtags !== undefined) ? tweet._source.hashtags.map((hashtag) => {return "#" + hashtag;}) : [];
+//     let user_mentions = (tweet._source.user_mentions !== undefined) ? tweet._source.user_mentions.map((obj) => { return "MT:@" + obj.screen_name;}) : [];
+//     let obj = {
+//       hashtags: [...new Set(hashtags)],
+//       user_mentions: [...new Set(user_mentions)],
+//       username: "AU:@" + tweet._source.screen_name
+//     }
+//     return obj;
+//   });
+//   return tweetAttrObjArr;
+// }
+
 function getTweetAttrObjArr(tweets) {
   let tweetAttrObjArr = tweets.map((tweet) => {
-    let hashtags = (tweet._source.hashtags !== undefined) ? tweet._source.hashtags.map((hashtag) => {return "#" + hashtag;}) : [];
-    let user_mentions = (tweet._source.user_mentions !== undefined) ? tweet._source.user_mentions.map((obj) => { return "MT:@" + obj.screen_name;}) : [];
+    let hashtags = (tweet._source.hashtags !== undefined && tweet._source.hashtags !== null)
+      ? tweet._source.hashtags.map((hashtag) => { return "#" + hashtag; })
+      : [];
+    let userIsMentioned = (tweet._source.user_mentions !== undefined && tweet._source.user_mentions !== null)
+      ? tweet._source.user_mentions.map((obj) => { return "isMTed:@" + obj.screen_name; })
+      : [];
+    let userRTWC = (tweet._source.quoted_status_id_str !== undefined && tweet._source.quoted_status_id_str !== null)
+    ? ["RT:@" + tweet._source.screen_name]
+    : [];
+    let userReply = (tweet._source.in_reply_to_screen_name !== undefined && tweet._source.in_reply_to_screen_name !== null)
+    ? ["Rpl:@" + tweet._source.screen_name]
+    : [];
+
     let obj = {
       hashtags: [...new Set(hashtags)],
-      user_mentions: [...new Set(user_mentions)],
-      username: "AU:@" + tweet._source.screen_name
+      userIsMentioned: [...new Set(userIsMentioned)],
+      userRTWC: userRTWC,
+      userReply: userReply
     }
     return obj;
   });
@@ -226,12 +257,47 @@ function getCoOccurenceHashtagMention(tweetAttrObjArr) {
     if (obj.hashtags.length > 0) {
       coOccur.push(getCoOccurCombinationFrom1Arr(obj.hashtags));
     }
-    if (obj.user_mentions.length > 0) {
-      coOccur.push(getCoOccurCombinationFrom1Arr(obj.user_mentions));
+    if (obj.userIsMentioned.length > 0) {
+      coOccur.push(getCoOccurCombinationFrom1Arr(obj.userIsMentioned));
     }
-    if (obj.hashtags.length > 0 && obj.user_mentions.length > 0) {
-      coOccur.push(getCombinationFrom2Arrs(obj.hashtags, obj.user_mentions));
+    if (obj.hashtags.length > 0 && obj.userIsMentioned.length > 0) {
+      coOccur.push(getCombinationFrom2Arrs(obj.hashtags, obj.userIsMentioned));
     }
+  })
+  let coOccurGroupedBy = groupByThenSum(coOccur.flat(), 'id', [], ['count'], []);
+  return coOccurGroupedBy;
+}
+
+function getCoOccurenceHashtagMentionRTWCReply(tweetAttrObjArr) {
+  let coOccur = [];
+  tweetAttrObjArr.forEach((obj) => {
+    if (obj.hashtags.length > 0) {
+      coOccur.push(getCoOccurCombinationFrom1Arr(obj.hashtags));
+    }
+    if (obj.userIsMentioned.length > 0) {
+      coOccur.push(getCoOccurCombinationFrom1Arr(obj.userIsMentioned));
+    }
+
+    if (obj.hashtags.length > 0 && obj.userIsMentioned.length > 0) {
+      coOccur.push(getCombinationFrom2Arrs(obj.hashtags, obj.userIsMentioned));
+    }
+    if (obj.hashtags.length > 0 && obj.userRTWC.length > 0) {
+      coOccur.push(getCombinationFrom2Arrs(obj.hashtags, obj.userRTWC));
+    }
+    if (obj.hashtags.length > 0 && obj.userReply.length > 0) {
+      coOccur.push(getCombinationFrom2Arrs(obj.hashtags, obj.userReply));
+    }
+    if (obj.userIsMentioned.length > 0 && obj.userRTWC.length > 0) {
+      coOccur.push(getCombinationFrom2Arrs(obj.userIsMentioned, obj.userRTWC));
+    }
+    if (obj.userIsMentioned.length > 0 && obj.userReply.length > 0) {
+      coOccur.push(getCombinationFrom2Arrs(obj.userIsMentioned, obj.userReply));
+    }
+    if (obj.userRTWC.length > 0 && obj.userReply.length > 0) {
+      coOccur.push(getCombinationFrom2Arrs(obj.userRTWC, obj.userReply));
+    }
+    let coOccurGroupedBy = groupByThenSum(coOccur.flat(), 'id', [], ['count'], []);
+    return coOccurGroupedBy;
   })
   let coOccurGroupedBy = groupByThenSum(coOccur.flat(), 'id', [], ['count'], []);
   return coOccurGroupedBy;
@@ -597,6 +663,8 @@ const useTwitterSnaRequest = (request) => {
         result.coHashtagGraph = createCoHashtagGraph(result.tweets);
         result.socioSemanticGraph = createSocioSemanticGraph(result.tweets);
         result.cloudChart = createWordCloud(result.tweets);
+
+        result.socioSemantic4ModeGraph = createSocioSemantic4ModeGraph(result.tweets);
         
         let authors = getTopActiveUsers(result.tweets, 100).map((arr) => {return arr[0];});
         if (authors.length > 0) {
@@ -735,11 +803,38 @@ const useTwitterSnaRequest = (request) => {
       
       let nodes = [];
       let freqHashtagObj = _.countBy(tweetAttrObjArr.map((obj) => { return obj.hashtags; }).flat());
-      let freqMentionObj = _.countBy(tweetAttrObjArr.map((obj) => { return obj.user_mentions; }).flat());
+      let freqMentionObj = _.countBy(tweetAttrObjArr.map((obj) => { return obj.userIsMentioned; }).flat());
       Object.entries(freqHashtagObj).forEach(arr => nodes.push({ id: arr[0], label: arr[0] + ": " + arr[1], size: arr[1], color: getColor("Hashtag"), type: "Hashtag" }));
-      Object.entries(freqMentionObj).forEach(arr => nodes.push({ id: arr[0], label: arr[0] + ": " + arr[1], size: arr[1], color: getColor("UserID"), type: "Mention" }));
+      Object.entries(freqMentionObj).forEach(arr => nodes.push({ id: arr[0], label: arr[0] + ": " + arr[1], size: arr[1], color: getColor("Mention"), type: "Mention" }));
 
       let topNodeGraph = getTopNodeGraph({ nodes: nodes, edges: edges}, ["size"], [20, 10], ['Hashtag', 'Mention']);
+      return {
+        data: topNodeGraph
+      };
+    }
+
+    const createSocioSemantic4ModeGraph = (tweets) => {
+      let lcTweets = lowercaseFieldInTweets(tweets, 'hashtags');
+      lcTweets = lowercaseFieldInTweets(lcTweets, 'user_mentions');
+      lcTweets = lowercaseFieldInTweets(lcTweets, 'screen_name');
+      lcTweets = lowercaseFieldInTweets(lcTweets, 'in_reply_to_screen_name');
+      
+      let tweetAttrObjArr = getTweetAttrObjArr(lcTweets);
+
+      let coOccurObjArr = getCoOccurenceHashtagMentionRTWCReply(tweetAttrObjArr);
+      let edges = getEdgesFromCoOcurObjArr(coOccurObjArr);
+      
+      let nodes = [];
+      let freqHashtagObj = _.countBy(tweetAttrObjArr.map((obj) => { return obj.hashtags; }).flat());
+      let freqMentionObj = _.countBy(tweetAttrObjArr.map((obj) => { return obj.userIsMentioned; }).flat());
+      let freqRTWCObj = _.countBy(tweetAttrObjArr.map((obj) => { return obj.userRTWC; }).flat());
+      let freqReplyObj = _.countBy(tweetAttrObjArr.map((obj) => { return obj.userReply; }).flat());
+      Object.entries(freqHashtagObj).forEach(arr => nodes.push({ id: arr[0], label: arr[0] + ": " + arr[1], size: arr[1], color: getColor("Hashtag"), type: "Hashtag" }));
+      Object.entries(freqMentionObj).forEach(arr => nodes.push({ id: arr[0], label: arr[0] + ": " + arr[1], size: arr[1], color: getColor("Mention"), type: "Mention" }));
+      Object.entries(freqRTWCObj).forEach(arr => nodes.push({ id: arr[0], label: arr[0] + ": " + arr[1], size: arr[1], color: getColor("RetweetWC"), type: "RetweetWC" }));
+      Object.entries(freqReplyObj).forEach(arr => nodes.push({ id: arr[0], label: arr[0] + ": " + arr[1], size: arr[1], color: getColor("Reply"), type: "Reply" }));
+
+      let topNodeGraph = getTopNodeGraph({ nodes: nodes, edges: edges}, ["size"], [20, 10, 10, 10], ['Hashtag', 'Mention', 'RetweetWC', 'Reply']);
       return {
         data: topNodeGraph
       };

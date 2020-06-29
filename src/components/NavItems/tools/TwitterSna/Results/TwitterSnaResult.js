@@ -54,6 +54,7 @@ export default function TwitterSnaResult(props) {
     const [pieCharts3, setPieCharts3] = useState(null);
     const [coHashtagGraphTweets, setCoHashtagGraphTweets] = useState(null);
     const [socioSemanticGraphTweets, setSocioSemanticGraphTweets] = useState(null);
+    const [socioSemantic4ModeGraphTweets, setSocioSemantic4ModeGraphTweets] = useState(null);
     const [bubbleTweets, setBubbleTweets] = useState(null);
 
     const CSVheaders = [{ label: keyword('twittersna_result_word'), key: "word" }, { label: keyword("twittersna_result_nb_occ"), key: "nb_occ" }, { label: keyword("twittersna_result_entity"), key: "entity" }];
@@ -77,6 +78,9 @@ export default function TwitterSnaResult(props) {
                 break;
             case "socioSemanticGraphIdx":
                 setSocioSemanticGraphTweets(null);
+                break;
+            case "socioSemantic4ModeGraphIdx":
+                setSocioSemantic4ModeGraphTweets(null);
                 break;
             case "bubbleIdx":
                 setBubbleTweets(null);
@@ -116,6 +120,7 @@ export default function TwitterSnaResult(props) {
         setPieCharts3(null);
         setCoHashtagGraphTweets(null);
         setSocioSemanticGraphTweets(null);
+        setSocioSemantic4ModeGraphTweets(null);
         setBubbleTweets(null);
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [JSON.stringify(props.request), props.request])
@@ -320,15 +325,57 @@ export default function TwitterSnaResult(props) {
             dataToDisplay["selected"] = data.data.node.id;
             setSocioSemanticGraphTweets(dataToDisplay);
         } else if (data.data.node.type === "Mention") {
-            let selectedUser = data.data.node.id.replace("MT:@", "");
-                let filteredTweets = result.tweets.filter(tweet => tweet._source.user_mentions !== undefined && tweet._source.user_mentions.length > 0)
-                    .filter(function (tweet) {
-                        let lcMentionArr = tweet._source.user_mentions.map(v => v.screen_name.toLowerCase());
-                        return lcMentionArr.includes(selectedUser.toLowerCase());
-                    });
-                let dataToDisplay = displayTweets(filteredTweets);
-                dataToDisplay["selected"] = data.data.node.id;
-                setSocioSemanticGraphTweets(dataToDisplay);
+            let selectedUser = data.data.node.id.replace("isMTed:@", "");
+            let filteredTweets = result.tweets.filter(tweet => tweet._source.user_mentions !== undefined && tweet._source.user_mentions.length > 0)
+                .filter(function (tweet) {
+                    let lcMentionArr = tweet._source.user_mentions.map(v => v.screen_name.toLowerCase());
+                    return lcMentionArr.includes(selectedUser.toLowerCase());
+                });
+            let dataToDisplay = displayTweets(filteredTweets);
+            dataToDisplay["selected"] = data.data.node.id;
+            setSocioSemanticGraphTweets(dataToDisplay);
+        }
+    }
+
+    const onClickNodeSocioSemantic4ModeGraph = (data) => {
+        if (data.data.node.type === "Hashtag") {
+            let selectedHashtag = data.data.node.id.replace("#", "");
+            let filteredTweets = result.tweets.filter(tweet => tweet._source.hashtags !== undefined && tweet._source.hashtags.length > 0)
+                .filter(function (tweet) {
+                    let hashtagArr = tweet._source.hashtags.map((v) => { return v.toLowerCase(); });
+                    return hashtagArr.includes(selectedHashtag.toLowerCase());
+                });
+            let dataToDisplay = displayTweets(filteredTweets);
+            dataToDisplay["selected"] = data.data.node.id;
+            setSocioSemantic4ModeGraphTweets(dataToDisplay);
+        } else if (data.data.node.type === "Mention") {
+            let selectedUser = data.data.node.id.replace("isMTed:@", "");
+            let filteredTweets = result.tweets.filter(tweet => tweet._source.user_mentions !== undefined && tweet._source.user_mentions.length > 0)
+                .filter(function (tweet) {
+                    let lcMentionArr = tweet._source.user_mentions.map(v => v.screen_name.toLowerCase());
+                    return lcMentionArr.includes(selectedUser.toLowerCase());
+                });
+            let dataToDisplay = displayTweets(filteredTweets);
+            dataToDisplay["selected"] = data.data.node.id;
+            setSocioSemantic4ModeGraphTweets(dataToDisplay);
+        } else if (data.data.node.type === "RetweetWC") {
+            let selectedUser = data.data.node.id.replace("RT:@", "");
+            let filteredTweets = result.tweets.filter(tweet => 
+                tweet._source.quoted_status_id_str !== undefined 
+                && tweet._source.quoted_status_id_str !== null
+                && tweet._source.screen_name.toLowerCase() === selectedUser);
+            let dataToDisplay = displayTweets(filteredTweets);
+            dataToDisplay["selected"] = data.data.node.id;
+            setSocioSemantic4ModeGraphTweets(dataToDisplay);
+        } else if (data.data.node.type === "Reply") {
+            let selectedUser = data.data.node.id.replace("Rpl:@", "");
+            let filteredTweets = result.tweets.filter(tweet => 
+                tweet._source.in_reply_to_screen_name !== undefined 
+                && tweet._source.in_reply_to_screen_name !== null
+                && tweet._source.screen_name.toLowerCase() === selectedUser);
+            let dataToDisplay = displayTweets(filteredTweets);
+            dataToDisplay["selected"] = data.data.node.id;
+            setSocioSemantic4ModeGraphTweets(dataToDisplay);
         }
     }
 
@@ -1125,6 +1172,89 @@ export default function TwitterSnaResult(props) {
                         }
                         {
                             result.socioSemanticGraph === undefined &&
+                            <CircularProgress className={classes.circularProgress} />
+                        }
+                    </ExpansionPanelDetails>
+                </ExpansionPanel>
+            }
+            {
+                props.request.userList.length === 0 && result &&
+                <ExpansionPanel>
+                    <ExpansionPanelSummary
+                        expandIcon={<ExpandMoreIcon />}
+                    >
+                        <Typography className={classes.heading}>Social-semantic graph (hashtags, mentioned users, users retweet and users reply)</Typography>
+                    </ExpansionPanelSummary>
+                    <ExpansionPanelDetails>
+                    {
+                        result.socioSemantic4ModeGraph && result.socioSemantic4ModeGraph.data.nodes.length !== 0 &&
+                            <div style={{ width: '100%' }}>
+                                <Sigma graph={result.socioSemantic4ModeGraph.data}
+                                    renderer={"canvas"}
+                                    style={{ textAlign: 'left', width: '100%', height: '700px' }}
+                                    onClickNode={(e) => onClickNodeSocioSemantic4ModeGraph(e)}
+                                    settings={{
+                                        drawEdges: true,
+                                        drawEdgeLabels: false,
+                                        minNodeSize: 10,
+                                        maxNodeSize: 30,
+                                        minEdgeSize: 1,
+                                        maxEdgeSize: 10,
+                                        defaultNodeColor: "#3388AA",
+                                        defaultEdgeColor: "#C0C0C0",
+                                        edgeColor: "default"
+                                    }}
+                                    >
+                                    <EdgeShapes default="curve" />
+                                    <RandomizeNodePositions>
+                                        <ForceAtlas2 iterationsPerRender={1} timeout={15000} />
+                                    </RandomizeNodePositions>
+                                </Sigma>
+                                <Box m={1}/>
+                                <OnClickInfo keyword={"twittersna_sosem_graph_tip"}/>
+                                <Box m={2}/>
+                                {
+                                    socioSemantic4ModeGraphTweets &&
+                                    <div>
+                                        <Grid container justify="space-between" spacing={2}
+                                            alignContent={"center"}>
+                                            <Grid item>
+                                                <Button
+                                                    variant={"contained"}
+                                                    color={"secondary"}
+                                                    onClick={() => hideTweetsView("socioSemantic4ModeGraphIdx")}>
+                                                    {
+                                                        keyword('twittersna_result_hide')
+                                                    }
+                                                </Button>
+                                            </Grid>
+                                            <Grid item>
+                                                <Button
+                                                    variant={"contained"}
+                                                    color={"primary"}
+                                                    onClick={() => downloadClick(socioSemantic4ModeGraphTweets.csvArr, socioSemantic4ModeGraphTweets.selected)}>
+                                                    {
+                                                        keyword('twittersna_result_download')
+                                                    }
+                                                </Button>
+                                            </Grid>
+                                        </Grid>
+                                        <Box m={2} />
+                                        <CustomTable title={keyword("twittersna_result_slected_tweets")}
+                                            colums={socioSemantic4ModeGraphTweets.columns}
+                                            data={socioSemantic4ModeGraphTweets.data}
+                                            actions={goToTweetAction}
+                                        />
+                                    </div>
+                                }
+                            </div>
+                        }
+                        {
+                            result.socioSemantic4ModeGraph && result.socioSemantic4ModeGraph.data.nodes.length === 0 &&
+                            <Typography variant={"body2"}>{keyword("twittersna_no_data")}</Typography>
+                        }
+                        {
+                            result.socioSemantic4ModeGraph === undefined &&
                             <CircularProgress className={classes.circularProgress} />
                         }
                     </ExpansionPanelDetails>
