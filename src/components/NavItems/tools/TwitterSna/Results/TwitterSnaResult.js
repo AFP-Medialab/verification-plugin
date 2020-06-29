@@ -1203,7 +1203,7 @@ export default function TwitterSnaResult(props) {
                     <ExpansionPanelSummary
                         expandIcon={<ExpandMoreIcon />}
                     >
-                        <Typography className={classes.heading}>Social-semantic graph (hashtags, mentioned users, users retweet and users reply)</Typography>
+                        <Typography className={classes.heading}>{keyword("sosem_4mode_graph_title")}</Typography>
                     </ExpansionPanelSummary>
                     <ExpansionPanelDetails>
                     {
@@ -1231,7 +1231,7 @@ export default function TwitterSnaResult(props) {
                                     </RandomizeNodePositions>
                                 </Sigma>
                                 <Box m={1}/>
-                                <OnClickInfo keyword={"twittersna_sosem_graph_tip"}/>
+                                <OnClickInfo keyword={"twittersna_sosem_4mode_graph_tip"}/>
                                 <Box m={2}/>
                                 {
                                     socioSemantic4ModeGraphTweets &&
