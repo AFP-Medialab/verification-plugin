@@ -101,7 +101,7 @@ const NavBar = (props) => {
     const dispatch = useDispatch();
 
 
-    const handleChange = (newValue) => {
+    const handleChange = (event, newValue) => {
         if (tabItems[newValue].path === "tools")
             history.push("/app/tools/" + drawerItems[newValue].path);
         else
