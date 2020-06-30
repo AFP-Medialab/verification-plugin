@@ -65,10 +65,13 @@ function getColor(entity) {
   if (entity === "UserID") return '#42BB9E';
   if (entity === "Location") return '#BB7042';
 
+  // Get color for graph's nodes, edges 
   if (entity === "Hashtag") return '#3388AA';
-  if (entity === "Mention") return '#88d8b0';
-  if (entity === "RetweetWC") return '#ff6f69';
-  if (entity === "Reply") return '#ffeead';
+  if (entity === "Mention" || entity === "Mention-Mention") return '#88D8B0';
+  if (entity === "RetweetWC" || entity === "RetweetWC-RetweetWC") return '#FF6F69';
+  if (entity === "Reply" || entity === "Reply-Reply") return '#FFEEAD';
+  if (entity === "Hashtag-Hashtag") return "#a2bfc7";
+  if (entity === "Else-Else") return "#C0C0C0";
 
   return '#35347B';
 }
@@ -307,6 +310,20 @@ function getEdgesFromCoOcurObjArr(coOccurObjArr) {
   let edges = [];
   coOccurObjArr.forEach((obj) => {
     let [first, second] =  obj.id.split("___and___");
+
+    let edgeType = null;
+    if (first.startsWith("#") && second.startsWith("#")) {
+      edgeType = "Hashtag-Hashtag";
+    } else if (first.startsWith("isMTed:@") && second.startsWith("isMTed:@")) {
+      edgeType = "Mention-Mention";
+    } else if (first.startsWith("RT:@") && second.startsWith("RT:@")) {
+      edgeType = "RetweetWC-RetweetWC";
+    } else if (first.startsWith("Rpl:@") && second.startsWith("Rpl:@")) {
+      edgeType = "Reply-Reply";
+    } else {
+      edgeType = "Else-Else";
+    }
+
     edges.push(
       {
         id: obj.id, 
@@ -314,7 +331,8 @@ function getEdgesFromCoOcurObjArr(coOccurObjArr) {
         source: first,
         target: second,
         size: obj.count, 
-        weight: obj.count
+        weight: obj.count,
+        color: getColor(edgeType)
     });
   });
   return edges;
