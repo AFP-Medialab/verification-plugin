@@ -59,7 +59,7 @@ const DrawerItem = (props) => {
         },
         {
             content: <TwitterSna/>,
-            footer: <Footer type={"afp"}/>
+            footer: <Footer type={"afp-usfd-eudisinfolab"}/>
         },
         {
             content: <CovidSearch/>,

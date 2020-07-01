@@ -44,6 +44,12 @@ const Footer = (props) => {
             linkLabel = "USFD "//keyword("usfd_link_label");
             contactUs = "To contact us ..."//keyword("usfd_part_2"), to be updated to gate contacts;
             break;
+        case "afp-usfd-eudisinfolab":
+            provideBy = keyword("apf_part_1");
+            link = [keyword("apf_link"), keyword("usfd_link"), keyword("eudisinfolab_link")];
+            linkLabel = [keyword("apf_link_label"), ", " + keyword("usfd_link_label"), " " + keyword("and") + " " + keyword("eudisinfolab_link_label")];
+            contactUs = keyword("apf_part_2");
+            break;
         default:
             provideBy = keyword("apf_part_1");
             link = keyword("apf_link");
@@ -59,12 +65,23 @@ const Footer = (props) => {
                     provideBy
                 }
                 {
-                    linkLabel && link &&
-                    <Link target="_blank" href={link}>
-                        {
-                            linkLabel
-                        }
-                    </Link>
+                    linkLabel.constructor === Array && link.constructor === Array ? (
+                        link.map((element, index) => {
+                            return (
+                                <Link target="_blank" href={element}>
+                                    {
+                                        linkLabel[index]
+                                    }
+                                </Link>
+                            )
+                        })
+                    ) : (
+                            <Link target="_blank" href={link}>
+                                {
+                                    linkLabel
+                                }
+                            </Link>
+                        )
                 }
             </Typography>
 

@@ -105,6 +105,13 @@ const PopUp = () => {
                         {keyword("open_assistant_on_page")}
                     </Button>
                 </Grid>
+                <Box m={1}/>
+                <Grid item xs={12}>
+                    <Button variant="outlined" color="primary" fullWidth={true} width={"100%"} onClick={
+                        () => window.open("/popup.html#/app/classroom/")}>
+                        {keyword("open_classroom")}
+                    </Button>
+                </Grid>
             </Grid>
 
             <Box m={1}/>
