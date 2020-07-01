@@ -68,9 +68,7 @@ const useLoadLanguage = (onlineTsv, localTsv) => {
                 if (result.data === "")
                     backUpLocal();
                 else
-                    //todo: temporarily always use local dictionary
-                    backUpLocal();
-                    //dispatch(addDictionary(gitHubFullUrl, translate_csv(result.data)));
+                    dispatch(addDictionary(gitHubFullUrl, translate_csv(result.data)));
             })
             .catch(() => {
                 backUpLocal();
