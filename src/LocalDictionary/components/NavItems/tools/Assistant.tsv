@@ -1,0 +1,51 @@
+	en	fr	es
+assistant_title	Assistant	temp	temp
+assistant_real_intro    Would you like to process a URL of upload your own file?	Temp	Temp
+process_url	Process URL	Temp	Temp
+submit_own_file	Upload File	Temp	Temp
+upload_video	Video	Temp	Temp
+upload_image	Image	Temp	Temp
+assistant_real_intro	Would you like to process a URL or upload your own file?	Temp	Temp
+assistant_intro	Enter the URL of the media you would like to process	Temp	Temp
+media_below	Select the media you would like to verify	Temp	Temp
+input_url_label	Input URL:	Temp	Temp
+images_label	Images	Temp	Temp
+videos_label	Videos	Temp	Temp
+upload_type_question	What type of file do you want to upload?	Temp  Temp
+assistant_urlbox	URL	Adresse	URL
+assistant_error	No media was found through the link entered.	Test	Test
+error_unknown	An unknown error has occurred. Please try again later.	Test	Test
+assistant_alternative	Try navigating to the input URL and using the "Open with Assistant" option on the toolbar popup	Temp	Temp
+assistant_handled_site	However, the media from this link can be extracted if the assistant is opened from the page itself.	Temp	Temp
+extracting_tweet_media  Extracting tweet media...   Temp... Temp...
+please_give_a_correct_link	Please give a correct link	Donner un lien valide s'il vous plaît	Por favor, dé un enlace válido
+button_submit	Submit	Envoyer	Enviar
+quit	Quit	Quitter	Salir
+save	Save	Enregistrer	Gardar
+
+navbar_analysis	Analysis	Analyse	Análisis
+navbar_keyframes	Keyframes	Images clés	Imágenes claves
+navbar_thumbnails	Thumbnails	Imagettes	Miniaturas
+navbar_twitter	Tw. search	Recherche Tw.	Búsqueda Tw.
+navbar_magnifier	Magnifier	Loupe	Lupa
+navbar_metadata	Metadata	Metadonnées	Metadatos
+navbar_rights	Video rights	Droits vidéo	Derechos video
+navbar_forensic	Forensic	Forensic	Forensic
+navbar_twitter_sna	Fact Check	Factuel	Factual
+navbar_no_action	Assistant	Temp	Temp
+navbar_assistant	Assistant	Temp	Temp
+
+media_to_process	Media to Process	Temp	Temp
+things_you_can_do_header	Potential Tools	Temp	Temp
+things_you_can_do	Below are the tools you can use on this media type	Temp	Temp
+analysis_text	The analysis feature  can be used to retrieve contextual information about the video	Temp	Temp
+keyframes_text	The keyframes feature can be used to fragment a video	Temp	Temp
+thumbnails_text	The YouTube thumbnail feature can be used to reverse search on thumbnails from the video	Temp	Temp
+twitter_text	The twitter search tool can be used	Temp	Temp
+magnifier_text	The magnifier tool can be used to examine the image thoroughly	Temp	Temp
+metadata_text	The metadata tool can be used to retrieve image/video metadata	Temp	Temp
+rights_text	The video rights tool can be used can be used to retrieve information solely about video rights	Temp	Temp
+forensic_text	The forensic tool can be used to detect any image manipulation	Temp	Temp
+twitter_sna_text	The twitter sna tool can be used	Temp	Temp
+no_action_text	No actions have been found for this media. Please try another URL.	Temp	Temp
+

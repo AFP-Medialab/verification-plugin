@@ -86,6 +86,16 @@ const imageMagnifier = function(word){
     }
 };
 
+const mediaAssistant = function(word){
+    let url = getUrlImg(word);
+    if (url !== "") {
+        window.chrome.tabs.create({url:page_name+"#/app/assistant/" + encodeURIComponent(url)});
+        // Google analytics
+        rightClickEvent("Assistant", url)
+    }
+};
+
+
 const imageReversesearch = function(word){
     let search_url = "https://www.google.com/searchbyimage?image_url=";
     let url = getUrlImg(word);
@@ -163,6 +173,13 @@ const imageReversesearchAll = function(word){
     imageReversesearchYandex(word);
     karmadecaySearch(word);
 };
+
+window.chrome.contextMenus.create({
+    id: "assistant",
+    title: "Open with assistant",
+    contexts:["image", "video"],
+    onclick: mediaAssistant,
+})
 
 window.chrome.contextMenus.create({
     title: "Youtube thumbnails reverse search",

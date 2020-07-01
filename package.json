@@ -11,6 +11,7 @@
     "@svgr/webpack": "^5.3.1",
     "@toast-ui/react-image-editor": "^1.2.0",
     "axios": "^0.19.2",
+    "big-integer": "^1.6.48",
     "cytoscape-fcose": "^1.2.1",
     "d3-selection": "^1.4.1",
     "date-fns": "^2.12.0",

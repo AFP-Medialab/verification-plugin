@@ -3,7 +3,7 @@ import CustomTile from "../../../Shared/CustomTitle/CustomTitle";
 import TextField from "@material-ui/core/TextField";
 import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
-import React from "react";
+import React, {useCallback, useEffect} from "react";
 import ImageReverseSearch from "../ImageReverseSearch";
 import ImageGridList from "../../../Shared/ImageGridList/ImageGridList";
 import {useDispatch, useSelector} from "react-redux";
@@ -11,7 +11,9 @@ import FormControl from "@material-ui/core/FormControl";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import {useInput} from "../../../../Hooks/useInput";
-import {cleanThumbnailsState, setThumbnailsResult} from "../../../../redux/actions/tools/thumbnailsActions"
+import {
+    cleanThumbnailsState,
+    setThumbnailsResult} from "../../../../redux/actions/tools/thumbnailsActions"
 import {setError} from "../../../../redux/actions/errorActions"
 import CloseResult from "../../../Shared/CloseResult/CloseResult";
 import Checkbox from "@material-ui/core/Checkbox";
@@ -20,8 +22,12 @@ import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/Thumbnails.tsv";
 import {submissionEvent} from "../../../Shared/GoogleAnalytics/GoogleAnalytics";
 import OnClickInfo from "../../../Shared/OnClickInfo/OnClickInfo";
+import {useParams} from 'react-router-dom'
+
 
 const Thumbnails = () => {
+    const {url} = useParams();
+
     const classes = useMyStyles();
     const keyword = useLoadLanguage("components/NavItems/tools/Thumbnails.tsv", tsv);
 
@@ -130,6 +136,13 @@ const Thumbnails = () => {
         if (selectedValue.reddit)
             ImageReverseSearch("reddit", [url]);
     };
+
+    useEffect(() => {
+        if (url !== undefined) {
+            const uri = (url !== null) ? decodeURIComponent(url) : undefined;
+            dispatch(setThumbnailsResult(uri, resultData, false, false));
+        }
+    }, [url]);
 
     return (
         <div>

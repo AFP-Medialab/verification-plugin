@@ -20,8 +20,11 @@ import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/Metadata.tsv";
 import {submissionEvent} from "../../../Shared/GoogleAnalytics/GoogleAnalytics";
+import {useParams} from "react-router-dom";
 
 const Metadata = () => {
+    const {url} = useParams();
+
     const classes = useMyStyles();
     const keyword = useLoadLanguage("components/NavItems/tools/Metadata.tsv", tsv);
     const resultUrl = useSelector(state => state.metadata.url);
@@ -54,6 +57,16 @@ const Metadata = () => {
     useEffect(() => {
         setImageurl(null)
     }, [imageUrl]);
+
+    useEffect(() => {
+        if (url !== undefined) {
+            const uri = (url !== null) ? decodeURIComponent(url) : undefined;
+            // note: could potentially match random char mixes on image urls instead?
+            if (uri.match("mp4")) setRadioImage(false);
+            setInput(uri);
+        }
+    }, [url]);
+
 
     return (
         <div>

@@ -1,5 +1,6 @@
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import {green} from "@material-ui/core/colors";
+import React from "react";
 
 const drawerWidth = 200;
 
@@ -337,6 +338,41 @@ const useMyStyles = makeStyles(theme => ({
             fontSize: theme.typography.pxToRem(13),
             minWidth: 100,
         },
+    },
+    assistantCards: {
+        backgroundColor: "#F8F8F8",
+        width: "100%",
+        marginBottom: 2,
+        textAlign: "centre",
+        '&:hover': {
+            backgroundColor: "#a9e8ef",
+        },
+    },
+    assistantText: {
+        width: "100%",
+        marginBottom: 2,
+        textAlign: "left",
+    },
+    twitterIcon: {
+        color: theme.palette.secondary.main,
+        position: "relative",
+        top: theme.spacing.unit,
+        width: theme.typography.h5.fontSize,
+        height: theme.typography.h5.fontSize,
+        marginRight: 3
+    },
+    twitterHeading: {
+        fontSize: theme.typography.h5.fontSize,
+        color: theme.palette.primary.main,
+        textAlign: "left",
+        marginBottom: 25
+    },
+    newAssistantGrid: {
+        width: "100%",
+        marginBottom: 2,
+        textAlign: "left",
+        font: theme.typography.h6.fontSize
     }
+
 }));
 export default useMyStyles;
