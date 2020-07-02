@@ -7,7 +7,7 @@ import Box from "@material-ui/core/Box";
 import CustomTile from "../../../Shared/CustomTitle/CustomTitle";
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/XNetwork.tsv";
-
+import OnClickInfo from "../../../Shared/OnClickInfo/OnClickInfo";
 
 const XNetwork = () => {
   const classes = useMyStyles();
@@ -34,7 +34,8 @@ const XNetwork = () => {
 
         <Box m={3} />
         <div className="gcse-search"></div>
-        
+        <Box m={1} />
+        <OnClickInfo keyword={"xnetwork_tip"}/>
       </Paper>
       
     </div>);
