@@ -68,7 +68,7 @@ const Footer = (props) => {
                     linkLabel.constructor === Array && link.constructor === Array ? (
                         link.map((element, index) => {
                             return (
-                                <Link target="_blank" href={element}>
+                                <Link target="_blank" href={element} key={index}>
                                     {
                                         linkLabel[index]
                                     }
