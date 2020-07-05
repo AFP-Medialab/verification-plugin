@@ -36,6 +36,8 @@ import tsv from "../../../../LocalDictionary/components/NavItems/tools/TwitterSn
 import { submissionEvent } from "../../../Shared/GoogleAnalytics/GoogleAnalytics";
 import AuthenticationCard from "../../../Shared/Authentication/AuthenticationCard";
 
+import { setTwitterSnaResult } from "../../../../redux/actions/tools/twitterSnaActions";
+
 
 const TwitterSna = () => {
   const classes = useMyStyles();
@@ -256,6 +258,18 @@ const TwitterSna = () => {
 
     // console.log("Submit, newRequest: ", newRequest);
     if (JSON.stringify(newRequest) !== JSON.stringify(request)) {
+
+      let prevResult = reduxResult;
+      if (prevResult && prevResult.coHashtagGraph) {
+        delete prevResult.coHashtagGraph;
+      }
+      if (prevResult && prevResult.socioSemanticGraph) {
+        delete prevResult.socioSemanticGraph;
+      }
+      if (prevResult && prevResult.socioSemantic4ModeGraph) {
+        delete prevResult.socioSemantic4ModeGraph;
+      }
+      
       submissionEvent(JSON.stringify(newRequest));
       setSubmittedRequest(newRequest);
     }
