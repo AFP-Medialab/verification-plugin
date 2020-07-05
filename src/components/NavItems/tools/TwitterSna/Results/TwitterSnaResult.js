@@ -73,18 +73,6 @@ export default function TwitterSnaResult(props) {
             case 3:
                 setPieCharts3(null);
                 break;
-            case "coHashtagGraphIdx":
-                setCoHashtagGraphTweets(null);
-                break;
-            case "socioSemanticGraphIdx":
-                setSocioSemanticGraphTweets(null);
-                break;
-            case "socioSemantic4ModeGraphIdx":
-                setSocioSemantic4ModeGraphTweets(null);
-                break;
-            case "bubbleIdx":
-                setBubbleTweets(null);
-                break;
             default:
                 break;
         }
@@ -922,7 +910,7 @@ export default function TwitterSnaResult(props) {
                                                 <Button
                                                     variant={"contained"}
                                                     color={"secondary"}
-                                                    onClick={() => hideTweetsView("bubbleIdx")}>
+                                                    onClick={() => setBubbleTweets(null)}>
                                                     {
                                                         keyword('twittersna_result_hide')
                                                     }
@@ -1082,7 +1070,7 @@ export default function TwitterSnaResult(props) {
                                             <Button
                                                 variant={"contained"}
                                                 color={"secondary"}
-                                                onClick={() => hideTweetsView("coHashtagGraphIdx")}>
+                                                onClick={() => setCoHashtagGraphTweets(null)}>
                                                 {
                                                     keyword('twittersna_result_hide')
                                                 }
@@ -1161,7 +1149,7 @@ export default function TwitterSnaResult(props) {
                                                 <Button
                                                     variant={"contained"}
                                                     color={"secondary"}
-                                                    onClick={() => hideTweetsView("socioSemanticGraphIdx")}>
+                                                    onClick={() => setSocioSemanticGraphTweets(null)}>
                                                     {
                                                         keyword('twittersna_result_hide')
                                                     }
@@ -1244,7 +1232,7 @@ export default function TwitterSnaResult(props) {
                                                 <Button
                                                     variant={"contained"}
                                                     color={"secondary"}
-                                                    onClick={() => hideTweetsView("socioSemantic4ModeGraphIdx")}>
+                                                    onClick={() => setSocioSemantic4ModeGraphTweets(null)}>
                                                     {
                                                         keyword('twittersna_result_hide')
                                                     }
