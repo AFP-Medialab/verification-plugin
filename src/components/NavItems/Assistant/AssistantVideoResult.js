@@ -44,6 +44,10 @@ const AssistantVideoResult = () => {
             case KNOWN_LINKS.FACEBOOK:
                 embedURL = "https://www.facebook.com/plugins/video.php?href=" + encodeURIComponent(embedURL);
                 break;
+            case KNOWN_LINKS.TWITTER:
+                //todo: evaluate if this is the best option
+                embedURL = "https://twitframe.com/show?url=" + encodeURIComponent(embedURL);
+                break;
         }
 
         return embedURL;
