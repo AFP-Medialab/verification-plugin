@@ -17,6 +17,7 @@ import thumbnailsReducer from "./tools/thumbnailsReducer";
 import twitterSnaReducer from "./tools/twitterSnaReducer";
 import videoRightsReducer from "./tools/videoRightsReducer";
 import cookiesReducer from "./cookiesReducers";
+import covidSearchReducer from "./tools/covidSearchReducer";
 import assistantReducer from "./assistantReducer";
 import twitterReducer from "./scrapers/twitterReducer";
 
@@ -39,6 +40,7 @@ const allReducers = combineReducers({
     twitterSna : twitterSnaReducer,
     videoRights : videoRightsReducer,
     cookies : cookiesReducer,
+    covidSearch: covidSearchReducer,
     assistant : assistantReducer,
     twitter: twitterReducer
 });

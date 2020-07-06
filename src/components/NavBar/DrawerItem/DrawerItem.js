@@ -15,6 +15,8 @@ import Forensic from "../../NavItems/tools/Forensic/Forensic";
 import {Route, Switch} from 'react-router-dom'
 import Footer from "../../Shared/Footer/Footer";
 import TwitterSna from "../../NavItems/tools/TwitterSna/TwitterSna";
+import CovidSearch from "../../NavItems/tools/CovidSearch/CovidSearch";
+import XNetwork from "../../NavItems/tools/XNetwork/XNetwork";
 
 const DrawerItem = (props) => {
 
@@ -57,8 +59,17 @@ const DrawerItem = (props) => {
         },
         {
             content: <TwitterSna/>,
+            footer: <Footer type={"afp-usfd-eudisinfolab"}/>
+        },
+        {
+            content: <CovidSearch/>,
+            footer: <Footer type={"afp"}/>
+        },
+        {
+            content: <XNetwork/>,
             footer: <Footer type={"afp"}/>
         }
+        
     ];
 
     const dispatch = useDispatch();

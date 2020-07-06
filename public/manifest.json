@@ -22,7 +22,7 @@
     "48": "img/icon-48.png",
     "128": "img/icon-128.png"
   },
-  "permissions": ["activeTab", "tabs", "all_urls", "contextMenus"],
-  "content_security_policy": "script-src 'self' 'unsafe-eval' https://www.google-analytics.com; object-src 'self'",
+  "permissions": ["activeTab", "tabs", "contextMenus"],
+  "content_security_policy": "script-src 'self' 'unsafe-eval' https://www.google-analytics.com https://cse.google.com https://www.google.com chrome-extension://cse.google.com; object-src 'self'",
   "web_accessible_resources": ["/popup.html"]
 }

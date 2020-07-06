@@ -72,6 +72,6 @@ const useGetImages = (url) => {
                     handleError("forensic_error_" + error.status);
                 })
         }
-    }, [url, keyword]);
+    }, [url, keyword, dispatch]);
 };
 export default useGetImages;

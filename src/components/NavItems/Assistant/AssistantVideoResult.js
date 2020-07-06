@@ -25,7 +25,7 @@ const AssistantVideoResult = () => {
         switch(linkType){
             case KNOWN_LINKS.YOUTUBE:
                 if (!embedURL.includes("/embed/")) {
-                    let ids = embedURL.match("(?<=v=|youtu.be\/)([a-zA-Z0-9_-]+)[&|\?]?");
+                    let ids = embedURL.match("(?<=v=|youtu.be/)([a-zA-Z0-9_-]+)[&|?]?");
                     if (ids) {embedURL = "http://www.youtube.com/embed/" + ids[0];}
                 }
                 break;
@@ -48,20 +48,22 @@ const AssistantVideoResult = () => {
                 //todo: evaluate if this is the best option
                 embedURL = "https://twitframe.com/show?url=" + encodeURIComponent(embedURL);
                 break;
+            default:
+                return embedURL;
         }
 
         return embedURL;
     }
 
     return (
-        <Grid item xs = {6} hidden={processUrl==""}>
+        <Grid item xs = {6} hidden={processUrl===""}>
             <Card variant = "outlined">
                 <CardContent>
                     <Typography variant="h5" component="h2">
                         {keyword("media_to_process")}
                     </Typography>
                     <Typography className={classes.title} color="primary">
-                        {<a href={processUrl} target="_blank"> {processUrl.length>100 ? processUrl.substring(0,100) + "...": processUrl} </a>}
+                        {<a href={processUrl}> {processUrl.length>100 ? processUrl.substring(0,100) + "...": processUrl} </a>}
                     </Typography>
                 </CardContent>
                 <CardMedia>

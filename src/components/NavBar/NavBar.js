@@ -71,6 +71,12 @@ import forensicIconOff from "./images/tools/forensic_logoOff.png"
 import twitterSnaIconOn from "./images/tools/twitter-sna-on.png"
 import twitterSnaIconOff from "./images/tools/twitter-sna-off.png"
 
+import covidSearchIconOn from "./images/tools/covid_search_logoOn.png"
+import covidSearchIconOff from "./images/tools/covid_search_logoOff.png"
+
+import xnetworkIconOn from "./images/tools/xnetwork_logoOn.png"
+import xnetworkIconOff from "./images/tools/xnetwork_logoOff.png"
+
 import useLoadLanguage from "../../Hooks/useLoadLanguage";
 import tsv from "../../LocalDictionary/components/NavBar.tsv";
 import FactCheck from "../NavItems/FactCheck/FactCheck";
@@ -178,6 +184,18 @@ const NavBar = (props) => {
             icon: (drawerValue === 9) ? twitterSnaIconOn : twitterSnaIconOff,
             tsvPrefix: "twitter_sna",
             path: "twitterSna"
+        },
+        {
+            title: "navbar_covidsearch",
+            icon: (drawerValue === 10) ? covidSearchIconOn : covidSearchIconOff,
+            tsvPrefix: "covidsearch",
+            path: "covidSearch"
+        },
+        {
+            title: "navbar_xnetwork",
+            icon: (drawerValue === 11) ? xnetworkIconOn : xnetworkIconOff,
+            tsvPrefix: "xnetwork",
+            path: "xnetwork"
         }
     ];
 
@@ -187,7 +205,7 @@ const NavBar = (props) => {
             title: "navbar_tools",
             icon:
                 <Icon classes={{root: classes.iconRootTab}} fontSize={"large"}>
-                    <img className={classes.imageIconTab} src={toolIcon}/>
+                    <img className={classes.imageIconTab} src={toolIcon} alt={keyword("navbar_tools")} />
                 </Icon>,
             content: <div/>,
             path: "tools",
@@ -197,7 +215,7 @@ const NavBar = (props) => {
             title: "navbar_tuto",
             icon:
                 <Icon classes={{root: classes.iconRootTab}} fontSize={"large"}>
-                    <img className={classes.imageIconTab} src={tutorialIcon}/>
+                    <img className={classes.imageIconTab} src={tutorialIcon} alt={keyword("navbar_tuto")}/>
                 </Icon>,
             content: <Tutorial/>,
             path: "tutorial",
@@ -207,7 +225,7 @@ const NavBar = (props) => {
             title: "navbar_classroom",
             icon:
                 <Icon classes={{root: classes.iconRootTab}} fontSize={"large"} color={'primary'}>
-                    <img className={classes.imageIconTab} src={classRoomIcon}/>
+                    <img className={classes.imageIconTab} src={classRoomIcon} alt={keyword("navbar_classroom")} />
                 </Icon>,
             content: <ClassRoom/>,
             path: "classroom",
@@ -217,7 +235,7 @@ const NavBar = (props) => {
             title: "navbar_quiz",
             icon:
                 <Icon classes={{root: classes.iconRootTab}} fontSize={"large"}>
-                    <img className={classes.imageIconTab} src={interactiveIcon}/>
+                    <img className={classes.imageIconTab} src={interactiveIcon} alt={keyword("navbar_quiz")} />
                 </Icon>,
             content: <Interactive/>,
             path: "interactive",
@@ -234,7 +252,7 @@ const NavBar = (props) => {
             title: "navbar_about",
             icon:
                 <Icon classes={{root: classes.iconRootTab}} fontSize={"large"}>
-                    <img className={classes.imageIconTab} src={aboutIcon}/>
+                    <img className={classes.imageIconTab} src={aboutIcon} alt={keyword("navbar_about")} />
                 </Icon>,
             content: <About/>,
             path: "about",
@@ -326,7 +344,7 @@ const NavBar = (props) => {
                                                 item.icon
                                                 :
                                                 <Icon className={classes.iconRootDrawer} fontSize={"large"}>
-                                                    <img className={classes.imageIconDrawer} src={item.icon}/>
+                                                    <img className={classes.imageIconDrawer} src={item.icon} alt={keyword(item.title)}/>
                                                 </Icon>
                                         }
                                     </ListItemIcon>
@@ -359,8 +377,8 @@ const NavBar = (props) => {
                         open={true}
                         message={keyword("cookies_message")}
                         action={[
-                            <Button color={"secondary"} size={"small"} onClick={() => dispatch(setFalse())}> {keyword("cookies_decline")} </Button>,
-                            <Button color={"primary"} size={"small"} onClick={() => dispatch(setTrue())}> {keyword("cookies_accept")} </Button>,
+                            <Button key={"cookies_decline"} color={"secondary"} size={"small"} onClick={() => dispatch(setFalse())}> {keyword("cookies_decline")} </Button>,
+                            <Button key={"cookies_accept"} color={"primary"} size={"small"} onClick={() => dispatch(setTrue())}> {keyword("cookies_accept")} </Button>,
                         ]}
                     />
                     }
@@ -369,4 +387,4 @@ const NavBar = (props) => {
         </div>
     );
 };
-export default NavBar;
+export default React.memo(NavBar);

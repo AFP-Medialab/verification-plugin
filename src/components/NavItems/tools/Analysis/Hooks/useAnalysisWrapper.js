@@ -6,7 +6,7 @@ import {useEffect} from "react";
 import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Analysis.tsv"
 
-export const useAnalysisWrapper = (apiUrl, videoUrl) => {
+export const useAnalysisWrapper = (apiUrl, videoUrl) => {    
     const keyword = useLoadLanguage("components/NavItems/tools/Analysis.tsv", tsv);
     const dispatch = useDispatch();
 
@@ -24,8 +24,9 @@ export const useAnalysisWrapper = (apiUrl, videoUrl) => {
                 .then(response => {
                     if (keyword("table_error_" + response.data.status) !== "")
                         handleError("table_error_" + response.data.status.status);
-                    else if (response.data.status !== "unavailable")
-                        dispatch(setAnalysisResult(videoUrl, response.data, false, false))
+                    else if (response.data.status !== "unavailable"){
+                        dispatch(setAnalysisResult(videoUrl, response.data, false, false));
+                    }
                 })
                 .catch(errors => handleError(errors));
         };
@@ -54,7 +55,7 @@ export const useAnalysisWrapper = (apiUrl, videoUrl) => {
                     }
                 })
                 .catch(error => {
-                    console.log(error)
+                    console.log("error waituntildone", error);
                 })
         };
 
@@ -71,5 +72,6 @@ export const useAnalysisWrapper = (apiUrl, videoUrl) => {
                 .then(response => handleJob(response["data"]))
                 .catch(error => handleError(error))
         }
-    }, [apiUrl]);
+        
+    }, [apiUrl, keyword, dispatch, videoUrl]);
 };

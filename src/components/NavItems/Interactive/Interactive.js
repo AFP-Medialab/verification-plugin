@@ -1,11 +1,9 @@
 import React, {useState} from "react";
-import Slide from "@material-ui/core/Slide";
 import {Paper} from "@material-ui/core";
 import {useSelector} from "react-redux";
 import Box from "@material-ui/core/Box";
 import CustomTile from "../../Shared/CustomTitle/CustomTitle";
 import Typography from "@material-ui/core/Typography";
-import makeStyles from "@material-ui/core/styles/makeStyles";
 import Iframe from "react-iframe";
 import ExpansionPanel from "@material-ui/core/ExpansionPanel";
 import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";

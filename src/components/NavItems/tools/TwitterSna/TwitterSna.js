@@ -36,17 +36,22 @@ import tsv from "../../../../LocalDictionary/components/NavItems/tools/TwitterSn
 import { submissionEvent } from "../../../Shared/GoogleAnalytics/GoogleAnalytics";
 import AuthenticationCard from "../../../Shared/Authentication/AuthenticationCard";
 
+import { setTwitterSnaResult } from "../../../../redux/actions/tools/twitterSnaActions";
+
 
 const TwitterSna = () => {
   const classes = useMyStyles();
   const keyword = useLoadLanguage("components/NavItems/tools/TwitterSna.tsv", tsv);
 
   const request = useSelector(state => state.twitterSna.request);
-  // console.log("Redux request: ", request);
   const reduxResult = useSelector(state => state.twitterSna.result);
-
+  console.log("request: ", request);
+  console.log("reduxResult: ", reduxResult);
   const isLoading = useSelector(state => state.twitterSna.loading);
   const loadingMessage = useSelector(state => state.twitterSna.loadingMessage);
+
+  const windowUrl = window.location.href;
+  let urlObj = extractUrlSearch(windowUrl);
 
   // Authentication Redux state
   const userAuthenticated = useSelector(state => state.userSession && state.userSession.userAuthenticated);
@@ -121,7 +126,7 @@ const TwitterSna = () => {
   const [localTime, setLocalTime] = useState("true");
 
   // Form disabled?
-  const searchFormDisabled = isLoading || !userAuthenticated;
+  const searchFormDisabled = isLoading || !userAuthenticated || urlObj.isUrlSearch;
 
   const handleErrors = (e) => {
     dispatch(setError(e));
@@ -135,12 +140,33 @@ const TwitterSna = () => {
     });
   }
 
+  function extractUrlSearch(windowUrl) {
+    // const isUrlSearch = windowUrl.split("/twitterSna?url=").length > 1 ? true : false;
+    let part = windowUrl.split("/twitterSna?url=")[1];
+    if (part === undefined) {
+      return {
+        url: null,
+        request: null,
+        isUrlSearch: false
+      }
+    } else {
+      let url = part.split("&request=")[0];
+      let request = JSON.parse(unescape(part.split("&request=")[1]));
+      let isUrlSearch = (!url || !request) ? false : true;
+      return {
+        url: url,
+        request: request,
+        isUrlSearch: isUrlSearch
+      }
+    }
+  }
+
   const makeRequestParams = (keywordsP, bannedWordsP, usersInputP, sinceP, untilP, localTimeP, langInputP, filtersP, verifiedUsersP) => {
     //Creating Request Object.
     const removeQuotes = (list) => {
       let res = [];
       !_.isNil(list) &&
-        list.map(string => {
+        list.forEach(string => {
           res.push(replaceAll(string, "\"", ""));
         });
       return res;
@@ -232,6 +258,18 @@ const TwitterSna = () => {
 
     // console.log("Submit, newRequest: ", newRequest);
     if (JSON.stringify(newRequest) !== JSON.stringify(request)) {
+
+      let prevResult = reduxResult;
+      if (prevResult && prevResult.coHashtagGraph) {
+        delete prevResult.coHashtagGraph;
+      }
+      if (prevResult && prevResult.socioSemanticGraph) {
+        delete prevResult.socioSemanticGraph;
+      }
+      if (prevResult && prevResult.socioSemantic4ModeGraph) {
+        delete prevResult.socioSemantic4ModeGraph;
+      }
+      
       submissionEvent(JSON.stringify(newRequest));
       setSubmittedRequest(newRequest);
     }
@@ -248,65 +286,126 @@ const TwitterSna = () => {
   // Reset form & result when user login
   useEffect(() => {
     // console.log("Auth change (authenticated: ", userAuthenticated, "), updating fields");
-
-    setKeywords(userAuthenticated ?
-      "" :
-      "\"fake news\""
-    );
-    setBannedWords("");
-    setUsersInput(userAuthenticated ?
-      "" :
-      "@realDonaldTrump"
-    );
-    setSince(userAuthenticated ?
-      null :
-      new Date("2016-12-10T00:00:00")
-    );
-    setUntil(userAuthenticated ?
-      null :
-      new Date("2020-01-01T00:00:00")
-    );
-    setLocalTime("true");
-    setLangInput(userAuthenticated ?
-      "lang_all" :
-      "lang_en"
-    );
-    setFilers("none");
-    setVerifiedUsers("false");
-
-    const newSubmittedRequest = makeRequestParams(
-      userAuthenticated ?
+    if (urlObj.isUrlSearch) {
+      setKeywords(userAuthenticated ?
+        urlObj.url ? urlObj.url : "" :
+        "\"fake news\""
+      );
+      setBannedWords(userAuthenticated ?
+        urlObj.request.bannedWords ? urlObj.request.bannedWords.join(" ") : "" :
+        "");
+      setUsersInput(userAuthenticated ?
+        urlObj.request.userList ? urlObj.request.userList.join(" ") : "" :
+        "@realDonaldTrump"
+      );
+      setSince(userAuthenticated ?
+        urlObj.request.from ? urlObj.request.from : null :
+        new Date("2016-12-10T00:00:00")
+      );
+      setUntil(userAuthenticated ?
+        urlObj.request.until ? urlObj.request.until : null :
+        new Date("2020-01-01T00:00:00")
+      );
+      setLocalTime(userAuthenticated ?
+        urlObj.request.localTime ? urlObj.request.localTime : "true" :
+        "true"
+      );
+      setLangInput(userAuthenticated ?
+        urlObj.request.lang ? "lang_" + urlObj.request.lang : "lang_all" :
+        "lang_en"
+      );
+      setFilers(userAuthenticated ?
+        urlObj.request.media ? urlObj.request.media : "none" :
+        "none"
+      );
+      setVerifiedUsers(userAuthenticated ?
+        urlObj.request.verified ? urlObj.request.verified : "false" :
+        "false"
+      );
+  
+      const newSubmittedRequest = makeRequestParams(
+        userAuthenticated ?
+          urlObj.url ? urlObj.url : "" :
+          "\"fake news\"",
+        "",
+        userAuthenticated ?
+          urlObj.request.userList ? urlObj.request.userList.join(" ") : "" :
+          "@realDonaldTrump",
+        userAuthenticated ?
+          urlObj.request.from ? urlObj.request.from : null :
+          new Date("2016-12-10T00:00:00"),
+        userAuthenticated ?
+          urlObj.request.until ? urlObj.request.until : null :
+          new Date("2020-01-01T00:00:00"),
+        "true",
+        userAuthenticated ?
+          "lang_all" :
+          "lang_en",
+        "none",
+        "false"
+      );
+      // console.log("Updating submittedRequest: ", newSubmittedRequest);
+      setSubmittedRequest(newSubmittedRequest);
+    } else {
+      setKeywords(userAuthenticated ?
         "" :
-        "\"fake news\"",
-      "",
-      userAuthenticated ?
+        "\"fake news\""
+      );
+      setBannedWords("");
+      setUsersInput(userAuthenticated ?
         "" :
-        "@realDonaldTrump",
-      userAuthenticated ?
+        "@realDonaldTrump"
+      );
+      setSince(userAuthenticated ?
         null :
-        new Date("2016-12-10T00:00:00"),
-      userAuthenticated ?
+        new Date("2016-12-10T00:00:00")
+      );
+      setUntil(userAuthenticated ?
         null :
-        new Date("2020-01-01T00:00:00"),
-      "true",
-      userAuthenticated ?
+        new Date("2020-01-01T00:00:00")
+      );
+      setLocalTime("true");
+      setLangInput(userAuthenticated ?
         "lang_all" :
-        "lang_en",
-      "none",
-      "false"
-    );
-    // console.log("Updating submittedRequest: ", newSubmittedRequest);
-    setSubmittedRequest(newSubmittedRequest);
+        "lang_en"
+      );
+      setFilers("none");
+      setVerifiedUsers("false");
+  
+      const newSubmittedRequest = makeRequestParams(
+        userAuthenticated ?
+          "" :
+          "\"fake news\"",
+        "",
+        userAuthenticated ?
+          "" :
+          "@realDonaldTrump",
+        userAuthenticated ?
+          null :
+          new Date("2016-12-10T00:00:00"),
+        userAuthenticated ?
+          null :
+          new Date("2020-01-01T00:00:00"),
+        "true",
+        userAuthenticated ?
+          "lang_all" :
+          "lang_en",
+        "none",
+        "false"
+      );
+      // console.log("Updating submittedRequest: ", newSubmittedRequest);
+      setSubmittedRequest(newSubmittedRequest);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userAuthenticated]);
 
   return (
     <div>
-      <Paper className={classes.root}>
+      <Paper className={classes.root} style={{marginTop: "0px", marginBottom: "0px", paddingTop: "0px"}}>
         <CustomTile text={keyword("twitter_sna_title")} />
 
         <AuthenticationCard />
 
-        <Box m={3} />
         <TextField
           disabled={searchFormDisabled}
           error={keyWordsError}
@@ -318,7 +417,7 @@ const TwitterSna = () => {
           id="standard-full-width"
           label={'*  ' + keyword("twitter_sna_search")}
           className={classes.neededField}
-          style={{ margin: 8 }}
+          style={{ marginTop: 0, marginBottom:0, marginLeft: 8, marginRight: 8 }}
           placeholder={"#example"}
           fullWidth
         />
@@ -328,7 +427,7 @@ const TwitterSna = () => {
           onChange={e => setBannedWords(e.target.value)}
           id="standard-full-width"
           label={keyword("twitter_sna_not")}
-          style={{ margin: 8 }}
+          style={{ marginTop: 0, marginBottom:0, marginLeft: 8, marginRight: 8 }}
           placeholder={"word word2"}
           fullWidth
         />
@@ -338,7 +437,7 @@ const TwitterSna = () => {
           onChange={e => setUsersInput(e.target.value)}
           id="standard-full-width"
           label={keyword("twitter_sna_user")}
-          style={{ margin: 8 }}
+          style={{ marginTop: 0, marginBottom:0, marginLeft: 8, marginRight: 8 }}
           placeholder={keyword("user_placeholder")}
           fullWidth
         />
@@ -502,7 +601,9 @@ const TwitterSna = () => {
       </Paper>
       {
         reduxResult &&
-        <TwitterSnaResult result={reduxResult} request={request} />
+        <TwitterSnaResult result={reduxResult} 
+                          request={request}
+                          />
       }
     </div>);
 };

@@ -113,9 +113,9 @@ const Thumbnails = () => {
         let url = input.value.replace("?rel=0", "");
         if (url !== null && url !== "" && isYtUrl(url)) {
             submissionEvent(url);
-            dispatch(setThumbnailsResult(url, get_images(url), false, false));
-
-
+            let images = get_images(url);
+            dispatch(setThumbnailsResult(url, images, false, false));
+            images.forEach(img => imageClickUrl(img));
         } else
             dispatch(setError("Please use a valid Youtube Url (add to tsv)"));
     };
@@ -136,17 +136,6 @@ const Thumbnails = () => {
         if (selectedValue.reddit)
             ImageReverseSearch("reddit", [url]);
     };
-    useCallback(() => {
-        if (selectedValue.openTabs)
-            resultData.map(value => imageClickUrl(value))
-        console.log(resultData);
-    }, [imageClick, imageClickUrl, resultData, selectedValue.openTabs]);
-    /*useEffect(() => {
-        
-        if (selectedValue.openTabs)
-            resultData.map(value => imageClickUrl(value))
-        
-    }, [resultUrl, imageClickUrl, resultData, selectedValue.openTabs]);*/
 
     useEffect(() => {
         if (url !== undefined) {
