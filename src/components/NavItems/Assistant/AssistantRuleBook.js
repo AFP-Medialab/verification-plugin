@@ -70,7 +70,7 @@ export const KNOWN_LINK_PATTERNS = [
     },
     {
         key: KNOWN_LINKS.MISC,
-        patterns: ["(http(s)?:\/\/.)?(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{2,256}\\.[a-z]{2,6}\\b([-a-zA-Z0-9@:%_\\+.~#?&//=]*)"]
+        patterns: ["(http(s)?://.)?(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{2,256}\\.[a-z]{2,6}\\b([-a-zA-Z0-9@:%_\\+.~#?&//=]*)"]
     }
 ]
 
@@ -78,7 +78,7 @@ export const ASSISTANT_ACTIONS = [
     {
         title: "navbar_analysis",
         icon: analysisIconOff,
-        linksAccepted: new Array(KNOWN_LINKS.YOUTUBE, KNOWN_LINKS.FACEBOOK, KNOWN_LINKS.TWITTER),
+        linksAccepted: [KNOWN_LINKS.YOUTUBE, KNOWN_LINKS.FACEBOOK, KNOWN_LINKS.TWITTER],
         cTypes: [CONTENT_TYPE.VIDEO],
         exceptions: [],
         useInputUrl: true,
@@ -89,9 +89,9 @@ export const ASSISTANT_ACTIONS = [
     {
         title: "navbar_keyframes",
         icon:  keyframesIconOff,
-        linksAccepted: new Array(KNOWN_LINKS.YOUTUBE, KNOWN_LINKS.FACEBOOK, KNOWN_LINKS.TWITTER,
+        linksAccepted: [KNOWN_LINKS.YOUTUBE, KNOWN_LINKS.FACEBOOK, KNOWN_LINKS.TWITTER,
             KNOWN_LINKS.DAILYMOTION, KNOWN_LINKS.INSTAGRAM, KNOWN_LINKS.VIMEO, KNOWN_LINKS.YOUTUBE, KNOWN_LINKS.LIVELEAK,
-            KNOWN_LINKS.OWN),
+            KNOWN_LINKS.OWN],
         cTypes: [CONTENT_TYPE.VIDEO],
         exceptions: [],
         useInputUrl: true,
@@ -102,7 +102,7 @@ export const ASSISTANT_ACTIONS = [
     {
         title: "navbar_thumbnails",
         icon: thumbnailsIconOff,
-        linksAccepted: new Array(KNOWN_LINKS.YOUTUBE),
+        linksAccepted: [KNOWN_LINKS.YOUTUBE],
         cTypes: [CONTENT_TYPE.VIDEO],
         exceptions: [],
         useInputUrl: true,
@@ -113,7 +113,7 @@ export const ASSISTANT_ACTIONS = [
     {
         title: "navbar_magnifier",
         icon: magnifierIconOff,
-        linksAccepted: new Array(KNOWN_LINKS.MISC),
+        linksAccepted: [KNOWN_LINKS.MISC],
         cTypes: [CONTENT_TYPE.IMAGE],
         exceptions: [],
         useInputUrl: false,
@@ -124,7 +124,7 @@ export const ASSISTANT_ACTIONS = [
     {
         title: "navbar_metadata",
         icon: metadataIconOff,
-        linksAccepted: new Array(KNOWN_LINKS.MISC, KNOWN_LINKS.OWN),
+        linksAccepted: [KNOWN_LINKS.MISC, KNOWN_LINKS.OWN],
         cTypes: [CONTENT_TYPE.IMAGE, CONTENT_TYPE.VIDEO],
         exceptions:  [/(pbs.twimg.com)|(youtu.be|youtube)|(instagram)|(fbcdn.net)|(vimeo)/],
         useInputUrl: false,
@@ -135,7 +135,7 @@ export const ASSISTANT_ACTIONS = [
     {
         title: "navbar_rights",
         icon:  videoRightsIconOff,
-        linksAccepted: new Array(KNOWN_LINKS.YOUTUBE, KNOWN_LINKS.FACEBOOK, KNOWN_LINKS.TWITTER),
+        linksAccepted: [KNOWN_LINKS.YOUTUBE, KNOWN_LINKS.FACEBOOK, KNOWN_LINKS.TWITTER],
         cTypes: [CONTENT_TYPE.VIDEO],
         exceptions: [],
         useInputUrl: true,
@@ -146,7 +146,7 @@ export const ASSISTANT_ACTIONS = [
     {
         title: "navbar_forensic",
         icon: forensicIconOff,
-        linksAccepted: new Array(KNOWN_LINKS.MISC, KNOWN_LINKS.OWN),
+        linksAccepted: [KNOWN_LINKS.MISC, KNOWN_LINKS.OWN],
         cTypes: [CONTENT_TYPE.IMAGE],
         exceptions: [],
         useInputUrl: false,
@@ -161,7 +161,7 @@ export const selectCorrectActions = (contentType, inputUrlTYpe, processUrlType, 
         ASSISTANT_ACTIONS.filter(action=>
             ((action.useInputUrl && action.linksAccepted.includes(inputUrlTYpe) && action.cTypes.includes(contentType)) ||
             (!action.useInputUrl && action.linksAccepted.includes(processUrlType) && action.cTypes.includes(contentType))) &&
-            (action.exceptions.length==0 || !(processUrl.match(action.exceptions)))
+            (action.exceptions.length===0 || !(processUrl.match(action.exceptions)))
         );
     return possibleActions;
 }

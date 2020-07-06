@@ -86,21 +86,21 @@ const Assistant = () => {
         let urlImageList = window.localStorage.getItem("imageList");
         let urlVideoList = window.localStorage.getItem("videoList");
 
-        if (urlImageList == null && urlVideoList == null) {return;}
-        else if (urlImageList != "" || urlVideoList != "") {
+        if (urlImageList === null && urlVideoList === null) {return;}
+        else if (urlImageList !== "" || urlVideoList !== "") {
             // filter out any duplicated images and images we can't process
-            imageListRef.current = urlImageList != "" ? urlImageList.split(",") : [];
+            imageListRef.current = urlImageList !== "" ? urlImageList.split(",") : [];
             imageListRef.current = imageListRef.current.filter(imageUrl => matchPattern(imageUrl, TYPE_PATTERNS));
 
-            videoListRef.current = urlVideoList != "" ? urlVideoList.split(",") : [];
+            videoListRef.current = urlVideoList !== "" ? urlVideoList.split(",") : [];
         }
     }
 
     // if there is only one image/video, set this to be processed
     const handleOneMediaListResult = () => {
-        if (imageListRef.current.length == 1 && videoListRef.current.length==0) {
+        if (imageListRef.current.length === 1 && videoListRef.current.length === 0) {
             dispatch(setProcessUrl(imageListRef.current[0]))}
-        else if(videoListRef.current.length == 1 && imageListRef.current.length==0){
+        else if(videoListRef.current.length === 1 && imageListRef.current.length === 0){
             dispatch(setProcessUrl(videoListRef.current[0]))}
     }
 
@@ -123,7 +123,7 @@ const Assistant = () => {
                 break;
             case KNOWN_LINKS.FACEBOOK:
                 let updatedUserInputs = userInput.match(KNOWN_LINK_PATTERNS
-                    .find(pattern=>pattern.key == KNOWN_LINKS.FACEBOOK).patterns);
+                    .find(pattern=>pattern.key === KNOWN_LINKS.FACEBOOK).patterns);
                 if (updatedUserInputs) userInput = updatedUserInputs[0];
 
                 handleFacebookLink(userInput);
@@ -139,9 +139,9 @@ const Assistant = () => {
                 break;
             case KNOWN_LINKS.MISC:
                 let contentType = matchPattern(userInput, TYPE_PATTERNS);
-                if(contentType!=null) {
-                    if (contentType == CONTENT_TYPE.IMAGE) imageListRef.current = [userInput];
-                    else if (contentType == CONTENT_TYPE.VIDEO) videoListRef.current = [userInput];
+                if(contentType!==null) {
+                    if (contentType === CONTENT_TYPE.IMAGE) imageListRef.current = [userInput];
+                    else if (contentType === CONTENT_TYPE.VIDEO) videoListRef.current = [userInput];
                 }
                 else{checkForMediaLists();}
                 break;
@@ -172,7 +172,7 @@ const Assistant = () => {
     ** if image links, filter for the first in the list. this is always (hopefuly...) the one in the post.*/
     const handleInstagramLink = (userInput) => {
         checkForMediaLists(userInput);
-        if(videoListRef.current.length == 1){imageListRef.current = []}
+        if(videoListRef.current.length === 1){imageListRef.current = []}
         else {imageListRef.current = imageListRef.current.length>0 ?  [imageListRef.current[1]] : []}
     }
 
@@ -254,7 +254,7 @@ const Assistant = () => {
 
     // if the processUrl changes, load any actions that can be taken on this new url
     useEffect(() => {
-        if (processUrl!=null){loadProcessUrlActions();}
+        if (processUrl!==null){loadProcessUrlActions();}
     }, [processUrl]);
 
 
@@ -264,7 +264,7 @@ const Assistant = () => {
             <Box m={3}/>
 
             <Grid container spacing={2}>
-                <Grid item xs = {12} className={classes.newAssistantGrid}  hidden={urlMode!=null}>
+                <Grid item xs = {12} className={classes.newAssistantGrid}  hidden={urlMode!==null}>
                     <Typography component={"span"} variant={"h6"} >
                         <FaceIcon fontSize={"small"}/> {keyword("assistant_real_intro")}
                     </Typography>
@@ -278,9 +278,9 @@ const Assistant = () => {
                 </Grid>
 
 
-                <Grid item xs = {12} className={classes.newAssistantGrid}  hidden={urlMode==null || urlMode==false}>
+                <Grid item xs = {12} className={classes.newAssistantGrid}  hidden={urlMode===null || urlMode===false}>
                     <Box m={5}/>
-                    <CloseResult hidden={urlMode==null || urlMode==false} onClick={() => cleanAssistant()}/>
+                    <CloseResult hidden={urlMode===null || urlMode===false} onClick={() => cleanAssistant()}/>
 
                     <Typography component={"span"} variant={"h6"} >
                         <FaceIcon fontSize={"small"}/> {keyword("assistant_intro")}
@@ -317,7 +317,7 @@ const Assistant = () => {
 
                     <Grid item xs = {6}
                           className={classes.newAssistantGrid}
-                          hidden={(imageList.length==0 )||(imageList.length<=1 && videoList.length<=1)}>
+                          hidden={(imageList.length===0 )||(imageList.length<=1 && videoList.length<=1)}>
                         <Card>
                             <Typography component={"span"} className={classes.twitterHeading}>
                                 <ImageIcon className={classes.twitterIcon}/> {keyword("images_label")}
@@ -331,7 +331,7 @@ const Assistant = () => {
 
                     <Grid item xs = {6}
                           className={classes.newAssistantGrid}
-                          hidden={(videoList.length==0 )||(imageList.length<=1 && videoList.length<=1)}>
+                          hidden={(videoList.length===0 )||(imageList.length<=1 && videoList.length<=1)}>
                         <Card>
                             <Typography component={"span"} className={classes.twitterHeading}>
                                 <DuoIcon className={classes.twitterIcon}/> {keyword("videos_label")}
@@ -343,7 +343,7 @@ const Assistant = () => {
                     </Grid>
 
                     <Grid item xs={12}
-                          hidden={inputUrl==null||(inputUrl!=null && imageList.length!=0 || videoList.length!=0)}>
+                          hidden={inputUrl===null||(inputUrl!==null && imageList.length!==0 || videoList.length!==0)}>
                         <Card><CardContent className={classes.assistantText}>
                             <Typography variant={"h6"} align={"left"}>
                                 <FaceIcon size={"small"}/> {keyword("assistant_error")}
@@ -356,9 +356,9 @@ const Assistant = () => {
 
                 </Grid>
 
-                <Grid item xs = {12} className={classes.newAssistantGrid}  hidden={urlMode==null || urlMode==true}>
+                <Grid item xs = {12} className={classes.newAssistantGrid}  hidden={urlMode===null || urlMode===true}>
                     <Box m={5}/>
-                    <CloseResult hidden={urlMode==null || urlMode==false} onClick={() => dispatch(cleanAssistantState())}/>
+                    <CloseResult hidden={urlMode===null || urlMode===false} onClick={() => dispatch(cleanAssistantState())}/>
                     <Typography component={"span"} variant={"h6"} >
                         <FaceIcon fontSize={"small"}/> {keyword("upload_type_question")}
                     </Typography>
@@ -372,7 +372,7 @@ const Assistant = () => {
                 </Grid>
 
                 <Grid item xs={12}>
-                    {processUrlActions.length!=0 || imageVideoSelected == true ?  <AssistantResult/> : null}
+                    {processUrlActions.length!==0 || imageVideoSelected === true ?  <AssistantResult/> : null}
                 </Grid>
             </Grid>
         </Paper>

@@ -16,18 +16,18 @@ const AssistantImageResult = () => {
     const processUrl = useSelector(state => state.assistant.processUrl);
     
     return (
-        <Grid item xs = {6} hidden={processUrl==""} >
+        <Grid item xs = {6} hidden={processUrl===""} >
             <Card variant = "outlined">
                 <CardContent>
                     <Typography variant="h5" component="h2">
                         {keyword("media_to_process")}
                     </Typography>
                     <Typography className={classes.title} color="primary">
-                        {<a href={processUrl} target="_blank"> {processUrl.length>100 ? processUrl.substring(0,100) + "...": processUrl} </a>}
+                        {<a href={processUrl}> {processUrl.length>100 ? processUrl.substring(0,100) + "...": processUrl} </a>}
                     </Typography>
                 </CardContent>
                 <CardMedia>
-                    <img src={processUrl} height={"100%"} width={"100%"}/>
+                    <img src={processUrl} height={"100%"} alt={processUrl} width={"100%"}/>
                 </CardMedia>
             </Card>
         </Grid>

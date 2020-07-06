@@ -5,7 +5,6 @@ import Button from "@material-ui/core/Button";
 import Card from "@material-ui/core/Card";
 import CardActionArea from "@material-ui/core/CardActionArea";
 import CardContent from "@material-ui/core/CardContent";
-import FaceIcon from "@material-ui/icons/Face";
 import Grid from "@material-ui/core/Grid";
 import Icon from "@material-ui/core/Icon";
 import {Paper} from "@material-ui/core";
@@ -15,7 +14,6 @@ import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
 import useLoadLanguage from "../../../Hooks/useLoadLanguage";
 import CloseResult from "../../Shared/CloseResult/CloseResult";
 import {
-    cleanAssistantState,
     setImageVideoSelected,
     setProcessUrl,
     setProcessUrlActions
@@ -80,7 +78,7 @@ const AssistantResult = () => {
                                                 <Typography className={classes.title} m={2}>{keyword(action.text)}</Typography>
                                                 <Button aria-colspan={2} size = "medium">
                                                     {<Icon className={classes.iconRootDrawer} fontSize={"large"}>
-                                                        <img className={classes.imageIconDrawer} src={action.icon}/>
+                                                        <img className={classes.imageIconDrawer} alt="" src={action.icon}/>
                                                     </Icon>}
                                                     {keyword(action.title)}
                                                 </Button>
