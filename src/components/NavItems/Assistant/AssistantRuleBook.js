@@ -113,7 +113,7 @@ export const ASSISTANT_ACTIONS = [
     {
         title: "navbar_magnifier",
         icon: magnifierIconOff,
-        linksAccepted: [KNOWN_LINKS.MISC],
+        linksAccepted: [KNOWN_LINKS.MISC, KNOWN_LINKS.OWN],
         cTypes: [CONTENT_TYPE.IMAGE],
         exceptions: [],
         useInputUrl: false,
