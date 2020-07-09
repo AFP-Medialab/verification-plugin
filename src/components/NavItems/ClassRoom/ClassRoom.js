@@ -19,7 +19,10 @@ import youCheckImage from "./Images/youCheck.png"
 import useLoadLanguage from "../../../Hooks/useLoadLanguage";
 import tsv from "../../../LocalDictionary/components/NavItems/ClassRoom.tsv";
 import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
-
+import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
+import ExpansionPanel from "@material-ui/core/ExpansionPanel";
 
 function TabPanel(props) {
     const {children, value, index, ...other} = props;
@@ -92,17 +95,61 @@ const ClassRoom = () => {
             return res;
         };
 
+        const introduction = (n) => {
+            let arr = [];
+            for (let i=1; i <= n; i++) {
+                arr.push({
+                    title: keyword("introduction_title" + i),
+                    content: keyword("introduction_para" + i)
+                })
+            }
+            return arr;
+        }
+
         return (
             <Paper className={classes.root}>
                 <Box justifyContent="center" display="flex" flexDirection="column">
                     <CustomTile text={keyword("classroom_title")}/>
                     <Box m={1}/>
                     <Tabs value={value} onChange={handleChange} aria-label="simple tabs example">
-                        <Tab label={keyword("remote_resources_title")} {...a11yProps(0)} />
-                        <Tab label={keyword("user_resources_title")}  {...a11yProps(1)} />
-                        <Tab label={keyword("glossary_title")}  {...a11yProps(2)} />
+                        <Tab label={keyword("classroom_introduction")} {...a11yProps(0)} />
+                        <Tab label={keyword("classroom_teaching")} {...a11yProps(1)} />
+                        <Tab label={keyword("remote_resources_title")} {...a11yProps(2)} />
+                        <Tab label={keyword("classroom_gamification")} {...a11yProps(3)} />
+                        <Tab label={keyword("user_resources_title")}  {...a11yProps(4)} />
+                        <Tab label={keyword("glossary_title")}  {...a11yProps(5)} />
                     </Tabs>
                     <TabPanel value={value} index={0}>
+                        {
+                            introduction(5).map((obj) => {
+                                return (
+                                    <ExpansionPanel>
+                                        <ExpansionPanelSummary
+                                            expandIcon={<ExpandMoreIcon />}
+                                            aria-controls="panel1a-content"
+                                            id="panel1a-header"
+                                        >
+                                            <Typography className={classes.heading}>{obj.title}</Typography>
+                                        </ExpansionPanelSummary>
+                                        <ExpansionPanelDetails>
+                                            <div className={"content"}
+                                                dangerouslySetInnerHTML={{ __html: obj.content }}></div>
+                                        </ExpansionPanelDetails>
+                                    </ExpansionPanel>
+                                )
+                            })
+                        }
+                    </TabPanel>
+                    <TabPanel value={value} index={1}>
+                        <Iframe
+                            frameBorder="0"
+                            url={keyword("teaching_url")}
+                            allow="fullscreen"
+                            height="450"
+                            width="100%"
+                        />
+                    </TabPanel>
+                    <TabPanel value={value} index={2}>
                         <Divider/>
                         {
                             EducationalResources().map((value, index) => {
@@ -138,7 +185,16 @@ const ClassRoom = () => {
                             })
                         }
                     </TabPanel>
-                    <TabPanel value={value} index={1}>
+                    <TabPanel value={value} index={3}>
+                        <Iframe
+                            frameBorder="0"
+                            url={keyword("gamification_url")}
+                            allow="fullscreen"
+                            height="450"
+                            width="100%"
+                        />
+                    </TabPanel>
+                    <TabPanel value={value} index={4}>
                         <Typography variant={"h5"}>{keyword("user_resources_intro")}</Typography>
                         <Box m={2}/>
                         <Typography variant="body1" align={"justify"}>{keyword("user_resources_intro_remote")}</Typography>
@@ -181,7 +237,7 @@ const ClassRoom = () => {
                             }
                         </Typography>
                     </TabPanel>
-                    <TabPanel value={value} index={2}>
+                    <TabPanel value={value} index={5}>
                         {
                             glossary().map((obj, key) => {
                                 return (
@@ -203,7 +259,9 @@ const ClassRoom = () => {
                         }
                     </TabPanel>
                 </Box>
-                <img src={youCheckImage} width={"20%"} alt={youCheckImage}/>
+                <a href="http://project-youcheck.com/" target="_blank" rel="noopener noreferrer">
+                    <img src={youCheckImage} width={"10%"} alt={youCheckImage}/>
+                </a>
                 <Dialog
                     height={"400px"}
                     fullWidth
