@@ -121,9 +121,9 @@ const ClassRoom = () => {
                     </Tabs>
                     <TabPanel value={value} index={0}>
                         {
-                            introduction(5).map((obj) => {
+                            introduction(5).map((obj, index) => {
                                 return (
-                                    <ExpansionPanel>
+                                    <ExpansionPanel key={index}>
                                         <ExpansionPanelSummary
                                             expandIcon={<ExpandMoreIcon />}
                                             aria-controls="panel1a-content"
@@ -145,7 +145,7 @@ const ClassRoom = () => {
                             frameBorder="0"
                             url={keyword("teaching_url")}
                             allow="fullscreen"
-                            height="450"
+                            height="700"
                             width="100%"
                         />
                     </TabPanel>
