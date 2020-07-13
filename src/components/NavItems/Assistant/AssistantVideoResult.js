@@ -21,7 +21,9 @@ const AssistantVideoResult = () => {
     const preprocessLinkForEmbed = (processUrl) => {
         let embedURL = processUrl;
         let linkType = matchPattern(processUrl, KNOWN_LINK_PATTERNS);
-
+        let stringToMatch ="";
+        let positionOne;
+        let positionTwo;
         switch(linkType){
             case KNOWN_LINKS.YOUTUBE:
                 if (!embedURL.includes("/embed/")) {
@@ -30,26 +32,31 @@ const AssistantVideoResult = () => {
                 }
                 break;
             case KNOWN_LINKS.VIMEO:
-                var stringToMatch = "vimeo.com/"
-                var positionOne = processUrl.indexOf(stringToMatch);
-                var positionTwo = positionOne + stringToMatch.length;
+                stringToMatch = "vimeo.com/"
+                positionOne = processUrl.indexOf(stringToMatch);
+                positionTwo = positionOne + stringToMatch.length;
                 embedURL = embedURL.slice(0, positionOne) + "player." + embedURL.slice(positionOne, positionTwo) +
                     "video/"  + embedURL.slice(positionTwo);
                 break;
             case KNOWN_LINKS.DAILYMOTION:
-                var stringToMatch = "dailymotion.com/";
-                var positionOne = processUrl.indexOf(stringToMatch) + stringToMatch.length;
+                stringToMatch = "dailymotion.com/";
+                positionOne = processUrl.indexOf(stringToMatch) + stringToMatch.length;
                 embedURL = embedURL.slice(0, positionOne) + "embed/" + embedURL.slice(positionOne);
                 break;
             case KNOWN_LINKS.FACEBOOK:
                 embedURL = "https://www.facebook.com/plugins/video.php?href=" + encodeURIComponent(embedURL);
                 break;
+<<<<<<< HEAD
             case KNOWN_LINKS.TWITTER:
                 //todo: evaluate if this is the best option
                 embedURL = "https://twitframe.com/show?url=" + encodeURIComponent(embedURL);
                 break;
             default:
                 return embedURL;
+=======
+            default:
+                break;
+>>>>>>> de1a896... Remove assistant warning an errors
         }
 
         return embedURL;
@@ -63,7 +70,11 @@ const AssistantVideoResult = () => {
                         {keyword("media_to_process")}
                     </Typography>
                     <Typography className={classes.title} color="primary">
+<<<<<<< HEAD
                         {<a href={processUrl}> {processUrl.length>100 ? processUrl.substring(0,100) + "...": processUrl} </a>}
+=======
+                        {<a href={processUrl} target="_blank" rel="noopener noreferrer"> {processUrl.length>100 ? processUrl.substring(0,100) + "...": processUrl} </a>}
+>>>>>>> de1a896... Remove assistant warning an errors
                     </Typography>
                 </CardContent>
                 <CardMedia>

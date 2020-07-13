@@ -86,7 +86,11 @@ const Assistant = () => {
         let urlImageList = window.localStorage.getItem("imageList");
         let urlVideoList = window.localStorage.getItem("videoList");
 
+<<<<<<< HEAD
         if (urlImageList === null && urlVideoList === null) {return;}
+=======
+        if (urlImageList == null && urlVideoList == null) {return;}
+>>>>>>> de1a896... Remove assistant warning an errors
         else if (urlImageList !== "" || urlVideoList !== "") {
             // filter out any duplicated images and images we can't process
             imageListRef.current = urlImageList !== "" ? urlImageList.split(",") : [];
@@ -98,9 +102,15 @@ const Assistant = () => {
 
     // if there is only one image/video, set this to be processed
     const handleOneMediaListResult = () => {
+<<<<<<< HEAD
         if (imageListRef.current.length === 1 && videoListRef.current.length === 0) {
             dispatch(setProcessUrl(imageListRef.current[0]))}
         else if(videoListRef.current.length === 1 && imageListRef.current.length === 0){
+=======
+        if (imageListRef.current.length === 1 && videoListRef.current.length===0) {
+            dispatch(setProcessUrl(imageListRef.current[0]))}
+        else if(videoListRef.current.length === 1 && imageListRef.current.length===0){
+>>>>>>> de1a896... Remove assistant warning an errors
             dispatch(setProcessUrl(videoListRef.current[0]))}
     }
 
@@ -209,19 +219,6 @@ const Assistant = () => {
         dispatch(setProcessUrl(url));
     }
 
-    // load possible actions for selected media url
-    const loadProcessUrlActions = () => {
-        let contentType = null;
-
-        if(imageListRef.current.includes(processUrl)) {contentType = CONTENT_TYPE.IMAGE}
-        else if (videoListRef.current.includes(processUrl)) {contentType = CONTENT_TYPE.VIDEO};
-
-        let knownInputLink = matchPattern(inputUrl, KNOWN_LINK_PATTERNS);
-        let knownProcessLink = matchPattern(processUrl, KNOWN_LINK_PATTERNS);
-        let actions = selectCorrectActions(contentType, knownInputLink, knownProcessLink, processUrl);
-
-        dispatch(setProcessUrlActions(contentType, actions))
-    }
 
     // clean assistant state
     const cleanAssistant = () => {
@@ -245,7 +242,8 @@ const Assistant = () => {
             submitInputUrl(uri);
             history.push("/app/assistant/");
         }
-    }, [url])
+         // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [url, dispatch])
 
     // if the user types anything into the input box, set it as the new form input
     useEffect(() => {
@@ -254,8 +252,26 @@ const Assistant = () => {
 
     // if the processUrl changes, load any actions that can be taken on this new url
     useEffect(() => {
+<<<<<<< HEAD
         if (processUrl!==null){loadProcessUrlActions();}
     }, [processUrl]);
+=======
+        // load possible actions for selected media url
+        const loadProcessUrlActions = () => {
+            let contentType = null;
+
+            if(imageListRef.current.includes(processUrl)) {contentType = CONTENT_TYPE.IMAGE}
+            else if (videoListRef.current.includes(processUrl)) {contentType = CONTENT_TYPE.VIDEO};
+
+            let knownInputLink = matchPattern(inputUrl, KNOWN_LINK_PATTERNS);
+            let knownProcessLink = matchPattern(processUrl, KNOWN_LINK_PATTERNS);
+            let actions = selectCorrectActions(contentType, knownInputLink, knownProcessLink, processUrl);
+
+            dispatch(setProcessUrlActions(contentType, actions))
+        }
+        if (processUrl!=null){loadProcessUrlActions();}
+    }, [processUrl, dispatch, inputUrl ]);
+>>>>>>> de1a896... Remove assistant warning an errors
 
 
     return (
@@ -343,7 +359,11 @@ const Assistant = () => {
                     </Grid>
 
                     <Grid item xs={12}
+<<<<<<< HEAD
                           hidden={inputUrl===null||(inputUrl!==null && imageList.length!==0 || videoList.length!==0)}>
+=======
+                          hidden={inputUrl===null || (inputUrl!==null && imageList.length!==0 ) || videoList.length!==0}>
+>>>>>>> de1a896... Remove assistant warning an errors
                         <Card><CardContent className={classes.assistantText}>
                             <Typography variant={"h6"} align={"left"}>
                                 <FaceIcon size={"small"}/> {keyword("assistant_error")}
