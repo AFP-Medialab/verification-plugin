@@ -20,7 +20,7 @@ const useStyles = makeStyles(theme => ({
     icon: {
         color: theme.palette.secondary.main,
         position: "relative",
-        top: theme.spacing.unit,
+        top: theme.spacing(1),
         width: theme.typography.h5.fontSize,
         height: theme.typography.h5.fontSize,
         marginRight: 3
