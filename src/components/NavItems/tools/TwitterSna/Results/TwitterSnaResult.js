@@ -3,11 +3,11 @@ import OnClickInfo from "../../../../Shared/OnClickInfo/OnClickInfo";
 import { useDispatch, useSelector } from "react-redux";
 import React, { useEffect, useState, useCallback } from "react";
 import { Paper } from "@material-ui/core";
-import ExpansionPanel from "@material-ui/core/ExpansionPanel";
-import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
+import Accordion from "@material-ui/core/Accordion";
+import AccordionSummary from "@material-ui/core/AccordionSummary";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import Typography from "@material-ui/core/Typography";
-import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
+import AccordionDetails from "@material-ui/core/AccordionDetails";
 import Plot from "react-plotly.js";
 import Box from "@material-ui/core/Box";
 import CustomTable from "../../../../Shared/CustomTable/CustomTable";
@@ -651,15 +651,15 @@ export default function TwitterSnaResult(props) {
             <CloseResult onClick={() => dispatch(cleanTwitterSnaState())} />
             {
                 result.histogram &&
-                <ExpansionPanel expanded={histoVisible} onChange={() => setHistoVisible(!histoVisible)}>
-                    <ExpansionPanelSummary
+                <Accordion expanded={histoVisible} onChange={() => setHistoVisible(!histoVisible)}>
+                    <AccordionSummary
                         expandIcon={<ExpandMoreIcon />}
                         aria-controls={"panel0a-content"}
                         id={"panel0a-header"}
                     >
                         <Typography className={classes.heading}>{keyword(result.histogram.title)}</Typography>
-                    </ExpansionPanelSummary>
-                    <ExpansionPanelDetails>
+                    </AccordionSummary>
+                    <AccordionDetails>
                         {}
                         <div style={{ width: '100%', }}>
                             {(result.histogram.json && (result.histogram.json.length === 0) &&
@@ -717,20 +717,20 @@ export default function TwitterSnaResult(props) {
                                 </div>
                             }
                         </div>
-                    </ExpansionPanelDetails>
-                </ExpansionPanel>
+                    </AccordionDetails>
+                </Accordion>
             }
             {
                 result && result.tweetCount &&
-                <ExpansionPanel>
-                    <ExpansionPanelSummary
+                <Accordion>
+                    <AccordionSummary
                         expandIcon={<ExpandMoreIcon />}
                         aria-controls={"panel0a-content"}
                         id={"panel0a-header"}
                     >
                         <Typography className={classes.heading} >{keyword("tweetCounter_title")}</Typography>
-                    </ExpansionPanelSummary>
-                    <ExpansionPanelDetails>
+                    </AccordionSummary>
+                    <AccordionDetails>
                         <Box alignItems="center" justifyContent="center" width={"100%"}>
                             <Grid container justify="space-around" spacing={2}
                                 alignContent={"center"}>
@@ -750,23 +750,23 @@ export default function TwitterSnaResult(props) {
                             <Box m={3}/>
                             <OnClickInfo keyword={"twittersna_tweetnb_tip"}/>
                         </Box>
-                    </ExpansionPanelDetails>
-                </ExpansionPanel>
+                    </AccordionDetails>
+                </Accordion>
             }
             {
                 result.pieCharts &&
                 result.pieCharts.map((obj, index) => {
                     if ((props.request.userList.length === 0 || index === 3))
                         return (
-                            <ExpansionPanel key={index}>
-                                <ExpansionPanelSummary
+                            <Accordion key={index}>
+                                <AccordionSummary
                                     expandIcon={<ExpandMoreIcon />}
                                     aria-controls={"panel" + index + "a-content"}
                                     id={"panel" + index + "a-header"}
                                 >
                                     <Typography className={classes.heading}>{keyword(obj.title)}</Typography>
-                                </ExpansionPanelSummary>
-                                <ExpansionPanelDetails>
+                                </AccordionSummary>
+                                <AccordionDetails>
                                     <Box alignItems="center" justifyContent="center" width={"100%"}>
                                         {
                                             (obj.json === null || (obj.json[0].values.length === 1 && obj.json[0].values[0] === "")) &&
@@ -862,8 +862,8 @@ export default function TwitterSnaResult(props) {
                                             </div>
                                         }
                                     </Box>
-                                </ExpansionPanelDetails>
-                            </ExpansionPanel>
+                                </AccordionDetails>
+                            </Accordion>
                         )
                     else
                         return null;
@@ -871,15 +871,15 @@ export default function TwitterSnaResult(props) {
             }
             {
                 props.request.userList.length === 0 && result &&
-                <ExpansionPanel>
-                    <ExpansionPanelSummary
+                <Accordion>
+                    <AccordionSummary
                         expandIcon={<ExpandMoreIcon />}
                         aria-controls={"panel0a-content"}
                         id={"panel0a-header"}
                     >
                         <Typography className={classes.heading}>{keyword("bubble_chart_title")}</Typography>
-                    </ExpansionPanelSummary>
-                    <ExpansionPanelDetails>
+                    </AccordionSummary>
+                    <AccordionDetails>
                         {
                             topUserProfile && topUserProfile.length !== 0 &&
                             <div style={{ width: '100%', }}>
@@ -945,17 +945,17 @@ export default function TwitterSnaResult(props) {
                             (!topUserProfile && result.tweetCount.count !== "0") &&
                             <CircularProgress className={classes.circularProgress} />
                         }
-                    </ExpansionPanelDetails>
-                </ExpansionPanel>
+                    </AccordionDetails>
+                </Accordion>
             }
             {
-                <ExpansionPanel>
-                    <ExpansionPanelSummary
+                <Accordion>
+                    <AccordionSummary
                         expandIcon={<ExpandMoreIcon />}
                     >
                         <Typography className={classes.heading}>{keyword('heatmap_chart_title')}</Typography>
-                    </ExpansionPanelSummary>
-                    <ExpansionPanelDetails>
+                    </AccordionSummary>
+                    <AccordionDetails>
                         {
                             result && result.heatMap &&
                             <Box alignItems="center" justifyContent="center" width={"100%"}>
@@ -1019,17 +1019,17 @@ export default function TwitterSnaResult(props) {
 
                                 <CircularProgress className={classes.circularProgress} />)
                         }
-                    </ExpansionPanelDetails>
-                </ExpansionPanel>
+                    </AccordionDetails>
+                </Accordion>
             }
             {
-                <ExpansionPanel>
-                    <ExpansionPanelSummary
+                <Accordion>
+                    <AccordionSummary
                         expandIcon={<ExpandMoreIcon />}
                     >
                         <Typography className={classes.heading}>{keyword("hashtag_graph_title")}</Typography>
-                    </ExpansionPanelSummary>
-                    <ExpansionPanelDetails>
+                    </AccordionSummary>
+                    <AccordionDetails>
                     {
                         result && result.coHashtagGraph && result.coHashtagGraph.data.nodes.length === 0 &&
                         <Typography variant={"body2"}>{keyword("twittersna_no_data")}</Typography>
@@ -1101,18 +1101,18 @@ export default function TwitterSnaResult(props) {
                         result.coHashtagGraph === undefined &&
                         <CircularProgress className={classes.circularProgress} />
                     }
-                    </ExpansionPanelDetails>
-                </ExpansionPanel>
+                    </AccordionDetails>
+                </Accordion>
             }
             {
                 props.request.userList.length === 0 && result &&
-                <ExpansionPanel>
-                    <ExpansionPanelSummary
+                <Accordion>
+                    <AccordionSummary
                         expandIcon={<ExpandMoreIcon />}
                     >
                         <Typography className={classes.heading}>{keyword("sosem_graph_title")}</Typography>
-                    </ExpansionPanelSummary>
-                    <ExpansionPanelDetails>
+                    </AccordionSummary>
+                    <AccordionDetails>
                     {
                         result.socioSemanticGraph && result.socioSemanticGraph.data.nodes.length !== 0 &&
                             <div style={{ width: '100%' }}>
@@ -1184,18 +1184,18 @@ export default function TwitterSnaResult(props) {
                             result.socioSemanticGraph === undefined &&
                             <CircularProgress className={classes.circularProgress} />
                         }
-                    </ExpansionPanelDetails>
-                </ExpansionPanel>
+                    </AccordionDetails>
+                </Accordion>
             }
             {
                 props.request.userList.length === 0 && result &&
-                <ExpansionPanel>
-                    <ExpansionPanelSummary
+                <Accordion>
+                    <AccordionSummary
                         expandIcon={<ExpandMoreIcon />}
                     >
                         <Typography className={classes.heading}>{keyword("sosem_4mode_graph_title")}</Typography>
-                    </ExpansionPanelSummary>
-                    <ExpansionPanelDetails>
+                    </AccordionSummary>
+                    <AccordionDetails>
                     {
                         result.socioSemantic4ModeGraph && result.socioSemantic4ModeGraph.data.nodes.length !== 0 &&
                             <div style={{ width: '100%' }}>
@@ -1267,19 +1267,19 @@ export default function TwitterSnaResult(props) {
                             result.socioSemantic4ModeGraph === undefined &&
                             <CircularProgress className={classes.circularProgress} />
                         }
-                    </ExpansionPanelDetails>
-                </ExpansionPanel>
+                    </AccordionDetails>
+                </Accordion>
             }
             {
-                <ExpansionPanel>
-                    <ExpansionPanelSummary
+                <Accordion>
+                    <AccordionSummary
                         expandIcon={<ExpandMoreIcon />}
                         aria-controls={"panel0a-content"}
                         id={"panel0a-header"}
                     >
                         <Typography className={classes.heading}>{keyword(result.cloudChart.title)}</Typography>
-                    </ExpansionPanelSummary>
-                    <ExpansionPanelDetails>
+                    </AccordionSummary>
+                    <AccordionDetails>
                         {
                             result && result.cloudChart && result.cloudChart.json &&
                             <Box alignItems="center" justifyContent="center" width={"100%"}>
@@ -1375,8 +1375,8 @@ export default function TwitterSnaResult(props) {
                             result.cloudChart.json === undefined &&
                             <CircularProgress className={classes.circularProgress} />
                         }
-                    </ExpansionPanelDetails>
-                </ExpansionPanel>
+                    </AccordionDetails>
+                </Accordion>
             }
             {
                 props.request.userList.length === 0 && result &&

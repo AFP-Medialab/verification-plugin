@@ -5,11 +5,11 @@ import Box from "@material-ui/core/Box";
 import CustomTile from "../../Shared/CustomTitle/CustomTitle";
 import Typography from "@material-ui/core/Typography";
 import Iframe from "react-iframe";
-import ExpansionPanel from "@material-ui/core/ExpansionPanel";
-import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
+import Accordion from "@material-ui/core/Accordion";
+import AccordionSummary from "@material-ui/core/AccordionSummary";
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import LockOpenIcon from '@material-ui/icons/LockOpen';
-import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
+import AccordionDetails from "@material-ui/core/AccordionDetails";
 import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import Fab from "@material-ui/core/Fab";
@@ -132,8 +132,8 @@ const Interactive = () => {
 
                                 <Box m={3}/>
                                 <Typography variant={"h5"}>{obj.title}</Typography>
-                                <ExpansionPanel expanded={answerExpanded} onChange={handleExpanded}>
-                                    <ExpansionPanelSummary
+                                <Accordion expanded={answerExpanded} onChange={handleExpanded}>
+                                    <AccordionSummary
                                         expandIcon={(answersAvailable) ? <ExpandMoreIcon/> : null}
                                         aria-controls="panel4bh-content"
                                         id="panel4bh-header"
@@ -154,16 +154,16 @@ const Interactive = () => {
                                                 }
                                             </Grid>
                                         </Grid>
-                                    </ExpansionPanelSummary>
-                                    <ExpansionPanelDetails>
+                                    </AccordionSummary>
+                                    <AccordionDetails>
                                         <Typography align={"justify"}>
                                             {obj.answer}
                                             <Link target="_blank" href={obj.answerUrl}>
                                                 {obj.answerUrl}
                                             </Link>
                                         </Typography>
-                                    </ExpansionPanelDetails>
-                                </ExpansionPanel>
+                                    </AccordionDetails>
+                                </Accordion>
                             </div>
                         )
                     })
