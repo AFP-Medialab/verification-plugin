@@ -244,47 +244,33 @@ function buildQuerySearchAfter(aggs, must, mustNot, size, searchAfter) {
 //Construct the match phrase (filter for tweets)
 function constructMatchNotPhrase(param) {
 
-    let match_phrases;
-    if (param.media === "video") {
-        match_phrases = JSON.stringify({
-            "match_phrase": {
-                "video": 
-                {
-                    "query": "0"
-                }
-            }
-        })
-    }
-    else
-        match_phrases = ""
-    if ((param.bannedWords === null || param.bannedWords === undefined) && (param.media === "none" || param.media === "image"))
-        return [];
     if (param.bannedWords === null || param.bannedWords === undefined)
-        return [match_phrases];
-        
-    // KEYWORDS ARGS MATCH
-    param.bannedWords.forEach(arg => {
-        if (match_phrases !== "")
+        return [];
+    else {
+        let match_phrases = "";
+        param.bannedWords.forEach(arg => {
+            if (match_phrases !== "")
             match_phrases += ",";
-        if (arg[0] === '#') {
-            match_phrases += '{' +
-                '"match_phrase": {' +
-                    '"hashtags": {' +
-                        '"query":"' + arg.substr(1) + '"' +
+            if (arg[0] === '#') {
+                match_phrases += '{' +
+                    '"match_phrase": {' +
+                        '"hashtags": {' +
+                            '"query":"' + arg.substr(1) + '"' +
+                            '}' +
                         '}' +
-                    '}' +
-                '}'
-        } else {
-            match_phrases += '{' +
-                '"match_phrase": {' +
-                    '"full_text": {' +
-                        '"query":"' + arg + '"' +
+                    '}'
+            } else {
+                match_phrases += '{' +
+                    '"match_phrase": {' +
+                        '"full_text": {' +
+                            '"query":"' + arg + '"' +
+                            '}' +
                         '}' +
-                    '}' +
-                '}';
-        }
-    });
-    return [match_phrases]
+                    '}';
+            }
+        });
+        return [match_phrases]
+    }
 }
 
 //Construct the match phrase (filter for tweets)
@@ -373,12 +359,24 @@ function constructMatchPhrase(param, startDate, endDate) {
         }
     });
 
+    // FILTERS VIDEO
+    if (param.media === "video") {
+        match_phrases += ',' + JSON.stringify({
+            "match_phrase": {
+                "media.type": {
+                    "query": "video"
+                }
+            }
+        })
+    }
 
-    // FILTERS MATCH
+    // FILTERS IMAGE
     if (param.media === "image") {
         match_phrases += ',' + JSON.stringify({
-            "exists": {
-                "field": "photos"
+            "match_phrase": {
+                "media.type": {
+                    "query": "photo"
+                }
             }
         })
     }
