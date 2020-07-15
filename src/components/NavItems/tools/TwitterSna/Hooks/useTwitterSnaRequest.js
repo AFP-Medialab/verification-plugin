@@ -427,11 +427,21 @@ const useTwitterSnaRequest = (request) => {
         annotations: [{
           xref: 'paper',
           yref: 'paper',
-          x: 1.2,
+          x: 1.15,
           xanchor: 'right',
           y: -0.4,
           yanchor: 'top',
           text: 'we-verify.eu',
+          showarrow: false
+        },
+        {
+          xref: 'paper',
+          yref: 'paper',
+          x: 1.15,
+          xanchor: 'right',
+          y: -0.6,
+          yanchor: 'top',
+          text: keyword('twitter_local_time'),
           showarrow: false
         }],
         autosize: true,
