@@ -441,7 +441,7 @@ const useTwitterSnaRequest = (request) => {
           xanchor: 'right',
           y: -0.6,
           yanchor: 'top',
-          text: "keyword('twitter_local_time')",
+          text: keyword('twitter_local_time'),
           showarrow: false
         }],
         autosize: true,
