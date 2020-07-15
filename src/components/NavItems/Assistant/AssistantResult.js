@@ -1,12 +1,10 @@
 import React from "react";
 import {useDispatch, useSelector} from "react-redux";
 import Box from "@material-ui/core/Box";
-import Button from "@material-ui/core/Button";
 import Card from "@material-ui/core/Card";
 import CardActionArea from "@material-ui/core/CardActionArea";
 import CardContent from "@material-ui/core/CardContent";
 import Grid from "@material-ui/core/Grid";
-import Icon from "@material-ui/core/Icon";
 import {Paper} from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
 import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
@@ -76,12 +74,10 @@ const AssistantResult = () => {
                                           }>
                                         <CardActionArea><CardContent>
                                                 <Typography className={classes.title} m={2}>{keyword(action.text)}</Typography>
-                                                <Button aria-colspan={2} size = "medium">
-                                                    {<Icon className={classes.iconRootDrawer} fontSize={"large"}>
-                                                        <img className={classes.imageIconDrawer} alt="" src={action.icon}/>
-                                                    </Icon>}
+                                                <Grid container direction="row" justify="center" alignItems="center">
+                                                        <img className={classes.imageIconDrawer} src={action.icon} style={{width: 40, height: 40, borderRadius:40}} alt=""/>
                                                     {keyword(action.title)}
-                                                </Button>
+                                                </Grid>
                                         </CardContent></CardActionArea>
                                     </Card>
                                 </Grid>
