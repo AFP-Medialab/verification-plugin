@@ -359,7 +359,7 @@ function constructMatchPhrase(param, startDate, endDate) {
         }
     });
 
-    // FILTERS VIDEO
+    // VIDEO MATCH
     if (param.media === "video") {
         match_phrases += ',' + JSON.stringify({
             "match_phrase": {
@@ -370,7 +370,7 @@ function constructMatchPhrase(param, startDate, endDate) {
         })
     }
 
-    // FILTERS IMAGE
+    // IMAGE MATCH
     if (param.media === "image") {
         match_phrases += ',' + JSON.stringify({
             "match_phrase": {
@@ -385,6 +385,15 @@ function constructMatchPhrase(param, startDate, endDate) {
 
 
     // LANGUAGE MATCH
+    if (param.lang !== "none") {
+        match_phrases += ',' + JSON.stringify({
+            "match_phrase": {
+                "lang": {
+                    "query": param.lang
+                }
+            }
+        })
+    }
 
     return [match_phrases]
 }
