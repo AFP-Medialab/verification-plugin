@@ -113,11 +113,7 @@ export const ASSISTANT_ACTIONS = [
     {
         title: "navbar_magnifier",
         icon: magnifierIconOff,
-<<<<<<< HEAD
         linksAccepted: [KNOWN_LINKS.MISC, KNOWN_LINKS.OWN],
-=======
-        linksAccepted: [KNOWN_LINKS.MISC],
->>>>>>> de1a896... Remove assistant warning an errors
         cTypes: [CONTENT_TYPE.IMAGE],
         exceptions: [],
         useInputUrl: false,
