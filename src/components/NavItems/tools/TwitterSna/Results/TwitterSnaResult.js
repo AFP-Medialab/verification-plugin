@@ -564,7 +564,7 @@ export default function TwitterSnaResult(props) {
 
         sortedObjArr.forEach((obj) => {
             let date = new Date(obj.datetimestamp * 1000);
-            let dateStr = date.getFullYear() + "-" + date.getMonth() + "-" + date.getDate();
+            let dateStr = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
             let nbTweets = tweetCountObj[obj.screen_name.toLowerCase()];
             let avgTweetsPerDate = nbTweets/nbDays;
 
