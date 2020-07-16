@@ -640,7 +640,8 @@ export default function TwitterSnaResult(props) {
                 screen_name: obj._source.screen_name,
                 followers_count: obj._source.followers_count,
                 datetimestamp: obj._source.datetimestamp,
-                indexedat: obj._source.indexedat
+                indexedat: obj._source.indexedat,
+                verified: obj._source.verified
             }; 
         });
 
@@ -664,6 +665,7 @@ export default function TwitterSnaResult(props) {
         let text = [];
         let color = []
         let size = [];
+        let symbol = [];
 
         sortedObjArr.forEach((obj) => {
             let date = new Date(obj.datetimestamp * 1000);
@@ -676,6 +678,7 @@ export default function TwitterSnaResult(props) {
             text.push('@' + obj.screen_name + '<br>Posted <b>' + nbTweets + '</b> tweets in ' + nbDays + ' days');
             color.push(getColorOfMostActiveUserBubble(avgTweetsPerDate));
             size.push(nbTweets);
+            symbol.push( (obj.verified ? "diamond" : "circle") );
         });
 
         let data = [
@@ -690,7 +693,8 @@ export default function TwitterSnaResult(props) {
                     size: size,
                     sizeref: (Math.max(...size) < 10 ? 1 : 2 * Math.max(...size) / (60**2)),
                     sizemode: 'area',
-                    sizemin: 5
+                    sizemin: 5,
+                    symbol: symbol
                 },
                 name: ""
             } 
