@@ -86,11 +86,7 @@ const Assistant = () => {
         let urlImageList = window.localStorage.getItem("imageList");
         let urlVideoList = window.localStorage.getItem("videoList");
 
-<<<<<<< HEAD
-        if (urlImageList === null && urlVideoList === null) {return;}
-=======
         if (urlImageList == null && urlVideoList == null) {return;}
->>>>>>> de1a896... Remove assistant warning an errors
         else if (urlImageList !== "" || urlVideoList !== "") {
             // filter out any duplicated images and images we can't process
             imageListRef.current = urlImageList !== "" ? urlImageList.split(",") : [];
@@ -102,15 +98,9 @@ const Assistant = () => {
 
     // if there is only one image/video, set this to be processed
     const handleOneMediaListResult = () => {
-<<<<<<< HEAD
-        if (imageListRef.current.length === 1 && videoListRef.current.length === 0) {
-            dispatch(setProcessUrl(imageListRef.current[0]))}
-        else if(videoListRef.current.length === 1 && imageListRef.current.length === 0){
-=======
         if (imageListRef.current.length === 1 && videoListRef.current.length===0) {
             dispatch(setProcessUrl(imageListRef.current[0]))}
         else if(videoListRef.current.length === 1 && imageListRef.current.length===0){
->>>>>>> de1a896... Remove assistant warning an errors
             dispatch(setProcessUrl(videoListRef.current[0]))}
     }
 
@@ -252,10 +242,6 @@ const Assistant = () => {
 
     // if the processUrl changes, load any actions that can be taken on this new url
     useEffect(() => {
-<<<<<<< HEAD
-        if (processUrl!==null){loadProcessUrlActions();}
-    }, [processUrl]);
-=======
         // load possible actions for selected media url
         const loadProcessUrlActions = () => {
             let contentType = null;
@@ -271,7 +257,6 @@ const Assistant = () => {
         }
         if (processUrl!=null){loadProcessUrlActions();}
     }, [processUrl, dispatch, inputUrl ]);
->>>>>>> de1a896... Remove assistant warning an errors
 
 
     return (
