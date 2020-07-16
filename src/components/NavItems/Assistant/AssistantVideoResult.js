@@ -46,17 +46,12 @@ const AssistantVideoResult = () => {
             case KNOWN_LINKS.FACEBOOK:
                 embedURL = "https://www.facebook.com/plugins/video.php?href=" + encodeURIComponent(embedURL);
                 break;
-<<<<<<< HEAD
             case KNOWN_LINKS.TWITTER:
                 //todo: evaluate if this is the best option
                 embedURL = "https://twitframe.com/show?url=" + encodeURIComponent(embedURL);
                 break;
             default:
                 return embedURL;
-=======
-            default:
-                break;
->>>>>>> de1a896... Remove assistant warning an errors
         }
 
         return embedURL;
@@ -70,11 +65,7 @@ const AssistantVideoResult = () => {
                         {keyword("media_to_process")}
                     </Typography>
                     <Typography className={classes.title} color="primary">
-<<<<<<< HEAD
-                        {<a href={processUrl}> {processUrl.length>100 ? processUrl.substring(0,100) + "...": processUrl} </a>}
-=======
                         {<a href={processUrl} target="_blank" rel="noopener noreferrer"> {processUrl.length>100 ? processUrl.substring(0,100) + "...": processUrl} </a>}
->>>>>>> de1a896... Remove assistant warning an errors
                     </Typography>
                 </CardContent>
                 <CardMedia>

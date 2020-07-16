@@ -23,19 +23,11 @@ const AssistantImageResult = () => {
                         {keyword("media_to_process")}
                     </Typography>
                     <Typography className={classes.title} color="primary">
-<<<<<<< HEAD
-                        {<a href={processUrl}> {processUrl.length>100 ? processUrl.substring(0,100) + "...": processUrl} </a>}
-                    </Typography>
-                </CardContent>
-                <CardMedia>
-                    <img src={processUrl} height={"100%"} alt={processUrl} width={"100%"}/>
-=======
                         {<a href={processUrl} target="_blank" rel="noopener noreferrer"> {processUrl.length>100 ? processUrl.substring(0,100) + "...": processUrl} </a>}
                     </Typography>
                 </CardContent>
                 <CardMedia>
                     <img src={processUrl} height={"100%"} width={"100%"} alt=""/>
->>>>>>> de1a896... Remove assistant warning an errors
                 </CardMedia>
             </Card>
         </Grid>
