@@ -28,7 +28,7 @@ import { saveSvgAsPng } from 'save-svg-as-png';
 import { CSVLink } from "react-csv";
 import Cytoscape from 'cytoscape';
 import Fcose from 'cytoscape-fcose';
-import { Sigma, RandomizeNodePositions, ForceAtlas2, SigmaEnableWebGL, EdgeShapes } from 'react-sigma';
+import { Sigma, RandomizeNodePositions, ForceAtlas2 } from 'react-sigma';
 import Plotly from 'plotly.js-dist';
 import _ from "lodash";
 import CircularProgress from "@material-ui/core/CircularProgress";
@@ -56,6 +56,17 @@ export default function TwitterSnaResult(props) {
     const [socioSemanticGraphTweets, setSocioSemanticGraphTweets] = useState(null);
     const [socioSemantic4ModeGraphTweets, setSocioSemantic4ModeGraphTweets] = useState(null);
     const [bubbleTweets, setBubbleTweets] = useState(null);
+    const [activiyContributorTweets, setActiviyContributorTweets] = useState(null);
+    const [visibleContributorTweets, setVisibleContributorTweets] = useState(null);
+
+    const [coHashtagGraphReset, setCoHashtagGraphReset] = useState(null);
+    const [coHashtagGraphClickNode, setCoHashtagGraphClickNode] = useState(null);
+
+    const [socioSemanticGraphReset, setSocioSemanticGraphReset] = useState(null);
+    const [socioSemanticGraphClickNode, setSocioSemanticGraphClickNode] = useState(null);
+
+    const [socioSemantic4ModeGraphReset, setSocioSemantic4ModeGraphReset] = useState(null);
+    const [socioSemantic4ModeGraphClickNode, setSocioSemantic4ModeGraphClickNode] = useState(null);
 
     const CSVheaders = [{ label: keyword('twittersna_result_word'), key: "word" }, { label: keyword("twittersna_result_nb_occ"), key: "nb_occ" }, { label: keyword("twittersna_result_entity"), key: "entity" }];
 
@@ -110,6 +121,14 @@ export default function TwitterSnaResult(props) {
         setSocioSemanticGraphTweets(null);
         setSocioSemantic4ModeGraphTweets(null);
         setBubbleTweets(null);
+        setActiviyContributorTweets(null);
+        setVisibleContributorTweets(null);
+        setCoHashtagGraphReset(null);
+        setCoHashtagGraphClickNode(null);
+        setSocioSemanticGraphReset(null);
+        setSocioSemanticGraphClickNode(null);
+        setSocioSemantic4ModeGraphReset(null);
+        setSocioSemantic4ModeGraphClickNode(null);
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [JSON.stringify(props.request), props.request])
 
@@ -310,6 +329,16 @@ export default function TwitterSnaResult(props) {
     }
 
     const onClickNodeCoHashtagGraph = (data) => {
+
+        let initGraph = {
+            nodes: data.data.renderer.graph.nodes(),
+            edges: data.data.renderer.graph.edges()
+        }
+
+        setCoHashtagGraphClickNode(createGraphWhenClickANode(data));
+
+        setCoHashtagGraphReset(initGraph);
+
         let selectedHashtag = data.data.node.id;
         let filteredTweets = result.tweets.filter(tweet => tweet._source.hashtags !== undefined && tweet._source.hashtags.length > 0)
             .filter(function (tweet) {
@@ -321,7 +350,21 @@ export default function TwitterSnaResult(props) {
         setCoHashtagGraphTweets(dataToDisplay);
     }
 
+    const onClickStageCoHashtagGraph = (e) => {
+        setCoHashtagGraphClickNode(null);
+        setCoHashtagGraphTweets(null);
+    }
+
     const onClickNodeSocioSemanticGraph = (data) => {
+        let initGraph = {
+            nodes: data.data.renderer.graph.nodes(),
+            edges: data.data.renderer.graph.edges()
+        }
+
+        setSocioSemanticGraphClickNode(createGraphWhenClickANode(data));
+
+        setSocioSemanticGraphReset(initGraph);
+
         if (data.data.node.type === "Hashtag") {
             let selectedHashtag = data.data.node.id.replace("#", "");
             let filteredTweets = result.tweets.filter(tweet => tweet._source.hashtags !== undefined && tweet._source.hashtags.length > 0)
@@ -345,7 +388,22 @@ export default function TwitterSnaResult(props) {
         }
     }
 
+    const onClickStageSocioSemanticGraph = (e) => {
+        setSocioSemanticGraphClickNode(null);
+        setSocioSemanticGraphTweets(null);
+    }
+
     const onClickNodeSocioSemantic4ModeGraph = (data) => {
+
+        let initGraph = {
+            nodes: data.data.renderer.graph.nodes(),
+            edges: data.data.renderer.graph.edges()
+        }
+
+        setSocioSemantic4ModeGraphClickNode(createGraphWhenClickANode(data));
+
+        setSocioSemantic4ModeGraphReset(initGraph);
+
         if (data.data.node.type === "Hashtag") {
             let selectedHashtag = data.data.node.id.replace("#", "");
             let filteredTweets = result.tweets.filter(tweet => tweet._source.hashtags !== undefined && tweet._source.hashtags.length > 0)
@@ -384,6 +442,51 @@ export default function TwitterSnaResult(props) {
             let dataToDisplay = displayTweets(filteredTweets);
             dataToDisplay["selected"] = data.data.node.id;
             setSocioSemantic4ModeGraphTweets(dataToDisplay);
+        }
+    }
+
+    const onClickStageSocioSemantic4ModeGraph = (e) => {
+        setSocioSemantic4ModeGraphClickNode(null);
+        setSocioSemantic4ModeGraphTweets(null);
+    }
+
+    const onActiveContributorHistClick = (data) => {
+        if (result.tweets !== undefined) {
+            let selectedPoints = data.points;
+            let filteredTweets = result.tweets.filter(tweet => 
+                tweet._source.screen_name.toLowerCase() === selectedPoints[0].x.toLowerCase()
+            );
+            setActiviyContributorTweets(displayTweets(filteredTweets));
+        }
+    }
+
+    const onVisibleContributorHistClick = (data) => {
+        if (result.tweets !== undefined) {
+            let selectedPoints = data.points;
+            let filteredTweets = [];
+            let pickedTweetIds = [];
+            selectedPoints.forEach((point) => {
+                let selectedUser = point.x.toLowerCase();
+
+                if (point.data.name === "genuineReplyReceived" && point.y > 0) {
+                    let grrTweets = result.tweets.filter(tweet => 
+                        ( tweet._source.screen_name.toLowerCase() === selectedUser && tweet._source.reply_count > 0)
+                        || ( tweet._source.user_mentions.length !== 0 && tweet._source.user_mentions.map((obj) => {return obj.screen_name.toLowerCase()}).includes(selectedUser))
+                    );
+                    pickedTweetIds = grrTweets.map((tweet) => {return tweet._source.id_str;})
+                    filteredTweets.push(grrTweets);
+                }
+                if (point.data.name === "retweetReceived" && point.y > 0) {
+                    let rtrTweets = result.tweets.filter(tweet => 
+                        tweet._source.screen_name.toLowerCase() === selectedUser
+                        && ( tweet._source.retweet_count > 0 || tweet._source.quote_count > 0 )
+                        && !pickedTweetIds.includes(tweet._source.id_str)
+                    );
+                    filteredTweets.push(rtrTweets);
+                }
+            });
+
+            setVisibleContributorTweets(displayTweets(filteredTweets.flat()));
         }
     }
 
@@ -640,6 +743,32 @@ export default function TwitterSnaResult(props) {
             layout: layout,
             config: config
         }
+    }
+
+    function createGraphWhenClickANode(e) {
+
+        let selectedNode = e.data.node;
+
+        let neighborNodes = e.data.renderer.graph.adjacentNodes(selectedNode.id);
+        let neighborEdges = e.data.renderer.graph.adjacentEdges(selectedNode.id);
+        let directedNeighborEdges = neighborEdges.map((edge) => {
+            let newEdge = JSON.parse(JSON.stringify(edge));
+            if (newEdge.source !== selectedNode.id) {
+                newEdge.target = edge.source;
+                newEdge.source = selectedNode.id;
+            }
+            return newEdge;
+        });
+
+        neighborNodes.push(selectedNode);
+
+        let newGraph = {
+            nodes: neighborNodes,
+            edges: directedNeighborEdges
+        }
+
+        console.log("newGraph", newGraph);
+        return newGraph;
     }
 
     if (result === null)
@@ -1037,27 +1166,75 @@ export default function TwitterSnaResult(props) {
                     {
                         result && result.coHashtagGraph && result.coHashtagGraph.data.nodes.length !== 0 &&
                         <div style={{ width: '100%' }}>
-                            <Sigma graph={result.coHashtagGraph.data}
-                                renderer={"canvas"}
-                                style={{ textAlign: 'left', width: '100%', height: '700px' }}
-                                onClickNode={(e) => onClickNodeCoHashtagGraph(e)}
-                                settings={{
-                                    drawEdges: true,
-                                    drawEdgeLabels: false,
-                                    minNodeSize: 6,
-                                    maxNodeSize: 20,
-                                    minEdgeSize: 1,
-                                    maxEdgeSize: 5,
-                                    defaultNodeColor: "#3388AA",
-                                    defaultEdgeColor: "#C0C0C0",
-                                    edgeColor: "default"
-                                }}
-                            >
-                                <EdgeShapes default="curve" />
-                                <RandomizeNodePositions>
-                                    <ForceAtlas2 iterationsPerRender={1} timeout={15000} />
-                                </RandomizeNodePositions>
-                            </Sigma>
+                            {
+                                (coHashtagGraphReset === null && coHashtagGraphClickNode === null && result.coHashtagGraph.data.nodes.length !== 0) &&
+                                <div>
+                                    <Sigma graph={result.coHashtagGraph.data}
+                                        renderer={"canvas"}
+                                        style={{ textAlign: 'left', width: '100%', height: '700px' }}
+                                        onClickNode={(e) => onClickNodeCoHashtagGraph(e)}
+                                        settings={{
+                                            drawEdges: true,
+                                            drawEdgeLabels: false,
+                                            minNodeSize: 6,
+                                            maxNodeSize: 20,
+                                            minEdgeSize: 1,
+                                            maxEdgeSize: 5,
+                                            defaultNodeColor: "#3388AA",
+                                            defaultEdgeColor: "#C0C0C0",
+                                            edgeColor: "default"
+                                        }}
+                                    >
+                                        <RandomizeNodePositions>
+                                            <ForceAtlas2 iterationsPerRender={1} timeout={15000} />
+                                        </RandomizeNodePositions>
+                                    </Sigma>
+                                </div>
+                            }
+                            {
+                                (coHashtagGraphReset !== null && coHashtagGraphClickNode !== null) &&
+                                <div>
+                                    <Sigma graph={coHashtagGraphClickNode}
+                                        renderer={"canvas"}
+                                        style={{ textAlign: 'left', width: '100%', height: '700px' }}
+                                        onClickStage={(e) => onClickStageCoHashtagGraph(e)}
+                                        settings={{
+                                            drawEdges: true,
+                                            drawEdgeLabels: false,
+                                            minNodeSize: 6,
+                                            maxNodeSize: 20,
+                                            minEdgeSize: 1,
+                                            maxEdgeSize: 5,
+                                            defaultNodeColor: "#3388AA",
+                                            defaultEdgeColor: "#C0C0C0",
+                                            edgeColor: "default"
+                                        }}
+                                    >
+                                    </Sigma>
+                                </div>
+                            }
+                            {
+                                (coHashtagGraphReset !== null && coHashtagGraphClickNode === null) &&
+                                <div>
+                                    <Sigma graph={coHashtagGraphReset}
+                                        renderer={"canvas"}
+                                        style={{ textAlign: 'left', width: '100%', height: '700px' }}
+                                        onClickNode={(e) => onClickNodeCoHashtagGraph(e)}
+                                        settings={{
+                                            drawEdges: true,
+                                            drawEdgeLabels: false,
+                                            minNodeSize: 6,
+                                            maxNodeSize: 20,
+                                            minEdgeSize: 1,
+                                            maxEdgeSize: 5,
+                                            defaultNodeColor: "#3388AA",
+                                            defaultEdgeColor: "#C0C0C0",
+                                            edgeColor: "default"
+                                        }}
+                                    >
+                                    </Sigma>
+                                </div>
+                            }
                             <Box m={1} />
                             <OnClickInfo keyword={"twittersna_hashtag_graph_tip"} />
                             <Box m={2} />
@@ -1116,27 +1293,75 @@ export default function TwitterSnaResult(props) {
                     {
                         result.socioSemanticGraph && result.socioSemanticGraph.data.nodes.length !== 0 &&
                             <div style={{ width: '100%' }}>
-                                <Sigma graph={result.socioSemanticGraph.data}
-                                    renderer={"canvas"}
-                                    style={{ textAlign: 'left', width: '100%', height: '700px' }}
-                                    onClickNode={(e) => onClickNodeSocioSemanticGraph(e)}
-                                    settings={{
-                                        drawEdges: true,
-                                        drawEdgeLabels: false,
-                                        minNodeSize: 6,
-                                        maxNodeSize: 20,
-                                        minEdgeSize: 1,
-                                        maxEdgeSize: 5,
-                                        defaultNodeColor: "#3388AA",
-                                        defaultEdgeColor: "#C0C0C0",
-                                        edgeColor: "default"
-                                    }}
-                                    >
-                                    <EdgeShapes default="curve" />
-                                    <RandomizeNodePositions>
-                                        <ForceAtlas2 iterationsPerRender={1} timeout={15000} scalingRatio={2} />
-                                    </RandomizeNodePositions>
-                                </Sigma>
+                                {
+                                    (socioSemanticGraphReset === null && socioSemanticGraphClickNode === null && result.socioSemanticGraph.data.nodes.length !== 0) &&
+                                    <div>
+                                        <Sigma graph={result.socioSemanticGraph.data}
+                                            renderer={"canvas"}
+                                            style={{ textAlign: 'left', width: '100%', height: '700px' }}
+                                            onClickNode={(e) => onClickNodeSocioSemanticGraph(e)}
+                                            settings={{
+                                                drawEdges: true,
+                                                drawEdgeLabels: false,
+                                                minNodeSize: 6,
+                                                maxNodeSize: 20,
+                                                minEdgeSize: 1,
+                                                maxEdgeSize: 5,
+                                                defaultNodeColor: "#3388AA",
+                                                defaultEdgeColor: "#C0C0C0",
+                                                edgeColor: "default"
+                                            }}
+                                            >
+                                            <RandomizeNodePositions>
+                                                <ForceAtlas2 iterationsPerRender={1} timeout={15000} scalingRatio={2} />
+                                            </RandomizeNodePositions>
+                                        </Sigma>
+                                    </div>
+                                }
+                                {
+                                    (socioSemanticGraphReset !== null && socioSemanticGraphClickNode !== null) &&
+                                    <div>
+                                        <Sigma graph={socioSemanticGraphClickNode}
+                                            renderer={"canvas"}
+                                            style={{ textAlign: 'left', width: '100%', height: '700px' }}
+                                            onClickStage={(e) => onClickStageSocioSemanticGraph(e)}
+                                            settings={{
+                                                drawEdges: true,
+                                                drawEdgeLabels: false,
+                                                minNodeSize: 6,
+                                                maxNodeSize: 20,
+                                                minEdgeSize: 1,
+                                                maxEdgeSize: 5,
+                                                defaultNodeColor: "#3388AA",
+                                                defaultEdgeColor: "#C0C0C0",
+                                                edgeColor: "default"
+                                            }}
+                                            >
+                                        </Sigma>
+                                    </div>
+                                }
+                                {
+                                    (socioSemanticGraphReset !== null && socioSemanticGraphClickNode === null) &&
+                                    <div>
+                                        <Sigma graph={socioSemanticGraphReset}
+                                            renderer={"canvas"}
+                                            style={{ textAlign: 'left', width: '100%', height: '700px' }}
+                                            onClickNode={(e) => onClickNodeSocioSemanticGraph(e)}
+                                            settings={{
+                                                drawEdges: true,
+                                                drawEdgeLabels: false,
+                                                minNodeSize: 6,
+                                                maxNodeSize: 20,
+                                                minEdgeSize: 1,
+                                                maxEdgeSize: 5,
+                                                defaultNodeColor: "#3388AA",
+                                                defaultEdgeColor: "#C0C0C0",
+                                                edgeColor: "default"
+                                            }}
+                                            >
+                                        </Sigma>
+                                    </div>
+                                }
                                 <Box m={1}/>
                                 <OnClickInfo keyword={"twittersna_sosem_graph_tip"}/>
                                 <Box m={2}/>
@@ -1199,27 +1424,75 @@ export default function TwitterSnaResult(props) {
                     {
                         result.socioSemantic4ModeGraph && result.socioSemantic4ModeGraph.data.nodes.length !== 0 &&
                             <div style={{ width: '100%' }}>
-                                <Sigma graph={result.socioSemantic4ModeGraph.data}
-                                    renderer={"canvas"}
-                                    style={{ textAlign: 'left', width: '100%', height: '700px' }}
-                                    onClickNode={(e) => onClickNodeSocioSemantic4ModeGraph(e)}
-                                    settings={{
-                                        drawEdges: true,
-                                        drawEdgeLabels: false,
-                                        minNodeSize: 6,
-                                        maxNodeSize: 20,
-                                        minEdgeSize: 1,
-                                        maxEdgeSize: 5,
-                                        defaultNodeColor: "#3388AA",
-                                        defaultEdgeColor: "#C0C0C0",
-                                        edgeColor: "default"
-                                    }}
-                                    >
-                                    <EdgeShapes default="curve" />
-                                    <RandomizeNodePositions>
-                                        <ForceAtlas2 iterationsPerRender={1} timeout={15000} scalingRatio={2} />
-                                    </RandomizeNodePositions>
-                                </Sigma>
+                                {
+                                    (socioSemantic4ModeGraphReset === null && socioSemantic4ModeGraphClickNode === null && result.socioSemantic4ModeGraph.data.nodes.length !== 0) &&
+                                    <div>
+                                        <Sigma graph={result.socioSemantic4ModeGraph.data}
+                                            renderer={"canvas"}
+                                            style={{ textAlign: 'left', width: '100%', height: '700px' }}
+                                            onClickNode={(e) => onClickNodeSocioSemantic4ModeGraph(e)}
+                                            settings={{
+                                                drawEdges: true,
+                                                drawEdgeLabels: false,
+                                                minNodeSize: 6,
+                                                maxNodeSize: 20,
+                                                minEdgeSize: 1,
+                                                maxEdgeSize: 5,
+                                                defaultNodeColor: "#3388AA",
+                                                defaultEdgeColor: "#C0C0C0",
+                                                edgeColor: "default"
+                                            }}
+                                        >
+                                            <RandomizeNodePositions>
+                                                <ForceAtlas2 iterationsPerRender={1} timeout={15000} scalingRatio={2} />
+                                            </RandomizeNodePositions>
+                                        </Sigma>
+                                    </div>
+                                }
+                                {
+                                    (socioSemantic4ModeGraphReset !== null && socioSemantic4ModeGraphClickNode !== null) &&
+                                    <div>
+                                        <Sigma graph={socioSemantic4ModeGraphClickNode}
+                                            renderer={"canvas"}
+                                            style={{ textAlign: 'left', width: '100%', height: '700px' }}
+                                            onClickStage={(e) => onClickStageSocioSemantic4ModeGraph(e)}
+                                            settings={{
+                                                drawEdges: true,
+                                                drawEdgeLabels: false,
+                                                minNodeSize: 6,
+                                                maxNodeSize: 20,
+                                                minEdgeSize: 1,
+                                                maxEdgeSize: 5,
+                                                defaultNodeColor: "#3388AA",
+                                                defaultEdgeColor: "#C0C0C0",
+                                                edgeColor: "default"
+                                            }}
+                                        >
+                                        </Sigma>
+                                    </div>
+                                }
+                                {
+                                    (socioSemantic4ModeGraphReset !== null && socioSemantic4ModeGraphClickNode === null) &&
+                                    <div>
+                                        <Sigma graph={socioSemantic4ModeGraphReset}
+                                            renderer={"canvas"}
+                                            style={{ textAlign: 'left', width: '100%', height: '700px' }}
+                                            onClickNode={(e) => onClickNodeSocioSemantic4ModeGraph(e)}
+                                            settings={{
+                                                drawEdges: true,
+                                                drawEdgeLabels: false,
+                                                minNodeSize: 6,
+                                                maxNodeSize: 20,
+                                                minEdgeSize: 1,
+                                                maxEdgeSize: 5,
+                                                defaultNodeColor: "#3388AA",
+                                                defaultEdgeColor: "#C0C0C0",
+                                                edgeColor: "default"
+                                            }}
+                                        >
+                                        </Sigma>
+                                    </div>
+                                }
                                 <Box m={1}/>
                                 <OnClickInfo keyword={"twittersna_sosem_4mode_graph_tip"}/>
                                 <Box m={2}/>
@@ -1437,6 +1710,156 @@ export default function TwitterSnaResult(props) {
                     <Box m={1} />
                     <OnClickInfo keyword={"twittersna_export_graph_tip"} />
                 </Paper>
+            }
+            {
+                <Accordion>
+                    <AccordionSummary
+                        expandIcon={<ExpandMoreIcon />}
+                        aria-controls={"panel0a-content"}
+                        id={"panel0a-header"}
+                    >
+                        <Typography className={classes.heading}>Most active contributors{/*keyword("active_hist_title")*/}</Typography>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                        {
+                            result && result.activeContributors &&
+                            <div style={{ width: '100%', }}>
+                                {
+                                    result.activeContributors && result.activeContributors.data.reduce((a, b) => a + (b.x.length || 0), 0) === 0 &&
+                                    <Typography variant={"body2"}>{keyword("twittersna_no_data")}</Typography>
+                                }
+                                {
+                                    (result.activeContributors.data && result.activeContributors.data.length !== 0) &&
+                                    <Plot useResizeHandler
+                                        style={{ width: '100%', height: "450px" }}
+                                        data={result.activeContributors.data}
+                                        layout={result.activeContributors.layout}
+                                        config={result.histogram.config}
+                                        onClick={(e) => onActiveContributorHistClick(e)}
+                                    />
+                                }
+                                <Box m={1} />
+                                <OnClickInfo keyword={"twittersna_active_hist_tip"}/>
+                                <Box m={2} />
+                                {
+                                    activiyContributorTweets &&
+                                    <div>
+                                        <Grid container justify="space-between" spacing={2}
+                                            alignContent={"center"}>
+                                            <Grid item>
+                                                <Button
+                                                    variant={"contained"}
+                                                    color={"secondary"}
+                                                    onClick={() => setActiviyContributorTweets(null)}
+                                                >
+                                                    {
+                                                        keyword('twittersna_result_hide')
+                                                    }
+                                                </Button>
+                                            </Grid>
+                                            <Grid item>
+                                                <Button
+                                                    variant={"contained"}
+                                                    color={"primary"}
+                                                    onClick={() => downloadClick(activiyContributorTweets.csvArr, activiyContributorTweets.title)}>
+                                                    {
+                                                        keyword('twittersna_result_download')
+                                                    }
+                                                </Button>
+                                            </Grid>
+                                        </Grid>
+                                        <Box m={2} />
+                                        <CustomTable
+                                            title={keyword("twittersna_result_slected_tweets")}
+                                            colums={activiyContributorTweets.columns}
+                                            data={activiyContributorTweets.data}
+                                            actions={goToTweetAction}
+                                        />
+                                    </div>
+                                }
+                            </div>
+                        }
+                        {
+                            result && result.activeContributors === undefined &&
+                            <CircularProgress className={classes.circularProgress} />
+                        }
+                    </AccordionDetails>
+                </Accordion>
+            }
+            {
+                <Accordion>
+                    <AccordionSummary
+                        expandIcon={<ExpandMoreIcon />}
+                        aria-controls={"panel0a-content"}
+                        id={"panel0a-header"}
+                    >
+                        <Typography className={classes.heading}>Most vsible contributors{/*keyword("visible_hist_title")*/}</Typography>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                        {
+                            result && result.visibleContributors &&
+                            <div style={{ width: '100%', }}>
+                                {
+                                    result.visibleContributors && result.visibleContributors.data.reduce((a, b) => a + (b.x.length || 0), 0) === 0 &&
+                                    <Typography variant={"body2"}>{keyword("twittersna_no_data")}</Typography>
+                                }
+                                {
+                                    (result.visibleContributors.data && result.visibleContributors.data.length !== 0) &&
+                                    <Plot useResizeHandler
+                                        style={{ width: '100%', height: "450px" }}
+                                        data={result.visibleContributors.data}
+                                        layout={result.visibleContributors.layout}
+                                        config={result.histogram.config}
+                                        onClick={(e) => onVisibleContributorHistClick(e)}
+                                    />
+                                }
+                                <Box m={1} />
+                                <OnClickInfo keyword={"twittersna_visible_hist_tip"} />
+                                <Box m={2} />
+                                {
+                                    visibleContributorTweets &&
+                                    <div>
+                                        <Grid container justify="space-between" spacing={2}
+                                            alignContent={"center"}>
+                                            <Grid item>
+                                                <Button
+                                                    variant={"contained"}
+                                                    color={"secondary"}
+                                                    onClick={() => setVisibleContributorTweets(null)}
+                                                >
+                                                    {
+                                                        keyword('twittersna_result_hide')
+                                                    }
+                                                </Button>
+                                            </Grid>
+                                            <Grid item>
+                                                <Button
+                                                    variant={"contained"}
+                                                    color={"primary"}
+                                                    onClick={() => downloadClick(visibleContributorTweets.csvArr, visibleContributorTweets.title)}>
+                                                    {
+                                                        keyword('twittersna_result_download')
+                                                    }
+                                                </Button>
+                                            </Grid>
+                                        </Grid>
+                                        <Box m={2} />
+                                        <CustomTable
+                                            title={keyword("twittersna_result_slected_tweets")}
+                                            colums={visibleContributorTweets.columns}
+                                            data={visibleContributorTweets.data}
+                                            actions={goToTweetAction}
+                                        />
+                                    </div>
+                                }
+                            </div>
+                        }
+                        {
+                            result && result.visibleContributors === undefined &&
+                            <CircularProgress className={classes.circularProgress} />
+                        }
+                    </AccordionDetails>
+                </Accordion>
             }
             <Box m={3} />
             {

@@ -1,7 +1,13 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setError } from "../../../../../redux/actions/errorActions";
-import { setTwitterSnaLoading, setTwitterSnaResult, setTwitterSnaLoadingMessage, setUserProfileMostActive, setGexfExport } from "../../../../../redux/actions/tools/twitterSnaActions";
+import { 
+  setTwitterSnaLoading, 
+  setTwitterSnaResult, 
+  setTwitterSnaLoadingMessage, 
+  setUserProfileMostActive, 
+  setGexfExport
+} from "../../../../../redux/actions/tools/twitterSnaActions";
 import axios from "axios";
 import _ from "lodash";
 
@@ -106,11 +112,12 @@ function getEdgesCoHashtag(tweets) {
                     target: sortedVertices[1],
                     label: sortedVertices.join(""), 
                     weight: 1,
-                    size: 1 });
+                    size: 1,
+                    type: "curve" });
       }
     }
   });
-  let uniqEdges = groupByThenSum(edges, 'id', [], ['size', 'weight'], ['source', 'target', 'label']);
+  let uniqEdges = groupByThenSum(edges, 'id', [], ['size', 'weight'], ['source', 'target', 'label', 'type']);
   return uniqEdges;
 }
 
@@ -311,17 +318,17 @@ function getEdgesFromCoOcurObjArr(coOccurObjArr) {
   coOccurObjArr.forEach((obj) => {
     let [first, second] =  obj.id.split("___and___");
 
-    let edgeType = null;
+    let connectionType = null;
     if (first.startsWith("#") && second.startsWith("#")) {
-      edgeType = "Hashtag-Hashtag";
+      connectionType = "Hashtag-Hashtag";
     } else if (first.startsWith("isMTed:@") && second.startsWith("isMTed:@")) {
-      edgeType = "Mention-Mention";
+      connectionType = "Mention-Mention";
     } else if (first.startsWith("RT:@") && second.startsWith("RT:@")) {
-      edgeType = "RetweetWC-RetweetWC";
+      connectionType = "RetweetWC-RetweetWC";
     } else if (first.startsWith("Rpl:@") && second.startsWith("Rpl:@")) {
-      edgeType = "Reply-Reply";
+      connectionType = "Reply-Reply";
     } else {
-      edgeType = "Else-Else";
+      connectionType = "Else-Else";
     }
 
     edges.push(
@@ -332,7 +339,8 @@ function getEdgesFromCoOcurObjArr(coOccurObjArr) {
         target: second,
         size: obj.count, 
         weight: obj.count,
-        color: getColor(edgeType)
+        color: getColor(connectionType),
+        type: "curve"
     });
   });
   return edges;
@@ -698,6 +706,9 @@ const useTwitterSnaRequest = (request) => {
         if (authors.length > 0) {
           getUserAccounts(authors).then((data) => dispatch(setUserProfileMostActive(data.hits.hits)))
         }
+
+        result.activeContributors = createActiveContributorsHist(result.tweets, 25);
+        result.visibleContributors = createVisibleContributorsHist(result.tweets, 25);
       }
       else
         result.cloudChart = { title: "top_words_cloud_chart_title" };
@@ -865,6 +876,125 @@ const useTwitterSnaRequest = (request) => {
       let topNodeGraph = getTopNodeGraph({ nodes: nodes, edges: edges}, ["size"], [20, 10, 10, 10], ['Hashtag', 'Mention', 'RetweetWC', 'Reply']);
       return {
         data: topNodeGraph
+      };
+    }
+
+    const createActiveContributorsHist = (tweets, topN) => {
+      let origTweetSent = tweets.filter(tweet => 
+        tweet._source.quoted_status_id_str === null && tweet._source.user_mentions.length === 0 && tweet._source.in_reply_to_screen_name === null )
+        .map((tweet) => {return tweet._source.screen_name;});
+      
+      let genuineReplySent = tweets.filter(tweet => 
+        tweet._source.quoted_status_id_str === null && ( tweet._source.user_mentions.length !== 0 || tweet._source.in_reply_to_screen_name !== null ))
+        .map((tweet) => {return tweet._source.screen_name;});
+      
+      let retweetSent = tweets.filter(tweet => 
+        tweet._source.quoted_status_id_str !== null )
+        .map((tweet) => {return tweet._source.screen_name;});
+
+      let allContributors = _.countBy(origTweetSent.concat(genuineReplySent).concat(retweetSent));
+      let sortedAllContributors = Object.entries(allContributors).sort((a,b)=> b[1]-a[1]);
+      let topContributors = sortedAllContributors.slice(0, topN).map((element) => {return element[0];})
+
+      let topOrigTweetSent = origTweetSent.filter(n => topContributors.includes(n));
+      let topGenuineReplySent = genuineReplySent.filter(n => topContributors.includes(n));
+      let topRetweetSent = retweetSent.filter(n => topContributors.includes(n));
+
+      let data = [
+        {
+          histfunc: "count",
+          x: topGenuineReplySent,
+          type: "histogram",
+          name: "genuineReplySent"
+        },
+        {
+          histfunc: "count",
+          x: topRetweetSent,
+          type: "histogram",
+          name: "retweetSent"
+        },
+        {
+          histfunc: "count",
+          x: topOrigTweetSent,
+          type: "histogram",
+          name: "origTweetSent"
+        }
+      ];
+      let layout = {
+        barmode: "stack",
+        "xaxis": {
+          "categoryorder": "array",
+          "categoryarray": topContributors
+        },
+        "yaxis": {
+          "title": "Tweets"
+        },
+      };
+      return {
+        data: data,
+        layout: layout
+      }
+    }
+
+    const createVisibleContributorsHist = (tweets, topN) => {
+
+      let nbRepliedAccounts = tweets.filter(tweet => tweet._source.reply_count > 0)
+        .map((tweet) => { return { user: tweet._source.screen_name, count: tweet._source.reply_count }; });
+      let mentionedAccounts = tweets.filter(tweet => tweet._source.user_mentions.length !== 0)
+        .map((tweet) => { return [...new Set(tweet._source.user_mentions.map((obj) => {return obj.screen_name;}))]; });
+      let nbMentionedAccounts =  Object.entries( _.countBy(mentionedAccounts.flat()))
+        .map((arr) => { return { user: arr[0], count: arr[1] }; });
+      let genuineReplyReceived = groupByThenSum(nbRepliedAccounts.concat(nbMentionedAccounts), "user", [], ["count"], []);
+
+      let nbRetweetedAccounts = tweets.filter(tweet => tweet._source.retweet_count > 0 || tweet._source.quote_count > 0)
+        .map((tweet) => { return { user: tweet._source.screen_name, count: tweet._source.retweet_count + tweet._source.quote_count }; });;
+      let retweetReceived = groupByThenSum(nbRetweetedAccounts, "user", [], ["count"], []);
+      
+      let allVisibleContributors = groupByThenSum(genuineReplyReceived.concat(retweetReceived), "user", [], ["count"], []);
+
+      let sortedGenuineReplyReceived = _.sortBy(genuineReplyReceived, ['count','user']).reverse();
+      let sortedRetweetReceived = _.sortBy(retweetReceived, ['count','user']).reverse();
+      let sortedContributors = _.sortBy(allVisibleContributors, ['count','user']).reverse();
+
+      let topContributors = sortedContributors.slice(0, topN).map((element) => {return element.user;});
+      let topGenuineReplyReceived = sortedGenuineReplyReceived.filter(n => topContributors.includes(n.user));
+      let topRetweetReceived = sortedRetweetReceived.filter(n => topContributors.includes(n.user));
+
+      let topGenuineReplyReceived_x = topGenuineReplyReceived.map((obj) => {return obj.user});
+      let topGenuineReplyReceived_y = topGenuineReplyReceived.map((obj) => {return obj.count});
+      let topRetweetReceived_x = topRetweetReceived.map((obj) => {return obj.user});
+      let topRetweetReceived_y = topRetweetReceived.map((obj) => {return obj.count});
+
+      let data = [
+        {
+          histfunc: "sum",
+          x: topGenuineReplyReceived_x,
+          y: topGenuineReplyReceived_y,
+          type: "histogram",
+          name: "genuineReplyReceived"
+        },
+        {
+          histfunc: "sum",
+          x: topRetweetReceived_x,
+          y: topRetweetReceived_y,
+          type: "histogram",
+          name: "retweetReceived"
+        },
+      ];
+      let layout = {
+        barmode: "stack",
+        "xaxis": {
+          "categoryorder": "array",
+          "categoryarray": topContributors
+        },
+        "yaxis": {
+          "title": "Tweets"
+        },
+      };
+
+      return {
+        data: data,
+        layout: layout
       };
     }
 
