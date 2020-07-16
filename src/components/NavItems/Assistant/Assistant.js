@@ -359,11 +359,7 @@ const Assistant = () => {
                     </Grid>
 
                     <Grid item xs={12}
-<<<<<<< HEAD
-                          hidden={inputUrl===null||(inputUrl!==null && imageList.length!==0 || videoList.length!==0)}>
-=======
                           hidden={inputUrl===null || (inputUrl!==null && imageList.length!==0 ) || videoList.length!==0}>
->>>>>>> de1a896... Remove assistant warning an errors
                         <Card><CardContent className={classes.assistantText}>
                             <Typography variant={"h6"} align={"left"}>
                                 <FaceIcon size={"small"}/> {keyword("assistant_error")}
