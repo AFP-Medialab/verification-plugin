@@ -18,7 +18,7 @@
     "fabric": "^3.6.2",
     "history": "^4.10.1",
     "jwt-decode": "^2.2.0",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "material-table": "^1.57.2",
     "material-ui-image": "^3.2.3",
     "plotly.js": "^1.52.3",
