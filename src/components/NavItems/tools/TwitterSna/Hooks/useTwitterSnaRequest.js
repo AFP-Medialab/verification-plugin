@@ -701,7 +701,7 @@ const useTwitterSnaRequest = (request) => {
       }
       else
         result.cloudChart = { title: "top_words_cloud_chart_title" };
-      dispatch(setTwitterSnaResult(request, result, false, false));
+      dispatch(setTwitterSnaResult(request, result, false, true));
       return result;
     };
 
