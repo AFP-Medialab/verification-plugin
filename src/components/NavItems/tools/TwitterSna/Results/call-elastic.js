@@ -305,6 +305,7 @@ function constructMatchPhrase(param, startDate, endDate) {
         '}';*/
 
     // KEYWORDS ARGS MATCH
+    let validUrl = require('valid-url');
     param.keywordList.forEach(arg => {
         if (arg[0] === '#') {
             match_phrases += ',{' +
@@ -314,7 +315,7 @@ function constructMatchPhrase(param, startDate, endDate) {
                         '}' +
                     '}' +
                 '}'
-        } else if (validURL(arg)) {
+        } else if (validUrl.isUri(arg)) {
             match_phrases += ',{' +
                 '"match_phrase": {' +
                     '"urls": {' +
@@ -538,12 +539,12 @@ function buildQueryMultipleMatchPhrase (field, arr) {
     return query;
 }
 
-function validURL(URL) {
-    var pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
-    '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.?)+[a-z]{2,}|'+ // domain name
-    '((\\d{1,3}\\.){3}\\d{1,3}))'+ // ip (v4) address
-    '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ //port
-    '(\\?[;&amp;a-z\\d%_.~+=-]*)?'+ // query string
-    '(\\#[-a-z\\d_]*)?$','i');
-    return pattern.test(URL);
- }
+// function validURL(URL) {
+//     var pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
+//     '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.?)+[a-z]{2,}|'+ // domain name
+//     '((\\d{1,3}\\.){3}\\d{1,3}))'+ // ip (v4) address
+//     '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ //port
+//     '(\\?[;&amp;a-z\\d%_.~+=-]*)?'+ // query string
+//     '(\\#[-a-z\\d_]*)?$','i');
+//     return pattern.test(URL);
+//  }
