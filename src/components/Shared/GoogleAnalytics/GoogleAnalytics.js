@@ -17,3 +17,12 @@ export function reverseSearchClick (payload) {
     });
     return true;
 }
+
+export function changeTabEvent (tabIndex, tabTitle) {
+    ReactGA.event({
+        category: 'changeTab',
+        action: 'Changed tabs in ' + history.location.pathname,
+        label: tabTitle,
+        value: tabIndex
+    });
+}
