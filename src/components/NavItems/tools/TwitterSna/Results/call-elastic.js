@@ -536,7 +536,6 @@ function buildQueryMultipleMatchPhrase (field, arr) {
     match_phrases = match_phrases.join(",");
 
     let query = '{ "size": 10000, "query": { "bool": { "should": [' + match_phrases + ' ] } } }';
-    console.log("The User Details query:", query);
     return query;
 }
 
