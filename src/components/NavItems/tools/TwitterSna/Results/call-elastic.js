@@ -79,6 +79,7 @@ let gexfGen_url = process.env.REACT_APP_GEXF_GENERATOR_URL;
 
         let gexfParams=JSON.stringify({
             "esURL":elasticSearch_url,
+            "esUserURL":elasticSearchUser_url,
             "mentions":true,
             "retweets":true,
             "replies":true,
