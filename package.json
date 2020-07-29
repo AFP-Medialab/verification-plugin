@@ -9,7 +9,7 @@
     "@toast-ui/react-image-editor": "^1.2.0",
     "axios": "^0.19.2",
     "big-integer": "^1.6.48",
-    "d3-selection": "^1.4.1",
+    "d3-selection": "^1.4.2",
     "dateformat": "^3.0.3",
     "exif-js": "^2.3.0",
     "history": "^4.10.1",
@@ -39,6 +39,7 @@
     "react-router-dom": "^5.2.0",
     "react-sigma": "^1.2.34",
     "react-slack-feedback": "^2.1.0",
+    "react-wordcloud": "^1.2.6",
     "redux": "^4.0.5",
     "rss-parser": "^3.8.0",
     "save-svg-as-png": "^1.4.17",
@@ -69,7 +70,6 @@
     ]
   },
   "devDependencies": {
-    "mp4box": "^0.3.20",
-    "react-wordcloud": "^1.2.3"
+    "mp4box": "^0.3.20"
   }
 }
