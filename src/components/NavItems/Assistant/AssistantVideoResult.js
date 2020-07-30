@@ -1,4 +1,3 @@
-import Grid from "@material-ui/core/Grid";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
@@ -17,7 +16,6 @@ const AssistantVideoResult = () => {
     const keyword = useLoadLanguage("components/NavItems/tools/Assistant.tsv", tsv);
     const processUrl = useSelector(state => state.assistant.processUrl);
 
-    // todo: error handling
     const preprocessLinkForEmbed = (processUrl) => {
         let embedURL = processUrl;
         let linkType = matchPattern(processUrl, KNOWN_LINK_PATTERNS);
@@ -56,27 +54,25 @@ const AssistantVideoResult = () => {
     }
 
     return (
-        <Grid item xs = {6} hidden={processUrl===""}>
-            <Card variant = "outlined">
-                <CardContent>
-                    <Typography variant="h5" component="h2">
-                        {keyword("media_to_process")}
-                    </Typography>
-                    <Typography className={classes.title} color="primary">
-                        {<a href={processUrl}> {processUrl.length>100 ? processUrl.substring(0,100) + "...": processUrl} </a>}
-                    </Typography>
-                </CardContent>
-                <CardMedia>
-                    <Iframe
-                        frameBorder="0"
-                        url = {preprocessLinkForEmbed(processUrl)}
-                        allow="fullscreen"
-                        height="400"
-                        width="100%"
-                    />
-                </CardMedia>
-            </Card>
-        </Grid>
+        <Card variant = "outlined">
+            <CardContent>
+                <Typography variant="h5" component="h2">
+                    {keyword("media_to_process")}
+                </Typography>
+                <Typography className={classes.title} color="primary">
+                    {<a href={processUrl}> {processUrl.length>100 ? processUrl.substring(0,100) + "...": processUrl} </a>}
+                </Typography>
+            </CardContent>
+            <CardMedia>
+                <Iframe
+                    frameBorder="0"
+                    url = {preprocessLinkForEmbed(processUrl)}
+                    allow="fullscreen"
+                    height="400"
+                    width="100%"
+                />
+            </CardMedia>
+        </Card>
     );
 }
 export default AssistantVideoResult;

@@ -1,28 +1,36 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {useDispatch, useSelector} from "react-redux";
+
+import Accordion from "@material-ui/core/Accordion";
+import AccordionDetails from "@material-ui/core/AccordionDetails";
+import AccordionSummary from "@material-ui/core/AccordionSummary";
 import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
 import Card from "@material-ui/core/Card";
 import CardActionArea from "@material-ui/core/CardActionArea";
 import CardContent from "@material-ui/core/CardContent";
+import Divider from "@material-ui/core/Divider";
+import DuoOutlinedIcon from '@material-ui/icons/DuoOutlined';
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import FaceIcon from "@material-ui/icons/Face";
 import Grid from "@material-ui/core/Grid";
+import HelpOutlineOutlinedIcon from "@material-ui/icons/HelpOutlineOutlined";
 import Icon from "@material-ui/core/Icon";
-import {Paper} from "@material-ui/core";
+import ImageIcon from "@material-ui/icons/Image";
+import ImageSearchOutlinedIcon from '@material-ui/icons/ImageSearchOutlined';
+import Tooltip from "@material-ui/core/Tooltip";
 import Typography from "@material-ui/core/Typography";
-import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
 
-import useLoadLanguage from "../../../Hooks/useLoadLanguage";
-import CloseResult from "../../Shared/CloseResult/CloseResult";
-import {
-    setImageVideoSelected,
-    setProcessUrl,
-    setProcessUrlActions
-} from "../../../redux/actions/tools/assistantActions";
-import history from "../../Shared/History/History";
-import tsv from "../../../LocalDictionary/components/NavItems/tools/Assistant.tsv";
 import AssistantImageResult from "./AssistantImageResult";
 import AssistantVideoResult from "./AssistantVideoResult";
-
+import {CONTENT_TYPE, KNOWN_LINK_PATTERNS, matchPattern, selectCorrectActions} from "./AssistantRuleBook";
+import history from "../../Shared/History/History";
+import ImageGridList from "../../Shared/ImageGridList/ImageGridList";
+import {setProcessUrl, setProcessUrlActions} from "../../../redux/actions/tools/assistantActions";
+import tsv from "../../../LocalDictionary/components/NavItems/tools/Assistant.tsv";
+import useLoadLanguage from "../../../Hooks/useLoadLanguage";
+import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
+import VideoGridList from "../../Shared/VideoGridList/VideoGridList";
 
 const AssistantResult = () => {
 
@@ -30,6 +38,8 @@ const AssistantResult = () => {
     const keyword = useLoadLanguage("components/NavItems/tools/Assistant.tsv", tsv);
     const inputUrl = useSelector(state => state.assistant.inputUrl);
     const processUrl = useSelector(state => state.assistant.processUrl);
+    const imageList = useSelector(state => state.assistant.imageList);
+    const videoList = useSelector(state => state.assistant.videoList);
     const processUrlActions = useSelector(state => state.assistant.processUrlActions);
     const resultProcessType = useSelector(state => state.assistant.processUrlType);
     const imageVideoSelected = useSelector(state => state.assistant.imageVideoSelected);
@@ -39,59 +49,163 @@ const AssistantResult = () => {
 
     const handleClick = (path, resultUrl) => {
         if(resultUrl!=null) {history.push("/app/" + path + "/" + encodeURIComponent(resultUrl))}
-        // in case of image/video upload being selected
         else{history.push("/app/" + path)}
     };
 
-    const cleanAssistantResult = () => {
-        dispatch(setProcessUrl(null));
-        dispatch(setImageVideoSelected(false));
-        dispatch(setProcessUrlActions(null, []))
+
+    // select the correct media to process, then load actions possible
+    const submitMediaToProcess = (url) => {
+        dispatch(setProcessUrl(url));
     }
 
+    // load possible actions for selected media url
+    const loadProcessUrlActions = () => {
+        let contentType = null;
+
+        if(imageList.includes(processUrl)) {contentType = CONTENT_TYPE.IMAGE}
+        else if (videoList.includes(processUrl)) {contentType = CONTENT_TYPE.VIDEO};
+
+        let knownInputLink = matchPattern(inputUrl, KNOWN_LINK_PATTERNS);
+        let knownProcessLink = matchPattern(processUrl, KNOWN_LINK_PATTERNS);
+        let actions = selectCorrectActions(contentType, knownInputLink, knownProcessLink, processUrl);
+
+        dispatch(setProcessUrlActions(contentType, actions))
+    }
+
+
+    // if the processUrl changes, load any actions that can be taken on this new url
+    useEffect(() => {
+        if (processUrl!==null){loadProcessUrlActions();}
+    }, [processUrl]);
+
+
+
     return (
-        <Paper className={classes.root}>
-            <CloseResult onClick={() => cleanAssistantResult()}/>
-            <Grid container spacing={2}>
-
-                {(!imageVideoSelected) ? ((resultIsImage) ? <AssistantImageResult/> : <AssistantVideoResult/>) : null}
-
-                <Grid  item xs = {6}>
-                    <Card variant = "outlined">
-                        <Box m = {2}/>
-                        <Typography variant="h5" component="h2">
-                            {keyword("things_you_can_do_header")}
+        <Grid item xs={12}>
+            <Card>
+                <Grid container>
+                    <Grid item xs={6}>
+                        <Typography className={classes.twitterHeading}>
+                            <ImageSearchOutlinedIcon className={classes.twitterIcon}/>Media
                         </Typography>
-                        <Typography className={classes.title} color="primary">
-                            {keyword("things_you_can_do")}
-                        </Typography>
-                        <Box m = {2}/>
-
-                        <Grid container spacing={2}>
-                            {processUrlActions.map((action) => {return (
-                                <Grid container m = {4}>
-                                    <Card className={classes.assistantCards}  variant = "outlined"
-                                          onClick={
-                                              () => handleClick(action.path, action.useInputUrl ? inputUrl : processUrl)
-                                          }>
-                                        <CardActionArea><CardContent>
-                                                <Typography className={classes.title} m={2}>{keyword(action.text)}</Typography>
-                                                <Button aria-colspan={2} size = "medium">
-                                                    {<Icon className={classes.iconRootDrawer} fontSize={"large"}>
-                                                        <img className={classes.imageIconDrawer} alt="" src={action.icon}/>
-                                                    </Icon>}
-                                                    {keyword(action.title)}
-                                                </Button>
-                                        </CardContent></CardActionArea>
-                                    </Card>
-                                </Grid>
-                            )})}
-                        </Grid>
-
-                    </Card>
+                    </Grid>
+                    <Grid item xs={6} align={"right"}>
+                        <Tooltip title= {<div className={"content"} dangerouslySetInnerHTML={{__html: keyword("media_tooltip")}}></div> }
+                                 classes={{ tooltip: classes.assistantTooltip }}>
+                            <HelpOutlineOutlinedIcon className={classes.toolTipIcon}/>
+                        </Tooltip>
+                    </Grid>
                 </Grid>
-            </Grid>
-        </Paper>
+                <Accordion expandicon={<ExpandMoreIcon/>} defaultExpanded={true}>
+                    <AccordionSummary expaniIcon={<ExpandMoreIcon/>}>
+                        <Typography className={classes.heading}>The following media has been found on the page</Typography>
+                    </AccordionSummary>
+                    <AccordionDetails>
+
+                        <Grid container>
+                            {imageList.length > 1 || videoList.length > 1 || (imageList.length===1 && videoList.length===1) ?
+                                <Grid item xs={12}
+                                      className={classes.newAssistantGrid}>
+                                    <Box m={5}/>
+                                    <Typography component={"span"} variant={"h6"}>
+                                        <FaceIcon fontSize={"small"}/> {keyword("media_below")}
+                                    </Typography>
+                                    <Box m={2}/>
+                                </Grid>
+                            : null}
+
+
+                            <Grid item xs = {12}>
+                                {imageList.length>1 || (imageList.length>0 && videoList.length>0) ?
+                                    <Grid item xs = {6}
+                                      className={classes.newAssistantGrid}>
+                                        <Card>
+                                            <Typography component={"span"} className={classes.twitterHeading}>
+                                                <ImageIcon className={classes.twitterIcon}/> {keyword("images_label")}
+                                                <Divider variant={"middle"}/>
+                                            </Typography>
+                                            <Box m={2}/>
+                                            <ImageGridList list={imageList} height={60} cols={5}
+                                                           handleClick={(event)=>{submitMediaToProcess(event.target.src)}}/>
+                                        </Card>
+                                        <Box m={2}/>
+                                    </Grid>
+                                : null}
+
+                                {videoList.length>1 || (imageList.length>0 && videoList.length>0) ?
+                                    <Grid item xs = {6}
+                                          className={classes.newAssistantGrid}>
+                                        <Card>
+                                            <Typography component={"span"} className={classes.twitterHeading}>
+                                                <DuoOutlinedIcon className={classes.twitterIcon}/> {keyword("videos_label")}
+                                                <Divider variant={"middle"}/>
+                                            </Typography>
+                                            <Box m={2}/>
+                                            <VideoGridList list={videoList} handleClick={(vidLink)=>{submitMediaToProcess(vidLink)}}/>
+                                        </Card>
+                                        <Box m={2}/>
+                                    </Grid>
+                                :null}
+                            </Grid>
+
+                            {processUrl !==null && videoList.length === 0 && imageList.length === 0 ?
+                                <Grid item xs={12}>
+                                    <Card><CardContent className={classes.assistantText}>
+                                        <Typography variant={"h6"} align={"left"}>
+                                            <FaceIcon size={"small"}/> {keyword("assistant_error")}
+                                        </Typography>
+                                    </CardContent></Card>
+                                </Grid> : null
+                            }
+
+                            {processUrlActions.length>0 ?
+                                <Grid container spacing = {2}>
+                                    {(processUrl!==null) ?
+                                        <Grid item xs={6}>
+                                            {resultIsImage ? <AssistantImageResult/> : <AssistantVideoResult/>}
+                                        </Grid>
+                                    : null}
+
+                                    <Grid  item xs = {6}>
+                                        <Card variant = {"outlined"}>
+                                            <Box m = {2}/>
+                                            <Typography variant="h5" component="h2">
+                                                {keyword("things_you_can_do_header")}
+                                            </Typography>
+                                            <Typography className={classes.title} color="primary">
+                                                {keyword("things_you_can_do")}
+                                            </Typography>
+                                            <Box m = {2}/>
+                                            <Grid container spacing={2}>
+                                                {processUrlActions.map((action) => {return (
+                                                    <Grid container m = {4}>
+                                                        <Card className={classes.assistantCards}  variant = "outlined"
+                                                              onClick={
+                                                                  () => handleClick(action.path, action.useInputUrl ? inputUrl : processUrl)
+                                                              }>
+                                                            <CardActionArea><CardContent>
+                                                                <Typography className={classes.title} m={2}>{keyword(action.text)}</Typography>
+                                                                <Button aria-colspan={2} size = "medium">
+                                                                    {<Icon className={classes.iconRootDrawer} fontSize={"large"}>
+                                                                        <img className={classes.imageIconDrawer} alt="" src={action.icon}/>
+                                                                    </Icon>}
+                                                                    {keyword(action.title)}
+                                                                </Button>
+                                                            </CardContent></CardActionArea>
+                                                        </Card>
+                                                    </Grid>
+                                                )})}
+                                            </Grid>
+                                        </Card>
+                                    </Grid>
+                                </Grid>
+                            :null}
+
+                        </Grid>
+                    </AccordionDetails>
+                </Accordion>
+            </Card>
+        </Grid>
     );
 };
 export default AssistantResult;

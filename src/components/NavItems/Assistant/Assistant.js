@@ -2,39 +2,35 @@ import React, {useEffect, useRef, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {useParams} from "react-router-dom";
 
-import axios from "axios";
 import {Box, Button,Paper, TextField} from "@material-ui/core";
-import Card from "@material-ui/core/Card";
-import CardContent from "@material-ui/core/CardContent";
-import DuoIcon from '@material-ui/icons/Duo';
-import Divider from "@material-ui/core/Divider";
 import Grid from "@material-ui/core/Grid";
-import ImageIcon from '@material-ui/icons/Image';
 import FaceIcon from "@material-ui/icons/Face";
 import Typography from "@material-ui/core/Typography";
 
+import AssistantLinkResult from "./AssistantLinkResult";
 import AssistantResult from "./AssistantResult";
+import AssistantTextResult from "./AssistantTextResult";
 import CloseResult from "../../Shared/CloseResult/CloseResult";
 import CustomTile from "../../Shared/CustomTitle/CustomTitle";
-import ImageGridList from "../../Shared/ImageGridList/ImageGridList";
-import VideoGridList from "../../Shared/VideoGridList/VideoGridList";
+import history from "../../Shared/History/History";
 import {setError} from "../../../redux/actions/errorActions";
 import tsv from "../../../LocalDictionary/components/NavItems/tools/Assistant.tsv";
 import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
+import useAssistantApi from "./useAssistantApi";
 import useLoadLanguage from "../../../Hooks/useLoadLanguage";
 
 import {
-    cleanAssistantState, setHelpMessage, setImageVideoSelected,
-    setInputUrl, setMediaLists, setProcessUrl, setProcessUrlActions,
+    cleanAssistantState, setAssistantLoading, setImageVideoSelected, setInputSC,
+    setInputUrl, setLinkListSC, setProcessUrl, setProcessUrlActions, setScrapedData,
     setUrlMode,
 } from "../../../redux/actions/tools/assistantActions";
 import {
     CONTENT_TYPE, TYPE_PATTERNS,
     matchPattern, selectCorrectActions, KNOWN_LINK_PATTERNS, KNOWN_LINKS,
 } from "./AssistantRuleBook";
-import history from "../../Shared/History/History";
+import LinearProgress from "@material-ui/core/LinearProgress";
 
-// todo: twitter iframe fix, instagram logged in fix
+
 const Assistant = () => {
 
     // styles, language, dispatch, scrapers
@@ -46,12 +42,17 @@ const Assistant = () => {
     const {url} = useParams();
     const urlMode = useSelector(state => state.assistant.urlMode);
     const imageVideoSelected = useSelector(state => state.assistant.imageVideoSelected);
+
+    const loading = useSelector(state => state.assistant.loading)
     const inputUrl = useSelector(state => state.assistant.inputUrl);
-    const processUrl = useSelector(state => state.assistant.processUrl);
-    const processUrlActions = useSelector(state => state.assistant.processUrlActions);
+    const inputUrlSC = useSelector(state => state.assistant.inputUrlSc);
+
     const imageList = useSelector(state => state.assistant.imageList);
     const videoList = useSelector(state => state.assistant.videoList);
-    const helpMessage = useSelector(state => state.assistant.helpMessage);
+    const text = useSelector(state => state.assistant.urlText)
+    const linkList = useSelector(state => state.assistant.linkList)
+    const linkListSC = useSelector(state => state.assistant.linkListSC);
+
 
     //other state values
     const [formInput, setFormInput] = useState(null);
@@ -59,42 +60,37 @@ const Assistant = () => {
     //refs
     const imageListRef = useRef(imageList);
     const videoListRef = useRef(videoList);
+    const textRef = useRef(text)
+    const linkListRef = useRef(linkList)
+
+    // apis
+    const assistantApi = useAssistantApi()
+
 
     //Check the input url for data. Figure out which url type and set required image/video lists
     const submitInputUrl = async (userInput) => {
         try {
-            // get url type and set media lists according to url
+            dispatch(setAssistantLoading(true))
+            // get domain and content type
             let urlType = matchPattern(userInput, KNOWN_LINK_PATTERNS);
-            const updatedUserInput = await setMediaListsByUrl(urlType, userInput);
+            let contentType = matchPattern(userInput, TYPE_PATTERNS);
 
-            // set assistant state to reflect media lists
-            dispatch(setMediaLists(imageListRef.current, videoListRef.current))
-            dispatch(setInputUrl(updatedUserInput));
+            // decide whether or not to scrape page based on domain and content type
+            let scrapeResult = await decideWhetherToScrape(urlType, contentType, userInput);
+            setAssistantResults(urlType, contentType, userInput, scrapeResult);
 
-            // if only one image/video exists, set this to be processed with an intermediate step
+            dispatch(setScrapedData(textRef.current, linkListRef.current, imageListRef.current, videoListRef.current))
+            dispatch(setInputUrl(userInput));
+
+            // if only one image/video exists, set this to be processed without an intermediate step
             handleOneMediaListResult();
+            dispatch(setAssistantLoading(false))
         }
         catch (error) {
             dispatch(setError(error.message));
         }
     }
 
-    /* Check if the browser has any stored media lists.
-    ** These are generated by popup.js when opening the assistant from another page and contain all possible
-    ** scraped images and videos from said page */
-    const checkForMediaLists = () => {
-        let urlImageList = window.localStorage.getItem("imageList");
-        let urlVideoList = window.localStorage.getItem("videoList");
-
-        if (urlImageList === null && urlVideoList === null) {return;}
-        else if (urlImageList !== "" || urlVideoList !== "") {
-            // filter out any duplicated images and images we can't process
-            imageListRef.current = urlImageList !== "" ? urlImageList.split(",") : [];
-            imageListRef.current = imageListRef.current.filter(imageUrl => matchPattern(imageUrl, TYPE_PATTERNS));
-
-            videoListRef.current = urlVideoList !== "" ? urlVideoList.split(",") : [];
-        }
-    }
 
     // if there is only one image/video, set this to be processed
     const handleOneMediaListResult = () => {
@@ -104,8 +100,34 @@ const Assistant = () => {
             dispatch(setProcessUrl(videoListRef.current[0]))}
     }
 
-    // handle specific urls in specific ways to populate image/video lists
-    const setMediaListsByUrl = async (urlType, userInput) => {
+
+    const decideWhetherToScrape = async (urlType, contentType, userInput) => {
+        let scrapeResult = null;
+        switch (urlType) {
+            case KNOWN_LINKS.YOUTUBE:
+            case KNOWN_LINKS.LIVELEAK:
+            case KNOWN_LINKS.VIMEO:
+            case KNOWN_LINKS.DAILYMOTION:
+                return scrapeResult;
+            case KNOWN_LINKS.TIKTOK:
+            case KNOWN_LINKS.INSTAGRAM:
+            case KNOWN_LINKS.FACEBOOK:
+            case KNOWN_LINKS.TWITTER:
+                scrapeResult = await assistantApi.callAssistantScraper(urlType, userInput)
+                break;
+            case KNOWN_LINKS.MISC:
+                if (contentType === null) {
+                    scrapeResult = await assistantApi.callAssistantScraper(KNOWN_LINKS.MISC, userInput)
+                }
+                return scrapeResult
+            default:
+                throw new Error(keyword("please_give_a_correct_link"));
+        }
+        return scrapeResult
+    }
+
+    // handle specific urls in specific ways to populate image, video and link lists, and text
+    const setAssistantResults = (urlType, contentType, userInput, scrapeResult) => {
         switch(urlType) {
             case KNOWN_LINKS.YOUTUBE:
             case KNOWN_LINKS.LIVELEAK:
@@ -114,87 +136,48 @@ const Assistant = () => {
                 videoListRef.current = [userInput];
                 break;
             case KNOWN_LINKS.TIKTOK:
-                checkForMediaLists(userInput);
-                imageListRef.current = [];
+                videoListRef.current = [scrapeResult.videos]
+                linkListRef.current = scrapeResult.links
                 break;
             case KNOWN_LINKS.INSTAGRAM:
-                handleInstagramLink(userInput);
-                dispatch(setHelpMessage("assistant_handled_site"));
+                if (scrapeResult.videos.length === 1) {videoListRef.current = [scrapeResult.videos]}
+                else {imageListRef.current = [scrapeResult.images[1]]}
+                textRef.current = scrapeResult.text
+                linkListRef.current = scrapeResult.links
                 break;
             case KNOWN_LINKS.FACEBOOK:
-                let updatedUserInputs = userInput.match(KNOWN_LINK_PATTERNS
-                    .find(pattern=>pattern.key === KNOWN_LINKS.FACEBOOK).patterns);
-                if (updatedUserInputs) userInput = updatedUserInputs[0];
-
-                handleFacebookLink(userInput);
-                dispatch(setHelpMessage("assistant_handled_site"));
+                if (scrapeResult.videos.length === 0) {
+                    imageListRef.current = scrapeResult.images
+                    imageListRef.current = imageListRef.current.filter(imageUrl => imageUrl.includes("//scontent") &&
+                            !(imageUrl.includes("/cp0/")));
+                }
+                else {videoListRef.current = [userInput];}
+                linkListRef.current = scrapeResult.links
+                textRef.current = scrapeResult.text
                 break;
             case KNOWN_LINKS.TWITTER:
-                try {
-                    await handleTwitterLink(userInput);
-                    dispatch(setHelpMessage("assistant_handled_site"));
-                }
-                catch(error){
-                    throw new Error(keyword("error_unknown"));}
+                if (scrapeResult.videos === 0) {imageListRef.current = scrapeResult.images}
+                else {videoListRef.current = [userInput]}
+                textRef.current = scrapeResult.text
+                linkListRef.current = scrapeResult.links
                 break;
             case KNOWN_LINKS.MISC:
-                let contentType = matchPattern(userInput, TYPE_PATTERNS);
                 if(contentType!==null) {
                     if (contentType === CONTENT_TYPE.IMAGE) imageListRef.current = [userInput];
                     else if (contentType === CONTENT_TYPE.VIDEO) videoListRef.current = [userInput];
                 }
-                else{checkForMediaLists();}
+                else{
+                    imageListRef.current = scrapeResult.images
+                    videoListRef.current = scrapeResult.videos
+                    textRef.current = scrapeResult.text
+                    linkListRef.current = scrapeResult.links
+                }
                 break;
             default:
                 throw new Error(keyword("please_give_a_correct_link"));
         }
-        return userInput;
     }
 
-    /* if video link, use direct link
-    ** if image link, filter for those which are post uploads rather than profile pictures etc.*/
-    const handleFacebookLink = (userInput) => {
-        if(userInput.includes("/photos/")){
-            checkForMediaLists(userInput);
-            videoListRef.current = [];
-            imageListRef.current =
-                imageListRef.current.filter(imageUrl => imageUrl.includes("//scontent") &&
-                    !(imageUrl.includes("/cp0/")));
-        }
-        else if(userInput.includes("/videos/")){
-            videoListRef.current = [userInput];
-            imageListRef.current = [];
-        }
-
-    }
-
-    /* if video link, use it, and get rid of any image references
-    ** if image links, filter for the first in the list. this is always (hopefuly...) the one in the post.*/
-    const handleInstagramLink = (userInput) => {
-        checkForMediaLists(userInput);
-        if(videoListRef.current.length === 1){imageListRef.current = []}
-        else {imageListRef.current = imageListRef.current.length>0 ?  [imageListRef.current[1]] : []}
-    }
-
-    /* use analysis backend to figure out if this is an image/video post
-    ** if video post, use post url and get rid of all image urls
-    ** if image post, filter for post images, rather than profile pictures etc .*/
-    const handleTwitterLink = async (userInput) => {
-        let createJob = await axios.post("http://mever.iti.gr/caa/api/v4/videos/jobs?url=" + userInput.replace("&", "%26"));
-        let createdJobId = (createJob["data"]).id;
-        let requestStatus = await axios.get("http://mever.iti.gr/caa/api/v4/videos/jobs/" + createdJobId);
-
-        if(requestStatus.data.status === "unavailable"){
-            checkForMediaLists(userInput);
-
-            imageListRef.current = imageListRef.current.filter(imageUrl => imageUrl.includes("/media"));
-            videoListRef.current = [];}
-        else{
-            videoListRef.current = [userInput];
-            imageListRef.current = [];
-        }
-        dispatch(setHelpMessage("assistant_handled_site"));
-    }
 
     // if the user wants to upload a file, give them tools where this is an option
     const submitUpload = (contentType) => {
@@ -204,33 +187,12 @@ const Assistant = () => {
         dispatch(setImageVideoSelected(true));
     }
 
-    // select the correct media to process, then load actions possible
-    const submitMediaToProcess = (url) => {
-        dispatch(setProcessUrl(url));
-    }
-
-    // load possible actions for selected media url
-    const loadProcessUrlActions = () => {
-        let contentType = null;
-
-        if(imageListRef.current.includes(processUrl)) {contentType = CONTENT_TYPE.IMAGE}
-        else if (videoListRef.current.includes(processUrl)) {contentType = CONTENT_TYPE.VIDEO};
-
-        let knownInputLink = matchPattern(inputUrl, KNOWN_LINK_PATTERNS);
-        let knownProcessLink = matchPattern(processUrl, KNOWN_LINK_PATTERNS);
-        let actions = selectCorrectActions(contentType, knownInputLink, knownProcessLink, processUrl);
-
-        dispatch(setProcessUrlActions(contentType, actions))
-    }
-
     // clean assistant state
     const cleanAssistant = () => {
-
-        //clean stored browser vars and refs
-        window.localStorage.removeItem("imageList");
-        window.localStorage.removeItem("videoList");
         imageListRef.current = [];
         videoListRef.current = [];
+        textRef.current = null;
+        linkListRef.current = []
 
         //clean state and input
         dispatch(cleanAssistantState());
@@ -252,10 +214,6 @@ const Assistant = () => {
         setFormInput(inputUrl)
     },[inputUrl])
 
-    // if the processUrl changes, load any actions that can be taken on this new url
-    useEffect(() => {
-        if (processUrl!==null){loadProcessUrlActions();}
-    }, [processUrl]);
 
 
     return (
@@ -304,57 +262,24 @@ const Assistant = () => {
                         {keyword("button_submit") || ""}
                     </Button>
                 </Grid>
+                {loading ? <LinearProgress variant={"indeterminate"}/> : null}
 
-                <Grid container spacing={2}>
-                    <Grid item xs = {12}
-                          className={classes.newAssistantGrid}
-                          hidden={imageList.length<=1 && videoList.length<=1}>
-                        <Box m={5}/>
-                        <Typography component={"span"} variant={"h6"} >
-                            <FaceIcon fontSize={"small"}/> {keyword("media_below")}
-                        </Typography>
-                    </Grid>
+                <Box m ={3}/>
+                {inputUrl !== null ? <AssistantLinkResult linkList={[inputUrl]}
+                                                          existingResult={inputUrlSC}
+                                                          title={"Source Credibility"}
+                                                          byline={"The input domain has been found as part of a credibility check"}
+                                                          storageMethod={(result)=>setInputSC(result)}/> : null}
+                <Box m={2}/>
+                {text !== null ?  <AssistantTextResult/> : null}
+                <Box m={2}/>
+                {linkList.length !== 0 ? <AssistantLinkResult linkList={linkList}
+                                                              existingResult={linkListSC}
+                                                              title={"Link Explorer"}
+                                                              byline={"The following URLs have been extracted from the page, and their domains have been checked for credibility"}
+                                                              storageMethod={(result)=>setLinkListSC(result)}/> : null}
+                <Box m={2}/>
 
-                    <Grid item xs = {6}
-                          className={classes.newAssistantGrid}
-                          hidden={(imageList.length===0 )||(imageList.length<=1 && videoList.length<=1)}>
-                        <Card>
-                            <Typography component={"span"} className={classes.twitterHeading}>
-                                <ImageIcon className={classes.twitterIcon}/> {keyword("images_label")}
-                                <Divider variant={"middle"}/>
-                            </Typography>
-                            <Box m={2}/>
-                            <ImageGridList list={imageList} height={60} cols={5}
-                                           handleClick={(event)=>{submitMediaToProcess(event.target.src)}}/>
-                        </Card>
-                    </Grid>
-
-                    <Grid item xs = {6}
-                          className={classes.newAssistantGrid}
-                          hidden={(videoList.length===0 )||(imageList.length<=1 && videoList.length<=1)}>
-                        <Card>
-                            <Typography component={"span"} className={classes.twitterHeading}>
-                                <DuoIcon className={classes.twitterIcon}/> {keyword("videos_label")}
-                                <Divider variant={"middle"}/>
-                            </Typography>
-                            <Box m={2}/>
-                            <VideoGridList list={videoList} handleClick={(vidLink)=>{submitMediaToProcess(vidLink)}}/>
-                        </Card>
-                    </Grid>
-
-                    <Grid item xs={12}
-                          hidden={inputUrl===null||(inputUrl!==null && imageList.length!==0 || videoList.length!==0)}>
-                        <Card><CardContent className={classes.assistantText}>
-                            <Typography variant={"h6"} align={"left"}>
-                                <FaceIcon size={"small"}/> {keyword("assistant_error")}
-                            </Typography>
-                            <Typography variant={"h6"} align={"left"}>
-                                {keyword(helpMessage)}
-                            </Typography>
-                        </CardContent></Card>
-                    </Grid>
-
-                </Grid>
 
                 <Grid item xs = {12} className={classes.newAssistantGrid}  hidden={urlMode===null || urlMode===true}>
                     <Box m={5}/>
@@ -372,7 +297,7 @@ const Assistant = () => {
                 </Grid>
 
                 <Grid item xs={12}>
-                    {processUrlActions.length!==0 || imageVideoSelected === true ?  <AssistantResult/> : null}
+                    {imageList.length>0 || videoList.length>0 || imageVideoSelected === true ?  <AssistantResult/> : null}
                 </Grid>
             </Grid>
         </Paper>

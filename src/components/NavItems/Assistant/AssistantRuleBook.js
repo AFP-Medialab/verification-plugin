@@ -12,16 +12,16 @@ export const CONTENT_TYPE = {
 };
 
 export const KNOWN_LINKS = {
-    TWITTER: "Twitter",
-    INSTAGRAM: "Instagram",
-    FACEBOOK: "Facebook",
-    TIKTOK: "Tiktok",
-    YOUTUBE: "Youtube",
-    DAILYMOTION: "Dailymotion",
-    LIVELEAK: "Liveleak",
-    VIMEO: "Vimeo",
-    OWN: "Own",
-    MISC: "Misc"
+    TWITTER: "twitter",
+    INSTAGRAM: "instagram",
+    FACEBOOK: "facebook",
+    TIKTOK: "tiktok",
+    YOUTUBE: "youtube",
+    DAILYMOTION: "dailymotion",
+    LIVELEAK: "liveleak",
+    VIMEO: "vimeo",
+    OWN: "own",
+    MISC: "general"
 }
 
 export const TYPE_PATTERNS = [
