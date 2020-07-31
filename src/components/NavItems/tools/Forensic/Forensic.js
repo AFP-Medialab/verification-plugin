@@ -14,6 +14,7 @@ import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/Forensic.tsv";
 import {submissionEvent} from "../../../Shared/GoogleAnalytics/GoogleAnalytics";
 import LocalFile from "../Forensic/LocalFile/LocalFile";
+import {CONTENT_TYPE} from "../../Assistant/AssistantRuleBook";
 
 const Forensic = () => {
     const {url} = useParams();
@@ -45,9 +46,14 @@ const Forensic = () => {
 
     useEffect(() => {
         if (url !== undefined) {
-            const uri = decodeURIComponent(url);
-            setInput(uri);
-            setImage(uri);
+            if(url===CONTENT_TYPE.IMAGE){
+                setLocalFile(true)
+            }
+            else {
+                const uri = decodeURIComponent(url);
+                setInput(uri);
+                setImage(uri);
+            }
         }
     }, [url]);
 

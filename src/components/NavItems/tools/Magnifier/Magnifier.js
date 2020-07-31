@@ -12,6 +12,7 @@ import {setError} from "../../../../redux/actions/errorActions";
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/Magnifier.tsv";
 import {submissionEvent} from "../../../Shared/GoogleAnalytics/GoogleAnalytics";
+import {CONTENT_TYPE} from "../../Assistant/AssistantRuleBook";
 
 const Magnifier = () => {
     const {url} = useParams();
@@ -53,9 +54,11 @@ const Magnifier = () => {
 
     useEffect(() => {
         if (url !== undefined) {
-            const uri = (url !== null) ? decodeURIComponent(url) : undefined;
-            setInput(uri);
-            submitUrl(uri)
+            if(url!==CONTENT_TYPE.IMAGE) {
+                const uri = (url !== null) ? decodeURIComponent(url) : undefined;
+                setInput(uri);
+                submitUrl(uri)
+            }
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [url]);

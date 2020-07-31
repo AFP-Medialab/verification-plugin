@@ -23,7 +23,12 @@ import Typography from "@material-ui/core/Typography";
 
 import AssistantImageResult from "./AssistantImageResult";
 import AssistantVideoResult from "./AssistantVideoResult";
-import {CONTENT_TYPE, KNOWN_LINK_PATTERNS, matchPattern, selectCorrectActions} from "./AssistantRuleBook";
+import {
+    CONTENT_TYPE,
+    KNOWN_LINK_PATTERNS,
+    matchPattern,
+    selectCorrectActions
+} from "./AssistantRuleBook";
 import history from "../../Shared/History/History";
 import ImageGridList from "../../Shared/ImageGridList/ImageGridList";
 import {setProcessUrl, setProcessUrlActions} from "../../../redux/actions/tools/assistantActions";
@@ -43,13 +48,16 @@ const AssistantResult = () => {
     const processUrlActions = useSelector(state => state.assistant.processUrlActions);
     const resultProcessType = useSelector(state => state.assistant.processUrlType);
     const imageVideoSelected = useSelector(state => state.assistant.imageVideoSelected);
-    const resultIsImage = resultProcessType === "Image";
+    const resultIsImage = resultProcessType === CONTENT_TYPE.IMAGE
 
     const dispatch = useDispatch();
 
     const handleClick = (path, resultUrl) => {
-        if(resultUrl!=null) {history.push("/app/" + path + "/" + encodeURIComponent(resultUrl))}
-        else{history.push("/app/" + path)}
+        if(resultUrl!=null) {
+            history.push("/app/" + path + "/" + encodeURIComponent(resultUrl))}
+        else{
+            history.push("/app/" + path + "/" + resultProcessType)
+        }
     };
 
 

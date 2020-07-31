@@ -7,8 +7,8 @@ import videoRightsIconOff from "../../NavBar/images/tools/copyrightOff.png";
 import forensicIconOff from "../../NavBar/images/tools/forensic_logoOff.png";
 
 export const CONTENT_TYPE = {
-    VIDEO: "Video",
-    IMAGE: "Image"
+    VIDEO: "video",
+    IMAGE: "image"
 };
 
 export const KNOWN_LINKS = {
