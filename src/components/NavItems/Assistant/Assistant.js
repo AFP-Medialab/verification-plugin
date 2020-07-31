@@ -8,7 +8,8 @@ import FaceIcon from "@material-ui/icons/Face";
 import Typography from "@material-ui/core/Typography";
 
 import AssistantLinkResult from "./AssistantLinkResult";
-import AssistantResult from "./AssistantResult";
+import AssistantMediaResult from "./AssistantMediaResult";
+import AssistantProcessUrlActions from "./AssistantProcessUrlActions";
 import AssistantTextResult from "./AssistantTextResult";
 import CloseResult from "../../Shared/CloseResult/CloseResult";
 import CustomTile from "../../Shared/CustomTitle/CustomTitle";
@@ -305,7 +306,11 @@ const Assistant = () => {
                 </Grid>
 
                 <Grid item xs={12}>
-                    {imageList.length>0 || videoList.length>0 || imageVideoSelected === true ?  <AssistantResult/> : null}
+                    {imageList.length>0 || videoList.length>0 ?  <AssistantMediaResult/> : null}
+                </Grid>
+
+                <Grid item xs={12}>
+                    {imageVideoSelected ? <AssistantProcessUrlActions/>:null}
                 </Grid>
             </Grid>
         </Paper>

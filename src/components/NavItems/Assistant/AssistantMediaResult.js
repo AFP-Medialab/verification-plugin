@@ -5,9 +5,7 @@ import Accordion from "@material-ui/core/Accordion";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import AccordionSummary from "@material-ui/core/AccordionSummary";
 import Box from "@material-ui/core/Box";
-import Button from "@material-ui/core/Button";
 import Card from "@material-ui/core/Card";
-import CardActionArea from "@material-ui/core/CardActionArea";
 import CardContent from "@material-ui/core/CardContent";
 import Divider from "@material-ui/core/Divider";
 import DuoOutlinedIcon from '@material-ui/icons/DuoOutlined';
@@ -15,21 +13,18 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import FaceIcon from "@material-ui/icons/Face";
 import Grid from "@material-ui/core/Grid";
 import HelpOutlineOutlinedIcon from "@material-ui/icons/HelpOutlineOutlined";
-import Icon from "@material-ui/core/Icon";
 import ImageIcon from "@material-ui/icons/Image";
 import ImageSearchOutlinedIcon from '@material-ui/icons/ImageSearchOutlined';
 import Tooltip from "@material-ui/core/Tooltip";
 import Typography from "@material-ui/core/Typography";
 
-import AssistantImageResult from "./AssistantImageResult";
-import AssistantVideoResult from "./AssistantVideoResult";
+import AssistantProcessUrlActions from "./AssistantProcessUrlActions";
 import {
     CONTENT_TYPE,
     KNOWN_LINK_PATTERNS,
     matchPattern,
     selectCorrectActions
 } from "./AssistantRuleBook";
-import history from "../../Shared/History/History";
 import ImageGridList from "../../Shared/ImageGridList/ImageGridList";
 import {setProcessUrl, setProcessUrlActions} from "../../../redux/actions/tools/assistantActions";
 import tsv from "../../../LocalDictionary/components/NavItems/tools/Assistant.tsv";
@@ -37,7 +32,7 @@ import useLoadLanguage from "../../../Hooks/useLoadLanguage";
 import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
 import VideoGridList from "../../Shared/VideoGridList/VideoGridList";
 
-const AssistantResult = () => {
+const AssistantMediaResult = () => {
 
     const classes = useMyStyles();
     const keyword = useLoadLanguage("components/NavItems/tools/Assistant.tsv", tsv);
@@ -45,20 +40,8 @@ const AssistantResult = () => {
     const processUrl = useSelector(state => state.assistant.processUrl);
     const imageList = useSelector(state => state.assistant.imageList);
     const videoList = useSelector(state => state.assistant.videoList);
-    const processUrlActions = useSelector(state => state.assistant.processUrlActions);
-    const resultProcessType = useSelector(state => state.assistant.processUrlType);
-    const imageVideoSelected = useSelector(state => state.assistant.imageVideoSelected);
-    const resultIsImage = resultProcessType === CONTENT_TYPE.IMAGE
 
     const dispatch = useDispatch();
-
-    const handleClick = (path, resultUrl) => {
-        if(resultUrl!=null) {
-            history.push("/app/" + path + "/" + encodeURIComponent(resultUrl))}
-        else{
-            history.push("/app/" + path + "/" + resultProcessType)
-        }
-    };
 
 
     // select the correct media to process, then load actions possible
@@ -106,7 +89,9 @@ const AssistantResult = () => {
                 </Grid>
                 <Accordion expandicon={<ExpandMoreIcon/>} defaultExpanded={true}>
                     <AccordionSummary expaniIcon={<ExpandMoreIcon/>}>
-                        <Typography className={classes.heading}>The following media has been found on the page</Typography>
+                        <Typography className={classes.heading}>
+                            The following media has been found on the page
+                        </Typography>
                     </AccordionSummary>
                     <AccordionDetails>
 
@@ -166,48 +151,7 @@ const AssistantResult = () => {
                                 </Grid> : null
                             }
 
-                            {processUrlActions.length>0 ?
-                                <Grid container spacing = {2}>
-                                    {(processUrl!==null) ?
-                                        <Grid item xs={6}>
-                                            {resultIsImage ? <AssistantImageResult/> : <AssistantVideoResult/>}
-                                        </Grid>
-                                    : null}
-
-                                    <Grid  item xs = {6}>
-                                        <Card variant = {"outlined"}>
-                                            <Box m = {2}/>
-                                            <Typography variant="h5" component="h2">
-                                                {keyword("things_you_can_do_header")}
-                                            </Typography>
-                                            <Typography className={classes.title} color="primary">
-                                                {keyword("things_you_can_do")}
-                                            </Typography>
-                                            <Box m = {2}/>
-                                            <Grid container spacing={2}>
-                                                {processUrlActions.map((action) => {return (
-                                                    <Grid container m = {4}>
-                                                        <Card className={classes.assistantCards}  variant = "outlined"
-                                                              onClick={
-                                                                  () => handleClick(action.path, action.useInputUrl ? inputUrl : processUrl)
-                                                              }>
-                                                            <CardActionArea><CardContent>
-                                                                <Typography className={classes.title} m={2}>{keyword(action.text)}</Typography>
-                                                                <Button aria-colspan={2} size = "medium">
-                                                                    {<Icon className={classes.iconRootDrawer} fontSize={"large"}>
-                                                                        <img className={classes.imageIconDrawer} alt="" src={action.icon}/>
-                                                                    </Icon>}
-                                                                    {keyword(action.title)}
-                                                                </Button>
-                                                            </CardContent></CardActionArea>
-                                                        </Card>
-                                                    </Grid>
-                                                )})}
-                                            </Grid>
-                                        </Card>
-                                    </Grid>
-                                </Grid>
-                            :null}
+                            <AssistantProcessUrlActions/>
 
                         </Grid>
                     </AccordionDetails>
@@ -216,4 +160,4 @@ const AssistantResult = () => {
         </Grid>
     );
 };
-export default AssistantResult;
+export default AssistantMediaResult;
