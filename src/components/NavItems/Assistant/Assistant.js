@@ -261,28 +261,36 @@ const Assistant = () => {
                             align={"center"} onClick={() => {submitInputUrl(formInput)}}>
                         {keyword("button_submit") || ""}
                     </Button>
+                    <Box m ={3}/>
                 </Grid>
-                {loading ? <LinearProgress variant={"indeterminate"}/> : null}
+                <LinearProgress variant={"indeterminate"}/>
 
-                <Box m ={3}/>
-                {inputUrl !== null ? <AssistantLinkResult linkList={[inputUrl]}
-                                                          existingResult={inputUrlSC}
-                                                          title={"Source Credibility"}
-                                                          byline={"The input domain has been found as part of a credibility check"}
-                                                          storageMethod={(result)=>setInputSC(result)}/> : null}
+                {inputUrl !== null ?
+                    <AssistantLinkResult linkList={[inputUrl]}
+                                         existingResult={inputUrlSC}
+                                         title={"Source Credibility"}
+                                         byline={"The input domain has been found as part of a credibility check"}
+                                         storageMethod={(result)=>setInputSC(result)}/>
+                    : null
+                }
+
                 <Box m={2}/>
+
                 {text !== null ?  <AssistantTextResult/> : null}
+
                 <Box m={2}/>
-                {linkList.length !== 0 ? <AssistantLinkResult linkList={linkList}
-                                                              existingResult={linkListSC}
-                                                              title={"Link Explorer"}
-                                                              byline={"The following URLs have been extracted from the page, and their domains have been checked for credibility"}
-                                                              storageMethod={(result)=>setLinkListSC(result)}/> : null}
-                <Box m={2}/>
+
+                {linkList.length !== 0 ?
+                    <AssistantLinkResult linkList={linkList}
+                                         existingResult={linkListSC}
+                                         title={"Link Explorer"}
+                                         byline={"The following URLs have been extracted from the page, and their domains have been checked for credibility"}
+                                         storageMethod={(result)=>setLinkListSC(result)}/>
+                    : null
+                }
 
 
                 <Grid item xs = {12} className={classes.newAssistantGrid}  hidden={urlMode===null || urlMode===true}>
-                    <Box m={5}/>
                     <CloseResult hidden={urlMode===null || urlMode===false} onClick={() => dispatch(cleanAssistantState())}/>
                     <Typography component={"span"} variant={"h6"} >
                         <FaceIcon fontSize={"small"}/> {keyword("upload_type_question")}
