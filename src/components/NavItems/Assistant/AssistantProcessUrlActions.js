@@ -56,9 +56,10 @@ const AssistantProcessUrlActions = () => {
                             {keyword("things_you_can_do")}
                         </Typography>
                         <Box m = {2}/>
+                        {/*todo: check the key here.*/}
                         <Grid container spacing={2}>
-                            {processUrlActions.map((action) => {return (
-                                <Grid container m = {4}>
+                            {processUrlActions.map((action, index) => {return (
+                                <Grid container m = {4} key={index}>
                                     <Card className={classes.assistantCards}  variant = "outlined"
                                           onClick={
                                               () => handleClick(action.path, action.useInputUrl ? inputUrl : processUrl)

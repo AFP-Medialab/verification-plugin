@@ -86,7 +86,7 @@ const AssistantLinkResult = (props) => {
                 {inProgress ? <LinearProgress variant={"indeterminate"}/> : null}
 
                 <Accordion>
-                    <AccordionSummary expandicon={<ExpandMoreIcon/>}>
+                    <AccordionSummary expandIcon={<ExpandMoreIcon/>}>
                             <Typography className={classes.heading}>{byline}</Typography>
                     </AccordionSummary>
                     <AccordionDetails>

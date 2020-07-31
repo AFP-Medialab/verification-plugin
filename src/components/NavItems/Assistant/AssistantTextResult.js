@@ -40,7 +40,7 @@ const AssistantTextResult = () => {
                     </Grid>
                 </Grid>
                 <Accordion>
-                    <AccordionSummary expandicon={<ExpandMoreIcon />}>
+                    <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                         <Typography className={classes.heading}>The following text has been found on the page</Typography>
                     </AccordionSummary>
                     <AccordionDetails>
