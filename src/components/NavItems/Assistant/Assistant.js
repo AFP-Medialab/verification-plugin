@@ -208,12 +208,12 @@ const Assistant = () => {
             submitInputUrl(uri);
             history.push("/app/assistant/");
         }
-    }, [url])
+    }, [url, dispatch])
 
     // if the user types anything into the input box, set it as the new form input
     useEffect(() => {
         setFormInput(inputUrl)
-    },[inputUrl])
+    },[inputUrl, setFormInput])
 
 
 

@@ -88,7 +88,7 @@ const AssistantMediaResult = () => {
                     </Grid>
                 </Grid>
                 <Accordion expandicon={<ExpandMoreIcon/>} defaultExpanded={true}>
-                    <AccordionSummary expaniIcon={<ExpandMoreIcon/>}>
+                    <AccordionSummary expanicon={<ExpandMoreIcon/>}>
                         <Typography className={classes.heading}>
                             The following media has been found on the page
                         </Typography>

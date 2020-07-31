@@ -76,11 +76,9 @@ const Analysis = () => {
 
     useEffect(() => {
         if (url !== undefined) {
-         {
              const uri = (url !== null) ? decodeURIComponent(url) : undefined;
              setInput(uri);
          }
-        }
     }, [url]);
 
     return (

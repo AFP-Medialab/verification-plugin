@@ -29,7 +29,7 @@ const AssistantLinkResult = (props) => {
 
     const classes = useMyStyles();
     const dispatch = useDispatch()
-    const keyword = useLoadLanguage("components/NavItems/tools/SourceCredibility.tsv", tsv);
+    const keyword = useLoadLanguage("components/NavItems/tools/Assistant.tsv", tsv);
 
     const linkList = props.linkList
     const title = props.title

@@ -37,7 +37,6 @@ const Footer = (props) => {
                     </Typography>
                 </div>
             );
-            break;
         case "usfd":
             provideBy = "Provided by "//keyword("usfd_part_1");
             link = "https://gate.ac.uk/"//keyword("usfd_link");
