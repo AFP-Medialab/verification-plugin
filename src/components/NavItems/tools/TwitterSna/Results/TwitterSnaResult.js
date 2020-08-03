@@ -799,7 +799,7 @@ export default function TwitterSnaResult(props) {
                                     style={{ width: '100%', height: "450px" }}
                                     data={result.histogram.json}
                                     layout={result.histogram.layout}
-                                    config={result.heatMap.config}
+                                    config={result.histogram.config}
                                     onClick={(e) => onHistogramClick(e)}
                                     onPurge={(a, b) => {
                                         console.log(a);
@@ -1096,7 +1096,7 @@ export default function TwitterSnaResult(props) {
                                         <Plot
                                             style={{ width: '100%', height: "450px" }}
                                             data={result.heatMap.plot}
-                                            config={result.histogram.config}
+                                            config={result.heatMap.config}
                                             onClick={(e) => onHeatMapClick(e)}
                                         />
                                         <Box m={1}/>
