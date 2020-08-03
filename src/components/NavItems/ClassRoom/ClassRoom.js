@@ -23,6 +23,7 @@ import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
 import ExpansionPanel from "@material-ui/core/ExpansionPanel";
+import {changeTabEvent} from "../../Shared/GoogleAnalytics/GoogleAnalytics";
 
 function TabPanel(props) {
     const {children, value, index, ...other} = props;
@@ -62,6 +63,7 @@ const ClassRoom = () => {
 
         const handleChange = (event, newValue) => {
             setValue(newValue);
+            changeTabEvent(newValue, tabTitle(newValue));
         };
 
         const [videoUrl, setVideoUrl] = useState(null);
@@ -106,18 +108,35 @@ const ClassRoom = () => {
             return arr;
         }
 
+        const tabTitle = (index) => {
+            switch (index) {
+                case 0:
+                    return keyword("classroom_introduction");
+                case 1: 
+                    return keyword("classroom_teaching");
+                case 2:
+                    return keyword("remote_resources_title");
+                case 3:
+                    return keyword("classroom_gamification");
+                case 4:
+                    return keyword("user_resources_title");
+                case 5:
+                    return keyword("glossary_title");
+            }
+        }
+
         return (
             <Paper className={classes.root}>
                 <Box justifyContent="center" display="flex" flexDirection="column">
                     <CustomTile text={keyword("classroom_title")}/>
                     <Box m={1}/>
                     <Tabs value={value} onChange={handleChange} aria-label="simple tabs example">
-                        <Tab label={keyword("classroom_introduction")} {...a11yProps(0)} />
-                        <Tab label={keyword("classroom_teaching")} {...a11yProps(1)} />
-                        <Tab label={keyword("remote_resources_title")} {...a11yProps(2)} />
-                        <Tab label={keyword("classroom_gamification")} {...a11yProps(3)} />
-                        <Tab label={keyword("user_resources_title")}  {...a11yProps(4)} />
-                        <Tab label={keyword("glossary_title")}  {...a11yProps(5)} />
+                        <Tab label={tabTitle(0)} {...a11yProps(0)} />
+                        <Tab label={tabTitle(1)} {...a11yProps(1)} />
+                        <Tab label={tabTitle(2)} {...a11yProps(2)} />
+                        <Tab label={tabTitle(3)} {...a11yProps(3)} />
+                        <Tab label={tabTitle(4)}  {...a11yProps(4)} />
+                        <Tab label={tabTitle(5)}  {...a11yProps(5)} />
                     </Tabs>
                     <TabPanel value={value} index={0}>
                         {

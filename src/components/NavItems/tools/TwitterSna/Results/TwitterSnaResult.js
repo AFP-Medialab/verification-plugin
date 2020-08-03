@@ -26,13 +26,10 @@ import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../../LocalDictionary/components/NavItems/tools/TwitterSna.tsv";
 import { saveSvgAsPng } from 'save-svg-as-png';
 import { CSVLink } from "react-csv";
-import Cytoscape from 'cytoscape';
-import Fcose from 'cytoscape-fcose';
 import { Sigma, RandomizeNodePositions, ForceAtlas2 } from 'react-sigma';
 import Plotly from 'plotly.js-dist';
 import _ from "lodash";
 import CircularProgress from "@material-ui/core/CircularProgress";
-Cytoscape.use(Fcose);
 
 export default function TwitterSnaResult(props) {
 
