@@ -1167,6 +1167,31 @@ export default function TwitterSnaResult(props) {
                     {
                         result && result.coHashtagGraph && result.coHashtagGraph.data.nodes.length !== 0 &&
                         <div style={{ width: '100%' }}>
+                            <Box pb={3}>
+                                <Grid container justify="space-between" spacing={2}
+                                    alignContent={"center"}>
+                                    <Grid item>
+                                        <CSVLink
+                                            data={result.coHashtagGraph.data.nodes}
+                                            filename={"Nodes_" + keyword("hashtag_graph_title") + '_' + props.request.keywordList.join('&') + '_' + props.request.from + "_" + props.request.until + ".csv"}
+                                            className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary">
+                                            {
+                                                "CSV Nodes"
+                                            }
+                                        </CSVLink>
+                                    </Grid>
+                                    <Grid item>
+                                        <CSVLink
+                                            data={result.coHashtagGraph.data.edges}
+                                            filename={"Edges_" + keyword("hashtag_graph_title") + '_' + props.request.keywordList.join('&') + '_' + props.request.from + "_" + props.request.until + ".csv"}
+                                            className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary">
+                                            {
+                                                "CSV Edges"
+                                            }
+                                        </CSVLink>
+                                    </Grid>
+                                </Grid>
+                            </Box>
                             {
                                 (coHashtagGraphReset === null && coHashtagGraphClickNode === null && result.coHashtagGraph.data.nodes.length !== 0) &&
                                 <div>
@@ -1294,6 +1319,31 @@ export default function TwitterSnaResult(props) {
                     {
                         result.socioSemanticGraph && result.socioSemanticGraph.data.nodes.length !== 0 &&
                             <div style={{ width: '100%' }}>
+                                <Box pb={3}>
+                                    <Grid container justify="space-between" spacing={2}
+                                        alignContent={"center"}>
+                                        <Grid item>
+                                            <CSVLink
+                                                data={result.socioSemanticGraph.data.nodes}
+                                                filename={"Nodes_" + keyword("sosem_graph_title") + '_' + props.request.keywordList.join('&') + '_' + props.request.from + "_" + props.request.until + ".csv"}
+                                                className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary">
+                                                {
+                                                    "CSV Nodes"
+                                                }
+                                            </CSVLink>
+                                        </Grid>
+                                        <Grid item>
+                                            <CSVLink
+                                                data={result.socioSemanticGraph.data.edges}
+                                                filename={"Edges_" + keyword("sosem_graph_title") + '_' + props.request.keywordList.join('&') + '_' + props.request.from + "_" + props.request.until + ".csv"}
+                                                className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary">
+                                                {
+                                                    "CSV Edges"
+                                                }
+                                            </CSVLink>
+                                        </Grid>
+                                    </Grid>
+                                </Box>
                                 {
                                     (socioSemanticGraphReset === null && socioSemanticGraphClickNode === null && result.socioSemanticGraph.data.nodes.length !== 0) &&
                                     <div>
@@ -1425,6 +1475,33 @@ export default function TwitterSnaResult(props) {
                     {
                         result.socioSemantic4ModeGraph && result.socioSemantic4ModeGraph.data.nodes.length !== 0 &&
                             <div style={{ width: '100%' }}>
+                                <Box pb={3}>
+                                    <Grid container justify="space-between" spacing={2}
+                                        alignContent={"center"}>
+                                        <Grid item>
+                                            <CSVLink
+                                                data={result.socioSemantic4ModeGraph.data.nodes}
+                                                filename={"Nodes_" + keyword("sosem_4mode_graph_title") + '_' + props.request.keywordList.join('&') + '_' + props.request.from + "_" + props.request.until + ".csv"} 
+                                                className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary">
+                                                {
+                                                    "CSV Nodes"
+                                                    // keyword('twittersna_result_download_csv')
+                                                }
+                                            </CSVLink>
+                                        </Grid>
+                                        <Grid item>
+                                            <CSVLink
+                                                data={result.socioSemantic4ModeGraph.data.edges}
+                                                filename={"Edges_" + keyword("sosem_4mode_graph_title") + '_' + props.request.keywordList.join('&') + '_' + props.request.from + "_" + props.request.until + ".csv"} 
+                                                className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary">
+                                                {
+                                                    "CSV Edges"
+                                                    // keyword('twittersna_result_download_csv')
+                                                }
+                                            </CSVLink>
+                                        </Grid>
+                                    </Grid>
+                                </Box>
                                 {
                                     (socioSemantic4ModeGraphReset === null && socioSemantic4ModeGraphClickNode === null && result.socioSemantic4ModeGraph.data.nodes.length !== 0) &&
                                     <div>
