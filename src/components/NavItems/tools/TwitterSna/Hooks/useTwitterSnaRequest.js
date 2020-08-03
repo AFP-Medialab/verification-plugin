@@ -107,10 +107,10 @@ function getEdgesCoHashtag(tweets) {
     for (let i = 0; i < arr.length - 1; i++) {
       for (let j = i + 1; j < arr.length; j++) {
         let sortedVertices = [arr[i], arr[j]].sort();
-        edges.push({ id: sortedVertices.join(""), 
+        edges.push({ id: sortedVertices.join("___and___"),
                     source: sortedVertices[0], 
                     target: sortedVertices[1],
-                    label: sortedVertices.join(""), 
+                    label: sortedVertices.join("___and___"),
                     weight: 1,
                     size: 1,
                     type: "curve" });
@@ -796,6 +796,20 @@ const useTwitterSnaRequest = (request) => {
       }
       // 2D-array with cells as number of tweets by day and hour
       let nbTweetArr2D = getNbTweetsByHourDay(dayAxis, hourAxis, hits);
+
+      let config = {
+        displayModeBar: true,
+        toImageButtonOptions: {
+          format: 'png', // one of png, svg, jpeg, webp
+          filename: request.keywordList.join("&") + "_" + request["from"] + "_" + request["until"] + "_Heatmap",
+          scale: 1 // Multiply title/legend/axis/canvas sizes by this factor
+        },
+
+        responsive: true,
+        modeBarButtons: [["toImage"], ["resetScale2d"]],
+        displaylogo: false,
+      }
+
       return {
         plot: [{
           z: nbTweetArr2D,
@@ -806,6 +820,7 @@ const useTwitterSnaRequest = (request) => {
           [0.75, 'rgb(33,113,181)'], [0.875, 'rgb(8,81,156)'], [1.0, 'rgb(8,48,107)']],
           type: 'heatmap'
         }],
+        config: config,
         isAllnul: isAllnul
       };
     }
@@ -930,9 +945,21 @@ const useTwitterSnaRequest = (request) => {
           "title": "Tweets"
         },
       };
+      let config = {
+        displayModeBar: true,
+        toImageButtonOptions: {
+          format: 'png', // one of png, svg, jpeg, webp
+          filename: request.keywordList.join("&") + "_" + request["from"] + "_" + request["until"] + "_ActiveContributors",
+          scale: 1 // Multiply title/legend/axis/canvas sizes by this factor
+        },
+        responsive: true,
+        modeBarButtons: [["toImage"], ["resetScale2d"]],
+        displaylogo: false,
+      }
       return {
         data: data,
-        layout: layout
+        layout: layout,
+        config: config
       }
     }
 
@@ -991,10 +1018,22 @@ const useTwitterSnaRequest = (request) => {
           "title": "Tweets"
         },
       };
+      let config = {
+        displayModeBar: true,
+        toImageButtonOptions: {
+          format: 'png', // one of png, svg, jpeg, webp
+          filename: request.keywordList.join("&") + "_" + request["from"] + "_" + request["until"] + "_VisibleContributors",
+          scale: 1 // Multiply title/legend/axis/canvas sizes by this factor
+        },
+        responsive: true,
+        modeBarButtons: [["toImage"], ["resetScale2d"]],
+        displaylogo: false,
+      }
 
       return {
         data: data,
-        layout: layout
+        layout: layout,
+        config: config
       };
     }
 

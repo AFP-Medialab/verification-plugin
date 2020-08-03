@@ -799,7 +799,7 @@ export default function TwitterSnaResult(props) {
                                     style={{ width: '100%', height: "450px" }}
                                     data={result.histogram.json}
                                     layout={result.histogram.layout}
-                                    config={result.histogram.config}
+                                    config={result.heatMap.config}
                                     onClick={(e) => onHistogramClick(e)}
                                     onPurge={(a, b) => {
                                         console.log(a);
@@ -1735,7 +1735,7 @@ export default function TwitterSnaResult(props) {
                                         style={{ width: '100%', height: "450px" }}
                                         data={result.activeContributors.data}
                                         layout={result.activeContributors.layout}
-                                        config={result.histogram.config}
+                                        config={result.activeContributors.config}
                                         onClick={(e) => onActiveContributorHistClick(e)}
                                     />
                                 }
@@ -1810,7 +1810,7 @@ export default function TwitterSnaResult(props) {
                                         style={{ width: '100%', height: "450px" }}
                                         data={result.visibleContributors.data}
                                         layout={result.visibleContributors.layout}
-                                        config={result.histogram.config}
+                                        config={result.visibleContributors.config}
                                         onClick={(e) => onVisibleContributorHistClick(e)}
                                     />
                                 }
