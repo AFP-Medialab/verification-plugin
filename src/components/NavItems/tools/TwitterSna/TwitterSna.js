@@ -346,6 +346,7 @@ const TwitterSna = () => {
       );
       // console.log("Updating submittedRequest: ", newSubmittedRequest);
       setSubmittedRequest(newSubmittedRequest);
+      window.history.pushState({}, null, "/popup.html#/app/tools/twitterSna");
     } else {
       setKeywords(userAuthenticated ?
         "" :
