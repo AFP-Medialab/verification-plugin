@@ -758,26 +758,64 @@ export default function TwitterSnaResult(props) {
         }
     }
 
+    // function createGraphWhenClickANode(e) {
+
+    //     let selectedNode = e.data.node;
+
+    //     let neighborNodes = e.data.renderer.graph.adjacentNodes(selectedNode.id);
+    //     let neighborEdges = e.data.renderer.graph.adjacentEdges(selectedNode.id);
+    //     let directedNeighborEdges = neighborEdges.map((edge) => {
+    //         let newEdge = JSON.parse(JSON.stringify(edge));
+    //         if (newEdge.source !== selectedNode.id) {
+    //             newEdge.target = edge.source;
+    //             newEdge.source = selectedNode.id;
+    //         }
+    //         return newEdge;
+    //     });
+
+    //     neighborNodes.push(selectedNode);
+
+    //     let newGraph = {
+    //         nodes: neighborNodes,
+    //         edges: directedNeighborEdges
+    //     }
+
+    //     console.log("newGraph", newGraph);
+    //     return newGraph;
+    // }
     function createGraphWhenClickANode(e) {
 
         let selectedNode = e.data.node;
 
         let neighborNodes = e.data.renderer.graph.adjacentNodes(selectedNode.id);
         let neighborEdges = e.data.renderer.graph.adjacentEdges(selectedNode.id);
-        let directedNeighborEdges = neighborEdges.map((edge) => {
-            let newEdge = JSON.parse(JSON.stringify(edge));
-            if (newEdge.source !== selectedNode.id) {
-                newEdge.target = edge.source;
-                newEdge.source = selectedNode.id;
-            }
-            return newEdge;
-        });
 
-        neighborNodes.push(selectedNode);
+        let neighborNodeIds = neighborNodes.map((node) => { return node.id; });
+        neighborNodeIds.push(selectedNode.id);
+        let neighborEdgeIds = neighborEdges.map((edge) => { return edge.id; });
+
+        let clonedNodes = JSON.parse(JSON.stringify(e.data.renderer.graph.nodes()));
+        let clonedEdges = JSON.parse(JSON.stringify(e.data.renderer.graph.edges()));
+
+        let updatedNodes = clonedNodes.map((node) => {
+            if (!neighborNodeIds.includes(node.id)) {
+                node.color = "#C0C0C0";
+            }
+            return node;
+        })
+
+        let updatedEdges = clonedEdges.map((edge) => {
+            if (neighborEdgeIds.includes(edge.id)) {
+                edge.color = "#000000";
+            } else {
+                edge.color = "#C0C0C0";
+            }
+            return edge;
+        })
 
         let newGraph = {
-            nodes: neighborNodes,
-            edges: directedNeighborEdges
+            nodes: updatedNodes,
+            edges: updatedEdges
         }
 
         console.log("newGraph", newGraph);
