@@ -77,7 +77,7 @@ function getColor(entity) {
   if (entity === "Mention" || entity === "Mention-Mention") return '#88D8B0';
   if (entity === "RetweetWC" || entity === "RetweetWC-RetweetWC") return '#FF6F69';
   if (entity === "Reply" || entity === "Reply-Reply") return '#FFEEAD';
-  if (entity === "Hashtag-Hashtag") return "#a2bfc7";
+  if (entity === "Hashtag-Hashtag") return "#96cce0";
   if (entity === "URL-URL") return "#666666";
   if (entity === "Else-Else") return "#C0C0C0";
 
