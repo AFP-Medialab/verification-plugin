@@ -73,12 +73,12 @@ function getColor(entity) {
 
   // Get color for graph's nodes, edges 
   if (entity === "Hashtag") return '#3388AA';
-  if (entity === "URL") return "#000000";
+  if (entity === "URL") return "#9400D3";
   if (entity === "Mention" || entity === "Mention-Mention") return '#88D8B0';
   if (entity === "RetweetWC" || entity === "RetweetWC-RetweetWC") return '#FF6F69';
   if (entity === "Reply" || entity === "Reply-Reply") return '#FFEEAD';
   if (entity === "Hashtag-Hashtag") return "#96cce0";
-  if (entity === "URL-URL") return "#666666";
+  if (entity === "URL-URL") return "#CC99C9";
   if (entity === "Else-Else") return "#C0C0C0";
 
   return '#35347B';
