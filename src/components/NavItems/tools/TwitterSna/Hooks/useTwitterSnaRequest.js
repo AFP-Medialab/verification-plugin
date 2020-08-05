@@ -73,10 +73,12 @@ function getColor(entity) {
 
   // Get color for graph's nodes, edges 
   if (entity === "Hashtag") return '#3388AA';
+  if (entity === "URL") return "#000000";
   if (entity === "Mention" || entity === "Mention-Mention") return '#88D8B0';
   if (entity === "RetweetWC" || entity === "RetweetWC-RetweetWC") return '#FF6F69';
   if (entity === "Reply" || entity === "Reply-Reply") return '#FFEEAD';
   if (entity === "Hashtag-Hashtag") return "#a2bfc7";
+  if (entity === "URL-URL") return "#666666";
   if (entity === "Else-Else") return "#C0C0C0";
 
   return '#35347B';
@@ -229,11 +231,16 @@ function getTweetAttrObjArr(tweets) {
     ? ["Rpl:@" + tweet._source.screen_name]
     : [];
 
+    let urls = (tweet._source.urls !== undefined && tweet._source.urls.length !== 0)
+    ? tweet._source.urls.map((url) => { return "URL:" + getDomain(url); })
+    : [];
+
     let obj = {
       hashtags: [...new Set(hashtags)],
       userIsMentioned: [...new Set(userIsMentioned)],
       userRTWC: userRTWC,
-      userReply: userReply
+      userReply: userReply,
+      urls: [...new Set(urls)]
     }
     return obj;
   });
@@ -278,7 +285,7 @@ function getCoOccurenceHashtagMention(tweetAttrObjArr) {
   return coOccurGroupedBy;
 }
 
-function getCoOccurenceHashtagMentionRTWCReply(tweetAttrObjArr) {
+function getCoOccurence(tweetAttrObjArr) {
   let coOccur = [];
   tweetAttrObjArr.forEach((obj) => {
     if (obj.hashtags.length > 0) {
@@ -286,6 +293,9 @@ function getCoOccurenceHashtagMentionRTWCReply(tweetAttrObjArr) {
     }
     if (obj.userIsMentioned.length > 0) {
       coOccur.push(getCoOccurCombinationFrom1Arr(obj.userIsMentioned));
+    }
+    if (obj.urls.length > 0) {
+      coOccur.push(getCoOccurCombinationFrom1Arr(obj.urls));
     }
 
     if (obj.hashtags.length > 0 && obj.userIsMentioned.length > 0) {
@@ -297,15 +307,31 @@ function getCoOccurenceHashtagMentionRTWCReply(tweetAttrObjArr) {
     if (obj.hashtags.length > 0 && obj.userReply.length > 0) {
       coOccur.push(getCombinationFrom2Arrs(obj.hashtags, obj.userReply));
     }
+    if (obj.hashtags.length > 0 && obj.urls.length > 0) {
+      coOccur.push(getCombinationFrom2Arrs(obj.hashtags, obj.urls));
+    }
+
     if (obj.userIsMentioned.length > 0 && obj.userRTWC.length > 0) {
       coOccur.push(getCombinationFrom2Arrs(obj.userIsMentioned, obj.userRTWC));
     }
     if (obj.userIsMentioned.length > 0 && obj.userReply.length > 0) {
       coOccur.push(getCombinationFrom2Arrs(obj.userIsMentioned, obj.userReply));
     }
+    if (obj.userIsMentioned.length > 0 && obj.urls.length > 0) {
+      coOccur.push(getCombinationFrom2Arrs(obj.userIsMentioned, obj.urls));
+    }
+
     if (obj.userRTWC.length > 0 && obj.userReply.length > 0) {
       coOccur.push(getCombinationFrom2Arrs(obj.userRTWC, obj.userReply));
     }
+    if (obj.userRTWC.length > 0 && obj.urls.length > 0) {
+      coOccur.push(getCombinationFrom2Arrs(obj.userRTWC, obj.urls));
+    }
+
+    if (obj.userReply.length > 0 && obj.urls.length > 0) {
+      coOccur.push(getCombinationFrom2Arrs(obj.userReply, obj.urls));
+    }
+
     let coOccurGroupedBy = groupByThenSum(coOccur.flat(), 'id', [], ['count'], []);
     return coOccurGroupedBy;
   })
@@ -327,7 +353,10 @@ function getEdgesFromCoOcurObjArr(coOccurObjArr) {
       connectionType = "RetweetWC-RetweetWC";
     } else if (first.startsWith("Rpl:@") && second.startsWith("Rpl:@")) {
       connectionType = "Reply-Reply";
-    } else {
+    } else if (first.startsWith("URL:") && second.startsWith("URL:")) {
+      connectionType = "URL-URL";
+    }
+     else {
       connectionType = "Else-Else";
     }
 
@@ -352,6 +381,26 @@ function getTopActiveUsers(tweets, topN) {
                         .reverse()
                         .slice(0, topN);
   return topUsers2DArr;
+}
+
+function getDomain(url) {
+  var domain;
+
+  if (url.indexOf("://") > -1) {
+    domain = url.split('/')[2];
+  }
+  else {
+    domain = url.split('/')[0];
+  }
+  
+  if (domain.indexOf("www.") > -1) { 
+    domain = domain.split('www.')[1];
+  }
+  
+  domain = domain.split(':')[0];
+  domain = domain.split('?')[0];
+
+  return domain;
 }
 
 const useTwitterSnaRequest = (request) => {
@@ -872,10 +921,11 @@ const useTwitterSnaRequest = (request) => {
       lcTweets = lowercaseFieldInTweets(lcTweets, 'user_mentions');
       lcTweets = lowercaseFieldInTweets(lcTweets, 'screen_name');
       lcTweets = lowercaseFieldInTweets(lcTweets, 'in_reply_to_screen_name');
+      lcTweets = lowercaseFieldInTweets(lcTweets, 'urls');
       
       let tweetAttrObjArr = getTweetAttrObjArr(lcTweets);
 
-      let coOccurObjArr = getCoOccurenceHashtagMentionRTWCReply(tweetAttrObjArr);
+      let coOccurObjArr = getCoOccurence(tweetAttrObjArr);
       let edges = getEdgesFromCoOcurObjArr(coOccurObjArr);
       
       let nodes = [];
@@ -883,12 +933,14 @@ const useTwitterSnaRequest = (request) => {
       let freqMentionObj = _.countBy(tweetAttrObjArr.map((obj) => { return obj.userIsMentioned; }).flat());
       let freqRTWCObj = _.countBy(tweetAttrObjArr.map((obj) => { return obj.userRTWC; }).flat());
       let freqReplyObj = _.countBy(tweetAttrObjArr.map((obj) => { return obj.userReply; }).flat());
+      let freqURLObj = _.countBy(tweetAttrObjArr.map((obj) => { return obj.urls; }).flat());
       Object.entries(freqHashtagObj).forEach(arr => nodes.push({ id: arr[0], label: arr[0] + ": " + arr[1], size: arr[1], color: getColor("Hashtag"), type: "Hashtag" }));
       Object.entries(freqMentionObj).forEach(arr => nodes.push({ id: arr[0], label: arr[0] + ": " + arr[1], size: arr[1], color: getColor("Mention"), type: "Mention" }));
       Object.entries(freqRTWCObj).forEach(arr => nodes.push({ id: arr[0], label: arr[0] + ": " + arr[1], size: arr[1], color: getColor("RetweetWC"), type: "RetweetWC" }));
       Object.entries(freqReplyObj).forEach(arr => nodes.push({ id: arr[0], label: arr[0] + ": " + arr[1], size: arr[1], color: getColor("Reply"), type: "Reply" }));
+      Object.entries(freqURLObj).forEach(arr => nodes.push({ id: arr[0], label: arr[0] + ": " + arr[1], size: arr[1], color: getColor("URL"), type: "URL" }));
 
-      let topNodeGraph = getTopNodeGraph({ nodes: nodes, edges: edges}, ["size"], [20, 10, 10, 10], ['Hashtag', 'Mention', 'RetweetWC', 'Reply']);
+      let topNodeGraph = getTopNodeGraph({ nodes: nodes, edges: edges}, ["size"], [20, 10, 10, 10, 15], ['Hashtag', 'Mention', 'RetweetWC', 'Reply', 'URL']);
       return {
         data: topNodeGraph
       };

@@ -439,6 +439,18 @@ export default function TwitterSnaResult(props) {
             let dataToDisplay = displayTweets(filteredTweets);
             dataToDisplay["selected"] = data.data.node.id;
             setSocioSemantic4ModeGraphTweets(dataToDisplay);
+        } else if (data.data.node.type === "URL") {
+            let selectedURL = data.data.node.id.replace("URL:", "");
+            let filteredTweets = result.tweets.filter(tweet => tweet._source.urls !== undefined && tweet._source.urls.length > 0)
+                .filter(function (tweet) {
+                    let urlArr = tweet._source.urls.map((url) => {
+                        return getDomain(url).toLowerCase();
+                    });
+                    return urlArr.includes(selectedURL.toLowerCase());
+                });
+            let dataToDisplay = displayTweets(filteredTweets);
+            dataToDisplay["selected"] = data.data.node.id;
+            setSocioSemantic4ModeGraphTweets(dataToDisplay);
         }
     }
 
@@ -770,6 +782,26 @@ export default function TwitterSnaResult(props) {
 
         console.log("newGraph", newGraph);
         return newGraph;
+    }
+
+    function getDomain(url) {
+        var domain;
+
+        if (url.indexOf("://") > -1) {
+            domain = url.split('/')[2];
+        }
+        else {
+            domain = url.split('/')[0];
+        }
+
+        if (domain.indexOf("www.") > -1) {
+            domain = domain.split('www.')[1];
+        }
+
+        domain = domain.split(':')[0];
+        domain = domain.split('?')[0];
+
+        return domain;
     }
 
     if (result === null)
