@@ -19,10 +19,10 @@ import youCheckImage from "./Images/youCheck.png"
 import useLoadLanguage from "../../../Hooks/useLoadLanguage";
 import tsv from "../../../LocalDictionary/components/NavItems/ClassRoom.tsv";
 import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
-import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
+import AccordionSummary from "@material-ui/core/AccordionSummary";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
-import ExpansionPanel from "@material-ui/core/ExpansionPanel";
+import AccordionDetails from "@material-ui/core/AccordionDetails";
+import Accordion from "@material-ui/core/Accordion";
 import {changeTabEvent} from "../../Shared/GoogleAnalytics/GoogleAnalytics";
 
 function TabPanel(props) {
@@ -142,19 +142,19 @@ const ClassRoom = () => {
                         {
                             introduction(5).map((obj, index) => {
                                 return (
-                                    <ExpansionPanel key={index}>
-                                        <ExpansionPanelSummary
+                                    <Accordion key={index}>
+                                        <AccordionSummary
                                             expandIcon={<ExpandMoreIcon />}
                                             aria-controls="panel1a-content"
                                             id="panel1a-header"
                                         >
                                             <Typography className={classes.heading}>{obj.title}</Typography>
-                                        </ExpansionPanelSummary>
-                                        <ExpansionPanelDetails>
+                                        </AccordionSummary>
+                                        <AccordionDetails>
                                             <div className={"content"}
                                                 dangerouslySetInnerHTML={{ __html: obj.content }}></div>
-                                        </ExpansionPanelDetails>
-                                    </ExpansionPanel>
+                                        </AccordionDetails>
+                                    </Accordion>
                                 )
                             })
                         }
