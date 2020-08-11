@@ -268,23 +268,6 @@ function getCombinationFrom2Arrs(arr1, arr2) {
   return occurences;
 }
 
-function getCoOccurenceHashtagMention(tweetAttrObjArr) {
-  let coOccur = [];
-  tweetAttrObjArr.forEach((obj) => {
-    if (obj.hashtags.length > 0) {
-      coOccur.push(getCoOccurCombinationFrom1Arr(obj.hashtags));
-    }
-    if (obj.userIsMentioned.length > 0) {
-      coOccur.push(getCoOccurCombinationFrom1Arr(obj.userIsMentioned));
-    }
-    if (obj.hashtags.length > 0 && obj.userIsMentioned.length > 0) {
-      coOccur.push(getCombinationFrom2Arrs(obj.hashtags, obj.userIsMentioned));
-    }
-  })
-  let coOccurGroupedBy = groupByThenSum(coOccur.flat(), 'id', [], ['count'], []);
-  return coOccurGroupedBy;
-}
-
 function getCoOccurence(tweetAttrObjArr) {
   let coOccur = [];
   tweetAttrObjArr.forEach((obj) => {
@@ -746,18 +729,13 @@ const useTwitterSnaRequest = (request) => {
         result.tweets = responseArrayOf9[1].tweets;
         result.heatMap = createHeatMap(request, result.tweets);
         result.coHashtagGraph = createCoHashtagGraph(result.tweets);
-        result.socioSemanticGraph = createSocioSemanticGraph(result.tweets);
         result.cloudChart = createWordCloud(result.tweets);
-
         result.socioSemantic4ModeGraph = createSocioSemantic4ModeGraph(result.tweets);
         
         let authors = getTopActiveUsers(result.tweets, 100).map((arr) => {return arr[0];});
         if (authors.length > 0) {
           getUserAccounts(authors).then((data) => dispatch(setUserProfileMostActive(data.hits.hits)))
         }
-
-        result.activeContributors = createActiveContributorsHist(result.tweets, 25);
-        result.visibleContributors = createVisibleContributorsHist(result.tweets, 25);
       }
       else
         result.cloudChart = { title: "top_words_cloud_chart_title" };
@@ -895,27 +873,6 @@ const useTwitterSnaRequest = (request) => {
       };
     }
 
-    const createSocioSemanticGraph = (tweets) => {
-      let lcTweets = lowercaseFieldInTweets(tweets, 'hashtags');
-      lcTweets = lowercaseFieldInTweets(lcTweets, 'user_mentions');
-      lcTweets = lowercaseFieldInTweets(lcTweets, 'screen_name');
-      
-      let tweetAttrObjArr = getTweetAttrObjArr(lcTweets);
-      let coOccurObjArr = getCoOccurenceHashtagMention(tweetAttrObjArr);
-      let edges = getEdgesFromCoOcurObjArr(coOccurObjArr);
-      
-      let nodes = [];
-      let freqHashtagObj = _.countBy(tweetAttrObjArr.map((obj) => { return obj.hashtags; }).flat());
-      let freqMentionObj = _.countBy(tweetAttrObjArr.map((obj) => { return obj.userIsMentioned; }).flat());
-      Object.entries(freqHashtagObj).forEach(arr => nodes.push({ id: arr[0], label: arr[0] + ": " + arr[1], size: arr[1], color: getColor("Hashtag"), type: "Hashtag" }));
-      Object.entries(freqMentionObj).forEach(arr => nodes.push({ id: arr[0], label: arr[0] + ": " + arr[1], size: arr[1], color: getColor("Mention"), type: "Mention" }));
-
-      let topNodeGraph = getTopNodeGraph({ nodes: nodes, edges: edges}, ["size"], [20, 10], ['Hashtag', 'Mention']);
-      return {
-        data: topNodeGraph
-      };
-    }
-
     const createSocioSemantic4ModeGraph = (tweets) => {
       let lcTweets = lowercaseFieldInTweets(tweets, 'hashtags');
       lcTweets = lowercaseFieldInTweets(lcTweets, 'user_mentions');
@@ -943,149 +900,6 @@ const useTwitterSnaRequest = (request) => {
       let topNodeGraph = getTopNodeGraph({ nodes: nodes, edges: edges}, ["size"], [20, 10, 10, 10, 15], ['Hashtag', 'Mention', 'RetweetWC', 'Reply', 'URL']);
       return {
         data: topNodeGraph
-      };
-    }
-
-    const createActiveContributorsHist = (tweets, topN) => {
-      let origTweetSent = tweets.filter(tweet => 
-        tweet._source.quoted_status_id_str === null && tweet._source.user_mentions.length === 0 && tweet._source.in_reply_to_screen_name === null )
-        .map((tweet) => {return tweet._source.screen_name;});
-      
-      let genuineReplySent = tweets.filter(tweet => 
-        tweet._source.quoted_status_id_str === null && ( tweet._source.user_mentions.length !== 0 || tweet._source.in_reply_to_screen_name !== null ))
-        .map((tweet) => {return tweet._source.screen_name;});
-      
-      let retweetSent = tweets.filter(tweet => 
-        tweet._source.quoted_status_id_str !== null )
-        .map((tweet) => {return tweet._source.screen_name;});
-
-      let allContributors = _.countBy(origTweetSent.concat(genuineReplySent).concat(retweetSent));
-      let sortedAllContributors = Object.entries(allContributors).sort((a,b)=> b[1]-a[1]);
-      let topContributors = sortedAllContributors.slice(0, topN).map((element) => {return element[0];})
-
-      let topOrigTweetSent = origTweetSent.filter(n => topContributors.includes(n));
-      let topGenuineReplySent = genuineReplySent.filter(n => topContributors.includes(n));
-      let topRetweetSent = retweetSent.filter(n => topContributors.includes(n));
-
-      let data = [
-        {
-          histfunc: "count",
-          x: topGenuineReplySent,
-          type: "histogram",
-          name: "genuineReplySent"
-        },
-        {
-          histfunc: "count",
-          x: topRetweetSent,
-          type: "histogram",
-          name: "retweetSent"
-        },
-        {
-          histfunc: "count",
-          x: topOrigTweetSent,
-          type: "histogram",
-          name: "origTweetSent"
-        }
-      ];
-      let layout = {
-        barmode: "stack",
-        "xaxis": {
-          "categoryorder": "array",
-          "categoryarray": topContributors
-        },
-        "yaxis": {
-          "title": "Tweets"
-        },
-      };
-      let config = {
-        displayModeBar: true,
-        toImageButtonOptions: {
-          format: 'png', // one of png, svg, jpeg, webp
-          filename: request.keywordList.join("&") + "_" + request["from"] + "_" + request["until"] + "_ActiveContributors",
-          scale: 1 // Multiply title/legend/axis/canvas sizes by this factor
-        },
-        responsive: true,
-        modeBarButtons: [["toImage"], ["resetScale2d"]],
-        displaylogo: false,
-      }
-      return {
-        data: data,
-        layout: layout,
-        config: config
-      }
-    }
-
-    const createVisibleContributorsHist = (tweets, topN) => {
-
-      let nbRepliedAccounts = tweets.filter(tweet => tweet._source.reply_count > 0)
-        .map((tweet) => { return { user: tweet._source.screen_name, count: tweet._source.reply_count }; });
-      let mentionedAccounts = tweets.filter(tweet => tweet._source.user_mentions.length !== 0)
-        .map((tweet) => { return [...new Set(tweet._source.user_mentions.map((obj) => {return obj.screen_name;}))]; });
-      let nbMentionedAccounts =  Object.entries( _.countBy(mentionedAccounts.flat()))
-        .map((arr) => { return { user: arr[0], count: arr[1] }; });
-      let genuineReplyReceived = groupByThenSum(nbRepliedAccounts.concat(nbMentionedAccounts), "user", [], ["count"], []);
-
-      let nbRetweetedAccounts = tweets.filter(tweet => tweet._source.retweet_count > 0 || tweet._source.quote_count > 0)
-        .map((tweet) => { return { user: tweet._source.screen_name, count: tweet._source.retweet_count + tweet._source.quote_count }; });;
-      let retweetReceived = groupByThenSum(nbRetweetedAccounts, "user", [], ["count"], []);
-      
-      let allVisibleContributors = groupByThenSum(genuineReplyReceived.concat(retweetReceived), "user", [], ["count"], []);
-
-      let sortedGenuineReplyReceived = _.sortBy(genuineReplyReceived, ['count','user']).reverse();
-      let sortedRetweetReceived = _.sortBy(retweetReceived, ['count','user']).reverse();
-      let sortedContributors = _.sortBy(allVisibleContributors, ['count','user']).reverse();
-
-      let topContributors = sortedContributors.slice(0, topN).map((element) => {return element.user;});
-      let topGenuineReplyReceived = sortedGenuineReplyReceived.filter(n => topContributors.includes(n.user));
-      let topRetweetReceived = sortedRetweetReceived.filter(n => topContributors.includes(n.user));
-
-      let topGenuineReplyReceived_x = topGenuineReplyReceived.map((obj) => {return obj.user});
-      let topGenuineReplyReceived_y = topGenuineReplyReceived.map((obj) => {return obj.count});
-      let topRetweetReceived_x = topRetweetReceived.map((obj) => {return obj.user});
-      let topRetweetReceived_y = topRetweetReceived.map((obj) => {return obj.count});
-
-      let data = [
-        {
-          histfunc: "sum",
-          x: topGenuineReplyReceived_x,
-          y: topGenuineReplyReceived_y,
-          type: "histogram",
-          name: "genuineReplyReceived"
-        },
-        {
-          histfunc: "sum",
-          x: topRetweetReceived_x,
-          y: topRetweetReceived_y,
-          type: "histogram",
-          name: "retweetReceived"
-        },
-      ];
-      let layout = {
-        barmode: "stack",
-        "xaxis": {
-          "categoryorder": "array",
-          "categoryarray": topContributors
-        },
-        "yaxis": {
-          "title": "Tweets"
-        },
-      };
-      let config = {
-        displayModeBar: true,
-        toImageButtonOptions: {
-          format: 'png', // one of png, svg, jpeg, webp
-          filename: request.keywordList.join("&") + "_" + request["from"] + "_" + request["until"] + "_VisibleContributors",
-          scale: 1 // Multiply title/legend/axis/canvas sizes by this factor
-        },
-        responsive: true,
-        modeBarButtons: [["toImage"], ["resetScale2d"]],
-        displaylogo: false,
-      }
-
-      return {
-        data: data,
-        layout: layout,
-        config: config
       };
     }
 

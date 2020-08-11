@@ -50,17 +50,11 @@ export default function TwitterSnaResult(props) {
     const [pieCharts2, setPieCharts2] = useState(null);
     const [pieCharts3, setPieCharts3] = useState(null);
     const [coHashtagGraphTweets, setCoHashtagGraphTweets] = useState(null);
-    const [socioSemanticGraphTweets, setSocioSemanticGraphTweets] = useState(null);
     const [socioSemantic4ModeGraphTweets, setSocioSemantic4ModeGraphTweets] = useState(null);
     const [bubbleTweets, setBubbleTweets] = useState(null);
-    const [activiyContributorTweets, setActiviyContributorTweets] = useState(null);
-    const [visibleContributorTweets, setVisibleContributorTweets] = useState(null);
 
     const [coHashtagGraphReset, setCoHashtagGraphReset] = useState(null);
     const [coHashtagGraphClickNode, setCoHashtagGraphClickNode] = useState(null);
-
-    const [socioSemanticGraphReset, setSocioSemanticGraphReset] = useState(null);
-    const [socioSemanticGraphClickNode, setSocioSemanticGraphClickNode] = useState(null);
 
     const [socioSemantic4ModeGraphReset, setSocioSemantic4ModeGraphReset] = useState(null);
     const [socioSemantic4ModeGraphClickNode, setSocioSemantic4ModeGraphClickNode] = useState(null);
@@ -115,15 +109,10 @@ export default function TwitterSnaResult(props) {
         setPieCharts2(null);
         setPieCharts3(null);
         setCoHashtagGraphTweets(null);
-        setSocioSemanticGraphTweets(null);
         setSocioSemantic4ModeGraphTweets(null);
         setBubbleTweets(null);
-        setActiviyContributorTweets(null);
-        setVisibleContributorTweets(null);
         setCoHashtagGraphReset(null);
         setCoHashtagGraphClickNode(null);
-        setSocioSemanticGraphReset(null);
-        setSocioSemanticGraphClickNode(null);
         setSocioSemantic4ModeGraphReset(null);
         setSocioSemantic4ModeGraphClickNode(null);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -352,44 +341,6 @@ export default function TwitterSnaResult(props) {
         setCoHashtagGraphTweets(null);
     }
 
-    const onClickNodeSocioSemanticGraph = (data) => {
-        let initGraph = {
-            nodes: data.data.renderer.graph.nodes(),
-            edges: data.data.renderer.graph.edges()
-        }
-
-        setSocioSemanticGraphClickNode(createGraphWhenClickANode(data));
-
-        setSocioSemanticGraphReset(initGraph);
-
-        if (data.data.node.type === "Hashtag") {
-            let selectedHashtag = data.data.node.id.replace("#", "");
-            let filteredTweets = result.tweets.filter(tweet => tweet._source.hashtags !== undefined && tweet._source.hashtags.length > 0)
-                .filter(function (tweet) {
-                    let hashtagArr = tweet._source.hashtags.map((v) => { return v.toLowerCase(); });
-                    return hashtagArr.includes(selectedHashtag.toLowerCase());
-                });
-            let dataToDisplay = displayTweets(filteredTweets);
-            dataToDisplay["selected"] = data.data.node.id;
-            setSocioSemanticGraphTweets(dataToDisplay);
-        } else if (data.data.node.type === "Mention") {
-            let selectedUser = data.data.node.id.replace("isMTed:@", "");
-            let filteredTweets = result.tweets.filter(tweet => tweet._source.user_mentions !== undefined && tweet._source.user_mentions.length > 0)
-                .filter(function (tweet) {
-                    let lcMentionArr = tweet._source.user_mentions.map(v => v.screen_name.toLowerCase());
-                    return lcMentionArr.includes(selectedUser.toLowerCase());
-                });
-            let dataToDisplay = displayTweets(filteredTweets);
-            dataToDisplay["selected"] = data.data.node.id;
-            setSocioSemanticGraphTweets(dataToDisplay);
-        }
-    }
-
-    const onClickStageSocioSemanticGraph = (e) => {
-        setSocioSemanticGraphClickNode(null);
-        setSocioSemanticGraphTweets(null);
-    }
-
     const onClickNodeSocioSemantic4ModeGraph = (data) => {
 
         let initGraph = {
@@ -457,46 +408,6 @@ export default function TwitterSnaResult(props) {
     const onClickStageSocioSemantic4ModeGraph = (e) => {
         setSocioSemantic4ModeGraphClickNode(null);
         setSocioSemantic4ModeGraphTweets(null);
-    }
-
-    const onActiveContributorHistClick = (data) => {
-        if (result.tweets !== undefined) {
-            let selectedPoints = data.points;
-            let filteredTweets = result.tweets.filter(tweet => 
-                tweet._source.screen_name.toLowerCase() === selectedPoints[0].x.toLowerCase()
-            );
-            setActiviyContributorTweets(displayTweets(filteredTweets));
-        }
-    }
-
-    const onVisibleContributorHistClick = (data) => {
-        if (result.tweets !== undefined) {
-            let selectedPoints = data.points;
-            let filteredTweets = [];
-            let pickedTweetIds = [];
-            selectedPoints.forEach((point) => {
-                let selectedUser = point.x.toLowerCase();
-
-                if (point.data.name === "genuineReplyReceived" && point.y > 0) {
-                    let grrTweets = result.tweets.filter(tweet => 
-                        ( tweet._source.screen_name.toLowerCase() === selectedUser && tweet._source.reply_count > 0)
-                        || ( tweet._source.user_mentions.length !== 0 && tweet._source.user_mentions.map((obj) => {return obj.screen_name.toLowerCase()}).includes(selectedUser))
-                    );
-                    pickedTweetIds = grrTweets.map((tweet) => {return tweet._source.id_str;})
-                    filteredTweets.push(grrTweets);
-                }
-                if (point.data.name === "retweetReceived" && point.y > 0) {
-                    let rtrTweets = result.tweets.filter(tweet => 
-                        tweet._source.screen_name.toLowerCase() === selectedUser
-                        && ( tweet._source.retweet_count > 0 || tweet._source.quote_count > 0 )
-                        && !pickedTweetIds.includes(tweet._source.id_str)
-                    );
-                    filteredTweets.push(rtrTweets);
-                }
-            });
-
-            setVisibleContributorTweets(displayTweets(filteredTweets.flat()));
-        }
     }
 
     function filterTweetsGivenWord(word) {
@@ -1383,162 +1294,6 @@ export default function TwitterSnaResult(props) {
                     <AccordionSummary
                         expandIcon={<ExpandMoreIcon />}
                     >
-                        <Typography className={classes.heading}>{keyword("sosem_graph_title")}</Typography>
-                    </AccordionSummary>
-                    <AccordionDetails>
-                    {
-                        result.socioSemanticGraph && result.socioSemanticGraph.data.nodes.length !== 0 &&
-                            <div style={{ width: '100%' }}>
-                                <Box pb={3}>
-                                    <Grid container justify="space-between" spacing={2}
-                                        alignContent={"center"}>
-                                        <Grid item>
-                                            <CSVLink
-                                                data={result.socioSemanticGraph.data.nodes}
-                                                filename={"Nodes_" + keyword("sosem_graph_title") + '_' + props.request.keywordList.join('&') + '_' + props.request.from + "_" + props.request.until + ".csv"}
-                                                className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary">
-                                                {
-                                                    "CSV Nodes"
-                                                }
-                                            </CSVLink>
-                                        </Grid>
-                                        <Grid item>
-                                            <CSVLink
-                                                data={result.socioSemanticGraph.data.edges}
-                                                filename={"Edges_" + keyword("sosem_graph_title") + '_' + props.request.keywordList.join('&') + '_' + props.request.from + "_" + props.request.until + ".csv"}
-                                                className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary">
-                                                {
-                                                    "CSV Edges"
-                                                }
-                                            </CSVLink>
-                                        </Grid>
-                                    </Grid>
-                                </Box>
-                                {
-                                    (socioSemanticGraphReset === null && socioSemanticGraphClickNode === null && result.socioSemanticGraph.data.nodes.length !== 0) &&
-                                    <div>
-                                        <Sigma graph={result.socioSemanticGraph.data}
-                                            renderer={"canvas"}
-                                            style={{ textAlign: 'left', width: '100%', height: '700px' }}
-                                            onClickNode={(e) => onClickNodeSocioSemanticGraph(e)}
-                                            settings={{
-                                                drawEdges: true,
-                                                drawEdgeLabels: false,
-                                                minNodeSize: 6,
-                                                maxNodeSize: 20,
-                                                minEdgeSize: 1,
-                                                maxEdgeSize: 5,
-                                                defaultNodeColor: "#3388AA",
-                                                defaultEdgeColor: "#C0C0C0",
-                                                edgeColor: "default"
-                                            }}
-                                            >
-                                            <RandomizeNodePositions>
-                                                <ForceAtlas2 iterationsPerRender={1} timeout={15000} scalingRatio={2} />
-                                            </RandomizeNodePositions>
-                                        </Sigma>
-                                    </div>
-                                }
-                                {
-                                    (socioSemanticGraphReset !== null && socioSemanticGraphClickNode !== null) &&
-                                    <div>
-                                        <Sigma graph={socioSemanticGraphClickNode}
-                                            renderer={"canvas"}
-                                            style={{ textAlign: 'left', width: '100%', height: '700px' }}
-                                            onClickStage={(e) => onClickStageSocioSemanticGraph(e)}
-                                            settings={{
-                                                drawEdges: true,
-                                                drawEdgeLabels: false,
-                                                minNodeSize: 6,
-                                                maxNodeSize: 20,
-                                                minEdgeSize: 1,
-                                                maxEdgeSize: 5,
-                                                defaultNodeColor: "#3388AA",
-                                                defaultEdgeColor: "#C0C0C0",
-                                                edgeColor: "default"
-                                            }}
-                                            >
-                                        </Sigma>
-                                    </div>
-                                }
-                                {
-                                    (socioSemanticGraphReset !== null && socioSemanticGraphClickNode === null) &&
-                                    <div>
-                                        <Sigma graph={socioSemanticGraphReset}
-                                            renderer={"canvas"}
-                                            style={{ textAlign: 'left', width: '100%', height: '700px' }}
-                                            onClickNode={(e) => onClickNodeSocioSemanticGraph(e)}
-                                            settings={{
-                                                drawEdges: true,
-                                                drawEdgeLabels: false,
-                                                minNodeSize: 6,
-                                                maxNodeSize: 20,
-                                                minEdgeSize: 1,
-                                                maxEdgeSize: 5,
-                                                defaultNodeColor: "#3388AA",
-                                                defaultEdgeColor: "#C0C0C0",
-                                                edgeColor: "default"
-                                            }}
-                                            >
-                                        </Sigma>
-                                    </div>
-                                }
-                                <Box m={1}/>
-                                <OnClickInfo keyword={"twittersna_sosem_graph_tip"}/>
-                                <Box m={2}/>
-                                {
-                                    socioSemanticGraphTweets &&
-                                    <div>
-                                        <Grid container justify="space-between" spacing={2}
-                                            alignContent={"center"}>
-                                            <Grid item>
-                                                <Button
-                                                    variant={"contained"}
-                                                    color={"secondary"}
-                                                    onClick={() => setSocioSemanticGraphTweets(null)}>
-                                                    {
-                                                        keyword('twittersna_result_hide')
-                                                    }
-                                                </Button>
-                                            </Grid>
-                                            <Grid item>
-                                                <Button
-                                                    variant={"contained"}
-                                                    color={"primary"}
-                                                    onClick={() => downloadClick(socioSemanticGraphTweets.csvArr, socioSemanticGraphTweets.selected)}>
-                                                    {
-                                                        keyword('twittersna_result_download')
-                                                    }
-                                                </Button>
-                                            </Grid>
-                                        </Grid>
-                                        <Box m={2} />
-                                        <CustomTable title={keyword("twittersna_result_slected_tweets")}
-                                            colums={socioSemanticGraphTweets.columns}
-                                            data={socioSemanticGraphTweets.data}
-                                            actions={goToTweetAction}
-                                        />
-                                    </div>
-                                }
-                            </div>
-                        }
-                        {
-                            result.socioSemanticGraph && result.socioSemanticGraph.data.nodes.length === 0 &&
-                            <Typography variant={"body2"}>{keyword("twittersna_no_data")}</Typography>
-                        }
-                        {
-                            result.socioSemanticGraph === undefined &&
-                            <CircularProgress className={classes.circularProgress} />
-                        }
-                    </AccordionDetails>
-                </Accordion>
-            }
-            {
-                props.request.userList.length === 0 && result &&
-                <Accordion>
-                    <AccordionSummary
-                        expandIcon={<ExpandMoreIcon />}
-                    >
                         <Typography className={classes.heading}>{keyword("sosem_4mode_graph_title")}</Typography>
                     </AccordionSummary>
                     <AccordionDetails>
@@ -1858,156 +1613,6 @@ export default function TwitterSnaResult(props) {
                     <Box m={1} />
                     <OnClickInfo keyword={"twittersna_export_graph_tip"} />
                 </Paper>
-            }
-            {
-                <Accordion>
-                    <AccordionSummary
-                        expandIcon={<ExpandMoreIcon />}
-                        aria-controls={"panel0a-content"}
-                        id={"panel0a-header"}
-                    >
-                        <Typography className={classes.heading}>Most active contributors{/*keyword("active_hist_title")*/}</Typography>
-                    </AccordionSummary>
-                    <AccordionDetails>
-                        {
-                            result && result.activeContributors &&
-                            <div style={{ width: '100%', }}>
-                                {
-                                    result.activeContributors && result.activeContributors.data.reduce((a, b) => a + (b.x.length || 0), 0) === 0 &&
-                                    <Typography variant={"body2"}>{keyword("twittersna_no_data")}</Typography>
-                                }
-                                {
-                                    (result.activeContributors.data && result.activeContributors.data.length !== 0) &&
-                                    <Plot useResizeHandler
-                                        style={{ width: '100%', height: "450px" }}
-                                        data={result.activeContributors.data}
-                                        layout={result.activeContributors.layout}
-                                        config={result.activeContributors.config}
-                                        onClick={(e) => onActiveContributorHistClick(e)}
-                                    />
-                                }
-                                <Box m={1} />
-                                <OnClickInfo keyword={"twittersna_active_hist_tip"}/>
-                                <Box m={2} />
-                                {
-                                    activiyContributorTweets &&
-                                    <div>
-                                        <Grid container justify="space-between" spacing={2}
-                                            alignContent={"center"}>
-                                            <Grid item>
-                                                <Button
-                                                    variant={"contained"}
-                                                    color={"secondary"}
-                                                    onClick={() => setActiviyContributorTweets(null)}
-                                                >
-                                                    {
-                                                        keyword('twittersna_result_hide')
-                                                    }
-                                                </Button>
-                                            </Grid>
-                                            <Grid item>
-                                                <Button
-                                                    variant={"contained"}
-                                                    color={"primary"}
-                                                    onClick={() => downloadClick(activiyContributorTweets.csvArr, activiyContributorTweets.title)}>
-                                                    {
-                                                        keyword('twittersna_result_download')
-                                                    }
-                                                </Button>
-                                            </Grid>
-                                        </Grid>
-                                        <Box m={2} />
-                                        <CustomTable
-                                            title={keyword("twittersna_result_slected_tweets")}
-                                            colums={activiyContributorTweets.columns}
-                                            data={activiyContributorTweets.data}
-                                            actions={goToTweetAction}
-                                        />
-                                    </div>
-                                }
-                            </div>
-                        }
-                        {
-                            result && result.activeContributors === undefined &&
-                            <CircularProgress className={classes.circularProgress} />
-                        }
-                    </AccordionDetails>
-                </Accordion>
-            }
-            {
-                <Accordion>
-                    <AccordionSummary
-                        expandIcon={<ExpandMoreIcon />}
-                        aria-controls={"panel0a-content"}
-                        id={"panel0a-header"}
-                    >
-                        <Typography className={classes.heading}>Most vsible contributors{/*keyword("visible_hist_title")*/}</Typography>
-                    </AccordionSummary>
-                    <AccordionDetails>
-                        {
-                            result && result.visibleContributors &&
-                            <div style={{ width: '100%', }}>
-                                {
-                                    result.visibleContributors && result.visibleContributors.data.reduce((a, b) => a + (b.x.length || 0), 0) === 0 &&
-                                    <Typography variant={"body2"}>{keyword("twittersna_no_data")}</Typography>
-                                }
-                                {
-                                    (result.visibleContributors.data && result.visibleContributors.data.length !== 0) &&
-                                    <Plot useResizeHandler
-                                        style={{ width: '100%', height: "450px" }}
-                                        data={result.visibleContributors.data}
-                                        layout={result.visibleContributors.layout}
-                                        config={result.visibleContributors.config}
-                                        onClick={(e) => onVisibleContributorHistClick(e)}
-                                    />
-                                }
-                                <Box m={1} />
-                                <OnClickInfo keyword={"twittersna_visible_hist_tip"} />
-                                <Box m={2} />
-                                {
-                                    visibleContributorTweets &&
-                                    <div>
-                                        <Grid container justify="space-between" spacing={2}
-                                            alignContent={"center"}>
-                                            <Grid item>
-                                                <Button
-                                                    variant={"contained"}
-                                                    color={"secondary"}
-                                                    onClick={() => setVisibleContributorTweets(null)}
-                                                >
-                                                    {
-                                                        keyword('twittersna_result_hide')
-                                                    }
-                                                </Button>
-                                            </Grid>
-                                            <Grid item>
-                                                <Button
-                                                    variant={"contained"}
-                                                    color={"primary"}
-                                                    onClick={() => downloadClick(visibleContributorTweets.csvArr, visibleContributorTweets.title)}>
-                                                    {
-                                                        keyword('twittersna_result_download')
-                                                    }
-                                                </Button>
-                                            </Grid>
-                                        </Grid>
-                                        <Box m={2} />
-                                        <CustomTable
-                                            title={keyword("twittersna_result_slected_tweets")}
-                                            colums={visibleContributorTweets.columns}
-                                            data={visibleContributorTweets.data}
-                                            actions={goToTweetAction}
-                                        />
-                                    </div>
-                                }
-                            </div>
-                        }
-                        {
-                            result && result.visibleContributors === undefined &&
-                            <CircularProgress className={classes.circularProgress} />
-                        }
-                    </AccordionDetails>
-                </Accordion>
             }
             <Box m={3} />
             {
