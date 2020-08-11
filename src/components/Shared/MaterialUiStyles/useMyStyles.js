@@ -1,6 +1,5 @@
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import {green} from "@material-ui/core/colors";
-import React from "react";
 
 const drawerWidth = 200;
 

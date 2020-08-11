@@ -36,8 +36,6 @@ import tsv from "../../../../LocalDictionary/components/NavItems/tools/TwitterSn
 import { submissionEvent } from "../../../Shared/GoogleAnalytics/GoogleAnalytics";
 import AuthenticationCard from "../../../Shared/Authentication/AuthenticationCard";
 
-import { setTwitterSnaResult } from "../../../../redux/actions/tools/twitterSnaActions";
-
 
 const TwitterSna = () => {
   const classes = useMyStyles();

@@ -122,6 +122,8 @@ const ClassRoom = () => {
                     return keyword("user_resources_title");
                 case 5:
                     return keyword("glossary_title");
+                default:
+                    return keyword("classroom_introduction");
             }
         }
 
