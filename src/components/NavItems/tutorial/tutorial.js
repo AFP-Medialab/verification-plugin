@@ -4,7 +4,6 @@ import {Paper} from "@material-ui/core";
 import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
 import CustomTile from "../../Shared/CustomTitle/CustomTitle";
-import insta from "./images/InstagramDemo.png";
 import useLoadLanguage from "../../../Hooks/useLoadLanguage";
 import tsv from "../../../LocalDictionary/components/NavItems/Tutorial.tsv";
 import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
@@ -65,9 +64,6 @@ const Tutorial = () => {
                      dangerouslySetInnerHTML={{__html: keyword("tuto_2")}}></div>
 
                 <Typography variant="body1">{keyword("tuto_3")}</Typography>
-                <Box item={"true"}>
-                    <img src={insta} alt={""} className={classes.InteractiveMedia}/>
-                </Box>
                 <Box m={1}/>
                 <Typography variant="h3">{keyword("tuto_h_2")}</Typography>
                 <Box m={1}/>
