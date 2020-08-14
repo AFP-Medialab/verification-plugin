@@ -20,9 +20,8 @@ export function reverseSearchClick (payload) {
 
 export function changeTabEvent (tabIndex, tabTitle) {
     ReactGA.event({
-        category: 'changeTab',
-        action: 'Changed tabs in ' + history.location.pathname,
-        label: tabTitle,
-        value: tabIndex
+        category: 'switchTab',
+        action: 'Switch tabs in ' + history.location.pathname,
+        label: tabIndex + " - " + tabTitle
     });
 }
