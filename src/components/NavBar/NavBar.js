@@ -4,7 +4,7 @@ import Box from '@material-ui/core/Box';
 import {useDispatch, useSelector} from "react-redux";
 import Languages from "../NavItems/languages/languages";
 import logoInvid from "./images/logo-invid.png";
-import logoWeVerify from "./images/logo-we-verify.png";
+import logoWeVerify from "../PopUp/images/logo-we-verify.png";
 import Tutorial from "../NavItems/tutorial/tutorial";
 import React from 'react';
 import clsx from 'clsx';
