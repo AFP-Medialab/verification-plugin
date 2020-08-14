@@ -621,6 +621,14 @@ export default function TwitterSnaResult(props) {
         ]
 
         let layout = {
+            title: {
+                text: keyword("bubble_chart_title") + "<br>" + request.keywordList.join(", ") + " - " + request["from"] + " - " + request["until"],
+                font: {
+                    family: 'Arial, sans-serif',
+                    size: 18
+                },
+                xanchor: 'center'
+            },
             xaxis: {
                 title: keyword("twittersna_acd"),
                 titlefont: {
@@ -1064,7 +1072,7 @@ export default function TwitterSnaResult(props) {
                     <AccordionSummary
                         expandIcon={<ExpandMoreIcon />}
                     >
-                        <Typography className={classes.heading}>{keyword('heatmap_chart_title')}</Typography>
+                        <Typography className={classes.heading}>{keyword("heatmap_chart_title")}</Typography>
                     </AccordionSummary>
                     <AccordionDetails>
                         {
@@ -1078,6 +1086,7 @@ export default function TwitterSnaResult(props) {
                                             style={{ width: '100%', height: "450px" }}
                                             data={result.heatMap.plot}
                                             config={result.heatMap.config}
+                                            layout={result.heatMap.layout}
                                             onClick={(e) => onHeatMapClick(e)}
                                         />
                                         <Box m={1}/>

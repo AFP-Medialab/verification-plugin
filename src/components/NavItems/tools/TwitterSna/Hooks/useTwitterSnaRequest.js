@@ -456,9 +456,8 @@ const useTwitterSnaRequest = (request) => {
     };
 
     const createTimeLineChart = (request, json, givenFrom, givenUntil) => {
-      let titleEnd = request.keywordList.join("&") + " " + request.from + " " + request.until;
       let layout = {
-        title: <div><b>{keyword("user_time_chart_title")}</b><br /> {titleEnd}</div>,
+        title: keyword("user_time_chart_title") + "<br>" + request.keywordList.join(", ") + " - " + request["from"] + " - " + request["until"],
         automargin: true,
         xaxis: {
           range: [request.from, request.until],
@@ -512,8 +511,14 @@ const useTwitterSnaRequest = (request) => {
     };
 
     const createPieCharts = (request, jsonPieCharts) => {
-      let cloudLayout = {
-        title: "",
+      let layout = {
+        title: {
+          font: {
+            family: 'Arial, sans-serif',
+            size: 18
+          },
+          xanchor: 'center'
+        },
         automargin: true,
         width: 500,
         height: 500
@@ -529,13 +534,14 @@ const useTwitterSnaRequest = (request) => {
         modeBarButtons: [["toImage"]],
         displaylogo: false
       };
-      let titleEnd = request.keywordList.join("&") + " " + request.from + " " + request.until;
-      let titles = [
+
+      let keywordTitles = [
         "retweets_cloud_chart_title",
         "likes_cloud_chart_title",
         "top_users_pie_chart_title",
         "mention_cloud_chart_title"
       ];
+
       let tips = [
         "twittersna_most_retweet_tip",
         "twittersna_most_likes_tip",
@@ -545,13 +551,15 @@ const useTwitterSnaRequest = (request) => {
 
       let pieCharts = [];
 
-      for (let cpt = 0; cpt < titles.length; cpt++) {
-        cloudLayout.title = <div><b>{keyword(titles[cpt])}</b><br /> {titleEnd}</div>;
+      for (let cpt = 0; cpt < keywordTitles.length; cpt++) {
+        let specificLayout = JSON.parse(JSON.stringify(layout));
+        let specificTitle = keyword(keywordTitles[cpt]) + "<br>" + request.keywordList.join(", ") + " - " + request["from"] + " - " + request["until"];
+        specificLayout.title.text = specificTitle;
         pieCharts.push(
           {
-            title: titles[cpt],
+            title: keywordTitles[cpt],
             json: jsonPieCharts[cpt],
-            layout: cloudLayout,
+            layout: specificLayout,
             config: config,
             tip: tips[cpt]
           }
@@ -831,10 +839,20 @@ const useTwitterSnaRequest = (request) => {
           filename: request.keywordList.join("&") + "_" + request["from"] + "_" + request["until"] + "_Heatmap",
           scale: 1 // Multiply title/legend/axis/canvas sizes by this factor
         },
-
         responsive: true,
         modeBarButtons: [["toImage"], ["resetScale2d"]],
         displaylogo: false,
+      }
+
+      let layout = {
+        title: {
+          text: keyword("heatmap_chart_title") + "<br>" + request.keywordList.join(", ") + " - " + request["from"] + " - " + request["until"],
+          font: {
+            family: 'Arial, sans-serif',
+            size: 18
+          },
+          xanchor: 'center'
+        }
       }
 
       return {
@@ -848,6 +866,7 @@ const useTwitterSnaRequest = (request) => {
           type: 'heatmap'
         }],
         config: config,
+        layout: layout,
         isAllnul: isAllnul
       };
     }
