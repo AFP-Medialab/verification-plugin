@@ -677,31 +677,6 @@ export default function TwitterSnaResult(props) {
         }
     }
 
-    // function createGraphWhenClickANode(e) {
-
-    //     let selectedNode = e.data.node;
-
-    //     let neighborNodes = e.data.renderer.graph.adjacentNodes(selectedNode.id);
-    //     let neighborEdges = e.data.renderer.graph.adjacentEdges(selectedNode.id);
-    //     let directedNeighborEdges = neighborEdges.map((edge) => {
-    //         let newEdge = JSON.parse(JSON.stringify(edge));
-    //         if (newEdge.source !== selectedNode.id) {
-    //             newEdge.target = edge.source;
-    //             newEdge.source = selectedNode.id;
-    //         }
-    //         return newEdge;
-    //     });
-
-    //     neighborNodes.push(selectedNode);
-
-    //     let newGraph = {
-    //         nodes: neighborNodes,
-    //         edges: directedNeighborEdges
-    //     }
-
-    //     console.log("newGraph", newGraph);
-    //     return newGraph;
-    // }
     function createGraphWhenClickANode(e) {
 
         let selectedNode = e.data.node;
@@ -1319,7 +1294,6 @@ export default function TwitterSnaResult(props) {
                                                 className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary">
                                                 {
                                                     "CSV Nodes"
-                                                    // keyword('twittersna_result_download_csv')
                                                 }
                                             </CSVLink>
                                         </Grid>
@@ -1330,7 +1304,6 @@ export default function TwitterSnaResult(props) {
                                                 className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary">
                                                 {
                                                     "CSV Edges"
-                                                    // keyword('twittersna_result_download_csv')
                                                 }
                                             </CSVLink>
                                         </Grid>

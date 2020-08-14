@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setError } from "../../../../../redux/actions/errorActions";
 import { 
@@ -201,20 +201,6 @@ function lowercaseFieldInTweets(tweets, field = 'hashtags') {
   });
   return newTweets;
 }
-
-// function getTweetAttrObjArr(tweets) {
-//   let tweetAttrObjArr = tweets.map((tweet) => {
-//     let hashtags = (tweet._source.hashtags !== undefined) ? tweet._source.hashtags.map((hashtag) => {return "#" + hashtag;}) : [];
-//     let user_mentions = (tweet._source.user_mentions !== undefined) ? tweet._source.user_mentions.map((obj) => { return "MT:@" + obj.screen_name;}) : [];
-//     let obj = {
-//       hashtags: [...new Set(hashtags)],
-//       user_mentions: [...new Set(user_mentions)],
-//       username: "AU:@" + tweet._source.screen_name
-//     }
-//     return obj;
-//   });
-//   return tweetAttrObjArr;
-// }
 
 function getTweetAttrObjArr(tweets) {
   let tweetAttrObjArr = tweets.map((tweet) => {
@@ -770,17 +756,14 @@ const useTwitterSnaRequest = (request) => {
       let givenFrom = data.from;
       let givenUntil = data.until;
       let entries = makeEntries(data);
-      // let generateList = [
-      //   getReactArrayURL(entries, keyword("elastic_url"), keyword("elastic_count")),
-      //   getJsonCounts(entries),
-      //   getPlotlyJsonHisto(entries, givenFrom, givenUntil)
-      // ];
+
       if (final) {
         axios.all([getESQuery4Gexf(entries)])
         .then(response => {
           dispatch(setGexfExport(response[0]));
         })
       }
+
       return axios.all(
         (final) ? [getAggregationData(entries), getTweets(entries)] : [getAggregationData(entries)]
       )
