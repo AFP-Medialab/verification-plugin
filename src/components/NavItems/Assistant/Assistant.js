@@ -200,7 +200,7 @@ const Assistant = () => {
         setFormInput("");
     }
 
-    // is a url is present in the plugin url(as a param), set it to input and process results
+    // if a url is present in the plugin url(as a param), set it to input and process results
     useEffect(() => {
         if (url !== undefined) {
             let uri = ( url!== null) ? decodeURIComponent(url) : undefined;
@@ -263,8 +263,8 @@ const Assistant = () => {
                         {keyword("button_submit") || ""}
                     </Button>
                     <Box m ={3}/>
+                    <LinearProgress hidden = {!loading}/>
                 </Grid>
-                <LinearProgress variant={"indeterminate"}/>
 
                 {inputUrl !== null ?
                     <AssistantLinkResult linkList={[inputUrl]}
