@@ -158,7 +158,7 @@ const Assistant = () => {
                 textRef.current = scrapeResult.text
                 break;
             case KNOWN_LINKS.TWITTER:
-                if (scrapeResult.videos === 0) {imageListRef.current = scrapeResult.images}
+                if (scrapeResult.videos.length === 0) {imageListRef.current = scrapeResult.images}
                 else {videoListRef.current = [userInput]}
                 textRef.current = scrapeResult.text
                 linkListRef.current = scrapeResult.links
