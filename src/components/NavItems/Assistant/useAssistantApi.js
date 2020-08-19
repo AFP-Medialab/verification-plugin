@@ -10,12 +10,9 @@ export default function useAssistantApi() {
             if (scrapeResult.data.status === "success") {
                 return scrapeResult.data
             }
-            else {throw new Error(scrapeResult.data.message)}
         }
         catch (error) {
-            if (!(error.isAxiosError)) {
-                throw new Error(error.message)
-            }
+            if(error.response) {throw new Error(error.response.data.message)}
             else{
                 throw new Error("An unexpected assistant error has occurred. If the problem persists, contact support.")
             }

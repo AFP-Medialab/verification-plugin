@@ -88,6 +88,7 @@ const Assistant = () => {
             dispatch(setAssistantLoading(false))
         }
         catch (error) {
+            dispatch(setAssistantLoading(false))
             dispatch(setError(error.message));
         }
     }
