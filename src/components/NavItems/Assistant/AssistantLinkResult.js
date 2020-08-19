@@ -95,7 +95,7 @@ const AssistantLinkResult = (props) => {
                             {jsonResult.entities.URL.map((value, key) => (
                                 <GridListTile key={key} cols={1}>
                                     <Accordion>
-                                        <AccordionSummary expandicon={<ExpandMoreIcon/>}>
+                                        <AccordionSummary expandIcon={<ExpandMoreIcon/>}>
                                             <Grid item xs={6}>
                                                 <LinkIcon className={classes.twitterIcon}/>
                                                 <Link variant="body2">{value.url}</Link>
