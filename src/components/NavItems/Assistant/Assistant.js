@@ -53,6 +53,7 @@ const Assistant = () => {
     const text = useSelector(state => state.assistant.urlText)
     const linkList = useSelector(state => state.assistant.linkList)
     const linkListSC = useSelector(state => state.assistant.linkListSC);
+    const dbkfClaims = useSelector(state => state.assistant.dbkfClaims);
 
 
     //other state values
@@ -278,7 +279,7 @@ const Assistant = () => {
 
                 <Box m={2}/>
 
-                {text !== null ?  <AssistantTextResult/> : null}
+                {text !== null ?  <AssistantTextResult existingResult = {dbkfClaims}/> : null}
 
                 <Box m={2}/>
 

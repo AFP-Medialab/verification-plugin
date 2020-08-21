@@ -86,6 +86,14 @@ export const setAssistantLoading = (loading) => {
 }
 
 
+export const setDbkfClaims = (claims) => {
+    return {
+        type: "SET_DBKF_CLAIMS",
+        payload: claims
+    }
+}
+
+
 export const cleanAssistantState = () => {
     return {
         type: "CLEAN_STATE"

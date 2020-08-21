@@ -14,6 +14,7 @@ const defaultState = {
     inputSCLoading: false,
     linkListSC: null,
     linkListSCLoading: false,
+    dbkfClaims: null,
     loading: false
 };
 
@@ -69,6 +70,11 @@ const assistantReducer = (state = defaultState, action) => {
             return state;
 
 
+        case "SET_DBKF_CLAIMS":
+            state.dbkfClaims = action.payload
+            return state
+
+
         case "SET_LOADING":
             state.loading = action.loading
             return state;
@@ -91,6 +97,7 @@ const assistantReducer = (state = defaultState, action) => {
                 inputSCLoading: false,
                 linkListSC: null,
                 linkListSCLoading: false,
+                dbkfClaims: null,
                 loading: false
             };
             return state;

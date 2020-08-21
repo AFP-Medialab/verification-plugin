@@ -348,6 +348,14 @@ const useMyStyles = makeStyles(theme => ({
             backgroundColor: "#a9e8ef",
         },
     },
+    dbkfCards: {
+        width: "100%",
+        marginBottom: 6,
+        textAlign: "left",
+        '&:hover': {
+            backgroundColor: "#a9e8ef",
+        }
+    },
     assistantText: {
         width: "100%",
         marginBottom: 2,
