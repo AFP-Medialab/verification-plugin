@@ -6,7 +6,8 @@ export default function useAssistantApi() {
 
     const callAssistantScraper = async (urlType, userInput) => {
         try {
-            let scrapeResult = await axios.get(assistantScrapeUrl  + urlType +  "/" + userInput)
+            let scrapeResult = await axios
+                .get(assistantScrapeUrl  + urlType +  "?url=" + encodeURIComponent(userInput))
             if (scrapeResult.data.status === "success") {
                 return scrapeResult.data
             }
