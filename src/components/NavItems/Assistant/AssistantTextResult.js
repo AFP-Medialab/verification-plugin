@@ -19,6 +19,7 @@ import tsv from "../../../LocalDictionary/components/NavItems/tools/Assistant.ts
 import useLoadLanguage from "../../../Hooks/useLoadLanguage";
 import useDBKFApi from "./useDBKFApi";
 import {setDbkfClaims} from "../../../redux/actions/tools/assistantActions";
+import {setError} from "../../../redux/actions/errorActions";
 
 
 const AssistantTextResult = (props) => {
@@ -32,20 +33,24 @@ const AssistantTextResult = (props) => {
     const dbkfApi = useDBKFApi()
     const dispatch = useDispatch()
     const uiUrl = process.env.REACT_APP_DBKF_UI
-    const [inProgress, setInProgress] = useState(false);
+    const [done, setDone] = useState(false);
     const [jsonResult, setJsonResult] = useState(null);
 
 
-    if((claimResults === null && !inProgress)){
-        setInProgress(true)
-
-        dbkfApi.callSearchApi(text.substring(0, 50))
+    if((claimResults === null && !(done))){
+        let textToUse = text.length > 500 ? text.substring(0,500) : text
+        dbkfApi.callSearchApi(textToUse)
             .then(result=>{
-                setInProgress(false)
+                setDone(true)
                 setJsonResult((result))
                 dispatch(setDbkfClaims(JSON.stringify(result)))
             })
-
+            .catch(()=>{
+                dispatch(setDbkfClaims("{}"))
+                setDone(true)
+                dispatch(setError("An issue has occurred when trying to connect to the database of known fakes." +
+                    "Some results may be ommited from this page. If the problem persists, please contact support."));
+            })
     }
 
     useEffect(()=>{
@@ -90,7 +95,7 @@ const AssistantTextResult = (props) => {
                                     </AccordionDetails>
                                 </Accordion>
                             </Grid>
-                            {jsonResult !== null ?
+                            {jsonResult !== null && Object.keys(jsonResult).length !== 0 ?
                                 <Grid item xs={12}>
                                     <Accordion>
                                         <AccordionSummary expandIcon={<ExpandMoreIcon/>}>
