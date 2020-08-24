@@ -272,7 +272,7 @@ const Assistant = () => {
                     <AssistantLinkResult linkList={[inputUrl]}
                                          existingResult={inputUrlSC}
                                          title={"Source Credibility"}
-                                         byline={"The input domain has been found as part of a credibility check"}
+                                         byline={"The source has been found as part of a credibility check"}
                                          storageMethod={(result)=>setInputSC(result)}/>
                     : null
                 }

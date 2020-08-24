@@ -14,7 +14,10 @@ export default function useSourceCredibilityApi() {
         sourceCredibility = sourceCredibility.data
         if(sourceCredibility.entities.DomainCredibility!==undefined) {
             let domainCredibility = sourceCredibility.entities.DomainCredibility
-            domainCredibility.forEach(dc => delete dc.indices)
+            domainCredibility.forEach(dc => {
+                delete dc["indices"]
+                delete dc["credibility-resolved-url"]
+            })
             sourceCredibility.entities.DomainCredibility = uniqWith(domainCredibility, isEqual)
         }
         sourceCredibility.entities.URL = uniqBy(sourceCredibility.entities.URL, 'url')

@@ -98,7 +98,7 @@ const AssistantLinkResult = (props) => {
                                         <AccordionSummary expandIcon={<ExpandMoreIcon/>}>
                                             <Grid item xs={6}>
                                                 <LinkIcon className={classes.twitterIcon}/>
-                                                <Link variant="body2">{value.url}</Link>
+                                                <Link variant="body2">{value.url} : {value["credibility-domain"] }</Link>
                                             </Grid>
                                             <Grid item xs={6}>
                                                 <Typography align={"right"} style={{ color: value["credibility-color"] }}>
