@@ -24,6 +24,7 @@ import tsv from "../../../LocalDictionary/components/NavItems/tools/Assistant.ts
 import useLoadLanguage from "../../../Hooks/useLoadLanguage";
 import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
 import useSourceCredibilityApi from "./useSourceCredibilityApi";
+import {setError} from "../../../redux/actions/errorActions";
 
 const AssistantLinkResult = (props) => {
 
@@ -46,13 +47,18 @@ const AssistantLinkResult = (props) => {
     if ((existingResult === null && jsonResult === null && !inProgress)) {
         setInProgress(true)
         sourceCredibilityApi.callSourceCredibility(linkList).then(result => {
-            if(result.entities.DomainCredibility === undefined){
-                setNoResultsFound(true)
-            }
+            if (result.entities.DomainCredibility === undefined) {setNoResultsFound(true)}
             setJsonResult(result)
             setInProgress(false)
-            dispatch(storageMethod(JSON.stringify(result)))
+            dispatch(storageMethod(result))
+        }).catch(() => {
+            setInProgress(false)
+            dispatch(storageMethod("{\"entities\": {}}"))
+            dispatch(setError("The source credibility check has failed. Some results may not be displayed. " +
+                "If the problem persists, please contact support."))
+
         })
+
     }
 
     useEffect(()=>{
