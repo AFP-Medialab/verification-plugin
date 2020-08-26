@@ -21,6 +21,8 @@ const AssistantVideoResult = () => {
 
         let embedURL = processUrl;
         let linkType = matchPattern(processUrl, KNOWN_LINK_PATTERNS);
+        let stringToMatch = ""
+        let positionOne = 0
 
         switch(linkType){
             case KNOWN_LINKS.YOUTUBE:
@@ -30,15 +32,15 @@ const AssistantVideoResult = () => {
                 }
                 break;
             case KNOWN_LINKS.VIMEO:
-                var stringToMatch = "vimeo.com/"
-                var positionOne = processUrl.indexOf(stringToMatch);
+                stringToMatch = "vimeo.com/"
+                positionOne = processUrl.indexOf(stringToMatch);
                 var positionTwo = positionOne + stringToMatch.length;
                 embedURL = embedURL.slice(0, positionOne) + "player." + embedURL.slice(positionOne, positionTwo) +
                     "video/"  + embedURL.slice(positionTwo);
                 break;
             case KNOWN_LINKS.DAILYMOTION:
-                var stringToMatch = "dailymotion.com/";
-                var positionOne = processUrl.indexOf(stringToMatch) + stringToMatch.length;
+                stringToMatch = "dailymotion.com/";
+                positionOne = processUrl.indexOf(stringToMatch) + stringToMatch.length;
                 embedURL = embedURL.slice(0, positionOne) + "embed/" + embedURL.slice(positionOne);
                 break;
             case KNOWN_LINKS.FACEBOOK:

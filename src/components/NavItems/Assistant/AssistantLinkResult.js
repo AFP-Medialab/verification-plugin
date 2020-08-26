@@ -61,7 +61,7 @@ const AssistantLinkResult = (props) => {
     useEffect(()=>{
         if (existingResult!=null) {
             let existingJson = existingResult
-            if(existingJson.entities == undefined || existingJson.entities.DomainCredibility === undefined){
+            if(existingJson.entities === undefined || existingJson.entities.DomainCredibility === undefined){
                 setNoResultsFound(true)
             }
             setJsonResult(existingJson)

@@ -141,7 +141,7 @@ const Assistant = () => {
                 linkListRef.current = scrapeResult.links
                 break;
             case KNOWN_LINKS.INSTAGRAM:
-                if (scrapeResult.videos.length === 1) {videoListRef.current = [scrapeResult.videos]}
+                if (scrapeResult.videos.length === 1) {videoListRef.current = [scrapeResult.videos[0]]}
                 else {imageListRef.current = [scrapeResult.images[1]]}
                 textRef.current = scrapeResult.text
                 linkListRef.current = scrapeResult.links
