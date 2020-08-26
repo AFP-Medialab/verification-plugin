@@ -23,16 +23,17 @@ import {setError} from "../../../redux/actions/errorActions";
 
 
 const AssistantTextResult = (props) => {
+
     const keyword = useLoadLanguage("components/NavItems/tools/Assistant.tsv", tsv);
-    const text = useSelector(state => state.assistant.urlText);
-    const claimResults = useSelector(state => state.assistant.dbkfClaims);
+    const classes = useMyStyles()
+    const dispatch = useDispatch()
+    const dbkfApi = useDBKFApi()
+
+    const uiUrl = process.env.REACT_APP_DBKF_UI
 
     const existingResult = props.existingResult
-
-    const classes = useMyStyles()
-    const dbkfApi = useDBKFApi()
-    const dispatch = useDispatch()
-    const uiUrl = process.env.REACT_APP_DBKF_UI
+    const text = useSelector(state => state.assistant.urlText);
+    const claimResults = useSelector(state => state.assistant.dbkfClaims);
     const [done, setDone] = useState(false);
     const [jsonResult, setJsonResult] = useState(null);
 
@@ -76,6 +77,7 @@ const AssistantTextResult = (props) => {
                         </Tooltip>
                     </Grid>
                 </Grid>
+
                 <Accordion>
                     <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                         <Typography className={classes.heading}>{keyword("text_intro")}</Typography>
@@ -94,16 +96,18 @@ const AssistantTextResult = (props) => {
                                     </AccordionDetails>
                                 </Accordion>
                             </Grid>
-                            {jsonResult !== null && Object.keys(jsonResult).length !== 0 ?
-                                <Grid item xs={12}>
+
+                            <Grid item xs={12}>
+                                {jsonResult !== null && Object.keys(jsonResult).length !== 0 ?
                                     <Accordion>
                                         <AccordionSummary expandIcon={<ExpandMoreIcon/>}>
                                             <Typography>{keyword("dbkf_title")}</Typography>
                                         </AccordionSummary>
+
                                         <AccordionDetails>
-                                            <Grid container xs={12}>
+                                            <Grid container>
                                             {jsonResult.map((value, key) => (
-                                                <Grid container xs={12}>
+                                                <Grid container key={key}>
                                                     <Card className={classes.dbkfCards} variant={"outlined"}>
                                                         <CardContent>
                                                             <Typography variant={"subtitle1"}>
@@ -117,14 +121,13 @@ const AssistantTextResult = (props) => {
                                                             </Typography>
                                                         </CardContent>
                                                     </Card>
-                                                </Grid>
-                                                )
+                                                </Grid>)
                                             )}
                                             </Grid>
                                         </AccordionDetails>
-                                    </Accordion>
-                                </Grid> : null
-                            }
+                                    </Accordion> : null
+                                }
+                            </Grid>
                         </Grid>
                     </AccordionDetails>
                 </Accordion>

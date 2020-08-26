@@ -19,12 +19,11 @@ import LinearProgress from "@material-ui/core/LinearProgress";
 import Typography from "@material-ui/core/Typography";
 import Tooltip from "@material-ui/core/Tooltip";
 
-
+import {setError} from "../../../redux/actions/errorActions";
 import tsv from "../../../LocalDictionary/components/NavItems/tools/Assistant.tsv";
 import useLoadLanguage from "../../../Hooks/useLoadLanguage";
 import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
 import useSourceCredibilityApi from "./useSourceCredibilityApi";
-import {setError} from "../../../redux/actions/errorActions";
 
 const AssistantLinkResult = (props) => {
 
@@ -74,9 +73,7 @@ const AssistantLinkResult = (props) => {
         !noResultsFound ?
 
             <Grid item xs={12}>
-
             <Card>
-
                 <Grid container>
                     <Grid item xs={6}>
                         <Typography className={classes.twitterHeading}>

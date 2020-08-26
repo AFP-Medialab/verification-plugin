@@ -6,10 +6,11 @@ import Iframe from "react-iframe";
 import React from "react";
 import {useSelector} from "react-redux";
 
+import {KNOWN_LINK_PATTERNS, KNOWN_LINKS, matchPattern} from "./AssistantRuleBook";
 import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
 import useLoadLanguage from "../../../Hooks/useLoadLanguage";
 import tsv from "../../../LocalDictionary/components/NavItems/tools/Assistant.tsv";
-import {KNOWN_LINK_PATTERNS, KNOWN_LINKS, matchPattern} from "./AssistantRuleBook";
+
 
 const AssistantVideoResult = () => {
     const classes = useMyStyles();
@@ -17,6 +18,7 @@ const AssistantVideoResult = () => {
     const processUrl = useSelector(state => state.assistant.processUrl);
 
     const preprocessLinkForEmbed = (processUrl) => {
+
         let embedURL = processUrl;
         let linkType = matchPattern(processUrl, KNOWN_LINK_PATTERNS);
 
@@ -43,13 +45,11 @@ const AssistantVideoResult = () => {
                 embedURL = "https://www.facebook.com/plugins/video.php?href=" + encodeURIComponent(embedURL);
                 break;
             case KNOWN_LINKS.TWITTER:
-                //todo: evaluate if this is the best option
                 embedURL = "https://twitframe.com/show?url=" + encodeURIComponent(embedURL);
                 break;
             default:
                 return embedURL;
         }
-
         return embedURL;
     }
 

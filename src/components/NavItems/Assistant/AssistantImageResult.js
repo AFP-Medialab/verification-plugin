@@ -10,8 +10,10 @@ import useLoadLanguage from "../../../Hooks/useLoadLanguage";
 import tsv from "../../../LocalDictionary/components/NavItems/tools/Assistant.tsv";
 
 const AssistantImageResult = () => {
+
     const classes = useMyStyles();
     const keyword = useLoadLanguage("components/NavItems/tools/Assistant.tsv", tsv);
+
     const processUrl = useSelector(state => state.assistant.processUrl);
     
     return (

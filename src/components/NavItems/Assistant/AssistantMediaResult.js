@@ -19,12 +19,7 @@ import Tooltip from "@material-ui/core/Tooltip";
 import Typography from "@material-ui/core/Typography";
 
 import AssistantProcessUrlActions from "./AssistantProcessUrlActions";
-import {
-    CONTENT_TYPE,
-    KNOWN_LINK_PATTERNS,
-    matchPattern,
-    selectCorrectActions
-} from "./AssistantRuleBook";
+import {CONTENT_TYPE, KNOWN_LINK_PATTERNS, matchPattern, selectCorrectActions} from "./AssistantRuleBook";
 import ImageGridList from "../../Shared/ImageGridList/ImageGridList";
 import {setProcessUrl, setProcessUrlActions} from "../../../redux/actions/tools/assistantActions";
 import tsv from "../../../LocalDictionary/components/NavItems/tools/Assistant.tsv";
@@ -35,13 +30,13 @@ import VideoGridList from "../../Shared/VideoGridList/VideoGridList";
 const AssistantMediaResult = () => {
 
     const classes = useMyStyles();
+    const dispatch = useDispatch();
     const keyword = useLoadLanguage("components/NavItems/tools/Assistant.tsv", tsv);
+
     const inputUrl = useSelector(state => state.assistant.inputUrl);
     const processUrl = useSelector(state => state.assistant.processUrl);
     const imageList = useSelector(state => state.assistant.imageList);
     const videoList = useSelector(state => state.assistant.videoList);
-
-    const dispatch = useDispatch();
 
 
     // select the correct media to process, then load actions possible
@@ -58,6 +53,7 @@ const AssistantMediaResult = () => {
 
         let knownInputLink = matchPattern(inputUrl, KNOWN_LINK_PATTERNS);
         let knownProcessLink = matchPattern(processUrl, KNOWN_LINK_PATTERNS);
+
         let actions = selectCorrectActions(contentType, knownInputLink, knownProcessLink, processUrl);
         dispatch(setProcessUrlActions(contentType, actions))
     }

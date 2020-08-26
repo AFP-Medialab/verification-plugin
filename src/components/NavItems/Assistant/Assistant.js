@@ -5,6 +5,7 @@ import {useParams} from "react-router-dom";
 import {Box, Button,Paper, TextField} from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 import FaceIcon from "@material-ui/icons/Face";
+import LinearProgress from "@material-ui/core/LinearProgress";
 import Typography from "@material-ui/core/Typography";
 
 import AssistantLinkResult from "./AssistantLinkResult";
@@ -25,29 +26,26 @@ import {
     setInputUrl, setLinkListSC, setProcessUrl, setProcessUrlActions, setScrapedData,
     setUrlMode,
 } from "../../../redux/actions/tools/assistantActions";
+
 import {
     CONTENT_TYPE, TYPE_PATTERNS,
     matchPattern, selectCorrectActions, KNOWN_LINK_PATTERNS, KNOWN_LINKS,
 } from "./AssistantRuleBook";
-import LinearProgress from "@material-ui/core/LinearProgress";
-
 
 const Assistant = () => {
 
-    // styles, language, dispatch, scrapers
+    // styles, language, dispatch, params
     const classes = useMyStyles();
     const dispatch = useDispatch();
     const keyword = useLoadLanguage("components/NavItems/tools/Assistant.tsv", tsv);
+    const {url} = useParams();
 
     //assistant state values
-    const {url} = useParams();
     const urlMode = useSelector(state => state.assistant.urlMode);
     const imageVideoSelected = useSelector(state => state.assistant.imageVideoSelected);
-
     const loading = useSelector(state => state.assistant.loading)
     const inputUrl = useSelector(state => state.assistant.inputUrl);
     const inputUrlSC = useSelector(state => state.assistant.inputUrlSc);
-
     const imageList = useSelector(state => state.assistant.imageList);
     const videoList = useSelector(state => state.assistant.videoList);
     const text = useSelector(state => state.assistant.urlText)
@@ -273,22 +271,21 @@ const Assistant = () => {
                                          existingResult={inputUrlSC}
                                          title={keyword("source_credibility_title")}
                                          byline={keyword("source_credibility_byline")}
-                                         storageMethod={(result)=>setInputSC(result)}/>
+                                         storageMethod={(result)=>setInputSC(result)}
+                    />
                     : null
                 }
 
-                <Box m={2}/>
+                {text !== null ?  <AssistantTextResult existingResult = {dbkfClaims}/> : null }
 
-                {text !== null ?  <AssistantTextResult existingResult = {dbkfClaims}/> : null}
-
-                <Box m={2}/>
 
                 {linkList.length !== 0 ?
                     <AssistantLinkResult linkList={linkList}
                                          existingResult={linkListSC}
                                          title={keyword("link_explorer_title")}
                                          byline={keyword("link_explorer_byline")}
-                                         storageMethod={(result)=>setLinkListSC(result)}/>
+                                         storageMethod={(result)=>setLinkListSC(result)}
+                    />
                     : null
                 }
 
