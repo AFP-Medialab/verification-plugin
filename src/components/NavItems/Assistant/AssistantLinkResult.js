@@ -108,7 +108,7 @@ const AssistantLinkResult = (props) => {
                                             </Grid>
                                             <Grid item xs={6}>
                                                 <Typography align={"right"} style={{ color: urlEntity["credibility-color"] }}>
-                                                    {urlEntity["credibility-score"] !== null ? urlEntity["credibility-score"] : "Unknown"}
+                                                    {urlEntity["credibility-score"] >= 0  ? urlEntity["credibility-score"] : "Unknown"}
                                                 </Typography>
                                             </Grid>
                                         </AccordionSummary>

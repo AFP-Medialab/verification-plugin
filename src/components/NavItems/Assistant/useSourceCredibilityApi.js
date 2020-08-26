@@ -2,6 +2,7 @@ import axios from "axios";
 import isEqual from "lodash/isEqual";
 import uniqWith from "lodash/uniqWith";
 import uniqBy from "lodash/uniqBy";
+import orderBy from "lodash/orderBy";
 
 export default function useSourceCredibilityApi() {
 
@@ -21,6 +22,8 @@ export default function useSourceCredibilityApi() {
             sourceCredibility.entities.DomainCredibility = uniqWith(domainCredibility, isEqual)
         }
         sourceCredibility.entities.URL = uniqBy(sourceCredibility.entities.URL, 'url')
+        sourceCredibility.entities.URL = orderBy(sourceCredibility.entities.URL, 'credibility-score', 'asc');
+
         return sourceCredibility
     }
 
