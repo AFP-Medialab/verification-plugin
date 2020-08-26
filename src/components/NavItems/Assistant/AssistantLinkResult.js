@@ -98,17 +98,17 @@ const AssistantLinkResult = (props) => {
                     <AccordionDetails>
                         {jsonResult != null ?
                         <GridList cellHeight={'auto'} className={classes.gridList} cols={1} align={"left"}>
-                            {jsonResult.entities.URL.map((value, key) => (
+                            {jsonResult.entities.URL.map((urlEntity, key) => (
                                 <GridListTile key={key} cols={1}>
                                     <Accordion>
                                         <AccordionSummary expandIcon={<ExpandMoreIcon/>}>
                                             <Grid item xs={6}>
                                                 <LinkIcon className={classes.twitterIcon}/>
-                                                <Link variant="body2">{value["url"]} : {value["credibility-domain"] }</Link>
+                                                <Link variant="body2">{urlEntity["url"]} : {urlEntity["credibility-domain"] }</Link>
                                             </Grid>
                                             <Grid item xs={6}>
-                                                <Typography align={"right"} style={{ color: value["credibility-color"] }}>
-                                                    {value["credibility-score"] !== null ? value["credibility-score"] : "Unknown"}
+                                                <Typography align={"right"} style={{ color: urlEntity["credibility-color"] }}>
+                                                    {urlEntity["credibility-score"] !== null ? urlEntity["credibility-score"] : "Unknown"}
                                                 </Typography>
                                             </Grid>
                                         </AccordionSummary>
@@ -116,7 +116,7 @@ const AssistantLinkResult = (props) => {
                                             <GridList cellHeight={'auto'} className={classes.gridList} cols={1} align={"left"}>
                                                 <List>
                                                 {jsonResult.entities.DomainCredibility
-                                                    .filter(domain => domain["credibility-domain"] === value["credibility-domain"])
+                                                    .filter(domain => domain["credibility-domain"] === urlEntity["credibility-domain"])
                                                     .map((value, key) => (
                                                         <ListItem key={key}>
                                                             <Grid item xs={6}>
