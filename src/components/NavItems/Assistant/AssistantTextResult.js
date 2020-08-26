@@ -48,8 +48,7 @@ const AssistantTextResult = (props) => {
             .catch(()=>{
                 dispatch(setDbkfClaims("{}"))
                 setDone(true)
-                dispatch(setError("An issue has occurred when trying to connect to the database of known fakes." +
-                    "Some results may be ommited from this page. If the problem persists, please contact support."));
+                dispatch(setError(keyword("dbkf_error")));
             })
     }
 
@@ -79,14 +78,14 @@ const AssistantTextResult = (props) => {
                 </Grid>
                 <Accordion>
                     <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                        <Typography className={classes.heading}>The following text has been found on the page</Typography>
+                        <Typography className={classes.heading}>{keyword("text_intro")}</Typography>
                     </AccordionSummary>
                     <AccordionDetails>
                         <Grid container>
                             <Grid item xs={12}>
                                 <Accordion>
                                     <AccordionSummary expandIcon={<ExpandMoreIcon/>}>
-                                        <Typography>Expand Text</Typography>
+                                        <Typography>{keyword("text_title")}</Typography>
                                     </AccordionSummary>
                                     <AccordionDetails>
                                         <Typography variant={"subtitle1"}>
@@ -99,7 +98,7 @@ const AssistantTextResult = (props) => {
                                 <Grid item xs={12}>
                                     <Accordion>
                                         <AccordionSummary expandIcon={<ExpandMoreIcon/>}>
-                                            <Typography col ={"red"}>DBKF Check</Typography>
+                                            <Typography>{keyword("dbkf_title")}</Typography>
                                         </AccordionSummary>
                                         <AccordionDetails>
                                             <Grid container xs={12}>

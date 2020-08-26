@@ -1,30 +1,50 @@
 	en	fr	es
+
+#main
 assistant_title	Assistant	temp	temp
-assistant_real_intro    Would you like to process a URL of upload your own file?	Temp	Temp
+assistant_intro	Would you like to process a URL of upload your own file?	Temp	Temp
 process_url	Process URL	Temp	Temp
 submit_own_file	Upload File	Temp	Temp
 upload_video	Video	Temp	Temp
 upload_image	Image	Temp	Temp
-assistant_real_intro	Would you like to process a URL or upload your own file?	Temp	Temp
-assistant_intro	Enter the URL of the media you would like to process	Temp	Temp
-media_below	Select the media you would like to verify	Temp	Temp
-input_url_label	Input URL:	Temp	Temp
-images_label	Images	Temp	Temp
-videos_label	Videos	Temp	Temp
+enter_url	Enter the URL of the media you would like to process	Temp	Temp
 upload_type_question	What type of file do you want to upload?	Temp  Temp
 assistant_urlbox	URL	Adresse	URL
-assistant_error	No media was found through the link entered.	Test	Test
-error_unknown	An unknown error has occurred. Please try again later.	Test	Test
-assistant_handled_site	However, the media from this link can be extracted if the assistant is opened from the page itself.	Temp	Temp
-link_tooltip	<b>What is this?</b></br>The scores displayed in this section give an indication of how reliable the web source listed can be considered to be. Scores range from 0-100.</br></br>In most cases, the source checked for credibility will be the URL domain. In some cases where this is not usefu a more relevant part of the URL has been checked against. In all cases, the full URL and the domain against which the source credibility check was carried on are listed in the form URL : domain-for-check. </br></br><b>How are these calculated?</b></br>Various institutions analyse sources (particularly domains) across the web to evaluate how reliable they are likely to be based on various metrics.</br>Here, datasets assessing web domain reliability have been pulled from some of these institutions including: Decodex, Media Bias/Fact Check, NewsGuard(COVID19) and ReportersLab.</br>Since the metrics or scores from each of these sources do not necessarily overlap and cannot easily be compared, all scores from any given institution are mapped to a single number between 0-100.</br>For any URL, a list of all institutions which gave the relevant domain a score has been listed, along with the (mapped) results they gave.</br>The final result displayed for any domain is the lowest score from the various sources.</br>	Test	Test
-media_tooltip	<b>What is this?</b></br>Any images or videos which can be extracted from the URL have been displayed here. If only one image or video is present, this is displayed as is. If multiple images/videos are present, a list is given to select from.</br></br><b>What can I do with these?</b></br>Multiple tools to detect image/video credibility and manipulation are available as part of this plugin. For any selected image/video, a list of any relevant tools from these are given, along with a brief explanation of what they can do. Selecting any of these will redirect you to the relevant tool with the media you selected as input.<br/> For a full list of tools, and more extensive tutorials on how to use them, refer to the Classroom and Tutorial sections of this plugin. 	Test	Test
-text_tooltip	<b>What is this?</b></br>Any text which can be extracted from the given URL is displayed here</br></br><b>How do I use this?</b></br>I don't know yet</br>	Test	Test
-extracting_tweet_media  Extracting tweet media...   Temp... Temp...
 please_give_a_correct_link	Please give a correct link	Donner un lien valide s'il vous plaît	Por favor, dé un enlace válido
 button_submit	Submit	Envoyer	Enviar
 quit	Quit	Quitter	Salir
 save	Save	Enregistrer	Gardar
+source_credibility_title	Source Credibility	temp	temp
+source_credibility_byline	The source has been found as part of a credibility check	Temp	Temp
+link_explorer_title	Link Explorer	Temp	Temp
+link_explorer_byline	The following URLs have been extracted from the page, and their domains have been checked for credibility	Temp	Temp
 
+#text result
+text_intro	The following text has been found on the page	Temp	Temp
+dbkf_title	DBKF Check	Temp	Temp
+text_title	Expand Text	Temp	Temp
+text_tooltip	<b>What is this?</b></br>Any text which can be extracted from the given URL is displayed here</br></br><b>How do I use this?</b></br>I don't know yet</br>	Test	Test
+dbkf_error	An issue has occurred when trying to connect to the database of known fakes. Some results may be omitted from this page. If the problem persists, please contact support.	Temp	Temp
+
+#link result
+sc_failed	The source credibility check has failed. Some results may not be displayed. If the problem persists, please contact support.	Temp	Temp
+link_tooltip	<b>What is this?</b></br>The scores displayed in this section give an indication of how reliable the web source listed can be considered to be. Scores range from 0-100.</br></br>In most cases, the source checked for credibility will be the URL domain. In some cases where this is not usefu a more relevant part of the URL has been checked against. In all cases, the full URL and the domain against which the source credibility check was carried on are listed in the form URL : domain-for-check. </br></br><b>How are these calculated?</b></br>Various institutions analyse sources (particularly domains) across the web to evaluate how reliable they are likely to be based on various metrics.</br>Here, datasets assessing web domain reliability have been pulled from some of these institutions including: Decodex, Media Bias/Fact Check, NewsGuard(COVID19) and ReportersLab.</br>Since the metrics or scores from each of these sources do not necessarily overlap and cannot easily be compared, all scores from any given institution are mapped to a single number between 0-100.</br>For any URL, a list of all institutions which gave the relevant domain a score has been listed, along with the (mapped) results they gave.</br>The final result displayed for any domain is the lowest score from the various sources.</br>	Test	Test
+
+#media result
+images_label	Images	Temp	Temp
+videos_label	Videos	Temp	Temp
+media_found	The following media has been found on the page	Temp	Temp
+media_below	Select the media you would like to verify	Temp	Temp
+media_to_process	Media to Process	Temp	Temp
+assistant_error	No media was found through the link entered.	Test	Test
+media_tooltip	<b>What is this?</b></br>Any images or videos which can be extracted from the URL have been displayed here. If only one image or video is present, this is displayed as is. If multiple images/videos are present, a list is given to select from.</br></br><b>What can I do with these?</b></br>Multiple tools to detect image/video credibility and manipulation are available as part of this plugin. For any selected image/video, a list of any relevant tools from these are given, along with a brief explanation of what they can do. Selecting any of these will redirect you to the relevant tool with the media you selected as input.<br/> For a full list of tools, and more extensive tutorials on how to use them, refer to the Classroom and Tutorial sections of this plugin. 	Test	Test
+
+#process url actions
+things_you_can_do_header	Potential Tools	Temp	Temp
+things_you_can_do	Below are the tools you can use on this media type	Temp	Temp
+
+
+#rulebook
 navbar_analysis	Analysis	Analyse	Análisis
 navbar_keyframes	Keyframes	Images clés	Imágenes claves
 navbar_thumbnails	Thumbnails	Imagettes	Miniaturas
@@ -36,10 +56,6 @@ navbar_forensic	Forensic	Forensic	Forensic
 navbar_twitter_sna	Fact Check	Factuel	Factual
 navbar_no_action	Assistant	Temp	Temp
 navbar_assistant	Assistant	Temp	Temp
-
-media_to_process	Media to Process	Temp	Temp
-things_you_can_do_header	Potential Tools	Temp	Temp
-things_you_can_do	Below are the tools you can use on this media type	Temp	Temp
 analysis_text	The analysis feature  can be used to retrieve contextual information about the video	Temp	Temp
 keyframes_text	The keyframes feature can be used to fragment a video	Temp	Temp
 thumbnails_text	The YouTube thumbnail feature can be used to reverse search on thumbnails from the video	Temp	Temp
@@ -48,6 +64,3 @@ magnifier_text	The magnifier tool can be used to examine the image thoroughly	Te
 metadata_text	The metadata tool can be used to retrieve image/video metadata	Temp	Temp
 rights_text	The video rights tool can be used can be used to retrieve information solely about video rights	Temp	Temp
 forensic_text	The forensic tool can be used to detect any image manipulation	Temp	Temp
-twitter_sna_text	The twitter sna tool can be used	Temp	Temp
-no_action_text	No actions have been found for this media. Please try another URL.	Temp	Temp
-

@@ -59,7 +59,6 @@ const AssistantMediaResult = () => {
         let knownInputLink = matchPattern(inputUrl, KNOWN_LINK_PATTERNS);
         let knownProcessLink = matchPattern(processUrl, KNOWN_LINK_PATTERNS);
         let actions = selectCorrectActions(contentType, knownInputLink, knownProcessLink, processUrl);
-
         dispatch(setProcessUrlActions(contentType, actions))
     }
 
@@ -90,7 +89,7 @@ const AssistantMediaResult = () => {
                 <Accordion expandicon={<ExpandMoreIcon/>} defaultExpanded={true}>
                     <AccordionSummary expandIcon={<ExpandMoreIcon/>}>
                         <Typography className={classes.heading}>
-                            The following media has been found on the page
+                            {keyword("media_found")}
                         </Typography>
                     </AccordionSummary>
                     <AccordionDetails>

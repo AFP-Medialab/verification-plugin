@@ -53,18 +53,16 @@ const AssistantLinkResult = (props) => {
             dispatch(storageMethod(result))
         }).catch(() => {
             setInProgress(false)
-            dispatch(storageMethod("{\"entities\": {}}"))
-            dispatch(setError("The source credibility check has failed. Some results may not be displayed. " +
-                "If the problem persists, please contact support."))
-
+            dispatch(storageMethod({}))
+            dispatch(setError(keyword("sc_failed")))
         })
 
     }
 
     useEffect(()=>{
         if (existingResult!=null) {
-            let existingJson = JSON.parse(existingResult)
-            if(existingJson.entities.DomainCredibility === undefined){
+            let existingJson = existingResult
+            if(existingJson.entities == undefined || existingJson.entities.DomainCredibility === undefined){
                 setNoResultsFound(true)
             }
             setJsonResult(existingJson)
@@ -74,8 +72,11 @@ const AssistantLinkResult = (props) => {
 
     return (
         !noResultsFound ?
+
             <Grid item xs={12}>
+
             <Card>
+
                 <Grid container>
                     <Grid item xs={6}>
                         <Typography className={classes.twitterHeading}>
@@ -89,12 +90,14 @@ const AssistantLinkResult = (props) => {
                         </Tooltip>
                     </Grid>
                 </Grid>
+
                 {inProgress ? <LinearProgress variant={"indeterminate"}/> : null}
 
                 <Accordion>
                     <AccordionSummary expandIcon={<ExpandMoreIcon/>}>
                             <Typography className={classes.heading}>{byline}</Typography>
                     </AccordionSummary>
+
                     <AccordionDetails>
                         {jsonResult != null ?
                         <GridList cellHeight={'auto'} className={classes.gridList} cols={1} align={"left"}>
@@ -104,7 +107,7 @@ const AssistantLinkResult = (props) => {
                                         <AccordionSummary expandIcon={<ExpandMoreIcon/>}>
                                             <Grid item xs={6}>
                                                 <LinkIcon className={classes.twitterIcon}/>
-                                                <Link variant="body2">{value.url} : {value["credibility-domain"] }</Link>
+                                                <Link variant="body2">{value["url"]} : {value["credibility-domain"] }</Link>
                                             </Grid>
                                             <Grid item xs={6}>
                                                 <Typography align={"right"} style={{ color: value["credibility-color"] }}>

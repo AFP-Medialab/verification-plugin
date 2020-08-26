@@ -227,7 +227,7 @@ const Assistant = () => {
             <Grid container spacing={2}>
                 <Grid item xs = {12} className={classes.newAssistantGrid}  hidden={urlMode!==null}>
                     <Typography component={"span"} variant={"h6"} >
-                        <FaceIcon fontSize={"small"}/> {keyword("assistant_real_intro")}
+                        <FaceIcon fontSize={"small"}/> {keyword("assistant_intro")}
                     </Typography>
                     <Box m={2}/>
                     <Button className={classes.button} variant = "contained" color="primary" onClick={() =>dispatch(setUrlMode(true))}>
@@ -244,7 +244,7 @@ const Assistant = () => {
                     <CloseResult hidden={urlMode===null || urlMode===false} onClick={() => cleanAssistant()}/>
 
                     <Typography component={"span"} variant={"h6"} >
-                        <FaceIcon fontSize={"small"}/> {keyword("assistant_intro")}
+                        <FaceIcon fontSize={"small"}/> {keyword("enter_url")}
                     </Typography>
 
                     <Box m={2}/>
@@ -271,8 +271,8 @@ const Assistant = () => {
                 {inputUrl !== null ?
                     <AssistantLinkResult linkList={[inputUrl]}
                                          existingResult={inputUrlSC}
-                                         title={"Source Credibility"}
-                                         byline={"The source has been found as part of a credibility check"}
+                                         title={keyword("source_credibility_title")}
+                                         byline={keyword("source_credibility_byline")}
                                          storageMethod={(result)=>setInputSC(result)}/>
                     : null
                 }
@@ -286,8 +286,8 @@ const Assistant = () => {
                 {linkList.length !== 0 ?
                     <AssistantLinkResult linkList={linkList}
                                          existingResult={linkListSC}
-                                         title={"Link Explorer"}
-                                         byline={"The following URLs have been extracted from the page, and their domains have been checked for credibility"}
+                                         title={keyword("link_explorer_title")}
+                                         byline={keyword("link_explorer_byline")}
                                          storageMethod={(result)=>setLinkListSC(result)}/>
                     : null
                 }
