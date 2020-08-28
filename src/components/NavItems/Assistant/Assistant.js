@@ -8,6 +8,7 @@ import FaceIcon from "@material-ui/icons/Face";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import Typography from "@material-ui/core/Typography";
 
+import AssistantHelp from "./AssistantHelp";
 import AssistantLinkResult from "./AssistantLinkResult";
 import AssistantMediaResult from "./AssistantMediaResult";
 import AssistantProcessUrlActions from "./AssistantProcessUrlActions";
@@ -31,6 +32,7 @@ import {
     CONTENT_TYPE, TYPE_PATTERNS,
     matchPattern, selectCorrectActions, KNOWN_LINK_PATTERNS, KNOWN_LINKS,
 } from "./AssistantRuleBook";
+
 
 const Assistant = () => {
 
@@ -290,6 +292,9 @@ const Assistant = () => {
                     : null
                 }
 
+                <Grid item xs={12}>
+                    {imageList.length>0 || videoList.length>0 ?  <AssistantMediaResult/> : null}
+                </Grid>
 
                 <Grid item xs = {12} className={classes.newAssistantGrid}  hidden={urlMode===null || urlMode===true}>
                     <CloseResult hidden={urlMode===null || urlMode===false} onClick={() => dispatch(cleanAssistantState())}/>
@@ -306,11 +311,11 @@ const Assistant = () => {
                 </Grid>
 
                 <Grid item xs={12}>
-                    {imageList.length>0 || videoList.length>0 ?  <AssistantMediaResult/> : null}
+                    {imageVideoSelected ? <AssistantProcessUrlActions/>:null}
                 </Grid>
 
-                <Grid item xs={12}>
-                    {imageVideoSelected ? <AssistantProcessUrlActions/>:null}
+                <Grid item xs={12} align={"right"}>
+                    {<AssistantHelp/>}
                 </Grid>
             </Grid>
         </Paper>
