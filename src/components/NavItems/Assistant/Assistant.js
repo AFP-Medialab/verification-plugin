@@ -137,6 +137,7 @@ const Assistant = () => {
                 videoListRef.current = [userInput];
                 break;
             case KNOWN_LINKS.TIKTOK:
+                textRef.current = scrapeResult.text
                 videoListRef.current = [scrapeResult.videos]
                 linkListRef.current = scrapeResult.links
                 break;
