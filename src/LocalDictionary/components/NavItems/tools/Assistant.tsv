@@ -23,7 +23,7 @@ link_explorer_byline	The following URLs have been extracted from the page, and t
 text_intro	The following text has been found on the page	Temp	Temp
 dbkf_title	DBKF Check	Temp	Temp
 text_title	Expand Text	Temp	Temp
-text_tooltip	<b>What is this?</b></br>Any text which can be extracted from the given URL is displayed here</br></br><b>How do I use this?</b></br>I don't know yet</br>	Test	Test
+text_tooltip	<b>What is this?</b></br>Any text which can be extracted from the given URL is displayed here</br></br><b>How do I use this?</b></br>The first 500 characters in any extracted text are sent to be checked against the database of known fakes - a database set up to identify and keep track of disinformation which has already been debunked.</br></br>The results of this check are listed in the section titled <b>DBKF Check</b>. Here, a list of all potentially relevant debunked claims are listed, along with a link where full details on the claim, and any evidence related to it or its debunk can be seen.</br>	Test	Test
 dbkf_error	An issue has occurred when trying to connect to the database of known fakes. Some results may be omitted from this page. If the problem persists, please contact support.	Temp	Temp
 
 #link result
