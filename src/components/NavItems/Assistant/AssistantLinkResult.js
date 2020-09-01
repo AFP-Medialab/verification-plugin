@@ -102,11 +102,11 @@ const AssistantLinkResult = (props) => {
                                 <GridListTile key={key} cols={1}>
                                     <Accordion>
                                         <AccordionSummary expandIcon={<ExpandMoreIcon/>}>
-                                            <Grid item xs={6}>
+                                            <Grid item xs={9}>
                                                 <LinkIcon className={classes.twitterIcon}/>
                                                 <Link variant="body2">{urlEntity["url"]} : {urlEntity["credibility-domain"] }</Link>
                                             </Grid>
-                                            <Grid item xs={6}>
+                                            <Grid item xs={3}>
                                                 <Typography align={"right"} style={{ color: urlEntity["credibility-color"] }}>
                                                     {urlEntity["credibility-score"] >= 0  ? urlEntity["credibility-score"] : "Unknown"}
                                                 </Typography>
