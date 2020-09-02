@@ -1,23 +1,23 @@
-	en	fr	es
+	en	fr	es	el
 
 #main
-assistant_title	Assistant	temp	temp
-assistant_intro	Would you like to process a URL of upload your own file?	Temp	Temp
-process_url	Process URL	Temp	Temp
-submit_own_file	Upload File	Temp	Temp
-upload_video	Video	Temp	Temp
-upload_image	Image	Temp	Temp
-enter_url	Enter the URL of the media you would like to process	Temp	Temp
-upload_type_question	What type of file do you want to upload?	Temp  Temp
-assistant_urlbox	URL	Adresse	URL
-please_give_a_correct_link	Please give a correct link	Donner un lien valide s'il vous plaît	Por favor, dé un enlace válido
-button_submit	Submit	Envoyer	Enviar
-quit	Quit	Quitter	Salir
-save	Save	Enregistrer	Gardar
-source_credibility_title	Source Credibility	temp	temp
-source_credibility_byline	The source has been found as part of a credibility check	Temp	Temp
-link_explorer_title	Link Explorer	Temp	Temp
-link_explorer_byline	The following URLs have been extracted from the page, and their domains have been checked for credibility	Temp	Temp
+assistant_title	Assistant	Assistant	Assistente	Βοηθός
+assistant_intro	Would you like to process a URL or upload your own file?	Voulez-vous traiter une adresse url ou télécharger votre fichier?	Quiere procesar una dirección url o cargar su propio fichero?	Θέλετε να επεξεργαστείτε μια διεύθυνση URL ή να ανεβάσετε το δικό σας αρχείο;
+process_url	Process URL	Traiter l'url		Procesar la url	Επεξεργασία URL
+submit_own_file	Upload File	Chargez votre fichier	Cargar su fichero	Μεταφόρτωση αρχείου
+upload_video	Video	Video	Video	Βίντεο
+upload_image	Image	Image	Imagen	Εικόνα
+enter_url	Enter the URL of the media you would like to process	Temp	Temp	Εισαγάγετε τη διεύθυνση URL των μέσων που θέλετε να επεξεργαστείτε
+upload_type_question	What type of file do you want to upload?	Quel type de fichier voulez-vous charger?	¿Que fichero quiere cargar?	Τι είδους αρχείο θέλετε να ανεβάσετε;
+assistant_urlbox	URL	Adresse URL	URL	Σύνδεσμος
+please_give_a_correct_link	Please give a correct link	Donner un lien valide s'il vous plaît	Por favor, dé un enlace válido	Παρακαλώ δώστε έναν σωστό σύνδεσμο
+button_submit	Submit	Envoyer	Enviar	Υποβολή
+quit	Quit	Quitter	Salir	Κλείσιμο
+save	Save	Enregistrer	Gardar	Αποθήκευση
+source_credibility_title	Source Credibility	Temp	Temp	Temp
+source_credibility_byline	The source has been found as part of a credibility check	Temp	Temp	Temp
+link_explorer_title	Link Explorer	Temp	Temp	Temp
+link_explorer_byline	The following URLs have been extracted from the page, and their domains have been checked for credibility	Temp	Temp	Temp
 
 #text result
 text_title	Text	Temp	Temp
