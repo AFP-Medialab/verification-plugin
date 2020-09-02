@@ -67,7 +67,7 @@ const AssistantTextResult = (props) => {
                 <Grid container>
                     <Grid item xs={6}>
                         <Typography className={classes.twitterHeading}>
-                            <ChatBubbleOutlineIcon className={classes.twitterIcon}/>Text
+                            <ChatBubbleOutlineIcon className={classes.twitterIcon}/>{keyword("text_title")}
                         </Typography>
                     </Grid>
                     <Grid item xs={6} align={"right"}>

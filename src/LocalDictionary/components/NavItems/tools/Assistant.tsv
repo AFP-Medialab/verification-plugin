@@ -20,6 +20,7 @@ link_explorer_title	Link Explorer	Temp	Temp
 link_explorer_byline	The following URLs have been extracted from the page, and their domains have been checked for credibility	Temp	Temp
 
 #text result
+text_title	Text	Temp	Temp
 text_intro	The following text has been found on the page	Temp	Temp
 dbkf_title	DBKF Check	Temp	Temp
 text_title	Expand Text	Temp	Temp
@@ -31,6 +32,7 @@ sc_failed	The source credibility check has failed. Some results may not be displ
 link_tooltip	<b>What is this?</b></br>The scores displayed in this section give an indication of how reliable the web source listed can be considered to be. Scores range from 0-100.</br></br>In most cases, the source checked for credibility will be the URL domain. In some cases where this is not usefu a more relevant part of the URL has been checked against. In all cases, the full URL and the domain against which the source credibility check was carried on are listed in the form URL : domain-for-check. </br></br><b>How are these calculated?</b></br>Various institutions analyse sources (particularly domains) across the web to evaluate how reliable they are likely to be based on various metrics.</br>Here, datasets assessing web domain reliability have been pulled from some of these institutions including: Decodex, Media Bias/Fact Check, NewsGuard(COVID19) and ReportersLab.</br>Since the metrics or scores from each of these sources do not necessarily overlap and cannot easily be compared, all scores from any given institution are mapped to a single number between 0-100.</br>For any URL, a list of all institutions which gave the relevant domain a score has been listed, along with the (mapped) results they gave.</br>The final result displayed for any domain is the lowest score from the various sources.</br>	Test	Test
 
 #media result
+media_title	Media	Temp	Temp
 images_label	Images	Temp	Temp
 videos_label	Videos	Temp	Temp
 media_found	The following media has been found on the page	Temp	Temp

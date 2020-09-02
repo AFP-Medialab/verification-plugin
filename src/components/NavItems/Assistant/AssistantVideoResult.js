@@ -61,7 +61,7 @@ const AssistantVideoResult = () => {
                 <Typography variant="h5" component="h2">
                     {keyword("media_to_process")}
                 </Typography>
-                <Typography className={classes.title} color="primary">
+                <Typography className={classes.title} color="primary" style={{wordBreak: "break-word"}}>
                     {<a href={processUrl}> {processUrl.length>100 ? processUrl.substring(0,100) + "...": processUrl} </a>}
                 </Typography>
             </CardContent>

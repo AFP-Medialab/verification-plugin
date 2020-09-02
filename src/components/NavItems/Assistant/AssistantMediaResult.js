@@ -72,7 +72,7 @@ const AssistantMediaResult = () => {
                 <Grid container>
                     <Grid item xs={6}>
                         <Typography className={classes.twitterHeading}>
-                            <ImageSearchOutlinedIcon className={classes.twitterIcon}/>Media
+                            <ImageSearchOutlinedIcon className={classes.twitterIcon}/>{keyword("media_title")}
                         </Typography>
                     </Grid>
                     <Grid item xs={6} align={"right"}>
