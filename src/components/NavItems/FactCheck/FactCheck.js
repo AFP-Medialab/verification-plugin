@@ -32,6 +32,8 @@ const FactCheck = () => {
             case "es":
                 rssUrl = "https://factual.afp.com/rss.xml";
                 break;
+            case "el":
+            	rssUrl = "https://www.ellinikahoaxes.gr/feed/";
             default:
                 rssUrl = "https://factcheck.afp.com/rss.xml";
                 break;
@@ -65,7 +67,7 @@ const FactCheck = () => {
                             <Grid item key={key}>
                                 <Card className={classes.FactCheckCard}>
                                     <CardContent>
-                                        <img src={afpImage} className={classes.factCheckLogos} alt=""/>
+                                       // <img src={afpImage} className={classes.factCheckLogos} alt=""/>
                                         <Typography className={classes.title} color="textSecondary" gutterBottom>
                                             {finishXMLParsing(val.pubDate)}
                                         </Typography>
