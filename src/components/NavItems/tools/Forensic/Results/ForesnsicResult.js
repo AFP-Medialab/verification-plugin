@@ -65,7 +65,6 @@ const ForensicResults = (props) => {
 
     const scrollToTop = () => window.scrollTo(0, 320)
     useEffect(() => {
-        console.log("removing filter");
         setFilteredImage(result.displayImage);
         setFilterName("forensic_title_none");
     }, [result]);
