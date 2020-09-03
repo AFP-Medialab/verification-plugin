@@ -1,7 +1,7 @@
 import {Paper} from "@material-ui/core";
 import Box from "@material-ui/core/Box";
 import Grid from "@material-ui/core/Grid";
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import {useDispatch} from "react-redux";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
@@ -64,7 +64,11 @@ const ForensicResults = (props) => {
     };
 
     const scrollToTop = () => window.scrollTo(0, 320)
-
+    useEffect(() => {
+        console.log("removing filter");
+        setFilteredImage(result.displayImage);
+        setFilterName("forensic_title_none");
+    }, [result]);
 
     return (
         <Paper className={classes.root}>
