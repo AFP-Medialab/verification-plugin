@@ -13,7 +13,7 @@ import Box from "@material-ui/core/Box";
 import useLoadLanguage from "../../../Hooks/useLoadLanguage";
 import tsv from "../../../LocalDictionary/components/NavItems/FactCheck.tsv";
 import Link from "@material-ui/core/Link";
-import afpImage from "../About/images/Logo-AFP-384.png"
+//import afpImage from "../About/images/Logo-AFP-384.png"
 
 
 const FactCheck = () => {
