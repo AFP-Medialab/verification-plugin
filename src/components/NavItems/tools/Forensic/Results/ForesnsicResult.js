@@ -112,7 +112,6 @@ const ForensicResults = (props) => {
                                         <CardMedia
                                             className={classes.forensicMedia}
                                             image={result[value]["map"]}
-                                            title={keyword("forensic_title_" + value)}
                                             onClick={() => changeFilter(key, "forensic_title_" + value)}
                                         />
                                     </Tooltip>
