@@ -1,6 +1,5 @@
 	en	fr	es	el
 
-#main
 assistant_title	Assistant	Assistant	Assistente	Βοηθός
 assistant_intro	Would you like to process a URL or upload your own file?	Voulez-vous traiter une adresse url ou télécharger votre fichier?	Quiere procesar una dirección url o cargar su propio fichero?	Θέλετε να επεξεργαστείτε μια διεύθυνση URL ή να ανεβάσετε το δικό σας αρχείο;
 process_url	Process URL	Traiter l'url		Procesar la url	Επεξεργασία URL
@@ -19,7 +18,6 @@ source_credibility_byline	The source has been found as part of a credibility che
 link_explorer_title	Link Explorer	Temp	Temp	Temp
 link_explorer_byline	The following URLs have been extracted from the page, and their domains have been checked for credibility	Temp	Temp	Temp
 
-#text result
 text_title	Text	Temp	Temp	Temp
 text_intro	The following text has been found on the page	Temp	Temp	Temp
 dbkf_title	DBKF Check	Temp	Temp	Temp
@@ -27,11 +25,9 @@ text_title	Expand Text	Temp	Temp	Temp
 text_tooltip	<b>What is this?</b></br>Any text which can be extracted from the given URL is displayed here</br></br><b>How do I use this?</b></br>The first 500 characters in any extracted text are sent to be checked against the database of known fakes - a database set up to identify and keep track of disinformation which has already been debunked.</br></br>The results of this check are listed in the section titled <b>DBKF Check</b>. Here, a list of all potentially relevant debunked claims are listed, along with a link where full details on the claim, and any evidence related to it or its debunk can be seen.</br>	Temp	Temp	Temp
 dbkf_error	An issue has occurred when trying to connect to the database of known fakes. Some results may be omitted from this page. If the problem persists, please contact support.	Temp	Temp	Temp
 
-#link result
 sc_failed	The source credibility check has failed. Some results may not be displayed. If the problem persists, please contact support.	Temp	Temp	Temp
 link_tooltip	<b>What is this?</b></br>The scores displayed in this section give an indication of how reliable the web source listed can be considered to be. Scores range from 0-100.</br></br>In most cases, the source checked for credibility will be the URL domain. In some cases where this is not usefu a more relevant part of the URL has been checked against. In all cases, the full URL and the domain against which the source credibility check was carried on are listed in the form URL : domain-for-check. </br></br><b>How are these calculated?</b></br>Various institutions analyse sources (particularly domains) across the web to evaluate how reliable they are likely to be based on various metrics.</br>Here, datasets assessing web domain reliability have been pulled from some of these institutions including: Decodex, Media Bias/Fact Check, NewsGuard(COVID19) and ReportersLab.</br>Since the metrics or scores from each of these sources do not necessarily overlap and cannot easily be compared, all scores from any given institution are mapped to a single number between 0-100.</br>For any URL, a list of all institutions which gave the relevant domain a score has been listed, along with the (mapped) results they gave.</br>The final result displayed for any domain is the lowest score from the various sources.</br>	Temp	Temp	Temp
 
-#media result
 media_title	Media	Temp	Temp	Μέσα
 images_label	Images	Temp	Temp	Εικόνες
 videos_label	Videos	Temp	Temp	Βίντεο
@@ -41,12 +37,9 @@ media_to_process	Media to Process	Temp	Temp	Μέσα για επεξεργασί
 assistant_error	No media was found through the link entered.	Temp	Temp	Δεν βρέθηκε κανένα μέσο μέσω του συνδέσμου που καταχωρίστηκε.
 media_tooltip	<b>What is this?</b></br>Any images or videos which can be extracted from the URL have been displayed here. If only one image or video is present, this is displayed as is. If multiple images/videos are present, a list is given to select from.</br></br><b>What can I do with these?</b></br>Multiple tools to detect image/video credibility and manipulation are available as part of this plugin. For any selected image/video, a list of any relevant tools from these are given, along with a brief explanation of what they can do. Selecting any of these will redirect you to the relevant tool with the media you selected as input.<br/> For a full list of tools, and more extensive tutorials on how to use them, refer to the Classroom and Tutorial sections of this plugin.	Temp	Temp	Temp
 
-#process url actions
 things_you_can_do_header	Potential Tools	Temp	Temp	Πιθανά εργαλεία
 things_you_can_do	Below are the tools you can use on this media type	Temp	Temp	Ακολουθούν τα εργαλεία που μπορείτε να χρησιμοποιήσετε σε αυτόν τον τύπο μέσων
 
-
-#rulebook
 navbar_analysis	Analysis	Analyse	Análisis	Ανάλυση
 navbar_keyframes	Keyframes	Images clés	Imágenes claves	Χαρακτηριστικά καρέ
 navbar_thumbnails	Thumbnails	Imagettes	Miniaturas	Μικρογραφίες
@@ -66,7 +59,6 @@ metadata_text	The metadata tool can be used to retrieve image/video metadata	Tem
 rights_text	The video rights tool can be used can be used to retrieve information solely about video rights	Temp	Temp	Το εργαλείο δικαιωμάτων βίντεο μπορεί να χρησιμοποιηθεί για την ανάκτηση πληροφοριών αποκλειστικά για δικαιώματα βίντεο
 forensic_text	The forensic tool can be used to detect any image manipulation	Temp	Temp	Το εργαλείο ανάλυση αυθεντικότητας Εικόνων (image forensics) μπορεί να χρησιμοποιηθεί για τον εντοπισμό τυχόν παραμορφώσεων της εικόνας
 
-#help
 assistant_help_title	What is this?	Temp	Temp
 assistant_help_1	The weverify toolkit (this plugin) has multiple tools which can help in the verification of content on social networks, designed to help journalists save time and be more efficient in their fact checking tasks.<br>A full list of these tools can be found in the tutorial section of this plugin.<br>Given the multiple tools and services available, the weverify assistant has been designed to guide users to the services available to them given the nature of the content they would like to check.<br><br>	Temp	Temp	Temp
 assistant_help_2	<b>How does the assistant work?</b><br>Users can choose to upload their own media to be checked (an image or a video), in which case verification tools on the plugin which support media upload will be listed.<br>An alternative option is to enter a URL which needs verification or fact checking.<br>Once a URL in entered, the assistant attempts to extract any text, images or videos it can find on the page.<br>Any extracted text or media are then used to suggest the potential actions which can be carried out. Currently, there are four major components to this:<ul><li>Source credibility: checking the source of the data to see if any information on its credibility can be found</li><li>Text: checking the text on the page to see if it is connected to any known debunks and/or misinformation</li><li>Link Explorer: checking the links on the page to see if any information on their credibility can be found</li><li>Media:  displaying any media found on the page, and if selected, giving the list of tools available on the weverify plugin to process selected media</li></ul>More information on each of these can be found on the sections themselves.<br><br>	Temp	Temp	Temp
