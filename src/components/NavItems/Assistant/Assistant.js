@@ -74,12 +74,14 @@ const Assistant = () => {
         try {
             dispatch(setAssistantLoading(true))
             // get domain and content type
-            let urlType = matchPattern(userInput, KNOWN_LINK_PATTERNS);
-            let contentType = matchPattern(userInput, TYPE_PATTERNS);
+            let urlType = matchPattern(userInput, KNOWN_LINK_PATTERNS)
+            let contentType = matchPattern(userInput, TYPE_PATTERNS)
 
             // decide whether or not to scrape page based on domain and content type
-            let scrapeResult = await decideWhetherToScrape(urlType, contentType, userInput);
-            setAssistantResults(urlType, contentType, userInput, scrapeResult);
+            let scrapeResult = await decideWhetherToScrape(urlType, contentType, userInput)
+
+            //set results
+            setAssistantResults(urlType, contentType, userInput, scrapeResult)
 
             dispatch(setScrapedData(textRef.current, linkListRef.current, imageListRef.current, videoListRef.current))
             dispatch(setInputUrl(userInput));
@@ -103,6 +105,12 @@ const Assistant = () => {
             dispatch(setProcessUrl(videoListRef.current[0]))}
     }
 
+
+    // remove urls from main text
+    const removeUrlsFromText = (text) => {
+        let urlRegex = new RegExp("(http(s)?:\/\/.)?(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{2,256}\\.[a-z]{2,6}\\b([-a-zA-Z0-9@:%_\\+.~#?&//=]*)","g");
+        return text.replace(urlRegex, "")
+    }
 
     const decideWhetherToScrape = async (urlType, contentType, userInput) => {
         let scrapeResult = null;
@@ -180,6 +188,7 @@ const Assistant = () => {
             default:
                 throw new Error(keyword("please_give_a_correct_link"));
         }
+        textRef.current = removeUrlsFromText(textRef.current);
     }
 
 
