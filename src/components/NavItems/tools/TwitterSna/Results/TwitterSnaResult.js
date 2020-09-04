@@ -8,7 +8,6 @@ import AccordionSummary from "@material-ui/core/AccordionSummary";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import Typography from "@material-ui/core/Typography";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
-import Plot from "react-plotly.js";
 import Box from "@material-ui/core/Box";
 import CustomTable from "../../../../Shared/CustomTable/CustomTable";
 import CustomTableURL from "../../../../Shared/CustomTable/CustomTableURL";
@@ -27,12 +26,14 @@ import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Twitte
 import { saveSvgAsPng } from 'save-svg-as-png';
 import { CSVLink } from "react-csv";
 import { Sigma, RandomizeNodePositions, ForceAtlas2 } from 'react-sigma';
+import createPlotlyComponent from 'react-plotly.js/factory';
 import Plotly from 'plotly.js-dist';
 import _ from "lodash";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
 export default function TwitterSnaResult(props) {
 
+    const Plot = createPlotlyComponent(Plotly);
     const classes = useMyStyles();
     const keyword = useLoadLanguage("components/NavItems/tools/TwitterSna.tsv", tsv);
 
