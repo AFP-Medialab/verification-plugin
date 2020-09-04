@@ -14,7 +14,6 @@ import VisibilityIcon from '@material-ui/icons/Visibility';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Collapse from "@material-ui/core/Collapse";
 import clsx from 'clsx';
-import 'react-image-lightbox/style.css';
 import CloseResult from "../../../../Shared/CloseResult/CloseResult";
 import {cleanForensicState} from "../../../../../redux/actions/tools/forensicActions";
 import Radio from "@material-ui/core/Radio";

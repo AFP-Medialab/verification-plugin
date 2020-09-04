@@ -7,7 +7,7 @@ import React, {useEffect, useState} from "react";
 import {useSelector} from "react-redux";
 import useGetImages from "./Hooks/useGetImages";
 import LinearProgress from "@material-ui/core/LinearProgress";
-import ForensicResults from "./Results/ForesnsicResult";
+import ForensicResults from "./Results/ForensicResult";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import {useParams} from 'react-router-dom'
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
