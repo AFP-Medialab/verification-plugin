@@ -87,7 +87,7 @@ const AssistantTextResult = (props) => {
                             <Grid item xs={12}>
                                 <Accordion>
                                     <AccordionSummary expandIcon={<ExpandMoreIcon/>}>
-                                        <Typography>{keyword("text_title")}</Typography>
+                                        <Typography>{keyword("expand_text")}</Typography>
                                     </AccordionSummary>
                                     <AccordionDetails>
                                         <Typography variant={"subtitle1"}>
