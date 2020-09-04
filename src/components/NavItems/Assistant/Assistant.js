@@ -108,8 +108,11 @@ const Assistant = () => {
 
     // remove urls from main text
     const removeUrlsFromText = (text) => {
-        let urlRegex = new RegExp("(http(s)?:\/\/.)?(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{2,256}\\.[a-z]{2,6}\\b([-a-zA-Z0-9@:%_\\+.~#?&//=]*)","g");
-        return text.replace(urlRegex, "")
+        if (text !== null) {
+            let urlRegex = new RegExp("(http(s)?:\/\/.)?(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{2,256}\\.[a-z]{2,6}\\b([-a-zA-Z0-9@:%_\\+.~#?&//=]*)", "g");
+            return text.replace(urlRegex, "")
+        }
+        return text
     }
 
     const decideWhetherToScrape = async (urlType, contentType, userInput) => {
