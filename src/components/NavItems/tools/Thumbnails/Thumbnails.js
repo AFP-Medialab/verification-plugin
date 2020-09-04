@@ -41,7 +41,7 @@ const Thumbnails = () => {
         'bing': false,
         'tineye': false,
         'yandex': false,
-        'openTabs': true,
+       // 'openTabs': true,
         'reddit': false,
 
     });
@@ -110,12 +110,13 @@ const Thumbnails = () => {
     };
 
     const submitForm = () => {
+        dispatch(setError(null));
         let url = input.value.replace("?rel=0", "");
         if (url !== null && url !== "" && isYtUrl(url)) {
             submissionEvent(url);
             let images = get_images(url);
             dispatch(setThumbnailsResult(url, images, false, false));
-            images.forEach(img => imageClickUrl(img));
+            //images.forEach(img => imageClickUrl(img));
         } else
             dispatch(setError("Please use a valid Youtube Url (add to tsv)"));
     };
@@ -178,7 +179,7 @@ const Thumbnails = () => {
                                 );
                             })
                         }
-                        <FormControlLabel
+                        {/*'<FormControlLabel
                             control={
                                 <Checkbox
                                     checked={selectedValue["openTabs"]}
@@ -189,7 +190,7 @@ const Thumbnails = () => {
                             }
                             label={keyword("openTabs")}
                             labelPlacement="end"
-                        />
+                        />'*/}
                     </FormGroup>
                 </FormControl>
                 <Box m={2}/>
