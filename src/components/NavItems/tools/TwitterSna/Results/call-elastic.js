@@ -68,13 +68,18 @@ let gexfGen_url = process.env.REACT_APP_GEXF_GENERATOR_URL;
         });
     }
 
+    // Returns a Promise that resolves after "ms" Milliseconds
+    function timer(ms) {
+    return new Promise(res => setTimeout(res, ms));
+   }
+   
     // Export gexf file
     export function getESQuery4Gexf(param) {
         let must = constructMatchPhrase(param);
         let mustNot = constructMatchNotPhrase(param);
         // let aggs = constructAggs("urls");
 
-        let size=10000;
+        let size=1000;
         // let esQuery = JSON.stringify(buildQuery4Gexf(must, mustNot,size)).replace(/\\/g, "").replace(/"{/g, "{").replace(/}"/g, "}");
 
         let gexfParams=JSON.stringify({
@@ -88,29 +93,53 @@ let gexfGen_url = process.env.REACT_APP_GEXF_GENERATOR_URL;
             "flow":false,
             "esQuery":buildQuery4Gexf(must, mustNot,size)
         }).replace(/\\/g, "").replace(/"{/g, "{").replace(/}"/g, "}");
+        // console.log("gexfParams:"+gexfParams);
         const userAction = async () => {
-            const response = await fetch(gexfGen_url, {
+            const response = await fetch(gexfGen_url, { // start gex gen process
                 method: 'POST',
-                body:
-                gexfParams,
+                body:gexfParams,
                 headers: {
                     'Content-Type': 'application/json'
                 }
             });
-            const gexfResponse = await response.json();
+            var gexfResponse = await response.json();
+            var gexfStatus = gexfResponse.gexfStatus;
+            // console.log("Status", gexfStatus.status, " and gexfResponse", gexfResponse)
+            //if status is not completed or failed then continue to run
+            while (!((gexfStatus.status==="COMPLETED") || (gexfStatus.status==="FAILED"))){ 
+                await timer(3000);
+                const statusResp = await fetch(gexfGen_url+"gexfStatus", {//check gexf status
+                    method: 'POST',
+                    body:JSON.stringify({"id":gexfResponse.gexfStatus.id}),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                gexfResponse = await statusResp.json();
+                gexfStatus = gexfResponse.gexfStatus;
+                // console.log("Status in While", gexfStatus.status, " and gexfResponse", gexfResponse)
+            }
+
+            //convert the response in appropriate format for GUI
+            
             let gexfResults = [];
-            if (gexfResponse.messages?.length) {// if messages has element
-                for (const resp of gexfResponse.messages){
+            if (gexfStatus.status==="COMPLETED" && gexfResponse.gexfStatus.message?.length) {// if messages has element
+                //convert message to JSON object
+                const messsages = JSON.parse(gexfResponse.gexfStatus.message);
+                // console.log("messages as obj",messsages);
+                for (const message of messsages){
                     let gexfRes = {};
-                    gexfRes.title = resp.title
-                    gexfRes.fileName = resp.fileName;
-                    gexfRes.getUrl = `${gexfGen_url}downloadGEXF?fileName=${resp.fileName}`;
+                    gexfRes.title = message.title
+                    gexfRes.fileName = message.fileName;
+                    gexfRes.getUrl = `${gexfGen_url}downloadGEXF?fileName=${message.fileName}`;
                     gexfRes.visualizationUrl = `http://networkx.iti.gr/network_url/?filepath=${gexfRes.getUrl}`;
-                    gexfRes.message = resp.message
+                    gexfRes.message = message.message
                     gexfResults.push(gexfRes)
                 }
             }
             return gexfResults;
+
+            // return gexfResponse;
         };
         return userAction();
     }
