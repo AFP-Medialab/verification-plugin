@@ -3,12 +3,11 @@ import OnClickInfo from "../../../../Shared/OnClickInfo/OnClickInfo";
 import { useDispatch, useSelector } from "react-redux";
 import React, { useEffect, useState, useCallback } from "react";
 import { Paper } from "@material-ui/core";
-import ExpansionPanel from "@material-ui/core/ExpansionPanel";
-import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
+import Accordion from "@material-ui/core/Accordion";
+import AccordionSummary from "@material-ui/core/AccordionSummary";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import Typography from "@material-ui/core/Typography";
-import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
-import Plot from "react-plotly.js";
+import AccordionDetails from "@material-ui/core/AccordionDetails";
 import Box from "@material-ui/core/Box";
 import CustomTable from "../../../../Shared/CustomTable/CustomTable";
 import CustomTableURL from "../../../../Shared/CustomTable/CustomTableURL";
@@ -26,16 +25,15 @@ import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../../LocalDictionary/components/NavItems/tools/TwitterSna.tsv";
 import { saveSvgAsPng } from 'save-svg-as-png';
 import { CSVLink } from "react-csv";
-import Cytoscape from 'cytoscape';
-import Fcose from 'cytoscape-fcose';
-import { Sigma, RandomizeNodePositions, ForceAtlas2, SigmaEnableWebGL, EdgeShapes } from 'react-sigma';
+import { Sigma, RandomizeNodePositions, ForceAtlas2 } from 'react-sigma';
+import createPlotlyComponent from 'react-plotly.js/factory';
 import Plotly from 'plotly.js-dist';
 import _ from "lodash";
 import CircularProgress from "@material-ui/core/CircularProgress";
-Cytoscape.use(Fcose);
 
 export default function TwitterSnaResult(props) {
 
+    const Plot = createPlotlyComponent(Plotly);
     const classes = useMyStyles();
     const keyword = useLoadLanguage("components/NavItems/tools/TwitterSna.tsv", tsv);
 
@@ -53,9 +51,14 @@ export default function TwitterSnaResult(props) {
     const [pieCharts2, setPieCharts2] = useState(null);
     const [pieCharts3, setPieCharts3] = useState(null);
     const [coHashtagGraphTweets, setCoHashtagGraphTweets] = useState(null);
-    const [socioSemanticGraphTweets, setSocioSemanticGraphTweets] = useState(null);
     const [socioSemantic4ModeGraphTweets, setSocioSemantic4ModeGraphTweets] = useState(null);
     const [bubbleTweets, setBubbleTweets] = useState(null);
+
+    const [coHashtagGraphReset, setCoHashtagGraphReset] = useState(null);
+    const [coHashtagGraphClickNode, setCoHashtagGraphClickNode] = useState(null);
+
+    const [socioSemantic4ModeGraphReset, setSocioSemantic4ModeGraphReset] = useState(null);
+    const [socioSemantic4ModeGraphClickNode, setSocioSemantic4ModeGraphClickNode] = useState(null);
 
     const CSVheaders = [{ label: keyword('twittersna_result_word'), key: "word" }, { label: keyword("twittersna_result_nb_occ"), key: "nb_occ" }, { label: keyword("twittersna_result_entity"), key: "entity" }];
 
@@ -107,9 +110,12 @@ export default function TwitterSnaResult(props) {
         setPieCharts2(null);
         setPieCharts3(null);
         setCoHashtagGraphTweets(null);
-        setSocioSemanticGraphTweets(null);
         setSocioSemantic4ModeGraphTweets(null);
         setBubbleTweets(null);
+        setCoHashtagGraphReset(null);
+        setCoHashtagGraphClickNode(null);
+        setSocioSemantic4ModeGraphReset(null);
+        setSocioSemantic4ModeGraphClickNode(null);
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [JSON.stringify(props.request), props.request])
 
@@ -310,6 +316,16 @@ export default function TwitterSnaResult(props) {
     }
 
     const onClickNodeCoHashtagGraph = (data) => {
+
+        let initGraph = {
+            nodes: data.data.renderer.graph.nodes(),
+            edges: data.data.renderer.graph.edges()
+        }
+
+        setCoHashtagGraphClickNode(createGraphWhenClickANode(data));
+
+        setCoHashtagGraphReset(initGraph);
+
         let selectedHashtag = data.data.node.id;
         let filteredTweets = result.tweets.filter(tweet => tweet._source.hashtags !== undefined && tweet._source.hashtags.length > 0)
             .filter(function (tweet) {
@@ -321,31 +337,22 @@ export default function TwitterSnaResult(props) {
         setCoHashtagGraphTweets(dataToDisplay);
     }
 
-    const onClickNodeSocioSemanticGraph = (data) => {
-        if (data.data.node.type === "Hashtag") {
-            let selectedHashtag = data.data.node.id.replace("#", "");
-            let filteredTweets = result.tweets.filter(tweet => tweet._source.hashtags !== undefined && tweet._source.hashtags.length > 0)
-                .filter(function (tweet) {
-                    let hashtagArr = tweet._source.hashtags.map((v) => { return v.toLowerCase(); });
-                    return hashtagArr.includes(selectedHashtag.toLowerCase());
-                });
-            let dataToDisplay = displayTweets(filteredTweets);
-            dataToDisplay["selected"] = data.data.node.id;
-            setSocioSemanticGraphTweets(dataToDisplay);
-        } else if (data.data.node.type === "Mention") {
-            let selectedUser = data.data.node.id.replace("isMTed:@", "");
-            let filteredTweets = result.tweets.filter(tweet => tweet._source.user_mentions !== undefined && tweet._source.user_mentions.length > 0)
-                .filter(function (tweet) {
-                    let lcMentionArr = tweet._source.user_mentions.map(v => v.screen_name.toLowerCase());
-                    return lcMentionArr.includes(selectedUser.toLowerCase());
-                });
-            let dataToDisplay = displayTweets(filteredTweets);
-            dataToDisplay["selected"] = data.data.node.id;
-            setSocioSemanticGraphTweets(dataToDisplay);
-        }
+    const onClickStageCoHashtagGraph = (e) => {
+        setCoHashtagGraphClickNode(null);
+        setCoHashtagGraphTweets(null);
     }
 
     const onClickNodeSocioSemantic4ModeGraph = (data) => {
+
+        let initGraph = {
+            nodes: data.data.renderer.graph.nodes(),
+            edges: data.data.renderer.graph.edges()
+        }
+
+        setSocioSemantic4ModeGraphClickNode(createGraphWhenClickANode(data));
+
+        setSocioSemantic4ModeGraphReset(initGraph);
+
         if (data.data.node.type === "Hashtag") {
             let selectedHashtag = data.data.node.id.replace("#", "");
             let filteredTweets = result.tweets.filter(tweet => tweet._source.hashtags !== undefined && tweet._source.hashtags.length > 0)
@@ -384,7 +391,24 @@ export default function TwitterSnaResult(props) {
             let dataToDisplay = displayTweets(filteredTweets);
             dataToDisplay["selected"] = data.data.node.id;
             setSocioSemantic4ModeGraphTweets(dataToDisplay);
+        } else if (data.data.node.type === "URL") {
+            let selectedURL = data.data.node.id.replace("URL:", "");
+            let filteredTweets = result.tweets.filter(tweet => tweet._source.urls !== undefined && tweet._source.urls.length > 0)
+                .filter(function (tweet) {
+                    let urlArr = tweet._source.urls.map((url) => {
+                        return getDomain(url).toLowerCase();
+                    });
+                    return urlArr.includes(selectedURL.toLowerCase());
+                });
+            let dataToDisplay = displayTweets(filteredTweets);
+            dataToDisplay["selected"] = data.data.node.id;
+            setSocioSemantic4ModeGraphTweets(dataToDisplay);
         }
+    }
+
+    const onClickStageSocioSemantic4ModeGraph = (e) => {
+        setSocioSemantic4ModeGraphClickNode(null);
+        setSocioSemantic4ModeGraphTweets(null);
     }
 
     function filterTweetsGivenWord(word) {
@@ -537,7 +561,8 @@ export default function TwitterSnaResult(props) {
                 screen_name: obj._source.screen_name,
                 followers_count: obj._source.followers_count,
                 datetimestamp: obj._source.datetimestamp,
-                indexedat: obj._source.indexedat
+                indexedat: obj._source.indexedat,
+                verified: obj._source.verified
             }; 
         });
 
@@ -561,10 +586,11 @@ export default function TwitterSnaResult(props) {
         let text = [];
         let color = []
         let size = [];
+        let symbol = [];
 
         sortedObjArr.forEach((obj) => {
             let date = new Date(obj.datetimestamp * 1000);
-            let dateStr = date.getFullYear() + "-" + date.getMonth() + "-" + date.getDate();
+            let dateStr = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
             let nbTweets = tweetCountObj[obj.screen_name.toLowerCase()];
             let avgTweetsPerDate = nbTweets/nbDays;
 
@@ -573,6 +599,7 @@ export default function TwitterSnaResult(props) {
             text.push('@' + obj.screen_name + '<br>Posted <b>' + nbTweets + '</b> tweets in ' + nbDays + ' days');
             color.push(getColorOfMostActiveUserBubble(avgTweetsPerDate));
             size.push(nbTweets);
+            symbol.push( (obj.verified ? "diamond" : "circle") );
         });
 
         let data = [
@@ -587,13 +614,22 @@ export default function TwitterSnaResult(props) {
                     size: size,
                     sizeref: (Math.max(...size) < 10 ? 1 : 2 * Math.max(...size) / (60**2)),
                     sizemode: 'area',
-                    sizemin: 5
+                    sizemin: 5,
+                    symbol: symbol
                 },
                 name: ""
             } 
         ]
 
         let layout = {
+            title: {
+                text: keyword("bubble_chart_title") + "<br>" + request.keywordList.join(", ") + " - " + request["from"] + " - " + request["until"],
+                font: {
+                    family: 'Arial, sans-serif',
+                    size: 18
+                },
+                xanchor: 'center'
+            },
             xaxis: {
                 title: keyword("twittersna_acd"),
                 titlefont: {
@@ -642,6 +678,65 @@ export default function TwitterSnaResult(props) {
         }
     }
 
+    function createGraphWhenClickANode(e) {
+
+        let selectedNode = e.data.node;
+
+        let neighborNodes = e.data.renderer.graph.adjacentNodes(selectedNode.id);
+        let neighborEdges = e.data.renderer.graph.adjacentEdges(selectedNode.id);
+
+        let neighborNodeIds = neighborNodes.map((node) => { return node.id; });
+        neighborNodeIds.push(selectedNode.id);
+        let neighborEdgeIds = neighborEdges.map((edge) => { return edge.id; });
+
+        let clonedNodes = JSON.parse(JSON.stringify(e.data.renderer.graph.nodes()));
+        let clonedEdges = JSON.parse(JSON.stringify(e.data.renderer.graph.edges()));
+
+        let updatedNodes = clonedNodes.map((node) => {
+            if (!neighborNodeIds.includes(node.id)) {
+                node.color = "#C0C0C0";
+            }
+            return node;
+        })
+
+        let updatedEdges = clonedEdges.map((edge) => {
+            if (neighborEdgeIds.includes(edge.id)) {
+                edge.color = "#000000";
+            } else {
+                edge.color = "#C0C0C0";
+            }
+            return edge;
+        })
+
+        let newGraph = {
+            nodes: updatedNodes,
+            edges: updatedEdges
+        }
+
+        console.log("newGraph", newGraph);
+        return newGraph;
+    }
+
+    function getDomain(url) {
+        var domain;
+
+        if (url.indexOf("://") > -1) {
+            domain = url.split('/')[2];
+        }
+        else {
+            domain = url.split('/')[0];
+        }
+
+        if (domain.indexOf("www.") > -1) {
+            domain = domain.split('www.')[1];
+        }
+
+        domain = domain.split(':')[0];
+        domain = domain.split('?')[0];
+
+        return domain;
+    }
+
     if (result === null)
         return <div />;
 
@@ -651,15 +746,15 @@ export default function TwitterSnaResult(props) {
             <CloseResult onClick={() => dispatch(cleanTwitterSnaState())} />
             {
                 result.histogram &&
-                <ExpansionPanel expanded={histoVisible} onChange={() => setHistoVisible(!histoVisible)}>
-                    <ExpansionPanelSummary
+                <Accordion expanded={histoVisible} onChange={() => setHistoVisible(!histoVisible)}>
+                    <AccordionSummary
                         expandIcon={<ExpandMoreIcon />}
                         aria-controls={"panel0a-content"}
                         id={"panel0a-header"}
                     >
                         <Typography className={classes.heading}>{keyword(result.histogram.title)}</Typography>
-                    </ExpansionPanelSummary>
-                    <ExpansionPanelDetails>
+                    </AccordionSummary>
+                    <AccordionDetails>
                         {}
                         <div style={{ width: '100%', }}>
                             {(result.histogram.json && (result.histogram.json.length === 0) &&
@@ -717,20 +812,20 @@ export default function TwitterSnaResult(props) {
                                 </div>
                             }
                         </div>
-                    </ExpansionPanelDetails>
-                </ExpansionPanel>
+                    </AccordionDetails>
+                </Accordion>
             }
             {
                 result && result.tweetCount &&
-                <ExpansionPanel>
-                    <ExpansionPanelSummary
+                <Accordion>
+                    <AccordionSummary
                         expandIcon={<ExpandMoreIcon />}
                         aria-controls={"panel0a-content"}
                         id={"panel0a-header"}
                     >
                         <Typography className={classes.heading} >{keyword("tweetCounter_title")}</Typography>
-                    </ExpansionPanelSummary>
-                    <ExpansionPanelDetails>
+                    </AccordionSummary>
+                    <AccordionDetails>
                         <Box alignItems="center" justifyContent="center" width={"100%"}>
                             <Grid container justify="space-around" spacing={2}
                                 alignContent={"center"}>
@@ -750,23 +845,23 @@ export default function TwitterSnaResult(props) {
                             <Box m={3}/>
                             <OnClickInfo keyword={"twittersna_tweetnb_tip"}/>
                         </Box>
-                    </ExpansionPanelDetails>
-                </ExpansionPanel>
+                    </AccordionDetails>
+                </Accordion>
             }
             {
                 result.pieCharts &&
                 result.pieCharts.map((obj, index) => {
                     if ((props.request.userList.length === 0 || index === 3))
                         return (
-                            <ExpansionPanel key={index}>
-                                <ExpansionPanelSummary
+                            <Accordion key={index}>
+                                <AccordionSummary
                                     expandIcon={<ExpandMoreIcon />}
                                     aria-controls={"panel" + index + "a-content"}
                                     id={"panel" + index + "a-header"}
                                 >
                                     <Typography className={classes.heading}>{keyword(obj.title)}</Typography>
-                                </ExpansionPanelSummary>
-                                <ExpansionPanelDetails>
+                                </AccordionSummary>
+                                <AccordionDetails>
                                     <Box alignItems="center" justifyContent="center" width={"100%"}>
                                         {
                                             (obj.json === null || (obj.json[0].values.length === 1 && obj.json[0].values[0] === "")) &&
@@ -862,8 +957,8 @@ export default function TwitterSnaResult(props) {
                                             </div>
                                         }
                                     </Box>
-                                </ExpansionPanelDetails>
-                            </ExpansionPanel>
+                                </AccordionDetails>
+                            </Accordion>
                         )
                     else
                         return null;
@@ -871,15 +966,15 @@ export default function TwitterSnaResult(props) {
             }
             {
                 props.request.userList.length === 0 && result &&
-                <ExpansionPanel>
-                    <ExpansionPanelSummary
+                <Accordion>
+                    <AccordionSummary
                         expandIcon={<ExpandMoreIcon />}
                         aria-controls={"panel0a-content"}
                         id={"panel0a-header"}
                     >
                         <Typography className={classes.heading}>{keyword("bubble_chart_title")}</Typography>
-                    </ExpansionPanelSummary>
-                    <ExpansionPanelDetails>
+                    </AccordionSummary>
+                    <AccordionDetails>
                         {
                             topUserProfile && topUserProfile.length !== 0 &&
                             <div style={{ width: '100%', }}>
@@ -945,17 +1040,17 @@ export default function TwitterSnaResult(props) {
                             (!topUserProfile && result.tweetCount.count !== "0") &&
                             <CircularProgress className={classes.circularProgress} />
                         }
-                    </ExpansionPanelDetails>
-                </ExpansionPanel>
+                    </AccordionDetails>
+                </Accordion>
             }
             {
-                <ExpansionPanel>
-                    <ExpansionPanelSummary
+                <Accordion>
+                    <AccordionSummary
                         expandIcon={<ExpandMoreIcon />}
                     >
-                        <Typography className={classes.heading}>{keyword('heatmap_chart_title')}</Typography>
-                    </ExpansionPanelSummary>
-                    <ExpansionPanelDetails>
+                        <Typography className={classes.heading}>{keyword("heatmap_chart_title")}</Typography>
+                    </AccordionSummary>
+                    <AccordionDetails>
                         {
                             result && result.heatMap &&
                             <Box alignItems="center" justifyContent="center" width={"100%"}>
@@ -966,7 +1061,8 @@ export default function TwitterSnaResult(props) {
                                         <Plot
                                             style={{ width: '100%', height: "450px" }}
                                             data={result.heatMap.plot}
-                                            config={result.histogram.config}
+                                            config={result.heatMap.config}
+                                            layout={result.heatMap.layout}
                                             onClick={(e) => onHeatMapClick(e)}
                                         />
                                         <Box m={1}/>
@@ -1019,17 +1115,17 @@ export default function TwitterSnaResult(props) {
 
                                 <CircularProgress className={classes.circularProgress} />)
                         }
-                    </ExpansionPanelDetails>
-                </ExpansionPanel>
+                    </AccordionDetails>
+                </Accordion>
             }
             {
-                <ExpansionPanel>
-                    <ExpansionPanelSummary
+                <Accordion>
+                    <AccordionSummary
                         expandIcon={<ExpandMoreIcon />}
                     >
                         <Typography className={classes.heading}>{keyword("hashtag_graph_title")}</Typography>
-                    </ExpansionPanelSummary>
-                    <ExpansionPanelDetails>
+                    </AccordionSummary>
+                    <AccordionDetails>
                     {
                         result && result.coHashtagGraph && result.coHashtagGraph.data.nodes.length === 0 &&
                         <Typography variant={"body2"}>{keyword("twittersna_no_data")}</Typography>
@@ -1037,27 +1133,100 @@ export default function TwitterSnaResult(props) {
                     {
                         result && result.coHashtagGraph && result.coHashtagGraph.data.nodes.length !== 0 &&
                         <div style={{ width: '100%' }}>
-                            <Sigma graph={result.coHashtagGraph.data}
-                                renderer={"canvas"}
-                                style={{ textAlign: 'left', width: '100%', height: '700px' }}
-                                onClickNode={(e) => onClickNodeCoHashtagGraph(e)}
-                                settings={{
-                                    drawEdges: true,
-                                    drawEdgeLabels: false,
-                                    minNodeSize: 6,
-                                    maxNodeSize: 20,
-                                    minEdgeSize: 1,
-                                    maxEdgeSize: 5,
-                                    defaultNodeColor: "#3388AA",
-                                    defaultEdgeColor: "#C0C0C0",
-                                    edgeColor: "default"
-                                }}
-                            >
-                                <EdgeShapes default="curve" />
-                                <RandomizeNodePositions>
-                                    <ForceAtlas2 iterationsPerRender={1} timeout={15000} />
-                                </RandomizeNodePositions>
-                            </Sigma>
+                            <Box pb={3}>
+                                <Grid container justify="space-between" spacing={2}
+                                    alignContent={"center"}>
+                                    <Grid item>
+                                        <CSVLink
+                                            data={result.coHashtagGraph.data.nodes}
+                                            filename={"Nodes_" + keyword("hashtag_graph_title") + '_' + props.request.keywordList.join('&') + '_' + props.request.from + "_" + props.request.until + ".csv"}
+                                            className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary">
+                                            {
+                                                "CSV Nodes"
+                                            }
+                                        </CSVLink>
+                                    </Grid>
+                                    <Grid item>
+                                        <CSVLink
+                                            data={result.coHashtagGraph.data.edges}
+                                            filename={"Edges_" + keyword("hashtag_graph_title") + '_' + props.request.keywordList.join('&') + '_' + props.request.from + "_" + props.request.until + ".csv"}
+                                            className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary">
+                                            {
+                                                "CSV Edges"
+                                            }
+                                        </CSVLink>
+                                    </Grid>
+                                </Grid>
+                            </Box>
+                            {
+                                (coHashtagGraphReset === null && coHashtagGraphClickNode === null && result.coHashtagGraph.data.nodes.length !== 0) &&
+                                <div>
+                                    <Sigma graph={result.coHashtagGraph.data}
+                                        renderer={"canvas"}
+                                        style={{ textAlign: 'left', width: '100%', height: '700px' }}
+                                        onClickNode={(e) => onClickNodeCoHashtagGraph(e)}
+                                        settings={{
+                                            drawEdges: true,
+                                            drawEdgeLabels: false,
+                                            minNodeSize: 6,
+                                            maxNodeSize: 20,
+                                            minEdgeSize: 1,
+                                            maxEdgeSize: 5,
+                                            defaultNodeColor: "#3388AA",
+                                            defaultEdgeColor: "#C0C0C0",
+                                            edgeColor: "default"
+                                        }}
+                                    >
+                                        <RandomizeNodePositions>
+                                            <ForceAtlas2 iterationsPerRender={1} timeout={15000} />
+                                        </RandomizeNodePositions>
+                                    </Sigma>
+                                </div>
+                            }
+                            {
+                                (coHashtagGraphReset !== null && coHashtagGraphClickNode !== null) &&
+                                <div>
+                                    <Sigma graph={coHashtagGraphClickNode}
+                                        renderer={"canvas"}
+                                        style={{ textAlign: 'left', width: '100%', height: '700px' }}
+                                        onClickStage={(e) => onClickStageCoHashtagGraph(e)}
+                                        settings={{
+                                            drawEdges: true,
+                                            drawEdgeLabels: false,
+                                            minNodeSize: 6,
+                                            maxNodeSize: 20,
+                                            minEdgeSize: 1,
+                                            maxEdgeSize: 5,
+                                            defaultNodeColor: "#3388AA",
+                                            defaultEdgeColor: "#C0C0C0",
+                                            edgeColor: "default"
+                                        }}
+                                    >
+                                    </Sigma>
+                                </div>
+                            }
+                            {
+                                (coHashtagGraphReset !== null && coHashtagGraphClickNode === null) &&
+                                <div>
+                                    <Sigma graph={coHashtagGraphReset}
+                                        renderer={"canvas"}
+                                        style={{ textAlign: 'left', width: '100%', height: '700px' }}
+                                        onClickNode={(e) => onClickNodeCoHashtagGraph(e)}
+                                        settings={{
+                                            drawEdges: true,
+                                            drawEdgeLabels: false,
+                                            minNodeSize: 6,
+                                            maxNodeSize: 20,
+                                            minEdgeSize: 1,
+                                            maxEdgeSize: 5,
+                                            defaultNodeColor: "#3388AA",
+                                            defaultEdgeColor: "#C0C0C0",
+                                            edgeColor: "default"
+                                        }}
+                                    >
+                                    </Sigma>
+                                </div>
+                            }
                             <Box m={1} />
                             <OnClickInfo keyword={"twittersna_hashtag_graph_tip"} />
                             <Box m={2} />
@@ -1101,125 +1270,115 @@ export default function TwitterSnaResult(props) {
                         result.coHashtagGraph === undefined &&
                         <CircularProgress className={classes.circularProgress} />
                     }
-                    </ExpansionPanelDetails>
-                </ExpansionPanel>
+                    </AccordionDetails>
+                </Accordion>
             }
             {
                 props.request.userList.length === 0 && result &&
-                <ExpansionPanel>
-                    <ExpansionPanelSummary
-                        expandIcon={<ExpandMoreIcon />}
-                    >
-                        <Typography className={classes.heading}>{keyword("sosem_graph_title")}</Typography>
-                    </ExpansionPanelSummary>
-                    <ExpansionPanelDetails>
-                    {
-                        result.socioSemanticGraph && result.socioSemanticGraph.data.nodes.length !== 0 &&
-                            <div style={{ width: '100%' }}>
-                                <Sigma graph={result.socioSemanticGraph.data}
-                                    renderer={"canvas"}
-                                    style={{ textAlign: 'left', width: '100%', height: '700px' }}
-                                    onClickNode={(e) => onClickNodeSocioSemanticGraph(e)}
-                                    settings={{
-                                        drawEdges: true,
-                                        drawEdgeLabels: false,
-                                        minNodeSize: 6,
-                                        maxNodeSize: 20,
-                                        minEdgeSize: 1,
-                                        maxEdgeSize: 5,
-                                        defaultNodeColor: "#3388AA",
-                                        defaultEdgeColor: "#C0C0C0",
-                                        edgeColor: "default"
-                                    }}
-                                    >
-                                    <EdgeShapes default="curve" />
-                                    <RandomizeNodePositions>
-                                        <ForceAtlas2 iterationsPerRender={1} timeout={15000} scalingRatio={2} />
-                                    </RandomizeNodePositions>
-                                </Sigma>
-                                <Box m={1}/>
-                                <OnClickInfo keyword={"twittersna_sosem_graph_tip"}/>
-                                <Box m={2}/>
-                                {
-                                    socioSemanticGraphTweets &&
-                                    <div>
-                                        <Grid container justify="space-between" spacing={2}
-                                            alignContent={"center"}>
-                                            <Grid item>
-                                                <Button
-                                                    variant={"contained"}
-                                                    color={"secondary"}
-                                                    onClick={() => setSocioSemanticGraphTweets(null)}>
-                                                    {
-                                                        keyword('twittersna_result_hide')
-                                                    }
-                                                </Button>
-                                            </Grid>
-                                            <Grid item>
-                                                <Button
-                                                    variant={"contained"}
-                                                    color={"primary"}
-                                                    onClick={() => downloadClick(socioSemanticGraphTweets.csvArr, socioSemanticGraphTweets.selected)}>
-                                                    {
-                                                        keyword('twittersna_result_download')
-                                                    }
-                                                </Button>
-                                            </Grid>
-                                        </Grid>
-                                        <Box m={2} />
-                                        <CustomTable title={keyword("twittersna_result_slected_tweets")}
-                                            colums={socioSemanticGraphTweets.columns}
-                                            data={socioSemanticGraphTweets.data}
-                                            actions={goToTweetAction}
-                                        />
-                                    </div>
-                                }
-                            </div>
-                        }
-                        {
-                            result.socioSemanticGraph && result.socioSemanticGraph.data.nodes.length === 0 &&
-                            <Typography variant={"body2"}>{keyword("twittersna_no_data")}</Typography>
-                        }
-                        {
-                            result.socioSemanticGraph === undefined &&
-                            <CircularProgress className={classes.circularProgress} />
-                        }
-                    </ExpansionPanelDetails>
-                </ExpansionPanel>
-            }
-            {
-                props.request.userList.length === 0 && result &&
-                <ExpansionPanel>
-                    <ExpansionPanelSummary
+                <Accordion>
+                    <AccordionSummary
                         expandIcon={<ExpandMoreIcon />}
                     >
                         <Typography className={classes.heading}>{keyword("sosem_4mode_graph_title")}</Typography>
-                    </ExpansionPanelSummary>
-                    <ExpansionPanelDetails>
+                    </AccordionSummary>
+                    <AccordionDetails>
                     {
                         result.socioSemantic4ModeGraph && result.socioSemantic4ModeGraph.data.nodes.length !== 0 &&
                             <div style={{ width: '100%' }}>
-                                <Sigma graph={result.socioSemantic4ModeGraph.data}
-                                    renderer={"canvas"}
-                                    style={{ textAlign: 'left', width: '100%', height: '700px' }}
-                                    onClickNode={(e) => onClickNodeSocioSemantic4ModeGraph(e)}
-                                    settings={{
-                                        drawEdges: true,
-                                        drawEdgeLabels: false,
-                                        minNodeSize: 6,
-                                        maxNodeSize: 20,
-                                        minEdgeSize: 1,
-                                        maxEdgeSize: 5,
-                                        defaultNodeColor: "#3388AA",
-                                        defaultEdgeColor: "#C0C0C0",
-                                        edgeColor: "default"
-                                    }}
-                                    >
-                                    <EdgeShapes default="curve" />
-                                    <RandomizeNodePositions>
-                                        <ForceAtlas2 iterationsPerRender={1} timeout={15000} scalingRatio={2} />
-                                    </RandomizeNodePositions>
-                                </Sigma>
+                                <Box pb={3}>
+                                    <Grid container justify="space-between" spacing={2}
+                                        alignContent={"center"}>
+                                        <Grid item>
+                                            <CSVLink
+                                                data={result.socioSemantic4ModeGraph.data.nodes}
+                                                filename={"Nodes_" + keyword("sosem_4mode_graph_title") + '_' + props.request.keywordList.join('&') + '_' + props.request.from + "_" + props.request.until + ".csv"} 
+                                                className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary">
+                                                {
+                                                    "CSV Nodes"
+                                                }
+                                            </CSVLink>
+                                        </Grid>
+                                        <Grid item>
+                                            <CSVLink
+                                                data={result.socioSemantic4ModeGraph.data.edges}
+                                                filename={"Edges_" + keyword("sosem_4mode_graph_title") + '_' + props.request.keywordList.join('&') + '_' + props.request.from + "_" + props.request.until + ".csv"} 
+                                                className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary">
+                                                {
+                                                    "CSV Edges"
+                                                }
+                                            </CSVLink>
+                                        </Grid>
+                                    </Grid>
+                                </Box>
+                                {
+                                    (socioSemantic4ModeGraphReset === null && socioSemantic4ModeGraphClickNode === null && result.socioSemantic4ModeGraph.data.nodes.length !== 0) &&
+                                    <div>
+                                        <Sigma graph={result.socioSemantic4ModeGraph.data}
+                                            renderer={"canvas"}
+                                            style={{ textAlign: 'left', width: '100%', height: '700px' }}
+                                            onClickNode={(e) => onClickNodeSocioSemantic4ModeGraph(e)}
+                                            settings={{
+                                                drawEdges: true,
+                                                drawEdgeLabels: false,
+                                                minNodeSize: 6,
+                                                maxNodeSize: 20,
+                                                minEdgeSize: 1,
+                                                maxEdgeSize: 5,
+                                                defaultNodeColor: "#3388AA",
+                                                defaultEdgeColor: "#C0C0C0",
+                                                edgeColor: "default"
+                                            }}
+                                        >
+                                            <RandomizeNodePositions>
+                                                <ForceAtlas2 iterationsPerRender={1} timeout={15000} scalingRatio={2} />
+                                            </RandomizeNodePositions>
+                                        </Sigma>
+                                    </div>
+                                }
+                                {
+                                    (socioSemantic4ModeGraphReset !== null && socioSemantic4ModeGraphClickNode !== null) &&
+                                    <div>
+                                        <Sigma graph={socioSemantic4ModeGraphClickNode}
+                                            renderer={"canvas"}
+                                            style={{ textAlign: 'left', width: '100%', height: '700px' }}
+                                            onClickStage={(e) => onClickStageSocioSemantic4ModeGraph(e)}
+                                            settings={{
+                                                drawEdges: true,
+                                                drawEdgeLabels: false,
+                                                minNodeSize: 6,
+                                                maxNodeSize: 20,
+                                                minEdgeSize: 1,
+                                                maxEdgeSize: 5,
+                                                defaultNodeColor: "#3388AA",
+                                                defaultEdgeColor: "#C0C0C0",
+                                                edgeColor: "default"
+                                            }}
+                                        >
+                                        </Sigma>
+                                    </div>
+                                }
+                                {
+                                    (socioSemantic4ModeGraphReset !== null && socioSemantic4ModeGraphClickNode === null) &&
+                                    <div>
+                                        <Sigma graph={socioSemantic4ModeGraphReset}
+                                            renderer={"canvas"}
+                                            style={{ textAlign: 'left', width: '100%', height: '700px' }}
+                                            onClickNode={(e) => onClickNodeSocioSemantic4ModeGraph(e)}
+                                            settings={{
+                                                drawEdges: true,
+                                                drawEdgeLabels: false,
+                                                minNodeSize: 6,
+                                                maxNodeSize: 20,
+                                                minEdgeSize: 1,
+                                                maxEdgeSize: 5,
+                                                defaultNodeColor: "#3388AA",
+                                                defaultEdgeColor: "#C0C0C0",
+                                                edgeColor: "default"
+                                            }}
+                                        >
+                                        </Sigma>
+                                    </div>
+                                }
                                 <Box m={1}/>
                                 <OnClickInfo keyword={"twittersna_sosem_4mode_graph_tip"}/>
                                 <Box m={2}/>
@@ -1267,19 +1426,19 @@ export default function TwitterSnaResult(props) {
                             result.socioSemantic4ModeGraph === undefined &&
                             <CircularProgress className={classes.circularProgress} />
                         }
-                    </ExpansionPanelDetails>
-                </ExpansionPanel>
+                    </AccordionDetails>
+                </Accordion>
             }
             {
-                <ExpansionPanel>
-                    <ExpansionPanelSummary
+                <Accordion>
+                    <AccordionSummary
                         expandIcon={<ExpandMoreIcon />}
                         aria-controls={"panel0a-content"}
                         id={"panel0a-header"}
                     >
                         <Typography className={classes.heading}>{keyword(result.cloudChart.title)}</Typography>
-                    </ExpansionPanelSummary>
-                    <ExpansionPanelDetails>
+                    </AccordionSummary>
+                    <AccordionDetails>
                         {
                             result && result.cloudChart && result.cloudChart.json &&
                             <Box alignItems="center" justifyContent="center" width={"100%"}>
@@ -1375,8 +1534,8 @@ export default function TwitterSnaResult(props) {
                             result.cloudChart.json === undefined &&
                             <CircularProgress className={classes.circularProgress} />
                         }
-                    </ExpansionPanelDetails>
-                </ExpansionPanel>
+                    </AccordionDetails>
+                </Accordion>
             }
             {
                 props.request.userList.length === 0 && result &&

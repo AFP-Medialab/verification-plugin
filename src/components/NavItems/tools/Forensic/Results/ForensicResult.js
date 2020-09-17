@@ -1,7 +1,7 @@
 import {Paper} from "@material-ui/core";
 import Box from "@material-ui/core/Box";
 import Grid from "@material-ui/core/Grid";
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import {useDispatch} from "react-redux";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
@@ -14,7 +14,6 @@ import VisibilityIcon from '@material-ui/icons/Visibility';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Collapse from "@material-ui/core/Collapse";
 import clsx from 'clsx';
-import 'react-image-lightbox/style.css';
 import CloseResult from "../../../../Shared/CloseResult/CloseResult";
 import {cleanForensicState} from "../../../../../redux/actions/tools/forensicActions";
 import Radio from "@material-ui/core/Radio";
@@ -64,7 +63,10 @@ const ForensicResults = (props) => {
     };
 
     const scrollToTop = () => window.scrollTo(0, 320)
-
+    useEffect(() => {
+        setFilteredImage(result.displayImage);
+        setFilterName("forensic_title_none");
+    }, [result]);
 
     return (
         <Paper className={classes.root}>
@@ -112,7 +114,6 @@ const ForensicResults = (props) => {
                                         <CardMedia
                                             className={classes.forensicMedia}
                                             image={result[value]["map"]}
-                                            title={keyword("forensic_title_" + value)}
                                             onClick={() => changeFilter(key, "forensic_title_" + value)}
                                         />
                                     </Tooltip>

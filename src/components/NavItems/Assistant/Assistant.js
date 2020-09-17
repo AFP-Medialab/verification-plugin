@@ -99,9 +99,9 @@ const Assistant = () => {
 
     // if there is only one image/video, set this to be processed
     const handleOneMediaListResult = () => {
-        if (imageListRef.current.length === 1 && videoListRef.current.length === 0) {
+        if (imageListRef.current.length === 1 && videoListRef.current.length===0) {
             dispatch(setProcessUrl(imageListRef.current[0]))}
-        else if(videoListRef.current.length === 1 && imageListRef.current.length === 0){
+        else if(videoListRef.current.length === 1 && imageListRef.current.length===0){
             dispatch(setProcessUrl(videoListRef.current[0]))}
     }
 

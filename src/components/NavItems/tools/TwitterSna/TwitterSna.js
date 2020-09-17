@@ -36,8 +36,6 @@ import tsv from "../../../../LocalDictionary/components/NavItems/tools/TwitterSn
 import { submissionEvent } from "../../../Shared/GoogleAnalytics/GoogleAnalytics";
 import AuthenticationCard from "../../../Shared/Authentication/AuthenticationCard";
 
-import { setTwitterSnaResult } from "../../../../redux/actions/tools/twitterSnaActions";
-
 
 const TwitterSna = () => {
   const classes = useMyStyles();
@@ -45,8 +43,6 @@ const TwitterSna = () => {
 
   const request = useSelector(state => state.twitterSna.request);
   const reduxResult = useSelector(state => state.twitterSna.result);
-  console.log("request: ", request);
-  console.log("reduxResult: ", reduxResult);
   const isLoading = useSelector(state => state.twitterSna.loading);
   const loadingMessage = useSelector(state => state.twitterSna.loadingMessage);
 
@@ -141,7 +137,6 @@ const TwitterSna = () => {
   }
 
   function extractUrlSearch(windowUrl) {
-    // const isUrlSearch = windowUrl.split("/twitterSna?url=").length > 1 ? true : false;
     let part = windowUrl.split("/twitterSna?url=")[1];
     if (part === undefined) {
       return {
@@ -344,8 +339,9 @@ const TwitterSna = () => {
         "none",
         "false"
       );
-      // console.log("Updating submittedRequest: ", newSubmittedRequest);
+
       setSubmittedRequest(newSubmittedRequest);
+      window.history.pushState({}, null, "/popup.html#/app/tools/twitterSna");
     } else {
       setKeywords(userAuthenticated ?
         "" :
@@ -393,7 +389,6 @@ const TwitterSna = () => {
         "none",
         "false"
       );
-      // console.log("Updating submittedRequest: ", newSubmittedRequest);
       setSubmittedRequest(newSubmittedRequest);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

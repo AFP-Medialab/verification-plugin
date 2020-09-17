@@ -13,7 +13,7 @@ import Box from "@material-ui/core/Box";
 import useLoadLanguage from "../../../Hooks/useLoadLanguage";
 import tsv from "../../../LocalDictionary/components/NavItems/FactCheck.tsv";
 import Link from "@material-ui/core/Link";
-import afpImage from "../About/images/Logo-AFP-384.png"
+//import afpImage from "../About/images/Logo-AFP-384.png"
 
 
 const FactCheck = () => {
@@ -31,6 +31,9 @@ const FactCheck = () => {
                 break;
             case "es":
                 rssUrl = "https://factual.afp.com/rss.xml";
+                break;
+            case "el":
+                rssUrl = "https://www.ellinikahoaxes.gr/feed/";
                 break;
             default:
                 rssUrl = "https://factcheck.afp.com/rss.xml";
@@ -65,7 +68,7 @@ const FactCheck = () => {
                             <Grid item key={key}>
                                 <Card className={classes.FactCheckCard}>
                                     <CardContent>
-                                        <img src={afpImage} className={classes.factCheckLogos} alt=""/>
+                                       {/*'<img src={afpImage} className={classes.factCheckLogos} alt=""/>'*/}
                                         <Typography className={classes.title} color="textSecondary" gutterBottom>
                                             {finishXMLParsing(val.pubDate)}
                                         </Typography>

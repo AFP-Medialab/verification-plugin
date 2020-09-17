@@ -26,11 +26,13 @@ const MetadataImageResult = (props) => {
     if (report.message === "metadata_img_error_exif")
         return (
             <Paper className={classes.root}>
-                <CloseResult onClick={() => dispatch(cleanMetadataState())}/>
-                <Box m={1}/>
-                <OnClickInfo keyword={"metadata_tip"}/>
-                <Box m={3}/>
-                <img src={props.image} alt={props.image}/>
+                <CloseResult onClick={() => dispatch(cleanMetadataState())} />
+                <Box m={1} />
+                <OnClickInfo keyword={"metadata_tip"} />
+                <Box m={3} />
+                <div style={{maxWidth: '640px', margin: "0 auto"}}>
+                    <img src={props.image} alt={props.image} style={{maxWidth: "100%", maxHeight: "100%"}}/>
+                </div>
                 <Typography variant={"h5"}>
                     {keyword("metadata_img_error_exif")}
                 </Typography>
@@ -279,7 +281,9 @@ const MetadataImageResult = (props) => {
             <Box m={1}/>
             <OnClickInfo keyword={"metadata_tip"}/>
             <Box m={3}/>
-            <img src={props.image} alt={props.image}/>
+            <div style={{maxWidth: '640px', margin: "0 auto"}}>
+                <img src={props.image} alt={props.image} style={{maxWidth: "100%", maxHeight: "100%"}}/>
+            </div>           
             <Typography variant={"h5"}>
                 {keyword("metadata_img_software_title")}
             </Typography>

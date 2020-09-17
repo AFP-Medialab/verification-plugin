@@ -15,9 +15,9 @@ import { useForm, Controller } from "react-hook-form";
 import * as yup from "yup";
 import _ from "lodash";
 
-import ExpansionPanel from '@material-ui/core/ExpansionPanel';
-import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
-import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
+import Accordion from '@material-ui/core/Accordion';
+import AccordionSummary from '@material-ui/core/AccordionSummary';
+import AccordionDetails from '@material-ui/core/AccordionDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Card from "@material-ui/core/Card";
 import Grid from '@material-ui/core/Grid';
@@ -207,13 +207,13 @@ const AuthenticationCard = (props) => {
   const explanationText = messageI18NResolver("AUTHCARD_EXPLANATION_TEXT");
 
   return (
-    <ExpansionPanel>
-      <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+    <Accordion>
+      <AccordionSummary expandIcon={<ExpandMoreIcon />}>
         {
           requireAuthMsgComp
         }
-      </ExpansionPanelSummary>
-      <ExpansionPanelDetails>
+      </AccordionSummary>
+      <AccordionDetails>
         <Card raised={false} elevation={0}>
           {
             explanationText && !(_.toString(explanationText).trim() === "") &&
@@ -495,8 +495,8 @@ const AuthenticationCard = (props) => {
             </Grid>
           </Grid>
         </Card>
-      </ExpansionPanelDetails>
-    </ExpansionPanel>
+      </AccordionDetails>
+    </Accordion>
 
   );
 };

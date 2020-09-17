@@ -19,7 +19,11 @@ import youCheckImage from "./Images/youCheck.png"
 import useLoadLanguage from "../../../Hooks/useLoadLanguage";
 import tsv from "../../../LocalDictionary/components/NavItems/ClassRoom.tsv";
 import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
-
+import AccordionSummary from "@material-ui/core/AccordionSummary";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import AccordionDetails from "@material-ui/core/AccordionDetails";
+import Accordion from "@material-ui/core/Accordion";
+import {changeTabEvent} from "../../Shared/GoogleAnalytics/GoogleAnalytics";
 
 function TabPanel(props) {
     const {children, value, index, ...other} = props;
@@ -59,6 +63,7 @@ const ClassRoom = () => {
 
         const handleChange = (event, newValue) => {
             setValue(newValue);
+            changeTabEvent(newValue, tabTitle(newValue));
         };
 
         const [videoUrl, setVideoUrl] = useState(null);
@@ -92,17 +97,80 @@ const ClassRoom = () => {
             return res;
         };
 
+        const introduction = (n) => {
+            let arr = [];
+            for (let i=1; i <= n; i++) {
+                arr.push({
+                    title: keyword("introduction_title" + i),
+                    content: keyword("introduction_para" + i)
+                })
+            }
+            return arr;
+        }
+
+        const tabTitle = (index) => {
+            switch (index) {
+                case 0:
+                    return keyword("classroom_introduction");
+                case 1: 
+                    return keyword("classroom_teaching");
+                case 2:
+                    return keyword("remote_resources_title");
+                case 3:
+                    return keyword("classroom_gamification");
+                case 4:
+                    return keyword("user_resources_title");
+                case 5:
+                    return keyword("glossary_title");
+                default:
+                    return keyword("classroom_introduction");
+            }
+        }
+
         return (
             <Paper className={classes.root}>
                 <Box justifyContent="center" display="flex" flexDirection="column">
                     <CustomTile text={keyword("classroom_title")}/>
                     <Box m={1}/>
                     <Tabs value={value} onChange={handleChange} aria-label="simple tabs example">
-                        <Tab label={keyword("remote_resources_title")} {...a11yProps(0)} />
-                        <Tab label={keyword("user_resources_title")}  {...a11yProps(1)} />
-                        <Tab label={keyword("glossary_title")}  {...a11yProps(2)} />
+                        <Tab label={tabTitle(0)} {...a11yProps(0)} />
+                        <Tab label={tabTitle(1)} {...a11yProps(1)} />
+                        <Tab label={tabTitle(2)} {...a11yProps(2)} />
+                        <Tab label={tabTitle(3)} {...a11yProps(3)} />
+                        <Tab label={tabTitle(4)}  {...a11yProps(4)} />
+                        <Tab label={tabTitle(5)}  {...a11yProps(5)} />
                     </Tabs>
                     <TabPanel value={value} index={0}>
+                        {
+                            introduction(5).map((obj, index) => {
+                                return (
+                                    <Accordion key={index}>
+                                        <AccordionSummary
+                                            expandIcon={<ExpandMoreIcon />}
+                                            aria-controls="panel1a-content"
+                                            id="panel1a-header"
+                                        >
+                                            <Typography className={classes.heading}>{obj.title}</Typography>
+                                        </AccordionSummary>
+                                        <AccordionDetails>
+                                            <div className={"content"}
+                                                dangerouslySetInnerHTML={{ __html: obj.content }}></div>
+                                        </AccordionDetails>
+                                    </Accordion>
+                                )
+                            })
+                        }
+                    </TabPanel>
+                    <TabPanel value={value} index={1}>
+                        <Iframe
+                            frameBorder="0"
+                            url={keyword("teaching_url")}
+                            allow="fullscreen"
+                            height="700"
+                            width="100%"
+                        />
+                    </TabPanel>
+                    <TabPanel value={value} index={2}>
                         <Divider/>
                         {
                             EducationalResources().map((value, index) => {
@@ -138,7 +206,16 @@ const ClassRoom = () => {
                             })
                         }
                     </TabPanel>
-                    <TabPanel value={value} index={1}>
+                    <TabPanel value={value} index={3}>
+                        <Iframe
+                            frameBorder="0"
+                            url={keyword("gamification_url")}
+                            allow="fullscreen"
+                            height="450"
+                            width="100%"
+                        />
+                    </TabPanel>
+                    <TabPanel value={value} index={4}>
                         <Typography variant={"h5"}>{keyword("user_resources_intro")}</Typography>
                         <Box m={2}/>
                         <Typography variant="body1" align={"justify"}>{keyword("user_resources_intro_remote")}</Typography>
@@ -181,7 +258,7 @@ const ClassRoom = () => {
                             }
                         </Typography>
                     </TabPanel>
-                    <TabPanel value={value} index={2}>
+                    <TabPanel value={value} index={5}>
                         {
                             glossary().map((obj, key) => {
                                 return (
@@ -203,7 +280,9 @@ const ClassRoom = () => {
                         }
                     </TabPanel>
                 </Box>
-                <img src={youCheckImage} width={"20%"} alt={youCheckImage}/>
+                <a href="http://project-youcheck.com/" target="_blank" rel="noopener noreferrer">
+                    <img src={youCheckImage} width={"10%"} alt={youCheckImage}/>
+                </a>
                 <Dialog
                     height={"400px"}
                     fullWidth

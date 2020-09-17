@@ -23,7 +23,7 @@ const AssistantImageResult = () => {
                     {keyword("media_to_process")}
                 </Typography>
                 <Typography className={classes.title} color="primary" style={{wordBreak: "break-word"}}>
-                    {<a href={processUrl}> {processUrl.length>100 ? processUrl.substring(0,100) + "...": processUrl} </a>}
+                    {<a href={processUrl} target="_blank" rel="noopener noreferrer"> {processUrl.length>100 ? processUrl.substring(0,100) + "...": processUrl} </a>}
                 </Typography>
             </CardContent>
             <CardMedia>

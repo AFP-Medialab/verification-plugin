@@ -1,7 +1,13 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setError } from "../../../../../redux/actions/errorActions";
-import { setTwitterSnaLoading, setTwitterSnaResult, setTwitterSnaLoadingMessage, setUserProfileMostActive, setGexfExport } from "../../../../../redux/actions/tools/twitterSnaActions";
+import { 
+  setTwitterSnaLoading, 
+  setTwitterSnaResult, 
+  setTwitterSnaLoadingMessage, 
+  setUserProfileMostActive, 
+  setGexfExport
+} from "../../../../../redux/actions/tools/twitterSnaActions";
 import axios from "axios";
 import _ from "lodash";
 
@@ -67,10 +73,12 @@ function getColor(entity) {
 
   // Get color for graph's nodes, edges 
   if (entity === "Hashtag") return '#3388AA';
+  if (entity === "URL") return "#9400D3";
   if (entity === "Mention" || entity === "Mention-Mention") return '#88D8B0';
   if (entity === "RetweetWC" || entity === "RetweetWC-RetweetWC") return '#FF6F69';
   if (entity === "Reply" || entity === "Reply-Reply") return '#FFEEAD';
-  if (entity === "Hashtag-Hashtag") return "#a2bfc7";
+  if (entity === "Hashtag-Hashtag") return "#96cce0";
+  if (entity === "URL-URL") return "#CC99C9";
   if (entity === "Else-Else") return "#C0C0C0";
 
   return '#35347B';
@@ -101,16 +109,17 @@ function getEdgesCoHashtag(tweets) {
     for (let i = 0; i < arr.length - 1; i++) {
       for (let j = i + 1; j < arr.length; j++) {
         let sortedVertices = [arr[i], arr[j]].sort();
-        edges.push({ id: sortedVertices.join(""), 
+        edges.push({ id: sortedVertices.join("___and___"),
                     source: sortedVertices[0], 
                     target: sortedVertices[1],
-                    label: sortedVertices.join(""), 
+                    label: sortedVertices.join("___and___"),
                     weight: 1,
-                    size: 1 });
+                    size: 1,
+                    type: "curve" });
       }
     }
   });
-  let uniqEdges = groupByThenSum(edges, 'id', [], ['size', 'weight'], ['source', 'target', 'label']);
+  let uniqEdges = groupByThenSum(edges, 'id', [], ['size', 'weight'], ['source', 'target', 'label', 'type']);
   return uniqEdges;
 }
 
@@ -193,20 +202,6 @@ function lowercaseFieldInTweets(tweets, field = 'hashtags') {
   return newTweets;
 }
 
-// function getTweetAttrObjArr(tweets) {
-//   let tweetAttrObjArr = tweets.map((tweet) => {
-//     let hashtags = (tweet._source.hashtags !== undefined) ? tweet._source.hashtags.map((hashtag) => {return "#" + hashtag;}) : [];
-//     let user_mentions = (tweet._source.user_mentions !== undefined) ? tweet._source.user_mentions.map((obj) => { return "MT:@" + obj.screen_name;}) : [];
-//     let obj = {
-//       hashtags: [...new Set(hashtags)],
-//       user_mentions: [...new Set(user_mentions)],
-//       username: "AU:@" + tweet._source.screen_name
-//     }
-//     return obj;
-//   });
-//   return tweetAttrObjArr;
-// }
-
 function getTweetAttrObjArr(tweets) {
   let tweetAttrObjArr = tweets.map((tweet) => {
     let hashtags = (tweet._source.hashtags !== undefined && tweet._source.hashtags !== null)
@@ -222,11 +217,16 @@ function getTweetAttrObjArr(tweets) {
     ? ["Rpl:@" + tweet._source.screen_name]
     : [];
 
+    let urls = (tweet._source.urls !== undefined && tweet._source.urls.length !== 0)
+    ? tweet._source.urls.map((url) => { return "URL:" + getDomain(url); })
+    : [];
+
     let obj = {
       hashtags: [...new Set(hashtags)],
       userIsMentioned: [...new Set(userIsMentioned)],
       userRTWC: userRTWC,
-      userReply: userReply
+      userReply: userReply,
+      urls: [...new Set(urls)]
     }
     return obj;
   });
@@ -254,7 +254,7 @@ function getCombinationFrom2Arrs(arr1, arr2) {
   return occurences;
 }
 
-function getCoOccurenceHashtagMention(tweetAttrObjArr) {
+function getCoOccurence(tweetAttrObjArr) {
   let coOccur = [];
   tweetAttrObjArr.forEach((obj) => {
     if (obj.hashtags.length > 0) {
@@ -263,22 +263,8 @@ function getCoOccurenceHashtagMention(tweetAttrObjArr) {
     if (obj.userIsMentioned.length > 0) {
       coOccur.push(getCoOccurCombinationFrom1Arr(obj.userIsMentioned));
     }
-    if (obj.hashtags.length > 0 && obj.userIsMentioned.length > 0) {
-      coOccur.push(getCombinationFrom2Arrs(obj.hashtags, obj.userIsMentioned));
-    }
-  })
-  let coOccurGroupedBy = groupByThenSum(coOccur.flat(), 'id', [], ['count'], []);
-  return coOccurGroupedBy;
-}
-
-function getCoOccurenceHashtagMentionRTWCReply(tweetAttrObjArr) {
-  let coOccur = [];
-  tweetAttrObjArr.forEach((obj) => {
-    if (obj.hashtags.length > 0) {
-      coOccur.push(getCoOccurCombinationFrom1Arr(obj.hashtags));
-    }
-    if (obj.userIsMentioned.length > 0) {
-      coOccur.push(getCoOccurCombinationFrom1Arr(obj.userIsMentioned));
+    if (obj.urls.length > 0) {
+      coOccur.push(getCoOccurCombinationFrom1Arr(obj.urls));
     }
 
     if (obj.hashtags.length > 0 && obj.userIsMentioned.length > 0) {
@@ -290,15 +276,31 @@ function getCoOccurenceHashtagMentionRTWCReply(tweetAttrObjArr) {
     if (obj.hashtags.length > 0 && obj.userReply.length > 0) {
       coOccur.push(getCombinationFrom2Arrs(obj.hashtags, obj.userReply));
     }
+    if (obj.hashtags.length > 0 && obj.urls.length > 0) {
+      coOccur.push(getCombinationFrom2Arrs(obj.hashtags, obj.urls));
+    }
+
     if (obj.userIsMentioned.length > 0 && obj.userRTWC.length > 0) {
       coOccur.push(getCombinationFrom2Arrs(obj.userIsMentioned, obj.userRTWC));
     }
     if (obj.userIsMentioned.length > 0 && obj.userReply.length > 0) {
       coOccur.push(getCombinationFrom2Arrs(obj.userIsMentioned, obj.userReply));
     }
+    if (obj.userIsMentioned.length > 0 && obj.urls.length > 0) {
+      coOccur.push(getCombinationFrom2Arrs(obj.userIsMentioned, obj.urls));
+    }
+
     if (obj.userRTWC.length > 0 && obj.userReply.length > 0) {
       coOccur.push(getCombinationFrom2Arrs(obj.userRTWC, obj.userReply));
     }
+    if (obj.userRTWC.length > 0 && obj.urls.length > 0) {
+      coOccur.push(getCombinationFrom2Arrs(obj.userRTWC, obj.urls));
+    }
+
+    if (obj.userReply.length > 0 && obj.urls.length > 0) {
+      coOccur.push(getCombinationFrom2Arrs(obj.userReply, obj.urls));
+    }
+
     let coOccurGroupedBy = groupByThenSum(coOccur.flat(), 'id', [], ['count'], []);
     return coOccurGroupedBy;
   })
@@ -311,17 +313,20 @@ function getEdgesFromCoOcurObjArr(coOccurObjArr) {
   coOccurObjArr.forEach((obj) => {
     let [first, second] =  obj.id.split("___and___");
 
-    let edgeType = null;
+    let connectionType = null;
     if (first.startsWith("#") && second.startsWith("#")) {
-      edgeType = "Hashtag-Hashtag";
+      connectionType = "Hashtag-Hashtag";
     } else if (first.startsWith("isMTed:@") && second.startsWith("isMTed:@")) {
-      edgeType = "Mention-Mention";
+      connectionType = "Mention-Mention";
     } else if (first.startsWith("RT:@") && second.startsWith("RT:@")) {
-      edgeType = "RetweetWC-RetweetWC";
+      connectionType = "RetweetWC-RetweetWC";
     } else if (first.startsWith("Rpl:@") && second.startsWith("Rpl:@")) {
-      edgeType = "Reply-Reply";
-    } else {
-      edgeType = "Else-Else";
+      connectionType = "Reply-Reply";
+    } else if (first.startsWith("URL:") && second.startsWith("URL:")) {
+      connectionType = "URL-URL";
+    }
+     else {
+      connectionType = "Else-Else";
     }
 
     edges.push(
@@ -332,7 +337,8 @@ function getEdgesFromCoOcurObjArr(coOccurObjArr) {
         target: second,
         size: obj.count, 
         weight: obj.count,
-        color: getColor(edgeType)
+        color: getColor(connectionType),
+        type: "curve"
     });
   });
   return edges;
@@ -344,6 +350,26 @@ function getTopActiveUsers(tweets, topN) {
                         .reverse()
                         .slice(0, topN);
   return topUsers2DArr;
+}
+
+function getDomain(url) {
+  var domain;
+
+  if (url.indexOf("://") > -1) {
+    domain = url.split('/')[2];
+  }
+  else {
+    domain = url.split('/')[0];
+  }
+  
+  if (domain.indexOf("www.") > -1) { 
+    domain = domain.split('www.')[1];
+  }
+  
+  domain = domain.split(':')[0];
+  domain = domain.split('?')[0];
+
+  return domain;
 }
 
 const useTwitterSnaRequest = (request) => {
@@ -416,9 +442,8 @@ const useTwitterSnaRequest = (request) => {
     };
 
     const createTimeLineChart = (request, json, givenFrom, givenUntil) => {
-      let titleEnd = request.keywordList.join("&") + " " + request.from + " " + request.until;
       let layout = {
-        title: <div><b>{keyword("user_time_chart_title")}</b><br /> {titleEnd}</div>,
+        title: keyword("user_time_chart_title") + "<br>" + request.keywordList.join(", ") + " - " + request["from"] + " - " + request["until"],
         automargin: true,
         xaxis: {
           range: [request.from, request.until],
@@ -427,11 +452,21 @@ const useTwitterSnaRequest = (request) => {
         annotations: [{
           xref: 'paper',
           yref: 'paper',
-          x: 1.2,
+          x: 1.15,
           xanchor: 'right',
           y: -0.4,
           yanchor: 'top',
           text: 'we-verify.eu',
+          showarrow: false
+        },
+        {
+          xref: 'paper',
+          yref: 'paper',
+          x: 1.15,
+          xanchor: 'right',
+          y: -0.6,
+          yanchor: 'top',
+          text: keyword('twitter_local_time'),
           showarrow: false
         }],
         autosize: true,
@@ -462,8 +497,14 @@ const useTwitterSnaRequest = (request) => {
     };
 
     const createPieCharts = (request, jsonPieCharts) => {
-      let cloudLayout = {
-        title: "",
+      let layout = {
+        title: {
+          font: {
+            family: 'Arial, sans-serif',
+            size: 18
+          },
+          xanchor: 'center'
+        },
         automargin: true,
         width: 500,
         height: 500
@@ -479,13 +520,14 @@ const useTwitterSnaRequest = (request) => {
         modeBarButtons: [["toImage"]],
         displaylogo: false
       };
-      let titleEnd = request.keywordList.join("&") + " " + request.from + " " + request.until;
-      let titles = [
+
+      let keywordTitles = [
         "retweets_cloud_chart_title",
         "likes_cloud_chart_title",
         "top_users_pie_chart_title",
         "mention_cloud_chart_title"
       ];
+
       let tips = [
         "twittersna_most_retweet_tip",
         "twittersna_most_likes_tip",
@@ -495,13 +537,15 @@ const useTwitterSnaRequest = (request) => {
 
       let pieCharts = [];
 
-      for (let cpt = 0; cpt < titles.length; cpt++) {
-        cloudLayout.title = <div><b>{keyword(titles[cpt])}</b><br /> {titleEnd}</div>;
+      for (let cpt = 0; cpt < keywordTitles.length; cpt++) {
+        let specificLayout = JSON.parse(JSON.stringify(layout));
+        let specificTitle = keyword(keywordTitles[cpt]) + "<br>" + request.keywordList.join(", ") + " - " + request["from"] + " - " + request["until"];
+        specificLayout.title.text = specificTitle;
         pieCharts.push(
           {
-            title: titles[cpt],
+            title: keywordTitles[cpt],
             json: jsonPieCharts[cpt],
-            layout: cloudLayout,
+            layout: specificLayout,
             config: config,
             tip: tips[cpt]
           }
@@ -679,9 +723,7 @@ const useTwitterSnaRequest = (request) => {
         result.tweets = responseArrayOf9[1].tweets;
         result.heatMap = createHeatMap(request, result.tweets);
         result.coHashtagGraph = createCoHashtagGraph(result.tweets);
-        result.socioSemanticGraph = createSocioSemanticGraph(result.tweets);
         result.cloudChart = createWordCloud(result.tweets);
-
         result.socioSemantic4ModeGraph = createSocioSemantic4ModeGraph(result.tweets);
         
         let authors = getTopActiveUsers(result.tweets, 100).map((arr) => {return arr[0];});
@@ -691,7 +733,7 @@ const useTwitterSnaRequest = (request) => {
       }
       else
         result.cloudChart = { title: "top_words_cloud_chart_title" };
-      dispatch(setTwitterSnaResult(request, result, false, false));
+      dispatch(setTwitterSnaResult(request, result, false, true));
       return result;
     };
 
@@ -714,17 +756,13 @@ const useTwitterSnaRequest = (request) => {
       let givenFrom = data.from;
       let givenUntil = data.until;
       let entries = makeEntries(data);
-      // let generateList = [
-      //   getReactArrayURL(entries, keyword("elastic_url"), keyword("elastic_count")),
-      //   getJsonCounts(entries),
-      //   getPlotlyJsonHisto(entries, givenFrom, givenUntil)
-      // ];
-      if (final) {
+      if (final && userAuthenticated) {
         axios.all([getESQuery4Gexf(entries)])
         .then(response => {
           dispatch(setGexfExport(response[0]));
         })
       }
+
       return axios.all(
         (final) ? [getAggregationData(entries), getTweets(entries)] : [getAggregationData(entries)]
       )
@@ -775,6 +813,30 @@ const useTwitterSnaRequest = (request) => {
       }
       // 2D-array with cells as number of tweets by day and hour
       let nbTweetArr2D = getNbTweetsByHourDay(dayAxis, hourAxis, hits);
+
+      let config = {
+        displayModeBar: true,
+        toImageButtonOptions: {
+          format: 'png', // one of png, svg, jpeg, webp
+          filename: request.keywordList.join("&") + "_" + request["from"] + "_" + request["until"] + "_Heatmap",
+          scale: 1 // Multiply title/legend/axis/canvas sizes by this factor
+        },
+        responsive: true,
+        modeBarButtons: [["toImage"], ["resetScale2d"]],
+        displaylogo: false,
+      }
+
+      let layout = {
+        title: {
+          text: keyword("heatmap_chart_title") + "<br>" + request.keywordList.join(", ") + " - " + request["from"] + " - " + request["until"],
+          font: {
+            family: 'Arial, sans-serif',
+            size: 18
+          },
+          xanchor: 'center'
+        }
+      }
+
       return {
         plot: [{
           z: nbTweetArr2D,
@@ -785,6 +847,8 @@ const useTwitterSnaRequest = (request) => {
           [0.75, 'rgb(33,113,181)'], [0.875, 'rgb(8,81,156)'], [1.0, 'rgb(8,48,107)']],
           type: 'heatmap'
         }],
+        config: config,
+        layout: layout,
         isAllnul: isAllnul
       };
     }
@@ -810,36 +874,16 @@ const useTwitterSnaRequest = (request) => {
       };
     }
 
-    const createSocioSemanticGraph = (tweets) => {
-      let lcTweets = lowercaseFieldInTweets(tweets, 'hashtags');
-      lcTweets = lowercaseFieldInTweets(lcTweets, 'user_mentions');
-      lcTweets = lowercaseFieldInTweets(lcTweets, 'screen_name');
-      
-      let tweetAttrObjArr = getTweetAttrObjArr(lcTweets);
-      let coOccurObjArr = getCoOccurenceHashtagMention(tweetAttrObjArr);
-      let edges = getEdgesFromCoOcurObjArr(coOccurObjArr);
-      
-      let nodes = [];
-      let freqHashtagObj = _.countBy(tweetAttrObjArr.map((obj) => { return obj.hashtags; }).flat());
-      let freqMentionObj = _.countBy(tweetAttrObjArr.map((obj) => { return obj.userIsMentioned; }).flat());
-      Object.entries(freqHashtagObj).forEach(arr => nodes.push({ id: arr[0], label: arr[0] + ": " + arr[1], size: arr[1], color: getColor("Hashtag"), type: "Hashtag" }));
-      Object.entries(freqMentionObj).forEach(arr => nodes.push({ id: arr[0], label: arr[0] + ": " + arr[1], size: arr[1], color: getColor("Mention"), type: "Mention" }));
-
-      let topNodeGraph = getTopNodeGraph({ nodes: nodes, edges: edges}, ["size"], [20, 10], ['Hashtag', 'Mention']);
-      return {
-        data: topNodeGraph
-      };
-    }
-
     const createSocioSemantic4ModeGraph = (tweets) => {
       let lcTweets = lowercaseFieldInTweets(tweets, 'hashtags');
       lcTweets = lowercaseFieldInTweets(lcTweets, 'user_mentions');
       lcTweets = lowercaseFieldInTweets(lcTweets, 'screen_name');
       lcTweets = lowercaseFieldInTweets(lcTweets, 'in_reply_to_screen_name');
+      lcTweets = lowercaseFieldInTweets(lcTweets, 'urls');
       
       let tweetAttrObjArr = getTweetAttrObjArr(lcTweets);
 
-      let coOccurObjArr = getCoOccurenceHashtagMentionRTWCReply(tweetAttrObjArr);
+      let coOccurObjArr = getCoOccurence(tweetAttrObjArr);
       let edges = getEdgesFromCoOcurObjArr(coOccurObjArr);
       
       let nodes = [];
@@ -847,12 +891,14 @@ const useTwitterSnaRequest = (request) => {
       let freqMentionObj = _.countBy(tweetAttrObjArr.map((obj) => { return obj.userIsMentioned; }).flat());
       let freqRTWCObj = _.countBy(tweetAttrObjArr.map((obj) => { return obj.userRTWC; }).flat());
       let freqReplyObj = _.countBy(tweetAttrObjArr.map((obj) => { return obj.userReply; }).flat());
+      let freqURLObj = _.countBy(tweetAttrObjArr.map((obj) => { return obj.urls; }).flat());
       Object.entries(freqHashtagObj).forEach(arr => nodes.push({ id: arr[0], label: arr[0] + ": " + arr[1], size: arr[1], color: getColor("Hashtag"), type: "Hashtag" }));
       Object.entries(freqMentionObj).forEach(arr => nodes.push({ id: arr[0], label: arr[0] + ": " + arr[1], size: arr[1], color: getColor("Mention"), type: "Mention" }));
       Object.entries(freqRTWCObj).forEach(arr => nodes.push({ id: arr[0], label: arr[0] + ": " + arr[1], size: arr[1], color: getColor("RetweetWC"), type: "RetweetWC" }));
       Object.entries(freqReplyObj).forEach(arr => nodes.push({ id: arr[0], label: arr[0] + ": " + arr[1], size: arr[1], color: getColor("Reply"), type: "Reply" }));
+      Object.entries(freqURLObj).forEach(arr => nodes.push({ id: arr[0], label: arr[0] + ": " + arr[1], size: arr[1], color: getColor("URL"), type: "URL" }));
 
-      let topNodeGraph = getTopNodeGraph({ nodes: nodes, edges: edges}, ["size"], [20, 10, 10, 10], ['Hashtag', 'Mention', 'RetweetWC', 'Reply']);
+      let topNodeGraph = getTopNodeGraph({ nodes: nodes, edges: edges}, ["size"], [20, 10, 10, 10, 15], ['Hashtag', 'Mention', 'RetweetWC', 'Reply', 'URL']);
       return {
         data: topNodeGraph
       };
