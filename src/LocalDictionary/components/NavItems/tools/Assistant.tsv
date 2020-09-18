@@ -1,8 +1,7 @@
 	en	fr	es	el
-
 assistant_title	Assistant	Assistant	Assistente	Βοηθός
 assistant_intro	Would you like to process a URL or upload your own file?	Voulez-vous traiter une adresse url ou télécharger votre fichier?	Quiere procesar una dirección url o cargar su propio fichero?	Θέλετε να επεξεργαστείτε μια διεύθυνση URL ή να ανεβάσετε το δικό σας αρχείο;
-process_url	Process URL	Traiter l'url		Procesar la url	Επεξεργασία URL
+process_url	Process URL	Traiter l'url	Procesar la url	Επεξεργασία URL
 submit_own_file	Upload File	Chargez votre fichier	Cargar su fichero	Μεταφόρτωση αρχείου
 upload_video	Video	Video	Video	Βίντεο
 upload_image	Image	Image	Imagen	Εικόνα
@@ -22,7 +21,7 @@ text_title	Text	Temp	Temp	Temp
 text_intro	The following text has been found on the page	Temp	Temp	Temp
 dbkf_title	DBKF Check	Temp	Temp	Temp
 expand_text	Expand Text	Temp	Temp	Temp
-text_tooltip	<b>What is this?</b></br>Any text which can be extracted from the given URL is displayed here</br></br><b>How do I use this?</b></br>The first 500 characters in any extracted text are sent to be checked against the database of known fakes - a database set up to identify and keep track of disinformation which has already been debunked.</br></br>The results of this check are listed in the section titled <b>DBKF Check</b>. Here, a list of all potentially relevant debunked claims are listed, along with a link where full details on the claim, and any evidence related to it or its debunk can be seen.</br>	Temp	Temp	Temp
+text_tooltip	<b>What is this?</b></br>Any text which can be extracted from the given URL is displayed here</br></br><b>How do I use this?</b></br>The first 500 characters in any extracted text are sent to be checked against the database of known fakes - a database set up to identify and keep track of disinformation which has already been debunked.</br></br>The results of this check are listed in the section titled <b>DBKF Check</b>. A list of all potentially relevant debunked claims are listed, along with a link where full details on the claim, and any evidence related to it or its debunk can be seen.</br>	Temp	Temp	Temp
 dbkf_error	An issue has occurred when trying to connect to the database of known fakes. Some results may be omitted from this page. If the problem persists, please contact support.	Temp	Temp	Temp
 
 sc_failed	The source credibility check has failed. Some results may not be displayed. If the problem persists, please contact support.	Temp	Temp	Temp
@@ -59,7 +58,7 @@ metadata_text	The metadata tool can be used to retrieve image/video metadata	Tem
 rights_text	The video rights tool can be used can be used to retrieve information solely about video rights	Temp	Temp	Το εργαλείο δικαιωμάτων βίντεο μπορεί να χρησιμοποιηθεί για την ανάκτηση πληροφοριών αποκλειστικά για δικαιώματα βίντεο
 forensic_text	The forensic tool can be used to detect any image manipulation	Temp	Temp	Το εργαλείο ανάλυση αυθεντικότητας Εικόνων (image forensics) μπορεί να χρησιμοποιηθεί για τον εντοπισμό τυχόν παραμορφώσεων της εικόνας
 
-assistant_help_title	What is this?	Temp	Temp
+assistant_help_title	What is this?	Temp	Temp	Temp
 assistant_help_1	The weverify toolkit (this plugin) has multiple tools which can help in the verification of content on social networks, designed to help journalists save time and be more efficient in their fact checking tasks.<br>A full list of these tools can be found in the tutorial section of this plugin.<br>Given the multiple tools and services available, the weverify assistant has been designed to guide users to the services available to them given the nature of the content they would like to check.<br><br>	Temp	Temp	Temp
 assistant_help_2	<b>How does the assistant work?</b><br>Users can choose to upload their own media to be checked (an image or a video), in which case verification tools on the plugin which support media upload will be listed.<br>An alternative option is to enter a URL which needs verification or fact checking.<br>Once a URL in entered, the assistant attempts to extract any text, images or videos it can find on the page.<br>Any extracted text or media are then used to suggest the potential actions which can be carried out. Currently, there are four major components to this:<ul><li>Source credibility: checking the source of the data to see if any information on its credibility can be found</li><li>Text: checking the text on the page to see if it is connected to any known debunks and/or misinformation</li><li>Link Explorer: checking the links on the page to see if any information on their credibility can be found</li><li>Media:  displaying any media found on the page, and if selected, giving the list of tools available on the weverify plugin to process selected media</li></ul>More information on each of these can be found on the sections themselves.<br><br>	Temp	Temp	Temp
 assistant_help_3	<b>Which URLS are supported?</b><br>Currently, there is dedicated support for links for the following types of URLs:<ul><li>Facebook photo or video posts</li><li>Twitter statuses</li><li>Youtube video links</li><li>Instagram posts</li><li>Tiktok posts</li><li>Dailymotion video links</li><li>Vimeo video links</li><li>Liveleak video links</li></ul> Other generic links can also be entered and the assistant will attempt to retrieve what it can. However, any results (particularly on the extraction of images and text) on generic links may be much more generalised.<br>	Temp	Temp	Temp
