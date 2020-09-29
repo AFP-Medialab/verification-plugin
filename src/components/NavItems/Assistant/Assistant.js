@@ -9,6 +9,7 @@ import LinearProgress from "@material-ui/core/LinearProgress";
 import Typography from "@material-ui/core/Typography";
 
 import AssistantHelp from "./AssistantHelp";
+import AssistantDBKFResult from "./AssistantDBKFResult";
 import AssistantLinkResult from "./AssistantLinkResult";
 import AssistantMediaResult from "./AssistantMediaResult";
 import AssistantProcessUrlActions from "./AssistantProcessUrlActions";
@@ -54,6 +55,7 @@ const Assistant = () => {
     const linkList = useSelector(state => state.assistant.linkList)
     const linkListSC = useSelector(state => state.assistant.linkListSC);
     const dbkfClaims = useSelector(state => state.assistant.dbkfClaims);
+    const dbkfImageResult = useSelector(state => state.assistant.dbkfImageMatch);
 
 
     //other state values
@@ -304,9 +306,13 @@ const Assistant = () => {
                     : null
                 }
 
-                <Grid item xs={12}>
-                    {imageList.length>0 || videoList.length>0 ?  <AssistantMediaResult/> : null}
-                </Grid>
+                {dbkfImageResult != null || dbkfClaims != null ?
+                    <Grid item xs={12}><AssistantDBKFResult/> </Grid> : null
+                }
+
+                {imageList.length>0 || videoList.length>0 ?
+                    <Grid item xs={12}><AssistantMediaResult/></Grid> : null
+                }
 
                 <Grid item xs = {12} className={classes.newAssistantGrid}  hidden={urlMode===null || urlMode===true}>
                     <CloseResult hidden={urlMode===null || urlMode===false} onClick={() => dispatch(cleanAssistantState())}/>

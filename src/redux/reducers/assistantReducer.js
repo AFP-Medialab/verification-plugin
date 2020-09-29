@@ -15,6 +15,7 @@ const defaultState = {
     linkListSC: null,
     linkListSCLoading: false,
     dbkfClaims: null,
+    dbkfImageMatch: null,
     loading: false
 };
 
@@ -74,6 +75,9 @@ const assistantReducer = (state = defaultState, action) => {
             state.dbkfClaims = action.payload
             return state
 
+        case "SET_DBKF_IMAGE_MATCH":
+            state.dbkfImageMatch = action.payload
+            return state
 
         case "SET_LOADING":
             state.loading = action.loading
@@ -98,6 +102,7 @@ const assistantReducer = (state = defaultState, action) => {
                 linkListSC: null,
                 linkListSCLoading: false,
                 dbkfClaims: null,
+                dbkfImageMatch: null,
                 loading: false
             };
             return state;

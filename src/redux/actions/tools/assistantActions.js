@@ -94,6 +94,14 @@ export const setDbkfClaims = (claims) => {
 }
 
 
+export const setDbkfImageMatch = (claims) => {
+    return {
+        type: "SET_DBKF_IMAGE_MATCH",
+        payload: claims
+    }
+}
+
+
 export const cleanAssistantState = () => {
     return {
         type: "CLEAN_STATE"

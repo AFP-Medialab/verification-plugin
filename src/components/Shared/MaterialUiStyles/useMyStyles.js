@@ -368,6 +368,14 @@ const useMyStyles = makeStyles(theme => ({
         height: theme.typography.h5.fontSize,
         marginRight: 3
     },
+    warningIcon: {
+        color: "red",
+        position: "relative",
+        top: theme.spacing(1),
+        width: theme.typography.h5.fontSize,
+        height: theme.typography.h5.fontSize,
+        marginRight: 3
+    },
     toolTipIcon: {
         color: theme.palette.secondary,
         position: "relative",

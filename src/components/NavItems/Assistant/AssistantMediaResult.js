@@ -21,11 +21,17 @@ import Typography from "@material-ui/core/Typography";
 import AssistantProcessUrlActions from "./AssistantProcessUrlActions";
 import {CONTENT_TYPE, KNOWN_LINK_PATTERNS, matchPattern, selectCorrectActions} from "./AssistantRuleBook";
 import ImageGridList from "../../Shared/ImageGridList/ImageGridList";
-import {setProcessUrl, setProcessUrlActions} from "../../../redux/actions/tools/assistantActions";
+import {
+    setDbkfImageMatch,
+    setProcessUrl,
+    setProcessUrlActions
+} from "../../../redux/actions/tools/assistantActions";
 import tsv from "../../../LocalDictionary/components/NavItems/tools/Assistant.tsv";
 import useLoadLanguage from "../../../Hooks/useLoadLanguage";
 import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
 import VideoGridList from "../../Shared/VideoGridList/VideoGridList";
+import useDBKFApi from "./useDBKFApi";
+import {setError} from "../../../redux/actions/errorActions";
 
 const AssistantMediaResult = () => {
 
@@ -33,11 +39,11 @@ const AssistantMediaResult = () => {
     const dispatch = useDispatch();
     const keyword = useLoadLanguage("components/NavItems/tools/Assistant.tsv", tsv);
 
+    const dbkfSimilarityApi = useDBKFApi();
     const inputUrl = useSelector(state => state.assistant.inputUrl);
     const processUrl = useSelector(state => state.assistant.processUrl);
     const imageList = useSelector(state => state.assistant.imageList);
     const videoList = useSelector(state => state.assistant.videoList);
-
 
     // select the correct media to process, then load actions possible
     const submitMediaToProcess = (url) => {
@@ -47,7 +53,6 @@ const AssistantMediaResult = () => {
     // load possible actions for selected media url
     const loadProcessUrlActions = () => {
         let contentType = null;
-
         if(imageList.includes(processUrl)) {contentType = CONTENT_TYPE.IMAGE}
         else if (videoList.includes(processUrl)) {contentType = CONTENT_TYPE.VIDEO};
 
@@ -58,13 +63,25 @@ const AssistantMediaResult = () => {
         dispatch(setProcessUrlActions(contentType, actions))
     }
 
+    const runSimilaritySearch = () => {
+        if(imageList.includes(processUrl)){
+            dbkfSimilarityApi.callSimilarityApi(processUrl).then(result=>{
+                if(result[1].length !== 0 ) {
+                    dispatch(setDbkfImageMatch(result[1]))
+                }
+            }).catch(()=>{
+                dispatch(setError(keyword("dbkf_error")));
+            })
+        }
+    }
 
     // if the processUrl changes, load any actions that can be taken on this new url
     useEffect(() => {
-        if (processUrl!==null){loadProcessUrlActions();}
+        if (processUrl!==null){
+            loadProcessUrlActions();
+            runSimilaritySearch();
+        }
     }, [processUrl]);
-
-
 
     return (
         <Grid item xs={12}>
