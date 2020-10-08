@@ -5,7 +5,7 @@ let gexfGen_url = process.env.REACT_APP_GEXF_GENERATOR_URL;
 //Functions calling elastic search and return a JSON plotly can use
 
     //Get tweets
-    async function queryTweetsFromES(param, aggs, must, mustNot) {
+    async function queryTweetsFromES(aggs, must, mustNot) {
         const response = await fetch(elasticSearch_url, {
             method: 'POST',
             body: JSON.stringify(buildQuery(aggs, must, mustNot, 10000)).replace(/\\/g, "").replace(/"{/g, "{").replace(/}"/g, "}"),
@@ -61,7 +61,7 @@ let gexfGen_url = process.env.REACT_APP_GEXF_GENERATOR_URL;
         let must = constructMatchPhrase(param);
         let mustNot = constructMatchNotPhrase(param);
         let aggs = {};
-        return queryTweetsFromES(param, aggs, must, mustNot).then(elasticResponse => {
+        return queryTweetsFromES(aggs, must, mustNot).then(elasticResponse => {
             return {
                 tweets: elasticResponse.hits.hits
             }

@@ -210,7 +210,7 @@ function getTweetAttrObjArr(tweets) {
     let userIsMentioned = (tweet._source.user_mentions !== undefined && tweet._source.user_mentions !== null)
       ? tweet._source.user_mentions.map((obj) => { return "isMTed:@" + obj.screen_name; })
       : [];
-    let userRTWC = (tweet._source.quoted_user_screen_name !== undefined && tweet._source.quoted_user_screen_name !== null)
+    let userRTWC = (tweet._source.quoted_status_id_str !== undefined && tweet._source.quoted_status_id_str !== null)
     ? ["RT:@" + tweet._source.quoted_user_screen_name]
     : [];
     let userReply = (tweet._source.in_reply_to_screen_name !== undefined && tweet._source.in_reply_to_screen_name !== null)

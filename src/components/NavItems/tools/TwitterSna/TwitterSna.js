@@ -96,7 +96,7 @@ const TwitterSna = () => {
           request.until :
           null
       ) :
-      new Date("2020-01-01T00:00:00")
+      new Date("2020-10-01T00:00:00")
   );
   const [untilError, setUntilError] = useState(false);
   const [langInput, setLangInput] = useState(
@@ -331,7 +331,7 @@ const TwitterSna = () => {
           new Date("2016-12-10T00:00:00"),
         userAuthenticated ?
           urlObj.request.until ? urlObj.request.until : null :
-          new Date("2020-01-01T00:00:00"),
+          new Date("2020-10-01T00:00:00"),
         "true",
         userAuthenticated ?
           "lang_all" :
@@ -358,7 +358,7 @@ const TwitterSna = () => {
       );
       setUntil(userAuthenticated ?
         null :
-        new Date("2020-01-01T00:00:00")
+        new Date("2020-10-01T00:00:00")
       );
       setLocalTime("true");
       setLangInput(userAuthenticated ?
@@ -381,7 +381,7 @@ const TwitterSna = () => {
           new Date("2016-12-10T00:00:00"),
         userAuthenticated ?
           null :
-          new Date("2020-01-01T00:00:00"),
+          new Date("2020-10-01T00:00:00"),
         "true",
         userAuthenticated ?
           "lang_all" :
