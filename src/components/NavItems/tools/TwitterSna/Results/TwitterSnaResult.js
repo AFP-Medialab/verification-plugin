@@ -375,10 +375,13 @@ export default function TwitterSnaResult(props) {
             setSocioSemantic4ModeGraphTweets(dataToDisplay);
         } else if (data.data.node.type === "RetweetWC") {
             let selectedUser = data.data.node.id.replace("RT:@", "");
-            let filteredTweets = result.tweets.filter(tweet => 
-                tweet._source.quoted_status_id_str !== undefined 
-                && tweet._source.quoted_status_id_str !== null
-                && tweet._source.screen_name.toLowerCase() === selectedUser);
+            let filteredTweets1 = result.tweets.filter(tweet => 
+                tweet._source.quoted_status_id_str !== undefined &&
+                tweet._source.quoted_status_id_str !== null &&
+                tweet._source.quoted_user_screen_name !== undefined);
+            let filteredTweets = filteredTweets1.filter(tweet =>
+                tweet._source.quoted_user_screen_name !== null &&
+                tweet._source.quoted_user_screen_name.includes(selectedUser));
             let dataToDisplay = displayTweets(filteredTweets);
             dataToDisplay["selected"] = data.data.node.id;
             setSocioSemantic4ModeGraphTweets(dataToDisplay);
