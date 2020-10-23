@@ -1,6 +1,7 @@
 const defaultState = {
-    urlMode: null,
+    urlMode: true,
     imageVideoSelected: false,
+    singleMediaPresent: null,
     inputUrl: null,
     processUrl: null,
     imageList: [],
@@ -9,14 +10,17 @@ const defaultState = {
     urlText: null,
     processUrlActions : [],
     processUrlType: null,
-    inputUrlActions: null,
-    inputUrlSc: null,
+    inputUrlSourceCredibility: null,
     inputSCLoading: false,
-    linkListSC: null,
-    linkListSCLoading: false,
-    dbkfClaims: null,
+    textMatchLoading: false,
+    dbkfTextMatch: null,
     dbkfImageMatch: null,
-    loading: false
+    dbkfVideoMatch: null,
+    dbkfMediaMatchLoading: false,
+    ocrTextResult: null,
+    ocrLoading: null,
+    loading: false,
+    warningExpanded: false
 };
 
 
@@ -27,9 +31,13 @@ const assistantReducer = (state = defaultState, action) => {
             return state;
 
         case "SET_PROCESS_URL":
-            state.processUrl = action.payload;
-            return state;
+            // return Object.assign({}, state, action)
+            state.processUrl = action.processUrl;
+            state.processUrlType = action.processUrlType;
 
+        case "SET_PROCESS_URL_TYPE":
+            state.processUrlType = action.payload;
+            return state;
 
         case "SET_SCRAPED_DATA":
             state.urlText = action.text
@@ -53,12 +61,7 @@ const assistantReducer = (state = defaultState, action) => {
 
 
         case "SET_INPUT_SC":
-            state.inputUrlSc = action.payload
-            return state;
-
-
-        case "SET_LINK_LIST_SC":
-            state.linkListSC = action.payload
+            state.inputUrlSourceCredibility = action.payload
             return state;
 
         case "SET_INPUT_SC_LOADING":
@@ -66,28 +69,54 @@ const assistantReducer = (state = defaultState, action) => {
             return state;
 
 
-        case "LINK_LIST_SC_LOADING":
-            state.linkListSCLoading = action.payload
+        case "SET_TEXT_MATCH_LOADING":
+            state.textMatchLoading = action.payload
             return state;
 
 
         case "SET_DBKF_CLAIMS":
-            state.dbkfClaims = action.payload
+            state.dbkfTextMatch = action.payload
             return state
 
         case "SET_DBKF_IMAGE_MATCH":
             state.dbkfImageMatch = action.payload
             return state
 
+        case "SET_DBKF_VIDEO_MATCH":
+            state.dbkfVideoMatch = action.payload
+            return state
+
+        case "SET_OCR_TEXT_RESULT":
+            state.ocrTextResult = action.payload
+            return state
+
+        case "SET_SINGLE_MEDIA_PRESENT":
+            state.singleMediaPresent = action.payload
+            return state
+
+        case "SET_OCR_LOADING":
+            state.ocrLoading = action.payload
+            return state
+
+        case "SET_DBKF_MEDIA_MATCH_LOADING":
+            state.dbkfMediaMatchLoading = action.payload
+            return state
+
+
         case "SET_LOADING":
             state.loading = action.loading
+            return state;
+
+        case "SET_WARNING_EXPANDED":
+            state.warningExpanded = action.payload
             return state;
 
 
         case "CLEAN_STATE":
             state = {
-                urlMode: null,
+                urlMode: true,
                 imageVideoSelected: false,
+                singleMediaPresent: null,
                 inputUrl: null,
                 processUrl: null,
                 imageList: [],
@@ -96,14 +125,17 @@ const assistantReducer = (state = defaultState, action) => {
                 urlText: null,
                 processUrlActions : [],
                 processUrlType: null,
-                inputUrlActions: null,
-                inputUrlSc: null,
+                inputUrlSourceCredibility: null,
                 inputSCLoading: false,
-                linkListSC: null,
-                linkListSCLoading: false,
-                dbkfClaims: null,
+                textMatchLoading: false,
+                dbkfTextMatch: null,
                 dbkfImageMatch: null,
-                loading: false
+                dbkfVideoMatch: null,
+                ocrTextResult: null,
+                ocrLoading: null,
+                loading: false,
+                warningExpanded: false,
+                dbkfMediaMatchLoading: false
             };
             return state;
 

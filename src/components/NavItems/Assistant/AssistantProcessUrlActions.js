@@ -1,21 +1,21 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {useSelector} from "react-redux";
 
+import Avatar from "@material-ui/core/Avatar";
 import Box from "@material-ui/core/Box";
-import Button from "@material-ui/core/Button";
 import Card from "@material-ui/core/Card";
-import CardContent from "@material-ui/core/CardContent";
-import Grid from "@material-ui/core/Grid";
-import Icon from "@material-ui/core/Icon";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemAvatar from "@material-ui/core/ListItemAvatar";
+import ListItemText from "@material-ui/core/ListItemText";
 import Typography from "@material-ui/core/Typography";
 
-import AssistantImageResult from "./AssistantImageResult";
-import AssistantVideoResult from "./AssistantVideoResult";
-import {CONTENT_TYPE} from "./AssistantRuleBook";
 import history from "../../Shared/History/History";
 import tsv from "../../../LocalDictionary/components/NavItems/tools/Assistant.tsv";
 import useLoadLanguage from "../../../Hooks/useLoadLanguage";
 import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
+import Divider from "@material-ui/core/Divider";
+
 
 const AssistantProcessUrlActions = () => {
 
@@ -26,7 +26,7 @@ const AssistantProcessUrlActions = () => {
     const processUrl = useSelector(state => state.assistant.processUrl);
     const processUrlActions = useSelector(state => state.assistant.processUrlActions);
     const resultProcessType = useSelector(state => state.assistant.processUrlType);
-    const resultIsImage = resultProcessType === CONTENT_TYPE.IMAGE
+
 
     const handleClick = (path, resultUrl) => {
         if(resultUrl!=null) {
@@ -39,54 +39,42 @@ const AssistantProcessUrlActions = () => {
 
     return (
         processUrlActions.length>0 ?
-
-            <Grid container spacing = {2}>
-                {(processUrl!==null) ?
-                    <Grid item xs={6}>
-                        {resultIsImage ? <AssistantImageResult/> : <AssistantVideoResult/>}
-                    </Grid>
-                    : null
-                }
-
-                <Grid  item xs = {6}>
-
-                    <Card variant = {"outlined"}>
-                        <Box m = {2}/>
-
-                        <Typography variant="h5" component="h2">
-                            {keyword("things_you_can_do_header")}
-                        </Typography>
-                        <Typography className={classes.title} color="primary">
-                            {keyword("things_you_can_do")}
-                        </Typography>
-
-                        <Box m = {2}/>
-
-                        <Grid container spacing={2}>
-                            {processUrlActions.map((action, index) => {return (
-                                <Grid container m = {4} key={index}>
-                                    <Card className={classes.assistantCards}  variant = "outlined"
-                                          onClick={
-                                              () => handleClick(action.path, action.useInputUrl ? inputUrl : processUrl)
-                                          }>
-                                        <CardContent>
-                                            <Typography className={classes.title} m={2}>{keyword(action.text)}</Typography>
-                                            <Button aria-colspan={2} size = "medium">
-                                                {<Icon className={classes.iconRootDrawer} fontSize={"large"}>
-                                                    <img className={classes.imageIconDrawer} alt="" src={action.icon}/>
-                                                </Icon>}
+            <div>
+                <Box p={2}>
+                    <Typography variant={"h5"}>{keyword("things_you_can_do_header")}</Typography>
+                    <Typography variant={"subtitle2"}>{keyword("things_you_can_do")}</Typography>
+                </Box>
+                <Divider variant={"middle"}/>
+                <List>
+                    {processUrlActions.map((action, index) => {return (
+                        <Box m={2} key={index}>
+                            <Card className={classes.assistantCards} variant={"outlined"}
+                                  style={{}}>
+                                <ListItem
+                                      onClick={() => handleClick(action.path, action.useInputUrl ? inputUrl : processUrl)}>
+                                <ListItemAvatar>
+                                    <Avatar variant={"square"} src={action.icon}/>
+                                </ListItemAvatar>
+                                <ListItemText
+                                    primary={
+                                        <Typography component={"span"}>
+                                            <Box fontWeight="fontWeightBold">
                                                 {keyword(action.title)}
-                                            </Button>
-                                        </CardContent>
-                                    </Card>
-                                </Grid>
-                            )})}
-                        </Grid>
-
-                    </Card>
-                </Grid>
-            </Grid>
-            :null
+                                            </Box>
+                                        </Typography>
+                                    }
+                                    secondary= {
+                                        <Typography color={"textSecondary"} component={"span"}>
+                                            <Box fontStyle="italic">{keyword(action.text)}</Box>
+                                        </Typography>
+                                    }/>
+                            </ListItem>
+                            </Card>
+                        </Box>
+                    )})}
+                </List>
+            </div>
+            : null
     );
 };
 export default AssistantProcessUrlActions;

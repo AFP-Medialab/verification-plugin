@@ -2,26 +2,34 @@ import axios from "axios";
 
 export default function useDBKFApi() {
 
-    const dbkfAPI = process.env.REACT_APP_DBKF_API;
-    const similarityAPI = process.env.REACT_APP_SIMILARITY_API
+    const dbkfAPI = process.env.REACT_APP_DBKF_SEARCH_API;
+    const similarityAPI = process.env.REACT_APP_DBKF_SIMILARITY_API
 
-    const callSearchApi = async (query) => {
+    const callTextSimilarityEndpoint = async (query) => {
         query = query.replace(/[/"()’\\]/g, "")
-        let searchResult = await axios.get(dbkfAPI  + "/claims?limit=5&q=" + query)
+        let searchResult = await axios.get(dbkfAPI  + "/claims?limit=1&q=" + query)
         let searchData = Object.values(searchResult.data)
         return searchData
     }
 
-    const callSimilarityApi = async (url) => {
-        let final_url = similarityAPI + encodeURIComponent(url)
+    const callVideoSimilarityEndpoint = async ( url) => {
+        let final_url = similarityAPI + "/similarVideos?&collection_id=similarity&url=" + encodeURIComponent(url)
+        let searchResult = await axios.get(final_url)
+        let searchData = Object.values(searchResult.data)
+        return searchData
+    }
+
+    const callImageSimilarityEndpoint = async ( url) => {
+        let final_url = similarityAPI + "/similarImages?&collection_id=similarity&url=" + encodeURIComponent(url)
         let searchResult = await axios.get(final_url)
         let searchData = Object.values(searchResult.data)
         return searchData
     }
 
     return {
-        callSearchApi,
-        callSimilarityApi
+        callTextSimilarityEndpoint,
+        callImageSimilarityEndpoint,
+        callVideoSimilarityEndpoint
     }
 
 }

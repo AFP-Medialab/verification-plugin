@@ -2,38 +2,56 @@ import React, {useEffect, useRef, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {useParams} from "react-router-dom";
 
+import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import {Box, Button,Paper, TextField} from "@material-ui/core";
-import Grid from "@material-ui/core/Grid";
-import FaceIcon from "@material-ui/icons/Face";
-import LinearProgress from "@material-ui/core/LinearProgress";
-import Typography from "@material-ui/core/Typography";
-
-import AssistantHelp from "./AssistantHelp";
-import AssistantDBKFResult from "./AssistantDBKFResult";
-import AssistantLinkResult from "./AssistantLinkResult";
-import AssistantMediaResult from "./AssistantMediaResult";
-import AssistantProcessUrlActions from "./AssistantProcessUrlActions";
-import AssistantTextResult from "./AssistantTextResult";
 import CloseResult from "../../Shared/CloseResult/CloseResult";
 import CustomTile from "../../Shared/CustomTitle/CustomTitle";
-import history from "../../Shared/History/History";
+import Divider from "@material-ui/core/Divider";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Grid from "@material-ui/core/Grid";
+import IconButton from "@material-ui/core/IconButton";
+import InputAdornment from "@material-ui/core/InputAdornment";
+import LinearProgress from "@material-ui/core/LinearProgress";
 import {setError} from "../../../redux/actions/errorActions";
+import Switch from "@material-ui/core/Switch";
 import tsv from "../../../LocalDictionary/components/NavItems/tools/Assistant.tsv";
+import Typography from "@material-ui/core/Typography";
 import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
+
+import AssistantWarnings from "./AssistantWarnings";
+import AssistantLinkResult from "./AssistantLinkResult";
+import HelpDialog from "../../Shared/HelpDialog/HelpDialog";
+import AssistantMediaResult from "./AssistantMediaResult";
+import AssistantTextResult from "./AssistantTextResult";
+import AssistantOcrResult from "./AssistantOcrResult";
+import history from "../../Shared/History/History";
+
+import useSourceCredibilityApi from "./useSourceCredibilityApi";
 import useAssistantApi from "./useAssistantApi";
 import useLoadLanguage from "../../../Hooks/useLoadLanguage";
 
 import {
-    cleanAssistantState, setAssistantLoading, setImageVideoSelected, setInputSC,
-    setInputUrl, setLinkListSC, setProcessUrl, setProcessUrlActions, setScrapedData,
+    cleanAssistantState,
+    setAssistantLoading, setDbkfTextMatch,
+    setImageVideoSelected,
+    setInputSC,
+    setInputUrl, setTextMatchLoading,
+    setProcessUrl,
+    setProcessUrlActions,
+    setScrapedData,
+    setSingleMediaPresent,
     setUrlMode,
 } from "../../../redux/actions/tools/assistantActions";
 
 import {
-    CONTENT_TYPE, TYPE_PATTERNS,
-    matchPattern, selectCorrectActions, KNOWN_LINK_PATTERNS, KNOWN_LINKS,
+    CONTENT_TYPE,
+    KNOWN_LINK_PATTERNS,
+    KNOWN_LINKS,
+    TYPE_PATTERNS,
+    matchPattern,
+    selectCorrectActions,
 } from "./AssistantRuleBook";
-
+import useDBKFApi from "./useDBKFApi";
 
 const Assistant = () => {
 
@@ -43,19 +61,24 @@ const Assistant = () => {
     const keyword = useLoadLanguage("components/NavItems/tools/Assistant.tsv", tsv);
     const {url} = useParams();
 
-    //assistant state values
+    //form states
     const urlMode = useSelector(state => state.assistant.urlMode);
     const imageVideoSelected = useSelector(state => state.assistant.imageVideoSelected);
     const loading = useSelector(state => state.assistant.loading)
     const inputUrl = useSelector(state => state.assistant.inputUrl);
-    const inputUrlSC = useSelector(state => state.assistant.inputUrlSc);
+
+    //url states
     const imageList = useSelector(state => state.assistant.imageList);
     const videoList = useSelector(state => state.assistant.videoList);
     const text = useSelector(state => state.assistant.urlText)
     const linkList = useSelector(state => state.assistant.linkList)
-    const linkListSC = useSelector(state => state.assistant.linkListSC);
-    const dbkfClaims = useSelector(state => state.assistant.dbkfClaims);
+
+    //url warning states
+    const ocrResult = useSelector(state=>state.assistant.ocrTextResult);
+    const inputUrlSourceCred = useSelector(state=>state.assistant.inputUrlSourceCredibility)
+    const dbkfTextMatch = useSelector(state => state.assistant.dbkfTextMatch);
     const dbkfImageResult = useSelector(state => state.assistant.dbkfImageMatch);
+    const dbkfVideoMatch = useSelector(state => state.assistant.dbkfVideoMatch);
 
 
     //other state values
@@ -69,27 +92,32 @@ const Assistant = () => {
 
     // apis
     const assistantApi = useAssistantApi()
+    const dbkfApi = useDBKFApi()
+    const sourceCredibilityApi = useSourceCredibilityApi()
 
 
     //Check the input url for data. Figure out which url type and set required image/video lists
     const submitInputUrl = async (userInput) => {
         try {
+            dispatch(cleanAssistantState());
             dispatch(setAssistantLoading(true))
+
             // get domain and content type
             let urlType = matchPattern(userInput, KNOWN_LINK_PATTERNS)
             let contentType = matchPattern(userInput, TYPE_PATTERNS)
 
-            // decide whether or not to scrape page based on domain and content type
+            // decide whether or not to scrape page based on domain and content type, scrape, filter results
             let scrapeResult = await decideWhetherToScrape(urlType, contentType, userInput)
-
-            //set results
             setAssistantResults(urlType, contentType, userInput, scrapeResult)
 
             dispatch(setScrapedData(textRef.current, linkListRef.current, imageListRef.current, videoListRef.current))
             dispatch(setInputUrl(userInput));
 
-            // if only one image/video exists, set this to be processed without an intermediate step
+            // run post scrape checks and handlers
             handleOneMediaListResult();
+            runSourceCredibilityCheck(userInput)
+            runTextSimilaritySearch(textRef.current)
+
             dispatch(setAssistantLoading(false))
         }
         catch (error) {
@@ -102,16 +130,49 @@ const Assistant = () => {
     // if there is only one image/video, set this to be processed
     const handleOneMediaListResult = () => {
         if (imageListRef.current.length === 1 && videoListRef.current.length===0) {
-            dispatch(setProcessUrl(imageListRef.current[0]))}
+            dispatch(setProcessUrl(imageListRef.current[0]), CONTENT_TYPE.IMAGE)
+            dispatch(setSingleMediaPresent(true))
+        }
         else if(videoListRef.current.length === 1 && imageListRef.current.length===0){
-            dispatch(setProcessUrl(videoListRef.current[0]))}
+            dispatch(setProcessUrl(videoListRef.current[0]), CONTENT_TYPE.VIDEO)
+            dispatch(setSingleMediaPresent(true))
+        }
+    }
+
+    const runSourceCredibilityCheck = (inputUrl) => {
+        sourceCredibilityApi.callSourceCredibility([inputUrl])
+            .then(result => {
+                if (result.entities.DomainCredibility === undefined) {
+                    return;
+                }
+                else {dispatch(setInputSC(result))}
+            })
+            .catch(() => {
+                dispatch(setError(keyword("sc_failed")))
+            })
+    }
+
+    const runTextSimilaritySearch = (text) => {
+        if(text!==null){
+            let textToUse = text.length > 500 ? text.substring(0,500) : text
+            dispatch(setTextMatchLoading(true))
+            dbkfApi.callTextSimilarityEndpoint(textToUse)
+                .then(result=>{
+                    dispatch(setDbkfTextMatch((result)))
+                    dispatch(setTextMatchLoading(false))
+                })
+                .catch(()=>{
+                    dispatch(setError(keyword("dbkf_error")));
+                    dispatch(setTextMatchLoading(false))
+                })
+        }
     }
 
 
     // remove urls from main text
     const removeUrlsFromText = (text) => {
         if (text !== null) {
-            let urlRegex = new RegExp("(http(s)?:\/\/.)?(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{2,256}\\.[a-z]{2,6}\\b([-a-zA-Z0-9@:%_\\+.~#?&//=]*)", "g");
+            let urlRegex = new RegExp("(http(s)?://.)?(www\\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\\.[a-z]{2,6}\\b([-a-zA-Z0-9@:%_+.~#?&//=]*)", "g");
             return text.replace(urlRegex, "")
         }
         return text
@@ -233,36 +294,39 @@ const Assistant = () => {
     },[inputUrl, setFormInput])
 
 
-
     return (
-        <Paper className = {classes.root}>
-            <CustomTile text={keyword("assistant_title")}/>
-            <Box m={3}/>
+        <div>
+            <Paper className = {classes.root}>
 
-            <Grid container spacing={2}>
-                <Grid item xs = {12} className={classes.newAssistantGrid}  hidden={urlMode!==null}>
-                    <Typography component={"span"} variant={"h6"} >
-                        <FaceIcon fontSize={"small"}/> {keyword("assistant_intro")}
-                    </Typography>
+                <Grid item xs={12}/>
+                    <CustomTile text={keyword("assistant_title")}/>
+                <Grid/>
+                <Box m={5}/>
+                <Grid item xs = {12} className={classes.assistantGrid}  hidden={urlMode===null || urlMode===false } >
+                    <Box m={3}/>
+                    <Grid container>
+                        <Grid item xs={10}>
+                            <Typography style={{display: 'flex', alignItems: 'center'}} component={"span"} variant={"h6"} >
+                                <Box p={1}/>{keyword("enter_url")}
+                            </Typography>
+                        </Grid>
+                        <Grid item xs={2} align={"right"}>
+                            <FormControlLabel
+                                control={
+                                    <Switch
+                                        checked={urlMode}
+                                        onChange={() => {
+                                            cleanAssistant()
+                                            dispatch(setUrlMode(false))
+                                        }}
+                                    />}
+                                label={keyword("mode_label")}
+                            />
+                        </Grid>
+                    </Grid>
+
                     <Box m={2}/>
-                    <Button className={classes.button} variant = "contained" color="primary" onClick={() =>dispatch(setUrlMode(true))}>
-                        {keyword("process_url") || ""}
-                    </Button>
-                    <Button className={classes.button} variant="contained" color="primary"  onClick={() => dispatch(setUrlMode(false))}>
-                        {keyword("submit_own_file") || ""}
-                    </Button>
-                </Grid>
 
-
-                <Grid item xs = {12} className={classes.newAssistantGrid}  hidden={urlMode===null || urlMode===false}>
-                    <Box m={5}/>
-                    <CloseResult hidden={urlMode===null || urlMode===false} onClick={() => cleanAssistant()}/>
-
-                    <Typography component={"span"} variant={"h6"} >
-                        <FaceIcon fontSize={"small"}/> {keyword("enter_url")}
-                    </Typography>
-
-                    <Box m={2}/>
                     <TextField
                         id="standard-full-width"
                         variant="outlined"
@@ -272,71 +336,118 @@ const Assistant = () => {
                         fullWidth
                         value={formInput || ""}
                         onChange={e => setFormInput(e.target.value)}
+                        InputProps={{endAdornment:
+                                <InputAdornment variant={"filled"}>
+                                    <IconButton color={"secondary"} onClick={() => {submitInputUrl(formInput)}}>
+                                        <ArrowForwardIcon/>
+                                    </IconButton>
+                                </InputAdornment>
+                        }}
                     />
-
-                    <Box m={2}/>
-                    <Button variant="contained" color="primary"
-                            align={"center"} onClick={() => {submitInputUrl(formInput)}}>
-                        {keyword("button_submit") || ""}
-                    </Button>
                     <Box m ={3}/>
                     <LinearProgress hidden = {!loading}/>
+                    <Grid item xs={12}>
+                        {dbkfTextMatch !== null || dbkfImageResult !==null || inputUrlSourceCred !== null || dbkfVideoMatch!==null ?
+                            <AssistantWarnings/> : null}
+                        <Box m={2}/>
+                    </Grid>
                 </Grid>
 
-                {inputUrl !== null ?
-                    <AssistantLinkResult linkList={[inputUrl]}
-                                         existingResult={inputUrlSC}
-                                         title={keyword("source_credibility_title")}
-                                         byline={keyword("source_credibility_byline")}
-                                         storageMethod={(result)=>setInputSC(result)}
-                    />
-                    : null
-                }
+                <Grid item xs = {12} className={classes.assistantGrid}  hidden={urlMode===null || urlMode===true}>
+                    <Grid container>
+                        <Grid item xs={10}>
+                            <Typography component={"span"} variant={"h6"} >
+                                <Box p={1}/>{keyword("upload_type_question")}
+                            </Typography>
+                        </Grid>
+                        <Grid item xs={2} align={"right"}>
+                            <FormControlLabel
+                                control={
+                                    <Switch
+                                        checked={urlMode}
+                                        onChange={() => {
+                                            cleanAssistant()
+                                            dispatch(setUrlMode(true))}
+                                        }
+                                    />}
+                                label={keyword("mode_label")}
+                            />
+                        </Grid>
+                    </Grid>
 
-                {text !== null ?  <AssistantTextResult existingResult = {dbkfClaims}/> : null }
-
-
-                {linkList.length !== 0 ?
-                    <AssistantLinkResult linkList={linkList}
-                                         existingResult={linkListSC}
-                                         title={keyword("link_explorer_title")}
-                                         byline={keyword("link_explorer_byline")}
-                                         storageMethod={(result)=>setLinkListSC(result)}
-                    />
-                    : null
-                }
-
-                {dbkfImageResult != null || dbkfClaims != null ?
-                    <Grid item xs={12}><AssistantDBKFResult/> </Grid> : null
-                }
-
-                {imageList.length>0 || videoList.length>0 ?
-                    <Grid item xs={12}><AssistantMediaResult/></Grid> : null
-                }
-
-                <Grid item xs = {12} className={classes.newAssistantGrid}  hidden={urlMode===null || urlMode===true}>
-                    <CloseResult hidden={urlMode===null || urlMode===false} onClick={() => dispatch(cleanAssistantState())}/>
-                    <Typography component={"span"} variant={"h6"} >
-                        <FaceIcon fontSize={"small"}/> {keyword("upload_type_question")}
-                    </Typography>
                     <Box m={2}/>
+
                     <Button className={classes.button} variant="contained" color="primary" onClick={()=>{submitUpload(CONTENT_TYPE.VIDEO)}}>
                         {keyword("upload_video") || ""}
                     </Button>
+
                     <Button className={classes.button} variant="contained" color="primary" onClick={()=>{submitUpload(CONTENT_TYPE.IMAGE)}}>
                         {keyword("upload_image") || ""}
                     </Button>
                 </Grid>
 
+            </Paper>
+
+            <Box m={2}/>
+
+            <Paper className = {classes.assistantRoot} hidden={(urlMode && inputUrl===null) || (!urlMode && !imageVideoSelected)}>
+                <CloseResult onClick={() => cleanAssistant()}/>
+
+                <Box m={2}/>
                 <Grid item xs={12}>
-                    {imageVideoSelected ? <AssistantProcessUrlActions/>:null}
+                    <Typography variant={"h5"} align={"left"} hidden={imageVideoSelected}>{keyword("url_content")}</Typography>
+                    <Divider/>
+                    <Box m={2}/>
                 </Grid>
 
-                <Grid item xs={12} align={"right"}>
-                    {<AssistantHelp/>}
+                {text !== null ?
+                    <Grid item xs={12}>
+                        <AssistantTextResult/>
+                        <Box m={2}/>
+                    </Grid>
+                    :null
+                }
+
+                {imageList.length>0 || videoList.length>0 || imageVideoSelected ?
+                    <Grid item xs={12}><AssistantMediaResult/></Grid>
+                    : null
+                }
+
+                <Box m={2}/>
+            </Paper>
+
+            <Box m={4}/>
+
+            <Paper className = {classes.assistantRoot} hidden={linkList.length===0 && ocrResult===null}>
+                <Grid container spacing={2}>
+                    <Grid item xs={12}>
+                        <Typography variant={"h5"} align={"left"}>{keyword("content_explorer")}</Typography>
+                        <Divider/>
+                        <Box m={2}/>
+                    </Grid>
+
+                    {linkList.length !== 0 ?
+                        <Grid item xs={6}>
+                            <AssistantLinkResult/>
+                        </Grid> : null
+                    }
+
+                    {ocrResult!==null ?
+                        <Grid item xs={6}>
+                            <AssistantOcrResult/>
+                        </Grid> : null
+                    }
                 </Grid>
+            </Paper>
+
+            <Box m={2}/>
+
+            <Grid item xs={12} align={"right"}>
+                {<HelpDialog paragraphs={["assistant_help_1", "assistant_help_2", "assistant_help_3"]}
+                             keywordFile="components/NavItems/tools/Assistant.tsv"/>
+                }
             </Grid>
-        </Paper>
+        </div>
     )
 
 };

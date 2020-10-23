@@ -12,10 +12,14 @@ import {HelpOutline} from "@material-ui/icons";
 import useLoadLanguage from "../../../Hooks/useLoadLanguage";
 import tsv from "../../../LocalDictionary/components/NavItems/tools/Assistant.tsv";
 
-const AssistantHelp = () => {
+const HelpDialog = (props) => {
 
     const [open, setOpen] = useState(false);
-    const keyword = useLoadLanguage("components/NavItems/tools/Assistant.tsv", tsv);
+
+    // a list of keywords found in a tsv file. pass in tsv labels and tsv file location
+    const paragraphs = props.paragraphs
+    const keywordFile = props.keywordFile
+    const keyword = useLoadLanguage(keywordFile, tsv);
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -36,22 +40,16 @@ const AssistantHelp = () => {
                     </Typography>
                 </DialogTitle>
                 <DialogContent dividers>
-                    <Typography gutterBottom>
-                        {<div className={"content"}
-                              dangerouslySetInnerHTML={{__html: keyword("assistant_help_1")}}></div>}
-                    </Typography>
-                    <Typography gutterBottom>
-                        {<div className={"content"}
-                              dangerouslySetInnerHTML={{__html: keyword("assistant_help_2")}}></div>}
-                    </Typography>
-                    <Typography gutterBottom>
-                        {<div className={"content"}
-                              dangerouslySetInnerHTML={{__html: keyword("assistant_help_3")}}></div>}
-                    </Typography>
+                    {paragraphs.map((text, index) => (
+                        <Typography gutterBottom key={index}>
+                            {<div className={"content"}
+                                  dangerouslySetInnerHTML={{__html: keyword(text)}}></div>}
+                        </Typography>
+                    ))}
                 </DialogContent>
             </Dialog>
         </div>
     );
 };
 
-export default AssistantHelp;
+export default HelpDialog;

@@ -30,10 +30,18 @@ export const setProcessUrlActions = (processUrlType, actions) => {
 };
 
 
-export const setProcessUrl = (processUrl) => {
+export const setProcessUrl = (processUrl, processUrlType) => {
     return {
         type : "SET_PROCESS_URL",
-        payload : processUrl
+        processUrl : processUrl,
+        processUrlType: processUrlType
+    }
+};
+
+export const setProcessUrlType = (processUrlType) => {
+    return {
+        type : "SET_PROCESS_URL_TYPE",
+        payload : processUrlType
     }
 };
 
@@ -55,14 +63,6 @@ export const setInputSC = (inputSC) => {
     }
 }
 
-
-export const setLinkListSC = (linkListSC) => {
-    return {
-        type: "SET_LINK_LIST_SC",
-        payload: linkListSC
-    }
-}
-
 export const setInputSCLoading = (inputSCLoading) => {
     return {
         type: "SET_INPUT_SC_LOADING",
@@ -71,10 +71,10 @@ export const setInputSCLoading = (inputSCLoading) => {
 }
 
 
-export const setLinkListSCLoading = (linkListSCLoading) => {
+export const setTextMatchLoading = (textMatchingLoading) => {
     return {
-        type: "SET_LIST_LIST_SC_LOADING",
-        payload: linkListSCLoading
+        type: "SET_TEXT_MATCH_LOADING",
+        payload: textMatchingLoading
     }
 }
 
@@ -86,7 +86,7 @@ export const setAssistantLoading = (loading) => {
 }
 
 
-export const setDbkfClaims = (claims) => {
+export const setDbkfTextMatch = (claims) => {
     return {
         type: "SET_DBKF_CLAIMS",
         payload: claims
@@ -98,6 +98,48 @@ export const setDbkfImageMatch = (claims) => {
     return {
         type: "SET_DBKF_IMAGE_MATCH",
         payload: claims
+    }
+}
+
+export const setDbkfVideoMatch = (claims) => {
+    return {
+        type: "SET_DBKF_VIDEO_MATCH",
+        payload: claims
+    }
+}
+
+export const setOcrTextResult = (ocrText) => {
+    return {
+        type: "SET_OCR_TEXT_RESULT",
+        payload: ocrText
+    }
+}
+
+export const setOcrLoading = (ocrLoading) => {
+    return {
+        type: "SET_OCR_LOADING",
+        payload: ocrLoading
+    }
+}
+
+export const setSingleMediaPresent = (singleMediaPresent) => {
+    return {
+        type: "SET_SINGLE_MEDIA_PRESENT",
+        payload: singleMediaPresent
+    }
+}
+
+export const setWarningExpanded = (warningExpanded) => {
+    return {
+        type: "SET_WARNING_EXPANDED",
+        payload: warningExpanded
+    }
+}
+
+export const setDbkfMediaMatchLoading = (dbkfMediaMatchLoading) => {
+    return {
+        type: "SET_DBKF_MEDIA_MATCH_LOADING",
+        payload: dbkfMediaMatchLoading
     }
 }
 

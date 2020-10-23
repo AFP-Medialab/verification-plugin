@@ -1,37 +1,41 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 
-import Accordion from "@material-ui/core/Accordion";
-import AccordionDetails from "@material-ui/core/AccordionDetails";
-import AccordionSummary from "@material-ui/core/AccordionSummary";
-import Box from "@material-ui/core/Box";
+import CardActions from "@material-ui/core/CardActions";
+import Collapse from "@material-ui/core/Collapse";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
+import {CardHeader} from "@material-ui/core";
 import Divider from "@material-ui/core/Divider";
-import DuoOutlinedIcon from '@material-ui/icons/DuoOutlined';
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import FaceIcon from "@material-ui/icons/Face";
 import Grid from "@material-ui/core/Grid";
 import HelpOutlineOutlinedIcon from "@material-ui/icons/HelpOutlineOutlined";
-import ImageIcon from "@material-ui/icons/Image";
-import ImageSearchOutlinedIcon from '@material-ui/icons/ImageSearchOutlined';
+import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
 import Typography from "@material-ui/core/Typography";
 
-import AssistantProcessUrlActions from "./AssistantProcessUrlActions";
 import {CONTENT_TYPE, KNOWN_LINK_PATTERNS, matchPattern, selectCorrectActions} from "./AssistantRuleBook";
+import AssistantImageResult from "./AssistantImageResult";
+import AssistantVideoResult from "./AssistantVideoResult";
+import AssistantProcessUrlActions from "./AssistantProcessUrlActions";
 import ImageGridList from "../../Shared/ImageGridList/ImageGridList";
+import {setError} from "../../../redux/actions/errorActions";
 import {
-    setDbkfImageMatch,
+    setDbkfImageMatch, setDbkfMediaMatchLoading,
+    setDbkfVideoMatch,
+    setOcrTextResult,
     setProcessUrl,
-    setProcessUrlActions
+    setProcessUrlActions, setWarningExpanded
 } from "../../../redux/actions/tools/assistantActions";
 import tsv from "../../../LocalDictionary/components/NavItems/tools/Assistant.tsv";
 import useLoadLanguage from "../../../Hooks/useLoadLanguage";
 import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
 import VideoGridList from "../../Shared/VideoGridList/VideoGridList";
 import useDBKFApi from "./useDBKFApi";
-import {setError} from "../../../redux/actions/errorActions";
+import useOcrService from "./useOcrService";
+import {WarningOutlined} from "@material-ui/icons";
+import LinearProgress from "@material-ui/core/LinearProgress";
+
 
 const AssistantMediaResult = () => {
 
@@ -40,22 +44,33 @@ const AssistantMediaResult = () => {
     const keyword = useLoadLanguage("components/NavItems/tools/Assistant.tsv", tsv);
 
     const dbkfSimilarityApi = useDBKFApi();
+    const ocrApi = useOcrService();
+
     const inputUrl = useSelector(state => state.assistant.inputUrl);
     const processUrl = useSelector(state => state.assistant.processUrl);
+    const urlMode = useSelector(state => state.assistant.urlMode);
+    const resultProcessType = useSelector(state => state.assistant.processUrlType);
+    const singleMediaPresent = useSelector(state => state.assistant.singleMediaPresent);
     const imageList = useSelector(state => state.assistant.imageList);
     const videoList = useSelector(state => state.assistant.videoList);
+    const imageReverseSearch = useSelector(state => state.assistant.dbkfImageMatch);
+    const videoReverseSearch = useSelector(state => state.assistant.dbkfVideoMatch);
+
+    const warningExpanded = useSelector(state => state.assistant.warningExpanded)
+
+    const [loading, setLoading] = useState(false);
+    const [expandMedia, setExpandMedia] = useState(false);
+    const resultIsImage = resultProcessType === CONTENT_TYPE.IMAGE
 
     // select the correct media to process, then load actions possible
     const submitMediaToProcess = (url) => {
+        setExpandMedia(false);
         dispatch(setProcessUrl(url));
+
     }
 
     // load possible actions for selected media url
-    const loadProcessUrlActions = () => {
-        let contentType = null;
-        if(imageList.includes(processUrl)) {contentType = CONTENT_TYPE.IMAGE}
-        else if (videoList.includes(processUrl)) {contentType = CONTENT_TYPE.VIDEO};
-
+    const loadProcessUrlActions = (contentType) => {
         let knownInputLink = matchPattern(inputUrl, KNOWN_LINK_PATTERNS);
         let knownProcessLink = matchPattern(processUrl, KNOWN_LINK_PATTERNS);
 
@@ -63,14 +78,43 @@ const AssistantMediaResult = () => {
         dispatch(setProcessUrlActions(contentType, actions))
     }
 
-    const runSimilaritySearch = () => {
-        if(imageList.includes(processUrl)){
-            dbkfSimilarityApi.callSimilarityApi(processUrl).then(result=>{
-                if(result[1].length !== 0 ) {
-                    dispatch(setDbkfImageMatch(result[1]))
-                }
-            }).catch(()=>{
-                dispatch(setError(keyword("dbkf_error")));
+    const runSimilaritySearch = (contentType) => {
+        dispatch(setDbkfMediaMatchLoading(true))
+        if(contentType === CONTENT_TYPE.IMAGE){
+           similaritySearch(
+               ()=>dbkfSimilarityApi.callImageSimilarityEndpoint(processUrl),
+               (result)=>setDbkfImageMatch(result))
+        }
+        else if (contentType === CONTENT_TYPE.VIDEO){
+            similaritySearch(
+                ()=>dbkfSimilarityApi.callVideoSimilarityEndpoint(processUrl),
+                (result)=>setDbkfVideoMatch(result))
+        }
+    }
+
+    const similaritySearch = (searchEndpoint, stateStorageFunction) => {
+        dispatch(stateStorageFunction(null))
+
+        searchEndpoint().then(result => {
+            if (result[1].length !== 0) {
+                dispatch(stateStorageFunction(result[1]))
+                dispatch(setDbkfMediaMatchLoading(false))
+            }
+        }).catch(() => {
+            dispatch(setError(keyword("dbkf_error")));
+            dispatch(setDbkfMediaMatchLoading(false))
+        })
+    }
+
+    const runOcrService = (contentType) => {
+        setLoading(true)
+        if(contentType === CONTENT_TYPE.IMAGE){
+            ocrApi.callOcrService(processUrl).then(result=>{
+                setLoading(false)
+                if (result.length!==0) { dispatch(setOcrTextResult(result))}
+            }).catch((error)=>{
+                dispatch(setError(keyword("ocr_error")));
+                dispatch(loading(false))
             })
         }
     }
@@ -78,97 +122,80 @@ const AssistantMediaResult = () => {
     // if the processUrl changes, load any actions that can be taken on this new url
     useEffect(() => {
         if (processUrl!==null){
-            loadProcessUrlActions();
-            runSimilaritySearch();
+            let contentType = null;
+            if(imageList.includes(processUrl)) {contentType = CONTENT_TYPE.IMAGE}
+            else if (videoList.includes(processUrl)) {contentType = CONTENT_TYPE.VIDEO};
+
+            loadProcessUrlActions(contentType);
+            runSimilaritySearch(contentType);
+            runOcrService(contentType);
         }
     }, [processUrl]);
 
+    useEffect(() => {
+        if (!singleMediaPresent){
+            setExpandMedia(true)
+        }
+    }, [singleMediaPresent]);
+
+
     return (
-        <Grid item xs={12}>
-            <Card>
-                <Grid container>
-                    <Grid item xs={6}>
-                        <Typography className={classes.twitterHeading}>
-                            <ImageSearchOutlinedIcon className={classes.twitterIcon}/>{keyword("media_title")}
-                        </Typography>
-                    </Grid>
-                    <Grid item xs={6} align={"right"}>
-                        <Tooltip title= {<div className={"content"} dangerouslySetInnerHTML={{__html: keyword("media_tooltip")}}></div> }
-                                 classes={{ tooltip: classes.assistantTooltip }}>
-                            <HelpOutlineOutlinedIcon className={classes.toolTipIcon}/>
-                        </Tooltip>
-                    </Grid>
-                </Grid>
-                <Accordion expandicon={<ExpandMoreIcon/>} defaultExpanded={true}>
-                    <AccordionSummary expandIcon={<ExpandMoreIcon/>}>
-                        <Typography className={classes.heading}>
-                            {keyword("media_found")}
-                        </Typography>
-                    </AccordionSummary>
-                    <AccordionDetails>
+        <Grid container spacing={2}>
 
-                        <Grid container>
-                            {imageList.length > 1 || videoList.length > 1 || (imageList.length===1 && videoList.length===1) ?
-                                <Grid item xs={12}
-                                      className={classes.newAssistantGrid}>
-                                    <Box m={5}/>
-                                    <Typography component={"span"} variant={"h6"}>
-                                        <FaceIcon fontSize={"small"}/> {keyword("media_below")}
-                                    </Typography>
-                                    <Box m={2}/>
-                                </Grid>
-                            : null}
+            <Grid item xs={6} hidden={!urlMode}>
+                <Card>
+                    <CardHeader
+                        className= {classes.assistantCardHeader}
+                        title={keyword("media_title")}
+                        action={
+                            <div style={{"display": "flex"}}>
+                                <div hidden={imageReverseSearch === null && videoReverseSearch === null}>
+                                    <Tooltip title={keyword("image_warning")}>
+                                        <WarningOutlined className={classes.toolTipWarning}
+                                                         onClick={()=>dispatch(setWarningExpanded(!warningExpanded))}/>
+                                    </Tooltip>
+                                </div>
+                                <div>
+                                    <Tooltip title= {<div className={"content"}
+                                                 dangerouslySetInnerHTML={{__html: keyword("media_tooltip")}}/> }
+                                                 classes={{ tooltip: classes.assistantTooltip }}>
+                                        <HelpOutlineOutlinedIcon className={classes.toolTipIcon}/>
+                                    </Tooltip>
+                                </div>
+                            </div>
+                        }
+                     />
+                    <LinearProgress variant={"indeterminate"} color={"secondary"} hidden={!loading}/>
+                    <CardContent>
+                        {processUrl!==null ? resultIsImage ? <AssistantImageResult/> : <AssistantVideoResult/> : null}
+                    </CardContent>
+                    <Divider m = {1.5}/>
+                    { !singleMediaPresent ?
+                        <div>
+                            <CardActions disableSpacing>
+                                <IconButton onClick={()=>{setExpandMedia(!expandMedia)}}>
+                                    <ExpandMoreIcon fontSize={"small"}/>
+                                    <Typography>{keyword("media_below")}</Typography>
+                                </IconButton>
+                            </CardActions>
+                            <Collapse in = {expandMedia}>
+                               <CardContent>
+                                    <ImageGridList list={imageList} height={60} cols={5} handleClick={(event)=>{submitMediaToProcess(event.target.src)}}/>
+                               </CardContent>
+                                <Divider m = {1.5}/>
+                                <CardContent>
+                                    <VideoGridList list={videoList} handleClick={(vidLink)=>{submitMediaToProcess(vidLink)}}/>
+                                </CardContent>
+                            </Collapse>
+                        </div>
+                        : null
+                    }
+                </Card>
+            </Grid>
 
-
-                            <Grid item xs = {12}>
-                                {imageList.length>1 || (imageList.length>0 && videoList.length>0) ?
-                                    <Grid item xs = {6}
-                                      className={classes.newAssistantGrid}>
-                                        <Card>
-                                            <Typography component={"span"} className={classes.twitterHeading}>
-                                                <ImageIcon className={classes.twitterIcon}/> {keyword("images_label")}
-                                                <Divider variant={"middle"}/>
-                                            </Typography>
-                                            <Box m={2}/>
-                                            <ImageGridList list={imageList} height={60} cols={5}
-                                                           handleClick={(event)=>{submitMediaToProcess(event.target.src)}}/>
-                                        </Card>
-                                        <Box m={2}/>
-                                    </Grid>
-                                : null}
-
-                                {videoList.length>1 || (imageList.length>0 && videoList.length>0) ?
-                                    <Grid item xs = {6}
-                                          className={classes.newAssistantGrid}>
-                                        <Card>
-                                            <Typography component={"span"} className={classes.twitterHeading}>
-                                                <DuoOutlinedIcon className={classes.twitterIcon}/> {keyword("videos_label")}
-                                                <Divider variant={"middle"}/>
-                                            </Typography>
-                                            <Box m={2}/>
-                                            <VideoGridList list={videoList} handleClick={(vidLink)=>{submitMediaToProcess(vidLink)}}/>
-                                        </Card>
-                                        <Box m={2}/>
-                                    </Grid>
-                                :null}
-                            </Grid>
-
-                            {processUrl !==null && videoList.length === 0 && imageList.length === 0 ?
-                                <Grid item xs={12}>
-                                    <Card><CardContent className={classes.assistantText}>
-                                        <Typography variant={"h6"} align={"left"}>
-                                            <FaceIcon size={"small"}/> {keyword("assistant_error")}
-                                        </Typography>
-                                    </CardContent></Card>
-                                </Grid> : null
-                            }
-
-                            <AssistantProcessUrlActions/>
-
-                        </Grid>
-                    </AccordionDetails>
-                </Accordion>
-            </Card>
+            <Grid item xs={6}>
+                <AssistantProcessUrlActions/>
+            </Grid>
         </Grid>
     );
 };
