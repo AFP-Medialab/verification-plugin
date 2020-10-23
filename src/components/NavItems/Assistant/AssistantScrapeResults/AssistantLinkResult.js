@@ -12,9 +12,9 @@ import List from "@material-ui/core/List";
 import ListItemText from "@material-ui/core/ListItemText";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import Typography from "@material-ui/core/Typography";
-import tsv from "../../../LocalDictionary/components/NavItems/tools/Assistant.tsv";
-import useLoadLanguage from "../../../Hooks/useLoadLanguage";
-import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
+import tsv from "../../../../LocalDictionary/components/NavItems/tools/Assistant.tsv";
+import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
+import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 
 const AssistantLinkResult = () => {
 

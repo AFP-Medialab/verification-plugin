@@ -11,7 +11,7 @@ import Iframe from "react-iframe";
 import Link from "@material-ui/core/Link";
 import Tooltip from "@material-ui/core/Tooltip";
 
-import {KNOWN_LINK_PATTERNS, KNOWN_LINKS, matchPattern} from "./AssistantRuleBook";
+import {KNOWN_LINK_PATTERNS, KNOWN_LINKS, matchPattern} from "../AssistantRuleBook";
 
 const AssistantVideoResult = () => {
 

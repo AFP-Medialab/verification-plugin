@@ -1,47 +1,52 @@
 export const setUrlMode = (mode) => {
     return {
         type : "SET_MODE",
-        payload : mode
+        payload: {
+            urlMode: mode
+        }
     }
 };
+
 
 export const setImageVideoSelected = (imageVideoSelected) => {
     return {
         type: "SET_IMAGE_VIDEO_SELECTED",
-        payload: imageVideoSelected
+        payload: {
+            imageVideoSelected: imageVideoSelected,
+        }
     }
 }
-
 
 export const setInputUrl = (inputUrl) => {
     return {
         type : "SET_INPUT_URL",
-        payload : inputUrl
+        payload: {
+            inputUrl: inputUrl,
+        }
     }
 };
 
 
-export const setProcessUrlActions = (processUrlType, actions) => {
+export const setProcessUrlActions = (actions) => {
     return {
         type : "SET_PROCESS_URL_ACTIONS",
-        processUrlType: processUrlType,
-        payload : actions
+        payload: {
+            processUrlActions : actions
+        }
     }
 };
 
 
-export const setProcessUrl = (processUrl, processUrlType) => {
+export const setProcessUrl = (processUrl, processUrlType, ocrDone, dbkfMediaMatchDone) => {
     return {
         type : "SET_PROCESS_URL",
-        processUrl : processUrl,
-        processUrlType: processUrlType
-    }
-};
+        payload: {
+            processUrl: processUrl,
+            processUrlType: processUrlType,
+            ocrDone: ocrDone,
+            dbkfMediaMatchDone: dbkfMediaMatchDone
 
-export const setProcessUrlType = (processUrlType) => {
-    return {
-        type : "SET_PROCESS_URL_TYPE",
-        payload : processUrlType
+        }
     }
 };
 
@@ -49,97 +54,96 @@ export const setProcessUrlType = (processUrlType) => {
 export const setScrapedData = (text, links, images, videos) => {
     return {
         type: "SET_SCRAPED_DATA",
-        text: text,
-        links: links,
-        images: images,
-        videos: videos
+        payload: {
+            urlText: text,
+            linkList: links,
+            imageList: images,
+            videoList: videos
+        }
     }
 }
 
-export const setInputSC = (inputSC) => {
+export const setInputSourceCredDetails = (inputSC, inputSCLoading, inputSCDone) => {
     return {
-        type: "SET_INPUT_SC",
-        payload: inputSC
+        type: "SET_INPUT_SC_DETAILS",
+        payload: {
+            inputUrlSourceCredibility: inputSC,
+            inputSCLoading: inputSCLoading,
+            inputSCDone: inputSCDone
+        }
     }
 }
 
-export const setInputSCLoading = (inputSCLoading) => {
-    return {
-        type: "SET_INPUT_SC_LOADING",
-        payload: inputSCLoading
-    }
-}
-
-
-export const setTextMatchLoading = (textMatchingLoading) => {
-    return {
-        type: "SET_TEXT_MATCH_LOADING",
-        payload: textMatchingLoading
-    }
-}
 
 export const setAssistantLoading = (loading) => {
     return {
         type: "SET_LOADING",
-        loading: loading
+        payload:{
+            loading: loading
+        }
     }
 }
 
-
-export const setDbkfTextMatch = (claims) => {
+export const setDbkfTextMatchDetails = (textMatch, textMatchLoading, textMatchDone) => {
     return {
-        type: "SET_DBKF_CLAIMS",
-        payload: claims
+        type: "SET_DBKF_TEXT_MATCH_DETAILS",
+        payload: {
+            dbkfTextMatch: textMatch,
+            dbkfTextMatchLoading: textMatchLoading,
+            dbkfTextMatchDone: textMatchDone
+        }
     }
 }
 
-
-export const setDbkfImageMatch = (claims) => {
+export const setDbkfImageMatchDetails = (imageMatch, dbkfMediaMatchLoading, dbkfMediaMatchDone) => {
     return {
-        type: "SET_DBKF_IMAGE_MATCH",
-        payload: claims
+        type: "SET_DBKF_IMAGE_MATCH_DETAILS",
+        payload: {
+            dbkfImageMatch: imageMatch,
+            dbkfMediaMatchLoading: dbkfMediaMatchLoading,
+            dbkfMediaMatchDone: dbkfMediaMatchDone
+        }
     }
 }
 
-export const setDbkfVideoMatch = (claims) => {
+export const setDbkfVideoMatchDetails = (videoMatch, dbkfMediaMatchLoading, dbkfMediaMatchDone) => {
     return {
-        type: "SET_DBKF_VIDEO_MATCH",
-        payload: claims
+        type: "SET_DBKF_VIDEO_MATCH_DETAILS",
+        payload: {
+            dbkfImageMatch: videoMatch,
+            dbkfMediaMatchLoading: dbkfMediaMatchLoading,
+            dbkfMediaMatchDone: dbkfMediaMatchDone
+        }
     }
 }
 
-export const setOcrTextResult = (ocrText) => {
+export const setOcrDetails = (ocrText, ocrLoading, ocrDone) => {
     return {
-        type: "SET_OCR_TEXT_RESULT",
-        payload: ocrText
+        type: "SET_OCR_DETAILS",
+        payload: {
+            ocrResult: ocrText,
+            ocrLoading: ocrLoading,
+            ocrDone: ocrDone
+        }
     }
 }
 
-export const setOcrLoading = (ocrLoading) => {
-    return {
-        type: "SET_OCR_LOADING",
-        payload: ocrLoading
-    }
-}
 
 export const setSingleMediaPresent = (singleMediaPresent) => {
     return {
         type: "SET_SINGLE_MEDIA_PRESENT",
-        payload: singleMediaPresent
+        payload: {
+            singleMediaPresent: singleMediaPresent
+        }
     }
 }
 
 export const setWarningExpanded = (warningExpanded) => {
     return {
         type: "SET_WARNING_EXPANDED",
-        payload: warningExpanded
-    }
-}
-
-export const setDbkfMediaMatchLoading = (dbkfMediaMatchLoading) => {
-    return {
-        type: "SET_DBKF_MEDIA_MATCH_LOADING",
-        payload: dbkfMediaMatchLoading
+        payload: {
+            warningExpanded: warningExpanded
+        }
     }
 }
 

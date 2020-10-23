@@ -12,13 +12,13 @@ import Grid from "@material-ui/core/Grid";
 import {IconButton} from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
 
-import tsv from "../../../LocalDictionary/components/NavItems/tools/Assistant.tsv";
+import tsv from "../../../../LocalDictionary/components/NavItems/tools/Assistant.tsv";
 
-import {setWarningExpanded} from "../../../redux/actions/tools/assistantActions";
-import useLoadLanguage from "../../../Hooks/useLoadLanguage";
-import SourceCredibilityResults from "./AssistantCheckResults/SourceCredibilityResults";
-import DbkfTextResults from "./AssistantCheckResults/DbkfTextResults";
-import DbkfMediaResults from "./AssistantCheckResults/DbkfMediaResults";
+import {setWarningExpanded} from "../../../../redux/actions/tools/assistantActions";
+import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
+import SourceCredibilityResults from "../AssistantCheckResults/SourceCredibilityResults";
+import DbkfTextResults from "../AssistantCheckResults/DbkfTextResults";
+import DbkfMediaResults from "../AssistantCheckResults/DbkfMediaResults";
 
 
 const AssistantWarnings = () => {
@@ -27,10 +27,8 @@ const AssistantWarnings = () => {
     const dispatch = useDispatch()
     const warningExpanded = useSelector(state => state.assistant.warningExpanded)
 
-
     return (
         <Grid item xs={12}>
-
             <Card variant={"outlined"} style={{"borderColor": "red", "borderStyle": "solid", "borderWidth": "3px"}}>
                 <div style={{"display": "flex"}}>
                     <CardMedia style={{backgroundColor: "red"}}>
