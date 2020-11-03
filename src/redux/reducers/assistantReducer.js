@@ -1,16 +1,23 @@
 const defaultState = {
     urlMode: null,
     imageVideoSelected: false,
-    requireLogIn: false,
     inputUrl: null,
     processUrl: null,
     imageList: [],
     videoList: [],
+    linkList: [],
+    urlText: null,
     processUrlActions : [],
     processUrlType: null,
     inputUrlActions: null,
-    helpMessage: "assistant_alternative"
+    inputUrlSc: null,
+    inputSCLoading: false,
+    linkListSC: null,
+    linkListSCLoading: false,
+    dbkfClaims: null,
+    loading: false
 };
+
 
 const assistantReducer = (state = defaultState, action) => {
     switch (action.type) {
@@ -22,17 +29,12 @@ const assistantReducer = (state = defaultState, action) => {
             state.processUrl = action.payload;
             return state;
 
-        case "SET_MEDIA_LISTS":
-            state.imageList = action.imageList;
-            state.videoList = action.videoList;
-            return state;
 
-        case "SET_IMAGE_LIST":
-            state.imageList = action.imageList;
-            return state;
-
-        case "SET_VIDEO_LIST":
-            state.videoList = action.videoList;
+        case "SET_SCRAPED_DATA":
+            state.urlText = action.text
+            state.linkList = action.links
+            state.imageList = action.images
+            state.videoList = action.videos
             return state;
 
         case "SET_PROCESS_URL_ACTIONS":
@@ -48,27 +50,55 @@ const assistantReducer = (state = defaultState, action) => {
             state.imageVideoSelected = action.payload;
             return state;
 
-        case "SET_REQUIRE_LOGIN":
-            state.requireLogIn = action.payload;
+
+        case "SET_INPUT_SC":
+            state.inputUrlSc = action.payload
             return state;
 
-        case "SET_HELP_MESSAGE":
-            state.helpMessage = action.payload;
+
+        case "SET_LINK_LIST_SC":
+            state.linkListSC = action.payload
             return state;
+
+        case "SET_INPUT_SC_LOADING":
+            state.inputSCLoading = action.payload
+            return state;
+
+
+        case "LINK_LIST_SC_LOADING":
+            state.linkListSCLoading = action.payload
+            return state;
+
+
+        case "SET_DBKF_CLAIMS":
+            state.dbkfClaims = action.payload
+            return state
+
+
+        case "SET_LOADING":
+            state.loading = action.loading
+            return state;
+
 
         case "CLEAN_STATE":
             state = {
                 urlMode: null,
                 imageVideoSelected: false,
-                requireLogIn: false,
                 inputUrl: null,
                 processUrl: null,
                 imageList: [],
                 videoList: [],
+                linkList: [],
+                urlText: null,
                 processUrlActions : [],
                 processUrlType: null,
                 inputUrlActions: null,
-                helpMessage: "assistant_alternative"
+                inputUrlSc: null,
+                inputSCLoading: false,
+                linkListSC: null,
+                linkListSCLoading: false,
+                dbkfClaims: null,
+                loading: false
             };
             return state;
 

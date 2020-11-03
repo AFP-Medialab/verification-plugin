@@ -12,12 +12,6 @@ export const setImageVideoSelected = (imageVideoSelected) => {
     }
 }
 
-export const setRequireLogin = (requireLogin) => {
-    return {
-        type : "SET_REQUIRE_LOGIN",
-        payload : requireLogin
-    }
-};
 
 export const setInputUrl = (inputUrl) => {
     return {
@@ -26,12 +20,6 @@ export const setInputUrl = (inputUrl) => {
     }
 };
 
-export const setHelpMessage = (messageKeyword) => {
-    return {
-        type: "SET_HELP_MESSAGE",
-        payload: messageKeyword,
-    }
-}
 
 export const setProcessUrlActions = (processUrlType, actions) => {
     return {
@@ -50,27 +38,60 @@ export const setProcessUrl = (processUrl) => {
 };
 
 
-export const setMediaLists = (imageList, videoList) => {
+export const setScrapedData = (text, links, images, videos) => {
     return {
-        type : "SET_MEDIA_LISTS",
-        imageList: imageList,
-        videoList: videoList
+        type: "SET_SCRAPED_DATA",
+        text: text,
+        links: links,
+        images: images,
+        videos: videos
     }
-};
+}
 
-export const setImageList = (imageList) => {
+export const setInputSC = (inputSC) => {
     return {
-        type : "SET_IMAGE_LIST",
-        imageList: imageList,
+        type: "SET_INPUT_SC",
+        payload: inputSC
     }
-};
+}
 
-export const setVideoList = (videoList) => {
+
+export const setLinkListSC = (linkListSC) => {
     return {
-        type : "SET_VIDEO_LIST",
-        videoList: videoList,
+        type: "SET_LINK_LIST_SC",
+        payload: linkListSC
     }
-};
+}
+
+export const setInputSCLoading = (inputSCLoading) => {
+    return {
+        type: "SET_INPUT_SC_LOADING",
+        payload: inputSCLoading
+    }
+}
+
+
+export const setLinkListSCLoading = (linkListSCLoading) => {
+    return {
+        type: "SET_LIST_LIST_SC_LOADING",
+        payload: linkListSCLoading
+    }
+}
+
+export const setAssistantLoading = (loading) => {
+    return {
+        type: "SET_LOADING",
+        loading: loading
+    }
+}
+
+
+export const setDbkfClaims = (claims) => {
+    return {
+        type: "SET_DBKF_CLAIMS",
+        payload: claims
+    }
+}
 
 
 export const cleanAssistantState = () => {

@@ -7,21 +7,21 @@ import videoRightsIconOff from "../../NavBar/images/tools/copyrightOff.png";
 import forensicIconOff from "../../NavBar/images/tools/forensic_logoOff.png";
 
 export const CONTENT_TYPE = {
-    VIDEO: "Video",
-    IMAGE: "Image"
+    VIDEO: "video",
+    IMAGE: "image"
 };
 
 export const KNOWN_LINKS = {
-    TWITTER: "Twitter",
-    INSTAGRAM: "Instagram",
-    FACEBOOK: "Facebook",
-    TIKTOK: "Tiktok",
-    YOUTUBE: "Youtube",
-    DAILYMOTION: "Dailymotion",
-    LIVELEAK: "Liveleak",
-    VIMEO: "Vimeo",
-    OWN: "Own",
-    MISC: "Misc"
+    TWITTER: "twitter",
+    INSTAGRAM: "instagram",
+    FACEBOOK: "facebook",
+    TIKTOK: "tiktok",
+    YOUTUBE: "youtube",
+    DAILYMOTION: "dailymotion",
+    LIVELEAK: "liveleak",
+    VIMEO: "vimeo",
+    OWN: "own",
+    MISC: "general"
 }
 
 export const TYPE_PATTERNS = [
@@ -42,7 +42,7 @@ export const KNOWN_LINK_PATTERNS = [
     },
     {
         key: KNOWN_LINKS.TIKTOK,
-        patterns:["((https?:\\/{2})?(www.)?tiktok.com\\/.*\\/video\\/\\d*\\?lang)"]
+        patterns:["((https?:\\/{2})?(www.)?tiktok.com\\/.*\\/video\\/.*)"]
     },
     {
         key: KNOWN_LINKS.INSTAGRAM,

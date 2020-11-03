@@ -21,6 +21,7 @@ import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/Metadata.tsv";
 import {submissionEvent} from "../../../Shared/GoogleAnalytics/GoogleAnalytics";
 import {useParams} from "react-router-dom";
+import {CONTENT_TYPE} from "../../Assistant/AssistantRuleBook";
 
 const Metadata = () => {
     const {url} = useParams();
@@ -60,10 +61,18 @@ const Metadata = () => {
 
     useEffect(() => {
         if (url !== undefined) {
-            const uri = (url !== null) ? decodeURIComponent(url) : undefined;
-            // note: could potentially match random char mixes on image urls instead?
-            if (uri.match("mp4")) setRadioImage(false);
-            setInput(uri);
+            if(url === CONTENT_TYPE.VIDEO){
+                setRadioImage(false)
+            }
+            else if(url === CONTENT_TYPE.IMAGE){
+                setRadioImage(true)
+            }
+            else {
+                const uri = (url !== null) ? decodeURIComponent(url) : undefined;
+                // note: could potentially match random char mixes on image urls instead?
+                if (uri.match("mp4")) setRadioImage(false);
+                setInput(uri);
+            }
         }
     }, [url]);
 

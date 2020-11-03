@@ -2,56 +2,59 @@ import React, {useEffect, useRef, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {useParams} from "react-router-dom";
 
-import axios from "axios";
 import {Box, Button,Paper, TextField} from "@material-ui/core";
-import Card from "@material-ui/core/Card";
-import CardContent from "@material-ui/core/CardContent";
-import DuoIcon from '@material-ui/icons/Duo';
-import Divider from "@material-ui/core/Divider";
 import Grid from "@material-ui/core/Grid";
-import ImageIcon from '@material-ui/icons/Image';
 import FaceIcon from "@material-ui/icons/Face";
+import LinearProgress from "@material-ui/core/LinearProgress";
 import Typography from "@material-ui/core/Typography";
 
-import AssistantResult from "./AssistantResult";
+import AssistantHelp from "./AssistantHelp";
+import AssistantLinkResult from "./AssistantLinkResult";
+import AssistantMediaResult from "./AssistantMediaResult";
+import AssistantProcessUrlActions from "./AssistantProcessUrlActions";
+import AssistantTextResult from "./AssistantTextResult";
 import CloseResult from "../../Shared/CloseResult/CloseResult";
 import CustomTile from "../../Shared/CustomTitle/CustomTitle";
-import ImageGridList from "../../Shared/ImageGridList/ImageGridList";
-import VideoGridList from "../../Shared/VideoGridList/VideoGridList";
+import history from "../../Shared/History/History";
 import {setError} from "../../../redux/actions/errorActions";
 import tsv from "../../../LocalDictionary/components/NavItems/tools/Assistant.tsv";
 import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
+import useAssistantApi from "./useAssistantApi";
 import useLoadLanguage from "../../../Hooks/useLoadLanguage";
 
 import {
-    cleanAssistantState, setHelpMessage, setImageVideoSelected,
-    setInputUrl, setMediaLists, setProcessUrl, setProcessUrlActions,
+    cleanAssistantState, setAssistantLoading, setImageVideoSelected, setInputSC,
+    setInputUrl, setLinkListSC, setProcessUrl, setProcessUrlActions, setScrapedData,
     setUrlMode,
 } from "../../../redux/actions/tools/assistantActions";
+
 import {
     CONTENT_TYPE, TYPE_PATTERNS,
     matchPattern, selectCorrectActions, KNOWN_LINK_PATTERNS, KNOWN_LINKS,
 } from "./AssistantRuleBook";
-import history from "../../Shared/History/History";
 
-// todo: twitter iframe fix, instagram logged in fix
+
 const Assistant = () => {
 
-    // styles, language, dispatch, scrapers
+    // styles, language, dispatch, params
     const classes = useMyStyles();
     const dispatch = useDispatch();
     const keyword = useLoadLanguage("components/NavItems/tools/Assistant.tsv", tsv);
+    const {url} = useParams();
 
     //assistant state values
-    const {url} = useParams();
     const urlMode = useSelector(state => state.assistant.urlMode);
     const imageVideoSelected = useSelector(state => state.assistant.imageVideoSelected);
+    const loading = useSelector(state => state.assistant.loading)
     const inputUrl = useSelector(state => state.assistant.inputUrl);
-    const processUrl = useSelector(state => state.assistant.processUrl);
-    const processUrlActions = useSelector(state => state.assistant.processUrlActions);
+    const inputUrlSC = useSelector(state => state.assistant.inputUrlSc);
     const imageList = useSelector(state => state.assistant.imageList);
     const videoList = useSelector(state => state.assistant.videoList);
-    const helpMessage = useSelector(state => state.assistant.helpMessage);
+    const text = useSelector(state => state.assistant.urlText)
+    const linkList = useSelector(state => state.assistant.linkList)
+    const linkListSC = useSelector(state => state.assistant.linkListSC);
+    const dbkfClaims = useSelector(state => state.assistant.dbkfClaims);
+
 
     //other state values
     const [formInput, setFormInput] = useState(null);
@@ -59,42 +62,40 @@ const Assistant = () => {
     //refs
     const imageListRef = useRef(imageList);
     const videoListRef = useRef(videoList);
+    const textRef = useRef(text)
+    const linkListRef = useRef(linkList)
+
+    // apis
+    const assistantApi = useAssistantApi()
+
 
     //Check the input url for data. Figure out which url type and set required image/video lists
     const submitInputUrl = async (userInput) => {
         try {
-            // get url type and set media lists according to url
-            let urlType = matchPattern(userInput, KNOWN_LINK_PATTERNS);
-            const updatedUserInput = await setMediaListsByUrl(urlType, userInput);
+            dispatch(setAssistantLoading(true))
+            // get domain and content type
+            let urlType = matchPattern(userInput, KNOWN_LINK_PATTERNS)
+            let contentType = matchPattern(userInput, TYPE_PATTERNS)
 
-            // set assistant state to reflect media lists
-            dispatch(setMediaLists(imageListRef.current, videoListRef.current))
-            dispatch(setInputUrl(updatedUserInput));
+            // decide whether or not to scrape page based on domain and content type
+            let scrapeResult = await decideWhetherToScrape(urlType, contentType, userInput)
 
-            // if only one image/video exists, set this to be processed with an intermediate step
+            //set results
+            setAssistantResults(urlType, contentType, userInput, scrapeResult)
+
+            dispatch(setScrapedData(textRef.current, linkListRef.current, imageListRef.current, videoListRef.current))
+            dispatch(setInputUrl(userInput));
+
+            // if only one image/video exists, set this to be processed without an intermediate step
             handleOneMediaListResult();
+            dispatch(setAssistantLoading(false))
         }
         catch (error) {
+            dispatch(setAssistantLoading(false))
             dispatch(setError(error.message));
         }
     }
 
-    /* Check if the browser has any stored media lists.
-    ** These are generated by popup.js when opening the assistant from another page and contain all possible
-    ** scraped images and videos from said page */
-    const checkForMediaLists = () => {
-        let urlImageList = window.localStorage.getItem("imageList");
-        let urlVideoList = window.localStorage.getItem("videoList");
-
-        if (urlImageList == null && urlVideoList == null) {return;}
-        else if (urlImageList !== "" || urlVideoList !== "") {
-            // filter out any duplicated images and images we can't process
-            imageListRef.current = urlImageList !== "" ? urlImageList.split(",") : [];
-            imageListRef.current = imageListRef.current.filter(imageUrl => matchPattern(imageUrl, TYPE_PATTERNS));
-
-            videoListRef.current = urlVideoList !== "" ? urlVideoList.split(",") : [];
-        }
-    }
 
     // if there is only one image/video, set this to be processed
     const handleOneMediaListResult = () => {
@@ -104,8 +105,43 @@ const Assistant = () => {
             dispatch(setProcessUrl(videoListRef.current[0]))}
     }
 
-    // handle specific urls in specific ways to populate image/video lists
-    const setMediaListsByUrl = async (urlType, userInput) => {
+
+    // remove urls from main text
+    const removeUrlsFromText = (text) => {
+        if (text !== null) {
+            let urlRegex = new RegExp("(http(s)?:\/\/.)?(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{2,256}\\.[a-z]{2,6}\\b([-a-zA-Z0-9@:%_\\+.~#?&//=]*)", "g");
+            return text.replace(urlRegex, "")
+        }
+        return text
+    }
+
+    const decideWhetherToScrape = async (urlType, contentType, userInput) => {
+        let scrapeResult = null;
+        switch (urlType) {
+            case KNOWN_LINKS.YOUTUBE:
+            case KNOWN_LINKS.LIVELEAK:
+            case KNOWN_LINKS.VIMEO:
+            case KNOWN_LINKS.DAILYMOTION:
+                return scrapeResult;
+            case KNOWN_LINKS.TIKTOK:
+            case KNOWN_LINKS.INSTAGRAM:
+            case KNOWN_LINKS.FACEBOOK:
+            case KNOWN_LINKS.TWITTER:
+                scrapeResult = await assistantApi.callAssistantScraper(urlType, userInput)
+                break;
+            case KNOWN_LINKS.MISC:
+                if (contentType === null) {
+                    scrapeResult = await assistantApi.callAssistantScraper(KNOWN_LINKS.MISC, userInput)
+                }
+                return scrapeResult
+            default:
+                throw new Error(keyword("please_give_a_correct_link"));
+        }
+        return scrapeResult
+    }
+
+    // handle specific urls in specific ways to populate image, video and link lists, and text
+    const setAssistantResults = (urlType, contentType, userInput, scrapeResult) => {
         switch(urlType) {
             case KNOWN_LINKS.YOUTUBE:
             case KNOWN_LINKS.LIVELEAK:
@@ -114,87 +150,50 @@ const Assistant = () => {
                 videoListRef.current = [userInput];
                 break;
             case KNOWN_LINKS.TIKTOK:
-                checkForMediaLists(userInput);
-                imageListRef.current = [];
+                textRef.current = scrapeResult.text
+                videoListRef.current = [scrapeResult.videos]
+                linkListRef.current = scrapeResult.links
                 break;
             case KNOWN_LINKS.INSTAGRAM:
-                handleInstagramLink(userInput);
-                dispatch(setHelpMessage("assistant_handled_site"));
+                if (scrapeResult.videos.length === 1) {videoListRef.current = [scrapeResult.videos[0]]}
+                else {imageListRef.current = [scrapeResult.images[1]]}
+                textRef.current = scrapeResult.text
+                linkListRef.current = scrapeResult.links
                 break;
             case KNOWN_LINKS.FACEBOOK:
-                let updatedUserInputs = userInput.match(KNOWN_LINK_PATTERNS
-                    .find(pattern=>pattern.key === KNOWN_LINKS.FACEBOOK).patterns);
-                if (updatedUserInputs) userInput = updatedUserInputs[0];
-
-                handleFacebookLink(userInput);
-                dispatch(setHelpMessage("assistant_handled_site"));
+                if (scrapeResult.videos.length === 0) {
+                    imageListRef.current = scrapeResult.images
+                    imageListRef.current = imageListRef.current.filter(imageUrl => imageUrl.includes("//scontent") &&
+                            !(imageUrl.includes("/cp0/")));
+                }
+                else {videoListRef.current = [userInput];}
+                linkListRef.current = scrapeResult.links
+                textRef.current = scrapeResult.text
                 break;
             case KNOWN_LINKS.TWITTER:
-                try {
-                    await handleTwitterLink(userInput);
-                    dispatch(setHelpMessage("assistant_handled_site"));
-                }
-                catch(error){
-                    throw new Error(keyword("error_unknown"));}
+                if (scrapeResult.videos.length === 0) {imageListRef.current = scrapeResult.images}
+                else {videoListRef.current = [userInput]}
+                textRef.current = scrapeResult.text
+                linkListRef.current = scrapeResult.links
                 break;
             case KNOWN_LINKS.MISC:
-                let contentType = matchPattern(userInput, TYPE_PATTERNS);
                 if(contentType!==null) {
                     if (contentType === CONTENT_TYPE.IMAGE) imageListRef.current = [userInput];
                     else if (contentType === CONTENT_TYPE.VIDEO) videoListRef.current = [userInput];
                 }
-                else{checkForMediaLists();}
+                else{
+                    imageListRef.current = scrapeResult.images
+                    videoListRef.current = scrapeResult.videos
+                    textRef.current = scrapeResult.text
+                    linkListRef.current = scrapeResult.links
+                }
                 break;
             default:
                 throw new Error(keyword("please_give_a_correct_link"));
         }
-        return userInput;
+        textRef.current = removeUrlsFromText(textRef.current);
     }
 
-    /* if video link, use direct link
-    ** if image link, filter for those which are post uploads rather than profile pictures etc.*/
-    const handleFacebookLink = (userInput) => {
-        if(userInput.includes("/photos/")){
-            checkForMediaLists(userInput);
-            videoListRef.current = [];
-            imageListRef.current =
-                imageListRef.current.filter(imageUrl => imageUrl.includes("//scontent") &&
-                    !(imageUrl.includes("/cp0/")));
-        }
-        else if(userInput.includes("/videos/")){
-            videoListRef.current = [userInput];
-            imageListRef.current = [];
-        }
-
-    }
-
-    /* if video link, use it, and get rid of any image references
-    ** if image links, filter for the first in the list. this is always (hopefuly...) the one in the post.*/
-    const handleInstagramLink = (userInput) => {
-        checkForMediaLists(userInput);
-        if(videoListRef.current.length === 1){imageListRef.current = []}
-        else {imageListRef.current = imageListRef.current.length>0 ?  [imageListRef.current[1]] : []}
-    }
-
-    /* use analysis backend to figure out if this is an image/video post
-    ** if video post, use post url and get rid of all image urls
-    ** if image post, filter for post images, rather than profile pictures etc .*/
-    const handleTwitterLink = async (userInput) => {
-        let createJob = await axios.post("http://mever.iti.gr/caa/api/v4/videos/jobs?url=" + userInput.replace("&", "%26"));
-        let createdJobId = (createJob["data"]).id;
-        let requestStatus = await axios.get("http://mever.iti.gr/caa/api/v4/videos/jobs/" + createdJobId);
-
-        if(requestStatus.data.status === "unavailable"){
-            checkForMediaLists(userInput);
-
-            imageListRef.current = imageListRef.current.filter(imageUrl => imageUrl.includes("/media"));
-            videoListRef.current = [];}
-        else{
-            videoListRef.current = [userInput];
-            imageListRef.current = [];
-        }
-        dispatch(setHelpMessage("assistant_handled_site"));
-    }
 
     // if the user wants to upload a file, give them tools where this is an option
     const submitUpload = (contentType) => {
@@ -204,27 +203,19 @@ const Assistant = () => {
         dispatch(setImageVideoSelected(true));
     }
 
-    // select the correct media to process, then load actions possible
-    const submitMediaToProcess = (url) => {
-        dispatch(setProcessUrl(url));
-    }
-
-
     // clean assistant state
     const cleanAssistant = () => {
-
-        //clean stored browser vars and refs
-        window.localStorage.removeItem("imageList");
-        window.localStorage.removeItem("videoList");
         imageListRef.current = [];
         videoListRef.current = [];
+        textRef.current = null;
+        linkListRef.current = []
 
         //clean state and input
         dispatch(cleanAssistantState());
         setFormInput("");
     }
 
-    // is a url is present in the plugin url(as a param), set it to input and process results
+    // if a url is present in the plugin url(as a param), set it to input and process results
     useEffect(() => {
         if (url !== undefined) {
             let uri = ( url!== null) ? decodeURIComponent(url) : undefined;
@@ -232,31 +223,13 @@ const Assistant = () => {
             submitInputUrl(uri);
             history.push("/app/assistant/");
         }
-         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [url, dispatch])
 
     // if the user types anything into the input box, set it as the new form input
     useEffect(() => {
         setFormInput(inputUrl)
-    },[inputUrl])
+    },[inputUrl, setFormInput])
 
-    // if the processUrl changes, load any actions that can be taken on this new url
-    useEffect(() => {
-        // load possible actions for selected media url
-        const loadProcessUrlActions = () => {
-            let contentType = null;
-
-            if(imageListRef.current.includes(processUrl)) {contentType = CONTENT_TYPE.IMAGE}
-            else if (videoListRef.current.includes(processUrl)) {contentType = CONTENT_TYPE.VIDEO};
-
-            let knownInputLink = matchPattern(inputUrl, KNOWN_LINK_PATTERNS);
-            let knownProcessLink = matchPattern(processUrl, KNOWN_LINK_PATTERNS);
-            let actions = selectCorrectActions(contentType, knownInputLink, knownProcessLink, processUrl);
-
-            dispatch(setProcessUrlActions(contentType, actions))
-        }
-        if (processUrl!=null){loadProcessUrlActions();}
-    }, [processUrl, dispatch, inputUrl ]);
 
 
     return (
@@ -267,7 +240,7 @@ const Assistant = () => {
             <Grid container spacing={2}>
                 <Grid item xs = {12} className={classes.newAssistantGrid}  hidden={urlMode!==null}>
                     <Typography component={"span"} variant={"h6"} >
-                        <FaceIcon fontSize={"small"}/> {keyword("assistant_real_intro")}
+                        <FaceIcon fontSize={"small"}/> {keyword("assistant_intro")}
                     </Typography>
                     <Box m={2}/>
                     <Button className={classes.button} variant = "contained" color="primary" onClick={() =>dispatch(setUrlMode(true))}>
@@ -284,7 +257,7 @@ const Assistant = () => {
                     <CloseResult hidden={urlMode===null || urlMode===false} onClick={() => cleanAssistant()}/>
 
                     <Typography component={"span"} variant={"h6"} >
-                        <FaceIcon fontSize={"small"}/> {keyword("assistant_intro")}
+                        <FaceIcon fontSize={"small"}/> {keyword("enter_url")}
                     </Typography>
 
                     <Box m={2}/>
@@ -304,61 +277,38 @@ const Assistant = () => {
                             align={"center"} onClick={() => {submitInputUrl(formInput)}}>
                         {keyword("button_submit") || ""}
                     </Button>
+                    <Box m ={3}/>
+                    <LinearProgress hidden = {!loading}/>
                 </Grid>
 
-                <Grid container spacing={2}>
-                    <Grid item xs = {12}
-                          className={classes.newAssistantGrid}
-                          hidden={imageList.length<=1 && videoList.length<=1}>
-                        <Box m={5}/>
-                        <Typography component={"span"} variant={"h6"} >
-                            <FaceIcon fontSize={"small"}/> {keyword("media_below")}
-                        </Typography>
-                    </Grid>
+                {inputUrl !== null ?
+                    <AssistantLinkResult linkList={[inputUrl]}
+                                         existingResult={inputUrlSC}
+                                         title={keyword("source_credibility_title")}
+                                         byline={keyword("source_credibility_byline")}
+                                         storageMethod={(result)=>setInputSC(result)}
+                    />
+                    : null
+                }
 
-                    <Grid item xs = {6}
-                          className={classes.newAssistantGrid}
-                          hidden={(imageList.length===0 )||(imageList.length<=1 && videoList.length<=1)}>
-                        <Card>
-                            <Typography component={"span"} className={classes.twitterHeading}>
-                                <ImageIcon className={classes.twitterIcon}/> {keyword("images_label")}
-                                <Divider variant={"middle"}/>
-                            </Typography>
-                            <Box m={2}/>
-                            <ImageGridList list={imageList} height={60} cols={5}
-                                           handleClick={(event)=>{submitMediaToProcess(event.target.src)}}/>
-                        </Card>
-                    </Grid>
+                {text !== null ?  <AssistantTextResult existingResult = {dbkfClaims}/> : null }
 
-                    <Grid item xs = {6}
-                          className={classes.newAssistantGrid}
-                          hidden={(videoList.length===0 )||(imageList.length<=1 && videoList.length<=1)}>
-                        <Card>
-                            <Typography component={"span"} className={classes.twitterHeading}>
-                                <DuoIcon className={classes.twitterIcon}/> {keyword("videos_label")}
-                                <Divider variant={"middle"}/>
-                            </Typography>
-                            <Box m={2}/>
-                            <VideoGridList list={videoList} handleClick={(vidLink)=>{submitMediaToProcess(vidLink)}}/>
-                        </Card>
-                    </Grid>
 
-                    <Grid item xs={12}
-                          hidden={inputUrl===null || (inputUrl!==null && imageList.length!==0 ) || videoList.length!==0}>
-                        <Card><CardContent className={classes.assistantText}>
-                            <Typography variant={"h6"} align={"left"}>
-                                <FaceIcon size={"small"}/> {keyword("assistant_error")}
-                            </Typography>
-                            <Typography variant={"h6"} align={"left"}>
-                                {keyword(helpMessage)}
-                            </Typography>
-                        </CardContent></Card>
-                    </Grid>
+                {linkList.length !== 0 ?
+                    <AssistantLinkResult linkList={linkList}
+                                         existingResult={linkListSC}
+                                         title={keyword("link_explorer_title")}
+                                         byline={keyword("link_explorer_byline")}
+                                         storageMethod={(result)=>setLinkListSC(result)}
+                    />
+                    : null
+                }
 
+                <Grid item xs={12}>
+                    {imageList.length>0 || videoList.length>0 ?  <AssistantMediaResult/> : null}
                 </Grid>
 
                 <Grid item xs = {12} className={classes.newAssistantGrid}  hidden={urlMode===null || urlMode===true}>
-                    <Box m={5}/>
                     <CloseResult hidden={urlMode===null || urlMode===false} onClick={() => dispatch(cleanAssistantState())}/>
                     <Typography component={"span"} variant={"h6"} >
                         <FaceIcon fontSize={"small"}/> {keyword("upload_type_question")}
@@ -373,7 +323,11 @@ const Assistant = () => {
                 </Grid>
 
                 <Grid item xs={12}>
-                    {processUrlActions.length!==0 || imageVideoSelected === true ?  <AssistantResult/> : null}
+                    {imageVideoSelected ? <AssistantProcessUrlActions/>:null}
+                </Grid>
+
+                <Grid item xs={12} align={"right"}>
+                    {<AssistantHelp/>}
                 </Grid>
             </Grid>
         </Paper>

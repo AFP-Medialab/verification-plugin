@@ -347,6 +347,14 @@ const useMyStyles = makeStyles(theme => ({
             backgroundColor: "#a9e8ef",
         },
     },
+    dbkfCards: {
+        width: "100%",
+        marginBottom: 6,
+        textAlign: "left",
+        '&:hover': {
+            backgroundColor: "#a9e8ef",
+        }
+    },
     assistantText: {
         width: "100%",
         marginBottom: 2,
@@ -356,6 +364,15 @@ const useMyStyles = makeStyles(theme => ({
         color: theme.palette.secondary.main,
         position: "relative",
         top: theme.spacing(1),
+        width: theme.typography.h5.fontSize,
+        height: theme.typography.h5.fontSize,
+        marginRight: 3
+    },
+    toolTipIcon: {
+        color: theme.palette.secondary,
+        position: "relative",
+        opacity: 0.7,
+        top: theme.spacing.unit,
         width: theme.typography.h5.fontSize,
         height: theme.typography.h5.fontSize,
         marginRight: 3
@@ -371,6 +388,17 @@ const useMyStyles = makeStyles(theme => ({
         marginBottom: 2,
         textAlign: "left",
         font: theme.typography.h6.fontSize
+    },
+    assistantTooltip: {
+        backgroundColor: theme.palette.secondary,
+        opacity: 0.9,
+        fontSize: "1.2rem",
+        maxWidth: 700,
+        textAlign: "justify",
+        fontFamily: "\"Roboto\", \"Helvetica\", \"Arial\", sans-serif",
+        fontWeight: 40,
+        lineHeight: 1.5,
+        letterSpacing: "0.00938em"
     }
 
 }));

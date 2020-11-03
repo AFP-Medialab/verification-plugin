@@ -16,6 +16,7 @@ import {useParams} from 'react-router-dom'
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/Keyframes.tsv";
 import {submissionEvent} from "../../../Shared/GoogleAnalytics/GoogleAnalytics";
+import {CONTENT_TYPE} from "../../Assistant/AssistantRuleBook";
 
 const Keyframes = (props) => {
     const {url} = useParams();
@@ -64,8 +65,14 @@ const Keyframes = (props) => {
     useEffect(() => {
         const uri = (url !== undefined) ? decodeURIComponent(url) : undefined;
         if (uri !== undefined) {
-            setInput(uri);
-            setSubmittedUrl(uri);
+            if (url === CONTENT_TYPE.VIDEO) {
+                setLocalFile(true)
+            }
+            else {
+                setInput(uri);
+                setSubmittedUrl(uri);
+            }
+
         }
     }, [url]);
 

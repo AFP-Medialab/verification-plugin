@@ -20,6 +20,7 @@ import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/Analysis.tsv";
 import {submissionEvent} from "../../../Shared/GoogleAnalytics/GoogleAnalytics";
 import {cleanAnalysisState} from "../../../../redux/actions/tools/analysisActions";
+import {useParams} from "react-router-dom";
 
 
 /*function useTraceUpdate(props) {
@@ -40,6 +41,7 @@ import {cleanAnalysisState} from "../../../../redux/actions/tools/analysisAction
 
 const Analysis = () => {
 
+    const {url} = useParams();
     const classes = useMyStyles();
     const keyword = useLoadLanguage("components/NavItems/tools/Analysis.tsv", tsv);
     const dispatch = useDispatch();
@@ -71,6 +73,13 @@ const Analysis = () => {
             setSubmittedUrl(undefined);
         }
     }, [finalUrl]);
+
+    useEffect(() => {
+        if (url !== undefined) {
+             const uri = (url !== null) ? decodeURIComponent(url) : undefined;
+             setInput(uri);
+         }
+    }, [url]);
 
     return (
         <div>
