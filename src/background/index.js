@@ -172,7 +172,7 @@ const imageReversesearchAll = function(word){
     imageReversesearchTineye(word);
     imageReversesearchYandex(word);
     karmadecaySearch(word);
-    imageReversesearchOntotext;
+    imageReversesearchOntotext(word);
 };
 
 window.chrome.contextMenus.create({
