@@ -172,6 +172,7 @@ const imageReversesearchAll = function(word){
     imageReversesearchTineye(word);
     imageReversesearchYandex(word);
     karmadecaySearch(word);
+    imageReversesearchOntotext;
 };
 
 window.chrome.contextMenus.create({
@@ -247,4 +248,21 @@ window.chrome.contextMenus.create({
     title: "Image Reverse Search - Reddit",
     contexts:["image"],
     onclick: karmadecaySearch,
+});
+
+const imageReversesearchOntotext = function(word){
+    let search_url = "http://weverify-demo.ontotext.com/#!/similaritySearchResults&params=";
+    let url = getUrlImg(word);
+    if (url !== ""){
+        window.chrome.tabs.create({url:search_url + url});
+        // Google analytics
+        rightClickEvent("Image Reverse Search Ontotext", url)
+        //ga("send", "event", "ContextualMenu - Baidu", "click", url);
+    }
+};
+
+window.chrome.contextMenus.create({
+    title: "Image Reverse Search - Ontotext",
+    contexts:["image"],
+    onclick: imageReversesearchOntotext,
 });

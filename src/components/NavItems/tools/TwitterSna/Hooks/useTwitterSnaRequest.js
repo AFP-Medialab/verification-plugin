@@ -211,10 +211,10 @@ function getTweetAttrObjArr(tweets) {
       ? tweet._source.user_mentions.map((obj) => { return "isMTed:@" + obj.screen_name; })
       : [];
     let userRTWC = (tweet._source.quoted_status_id_str !== undefined && tweet._source.quoted_status_id_str !== null)
-    ? ["RT:@" + tweet._source.screen_name]
+    ? ["RT:@" + tweet._source.quoted_user_screen_name]
     : [];
     let userReply = (tweet._source.in_reply_to_screen_name !== undefined && tweet._source.in_reply_to_screen_name !== null)
-    ? ["Rpl:@" + tweet._source.screen_name]
+    ? ["Rpl:@" + tweet._source.in_reply_to_screen_name]
     : [];
 
     let urls = (tweet._source.urls !== undefined && tweet._source.urls.length !== 0)
