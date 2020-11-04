@@ -109,6 +109,17 @@ const imageReversesearch = function(word){
     }
 };
 
+const imageReversesearchDBKF = function(word){
+    let search_url = "http://weverify-demo.ontotext.com/#!/similaritySearchResults&params=";
+    let url = getUrlImg(word);
+    if (url !== ""){
+        window.chrome.tabs.create({url:search_url + url});
+        // Google analytics
+        rightClickEvent("Image Reverse Search - DBKF (beta)", url)
+        //ga("send", "event", "ContextualMenu - Baidu", "click", url);
+    }
+};
+
 const imageForensic = function(word){
     let url = getUrlImg(word);
     if (url !== ""){
@@ -166,13 +177,15 @@ const imageReversesearchBing = function(word){
 
 const imageReversesearchAll = function(word){
     rightClickEvent("Image Reverse Search All", getUrlImg(word));
+    imageReversesearchDBKF(word);
     imageReversesearch(word);
     imageReversesearchBaidu(word);
     imageReversesearchBing(word);
     imageReversesearchTineye(word);
     imageReversesearchYandex(word);
     karmadecaySearch(word);
-    imageReversesearchOntotext(word);
+
+    
 };
 
 window.chrome.contextMenus.create({
@@ -215,6 +228,12 @@ window.chrome.contextMenus.create({
 });
 
 window.chrome.contextMenus.create({
+    title: "Image Reverse Search - DBKF (beta)",
+    contexts:["image"],
+    onclick: imageReversesearchDBKF,
+});
+
+window.chrome.contextMenus.create({
     title: "Image Reverse Search - Google",
     contexts:["image", "link"],
     onclick: imageReversesearch,
@@ -248,21 +267,4 @@ window.chrome.contextMenus.create({
     title: "Image Reverse Search - Reddit",
     contexts:["image"],
     onclick: karmadecaySearch,
-});
-
-const imageReversesearchOntotext = function(word){
-    let search_url = "http://weverify-demo.ontotext.com/#!/similaritySearchResults&params=";
-    let url = getUrlImg(word);
-    if (url !== ""){
-        window.chrome.tabs.create({url:search_url + url});
-        // Google analytics
-        rightClickEvent("Image Reverse Search Ontotext", url)
-        //ga("send", "event", "ContextualMenu - Baidu", "click", url);
-    }
-};
-
-window.chrome.contextMenus.create({
-    title: "Image Reverse Search - Ontotext",
-    contexts:["image"],
-    onclick: imageReversesearchOntotext,
 });
