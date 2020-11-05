@@ -456,7 +456,7 @@ const useTwitterSnaRequest = (request) => {
           xanchor: 'right',
           y: -0.4,
           yanchor: 'top',
-          text: 'we-verify.eu',
+          text: 'weverify.eu',
           showarrow: false
         },
         {
@@ -505,6 +505,15 @@ const useTwitterSnaRequest = (request) => {
           },
           xanchor: 'center'
         },
+        annotations: [{
+          xref: 'paper',
+          yref: 'paper',
+          x: 1.15,
+          y:-0.2,
+          text: 'weverify.eu',
+          showarrow: false
+          },
+          ],
         automargin: true,
         width: 500,
         height: 500
@@ -834,7 +843,16 @@ const useTwitterSnaRequest = (request) => {
             size: 18
           },
           xanchor: 'center'
-        }
+        },
+        annotations: [{
+          xref: 'paper',
+          yref: 'paper',
+          x: 1,
+          y:-0.2,
+          text: 'weverify.eu',
+          showarrow: false
+          },
+          ],
       }
 
       return {

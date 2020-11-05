@@ -633,6 +633,15 @@ export default function TwitterSnaResult(props) {
                 },
                 xanchor: 'center'
             },
+            annotations: [{
+                xref: 'paper',
+                yref: 'paper',
+                x: 1,
+                y: -0.180,
+                text: 'weverify.eu',
+                showarrow: false
+                },
+            ],
             xaxis: {
                 title: keyword("twittersna_acd"),
                 titlefont: {
