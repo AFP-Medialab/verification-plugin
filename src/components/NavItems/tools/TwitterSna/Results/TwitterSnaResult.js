@@ -1591,7 +1591,7 @@ export default function TwitterSnaResult(props) {
                                                     rel="noopener"
                                                     tooltip={gexfExport ? gexfRes.message : undefined}
                                                 >
-                                                    {gexfRes.title/* {keyword("twittersna_result_view_graph")} */}
+                                                    {keyword("twittersna_result_visualize_graph")?keyword("twittersna_result_visualize_graph"):"Visualise"} {" "+gexfRes.title/*  {keyword("twittersna_result_view_graph")} */}
                                                 </Button>
                                             </Grid>
                                         )
