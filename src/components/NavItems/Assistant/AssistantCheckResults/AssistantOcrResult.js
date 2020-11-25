@@ -22,7 +22,6 @@ const AssistantOcrResult = () => {
     const text = useSelector(state => state.assistant.ocrResult);
     const ocrLoading = useSelector(state => state.assistant.ocrLoading);
 
-
     return (
         <Grid item xs={12}>
             <Card>

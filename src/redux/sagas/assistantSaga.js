@@ -127,12 +127,17 @@ function * handleOcrCall(action) {
 
     try {
         if (contentType === CONTENT_TYPE.IMAGE) {
-            let ocrResult = yield call(ocrApi.callOcrService, processUrl)
-            yield put(setOcrDetails(ocrResult, false, true))
+            yield put(setOcrDetails(null, true, false))
+            let ocrResult = yield call(ocrApi.callOcrService, [processUrl])
+            let ocrText = ocrResult.entities.URL[0].ocr_text
+           ocrText === "" ?
+                yield put(setOcrDetails(null, false, true)) :
+                yield put(setOcrDetails(ocrText, false, true))
+
         }
     }
     catch(error){
-        yield put(setError(error))
+        yield put(setError("ocr_error"))
     }
 }
 
