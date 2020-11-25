@@ -26,7 +26,6 @@ import AssistantTextResult from "./AssistantScrapeResults/AssistantTextResult";
 import AssistantOcrResult from "./AssistantCheckResults/AssistantOcrResult";
 import history from "../../Shared/History/History";
 
-import useSourceCredibilityApi from "./AssistantApiHandlers/useSourceCredibilityApi";
 import useAssistantApi from "./AssistantApiHandlers/useAssistantApi";
 import useLoadLanguage from "../../../Hooks/useLoadLanguage";
 
@@ -34,7 +33,6 @@ import {
     cleanAssistantState,
     setAssistantLoading,
     setImageVideoSelected,
-    setInputSourceCredDetails,
     setInputUrl,
     setProcessUrlActions,
     setScrapedData,
@@ -90,7 +88,6 @@ const Assistant = () => {
 
     // apis
     const assistantApi = useAssistantApi()
-    const sourceCredibilityApi = useSourceCredibilityApi()
 
 
     //Check the input url for data. Figure out which url type and set required image/video lists
@@ -144,7 +141,7 @@ const Assistant = () => {
                 break;
             case KNOWN_LINKS.MISC:
                 if (contentType === null) {
-                    scrapeResult = await assistantApi.callAssistantScraper(KNOWN_LINKS.MISC, userInput)
+                    scrapeResult = await assistantApi.callAssistantScraper(urlType, userInput)
                 }
                 return scrapeResult
             default:
@@ -245,29 +242,6 @@ const Assistant = () => {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [url])
-
-
-    useEffect(()=>{
-        const runSourceCredibilityCheck = () => {
-            dispatch(setInputSourceCredDetails(null, true, false))
-            sourceCredibilityApi.callSourceCredibility([inputUrl])
-                .then(result => {
-                    if (result.entities.DomainCredibility === undefined) {
-                        setInputSourceCredDetails(null, false, true);
-                    } else {
-                        dispatch(setInputSourceCredDetails(result, false, true))
-                    }
-                })
-                .catch(() => {
-                    dispatch(setInputSourceCredDetails(null, false, true))
-                    dispatch(setError(keyword("sc_failed")))
-                })
-        }
-        if (inputUrl!==null && inputSCDone!==true) {
-            runSourceCredibilityCheck();
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [inputUrl])
 
 
     return (

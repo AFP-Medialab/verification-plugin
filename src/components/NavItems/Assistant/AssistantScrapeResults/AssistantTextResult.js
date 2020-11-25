@@ -15,12 +15,10 @@ import LinearProgress from "@material-ui/core/LinearProgress";
 import Tooltip from "@material-ui/core/Tooltip";
 import Typography from "@material-ui/core/Typography";
 
-import {setDbkfTextMatchDetails, setWarningExpanded} from "../../../../redux/actions/tools/assistantActions";
+import {setWarningExpanded} from "../../../../redux/actions/tools/assistantActions";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/Assistant.tsv";
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
-import {setError} from "../../../../redux/actions/errorActions";
-import useDBKFApi from "../AssistantApiHandlers/useDBKFApi";
 
 const AssistantTextResult = () => {
 
@@ -28,16 +26,12 @@ const AssistantTextResult = () => {
     const keyword = useLoadLanguage("components/NavItems/tools/Assistant.tsv", tsv);
     const classes = useMyStyles()
     const dispatch = useDispatch()
-    const dbkfApi = useDBKFApi();
 
     // state related
     const text = useSelector(state => state.assistant.urlText);
     const dbkfMatch = useSelector(state => state.assistant.dbkfTextMatch)
     const dbkfMatchLoading = useSelector(state => state.assistant.dbkfTextMatchLoading)
-    const dbkfMatchDone = useSelector(state => state.assistant.dbkfTextMatchDone)
-
     const warningExpanded = useSelector(state => state.assistant.warningExpanded);
-
 
     const textBox = document.getElementById("element-to-check")
     const [expanded, setExpanded] = useState(false);
@@ -51,23 +45,6 @@ const AssistantTextResult = () => {
             setDisplayExpander(true)
         }
     },[textBox])
-
-    useEffect(() => {
-        if(text!==null && !dbkfMatchDone){
-            let textToUse = text.length > 500 ? text.substring(0,500) : text
-            dispatch(setDbkfTextMatchDetails(null, true, false))
-            dbkfApi.callTextSimilarityEndpoint(textToUse)
-                .then(result=>{
-                    dispatch(setDbkfTextMatchDetails(result, false, true))
-                })
-                .catch(()=>{
-                    dispatch(setDbkfTextMatchDetails(null, false, true))
-                    dispatch(setError(keyword("dbkf_error")));
-                })
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [text])
-
 
     return (
         <Grid item xs={12}>

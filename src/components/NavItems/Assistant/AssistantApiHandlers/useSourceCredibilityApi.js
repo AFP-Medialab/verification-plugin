@@ -13,21 +13,25 @@ export default function useSourceCredibilityApi() {
 
     const filterSourceCredibility = (sourceCredibility) => {
         sourceCredibility = sourceCredibility.data
-        if(sourceCredibility.entities.DomainCredibility!==undefined) {
-            let domainCredibility = sourceCredibility.entities.DomainCredibility
-            domainCredibility.forEach(dc => {
-                delete dc["indices"]
-                delete dc["credibility-resolved-url"]
-            })
-            sourceCredibility.entities.DomainCredibility = uniqWith(domainCredibility, isEqual)
+
+        if(sourceCredibility.entities.DomainCredibility===undefined) {
+            return null
         }
+
+        let domainCredibility = sourceCredibility.entities.DomainCredibility
+        domainCredibility.forEach(dc => {
+            delete dc["indices"]
+            delete dc["credibility-resolved-url"]
+        })
+        sourceCredibility.entities.DomainCredibility = uniqWith(domainCredibility, isEqual)
+
         sourceCredibility.entities.URL = uniqBy(sourceCredibility.entities.URL, 'url')
         sourceCredibility.entities.URL = orderBy(sourceCredibility.entities.URL, 'credibility-score', 'asc');
 
         return sourceCredibility
     }
 
-    const callSourceCredibility = async (urlList) => {
+    const callSourceCredibility = (urlList) => {
         if (urlList.length === 0 ) return null
 
         let unencoded_auth = unencoded_token + ":" + unencoded_pw
@@ -35,13 +39,11 @@ export default function useSourceCredibilityApi() {
         let headers = {'Authorization': 'Basic ' + key, 'Content-Type': 'text/plain'}
         let urls = urlList.join(" ")
 
-        let sourceCredibility = await axios.post(
+        return axios.post(
             sourceCredibilityUrl,
             {text: urls},
             {headers: headers})
-
-        let filteredSCScores = filterSourceCredibility(sourceCredibility)
-        return filteredSCScores
+         .then(result => filterSourceCredibility(result))
     }
 
     return {

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 
 import CardActions from "@material-ui/core/CardActions";
@@ -19,7 +19,7 @@ import AssistantImageResult from "./AssistantImageResult";
 import AssistantVideoResult from "./AssistantVideoResult";
 import AssistantProcessUrlActions from "./AssistantProcessUrlActions";
 import ImageGridList from "../../../Shared/ImageGridList/ImageGridList";
-import {setProcessUrl, setSingleMediaPresent, setWarningExpanded} from "../../../../redux/actions/tools/assistantActions";
+import {setProcessUrl, setWarningExpanded} from "../../../../redux/actions/tools/assistantActions";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/Assistant.tsv";
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
@@ -47,11 +47,11 @@ const AssistantMediaResult = () => {
     const dbkfMediaMatchLoading = useSelector(state=>state.assistant.dbkfMediaMatchLoading)
     const dbkfImageMatch = useSelector(state => state.assistant.dbkfImageMatch);
     const dbkfVideoMatch = useSelector(state => state.assistant.dbkfVideoMatch);
+
     const warningExpanded = useSelector(state => state.assistant.warningExpanded)
     const resultIsImage = resultProcessType === CONTENT_TYPE.IMAGE
 
-
-    const [expandMedia, setExpandMedia] = useState(false);
+    const [expandMedia, setExpandMedia] = useState(!singleMediaPresent || processUrl==null);
 
     // select the correct media to process, then load actions possible
     const submitMediaToProcess = (url) => {
@@ -66,20 +66,6 @@ const AssistantMediaResult = () => {
         ;
         dispatch(setProcessUrl(url, cType, false, false));
     }
-
-
-    useEffect(() => {
-        if (imageList.length === 1 && videoList.length === 0) {
-            dispatch(setProcessUrl(imageList[0], CONTENT_TYPE.IMAGE), false, false)
-            dispatch(setSingleMediaPresent(true))
-        } else if (videoList.length === 1 && imageList.length === 0) {
-            dispatch(setProcessUrl(videoList[0], CONTENT_TYPE.VIDEO), false, false)
-            dispatch(setSingleMediaPresent(true))
-        } else {
-            setExpandMedia(true);
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [imageList, videoList])
 
 
     return (
