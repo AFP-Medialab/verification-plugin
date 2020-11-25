@@ -29,6 +29,10 @@ const defaultState = {
     ocrLoading: false,
     ocrDone: false,
 
+    hpResult: null,
+    hpLoading: false,
+    hpDone: false,
+
     loading: false,
     warningExpanded: false
 };
@@ -48,6 +52,7 @@ const assistantReducer = (state = defaultState, action) => {
         case "SET_DBKF_IMAGE_MATCH_DETAILS":
         case "SET_DBKF_VIDEO_MATCH_DETAILS":
         case "SET_OCR_DETAILS":
+        case "SET_HP_DETAILS":
         case "SET_LOADING":
         case "SET_WARNING_EXPANDED":
             return Object.assign({}, state, action.payload)
@@ -84,6 +89,10 @@ const assistantReducer = (state = defaultState, action) => {
                 ocrResult: null,
                 ocrLoading: false,
                 ocrDone: false,
+
+                hpResult: null,
+                hpLoading: false,
+                hpDone: false,
 
                 loading: false,
                 warningExpanded: false

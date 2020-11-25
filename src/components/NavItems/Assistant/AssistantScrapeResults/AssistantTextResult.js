@@ -30,6 +30,8 @@ const AssistantTextResult = () => {
     // state related
     const text = useSelector(state => state.assistant.urlText);
     const dbkfMatch = useSelector(state => state.assistant.dbkfTextMatch)
+    const hpLoading = useSelector(state => state.assistant.hpLoading)
+
     const dbkfMatchLoading = useSelector(state => state.assistant.dbkfTextMatchLoading)
     const warningExpanded = useSelector(state => state.assistant.warningExpanded);
 
@@ -72,7 +74,7 @@ const AssistantTextResult = () => {
                         </div>
                     }
                 />
-                <LinearProgress variant={"indeterminate"} color = {"secondary"} hidden={!dbkfMatchLoading}/>
+                <LinearProgress variant={"indeterminate"} color = {"secondary"} hidden={!dbkfMatchLoading && !hpLoading}/>
                 <CardContent>
                         <Collapse in={expanded} collapsedHeight={100} id={"element-to-check"}>
                             <Typography align={"center"}>

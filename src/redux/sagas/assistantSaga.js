@@ -1,13 +1,13 @@
 import {
     setDbkfImageMatchDetails,
-    setDbkfTextMatchDetails, setDbkfVideoMatchDetails,
+    setDbkfTextMatchDetails, setDbkfVideoMatchDetails, setHpDetails,
     setInputSourceCredDetails, setOcrDetails, setProcessUrl,
     setProcessUrlActions, setSingleMediaPresent
 } from "../actions/tools/assistantActions";
 import {setError} from "../actions/errorActions";
 
-import {put, takeLatest, all, call, select, fork, cancel} from 'redux-saga/effects'
-import useSourceCredibilityApi from "../../components/NavItems/Assistant/AssistantApiHandlers/useSourceCredibilityApi";
+import {put, takeLatest, all, call, select, fork} from 'redux-saga/effects'
+import useGateCloudApi from "../../components/NavItems/Assistant/AssistantApiHandlers/useGateCloudApi";
 import useDBKFApi from "../../components/NavItems/Assistant/AssistantApiHandlers/useDBKFApi";
 import {
     CONTENT_TYPE,
@@ -15,12 +15,10 @@ import {
     matchPattern,
     selectCorrectActions
 } from "../../components/NavItems/Assistant/AssistantRuleBook";
-import useOcrService from "../../components/NavItems/Assistant/AssistantApiHandlers/useOcrService";
 
 
 const dbkfAPI = useDBKFApi()
-const sourceCredApi = useSourceCredibilityApi()
-const ocrApi = useOcrService();
+const gateCloudApi = useGateCloudApi()
 
 
 function * getMediaListSaga() {
@@ -42,6 +40,11 @@ function * getMediaSimilaritySaga() {
 function * getDbkfTextMatchSaga() {
     yield takeLatest(["SET_SCRAPED_DATA", "CLEAN_STATE"], handleDbkfTextSearch)
 }
+
+function * getHyperpartisanSaga() {
+    yield takeLatest(["SET_SCRAPED_DATA", "CLEAN_STATE"], handleHyperpartisanCall)
+}
+
 
 function * getSourceCredSaga() {
     yield takeLatest(["SET_INPUT_URL", "CLEAN_STATE"], handleSourceCredibility)
@@ -128,9 +131,9 @@ function * handleOcrCall(action) {
     try {
         if (contentType === CONTENT_TYPE.IMAGE) {
             yield put(setOcrDetails(null, true, false))
-            let ocrResult = yield call(ocrApi.callOcrService, [processUrl])
+            let ocrResult = yield call(gateCloudApi.callOcrService, [processUrl])
             let ocrText = ocrResult.entities.URL[0].ocr_text
-           ocrText === "" ?
+            ocrText === "" ?
                 yield put(setOcrDetails(null, false, true)) :
                 yield put(setOcrDetails(ocrText, false, true))
 
@@ -147,7 +150,7 @@ function * handleSourceCredibility(action) {
 
     try {
         const inputUrl = yield select((state)=>state.assistant.inputUrl)
-        const result = yield call(sourceCredApi.callSourceCredibility, [inputUrl])
+        const result = yield call(gateCloudApi.callSourceCredibilityService, [inputUrl])
         yield put(setInputSourceCredDetails(result, false, true))
     }
 
@@ -173,6 +176,26 @@ function * handleDbkfTextSearch(action) {
     }
 }
 
+function * handleHyperpartisanCall(action) {
+    if(action.type === "CLEAN_STATE") return
+
+    try {
+        const text = yield select((state)=>state.assistant.urlText)
+        if (text !== null) {
+            yield put(setHpDetails(null,true,false))
+            let textToUse = text.length > 500 ? text.substring(0, 500) : text
+
+            const result = yield call(gateCloudApi.callHyperpartisanService, textToUse)
+            let hpProb = result.entities.hyperpartisan[0].hyperpartisan_probability
+            hpProb = parseFloat(hpProb).toFixed(2)
+            yield put(setHpDetails(hpProb,false,true))
+        }
+    }
+    catch (error) {
+        yield put(setError("hyperpartisan_error"))
+    }
+}
+
 
 export default function * rootSaga(){
     yield all([
@@ -181,6 +204,7 @@ export default function * rootSaga(){
         fork(getMediaActionSaga),
         fork(getImageOcrSaga),
         fork(getMediaSimilaritySaga),
-        fork(getMediaListSaga)
+        fork(getMediaListSaga),
+        fork(getHyperpartisanSaga)
     ])
 }

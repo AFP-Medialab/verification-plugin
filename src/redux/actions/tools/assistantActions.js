@@ -128,6 +128,17 @@ export const setOcrDetails = (ocrText, ocrLoading, ocrDone) => {
     }
 }
 
+export const setHpDetails = (hpResult, hpLoading, hpDone) => {
+    return {
+        type: "SET_HP_DETAILS",
+        payload: {
+            hpResult: hpResult,
+            hpLoading: hpLoading,
+            hpDone: hpDone
+        }
+    }
+}
+
 
 export const setSingleMediaPresent = (singleMediaPresent) => {
     return {
