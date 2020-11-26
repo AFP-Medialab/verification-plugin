@@ -22,6 +22,7 @@ import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import Typography from "@material-ui/core/Typography";
+import OnClickInfo from "../../../Shared/OnClickInfo/OnClickInfo";
 
 import SearchIcon from '@material-ui/icons/Search';
 
@@ -593,6 +594,7 @@ const TwitterSna = () => {
         <Box m={2} />
         <Typography>{loadingMessage}</Typography>
         <LinearProgress hidden={!isLoading} />
+        <OnClickInfo keyword={"introduction_tip"} />
       </Paper>
       {
         reduxResult &&
