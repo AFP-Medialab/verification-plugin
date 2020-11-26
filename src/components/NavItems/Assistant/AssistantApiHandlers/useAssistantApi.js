@@ -2,7 +2,8 @@ import axios from "axios";
 
 export default function useAssistantApi() {
 
-    const assistantScrapeUrl = process.env.REACT_APP_ASSISTANT_URL;
+    const assistantScrapeUrl = process.env.REACT_APP_ASSISTANT_URL
+    const elgEndpoint = process.env.REACT_APP_SPACY
 
     const callAssistantScraper = async (urlType, userInput) => {
         try {
@@ -20,8 +21,21 @@ export default function useAssistantApi() {
         }
     }
 
+    const callNamedEntityService = async (text) => {
+
+        const namedEntityResult = await axios.post(
+            elgEndpoint,
+            {'content': text},
+            {headers: {'Content-Type': 'text/plain; charset=UTF-8'}}
+        )
+
+        console.log("jh" + namedEntityResult)
+        return namedEntityResult.data
+    }
+
     return {
-        callAssistantScraper
+        callAssistantScraper,
+        callNamedEntityService
     }
 
 }

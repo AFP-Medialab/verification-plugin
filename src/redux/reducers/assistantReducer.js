@@ -33,6 +33,10 @@ const defaultState = {
     hpLoading: false,
     hpDone: false,
 
+    neResult: null,
+    neLoading: false,
+    neDone: false,
+
     loading: false,
     warningExpanded: false
 };
@@ -53,6 +57,7 @@ const assistantReducer = (state = defaultState, action) => {
         case "SET_DBKF_VIDEO_MATCH_DETAILS":
         case "SET_OCR_DETAILS":
         case "SET_HP_DETAILS":
+        case "SET_NE_DETAILS":
         case "SET_LOADING":
         case "SET_WARNING_EXPANDED":
             return Object.assign({}, state, action.payload)
@@ -93,6 +98,10 @@ const assistantReducer = (state = defaultState, action) => {
                 hpResult: null,
                 hpLoading: false,
                 hpDone: false,
+
+                neResult: null,
+                neLoading: false,
+                neDone: false,
 
                 loading: false,
                 warningExpanded: false

@@ -139,6 +139,17 @@ export const setHpDetails = (hpResult, hpLoading, hpDone) => {
     }
 }
 
+export const setNeDetails = (neResult, neLoading, neDone) => {
+    return {
+        type: "SET_NE_DETAILS",
+        payload: {
+            neResult: neResult,
+            neLoading: neLoading,
+            neDone: neDone
+        }
+    }
+}
+
 
 export const setSingleMediaPresent = (singleMediaPresent) => {
     return {

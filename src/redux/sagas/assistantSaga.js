@@ -1,12 +1,13 @@
 import {
     setDbkfImageMatchDetails,
     setDbkfTextMatchDetails, setDbkfVideoMatchDetails, setHpDetails,
-    setInputSourceCredDetails, setOcrDetails, setProcessUrl,
+    setInputSourceCredDetails, setNeDetails, setOcrDetails, setProcessUrl,
     setProcessUrlActions, setSingleMediaPresent
 } from "../actions/tools/assistantActions";
 import {setError} from "../actions/errorActions";
 
 import {put, takeLatest, all, call, select, fork} from 'redux-saga/effects'
+import useAssistantApi from "../../components/NavItems/Assistant/AssistantApiHandlers/useAssistantApi";
 import useGateCloudApi from "../../components/NavItems/Assistant/AssistantApiHandlers/useGateCloudApi";
 import useDBKFApi from "../../components/NavItems/Assistant/AssistantApiHandlers/useDBKFApi";
 import {
@@ -19,6 +20,7 @@ import {
 
 const dbkfAPI = useDBKFApi()
 const gateCloudApi = useGateCloudApi()
+const assistantApi = useAssistantApi()
 
 
 function * getMediaListSaga() {
@@ -48,6 +50,10 @@ function * getHyperpartisanSaga() {
 
 function * getSourceCredSaga() {
     yield takeLatest(["SET_INPUT_URL", "CLEAN_STATE"], handleSourceCredibility)
+}
+
+function * getNamedEntitySaga() {
+    yield takeLatest(["SET_SCRAPED_DATA", "CLEAN_STATE"], handleNamedEntitySaga)
 }
 
 function * handleMediaLists() {
@@ -199,15 +205,34 @@ function * handleHyperpartisanCall(action) {
     }
 }
 
+function * handleNamedEntitySaga(action) {
+    if(action.type === "CLEAN_STATE") return
+
+    try {
+        const text = yield select((state)=>state.assistant.urlText)
+        if (text !== null) {
+            yield put(setNeDetails(null,true,false))
+
+            const result = yield call(assistantApi.callNamedEntityService, text)
+
+            yield put(setNeDetails(result,false,true))
+        }
+    }
+    catch (error) {
+        yield put(setNeDetails(null,false,true))
+        yield put(setError("named_entity_error"))
+    }
+}
 
 export default function * rootSaga(){
     yield all([
-        fork(getDbkfTextMatchSaga),
+        // fork(getDbkfTextMatchSaga),
         fork(getSourceCredSaga),
         fork(getMediaActionSaga),
         fork(getImageOcrSaga),
         fork(getMediaSimilaritySaga),
         fork(getMediaListSaga),
-        fork(getHyperpartisanSaga)
+        fork(getHyperpartisanSaga),
+        fork(getNamedEntitySaga)
     ])
 }
