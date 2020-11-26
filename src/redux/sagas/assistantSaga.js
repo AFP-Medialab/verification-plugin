@@ -185,13 +185,16 @@ function * handleHyperpartisanCall(action) {
             yield put(setHpDetails(null,true,false))
             let textToUse = text.length > 500 ? text.substring(0, 500) : text
 
-            const result = yield call(gateCloudApi.callHyperpartisanService, textToUse)
+            const result = yield call(gateCloudApi.callHyperpartisanService, text)
+
             let hpProb = result.entities.hyperpartisan[0].hyperpartisan_probability
-            hpProb = parseFloat(hpProb).toFixed(2)
+            hpProb = parseFloat(hpProb).toFixed(2) > 0.80 ? parseFloat(hpProb).toFixed(2) : null
+
             yield put(setHpDetails(hpProb,false,true))
         }
     }
     catch (error) {
+        yield put(setHpDetails(null,false,true))
         yield put(setError("hyperpartisan_error"))
     }
 }

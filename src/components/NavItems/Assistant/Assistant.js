@@ -69,8 +69,8 @@ const Assistant = () => {
     const linkList = useSelector(state => state.assistant.linkList)
 
     //url warning states
-    const inputSCDone = useSelector(state => state.assistant.inputSCDone);
     const ocrResult = useSelector(state => state.assistant.ocrResult);
+    const hpResult = useSelector(state => state.assistant.hpResult)
     const inputUrlSourceCred = useSelector(state => state.assistant.inputUrlSourceCredibility)
     const dbkfTextMatch = useSelector(state => state.assistant.dbkfTextMatch);
     const dbkfImageResult = useSelector(state => state.assistant.dbkfImageMatch);
@@ -300,7 +300,11 @@ const Assistant = () => {
                     <Box m={3}/>
                     <LinearProgress hidden={!loading}/>
                     <Grid item xs={12}>
-                        {dbkfTextMatch !== null || dbkfImageResult !== null || inputUrlSourceCred !== null || dbkfVideoMatch !== null ?
+                        {dbkfTextMatch !== null ||
+                        dbkfImageResult !== null ||
+                        inputUrlSourceCred !== null ||
+                        dbkfVideoMatch !== null ||
+                        hpResult !== null ?
                             <AssistantWarnings/> : null}
                         <Box m={2}/>
                     </Grid>

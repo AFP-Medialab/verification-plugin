@@ -19,6 +19,7 @@ import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import SourceCredibilityResults from "../AssistantCheckResults/SourceCredibilityResults";
 import DbkfTextResults from "../AssistantCheckResults/DbkfTextResults";
 import DbkfMediaResults from "../AssistantCheckResults/DbkfMediaResults";
+import HpTextResult from "../AssistantCheckResults/HpTextResult";
 
 
 const AssistantWarnings = () => {
@@ -55,6 +56,8 @@ const AssistantWarnings = () => {
                 <DbkfTextResults/>
 
                 <DbkfMediaResults/>
+
+                <HpTextResult/>
             </Collapse>
 
             <Divider/>
