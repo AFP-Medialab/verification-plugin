@@ -189,7 +189,6 @@ function * handleHyperpartisanCall(action) {
         const text = yield select((state)=>state.assistant.urlText)
         if (text !== null) {
             yield put(setHpDetails(null,true,false))
-            let textToUse = text.length > 500 ? text.substring(0, 500) : text
 
             const result = yield call(gateCloudApi.callHyperpartisanService, text)
 
@@ -215,7 +214,23 @@ function * handleNamedEntitySaga(action) {
 
             const result = yield call(assistantApi.callNamedEntityService, text)
 
-            yield put(setNeDetails(result,false,true))
+            let entities = []
+
+            Object.values(result.response.annotations).forEach(annotation=>{
+                annotation.forEach(instance=>{
+                    entities.push(instance.features.string)
+                })
+            })
+
+            let wordCloudList = entities.reduce((accumulator, currentWord)=>{
+                accumulator.filter(wordObj=>wordObj.text === currentWord).length ?
+                    accumulator.filter(wordObj=>wordObj.text === currentWord)[0].value += 1 :
+                    accumulator.push({"text": currentWord, "value": 1})
+
+                return accumulator
+            }, [])
+
+            yield put(setNeDetails(wordCloudList,false,true))
         }
     }
     catch (error) {
@@ -232,7 +247,7 @@ export default function * rootSaga(){
         fork(getImageOcrSaga),
         fork(getMediaSimilaritySaga),
         fork(getMediaListSaga),
-        fork(getHyperpartisanSaga),
+        // fork(getHyperpartisanSaga),
         fork(getNamedEntitySaga)
     ])
 }

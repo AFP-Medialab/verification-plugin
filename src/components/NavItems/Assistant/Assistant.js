@@ -47,6 +47,7 @@ import {
     selectCorrectActions,
     TYPE_PATTERNS,
 } from "./AssistantRuleBook";
+import AssistantNEResult from "./AssistantCheckResults/AssistantNEResult";
 
 const Assistant = () => {
 
@@ -68,8 +69,11 @@ const Assistant = () => {
     const text = useSelector(state => state.assistant.urlText)
     const linkList = useSelector(state => state.assistant.linkList)
 
-    //url warning states
+    // media processing states
     const ocrResult = useSelector(state => state.assistant.ocrResult);
+    const neResult = useSelector(state => state.assistant.neResult);
+
+    //url warning states
     const hpResult = useSelector(state => state.assistant.hpResult)
     const inputUrlSourceCred = useSelector(state => state.assistant.inputUrlSourceCredibility)
     const dbkfTextMatch = useSelector(state => state.assistant.dbkfTextMatch);
@@ -382,7 +386,7 @@ const Assistant = () => {
 
             <Box m={4}/>
 
-            <Paper className={classes.assistantRoot} hidden={linkList.length === 0 && ocrResult === null}>
+            <Paper className={classes.assistantRoot} hidden={linkList.length === 0 && ocrResult === null && neResult === null}>
                 <Grid container spacing={2}>
                     <Grid item xs={12}>
                         <Typography variant={"h5"} align={"left"}>{keyword("content_explorer")}</Typography>
@@ -399,6 +403,12 @@ const Assistant = () => {
                     {ocrResult !== null ?
                         <Grid item xs={6}>
                             <AssistantOcrResult/>
+                        </Grid> : null
+                    }
+
+                    {neResult !== null ?
+                        <Grid item xs={6}>
+                            <AssistantNEResult/>
                         </Grid> : null
                     }
                 </Grid>

@@ -29,7 +29,6 @@ export default function useAssistantApi() {
             {headers: {'Content-Type': 'text/plain; charset=UTF-8'}}
         )
 
-        console.log("jh" + namedEntityResult)
         return namedEntityResult.data
     }
 

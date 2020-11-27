@@ -15,7 +15,7 @@ export default function useGateCloudApi() {
 
     let unencoded_auth = unencoded_token + ":" + unencoded_pw
     let key = btoa(encodeURI(unencoded_auth))
-    let headers = {'Authorization': 'Basic ' + key, 'Content-Type': 'text/plain'}
+    let headers = {'Authorization': 'Basic ' + key, 'Content-Type': 'text/plain; charset=utf-8'}
 
 
     const filterSourceCredibility = (sourceCredibility) => {
