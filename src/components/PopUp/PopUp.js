@@ -1,18 +1,25 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
+import {useDispatch, useSelector} from "react-redux";
+
 import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
+import weVerifyLogo from "./images/logo-we-verify.png";
+import invidLogo from "./images/InVID-logo.svg";
+
 import tsv from "../../LocalDictionary/components/PopUp.tsv";
 import useMyStyles from "../Shared/MaterialUiStyles/useMyStyles";
 import useLoadLanguage from "../../Hooks/useLoadLanguage";
-import weVerifyLogo from "./images/logo-we-verify.png";
-import invidLogo from "./images/InVID-logo.svg";
+import {changeLanguage} from "../../redux/actions";
+import {getSupportedBrowserLanguage} from "../Shared/Languages/getSupportedBrowserLanguage";
 
 const navigator = (window.browser) ? window.browser : window.chrome;
 
 const PopUp = () => {
     const classes = useMyStyles();
+    const dispatch = useDispatch();
     const keyword = useLoadLanguage("components/PopUp.tsv", tsv);
+    const currentLang = useSelector(state => state.language);
 
     const [pageUrl, setPageUrl] = useState(null);
 
@@ -28,6 +35,14 @@ const PopUp = () => {
             setPageUrl(url);
         })
     }
+
+    useEffect(() => {
+        let supportedBrowserLang = getSupportedBrowserLanguage()
+
+        if (supportedBrowserLang !== undefined && supportedBrowserLang !== currentLang) {
+            dispatch(changeLanguage(supportedBrowserLang))
+        }
+    }, [])
 
     return (
         <div className={classes.popUp}>

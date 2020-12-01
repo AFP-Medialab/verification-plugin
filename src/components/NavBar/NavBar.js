@@ -6,7 +6,7 @@ import Languages from "../NavItems/languages/languages";
 import logoInvid from "./images/logo-invid.png";
 import logoWeVerify from "../PopUp/images/logo-we-verify.png";
 import Tutorial from "../NavItems/tutorial/tutorial";
-import React from 'react';
+import React, {useEffect} from 'react';
 import clsx from 'clsx';
 import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
@@ -77,11 +77,13 @@ import covidSearchIconOff from "./images/tools/covid_search_logoOff.png"
 import xnetworkIconOn from "./images/tools/xnetwork_logoOn.png"
 import xnetworkIconOff from "./images/tools/xnetwork_logoOff.png"
 
+import {getSupportedBrowserLanguage} from "../Shared/Languages/getSupportedBrowserLanguage";
 import useLoadLanguage from "../../Hooks/useLoadLanguage";
 import tsv from "../../LocalDictionary/components/NavBar.tsv";
 import FactCheck from "../NavItems/FactCheck/FactCheck";
 import Snackbar from "@material-ui/core/Snackbar";
 import {setFalse, setTrue} from "../../redux/actions/cookiesActions";
+import {changeLanguage} from "../../redux/actions";
 import Button from "@material-ui/core/Button";
 
 
@@ -99,6 +101,7 @@ const NavBar = (props) => {
     const tabValue = useSelector(state => state.nav);
     const drawerValue = useSelector(state => state.tool.selected);
     const cookiesUsage = useSelector(state => state.cookies);
+    const currentLang = useSelector(state => state.language);
 
     const dispatch = useDispatch();
 
@@ -270,6 +273,15 @@ const NavBar = (props) => {
     const handleImageClick = () => {
         history.push("/app/tools/all");
     };
+
+    useEffect(() => {
+        let supportedBrowserLang = getSupportedBrowserLanguage()
+
+        if (supportedBrowserLang !== undefined && supportedBrowserLang !== currentLang) {
+            dispatch(changeLanguage(supportedBrowserLang))
+        }
+    }, [])
+
 
     return (
         <div className={classes.flex}>
