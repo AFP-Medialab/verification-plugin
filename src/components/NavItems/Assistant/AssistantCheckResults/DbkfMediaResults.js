@@ -23,7 +23,7 @@ const DbkfMediaResults = () => {
     const dbkfVideoMatch = useSelector(state => state.assistant.dbkfVideoMatch)
 
     return (
-        <List>
+        <List disablePadding={true}>
             {dbkfImageMatch !== null && dbkfImageMatch.length !== 0 ?
                 dbkfImageMatch.map((value, key) => (
                     <ListItem key={key}>

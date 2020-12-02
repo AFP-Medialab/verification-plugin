@@ -37,7 +37,10 @@ const SourceCredibilityResults = () => {
                                                 {keyword("source_credibility_warning")}
                                             </Box>
                                         </Typography>}
-                                    secondary={<Typography>{value["credibility-source"]} : {value["credibility-labels"]} </Typography>}/>
+                                    secondary={
+                                        <Typography> "{value["credibility-labels"]}" {keyword("according_to")} {value["credibility-source"]}
+                                        </Typography>}/>
+                                        }
                             </ListItem>
                             )
                         )

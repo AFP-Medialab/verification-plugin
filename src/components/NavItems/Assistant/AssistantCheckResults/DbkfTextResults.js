@@ -18,7 +18,7 @@ const DbkfTextResults = () => {
     const dbkfTextMatch = useSelector(state => state.assistant.dbkfTextMatch)
 
     return (
-        <List>
+        <List disablePadding={true}>
             {dbkfTextMatch !== null && Object.keys(dbkfTextMatch).length !== 0 ?
                 dbkfTextMatch.map((value, key) => (
                     <ListItem key={key}>

@@ -17,7 +17,8 @@ const HpTextResult = () => {
     const hpResult = useSelector(state => state.assistant.hpResult)
 
     return (
-        <List>
+        hpResult != null ?
+        <List disablePadding={true}>
             <ListItem>
                 <ListItemAvatar>
                     <Avatar variant={"square"}><TextFieldsIcon fontSize={"large"}/> </Avatar>
@@ -29,10 +30,10 @@ const HpTextResult = () => {
                                 {keyword("hp_warning")}
                             </Box>
                         </Typography>}
-                    secondary={hpResult}
-                />
+                    secondary={<Typography> {hpResult} </Typography>}
+                    />
             </ListItem>
-        </List>
+        </List> : null
     )
 };
 export default HpTextResult;
