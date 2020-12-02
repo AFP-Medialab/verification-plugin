@@ -29,6 +29,7 @@ const AssistantTextResult = () => {
 
     // state related
     const text = useSelector(state => state.assistant.urlText);
+    const textLang = useSelector(state => state.assistant.textLang);
     const dbkfMatch = useSelector(state => state.assistant.dbkfTextMatch)
     const hpLoading = useSelector(state => state.assistant.hpLoading)
 
@@ -84,14 +85,21 @@ const AssistantTextResult = () => {
 
                 </CardContent>
 
-                <Box m={1.5} align={"right"}>
+                <Box m={1.5}>
                     <Divider/>
-                    {displayExpander ?
-                        expanded ?
-                            <ExpandLessOutlined className={classes.toolTipIcon} onClick={()=> {setExpanded(!expanded)}}/> :
-                            <ExpandMoreOutlined className={classes.toolTipIcon} onClick={()=> {setExpanded(!expanded)}}/>
-                        : null
-                    }
+                    <Grid container>
+                        <Grid item xs={6}>
+                            <Typography className={classes.toolTipIcon}>{textLang}</Typography>
+                        </Grid>
+                        <Grid item xs={6} align={"right"}>
+                            {displayExpander ?
+                                expanded ?
+                                    <ExpandLessOutlined className={classes.toolTipIcon} onClick={()=> {setExpanded(!expanded)}}/> :
+                                    <ExpandMoreOutlined className={classes.toolTipIcon} onClick={()=> {setExpanded(!expanded)}}/>
+                                : null
+                            }
+                        </Grid>
+                    </Grid>
                 </Box>
             </Card>
         </Grid>

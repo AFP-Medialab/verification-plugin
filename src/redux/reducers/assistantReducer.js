@@ -9,6 +9,7 @@ const defaultState = {
     videoList: [],
     linkList: [],
     urlText: null,
+    textLang: null,
     processUrlActions : [],
     processUrlType: null,
 
@@ -75,6 +76,7 @@ const assistantReducer = (state = defaultState, action) => {
                 videoList: [],
                 linkList: [],
                 urlText: null,
+                textLang: null,
                 processUrlActions : [],
                 processUrlType: null,
 

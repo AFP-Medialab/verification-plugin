@@ -51,11 +51,12 @@ export const setProcessUrl = (processUrl, processUrlType, ocrDone, dbkfMediaMatc
 };
 
 
-export const setScrapedData = (text, links, images, videos) => {
+export const setScrapedData = (text,lang, links, images, videos) => {
     return {
         type: "SET_SCRAPED_DATA",
         payload: {
             urlText: text,
+            textLang: lang,
             linkList: links,
             imageList: images,
             videoList: videos

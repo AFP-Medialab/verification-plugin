@@ -67,6 +67,7 @@ const Assistant = () => {
     const imageList = useSelector(state => state.assistant.imageList);
     const videoList = useSelector(state => state.assistant.videoList);
     const text = useSelector(state => state.assistant.urlText)
+    const textLang = useSelector(state => state.assistant.textLang)
     const linkList = useSelector(state => state.assistant.linkList)
 
     // media processing states
@@ -89,6 +90,7 @@ const Assistant = () => {
     const videoListRef = useRef(videoList);
     const textRef = useRef(text)
     const linkListRef = useRef(linkList)
+    const textLangRef = useRef(textLang)
 
     // apis
     const assistantApi = useAssistantApi()
@@ -109,7 +111,7 @@ const Assistant = () => {
             setAssistantResults(urlType, contentType, userInput, scrapeResult)
 
             dispatch(setInputUrl(userInput));
-            dispatch(setScrapedData(textRef.current, linkListRef.current, imageListRef.current, videoListRef.current))
+            dispatch(setScrapedData(textRef.current, textLangRef.current, linkListRef.current, imageListRef.current, videoListRef.current))
 
 
             dispatch(setAssistantLoading(false))
@@ -166,6 +168,7 @@ const Assistant = () => {
             case KNOWN_LINKS.TIKTOK:
                 textRef.current = scrapeResult.text
                 videoListRef.current = [scrapeResult.videos]
+                textLangRef.current = scrapeResult.lang
                 linkListRef.current = scrapeResult.links
                 break;
             case KNOWN_LINKS.INSTAGRAM:
@@ -175,6 +178,7 @@ const Assistant = () => {
                     imageListRef.current = [scrapeResult.images[1]]
                 }
                 textRef.current = scrapeResult.text
+                textLangRef.current = scrapeResult.lang
                 linkListRef.current = scrapeResult.links
                 break;
             case KNOWN_LINKS.FACEBOOK:
@@ -187,6 +191,7 @@ const Assistant = () => {
                 }
                 linkListRef.current = scrapeResult.links
                 textRef.current = scrapeResult.text
+                textLangRef.current = scrapeResult.lang
                 break;
             case KNOWN_LINKS.TWITTER:
                 if (scrapeResult.videos.length === 0) {
@@ -196,6 +201,7 @@ const Assistant = () => {
                 }
                 textRef.current = scrapeResult.text
                 linkListRef.current = scrapeResult.links
+                textLangRef.current = scrapeResult.lang
                 break;
             case KNOWN_LINKS.MISC:
                 if (contentType !== null) {
@@ -205,6 +211,7 @@ const Assistant = () => {
                     imageListRef.current = scrapeResult.images
                     videoListRef.current = scrapeResult.videos
                     textRef.current = scrapeResult.text
+                    textLangRef.current = scrapeResult.lang
                     linkListRef.current = scrapeResult.links
                 }
                 break;
