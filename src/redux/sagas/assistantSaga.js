@@ -230,7 +230,7 @@ function * handleNamedEntitySaga(action) {
                 return accumulator
             }, [])
 
-            yield put(setNeDetails(wordCloudList,false,true))
+            yield put(setNeDetails( wordCloudList.length > 0 ? wordCloudList : null,false,true))
         }
     }
     catch (error) {

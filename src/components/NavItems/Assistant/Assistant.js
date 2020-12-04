@@ -187,7 +187,7 @@ const Assistant = () => {
                     imageListRef.current = imageListRef.current.filter(imageUrl => imageUrl.includes("//scontent") &&
                         !(imageUrl.includes("/cp0/")));
                 } else {
-                    videoListRef.current = [userInput];
+                    videoListRef.current = scrapeResult.videos;
                 }
                 linkListRef.current = scrapeResult.links
                 textRef.current = scrapeResult.text
@@ -375,7 +375,7 @@ const Assistant = () => {
                     <Box m={2}/>
                 </Grid>
 
-                {text !== null ?
+                {text ?
                     <Grid item xs={12}>
                         <AssistantTextResult/>
                         <Box m={2}/>
@@ -413,7 +413,7 @@ const Assistant = () => {
                         </Grid> : null
                     }
 
-                    {neResult !== null ?
+                    {neResult ?
                         <Grid item xs={6}>
                             <AssistantNEResult/>
                         </Grid> : null
