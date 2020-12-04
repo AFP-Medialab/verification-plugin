@@ -186,7 +186,8 @@ const TwitterSna = () => {
       "until": dateFormat(newUntil, "yyyy-mm-dd HH:MM:ss"),
       "verified": String(verifiedUsersP) === "true",
       "media": (filtersP === "none") ? null : filtersP,
-      "retweetsHandling": null
+      "retweetsHandling": null,
+      "localTime": localTimeP,
     };
   };
 

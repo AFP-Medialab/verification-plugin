@@ -380,6 +380,8 @@ const useTwitterSnaRequest = (request) => {
   const dispatch = useDispatch();
   const authenticatedRequest = useAuthenticatedRequest();
   const userAuthenticated = useSelector(state => state.userSession && state.userSession.userAuthenticated);
+  const userToken = useSelector(state => state.userSession && state.userSession.accessToken);
+  const userLogined = useSelector(state => state.userSession && state.userSession.user);
 
   useEffect(() => {
 
@@ -976,24 +978,15 @@ const useTwitterSnaRequest = (request) => {
     dispatch(setTwitterSnaLoading(true));
 
     if (userAuthenticated) {
-      const axiosConfig = {
-        method: 'post',
-        baseURL: TwintWrapperUrl,
-        url: '/collect',
-        data: request
-      };
-      // axios.post(TwintWrapperUrl + "/collect", request)
-      authenticatedRequest(axiosConfig)
-        .then(response => {
-          if (response.data.status === "Error")
-            handleErrors("twitterSnaErrorMessage");
-          else if (response.data.status === "Done")
-            lastRenderCall(response.data.session, request);
-          else
-            getResultUntilsDone(response.data.session, true, request);
-        }).catch(error => {
-          handleErrors(error);
-        });
+      // ici la redirection vers le serveur
+      //construite la requête avec:
+      // 1 - le contenu request
+      // 2 - le token d'authentification
+      const requestData = encodeURIComponent(JSON.stringify(request));
+      const userData = encodeURIComponent(JSON.stringify(userLogined));
+      // userToken
+      window.open(process.env.REACT_APP_TSNA_SERVER+"?data=" + requestData + "&token=" + userToken + "&user=" + userData);
+      dispatch(setTwitterSnaLoading(false));     
     } else {
       lastRenderCall(null, request);
     }
