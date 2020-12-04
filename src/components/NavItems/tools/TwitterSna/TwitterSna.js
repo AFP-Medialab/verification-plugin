@@ -595,7 +595,7 @@ const TwitterSna = () => {
         <Box m={2} />
         <Typography>{loadingMessage}</Typography>
         <LinearProgress hidden={!isLoading} />
-        <OnClickInfo keyword={"introduction_tip"} />
+        <OnClickInfo keyword={"twittersna_explication"} />
       </Paper>
       {
         reduxResult &&
