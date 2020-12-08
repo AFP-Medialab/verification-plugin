@@ -226,7 +226,7 @@ const Assistant = () => {
     const submitUpload = (contentType) => {
         let known_link = KNOWN_LINKS.OWN;
         let actions = selectCorrectActions(contentType, known_link, known_link, "");
-        dispatch(setProcessUrlActions(actions));
+        dispatch(setProcessUrlActions(contentType, actions));
         dispatch(setImageVideoSelected(true));
     }
 

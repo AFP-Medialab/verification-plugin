@@ -27,10 +27,11 @@ export const setInputUrl = (inputUrl) => {
 };
 
 
-export const setProcessUrlActions = (actions) => {
+export const setProcessUrlActions = (contentType, actions) => {
     return {
         type : "SET_PROCESS_URL_ACTIONS",
         payload: {
+            processUrlType: contentType,
             processUrlActions : actions
         }
     }

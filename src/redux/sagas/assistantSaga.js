@@ -88,7 +88,7 @@ function * handleActionCall() {
             let knownProcessLink = yield call(matchPattern, processUrl, KNOWN_LINK_PATTERNS);
             let actions = yield call(selectCorrectActions, contentType, knownInputLink, knownProcessLink, processUrl);
 
-            yield put(setProcessUrlActions(actions))
+            yield put(setProcessUrlActions(contentType, actions))
         }
         catch(error){
             yield put(setError("Error deciding which actions can be taken against given media"))
