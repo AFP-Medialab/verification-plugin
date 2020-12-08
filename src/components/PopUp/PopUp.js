@@ -42,7 +42,7 @@ const PopUp = () => {
         if (supportedBrowserLang !== undefined && supportedBrowserLang !== currentLang) {
             dispatch(changeLanguage(supportedBrowserLang))
         }
-    }, [])
+    }, [currentLang, dispatch])
 
     return (
         <div className={classes.popUp}>
