@@ -15,6 +15,7 @@ import tsv from "../../../../LocalDictionary/components/NavItems/tools/Assistant
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import Divider from "@material-ui/core/Divider";
+import {KNOWN_LINKS} from "../AssistantRuleBook";
 
 const AssistantProcessUrlActions = () => {
 
@@ -29,9 +30,9 @@ const AssistantProcessUrlActions = () => {
 
     const handleClick = (path, resultUrl) => {
         if (resultUrl != null) {
-            history.push("/app/" + path + "/" + encodeURIComponent(resultUrl))
+            history.push("/app/" + path + "/" + encodeURIComponent(resultUrl) + "/" + contentType)
         } else {
-            history.push("/app/" + path + "/" + contentType)
+            history.push("/app/" + path + "/" + KNOWN_LINKS.OWN + "/" + contentType)
         }
     };
 

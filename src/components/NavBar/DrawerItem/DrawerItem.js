@@ -82,7 +82,7 @@ const DrawerItem = (props) => {
                         return (
                             <Route
                                 key={index}
-                                path={"/app/tools/" + item.path + "/:url?"}
+                                path={"/app/tools/" + item.path + "/:url?/:type?/"}
                                 render={
                                     () => {
                                         dispatch(selectTool(index));
