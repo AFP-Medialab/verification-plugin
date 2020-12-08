@@ -66,7 +66,10 @@ const Metadata = () => {
 
     useEffect( ()=> {
         // roundabout hack :: fix requires amending actions/reducer so a new state object is returned
-        submitUrl()
+        if (urlDetected) {
+            submitUrl()
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [urlDetected])
 
     useEffect(() => {

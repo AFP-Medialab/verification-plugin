@@ -14,7 +14,7 @@ import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/Forensic.tsv";
 import {submissionEvent} from "../../../Shared/GoogleAnalytics/GoogleAnalytics";
 import LocalFile from "../Forensic/LocalFile/LocalFile";
-import {CONTENT_TYPE} from "../../Assistant/AssistantRuleBook";
+import {KNOWN_LINKS} from "../../Assistant/AssistantRuleBook";
 
 const Forensic = () => {
     const {url} = useParams();
@@ -34,6 +34,7 @@ const Forensic = () => {
 
     const [input, setInput] = useState(resultUrl);
     const [image, setImage] = useState("");
+    const [urlDetected, setUrlDetected] = useState(false)
 
     useGetImages(image);
 
@@ -45,17 +46,24 @@ const Forensic = () => {
     };
 
     useEffect(() => {
-        if (url !== undefined) {
-            if(url===CONTENT_TYPE.IMAGE){
+        if (url) {
+            if (url === KNOWN_LINKS.OWN) {
                 setLocalFile(true)
-            }
-            else {
+            } else {
                 const uri = decodeURIComponent(url);
-                setInput(uri);
-                setImage(uri);
+                setInput(uri)
             }
         }
+        setUrlDetected(true)
+
     }, [url]);
+
+    useEffect(() => {
+        if (urlDetected){
+            submitUrl()
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [urlDetected])
 
     useEffect(() => {
         setImage("")
