@@ -187,7 +187,9 @@ function * handleHyperpartisanCall(action) {
 
     try {
         const text = yield select((state)=>state.assistant.urlText)
-        if (text !== null) {
+        const lang = yield select((state)=>state.assistant.textLang)
+
+        if (text !== null && lang === "en") {
             yield put(setHpDetails(null,true,false))
 
             const result = yield call(gateCloudApi.callHyperpartisanService, text)
