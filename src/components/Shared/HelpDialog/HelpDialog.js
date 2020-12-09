@@ -32,7 +32,7 @@ const HelpDialog = (props) => {
     return (
         <div>
             <HelpOutline onClick={handleClickOpen}/>
-            <Dialog fullScreen TransitionComponent={Transition} open={open}>
+            <Dialog maxWidth={"xl"} TransitionComponent={Transition} open={open}>
                 <DialogTitle>
                     <Typography variant={"h4"}>
                         <IconButton onClick={handleClose}><CloseIcon/></IconButton>

@@ -371,7 +371,7 @@ const useMyStyles = makeStyles(theme => ({
         fontSize: theme.typography.h6.fontSize,
         color: "white",
         textAlign: "left",
-        backgroundColor: theme.palette.primary.dark
+        backgroundColor: theme.palette.primary.main
     },
     assistantTooltip: {
         backgroundColor: theme.palette.secondary,
