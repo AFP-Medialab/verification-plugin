@@ -212,42 +212,52 @@ function * handleNamedEntitySaga(action) {
     try {
         const text = yield select((state)=>state.assistant.urlText)
         if (text !== null) {
-            yield put(setNeDetails(null,true,false))
+            yield put(setNeDetails(null, null,true,false))
+
             const result = yield call(assistantApi.callNamedEntityService, text)
             let entities = []
-
-            // extract relevant name and category
             Object.entries(result.response.annotations).forEach(entity=>{
                 entity[1].forEach(instance=>{
                     entities.push({"word": instance.features.string, "category": entity[0]})
                 })
             })
 
-            // group by word and count
-            let wordCloudList = entities.reduce((accumulator, currentWord)=>{
-                accumulator.filter(wordObj=>wordObj.text === currentWord["word"]).length ?
-                    accumulator.filter(wordObj=>wordObj.text === currentWord["word"])[0].value += 1 :
-                    accumulator.push({"text": currentWord["word"], "category": currentWord["category"],"value": 1})
-
-                return accumulator
-            }, [])
-
-            // group by category
-            let categoryList = wordCloudList.reduce((accumulator, currentWord)=>{
-                accumulator.filter(wordObj=>wordObj.category === currentWord["category"]).length ?
-                    accumulator.filter(wordObj=>wordObj.category === currentWord["category"])[0].words.push(currentWord['text']) :
-                    accumulator.push({"category": currentWord["category"], "words": [currentWord["text"]]})
-
-                return accumulator
-            }, [])
-
-            yield put(setNeDetails(categoryList,wordCloudList.length > 0 ? wordCloudList : null,false,true))
+            if (entities.length === 0) {
+                yield put(setNeDetails(null,null,false,true))
+            }
+            else{
+                let wordCloudList = buildWordCloudList(entities)
+                let categoryList = buildCategoryList(wordCloudList)
+                yield put(setNeDetails(categoryList,wordCloudList,false,true))
+            }
         }
     }
     catch (error) {
-        yield put(setNeDetails(null,false,true))
+        yield put(setNeDetails(null, null,false,true))
         yield put(setError("named_entity_error"))
     }
+}
+
+
+function buildWordCloudList(entities) {
+    return entities.reduce((accumulator, currentWord)=>{
+        accumulator.filter(wordObj=>wordObj.text === currentWord["word"]).length ?
+            accumulator.filter(wordObj=>wordObj.text === currentWord["word"])[0].value += 1 :
+            accumulator.push({"text": currentWord["word"], "category": currentWord["category"],"value": 1})
+
+        return accumulator
+    }, [])
+}
+
+function buildCategoryList(wordCloudList) {
+    // group by category
+    return wordCloudList.reduce((accumulator, currentWord)=>{
+        accumulator.filter(wordObj=>wordObj.category === currentWord["category"]).length ?
+            accumulator.filter(wordObj=>wordObj.category === currentWord["category"])[0].words.push(currentWord['text']) :
+            accumulator.push({"category": currentWord["category"], "words": [currentWord["text"]]})
+
+        return accumulator
+    }, [])
 }
 
 export default function * rootSaga(){
