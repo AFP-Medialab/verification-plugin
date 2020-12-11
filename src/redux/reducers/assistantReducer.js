@@ -34,7 +34,8 @@ const defaultState = {
     hpLoading: false,
     hpDone: false,
 
-    neResult: null,
+    neResultCategory: null,
+    neResultCount: null,
     neLoading: false,
     neDone: false,
 
@@ -101,7 +102,8 @@ const assistantReducer = (state = defaultState, action) => {
                 hpLoading: false,
                 hpDone: false,
 
-                neResult: null,
+                neResultCategory: null,
+                neResultCount: null,
                 neLoading: false,
                 neDone: false,
 

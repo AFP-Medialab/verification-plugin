@@ -213,26 +213,35 @@ function * handleNamedEntitySaga(action) {
         const text = yield select((state)=>state.assistant.urlText)
         if (text !== null) {
             yield put(setNeDetails(null,true,false))
-
             const result = yield call(assistantApi.callNamedEntityService, text)
-
             let entities = []
 
-            Object.values(result.response.annotations).forEach(annotation=>{
-                annotation.forEach(instance=>{
-                    entities.push(instance.features.string)
+            // extract relevant name and category
+            Object.entries(result.response.annotations).forEach(entity=>{
+                entity[1].forEach(instance=>{
+                    entities.push({"word": instance.features.string, "category": entity[0]})
                 })
             })
 
+            // group by word and count
             let wordCloudList = entities.reduce((accumulator, currentWord)=>{
-                accumulator.filter(wordObj=>wordObj.text === currentWord).length ?
-                    accumulator.filter(wordObj=>wordObj.text === currentWord)[0].value += 1 :
-                    accumulator.push({"text": currentWord, "value": 1})
+                accumulator.filter(wordObj=>wordObj.text === currentWord["word"]).length ?
+                    accumulator.filter(wordObj=>wordObj.text === currentWord["word"])[0].value += 1 :
+                    accumulator.push({"text": currentWord["word"], "category": currentWord["category"],"value": 1})
 
                 return accumulator
             }, [])
 
-            yield put(setNeDetails( wordCloudList.length > 0 ? wordCloudList : null,false,true))
+            // group by category
+            let categoryList = wordCloudList.reduce((accumulator, currentWord)=>{
+                accumulator.filter(wordObj=>wordObj.category === currentWord["category"]).length ?
+                    accumulator.filter(wordObj=>wordObj.category === currentWord["category"])[0].words.push(currentWord['text']) :
+                    accumulator.push({"category": currentWord["category"], "words": [currentWord["text"]]})
+
+                return accumulator
+            }, [])
+
+            yield put(setNeDetails(categoryList,wordCloudList.length > 0 ? wordCloudList : null,false,true))
         }
     }
     catch (error) {

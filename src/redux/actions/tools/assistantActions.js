@@ -141,11 +141,12 @@ export const setHpDetails = (hpResult, hpLoading, hpDone) => {
     }
 }
 
-export const setNeDetails = (neResult, neLoading, neDone) => {
+export const setNeDetails = (neResultCategory, neResultCount, neLoading, neDone) => {
     return {
         type: "SET_NE_DETAILS",
         payload: {
-            neResult: neResult,
+            neResultCategory: neResultCategory,
+            neResultCount: neResultCount,
             neLoading: neLoading,
             neDone: neDone
         }

@@ -72,7 +72,7 @@ const Assistant = () => {
 
     // media processing states
     const ocrResult = useSelector(state => state.assistant.ocrResult);
-    const neResult = useSelector(state => state.assistant.neResult);
+    const neResult = useSelector(state => state.assistant.neResultCategory);
 
     //url warning states
     const hpResult = useSelector(state => state.assistant.hpResult)
