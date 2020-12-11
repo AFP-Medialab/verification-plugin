@@ -59,8 +59,8 @@ const AssistantNEResult = () => {
                         <Grid item xs={3} style={{"maxHeight": 300, "overflowY": 'auto'}}>
                             <List>
                                 {neResult.map((value, index)=>(
-                                    <Box>
-                                        <ListItem key={index} button onClick={() => handleCollapse(index)}>
+                                    <Box key={index}>
+                                        <ListItem button onClick={() => handleCollapse(index)}>
                                             <ListItemText primary= {
                                                 <Typography component={"div"} align={"left"}>
                                                     <Box fontWeight="fontWeightBold">
