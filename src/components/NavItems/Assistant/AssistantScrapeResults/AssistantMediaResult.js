@@ -81,7 +81,10 @@ const AssistantMediaResult = () => {
                                 <div hidden={dbkfImageMatch === null && dbkfVideoMatch === null}>
                                     <Tooltip title={keyword("image_warning")}>
                                         <WarningOutlined className={classes.toolTipWarning}
-                                                         onClick={() => dispatch(setWarningExpanded(!warningExpanded))}/>
+                                                         onClick={() => {
+                                                             dispatch(setWarningExpanded(!warningExpanded))
+                                                             window.scroll(0,0)
+                                                         }}/>
                                     </Tooltip>
                                 </div>
                                 <div>
