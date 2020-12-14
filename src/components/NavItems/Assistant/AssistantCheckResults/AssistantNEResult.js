@@ -56,7 +56,7 @@ const AssistantNEResult = () => {
                 <LinearProgress hidden={!neLoading}/>
                 <CardContent>
                     <Grid container>
-                        <Grid item xs={3} style={{"maxHeight": 300, "overflowY": 'auto'}}>
+                        <Grid item xs={4} style={{"maxHeight": 300, "overflowY": 'auto'}}>
                             <List>
                                 {neResult.map((value, index)=>(
                                     <Box key={index}>
@@ -85,7 +85,7 @@ const AssistantNEResult = () => {
                         <Grid item xs={1} align={"center"}>
                             <Divider orientation="vertical"/>
                         </Grid>
-                        <Grid item xs={8}>
+                        <Grid item xs={7} align={"center"}>
                             <ReactWordcloud words={neResultCount} options={options}/>
                         </Grid>
                     </Grid>

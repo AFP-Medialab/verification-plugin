@@ -4,7 +4,7 @@ import {useParams} from "react-router-dom";
 
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import {Box, Button, Paper, TextField} from "@material-ui/core";
-import CloseResult from "../../Shared/CloseResult/CloseResult";
+import CancelIcon from "@material-ui/icons/Cancel";
 import CustomTile from "../../Shared/CustomTitle/CustomTitle";
 import Divider from "@material-ui/core/Divider";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
@@ -299,13 +299,24 @@ const Assistant = () => {
                         onChange={e => setFormInput(e.target.value)}
                         InputProps={{
                             endAdornment:
-                                <InputAdornment variant={"filled"}>
-                                    <IconButton color={"secondary"} onClick={() => {
-                                        submitInputUrl(formInput)
-                                    }}>
-                                        <ArrowForwardIcon/>
-                                    </IconButton>
-                                </InputAdornment>
+                                inputUrl ?
+                                    <InputAdornment>
+                                        <IconButton
+                                            color={"secondary"}
+                                            fontSize={"default"}
+                                            onClick={() => cleanAssistant()}>
+                                            <CancelIcon/>
+                                        </IconButton>
+                                    </InputAdornment>
+                                     :
+                                    <InputAdornment variant={"filled"}>
+                                        <IconButton color={"secondary"} onClick={() => {
+                                            submitInputUrl(formInput)
+                                        }}>
+                                            <ArrowForwardIcon/>
+                                        </IconButton>
+                                    </InputAdornment>
+
                         }}
                     />
                     <Box m={3}/>
@@ -364,58 +375,62 @@ const Assistant = () => {
             <Box m={2}/>
 
             <Paper className={classes.assistantRoot}
-                   hidden={(urlMode && inputUrl === null) || (!urlMode && !imageVideoSelected)}>
-                <CloseResult onClick={() => cleanAssistant()}/>
-
+                   hidden = {linkList.length === 0 && text === null && neResult === null}>
                 <Box m={2}/>
-                <Grid item xs={12}>
-                    <Typography variant={"h5"} align={"left"}
-                                hidden={imageVideoSelected}>{keyword("url_content")}</Typography>
-                    <Divider/>
-                    <Box m={2}/>
-                </Grid>
 
-                {text ?
-                    <Grid item xs={12}>
-                        <AssistantTextResult/>
-                        <Box m={2}/>
-                    </Grid>
-                    : null
-                }
-
-                {imageList.length > 0 || videoList.length > 0 || imageVideoSelected ?
-                    <Grid item xs={12}><AssistantMediaResult/></Grid>
-                    : null
-                }
-
-                <Box m={2}/>
-            </Paper>
-
-            <Box m={4}/>
-
-            <Paper className={classes.assistantRoot} hidden={linkList.length === 0 && ocrResult === null && neResult === null}>
                 <Grid container spacing={2}>
                     <Grid item xs={12}>
-                        <Typography variant={"h5"} align={"left"}>{keyword("content_explorer")}</Typography>
+                        <Typography variant={"h5"} align={"left"}>{keyword("url_text")}</Typography>
                         <Divider/>
                         <Box m={2}/>
                     </Grid>
 
+                    {text ?
+                        <Grid item xs={12}>
+                            <AssistantTextResult/>
+                            <Box m={2}/>
+                        </Grid>
+                        : null
+                    }
+
+                    {neResult ?
+                        <Grid item xs={7}>
+                            <AssistantNEResult/>
+                        </Grid> : null
+                    }
+
                     {linkList.length !== 0 ?
-                        <Grid item xs={6}>
+                        <Grid item xs={5}>
                             <AssistantLinkResult/>
                         </Grid> : null
+                    }
+                </Grid>
+
+                <Box m={2}/>
+
+            </Paper>
+
+            <Box m={4}/>
+
+            <Paper className={classes.assistantRoot}
+                   hidden={(urlMode && inputUrl === null) || (!urlMode && !imageVideoSelected) && ocrResult === null}>
+
+                <Grid container spacing={2}>
+                    <Grid item xs={12}>
+                        <Typography variant={"h5"} align={"left"}>{keyword("url_media")}</Typography>
+                        <Divider/>
+                        <Box m={2}/>
+                    </Grid>
+
+
+                    {imageList.length > 0 || videoList.length > 0 || imageVideoSelected ?
+                        <Grid item xs={12}><AssistantMediaResult/></Grid>
+                        : null
                     }
 
                     {ocrResult !== null ?
                         <Grid item xs={6}>
                             <AssistantOcrResult/>
-                        </Grid> : null
-                    }
-
-                    {neResult ?
-                        <Grid item xs={6}>
-                            <AssistantNEResult/>
                         </Grid> : null
                     }
                 </Grid>

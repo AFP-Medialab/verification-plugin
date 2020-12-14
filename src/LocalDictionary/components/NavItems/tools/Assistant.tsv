@@ -51,8 +51,8 @@ assistant_help_3	<b>Which URLS are supported?</b><br>Currently, there is dedicat
 
 
 mode_label	URL mode	Temp	Temp	Temp
-url_content	URL Content	Temp	Temp	Temp
-content_explorer	Content Explorer	Temp	Temp	Temp
+url_text	URL Text	Temp	Temp	Temp
+url_media	URL Media	Temp	Temp	Temp
 media_text	Extracted Media Text	Temp	Temp	Temp
 text_warning	Warnings found against text. See warning box.	Temp	Temp	Temp
 image_warning	Warnings found against image. See warning box.	Temp	Temp	Temp
