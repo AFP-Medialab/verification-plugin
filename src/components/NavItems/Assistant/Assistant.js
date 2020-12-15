@@ -48,6 +48,7 @@ import {
     TYPE_PATTERNS,
 } from "./AssistantRuleBook";
 import AssistantNEResult from "./AssistantCheckResults/AssistantNEResult";
+import AssistantCheckStatus from "./AssistantCheckResults/AssistantCheckStatus";
 
 const Assistant = () => {
 
@@ -81,6 +82,12 @@ const Assistant = () => {
     const dbkfImageResult = useSelector(state => state.assistant.dbkfImageMatch);
     const dbkfVideoMatch = useSelector(state => state.assistant.dbkfVideoMatch);
 
+    // url fail states
+    const hpFailState = useSelector(state => state.assistant.hpFail)
+    const scFailState = useSelector(state => state.assistant.inputSCFail)
+    const dbkfTextFailState = useSelector(state => state.assistant.dbkfTextMatchFail)
+    const dbkfMediaFailState = useSelector(state => state.assistant.dbkfMediaMatchFail)
+    const neFailState = useSelector(state => state.assistant.neFail)
 
     //other state values
     const [formInput, setFormInput] = useState(inputUrl);
@@ -260,11 +267,13 @@ const Assistant = () => {
         <div>
             <Paper className={classes.root}>
                 <Grid item xs={12}/>
-                <CustomTile text={keyword("assistant_title")}/>
+                    <CustomTile text={keyword("assistant_title")}/>
                 <Grid/>
                 <Box m={5}/>
+
                 <Grid item xs={12} className={classes.assistantGrid} hidden={urlMode === null || urlMode === false}>
                     <Box m={3}/>
+
                     <Grid container>
                         <Grid item xs={10}>
                             <Typography style={{display: 'flex', alignItems: 'center'}} component={"span"}
@@ -322,15 +331,20 @@ const Assistant = () => {
                     />
                     <Box m={3}/>
                     <LinearProgress hidden={!loading}/>
+
                     <Grid item xs={12}>
-                        {dbkfTextMatch !== null ||
-                        dbkfImageResult !== null ||
-                        inputUrlSourceCred !== null ||
-                        dbkfVideoMatch !== null ||
-                        hpResult !== null ?
-                            <AssistantWarnings/> : null}
+                        {dbkfTextMatch  || dbkfImageResult  || inputUrlSourceCred  || dbkfVideoMatch  || hpResult ?
+                            <AssistantWarnings/> : null
+                        }
                         <Box m={2}/>
                     </Grid>
+
+                    <Grid item xs={12}>
+                        {hpFailState || scFailState || dbkfTextFailState || dbkfMediaFailState || neFailState ?
+                            <AssistantCheckStatus/> : null
+                        }
+                    </Grid>
+
                 </Grid>
 
                 <Grid item xs={12} className={classes.assistantGrid} hidden={urlMode === null || urlMode === true}>
