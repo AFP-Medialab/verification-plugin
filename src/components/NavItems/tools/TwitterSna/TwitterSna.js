@@ -23,6 +23,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import Typography from "@material-ui/core/Typography";
 import OnClickInfo from "../../../Shared/OnClickInfo/OnClickInfo";
+import OnWarningInfo from "../../../Shared/OnClickInfo/OnWarningInfo";
 
 import SearchIcon from '@material-ui/icons/Search';
 
@@ -30,7 +31,6 @@ import CustomTile from "../../../Shared/CustomTitle/CustomTitle";
 import DateTimePicker from "../../../Shared/DateTimePicker/DateTimePicker";
 import convertToGMT from "../../../Shared/DateTimePicker/convertToGMT";
 import useTwitterSnaRequest from "./Hooks/useTwitterSnaRequest";
-import TwitterSnaResult from "./Results/TwitterSnaResult";
 import { replaceAll } from "../TwitterAdvancedSearch/createUrl";
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/TwitterSna.tsv";
@@ -63,7 +63,7 @@ const TwitterSna = () => {
           request.keywordList.join(" ") :
           ""
       ) :
-      "\"fake news\""
+      ""
   );
   const [keyWordsError, setKeyWordsError] = useState(false);
   const [bannedWords, setBannedWords] = useState(
@@ -78,7 +78,7 @@ const TwitterSna = () => {
           request.userList.join(" ") :
           ""
       ) :
-      "@realDonaldTrump"
+      ""
   );
   const [since, setSince] = useState(
     userAuthenticated ?
@@ -87,7 +87,7 @@ const TwitterSna = () => {
           request.from :
           null
       ) :
-      new Date("2016-12-10T00:00:00")
+      null
   );
   const [sinceError, setSinceError] = useState(false);
   const [until, setUntil] = useState(
@@ -97,7 +97,7 @@ const TwitterSna = () => {
           request.until :
           null
       ) :
-      new Date("2020-10-01T00:00:00")
+      null
   );
   const [untilError, setUntilError] = useState(false);
   const [langInput, setLangInput] = useState(
@@ -107,7 +107,7 @@ const TwitterSna = () => {
           "lang_" + request.lang :
           "lang_all"
       ) :
-      "lang_en"
+      "lang_all"
   );
   const [openLangInput, setLangInputOpen] = React.useState(false);
   const [filters, setFilers] = useState(
@@ -286,22 +286,22 @@ const TwitterSna = () => {
     if (urlObj.isUrlSearch) {
       setKeywords(userAuthenticated ?
         urlObj.url ? urlObj.url : "" :
-        "\"fake news\""
+        ""
       );
       setBannedWords(userAuthenticated ?
         urlObj.request.bannedWords ? urlObj.request.bannedWords.join(" ") : "" :
         "");
       setUsersInput(userAuthenticated ?
         urlObj.request.userList ? urlObj.request.userList.join(" ") : "" :
-        "@realDonaldTrump"
+        ""
       );
       setSince(userAuthenticated ?
         urlObj.request.from ? urlObj.request.from : null :
-        new Date("2016-12-10T00:00:00")
+        null
       );
       setUntil(userAuthenticated ?
         urlObj.request.until ? urlObj.request.until : null :
-        new Date("2020-01-01T00:00:00")
+        null
       );
       setLocalTime(userAuthenticated ?
         urlObj.request.localTime ? urlObj.request.localTime : "true" :
@@ -309,7 +309,7 @@ const TwitterSna = () => {
       );
       setLangInput(userAuthenticated ?
         urlObj.request.lang ? "lang_" + urlObj.request.lang : "lang_all" :
-        "lang_en"
+        "lang_all"
       );
       setFilers(userAuthenticated ?
         urlObj.request.media ? urlObj.request.media : "none" :
@@ -323,21 +323,21 @@ const TwitterSna = () => {
       const newSubmittedRequest = makeRequestParams(
         userAuthenticated ?
           urlObj.url ? urlObj.url : "" :
-          "\"fake news\"",
+          "",
         "",
         userAuthenticated ?
           urlObj.request.userList ? urlObj.request.userList.join(" ") : "" :
-          "@realDonaldTrump",
+          "",
         userAuthenticated ?
           urlObj.request.from ? urlObj.request.from : null :
-          new Date("2016-12-10T00:00:00"),
+          null,
         userAuthenticated ?
           urlObj.request.until ? urlObj.request.until : null :
-          new Date("2020-10-01T00:00:00"),
+          null,
         "true",
         userAuthenticated ?
           "lang_all" :
-          "lang_en",
+          "lang_all",
         "none",
         "false"
       );
@@ -347,25 +347,25 @@ const TwitterSna = () => {
     } else {
       setKeywords(userAuthenticated ?
         "" :
-        "\"fake news\""
+        ""
       );
       setBannedWords("");
       setUsersInput(userAuthenticated ?
         "" :
-        "@realDonaldTrump"
+        ""
       );
       setSince(userAuthenticated ?
         null :
-        new Date("2016-12-10T00:00:00")
+        null
       );
       setUntil(userAuthenticated ?
         null :
-        new Date("2020-10-01T00:00:00")
+        null
       );
       setLocalTime("true");
       setLangInput(userAuthenticated ?
         "lang_all" :
-        "lang_en"
+        "lang_all"
       );
       setFilers("none");
       setVerifiedUsers("false");
@@ -373,17 +373,17 @@ const TwitterSna = () => {
       const newSubmittedRequest = makeRequestParams(
         userAuthenticated ?
           "" :
-          "\"fake news\"",
+          "",
         "",
         userAuthenticated ?
           "" :
-          "@realDonaldTrump",
+          "",
         userAuthenticated ?
           null :
-          new Date("2016-12-10T00:00:00"),
+          null,
         userAuthenticated ?
           null :
-          new Date("2020-10-01T00:00:00"),
+          null,
         "true",
         userAuthenticated ?
           "lang_all" :
@@ -595,14 +595,15 @@ const TwitterSna = () => {
         <Box m={2} />
         <Typography>{loadingMessage}</Typography>
         <LinearProgress hidden={!isLoading} />
-        <OnClickInfo keyword={"introduction_tip"} />
+        {
+        userAuthenticated &&
+        <OnClickInfo keyword={"twittersna_explication"} />
+        }
+        {
+        !userAuthenticated &&
+        <OnWarningInfo keyword={"warning_sna"} />
+        }
       </Paper>
-      {
-        reduxResult &&
-        <TwitterSnaResult result={reduxResult} 
-                          request={request}
-                          />
-      }
     </div>);
 };
 export default TwitterSna;
