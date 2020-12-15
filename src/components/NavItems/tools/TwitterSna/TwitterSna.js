@@ -603,6 +603,7 @@ const TwitterSna = () => {
         !userAuthenticated &&
         <OnWarningInfo keyword={"warning_sna"} />
         }
+
       </Paper>
     </div>);
 };
