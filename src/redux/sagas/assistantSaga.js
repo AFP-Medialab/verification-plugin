@@ -268,7 +268,7 @@ export default function * rootSaga(){
         // fork(getDbkfTextMatchSaga),
         fork(getSourceCredSaga),
         fork(getMediaActionSaga),
-        fork(getImageOcrSaga),
+        // fork(getImageOcrSaga),
         fork(getMediaSimilaritySaga),
         fork(getMediaListSaga),
         fork(getHyperpartisanSaga),
