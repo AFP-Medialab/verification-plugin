@@ -65,13 +65,14 @@ export const setScrapedData = (text,lang, links, images, videos) => {
     }
 }
 
-export const setInputSourceCredDetails = (inputSC, inputSCLoading, inputSCDone) => {
+export const setInputSourceCredDetails = (inputSC, inputSCLoading, inputSCDone, inputSCFail) => {
     return {
         type: "SET_INPUT_SC_DETAILS",
         payload: {
             inputUrlSourceCredibility: inputSC,
             inputSCLoading: inputSCLoading,
-            inputSCDone: inputSCDone
+            inputSCDone: inputSCDone,
+            inputSCFail: inputSCFail
         }
     }
 }
@@ -86,35 +87,38 @@ export const setAssistantLoading = (loading) => {
     }
 }
 
-export const setDbkfTextMatchDetails = (textMatch, textMatchLoading, textMatchDone) => {
+export const setDbkfTextMatchDetails = (textMatch, textMatchLoading, textMatchDone, textMatchFail) => {
     return {
         type: "SET_DBKF_TEXT_MATCH_DETAILS",
         payload: {
             dbkfTextMatch: textMatch,
             dbkfTextMatchLoading: textMatchLoading,
-            dbkfTextMatchDone: textMatchDone
+            dbkfTextMatchDone: textMatchDone,
+            dbkfTextMatchFail: textMatchFail
         }
     }
 }
 
-export const setDbkfImageMatchDetails = (imageMatch, dbkfMediaMatchLoading, dbkfMediaMatchDone) => {
+export const setDbkfImageMatchDetails = (imageMatch, dbkfMediaMatchLoading, dbkfMediaMatchDone, dbkfMediaMatchFail) => {
     return {
         type: "SET_DBKF_IMAGE_MATCH_DETAILS",
         payload: {
             dbkfImageMatch: imageMatch,
             dbkfMediaMatchLoading: dbkfMediaMatchLoading,
-            dbkfMediaMatchDone: dbkfMediaMatchDone
+            dbkfMediaMatchDone: dbkfMediaMatchDone,
+            dbkfMediaMatchFail: dbkfMediaMatchFail
         }
     }
 }
 
-export const setDbkfVideoMatchDetails = (videoMatch, dbkfMediaMatchLoading, dbkfMediaMatchDone) => {
+export const setDbkfVideoMatchDetails = (videoMatch, dbkfMediaMatchLoading, dbkfMediaMatchDone, dbkfMediaMatchFail) => {
     return {
         type: "SET_DBKF_VIDEO_MATCH_DETAILS",
         payload: {
             dbkfImageMatch: videoMatch,
             dbkfMediaMatchLoading: dbkfMediaMatchLoading,
-            dbkfMediaMatchDone: dbkfMediaMatchDone
+            dbkfMediaMatchDone: dbkfMediaMatchDone,
+            dbkfMediaMatchFail: dbkfMediaMatchFail
         }
     }
 }
@@ -130,25 +134,27 @@ export const setOcrDetails = (ocrText, ocrLoading, ocrDone) => {
     }
 }
 
-export const setHpDetails = (hpResult, hpLoading, hpDone) => {
+export const setHpDetails = (hpResult, hpLoading, hpDone, hpFail) => {
     return {
         type: "SET_HP_DETAILS",
         payload: {
             hpResult: hpResult,
             hpLoading: hpLoading,
-            hpDone: hpDone
+            hpDone: hpDone,
+            hpFail: hpFail
         }
     }
 }
 
-export const setNeDetails = (neResultCategory, neResultCount, neLoading, neDone) => {
+export const setNeDetails = (neResultCategory, neResultCount, neLoading, neDone, neFail) => {
     return {
         type: "SET_NE_DETAILS",
         payload: {
             neResultCategory: neResultCategory,
             neResultCount: neResultCount,
             neLoading: neLoading,
-            neDone: neDone
+            neDone: neDone,
+            neFail: neFail
         }
     }
 }
@@ -168,6 +174,15 @@ export const setWarningExpanded = (warningExpanded) => {
         type: "SET_WARNING_EXPANDED",
         payload: {
             warningExpanded: warningExpanded
+        }
+    }
+}
+
+export const setStateExpanded = (stateExpanded) => {
+    return {
+        type: "SET_STATE_EXPANDED",
+        payload: {
+            stateExpanded: stateExpanded
         }
     }
 }

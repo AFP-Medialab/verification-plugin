@@ -97,13 +97,18 @@ function * handleActionCall() {
 }
 
 function * similaritySearch (searchEndpoint, stateStorageFunction) {
-    yield put (stateStorageFunction(null, true, false))
+    yield put (stateStorageFunction(null, true, false, false))
 
-    let result = yield call(searchEndpoint)
-    if (result[1].length!== 0) {
-        yield put(stateStorageFunction(result[1], false, true))}
-    else {
-        yield put(stateStorageFunction(null, false, true))
+    try {
+        let result = yield call(searchEndpoint)
+        if (result[1].length !== 0) {
+            yield put(stateStorageFunction(result[1], false, true, false))
+        } else {
+            yield put(stateStorageFunction(null, false, true, false))
+        }
+    }
+    catch (error) {
+        yield put(stateStorageFunction(null, false, false, true))
     }
 }
 
@@ -116,13 +121,13 @@ function * handleSimilaritySearch(action) {
     if (contentType === CONTENT_TYPE.IMAGE) {
         yield call (similaritySearch,
             () => dbkfAPI.callImageSimilarityEndpoint(processUrl),
-            (result, loading, done) => setDbkfImageMatchDetails(result, loading, done)
+            (result, loading, done, fail) => setDbkfImageMatchDetails(result, loading, done, fail)
         )
     }
     else if (contentType === CONTENT_TYPE.VIDEO) {
         yield call (similaritySearch,
             () => dbkfAPI.callVideoSimilarityEndpoint(processUrl),
-            (result, loading, done) => setDbkfVideoMatchDetails(result, loading, done)
+            (result, loading, done, fail) => setDbkfVideoMatchDetails(result, loading, done, fail)
         )
     }
 }
@@ -136,17 +141,17 @@ function * handleOcrCall(action) {
 
     try {
         if (contentType === CONTENT_TYPE.IMAGE) {
-            yield put(setOcrDetails(null, true, false))
+            yield put(setOcrDetails(null, true, false, false))
             let ocrResult = yield call(gateCloudApi.callOcrService, [processUrl])
             let ocrText = ocrResult.entities.URL[0].ocr_text
             ocrText === "" ?
-                yield put(setOcrDetails(null, false, true)) :
-                yield put(setOcrDetails(ocrText, false, true))
+                yield put(setOcrDetails(null, false, true, false)) :
+                yield put(setOcrDetails(ocrText, false, true, false))
 
         }
     }
     catch(error){
-        yield put(setError("ocr_error"))
+        yield put(setOcrDetails(null, false, false, true))
     }
 }
 
@@ -157,11 +162,11 @@ function * handleSourceCredibility(action) {
     try {
         const inputUrl = yield select((state)=>state.assistant.inputUrl)
         const result = yield call(gateCloudApi.callSourceCredibilityService, [inputUrl])
-        yield put(setInputSourceCredDetails(result, false, true))
+        yield put(setInputSourceCredDetails(result, false, true, false))
     }
 
     catch(error){
-        yield put(setError("source cred error"))
+        yield put(setInputSourceCredDetails(null, false, false, true))
     }
 }
 
@@ -174,11 +179,11 @@ function * handleDbkfTextSearch(action) {
             let textToUse = text.length > 500 ? text.substring(0, 500) : text
             textToUse = textToUse.replace(/[/"()’\\]/g, "")
             const result = yield call(dbkfAPI.callTextSimilarityEndpoint, textToUse)
-            yield put(setDbkfTextMatchDetails(result,false,true))
+            yield put(setDbkfTextMatchDetails(result,false,true, false))
         }
     }
     catch (error){
-        yield put(setError("dbkf_error"))
+        yield put(setDbkfTextMatchDetails(null,false,false, true))
     }
 }
 
@@ -190,19 +195,18 @@ function * handleHyperpartisanCall(action) {
         const lang = yield select((state)=>state.assistant.textLang)
 
         if (text !== null && lang === "en") {
-            yield put(setHpDetails(null,true,false))
+            yield put(setHpDetails(null,true,false, false))
 
             const result = yield call(gateCloudApi.callHyperpartisanService, text)
 
             let hpProb = result.entities.hyperpartisan[0].hyperpartisan_probability
             hpProb = parseFloat(hpProb).toFixed(2) > 0.50 ? parseFloat(hpProb).toFixed(2) : null
 
-            yield put(setHpDetails(hpProb,false,true))
+            yield put(setHpDetails(hpProb,false,true, false))
         }
     }
     catch (error) {
-        yield put(setHpDetails(null,false,true))
-        yield put(setError("hyperpartisan_error"))
+        yield put(setHpDetails(null,false,false, true))
     }
 }
 
@@ -212,7 +216,7 @@ function * handleNamedEntitySaga(action) {
     try {
         const text = yield select((state)=>state.assistant.urlText)
         if (text !== null) {
-            yield put(setNeDetails(null, null,true,false))
+            yield put(setNeDetails(null, null,true,false, false))
 
             const result = yield call(assistantApi.callNamedEntityService, text)
             let entities = []
@@ -223,18 +227,17 @@ function * handleNamedEntitySaga(action) {
             })
 
             if (entities.length === 0) {
-                yield put(setNeDetails(null,null,false,true))
+                yield put(setNeDetails(null,null,false,true, false))
             }
             else{
                 let wordCloudList = buildWordCloudList(entities)
                 let categoryList = buildCategoryList(wordCloudList)
-                yield put(setNeDetails(categoryList,wordCloudList,false,true))
+                yield put(setNeDetails(categoryList,wordCloudList,false,true, false))
             }
         }
     }
     catch (error) {
-        yield put(setNeDetails(null, null,false,true))
-        yield put(setError("named_entity_error"))
+        yield put(setNeDetails(null, null,false,false, true))
     }
 }
 

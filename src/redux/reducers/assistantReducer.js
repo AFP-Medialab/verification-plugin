@@ -15,32 +15,39 @@ const defaultState = {
 
     inputUrlSourceCredibility: null,
     inputSCLoading: false,
-    inputSCDone: true,
+    inputSCDone: false,
+    inputSCFail: false,
 
     dbkfTextMatch: null,
     dbkfTextMatchLoading: false,
     dbkfTextMatchDone: false,
+    dbkfTextMatchFail: false,
 
     dbkfImageMatch: null,
     dbkfVideoMatch: null,
     dbkfMediaMatchLoading: false,
     dbkfMediaMatchDone: false,
+    dbkfMediaMatchFail: false,
 
     ocrResult: null,
     ocrLoading: false,
     ocrDone: false,
+    ocrFail: false,
 
     hpResult: null,
     hpLoading: false,
     hpDone: false,
+    hpFail: false,
 
     neResultCategory: null,
     neResultCount: null,
     neLoading: false,
     neDone: false,
+    neFail: false,
 
     loading: false,
-    warningExpanded: false
+    warningExpanded: false,
+    stateExpanded: false
 };
 
 
@@ -62,6 +69,7 @@ const assistantReducer = (state = defaultState, action) => {
         case "SET_NE_DETAILS":
         case "SET_LOADING":
         case "SET_WARNING_EXPANDED":
+        case "SET_STATE_EXPANDED":
             return Object.assign({}, state, action.payload)
 
 
@@ -84,31 +92,38 @@ const assistantReducer = (state = defaultState, action) => {
                 inputUrlSourceCredibility: null,
                 inputSCLoading: false,
                 inputSCDone: false,
+                inputSCFail: false,
 
                 dbkfTextMatch: null,
                 dbkfTextMatchLoading: false,
                 dbkfTextMatchDone: false,
+                dbkfTextMatchFail: false,
 
                 dbkfImageMatch: null,
                 dbkfVideoMatch: null,
                 dbkfMediaMatchLoading: false,
                 dbkfMediaMatchDone: false,
+                dbkfMediaMatchFail: false,
 
                 ocrResult: null,
                 ocrLoading: false,
                 ocrDone: false,
+                ocrFail: false,
 
                 hpResult: null,
                 hpLoading: false,
                 hpDone: false,
+                hpFail: false,
 
                 neResultCategory: null,
                 neResultCount: null,
                 neLoading: false,
                 neDone: false,
+                neFail: false,
 
                 loading: false,
-                warningExpanded: false
+                warningExpanded: false,
+                stateExpanded: false
             };
             return state;
 

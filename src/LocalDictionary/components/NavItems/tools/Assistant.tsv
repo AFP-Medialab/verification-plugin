@@ -58,6 +58,8 @@ text_warning	Warnings found against text. See warning box.	Temp	Temp	Temp
 image_warning	Warnings found against image. See warning box.	Temp	Temp	Temp
 warning_title	Warning	Text	Text	Text
 warning_subtitle	Some elements of this content have been flagged	Temp	Temp	Temp
+status_title	Status	Text	Text	Text
+status_subtitle	The status of checks can be viewed here	Temp	Temp	Temp
 dbkf_image_warning	The image from this URL has matched against the following from the database of known fakes with a similarity score of 	Temp	Temp	Temp	Temp
 dbkf_video_warning	The video from this URL has matched against the following from the database of known fakes with a similarity score of 	Temp	Temp	Temp	Temp
 dbkf_text_warning	The text from this URL has matched against the following from the database of known fakes	Temp	Temp	Temp	Temp
@@ -77,3 +79,12 @@ metadata_text	Retrieve image/video metadata	Temp	Temp	Το εργαλείο με
 rights_text	Retrieve information solely about video rights	Temp	Temp	Το εργαλείο δικαιωμάτων βίντεο μπορεί να χρησιμοποιηθεί για την ανάκτηση πληροφοριών αποκλειστικά για δικαιώματα βίντεο
 forensic_text	Detect any image manipulation	Temp	Temp	Το εργαλείο ανάλυση αυθεντικότητας Εικόνων (image forensics) μπορεί να χρησιμοποιηθεί για τον εντοπισμό τυχόν παραμορφώσεων της εικόνας
 enter_url	Enter URL	Temp	Temp	Εισαγάγετε τη διεύθυνση URL των μέσων που θέλετε να επεξεργαστείτε
+
+
+
+hyperpartisan_title	Hyperpartisan Check
+dbkf_text_title	Database of known fakes text search
+dbkf_media_title	Database of known fakes media search
+ne_title	Named entity search
+ocr_title	OCR search
+source_cred_title	Source credbility check
