@@ -4,7 +4,6 @@ import {useDispatch, useSelector} from "react-redux";
 import Box from "@material-ui/core/Box";
 import Collapse from "@material-ui/core/Collapse";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import Grid from "@material-ui/core/Grid";
 import {IconButton} from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
 
@@ -43,8 +42,7 @@ const AssistantCheckStatus = () => {
 
 
     return (
-        <Grid item xs={12}>
-
+        <Box pl={1}>
             <Typography component={"span"}>
                 <Box color={"orange"} fontStyle="italic">
                     {keyword("status_subtitle")}
@@ -72,7 +70,7 @@ const AssistantCheckStatus = () => {
                     ))}
                 </List>
             </Collapse>
-        </Grid>
+        </Box>
     )
 }
 export default AssistantCheckStatus;
