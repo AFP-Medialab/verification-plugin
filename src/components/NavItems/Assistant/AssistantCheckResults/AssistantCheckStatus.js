@@ -3,6 +3,7 @@ import {useDispatch, useSelector} from "react-redux";
 
 import Box from "@material-ui/core/Box";
 import Collapse from "@material-ui/core/Collapse";
+import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import {IconButton} from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
@@ -58,14 +59,12 @@ const AssistantCheckStatus = () => {
                     {failStates.map((value, key) => (
                         value.failed ?
                             <ListItem key={key}>
+                                <IconButton>
+                                    <ErrorOutlineIcon color={"error"}/>
+                                </IconButton>
                                 <ListItemText
                                     primary={value.title}
                                 />
-                                {/*<ListItemSecondaryAction>*/}
-                                {/*    <IconButton edge="start" >*/}
-                                {/*        <ErrorOutlineIcon color={"error"}/>*/}
-                                {/*    </IconButton>*/}
-                                {/*</ListItemSecondaryAction>*/}
                             </ListItem> : null
                     ))}
                 </List>
