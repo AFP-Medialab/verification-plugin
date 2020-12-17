@@ -16,6 +16,7 @@ import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import DescriptionIcon from '@material-ui/icons/Description';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -199,6 +200,17 @@ const NavBar = (props) => {
             icon: (drawerValue === 11) ? xnetworkIconOn : xnetworkIconOff,
             tsvPrefix: "xnetwork",
             path: "xnetwork"
+        },
+        {
+
+            title: "navbar_ocr",
+            icon:
+                <DescriptionIcon
+                    fontSize={"large"}
+                    className={(drawerValue === 12) ? classes.selectedApp : classes.unSelectedApp}
+                />,
+            tsvPrefix: "ocr",
+            path: "ocr"
         }
     ];
 
@@ -352,7 +364,7 @@ const NavBar = (props) => {
                                 <ListItem button key={key} onClick={() => changeValue(key)}>
                                     <ListItemIcon color="primary.main">
                                         {
-                                            (key === 0) ?
+                                            (key === 0 || key === 12) ?
                                                 item.icon
                                                 :
                                                 <Icon className={classes.iconRootDrawer} fontSize={"large"}>

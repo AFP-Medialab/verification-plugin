@@ -1,0 +1,58 @@
+import React from "react";
+import {useDispatch, useSelector} from "react-redux";
+
+import Card from "@material-ui/core/Card";
+import CardMedia from "@material-ui/core/CardMedia";
+import CardActions from "@material-ui/core/CardActions";
+import Divider from "@material-ui/core/Divider";
+import Grid from "@material-ui/core/Grid";
+import LinearProgress from "@material-ui/core/LinearProgress";
+import {Paper} from "@material-ui/core";
+import Typography from "@material-ui/core/Typography";
+
+import CloseResult from "../../../../Shared/CloseResult/CloseResult";
+import history from "../../../../Shared/History/History";
+import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
+
+import {cleanOcr} from "../../../../../redux/actions/tools/ocrActions";
+
+
+const OcrResult = () => {
+
+    const classes = useMyStyles();
+
+    const inputUrl = useSelector(state => state.ocr.url);
+    const loading = useSelector(state => state.ocr.loading);
+    const result = useSelector(state => state.ocr.result);
+    const dispatch = useDispatch();
+
+
+    return (
+        <Paper className={classes.root}>
+            <CloseResult onClick={() => {
+                dispatch(cleanOcr())
+                history.push("/app/tools/ocr");
+            }}/>
+            <Grid container justify={"center"}>
+                <Card variant={"outlined"} style={{"width": "50%"}}>
+                    <CardMedia>
+                        <LinearProgress hidden={!loading}/>
+                        <img src={inputUrl} height={"100%"} alt={inputUrl} width={"100%"}/>
+                    </CardMedia>
+                    <Divider variant={"middle"}/>
+                    {result ?
+                        <CardActions style={{justifyContent: 'center'}}>
+                            <Typography variant={"subtitle2"}>
+                                {result}
+                            </Typography>
+                        </CardActions> :
+                        null
+                    }
+                </Card>
+            </Grid>
+        </Paper>
+    )
+}
+
+
+export default OcrResult;

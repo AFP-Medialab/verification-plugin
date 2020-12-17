@@ -38,15 +38,12 @@ export const setProcessUrlActions = (contentType, actions) => {
 };
 
 
-export const setProcessUrl = (processUrl, processUrlType, ocrDone, dbkfMediaMatchDone) => {
+export const setProcessUrl = (processUrl, processUrlType) => {
     return {
         type : "SET_PROCESS_URL",
         payload: {
             processUrl: processUrl,
-            processUrlType: processUrlType,
-            ocrDone: ocrDone,
-            dbkfMediaMatchDone: dbkfMediaMatchDone
-
+            processUrlType: processUrlType
         }
     }
 };
@@ -119,17 +116,6 @@ export const setDbkfVideoMatchDetails = (videoMatch, dbkfMediaMatchLoading, dbkf
             dbkfMediaMatchLoading: dbkfMediaMatchLoading,
             dbkfMediaMatchDone: dbkfMediaMatchDone,
             dbkfMediaMatchFail: dbkfMediaMatchFail
-        }
-    }
-}
-
-export const setOcrDetails = (ocrText, ocrLoading, ocrDone) => {
-    return {
-        type: "SET_OCR_DETAILS",
-        payload: {
-            ocrResult: ocrText,
-            ocrLoading: ocrLoading,
-            ocrDone: ocrDone
         }
     }
 }

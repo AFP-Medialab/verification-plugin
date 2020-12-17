@@ -64,7 +64,7 @@ const AssistantMediaResult = () => {
             cType = CONTENT_TYPE.VIDEO
         }
         ;
-        dispatch(setProcessUrl(url, cType, false, false));
+        dispatch(setProcessUrl(url, cType));
     }
 
 

@@ -9,7 +9,8 @@ import allReducers from "./redux/reducers/index"
 import createSagaMiddleware from 'redux-saga';
 
 import {Provider} from "react-redux"
-import rootSaga from "./redux/sagas/assistantSaga";
+import rootSaga from "./redux/sagas";
+
 // import {createEpicMiddleware} from "redux-observable";
 // import {rootEpic} from "./redux/epics/assistantEpics";
 

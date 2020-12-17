@@ -1,7 +1,7 @@
 import {
     setDbkfImageMatchDetails,
     setDbkfTextMatchDetails, setDbkfVideoMatchDetails, setHpDetails,
-    setInputSourceCredDetails, setNeDetails, setOcrDetails, setProcessUrl,
+    setInputSourceCredDetails, setNeDetails, setProcessUrl,
     setProcessUrlActions, setSingleMediaPresent
 } from "../actions/tools/assistantActions";
 import {setError} from "../actions/errorActions";
@@ -29,10 +29,6 @@ function * getMediaListSaga() {
 
 function * getMediaActionSaga() {
     yield takeLatest("SET_PROCESS_URL", handleActionCall)
-}
-
-function * getImageOcrSaga() {
-    yield takeLatest(["SET_PROCESS_URL", "CLEAN_STATE"], handleOcrCall)
 }
 
 function * getMediaSimilaritySaga() {
@@ -63,11 +59,11 @@ function * handleMediaLists() {
 
     try {
         if (imageList.length === 1 && videoList.length === 0) {
-            yield put(setProcessUrl(imageList[0], CONTENT_TYPE.IMAGE, false, false))
+            yield put(setProcessUrl(imageList[0], CONTENT_TYPE.IMAGE))
             yield put(setSingleMediaPresent(true))
 
         } else if (videoList.length === 1 && imageList.length === 0) {
-            yield put(setProcessUrl(videoList[0], CONTENT_TYPE.VIDEO, false, false))
+            yield put(setProcessUrl(videoList[0], CONTENT_TYPE.VIDEO))
             yield put(setSingleMediaPresent(true))
         }
     }
@@ -131,30 +127,6 @@ function * handleSimilaritySearch(action) {
         )
     }
 }
-
-
-function * handleOcrCall(action) {
-    if(action.type === "CLEAN_STATE") return
-
-    const processUrl = yield select(state => state.assistant.processUrl);
-    const contentType = yield select(state => state.assistant.processUrlType);
-
-    try {
-        if (contentType === CONTENT_TYPE.IMAGE) {
-            yield put(setOcrDetails(null, true, false, false))
-            let ocrResult = yield call(gateCloudApi.callOcrService, [processUrl])
-            let ocrText = ocrResult.entities.URL[0].ocr_text
-            ocrText === "" ?
-                yield put(setOcrDetails(null, false, true, false)) :
-                yield put(setOcrDetails(ocrText, false, true, false))
-
-        }
-    }
-    catch(error){
-        yield put(setOcrDetails(null, false, false, true))
-    }
-}
-
 
 function * handleSourceCredibility(action) {
     if(action.type === "CLEAN_STATE") return
@@ -263,12 +235,11 @@ function buildCategoryList(wordCloudList) {
     }, [])
 }
 
-export default function * rootSaga(){
+export default function * assistantSaga(){
     yield all([
         // fork(getDbkfTextMatchSaga),
         fork(getSourceCredSaga),
         fork(getMediaActionSaga),
-        // fork(getImageOcrSaga),
         fork(getMediaSimilaritySaga),
         fork(getMediaListSaga),
         fork(getHyperpartisanSaga),

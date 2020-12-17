@@ -29,11 +29,6 @@ const defaultState = {
     dbkfMediaMatchDone: false,
     dbkfMediaMatchFail: false,
 
-    ocrResult: null,
-    ocrLoading: false,
-    ocrDone: false,
-    ocrFail: false,
-
     hpResult: null,
     hpLoading: false,
     hpDone: false,
@@ -64,7 +59,6 @@ const assistantReducer = (state = defaultState, action) => {
         case "SET_DBKF_TEXT_MATCH_DETAILS":
         case "SET_DBKF_IMAGE_MATCH_DETAILS":
         case "SET_DBKF_VIDEO_MATCH_DETAILS":
-        case "SET_OCR_DETAILS":
         case "SET_HP_DETAILS":
         case "SET_NE_DETAILS":
         case "SET_LOADING":
@@ -104,11 +98,6 @@ const assistantReducer = (state = defaultState, action) => {
                 dbkfMediaMatchLoading: false,
                 dbkfMediaMatchDone: false,
                 dbkfMediaMatchFail: false,
-
-                ocrResult: null,
-                ocrLoading: false,
-                ocrDone: false,
-                ocrFail: false,
 
                 hpResult: null,
                 hpLoading: false,

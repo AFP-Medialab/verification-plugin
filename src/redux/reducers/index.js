@@ -19,6 +19,7 @@ import videoRightsReducer from "./tools/videoRightsReducer";
 import cookiesReducer from "./cookiesReducers";
 import covidSearchReducer from "./tools/covidSearchReducer";
 import assistantReducer from "./assistantReducer";
+import ocrReducer from "./tools/ocrReducer";
 
 
 const allReducers = combineReducers({
@@ -40,7 +41,8 @@ const allReducers = combineReducers({
     videoRights : videoRightsReducer,
     cookies : cookiesReducer,
     covidSearch: covidSearchReducer,
-    assistant : assistantReducer
+    assistant : assistantReducer,
+    ocr: ocrReducer
 });
 
 export default allReducers;
