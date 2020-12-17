@@ -23,7 +23,6 @@ import AssistantLinkResult from "./AssistantScrapeResults/AssistantLinkResult";
 import HelpDialog from "../../Shared/HelpDialog/HelpDialog";
 import AssistantMediaResult from "./AssistantScrapeResults/AssistantMediaResult";
 import AssistantTextResult from "./AssistantScrapeResults/AssistantTextResult";
-import AssistantOcrResult from "./AssistantCheckResults/AssistantOcrResult";
 import history from "../../Shared/History/History";
 
 import useAssistantApi from "./AssistantApiHandlers/useAssistantApi";
@@ -441,12 +440,6 @@ const Assistant = () => {
                     {imageList.length > 0 || videoList.length > 0 || imageVideoSelected ?
                         <Grid item xs={12}><AssistantMediaResult/></Grid>
                         : null
-                    }
-
-                    {ocrResult !== null ?
-                        <Grid item xs={6}>
-                            <AssistantOcrResult/>
-                        </Grid> : null
                     }
                 </Grid>
             </Paper>

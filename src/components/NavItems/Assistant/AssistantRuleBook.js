@@ -153,6 +153,17 @@ export const ASSISTANT_ACTIONS = [
         text: "forensic_text",
         tsvPrefix: "forensic",
         path: "tools/forensic",
+    },
+    {
+        title: "navbar_ocr",
+        icon: forensicIconOff,
+        linksAccepted: [KNOWN_LINKS.MISC, KNOWN_LINKS.OWN],
+        cTypes: [CONTENT_TYPE.IMAGE],
+        exceptions: [],
+        useInputUrl: false,
+        text: "ocr_text",
+        tsvPrefix: "ocr",
+        path: "tools/ocr",
     }
 ];
 

@@ -41,8 +41,10 @@ navbar_magnifier	Magnifier	Loupe	Lupa	Μεγεθυντικός φακός
 navbar_metadata	Metadata	Metadonnées	Metadatos	Μεταδεδομένα
 navbar_rights	Video rights	Droits vidéo	Derechos video	Δικαιώματα βίντεο
 navbar_forensic	Forensic	Forensic	Forensic	Ανάλυση Αυθεντικότητας Εικόνων (image forensics)
+navbar_ocr	OCR	Temp	Temp	Temp
 navbar_twitter_sna	Fact Check	Factuel	Factual	Έλεγχος γεγονότων
 navbar_assistant	Assistant	Temp	Temp	Βοηθός
+navbar_ocr	OCR	Temp	Temp	Temp
 
 assistant_help_title	What is this?	Temp	Temp	Temp
 assistant_help_1	The weverify toolkit (this plugin) has multiple tools which can help in the verification of content on social networks, designed to help journalists save time and be more efficient in their fact checking tasks.<br>A full list of these tools can be found in the tutorial section of this plugin.<br>Given the multiple tools and services available, the weverify assistant has been designed to guide users to the services available to them given the nature of the content they would like to check.<br><br>	Temp	Temp	Temp
@@ -78,6 +80,7 @@ magnifier_text	Examine the image thoroughly	Temp	Temp	Το εργαλείο με
 metadata_text	Retrieve image/video metadata	Temp	Temp	Το εργαλείο μεταδεδομένων μπορεί να χρησιμοποιηθεί για την ανάκτηση μεταδεδομένων εικόνας / βίντεο
 rights_text	Retrieve information solely about video rights	Temp	Temp	Το εργαλείο δικαιωμάτων βίντεο μπορεί να χρησιμοποιηθεί για την ανάκτηση πληροφοριών αποκλειστικά για δικαιώματα βίντεο
 forensic_text	Detect any image manipulation	Temp	Temp	Το εργαλείο ανάλυση αυθεντικότητας Εικόνων (image forensics) μπορεί να χρησιμοποιηθεί για τον εντοπισμό τυχόν παραμορφώσεων της εικόνας
+ocr_text	Extract any text from the image	Temp	Temp	Temp
 enter_url	Enter URL	Temp	Temp	Εισαγάγετε τη διεύθυνση URL των μέσων που θέλετε να επεξεργαστείτε
 
 

@@ -39,11 +39,9 @@ const AssistantProcessUrlActions = () => {
     return (
         processUrlActions.length > 0 ?
             <div>
-                <Box p={2}>
-                    <Typography variant={"h5"}>{keyword("things_you_can_do_header")}</Typography>
-                    <Typography variant={"subtitle2"}>{keyword("things_you_can_do")}</Typography>
-                </Box>
-                <Divider variant={"middle"}/>
+                <Typography variant={"h5"}>{keyword("things_you_can_do_header")}</Typography>
+                <Typography variant={"subtitle2"}>{keyword("things_you_can_do")}</Typography>
+                <Divider/>
                 <List>
                     {processUrlActions.map((action, index) => {
                         return (
