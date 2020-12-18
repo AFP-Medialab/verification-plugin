@@ -37,15 +37,19 @@ const KeyFramesResults = (props) => {
         setDetailed(!detailed);
     };
     const imageClick = (event) => { 
+    let search_url = "https://www.google.com/searchbyimage?image_url=";
+    let url = event
+
+    if (url !== ""){
+        window.chrome.tabs.create({url:search_url + url});
+    }
     };
     const zoom = (zoom) => {
         if (zoom == 1 && cols > 1) {
             setCols(cols - 1);
-            console.log("in" + cols);
         };
         if (zoom == -1) {
             setCols(cols + 1);
-            console.log("out" + cols);
         };
     }
 
@@ -82,13 +86,11 @@ const KeyFramesResults = (props) => {
                 <Button color={"primary"} onClick={() => zoom(1)}>
                     {
                         keyword("zoom_in")
-                        //"ZOOM IN"
                     }
                 </Button>
                 <Button color={"primary"} onClick={() => zoom(-1)}>
                     {
                         keyword("zoom_out")
-                        //"ZOOM OUT"
                     }
                 </Button>
                 <Box m={2}/>
