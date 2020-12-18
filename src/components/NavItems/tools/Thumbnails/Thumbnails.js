@@ -3,7 +3,7 @@ import CustomTile from "../../../Shared/CustomTitle/CustomTitle";
 import TextField from "@material-ui/core/TextField";
 import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import ImageReverseSearch from "../ImageReverseSearch";
 import ImageGridList from "../../../Shared/ImageGridList/ImageGridList";
 import {useDispatch, useSelector} from "react-redux";
@@ -146,6 +146,20 @@ const Thumbnails = () => {
         }
     }, [url]);
 
+    const [showResult, setShowResult] = useState(false);
+    const toggleDetail = () => {
+        setShowResult(true);
+    };
+
+    let height = 0;
+    let cols = 3;
+    let colsWidth = 1180 / cols;
+    if (resultData) {
+        var img = new Image();
+        img.src = resultData[0];
+        height = ((colsWidth * img.height) / img.width) - 60;
+    }
+
     return (
         <div>
             <Paper className={classes.root}>
@@ -210,7 +224,16 @@ const Thumbnails = () => {
                     <CloseResult onClick={() => dispatch(cleanThumbnailsState())}/>
                     <OnClickInfo keyword={"thumbnails_tip"}/>
                     <Box m={2}/>
-                    <ImageGridList list={resultData} handleClick={imageClick} height={160}/>
+                    <Button color={"primary"} onClick={() => toggleDetail()}>
+                    {
+                        keyword("show_result")
+                        
+                    }
+                    </Button>
+                    {
+                    showResult &&
+                    <ImageGridList list={resultData} handleClick={imageClick} height={height} cols={cols} />
+                    }
                 </Paper>
             }
         </div>);

@@ -22,19 +22,35 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
+
 const KeyFramesResults = (props) => {
     const classes = useStyles();
     const keyword = useLoadLanguage("components/NavItems/tools/Keyframes.tsv", tsv);
     const dispatch = useDispatch();
 
-    const [detailed, setDetailed] = useState(false);
+    const [detailed, setDetailed] = useState(true);
     const [simpleList, detailedList] = useKeyframes(props.result);
+    const [findHeight, setFindHeight] = useState(false);
 
     const toggleDetail = () => {
         setDetailed(!detailed);
     };
     const imageClick = (event) => { 
     };
+
+    let height = 0;
+    let cols = 3;
+    let colsWidth = 1180 / cols;
+    if (simpleList) {
+        var img = new Image();
+        img.src = simpleList[0];
+        height = (colsWidth * img.height) / img.width;
+ 
+        if (img.width != 0 && img.height != 0 && findHeight== false) {
+            setFindHeight(true);
+        }
+
+    }
 
     return (
         <div>
@@ -55,14 +71,14 @@ const KeyFramesResults = (props) => {
                 </Button>
                 <Box m={2}/>
                 {
-                    detailed &&
+                    detailed && findHeight &&
                     //<ImageGridList list={detailedList} height={160} onClick={(url) => ImageReverseSearch("google", url)}/>
-                    <ImageGridList list={detailedList} height={160} handleClick={imageClick}/>
+                    <ImageGridList list={detailedList} height={height} cols={cols} handleClick={imageClick}/>
                 }
                 {
-                    !detailed &&
+                    !detailed && findHeight &&
                     //<ImageGridList list={simpleList}  height={160} onClick={(url) => ImageReverseSearch("google", url)}/>
-                    <ImageGridList list={simpleList}  height={160} handleClick={imageClick}/>
+                    <ImageGridList list={simpleList}  height={height} cols={cols} handleClick={imageClick}/>
                 }
             </Paper>
         </div>
