@@ -62,7 +62,7 @@ const OCR = () => {
         if (fail) {
             dispatch(setError(keyword("ocr_error")));
         }
-    }, [fail])
+    }, [fail, dispatch, keyword])
 
     useEffect(() => {
         if (url && url !== KNOWN_LINKS.OWN) {
@@ -70,6 +70,7 @@ const OCR = () => {
                 setUserInput(uri);
                 submitUrl(uri)
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [url]);
 
 

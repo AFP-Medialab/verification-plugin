@@ -27,7 +27,7 @@ function* handleOcrCall(action) {
             let ocrSuccess = ocrResult.entities.URL[0].ocr_ok
 
             if(!ocrSuccess) {
-                throw new Error;
+                throw new Error();
             }
 
             ocrText = ocrResult.entities.URL[0].ocr_text

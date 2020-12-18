@@ -427,7 +427,7 @@ const Assistant = () => {
             <Box m={4}/>
 
             <Paper className={classes.assistantRoot}
-                   hidden={(urlMode && inputUrl === null) || (!urlMode && !imageVideoSelected) && ocrResult === null}>
+                   hidden={(urlMode && inputUrl === null) || ((!urlMode && !imageVideoSelected))}>
 
                 <Grid container spacing={2}>
                     <Grid item xs={12}>
