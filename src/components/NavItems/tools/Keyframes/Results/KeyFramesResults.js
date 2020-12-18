@@ -31,15 +31,25 @@ const KeyFramesResults = (props) => {
     const [detailed, setDetailed] = useState(true);
     const [simpleList, detailedList] = useKeyframes(props.result);
     const [findHeight, setFindHeight] = useState(false);
+    const [cols, setCols] = useState(3);
 
     const toggleDetail = () => {
         setDetailed(!detailed);
     };
     const imageClick = (event) => { 
     };
+    const zoom = (zoom) => {
+        if (zoom == 1 && cols > 1) {
+            setCols(cols - 1);
+            console.log("in" + cols);
+        };
+        if (zoom == -1) {
+            setCols(cols + 1);
+            console.log("out" + cols);
+        };
+    }
 
     let height = 0;
-    let cols = 3;
     let colsWidth = 1180 / cols;
     if (simpleList) {
         var img = new Image();
@@ -67,6 +77,18 @@ const KeyFramesResults = (props) => {
                     {
                         !detailed ? keyword("keyframe_title_get_detail")
                             : keyword("keyframe_title_get_simple")
+                    }
+                </Button>
+                <Button color={"primary"} onClick={() => zoom(1)}>
+                    {
+                        keyword("zoom_in")
+                        //"ZOOM IN"
+                    }
+                </Button>
+                <Button color={"primary"} onClick={() => zoom(-1)}>
+                    {
+                        keyword("zoom_out")
+                        //"ZOOM OUT"
                     }
                 </Button>
                 <Box m={2}/>
