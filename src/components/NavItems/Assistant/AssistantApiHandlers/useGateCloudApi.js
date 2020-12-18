@@ -61,7 +61,6 @@ export default function useGateCloudApi() {
     }
 
     const callOcrService = async (urlList) => {
-
         let urls = urlList.join(" ")
 
         const result = await axios.post(
@@ -72,10 +71,20 @@ export default function useGateCloudApi() {
         return result.data
     }
 
+    const callOcrB64Service = async (b64Img) => {
+        b64Img = b64Img.replace("data:image/png;base64,", "")
+
+        const result = await axios.post(
+            ocrEndpoint, b64Img, {headers: headers})
+
+        return result.data
+    }
+
     return {
         callSourceCredibilityService,
         callHyperpartisanService,
-        callOcrService
+        callOcrService,
+        callOcrB64Service
     }
 
 }

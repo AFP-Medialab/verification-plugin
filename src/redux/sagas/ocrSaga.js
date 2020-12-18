@@ -12,15 +12,27 @@ function* handleOcrCall(action) {
     if (action.type === "CLEAN_STATE") return
 
     const inputUrl = yield select(state => state.ocr.url);
+    const b64Encoding =  yield select(state => state.ocr.b64Image);
+    let ocrText = null
+
     try {
         yield put(setOcrResult(true, false, false, null))
-        let ocrResult = yield call(gateCloudApi.callOcrService, [inputUrl])
-        let ocrSuccess = ocrResult.entities.URL[0].ocr_ok
-        let ocrText = ocrResult.entities.URL[0].ocr_text
 
-        if(!ocrSuccess) {
-            throw new Error;
+        if (b64Encoding) {
+            let ocrResult = yield call(gateCloudApi.callOcrB64Service,  b64Encoding)
+            ocrText = ocrResult.text
         }
+        else{
+            let ocrResult = yield call(gateCloudApi.callOcrService, [inputUrl])
+            let ocrSuccess = ocrResult.entities.URL[0].ocr_ok
+
+            if(!ocrSuccess) {
+                throw new Error;
+            }
+
+            ocrText = ocrResult.entities.URL[0].ocr_text
+        }
+
         ocrText === "" ?
             yield put(setOcrResult(false, false, true, "No text has been found in the image.")) :
             yield put(setOcrResult(false, false, true, ocrText))

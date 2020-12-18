@@ -12,7 +12,7 @@ import tsv from "../../../../LocalDictionary/components/NavItems/tools/OCR.tsv";
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 
-import {setOcrInput} from "../../../../redux/actions/tools/ocrActions";
+import {setOcrB64Img, setOcrInput} from "../../../../redux/actions/tools/ocrActions";
 import OcrResult from "./Results/OcrResult";
 
 const OCR = () => {
@@ -30,6 +30,27 @@ const OCR = () => {
     const submitUrl = (src) => {
         dispatch(setOcrInput(src))
     };
+
+    const uploadImg = (localFile) => {
+        let uploadedImg = new Image();
+
+        uploadedImg.onload = () => {
+            let canvas = document.createElement('canvas');
+            canvas.width = uploadedImg.naturalWidth
+            canvas.height = uploadedImg.naturalHeight
+            canvas.getContext('2d').drawImage(uploadedImg, 0, 0);
+
+            dispatch(setOcrB64Img(canvas.toDataURL('image/png')))
+            canvas.remove();
+        };
+
+        uploadedImg.onerror = () => {
+            dispatch(setError(keyword("ocr_error")));
+        };
+
+        uploadedImg.src = localFile;
+        setUserInput(localFile)
+    }
 
     useEffect(() => {
         if (!ocrInputUrl) {
@@ -72,7 +93,7 @@ const OCR = () => {
                         <Typography variant={"subtitle2"}>{keyword("button_localfile")}</Typography>
                     </label>
                     <input id="fileInputMagnifier" type="file" hidden={true} onChange={e => {
-                        setUserInput(URL.createObjectURL(e.target.files[0]))
+                        uploadImg(URL.createObjectURL(e.target.files[0]))
                     }}/>
                 </Button>
                 <Box m={2}/>
