@@ -123,7 +123,12 @@ const Thumbnails = () => {
     };
 
     const imageClick = (event) => {
-        imageClickUrl(event.target.src);
+        let search_url = "https://www.google.com/searchbyimage?image_url=";
+    let url = event;
+
+    if (url !== ""){
+        window.chrome.tabs.create({url:search_url + url});
+    }
     };
 
     const imageClickUrl = (url) => {
@@ -227,7 +232,6 @@ const Thumbnails = () => {
                     <Button color={"primary"} onClick={() => toggleDetail()}>
                     {
                         keyword("show_result")
-                        
                     }
                     </Button>
                     {
