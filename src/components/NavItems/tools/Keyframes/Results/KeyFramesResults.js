@@ -45,10 +45,10 @@ const KeyFramesResults = (props) => {
     }
     };
     const zoom = (zoom) => {
-        if (zoom == 1 && cols > 1) {
+        if (zoom === 1 && cols > 1) {
             setCols(cols - 1);
         };
-        if (zoom == -1) {
+        if (zoom === -1) {
             setCols(cols + 1);
         };
     }
@@ -60,7 +60,7 @@ const KeyFramesResults = (props) => {
         img.src = simpleList[0];
         height = (colsWidth * img.height) / img.width;
  
-        if (img.width != 0 && img.height != 0 && findHeight== false) {
+        if (img.width !== 0 && img.height !== 0 && findHeight === false) {
             setFindHeight(true);
         }
 
