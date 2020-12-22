@@ -16,6 +16,7 @@ import Radio from "@material-ui/core/Radio";
 import Box from "@material-ui/core/Box";
 import FormLabel from "@material-ui/core/FormLabel";
 import Button from "@material-ui/core/Button";
+import Checkbox from "@material-ui/core/Checkbox";
 import Grid from "@material-ui/core/Grid";
 import InputLabel from "@material-ui/core/InputLabel";
 import Select from "@material-ui/core/Select";
@@ -49,6 +50,9 @@ const TwitterSna = () => {
 
   const windowUrl = window.location.href;
   let urlObj = extractUrlSearch(windowUrl);
+
+  const role = useSelector(state => state.userSession.user.roles);
+  const [cache, setCache] = useState(false);
 
   // Authentication Redux state
   const userAuthenticated = useSelector(state => state.userSession && state.userSession.userAuthenticated);
@@ -188,12 +192,17 @@ const TwitterSna = () => {
       "media": (filtersP === "none") ? null : filtersP,
       "retweetsHandling": null,
       "localTime": localTimeP,
+      "cached": !cache,
     };
   };
 
   const makeRequest = () => {
     return makeRequestParams(keyWords, bannedWords, usersInput, since, until, localTime, langInput, filters, verifiedUsers);
   };
+
+  const cacheChange = () => {
+    setCache(!cache);
+};
 
   const sinceDateIsValid = (momentDate) => {
     const itemDate = momentDate.toDate();
@@ -396,6 +405,15 @@ const TwitterSna = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userAuthenticated]);
 
+  function cacheCheck() {
+    for (let index in role)
+    {
+      if (role[index] == "CACHEOVERRIDE")
+      {return true;}
+    }
+    return false;
+  }
+
   return (
     <div>
       <Paper className={classes.root} style={{marginTop: "0px", marginBottom: "0px", paddingTop: "0px"}}>
@@ -582,6 +600,19 @@ const TwitterSna = () => {
               </Select>
             </FormControl>
           </Grid>
+          {
+          cacheCheck() &&
+          <FormControlLabel
+          control={
+              <Checkbox
+                  checked={cache}
+                  onChange={cacheChange}
+                  value="checkedBox"
+                  color="primary"
+              />
+          }
+          label={keyword("disable_cache")}
+      />}
         </Grid>
         <Box m={2} />
 
