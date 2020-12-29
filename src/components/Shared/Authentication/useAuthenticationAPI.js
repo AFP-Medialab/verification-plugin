@@ -192,17 +192,19 @@ export default function useAuthenticationAPI() {
       timeout: loginTimeout
     }).then(response => {
       const accessToken = response.data.token;
+      const refreshToken = response.data.refreshToken;
       const userInfo = response.data.user;
       // Decode JWT token
       try {
         const tokenContent = decodeJWTToken(accessToken);
         _.merge(userInfo, tokenContent.user);
-        dispatch(userLoginAction(accessToken, tokenContent.accessTokenExpiry, userInfo));
+        dispatch(userLoginAction(accessToken, tokenContent.accessTokenExpiry, refreshToken, userInfo));
         return Promise.resolve({
           status: response.status,
           data: {
             accessToken: accessToken,
             accessTokenExpiry: tokenContent.accessTokenExpiry,
+            refreshToken: refreshToken,
             user: userInfo
           }
         });
@@ -296,8 +298,8 @@ export default function useAuthenticationAPI() {
    *
    * @returns {Promise<Object>} Result as a Promise.
    */
-  const refreshToken = (accessToken) => {
-    return axios.post(AUTH_SRV_REFRESH_TOKEN_URL, "\""+accessToken+"\"", {
+  const refreshToken = (refreshToken) => {
+    return axios.post(AUTH_SRV_REFRESH_TOKEN_URL, refreshToken, {
       baseURL: authSrvBaseURL,
        headers: {
          "Content-Type": jsonContentType
