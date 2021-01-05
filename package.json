@@ -9,7 +9,7 @@
     "@material-ui/pickers": "^3.2.10",
     "@svgr/webpack": "^4.3.3",
     "@toast-ui/react-image-editor": "^1.2.0",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "cytoscape-fcose": "^1.2.0",
     "d3-selection": "^1.4.1",
     "date-fns": "^2.10.0",
