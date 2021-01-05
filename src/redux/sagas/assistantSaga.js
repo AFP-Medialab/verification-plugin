@@ -237,7 +237,7 @@ function buildCategoryList(wordCloudList) {
 
 export default function * assistantSaga(){
     yield all([
-        // fork(getDbkfTextMatchSaga),
+        fork(getDbkfTextMatchSaga),
         fork(getSourceCredSaga),
         fork(getMediaActionSaga),
         fork(getMediaSimilaritySaga),
