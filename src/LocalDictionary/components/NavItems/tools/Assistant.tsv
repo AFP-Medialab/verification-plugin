@@ -85,9 +85,11 @@ enter_url	Enter URL	Temp	Temp	Εισαγάγετε τη διεύθυνση URL �
 
 
 
-hyperpartisan_title	Hyperpartisan Check
-dbkf_text_title	Database of known fakes text search
-dbkf_media_title	Database of known fakes media search
-ne_title	Named entity search
-ocr_title	OCR search
-source_cred_title	Source credbility check
+hyperpartisan_title	Hyperpartisan service	Temp	Temp	Temp
+dbkf_text_title	Database of known fakes text search	Temp	Temp	Temp
+dbkf_media_title	Database of known fakes media search	Temp	Temp	Temp
+ne_title	Named entity search	Temp	Temp	Temp
+ocr_title	OCR search	Temp	Temp	Temp
+source_cred_title	Source credbility service	Temp	Temp	Temp
+mt_title	Machine translation service	Temp	Temp	Temp
+translate_to_french	Translate to French	Temp	Temp	Temp

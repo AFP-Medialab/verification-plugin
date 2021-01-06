@@ -12,13 +12,15 @@ import FormatQuoteIcon from "@material-ui/icons/FormatQuote";
 import Grid from "@material-ui/core/Grid";
 import HelpOutlineOutlinedIcon from "@material-ui/icons/HelpOutlineOutlined";
 import LinearProgress from "@material-ui/core/LinearProgress";
+import SpeakerNotesIcon from '@material-ui/icons/SpeakerNotes';
 import Tooltip from "@material-ui/core/Tooltip";
 import Typography from "@material-ui/core/Typography";
 
-import {setWarningExpanded} from "../../../../redux/actions/tools/assistantActions";
+import {runTranslation, setWarningExpanded} from "../../../../redux/actions/tools/assistantActions";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/Assistant.tsv";
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
+import IconButton from "@material-ui/core/IconButton";
 
 const AssistantTextResult = () => {
 
@@ -30,8 +32,13 @@ const AssistantTextResult = () => {
     // state related
     const text = useSelector(state => state.assistant.urlText);
     const textLang = useSelector(state => state.assistant.textLang);
+    const translatedText = useSelector(state => state.assistant.mtResult);
+
+
     const dbkfMatch = useSelector(state => state.assistant.dbkfTextMatch)
     const hpLoading = useSelector(state => state.assistant.hpLoading)
+    const mtLoading = useSelector(state => state.assistant.mtLoading)
+
 
     const dbkfMatchLoading = useSelector(state => state.assistant.dbkfTextMatchLoading)
     const warningExpanded = useSelector(state => state.assistant.warningExpanded);
@@ -75,11 +82,11 @@ const AssistantTextResult = () => {
                         </div>
                     }
                 />
-                <LinearProgress variant={"indeterminate"} color = {"secondary"} hidden={!dbkfMatchLoading && !hpLoading}/>
+                <LinearProgress variant={"indeterminate"} color = {"secondary"} hidden={!dbkfMatchLoading && !hpLoading && !mtLoading}/>
                 <CardContent>
                         <Collapse in={expanded} collapsedHeight={100} id={"element-to-check"}>
                             <Typography align={"center"}>
-                                <FormatQuoteIcon fontSize={"large"}/>{text}
+                                <FormatQuoteIcon fontSize={"large"}/>{translatedText ? translatedText : text}
                             </Typography>
                         </Collapse>
 
@@ -88,8 +95,16 @@ const AssistantTextResult = () => {
                 <Box m={1.5}>
                     <Divider/>
                     <Grid container>
-                        <Grid item xs={6}>
+                        <Grid item xs={6} style={{"display": "flex"}}>
                             <Typography className={classes.toolTipIcon}>{textLang}</Typography>
+
+                            {textLang === "EN" ?
+                                <Tooltip title={keyword("translate_to_french")}>
+                                    <IconButton className={classes.toolTipIcon} onClick={()=>dispatch(runTranslation("fr", text))}>
+                                        <SpeakerNotesIcon/>
+                                    </IconButton>
+                                </Tooltip> : null
+                            }
                         </Grid>
                         <Grid item xs={6} align={"right"}>
                             {displayExpander ?

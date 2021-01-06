@@ -40,6 +40,11 @@ const defaultState = {
     neDone: false,
     neFail: false,
 
+    mtResult: null,
+    mtLoading: false,
+    mtDone: false,
+    mtFail: false,
+
     loading: false,
     warningExpanded: false,
     stateExpanded: false
@@ -64,6 +69,7 @@ const assistantReducer = (state = defaultState, action) => {
         case "SET_LOADING":
         case "SET_WARNING_EXPANDED":
         case "SET_STATE_EXPANDED":
+        case "SET_MT_DETAILS":
             return Object.assign({}, state, action.payload)
 
 
@@ -109,6 +115,11 @@ const assistantReducer = (state = defaultState, action) => {
                 neLoading: false,
                 neDone: false,
                 neFail: false,
+
+                mtResult: null,
+                mtLoading: false,
+                mtDone: false,
+                mtFail: false,
 
                 loading: false,
                 warningExpanded: false,

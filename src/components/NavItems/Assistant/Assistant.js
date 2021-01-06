@@ -87,6 +87,8 @@ const Assistant = () => {
     const dbkfTextFailState = useSelector(state => state.assistant.dbkfTextMatchFail)
     const dbkfMediaFailState = useSelector(state => state.assistant.dbkfMediaMatchFail)
     const neFailState = useSelector(state => state.assistant.neFail)
+    const mtFailState = useSelector(state => state.assistant.mtFail)
+
 
     //other state values
     const [formInput, setFormInput] = useState(inputUrl);
@@ -117,7 +119,7 @@ const Assistant = () => {
             setAssistantResults(urlType, contentType, userInput, scrapeResult)
 
             dispatch(setInputUrl(userInput));
-            dispatch(setScrapedData(textRef.current, textLangRef.current, linkListRef.current, imageListRef.current, videoListRef.current))
+            dispatch(setScrapedData(textRef.current, textLangRef.current.toUpperCase(), linkListRef.current, imageListRef.current, videoListRef.current))
 
 
             dispatch(setAssistantLoading(false))
@@ -339,7 +341,7 @@ const Assistant = () => {
                     </Grid>
 
                     <Grid item xs={12}>
-                        {hpFailState || scFailState || dbkfTextFailState || dbkfMediaFailState || neFailState ?
+                        {hpFailState || scFailState || dbkfTextFailState || dbkfMediaFailState || neFailState || mtFailState ?
                             <AssistantCheckStatus/> : null
                         }
                     </Grid>

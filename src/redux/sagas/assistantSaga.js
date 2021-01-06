@@ -1,7 +1,7 @@
 import {
     setDbkfImageMatchDetails,
     setDbkfTextMatchDetails, setDbkfVideoMatchDetails, setHpDetails,
-    setInputSourceCredDetails, setNeDetails, setProcessUrl,
+    setInputSourceCredDetails, setMtDetails, setNeDetails, setProcessUrl,
     setProcessUrlActions, setSingleMediaPresent
 } from "../actions/tools/assistantActions";
 import {setError} from "../actions/errorActions";
@@ -50,6 +50,10 @@ function * getSourceCredSaga() {
 
 function * getNamedEntitySaga() {
     yield takeLatest(["SET_SCRAPED_DATA", "CLEAN_STATE"], handleNamedEntitySaga)
+}
+
+function * getTranslationSaga() {
+    yield takeLatest(["RUN_TRANSLATION", "CLEAN_STATE"], handleTranslateSaga)
 }
 
 function * handleMediaLists() {
@@ -213,6 +217,24 @@ function * handleNamedEntitySaga(action) {
     }
 }
 
+function * handleTranslateSaga(action){
+    if(action.type === "CLEAN_STATE") return
+
+    try {
+        let lang = action.payload.lang
+        let text = action.payload.text
+
+        yield put(setMtDetails(null,true,false, false))
+        const result = yield call(assistantApi.callAssistantTranslator, lang, text)
+        yield put(setMtDetails(result,false,true, false))
+    }
+
+    catch (error) {
+        yield put(setMtDetails(null,false,false, true))
+    }
+
+
+}
 
 function buildWordCloudList(entities) {
     return entities.reduce((accumulator, currentWord)=>{
@@ -243,6 +265,7 @@ export default function * assistantSaga(){
         fork(getMediaSimilaritySaga),
         fork(getMediaListSaga),
         fork(getHyperpartisanSaga),
-        fork(getNamedEntitySaga)
+        fork(getNamedEntitySaga),
+        fork(getTranslationSaga)
     ])
 }

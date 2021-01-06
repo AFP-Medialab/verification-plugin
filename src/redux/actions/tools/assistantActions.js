@@ -145,6 +145,18 @@ export const setNeDetails = (neResultCategory, neResultCount, neLoading, neDone,
     }
 }
 
+export const setMtDetails = (mtResult, mtLoading, mtDone, mtFail) => {
+    return {
+        type: "SET_MT_DETAILS",
+        payload: {
+            mtResult: mtResult,
+            mtLoading: mtLoading,
+            mtDone: mtDone,
+            mtFail: mtFail
+        }
+    }
+}
+
 
 export const setSingleMediaPresent = (singleMediaPresent) => {
     return {
@@ -173,6 +185,15 @@ export const setStateExpanded = (stateExpanded) => {
     }
 }
 
+export const runTranslation = (lang, text) => {
+    return {
+        type: "RUN_TRANSLATION",
+        payload: {
+            lang: lang,
+            text: text
+        }
+    }
+}
 
 export const cleanAssistantState = () => {
     return {

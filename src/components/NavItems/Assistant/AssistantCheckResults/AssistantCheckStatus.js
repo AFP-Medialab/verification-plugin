@@ -31,6 +31,8 @@ const AssistantCheckStatus = () => {
     const dbkfTextFailState = useSelector(state => state.assistant.dbkfTextMatchFail)
     const dbkfMediaTitle = keyword("dbkf_media_title")
     const dbkfMediaFailState = useSelector(state => state.assistant.dbkfMediaMatchFail)
+    const mtTitle = keyword("mt_title")
+    const mtFailState = useSelector(state => state.assistant.mtFail)
     const neTitle = keyword("ne_title")
     const neFailState = useSelector(state => state.assistant.neFail)
 
@@ -39,6 +41,7 @@ const AssistantCheckStatus = () => {
         {"title": scTitle, "failed": scFailState},
         {"title": dbkfMediaTitle, "failed": dbkfMediaFailState},
         {"title": dbkfTextTitle, "failed": dbkfTextFailState},
+        {"title": mtTitle, "failed": mtFailState},
         {"title": neTitle, "failed": neFailState}]
 
 
