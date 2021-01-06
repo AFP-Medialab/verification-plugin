@@ -54,6 +54,7 @@ const TwitterSna = () => {
   const role = useSelector(state => state.userSession.user.roles);
   const [cache, setCache] = useState(false);
 
+  const langPage = useSelector(state => state.language);
   // Authentication Redux state
   const userAuthenticated = useSelector(state => state.userSession && state.userSession.userAuthenticated);
 
@@ -193,6 +194,7 @@ const TwitterSna = () => {
       "retweetsHandling": null,
       "localTime": localTimeP,
       "cached": !cache,
+      "pageLanguage" : langPage,
     };
   };
 
