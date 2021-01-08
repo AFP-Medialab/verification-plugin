@@ -43,7 +43,7 @@ const Languages = () => {
                 <IconButton aria-label="add to favorites"
                             onClick={handleClick}
                 >
-                    <TranslateIcon/>
+                    <TranslateIcon fontSize="large"/>
                 </IconButton>
             </Tooltip>
             <Menu
