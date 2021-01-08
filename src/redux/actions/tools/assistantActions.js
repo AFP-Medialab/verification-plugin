@@ -195,6 +195,15 @@ export const runTranslation = (lang, text) => {
     }
 }
 
+export const submitInputUrl = (inputUrl) => {
+    return {
+        type: "SUBMIT_INPUT_URL",
+        payload: {
+            inputUrl: inputUrl,
+        }
+    }
+}
+
 export const cleanAssistantState = () => {
     return {
         type: "CLEAN_STATE"
