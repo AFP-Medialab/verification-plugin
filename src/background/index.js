@@ -95,6 +95,14 @@ const mediaAssistant = function(word){
     }
 };
 
+const ocr = function(word){
+    let url = getUrlImg(word);
+    if (url !== "") {
+        window.chrome.tabs.create({url:page_name+"#/app/tools/ocr/" + encodeURIComponent(url)});
+        // Google analytics
+        rightClickEvent("OCR", url)
+    }
+};
 
 const imageReversesearch = function(word){
     let search_url = "https://www.google.com/searchbyimage?image_url=";
@@ -180,6 +188,13 @@ window.chrome.contextMenus.create({
     title: "Open with assistant",
     contexts:["image", "video"],
     onclick: mediaAssistant,
+})
+
+window.chrome.contextMenus.create({
+    id: "ocr",
+    title: "Open with OCR",
+    contexts:["image"],
+    onclick: ocr,
 })
 
 window.chrome.contextMenus.create({
