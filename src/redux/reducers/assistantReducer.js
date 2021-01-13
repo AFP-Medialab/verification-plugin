@@ -4,6 +4,7 @@ const defaultState = {
     singleMediaPresent: null,
 
     inputUrl: null,
+    errorKey: null,
     processUrl: null,
     imageList: [],
     videoList: [],
@@ -54,6 +55,7 @@ const defaultState = {
 const assistantReducer = (state = defaultState, action) => {
     switch (action.type) {
         case "SET_INPUT_URL":
+        case "SET_ERROR_KEY":
         case "SET_PROCESS_URL":
         case "SET_SCRAPED_DATA":
         case "SET_PROCESS_URL_ACTIONS":
@@ -80,6 +82,7 @@ const assistantReducer = (state = defaultState, action) => {
                 singleMediaPresent: null,
 
                 inputUrl: null,
+                errorKey: null,
                 processUrl: null,
                 imageList: [],
                 videoList: [],

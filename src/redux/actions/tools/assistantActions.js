@@ -27,6 +27,16 @@ export const setInputUrl = (inputUrl) => {
 };
 
 
+export const setErrorKey = (errorKey) => {
+    return {
+        type : "SET_ERROR_KEY",
+        payload: {
+            errorKey: errorKey,
+        }
+    }
+};
+
+
 export const setProcessUrlActions = (contentType, actions) => {
     return {
         type : "SET_PROCESS_URL_ACTIONS",

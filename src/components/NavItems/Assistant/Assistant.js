@@ -35,6 +35,7 @@ import {
 import {CONTENT_TYPE, KNOWN_LINKS, selectCorrectActions,} from "./AssistantRuleBook";
 import AssistantNEResult from "./AssistantCheckResults/AssistantNEResult";
 import AssistantCheckStatus from "./AssistantCheckResults/AssistantCheckStatus";
+import {setError} from "../../../redux/actions/errorActions";
 
 const Assistant = () => {
 
@@ -49,6 +50,8 @@ const Assistant = () => {
     const imageVideoSelected = useSelector(state => state.assistant.imageVideoSelected);
     const loading = useSelector(state => state.assistant.loading)
     const inputUrl = useSelector(state => state.assistant.inputUrl);
+    const errorKey = useSelector(state => state.assistant.errorKey);
+
 
     //url states
     const imageList = useSelector(state => state.assistant.imageList);
@@ -74,10 +77,8 @@ const Assistant = () => {
     const neFailState = useSelector(state => state.assistant.neFail)
     const mtFailState = useSelector(state => state.assistant.mtFail)
 
-
     //other state values
     const [formInput, setFormInput] = useState(inputUrl);
-
 
     // if the user wants to upload a file, give them tools where this is an option
     const submitUpload = (contentType) => {
@@ -89,10 +90,15 @@ const Assistant = () => {
 
     // clean assistant state
     const cleanAssistant = () => {
-        //clean state and input
         dispatch(cleanAssistantState());
         setFormInput("");
     }
+
+    useEffect(()=>{
+        if(errorKey){
+            dispatch(setError(keyword(errorKey)))
+        }
+    }, [errorKey])
 
     // if a url is present in the plugin url(as a param), set it to input and process results
     useEffect(() => {
@@ -272,8 +278,11 @@ const Assistant = () => {
             <Box m={4}/>
 
             <Paper className={classes.assistantRoot}
-                   hidden={(urlMode && inputUrl === null) || ((!urlMode && !imageVideoSelected))}>
-
+                   hidden={
+                       (urlMode && inputUrl === null) ||
+                       (urlMode && inputUrl !== null && (!imageList.length && !videoList.length)) ||
+                       ((!urlMode && !imageVideoSelected))}
+            >
                 <Grid container spacing={2}>
                     <Grid item xs={12}>
                         <Typography variant={"h5"} align={"left"}>{keyword("url_media")}</Typography>

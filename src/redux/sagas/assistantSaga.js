@@ -3,7 +3,7 @@ import {
     setAssistantLoading,
     setDbkfImageMatchDetails,
     setDbkfTextMatchDetails,
-    setDbkfVideoMatchDetails,
+    setDbkfVideoMatchDetails, setErrorKey,
     setHpDetails,
     setInputSourceCredDetails,
     setInputUrl,
@@ -73,21 +73,16 @@ function* getTranslationSaga() {
 }
 
 function* handleMediaLists() {
-
     const imageList = yield select(state => state.assistant.imageList);
     const videoList = yield select(state => state.assistant.videoList);
 
-    try {
-        if (imageList.length === 1 && videoList.length === 0) {
-            yield put(setProcessUrl(imageList[0], CONTENT_TYPE.IMAGE))
-            yield put(setSingleMediaPresent(true))
+    if (imageList.length === 1 && videoList.length === 0) {
+        yield put(setProcessUrl(imageList[0], CONTENT_TYPE.IMAGE))
+        yield put(setSingleMediaPresent(true))
 
-        } else if (videoList.length === 1 && imageList.length === 0) {
-            yield put(setProcessUrl(videoList[0], CONTENT_TYPE.VIDEO))
-            yield put(setSingleMediaPresent(true))
-        }
-    } catch (error) {
-        yield put(setError("Error handling media lists"))
+    } else if (videoList.length === 1 && imageList.length === 0) {
+        yield put(setProcessUrl(videoList[0], CONTENT_TYPE.VIDEO))
+        yield put(setSingleMediaPresent(true))
     }
 }
 
@@ -98,15 +93,11 @@ function* handleActionCall() {
     const contentType = yield select(state => state.assistant.processUrlType);
 
     if (processUrl !== null) {
-        try {
-            let knownInputLink = yield call(matchPattern, inputUrl, KNOWN_LINK_PATTERNS);
-            let knownProcessLink = yield call(matchPattern, processUrl, KNOWN_LINK_PATTERNS);
-            let actions = yield call(selectCorrectActions, contentType, knownInputLink, knownProcessLink, processUrl);
+        let knownInputLink = yield call(matchPattern, inputUrl, KNOWN_LINK_PATTERNS);
+        let knownProcessLink = yield call(matchPattern, processUrl, KNOWN_LINK_PATTERNS);
+        let actions = yield call(selectCorrectActions, contentType, knownInputLink, knownProcessLink, processUrl);
 
-            yield put(setProcessUrlActions(contentType, actions))
-        } catch (error) {
-            yield put(setError("Error deciding which actions can be taken against given media"))
-        }
+        yield put(setProcessUrlActions(contentType, actions))
     }
 }
 
@@ -265,9 +256,8 @@ function * handleInputUrl(action) {
         yield put(setAssistantLoading(false))
     } catch (error) {
         yield put(setAssistantLoading(false))
-        yield put(setError(error.message));
+        yield put(setErrorKey(error.message));
     }
-
 }
 
 const removeUrlsAndEmojisFromText = (text) => {
@@ -326,7 +316,7 @@ const decideWhetherToScrape = (urlType, contentType) => {
             }
             return false;
         default:
-            throw new Error("please_give_a_correct_link");
+            throw new Error("please_give_a_correct_link")
     }
 }
 

@@ -28,7 +28,7 @@ videos_label	Videos	Temp	Temp	Βίντεο
 media_found	The following media has been found on the page	Temp	Temp	Temp
 media_below	Select the media you would like to verify	Temp	Temp	Επιλέξτε τα μέσα που θέλετε να επαληθεύσετε
 media_to_process	Media to Process	Temp	Temp	Μέσα για επεξεργασία
-assistant_error	No media was found through the link entered.	Temp	Temp	Δεν βρέθηκε κανένα μέσο μέσω του συνδέσμου που καταχωρίστηκε.
+assistant_error	An unexpected assistant error has occurred. If the problem persists, contact support.	Temp	Temp	Δεν βρέθηκε κανένα μέσο μέσω του συνδέσμου που καταχωρίστηκε.
 
 things_you_can_do_header	Potential Tools	Temp	Temp	Πιθανά εργαλεία
 things_you_can_do	Below are the tools you can use on this media type	Temp	Temp	Ακολουθούν τα εργαλεία που μπορείτε να χρησιμοποιήσετε σε αυτόν τον τύπο μέσων
@@ -54,7 +54,7 @@ assistant_help_3	<b>Which URLS are supported?</b><br>Currently, there is dedicat
 
 mode_label	URL mode	Temp	Temp	Temp
 url_text	URL Text	Temp	Temp	Temp
-url_media	URL Media	Temp	Temp	Temp
+url_media	Media	Temp	Temp	Temp
 media_text	Extracted Media Text	Temp	Temp	Temp
 text_warning	Warnings found against text. See warning box.	Temp	Temp	Temp
 image_warning	Warnings found against image. See warning box.	Temp	Temp	Temp

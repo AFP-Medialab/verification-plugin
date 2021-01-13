@@ -16,7 +16,7 @@ export default function useAssistantApi() {
         catch (error) {
             if(error.response) {throw new Error(error.response.data.message)}
             else{
-                throw new Error("An unexpected assistant error has occurred. If the problem persists, contact support.")
+                throw new Error("assistant_error")
             }
         }
     }
@@ -43,7 +43,7 @@ export default function useAssistantApi() {
         catch (error) {
             if(error.response) {throw new Error(error.response.data.message)}
             else{
-                throw new Error("An unexpected assistant error has occurred. If the problem persists, contact support.")
+                throw new Error("assistant_error")
             }
         }
     }
@@ -53,5 +53,4 @@ export default function useAssistantApi() {
         callNamedEntityService,
         callAssistantTranslator
     }
-
 }

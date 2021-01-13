@@ -167,15 +167,6 @@ export const ASSISTANT_ACTIONS = [
     }
 ];
 
-export const ASSISTANT_CHECKS = [
-    {
-        title: "hyperpartisan_check",
-        loading_state: "hpLoading",
-        fail_state: "hpFail",
-        done_state: "hpDone",
-    }
-]
-
 export const selectCorrectActions = (contentType, inputUrlTYpe, processUrlType, processUrl) => {
     let possibleActions =
         ASSISTANT_ACTIONS.filter(action=>
