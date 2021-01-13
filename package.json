@@ -9,6 +9,7 @@
     "@toast-ui/react-image-editor": "^1.2.0",
     "axios": "^0.19.2",
     "big-integer": "^1.6.48",
+    "clsx": "^1.1.1",
     "d3-selection": "^1.4.2",
     "dateformat": "^3.0.3",
     "exif-js": "^2.3.0",
