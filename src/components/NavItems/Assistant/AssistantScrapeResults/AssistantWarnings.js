@@ -29,27 +29,23 @@ const AssistantWarnings = () => {
 
     return (
         <Box pl={1}>
-            <Card variant={"outlined"} style={{"borderColor": "red", "borderStyle": "solid", "borderWidth": "3px"}}>
-                <div style={{"display": "flex"}}>
-                    <CardMedia style={{backgroundColor: "red"}}>
-                        <Box m={1}>
-                            <ErrorOutlineOutlinedIcon fontSize={"large"}/>
-                        </Box>
-                    </CardMedia>
-                    <Box m={1}/>
-                    <div>
-                        <Typography component={"span"} variant={"h6"} style={{color: "red"}}><Box
-                            fontWeight="fontWeightBold">{keyword("warning_title")}</Box></Typography>
-                        <Typography component={"span"}><Box color={"black"}
-                                                            fontStyle="italic">{keyword("warning_subtitle")} </Box></Typography>
-                    </div>
-                    <IconButton style={{"marginLeft": "auto"}}
-                                onClick={() => dispatch(setWarningExpanded(!warningExpanded))}><ExpandMoreIcon
-                        style={{"color": "red"}}/></IconButton>
+            <Card variant={"outlined"} style={{"borderColor": "red", "borderStyle": "solid", "display": "flex"}}>
+                <CardMedia style={{backgroundColor: "red"}}>
+                    <Box m={1}><ErrorOutlineOutlinedIcon fontSize={"large"}/></Box>
+                </CardMedia>
+                <Box m={1}/>
+                <div>
+                    <Typography component={"span"} variant={"h6"} color={"error"}><Box
+                        fontWeight="fontWeightBold">{keyword("warning_title")}</Box>
+                    </Typography>
+                    <Typography component={"span"}>
+                        <Box color={"black"} fontStyle="italic">{keyword("warning_subtitle")} </Box>
+                    </Typography>
                 </div>
+                <IconButton style={{"marginLeft": "auto"}} onClick={() => dispatch(setWarningExpanded(!warningExpanded))}>
+                    <ExpandMoreIcon style={{"color": "red"}}/>
+                </IconButton>
             </Card>
-
-
             <Collapse in={warningExpanded} style={{"backgroundColor": "transparent"}}>
                 <Box m={3}/>
                 <SourceCredibilityResults/>
