@@ -1,6 +1,5 @@
 import React from "react";
 import {useDispatch, useSelector} from "react-redux";
-
 import Card from "@material-ui/core/Card";
 import CardMedia from "@material-ui/core/CardMedia";
 import CardActions from "@material-ui/core/CardActions";
@@ -12,10 +11,10 @@ import Typography from "@material-ui/core/Typography";
 
 import CloseResult from "../../../../Shared/CloseResult/CloseResult";
 import history from "../../../../Shared/History/History";
+import OnClickInfo from "../../../../Shared/OnClickInfo/OnClickInfo";
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 
 import {cleanOcr} from "../../../../../redux/actions/tools/ocrActions";
-
 
 const OcrResult = () => {
 
@@ -25,7 +24,6 @@ const OcrResult = () => {
     const loading = useSelector(state => state.ocr.loading);
     const result = useSelector(state => state.ocr.result);
     const dispatch = useDispatch();
-
 
     return (
         <Paper className={classes.root}>
@@ -42,7 +40,7 @@ const OcrResult = () => {
                     <Divider variant={"middle"}/>
                     {result ?
                         <CardActions style={{justifyContent: 'center'}}>
-                            <Typography variant={"subtitle2"}>
+                            <Typography variant={"h5"}>
                                 {result}
                             </Typography>
                         </CardActions> :
@@ -50,9 +48,11 @@ const OcrResult = () => {
                     }
                 </Card>
             </Grid>
+            <Grid>
+                <OnClickInfo keyword={"ocr_tip"}/>
+            </Grid>
         </Paper>
     )
 }
-
 
 export default OcrResult;

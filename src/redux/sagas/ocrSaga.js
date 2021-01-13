@@ -39,7 +39,7 @@ function* handleOcrCall(action) {
 
     } catch (error) {
         console.log(error)
-        yield put(setOcrResult(false, true, true, null))
+        yield put(setOcrResult(false, true, false, null))
     }
 }
 

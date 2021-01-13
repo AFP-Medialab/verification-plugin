@@ -38,7 +38,11 @@ const OCR = () => {
             let canvas = document.createElement('canvas');
             canvas.width = uploadedImg.naturalWidth
             canvas.height = uploadedImg.naturalHeight
-            canvas.getContext('2d').drawImage(uploadedImg, 0, 0);
+
+            let canvas_context = canvas.getContext("2d")
+            canvas_context.scale(0.75, 0.75)
+            canvas_context.drawImage(uploadedImg, 0, 0);
+            // canvas.getContext('2d').drawImage(uploadedImg, 0, 0);
 
             dispatch(setOcrB64Img(canvas.toDataURL('image/png')))
             canvas.remove();
@@ -62,7 +66,8 @@ const OCR = () => {
         if (fail) {
             dispatch(setError(keyword("ocr_error")));
         }
-    }, [fail, dispatch, keyword])
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [fail])
 
     useEffect(() => {
         if (url && url !== KNOWN_LINKS.OWN) {
@@ -102,7 +107,6 @@ const OCR = () => {
                     {keyword("button_submit") || ""}
                 </Button>
             </Paper>
-
             {ocrInputUrl && !fail ? <OcrResult/> : null}
 
         </div>
