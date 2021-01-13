@@ -13,6 +13,7 @@ import {cleanKeyframesState} from "../../../../../redux/actions/tools/keyframesA
 import OnClickInfo from "../../../../Shared/OnClickInfo/OnClickInfo";
 import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Keyframes.tsv";
+import Grid from "@material-ui/core/Grid";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -77,22 +78,31 @@ const KeyFramesResults = (props) => {
                 <Box m={2}/>
                 <Divider/>
                 <Box m={2}/>
-                <Button color={"primary"} onClick={() => toggleDetail()}>
-                    {
-                        !detailed ? keyword("keyframe_title_get_detail")
-                            : keyword("keyframe_title_get_simple")
-                    }
-                </Button>
-                <Button color={"primary"} onClick={() => zoom(1)}>
-                    {
-                        keyword("zoom_in")
-                    }
-                </Button>
-                <Button color={"primary"} onClick={() => zoom(-1)}>
-                    {
-                        keyword("zoom_out")
-                    }
-                </Button>
+                <Grid container justify="center" spacing={2}
+                                              alignContent={"center"}>
+                    <Grid item>
+                    <Button variant="contained" color={"primary"} onClick={() => toggleDetail()}>
+                        {
+                            !detailed ? keyword("keyframe_title_get_detail")
+                                : keyword("keyframe_title_get_simple")
+                        }
+                    </Button>
+                    </Grid>
+                    <Grid item>
+                    <Button variant="contained" color={"primary"} onClick={() => zoom(1)}>
+                        {
+                            keyword("zoom_in")
+                        }
+                    </Button>
+                    </Grid>
+                    <Grid item>
+                    <Button variant="contained" color={"primary"} onClick={() => zoom(-1)}>
+                        {
+                            keyword("zoom_out")
+                        }
+                    </Button>
+                    </Grid>
+                    </Grid>
                 <Box m={2}/>
                 {
                     detailed && findHeight &&
