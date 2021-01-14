@@ -17,6 +17,7 @@ const HelpDialog = (props) => {
     const [open, setOpen] = useState(false);
 
     // a list of keywords found in a tsv file. pass in tsv labels and tsv file location
+    const title = props.title
     const paragraphs = props.paragraphs
     const keywordFile = props.keywordFile
     const keyword = useLoadLanguage(keywordFile, tsv);
@@ -36,7 +37,7 @@ const HelpDialog = (props) => {
                 <DialogTitle>
                     <Typography variant={"h4"}>
                         <IconButton onClick={handleClose}><CloseIcon/></IconButton>
-                        {keyword("assistant_help_title")}
+                        {keyword(title)}
                     </Typography>
                 </DialogTitle>
                 <DialogContent dividers>

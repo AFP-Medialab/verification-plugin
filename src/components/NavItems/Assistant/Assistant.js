@@ -301,7 +301,8 @@ const Assistant = () => {
             <Box m={2}/>
 
             <Grid item xs={12} align={"right"}>
-                {<HelpDialog paragraphs={["assistant_help_1", "assistant_help_2", "assistant_help_3"]}
+                {<HelpDialog title = {"assistant_help_title"}
+                             paragraphs={["assistant_help_1", "assistant_help_2", "assistant_help_3", "assistant_help_4"]}
                              keywordFile="components/NavItems/tools/Assistant.tsv"/>
                 }
             </Grid>
