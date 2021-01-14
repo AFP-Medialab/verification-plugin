@@ -11,9 +11,6 @@ import createSagaMiddleware from 'redux-saga';
 import {Provider} from "react-redux"
 import rootSaga from "./redux/sagas";
 
-// import {createEpicMiddleware} from "redux-observable";
-// import {rootEpic} from "./redux/epics/assistantEpics";
-
 function saveToLocalStorage(state) {
     try {
         const savedState = {
@@ -44,7 +41,6 @@ function loadFromLocalStorage() {
 }
 
 const persistedState = loadFromLocalStorage();
-// const observableMiddleware = createEpicMiddleware();
 
 /*SAGA*/
 const sagaMiddleware = createSagaMiddleware();
@@ -53,12 +49,10 @@ const store = createStore(
     allReducers,
     persistedState,  // uncomment to keep redux state on refresh,
     applyMiddleware(sagaMiddleware)
-    // applyMiddleware(observableMiddleware)
 );
 
 /*SAGA*/
 sagaMiddleware.run(rootSaga)
-// observableMiddleware.run(rootEpic)
 
 store.subscribe(() => {
     if (store.getState().cookies !== null && store.getState().cookies)
