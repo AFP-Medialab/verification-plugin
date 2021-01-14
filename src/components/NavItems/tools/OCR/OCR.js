@@ -108,7 +108,6 @@ const OCR = () => {
                 </Button>
             </Paper>
             {ocrInputUrl && !fail ? <OcrResult/> : null}
-
         </div>
     )
 };

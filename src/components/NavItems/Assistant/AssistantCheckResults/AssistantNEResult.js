@@ -14,23 +14,17 @@ import Typography from "@material-ui/core/Typography";
 import ListItem from "@material-ui/core/ListItem";
 import List from "@material-ui/core/List";
 import ListItemText from "@material-ui/core/ListItemText";
-
 import ReactWordcloud from "react-wordcloud";
-
 
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/Assistant.tsv";
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 
-
-
 const AssistantNEResult = () => {
 
-    // necessary components
     const keyword = useLoadLanguage("components/NavItems/tools/Assistant.tsv", tsv);
     const classes = useMyStyles()
 
-    // state related
     const neResult = useSelector(state => state.assistant.neResultCategory);
     const neResultCount = useSelector(state => state.assistant.neResultCount);
     const neLoading = useSelector(state => state.assistant.neLoading);

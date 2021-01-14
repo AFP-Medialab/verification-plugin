@@ -1,8 +1,4 @@
 import axios from "axios";
-import isEqual from "lodash/isEqual";
-import uniqWith from "lodash/uniqWith";
-import uniqBy from "lodash/uniqBy";
-import orderBy from "lodash/orderBy";
 
 export default function useGateCloudApi() {
 
@@ -17,41 +13,20 @@ export default function useGateCloudApi() {
     let key = btoa(encodeURI(unencoded_auth))
     let headers = {'Authorization': 'Basic ' + key, 'Content-Type': 'text/plain; charset=utf-8'}
 
-
-    const filterSourceCredibility = (sourceCredibility) => {
-        sourceCredibility = sourceCredibility.data
-
-        if(sourceCredibility.entities.DomainCredibility===undefined) {
-            return null
-        }
-
-        let domainCredibility = sourceCredibility.entities.DomainCredibility
-        domainCredibility.forEach(dc => {
-            delete dc["indices"]
-            delete dc["credibility-resolved-url"]
-        })
-        sourceCredibility.entities.DomainCredibility = uniqWith(domainCredibility, isEqual)
-
-        sourceCredibility.entities.URL = uniqBy(sourceCredibility.entities.URL, 'url')
-        sourceCredibility.entities.URL = orderBy(sourceCredibility.entities.URL, 'credibility-score', 'asc');
-
-        return sourceCredibility
-    }
-
-    const callSourceCredibilityService = (urlList) => {
-        if (urlList.length === 0 ) return null
+    const callSourceCredibilityService = async (urlList) => {
+        if (urlList.length === 0) return null
 
         let urls = urlList.join(" ")
 
-        return axios.post(
+        const result = await axios.post(
             sourceCredEndpoint,
             {text: urls},
             {headers: headers})
-         .then(result => filterSourceCredibility(result))
+
+        return result.data
     }
 
     const callHyperpartisanService = async (text) => {
-
         const result = await axios.post(
             hyperpartisanEndpoint,
             {text: text},

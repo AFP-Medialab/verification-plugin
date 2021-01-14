@@ -25,16 +25,14 @@ function* handleOcrCall(action) {
         else{
             let ocrResult = yield call(gateCloudApi.callOcrService, [inputUrl])
             let ocrSuccess = ocrResult.entities.URL[0].ocr_ok
-
             if(!ocrSuccess) {
                 throw new Error();
             }
-
             ocrText = ocrResult.entities.URL[0].ocr_text
         }
 
         ocrText === "" ?
-            yield put(setOcrResult(false, false, true, "No text has been found in the image.")) :
+            yield put(setOcrResult(false, false, true, "ocr_no_text")) :
             yield put(setOcrResult(false, false, true, ocrText))
 
     } catch (error) {

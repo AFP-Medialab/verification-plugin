@@ -25,7 +25,6 @@ const AssistantProcessUrlActions = () => {
     const inputUrl = useSelector(state => state.assistant.inputUrl);
     const processUrl = useSelector(state => state.assistant.processUrl);
     const contentType = useSelector(state => state.assistant.processUrlType);
-
     const processUrlActions = useSelector(state => state.assistant.processUrlActions);
 
     const handleClick = (path, resultUrl) => {

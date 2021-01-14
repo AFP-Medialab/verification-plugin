@@ -1,10 +1,15 @@
+import uniqWith from "lodash/uniqWith";
+import isEqual from "lodash/isEqual";
+import uniqBy from "lodash/uniqBy";
+import orderBy from "lodash/orderBy";
+
 import {
     cleanAssistantState,
     setAssistantLoading,
     setDbkfImageMatchDetails,
     setDbkfTextMatchDetails,
     setDbkfVideoMatchDetails, setErrorKey,
-    setHpDetails,
+    setHpDetails, setImageVideoSelected,
     setInputSourceCredDetails,
     setInputUrl,
     setMtDetails,
@@ -14,7 +19,6 @@ import {
     setScrapedData,
     setSingleMediaPresent
 } from "../actions/tools/assistantActions";
-import {setError} from "../actions/errorActions";
 
 import {all, call, fork, put, select, takeLatest} from 'redux-saga/effects'
 import useAssistantApi from "../../components/NavItems/Assistant/AssistantApiHandlers/useAssistantApi";
@@ -30,13 +34,23 @@ import {
 } from "../../components/NavItems/Assistant/AssistantRuleBook";
 
 
+/**
+ * APIs
+ **/
 const dbkfAPI = useDBKFApi()
 const gateCloudApi = useGateCloudApi()
 const assistantApi = useAssistantApi()
 
 
+/**
+ * WATCHERS
+ **/
 function* getAssistantScrapeSaga() {
     yield takeLatest("SUBMIT_INPUT_URL", handleInputUrl)
+}
+
+function* getUploadSaga() {
+    yield takeLatest("SUBMIT_UPLOAD", handleSubmitUpload)
 }
 
 function* getMediaListSaga() {
@@ -72,6 +86,10 @@ function* getTranslationSaga() {
     yield takeLatest(["RUN_TRANSLATION", "CLEAN_STATE"], handleTranslateSaga)
 }
 
+
+/**
+ * HANDLERS
+ **/
 function* handleMediaLists() {
     const imageList = yield select(state => state.assistant.imageList);
     const videoList = yield select(state => state.assistant.videoList);
@@ -141,7 +159,8 @@ function* handleSourceCredibility(action) {
     try {
         const inputUrl = yield select((state) => state.assistant.inputUrl)
         const result = yield call(gateCloudApi.callSourceCredibilityService, [inputUrl])
-        yield put(setInputSourceCredDetails(result, false, true, false))
+        const filteredResults = filterSourceCredibility(result)
+        yield put(setInputSourceCredDetails(filteredResults, false, true, false))
     } catch (error) {
         yield put(setInputSourceCredDetails(null, false, false, true))
     }
@@ -227,10 +246,7 @@ function* handleTranslateSaga(action) {
     } catch (error) {
         yield put(setMtDetails(null, false, false, true))
     }
-
-
 }
-
 
 function * handleInputUrl(action) {
 
@@ -244,7 +260,6 @@ function * handleInputUrl(action) {
         let contentType = matchPattern(inputUrl, TYPE_PATTERNS)
 
         let scrapeResult = null
-
         if (decideWhetherToScrape(urlType, contentType, inputUrl)) {
             scrapeResult = yield call(assistantApi.callAssistantScraper, urlType, inputUrl)
         }
@@ -260,6 +275,18 @@ function * handleInputUrl(action) {
     }
 }
 
+function * handleSubmitUpload(action) {
+    let contentType = action.payload.contentType
+
+    let known_link = KNOWN_LINKS.OWN;
+    let actions = selectCorrectActions(contentType, known_link, known_link, "");
+    yield put(setProcessUrlActions(contentType, actions));
+    yield put(setImageVideoSelected(true));
+}
+
+/**
+* UTIL FUNCTIONS
+**/
 const removeUrlsAndEmojisFromText = (text) => {
     if (text !== null) {
         let urlRegex = new RegExp("(http(s)?://.)?(www\\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\\.[a-z]{2,6}\\b([-a-zA-Z0-9@:%_+.~#?&//=]*)", "g");
@@ -274,7 +301,6 @@ const removeUrlsAndEmojisFromText = (text) => {
     }
     return text
 }
-
 
 const buildWordCloudList = (entities) => {
     return entities.reduce((accumulator, currentWord) => {
@@ -296,7 +322,6 @@ const buildCategoryList = (wordCloudList) => {
         return accumulator
     }, [])
 }
-
 
 const decideWhetherToScrape = (urlType, contentType) => {
     switch (urlType) {
@@ -326,7 +351,6 @@ const setAssistantResults = (urlType, contentType, userInput, scrapeResult) => {
     let linkList = []
     let urlText = null
     let textLang = null
-
     switch (urlType) {
         case KNOWN_LINKS.YOUTUBE:
         case KNOWN_LINKS.LIVELEAK:
@@ -388,6 +412,27 @@ const setAssistantResults = (urlType, contentType, userInput, scrapeResult) => {
     };
 }
 
+const filterSourceCredibility = (sourceCredResult) => {
+    if(sourceCredResult.entities.DomainCredibility===undefined) {
+        return null
+    }
+
+    let domainCredibility = sourceCredResult.entities.DomainCredibility
+    domainCredibility.forEach(dc => {
+        delete dc["indices"]
+        delete dc["credibility-resolved-url"]
+    })
+    sourceCredResult.entities.DomainCredibility = uniqWith(domainCredibility, isEqual)
+
+    sourceCredResult.entities.URL = uniqBy(sourceCredResult.entities.URL, 'url')
+    sourceCredResult.entities.URL = orderBy(sourceCredResult.entities.URL, 'credibility-score', 'asc');
+
+    return sourceCredResult
+}
+
+/**
+ * EXPORT
+ **/
 export default function* assistantSaga() {
     yield all([
         fork(getDbkfTextMatchSaga),
@@ -398,6 +443,7 @@ export default function* assistantSaga() {
         fork(getHyperpartisanSaga),
         fork(getNamedEntitySaga),
         fork(getTranslationSaga),
-        fork(getAssistantScrapeSaga)
+        fork(getAssistantScrapeSaga),
+        fork(getUploadSaga)
     ])
 }

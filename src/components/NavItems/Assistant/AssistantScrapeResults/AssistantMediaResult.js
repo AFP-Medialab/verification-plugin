@@ -34,7 +34,7 @@ const AssistantMediaResult = () => {
     const dispatch = useDispatch();
     const keyword = useLoadLanguage("components/NavItems/tools/Assistant.tsv", tsv);
 
-    // account for state
+    // assistant media states
     const processUrl = useSelector(state => state.assistant.processUrl);
     const urlMode = useSelector(state => state.assistant.urlMode);
     const resultProcessType = useSelector(state => state.assistant.processUrlType);
@@ -42,7 +42,7 @@ const AssistantMediaResult = () => {
     const imageList = useSelector(state => state.assistant.imageList);
     const videoList = useSelector(state => state.assistant.videoList);
 
-    // decide whether to display certain elements
+    // third party tool states
     const ocrLoading = useSelector(state=>state.assistant.ocrLoading)
     const dbkfMediaMatchLoading = useSelector(state=>state.assistant.dbkfMediaMatchLoading)
     const dbkfImageMatch = useSelector(state => state.assistant.dbkfImageMatch);
@@ -51,12 +51,12 @@ const AssistantMediaResult = () => {
     const warningExpanded = useSelector(state => state.assistant.warningExpanded)
     const resultIsImage = resultProcessType === CONTENT_TYPE.IMAGE
 
+    // local control state
     const [expandMedia, setExpandMedia] = useState(!singleMediaPresent || processUrl==null);
 
     // select the correct media to process, then load actions possible
     const submitMediaToProcess = (url) => {
         setExpandMedia(false)
-
         let cType = null;
         if (imageList.includes(url)) {
             cType = CONTENT_TYPE.IMAGE
@@ -67,10 +67,8 @@ const AssistantMediaResult = () => {
         dispatch(setProcessUrl(url, cType));
     }
 
-
     return (
         <Grid container spacing={2}>
-
             <Grid item xs={6} hidden={!urlMode}>
                 <Card>
                     <CardHeader

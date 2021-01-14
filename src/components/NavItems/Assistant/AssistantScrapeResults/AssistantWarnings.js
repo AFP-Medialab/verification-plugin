@@ -29,7 +29,8 @@ const AssistantWarnings = () => {
 
     return (
         <Box pl={1}>
-            <Card variant={"outlined"} style={{"borderColor": "red", "borderStyle": "solid", "display": "flex"}}>
+            <Card variant={"outlined"}
+                  style={{"borderColor": "red", "borderStyle": "solid", "display": "flex"}}>
                 <CardMedia style={{backgroundColor: "red"}}>
                     <Box m={1}><ErrorOutlineOutlinedIcon fontSize={"large"}/></Box>
                 </CardMedia>

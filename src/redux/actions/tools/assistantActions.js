@@ -214,6 +214,15 @@ export const submitInputUrl = (inputUrl) => {
     }
 }
 
+export const submitUpload = (contentType) => {
+    return {
+        type: "SUBMIT_UPLOAD",
+        payload: {
+            contentType: contentType,
+        }
+    }
+}
+
 export const cleanAssistantState = () => {
     return {
         type: "CLEAN_STATE"

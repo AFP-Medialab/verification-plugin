@@ -15,10 +15,13 @@ import OnClickInfo from "../../../../Shared/OnClickInfo/OnClickInfo";
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 
 import {cleanOcr} from "../../../../../redux/actions/tools/ocrActions";
+import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
+import tsv from "../../../../../LocalDictionary/components/NavItems/tools/OCR.tsv";
 
 const OcrResult = () => {
 
     const classes = useMyStyles();
+    const keyword = useLoadLanguage("components/NavItems/tools/OCR.tsv", tsv);
 
     const inputUrl = useSelector(state => state.ocr.url);
     const loading = useSelector(state => state.ocr.loading);
@@ -41,7 +44,7 @@ const OcrResult = () => {
                     {result ?
                         <CardActions style={{justifyContent: 'center'}}>
                             <Typography variant={"h5"}>
-                                {result}
+                                {result === "ocr_no_text" ? keyword("ocr_no_text") : result}
                             </Typography>
                         </CardActions> :
                         null

@@ -15,7 +15,6 @@ import tsv from "../../../../LocalDictionary/components/NavItems/tools/Assistant
 
 const SourceCredibilityResults = () => {
 
-
     const sourceCredibilityResults = useSelector(state => state.assistant.inputUrlSourceCredibility)
     const keyword = useLoadLanguage("components/NavItems/tools/Assistant.tsv", tsv);
 
@@ -38,12 +37,11 @@ const SourceCredibilityResults = () => {
                                             </Box>
                                         </Typography>}
                                     secondary={
-                                        <Typography> "{value["credibility-labels"]}" {keyword("according_to")} {value["credibility-source"]}
+                                        <Typography>
+                                            "{value["credibility-labels"]}" {keyword("according_to")} {value["credibility-source"]}
                                         </Typography>}/>
-                                        }
                             </ListItem>
-                            )
-                        )
+                            ))
                 ))  :
                 null
             }

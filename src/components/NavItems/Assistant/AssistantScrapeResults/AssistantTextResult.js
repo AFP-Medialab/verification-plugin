@@ -24,25 +24,23 @@ import IconButton from "@material-ui/core/IconButton";
 
 const AssistantTextResult = () => {
 
-    // necessary components
     const keyword = useLoadLanguage("components/NavItems/tools/Assistant.tsv", tsv);
     const classes = useMyStyles()
     const dispatch = useDispatch()
 
-    // state related
+    // assistant media states
     const text = useSelector(state => state.assistant.urlText);
     const textLang = useSelector(state => state.assistant.textLang);
     const translatedText = useSelector(state => state.assistant.mtResult);
 
-
+    // third party check states
     const dbkfMatch = useSelector(state => state.assistant.dbkfTextMatch)
     const hpLoading = useSelector(state => state.assistant.hpLoading)
     const mtLoading = useSelector(state => state.assistant.mtLoading)
-
-
     const dbkfMatchLoading = useSelector(state => state.assistant.dbkfTextMatchLoading)
     const warningExpanded = useSelector(state => state.assistant.warningExpanded);
 
+    // display states
     const textBox = document.getElementById("element-to-check")
     const [expanded, setExpanded] = useState(false);
     const [displayExpander, setDisplayExpander] = useState(false);
@@ -82,14 +80,18 @@ const AssistantTextResult = () => {
                         </div>
                     }
                 />
-                <LinearProgress variant={"indeterminate"} color = {"secondary"} hidden={!dbkfMatchLoading && !hpLoading && !mtLoading}/>
+                <LinearProgress variant={"indeterminate"}
+                                color = {"secondary"}
+                                hidden={!dbkfMatchLoading && !hpLoading && !mtLoading}
+                />
                 <CardContent>
-                        <Collapse in={expanded} collapsedHeight={100} id={"element-to-check"}>
+                        <Collapse in={expanded}
+                                  collapsedHeight={100}
+                                  id={"element-to-check"}>
                             <Typography align={"center"}>
                                 <FormatQuoteIcon fontSize={"large"}/>{translatedText ? translatedText : text}
                             </Typography>
                         </Collapse>
-
                 </CardContent>
 
                 <Box m={1.5}>
@@ -97,7 +99,6 @@ const AssistantTextResult = () => {
                     <Grid container>
                         <Grid item xs={6} style={{"display": "flex"}}>
                             <Typography className={classes.toolTipIcon}>{textLang}</Typography>
-
                             {textLang === "EN" ?
                                 <Tooltip title={keyword("translate_to_french")}>
                                     <IconButton className={classes.toolTipIcon} onClick={()=>dispatch(runTranslation("fr", text))}>

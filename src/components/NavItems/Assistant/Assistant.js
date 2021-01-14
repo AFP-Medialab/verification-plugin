@@ -25,14 +25,9 @@ import AssistantTextResult from "./AssistantScrapeResults/AssistantTextResult";
 import history from "../../Shared/History/History";
 import useLoadLanguage from "../../../Hooks/useLoadLanguage";
 
-import {
-    cleanAssistantState,
-    setImageVideoSelected,
-    setProcessUrlActions,
-    setUrlMode, submitInputUrl,
-} from "../../../redux/actions/tools/assistantActions";
+import {cleanAssistantState, setUrlMode, submitInputUrl, submitUpload} from "../../../redux/actions/tools/assistantActions";
 
-import {CONTENT_TYPE, KNOWN_LINKS, selectCorrectActions,} from "./AssistantRuleBook";
+import {CONTENT_TYPE,} from "./AssistantRuleBook";
 import AssistantNEResult from "./AssistantCheckResults/AssistantNEResult";
 import AssistantCheckStatus from "./AssistantCheckResults/AssistantCheckStatus";
 import {setError} from "../../../redux/actions/errorActions";
@@ -46,30 +41,27 @@ const Assistant = () => {
     const {url} = useParams();
 
     //form states
+    const inputUrl = useSelector(state => state.assistant.inputUrl);
     const urlMode = useSelector(state => state.assistant.urlMode);
     const imageVideoSelected = useSelector(state => state.assistant.imageVideoSelected);
     const loading = useSelector(state => state.assistant.loading)
-    const inputUrl = useSelector(state => state.assistant.inputUrl);
-    const errorKey = useSelector(state => state.assistant.errorKey);
 
-
-    //url states
+    //result states
     const imageList = useSelector(state => state.assistant.imageList);
     const videoList = useSelector(state => state.assistant.videoList);
     const text = useSelector(state => state.assistant.urlText)
     const linkList = useSelector(state => state.assistant.linkList)
+    const errorKey = useSelector(state => state.assistant.errorKey);
 
-    // media processing states
+    //third party check states
     const neResult = useSelector(state => state.assistant.neResultCategory);
-
-    //url warning states
     const hpResult = useSelector(state => state.assistant.hpResult)
     const inputUrlSourceCred = useSelector(state => state.assistant.inputUrlSourceCredibility)
     const dbkfTextMatch = useSelector(state => state.assistant.dbkfTextMatch);
     const dbkfImageResult = useSelector(state => state.assistant.dbkfImageMatch);
     const dbkfVideoMatch = useSelector(state => state.assistant.dbkfVideoMatch);
 
-    // url fail states
+    //third party fail states
     const hpFailState = useSelector(state => state.assistant.hpFail)
     const scFailState = useSelector(state => state.assistant.inputSCFail)
     const dbkfTextFailState = useSelector(state => state.assistant.dbkfTextMatchFail)
@@ -77,16 +69,8 @@ const Assistant = () => {
     const neFailState = useSelector(state => state.assistant.neFail)
     const mtFailState = useSelector(state => state.assistant.mtFail)
 
-    //other state values
+    //local state
     const [formInput, setFormInput] = useState(inputUrl);
-
-    // if the user wants to upload a file, give them tools where this is an option
-    const submitUpload = (contentType) => {
-        let known_link = KNOWN_LINKS.OWN;
-        let actions = selectCorrectActions(contentType, known_link, known_link, "");
-        dispatch(setProcessUrlActions(contentType, actions));
-        dispatch(setImageVideoSelected(true));
-    }
 
     // clean assistant state
     const cleanAssistant = () => {
@@ -94,13 +78,17 @@ const Assistant = () => {
         setFormInput("");
     }
 
-    useEffect(()=>{
-        if(errorKey){
-            dispatch(setError(keyword(errorKey)))
+    // set correct error message
+    useEffect(() => {
+        if (errorKey) {
+            errorKey.startsWith("assistant_error") ?
+                dispatch(setError(keyword(errorKey))) :
+                dispatch(setError(errorKey))
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [errorKey])
 
-    // if a url is present in the plugin url(as a param), set it to input and process results
+    // if a url is present in the plugin url(as a param), set it to input
     useEffect(() => {
         if (url !== undefined) {
             let uri = (url !== null) ? decodeURIComponent(url) : undefined;
@@ -117,16 +105,17 @@ const Assistant = () => {
         <div>
             <Paper className={classes.root}>
                 <Grid item xs={12}/>
-                <CustomTile text={keyword("assistant_title")}/>
+                    <CustomTile text={keyword("assistant_title")}/>
                 <Grid/>
+
                 <Box m={5}/>
 
                 <Grid item xs={12} className={classes.assistantGrid} hidden={urlMode === null || urlMode === false}>
                     <Box m={3}/>
-
                     <Grid container>
                         <Grid item xs={10}>
-                            <Typography style={{display: 'flex', alignItems: 'center'}} component={"span"}
+                            <Typography style={{display: 'flex', alignItems: 'center'}}
+                                        component={"span"}
                                         variant={"h6"}>
                                 <Box p={1}/>{keyword("enter_url")}
                             </Typography>
@@ -170,13 +159,10 @@ const Assistant = () => {
                                     </InputAdornment>
                                     :
                                     <InputAdornment variant={"filled"}>
-                                        <IconButton color={"secondary"} onClick={() => {
-                                            dispatch(submitInputUrl(formInput))
-                                        }}>
+                                        <IconButton color={"secondary"} onClick={() => {dispatch(submitInputUrl(formInput))}}>
                                             <ArrowForwardIcon/>
                                         </IconButton>
                                     </InputAdornment>
-
                         }}
                     />
                     <Box m={3}/>
@@ -200,7 +186,9 @@ const Assistant = () => {
                 <Grid item xs={12} className={classes.assistantGrid} hidden={urlMode === null || urlMode === true}>
                     <Grid container>
                         <Grid item xs={10}>
-                            <Typography component={"span"} variant={"h6"}>
+                            <Typography component={"span"}
+                                        variant={"h6"}
+                            >
                                 <Box p={1}/>{keyword("upload_type_question")}
                             </Typography>
                         </Grid>
@@ -212,8 +200,7 @@ const Assistant = () => {
                                         onChange={() => {
                                             cleanAssistant()
                                             dispatch(setUrlMode(true))
-                                        }
-                                        }
+                                        }}
                                     />}
                                 label={keyword("mode_label")}
                             />
@@ -222,19 +209,20 @@ const Assistant = () => {
 
                     <Box m={2}/>
 
-                    <Button className={classes.button} variant="contained" color="primary" onClick={() => {
-                        submitUpload(CONTENT_TYPE.VIDEO)
-                    }}>
+                    <Button className={classes.button}
+                            variant="contained"
+                            color="primary"
+                            onClick={() => {dispatch(submitUpload(CONTENT_TYPE.VIDEO))}}>
                         {keyword("upload_video") || ""}
                     </Button>
 
-                    <Button className={classes.button} variant="contained" color="primary" onClick={() => {
-                        submitUpload(CONTENT_TYPE.IMAGE)
-                    }}>
+                    <Button className={classes.button}
+                            variant="contained"
+                            color="primary"
+                            onClick={() => {dispatch(submitUpload(CONTENT_TYPE.IMAGE))}}>
                         {keyword("upload_image") || ""}
                     </Button>
                 </Grid>
-
             </Paper>
 
             <Box m={2}/>
@@ -272,7 +260,6 @@ const Assistant = () => {
                 </Grid>
 
                 <Box m={2}/>
-
             </Paper>
 
             <Box m={4}/>
@@ -290,7 +277,6 @@ const Assistant = () => {
                         <Box m={2}/>
                     </Grid>
 
-
                     {imageList.length > 0 || videoList.length > 0 || imageVideoSelected ?
                         <Grid item xs={12}><AssistantMediaResult/></Grid>
                         : null
@@ -301,14 +287,13 @@ const Assistant = () => {
             <Box m={2}/>
 
             <Grid item xs={12} align={"right"}>
-                {<HelpDialog title = {"assistant_help_title"}
+                {<HelpDialog title={"assistant_help_title"}
                              paragraphs={["assistant_help_1", "assistant_help_2", "assistant_help_3", "assistant_help_4"]}
                              keywordFile="components/NavItems/tools/Assistant.tsv"/>
                 }
             </Grid>
         </div>
     )
-
 };
 
 export default Assistant;
