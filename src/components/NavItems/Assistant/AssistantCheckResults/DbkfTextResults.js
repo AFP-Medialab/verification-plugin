@@ -21,7 +21,7 @@ const DbkfTextResults = () => {
 
     return (
         <List disablePadding={true}>
-            {dbkfTextMatch !== null && Object.keys(dbkfTextMatch).length !== 0 ?
+            {dbkfTextMatch ?
                 dbkfTextMatch.map((value, key) => (
                     <ListItem key={key}>
                         <ListItemAvatar>

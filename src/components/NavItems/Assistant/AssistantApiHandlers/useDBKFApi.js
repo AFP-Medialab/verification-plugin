@@ -6,8 +6,7 @@ export default function useDBKFApi() {
     const similarityAPI = process.env.REACT_APP_DBKF_SIMILARITY_API
 
     const callTextSimilarityEndpoint = async (query) => {
-        query = query.replace(/[/"()’\\]/g, "")
-        let searchResult = await axios.get(dbkfAPI  + "/claims?limit=1&q=" + query)
+        let searchResult = await axios.get(dbkfAPI  + "/claims?&q=" + query)
         let searchData = Object.values(searchResult.data)
         return searchData
     }

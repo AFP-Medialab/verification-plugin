@@ -171,13 +171,25 @@ function* handleDbkfTextSearch(action) {
 
     try {
         const text = yield select((state) => state.assistant.urlText)
-        if (text !== null) {
+
+        if (text) {
             let textToUse = text.length > 500 ? text.substring(0, 500) : text
-            textToUse = textToUse.replace(/[/"()’\\]/g, "")
-            const result = yield call(dbkfAPI.callTextSimilarityEndpoint, textToUse)
-            yield put(setDbkfTextMatchDetails(result, false, true, false))
+            textToUse = textToUse.replace(/[^\w\s]/gi, '')
+
+            let result = yield call(dbkfAPI.callTextSimilarityEndpoint, textToUse)
+
+            let resultList = []
+            result.forEach((value) => {
+                if (value.score > 900) {
+                    resultList.push({"text": value.text, "claimUrl": value.claimUrl, "score": value.score})
+                }
+            })
+            resultList = resultList.length ? resultList : null
+
+            yield put(setDbkfTextMatchDetails(resultList, false, true, false))
         }
     } catch (error) {
+        console.log(error)
         yield put(setDbkfTextMatchDetails(null, false, false, true))
     }
 }
