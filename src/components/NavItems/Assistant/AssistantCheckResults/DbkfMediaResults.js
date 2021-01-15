@@ -24,7 +24,7 @@ const DbkfMediaResults = () => {
 
     return (
         <List disablePadding={true}>
-            {dbkfImageMatch !== null && dbkfImageMatch.length !== 0 ?
+            {dbkfImageMatch ?
                 dbkfImageMatch.map((value, key) => (
                     <ListItem key={key}>
                         <ListItemAvatar>
@@ -38,16 +38,16 @@ const DbkfMediaResults = () => {
                                     </Box>
                                 </Typography>}
                             secondary={
-                                <a href={uiUrl + value.dbkfObjects[0].claimUrl} key={key} target="_blank"
+                                <a href={uiUrl + value.claimUrl} key={key} target="_blank"
                                    rel="noopener noreferrer">
-                                    {value.dbkfObjects[0].claimUrl}
+                                    {value.claimUrl}
                                 </a>
                             }/>
                     </ListItem>
                 ))
                 : null}
 
-            {dbkfVideoMatch !== null && dbkfVideoMatch.length !== 0 ?
+            {dbkfVideoMatch ?
                 dbkfVideoMatch.map((value, key) => (
                     <ListItem key={key}>
                         <ListItemAvatar>
@@ -61,9 +61,9 @@ const DbkfMediaResults = () => {
                                     </Box>
                                 </Typography>}
                             secondary={
-                                <a href={uiUrl + value.dbkfObjects[0].claimUrl} key={key} target="_blank"
+                                <a href={uiUrl + value.claimUrl} key={key} target="_blank"
                                    rel="noopener noreferrer">
-                                    {value.dbkfObjects[0].claimUrl}
+                                    {value.claimUrl}
                                 </a>
                             }/>
                     </ListItem>

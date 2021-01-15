@@ -122,12 +122,22 @@ function* similaritySearch(searchEndpoint, stateStorageFunction) {
 
     try {
         let result = yield call(searchEndpoint)
-        if (result[1].length !== 0) {
-            yield put(stateStorageFunction(result[1], false, true, false))
+        if (result[1].length) {
+            let similarityResult = result[1]
+            let resultList = []
+
+            similarityResult.forEach(result=>{
+                resultList.push({
+                    "claimUrl": result.dbkfObjects[0].claimUrl,
+                    "similarity": result.similarity})
+            })
+
+            yield put(stateStorageFunction(resultList, false, true, false))
         } else {
             yield put(stateStorageFunction(null, false, true, false))
         }
     } catch (error) {
+        console.log(error)
         yield put(stateStorageFunction(null, false, false, true))
     }
 }
