@@ -21,21 +21,26 @@ import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/Metadata.tsv";
 import {submissionEvent} from "../../../Shared/GoogleAnalytics/GoogleAnalytics";
 import {useParams} from "react-router-dom";
-import {CONTENT_TYPE} from "../../Assistant/AssistantRuleBook";
+
+import {CONTENT_TYPE, KNOWN_LINKS} from "../../Assistant/AssistantRuleBook";
+
 
 const Metadata = () => {
-    const {url} = useParams();
+    const {url, type} = useParams();
 
     const classes = useMyStyles();
     const keyword = useLoadLanguage("components/NavItems/tools/Metadata.tsv", tsv);
+
     const resultUrl = useSelector(state => state.metadata.url);
     const resultData = useSelector(state => state.metadata.result);
     const resultIsImage = useSelector(state => state.metadata.isImage);
 
-    const [radioImage, setRadioImage] = useState(true);
+    const [radioImage, setRadioImage] = useState( true);
     const [input, setInput] = useState((resultUrl) ? resultUrl : "");
     const [imageUrl, setImageurl] = useState(null);
     const [videoUrl, setVideoUrl] = useState(null);
+    const [urlDetected, setUrlDetected] = useState(false)
+
 
     useVideoTreatment(videoUrl);
     useImageTreatment(imageUrl);
@@ -59,22 +64,30 @@ const Metadata = () => {
         setImageurl(null)
     }, [imageUrl]);
 
+    useEffect( ()=> {
+        // roundabout hack :: fix requires amending actions/reducer so a new state object is returned
+        if (urlDetected) {
+            submitUrl()
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [urlDetected])
+
     useEffect(() => {
-        if (url !== undefined) {
-            if(url === CONTENT_TYPE.VIDEO){
+        if (type) {
+            let content_type = decodeURIComponent(type)
+            if (content_type === CONTENT_TYPE.VIDEO) {
                 setRadioImage(false)
-            }
-            else if(url === CONTENT_TYPE.IMAGE){
+            } else if (content_type === CONTENT_TYPE.IMAGE) {
                 setRadioImage(true)
             }
-            else {
-                const uri = (url !== null) ? decodeURIComponent(url) : undefined;
-                // note: could potentially match random char mixes on image urls instead?
-                if (uri.match("mp4")) setRadioImage(false);
-                setInput(uri);
-            }
         }
-    }, [url]);
+
+        if (url && url !== KNOWN_LINKS.OWN) {
+            let uri = decodeURIComponent(url)
+            setInput(uri)
+            setUrlDetected(true)
+        }
+    }, [url, type]);
 
 
     return (

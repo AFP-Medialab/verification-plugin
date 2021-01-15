@@ -343,34 +343,14 @@ const useMyStyles = makeStyles(theme => ({
         },
     },
     assistantCards: {
-        backgroundColor: "#F8F8F8",
-        width: "100%",
         marginBottom: 2,
-        textAlign: "centre",
+        backgroundColor: theme.palette.primary.light,
         '&:hover': {
-            backgroundColor: "#a9e8ef",
+            backgroundColor: theme.palette.secondary.main,
         },
-    },
-    dbkfCards: {
-        width: "100%",
-        marginBottom: 6,
-        textAlign: "left",
-        '&:hover': {
-            backgroundColor: "#a9e8ef",
-        }
-    },
-    assistantText: {
-        width: "100%",
-        marginBottom: 2,
-        textAlign: "left",
-    },
-    twitterIcon: {
-        color: theme.palette.secondary.main,
-        position: "relative",
-        top: theme.spacing(1),
-        width: theme.typography.h5.fontSize,
-        height: theme.typography.h5.fontSize,
-        marginRight: 3
+        borderColor:"darkcyan",
+        borderStyle: "solid",
+        borderWidth: "2px"
     },
     toolTipIcon: {
         color: theme.palette.secondary,
@@ -379,31 +359,47 @@ const useMyStyles = makeStyles(theme => ({
         top: theme.spacing.unit,
         width: theme.typography.h5.fontSize,
         height: theme.typography.h5.fontSize,
-        marginRight: 3
+        marginRight: 3,
+        marginLeft: 5
     },
-    twitterHeading: {
-        fontSize: theme.typography.h5.fontSize,
-        color: theme.palette.primary.main,
-        textAlign: "left",
-        marginBottom: 25
+    toolTipWarning: {
+        color: "red",
+        position: "relative",
+        top: theme.spacing.unit,
+        width: theme.typography.h5.fontSize,
+        height: theme.typography.h5.fontSize,
+        marginRight: 3,
+        marginLeft: 5
     },
-    newAssistantGrid: {
-        width: "100%",
-        marginBottom: 2,
+    assistantCardHeader: {
+        fontSize: theme.typography.h6.fontSize,
+        color: "white",
         textAlign: "left",
-        font: theme.typography.h6.fontSize
+        backgroundColor: theme.palette.primary.main
     },
     assistantTooltip: {
         backgroundColor: theme.palette.secondary,
         opacity: 0.9,
         fontSize: "1.2rem",
         maxWidth: 700,
-        textAlign: "justify",
+        textAlign: "left",
         fontFamily: "\"Roboto\", \"Helvetica\", \"Arial\", sans-serif",
         fontWeight: 40,
         lineHeight: 1.5,
-        letterSpacing: "0.00938em"
-    }
+        letterSpacing: "0.00938em",
+    },
+    assistantRoot: {
+        padding: theme.spacing(3, 2),
+        backgroundColor: "#F7F7F7",
+        marginTop: 5,
+        textAlign: "left",
+    },
+    assistantGrid: {
+        width: "100%",
+        marginBottom: 2,
+        textAlign: "left",
+        font: theme.typography.h6.fontSize
+    },
 
 }));
 export default useMyStyles;

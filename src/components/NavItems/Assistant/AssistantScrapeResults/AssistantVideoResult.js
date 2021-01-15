@@ -1,24 +1,23 @@
-import Card from "@material-ui/core/Card";
-import CardContent from "@material-ui/core/CardContent";
-import Typography from "@material-ui/core/Typography";
-import CardMedia from "@material-ui/core/CardMedia";
-import Iframe from "react-iframe";
 import React from "react";
 import {useSelector} from "react-redux";
 
-import {KNOWN_LINK_PATTERNS, KNOWN_LINKS, matchPattern} from "./AssistantRuleBook";
-import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
-import useLoadLanguage from "../../../Hooks/useLoadLanguage";
-import tsv from "../../../LocalDictionary/components/NavItems/tools/Assistant.tsv";
+import Card from "@material-ui/core/Card";
+import CardMedia from "@material-ui/core/CardMedia";
+import CardActions from "@material-ui/core/CardActions";
+import FileCopyIcon from "@material-ui/icons/FileCopy";
+import {IconButton} from "@material-ui/core";
+import ImageIcon from "@material-ui/icons/Image";
+import Iframe from "react-iframe";
+import Link from "@material-ui/core/Link";
+import Tooltip from "@material-ui/core/Tooltip";
 
+import {KNOWN_LINK_PATTERNS, KNOWN_LINKS, matchPattern} from "../AssistantRuleBook";
 
 const AssistantVideoResult = () => {
-    const classes = useMyStyles();
-    const keyword = useLoadLanguage("components/NavItems/tools/Assistant.tsv", tsv);
+
     const processUrl = useSelector(state => state.assistant.processUrl);
 
     const preprocessLinkForEmbed = (processUrl) => {
-
         let embedURL = processUrl;
         let linkType = matchPattern(processUrl, KNOWN_LINK_PATTERNS);
         let stringToMatch = ""
@@ -46,25 +45,18 @@ const AssistantVideoResult = () => {
             case KNOWN_LINKS.FACEBOOK:
                 embedURL = "https://www.facebook.com/plugins/video.php?href=" + encodeURIComponent(embedURL);
                 break;
-            case KNOWN_LINKS.TWITTER:
-                embedURL = "https://twitframe.com/show?url=" + encodeURIComponent(embedURL);
-                break;
             default:
                 return embedURL;
         }
         return embedURL;
     }
 
+    const copyUrl = () => {
+        navigator.clipboard.writeText(processUrl)
+    }
+
     return (
-        <Card variant = "outlined">
-            <CardContent>
-                <Typography variant="h5" component="h2">
-                    {keyword("media_to_process")}
-                </Typography>
-                <Typography className={classes.title} color="primary" style={{wordBreak: "break-word"}}>
-                    {<a href={processUrl} target="_blank" rel="noopener noreferrer"> {processUrl.length>100 ? processUrl.substring(0,100) + "...": processUrl} </a>}
-                </Typography>
-            </CardContent>
+        <Card variant={"outlined"}>
             <CardMedia>
                 <Iframe
                     frameBorder="0"
@@ -74,6 +66,17 @@ const AssistantVideoResult = () => {
                     width="100%"
                 />
             </CardMedia>
+            <CardActions>
+                <ImageIcon color={"action"}/>
+                <Link href={processUrl} color={"textSecondary"} variant={"subtitle2"}>
+                    {processUrl.length>60 ? processUrl.substring(0,60) + "...": processUrl}
+                </Link>
+                <Tooltip title={"Copy link"}>
+                    <IconButton style={{"marginLeft":"auto"}} onClick={() => {copyUrl()}}>
+                        <FileCopyIcon color={"action"}/>
+                    </IconButton>
+                </Tooltip>
+            </CardActions>
         </Card>
     );
 }

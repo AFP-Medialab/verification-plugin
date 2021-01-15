@@ -6,7 +6,7 @@ import Languages from "../NavItems/languages/languages";
 import logoInvid from "./images/logo-invid.png";
 import logoWeVerify from "../PopUp/images/logo-we-verify.png";
 import Tutorial from "../NavItems/tutorial/tutorial";
-import React from 'react';
+import React, {useEffect} from 'react';
 import clsx from 'clsx';
 import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
@@ -16,6 +16,7 @@ import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import DescriptionIcon from '@material-ui/icons/Description';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -77,11 +78,13 @@ import covidSearchIconOff from "./images/tools/covid_search_logoOff.png"
 import xnetworkIconOn from "./images/tools/xnetwork_logoOn.png"
 import xnetworkIconOff from "./images/tools/xnetwork_logoOff.png"
 
+import {getSupportedBrowserLanguage} from "../Shared/Languages/getSupportedBrowserLanguage";
 import useLoadLanguage from "../../Hooks/useLoadLanguage";
 import tsv from "../../LocalDictionary/components/NavBar.tsv";
 import FactCheck from "../NavItems/FactCheck/FactCheck";
 import Snackbar from "@material-ui/core/Snackbar";
 import {setFalse, setTrue} from "../../redux/actions/cookiesActions";
+import {changeLanguage} from "../../redux/actions";
 import Button from "@material-ui/core/Button";
 
 
@@ -99,6 +102,7 @@ const NavBar = (props) => {
     const tabValue = useSelector(state => state.nav);
     const drawerValue = useSelector(state => state.tool.selected);
     const cookiesUsage = useSelector(state => state.cookies);
+    const currentLang = useSelector(state => state.language);
 
     const dispatch = useDispatch();
 
@@ -196,6 +200,17 @@ const NavBar = (props) => {
             icon: (drawerValue === 11) ? xnetworkIconOn : xnetworkIconOff,
             tsvPrefix: "xnetwork",
             path: "xnetwork"
+        },
+        {
+
+            title: "navbar_ocr",
+            icon:
+                <DescriptionIcon
+                    fontSize={"large"}
+                    className={(drawerValue === 12) ? classes.selectedApp : classes.unSelectedApp}
+                />,
+            tsvPrefix: "ocr",
+            path: "ocr"
         }
     ];
 
@@ -271,6 +286,16 @@ const NavBar = (props) => {
         history.push("/app/tools/all");
     };
 
+    useEffect(() => {
+        let supportedBrowserLang = getSupportedBrowserLanguage()
+
+        if (supportedBrowserLang !== undefined && supportedBrowserLang !== currentLang) {
+            dispatch(changeLanguage(supportedBrowserLang))
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
+
+
     return (
         <div className={classes.flex}>
             <AppBar position="fixed" color="default" className={classes.appBar}>
@@ -340,7 +365,7 @@ const NavBar = (props) => {
                                 <ListItem button key={key} onClick={() => changeValue(key)}>
                                     <ListItemIcon color="primary.main">
                                         {
-                                            (key === 0) ?
+                                            (key === 0 || key === 12) ?
                                                 item.icon
                                                 :
                                                 <Icon className={classes.iconRootDrawer} fontSize={"large"}>

@@ -13,6 +13,7 @@ import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/VideoRights.tsv";
 import {submissionEvent} from "../../../Shared/GoogleAnalytics/GoogleAnalytics";
 import {useParams} from "react-router-dom";
+import {KNOWN_LINKS} from "../../Assistant/AssistantRuleBook";
 
 const VideoRights = () => {
     const {url} = useParams();
@@ -24,6 +25,7 @@ const VideoRights = () => {
     const isLoading = useSelector(state => state.videoRights.loading);
 
     const [input, setInput] = useState(resultUrl);
+    const [urlDetected, setUrlDetected] = useState(false);
     const [submitted, setSubmitted] = useState(null);
     useVideoRightsTreatment(submitted);
 
@@ -34,10 +36,18 @@ const VideoRights = () => {
         }
     };
 
+    useEffect(()=>{
+        if (urlDetected){
+            submitForm()
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [urlDetected])
+
     useEffect(() => {
-        if (url !== undefined) {
+        if (url && url !== KNOWN_LINKS.OWN) {
             const uri = (url !== null) ? decodeURIComponent(url) : undefined;
             setInput(uri);
+            setUrlDetected(true)
         }
     }, [url]);
 

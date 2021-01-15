@@ -16,7 +16,7 @@ import {useParams} from 'react-router-dom'
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/Keyframes.tsv";
 import {submissionEvent} from "../../../Shared/GoogleAnalytics/GoogleAnalytics";
-import {CONTENT_TYPE} from "../../Assistant/AssistantRuleBook";
+import {KNOWN_LINKS} from "../../Assistant/AssistantRuleBook";
 
 const Keyframes = (props) => {
     const {url} = useParams();
@@ -39,6 +39,7 @@ const Keyframes = (props) => {
     // State used to load images
     const [input, setInput] = useState((resultUrl) ? resultUrl : "");
     const [submittedUrl, setSubmittedUrl] = useState(undefined);
+    const [urlDetected, setUrlDetected] = useState(false)
     useKeyframeWrapper(submittedUrl);
 
     //human right
@@ -62,18 +63,24 @@ const Keyframes = (props) => {
         setSubmittedUrl(input);
     };
 
-    useEffect(() => {
-        const uri = (url !== undefined) ? decodeURIComponent(url) : undefined;
-        if (uri !== undefined) {
-            if (url === CONTENT_TYPE.VIDEO) {
-                setLocalFile(true)
-            }
-            else {
-                setInput(uri);
-                setSubmittedUrl(uri);
-            }
-
+    useEffect(()=>{
+        if (urlDetected) {
+            submitUrl()
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [urlDetected])
+
+
+    useEffect(() => {
+        if (url) {
+            if (url === KNOWN_LINKS.OWN) {
+                setLocalFile(true)
+            } else {
+                const uri = decodeURIComponent(url);
+                setInput(uri)
+            }
+        }
+        setUrlDetected(true)
     }, [url]);
 
     useEffect(() => {

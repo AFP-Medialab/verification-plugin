@@ -21,6 +21,7 @@ import tsv from "../../../../LocalDictionary/components/NavItems/tools/Analysis.
 import {submissionEvent} from "../../../Shared/GoogleAnalytics/GoogleAnalytics";
 import {cleanAnalysisState} from "../../../../redux/actions/tools/analysisActions";
 import {useParams} from "react-router-dom";
+import {KNOWN_LINKS} from "../../Assistant/AssistantRuleBook";
 
 
 /*function useTraceUpdate(props) {
@@ -49,9 +50,10 @@ const Analysis = () => {
     const resultUrl = useSelector(state => state.analysis.url);
     const resultData = useSelector(state => state.analysis.result);
     const isLoading = useSelector(state => state.analysis.loading);
-    
+
 
     const [input, setInput] = useState((resultUrl) ? resultUrl : "");
+    const [urlDetected, setUrlDetected] = useState(false)
     const [submittedUrl, setSubmittedUrl] = useState(undefined);
     const [reprocess, setReprocess] = useState(false);
 
@@ -74,10 +76,18 @@ const Analysis = () => {
         }
     }, [finalUrl]);
 
+    useEffect(()=>{
+        if (urlDetected) {
+            submitForm()
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [urlDetected])
+
     useEffect(() => {
-        if (url !== undefined) {
+        if (url && url !== KNOWN_LINKS.OWN) {
              const uri = (url !== null) ? decodeURIComponent(url) : undefined;
              setInput(uri);
+             setUrlDetected(true)
          }
     }, [url]);
 

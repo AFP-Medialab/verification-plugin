@@ -17,6 +17,7 @@ import Footer from "../../Shared/Footer/Footer";
 import TwitterSna from "../../NavItems/tools/TwitterSna/TwitterSna";
 import CovidSearch from "../../NavItems/tools/CovidSearch/CovidSearch";
 import XNetwork from "../../NavItems/tools/XNetwork/XNetwork";
+import OCR from "../../NavItems/tools/OCR/OCR";
 
 const DrawerItem = (props) => {
 
@@ -68,8 +69,11 @@ const DrawerItem = (props) => {
         {
             content: <XNetwork/>,
             footer: <Footer type={"afp"}/>
+        },
+        {
+            content: <OCR/>,
+            footer: <Footer type={"usfd"}/>
         }
-        
     ];
 
     const dispatch = useDispatch();
@@ -82,7 +86,7 @@ const DrawerItem = (props) => {
                         return (
                             <Route
                                 key={index}
-                                path={"/app/tools/" + item.path + "/:url?"}
+                                path={"/app/tools/" + item.path + "/:url?/:type?/"}
                                 render={
                                     () => {
                                         dispatch(selectTool(index));

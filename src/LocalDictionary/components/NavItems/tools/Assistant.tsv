@@ -1,11 +1,7 @@
 	en	fr	es	el
 assistant_title	Assistant	Assistant	Assistente	Βοηθός
-assistant_intro	Would you like to process a URL or upload your own file?	Voulez-vous traiter une adresse url ou télécharger votre fichier?	Quiere procesar una dirección url o cargar su propio fichero?	Θέλετε να επεξεργαστείτε μια διεύθυνση URL ή να ανεβάσετε το δικό σας αρχείο;
-process_url	Process URL	Traiter l'url	Procesar la url	Επεξεργασία URL
-submit_own_file	Upload File	Chargez votre fichier	Cargar su fichero	Μεταφόρτωση αρχείου
 upload_video	Video	Video	Video	Βίντεο
 upload_image	Image	Image	Imagen	Εικόνα
-enter_url	Enter the URL of the media you would like to process	Temp	Temp	Εισαγάγετε τη διεύθυνση URL των μέσων που θέλετε να επεξεργαστείτε
 upload_type_question	What type of file do you want to upload?	Quel type de fichier voulez-vous charger?	¿Que fichero quiere cargar?	Τι είδους αρχείο θέλετε να ανεβάσετε;
 assistant_urlbox	URL	Adresse URL	URL	Σύνδεσμος
 please_give_a_correct_link	Please give a correct link	Donner un lien valide s'il vous plaît	Por favor, dé un enlace válido	Παρακαλώ δώστε έναν σωστό σύνδεσμο
@@ -21,7 +17,6 @@ text_title	Text	Temp	Temp	Temp
 text_intro	The following text has been found on the page	Temp	Temp	Temp
 dbkf_title	DBKF Check	Temp	Temp	Temp
 expand_text	Expand Text	Temp	Temp	Temp
-text_tooltip	<b>What is this?</b></br>Any text which can be extracted from the given URL is displayed here</br></br><b>How do I use this?</b></br>The first 500 characters in any extracted text are sent to be checked against the database of known fakes - a database set up to identify and keep track of disinformation which has already been debunked.</br></br>The results of this check are listed in the section titled <b>DBKF Check</b>. A list of all potentially relevant debunked claims are listed, along with a link where full details on the claim, and any evidence related to it or its debunk can be seen.</br>	Temp	Temp	Temp
 dbkf_error	An issue has occurred when trying to connect to the database of known fakes. Some results may be omitted from this page. If the problem persists, please contact support.	Temp	Temp	Temp
 
 sc_failed	The source credibility check has failed. Some results may not be displayed. If the problem persists, please contact support.	Temp	Temp	Temp
@@ -33,8 +28,7 @@ videos_label	Videos	Temp	Temp	Βίντεο
 media_found	The following media has been found on the page	Temp	Temp	Temp
 media_below	Select the media you would like to verify	Temp	Temp	Επιλέξτε τα μέσα που θέλετε να επαληθεύσετε
 media_to_process	Media to Process	Temp	Temp	Μέσα για επεξεργασία
-assistant_error	No media was found through the link entered.	Temp	Temp	Δεν βρέθηκε κανένα μέσο μέσω του συνδέσμου που καταχωρίστηκε.
-media_tooltip	<b>What is this?</b></br>Any images or videos which can be extracted from the URL have been displayed here. If only one image or video is present, this is displayed as is. If multiple images/videos are present, a list is given to select from.</br></br><b>What can I do with these?</b></br>Multiple tools to detect image/video credibility and manipulation are available as part of this plugin. For any selected image/video, a list of any relevant tools from these are given, along with a brief explanation of what they can do. Selecting any of these will redirect you to the relevant tool with the media you selected as input.<br/> For a full list of tools, and more extensive tutorials on how to use them, refer to the Classroom and Tutorial sections of this plugin.	Temp	Temp	Temp
+assistant_error	An unexpected assistant error has occurred. If the problem persists, contact support.	Temp	Temp	Temp
 
 things_you_can_do_header	Potential Tools	Temp	Temp	Πιθανά εργαλεία
 things_you_can_do	Below are the tools you can use on this media type	Temp	Temp	Ακολουθούν τα εργαλεία που μπορείτε να χρησιμοποιήσετε σε αυτόν τον τύπο μέσων
@@ -47,18 +41,54 @@ navbar_magnifier	Magnifier	Loupe	Lupa	Μεγεθυντικός φακός
 navbar_metadata	Metadata	Metadonnées	Metadatos	Μεταδεδομένα
 navbar_rights	Video rights	Droits vidéo	Derechos video	Δικαιώματα βίντεο
 navbar_forensic	Forensic	Forensic	Forensic	Ανάλυση Αυθεντικότητας Εικόνων (image forensics)
+navbar_ocr	OCR	Temp	Temp	Temp
 navbar_twitter_sna	Fact Check	Factuel	Factual	Έλεγχος γεγονότων
 navbar_assistant	Assistant	Temp	Temp	Βοηθός
-analysis_text	The analysis feature  can be used to retrieve contextual information about the video	Temp	Temp	Το εργαλείο ανάλυσης μπορεί να χρησιμοποιηθεί για την ανάκτηση πληροφοριών με βάση τα συμφραζόμενα σχετικά με το βίντεο
-keyframes_text	The keyframes feature can be used to fragment a video	Temp	Temp	Η εργαλείο χαρακτηριστικών καρέ μπορεί να χρησιμοποιηθεί για τον κατακερματισμό ενός βίντεο
-thumbnails_text	The YouTube thumbnail feature can be used to reverse search on thumbnails from the video	Temp	Temp	Η λειτουργία μικρογραφιών του YouTube μπορεί να χρησιμοποιηθεί για την αντιστροφή της αναζήτησης σε μικρογραφίες από το βίντεο
-twitter_text	The twitter search tool can be used	Temp	Temp	Το εργαλείο αναζήτησης twitter μπορεί να χρησιμοποιηθεί
-magnifier_text	The magnifier tool can be used to examine the image thoroughly	Temp	Temp	Το εργαλείο μεγεθυντικού φακού μπορεί να χρησιμοποιηθεί για την προσεκτική εξέταση της εικόνας
-metadata_text	The metadata tool can be used to retrieve image/video metadata	Temp	Temp	Το εργαλείο μεταδεδομένων μπορεί να χρησιμοποιηθεί για την ανάκτηση μεταδεδομένων εικόνας / βίντεο
-rights_text	The video rights tool can be used can be used to retrieve information solely about video rights	Temp	Temp	Το εργαλείο δικαιωμάτων βίντεο μπορεί να χρησιμοποιηθεί για την ανάκτηση πληροφοριών αποκλειστικά για δικαιώματα βίντεο
-forensic_text	The forensic tool can be used to detect any image manipulation	Temp	Temp	Το εργαλείο ανάλυση αυθεντικότητας Εικόνων (image forensics) μπορεί να χρησιμοποιηθεί για τον εντοπισμό τυχόν παραμορφώσεων της εικόνας
 
-assistant_help_title	What is this?	Temp	Temp	Temp
+assistant_help_title	Assistant Help	Temp	Temp	Temp
 assistant_help_1	The weverify toolkit (this plugin) has multiple tools which can help in the verification of content on social networks, designed to help journalists save time and be more efficient in their fact checking tasks.<br>A full list of these tools can be found in the tutorial section of this plugin.<br>Given the multiple tools and services available, the weverify assistant has been designed to guide users to the services available to them given the nature of the content they would like to check.<br><br>	Temp	Temp	Temp
-assistant_help_2	<b>How does the assistant work?</b><br>Users can choose to upload their own media to be checked (an image or a video), in which case verification tools on the plugin which support media upload will be listed.<br>An alternative option is to enter a URL which needs verification or fact checking.<br>Once a URL in entered, the assistant attempts to extract any text, images or videos it can find on the page.<br>Any extracted text or media are then used to suggest the potential actions which can be carried out. Currently, there are four major components to this:<ul><li>Source credibility: checking the source of the data to see if any information on its credibility can be found</li><li>Text: checking the text on the page to see if it is connected to any known debunks and/or misinformation</li><li>Link Explorer: checking the links on the page to see if any information on their credibility can be found</li><li>Media:  displaying any media found on the page, and if selected, giving the list of tools available on the weverify plugin to process selected media</li></ul>More information on each of these can be found on the sections themselves.<br><br>	Temp	Temp	Temp
-assistant_help_3	<b>Which URLS are supported?</b><br>Currently, there is dedicated support for links for the following types of URLs:<ul><li>Facebook photo or video posts</li><li>Twitter statuses</li><li>Youtube video links</li><li>Instagram posts</li><li>Tiktok posts</li><li>Dailymotion video links</li><li>Vimeo video links</li><li>Liveleak video links</li></ul> Other generic links can also be entered and the assistant will attempt to retrieve what it can. However, any results (particularly on the extraction of images and text) on generic links may be much more generalised.<br>	Temp	Temp	Temp
+assistant_help_2	<b>How does the assistant work?</b><br>Users can choose to upload their own media to be checked (an image or a video), in which case verification tools on the plugin which support media upload will be listed.<br>An alternative option is to enter a URL which needs verification or fact checking.<br>Once a URL in entered, the assistant attempts to extract any text, images or videos it can find on the page.<br>Any extracted text or media are then used to suggest the potential actions which can be carried out. Currently, there are three major components to this:<ul><li>Text Checks: displaying any text found on the page, and running a selection of post processing/verification tools against it</li><li>Media Checks: displaying any media found on the page, and if selected, giving the list of tools available on the WeVerify plugin to process selected media</li><li>Verification Checks: checks against elements of the URL which do not fall under either text or media, such as the domain of the website </li></ul>More information on each of these can be found in the links below.<br><br>	Temp	Temp	Temp
+assistant_help_3	<b>Which URLS are supported?</b><br>Currently, there is dedicated support for links for the following types of URLs:<ul><li>Facebook photo or video posts</li><li>Twitter statuses</li><li>Youtube video links</li><li>Instagram posts</li><li>Tiktok posts</li><li>Dailymotion video links</li><li>Vimeo video links</li><li>Liveleak video links</li></ul> Other generic links can also be entered and the assistant will attempt to retrieve what it can. However, any results (particularly on the extraction of images and text) on generic links may be much more generalised.<br><br>	Temp	Temp	Temp
+assistant_help_4	<b>More information</b><br>For a detailed breakdown of the type of URLs supported by the assistant, see <a href="https://docs.google.com/document/d/1z97ZNdLSDdNJyoDEE_3f43O-WZ5zkg3VUXvFJ30kAdc/edit?usp=sharing" target="_blank">this document</a><br/>For a detailed breakdown of the tools and checks run by the assistant, see: <a href="https://docs.google.com/document/d/1fMlRNvAw0p9r3pgav9i6ooHPUg3hZJr9rz1kROy_aLA/edit?usp=sharing" target="_blank">this document</a>	Temp	Temp	Temp
+
+enter_url	Enter URL	Temp	Temp	Εισαγάγετε τη διεύθυνση URL των μέσων που θέλετε να επεξεργαστείτε
+mode_label	URL mode	Temp	Temp	Temp
+url_text	URL Text	Temp	Temp	Temp
+url_media	Media	Temp	Temp	Temp
+media_text	Extracted Media Text	Temp	Temp	Temp
+text_warning	Warnings found against text. See warning box.	Temp	Temp	Temp
+image_warning	Warnings found against image. See warning box.	Temp	Temp	Temp
+warning_title	Warning	Text	Text	Text
+warning_subtitle	Some elements of this content have been flagged	Temp	Temp	Temp
+status_title	Status	Temp	Temp	Temp
+status_subtitle	Note: one or more of the automated checks have resulted in an error. Some results may be omitted from this page.	Temp	Temp	Temp
+named_entity_title	Text Topics	Temp	Temp	Temp
+
+dbkf_image_warning	The image from this URL has matched against the following from the database of known fakes with a similarity score of 	Temp	Temp	Temp	Temp
+dbkf_video_warning	The video from this URL has matched against the following from the database of known fakes with a similarity score of 	Temp	Temp	Temp	Temp
+dbkf_text_warning	The text from this URL has matched against the following from the database of known fakes	Temp	Temp	Temp	Temp
+source_credibility_warning	The domain has been found as part of a domain credibility check. It has been labelled as	Temp	Temp	Temp
+according_to	according to	Temp	Temp	Temp
+hp_warning	The text from this URL has returned an unusually high hyperpartisan score of	Temp	Temp	Temp
+
+text_tooltip	<b>What is this?</b></br>Any text which can be extracted from the given URL is displayed here</br></br><b>How is this used?</b></br>Various text processing tools are run against this text: <ul><li>The language is detected and displayed</li><li>The named entities in the text are extracted and displayed (people, locations, organisations etc.)</li><li>The first 500 characters in the text are sent to be checked against the database of known fakes. The results of this check (if any) are listed in the <b>Warnings</b> section</li></ul> For more information, see: 	Temp	Temp	Temp
+media_tooltip	<b>What is this?</b></br>Any images or videos which can be extracted from the URL have been displayed here.</br></br><b>What can I do with these?</b></br>For any selected image/video, a list of relevant tools from the plugin which can process this media are given. Selecting any of these will redirect the media to the selected tool.</br> Alongside this, the assistant will reverse search the media against the database of known fakes. If any results are found, these will be displayed in the <b>Warnings</b> section.</br></br> For more information, see: 	Temp	Temp	Temp
+
+analysis_text	Retrieve contextual information about the video	Temp	Temp	Temp
+keyframes_text	Fragment the video	Temp	Temp	Temp
+thumbnails_text	Reverse search on thumbnails from the video	Temp	Temp	Temp
+magnifier_text	Examine the image thoroughly	Temp	Temp	Temp
+metadata_text	Retrieve image/video metadata	Temp	Temp	Temp
+rights_text	Retrieve information solely about video rights	Temp	Temp	Temp
+forensic_text	Detect any image manipulation	Temp	Temp
+ocr_text	Extract any text from the image	Temp	Temp	Temp
+
+
+hyperpartisan_title	Hyperpartisan service	Temp	Temp	Temp
+dbkf_text_title	Database of known fakes text search	Temp	Temp	Temp
+dbkf_media_title	Database of known fakes media search	Temp	Temp	Temp
+ne_title	Named entity search	Temp	Temp	Temp
+ocr_title	OCR search	Temp	Temp	Temp
+source_cred_title	Source credbility service	Temp	Temp	Temp
+mt_title	Machine translation service	Temp	Temp	Temp
+translate	Translate	Temp	Temp	Temp
