@@ -1,7 +1,5 @@
 import uniqWith from "lodash/uniqWith";
 import isEqual from "lodash/isEqual";
-import uniqBy from "lodash/uniqBy";
-import orderBy from "lodash/orderBy";
 
 import {
     cleanAssistantState,
@@ -162,6 +160,7 @@ function* handleSourceCredibility(action) {
         const filteredResults = filterSourceCredibility(result)
         yield put(setInputSourceCredDetails(filteredResults, false, true, false))
     } catch (error) {
+        console.log(error)
         yield put(setInputSourceCredDetails(null, false, false, true))
     }
 }
@@ -424,22 +423,25 @@ const setAssistantResults = (urlType, contentType, userInput, scrapeResult) => {
     };
 }
 
-const filterSourceCredibility = (sourceCredResult) => {
-    if(sourceCredResult.entities.DomainCredibility===undefined) {
-        return null
-    }
+const filterSourceCredibility = (originalResult) => {
+    if(!(originalResult.entities.DomainCredibility)) {return null}
 
-    let domainCredibility = sourceCredResult.entities.DomainCredibility
+    let domainCredibility = originalResult.entities.DomainCredibility
+
     domainCredibility.forEach(dc => {
         delete dc["indices"]
         delete dc["credibility-resolved-url"]
     })
-    sourceCredResult.entities.DomainCredibility = uniqWith(domainCredibility, isEqual)
 
-    sourceCredResult.entities.URL = uniqBy(sourceCredResult.entities.URL, 'url')
-    sourceCredResult.entities.URL = orderBy(sourceCredResult.entities.URL, 'credibility-score', 'asc');
+    domainCredibility = uniqWith(domainCredibility, isEqual)
 
-    return sourceCredResult
+    let sourceCredResult = []
+
+    domainCredibility.forEach(result => {
+        sourceCredResult.push({"credibility_source": result["credibility-source"], "credibility_labels": result["credibility-labels"]})
+    })
+
+    return sourceCredResult.length ? sourceCredResult : null
 }
 
 /**

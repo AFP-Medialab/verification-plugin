@@ -20,29 +20,24 @@ const SourceCredibilityResults = () => {
 
     return (
         <List disablePadding={true}>
-            {sourceCredibilityResults !== null ?
-                sourceCredibilityResults.entities.URL.map((urlEntity, key) => (
-                    sourceCredibilityResults.entities.DomainCredibility
-                        .filter(domain => domain["credibility-domain"] === urlEntity["credibility-domain"])
-                        .map((value, key) => (
-                            <ListItem key={key}>
-                                <ListItemAvatar>
-                                    <Avatar variant={"square"}><PublicIcon fontSize={"large"}/> </Avatar>
-                                </ListItemAvatar>
-                                <ListItemText
-                                    primary={
-                                        <Typography component={"div"} align={"left"}>
-                                            <Box fontWeight="fontWeightBold">
-                                                {keyword("source_credibility_warning")}
-                                            </Box>
-                                        </Typography>}
-                                    secondary={
-                                        <Typography>
-                                            "{value["credibility-labels"]}" {keyword("according_to")} {value["credibility-source"]}
-                                        </Typography>}/>
-                            </ListItem>
-                            ))
-                ))  :
+            {sourceCredibilityResults ?
+                sourceCredibilityResults.map((value, key) => (
+                    <ListItem key={key}>
+                        <ListItemAvatar>
+                            <Avatar variant={"square"}><PublicIcon fontSize={"large"}/> </Avatar>
+                        </ListItemAvatar>
+                        <ListItemText
+                            primary={
+                                <Typography component={"div"} align={"left"}>
+                                    <Box fontWeight="fontWeightBold">
+                                        {keyword("source_credibility_warning")}
+                                    </Box>
+                                </Typography>}
+                            secondary={
+                                <Typography>
+                                    "{value.credibility_labels}" {keyword("according_to")} {value.credibility_source}
+                                </Typography>}/>
+                    </ListItem>))  :
                 null
             }
         </List>
