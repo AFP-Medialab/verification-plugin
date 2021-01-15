@@ -16,12 +16,15 @@ import Radio from "@material-ui/core/Radio";
 import Box from "@material-ui/core/Box";
 import FormLabel from "@material-ui/core/FormLabel";
 import Button from "@material-ui/core/Button";
+import Checkbox from "@material-ui/core/Checkbox";
 import Grid from "@material-ui/core/Grid";
 import InputLabel from "@material-ui/core/InputLabel";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import Typography from "@material-ui/core/Typography";
+import OnClickInfo from "../../../Shared/OnClickInfo/OnClickInfo";
+import OnWarningInfo from "../../../Shared/OnClickInfo/OnWarningInfo";
 
 import SearchIcon from '@material-ui/icons/Search';
 
@@ -29,7 +32,6 @@ import CustomTile from "../../../Shared/CustomTitle/CustomTitle";
 import DateTimePicker from "../../../Shared/DateTimePicker/DateTimePicker";
 import convertToGMT from "../../../Shared/DateTimePicker/convertToGMT";
 import useTwitterSnaRequest from "./Hooks/useTwitterSnaRequest";
-import TwitterSnaResult from "./Results/TwitterSnaResult";
 import { replaceAll } from "../TwitterAdvancedSearch/createUrl";
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/TwitterSna.tsv";
@@ -49,6 +51,10 @@ const TwitterSna = () => {
   const windowUrl = window.location.href;
   let urlObj = extractUrlSearch(windowUrl);
 
+  const role = useSelector(state => state.userSession.user.roles);
+  const [cache, setCache] = useState(false);
+
+  const langPage = useSelector(state => state.language);
   // Authentication Redux state
   const userAuthenticated = useSelector(state => state.userSession && state.userSession.userAuthenticated);
 
@@ -62,7 +68,7 @@ const TwitterSna = () => {
           request.keywordList.join(" ") :
           ""
       ) :
-      "\"fake news\""
+      ""
   );
   const [keyWordsError, setKeyWordsError] = useState(false);
   const [bannedWords, setBannedWords] = useState(
@@ -77,7 +83,7 @@ const TwitterSna = () => {
           request.userList.join(" ") :
           ""
       ) :
-      "@realDonaldTrump"
+      ""
   );
   const [since, setSince] = useState(
     userAuthenticated ?
@@ -86,7 +92,7 @@ const TwitterSna = () => {
           request.from :
           null
       ) :
-      new Date("2016-12-10T00:00:00")
+      null
   );
   const [sinceError, setSinceError] = useState(false);
   const [until, setUntil] = useState(
@@ -96,7 +102,7 @@ const TwitterSna = () => {
           request.until :
           null
       ) :
-      new Date("2020-10-01T00:00:00")
+      null
   );
   const [untilError, setUntilError] = useState(false);
   const [langInput, setLangInput] = useState(
@@ -106,7 +112,7 @@ const TwitterSna = () => {
           "lang_" + request.lang :
           "lang_all"
       ) :
-      "lang_en"
+      "lang_all"
   );
   const [openLangInput, setLangInputOpen] = React.useState(false);
   const [filters, setFilers] = useState(
@@ -185,13 +191,20 @@ const TwitterSna = () => {
       "until": dateFormat(newUntil, "yyyy-mm-dd HH:MM:ss"),
       "verified": String(verifiedUsersP) === "true",
       "media": (filtersP === "none") ? null : filtersP,
-      "retweetsHandling": null
+      "retweetsHandling": null,
+      "localTime": localTimeP,
+      "cached": !cache,
+      "pageLanguage" : langPage,
     };
   };
 
   const makeRequest = () => {
     return makeRequestParams(keyWords, bannedWords, usersInput, since, until, localTime, langInput, filters, verifiedUsers);
   };
+
+  const cacheChange = () => {
+    setCache(!cache);
+};
 
   const sinceDateIsValid = (momentDate) => {
     const itemDate = momentDate.toDate();
@@ -284,22 +297,22 @@ const TwitterSna = () => {
     if (urlObj.isUrlSearch) {
       setKeywords(userAuthenticated ?
         urlObj.url ? urlObj.url : "" :
-        "\"fake news\""
+        ""
       );
       setBannedWords(userAuthenticated ?
         urlObj.request.bannedWords ? urlObj.request.bannedWords.join(" ") : "" :
         "");
       setUsersInput(userAuthenticated ?
         urlObj.request.userList ? urlObj.request.userList.join(" ") : "" :
-        "@realDonaldTrump"
+        ""
       );
       setSince(userAuthenticated ?
         urlObj.request.from ? urlObj.request.from : null :
-        new Date("2016-12-10T00:00:00")
+        null
       );
       setUntil(userAuthenticated ?
         urlObj.request.until ? urlObj.request.until : null :
-        new Date("2020-01-01T00:00:00")
+        null
       );
       setLocalTime(userAuthenticated ?
         urlObj.request.localTime ? urlObj.request.localTime : "true" :
@@ -307,7 +320,7 @@ const TwitterSna = () => {
       );
       setLangInput(userAuthenticated ?
         urlObj.request.lang ? "lang_" + urlObj.request.lang : "lang_all" :
-        "lang_en"
+        "lang_all"
       );
       setFilers(userAuthenticated ?
         urlObj.request.media ? urlObj.request.media : "none" :
@@ -321,21 +334,21 @@ const TwitterSna = () => {
       const newSubmittedRequest = makeRequestParams(
         userAuthenticated ?
           urlObj.url ? urlObj.url : "" :
-          "\"fake news\"",
+          "",
         "",
         userAuthenticated ?
           urlObj.request.userList ? urlObj.request.userList.join(" ") : "" :
-          "@realDonaldTrump",
+          "",
         userAuthenticated ?
           urlObj.request.from ? urlObj.request.from : null :
-          new Date("2016-12-10T00:00:00"),
+          null,
         userAuthenticated ?
           urlObj.request.until ? urlObj.request.until : null :
-          new Date("2020-10-01T00:00:00"),
+          null,
         "true",
         userAuthenticated ?
           "lang_all" :
-          "lang_en",
+          "lang_all",
         "none",
         "false"
       );
@@ -345,25 +358,25 @@ const TwitterSna = () => {
     } else {
       setKeywords(userAuthenticated ?
         "" :
-        "\"fake news\""
+        ""
       );
       setBannedWords("");
       setUsersInput(userAuthenticated ?
         "" :
-        "@realDonaldTrump"
+        ""
       );
       setSince(userAuthenticated ?
         null :
-        new Date("2016-12-10T00:00:00")
+        null
       );
       setUntil(userAuthenticated ?
         null :
-        new Date("2020-10-01T00:00:00")
+        null
       );
       setLocalTime("true");
       setLangInput(userAuthenticated ?
         "lang_all" :
-        "lang_en"
+        "lang_all"
       );
       setFilers("none");
       setVerifiedUsers("false");
@@ -371,17 +384,17 @@ const TwitterSna = () => {
       const newSubmittedRequest = makeRequestParams(
         userAuthenticated ?
           "" :
-          "\"fake news\"",
+          "",
         "",
         userAuthenticated ?
           "" :
-          "@realDonaldTrump",
+          "",
         userAuthenticated ?
           null :
-          new Date("2016-12-10T00:00:00"),
+          null,
         userAuthenticated ?
           null :
-          new Date("2020-10-01T00:00:00"),
+          null,
         "true",
         userAuthenticated ?
           "lang_all" :
@@ -393,6 +406,15 @@ const TwitterSna = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userAuthenticated]);
+
+  function cacheCheck() {
+    for (let index in role)
+    {
+      if (role[index] == "CACHEOVERRIDE")
+      {return true;}
+    }
+    return false;
+  }
 
   return (
     <div>
@@ -580,6 +602,19 @@ const TwitterSna = () => {
               </Select>
             </FormControl>
           </Grid>
+          {
+          cacheCheck() &&
+          <FormControlLabel
+          control={
+              <Checkbox
+                  checked={cache}
+                  onChange={cacheChange}
+                  value="checkedBox"
+                  color="primary"
+              />
+          }
+          label={keyword("disable_cache")}
+      />}
         </Grid>
         <Box m={2} />
 
@@ -593,13 +628,16 @@ const TwitterSna = () => {
         <Box m={2} />
         <Typography>{loadingMessage}</Typography>
         <LinearProgress hidden={!isLoading} />
+        {
+        userAuthenticated &&
+        <OnClickInfo keyword={"twittersna_explication"} />
+        }
+        {
+        !userAuthenticated &&
+        <OnWarningInfo keyword={"warning_sna"} />
+        }
+
       </Paper>
-      {
-        reduxResult &&
-        <TwitterSnaResult result={reduxResult} 
-                          request={request}
-                          />
-      }
     </div>);
 };
 export default TwitterSna;

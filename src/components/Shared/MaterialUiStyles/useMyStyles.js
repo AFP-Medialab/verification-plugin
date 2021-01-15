@@ -276,8 +276,12 @@ const useMyStyles = makeStyles(theme => ({
     forensicCard: {
         width: "100%",
     },
-    forensicMedia: {
+    forensicMediaLandscape: {
         height: 0,
+        paddingTop: '56.25%', // 16:9
+    },
+    forensicMediaNotLandscape: {
+        height: 400,
         paddingTop: '56.25%', // 16:9
     },
     expand: {

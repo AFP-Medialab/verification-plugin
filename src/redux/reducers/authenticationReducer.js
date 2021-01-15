@@ -15,6 +15,7 @@ const defaultState = {
   userAuthenticated: false,
   accessToken: null,
   accessTokenExpiry: null,
+  refreshToken: null,
   // user: null
   user: {
     id: null,
@@ -59,33 +60,31 @@ function authenticationReducer(state = defaultState, action) {
 
     case AUTH_USER_LOGIN:
       // State user as logged in and add user authentication information.
-      state.userLoginLoading = false;
-      state.userAuthenticated = true;
-      state.accessToken = action.payload.accessToken;
-      state.accessTokenExpiry = action.payload.accessTokenExpiry;
-      // user: {
-      //   id: null,
-      //   firstName: null,
-      //   lastName: null,
-      //   email: null,
-      //   roles: []
-      // }
-      state.user = action.payload.user;
-      break;
+      return {...state, 
+        userLoginLoading:false, 
+        userAuthenticated: true, 
+        accessToken:action.payload.accessToken, 
+        accessTokenExpiry: 
+        action.payload.accessTokenExpiry, 
+        refreshToken: action.payload.refreshToken,
+        user:action.payload.user
+      };
 
     case AUTH_USER_LOGOUT:
       // State user as not logged and remove user authentication information.
-      state.userAuthenticated = false;
-      state.accessToken = null;
-      state.accessTokenExpiry = null;
-      state.user = {
-        id: null,
-        firstName: null,
-        lastName: null,
-        email: null,
-        roles: []
-      };
-      break;
+      return {...state, 
+        userAuthenticated: false,
+        accessToken: null,
+        accessTokenExpiry: null,
+        refreshToken: null,
+        user:{
+          id: null,
+          firstName: null,
+          lastName: null,
+          email: null,
+          roles: []
+          }
+        };
 
     case AUTH_TOKEN_INVALID:
       // TODO
@@ -101,18 +100,20 @@ function authenticationReducer(state = defaultState, action) {
       break;
 
     case AUTH_USER_SESSION_EXPIRED:
-      // TODO
-      state.userAuthenticated = false;
-      state.accessToken = null;
-      state.accessTokenExpiry = null;
-      state.user = {
-        id: null,
-        firstName: null,
-        lastName: null,
-        email: null,
-        roles: []
-      };
-      break;
+      return {...state, 
+        userAuthenticated: false,
+        accessToken: null,
+        accessTokenExpiry: null,
+        refreshToken: null,
+        user:{
+          id: null,
+          firstName: null,
+          lastName: null,
+          email: null,
+          roles: []
+          }
+        };
+
     default:
       break;
   }

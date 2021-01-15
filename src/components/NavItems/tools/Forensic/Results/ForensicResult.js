@@ -1,4 +1,4 @@
-import {Paper} from "@material-ui/core";
+import {Paper, StepButton} from "@material-ui/core";
 import Box from "@material-ui/core/Box";
 import Grid from "@material-ui/core/Grid";
 import React, {useState, useEffect} from "react";
@@ -31,6 +31,18 @@ const ForensicResults = (props) => {
     const classes = useMyStyles();
     const keyword = useLoadLanguage("components/NavItems/tools/Forensic.tsv", tsv);
     const dispatch = useDispatch();
+    const [landscape, setLandscape] = useState(true);
+
+    const OnClickShowFilters = () => { 
+
+        if (landscape === false){
+            setLandscape(true);
+        }
+        else {
+            setLandscape(false);
+        }
+            
+    }
 
     const dataParams = ["dqReport", "elaReport", "dwNoiseReport", "blockingReport", "gridsReport", "gridsInversedReport", "medianNoiseReport"];
     const result = props.result;
@@ -100,8 +112,16 @@ const ForensicResults = (props) => {
                 </Button>
             }
             <Box m={2}/>
+            {
+            <Button variant="contained" color="primary" onClick={() => {OnClickShowFilters()}}>
+                    {
+                        keyword("forensic_ratio_button")
+                    }
+                </Button>
+            }
             <Grid container justify="center" spacing={2}>
                 {
+                     landscape &&
                     dataParams.map((value, key) => {
                         return (
                             <Box key={key} m={1} width={"30%"}>
@@ -112,7 +132,7 @@ const ForensicResults = (props) => {
                                     />
                                     <Tooltip title={keyword("apply_filter")} placement="bottom">
                                         <CardMedia
-                                            className={classes.forensicMedia}
+                                            className={classes.forensicMediaLandscape}
                                             image={result[value]["map"]}
                                             onClick={() => changeFilter(key, "forensic_title_" + value)}
                                         />
@@ -150,6 +170,57 @@ const ForensicResults = (props) => {
                         )
                     })
                 }
+                {
+                   !landscape &&
+                    dataParams.map((value, key) => {
+                        return (
+                            <Box key={key} m={1} width={"30%"}>
+                                <Card className={classes.forensicCard}>
+                                    <CardHeader
+                                        title={keyword("forensic_title_" + value)}
+                                        subheader=""
+                                    />
+                                    <Tooltip title={keyword("apply_filter")} placement="bottom">
+                                        <CardMedia
+                                            className={classes.forensicMediaNotLandscape}
+                                            image={result[value]["map"]}
+                                            onClick={() => changeFilter(key, "forensic_title_" + value)}
+                                        />
+                                    </Tooltip>
+                                    <CardActions disableSpacing>
+                                        <Tooltip title={keyword("apply_filter")} placement="bottom">
+                                            <IconButton aria-label="add to favorites"
+                                                        onClick={() => {
+                                                            changeFilter(key, "forensic_title_" + value)
+                                                        }}>
+                                                <VisibilityIcon/>
+                                            </IconButton>
+                                        </Tooltip>
+                                        <IconButton
+                                            className={clsx(classes.expand, {
+                                                [classes.expandOpen]: expanded[value],
+                                            })}
+                                            onClick={() => handleExpandClick(value)}
+                                            aria-expanded={expanded[value]}
+                                            aria-label="show more"
+                                        >
+                                            <ExpandMoreIcon/>
+                                        </IconButton>
+                                    </CardActions>
+                                    <Collapse in={expanded[value]} timeout="auto"
+                                              unmountOnExit>
+                                        <CardContent>
+                                            <Typography paragraph>
+                                                {keyword("forensic_card_" + value)}
+                                            </Typography>
+                                        </CardContent>
+                                    </Collapse>
+                                </Card>
+                            </Box>
+                        )
+                    })
+                }
+                {
                 <Box m={1} width={"30%"}>
                     <Card className={classes.forensicCard}>
                         <CardHeader
@@ -157,12 +228,29 @@ const ForensicResults = (props) => {
                             subheader=""
                         />
                         {
+                            landscape &&
                             ghostImages.map((image, index) => {
                                 return (
                                     <Box key={index} hidden={selectedGhostImage !== index.toString()}>
                                         <Tooltip title={keyword("apply_filter")} placement="bottom">
                                             <CardMedia
-                                                className={classes.forensicMedia}
+                                                className={classes.forensicMediaLandscape}
+                                                image={image}
+                                                onClick={() => changeFilter(images.length - ghostImages.length + index, "forensic_title_ghostReport")}
+                                            />
+                                        </Tooltip>
+                                    </Box>
+                                )
+                            })
+                        }
+                        {
+                            !landscape &&
+                            ghostImages.map((image, index) => {
+                                return (
+                                    <Box key={index} hidden={selectedGhostImage !== index.toString()}>
+                                        <Tooltip title={keyword("apply_filter")} placement="bottom">
+                                            <CardMedia
+                                                className={classes.forensicMediaNotLandscape}
                                                 image={image}
                                                 onClick={() => changeFilter(images.length - ghostImages.length + index, "forensic_title_ghostReport")}
                                             />
@@ -218,6 +306,7 @@ const ForensicResults = (props) => {
                         </Collapse>
                     </Card>
                 </Box>
+            }
             </Grid>
         </Paper>
     )

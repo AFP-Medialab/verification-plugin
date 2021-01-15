@@ -29,6 +29,7 @@ export default function useAuthenticatedRequest() {
     const userSession = store.getState().userSession;
     const userAuthenticated = userSession && userSession.userAuthenticated;
     const accessToken = userSession && userSession.accessToken;
+    const refreshToken = userSession && userSession.refreshToken;
 
     // If not authenticated, make a std service call
     if (!userAuthenticated || !accessToken) {
@@ -48,7 +49,7 @@ export default function useAuthenticatedRequest() {
       // If unauthorized
       if (error.response && error.response.status === 401) {
         // Refresh token
-        return authenticationAPI.refreshToken(accessToken).then(response => {
+        return authenticationAPI.refreshToken(refreshToken).then(response => {
           // TODO: get token (refresh return axios response??)
           const newAccessToken = response.data.accessToken;
           // Update access token header

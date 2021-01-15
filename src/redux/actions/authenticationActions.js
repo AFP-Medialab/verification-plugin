@@ -117,12 +117,13 @@ export function userLoginLoadingAction(loading = true) {
  * @param {Object} user Logged in user information.
  * @returns
  */
-export function userLoginAction(accessToken, accessTokenExpiry, user) {
+export function userLoginAction(accessToken, accessTokenExpiry, refreshToken, user) {
   return {
     type: AUTH_USER_LOGIN,
     payload: {
       accessToken,
       accessTokenExpiry,
+      refreshToken,
       user
     }
   };
