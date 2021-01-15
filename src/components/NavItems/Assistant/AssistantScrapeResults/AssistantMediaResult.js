@@ -113,7 +113,7 @@ const AssistantMediaResult = () => {
                             <Collapse in={expandMedia}>
                                 <CardContent>
                                     <ImageGridList list={imageList} height={60} cols={5} handleClick={(event) => {
-                                        submitMediaToProcess(event.target.src)
+                                        submitMediaToProcess(event)
                                     }}/>
                                 </CardContent>
                                 <Divider m={1.5}/>
