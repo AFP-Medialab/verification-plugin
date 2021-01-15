@@ -43,10 +43,6 @@ const assistantApi = useAssistantApi()
 /**
  * WATCHERS
  **/
-function* getAssistantScrapeSaga() {
-    yield takeLatest("SUBMIT_INPUT_URL", handleInputUrl)
-}
-
 function* getUploadSaga() {
     yield takeLatest("SUBMIT_UPLOAD", handleSubmitUpload)
 }
@@ -56,37 +52,40 @@ function* getMediaListSaga() {
 }
 
 function* getMediaActionSaga() {
-    yield takeLatest("SET_PROCESS_URL", handleActionCall)
+    yield takeLatest("SET_PROCESS_URL", handleMediaActionList)
+}
+
+function* getAssistantScrapeSaga() {
+    yield takeLatest("SUBMIT_INPUT_URL", handleAssistantScrapeCall)
 }
 
 function* getMediaSimilaritySaga() {
-    yield takeLatest(["SET_PROCESS_URL", "CLEAN_STATE"], handleSimilaritySearch)
+    yield takeLatest(["SET_PROCESS_URL", "CLEAN_STATE"], handleMediaSimilarityCall)
 }
 
 function* getDbkfTextMatchSaga() {
-    yield takeLatest(["SET_SCRAPED_DATA", "CLEAN_STATE"], handleDbkfTextSearch)
+    yield takeLatest(["SET_SCRAPED_DATA", "CLEAN_STATE"], handleDbkfTextCall)
 }
 
 function* getHyperpartisanSaga() {
     yield takeLatest(["SET_SCRAPED_DATA", "CLEAN_STATE"], handleHyperpartisanCall)
 }
 
-
 function* getSourceCredSaga() {
-    yield takeLatest(["SET_INPUT_URL", "CLEAN_STATE"], handleSourceCredibility)
+    yield takeLatest(["SET_INPUT_URL", "CLEAN_STATE"], handleSourceCredibilityCall)
 }
 
 function* getNamedEntitySaga() {
-    yield takeLatest(["SET_SCRAPED_DATA", "CLEAN_STATE"], handleNamedEntitySaga)
+    yield takeLatest(["SET_SCRAPED_DATA", "CLEAN_STATE"], handleNamedEntityCall)
 }
 
 function* getTranslationSaga() {
-    yield takeLatest(["RUN_TRANSLATION", "CLEAN_STATE"], handleTranslateSaga)
+    yield takeLatest(["RUN_TRANSLATION", "CLEAN_STATE"], handleTranslateCall)
 }
 
 
 /**
- * HANDLERS
+ * NON-API HANDLERS
  **/
 function* handleMediaLists() {
     const imageList = yield select(state => state.assistant.imageList);
@@ -102,8 +101,7 @@ function* handleMediaLists() {
     }
 }
 
-
-function* handleActionCall() {
+function* handleMediaActionList() {
     const inputUrl = yield select((state) => state.assistant.inputUrl)
     const processUrl = yield select((state) => state.assistant.processUrl)
     const contentType = yield select(state => state.assistant.processUrlType);
@@ -114,6 +112,37 @@ function* handleActionCall() {
         let actions = yield call(selectCorrectActions, contentType, knownInputLink, knownProcessLink, processUrl);
 
         yield put(setProcessUrlActions(contentType, actions))
+    }
+}
+
+function * handleSubmitUpload(action) {
+    let contentType = action.payload.contentType
+    let known_link = KNOWN_LINKS.OWN;
+    let actions = selectCorrectActions(contentType, known_link, known_link, "");
+    yield put(setProcessUrlActions(contentType, actions));
+    yield put(setImageVideoSelected(true));
+}
+
+
+/**
+ * API HANDLERS
+ **/
+function* handleMediaSimilarityCall(action) {
+    if (action.type === "CLEAN_STATE") return
+
+    const processUrl = yield select((state) => state.assistant.processUrl)
+    const contentType = yield select(state => state.assistant.processUrlType);
+
+    if (contentType === CONTENT_TYPE.IMAGE) {
+        yield call(similaritySearch,
+            () => dbkfAPI.callImageSimilarityEndpoint(processUrl),
+            (result, loading, done, fail) => setDbkfImageMatchDetails(result, loading, done, fail)
+        )
+    } else if (contentType === CONTENT_TYPE.VIDEO) {
+        yield call(similaritySearch,
+            () => dbkfAPI.callVideoSimilarityEndpoint(processUrl),
+            (result, loading, done, fail) => setDbkfVideoMatchDetails(result, loading, done, fail)
+        )
     }
 }
 
@@ -142,32 +171,13 @@ function* similaritySearch(searchEndpoint, stateStorageFunction) {
     }
 }
 
-function* handleSimilaritySearch(action) {
-    if (action.type === "CLEAN_STATE") return
-
-    const processUrl = yield select((state) => state.assistant.processUrl)
-    const contentType = yield select(state => state.assistant.processUrlType);
-
-    if (contentType === CONTENT_TYPE.IMAGE) {
-        yield call(similaritySearch,
-            () => dbkfAPI.callImageSimilarityEndpoint(processUrl),
-            (result, loading, done, fail) => setDbkfImageMatchDetails(result, loading, done, fail)
-        )
-    } else if (contentType === CONTENT_TYPE.VIDEO) {
-        yield call(similaritySearch,
-            () => dbkfAPI.callVideoSimilarityEndpoint(processUrl),
-            (result, loading, done, fail) => setDbkfVideoMatchDetails(result, loading, done, fail)
-        )
-    }
-}
-
-function* handleSourceCredibility(action) {
+function* handleSourceCredibilityCall(action) {
     if (action.type === "CLEAN_STATE") return
 
     try {
         const inputUrl = yield select((state) => state.assistant.inputUrl)
         const result = yield call(gateCloudApi.callSourceCredibilityService, [inputUrl])
-        const filteredResults = filterSourceCredibility(result)
+        const filteredResults = filterSourceCredibilityResults(result)
         yield put(setInputSourceCredDetails(filteredResults, false, true, false))
     } catch (error) {
         console.log(error)
@@ -175,7 +185,7 @@ function* handleSourceCredibility(action) {
     }
 }
 
-function* handleDbkfTextSearch(action) {
+function* handleDbkfTextCall(action) {
     if (action.type === "CLEAN_STATE") return
 
     try {
@@ -186,16 +196,9 @@ function* handleDbkfTextSearch(action) {
             textToUse = textToUse.replace(/[^\w\s]/gi, '')
 
             let result = yield call(dbkfAPI.callTextSimilarityEndpoint, textToUse)
+            let filteredResult = filterDbkfTextResult(result)
 
-            let resultList = []
-            result.forEach((value) => {
-                if (value.score > 900) {
-                    resultList.push({"text": value.text, "claimUrl": value.claimUrl, "score": value.score})
-                }
-            })
-            resultList = resultList.length ? resultList : null
-
-            yield put(setDbkfTextMatchDetails(resultList, false, true, false))
+            yield put(setDbkfTextMatchDetails(filteredResult, false, true, false))
         }
     } catch (error) {
         console.log(error)
@@ -210,7 +213,7 @@ function* handleHyperpartisanCall(action) {
         const text = yield select((state) => state.assistant.urlText)
         const lang = yield select((state) => state.assistant.textLang)
 
-        if (text !== null && lang === "en") {
+        if (text && lang === "en") {
             yield put(setHpDetails(null, true, false, false))
 
             const result = yield call(gateCloudApi.callHyperpartisanService, text)
@@ -225,7 +228,7 @@ function* handleHyperpartisanCall(action) {
     }
 }
 
-function* handleNamedEntitySaga(action) {
+function* handleNamedEntityCall(action) {
     if (action.type === "CLEAN_STATE") return
 
     try {
@@ -234,10 +237,15 @@ function* handleNamedEntitySaga(action) {
             yield put(setNeDetails(null, null, true, false, false))
 
             const result = yield call(assistantApi.callNamedEntityService, text)
+
             let entities = []
+
             Object.entries(result.response.annotations).forEach(entity => {
                 entity[1].forEach(instance => {
-                    entities.push({"word": instance.features.string, "category": entity[0]})
+                    entities.push({
+                        "word": instance.features.string,
+                        "category": entity[0]
+                    })
                 })
             })
 
@@ -254,7 +262,7 @@ function* handleNamedEntitySaga(action) {
     }
 }
 
-function* handleTranslateSaga(action) {
+function* handleTranslateCall(action) {
     if (action.type === "CLEAN_STATE") return
 
     try {
@@ -269,7 +277,7 @@ function* handleTranslateSaga(action) {
     }
 }
 
-function * handleInputUrl(action) {
+function * handleAssistantScrapeCall(action) {
 
     let inputUrl = action.payload.inputUrl
 
@@ -285,7 +293,7 @@ function * handleInputUrl(action) {
             scrapeResult = yield call(assistantApi.callAssistantScraper, urlType, inputUrl)
         }
 
-        let filteredSR = setAssistantResults(urlType, contentType, inputUrl, scrapeResult)
+        let filteredSR = filterAssistantResults(urlType, contentType, inputUrl, scrapeResult)
 
         yield put(setInputUrl(inputUrl))
         yield put(setScrapedData(filteredSR.urlText, filteredSR.textLang, filteredSR.linkList, filteredSR.imageList, filteredSR.videoList))
@@ -296,17 +304,10 @@ function * handleInputUrl(action) {
     }
 }
 
-function * handleSubmitUpload(action) {
-    let contentType = action.payload.contentType
 
-    let known_link = KNOWN_LINKS.OWN;
-    let actions = selectCorrectActions(contentType, known_link, known_link, "");
-    yield put(setProcessUrlActions(contentType, actions));
-    yield put(setImageVideoSelected(true));
-}
 
 /**
-* UTIL FUNCTIONS
+* PREPROCESS FUNCTIONS
 **/
 const removeUrlsAndEmojisFromText = (text) => {
     if (text !== null) {
@@ -321,27 +322,6 @@ const removeUrlsAndEmojisFromText = (text) => {
         return text.replace(urlRegex, "").replaceAll(emojiRegex, "")
     }
     return text
-}
-
-const buildWordCloudList = (entities) => {
-    return entities.reduce((accumulator, currentWord) => {
-        accumulator.filter(wordObj => wordObj.text === currentWord["word"]).length ?
-            accumulator.filter(wordObj => wordObj.text === currentWord["word"])[0].value += 1 :
-            accumulator.push({"text": currentWord["word"], "category": currentWord["category"], "value": 1})
-
-        return accumulator
-    }, [])
-}
-
-const buildCategoryList = (wordCloudList) => {
-    // group by category
-    return wordCloudList.reduce((accumulator, currentWord) => {
-        accumulator.filter(wordObj => wordObj.category === currentWord["category"]).length ?
-            accumulator.filter(wordObj => wordObj.category === currentWord["category"])[0].words.push(currentWord['text']) :
-            accumulator.push({"category": currentWord["category"], "words": [currentWord["text"]]})
-
-        return accumulator
-    }, [])
 }
 
 const decideWhetherToScrape = (urlType, contentType) => {
@@ -366,7 +346,31 @@ const decideWhetherToScrape = (urlType, contentType) => {
     }
 }
 
-const setAssistantResults = (urlType, contentType, userInput, scrapeResult) => {
+/**
+ * POSTPROCESS FUNCTIONS
+ **/
+const buildWordCloudList = (entities) => {
+    return entities.reduce((accumulator, currentWord) => {
+        accumulator.filter(wordObj => wordObj.text === currentWord["word"]).length ?
+            accumulator.filter(wordObj => wordObj.text === currentWord["word"])[0].value += 1 :
+            accumulator.push({"text": currentWord["word"], "category": currentWord["category"], "value": 1})
+
+        return accumulator
+    }, [])
+}
+
+const buildCategoryList = (wordCloudList) => {
+    // group by category
+    return wordCloudList.reduce((accumulator, currentWord) => {
+        accumulator.filter(wordObj => wordObj.category === currentWord["category"]).length ?
+            accumulator.filter(wordObj => wordObj.category === currentWord["category"])[0].words.push(currentWord['text']) :
+            accumulator.push({"category": currentWord["category"], "words": [currentWord["text"]]})
+
+        return accumulator
+    }, [])
+}
+
+const filterAssistantResults = (urlType, contentType, userInput, scrapeResult) => {
     let videoList = []
     let imageList = []
     let linkList = []
@@ -433,25 +437,39 @@ const setAssistantResults = (urlType, contentType, userInput, scrapeResult) => {
     };
 }
 
-const filterSourceCredibility = (originalResult) => {
+const filterSourceCredibilityResults = (originalResult) => {
     if(!(originalResult.entities.DomainCredibility)) {return null}
 
     let domainCredibility = originalResult.entities.DomainCredibility
-
     domainCredibility.forEach(dc => {
         delete dc["indices"]
         delete dc["credibility-resolved-url"]
     })
-
     domainCredibility = uniqWith(domainCredibility, isEqual)
 
     let sourceCredResult = []
-
     domainCredibility.forEach(result => {
-        sourceCredResult.push({"credibility_source": result["credibility-source"], "credibility_labels": result["credibility-labels"]})
+        sourceCredResult.push({
+            "credibility_source": result["credibility-source"],
+            "credibility_labels": result["credibility-labels"]
+        })
     })
 
     return sourceCredResult.length ? sourceCredResult : null
+}
+
+const filterDbkfTextResult = (result) => {
+    let resultList = []
+    result.forEach((value) => {
+        if (value.score > 900) {
+            resultList.push({
+                "text": value.text,
+                "claimUrl": value.claimUrl,
+                "score": value.score
+            })
+        }
+    })
+    return resultList.length ? resultList : null
 }
 
 /**
