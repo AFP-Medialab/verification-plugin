@@ -99,8 +99,8 @@ const AssistantTextResult = () => {
                     <Grid container>
                         <Grid item xs={6} style={{"display": "flex"}}>
                             <Typography className={classes.toolTipIcon}>{textLang}</Typography>
-                            {textLang === "EN" ?
-                                <Tooltip title={keyword("translate_to_french")}>
+                            {textLang === "en" ?
+                                <Tooltip title={keyword("translate")}>
                                     <IconButton className={classes.toolTipIcon} onClick={()=>dispatch(runTranslation("fr", text))}>
                                         <SpeakerNotesIcon/>
                                     </IconButton>

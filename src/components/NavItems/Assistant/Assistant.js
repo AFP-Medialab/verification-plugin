@@ -67,7 +67,7 @@ const Assistant = () => {
     const dbkfTextFailState = useSelector(state => state.assistant.dbkfTextMatchFail)
     const dbkfMediaFailState = useSelector(state => state.assistant.dbkfMediaMatchFail)
     const neFailState = useSelector(state => state.assistant.neFail)
-    const mtFailState = useSelector(state => state.assistant.mtFail)
+    // const mtFailState = useSelector(state => state.assistant.mtFail)
 
     //local state
     const [formInput, setFormInput] = useState(inputUrl);
@@ -176,7 +176,7 @@ const Assistant = () => {
                     </Grid>
 
                     <Grid item xs={12}>
-                        {hpFailState || scFailState || dbkfTextFailState || dbkfMediaFailState || neFailState || mtFailState ?
+                        {hpFailState || scFailState || dbkfTextFailState || dbkfMediaFailState || neFailState ?
                             <AssistantCheckStatus/> : null
                         }
                     </Grid>

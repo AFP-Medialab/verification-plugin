@@ -271,7 +271,8 @@ function* handleTranslateCall(action) {
 
         yield put(setMtDetails(null, true, false, false))
         const result = yield call(assistantApi.callAssistantTranslator, lang, text)
-        yield put(setMtDetails(result, false, true, false))
+        let result_text = result.text ? result : null
+        yield put(setMtDetails(result_text, false, true, false))
     } catch (error) {
         yield put(setMtDetails(null, false, false, true))
     }
