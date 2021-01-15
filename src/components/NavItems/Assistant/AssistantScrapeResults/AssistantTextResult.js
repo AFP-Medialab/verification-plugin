@@ -43,6 +43,7 @@ const AssistantTextResult = () => {
     // display states
     const textBox = document.getElementById("element-to-check")
     const [expanded, setExpanded] = useState(false);
+    const [displayOrigLang, setDisplayOrigLang] = useState(true)
     const [displayExpander, setDisplayExpander] = useState(false);
 
 
@@ -53,6 +54,12 @@ const AssistantTextResult = () => {
             setDisplayExpander(true)
         }
     },[textBox])
+
+    useEffect(()=>{
+       if (translatedText) {
+           setDisplayOrigLang(false)
+       }
+    },[translatedText])
 
     return (
         <Grid item xs={12}>
@@ -89,7 +96,7 @@ const AssistantTextResult = () => {
                                   collapsedHeight={100}
                                   id={"element-to-check"}>
                             <Typography align={"center"}>
-                                <FormatQuoteIcon fontSize={"large"}/>{translatedText ? translatedText : text}
+                                <FormatQuoteIcon fontSize={"large"}/>{!displayOrigLang && translatedText ? translatedText : text}
                             </Typography>
                         </Collapse>
                 </CardContent>
@@ -98,7 +105,7 @@ const AssistantTextResult = () => {
                     <Divider/>
                     <Grid container>
                         <Grid item xs={6} style={{"display": "flex"}}>
-                            <Typography className={classes.toolTipIcon}>{textLang}</Typography>
+                            <Typography className={classes.toolTipIcon} onClick={()=>setDisplayOrigLang(!displayOrigLang)}>{textLang}</Typography>
                             {textLang === "en" ?
                                 <Tooltip title={keyword("translate")}>
                                     <IconButton className={classes.toolTipIcon} onClick={()=>dispatch(runTranslation("fr", text))}>

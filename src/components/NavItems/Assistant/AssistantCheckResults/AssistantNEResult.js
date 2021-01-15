@@ -54,7 +54,7 @@ const AssistantNEResult = () => {
                             <List>
                                 {neResult.map((value, index)=>(
                                     <Box key={index}>
-                                        <ListItem button onClick={() => handleCollapse(index)}>
+                                        <ListItem key={index} button onClick={() => handleCollapse(index)}>
                                             <ListItemText primary= {
                                                 <Typography component={"div"} align={"left"}>
                                                     <Box fontWeight="fontWeightBold">
@@ -65,8 +65,8 @@ const AssistantNEResult = () => {
                                         </ListItem>
                                         <Collapse in={index === selectedIndex}>
                                             <List component="div" disablePadding >
-                                                {value["words"].map((v)=>(
-                                                    <ListItem key={v}>
+                                                {value["words"].map((v, k)=>(
+                                                    <ListItem key={k}>
                                                         <ListItemText>{v}</ListItemText>
                                                     </ListItem>
                                                 ))}

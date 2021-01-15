@@ -292,6 +292,7 @@ const NavBar = (props) => {
         if (supportedBrowserLang !== undefined && supportedBrowserLang !== currentLang) {
             dispatch(changeLanguage(supportedBrowserLang))
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
 
