@@ -7,7 +7,7 @@
     "@material-ui/icons": "^4.9.1",
     "@svgr/webpack": "^5.4.0",
     "@toast-ui/react-image-editor": "^1.2.0",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "big-integer": "^1.6.48",
     "clsx": "^1.1.1",
     "d3-selection": "^1.4.2",
@@ -19,7 +19,6 @@
     "material-table": "^1.69.0",
     "moment": "2.27.0",
     "moment-timezone": "0.5.31",
-    "plotly.js-dist": "^1.54.7",
     "querystring": "^0.2.0",
     "react": "^16.13.1",
     "react-browser-extension-scripts": "^3.3.1",
@@ -33,7 +32,6 @@
     "react-linkify": "^1.0.0-alpha",
     "react-magnifier": "^3.0.4",
     "react-map-gl": "^5.2.7",
-    "react-plotly.js": "^2.4.0",
     "react-redux": "^7.2.1",
     "react-router-dom": "^5.2.0",
     "react-sigma": "^1.2.34",
@@ -76,6 +74,6 @@
     ]
   },
   "devDependencies": {
-    "mp4box": "^0.3.20"
+    "mp4box": "^0.4.1"
   }
 }
