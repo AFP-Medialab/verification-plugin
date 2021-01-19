@@ -112,10 +112,20 @@ const ForensicResults = (props) => {
                 </Button>
             }
             <Box m={2}/>
+            
             {
+                !landscape &&
             <Button variant="contained" color="primary" onClick={() => {OnClickShowFilters()}}>
                     {
-                        keyword("forensic_ratio_button")
+                        keyword("forensic_ratio_b_portrait")
+                    }
+                </Button>
+            }
+            {
+                landscape &&
+            <Button variant="contained" color="primary" onClick={() => {OnClickShowFilters()}}>
+                    {
+                        keyword("forensic_ratio_b_landscape")
                     }
                 </Button>
             }
