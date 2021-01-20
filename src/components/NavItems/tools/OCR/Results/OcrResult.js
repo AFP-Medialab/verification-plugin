@@ -17,6 +17,8 @@ import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 import {cleanOcr} from "../../../../../redux/actions/tools/ocrActions";
 import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../../LocalDictionary/components/NavItems/tools/OCR.tsv";
+import Box from "@material-ui/core/Box";
+import Button from "@material-ui/core/Button";
 
 const OcrResult = () => {
 
@@ -27,6 +29,20 @@ const OcrResult = () => {
     const loading = useSelector(state => state.ocr.loading);
     const result = useSelector(state => state.ocr.result);
     const dispatch = useDispatch();
+
+    const reversesearchYandex = function(url){
+        let search_url = "https://yandex.com/images/search?rpt=imageview&from=tabbar&url=" + url;
+        if (url !== "") {
+            window.open(search_url);
+        }
+    };
+    
+    const reversesearchBing = function(url){
+        let search_url = "https://www.bing.com/images/search?view=detailv2&iss=sbi&form=SBIIRP&sbisrc=ImgDropper&q=imgurl:" + url;
+        if (url !== "") {
+            window.open(search_url);
+        }
+    };
 
     return (
         <Paper className={classes.root}>
@@ -51,9 +67,28 @@ const OcrResult = () => {
                     }
                 </Card>
             </Grid>
+            <Box m={2} />
             <Grid>
                 <OnClickInfo keyword={"ocr_tip"}/>
             </Grid>
+            <Box m={2} />
+            <Grid container justify="center" spacing={5}
+                                              alignContent={"center"}>
+                    <Grid item>
+                    <Button variant="contained" color={"primary"} onClick={() => reversesearchYandex(inputUrl)}>
+                        {
+                            keyword("ocr_search_yandex")
+                        }
+                    </Button>
+                    </Grid>
+                    <Grid item>
+                    <Button variant="contained" color={"primary"} onClick={() => reversesearchBing(inputUrl)}>
+                        {
+                            keyword("ocr_search_bing")
+                        }
+                    </Button>
+                    </Grid>
+                </Grid>
         </Paper>
     )
 }
