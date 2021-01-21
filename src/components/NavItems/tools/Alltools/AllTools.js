@@ -35,7 +35,7 @@ const AllTools = (props) => {
                                     <Grid>
                                         <Grid item onClick={() => handleClick(value.path)}>
                                             {key === 12 ?
-                                                <IconButton>
+                                                <IconButton className={classes.customAllToolsButton} style={{"fontSize":67}}>
                                                     {value.icon}
                                                 </IconButton> :
                                                 <img
