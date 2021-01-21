@@ -16,10 +16,22 @@ import {KNOWN_LINK_PATTERNS, KNOWN_LINKS, matchPattern} from "../AssistantRuleBo
 const AssistantVideoResult = () => {
 
     const processUrl = useSelector(state => state.assistant.processUrl);
+    const linkType = matchPattern(processUrl, KNOWN_LINK_PATTERNS);
+
+    const useIframe = () => {
+        switch(linkType){
+            case KNOWN_LINKS.YOUTUBE:
+            case KNOWN_LINKS.VIMEO:
+            case KNOWN_LINKS.DAILYMOTION:
+            case KNOWN_LINKS.LIVELEAK:
+                return true
+            default:
+                return false
+        }
+    }
 
     const preprocessLinkForEmbed = (processUrl) => {
         let embedURL = processUrl;
-        let linkType = matchPattern(processUrl, KNOWN_LINK_PATTERNS);
         let stringToMatch = ""
         let positionOne = 0
 
@@ -42,9 +54,6 @@ const AssistantVideoResult = () => {
                 positionOne = processUrl.indexOf(stringToMatch) + stringToMatch.length;
                 embedURL = embedURL.slice(0, positionOne) + "embed/" + embedURL.slice(positionOne);
                 break;
-            case KNOWN_LINKS.FACEBOOK:
-                embedURL = "https://www.facebook.com/plugins/video.php?href=" + encodeURIComponent(embedURL);
-                break;
             default:
                 return embedURL;
         }
@@ -58,14 +67,23 @@ const AssistantVideoResult = () => {
     return (
         <Card variant={"outlined"}>
             <CardMedia>
-                <Iframe
-                    frameBorder="0"
-                    url = {preprocessLinkForEmbed(processUrl)}
-                    allow="fullscreen"
-                    height="400"
-                    width="100%"
-                />
+                {useIframe() ?
+                    <Iframe
+                        frameBorder="0"
+                        url={preprocessLinkForEmbed(processUrl)}
+                        allow="fullscreen"
+                        height="400"
+                        width="100%"
+                    /> :
+                    <video
+                        src={preprocessLinkForEmbed(processUrl)}
+                        controls={true}
+                        height="400"
+                        width="100%"
+                    />
+                }
             </CardMedia>
+
             <CardActions>
                 <ImageIcon color={"action"}/>
                 <Link href={processUrl} color={"textSecondary"} variant={"subtitle2"}>
