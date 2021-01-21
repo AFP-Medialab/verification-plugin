@@ -206,8 +206,7 @@ const NavBar = (props) => {
             title: "navbar_ocr",
             icon:
                 <DescriptionIcon
-                    fontSize={"large"}
-                    className={(drawerValue === 12) ? classes.selectedApp : classes.unSelectedApp}
+                    className={(drawerValue === 12) ? classes.customAllToolsIconSelected : classes.customAllToolsIconDeselected}
                 />,
             tsvPrefix: "ocr",
             path: "ocr"
@@ -366,7 +365,8 @@ const NavBar = (props) => {
                                     <ListItemIcon color="primary.main">
                                         {
                                             (key === 0 || key === 12) ?
-                                                item.icon
+                                                <IconButton className={classes.customAllToolsButton} style={{"fontSize":40}}>
+                                                    {item.icon}</IconButton>
                                                 :
                                                 <Icon className={classes.iconRootDrawer} fontSize={"large"}>
                                                     <img className={classes.imageIconDrawer} src={item.icon} alt={keyword(item.title)}/>
