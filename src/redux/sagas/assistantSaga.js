@@ -415,7 +415,7 @@ const filterAssistantResults = (urlType, contentType, userInput, scrapeResult) =
             break;
         case KNOWN_LINKS.MISC:
             if (contentType) {
-                CONTENT_TYPE.IMAGE ? imageList = [userInput] : videoList = [userInput]
+                contentType === CONTENT_TYPE.IMAGE ? imageList = [userInput] : videoList = [userInput]
             } else {
                 imageList = scrapeResult.images
                 videoList = scrapeResult.videos
