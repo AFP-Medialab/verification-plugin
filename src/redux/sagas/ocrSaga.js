@@ -1,6 +1,6 @@
 import useGateCloudApi from "../../components/NavItems/Assistant/AssistantApiHandlers/useGateCloudApi";
 import {all, call, fork, put, select, takeLatest} from "redux-saga/effects";
-import {setOcrResult} from "../actions/tools/ocrActions";
+import {setOcrErrorKey, setOcrResult} from "../actions/tools/ocrActions";
 
 const gateCloudApi = useGateCloudApi()
 
@@ -19,6 +19,7 @@ function* handleOcrCall(action) {
         yield put(setOcrResult(true, false, false, null))
 
         if (b64Encoding) {
+            checkImageSize(b64Encoding)
             let ocrResult = yield call(gateCloudApi.callOcrB64Service,  b64Encoding)
             ocrText = ocrResult.text
         }
@@ -37,7 +38,18 @@ function* handleOcrCall(action) {
 
     } catch (error) {
         console.log(error)
+        if(error.message==="ocr_too_big"){
+            yield put (setOcrErrorKey("ocr_too_big"))
+        }
         yield put(setOcrResult(false, true, false, null))
+    }
+}
+
+function checkImageSize (b64Image) {
+    let image=  b64Image.substr(22)
+    let decoded_image = atob(image)
+    if(decoded_image.length > 4000000){
+        throw  Error("ocr_too_big")
     }
 }
 

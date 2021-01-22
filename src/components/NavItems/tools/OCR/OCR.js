@@ -23,6 +23,7 @@ const OCR = () => {
     const keyword = useLoadLanguage("components/NavItems/tools/OCR.tsv", tsv);
 
     const ocrInputUrl = useSelector(state => state.ocr.url);
+    const errorKey = useSelector(state => state.ocr.errorKey);
     const fail = useSelector(state => state.ocr.fail);
 
     const [userInput, setUserInput] = useState(ocrInputUrl);
@@ -63,11 +64,12 @@ const OCR = () => {
     }, [ocrInputUrl]);
 
     useEffect(() => {
+        let error_message_key = errorKey ? errorKey : "ocr_error"
         if (fail) {
-            dispatch(setError(keyword("ocr_error")));
+            dispatch(setError(keyword(error_message_key)));
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [fail])
+    }, [fail, errorKey])
 
     useEffect(() => {
         if (url && url !== KNOWN_LINKS.OWN) {
