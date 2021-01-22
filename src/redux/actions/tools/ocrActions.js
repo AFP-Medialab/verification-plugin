@@ -28,6 +28,15 @@ export const setOcrResult = (loading, fail, done, result) => {
     }
 }
 
+export const setOcrErrorKey = (errorKey) => {
+    return {
+        type: "SET_OCR_ERROR_KEY",
+        payload: {
+            errorKey: errorKey,
+        }
+    }
+};
+
 export const cleanOcr = () => {
     return {
         type: "OCR_CLEAN_STATE"
