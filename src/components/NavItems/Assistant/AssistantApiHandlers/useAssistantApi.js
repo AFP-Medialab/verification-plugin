@@ -2,13 +2,12 @@ import axios from "axios";
 
 export default function useAssistantApi() {
 
-    const assistantScrapeUrl = process.env.REACT_APP_ASSISTANT_URL
-    const elgEndpoint = process.env.REACT_APP_SPACY
+    const assistantEndpoint = process.env.REACT_APP_ASSISTANT_URL
 
     const callAssistantScraper = async (urlType, userInput) => {
         try {
             let scrapeResult = await axios
-                .get(assistantScrapeUrl  + "scrape/" +  urlType +  "?url=" + encodeURIComponent(userInput))
+                .get(assistantEndpoint  + "scrape/" +  urlType +  "?url=" + encodeURIComponent(userInput))
             if (scrapeResult.data.status === "success") {
                 return scrapeResult.data
             }
@@ -24,9 +23,8 @@ export default function useAssistantApi() {
     const callNamedEntityService = async (text) => {
 
         const namedEntityResult = await axios.post(
-            elgEndpoint,
-            {'content': text},
-            {headers: {'Content-Type': 'text/plain; charset=UTF-8'}}
+            assistantEndpoint + "gcloud/named-entity",
+            {content: text}
         )
 
         return namedEntityResult.data
@@ -35,7 +33,7 @@ export default function useAssistantApi() {
     const callAssistantTranslator = async (lang, text) => {
         try {
             let translationResult = await axios
-                .get(assistantScrapeUrl + "translate/"  + lang +  "?text=" + encodeURIComponent(text))
+                .get(assistantEndpoint + "translate/"  + lang +  "?text=" + encodeURIComponent(text))
             if (translationResult.data.status === "success") {
                 return translationResult.data
             }
@@ -48,9 +46,55 @@ export default function useAssistantApi() {
         }
     }
 
+    const callSourceCredibilityService = async (urlList) => {
+        if (urlList.length === 0) return null
+
+        let urls = urlList.join(" ")
+
+        const result = await axios.post(
+            assistantEndpoint + "gcloud/source-credibility",
+            {text: urls})
+
+        return result.data
+    }
+
+    const callHyperpartisanService = async (text) => {
+        const result = await axios.post(
+            assistantEndpoint + "gcloud/hyperpartisan",
+            {text: text})
+
+        return result.data
+    }
+
+    const callOcrService = async (urlList) => {
+        let urls = urlList.join(" ")
+
+        const result = await axios.post(
+            assistantEndpoint + "gcloud/ocr",
+            {text: urls, data_type: "url"}
+        )
+
+        return result.data
+    }
+
+    const callOcrB64Service = async (b64Img) => {
+        b64Img = b64Img.replace("data:image/png;base64,", "")
+
+        const result = await axios.post(
+            assistantEndpoint + "gcloud/ocr",
+            {text: b64Img, data_type:"upload"}
+            )
+
+        return result.data
+    }
+
     return {
         callAssistantScraper,
+        callSourceCredibilityService,
         callNamedEntityService,
-        callAssistantTranslator
+        callAssistantTranslator,
+        callHyperpartisanService,
+        callOcrService,
+        callOcrB64Service
     }
 }

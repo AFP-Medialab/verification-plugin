@@ -84,6 +84,7 @@ const Assistant = () => {
             errorKey.startsWith("assistant_error") ?
                 dispatch(setError(keyword(errorKey))) :
                 dispatch(setError(errorKey))
+            cleanAssistant()
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [errorKey])

@@ -20,7 +20,6 @@ import {
 
 import {all, call, fork, put, select, takeLatest} from 'redux-saga/effects'
 import useAssistantApi from "../../components/NavItems/Assistant/AssistantApiHandlers/useAssistantApi";
-import useGateCloudApi from "../../components/NavItems/Assistant/AssistantApiHandlers/useGateCloudApi";
 import useDBKFApi from "../../components/NavItems/Assistant/AssistantApiHandlers/useDBKFApi";
 import {
     CONTENT_TYPE,
@@ -36,7 +35,6 @@ import {
  * APIs
  **/
 const dbkfAPI = useDBKFApi()
-const gateCloudApi = useGateCloudApi()
 const assistantApi = useAssistantApi()
 
 
@@ -179,7 +177,7 @@ function* handleSourceCredibilityCall(action) {
 
     try {
         const inputUrl = yield select((state) => state.assistant.inputUrl)
-        const result = yield call(gateCloudApi.callSourceCredibilityService, [inputUrl])
+        const result = yield call(assistantApi.callSourceCredibilityService, [inputUrl])
         const filteredResults = filterSourceCredibilityResults(result)
         yield put(setInputSourceCredDetails(filteredResults, false, true, false))
     } catch (error) {
@@ -219,7 +217,7 @@ function* handleHyperpartisanCall(action) {
         if (text && lang === "en") {
             yield put(setHpDetails(null, true, false, false))
 
-            const result = yield call(gateCloudApi.callHyperpartisanService, text)
+            const result = yield call(assistantApi.callHyperpartisanService, text)
 
             let hpProb = result.entities.hyperpartisan[0].hyperpartisan_probability
             hpProb = parseFloat(hpProb).toFixed(2) > 0.50 ? parseFloat(hpProb).toFixed(2) : null
