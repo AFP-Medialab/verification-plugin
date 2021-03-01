@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {useSelector} from "react-redux";
+import {useDispatch} from "react-redux";
 import {Paper} from "@material-ui/core";
 import TextField from "@material-ui/core/TextField";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
@@ -12,13 +13,16 @@ import YoutubeResults from "./Results/YoutubeResults.js"
 import TwitterResults from "./Results/TwitterResults";
 import {useAnalysisWrapper} from "./Hooks/useAnalysisWrapper";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles"
-import {useParams} from 'react-router-dom'
 import Iframe from "react-iframe";
 import useGenerateApiUrl from "./Hooks/useGenerateApiUrl";
 import FacebookResults from "./Results/FacebookResults";
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/Analysis.tsv";
 import {submissionEvent} from "../../../Shared/GoogleAnalytics/GoogleAnalytics";
+import {cleanAnalysisState} from "../../../../redux/actions/tools/analysisActions";
+import {useParams} from "react-router-dom";
+import {KNOWN_LINKS} from "../../Assistant/AssistantRuleBook";
+
 
 /*function useTraceUpdate(props) {
     const prev = useRef(props);
@@ -41,12 +45,15 @@ const Analysis = () => {
     const {url} = useParams();
     const classes = useMyStyles();
     const keyword = useLoadLanguage("components/NavItems/tools/Analysis.tsv", tsv);
+    const dispatch = useDispatch();
 
     const resultUrl = useSelector(state => state.analysis.url);
     const resultData = useSelector(state => state.analysis.result);
     const isLoading = useSelector(state => state.analysis.loading);
 
+
     const [input, setInput] = useState((resultUrl) ? resultUrl : "");
+    const [urlDetected, setUrlDetected] = useState(false)
     const [submittedUrl, setSubmittedUrl] = useState(undefined);
     const [reprocess, setReprocess] = useState(false);
 
@@ -60,21 +67,29 @@ const Analysis = () => {
     const submitForm = () => {
         submissionEvent(input.trim());
         setSubmittedUrl(input.trim());
+        dispatch(cleanAnalysisState());
     };
-
-    console.log(resultData)
-
-    useEffect(() => {
-        if (url !== undefined) {
-            const uri = decodeURIComponent(url);
-            setInput(uri);
-            setSubmittedUrl(uri);
+    
+    useEffect(() => {       
+        if (finalUrl !== undefined) {
+            setSubmittedUrl(undefined);
         }
-    }, [url]);
+    }, [finalUrl]);
+
+    useEffect(()=>{
+        if (urlDetected) {
+            submitForm()
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [urlDetected])
 
     useEffect(() => {
-        setSubmittedUrl(undefined);
-    }, [finalUrl]);
+        if (url && url !== KNOWN_LINKS.OWN) {
+             const uri = (url !== null) ? decodeURIComponent(url) : undefined;
+             setInput(uri);
+             setUrlDetected(true)
+         }
+    }, [url]);
 
     return (
         <div>
@@ -127,17 +142,20 @@ const Analysis = () => {
                 </Box>
             }
             {
-                (resultData !== null && resultUrl != null && resultUrl.startsWith("https://www.youtube.com/")) ?
+                //(resultData !== null && resultUrl != null && resultUrl.startsWith("https://www.youtube.com/")) ?
+                (resultData  && resultData.platform.startsWith("youtube")) ?
                     <YoutubeResults report={resultData}/> : null
             }
             {
-                (resultData !== null && resultUrl != null && resultUrl.startsWith("https://twitter.com/")) ?
+                //(resultData !== null && resultUrl != null && resultUrl.startsWith("https://twitter.com/")) ?
+                (resultData  && resultData.platform.startsWith("twitter")) ?
                     <TwitterResults report={resultData}/> : null
             }
             {
-                (resultData !== null && resultUrl != null && resultUrl.startsWith("https://www.facebook.com/")) ?
+                //(resultData !== null && resultUrl != null && resultUrl.startsWith("https://www.facebook.com/")) ?
+                (resultData  && resultData.platform.startsWith("facebook")) ?
                     <FacebookResults report={resultData}/> : null
             }
         </div>);
 };
-export default Analysis;
+export default React.memo(Analysis);

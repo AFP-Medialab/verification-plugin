@@ -3,9 +3,13 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-import {createStore} from "redux";
+import {applyMiddleware, createStore} from "redux";
+
 import allReducers from "./redux/reducers/index"
+import createSagaMiddleware from 'redux-saga';
+
 import {Provider} from "react-redux"
+import rootSaga from "./redux/sagas";
 
 function saveToLocalStorage(state) {
     try {
@@ -38,12 +42,17 @@ function loadFromLocalStorage() {
 
 const persistedState = loadFromLocalStorage();
 
+/*SAGA*/
+const sagaMiddleware = createSagaMiddleware();
+
 const store = createStore(
     allReducers,
-    persistedState,  // uncomment to keep redux state on refresh
-    //Useful for the chrome extension Redux devtool : https://chrome.google.com/webstore/detail/redux-devtools/lmhkpmbekcpmknklioeibfkpmmfibljd
-    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+    persistedState,  // uncomment to keep redux state on refresh,
+    applyMiddleware(sagaMiddleware)
 );
+
+/*SAGA*/
+sagaMiddleware.run(rootSaga)
 
 store.subscribe(() => {
     if (store.getState().cookies !== null && store.getState().cookies)

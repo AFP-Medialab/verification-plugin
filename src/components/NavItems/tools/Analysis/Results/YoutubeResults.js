@@ -8,9 +8,9 @@ import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
-import ExpansionPanel from "@material-ui/core/ExpansionPanel";
-import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
-import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
+import Accordion from "@material-ui/core/Accordion";
+import AccordionSummary from "@material-ui/core/AccordionSummary";
+import AccordionDetails from "@material-ui/core/AccordionDetails";
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import TableHead from "@material-ui/core/TableHead";
 import GridList from "@material-ui/core/GridList";
@@ -211,16 +211,16 @@ const YoutubeResults = (props) => {
                             </Table>
                             {
                                 verificationComments.length > 0 &&
-                                <ExpansionPanel expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
-                                    <ExpansionPanelSummary
+                                <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
+                                    <AccordionSummary
                                         expandIcon={<ExpandMoreIcon/>}
                                         aria-controls="panel1bh-content"
                                         id="panel1bh-header"
                                     >
                                         <Typography className={classes.heading}>{keyword("api_comments")}</Typography>
                                         <Typography className={classes.secondaryHeading}> ...</Typography>
-                                    </ExpansionPanelSummary>
-                                    <ExpansionPanelDetails>
+                                    </AccordionSummary>
+                                    <AccordionDetails>
                                         <Table className={classes.table} size="small" aria-label="a dense table">
                                             <TableHead>
                                                 <TableRow>
@@ -252,8 +252,8 @@ const YoutubeResults = (props) => {
                                                 }
                                             </TableBody>
                                         </Table>
-                                    </ExpansionPanelDetails>
-                                </ExpansionPanel>
+                                    </AccordionDetails>
+                                </Accordion>
                             }
                         </div>
                     }

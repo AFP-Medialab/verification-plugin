@@ -9,6 +9,7 @@ navbar_metadata	Metadata	Metadonnées	Metadatos
 navbar_rights	Video rights	Droits vidéo	Derechos video
 navbar_forensic	Forensic	Forensic	Forensic
 navbar_twitter_sna	Twitter SNA.	Twitter SNA.	Twitter SNA.
+navbar_ocr	OCR	Temp	Temp	Temp
 api_help_video	https://www.youtube.com/embed/eEVTYq1LMxM?rel=0	https://www.youtube.com/embed/6kkulKrgtLQ?rel=0	https://www.youtube.com/embed/FtAbxbrJMMY?rel=0
 keyframes_help_video	https://www.youtube.com/embed/iNs8y5DoxP8?rel=0	https://www.youtube.com/embed/kXtjUWTqgFQ?rel=0	https://www.youtube.com/embed/0seFvJXegyc?rel=0
 thumbnails_help_video	https://www.youtube.com/embed/Vn0XGlOkSRQ?rel=0	https://www.youtube.com/embed/Ioe5yDqPaL8?rel=0	https://www.youtube.com/embed/cmv_1KJlbhE?rel=0
@@ -18,3 +19,5 @@ metadata_help_video	https://www.youtube.com/embed/Mg6Z-Jc54yo?rel=0	https://www.
 copyright_help_video	https://www.youtube.com/embed/NjTXsbF5Wu8?rel=0	https://www.youtube.com/embed/dDQWlR8u-mk?rel=0	https://www.youtube.com/embed/36hvLnIugjI?rel=0
 forensic_help_video	https://www.youtube.com/embed/de862rAPne4?rel=0	https://www.youtube.com/embed/jiqcixMzmpo?rel=0	https://www.youtube.com/embed/B2D0kPOAWxM?rel=0
 close	Close	Fermer	Cerrar
+navbar_covidsearch	COVID-19 Debunk search	Recherche COVID-19	Búsqueda COVID-19
+navbar_xnetwork	XNetwork Debunk search	Recherche XNetwork	Búsqueda XNetwork

@@ -27,7 +27,6 @@ const MyMap = (props) => {
         if (!props.locations)
             return;
         const locationName = props.locations[0].location;
-        console.log(locationName)
         setInfoLink(props.locations[0].wikipedia_url);
         axios.get("https://nominatim.openstreetmap.org/search?q=" + locationName + "&format=json")
             .then(response => {
@@ -41,15 +40,16 @@ const MyMap = (props) => {
                 }
             })
             .catch(error => console.log(error))
-    }, [(props.locations) ? props.locations.length : 0]);
+    
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [(props.locations) ? props.locations.length : 0, props.locations]);
 
 
     return (
         <ReactMapGL
             {...view}
-            mapboxApiAccessToken={process.env.REACT_APP_MAP_TOKEN}
             onViewportChange={view => setView(view)}
-            mapStyle={"mapbox://styles/teebolt16/ck4cj4f5y13gw1cmmtboiklua"}
+            mapStyle={"https://api.maptiler.com/maps/basic/style.json?key="+process.env.REACT_APP_MAP_TOKEN}
         >
             <Marker
                 latitude={markerLat}

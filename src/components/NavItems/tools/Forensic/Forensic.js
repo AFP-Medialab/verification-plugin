@@ -7,13 +7,14 @@ import React, {useEffect, useState} from "react";
 import {useSelector} from "react-redux";
 import useGetImages from "./Hooks/useGetImages";
 import LinearProgress from "@material-ui/core/LinearProgress";
-import ForensicResults from "./Results/ForesnsicResult";
+import ForensicResults from "./Results/ForensicResult";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import {useParams} from 'react-router-dom'
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/Forensic.tsv";
 import {submissionEvent} from "../../../Shared/GoogleAnalytics/GoogleAnalytics";
 import LocalFile from "../Forensic/LocalFile/LocalFile";
+import {KNOWN_LINKS} from "../../Assistant/AssistantRuleBook";
 
 const Forensic = () => {
     const {url} = useParams();
@@ -33,6 +34,7 @@ const Forensic = () => {
 
     const [input, setInput] = useState(resultUrl);
     const [image, setImage] = useState("");
+    const [urlDetected, setUrlDetected] = useState(false)
 
     useGetImages(image);
 
@@ -44,12 +46,24 @@ const Forensic = () => {
     };
 
     useEffect(() => {
-        if (url !== undefined) {
-            const uri = decodeURIComponent(url);
-            setInput(uri);
-            setImage(uri);
+        if (url) {
+            if (url === KNOWN_LINKS.OWN) {
+                setLocalFile(true)
+            } else {
+                const uri = decodeURIComponent(url);
+                setInput(uri)
+            }
         }
+        setUrlDetected(true)
+
     }, [url]);
+
+    useEffect(() => {
+        if (urlDetected){
+            submitUrl()
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [urlDetected])
 
     useEffect(() => {
         setImage("")

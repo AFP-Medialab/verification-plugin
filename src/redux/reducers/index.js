@@ -17,6 +17,10 @@ import thumbnailsReducer from "./tools/thumbnailsReducer";
 import twitterSnaReducer from "./tools/twitterSnaReducer";
 import videoRightsReducer from "./tools/videoRightsReducer";
 import cookiesReducer from "./cookiesReducers";
+import covidSearchReducer from "./tools/covidSearchReducer";
+import assistantReducer from "./assistantReducer";
+import ocrReducer from "./tools/ocrReducer";
+
 
 const allReducers = combineReducers({
     language : languageReducer,
@@ -35,7 +39,10 @@ const allReducers = combineReducers({
     thumbnails : thumbnailsReducer,
     twitterSna : twitterSnaReducer,
     videoRights : videoRightsReducer,
-    cookies : cookiesReducer
+    cookies : cookiesReducer,
+    covidSearch: covidSearchReducer,
+    assistant : assistantReducer,
+    ocr: ocrReducer
 });
 
 export default allReducers;

@@ -36,6 +36,6 @@ export const useKeyframes = (result) => {
             });
         setDetailedList(tmpDetailed);
         setSimpleList(tmpSimple);
-    }, [jsonResult]);
+    }, [jsonResult, result]);
     return [simpleList, detailedList];
 };

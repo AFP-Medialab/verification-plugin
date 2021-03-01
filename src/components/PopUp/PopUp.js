@@ -1,80 +1,48 @@
-import React, {useState} from "react";
-import useMyStyles from "../Shared/MaterialUiStyles/useMyStyles";
-import {Typography} from "@material-ui/core";
+import React, {useEffect, useState} from "react";
+import {useDispatch, useSelector} from "react-redux";
+
+import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
+import Grid from "@material-ui/core/Grid";
 import weVerifyLogo from "./images/logo-we-verify.png";
 import invidLogo from "./images/InVID-logo.svg";
-import ExpansionPanel from "@material-ui/core/ExpansionPanel";
-import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
-import Grid from "@material-ui/core/Grid";
-import ImageGridList from "../Shared/ImageGridList/ImageGridList";
-import Link from "@material-ui/core/Link";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import useLoadLanguage from "../../Hooks/useLoadLanguage";
+
 import tsv from "../../LocalDictionary/components/PopUp.tsv";
+import useMyStyles from "../Shared/MaterialUiStyles/useMyStyles";
+import useLoadLanguage from "../../Hooks/useLoadLanguage";
+import {changeLanguage} from "../../redux/actions";
+import {getSupportedBrowserLanguage} from "../Shared/Languages/getSupportedBrowserLanguage";
 
 const navigator = (window.browser) ? window.browser : window.chrome;
 
-
 const PopUp = () => {
     const classes = useMyStyles();
+    const dispatch = useDispatch();
     const keyword = useLoadLanguage("components/PopUp.tsv", tsv);
-    const createScript = (tag, field) => {
-        let script =
-            "let array = [];" +
-            "for (let elt of document.getElementsByTagName('" + tag + "')) {" +
-            "	if (elt." + field + ") {" +
-            "    let url = elt." + field + ";" +
-            "	 if (url.startsWith('blob'))" +
-            "      continue;" +
-            "	 if (!url.startsWith('http')) {" +
-            "		url = new URL(url).href;" +
-            "	 }" +
-            "    if (!array.includes(url))" +
-            "      array.push(url);" +
-            "  }" +
-            "}" +
-            "array;";
-        return script;
-    };
+    const currentLang = useSelector(state => state.language);
 
-    const [imageList, setImageList] = useState(null);
-    const [videoList, setVideoList] = useState(null);
+    const [pageUrl, setPageUrl] = useState(null);
 
-    const getUrls = (tag, field, setFunction) => {
-        let urlList = [];
-        const script = createScript(tag, field);
-        navigator.tabs.executeScript({
-            code: script
-        }, (result) => {
-            if (result) {
-                for (let url of result[0])
-                    urlList.push(url);
-            }
-            setFunction(urlList)
+
+    const urlOpenAssistant = () => {
+        window.open("/popup.html#/app/assistant/" + encodeURIComponent(pageUrl))
+    }
+
+    const loadData = () => {
+        //get url of window
+        navigator.tabs.query({active: true, lastFocusedWindow: true}, tabs => {
+            let url = tabs[0].url;
+            setPageUrl(url);
         })
-    };
+    }
 
-    const imageClick = () => {
-        getUrls("img", "src", setImageList);
-    };
+    useEffect(() => {
+        let supportedBrowserLang = getSupportedBrowserLanguage()
 
-    const videoClick = () => {
-        getUrls("video", "src", setVideoList);
-    };
-
-
-    const copyToClipBoard = (string) => {
-        let textArea = document.createElement("textarea");
-        textArea.innerHTML = string;
-        document.body.appendChild(textArea);
-        textArea.select();
-        document.execCommand('copy');
-        textArea.remove();
-    };
+        if (supportedBrowserLang !== undefined && supportedBrowserLang !== currentLang) {
+            dispatch(changeLanguage(supportedBrowserLang))
+        }
+    }, [currentLang, dispatch])
 
     return (
         <div className={classes.popUp}>
@@ -89,78 +57,33 @@ const PopUp = () => {
                     <Button variant="outlined" color="primary" fullWidth={true} width={"100%"} onClick={
                         () => window.open("/popup.html#/app/tools/all")
                     }>
-                        {
-                            keyword("open_website")
-                        }
+                        {keyword("open_website")}
+                    </Button>
+                </Grid>
+                <Box m={1}/>
+                <Grid item xs={12}>
+                    <Button variant="outlined" color="primary" fullWidth={true} width={"100%"} onClick={
+                        () => window.open("/popup.html#/app/assistant/")}>
+                        {keyword("open_assistant")}
+                    </Button>
+                </Grid>
+                <Box m={1}/>
+                <Grid item xs={12}>
+                    <Button variant="outlined" color="primary" fullWidth={true} width={"100%"} onMouseOver={()=>loadData()} onClick={
+                        () => urlOpenAssistant()}>
+                        {keyword("open_assistant_on_page")}
+                    </Button>
+                </Grid>
+                <Box m={1}/>
+                <Grid item xs={12}>
+                    <Button variant="outlined" color="primary" fullWidth={true} width={"100%"} onClick={
+                        () => window.open("/popup.html#/app/classroom/")}>
+                        {keyword("open_classroom")}
                     </Button>
                 </Grid>
             </Grid>
 
-            <ExpansionPanel onClick={videoClick}>
-                <ExpansionPanelSummary
-                    expandIcon={<ExpandMoreIcon/>}
-                    aria-controls="panel1a-content"
-                    id="panel1a-header"
-                >
-                    <Typography className={classes.heading}>
-                        {
-                            keyword("video_urls")
-                        }
-                    </Typography>
-                </ExpansionPanelSummary>
-                <ExpansionPanelDetails>
-                    <List>
-                        {
-                            (videoList && videoList.length > 0) ?
-                                videoList.map((url, index) => {
-                                    return (
-                                        <ListItem key={index}>
-                                            <Grid container alignContent={"center"}
-                                                  spacing={1} alignItems={"center"}>
-                                                <Grid item>
-                                                    <Button variant="outlined" size="small" color={"primary"}
-                                                            onClick={() => copyToClipBoard(url)}>
-                                                        {
-                                                            keyword("copy")
-                                                        }
-                                                    </Button>
-                                                </Grid>
-                                                <Grid item>
-                                                    <Link onClick={() => window.open(url)} variant="body2">
-                                                        {url.substring(0, 20) + "..."}
-                                                    </Link>
-                                                </Grid>
-                                            </Grid>
-                                        </ListItem>
-                                    )
-                                })
-                                :
-                                keyword("no_video_found")
-                        }
-                    </List>
-                </ExpansionPanelDetails>
-            </ExpansionPanel>
-            <ExpansionPanel onClick={imageClick}>
-                <ExpansionPanelSummary
-                    expandIcon={<ExpandMoreIcon/>}
-                    aria-controls="panel2a-content"
-                    id="panel2a-header"
-                >
-                    <Typography className={classes.heading}>
-                        {
-                            keyword("images_url")
-                        }
-                    </Typography>
-                </ExpansionPanelSummary>
-                <ExpansionPanelDetails p={0}>
-                    {
-                        (imageList && imageList.length > 0) ?
-                            <ImageGridList list={imageList} height={60}/>
-                            :
-                            keyword("no_images")
-                    }
-                </ExpansionPanelDetails>
-            </ExpansionPanel>
+            <Box m={1}/>
         </div>
     )
 };

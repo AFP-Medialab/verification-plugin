@@ -276,8 +276,12 @@ const useMyStyles = makeStyles(theme => ({
     forensicCard: {
         width: "100%",
     },
-    forensicMedia: {
+    forensicMediaLandscape: {
         height: 0,
+        paddingTop: '56.25%', // 16:9
+    },
+    forensicMediaNotLandscape: {
+        height: 400,
         paddingTop: '56.25%', // 16:9
     },
     expand: {
@@ -337,6 +341,80 @@ const useMyStyles = makeStyles(theme => ({
             fontSize: theme.typography.pxToRem(13),
             minWidth: 100,
         },
+    },
+    assistantCards: {
+        marginBottom: 2,
+        backgroundColor: theme.palette.primary.light,
+        '&:hover': {
+            backgroundColor: theme.palette.secondary.main,
+        },
+        borderColor:"darkcyan",
+        borderStyle: "solid",
+        borderWidth: "2px"
+    },
+    toolTipIcon: {
+        color: theme.palette.secondary,
+        position: "relative",
+        opacity: 0.7,
+        top: theme.spacing.unit,
+        width: theme.typography.h5.fontSize,
+        height: theme.typography.h5.fontSize,
+        marginRight: 3,
+        marginLeft: 5
+    },
+    toolTipWarning: {
+        color: "red",
+        position: "relative",
+        top: theme.spacing.unit,
+        width: theme.typography.h5.fontSize,
+        height: theme.typography.h5.fontSize,
+        marginRight: 3,
+        marginLeft: 5
+    },
+    assistantCardHeader: {
+        fontSize: theme.typography.h6.fontSize,
+        color: "white",
+        textAlign: "left",
+        backgroundColor: theme.palette.primary.main
+    },
+    assistantTooltip: {
+        backgroundColor: theme.palette.secondary,
+        opacity: 0.9,
+        fontSize: "1.2rem",
+        maxWidth: 700,
+        textAlign: "left",
+        fontFamily: "\"Roboto\", \"Helvetica\", \"Arial\", sans-serif",
+        fontWeight: 40,
+        lineHeight: 1.5,
+        letterSpacing: "0.00938em",
+    },
+    assistantRoot: {
+        padding: theme.spacing(3, 2),
+        backgroundColor: "#F7F7F7",
+        marginTop: 5,
+        textAlign: "left",
+    },
+    assistantGrid: {
+        width: "100%",
+        marginBottom: 2,
+        textAlign: "left",
+        font: theme.typography.h6.fontSize
+    },
+    customAllToolsButton: {
+        padding: 0,
+        minHeight:0,
+        minWidth: 0,
+        backgroundColor: 'transparent',
+        fontSize: 40
+    },
+    customAllToolsIconDeselected: {
+        fontSize: "inherit",
+        color: "#9A9A9A"
+    },
+    customAllToolsIconSelected: {
+        fontSize: "inherit",
+        color: theme.palette.primary.main
     }
+
 }));
 export default useMyStyles;

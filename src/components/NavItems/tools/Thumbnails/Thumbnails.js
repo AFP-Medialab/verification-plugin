@@ -3,7 +3,7 @@ import CustomTile from "../../../Shared/CustomTitle/CustomTitle";
 import TextField from "@material-ui/core/TextField";
 import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
-import React, {useCallback} from "react";
+import React, {useEffect, useState} from "react";
 import ImageReverseSearch from "../ImageReverseSearch";
 import ImageGridList from "../../../Shared/ImageGridList/ImageGridList";
 import {useDispatch, useSelector} from "react-redux";
@@ -11,7 +11,9 @@ import FormControl from "@material-ui/core/FormControl";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import {useInput} from "../../../../Hooks/useInput";
-import {cleanThumbnailsState, setThumbnailsResult} from "../../../../redux/actions/tools/thumbnailsActions"
+import {
+    cleanThumbnailsState,
+    setThumbnailsResult} from "../../../../redux/actions/tools/thumbnailsActions"
 import {setError} from "../../../../redux/actions/errorActions"
 import CloseResult from "../../../Shared/CloseResult/CloseResult";
 import Checkbox from "@material-ui/core/Checkbox";
@@ -20,8 +22,12 @@ import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/Thumbnails.tsv";
 import {submissionEvent} from "../../../Shared/GoogleAnalytics/GoogleAnalytics";
 import OnClickInfo from "../../../Shared/OnClickInfo/OnClickInfo";
+import {useParams} from 'react-router-dom'
+
 
 const Thumbnails = () => {
+    const {url} = useParams();
+
     const classes = useMyStyles();
     const keyword = useLoadLanguage("components/NavItems/tools/Thumbnails.tsv", tsv);
 
@@ -31,11 +37,11 @@ const Thumbnails = () => {
 
     const input = useInput(resultUrl);
     const [selectedValue, setSelectedValue] = React.useState({
-        'google': true,
+        'google': false,
         'bing': false,
         'tineye': false,
         'yandex': false,
-        'openTabs': true,
+        'openTabs': false,
         'reddit': false,
 
     });
@@ -104,18 +110,25 @@ const Thumbnails = () => {
     };
 
     const submitForm = () => {
+        dispatch(setError(null));
         let url = input.value.replace("?rel=0", "");
         if (url !== null && url !== "" && isYtUrl(url)) {
             submissionEvent(url);
-            dispatch(setThumbnailsResult(url, get_images(url), false, false));
-
-
+            let images = get_images(url);
+            dispatch(setThumbnailsResult(url, images, false, false));
+            if(selectedValue.openTabs)
+                images.forEach(img => imageClickUrl(img));
         } else
             dispatch(setError("Please use a valid Youtube Url (add to tsv)"));
     };
 
     const imageClick = (event) => {
-        imageClickUrl(event.target.src);
+        let search_url = "https://www.google.com/searchbyimage?image_url=";
+    let url = event;
+
+    if (url !== ""){
+        window.chrome.tabs.create({url:search_url + url});
+    }
     };
 
     const imageClickUrl = (url) => {
@@ -130,17 +143,27 @@ const Thumbnails = () => {
         if (selectedValue.reddit)
             ImageReverseSearch("reddit", [url]);
     };
-    useCallback(() => {
-        if (selectedValue.openTabs)
-            resultData.map(value => imageClickUrl(value))
-        console.log(resultData);
-    }, [imageClick, imageClickUrl, resultData, selectedValue.openTabs]);
-    /*useEffect(() => {
-        
-        if (selectedValue.openTabs)
-            resultData.map(value => imageClickUrl(value))
-        
-    }, [resultUrl, imageClickUrl, resultData, selectedValue.openTabs]);*/
+
+    useEffect(() => {
+        if (url !== undefined) {
+            const uri = (url !== null) ? decodeURIComponent(url) : undefined;
+            dispatch(setThumbnailsResult(uri, resultData, false, false));
+        }
+    }, [url]);
+
+    const [showResult, setShowResult] = useState(false);
+    const toggleDetail = () => {
+        setShowResult(true);
+    };
+
+    let height = 0;
+    let cols = 3;
+    let colsWidth = 1180 / cols;
+    if (resultData) {
+        var img = new Image();
+        img.src = resultData[0];
+        height = ((colsWidth * img.height) / img.width) - 60;
+    }
 
     return (
         <div>
@@ -176,7 +199,7 @@ const Thumbnails = () => {
                                 );
                             })
                         }
-                        <FormControlLabel
+                        {<FormControlLabel
                             control={
                                 <Checkbox
                                     checked={selectedValue["openTabs"]}
@@ -187,7 +210,7 @@ const Thumbnails = () => {
                             }
                             label={keyword("openTabs")}
                             labelPlacement="end"
-                        />
+                        />}
                     </FormGroup>
                 </FormControl>
                 <Box m={2}/>
@@ -206,7 +229,15 @@ const Thumbnails = () => {
                     <CloseResult onClick={() => dispatch(cleanThumbnailsState())}/>
                     <OnClickInfo keyword={"thumbnails_tip"}/>
                     <Box m={2}/>
-                    <ImageGridList list={resultData} handleClick={imageClick} height={160}/>
+                    <Button color={"primary"} onClick={() => toggleDetail()}>
+                    {
+                        keyword("show_result")
+                    }
+                    </Button>
+                    {
+                    showResult &&
+                    <ImageGridList list={resultData} handleClick={imageClick} height={height} cols={cols} />
+                    }
                 </Paper>
             }
         </div>);

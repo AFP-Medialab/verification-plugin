@@ -6,7 +6,6 @@ import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
-import CardActions from "@material-ui/core/CardActions";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import CustomTile from "../../Shared/CustomTitle/CustomTitle";
@@ -14,7 +13,7 @@ import Box from "@material-ui/core/Box";
 import useLoadLanguage from "../../../Hooks/useLoadLanguage";
 import tsv from "../../../LocalDictionary/components/NavItems/FactCheck.tsv";
 import Link from "@material-ui/core/Link";
-import afpImage from "../About/images/Logo-AFP-384.png"
+//import afpImage from "../About/images/Logo-AFP-384.png"
 
 
 const FactCheck = () => {
@@ -33,6 +32,9 @@ const FactCheck = () => {
             case "es":
                 rssUrl = "https://factual.afp.com/rss.xml";
                 break;
+            case "el":
+                rssUrl = "https://www.ellinikahoaxes.gr/feed/";
+                break;
             default:
                 rssUrl = "https://factcheck.afp.com/rss.xml";
                 break;
@@ -50,7 +52,8 @@ const FactCheck = () => {
         console.log(feed.items);
 
     const finishXMLParsing = (str) => {
-        return str.replace(/&#039;/g, "'").replace(/&quot;/g, "\"")
+        if(str)
+            return str.replace(/&#039;/g, "'").replace(/&quot;/g, "\"")
     };
 
     return (
@@ -65,7 +68,7 @@ const FactCheck = () => {
                             <Grid item key={key}>
                                 <Card className={classes.FactCheckCard}>
                                     <CardContent>
-                                        <img src={afpImage} className={classes.factCheckLogos}/>
+                                       {/*'<img src={afpImage} className={classes.factCheckLogos} alt=""/>'*/}
                                         <Typography className={classes.title} color="textSecondary" gutterBottom>
                                             {finishXMLParsing(val.pubDate)}
                                         </Typography>

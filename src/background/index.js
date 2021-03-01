@@ -86,6 +86,24 @@ const imageMagnifier = function(word){
     }
 };
 
+const mediaAssistant = function(word){
+    let url = getUrlImg(word);
+    if (url !== "") {
+        window.chrome.tabs.create({url:page_name+"#/app/assistant/" + encodeURIComponent(url)});
+        // Google analytics
+        rightClickEvent("Assistant", url)
+    }
+};
+
+const ocr = function(word){
+    let url = getUrlImg(word);
+    if (url !== "") {
+        window.chrome.tabs.create({url:page_name+"#/app/tools/ocr/" + encodeURIComponent(url)});
+        // Google analytics
+        rightClickEvent("OCR", url)
+    }
+};
+
 const imageReversesearch = function(word){
     let search_url = "https://www.google.com/searchbyimage?image_url=";
     let url = getUrlImg(word);
@@ -96,6 +114,17 @@ const imageReversesearch = function(word){
         let bool = rightClickEvent("Image Reverse Search Google", url)
         console.error("right Click : " + bool)
         //ga("send", "event", "ContextualMenu - Google", "click", url);
+    }
+};
+
+const imageReversesearchDBKF = function(word){
+    let search_url = "http://weverify-demo.ontotext.com/#!/similaritySearchResults&params=";
+    let url = getUrlImg(word);
+    if (url !== ""){
+        window.chrome.tabs.create({url:search_url + url});
+        // Google analytics
+        rightClickEvent("Image Reverse Search - DBKF (beta)", url)
+        //ga("send", "event", "ContextualMenu - Baidu", "click", url);
     }
 };
 
@@ -156,13 +185,30 @@ const imageReversesearchBing = function(word){
 
 const imageReversesearchAll = function(word){
     rightClickEvent("Image Reverse Search All", getUrlImg(word));
+    imageReversesearchDBKF(word);
     imageReversesearch(word);
     imageReversesearchBaidu(word);
     imageReversesearchBing(word);
     imageReversesearchTineye(word);
     imageReversesearchYandex(word);
     karmadecaySearch(word);
+
+    
 };
+
+window.chrome.contextMenus.create({
+    id: "assistant",
+    title: "Open with assistant",
+    contexts:["image", "video"],
+    onclick: mediaAssistant,
+})
+
+window.chrome.contextMenus.create({
+    id: "ocr",
+    title: "Open with OCR",
+    contexts:["image"],
+    onclick: ocr,
+})
 
 window.chrome.contextMenus.create({
     title: "Youtube thumbnails reverse search",
@@ -194,6 +240,12 @@ window.chrome.contextMenus.create({
     title: "Image Reverse Search - ALL",
     contexts:["image", "link"],
     onclick: imageReversesearchAll,
+});
+
+window.chrome.contextMenus.create({
+    title: "Image Reverse Search - DBKF (beta)",
+    contexts:["image"],
+    onclick: imageReversesearchDBKF,
 });
 
 window.chrome.contextMenus.create({

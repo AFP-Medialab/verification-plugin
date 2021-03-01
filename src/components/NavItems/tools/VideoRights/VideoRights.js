@@ -5,15 +5,18 @@ import TextField from "@material-ui/core/TextField";
 import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
 import LinearProgress from "@material-ui/core/LinearProgress";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import useVideoRightsTreatment from "./Hooks/useVideoRightsTreatment";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import VideoRightsResults from "./Results/VideoRightsResults";
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/VideoRights.tsv";
 import {submissionEvent} from "../../../Shared/GoogleAnalytics/GoogleAnalytics";
+import {useParams} from "react-router-dom";
+import {KNOWN_LINKS} from "../../Assistant/AssistantRuleBook";
 
 const VideoRights = () => {
+    const {url} = useParams();
     const classes = useMyStyles();
     const keyword = useLoadLanguage("components/NavItems/tools/VideoRights.tsv", tsv);
 
@@ -22,6 +25,7 @@ const VideoRights = () => {
     const isLoading = useSelector(state => state.videoRights.loading);
 
     const [input, setInput] = useState(resultUrl);
+    const [urlDetected, setUrlDetected] = useState(false);
     const [submitted, setSubmitted] = useState(null);
     useVideoRightsTreatment(submitted);
 
@@ -31,6 +35,21 @@ const VideoRights = () => {
             setSubmitted(input);
         }
     };
+
+    useEffect(()=>{
+        if (urlDetected){
+            submitForm()
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [urlDetected])
+
+    useEffect(() => {
+        if (url && url !== KNOWN_LINKS.OWN) {
+            const uri = (url !== null) ? decodeURIComponent(url) : undefined;
+            setInput(uri);
+            setUrlDetected(true)
+        }
+    }, [url]);
 
     return (
         <div>

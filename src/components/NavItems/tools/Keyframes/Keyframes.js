@@ -16,6 +16,7 @@ import {useParams} from 'react-router-dom'
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/Keyframes.tsv";
 import {submissionEvent} from "../../../Shared/GoogleAnalytics/GoogleAnalytics";
+import {KNOWN_LINKS} from "../../Assistant/AssistantRuleBook";
 
 const Keyframes = (props) => {
     const {url} = useParams();
@@ -33,23 +34,53 @@ const Keyframes = (props) => {
     const resultData = useSelector(state => state.keyframes.result);
     const isLoading = useSelector(state => state.keyframes.loading);
     const message = useSelector(state => state.keyframes.message);
+    const video_id = useSelector(state => state.keyframes.video_id);
 
     // State used to load images
     const [input, setInput] = useState((resultUrl) ? resultUrl : "");
     const [submittedUrl, setSubmittedUrl] = useState(undefined);
+    const [urlDetected, setUrlDetected] = useState(false)
     useKeyframeWrapper(submittedUrl);
+
+    //human right
+    const downloadShubshots = useSelector(state => state.humanRightsCheckBox)
+    //download subshots results
+    const downloadAction = () => {
+        let downloadlink = "http://multimedia2.iti.gr/video_analysis/keyframes/" + video_id + "/Subshots";
+        fetch(downloadlink).then(
+            response => {
+                response.blob().then(blob => {
+					let url = window.URL.createObjectURL(blob);
+					let a = document.createElement('a');
+                    a.href = url;
+                    a.click()});
+            });
+
+    }
 
     const submitUrl = () => {
         submissionEvent(input);
         setSubmittedUrl(input);
     };
 
-    useEffect(() => {
-        const uri = (url !== undefined) ? decodeURIComponent(url) : undefined;
-        if (uri !== undefined) {
-            setInput(uri);
-            setSubmittedUrl(uri);
+    useEffect(()=>{
+        if (urlDetected) {
+            submitUrl()
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [urlDetected])
+
+
+    useEffect(() => {
+        if (url) {
+            if (url === KNOWN_LINKS.OWN) {
+                setLocalFile(true)
+            } else {
+                const uri = decodeURIComponent(url);
+                setInput(uri)
+            }
+        }
+        setUrlDetected(true)
     }, [url]);
 
     useEffect(() => {
@@ -99,6 +130,14 @@ const Keyframes = (props) => {
                     resultData &&
                     <KeyFramesResults result={resultData}/>
                 }
+            </div>
+            <div>
+                {
+                    (resultData && downloadShubshots) ? 
+                    <Button color="primary" onClick={downloadAction}>
+                        {keyword("keyframes_download_subshots")}
+                    </Button> : <div/>
+                }            
             </div>
         </div>
     );

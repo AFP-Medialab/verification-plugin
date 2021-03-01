@@ -6,21 +6,17 @@ const useGenerateApiUrl = (url, reprocess) => {
     const [showFacebookIframe, setFacebookIframe] = useState(false);
 
     useEffect(() => {
-        window.addEventListener("message", (e) => {
+        function facebooktokenChange(e){
             if (e.origin === "https://caa.iti.gr") {
                 setFacebookToken(e.data[1]);
                 setFacebookIframe(false);
             }
-        });
-        return () => {
-            window.removeEventListener("message", (e) => {
-                if (e.origin === "https://caa.iti.gr") {
-                    setFacebookToken(e.data[1]);
-                    setFacebookIframe(false);
-                }
-            });
         }
-    }, []);
+        window.addEventListener("message", facebooktokenChange);
+        return () => {
+            window.removeEventListener("message", facebooktokenChange);
+        }
+    }, [facebookToken]);
 
     useEffect(() => {
         if (!url || url === "") {

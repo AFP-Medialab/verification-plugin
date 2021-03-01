@@ -34,15 +34,20 @@ const AllTools = (props) => {
                                 <Grid item key={key}>
                                     <Grid>
                                         <Grid item onClick={() => handleClick(value.path)}>
-                                            <img
-                                                style={{
-                                                    cursor: "pointer",
-                                                    maxWidth: 60,
-                                                    height: "auto"
-                                                }}
-                                                src={value.icon}
-                                                alt={value.icon}
-                                            />
+                                            {key === 12 ?
+                                                <IconButton className={classes.customAllToolsButton} style={{"fontSize":67}}>
+                                                    {value.icon}
+                                                </IconButton> :
+                                                <img
+                                                    style={{
+                                                        cursor: "pointer",
+                                                        maxWidth: 60,
+                                                        height: "auto"
+                                                    }}
+                                                    src={value.icon}
+                                                    alt={value.icon}
+                                                />
+                                            }
                                         </Grid>
                                         <Grid item>
                                             <Grid>

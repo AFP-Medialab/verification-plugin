@@ -17,7 +17,7 @@ const TabItem = (props) => {
                     return (
                         <Route
                             key={index}
-                            path={"/app/" + item.path}
+                            path={"/app/" + item.path + "/:url?"}
                             render={
                                 () => {
                                     dispatch(selectPage(index));
