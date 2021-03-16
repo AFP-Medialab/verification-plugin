@@ -154,13 +154,15 @@ function* similaritySearch(searchEndpoint, stateStorageFunction) {
             let resultList = []
 
             Object.values(similarityResult).forEach(result=>{
-                console.log(result)
                 result.appearancesResults.forEach(appearance=>{
                     resultList.push({
                         "claimUrl": appearance.appearanceUrls,
                         "similarity": appearance.similarity})
                 })
             })
+
+            //resultList.sort((a, b) => b.similarity - a.similarity);
+            resultList = resultList.slice(0,3)
 
             yield put(stateStorageFunction(resultList, false, true, false))
         } else {
