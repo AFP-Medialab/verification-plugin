@@ -229,6 +229,37 @@ const Assistant = () => {
             <Box m={2}/>
 
             <Paper className={classes.assistantRoot}
+                   hidden={
+                       (urlMode && inputUrl === null) ||
+                       (urlMode && inputUrl !== null && (!imageList.length && !videoList.length)) ||
+                       ((!urlMode && !imageVideoSelected))}
+            >
+                <Grid container spacing={2}>
+                    <Grid item xs={12}>
+                        <Typography variant={"h5"} align={"left"}>{keyword("url_media")}</Typography>
+                        <Divider/>
+                        <Box m={2}/>
+                    </Grid>
+
+                    {imageList.length > 0 || videoList.length > 0 || imageVideoSelected ?
+                        <Grid item xs={12}><AssistantMediaResult/></Grid>
+                        : null
+                    }
+                </Grid>
+            </Paper>
+
+            <Box m={2}/>
+
+            <Grid item xs={12} align={"right"}>
+                {<HelpDialog title={"assistant_help_title"}
+                             paragraphs={["assistant_help_1", "assistant_help_2", "assistant_help_3", "assistant_help_4"]}
+                             keywordFile="components/NavItems/tools/Assistant.tsv"/>
+                }
+            </Grid>
+
+            <Box m={4}/>
+
+            <Paper className={classes.assistantRoot}
                    hidden={linkList.length === 0 && text === null && neResult === null}>
                 <Box m={2}/>
 
@@ -262,37 +293,6 @@ const Assistant = () => {
 
                 <Box m={2}/>
             </Paper>
-
-            <Box m={4}/>
-
-            <Paper className={classes.assistantRoot}
-                   hidden={
-                       (urlMode && inputUrl === null) ||
-                       (urlMode && inputUrl !== null && (!imageList.length && !videoList.length)) ||
-                       ((!urlMode && !imageVideoSelected))}
-            >
-                <Grid container spacing={2}>
-                    <Grid item xs={12}>
-                        <Typography variant={"h5"} align={"left"}>{keyword("url_media")}</Typography>
-                        <Divider/>
-                        <Box m={2}/>
-                    </Grid>
-
-                    {imageList.length > 0 || videoList.length > 0 || imageVideoSelected ?
-                        <Grid item xs={12}><AssistantMediaResult/></Grid>
-                        : null
-                    }
-                </Grid>
-            </Paper>
-
-            <Box m={2}/>
-
-            <Grid item xs={12} align={"right"}>
-                {<HelpDialog title={"assistant_help_title"}
-                             paragraphs={["assistant_help_1", "assistant_help_2", "assistant_help_3", "assistant_help_4"]}
-                             keywordFile="components/NavItems/tools/Assistant.tsv"/>
-                }
-            </Grid>
         </div>
     )
 };
