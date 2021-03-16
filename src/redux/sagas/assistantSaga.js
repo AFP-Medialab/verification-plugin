@@ -220,7 +220,7 @@ function* handleHyperpartisanCall(action) {
             const result = yield call(assistantApi.callHyperpartisanService, text)
 
             let hpProb = result.entities.hyperpartisan[0].hyperpartisan_probability
-            hpProb = parseFloat(hpProb).toFixed(2) > 0.50 ? parseFloat(hpProb).toFixed(2) : null
+            hpProb = parseFloat(hpProb).toFixed(2) > 0.70 ? parseFloat(hpProb).toFixed(2) : null
 
             yield put(setHpDetails(hpProb, false, true, false))
         }
