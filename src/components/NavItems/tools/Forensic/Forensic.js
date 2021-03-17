@@ -72,6 +72,7 @@ const Forensic = () => {
     return (
         <div>
             <Paper className={classes.root}>
+                
                 <CustomTile text={keyword("forensic_title")}/>
                 <Box m={1}/>
                 <Box display={localFile ? "none" : "block"}>
