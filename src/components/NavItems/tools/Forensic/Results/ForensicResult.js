@@ -44,18 +44,31 @@ const ForensicResults = (props) => {
             
     }
 
-    const dataParams = ["dqReport", "elaReport", "dwNoiseReport", "blockingReport", "gridsReport", "gridsInversedReport", "medianNoiseReport"];
+    
+    //const dataParamsTexts = ["dqReport", "elaReport", "dwNoiseReport", "blockingReport", "gridsReport", "gridsInversedReport", "medianNoiseReport"];
+    const dataParams = ["adq1_report", "ela_report", "wavelet_report", "blk_report", "median_report"];
     const result = props.result;
 
     const [expanded, setExpanded] = React.useState(dataParams.reduce((o, key, id) => ({...o, [id]: false}), {}));
     const images = dataParams.map((value) => {
+        //console.log("MAP");
         return result[value]["map"];
     });
 
-    const ghostImages = result.ghostReport.maps;
+    const cagiNormal = result.cagi_report.mapG;
+    const cagiInversed = result.cagi_report.mapGI;
+    const [cagiNormalExpanded, setCagiNormalExpand] = useState(false);
+    const [cagiInversedExpanded, setCagiInversedExpand] = useState(false);
+    images.push(cagiNormal);
+    images.push(cagiInversed);
+
+    const ghostImages = result.ghost_report.maps;
     const [selectedGhostImage, setSelectedGhostImage] = useState("0");
     const [ghostExpanded, setGhostExpand] = useState(false);
     images.push(...ghostImages);
+
+    
+    //console.log(images);  
 
     const handleExpandClick = (key) => {
         const previous = expanded[key];
@@ -65,7 +78,7 @@ const ForensicResults = (props) => {
         });
     };
 
-    const [filteredImage, setFilteredImage] = useState(result.displayImage);
+    const [filteredImage, setFilteredImage] = useState(props.url);
     const [filterName, setFilterName] = useState("forensic_title_none");
 
     const changeFilter = (index, text) => {
@@ -76,9 +89,12 @@ const ForensicResults = (props) => {
 
     const scrollToTop = () => window.scrollTo(0, 320)
     useEffect(() => {
-        setFilteredImage(result.displayImage);
+        setFilteredImage(props.url);
         setFilterName("forensic_title_none");
     }, [result]);
+
+    //console.log("props");
+    //console.log(props);
 
     return (
         <Paper className={classes.root}>
@@ -86,23 +102,25 @@ const ForensicResults = (props) => {
             <Box m={1}/>
             <OnClickInfo keyword={"forensic_tip"}/>
             <Box m={3}/>
+            
             <div style={{maxWidth: '640px', margin: "0 auto"}}>
                 <ReactCompareImage
-                    leftImage={result.displayImage}
+                    leftImage={props.url}
                     rightImage={filteredImage}
-                    handle={(result.displayImage !== filteredImage) ? null : <React.Fragment/>}
-                    sliderLineWidth={(result.displayImage === filteredImage) ? 0 : 0.6}
+                    handle={(props.url !== filteredImage) ? null : <React.Fragment/>}
+                    sliderLineWidth={(props.url === filteredImage) ? 0 : 0.6}
                 />
             </div>
+            
             <Box m={1}/>
             <Typography variant={"h5"}>{keyword("applied_filter") + keyword(filterName)}</Typography>
             {
-                (result.displayImage !== filteredImage) &&
+                (props.url !== filteredImage) &&
                 <Button
                     variant={"contained"}
                     color={"primary"}
                     onClick={() => {
-                        setFilteredImage(result.displayImage);
+                        setFilteredImage(props.url);
                         setFilterName("forensic_title_none")
                     }}
                 >
@@ -133,6 +151,10 @@ const ForensicResults = (props) => {
                 {
                      landscape &&
                     dataParams.map((value, key) => {
+                        //console.log(value);
+                        //console.log(key);
+                        //console.log(keyword("forensic_title_dqReport"));
+                        //console.log(keyword("forensic_title_adq1_report"));
                         return (
                             <Box key={key} m={1} width={"30%"}>
                                 <Card className={classes.forensicCard}>
@@ -316,7 +338,97 @@ const ForensicResults = (props) => {
                         </Collapse>
                     </Card>
                 </Box>
-            }
+                }
+                {
+                <Box key={"key"} m={1} width={"30%"}>
+                    <Card className={classes.forensicCard}>
+                        <CardHeader
+                            title={keyword("forensic_title_cagiNormal")}
+                            subheader=""
+                        />
+                        <Tooltip title={keyword("apply_filter")} placement="bottom">
+                            <CardMedia
+                                className={classes.forensicMediaLandscape}
+                                image={cagiNormal}
+                                onClick={() => changeFilter(5, "forensic_title_cagiNormal")}
+                            />
+                        </Tooltip>
+                        <CardActions disableSpacing>
+                            <Tooltip title={keyword("apply_filter")} placement="bottom">
+                                <IconButton aria-label="add to favorites"
+                                            onClick={() => {
+                                                changeFilter(5, "forensic_title_cagiNormal")
+                                            }}>
+                                    <VisibilityIcon/>
+                                </IconButton>
+                            </Tooltip>
+                            <IconButton
+                                className={clsx(classes.expand, {
+                                    [classes.expandOpen]: cagiNormalExpanded,
+                                })}
+                                onClick={() => setCagiNormalExpand(!cagiNormalExpanded)}
+                                aria-expanded={cagiNormalExpanded}
+                                aria-label="show more"
+                            >
+                                <ExpandMoreIcon/>
+                            </IconButton>
+                        </CardActions>
+                        <Collapse in={cagiNormalExpanded} timeout="auto"
+                                  unmountOnExit>
+                            <CardContent>
+                                <Typography paragraph>
+                                    {keyword("forensic_card_cagiNormal")}
+                                </Typography>
+                            </CardContent>
+                        </Collapse>
+                    </Card>
+                </Box>
+                }
+                {
+                <Box key={"key2"} m={1} width={"30%"}>
+                    <Card className={classes.forensicCard}>
+                        <CardHeader
+                            title={keyword("forensic_title_cagiInversed")}
+                            subheader=""
+                        />
+                        <Tooltip title={keyword("apply_filter")} placement="bottom">
+                            <CardMedia
+                                className={classes.forensicMediaLandscape}
+                                image={cagiInversed}
+                                onClick={() => changeFilter(6, "forensic_title_cagiInversed")}
+                            />
+                        </Tooltip>
+                        <CardActions disableSpacing>
+                            <Tooltip title={keyword("apply_filter")} placement="bottom">
+                                <IconButton aria-label="add to favorites"
+                                            onClick={() => {
+                                                changeFilter(6, "forensic_title_cagiInversed")
+                                            }}>
+                                    <VisibilityIcon/>
+                                </IconButton>
+                            </Tooltip>
+                            <IconButton
+                                className={clsx(classes.expand, {
+                                    [classes.expandOpen]: cagiInversedExpanded,
+                                })}
+                                onClick={() => setCagiInversedExpand(!cagiInversedExpanded)}
+                                aria-expanded={expanded[cagiInversedExpanded]}
+                                aria-label="show more"
+                            >
+                                <ExpandMoreIcon/>
+                            </IconButton>
+                        </CardActions>
+                        <Collapse in={cagiInversedExpanded} timeout="auto"
+                                  unmountOnExit>
+                            <CardContent>
+                                <Typography paragraph>
+                                    {keyword("forensic_card_cagiInversed")}
+                                </Typography>
+                            </CardContent>
+                        </Collapse>
+                    </Card>
+                </Box>
+                }
             </Grid>
         </Paper>
     )

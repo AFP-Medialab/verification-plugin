@@ -31,13 +31,13 @@ const Forensic = () => {
     const resultData = useSelector(state => state.forensic.result);
     const isLoading = useSelector(state => state.forensic.loading);
 
-
     const [input, setInput] = useState(resultUrl);
     const [image, setImage] = useState("");
     const [urlDetected, setUrlDetected] = useState(false)
 
     useGetImages(image);
 
+    
     const submitUrl = () => {
         if (input && input !== "") {
             submissionEvent(input);
@@ -68,7 +68,6 @@ const Forensic = () => {
     useEffect(() => {
         setImage("")
     }, [image]);
-
     return (
         <div>
             <Paper className={classes.root}>
@@ -108,7 +107,10 @@ const Forensic = () => {
             </Paper>
             {
                 resultData &&
-                <ForensicResults result={resultData}/>
+                <ForensicResults 
+                    result={resultData}
+                    url={resultUrl}
+                    />
             }
         </div>
     );
