@@ -26,6 +26,7 @@ import {
     KNOWN_LINK_PATTERNS,
     KNOWN_LINKS,
     matchPattern,
+    NE_SUPPORTED_LANGS,
     selectCorrectActions,
     TYPE_PATTERNS
 } from "../../components/NavItems/Assistant/AssistantRuleBook";
@@ -236,11 +237,10 @@ function* handleNamedEntityCall(action) {
 
     try {
         const text = yield select((state) => state.assistant.urlText)
-        if (text !== null) {
+        const textLang = yield select((state) => state.assistant.textLang)
+        if (text !== null && NE_SUPPORTED_LANGS.includes(textLang)) {
             yield put(setNeDetails(null, null, true, false, false))
-
             const result = yield call(assistantApi.callNamedEntityService, text)
-
             let entities = []
 
             Object.entries(result.response.annotations).forEach(entity => {
@@ -258,7 +258,7 @@ function* handleNamedEntityCall(action) {
                 let wordCloudList = buildWordCloudList(entities)
                 let categoryList = buildCategoryList(wordCloudList)
                 categoryList.map((v,k)=>{
-                    categoryList[k].words.sort(function(a,b){
+                    return categoryList[k].words.sort(function(a,b){
                         return b.value - a.value;
                     })
                 })
