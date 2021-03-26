@@ -414,7 +414,58 @@ const useMyStyles = makeStyles(theme => ({
     customAllToolsIconSelected: {
         fontSize: "inherit",
         color: theme.palette.primary.main
-    }
+    },
+
+
+    newForensics:{
+        spacing: 8,
+    },
+
+    forensicCardTitle:{
+        borderRadius: 5,
+    },
+
+    cardHeader:{
+        color: "#05A9B4",
+    },
+
+
+    cardContent:{
+        height: 200
+    },
+
+    lensesTitles:{
+        fontSize: "1rem"
+    },
+
+    filtersCard:{
+        height: "100%"
+    },
+
+    lensesCard:{
+        
+    },
+
+
+    uploadedImage:{
+        objectFit: "contain",
+        objectPosition: "top",
+        maxHeight:"55vh"
+    },
+
+
+    overrides: {
+        MuiTab: {
+          wrapper: {
+            fontSize: 12,  
+          },
+        },
+        MuiTabs: {
+            indicator: {
+                color: "#05A9B4", 
+            },
+        },
+    },
 
 }));
 export default useMyStyles;

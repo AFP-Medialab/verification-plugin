@@ -27,7 +27,7 @@ const useGetImages = (url) => {
 
         const getResult = (hash) => {
             //console.log("TEST3");
-            axios.get("https://mever.iti.gr/forensics/api/v4/images/reports/" + hash)
+            axios.get("https://mever.iti.gr/envisu4/api/v4/images/reports/" + hash)
                 .then(response => {
                     //console.log(response);
                     if (response.data != null) {
@@ -44,7 +44,7 @@ const useGetImages = (url) => {
 
         const waitUntilFinish = (id) => {
             //console.log("TEST2");
-            axios.get("https://mever.iti.gr/forensics/api/v4/images/jobs/" + id)
+            axios.get("https://mever.iti.gr/envisu4/api/v4/images/jobs/" + id)
                 .then((response) => {
                     if (response.data.status === "PROCESSING") {
                         setTimeout(function () {
@@ -65,7 +65,7 @@ const useGetImages = (url) => {
         if (url) {
             dispatch(setForensicsLoading(true));
             //console.log("TEST1");
-            axios.post("https://mever.iti.gr/forensics/api/v4/images/jobs?url=" + encodeURIComponent(url))
+            axios.post("https://mever.iti.gr/envisu4/api/v4/images/jobs?url=" + encodeURIComponent(url))
                 .then(response => waitUntilFinish(response.data.id))
                 .catch(error => {
                     handleError("forensic_error_" + error.status);
