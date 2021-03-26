@@ -279,7 +279,7 @@ const Assistant = () => {
                     }
 
                     {neResult ?
-                        <Grid item xs={7}>
+                        <Grid item xs={12}>
                             <AssistantNEResult/>
                         </Grid> : null
                     }

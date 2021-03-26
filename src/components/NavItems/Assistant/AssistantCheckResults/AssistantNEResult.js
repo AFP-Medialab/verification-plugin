@@ -11,6 +11,7 @@ import {ExpandLess, ExpandMore} from "@material-ui/icons";
 import Grid from "@material-ui/core/Grid";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import Typography from "@material-ui/core/Typography";
+import Link from "@material-ui/core/Link";
 import ListItem from "@material-ui/core/ListItem";
 import List from "@material-ui/core/List";
 import ListItemText from "@material-ui/core/ListItemText";
@@ -35,10 +36,10 @@ const AssistantNEResult = () => {
         index === selectedIndex ?
             setSelectedIndex(null) : setSelectedIndex(index)
     }
-
     const options = {
         rotations: 1,
         rotationAngles: [0],
+        fontSizes: [15,60]
     };
 
     return (
@@ -67,7 +68,14 @@ const AssistantNEResult = () => {
                                             <List component="div" disablePadding >
                                                 {value["words"].map((v, k)=>(
                                                     <ListItem key={k}>
-                                                        <ListItemText>{v}</ListItemText>
+                                                            <ListItemText>
+                                                                <Link href={"https://www.google.com/search?q=" + v.text}
+                                                                      rel="noopener noreferrer"
+                                                                      target={"_blank"}>
+                                                                    {v.text} &nbsp;
+                                                                </Link>
+                                                                ({v.value})
+                                                            </ListItemText>
                                                     </ListItem>
                                                 ))}
                                             </List>

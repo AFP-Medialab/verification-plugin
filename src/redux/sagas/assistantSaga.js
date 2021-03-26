@@ -257,6 +257,11 @@ function* handleNamedEntityCall(action) {
             } else {
                 let wordCloudList = buildWordCloudList(entities)
                 let categoryList = buildCategoryList(wordCloudList)
+                categoryList.map((v,k)=>{
+                    categoryList[k].words.sort(function(a,b){
+                        return b.value - a.value;
+                    })
+                })
                 yield put(setNeDetails(categoryList, wordCloudList, false, true, false))
             }
         }
@@ -367,8 +372,8 @@ const buildCategoryList = (wordCloudList) => {
     // group by category
     return wordCloudList.reduce((accumulator, currentWord) => {
         accumulator.filter(wordObj => wordObj.category === currentWord["category"]).length ?
-            accumulator.filter(wordObj => wordObj.category === currentWord["category"])[0].words.push(currentWord['text']) :
-            accumulator.push({"category": currentWord["category"], "words": [currentWord["text"]]})
+            accumulator.filter(wordObj => wordObj.category === currentWord["category"])[0].words.push(currentWord) :
+            accumulator.push({"category": currentWord["category"], "words": [currentWord]})
 
         return accumulator
     }, [])
