@@ -37,13 +37,13 @@ import Footer from "../Shared/Footer/Footer";
 import FeedBack from "../FeedBack/FeedBack";
 import Icon from "@material-ui/core/Icon";
 
+import assistantIcon from "./images/navbar/assistant-icon-grey.svg";
 import toolIcon from "./images/navbar/tools-off.png"
 import tutorialIcon from "./images/navbar/tutorial-off.png"
 import classRoomIcon from "./images/navbar/classroom-off.png"
 import interactiveIcon from "./images/navbar/quiz-off.png"
 import aboutIcon from "./images/navbar/about-off.png"
 import ImageSearchIcon from '@material-ui/icons/ImageSearch';
-import FaceIcon from '@material-ui/icons/Face';
 
 import analysisIconOn from "./images/tools/video_logoOn.png"
 import analysisIconOff from "./images/tools/video_logoOff.png"
@@ -274,7 +274,10 @@ const NavBar = (props) => {
         },
         {
             title: "navbar_assistant",
-            icon: <FaceIcon fontSize={"large"}/>,
+            icon:
+                <Icon classes={{root: classes.iconRootTab}} fontSize={"large"}>
+                    <img className={classes.imageIconTab} src={assistantIcon} alt={keyword("navbar_assistant")} />
+                 </Icon>,
             content: <Assistant/>,
             path: "assistant",
             footer: <Footer type={"usfd"}/>

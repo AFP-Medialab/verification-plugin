@@ -1,5 +1,5 @@
 const defaultState = {
-    urlMode: true,
+    urlMode: false,
     imageVideoSelected: false,
     singleMediaPresent: null,
 
@@ -77,7 +77,7 @@ const assistantReducer = (state = defaultState, action) => {
 
         case "CLEAN_STATE":
             state = {
-                urlMode: true,
+                urlMode: false,
                 imageVideoSelected: false,
                 singleMediaPresent: null,
 

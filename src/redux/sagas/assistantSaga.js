@@ -15,7 +15,8 @@ import {
     setProcessUrl,
     setProcessUrlActions,
     setScrapedData,
-    setSingleMediaPresent
+    setSingleMediaPresent,
+    setUrlMode
 } from "../actions/tools/assistantActions";
 
 import {all, call, fork, put, select, takeLatest} from 'redux-saga/effects'
@@ -292,6 +293,7 @@ function * handleAssistantScrapeCall(action) {
 
     try {
         yield put(cleanAssistantState())
+        yield put(setUrlMode(true))
         yield put(setAssistantLoading(true))
 
         let urlType = matchPattern(inputUrl, KNOWN_LINK_PATTERNS)
