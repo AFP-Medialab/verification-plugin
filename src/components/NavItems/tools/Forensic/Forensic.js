@@ -34,12 +34,14 @@ const Forensic = () => {
     const [input, setInput] = useState(resultUrl);
     const [image, setImage] = useState("");
     const [urlDetected, setUrlDetected] = useState(false)
+    const [loaded, setLoaded] = useState(false);
 
     useGetImages(image);
 
     
     const submitUrl = () => {
         if (input && input !== "") {
+            setLoaded(true);
             submissionEvent(input);
             setImage(input);
         }
@@ -68,9 +70,11 @@ const Forensic = () => {
     useEffect(() => {
         setImage("")
     }, [image]);
+
     return (
         <div>
-            <Paper className={classes.root}>
+            
+            <Paper className={classes.root} style={{ display: loaded ? "none" : "block" }}>
                 
                 <CustomTile text={keyword("forensic_title")}/>
                 <Box m={1}/>
@@ -110,6 +114,7 @@ const Forensic = () => {
                 <ForensicResults 
                     result={resultData}
                     url={resultUrl}
+                    loaded={loaded}
                     />
             }
         </div>

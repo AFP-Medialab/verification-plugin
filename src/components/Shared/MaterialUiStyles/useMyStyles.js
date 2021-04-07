@@ -1,5 +1,6 @@
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import {green} from "@material-ui/core/colors";
+import { CenterFocusStrong } from "@material-ui/icons";
 
 const drawerWidth = 200;
 
@@ -417,55 +418,72 @@ const useMyStyles = makeStyles(theme => ({
     },
 
 
+
+    /* Forensic classes */
     newForensics:{
         spacing: 8,
+        marginTop: -40
     },
 
-    forensicCardTitle:{
-        borderRadius: 5,
-    },
-
-    cardHeader:{
-        color: "#05A9B4",
-    },
-
-
-    cardContent:{
-        height: 200
-    },
-
-    lensesTitles:{
-        fontSize: "1rem"
-    },
-
-    filtersCard:{
+    cardFilters:{
         height: "100%"
     },
 
-    lensesCard:{
-        
-    },
-
-
-    uploadedImage:{
+    imageUploaded:{
         objectFit: "contain",
         objectPosition: "top",
-        maxHeight:"55vh"
+        maxHeight:"48vh"
     },
 
-
-    overrides: {
-        MuiTab: {
-          wrapper: {
-            fontSize: 12,  
-          },
-        },
-        MuiTabs: {
-            indicator: {
-                color: "#05A9B4", 
-            },
-        },
+    imageFilter: {
+        height: "13vh",
+        backgroundPosition: "center",
+        backgroundSize: "contain",
     },
+
+    headerUpladedImage: {
+        paddingTop: "11px!important",
+        paddingBottom: "11px!important",
+    },
+
+    imageOverlayWrapper: {
+        position: "relative",
+    },
+
+    imageOverlay: {
+        position: "absolute",
+        top: 0,
+        bottom: 0,
+        left: 0,
+        right: 0,
+        display: "flex",
+        alignItems: "center",
+        transition: "visibility 0s, opacity 0.2s linear",
+        opacity: 0,
+        '&:hover': {
+            opacity: 1,
+        }
+    },
+
+    filterDisplayedClass: {
+        position: "absolute",
+        objectFit: "contain",
+        objectPosition: "top",
+        maxHeight: "48vh",
+        top:0,
+        left: 0,
+        bottom: 0,
+        right:0,
+    },
+
+    wrapperImageFilter: {
+        position: "relative",
+    }
+
+    
+
+
+
 
 }));
 export default useMyStyles;
