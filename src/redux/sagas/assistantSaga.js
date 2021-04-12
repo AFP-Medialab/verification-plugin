@@ -301,7 +301,9 @@ function * handleAssistantScrapeCall(action) {
 
         let scrapeResult = null
         if (decideWhetherToScrape(urlType, contentType, inputUrl)) {
-            scrapeResult = yield call(assistantApi.callAssistantScraper, urlType, inputUrl)
+            scrapeResult = urlType === KNOWN_LINKS.TIKTOK ?
+                yield call(assistantApi.callTiktokScraper, inputUrl) :
+                yield call(assistantApi.callAssistantScraper, urlType, inputUrl)
         }
 
         let filteredSR = filterAssistantResults(urlType, contentType, inputUrl, scrapeResult)
@@ -395,7 +397,7 @@ const filterAssistantResults = (urlType, contentType, userInput, scrapeResult) =
             videoList = [userInput];
             break;
         case KNOWN_LINKS.TIKTOK:
-            videoList = [scrapeResult.videos]
+            videoList = scrapeResult.videos
             break;
         case KNOWN_LINKS.INSTAGRAM:
             if (scrapeResult.videos.length === 1) {

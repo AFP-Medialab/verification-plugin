@@ -44,7 +44,7 @@ export const KNOWN_LINK_PATTERNS = [
     },
     {
         key: KNOWN_LINKS.TIKTOK,
-        patterns:["((https?:\\/{2})?(www.)?tiktok.com\\/.*\\/video\\/.*)"]
+        patterns:["((https?:\\/{2})?(www.)?tiktok.com\\/.*\\/video/\\d*)"]
     },
     {
         key: KNOWN_LINKS.INSTAGRAM,
