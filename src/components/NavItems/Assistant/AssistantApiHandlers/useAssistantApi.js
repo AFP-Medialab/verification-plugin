@@ -14,7 +14,7 @@ export default function useAssistantApi() {
             let scrapeResult = {}
             scrapeResult.videos = [result.data.itemInfo.itemStruct.video.downloadAddr]
             scrapeResult.text = result.data.itemInfo.itemStruct.desc
-            scrapeResult.lang = result["$language"]
+            scrapeResult.lang = result.data.seoProps.predictedLanguage
             scrapeResult.images = []
             scrapeResult.links = []
 

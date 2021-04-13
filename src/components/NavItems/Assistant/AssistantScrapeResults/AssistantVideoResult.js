@@ -24,7 +24,6 @@ const AssistantVideoResult = () => {
             case KNOWN_LINKS.VIMEO:
             case KNOWN_LINKS.DAILYMOTION:
             case KNOWN_LINKS.LIVELEAK:
-            case KNOWN_LINKS.TIKTOK:
                 return true
             default:
                 return false
