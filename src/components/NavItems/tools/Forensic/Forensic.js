@@ -30,6 +30,9 @@ const Forensic = () => {
     const resultUrl = useSelector(state => state.forensic.url);
     const resultData = useSelector(state => state.forensic.result);
     const isLoading = useSelector(state => state.forensic.loading);
+    const gifAnimationState = useSelector(state => state.forensic.gifAnimation);
+
+    //console.log(gifAnimationState);
 
     const [input, setInput] = useState(resultUrl);
     const [image, setImage] = useState("");
@@ -115,6 +118,7 @@ const Forensic = () => {
                     result={resultData}
                     url={resultUrl}
                     loaded={loaded}
+                    gifAnimation={gifAnimationState}
                     />
             }
         </div>

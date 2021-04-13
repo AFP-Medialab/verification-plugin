@@ -1,7 +1,7 @@
 
 import Box from "@material-ui/core/Box";
 import Grid from "@material-ui/core/Grid";
-import React, { useState, useEffect, Component, useRef} from "react";
+import React, { useState, useEffect, Component, useRef, state} from "react";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 import CardMedia from "@material-ui/core/CardMedia";
@@ -25,6 +25,10 @@ import Fab from '@material-ui/core/Fab';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
 import Fade from '@material-ui/core/Fade';
+import { useSelector } from "react-redux";
+import { setForensicsGifAnimateShow, setForensicsGifAnimateHide } from "../../../../../redux/actions/tools/forensicActions";
+import { useDispatch } from "react-redux";
+import Slider from '@material-ui/core/Slider';
 
 
 function TabPanel(props) {
@@ -314,8 +318,97 @@ const ForensicResults = (props) => {
     }
 
 
+    //Gif popover
+    //============================================================================================
+    const [anchorGifPopover, setAnchorGifPopover] = React.useState(null);
+    const openGifPopover = Boolean(anchorGifPopover);
+    const gifPopover = openGifPopover ? 'simple-popover' : undefined;
+
+    const [interval, setIntervalVar] = React.useState(null);
+
+    function clickGifPopover(event, filter) {
+        if (filter === "zero_report" || filter === "ghost_report" || filter === "cagi_report"){
+            setGifFilter(filters.current.find(x => x.id === filter).map[filters.current.find(x => x.id === filter).currentDisplayed]);         
+        }else{
+            setGifFilter(filters.current.find(x => x.id === filter).map);
+        }
+        setIntervalVar(setInterval(() => animateFilter(), 1100));
+        setAnchorGifPopover(event.currentTarget);
+
+    }
+
+    function closeGifPopover() {
+        clearInterval(interval);
+        setAnchorGifPopover(null);
+        
+    }
+
+    const [gifImage, setGifImage] = React.useState(props.url);
+    const [gifFilter, setGifFilter] = React.useState(props.url);
 
 
+    function animateFilter() {
+        console.log("Loop function");
+        console.log(interval);
+        var x = document.getElementById("gifFilterElement");
+        if (x.style.display === "none") {
+            x.style.display = "block";
+        } else {
+            x.style.display = "none";
+        }
+    }
+
+
+    const marks = [
+        {
+            value: -1700,
+            label: 'Slow',
+        },
+        {
+            value: -500,
+            label: 'Fast',
+        },
+    ];
+
+    var speed = 1100;
+
+    function changeValueSpeed(value) {
+        console.log("Change value speed: " + value);
+        speed = value;
+    }
+
+    function changeSpeed(value) {
+        console.log("Change speed: " + value);
+        clearInterval(interval);
+        setIntervalVar(setInterval(() => animateFilter(), (value*-1)));
+
+    }
+
+
+
+
+    const dispatch = useDispatch();
+
+    //const variable = useSelector(state => state.forensic.gifAnimation);
+
+    /*
+    //const [gifAnimation, setGifAnimation] = React.useState(props.gifAnimation)
+    useEffect(() => {
+    function blinkFilter() {
+        console.log("blinking");
+        const variable = useSelector(state => state.forensic.gifAnimation);
+        console.log(variable);
+
+        if(variable){
+            dispatch(setForensicsGifAnimateHide());
+        }else{
+            dispatch(setForensicsGifAnimateShow());
+        }
+        
+        //console.log(useSelector(state => state.forensic.gifAnimation));
+        //setGifAnimation(false);
+    }});
+    */
 
 
     // para organizar
@@ -601,7 +694,7 @@ const ForensicResults = (props) => {
                                                                                             <NavigateBeforeIcon/>
                                                                                         </Fab>
                                                                                     }
-                                                                                    <Fab size="medium" style={{ backgroundColor: "#ffffff" }}>
+                                                                                <Fab size="medium" style={{ backgroundColor: "#ffffff" }} onClick={(e) => clickGifPopover(e, value.id)}>
                                                                                         <GifIcon style={{ color: "#000000" }} />
                                                                                     </Fab>
 
@@ -637,7 +730,7 @@ const ForensicResults = (props) => {
                                                                                     justify="space-around"
                                                                                     alignItems="center">
 
-                                                                                    <Fab size="medium" style={{ backgroundColor: "#ffffff" }}>
+                                                                                <Fab size="medium" style={{ backgroundColor: "#ffffff" }} onClick={(e) => clickGifPopover(e,value.id)}>
                                                                                         <GifIcon style={{ color: "#000000" }} />
                                                                                     </Fab>
 
@@ -691,6 +784,114 @@ const ForensicResults = (props) => {
                             </Grid>
 
                         </Grid>
+                                    
+
+
+                        <Popover
+                            id={gifPopover}
+                            open={openGifPopover}
+                            anchorEl={anchorGifPopover}
+                            onClose={closeGifPopover}
+                            anchorReference="anchorPosition"
+                            anchorPosition={{ top: '0', left: '0' }}
+                            PaperProps={{
+                                style: {
+                                    width: '70vw',
+                                    height: '70vh',
+                                    marginTop: '15vh',
+                                    marginLeft: '15vw',
+                                    marginBottom: '15vh',
+                                    marginRight: '15vw',
+                                    fontSize: 14,
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                },
+                            }}
+                            anchorOrigin={{
+                                vertical: 'center',
+                                horizontal: 'center',
+                            }}
+                            transformOrigin={{
+                                vertical: 'center',
+                                horizontal: 'center',
+                            }}
+                        >   
+
+                            <Box p={3}>
+                                <Grid
+                                    container
+                                    direction="row"
+                                    justify="space-between"
+                                    alignItems="strech">
+
+                                    <Typography variant="h6" gutterBottom>
+                                        Export the result as a GIF
+                                    </Typography>
+
+                                    <CloseIcon onClick={closeGifPopover} />
+                                </Grid>
+                                <Box m={1} />
+
+                                <Box justifyContent="center" className={classes.wrapperImageFilter}>
+
+                                    <CardMedia
+                                        component="img"
+                                        className={classes.imagesGifImage}
+                                        image={gifImage}
+                                    />
+                                    {true &&
+                                        <CardMedia
+                                            component="img"
+                                            className={classes.imagesGifFilter}
+                                            image={gifFilter}
+                                            id="gifFilterElement"
+                                        />
+                                    }
+                                </Box>
+
+                                
+
+                                <Grid
+                                    container
+                                    direction="column"
+                                    justify="center"
+                                    alignItems="center"
+                                >
+                                    <Box m={4} />
+
+                                    <Typography gutterBottom>
+                                        Speed of the animation
+                                    </Typography>
+
+                                    
+                                        <Slider
+                                            defaultValue={-1100}
+                                            aria-labelledby="discrete-slider"
+                                            step={300}
+                                            marks={marks}
+                                            min={-1700}
+                                            max={-500}
+                                            scale={x => -x}
+                                            onChange={(e, val) => changeValueSpeed(val)}
+                                            onChangeCommitted={(e) => changeSpeed(speed)}
+                                            className={classes.sliderClass}
+                                        />
+                                    
+
+
+                                    <Box m={2} />
+
+
+                                    <Button variant="contained" color="primary">
+                                        Download
+                                    </Button>
+                                </Grid>
+
+
+                            </Box>
+
+                        </Popover>
+
                     </Box>
                 </ThemeProvider>
 

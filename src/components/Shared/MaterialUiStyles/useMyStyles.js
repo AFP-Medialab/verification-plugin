@@ -432,7 +432,7 @@ const useMyStyles = makeStyles(theme => ({
     imageUploaded:{
         objectFit: "contain",
         objectPosition: "top",
-        maxHeight:"48vh"
+        maxHeight:"48vh",
     },
 
     imageFilter: {
@@ -478,8 +478,38 @@ const useMyStyles = makeStyles(theme => ({
 
     wrapperImageFilter: {
         position: "relative",
-    }
+    },
 
+
+    imagesGifImage: {
+        backgroundPosition: "center",
+        backgroundSize: "contain",
+        objectFit: "contain",
+        objectPosition: "top",
+        maxHeight: "30vh",
+
+        position: "relative",
+        top: 0,
+        left: 0,
+    },
+
+    imagesGifFilter: {
+        backgroundPosition: "center",
+        backgroundSize: "contain",
+        objectFit: "contain",
+        objectPosition: "top",
+        maxHeight: "30vh",
+
+        position: "absolute",
+        top: 0,
+        left: 0,
+    },
+
+
+
+    sliderClass: {
+        maxWidth:"30vw"
+    },
     
 
 
