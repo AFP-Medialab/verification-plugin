@@ -451,20 +451,22 @@ const filterAssistantResults = (urlType, contentType, userInput, scrapeResult) =
 }
 
 const filterSourceCredibilityResults = (originalResult) => {
-    if(!(originalResult.entities.DomainCredibility)) {return null}
+    if(!(originalResult.entities.SourceCredibility)) {return null}
 
-    let domainCredibility = originalResult.entities.DomainCredibility
-    domainCredibility.forEach(dc => {
+    let sourceCredibility = originalResult.entities.SourceCredibility
+
+    sourceCredibility.forEach(dc => {
         delete dc["indices"]
-        delete dc["credibility-resolved-url"]
+        delete dc["resolved-url"]
     })
-    domainCredibility = uniqWith(domainCredibility, isEqual)
+    sourceCredibility = uniqWith(sourceCredibility, isEqual)
 
     let sourceCredResult = []
-    domainCredibility.forEach(result => {
+    sourceCredibility.forEach(result => {
         sourceCredResult.push({
-            "credibility_source": result["credibility-source"],
-            "credibility_labels": result["credibility-labels"]
+            "credibility_source": result["source"],
+            "credibility_labels": result["type"],
+            "credibility_description": result["description"]
         })
     })
 

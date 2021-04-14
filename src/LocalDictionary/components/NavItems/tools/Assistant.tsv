@@ -75,8 +75,9 @@ named_entity_title	Text Topics	Temp	Temp	Temp
 dbkf_image_warning	The image from this URL has matched against the following from the database of known fakes with a similarity score of 	Temp	Temp	Temp	Temp
 dbkf_video_warning	The video from this URL has matched against the following from the database of known fakes with a similarity score of 	Temp	Temp	Temp	Temp
 dbkf_text_warning	The text from this URL has matched against the following from the database of known fakes	Temp	Temp	Temp	Temp
-source_credibility_warning	The domain has been found as part of a domain credibility check. It has been labelled as	Temp	Temp	Temp
-according_to	according to	Temp	Temp	Temp
+source_credibility_warning	The domain has been found as part of a domain credibility check by: 	Temp	Temp	Temp
+labelled_as	It has been labelled as: 	Temp	Temp	Temp
+commented_as	It has the following comment against it:	Temp	Temp	Temp
 hp_warning	The text from this URL has returned an unusually high hyperpartisan score of	Temp	Temp	Temp
 
 text_tooltip	<b>What is this?</b></br>Any text which can be extracted from the given URL is displayed here</br></br><b>How is this used?</b></br>Various text processing tools are run against this text: <ul><li>The language is detected and displayed</li><li>The named entities in the text are extracted and displayed (people, locations, organisations etc.)</li><li>The first 500 characters in the text are sent to be checked against the database of known fakes. The results of this check (if any) are listed in the <b>Warnings</b> section</li></ul> For more information, see: 	Temp	Temp	Temp
