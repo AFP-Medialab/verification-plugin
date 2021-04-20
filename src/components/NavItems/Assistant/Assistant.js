@@ -28,9 +28,7 @@ import useLoadLanguage from "../../../Hooks/useLoadLanguage";
 
 /*
 * todo:
-*  - add vertical divider
-*  - change text and colour of buttons for media
-*  - clean up assistant.tsv
+*  - fix video type bug
 *  - check if any states now redundant
 *  - check if any styles now redundant
 *
