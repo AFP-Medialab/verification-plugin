@@ -308,7 +308,7 @@ function * handleAssistantScrapeCall(action) {
 
         let filteredSR = filterAssistantResults(urlType, contentType, inputUrl, scrapeResult)
 
-        yield put(setInputUrl(inputUrl))
+        yield put(setInputUrl(inputUrl, urlType))
         yield put(setScrapedData(filteredSR.urlText, filteredSR.textLang, filteredSR.linkList, filteredSR.imageList, filteredSR.videoList))
         yield put(setAssistantLoading(false))
     } catch (error) {

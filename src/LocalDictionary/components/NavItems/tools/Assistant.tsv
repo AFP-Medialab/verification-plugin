@@ -64,6 +64,7 @@ mode_label	URL mode	Temp	Temp	Temp
 url_text	URL Text	Temp	Temp	Temp
 url_media	Media	Temp	Temp	Temp
 media_text	Extracted Media Text	Temp	Temp	Temp
+download_video	The video has been extracted but cannot be processed using the direct URL. Please open it in a new tab using the link below, download it, and use the assistant to see which tools can be used on the downloaded video.	Temp	Temp	Temp
 text_warning	Warnings found against text. See warning box.	Temp	Temp	Temp
 image_warning	Warnings found against image. See warning box.	Temp	Temp	Temp
 warning_title	Warning	Text	Text	Text

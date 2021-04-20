@@ -13,6 +13,7 @@ const defaultState = {
     textLang: null,
     processUrlActions : [],
     processUrlType: null,
+    inputUrlType: null,
 
     inputUrlSourceCredibility: null,
     inputSCLoading: false,
@@ -91,6 +92,7 @@ const assistantReducer = (state = defaultState, action) => {
                 textLang: null,
                 processUrlActions : [],
                 processUrlType: null,
+                inputUrlType: null,
 
                 inputUrlSourceCredibility: null,
                 inputSCLoading: false,
