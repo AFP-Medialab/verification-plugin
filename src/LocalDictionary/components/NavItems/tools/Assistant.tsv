@@ -13,8 +13,8 @@ assistant_urlbox	URL	Adresse URL	URL	Σύνδεσμος
 assistant_give_url	Give the URL of the page to analyse	Temp	Temp	Temp
 assistant_paste_url	Paste the URL here	Temp	Temp	Temp
 please_give_a_correct_link	Please give a correct link	Donner un lien valide s'il vous plaît	Por favor, dé un enlace válido	Παρακαλώ δώστε έναν σωστό σύνδεσμο
-button_submit	Submit	Envoyer	Enviar	Υποβολή
-quit	Quit	Quitter	Salir	Κλείσιμο
+button_analyse	Analyse	Temp	Temp	Temp
+button_clean	Clean	Temp	Temp	Temp
 save	Save	Enregistrer	Gardar	Αποθήκευση
 source_credibility_title	Source Credibility	Temp	Temp	Temp
 source_credibility_byline	The source has been found as part of a credibility check	Temp	Temp	Temp

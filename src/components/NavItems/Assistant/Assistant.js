@@ -106,8 +106,8 @@ const Assistant = () => {
 
 
     return (
-        <div>
-            <Paper className={classes.assistantRoot}>
+        <Paper>
+            <Paper className={classes.root}>
                 {/* introduction */}
                 <AssistantIntroduction cleanAssistant={cleanAssistant}/>
 
@@ -146,7 +146,7 @@ const Assistant = () => {
             <Box m={3}/>
 
             {/* media results */}
-            <Paper className={classes.assistantRoot}
+            <Paper className={classes.root}
                    hidden={
                        (!urlMode) ||
                        (urlMode && inputUrl === null) ||
@@ -171,7 +171,7 @@ const Assistant = () => {
             <Box m={3}/>
 
             {/* text results */}
-            <Paper className={classes.assistantRoot}
+            <Paper className={classes.root}
                    hidden={linkList.length === 0 && text === null && neResult === null}>
 
                 <Grid container spacing={2}>
@@ -200,7 +200,7 @@ const Assistant = () => {
                     }
                 </Grid>
             </Paper>
-        </div>
+        </Paper>
     )
 };
 

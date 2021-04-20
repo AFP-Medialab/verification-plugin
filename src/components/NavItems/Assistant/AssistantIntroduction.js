@@ -78,7 +78,7 @@ const AssistantIntroduction = (props) => {
                             <Grid container spacing={5}>
                                 <Grid item xs={6}>
                                     <Card variant={"outlined"}
-                                          className={urlMode ? classes.assistantIconSelected : classes.assistantIconHover}
+                                          className={urlMode ? classes.assistantSelected : classes.assistantHover}
                                           onMouseOver={() => {setUseLinkHoverColour(true)}}
                                           onMouseOut={() => setUseLinkHoverColour(false)}
                                           style={{height: 250, borderWidth: 3}}
@@ -115,7 +115,7 @@ const AssistantIntroduction = (props) => {
 
                                 <Grid item xs={6}>
                                     <Card variant={"outlined"}
-                                          className={imageVideoSelected ? classes.assistantIconSelected : classes.assistantIconHover}
+                                          className={imageVideoSelected ? classes.assistantSelected : classes.assistantHover}
                                           style={{height: 250, borderWidth: 3}}
                                           onMouseOver={() => {setUseFileHoverColour(true)}}
                                           onMouseOut={() => setUseFileHoverColour(false)}

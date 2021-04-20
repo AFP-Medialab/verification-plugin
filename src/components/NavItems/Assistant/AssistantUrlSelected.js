@@ -1,13 +1,11 @@
 import React from "react";
 import {useDispatch, useSelector} from "react-redux";
 
-import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
 import {Box, CardHeader, TextField} from "@material-ui/core";
-import CancelIcon from "@material-ui/icons/Cancel";
+import Button from "@material-ui/core/Button";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
-import IconButton from "@material-ui/core/IconButton";
-import InputAdornment from "@material-ui/core/InputAdornment";
+import Grid from "@material-ui/core/Grid";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import Typography from "@material-ui/core/Typography";
 import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
@@ -47,35 +45,32 @@ const AssistantUrlSelected = (props) => {
 
                 <CardContent>
                     <Box mr={2}>
-                        <TextField
-                            id="standard-full-width"
-                            variant="outlined"
-                            label={keyword("assistant_paste_url")}
-                            style={{margin: 8}}
-                            placeholder={""}
-                            fullWidth
-                            value={formInput || ""}
-                            onChange={e => setFormInput(e.target.value)}
-                            InputProps={{
-                                endAdornment: inputUrl ?
-                                    <InputAdornment>
-                                        <IconButton
-                                            color={"secondary"}
-                                            fontSize={"default"}
-                                            onClick={() => cleanAssistant()}>
-                                            <CancelIcon/>
-                                        </IconButton>
-                                    </InputAdornment>
-                                    :
-                                    <InputAdornment variant={"filled"}>
-                                        <IconButton color={"secondary"} onClick={() => {
+                        <Grid container>
+                            <Grid item xs={10}>
+                                <TextField
+                                    variant="outlined"
+                                    label={keyword("assistant_paste_url")}
+                                    style={{margin: 8}}
+                                    placeholder={""}
+                                    fullWidth
+                                    value={formInput || ""}
+                                    onChange={e => setFormInput(e.target.value)}
+                                />
+                            </Grid>
+                            <Grid item xs={2}>
+                                <Box mt={2} ml={6}>
+                                    {inputUrl === null ?
+                                        <Button variant="contained" color="primary" onClick={() => {
                                             dispatch(submitInputUrl(formInput))
                                         }}>
-                                            <ArrowForwardIcon/>
-                                        </IconButton>
-                                    </InputAdornment>
-                            }}
-                        />
+                                            {keyword("button_analyse")}
+                                        </Button> :
+                                        <Button variant="contained" color="primary" onClick={() => cleanAssistant()}>
+                                            {keyword("button_clean")}
+                                        </Button>}
+                                </Box>
+                            </Grid>
+                        </Grid>
                     </Box>
                 </CardContent>
             </Card>

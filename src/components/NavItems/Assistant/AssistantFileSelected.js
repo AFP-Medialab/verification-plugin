@@ -14,11 +14,11 @@ import ListItemText from "@material-ui/core/ListItemText";
 import Typography from "@material-ui/core/Typography";
 
 import {CONTENT_TYPE, KNOWN_LINKS, selectCorrectActions} from "./AssistantRuleBook";
+import Divider from "@material-ui/core/Divider";
 import history from "../../Shared/History/History";
 import tsv from "../../../LocalDictionary/components/NavItems/tools/Assistant.tsv";
 import useLoadLanguage from "../../../Hooks/useLoadLanguage";
 import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
-import {submitUpload} from "../../../redux/actions/tools/assistantActions";
 
 const AssistantFileSelected = () => {
 
@@ -38,14 +38,14 @@ const AssistantFileSelected = () => {
     const imageActions = getActionList(CONTENT_TYPE.IMAGE)
     const videoActions = getActionList(CONTENT_TYPE.VIDEO)
 
-    const handleClick = (path) => {
-        history.push("/app/" + path + "/" + KNOWN_LINKS.OWN + "/" + contentType)
+    const handleClick = (path, cType) => {
+        history.push("/app/" + path + "/" + KNOWN_LINKS.OWN + "/" + cType)
     };
 
-    const generateList = (title, contentType, actionList) => {return (
+    const generateList = (title, cType, actionList) => {return (
         <Grid item xs={6}>
             <Box mx={2} my={0.5}>
-                <Typography variant={"h6"} style={{"fontWeight": "bold"}}>
+                <Typography align={"left"} variant={"h6"} style={{"fontWeight": "bold"}}>
                     {title}
                 </Typography>
             </Box>
@@ -53,12 +53,8 @@ const AssistantFileSelected = () => {
                 {actionList.map((action, index) => {
                     return (
                         <Box m={2} key={index}>
-                            <Card className={classes.assistantCards} variant={"outlined"}>
-                                <ListItem
-                                    onClick={() => {
-                                        dispatch(submitUpload(contentType))
-                                        handleClick(action.path, action.useInputUrl ? inputUrl : processUrl)
-                                    }}>
+                            <Card className={classes.assistantHover} variant={"outlined"}>
+                                <ListItem onClick={() => {handleClick(action.path, cType)}}>
                                     <ListItemAvatar>
                                         <Avatar variant={"square"} src={action.icon}/>
                                     </ListItemAvatar>
@@ -94,8 +90,9 @@ const AssistantFileSelected = () => {
                         </Typography>}
                 />
                 <CardContent>
-                    <Grid container spacing={2}>
+                    <Grid container spacing={3}>
                         {generateList(keyword("upload_image"), CONTENT_TYPE.IMAGE, imageActions)}
+                        <Divider orientation="vertical" flexItem style={{marginRight:"-1px", marginTop: "20px"}} />
                         {generateList(keyword("upload_video"), CONTENT_TYPE.VIDEO, videoActions)}
                     </Grid>
                 </CardContent>

@@ -342,21 +342,6 @@ const useMyStyles = makeStyles(theme => ({
             minWidth: 100,
         },
     },
-    assistantRoot: {
-        padding: theme.spacing(3, 6),
-        backgroundColor: "#F7F7F7",
-        textAlign: "left",
-    },
-    assistantCards: {
-        marginBottom: 2,
-        backgroundColor: theme.palette.primary.light,
-        '&:hover': {
-            backgroundColor: theme.palette.secondary.main,
-        },
-        borderColor:"darkcyan",
-        borderStyle: "solid",
-        borderWidth: "2px"
-    },
     toolTipIcon: {
         color: theme.palette.secondary,
         position: "relative",
@@ -408,14 +393,13 @@ const useMyStyles = makeStyles(theme => ({
         textAlign: "left",
         font: theme.typography.h6.fontSize
     },
-    assistantIconHover: {
+    assistantHover: {
+        borderWidth: 3,
         '&:hover': {
             borderColor: theme.palette.primary.main,
-
-
         },
     },
-    assistantIconSelected: {
+    assistantSelected: {
         borderColor: theme.palette.primary.main,
         '&:hover': {
             borderColor: theme.palette.primary.main,
