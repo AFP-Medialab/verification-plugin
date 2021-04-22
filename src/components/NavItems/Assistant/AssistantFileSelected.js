@@ -1,5 +1,4 @@
 import React from "react";
-import {useDispatch, useSelector} from "react-redux";
 
 import Avatar from "@material-ui/core/Avatar";
 import Box from "@material-ui/core/Box";
@@ -23,12 +22,7 @@ import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
 const AssistantFileSelected = () => {
 
     const classes = useMyStyles();
-    const dispatch = useDispatch();
     const keyword = useLoadLanguage("components/NavItems/tools/Assistant.tsv", tsv);
-
-    const inputUrl = useSelector(state => state.assistant.inputUrl);
-    const processUrl = useSelector(state => state.assistant.processUrl);
-    const contentType = useSelector(state => state.assistant.processUrlType);
 
     const getActionList = (contentType) => {
         let known_link = KNOWN_LINKS.OWN;
