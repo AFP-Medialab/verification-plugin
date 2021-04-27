@@ -74,10 +74,10 @@ const DrawerItem = (props) => {
             content: <OCR/>,
             footer: <Footer type={"usfd"}/>
         },
-        {
-            content: <Checkgif/>,
-            footer: <Footer type={"borelli-afp"}/>
-        },
+    //    {
+    //         content: <Checkgif/>,
+    //         footer: <Footer type={"borelli-afp"}/>
+    //    },
     ];
 
     const dispatch = useDispatch();
