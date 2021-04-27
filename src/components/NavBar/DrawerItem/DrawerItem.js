@@ -56,7 +56,7 @@ const DrawerItem = (props) => {
         },
         {
             content: <Forensic/>,
-            footer: <Footer type={"iti"}/>
+            footer: <Footer type={"iti-borelli-afp"}/>
         },
         {
             content: <TwitterSna/>,
@@ -73,7 +73,11 @@ const DrawerItem = (props) => {
         {
             content: <OCR/>,
             footer: <Footer type={"usfd"}/>
-        }
+        },
+        {
+            content: <Checkgif/>,
+            footer: <Footer type={"borelli-afp"}/>
+        },
     ];
 
     const dispatch = useDispatch();
