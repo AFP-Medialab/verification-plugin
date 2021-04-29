@@ -58,7 +58,7 @@ const DrawerItem = (props) => {
         },
         {
             content: <Forensic/>,
-            footer: <Footer type={"iti"}/>
+            footer: <Footer type={"iti-borelli-afp"}/>
         },
         {
             content: <TwitterSna/>,
