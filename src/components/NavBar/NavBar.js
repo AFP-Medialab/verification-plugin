@@ -78,6 +78,28 @@ import covidSearchIconOff from "./images/tools/covid_search_logoOff.png"
 import xnetworkIconOn from "./images/tools/xnetwork_logoOn.png"
 import xnetworkIconOff from "./images/tools/xnetwork_logoOff.png"
 
+
+import analysisIcon from "./images/SVG/Video/Video_analysis.svg"
+import keyframesIcon from "./images/SVG/Video/Keyframes.svg"
+import thumbnailsIcon from "./images/SVG/Video/Thumbnails.svg"
+import videoRightsIcon from "./images/SVG/Video/Video_rights.svg"
+
+import metadataIcon from "./images/SVG/Image/Metadata.svg"
+import magnifierIcon from "./images/SVG/Image/Magnifier.svg"
+import forensicIcon from "./images/SVG/Image/Forensic.svg"
+import gifIcon from "./images/SVG/Image/Gif.svg"
+import ocrIcon from "./images/SVG/Image/OCR.svg"
+
+
+import twitterSearchIcon from "./images/SVG/Search/Twitter_search.svg"
+import covidSearchIcon from "./images/SVG/Search/Covid19.svg"
+import xnetworkIcon from "./images/SVG/Search/Xnetwork.svg"
+
+import twitterSnaIcon from "./images/SVG/DataAnalysis/Twitter_sna.svg"
+
+
+
+
 import {getSupportedBrowserLanguage} from "../Shared/Languages/getSupportedBrowserLanguage";
 import useLoadLanguage from "../../Hooks/useLoadLanguage";
 import tsv from "../../LocalDictionary/components/NavBar.tsv";
@@ -137,79 +159,83 @@ const NavBar = (props) => {
         },
         {
             title: "navbar_analysis",
-            icon: (drawerValue === 1) ? analysisIconOn : analysisIconOff,
+            icon: (drawerValue === 2) ? analysisIconOn : analysisIcon,
             tsvPrefix: "api",
             path: "analysis",
         },
         {
             title: "navbar_keyframes",
-            icon: (drawerValue === 2) ? keyframesIconOn : keyframesIconOff,
+            icon: (drawerValue === 2) ? keyframesIconOn : keyframesIcon,
             tsvPrefix: "keyframes",
             path: "keyframes",
         },
         {
             title: "navbar_thumbnails",
-            icon: (drawerValue === 3) ? thumbnailsIconOn : thumbnailsIconOff,
+            icon: (drawerValue === 3) ? thumbnailsIconOn : thumbnailsIcon,
             tsvPrefix: "thumbnails",
             path: "thumbnails",
         },
         {
             title: "navbar_twitter",
-            icon: (drawerValue === 4) ? twitterSearchIconOn : twitterSearchIconOff,
+            icon: (drawerValue === 4) ? twitterSearchIconOn : twitterSearchIcon,
             tsvPrefix: "twitter",
             path: "twitter",
         },
         {
             title: "navbar_magnifier",
-            icon: (drawerValue === 5) ? magnifierIconOn : magnifierIconOff,
+            icon: (drawerValue === 5) ? magnifierIconOn : magnifierIcon,
             tsvPrefix: "magnifier",
             path: "magnifier",
         },
         {
             title: "navbar_metadata",
-            icon: (drawerValue === 6) ? metadataIconOn : metadataIconOff,
+            icon: (drawerValue === 6) ? metadataIconOn : metadataIcon,
             tsvPrefix: "metadata",
             path: "metadata",
         },
         {
             title: "navbar_rights",
-            icon: (drawerValue === 7) ? videoRightsIconOn : videoRightsIconOff,
+            icon: (drawerValue === 7) ? videoRightsIconOn : videoRightsIcon,
             tsvPrefix: "copyright",
             path: "copyright",
         },
         {
             title: "navbar_forensic",
-            icon: (drawerValue === 8) ? forensicIconOn : forensicIconOff,
+            icon: (drawerValue === 8) ? forensicIconOn : forensicIcon,
             tsvPrefix: "forensic",
             path: "forensic",
         },
         {
             title: "navbar_twitter_sna",
-            icon: (drawerValue === 9) ? twitterSnaIconOn : twitterSnaIconOff,
+            icon: (drawerValue === 9) ? twitterSnaIconOn : twitterSnaIcon,
             tsvPrefix: "twitter_sna",
             path: "twitterSna"
         },
         {
             title: "navbar_covidsearch",
-            icon: (drawerValue === 10) ? covidSearchIconOn : covidSearchIconOff,
+            icon: (drawerValue === 10) ? covidSearchIconOn : covidSearchIcon,
             tsvPrefix: "covidsearch",
             path: "covidSearch"
         },
         {
             title: "navbar_xnetwork",
-            icon: (drawerValue === 11) ? xnetworkIconOn : xnetworkIconOff,
+            icon: (drawerValue === 11) ? xnetworkIconOn : xnetworkIcon,
             tsvPrefix: "xnetwork",
             path: "xnetwork"
         },
         {
-
             title: "navbar_ocr",
-            icon:
-                <DescriptionIcon
-                    className={(drawerValue === 12) ? classes.customAllToolsIconSelected : classes.customAllToolsIconDeselected}
-                />,
+            icon: <DescriptionIcon
+                className={(drawerValue === 12) ? classes.customAllToolsIconSelected : classes.customAllToolsIconDeselected}
+            />,
             tsvPrefix: "ocr",
             path: "ocr"
+        },
+        {
+            title: "navbar_gif",
+            icon: (drawerValue === 11) ? gifIcon : gifIcon,
+            tsvPrefix: "gif",
+            path: "gif"
         }
     ];
 

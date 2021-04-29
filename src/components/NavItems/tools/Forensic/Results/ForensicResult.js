@@ -1,7 +1,7 @@
 
 import Box from "@material-ui/core/Box";
 import Grid from "@material-ui/core/Grid";
-import React, { useState, useEffect, Component, useRef, state} from "react";
+import React, { useState, Component, useRef} from "react";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 import CardMedia from "@material-ui/core/CardMedia";
@@ -25,10 +25,8 @@ import Fab from '@material-ui/core/Fab';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
 import Fade from '@material-ui/core/Fade';
-import { useSelector } from "react-redux";
-import { setForensicsGifAnimateShow, setForensicsGifAnimateHide } from "../../../../../redux/actions/tools/forensicActions";
-import { useDispatch } from "react-redux";
 import Slider from '@material-ui/core/Slider';
+import useGetGif from "../../GIF/Hooks/useGetGif";
 
 
 function TabPanel(props) {
@@ -173,9 +171,11 @@ const ForensicResults = (props) => {
 
     const filters = useRef(filtersIDs.map((value) => {
 
+        var filter;
+
         //Zero
         if (value === "zero_report"){
-            var filter = {
+            filter = {
                 "id": value,
                 "name": keyword("forensic_title_" + value),
                 "map": [
@@ -188,7 +188,7 @@ const ForensicResults = (props) => {
 
         //GHOST
         } else if (value === "ghost_report"){
-            var filter = {
+            filter = {
                 "id": value,
                 "name": keyword("forensic_title_" + value),
                 "map": results[value]["maps"],
@@ -198,7 +198,7 @@ const ForensicResults = (props) => {
         
         //CAGI
         } else if (value === "cagi_report") {
-            var filter = {
+            filter = {
                 "id": value,
                 "name": [
                     keyword("forensic_title_cagiNormal"),
@@ -214,7 +214,7 @@ const ForensicResults = (props) => {
         
         //REST
         }else{
-            var filter = {
+            filter = {
                 "id": value,
                 "name": keyword("forensic_title_" + value),
                 "map": results[value]["map"],
@@ -285,21 +285,17 @@ const ForensicResults = (props) => {
     //Navigation and Gif of filters
     //============================================================================================
 
-    const [currentZero, setCurrentZero] = React.useState(0);
-    const [currentGhost, setCurrentGhost] = React.useState(0);
-    const [currentCagi, setCurrentCagi] = React.useState(0);
-
     function arrowsToDisplay (filter){
         //left, right
         var arrows = [false, false]
         var filterData = filters.current.find(x => x.id === filter);
-        if (filterData.map.length == 1){
+        if (filterData.map.length === 1){
             return;
         }
-        if (filterData.currentDisplayed == 0){
+        if (filterData.currentDisplayed === 0){
             arrows[1] = true;
             filters.current.find(x => x.id === filter).arrows = arrows;
-        } else if (filterData.currentDisplayed == filterData.map.length -1){
+        } else if (filterData.currentDisplayed === filterData.map.length -1){
             arrows[0] = true;
             filters.current.find(x => x.id === filter).arrows = arrows;
         }else{
@@ -343,7 +339,7 @@ const ForensicResults = (props) => {
         
     }
 
-    const [gifImage, setGifImage] = React.useState(props.url);
+    const gifImage  = props.url;
     const [gifFilter, setGifFilter] = React.useState(props.url);
 
 
@@ -370,24 +366,42 @@ const ForensicResults = (props) => {
         },
     ];
 
-    var speed = 1100;
+    const [speed, setSpeed] = React.useState(1100);
 
     function changeValueSpeed(value) {
         console.log("Change value speed: " + value);
-        speed = value;
+        setSpeed(value*-1);
     }
 
     function changeSpeed(value) {
         console.log("Change speed: " + value);
         clearInterval(interval);
-        setIntervalVar(setInterval(() => animateFilter(), (value*-1)));
+        setIntervalVar(setInterval(() => animateFilter(), (value)));
 
     }
 
 
+    const [filesForGif, setFilesForGif] = useState();
+    const [delayGif, setDelayGif] = useState();
+    const [readyToDownload, setReadyToDownload] = useState();
+
+    useGetGif(filesForGif, delayGif);
+    
+
+    const handleDownloadGif = () => {
+        var files = {
+            "image1": gifImage,
+            "image2": gifFilter,
+        }
+        setFilesForGif(files);
+        setDelayGif(speed);
+
+    };
 
 
-    const dispatch = useDispatch();
+
+
+    //const dispatch = useDispatch();
 
     //const variable = useSelector(state => state.forensic.gifAnimation);
 
@@ -626,19 +640,19 @@ const ForensicResults = (props) => {
                                         var textLook = "";
                                         var textIgnore = "";
 
-                                        if(valueTab == 0){
+                                        if(valueTab === 0){
                                             filtersTab = filters.current.slice (idStartCompression, idStartNoise);
                                             textDescription = keyword("forensic_family_compression_description");
                                             textLook = keyword("forensic_family_compression_look");
                                             textIgnore = keyword("forensic_family_compression_ignore");
 
-                                        } else if (valueTab == 1){
+                                        } else if (valueTab === 1){
                                             filtersTab = filters.current.slice(idStartNoise, idStartDeepLearning);
                                             textDescription = keyword("forensic_family_noise_description");
                                             textLook = keyword("forensic_family_noise_look");
                                             textIgnore = keyword("forensic_family_noise_ignore");
 
-                                        } else if (valueTab == 2){
+                                        } else if (valueTab === 2){
                                             filtersTab = filters.current.slice(idStartDeepLearning, idStartCloning);
                                             textDescription = keyword("forensic_family_ai_description");
                                             textLook = keyword("forensic_family_ai_look");
@@ -882,7 +896,7 @@ const ForensicResults = (props) => {
                                     <Box m={2} />
 
 
-                                    <Button variant="contained" color="primary">
+                                    <Button variant="contained" color="primary" onClick={(e) => handleDownloadGif(e)}>
                                         Download
                                     </Button>
                                 </Grid>

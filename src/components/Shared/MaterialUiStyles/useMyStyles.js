@@ -1,6 +1,5 @@
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import {green} from "@material-ui/core/colors";
-import { CenterFocusStrong } from "@material-ui/icons";
 
 const drawerWidth = 200;
 
@@ -510,6 +509,57 @@ const useMyStyles = makeStyles(theme => ({
     sliderClass: {
         maxWidth:"30vw"
     },
+
+    dropArea: {
+        height: "20vh"
+
+    },
+
+
+    dropZone: {
+        border: 'dashed grey 2px',
+        borderRadius: "25px",
+        height: "30vh"
+    },
+
+    dropZoneInside: {
+        width: "100%",
+        height: "100%",
+
+    },
+
+
+    imageDropped: {
+        height: "30vh"
+    },
+
+    inputContainer:{
+        position: "relative",
+    },
+
+    inputLabel: {
+        cursor: "pointer",
+    },
+
+    inputInput: {
+        position: "absolute",
+        zIndex: 2,
+        width: "0.1px",
+        height: "0.1px",
+        opacity: 0,
+        overflow: "hidden",
+    },
+
+    headingGif: {
+        fontSize: "1rem",
+        fontWeight: "600",
+    },
+
+    buttonGif: {
+        weight: "100%!important",
+    }
+
+
     
 
 

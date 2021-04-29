@@ -20,7 +20,7 @@ import cookiesReducer from "./cookiesReducers";
 import covidSearchReducer from "./tools/covidSearchReducer";
 import assistantReducer from "./assistantReducer";
 import ocrReducer from "./tools/ocrReducer";
-
+import gifReducer from "./tools/gifReducer";
 
 const allReducers = combineReducers({
     language : languageReducer,
@@ -42,7 +42,8 @@ const allReducers = combineReducers({
     cookies : cookiesReducer,
     covidSearch: covidSearchReducer,
     assistant : assistantReducer,
-    ocr: ocrReducer
+    ocr: ocrReducer,
+    gif: gifReducer,
 });
 
 export default allReducers;

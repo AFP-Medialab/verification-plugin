@@ -24,6 +24,9 @@ const AllTools = (props) => {
         history.push("/app/tools/" + path)
     };
 
+    console.log(tools);
+
+
     return (
         <Paper className={classes.root}>
             <Grid container justify="center" spacing={10}>
