@@ -78,7 +78,7 @@ const DrawerItem = (props) => {
         },
         {
             content: <Gif />,
-            footer: <Footer type={"afp"} />
+            footer: <Footer type={"borelli-afp"} />
         }
     ];
 
@@ -97,7 +97,7 @@ const DrawerItem = (props) => {
                                     () => {
                                         dispatch(selectTool(index));
                                         return (
-                                            <Container key={index}>
+                                            <Container key={index} >
                                                 <Fade in={true}>
                                                     <div>
                                                         {drawerItemsContent[index].content}
