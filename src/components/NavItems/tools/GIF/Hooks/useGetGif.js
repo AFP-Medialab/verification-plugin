@@ -40,7 +40,7 @@ const useGetGif = (images, delayInput) => {
 
             axios({
                 method: "post",
-                url: "https://demo-medialab.afp.com/envisu-tools/createAnimated",
+                url: "https://demo-medialab.afp.com/envisu-tools/open/animated",
                 data: body,
                 responseType: 'blob',
             })

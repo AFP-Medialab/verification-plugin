@@ -8,6 +8,7 @@ const useMyStyles = makeStyles(theme => ({
         padding: theme.spacing(3, 2),
         marginTop: 5,
         textAlign: "center",
+        
        
     },
     circularProgress: {
