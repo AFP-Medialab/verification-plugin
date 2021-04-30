@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
-import Paper from "@material-ui/core/Paper";
 import Box from "@material-ui/core/Box";
 import useGetHomographics from "./Hooks/useGetHomographics";
 import useGetGif from "./Hooks/useGetGif";
@@ -12,26 +11,17 @@ import Typography from "@material-ui/core/Typography";
 import Slider from '@material-ui/core/Slider';
 import Grid from "@material-ui/core/Grid";
 import Button from '@material-ui/core/Button';
-
-
-import Input from '@material-ui/core/Input';
-
-
-import Dropzone from 'react-dropzone'
-import { useDropzone } from 'react-dropzone'
-
 import { ReactComponent as IconGif } from '../../../NavBar/images/SVG/Image/Gif.svg';
-
-
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
-
 import DragAndDrop from './DragAndDrop'
-
-
+import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
+import tsv from "../../../../LocalDictionary/components/NavItems/tools/CheckGIF.tsv";
 
 
 const Gif = () => {
 
+    //Load of the TSV
+    const keyword = useLoadLanguage("components/NavItems/tools/CheckGIF.tsv", tsv);
 
     //Style elements
     //============================================================================================
@@ -190,11 +180,11 @@ const Gif = () => {
     const marks = [
         {
             value: -1700,
-            label: 'Slow',
+            label: keyword("slider_label_slow"),
         },
         {
             value: -500,
-            label: 'Fast',
+            label: keyword("slider_label_fast"),
         },
     ];
 
@@ -250,7 +240,7 @@ const Gif = () => {
                 <IconGif fill={'primary'} style={{ fill: "#51A5B2" }}/>
 
                 <Typography variant="h4" color={'primary'}>
-                    Gif Generator
+                    {keyword("checkGIF_title")}
                 </Typography>
 
 
@@ -273,7 +263,7 @@ const Gif = () => {
                             justify="space-between"
                             alignItems="center">
 
-                            <span>Images for the GIF</span>
+                                <span>{keyword("cardTitle_images")}</span>
 
                         </Grid>
                     }
@@ -288,7 +278,7 @@ const Gif = () => {
                         <Box p={2}>
 
                             <Typography variant="h6" className={classes.headingGif}>
-                                First image
+                                {keyword("title_image1")}
                             </Typography>
 
                             <Box m={2}/>
@@ -321,7 +311,7 @@ const Gif = () => {
                                                 />
                                                 <div>
                                                     <label htmlFor="raised-button-file" className={classes.inputLabel}>
-                                                        <span>Drop an image here or click to select an image</span>
+                                                    <span>{keyword("body_droparea")}</span>
                                                     </label>
                                                 </div>
                                                 
@@ -342,7 +332,7 @@ const Gif = () => {
                         <Box p={2}>
 
                             <Typography variant="h6" className={classes.headingGif}>
-                                Second image
+                                {keyword("title_image2")}
                             </Typography>
 
                             <Box m={2} />
@@ -375,7 +365,7 @@ const Gif = () => {
                                             />
                                             <div>
                                                 <label htmlFor="raised-button-file" className={classes.inputLabel}>
-                                                    <span>Drop an image here or click to select an image</span>
+                                                    <span>{keyword("body_droparea")}</span>
                                                 </label>
                                             </div>
 
@@ -402,7 +392,7 @@ const Gif = () => {
 
                 <Box p={2}>
                         <Button variant="contained" color="primary" fullWidth onClick={handleSubmission} disabled={!readyToSend}>
-                        Create Gif
+                            {keyword("button_loadImages")}
                     </Button>
 
                 </Box>
@@ -426,7 +416,7 @@ const Gif = () => {
                             justify="space-between"
                             alignItems="center">
 
-                            <span>Generated GIF</span>
+                                <span>{keyword("cardTitle_generatedGIF")}</span>
 
                         </Grid>
                     }
@@ -465,7 +455,7 @@ const Gif = () => {
                         <Box m={4} />
 
                         <Typography gutterBottom>
-                            Speed of the animation
+                            {keyword("slider_title")}
                                         </Typography>
 
 
@@ -488,7 +478,7 @@ const Gif = () => {
 
 
                         <Button variant="contained" color="primary" fullWidth onClick={(e) => handleDownloadGif(e)}>
-                            Download
+                                {keyword("button_download")}
                         </Button>
                     </Grid>
 
