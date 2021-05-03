@@ -2,6 +2,7 @@
 import Box from "@material-ui/core/Box";
 import Grid from "@material-ui/core/Grid";
 import React, { useState, Component, useRef} from "react";
+import { useSelector } from "react-redux";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 import CardMedia from "@material-ui/core/CardMedia";
@@ -432,6 +433,11 @@ const ForensicResults = (props) => {
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
+
+
+
+    const loading = useSelector(state => state.forensic.loading);
+    console.log("loading: " + loading);
 
     
 

@@ -74,6 +74,9 @@ const Forensic = () => {
         setImage("")
     }, [image]);
 
+    const loading = useSelector(state => state.forensic.loading);
+    console.log("loading: " + loading);
+
     return (
         <div>
             
@@ -112,6 +115,11 @@ const Forensic = () => {
                     <LocalFile/>
                 </Box>
             </Paper>
+            
+            {loading &&
+                <LinearProgress />
+            }
+            
             {
                 resultData &&
                 <ForensicResults 

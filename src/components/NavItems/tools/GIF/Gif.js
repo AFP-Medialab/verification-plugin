@@ -145,11 +145,10 @@ const Gif = () => {
     //Call to the API
     useGetHomographics(filesToSend, showHomo);
 
+    //Loading bar
     if (loading && !readyToSend){
         setReadyToSend(false);
     }
-
-
 
 
 
