@@ -97,6 +97,14 @@ import { ReactComponent as XnetworkIcon } from "./images/SVG/Search/Xnetwork.svg
 
 import { ReactComponent as TwitterSnaIcon } from "./images/SVG/DataAnalysis/Twitter_sna.svg"
 
+import { ReactComponent as ToolsIcon } from "./images/SVG/Navbar/Tools.svg"
+import { ReactComponent as ClassroomIcon } from "./images/SVG/Navbar/Classroom.svg"
+import { ReactComponent as InteractiveIcon } from "./images/SVG/Navbar/Interactive.svg"
+import { ReactComponent as FactcheckIcon } from "./images/SVG/Navbar/Fact_check.svg"
+import { ReactComponent as AboutIcon } from "./images/SVG/Navbar/About.svg"
+import { ReactComponent as AssistantIcon } from "./images/SVG/Navbar/Assistant.svg"
+import { ReactComponent as GuideIcon } from "./images/SVG/Navbar/Guide.svg"
+
 
 
 
@@ -255,64 +263,49 @@ const NavBar = (props) => {
     const tabItems = [
         {
             title: "navbar_tools",
-            icon:
-                <Icon classes={{root: classes.iconRootTab}} fontSize={"large"}>
-                    <img className={classes.imageIconTab} src={toolIcon} alt={keyword("navbar_tools")} />
-                </Icon>,
+            icon: <ToolsIcon width="40px" height="40px" style={{ fill: "#717171" }} />,
             content: <div/>,
             path: "tools",
             footer: <div/>,
         },
         {
             title: "navbar_tuto",
-            icon:
-                <Icon classes={{root: classes.iconRootTab}} fontSize={"large"}>
-                    <img className={classes.imageIconTab} src={tutorialIcon} alt={keyword("navbar_tuto")}/>
-                </Icon>,
+            icon: <GuideIcon width="40px" height="40px" style={{ fill: "#717171" }} />,
             content: <Tutorial/>,
             path: "tutorial",
             footer: <Footer type={"afp"}/>
         },
         {
             title: "navbar_classroom",
-            icon:
-                <Icon classes={{root: classes.iconRootTab}} fontSize={"large"} color={'primary'}>
-                    <img className={classes.imageIconTab} src={classRoomIcon} alt={keyword("navbar_classroom")} />
-                </Icon>,
+            icon: <ClassroomIcon width="40px" height="40px" style={{ fill: "#717171" }} />,
             content: <ClassRoom/>,
             path: "classroom",
             footer: <Footer type={"afp"}/>
         },
         {
             title: "navbar_quiz",
-            icon:
-                <Icon classes={{root: classes.iconRootTab}} fontSize={"large"}>
-                    <img className={classes.imageIconTab} src={interactiveIcon} alt={keyword("navbar_quiz")} />
-                </Icon>,
+            icon: <InteractiveIcon width="40px" height="40px" style={{ fill: "#717171" }} />,
             content: <Interactive/>,
             path: "interactive",
             footer: <Footer type={"afp"}/>
         },
         {
             title: "navbar_factCheck",
-            icon: <ImageSearchIcon fontSize={"large"}/>,
+            icon: <FactcheckIcon width="40px" height="40px" style={{ fill: "#717171" }} />,
             content: <FactCheck/>,
             path: "factCheck",
             footer: <Footer type={"afp"}/>
         },
         {
             title: "navbar_about",
-            icon:
-                <Icon classes={{root: classes.iconRootTab}} fontSize={"large"}>
-                    <img className={classes.imageIconTab} src={aboutIcon} alt={keyword("navbar_about")} />
-                </Icon>,
+            icon: <AboutIcon width="40px" height="40px" style={{ fill: "#717171" }} />,
             content: <About/>,
             path: "about",
             footer: <Footer type={"afp"}/>
         },
         {
             title: "navbar_assistant",
-            icon: <FaceIcon fontSize={"large"}/>,
+            icon: <AssistantIcon width="40px" height="40px" style={{ fill: "#717171" }} />,
             content: <Assistant/>,
             path: "assistant",
             footer: <Footer type={"usfd"}/>
