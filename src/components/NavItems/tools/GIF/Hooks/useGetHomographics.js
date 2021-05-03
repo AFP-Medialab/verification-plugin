@@ -37,6 +37,8 @@ const useGetHomographics = (files, showHomo) => {
 
         if (files && !showHomo) {
             console.log("UPLOADING IMAGES");
+
+            dispatch(setGifLoading());
             //console.log(files.file1);
             //console.log(files.file2);
 

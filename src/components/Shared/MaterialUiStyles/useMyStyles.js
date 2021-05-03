@@ -420,6 +420,7 @@ const useMyStyles = makeStyles(theme => ({
 
 
     /* Forensic classes */
+    /* ================================================================================== */
     newForensics:{
         spacing: 8,
         marginTop: -40
@@ -511,6 +512,10 @@ const useMyStyles = makeStyles(theme => ({
         maxWidth:"30vw"
     },
 
+
+    /* CheckGIF classes */
+    /* ================================================================================== */
+
     dropArea: {
         height: "20vh"
 
@@ -520,7 +525,7 @@ const useMyStyles = makeStyles(theme => ({
     dropZone: {
         border: 'dashed grey 2px',
         borderRadius: "25px",
-        height: "30vh"
+        height: "40vh"
     },
 
     dropZoneInside: {
@@ -531,7 +536,7 @@ const useMyStyles = makeStyles(theme => ({
 
 
     imageDropped: {
-        height: "30vh"
+        height: "40vh"
     },
 
     inputContainer:{

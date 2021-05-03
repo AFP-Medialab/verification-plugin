@@ -16,6 +16,7 @@ import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import DragAndDrop from './DragAndDrop'
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/CheckGIF.tsv";
+import LinearProgress from '@material-ui/core/LinearProgress';
 
 
 const Gif = () => {
@@ -83,6 +84,8 @@ const Gif = () => {
     const [filesToSend, setFilesToSend] = useState();
     const showHomo = useSelector(state => state.gif.showHomo);
 
+    const loading = useSelector(state => state.gif.loading);
+
 
     //===  CODE FOR THE FIRST IMAGE ===
     //Load by drop
@@ -141,6 +144,11 @@ const Gif = () => {
 
     //Call to the API
     useGetHomographics(filesToSend, showHomo);
+
+    if (loading && !readyToSend){
+        setReadyToSend(false);
+    }
+
 
 
 
@@ -222,6 +230,9 @@ const Gif = () => {
     //Call to the API
     useGetGif(filesForGif, delayGif);
 
+
+
+
     
 
 
@@ -254,7 +265,6 @@ const Gif = () => {
                         The GIF generator tool will create an animated GIF from two images that you choose
                     </Typography>
                 </Box>
-
                 <Box m={3} />
 
                 {//=== Load of the images ===
@@ -276,7 +286,7 @@ const Gif = () => {
                         className={classes.headerUpladedImage}
                     />
 
-
+                        
                     <Grid container spacing={3}>
 
                         <Grid item xs={6}>
@@ -315,9 +325,11 @@ const Gif = () => {
                                                     onChange={(e) => handleInput(e)}
                                                 />
                                                 <div>
-                                                    <label htmlFor="raised-button-file" className={classes.inputLabel}>
-                                                        <span>{keyword("body_droparea")}</span>
-                                                    </label>
+                                                <Box p={2} textAlign="center">
+                                                        <label htmlFor="raised-button-file" className={classes.inputLabel}>
+                                                            <span>{keyword("body_droparea")}</span>
+                                                        </label>
+                                                    </Box>
                                                 </div>
 
                                             </Grid>
@@ -366,9 +378,11 @@ const Gif = () => {
                                                     onChange={(e) => handleInput2(e)}
                                                 />
                                                 <div>
-                                                    <label htmlFor="raised-button-file" className={classes.inputLabel}>
-                                                        <span>{keyword("body_droparea")}</span>
-                                                    </label>
+                                                    <Box p={2} textAlign="center">
+                                                        <label htmlFor="raised-button-file" className={classes.inputLabel}>
+                                                            <span>{keyword("body_droparea")}</span>
+                                                        </label>
+                                                    </Box>
                                                 </div>
                                             </Grid>
 
@@ -387,6 +401,10 @@ const Gif = () => {
                             {keyword("button_loadImages")}
                         </Button>
                     </Box>
+
+                    {loading &&
+                        <LinearProgress />
+                    }
 
                 </Card>
 

@@ -60,7 +60,7 @@ class DragAndDrop extends Component {
 				style={{ 
 					display: 'inline-block', 
 					position: 'relative' ,
-					width: "100%"
+					width: "100%",
 				}}
 				ref={this.dropRef}
 			>
