@@ -16,6 +16,9 @@ import ListItem from "@material-ui/core/ListItem";
 import List from "@material-ui/core/List";
 import ListItemText from "@material-ui/core/ListItemText";
 import ReactWordcloud from "react-wordcloud";
+import {select} from "d3-selection";
+import "tippy.js/dist/tippy.css";
+import "tippy.js/animations/scale.css";
 
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/Assistant.tsv";
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
@@ -36,11 +39,51 @@ const AssistantNEResult = () => {
         index === selectedIndex ?
             setSelectedIndex(null) : setSelectedIndex(index)
     }
+
+    function getCallback(callback) {
+        return function (word, event) {
+            const isActive = callback !== "onWordMouseOut";
+            const element = event.target;
+            const text = select(element);
+            text
+                .on("click", () => {
+                    if (isActive) {window.open(`https://google.com/search?q=${word.text}`, "_blank");}
+                })
+                .transition()
+                .attr("text-decoration", isActive ? "underline" : "none");
+        };
+    }
+
     const options = {
         rotations: 1,
         rotationAngles: [0],
         fontSizes: [15,60]
     };
+
+    const callbacks = {
+        getWordColor: word => {
+            switch (word.category) {
+                case "Person":
+                    return "blue"
+                case "Location":
+                    return "red"
+                case "Organization":
+                    return "green"
+                case "Hashtag":
+                    return "orange"
+                case "UserId":
+                    return "purple"
+                default:
+                    return "black"
+            }
+        },
+        getWordTooltip: word => {
+            return word.text + " (" + word.category + "): " + word.value;
+        },
+        onWordClick: getCallback("onWordClick"),
+        onWordMouseOut: getCallback("onWordMouseOut"),
+        onWordMouseOver: getCallback("onWordMouseOver")
+    }
 
     return (
         <Grid item xs={12}>
@@ -88,7 +131,7 @@ const AssistantNEResult = () => {
                             <Divider orientation="vertical"/>
                         </Grid>
                         <Grid item xs={7} align={"center"}>
-                            <ReactWordcloud words={neResultCount} options={options}/>
+                            <ReactWordcloud words={neResultCount} callbacks={callbacks} options={options}/>
                         </Grid>
                     </Grid>
                 </CardContent>
