@@ -79,23 +79,23 @@ import xnetworkIconOn from "./images/tools/xnetwork_logoOn.png"
 import xnetworkIconOff from "./images/tools/xnetwork_logoOff.png"
 
 
-import analysisIcon from "./images/SVG/Video/Video_analysis.svg"
-import keyframesIcon from "./images/SVG/Video/Keyframes.svg"
-import thumbnailsIcon from "./images/SVG/Video/Thumbnails.svg"
-import videoRightsIcon from "./images/SVG/Video/Video_rights.svg"
+import { ReactComponent as AnalysisIcon } from "./images/SVG/Video/Video_analysis.svg"
+import { ReactComponent as KeyframesIcon } from "./images/SVG/Video/Keyframes.svg"
+import { ReactComponent as ThumbnailsIcon } from "./images/SVG/Video/Thumbnails.svg"
+import { ReactComponent as VideoRightsIcon } from "./images/SVG/Video/Video_rights.svg"
 
-import metadataIcon from "./images/SVG/Image/Metadata.svg"
-import magnifierIcon from "./images/SVG/Image/Magnifier.svg"
-import forensicIcon from "./images/SVG/Image/Forensic.svg"
-import gifIcon from "./images/SVG/Image/Gif.svg"
-import ocrIcon from "./images/SVG/Image/OCR.svg"
+import { ReactComponent as MetadataIcon } from "./images/SVG/Image/Metadata.svg"
+import { ReactComponent as MagnifierIcon } from "./images/SVG/Image/Magnifier.svg"
+import { ReactComponent as ForensicIcon } from "./images/SVG/Image/Forensic.svg"
+import { ReactComponent as GifIcon }  from "./images/SVG/Image/Gif.svg"
+import { ReactComponent as OcrIcon }  from "./images/SVG/Image/OCR.svg"
 
 
-import twitterSearchIcon from "./images/SVG/Search/Twitter_search.svg"
-import covidSearchIcon from "./images/SVG/Search/Covid19.svg"
-import xnetworkIcon from "./images/SVG/Search/Xnetwork.svg"
+import { ReactComponent as TwitterSearchIcon } from "./images/SVG/Search/Twitter_search.svg"
+import { ReactComponent as CovidSearchIcon } from "./images/SVG/Search/Covid19.svg"
+import { ReactComponent as XnetworkIcon } from "./images/SVG/Search/Xnetwork.svg"
 
-import twitterSnaIcon from "./images/SVG/DataAnalysis/Twitter_sna.svg"
+import { ReactComponent as TwitterSnaIcon } from "./images/SVG/DataAnalysis/Twitter_sna.svg"
 
 
 
@@ -148,6 +148,7 @@ const NavBar = (props) => {
         setOpen(!open);
     };
 
+    const colorPrimary = "#123456"
 
     const drawerItems = [
         {
@@ -159,81 +160,79 @@ const NavBar = (props) => {
         },
         {
             title: "navbar_analysis",
-            icon: (drawerValue === 2) ? analysisIconOn : analysisIcon,
+            icon: <AnalysisIcon width="60px" height="60px" style={{ fill: "#4c4c4c" }} />,
             tsvPrefix: "api",
             path: "analysis",
         },
         {
             title: "navbar_keyframes",
-            icon: (drawerValue === 2) ? keyframesIconOn : keyframesIcon,
+            icon: <KeyframesIcon width="60px" height="60px" style={{ fill: "#4c4c4c" }} />,
             tsvPrefix: "keyframes",
             path: "keyframes",
         },
         {
             title: "navbar_thumbnails",
-            icon: (drawerValue === 3) ? thumbnailsIconOn : thumbnailsIcon,
+            icon: <ThumbnailsIcon width="60px" height="60px" style={{ fill: "#4c4c4c" }} />,
             tsvPrefix: "thumbnails",
             path: "thumbnails",
         },
         {
             title: "navbar_twitter",
-            icon: (drawerValue === 4) ? twitterSearchIconOn : twitterSearchIcon,
+            icon: <TwitterSearchIcon width="60px" height="60px" style={{ fill: "#4c4c4c" }} />,
             tsvPrefix: "twitter",
             path: "twitter",
         },
         {
             title: "navbar_magnifier",
-            icon: (drawerValue === 5) ? magnifierIconOn : magnifierIcon,
+            icon: <MagnifierIcon width="60px" height="60px" style={{ fill: "#4c4c4c" }} />,
             tsvPrefix: "magnifier",
             path: "magnifier",
         },
         {
             title: "navbar_metadata",
-            icon: (drawerValue === 6) ? metadataIconOn : metadataIcon,
+            icon: <MetadataIcon width="60px" height="60px" style={{ fill: "#4c4c4c" }} />,
             tsvPrefix: "metadata",
             path: "metadata",
         },
         {
             title: "navbar_rights",
-            icon: (drawerValue === 7) ? videoRightsIconOn : videoRightsIcon,
+            icon: <VideoRightsIcon width="60px" height="60px" style={{ fill: "#4c4c4c" }} />,
             tsvPrefix: "copyright",
             path: "copyright",
         },
         {
             title: "navbar_forensic",
-            icon: (drawerValue === 8) ? forensicIconOn : forensicIcon,
+            icon: <ForensicIcon width="60px" height="60px" style={{ fill: "#4c4c4c" }} />,
             tsvPrefix: "forensic",
             path: "forensic",
         },
         {
             title: "navbar_twitter_sna",
-            icon: (drawerValue === 9) ? twitterSnaIconOn : twitterSnaIcon,
+            icon: <TwitterSnaIcon width="60px" height="60px" style={{ fill: "#4c4c4c" }} />,
             tsvPrefix: "twitter_sna",
             path: "twitterSna"
         },
         {
             title: "navbar_covidsearch",
-            icon: (drawerValue === 10) ? covidSearchIconOn : covidSearchIcon,
+            icon: <CovidSearchIcon width="60px" height="60px" style={{ fill: "#4c4c4c" }} />,
             tsvPrefix: "covidsearch",
             path: "covidSearch"
         },
         {
             title: "navbar_xnetwork",
-            icon: (drawerValue === 11) ? xnetworkIconOn : xnetworkIcon,
+            icon: <XnetworkIcon width="60px" height="60px" style={{ fill: "#4c4c4c" }} />,
             tsvPrefix: "xnetwork",
             path: "xnetwork"
         },
         {
             title: "navbar_ocr",
-            icon: <DescriptionIcon
-                className={(drawerValue === 12) ? classes.customAllToolsIconSelected : classes.customAllToolsIconDeselected}
-            />,
+            icon: <OcrIcon width="60px" height="60px" style={{ fill: "#4c4c4c" }} />,
             tsvPrefix: "ocr",
             path: "ocr"
         },
         {
             title: "navbar_gif",
-            icon: (drawerValue === 11) ? gifIcon : gifIcon,
+            icon: <GifIcon width="60px" height="60px" style={{ fill: "#4c4c4c" }}/>,
             tsvPrefix: "gif",
             path: "gif"
         }
@@ -387,16 +386,12 @@ const NavBar = (props) => {
                     {
                         drawerItems.map((item, key) => {
                             return (
-                                <ListItem button key={key} onClick={() => changeValue(key)}>
+                                <ListItem button key={key} onClick={() => changeValue(key)} >
                                     <ListItemIcon color="primary.main">
                                         {
-                                            (key === 0 || key === 12) ?
-                                                <IconButton className={classes.customAllToolsButton} style={{"fontSize":40}}>
-                                                    {item.icon}</IconButton>
-                                                :
-                                                <Icon className={classes.iconRootDrawer} fontSize={"large"}>
-                                                    <img className={classes.imageIconDrawer} src={item.icon} alt={keyword(item.title)}/>
-                                                </Icon>
+                                            <IconButton className={classes.customAllToolsButton} style={{ "width": 40, "height": 40}}>
+                                                {item.icon}
+                                            </IconButton>
                                         }
                                     </ListItemIcon>
                                     <ListItemText primary={keyword(item.title)}/>

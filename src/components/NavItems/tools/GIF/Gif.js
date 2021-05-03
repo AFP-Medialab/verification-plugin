@@ -231,10 +231,6 @@ const Gif = () => {
 
 
 
-
-    
-
-
     //HTML Code
     //============================================================================================
 
@@ -252,7 +248,7 @@ const Gif = () => {
                     alignItems="center"
                 >
 
-                    <IconGif fill={'primary'} style={{ fill: "#51A5B2" }} />
+                    <IconGif style={{ fill: "#51A5B2" }} />
                     <Typography variant="h4" color={'primary'}>
                         {keyword("checkGIF_title")}
                     </Typography>
