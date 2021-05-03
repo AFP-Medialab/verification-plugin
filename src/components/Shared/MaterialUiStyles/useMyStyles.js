@@ -8,9 +8,19 @@ const useMyStyles = makeStyles(theme => ({
         padding: theme.spacing(3, 2),
         marginTop: 5,
         textAlign: "center",
-        
        
     },
+
+    rootNoCenter: {
+        padding: theme.spacing(3, 2),
+        marginTop: 5,
+    },
+
+    noMargin: {
+        marginLeft: "0px!important",
+        marginRight: "0px!important"
+    },
+
     circularProgress: {
         margin: "auto",
         width: "100%"
@@ -84,7 +94,11 @@ const useMyStyles = makeStyles(theme => ({
     },
     content: {
         flexGrow: 1,
-        padding: theme.spacing(3),
+        paddingLeft: theme.spacing(3),
+        paddingRight: theme.spacing(3),
+        paddingTop: "3vh",
+        backgroundColor: "#fafafa",
+        minHeight: "97vh"
     },
     logoLeft: {
         cursor: "pointer",
@@ -563,7 +577,19 @@ const useMyStyles = makeStyles(theme => ({
 
     buttonGif: {
         weight: "100%!important",
-    }
+    },
+
+
+
+
+
+
+    toolCardsContainer: {
+
+
+    },
+
+    
 
 
     

@@ -160,79 +160,92 @@ const NavBar = (props) => {
         },
         {
             title: "navbar_analysis",
-            icon: <AnalysisIcon width="60px" height="60px" style={{ fill: "#4c4c4c" }} />,
+            description: "navbar_analysis_description",
+            icon: <AnalysisIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} />,
             tsvPrefix: "api",
             path: "analysis",
         },
         {
             title: "navbar_keyframes",
-            icon: <KeyframesIcon width="60px" height="60px" style={{ fill: "#4c4c4c" }} />,
+            description: "navbar_keyframes_description",
+            icon: <KeyframesIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} />,
             tsvPrefix: "keyframes",
             path: "keyframes",
         },
         {
             title: "navbar_thumbnails",
-            icon: <ThumbnailsIcon width="60px" height="60px" style={{ fill: "#4c4c4c" }} />,
+            description: "navbar_thumbnails_description",
+            icon: <ThumbnailsIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} />,
             tsvPrefix: "thumbnails",
             path: "thumbnails",
         },
         {
             title: "navbar_twitter",
-            icon: <TwitterSearchIcon width="60px" height="60px" style={{ fill: "#4c4c4c" }} />,
+            description: "navbar_twitter_description",
+            icon: <TwitterSearchIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} />,
             tsvPrefix: "twitter",
             path: "twitter",
         },
         {
             title: "navbar_magnifier",
-            icon: <MagnifierIcon width="60px" height="60px" style={{ fill: "#4c4c4c" }} />,
+            description: "navbar_magnifier_description",
+            icon: <MagnifierIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} />,
             tsvPrefix: "magnifier",
             path: "magnifier",
         },
         {
             title: "navbar_metadata",
-            icon: <MetadataIcon width="60px" height="60px" style={{ fill: "#4c4c4c" }} />,
+            description: "navbar_metadata_description",
+            icon: <MetadataIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} />,
             tsvPrefix: "metadata",
             path: "metadata",
         },
         {
             title: "navbar_rights",
-            icon: <VideoRightsIcon width="60px" height="60px" style={{ fill: "#4c4c4c" }} />,
+            description: "navbar_rights_description",
+            icon: <VideoRightsIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} />,
             tsvPrefix: "copyright",
             path: "copyright",
         },
         {
             title: "navbar_forensic",
-            icon: <ForensicIcon width="60px" height="60px" style={{ fill: "#4c4c4c" }} />,
+            description: "navbar_forensic_description",
+            icon: <ForensicIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} />,
             tsvPrefix: "forensic",
             path: "forensic",
         },
         {
             title: "navbar_twitter_sna",
-            icon: <TwitterSnaIcon width="60px" height="60px" style={{ fill: "#4c4c4c" }} />,
+            description: "navbar_twitter_sna_description",
+            icon: <TwitterSnaIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} />,
             tsvPrefix: "twitter_sna",
             path: "twitterSna"
         },
         {
             title: "navbar_covidsearch",
-            icon: <CovidSearchIcon width="60px" height="60px" style={{ fill: "#4c4c4c" }} />,
+            description: "navbar_covidsearch_description",
+            icon: <CovidSearchIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} />,
             tsvPrefix: "covidsearch",
             path: "covidSearch"
         },
         {
             title: "navbar_xnetwork",
-            icon: <XnetworkIcon width="60px" height="60px" style={{ fill: "#4c4c4c" }} />,
+            description: "navbar_xnetwork_description",
+            icon: <XnetworkIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} />,
             tsvPrefix: "xnetwork",
             path: "xnetwork"
         },
         {
             title: "navbar_ocr",
-            icon: <OcrIcon width="60px" height="60px" style={{ fill: "#4c4c4c" }} />,
+            description: "navbar_ocr_description",
+            icon: <OcrIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} />,
             tsvPrefix: "ocr",
             path: "ocr"
         },
         {
             title: "navbar_gif",
-            icon: <GifIcon width="60px" height="60px" style={{ fill: "#4c4c4c" }}/>,
+            description: "navbar_gif_description",
+            icon: <GifIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }}/>,
             tsvPrefix: "gif",
             path: "gif"
         }
@@ -403,7 +416,7 @@ const NavBar = (props) => {
             </Drawer>
             <main className={classes.content}>
                 <div className={classes.toolbar} id="back-to-top-anchor"/>
-                <TabItem tabItems={tabItems} drawerItems={drawerItems}/>
+                <TabItem className={classes.noMargin} tabItems={tabItems} drawerItems={drawerItems}/>
                 <ScrollTop {...props}>
                     <Fab color="secondary" size="small" aria-label="scroll back to top">
                         <KeyboardArrowUpIcon/>

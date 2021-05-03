@@ -19,9 +19,11 @@ import CovidSearch from "../../NavItems/tools/CovidSearch/CovidSearch";
 import XNetwork from "../../NavItems/tools/XNetwork/XNetwork";
 import OCR from "../../NavItems/tools/OCR/OCR";
 import Gif from "../../NavItems/tools/GIF/Gif";
+import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
 
 const DrawerItem = (props) => {
 
+    const classes = useMyStyles();
 
     const drawerItemsContent = [
         {
@@ -97,7 +99,7 @@ const DrawerItem = (props) => {
                                     () => {
                                         dispatch(selectTool(index));
                                         return (
-                                            <Container key={index} >
+                                            <Container key={index} className={classes.noMargin} maxWidth={false}>
                                                 <Fade in={true}>
                                                     <div>
                                                         {drawerItemsContent[index].content}
