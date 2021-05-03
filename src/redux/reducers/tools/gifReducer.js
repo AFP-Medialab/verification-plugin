@@ -3,6 +3,7 @@ const defaultState = {
     loading: false,
     homoImg1: "",
     homoImg2: "",
+    downloading: false,
 };
 
 const gifReducer = (state = defaultState, action) => {
@@ -12,6 +13,12 @@ const gifReducer = (state = defaultState, action) => {
             return state;
         case "SET_GIF_HOMOGRAPHIC":
             return action.payload;
+        case "SET_GIF_DOWNLOADING":
+            state.downloading = true;
+            return state;
+        case "SET_GIF_DOWNLOADED":
+            state.downloading = false;
+            return state;
         default:
             return state;
     }

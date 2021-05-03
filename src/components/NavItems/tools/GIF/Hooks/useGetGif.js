@@ -4,10 +4,10 @@ import { useDispatch } from "react-redux";
 import { setError } from "../../../../../redux/actions/errorActions";
 import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Forensic.tsv";
-import { setGifLoading } from "../../../../../redux/actions/tools/gifActions";
+import { setGifLoading, setGifDownloaded } from "../../../../../redux/actions/tools/gifActions";
 import { saveAs } from 'file-saver';
 
-const useGetGif = (images, delayInput) => {
+const useGetGif = (images, delayInput, downloading) => {
     const keyword = useLoadLanguage("components/NavItems/tools/Forensic.tsv", tsv);
     const dispatch = useDispatch();
 
@@ -25,11 +25,12 @@ const useGetGif = (images, delayInput) => {
 
         const downloadGif = (response) => {
             console.log(response.data);
-            const file = new Blob([response.data], { type: 'image/gif' })
-            saveAs(file, "image.gif")
+            const file = new Blob([response.data], { type: 'image/gif' });
+            saveAs(file, "image.gif");
+            dispatch(setGifDownloaded());
         }
 
-        if (images && delayInput) {
+        if (images && delayInput && downloading) {
             var body = {
                 inputURLs: [
                     images.image1,

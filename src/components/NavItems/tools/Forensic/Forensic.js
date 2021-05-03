@@ -75,7 +75,6 @@ const Forensic = () => {
     }, [image]);
 
     const loading = useSelector(state => state.forensic.loading);
-    console.log("loading: " + loading);
 
     return (
         <div>

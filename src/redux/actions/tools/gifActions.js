@@ -17,3 +17,15 @@ export const setGifLoading = () => {
     }
 };
 
+
+export const setGifDownloading = () => {
+    return {
+        type: "SET_GIF_DOWNLOADING"
+    }
+};
+
+export const setGifDownloaded= () => {
+    return {
+        type: "SET_GIF_DOWNLOADED"
+    }
+};

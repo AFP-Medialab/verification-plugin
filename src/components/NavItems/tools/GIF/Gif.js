@@ -227,7 +227,7 @@ const Gif = () => {
     };
 
     //Call to the API
-    useGetGif(filesForGif, delayGif);
+    useGetGif(filesForGif, delayGif, true);
 
 
 

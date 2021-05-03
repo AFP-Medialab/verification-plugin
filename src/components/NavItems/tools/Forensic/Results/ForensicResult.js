@@ -28,7 +28,8 @@ import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
 import Fade from '@material-ui/core/Fade';
 import Slider from '@material-ui/core/Slider';
 import useGetGif from "../../GIF/Hooks/useGetGif";
-
+import { setGifDownloading } from "../../../../../redux/actions/tools/gifActions";
+import { useDispatch } from "react-redux";
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -63,6 +64,8 @@ export class Instructions extends Component {
 
 
 const ForensicResults = (props) => {
+
+    const dispatch = useDispatch();
 
     const theme = createMuiTheme({
         overrides: {
@@ -323,6 +326,8 @@ const ForensicResults = (props) => {
 
     const [interval, setIntervalVar] = React.useState(null);
 
+    const downloading = useSelector(state => state.gif.downloading);
+
     function clickGifPopover(event, filter) {
         if (filter === "zero_report" || filter === "ghost_report" || filter === "cagi_report"){
             setGifFilter(filters.current.find(x => x.id === filter).map[filters.current.find(x => x.id === filter).currentDisplayed]);         
@@ -386,7 +391,7 @@ const ForensicResults = (props) => {
     const [delayGif, setDelayGif] = useState();
     const [readyToDownload, setReadyToDownload] = useState();
 
-    useGetGif(filesForGif, delayGif);
+    useGetGif(filesForGif, delayGif, downloading);
     
 
     const handleDownloadGif = () => {
@@ -396,7 +401,7 @@ const ForensicResults = (props) => {
         }
         setFilesForGif(files);
         setDelayGif(speed);
-
+        dispatch(setGifDownloading());
     };
 
 
@@ -436,9 +441,7 @@ const ForensicResults = (props) => {
 
 
 
-    const loading = useSelector(state => state.forensic.loading);
-    console.log("loading: " + loading);
-
+    console.log("Downloading: " + downloading);
     
 
 
