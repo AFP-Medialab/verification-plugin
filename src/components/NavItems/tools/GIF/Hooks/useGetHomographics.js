@@ -51,10 +51,6 @@ const useGetHomographics = (files, showHomo) => {
                 url: "https://demo-medialab.afp.com/envisu-tools/open/ipol/homographic",
                 data: bodyFormData,
                 headers: { "Content-Type": "multipart/form-data" },
-                params: {
-                    url0: 'noURL',
-                    url1: 'noURL'
-                },
             })
                 .then(response => getImages(response))
                 .catch(error => {

@@ -9,7 +9,6 @@ import NewReleasesIcon from '@material-ui/icons/NewReleases';
 import FiberNewIcon from '@material-ui/icons/FiberNew';
 import LockIcon from '@material-ui/icons/Lock';
 
-
 export class ToolCard extends Component {
 
     render() {
@@ -40,7 +39,7 @@ export class ToolCard extends Component {
                     borderRadius: "10px",
                     width: "235px",
                     cursor: "pointer",
-                    backgroundColor: "#ffffff"
+                    backgroundColor: "#ffffff",
             }}>
 
                 <Box p={2}>
@@ -54,7 +53,7 @@ export class ToolCard extends Component {
                             >
 
                                 <Grid item>
-                                    {this.props.icon}
+                                    {this.props.icon}                   
                                 </Grid>
                                 <Grid item>
                                     <Box ml={1}/>

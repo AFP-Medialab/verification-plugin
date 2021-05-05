@@ -169,8 +169,10 @@ const AllTools = (props) => {
                                             <ToolCard
                                                 name={keyword(value.title)}
                                                 description={keyword(value.description)}
-                                                icon={value.icon} 
-                                                type={value.type}/>
+                                                icon={value.iconColored} 
+                                                type={value.type}
+                                                path="../../../NavBar/images/SVG/Image/Gif.svg"/>
+                                                
                                         </Grid>
                                     );
                                 })
@@ -215,7 +217,7 @@ const AllTools = (props) => {
                                         <ToolCard
                                             name={keyword(value.title)}
                                             description={keyword(value.description)}
-                                            icon={value.icon} 
+                                            icon={value.iconColored}
                                             type={value.type}/>
                                     </Grid>
                                 );
@@ -261,7 +263,7 @@ const AllTools = (props) => {
                                         <ToolCard
                                             name={keyword(value.title)}
                                             description={keyword(value.description)}
-                                            icon={value.icon} 
+                                            icon={value.iconColored}
                                             type={value.type}/>
                                     </Grid>
                                 );
@@ -307,7 +309,7 @@ const AllTools = (props) => {
                                         <ToolCard
                                             name={keyword(value.title)}
                                             description={keyword(value.description)}
-                                            icon={value.icon} 
+                                            icon={value.iconColored}
                                             type={value.type}/>
                                     </Grid>
                                 );
