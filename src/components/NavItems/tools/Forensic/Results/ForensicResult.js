@@ -500,8 +500,7 @@ const ForensicResults = (props) => {
                                                 direction="row"
                                                 justify="space-between"
                                                 alignItems="center">
-
-                                                <span>Lenses</span>
+                                                <span>{keyword("forensic_title_lenses")}</span>
                                                 <HelpOutlineIcon style={{ color: "#FFFFFF" }} onClick={clickHelpLenses} />
 
                                                 <Popover
