@@ -257,7 +257,7 @@ const Gif = () => {
 
                 <Box ml={1}>
                     <Typography variant="body1">
-                        The GIF generator tool will create an animated GIF from two images that you choose
+                        {keyword("checkGIF_description")}
                     </Typography>
                 </Box>
                 <Box m={3} />
