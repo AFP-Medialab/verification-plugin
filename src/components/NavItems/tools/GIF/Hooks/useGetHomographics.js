@@ -62,6 +62,6 @@ const useGetHomographics = (files, showHomo) => {
 
         
 
-    }, [keyword, dispatch]);
+    }, [files, showHomo, keyword, dispatch]);
 };
 export default useGetHomographics;

@@ -55,6 +55,6 @@ const useGetGif = (images, delayInput, downloading) => {
 
 
 
-    }, [keyword, dispatch]);
+    }, [images, delayInput, downloading, keyword, dispatch]);
 };
 export default useGetGif;

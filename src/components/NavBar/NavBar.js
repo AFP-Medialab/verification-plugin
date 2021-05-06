@@ -16,7 +16,6 @@ import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import DescriptionIcon from '@material-ui/icons/Description';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -35,6 +34,8 @@ import MySnackbar from "../MySnackbar/MySnackbar";
 import useMyStyles from "../Shared/MaterialUiStyles/useMyStyles";
 import Footer from "../Shared/Footer/Footer";
 import FeedBack from "../FeedBack/FeedBack";
+
+/*
 import Icon from "@material-ui/core/Icon";
 
 import toolIcon from "./images/navbar/tools-off.png"
@@ -77,7 +78,7 @@ import covidSearchIconOff from "./images/tools/covid_search_logoOff.png"
 
 import xnetworkIconOn from "./images/tools/xnetwork_logoOn.png"
 import xnetworkIconOff from "./images/tools/xnetwork_logoOff.png"
-
+*/
 
 import { ReactComponent as AnalysisIcon } from "./images/SVG/Video/Video_analysis.svg"
 import { ReactComponent as KeyframesIcon } from "./images/SVG/Video/Keyframes.svg"
@@ -155,8 +156,6 @@ const NavBar = (props) => {
     const handleDrawerToggle = () => {
         setOpen(!open);
     };
-
-    const colorPrimary = "#123456"
 
     const drawerItems = [
         {

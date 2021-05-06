@@ -1,8 +1,5 @@
-import {Paper} from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 import React, {useState} from "react";
-import HelpIcon from '@material-ui/icons/Help';
-import IconButton from "@material-ui/core/IconButton";
 import Button from "@material-ui/core/Button";
 import DialogContent from "@material-ui/core/DialogContent";
 import Iframe from "react-iframe";
@@ -39,7 +36,7 @@ const AllTools = (props) => {
     const toolsData = [];
     
 
-    tools.map((value,key) => {
+    tools.forEach((value) => {
 
         if (value.title === "navbar_forensic" ){
             value.type = "redesigned";
@@ -90,7 +87,7 @@ const AllTools = (props) => {
         ) {
             toolsData.push(value);
         }
-
+        
 
     })
 

@@ -389,7 +389,7 @@ const ForensicResults = (props) => {
 
     const [filesForGif, setFilesForGif] = useState();
     const [delayGif, setDelayGif] = useState();
-    const [readyToDownload, setReadyToDownload] = useState();
+    //const [readyToDownload, setReadyToDownload] = useState();
 
     useGetGif(filesForGif, delayGif, downloading);
     

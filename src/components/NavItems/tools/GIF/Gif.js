@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import Box from "@material-ui/core/Box";
@@ -294,7 +294,7 @@ const Gif = () => {
                                 <Box m={2} />
 
                                 {!showDropZone1 &&
-                                    <img src={imageDropped1} className={classes.imageDropped} />
+                                    <img src={imageDropped1} className={classes.imageDropped} alt=""/>
                                 }
 
                                 {showDropZone1 &&
@@ -347,7 +347,7 @@ const Gif = () => {
                                 <Box m={2} />
 
                                 {!showDropZone2 &&
-                                    <img src={imageDropped2} className={classes.imageDropped} />
+                                    <img src={imageDropped2} className={classes.imageDropped} alt=""/>
                                 }
 
                                 {showDropZone2 &&

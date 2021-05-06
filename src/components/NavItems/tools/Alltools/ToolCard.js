@@ -1,8 +1,7 @@
-import React, { Component, useState } from 'react';
-import { ReactComponent as GifIcon } from "../../../NavBar/images/SVG/Image/Gif.svg"
+import React, { Component } from 'react';
+//import { ReactComponent as GifIcon } from "../../../NavBar/images/SVG/Image/Gif.svg"
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
-import { divide } from 'lodash';
 import Typography from "@material-ui/core/Typography";
 
 import NewReleasesIcon from '@material-ui/icons/NewReleases';
