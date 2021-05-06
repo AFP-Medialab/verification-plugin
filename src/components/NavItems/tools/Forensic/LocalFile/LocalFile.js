@@ -9,7 +9,7 @@ const LocalFile = () => {
             <Box >
                 <Iframe
                     frameBorder="0"
-                    url={"https://reveal-mklab.iti.gr/reveal/"}
+                    url={"http://mever.iti.gr/envisu4/"}
                     width="100%"
                     height="700px"
                 />
