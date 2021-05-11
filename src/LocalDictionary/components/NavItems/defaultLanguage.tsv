@@ -1,6 +1,6 @@
 	en	fr	es	el
-set_as_default	Would you like to set this as the default language?	Temp	Temp	Temp
-enable_cookies	Please note doing so requires the use of cookies	Temp	Temp	Temp
-yes	Yes	Temp	Temp	Temp
-no	No	Temp	Temp	Temp
-cancel	Cancel	Temp	Temp	Temp
+set_as_default	Would you like to set this as the default language?	Voulez-vous définir votre choix comme langue par défaut?	¿Quiere guardar su elección como el idioma por defecto?	Θα θέλατε να ορίσετε ως προεπιλεγμένη γλώσσα;
+enable_cookies	Please note doing so requires the use of a cookie	Veuillez noter que ce paramétrage utilise un cookie	Apunte que cambiar el idioma requiere el uso de un cookie	Παρακαλείστε να σημειώσετε ότι κάτι τέτοιο απαιτεί τη χρήση των cookie
+yes	Yes	Oui	Sí	Ναί
+no	No	Non	No	Οχι
+cancel	Cancel	Annuler	Cancelar	Ματαίωση
