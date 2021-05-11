@@ -76,12 +76,12 @@ const Languages = () => {
                         </MenuItem>
                     })
                 }
-                <DefaultLanguageDialog
-                    open={open}
-                    onCancel={handleClose}
-                    onClose={handleCloseItem}
-                />
             </Menu>
+            <DefaultLanguageDialog
+                open={open}
+                onCancel={handleClose}
+                onClose={handleCloseItem}
+            />
         </div>
     );
 };

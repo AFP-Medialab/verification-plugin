@@ -9,7 +9,7 @@ import Typography from "@material-ui/core/Typography";
 import useLoadLanguage from "../../../Hooks/useLoadLanguage";
 import tsv from "../../../LocalDictionary/components/NavItems/defaultLanguage.tsv";
 
-function DefaultLanguageDialog(props) {
+const DefaultLanguageDialog = (props) => {
     const keyword = useLoadLanguage("components/NavItems/defaultLanguage.tsv", tsv);
     const {open, onCancel, onClose} = props;
 
