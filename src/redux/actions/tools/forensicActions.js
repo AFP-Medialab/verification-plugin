@@ -6,6 +6,7 @@ export const setForensicsResult = (url, result, notification, loading) => {
             loading : loading,
             url : url,
             result : result,
+            gifAnimation: false,
         }
     }
 };
@@ -20,5 +21,17 @@ export const setForensicsLoading = (loading) => {
 export const cleanForensicState = () => {
     return {
         type : "FORENSIC_CLEAN_STATE"
+    }
+};
+
+export const setForensicsGifAnimateShow = () => {
+    return {
+        type: "SET_FORENSIC_GIF_SHOW",
+    }
+};
+
+export const setForensicsGifAnimateHide = () => {
+    return {
+        type: "SET_FORENSIC_GIF_HIDE",
     }
 };

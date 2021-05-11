@@ -30,16 +30,21 @@ const Forensic = () => {
     const resultUrl = useSelector(state => state.forensic.url);
     const resultData = useSelector(state => state.forensic.result);
     const isLoading = useSelector(state => state.forensic.loading);
+    const gifAnimationState = useSelector(state => state.forensic.gifAnimation);
 
+    //console.log(gifAnimationState);
 
     const [input, setInput] = useState(resultUrl);
     const [image, setImage] = useState("");
     const [urlDetected, setUrlDetected] = useState(false)
+    const [loaded, setLoaded] = useState(false);
 
     useGetImages(image);
 
+    
     const submitUrl = () => {
         if (input && input !== "") {
+            setLoaded(true);
             submissionEvent(input);
             setImage(input);
         }
@@ -69,9 +74,13 @@ const Forensic = () => {
         setImage("")
     }, [image]);
 
+    const loading = useSelector(state => state.forensic.loading);
+
     return (
         <div>
-            <Paper className={classes.root}>
+            
+            <Paper className={classes.root} style={{ display: loaded ? "none" : "block" }}>
+                
                 <CustomTile text={keyword("forensic_title")}/>
                 <Box m={1}/>
                 <Box display={localFile ? "none" : "block"}>
@@ -105,9 +114,19 @@ const Forensic = () => {
                     <LocalFile/>
                 </Box>
             </Paper>
+            
+            {loading &&
+                <LinearProgress />
+            }
+            
             {
                 resultData &&
-                <ForensicResults result={resultData}/>
+                <ForensicResults 
+                    result={resultData}
+                    url={resultUrl}
+                    loaded={loaded}
+                    gifAnimation={gifAnimationState}
+                    />
             }
         </div>
     );

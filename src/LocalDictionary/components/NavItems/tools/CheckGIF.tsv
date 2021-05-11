@@ -1,0 +1,13 @@
+	en	fr	es	el
+checkGIF_title	CheckGIF	CheckGIF	CheckGIF	CheckGIF
+checkGIF_description				
+cardTitle_images	Images for the GIF			
+title_image1	First image			
+title_image2	Second image			
+body_droparea	Drope here an image file or click here to browse for an image			
+button_loadImages	Load images			
+cardTitle_generatedGIF	Preview of the GIF			
+slider_title	Speed of the animation			
+slider_label_slow	Slow			
+slider_label_fast	Fast			
+button_download	Download GIF			

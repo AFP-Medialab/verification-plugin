@@ -259,13 +259,17 @@ const TwitterSna = () => {
     setUntil(date);
   };
 
+  
+  /*
   const handleFiltersChange = (event) => {
     setFilers(event.target.value);
   };
-
+  */
+  
   const handleVerifiedUsersChange = (event) => {
     setVerifiedUsers(event.target.value);
   };
+  
 
   const onSubmit = () => {
     //Mandatory Fields errors
@@ -427,7 +431,7 @@ const TwitterSna = () => {
 
   function cacheCheck() {
     for (let index in role) {
-      if (role[index] == "CACHEOVERRIDE") {
+      if (role[index] === "CACHEOVERRIDE") {
         return true;
       }
     }

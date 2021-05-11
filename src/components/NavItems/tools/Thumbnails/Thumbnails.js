@@ -149,7 +149,7 @@ const Thumbnails = () => {
             const uri = (url !== null) ? decodeURIComponent(url) : undefined;
             dispatch(setThumbnailsResult(uri, resultData, false, false));
         }
-    }, [url]);
+    }, [url, dispatch, resultData]);
 
     const [showResult, setShowResult] = useState(false);
     const toggleDetail = () => {

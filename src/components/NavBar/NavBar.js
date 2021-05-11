@@ -16,7 +16,6 @@ import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import DescriptionIcon from '@material-ui/icons/Description';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -35,6 +34,8 @@ import MySnackbar from "../MySnackbar/MySnackbar";
 import useMyStyles from "../Shared/MaterialUiStyles/useMyStyles";
 import Footer from "../Shared/Footer/Footer";
 import FeedBack from "../FeedBack/FeedBack";
+
+/*
 import Icon from "@material-ui/core/Icon";
 
 import assistantIcon from "./images/navbar/assistant-icon-grey.svg";
@@ -77,6 +78,36 @@ import covidSearchIconOff from "./images/tools/covid_search_logoOff.png"
 
 import xnetworkIconOn from "./images/tools/xnetwork_logoOn.png"
 import xnetworkIconOff from "./images/tools/xnetwork_logoOff.png"
+*/
+
+import { ReactComponent as AnalysisIcon } from "./images/SVG/Video/Video_analysis.svg"
+import { ReactComponent as KeyframesIcon } from "./images/SVG/Video/Keyframes.svg"
+import { ReactComponent as ThumbnailsIcon } from "./images/SVG/Video/Thumbnails.svg"
+import { ReactComponent as VideoRightsIcon } from "./images/SVG/Video/Video_rights.svg"
+
+import { ReactComponent as MetadataIcon } from "./images/SVG/Image/Metadata.svg"
+import { ReactComponent as MagnifierIcon } from "./images/SVG/Image/Magnifier.svg"
+import { ReactComponent as ForensicIcon } from "./images/SVG/Image/Forensic.svg"
+import { ReactComponent as GifIcon }  from "./images/SVG/Image/Gif.svg"
+import { ReactComponent as OcrIcon }  from "./images/SVG/Image/OCR.svg"
+
+
+import { ReactComponent as TwitterSearchIcon } from "./images/SVG/Search/Twitter_search.svg"
+import { ReactComponent as CovidSearchIcon } from "./images/SVG/Search/Covid19.svg"
+import { ReactComponent as XnetworkIcon } from "./images/SVG/Search/Xnetwork.svg"
+
+import { ReactComponent as TwitterSnaIcon } from "./images/SVG/DataAnalysis/Twitter_sna.svg"
+
+import { ReactComponent as ToolsIcon } from "./images/SVG/Navbar/Tools.svg"
+import { ReactComponent as ClassroomIcon } from "./images/SVG/Navbar/Classroom.svg"
+import { ReactComponent as InteractiveIcon } from "./images/SVG/Navbar/Interactive.svg"
+import { ReactComponent as FactcheckIcon } from "./images/SVG/Navbar/Fact_check.svg"
+import { ReactComponent as AboutIcon } from "./images/SVG/Navbar/About.svg"
+import { ReactComponent as AssistantIcon } from "./images/SVG/Navbar/Assistant.svg"
+import { ReactComponent as GuideIcon } from "./images/SVG/Navbar/Guide.svg"
+
+
+
 
 import {getSupportedBrowserLanguage} from "../Shared/Languages/getSupportedBrowserLanguage";
 import useLoadLanguage from "../../Hooks/useLoadLanguage";
@@ -126,7 +157,6 @@ const NavBar = (props) => {
         setOpen(!open);
     };
 
-
     const drawerItems = [
         {
             title: "navbar_tools",
@@ -137,79 +167,107 @@ const NavBar = (props) => {
         },
         {
             title: "navbar_analysis",
-            icon: (drawerValue === 1) ? analysisIconOn : analysisIconOff,
+            description: "navbar_analysis_description",
+            icon: <AnalysisIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} />,
+            iconColored: <AnalysisIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} />,
             tsvPrefix: "api",
             path: "analysis",
         },
         {
             title: "navbar_keyframes",
-            icon: (drawerValue === 2) ? keyframesIconOn : keyframesIconOff,
+            description: "navbar_keyframes_description",
+            icon: <KeyframesIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} />,
+            iconColored: <KeyframesIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} />,
             tsvPrefix: "keyframes",
             path: "keyframes",
         },
         {
             title: "navbar_thumbnails",
-            icon: (drawerValue === 3) ? thumbnailsIconOn : thumbnailsIconOff,
+            description: "navbar_thumbnails_description",
+            icon: <ThumbnailsIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} />,
+            iconColored: <ThumbnailsIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} />,
             tsvPrefix: "thumbnails",
             path: "thumbnails",
         },
         {
             title: "navbar_twitter",
-            icon: (drawerValue === 4) ? twitterSearchIconOn : twitterSearchIconOff,
+            description: "navbar_twitter_description",
+            icon: <TwitterSearchIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} />,
+            iconColored: <TwitterSearchIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} />,
             tsvPrefix: "twitter",
             path: "twitter",
         },
         {
             title: "navbar_magnifier",
-            icon: (drawerValue === 5) ? magnifierIconOn : magnifierIconOff,
+            description: "navbar_magnifier_description",
+            icon: <MagnifierIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} />,
+            iconColored: <MagnifierIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} />,
             tsvPrefix: "magnifier",
             path: "magnifier",
         },
         {
             title: "navbar_metadata",
-            icon: (drawerValue === 6) ? metadataIconOn : metadataIconOff,
+            description: "navbar_metadata_description",
+            icon: <MetadataIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} />,
+            iconColored: <MetadataIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} />,
             tsvPrefix: "metadata",
             path: "metadata",
         },
         {
             title: "navbar_rights",
-            icon: (drawerValue === 7) ? videoRightsIconOn : videoRightsIconOff,
+            description: "navbar_rights_description",
+            icon: <VideoRightsIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} />,
+            iconColored: <VideoRightsIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} />,
             tsvPrefix: "copyright",
             path: "copyright",
         },
         {
             title: "navbar_forensic",
-            icon: (drawerValue === 8) ? forensicIconOn : forensicIconOff,
+            description: "navbar_forensic_description",
+            icon: <ForensicIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} />,
+            iconColored: <ForensicIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} />,
             tsvPrefix: "forensic",
             path: "forensic",
         },
         {
             title: "navbar_twitter_sna",
-            icon: (drawerValue === 9) ? twitterSnaIconOn : twitterSnaIconOff,
+            description: "navbar_twitter_sna_description",
+            icon: <TwitterSnaIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} />,
+            iconColored: <TwitterSnaIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} />,
             tsvPrefix: "twitter_sna",
             path: "twitterSna"
         },
         {
             title: "navbar_covidsearch",
-            icon: (drawerValue === 10) ? covidSearchIconOn : covidSearchIconOff,
+            description: "navbar_covidsearch_description",
+            icon: <CovidSearchIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} />,
+            iconColored: <CovidSearchIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} />,
             tsvPrefix: "covidsearch",
             path: "covidSearch"
         },
         {
             title: "navbar_xnetwork",
-            icon: (drawerValue === 11) ? xnetworkIconOn : xnetworkIconOff,
+            description: "navbar_xnetwork_description",
+            icon: <XnetworkIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} />,
+            iconColored: <XnetworkIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} />,
             tsvPrefix: "xnetwork",
             path: "xnetwork"
         },
         {
-
             title: "navbar_ocr",
-            icon:
-                <DescriptionIcon
-                    className={(drawerValue === 12) ? classes.customAllToolsIconSelected : classes.customAllToolsIconDeselected}
-                />,
+            description: "navbar_ocr_description",
+            icon: <OcrIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} />,
+            iconColored: <OcrIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} />,
             tsvPrefix: "ocr",
             path: "ocr"
+        },
+        {
+            title: "navbar_gif",
+            description: "navbar_gif_description",
+            icon: <GifIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }}/>,
+            iconColored: <GifIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} />,
+            tsvPrefix: "gif",
+            path: "gif"
         }
     ];
 
@@ -217,67 +275,49 @@ const NavBar = (props) => {
     const tabItems = [
         {
             title: "navbar_tools",
-            icon:
-                <Icon classes={{root: classes.iconRootTab}} fontSize={"large"}>
-                    <img className={classes.imageIconTab} src={toolIcon} alt={keyword("navbar_tools")} />
-                </Icon>,
+            icon: <ToolsIcon width="40px" height="40px" style={{ fill: "#717171" }} />,
             content: <div/>,
             path: "tools",
             footer: <div/>,
         },
         {
             title: "navbar_tuto",
-            icon:
-                <Icon classes={{root: classes.iconRootTab}} fontSize={"large"}>
-                    <img className={classes.imageIconTab} src={tutorialIcon} alt={keyword("navbar_tuto")}/>
-                </Icon>,
+            icon: <GuideIcon width="40px" height="40px" style={{ fill: "#717171" }} />,
             content: <Tutorial/>,
             path: "tutorial",
             footer: <Footer type={"afp"}/>
         },
         {
             title: "navbar_classroom",
-            icon:
-                <Icon classes={{root: classes.iconRootTab}} fontSize={"large"} color={'primary'}>
-                    <img className={classes.imageIconTab} src={classRoomIcon} alt={keyword("navbar_classroom")} />
-                </Icon>,
+            icon: <ClassroomIcon width="40px" height="40px" style={{ fill: "#717171" }} />,
             content: <ClassRoom/>,
             path: "classroom",
             footer: <Footer type={"afp"}/>
         },
         {
             title: "navbar_quiz",
-            icon:
-                <Icon classes={{root: classes.iconRootTab}} fontSize={"large"}>
-                    <img className={classes.imageIconTab} src={interactiveIcon} alt={keyword("navbar_quiz")} />
-                </Icon>,
+            icon: <InteractiveIcon width="40px" height="40px" style={{ fill: "#717171" }} />,
             content: <Interactive/>,
             path: "interactive",
             footer: <Footer type={"afp"}/>
         },
         {
             title: "navbar_factCheck",
-            icon: <ImageSearchIcon fontSize={"large"}/>,
+            icon: <FactcheckIcon width="40px" height="40px" style={{ fill: "#717171" }} />,
             content: <FactCheck/>,
             path: "factCheck",
             footer: <Footer type={"afp"}/>
         },
         {
             title: "navbar_about",
-            icon:
-                <Icon classes={{root: classes.iconRootTab}} fontSize={"large"}>
-                    <img className={classes.imageIconTab} src={aboutIcon} alt={keyword("navbar_about")} />
-                </Icon>,
+            icon: <AboutIcon width="40px" height="40px" style={{ fill: "#717171" }} />,
             content: <About/>,
             path: "about",
             footer: <Footer type={"afp"}/>
         },
         {
             title: "navbar_assistant",
-            icon:
-                <Icon classes={{root: classes.iconRootTab}} fontSize={"large"}>
-                    <img className={classes.imageIconTab} src={assistantIcon} alt={keyword("navbar_assistant")} />
-                 </Icon>,
+            icon: <AssistantIcon width="40px" height="40px" style={{ fill: "#717171" }} />,
             content: <Assistant/>,
             path: "assistant",
             footer: <Footer type={"usfd"}/>
@@ -364,16 +404,12 @@ const NavBar = (props) => {
                     {
                         drawerItems.map((item, key) => {
                             return (
-                                <ListItem button key={key} onClick={() => changeValue(key)}>
+                                <ListItem button key={key} onClick={() => changeValue(key)} >
                                     <ListItemIcon color="primary.main">
                                         {
-                                            (key === 0 || key === 12) ?
-                                                <IconButton className={classes.customAllToolsButton} style={{"fontSize":40}}>
-                                                    {item.icon}</IconButton>
-                                                :
-                                                <Icon className={classes.iconRootDrawer} fontSize={"large"}>
-                                                    <img className={classes.imageIconDrawer} src={item.icon} alt={keyword(item.title)}/>
-                                                </Icon>
+                                            <IconButton className={classes.customAllToolsButton} style={{ "width": 40, "height": 40}}>
+                                                {item.icon}
+                                            </IconButton>
                                         }
                                     </ListItemIcon>
                                     <ListItemText primary={keyword(item.title)}/>
@@ -385,7 +421,7 @@ const NavBar = (props) => {
             </Drawer>
             <main className={classes.content}>
                 <div className={classes.toolbar} id="back-to-top-anchor"/>
-                <TabItem tabItems={tabItems} drawerItems={drawerItems}/>
+                <TabItem className={classes.noMargin} tabItems={tabItems} drawerItems={drawerItems}/>
                 <ScrollTop {...props}>
                     <Fab color="secondary" size="small" aria-label="scroll back to top">
                         <KeyboardArrowUpIcon/>

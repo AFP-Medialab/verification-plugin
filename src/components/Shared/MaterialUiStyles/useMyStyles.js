@@ -10,6 +10,17 @@ const useMyStyles = makeStyles(theme => ({
         textAlign: "center",
        
     },
+
+    rootNoCenter: {
+        padding: theme.spacing(3, 2),
+        marginTop: 5,
+    },
+
+    noMargin: {
+        marginLeft: "0px!important",
+        marginRight: "0px!important"
+    },
+
     circularProgress: {
         margin: "auto",
         width: "100%"
@@ -83,7 +94,11 @@ const useMyStyles = makeStyles(theme => ({
     },
     content: {
         flexGrow: 1,
-        padding: theme.spacing(3),
+        paddingLeft: theme.spacing(3),
+        paddingRight: theme.spacing(3),
+        paddingTop: "3vh",
+        backgroundColor: "#fafafa",
+        minHeight: "97vh"
     },
     logoLeft: {
         cursor: "pointer",
@@ -419,7 +434,173 @@ const useMyStyles = makeStyles(theme => ({
     customAllToolsIconSelected: {
         fontSize: "inherit",
         color: theme.palette.primary.main
-    }
+    },
+
+
+
+    /* Forensic classes */
+    /* ================================================================================== */
+    newForensics:{
+        spacing: 8,
+        marginTop: -40
+    },
+
+    cardFilters:{
+        height: "100%"
+    },
+
+    imageUploaded:{
+        objectFit: "contain",
+        objectPosition: "top",
+        maxHeight:"48vh",
+    },
+
+    imageFilter: {
+        height: "13vh",
+        backgroundPosition: "center",
+        backgroundSize: "contain",
+    },
+
+    headerUpladedImage: {
+        paddingTop: "11px!important",
+        paddingBottom: "11px!important",
+    },
+
+    imageOverlayWrapper: {
+        position: "relative",
+    },
+
+    imageOverlay: {
+        position: "absolute",
+        top: 0,
+        bottom: 0,
+        left: 0,
+        right: 0,
+        display: "flex",
+        alignItems: "center",
+        transition: "visibility 0s, opacity 0.2s linear",
+        opacity: 0,
+        '&:hover': {
+            opacity: 1,
+        }
+    },
+
+    filterDisplayedClass: {
+        position: "absolute",
+        objectFit: "contain",
+        objectPosition: "top",
+        maxHeight: "48vh",
+        top:0,
+        left: 0,
+        bottom: 0,
+        right:0,
+    },
+
+    wrapperImageFilter: {
+        position: "relative",
+    },
+
+
+    imagesGifImage: {
+        backgroundPosition: "center",
+        backgroundSize: "contain",
+        objectFit: "contain",
+        objectPosition: "top",
+        maxHeight: "30vh",
+
+        position: "relative",
+        top: 0,
+        left: 0,
+    },
+
+    imagesGifFilter: {
+        backgroundPosition: "center",
+        backgroundSize: "contain",
+        objectFit: "contain",
+        objectPosition: "top",
+        maxHeight: "30vh",
+
+        position: "absolute",
+        top: 0,
+        left: 0,
+    },
+
+
+
+    sliderClass: {
+        maxWidth:"30vw"
+    },
+
+
+    /* CheckGIF classes */
+    /* ================================================================================== */
+
+    dropArea: {
+        height: "20vh"
+
+    },
+
+
+    dropZone: {
+        border: 'dashed grey 2px',
+        borderRadius: "25px",
+        height: "40vh"
+    },
+
+    dropZoneInside: {
+        width: "100%",
+        height: "100%",
+
+    },
+
+
+    imageDropped: {
+        height: "40vh"
+    },
+
+    inputContainer:{
+        position: "relative",
+    },
+
+    inputLabel: {
+        cursor: "pointer",
+    },
+
+    inputInput: {
+        position: "absolute",
+        zIndex: 2,
+        width: "0.1px",
+        height: "0.1px",
+        opacity: 0,
+        overflow: "hidden",
+    },
+
+    headingGif: {
+        fontSize: "1rem",
+        fontWeight: "600",
+    },
+
+    buttonGif: {
+        weight: "100%!important",
+    },
+
+
+
+
+
+
+    toolCardsContainer: {
+
+
+    },
+
+    
+
+
+    
+
+
+
 
 }));
 export default useMyStyles;

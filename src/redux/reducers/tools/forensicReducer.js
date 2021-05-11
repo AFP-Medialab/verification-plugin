@@ -3,6 +3,7 @@ const defaultState = {
     loading : false,
     url: "",
     result: null,
+    gifAnimation: false,
 };
 
 const forensicReducer = (state = defaultState, action) => {
@@ -15,6 +16,12 @@ const forensicReducer = (state = defaultState, action) => {
         case "FORENSIC_CLEAN_STATE":
             state.url = "";
             state.result = null;
+            return state;
+        case "SET_FORENSIC_GIF_HIDE":
+            state.gifAnimation = false;
+            return state;
+        case "SET_FORENSIC_GIF_SHOW":
+            state.gifAnimation = true;
             return state;
         default:
             return state;
