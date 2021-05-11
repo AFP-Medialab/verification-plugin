@@ -134,6 +134,7 @@ const NavBar = (props) => {
     const drawerValue = useSelector(state => state.tool.selected);
     const cookiesUsage = useSelector(state => state.cookies);
     const currentLang = useSelector(state => state.language);
+    const defaultLanguage = useSelector(state => state.defaultLanguage);
 
     const dispatch = useDispatch();
 
@@ -331,7 +332,10 @@ const NavBar = (props) => {
     useEffect(() => {
         let supportedBrowserLang = getSupportedBrowserLanguage()
 
-        if (supportedBrowserLang !== undefined && supportedBrowserLang !== currentLang) {
+        if (defaultLanguage !== null) {
+            if (defaultLanguage !== currentLang)  dispatch(changeLanguage(defaultLanguage))
+        }
+        else if (supportedBrowserLang !== undefined && supportedBrowserLang !== currentLang) {
             dispatch(changeLanguage(supportedBrowserLang))
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps

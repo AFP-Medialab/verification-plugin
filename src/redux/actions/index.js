@@ -5,6 +5,13 @@ export const changeLanguage = (lang) => {
     };
 };
 
+export const changeDefaultLanguage = (lang) => {
+    return {
+        type : 'CHANGE_DEFAULT',
+        payload : lang
+    };
+};
+
 export const setDictionary = (text) => {
     return {
         type : "SET",

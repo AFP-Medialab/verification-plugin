@@ -20,10 +20,12 @@ import cookiesReducer from "./cookiesReducers";
 import covidSearchReducer from "./tools/covidSearchReducer";
 import assistantReducer from "./assistantReducer";
 import ocrReducer from "./tools/ocrReducer";
+import defaultLanguageReducer from "./defaultLanguageReducer";
 import gifReducer from "./tools/gifReducer";
 
 const allReducers = combineReducers({
     language : languageReducer,
+    defaultLanguage : defaultLanguageReducer,
     dictionary : dictionaryReducer,
     nav : navReducer,
     tool : toolReducer,
