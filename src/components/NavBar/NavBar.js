@@ -45,6 +45,7 @@ import classRoomIcon from "./images/navbar/classroom-off.png"
 import interactiveIcon from "./images/navbar/quiz-off.png"
 import aboutIcon from "./images/navbar/about-off.png"
 import ImageSearchIcon from '@material-ui/icons/ImageSearch';
+import FaceIcon from '@material-ui/icons/Face';
 
 import analysisIconOn from "./images/tools/video_logoOn.png"
 import analysisIconOff from "./images/tools/video_logoOff.png"
