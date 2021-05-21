@@ -137,6 +137,7 @@ const NavBar = (props) => {
     const currentLang = useSelector(state => state.language);
     const defaultLanguage = useSelector(state => state.defaultLanguage);
 
+
     const dispatch = useDispatch();
 
 
@@ -333,8 +334,12 @@ const NavBar = (props) => {
     useEffect(() => {
         let supportedBrowserLang = getSupportedBrowserLanguage()
 
-        if (defaultLanguage !== null) {
-            if (defaultLanguage !== currentLang)  dispatch(changeLanguage(defaultLanguage))
+
+        if (defaultLanguage !== undefined) {
+            if (defaultLanguage !== currentLang) {
+                dispatch(changeLanguage(defaultLanguage))
+            } 
+
         }
         else if (supportedBrowserLang !== undefined && supportedBrowserLang !== currentLang) {
             dispatch(changeLanguage(supportedBrowserLang))
