@@ -121,7 +121,7 @@ const AssistantIntroduction = (props) => {
                                           onMouseOver={() => {setUseFileHoverColour(true)}}
                                           onMouseOut={() => setUseFileHoverColour(false)}
                                           onClick={() => {
-                                              setTimeout(function () { window.scroll({ top: 520, left: 0, behavior: 'smooth' });}, 200);
+                                              setTimeout(function () { window.scroll({ top: 520, left: 0, behavior: 'smooth' });}, 100);
                                               
                                               cleanAssistant()
                                               dispatch(setImageVideoSelected(!imageVideoSelected))
