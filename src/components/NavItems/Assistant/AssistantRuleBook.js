@@ -6,6 +6,8 @@ import metadataIconOff from "../../NavBar/images/tools/metadataOff.png";
 import videoRightsIconOff from "../../NavBar/images/tools/copyrightOff.png";
 import forensicIconOff from "../../NavBar/images/tools/forensic_logoOff.png";
 
+export const NE_SUPPORTED_LANGS =  ["en", "pt", "fr", "de", "el", "es"]
+
 export const CONTENT_TYPE = {
     VIDEO: "video",
     IMAGE: "image"
@@ -42,7 +44,7 @@ export const KNOWN_LINK_PATTERNS = [
     },
     {
         key: KNOWN_LINKS.TIKTOK,
-        patterns:["((https?:\\/{2})?(www.)?tiktok.com\\/.*\\/video\\/.*)"]
+        patterns:["((https?:\\/{2})?(www.)?tiktok.com\\/.*\\/video/\\d*)"]
     },
     {
         key: KNOWN_LINKS.INSTAGRAM,
@@ -90,7 +92,7 @@ export const ASSISTANT_ACTIONS = [
         title: "navbar_keyframes",
         icon:  keyframesIconOff,
         linksAccepted: [KNOWN_LINKS.YOUTUBE, KNOWN_LINKS.FACEBOOK, KNOWN_LINKS.TWITTER,
-            KNOWN_LINKS.DAILYMOTION, KNOWN_LINKS.INSTAGRAM, KNOWN_LINKS.VIMEO, KNOWN_LINKS.YOUTUBE, KNOWN_LINKS.LIVELEAK,
+            KNOWN_LINKS.DAILYMOTION, KNOWN_LINKS.VIMEO, KNOWN_LINKS.YOUTUBE, KNOWN_LINKS.LIVELEAK,
             KNOWN_LINKS.OWN],
         cTypes: [CONTENT_TYPE.VIDEO],
         exceptions: [],
@@ -126,7 +128,7 @@ export const ASSISTANT_ACTIONS = [
         icon: metadataIconOff,
         linksAccepted: [KNOWN_LINKS.MISC, KNOWN_LINKS.OWN],
         cTypes: [CONTENT_TYPE.IMAGE, CONTENT_TYPE.VIDEO],
-        exceptions:  [/(pbs.twimg.com)|(youtu.be|youtube)|(instagram)|(fbcdn.net)|(vimeo)/],
+        exceptions:  [/(pbs.twimg.com)|(youtu.be|youtube)|(instagram)|(fbcdn.net)|(vimeo)|(tiktok.com)/],
         useInputUrl: false,
         text: "metadata_text",
         tsvPrefix: "metadata",

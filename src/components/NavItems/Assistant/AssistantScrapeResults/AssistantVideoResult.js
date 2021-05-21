@@ -10,16 +10,21 @@ import ImageIcon from "@material-ui/icons/Image";
 import Iframe from "react-iframe";
 import Link from "@material-ui/core/Link";
 import Tooltip from "@material-ui/core/Tooltip";
+import Typography from "@material-ui/core/Typography";
 
-import {KNOWN_LINK_PATTERNS, KNOWN_LINKS, matchPattern} from "../AssistantRuleBook";
+import {KNOWN_LINKS} from "../AssistantRuleBook";
+import tsv from "../../../../LocalDictionary/components/NavItems/tools/Assistant.tsv";
+import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 
 const AssistantVideoResult = () => {
 
+    const keyword = useLoadLanguage("components/NavItems/tools/Assistant.tsv", tsv);
     const processUrl = useSelector(state => state.assistant.processUrl);
-    const linkType = matchPattern(processUrl, KNOWN_LINK_PATTERNS);
+    const process_url_type = useSelector(state => state.assistant.processUrlType);
+    const input_url_type = useSelector(state => state.assistant.inputUrlType)
 
     const useIframe = () => {
-        switch(linkType){
+        switch (process_url_type) {
             case KNOWN_LINKS.YOUTUBE:
             case KNOWN_LINKS.VIMEO:
             case KNOWN_LINKS.DAILYMOTION:
@@ -30,16 +35,22 @@ const AssistantVideoResult = () => {
         }
     }
 
+    const downloadVideoFound = () => {
+        return (input_url_type === KNOWN_LINKS.TIKTOK || input_url_type === KNOWN_LINKS.INSTAGRAM)
+    }
+
     const preprocessLinkForEmbed = (processUrl) => {
         let embedURL = processUrl;
         let stringToMatch = ""
         let positionOne = 0
 
-        switch(linkType){
+        switch (process_url_type) {
             case KNOWN_LINKS.YOUTUBE:
                 if (!embedURL.includes("/embed/")) {
                     let ids = embedURL.match("(?<=v=|youtu.be/)([a-zA-Z0-9_-]+)[&|?]?");
-                    if (ids) {embedURL = "http://www.youtube.com/embed/" + ids[0];}
+                    if (ids) {
+                        embedURL = "http://www.youtube.com/embed/" + ids[0];
+                    }
                 }
                 break;
             case KNOWN_LINKS.VIMEO:
@@ -47,7 +58,7 @@ const AssistantVideoResult = () => {
                 positionOne = processUrl.indexOf(stringToMatch);
                 var positionTwo = positionOne + stringToMatch.length;
                 embedURL = embedURL.slice(0, positionOne) + "player." + embedURL.slice(positionOne, positionTwo) +
-                    "video/"  + embedURL.slice(positionTwo);
+                    "video/" + embedURL.slice(positionTwo);
                 break;
             case KNOWN_LINKS.DAILYMOTION:
                 stringToMatch = "dailymotion.com/";
@@ -68,29 +79,37 @@ const AssistantVideoResult = () => {
         <Card variant={"outlined"}>
             <CardMedia>
                 {useIframe() ?
-                    <Iframe
-                        frameBorder="0"
-                        url={preprocessLinkForEmbed(processUrl)}
-                        allow="fullscreen"
-                        height="400"
-                        width="100%"
+                    <Iframe hidden={downloadVideoFound()}
+                            frameBorder="0"
+                            url={preprocessLinkForEmbed(processUrl)}
+                            allow="fullscreen"
+                            height="400"
+                            width="100%"
                     /> :
-                    <video
-                        src={preprocessLinkForEmbed(processUrl)}
-                        controls={true}
-                        height="400"
-                        width="100%"
+                    <video hidden={downloadVideoFound()}
+                           src={preprocessLinkForEmbed(processUrl)}
+                           controls={true}
+                           height="400"
+                           width="100%"
                     />
                 }
+            </CardMedia>
+            <CardMedia hidden={!downloadVideoFound()}>
+                <Typography variant={"h4"} align={"center"} hidden={!downloadVideoFound()}>
+                    {keyword("download_video")}
+                </Typography>
             </CardMedia>
 
             <CardActions>
                 <ImageIcon color={"action"}/>
-                <Link href={processUrl} color={"textSecondary"} variant={"subtitle2"}>
-                    {processUrl.length>60 ? processUrl.substring(0,60) + "...": processUrl}
+                <Link href={processUrl} color={"textSecondary"} variant={"subtitle2"} target="_blank"
+                      rel="noopener noreferrer">
+                    {processUrl.length > 60 ? processUrl.substring(0, 60) + "..." : processUrl}
                 </Link>
                 <Tooltip title={"Copy link"}>
-                    <IconButton style={{"marginLeft":"auto"}} onClick={() => {copyUrl()}}>
+                    <IconButton style={{"marginLeft": "auto"}} onClick={() => {
+                        copyUrl()
+                    }}>
                         <FileCopyIcon color={"action"}/>
                     </IconButton>
                 </Tooltip>

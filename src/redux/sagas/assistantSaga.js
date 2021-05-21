@@ -15,18 +15,19 @@ import {
     setProcessUrl,
     setProcessUrlActions,
     setScrapedData,
-    setSingleMediaPresent
+    setSingleMediaPresent,
+    setUrlMode
 } from "../actions/tools/assistantActions";
 
 import {all, call, fork, put, select, takeLatest} from 'redux-saga/effects'
 import useAssistantApi from "../../components/NavItems/Assistant/AssistantApiHandlers/useAssistantApi";
-import useGateCloudApi from "../../components/NavItems/Assistant/AssistantApiHandlers/useGateCloudApi";
 import useDBKFApi from "../../components/NavItems/Assistant/AssistantApiHandlers/useDBKFApi";
 import {
     CONTENT_TYPE,
     KNOWN_LINK_PATTERNS,
     KNOWN_LINKS,
     matchPattern,
+    NE_SUPPORTED_LANGS,
     selectCorrectActions,
     TYPE_PATTERNS
 } from "../../components/NavItems/Assistant/AssistantRuleBook";
@@ -36,7 +37,6 @@ import {
  * APIs
  **/
 const dbkfAPI = useDBKFApi()
-const gateCloudApi = useGateCloudApi()
 const assistantApi = useAssistantApi()
 
 
@@ -156,13 +156,15 @@ function* similaritySearch(searchEndpoint, stateStorageFunction) {
             let resultList = []
 
             Object.values(similarityResult).forEach(result=>{
-                console.log(result)
                 result.appearancesResults.forEach(appearance=>{
                     resultList.push({
                         "claimUrl": appearance.appearanceUrls,
                         "similarity": appearance.similarity})
                 })
             })
+
+            //resultList.sort((a, b) => b.similarity - a.similarity);
+            resultList = resultList.slice(0,3)
 
             yield put(stateStorageFunction(resultList, false, true, false))
         } else {
@@ -179,7 +181,7 @@ function* handleSourceCredibilityCall(action) {
 
     try {
         const inputUrl = yield select((state) => state.assistant.inputUrl)
-        const result = yield call(gateCloudApi.callSourceCredibilityService, [inputUrl])
+        const result = yield call(assistantApi.callSourceCredibilityService, [inputUrl])
         const filteredResults = filterSourceCredibilityResults(result)
         yield put(setInputSourceCredDetails(filteredResults, false, true, false))
     } catch (error) {
@@ -219,10 +221,10 @@ function* handleHyperpartisanCall(action) {
         if (text && lang === "en") {
             yield put(setHpDetails(null, true, false, false))
 
-            const result = yield call(gateCloudApi.callHyperpartisanService, text)
+            const result = yield call(assistantApi.callHyperpartisanService, text)
 
             let hpProb = result.entities.hyperpartisan[0].hyperpartisan_probability
-            hpProb = parseFloat(hpProb).toFixed(2) > 0.50 ? parseFloat(hpProb).toFixed(2) : null
+            hpProb = parseFloat(hpProb).toFixed(2) > 0.70 ? parseFloat(hpProb).toFixed(2) : null
 
             yield put(setHpDetails(hpProb, false, true, false))
         }
@@ -236,11 +238,10 @@ function* handleNamedEntityCall(action) {
 
     try {
         const text = yield select((state) => state.assistant.urlText)
-        if (text !== null) {
+        const textLang = yield select((state) => state.assistant.textLang)
+        if (text !== null && NE_SUPPORTED_LANGS.includes(textLang)) {
             yield put(setNeDetails(null, null, true, false, false))
-
             const result = yield call(assistantApi.callNamedEntityService, text)
-
             let entities = []
 
             Object.entries(result.response.annotations).forEach(entity => {
@@ -257,6 +258,11 @@ function* handleNamedEntityCall(action) {
             } else {
                 let wordCloudList = buildWordCloudList(entities)
                 let categoryList = buildCategoryList(wordCloudList)
+                categoryList.map((v,k)=>{
+                    return categoryList[k].words.sort(function(a,b){
+                        return b.value - a.value;
+                    })
+                })
                 yield put(setNeDetails(categoryList, wordCloudList, false, true, false))
             }
         }
@@ -287,6 +293,7 @@ function * handleAssistantScrapeCall(action) {
 
     try {
         yield put(cleanAssistantState())
+        yield put(setUrlMode(true))
         yield put(setAssistantLoading(true))
 
         let urlType = matchPattern(inputUrl, KNOWN_LINK_PATTERNS)
@@ -294,12 +301,14 @@ function * handleAssistantScrapeCall(action) {
 
         let scrapeResult = null
         if (decideWhetherToScrape(urlType, contentType, inputUrl)) {
-            scrapeResult = yield call(assistantApi.callAssistantScraper, urlType, inputUrl)
+            scrapeResult = urlType === KNOWN_LINKS.TIKTOK ?
+                yield call(assistantApi.callTiktokScraper, inputUrl) :
+                yield call(assistantApi.callAssistantScraper, urlType, inputUrl)
         }
 
         let filteredSR = filterAssistantResults(urlType, contentType, inputUrl, scrapeResult)
 
-        yield put(setInputUrl(inputUrl))
+        yield put(setInputUrl(inputUrl, urlType))
         yield put(setScrapedData(filteredSR.urlText, filteredSR.textLang, filteredSR.linkList, filteredSR.imageList, filteredSR.videoList))
         yield put(setAssistantLoading(false))
     } catch (error) {
@@ -367,8 +376,8 @@ const buildCategoryList = (wordCloudList) => {
     // group by category
     return wordCloudList.reduce((accumulator, currentWord) => {
         accumulator.filter(wordObj => wordObj.category === currentWord["category"]).length ?
-            accumulator.filter(wordObj => wordObj.category === currentWord["category"])[0].words.push(currentWord['text']) :
-            accumulator.push({"category": currentWord["category"], "words": [currentWord["text"]]})
+            accumulator.filter(wordObj => wordObj.category === currentWord["category"])[0].words.push(currentWord) :
+            accumulator.push({"category": currentWord["category"], "words": [currentWord]})
 
         return accumulator
     }, [])
@@ -388,7 +397,7 @@ const filterAssistantResults = (urlType, contentType, userInput, scrapeResult) =
             videoList = [userInput];
             break;
         case KNOWN_LINKS.TIKTOK:
-            videoList = [scrapeResult.videos]
+            videoList = scrapeResult.videos
             break;
         case KNOWN_LINKS.INSTAGRAM:
             if (scrapeResult.videos.length === 1) {
@@ -442,20 +451,22 @@ const filterAssistantResults = (urlType, contentType, userInput, scrapeResult) =
 }
 
 const filterSourceCredibilityResults = (originalResult) => {
-    if(!(originalResult.entities.DomainCredibility)) {return null}
+    if(!(originalResult.entities.SourceCredibility)) {return null}
 
-    let domainCredibility = originalResult.entities.DomainCredibility
-    domainCredibility.forEach(dc => {
+    let sourceCredibility = originalResult.entities.SourceCredibility
+
+    sourceCredibility.forEach(dc => {
         delete dc["indices"]
-        delete dc["credibility-resolved-url"]
+        delete dc["resolved-url"]
     })
-    domainCredibility = uniqWith(domainCredibility, isEqual)
+    sourceCredibility = uniqWith(sourceCredibility, isEqual)
 
     let sourceCredResult = []
-    domainCredibility.forEach(result => {
+    sourceCredibility.forEach(result => {
         sourceCredResult.push({
-            "credibility_source": result["credibility-source"],
-            "credibility_labels": result["credibility-labels"]
+            "credibility_source": result["source"],
+            "credibility_labels": result["type"],
+            "credibility_description": result["description"]
         })
     })
 

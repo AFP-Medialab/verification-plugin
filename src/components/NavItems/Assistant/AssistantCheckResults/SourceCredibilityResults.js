@@ -17,7 +17,6 @@ const SourceCredibilityResults = () => {
 
     const sourceCredibilityResults = useSelector(state => state.assistant.inputUrlSourceCredibility)
     const keyword = useLoadLanguage("components/NavItems/tools/Assistant.tsv", tsv);
-
     return (
         <List disablePadding={true}>
             {sourceCredibilityResults ?
@@ -30,13 +29,21 @@ const SourceCredibilityResults = () => {
                             primary={
                                 <Typography component={"div"} align={"left"}>
                                     <Box fontWeight="fontWeightBold">
-                                        {keyword("source_credibility_warning")}
+                                        {keyword("source_credibility_warning")} {value.credibility_source}
                                     </Box>
                                 </Typography>}
                             secondary={
                                 <Typography>
-                                    "{value.credibility_labels}" {keyword("according_to")} {value.credibility_source}
-                                </Typography>}/>
+                                    {value.credibility_labels ?
+                                        <Typography> {keyword("labelled_as")} "{value.credibility_labels}"  </Typography>
+                                        : null
+                                    }
+                                    {value.credibility_description ?
+                                        <Typography> {keyword("commented_as")} "{value.credibility_description}" </Typography>
+                                        : null
+                                    }
+                                </Typography>
+                            }/>
                     </ListItem>))  :
                 null
             }
