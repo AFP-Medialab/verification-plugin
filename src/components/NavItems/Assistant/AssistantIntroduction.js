@@ -83,6 +83,7 @@ const AssistantIntroduction = (props) => {
                                           onMouseOut={() => setUseLinkHoverColour(false)}
                                           style={{height: 250, borderWidth: 3}}
                                           onClick={() => {
+                                              window.scroll({top: 400,left: 0,behavior: 'smooth'});
                                               cleanAssistant()
                                               dispatch(setUrlMode(!urlMode))
                                           }}
@@ -120,6 +121,8 @@ const AssistantIntroduction = (props) => {
                                           onMouseOver={() => {setUseFileHoverColour(true)}}
                                           onMouseOut={() => setUseFileHoverColour(false)}
                                           onClick={() => {
+                                              setTimeout(function () { window.scroll({ top: 520, left: 0, behavior: 'smooth' });}, 200);
+                                              
                                               cleanAssistant()
                                               dispatch(setImageVideoSelected(!imageVideoSelected))
                                           }}
