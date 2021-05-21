@@ -23,6 +23,12 @@ import {cleanAnalysisState} from "../../../../redux/actions/tools/analysisAction
 import {useParams} from "react-router-dom";
 import {KNOWN_LINKS} from "../../Assistant/AssistantRuleBook";
 
+import Card from "@material-ui/core/Card";
+import CardHeader from "@material-ui/core/CardHeader";
+import { ReactComponent as AnalysisIcon } from '../../../NavBar/images/SVG/Video/Video_analysis.svg';
+import Typography from "@material-ui/core/Typography";
+import Grid from "@material-ui/core/Grid";
+
 
 /*function useTraceUpdate(props) {
     const prev = useRef(props);
@@ -45,6 +51,7 @@ const Analysis = () => {
     const {url} = useParams();
     const classes = useMyStyles();
     const keyword = useLoadLanguage("components/NavItems/tools/Analysis.tsv", tsv);
+    const keyword2 = useLoadLanguage("components/NavItems/tools/Alltools.tsv", tsv);
     const dispatch = useDispatch();
 
     const resultUrl = useSelector(state => state.analysis.url);
@@ -93,42 +100,101 @@ const Analysis = () => {
 
     return (
         <div>
-            <Paper className={classes.root}>
-                <CustomTile text={keyword("api_title")}/>
-                <br/>
-                <TextField
-                    id="standard-full-width"
-                    label={keyword("api_input")}
-                    placeholder="URL"
-                    fullWidth
-                    disabled={isLoading}
-                    value={input}
-                    onChange={e => setInput(e.target.value)}
-                />
-                <Box m={2}/>
-                <FormControlLabel
-                    control={
-                        <Checkbox
-                            checked={reprocess}
-                            onChange={reprocessToggle}
-                            disabled={isLoading}
-                            value="checkedBox"
-                            color="primary"
-                        />
+
+            <Grid
+                container
+                direction="row"
+                justify="flex-start"
+                alignItems="center"
+            >
+
+                <AnalysisIcon style={{ fill: "#51A5B2" }} />
+                <Typography variant="h4" color={'primary'}>
+                    {keyword2("navbar_analysis")}
+                </Typography>
+
+            </Grid>
+
+            <Box ml={1}>
+                <Typography variant="body1">
+                    {keyword2("navbar_analysis_description")}
+                </Typography>
+            </Box>
+            <Box m={3} />
+
+
+            <Card>
+                <CardHeader
+                    title={
+                        <Grid
+                            container
+                            direction="row"
+                            justify="space-between"
+                            alignItems="center">
+
+                            <span>Link of the video</span>
+
+                        </Grid>
                     }
-                    label={keyword("api_repro")}
+                    className={classes.headerUpladedImage}
                 />
-                <Button
-                    variant="contained"
-                    color="primary"
-                    disabled={isLoading}
-                    onClick={submitForm}
-                >
-                    {keyword("button_submit")}
-                </Button>
-                <Box m={1}/>
-                <LinearProgress hidden={!isLoading}/>
-            </Paper>
+                <div className={classes.root2}>
+                    <Grid
+                        container
+                        direction="row"
+                        spacing={3}
+                        alignItems="center"
+                    >
+                        <Grid item xs>
+
+                            <TextField
+                                id="standard-full-width"
+                                label={keyword("api_input")}
+                                placeholder="URL"
+                                fullWidth
+                                disabled={isLoading}
+                                value={input}
+                                variant="outlined"
+                                onChange={e => setInput(e.target.value)}
+                            />
+                            
+                        </Grid>
+
+                        <Grid item>
+                            <FormControlLabel
+                                control={
+                                    <Checkbox
+                                        checked={reprocess}
+                                        onChange={reprocessToggle}
+                                        disabled={isLoading}
+                                        value="checkedBox"
+                                        color="primary"
+                                    />
+                                }
+                                label={keyword("api_repro")}
+                            />
+
+                        </Grid>
+                        
+                        <Grid item>
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                disabled={isLoading}
+                                onClick={submitForm}
+                                >
+                                {keyword("button_submit")}
+                            </Button>
+                        </Grid>
+
+                        
+
+                        <Box m={1}/>
+                        
+                    </Grid>
+                </div>
+                <LinearProgress hidden={!isLoading} />
+            </Card>
             {
                 showFacebookIframe &&
                 <Box m={4}>
