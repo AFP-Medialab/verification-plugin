@@ -357,7 +357,7 @@ const Gif = () => {
                                 justify="space-between"
                                 alignItems="center">
 
-                                <span>Source of the image</span>
+                            <span>{keyword("cardTitle_source")}</span>
 
                             </Grid>
                         }
@@ -391,13 +391,13 @@ const Gif = () => {
                                                 alignItems="flex-start"
                                             >
                                                 <Grid item>
-                                                    <Typography variant="body1" style={{ fontWeight: 600 }}>URL Link</Typography>
+                                                    <Typography variant="body1" style={{ fontWeight: 600 }}>{keyword("title_URL")}</Typography>
                                                 </Grid>
 
                                                 <Box mt={1} />
 
                                                 <Grid item>
-                                                    <Typography variant="body1">You will insert the two links of the two images</Typography>
+                                                    <Typography variant="body1">{keyword("description_URL")}</Typography>
                                                 </Grid>
 
                                             </Grid>
@@ -433,13 +433,13 @@ const Gif = () => {
                                                 alignItems="flex-start"
                                             >
                                                 <Grid item>
-                                                    <Typography variant="body1" style={{ fontWeight: 600 }}>Local file</Typography>
+                                                    <Typography variant="body1" style={{ fontWeight: 600 }}>{keyword("title_local")}</Typography>
                                                 </Grid>
 
                                                 <Box mt={1} />
 
                                                 <Grid item>
-                                                    <Typography variant="body1">You will upload the two images from your local files</Typography>
+                                                    <Typography variant="body1">{keyword("description_local")}</Typography>
                                                 </Grid>
 
                                             </Grid>
@@ -471,7 +471,7 @@ const Gif = () => {
                                 justify="space-between"
                                 alignItems="center">
 
-                                <span>Gif Creation</span>
+                                <span>{keyword("title_gifcreation")}</span>
 
                             </Grid>
                         }
@@ -506,6 +506,7 @@ const Gif = () => {
                                                     alignItems="center"
                                                     justify="center"
                                                     className={classes.dropZone}
+                                                    
                                                 >
 
                                                     <Grid item className={classes.inputContainer}>
@@ -519,7 +520,7 @@ const Gif = () => {
                                                             onChange={(e) => handleInput(e)}
                                                         />
                                                         <div>
-                                                            <Box p={2} textAlign="center">
+                                                            <Box textAlign="center">
                                                                 <label htmlFor="raised-button-file" className={classes.inputLabel}>
                                                                     <span>{keyword("body_droparea")}</span>
                                                                 </label>

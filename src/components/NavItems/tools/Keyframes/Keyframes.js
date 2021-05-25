@@ -18,11 +18,17 @@ import tsv from "../../../../LocalDictionary/components/NavItems/tools/Keyframes
 import {submissionEvent} from "../../../Shared/GoogleAnalytics/GoogleAnalytics";
 import {KNOWN_LINKS} from "../../Assistant/AssistantRuleBook";
 
+import Card from "@material-ui/core/Card";
+import CardHeader from "@material-ui/core/CardHeader";
+import { ReactComponent as AnalysisIcon } from '../../../NavBar/images/SVG/Video/Keyframes.svg';
+import Grid from "@material-ui/core/Grid";
+
 const Keyframes = (props) => {
     const {url} = useParams();
 
     const classes = useMyStyles();
     const keyword = useLoadLanguage("components/NavItems/tools/Keyframes.tsv", tsv);
+    const keyword2 = useLoadLanguage("components/NavItems/tools/Alltools.tsv", tsv);
 
     // state used to toggle localFile view
     const [localFile, setLocalFile] = useState(false);
@@ -89,8 +95,46 @@ const Keyframes = (props) => {
 
     return (
         <div>
-            <Paper className={classes.root}>
-                <CustomTile text={keyword("keyframes_title")}/>
+            <Grid
+                container
+                direction="row"
+                justify="flex-start"
+                alignItems="center"
+            >
+
+                <AnalysisIcon style={{ fill: "#51A5B2" }} />
+                <Typography variant="h4" color={'primary'}>
+                    {keyword2("navbar_keyframes")}
+                </Typography>
+
+            </Grid>
+
+            <Box ml={1}>
+                <Typography variant="body1">
+                    {keyword2("navbar_keyframes_description")}
+                </Typography>
+            </Box>
+            <Box m={3} />
+
+
+            <Card>
+                <CardHeader
+                    title={
+                        <Grid
+                            container
+                            direction="row"
+                            justify="space-between"
+                            alignItems="center">
+
+                            <span>Link of the video</span>
+
+                        </Grid>
+                    }
+                    className={classes.headerUpladedImage}
+                />
+
+                <div className={classes.root2}>
+                
                 <Box m={1}/>
                 <Box display={localFile ? "none" : "block"}>
                     <Button variant="contained" color="primary" onClick={toggleLocal}>
@@ -124,7 +168,8 @@ const Keyframes = (props) => {
                     </Button>
                     <LocalFile/>
                 </Box>
-            </Paper>
+                </div>
+            </Card>
             <div>
                 {
                     resultData &&
