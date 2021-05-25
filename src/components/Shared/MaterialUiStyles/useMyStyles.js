@@ -526,8 +526,6 @@ const useMyStyles = makeStyles(theme => ({
         left: 0,
     },
 
-
-
     sliderClass: {
         maxWidth:"30vw"
     },
@@ -627,6 +625,7 @@ const useMyStyles = makeStyles(theme => ({
     height100: {
         height: "100%",
     },
+    
 
     root2: {
         textAlign: "center",

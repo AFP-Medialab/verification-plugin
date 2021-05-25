@@ -22,12 +22,13 @@ import {submissionEvent} from "../../../Shared/GoogleAnalytics/GoogleAnalytics";
 import {cleanAnalysisState} from "../../../../redux/actions/tools/analysisActions";
 import {useParams} from "react-router-dom";
 import {KNOWN_LINKS} from "../../Assistant/AssistantRuleBook";
-
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 import { ReactComponent as AnalysisIcon } from '../../../NavBar/images/SVG/Video/Video_analysis.svg';
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
+
+import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 
 
 /*function useTraceUpdate(props) {
@@ -51,7 +52,7 @@ const Analysis = () => {
     const {url} = useParams();
     const classes = useMyStyles();
     const keyword = useLoadLanguage("components/NavItems/tools/Analysis.tsv", tsv);
-    const keyword2 = useLoadLanguage("components/NavItems/tools/Alltools.tsv", tsv);
+    const keywordAllTools = useLoadLanguage("components/NavItems/tools/Alltools.tsv", tsv);
     const dispatch = useDispatch();
 
     const resultUrl = useSelector(state => state.analysis.url);
@@ -101,41 +102,11 @@ const Analysis = () => {
     return (
         <div>
 
-            <Grid
-                container
-                direction="row"
-                justify="flex-start"
-                alignItems="center"
-            >
-
-                <AnalysisIcon style={{ fill: "#51A5B2" }} />
-                <Typography variant="h4" color={'primary'}>
-                    {keyword2("navbar_analysis")}
-                </Typography>
-
-            </Grid>
-
-            <Box ml={1}>
-                <Typography variant="body1">
-                    {keyword2("navbar_analysis_description")}
-                </Typography>
-            </Box>
-            <Box m={3} />
-
+            <HeaderTool name={keywordAllTools("navbar_analysis")} description={keywordAllTools("navbar_analysis_description")} icon={<AnalysisIcon style={{ fill: "#51A5B2" }} />}/>
 
             <Card>
                 <CardHeader
-                    title={
-                        <Grid
-                            container
-                            direction="row"
-                            justify="space-between"
-                            alignItems="center">
-
-                            <span>Link of the video</span>
-
-                        </Grid>
-                    }
+                    title={keyword("cardheader_link")}
                     className={classes.headerUpladedImage}
                 />
                 <div className={classes.root2}>
@@ -195,6 +166,8 @@ const Analysis = () => {
                 </div>
                 <LinearProgress hidden={!isLoading} />
             </Card>
+            <Box m={3} />
+
             {
                 showFacebookIframe &&
                 <Box m={4}>
