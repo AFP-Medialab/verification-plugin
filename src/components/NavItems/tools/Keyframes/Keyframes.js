@@ -20,15 +20,18 @@ import {KNOWN_LINKS} from "../../Assistant/AssistantRuleBook";
 
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
-import { ReactComponent as AnalysisIcon } from '../../../NavBar/images/SVG/Video/Keyframes.svg';
+import { ReactComponent as KeframesIcon } from '../../../NavBar/images/SVG/Video/Keyframes.svg';
 import Grid from "@material-ui/core/Grid";
+import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
+import LinkIcon from '@material-ui/icons/Link';
+import FileIcon from '@material-ui/icons/InsertDriveFile';
 
 const Keyframes = (props) => {
     const {url} = useParams();
 
     const classes = useMyStyles();
     const keyword = useLoadLanguage("components/NavItems/tools/Keyframes.tsv", tsv);
-    const keyword2 = useLoadLanguage("components/NavItems/tools/Alltools.tsv", tsv);
+    const keywordAllTools = useLoadLanguage("components/NavItems/tools/Alltools.tsv", tsv);
 
     // state used to toggle localFile view
     const [localFile, setLocalFile] = useState(false);
@@ -93,83 +96,207 @@ const Keyframes = (props) => {
         setSubmittedUrl(undefined)
     }, [submittedUrl]);
 
+
+
+
+    const [classButtonURL, setClassButtonURL] = useState(null);
+    const [classButtonLocal, setClassButtonLocal] = useState(null);
+
+    const [classIconURL, setClassIconURL] = useState(classes.bigButtonIconSelectted);
+    const [classIconLocal, setClassIconLocal] = useState(classes.bigButtonIcon);
+
+    const [showURL, setShowURL] = useState(true);
+    const [showLocal, setShowLocal] = useState(false);
+
+    if (showURL && !showLocal && classButtonURL != classes.bigButtonDivSelectted && classButtonLocal != classes.bigButtonDiv) {
+        setClassButtonURL(classes.bigButtonDivSelectted);
+        setClassButtonLocal(classes.bigButtonDiv);
+    }
+
+
+    const clickURL = (event) => {
+        setClassButtonURL(classes.bigButtonDivSelectted);
+        setClassIconURL(classes.bigButtonIconSelectted);
+
+        setClassButtonLocal(classes.bigButtonDiv);
+        setClassIconLocal(classes.bigButtonIcon);
+
+        setShowURL(true);
+        setShowLocal(false);
+
+        setLocalFile(false);
+    }
+
+    const clickLocal = (event) => {
+        setClassButtonURL(classes.bigButtonDiv);
+        setClassIconURL(classes.bigButtonIcon);
+
+        setClassButtonLocal(classes.bigButtonDivSelectted);
+        setClassIconLocal(classes.bigButtonIconSelectted);
+
+        setShowURL(false);
+        setShowLocal(true);
+
+        setLocalFile(true);
+    }
+
+
+
     return (
         <div>
-            <Grid
-                container
-                direction="row"
-                justify="flex-start"
-                alignItems="center"
-            >
-
-                <AnalysisIcon style={{ fill: "#51A5B2" }} />
-                <Typography variant="h4" color={'primary'}>
-                    {keyword2("navbar_keyframes")}
-                </Typography>
-
-            </Grid>
-
-            <Box ml={1}>
-                <Typography variant="body1">
-                    {keyword2("navbar_keyframes_description")}
-                </Typography>
-            </Box>
-            <Box m={3} />
-
+            <HeaderTool name={keywordAllTools("navbar_keyframes")} description={keywordAllTools("navbar_keyframes_description")} icon={<KeframesIcon style={{ fill: "#51A5B2" }} />}/>
 
             <Card>
                 <CardHeader
-                    title={
-                        <Grid
-                            container
-                            direction="row"
-                            justify="space-between"
-                            alignItems="center">
-
-                            <span>Link of the video</span>
-
-                        </Grid>
-                    }
+                    title={keyword("cardheader_source")}
                     className={classes.headerUpladedImage}
                 />
 
-                <div className={classes.root2}>
+                <Box p={3}>
+
+
+                    <Grid container spacing={3} alignItems="center">
+                        <Grid item xs={6}>
+
+                            <Box p={3} className={classButtonURL} onClick={clickURL}>
+                                <Grid
+                                    container
+                                    direction="row"
+                                    alignItems="center"
+
+                                >
+                                    <Grid item>
+                                        <Box ml={1} mr={2}>
+                                            <LinkIcon className={classIconURL} />
+                                        </Box>
+
+                                    </Grid>
+
+                                    <Grid item>
+                                        <Grid
+                                            container
+                                            direction="column"
+                                            justify="flex-start"
+                                            alignItems="flex-start"
+                                        >
+                                            <Grid item>
+                                                <Typography variant="body1" style={{ fontWeight: 600 }}>{keyword("linkmode_title")}</Typography>
+                                            </Grid>
+
+                                            <Box mt={1} />
+
+                                            <Grid item>
+                                                <Typography variant="body1">{keyword("linkmode_description")}</Typography>
+                                            </Grid>
+
+                                        </Grid>
+                                    </Grid>
+
+                                </Grid>
+                            </Box>
+
+                        </Grid>
+
+
+                        <Grid item xs={6}>
+
+                            <Box p={3} className={classButtonLocal} onClick={clickLocal}>
+                                <Grid
+                                    container
+                                    direction="row"
+                                    alignItems="center"
+
+                                >
+                                    <Grid item>
+                                        <Box ml={1} mr={2}>
+                                            <FileIcon className={classIconLocal} />
+                                        </Box>
+
+                                    </Grid>
+
+                                    <Grid item>
+                                        <Grid
+                                            container
+                                            direction="column"
+                                            justify="flex-start"
+                                            alignItems="flex-start"
+                                        >
+                                            <Grid item>
+                                                <Typography variant="body1" style={{ fontWeight: 600 }}>{keyword("filemode_title")}</Typography>
+                                            </Grid>
+
+                                            <Box mt={1} />
+
+                                            <Grid item>
+                                                <Typography variant="body1">{keyword("filemode_description")}</Typography>
+                                            </Grid>
+
+                                        </Grid>
+                                    </Grid>
+
+                                </Grid>
+                            </Box>
+
+                        </Grid>
+
+                    </Grid>
+
+                    <Box mt={4} mb={4}>
+                        <Divider />
+                    </Box>
+
                 
-                <Box m={1}/>
-                <Box display={localFile ? "none" : "block"}>
-                    <Button variant="contained" color="primary" onClick={toggleLocal}>
-                        {keyword("button_localfile")}
-                    </Button>
-                    <Box m={2}/>
-                    <Divider/>
-                    <TextField
-                        id="standard-full-width"
-                        label={keyword("keyframes_input")}
-                        style={{margin: 8}}
-                        placeholder="URL"
-                        fullWidth
-                        disabled={isLoading}
-                        value={input}
-                        onChange={e => setInput(e.target.value)}
-                    />
-                    <Box m={2}/>
-                    <Button variant="contained" color="primary" onClick={submitUrl} disabled={isLoading}>
-                        {keyword("button_submit")}
-                    </Button>
                     <Box m={1}/>
-                    <LinearProgress hidden={!isLoading}/>
-                    <Typography variant="body1" hidden={!isLoading}>
-                        {message}
-                    </Typography>
+                    <Box display={localFile ? "none" : "block"}>
+
+                        <Grid container
+                            direction="row"
+                            spacing={3}
+                            alignItems="center"
+                        >
+
+                            <Grid item xs>
+                                <TextField
+                                    id="standard-full-width"
+                                    label={keyword("keyframes_input")}
+                                    placeholder={keyword("keyframes_input_placeholder")}
+                                    fullWidth
+                                    disabled={isLoading}
+                                    value={input}
+                                    variant="outlined"
+                                    onChange={e => setInput(e.target.value)}
+                                />
+
+                            </Grid>
+
+                            <Grid item>
+                                <Button variant="contained" color="primary" onClick={submitUrl} disabled={isLoading}>
+                                    {keyword("button_submit")}
+                                </Button>
+
+                            </Grid>
+
+                        </Grid>
+
+                        
+                        <Box m={3} hidden={!isLoading}/>
+                        <LinearProgress hidden={!isLoading}/>
+                        <Typography variant="body1" hidden={!isLoading}>
+                            {message}
+                        </Typography>
+                    </Box>
+                    <Box display={!localFile ? "none" : "block"}>
+                        <Button variant="contained" color="primary" onClick={toggleLocal}>
+                            {keyword("forensic_card_back")}
+                        </Button>
+                        <LocalFile/>
+                    </Box>
                 </Box>
-                <Box display={!localFile ? "none" : "block"}>
-                    <Button variant="contained" color="primary" onClick={toggleLocal}>
-                        {keyword("forensic_card_back")}
-                    </Button>
-                    <LocalFile/>
-                </Box>
-                </div>
             </Card>
+
+            <Box m={3} />
+
+
             <div>
                 {
                     resultData &&
