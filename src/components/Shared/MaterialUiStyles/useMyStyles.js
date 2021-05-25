@@ -625,11 +625,11 @@ const useMyStyles = makeStyles(theme => ({
     height100: {
         height: "100%",
     },
-    
+
 
     root2: {
         textAlign: "center",
-        padding: theme.spacing(3, 2),
+        padding: theme.spacing(3),
 
     },
 

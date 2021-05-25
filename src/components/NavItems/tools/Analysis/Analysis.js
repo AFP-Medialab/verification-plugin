@@ -22,12 +22,11 @@ import {submissionEvent} from "../../../Shared/GoogleAnalytics/GoogleAnalytics";
 import {cleanAnalysisState} from "../../../../redux/actions/tools/analysisActions";
 import {useParams} from "react-router-dom";
 import {KNOWN_LINKS} from "../../Assistant/AssistantRuleBook";
+
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 import { ReactComponent as AnalysisIcon } from '../../../NavBar/images/SVG/Video/Video_analysis.svg';
-import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
-
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 
 
@@ -121,7 +120,7 @@ const Analysis = () => {
                             <TextField
                                 id="standard-full-width"
                                 label={keyword("api_input")}
-                                placeholder="URL"
+                                placeholder={keyword("api_input_placeholder")}
                                 fullWidth
                                 disabled={isLoading}
                                 value={input}

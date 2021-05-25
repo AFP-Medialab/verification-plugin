@@ -364,7 +364,7 @@ const Gif = () => {
                         className={classes.headerUpladedImage}
                     />
 
-                    <Box p={4} >
+                    <Box p={3} >
 
                         <Grid container spacing={3} alignItems="center">
                             <Grid item xs={6}>
@@ -478,7 +478,7 @@ const Gif = () => {
                         className={classes.headerUpladedImage}
                     />
 
-                    <Box p={4} >
+                    <Box p={3} >
 
                         <Grid container spacing={3}>
                             <Grid item xs={6} style={{ borderRight: '0.1em solid #ECECEC', padding: '0.5em' }}>
