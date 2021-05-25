@@ -121,7 +121,6 @@ const OCR = () => {
                         </Grid>
 
                         <Grid item>
-
                             <Button variant="contained" color="primary" onClick={() => submitUrl(userInput)}>
                                 {keyword("button_submit") || ""}
                             </Button>

@@ -17,6 +17,9 @@ import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Metadata.tsv";
 import OnClickInfo from "../../../../Shared/OnClickInfo/OnClickInfo";
 
+import Card from "@material-ui/core/Card";
+import CardHeader from "@material-ui/core/CardHeader";
+
 const MetadataImageResult = (props) => {
     const classes = useMyStyles();
     const keyword = useLoadLanguage("components/NavItems/tools/Metadata.tsv", tsv);
@@ -25,18 +28,29 @@ const MetadataImageResult = (props) => {
     const dispatch = useDispatch();
     if (report.message === "metadata_img_error_exif")
         return (
-            <Paper className={classes.root}>
-                <CloseResult onClick={() => dispatch(cleanMetadataState())} />
-                <Box m={1} />
-                <OnClickInfo keyword={"metadata_tip"} />
-                <Box m={3} />
-                <div style={{maxWidth: '640px', margin: "0 auto"}}>
-                    <img src={props.image} alt={props.image} style={{maxWidth: "100%", maxHeight: "100%"}}/>
+            <Card>
+                <CardHeader
+                    title={keyword("cardheader_results")}
+                    className={classes.headerUpladedImage}
+                />
+
+                <div className={classes.root2}>
+
+
+                    <CloseResult onClick={() => dispatch(cleanMetadataState())} />
+                    <Box m={1} />
+                    <OnClickInfo keyword={"metadata_tip"} />
+                    <Box m={3} />
+                    <div style={{maxWidth: '640px', margin: "0 auto"}}>
+                        <img src={props.image} alt={props.image} style={{maxWidth: "100%", maxHeight: "100%"}}/>
+                    </div>
+                    <Typography variant={"h5"}>
+                        {keyword("metadata_img_error_exif")}
+                    </Typography>
+
                 </div>
-                <Typography variant={"h5"}>
-                    {keyword("metadata_img_error_exif")}
-                </Typography>
-            </Paper>
+
+            </Card>
         );
 
     let softwareInfos = [

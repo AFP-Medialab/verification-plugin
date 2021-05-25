@@ -93,7 +93,7 @@ const Magnifier = () => {
                             <TextField
                                 id="standard-full-width"
                                 label={keyword("magnifier_urlbox")}
-                                placeholder={""}
+                                placeholder={keyword("magnifier_urlbox_placeholder")}
                                 fullWidth
                                 value={input}
                                 variant="outlined"
@@ -125,6 +125,9 @@ const Magnifier = () => {
                         
                 </Box>
             </Card>
+
+            <Box m={3} />
+
             {
                 resultResult && resultResult !== "" &&
                 <ImageResult/>
