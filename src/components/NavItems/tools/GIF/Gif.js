@@ -600,7 +600,8 @@ const Gif = () => {
                                         
                                         <TextField
                                             id="outlined-multiline-static"
-                                            label="URL first image"
+                                            label={keyword("input_label1")}
+                                            placeholder={keyword("input_placeholder")}
                                             multiline
                                             rows={8}
                                             fullWidth
@@ -621,7 +622,8 @@ const Gif = () => {
 
                                         <TextField
                                             id="outlined-multiline-static"
-                                            label="URL second image"
+                                            label={keyword("input_label1")}
+                                            placeholder={keyword("input_placeholder")}
                                             multiline
                                             rows={8}
                                             fullWidth
@@ -660,7 +662,7 @@ const Gif = () => {
                                             <IconGif style={{ fill: "#C9C9C9" }} />
                                             <Box p={4}>
                                                 <Typography variant="h6" style={{ color: "#C9C9C9" }} align="center">
-                                                    You need to select the two images on the left and click the button to see the preview
+                                                    {keyword("text_preview")}
                                                 </Typography>
                                             </Box>
                                         
@@ -681,8 +683,6 @@ const Gif = () => {
                                         </Grid>
                                     }
 
-
-
                                     {showHomo &&
                                     
                                         <Grid
@@ -693,9 +693,8 @@ const Gif = () => {
                                             className={classes.height100}
                                         >
                                             
-
                                             <Typography variant="h6" className={classes.headingGif}>
-                                                Preview of the GIF
+                                                {keyword("title_preview")}
                                             </Typography>
 
                                             <Box justifyContent="center" className={classes.wrapperImageFilter}>
