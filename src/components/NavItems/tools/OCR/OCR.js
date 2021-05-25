@@ -12,7 +12,7 @@ import tsv from "../../../../LocalDictionary/components/NavItems/tools/OCR.tsv";
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 
-import {setOcrB64Img, setOcrInput} from "../../../../redux/actions/tools/ocrActions";
+import {cleanOcr, setOcrB64Img, setOcrInput} from "../../../../redux/actions/tools/ocrActions";
 import OcrResult from "./Results/OcrResult";
 
 const OCR = () => {
@@ -67,6 +67,7 @@ const OCR = () => {
         let error_message_key = errorKey ? errorKey : "ocr_error"
         if (fail) {
             dispatch(setError(keyword(error_message_key)));
+            dispatch(cleanOcr())
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [fail, errorKey])

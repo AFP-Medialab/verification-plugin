@@ -26,7 +26,7 @@ const AssistantImageResult = () => {
             </CardMedia>
             <CardActions>
                 <ImageIcon color={"action"}/>
-                <Link href={processUrl} color={"textSecondary"} variant={"subtitle2"}>
+                <Link href={processUrl} target={"_blank"} color={"textSecondary"} variant={"subtitle2"}>
                     {processUrl.length>60 ? processUrl.substring(0,60) + "...": processUrl}
                 </Link>
                 <Tooltip title={"Copy link"}>

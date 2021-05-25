@@ -358,16 +358,6 @@ const useMyStyles = makeStyles(theme => ({
             minWidth: 100,
         },
     },
-    assistantCards: {
-        marginBottom: 2,
-        backgroundColor: theme.palette.primary.light,
-        '&:hover': {
-            backgroundColor: theme.palette.secondary.main,
-        },
-        borderColor:"darkcyan",
-        borderStyle: "solid",
-        borderWidth: "2px"
-    },
     toolTipIcon: {
         color: theme.palette.secondary,
         position: "relative",
@@ -377,6 +367,15 @@ const useMyStyles = makeStyles(theme => ({
         height: theme.typography.h5.fontSize,
         marginRight: 3,
         marginLeft: 5
+    },
+    svgIcon: {
+        fill: theme.palette.primary,
+        position: "relative",
+        top: theme.spacing.unit,
+        width: theme.typography.h3.fontSize,
+        height: theme.typography.h3.fontSize,
+        marginRight: 7,
+        marginLeft: 5,
     },
     toolTipWarning: {
         color: "red",
@@ -404,17 +403,23 @@ const useMyStyles = makeStyles(theme => ({
         lineHeight: 1.5,
         letterSpacing: "0.00938em",
     },
-    assistantRoot: {
-        padding: theme.spacing(3, 2),
-        backgroundColor: "#F7F7F7",
-        marginTop: 5,
-        textAlign: "left",
-    },
     assistantGrid: {
         width: "100%",
         marginBottom: 2,
         textAlign: "left",
         font: theme.typography.h6.fontSize
+    },
+    assistantHover: {
+        borderWidth: 3,
+        '&:hover': {
+            borderColor: theme.palette.primary.main,
+        },
+    },
+    assistantSelected: {
+        borderColor: theme.palette.primary.main,
+        '&:hover': {
+            borderColor: theme.palette.primary.main,
+        }
     },
     customAllToolsButton: {
         padding: 0,

@@ -17,11 +17,12 @@ export const setImageVideoSelected = (imageVideoSelected) => {
     }
 }
 
-export const setInputUrl = (inputUrl) => {
+export const setInputUrl = (inputUrl, inputUrlType) => {
     return {
         type : "SET_INPUT_URL",
         payload: {
             inputUrl: inputUrl,
+            inputUrlType: inputUrlType
         }
     }
 };

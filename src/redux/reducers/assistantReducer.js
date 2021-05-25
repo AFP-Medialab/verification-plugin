@@ -1,5 +1,5 @@
 const defaultState = {
-    urlMode: true,
+    urlMode: false,
     imageVideoSelected: false,
     singleMediaPresent: null,
 
@@ -13,6 +13,7 @@ const defaultState = {
     textLang: null,
     processUrlActions : [],
     processUrlType: null,
+    inputUrlType: null,
 
     inputUrlSourceCredibility: null,
     inputSCLoading: false,
@@ -77,7 +78,7 @@ const assistantReducer = (state = defaultState, action) => {
 
         case "CLEAN_STATE":
             state = {
-                urlMode: true,
+                urlMode: false,
                 imageVideoSelected: false,
                 singleMediaPresent: null,
 
@@ -91,6 +92,7 @@ const assistantReducer = (state = defaultState, action) => {
                 textLang: null,
                 processUrlActions : [],
                 processUrlType: null,
+                inputUrlType: null,
 
                 inputUrlSourceCredibility: null,
                 inputSCLoading: false,

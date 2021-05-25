@@ -4,6 +4,7 @@ ocr_urlbox	Image URL	Temp	Temp	Temp
 ocr_error	Could not extract text. Please try another input	Temp	Temp	Temp
 ocr_no_text	No text has been found in the image	Temp	Temp	Temp
 ocr_too_big	Your uploaded image must be below 4MB in size.	Temp	Temp	Temp
+service_error	Service currently unavailalbe. Please contact support if the problem persists.	Temp	Temp	Temp
 
 button_localfile	Local file	Fichier local	Fichero local
 button_submit	Submit	Envoyer	Enviar	Temp

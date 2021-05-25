@@ -38,6 +38,7 @@ import FeedBack from "../FeedBack/FeedBack";
 /*
 import Icon from "@material-ui/core/Icon";
 
+import assistantIcon from "./images/navbar/assistant-icon-grey.svg";
 import toolIcon from "./images/navbar/tools-off.png"
 import tutorialIcon from "./images/navbar/tutorial-off.png"
 import classRoomIcon from "./images/navbar/classroom-off.png"
@@ -134,6 +135,8 @@ const NavBar = (props) => {
     const drawerValue = useSelector(state => state.tool.selected);
     const cookiesUsage = useSelector(state => state.cookies);
     const currentLang = useSelector(state => state.language);
+    const defaultLanguage = useSelector(state => state.defaultLanguage);
+
 
     const dispatch = useDispatch();
 
@@ -331,7 +334,14 @@ const NavBar = (props) => {
     useEffect(() => {
         let supportedBrowserLang = getSupportedBrowserLanguage()
 
-        if (supportedBrowserLang !== undefined && supportedBrowserLang !== currentLang) {
+
+        if (defaultLanguage !== undefined) {
+            if (defaultLanguage !== currentLang) {
+                dispatch(changeLanguage(defaultLanguage))
+            } 
+
+        }
+        else if (supportedBrowserLang !== undefined && supportedBrowserLang !== currentLang) {
             dispatch(changeLanguage(supportedBrowserLang))
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps

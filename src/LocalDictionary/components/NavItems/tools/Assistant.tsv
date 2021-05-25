@@ -1,12 +1,20 @@
 	en	fr	es	el
 assistant_title	Assistant	Assistant	Assistente	Βοηθός
+assistant_intro	The assistant will help you to analyse a webpage, an image or a video file and suggest which WeVerify tools are useful for each case	Temp	Temp	Temp
+assistant_choose	Choose what you want to analyse	Temp	Temp	Temp
+assistant_webpage_header	Webpage link	Temp	Temp	Temp	Temp
+assistant_webpage_text	Insert the link of a webpage, and the assistant will suggest the most useful tools for the contents of the given page.	Temp	Temp	Temp
+assistant_file_header	Local file	Temp	Temp	Temp	Temp
+assistant_file_text	 The assistant will suggest the most useful tools depending on if the file is a video or image	Temp	Temp	Temp
+assistant_choose_tool	Choose the tool you want to use	Temp	Temp	Temp	Temp
 upload_video	Video	Video	Video	Βίντεο
 upload_image	Image	Image	Imagen	Εικόνα
-upload_type_question	What type of file do you want to upload?	Quel type de fichier voulez-vous charger?	¿Que fichero quiere cargar?	Τι είδους αρχείο θέλετε να ανεβάσετε;
 assistant_urlbox	URL	Adresse URL	URL	Σύνδεσμος
+assistant_give_url	Give the URL of the page to analyse	Temp	Temp	Temp
+assistant_paste_url	Paste the URL here	Temp	Temp	Temp
 please_give_a_correct_link	Please give a correct link	Donner un lien valide s'il vous plaît	Por favor, dé un enlace válido	Παρακαλώ δώστε έναν σωστό σύνδεσμο
-button_submit	Submit	Envoyer	Enviar	Υποβολή
-quit	Quit	Quitter	Salir	Κλείσιμο
+button_analyse	Analyse	Temp	Temp	Temp
+button_clean	Clean	Temp	Temp	Temp
 save	Save	Enregistrer	Gardar	Αποθήκευση
 source_credibility_title	Source Credibility	Temp	Temp	Temp
 source_credibility_byline	The source has been found as part of a credibility check	Temp	Temp	Temp
@@ -49,13 +57,14 @@ assistant_help_title	Assistant Help	Temp	Temp	Temp
 assistant_help_1	The weverify toolkit (this plugin) has multiple tools which can help in the verification of content on social networks, designed to help journalists save time and be more efficient in their fact checking tasks.<br>A full list of these tools can be found in the tutorial section of this plugin.<br>Given the multiple tools and services available, the weverify assistant has been designed to guide users to the services available to them given the nature of the content they would like to check.<br><br>	Temp	Temp	Temp
 assistant_help_2	<b>How does the assistant work?</b><br>Users can choose to upload their own media to be checked (an image or a video), in which case verification tools on the plugin which support media upload will be listed.<br>An alternative option is to enter a URL which needs verification or fact checking.<br>Once a URL in entered, the assistant attempts to extract any text, images or videos it can find on the page.<br>Any extracted text or media are then used to suggest the potential actions which can be carried out. Currently, there are three major components to this:<ul><li>Text Checks: displaying any text found on the page, and running a selection of post processing/verification tools against it</li><li>Media Checks: displaying any media found on the page, and if selected, giving the list of tools available on the WeVerify plugin to process selected media</li><li>Verification Checks: checks against elements of the URL which do not fall under either text or media, such as the domain of the website </li></ul>More information on each of these can be found in the links below.<br><br>	Temp	Temp	Temp
 assistant_help_3	<b>Which URLS are supported?</b><br>Currently, there is dedicated support for links for the following types of URLs:<ul><li>Facebook photo or video posts</li><li>Twitter statuses</li><li>Youtube video links</li><li>Instagram posts</li><li>Tiktok posts</li><li>Dailymotion video links</li><li>Vimeo video links</li><li>Liveleak video links</li></ul> Other generic links can also be entered and the assistant will attempt to retrieve what it can. However, any results (particularly on the extraction of images and text) on generic links may be much more generalised.<br><br>	Temp	Temp	Temp
-assistant_help_4	<b>More information</b><br>For a detailed breakdown of the type of URLs supported by the assistant, see <a href="https://docs.google.com/document/d/1z97ZNdLSDdNJyoDEE_3f43O-WZ5zkg3VUXvFJ30kAdc/edit?usp=sharing" target="_blank">this document</a><br/>For a detailed breakdown of the tools and checks run by the assistant, see: <a href="https://docs.google.com/document/d/1fMlRNvAw0p9r3pgav9i6ooHPUg3hZJr9rz1kROy_aLA/edit?usp=sharing" target="_blank">this document</a>	Temp	Temp	Temp
+assistant_help_4	<b>More information</b><br>For a detailed breakdown of the type of URLs supported by the assistant, see <a href="https://gatenlp.github.io/we-verify-app-assistant/supported-urls" target="_blank">this page</a><br/>For a detailed breakdown of the tools and checks run by the assistant, see: <a href="https://gatenlp.github.io/we-verify-app-assistant/supported-tools" target="_blank">this page</a>	Temp	Temp	Temp
 
 enter_url	Enter URL	Temp	Temp	Εισαγάγετε τη διεύθυνση URL των μέσων που θέλετε να επεξεργαστείτε
 mode_label	URL mode	Temp	Temp	Temp
 url_text	URL Text	Temp	Temp	Temp
 url_media	Media	Temp	Temp	Temp
 media_text	Extracted Media Text	Temp	Temp	Temp
+download_video	The video has been extracted but cannot be processed using the direct URL. Please open it in a new tab using the link below, download it, and use the assistant to see which tools can be used on the downloaded video.	Temp	Temp	Temp
 text_warning	Warnings found against text. See warning box.	Temp	Temp	Temp
 image_warning	Warnings found against image. See warning box.	Temp	Temp	Temp
 warning_title	Warning	Text	Text	Text
@@ -67,8 +76,9 @@ named_entity_title	Text Topics	Temp	Temp	Temp
 dbkf_image_warning	The image from this URL has matched against the following from the database of known fakes with a similarity score of 	Temp	Temp	Temp	Temp
 dbkf_video_warning	The video from this URL has matched against the following from the database of known fakes with a similarity score of 	Temp	Temp	Temp	Temp
 dbkf_text_warning	The text from this URL has matched against the following from the database of known fakes	Temp	Temp	Temp	Temp
-source_credibility_warning	The domain has been found as part of a domain credibility check. It has been labelled as	Temp	Temp	Temp
-according_to	according to	Temp	Temp	Temp
+source_credibility_warning	The domain has been found as part of a domain credibility check by: 	Temp	Temp	Temp
+labelled_as	It has been labelled as: 	Temp	Temp	Temp
+commented_as	It has the following comment against it:	Temp	Temp	Temp
 hp_warning	The text from this URL has returned an unusually high hyperpartisan score of	Temp	Temp	Temp
 
 text_tooltip	<b>What is this?</b></br>Any text which can be extracted from the given URL is displayed here</br></br><b>How is this used?</b></br>Various text processing tools are run against this text: <ul><li>The language is detected and displayed</li><li>The named entities in the text are extracted and displayed (people, locations, organisations etc.)</li><li>The first 500 characters in the text are sent to be checked against the database of known fakes. The results of this check (if any) are listed in the <b>Warnings</b> section</li></ul> For more information, see: 	Temp	Temp	Temp
