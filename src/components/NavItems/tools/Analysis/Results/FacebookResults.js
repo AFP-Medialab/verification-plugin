@@ -1,7 +1,7 @@
 import {useDispatch} from "react-redux";
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 import Paper from "@material-ui/core/Paper";
-import React from "react";
+import React,{ useState } from "react";
 import CloseResult from "../../../../Shared/CloseResult/CloseResult";
 import {cleanAnalysisState} from "../../../../../redux/actions/tools/analysisActions";
 import Typography from "@material-ui/core/Typography";
@@ -24,23 +24,73 @@ import OnClickInfo from "../../../../Shared/OnClickInfo/OnClickInfo";
 import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Analysis.tsv";
 import MyMap from "../../../../Shared/MyMap/MyMap";
+import styles from './layout.module.css';
+import MaterialTable  from 'material-table';
+import axios from "axios"
+import {setAnalysisComments} from "../../../../../redux/actions/tools/analysisActions";
+
+
 
 const FacebookResults = (props) => {
     const classes = useMyStyles();
     const keyword = useLoadLanguage("components/NavItems/tools/Analysis.tsv", tsv);
-
-
+    const [count, setCount] = useState(1);
+    
+    
     const reverseSearch = (website) => {
         for (let image of thumbnails) {
             ImageReverseSearch(website, image.url);
         }
     };
+   
+    
+ 
+        var nextPage=props.report.pagination.next
+        var previousPage=props.report.pagination.previous
+
+        console.log(previousPage)
+        
+        const handleClick_next_page = (event) => {
+    
+        //<OnClickInfo>ceva</OnClickInfo>
+           if (nextPage!=="undefined" && nextPage!=="null"&& nextPage!==""){
+            setCount(count+1)
+            axios.get("http://mever.iti.gr"+nextPage)
+            .then(response => {
+                dispatch(setAnalysisComments(response.data));
+            })
+           }
+           
+
+      };
+      const handleClick_previous_page = (event) => {
+        //<OnClickInfo>ceva</OnClickInfo>
+      if (previousPage!=="undefined" && previousPage!=="null" && previousPage!==""){
+        setCount(count-1)
+        axios.get("http://mever.iti.gr"+previousPage)
+        .then(response => {
+            dispatch(setAnalysisComments(response.data));
+        })
+    }
+
+    
+   
+       
+      };
+      
+
 
     const dispatch = useDispatch();
     const report = props.report;
+    console.log("Report ", report)
+    //console.log("report.pagination.next ",report.pagination.next)
     const verificationComments = (report.comments) ? report.comments : [];
     const thumbnails = (report.thumbnails.others);
-
+    var nothing=[]
+    for (var j=0;j<report.comments.length;j++){
+        nothing[j]=report.comments[j].textDisplay
+    }
+    //console.log("nothing ", nothing)
     return (
 
         <div>
@@ -184,47 +234,84 @@ const FacebookResults = (props) => {
                                 </TableBody>
                             </Table>
                         }
+                        
+                        
                         <Box m={2}/>
                         {
                             verificationComments.length > 0 &&
                             <Accordion>
+                                
                                 <AccordionSummary
                                     expandIcon={<ExpandMoreIcon/>}
                                     aria-controls="panel1bh-content"
                                     id="panel1bh-header"
                                 >
+                                  
                                     <Typography className={classes.heading}>{keyword("api_comments")}</Typography>
                                     <Typography className={classes.secondaryHeading}> ...</Typography>
                                 </AccordionSummary>
                                 <AccordionDetails>
                                     <Table className={classes.table} size="small" aria-label="a dense table">
+                                   
                                         <TableHead>
-                                            <TableRow>
+                                        <Typography align='right'>
+                                        
+                                        </Typography>
+                                        
+                                            <TableRow >
+                                                <TableCell class={styles.size}
+                                                    align="center">{keyword("twitter_user_name_13")}</TableCell>
                                                 <TableCell
-                                                    align="right">{keyword("twitter_user_name_13")}</TableCell>
-                                                <TableCell
-                                                    align="right">{keyword("twitter_user_name_5")}</TableCell>
+                                                    align="center" >{keyword("twitter_user_name_5")}</TableCell>
                                             </TableRow>
                                         </TableHead>
-                                        <TableBody>
+                                        
+                                        <TableBody className={styles.container} /* class="fixed_headers" */>
+                                        
                                             {
                                                 verificationComments.map((comment, key) => {
+                                                  //  console.log("comment ", comment)
+                                                 //   console.log("key ", key)
+
+                                                    
                                                     return (
-                                                        <TableRow key={key}>
-                                                            <TableCell
-                                                                align="right">{comment.publishedAt}
+                                                        
+                                                       
+                                                        
+                                                        <TableRow key={key} >
+                                             
+                                                            <TableCell 
+                                                                align="center" size="small"  >{comment.publishedAt}
                                                             </TableCell>
-                                                            <TableCell
-                                                                align="right">{comment.textDisplay}
+                                                            <TableCell 
+                                                                align="left" size="small">{comment.textDisplay}
                                                             </TableCell>
-                                                        </TableRow>);
+                                                        </TableRow>
+    
+                                                        );
                                                 })
                                             }
-                                        </TableBody>
+                                            
+
+                                            </TableBody>
+                                            
                                     </Table>
+                                           
                                 </AccordionDetails>
+                                <Box>{keyword("page_number")+count}
+                                     
+                                </Box>
+                                <Button  variant='contained' aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick_previous_page}  >
+                                {keyword("next_button")}
+                                    </Button>
+                                    <Button  variant='contained' aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick_next_page} >
+                                    {keyword("previous_button")}
+                                    </Button>
                             </Accordion>
+
+
                         }
+                        
                     </div>
                     <Box m={4}/>
                     {
