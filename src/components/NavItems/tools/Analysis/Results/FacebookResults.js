@@ -226,7 +226,39 @@ const FacebookResults = (props) => {
                                             <TableCell align="right">{report.video.created_time}</TableCell>
                                         </TableRow>
                                     }
-
+                            </TableBody>
+                        </Table>
+                    }
+                    <div>
+                        <Box m={4}/>
+                        <Typography variant={"h6"}>
+                            {keyword("facebook_comment_title")}
+                        </Typography>
+                        <Box m={2}/>
+                        {
+                            report.verification_cues &&
+                            <Table className={classes.table} size="small" aria-label="a dense table">
+                                <TableBody>
+                                    {
+                                        report.verification_cues.num_comments &&
+                                        <TableRow>
+                                            <TableCell component="th" scope="row">
+                                                {keyword("facebook_comment_name_1")}
+                                            </TableCell>
+                                            <TableCell
+                                                align="right">{report.verification_cues.num_comments}</TableCell>
+                                        </TableRow>
+                                    }
+                                    {
+                                        report.verification_cues.num_verification_comments !== 0 &&
+                                        <TableRow>
+                                            <TableCell component="th" scope="row">
+                                                {keyword("facebook_comment_name_2")}
+                                            </TableCell>
+                                            <TableCell
+                                                align="right">{report.verification_cues.num_verification_comments}</TableCell>
+                                        </TableRow>
+                                    }
                                     
                                 </TableBody>
                             </Table>
@@ -399,93 +431,6 @@ const FacebookResults = (props) => {
 
                         }
                         
-                    </div>
-                    <Box m={4}/>
-                    {
-                        report.mentioned_locations &&
-                        report.mentioned_locations.detected_locations &&
-                        report.mentioned_locations.detected_locations.length > 0 &&
-                        <div>
-                            <MyMap locations={report.mentioned_locations.detected_locations}/>
-                            <Box m={4}/>
-                        </div>
-                    }
-                    {
-                        thumbnails !== undefined &&
-                        <div>
-                            <Box m={4}/>
-                            <Typography variant={"h6"}>
-                                {keyword("facebook_comment_title")}
-                            </Typography>
-                            <Box m={2}/>
-                            {
-                                report.verification_cues &&
-                                <Table className={classes.table} size="small" aria-label="a dense table">
-                                    <TableBody>
-                                        {
-                                            report.verification_cues.num_comments &&
-                                            <TableRow>
-                                                <TableCell component="th" scope="row">
-                                                    {keyword("facebook_comment_name_1")}
-                                                </TableCell>
-                                                <TableCell
-                                                    align="right">{report.verification_cues.num_comments}</TableCell>
-                                            </TableRow>
-                                        }
-                                        {
-                                            report.verification_cues.num_verification_comments !== 0 &&
-                                            <TableRow>
-                                                <TableCell component="th" scope="row">
-                                                    {keyword("facebook_comment_name_2")}
-                                                </TableCell>
-                                                <TableCell
-                                                    align="right">{report.verification_cues.num_verification_comments}</TableCell>
-                                            </TableRow>
-                                        }
-                                    </TableBody>
-                                </Table>
-                            }
-                            <Box m={2}/>
-                            {
-                                verificationComments.length > 0 &&
-                                <Accordion>
-                                    <AccordionSummary
-                                        expandIcon={<ExpandMoreIcon/>}
-                                        aria-controls="panel1bh-content"
-                                        id="panel1bh-header"
-                                    >
-                                        <Typography className={classes.heading}>{keyword("api_comments")}</Typography>
-                                        <Typography className={classes.secondaryHeading}> ...</Typography>
-                                    </AccordionSummary>
-                                    <AccordionDetails>
-                                        <Table className={classes.table} size="small" aria-label="a dense table">
-                                            <TableHead>
-                                                <TableRow>
-                                                    <TableCell
-                                                        align="right">{keyword("twitter_user_name_13")}</TableCell>
-                                                    <TableCell
-                                                        align="right">{keyword("twitter_user_name_5")}</TableCell>
-                                                </TableRow>
-                                            </TableHead>
-                                            <TableBody>
-                                                {
-                                                    verificationComments.map((comment, key) => {
-                                                        return (
-                                                            <TableRow key={key}>
-                                                                <TableCell
-                                                                    align="right">{comment.publishedAt}
-                                                                </TableCell>
-                                                                <TableCell
-                                                                    align="right">{comment.textDisplay}
-                                                                </TableCell>
-                                                            </TableRow>);
-                                                    })
-                                                }
-                                            </TableBody>
-                                        </Table>
-                                    </AccordionDetails>
-                                </Accordion>
-                            }
                         </div>
                         <Box m={4}/>
                         {
