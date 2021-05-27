@@ -52,7 +52,6 @@ const FacebookResults = (props) => {
         
         const handleClick_next_page = (event) => {
     
-        //<OnClickInfo>ceva</OnClickInfo>
            if (nextPage!=="undefined" && nextPage!=="null"&& nextPage!==""){
             setCount(count+1)
             axios.get("http://mever.iti.gr"+nextPage)
@@ -64,7 +63,6 @@ const FacebookResults = (props) => {
 
       };
       const handleClick_previous_page = (event) => {
-        //<OnClickInfo>ceva</OnClickInfo>
       if (previousPage!=="undefined" && previousPage!=="null" && previousPage!==""){
         setCount(count-1)
         axios.get("http://mever.iti.gr"+previousPage)
@@ -72,10 +70,34 @@ const FacebookResults = (props) => {
             dispatch(setAnalysisComments(response.data));
         })
     }
+      };
+      const handleClick_previous_link_page = (event) => {
+        /*
+      if (previousPage!=="undefined" && previousPage!=="null" && previousPage!==""){
+        setCount(count-1)
+        axios.get("http://mever.iti.gr"+previousPage)
+        .then(response => {
+            dispatch(setAnalysisComments(response.data));
+        })
+        
+        
 
-    
-   
-       
+    }*/
+    console.log("next_Page",axios.get("http://mever.iti.gr"+nextPage))
+      };
+      const handleClick_next_link_page = (event) => {
+        /*
+           if (nextPage!=="undefined" && nextPage!=="null"&& nextPage!==""){
+            setCount(count+1)
+            axios.get("http://mever.iti.gr"+nextPage)
+            .then(response => {
+                dispatch(setAnalysisComments(response.data));
+            })
+           }
+           */
+           console.log("next_Page",axios.get("http://mever.iti.gr"+nextPage))
+           
+
       };
       
 
@@ -85,11 +107,9 @@ const FacebookResults = (props) => {
     console.log("Report ", report)
     //console.log("report.pagination.next ",report.pagination.next)
     const verificationComments = (report.comments) ? report.comments : [];
+    const linkComments=(report.link_comments) ? report.link_comments : [];
     const thumbnails = (report.thumbnails.others);
-    var nothing=[]
-    for (var j=0;j<report.comments.length;j++){
-        nothing[j]=report.comments[j].textDisplay
-    }
+    
     //console.log("nothing ", nothing)
     return (
 
@@ -231,9 +251,104 @@ const FacebookResults = (props) => {
                                                 align="right">{report.verification_cues.num_verification_comments}</TableCell>
                                         </TableRow>
                                     }
+
+                                    
                                 </TableBody>
                             </Table>
                         }
+
+
+
+                        <Box m={2}/>
+                        {
+                            //linkComments.length > 0 &&
+                            <Accordion>
+                                
+                                <AccordionSummary
+                                    expandIcon={<ExpandMoreIcon/>}
+                                    aria-controls="panel1bh-content"
+                                    id="panel1bh-header"
+                                >
+                                  
+                                    <Typography className={classes.heading}>{keyword("link_comments")}</Typography>
+                                    <Typography className={classes.secondaryHeading}> ...</Typography>
+                                </AccordionSummary>
+                                <AccordionDetails>
+                                    <Table className={classes.table} size="small" aria-label="a dense table">
+                                   
+                                        <TableHead>
+                                        <Typography align='right'>
+                                        
+                                        </Typography>
+                                        
+                                            <TableRow >
+                                                <TableCell class={styles.size}
+                                                    align="center">{keyword("twitter_user_name_13")}</TableCell>
+                                                <TableCell
+                                                    align="center" >{keyword("twitter_user_name_5")}</TableCell>
+                                            </TableRow>
+                                        </TableHead>
+                                        
+                                        <TableBody className={styles.container}>
+                                        
+                                            {
+                                                linkComments.map((comment, key) => {
+                                                 
+                                                    return (
+                                                        
+                                                       
+                                                        
+                                                        <TableRow key={key} >
+                                             
+                                                            <TableCell 
+                                                                align="center" size="small"  >{comment.publishedAt}
+                                                            </TableCell>
+                                                            <TableCell 
+                                                                align="left" size="small">{comment.textDisplay}
+                                                            </TableCell>
+                                                            
+                                                        </TableRow>
+    
+                                                        );
+                                                })
+                                            }
+                                            
+
+                                            </TableBody>
+                                            
+                                    </Table>
+                                           
+                                </AccordionDetails>
+                            </Accordion>
+
+
+                        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                         
                         
                         <Box m={2}/>
@@ -302,10 +417,10 @@ const FacebookResults = (props) => {
                                      
                                 </Box>
                                 <Button  variant='contained' aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick_previous_page}  >
-                                {keyword("next_button")}
+                                {keyword("previous_button")}
                                     </Button>
                                     <Button  variant='contained' aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick_next_page} >
-                                    {keyword("previous_button")}
+                                    {keyword("next_button")}
                                     </Button>
                             </Accordion>
 
