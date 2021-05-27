@@ -47,9 +47,9 @@ const myTheme = {
 
 
     // submenu icons
-    'submenu.normalIcon.path': '../dist/svg/icon-a.svg',
+    'submenu.normalIcon.path': icona,
     'submenu.normalIcon.name': 'icon-a',
-    'submenu.activeIcon.path': '../dist/svg/icon-c.svg',
+    'submenu.activeIcon.path': iconc,
     'submenu.activeIcon.name': 'icon-c',
     'submenu.iconSize.width': '64px',
     'submenu.iconSize.height': '64px',
@@ -194,6 +194,7 @@ const ImageResult = () => {
                 >
                     <Grid item>
                         <Button color="primary" variant="contained" onClick={handleOpen}>
+
                             {
                                 keyword("edit_image")
                             }

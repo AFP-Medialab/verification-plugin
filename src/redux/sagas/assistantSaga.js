@@ -20,8 +20,8 @@ import {
 } from "../actions/tools/assistantActions";
 
 import {all, call, fork, put, select, takeLatest} from 'redux-saga/effects'
-import useAssistantApi from "../../components/NavItems/Assistant/AssistantApiHandlers/useAssistantApi";
-import useDBKFApi from "../../components/NavItems/Assistant/AssistantApiHandlers/useDBKFApi";
+import assistantApiCalls from "../../components/NavItems/Assistant/AssistantApiHandlers/useAssistantApi";
+import DBKFApi from "../../components/NavItems/Assistant/AssistantApiHandlers/useDBKFApi";
 import {
     CONTENT_TYPE,
     KNOWN_LINK_PATTERNS,
@@ -36,8 +36,8 @@ import {
 /**
  * APIs
  **/
-const dbkfAPI = useDBKFApi()
-const assistantApi = useAssistantApi()
+const dbkfAPI = DBKFApi()
+const assistantApi = assistantApiCalls()
 
 
 /**

@@ -1,7 +1,7 @@
 import {useDispatch} from "react-redux";
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 import Paper from "@material-ui/core/Paper";
-import React from "react";
+import React,{ useState } from "react";
 import CloseResult from "../../../../Shared/CloseResult/CloseResult";
 import {cleanAnalysisState} from "../../../../../redux/actions/tools/analysisActions";
 import Typography from "@material-ui/core/Typography";
@@ -24,25 +24,95 @@ import OnClickInfo from "../../../../Shared/OnClickInfo/OnClickInfo";
 import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Analysis.tsv";
 import MyMap from "../../../../Shared/MyMap/MyMap";
+
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
+import styles from './layout.module.css';
+import MaterialTable  from 'material-table';
+import axios from "axios"
+import {setAnalysisComments} from "../../../../../redux/actions/tools/analysisActions";
+
 
 const FacebookResults = (props) => {
     const classes = useMyStyles();
     const keyword = useLoadLanguage("components/NavItems/tools/Analysis.tsv", tsv);
-
-
+    const [count, setCount] = useState(1);
+    
+    
     const reverseSearch = (website) => {
         for (let image of thumbnails) {
             ImageReverseSearch(website, image.url);
         }
     };
+   
+    
+ 
+        var nextPage=props.report.pagination.next
+        var previousPage=props.report.pagination.previous
+
+        console.log(previousPage)
+        
+        const handleClick_next_page = (event) => {
+    
+           if (nextPage!=="undefined" && nextPage!=="null"&& nextPage!==""){
+            setCount(count+1)
+            axios.get("http://mever.iti.gr"+nextPage)
+            .then(response => {
+                dispatch(setAnalysisComments(response.data));
+            })
+           }
+           
+
+      };
+      const handleClick_previous_page = (event) => {
+      if (previousPage!=="undefined" && previousPage!=="null" && previousPage!==""){
+        setCount(count-1)
+        axios.get("http://mever.iti.gr"+previousPage)
+        .then(response => {
+            dispatch(setAnalysisComments(response.data));
+        })
+    }
+      };
+      const handleClick_previous_link_page = (event) => {
+        /*
+      if (previousPage!=="undefined" && previousPage!=="null" && previousPage!==""){
+        setCount(count-1)
+        axios.get("http://mever.iti.gr"+previousPage)
+        .then(response => {
+            dispatch(setAnalysisComments(response.data));
+        })
+        
+        
+
+    }*/
+    console.log("next_Page",axios.get("http://mever.iti.gr"+nextPage))
+      };
+      const handleClick_next_link_page = (event) => {
+        /*
+           if (nextPage!=="undefined" && nextPage!=="null"&& nextPage!==""){
+            setCount(count+1)
+            axios.get("http://mever.iti.gr"+nextPage)
+            .then(response => {
+                dispatch(setAnalysisComments(response.data));
+            })
+           }
+           */
+           console.log("next_Page",axios.get("http://mever.iti.gr"+nextPage))
+           
+
+      };
+      
+
 
     const dispatch = useDispatch();
     const report = props.report;
+    console.log("Report ", report)
+    //console.log("report.pagination.next ",report.pagination.next)
     const verificationComments = (report.comments) ? report.comments : [];
+    const linkComments=(report.link_comments) ? report.link_comments : [];
     const thumbnails = (report.thumbnails.others);
-
+    
+    //console.log("nothing ", nothing)
     return (
 
         <div>
@@ -156,9 +226,192 @@ const FacebookResults = (props) => {
                                             <TableCell align="right">{report.video.created_time}</TableCell>
                                         </TableRow>
                                     }
+
+                                    
                                 </TableBody>
                             </Table>
                         }
+                        <Box m={2}/>
+                        {
+                            //linkComments.length > 0 &&
+                            <Accordion>
+                                
+                                <AccordionSummary
+                                    expandIcon={<ExpandMoreIcon/>}
+                                    aria-controls="panel1bh-content"
+                                    id="panel1bh-header"
+                                >
+                                  
+                                    <Typography className={classes.heading}>{keyword("link_comments")}</Typography>
+                                    <Typography className={classes.secondaryHeading}> ...</Typography>
+                                </AccordionSummary>
+                                <AccordionDetails>
+                                    <Table className={classes.table} size="small" aria-label="a dense table">
+                                   
+                                        <TableHead>
+                                        <Typography align='right'>
+                                        
+                                        </Typography>
+                                        
+                                            <TableRow >
+                                                <TableCell class={styles.size}
+                                                    align="center">{keyword("twitter_user_name_13")}</TableCell>
+                                                <TableCell
+                                                    align="center" >{keyword("twitter_user_name_5")}</TableCell>
+                                            </TableRow>
+                                        </TableHead>
+                                        
+                                        <TableBody className={styles.container}>
+                                        
+                                            {
+                                                linkComments.map((comment, key) => {
+                                                 
+                                                    return (
+                                                        
+                                                       
+                                                        
+                                                        <TableRow key={key} >
+                                             
+                                                            <TableCell 
+                                                                align="center" size="small"  >{comment.publishedAt}
+                                                            </TableCell>
+                                                            <TableCell 
+                                                                align="left" size="small">{comment.textDisplay}
+                                                            </TableCell>
+                                                            
+                                                        </TableRow>
+    
+                                                        );
+                                                })
+                                            }
+                                            
+
+                                            </TableBody>
+                                            
+                                    </Table>
+                                           
+                                </AccordionDetails>
+                            </Accordion>
+
+
+                        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                        
+                        
+                        <Box m={2}/>
+                        {
+                            verificationComments.length > 0 &&
+                            <Accordion>
+                                
+                                <AccordionSummary
+                                    expandIcon={<ExpandMoreIcon/>}
+                                    aria-controls="panel1bh-content"
+                                    id="panel1bh-header"
+                                >
+                                  
+                                    <Typography className={classes.heading}>{keyword("api_comments")}</Typography>
+                                    <Typography className={classes.secondaryHeading}> ...</Typography>
+                                </AccordionSummary>
+                                <AccordionDetails>
+                                    <Table className={classes.table} size="small" aria-label="a dense table">
+                                   
+                                        <TableHead>
+                                        <Typography align='right'>
+                                        
+                                        </Typography>
+                                        
+                                            <TableRow >
+                                                <TableCell class={styles.size}
+                                                    align="center">{keyword("twitter_user_name_13")}</TableCell>
+                                                <TableCell
+                                                    align="center" >{keyword("twitter_user_name_5")}</TableCell>
+                                            </TableRow>
+                                        </TableHead>
+                                        
+                                        <TableBody className={styles.container} /* class="fixed_headers" */>
+                                        
+                                            {
+                                                verificationComments.map((comment, key) => {
+                                                  //  console.log("comment ", comment)
+                                                 //   console.log("key ", key)
+
+                                                    
+                                                    return (
+                                                        
+                                                       
+                                                        
+                                                        <TableRow key={key} >
+                                             
+                                                            <TableCell 
+                                                                align="center" size="small"  >{comment.publishedAt}
+                                                            </TableCell>
+                                                            <TableCell 
+                                                                align="left" size="small">{comment.textDisplay}
+                                                            </TableCell>
+                                                        </TableRow>
+    
+                                                        );
+                                                })
+                                            }
+                                            
+
+                                            </TableBody>
+                                            
+                                    </Table>
+                                           
+                                </AccordionDetails>
+                                <Box>{keyword("page_number")+count}
+                                     
+                                </Box>
+                                <Button  variant='contained' aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick_previous_page}  >
+                                {keyword("previous_button")}
+                                    </Button>
+                                    <Button  variant='contained' aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick_next_page} >
+                                    {keyword("next_button")}
+                                    </Button>
+                            </Accordion>
+
+
+                        }
+                        
+                    </div>
+                    <Box m={4}/>
+                    {
+                        report.mentioned_locations &&
+                        report.mentioned_locations.detected_locations &&
+                        report.mentioned_locations.detected_locations.length > 0 &&
+                        <div>
+                            <MyMap locations={report.mentioned_locations.detected_locations}/>
+                            <Box m={4}/>
+                        </div>
+                    }
+                    {
+                        thumbnails !== undefined &&
                         <div>
                             <Box m={4}/>
                             <Typography variant={"h6"}>

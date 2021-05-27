@@ -815,7 +815,7 @@ const ForensicResults = (props) => {
                             anchorEl={anchorGifPopover}
                             onClose={closeGifPopover}
                             anchorReference="anchorPosition"
-                            anchorPosition={{ top: '0', left: '0' }}
+                            anchorPosition={{ top: 0, left: 0 }}
                             PaperProps={{
                                 style: {
                                     width: '70vw',
@@ -844,7 +844,7 @@ const ForensicResults = (props) => {
                                     container
                                     direction="row"
                                     justify="space-between"
-                                    alignItems="strech">
+                                    alignItems="stretch">
 
                                     <Typography variant="h6" gutterBottom>
                                         Export the result as a GIF

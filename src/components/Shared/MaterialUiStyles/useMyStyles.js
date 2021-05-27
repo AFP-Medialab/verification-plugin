@@ -362,7 +362,7 @@ const useMyStyles = makeStyles(theme => ({
         color: theme.palette.secondary,
         position: "relative",
         opacity: 0.7,
-        top: theme.spacing.unit,
+        top: theme.spacing(1),
         width: theme.typography.h5.fontSize,
         height: theme.typography.h5.fontSize,
         marginRight: 3,
@@ -371,7 +371,7 @@ const useMyStyles = makeStyles(theme => ({
     svgIcon: {
         fill: theme.palette.primary,
         position: "relative",
-        top: theme.spacing.unit,
+        top: theme.spacing(1),
         width: theme.typography.h3.fontSize,
         height: theme.typography.h3.fontSize,
         marginRight: 7,
@@ -380,7 +380,7 @@ const useMyStyles = makeStyles(theme => ({
     toolTipWarning: {
         color: "red",
         position: "relative",
-        top: theme.spacing.unit,
+        top: theme.spacing(1),
         width: theme.typography.h5.fontSize,
         height: theme.typography.h5.fontSize,
         marginRight: 3,

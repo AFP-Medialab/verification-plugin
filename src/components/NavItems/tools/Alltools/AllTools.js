@@ -157,7 +157,7 @@ const AllTools = (props) => {
 
                     <Box m={2}/>
 
-                    <Grid container justify="left" spacing={2} className={classes.toolCardsContainer}>
+                    <Grid container justify="flex-start" spacing={2} className={classes.toolCardsContainer}>
                         
                             {
                                 toolsVideo.map((value, key) => {
@@ -205,7 +205,7 @@ const AllTools = (props) => {
 
                     <Box m={2} />
 
-                    <Grid container justify="left" spacing={2} className={classes.toolCardsContainer}>
+                    <Grid container justify="flex-start" spacing={2} className={classes.toolCardsContainer}>
 
                         {
                             toolsImages.map((value, key) => {
@@ -251,7 +251,7 @@ const AllTools = (props) => {
 
                     <Box m={2} />
 
-                    <Grid container justify="left" spacing={2} className={classes.toolCardsContainer}>
+                    <Grid container justify="flex-start" spacing={2} className={classes.toolCardsContainer}>
 
                         {
                             toolsSearch.map((value, key) => {
@@ -297,7 +297,7 @@ const AllTools = (props) => {
 
                     <Box m={2} />
 
-                    <Grid container justify="left" spacing={2} className={classes.toolCardsContainer}>
+                    <Grid container justify="flex-start" spacing={2} className={classes.toolCardsContainer}>
 
                         {
                             toolsData.map((value, key) => {

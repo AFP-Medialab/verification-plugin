@@ -1,8 +1,8 @@
 import {all, call, fork, put, select, takeLatest} from "redux-saga/effects";
 import {setOcrErrorKey, setOcrResult} from "../actions/tools/ocrActions";
-import useAssistantApi from "../../components/NavItems/Assistant/AssistantApiHandlers/useAssistantApi";
+import assistantApiCalls from "../../components/NavItems/Assistant/AssistantApiHandlers/useAssistantApi";
 
-const assistantApi = useAssistantApi()
+const assistantApi = assistantApiCalls()
 
 function* getImageOcrSaga() {
     yield takeLatest(["SET_OCR_INPUT", "CLEAN_OCR"], handleOcrCall)
