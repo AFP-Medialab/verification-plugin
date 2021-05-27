@@ -15,10 +15,17 @@ import {submissionEvent} from "../../../Shared/GoogleAnalytics/GoogleAnalytics";
 import {useParams} from "react-router-dom";
 import {KNOWN_LINKS} from "../../Assistant/AssistantRuleBook";
 
+import Card from "@material-ui/core/Card";
+import CardHeader from "@material-ui/core/CardHeader";
+import { ReactComponent as VideoRightsIcon } from '../../../NavBar/images/SVG/Video/Video_rights.svg';
+import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
+import Grid from "@material-ui/core/Grid";
+
 const VideoRights = () => {
     const {url} = useParams();
     const classes = useMyStyles();
     const keyword = useLoadLanguage("components/NavItems/tools/VideoRights.tsv", tsv);
+    const keywordAllTools = useLoadLanguage("components/NavItems/tools/Alltools.tsv", tsv);
 
     const resultUrl = useSelector(state => state.videoRights.url);
     const resultResult = useSelector(state => state.videoRights.result);
@@ -53,30 +60,58 @@ const VideoRights = () => {
 
     return (
         <div>
-            <Paper className={classes.root}>
-                <CustomTile text={keyword("copyright_title")}/>
-                <br/>
-                <TextField
-                    value={input}
-                    id="standard-full-width"
-                    label={keyword("copyright_input")}
-                    placeholder="URL"
-                    fullWidth
-                    disabled={isLoading}
-                    onChange={e => setInput(e.target.value)}
+            <HeaderTool name={keywordAllTools("navbar_rights")} description={keywordAllTools("navbar_rights_description")} icon={<VideoRightsIcon style={{ fill: "#51A5B2" }} />} />
+
+            <Card>
+                <CardHeader
+                    title={keyword("cardheader_link")}
+                    className={classes.headerUpladedImage}
                 />
-                <Box m={2}/>
-                <Button
-                    variant="contained"
-                    color="primary"
-                    disabled={isLoading}
-                    onClick={submitForm}
-                >
-                    {keyword("button_submit")}
-                </Button>
-                <Box m={1}/>
-                <LinearProgress hidden={!isLoading}/>
-            </Paper>
+                <div className={classes.root2}>
+
+                    <Grid
+                        container
+                        direction="row"
+                        spacing={3}
+                        alignItems="center"
+                    >
+
+                        <Grid item xs>
+                            <TextField
+                                value={input}
+                                id="standard-full-width"
+                                label={keyword("copyright_input")}
+                                placeholder={keyword("copyright_input_placeholder")}
+                                fullWidth
+                                disabled={isLoading}
+                                variant="outlined"
+                                onChange={e => setInput(e.target.value)}
+                            />
+
+                        </Grid>
+
+                        <Grid item>
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                disabled={isLoading}
+                                onClick={submitForm}
+                            >
+                                {keyword("button_submit")}
+                            </Button>
+
+                        </Grid>
+
+                    </Grid>
+                    
+                    <Box m={3} hidden={!isLoading}/>
+                    <LinearProgress hidden={!isLoading}/>
+
+                </div>
+            </Card>
+
+            <Box m={3} />
+
             {
                 resultResult &&
                 <VideoRightsResults result={resultResult}/>

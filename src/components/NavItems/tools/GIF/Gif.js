@@ -18,6 +18,11 @@ import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/CheckGIF.tsv";
 import LinearProgress from '@material-ui/core/LinearProgress';
 
+import LinkIcon from '@material-ui/icons/Link';
+import FileIcon from '@material-ui/icons/InsertDriveFile';
+
+import TextField from '@material-ui/core/TextField';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 const Gif = () => {
 
@@ -126,28 +131,60 @@ const Gif = () => {
         setShowDropZone2(false)
     }
 
+
+
+    //URL
+    const [imageURL1, setImageURL1] = useState("");
+    const [imageURL2, setImageURL2] = useState("");
+
+    //1=Images | 2=URL
+    const [modeHomo, setModeHomo] = useState(0);
+
     //Code to enable the button to upload the images
-    if (imageDropped1 != null && imageDropped2 != null && !readyToSend) {
+    if (imageURL1 != "" && imageURL2 != "" && !readyToSend && !loading & !showHomo) {
         //console.log("Ready to send"); //DEBUG
         setReadyToSend(true);
     }
 
+
+
+    //Code to enable the button to upload the images
+    if (imageDropped1 != null && imageDropped2 != null && !readyToSend && !loading & !showHomo) {
+        console.log("Ready to send"); //DEBUG
+        setReadyToSend(true);
+    }
+
     //Function to prepare the files to trigger the submission
+    const handleSubmissionURL = () => {
+        var files = {
+            "url_0": imageURL1,
+            "url_1": imageURL2,
+        }
+        setModeHomo(2);
+        setFilesToSend(files);
+        setReadyToSend(false);
+    };
+
+
     const handleSubmission = () => {
         var files = {
             "file1": selectedFile1,
             "file2": selectedFile2,
         }
-
+        setModeHomo(1);
         setFilesToSend(files);
+        setReadyToSend(false);
     };
 
+
+
     //Call to the API
-    useGetHomographics(filesToSend, showHomo);
+    useGetHomographics(filesToSend, showHomo, modeHomo);
 
     //Loading bar
-    if (loading && !readyToSend){
+    if (loading && readyToSend){
         setReadyToSend(false);
+        console.log("Disable button"); //DEBUG
     }
 
 
@@ -231,12 +268,57 @@ const Gif = () => {
 
 
 
+
+    const [classButtonURL, setClassButtonURL] = useState(null);
+    const [classButtonLocal, setClassButtonLocal] = useState(null);
+
+    const [classIconURL, setClassIconURL] = useState(classes.bigButtonIcon);
+    const [classIconLocal, setClassIconLocal] = useState(classes.bigButtonIcon);
+
+    const [showURL, setShowURL] = useState(false);
+    const [showLocal, setShowLocal] = useState(false);
+
+    if (!showURL && !showLocal && classButtonURL != classes.bigButtonDiv && classButtonLocal != classes.bigButtonDiv){
+        setClassButtonURL(classes.bigButtonDiv);
+        setClassButtonLocal(classes.bigButtonDiv);
+    }
+
+
+    const clickURL = (event) => {
+        setClassButtonURL(classes.bigButtonDivSelectted);
+        setClassIconURL(classes.bigButtonIconSelectted);
+
+        setClassButtonLocal(classes.bigButtonDiv);
+        setClassIconLocal(classes.bigButtonIcon);
+
+        setShowURL(true);
+        setShowLocal(false);
+    }
+
+    const clickLocal = (event) => {
+        setClassButtonURL(classes.bigButtonDiv);
+        setClassIconURL(classes.bigButtonIcon);
+
+        setClassButtonLocal(classes.bigButtonDivSelectted);
+        setClassIconLocal(classes.bigButtonIconSelectted);
+
+        setShowURL(false);
+        setShowLocal(true);
+    }
+
+    
+
+
+
+
+
+
     //HTML Code
     //============================================================================================
 
     return (
         <div >
-            <ThemeProvider theme={theme}>
+            
 
                 {//=== Title ===
                 }
@@ -265,6 +347,436 @@ const Gif = () => {
                 {//=== Load of the images ===
                 }
 
+
+                <Card>
+                    <CardHeader
+                        title={
+                            <Grid
+                                container
+                                direction="row"
+                                justify="space-between"
+                                alignItems="center">
+
+                            <span>{keyword("cardTitle_source")}</span>
+
+                            </Grid>
+                        }
+                        className={classes.headerUpladedImage}
+                    />
+
+                    <Box p={3} >
+
+                        <Grid container spacing={3} alignItems="center">
+                            <Grid item xs={6}>
+ 
+                                <Box p={3} className={classButtonURL} onClick={clickURL}>
+                                    <Grid
+                                        container
+                                        direction="row"
+                                        alignItems="center"
+
+                                    >
+                                        <Grid item>
+                                            <Box ml={1} mr={2}>
+                                                <LinkIcon className={classIconURL} />
+                                            </Box>
+
+                                        </Grid>
+
+                                        <Grid item>
+                                            <Grid
+                                                container
+                                                direction="column"
+                                                justify="flex-start"
+                                                alignItems="flex-start"
+                                            >
+                                                <Grid item>
+                                                    <Typography variant="body1" style={{ fontWeight: 600 }}>{keyword("title_URL")}</Typography>
+                                                </Grid>
+
+                                                <Box mt={1} />
+
+                                                <Grid item>
+                                                    <Typography variant="body1">{keyword("description_URL")}</Typography>
+                                                </Grid>
+
+                                            </Grid>
+                                        </Grid>
+
+                                    </Grid>
+                                </Box>
+
+                            </Grid>
+
+
+                            <Grid item xs={6}>
+
+                                <Box p={3} className={classButtonLocal} onClick={clickLocal}>
+                                    <Grid
+                                        container
+                                        direction="row"
+                                        alignItems="center"
+
+                                    >
+                                        <Grid item>
+                                            <Box ml={1} mr={2}>
+                                                <FileIcon className={classIconLocal} />
+                                            </Box>
+
+                                        </Grid>
+
+                                        <Grid item>
+                                            <Grid
+                                                container
+                                                direction="column"
+                                                justify="flex-start"
+                                                alignItems="flex-start"
+                                            >
+                                                <Grid item>
+                                                    <Typography variant="body1" style={{ fontWeight: 600 }}>{keyword("title_local")}</Typography>
+                                                </Grid>
+
+                                                <Box mt={1} />
+
+                                                <Grid item>
+                                                    <Typography variant="body1">{keyword("description_local")}</Typography>
+                                                </Grid>
+
+                                            </Grid>
+                                        </Grid>
+
+                                    </Grid>
+                                </Box>
+
+                            </Grid>
+
+                        </Grid>
+
+                    </Box>
+
+                    
+
+                </Card>
+
+                <Box m={3} />
+
+                {(showLocal || showURL) &&
+
+                <Card>
+                    <CardHeader
+                        title={
+                            <Grid
+                                container
+                                direction="row"
+                                justify="space-between"
+                                alignItems="center">
+
+                                <span>{keyword("title_gifcreation")}</span>
+
+                            </Grid>
+                        }
+                        className={classes.headerUpladedImage}
+                    />
+
+                    <Box p={3} >
+
+                        <Grid container spacing={3}>
+                            <Grid item xs={6} style={{ borderRight: '0.1em solid #ECECEC', padding: '0.5em' }}>
+                                <Box p={2}>
+
+                                {showLocal &&
+                                    <div>
+                                        <Typography variant="h6" className={classes.headingGif}>
+                                            {keyword("title_image1")}
+                                        </Typography>
+
+                                        <Box m={2} />
+
+                                        {!showDropZone1 &&
+                                            <img src={imageDropped1} className={classes.imageDropped} alt="" />
+                                        }
+
+                                        {showDropZone1 &&
+                                            <DragAndDrop handleDrop={(files) => handleDrop(files)}>
+
+                                                <Grid
+                                                    container
+                                                    spacing={0}
+                                                    direction="column"
+                                                    alignItems="center"
+                                                    justify="center"
+                                                    className={classes.dropZone}
+                                                    
+                                                >
+
+                                                    <Grid item className={classes.inputContainer}>
+                                                        <input
+                                                            accept="image/*"
+                                                            className={classes.input}
+                                                            style={{ display: 'none' }}
+                                                            id="raised-button-file"
+                                                            multiple
+                                                            type="file"
+                                                            onChange={(e) => handleInput(e)}
+                                                        />
+                                                        <div>
+                                                            <Box textAlign="center">
+                                                                <label htmlFor="raised-button-file" className={classes.inputLabel}>
+                                                                    <span>{keyword("body_droparea")}</span>
+                                                                </label>
+                                                            </Box>
+                                                        </div>
+
+                                                    </Grid>
+
+                                                </Grid>
+
+                                            </DragAndDrop>
+                                        }
+
+                                        <Box m={4} />
+
+                                        <Typography variant="h6" className={classes.headingGif}>
+                                            {keyword("title_image2")}
+                                        </Typography>
+
+                                        <Box m={2} />
+
+                                        {!showDropZone2 &&
+                                            <img src={imageDropped2} className={classes.imageDropped} alt="" />
+                                        }
+
+                                        {showDropZone2 &&
+                                            <DragAndDrop handleDrop={(files) => handleDrop2(files)}>
+
+                                                <Grid
+                                                    container
+                                                    spacing={0}
+                                                    direction="column"
+                                                    alignItems="center"
+                                                    justify="center"
+                                                    className={classes.dropZone}
+                                                >
+
+                                                    <Grid item className={classes.inputContainer}>
+                                                        <input
+                                                            accept="image/*"
+                                                            className={classes.input}
+                                                            style={{ display: 'none' }}
+                                                            id="raised-button-file"
+                                                            multiple
+                                                            type="file"
+                                                            onChange={(e) => handleInput2(e)}
+                                                        />
+                                                        <div>
+                                                            <Box p={2} textAlign="center">
+                                                                <label htmlFor="raised-button-file" className={classes.inputLabel}>
+                                                                    <span>{keyword("body_droparea")}</span>
+                                                                </label>
+                                                            </Box>
+                                                        </div>
+                                                    </Grid>
+
+                                                </Grid>
+
+                                            </DragAndDrop>
+                                        }
+
+                                        <Box m={4} />
+
+                                        <Button variant="contained" color="primary" fullWidth onClick={handleSubmission} disabled={!readyToSend}>
+                                            {keyword("button_loadImages")}
+                                        </Button>
+                                    </div>
+                                }
+
+                                {showURL &&
+                                    <div>
+                                        <Typography variant="h6" className={classes.headingGif}>
+                                            {keyword("title_image1")}
+                                        </Typography>
+
+                                        <Box m={2} />
+                                        
+                                        <TextField
+                                            id="outlined-multiline-static"
+                                            label={keyword("input_label1")}
+                                            placeholder={keyword("input_placeholder")}
+                                            multiline
+                                            rows={8}
+                                            fullWidth
+                                            variant="outlined"
+                                            onChange={e => {
+                                                setImageURL1(e.target.value)
+                                            }}
+                                        />
+                                        
+
+                                        <Box m={4} />
+
+                                        <Typography variant="h6" className={classes.headingGif}>
+                                            {keyword("title_image2")}
+                                        </Typography>
+
+                                        <Box m={2} />
+
+                                        <TextField
+                                            id="outlined-multiline-static"
+                                            label={keyword("input_label1")}
+                                            placeholder={keyword("input_placeholder")}
+                                            multiline
+                                            rows={8}
+                                            fullWidth
+                                            variant="outlined"
+                                            onChange={e => {
+                                                setImageURL2(e.target.value)
+                                            }}
+                                        />
+
+                                        <Box m={4} />
+
+                                    <Button variant="contained" color="primary" fullWidth onClick={handleSubmissionURL} disabled={!readyToSend}>
+                                            {keyword("button_loadImages")}
+                                        </Button>
+                                        
+                                    </div>
+                                }
+
+                                </Box>
+
+                            </Grid>
+
+
+                            <Grid item xs={6}>
+                                
+                                    
+                                    {!showHomo && !loading &&
+                                        
+                                        <Grid
+                                            container
+                                            direction="column"
+                                            justify="center"
+                                            alignItems="center"
+                                            className={classes.height100}
+                                        >
+                                            <IconGif style={{ fill: "#C9C9C9" }} />
+                                            <Box p={4}>
+                                                <Typography variant="h6" style={{ color: "#C9C9C9" }} align="center">
+                                                    {keyword("text_preview")}
+                                                </Typography>
+                                            </Box>
+                                        
+                                        </Grid>
+                                    }
+
+
+
+                                    {loading &&
+                                        <Grid
+                                            container
+                                            direction="column"
+                                            justify="center"
+                                            alignItems="center"
+                                            className={classes.height100}
+                                        >
+                                            <CircularProgress />
+                                        </Grid>
+                                    }
+
+                                    {showHomo &&
+                                    
+                                        <Grid
+                                            container
+                                            direction="column"
+                                            justify="space-between"
+                                            alignItems="flex-start"
+                                            className={classes.height100}
+                                        >
+                                            
+                                            <Typography variant="h6" className={classes.headingGif}>
+                                                {keyword("title_preview")}
+                                            </Typography>
+
+                                            <Box justifyContent="center" className={classes.wrapperImageFilter}>
+
+                                                <CardMedia
+                                                    component="img"
+                                                    className={classes.imagesGifImage}
+                                                    image={homoImg1}
+                                                />
+                                                {true &&
+                                                    <CardMedia
+                                                        component="img"
+                                                        className={classes.imagesGifFilter}
+                                                        image={homoImg2}
+                                                        id="gifFilterElement"
+                                                    />
+                                                }
+                                            </Box>
+
+
+
+                                            <Grid
+                                                container
+                                                direction="column"
+                                                justify="center"
+                                                alignItems="center"
+                                            >
+                                                <Box m={4} />
+
+                                                <Typography gutterBottom>
+                                                    {keyword("slider_title")}
+                                                </Typography>
+
+
+                                                <Slider
+                                                    defaultValue={-1100}
+                                                    aria-labelledby="discrete-slider"
+                                                    step={300}
+                                                    marks={marks}
+                                                    min={-1700}
+                                                    max={-500}
+                                                    scale={x => -x}
+                                                    onChange={(e, val) => changeSpeed(val)}
+                                                    onChangeCommitted={(e) => commitChangeSpeed(speed)}
+                                                    className={classes.sliderClass}
+                                                />
+
+
+
+                                                <Box m={2} />
+
+
+                                                <Button variant="contained" color="primary" fullWidth onClick={(e) => handleDownloadGif(e)}>
+                                                    {keyword("button_download")}
+                                                </Button>
+                                                <Box mt={2} />
+                                            </Grid>
+
+                                        
+                                        </Grid>
+                                        
+
+                                    }
+                                
+
+                            </Grid>
+
+                        </Grid>
+
+                    </Box>
+
+
+
+                </Card>
+
+                }
+
+                
+
+{ /*
+
+<Box m={3} />
                 <Card>
                     <CardHeader
                         title={
@@ -320,7 +832,7 @@ const Gif = () => {
                                                     onChange={(e) => handleInput(e)}
                                                 />
                                                 <div>
-                                                <Box p={2} textAlign="center">
+                                                    <Box p={2} textAlign="center">
                                                         <label htmlFor="raised-button-file" className={classes.inputLabel}>
                                                             <span>{keyword("body_droparea")}</span>
                                                         </label>
@@ -488,9 +1000,14 @@ const Gif = () => {
 
                         </Box>
                     </Card>
+
                 }
 
-            </ThemeProvider>
+
+                */
+            }
+
+            
         </div>);
 };
 export default Gif;

@@ -24,12 +24,19 @@ import {submissionEvent} from "../../../Shared/GoogleAnalytics/GoogleAnalytics";
 import OnClickInfo from "../../../Shared/OnClickInfo/OnClickInfo";
 import {useParams} from 'react-router-dom'
 
+import Card from "@material-ui/core/Card";
+import CardHeader from "@material-ui/core/CardHeader";
+import { ReactComponent as ThumbnailsIcon } from '../../../NavBar/images/SVG/Video/Thumbnails.svg';
+import Grid from "@material-ui/core/Grid";
+import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
+
 
 const Thumbnails = () => {
     const {url} = useParams();
 
     const classes = useMyStyles();
     const keyword = useLoadLanguage("components/NavItems/tools/Thumbnails.tsv", tsv);
+    const keywordAllTools = useLoadLanguage("components/NavItems/tools/Alltools.tsv", tsv);
 
     const resultUrl = useSelector(state => state.thumbnails.url);
     const resultData = useSelector(state => state.thumbnails.result);
@@ -167,78 +174,113 @@ const Thumbnails = () => {
 
     return (
         <div>
-            <Paper className={classes.root}>
-                <CustomTile text={keyword("youtube_title")}/>
-                <br/>
-                <TextField
-                    id="standard-full-width"
-                    label={keyword("api_input")}
-                    placeholder={keyword("youtube_input")}
-                    fullWidth
-                    {...input}
+            <HeaderTool name={keywordAllTools("navbar_thumbnails")} description={keywordAllTools("navbar_thumbnails_description")} icon={<ThumbnailsIcon style={{ fill: "#51A5B2" }} />} />
+
+            <Card>
+                <CardHeader
+                    title={keyword("cardheader_link")}
+                    className={classes.headerUpladedImage}
                 />
-                <Box m={2}/>
-                <FormControl component="fieldset">
-                    <FormGroup row>
-                        {
-                            searchEngines.map((item, key) => {
-                                return (
-                                    <FormControlLabel
-                                        key={key}
-                                        control={
-                                            <Checkbox
-                                                checked={selectedValue[item.title]}
-                                                value={item.title}
-                                                onChange={e => handleChange(e)}
-                                                color="primary"
-                                            />
-                                        }
-                                        label={item.text}
-                                        labelPlacement="end"
+                <Box p={3}>
+
+                    <Grid
+                        container
+                        direction="row"
+                        spacing={3}
+                        alignItems="center"
+                    >
+                        <Grid item xs>
+                            <TextField
+                                id="standard-full-width"
+                                label={keyword("youtube_input")}
+                                placeholder={keyword("api_input")}
+                                fullWidth
+                                variant="outlined"
+                                {...input}
+                            />
+
+                        </Grid>
+
+                        <Grid item>
+                            {<FormControlLabel
+                                control={
+                                    <Checkbox
+                                        checked={selectedValue["openTabs"]}
+                                        value={"openTabs"}
+                                        onChange={e => handleChange(e)}
+                                        color="primary"
                                     />
-                                );
-                            })
-                        }
-                        {<FormControlLabel
-                            control={
-                                <Checkbox
-                                    checked={selectedValue["openTabs"]}
-                                    value={"openTabs"}
-                                    onChange={e => handleChange(e)}
-                                    color="primary"
-                                />
+                                }
+                                label={keyword("openTabs")}
+                                labelPlacement="end"
+                            />}
+                        </Grid>
+                        <Grid item>
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                onClick={submitForm}
+                            >
+                                {keyword("button_submit")}
+                            </Button>
+                        </Grid>
+                    
+                    </Grid>
+
+                    <Box m={2} />
+                    <FormControl component="fieldset">
+                        <FormGroup row>
+                            {
+                                searchEngines.map((item, key) => {
+                                    return (
+                                        <FormControlLabel
+                                            key={key}
+                                            control={
+                                                <Checkbox
+                                                    checked={selectedValue[item.title]}
+                                                    value={item.title}
+                                                    onChange={e => handleChange(e)}
+                                                    color="primary"
+                                                />
+                                            }
+                                            label={item.text}
+                                            labelPlacement="end"
+                                        />
+                                    );
+                                })
                             }
-                            label={keyword("openTabs")}
-                            labelPlacement="end"
-                        />}
-                    </FormGroup>
-                </FormControl>
-                <Box m={2}/>
-                <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={submitForm}
-                >
-                    {keyword("button_submit")}
-                </Button>
-            </Paper>
+                            
+                        </FormGroup>
+                    </FormControl>
+
+
+                </Box>
+            </Card>
+
+            <Box m={3} />
 
             {
                 resultData && resultData.length !== 0 &&
-                <Paper className={classes.root}>
-                    <CloseResult onClick={() => dispatch(cleanThumbnailsState())}/>
-                    <OnClickInfo keyword={"thumbnails_tip"}/>
-                    <Box m={2}/>
-                    <Button color={"primary"} onClick={() => toggleDetail()}>
-                    {
-                        keyword("show_result")
-                    }
-                    </Button>
-                    {
-                    showResult &&
-                    <ImageGridList list={resultData} handleClick={imageClick} height={height} cols={cols} />
-                    }
-                </Paper>
+                <Card>
+                    <CardHeader
+                        title={keyword("cardheader_results")}
+                        className={classes.headerUpladedImage}
+                    />
+                    <div className={classes.root2}>
+                        <CloseResult onClick={() => dispatch(cleanThumbnailsState())}/>
+                        <OnClickInfo keyword={"thumbnails_tip"}/>
+                        <Box m={2}/>
+                        <Button color={"primary"} onClick={() => toggleDetail()}>
+                        {
+                            keyword("show_result")
+                        }
+                        </Button>
+                        {
+                        showResult &&
+                        <ImageGridList list={resultData} handleClick={imageClick} height={height} cols={cols} />
+                        }
+                    </div>
+                </Card>
             }
         </div>);
 };

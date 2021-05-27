@@ -45,6 +45,7 @@ import classRoomIcon from "./images/navbar/classroom-off.png"
 import interactiveIcon from "./images/navbar/quiz-off.png"
 import aboutIcon from "./images/navbar/about-off.png"
 import ImageSearchIcon from '@material-ui/icons/ImageSearch';
+import FaceIcon from '@material-ui/icons/Face';
 
 import analysisIconOn from "./images/tools/video_logoOn.png"
 import analysisIconOff from "./images/tools/video_logoOff.png"
@@ -135,6 +136,7 @@ const NavBar = (props) => {
     const cookiesUsage = useSelector(state => state.cookies);
     const currentLang = useSelector(state => state.language);
     const defaultLanguage = useSelector(state => state.defaultLanguage);
+
 
     const dispatch = useDispatch();
 
@@ -332,8 +334,12 @@ const NavBar = (props) => {
     useEffect(() => {
         let supportedBrowserLang = getSupportedBrowserLanguage()
 
-        if (defaultLanguage !== null) {
-            if (defaultLanguage !== currentLang)  dispatch(changeLanguage(defaultLanguage))
+
+        if (defaultLanguage !== undefined) {
+            if (defaultLanguage !== currentLang) {
+                dispatch(changeLanguage(defaultLanguage))
+            } 
+
         }
         else if (supportedBrowserLang !== undefined && supportedBrowserLang !== currentLang) {
             dispatch(changeLanguage(supportedBrowserLang))

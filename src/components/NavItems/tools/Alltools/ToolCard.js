@@ -32,13 +32,17 @@ export class ToolCard extends Component {
 
         return (
 
-            <div 
+            <Box 
                 style={{
                     border: 'solid #E1E1E1 2px',
                     borderRadius: "10px",
                     width: "235px",
                     cursor: "pointer",
                     backgroundColor: "#ffffff",
+                    "&:hover": {
+                        border: 'solid #51A5B2 2px',
+
+                    },
             }}>
 
                 <Box p={2}>
@@ -103,7 +107,7 @@ export class ToolCard extends Component {
 
 
                 
-            </div>
+            </Box>
             
         )
     }

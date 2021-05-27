@@ -24,12 +24,18 @@ import {useParams} from "react-router-dom";
 
 import {CONTENT_TYPE, KNOWN_LINKS} from "../../Assistant/AssistantRuleBook";
 
+import Card from "@material-ui/core/Card";
+import CardHeader from "@material-ui/core/CardHeader";
+import { ReactComponent as MetadataIcon } from '../../../NavBar/images/SVG/Image/Metadata.svg';
+import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
+
 
 const Metadata = () => {
     const {url, type} = useParams();
 
     const classes = useMyStyles();
     const keyword = useLoadLanguage("components/NavItems/tools/Metadata.tsv", tsv);
+    const keywordAllTools = useLoadLanguage("components/NavItems/tools/Alltools.tsv", tsv);
 
     const resultUrl = useSelector(state => state.metadata.url);
     const resultData = useSelector(state => state.metadata.result);
@@ -92,58 +98,95 @@ const Metadata = () => {
 
     return (
         <div>
-            <Paper className={classes.root}>
-                <CustomTile text={keyword("metadata_content_title")}/>
-                <Box m={1}/>
-                <TextField
-                    value={input}
-                    id="standard-full-width"
-                    label={keyword("metadata_content_input")}
-                    style={{margin: 8}}
-                    placeholder={""}
-                    fullWidth
-                    onChange={e => setInput(e.target.value)}
+            <HeaderTool name={keywordAllTools("navbar_metadata")} description={keywordAllTools("navbar_metadata_description")} icon={<MetadataIcon style={{ fill: "#51A5B2" }} />} />
+
+            <Card>
+                <CardHeader
+                    title={keyword("cardheader_source")}
+                    className={classes.headerUpladedImage}
                 />
-                <Button>
-                    <label htmlFor="fileInputMetadata">
-                        <FolderOpenIcon/>
-                        <Typography variant={"subtitle2"}>{keyword("button_localfile")}</Typography>
-                    </label>
-                    <input id="fileInputMetadata" type="file" hidden={true} onChange={e => {
-                        setInput(URL.createObjectURL(e.target.files[0]));
-                    }}/>
-                </Button>
-                <Box m={1}/>
-                <Grid
-                    container
-                    direction="row"
-                    justify="center"
-                    alignItems="center"
-                    spacing={3}
-                >
-                    <RadioGroup aria-label="position" name="position" value={radioImage}
+                <Box p={3}>
+
+                    <Grid
+                        container
+                        direction="row"
+                        spacing={3}
+                        alignItems="center"
+                    >
+                        <Grid item xs>
+                            <TextField
+                                value={input}
+                                id="standard-full-width"
+                                label={keyword("metadata_content_input")}
+                                placeholder={keyword("metadata_content_input_placeholder")}
+                                fullWidth
+                                variant="outlined"
+                                onChange={e => setInput(e.target.value)}
+                            />
+                        </Grid>
+
+                        <Grid item>
+                            <RadioGroup aria-label="position" name="position" value={radioImage}
                                 onChange={() => setRadioImage(!radioImage)} row>
 
-                        <FormControlLabel
-                            value={true}
-                            control={<Radio color="primary"/>}
-                            label={keyword("metadata_radio_image")}
-                            labelPlacement="end"
-                        />
-                        <FormControlLabel
-                            value={false}
-                            control={<Radio color="primary"/>}
-                            label={keyword("metadata_radio_video")}
-                            labelPlacement="end"
-                        />
+                                <FormControlLabel
+                                    value={true}
+                                    control={<Radio color="primary" />}
+                                    label={keyword("metadata_radio_image")}
+                                    labelPlacement="end"
+                                />
+                                <FormControlLabel
+                                    value={false}
+                                    control={<Radio color="primary" />}
+                                    label={keyword("metadata_radio_video")}
+                                    labelPlacement="end"
+                                />
 
-                    </RadioGroup>
-                </Grid>
-                <Box m={2}/>
-                <Button variant="contained" color="primary" onClick={submitUrl}>
-                    {keyword("button_submit")}
-                </Button>
-            </Paper>
+                            </RadioGroup>
+                        </Grid>
+
+
+
+                        <Grid item>
+                            <Button variant="contained" color="primary" onClick={submitUrl}>
+                                {keyword("button_submit")}
+                            </Button>
+                        </Grid>
+
+                    </Grid>
+                    
+                    <Box m={1} />
+
+                    <Grid
+                        container
+                        direction="row"
+                        spacing={3}
+                        alignItems="center"
+                    >
+                        <Grid item>
+
+                            <Button startIcon={<FolderOpenIcon />}>
+                                <label htmlFor="fileInputMetadata">
+                                    {keyword("button_localfile")}
+                                </label>
+                                <input id="fileInputMetadata" type="file" hidden={true} onChange={e => {
+                                    setInput(URL.createObjectURL(e.target.files[0]));
+                                }} />
+                            </Button>
+                        </Grid>
+
+                        <Grid item xs>
+                            <Typography variant="body">* {keyword("description_limitations")}</Typography>
+                        </Grid>
+
+                    </Grid>
+                </Box>
+            </Card>
+
+
+            <Box m={3} />
+
+
             {
                 (resultData) ?
                     (

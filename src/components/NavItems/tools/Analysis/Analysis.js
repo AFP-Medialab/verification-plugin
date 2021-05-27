@@ -23,6 +23,12 @@ import {cleanAnalysisState} from "../../../../redux/actions/tools/analysisAction
 import {useParams} from "react-router-dom";
 import {KNOWN_LINKS} from "../../Assistant/AssistantRuleBook";
 
+import Card from "@material-ui/core/Card";
+import CardHeader from "@material-ui/core/CardHeader";
+import { ReactComponent as AnalysisIcon } from '../../../NavBar/images/SVG/Video/Video_analysis.svg';
+import Grid from "@material-ui/core/Grid";
+import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
+
 
 /*function useTraceUpdate(props) {
     const prev = useRef(props);
@@ -45,6 +51,7 @@ const Analysis = () => {
     const {url} = useParams();
     const classes = useMyStyles();
     const keyword = useLoadLanguage("components/NavItems/tools/Analysis.tsv", tsv);
+    const keywordAllTools = useLoadLanguage("components/NavItems/tools/Alltools.tsv", tsv);
     const dispatch = useDispatch();
 
     const resultUrl = useSelector(state => state.analysis.url);
@@ -93,42 +100,73 @@ const Analysis = () => {
 
     return (
         <div>
-            <Paper className={classes.root}>
-                <CustomTile text={keyword("api_title")}/>
-                <br/>
-                <TextField
-                    id="standard-full-width"
-                    label={keyword("api_input")}
-                    placeholder="URL"
-                    fullWidth
-                    disabled={isLoading}
-                    value={input}
-                    onChange={e => setInput(e.target.value)}
+
+            <HeaderTool name={keywordAllTools("navbar_analysis")} description={keywordAllTools("navbar_analysis_description")} icon={<AnalysisIcon style={{ fill: "#51A5B2" }} />}/>
+
+            <Card>
+                <CardHeader
+                    title={keyword("cardheader_link")}
+                    className={classes.headerUpladedImage}
                 />
-                <Box m={2}/>
-                <FormControlLabel
-                    control={
-                        <Checkbox
-                            checked={reprocess}
-                            onChange={reprocessToggle}
-                            disabled={isLoading}
-                            value="checkedBox"
-                            color="primary"
-                        />
-                    }
-                    label={keyword("api_repro")}
-                />
-                <Button
-                    variant="contained"
-                    color="primary"
-                    disabled={isLoading}
-                    onClick={submitForm}
-                >
-                    {keyword("button_submit")}
-                </Button>
-                <Box m={1}/>
-                <LinearProgress hidden={!isLoading}/>
-            </Paper>
+                <div className={classes.root2}>
+                    <Grid
+                        container
+                        direction="row"
+                        spacing={3}
+                        alignItems="center"
+                    >
+                        <Grid item xs>
+
+                            <TextField
+                                id="standard-full-width"
+                                label={keyword("api_input")}
+                                placeholder={keyword("api_input_placeholder")}
+                                fullWidth
+                                disabled={isLoading}
+                                value={input}
+                                variant="outlined"
+                                onChange={e => setInput(e.target.value)}
+                            />
+                            
+                        </Grid>
+
+                        <Grid item>
+                            <FormControlLabel
+                                control={
+                                    <Checkbox
+                                        checked={reprocess}
+                                        onChange={reprocessToggle}
+                                        disabled={isLoading}
+                                        value="checkedBox"
+                                        color="primary"
+                                    />
+                                }
+                                label={keyword("api_repro")}
+                            />
+
+                        </Grid>
+                        
+                        <Grid item>
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                disabled={isLoading}
+                                onClick={submitForm}
+                                >
+                                {keyword("button_submit")}
+                            </Button>
+                        </Grid>
+
+                        
+
+                        <Box m={1}/>
+                        
+                    </Grid>
+                </div>
+                <LinearProgress hidden={!isLoading} />
+            </Card>
+            <Box m={3} />
+
             {
                 showFacebookIframe &&
                 <Box m={4}>

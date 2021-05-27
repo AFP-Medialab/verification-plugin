@@ -14,10 +14,16 @@ import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/Thumbnails.tsv";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import {submissionEvent} from "../../../Shared/GoogleAnalytics/GoogleAnalytics";
+import Card from "@material-ui/core/Card";
+import CardHeader from "@material-ui/core/CardHeader";
+import { ReactComponent as TwitterAdvancedSearchIcon } from '../../../NavBar/images/SVG/Search/Twitter_search.svg';
+import Grid from "@material-ui/core/Grid";
+import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 
 const TwitterAdvancedSearch = () => {
     const classes = useMyStyles();
     const keyword = useLoadLanguage("components/NavItems/tools/TwitterAdvancedSearch.tsv", tsv);
+    const keywordAllTools = useLoadLanguage("components/NavItems/tools/Alltools.tsv", tsv);
 
     const term = useInput("");
     const account = useInput("");
@@ -101,69 +107,79 @@ const TwitterAdvancedSearch = () => {
     };
 
     return (
-        <Paper className={classes.root}>
-            <CustomTile text={keyword("twitter_title")}/>
-            <Box m={2}>
-                {
-                    largeInputList.map((value, key) => {
-                        return (
-                            <TextField
-                                key={key}
-                                id="standard-full-width"
-                                label={keyword(value.label)}
-                                style={{margin: 8}}
-                                placeholder={"ex : (need tsv changes)"}
-                                fullWidth
-                                {...value.props}
+        <div>
+            <HeaderTool name={keywordAllTools("navbar_twitter")} description={keywordAllTools("navbar_twitter_description")} icon={<TwitterAdvancedSearchIcon style={{ fill: "#51A5B2" }} />}/>
+
+            <Card>
+                <CardHeader
+                    title={keyword("cardheader_parameters")}
+                    className={classes.headerUpladedImage}
+                />
+                <div className={classes.root2}>
+
+                    {
+                        largeInputList.map((value, key) => {
+                            return (
+                                <TextField
+                                    key={key}
+                                    id="standard-full-width"
+                                    label={keyword(value.label)}
+                                    style={{margin: 8}}
+                                    placeholder={"ex : (need tsv changes)"}
+                                    fullWidth
+                                    {...value.props}
+                                />
+                            )
+                        })
+                    }
+                    <div>
+                        <DateTimePicker
+                            input={true}
+                            isValidDate={fromDateIsValid}
+                            label={keyword("twitter_from_date")}
+                            dateFormat={"YYYY-MM-DD"}
+                            timeFormat={"HH:mm:ss"}
+                            handleChange={handleFromDateChange}
+                            error={fromDatError}
+                        />
+                    </div>
+                    <div>
+                        <DateTimePicker
+                            input={true}
+                            isValidDate={toDateIsValid}
+                            label={keyword("twitter_to_date")}
+                            dateFormat={"YYYY-MM-DD"}
+                            timeFormat={"HH:mm:ss"}
+                            handleChange={handleToDateChange}
+                            error={toDateError}
+                        />
+                    </div>
+                    
+                    <FormControl component="fieldset">
+                        <RadioGroup aria-label="position" name="position" value={localTime}
+                                    onChange={e => setLocalTime(e.target.value)} row>
+                            <FormControlLabel
+                                value={"true"}
+                                control={<Radio color="primary"/>}
+                                label={keyword("twitter_local_time")}
+                                labelPlacement="end"
                             />
-                        )
-                    })
-                }
-                <div>
-                    <DateTimePicker
-                        input={true}
-                        isValidDate={fromDateIsValid}
-                        label={keyword("twitter_from_date")}
-                        dateFormat={"YYYY-MM-DD"}
-                        timeFormat={"HH:mm:ss"}
-                        handleChange={handleFromDateChange}
-                        error={fromDatError}
-                    />
+                            <FormControlLabel
+                                value={"false"}
+                                control={<Radio color="primary"/>}
+                                label={keyword("twitter_gmt")}
+                                labelPlacement="end"
+                            />
+                        </RadioGroup>
+                    </FormControl>
+                    <Box m={2}/>
+                    <Button variant="contained" color="primary" onClick={onSubmit}>
+                        {keyword("button_submit")}
+                    </Button>
+
                 </div>
-                <div>
-                    <DateTimePicker
-                        input={true}
-                        isValidDate={toDateIsValid}
-                        label={keyword("twitter_to_date")}
-                        dateFormat={"YYYY-MM-DD"}
-                        timeFormat={"HH:mm:ss"}
-                        handleChange={handleToDateChange}
-                        error={toDateError}
-                    />
-                </div>
-            </Box>
-            <FormControl component="fieldset">
-                <RadioGroup aria-label="position" name="position" value={localTime}
-                            onChange={e => setLocalTime(e.target.value)} row>
-                    <FormControlLabel
-                        value={"true"}
-                        control={<Radio color="primary"/>}
-                        label={keyword("twitter_local_time")}
-                        labelPlacement="end"
-                    />
-                    <FormControlLabel
-                        value={"false"}
-                        control={<Radio color="primary"/>}
-                        label={keyword("twitter_gmt")}
-                        labelPlacement="end"
-                    />
-                </RadioGroup>
-            </FormControl>
-            <Box m={2}/>
-            <Button variant="contained" color="primary" onClick={onSubmit}>
-                {keyword("button_submit")}
-            </Button>
-        </Paper>
+            </Card>
+        </div>
     )
 };
 export default TwitterAdvancedSearch;

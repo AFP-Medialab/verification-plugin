@@ -65,6 +65,7 @@ const useMyStyles = makeStyles(theme => ({
     },
     appBar: {
         zIndex: theme.zIndex.drawer + 1,
+        height: "83px"
     },
     drawer: {
         width: drawerWidth,
@@ -96,7 +97,7 @@ const useMyStyles = makeStyles(theme => ({
         flexGrow: 1,
         paddingLeft: theme.spacing(3),
         paddingRight: theme.spacing(3),
-        paddingTop: "3vh",
+        paddingTop: "50px",
         backgroundColor: "#fafafa",
         minHeight: "97vh"
     },
@@ -525,8 +526,6 @@ const useMyStyles = makeStyles(theme => ({
         left: 0,
     },
 
-
-
     sliderClass: {
         maxWidth:"30vw"
     },
@@ -544,7 +543,7 @@ const useMyStyles = makeStyles(theme => ({
     dropZone: {
         border: 'dashed grey 2px',
         borderRadius: "25px",
-        height: "40vh"
+        height: "25vh"
     },
 
     dropZoneInside: {
@@ -555,12 +554,14 @@ const useMyStyles = makeStyles(theme => ({
 
 
     imageDropped: {
-        height: "40vh"
+        height: "25vh"
     },
 
     inputContainer:{
         position: "relative",
     },
+
+    
 
     inputLabel: {
         cursor: "pointer",
@@ -587,14 +588,50 @@ const useMyStyles = makeStyles(theme => ({
 
 
 
+    bigButtonDiv: {
+        border: 'solid #E1E1E1 2px',
+        borderRadius: "25px",
+        cursor: "pointer",
+
+        "&:hover": {
+            border: 'solid #51A5B2 2px',
+
+        },
+    },
 
 
-    toolCardsContainer: {
+    bigButtonDivSelectted: {
+        border: 'solid #51A5B2 3px',
+        borderRadius: "25px",
+    },
 
+    bigButtonIcon: {
+
+        height: "50px",
+        width: "auto",
+        color: "#9A9A9A"
 
     },
 
-    
+    bigButtonIconSelectted: {
+
+        height: "50px",
+        width: "auto",
+        color: "#51A5B2"
+
+    },
+
+
+    height100: {
+        height: "100%",
+    },
+
+
+    root2: {
+        textAlign: "center",
+        padding: theme.spacing(3),
+
+    },
 
 
     
