@@ -9,13 +9,12 @@ export const useKeyframeWrapper = (url) => {
     const keyword = useLoadLanguage("components/NavItems/tools/Keyframes.tsv", tsv);
     const dispatch = useDispatch();
 
-    let jsonData = {
-        "video_url": url,
-        "user_key": process.env.REACT_APP_KEYFRAME_TOKEN,
-        "overwrite": 0
-    };
-
     useEffect(() => {
+        let jsonData = {
+            "video_url": url,
+            "user_key": process.env.REACT_APP_KEYFRAME_TOKEN,
+            "overwrite": 0
+        };
 
         const handleError = (e) => {
             if (keyword(e) !== "")
@@ -76,5 +75,5 @@ export const useKeyframeWrapper = (url) => {
         dispatch(setKeyframesLoading(true));
         postUrl("http://multimedia2.iti.gr/video_analysis/subshot", jsonData);
         //postUrl("http://multimedia2.iti.gr/video_analysis/segmentation", jsonData);
-    }, [url, keyword, jsonData, dispatch]);
+    }, [url, keyword, dispatch]);
 };

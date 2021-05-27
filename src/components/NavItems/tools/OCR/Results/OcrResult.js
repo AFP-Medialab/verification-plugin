@@ -6,7 +6,6 @@ import CardActions from "@material-ui/core/CardActions";
 import Divider from "@material-ui/core/Divider";
 import Grid from "@material-ui/core/Grid";
 import LinearProgress from "@material-ui/core/LinearProgress";
-import {Paper} from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
 
 import CloseResult from "../../../../Shared/CloseResult/CloseResult";

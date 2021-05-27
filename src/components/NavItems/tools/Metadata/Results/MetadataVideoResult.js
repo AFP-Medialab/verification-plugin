@@ -1,4 +1,3 @@
-import {Paper} from "@material-ui/core";
 import {useDispatch} from "react-redux";
 import React from "react";
 import Typography from "@material-ui/core/Typography";

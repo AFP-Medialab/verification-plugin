@@ -1,5 +1,3 @@
-import {Paper} from "@material-ui/core";
-import CustomTile from "../../../Shared/CustomTitle/CustomTitle";
 import Box from "@material-ui/core/Box";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
@@ -72,10 +70,6 @@ const Forensic = () => {
 
     // state used to toggle localFile view
     const [localFile, setLocalFile] = useState(false);
-    const toggleLocal = () => {
-        setLocalFile(!localFile);
-    };
-
     const resultUrl = useSelector(state => state.forensic.url);
     const resultData = useSelector(state => state.forensic.result);
     const isLoading = useSelector(state => state.forensic.loading);
@@ -134,7 +128,7 @@ const Forensic = () => {
     const [showURL, setShowURL] = useState(true);
     const [showLocal, setShowLocal] = useState(false);
 
-    if (showURL && !showLocal && classButtonURL != classes.bigButtonDivSelectted && classButtonLocal != classes.bigButtonDiv) {
+    if (showURL && !showLocal && classButtonURL !== classes.bigButtonDivSelectted && classButtonLocal !== classes.bigButtonDiv) {
         setClassButtonURL(classes.bigButtonDivSelectted);
         setClassButtonLocal(classes.bigButtonDiv);
     }

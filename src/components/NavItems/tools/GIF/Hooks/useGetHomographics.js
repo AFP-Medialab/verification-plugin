@@ -35,7 +35,7 @@ const useGetHomographics = (files, showHomo, mode) => {
 
         }
 
-        if (files && !showHomo && mode==1) {
+        if (files && !showHomo && mode===1) {
             console.log("UPLOADING IMAGES");
 
             dispatch(setGifLoading());
@@ -61,21 +61,21 @@ const useGetHomographics = (files, showHomo, mode) => {
         };
 
 
-        if (files && !showHomo && mode == 2) {
+        if (files && !showHomo && mode === 2) {
             console.log("UPLOADING IMAGES");
 
             dispatch(setGifLoading());
             //console.log(files.file1);
             //console.log(files.file2);
 
-            var bodyFormData = new FormData();
-            bodyFormData.append('url_0', files.url_0);
-            bodyFormData.append('url_1', files.url_1);
+            var bodyUrlFormData = new FormData();
+            bodyUrlFormData.append('url_0', files.url_0);
+            bodyUrlFormData.append('url_1', files.url_1);
 
             axios({
                 method: "post",
                 url: "https://demo-medialab.afp.com/envisu-tools/open/ipol/homographic/url",
-                data: bodyFormData,
+                data: bodyUrlFormData,
                 headers: { "Content-Type": "multipart/form-data" },
             })
                 .then(response => getImages(response))

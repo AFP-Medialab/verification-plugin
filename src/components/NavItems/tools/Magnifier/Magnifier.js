@@ -1,6 +1,5 @@
-import {Paper, Box, TextField, Button, Typography} from "@material-ui/core";
+import {Box, TextField, Button} from "@material-ui/core";
 import React, {useEffect, useState} from "react";
-import CustomTile from "../../../Shared/CustomTitle/CustomTitle";
 import {useDispatch, useSelector} from "react-redux";
 import 'tui-image-editor/dist/tui-image-editor.css'
 import ImageResult from "./Results/ImageResult";

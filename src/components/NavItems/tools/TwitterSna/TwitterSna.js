@@ -1,13 +1,9 @@
 import React, { useEffect, useState } from "react";
-
 import { useDispatch, useSelector } from "react-redux";
 import { setError } from "../../../../redux/actions/errorActions";
-
 import dateFormat from "dateformat";
 import _ from "lodash";
-
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
-import Paper from "@material-ui/core/Paper";
 import TextField from "@material-ui/core/TextField";
 import FormControl from "@material-ui/core/FormControl";
 import RadioGroup from "@material-ui/core/RadioGroup";
@@ -25,10 +21,7 @@ import LinearProgress from "@material-ui/core/LinearProgress";
 import Typography from "@material-ui/core/Typography";
 import OnClickInfo from "../../../Shared/OnClickInfo/OnClickInfo";
 import OnWarningInfo from "../../../Shared/OnClickInfo/OnWarningInfo";
-
 import SearchIcon from "@material-ui/icons/Search";
-
-import CustomTile from "../../../Shared/CustomTitle/CustomTitle";
 import DateTimePicker from "../../../Shared/DateTimePicker/DateTimePicker";
 import convertToGMT from "../../../Shared/DateTimePicker/convertToGMT";
 import useTwitterSnaRequest from "./Hooks/useTwitterSnaRequest";

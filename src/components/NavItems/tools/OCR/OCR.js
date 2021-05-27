@@ -2,10 +2,9 @@ import React, {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {useParams} from 'react-router-dom'
 
-import {Box, Button, Paper, TextField, Typography} from "@material-ui/core";
+import {Box, Button, TextField} from "@material-ui/core";
 import FolderOpenIcon from '@material-ui/icons/FolderOpen';
 
-import CustomTile from "../../../Shared/CustomTitle/CustomTitle";
 import {KNOWN_LINKS} from "../../Assistant/AssistantRuleBook";
 import {setError} from "../../../../redux/actions/errorActions";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/OCR.tsv";

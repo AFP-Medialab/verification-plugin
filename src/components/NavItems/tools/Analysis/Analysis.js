@@ -1,13 +1,11 @@
 import React, {useEffect, useState} from "react";
 import {useSelector} from "react-redux";
 import {useDispatch} from "react-redux";
-import {Paper} from "@material-ui/core";
 import TextField from "@material-ui/core/TextField";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
 import Button from "@material-ui/core/Button";
 import LinearProgress from "@material-ui/core/LinearProgress";
-import CustomTile from "../../../Shared/CustomTitle/CustomTitle"
 import Box from "@material-ui/core/Box";
 import YoutubeResults from "./Results/YoutubeResults.js"
 import TwitterResults from "./Results/TwitterResults";

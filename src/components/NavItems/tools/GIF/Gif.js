@@ -12,11 +12,10 @@ import Slider from '@material-ui/core/Slider';
 import Grid from "@material-ui/core/Grid";
 import Button from '@material-ui/core/Button';
 import { ReactComponent as IconGif } from '../../../NavBar/images/SVG/Image/Gif.svg';
-import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
+import { createMuiTheme } from '@material-ui/core/styles';
 import DragAndDrop from './DragAndDrop'
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/CheckGIF.tsv";
-import LinearProgress from '@material-ui/core/LinearProgress';
 
 import LinkIcon from '@material-ui/icons/Link';
 import FileIcon from '@material-ui/icons/InsertDriveFile';
@@ -141,7 +140,7 @@ const Gif = () => {
     const [modeHomo, setModeHomo] = useState(0);
 
     //Code to enable the button to upload the images
-    if (imageURL1 != "" && imageURL2 != "" && !readyToSend && !loading & !showHomo) {
+    if (imageURL1 !== "" && imageURL2 !== "" && !readyToSend && !loading & !showHomo) {
         //console.log("Ready to send"); //DEBUG
         setReadyToSend(true);
     }
@@ -278,7 +277,7 @@ const Gif = () => {
     const [showURL, setShowURL] = useState(false);
     const [showLocal, setShowLocal] = useState(false);
 
-    if (!showURL && !showLocal && classButtonURL != classes.bigButtonDiv && classButtonLocal != classes.bigButtonDiv){
+    if (!showURL && !showLocal && classButtonURL !== classes.bigButtonDiv && classButtonLocal !== classes.bigButtonDiv){
         setClassButtonURL(classes.bigButtonDiv);
         setClassButtonLocal(classes.bigButtonDiv);
     }

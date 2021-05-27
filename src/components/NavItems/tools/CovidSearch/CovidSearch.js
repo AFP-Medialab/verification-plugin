@@ -1,11 +1,6 @@
 import React, { useEffect } from "react";
-
-
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
-import Paper from "@material-ui/core/Paper";
 import Box from "@material-ui/core/Box";
-
-import CustomTile from "../../../Shared/CustomTitle/CustomTitle";
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/CovidSearch.tsv";
 import OnClickInfo from "../../../Shared/OnClickInfo/OnClickInfo";

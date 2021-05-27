@@ -1,6 +1,5 @@
-import {Box, Paper} from "@material-ui/core";
+import {Box} from "@material-ui/core";
 import React, {useState} from "react";
-import CustomTile from "../../../Shared/CustomTitle/CustomTitle";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import {useInput} from "../../../../Hooks/useInput";
@@ -17,7 +16,6 @@ import {submissionEvent} from "../../../Shared/GoogleAnalytics/GoogleAnalytics";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 import { ReactComponent as TwitterAdvancedSearchIcon } from '../../../NavBar/images/SVG/Search/Twitter_search.svg';
-import Grid from "@material-ui/core/Grid";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 
 const TwitterAdvancedSearch = () => {
