@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export default function useDBKFApi() {
+export default function DBKFApi() {
 
     const dbkfAPI = process.env.REACT_APP_DBKF_SEARCH_API;
     const similarityAPI = process.env.REACT_APP_DBKF_SIMILARITY_API

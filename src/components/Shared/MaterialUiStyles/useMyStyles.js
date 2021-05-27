@@ -370,7 +370,7 @@ const useMyStyles = makeStyles(theme => ({
     svgIcon: {
         fill: theme.palette.primary,
         position: "relative",
-        top: theme.spacing.unit,
+        top: theme.spacing(1),
         width: theme.typography.h3.fontSize,
         height: theme.typography.h3.fontSize,
         marginRight: 7,

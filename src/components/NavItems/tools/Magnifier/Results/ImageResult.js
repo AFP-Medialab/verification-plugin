@@ -45,9 +45,9 @@ const myTheme = {
 
 
     // submenu icons
-    'submenu.normalIcon.path': '../dist/svg/icon-a.svg',
+    'submenu.normalIcon.path': icona,
     'submenu.normalIcon.name': 'icon-a',
-    'submenu.activeIcon.path': '../dist/svg/icon-c.svg',
+    'submenu.activeIcon.path': iconc,
     'submenu.activeIcon.name': 'icon-c',
     'submenu.iconSize.width': '64px',
     'submenu.iconSize.height': '64px',
@@ -192,7 +192,7 @@ const ImageResult = () => {
                     </Button>
                 </Grid>
                 <Grid item>
-                    <a style={{"text-decoration": "none"}} href={resultImage} download={downLoadLink(resultImage)}>
+                    <a style={{"textDecoration": "none"}} href={resultImage} download={downLoadLink(resultImage)}>
                         <Button color="primary" variant="contained">
                             {
                                 keyword("download")

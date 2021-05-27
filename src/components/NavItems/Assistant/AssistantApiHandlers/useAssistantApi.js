@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export default function useAssistantApi() {
+export default function assistantApiCalls() {
 
     const assistantEndpoint = process.env.REACT_APP_ASSISTANT_URL
 
