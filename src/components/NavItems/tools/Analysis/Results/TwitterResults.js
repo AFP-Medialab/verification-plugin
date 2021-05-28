@@ -22,7 +22,7 @@ import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 import OnClickInfo from "../../../../Shared/OnClickInfo/OnClickInfo";
 import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Analysis.tsv";
-import MyMap from "../../../../Shared/MyMap/MyMap";
+import AsynchMyMap from "../../../../Shared/MyMap/AsynchMyMap";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 
@@ -444,7 +444,7 @@ const TwitterResults = (props) => {
                             report.mentioned_locations.detected_locations &&
                             report.mentioned_locations.detected_locations.length > 0 &&
                             <div>
-                                <MyMap locations={report.mentioned_locations.detected_locations}/>
+                                <AsynchMyMap locations={report.mentioned_locations.detected_locations}/>
                                 <Box m={4}/>
                             </div>
                         }

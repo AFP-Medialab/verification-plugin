@@ -33,7 +33,7 @@
     "react-iframe": "^1.8.0",
     "react-linkify": "^1.0.0-alpha",
     "react-magnifier": "^3.0.4",
-    "react-map-gl": "^6.1.14",
+    "react-map-gl": "^6.1.15",
     "react-redux": "^7.2.4",
     "react-router-dom": "^5.2.0",
     "react-sigma": "^1.2.35",
