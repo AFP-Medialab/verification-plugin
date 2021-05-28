@@ -35,3 +35,10 @@ export const setForensicsGifAnimateHide = () => {
         type: "SET_FORENSIC_GIF_HIDE",
     }
 };
+
+export const setForensicMaskGif = (url) => {
+    return {
+        type: "SET_FORENSIC_MASK_GIF",
+        payload: url
+    }
+};

@@ -4,6 +4,7 @@ const defaultState = {
     url: "",
     result: null,
     gifAnimation: false,
+    maskUrl: "",
 };
 
 const forensicReducer = (state = defaultState, action) => {
@@ -22,6 +23,9 @@ const forensicReducer = (state = defaultState, action) => {
             return state;
         case "SET_FORENSIC_GIF_SHOW":
             state.gifAnimation = true;
+            return state;
+        case "SET_FORENSIC_MASK_GIF":
+            state.maskUrl = action.payload;
             return state;
         default:
             return state;

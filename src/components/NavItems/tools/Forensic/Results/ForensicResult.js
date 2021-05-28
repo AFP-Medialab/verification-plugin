@@ -30,6 +30,7 @@ import Slider from '@material-ui/core/Slider';
 import useGetGif from "../../GIF/Hooks/useGetGif";
 import { setGifDownloading } from "../../../../../redux/actions/tools/gifActions";
 import { useDispatch } from "react-redux";
+import useGetTransparent from "../Hooks/useGetTransparent";
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -323,30 +324,47 @@ const ForensicResults = (props) => {
     const [anchorGifPopover, setAnchorGifPopover] = React.useState(null);
     const openGifPopover = Boolean(anchorGifPopover);
     const gifPopover = openGifPopover ? 'simple-popover' : undefined;
+    const gifImage = props.url;
+    const [gifFilter, setGifFilter] = React.useState(props.url);
+    const gifFilterMask = useSelector(state => state.forensic.maskUrl);
+    console.log(gifFilterMask);
 
     const [interval, setIntervalVar] = React.useState(null);
 
     const downloading = useSelector(state => state.gif.downloading);
 
+
+    const [readyTransparency, setReadyTransparency] = React.useState(false);
+
+    useGetTransparent(gifFilter, readyTransparency);
+
     function clickGifPopover(event, filter) {
         if (filter === "zero_report" || filter === "ghost_report" || filter === "cagi_report"){
-            setGifFilter(filters.current.find(x => x.id === filter).map[filters.current.find(x => x.id === filter).currentDisplayed]);         
+            var url = filters.current.find(x => x.id === filter).map[filters.current.find(x => x.id === filter).currentDisplayed]
+            setGifFilter(url);
+            console.log(url);
+
+            setReadyTransparency(true);
+
         }else{
-            setGifFilter(filters.current.find(x => x.id === filter).map);
+            var url = filters.current.find(x => x.id === filter).map;
+            setGifFilter(url);
+            console.log(url);
+
+            setReadyTransparency(true);
         }
         setIntervalVar(setInterval(() => animateFilter(), 1100));
         setAnchorGifPopover(event.currentTarget);
-
+        
     }
 
     function closeGifPopover() {
         clearInterval(interval);
         setAnchorGifPopover(null);
-        
+        setReadyTransparency(false);
     }
 
-    const gifImage  = props.url;
-    const [gifFilter, setGifFilter] = React.useState(props.url);
+    
 
 
     function animateFilter() {
@@ -354,6 +372,7 @@ const ForensicResults = (props) => {
         console.log(interval);
         var x = document.getElementById("gifFilterElement");
         if (x.style.display === "none") {
+            console.log("display");
             x.style.display = "block";
         } else {
             x.style.display = "none";
@@ -865,7 +884,8 @@ const ForensicResults = (props) => {
                                         <CardMedia
                                             component="img"
                                             className={classes.imagesGifFilter}
-                                            image={gifFilter}
+                                            style={{ display: "none" }}
+                                            image={gifFilterMask}
                                             id="gifFilterElement"
                                         />
                                     }
