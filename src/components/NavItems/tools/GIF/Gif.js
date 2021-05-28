@@ -32,46 +32,6 @@ const Gif = () => {
     //============================================================================================
     const classes = useMyStyles();
 
-    const theme = createMuiTheme({
-        overrides: {
-
-            MuiCardHeader: {
-                root: {
-                    backgroundColor: "#05A9B4",
-                },
-                title: {
-                    color: 'white',
-                    fontSize: 20,
-                    fontweight: 500,
-                }
-            },
-
-            MuiTab: {
-                wrapper: {
-                    fontSize: 12,
-
-                },
-                root: {
-                    minWidth: "25%!important",
-                }
-            },
-
-        },
-
-        palette: {
-            primary: {
-                light: '#5cdbe6',
-                main: '#05a9b4',
-                dark: '#007984',
-                contrastText: '#fff',
-            },
-        },
-
-    });
-
-
-
-
     //Load images for the GIF 
     //============================================================================================
 
