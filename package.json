@@ -33,7 +33,6 @@
     "react-iframe": "^1.8.0",
     "react-linkify": "^1.0.0-alpha",
     "react-magnifier": "^3.0.4",
-    "react-map-gl": "^6.1.15",
     "react-redux": "^7.2.4",
     "react-router-dom": "^5.2.0",
     "react-sigma": "^1.2.35",
@@ -68,7 +67,9 @@
     "production": [
       ">0.2%",
       "not dead",
-      "not op_mini all"
+      "not ie 11",
+      "not chrome < 51",
+      "not safari < 10"
     ],
     "development": [
       "last 1 chrome version",
@@ -77,7 +78,6 @@
     ]
   },
   "devDependencies": {
-    "bonjour": "^3.5.0",
     "mp4box": "^0.4.1"
   }
 }

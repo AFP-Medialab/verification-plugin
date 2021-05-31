@@ -2,6 +2,7 @@ import React, {useEffect, useState} from "react";
 import axios from "axios";
 import MapGL, {Marker} from "react-map-gl"
 import LocationOnIcon from '@material-ui/icons/LocationOn';
+import 'mapbox-gl/dist/mapbox-gl.css';
 
 
 const MyMap = (props) => {

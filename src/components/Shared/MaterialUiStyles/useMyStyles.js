@@ -1,5 +1,6 @@
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import {green} from "@material-ui/core/colors";
+import { MicNone } from "@material-ui/icons";
 
 const drawerWidth = 200;
 
@@ -632,7 +633,9 @@ const useMyStyles = makeStyles(theme => ({
         padding: theme.spacing(3),
 
     },
-
+    rootCard: {
+        overflow: "visible"
+    }
 
     
 
