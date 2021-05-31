@@ -24,7 +24,7 @@ import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import LinkIcon from '@material-ui/icons/Link';
 import FileIcon from '@material-ui/icons/InsertDriveFile';
 
-const Keyframes = (props) => {
+const Keyframes = () => {
     const {url} = useParams();
 
     const classes = useMyStyles();
@@ -62,12 +62,12 @@ const Keyframes = (props) => {
                     a.href = url;
                     a.click()});
             });
-
     }
 
     const submitUrl = () => {
         submissionEvent(input);
         setSubmittedUrl(input);
+        
     };
 
     useEffect(()=>{
@@ -86,8 +86,9 @@ const Keyframes = (props) => {
                 const uri = decodeURIComponent(url);
                 setInput(uri)
             }
+            setUrlDetected(true)
         }
-        setUrlDetected(true)
+        
     }, [url]);
 
     useEffect(() => {
@@ -112,7 +113,7 @@ const Keyframes = (props) => {
     }
 
 
-    const clickURL = (event) => {
+    const clickURL = () => {
         setClassButtonURL(classes.bigButtonDivSelectted);
         setClassIconURL(classes.bigButtonIconSelectted);
 
@@ -125,7 +126,7 @@ const Keyframes = (props) => {
         setLocalFile(false);
     }
 
-    const clickLocal = (event) => {
+    const clickLocal = () => {
         setClassButtonURL(classes.bigButtonDiv);
         setClassIconURL(classes.bigButtonIcon);
 
@@ -137,7 +138,6 @@ const Keyframes = (props) => {
 
         setLocalFile(true);
     }
-
 
 
     return (
@@ -287,7 +287,7 @@ const Keyframes = (props) => {
                         <Button variant="contained" color="primary" onClick={toggleLocal}>
                             {keyword("forensic_card_back")}
                         </Button>
-                        <LocalFile/>
+                        {localFile &&<LocalFile/>}
                     </Box>
                 </Box>
             </Card>

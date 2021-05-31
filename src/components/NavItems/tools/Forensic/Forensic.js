@@ -306,7 +306,7 @@ const Forensic = () => {
 
 
                     <Box display={!localFile ? "none" : "block"}>
-                        <LocalFile />
+                        {localFile &&<LocalFile />}
                     </Box>
 
                 
