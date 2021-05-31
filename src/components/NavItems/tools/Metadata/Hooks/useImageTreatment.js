@@ -12,7 +12,9 @@ const useImageTreatment = (mediaUrl) => {
 
     useEffect(() => {
 
+
         function isEmpty(obj) {
+
             for (let key in obj) {
                 if (obj.hasOwnProperty(key))
                     return false;
@@ -46,6 +48,8 @@ const useImageTreatment = (mediaUrl) => {
 
         if (mediaUrl)
             imageTreatment();
+
+
     }, [mediaUrl, keyword, dispatch]);
 };
 export default useImageTreatment;

@@ -61,6 +61,8 @@ const useVideoTreatment = (mediaUrl) => {
 
         if (mediaUrl)
             videoTreatment();
+
+    
     }, [mediaUrl, keyword, dispatch]);
 
 };

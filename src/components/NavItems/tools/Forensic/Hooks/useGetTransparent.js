@@ -22,22 +22,6 @@ const useGetTransparent = (url, ready) => {
         };
 
 
-        const getResult = (hash) => {
-            //console.log("TEST3");
-            axios.get("https://mever.iti.gr/envisu4/api/v4/images/reports/" + hash)
-                .then(response => {
-                    //console.log(response);
-                    if (response.data != null) {
-                        dispatch(setForensicsResult(url, response.data, false, false));
-                    } else {
-                        handleError("forensic_error_" + response.data.status);
-                    }
-                })
-                .catch(error => {
-                    //console.log("ERROR 1");
-                    handleError("forensic_error_" + error.status);
-                })
-        };
 
 
         if (url && ready) {

@@ -10,6 +10,8 @@ const useGetImages = (url) => {
     const keyword = useLoadLanguage("components/NavItems/tools/Forensic.tsv", tsv);
     const dispatch = useDispatch();
 
+    const gifTransparencyMasks = [];
+
 
     useEffect(() => {
 
@@ -21,10 +23,7 @@ const useGetImages = (url) => {
             dispatch(setForensicsLoading(false));
         };
         
-
         
-
-
         const getResult = (hash) => {
             //console.log("TEST3");
             axios.get("https://mever.iti.gr/envisu4/api/v4/images/reports/" + hash)
@@ -41,7 +40,117 @@ const useGetImages = (url) => {
                     handleError("forensic_error_" + error.status);
                 })
         };
+        
 
+        /*
+        const getResult = (hash) => {
+            //console.log("TEST3");
+            axios.get("https://mever.iti.gr/envisu4/api/v4/images/reports/" + hash)
+                .then(response => {
+                    console.log(response);
+                    if (response.data != null) {
+                        
+
+
+                        for (const item of Object.entries(response.data)) {
+                            
+                            
+
+                            /*
+
+                            item[0] == "zero_report" ||
+                                item[0] == "ghost_report" ||
+                                item[0] == "cagi_report" ||
+
+                            
+
+                            
+
+
+                            if (
+                                item[0] == "adq1_report" ||
+                                item[0] == "dct_report" ||
+                                item[0] == "blk_report" ||
+                                item[0] == "splicebuster_report" ||
+                                item[0] == "wavelet_report" ||
+                                item[0] == "mantranet_report" ||
+                                item[0] == "fusion_report" ||
+                                item[0] == "cmfd_report" ||
+                                item[0] == "rcmfd_report") {
+
+                                    console.log("filtro");
+                                    console.log(item);
+                                    //item[1].completed = false;
+                                    //console.log(response.data.get("adq1_report"));
+                                    
+                                    
+                                    axios.get("https://mever.iti.gr/envisu4/utils/mask?url=" + item[1].map)
+                                        .then(response2 => {
+                                            if (response2.data != null) {
+                                                console.log(response2.data);
+                                                item[1].map = response2.data.mask;
+
+                                                if (item[0] == "rcmfd_report"){
+                                                    console.log("Response");
+
+                                                    console.log(response.data);
+                                                    dispatch(setForensicsResult(url, response.data, false, false));
+                                                }
+
+
+                                            } else {
+                                                handleError("forensic_error_" + response.data.status);
+                                            }
+                                        })
+                                        .catch(error => {
+                                            handleError("forensic_error_" + error.status);
+                                        })
+                                        
+                                }
+                        }
+                    
+                        
+
+                        
+
+                        
+
+                                /*
+                                axios.get("https://mever.iti.gr/envisu4/utils/mask?url=" + filter.map)
+                                    .then(response => {
+                                        if (response.data != null) {
+                                            console.log(response);
+                                        } else {
+                                            handleError("forensic_error_" + response.data.status);
+                                        }
+                                    })
+                                    .catch(error => {
+                                        handleError("forensic_error_" + error.status);
+                                    })
+                                
+
+
+                            
+                            
+                        
+                    
+
+                    } else {
+                        handleError("forensic_error_" + response.data.status);
+                    }
+                })
+                .catch(error => {
+                    //console.log("ERROR 1");
+                    handleError("forensic_error_" + error.status);
+                })
+
+
+
+
+        };
+
+
+        */
         const waitUntilFinish = (id) => {
             //console.log("TEST2");
             axios.get("https://mever.iti.gr/envisu4/api/v4/images/jobs/" + id)
