@@ -441,7 +441,7 @@ const TwitterSna = () => {
     <div>
       <HeaderTool name={keywordAllTools("navbar_twitter_sna")} description={keywordAllTools("navbar_twitter_sna_description")} icon={<TwitterSNAIcon style={{ fill: "#51A5B2" }} />} />
 
-      <Card>
+      <Card className={classes.rootCard}>
         <CardHeader
           title={keyword("cardheader_parameters")}
           className={classes.headerUpladedImage}

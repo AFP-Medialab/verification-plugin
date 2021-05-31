@@ -108,7 +108,7 @@ const TwitterAdvancedSearch = () => {
         <div>
             <HeaderTool name={keywordAllTools("navbar_twitter")} description={keywordAllTools("navbar_twitter_description")} icon={<TwitterAdvancedSearchIcon style={{ fill: "#51A5B2" }} />}/>
 
-            <Card>
+            <Card className={classes.rootCard}>
                 <CardHeader
                     title={keyword("cardheader_parameters")}
                     className={classes.headerUpladedImage}
