@@ -133,8 +133,7 @@ const Forensic = () => {
         setClassButtonLocal(classes.bigButtonDiv);
     }
 
-
-    const clickURL = (event) => {
+    const clickURL = () => {
         setClassButtonURL(classes.bigButtonDivSelectted);
         setClassIconURL(classes.bigButtonIconSelectted);
 
@@ -147,7 +146,7 @@ const Forensic = () => {
         setLocalFile(false);
     }
 
-    const clickLocal = (event) => {
+    const clickLocal = () => {
         setClassButtonURL(classes.bigButtonDiv);
         setClassIconURL(classes.bigButtonIcon);
 
@@ -159,11 +158,10 @@ const Forensic = () => {
 
         setLocalFile(true);
     }
-
-
-
-
-
+    const resetImage = () => {
+        setLoaded(false);
+        setInput("");
+    }
 
     return (
         <div>
@@ -324,6 +322,7 @@ const Forensic = () => {
                     url={resultUrl}
                     loaded={loaded}
                     gifAnimation={gifAnimationState}
+                    resetImage={resetImage}
                     />
             }
         </ThemeProvider>

@@ -15,9 +15,11 @@ const forensicReducer = (state = defaultState, action) => {
             state.loading = action.payload;
             return state;
         case "FORENSIC_CLEAN_STATE":
-            state.url = "";
-            state.result = null;
-            return state;
+            return {...state, notification: false, loading : false,
+                url: "",
+                result: null,
+                gifAnimation: false,
+                maskUrl: ""}
         case "SET_FORENSIC_GIF_HIDE":
             state.gifAnimation = false;
             return state;

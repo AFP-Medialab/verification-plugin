@@ -31,6 +31,7 @@ import useGetGif from "../../GIF/Hooks/useGetGif";
 import { setGifDownloading } from "../../../../../redux/actions/tools/gifActions";
 import { useDispatch } from "react-redux";
 import useGetTransparent from "../Hooks/useGetTransparent";
+import {cleanForensicState} from "../../../../../redux/actions/tools/forensicActions"
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -251,7 +252,8 @@ const ForensicResults = (props) => {
     //Button analyze new image
     //============================================================================================
     function newImage (){
-        window.location.reload(false);
+        dispatch(cleanForensicState());
+        props.resetImage();
     }
 
 
