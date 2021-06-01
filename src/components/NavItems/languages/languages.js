@@ -11,10 +11,6 @@ import {setTrue} from "../../../redux/actions/cookiesActions";
 import tsv from "../../../LocalDictionary/components/NavItems/languages.tsv";
 import useLoadLanguage from "../../../Hooks/useLoadLanguage";
 import TranslateIcon from '@material-ui/icons/Translate';
-import Typography from "@material-ui/core/Typography";
-import Box from "@material-ui/core/Box";
-import Grid from "@material-ui/core/Grid";
-
 
 const Languages = () => {
     const dictionary = useSelector(state => state.dictionary);
@@ -24,7 +20,7 @@ const Languages = () => {
     const [open, setOpen] = useState(false);
     const [lang, setLang] = useState("en");
     const storeLanguage = useSelector(state => state.language);
-    console.log("storeLanguage ", storeLanguage);
+    
     const keywordByLang = (language) => {
         return (dictionary && dictionary[onlineTsv] && dictionary[onlineTsv][language]) ? dictionary[onlineTsv][language]["lang_label"] : "";
     };
