@@ -25,7 +25,6 @@ const Languages = () => {
     const [lang, setLang] = useState("en");
 
     const keywordByLang = (language) => {
-        console.log("IDIOMA" + language);
         return (dictionary && dictionary[onlineTsv] && dictionary[onlineTsv][language]) ? dictionary[onlineTsv][language]["lang_label"] : "";
     };
 

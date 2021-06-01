@@ -33,7 +33,7 @@ const AllTools = (props) => {
         })
     };
 
-    console.log(tools);
+    //console.log(tools);
 
     const toolsVideo = [];
     const toolsImages = [];
@@ -96,6 +96,7 @@ const AllTools = (props) => {
 
     })
 
+    /*
     console.log("Video");
     console.log(toolsVideo);
     console.log("Images");
@@ -104,7 +105,10 @@ const AllTools = (props) => {
     console.log(toolsSearch);
     console.log("SNA");
     console.log(toolsData);
+    */
 
+
+    
     /*
 
 
