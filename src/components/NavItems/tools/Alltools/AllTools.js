@@ -16,7 +16,9 @@ import { ReactComponent as IconImage } from '../../../NavBar/images/SVG/Image/Im
 import { ReactComponent as IconVideo } from '../../../NavBar/images/SVG/Video/Video.svg';
 import { ReactComponent as IconSearch } from '../../../NavBar/images/SVG/Search/Search.svg';
 import { ReactComponent as IconData } from '../../../NavBar/images/SVG/DataAnalysis/Data_analysis.svg';
+import { ReactComponent as IconTools } from '../../../NavBar/images/SVG/Navbar/Tools.svg';
 import Box from "@material-ui/core/Box";
+import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 
 const AllTools = (props) => {
     const classes = useMyStyles();
@@ -134,7 +136,9 @@ const AllTools = (props) => {
     */
 
     return (
-        <div className={classes.rootNoCenter}>
+        <div>
+
+            <HeaderTool name={keyword("navbar_tools")} icon={<IconTools style={{ fill: "#51A5B2" }} />} />
 
             <Card>
                 <Box p={2}>
@@ -145,7 +149,7 @@ const AllTools = (props) => {
                         alignItems="center"
                     >
                         <Grid item>
-                            <IconVideo width="45px" height="45px" style={{ fill: "#4c4c4c" }} />
+                            <IconVideo width="45px" height="45px" style={{ fill: "#596977" }} />
                         </Grid>
 
                         <Grid item>
@@ -153,7 +157,7 @@ const AllTools = (props) => {
                         </Grid>
 
                         <Grid item>
-                            <Typography variant="h5">Video</Typography>
+                            <Typography variant="h5" style={{ color: "#596977" }}>Video</Typography>
                         </Grid>
 
                     </Grid>
@@ -194,7 +198,7 @@ const AllTools = (props) => {
                         alignItems="center"
                     >
                         <Grid item>
-                            <IconImage width="45px" height="45px" style={{ fill: "#4c4c4c" }} />
+                            <IconImage width="45px" height="45px" style={{ fill: "#596977" }} />
                         </Grid>
 
                         <Grid item>
@@ -202,7 +206,7 @@ const AllTools = (props) => {
                         </Grid>
 
                         <Grid item>
-                            <Typography variant="h5">Image</Typography>
+                            <Typography variant="h5" style={{ color: "#596977" }}>Image</Typography>
                         </Grid>
 
                     </Grid>
@@ -240,7 +244,7 @@ const AllTools = (props) => {
                         alignItems="center"
                     >
                         <Grid item>
-                            <IconSearch width="45px" height="45px" style={{ fill: "#4c4c4c" }} />
+                            <IconSearch width="45px" height="45px" style={{ fill: "#596977" }} />
                         </Grid>
 
                         <Grid item>
@@ -248,7 +252,7 @@ const AllTools = (props) => {
                         </Grid>
 
                         <Grid item>
-                            <Typography variant="h5">Search</Typography>
+                            <Typography variant="h5" style={{ color: "#596977" }}>Search</Typography>
                         </Grid>
 
                     </Grid>
@@ -286,7 +290,7 @@ const AllTools = (props) => {
                         alignItems="center"
                     >
                         <Grid item>
-                            <IconData width="45px" height="45px" style={{ fill: "#4c4c4c" }} />
+                            <IconData width="45px" height="45px" style={{ fill: "#596977" }} />
                         </Grid>
 
                         <Grid item>
@@ -294,7 +298,7 @@ const AllTools = (props) => {
                         </Grid>
 
                         <Grid item>
-                            <Typography variant="h5">Data Analysis</Typography>
+                            <Typography variant="h5" style={{ color: "#596977" }}>Data Analysis</Typography>
                         </Grid>
 
                     </Grid>

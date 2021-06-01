@@ -107,7 +107,8 @@ import { ReactComponent as AboutIcon } from "./images/SVG/Navbar/About.svg"
 import { ReactComponent as AssistantIcon } from "./images/SVG/Navbar/Assistant.svg"
 import { ReactComponent as GuideIcon } from "./images/SVG/Navbar/Guide.svg"
 
-
+import { ReactComponent as LogoInvid2 } from "./images/SVG/Navbar/InVID.svg"
+import { ReactComponent as LogoWeVerify2 } from "./images/SVG/Navbar/WeVerify.svg"
 
 
 import {getSupportedBrowserLanguage} from "../Shared/Languages/getSupportedBrowserLanguage";
@@ -161,13 +162,15 @@ const NavBar = (props) => {
     };
 
     const drawerItems = [
+
+        
         {
             title: "navbar_tools",
-            icon: <AppsIcon fontSize={"large"}
-                            className={(drawerValue === 0) ? classes.selectedApp : classes.unSelectedApp}/>,
+            icon: <ToolsIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} />,
             tsvPrefix: "all",
             path: "all",
         },
+        
         {
             title: "navbar_analysis",
             description: "navbar_analysis_description",
@@ -278,53 +281,54 @@ const NavBar = (props) => {
     const tabItems = [
         {
             title: "navbar_tools",
-            icon: <ToolsIcon width="40px" height="40px" style={{ fill: "#717171" }} />,
+            icon: <ToolsIcon width="40px" height="40px" style={{ fill: "#4c4c4c" }} />,
             content: <div/>,
             path: "tools",
             footer: <div/>,
         },
         {
+            title: "navbar_assistant",
+            icon: <AssistantIcon width="40px" height="40px" style={{ fill: "#4c4c4c" }} />,
+            content: <Assistant />,
+            path: "assistant",
+            footer: <Footer type={"usfd"} />
+        },
+        {
             title: "navbar_tuto",
-            icon: <GuideIcon width="40px" height="40px" style={{ fill: "#717171" }} />,
+            icon: <GuideIcon width="40px" height="40px" style={{ fill: "#4c4c4c" }} />,
             content: <Tutorial/>,
             path: "tutorial",
             footer: <Footer type={"afp"}/>
         },
         {
+            title: "navbar_quiz",
+            icon: <InteractiveIcon width="40px" height="40px" style={{ fill: "#4c4c4c" }} />,
+            content: <Interactive />,
+            path: "interactive",
+            footer: <Footer type={"afp"} />
+        },
+        {
             title: "navbar_classroom",
-            icon: <ClassroomIcon width="40px" height="40px" style={{ fill: "#717171" }} />,
+            icon: <ClassroomIcon width="40px" height="40px" style={{ fill: "#4c4c4c" }} />,
             content: <ClassRoom/>,
             path: "classroom",
             footer: <Footer type={"afp"}/>
         },
         {
-            title: "navbar_quiz",
-            icon: <InteractiveIcon width="40px" height="40px" style={{ fill: "#717171" }} />,
-            content: <Interactive/>,
-            path: "interactive",
-            footer: <Footer type={"afp"}/>
-        },
-        {
             title: "navbar_factCheck",
-            icon: <FactcheckIcon width="40px" height="40px" style={{ fill: "#717171" }} />,
+            icon: <FactcheckIcon width="40px" height="40px" style={{ fill: "#4c4c4c" }} />,
             content: <FactCheck/>,
             path: "factCheck",
             footer: <Footer type={"afp"}/>
         },
         {
             title: "navbar_about",
-            icon: <AboutIcon width="40px" height="40px" style={{ fill: "#717171" }} />,
+            icon: <AboutIcon width="40px" height="40px" style={{ fill: "#4c4c4c" }} />,
             content: <About/>,
             path: "about",
             footer: <Footer type={"afp"}/>
         },
-        {
-            title: "navbar_assistant",
-            icon: <AssistantIcon width="40px" height="40px" style={{ fill: "#717171" }} />,
-            content: <Assistant/>,
-            path: "assistant",
-            footer: <Footer type={"usfd"}/>
-        }
+
     ];
 
     const handleImageClick = () => {
@@ -352,12 +356,26 @@ const NavBar = (props) => {
             <AppBar position="fixed" color="default" className={classes.appBar}>
                 <Toolbar className={classes.toolbar}>
                     <Box display={{xs: 'none', md: 'block'}}>
-                        <img
-                            src={logoInvid} alt="logo"
+                        <LogoInvid2
+                            height="40px"
+                            width="60px"
+                            alt="logo"
                             className={classes.logoLeft}
                             onClick={handleImageClick}
                         />
                     </Box>
+
+                    <Box display={{ xs: 'none', md: 'block' }}>
+                        <LogoWeVerify2
+                            height="40px"
+                            width="60px"
+                            alt="logo"
+                            className={classes.logoRight}
+                            onClick={handleImageClick}
+                        />
+                    </Box>
+
+
                     <div className={classes.grow}/>
                     <Tabs
                         value={tabValue}
@@ -367,6 +385,7 @@ const NavBar = (props) => {
                         indicatorColor="primary"
                         textColor="primary"
                         aria-label="scrollable force tabs example"
+                        style={{marginRight: "30px"}}
                     >
                         {
                             tabItems.map((item, index) => {
@@ -380,14 +399,7 @@ const NavBar = (props) => {
                     </Tabs>
                     <div className={classes.grow}/>
                     <Languages/>
-                    <Box display={{xs: 'none', md: 'block'}}>
-                        <img
-                            src={logoWeVerify}
-                            alt="logo"
-                            className={classes.logoRight}
-                            onClick={handleImageClick}
-                        />
-                    </Box>
+                    
                 </Toolbar>
             </AppBar>
             <Drawer hidden={tabValue !== 0 || (tabValue === 0 && drawerValue === 0)}

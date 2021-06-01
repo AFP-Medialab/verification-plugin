@@ -12,8 +12,7 @@ const useMyStyles = makeStyles(theme => ({
     },
 
     rootNoCenter: {
-        padding: theme.spacing(3, 2),
-        marginTop: 5,
+        padding: theme.spacing(2),
     },
 
     noMargin: {
@@ -65,7 +64,8 @@ const useMyStyles = makeStyles(theme => ({
     },
     appBar: {
         zIndex: theme.zIndex.drawer + 1,
-        height: "83px"
+        height: "83px",
+        backgroundColor: "#ffffff"
     },
     drawer: {
         width: drawerWidth,
@@ -356,6 +356,7 @@ const useMyStyles = makeStyles(theme => ({
         [theme.breakpoints.up('sm')]: {
             fontSize: theme.typography.pxToRem(13),
             minWidth: 100,
+            color: "#4c4c4c"
         },
     },
     toolTipIcon: {
