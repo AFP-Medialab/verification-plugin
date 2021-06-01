@@ -23,11 +23,12 @@ const Languages = () => {
 
     const [open, setOpen] = useState(false);
     const [lang, setLang] = useState("en");
-
+    const storeLanguage = useSelector(state => state.language);
+    console.log("storeLanguage ", storeLanguage);
     const keywordByLang = (language) => {
         return (dictionary && dictionary[onlineTsv] && dictionary[onlineTsv][language]) ? dictionary[onlineTsv][language]["lang_label"] : "";
     };
-
+    
     const dispatch = useDispatch();
 
     const [anchorEl, setAnchorEl] = useState(null);
@@ -63,7 +64,7 @@ const Languages = () => {
                             marginRight: "5px", 
                             }}>
 
-                            {keywordByLang(lang)}
+                            {keywordByLang(storeLanguage)}
             </span>
 
             <Tooltip title={keyword("translations")} placement="bottom">
