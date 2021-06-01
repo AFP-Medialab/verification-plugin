@@ -33,9 +33,12 @@ const Keyframes = () => {
 
     // state used to toggle localFile view
     const [localFile, setLocalFile] = useState(false);
+
+    /*
     const toggleLocal = () => {
         setLocalFile(!localFile);
     };
+    */
 
     const resultUrl = useSelector(state => state.keyframes.url);
     const resultData = useSelector(state => state.keyframes.result);
@@ -284,10 +287,7 @@ const Keyframes = () => {
                         </Typography>
                     </Box>
                     <Box display={!localFile ? "none" : "block"}>
-                        <Button variant="contained" color="primary" onClick={toggleLocal}>
-                            {keyword("forensic_card_back")}
-                        </Button>
-                        {localFile &&<LocalFile/>}
+                        <LocalFile/>
                     </Box>
                 </Box>
             </Card>

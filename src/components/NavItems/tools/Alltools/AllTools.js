@@ -24,8 +24,11 @@ const AllTools = (props) => {
     const tools = props.tools;
     const [videoUrl, setVideoUrl] = useState(null);
 
-    const handleClick = (path) => {
-        history.push("/app/tools/" + path)
+    const handleClick = (path, mediaTool) => {
+        history.push({
+            pathname: "/app/tools/" + path,
+            state: { media: mediaTool}
+        })
     };
 
     console.log(tools);
@@ -161,14 +164,15 @@ const AllTools = (props) => {
                         
                             {
                                 toolsVideo.map((value, key) => {
+
                                     return (
-                                        <Grid item key={key} onClick={() => handleClick(value.path)}>
+                                        <Grid item key={key} onClick={() => handleClick(value.path, "video")}>
                                             <ToolCard
                                                 name={keyword(value.title)}
                                                 description={keyword(value.description)}
                                                 icon={value.iconColored} 
                                                 type={value.type}
-                                                path="../../../NavBar/images/SVG/Image/Gif.svg"/>
+                                                path="../../../NavBar/images/SVG/Image/Gif.svg" />
                                                 
                                         </Grid>
                                     );
@@ -210,7 +214,7 @@ const AllTools = (props) => {
                         {
                             toolsImages.map((value, key) => {
                                 return (
-                                    <Grid item key={key} onClick={() => handleClick(value.path)}>
+                                    <Grid item key={key} onClick={() => handleClick(value.path, "image")}>
                                         <ToolCard
                                             name={keyword(value.title)}
                                             description={keyword(value.description)}
@@ -256,7 +260,7 @@ const AllTools = (props) => {
                         {
                             toolsSearch.map((value, key) => {
                                 return (
-                                    <Grid item key={key} onClick={() => handleClick(value.path)}>
+                                    <Grid item key={key} onClick={() => handleClick(value.path, "search")}>
                                         <ToolCard
                                             name={keyword(value.title)}
                                             description={keyword(value.description)}
@@ -302,7 +306,7 @@ const AllTools = (props) => {
                         {
                             toolsData.map((value, key) => {
                                 return (
-                                    <Grid item key={key} onClick={() => handleClick(value.path)}>
+                                    <Grid item key={key} onClick={() => handleClick(value.path, "datas")}>
                                         <ToolCard
                                             name={keyword(value.title)}
                                             description={keyword(value.description)}

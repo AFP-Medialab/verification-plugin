@@ -27,9 +27,14 @@ import CardHeader from "@material-ui/core/CardHeader";
 import { ReactComponent as MetadataIcon } from '../../../NavBar/images/SVG/Image/Metadata.svg';
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 
+import { useLocation } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setMetadataMediaType } from "../../../../redux/actions/tools/metadataActions";
+
 
 const Metadata = () => {
     const {url, type} = useParams();
+    const location = useLocation();
 
     const classes = useMyStyles();
     const keyword = useLoadLanguage("components/NavItems/tools/Metadata.tsv", tsv);
@@ -38,18 +43,21 @@ const Metadata = () => {
     const resultUrl = useSelector(state => state.metadata.url);
     const resultData = useSelector(state => state.metadata.result);
     const resultIsImage = useSelector(state => state.metadata.isImage);
+    const mediaType = useSelector(state => state.metadata.mediaType);
 
     const [radioImage, setRadioImage] = useState( true);
     const [input, setInput] = useState((resultUrl) ? resultUrl : "");
     const [imageUrl, setImageurl] = useState(null);
     const [videoUrl, setVideoUrl] = useState(null);
     const [urlDetected, setUrlDetected] = useState(false)
+    const [readyToSend, setReadyToSend] = useState(false)
 
 
     useVideoTreatment(videoUrl);
     useImageTreatment(imageUrl);
 
     const submitUrl = () => {
+        console.log("input" + input);
         if (input) {
             submissionEvent(input);
             if (radioImage) {
@@ -75,6 +83,38 @@ const Metadata = () => {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [urlDetected])
+
+    const [initTool, setInitTool] = useState(true);
+
+    const dispatch = useDispatch();
+
+    if(initTool){
+        console.log("Hola metadata");
+
+        if (location.state != null){
+            console.log(location.state.media);
+            if (location.state.media === "image") {
+                dispatch(setMetadataMediaType("image"));
+                console.log("Hola image");
+                console.log(mediaType);
+
+                setRadioImage(true)
+
+            } else if (location.state.media === "video") {
+                dispatch(setMetadataMediaType("video"));
+                console.log("Hola video");
+                console.log(mediaType);
+
+                setRadioImage(false)
+            }
+        }else{
+            console.log(mediaType);
+        }
+
+        
+        setInitTool(false);
+    }
+
 
     useEffect(() => {
         if (type) {
@@ -103,6 +143,7 @@ const Metadata = () => {
                     title={keyword("cardheader_source")}
                     className={classes.headerUpladedImage}
                 />
+
                 <Box p={3}>
 
                     <Grid
@@ -115,7 +156,7 @@ const Metadata = () => {
                             <TextField
                                 value={input}
                                 id="standard-full-width"
-                                label={keyword("metadata_content_input")}
+                                label={keyword("metadata_content_inputt")}
                                 placeholder={keyword("metadata_content_input_placeholder")}
                                 fullWidth
                                 variant="outlined"
@@ -123,7 +164,11 @@ const Metadata = () => {
                             />
                         </Grid>
 
+                        
+
                         <Grid item>
+
+                            
                             <RadioGroup aria-label="position" name="position" value={radioImage}
                                 onChange={() => setRadioImage(!radioImage)} row>
 
@@ -141,8 +186,10 @@ const Metadata = () => {
                                 />
 
                             </RadioGroup>
-                        </Grid>
 
+                            
+                        </Grid>
+                                
 
 
                         <Grid item>
