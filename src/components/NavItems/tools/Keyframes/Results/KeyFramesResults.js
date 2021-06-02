@@ -14,14 +14,7 @@ import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Keyfra
 import Grid from "@material-ui/core/Grid";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
-
-const useStyles = makeStyles(theme => ({
-    root: {
-        padding: theme.spacing(3, 2),
-        marginTop: 5,
-        textAlign: "center",
-    },
-}));
+import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 
 const useLoading = (action) => {
     const [loading, setLoading] = useState(false);
@@ -52,7 +45,7 @@ const loadImageSize = (simpleList, cols) => {
 
 
 const KeyFramesResults = (props) => {
-    const classes = useStyles();
+    const classes = useMyStyles();
     const keyword = useLoadLanguage("components/NavItems/tools/Keyframes.tsv", tsv);
     const dispatch = useDispatch();
 
@@ -104,7 +97,7 @@ const KeyFramesResults = (props) => {
     },[findHeight, dispatch]);
 
     return (
-        <div>
+        <>
             {
             !isLoading &&
             <Card>
@@ -160,8 +153,8 @@ const KeyFramesResults = (props) => {
                     }
                 </div>
             </Card>
-            }   
-        </div>
+            } 
+        </>  
     )
 };
 export default React.memo(KeyFramesResults);
