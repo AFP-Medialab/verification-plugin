@@ -451,6 +451,10 @@ const useMyStyles = makeStyles(theme => ({
         height: "100%"
     },
 
+    lensesCard: {
+        flexGrow: 1,
+    },
+
     imageUploaded:{
         objectFit: "contain",
         objectPosition: "top",

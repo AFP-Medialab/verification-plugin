@@ -476,7 +476,8 @@ const ForensicResults = (props) => {
                     <Box mt={5} mb={5}>
                         <Grid container spacing={3}>
                             
-                            <Grid item xs={6}>
+                            <Grid item xs={6} style={{display: "flex", flexDirection: "column"}}>
+
                                 <Card>
                                     <CardHeader
                                         title={
@@ -512,7 +513,7 @@ const ForensicResults = (props) => {
                                     </div>
                                 </Card>
 
-                                <Box m={3}></Box>
+                                <Box mt={3}></Box>
 
                                 <Card className={classes.lensesCard}>
                                     <CardHeader
@@ -572,6 +573,7 @@ const ForensicResults = (props) => {
                                         }
                                     />
 
+
                                     <Box p={3}>
 
                                         <Grid container spacing={3}>
@@ -592,6 +594,7 @@ const ForensicResults = (props) => {
                                             }
                                         </Grid>
                                     </Box>
+
                                 </Card>
                             </Grid>
 
