@@ -8,10 +8,10 @@ import {useDispatch, useSelector} from "react-redux";
 import FormControl from "@material-ui/core/FormControl";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
-import {useInput} from "../../../../Hooks/useInput";
+import {useInput, loadImageSize, useLoading} from "../../../../Hooks/useInput";
 import {
     cleanThumbnailsState,
-    setThumbnailsResult} from "../../../../redux/actions/tools/thumbnailsActions"
+    setThumbnailsResult, setThumbnailsLoading} from "../../../../redux/actions/tools/thumbnailsActions"
 import {setError} from "../../../../redux/actions/errorActions"
 import CloseResult from "../../../Shared/CloseResult/CloseResult";
 import Checkbox from "@material-ui/core/Checkbox";
@@ -27,6 +27,8 @@ import CardHeader from "@material-ui/core/CardHeader";
 import { ReactComponent as ThumbnailsIcon } from '../../../NavBar/images/SVG/Video/Thumbnails.svg';
 import Grid from "@material-ui/core/Grid";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
+import LinearProgress from "@material-ui/core/LinearProgress";
+import Typography from "@material-ui/core/Typography";
 
 
 const Thumbnails = () => {
@@ -38,6 +40,11 @@ const Thumbnails = () => {
 
     const resultUrl = useSelector(state => state.thumbnails.url);
     const resultData = useSelector(state => state.thumbnails.result);
+    const isLoading = useSelector(state => state.thumbnails.loading);
+    const [height, setHeight] = useState(0);
+    const [showResult, setShowResult] = useState(false);
+    var cols = 3;
+
     const dispatch = useDispatch();
 
     const input = useInput(resultUrl);
@@ -120,7 +127,7 @@ const Thumbnails = () => {
         if (url !== null && url !== "" && isYtUrl(url)) {
             submissionEvent(url);
             let images = get_images(url);
-            dispatch(setThumbnailsResult(url, images, false, false));
+            dispatch(setThumbnailsResult(url, images, false, true));
             if(selectedValue.openTabs)
                 images.forEach(img => imageClickUrl(img));
         } else
@@ -149,26 +156,39 @@ const Thumbnails = () => {
             ImageReverseSearch("reddit", [url]);
     };
 
+    const computeHeight = async() =>{
+        loadImageSize(resultData, cols)
+                .then((height) => {setHeight(height); setShowResult(true)})
+                .then((height) => {return height} );
+    };
+    
+    const [getHeight, isImgLoading] = useLoading(computeHeight);
     useEffect(() => {
         if (url !== undefined) {
             const uri = (url !== null) ? decodeURIComponent(url) : undefined;
             dispatch(setThumbnailsResult(uri, resultData, false, false));
         }
+        if(resultData){
+            getHeight();
+        }
+        // eslint-disable-next-line 
     }, [url, dispatch, resultData]);
 
-    const [showResult, setShowResult] = useState(false);
-    const toggleDetail = () => {
-        setShowResult(true);
-    };
+   // const response = getHeight();
+    useEffect(() => {
+        if(resultData){
+            getHeight();
+        }
+        // eslint-disable-next-line 
+      }, [resultData]);
 
-    let height = 0;
-    let cols = 3;
-    let colsWidth = 1180 / cols;
-    if (resultData) {
-        var img = new Image();
-        img.src = resultData[0];
-        height = ((colsWidth * img.height) / img.width) - 60;
-    }
+    useEffect(()=> {
+        if(showResult){
+            dispatch(setThumbnailsLoading(false));
+        }
+    },[showResult, dispatch]);
+
+
 
     return (
         <div>
@@ -250,15 +270,16 @@ const Thumbnails = () => {
                             
                         </FormGroup>
                     </FormControl>
-
-
+                    <Box m={3} hidden={!isLoading}/>
+                    <LinearProgress hidden={!isLoading}/>
+                    
                 </Box>
             </Card>
 
             <Box m={3} />
 
             {
-                resultData && resultData.length !== 0 &&
+                resultData && resultData.length !== 0 && !isImgLoading &&
                 <Card>
                     <CardHeader
                         title={keyword("cardheader_results")}
@@ -268,15 +289,9 @@ const Thumbnails = () => {
                         <CloseResult onClick={() => dispatch(cleanThumbnailsState())}/>
                         <OnClickInfo keyword={"thumbnails_tip"}/>
                         <Box m={2}/>
-                        <Button color={"primary"} onClick={() => toggleDetail()}>
-                        {
-                            keyword("show_result")
-                        }
-                        </Button>
-                        {
-                        showResult &&
+
                         <ImageGridList list={resultData} handleClick={imageClick} height={height} cols={cols} />
-                        }
+                        
                     </div>
                 </Card>
             }

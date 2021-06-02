@@ -1,5 +1,4 @@
 import React, {useState, useEffect} from "react";
-import makeStyles from "@material-ui/core/styles/makeStyles";
 import {useDispatch} from "react-redux";
 import ImageGridList from "../../../../Shared/ImageGridList/ImageGridList";
 import Box from "@material-ui/core/Box";
@@ -15,34 +14,7 @@ import Grid from "@material-ui/core/Grid";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
-
-const useLoading = (action) => {
-    const [loading, setLoading] = useState(false);
-    const doAction = (...args) => {
-      setLoading(true);
-      return action(...args).finally(() => setLoading(false));
-    };
-    return [doAction, loading];
-  };
-
-const loadImageSize = (simpleList, cols) => {
-    return new Promise((resolve, reject) => {
-        setTimeout(() => {
-            let height = 0;
-            let colsWidth = 1180 / cols;
-            if (simpleList) {
-                var img = new Image();
-                img.src = simpleList[0];
-                height = (colsWidth * img.height) / img.width;
-                if (img.width !== 0 && img.height !== 0 ) {
-                    resolve(height);
-                }
-
-            } else reject("no images");
-        }, 2000);
-    });
-};
-
+import {useLoading, loadImageSize} from "../../../../../Hooks/useInput"
 
 const KeyFramesResults = (props) => {
     const classes = useMyStyles();
