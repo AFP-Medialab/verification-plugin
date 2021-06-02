@@ -68,7 +68,7 @@ const useGetHomographics = (files, showHomo, mode) => {
             //console.log(files.file1);
             //console.log(files.file2);
 
-            var bodyUrlFormData = new FormData();
+            var bodyUrlFormData = new URLSearchParams();
             bodyUrlFormData.append('url_0', files.url_0);
             bodyUrlFormData.append('url_1', files.url_1);
 
@@ -76,7 +76,7 @@ const useGetHomographics = (files, showHomo, mode) => {
                 method: "post",
                 url: "https://demo-medialab.afp.com/envisu-tools/open/ipol/homographic/url",
                 data: bodyUrlFormData,
-                headers: { "Content-Type": "multipart/form-data" },
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
             })
                 .then(response => getImages(response))
                 .catch(error => {
