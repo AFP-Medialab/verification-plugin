@@ -10,7 +10,7 @@ const useGetImages = (url) => {
     const keyword = useLoadLanguage("components/NavItems/tools/Forensic.tsv", tsv);
     const dispatch = useDispatch();
 
-    const gifTransparencyMasks = [];
+    //const gifTransparencyMasks = [];
 
 
     useEffect(() => {

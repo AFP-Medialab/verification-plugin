@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import axios from "axios"
 import { useDispatch } from "react-redux";
-import { setForensicsLoading, setForensicsResult, setForensicMaskGif } from "../../../../../redux/actions/tools/forensicActions";
+import { setForensicsLoading, setForensicMaskGif } from "../../../../../redux/actions/tools/forensicActions";
 import { setError } from "../../../../../redux/actions/errorActions";
 import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Forensic.tsv";

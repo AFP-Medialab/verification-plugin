@@ -13,6 +13,7 @@ export const ERR_AUTH_INVALID_USER_STATE = "ERR_AUTH_INVALID_USER_STATE";
 export const ERR_AUTH_USER_EXPIRED = "ERR_AUTH_USER_EXPIRED";
 export const ERR_AUTH_SESSION_EXPIRED = "ERR_AUTH_SESSION_EXPIRED";
 
+/* eslint import/no-anonymous-default-export: [2, {"allowObject": true}] */
 export default {
   ERR_AUTH_UNKNOWN_ERROR,
   ERR_AUTH_INVALID_PARAMS,

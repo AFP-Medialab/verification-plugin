@@ -341,15 +341,16 @@ const ForensicResults = (props) => {
     useGetTransparent(gifFilter, readyTransparency);
 
     function clickGifPopover(event, filter) {
+        var url;
         if (filter === "zero_report" || filter === "ghost_report" || filter === "cagi_report"){
-            var url = filters.current.find(x => x.id === filter).map[filters.current.find(x => x.id === filter).currentDisplayed]
+            url = filters.current.find(x => x.id === filter).map[filters.current.find(x => x.id === filter).currentDisplayed]
             setGifFilter(url);
             console.log(url);
 
             setReadyTransparency(true);
 
         }else{
-            var url = filters.current.find(x => x.id === filter).map;
+            url = filters.current.find(x => x.id === filter).map;
             setGifFilter(url);
             console.log(url);
 
