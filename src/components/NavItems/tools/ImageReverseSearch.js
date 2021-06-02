@@ -1,4 +1,5 @@
 const ImageReverseSearch = (type, urls) => {
+  
     let baseUrl = {
         baidu: {
             search: "https://image.baidu.com/n/pc_search?queryImageUrl="
@@ -35,7 +36,8 @@ const ImageReverseSearch = (type, urls) => {
     }
     let urlStart = baseUrl[type].search;
     let urlEnd = ( baseUrl[type].end !== undefined ? baseUrl[type].end : "" );
-    for (let image of urls)
-        window.open(urlStart + image + urlEnd)
+    for (let image of urls){
+        window.open(urlStart + encodeURIComponent(image) + urlEnd)
+    }
 };
 export default ImageReverseSearch;

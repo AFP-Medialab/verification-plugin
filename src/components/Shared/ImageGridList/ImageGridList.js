@@ -29,7 +29,7 @@ const ImageGridList = (props) => {
             <GridList cellHeight={props.height} className={classes.gridList} cols={props.cols!=null ? props.cols : 3}>
                 {props.list.map((tile, index) => (
                     <GridListTile  key={index} cols={1} >
-                         <img src={tile} alt={tile} onClick={(tile) => props.handleClick(props.list[index])}/>
+                         <img src={tile} alt={tile} onClick={() => props.handleClick(props.list[index])}/>
                     </GridListTile>
                 ))}
             </GridList>

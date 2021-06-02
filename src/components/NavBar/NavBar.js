@@ -3,8 +3,6 @@ import Tab from '@material-ui/core/Tab';
 import Box from '@material-ui/core/Box';
 import {useDispatch, useSelector} from "react-redux";
 import Languages from "../NavItems/languages/languages";
-import logoInvid from "./images/logo-invid.png";
-import logoWeVerify from "../PopUp/images/logo-we-verify.png";
 import Tutorial from "../NavItems/tutorial/tutorial";
 import React, {useEffect} from 'react';
 import clsx from 'clsx';
@@ -19,7 +17,6 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import AppsIcon from '@material-ui/icons/Apps';
 import ScrollTop from "../Shared/ScrollTop/ScrollTop";
 import Fab from "@material-ui/core/Fab";
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
@@ -119,7 +116,6 @@ import Snackbar from "@material-ui/core/Snackbar";
 import {setFalse, setTrue} from "../../redux/actions/cookiesActions";
 import {changeLanguage} from "../../redux/actions";
 import Button from "@material-ui/core/Button";
-import { Log } from 'mp4box';
 
 
 function a11yProps(index) {

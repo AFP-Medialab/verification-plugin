@@ -49,7 +49,7 @@ const Magnifier = () => {
             canvas.getContext('2d').drawImage(img, 0, 0);
 
             // Get raw image data
-            dispatch(setMagnifierResult(input, canvas.toDataURL('image/png'), false, false));
+            dispatch(setMagnifierResult(src, canvas.toDataURL('image/png'), false, false));
             canvas.remove();
         };
         img.onerror = (error) => {
@@ -58,7 +58,7 @@ const Magnifier = () => {
         img.src = src;
     };
 
-    useEffect(() => {
+    useEffect(() => { 
         if (url) {
             if(url !== KNOWN_LINKS.OWN) {
                 const uri = (url !== null) ? decodeURIComponent(url) : undefined;

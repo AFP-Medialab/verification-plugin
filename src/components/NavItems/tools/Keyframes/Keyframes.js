@@ -293,14 +293,10 @@ const Keyframes = () => {
             </Card>
 
             <Box m={3} />
-
-
-            <div>
                 {
                     resultData &&
                     <KeyFramesResults result={resultData}/>
                 }
-            </div>
             <div>
                 {
                     (resultData && downloadShubshots) ? 

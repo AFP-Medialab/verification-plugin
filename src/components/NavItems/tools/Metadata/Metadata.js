@@ -50,8 +50,6 @@ const Metadata = () => {
     const [imageUrl, setImageurl] = useState(null);
     const [videoUrl, setVideoUrl] = useState(null);
     const [urlDetected, setUrlDetected] = useState(false)
-    const [readyToSend, setReadyToSend] = useState(false)
-
 
     useVideoTreatment(videoUrl);
     useImageTreatment(imageUrl);

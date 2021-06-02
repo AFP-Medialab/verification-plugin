@@ -200,7 +200,7 @@ const ImageResult = () => {
                         </Button>
                     </Grid>
                     <Grid item>
-                        <a style={{"text-decoration": "none"}} href={resultImage} download={downLoadLink(resultImage)}>
+                        <a style={{"textDecoration": "none"}} href={resultImage} download={downLoadLink(resultImage)}>
                             <Button color="primary" variant="contained">
                                 {
                                     keyword("download")
@@ -216,7 +216,7 @@ const ImageResult = () => {
                     !imageIsUrl ?
                         <Grid
                             container
-                            direction="row"
+                            direction="column"
                             justify="center"
                             alignItems="center"
                             spacing={3}
