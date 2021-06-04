@@ -21,6 +21,7 @@ import OCR from "../../NavItems/tools/OCR/OCR";
 import Gif from "../../NavItems/tools/GIF/Gif";
 import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
+import AnalysisImg from "../../NavItems/tools/Analysis_image/Analysis"
 
 const DrawerItem = (props) => {
 
@@ -45,6 +46,10 @@ const DrawerItem = (props) => {
         },
         {
             content: <TwitterAdvancedSearch/>,
+            footer: <Footer type={"afp"}/>
+        },
+        {
+            content: <AnalysisImg/>,
             footer: <Footer type={"afp"}/>
         },
         {

@@ -53,7 +53,7 @@ const AllTools = (props) => {
 
 
         if(
-            value.title === "navbar_analysis" ||
+            value.title === "navbar_analysis_video" ||
             value.title === "navbar_keyframes" ||
             value.title === "navbar_thumbnails" ||
             value.title === "navbar_rights" ||
@@ -64,6 +64,7 @@ const AllTools = (props) => {
 
 
         if (
+            value.title === "navbar_analysis_image" ||
             value.title === "navbar_ocr" ||
             value.title === "navbar_forensic" ||
             value.title === "navbar_magnifier" ||

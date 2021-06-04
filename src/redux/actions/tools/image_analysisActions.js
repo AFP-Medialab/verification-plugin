@@ -12,9 +12,7 @@ export const setAnalysisResult = (url, result, notification, loading) => {
 export const setAnalysisComments = (data) => {
     return {
         type : "SET_ANALYSIS_PAGINATION_COMMENTS",
-        payload : data
-            
-        
+        payload : data  
     }
 };
 export const setAnalysisLinkComments = (data) => {

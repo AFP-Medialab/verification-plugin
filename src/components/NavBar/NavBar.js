@@ -91,6 +91,8 @@ import { ReactComponent as MagnifierIcon } from "./images/SVG/Image/Magnifier.sv
 import { ReactComponent as ForensicIcon } from "./images/SVG/Image/Forensic.svg"
 import { ReactComponent as GifIcon }  from "./images/SVG/Image/Gif.svg"
 import { ReactComponent as OcrIcon }  from "./images/SVG/Image/OCR.svg"
+//import { ReactComponent as AnalysisIconImage }  from "./images/SVG/Image/Analysis_img.svg"
+import { ReactComponent as AnalysisIconImage }  from "./images/SVG/Video/Video_analysis.svg"
 
 
 import { ReactComponent as TwitterSearchIcon } from "./images/SVG/Search/Twitter_search.svg"
@@ -169,7 +171,7 @@ const NavBar = (props) => {
             path: "all",
         },
         {
-            title: "navbar_analysis",
+            title: "navbar_analysis_video",
             description: "navbar_analysis_description",
             icon: <AnalysisIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} />,
             iconColored: <AnalysisIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} />,
@@ -199,6 +201,14 @@ const NavBar = (props) => {
             iconColored: <TwitterSearchIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} />,
             tsvPrefix: "twitter",
             path: "twitter",
+        },
+        {
+            title: "navbar_analysis_image",
+            description: "navbar_analysis_description_image",
+            icon: <AnalysisIconImage width="45px" height="45px" style={{ fill: "#4c4c4c" }} />,
+            iconColored: <AnalysisIconImage width="45px" height="45px" style={{ fill: "#51A5B2" }} />,
+            tsvPrefix: "api",
+            path: "analysisImage",
         },
         {
             title: "navbar_magnifier",
@@ -240,6 +250,7 @@ const NavBar = (props) => {
             tsvPrefix: "twitter_sna",
             path: "twitterSna"
         },
+        
         {
             title: "navbar_covidsearch",
             description: "navbar_covidsearch_description",
@@ -264,6 +275,7 @@ const NavBar = (props) => {
             tsvPrefix: "ocr",
             path: "ocr"
         },
+        
         {
             title: "navbar_gif",
             description: "navbar_gif_description",
