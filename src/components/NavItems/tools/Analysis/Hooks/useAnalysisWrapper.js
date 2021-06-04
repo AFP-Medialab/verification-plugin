@@ -20,7 +20,7 @@ export const useAnalysisWrapper = (apiUrl, videoUrl) => {
         };
 
         const getReport = (id) => {
-            axios.get("http://mever.iti.gr/caa/api/v4/videos/reports/" + id)
+            axios.get("https://mever.iti.gr/caa/api/v4/videos/reports/" + id)
                 .then(response => {
                     if (keyword("table_error_" + response.data.status) !== "")
                         handleError("table_error_" + response.data.status.status);
@@ -41,7 +41,7 @@ export const useAnalysisWrapper = (apiUrl, videoUrl) => {
 
 
         const waitUntilDonne = (data) => {
-            axios.get("http://mever.iti.gr/caa/api/v4/videos/jobs/" + data.id)
+            axios.get("https://mever.iti.gr/caa/api/v4/videos/jobs/" + data.id)
                 .then(response => {
                     if (response.data.status === "done") {
                         getReport(response.data.media_id)

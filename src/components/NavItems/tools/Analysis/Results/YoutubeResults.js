@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {useDispatch} from "react-redux";
 import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
@@ -26,11 +26,13 @@ import TimeToLocalTime from "./TimeToLocalTime";
 //import AsynchMyMap from "../../../../Shared/MyMap/AsynchMyMap";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
+import styles from "./layout.module.css";
 
 const YoutubeResults = (props) => {
     const classes = useMyStyles();
     const keyword = useLoadLanguage("components/NavItems/tools/Analysis.tsv", tsv);
     const dispatch = useDispatch();
+    const [count_comments, setCount_comments] = useState(1);
 
     const [expanded, setExpanded] = React.useState(false);
 
@@ -39,8 +41,11 @@ const YoutubeResults = (props) => {
     };
 
     const report = props.report;
+    console.log("report ",report)
+    //const verificationComments = report["verification_comments"];
+    const verificationComments = report.comments ? report.comments : [];
+    console.log("verificationComments ",verificationComments)
 
-    const verificationComments = report["verification_comments"];
     const thumbnails = (report["thumbnails"]["others"]);
 
     const reverseSearch = (website) => {
@@ -49,6 +54,15 @@ const YoutubeResults = (props) => {
         }
     };
 
+
+
+
+
+
+
+
+
+    
 
     const videoTable = [
         {
@@ -186,6 +200,7 @@ const YoutubeResults = (props) => {
                                 </Table>
                             </div>
                         }
+
                         {
                             report["verification_comments"] &&
                             <div>
