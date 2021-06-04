@@ -1,6 +1,5 @@
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import {green} from "@material-ui/core/colors";
-import { MicNone } from "@material-ui/icons";
 
 const drawerWidth = 200;
 
@@ -13,8 +12,7 @@ const useMyStyles = makeStyles(theme => ({
     },
 
     rootNoCenter: {
-        padding: theme.spacing(3, 2),
-        marginTop: 5,
+        padding: theme.spacing(2),
     },
 
     noMargin: {
@@ -66,7 +64,8 @@ const useMyStyles = makeStyles(theme => ({
     },
     appBar: {
         zIndex: theme.zIndex.drawer + 1,
-        height: "83px"
+        height: "83px",
+        backgroundColor: "#ffffff"
     },
     drawer: {
         width: drawerWidth,
@@ -357,6 +356,7 @@ const useMyStyles = makeStyles(theme => ({
         [theme.breakpoints.up('sm')]: {
             fontSize: theme.typography.pxToRem(13),
             minWidth: 100,
+            color: "#4c4c4c"
         },
     },
     toolTipIcon: {
@@ -449,6 +449,10 @@ const useMyStyles = makeStyles(theme => ({
 
     cardFilters:{
         height: "100%"
+    },
+
+    lensesCard: {
+        flexGrow: 1,
     },
 
     imageUploaded:{
@@ -627,7 +631,6 @@ const useMyStyles = makeStyles(theme => ({
         height: "100%",
     },
 
-
     root2: {
         textAlign: "center",
         padding: theme.spacing(3),
@@ -636,11 +639,6 @@ const useMyStyles = makeStyles(theme => ({
     rootCard: {
         overflow: "visible"
     }
-
-    
-
-
-
 
 }));
 export default useMyStyles;

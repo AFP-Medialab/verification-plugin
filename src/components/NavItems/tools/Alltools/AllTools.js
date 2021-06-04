@@ -16,7 +16,9 @@ import { ReactComponent as IconImage } from '../../../NavBar/images/SVG/Image/Im
 import { ReactComponent as IconVideo } from '../../../NavBar/images/SVG/Video/Video.svg';
 import { ReactComponent as IconSearch } from '../../../NavBar/images/SVG/Search/Search.svg';
 import { ReactComponent as IconData } from '../../../NavBar/images/SVG/DataAnalysis/Data_analysis.svg';
+import { ReactComponent as IconTools } from '../../../NavBar/images/SVG/Navbar/Tools.svg';
 import Box from "@material-ui/core/Box";
+import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 
 const AllTools = (props) => {
     const classes = useMyStyles();
@@ -24,11 +26,14 @@ const AllTools = (props) => {
     const tools = props.tools;
     const [videoUrl, setVideoUrl] = useState(null);
 
-    const handleClick = (path) => {
-        history.push("/app/tools/" + path)
+    const handleClick = (path, mediaTool) => {
+        history.push({
+            pathname: "/app/tools/" + path,
+            state: { media: mediaTool}
+        })
     };
 
-    console.log(tools);
+    //console.log(tools);
 
     const toolsVideo = [];
     const toolsImages = [];
@@ -92,6 +97,7 @@ const AllTools = (props) => {
 
     })
 
+    /*
     console.log("Video");
     console.log(toolsVideo);
     console.log("Images");
@@ -100,7 +106,10 @@ const AllTools = (props) => {
     console.log(toolsSearch);
     console.log("SNA");
     console.log(toolsData);
+    */
 
+
+    
     /*
 
 
@@ -132,7 +141,9 @@ const AllTools = (props) => {
     */
 
     return (
-        <div className={classes.rootNoCenter}>
+        <div>
+
+            <HeaderTool name={keyword("navbar_tools")} icon={<IconTools style={{ fill: "#51A5B2" }} />} />
 
             <Card>
                 <Box p={2}>
@@ -143,7 +154,7 @@ const AllTools = (props) => {
                         alignItems="center"
                     >
                         <Grid item>
-                            <IconVideo width="45px" height="45px" style={{ fill: "#4c4c4c" }} />
+                            <IconVideo width="45px" height="45px" style={{ fill: "#596977" }} />
                         </Grid>
 
                         <Grid item>
@@ -151,7 +162,7 @@ const AllTools = (props) => {
                         </Grid>
 
                         <Grid item>
-                            <Typography variant="h5">Video</Typography>
+                            <Typography variant="h5" style={{ color: "#596977" }}>Video</Typography>
                         </Grid>
 
                     </Grid>
@@ -162,14 +173,15 @@ const AllTools = (props) => {
                         
                             {
                                 toolsVideo.map((value, key) => {
+
                                     return (
-                                        <Grid item key={key} onClick={() => handleClick(value.path)}>
+                                        <Grid item key={key} onClick={() => handleClick(value.path, "video")}>
                                             <ToolCard
                                                 name={keyword(value.title)}
                                                 description={keyword(value.description)}
                                                 icon={value.iconColored} 
                                                 type={value.type}
-                                                path="../../../NavBar/images/SVG/Image/Gif.svg"/>
+                                                path="../../../NavBar/images/SVG/Image/Gif.svg" />
                                                 
                                         </Grid>
                                     );
@@ -191,7 +203,7 @@ const AllTools = (props) => {
                         alignItems="center"
                     >
                         <Grid item>
-                            <IconImage width="45px" height="45px" style={{ fill: "#4c4c4c" }} />
+                            <IconImage width="45px" height="45px" style={{ fill: "#596977" }} />
                         </Grid>
 
                         <Grid item>
@@ -199,7 +211,7 @@ const AllTools = (props) => {
                         </Grid>
 
                         <Grid item>
-                            <Typography variant="h5">Image</Typography>
+                            <Typography variant="h5" style={{ color: "#596977" }}>Image</Typography>
                         </Grid>
 
                     </Grid>
@@ -211,7 +223,7 @@ const AllTools = (props) => {
                         {
                             toolsImages.map((value, key) => {
                                 return (
-                                    <Grid item key={key} onClick={() => handleClick(value.path)}>
+                                    <Grid item key={key} onClick={() => handleClick(value.path, "image")}>
                                         <ToolCard
                                             name={keyword(value.title)}
                                             description={keyword(value.description)}
@@ -237,7 +249,7 @@ const AllTools = (props) => {
                         alignItems="center"
                     >
                         <Grid item>
-                            <IconSearch width="45px" height="45px" style={{ fill: "#4c4c4c" }} />
+                            <IconSearch width="45px" height="45px" style={{ fill: "#596977" }} />
                         </Grid>
 
                         <Grid item>
@@ -245,7 +257,7 @@ const AllTools = (props) => {
                         </Grid>
 
                         <Grid item>
-                            <Typography variant="h5">Search</Typography>
+                            <Typography variant="h5" style={{ color: "#596977" }}>Search</Typography>
                         </Grid>
 
                     </Grid>
@@ -257,7 +269,7 @@ const AllTools = (props) => {
                         {
                             toolsSearch.map((value, key) => {
                                 return (
-                                    <Grid item key={key} onClick={() => handleClick(value.path)}>
+                                    <Grid item key={key} onClick={() => handleClick(value.path, "search")}>
                                         <ToolCard
                                             name={keyword(value.title)}
                                             description={keyword(value.description)}
@@ -283,7 +295,7 @@ const AllTools = (props) => {
                         alignItems="center"
                     >
                         <Grid item>
-                            <IconData width="45px" height="45px" style={{ fill: "#4c4c4c" }} />
+                            <IconData width="45px" height="45px" style={{ fill: "#596977" }} />
                         </Grid>
 
                         <Grid item>
@@ -291,7 +303,7 @@ const AllTools = (props) => {
                         </Grid>
 
                         <Grid item>
-                            <Typography variant="h5">Data Analysis</Typography>
+                            <Typography variant="h5" style={{ color: "#596977" }}>Data Analysis</Typography>
                         </Grid>
 
                     </Grid>
@@ -303,7 +315,7 @@ const AllTools = (props) => {
                         {
                             toolsData.map((value, key) => {
                                 return (
-                                    <Grid item key={key} onClick={() => handleClick(value.path)}>
+                                    <Grid item key={key} onClick={() => handleClick(value.path, "datas")}>
                                         <ToolCard
                                             name={keyword(value.title)}
                                             description={keyword(value.description)}

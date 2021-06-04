@@ -16,7 +16,7 @@ export class ToolCard extends Component {
         var showRedesign = false;
         var showLock = false;
 
-        console.log(this.props);
+        //console.log(this.props);
 
         if (this.props.type === "redesigned"){
             showRedesign = true;

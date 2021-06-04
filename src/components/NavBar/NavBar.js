@@ -3,8 +3,6 @@ import Tab from '@material-ui/core/Tab';
 import Box from '@material-ui/core/Box';
 import {useDispatch, useSelector} from "react-redux";
 import Languages from "../NavItems/languages/languages";
-import logoInvid from "./images/logo-invid.png";
-import logoWeVerify from "../PopUp/images/logo-we-verify.png";
 import Tutorial from "../NavItems/tutorial/tutorial";
 import React, {useEffect} from 'react';
 import clsx from 'clsx';
@@ -19,7 +17,6 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import AppsIcon from '@material-ui/icons/Apps';
 import ScrollTop from "../Shared/ScrollTop/ScrollTop";
 import Fab from "@material-ui/core/Fab";
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
@@ -109,7 +106,8 @@ import { ReactComponent as AboutIcon } from "./images/SVG/Navbar/About.svg"
 import { ReactComponent as AssistantIcon } from "./images/SVG/Navbar/Assistant.svg"
 import { ReactComponent as GuideIcon } from "./images/SVG/Navbar/Guide.svg"
 
-
+import { ReactComponent as LogoInvid2 } from "./images/SVG/Navbar/InVID.svg"
+import { ReactComponent as LogoWeVerify2 } from "./images/SVG/Navbar/WeVerify.svg"
 
 
 import {getSupportedBrowserLanguage} from "../Shared/Languages/getSupportedBrowserLanguage";
@@ -139,7 +137,6 @@ const NavBar = (props) => {
     const currentLang = useSelector(state => state.language);
     const defaultLanguage = useSelector(state => state.defaultLanguage);
 
-
     const dispatch = useDispatch();
 
 
@@ -163,17 +160,20 @@ const NavBar = (props) => {
     };
 
     const drawerItems = [
+
+        
         {
             title: "navbar_tools",
-            icon: <AppsIcon fontSize={"large"}
-                            className={(drawerValue === 0) ? classes.selectedApp : classes.unSelectedApp}/>,
+            icon: <ToolsIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} />,
             tsvPrefix: "all",
             path: "all",
         },
+
         {
             title: "navbar_analysis_video",
             description: "navbar_analysis_description",
-            icon: <AnalysisIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} />,
+            icon: (drawerValue === 1)   ? <AnalysisIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} />
+                                        : <AnalysisIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} />,
             iconColored: <AnalysisIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} />,
             tsvPrefix: "api",
             path: "analysis",
@@ -181,7 +181,8 @@ const NavBar = (props) => {
         {
             title: "navbar_keyframes",
             description: "navbar_keyframes_description",
-            icon: <KeyframesIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} />,
+            icon: (drawerValue === 2)   ? <KeyframesIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} />
+                                        : <KeyframesIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} />,
             iconColored: <KeyframesIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} />,
             tsvPrefix: "keyframes",
             path: "keyframes",
@@ -189,7 +190,8 @@ const NavBar = (props) => {
         {
             title: "navbar_thumbnails",
             description: "navbar_thumbnails_description",
-            icon: <ThumbnailsIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} />,
+            icon: (drawerValue === 3)   ? <ThumbnailsIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} />
+                                        : <ThumbnailsIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} />,
             iconColored: <ThumbnailsIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} />,
             tsvPrefix: "thumbnails",
             path: "thumbnails",
@@ -197,7 +199,8 @@ const NavBar = (props) => {
         {
             title: "navbar_twitter",
             description: "navbar_twitter_description",
-            icon: <TwitterSearchIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} />,
+            icon: (drawerValue === 4)   ? <TwitterSearchIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} />
+                                        : <TwitterSearchIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} />,
             iconColored: <TwitterSearchIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} />,
             tsvPrefix: "twitter",
             path: "twitter",
@@ -213,7 +216,8 @@ const NavBar = (props) => {
         {
             title: "navbar_magnifier",
             description: "navbar_magnifier_description",
-            icon: <MagnifierIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} />,
+            icon: (drawerValue === 5)   ? <MagnifierIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} />
+                                        : <MagnifierIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} />,
             iconColored: <MagnifierIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} />,
             tsvPrefix: "magnifier",
             path: "magnifier",
@@ -221,7 +225,8 @@ const NavBar = (props) => {
         {
             title: "navbar_metadata",
             description: "navbar_metadata_description",
-            icon: <MetadataIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} />,
+            icon: (drawerValue === 6)   ? <MetadataIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} />
+                                        : <MetadataIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} />,
             iconColored: <MetadataIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} />,
             tsvPrefix: "metadata",
             path: "metadata",
@@ -229,7 +234,8 @@ const NavBar = (props) => {
         {
             title: "navbar_rights",
             description: "navbar_rights_description",
-            icon: <VideoRightsIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} />,
+            icon: (drawerValue === 7)   ? <VideoRightsIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} />
+                                        : <VideoRightsIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} />,
             iconColored: <VideoRightsIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} />,
             tsvPrefix: "copyright",
             path: "copyright",
@@ -237,7 +243,8 @@ const NavBar = (props) => {
         {
             title: "navbar_forensic",
             description: "navbar_forensic_description",
-            icon: <ForensicIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} />,
+            icon: (drawerValue === 8)   ? <ForensicIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} />
+                                        : <ForensicIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} />,
             iconColored: <ForensicIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} />,
             tsvPrefix: "forensic",
             path: "forensic",
@@ -245,7 +252,8 @@ const NavBar = (props) => {
         {
             title: "navbar_twitter_sna",
             description: "navbar_twitter_sna_description",
-            icon: <TwitterSnaIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} />,
+            icon: (drawerValue === 9)   ? <TwitterSnaIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} />
+                                        : <TwitterSnaIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} />,
             iconColored: <TwitterSnaIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} />,
             tsvPrefix: "twitter_sna",
             path: "twitterSna"
@@ -254,7 +262,8 @@ const NavBar = (props) => {
         {
             title: "navbar_covidsearch",
             description: "navbar_covidsearch_description",
-            icon: <CovidSearchIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} />,
+            icon: (drawerValue === 10)  ? <CovidSearchIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} />
+                                        : <CovidSearchIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} />,
             iconColored: <CovidSearchIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} />,
             tsvPrefix: "covidsearch",
             path: "covidSearch"
@@ -262,7 +271,8 @@ const NavBar = (props) => {
         {
             title: "navbar_xnetwork",
             description: "navbar_xnetwork_description",
-            icon: <XnetworkIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} />,
+            icon: (drawerValue === 11)  ? <XnetworkIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} />
+                                        : <XnetworkIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} />,
             iconColored: <XnetworkIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} />,
             tsvPrefix: "xnetwork",
             path: "xnetwork"
@@ -270,7 +280,8 @@ const NavBar = (props) => {
         {
             title: "navbar_ocr",
             description: "navbar_ocr_description",
-            icon: <OcrIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} />,
+            icon: (drawerValue === 12)  ? <OcrIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} />
+                                        : <OcrIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} />,
             iconColored: <OcrIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} />,
             tsvPrefix: "ocr",
             path: "ocr"
@@ -279,7 +290,8 @@ const NavBar = (props) => {
         {
             title: "navbar_gif",
             description: "navbar_gif_description",
-            icon: <GifIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }}/>,
+            icon: (drawerValue === 13)  ? <GifIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} />
+                                        : <GifIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} />,
             iconColored: <GifIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} />,
             tsvPrefix: "gif",
             path: "gif"
@@ -290,53 +302,61 @@ const NavBar = (props) => {
     const tabItems = [
         {
             title: "navbar_tools",
-            icon: <ToolsIcon width="40px" height="40px" style={{ fill: "#717171" }} />,
+            icon: (tabValue === 0)  ? <ToolsIcon width="40px" height="40px" style={{ fill: "#51A5B2" }} />
+                                    : <ToolsIcon width="40px" height="40px" style={{ fill: "#4c4c4c" }} />,
             content: <div/>,
             path: "tools",
             footer: <div/>,
         },
         {
+            title: "navbar_assistant",
+            icon: (tabValue === 1)  ? <AssistantIcon width="40px" height="40px" style={{ fill: "#51A5B2" }} />
+                                    : <AssistantIcon width="40px" height="40px" style={{ fill: "#4c4c4c" }} />,
+            content: <Assistant />,
+            path: "assistant",
+            footer: <Footer type={"usfd"} />
+        },
+        {
             title: "navbar_tuto",
-            icon: <GuideIcon width="40px" height="40px" style={{ fill: "#717171" }} />,
+            icon: (tabValue === 2)  ? <GuideIcon width="40px" height="40px" style={{ fill: "#51A5B2" }} />
+                                    : <GuideIcon width="40px" height="40px" style={{ fill: "#4c4c4c" }} />,
             content: <Tutorial/>,
             path: "tutorial",
             footer: <Footer type={"afp"}/>
         },
         {
+            title: "navbar_quiz",
+            icon: (tabValue === 3)  ? <InteractiveIcon width="40px" height="40px" style={{ fill: "#51A5B2" }} />
+                                    : <InteractiveIcon width="40px" height="40px" style={{ fill: "#4c4c4c" }} />,
+            content: <Interactive />,
+            path: "interactive",
+            footer: <Footer type={"afp"} />
+        },
+        {
             title: "navbar_classroom",
-            icon: <ClassroomIcon width="40px" height="40px" style={{ fill: "#717171" }} />,
+            icon: (tabValue === 4)  ? <ClassroomIcon width="40px" height="40px" style={{ fill: "#51A5B2" }} />
+                                    : <ClassroomIcon width="40px" height="40px" style={{ fill: "#4c4c4c" }} />,
             content: <ClassRoom/>,
             path: "classroom",
             footer: <Footer type={"afp"}/>
         },
         {
-            title: "navbar_quiz",
-            icon: <InteractiveIcon width="40px" height="40px" style={{ fill: "#717171" }} />,
-            content: <Interactive/>,
-            path: "interactive",
-            footer: <Footer type={"afp"}/>
-        },
-        {
             title: "navbar_factCheck",
-            icon: <FactcheckIcon width="40px" height="40px" style={{ fill: "#717171" }} />,
+            icon: (tabValue === 5)  ? <FactcheckIcon width="40px" height="40px" style={{ fill: "#51A5B2" }} />
+                                    : <FactcheckIcon width="40px" height="40px" style={{ fill: "#4c4c4c" }} />,
             content: <FactCheck/>,
             path: "factCheck",
             footer: <Footer type={"afp"}/>
         },
         {
             title: "navbar_about",
-            icon: <AboutIcon width="40px" height="40px" style={{ fill: "#717171" }} />,
+            icon: (tabValue === 6)  ? <AboutIcon width="40px" height="40px" style={{ fill: "#51A5B2" }} />
+                                    : <AboutIcon width="40px" height="40px" style={{ fill: "#4c4c4c" }} />,
             content: <About/>,
             path: "about",
             footer: <Footer type={"afp"}/>
         },
-        {
-            title: "navbar_assistant",
-            icon: <AssistantIcon width="40px" height="40px" style={{ fill: "#717171" }} />,
-            content: <Assistant/>,
-            path: "assistant",
-            footer: <Footer type={"usfd"}/>
-        }
+
     ];
 
     const handleImageClick = () => {
@@ -364,12 +384,26 @@ const NavBar = (props) => {
             <AppBar position="fixed" color="default" className={classes.appBar}>
                 <Toolbar className={classes.toolbar}>
                     <Box display={{xs: 'none', md: 'block'}}>
-                        <img
-                            src={logoInvid} alt="logo"
+                        <LogoInvid2
+                            height="40px"
+                            width="60px"
+                            alt="logo"
                             className={classes.logoLeft}
                             onClick={handleImageClick}
                         />
                     </Box>
+
+                    <Box display={{ xs: 'none', md: 'block' }}>
+                        <LogoWeVerify2
+                            height="40px"
+                            width="60px"
+                            alt="logo"
+                            className={classes.logoRight}
+                            onClick={handleImageClick}
+                        />
+                    </Box>
+
+
                     <div className={classes.grow}/>
                     <Tabs
                         value={tabValue}
@@ -379,6 +413,7 @@ const NavBar = (props) => {
                         indicatorColor="primary"
                         textColor="primary"
                         aria-label="scrollable force tabs example"
+                        style={{marginRight: "30px"}}
                     >
                         {
                             tabItems.map((item, index) => {
@@ -392,14 +427,7 @@ const NavBar = (props) => {
                     </Tabs>
                     <div className={classes.grow}/>
                     <Languages/>
-                    <Box display={{xs: 'none', md: 'block'}}>
-                        <img
-                            src={logoWeVerify}
-                            alt="logo"
-                            className={classes.logoRight}
-                            onClick={handleImageClick}
-                        />
-                    </Box>
+                    
                 </Toolbar>
             </AppBar>
             <Drawer hidden={tabValue !== 0 || (tabValue === 0 && drawerValue === 0)}

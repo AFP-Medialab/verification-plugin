@@ -27,7 +27,7 @@ export const useKeyframeWrapper = (url) => {
         const lastGet = (itiUrl, video_id) => {
             axios.get(itiUrl)
                 .then(response => {
-                    dispatch(setKeyframesResult(url, response.data, false, false, video_id))
+                    dispatch(setKeyframesResult(url, response.data, false, true, video_id))
                 })
                 .catch(error => handleError(error));
         };

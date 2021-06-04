@@ -2,7 +2,6 @@ import React, {useState} from 'react';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import {useDispatch, useSelector} from "react-redux";
-import TranslateIcon from '@material-ui/icons/Language';
 import Tooltip from "@material-ui/core/Tooltip";
 import IconButton from "@material-ui/core/IconButton";
 
@@ -11,7 +10,7 @@ import DefaultLanguageDialog from "./defaultLanguageDialog";
 import {setTrue} from "../../../redux/actions/cookiesActions";
 import tsv from "../../../LocalDictionary/components/NavItems/languages.tsv";
 import useLoadLanguage from "../../../Hooks/useLoadLanguage";
-
+import TranslateIcon from '@material-ui/icons/Translate';
 
 const Languages = () => {
     const dictionary = useSelector(state => state.dictionary);
@@ -20,17 +19,18 @@ const Languages = () => {
 
     const [open, setOpen] = useState(false);
     const [lang, setLang] = useState("en");
-
+    const storeLanguage = useSelector(state => state.language);
+    
     const keywordByLang = (language) => {
         return (dictionary && dictionary[onlineTsv] && dictionary[onlineTsv][language]) ? dictionary[onlineTsv][language]["lang_label"] : "";
     };
-
+    
     const dispatch = useDispatch();
 
     const [anchorEl, setAnchorEl] = useState(null);
 
     const handleClick = event => {
-        setAnchorEl(event.currentTarget);
+        setAnchorEl(document.getElementById("language"));
     };
 
     const handleCloseItem = (defaultLang) => {
@@ -52,12 +52,23 @@ const Languages = () => {
 
     return (
         <div>
-            <Tooltip title={keyword("translations")} placement="bottom">
-                <IconButton aria-label="add to favorites" onClick={handleClick}>
-                    <TranslateIcon fontSize="large"/>
-                </IconButton>
+                
+            <span   id="language" 
+                    style={{color: "#596977", 
+                            fontSize: "16px", 
+                            fontWeight: "500", 
+                            marginRight: "5px", 
+                            }}>
 
+                            {keywordByLang(storeLanguage)}
+            </span>
+
+            <Tooltip title={keyword("translations")} placement="bottom">
+                <IconButton onClick={handleClick}>
+                    <TranslateIcon fontSize="large" style={{ color: "#596977" }} />
+                </IconButton>
             </Tooltip>
+
             <Menu
                 id="simple-menu"
                 anchorEl={anchorEl}

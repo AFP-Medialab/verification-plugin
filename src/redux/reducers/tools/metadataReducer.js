@@ -4,6 +4,7 @@ const defaultState = {
     loading : false,
     url: "",
     result: null,
+    mediaType: "nomedia",
 };
 
 const metadataReducer = (state = defaultState, action) => {
@@ -19,6 +20,9 @@ const metadataReducer = (state = defaultState, action) => {
         case "METADATA_CLEAN_STATE":
             state.url = "";
             state.result = null;
+            return state;
+        case "SET_METADATA_MEDIA_TYPE":
+            state.mediaType = action.payload;
             return state;
         default:
             return state;

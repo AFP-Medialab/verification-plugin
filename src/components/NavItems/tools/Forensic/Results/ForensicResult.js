@@ -31,6 +31,7 @@ import useGetGif from "../../GIF/Hooks/useGetGif";
 import { setGifDownloading } from "../../../../../redux/actions/tools/gifActions";
 import { useDispatch } from "react-redux";
 import useGetTransparent from "../Hooks/useGetTransparent";
+import {cleanForensicState} from "../../../../../redux/actions/tools/forensicActions"
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -251,7 +252,8 @@ const ForensicResults = (props) => {
     //Button analyze new image
     //============================================================================================
     function newImage (){
-        window.location.reload(false);
+        dispatch(cleanForensicState());
+        props.resetImage();
     }
 
 
@@ -339,15 +341,16 @@ const ForensicResults = (props) => {
     useGetTransparent(gifFilter, readyTransparency);
 
     function clickGifPopover(event, filter) {
+        var url;
         if (filter === "zero_report" || filter === "ghost_report" || filter === "cagi_report"){
-            var url = filters.current.find(x => x.id === filter).map[filters.current.find(x => x.id === filter).currentDisplayed]
+            url = filters.current.find(x => x.id === filter).map[filters.current.find(x => x.id === filter).currentDisplayed]
             setGifFilter(url);
             console.log(url);
 
             setReadyTransparency(true);
 
         }else{
-            var url = filters.current.find(x => x.id === filter).map;
+            url = filters.current.find(x => x.id === filter).map;
             setGifFilter(url);
             console.log(url);
 
@@ -473,7 +476,8 @@ const ForensicResults = (props) => {
                     <Box mt={5} mb={5}>
                         <Grid container spacing={3}>
                             
-                            <Grid item xs={6}>
+                            <Grid item xs={6} style={{display: "flex", flexDirection: "column"}}>
+
                                 <Card>
                                     <CardHeader
                                         title={
@@ -509,7 +513,7 @@ const ForensicResults = (props) => {
                                     </div>
                                 </Card>
 
-                                <Box m={3}></Box>
+                                <Box mt={3}></Box>
 
                                 <Card className={classes.lensesCard}>
                                     <CardHeader
@@ -569,6 +573,7 @@ const ForensicResults = (props) => {
                                         }
                                     />
 
+
                                     <Box p={3}>
 
                                         <Grid container spacing={3}>
@@ -589,6 +594,7 @@ const ForensicResults = (props) => {
                                             }
                                         </Grid>
                                     </Box>
+
                                 </Card>
                             </Grid>
 
