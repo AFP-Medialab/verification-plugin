@@ -78,7 +78,7 @@ export const KNOWN_LINK_PATTERNS = [
 
 export const ASSISTANT_ACTIONS = [
     {
-        title: "navbar_analysis",
+        title: "navbar_analysis_video",
         icon: analysisIconOff,
         linksAccepted: [KNOWN_LINKS.YOUTUBE, KNOWN_LINKS.FACEBOOK, KNOWN_LINKS.TWITTER],
         cTypes: [CONTENT_TYPE.VIDEO],
@@ -87,6 +87,17 @@ export const ASSISTANT_ACTIONS = [
         text: "analysis_text",
         tsvPrefix: "api",
         path: "tools/analysis",
+    },
+    {
+        title: "navbar_analysis_image",
+        icon: analysisIconOff,
+        linksAccepted: [KNOWN_LINKS.YOUTUBE, KNOWN_LINKS.FACEBOOK, KNOWN_LINKS.TWITTER],
+        cTypes: [CONTENT_TYPE.VIDEO],
+        exceptions: [],
+        useInputUrl: true,
+        text: "analysis_text",
+        tsvPrefix: "api",
+        path: "tools/analysis_image",
     },
     {
         title: "navbar_keyframes",
