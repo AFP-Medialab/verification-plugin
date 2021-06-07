@@ -638,6 +638,13 @@ const useMyStyles = makeStyles(theme => ({
     },
     rootCard: {
         overflow: "visible"
+    },
+
+
+    toolCardStyle: {
+        width: "25%", 
+        maxWidth: "350px", 
+        minWidth: "250px",
     }
 
 }));

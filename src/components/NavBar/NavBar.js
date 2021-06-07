@@ -88,6 +88,8 @@ import { ReactComponent as MagnifierIcon } from "./images/SVG/Image/Magnifier.sv
 import { ReactComponent as ForensicIcon } from "./images/SVG/Image/Forensic.svg"
 import { ReactComponent as GifIcon }  from "./images/SVG/Image/Gif.svg"
 import { ReactComponent as OcrIcon }  from "./images/SVG/Image/OCR.svg"
+//import { ReactComponent as AnalysisIconImage }  from "./images/SVG/Image/Analysis_img.svg"
+import { ReactComponent as AnalysisIconImage }  from "./images/SVG/Image/Image_analysis.svg"
 
 
 import { ReactComponent as TwitterSearchIcon } from "./images/SVG/Search/Twitter_search.svg"
@@ -168,7 +170,7 @@ const NavBar = (props) => {
         },
 
         {
-            title: "navbar_analysis",
+            title: "navbar_analysis_video",
             description: "navbar_analysis_description",
             icon: (drawerValue === 1)   ? <AnalysisIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} />
                                         : <AnalysisIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} />,
@@ -204,6 +206,23 @@ const NavBar = (props) => {
             path: "twitter",
         },
         {
+            title: "navbar_analysis_image",
+            description: "navbar_analysis_image_description",
+            icon: <AnalysisIconImage width="45px" height="45px" style={{ fill: "#4c4c4c" }} />,
+            iconColored: <AnalysisIconImage width="45px" height="45px" style={{ fill: "#51A5B2" }} />,
+            tsvPrefix: "api",
+            path: "analysisImage",
+        },
+        {
+            title: "navbar_forensic",
+            description: "navbar_forensic_description",
+            icon: (drawerValue === 8) ? <ForensicIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} />
+                : <ForensicIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} />,
+            iconColored: <ForensicIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} />,
+            tsvPrefix: "forensic",
+            path: "forensic",
+        },
+        {
             title: "navbar_magnifier",
             description: "navbar_magnifier_description",
             icon: (drawerValue === 5)   ? <MagnifierIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} />
@@ -211,6 +230,15 @@ const NavBar = (props) => {
             iconColored: <MagnifierIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} />,
             tsvPrefix: "magnifier",
             path: "magnifier",
+        },
+        {
+            title: "navbar_rights",
+            description: "navbar_rights_description",
+            icon: (drawerValue === 7) ? <VideoRightsIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} />
+                : <VideoRightsIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} />,
+            iconColored: <VideoRightsIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} />,
+            tsvPrefix: "copyright",
+            path: "copyright",
         },
         {
             title: "navbar_metadata",
@@ -221,24 +249,8 @@ const NavBar = (props) => {
             tsvPrefix: "metadata",
             path: "metadata",
         },
-        {
-            title: "navbar_rights",
-            description: "navbar_rights_description",
-            icon: (drawerValue === 7)   ? <VideoRightsIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} />
-                                        : <VideoRightsIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} />,
-            iconColored: <VideoRightsIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} />,
-            tsvPrefix: "copyright",
-            path: "copyright",
-        },
-        {
-            title: "navbar_forensic",
-            description: "navbar_forensic_description",
-            icon: (drawerValue === 8)   ? <ForensicIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} />
-                                        : <ForensicIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} />,
-            iconColored: <ForensicIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} />,
-            tsvPrefix: "forensic",
-            path: "forensic",
-        },
+        
+        
         {
             title: "navbar_twitter_sna",
             description: "navbar_twitter_sna_description",
@@ -248,6 +260,7 @@ const NavBar = (props) => {
             tsvPrefix: "twitter_sna",
             path: "twitterSna"
         },
+        
         {
             title: "navbar_covidsearch",
             description: "navbar_covidsearch_description",
@@ -275,6 +288,7 @@ const NavBar = (props) => {
             tsvPrefix: "ocr",
             path: "ocr"
         },
+        
         {
             title: "navbar_gif",
             description: "navbar_gif_description",
@@ -383,8 +397,8 @@ const NavBar = (props) => {
 
                     <Box display={{ xs: 'none', md: 'block' }}>
                         <LogoWeVerify2
-                            height="40px"
-                            width="60px"
+                            height="50px"
+                            width="70px"
                             alt="logo"
                             className={classes.logoRight}
                             onClick={handleImageClick}

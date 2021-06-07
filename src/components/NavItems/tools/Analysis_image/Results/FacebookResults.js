@@ -23,14 +23,14 @@ import OnClickInfo from "../../../../Shared/OnClickInfo/OnClickInfo";
 import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Analysis.tsv";
 //import AsynchMyMap from "../../../../Shared/MyMap/AsynchMyMap";
+
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 import styles from "./layout.module.css";
 import axios from "axios";
-import { setAnalysisComments } from "../../../../../redux/actions/tools/analysisActions";
-import {setAnalysisLinkComments} from "../../../../../redux/actions/tools/analysisActions"
-import {setAnalysisVerifiedComments} from "../../../../../redux/actions/tools/analysisActions"
-
+import { setAnalysisComments } from "../../../../../redux/actions/tools/image_analysisActions";
+import {setAnalysisLinkComments} from "../../../../../redux/actions/tools/image_analysisActions"
+import {setAnalysisVerifiedComments} from "../../../../../redux/actions/tools/image_analysisActions"
 const FacebookResults = (props) => {
   const classes = useMyStyles();
   const keyword = useLoadLanguage(
@@ -41,122 +41,94 @@ const FacebookResults = (props) => {
   const [count_verified_comments, setCount_verified_comments] = useState(1);
   const [count_link_comments, setCount_link_comments] = useState(1);
 
-
   const reverseSearch = (website) => {
     for (let image of thumbnails) {
       ImageReverseSearch(website, image.url);
     }
   };
-  
+
   var nextPage = props.report.pagination.next;
+  var previousPage = props.report.pagination.previous;
 
-  var index=0
-  var real
+  console.log(previousPage);
 
-  for(var i=0;i<nextPage.length;i++){
-    if(nextPage[i]==="="){
-      index=index+1
-      if(index===2){
-        real=i
-        break;
-      }
-    }
-  }
-  var next_page_comments=nextPage.substring(0, real+1)+(count_comments+1)+"&type=coms"
-  var previous_page_comments=nextPage.substring(0, real+1)+(count_comments-1)+"&type=coms"
-  var next_page_verified=nextPage.substring(0, real+1)+(count_verified_comments+1)+"&type=vercoms"
-  var previous_page_verified=nextPage.substring(0, real+1)+(count_verified_comments-1)+"&type=vercoms"
-  var next_page_link=nextPage.substring(0,real+1)+(count_link_comments+1)+"&type=linkcoms"
-  var previous_page_link=nextPage.substring(0,real+1)+(count_link_comments-1)+"&type=linkcoms"
-
- 
   const handleClick_next_page = (event) => {
-    console.log("page_verified INSIDE ",next_page_comments)
-      console.log("CALL ",axios.get("https://mever.iti.gr" + next_page_comments))
-      axios.get("https://mever.iti.gr" + next_page_comments).then((response) => {
-        console.log("response.data ",response.data)
-        if(!response.data.error){
-          setCount_comments(count_comments + 1);
-          console.log("PAGE NUMBER: ",count_comments)
-          dispatch(setAnalysisComments(response.data));
-        }
+    console.log("nextPage ",nextPage)
+    if (nextPage !== "undefined" && nextPage !== "null" && nextPage !== "") {
+      setCount_comments(count_comments + 1);
+      axios.get("http://mever.iti.gr" + nextPage).then((response) => {
+        dispatch(setAnalysisComments(response.data));
       });
-  };
-  
-  const handleClick_previous_page = (event) => {
-      if(count_comments>1){
-      setCount_comments(count_comments - 1);
-      console.log("PAGE NUMBER: ",count_comments)
-      console.log("page_link INSIDE ",previous_page_comments)
-      console.log("CALL ",axios.get("https://mever.iti.gr" + previous_page_comments))
-      axios.get("https://mever.iti.gr" + previous_page_comments).then((response) => {
-        console.log("response.data ",response.data)
-        if(!response.data.error){
-          dispatch(setAnalysisComments(response.data));
-        }
-      });
-  };
-  };
-  
-  const handleClick_next_page2 = (event) => {
-    
-      console.log("page_verified INSIDE ",next_page_verified)
-      console.log("CALL ",axios.get("https://mever.iti.gr" + next_page_verified))
-      axios.get("https://mever.iti.gr" + next_page_verified).then((response) => {
-        console.log("response.data ",response.data)
-        if(!response.data.error){
-          setCount_verified_comments(count_verified_comments + 1);
-          console.log("PAGE NUMBER: ",count_verified_comments)
-          dispatch(setAnalysisVerifiedComments(response.data));
-        }
-      });   
-  } 
-
-  const handleClick_previous_page2 = (event) => {
-    if(count_verified_comments>1){
-      setCount_verified_comments(count_verified_comments - 1);
-      console.log("PAGE NUMBER: ",count_verified_comments)
-      console.log("page_link INSIDE ",previous_page_verified)
-      console.log("CALL ",axios.get("https://mever.iti.gr" + previous_page_verified))
-      axios.get("https://mever.iti.gr" + previous_page_verified).then((response) => {
-        console.log("response.data ",response.data)
-        if(!response.data.error){
-          dispatch(setAnalysisVerifiedComments(response.data));
-        }
-      });
-  };
     }
+  };
+  const handleClick_previous_page = (event) => {
+    console.log("previousPage ",previousPage)
 
-    const handleClick_next_page1 = (event) => {
-
-      console.log("page_link INSIDE ", next_page_link)
-      console.log("CALL ",axios.get("https://mever.iti.gr" + next_page_link))
-      axios.get("https://mever.iti.gr" + next_page_link).then((response) => {
-        console.log("response.data ",response.data)
-        if(!response.data.error){
-          setCount_link_comments(count_link_comments + 1);
-          console.log("PAGE NUMBER: ",count_link_comments)
-          dispatch(setAnalysisLinkComments(response.data));
-        }
-        
+    if (
+      previousPage !== "undefined" &&
+      previousPage !== "null" &&
+      previousPage !== ""
+    ) {
+      setCount_comments(count_comments - 1);
+      axios.get("http://mever.iti.gr" + previousPage).then((response) => {
+        dispatch(setAnalysisComments(response.data));
       });
-      
-    };
+    }
+  };
 
-    const handleClick_previous_page1 = (event) => {
-          if(count_link_comments>1){
-            setCount_link_comments(count_link_comments - 1);
-            console.log("PAGE NUMBER: ",count_link_comments)
-            console.log("page_verified INSIDE ",previous_page_link)
-            console.log("CALL ",axios.get("http://mever.iti.gr" + previous_page_link))
-            axios.get("http://mever.iti.gr" + previous_page_link).then((response) => {
-              console.log("response.data ",response.data)
-              if(!response.data.error){
-                dispatch(setAnalysisLinkComments(response.data));
-              }
-            });
-      }
-    };
+  const handleClick_next_page1 = (event) => {
+    console.log("nextPage ",nextPage)
+
+    if (nextPage !== "undefined" && nextPage !== "null" && nextPage !== "") {
+      setCount_link_comments(count_link_comments + 1);
+      console.log(axios.get("http://mever.iti.gr" + nextPage))
+      axios.get("http://mever.iti.gr" + nextPage).then((response) => {
+        dispatch(setAnalysisLinkComments(response.data));
+      });
+    }
+  };
+  const handleClick_previous_page1 = (event) => {
+    console.log("previousPage ",previousPage)
+
+    if (
+      previousPage !== "undefined" &&
+      previousPage !== "null" &&
+      previousPage !== ""
+    ) {
+      setCount_link_comments(count_link_comments - 1);
+      console.log(axios.get("http://mever.iti.gr" + nextPage))
+      axios.get("http://mever.iti.gr" + previousPage).then((response) => {
+        dispatch(setAnalysisLinkComments(response.data));
+      });
+    }
+  };
+
+  const handleClick_next_page2 = (event) => {
+    console.log("nextPage ",nextPage)
+
+    if (nextPage !== "undefined" && nextPage !== "null" && nextPage !== "") {
+      setCount_verified_comments(count_verified_comments + 1);
+      console.log(axios.get("http://mever.iti.gr" + nextPage))
+      axios.get("http://mever.iti.gr" + nextPage).then((response) => {
+        dispatch(setAnalysisVerifiedComments(response.data));
+      });
+    }
+  };
+  const handleClick_previous_page2 = (event) => {
+    console.log("previousPage ",previousPage)
+
+    if (
+      previousPage !== "undefined" &&
+      previousPage !== "null" &&
+      previousPage !== ""
+    ) {
+      setCount_verified_comments(count_verified_comments - 1);
+      console.log(axios.get("http://mever.iti.gr" + nextPage))
+      axios.get("http://mever.iti.gr" + previousPage).then((response) => {
+        dispatch(setAnalysisVerifiedComments(response.data));
+      });
+    }
+  };
 
   const dispatch = useDispatch();
   const report = props.report;
@@ -165,10 +137,6 @@ const FacebookResults = (props) => {
   const verificationComments = report.comments ? report.comments : [];
   const linkComments = report.link_comments ? report.link_comments : [];
   const verifiedComments = report.verification_comments ? report.verification_comments : [];
-
-  //console.log("linkComments ",linkComments)
-  console.log("verifiedComments ",verifiedComments)
-
   const thumbnails = report.thumbnails.others;
 
   //console.log("nothing ", nothing)
@@ -406,11 +374,9 @@ const FacebookResults = (props) => {
                     </Button>
                   </Accordion>
                 }
-
-
                 <Box m={2} />
                 {
-                  //linkComments.length > 0 &&
+                  //VerifiedComments.length > 0 &&
                   <Accordion>
                     <AccordionSummary
                       expandIcon={<ExpandMoreIcon />}
@@ -477,10 +443,6 @@ const FacebookResults = (props) => {
                     </Button>
                   </Accordion>
                 }
-
-
-
-
                 <Box m={2} />
                 {verificationComments.length > 0 && (
                   <Accordion>

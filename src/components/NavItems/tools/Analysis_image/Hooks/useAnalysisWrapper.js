@@ -6,7 +6,7 @@ import {useEffect} from "react";
 import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Analysis.tsv"
 
-export const useAnalysisWrapper = (apiUrl, videoUrl) => {    
+export const useAnalysisWrapper = (apiUrl, imageUrl) => {    
     const keyword = useLoadLanguage("components/NavItems/tools/Analysis.tsv", tsv);
     const dispatch = useDispatch();
 
@@ -20,12 +20,12 @@ export const useAnalysisWrapper = (apiUrl, videoUrl) => {
         };
 
         const getReport = (id) => {
-            axios.get("https://mever.iti.gr/caa/api/v4/videos/reports/" + id)
+            axios.get("http://mever.iti.gr/caa/api/v4/images/reports/" + id)
                 .then(response => {
                     if (keyword("table_error_" + response.data.status) !== "")
                         handleError("table_error_" + response.data.status.status);
                     else if (response.data.status !== "unavailable"){
-                        dispatch(setAnalysisResult(videoUrl, response.data, false, false));
+                        dispatch(setAnalysisResult(imageUrl, response.data, false, false));
                     }
                 })
                 .catch(errors => handleError(errors));
@@ -41,7 +41,7 @@ export const useAnalysisWrapper = (apiUrl, videoUrl) => {
 
 
         const waitUntilDonne = (data) => {
-            axios.get("https://mever.iti.gr/caa/api/v4/videos/jobs/" + data.id)
+            axios.get("http://mever.iti.gr/caa/api/v4/images/jobs/" + data.id)
                 .then(response => {
                     if (response.data.status === "done") {
                         getReport(response.data.media_id)
@@ -73,5 +73,5 @@ export const useAnalysisWrapper = (apiUrl, videoUrl) => {
                 .catch(error => handleError(error))
         }
         
-    }, [apiUrl, keyword, dispatch, videoUrl]);
+    }, [apiUrl, keyword, dispatch, imageUrl]);
 };

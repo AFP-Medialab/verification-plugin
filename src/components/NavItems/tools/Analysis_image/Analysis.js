@@ -99,7 +99,7 @@ const Analysis = () => {
     return (
         <div>
 
-            <HeaderTool name={keywordAllTools("navbar_analysis_video")} description={keywordAllTools("navbar_analysis_description")} icon={<AnalysisIcon style={{ fill: "#51A5B2" }} />}/>
+            <HeaderTool name={keywordAllTools("navbar_analysis_image")} description={keywordAllTools("navbar_analysis_description_image")} icon={<AnalysisIcon style={{ fill: "#51A5B2" }} />}/>
 
             <Card>
                 <CardHeader
@@ -199,6 +199,9 @@ const Analysis = () => {
                             </Typography>
                             <Box m={1} alignItems="center" justifyContent="center"/>
                             <OnClickInfo keyword={"intro_tip"}/>
+                            
+
+
                 </Box>
             }
         </div>);

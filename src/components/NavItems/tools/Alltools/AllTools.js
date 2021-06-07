@@ -47,7 +47,7 @@ const AllTools = (props) => {
             value.type = "redesigned";
         }
 
-        if (value.title === "navbar_ocr" || value.title === "navbar_gif" || value.title === "navbar_xnetwork" || value.title === "navbar_covidsearch") {
+        if (value.title === "navbar_ocr" || value.title === "navbar_gif" || value.title === "navbar_xnetwork" || value.title === "navbar_covidsearch" || value.title === "navbar_analysis_image") {
             value.type = "new";
         }
 
@@ -58,7 +58,7 @@ const AllTools = (props) => {
 
 
         if(
-            value.title === "navbar_analysis" ||
+            value.title === "navbar_analysis_video" ||
             value.title === "navbar_keyframes" ||
             value.title === "navbar_thumbnails" ||
             value.title === "navbar_rights" ||
@@ -69,6 +69,7 @@ const AllTools = (props) => {
 
 
         if (
+            value.title === "navbar_analysis_image" ||
             value.title === "navbar_ocr" ||
             value.title === "navbar_forensic" ||
             value.title === "navbar_magnifier" ||
@@ -172,9 +173,10 @@ const AllTools = (props) => {
                         
                             {
                                 toolsVideo.map((value, key) => {
+                                    console.log(value);
 
                                     return (
-                                        <Grid item key={key} onClick={() => handleClick(value.path, "video")}>
+                                        <Grid className={classes.toolCardStyle} item key={key} onClick={() => handleClick(value.path, "video")}>
                                             <ToolCard
                                                 name={keyword(value.title)}
                                                 description={keyword(value.description)}
@@ -222,7 +224,7 @@ const AllTools = (props) => {
                         {
                             toolsImages.map((value, key) => {
                                 return (
-                                    <Grid item key={key} onClick={() => handleClick(value.path, "image")}>
+                                    <Grid className={classes.toolCardStyle} item key={key} onClick={() => handleClick(value.path, "image")}>
                                         <ToolCard
                                             name={keyword(value.title)}
                                             description={keyword(value.description)}
@@ -268,7 +270,7 @@ const AllTools = (props) => {
                         {
                             toolsSearch.map((value, key) => {
                                 return (
-                                    <Grid item key={key} onClick={() => handleClick(value.path, "search")}>
+                                    <Grid className={classes.toolCardStyle} item key={key} onClick={() => handleClick(value.path, "search")}>
                                         <ToolCard
                                             name={keyword(value.title)}
                                             description={keyword(value.description)}
@@ -314,7 +316,7 @@ const AllTools = (props) => {
                         {
                             toolsData.map((value, key) => {
                                 return (
-                                    <Grid item key={key} onClick={() => handleClick(value.path, "datas")}>
+                                    <Grid className={classes.toolCardStyle} item key={key} onClick={() => handleClick(value.path, "datas")}>
                                         <ToolCard
                                             name={keyword(value.title)}
                                             description={keyword(value.description)}

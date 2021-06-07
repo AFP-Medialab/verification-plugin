@@ -10,6 +10,23 @@ import LockIcon from '@material-ui/icons/Lock';
 
 export class ToolCard extends Component {
 
+    constructor(props) {
+        super(props);
+        this.state = {
+            hovered: false
+        };
+    }
+
+    onMouseEnter = e => {
+        this.setState({ hovered: true });
+        console.log("ON MOUSE ENTER");
+    };
+
+    onMouseLeave = e => {
+        this.setState({ hovered: false });
+        console.log("ON MOUSE leave");
+    };
+
     render() {
 
         var showNew = false;
@@ -28,22 +45,26 @@ export class ToolCard extends Component {
 
         if (this.props.type === "lock") {
             showLock = true;
-        }
+        } 
+
+        const { hovered } = this.state;
+        const styleCard = hovered   ? {
+            border: 'solid #90A4AE 2px',
+                                        borderRadius: "10px",
+                                        cursor: "pointer",
+                                        backgroundColor: "#ffffff",
+                                    } 
+
+                                    : {
+                border: 'solid #dce0e2 2px',
+                                        borderRadius: "10px",
+                                        cursor: "pointer",
+                                        backgroundColor: "#ffffff",
+                                    };
 
         return (
 
-            <Box 
-                style={{
-                    border: 'solid #E1E1E1 2px',
-                    borderRadius: "10px",
-                    width: "235px",
-                    cursor: "pointer",
-                    backgroundColor: "#ffffff",
-                    "&:hover": {
-                        border: 'solid #51A5B2 2px',
-
-                    },
-            }}>
+            <Box onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} style={styleCard}>
 
                 <Box p={2}>
 
