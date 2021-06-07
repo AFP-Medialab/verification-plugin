@@ -29,3 +29,15 @@ export const setGifDownloaded= () => {
         type: "SET_GIF_DOWNLOADED"
     }
 };
+
+export const setGifClean = () => {
+    return {
+        type: "SET_GIF_CLEAN"
+    }
+};
+
+export const setFinishReset = () => {
+    return {
+        type: "SET_FINISH_RESET"
+    }
+};

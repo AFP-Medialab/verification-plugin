@@ -1,13 +1,13 @@
 import { useEffect } from "react";
 import axios from "axios"
 import { useDispatch } from "react-redux";
-import { setHomogroaphic, setGifLoading } from "../../../../../redux/actions/tools/gifActions";
+import { setHomogroaphic, setGifLoading, setGifClean } from "../../../../../redux/actions/tools/gifActions";
 import { setError } from "../../../../../redux/actions/errorActions";
 import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Forensic.tsv";
 
-const useGetHomographics = (files, showHomo, mode) => {
-    const keyword = useLoadLanguage("components/NavItems/tools/Forensic.tsv", tsv);
+const useGetHomographics = (files, mode) => {
+    const keyword = useLoadLanguage("components/NavItems/tools/CheckGIF.tsv", tsv);
     const dispatch = useDispatch();
 
 
@@ -17,25 +17,30 @@ const useGetHomographics = (files, showHomo, mode) => {
             if (keyword(e) !== "")
                 dispatch(setError(keyword(e)));
             else
-                dispatch(setError(keyword("please_give_a_correct_link")));
-            dispatch(setGifLoading());
+                dispatch(setError(keyword("error_homo")));
+            dispatch(setGifClean());
         };
 
         const getImages = (response) => {
             console.log("RESPONSE RECIEVED");
             console.log(response);
 
-            var homoImage1 = "https://ipolcore.ipol.im/" + response.data.work_url + "output_0.png";
-            var homoImage2 = "https://ipolcore.ipol.im/" + response.data.work_url + "output_1.png";
+            if(response.data.status === "KO"){
+                dispatch(setError(keyword("error_homo")));
+                dispatch(setGifClean());
+            }else{
+                var homoImage1 = "https://ipolcore.ipol.im/" + response.data.work_url + "output_0.png";
+                var homoImage2 = "https://ipolcore.ipol.im/" + response.data.work_url + "output_1.png";
 
-            //console.log(homoImage1);
-            //console.log(homoImage2);
+                //console.log(homoImage1);
+                //console.log(homoImage2);
 
-            dispatch(setHomogroaphic(homoImage1, homoImage2));
+                dispatch(setHomogroaphic(homoImage1, homoImage2));
+            }
 
         }
 
-        if (files && !showHomo && mode===1) {
+        if (files && mode===1) {
             console.log("UPLOADING IMAGES");
 
             dispatch(setGifLoading());
@@ -61,7 +66,7 @@ const useGetHomographics = (files, showHomo, mode) => {
         };
 
 
-        if (files && !showHomo && mode === 2) {
+        if (files && mode === 2) {
             console.log("UPLOADING IMAGES");
 
             dispatch(setGifLoading());
@@ -88,6 +93,6 @@ const useGetHomographics = (files, showHomo, mode) => {
 
         
 
-    }, [files, showHomo, mode, keyword, dispatch]);
+    }, [files, mode, keyword, dispatch]);
 };
 export default useGetHomographics;

@@ -15,17 +15,24 @@ import { ReactComponent as IconGif } from '../../../NavBar/images/SVG/Image/Gif.
 import DragAndDrop from './DragAndDrop'
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/CheckGIF.tsv";
+import { setFinishReset } from "../../../../redux/actions/tools/gifActions";
+
 
 import LinkIcon from '@material-ui/icons/Link';
 import FileIcon from '@material-ui/icons/InsertDriveFile';
 
 import TextField from '@material-ui/core/TextField';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import { useDispatch } from "react-redux";
+import { useEffect } from "react";
+import { setGifClean } from "../../../../redux/actions/tools/gifActions";
 
 const Gif = () => {
 
     //Load of the TSV
     const keyword = useLoadLanguage("components/NavItems/tools/CheckGIF.tsv", tsv);
+
+    const dispatch = useDispatch();
 
     //Style elements
     //============================================================================================
@@ -50,6 +57,8 @@ const Gif = () => {
     const showHomo = useSelector(state => state.gif.showHomo);
 
     const loading = useSelector(state => state.gif.loading);
+
+    const [reset, setReset] = useState(false);
 
 
     //===  CODE FOR THE FIRST IMAGE ===
@@ -123,6 +132,7 @@ const Gif = () => {
         setModeHomo(2);
         setFilesToSend(files);
         setReadyToSend(false);
+        setReset(true);
     };
 
 
@@ -133,13 +143,12 @@ const Gif = () => {
         }
         setModeHomo(1);
         setFilesToSend(files);
-        setReadyToSend(false);
+        setReadyToSend(false)
+        setReset(true);
     };
 
-
-
     //Call to the API
-    useGetHomographics(filesToSend, showHomo, modeHomo);
+    useGetHomographics(filesToSend, modeHomo);
 
     //Loading bar
     if (loading && readyToSend){
@@ -156,6 +165,15 @@ const Gif = () => {
     const homoImg2 = useSelector(state => state.gif.homoImg2);
 
     const [interval, setIntervalVar] = React.useState(null);
+
+    console.log("Reset? " + reset + homoImg1 + homoImg2);
+
+    if (reset && homoImg1 === "reset" && homoImg2 === "reset"){
+        console.log("RESET");
+        setFilesToSend(null);
+        setModeHomo(0);           
+        setReset(false);  
+    }
 
 
     //=== CSS ANIMATION ===
@@ -266,11 +284,21 @@ const Gif = () => {
         setShowLocal(true);
     }
 
-    
+    const newGif = (event) => {
+        setReadyToSend(false);
+        setImageDropped1("");
+        setImageDropped2("");
+        setShowDropZone1(true);
+        setShowDropZone2(true);
+        setShowURL(false);
+        setShowLocal(false);
 
+        setClassButtonURL(classes.bigButtonDiv);
+        setClassIconURL(classes.bigButtonIcon);
 
-
-
+        setClassButtonLocal(classes.bigButtonDiv);
+        setClassIconLocal(classes.bigButtonIcon);
+    }
 
 
     //HTML Code
@@ -433,6 +461,10 @@ const Gif = () => {
 
                                 <span>{keyword("title_gifcreation")}</span>
 
+                                <Button variant="contained" style={{ backgroundColor: "#FFFFFF" }} onClick={newGif}>
+                                    {keyword("button_new")}
+                                </Button>
+
                             </Grid>
                         }
                         className={classes.headerUpladedImage}
@@ -453,7 +485,9 @@ const Gif = () => {
                                         <Box m={2} />
 
                                         {!showDropZone1 &&
-                                            <img src={imageDropped1} className={classes.imageDropped} alt="" />
+                                            <div>
+                                                <img src={imageDropped1} className={classes.imageDropped} alt="" />
+                                            </div>
                                         }
 
                                         {showDropZone1 &&
@@ -607,9 +641,10 @@ const Gif = () => {
                             </Grid>
 
 
-                            <Grid item xs={6}>
+                            <Grid item xs={6} style={{ padding: '0.5em' }}>
                                 
-                                    
+                                
+
                                     {!showHomo && !loading &&
                                         
                                         <Grid
@@ -619,12 +654,12 @@ const Gif = () => {
                                             alignItems="center"
                                             className={classes.height100}
                                         >
-                                            <IconGif style={{ fill: "#C9C9C9" }} />
-                                            <Box p={4}>
-                                                <Typography variant="h6" style={{ color: "#C9C9C9" }} align="center">
-                                                    {keyword("text_preview")}
-                                                </Typography>
-                                            </Box>
+                                                <IconGif style={{ fill: "#C9C9C9" }} />
+                                                <Box p={4}>
+                                                    <Typography variant="h6" style={{ color: "#C9C9C9" }} align="center">
+                                                        {keyword("text_preview")}
+                                                    </Typography>
+                                                </Box>
                                         
                                         </Grid>
                                     }
@@ -644,81 +679,83 @@ const Gif = () => {
                                     }
 
                                     {showHomo &&
-                                    
-                                        <Grid
-                                            container
-                                            direction="column"
-                                            justify="space-between"
-                                            alignItems="flex-start"
-                                            className={classes.height100}
-                                        >
-                                            
-                                            <Typography variant="h6" className={classes.headingGif}>
-                                                {keyword("title_preview")}
-                                            </Typography>
 
-                                            <Box justifyContent="center" className={classes.wrapperImageFilter}>
+                                        <Box p={2} className={classes.height100}>
 
-                                                <CardMedia
-                                                    component="img"
-                                                    className={classes.imagesGifImage}
-                                                    image={homoImg1}
-                                                />
-                                                {true &&
-                                                    <CardMedia
-                                                        component="img"
-                                                        className={classes.imagesGifFilter}
-                                                        image={homoImg2}
-                                                        id="gifFilterElement"
-                                                    />
-                                                }
-                                            </Box>
-
-
-
+                                        
                                             <Grid
                                                 container
                                                 direction="column"
-                                                justify="center"
-                                                alignItems="center"
+                                                justify="space-between"
+                                                alignItems="flex-start"
+                                                className={classes.height100}
                                             >
-                                                <Box m={4} />
-
-                                                <Typography gutterBottom>
-                                                    {keyword("slider_title")}
+                                                
+                                                <Typography variant="h6" className={classes.headingGif}>
+                                                    {keyword("title_preview")}
                                                 </Typography>
 
+                                                <Box justifyContent="center" className={classes.wrapperImageFilter}>
 
-                                                <Slider
-                                                    defaultValue={-1100}
-                                                    aria-labelledby="discrete-slider"
-                                                    step={300}
-                                                    marks={marks}
-                                                    min={-1700}
-                                                    max={-500}
-                                                    scale={x => -x}
-                                                    onChange={(e, val) => changeSpeed(val)}
-                                                    onChangeCommitted={(e) => commitChangeSpeed(speed)}
-                                                    className={classes.sliderClass}
-                                                />
+                                                    <CardMedia
+                                                        component="img"
+                                                        className={classes.imagesGifImage}
+                                                        image={homoImg1}
+                                                    />
+                                                    {true &&
+                                                        <CardMedia
+                                                            component="img"
+                                                            className={classes.imagesGifFilter}
+                                                            image={homoImg2}
+                                                            id="gifFilterElement"
+                                                        />
+                                                    }
+                                                </Box>
 
 
 
-                                                <Box m={2} />
+                                                <Grid
+                                                    container
+                                                    direction="column"
+                                                    justify="center"
+                                                    alignItems="center"
+                                                >
+                                                    <Box m={4} />
+
+                                                    <Typography gutterBottom>
+                                                        {keyword("slider_title")}
+                                                    </Typography>
 
 
-                                                <Button variant="contained" color="primary" fullWidth onClick={(e) => handleDownloadGif(e)}>
-                                                    {keyword("button_download")}
-                                                </Button>
-                                                <Box mt={2} />
+                                                    <Slider
+                                                        defaultValue={-1100}
+                                                        aria-labelledby="discrete-slider"
+                                                        step={300}
+                                                        marks={marks}
+                                                        min={-1700}
+                                                        max={-500}
+                                                        scale={x => -x}
+                                                        onChange={(e, val) => changeSpeed(val)}
+                                                        onChangeCommitted={(e) => commitChangeSpeed(speed)}
+                                                        className={classes.sliderClass}
+                                                    />
+
+
+
+                                                    <Box m={2} />
+
+
+                                                    <Button variant="contained" color="primary" fullWidth onClick={(e) => handleDownloadGif(e)}>
+                                                        {keyword("button_download")}
+                                                    </Button>
+                                                    <Box m={2} />
+                                                </Grid>
+
+                                            
                                             </Grid>
-
-                                        
-                                        </Grid>
-                                        
+                                        </Box>
 
                                     }
-                                
 
                             </Grid>
 
