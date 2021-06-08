@@ -69,6 +69,8 @@ text_warning	Warnings found against text. See warning box.	Temp	Temp	Temp
 image_warning	Warnings found against image. See warning box.	Temp	Temp	Temp
 warning_title	Warning	Text	Text	Text
 warning_subtitle	Some elements of this content have been flagged	Temp	Temp	Temp
+assurance_title	Fact checker	Temp	Temp	Temp
+assurance_subtitle	Some elements of this content have been highlighted	Temp	Temp	Temp
 status_title	Status	Temp	Temp	Temp
 status_subtitle	Note: one or more of the automated checks have resulted in an error. Some results may be omitted from this page.	Temp	Temp	Temp
 named_entity_title	Text Topics	Temp	Temp	Temp

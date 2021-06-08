@@ -183,7 +183,10 @@ function* handleSourceCredibilityCall(action) {
         const inputUrl = yield select((state) => state.assistant.inputUrl)
         const result = yield call(assistantApi.callSourceCredibilityService, [inputUrl])
         const filteredResults = filterSourceCredibilityResults(result)
-        yield put(setInputSourceCredDetails(filteredResults, false, true, false))
+        const uncredibleResults = filteredResults[0].length ? filteredResults[0] : null
+        const credibleResults = filteredResults[1].length ? filteredResults[1] : null
+
+        yield put(setInputSourceCredDetails(uncredibleResults, credibleResults, false, true, false))
     } catch (error) {
         console.log(error)
         yield put(setInputSourceCredDetails(null, false, false, true))
@@ -462,16 +465,28 @@ const filterSourceCredibilityResults = (originalResult) => {
     sourceCredibility = uniqWith(sourceCredibility, isEqual)
 
     let sourceCredResult = []
+    let factCheckerResult = []
+
     sourceCredibility.forEach(result => {
-        sourceCredResult.push({
-            "credibility_source": result["source"],
-            "credibility_labels": result["type"],
-            "credibility_description": result["description"]
-        })
+        if(result["type"] === "fact checker"){
+            factCheckerResult.push({
+                "credibility_source": result["source"],
+                "credibility_labels": result["type"],
+                "credibility_description": result["description"]
+            })
+        }
+        else {
+            sourceCredResult.push({
+                "credibility_source": result["source"],
+                "credibility_labels": result["type"],
+                "credibility_description": result["description"]
+            })
+        }
     })
 
-    return sourceCredResult.length ? sourceCredResult : null
+    return [sourceCredResult, factCheckerResult]
 }
+
 
 const filterDbkfTextResult = (result) => {
     let resultList = []
