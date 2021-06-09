@@ -338,8 +338,8 @@ const Gif = () => {
         setFilesToSend(null);
         setModeHomo(0);
 
-        setFilesForGif(null); 
-        setDelayGif(null);
+        //setFilesForGif(null); 
+        //setDelayGif(null);
     }
 
     useEffect(() => {
