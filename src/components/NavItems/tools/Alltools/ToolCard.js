@@ -19,12 +19,10 @@ export class ToolCard extends Component {
 
     onMouseEnter = e => {
         this.setState({ hovered: true });
-        console.log("ON MOUSE ENTER");
     };
 
     onMouseLeave = e => {
         this.setState({ hovered: false });
-        console.log("ON MOUSE leave");
     };
 
     render() {
