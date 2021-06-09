@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, Component } from "react";
 import { useSelector } from "react-redux";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import Box from "@material-ui/core/Box";
@@ -27,41 +27,101 @@ import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { setGifClean } from "../../../../redux/actions/tools/gifActions";
 
+import { setStateSelectingLocal, setStateSelectingUrl, setStateReady, setStateInit } from "../../../../redux/actions/tools/gifActions";
+import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
+
+
+
 const Gif = () => {
+    
 
-    //Load of the TSV
-    const keyword = useLoadLanguage("components/NavItems/tools/CheckGIF.tsv", tsv);
-
-    const dispatch = useDispatch();
-
-    //Style elements
+    //Init variables
     //============================================================================================
     const classes = useMyStyles();
+    const keyword = useLoadLanguage("components/NavItems/tools/CheckGIF.tsv", tsv);
+    const keywordAllTools = useLoadLanguage("components/NavItems/tools/Alltools.tsv", tsv);
+    const toolState = useSelector(state => state.gif.toolState);
+    const dispatch = useDispatch();
+
+
+    //Selecting mode
+    //============================================================================================
+
+    const [classButtonURL, setClassButtonURL] = useState(classes.bigButtonDiv);
+    const [classButtonLocal, setClassButtonLocal] = useState(classes.bigButtonDiv);
+
+    const [classIconURL, setClassIconURL] = useState(classes.bigButtonIcon);
+    const [classIconLocal, setClassIconLocal] = useState(classes.bigButtonIcon);
+
+    const [selectedMode, setSelectedMode] = useState("");
+    
+    if (toolState === 1 && classButtonURL !== classes.bigButtonDiv && classButtonLocal !== classes.bigButtonDiv) {
+
+        setClassButtonURL(classes.bigButtonDiv);
+        setClassButtonLocal(classes.bigButtonDiv);
+
+        setClassIconURL(classes.bigButtonIcon);
+        setClassIconLocal(classes.bigButtonIcon);
+
+    }
+
+    function clickURL () {
+        changeStylesToUrl();
+        dispatch(setStateSelectingUrl());
+        setSelectedMode("URL");
+    }
+
+    function clickLocal (){
+        changeStylesToLocal();
+        dispatch(setStateSelectingLocal());
+        setSelectedMode("LOCAL");
+    }
+
+    function changeStylesToLocal() {
+        //Change styles of the local button to selected
+        setClassButtonLocal(classes.bigButtonDivSelectted);
+        setClassIconLocal(classes.bigButtonIconSelectted);
+
+        //Change styles of the URL button to not selected
+        setClassButtonURL(classes.bigButtonDiv);
+        setClassIconURL(classes.bigButtonIcon);
+    }
+
+    function changeStylesToUrl() {
+        //Change styles of the url button to selected
+        setClassButtonURL(classes.bigButtonDivSelectted);
+        setClassIconURL(classes.bigButtonIconSelectted);
+
+        //Change styles of the Local button to not selected
+        setClassButtonLocal(classes.bigButtonDiv);
+        setClassIconLocal(classes.bigButtonIcon);
+    }
+
+
 
 
 
     //Load images for the GIF 
     //============================================================================================
 
-    const [imageDropped1, setImageDropped1] = useState();
+    //1=Images | 2=URL
+    const [modeHomo, setModeHomo] = useState(0);
+
+    const [imageDropped1, setImageDropped1] = useState(null);
     const [showDropZone1, setShowDropZone1] = useState(true);
 
-    const [imageDropped2, setImageDropped2] = useState();
+    const [imageDropped2, setImageDropped2] = useState(null);
     const [showDropZone2, setShowDropZone2] = useState(true);
 
     const [selectedFile1, setSelectedFile1] = useState();
     const [selectedFile2, setSelectedFile2] = useState();
-
-    const [readyToSend, setReadyToSend] = useState(false);
     const [filesToSend, setFilesToSend] = useState();
-    const showHomo = useSelector(state => state.gif.showHomo);
-
-    const loading = useSelector(state => state.gif.loading);
-
-    const [reset, setReset] = useState(false);
 
 
-    //===  CODE FOR THE FIRST IMAGE ===
+    //--- Local files mode ---
+
+    //FIRST IMAGE
+
     //Load by drop
     const handleDrop = (files) => {
         //console.log(files);//DEBUG
@@ -81,7 +141,9 @@ const Gif = () => {
     }
 
 
-    //=== CODE FOR THE SECOND IMAGE ===
+
+    //SECOND IMAGE
+
     //Load by drop
     const handleDrop2 = (files) => {
         //console.log(files);//DEBUG
@@ -101,26 +163,23 @@ const Gif = () => {
     }
 
 
+    //--- URL mode ---  
 
     //URL
     const [imageURL1, setImageURL1] = useState("");
     const [imageURL2, setImageURL2] = useState("");
 
-    //1=Images | 2=URL
-    const [modeHomo, setModeHomo] = useState(0);
-
+    
     //Code to enable the button to upload the images
-    if (imageURL1 !== "" && imageURL2 !== "" && !readyToSend && !loading & !showHomo) {
-        //console.log("Ready to send"); //DEBUG
-        setReadyToSend(true);
+    if (toolState === 22 && imageURL1 !== "" && imageURL2 !== "") {
+        console.log("Ready to send"); //DEBUG
+        dispatch(setStateReady());
     }
 
-
-
     //Code to enable the button to upload the images
-    if (imageDropped1 != null && imageDropped2 != null && !readyToSend && !loading & !showHomo) {
+    if (toolState === 21 && imageDropped1 !== null && imageDropped2 !== null) {
         console.log("Ready to send"); //DEBUG
-        setReadyToSend(true);
+        dispatch(setStateReady());
     }
 
     //Function to prepare the files to trigger the submission
@@ -131,8 +190,6 @@ const Gif = () => {
         }
         setModeHomo(2);
         setFilesToSend(files);
-        setReadyToSend(false);
-        setReset(true);
     };
 
 
@@ -143,17 +200,26 @@ const Gif = () => {
         }
         setModeHomo(1);
         setFilesToSend(files);
-        setReadyToSend(false)
-        setReset(true);
     };
 
     //Call to the API
     useGetHomographics(filesToSend, modeHomo);
 
     //Loading bar
+    /*
     if (loading && readyToSend){
         setReadyToSend(false);
         console.log("Disable button"); //DEBUG
+    }
+    */
+
+    if(toolState == 6){
+        cleanInputs();
+        if (selectedMode === "URL"){
+            dispatch(setStateSelectingUrl());
+        } else if (selectedMode === "LOCAL"){
+            dispatch(setStateSelectingLocal());
+        }
     }
 
 
@@ -166,26 +232,19 @@ const Gif = () => {
 
     const [interval, setIntervalVar] = React.useState(null);
 
-    console.log("Reset? " + reset + homoImg1 + homoImg2);
-
-    if (reset && homoImg1 === "reset" && homoImg2 === "reset"){
-        console.log("RESET");
-        setFilesToSend(null);
-        setModeHomo(0);           
-        setReset(false);  
-    }
 
 
     //=== CSS ANIMATION ===
 
     //Trigger of the loop function
-    if (showHomo && interval === null) {
+    if (toolState === 5 && interval === null) {
         setIntervalVar(setInterval(() => animateImages(), 1100));
     }
+    
 
     //Loop function
     function animateImages() {
-        //console.log("Loop function"); //DEBUG
+        console.log("Loop function"); //DEBUG
         //console.log(interval); //DEBUG
         var x = document.getElementById("gifFilterElement");
 
@@ -223,13 +282,17 @@ const Gif = () => {
         setIntervalVar(setInterval(() => animateImages(), (value)));
     }
 
+    function stopLoop() {
+        clearInterval(interval);
+    }
+
     
 
 
     //Download GIF
     //============================================================================================
-    const [filesForGif, setFilesForGif] = useState();
-    const [delayGif, setDelayGif] = useState();
+    const [filesForGif, setFilesForGif] = useState(null);
+    const [delayGif, setDelayGif] = useState(null);
 
     //Function to prepare the files to trigger the download
     const handleDownloadGif = () => {
@@ -242,63 +305,56 @@ const Gif = () => {
     };
 
     //Call to the API
-    useGetGif(filesForGif, delayGif, true);
+    useGetGif(filesForGif, delayGif, (toolState === 5));
 
 
 
 
-    const [classButtonURL, setClassButtonURL] = useState(null);
-    const [classButtonLocal, setClassButtonLocal] = useState(null);
 
-    const [classIconURL, setClassIconURL] = useState(classes.bigButtonIcon);
-    const [classIconLocal, setClassIconLocal] = useState(classes.bigButtonIcon);
+    //Reset states
+    //============================================================================================
 
-    const [showURL, setShowURL] = useState(false);
-    const [showLocal, setShowLocal] = useState(false);
-
-    if (!showURL && !showLocal && classButtonURL !== classes.bigButtonDiv && classButtonLocal !== classes.bigButtonDiv){
-        setClassButtonURL(classes.bigButtonDiv);
-        setClassButtonLocal(classes.bigButtonDiv);
-    }
-
-
-    const clickURL = (event) => {
-        setClassButtonURL(classes.bigButtonDivSelectted);
-        setClassIconURL(classes.bigButtonIconSelectted);
-
-        setClassButtonLocal(classes.bigButtonDiv);
-        setClassIconLocal(classes.bigButtonIcon);
-
-        setShowURL(true);
-        setShowLocal(false);
-    }
-
-    const clickLocal = (event) => {
-        setClassButtonURL(classes.bigButtonDiv);
-        setClassIconURL(classes.bigButtonIcon);
-
-        setClassButtonLocal(classes.bigButtonDivSelectted);
-        setClassIconLocal(classes.bigButtonIconSelectted);
-
-        setShowURL(false);
-        setShowLocal(true);
-    }
 
     const newGif = (event) => {
-        setReadyToSend(false);
-        setImageDropped1("");
-        setImageDropped2("");
-        setShowDropZone1(true);
-        setShowDropZone2(true);
-        setShowURL(false);
-        setShowLocal(false);
+        cleanInputs();
+        stopLoop();
 
         setClassButtonURL(classes.bigButtonDiv);
         setClassIconURL(classes.bigButtonIcon);
 
         setClassButtonLocal(classes.bigButtonDiv);
         setClassIconLocal(classes.bigButtonIcon);
+
+        dispatch(setStateInit());
     }
+
+
+    function cleanInputs() {
+        setImageDropped1(null);
+        setSelectedFile1(null);
+        setShowDropZone1(true);
+
+        setImageDropped2(null);
+        setSelectedFile2(null);
+        setShowDropZone2(true);
+
+        setImageURL1("");
+        setImageURL2("");
+
+        setFilesToSend(null);
+        setModeHomo(0);
+
+        setFilesForGif(null); 
+        setDelayGif(null);
+    }
+
+    useEffect(() => {
+        return () => {
+            // componentwillunmount in functional component.
+            // Anything in here is fired on component unmount.
+            newGif();
+        }
+    }, [])
 
 
     //HTML Code
@@ -311,26 +367,8 @@ const Gif = () => {
                 {//=== Title ===
                 }
 
-                <Grid
-                    container
-                    direction="row"
-                    justify="flex-start"
-                    alignItems="center"
-                >
-
-                    <IconGif style={{ fill: "#51A5B2" }} />
-                    <Typography variant="h4" color={'primary'}>
-                        {keyword("checkGIF_title")}
-                    </Typography>
-
-                </Grid>
-
-                <Box ml={1}>
-                    <Typography variant="body1">
-                        {keyword("checkGIF_description")}
-                    </Typography>
-                </Box>
-                <Box m={3} />
+                <HeaderTool name={keywordAllTools("navbar_gif")} description={keywordAllTools("navbar_gif_description")} icon={<IconGif style={{ fill: "#51A5B2" }} />} />
+            
 
                 {//=== Load of the images ===
                 }
@@ -448,7 +486,7 @@ const Gif = () => {
 
                 <Box m={3} />
 
-                {(showLocal || showURL) &&
+                {(toolState >= 2) &&
 
                 <Card>
                     <CardHeader
@@ -476,7 +514,7 @@ const Gif = () => {
                             <Grid item xs={6} style={{ borderRight: '0.1em solid #ECECEC', padding: '0.5em' }}>
                                 <Box p={2}>
 
-                                {showLocal &&
+                                {(selectedMode === "LOCAL") &&
                                     <div>
                                         <Typography variant="h6" className={classes.headingGif}>
                                             {keyword("title_image1")}
@@ -578,13 +616,13 @@ const Gif = () => {
 
                                         <Box m={4} />
 
-                                        <Button variant="contained" color="primary" fullWidth onClick={handleSubmission} disabled={!readyToSend}>
+                                        <Button variant="contained" color="primary" fullWidth onClick={handleSubmission} disabled={toolState!==3}>
                                             {keyword("button_loadImages")}
                                         </Button>
                                     </div>
                                 }
 
-                                {showURL &&
+                                {(selectedMode === "URL") &&
                                     <div>
                                         <Typography variant="h6" className={classes.headingGif}>
                                             {keyword("title_image1")}
@@ -629,7 +667,7 @@ const Gif = () => {
 
                                         <Box m={4} />
 
-                                    <Button variant="contained" color="primary" fullWidth onClick={handleSubmissionURL} disabled={!readyToSend}>
+                                        <Button variant="contained" color="primary" fullWidth onClick={handleSubmissionURL} disabled={toolState !== 3}>
                                             {keyword("button_loadImages")}
                                         </Button>
                                         
@@ -645,7 +683,7 @@ const Gif = () => {
                                 
                                 
 
-                                    {!showHomo && !loading &&
+                                    {(toolState === 21 || toolState === 22 || toolState === 3) &&
                                         
                                         <Grid
                                             container
@@ -666,7 +704,7 @@ const Gif = () => {
 
 
 
-                                    {loading &&
+                                    {toolState === 4 &&
                                         <Grid
                                             container
                                             direction="column"
@@ -678,7 +716,7 @@ const Gif = () => {
                                         </Grid>
                                     }
 
-                                    {showHomo &&
+                                    {toolState === 5 &&
 
                                         <Box p={2} className={classes.height100}>
 

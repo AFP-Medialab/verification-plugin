@@ -208,53 +208,54 @@ const NavBar = (props) => {
         {
             title: "navbar_analysis_image",
             description: "navbar_analysis_image_description",
-            icon: <AnalysisIconImage width="45px" height="45px" style={{ fill: "#4c4c4c" }} />,
+            icon: (drawerValue === 5)   ? <AnalysisIconImage width="45px" height="45px" style={{ fill: "#51A5B2" }} />
+                                        : < AnalysisIconImage width = "45px" height = "45px" style = {{ fill: "#4c4c4c" }} />,
             iconColored: <AnalysisIconImage width="45px" height="45px" style={{ fill: "#51A5B2" }} />,
             tsvPrefix: "api",
             path: "analysisImage",
         },
-        {
-            title: "navbar_forensic",
-            description: "navbar_forensic_description",
-            icon: (drawerValue === 8) ? <ForensicIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} />
-                : <ForensicIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} />,
-            iconColored: <ForensicIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} />,
-            tsvPrefix: "forensic",
-            path: "forensic",
-        },
+        
         {
             title: "navbar_magnifier",
             description: "navbar_magnifier_description",
-            icon: (drawerValue === 5)   ? <MagnifierIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} />
+            icon: (drawerValue === 6)   ? <MagnifierIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} />
                                         : <MagnifierIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} />,
             iconColored: <MagnifierIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} />,
             tsvPrefix: "magnifier",
             path: "magnifier",
         },
         {
+            title: "navbar_metadata",
+            description: "navbar_metadata_description",
+            icon: (drawerValue === 7)   ? <MetadataIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} />
+                                        : <MetadataIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} />,
+            iconColored: <MetadataIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} />,
+            tsvPrefix: "metadata",
+            path: "metadata",
+        },
+        {
             title: "navbar_rights",
             description: "navbar_rights_description",
-            icon: (drawerValue === 7) ? <VideoRightsIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} />
+            icon: (drawerValue === 8) ? <VideoRightsIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} />
                 : <VideoRightsIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} />,
             iconColored: <VideoRightsIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} />,
             tsvPrefix: "copyright",
             path: "copyright",
         },
         {
-            title: "navbar_metadata",
-            description: "navbar_metadata_description",
-            icon: (drawerValue === 6)   ? <MetadataIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} />
-                                        : <MetadataIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} />,
-            iconColored: <MetadataIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} />,
-            tsvPrefix: "metadata",
-            path: "metadata",
+            title: "navbar_forensic",
+            description: "navbar_forensic_description",
+            icon: (drawerValue === 9) ? <ForensicIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} />
+                : <ForensicIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} />,
+            iconColored: <ForensicIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} />,
+            tsvPrefix: "forensic",
+            path: "forensic",
         },
-        
         
         {
             title: "navbar_twitter_sna",
             description: "navbar_twitter_sna_description",
-            icon: (drawerValue === 9)   ? <TwitterSnaIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} />
+            icon: (drawerValue ===  10)   ? <TwitterSnaIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} />
                                         : <TwitterSnaIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} />,
             iconColored: <TwitterSnaIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} />,
             tsvPrefix: "twitter_sna",
@@ -264,7 +265,7 @@ const NavBar = (props) => {
         {
             title: "navbar_covidsearch",
             description: "navbar_covidsearch_description",
-            icon: (drawerValue === 10)  ? <CovidSearchIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} />
+            icon: (drawerValue === 11)  ? <CovidSearchIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} />
                                         : <CovidSearchIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} />,
             iconColored: <CovidSearchIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} />,
             tsvPrefix: "covidsearch",
@@ -273,7 +274,7 @@ const NavBar = (props) => {
         {
             title: "navbar_xnetwork",
             description: "navbar_xnetwork_description",
-            icon: (drawerValue === 11)  ? <XnetworkIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} />
+            icon: (drawerValue === 12)  ? <XnetworkIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} />
                                         : <XnetworkIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} />,
             iconColored: <XnetworkIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} />,
             tsvPrefix: "xnetwork",
@@ -282,7 +283,7 @@ const NavBar = (props) => {
         {
             title: "navbar_ocr",
             description: "navbar_ocr_description",
-            icon: (drawerValue === 12)  ? <OcrIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} />
+            icon: (drawerValue === 13)  ? <OcrIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} />
                                         : <OcrIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} />,
             iconColored: <OcrIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} />,
             tsvPrefix: "ocr",
@@ -292,7 +293,7 @@ const NavBar = (props) => {
         {
             title: "navbar_gif",
             description: "navbar_gif_description",
-            icon: (drawerValue === 13)  ? <GifIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} />
+            icon: (drawerValue === 14)  ? <GifIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} />
                                         : <GifIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} />,
             iconColored: <GifIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} />,
             tsvPrefix: "gif",

@@ -1,7 +1,8 @@
 import { useEffect } from "react";
 import axios from "axios"
 import { useDispatch } from "react-redux";
-import { setHomogroaphic, setGifLoading, setGifClean } from "../../../../../redux/actions/tools/gifActions";
+import { useSelector } from "react-redux";
+import { setStateLoading, setStateShow, setStateError} from "../../../../../redux/actions/tools/gifActions";
 import { setError } from "../../../../../redux/actions/errorActions";
 import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Forensic.tsv";
@@ -9,25 +10,28 @@ import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Forens
 const useGetHomographics = (files, mode) => {
     const keyword = useLoadLanguage("components/NavItems/tools/CheckGIF.tsv", tsv);
     const dispatch = useDispatch();
-
+    const toolState = useSelector(state => state.gif.toolState);
 
     useEffect(() => {
 
         const handleError = (e) => {
-            if (keyword(e) !== "")
+            if (keyword(e) !== ""){
                 dispatch(setError(keyword(e)));
-            else
+                console.log("ERROR HOMO: " + keyword(e));
+            }else{
                 dispatch(setError(keyword("error_homo")));
-            dispatch(setGifClean());
+            }
+            
+            dispatch(setStateError());
+
         };
 
         const getImages = (response) => {
             console.log("RESPONSE RECIEVED");
-            console.log(response);
+            //console.log(response);
 
             if(response.data.status === "KO"){
-                dispatch(setError(keyword("error_homo")));
-                dispatch(setGifClean());
+                handleError("error_homo");
             }else{
                 var homoImage1 = "https://ipolcore.ipol.im/" + response.data.work_url + "output_0.png";
                 var homoImage2 = "https://ipolcore.ipol.im/" + response.data.work_url + "output_1.png";
@@ -35,15 +39,15 @@ const useGetHomographics = (files, mode) => {
                 //console.log(homoImage1);
                 //console.log(homoImage2);
 
-                dispatch(setHomogroaphic(homoImage1, homoImage2));
+                dispatch(setStateShow(homoImage1, homoImage2));
             }
 
         }
 
-        if (files && mode===1) {
+        if (files && mode === 1 && toolState === 3) {
             console.log("UPLOADING IMAGES");
 
-            dispatch(setGifLoading());
+            dispatch(setStateLoading());
             //console.log(files.file1);
             //console.log(files.file2);
 
@@ -66,10 +70,10 @@ const useGetHomographics = (files, mode) => {
         };
 
 
-        if (files && mode === 2) {
+        if (files && mode === 2 && toolState === 3) {
             console.log("UPLOADING IMAGES");
 
-            dispatch(setGifLoading());
+            dispatch(setStateLoading());
             //console.log(files.file1);
             //console.log(files.file2);
 

@@ -173,7 +173,7 @@ const AllTools = (props) => {
                         
                             {
                                 toolsVideo.map((value, key) => {
-                                    console.log(value);
+                                    //console.log(value);
 
                                     return (
                                         <Grid className={classes.toolCardStyle} item key={key} onClick={() => handleClick(value.path, "video")}>
@@ -223,6 +223,7 @@ const AllTools = (props) => {
 
                         {
                             toolsImages.map((value, key) => {
+                                console.log(value);
                                 return (
                                     <Grid className={classes.toolCardStyle} item key={key} onClick={() => handleClick(value.path, "image")}>
                                         <ToolCard

@@ -28,7 +28,7 @@ import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
 import Fade from '@material-ui/core/Fade';
 import Slider from '@material-ui/core/Slider';
 import useGetGif from "../../GIF/Hooks/useGetGif";
-import { setGifDownloading } from "../../../../../redux/actions/tools/gifActions";
+//import { setGifDownloading } from "../../../../../redux/actions/tools/gifActions";
 import { useDispatch } from "react-redux";
 import useGetTransparent from "../Hooks/useGetTransparent";
 import {cleanForensicState} from "../../../../../redux/actions/tools/forensicActions"
@@ -423,7 +423,7 @@ const ForensicResults = (props) => {
         }
         setFilesForGif(files);
         setDelayGif(speed);
-        dispatch(setGifDownloading());
+        //dispatch(setGifDownloading());
     };
 
 

@@ -1,43 +1,46 @@
-export const setHomogroaphic = (urlImg1, urlImg2) => {
+export const setStateInit = () => {
     return {
-        type: "SET_GIF_HOMOGRAPHIC",
+        type: "SET_STATE_INIT"
+    }
+};
+
+export const setStateSelectingLocal = () => {
+    return {
+        type: "SET_STATE_SELECTINGFILES_LOCAL"
+    }
+};
+
+export const setStateSelectingUrl = () => {
+    return {
+        type: "SET_STATE_SELECTINGFILES_URL"
+    }
+};
+
+export const setStateReady = () => {
+    return {
+        type: "SET_STATE_READY"
+    }
+};
+
+export const setStateLoading = () => {
+    return {
+        type: "SET_STATE_LOADING"
+    }
+};
+
+export const setStateError = () => {
+    return {
+        type: "SET_STATE_ERROR"
+    }
+};
+
+export const setStateShow = (urlImg1, urlImg2) => {
+    return {
+        type: "SET_STATE_SHOW",
         payload: {
-            showHomo: true,
-            loading: false,
+            toolState: 5,
             homoImg1: urlImg1,
             homoImg2: urlImg2,
         }
-    }
-};
-
-
-export const setGifLoading = () => {
-    return {
-        type: "SET_GIF_LOADING"
-    }
-};
-
-
-export const setGifDownloading = () => {
-    return {
-        type: "SET_GIF_DOWNLOADING"
-    }
-};
-
-export const setGifDownloaded= () => {
-    return {
-        type: "SET_GIF_DOWNLOADED"
-    }
-};
-
-export const setGifClean = () => {
-    return {
-        type: "SET_GIF_CLEAN"
-    }
-};
-
-export const setFinishReset = () => {
-    return {
-        type: "SET_FINISH_RESET"
     }
 };
