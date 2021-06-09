@@ -214,6 +214,7 @@ const NavBar = (props) => {
             tsvPrefix: "api",
             path: "analysisImage",
         },
+        {
             title: "navbar_magnifier",
             description: "navbar_magnifier_description",
             icon: (drawerValue === 6)   ? <MagnifierIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} />
