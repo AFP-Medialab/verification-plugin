@@ -23,6 +23,9 @@ import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { setStateSelectingLocal, setStateSelectingUrl, setStateReady, setStateInit } from "../../../../redux/actions/tools/gifActions";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
+import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
+import IconButton from '@material-ui/core/IconButton';
+
 
 
 
@@ -155,6 +158,21 @@ const Gif = () => {
         setSelectedFile2(event.target.files[0]);
         setShowDropZone2(false)
     }
+
+    //Remove image1
+    const removeImage1 = () => {
+        setImageDropped1(null);
+        setSelectedFile1(null);
+        setShowDropZone1(true)
+    }
+
+    //Remove image1
+    const removeImage2 = () => {
+        setImageDropped2(null);
+        setSelectedFile2(null);
+        setShowDropZone2(true)
+    }
+
 
 
     //--- URL mode ---  
@@ -517,9 +535,19 @@ const Gif = () => {
                                         <Box m={2} />
 
                                         {!showDropZone1 &&
-                                            <div>
+                                            < Grid
+                                                container
+                                                spacing={1}
+                                                direction="row"
+                                                justify="flex-start"
+                                                alignItems="flex-start"
+
+                                            >
                                                 <img src={imageDropped1} className={classes.imageDropped} alt="" />
-                                            </div>
+                                                <IconButton color="black" onClick={removeImage1}>
+                                                    <DeleteOutlineIcon fontSize="small" />
+                                                </IconButton>
+                                            </Grid>
                                         }
 
                                         {showDropZone1 &&
@@ -569,7 +597,19 @@ const Gif = () => {
                                         <Box m={2} />
 
                                         {!showDropZone2 &&
-                                            <img src={imageDropped2} className={classes.imageDropped} alt="" />
+                                            <Grid
+                                                container
+                                                spacing={1}
+                                                direction="row"
+                                                justify="flex-start"
+                                                alignItems="flex-start"
+
+                                            >
+                                                <img src={imageDropped2} className={classes.imageDropped} alt="" />
+                                                <IconButton color="black" onClick={removeImage2}>
+                                                    <DeleteOutlineIcon fontSize="small" />
+                                                </IconButton>
+                                            </Grid>
                                         }
 
                                         {showDropZone2 &&
