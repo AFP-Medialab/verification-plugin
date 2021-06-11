@@ -19,6 +19,7 @@ import { ReactComponent as IconData } from '../../../NavBar/images/SVG/DataAnaly
 import { ReactComponent as IconTools } from '../../../NavBar/images/SVG/Navbar/Tools.svg';
 import Box from "@material-ui/core/Box";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
+import MasterMode from "./MasterMode/MasterMode";
 
 const AllTools = (props) => {
     const classes = useMyStyles();
@@ -143,7 +144,24 @@ const AllTools = (props) => {
     return (
         <div>
 
-            <HeaderTool name={keyword("navbar_tools")} icon={<IconTools style={{ fill: "#51A5B2" }} />} />
+            <Grid
+                container
+                direction="row"
+                justify="space-between"
+                alignItems="center">
+
+
+                <Grid item xs>
+                    <HeaderTool name={keyword("navbar_tools")} icon={<IconTools style={{ fill: "#51A5B2" }} />} />
+                </Grid>
+
+                <Grid item>
+                    <MasterMode/>
+                </Grid>
+
+            </Grid>
+
+            
 
             <Card>
                 <Box p={2}>
