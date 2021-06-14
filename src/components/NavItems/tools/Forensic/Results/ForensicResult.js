@@ -109,8 +109,6 @@ const ForensicResults = (props) => {
     const classes = useMyStyles();
     const keyword = useLoadLanguage("components/NavItems/tools/Forensic.tsv", tsv);
     const results = props.result;
-    const masks = props.masksData;
-    //console.log(results);
 
     /*
         --- COMPRESSION ---
@@ -177,10 +175,6 @@ const ForensicResults = (props) => {
     const idStartCloning = 10;
     const idStartLenses = 12;
 
-    
-
-    //console.log(results);
-
     const filters = useRef(filtersIDs.map((value) => {
 
         var filter;
@@ -196,7 +190,6 @@ const ForensicResults = (props) => {
                 ],
                 "currentDisplayed": 0,
                 "arrows": [false,false],
-                "mask": [masks.forgery],
             }
 
         //GHOST
@@ -207,7 +200,6 @@ const ForensicResults = (props) => {
                 "map": results[value]["maps"],
                 "currentDisplayed": 0,
                 "arrows": [false, false],
-                "mask": [],
             }
         
         //CAGI
@@ -224,101 +216,18 @@ const ForensicResults = (props) => {
                 ],
                 "currentDisplayed": 0,
                 "arrows": [false, false],
-                "mask": [
-                    masks.CAGIOutput,
-                    masks.CAGIInversedOutput,
-                ],
             }
         
         //REST
-        } else if (value === "adq1_report"){
+        }else{
             filter = {
                 "id": value,
                 "name": keyword("forensic_title_" + value),
                 "map": results[value]["map"],
-                "mask": masks.DQOutput,
-            }
-        } else if (value === "dct_report") {
-            filter = {
-                "id": value,
-                "name": keyword("forensic_title_" + value),
-                "map": results[value]["map"],
-                "mask": masks.DCTOutput,
-            }
-        } else if (value === "blk_report") {
-            filter = {
-                "id": value,
-                "name": keyword("forensic_title_" + value),
-                "map": results[value]["map"],
-                "mask": masks.BLKOutput,
-            }
-        } else if (value === "splicebuster_report") {
-            filter = {
-                "id": value,
-                "name": keyword("forensic_title_" + value),
-                "map": results[value]["map"],
-                "mask": masks.SBOutput,
-            }
-        } else if (value === "wavelet_report") {
-            filter = {
-                "id": value,
-                "name": keyword("forensic_title_" + value),
-                "map": results[value]["map"],
-                "mask": masks.DWNoiseOutput,
-            }
-        } else if (value === "mantranet_report") {
-            filter = {
-                "id": value,
-                "name": keyword("forensic_title_" + value),
-                "map": results[value]["map"],
-                "mask": masks.MANTRANETOutput,
-            }
-        } else if (value === "fusion_report") {
-            filter = {
-                "id": value,
-                "name": keyword("forensic_title_" + value),
-                "map": results[value]["map"],
-                "mask": masks.FusionOutput,
-            }
-        } else if (value === "cmfd_report") {
-            filter = {
-                "id": value,
-                "name": keyword("forensic_title_" + value),
-                "map": results[value]["map"],
-                "mask": masks.CMFDOutput,
-            }
-        } else if (value === "rcmfd_report") {
-            filter = {
-                "id": value,
-                "name": keyword("forensic_title_" + value),
-                "map": results[value]["map"],
-                "mask": results[value]["map"],
-            }
-        } else {
-            filter = {
-                "id": value,
-                "name": keyword("forensic_title_" + value),
-                "map": results[value]["map"],
-                "mask": results[value]["map"],
             }
         }
-
-        
-
         return filter;
     }));
-
-    const numbersGhost = results["ghost_report"]["qualities"];
-    const ghostMasks = [];
-
-    for (var i = 0; i < numbersGhost.length; i++) {
-        const stringMask = "GhostOutput" + numbersGhost[i];
-        ghostMasks.push(masks[stringMask]);
-    }
-    
-
-    
-
 
     //console.log(filters);
     //console.log(results);
@@ -408,7 +317,7 @@ const ForensicResults = (props) => {
     function clickArrowFilter(filter, arrow) {
         filters.current.find(x => x.id === filter).currentDisplayed += arrow;
         arrowsToDisplay(filter);
-        displayFilterHover(filters.current.find(x => x.id === filter).mask[filters.current.find(x => x.id === filter).currentDisplayed]);
+        displayFilterHover(filters.current.find(x => x.id === filter).map[filters.current.find(x => x.id === filter).currentDisplayed]);
     }
 
 
@@ -420,7 +329,7 @@ const ForensicResults = (props) => {
     const gifImage = props.url;
     const [gifFilter, setGifFilter] = React.useState(props.url);
     const gifFilterMask = useSelector(state => state.forensic.maskUrl);
-    //console.log(gifFilterMask);
+    console.log(gifFilterMask);
 
     const [interval, setIntervalVar] = React.useState(null);
 
@@ -429,21 +338,21 @@ const ForensicResults = (props) => {
 
     const [readyTransparency, setReadyTransparency] = React.useState(false);
 
-    //nsparent(gifFilter, readyTransparency);
+    useGetTransparent(gifFilter, readyTransparency);
 
     function clickGifPopover(event, filter) {
         var url;
         if (filter === "zero_report" || filter === "ghost_report" || filter === "cagi_report"){
-            url = filters.current.find(x => x.id === filter).mask[filters.current.find(x => x.id === filter).currentDisplayed]
+            url = filters.current.find(x => x.id === filter).map[filters.current.find(x => x.id === filter).currentDisplayed]
             setGifFilter(url);
-            //console.log(url);
+            console.log(url);
 
             setReadyTransparency(true);
 
         }else{
-            url = filters.current.find(x => x.id === filter).mask;
+            url = filters.current.find(x => x.id === filter).map;
             setGifFilter(url);
-            //console.log(url);
+            console.log(url);
 
             setReadyTransparency(true);
         }
@@ -554,7 +463,7 @@ const ForensicResults = (props) => {
 
 
 
-    //console.log("Downloading: " + downloading);
+    console.log("Downloading: " + downloading);
     
 
 
@@ -800,10 +709,6 @@ const ForensicResults = (props) => {
                                                             arrowsToDisplay(value.id);
                                                         }
 
-                                                        if (value.id === "ghost_report"){
-                                                            value.mask = ghostMasks;
-                                                        }
-
 
                                                         return (
                                                             <Grid key={key} item xs={4} >
@@ -811,7 +716,7 @@ const ForensicResults = (props) => {
                                                                 {(value.id === "zero_report" || value.id === "ghost_report" || value.id === "cagi_report")      
                                                                     ? <div 
                                                                         className={classes.imageOverlayWrapper}
-                                                                        onMouseOver={() => displayFilterHover(value.mask[value.currentDisplayed])}
+                                                                        onMouseOver={() => displayFilterHover(value.map[value.currentDisplayed])}
                                                                         onMouseLeave={hideFilterHover}>
 
                                                                             <CardMedia
@@ -836,7 +741,7 @@ const ForensicResults = (props) => {
                                                                                             <NavigateBeforeIcon/>
                                                                                         </Fab>
                                                                                     }
-                                                                                    <Fab size="medium" style={{ backgroundColor: "#ffffff" }} onClick={(e) => clickGifPopover(e, value.id)}>
+                                                                                <Fab size="medium" style={{ backgroundColor: "#ffffff" }} onClick={(e) => clickGifPopover(e, value.id)}>
                                                                                         <GifIcon style={{ color: "#000000" }} />
                                                                                     </Fab>
 
@@ -856,7 +761,7 @@ const ForensicResults = (props) => {
 
                                                                     : <div
                                                                         className={classes.imageOverlayWrapper}
-                                                                        onMouseOver={() => displayFilterHover(value.mask)}
+                                                                        onMouseOver={() => displayFilterHover(value.map)}
                                                                         onMouseLeave={hideFilterHover}>
 
                                                                             <CardMedia
@@ -986,7 +891,7 @@ const ForensicResults = (props) => {
                                             component="img"
                                             className={classes.imagesGifFilter}
                                             style={{ display: "none" }}
-                                            image={gifFilter}
+                                            image={gifFilterMask}
                                             id="gifFilterElement"
                                         />
                                     }

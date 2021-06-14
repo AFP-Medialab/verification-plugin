@@ -25,6 +25,7 @@ const useGetTransparent = (url, ready) => {
 
 
         if (url && ready) {
+            console.log("TEST");
             axios.get("https://mever.iti.gr/envisu4/utils/mask?url=" + url)
                 .then(response => {
                     console.log(response);

@@ -7,7 +7,6 @@ import Checkbox from "@material-ui/core/Checkbox";
 import Button from "@material-ui/core/Button";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import Box from "@material-ui/core/Box";
-import YoutubeResults from "./Results/YoutubeResults.js"
 import TwitterResults from "./Results/TwitterResults";
 import {useAnalysisWrapper} from "./Hooks/useAnalysisWrapper";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles"
@@ -27,6 +26,7 @@ import Grid from "@material-ui/core/Grid";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import OnClickInfo from "../../../Shared/OnClickInfo/OnClickInfo";
 import Typography from "@material-ui/core/Typography";
+import styles from "./Results/layout.module.css";
 
 /*function useTraceUpdate(props) {
     const prev = useRef(props);
@@ -99,7 +99,7 @@ const Analysis = () => {
     return (
         <div>
 
-            <HeaderTool name={keywordAllTools("navbar_analysis_image")} description={keywordAllTools("navbar_analysis_description_image")} icon={<AnalysisIcon style={{ fill: "#51A5B2" }} />}/>
+            <HeaderTool name={keywordAllTools("navbar_analysis_image")} description={keywordAllTools("navbar_analysis_image_description")} icon={<AnalysisIcon style={{ fill: "#51A5B2" }} />}/>
 
             <Card>
                 <CardHeader
@@ -177,11 +177,7 @@ const Analysis = () => {
                     />
                 </Box>
             }
-            {
-                //(resultData !== null && resultUrl != null && resultUrl.startsWith("https://www.youtube.com/")) ?
-                (resultData  && resultData.platform.startsWith("youtube")) ?
-                    <YoutubeResults report={resultData}/> : null
-            }
+            
             {
                 //(resultData !== null && resultUrl != null && resultUrl.startsWith("https://twitter.com/")) ?
                 (resultData  && resultData.platform.startsWith("twitter")) ?
@@ -192,18 +188,9 @@ const Analysis = () => {
                 (resultData  && resultData.platform.startsWith("facebook")) ?
                     <FacebookResults report={resultData}/> : null
             }
-             {
-                <Box m={4} justifyContent="center" alignItems="center">
-                            <Typography variant={"h6"}>
-                                {keyword("intro_tip")}
-                            </Typography>
-                            <Box m={1} alignItems="center" justifyContent="center"/>
-                            <OnClickInfo keyword={"intro_tip"}/>
-                            
-
-
-                </Box>
-            }
+             <div className={classes.onClickInfo}>
+                    <Typography className={styles.margin}   variant={"body2"}>{"If the input link does not work, enter the video and copy the link manually instead of using the facebook's option: 'copy link'."}</Typography>
+                </div>
         </div>);
 };
 export default React.memo(Analysis);

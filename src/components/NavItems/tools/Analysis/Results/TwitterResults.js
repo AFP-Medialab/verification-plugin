@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {useDispatch} from "react-redux";
 import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
@@ -25,29 +25,154 @@ import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Analys
 //import AsynchMyMap from "../../../../Shared/MyMap/AsynchMyMap";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
+import styles from "./layout.module.css";
+import axios from "axios";
+import { setAnalysisComments } from "../../../../../redux/actions/tools/analysisActions";
+import {setAnalysisLinkComments} from "../../../../../redux/actions/tools/analysisActions"
+import {setAnalysisVerifiedComments} from "../../../../../redux/actions/tools/analysisActions"
+
 
 const TwitterResults = (props) => {
     const classes = useMyStyles();
     const keyword = useLoadLanguage("components/NavItems/tools/Analysis.tsv", tsv);
-
-    const dispatch = useDispatch();
-
-    const [expanded, setExpanded] = React.useState(false);
-
-    const handleChange = panel => (event, isExpanded) => {
-        setExpanded(isExpanded ? panel : false);
-    };
-
-    const report = props.report;
-
-    const verificationComments = report["verification_comments"];
-    const thumbnails = [report["thumbnails"]["preferred"]];
+    const [count_comments, setCount_comments] = useState(1);
+    const [count_verified_comments, setCount_verified_comments] = useState(1);
+    const [count_link_comments, setCount_link_comments] = useState(1);
 
     const reverseSearch = (website) => {
         for (let image of thumbnails) {
             ImageReverseSearch(website, image.url);
         }
     };
+    var nextPage = props.report.pagination.next;
+    const url = useState(nextPage);
+    console.log("url ",url[0])
+  
+    var index=0
+    var real
+  
+    for(var i=0;i<url[0].length;i++){
+      if(url[0][i]==="="){
+        index=index+1
+        if(index===2){
+          real=i
+          break;
+        }
+      }
+    }
+    const [expanded, setExpanded] = React.useState(false);
+
+    const handleChange = panel => (event, isExpanded) => {
+        setExpanded(isExpanded ? panel : false);
+    };
+
+    
+
+    
+   
+    var next_page_comments=url[0].substring(0, real+1)+(count_comments+1)+"&type=coms"
+    var previous_page_comments=url[0].substring(0, real+1)+(count_comments-1)+"&type=coms"
+    var next_page_verified=url[0].substring(0, real+1)+(count_verified_comments+1)+"&type=vercoms"
+    var previous_page_verified=url[0].substring(0, real+1)+(count_verified_comments-1)+"&type=vercoms"
+    var next_page_link=url[0].substring(0,real+1)+(count_link_comments+1)+"&type=linkcoms"
+    var previous_page_link=url[0].substring(0,real+1)+(count_link_comments-1)+"&type=linkcoms"
+
+    const handleClick_next_page = (event) => {
+        console.log("page_verified INSIDE ",next_page_comments)
+          console.log("CALL ",axios.get("https://mever.iti.gr" + next_page_comments))
+          axios.get("https://mever.iti.gr" + next_page_comments).then((response) => {
+            console.log("response.data ",response.data)
+            if(!response.data.error){
+              setCount_comments(count_comments + 1);
+              console.log("PAGE NUMBER: ",count_comments)
+              dispatch(setAnalysisComments(response.data));
+            }
+          });
+      };
+    
+      const handleClick_previous_page = (event) => {
+          if(count_comments>1){
+          setCount_comments(count_comments - 1);
+          console.log("PAGE NUMBER: ",count_comments)
+          console.log("page_link INSIDE ",previous_page_comments)
+          console.log("CALL ",axios.get("https://mever.iti.gr" + previous_page_comments))
+          axios.get("https://mever.iti.gr" + previous_page_comments).then((response) => {
+            console.log("response.data ",response.data)
+            if(!response.data.error){
+              dispatch(setAnalysisComments(response.data));
+            }
+          });
+      };
+      };
+      
+      const handleClick_next_page2 = (event) => {
+        
+          console.log("page_verified INSIDE ",next_page_verified)
+          console.log("CALL ",axios.get("https://mever.iti.gr" + next_page_verified))
+          axios.get("https://mever.iti.gr" + next_page_verified).then((response) => {
+            console.log("response.data ",response.data)
+            if(!response.data.error){
+              setCount_verified_comments(count_verified_comments + 1);
+              console.log("PAGE NUMBER: ",count_verified_comments)
+              dispatch(setAnalysisVerifiedComments(response.data));
+            }
+          });   
+      } 
+    
+      const handleClick_previous_page2 = (event) => {
+        if(count_verified_comments>1){
+          setCount_verified_comments(count_verified_comments - 1);
+          console.log("PAGE NUMBER: ",count_verified_comments)
+          console.log("page_link INSIDE ",previous_page_verified)
+          console.log("CALL ",axios.get("https://mever.iti.gr" + previous_page_verified))
+          axios.get("https://mever.iti.gr" + previous_page_verified).then((response) => {
+            console.log("response.data ",response.data)
+            if(!response.data.error){
+              dispatch(setAnalysisVerifiedComments(response.data));
+            }
+          });
+      };
+        }
+    
+        const handleClick_next_page1 = (event) => {
+    
+          console.log("page_link INSIDE ", next_page_link)
+          console.log("CALL ",axios.get("https://mever.iti.gr" + next_page_link))
+          axios.get("https://mever.iti.gr" + next_page_link).then((response) => {
+            console.log("response.data ",response.data)
+            if(!response.data.error){
+              setCount_link_comments(count_link_comments + 1);
+              console.log("PAGE NUMBER: ",count_link_comments)
+              dispatch(setAnalysisLinkComments(response.data));
+            }
+            
+          });
+          
+        };
+    
+        const handleClick_previous_page1 = (event) => {
+              if(count_link_comments>1){
+                setCount_link_comments(count_link_comments - 1);
+                console.log("PAGE NUMBER: ",count_link_comments)
+                console.log("page_verified INSIDE ",previous_page_link)
+                console.log("CALL ",axios.get("http://mever.iti.gr" + previous_page_link))
+                axios.get("http://mever.iti.gr" + previous_page_link).then((response) => {
+                  console.log("response.data ",response.data)
+                  if(!response.data.error){
+                    dispatch(setAnalysisLinkComments(response.data));
+                  }
+                });
+          }
+        };
+
+        const dispatch = useDispatch();
+        const report = props.report;
+        console.log("report ",report)
+        const verificationComments = report.comments ? report.comments : [];
+        const linkComments = report.link_comments ? report.link_comments : [];
+        const verifiedComments = report.verification_comments ? report.verification_comments : [];
+        console.log("linkComments ",linkComments)    
+        const thumbnails = [report["thumbnails"]["preferred"]];
 
     return (
         <div>
@@ -368,74 +493,281 @@ const TwitterResults = (props) => {
                                 <Box m={2}/>
                                 <Table className={classes.table} size="small" aria-label="a dense table">
                                     <TableBody>
-                                        {
-                                            (!report["pagination"]["total_comments"]) ? null :
-                                                <TableRow>
-                                                    <TableCell component="th" scope="row">
-                                                        {keyword("youtube_comment_name_1")}
-                                                    </TableCell>
-                                                    <TableCell
-                                                        align="right">{report["pagination"]["total_comments"]}</TableCell>
-                                                </TableRow>
-                                        }
-                                        {
-                                            (!verificationComments !== undefined) ? null :
-                                                <TableRow>
-                                                    <TableCell component="th" scope="row">
-                                                        {keyword("youtube_comment_name_2")}
-                                                    </TableCell>
-                                                    <TableCell align="right">{verificationComments.length}</TableCell>
-                                                </TableRow>
-                                        }
+                                    {
+                                        report.verification_cues.num_comments && (
+                                        <TableRow>
+                                        <TableCell component="th" scope="row">
+                                            {keyword("facebook_comment_name_1")}
+                                        </TableCell>
+                                        <TableCell align="right">
+                                            {report.verification_cues.num_comments}
+                                        </TableCell>
+                                        </TableRow>
+                                    )}
+                                    {
+                                    report.verification_cues.num_verification_comments !==
+                                    0 && (
+                                        <TableRow>
+                                        <TableCell component="th" scope="row">
+                                            {keyword("facebook_comment_name_2")}
+                                        </TableCell>
+                                        <TableCell align="right">
+                                            {report.verification_cues.num_verification_comments}
+                                        </TableCell>
+                                        </TableRow>
+                                    )}
+                                    {
+                                    report.verification_cues.num_link_comments !==
+                                    0  && (
+                                        <TableRow>
+                                        <TableCell component="th" scope="row">
+                                            {keyword("comments_links")}
+                                        </TableCell>
+                                        <TableCell align="right">
+                                            {report.verification_cues.num_link_comments}
+                                        </TableCell>
+                                        </TableRow>
+                                    )}
+                                    
+                                    
+                                        
                                     </TableBody>
                                 </Table>
+                                
                                 <Box m={2}/>
-                                {
-                                    verificationComments.length > 0 &&
-                                    <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
-                                        <AccordionSummary
-                                            expandIcon={<ExpandMoreIcon/>}
-                                            aria-controls="panel1bh-content"
-                                            id="panel1bh-header"
-                                        >
-                                            <Typography className={classes.heading}>{keyword("api_comments")}</Typography>
-                                            <Typography className={classes.secondaryHeading}> ...</Typography>
-                                        </AccordionSummary>
-                                        <AccordionDetails>
-                                            <Table className={classes.table} size="small" aria-label="a dense table">
-                                                <TableHead>
-                                                    <TableRow>
-                                                        <TableCell>{keyword("twitter_user_title")}</TableCell>
-                                                        <TableCell
-                                                            align="right">{keyword("twitter_user_name_13")}</TableCell>
-                                                        <TableCell
-                                                            align="right">{keyword("twitter_user_name_5")}</TableCell>
-                                                    </TableRow>
-                                                </TableHead>
-                                                <TableBody>
-                                                    {
-                                                        verificationComments.map((comment, key) => {
-                                                            return (
-                                                                <TableRow key={key}>
-                                                                    <TableCell component="th" scope="row">
-                                                                        <a href={"https://www.youtube.com/channel/" + comment["comid"]}
-                                                                        rel="noopener noreferrer"
-                                                                        target="_blank">{comment["authorDisplayName"]}</a>
-                                                                    </TableCell>
-                                                                    <TableCell
-                                                                        align="right">{comment["publishedAt"]}
-                                                                    </TableCell>
-                                                                    <TableCell
-                                                                        align="right">{comment["textDisplay"]}
-                                                                    </TableCell>
-                                                                </TableRow>);
-                                                        })
-                                                    }
-                                                </TableBody>
-                                            </Table>
-                                        </AccordionDetails>
-                                    </Accordion>
-                                }
+
+{
+                    verificationComments.length > 0 &&
+                    <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
+                        <AccordionSummary
+                            expandIcon={<ExpandMoreIcon/>}
+                            aria-controls="panel1bh-content"
+                            id="panel1bh-header"
+                        >
+                            <Typography className={classes.heading}>{keyword("api_comments")}</Typography>
+                            <Typography className={classes.secondaryHeading}> </Typography>
+                        </AccordionSummary>
+                        <AccordionDetails>
+                            <Table className={classes.table} size="small" aria-label="a dense table">
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell align="center">{keyword("twitter_user_title")}</TableCell>
+                                        <TableCell
+                                            className={styles.size} align="center">{keyword("twitter_user_name_13")}</TableCell>
+                                        <TableCell
+                                            align="center">{keyword("twitter_user_name_5")}</TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody className={
+                                    styles.container
+                                }>
+                                    {
+                                        verificationComments.map((comment, key) => {
+                                            return (
+                                                <TableRow key={key}>
+                                                    <TableCell component="th" scope="row">
+                                                        <a href={"https://twitter.com/" + comment["comid"]}
+                                                        rel="noopener noreferrer"
+                                                        target="_blank">{comment["authorDisplayName"]}</a>
+                                                    </TableCell>
+                                                    <TableCell
+                                                        align="center">{comment["publishedAt"]}
+                                                    </TableCell>
+                                                    <TableCell
+                                                        align="left">{comment["textDisplay"]}
+                                                    </TableCell>
+                                                </TableRow>);
+                                        })
+                                    }
+                                </TableBody>
+                            </Table>
+                        </AccordionDetails>
+                        <Box>{keyword("page_number") + count_comments}</Box>
+                        <Button
+                        variant="contained"
+                        aria-controls="simple-menu"
+                        aria-haspopup="true"
+                        color={"primary"}
+                        className={classes.button}
+                        onClick={handleClick_previous_page}
+                        >
+                        {keyword("previous_button")}
+                        </Button>
+                        <Button
+                        variant="contained"
+                        aria-controls="simple-menu"
+                        aria-haspopup="true"
+                        color={"primary"}
+                        className={classes.button}
+                        onClick={handleClick_next_page}
+                        >
+                        {keyword("next_button")}
+                        </Button>
+                    </Accordion>
+                }
+
+                                <Box m={2} />
+                {
+                  //verifiedComments.length > 0 &&
+                  <Accordion>
+                    <AccordionSummary
+                      expandIcon={<ExpandMoreIcon />}
+                      aria-controls="panel1bh-content"
+                      id="panel1bh-header"
+                    >
+                      <Typography className={classes.heading}>
+                        {keyword("api_comments_verified")}
+                      </Typography>
+                      <Typography className={classes.secondaryHeading}>
+                        {" "}
+                        
+                      </Typography>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                      <Table
+                        className={classes.table}
+                        size="small"
+                        aria-label="a dense table"
+                      >
+                        <TableHead>
+                          <TableRow>
+                              
+                            <TableCell align="center">{keyword("twitter_user_title")}</TableCell>
+                            <TableCell className={styles.size} align="center">
+                              {keyword("twitter_user_name_13")}
+                            </TableCell>
+                            <TableCell align="center">
+                              {keyword("twitter_user_name_5")}
+                            </TableCell>
+                          </TableRow>
+                        </TableHead>
+
+                        <TableBody className={styles.container}>
+                          {verifiedComments.map((comment, key) => {
+                            return (
+                              <TableRow key={key}>
+                                  <TableCell component="th" scope="row">
+                                    <a href={"https://twitter.com/" + comment["comid"]}
+                                       rel="noopener noreferrer"
+                                      target="_blank">{comment["authorDisplayName"]}</a>
+                                       </TableCell>
+                                <TableCell align="center" size="small">
+                                  {comment.publishedAt}
+                                </TableCell>
+                                <TableCell align="left" size="small">
+                                  {comment.textDisplay}
+                                </TableCell>
+                              </TableRow>
+                            );
+                          })}
+                        </TableBody>
+                      </Table>
+                    </AccordionDetails>
+                    <Box>{keyword("page_number") + count_verified_comments}</Box>
+                    <Button
+                      variant="contained"
+                      aria-controls="simple-menu"
+                      aria-haspopup="true"
+                      color={"primary"}
+                      className={classes.button}
+                      onClick={handleClick_previous_page2}
+                    >
+                      {keyword("previous_button")}
+                    </Button>
+                    <Button
+                      variant="contained"
+                      aria-controls="simple-menu"
+                      aria-haspopup="true"
+                      color={"primary"}
+                      className={classes.button}
+                      onClick={handleClick_next_page2}
+                    >
+                      {keyword("next_button")}
+                    </Button>
+                  </Accordion>
+                }
+                <Box m={2} />
+                {
+                  //linkComments.length > 0 &&
+                  <Accordion>
+                    <AccordionSummary
+                      expandIcon={<ExpandMoreIcon />}
+                      aria-controls="panel1bh-content"
+                      id="panel1bh-header"
+                    >
+                      <Typography className={classes.heading}>
+                        {keyword("link_comments")}
+                      </Typography>
+                      <Typography className={classes.secondaryHeading}>
+                        {" "}
+                        
+                      </Typography>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                      <Table
+                        className={classes.table}
+                        size="small"
+                        aria-label="a dense table"
+                      >
+                        <TableHead>
+                          <TableRow>
+                              
+                            <TableCell align="center">{keyword("twitter_user_title")}</TableCell>
+                            <TableCell className={styles.size} align="center">
+                              {keyword("twitter_user_name_13")}
+                            </TableCell>
+                            <TableCell align="center">
+                              {keyword("twitter_user_name_5")}
+                            </TableCell>
+                          </TableRow>
+                        </TableHead>
+
+                        <TableBody className={styles.container}>
+                          {linkComments.map((comment, key) => {
+                            return (
+                              <TableRow key={key}>
+                                  <TableCell component="th" scope="row">
+                                     <a href={"https://twitter.com/" + comment["comid"]}
+                                        rel="noopener noreferrer"
+                                        target="_blank">{comment["authorDisplayName"]}</a>
+                                    </TableCell>
+                                <TableCell align="center" size="small">
+                                  {comment.publishedAt}
+                                </TableCell>
+                                <TableCell align="left" size="small">
+                                  {comment.textDisplay}
+                                </TableCell>
+                              </TableRow>
+                            );
+                          })}
+                        </TableBody>
+                      </Table>
+                    </AccordionDetails>
+                    <Box>{keyword("page_number") + count_link_comments}</Box>
+                    <Button
+                      variant="contained"
+                      aria-controls="simple-menu"
+                      aria-haspopup="true"
+                      color={"primary"}
+                      onClick={handleClick_previous_page1}
+                      className={classes.button}                    >
+                      {keyword("previous_button")}
+                    </Button>
+
+
+                    <Button
+                      variant="contained"
+                      aria-controls="simple-menu"
+                      aria-haspopup="true"
+                      color={"primary"}
+                      onClick={handleClick_next_page1}
+                      className={classes.button}                   >
+
+                    
+                      {keyword("next_button")}
+                    </Button>
+                  </Accordion>
+                }
                             </div>
                         }
                         <Box m={4}/>

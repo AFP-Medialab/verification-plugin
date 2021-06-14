@@ -27,6 +27,9 @@ import Grid from "@material-ui/core/Grid";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import OnClickInfo from "../../../Shared/OnClickInfo/OnClickInfo";
 import Typography from "@material-ui/core/Typography";
+import styles from "./Results/layout.module.css";
+
+
 
 /*function useTraceUpdate(props) {
     const prev = useRef(props);
@@ -192,15 +195,10 @@ const Analysis = () => {
                 (resultData  && resultData.platform.startsWith("facebook")) ?
                     <FacebookResults report={resultData}/> : null
             }
-             {
-                <Box m={4} justifyContent="center" alignItems="center">
-                            <Typography variant={"h6"}>
-                                {keyword("intro_tip")}
-                            </Typography>
-                            <Box m={1} alignItems="center" justifyContent="center"/>
-                            <OnClickInfo keyword={"intro_tip"}/>
-                </Box>
-            }
+            <div className={classes.onClickInfo}>
+                    <Typography className={styles.margin}   variant={"body2"}>{"If the input link does not work, enter the video and copy the link manually instead of using the facebook's option: 'copy link'."}</Typography>
+                </div>
+            
         </div>);
 };
 export default React.memo(Analysis);

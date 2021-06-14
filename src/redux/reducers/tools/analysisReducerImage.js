@@ -5,7 +5,7 @@ const defaultState = {
     result: null,
 };
 
-const analysisReducer = (state = defaultState, action) => {
+const ImageAnalysisReducer = (state = defaultState, action) => {
     switch (action.type) {
         case "SET_ANALYSIS_RESULT":
             return action.payload;
@@ -13,16 +13,22 @@ const analysisReducer = (state = defaultState, action) => {
             return {
                 ...state,
                 result: { ...state.result, comments:action.payload.comments, pagination:action.payload.pagination },
-              }; 
+              };
         case "SET_ANALYSIS_PAGINATION_LINK_COMMENTS":
             return {
                 ...state,
-                result: { ...state.result, link_comments:action.payload.link_comments, pagination:action.payload.pagination },
+                result: { ...state.result, 
+                    link_comments:action.payload.comments,
+                    pagination:action.payload.pagination 
+                    }, 
+                
               };
         case "SET_ANALYSIS_PAGINATION_VERIFIED_COMMENTS":
-            return {
+                return {
                     ...state,
-                    result: { ...state.result, verification_comments:action.payload.verification_comments, pagination:action.payload.pagination },
+                    result: { ...state.result, 
+                        verification_comments:action.payload.comments, 
+                        pagination:action.payload.pagination },
                   };         
         case "SET_ANALYSIS_LOADING":
             state.loading = action.payload;
@@ -35,4 +41,4 @@ const analysisReducer = (state = defaultState, action) => {
             return state;
     }
 };
-export default analysisReducer;
+export default ImageAnalysisReducer;
