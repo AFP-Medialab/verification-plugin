@@ -74,8 +74,8 @@ const Forensic = () => {
     const resultData = useSelector(state => state.forensic.result);
     const isLoading = useSelector(state => state.forensic.loading);
     const gifAnimationState = useSelector(state => state.forensic.gifAnimation);
+    const masks = useSelector(state => state.forensic.masks);
 
-    //console.log(gifAnimationState);
 
     const [input, setInput] = useState(resultUrl);
     const [image, setImage] = useState("");
@@ -323,6 +323,7 @@ const Forensic = () => {
                     loaded={loaded}
                     gifAnimation={gifAnimationState}
                     resetImage={resetImage}
+                    masksData={masks}
                     />
             }
         </ThemeProvider>

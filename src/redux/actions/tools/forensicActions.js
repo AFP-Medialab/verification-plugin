@@ -1,4 +1,4 @@
-export const setForensicsResult = (url, result, notification, loading) => {
+export const setForensicsResult = (url, result, masks, notification, loading) => {
     return {
         type : "SET_FORENSIC_RESULT",
         payload : {
@@ -7,7 +7,16 @@ export const setForensicsResult = (url, result, notification, loading) => {
             url : url,
             result : result,
             gifAnimation: false,
+            masks: masks,
         }
+    }
+};
+
+export const setForensicMask = (masks) => {
+    return {
+        type: "SET_FORENSIC_MASK",
+        payload: masks
+        
     }
 };
 

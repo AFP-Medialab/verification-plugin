@@ -5,12 +5,16 @@ const defaultState = {
     result: null,
     gifAnimation: false,
     maskUrl: "",
+    masks: null,
 };
 
 const forensicReducer = (state = defaultState, action) => {
     switch (action.type) {
         case "SET_FORENSIC_RESULT":
             return action.payload;
+        case "SET_FORENSIC_MASK":
+            state.masks = action.payload;
+            return state;
         case "SET_FORENSIC_LOADING":
             state.loading = action.payload;
             return state;
