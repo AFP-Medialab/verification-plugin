@@ -386,19 +386,19 @@ const NavBar = (props) => {
             <AppBar position="fixed" color="default" className={classes.appBar}>
                 <Toolbar className={classes.toolbar}>
                     <Box display={{ xs: 'none', md: 'block' }}>
-                        <LogoInvid2
-                            height="40px"
-                            width="60px"
+                    <LogoWeVerify2
+                            height="55px"
+                            width="77px"
                             alt="logo"
                             className={classes.logoLeft}
                             onClick={handleImageClick}
-                        />
+                        />  
                     </Box>
 
                     <Box display={{ xs: 'none', md: 'block' }}>
-                        <LogoWeVerify2
-                            height="50px"
-                            width="70px"
+                    <LogoInvid2
+                            height="40px"
+                            width="60px"
                             alt="logo"
                             className={classes.logoRight}
                             onClick={handleImageClick}
