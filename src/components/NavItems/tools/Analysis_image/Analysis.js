@@ -16,7 +16,7 @@ import FacebookResults from "./Results/FacebookResults";
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/Analysis.tsv";
 import {submissionEvent} from "../../../Shared/GoogleAnalytics/GoogleAnalytics";
-import {cleanAnalysisState} from "../../../../redux/actions/tools/analysisActions";
+import {cleanAnalysisState} from "../../../../redux/actions/tools/image_analysisActions";
 import {useParams} from "react-router-dom";
 import {KNOWN_LINKS} from "../../Assistant/AssistantRuleBook";
 import Card from "@material-ui/core/Card";
@@ -52,9 +52,9 @@ const Analysis = () => {
     const keywordAllTools = useLoadLanguage("components/NavItems/tools/Alltools.tsv", tsv);
     const dispatch = useDispatch();
 
-    const resultUrl = useSelector(state => state.analysis.url);
-    const resultData = useSelector(state => state.analysis.result);
-    const isLoading = useSelector(state => state.analysis.loading);
+    const resultUrl = useSelector(state => state.analysisImage.url);
+    const resultData = useSelector(state => state.analysisImage.result);
+    const isLoading = useSelector(state => state.analysisImage.loading);
 
 
     const [input, setInput] = useState((resultUrl) ? resultUrl : "");
@@ -117,7 +117,7 @@ const Analysis = () => {
 
                             <TextField
                                 id="standard-full-width"
-                                label={keyword("api_input")}
+                                label={keyword("api_input_image")}
                                 placeholder={keyword("api_input_placeholder")}
                                 fullWidth
                                 disabled={isLoading}
@@ -189,7 +189,7 @@ const Analysis = () => {
                     <FacebookResults report={resultData}/> : null
             }
              <div className={classes.onClickInfo}>
-                    <Typography className={styles.margin}   variant={"body2"}>{"If the input link does not work, enter the video and copy the link manually instead of using the facebook's option: 'copy link'."}</Typography>
+             <Typography className={styles.margin}   variant={"body2"}>{keyword("facebook_tip")}</Typography>
                 </div>
         </div>);
 };

@@ -82,6 +82,7 @@ const analysisVideo = function(word){
     }
 };
 
+
 const imageMagnifier = function(word){
     let url = getUrlImg(word);
     if (url !== "") {
@@ -234,6 +235,7 @@ window.chrome.contextMenus.create({
     onclick: analysisVideo,
     targetUrlPatterns: ["https://www.youtube.com/*", "https://youtu.be/*", "https://www.facebook.com/*/videos/*", "https://www.facebook.com/*", "https://twitter.com/*"]
 });
+
 
 window.chrome.contextMenus.create({
     title: "Image Magnifier",

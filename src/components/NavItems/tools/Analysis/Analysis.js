@@ -196,7 +196,7 @@ const Analysis = () => {
                     <FacebookResults report={resultData}/> : null
             }
             <div className={classes.onClickInfo}>
-                    <Typography className={styles.margin}   variant={"body2"}>{"If the input link does not work, enter the video and copy the link manually instead of using the facebook's option: 'copy link'."}</Typography>
+                    <Typography className={styles.margin}   variant={"body2"}>{keyword("facebook_tip")}</Typography>
                 </div>
             
         </div>);

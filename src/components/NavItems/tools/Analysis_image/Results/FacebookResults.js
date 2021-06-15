@@ -2,7 +2,7 @@ import { useDispatch } from "react-redux";
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 import React, { useState } from "react";
 import CloseResult from "../../../../Shared/CloseResult/CloseResult";
-import { cleanAnalysisState } from "../../../../../redux/actions/tools/analysisActions";
+import { cleanAnalysisState } from "../../../../../redux/actions/tools/image_analysisActions";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import Divider from "@material-ui/core/Divider";
@@ -181,7 +181,6 @@ const FacebookResults = (props) => {
             />
             <div className={classes.root2}>
               <CloseResult onClick={() => dispatch(cleanAnalysisState())} />
-              <Typography variant={"h5"}>{report.image.caption}</Typography>
               <Typography variant={"h6"}>
                 {keyword("youtube_video_name1_2")}
               </Typography>
@@ -240,7 +239,7 @@ const FacebookResults = (props) => {
                         </TableCell>
                       </TableRow>
                     )}
-                    {report.image.caption && (
+                    {/*report.image.caption && (
                       <TableRow>
                         <TableCell component="th" scope="row">
                           {keyword("facebook_video_name_4")}
@@ -249,7 +248,7 @@ const FacebookResults = (props) => {
                           {report.image.caption}
                         </TableCell>
                       </TableRow>
-                    )}
+                    )*/}
                     {report.image.can_tag && (
                       <TableRow>
                         <TableCell component="th" scope="row">
@@ -260,7 +259,7 @@ const FacebookResults = (props) => {
                         </TableCell>
                       </TableRow>
                     )}
-                    {report.image.caption && (
+                    {/*report.image.caption && (
                       <TableRow>
                         <TableCell component="th" scope="row">
                           {keyword("facebook_video_name_7")}
@@ -269,7 +268,7 @@ const FacebookResults = (props) => {
                           {report.image.caption}
                         </TableCell>
                       </TableRow>
-                    )}
+                    )*/}
                     {report.image.created_time && (
                       <TableRow>
                         <TableCell component="th" scope="row">

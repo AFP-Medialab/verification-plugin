@@ -1,6 +1,6 @@
 import axios from "axios"
 import {useDispatch} from "react-redux";
-import {setAnalysisLoading, setAnalysisResult} from "../../../../../redux/actions/tools/analysisActions";
+import {setAnalysisLoading, setAnalysisResult} from "../../../../../redux/actions/tools/image_analysisActions";
 import {setError} from "../../../../../redux/actions/errorActions";
 import {useEffect} from "react";
 import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";

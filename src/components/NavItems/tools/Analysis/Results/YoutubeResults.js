@@ -409,7 +409,7 @@ const YoutubeResults = (props) => {
                                             <Table className={classes.table} size="small" aria-label="a dense table">
                                                 <TableHead>
                                                     <TableRow>
-                                                        <TableCell>{keyword("twitter_user_title")}</TableCell>
+                                                        <TableCell  align="center">{keyword("twitter_user_title")}</TableCell>
                                                         <TableCell
                                                            className={styles.size} align="center">{keyword("twitter_user_name_13")}</TableCell>
                                                         <TableCell
@@ -421,11 +421,9 @@ const YoutubeResults = (props) => {
                                                         verificationComments.map((comment, key) => {
                                                             return (
                                                                 <TableRow key={key}>
-                                                                    <TableCell component="th" scope="row">
-                                                                        <a href={"https://www.youtube.com/channel/" + comment["comid"]}
-                                                                        rel="noopener noreferrer"
-                                                                        target="_blank">{comment["authorDisplayName"]}</a>
-                                                                    </TableCell>
+                                                                    <TableCell align="center" scope="row" size="small">
+                                                                    {comment.authorDisplayName}
+                                                                  </TableCell>
                                                                     <TableCell
                                                                         align="center">{comment["publishedAt"]}
                                                                     </TableCell>
@@ -486,7 +484,7 @@ const YoutubeResults = (props) => {
                       >
                         <TableHead>
                           <TableRow>
-                          <TableCell>{keyword("twitter_user_title")}</TableCell>
+                          <TableCell  align="center">{keyword("twitter_user_title")}</TableCell>
                             <TableCell className={styles.size} align="center">
                               {keyword("twitter_user_name_13")}
                             </TableCell>
@@ -500,11 +498,9 @@ const YoutubeResults = (props) => {
                           {verifiedComments.map((comment, key) => {
                             return (
                               <TableRow key={key}>
-                                   <TableCell component="th" scope="row">
-                                                                        <a href={"https://www.youtube.com/channel/" + comment["comid"]}
-                                                                        rel="noopener noreferrer"
-                                                                        target="_blank">{comment["authorDisplayName"]}</a>
-                                                                    </TableCell>
+                                   <TableCell align="center" scope="row" size="small">
+                                  {comment.authorDisplayName}
+                                </TableCell>
                                 <TableCell align="center" size="small">
                                   {comment.publishedAt}
                                 </TableCell>
@@ -565,7 +561,7 @@ const YoutubeResults = (props) => {
                       >
                         <TableHead>
                           <TableRow>
-                          <TableCell>{keyword("twitter_user_title")}</TableCell>
+                          <TableCell align="center">{keyword("twitter_user_title")}</TableCell>
                             <TableCell className={styles.size} align="center">
                               {keyword("twitter_user_name_13")}
                             </TableCell>
@@ -579,11 +575,9 @@ const YoutubeResults = (props) => {
                           {linkComments.map((comment, key) => {
                             return (
                               <TableRow key={key}>
-                                   <TableCell component="th" scope="row">
-                                                                        <a href={"https://www.youtube.com/channel/" + comment["comid"]}
-                                                                        rel="noopener noreferrer"
-                                                                        target="_blank">{comment["authorDisplayName"]}</a>
-                                                                    </TableCell>
+                                   <TableCell align="center" scope="row" size="small">
+                                  {comment.authorDisplayName}
+                                </TableCell>
                                 <TableCell align="center" size="small">
                                   {comment.publishedAt}
                                 </TableCell>

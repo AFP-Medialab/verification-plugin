@@ -17,7 +17,7 @@ import GridListTile from "@material-ui/core/GridListTile";
 import Button from "@material-ui/core/Button";
 import ImageReverseSearch from "../../ImageReverseSearch";
 import CloseResult from "../../../../Shared/CloseResult/CloseResult";
-import {cleanAnalysisState} from "../../../../../redux/actions/tools/analysisActions";
+import {cleanAnalysisState} from "../../../../../redux/actions/tools/image_analysisActions";
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 import OnClickInfo from "../../../../Shared/OnClickInfo/OnClickInfo";
 import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
