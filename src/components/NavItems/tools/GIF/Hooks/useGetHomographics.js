@@ -33,8 +33,8 @@ const useGetHomographics = (files, mode) => {
             if(response.data.status === "KO"){
                 handleError("error_homo");
             }else{
-                var homoImage1 = "https://ipolcore.ipol.im/" + response.data.work_url + "output_0.png";
-                var homoImage2 = "https://ipolcore.ipol.im/" + response.data.work_url + "output_1.png";
+                var homoImage1 = "https://demo-medialab.afp.com/weverify-wrapper/" + response.data.work_url + "output_0.png";
+                var homoImage2 = "https://demo-medialab.afp.com/weverify-wrapper/" + response.data.work_url + "output_1.png";
 
                 //console.log(homoImage1);
                 //console.log(homoImage2);
@@ -57,7 +57,7 @@ const useGetHomographics = (files, mode) => {
 
             axios({
                 method: "post",
-                url: "https://demo-medialab.afp.com/envisu-tools/open/ipol/homographic",
+                url: "https://demo-medialab.afp.com/weverify-wrapper/envisu-tools/open/ipol/homographic",
                 data: bodyFormData,
                 headers: { "Content-Type": "multipart/form-data" },
             })

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { useEffect } from "react";
 //import { ReactComponent as GifIcon } from "../../../NavBar/images/SVG/Image/Gif.svg"
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
@@ -13,32 +14,76 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import FormControl from '@material-ui/core/FormControl';
 import TextField from "@material-ui/core/TextField";
 import LockOpenIcon from '@material-ui/icons/LockOpen';
+import useAuthenticationAPI from '../../../../Shared/Authentication/useAuthenticationAPI';
+import { useSelector, useDispatch } from 'react-redux';
+import { ERR_AUTH_UNKNOWN_ERROR } from '../../../../Shared/Authentication/authenticationErrors';
+import { setError } from "../../../../../redux/actions/errorActions";
+import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
+import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Alltools.tsv";
 
-const MasterMode = (porps) => {
+const AdvancedTools = (porps) => {
+
+    // Redux store
+    const dispatch = useDispatch();
+    const userAuthenticated = useSelector(state => state.userSession && state.userSession.userAuthenticated);
+    const user = useSelector(state => state.userSession && state.userSession.user);
+    const userRegistrationLoading = useSelector(state => state.userSession && state.userSession.userRegistrationLoading);
+    const userRegistrationSent = useSelector(state => state.userSession && state.userSession.userRegistrationSent);
+    const accessCodeRequestLoading = useSelector(state => state.userSession && state.userSession.accessCodeRequestLoading);
+    const accessCodeRequestSent = useSelector(state => state.userSession && state.userSession.accessCodeRequestSent);
+    const userLoginLoading = useSelector(state => state.userSession && state.userSession.userLoginLoading);
+
+
+    // i18n
+    const messageI18NResolver = useLoadLanguage("components/Shared/Authentication.tsv", tsv);
+
 
     const [dialogState, setDialogState] = React.useState(0);
-
     const [textToolsState, setTextToolsState] = React.useState("The advanced tools are locked");
     const [textButton, setTextButton] = React.useState("UNLOCK");
     const [colorButton, setColorButton] = React.useState("primary");
     const [iconState, setIconState] = React.useState(<LockIcon fontSize="small" />);
 
-    var stateMasterMode = "LOCK"
-
     const [open, setOpen] = React.useState(false);
 
-    
+    const isAuthenticated = () => {
+        return userAuthenticated;
+    }
+
+    useEffect(() => {
+
+        if (isAuthenticated){
+            setAuthenticatedData();
+        }else{
+            setNotAuthenticatedData();
+        }
+
+    }, []);
+
+    const setAuthenticatedData = () => {
+        setDialogState(2);
+        setTextToolsState("The advanced tools are unlocked");
+        setTextButton("EXIT");
+        setColorButton("secondary");
+        setIconState(<LockOpenIcon fontSize="small" />);
+    }
+
+    const setNotAuthenticatedData = () => {
+        setDialogState(0);
+        setTextToolsState("The advanced tools are locked");
+        setTextButton("UNLOCK");
+        setColorButton("primary");
+        setIconState(<LockIcon fontSize="small" />);
+    }
 
 
     const handleClickOpen = () => {
         if(dialogState===0){
             setOpen(true);
         }else{
-            setDialogState(0);
-            setTextToolsState("The advanced tools are locked");
-            setTextButton("UNLOCK");
-            setColorButton("primary");
-            setIconState(<LockIcon fontSize="small" />);
+            logoutOnClick();
+            
+            setNotAuthenticatedData();
         }
         
     };
@@ -48,31 +93,73 @@ const MasterMode = (porps) => {
     };
 
     const [email, setEmail] = React.useState("");
+    const [code, setCode] = React.useState("");
     const [stateGetCode, setStateGetCode] = React.useState(true);
 
 
 
     const handleGetCode = () => {
-        setDialogState(1);
+        submitGetCode(email);
+        
     };
 
-
-    const [code, setCode] = React.useState("");
     const [stateUnlockTools, setStateUnlockTools] = React.useState(true);
 
     
     const handleClickUnlock = () => {
-        setDialogState(2);
+        submitCode(code)
     };
 
     const handleCloseFinish = () => {
         setOpen(false);
-        setTextToolsState("The advanced tools are unlocked");
-        setTextButton("EXIT");
-        setColorButton("secondary");
-        setIconState(<LockOpenIcon fontSize="small" />);
+        setAuthenticatedData();
     };
 
+    
+
+
+
+
+    // Authentication API
+    const authenticationAPI = useAuthenticationAPI();
+
+    const submitGetCode = (emailInput) => {
+        authenticationAPI.requestAccessCode({
+            email: emailInput
+        }).then(result => {
+            setDialogState(1);
+        }).catch(error => {
+            handleError(error.error ? error.error.code : ERR_AUTH_UNKNOWN_ERROR);
+        });
+    };
+
+    const submitCode = (codeInput) => {
+        authenticationAPI.login({
+            accessCode: codeInput
+        }).then(result => {
+            setDialogState(2);
+            console.log(result);
+        }).catch(error => {
+            handleError(error.error ? error.error.code : ERR_AUTH_UNKNOWN_ERROR);
+        });
+    };
+
+    const logoutOnClick = () => {
+        authenticationAPI.logout().catch(error => {
+            handleError(error.error ? error.error.code : ERR_AUTH_UNKNOWN_ERROR);
+        });
+    };
+
+
+
+    // Error handler
+    const handleError = (errorKey) => {
+        let errMsg = messageI18NResolver(errorKey);
+        if (errMsg === "") {
+            errMsg = messageI18NResolver(ERR_AUTH_UNKNOWN_ERROR);
+        }
+        dispatch(setError(errMsg));
+    };
 
     return (
 
@@ -138,12 +225,13 @@ const MasterMode = (porps) => {
                 open={open}
                 onClose={handleClose}
                 aria-labelledby="max-width-dialog-title"
+                
             >
 
                 {dialogState === 0 &&
                     <Box p={2}>
                         <DialogTitle id="max-width-dialog-title">
-                            <Typography variant="h5" gutterBottom style={{ color: "#51A5B2" }}>
+                            <Typography gutterBottom style={{ color: "#51A5B2",  fontSize: "24px" }}>
                                 Advanced tools
                             </Typography>
                         </DialogTitle>
@@ -154,7 +242,7 @@ const MasterMode = (porps) => {
 
                             <Box m={4}/>
 
-                            <Typography variant="body2" style={{ color: "#818B95" }}>
+                            <Typography variant="body2" style={{ color: "#818B95"}}>
                                 Do you already have an account?
                             </Typography>
                             <Box m={2} />
@@ -202,7 +290,7 @@ const MasterMode = (porps) => {
                 {dialogState === 1 &&
                     <Box p={2}>
                         <DialogTitle id="max-width-dialog-title">
-                            <Typography variant="h5" gutterBottom style={{ color: "#51A5B2" }}>
+                            <Typography gutterBottom style={{ color: "#51A5B2", fontSize: "24px"  }}>
                                 Check your email
                             </Typography>
                         </DialogTitle>
@@ -250,7 +338,7 @@ const MasterMode = (porps) => {
                 {dialogState === 2 &&
                     <Box p={2}>
                         <DialogTitle id="max-width-dialog-title">
-                            <Typography variant="h5" gutterBottom style={{ color: "#51A5B2" }}>
+                            <Typography gutterBottom style={{ color: "#51A5B2", fontSize: "24px"  }}>
                                 Tools unlocked
                             </Typography>
                         </DialogTitle>
@@ -293,4 +381,4 @@ const MasterMode = (porps) => {
 
 }
 
-export default MasterMode;
+export default AdvancedTools;

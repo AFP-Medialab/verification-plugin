@@ -19,7 +19,7 @@ import { ReactComponent as IconData } from '../../../NavBar/images/SVG/DataAnaly
 import { ReactComponent as IconTools } from '../../../NavBar/images/SVG/Navbar/Tools.svg';
 import Box from "@material-ui/core/Box";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
-import MasterMode from "./MasterMode/MasterMode";
+import AdvancedTools from "./AdvancedTools/AdvancedTools";
 
 const AllTools = (props) => {
     const classes = useMyStyles();
@@ -48,7 +48,7 @@ const AllTools = (props) => {
             value.type = "redesigned";
         }
 
-        if (value.title === "navbar_ocr" || value.title === "navbar_gif" || value.title === "navbar_xnetwork" || value.title === "navbar_covidsearch" || value.title === "navbar_analysis_image") {
+        if (value.title === "navbar_ocr" || value.title === "navbar_xnetwork" || value.title === "navbar_covidsearch" || value.title === "navbar_analysis_image") {
             value.type = "new";
         }
 
@@ -56,6 +56,9 @@ const AllTools = (props) => {
             value.type = "lock";
         }
 
+        if (value.title === "navbar_gif") {
+            value.type = "lock and new";
+        }
 
 
         if(
@@ -156,7 +159,7 @@ const AllTools = (props) => {
                 </Grid>
 
                 <Grid item>
-                    <MasterMode/>
+                    <AdvancedTools/>
                 </Grid>
 
             </Grid>
