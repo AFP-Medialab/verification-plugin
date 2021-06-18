@@ -27,7 +27,7 @@ import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
 import Fade from '@material-ui/core/Fade';
 import Slider from '@material-ui/core/Slider';
 import useGetGif from "../../GIF/Hooks/useGetGif";
-//import { setGifDownloading } from "../../../../../redux/actions/tools/gifActions";
+import { setStateDownloading } from "../../../../../redux/actions/tools/gifActions";
 import { useDispatch } from "react-redux";
 import useGetTransparent from "../Hooks/useGetTransparent";
 import { cleanForensicState } from "../../../../../redux/actions/tools/forensicActions"
@@ -416,7 +416,7 @@ const ForensicResults = (props) => {
 
     const [interval, setIntervalVar] = React.useState(null);
 
-    const downloading = useSelector(state => state.gif.downloading);
+    const downloading = useSelector(state => state.gif.toolState);
 
 
     const [readyTransparency, setReadyTransparency] = React.useState(false);
@@ -496,20 +496,21 @@ const ForensicResults = (props) => {
     const [delayGif, setDelayGif] = useState();
     //const [readyToDownload, setReadyToDownload] = useState();
 
-    useGetGif(filesForGif, delayGif, downloading);
+    
 
 
     const handleDownloadGif = () => {
+        dispatch(setStateDownloading());
         var files = {
             "image1": gifImage,
             "image2": gifFilter,
         }
         setFilesForGif(files);
         setDelayGif(speed);
-        //dispatch(setGifDownloading());
+        
     };
 
-
+    useGetGif(filesForGif, delayGif, downloading);
 
 
     //const dispatch = useDispatch();

@@ -21,7 +21,7 @@ import TextField from '@material-ui/core/TextField';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
-import { setStateSelectingLocal, setStateSelectingUrl, setStateReady, setStateInit } from "../../../../redux/actions/tools/gifActions";
+import { setStateSelectingLocal, setStateSelectingUrl, setStateReady, setStateInit, setStateDownloading } from "../../../../redux/actions/tools/gifActions";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 import IconButton from '@material-ui/core/IconButton';
@@ -308,16 +308,23 @@ const Gif = () => {
 
     //Function to prepare the files to trigger the download
     const handleDownloadGif = () => {
+        dispatch(setStateDownloading());
+        console.log(toolState);
         var files = {
             "image1": homoImg1,
             "image2": homoImg2,
         }
         setFilesForGif(files);
         setDelayGif(speed);
+        
+        
     };
 
+    console.log(filesForGif);
+    console.log(delayGif);
+    console.log(toolState);
     //Call to the API
-    useGetGif(filesForGif, delayGif, (toolState === 5));
+    useGetGif(filesForGif, delayGif, toolState);
 
 
 
@@ -750,7 +757,7 @@ const Gif = () => {
                                         </Grid>
                                     }
 
-                                    {toolState === 5 &&
+                                    {(toolState === 5 || toolState === 7) &&
 
                                         <Box p={2} className={classes.height100}>
 
