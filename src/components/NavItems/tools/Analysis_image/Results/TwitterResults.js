@@ -30,6 +30,10 @@ import axios from "axios";
 import { setAnalysisComments } from "../../../../../redux/actions/tools/image_analysisActions";
 import {setAnalysisLinkComments} from "../../../../../redux/actions/tools/image_analysisActions"
 import {setAnalysisVerifiedComments} from "../../../../../redux/actions/tools/image_analysisActions"
+import NavigateNextIcon from '@material-ui/icons/NavigateNext';
+import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
+import SkipNextIcon from '@material-ui/icons/SkipNext';
+import SkipPreviousIcon from '@material-ui/icons/SkipPrevious';
 
 
 const TwitterResults = (props) => {
@@ -43,6 +47,9 @@ const TwitterResults = (props) => {
     var nextPage = props.report.pagination.next;
     const url = useState(nextPage);
     console.log("url ",url[0])
+    var last_page_all_comments=Math.ceil(props.report.verification_cues.num_comments/10)
+    var last_page_verified_comments=Math.ceil(props.report.verification_cues.num_verification_comments/10)
+    var last_page_link_comments=Math.ceil(props.report.verification_cues.num_link_comments/10)
   
     var index=0
     var real
@@ -72,6 +79,91 @@ const TwitterResults = (props) => {
     var previous_page_verified=url[0].substring(0, real+1)+(count_verified_comments-1)+"&type=vercoms"
     var next_page_link=url[0].substring(0,real+1)+(count_link_comments+1)+"&type=linkcoms"
     var previous_page_link=url[0].substring(0,real+1)+(count_link_comments-1)+"&type=linkcoms"
+
+    var last_page_all_comments1=url[0].substring(0, real+1)+(last_page_all_comments)+"&type=coms"
+    var last_page_verified_comments1=url[0].substring(0, real+1)+(last_page_verified_comments)+"&type=vercoms"
+    var last_page_link_comments1=url[0].substring(0, real+1)+(last_page_link_comments)+"&type=linkcoms"
+  
+    var first_page_all_comments1=url[0].substring(0, real+1)+(1)+"&type=coms"
+    var first_page_verified_comments1=url[0].substring(0, real+1)+(1)+"&type=vercoms"
+    var first_page_link_comments1=url[0].substring(0, real+1)+(1)+"&type=linkcoms"
+  
+    const handleClick_first_page = (event) => {
+        if(count_comments!==1){
+          
+          console.log("CALL ",axios.get("https://mever.iti.gr" + first_page_all_comments1))
+          axios.get("https://mever.iti.gr" + first_page_all_comments1).then((response) => {
+            console.log("response.data ",response.data)
+            setCount_comments(1);
+            dispatch(setAnalysisComments(response.data));
+            
+          });
+        }
+      };
+      const handleClick_last_page = (event) => {
+        if(count_link_comments!==last_page_all_comments){
+        
+        
+          console.log("CALL ",axios.get("https://mever.iti.gr" + last_page_all_comments1))
+          axios.get("https://mever.iti.gr" + last_page_all_comments1).then((response) => {
+            console.log("response.data ",response.data)
+            setCount_comments(last_page_all_comments);
+            dispatch(setAnalysisComments(response.data));
+          });
+        }
+      };
+    
+      const handleClick_first_page1 = (event) => {
+        if(count_link_comments!==1){
+          
+          console.log("CALL ",axios.get("https://mever.iti.gr" + first_page_link_comments1))
+          axios.get("https://mever.iti.gr" + first_page_link_comments1).then((response) => {
+            console.log("response.data ",response.data)
+            setCount_link_comments(1);
+            dispatch(setAnalysisLinkComments(response.data));
+            
+          });
+        }
+      };
+      const handleClick_last_page1 = (event) => {
+        if(count_link_comments!==last_page_link_comments){
+        
+        
+          console.log("CALL ",axios.get("https://mever.iti.gr" + last_page_link_comments1))
+          axios.get("https://mever.iti.gr" + last_page_link_comments1).then((response) => {
+            console.log("response.data ",response.data)
+              setCount_link_comments(last_page_link_comments);
+              dispatch(setAnalysisLinkComments(response.data));
+     
+          });
+        }
+      };
+    
+      const handleClick_first_page2 = (event) => {
+        if(count_verified_comments!==1){
+          
+          console.log("CALL ",axios.get("https://mever.iti.gr" + first_page_verified_comments1))
+          axios.get("https://mever.iti.gr" + first_page_verified_comments1).then((response) => {
+            console.log("response.data ",response.data)
+            setCount_verified_comments(1);
+            dispatch(setAnalysisVerifiedComments(response.data));
+            
+          });
+        }
+      };
+      const handleClick_last_page2 = (event) => {
+        if(count_verified_comments!==last_page_verified_comments){
+        
+        
+          console.log("CALL ",axios.get("https://mever.iti.gr" + last_page_verified_comments1))
+          axios.get("https://mever.iti.gr" + last_page_verified_comments1).then((response) => {
+            console.log("response.data ",response.data)
+            setCount_verified_comments(last_page_verified_comments);
+            dispatch(setAnalysisVerifiedComments(response.data));
+     
+          });
+        }
+      };
 
     const handleClick_next_page = (event) => {
         console.log("page_verified INSIDE ",next_page_comments)
@@ -191,7 +283,7 @@ const TwitterResults = (props) => {
                         <Divider/>
                         <Box m={2}/>
                         <Typography variant={"h6"}>
-                            {keyword("youtube_video_name1_2")}
+                            {keyword("image_description")}
                         </Typography>
                         {
                             report["image"] &&
@@ -322,196 +414,11 @@ const TwitterResults = (props) => {
                                                 </TableCell>
                                             </TableRow>
                                     }
-                                    {/*
-                                        (!report["video"]["lang"]) ? null :
-                                            <TableRow>
-                                                <TableCell component="th" scope="row">
-                                                    {keyword("twitter_video_name_9")}
-                                                </TableCell>
-                                                <TableCell align="right">{report["video"]["lang"]}</TableCell>
-                                            </TableRow>
-                                    */ }
-                                    {
-                                        /*
-                                        (!report["thumbnails"]["preferred"]["url"]) ? null :
-                                            <TableRow>
-                                                <TableCell component="th" scope="row">
-                                                    {keyword("twitter_video_name_10")}
-                                                </TableCell>
-                                                <TableCell align="right"><a href={report["thumbnails"]["preferred"]["url"]}
-                                                                            rel="noopener noreferrer"
-                                                                            target={"_blank"}>{report["thumbnails"]["preferred"]["url"]}</a></TableCell>
-                                            </TableRow>
-                                    */}
-                                    {
-                                        /*
-                                        (!(report["image"]["full_text"] &&
-                                            <TableRow>
-                                                <TableCell component="th" scope="row">
-                                                    {keyword("twitter_video_name_11")}
-                                                </TableCell>
-                                                <TableCell
-                                                    align="right">{report["video"]["video_info"]["aspect_ratio"]}</TableCell>
-                                            </TableRow>
-                                    */ }
-                                    {/*
-                                        (!(report["video"]["video_info"] && report["video"]["video_info"]["duration"])) ? null :
-                                            <TableRow>
-                                                <TableCell component="th" scope="row">
-                                                    {keyword("twitter_video_name_12")}
-                                                </TableCell>
-                                                <TableCell
-                                                    align="right">{report["video"]["video_info"]["duration"]}</TableCell>
-                                            </TableRow>
-                                    */ }
-                                    {/*
-                                        (!(report["video"]["video_info"] && report["video"]["video_info"]["urls"] &&
-                                            report["video"]["video_info"]["urls"].length > 0)) ? null :
-                                            <TableRow>
-                                                <TableCell component="th" scope="row">
-                                                    {keyword("twitter_video_name_16")}
-                                                </TableCell>
-                                                <TableCell align="right">
-                                                    {
-                                                        report["video"]["video_info"]["urls"].map((value, key) => {
-                                                            return <a key={key} href={value} rel="noopener noreferrer"
-                                                                    target={"_blank"}>{value + " "}</a>
-                                                        })
-                                                    }
-                                                </TableCell>
-                                            </TableRow>
-                                                */ }
+                                    
                                 </TableBody>
                             </Table>
                         }
-                        {/*
-                            report["source"] &&
-                            <div>
-                                <Box m={4}/>
-                                <Typography variant={"h6"}>
-                                    {keyword("twitter_user_title") + ": " + report["source"]["user_name"]}
-                                </Typography>
-                                <Typography variant="body2" color="textSecondary" component="p" className={classes.text}>
-                                    {
-                                        report["source"]["user_description"]
-                                    }
-                                </Typography>
-                                <Table className={classes.table} size="small" aria-label="a dense table">
-                                    <TableBody>
-                                        {
-                                            (!report["source"]["user_screen_name"]) ? null :
-                                                <TableRow>
-                                                    <TableCell component="th" scope="row">
-                                                        {keyword("twitter_user_name_2")}
-                                                    </TableCell>
-                                                    <TableCell
-                                                        align="right">{report["source"]["user_screen_name"]}</TableCell>
-                                                </TableRow>
-                                        }
-                                        {
-                                            (!report["source"]["user_location"]) ? null :
-                                                <TableRow>
-                                                    <TableCell component="th" scope="row">
-                                                        {keyword("twitter_user_name_3")}
-                                                    </TableCell>
-                                                    <TableCell align="right">{report["source"]["user_location"]}</TableCell>
-                                                </TableRow>
-                                        }
-                                        {
-                                            (!report["source"]["user_url"]) ? null :
-                                                <TableRow>
-                                                    <TableCell component="th" scope="row">
-                                                        {keyword("twitter_user_name_4")}
-                                                    </TableCell>
-                                                    <TableCell align="right"><a
-                                                        href={report["source"]["url"]}
-                                                        rel="noopener noreferrer"
-                                                        target="_blank">{report["source"]["user_url"]}</a></TableCell>
-                                                </TableRow>
-                                        }
-                                        {
-                                            (!report["source"]["user_protected"]) ? null :
-                                                <TableRow>
-                                                    <TableCell component="th" scope="row">
-                                                        {keyword("twitter_user_name_6")}
-                                                    </TableCell>
-                                                    <TableCell
-                                                        align="right">{report["source"]["user_protected"]}</TableCell>
-                                                </TableRow>
-                                        }
-                                        {
-                                            (!report["source"]["user_verified"]) ? null :
-                                                <TableRow>
-                                                    <TableCell component="th" scope="row">
-                                                        {keyword("twitter_user_name_7")}
-                                                    </TableCell>
-                                                    <TableCell align="right">{report["source"]["user_verified"]}</TableCell>
-                                                </TableRow>
-                                        }
-                                        {
-                                            (!report["source"]["user_followers_count"]) ? null :
-                                                <TableRow>
-                                                    <TableCell component="th" scope="row">
-                                                        {keyword("twitter_user_name_8")}
-                                                    </TableCell>
-                                                    <TableCell
-                                                        align="right">{report["source"]["user_followers_count"]}</TableCell>
-                                                </TableRow>
-                                        }
-                                        {
-                                            (!report["source"]["user_friends_count"]) ? null :
-                                                <TableRow>
-                                                    <TableCell component="th" scope="row">
-                                                        {keyword("twitter_user_name_9")}
-                                                    </TableCell>
-                                                    <TableCell
-                                                        align="right">{report["source"]["user_friends_count"]}</TableCell>
-                                                </TableRow>
-                                        }
-                                        {
-                                            (!report["source"]["user_listed_count"]) ? null :
-                                                <TableRow>
-                                                    <TableCell component="th" scope="row">
-                                                        {keyword("twitter_user_name_10")}
-                                                    </TableCell>
-                                                    <TableCell
-                                                        align="right">{report["source"]["user_listed_count"]}</TableCell>
-                                                </TableRow>
-                                        }
-                                        {
-                                            (!report["source"]["user_favourites_count"]) ? null :
-                                                <TableRow>
-                                                    <TableCell component="th" scope="row">
-                                                        {keyword("twitter_user_name_11")}
-                                                    </TableCell>
-                                                    <TableCell
-                                                        align="right">{report["source"]["user_favourites_count"]}</TableCell>
-                                                </TableRow>
-                                        }
-                                        {
-                                            (!report["source"]["user_statuses_count"]) ? null :
-                                                <TableRow>
-                                                    <TableCell component="th" scope="row">
-                                                        {keyword("twitter_user_name_12")}
-                                                    </TableCell>
-                                                    <TableCell
-                                                        align="right">{report["source"]["user_statuses_count"]}</TableCell>
-                                                </TableRow>
-                                        }
-                                        {
-                                            (!report["source"]["user_created_at"]) ? null :
-                                                <TableRow>
-                                                    <TableCell component="th" scope="row">
-                                                        {keyword("twitter_user_name_13")}
-                                                    </TableCell>
-                                                    <TableCell
-                                                        align="right">{report["source"]["user_created_at"]}</TableCell>
-                                                </TableRow>
-                                        }
-                                    </TableBody>
-                                </Table>
-                            </div>
-                                    */}
+                        
                         {
                             report["verification_comments"] &&
                             <div>
@@ -592,7 +499,7 @@ const TwitterResults = (props) => {
                                                             return (
                                                                 <TableRow key={key}>
                                                                     <TableCell component="th" scope="row">
-                                                                        <a href={"https://twitter.com/" + comment["comid"]}
+                                                                        <a href={"https://twitter.com/" + comment["authorDisplayName"]}
                                                                         rel="noopener noreferrer"
                                                                         target="_blank">{comment["authorDisplayName"]}</a>
                                                                     </TableCell>
@@ -608,27 +515,50 @@ const TwitterResults = (props) => {
                                                 </TableBody>
                                             </Table>
                                         </AccordionDetails>
-                                        <Box>{keyword("page_number") + count_comments}</Box>
                                         <Button
-                                        variant="contained"
-                                        aria-controls="simple-menu"
-                                        aria-haspopup="true"
-                                        color={"primary"}
-                                        className={classes.button}
-                                        onClick={handleClick_previous_page}
-                                        >
-                                        {keyword("previous_button")}
-                                        </Button>
-                                        <Button
-                                        variant="contained"
-                                        aria-controls="simple-menu"
-                                        aria-haspopup="true"
-                                        color={"primary"}
-                                        className={classes.button}
-                                        onClick={handleClick_next_page}
-                                        >
-                                        {keyword("next_button")}
-                                        </Button>
+                      variant="contained"
+                      aria-controls="simple-menu"
+                      aria-haspopup="true"
+                      color={"primary"}
+                      className={classes.button}
+                      onClick={handleClick_first_page}
+                    >                     
+                      <SkipPreviousIcon/>
+                    </Button>
+                    <Button
+                      variant="contained"
+                      aria-controls="simple-menu"
+                      aria-haspopup="true"
+                      color={"primary"}
+                      className={classes.button}
+                      onClick={handleClick_previous_page}
+                    >
+                      <NavigateBeforeIcon/>
+                      {/*keyword("previous_button")*/}
+                    </Button>
+                    
+                    {"  "+ count_comments +"  "+keyword("page_number")+"  "+ last_page_all_comments+"  "}
+                    <Button
+                      variant="contained"
+                      aria-controls="simple-menu"
+                      aria-haspopup="true"
+                      color={"primary"}
+                      className={classes.button}
+                      onClick={handleClick_next_page}
+                    >
+                      <NavigateNextIcon/>                    
+                      {/*keyword("next_button")*/}
+                    </Button>
+                    <Button
+                      variant="contained"
+                      aria-controls="simple-menu"
+                      aria-haspopup="true"
+                      color={"primary"}
+                      className={classes.button}
+                      onClick={handleClick_last_page}
+                    >                     
+                      <SkipNextIcon/> 
+                    </Button>
                                     </Accordion>
                                 }
                                 <Box m={2} />
@@ -672,7 +602,7 @@ const TwitterResults = (props) => {
                             return (
                               <TableRow key={key}>
                                   <TableCell component="th" scope="row">
-                                    <a href={"https://twitter.com/" + comment["comid"]}
+                                    <a href={"https://twitter.com/" + comment["authorDisplayName"]}
                                        rel="noopener noreferrer"
                                       target="_blank">{comment["authorDisplayName"]}</a>
                                        </TableCell>
@@ -688,7 +618,16 @@ const TwitterResults = (props) => {
                         </TableBody>
                       </Table>
                     </AccordionDetails>
-                    <Box>{keyword("page_number") + count_verified_comments}</Box>
+                    <Button
+                      variant="contained"
+                      aria-controls="simple-menu"
+                      aria-haspopup="true"
+                      color={"primary"}
+                      className={classes.button}
+                      onClick={handleClick_first_page2}
+                    >                     
+                      <SkipPreviousIcon/>
+                    </Button>
                     <Button
                       variant="contained"
                       aria-controls="simple-menu"
@@ -696,9 +635,12 @@ const TwitterResults = (props) => {
                       color={"primary"}
                       className={classes.button}
                       onClick={handleClick_previous_page2}
-                    >
-                      {keyword("previous_button")}
+                    >  
+                     <NavigateBeforeIcon/>                    
+                      {/*keyword("previous_button")*/}
                     </Button>
+                    
+                    {"  "+ count_verified_comments +"  "+keyword("page_number")+"  "+ last_page_verified_comments+"  "}
                     <Button
                       variant="contained"
                       aria-controls="simple-menu"
@@ -707,7 +649,19 @@ const TwitterResults = (props) => {
                       className={classes.button}
                       onClick={handleClick_next_page2}
                     >
-                      {keyword("next_button")}
+                      <NavigateNextIcon/>                    
+                      {/*keyword("next_button")*/}
+                    </Button>
+                    
+                    <Button
+                      variant="contained"
+                      aria-controls="simple-menu"
+                      aria-haspopup="true"
+                      color={"primary"}
+                      className={classes.button}
+                      onClick={handleClick_last_page2}
+                    >                     
+                      <SkipNextIcon/> 
                     </Button>
                   </Accordion>
                 }
@@ -752,7 +706,7 @@ const TwitterResults = (props) => {
                             return (
                               <TableRow key={key}>
                                   <TableCell component="th" scope="row" size="small">
-                                     <a href={"https://twitter.com/" + comment["comid"]}
+                                     <a href={"https://twitter.com/" + comment["authorDisplayName"]}
                                         rel="noopener noreferrer"
                                         target="_blank">{comment["authorDisplayName"]}</a>
                                     </TableCell>
@@ -768,7 +722,16 @@ const TwitterResults = (props) => {
                         </TableBody>
                       </Table>
                     </AccordionDetails>
-                    <Box >{keyword("page_number") + count_link_comments}</Box>
+                    <Button
+                      variant="contained"
+                      aria-controls="simple-menu"
+                      aria-haspopup="true"
+                      color={"primary"}
+                      className={classes.button}
+                      onClick={handleClick_first_page1}
+                    >                     
+                      <SkipPreviousIcon/>
+                    </Button>
                     <Button
                       variant="contained"
                       aria-controls="simple-menu"
@@ -776,11 +739,11 @@ const TwitterResults = (props) => {
                       color={"primary"}
                       className={classes.button}
                       onClick={handleClick_previous_page1}
-                                          >
-                      {keyword("previous_button")}
+                    >  
+                     <NavigateBeforeIcon/>                    
+                      {/*keyword("previous_button")*/}
                     </Button>
-
-
+                    { "  "+ count_link_comments +"  "+keyword("page_number")+"  "+ last_page_link_comments+"  "}
                     <Button
                       variant="contained"
                       aria-controls="simple-menu"
@@ -788,10 +751,19 @@ const TwitterResults = (props) => {
                       color={"primary"}
                       className={classes.button}
                       onClick={handleClick_next_page1}
-                                         >
-
-                    
-                      {keyword("next_button")}
+                    >
+                      <NavigateNextIcon/>                    
+                      {/*keyword("next_button")*/}
+                    </Button>
+                    <Button
+                      variant="contained"
+                      aria-controls="simple-menu"
+                      aria-haspopup="true"
+                      color={"primary"}
+                      className={classes.button}
+                      onClick={handleClick_last_page1}
+                    >                     
+                      <SkipNextIcon/> 
                     </Button>
                   </Accordion>
                 }

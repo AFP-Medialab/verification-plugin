@@ -30,6 +30,10 @@ import axios from "axios";
 import { setAnalysisComments } from "../../../../../redux/actions/tools/image_analysisActions";
 import {setAnalysisLinkComments} from "../../../../../redux/actions/tools/image_analysisActions"
 import {setAnalysisVerifiedComments} from "../../../../../redux/actions/tools/image_analysisActions"
+import NavigateNextIcon from '@material-ui/icons/NavigateNext';
+import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
+import SkipNextIcon from '@material-ui/icons/SkipNext';
+import SkipPreviousIcon from '@material-ui/icons/SkipPrevious';
 
 const FacebookResults = (props) => {
   const classes = useMyStyles();
@@ -46,6 +50,9 @@ const FacebookResults = (props) => {
   var nextPage = props.report.pagination.next;
   const url = useState(nextPage);
   console.log("url ",url[0])
+  var last_page_all_comments=Math.ceil(props.report.verification_cues.num_comments/10)
+  var last_page_verified_comments=Math.ceil(props.report.verification_cues.num_verification_comments/10)
+  var last_page_link_comments=Math.ceil(props.report.verification_cues.num_link_comments/10)
 
   var index=0
   var real
@@ -66,6 +73,90 @@ const FacebookResults = (props) => {
   var next_page_link=url[0].substring(0,real+1)+(count_link_comments+1)+"&type=linkcoms"
   var previous_page_link=url[0].substring(0,real+1)+(count_link_comments-1)+"&type=linkcoms"
 
+  var last_page_all_comments1=url[0].substring(0, real+1)+(last_page_all_comments)+"&type=coms"
+  var last_page_verified_comments1=url[0].substring(0, real+1)+(last_page_verified_comments)+"&type=vercoms"
+  var last_page_link_comments1=url[0].substring(0, real+1)+(last_page_link_comments)+"&type=linkcoms"
+
+  var first_page_all_comments1=url[0].substring(0, real+1)+(1)+"&type=coms"
+  var first_page_verified_comments1=url[0].substring(0, real+1)+(1)+"&type=vercoms"
+  var first_page_link_comments1=url[0].substring(0, real+1)+(1)+"&type=linkcoms"
+
+  const handleClick_first_page = (event) => {
+    if(count_comments!==1){
+      
+      console.log("CALL ",axios.get("https://mever.iti.gr" + first_page_all_comments1))
+      axios.get("https://mever.iti.gr" + first_page_all_comments1).then((response) => {
+        console.log("response.data ",response.data)
+        setCount_comments(1);
+        dispatch(setAnalysisComments(response.data));
+        
+      });
+    }
+  };
+  const handleClick_last_page = (event) => {
+    if(count_link_comments!==last_page_all_comments){
+    
+    
+      console.log("CALL ",axios.get("https://mever.iti.gr" + last_page_all_comments1))
+      axios.get("https://mever.iti.gr" + last_page_all_comments1).then((response) => {
+        console.log("response.data ",response.data)
+        setCount_comments(last_page_all_comments);
+        dispatch(setAnalysisComments(response.data));
+      });
+    }
+  };
+
+  const handleClick_first_page1 = (event) => {
+    if(count_link_comments!==1){
+      
+      console.log("CALL ",axios.get("https://mever.iti.gr" + first_page_link_comments1))
+      axios.get("https://mever.iti.gr" + first_page_link_comments1).then((response) => {
+        console.log("response.data ",response.data)
+        setCount_link_comments(1);
+        dispatch(setAnalysisLinkComments(response.data));
+        
+      });
+    }
+  };
+  const handleClick_last_page1 = (event) => {
+    if(count_link_comments!==last_page_link_comments){
+    
+    
+      console.log("CALL ",axios.get("https://mever.iti.gr" + last_page_link_comments1))
+      axios.get("https://mever.iti.gr" + last_page_link_comments1).then((response) => {
+        console.log("response.data ",response.data)
+          setCount_link_comments(last_page_link_comments);
+          dispatch(setAnalysisLinkComments(response.data));
+ 
+      });
+    }
+  };
+
+  const handleClick_first_page2 = (event) => {
+    if(count_verified_comments!==1){
+      
+      console.log("CALL ",axios.get("https://mever.iti.gr" + first_page_verified_comments1))
+      axios.get("https://mever.iti.gr" + first_page_verified_comments1).then((response) => {
+        console.log("response.data ",response.data)
+        setCount_verified_comments(1);
+        dispatch(setAnalysisVerifiedComments(response.data));
+        
+      });
+    }
+  };
+  const handleClick_last_page2 = (event) => {
+    if(count_verified_comments!==last_page_verified_comments){
+    
+    
+      console.log("CALL ",axios.get("https://mever.iti.gr" + last_page_verified_comments1))
+      axios.get("https://mever.iti.gr" + last_page_verified_comments1).then((response) => {
+        console.log("response.data ",response.data)
+        setCount_verified_comments(last_page_verified_comments);
+        dispatch(setAnalysisVerifiedComments(response.data));
+ 
+      });
+    }
+  };
  
   const handleClick_next_page = (event) => {
     console.log("page_verified INSIDE ",next_page_comments)
@@ -182,7 +273,7 @@ const FacebookResults = (props) => {
             <div className={classes.root2}>
               <CloseResult onClick={() => dispatch(cleanAnalysisState())} />
               <Typography variant={"h6"}>
-                {keyword("youtube_video_name1_2")}
+                {keyword("image_description")}
               </Typography>
               
               <Box m={2} />
@@ -415,7 +506,16 @@ const FacebookResults = (props) => {
                         </TableBody>
                       </Table>
                     </AccordionDetails>
-                    <Box>{keyword("page_number") + count_comments}</Box>
+                    <Button
+                      variant="contained"
+                      aria-controls="simple-menu"
+                      aria-haspopup="true"
+                      color={"primary"}
+                      className={classes.button}
+                      onClick={handleClick_first_page}
+                    >                     
+                      <SkipPreviousIcon/>
+                    </Button>
                     <Button
                       variant="contained"
                       aria-controls="simple-menu"
@@ -424,8 +524,11 @@ const FacebookResults = (props) => {
                       className={classes.button}
                       onClick={handleClick_previous_page}
                     >
-                      {keyword("previous_button")}
+                      <NavigateBeforeIcon/>
+                      {/*keyword("previous_button")*/}
                     </Button>
+                    
+                    {"  "+ count_comments +"  "+keyword("page_number")+"  "+ last_page_all_comments+"  "}
                     <Button
                       variant="contained"
                       aria-controls="simple-menu"
@@ -434,7 +537,18 @@ const FacebookResults = (props) => {
                       className={classes.button}
                       onClick={handleClick_next_page}
                     >
-                      {keyword("next_button")}
+                      <NavigateNextIcon/>                    
+                      {/*keyword("next_button")*/}
+                    </Button>
+                    <Button
+                      variant="contained"
+                      aria-controls="simple-menu"
+                      aria-haspopup="true"
+                      color={"primary"}
+                      className={classes.button}
+                      onClick={handleClick_last_page}
+                    >                     
+                      <SkipNextIcon/> 
                     </Button>
                   </Accordion>
                 )}
@@ -496,7 +610,16 @@ const FacebookResults = (props) => {
                         </TableBody>
                       </Table>
                     </AccordionDetails>
-                    <Box>{keyword("page_number") + count_verified_comments}</Box>
+                    <Button
+                      variant="contained"
+                      aria-controls="simple-menu"
+                      aria-haspopup="true"
+                      color={"primary"}
+                      className={classes.button}
+                      onClick={handleClick_first_page2}
+                    >                     
+                      <SkipPreviousIcon/>
+                    </Button>
                     <Button
                       variant="contained"
                       aria-controls="simple-menu"
@@ -504,9 +627,12 @@ const FacebookResults = (props) => {
                       color={"primary"}
                       className={classes.button}
                       onClick={handleClick_previous_page2}
-                    >
-                      {keyword("previous_button")}
+                    >  
+                     <NavigateBeforeIcon/>                    
+                      {/*keyword("previous_button")*/}
                     </Button>
+                    
+                    {"  "+ count_verified_comments +"  "+keyword("page_number")+"  "+ last_page_verified_comments+"  "}
                     <Button
                       variant="contained"
                       aria-controls="simple-menu"
@@ -515,7 +641,19 @@ const FacebookResults = (props) => {
                       className={classes.button}
                       onClick={handleClick_next_page2}
                     >
-                      {keyword("next_button")}
+                      <NavigateNextIcon/>                    
+                      {/*keyword("next_button")*/}
+                    </Button>
+                    
+                    <Button
+                      variant="contained"
+                      aria-controls="simple-menu"
+                      aria-haspopup="true"
+                      color={"primary"}
+                      className={classes.button}
+                      onClick={handleClick_last_page2}
+                    >                     
+                      <SkipNextIcon/> 
                     </Button>
                   </Accordion>
                 }
@@ -575,7 +713,16 @@ const FacebookResults = (props) => {
                         </TableBody>
                       </Table>
                     </AccordionDetails>
-                    <Box>{keyword("page_number") + count_link_comments}</Box>
+                    <Button
+                      variant="contained"
+                      aria-controls="simple-menu"
+                      aria-haspopup="true"
+                      color={"primary"}
+                      className={classes.button}
+                      onClick={handleClick_first_page1}
+                    >                     
+                      <SkipPreviousIcon/>
+                    </Button>
                     <Button
                       variant="contained"
                       aria-controls="simple-menu"
@@ -583,9 +730,11 @@ const FacebookResults = (props) => {
                       color={"primary"}
                       className={classes.button}
                       onClick={handleClick_previous_page1}
-                    >
-                      {keyword("previous_button")}
+                    >  
+                     <NavigateBeforeIcon/>                    
+                      {/*keyword("previous_button")*/}
                     </Button>
+                    { "  "+ count_link_comments +"  "+keyword("page_number")+"  "+ last_page_link_comments+"  "}
                     <Button
                       variant="contained"
                       aria-controls="simple-menu"
@@ -594,7 +743,18 @@ const FacebookResults = (props) => {
                       className={classes.button}
                       onClick={handleClick_next_page1}
                     >
-                      {keyword("next_button")}
+                      <NavigateNextIcon/>                    
+                      {/*keyword("next_button")*/}
+                    </Button>
+                    <Button
+                      variant="contained"
+                      aria-controls="simple-menu"
+                      aria-haspopup="true"
+                      color={"primary"}
+                      className={classes.button}
+                      onClick={handleClick_last_page1}
+                    >                     
+                      <SkipNextIcon/> 
                     </Button>
                   </Accordion>
                 }
