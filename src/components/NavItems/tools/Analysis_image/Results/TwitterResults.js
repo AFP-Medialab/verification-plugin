@@ -25,7 +25,7 @@ import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Analys
 //import AsynchMyMap from "../../../../Shared/MyMap/AsynchMyMap";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
-import styles from "./layout.module.css";
+import styles from "../../Analysis/Results/layout.module.css";
 import axios from "axios";
 import { setAnalysisComments } from "../../../../../redux/actions/tools/image_analysisActions";
 import {setAnalysisLinkComments} from "../../../../../redux/actions/tools/image_analysisActions"
@@ -43,6 +43,7 @@ const TwitterResults = (props) => {
     const [count_verified_comments, setCount_verified_comments] = useState(1);
     const [count_link_comments, setCount_link_comments] = useState(1);
 
+    
     
     var nextPage = props.report.pagination.next;
     const url = useState(nextPage);
@@ -536,8 +537,9 @@ const TwitterResults = (props) => {
                       <NavigateBeforeIcon/>
                       {/*keyword("previous_button")*/}
                     </Button>
-                    
+                    <div className={styles.inline}>
                     {"  "+ count_comments +"  "+keyword("page_number")+"  "+ last_page_all_comments+"  "}
+                    </div>
                     <Button
                       variant="contained"
                       aria-controls="simple-menu"
@@ -639,8 +641,9 @@ const TwitterResults = (props) => {
                      <NavigateBeforeIcon/>                    
                       {/*keyword("previous_button")*/}
                     </Button>
-                    
+                    <div className={styles.inline}>
                     {"  "+ count_verified_comments +"  "+keyword("page_number")+"  "+ last_page_verified_comments+"  "}
+                    </div>
                     <Button
                       variant="contained"
                       aria-controls="simple-menu"
@@ -711,7 +714,7 @@ const TwitterResults = (props) => {
                                         target="_blank">{comment["authorDisplayName"]}</a>
                                     </TableCell>
                                 <TableCell align="center" size="small">
-                                  {comment.publishedAt}
+                                 {comment.publishedAt}
                                 </TableCell>
                                 <TableCell align="left" size="small">
                                   {comment.textDisplay}
@@ -743,7 +746,9 @@ const TwitterResults = (props) => {
                      <NavigateBeforeIcon/>                    
                       {/*keyword("previous_button")*/}
                     </Button>
+                    <div className={styles.inline}>
                     { "  "+ count_link_comments +"  "+keyword("page_number")+"  "+ last_page_link_comments+"  "}
+                    </div>
                     <Button
                       variant="contained"
                       aria-controls="simple-menu"

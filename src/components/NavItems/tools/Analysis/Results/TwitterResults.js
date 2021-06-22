@@ -694,8 +694,9 @@ const TwitterResults = (props) => {
                       <NavigateBeforeIcon/>
                       {/*keyword("previous_button")*/}
                     </Button>
-                    
+                    <div className={styles.inline}>
                     {"  "+ count_comments +"  "+keyword("page_number")+"  "+ last_page_all_comments+"  "}
+                    </div>
                     <Button
                       variant="contained"
                       aria-controls="simple-menu"
@@ -798,8 +799,9 @@ const TwitterResults = (props) => {
                      <NavigateBeforeIcon/>                    
                       {/*keyword("previous_button")*/}
                     </Button>
-                    
+                    <div className={styles.inline}>
                     {"  "+ count_verified_comments +"  "+keyword("page_number")+"  "+ last_page_verified_comments+"  "}
+                    </div>
                     <Button
                       variant="contained"
                       aria-controls="simple-menu"
@@ -902,7 +904,9 @@ const TwitterResults = (props) => {
                      <NavigateBeforeIcon/>                    
                       {/*keyword("previous_button")*/}
                     </Button>
+                    <div className={styles.inline}>
                     { "  "+ count_link_comments +"  "+keyword("page_number")+"  "+ last_page_link_comments+"  "}
+                    </div>
                     <Button
                       variant="contained"
                       aria-controls="simple-menu"
