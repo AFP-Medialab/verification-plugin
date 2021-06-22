@@ -155,14 +155,14 @@ const ForensicResults = (props) => {
 
         //CLONING
         "cmfd_report",  //10
-        //"rcmfd_report", //11
+        "rcmfd_report", //11
 
         //LENSES
-        /*
+        
         "ela_report",       //12
         "laplacian_report", //13
         "median_report",    //14
-        */
+        
     ];
 
 
@@ -183,21 +183,23 @@ const ForensicResults = (props) => {
         var filter;
 
         //Zero
-        
         if (value === "zero_report") {
             filter = {
                 "id": value,
                 "name": keyword("forensic_title_" + value),
                 "map": [
-                    results[value]["colormap"],
-                    //results[value]["votemap"],
+                    results[value]["forgery"]["colormap"],
+                    results[value]["votemap"]["colormap"],
                 ],
                 "currentDisplayed": 0,
                 "arrows": [false, false],
-                "mask": results[value]["transparent"],
+                "mask": [
+                    results[value]["forgery"]["transparent"],
+                    results[value]["votemap"]["transparent"],
+                ],
             }
             
-            //GHOST
+        //GHOST
         }else if(value === "ghost_report") {
             filter = {
                 "id": value,
@@ -208,7 +210,7 @@ const ForensicResults = (props) => {
                 "mask": results[value]["transparent"],
             }
 
-            //CAGI
+        //CAGI
         } else if (value === "cagi_report") {
             filter = {
                 "id": value,
@@ -228,17 +230,28 @@ const ForensicResults = (props) => {
                 ],
             }
 
-            //REST
 
-
-            /*
-        } else if (value === "adq1_report") {
+        //RCMFD
+        } else if (value === "rcmfd_report") {
             filter = {
                 "id": value,
                 "name": keyword("forensic_title_" + value),
-                "map": results[value]["colormap"],
-                "mask": masks.DQOutput,
+                "map": results[value],
+                "mask": results[value],
             }
+            
+
+
+        //LENSES
+        } else if (value === "ela_report" || value === "laplacian_report" || value === "median_report") {
+            filter = {
+                "id": value,
+                "name": keyword("forensic_title_" + value),
+                "map": results[value],
+            }
+
+
+            /*
         } else if (value === "dct_report") {
             filter = {
                 "id": value,
