@@ -107,7 +107,7 @@ const ForensicResults = (props) => {
 
     const classes = useMyStyles();
     const keyword = useLoadLanguage("components/NavItems/tools/Forensic.tsv", tsv);
-    const results = props.result;
+    const results = props.result.filters;
     const masks = props.masksData;
     //console.log(results);
 
@@ -155,13 +155,17 @@ const ForensicResults = (props) => {
 
         //CLONING
         "cmfd_report",  //10
-        "rcmfd_report", //11
+        //"rcmfd_report", //11
 
         //LENSES
+        /*
         "ela_report",       //12
         "laplacian_report", //13
         "median_report",    //14
+        */
     ];
+
+
 
     const idStartCompression = 0;
     const idStartNoise = 6;
@@ -169,6 +173,7 @@ const ForensicResults = (props) => {
     const idStartCloning = 10;
     const idStartLenses = 12;
 
+    console.log();
 
 
     //console.log(results);
@@ -178,28 +183,29 @@ const ForensicResults = (props) => {
         var filter;
 
         //Zero
+        
         if (value === "zero_report") {
             filter = {
                 "id": value,
                 "name": keyword("forensic_title_" + value),
                 "map": [
-                    results[value]["forgery"],
-                    results[value]["votemap"],
+                    results[value]["colormap"],
+                    //results[value]["votemap"],
                 ],
                 "currentDisplayed": 0,
                 "arrows": [false, false],
-                "mask": [masks.forgery],
+                "mask": results[value]["transparent"],
             }
-
+            
             //GHOST
-        } else if (value === "ghost_report") {
+        }else if(value === "ghost_report") {
             filter = {
                 "id": value,
                 "name": keyword("forensic_title_" + value),
-                "map": results[value]["maps"],
+                "map": results[value]["colormap"],
                 "currentDisplayed": 0,
                 "arrows": [false, false],
-                "mask": [],
+                "mask": results[value]["transparent"],
             }
 
             //CAGI
@@ -211,87 +217,92 @@ const ForensicResults = (props) => {
                     keyword("forensic_title_cagiInversed"),
                 ],
                 "map": [
-                    results[value]["mapG"],
-                    results[value]["mapGI"],
+                    results[value]["cagiNormalReport"]["colormap"],
+                    results[value]["cagiInversedReport"]["colormap"],
                 ],
                 "currentDisplayed": 0,
                 "arrows": [false, false],
                 "mask": [
-                    masks.CAGIOutput,
-                    masks.CAGIInversedOutput,
+                    results[value]["cagiNormalReport"]["transparent"],
+                    results[value]["cagiInversedReport"]["transparent"],
                 ],
             }
 
             //REST
+
+
+            /*
         } else if (value === "adq1_report") {
             filter = {
                 "id": value,
                 "name": keyword("forensic_title_" + value),
-                "map": results[value]["map"],
+                "map": results[value]["colormap"],
                 "mask": masks.DQOutput,
             }
         } else if (value === "dct_report") {
             filter = {
                 "id": value,
                 "name": keyword("forensic_title_" + value),
-                "map": results[value]["map"],
+                "map": results[value]["colormap"],
                 "mask": masks.DCTOutput,
             }
         } else if (value === "blk_report") {
             filter = {
                 "id": value,
                 "name": keyword("forensic_title_" + value),
-                "map": results[value]["map"],
+                "map": results[value]["colormap"],
                 "mask": masks.BLKOutput,
             }
         } else if (value === "splicebuster_report") {
             filter = {
                 "id": value,
                 "name": keyword("forensic_title_" + value),
-                "map": results[value]["map"],
+                "map": results[value]["colormap"],
                 "mask": masks.SBOutput,
             }
         } else if (value === "wavelet_report") {
             filter = {
                 "id": value,
                 "name": keyword("forensic_title_" + value),
-                "map": results[value]["map"],
+                "map": results[value]["colormap"],
                 "mask": masks.DWNoiseOutput,
             }
         } else if (value === "mantranet_report") {
             filter = {
                 "id": value,
                 "name": keyword("forensic_title_" + value),
-                "map": results[value]["map"],
+                "map": results[value]["colormap"],
                 "mask": masks.MANTRANETOutput,
             }
         } else if (value === "fusion_report") {
             filter = {
                 "id": value,
                 "name": keyword("forensic_title_" + value),
-                "map": results[value]["map"],
+                "map": results[value]["colormap"],
                 "mask": masks.FusionOutput,
             }
         } else if (value === "cmfd_report") {
             filter = {
                 "id": value,
                 "name": keyword("forensic_title_" + value),
-                "map": results[value]["map"],
+                "map": results[value]["colormap"],
                 "mask": masks.CMFDOutput,
             }
         } else if (value === "rcmfd_report") {
             filter = {
                 "id": value,
                 "name": keyword("forensic_title_" + value),
-                "map": results[value]["map"],
+                "map": results[value]["colormap"],
                 "mask": results[value]["map"],
             }
+
+            */
         } else {
             filter = {
                 "id": value,
                 "name": keyword("forensic_title_" + value),
-                "map": results[value]["map"],
-                "mask": results[value]["map"],
+                "map": results[value]["colormap"],
+                "mask": results[value]["transparent"],
             }
         }
 
@@ -300,6 +311,8 @@ const ForensicResults = (props) => {
         return filter;
     }));
 
+    /*
+
     const numbersGhost = results["ghost_report"]["qualities"];
     const ghostMasks = [];
 
@@ -307,6 +320,7 @@ const ForensicResults = (props) => {
         const stringMask = "GhostOutput" + numbersGhost[i];
         ghostMasks.push(masks[stringMask]);
     }
+    */
 
 
 
@@ -792,9 +806,11 @@ const ForensicResults = (props) => {
                                                             arrowsToDisplay(value.id);
                                                         }
 
+                                                        /*
                                                         if (value.id === "ghost_report") {
                                                             value.mask = ghostMasks;
                                                         }
+                                                        */
 
 
                                                         return (
