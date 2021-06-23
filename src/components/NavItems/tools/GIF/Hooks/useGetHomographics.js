@@ -6,18 +6,17 @@ import { setStateLoading, setStateShow, setStateError} from "../../../../../redu
 import { setError } from "../../../../../redux/actions/errorActions";
 import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Forensic.tsv";
+import useAuthenticatedRequest from "../../../../Shared/Authentication/useAuthenticatedRequest"
 
 const useGetHomographics = (files, mode) => {
     const keyword = useLoadLanguage("components/NavItems/tools/CheckGIF.tsv", tsv);
     const dispatch = useDispatch();
     const toolState = useSelector(state => state.gif.toolState);
 
-    const userAuthenticated = useSelector(state => state.userSession && state.userSession.userAuthenticated);
-    const userToken = useSelector(state => state.userSession && state.userSession.accessToken);
-
-    
+    const authenticatedRequest = useAuthenticatedRequest();
 
     useEffect(() => {
+
 
         const handleError = (e) => {
             if (keyword(e) !== ""){
@@ -59,16 +58,18 @@ const useGetHomographics = (files, mode) => {
             var bodyFormData = new FormData();
             bodyFormData.append('file_0', files.file1);
             bodyFormData.append('file_1', files.file2);
+        
 
-            axios({
+            const axiosConfig = {
                 method: "post",
                 url: "https://demo-medialab.afp.com/weverify-wrapper/ipol/homographic",
                 data: bodyFormData,
                 headers: { 
                     "Content-Type": "multipart/form-data",
-                    "Authorization": `Bearer ${userToken}`,
                 },
-            })
+            } 
+            
+            authenticatedRequest(axiosConfig)
                 .then(response => getImages(response))
                 .catch(error => {
                     handleError("gif_error_" + error.status);
@@ -90,15 +91,16 @@ const useGetHomographics = (files, mode) => {
             bodyUrlFormData.append('url_1', files.url_1);
 
 
-            axios({
+            const axiosConfig = {
                 method: "post",
                 url: "https://demo-medialab.afp.com/weverify-wrapper/ipol/homographic/url",
                 data: bodyUrlFormData,
                 headers: { 
                     "Content-Type": "application/x-www-form-urlencoded", 
-                    "Authorization": `Bearer ${userToken}`,
                 },
-            })
+            }
+
+            authenticatedRequest(axiosConfig)
                 .then(response => getImages(response))
                 .catch(error => {
                     handleError("gif_error_" + error.status);

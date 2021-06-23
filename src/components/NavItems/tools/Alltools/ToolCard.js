@@ -118,7 +118,7 @@ export class ToolCard extends Component {
                                 <Box ml={1} />
                             </Grid>
 
-                            <Grid item>
+                            <Grid item xs>
                                 <Typography variant="h6">{this.props.name}</Typography>
                             </Grid>
 
