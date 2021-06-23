@@ -8,15 +8,15 @@ import Button from "@material-ui/core/Button";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import Box from "@material-ui/core/Box";
 import TwitterResults from "./Results/TwitterResults";
-import {useAnalysisWrapper} from "./Hooks/useAnalysisWrapper";
+import {useAnalysisWrapper} from "../Analysis/Hooks/useAnalysisWrapper";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles"
 import Iframe from "react-iframe";
-import useGenerateApiUrl from "./Hooks/useGenerateApiUrl";
+import useGenerateApiUrl from "../Analysis/Hooks/useGenerateApiUrl";
 import FacebookResults from "./Results/FacebookResults";
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/Analysis.tsv";
 import {submissionEvent} from "../../../Shared/GoogleAnalytics/GoogleAnalytics";
-import {cleanAnalysisState} from "../../../../redux/actions/tools/image_analysisActions";
+import {cleanAnalysisState, setAnalysisLoading, setAnalysisResult} from "../../../../redux/actions/tools/image_analysisActions";
 import {useParams} from "react-router-dom";
 import {KNOWN_LINKS} from "../../Assistant/AssistantRuleBook";
 import Card from "@material-ui/core/Card";
@@ -24,7 +24,6 @@ import CardHeader from "@material-ui/core/CardHeader";
 import { ReactComponent as AnalysisIcon } from '../../../NavBar/images/SVG/Video/Video_analysis.svg';
 import Grid from "@material-ui/core/Grid";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
-import OnClickInfo from "../../../Shared/OnClickInfo/OnClickInfo";
 import Typography from "@material-ui/core/Typography";
 import styles from "./Results/layout.module.css";
 
@@ -61,9 +60,10 @@ const Analysis = () => {
     const [urlDetected, setUrlDetected] = useState(false)
     const [submittedUrl, setSubmittedUrl] = useState(undefined);
     const [reprocess, setReprocess] = useState(false);
+    const serviceUrl = "https://mever.iti.gr/caa/api/v4/images";
 
-    const [finalUrl, showFacebookIframe] = useGenerateApiUrl(submittedUrl, reprocess);
-    useAnalysisWrapper(finalUrl, submittedUrl);
+    const [finalUrl, showFacebookIframe] = useGenerateApiUrl(serviceUrl, submittedUrl, reprocess);
+    useAnalysisWrapper(setAnalysisLoading, setAnalysisResult, serviceUrl, finalUrl, submittedUrl);
 
     const reprocessToggle = () => {
         setReprocess(!reprocess);
@@ -75,7 +75,7 @@ const Analysis = () => {
         dispatch(cleanAnalysisState());
     };
     
-    useEffect(() => {       
+    useEffect(() => {     
         if (finalUrl !== undefined) {
             setSubmittedUrl(undefined);
         }

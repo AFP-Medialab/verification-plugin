@@ -17,7 +17,7 @@ import FacebookResults from "./Results/FacebookResults";
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/Analysis.tsv";
 import {submissionEvent} from "../../../Shared/GoogleAnalytics/GoogleAnalytics";
-import {cleanAnalysisState} from "../../../../redux/actions/tools/analysisActions";
+import {cleanAnalysisState,setAnalysisLoading, setAnalysisResult} from "../../../../redux/actions/tools/analysisActions";
 import {useParams} from "react-router-dom";
 import {KNOWN_LINKS} from "../../Assistant/AssistantRuleBook";
 import Card from "@material-ui/core/Card";
@@ -25,7 +25,6 @@ import CardHeader from "@material-ui/core/CardHeader";
 import { ReactComponent as AnalysisIcon } from '../../../NavBar/images/SVG/Video/Video_analysis.svg';
 import Grid from "@material-ui/core/Grid";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
-import OnClickInfo from "../../../Shared/OnClickInfo/OnClickInfo";
 import Typography from "@material-ui/core/Typography";
 import styles from "./Results/layout.module.css";
 
@@ -64,9 +63,10 @@ const Analysis = () => {
     const [urlDetected, setUrlDetected] = useState(false)
     const [submittedUrl, setSubmittedUrl] = useState(undefined);
     const [reprocess, setReprocess] = useState(false);
+    const serviceUrl = "https://mever.iti.gr/caa/api/v4/videos";
 
-    const [finalUrl, showFacebookIframe] = useGenerateApiUrl(submittedUrl, reprocess);
-    useAnalysisWrapper(finalUrl, submittedUrl);
+    const [finalUrl, showFacebookIframe] = useGenerateApiUrl(serviceUrl, submittedUrl, reprocess);
+    useAnalysisWrapper(setAnalysisLoading, setAnalysisResult, serviceUrl, finalUrl, submittedUrl);
 
     const reprocessToggle = () => {
         setReprocess(!reprocess);
