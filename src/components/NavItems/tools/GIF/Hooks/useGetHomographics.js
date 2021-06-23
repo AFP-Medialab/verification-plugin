@@ -12,6 +12,11 @@ const useGetHomographics = (files, mode) => {
     const dispatch = useDispatch();
     const toolState = useSelector(state => state.gif.toolState);
 
+    const userAuthenticated = useSelector(state => state.userSession && state.userSession.userAuthenticated);
+    const userToken = useSelector(state => state.userSession && state.userSession.accessToken);
+
+    
+
     useEffect(() => {
 
         const handleError = (e) => {
@@ -33,8 +38,8 @@ const useGetHomographics = (files, mode) => {
             if(response.data.status === "KO"){
                 handleError("error_homo");
             }else{
-                var homoImage1 = "https://demo-medialab.afp.com/weverify-wrapper/" + response.data.work_url + "output_0.png";
-                var homoImage2 = "https://demo-medialab.afp.com/weverify-wrapper/" + response.data.work_url + "output_1.png";
+                var homoImage1 = "https://demo-medialab.afp.com/weverify-wrapper/" + response.data.results.output0;
+                var homoImage2 = "https://demo-medialab.afp.com/weverify-wrapper/" + response.data.results.output1;
 
                 //console.log(homoImage1);
                 //console.log(homoImage2);
@@ -57,9 +62,12 @@ const useGetHomographics = (files, mode) => {
 
             axios({
                 method: "post",
-                url: "https://demo-medialab.afp.com/weverify-wrapper/envisu-tools/open/ipol/homographic",
+                url: "https://demo-medialab.afp.com/weverify-wrapper/ipol/homographic",
                 data: bodyFormData,
-                headers: { "Content-Type": "multipart/form-data" },
+                headers: { 
+                    "Content-Type": "multipart/form-data",
+                    "Authorization": `Bearer ${userToken}`,
+                },
             })
                 .then(response => getImages(response))
                 .catch(error => {
@@ -81,11 +89,15 @@ const useGetHomographics = (files, mode) => {
             bodyUrlFormData.append('url_0', files.url_0);
             bodyUrlFormData.append('url_1', files.url_1);
 
+
             axios({
                 method: "post",
-                url: "https://demo-medialab.afp.com/envisu-tools/open/ipol/homographic/url",
+                url: "https://demo-medialab.afp.com/weverify-wrapper/ipol/homographic/url",
                 data: bodyUrlFormData,
-                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                headers: { 
+                    "Content-Type": "application/x-www-form-urlencoded", 
+                    "Authorization": `Bearer ${userToken}`,
+                },
             })
                 .then(response => getImages(response))
                 .catch(error => {
