@@ -130,6 +130,8 @@ const AuthenticationCard = (props) => {
     dispatch(userRegistrationSentAction(false));
   };
 
+  
+
   // Access Code form
   const accessCodeForm = useForm({
     mode: "onBlur",

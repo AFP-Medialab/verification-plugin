@@ -6,10 +6,12 @@ import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Forensic.tsv";
 import { setStateBackResults } from "../../../../../redux/actions/tools/gifActions";
 import { saveAs } from 'file-saver';
+import { useSelector } from "react-redux";
 
 const useGetGif = (images, delayInput, downloading) => {
     const keyword = useLoadLanguage("components/NavItems/tools/Forensic.tsv", tsv);
     const dispatch = useDispatch();
+    const userToken = useSelector(state => state.userSession && state.userSession.accessToken);
 
 
     useEffect(() => {
@@ -41,9 +43,12 @@ const useGetGif = (images, delayInput, downloading) => {
 
             axios({
                 method: "post",
-                url: "https://demo-medialab.afp.com/envisu-tools/open/animated",
+                url: "https://demo-medialab.afp.com/weverify-wrapper/animated",
                 data: body,
                 responseType: 'blob',
+                headers: {
+                    "Authorization": `Bearer ${userToken}`,
+                },
             })
                 .then(response => downloadGif(response))
                 .catch(error => {
