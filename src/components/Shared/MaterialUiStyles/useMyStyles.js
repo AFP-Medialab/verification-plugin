@@ -645,7 +645,13 @@ const useMyStyles = makeStyles(theme => ({
         width: "25%", 
         maxWidth: "350px", 
         minWidth: "250px",
-    }
+    },
+
+    dialogTitleWithButton: {
+        display: "flex",
+        justifyContent: "space - between",
+        alignItems: "center",
+    },
 
 }));
 export default useMyStyles;

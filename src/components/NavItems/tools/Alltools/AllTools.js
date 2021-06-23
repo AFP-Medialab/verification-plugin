@@ -20,6 +20,13 @@ import { ReactComponent as IconTools } from '../../../NavBar/images/SVG/Navbar/T
 import Box from "@material-ui/core/Box";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import AdvancedTools from "./AdvancedTools/AdvancedTools";
+import { useSelector } from 'react-redux';
+import Snackbar from '@material-ui/core/Snackbar';
+import Alert from '@material-ui/lab/Alert';
+
+
+
+
 
 const AllTools = (props) => {
     const classes = useMyStyles();
@@ -27,12 +34,34 @@ const AllTools = (props) => {
     const tools = props.tools;
     const [videoUrl, setVideoUrl] = useState(null);
 
-    const handleClick = (path, mediaTool) => {
+    const userAuthenticated = useSelector(
+        (state) => state.userSession && state.userSession.userAuthenticated
+    );
+    const [openAlert, setOpenAlert] = React.useState(false);
+
+    const handleClick = (path, mediaTool, type) => {
+        console.log(type);
+        if (type === "lock" || type === "lock and new"){
+            if (userAuthenticated){
+                console.log("LOGGED");
+                handlePush(path, mediaTool);
+            }else{
+                setOpenAlert(true);
+            }
+        }else{
+            console.log("NOT LOGGED");
+            handlePush(path, mediaTool);
+        }
+    };
+
+    const handlePush = (path, mediaTool) => {
         history.push({
             pathname: "/app/tools/" + path,
-            state: { media: mediaTool}
+            state: { media: mediaTool }
         })
+        
     };
+    
 
     //console.log(tools);
 
@@ -143,9 +172,24 @@ const AllTools = (props) => {
                                     </Grid>
 
     */
+    
+
+    const handleCloseAlert = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setOpenAlert(false);
+    };
+
+
 
     return (
         <div>
+            <Snackbar open={openAlert} autoHideDuration={6000} onClose={handleCloseAlert}>
+                <Alert onClose={handleCloseAlert} severity="warning">
+                    This tool is restricted, you need to unlock the advanced tools to use it
+                </Alert>
+            </Snackbar>
 
             <Grid
                 container
@@ -197,7 +241,7 @@ const AllTools = (props) => {
                                     //console.log(value);
 
                                     return (
-                                        <Grid className={classes.toolCardStyle} item key={key} onClick={() => handleClick(value.path, "video")}>
+                                        <Grid className={classes.toolCardStyle} item key={key} onClick={() => handleClick(value.path, "video", value.type)}>
                                             <ToolCard
                                                 name={keyword(value.title)}
                                                 description={keyword(value.description)}
@@ -244,9 +288,9 @@ const AllTools = (props) => {
 
                         {
                             toolsImages.map((value, key) => {
-                                console.log(value);
+                                //console.log(value);
                                 return (
-                                    <Grid className={classes.toolCardStyle} item key={key} onClick={() => handleClick(value.path, "image")}>
+                                    <Grid className={classes.toolCardStyle} item key={key} onClick={() => handleClick(value.path, "image", value.type)}>
                                         <ToolCard
                                             name={keyword(value.title)}
                                             description={keyword(value.description)}
@@ -292,7 +336,7 @@ const AllTools = (props) => {
                         {
                             toolsSearch.map((value, key) => {
                                 return (
-                                    <Grid className={classes.toolCardStyle} item key={key} onClick={() => handleClick(value.path, "search")}>
+                                    <Grid className={classes.toolCardStyle} item key={key} onClick={() => handleClick(value.path, "search", value.type)}>
                                         <ToolCard
                                             name={keyword(value.title)}
                                             description={keyword(value.description)}
@@ -338,7 +382,7 @@ const AllTools = (props) => {
                         {
                             toolsData.map((value, key) => {
                                 return (
-                                    <Grid className={classes.toolCardStyle} item key={key} onClick={() => handleClick(value.path, "datas")}>
+                                    <Grid className={classes.toolCardStyle} item key={key} onClick={() => handleClick(value.path, "datas", value.type)}>
                                         <ToolCard
                                             name={keyword(value.title)}
                                             description={keyword(value.description)}
