@@ -37,8 +37,8 @@ const useGetHomographics = (files, mode) => {
             if(response.data.status === "KO"){
                 handleError("error_homo");
             }else{
-                var homoImage1 = "https://demo-medialab.afp.com/weverify-wrapper/" + response.data.results.output0;
-                var homoImage2 = "https://demo-medialab.afp.com/weverify-wrapper/" + response.data.results.output1;
+                var homoImage1 = "https://demo-medialab.afp.com/weverify-wrapper" + response.data.results.output0;
+                var homoImage2 = "https://demo-medialab.afp.com/weverify-wrapper" + response.data.results.output1;
 
                 //console.log(homoImage1);
                 //console.log(homoImage2);
