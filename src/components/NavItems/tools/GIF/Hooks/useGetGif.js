@@ -7,11 +7,13 @@ import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Forens
 import { setStateBackResults } from "../../../../../redux/actions/tools/gifActions";
 import { saveAs } from 'file-saver';
 import { useSelector } from "react-redux";
+import useAuthenticatedRequest from "../../../../Shared/Authentication/useAuthenticatedRequest"
 
 const useGetGif = (images, delayInput, downloading) => {
     const keyword = useLoadLanguage("components/NavItems/tools/Forensic.tsv", tsv);
     const dispatch = useDispatch();
     const userToken = useSelector(state => state.userSession && state.userSession.accessToken);
+    const authenticatedRequest = useAuthenticatedRequest();
 
 
     useEffect(() => {
@@ -41,15 +43,14 @@ const useGetGif = (images, delayInput, downloading) => {
                 delay: delayInput
             }
 
-            axios({
+            const axiosConfig = {
                 method: "post",
                 url: "https://demo-medialab.afp.com/weverify-wrapper/animated",
                 data: body,
                 responseType: 'blob',
-                headers: {
-                    "Authorization": `Bearer ${userToken}`,
-                },
-            })
+            }
+
+            authenticatedRequest(axiosConfig)
                 .then(response => downloadGif(response))
                 .catch(error => {
                     handleError("gif_error_" + error.status);
