@@ -25,7 +25,7 @@ export class ToolCard extends Component {
         };
     }
 
-    
+
 
     onMouseEnter = e => {
         this.setState({ hovered: true });
@@ -34,7 +34,7 @@ export class ToolCard extends Component {
     onMouseLeave = e => {
         this.setState({ hovered: false });
     };
-    
+
 
     render() {
 
@@ -46,14 +46,14 @@ export class ToolCard extends Component {
             userAuthenticated: state.userSession.userAuthenticated
         });
 
-        if (!(userSession && userAuthenticated)){
+        if (!(userSession && userAuthenticated)) {
             console.log("AUTH 1");
         }
 
         if (!isAuthenticated) {
             console.log("AUTH 2");
         }
-        
+
 
 
         var showNew = false;
@@ -62,7 +62,7 @@ export class ToolCard extends Component {
 
         //console.log(this.props);
 
-        if (this.props.type === "redesigned"){
+        if (this.props.type === "redesigned") {
             showRedesign = true;
         }
 
@@ -79,22 +79,22 @@ export class ToolCard extends Component {
             showNew = true;
         }
 
-        
+
 
         const { hovered } = this.state;
-        const styleCard = hovered   ? {
+        const styleCard = hovered ? {
             border: 'solid #90A4AE 2px',
-                                        borderRadius: "10px",
-                                        cursor: "pointer",
-                                        backgroundColor: "#ffffff",
-                                    } 
+            borderRadius: "10px",
+            cursor: "pointer",
+            backgroundColor: "#ffffff",
+        }
 
-                                    : {
+            : {
                 border: 'solid #dce0e2 2px',
-                                        borderRadius: "10px",
-                                        cursor: "pointer",
-                                        backgroundColor: "#ffffff",
-                                    };
+                borderRadius: "10px",
+                cursor: "pointer",
+                backgroundColor: "#ffffff",
+            };
 
         return (
 
@@ -103,95 +103,74 @@ export class ToolCard extends Component {
                 <Box p={2}>
 
 
-                            <Box mr={1}>
-                                <Grid
-                                    container
-                                    direction="row"
-                                    alignItems="center"
-                                >
+                    <Box mr={1}>
+
+                        <Grid
+                            container
+                            direction="row"
+                            alignItems="center"
+                        >
+
+                            <Grid item>
+                                {this.props.icon}
+                            </Grid>
+                            <Grid item>
+                                <Box ml={1} />
+                            </Grid>
+
+                            <Grid item>
+                                <Typography variant="h6">{this.props.name}</Typography>
+                            </Grid>
 
 
-                            <Grid
-                                container
-                                direction="row"
-                                alignItems="center"
-                            >
-
-                                <Grid item>
-                                    {this.props.icon}                   
+                            {showRedesign &&
+                                <Grid item style={{ marginLeft: 'auto', color: "#F44336" }} >
+                                    <NewReleasesIcon />
                                 </Grid>
-                                <Grid item>
-                                    <Box ml={1}/>
+                            }
+
+                            {showNew &&
+                                <Grid item style={{ marginLeft: 'auto', color: "#F44336" }} >
+                                    <FiberNewIcon />
                                 </Grid>
+                            }
 
-                                <Grid item>
-                                    <Typography variant="h6">{this.props.name}</Typography>
+
+                            {showLock && !(this.state.userSession && this.state.userSession.userAuthenticated) &&
+                                <Grid item style={{ marginLeft: 'auto' }} >
+                                    <Box ml={2}>
+                                        <AuthenticationIcon />
+                                    </Box>
                                 </Grid>
+                            }
 
-                                {showRedesign &&
-                                    <Grid item style={{ marginLeft: 'auto', color: "#F44336" }} >
-                                        <Box mr={-1}>
-                                            <ImprovedIcon title="Upgraded" width="40px" height="40px" />
-                                        </Box>
-                                        
-
-                                    <Grid item>
-                                        {this.props.icon}                   
-
-                                    </Grid>
-                                    <Grid item>
-                                        <Box ml={1}/>
-                                    </Grid>
-
-                                    <Grid item xs>
-                                        <Typography variant="h6">{this.props.name}</Typography>
-                                    </Grid>
-
-                                    {showRedesign &&
-                                        <Grid item style={{ marginLeft: 'auto', color: "#F44336" }} >
-                                            <NewReleasesIcon />
-                                        </Grid>
-                                    }
-
-                                    {showNew &&
-                                        <Grid item style={{ marginLeft: 'auto', color: "#F44336" }} >
-                                            <FiberNewIcon />
-                                        </Grid>
-                                    }
+                        </Grid>
+                    </Box>
 
 
-                                    {showLock && !(this.state.userSession && this.state.userSession.userAuthenticated) &&
-                                        <Grid item style={{ marginLeft: 'auto' }} >
-                                            <Box ml={2}>
-                                                <AuthenticationIcon />
-                                            </Box>  
-                                        </Grid>
-                                    }
-                                            
-                                </Grid>
-                            </Box>
+
+                    <Box m={1} />
 
 
-                            <Box m={1} />
+                    <div style={{ minHeight: "45px" }}>
+                        <span style={{ fontSize: '10px', }}>{
+                            this.props.description}
+                        </span>
+                    </div>
 
 
-                            <div style={{minHeight: "45px"}}>
-                                <span style={{fontSize: '10px',}}>{
-                                    this.props.description}
-                                </span>
-                            </div>
 
 
 
 
                 </Box>
 
-               
 
 
-                
+
+
             </Box>
-            
+
         )
     }
 
