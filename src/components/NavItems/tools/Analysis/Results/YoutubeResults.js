@@ -35,6 +35,7 @@ import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
 import SkipNextIcon from '@material-ui/icons/SkipNext';
 import SkipPreviousIcon from '@material-ui/icons/SkipPrevious';
+import Linkify from 'react-linkify';
 
 const YoutubeResults = (props) => {
     const classes = useMyStyles();
@@ -500,7 +501,14 @@ const YoutubeResults = (props) => {
                                                                         align="center">{comment["publishedAt"]}
                                                                     </TableCell>
                                                                     <TableCell
-                                                                        align="left">{comment["textDisplay"]}
+                                                                        align="left"><Linkify 
+                                                                        componentDecorator={(decoratedHref, decoratedText, key) => (
+                                                                          <a target="blank" href={decoratedHref} key={key}>
+                                                                              {decoratedText}
+                                                                          </a>
+                                                                          )}
+                                          
+                                                                        >{comment.textDisplay}</Linkify>
                                                                     </TableCell>
                                                                 </TableRow>);
                                                         })
@@ -601,7 +609,14 @@ const YoutubeResults = (props) => {
                                   {comment.publishedAt}
                                 </TableCell>
                                 <TableCell align="left" size="small">
-                                  {comment.textDisplay}
+                                <Linkify 
+                                componentDecorator={(decoratedHref, decoratedText, key) => (
+                                  <a target="blank" href={decoratedHref} key={key}>
+                                      {decoratedText}
+                                  </a>
+                                  )}
+  
+                                >{comment.textDisplay}</Linkify>
                                 </TableCell>
                               </TableRow>
                             );
@@ -704,7 +719,14 @@ const YoutubeResults = (props) => {
                                   {comment.publishedAt}
                                 </TableCell>
                                 <TableCell align="left" size="small">
-                                  {comment.textDisplay}
+                                <Linkify 
+                                componentDecorator={(decoratedHref, decoratedText, key) => (
+                                  <a target="blank" href={decoratedHref} key={key}>
+                                      {decoratedText}
+                                  </a>
+                                  )}
+  
+                                >{comment.textDisplay}</Linkify>
                                 </TableCell>
                               </TableRow>
                             );

@@ -22,7 +22,6 @@ import ImageReverseSearch from "../../ImageReverseSearch";
 import OnClickInfo from "../../../../Shared/OnClickInfo/OnClickInfo";
 import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Analysis.tsv";
-//import AsynchMyMap from "../../../../Shared/MyMap/AsynchMyMap";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 import styles from "./layout.module.css";
@@ -34,6 +33,7 @@ import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
 import SkipNextIcon from '@material-ui/icons/SkipNext';
 import SkipPreviousIcon from '@material-ui/icons/SkipPrevious';
+import Linkify from 'react-linkify';
 
 
 const FacebookResults = (props) => {
@@ -42,6 +42,7 @@ const FacebookResults = (props) => {
     "components/NavItems/tools/Analysis.tsv",
     tsv
   );
+  
   const [count_comments, setCount_comments] = useState(1);
   const [count_verified_comments, setCount_verified_comments] = useState(1);
   const [count_link_comments, setCount_link_comments] = useState(1);
@@ -481,9 +482,15 @@ const FacebookResults = (props) => {
                                   {comment.publishedAt}
                                 </TableCell>
                                 <TableCell align="left" size="small">
-                                  {comment.textDisplay}
+                                <Linkify 
+                                componentDecorator={(decoratedHref, decoratedText, key) => (
+                                  <a target="blank" href={decoratedHref} key={key}>
+                                      {decoratedText}
+                                  </a>
+                                  )}
+  
+                                >{comment.textDisplay}</Linkify>
                                   
-
                                  </TableCell>
                               </TableRow>
                             );
@@ -587,7 +594,14 @@ const FacebookResults = (props) => {
                                   {comment.publishedAt}
                                 </TableCell>
                                 <TableCell align="left" size="small">
-                                  {comment.textDisplay}
+                                <Linkify 
+                                componentDecorator={(decoratedHref, decoratedText, key) => (
+                                  <a target="blank" href={decoratedHref} key={key}>
+                                      {decoratedText}
+                                  </a>
+                                  )}
+  
+                                >{comment.textDisplay}</Linkify>
                                 </TableCell>
                               </TableRow>
                             );
@@ -693,7 +707,16 @@ const FacebookResults = (props) => {
                                   {comment.publishedAt}
                                 </TableCell>
                                 <TableCell align="left" size="small">
-                                  {comment.textDisplay}
+                                <Linkify 
+                                componentDecorator={(decoratedHref, decoratedText, key) => (
+                                  <a target="blank" href={decoratedHref} key={key}>
+                                      {decoratedText}
+                                  </a>
+                                  )}
+  
+                                >{comment.textDisplay}</Linkify>
+                                
+                                  
                                 </TableCell>
                               </TableRow>
                             );
