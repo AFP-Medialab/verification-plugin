@@ -101,7 +101,7 @@ import { ReactComponent as TwitterSnaIcon } from "./images/SVG/DataAnalysis/Twit
 import { ReactComponent as ToolsIcon } from "./images/SVG/Navbar/Tools.svg"
 import { ReactComponent as ClassroomIcon } from "./images/SVG/Navbar/Classroom.svg"
 import { ReactComponent as InteractiveIcon } from "./images/SVG/Navbar/Interactive.svg"
-import { ReactComponent as FactcheckIcon } from "./images/SVG/Navbar/Fact_check.svg"
+//import { ReactComponent as FactcheckIcon } from "./images/SVG/Navbar/Fact_check.svg"
 import { ReactComponent as AboutIcon } from "./images/SVG/Navbar/About.svg"
 import { ReactComponent as AssistantIcon } from "./images/SVG/Navbar/Assistant.svg"
 import { ReactComponent as GuideIcon } from "./images/SVG/Navbar/Guide.svg"
@@ -113,7 +113,7 @@ import { ReactComponent as LogoWeVerify2 } from "./images/SVG/Navbar/WeVerify.sv
 import { getSupportedBrowserLanguage } from "../Shared/Languages/getSupportedBrowserLanguage";
 import useLoadLanguage from "../../Hooks/useLoadLanguage";
 import tsv from "../../LocalDictionary/components/NavBar.tsv";
-import FactCheck from "../NavItems/FactCheck/FactCheck";
+//import FactCheck from "../NavItems/FactCheck/FactCheck";
 import Snackbar from "@material-ui/core/Snackbar";
 import { setFalse, setTrue } from "../../redux/actions/cookiesActions";
 import { changeLanguage } from "../../redux/actions";
@@ -364,14 +364,14 @@ const NavBar = (props) => {
             path: "classroom",
             footer: <Footer type={"afp"} />
         },
-        {
+        /*{
             title: "navbar_factCheck",
             icon: (tabValue === 5) ? <FactcheckIcon width="40px" height="40px" style={{ fill: "#51A5B2" }} />
                 : <FactcheckIcon width="40px" height="40px" style={{ fill: "#4c4c4c" }} />,
             content: <FactCheck />,
             path: "factCheck",
             footer: <Footer type={"afp"} />
-        },
+        },*/
         {
             title: "navbar_about",
             icon: (tabValue === 6) ? <AboutIcon width="40px" height="40px" style={{ fill: "#51A5B2" }} />
