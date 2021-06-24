@@ -102,15 +102,17 @@ const Forensic = () => {
                 const uri = decodeURIComponent(url);
                 setInput(uri)
             }
+            setUrlDetected(true)
         }
-        setUrlDetected(true)
 
     }, [url]);
 
     useEffect(() => {
+        console.log("url detected ", urlDetected);
         if (urlDetected){
             submitUrl()
         }
+        return () => setUrlDetected(false);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [urlDetected])
 
