@@ -1,18 +1,15 @@
 import { useEffect } from "react";
-import axios from "axios"
 import { useDispatch } from "react-redux";
 import { setError } from "../../../../../redux/actions/errorActions";
 import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Forensic.tsv";
 import { setStateBackResults } from "../../../../../redux/actions/tools/gifActions";
 import { saveAs } from 'file-saver';
-import { useSelector } from "react-redux";
 import useAuthenticatedRequest from "../../../../Shared/Authentication/useAuthenticatedRequest"
 
 const useGetGif = (images, delayInput, downloading) => {
     const keyword = useLoadLanguage("components/NavItems/tools/Forensic.tsv", tsv);
     const dispatch = useDispatch();
-    const userToken = useSelector(state => state.userSession && state.userSession.accessToken);
     const authenticatedRequest = useAuthenticatedRequest();
     const baseURL = process.env.REACT_APP_BASEURL
 
@@ -62,6 +59,6 @@ const useGetGif = (images, delayInput, downloading) => {
 
 
 
-    }, [images, delayInput, downloading, keyword, dispatch]);
+    }, [baseURL, images, delayInput, downloading, keyword, dispatch, authenticatedRequest]);
 };
 export default useGetGif;

@@ -45,7 +45,7 @@ const Gif = () => {
 
     const [classButtonURL, setClassButtonURL] = useState(classes.bigButtonDiv);
     const [classButtonLocal, setClassButtonLocal] = useState(classes.bigButtonDiv);
-
+    
     const [classIconURL, setClassIconURL] = useState(classes.bigButtonIcon);
     const [classIconLocal, setClassIconLocal] = useState(classes.bigButtonIcon);
 
@@ -372,6 +372,7 @@ const Gif = () => {
             // Anything in here is fired on component unmount.
             newGif();
         }
+    // eslint-disable-next-line
     }, [])
 
 

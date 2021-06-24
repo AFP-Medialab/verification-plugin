@@ -82,8 +82,8 @@ const AdvancedTools = (porps) => {
         }else{
             setNotAuthenticatedData();
         }
-
-    }, [userAuthenticated]);
+    // eslint-disable-next-line
+    }, []);
 
     const setAuthenticatedData = () => {
         setDialogState(2);

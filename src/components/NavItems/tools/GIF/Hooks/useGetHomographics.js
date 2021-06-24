@@ -1,5 +1,4 @@
 import { useEffect } from "react";
-import axios from "axios"
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { setStateLoading, setStateShow, setStateError} from "../../../../../redux/actions/tools/gifActions";
@@ -112,6 +111,6 @@ const useGetHomographics = (files, mode) => {
 
         
 
-    }, [files, mode, keyword, dispatch]);
+    }, [baseURL, toolState, files, mode, keyword, dispatch, authenticatedRequest]);
 };
 export default useGetHomographics;

@@ -108,7 +108,7 @@ const ForensicResults = (props) => {
     const classes = useMyStyles();
     const keyword = useLoadLanguage("components/NavItems/tools/Forensic.tsv", tsv);
     const results = props.result.filters;
-    const masks = props.masksData;
+    //const masks = props.masksData;
     //console.log(results);
 
     /*
@@ -438,7 +438,7 @@ const ForensicResults = (props) => {
     const gifPopover = openGifPopover ? 'simple-popover' : undefined;
     const gifImage = props.url;
     const [gifFilter, setGifFilter] = React.useState(props.url);
-    const gifFilterMask = useSelector(state => state.forensic.maskUrl);
+    //const gifFilterMask = useSelector(state => state.forensic.maskUrl);
     //console.log(gifFilterMask);
 
     const [interval, setIntervalVar] = React.useState(null);
@@ -446,7 +446,7 @@ const ForensicResults = (props) => {
     const downloading = useSelector(state => state.gif.toolState);
 
 
-    const [readyTransparency, setReadyTransparency] = React.useState(false);
+    //const [readyTransparency, setReadyTransparency] = React.useState(false);
 
     //nsparent(gifFilter, readyTransparency);
 
@@ -457,14 +457,14 @@ const ForensicResults = (props) => {
             setGifFilter(url);
             //console.log(url);
 
-            setReadyTransparency(true);
+            //setReadyTransparency(true);
 
         } else {
             url = filters.current.find(x => x.id === filter).mask;
             setGifFilter(url);
             //console.log(url);
 
-            setReadyTransparency(true);
+            //setReadyTransparency(true);
         }
         setIntervalVar(setInterval(() => animateFilter(), 1100));
         setAnchorGifPopover(event.currentTarget);
@@ -474,7 +474,7 @@ const ForensicResults = (props) => {
     function closeGifPopover() {
         clearInterval(interval);
         setAnchorGifPopover(null);
-        setReadyTransparency(false);
+        //setReadyTransparency(false);
     }
 
 
