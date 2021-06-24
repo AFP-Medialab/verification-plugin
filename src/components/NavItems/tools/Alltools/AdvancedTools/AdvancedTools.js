@@ -444,7 +444,7 @@ const AdvancedTools = (porps) => {
 
                         </DialogContent>
                         <DialogActions>
-                            <Button v color="black" onClick={handleCloseFinish} fullWidth >
+                            <Button v color="default" onClick={handleCloseFinish} fullWidth >
                                 {keyword("button_close")}
                             </Button>
                         </DialogActions>
@@ -599,7 +599,7 @@ const AdvancedTools = (porps) => {
                                     </Grid>
                                     <Grid item xs={12}>
                                         <Box mt={2}>
-                                            <Button color="black" fullWidth type="submit" >
+                                            <Button color="default" fullWidth type="submit" >
                                                 {keyword("button_register")}
                                             </Button>
                                         </Box>
@@ -629,7 +629,7 @@ const AdvancedTools = (porps) => {
 
                         </DialogContent>
                         <DialogActions>
-                            <Button v color="black" onClick={handleCloseRegistration} fullWidth >
+                            <Button v color="default" onClick={handleCloseRegistration} fullWidth >
                                 {keyword("button_close")}
                             </Button>
                         </DialogActions>

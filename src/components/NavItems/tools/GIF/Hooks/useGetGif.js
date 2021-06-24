@@ -15,9 +15,7 @@ const useGetGif = (images, delayInput, downloading) => {
 
 
     useEffect(() => {
-        console.log("gi use effect 1 ",  downloading);
-        console.log("gi use effect 2",  images);
-        console.log("gi use effect 3",  delayInput);
+      
         const handleError = (e) => {
             if (keyword(e) !== "")
                 dispatch(setError(keyword(e)));
@@ -28,14 +26,12 @@ const useGetGif = (images, delayInput, downloading) => {
 
 
         const downloadGif = (response) => {
-            console.log(response.data);
+      
             const file = new Blob([response.data], { type: 'image/gif' });
-            saveAs(file, "image.gif");
-           
+            saveAs(file, "image.gif");     
         }
 
         if (images && delayInput && downloading === 7) {
-            console.log("download .... ", downloading);
             dispatch(setStateBackResults());
             var body = {
                 inputURLs: [

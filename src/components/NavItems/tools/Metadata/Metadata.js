@@ -219,7 +219,7 @@ const Metadata = () => {
                         </Grid>
 
                         <Grid item xs>
-                            <Typography variant="body">* {keyword("description_limitations")}</Typography>
+                            <Typography variant="body1">* {keyword("description_limitations")}</Typography>
                         </Grid>
 
                     </Grid>

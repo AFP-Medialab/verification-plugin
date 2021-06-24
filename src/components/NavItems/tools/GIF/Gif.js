@@ -251,15 +251,10 @@ const [speed, setSpeed] = React.useState(1100);
 
     //Trigger of the loop function
     useEffect(() => {
-        console.log("useeffect loop ", interval);
-        console.log("useeffect loop2 ", toolState);
     if (toolState === 5 && (interval === null || interval === undefined)) {
-            console.log("start loop");
             setIntervalVar(setInterval(() => animateImages(), speed));
-            
     }
     return () => {
-        console.log("unmonted");
         if(interval !==null ){
             clearInterval(interval); 
             setIntervalVar(null)
