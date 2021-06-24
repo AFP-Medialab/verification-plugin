@@ -243,14 +243,29 @@ const Gif = () => {
 
     const [interval, setIntervalVar] = React.useState(null);
 
+//=== SPEED SLIDER ===
+const [speed, setSpeed] = React.useState(1100);
 
 
     //=== CSS ANIMATION ===
 
     //Trigger of the loop function
-    if (toolState === 5 && interval === null) {
-        setIntervalVar(setInterval(() => animateImages(), 1100));
+    useEffect(() => {
+        console.log("useeffect loop ", interval);
+        console.log("useeffect loop2 ", toolState);
+    if (toolState === 5 && (interval === null || interval === undefined)) {
+            console.log("start loop");
+            setIntervalVar(setInterval(() => animateImages(), speed));
+            
     }
+    return () => {
+        console.log("unmonted");
+        if(interval !==null ){
+            clearInterval(interval); 
+            setIntervalVar(null)
+        }
+    }
+    }, [setIntervalVar, interval, toolState, speed]);
     
 
     //Loop function
@@ -265,9 +280,6 @@ const Gif = () => {
             x.style.display = "none";
         }
     }
-
-    //=== SPEED SLIDER ===
-    const [speed, setSpeed] = React.useState(1100);
 
     const marks = [
         {
@@ -289,7 +301,7 @@ const Gif = () => {
     //On release function (when the click is released this function is triggered)
     function commitChangeSpeed(value) {
         //console.log("Commit change speed: " + value); //DEBUG
-        clearInterval(interval);
+        //clearInterval(interval);
         setIntervalVar(setInterval(() => animateImages(), (value)));
     }
 
@@ -316,16 +328,10 @@ const Gif = () => {
         setFilesForGif(files);
         setDelayGif(speed);
         
-        
     };
 
-    console.log(filesForGif);
-    console.log(delayGif);
-    console.log(toolState);
     //Call to the API
     useGetGif(filesForGif, delayGif, toolState);
-
-
 
 
 
@@ -334,9 +340,9 @@ const Gif = () => {
 
 
     const newGif = (event) => {
-        cleanInputs();
         stopLoop();
-
+        cleanInputs();
+        
         setClassButtonURL(classes.bigButtonDiv);
         setClassIconURL(classes.bigButtonIcon);
 
@@ -372,7 +378,7 @@ const Gif = () => {
             // Anything in here is fired on component unmount.
             newGif();
         }
-    }, [])
+    }, []);
 
 
     //HTML Code
@@ -550,7 +556,7 @@ const Gif = () => {
 
                                             >
                                                 <img src={imageDropped1} className={classes.imageDropped} alt="" />
-                                                <IconButton color="black" onClick={removeImage1}>
+                                                <IconButton color="default" onClick={removeImage1}>
                                                     <DeleteOutlineIcon fontSize="small" />
                                                 </IconButton>
                                             </Grid>
@@ -612,7 +618,7 @@ const Gif = () => {
 
                                             >
                                                 <img src={imageDropped2} className={classes.imageDropped} alt="" />
-                                                <IconButton color="black" onClick={removeImage2}>
+                                                <IconButton color="default" onClick={removeImage2}>
                                                     <DeleteOutlineIcon fontSize="small" />
                                                 </IconButton>
                                             </Grid>
