@@ -22,7 +22,6 @@ import ImageReverseSearch from "../../ImageReverseSearch";
 import OnClickInfo from "../../../../Shared/OnClickInfo/OnClickInfo";
 import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Analysis.tsv";
-//import AsynchMyMap from "../../../../Shared/MyMap/AsynchMyMap";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 import styles from "./layout.module.css";
@@ -34,6 +33,8 @@ import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
 import SkipNextIcon from '@material-ui/icons/SkipNext';
 import SkipPreviousIcon from '@material-ui/icons/SkipPrevious';
+import Linkify from 'react-linkify';
+
 
 const FacebookResults = (props) => {
   const classes = useMyStyles();
@@ -41,6 +42,7 @@ const FacebookResults = (props) => {
     "components/NavItems/tools/Analysis.tsv",
     tsv
   );
+  
   const [count_comments, setCount_comments] = useState(1);
   const [count_verified_comments, setCount_verified_comments] = useState(1);
   const [count_link_comments, setCount_link_comments] = useState(1);
@@ -53,9 +55,28 @@ const FacebookResults = (props) => {
   };  
   var nextPage = props.report.pagination.next;
   const url = useState(nextPage);
-  var last_page_all_comments=Math.ceil(props.report.verification_cues.num_comments/10)
-  var last_page_verified_comments=Math.ceil(props.report.verification_cues.num_verification_comments/10)
-  var last_page_link_comments=Math.ceil(props.report.verification_cues.num_link_comments/10)
+  var last_page_all_comments;
+    var last_page_verified_comments;
+    var last_page_link_comments;
+
+    if(props.report.verification_cues.num_comments!==0){
+      last_page_all_comments=Math.ceil(props.report.verification_cues.num_comments/10)
+    }
+    else{
+      last_page_all_comments=1
+    }
+    if(props.report.verification_cues.num_verification_comments!==0){
+      last_page_verified_comments=Math.ceil(props.report.verification_cues.num_verification_comments/10)
+    }
+    else{
+      last_page_verified_comments=1
+    }
+    if(props.report.verification_cues.num_link_comments!==0){
+      last_page_link_comments=Math.ceil(props.report.verification_cues.num_link_comments/10)
+    }
+    else{
+      last_page_link_comments=1
+    }
 
   
   var index=0
@@ -404,52 +425,9 @@ const FacebookResults = (props) => {
                 <Typography variant={"h6"}>
                   {keyword("facebook_comment_title")}
                 </Typography>
+                
                 <Box m={2} />
-                {report.verification_cues && (
-                  <Table
-                    className={classes.table}
-                    size="small"
-                    aria-label="a dense table"
-                  >
-                    <TableBody>
-                    {report.verification_cues.num_comments && (
-                        <TableRow>
-                          <TableCell component="th" scope="row">
-                            {keyword("facebook_comment_name_1")}
-                          </TableCell>
-                          <TableCell align="right">
-                            {report.verification_cues.num_comments}
-                          </TableCell>
-                        </TableRow>
-                      )}
-                      {report.verification_cues.num_verification_comments !==
-                        0 && (
-                        <TableRow>
-                          <TableCell component="th" scope="row">
-                            {keyword("facebook_comment_name_2")}
-                          </TableCell>
-                          <TableCell align="right">
-                            {report.verification_cues.num_verification_comments}
-                          </TableCell>
-                        </TableRow>
-                      )}
-                      {report.verification_cues.num_link_comments !==
-                        0 && (
-                        <TableRow>
-                          <TableCell component="th" scope="row">
-                            {keyword("comments_links")}
-                          </TableCell>
-                          <TableCell align="right">
-                            {report.verification_cues.num_link_comments}
-                          </TableCell>
-                        </TableRow>
-                      )}
-                      
-                    </TableBody>
-                  </Table>
-                )}
-                <Box m={2} />
-                {verificationComments.length > 0 && (
+                {verificationComments.length  && (
                   <Accordion>
                     <AccordionSummary
                       expandIcon={<ExpandMoreIcon />}
@@ -457,7 +435,7 @@ const FacebookResults = (props) => {
                       id="panel1bh-header"
                     >
                       <Typography className={classes.heading}>
-                        {keyword("api_comments")}
+                        {keyword("api_comments")+" ("+props.report.verification_cues.num_comments+")"}
                       </Typography>
                       <Typography className={classes.secondaryHeading}>
                         {" "}
@@ -504,8 +482,16 @@ const FacebookResults = (props) => {
                                   {comment.publishedAt}
                                 </TableCell>
                                 <TableCell align="left" size="small">
-                                  {comment.textDisplay}
-                                </TableCell>
+                                <Linkify 
+                                componentDecorator={(decoratedHref, decoratedText, key) => (
+                                  <a target="blank" href={decoratedHref} key={key}>
+                                      {decoratedText}
+                                  </a>
+                                  )}
+  
+                                >{comment.textDisplay}</Linkify>
+                                  
+                                 </TableCell>
                               </TableRow>
                             );
                           })}
@@ -569,7 +555,7 @@ const FacebookResults = (props) => {
                       id="panel1bh-header"
                     >
                       <Typography className={classes.heading}>
-                        {keyword("api_comments_verified")}
+                        {keyword("api_comments_verified")+" ("+props.report.verification_cues.num_verification_comments+")"}
                       </Typography>
                       <Typography className={classes.secondaryHeading}>
                         {" "}
@@ -608,7 +594,14 @@ const FacebookResults = (props) => {
                                   {comment.publishedAt}
                                 </TableCell>
                                 <TableCell align="left" size="small">
-                                  {comment.textDisplay}
+                                <Linkify 
+                                componentDecorator={(decoratedHref, decoratedText, key) => (
+                                  <a target="blank" href={decoratedHref} key={key}>
+                                      {decoratedText}
+                                  </a>
+                                  )}
+  
+                                >{comment.textDisplay}</Linkify>
                                 </TableCell>
                               </TableRow>
                             );
@@ -675,7 +668,7 @@ const FacebookResults = (props) => {
                       id="panel1bh-header"
                     >
                       <Typography className={classes.heading}>
-                        {keyword("link_comments")}
+                        {keyword("link_comments")+" ("+props.report.verification_cues.num_link_comments+")"}
                       </Typography>
                       <Typography className={classes.secondaryHeading}>
                         {" "}
@@ -714,7 +707,16 @@ const FacebookResults = (props) => {
                                   {comment.publishedAt}
                                 </TableCell>
                                 <TableCell align="left" size="small">
-                                  {comment.textDisplay}
+                                <Linkify 
+                                componentDecorator={(decoratedHref, decoratedText, key) => (
+                                  <a target="blank" href={decoratedHref} key={key}>
+                                      {decoratedText}
+                                  </a>
+                                  )}
+  
+                                >{comment.textDisplay}</Linkify>
+                                
+                                  
                                 </TableCell>
                               </TableRow>
                             );

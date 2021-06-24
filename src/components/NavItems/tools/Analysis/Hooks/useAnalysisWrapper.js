@@ -1,16 +1,16 @@
 import axios from "axios"
 import {useDispatch} from "react-redux";
-import {setAnalysisLoading, setAnalysisResult} from "../../../../../redux/actions/tools/analysisActions";
 import {setError} from "../../../../../redux/actions/errorActions";
 import {useEffect} from "react";
 import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Analysis.tsv"
 
-export const useAnalysisWrapper = (apiUrl, videoUrl) => {    
+export const useAnalysisWrapper = (setAnalysisLoading, setAnalysisResult, serviceUrl, apiUrl, processUrl) => {    
     const keyword = useLoadLanguage("components/NavItems/tools/Analysis.tsv", tsv);
     const dispatch = useDispatch();
 
     useEffect(() => {
+        
         const handleError = (error) => {
             if (keyword(error) !== "")
                 dispatch(setError((keyword(error))));
@@ -20,12 +20,12 @@ export const useAnalysisWrapper = (apiUrl, videoUrl) => {
         };
 
         const getReport = (id) => {
-            axios.get("https://mever.iti.gr/caa/api/v4/videos/reports/" + id)
+            axios.get(serviceUrl+"/reports/" + id)
                 .then(response => {
                     if (keyword("table_error_" + response.data.status) !== "")
                         handleError("table_error_" + response.data.status.status);
                     else if (response.data.status !== "unavailable"){
-                        dispatch(setAnalysisResult(videoUrl, response.data, false, false));
+                        dispatch(setAnalysisResult(processUrl, response.data, false, false));
                     }
                 })
                 .catch(errors => handleError(errors));
@@ -41,7 +41,7 @@ export const useAnalysisWrapper = (apiUrl, videoUrl) => {
 
 
         const waitUntilDonne = (data) => {
-            axios.get("https://mever.iti.gr/caa/api/v4/videos/jobs/" + data.id)
+            axios.get(serviceUrl+"/jobs/" + data.id)
                 .then(response => {
                     if (response.data.status === "done") {
                         getReport(response.data.media_id)
@@ -66,12 +66,12 @@ export const useAnalysisWrapper = (apiUrl, videoUrl) => {
             handleError("table_error_empty_url");
         else if (apiUrl.includes(" "))
             handleError("table_error_unavailable");
-        else {
+        else if (processUrl) {           
             dispatch(setAnalysisLoading(true));
             axios.post(apiUrl)
                 .then(response => handleJob(response["data"]))
                 .catch(error => handleError(error))
         }
-        
-    }, [apiUrl, keyword, dispatch, videoUrl]);
+        // eslint-disable-next-line
+    }, [apiUrl, keyword, dispatch, processUrl]);
 };

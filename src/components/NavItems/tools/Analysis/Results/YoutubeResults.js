@@ -35,6 +35,7 @@ import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
 import SkipNextIcon from '@material-ui/icons/SkipNext';
 import SkipPreviousIcon from '@material-ui/icons/SkipPrevious';
+import Linkify from 'react-linkify';
 
 const YoutubeResults = (props) => {
     const classes = useMyStyles();
@@ -53,9 +54,28 @@ const YoutubeResults = (props) => {
     
     var nextPage = props.report.pagination.next;
     const url = useState(nextPage);
-    var last_page_all_comments=Math.ceil(props.report.verification_cues.num_comments/10)
-    var last_page_verified_comments=Math.ceil(props.report.verification_cues.num_verification_comments/10)
-    var last_page_link_comments=Math.ceil(props.report.verification_cues.num_link_comments/10)
+    var last_page_all_comments;
+    var last_page_verified_comments;
+    var last_page_link_comments;
+
+    if(props.report.verification_cues.num_comments!==0){
+      last_page_all_comments=Math.ceil(props.report.verification_cues.num_comments/10)
+    }
+    else{
+      last_page_all_comments=1
+    }
+    if(props.report.verification_cues.num_verification_comments!==0){
+      last_page_verified_comments=Math.ceil(props.report.verification_cues.num_verification_comments/10)
+    }
+    else{
+      last_page_verified_comments=1
+    }
+    if(props.report.verification_cues.num_link_comments!==0){
+      last_page_link_comments=Math.ceil(props.report.verification_cues.num_link_comments/10)
+    }
+    else{
+      last_page_link_comments=1
+    }
   
     var index=0
     var real
@@ -444,55 +464,18 @@ const YoutubeResults = (props) => {
                                 <Typography variant={"h6"}>
                                     {keyword("youtube_comment_title")}
                                 </Typography>
-                                <Box m={2}/>
-                                <Table className={classes.table} size="small" aria-label="a dense table">
-                                    <TableBody>
-                                    {report.verification_cues.num_comments && (
-                                                <TableRow>
-                                                <TableCell component="th" scope="row">
-                                                    {keyword("facebook_comment_name_1")}
-                                                </TableCell>
-                                                <TableCell align="right">
-                                                    {report.verification_cues.num_comments}
-                                                </TableCell>
-                                                </TableRow>
-                                            )}
-                                        {report.verification_cues.num_verification_comments !==
-                                            0 && (
-                                            <TableRow>
-                                            <TableCell component="th" scope="row">
-                                                {keyword("facebook_comment_name_2")}
-                                            </TableCell>
-                                            <TableCell align="right">
-                                                {report.verification_cues.num_verification_comments}
-                                            </TableCell>
-                                            </TableRow>
-                                        )}
-                                        {report.verification_cues.num_link_comments !==
-                                            0 && (
-                                            <TableRow>
-                                            <TableCell component="th" scope="row">
-                                                {keyword("comments_links")}
-                                            </TableCell>
-                                            <TableCell align="right">
-                                                {report.verification_cues.num_link_comments}
-                                            </TableCell>
-                                            </TableRow>
-                                        )}
-                                        
-                                    </TableBody>
-                                </Table>
+              
                                 <Box m={2} />
 
                                 {
-                                    verificationComments.length > 0 &&
+                                    //verificationComments.length > 0 &&
                                     <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
                                         <AccordionSummary
                                             expandIcon={<ExpandMoreIcon/>}
                                             aria-controls="panel1bh-content"
                                             id="panel1bh-header"
                                         >
-                                            <Typography className={classes.heading}>{keyword("api_comments")}</Typography>
+                                            <Typography className={classes.heading}>{keyword("api_comments")+" ("+props.report.verification_cues.num_comments+")"}</Typography>
                                             <Typography className={classes.secondaryHeading}></Typography>
                                         </AccordionSummary>
                                         <AccordionDetails>
@@ -518,7 +501,14 @@ const YoutubeResults = (props) => {
                                                                         align="center">{comment["publishedAt"]}
                                                                     </TableCell>
                                                                     <TableCell
-                                                                        align="left">{comment["textDisplay"]}
+                                                                        align="left"><Linkify 
+                                                                        componentDecorator={(decoratedHref, decoratedText, key) => (
+                                                                          <a target="blank" href={decoratedHref} key={key}>
+                                                                              {decoratedText}
+                                                                          </a>
+                                                                          )}
+                                          
+                                                                        >{comment.textDisplay}</Linkify>
                                                                     </TableCell>
                                                                 </TableRow>);
                                                         })
@@ -583,7 +573,7 @@ const YoutubeResults = (props) => {
                       id="panel1bh-header"
                     >
                       <Typography className={classes.heading}>
-                        {keyword("api_comments_verified")}
+                        {keyword("api_comments_verified")+" ("+props.report.verification_cues.num_verification_comments+")"}
                       </Typography>
                       <Typography className={classes.secondaryHeading}>
                         {" "}
@@ -619,7 +609,14 @@ const YoutubeResults = (props) => {
                                   {comment.publishedAt}
                                 </TableCell>
                                 <TableCell align="left" size="small">
-                                  {comment.textDisplay}
+                                <Linkify 
+                                componentDecorator={(decoratedHref, decoratedText, key) => (
+                                  <a target="blank" href={decoratedHref} key={key}>
+                                      {decoratedText}
+                                  </a>
+                                  )}
+  
+                                >{comment.textDisplay}</Linkify>
                                 </TableCell>
                               </TableRow>
                             );
@@ -686,7 +683,7 @@ const YoutubeResults = (props) => {
                       id="panel1bh-header"
                     >
                       <Typography className={classes.heading}>
-                        {keyword("link_comments")}
+                        {keyword("link_comments")+" ("+props.report.verification_cues.num_link_comments+")"}
                       </Typography>
                       <Typography className={classes.secondaryHeading}>
                         {" "}
@@ -722,7 +719,14 @@ const YoutubeResults = (props) => {
                                   {comment.publishedAt}
                                 </TableCell>
                                 <TableCell align="left" size="small">
-                                  {comment.textDisplay}
+                                <Linkify 
+                                componentDecorator={(decoratedHref, decoratedText, key) => (
+                                  <a target="blank" href={decoratedHref} key={key}>
+                                      {decoratedText}
+                                  </a>
+                                  )}
+  
+                                >{comment.textDisplay}</Linkify>
                                 </TableCell>
                               </TableRow>
                             );
