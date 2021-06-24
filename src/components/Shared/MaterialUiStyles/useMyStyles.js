@@ -1,4 +1,4 @@
-import makeStyles from "@material-ui/core/styles/makeStyles";
+import {makeStyles} from "@material-ui/core/styles";
 import {green} from "@material-ui/core/colors";
 
 const drawerWidth = 200;
@@ -638,10 +638,6 @@ const useMyStyles = makeStyles(theme => ({
         padding: theme.spacing(3),
 
     },
-    rootCard: {
-        overflow: "visible"
-    },
-
 
     toolCardStyle: {
         width: "25%", 
@@ -656,4 +652,10 @@ const useMyStyles = makeStyles(theme => ({
     },
 
 }));
+export const myCardStyles = makeStyles({
+    root: {
+        overflow: "visible"
+    }
+});
 export default useMyStyles;
+
