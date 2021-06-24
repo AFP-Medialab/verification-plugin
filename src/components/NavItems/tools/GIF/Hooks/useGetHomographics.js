@@ -12,6 +12,7 @@ const useGetHomographics = (files, mode) => {
     const keyword = useLoadLanguage("components/NavItems/tools/CheckGIF.tsv", tsv);
     const dispatch = useDispatch();
     const toolState = useSelector(state => state.gif.toolState);
+    const baseURL = process.env.REACT_APP_BASEURL
 
     const authenticatedRequest = useAuthenticatedRequest();
 
@@ -37,8 +38,8 @@ const useGetHomographics = (files, mode) => {
             if(response.data.status === "KO"){
                 handleError("error_homo");
             }else{
-                var homoImage1 = "https://demo-medialab.afp.com/weverify-wrapper/" + response.data.results.output0;
-                var homoImage2 = "https://demo-medialab.afp.com/weverify-wrapper/" + response.data.results.output1;
+                var homoImage1 = baseURL + response.data.results.output0;
+                var homoImage2 = baseURL + response.data.results.output1;
 
                 //console.log(homoImage1);
                 //console.log(homoImage2);
@@ -62,7 +63,7 @@ const useGetHomographics = (files, mode) => {
 
             const axiosConfig = {
                 method: "post",
-                url: "https://demo-medialab.afp.com/weverify-wrapper/ipol/homographic",
+                url: baseURL + "/ipol/homographic",
                 data: bodyFormData,
                 headers: { 
                     "Content-Type": "multipart/form-data",
@@ -93,7 +94,7 @@ const useGetHomographics = (files, mode) => {
 
             const axiosConfig = {
                 method: "post",
-                url: "https://demo-medialab.afp.com/weverify-wrapper/ipol/homographic/url",
+                url: baseURL + "/ipol/homographic/url",
                 data: bodyUrlFormData,
                 headers: { 
                     "Content-Type": "application/x-www-form-urlencoded", 

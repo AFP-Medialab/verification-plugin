@@ -141,37 +141,6 @@ const AllTools = (props) => {
     console.log(toolsData);
     */
 
-
-    
-    /*
-
-
-<Grid>
-                                        <Grid item onClick={() => handleClick(value.path)}>
-                                            <IconButton className={classes.customAllToolsButton} style={{ "fontSize": 67}}>
-                                                {value.icon}
-                                            </IconButton>
-                                        </Grid>
-                                        <Grid item>
-                                            <Grid>
-                                                <Typography variant={"body1"}>
-                                                    {keyword(value.title)}
-                                                    <IconButton
-                                                        aria-label="settings"
-                                                        size={"small"}
-                                                        onClick={() => setVideoUrl(keyword(value.tsvPrefix + "_help_video"))}
-                                                    >
-                                                        <HelpIcon/>
-                                                    </IconButton>
-                                                </Typography>
-
-
-
-                                            </Grid>
-                                        </Grid>
-                                    </Grid>
-
-    */
     
 
     const handleCloseAlert = (event, reason) => {

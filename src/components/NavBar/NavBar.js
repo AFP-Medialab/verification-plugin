@@ -118,6 +118,7 @@ import Snackbar from "@material-ui/core/Snackbar";
 import { setFalse, setTrue } from "../../redux/actions/cookiesActions";
 import { changeLanguage } from "../../redux/actions";
 import Button from "@material-ui/core/Button";
+import Alert from '@material-ui/lab/Alert';
 
 
 function a11yProps(index) {
@@ -139,7 +140,6 @@ const NavBar = (props) => {
 
     const dispatch = useDispatch();
 
-
     const handleChange = (event, newValue) => {
         if (tabItems[newValue].path === "tools")
             history.push("/app/tools/" + drawerItems[newValue].path);
@@ -147,8 +147,29 @@ const NavBar = (props) => {
             history.push("/app/" + tabItems[newValue].path)
     };
 
+    const [openAlert, setOpenAlert] = React.useState(false);
+
+    const handleCloseAlert = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setOpenAlert(false);
+    };
+
+    const userAuthenticated = useSelector(
+        (state) => state.userSession && state.userSession.userAuthenticated
+    );
+    
     const changeValue = (newValue) => {
-        history.push("/app/tools/" + drawerItems[newValue].path)
+        if (drawerItems[newValue].title === "navbar_twitter_sna" || drawerItems[newValue].title === "navbar_gif"){
+            if (userAuthenticated){
+                history.push("/app/tools/" + drawerItems[newValue].path);
+            }else{
+                setOpenAlert(true);
+            }
+        }else{
+            history.push("/app/tools/" + drawerItems[newValue].path);
+        }
     };
 
     const error = useSelector(state => state.error);
@@ -383,6 +404,12 @@ const NavBar = (props) => {
 
     return (
         <div className={classes.flex}>
+            <Snackbar open={openAlert} autoHideDuration={6000} onClose={handleCloseAlert}>
+                <Alert onClose={handleCloseAlert} severity="warning">
+                    This tool is restricted, you need to unlock the advanced tools to use it
+                </Alert>
+            </Snackbar>
+
             <AppBar position="fixed" color="default" className={classes.appBar}>
                 <Toolbar className={classes.toolbar}>
                     <Box display={{ xs: 'none', md: 'block' }}>

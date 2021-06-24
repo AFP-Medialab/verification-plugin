@@ -14,6 +14,7 @@ const useGetGif = (images, delayInput, downloading) => {
     const dispatch = useDispatch();
     const userToken = useSelector(state => state.userSession && state.userSession.accessToken);
     const authenticatedRequest = useAuthenticatedRequest();
+    const baseURL = process.env.REACT_APP_BASEURL
 
 
     useEffect(() => {
@@ -45,7 +46,7 @@ const useGetGif = (images, delayInput, downloading) => {
 
             const axiosConfig = {
                 method: "post",
-                url: "https://demo-medialab.afp.com/weverify-wrapper/animated",
+                url: baseURL + "/animated",
                 data: body,
                 responseType: 'blob',
             }
