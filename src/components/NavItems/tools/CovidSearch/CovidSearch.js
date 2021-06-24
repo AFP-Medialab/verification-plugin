@@ -21,7 +21,6 @@ const CovidSearch = () => {
       
       const script = document.createElement('script');
       script.src = "https://cse.google.com/cse.js?cx=000556916517770601014:" + keyword("covidsearch_engines");
-      console.log(script.src);
       script.async = true;
     
       document.head.appendChild(script);

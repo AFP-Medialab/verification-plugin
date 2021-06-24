@@ -87,7 +87,6 @@ const Metadata = () => {
     const dispatch = useDispatch();
 
     if(initTool){
-        console.log("Hola metadata");
 
         if (location.state != null){
             console.log(location.state.media);
@@ -106,10 +105,8 @@ const Metadata = () => {
                 setRadioImage(false)
             }
         }else{
-            console.log(mediaType);
+           // console.log(mediaType);
         }
-
-        
         setInitTool(false);
     }
 

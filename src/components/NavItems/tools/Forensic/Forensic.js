@@ -108,7 +108,6 @@ const Forensic = () => {
     }, [url]);
 
     useEffect(() => {
-        console.log("url detected ", urlDetected);
         if (urlDetected){
             submitUrl()
         }
