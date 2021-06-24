@@ -3,15 +3,9 @@ import React, { Component } from 'react';
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
-
 import NewReleasesIcon from '@material-ui/icons/NewReleases';
 import FiberNewIcon from '@material-ui/icons/FiberNew';
-import LockIcon from '@material-ui/icons/Lock';
-
-import { ReactComponent as ImprovedIcon } from '../../../NavBar/images/SVG/Improved.svg';
-
 import isAuthenticated from "./AdvancedTools/AdvancedTools";
-
 import AuthenticationIcon from "./AdvancedTools/AuthenticationIcon";
 
 

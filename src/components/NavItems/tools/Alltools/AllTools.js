@@ -31,6 +31,8 @@ import Alert from '@material-ui/lab/Alert';
 const AllTools = (props) => {
     const classes = useMyStyles();
     const keyword = useLoadLanguage("components/NavItems/tools/Alltools.tsv", tsv);
+    const keywordAdvancedTools = useLoadLanguage("components/NavItems/AdvancedTools.tsv", tsv);
+    
     const tools = props.tools;
     const [videoUrl, setVideoUrl] = useState(null);
 
@@ -156,7 +158,7 @@ const AllTools = (props) => {
         <div>
             <Snackbar open={openAlert} autoHideDuration={6000} onClose={handleCloseAlert}>
                 <Alert onClose={handleCloseAlert} severity="warning">
-                    This tool is restricted, you need to unlock the advanced tools to use it
+                    {keywordAdvancedTools("alert_text")}
                 </Alert>
             </Snackbar>
 
