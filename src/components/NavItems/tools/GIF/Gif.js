@@ -45,7 +45,7 @@ const Gif = () => {
 
     const [classButtonURL, setClassButtonURL] = useState(classes.bigButtonDiv);
     const [classButtonLocal, setClassButtonLocal] = useState(classes.bigButtonDiv);
-
+    
     const [classIconURL, setClassIconURL] = useState(classes.bigButtonIcon);
     const [classIconLocal, setClassIconLocal] = useState(classes.bigButtonIcon);
 
@@ -378,7 +378,8 @@ const [speed, setSpeed] = React.useState(1100);
             // Anything in here is fired on component unmount.
             newGif();
         }
-    }, []);
+    // eslint-disable-next-line
+    }, [])
 
 
     //HTML Code

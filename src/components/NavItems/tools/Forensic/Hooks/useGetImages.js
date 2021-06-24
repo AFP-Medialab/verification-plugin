@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import axios from "axios"
 import { useDispatch } from "react-redux";
-import { setForensicsLoading, setForensicsResult, setForensicMask } from "../../../../../redux/actions/tools/forensicActions";
+import { setForensicsLoading, setForensicsResult } from "../../../../../redux/actions/tools/forensicActions";
 import { setError } from "../../../../../redux/actions/errorActions";
 import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Forensic.tsv";
@@ -71,7 +71,7 @@ const getResult = (hash) => {
 
         //https://mever.iti.gr/envisu4/utils/process_filters?id=57a737402e7c0c75907b1566b983e46e&threshold=0.6&cmap=mako
 
-
+/*
         const getTransparent = (id, url, data) => {
             //console.log("TEST3");
             axios.get("https://mever.iti.gr/envisu4/utils/mask_all?id=" + id)
@@ -91,7 +91,7 @@ const getResult = (hash) => {
                 })
         };
 
-
+*/
 
         const waitUntilFinish = (id) => {
             //console.log("TEST2");

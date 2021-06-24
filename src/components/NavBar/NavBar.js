@@ -174,6 +174,7 @@ const NavBar = (props) => {
 
     const error = useSelector(state => state.error);
     const keyword = useLoadLanguage("components/NavBar.tsv", tsv);
+    const keywordAdvancedTools = useLoadLanguage("components/NavItems/AdvancedTools.tsv", tsv);
 
 
     const handleDrawerToggle = () => {
@@ -406,7 +407,7 @@ const NavBar = (props) => {
         <div className={classes.flex}>
             <Snackbar open={openAlert} autoHideDuration={6000} onClose={handleCloseAlert}>
                 <Alert onClose={handleCloseAlert} severity="warning">
-                    This tool is restricted, you need to unlock the advanced tools to use it
+                    {keywordAdvancedTools("alert_text")}
                 </Alert>
             </Snackbar>
 
