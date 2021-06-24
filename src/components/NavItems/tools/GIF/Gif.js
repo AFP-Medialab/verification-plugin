@@ -1,4 +1,4 @@
-import React, { useState, Component } from "react";
+import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import Box from "@material-ui/core/Box";
@@ -25,8 +25,7 @@ import { setStateSelectingLocal, setStateSelectingUrl, setStateReady, setStateIn
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 import IconButton from '@material-ui/core/IconButton';
-
-
+import { StylesProvider } from "@material-ui/core/styles";
 
 
 const Gif = () => {
@@ -225,7 +224,7 @@ const Gif = () => {
     }
     */
 
-    if(toolState == 6){
+    if(toolState === 6){
         cleanInputs();
         if (selectedMode === "URL"){
             dispatch(setStateSelectingUrl());
@@ -392,7 +391,7 @@ const Gif = () => {
                 {//=== Load of the images ===
                 }
 
-
+                <StylesProvider injectFirst>
                 <Card>
                     <CardHeader
                         title={
@@ -845,9 +844,8 @@ const Gif = () => {
 
 
                 </Card>
-
                 }
-
+                </StylesProvider>
                 
 
 { /*
