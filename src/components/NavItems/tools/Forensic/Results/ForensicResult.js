@@ -597,9 +597,8 @@ const ForensicResults = (props) => {
 
     //Explanation of the filters
     const [anchorFilterExplanation, setAnchorFilterExplanation] = React.useState(null);
-    const handleOpenFilterExplanation = (event, id) => {
+    const handleOpenFilterExplanation = (event) => {
         setAnchorFilterExplanation(event.currentTarget);
-        setIdExpl(id);
     };
 
     const handleCloseFilterExplanation = () => {
@@ -607,7 +606,7 @@ const ForensicResults = (props) => {
     };
 
     const openFilterExplanation = Boolean(anchorFilterExplanation);
-    const [idExpl, setIdExpl] = React.useState(openFilterExplanation ? 'simple-popover' : undefined);
+    const idExpl = openFilterExplanation ? 'simple-popover' : undefined;
     
 
 
@@ -977,15 +976,15 @@ const ForensicResults = (props) => {
 
                                                                         : <Box align="center" width="100%" pl={1}>
                                                                             {value.name}
-                                                                            <IconButton className={classes.margin} size="small" onClick={(e) => handleOpenFilterExplanation(e, value.id)}>
+                                                                            <IconButton className={classes.margin} size="small" onClick={(e) => handleOpenFilterExplanation(e)}>
                                                                                 <HelpOutlineIcon fontSize="inherit" />
                                                                             </IconButton>
                                                                         </Box>
                                                                     }
 
                                                                     <Popover
-                                                                        id={value.id}
-                                                                        open={openFilterExplanation === value.id}
+                                                                        id={idExpl}
+                                                                        open={openFilterExplanation}
                                                                         anchorEl={anchorFilterExplanation}
                                                                         onClose={handleCloseFilterExplanation}
                                                                         PaperProps={{
