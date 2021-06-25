@@ -265,7 +265,7 @@ const [speed, setSpeed] = React.useState(1100);
 
     //Loop function
     function animateImages() {
-        console.log("Loop function"); //DEBUG
+        console.log("Loop function" + interval); //DEBUG
         //console.log(interval); //DEBUG
         var x = document.getElementById("gifFilterElement");
 
@@ -315,7 +315,7 @@ const [speed, setSpeed] = React.useState(1100);
     //Function to prepare the files to trigger the download
     const handleDownloadGif = () => {
         dispatch(setStateDownloading());
-        console.log(toolState);
+        //console.log(toolState);
         var files = {
             "image1": homoImg1,
             "image2": homoImg2,
@@ -325,6 +325,9 @@ const [speed, setSpeed] = React.useState(1100);
         
     };
 
+    //console.log(filesForGif);
+    //console.log(delayGif);
+    //console.log(toolState);
     //Call to the API
     useGetGif(filesForGif, delayGif, toolState);
 
@@ -371,6 +374,8 @@ const [speed, setSpeed] = React.useState(1100);
         return () => {
             // componentwillunmount in functional component.
             // Anything in here is fired on component unmount.
+            console.log("Stop loop "  + interval);
+            clearInterval(interval);
             newGif();
         }
     // eslint-disable-next-line
@@ -552,7 +557,7 @@ const [speed, setSpeed] = React.useState(1100);
 
                                             >
                                                 <img src={imageDropped1} className={classes.imageDropped} alt="" />
-                                                <IconButton color="default" onClick={removeImage1}>
+                                                <IconButton onClick={removeImage1}>
                                                     <DeleteOutlineIcon fontSize="small" />
                                                 </IconButton>
                                             </Grid>
@@ -614,7 +619,7 @@ const [speed, setSpeed] = React.useState(1100);
 
                                             >
                                                 <img src={imageDropped2} className={classes.imageDropped} alt="" />
-                                                <IconButton color="default" onClick={removeImage2}>
+                                                <IconButton onClick={removeImage2}>
                                                     <DeleteOutlineIcon fontSize="small" />
                                                 </IconButton>
                                             </Grid>

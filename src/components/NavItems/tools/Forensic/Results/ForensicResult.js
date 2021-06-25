@@ -31,6 +31,9 @@ import { setStateDownloading } from "../../../../../redux/actions/tools/gifActio
 import { useDispatch } from "react-redux";
 import { StylesProvider } from "@material-ui/core/styles";
 import { cleanForensicState } from "../../../../../redux/actions/tools/forensicActions"
+import LinkIcon from '@material-ui/icons/Link';
+import IconButton from '@material-ui/core/IconButton';
+import Snackbar from '@material-ui/core/Snackbar';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -576,6 +579,37 @@ const ForensicResults = (props) => {
     //console.log("Downloading: " + downloading);
 
 
+    //Copy url to clipboard
+    const [openToast, setOpenToast] = React.useState(false);
+
+    const handleClickCopyURL = () => {
+        navigator.clipboard.writeText(props.url);
+        setOpenToast(true);
+    };
+
+    const handleCloseToast = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setOpenToast(false);
+    };
+
+
+    //Explanation of the filters
+    const [anchorFilterExplanation, setAnchorFilterExplanation] = React.useState(null);
+    const handleOpenFilterExplanation = (event, id) => {
+        setAnchorFilterExplanation(event.currentTarget);
+        setIdExpl(id);
+    };
+
+    const handleCloseFilterExplanation = () => {
+        setAnchorFilterExplanation(null);
+    };
+
+    const openFilterExplanation = Boolean(anchorFilterExplanation);
+    const [idExpl, setIdExpl] = React.useState(openFilterExplanation ? 'simple-popover' : undefined);
+    
+
 
     return (
         <StylesProvider injectFirst>
@@ -583,6 +617,25 @@ const ForensicResults = (props) => {
                 <div className={classes.newForensics}>
                     <ThemeProvider theme={theme}>
                         <Box mt={5} mb={5}>
+
+                            <Snackbar
+                                anchorOrigin={{
+                                    vertical: 'bottom',
+                                    horizontal: 'left',
+                                }}
+                                open={openToast}
+                                autoHideDuration={6000}
+                                onClose={handleCloseToast}
+                                message={keyword("forensic_tosast_clipboard")}
+                                action={
+                                    <React.Fragment>
+                                        <IconButton size="small" aria-label="close" color="inherit" onClick={handleCloseToast}>
+                                            <CloseIcon fontSize="small" />
+                                        </IconButton>
+                                    </React.Fragment>
+                                }
+                            />
+
                             <Grid container spacing={3}>
 
                                 <Grid item xs={6} style={{ display: "flex", flexDirection: "column" }}>
@@ -596,10 +649,21 @@ const ForensicResults = (props) => {
                                                     justify="space-between"
                                                     alignItems="center">
 
-                                                    <span >{keyword("forensic_title_image")}</span>
-                                                    <Button variant="contained" style={{ backgroundColor: "#FFFFFF" }} onClick={newImage}>
-                                                        {keyword("forensic_button_newImage")}
-                                                    </Button>
+                                                    <Grid item>
+                                                        <span >{keyword("forensic_title_image")}</span>
+                                                    </Grid>
+
+                                                    <Grid item xs>
+                                                        <IconButton style={{ color: "white" }} component="span" onClick={handleClickCopyURL}>
+                                                            <LinkIcon />
+                                                        </IconButton>
+                                                    </Grid>
+
+                                                    <Grid item>
+                                                        <Button variant="contained" style={{ backgroundColor: "#FFFFFF" }} onClick={newImage}>
+                                                            {keyword("forensic_button_newImage")}
+                                                        </Button>
+                                                    </Grid>
 
                                                 </Grid>
                                             }
@@ -904,15 +968,69 @@ const ForensicResults = (props) => {
 
 
                                                                     {(value.id === "cagi_report")
-                                                                        ? <Box align="center" width="100%">{value.name[value.currentDisplayed]}</Box>
-                                                                        : <Box align="center" width="100%">{value.name}</Box>
+                                                                        ? <Box align="center" width="100%">
+                                                                            {value.name[value.currentDisplayed]}
+                                                                            <IconButton className={classes.margin} size="small" onClick={handleOpenFilterExplanation}>
+                                                                                <HelpOutlineIcon fontSize="inherit" />
+                                                                            </IconButton>
+                                                                        </Box>
+
+                                                                        : <Box align="center" width="100%" pl={1}>
+                                                                            {value.name}
+                                                                            <IconButton className={classes.margin} size="small" onClick={(e) => handleOpenFilterExplanation(e, value.id)}>
+                                                                                <HelpOutlineIcon fontSize="inherit" />
+                                                                            </IconButton>
+                                                                        </Box>
                                                                     }
+
+                                                                    <Popover
+                                                                        id={value.id}
+                                                                        open={openFilterExplanation === value.id}
+                                                                        anchorEl={anchorFilterExplanation}
+                                                                        onClose={handleCloseFilterExplanation}
+                                                                        PaperProps={{
+                                                                            style: {
+                                                                                width: '300px',
+                                                                                fontSize: 14
+                                                                            },
+                                                                        }}
+                                                                        anchorOrigin={{
+                                                                            vertical: 'bottom',
+                                                                            horizontal: 'center',
+                                                                        }}
+                                                                        transformOrigin={{
+                                                                            vertical: 'top',
+                                                                            horizontal: 'center',
+                                                                        }}
+                                                                    >
+                                                                        <Box p={1}>
+                                                                            <Grid
+                                                                                container
+                                                                                direction="row"
+                                                                                justify="space-between"
+                                                                                alignItems="strech">
+
+                                                                                <Typography variant="body1" gutterBottom>
+                                                                                    {keyword("forensic_title_what")}
+                                                                                </Typography>
+
+                                                                                <CloseIcon onClick={closeHelpFilters} />
+                                                                            </Grid>
+                                                                            <Box m={1} />
+                                                                            <Typography variant="body2">
+                                                                                {keyword("forensic_card_" + value.id)}
+                                                                            </Typography>
+
+                                                                        </Box>
+                                                                    </Popover>
+                                                                    
+
+
                                                                 </Grid>
                                                             )
                                                         })}
 
                                                     </Grid>
-
 
                                                     <Box mt={2} mb={2}>
                                                         <Divider />
@@ -946,6 +1064,9 @@ const ForensicResults = (props) => {
                                 </Grid>
 
                             </Grid>
+
+
+                            
 
 
 
