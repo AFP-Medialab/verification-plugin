@@ -27,21 +27,8 @@ import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import Typography from "@material-ui/core/Typography";
 import styles from "./Results/layout.module.css";
 
-/*function useTraceUpdate(props) {
-    const prev = useRef(props);
-    useEffect(() => {
-        const changedProps = Object.entries(props).reduce((ps, [k, v]) => {
-            if (prev.current[k] !== v) {
-                ps[k] = [prev.current[k], v];
-            }
-            return ps;
-        }, {});
-        if (Object.keys(changedProps).length > 0) {
-            console.log('Changed props:', changedProps);
-        }
-        prev.current = props;
-    });
-}*/
+
+
 
 const Analysis = () => {
 
@@ -85,7 +72,6 @@ const Analysis = () => {
         if (urlDetected) {
             submitForm()
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [urlDetected])
 
     useEffect(() => {
@@ -188,9 +174,7 @@ const Analysis = () => {
                 (resultData  && resultData.platform.startsWith("facebook")) ?
                     <FacebookResults report={resultData}/> : null
             }
-             <div className={classes.onClickInfo}>
-             <Typography className={styles.margin}   variant={"body2"}>{keyword("facebook_tip")}</Typography>
-                </div>
+             
         </div>);
 };
 export default React.memo(Analysis);

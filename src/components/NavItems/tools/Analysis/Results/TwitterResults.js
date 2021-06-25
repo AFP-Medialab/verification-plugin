@@ -598,7 +598,7 @@ const TwitterResults = (props) => {
                             <div>
                                 <Box m={4}/>
                                 <Typography variant={"h6"}>
-                                    {keyword("youtube_comment_title")}
+                                    {keyword("twitter_video_replies")}
                                 </Typography>
                                 
                                 
@@ -612,7 +612,7 @@ const TwitterResults = (props) => {
                             aria-controls="panel1bh-content"
                             id="panel1bh-header"
                         >
-                            <Typography className={classes.heading}>{keyword("api_comments")+" ("+props.report.verification_cues.num_comments+")"}</Typography>
+                            <Typography className={classes.heading}>{keyword("twitter_reply")+" ("+props.report.verification_cues.num_comments+")"}</Typography>
                             <Typography className={classes.secondaryHeading}> </Typography>
                         </AccordionSummary>
                         <AccordionDetails>
@@ -715,7 +715,7 @@ const TwitterResults = (props) => {
                       id="panel1bh-header"
                     >
                       <Typography className={classes.heading}>
-                        {keyword("api_comments_verified")+" ("+props.report.verification_cues.num_verification_comments+")"}
+                        {keyword("twitter_reply_verified")+" ("+props.report.verification_cues.num_verification_comments+")"}
                       </Typography>
                       <Typography className={classes.secondaryHeading}>
                         {" "}
@@ -827,7 +827,7 @@ const TwitterResults = (props) => {
                       id="panel1bh-header"
                     >
                       <Typography className={classes.heading}>
-                        {keyword("link_comments")+" ("+props.report.verification_cues.num_link_comments+")"}
+                        {keyword("twitter_reply_link")+" ("+props.report.verification_cues.num_link_comments+")"}
                       </Typography>
                       <Typography className={classes.secondaryHeading}>
                         {" "}
