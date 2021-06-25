@@ -29,8 +29,13 @@ import Slider from '@material-ui/core/Slider';
 import useGetGif from "../../GIF/Hooks/useGetGif";
 import { setStateDownloading } from "../../../../../redux/actions/tools/gifActions";
 import { useDispatch } from "react-redux";
-import useGetTransparent from "../Hooks/useGetTransparent";
+import { StylesProvider } from "@material-ui/core/styles";
 import { cleanForensicState } from "../../../../../redux/actions/tools/forensicActions"
+import LinkIcon from '@material-ui/icons/Link';
+import IconButton from '@material-ui/core/IconButton';
+import Snackbar from '@material-ui/core/Snackbar';
+import WarningIcon from '@material-ui/icons/Warning';
+import Alert from '@material-ui/lab/Alert';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -107,9 +112,15 @@ const ForensicResults = (props) => {
 
     const classes = useMyStyles();
     const keyword = useLoadLanguage("components/NavItems/tools/Forensic.tsv", tsv);
+    const keywordAdvancedTools = useLoadLanguage("components/NavItems/AdvancedTools.tsv", tsv);
     const results = props.result.filters;
-    const masks = props.masksData;
+    //const masks = props.masksData;
     //console.log(results);
+
+    const userAuthenticated = useSelector(
+        (state) => state.userSession && state.userSession.userAuthenticated
+    );
+    const [openAlert, setOpenAlert] = React.useState(false);
 
     /*
         --- COMPRESSION ---
@@ -438,7 +449,7 @@ const ForensicResults = (props) => {
     const gifPopover = openGifPopover ? 'simple-popover' : undefined;
     const gifImage = props.url;
     const [gifFilter, setGifFilter] = React.useState(props.url);
-    const gifFilterMask = useSelector(state => state.forensic.maskUrl);
+    //const gifFilterMask = useSelector(state => state.forensic.maskUrl);
     //console.log(gifFilterMask);
 
     const [interval, setIntervalVar] = React.useState(null);
@@ -446,35 +457,42 @@ const ForensicResults = (props) => {
     const downloading = useSelector(state => state.gif.toolState);
 
 
-    const [readyTransparency, setReadyTransparency] = React.useState(false);
+    //const [readyTransparency, setReadyTransparency] = React.useState(false);
 
     //nsparent(gifFilter, readyTransparency);
 
     function clickGifPopover(event, filter) {
-        var url;
-        if (filter === "zero_report" || filter === "ghost_report" || filter === "cagi_report") {
-            url = filters.current.find(x => x.id === filter).mask[filters.current.find(x => x.id === filter).currentDisplayed]
-            setGifFilter(url);
-            //console.log(url);
+        if(userAuthenticated){
+            var url;
+            if (filter === "zero_report" || filter === "ghost_report" || filter === "cagi_report") {
+                url = filters.current.find(x => x.id === filter).mask[filters.current.find(x => x.id === filter).currentDisplayed]
+                setGifFilter(url);
+                //console.log(url);
 
-            setReadyTransparency(true);
+                //setReadyTransparency(true);
 
-        } else {
-            url = filters.current.find(x => x.id === filter).mask;
-            setGifFilter(url);
-            //console.log(url);
+            } else {
+                url = filters.current.find(x => x.id === filter).mask;
+                setGifFilter(url);
+                //console.log(url);
 
-            setReadyTransparency(true);
+                //setReadyTransparency(true);
+            }
+            setIntervalVar(setInterval(() => animateFilter(), 1100));
+            setAnchorGifPopover(event.currentTarget);
+        }else{
+            setOpenAlert(true);
         }
-        setIntervalVar(setInterval(() => animateFilter(), 1100));
-        setAnchorGifPopover(event.currentTarget);
+
+
+        
 
     }
 
     function closeGifPopover() {
         clearInterval(interval);
         setAnchorGifPopover(null);
-        setReadyTransparency(false);
+        //setReadyTransparency(false);
     }
 
 
@@ -576,492 +594,628 @@ const ForensicResults = (props) => {
     //console.log("Downloading: " + downloading);
 
 
+    //Copy url to clipboard
+    const [openToast, setOpenToast] = React.useState(false);
+
+    const handleClickCopyURL = () => {
+        navigator.clipboard.writeText(props.url);
+        setOpenToast(true);
+    };
+
+    const handleCloseToast = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setOpenToast(false);
+    };
+
+    //Explanation of the filters
+    const [anchorFilterExplanation, setAnchorFilterExplanation] = React.useState(null);
+    const openFilterExplanation = Boolean(anchorFilterExplanation);
+
+    const handleOpenFilterExplanation = (event) => {
+        setAnchorFilterExplanation(event.currentTarget);
+    };
+
+    const handleCloseFilterExplanation = () => {
+        setAnchorFilterExplanation(null);
+    };
+
+    const idExpl = openFilterExplanation ? 'simple-popover' : undefined;
+    
+    
+    
+    const handleCloseAlert = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setOpenAlert(false);
+    };
 
     return (
-        <div>
+        <StylesProvider injectFirst>
+            <div>
+                <Snackbar open={openAlert} autoHideDuration={6000} onClose={handleCloseAlert}>
+                    <Alert onClose={handleCloseAlert} severity="warning">
+                        {keywordAdvancedTools("alert_text")}
+                    </Alert>
+                </Snackbar>
+                <div className={classes.newForensics}>
+                    <ThemeProvider theme={theme}>
+                        <Box mt={5} mb={5}>
 
+                            <Snackbar
+                                anchorOrigin={{
+                                    vertical: 'bottom',
+                                    horizontal: 'left',
+                                }}
+                                open={openToast}
+                                autoHideDuration={6000}
+                                onClose={handleCloseToast}
+                                message={keyword("forensic_tosast_clipboard")}
+                                action={
+                                    <React.Fragment>
+                                        <IconButton size="small" aria-label="close" color="inherit" onClick={handleCloseToast}>
+                                            <CloseIcon fontSize="small" />
+                                        </IconButton>
+                                    </React.Fragment>
+                                }
+                            />
 
-            <div className={classes.newForensics}>
-                <ThemeProvider theme={theme}>
-                    <Box mt={5} mb={5}>
-                        <Grid container spacing={3}>
+                            <Grid container spacing={3}>
 
-                            <Grid item xs={6} style={{ display: "flex", flexDirection: "column" }}>
+                                <Grid item xs={6} style={{ display: "flex", flexDirection: "column" }}>
 
-                                <Card>
-                                    <CardHeader
-                                        title={
-                                            <Grid
-                                                container
-                                                direction="row"
-                                                justify="space-between"
-                                                alignItems="center">
+                                    <Card>
+                                        <CardHeader
+                                            title={
+                                                <Grid
+                                                    container
+                                                    direction="row"
+                                                    justify="space-between"
+                                                    alignItems="center">
 
-                                                <span >{keyword("forensic_title_image")}</span>
-                                                <Button variant="contained" style={{ backgroundColor: "#FFFFFF" }} onClick={newImage}>
-                                                    {keyword("forensic_button_newImage")}
-                                                </Button>
+                                                    <Grid item>
+                                                        <span >{keyword("forensic_title_image")}</span>
+                                                    </Grid>
 
-                                            </Grid>
-                                        }
-                                        className={classes.headerUpladedImage}
-                                    />
+                                                    <Grid item xs>
+                                                        <Box ml={2}>
+                                                            <IconButton style={{ color: "white", padding: "0" }} component="span" onClick={handleClickCopyURL}>
+                                                                <LinkIcon />
+                                                            </IconButton>
+                                                        </Box>
+                                                    </Grid>
 
-                                    <div className={classes.wrapperImageFilter}>
-                                        <CardMedia
-                                            component="img"
-                                            className={classes.imageUploaded}
-                                            image={imageDisplayed}
-                                        />
-                                        <Fade in={filterHoverEnabled} timeout={300}>
-                                            <CardMedia
-                                                component="img"
-                                                className={classes.filterDisplayedClass}
-                                                image={filterHover}
-                                            />
-                                        </Fade>
-                                    </div>
-                                </Card>
-
-                                <Box mt={3}></Box>
-
-                                <Card className={classes.lensesCard}>
-                                    <CardHeader
-                                        title={
-                                            <Grid
-                                                container
-                                                direction="row"
-                                                justify="space-between"
-                                                alignItems="center">
-                                                <span>{keyword("forensic_title_lenses")}</span>
-                                                <HelpOutlineIcon style={{ color: "#FFFFFF" }} onClick={clickHelpLenses} />
-
-                                                <Popover
-                                                    id={helpLenses}
-                                                    open={openHelpLenses}
-                                                    anchorEl={anchorHelpLenses}
-                                                    onClose={closeHelpLenses}
-                                                    PaperProps={{
-                                                        style: {
-                                                            width: '300px',
-                                                            fontSize: 14
-                                                        },
-                                                    }}
-                                                    anchorOrigin={{
-                                                        vertical: 'bottom',
-                                                        horizontal: 'center',
-                                                    }}
-                                                    transformOrigin={{
-                                                        vertical: 'top',
-                                                        horizontal: 'center',
-                                                    }}>
-
-                                                    <Box p={3}>
-                                                        <Grid
-                                                            container
-                                                            direction="row"
-                                                            justify="space-between"
-                                                            alignItems="strech">
-
-                                                            <Typography variant="h6" gutterBottom>
-                                                                {keyword("forensic_title_what")}
-                                                            </Typography>
-
-                                                            <CloseIcon onClick={closeHelpLenses} />
-                                                        </Grid>
-
-                                                        <Box m={1} />
-                                                        <Typography variant="body2">
-                                                            {keyword("forensic_lenses_explanation")}
-                                                        </Typography>
-
-                                                    </Box>
-
-                                                </Popover>
-
-                                            </Grid>
-                                        }
-                                    />
-
-
-                                    <Box p={3}>
-
-                                        <Grid container spacing={3}>
-                                            {
-                                                filters.current.slice(idStartLenses).map((value, key) => {
-                                                    return (
-                                                        <Grid key={key} item xs={4} >
-                                                            <CardMedia
-                                                                className={classes.imageFilter}
-                                                                image={value.map}
-                                                                onMouseOver={() => displayFilterHover(value.map)}
-                                                                onMouseLeave={hideFilterHover}
-                                                            />
-                                                            <Box align="center" width="100%" className={classes.lensesTitles}>{value.name}</Box>
-                                                        </Grid>
-                                                    )
-                                                })
-                                            }
-                                        </Grid>
-                                    </Box>
-
-                                </Card>
-                            </Grid>
-
-                            <Grid item xs={6}>
-                                <Card className={classes.cardFilters}>
-                                    <CardHeader
-                                        title={
-
-                                            <Grid
-                                                container
-                                                direction="row"
-                                                justify="space-between"
-                                                alignItems="center">
-
-                                                <span>{keyword("forensic_title_filters")}</span>
-                                                <HelpOutlineIcon style={{ color: "#FFFFFF" }} onClick={clickHelpFilters} />
-
-                                                <Popover
-                                                    id={helpFilters}
-                                                    open={openHelpFilters}
-                                                    anchorEl={anchorHelpFilters}
-                                                    onClose={closeHelpFilters}
-                                                    PaperProps={{
-                                                        style: {
-                                                            width: '300px',
-                                                            fontSize: 14
-                                                        },
-                                                    }}
-                                                    anchorOrigin={{
-                                                        vertical: 'bottom',
-                                                        horizontal: 'center',
-                                                    }}
-                                                    transformOrigin={{
-                                                        vertical: 'top',
-                                                        horizontal: 'center',
-                                                    }}
-                                                >
-                                                    <Box p={3}>
-                                                        <Grid
-                                                            container
-                                                            direction="row"
-                                                            justify="space-between"
-                                                            alignItems="strech">
-
-                                                            <Typography variant="h6" gutterBottom>
-                                                                {keyword("forensic_title_what")}
-                                                            </Typography>
-
-                                                            <CloseIcon onClick={closeHelpFilters} />
-                                                        </Grid>
-                                                        <Box m={1} />
-                                                        <Typography variant="body2">
-                                                            {keyword("forensic_filters_explanation")}
-                                                        </Typography>
-
-                                                    </Box>
-                                                </Popover>
-
-                                            </Grid>
-                                        }
-                                    >
-                                    </CardHeader>
-
-                                    <Tabs value={value} onChange={handleChange} indicatorColor={'primary'}>
-                                        <Tab label={keyword("forensic_family_compression_title")} />
-                                        <Tab label={keyword("forensic_family_noise_title")} />
-                                        <Tab label={keyword("forensic_family_ai_title")} />
-                                        <Tab label={keyword("forensic_family_cloning_title")} />
-                                    </Tabs>
-
-
-                                    {tabs.map((valueTab, keyTab) => {
-
-                                        var filtersTab = [];
-                                        var textDescription = "";
-                                        var textLook = "";
-                                        var textIgnore = "";
-
-                                        if (valueTab === 0) {
-                                            filtersTab = filters.current.slice(idStartCompression, idStartNoise);
-                                            textDescription = keyword("forensic_family_compression_description");
-                                            textLook = keyword("forensic_family_compression_look");
-                                            textIgnore = keyword("forensic_family_compression_ignore");
-
-                                        } else if (valueTab === 1) {
-                                            filtersTab = filters.current.slice(idStartNoise, idStartDeepLearning);
-                                            textDescription = keyword("forensic_family_noise_description");
-                                            textLook = keyword("forensic_family_noise_look");
-                                            textIgnore = keyword("forensic_family_noise_ignore");
-
-                                        } else if (valueTab === 2) {
-                                            filtersTab = filters.current.slice(idStartDeepLearning, idStartCloning);
-                                            textDescription = keyword("forensic_family_ai_description");
-                                            textLook = keyword("forensic_family_ai_look");
-                                            textIgnore = keyword("forensic_family_ai_ignore");
-
-                                        } else {
-                                            filtersTab = filters.current.slice(idStartCloning, idStartLenses);
-                                            textDescription = keyword("forensic_family_cloning_description");
-                                            textLook = keyword("forensic_family_cloning_look");
-                                            textIgnore = keyword("forensic_family_cloning_ignore");
-
-                                        }
-
-                                        return (
-
-                                            <TabPanel value={value} key={keyTab} index={valueTab}>
-                                                <Grid container spacing={3}>
-
-                                                    {filtersTab.map((value, key) => {
-                                                        if ((value.id === "zero_report" || value.id === "ghost_report" || value.id === "cagi_report")) {
-                                                            arrowsToDisplay(value.id);
-                                                        }
-
-                                                        /*
-                                                        if (value.id === "ghost_report") {
-                                                            value.mask = ghostMasks;
-                                                        }
-                                                        */
-
-
-                                                        return (
-                                                            <Grid key={key} item xs={4} >
-
-                                                                {(value.id === "zero_report" || value.id === "ghost_report" || value.id === "cagi_report")
-                                                                    ? <div
-                                                                        className={classes.imageOverlayWrapper}
-                                                                        onMouseOver={() => displayFilterHover(value.mask[value.currentDisplayed])}
-                                                                        onMouseLeave={hideFilterHover}>
-
-                                                                        <CardMedia
-                                                                            className={classes.imageFilter}
-                                                                            image={value.map[value.currentDisplayed]}
-                                                                        />
-
-                                                                        <div className={classes.imageOverlay} >
-
-                                                                            <Grid
-                                                                                container
-                                                                                direction="row"
-                                                                                justify="space-around"
-                                                                                alignItems="center">
-
-                                                                                {value.arrows[0]
-                                                                                    ? <Fab size="small" style={{ backgroundColor: "#ffffff" }} onClick={() => clickArrowFilter(value.id, -1)}>
-                                                                                        <NavigateBeforeIcon style={{ color: "#000000" }} />
-                                                                                    </Fab>
-
-                                                                                    : <Fab size="small" style={{ visibility: "hidden" }}>
-                                                                                        <NavigateBeforeIcon />
-                                                                                    </Fab>
-                                                                                }
-                                                                                <Fab size="medium" style={{ backgroundColor: "#ffffff" }} onClick={(e) => clickGifPopover(e, value.id)}>
-                                                                                    <GifIcon style={{ color: "#000000" }} />
-                                                                                </Fab>
-
-                                                                                {value.arrows[1]
-                                                                                    ? <Fab size="small" style={{ backgroundColor: "#ffffff" }} onClick={() => clickArrowFilter(value.id, 1)}>
-                                                                                        <NavigateNextIcon style={{ color: "#000000" }} />
-                                                                                    </Fab>
-
-                                                                                    : <Fab size="small" style={{ visibility: "hidden" }}>
-                                                                                        <NavigateNextIcon />
-                                                                                    </Fab>
-                                                                                }
-                                                                            </Grid>
-                                                                        </div>
-
-                                                                    </div>
-
-                                                                    : <div
-                                                                        className={classes.imageOverlayWrapper}
-                                                                        onMouseOver={() => displayFilterHover(value.mask)}
-                                                                        onMouseLeave={hideFilterHover}>
-
-                                                                        <CardMedia
-                                                                            className={classes.imageFilter}
-                                                                            image={value.map}
-                                                                        />
-
-                                                                        <div className={classes.imageOverlay} >
-
-                                                                            <Grid
-                                                                                container
-                                                                                direction="row"
-                                                                                justify="space-around"
-                                                                                alignItems="center">
-
-                                                                                <Fab size="medium" style={{ backgroundColor: "#ffffff" }} onClick={(e) => clickGifPopover(e, value.id)}>
-                                                                                    <GifIcon style={{ color: "#000000" }} />
-                                                                                </Fab>
-
-                                                                            </Grid>
-                                                                        </div>
-
-                                                                    </div>
-                                                                }
-
-
-                                                                {(value.id === "cagi_report")
-                                                                    ? <Box align="center" width="100%">{value.name[value.currentDisplayed]}</Box>
-                                                                    : <Box align="center" width="100%">{value.name}</Box>
-                                                                }
-                                                            </Grid>
-                                                        )
-                                                    })}
+                                                    <Grid item>
+                                                        <Button variant="contained" style={{ backgroundColor: "#FFFFFF" }} onClick={newImage}>
+                                                            {keyword("forensic_button_newImage")}
+                                                        </Button>
+                                                    </Grid>
 
                                                 </Grid>
+                                            }
+                                            className={classes.headerUpladedImage}
+                                        />
+
+                                        <div className={classes.wrapperImageFilter}>
+                                            <CardMedia
+                                                component="img"
+                                                className={classes.imageUploaded}
+                                                image={imageDisplayed}
+                                            />
+                                            <Fade in={filterHoverEnabled} timeout={300}>
+                                                <CardMedia
+                                                    component="img"
+                                                    className={classes.filterDisplayedClass}
+                                                    image={filterHover}
+                                                />
+                                            </Fade>
+                                        </div>
+                                    </Card>
+
+                                    <Box mt={3}></Box>
+
+                                    <Card className={classes.lensesCard}>
+                                        <CardHeader
+                                            title={
+                                                <Grid
+                                                    container
+                                                    direction="row"
+                                                    justify="space-between"
+                                                    alignItems="center">
+                                                    <span>{keyword("forensic_title_lenses")}</span>
+                                                    <WarningIcon style={{ color: "#FFFFFF" }} onClick={clickHelpLenses} />
+
+                                                    <Popover
+                                                        id={helpLenses}
+                                                        open={openHelpLenses}
+                                                        anchorEl={anchorHelpLenses}
+                                                        onClose={closeHelpLenses}
+                                                        PaperProps={{
+                                                            style: {
+                                                                width: '300px',
+                                                                fontSize: 14
+                                                            },
+                                                        }}
+                                                        anchorOrigin={{
+                                                            vertical: 'bottom',
+                                                            horizontal: 'center',
+                                                        }}
+                                                        transformOrigin={{
+                                                            vertical: 'top',
+                                                            horizontal: 'center',
+                                                        }}>
+
+                                                        <Box p={3}>
+                                                            <Grid
+                                                                container
+                                                                direction="row"
+                                                                justify="space-between"
+                                                                alignItems="strech">
+
+                                                                <Typography variant="h6" gutterBottom>
+                                                                    {keyword("forensic_title_what")}
+                                                                </Typography>
+
+                                                                <CloseIcon onClick={closeHelpLenses} />
+                                                            </Grid>
+
+                                                            <Box m={1} />
+                                                            <Typography variant="body2">
+                                                                {keyword("forensic_lenses_explanation")}
+                                                            </Typography>
+
+                                                        </Box>
+
+                                                    </Popover>
+
+                                                </Grid>
+                                            }
+                                        />
 
 
-                                                <Box mt={2} mb={2}>
-                                                    <Divider />
-                                                </Box>
+                                        <Box p={3}>
 
-                                                <Box display="flex" mb={2}>
-                                                    <Box mr={2}>
-                                                        <InfoIcon style={{ color: "#333333" }} />
+                                            <Grid container spacing={3}>
+                                                {
+                                                    filters.current.slice(idStartLenses).map((value, key) => {
+                                                        return (
+                                                            <Grid key={key} item xs={4} >
+                                                                <CardMedia
+                                                                    className={classes.imageFilter}
+                                                                    image={value.map}
+                                                                    onMouseOver={() => displayFilterHover(value.map)}
+                                                                    onMouseLeave={hideFilterHover}
+                                                                />
+                                                                <Box align="center" width="100%" className={classes.lensesTitles}>{value.name}</Box>
+                                                            </Grid>
+                                                        )
+                                                    })
+                                                }
+                                            </Grid>
+                                        </Box>
+
+                                    </Card>
+                                </Grid>
+
+                                <Grid item xs={6}>
+                                    <Card className={classes.cardFilters}>
+                                        <CardHeader
+                                            title={
+
+                                                <Grid
+                                                    container
+                                                    direction="row"
+                                                    justify="space-between"
+                                                    alignItems="center">
+
+                                                    <span>{keyword("forensic_title_filters")}</span>
+                                                    <HelpOutlineIcon style={{ color: "#FFFFFF" }} onClick={clickHelpFilters} />
+
+                                                    <Popover
+                                                        id={helpFilters}
+                                                        open={openHelpFilters}
+                                                        anchorEl={anchorHelpFilters}
+                                                        onClose={closeHelpFilters}
+                                                        PaperProps={{
+                                                            style: {
+                                                                width: '300px',
+                                                                fontSize: 14
+                                                            },
+                                                        }}
+                                                        anchorOrigin={{
+                                                            vertical: 'bottom',
+                                                            horizontal: 'center',
+                                                        }}
+                                                        transformOrigin={{
+                                                            vertical: 'top',
+                                                            horizontal: 'center',
+                                                        }}
+                                                    >
+                                                        <Box p={3}>
+                                                            <Grid
+                                                                container
+                                                                direction="row"
+                                                                justify="space-between"
+                                                                alignItems="strech">
+
+                                                                <Typography variant="h6" gutterBottom>
+                                                                    {keyword("forensic_title_what")}
+                                                                </Typography>
+
+                                                                <CloseIcon onClick={closeHelpFilters} />
+                                                            </Grid>
+                                                            <Box m={1} />
+                                                            <Typography variant="body2">
+                                                                {keyword("forensic_filters_explanation")}
+                                                            </Typography>
+
+                                                        </Box>
+                                                    </Popover>
+
+                                                </Grid>
+                                            }
+                                        >
+                                        </CardHeader>
+
+                                        <Tabs value={value} onChange={handleChange} indicatorColor={'primary'}>
+                                            <Tab label={keyword("forensic_family_compression_title")} />
+                                            <Tab label={keyword("forensic_family_noise_title")} />
+                                            <Tab label={keyword("forensic_family_ai_title")} />
+                                            <Tab label={keyword("forensic_family_cloning_title")} />
+                                        </Tabs>
+
+
+                                        {tabs.map((valueTab, keyTab) => {
+
+                                            var filtersTab = [];
+                                            var textDescription = "";
+                                            var textLook = "";
+                                            var textIgnore = "";
+
+                                            if (valueTab === 0) {
+                                                filtersTab = filters.current.slice(idStartCompression, idStartNoise);
+                                                textDescription = keyword("forensic_family_compression_description");
+                                                textLook = keyword("forensic_family_compression_look");
+                                                textIgnore = keyword("forensic_family_compression_ignore");
+
+                                            } else if (valueTab === 1) {
+                                                filtersTab = filters.current.slice(idStartNoise, idStartDeepLearning);
+                                                textDescription = keyword("forensic_family_noise_description");
+                                                textLook = keyword("forensic_family_noise_look");
+                                                textIgnore = keyword("forensic_family_noise_ignore");
+
+                                            } else if (valueTab === 2) {
+                                                filtersTab = filters.current.slice(idStartDeepLearning, idStartCloning);
+                                                textDescription = keyword("forensic_family_ai_description");
+                                                textLook = keyword("forensic_family_ai_look");
+                                                textIgnore = keyword("forensic_family_ai_ignore");
+
+                                            } else {
+                                                filtersTab = filters.current.slice(idStartCloning, idStartLenses);
+                                                textDescription = keyword("forensic_family_cloning_description");
+                                                textLook = keyword("forensic_family_cloning_look");
+                                                textIgnore = keyword("forensic_family_cloning_ignore");
+
+                                            }
+
+                                            
+
+                                            return (
+
+                                                <TabPanel value={value} key={keyTab} index={valueTab}>
+                                                    <Grid container spacing={3}>
+
+                                                        {filtersTab.map((value, key) => {
+                                                            if ((value.id === "zero_report" || value.id === "ghost_report" || value.id === "cagi_report")) {
+                                                                arrowsToDisplay(value.id);
+                                                            }
+
+                                                            /*
+                                                            if (value.id === "ghost_report") {
+                                                                value.mask = ghostMasks;
+                                                            }
+                                                            */
+
+
+                                                            return (
+                                                                <Grid key={key} item xs={4} >
+
+                                                                    {(value.id === "zero_report" || value.id === "ghost_report" || value.id === "cagi_report")
+                                                                        ? <div
+                                                                            className={classes.imageOverlayWrapper}
+                                                                            onMouseOver={() => displayFilterHover(value.mask[value.currentDisplayed])}
+                                                                            onMouseLeave={hideFilterHover}>
+
+                                                                            <CardMedia
+                                                                                className={classes.imageFilter}
+                                                                                image={value.map[value.currentDisplayed]}
+                                                                            />
+
+                                                                            <div className={classes.imageOverlay} >
+
+                                                                                <Grid
+                                                                                    container
+                                                                                    direction="row"
+                                                                                    justify="space-around"
+                                                                                    alignItems="center">
+
+                                                                                    {value.arrows[0]
+                                                                                        ? <Fab size="small" style={{ backgroundColor: "#ffffff" }} onClick={() => clickArrowFilter(value.id, -1)}>
+                                                                                            <NavigateBeforeIcon style={{ color: "#000000" }} />
+                                                                                        </Fab>
+
+                                                                                        : <Fab size="small" style={{ visibility: "hidden" }}>
+                                                                                            <NavigateBeforeIcon />
+                                                                                        </Fab>
+                                                                                    }
+                                                                                    <Fab size="medium" style={{ backgroundColor: "#ffffff" }} onClick={(e) => clickGifPopover(e, value.id)}>
+                                                                                        <GifIcon style={{ color: "#000000" }} />
+                                                                                    </Fab>
+
+                                                                                    {value.arrows[1]
+                                                                                        ? <Fab size="small" style={{ backgroundColor: "#ffffff" }} onClick={() => clickArrowFilter(value.id, 1)}>
+                                                                                            <NavigateNextIcon style={{ color: "#000000" }} />
+                                                                                        </Fab>
+
+                                                                                        : <Fab size="small" style={{ visibility: "hidden" }}>
+                                                                                            <NavigateNextIcon />
+                                                                                        </Fab>
+                                                                                    }
+                                                                                </Grid>
+                                                                            </div>
+
+                                                                        </div>
+
+                                                                        : <div
+                                                                            className={classes.imageOverlayWrapper}
+                                                                            onMouseOver={() => displayFilterHover(value.mask)}
+                                                                            onMouseLeave={hideFilterHover}>
+
+                                                                            <CardMedia
+                                                                                className={classes.imageFilter}
+                                                                                image={value.map}
+                                                                            />
+
+                                                                            <div className={classes.imageOverlay} >
+
+                                                                                <Grid
+                                                                                    container
+                                                                                    direction="row"
+                                                                                    justify="space-around"
+                                                                                    alignItems="center">
+
+                                                                                    <Fab size="medium" style={{ backgroundColor: "#ffffff" }} onClick={(e) => clickGifPopover(e, value.id)}>
+                                                                                        <GifIcon style={{ color: "#000000" }} />
+                                                                                    </Fab>
+
+                                                                                </Grid>
+                                                                            </div>
+
+                                                                        </div>
+                                                                    }
+
+
+                                                                    {(value.id === "cagi_report")
+                                                                        ? <Box align="center" width="100%">
+                                                                            {value.name[value.currentDisplayed]}
+                                                                            <IconButton className={classes.margin} size="small" onClick={handleOpenFilterExplanation}>
+                                                                                <HelpOutlineIcon fontSize="inherit" />
+                                                                            </IconButton>
+                                                                        </Box>
+
+                                                                        : <Box align="center" width="100%" pl={1}>
+                                                                            {value.name}
+                                                                            <IconButton className={classes.margin} size="small" onClick={(e) => handleOpenFilterExplanation(e)}>
+                                                                                <HelpOutlineIcon fontSize="inherit" />
+                                                                            </IconButton>
+                                                                        </Box>
+                                                                    }
+
+                                                                    <Popover
+                                                                        id={idExpl}
+                                                                        open={openFilterExplanation}
+                                                                        anchorEl={anchorFilterExplanation}
+                                                                        onClose={handleCloseFilterExplanation}
+                                                                        PaperProps={{
+                                                                            style: {
+                                                                                width: '300px',
+                                                                                fontSize: 14
+                                                                            },
+                                                                        }}
+                                                                        anchorOrigin={{
+                                                                            vertical: 'bottom',
+                                                                            horizontal: 'center',
+                                                                        }}
+                                                                        transformOrigin={{
+                                                                            vertical: 'top',
+                                                                            horizontal: 'center',
+                                                                        }}
+                                                                    >
+                                                                        <Box p={1}>
+                                                                            <Grid
+                                                                                container
+                                                                                direction="row"
+                                                                                justify="space-between"
+                                                                                alignItems="strech">
+
+                                                                                <Typography variant="body1" gutterBottom>
+                                                                                    {keyword("forensic_title_what")}
+                                                                                </Typography>
+
+                                                                                <CloseIcon onClick={closeHelpFilters} />
+                                                                            </Grid>
+                                                                            <Box m={1} />
+                                                                            <Typography variant="body2">
+                                                                                {keyword("forensic_card_" + value.id)}
+                                                                            </Typography>
+
+                                                                        </Box>
+                                                                    </Popover>
+                                                                    
+
+
+                                                                </Grid>
+                                                            )
+                                                        })}
+
+                                                    </Grid>
+
+                                                    <img src="../../../../NavBar/images/SVG/MakoScale.png"></img>
+ 
+
+                                                    <Box mt={2} mb={2}>
+                                                        <Divider />
                                                     </Box>
-                                                    <Box>{textDescription}</Box>
-                                                </Box>
 
-                                                <Box display="flex" mb={2}>
-                                                    <Box mr={2}>
-                                                        <CheckCircleIcon style={{ color: "#8BC34A" }} />
+                                                    <Box display="flex" mb={2}>
+                                                        <Box mr={2}>
+                                                            <InfoIcon style={{ color: "#333333" }} />
+                                                        </Box>
+                                                        <Box>{textDescription}</Box>
                                                     </Box>
-                                                    <Box>{textLook}</Box>
-                                                </Box>
 
-                                                <Box display="flex" mb={2}>
-                                                    <Box mr={2}>
-                                                        <CancelIcon style={{ color: "#EB5757" }} />
+                                                    <Box display="flex" mb={2}>
+                                                        <Box mr={2}>
+                                                            <CheckCircleIcon style={{ color: "#8BC34A" }} />
+                                                        </Box>
+                                                        <Box>{textLook}</Box>
                                                     </Box>
-                                                    <Box>{textIgnore}</Box>
-                                                </Box>
 
-                                            </TabPanel>
-                                        )
-                                    })}
-                                </Card>
+                                                    <Box display="flex" mb={2}>
+                                                        <Box mr={2}>
+                                                            <CancelIcon style={{ color: "#EB5757" }} />
+                                                        </Box>
+                                                        <Box>{textIgnore}</Box>
+                                                    </Box>
+
+                                                </TabPanel>
+                                            )
+                                        })}
+                                    </Card>
+                                </Grid>
+
                             </Grid>
 
-                        </Grid>
+
+                            
 
 
 
-                        <Popover
-                            id={gifPopover}
-                            open={openGifPopover}
-                            anchorEl={anchorGifPopover}
-                            onClose={closeGifPopover}
-                            anchorReference="anchorPosition"
-                            anchorPosition={{ top: 0, left: 0 }}
-                            PaperProps={{
-                                style: {
-                                    width: '70vw',
-                                    height: '70vh',
-                                    marginTop: '15vh',
-                                    marginLeft: '15vw',
-                                    marginBottom: '15vh',
-                                    marginRight: '15vw',
-                                    fontSize: 14,
-                                    justifyContent: 'center',
-                                    alignItems: 'center',
-                                },
-                            }}
-                            anchorOrigin={{
-                                vertical: 'center',
-                                horizontal: 'center',
-                            }}
-                            transformOrigin={{
-                                vertical: 'center',
-                                horizontal: 'center',
-                            }}
-                        >
+                            <Popover
+                                id={gifPopover}
+                                open={openGifPopover}
+                                anchorEl={anchorGifPopover}
+                                onClose={closeGifPopover}
+                                anchorReference="anchorPosition"
+                                anchorPosition={{ top: 0, left: 0 }}
+                                PaperProps={{
+                                    style: {
+                                        width: '70vw',
+                                        height: '70vh',
+                                        marginTop: '15vh',
+                                        marginLeft: '15vw',
+                                        marginBottom: '15vh',
+                                        marginRight: '15vw',
+                                        fontSize: 14,
+                                        justifyContent: 'center',
+                                        alignItems: 'center',
+                                    },
+                                }}
+                                anchorOrigin={{
+                                    vertical: 'center',
+                                    horizontal: 'center',
+                                }}
+                                transformOrigin={{
+                                    vertical: 'center',
+                                    horizontal: 'center',
+                                }}
+                            >
 
-                            <Box p={3}>
-                                <Grid
-                                    container
-                                    direction="row"
-                                    justify="space-between"
-                                    alignItems="stretch">
+                                <Box p={3}>
+                                    <Grid
+                                        container
+                                        direction="row"
+                                        justify="space-between"
+                                        alignItems="stretch">
 
-                                    <Typography variant="h6" gutterBottom>
-                                        Export the result as a GIF
-                                    </Typography>
+                                        <Typography variant="h6" gutterBottom>
+                                            Export the result as a GIF
+                                        </Typography>
 
-                                    <CloseIcon onClick={closeGifPopover} />
-                                </Grid>
-                                <Box m={1} />
+                                        <CloseIcon onClick={closeGifPopover} />
+                                    </Grid>
+                                    <Box m={1} />
 
-                                <Box justifyContent="center" className={classes.wrapperImageFilter}>
+                                    <Box justifyContent="center" className={classes.wrapperImageFilter}>
 
-                                    <CardMedia
-                                        component="img"
-                                        className={classes.imagesGifImage}
-                                        image={gifImage}
-                                    />
-                                    {true &&
                                         <CardMedia
                                             component="img"
-                                            className={classes.imagesGifFilter}
-                                            style={{ display: "none" }}
-                                            image={gifFilter}
-                                            id="gifFilterElement"
+                                            className={classes.imagesGifImage}
+                                            image={gifImage}
                                         />
-                                    }
+                                        {true &&
+                                            <CardMedia
+                                                component="img"
+                                                className={classes.imagesGifFilter}
+                                                style={{ display: "none" }}
+                                                image={gifFilter}
+                                                id="gifFilterElement"
+                                            />
+                                        }
+                                    </Box>
+
+
+
+                                    <Grid
+                                        container
+                                        direction="column"
+                                        justify="center"
+                                        alignItems="center"
+                                    >
+                                        <Box m={4} />
+
+                                        <Typography gutterBottom>
+                                            Speed of the animation
+                                        </Typography>
+
+
+                                        <Slider
+                                            defaultValue={-1100}
+                                            aria-labelledby="discrete-slider"
+                                            step={300}
+                                            marks={marks}
+                                            min={-1700}
+                                            max={-500}
+                                            scale={x => -x}
+                                            onChange={(e, val) => changeValueSpeed(val)}
+                                            onChangeCommitted={(e) => changeSpeed(speed)}
+                                            className={classes.sliderClass}
+                                        />
+
+
+
+                                        <Box m={2} />
+
+
+                                        <Button variant="contained" color="primary" onClick={(e) => handleDownloadGif(e)}>
+                                            Download
+                                        </Button>
+                                    </Grid>
+
+
                                 </Box>
 
+                            </Popover>
 
+                        </Box>
+                    </ThemeProvider>
 
-                                <Grid
-                                    container
-                                    direction="column"
-                                    justify="center"
-                                    alignItems="center"
-                                >
-                                    <Box m={4} />
-
-                                    <Typography gutterBottom>
-                                        Speed of the animation
-                                    </Typography>
-
-
-                                    <Slider
-                                        defaultValue={-1100}
-                                        aria-labelledby="discrete-slider"
-                                        step={300}
-                                        marks={marks}
-                                        min={-1700}
-                                        max={-500}
-                                        scale={x => -x}
-                                        onChange={(e, val) => changeValueSpeed(val)}
-                                        onChangeCommitted={(e) => changeSpeed(speed)}
-                                        className={classes.sliderClass}
-                                    />
-
-
-
-                                    <Box m={2} />
-
-
-                                    <Button variant="contained" color="primary" onClick={(e) => handleDownloadGif(e)}>
-                                        Download
-                                    </Button>
-                                </Grid>
-
-
-                            </Box>
-
-                        </Popover>
-
-                    </Box>
-                </ThemeProvider>
+                </div>
 
             </div>
-
-        </div>
+        </StylesProvider>
     )
 };
 export default ForensicResults;

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { useSelector } from 'react-redux';
 import LockIcon from '@material-ui/icons/Lock';
 import LockOpenIcon from '@material-ui/icons/LockOpen';

@@ -1,23 +1,21 @@
 import { useEffect } from "react";
-import axios from "axios"
 import { useDispatch } from "react-redux";
 import { setError } from "../../../../../redux/actions/errorActions";
 import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Forensic.tsv";
 import { setStateBackResults } from "../../../../../redux/actions/tools/gifActions";
 import { saveAs } from 'file-saver';
-import { useSelector } from "react-redux";
 import useAuthenticatedRequest from "../../../../Shared/Authentication/useAuthenticatedRequest"
 
 const useGetGif = (images, delayInput, downloading) => {
     const keyword = useLoadLanguage("components/NavItems/tools/Forensic.tsv", tsv);
     const dispatch = useDispatch();
-    const userToken = useSelector(state => state.userSession && state.userSession.accessToken);
     const authenticatedRequest = useAuthenticatedRequest();
+    const baseURL = process.env.REACT_APP_BASEURL
 
 
     useEffect(() => {
-
+      
         const handleError = (e) => {
             if (keyword(e) !== "")
                 dispatch(setError(keyword(e)));
@@ -28,13 +26,13 @@ const useGetGif = (images, delayInput, downloading) => {
 
 
         const downloadGif = (response) => {
-            console.log(response.data);
+      
             const file = new Blob([response.data], { type: 'image/gif' });
-            saveAs(file, "image.gif");
-            dispatch(setStateBackResults());
+            saveAs(file, "image.gif");     
         }
 
         if (images && delayInput && downloading === 7) {
+            dispatch(setStateBackResults());
             var body = {
                 inputURLs: [
                     images.image1,
@@ -45,7 +43,7 @@ const useGetGif = (images, delayInput, downloading) => {
 
             const axiosConfig = {
                 method: "post",
-                url: "https://demo-medialab.afp.com/weverify-wrapper/animated",
+                url: baseURL + "/animated",
                 data: body,
                 responseType: 'blob',
             }
@@ -61,6 +59,6 @@ const useGetGif = (images, delayInput, downloading) => {
 
 
 
-    }, [images, delayInput, downloading, keyword, dispatch]);
+    }, [images, delayInput, downloading, keyword, dispatch, baseURL, authenticatedRequest]);
 };
 export default useGetGif;

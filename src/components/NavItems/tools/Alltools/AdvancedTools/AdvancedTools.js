@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { useEffect } from "react";
 //import { ReactComponent as GifIcon } from "../../../NavBar/images/SVG/Image/Gif.svg"
 import Grid from "@material-ui/core/Grid";
@@ -9,42 +9,37 @@ import LockIcon from '@material-ui/icons/Lock';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import FormControl from '@material-ui/core/FormControl';
 import TextField from "@material-ui/core/TextField";
 import LockOpenIcon from '@material-ui/icons/LockOpen';
 import useAuthenticationAPI from '../../../../Shared/Authentication/useAuthenticationAPI';
 import { useSelector, useDispatch } from 'react-redux';
 import { ERR_AUTH_UNKNOWN_ERROR } from '../../../../Shared/Authentication/authenticationErrors';
 import { setError } from "../../../../../redux/actions/errorActions";
-import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Alltools.tsv";
 import IconButton from '@material-ui/core/IconButton';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
-import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
+//import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 import { useForm, Controller } from "react-hook-form";
 import * as yup from "yup";
 import _ from "lodash";
 import MenuItem from '@material-ui/core/MenuItem';
-import PersonAddIcon from '@material-ui/icons/PersonAdd';
-import { userRegistrationSentAction, userAccessCodeRequestSentAction } from "../../../../../redux/actions/authenticationActions";
+//import { userRegistrationSentAction } from "../../../../../redux/actions/authenticationActions";
+import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
 
 
 const AdvancedTools = (porps) => {
 
-    const classes = useMyStyles();
+    //const classes = useMyStyles();
     // Redux store
     const dispatch = useDispatch();
     const userAuthenticated = useSelector(
         (state) => state.userSession && state.userSession.userAuthenticated
     );
-    const user = useSelector(state => state.userSession && state.userSession.user);
-    const userRegistrationLoading = useSelector(state => state.userSession && state.userSession.userRegistrationLoading);
-    const userRegistrationSent = useSelector(state => state.userSession && state.userSession.userRegistrationSent);
-    const accessCodeRequestLoading = useSelector(state => state.userSession && state.userSession.accessCodeRequestLoading);
-    const accessCodeRequestSent = useSelector(state => state.userSession && state.userSession.accessCodeRequestSent);
-    const userLoginLoading = useSelector(state => state.userSession && state.userSession.userLoginLoading);
+
+    const keyword = useLoadLanguage("components/NavItems/AdvancedTools.tsv", tsv);
+
+    //const userRegistrationLoading = useSelector(state => state.userSession && state.userSession.userRegistrationLoading);
 
     const registrationValidationSchema = yup.object().shape({
         email: yup.string()
@@ -87,21 +82,21 @@ const AdvancedTools = (porps) => {
         }else{
             setNotAuthenticatedData();
         }
-
+    // eslint-disable-next-line
     }, []);
 
     const setAuthenticatedData = () => {
         setDialogState(2);
-        setTextToolsState("The advanced tools are unlocked");
-        setTextButton("EXIT");
+        setTextToolsState(keyword("text_unlocked"));
+        setTextButton(keyword("button_exit"));
         setColorButton("secondary");
         setIconState(<LockOpenIcon fontSize="small" />);
     }
 
     const setNotAuthenticatedData = () => {
         setDialogState(0);
-        setTextToolsState("The advanced tools are locked");
-        setTextButton("UNLOCK");
+        setTextToolsState(keyword("text_locked"));
+        setTextButton(keyword("button_unlock2"));
         setColorButton("primary");
         setIconState(<LockIcon fontSize="small" />);
     }
@@ -211,10 +206,7 @@ const AdvancedTools = (porps) => {
             handleError(error.error ? error.error.code : ERR_AUTH_UNKNOWN_ERROR);
         });
     };
-    const registrationFormSubmitDisabled = registrationForm.formState.isSubmitting || userRegistrationLoading;
-    const registrationSentMsgReset = (e) => {
-        dispatch(userRegistrationSentAction(false));
-    };
+    
 
     
 
@@ -267,7 +259,7 @@ const AdvancedTools = (porps) => {
 
                                 <Grid item>
                                     <Typography variant="subtitle2">
-                                        Advanced tools
+                                        {keyword("title")}
                                     </Typography>
                                 </Grid>
                             
@@ -307,25 +299,25 @@ const AdvancedTools = (porps) => {
                     <Box p={2}>
                         <DialogTitle id="max-width-dialog-title">
                             <Typography gutterBottom style={{ color: "#51A5B2",  fontSize: "24px" }}>
-                                Advanced tools
+                                {keyword("title")}
                             </Typography>
                         </DialogTitle>
                         <DialogContent style={{ height: '270px' }}>
                             
                             <Typography variant="body2">
-                                There are some advanced tools that are restricted for general users. You need to register to use this tools.
+                                {keyword("text_general")}
                             </Typography>
 
                             <Box m={4}/>
 
                             <Typography variant="body2" style={{ color: "#818B95"}}>
-                                Do you already have an account?
+                                {keyword("text_account")}
                             </Typography>
                             <Box m={2} />
                             <TextField                        
                                 label={"Email"}
                                 value={email}
-                                placeholder={"Introudce your email here"}
+                                placeholder={keyword("placeholder_email")}
                                 fullWidth
                                 variant="outlined"
                                 onChange={e => {
@@ -341,7 +333,7 @@ const AdvancedTools = (porps) => {
                             />
                             <Box m={2} />
                             <Button variant="contained" color="primary" fullWidth disabled={stateGetCode} onClick={handleGetCode}>
-                                GET CODE
+                                {keyword("button_code")}
                             </Button>
 
 
@@ -353,11 +345,11 @@ const AdvancedTools = (porps) => {
                         <DialogActions>
                             <Grid container direction="column" style={{ width: "100%" }}>
                                 <Typography variant="body2" style={{ color: "#818B95", textAlign: "center" }}>
-                                    You don't have an account?
+                                    {keyword("text_notaccount")}
                                 </Typography>
                                 <Box m={2} />
                                 <Button variant="outlined" color="primary" onClick={handleClickOpenRegister} style={{ border: "2px solid" }} fullWidth>
-                                    REGISTER
+                                    {keyword("button_register")}
                                 </Button>
 
                             </Grid>
@@ -387,7 +379,7 @@ const AdvancedTools = (porps) => {
 
                                     <Grid item>
                                         <Typography style={{ color: "#51A5B2", fontSize: "24px" }}>
-                                            Check your email
+                                            {keyword("title_email")}
                                         </Typography>
                                     </Grid>
                                 
@@ -395,7 +387,7 @@ const AdvancedTools = (porps) => {
                         </DialogTitle>
                         <DialogContent style={{ height: '300px' }}>
                             <Typography variant="body2">
-                                We have sent you a code to your email, insert it to unlock the advanced tools
+                                {keyword("text_code_email")}
                             </Typography>
 
                             <Box m={2} />
@@ -403,7 +395,7 @@ const AdvancedTools = (porps) => {
                             <TextField
                                 label={"Code"}
                                 value={code}
-                                placeholder={"Introudce your code here"}
+                                placeholder={keyword("placeholder_code")}
                                 fullWidth
                                 variant="outlined"
                                 onChange={e => {
@@ -422,7 +414,7 @@ const AdvancedTools = (porps) => {
 
                             <Box ml={1} margin={1}>
                                 <Typography variant="body2" style={{ color: "#989898", fontSize: "13px"}}>
-                                    If you have not recieved the code check the spam folder or go back and review that you introduced the email correctly
+                                    {keyword("text_problem")}
                                 </Typography>
                             </Box>
 
@@ -431,7 +423,7 @@ const AdvancedTools = (porps) => {
                         </DialogContent>
                         <DialogActions>
                             <Button variant="contained" color="primary" onClick={handleClickUnlock} fullWidth disabled={stateUnlockTools}>
-                                UNLOCK TOOLS
+                                {keyword("button_unlock")}
                             </Button>
                         </DialogActions>
                     </Box>
@@ -442,18 +434,18 @@ const AdvancedTools = (porps) => {
                     <Box p={2}>
                         <DialogTitle id="max-width-dialog-title">
                             <Typography gutterBottom style={{ color: "#51A5B2", fontSize: "24px"  }}>
-                                Tools unlocked
+                                {keyword("title_tools_unlocked")}
                             </Typography>
                         </DialogTitle>
                         <DialogContent style={{ height: '300px' }}>
                             <Typography variant="body2">
-                                You have unlocked the advanced tools susccesfully, now you can close this window and start using them.
+                                {keyword("text_success")}
                             </Typography>
 
                         </DialogContent>
                         <DialogActions>
-                            <Button v color="black" onClick={handleCloseFinish} fullWidth >
-                                CLOSE
+                            <Button v color="default" onClick={handleCloseFinish} fullWidth >
+                                {keyword("button_close")}
                             </Button>
                         </DialogActions>
                     </Box>
@@ -464,12 +456,12 @@ const AdvancedTools = (porps) => {
                     <Box p={2}>
                         <DialogTitle id="max-width-dialog-title">
                             <Typography gutterBottom style={{ color: "#51A5B2", fontSize: "24px" }}>
-                                Registration
+                                {keyword("title_registration")}
                             </Typography>
                         </DialogTitle>
                         <DialogContent>
                             <Typography variant="body2">
-                                Provide the requiered information to ask for the registration
+                                {keyword("text_description_resgitration")}
                             </Typography>
                             <Box m={2} />
                             <form onSubmit={registrationForm.handleSubmit(registrationOnSubmit)}>
@@ -607,8 +599,8 @@ const AdvancedTools = (porps) => {
                                     </Grid>
                                     <Grid item xs={12}>
                                         <Box mt={2}>
-                                            <Button color="black" fullWidth type="submit" >
-                                                Register
+                                            <Button color="default" fullWidth type="submit" >
+                                                {keyword("button_register")}
                                             </Button>
                                         </Box>
                                     </Grid>
@@ -627,18 +619,18 @@ const AdvancedTools = (porps) => {
                     <Box p={2}>
                         <DialogTitle id="max-width-dialog-title">
                             <Typography gutterBottom style={{ color: "#51A5B2", fontSize: "24px" }}>
-                                Wait for the approval
+                                {keyword("title_approval")}
                             </Typography>
                         </DialogTitle>
                         <DialogContent style={{ height: '300px' }}>
                             <Typography variant="body2">
-                                We will review your information and we will approve your registration if you fulfill the requirements. You will recive an email when the registration is approved
+                                {keyword("text_review")}
                             </Typography>
 
                         </DialogContent>
                         <DialogActions>
-                            <Button v color="black" onClick={handleCloseRegistration} fullWidth >
-                                CLOSE
+                            <Button v color="default" onClick={handleCloseRegistration} fullWidth >
+                                {keyword("button_close")}
                             </Button>
                         </DialogActions>
                     </Box>

@@ -1,4 +1,4 @@
-import React, { useState, Component } from "react";
+import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import Box from "@material-ui/core/Box";
@@ -25,8 +25,7 @@ import { setStateSelectingLocal, setStateSelectingUrl, setStateReady, setStateIn
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 import IconButton from '@material-ui/core/IconButton';
-
-
+import { StylesProvider } from "@material-ui/core/styles";
 
 
 const Gif = () => {
@@ -46,7 +45,7 @@ const Gif = () => {
 
     const [classButtonURL, setClassButtonURL] = useState(classes.bigButtonDiv);
     const [classButtonLocal, setClassButtonLocal] = useState(classes.bigButtonDiv);
-
+    
     const [classIconURL, setClassIconURL] = useState(classes.bigButtonIcon);
     const [classIconLocal, setClassIconLocal] = useState(classes.bigButtonIcon);
 
@@ -225,7 +224,7 @@ const Gif = () => {
     }
     */
 
-    if(toolState == 6){
+    if(toolState === 6){
         cleanInputs();
         if (selectedMode === "URL"){
             dispatch(setStateSelectingUrl());
@@ -244,19 +243,29 @@ const Gif = () => {
 
     const [interval, setIntervalVar] = React.useState(null);
 
+//=== SPEED SLIDER ===
+const [speed, setSpeed] = React.useState(1100);
 
 
     //=== CSS ANIMATION ===
 
     //Trigger of the loop function
-    if (toolState === 5 && interval === null) {
-        setIntervalVar(setInterval(() => animateImages(), 1100));
+    useEffect(() => {
+    if (toolState === 5 && (interval === null || interval === undefined)) {
+            setIntervalVar(setInterval(() => animateImages(), speed));
     }
+    return () => {
+        if(interval !==null ){
+            clearInterval(interval); 
+            setIntervalVar(null)
+        }
+    }
+    }, [setIntervalVar, interval, toolState, speed]);
     
 
     //Loop function
     function animateImages() {
-        console.log("Loop function"); //DEBUG
+        console.log("Loop function" + interval); //DEBUG
         //console.log(interval); //DEBUG
         var x = document.getElementById("gifFilterElement");
 
@@ -266,9 +275,6 @@ const Gif = () => {
             x.style.display = "none";
         }
     }
-
-    //=== SPEED SLIDER ===
-    const [speed, setSpeed] = React.useState(1100);
 
     const marks = [
         {
@@ -290,7 +296,7 @@ const Gif = () => {
     //On release function (when the click is released this function is triggered)
     function commitChangeSpeed(value) {
         //console.log("Commit change speed: " + value); //DEBUG
-        clearInterval(interval);
+        //clearInterval(interval);
         setIntervalVar(setInterval(() => animateImages(), (value)));
     }
 
@@ -309,7 +315,7 @@ const Gif = () => {
     //Function to prepare the files to trigger the download
     const handleDownloadGif = () => {
         dispatch(setStateDownloading());
-        console.log(toolState);
+        //console.log(toolState);
         var files = {
             "image1": homoImg1,
             "image2": homoImg2,
@@ -317,16 +323,13 @@ const Gif = () => {
         setFilesForGif(files);
         setDelayGif(speed);
         
-        
     };
 
-    console.log(filesForGif);
-    console.log(delayGif);
-    console.log(toolState);
+    //console.log(filesForGif);
+    //console.log(delayGif);
+    //console.log(toolState);
     //Call to the API
     useGetGif(filesForGif, delayGif, toolState);
-
-
 
 
 
@@ -335,9 +338,9 @@ const Gif = () => {
 
 
     const newGif = (event) => {
-        cleanInputs();
         stopLoop();
-
+        cleanInputs();
+        
         setClassButtonURL(classes.bigButtonDiv);
         setClassIconURL(classes.bigButtonIcon);
 
@@ -371,8 +374,11 @@ const Gif = () => {
         return () => {
             // componentwillunmount in functional component.
             // Anything in here is fired on component unmount.
+            console.log("Stop loop "  + interval);
+            clearInterval(interval);
             newGif();
         }
+    // eslint-disable-next-line
     }, [])
 
 
@@ -392,7 +398,7 @@ const Gif = () => {
                 {//=== Load of the images ===
                 }
 
-
+                <StylesProvider injectFirst>
                 <Card>
                     <CardHeader
                         title={
@@ -551,7 +557,7 @@ const Gif = () => {
 
                                             >
                                                 <img src={imageDropped1} className={classes.imageDropped} alt="" />
-                                                <IconButton color="black" onClick={removeImage1}>
+                                                <IconButton onClick={removeImage1}>
                                                     <DeleteOutlineIcon fontSize="small" />
                                                 </IconButton>
                                             </Grid>
@@ -613,7 +619,7 @@ const Gif = () => {
 
                                             >
                                                 <img src={imageDropped2} className={classes.imageDropped} alt="" />
-                                                <IconButton color="black" onClick={removeImage2}>
+                                                <IconButton onClick={removeImage2}>
                                                     <DeleteOutlineIcon fontSize="small" />
                                                 </IconButton>
                                             </Grid>
@@ -845,9 +851,8 @@ const Gif = () => {
 
 
                 </Card>
-
                 }
-
+                </StylesProvider>
                 
 
 { /*

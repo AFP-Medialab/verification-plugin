@@ -31,6 +31,8 @@ import Alert from '@material-ui/lab/Alert';
 const AllTools = (props) => {
     const classes = useMyStyles();
     const keyword = useLoadLanguage("components/NavItems/tools/Alltools.tsv", tsv);
+    const keywordAdvancedTools = useLoadLanguage("components/NavItems/AdvancedTools.tsv", tsv);
+    
     const tools = props.tools;
     const [videoUrl, setVideoUrl] = useState(null);
 
@@ -141,37 +143,6 @@ const AllTools = (props) => {
     console.log(toolsData);
     */
 
-
-    
-    /*
-
-
-<Grid>
-                                        <Grid item onClick={() => handleClick(value.path)}>
-                                            <IconButton className={classes.customAllToolsButton} style={{ "fontSize": 67}}>
-                                                {value.icon}
-                                            </IconButton>
-                                        </Grid>
-                                        <Grid item>
-                                            <Grid>
-                                                <Typography variant={"body1"}>
-                                                    {keyword(value.title)}
-                                                    <IconButton
-                                                        aria-label="settings"
-                                                        size={"small"}
-                                                        onClick={() => setVideoUrl(keyword(value.tsvPrefix + "_help_video"))}
-                                                    >
-                                                        <HelpIcon/>
-                                                    </IconButton>
-                                                </Typography>
-
-
-
-                                            </Grid>
-                                        </Grid>
-                                    </Grid>
-
-    */
     
 
     const handleCloseAlert = (event, reason) => {
@@ -187,7 +158,7 @@ const AllTools = (props) => {
         <div>
             <Snackbar open={openAlert} autoHideDuration={6000} onClose={handleCloseAlert}>
                 <Alert onClose={handleCloseAlert} severity="warning">
-                    This tool is restricted, you need to unlock the advanced tools to use it
+                    {keywordAdvancedTools("alert_text")}
                 </Alert>
             </Snackbar>
 
@@ -227,7 +198,7 @@ const AllTools = (props) => {
                         </Grid>
 
                         <Grid item>
-                            <Typography variant="h5" style={{ color: "#596977" }}>Video</Typography>
+                            <Typography variant="h5" style={{ color: "#596977" }}>{keyword("category_video")}</Typography>
                         </Grid>
 
                     </Grid>
@@ -277,7 +248,7 @@ const AllTools = (props) => {
                         </Grid>
 
                         <Grid item>
-                            <Typography variant="h5" style={{ color: "#596977" }}>Image</Typography>
+                            <Typography variant="h5" style={{ color: "#596977" }}>{keyword("category_image")}</Typography>
                         </Grid>
 
                     </Grid>
@@ -324,7 +295,7 @@ const AllTools = (props) => {
                         </Grid>
 
                         <Grid item>
-                            <Typography variant="h5" style={{ color: "#596977" }}>Search</Typography>
+                            <Typography variant="h5" style={{ color: "#596977" }}>{keyword("category_search")}</Typography>
                         </Grid>
 
                     </Grid>
@@ -370,7 +341,7 @@ const AllTools = (props) => {
                         </Grid>
 
                         <Grid item>
-                            <Typography variant="h5" style={{ color: "#596977" }}>Data Analysis</Typography>
+                            <Typography variant="h5" style={{ color: "#596977" }}>{keyword("category_data")}</Typography>
                         </Grid>
 
                     </Grid>

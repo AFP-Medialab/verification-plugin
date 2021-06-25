@@ -101,7 +101,7 @@ import { ReactComponent as TwitterSnaIcon } from "./images/SVG/DataAnalysis/Twit
 import { ReactComponent as ToolsIcon } from "./images/SVG/Navbar/Tools.svg"
 import { ReactComponent as ClassroomIcon } from "./images/SVG/Navbar/Classroom.svg"
 import { ReactComponent as InteractiveIcon } from "./images/SVG/Navbar/Interactive.svg"
-import { ReactComponent as FactcheckIcon } from "./images/SVG/Navbar/Fact_check.svg"
+//import { ReactComponent as FactcheckIcon } from "./images/SVG/Navbar/Fact_check.svg"
 import { ReactComponent as AboutIcon } from "./images/SVG/Navbar/About.svg"
 import { ReactComponent as AssistantIcon } from "./images/SVG/Navbar/Assistant.svg"
 import { ReactComponent as GuideIcon } from "./images/SVG/Navbar/Guide.svg"
@@ -113,11 +113,12 @@ import { ReactComponent as LogoWeVerify2 } from "./images/SVG/Navbar/WeVerify.sv
 import { getSupportedBrowserLanguage } from "../Shared/Languages/getSupportedBrowserLanguage";
 import useLoadLanguage from "../../Hooks/useLoadLanguage";
 import tsv from "../../LocalDictionary/components/NavBar.tsv";
-import FactCheck from "../NavItems/FactCheck/FactCheck";
+//import FactCheck from "../NavItems/FactCheck/FactCheck";
 import Snackbar from "@material-ui/core/Snackbar";
 import { setFalse, setTrue } from "../../redux/actions/cookiesActions";
 import { changeLanguage } from "../../redux/actions";
 import Button from "@material-ui/core/Button";
+import Alert from '@material-ui/lab/Alert';
 
 
 function a11yProps(index) {
@@ -139,7 +140,6 @@ const NavBar = (props) => {
 
     const dispatch = useDispatch();
 
-
     const handleChange = (event, newValue) => {
         if (tabItems[newValue].path === "tools")
             history.push("/app/tools/" + drawerItems[newValue].path);
@@ -147,12 +147,34 @@ const NavBar = (props) => {
             history.push("/app/" + tabItems[newValue].path)
     };
 
+    const [openAlert, setOpenAlert] = React.useState(false);
+
+    const handleCloseAlert = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setOpenAlert(false);
+    };
+
+    const userAuthenticated = useSelector(
+        (state) => state.userSession && state.userSession.userAuthenticated
+    );
+    
     const changeValue = (newValue) => {
-        history.push("/app/tools/" + drawerItems[newValue].path)
+        if (drawerItems[newValue].title === "navbar_twitter_sna" || drawerItems[newValue].title === "navbar_gif"){
+            if (userAuthenticated){
+                history.push("/app/tools/" + drawerItems[newValue].path);
+            }else{
+                setOpenAlert(true);
+            }
+        }else{
+            history.push("/app/tools/" + drawerItems[newValue].path);
+        }
     };
 
     const error = useSelector(state => state.error);
     const keyword = useLoadLanguage("components/NavBar.tsv", tsv);
+    const keywordAdvancedTools = useLoadLanguage("components/NavItems/AdvancedTools.tsv", tsv);
 
 
     const handleDrawerToggle = () => {
@@ -342,14 +364,14 @@ const NavBar = (props) => {
             path: "classroom",
             footer: <Footer type={"afp"} />
         },
-        {
+        /*{
             title: "navbar_factCheck",
             icon: (tabValue === 5) ? <FactcheckIcon width="40px" height="40px" style={{ fill: "#51A5B2" }} />
                 : <FactcheckIcon width="40px" height="40px" style={{ fill: "#4c4c4c" }} />,
             content: <FactCheck />,
             path: "factCheck",
             footer: <Footer type={"afp"} />
-        },
+        },*/
         {
             title: "navbar_about",
             icon: (tabValue === 6) ? <AboutIcon width="40px" height="40px" style={{ fill: "#51A5B2" }} />
@@ -383,6 +405,12 @@ const NavBar = (props) => {
 
     return (
         <div className={classes.flex}>
+            <Snackbar open={openAlert} autoHideDuration={6000} onClose={handleCloseAlert}>
+                <Alert onClose={handleCloseAlert} severity="warning">
+                    {keywordAdvancedTools("alert_text")}
+                </Alert>
+            </Snackbar>
+
             <AppBar position="fixed" color="default" className={classes.appBar}>
                 <Toolbar className={classes.toolbar}>
                     <Box display={{ xs: 'none', md: 'block' }}>
