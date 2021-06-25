@@ -174,7 +174,6 @@ const Thumbnails = () => {
       }, [resultData]);
 
     useEffect(()=> {
-        console.log("show results ", showResult);
         if(showResult){
             dispatch(setThumbnailsLoading(false));
         }
