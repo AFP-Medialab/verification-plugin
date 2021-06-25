@@ -198,7 +198,7 @@ const AllTools = (props) => {
                         </Grid>
 
                         <Grid item>
-                            <Typography variant="h5" style={{ color: "#596977" }}>Video</Typography>
+                            <Typography variant="h5" style={{ color: "#596977" }}>{keyword("category_video")}</Typography>
                         </Grid>
 
                     </Grid>
@@ -248,7 +248,7 @@ const AllTools = (props) => {
                         </Grid>
 
                         <Grid item>
-                            <Typography variant="h5" style={{ color: "#596977" }}>Image</Typography>
+                            <Typography variant="h5" style={{ color: "#596977" }}>{keyword("category_image")}</Typography>
                         </Grid>
 
                     </Grid>
@@ -295,7 +295,7 @@ const AllTools = (props) => {
                         </Grid>
 
                         <Grid item>
-                            <Typography variant="h5" style={{ color: "#596977" }}>Search</Typography>
+                            <Typography variant="h5" style={{ color: "#596977" }}>{keyword("category_search")}</Typography>
                         </Grid>
 
                     </Grid>
@@ -341,7 +341,7 @@ const AllTools = (props) => {
                         </Grid>
 
                         <Grid item>
-                            <Typography variant="h5" style={{ color: "#596977" }}>Data Analysis</Typography>
+                            <Typography variant="h5" style={{ color: "#596977" }}>{keyword("category_data")}</Typography>
                         </Grid>
 
                     </Grid>

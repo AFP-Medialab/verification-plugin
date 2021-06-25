@@ -34,6 +34,7 @@ import { cleanForensicState } from "../../../../../redux/actions/tools/forensicA
 import LinkIcon from '@material-ui/icons/Link';
 import IconButton from '@material-ui/core/IconButton';
 import Snackbar from '@material-ui/core/Snackbar';
+import WarningIcon from '@material-ui/icons/Warning';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -696,7 +697,7 @@ const ForensicResults = (props) => {
                                                     justify="space-between"
                                                     alignItems="center">
                                                     <span>{keyword("forensic_title_lenses")}</span>
-                                                    <HelpOutlineIcon style={{ color: "#FFFFFF" }} onClick={clickHelpLenses} />
+                                                    <WarningIcon style={{ color: "#FFFFFF" }} onClick={clickHelpLenses} />
 
                                                     <Popover
                                                         id={helpLenses}

@@ -151,7 +151,7 @@ const Metadata = () => {
                             <TextField
                                 value={input}
                                 id="standard-full-width"
-                                label={keyword("metadata_content_inputt")}
+                                label={keyword("metadata_content_input")}
                                 placeholder={keyword("metadata_content_input_placeholder")}
                                 fullWidth
                                 variant="outlined"
@@ -199,10 +199,15 @@ const Metadata = () => {
 
                     <Grid
                         container
-                        direction="row"
-                        spacing={3}
-                        alignItems="center"
+                        direction="column"
+                        spacing={1}
+                        alignItems="left"
                     >
+
+                        <Grid item xs>
+                            <Typography variant="body1">* {keyword("description_limitations")}</Typography>
+                        </Grid>
+
                         <Grid item>
 
                             <Button startIcon={<FolderOpenIcon />}>
@@ -215,9 +220,7 @@ const Metadata = () => {
                             </Button>
                         </Grid>
 
-                        <Grid item xs>
-                            <Typography variant="body1">* {keyword("description_limitations")}</Typography>
-                        </Grid>
+                        
 
                     </Grid>
                 </Box>

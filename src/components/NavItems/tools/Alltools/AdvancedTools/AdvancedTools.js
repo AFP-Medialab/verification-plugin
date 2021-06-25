@@ -317,7 +317,7 @@ const AdvancedTools = (porps) => {
                             <TextField                        
                                 label={"Email"}
                                 value={email}
-                                placeholder={"Introudce your email here"}
+                                placeholder={keyword("placeholder_email")}
                                 fullWidth
                                 variant="outlined"
                                 onChange={e => {
@@ -395,7 +395,7 @@ const AdvancedTools = (porps) => {
                             <TextField
                                 label={"Code"}
                                 value={code}
-                                placeholder={"Introudce your code here"}
+                                placeholder={keyword("placeholder_code")}
                                 fullWidth
                                 variant="outlined"
                                 onChange={e => {
