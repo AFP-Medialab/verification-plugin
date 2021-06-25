@@ -32,52 +32,6 @@ import useMyStyles from "../Shared/MaterialUiStyles/useMyStyles";
 import Footer from "../Shared/Footer/Footer";
 import FeedBack from "../FeedBack/FeedBack";
 
-/*
-import Icon from "@material-ui/core/Icon";
-
-import assistantIcon from "./images/navbar/assistant-icon-grey.svg";
-import toolIcon from "./images/navbar/tools-off.png"
-import tutorialIcon from "./images/navbar/tutorial-off.png"
-import classRoomIcon from "./images/navbar/classroom-off.png"
-import interactiveIcon from "./images/navbar/quiz-off.png"
-import aboutIcon from "./images/navbar/about-off.png"
-import ImageSearchIcon from '@material-ui/icons/ImageSearch';
-import FaceIcon from '@material-ui/icons/Face';
-
-import analysisIconOn from "./images/tools/video_logoOn.png"
-import analysisIconOff from "./images/tools/video_logoOff.png"
-
-import keyframesIconOn from "./images/tools/keyframesOn.png"
-import keyframesIconOff from "./images/tools/keyframesOff.png"
-
-import thumbnailsIconOn from "./images/tools/youtubeOn.png"
-import thumbnailsIconOff from "./images/tools/youtubeOff.png"
-
-import twitterSearchIconOn from "./images/tools/twitterOn.png"
-import twitterSearchIconOff from "./images/tools/twitterOff.png"
-
-import magnifierIconOn from "./images/tools/magnifierOn.png"
-import magnifierIconOff from "./images/tools/magnifierOff.png"
-
-import metadataIconOn from "./images/tools/metadataOn.png"
-import metadataIconOff from "./images/tools/metadataOff.png"
-
-import videoRightsIconOn from "./images/tools/copyrightOn.png"
-import videoRightsIconOff from "./images/tools/copyrightOff.png"
-
-import forensicIconOn from "./images/tools/forensic_logoOn.png"
-import forensicIconOff from "./images/tools/forensic_logoOff.png"
-
-import twitterSnaIconOn from "./images/tools/twitter-sna-on.png"
-import twitterSnaIconOff from "./images/tools/twitter-sna-off.png"
-
-import covidSearchIconOn from "./images/tools/covid_search_logoOn.png"
-import covidSearchIconOff from "./images/tools/covid_search_logoOff.png"
-
-import xnetworkIconOn from "./images/tools/xnetwork_logoOn.png"
-import xnetworkIconOff from "./images/tools/xnetwork_logoOff.png"
-*/
-
 import { ReactComponent as AnalysisIcon } from "./images/SVG/Video/Video_analysis.svg"
 import { ReactComponent as KeyframesIcon } from "./images/SVG/Video/Keyframes.svg"
 import { ReactComponent as ThumbnailsIcon } from "./images/SVG/Video/Thumbnails.svg"

@@ -3,6 +3,7 @@ import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import Box from "@material-ui/core/Box";
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/XNetwork.tsv";
+import alltoolstsv from "../../../../LocalDictionary/components/NavItems/tools/Alltools.tsv";
 import OnClickInfo from "../../../Shared/OnClickInfo/OnClickInfo";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
@@ -12,7 +13,7 @@ import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 const XNetwork = () => {
   const classes = useMyStyles();
   const keyword = useLoadLanguage("components/NavItems/tools/XNetwork.tsv", tsv);
-  const keywordAllTools = useLoadLanguage("components/NavItems/tools/Alltools.tsv", tsv);
+  const keywordAllTools = useLoadLanguage("components/NavItems/tools/Alltools.tsv", alltoolstsv);
 
   useEffect(() => {
 

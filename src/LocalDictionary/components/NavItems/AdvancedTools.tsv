@@ -1,0 +1,25 @@
+	en	fr	es	el
+title	Advanced tools			
+text_general	There are some advanced tools that are restricted for general users. You need to register to use this tools.			
+text_account	Do you already have an account?			
+button_code	GET CODE			
+text_notaccount	You don't have an account?			
+button_register	REGISTER			
+title_email	Check your email			
+text_code_email	We have sent you a code to your email, insert it to unlock the advanced tools.			
+text_problem	If you have not recieved the code check the spam folder or go back and review that you introduced the email correctly.			
+button_unlock	UNLOCK TOOLS			
+title_tools_unlocked	Tools unlocked			
+text_success	You have unlocked the advanced tools susccesfully, now you can close this window and start using them.			
+button_close	CLOSE			
+title_registration	Registration			
+text_description_resgitration	Provide the requiered information to ask for the registration.			
+title_approval	Wait for the approval.			
+text_review	We will review your information and we will approve your registration if you fulfill the requirements. You will recive an email when the registration is approved.			
+text_unlocked	The advanced tools are unlocked			
+text_locked	The advanced tools are locked			
+button_unlock2	UNLOCK			
+button_exit	EXIT			
+alert_text	This tool is restricted, you need to unlock the advanced tools to use it			
+placeholder_email	Introduce your email here			
+placeholder_code	Introudce the code here			

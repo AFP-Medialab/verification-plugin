@@ -4,7 +4,7 @@ import LockIcon from '@material-ui/icons/Lock';
 import LockOpenIcon from '@material-ui/icons/LockOpen';
 
 
-const AuthenticationIcon = (porps) => {
+const AuthenticationIcon = () => {
 
     const userAuthenticated = useSelector(state => state.userSession && state.userSession.userAuthenticated);
 

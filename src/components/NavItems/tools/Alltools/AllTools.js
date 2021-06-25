@@ -9,6 +9,7 @@ import history from "../../../Shared/History/History";
 import Typography from "@material-ui/core/Typography";
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/Alltools.tsv";
+import advancedToolTsv from "../../../../LocalDictionary/components/NavItems/AdvancedTools.tsv";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import ToolCard from "./ToolCard"
 import Card from "@material-ui/core/Card";
@@ -31,7 +32,7 @@ import Alert from '@material-ui/lab/Alert';
 const AllTools = (props) => {
     const classes = useMyStyles();
     const keyword = useLoadLanguage("components/NavItems/tools/Alltools.tsv", tsv);
-    const keywordAdvancedTools = useLoadLanguage("components/NavItems/AdvancedTools.tsv", tsv);
+    const keywordAdvancedTools = useLoadLanguage("components/NavItems/AdvancedTools.tsv", advancedToolTsv);
     
     const tools = props.tools;
     const [videoUrl, setVideoUrl] = useState(null);
@@ -174,7 +175,7 @@ const AllTools = (props) => {
                 </Grid>
 
                 <Grid item>
-                    <AdvancedTools/>
+                    <AdvancedTools keyword={keywordAdvancedTools}/>
                 </Grid>
 
             </Grid>
