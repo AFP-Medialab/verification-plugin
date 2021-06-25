@@ -175,7 +175,7 @@ const Forensic = () => {
 
             <HeaderTool name={keywordAllTools("navbar_forensic")} description={keywordAllTools("navbar_forensic_description")} icon={<ForensicIcon style={{ fill: "#51A5B2" }} />}/>
 
-            <Card  style={{ display: loaded ? "none" : "block" }}>
+                <Card style={{ display: (resultData || loading) ? "none" : "block" }}>
                 <CardHeader
                     title={keyword("cardheader_source")}
                     className={classes.headerUpladedImage}

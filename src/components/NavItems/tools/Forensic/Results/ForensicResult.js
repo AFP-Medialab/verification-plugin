@@ -35,6 +35,7 @@ import LinkIcon from '@material-ui/icons/Link';
 import IconButton from '@material-ui/core/IconButton';
 import Snackbar from '@material-ui/core/Snackbar';
 import WarningIcon from '@material-ui/icons/Warning';
+import Alert from '@material-ui/lab/Alert';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -111,9 +112,15 @@ const ForensicResults = (props) => {
 
     const classes = useMyStyles();
     const keyword = useLoadLanguage("components/NavItems/tools/Forensic.tsv", tsv);
+    const keywordAdvancedTools = useLoadLanguage("components/NavItems/AdvancedTools.tsv", tsv);
     const results = props.result.filters;
     //const masks = props.masksData;
     //console.log(results);
+
+    const userAuthenticated = useSelector(
+        (state) => state.userSession && state.userSession.userAuthenticated
+    );
+    const [openAlert, setOpenAlert] = React.useState(false);
 
     /*
         --- COMPRESSION ---
@@ -455,23 +462,30 @@ const ForensicResults = (props) => {
     //nsparent(gifFilter, readyTransparency);
 
     function clickGifPopover(event, filter) {
-        var url;
-        if (filter === "zero_report" || filter === "ghost_report" || filter === "cagi_report") {
-            url = filters.current.find(x => x.id === filter).mask[filters.current.find(x => x.id === filter).currentDisplayed]
-            setGifFilter(url);
-            //console.log(url);
+        if(userAuthenticated){
+            var url;
+            if (filter === "zero_report" || filter === "ghost_report" || filter === "cagi_report") {
+                url = filters.current.find(x => x.id === filter).mask[filters.current.find(x => x.id === filter).currentDisplayed]
+                setGifFilter(url);
+                //console.log(url);
 
-            //setReadyTransparency(true);
+                //setReadyTransparency(true);
 
-        } else {
-            url = filters.current.find(x => x.id === filter).mask;
-            setGifFilter(url);
-            //console.log(url);
+            } else {
+                url = filters.current.find(x => x.id === filter).mask;
+                setGifFilter(url);
+                //console.log(url);
 
-            //setReadyTransparency(true);
+                //setReadyTransparency(true);
+            }
+            setIntervalVar(setInterval(() => animateFilter(), 1100));
+            setAnchorGifPopover(event.currentTarget);
+        }else{
+            setOpenAlert(true);
         }
-        setIntervalVar(setInterval(() => animateFilter(), 1100));
-        setAnchorGifPopover(event.currentTarget);
+
+
+        
 
     }
 
@@ -595,9 +609,10 @@ const ForensicResults = (props) => {
         setOpenToast(false);
     };
 
-
     //Explanation of the filters
     const [anchorFilterExplanation, setAnchorFilterExplanation] = React.useState(null);
+    const openFilterExplanation = Boolean(anchorFilterExplanation);
+
     const handleOpenFilterExplanation = (event) => {
         setAnchorFilterExplanation(event.currentTarget);
     };
@@ -606,14 +621,25 @@ const ForensicResults = (props) => {
         setAnchorFilterExplanation(null);
     };
 
-    const openFilterExplanation = Boolean(anchorFilterExplanation);
     const idExpl = openFilterExplanation ? 'simple-popover' : undefined;
     
-
+    
+    
+    const handleCloseAlert = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setOpenAlert(false);
+    };
 
     return (
         <StylesProvider injectFirst>
             <div>
+                <Snackbar open={openAlert} autoHideDuration={6000} onClose={handleCloseAlert}>
+                    <Alert onClose={handleCloseAlert} severity="warning">
+                        {keywordAdvancedTools("alert_text")}
+                    </Alert>
+                </Snackbar>
                 <div className={classes.newForensics}>
                     <ThemeProvider theme={theme}>
                         <Box mt={5} mb={5}>
@@ -654,9 +680,11 @@ const ForensicResults = (props) => {
                                                     </Grid>
 
                                                     <Grid item xs>
-                                                        <IconButton style={{ color: "white" }} component="span" onClick={handleClickCopyURL}>
-                                                            <LinkIcon />
-                                                        </IconButton>
+                                                        <Box ml={2}>
+                                                            <IconButton style={{ color: "white", padding: "0" }} component="span" onClick={handleClickCopyURL}>
+                                                                <LinkIcon />
+                                                            </IconButton>
+                                                        </Box>
                                                     </Grid>
 
                                                     <Grid item>
@@ -872,6 +900,8 @@ const ForensicResults = (props) => {
 
                                             }
 
+                                            
+
                                             return (
 
                                                 <TabPanel value={value} key={keyTab} index={valueTab}>
@@ -1031,6 +1061,9 @@ const ForensicResults = (props) => {
                                                         })}
 
                                                     </Grid>
+
+                                                    <img src="../../../../NavBar/images/SVG/MakoScale.png"></img>
+ 
 
                                                     <Box mt={2} mb={2}>
                                                         <Divider />
