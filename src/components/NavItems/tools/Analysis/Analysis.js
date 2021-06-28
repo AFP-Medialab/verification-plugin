@@ -117,8 +117,6 @@ const Analysis = () => {
                                     const regex1 = /www.facebook.com\/watch\//g;
                                     var found = e.target.value.match(regex);
                                     var found1 =e.target.value.match(regex1);
-                                    console.log("found ",found)
-                                    console.log("found1 ",found1)
                                     if(found!==null || found1!==null ){
                                         setWarning(true)
 
