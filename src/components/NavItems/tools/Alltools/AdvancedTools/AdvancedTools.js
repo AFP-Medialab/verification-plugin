@@ -16,7 +16,7 @@ import useAuthenticationAPI from '../../../../Shared/Authentication/useAuthentic
 import { useSelector, useDispatch } from 'react-redux';
 import { ERR_AUTH_UNKNOWN_ERROR } from '../../../../Shared/Authentication/authenticationErrors';
 import { setError } from "../../../../../redux/actions/errorActions";
-import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Alltools.tsv";
+import tsv from "../../../../../LocalDictionary/components/Shared/Authentication.tsv";
 import IconButton from '@material-ui/core/IconButton';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 //import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
@@ -28,7 +28,9 @@ import MenuItem from '@material-ui/core/MenuItem';
 import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
 
 
-const AdvancedTools = (porps) => {
+const AdvancedTools = (props) => {
+     //const keyword = useLoadLanguage("components/NavItems/AdvancedTools.tsv", tsv);
+     const keyword = props.keyword;
 
     //const classes = useMyStyles();
     // Redux store
@@ -37,8 +39,7 @@ const AdvancedTools = (porps) => {
         (state) => state.userSession && state.userSession.userAuthenticated
     );
 
-    const keyword = useLoadLanguage("components/NavItems/AdvancedTools.tsv", tsv);
-
+   
     //const userRegistrationLoading = useSelector(state => state.userSession && state.userSession.userRegistrationLoading);
 
     const registrationValidationSchema = yup.object().shape({
@@ -76,14 +77,13 @@ const AdvancedTools = (porps) => {
     
     
     useEffect(() => {
-
         if (userAuthenticated){
             setAuthenticatedData();
         }else{
             setNotAuthenticatedData();
         }
     // eslint-disable-next-line
-    }, []);
+    }, [userAuthenticated, keyword]);
 
     const setAuthenticatedData = () => {
         setDialogState(2);
@@ -278,7 +278,7 @@ const AdvancedTools = (porps) => {
 
                 <Grid item>
                     <Button variant="outlined" color={colorButton} onClick={handleClickOpen} style={{ border: "2px solid", heigth: "40px" }}>
-                        {textButton}
+                        {textButton} 
                     </Button>
                 </Grid>
 
@@ -444,7 +444,7 @@ const AdvancedTools = (porps) => {
 
                         </DialogContent>
                         <DialogActions>
-                            <Button v color="default" onClick={handleCloseFinish} fullWidth >
+                            <Button color="default" onClick={handleCloseFinish} fullWidth >
                                 {keyword("button_close")}
                             </Button>
                         </DialogActions>
