@@ -9,6 +9,7 @@ import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
 
+import AssistantAssurances from "./AssistantScrapeResults/AssistantAssurances";
 import AssistantCheckStatus from "./AssistantCheckResults/AssistantCheckStatus";
 import AssistantFileSelected from "./AssistantFileSelected";
 import AssistantIntroduction from "./AssistantIntroduction";
@@ -58,6 +59,8 @@ const Assistant = () => {
     const neResult = useSelector(state => state.assistant.neResultCategory);
     const hpResult = useSelector(state => state.assistant.hpResult)
     const inputUrlSourceCred = useSelector(state => state.assistant.inputUrlSourceCredibility)
+    const inputUrlFactCheckers = useSelector(state => state.assistant.inputUrlFactCheckers)
+
     const dbkfTextMatch = useSelector(state => state.assistant.dbkfTextMatch);
     const dbkfImageResult = useSelector(state => state.assistant.dbkfImageMatch);
     const dbkfVideoMatch = useSelector(state => state.assistant.dbkfVideoMatch);
@@ -126,6 +129,12 @@ const Assistant = () => {
                 {/* warnings and api status checks */}
                 <Grid item xs={12} className={classes.assistantGrid}
                       hidden={urlMode === null || urlMode === false}>
+
+                    <Grid item xs={12}>
+                        {inputUrlFactCheckers ?
+                            <AssistantAssurances/> : null
+                        }
+                    </Grid>
 
                     <Grid item xs={12}>
                         {dbkfTextMatch || dbkfImageResult || inputUrlSourceCred || dbkfVideoMatch || hpResult ?

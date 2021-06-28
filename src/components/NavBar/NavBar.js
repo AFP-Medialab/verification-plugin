@@ -72,7 +72,7 @@ import Snackbar from "@material-ui/core/Snackbar";
 import { setFalse, setTrue } from "../../redux/actions/cookiesActions";
 import { changeLanguage } from "../../redux/actions";
 import Button from "@material-ui/core/Button";
-import Alert from '@material-ui/lab/Alert';
+import Alert from "@material-ui/lab/Alert";
 
 
 function a11yProps(index) {

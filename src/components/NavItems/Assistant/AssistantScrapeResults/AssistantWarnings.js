@@ -26,6 +26,7 @@ const AssistantWarnings = () => {
     const keyword = useLoadLanguage("components/NavItems/tools/Assistant.tsv", tsv);
     const dispatch = useDispatch()
     const warningExpanded = useSelector(state => state.assistant.warningExpanded)
+    const uncredibleSCResults = useSelector(state => state.assistant.inputUrlSourceCredibility)
 
     return (
         <Box pl={1}>
@@ -49,7 +50,7 @@ const AssistantWarnings = () => {
             </Card>
             <Collapse in={warningExpanded} style={{"backgroundColor": "transparent"}}>
                 <Box m={3}/>
-                <SourceCredibilityResults/>
+                <SourceCredibilityResults scResultFiltered = {uncredibleSCResults}/>
 
                 <DbkfTextResults/>
 
