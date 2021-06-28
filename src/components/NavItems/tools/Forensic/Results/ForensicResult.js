@@ -220,6 +220,7 @@ const ForensicResults = (props) => {
                     results[value]["forgery"]["transparent"],
                     results[value]["votemap"]["transparent"],
                 ],
+                "popover": false,
             }
             
         //GHOST
@@ -231,6 +232,7 @@ const ForensicResults = (props) => {
                 "currentDisplayed": 0,
                 "arrows": [false, false],
                 "mask": results[value]["transparent"],
+                "popover": false,
             }
 
         //CAGI
@@ -251,6 +253,7 @@ const ForensicResults = (props) => {
                     results[value]["cagiNormalReport"]["transparent"],
                     results[value]["cagiInversedReport"]["transparent"],
                 ],
+                "popover": false,
             }
 
 
@@ -261,9 +264,9 @@ const ForensicResults = (props) => {
                 "name": keyword("forensic_title_" + value),
                 "map": results[value],
                 "mask": results[value],
+                "popover": false,
             }
             
-
 
         //LENSES
         } else if (value === "ela_report" || value === "laplacian_report" || value === "median_report") {
@@ -273,66 +276,7 @@ const ForensicResults = (props) => {
                 "map": results[value],
             }
 
-
-            /*
-        } else if (value === "dct_report") {
-            filter = {
-                "id": value,
-                "name": keyword("forensic_title_" + value),
-                "map": results[value]["colormap"],
-                "mask": masks.DCTOutput,
-            }
-        } else if (value === "blk_report") {
-            filter = {
-                "id": value,
-                "name": keyword("forensic_title_" + value),
-                "map": results[value]["colormap"],
-                "mask": masks.BLKOutput,
-            }
-        } else if (value === "splicebuster_report") {
-            filter = {
-                "id": value,
-                "name": keyword("forensic_title_" + value),
-                "map": results[value]["colormap"],
-                "mask": masks.SBOutput,
-            }
-        } else if (value === "wavelet_report") {
-            filter = {
-                "id": value,
-                "name": keyword("forensic_title_" + value),
-                "map": results[value]["colormap"],
-                "mask": masks.DWNoiseOutput,
-            }
-        } else if (value === "mantranet_report") {
-            filter = {
-                "id": value,
-                "name": keyword("forensic_title_" + value),
-                "map": results[value]["colormap"],
-                "mask": masks.MANTRANETOutput,
-            }
-        } else if (value === "fusion_report") {
-            filter = {
-                "id": value,
-                "name": keyword("forensic_title_" + value),
-                "map": results[value]["colormap"],
-                "mask": masks.FusionOutput,
-            }
-        } else if (value === "cmfd_report") {
-            filter = {
-                "id": value,
-                "name": keyword("forensic_title_" + value),
-                "map": results[value]["colormap"],
-                "mask": masks.CMFDOutput,
-            }
-        } else if (value === "rcmfd_report") {
-            filter = {
-                "id": value,
-                "name": keyword("forensic_title_" + value),
-                "map": results[value]["colormap"],
-                "mask": results[value]["map"],
-            }
-
-            */
+           
         } else {  
 
             filter = {
@@ -340,6 +284,7 @@ const ForensicResults = (props) => {
                 "name": keyword("forensic_title_" + value),
                 "map": results[value]["colormap"],
                 "mask": results[value]["transparent"],
+                "popover" : false,
             }
         }
 
@@ -347,20 +292,6 @@ const ForensicResults = (props) => {
 
         return filter;
     }));
-
-    /*
-
-    const numbersGhost = results["ghost_report"]["qualities"];
-    const ghostMasks = [];
-
-    for (var i = 0; i < numbersGhost.length; i++) {
-        const stringMask = "GhostOutput" + numbersGhost[i];
-        ghostMasks.push(masks[stringMask]);
-    }
-    */
-
-
-
 
 
     //console.log(filters);
@@ -527,11 +458,11 @@ const ForensicResults = (props) => {
     const marks = [
         {
             value: -1700,
-            label: 'Slow',
+            label: keyword("forensic_text_slow"),
         },
         {
             value: -500,
-            label: 'Fast',
+            label: keyword("forensic_text_fast"),
         },
     ];
 
@@ -627,13 +558,34 @@ const ForensicResults = (props) => {
     //Explanation of the filters
     const [anchorFilterExplanation, setAnchorFilterExplanation] = React.useState(null);
     const openFilterExplanation = Boolean(anchorFilterExplanation);
+    const [filterPopover, setFilterPopover] = React.useState(null);
+    const [textCagiPopover, setTextCagiPopover] = React.useState(null);
+    const [titleCagiPopover, setTitleCagiPopover] = React.useState(null);
+    
 
-    const handleOpenFilterExplanation = (event) => {
-        setAnchorFilterExplanation(event.currentTarget);
+    const handleOpenFilterExplanation = (event, filter) => {
+        if (filter === "cagi"){
+            if (filters.current.find(x => x.id === "cagi_report").currentDisplayed === 0){
+                setTextCagiPopover(keyword("forensic_card_cagiNormal"));
+                setTitleCagiPopover(filters.current.find(x => x.id === "cagi_report").name[0])
+            }else{
+                setTextCagiPopover(keyword("forensic_card_cagiInversed"));
+                setTitleCagiPopover(filters.current.find(x => x.id === "cagi_report").name[1])
+            }
+            setAnchorFilterExplanation(event.currentTarget);
+            setFilterPopover("cagi_report");
+            filters.current.find(x => x.id === "cagi_report").popover = true;
+
+        } else {
+            setAnchorFilterExplanation(event.currentTarget);
+            setFilterPopover(filter);
+            filters.current.find(x => x.id === filter).popover = true;
+        }
     };
 
     const handleCloseFilterExplanation = () => {
         setAnchorFilterExplanation(null);
+        filters.current.find(x => x.id === filterPopover).popover = false;
     };
 
     const idExpl = openFilterExplanation ? 'simple-popover' : undefined;
@@ -806,8 +758,61 @@ const ForensicResults = (props) => {
                                                                     onMouseOver={() => displayFilterHover(value.map)}
                                                                     onMouseLeave={hideFilterHover}
                                                                 />
-                                                                <Box align="center" width="100%" className={classes.lensesTitles}>{value.name}</Box>
+                                                                <Box align="center" width="100%" className={classes.lensesTitles}>
+                                                                    {value.name}
+                                                                    <IconButton className={classes.margin} size="small" onClick={(e) => handleOpenFilterExplanation(e, value.id)}>
+                                                                        <HelpOutlineIcon fontSize="inherit" />
+                                                                    </IconButton>
+                                                                    <Popover
+                                                                        id={idExpl}
+                                                                        open={value.popover}
+                                                                        anchorEl={anchorFilterExplanation}
+                                                                        onClose={handleCloseFilterExplanation}
+                                                                        PaperProps={{
+                                                                            style: {
+                                                                                width: '300px',
+                                                                                fontSize: 14
+                                                                            },
+                                                                        }}
+                                                                        anchorOrigin={{
+                                                                            vertical: 'bottom',
+                                                                            horizontal: 'center',
+                                                                        }}
+                                                                        transformOrigin={{
+                                                                            vertical: 'top',
+                                                                            horizontal: 'center',
+                                                                        }}
+                                                                    >
+                                                                        <Box p={1}>
+                                                                            <Grid
+                                                                                container
+                                                                                direction="row"
+                                                                                justify="space-between"
+                                                                                alignItems="strech">
+
+
+                                                                                <Typography variant="body1">
+                                                                                    {value.name}
+                                                                                </Typography>
+                                                                        
+
+                                                                                <CloseIcon onClick={handleCloseFilterExplanation} />
+                                                                            </Grid>
+                                                                            <Box m={1} />
+
+                                                                            <Typography variant="body2">
+                                                                                {keyword("forensic_card_" + value.id)}
+                                                                            </Typography>
+                                                                            
+
+
+
+                                                                        </Box>
+                                                                    </Popover>
+                                                                </Box>
+                                                                
                                                             </Grid>
+                                                            
                                                         )
                                                     })
                                                 }
@@ -1020,14 +1025,14 @@ const ForensicResults = (props) => {
                                                                             {(value.id === "cagi_report")
                                                                                 ? <Box align="center" width="100%">
                                                                                     {value.name[value.currentDisplayed]}
-                                                                                    <IconButton className={classes.margin} size="small" onClick={handleOpenFilterExplanation}>
+                                                                                    <IconButton className={classes.margin} size="small" onClick={(e) => handleOpenFilterExplanation(e, "cagi")}>
                                                                                         <HelpOutlineIcon fontSize="inherit" />
                                                                                     </IconButton>
                                                                                 </Box>
 
                                                                                 : <Box align="center" width="100%" pl={1}>
                                                                                     {value.name}
-                                                                                    <IconButton className={classes.margin} size="small" onClick={(e) => handleOpenFilterExplanation(e)}>
+                                                                                    <IconButton className={classes.margin} size="small" onClick={(e) => handleOpenFilterExplanation(e, value.id)}>
                                                                                         <HelpOutlineIcon fontSize="inherit" />
                                                                                     </IconButton>
                                                                                 </Box>
@@ -1038,7 +1043,7 @@ const ForensicResults = (props) => {
 
                                                                     <Popover
                                                                         id={idExpl}
-                                                                        open={openFilterExplanation}
+                                                                        open={value.popover}
                                                                         anchorEl={anchorFilterExplanation}
                                                                         onClose={handleCloseFilterExplanation}
                                                                         PaperProps={{
@@ -1064,15 +1069,32 @@ const ForensicResults = (props) => {
                                                                                 alignItems="strech">
 
                                                                                 <Typography variant="body1" gutterBottom>
-                                                                                    {keyword("forensic_title_what")}
+                                                                                    {(value.id === "cagi_report")
+                                                                                        ? <Typography variant="body1">
+                                                                                            {titleCagiPopover}
+                                                                                        </Typography>
+
+                                                                                        : <Typography variant="body1">
+                                                                                            {value.name}
+                                                                                        </Typography>
+                                                                                    }
                                                                                 </Typography>
 
-                                                                                <CloseIcon onClick={closeHelpFilters} />
+                                                                                <CloseIcon onClick={handleCloseFilterExplanation} />
                                                                             </Grid>
                                                                             <Box m={1} />
-                                                                            <Typography variant="body2">
-                                                                                {keyword("forensic_card_" + value.id)}
-                                                                            </Typography>
+                                                                            
+                                                                            {(value.id === "cagi_report")
+                                                                                ?   <Typography variant="body2">
+                                                                                        {textCagiPopover}
+                                                                                    </Typography>
+
+                                                                                :   <Typography variant="body2">
+                                                                                        {keyword("forensic_card_" + value.id)}
+                                                                                    </Typography>
+                                                                            }
+
+                                                                            
 
                                                                         </Box>
                                                                     </Popover>
@@ -1100,11 +1122,11 @@ const ForensicResults = (props) => {
                                                     >
 
                                                         <Grid item>
-                                                            <Typography variant="body1">No detection</Typography>
+                                                            <Typography variant="body1">{keyword("forensic_text_nodetection")}</Typography>
                                                         </Grid>
 
                                                         <Grid item>
-                                                            <Typography variant="body1">Detection</Typography>
+                                                            <Typography variant="body1">{keyword("forensic_text_detection")}</Typography>
                                                         </Grid>
 
                                                     </Grid>
@@ -1186,7 +1208,7 @@ const ForensicResults = (props) => {
                                         alignItems="stretch">
 
                                         <Typography variant="h6" gutterBottom>
-                                            Export the result as a GIF
+                                            {keyword("forensic_title_export")}
                                         </Typography>
 
                                         <CloseIcon onClick={closeGifPopover} />
@@ -1222,7 +1244,7 @@ const ForensicResults = (props) => {
                                         <Box m={4} />
 
                                         <Typography gutterBottom>
-                                            Speed of the animation
+                                            {keyword("forensic_text_speed")}
                                         </Typography>
 
 
@@ -1245,7 +1267,7 @@ const ForensicResults = (props) => {
 
 
                                         <Button variant="contained" disabled={gifState === 7} color="primary" onClick={(e) => handleDownloadGif(e)}>
-                                            Download
+                                            {keyword("forensic_button_download")}
                                         </Button>
                                     </Grid>
 

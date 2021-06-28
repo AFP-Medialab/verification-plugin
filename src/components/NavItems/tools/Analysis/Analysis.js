@@ -91,7 +91,7 @@ const Analysis = () => {
 
             <Card>
                 <CardHeader
-                    title={keyword("cardheader_link")}
+                    title={keyword("video_card_header")}
                     className={classes.headerUpladedImage}
                 />
                 <div className={classes.root2}>
