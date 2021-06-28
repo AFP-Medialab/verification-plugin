@@ -25,6 +25,8 @@ import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import Divider from '@material-ui/core/Divider';
 import Alert from '@material-ui/lab/Alert';
 
+import CardMedia from "@material-ui/core/CardMedia";
+
 const Forensic = () => {
     const {url} = useParams();
     const classes = useMyStyles();

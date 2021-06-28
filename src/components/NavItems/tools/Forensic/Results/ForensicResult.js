@@ -36,6 +36,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Snackbar from '@material-ui/core/Snackbar';
 import WarningIcon from '@material-ui/icons/Warning';
 import Alert from '@material-ui/lab/Alert';
+import MakoScale from '../../../../NavBar/images/SVG/MakoScale.png';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -1084,7 +1085,29 @@ const ForensicResults = (props) => {
 
                                                     </Grid>
 
-                                                    <img src="../../../../NavBar/images/SVG/MakoScale.png"></img>
+                                                    <Box m={2}/>
+
+                                                    <CardMedia
+                                                        image={MakoScale}
+                                                        style={{ height: "2vh" }}
+                                                    />
+
+                                                    <Grid
+                                                        container
+                                                        direction="row"
+                                                        justify="space-between"
+                                                        alignItems="center"
+                                                    >
+
+                                                        <Grid item>
+                                                            <Typography variant="body1">No detection</Typography>
+                                                        </Grid>
+
+                                                        <Grid item>
+                                                            <Typography variant="body1">Detection</Typography>
+                                                        </Grid>
+
+                                                    </Grid>
  
 
                                                     <Box mt={2} mb={2}>
