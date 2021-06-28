@@ -8,7 +8,7 @@ import { saveAs } from 'file-saver';
 import useAuthenticatedRequest from "../../../../Shared/Authentication/useAuthenticatedRequest";
 import { useSelector } from "react-redux";
 
-const useGetGif = (images, delayInput, downloading) => {
+const useGetGif = (images, delayInput, enableDownload) => {
     const keyword = useLoadLanguage("components/NavItems/tools/Forensic.tsv", tsv);
     const dispatch = useDispatch();
     const authenticatedRequest = useAuthenticatedRequest();
@@ -34,8 +34,12 @@ const useGetGif = (images, delayInput, downloading) => {
             dispatch(setStateBackResults());
         }
 
-        if (images && delayInput && downloading === 7) {
+        console.log("files", images);
+        console.log("speed", delayInput);
+        console.log("enable", enableDownload);
 
+        if (enableDownload) {
+            dispatch(setStateDownloading());
             var body = {
                 inputURLs: [
                     images.image1,
@@ -62,6 +66,6 @@ const useGetGif = (images, delayInput, downloading) => {
 
 
 
-    }, [images, delayInput, downloading, keyword, dispatch, baseURL, authenticatedRequest]);
+    }, [images, delayInput, enableDownload, keyword, dispatch, baseURL, authenticatedRequest]);
 };
 export default useGetGif;

@@ -311,6 +311,7 @@ const Gif = () => {
     //============================================================================================
     const [filesForGif, setFilesForGif] = useState(null);
     const [delayGif, setDelayGif] = useState(null);
+    const [enableDownload, setEnableDownload] = useState(false);
 
     //Function to prepare the files to trigger the download
     const handleDownloadGif = () => {
@@ -319,17 +320,22 @@ const Gif = () => {
             "image1": homoImg1,
             "image2": homoImg2,
         }
+        
         setFilesForGif(files);
         setDelayGif(speed);
-        dispatch(setStateDownloading());
+        setEnableDownload(true);
     };
 
     //console.log(filesForGif);
     //console.log(delayGif);
     //console.log(toolState);
-    //Call to the API
-    useGetGif(filesForGif, delayGif, toolState);
+    //Call to the API    
 
+    useGetGif(filesForGif, delayGif, enableDownload);
+    if (toolState === 7 && enableDownload) {
+        setEnableDownload(false);
+    }
+    
 
 
     //Reset states

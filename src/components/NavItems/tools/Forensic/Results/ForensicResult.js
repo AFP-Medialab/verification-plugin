@@ -113,6 +113,7 @@ const ForensicResults = (props) => {
     const classes = useMyStyles();
     const keyword = useLoadLanguage("components/NavItems/tools/Forensic.tsv", tsv);
     const keywordAdvancedTools = useLoadLanguage("components/NavItems/AdvancedTools.tsv", tsv);
+    const keywordWarning = useLoadLanguage("components/Shared/OnWarningInfo.tsv", tsv);
     const results = props.result.filters;
     //const masks = props.masksData;
     //console.log(results);
@@ -192,7 +193,17 @@ const ForensicResults = (props) => {
     const filters = useRef(filtersIDs.map((value) => {
 
         var filter;
+        console.log(results[value]);
 
+        if (results[value] === undefined) {
+            filter = {
+                "id": "",
+                "name": "",
+                "map": "",
+                "mask": "",
+            } 
+            return filter;
+        }
         //Zero
         if (value === "zero_report") {
             filter = {
@@ -321,7 +332,8 @@ const ForensicResults = (props) => {
             }
 
             */
-        } else {
+        } else {  
+
             filter = {
                 "id": value,
                 "name": keyword("forensic_title_" + value),
@@ -454,7 +466,7 @@ const ForensicResults = (props) => {
 
     const [interval, setIntervalVar] = React.useState(null);
 
-    const downloading = useSelector(state => state.gif.toolState);
+    const gifState = useSelector(state => state.gif.toolState);
 
 
     //const [readyTransparency, setReadyTransparency] = React.useState(false);
@@ -539,23 +551,25 @@ const ForensicResults = (props) => {
 
     const [filesForGif, setFilesForGif] = useState();
     const [delayGif, setDelayGif] = useState();
-    //const [readyToDownload, setReadyToDownload] = useState();
-
+    const [enableDownload, setEnableDownload] = useState(false);
     
 
 
     const handleDownloadGif = () => {
-        dispatch(setStateDownloading());
+
         var files = {
             "image1": gifImage,
             "image2": gifFilter,
         }
         setFilesForGif(files);
         setDelayGif(speed);
-        
+        setEnableDownload(true);
     };
 
-    useGetGif(filesForGif, delayGif, downloading);
+    useGetGif(filesForGif, delayGif, enableDownload);
+    if (gifState === 7 && enableDownload) {
+        setEnableDownload(false);
+    }
 
 
     //const dispatch = useDispatch();
@@ -640,6 +654,9 @@ const ForensicResults = (props) => {
                         {keywordAdvancedTools("alert_text")}
                     </Alert>
                 </Snackbar>
+                <Box mt={3}  style={{marginBottom: "50px"}}>
+                    <Alert severity="warning">{keywordWarning("warning_forenisc")}</Alert>
+                </Box>
                 <div className={classes.newForensics}>
                     <ThemeProvider theme={theme}>
                         <Box mt={5} mb={5}>
@@ -996,21 +1013,26 @@ const ForensicResults = (props) => {
                                                                         </div>
                                                                     }
 
+                                                                    {value.id !== "" &&
+                                                                        <div>
 
-                                                                    {(value.id === "cagi_report")
-                                                                        ? <Box align="center" width="100%">
-                                                                            {value.name[value.currentDisplayed]}
-                                                                            <IconButton className={classes.margin} size="small" onClick={handleOpenFilterExplanation}>
-                                                                                <HelpOutlineIcon fontSize="inherit" />
-                                                                            </IconButton>
-                                                                        </Box>
+                                                                            {(value.id === "cagi_report")
+                                                                                ? <Box align="center" width="100%">
+                                                                                    {value.name[value.currentDisplayed]}
+                                                                                    <IconButton className={classes.margin} size="small" onClick={handleOpenFilterExplanation}>
+                                                                                        <HelpOutlineIcon fontSize="inherit" />
+                                                                                    </IconButton>
+                                                                                </Box>
 
-                                                                        : <Box align="center" width="100%" pl={1}>
-                                                                            {value.name}
-                                                                            <IconButton className={classes.margin} size="small" onClick={(e) => handleOpenFilterExplanation(e)}>
-                                                                                <HelpOutlineIcon fontSize="inherit" />
-                                                                            </IconButton>
-                                                                        </Box>
+                                                                                : <Box align="center" width="100%" pl={1}>
+                                                                                    {value.name}
+                                                                                    <IconButton className={classes.margin} size="small" onClick={(e) => handleOpenFilterExplanation(e)}>
+                                                                                        <HelpOutlineIcon fontSize="inherit" />
+                                                                                    </IconButton>
+                                                                                </Box>
+                                                                            }
+
+                                                                        </div>
                                                                     }
 
                                                                     <Popover
@@ -1199,7 +1221,7 @@ const ForensicResults = (props) => {
                                         <Box m={2} />
 
 
-                                        <Button variant="contained" color="primary" onClick={(e) => handleDownloadGif(e)}>
+                                        <Button variant="contained" disabled={gifState === 7} color="primary" onClick={(e) => handleDownloadGif(e)}>
                                             Download
                                         </Button>
                                     </Grid>
