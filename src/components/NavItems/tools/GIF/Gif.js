@@ -243,8 +243,8 @@ const Gif = () => {
 
     const [interval, setIntervalVar] = React.useState(null);
 
-//=== SPEED SLIDER ===
-const [speed, setSpeed] = React.useState(1100);
+    //=== SPEED SLIDER ===
+    const [speed, setSpeed] = React.useState(1100);
 
 
     //=== CSS ANIMATION ===
@@ -314,15 +314,14 @@ const [speed, setSpeed] = React.useState(1100);
 
     //Function to prepare the files to trigger the download
     const handleDownloadGif = () => {
-        dispatch(setStateDownloading());
-        //console.log(toolState);
+        console.log(toolState);
         var files = {
             "image1": homoImg1,
             "image2": homoImg2,
         }
         setFilesForGif(files);
         setDelayGif(speed);
-        
+        dispatch(setStateDownloading());
     };
 
     //console.log(filesForGif);
@@ -830,7 +829,7 @@ const [speed, setSpeed] = React.useState(1100);
                                                     <Box m={2} />
 
 
-                                                    <Button variant="contained" color="primary" fullWidth onClick={(e) => handleDownloadGif(e)}>
+                                                    <Button variant="contained" color="primary" disabled={toolState===7} fullWidth onClick={(e) => handleDownloadGif(e)}>
                                                         {keyword("button_download")}
                                                     </Button>
                                                     <Box m={2} />

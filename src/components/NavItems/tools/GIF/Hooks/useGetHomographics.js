@@ -32,10 +32,15 @@ const useGetHomographics = (files, mode) => {
 
         const getImages = (response) => {
             console.log("RESPONSE RECIEVED");
-            //console.log(response);
+            console.log(response);
 
             if(response.data.status === "KO"){
-                handleError("error_homo");
+                if (response.data.errorCode === "NO_MATCHES_FOUND"){
+                    handleError("error_homo");
+                } else if (response.data.errorCode === "IPOL_GENERIC_EROR"){
+                    handleError("error_server");
+                }
+                
             }else{
                 var homoImage1 = baseURL + response.data.results.output0;
                 var homoImage2 = baseURL + response.data.results.output1;
