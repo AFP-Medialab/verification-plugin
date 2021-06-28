@@ -48,11 +48,11 @@ const Thumbnails = () => {
 
     const input = useInput(resultUrl);
     const [selectedValue, setSelectedValue] = React.useState({
-        'google': false,
+        'google': true,
         'bing': false,
         'tineye': false,
         'yandex': false,
-        'openTabs': false,
+        'openTabs': true,
         'reddit': false,
 
     });
@@ -121,6 +121,7 @@ const Thumbnails = () => {
     };
 
     const submitForm = () => {
+        setShowResult(false);
         dispatch(setError(null));
         let url = input.value.replace("?rel=0", "");
         if (url !== null && url !== "" && isYtUrl(url)) {
@@ -131,15 +132,6 @@ const Thumbnails = () => {
                 images.forEach(img => imageClickUrl(img));
         } else
             dispatch(setError("Please use a valid Youtube Url (add to tsv)"));
-    };
-
-    const imageClick = (event) => {
-        let search_url = "https://www.google.com/searchbyimage?image_url=";
-    let url = event;
-
-    if (url !== ""){
-        window.chrome.tabs.create({url:search_url + url});
-    }
     };
 
     const imageClickUrl = (url) => {
@@ -289,7 +281,7 @@ const Thumbnails = () => {
                         <OnClickInfo keyword={"thumbnails_tip"}/>
                         <Box m={2}/>
 
-                        <ImageGridList list={resultData} handleClick={imageClick} height={height} cols={cols} />
+                        <ImageGridList list={resultData} handleClick={imageClickUrl} height={height} cols={cols} />
                         
                     </div>
                 </Card>

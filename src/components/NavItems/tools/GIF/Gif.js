@@ -15,44 +15,109 @@ import { ReactComponent as IconGif } from '../../../NavBar/images/SVG/Image/Gif.
 import DragAndDrop from './DragAndDrop'
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/CheckGIF.tsv";
-
 import LinkIcon from '@material-ui/icons/Link';
 import FileIcon from '@material-ui/icons/InsertDriveFile';
-
 import TextField from '@material-ui/core/TextField';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import { useDispatch } from "react-redux";
+import { useEffect } from "react";
+import { setStateSelectingLocal, setStateSelectingUrl, setStateReady, setStateInit, setStateDownloading } from "../../../../redux/actions/tools/gifActions";
+import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
+import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
+import IconButton from '@material-ui/core/IconButton';
+import { StylesProvider } from "@material-ui/core/styles";
+
 
 const Gif = () => {
+    
 
-    //Load of the TSV
-    const keyword = useLoadLanguage("components/NavItems/tools/CheckGIF.tsv", tsv);
-
-    //Style elements
+    //Init variables
     //============================================================================================
     const classes = useMyStyles();
+    const keyword = useLoadLanguage("components/NavItems/tools/CheckGIF.tsv", tsv);
+    const keywordAllTools = useLoadLanguage("components/NavItems/tools/Alltools.tsv", tsv);
+    const toolState = useSelector(state => state.gif.toolState);
+    const dispatch = useDispatch();
+
+
+    //Selecting mode
+    //============================================================================================
+
+    const [classButtonURL, setClassButtonURL] = useState(classes.bigButtonDiv);
+    const [classButtonLocal, setClassButtonLocal] = useState(classes.bigButtonDiv);
+    
+    const [classIconURL, setClassIconURL] = useState(classes.bigButtonIcon);
+    const [classIconLocal, setClassIconLocal] = useState(classes.bigButtonIcon);
+
+    const [selectedMode, setSelectedMode] = useState("");
+    
+    if (toolState === 1 && classButtonURL !== classes.bigButtonDiv && classButtonLocal !== classes.bigButtonDiv) {
+
+        setClassButtonURL(classes.bigButtonDiv);
+        setClassButtonLocal(classes.bigButtonDiv);
+
+        setClassIconURL(classes.bigButtonIcon);
+        setClassIconLocal(classes.bigButtonIcon);
+
+    }
+
+    function clickURL () {
+        changeStylesToUrl();
+        dispatch(setStateSelectingUrl());
+        setSelectedMode("URL");
+    }
+
+    function clickLocal (){
+        changeStylesToLocal();
+        dispatch(setStateSelectingLocal());
+        setSelectedMode("LOCAL");
+    }
+
+    function changeStylesToLocal() {
+        //Change styles of the local button to selected
+        setClassButtonLocal(classes.bigButtonDivSelectted);
+        setClassIconLocal(classes.bigButtonIconSelectted);
+
+        //Change styles of the URL button to not selected
+        setClassButtonURL(classes.bigButtonDiv);
+        setClassIconURL(classes.bigButtonIcon);
+    }
+
+    function changeStylesToUrl() {
+        //Change styles of the url button to selected
+        setClassButtonURL(classes.bigButtonDivSelectted);
+        setClassIconURL(classes.bigButtonIconSelectted);
+
+        //Change styles of the Local button to not selected
+        setClassButtonLocal(classes.bigButtonDiv);
+        setClassIconLocal(classes.bigButtonIcon);
+    }
+
+
 
 
 
     //Load images for the GIF 
     //============================================================================================
 
-    const [imageDropped1, setImageDropped1] = useState();
+    //1=Images | 2=URL
+    const [modeHomo, setModeHomo] = useState(0);
+
+    const [imageDropped1, setImageDropped1] = useState(null);
     const [showDropZone1, setShowDropZone1] = useState(true);
 
-    const [imageDropped2, setImageDropped2] = useState();
+    const [imageDropped2, setImageDropped2] = useState(null);
     const [showDropZone2, setShowDropZone2] = useState(true);
 
     const [selectedFile1, setSelectedFile1] = useState();
     const [selectedFile2, setSelectedFile2] = useState();
-
-    const [readyToSend, setReadyToSend] = useState(false);
     const [filesToSend, setFilesToSend] = useState();
-    const showHomo = useSelector(state => state.gif.showHomo);
-
-    const loading = useSelector(state => state.gif.loading);
 
 
-    //===  CODE FOR THE FIRST IMAGE ===
+    //--- Local files mode ---
+
+    //FIRST IMAGE
+
     //Load by drop
     const handleDrop = (files) => {
         //console.log(files);//DEBUG
@@ -72,7 +137,9 @@ const Gif = () => {
     }
 
 
-    //=== CODE FOR THE SECOND IMAGE ===
+
+    //SECOND IMAGE
+
     //Load by drop
     const handleDrop2 = (files) => {
         //console.log(files);//DEBUG
@@ -91,27 +158,39 @@ const Gif = () => {
         setShowDropZone2(false)
     }
 
+    //Remove image1
+    const removeImage1 = () => {
+        setImageDropped1(null);
+        setSelectedFile1(null);
+        setShowDropZone1(true)
+    }
 
+    //Remove image1
+    const removeImage2 = () => {
+        setImageDropped2(null);
+        setSelectedFile2(null);
+        setShowDropZone2(true)
+    }
+
+
+
+    //--- URL mode ---  
 
     //URL
     const [imageURL1, setImageURL1] = useState("");
     const [imageURL2, setImageURL2] = useState("");
 
-    //1=Images | 2=URL
-    const [modeHomo, setModeHomo] = useState(0);
-
+    
     //Code to enable the button to upload the images
-    if (imageURL1 !== "" && imageURL2 !== "" && !readyToSend && !loading & !showHomo) {
-        //console.log("Ready to send"); //DEBUG
-        setReadyToSend(true);
+    if (toolState === 22 && imageURL1 !== "" && imageURL2 !== "") {
+        console.log("Ready to send"); //DEBUG
+        dispatch(setStateReady());
     }
 
-
-
     //Code to enable the button to upload the images
-    if (imageDropped1 != null && imageDropped2 != null && !readyToSend && !loading & !showHomo) {
+    if (toolState === 21 && imageDropped1 !== null && imageDropped2 !== null) {
         console.log("Ready to send"); //DEBUG
-        setReadyToSend(true);
+        dispatch(setStateReady());
     }
 
     //Function to prepare the files to trigger the submission
@@ -122,7 +201,6 @@ const Gif = () => {
         }
         setModeHomo(2);
         setFilesToSend(files);
-        setReadyToSend(false);
     };
 
 
@@ -133,18 +211,26 @@ const Gif = () => {
         }
         setModeHomo(1);
         setFilesToSend(files);
-        setReadyToSend(false);
     };
 
-
-
     //Call to the API
-    useGetHomographics(filesToSend, showHomo, modeHomo);
+    useGetHomographics(filesToSend, modeHomo);
 
     //Loading bar
+    /*
     if (loading && readyToSend){
         setReadyToSend(false);
         console.log("Disable button"); //DEBUG
+    }
+    */
+
+    if(toolState === 6){
+        cleanInputs();
+        if (selectedMode === "URL"){
+            dispatch(setStateSelectingUrl());
+        } else if (selectedMode === "LOCAL"){
+            dispatch(setStateSelectingLocal());
+        }
     }
 
 
@@ -157,17 +243,29 @@ const Gif = () => {
 
     const [interval, setIntervalVar] = React.useState(null);
 
+//=== SPEED SLIDER ===
+const [speed, setSpeed] = React.useState(1100);
+
 
     //=== CSS ANIMATION ===
 
     //Trigger of the loop function
-    if (showHomo && interval === null) {
-        setIntervalVar(setInterval(() => animateImages(), 1100));
+    useEffect(() => {
+    if (toolState === 5 && (interval === null || interval === undefined)) {
+            setIntervalVar(setInterval(() => animateImages(), speed));
     }
+    return () => {
+        if(interval !==null ){
+            clearInterval(interval); 
+            setIntervalVar(null)
+        }
+    }
+    }, [setIntervalVar, interval, toolState, speed]);
+    
 
     //Loop function
     function animateImages() {
-        //console.log("Loop function"); //DEBUG
+        console.log("Loop function" + interval); //DEBUG
         //console.log(interval); //DEBUG
         var x = document.getElementById("gifFilterElement");
 
@@ -177,9 +275,6 @@ const Gif = () => {
             x.style.display = "none";
         }
     }
-
-    //=== SPEED SLIDER ===
-    const [speed, setSpeed] = React.useState(1100);
 
     const marks = [
         {
@@ -201,8 +296,12 @@ const Gif = () => {
     //On release function (when the click is released this function is triggered)
     function commitChangeSpeed(value) {
         //console.log("Commit change speed: " + value); //DEBUG
-        clearInterval(interval);
+        //clearInterval(interval);
         setIntervalVar(setInterval(() => animateImages(), (value)));
+    }
+
+    function stopLoop() {
+        clearInterval(interval);
     }
 
     
@@ -210,67 +309,77 @@ const Gif = () => {
 
     //Download GIF
     //============================================================================================
-    const [filesForGif, setFilesForGif] = useState();
-    const [delayGif, setDelayGif] = useState();
+    const [filesForGif, setFilesForGif] = useState(null);
+    const [delayGif, setDelayGif] = useState(null);
 
     //Function to prepare the files to trigger the download
     const handleDownloadGif = () => {
+        dispatch(setStateDownloading());
+        //console.log(toolState);
         var files = {
             "image1": homoImg1,
             "image2": homoImg2,
         }
         setFilesForGif(files);
         setDelayGif(speed);
+        
     };
 
+    //console.log(filesForGif);
+    //console.log(delayGif);
+    //console.log(toolState);
     //Call to the API
-    useGetGif(filesForGif, delayGif, true);
+    useGetGif(filesForGif, delayGif, toolState);
 
 
 
+    //Reset states
+    //============================================================================================
 
-    const [classButtonURL, setClassButtonURL] = useState(null);
-    const [classButtonLocal, setClassButtonLocal] = useState(null);
 
-    const [classIconURL, setClassIconURL] = useState(classes.bigButtonIcon);
-    const [classIconLocal, setClassIconLocal] = useState(classes.bigButtonIcon);
-
-    const [showURL, setShowURL] = useState(false);
-    const [showLocal, setShowLocal] = useState(false);
-
-    if (!showURL && !showLocal && classButtonURL !== classes.bigButtonDiv && classButtonLocal !== classes.bigButtonDiv){
+    const newGif = (event) => {
+        stopLoop();
+        cleanInputs();
+        
         setClassButtonURL(classes.bigButtonDiv);
-        setClassButtonLocal(classes.bigButtonDiv);
-    }
-
-
-    const clickURL = (event) => {
-        setClassButtonURL(classes.bigButtonDivSelectted);
-        setClassIconURL(classes.bigButtonIconSelectted);
+        setClassIconURL(classes.bigButtonIcon);
 
         setClassButtonLocal(classes.bigButtonDiv);
         setClassIconLocal(classes.bigButtonIcon);
 
-        setShowURL(true);
-        setShowLocal(false);
+        dispatch(setStateInit());
     }
 
-    const clickLocal = (event) => {
-        setClassButtonURL(classes.bigButtonDiv);
-        setClassIconURL(classes.bigButtonIcon);
 
-        setClassButtonLocal(classes.bigButtonDivSelectted);
-        setClassIconLocal(classes.bigButtonIconSelectted);
+    function cleanInputs() {
+        setImageDropped1(null);
+        setSelectedFile1(null);
+        setShowDropZone1(true);
 
-        setShowURL(false);
-        setShowLocal(true);
+        setImageDropped2(null);
+        setSelectedFile2(null);
+        setShowDropZone2(true);
+
+        setImageURL1("");
+        setImageURL2("");
+
+        setFilesToSend(null);
+        setModeHomo(0);
+
+        //setFilesForGif(null); 
+        //setDelayGif(null);
     }
 
-    
-
-
-
-
+    useEffect(() => {
+        return () => {
+            // componentwillunmount in functional component.
+            // Anything in here is fired on component unmount.
+            console.log("Stop loop "  + interval);
+            clearInterval(interval);
+            newGif();
+        }
+    // eslint-disable-next-line
+    }, [])
 
 
     //HTML Code
@@ -283,31 +392,13 @@ const Gif = () => {
                 {//=== Title ===
                 }
 
-                <Grid
-                    container
-                    direction="row"
-                    justify="flex-start"
-                    alignItems="center"
-                >
-
-                    <IconGif style={{ fill: "#51A5B2" }} />
-                    <Typography variant="h4" color={'primary'}>
-                        {keyword("checkGIF_title")}
-                    </Typography>
-
-                </Grid>
-
-                <Box ml={1}>
-                    <Typography variant="body1">
-                        {keyword("checkGIF_description")}
-                    </Typography>
-                </Box>
-                <Box m={3} />
+                <HeaderTool name={keywordAllTools("navbar_gif")} description={keywordAllTools("navbar_gif_description")} icon={<IconGif style={{ fill: "#51A5B2" }} />} />
+            
 
                 {//=== Load of the images ===
                 }
 
-
+                <StylesProvider injectFirst>
                 <Card>
                     <CardHeader
                         title={
@@ -420,7 +511,7 @@ const Gif = () => {
 
                 <Box m={3} />
 
-                {(showLocal || showURL) &&
+                {(toolState >= 2) &&
 
                 <Card>
                     <CardHeader
@@ -433,6 +524,10 @@ const Gif = () => {
 
                                 <span>{keyword("title_gifcreation")}</span>
 
+                                <Button variant="contained" style={{ backgroundColor: "#FFFFFF" }} onClick={newGif}>
+                                    {keyword("button_new")}
+                                </Button>
+
                             </Grid>
                         }
                         className={classes.headerUpladedImage}
@@ -444,7 +539,7 @@ const Gif = () => {
                             <Grid item xs={6} style={{ borderRight: '0.1em solid #ECECEC', padding: '0.5em' }}>
                                 <Box p={2}>
 
-                                {showLocal &&
+                                {(selectedMode === "LOCAL") &&
                                     <div>
                                         <Typography variant="h6" className={classes.headingGif}>
                                             {keyword("title_image1")}
@@ -453,7 +548,19 @@ const Gif = () => {
                                         <Box m={2} />
 
                                         {!showDropZone1 &&
-                                            <img src={imageDropped1} className={classes.imageDropped} alt="" />
+                                            < Grid
+                                                container
+                                                spacing={1}
+                                                direction="row"
+                                                justify="flex-start"
+                                                alignItems="flex-start"
+
+                                            >
+                                                <img src={imageDropped1} className={classes.imageDropped} alt="" />
+                                                <IconButton onClick={removeImage1}>
+                                                    <DeleteOutlineIcon fontSize="small" />
+                                                </IconButton>
+                                            </Grid>
                                         }
 
                                         {showDropZone1 &&
@@ -503,7 +610,19 @@ const Gif = () => {
                                         <Box m={2} />
 
                                         {!showDropZone2 &&
-                                            <img src={imageDropped2} className={classes.imageDropped} alt="" />
+                                            <Grid
+                                                container
+                                                spacing={1}
+                                                direction="row"
+                                                justify="flex-start"
+                                                alignItems="flex-start"
+
+                                            >
+                                                <img src={imageDropped2} className={classes.imageDropped} alt="" />
+                                                <IconButton onClick={removeImage2}>
+                                                    <DeleteOutlineIcon fontSize="small" />
+                                                </IconButton>
+                                            </Grid>
                                         }
 
                                         {showDropZone2 &&
@@ -544,13 +663,13 @@ const Gif = () => {
 
                                         <Box m={4} />
 
-                                        <Button variant="contained" color="primary" fullWidth onClick={handleSubmission} disabled={!readyToSend}>
+                                        <Button variant="contained" color="primary" fullWidth onClick={handleSubmission} disabled={toolState!==3}>
                                             {keyword("button_loadImages")}
                                         </Button>
                                     </div>
                                 }
 
-                                {showURL &&
+                                {(selectedMode === "URL") &&
                                     <div>
                                         <Typography variant="h6" className={classes.headingGif}>
                                             {keyword("title_image1")}
@@ -595,7 +714,7 @@ const Gif = () => {
 
                                         <Box m={4} />
 
-                                    <Button variant="contained" color="primary" fullWidth onClick={handleSubmissionURL} disabled={!readyToSend}>
+                                        <Button variant="contained" color="primary" fullWidth onClick={handleSubmissionURL} disabled={toolState !== 3}>
                                             {keyword("button_loadImages")}
                                         </Button>
                                         
@@ -607,10 +726,11 @@ const Gif = () => {
                             </Grid>
 
 
-                            <Grid item xs={6}>
+                            <Grid item xs={6} style={{ padding: '0.5em' }}>
                                 
-                                    
-                                    {!showHomo && !loading &&
+                                
+
+                                    {(toolState === 21 || toolState === 22 || toolState === 3) &&
                                         
                                         <Grid
                                             container
@@ -619,19 +739,19 @@ const Gif = () => {
                                             alignItems="center"
                                             className={classes.height100}
                                         >
-                                            <IconGif style={{ fill: "#C9C9C9" }} />
-                                            <Box p={4}>
-                                                <Typography variant="h6" style={{ color: "#C9C9C9" }} align="center">
-                                                    {keyword("text_preview")}
-                                                </Typography>
-                                            </Box>
+                                                <IconGif style={{ fill: "#C9C9C9" }} />
+                                                <Box p={4}>
+                                                    <Typography variant="h6" style={{ color: "#C9C9C9" }} align="center">
+                                                        {keyword("text_preview")}
+                                                    </Typography>
+                                                </Box>
                                         
                                         </Grid>
                                     }
 
 
 
-                                    {loading &&
+                                    {toolState === 4 &&
                                         <Grid
                                             container
                                             direction="column"
@@ -643,82 +763,84 @@ const Gif = () => {
                                         </Grid>
                                     }
 
-                                    {showHomo &&
-                                    
-                                        <Grid
-                                            container
-                                            direction="column"
-                                            justify="space-between"
-                                            alignItems="flex-start"
-                                            className={classes.height100}
-                                        >
-                                            
-                                            <Typography variant="h6" className={classes.headingGif}>
-                                                {keyword("title_preview")}
-                                            </Typography>
+                                    {(toolState === 5 || toolState === 7) &&
 
-                                            <Box justifyContent="center" className={classes.wrapperImageFilter}>
+                                        <Box p={2} className={classes.height100}>
 
-                                                <CardMedia
-                                                    component="img"
-                                                    className={classes.imagesGifImage}
-                                                    image={homoImg1}
-                                                />
-                                                {true &&
-                                                    <CardMedia
-                                                        component="img"
-                                                        className={classes.imagesGifFilter}
-                                                        image={homoImg2}
-                                                        id="gifFilterElement"
-                                                    />
-                                                }
-                                            </Box>
-
-
-
+                                        
                                             <Grid
                                                 container
                                                 direction="column"
-                                                justify="center"
-                                                alignItems="center"
+                                                justify="space-between"
+                                                alignItems="flex-start"
+                                                className={classes.height100}
                                             >
-                                                <Box m={4} />
-
-                                                <Typography gutterBottom>
-                                                    {keyword("slider_title")}
+                                                
+                                                <Typography variant="h6" className={classes.headingGif}>
+                                                    {keyword("title_preview")}
                                                 </Typography>
 
+                                                <Box justifyContent="center" className={classes.wrapperImageFilter}>
 
-                                                <Slider
-                                                    defaultValue={-1100}
-                                                    aria-labelledby="discrete-slider"
-                                                    step={300}
-                                                    marks={marks}
-                                                    min={-1700}
-                                                    max={-500}
-                                                    scale={x => -x}
-                                                    onChange={(e, val) => changeSpeed(val)}
-                                                    onChangeCommitted={(e) => commitChangeSpeed(speed)}
-                                                    className={classes.sliderClass}
-                                                />
+                                                    <CardMedia
+                                                        component="img"
+                                                        className={classes.imagesGifImage}
+                                                        image={homoImg1}
+                                                    />
+                                                    {true &&
+                                                        <CardMedia
+                                                            component="img"
+                                                            className={classes.imagesGifFilter}
+                                                            image={homoImg2}
+                                                            id="gifFilterElement"
+                                                        />
+                                                    }
+                                                </Box>
 
 
 
-                                                <Box m={2} />
+                                                <Grid
+                                                    container
+                                                    direction="column"
+                                                    justify="center"
+                                                    alignItems="center"
+                                                >
+                                                    <Box m={4} />
+
+                                                    <Typography gutterBottom>
+                                                        {keyword("slider_title")}
+                                                    </Typography>
 
 
-                                                <Button variant="contained" color="primary" fullWidth onClick={(e) => handleDownloadGif(e)}>
-                                                    {keyword("button_download")}
-                                                </Button>
-                                                <Box mt={2} />
+                                                    <Slider
+                                                        defaultValue={-1100}
+                                                        aria-labelledby="discrete-slider"
+                                                        step={300}
+                                                        marks={marks}
+                                                        min={-1700}
+                                                        max={-500}
+                                                        scale={x => -x}
+                                                        onChange={(e, val) => changeSpeed(val)}
+                                                        onChangeCommitted={(e) => commitChangeSpeed(speed)}
+                                                        className={classes.sliderClass}
+                                                    />
+
+
+
+                                                    <Box m={2} />
+
+
+                                                    <Button variant="contained" color="primary" fullWidth onClick={(e) => handleDownloadGif(e)}>
+                                                        {keyword("button_download")}
+                                                    </Button>
+                                                    <Box m={2} />
+                                                </Grid>
+
+                                            
                                             </Grid>
-
-                                        
-                                        </Grid>
-                                        
+                                        </Box>
 
                                     }
-                                
 
                             </Grid>
 
@@ -729,9 +851,8 @@ const Gif = () => {
 
 
                 </Card>
-
                 }
-
+                </StylesProvider>
                 
 
 { /*

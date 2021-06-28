@@ -9,6 +9,7 @@ import history from "../../../Shared/History/History";
 import Typography from "@material-ui/core/Typography";
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/Alltools.tsv";
+import advancedToolTsv from "../../../../LocalDictionary/components/NavItems/AdvancedTools.tsv";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import ToolCard from "./ToolCard"
 import Card from "@material-ui/core/Card";
@@ -19,19 +20,51 @@ import { ReactComponent as IconData } from '../../../NavBar/images/SVG/DataAnaly
 import { ReactComponent as IconTools } from '../../../NavBar/images/SVG/Navbar/Tools.svg';
 import Box from "@material-ui/core/Box";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
+import AdvancedTools from "./AdvancedTools/AdvancedTools";
+import { useSelector } from 'react-redux';
+import Snackbar from '@material-ui/core/Snackbar';
+import Alert from '@material-ui/lab/Alert';
+
+
+
+
 
 const AllTools = (props) => {
     const classes = useMyStyles();
     const keyword = useLoadLanguage("components/NavItems/tools/Alltools.tsv", tsv);
+    const keywordAdvancedTools = useLoadLanguage("components/NavItems/AdvancedTools.tsv", advancedToolTsv);
+    
     const tools = props.tools;
     const [videoUrl, setVideoUrl] = useState(null);
 
-    const handleClick = (path, mediaTool) => {
+    const userAuthenticated = useSelector(
+        (state) => state.userSession && state.userSession.userAuthenticated
+    );
+    const [openAlert, setOpenAlert] = React.useState(false);
+
+    const handleClick = (path, mediaTool, type) => {
+        console.log(type);
+        if (type === "lock" || type === "lock and new"){
+            if (userAuthenticated){
+                console.log("LOGGED");
+                handlePush(path, mediaTool);
+            }else{
+                setOpenAlert(true);
+            }
+        }else{
+            console.log("NOT LOGGED");
+            handlePush(path, mediaTool);
+        }
+    };
+
+    const handlePush = (path, mediaTool) => {
         history.push({
             pathname: "/app/tools/" + path,
-            state: { media: mediaTool}
+            state: { media: mediaTool }
         })
+        
     };
+    
 
     //console.log(tools);
 
@@ -47,7 +80,7 @@ const AllTools = (props) => {
             value.type = "redesigned";
         }
 
-        if (value.title === "navbar_ocr" || value.title === "navbar_gif" || value.title === "navbar_xnetwork" || value.title === "navbar_covidsearch" || value.title === "navbar_analysis_image") {
+        if (value.title === "navbar_ocr" || value.title === "navbar_xnetwork" || value.title === "navbar_covidsearch" || value.title === "navbar_analysis_image") {
             value.type = "new";
         }
 
@@ -55,6 +88,9 @@ const AllTools = (props) => {
             value.type = "lock";
         }
 
+        if (value.title === "navbar_gif") {
+            value.type = "lock and new";
+        }
 
 
         if(
@@ -108,42 +144,43 @@ const AllTools = (props) => {
     console.log(toolsData);
     */
 
-
     
-    /*
+
+    const handleCloseAlert = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setOpenAlert(false);
+    };
 
 
-<Grid>
-                                        <Grid item onClick={() => handleClick(value.path)}>
-                                            <IconButton className={classes.customAllToolsButton} style={{ "fontSize": 67}}>
-                                                {value.icon}
-                                            </IconButton>
-                                        </Grid>
-                                        <Grid item>
-                                            <Grid>
-                                                <Typography variant={"body1"}>
-                                                    {keyword(value.title)}
-                                                    <IconButton
-                                                        aria-label="settings"
-                                                        size={"small"}
-                                                        onClick={() => setVideoUrl(keyword(value.tsvPrefix + "_help_video"))}
-                                                    >
-                                                        <HelpIcon/>
-                                                    </IconButton>
-                                                </Typography>
-
-
-
-                                            </Grid>
-                                        </Grid>
-                                    </Grid>
-
-    */
 
     return (
         <div>
+            <Snackbar open={openAlert} autoHideDuration={6000} onClose={handleCloseAlert}>
+                <Alert onClose={handleCloseAlert} severity="warning">
+                    {keywordAdvancedTools("alert_text")}
+                </Alert>
+            </Snackbar>
 
-            <HeaderTool name={keyword("navbar_tools")} icon={<IconTools style={{ fill: "#51A5B2" }} />} />
+            <Grid
+                container
+                direction="row"
+                justify="space-between"
+                alignItems="center">
+
+
+                <Grid item xs>
+                    <HeaderTool name={keyword("navbar_tools")} icon={<IconTools style={{ fill: "#51A5B2" }} />} />
+                </Grid>
+
+                <Grid item>
+                    <AdvancedTools keyword={keywordAdvancedTools}/>
+                </Grid>
+
+            </Grid>
+
+            
 
             <Card>
                 <Box p={2}>
@@ -162,7 +199,7 @@ const AllTools = (props) => {
                         </Grid>
 
                         <Grid item>
-                            <Typography variant="h5" style={{ color: "#596977" }}>Video</Typography>
+                            <Typography variant="h5" style={{ color: "#596977" }}>{keyword("category_video")}</Typography>
                         </Grid>
 
                     </Grid>
@@ -173,10 +210,10 @@ const AllTools = (props) => {
                         
                             {
                                 toolsVideo.map((value, key) => {
-                                    console.log(value);
+                                    //console.log(value);
 
                                     return (
-                                        <Grid className={classes.toolCardStyle} item key={key} onClick={() => handleClick(value.path, "video")}>
+                                        <Grid className={classes.toolCardStyle} item key={key} onClick={() => handleClick(value.path, "video", value.type)}>
                                             <ToolCard
                                                 name={keyword(value.title)}
                                                 description={keyword(value.description)}
@@ -212,7 +249,7 @@ const AllTools = (props) => {
                         </Grid>
 
                         <Grid item>
-                            <Typography variant="h5" style={{ color: "#596977" }}>Image</Typography>
+                            <Typography variant="h5" style={{ color: "#596977" }}>{keyword("category_image")}</Typography>
                         </Grid>
 
                     </Grid>
@@ -223,8 +260,9 @@ const AllTools = (props) => {
 
                         {
                             toolsImages.map((value, key) => {
+                                //console.log(value);
                                 return (
-                                    <Grid className={classes.toolCardStyle} item key={key} onClick={() => handleClick(value.path, "image")}>
+                                    <Grid className={classes.toolCardStyle} item key={key} onClick={() => handleClick(value.path, "image", value.type)}>
                                         <ToolCard
                                             name={keyword(value.title)}
                                             description={keyword(value.description)}
@@ -258,7 +296,7 @@ const AllTools = (props) => {
                         </Grid>
 
                         <Grid item>
-                            <Typography variant="h5" style={{ color: "#596977" }}>Search</Typography>
+                            <Typography variant="h5" style={{ color: "#596977" }}>{keyword("category_search")}</Typography>
                         </Grid>
 
                     </Grid>
@@ -270,7 +308,7 @@ const AllTools = (props) => {
                         {
                             toolsSearch.map((value, key) => {
                                 return (
-                                    <Grid className={classes.toolCardStyle} item key={key} onClick={() => handleClick(value.path, "search")}>
+                                    <Grid className={classes.toolCardStyle} item key={key} onClick={() => handleClick(value.path, "search", value.type)}>
                                         <ToolCard
                                             name={keyword(value.title)}
                                             description={keyword(value.description)}
@@ -304,7 +342,7 @@ const AllTools = (props) => {
                         </Grid>
 
                         <Grid item>
-                            <Typography variant="h5" style={{ color: "#596977" }}>Data Analysis</Typography>
+                            <Typography variant="h5" style={{ color: "#596977" }}>{keyword("category_data")}</Typography>
                         </Grid>
 
                     </Grid>
@@ -316,7 +354,7 @@ const AllTools = (props) => {
                         {
                             toolsData.map((value, key) => {
                                 return (
-                                    <Grid className={classes.toolCardStyle} item key={key} onClick={() => handleClick(value.path, "datas")}>
+                                    <Grid className={classes.toolCardStyle} item key={key} onClick={() => handleClick(value.path, "datas", value.type)}>
                                         <ToolCard
                                             name={keyword(value.title)}
                                             description={keyword(value.description)}

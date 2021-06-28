@@ -1,4 +1,4 @@
-import makeStyles from "@material-ui/core/styles/makeStyles";
+import {makeStyles} from "@material-ui/core/styles";
 import {green} from "@material-ui/core/colors";
 
 const drawerWidth = 200;
@@ -548,7 +548,8 @@ const useMyStyles = makeStyles(theme => ({
     dropZone: {
         border: 'dashed grey 2px',
         borderRadius: "25px",
-        height: "25vh"
+        height: "25vh",
+        minHeight: "200px"
     },
 
     dropZoneInside: {
@@ -559,7 +560,8 @@ const useMyStyles = makeStyles(theme => ({
 
 
     imageDropped: {
-        height: "25vh"
+        height: "25vh",
+        minHeight: "200px"
     },
 
     inputContainer:{
@@ -636,16 +638,24 @@ const useMyStyles = makeStyles(theme => ({
         padding: theme.spacing(3),
 
     },
-    rootCard: {
-        overflow: "visible"
-    },
-
 
     toolCardStyle: {
         width: "25%", 
         maxWidth: "350px", 
         minWidth: "250px",
-    }
+    },
+
+    dialogTitleWithButton: {
+        display: "flex",
+        justifyContent: "space - between",
+        alignItems: "center",
+    },
 
 }));
+export const myCardStyles = makeStyles({
+    root: {
+        overflow: "visible"
+    }
+});
 export default useMyStyles;
+

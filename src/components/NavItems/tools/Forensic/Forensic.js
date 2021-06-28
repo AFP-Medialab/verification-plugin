@@ -23,13 +23,14 @@ import LinkIcon from '@material-ui/icons/Link';
 import FileIcon from '@material-ui/icons/InsertDriveFile';
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import Divider from '@material-ui/core/Divider';
+import Alert from '@material-ui/lab/Alert';
 
 const Forensic = () => {
     const {url} = useParams();
     const classes = useMyStyles();
     const keyword = useLoadLanguage("components/NavItems/tools/Forensic.tsv", tsv);
     const keywordAllTools = useLoadLanguage("components/NavItems/tools/Alltools.tsv", tsv);
-
+    const keywordWarning = useLoadLanguage("components/Shared/OnWarningInfo.tsv", tsv);
 
     const theme = createMuiTheme({
         overrides: {
@@ -74,6 +75,7 @@ const Forensic = () => {
     const resultData = useSelector(state => state.forensic.result);
     const isLoading = useSelector(state => state.forensic.loading);
     const gifAnimationState = useSelector(state => state.forensic.gifAnimation);
+    const masks = useSelector(state => state.forensic.masks);
 
     //console.log(gifAnimationState);
 
@@ -101,8 +103,8 @@ const Forensic = () => {
                 const uri = decodeURIComponent(url);
                 setInput(uri)
             }
+            setUrlDetected(true)
         }
-        setUrlDetected(true)
 
     }, [url]);
 
@@ -110,6 +112,7 @@ const Forensic = () => {
         if (urlDetected){
             submitUrl()
         }
+        return () => setUrlDetected(false);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [urlDetected])
 
@@ -172,7 +175,7 @@ const Forensic = () => {
 
             <HeaderTool name={keywordAllTools("navbar_forensic")} description={keywordAllTools("navbar_forensic_description")} icon={<ForensicIcon style={{ fill: "#51A5B2" }} />}/>
 
-            <Card  style={{ display: loaded ? "none" : "block" }}>
+                <Card style={{ display: (resultData || loading) ? "none" : "block" }}>
                 <CardHeader
                     title={keyword("cardheader_source")}
                     className={classes.headerUpladedImage}
@@ -272,11 +275,18 @@ const Forensic = () => {
 
                     <Box display={localFile ? "none" : "block"}>
 
+                        <Alert severity="warning">{keywordWarning("warning_forenisc")}</Alert>
+
+                        <Box mt={3}/>
+
                         <Grid container
                             direction="row"
                             spacing={3}
                             alignItems="center"
                         >
+
+
+
                             <Grid item xs>
 
                                 <TextField
@@ -323,6 +333,7 @@ const Forensic = () => {
                     loaded={loaded}
                     gifAnimation={gifAnimationState}
                     resetImage={resetImage}
+                    masksData={masks}
                     />
             }
         </ThemeProvider>

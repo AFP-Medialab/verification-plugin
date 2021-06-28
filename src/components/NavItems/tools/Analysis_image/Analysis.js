@@ -7,17 +7,16 @@ import Checkbox from "@material-ui/core/Checkbox";
 import Button from "@material-ui/core/Button";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import Box from "@material-ui/core/Box";
-import YoutubeResults from "./Results/YoutubeResults.js"
 import TwitterResults from "./Results/TwitterResults";
-import {useAnalysisWrapper} from "./Hooks/useAnalysisWrapper";
+import {useAnalysisWrapper} from "../Analysis/Hooks/useAnalysisWrapper";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles"
 import Iframe from "react-iframe";
-import useGenerateApiUrl from "./Hooks/useGenerateApiUrl";
+import useGenerateApiUrl from "../Analysis/Hooks/useGenerateApiUrl";
 import FacebookResults from "./Results/FacebookResults";
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/Analysis.tsv";
 import {submissionEvent} from "../../../Shared/GoogleAnalytics/GoogleAnalytics";
-import {cleanAnalysisState} from "../../../../redux/actions/tools/analysisActions";
+import {cleanAnalysisState, setAnalysisLoading, setAnalysisResult} from "../../../../redux/actions/tools/image_analysisActions";
 import {useParams} from "react-router-dom";
 import {KNOWN_LINKS} from "../../Assistant/AssistantRuleBook";
 import Card from "@material-ui/core/Card";
@@ -25,24 +24,11 @@ import CardHeader from "@material-ui/core/CardHeader";
 import { ReactComponent as AnalysisIcon } from '../../../NavBar/images/SVG/Video/Video_analysis.svg';
 import Grid from "@material-ui/core/Grid";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
-import OnClickInfo from "../../../Shared/OnClickInfo/OnClickInfo";
 import Typography from "@material-ui/core/Typography";
+import styles from "./Results/layout.module.css";
 
-/*function useTraceUpdate(props) {
-    const prev = useRef(props);
-    useEffect(() => {
-        const changedProps = Object.entries(props).reduce((ps, [k, v]) => {
-            if (prev.current[k] !== v) {
-                ps[k] = [prev.current[k], v];
-            }
-            return ps;
-        }, {});
-        if (Object.keys(changedProps).length > 0) {
-            console.log('Changed props:', changedProps);
-        }
-        prev.current = props;
-    });
-}*/
+
+
 
 const Analysis = () => {
 
@@ -52,18 +38,19 @@ const Analysis = () => {
     const keywordAllTools = useLoadLanguage("components/NavItems/tools/Alltools.tsv", tsv);
     const dispatch = useDispatch();
 
-    const resultUrl = useSelector(state => state.analysis.url);
-    const resultData = useSelector(state => state.analysis.result);
-    const isLoading = useSelector(state => state.analysis.loading);
+    const resultUrl = useSelector(state => state.analysisImage.url);
+    const resultData = useSelector(state => state.analysisImage.result);
+    const isLoading = useSelector(state => state.analysisImage.loading);
 
 
     const [input, setInput] = useState((resultUrl) ? resultUrl : "");
     const [urlDetected, setUrlDetected] = useState(false)
     const [submittedUrl, setSubmittedUrl] = useState(undefined);
     const [reprocess, setReprocess] = useState(false);
+    const serviceUrl = "https://mever.iti.gr/caa/api/v4/images";
 
-    const [finalUrl, showFacebookIframe] = useGenerateApiUrl(submittedUrl, reprocess);
-    useAnalysisWrapper(finalUrl, submittedUrl);
+    const [finalUrl, showFacebookIframe] = useGenerateApiUrl(serviceUrl, submittedUrl, reprocess);
+    useAnalysisWrapper(setAnalysisLoading, setAnalysisResult, serviceUrl, finalUrl, submittedUrl);
 
     const reprocessToggle = () => {
         setReprocess(!reprocess);
@@ -75,7 +62,7 @@ const Analysis = () => {
         dispatch(cleanAnalysisState());
     };
     
-    useEffect(() => {       
+    useEffect(() => {     
         if (finalUrl !== undefined) {
             setSubmittedUrl(undefined);
         }
@@ -85,7 +72,6 @@ const Analysis = () => {
         if (urlDetected) {
             submitForm()
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [urlDetected])
 
     useEffect(() => {
@@ -99,7 +85,7 @@ const Analysis = () => {
     return (
         <div>
 
-            <HeaderTool name={keywordAllTools("navbar_analysis_image")} description={keywordAllTools("navbar_analysis_description_image")} icon={<AnalysisIcon style={{ fill: "#51A5B2" }} />}/>
+            <HeaderTool name={keywordAllTools("navbar_analysis_image")} description={keywordAllTools("navbar_analysis_image_description")} icon={<AnalysisIcon style={{ fill: "#51A5B2" }} />}/>
 
             <Card>
                 <CardHeader
@@ -117,7 +103,7 @@ const Analysis = () => {
 
                             <TextField
                                 id="standard-full-width"
-                                label={keyword("api_input")}
+                                label={keyword("api_input_image")}
                                 placeholder={keyword("api_input_placeholder")}
                                 fullWidth
                                 disabled={isLoading}
@@ -177,11 +163,7 @@ const Analysis = () => {
                     />
                 </Box>
             }
-            {
-                //(resultData !== null && resultUrl != null && resultUrl.startsWith("https://www.youtube.com/")) ?
-                (resultData  && resultData.platform.startsWith("youtube")) ?
-                    <YoutubeResults report={resultData}/> : null
-            }
+            
             {
                 //(resultData !== null && resultUrl != null && resultUrl.startsWith("https://twitter.com/")) ?
                 (resultData  && resultData.platform.startsWith("twitter")) ?
@@ -192,18 +174,7 @@ const Analysis = () => {
                 (resultData  && resultData.platform.startsWith("facebook")) ?
                     <FacebookResults report={resultData}/> : null
             }
-             {
-                <Box m={4} justifyContent="center" alignItems="center">
-                            <Typography variant={"h6"}>
-                                {keyword("intro_tip")}
-                            </Typography>
-                            <Box m={1} alignItems="center" justifyContent="center"/>
-                            <OnClickInfo keyword={"intro_tip"}/>
-                            
-
-
-                </Box>
-            }
+             
         </div>);
 };
 export default React.memo(Analysis);

@@ -17,7 +17,7 @@ import FacebookResults from "./Results/FacebookResults";
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/Analysis.tsv";
 import {submissionEvent} from "../../../Shared/GoogleAnalytics/GoogleAnalytics";
-import {cleanAnalysisState} from "../../../../redux/actions/tools/analysisActions";
+import {cleanAnalysisState,setAnalysisLoading, setAnalysisResult} from "../../../../redux/actions/tools/analysisActions";
 import {useParams} from "react-router-dom";
 import {KNOWN_LINKS} from "../../Assistant/AssistantRuleBook";
 import Card from "@material-ui/core/Card";
@@ -25,24 +25,9 @@ import CardHeader from "@material-ui/core/CardHeader";
 import { ReactComponent as AnalysisIcon } from '../../../NavBar/images/SVG/Video/Video_analysis.svg';
 import Grid from "@material-ui/core/Grid";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
-import OnClickInfo from "../../../Shared/OnClickInfo/OnClickInfo";
-import Typography from "@material-ui/core/Typography";
+import styles from "./Results/layout.module.css";
+import Alert from '@material-ui/lab/Alert';
 
-/*function useTraceUpdate(props) {
-    const prev = useRef(props);
-    useEffect(() => {
-        const changedProps = Object.entries(props).reduce((ps, [k, v]) => {
-            if (prev.current[k] !== v) {
-                ps[k] = [prev.current[k], v];
-            }
-            return ps;
-        }, {});
-        if (Object.keys(changedProps).length > 0) {
-            console.log('Changed props:', changedProps);
-        }
-        prev.current = props;
-    });
-}*/
 
 const Analysis = () => {
 
@@ -56,15 +41,17 @@ const Analysis = () => {
     const resultData = useSelector(state => state.analysis.result);
     const isLoading = useSelector(state => state.analysis.loading);
 
-
     const [input, setInput] = useState((resultUrl) ? resultUrl : "");
     const [urlDetected, setUrlDetected] = useState(false)
     const [submittedUrl, setSubmittedUrl] = useState(undefined);
     const [reprocess, setReprocess] = useState(false);
+    const serviceUrl = "https://mever.iti.gr/caa/api/v4/videos";
+    const [finalUrl, showFacebookIframe] = useGenerateApiUrl(serviceUrl, submittedUrl, reprocess);
+    useAnalysisWrapper(setAnalysisLoading, setAnalysisResult, serviceUrl, finalUrl, submittedUrl);
 
-    const [finalUrl, showFacebookIframe] = useGenerateApiUrl(submittedUrl, reprocess);
-    useAnalysisWrapper(finalUrl, submittedUrl);
 
+    var [warning, setWarning] = useState(false);
+    
     const reprocessToggle = () => {
         setReprocess(!reprocess);
     };
@@ -73,6 +60,7 @@ const Analysis = () => {
         submissionEvent(input.trim());
         setSubmittedUrl(input.trim());
         dispatch(cleanAnalysisState());
+
     };
     
     useEffect(() => {       
@@ -83,9 +71,9 @@ const Analysis = () => {
 
     useEffect(()=>{
         if (urlDetected) {
+            
             submitForm()
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [urlDetected])
 
     useEffect(() => {
@@ -123,7 +111,26 @@ const Analysis = () => {
                                 disabled={isLoading}
                                 value={input}
                                 variant="outlined"
-                                onChange={e => setInput(e.target.value)}
+                                onChange={e => {
+                                    setInput(e.target.value)
+                                    const regex = /fb.watch\//g;
+                                    const regex1 = /www.facebook.com\/watch\//g;
+                                    var found = e.target.value.match(regex);
+                                    var found1 =e.target.value.match(regex1);
+                                    if(found!==null || found1!==null ){
+                                        setWarning(true)
+
+                                    }
+                                    else{
+                                        setWarning(false)
+                                    }
+                                    
+                                }
+                                
+                                
+                                
+                                
+                                }
                             />
                             
                         </Grid>
@@ -143,7 +150,7 @@ const Analysis = () => {
                             />
 
                         </Grid>
-                        
+
                         <Grid item>
                             <Button
                                 variant="contained"
@@ -191,16 +198,18 @@ const Analysis = () => {
                 //(resultData !== null && resultUrl != null && resultUrl.startsWith("https://www.facebook.com/")) ?
                 (resultData  && resultData.platform.startsWith("facebook")) ?
                     <FacebookResults report={resultData}/> : null
+                    
+
             }
-             {
-                <Box m={4} justifyContent="center" alignItems="center">
-                            <Typography variant={"h6"}>
-                                {keyword("intro_tip")}
-                            </Typography>
-                            <Box m={1} alignItems="center" justifyContent="center"/>
-                            <OnClickInfo keyword={"intro_tip"}/>
-                </Box>
+            
+            {
+                
+                    warning===true &&
+                    <Alert className={styles.margin1} variant="outlined" severity="warning">{keyword("facebook_tip")}</Alert>
+
             }
+                
+                
         </div>);
 };
 export default React.memo(Analysis);
