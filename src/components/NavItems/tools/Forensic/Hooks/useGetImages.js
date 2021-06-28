@@ -12,7 +12,7 @@ const useGetImages = (url) => {
 
     //const gifTransparencyMasks = [];
 
-    const threshold = 0.6;
+    const threshold = 0.4;
     const colormap = "mako";
 
 
