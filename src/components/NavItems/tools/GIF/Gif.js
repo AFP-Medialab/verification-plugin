@@ -706,7 +706,7 @@ const Gif = () => {
 
                                         <TextField
                                             id="outlined-multiline-static"
-                                            label={keyword("input_label1")}
+                                            label={keyword("input_label2")}
                                             placeholder={keyword("input_placeholder")}
                                             multiline
                                             rows={8}
