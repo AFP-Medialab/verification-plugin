@@ -113,9 +113,13 @@ const Analysis = () => {
                                 variant="outlined"
                                 onChange={e => {
                                     setInput(e.target.value)
-                                    const regex = /fb.watch/g;
+                                    const regex = /fb.watch\//g;
+                                    const regex1 = /www.facebook.com\/watch\//g;
                                     var found = e.target.value.match(regex);
-                                    if(found!==null){
+                                    var found1 =e.target.value.match(regex1);
+                                    console.log("found ",found)
+                                    console.log("found1 ",found1)
+                                    if(found!==null || found1!==null ){
                                         setWarning(true)
 
                                     }
