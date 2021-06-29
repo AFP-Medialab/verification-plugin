@@ -11,7 +11,7 @@ import {useParams} from 'react-router-dom'
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/Forensic.tsv";
 import tsvAllTools from "../../../../LocalDictionary/components/NavItems/tools/Alltools.tsv";
-import tsvWarning from "../../../../LocalDictionary/components/Shared/OnWarningInfo";
+import tsvWarning from "../../../../LocalDictionary/components/Shared/OnWarningInfo.tsv";
 import {submissionEvent} from "../../../Shared/GoogleAnalytics/GoogleAnalytics";
 import LocalFile from "../Forensic/LocalFile/LocalFile";
 import {KNOWN_LINKS} from "../../Assistant/AssistantRuleBook";

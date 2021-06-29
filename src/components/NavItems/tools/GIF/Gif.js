@@ -30,8 +30,6 @@ import { StylesProvider } from "@material-ui/core/styles";
 
 
 const Gif = () => {
-    
-console.log("LOAD .......")
     //Init variables
     //============================================================================================
     const classes = useMyStyles();
