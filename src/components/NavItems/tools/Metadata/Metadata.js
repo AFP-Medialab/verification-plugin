@@ -56,7 +56,6 @@ const Metadata = () => {
     useImageTreatment(imageUrl, keyword);
 
     const submitUrl = () => {
-        console.log("input" + input);
         if (input) {
             submissionEvent(input);
             if (radioImage) {

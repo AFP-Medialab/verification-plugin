@@ -27,6 +27,7 @@ import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 import IconButton from '@material-ui/core/IconButton';
 import { StylesProvider } from "@material-ui/core/styles";
+import {submissionEvent} from "../../../Shared/GoogleAnalytics/GoogleAnalytics";
 
 
 const Gif = () => {
@@ -194,6 +195,8 @@ const Gif = () => {
 
     //Function to prepare the files to trigger the submission
     const handleSubmissionURL = () => {
+        submissionEvent(imageURL1);
+        submissionEvent(imageURL2);
         var files = {
             "url_0": imageURL1,
             "url_1": imageURL2,
@@ -204,6 +207,8 @@ const Gif = () => {
 
 
     const handleSubmission = () => {
+        submissionEvent(selectedFile1);
+        submissionEvent(selectedFile2);
         var files = {
             "file1": selectedFile1,
             "file2": selectedFile2,
