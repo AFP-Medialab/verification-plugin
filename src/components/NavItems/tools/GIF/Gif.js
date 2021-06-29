@@ -65,12 +65,14 @@ const Gif = () => {
         changeStylesToUrl();
         dispatch(setStateSelectingUrl());
         setSelectedMode("URL");
+        cleanInputs();
     }
 
     function clickLocal (){
         changeStylesToLocal();
         dispatch(setStateSelectingLocal());
         setSelectedMode("LOCAL");
+        cleanInputs();
     }
 
     function changeStylesToLocal() {

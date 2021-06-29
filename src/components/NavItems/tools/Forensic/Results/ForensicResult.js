@@ -608,7 +608,7 @@ const ForensicResults = (props) => {
                     </Alert>
                 </Snackbar>
                 <Box mt={3}  style={{marginBottom: "50px"}}>
-                    <Alert severity="warning">{keywordWarning("warning_forenisc")}</Alert>
+                    <Alert severity="warning">{keywordWarning("warning_forensic")}</Alert>
                 </Box>
                 <div className={classes.newForensics}>
                     <ThemeProvider theme={theme}>

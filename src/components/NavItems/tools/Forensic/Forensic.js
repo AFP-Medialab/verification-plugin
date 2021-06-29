@@ -277,7 +277,7 @@ const Forensic = () => {
 
                     <Box display={localFile ? "none" : "block"}>
 
-                        <Alert severity="warning">{keywordWarning("warning_forenisc")}</Alert>
+                            <Alert severity="warning">{keywordWarning("warning_forensic")}</Alert>
 
                         <Box mt={3}/>
 
