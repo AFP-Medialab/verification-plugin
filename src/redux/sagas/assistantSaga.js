@@ -151,14 +151,13 @@ function* similaritySearch(searchEndpoint, stateStorageFunction) {
 
     try {
         let result = yield call(searchEndpoint)
-        if (result.length) {
+        if (Object.keys(result).length) {
             let similarityResult = result
             let resultList = []
-
-            Object.values(similarityResult).forEach(result=>{
-                result.appearancesResults.forEach(appearance=>{
+            Object.keys(similarityResult).forEach(key=>{
+                result[key].appearancesResults.forEach(appearance=>{
                     resultList.push({
-                        "claimUrl": appearance.appearanceUrls,
+                        "claimUrl": key,
                         "similarity": appearance.similarity})
                 })
             })
@@ -454,7 +453,10 @@ const filterAssistantResults = (urlType, contentType, userInput, scrapeResult) =
 }
 
 const filterSourceCredibilityResults = (originalResult) => {
-    if(!(originalResult.entities.SourceCredibility)) {return null}
+    let sourceCredResult = []
+    let factCheckerResult = []
+
+    if(!(originalResult.entities.SourceCredibility)) {return [sourceCredResult, factCheckerResult]}
 
     let sourceCredibility = originalResult.entities.SourceCredibility
 
@@ -463,9 +465,6 @@ const filterSourceCredibilityResults = (originalResult) => {
         delete dc["resolved-url"]
     })
     sourceCredibility = uniqWith(sourceCredibility, isEqual)
-
-    let sourceCredResult = []
-    let factCheckerResult = []
 
     sourceCredibility.forEach(result => {
         if(result["type"] === "fact checker"){
