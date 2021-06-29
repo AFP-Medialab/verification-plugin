@@ -22,7 +22,7 @@ const AssistantImageResult = () => {
     return (
         <Card variant={"outlined"}>
             <CardMedia>
-                <img src={processUrl} height={"100%"} alt={processUrl} width={"100%"}/>
+                <img crossOrigin={"anonymous"} src={processUrl} height={"100%"} alt={processUrl} width={"100%"}/>
             </CardMedia>
             <CardActions>
                 <ImageIcon color={"action"}/>

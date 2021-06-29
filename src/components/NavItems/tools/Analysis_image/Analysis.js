@@ -88,8 +88,9 @@ const Analysis = () => {
             <HeaderTool name={keywordAllTools("navbar_analysis_image")} description={keywordAllTools("navbar_analysis_image_description")} icon={<AnalysisIcon style={{ fill: "#51A5B2" }} />}/>
 
             <Card>
+                
                 <CardHeader
-                    title={keyword("cardheader_link")}
+                    title={keyword("image_card_header")}
                     className={classes.headerUpladedImage}
                 />
                 <div className={classes.root2}>

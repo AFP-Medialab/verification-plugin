@@ -1,5 +1,4 @@
 import React from "react";
-import {useSelector} from "react-redux";
 
 import Avatar from "@material-ui/core/Avatar";
 import Box from "@material-ui/core/Box";
@@ -13,9 +12,9 @@ import Typography from "@material-ui/core/Typography";
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/Assistant.tsv";
 
-const SourceCredibilityResults = () => {
+const SourceCredibilityResults = (props) => {
 
-    const sourceCredibilityResults = useSelector(state => state.assistant.inputUrlSourceCredibility)
+    const sourceCredibilityResults = props.scResultFiltered
     const keyword = useLoadLanguage("components/NavItems/tools/Assistant.tsv", tsv);
     return (
         <List disablePadding={true}>
@@ -33,9 +32,9 @@ const SourceCredibilityResults = () => {
                                     </Box>
                                 </Typography>}
                             secondary={
-                                <Typography>
+                                <Typography component={"div"}>
                                     {value.credibility_labels ?
-                                        <Typography> {keyword("labelled_as")} "{value.credibility_labels}"  </Typography>
+                                        <Typography> {keyword("labelled_as")} "{value.credibility_labels}" </Typography>
                                         : null
                                     }
                                     {value.credibility_description ?
@@ -44,9 +43,10 @@ const SourceCredibilityResults = () => {
                                     }
                                 </Typography>
                             }/>
-                    </ListItem>))  :
+                    </ListItem>)) :
                 null
             }
         </List>
-        )};
+    )
+};
 export default SourceCredibilityResults;

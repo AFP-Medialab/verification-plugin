@@ -15,6 +15,7 @@ import { ReactComponent as IconGif } from '../../../NavBar/images/SVG/Image/Gif.
 import DragAndDrop from './DragAndDrop'
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/CheckGIF.tsv";
+import tsvAlltools from "../../../../LocalDictionary/components/NavItems/tools/Alltools.tsv";
 import LinkIcon from '@material-ui/icons/Link';
 import FileIcon from '@material-ui/icons/InsertDriveFile';
 import TextField from '@material-ui/core/TextField';
@@ -26,16 +27,15 @@ import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 import IconButton from '@material-ui/core/IconButton';
 import { StylesProvider } from "@material-ui/core/styles";
+import {submissionEvent} from "../../../Shared/GoogleAnalytics/GoogleAnalytics";
 
 
 const Gif = () => {
-    
-
     //Init variables
     //============================================================================================
     const classes = useMyStyles();
     const keyword = useLoadLanguage("components/NavItems/tools/CheckGIF.tsv", tsv);
-    const keywordAllTools = useLoadLanguage("components/NavItems/tools/Alltools.tsv", tsv);
+    const keywordAllTools = useLoadLanguage("components/NavItems/tools/Alltools.tsv", tsvAlltools);
     const toolState = useSelector(state => state.gif.toolState);
     const dispatch = useDispatch();
 
@@ -65,12 +65,14 @@ const Gif = () => {
         changeStylesToUrl();
         dispatch(setStateSelectingUrl());
         setSelectedMode("URL");
+        cleanInputs();
     }
 
     function clickLocal (){
         changeStylesToLocal();
         dispatch(setStateSelectingLocal());
         setSelectedMode("LOCAL");
+        cleanInputs();
     }
 
     function changeStylesToLocal() {
@@ -195,6 +197,8 @@ const Gif = () => {
 
     //Function to prepare the files to trigger the submission
     const handleSubmissionURL = () => {
+        submissionEvent(imageURL1);
+        submissionEvent(imageURL2);
         var files = {
             "url_0": imageURL1,
             "url_1": imageURL2,
@@ -205,6 +209,8 @@ const Gif = () => {
 
 
     const handleSubmission = () => {
+        submissionEvent(selectedFile1);
+        submissionEvent(selectedFile2);
         var files = {
             "file1": selectedFile1,
             "file2": selectedFile2,
@@ -214,7 +220,7 @@ const Gif = () => {
     };
 
     //Call to the API
-    useGetHomographics(filesToSend, modeHomo);
+    useGetHomographics(filesToSend, modeHomo, keyword);
 
     //Loading bar
     /*
@@ -243,8 +249,8 @@ const Gif = () => {
 
     const [interval, setIntervalVar] = React.useState(null);
 
-//=== SPEED SLIDER ===
-const [speed, setSpeed] = React.useState(1100);
+    //=== SPEED SLIDER ===
+    const [speed, setSpeed] = React.useState(1100);
 
 
     //=== CSS ANIMATION ===
@@ -311,26 +317,31 @@ const [speed, setSpeed] = React.useState(1100);
     //============================================================================================
     const [filesForGif, setFilesForGif] = useState(null);
     const [delayGif, setDelayGif] = useState(null);
+    const [enableDownload, setEnableDownload] = useState(false);
 
     //Function to prepare the files to trigger the download
     const handleDownloadGif = () => {
-        dispatch(setStateDownloading());
-        //console.log(toolState);
+        console.log(toolState);
         var files = {
             "image1": homoImg1,
             "image2": homoImg2,
         }
+        
         setFilesForGif(files);
         setDelayGif(speed);
-        
+        setEnableDownload(true);
     };
 
     //console.log(filesForGif);
     //console.log(delayGif);
     //console.log(toolState);
-    //Call to the API
-    useGetGif(filesForGif, delayGif, toolState);
+    //Call to the API    
 
+    useGetGif(filesForGif, delayGif, enableDownload);
+    if (toolState === 7 && enableDownload) {
+        setEnableDownload(false);
+    }
+    
 
 
     //Reset states
@@ -701,7 +712,7 @@ const [speed, setSpeed] = React.useState(1100);
 
                                         <TextField
                                             id="outlined-multiline-static"
-                                            label={keyword("input_label1")}
+                                            label={keyword("input_label2")}
                                             placeholder={keyword("input_placeholder")}
                                             multiline
                                             rows={8}
@@ -830,7 +841,7 @@ const [speed, setSpeed] = React.useState(1100);
                                                     <Box m={2} />
 
 
-                                                    <Button variant="contained" color="primary" fullWidth onClick={(e) => handleDownloadGif(e)}>
+                                                    <Button variant="contained" color="primary" disabled={toolState===7} fullWidth onClick={(e) => handleDownloadGif(e)}>
                                                         {keyword("button_download")}
                                                     </Button>
                                                     <Box m={2} />

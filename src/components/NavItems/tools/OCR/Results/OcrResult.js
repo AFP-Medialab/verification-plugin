@@ -61,7 +61,7 @@ const OcrResult = () => {
                     <Card variant={"outlined"} style={{"width": "50%"}}>
                         <CardMedia>
                             <LinearProgress hidden={!loading}/>
-                            <img src={inputUrl} height={"100%"} alt={inputUrl} width={"100%"}/>
+                            <img crossOrigin={"anonymous"} src={inputUrl} height={"100%"} alt={inputUrl} width={"100%"}/>
                         </CardMedia>
                         <Divider variant={"middle"}/>
                         {result ?

@@ -2,11 +2,8 @@ import axios from "axios"
 import {useDispatch} from "react-redux";
 import {setError} from "../../../../../redux/actions/errorActions";
 import {useEffect} from "react";
-import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
-import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Analysis.tsv"
 
-export const useAnalysisWrapper = (setAnalysisLoading, setAnalysisResult, serviceUrl, apiUrl, processUrl) => {    
-    const keyword = useLoadLanguage("components/NavItems/tools/Analysis.tsv", tsv);
+export const useAnalysisWrapper = (setAnalysisLoading, setAnalysisResult, serviceUrl, apiUrl, processUrl, keyword) => {    
     const dispatch = useDispatch();
 
     useEffect(() => {

@@ -3,11 +3,8 @@ import * as mp4box from "mp4box";
 import {useDispatch} from "react-redux";
 import {setMetadadaResult, setMetadadaLoading} from "../../../../../redux/actions/tools/metadataActions";
 import {setError} from "../../../../../redux/actions/errorActions";
-import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
-import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Metadata.tsv";
 
-const useVideoTreatment = (mediaUrl) => {
-    const keyword = useLoadLanguage("components/NavItems/tools/Metadata.tsv", tsv);
+const useVideoTreatment = (mediaUrl, keyword) => {
     const dispatch = useDispatch();
 
     useEffect(() => {

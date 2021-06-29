@@ -42,6 +42,7 @@ const Magnifier = () => {
     const submitUrl = (src) => {
         submissionEvent(src);
         let img = new Image();
+        img.crossOrigin="anonymous"
         img.onload = () => {
             let canvas = document.createElement('canvas');
             canvas.width = img.width;

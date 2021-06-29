@@ -7,7 +7,7 @@ import NewReleasesIcon from '@material-ui/icons/NewReleases';
 import FiberNewIcon from '@material-ui/icons/FiberNew';
 import isAuthenticated from "./AdvancedTools/AdvancedTools";
 import AuthenticationIcon from "./AdvancedTools/AuthenticationIcon";
-
+import { ReactComponent as ImprovedIcon } from "../../../NavBar/images/SVG/Improved.svg";
 
 
 export class ToolCard extends Component {
@@ -119,7 +119,7 @@ export class ToolCard extends Component {
 
                             {showRedesign &&
                                 <Grid item style={{ marginLeft: 'auto', color: "#F44336" }} >
-                                    <NewReleasesIcon />
+                                    <ImprovedIcon title="Upgraded" width="40px" height="40px" />
                                 </Grid>
                             }
 

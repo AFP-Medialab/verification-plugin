@@ -64,7 +64,7 @@ function MySnackbarContentWrapper(props) {
             message={
                 <span id="client-snackbar" className={classes.message}>
                     <Icon className={clsx(classes.icon, classes.iconVariant)}/>
-                    {keyword("error")}
+                    {message}
                 </span>
             }
             action={[

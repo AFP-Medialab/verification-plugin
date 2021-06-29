@@ -73,11 +73,12 @@ export const setScrapedData = (text,lang, links, images, videos) => {
     }
 }
 
-export const setInputSourceCredDetails = (inputSC, inputSCLoading, inputSCDone, inputSCFail) => {
+export const setInputSourceCredDetails = (inputSC, inputFC, inputSCLoading, inputSCDone, inputSCFail) => {
     return {
         type: "SET_INPUT_SC_DETAILS",
         payload: {
             inputUrlSourceCredibility: inputSC,
+            inputUrlFactCheckers: inputFC,
             inputSCLoading: inputSCLoading,
             inputSCDone: inputSCDone,
             inputSCFail: inputSCFail
@@ -183,6 +184,15 @@ export const setWarningExpanded = (warningExpanded) => {
         type: "SET_WARNING_EXPANDED",
         payload: {
             warningExpanded: warningExpanded
+        }
+    }
+}
+
+export const setAssuranceExpanded = (assuranceExpanded) => {
+    return {
+        type: "SET_ASSURANCE_EXPANDED",
+        payload: {
+            assuranceExpanded: assuranceExpanded
         }
     }
 }

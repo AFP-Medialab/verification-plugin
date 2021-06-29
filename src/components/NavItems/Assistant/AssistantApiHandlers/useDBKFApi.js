@@ -14,14 +14,14 @@ export default function DBKFApi() {
     const callVideoSimilarityEndpoint = async ( url) => {
         let final_url = similarityAPI + "/similarVideos?&collection_id=similarity&url=" + encodeURIComponent(url)
         let searchResult = await axios.get(final_url)
-        let searchData = Object.values(searchResult.data)
+        let searchData = searchResult.data
         return searchData
     }
 
     const callImageSimilarityEndpoint = async ( url) => {
         let final_url = similarityAPI + "/similarImages?&collection_id=similarity&url=" + encodeURIComponent(url)
         let searchResult = await axios.get(final_url)
-        let searchData = Object.values(searchResult.data)
+        let searchData = searchResult.data
         return searchData
     }
 

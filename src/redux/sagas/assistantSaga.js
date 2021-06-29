@@ -151,14 +151,13 @@ function* similaritySearch(searchEndpoint, stateStorageFunction) {
 
     try {
         let result = yield call(searchEndpoint)
-        if (result.length) {
+        if (Object.keys(result).length) {
             let similarityResult = result
             let resultList = []
-
-            Object.values(similarityResult).forEach(result=>{
-                result.appearancesResults.forEach(appearance=>{
+            Object.keys(similarityResult).forEach(key=>{
+                result[key].appearancesResults.forEach(appearance=>{
                     resultList.push({
-                        "claimUrl": appearance.appearanceUrls,
+                        "claimUrl": key,
                         "similarity": appearance.similarity})
                 })
             })
@@ -183,7 +182,10 @@ function* handleSourceCredibilityCall(action) {
         const inputUrl = yield select((state) => state.assistant.inputUrl)
         const result = yield call(assistantApi.callSourceCredibilityService, [inputUrl])
         const filteredResults = filterSourceCredibilityResults(result)
-        yield put(setInputSourceCredDetails(filteredResults, false, true, false))
+        const uncredibleResults = filteredResults[0].length ? filteredResults[0] : null
+        const credibleResults = filteredResults[1].length ? filteredResults[1] : null
+
+        yield put(setInputSourceCredDetails(uncredibleResults, credibleResults, false, true, false))
     } catch (error) {
         console.log(error)
         yield put(setInputSourceCredDetails(null, false, false, true))
@@ -451,7 +453,10 @@ const filterAssistantResults = (urlType, contentType, userInput, scrapeResult) =
 }
 
 const filterSourceCredibilityResults = (originalResult) => {
-    if(!(originalResult.entities.SourceCredibility)) {return null}
+    let sourceCredResult = []
+    let factCheckerResult = []
+
+    if(!(originalResult.entities.SourceCredibility)) {return [sourceCredResult, factCheckerResult]}
 
     let sourceCredibility = originalResult.entities.SourceCredibility
 
@@ -461,17 +466,26 @@ const filterSourceCredibilityResults = (originalResult) => {
     })
     sourceCredibility = uniqWith(sourceCredibility, isEqual)
 
-    let sourceCredResult = []
     sourceCredibility.forEach(result => {
-        sourceCredResult.push({
-            "credibility_source": result["source"],
-            "credibility_labels": result["type"],
-            "credibility_description": result["description"]
-        })
+        if(result["type"] === "fact checker"){
+            factCheckerResult.push({
+                "credibility_source": result["source"],
+                "credibility_labels": result["type"],
+                "credibility_description": result["description"]
+            })
+        }
+        else {
+            sourceCredResult.push({
+                "credibility_source": result["source"],
+                "credibility_labels": result["type"],
+                "credibility_description": result["description"]
+            })
+        }
     })
 
-    return sourceCredResult.length ? sourceCredResult : null
+    return [sourceCredResult, factCheckerResult]
 }
+
 
 const filterDbkfTextResult = (result) => {
     let resultList = []
