@@ -3,17 +3,14 @@ import axios from "axios"
 import { useDispatch } from "react-redux";
 import { setForensicsLoading, setForensicsResult } from "../../../../../redux/actions/tools/forensicActions";
 import { setError } from "../../../../../redux/actions/errorActions";
-import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
-import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Forensic.tsv";
 
-const useGetImages = (url) => {
-    const keyword = useLoadLanguage("components/NavItems/tools/Forensic.tsv", tsv);
+const useGetImages = (url, keyword) => {
     const dispatch = useDispatch();
 
     //const gifTransparencyMasks = [];
 
-    const threshold = 0.6;
-    const colormap = "mako"
+    const threshold = 0.4;
+    const colormap = "mako";
 
 
     useEffect(() => {

@@ -13,6 +13,7 @@ import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import {useParams} from 'react-router-dom'
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/Keyframes.tsv";
+import tsvAllTools from "../../../../LocalDictionary/components/NavItems/tools/Alltools.tsv";
 import {submissionEvent} from "../../../Shared/GoogleAnalytics/GoogleAnalytics";
 import {KNOWN_LINKS} from "../../Assistant/AssistantRuleBook";
 
@@ -29,7 +30,7 @@ const Keyframes = () => {
 
     const classes = useMyStyles();
     const keyword = useLoadLanguage("components/NavItems/tools/Keyframes.tsv", tsv);
-    const keywordAllTools = useLoadLanguage("components/NavItems/tools/Alltools.tsv", tsv);
+    const keywordAllTools = useLoadLanguage("components/NavItems/tools/Alltools.tsv", tsvAllTools);
 
     // state used to toggle localFile view
     const [localFile, setLocalFile] = useState(false);
@@ -50,7 +51,7 @@ const Keyframes = () => {
     const [input, setInput] = useState((resultUrl) ? resultUrl : "");
     const [submittedUrl, setSubmittedUrl] = useState(undefined);
     const [urlDetected, setUrlDetected] = useState(false)
-    useKeyframeWrapper(submittedUrl);
+    useKeyframeWrapper(submittedUrl, keyword);
 
     //human right
     const downloadShubshots = useSelector(state => state.humanRightsCheckBox)

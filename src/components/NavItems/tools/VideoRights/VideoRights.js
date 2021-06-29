@@ -9,6 +9,7 @@ import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import VideoRightsResults from "./Results/VideoRightsResults";
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/VideoRights.tsv";
+import tsvAlltools from "../../../../LocalDictionary/components/NavItems/tools/Alltools.tsv";
 import {submissionEvent} from "../../../Shared/GoogleAnalytics/GoogleAnalytics";
 import {useParams} from "react-router-dom";
 import {KNOWN_LINKS} from "../../Assistant/AssistantRuleBook";
@@ -23,7 +24,7 @@ const VideoRights = () => {
     const {url} = useParams();
     const classes = useMyStyles();
     const keyword = useLoadLanguage("components/NavItems/tools/VideoRights.tsv", tsv);
-    const keywordAllTools = useLoadLanguage("components/NavItems/tools/Alltools.tsv", tsv);
+    const keywordAllTools = useLoadLanguage("components/NavItems/tools/Alltools.tsv", tsvAlltools);
 
     const resultUrl = useSelector(state => state.videoRights.url);
     const resultResult = useSelector(state => state.videoRights.result);
@@ -32,7 +33,7 @@ const VideoRights = () => {
     const [input, setInput] = useState(resultUrl);
     const [urlDetected, setUrlDetected] = useState(false);
     const [submitted, setSubmitted] = useState(null);
-    useVideoRightsTreatment(submitted);
+    useVideoRightsTreatment(submitted, keyword);
 
     const submitForm = () => {
         if (!isLoading) {

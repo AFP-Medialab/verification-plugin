@@ -3,15 +3,17 @@ import { useDispatch } from "react-redux";
 import { setError } from "../../../../../redux/actions/errorActions";
 import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Forensic.tsv";
-import { setStateBackResults } from "../../../../../redux/actions/tools/gifActions";
+import { setStateDownloading,setStateBackResults } from "../../../../../redux/actions/tools/gifActions";
 import { saveAs } from 'file-saver';
-import useAuthenticatedRequest from "../../../../Shared/Authentication/useAuthenticatedRequest"
+import useAuthenticatedRequest from "../../../../Shared/Authentication/useAuthenticatedRequest";
+import { useSelector } from "react-redux";
 
-const useGetGif = (images, delayInput, downloading) => {
+const useGetGif = (images, delayInput, enableDownload) => {
     const keyword = useLoadLanguage("components/NavItems/tools/Forensic.tsv", tsv);
     const dispatch = useDispatch();
     const authenticatedRequest = useAuthenticatedRequest();
-    const baseURL = process.env.REACT_APP_BASEURL
+    const baseURL = process.env.REACT_APP_BASEURL;
+    const toolState = useSelector(state => state.gif.toolState);
 
 
     useEffect(() => {
@@ -26,13 +28,18 @@ const useGetGif = (images, delayInput, downloading) => {
 
 
         const downloadGif = (response) => {
-      
+            console.log(response);
             const file = new Blob([response.data], { type: 'image/gif' });
-            saveAs(file, "image.gif");     
+            saveAs(file, "image.gif");
+            dispatch(setStateBackResults());
         }
 
-        if (images && delayInput && downloading === 7) {
-            dispatch(setStateBackResults());
+        console.log("files", images);
+        console.log("speed", delayInput);
+        console.log("enable", enableDownload);
+
+        if (enableDownload) {
+            dispatch(setStateDownloading());
             var body = {
                 inputURLs: [
                     images.image1,
@@ -53,12 +60,12 @@ const useGetGif = (images, delayInput, downloading) => {
                 .catch(error => {
                     handleError("gif_error_" + error.status);
                 });
-
+            
 
         };
 
 
 
-    }, [images, delayInput, downloading, keyword, dispatch, baseURL, authenticatedRequest]);
+    }, [images, delayInput, enableDownload, keyword, dispatch, baseURL, authenticatedRequest]);
 };
 export default useGetGif;
