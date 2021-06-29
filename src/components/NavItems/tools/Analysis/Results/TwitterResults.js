@@ -470,7 +470,7 @@ const TwitterResults = (props) => {
                             <div>
                                 <Box m={4}/>
                                 <Typography variant={"h6"}>
-                                    {keyword("twitter_user_title") + ": " + report["source"]["user_name"]}
+                                    {keyword("post_creator") + ": " + report["source"]["user_name"]}
                                 </Typography>
                                 <Typography variant="body2" color="textSecondary" component="p" className={classes.text}>
                                     {
@@ -619,7 +619,7 @@ const TwitterResults = (props) => {
                             <Table className={classes.table} size="small" aria-label="a dense table">
                                 <TableHead>
                                     <TableRow>
-                                        <TableCell align="center">{keyword("twitter_user_title")}</TableCell>
+                                        <TableCell align="center">{keyword("user")}</TableCell>
                                         <TableCell
                                             className={styles.size} align="center">{keyword("twitter_user_name_13")}</TableCell>
                                         <TableCell
@@ -731,7 +731,7 @@ const TwitterResults = (props) => {
                         <TableHead>
                           <TableRow>
                               
-                            <TableCell align="center">{keyword("twitter_user_title")}</TableCell>
+                            <TableCell align="center">{keyword("user")}</TableCell>
                             <TableCell className={styles.size} align="center">
                               {keyword("twitter_user_name_13")}
                             </TableCell>
@@ -843,7 +843,7 @@ const TwitterResults = (props) => {
                         <TableHead>
                           <TableRow>
                               
-                            <TableCell align="center">{keyword("twitter_user_title")}</TableCell>
+                            <TableCell align="center">{keyword("user")}</TableCell>
                             <TableCell className={styles.size} align="center">
                               {keyword("twitter_user_name_13")}
                             </TableCell>

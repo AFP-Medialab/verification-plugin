@@ -482,7 +482,7 @@ const YoutubeResults = (props) => {
                                             <Table className={classes.table} size="small" aria-label="a dense table">
                                                 <TableHead>
                                                     <TableRow>
-                                                        <TableCell  align="center">{keyword("twitter_user_title")}</TableCell>
+                                                        <TableCell  align="center">{keyword("user")}</TableCell>
                                                         <TableCell
                                                            className={styles.size} align="center">{keyword("twitter_user_name_13")}</TableCell>
                                                         <TableCell
@@ -495,7 +495,9 @@ const YoutubeResults = (props) => {
                                                             return (
                                                                 <TableRow key={key}>
                                                                     <TableCell align="center" scope="row" size="small">
-                                                                    {comment.authorDisplayName}
+                                                                    <a href={comment["authorURL"]}
+                                                                          rel="noopener noreferrer"
+                                                                          target="_blank">{comment["authorDisplayName"]}</a>
                                                                   </TableCell>
                                                                     <TableCell
                                                                         align="center">{comment["publishedAt"]}
@@ -588,7 +590,7 @@ const YoutubeResults = (props) => {
                       >
                         <TableHead>
                           <TableRow>
-                          <TableCell  align="center">{keyword("twitter_user_title")}</TableCell>
+                          <TableCell  align="center">{keyword("user")}</TableCell>
                             <TableCell className={styles.size} align="center">
                               {keyword("twitter_user_name_13")}
                             </TableCell>
@@ -603,7 +605,9 @@ const YoutubeResults = (props) => {
                             return (
                               <TableRow key={key}>
                                    <TableCell align="center" scope="row" size="small">
-                                  {comment.authorDisplayName}
+                                   <a href={comment["authorURL"]}
+                                             rel="noopener noreferrer"
+                                             target="_blank">{comment["authorDisplayName"]}</a>
                                 </TableCell>
                                 <TableCell align="center" size="small">
                                   {comment.publishedAt}
@@ -698,7 +702,7 @@ const YoutubeResults = (props) => {
                       >
                         <TableHead>
                           <TableRow>
-                          <TableCell align="center">{keyword("twitter_user_title")}</TableCell>
+                          <TableCell align="center">{keyword("user")}</TableCell>
                             <TableCell className={styles.size} align="center">
                               {keyword("twitter_user_name_13")}
                             </TableCell>
@@ -713,7 +717,9 @@ const YoutubeResults = (props) => {
                             return (
                               <TableRow key={key}>
                                    <TableCell align="center" scope="row" size="small">
-                                  {comment.authorDisplayName}
+                                   <a href={comment["authorURL"]}
+                                             rel="noopener noreferrer"
+                                             target="_blank">{comment["authorDisplayName"]}</a>
                                 </TableCell>
                                 <TableCell align="center" size="small">
                                   {comment.publishedAt}
