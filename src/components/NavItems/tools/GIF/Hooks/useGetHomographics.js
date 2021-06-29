@@ -3,12 +3,9 @@ import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { setStateLoading, setStateShow, setStateError} from "../../../../../redux/actions/tools/gifActions";
 import { setError } from "../../../../../redux/actions/errorActions";
-import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
-import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Forensic.tsv";
 import useAuthenticatedRequest from "../../../../Shared/Authentication/useAuthenticatedRequest"
 
-const useGetHomographics = (files, mode) => {
-    const keyword = useLoadLanguage("components/NavItems/tools/CheckGIF.tsv", tsv);
+const useGetHomographics = (files, mode, keyword) => {
     const dispatch = useDispatch();
     const toolState = useSelector(state => state.gif.toolState);
     const baseURL = process.env.REACT_APP_BASEURL

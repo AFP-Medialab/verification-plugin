@@ -17,6 +17,7 @@ import useVideoTreatment from "./Hooks/useVideoTreatment";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/Metadata.tsv";
+import tsvAllTools from "../../../../LocalDictionary/components/NavItems/tools/Alltools.tsv";
 import {submissionEvent} from "../../../Shared/GoogleAnalytics/GoogleAnalytics";
 import {useParams} from "react-router-dom";
 
@@ -38,7 +39,7 @@ const Metadata = () => {
 
     const classes = useMyStyles();
     const keyword = useLoadLanguage("components/NavItems/tools/Metadata.tsv", tsv);
-    const keywordAllTools = useLoadLanguage("components/NavItems/tools/Alltools.tsv", tsv);
+    const keywordAllTools = useLoadLanguage("components/NavItems/tools/Alltools.tsv", tsvAllTools);
 
     const resultUrl = useSelector(state => state.metadata.url);
     const resultData = useSelector(state => state.metadata.result);
@@ -51,8 +52,8 @@ const Metadata = () => {
     const [videoUrl, setVideoUrl] = useState(null);
     const [urlDetected, setUrlDetected] = useState(false)
 
-    useVideoTreatment(videoUrl);
-    useImageTreatment(imageUrl);
+    useVideoTreatment(videoUrl, keyword);
+    useImageTreatment(imageUrl, keyword);
 
     const submitUrl = () => {
         console.log("input" + input);

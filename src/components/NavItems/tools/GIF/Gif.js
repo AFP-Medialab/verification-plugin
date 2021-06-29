@@ -15,6 +15,7 @@ import { ReactComponent as IconGif } from '../../../NavBar/images/SVG/Image/Gif.
 import DragAndDrop from './DragAndDrop'
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/CheckGIF.tsv";
+import tsvAlltools from "../../../../LocalDictionary/components/NavItems/tools/Alltools.tsv";
 import LinkIcon from '@material-ui/icons/Link';
 import FileIcon from '@material-ui/icons/InsertDriveFile';
 import TextField from '@material-ui/core/TextField';
@@ -30,12 +31,12 @@ import { StylesProvider } from "@material-ui/core/styles";
 
 const Gif = () => {
     
-
+console.log("LOAD .......")
     //Init variables
     //============================================================================================
     const classes = useMyStyles();
     const keyword = useLoadLanguage("components/NavItems/tools/CheckGIF.tsv", tsv);
-    const keywordAllTools = useLoadLanguage("components/NavItems/tools/Alltools.tsv", tsv);
+    const keywordAllTools = useLoadLanguage("components/NavItems/tools/Alltools.tsv", tsvAlltools);
     const toolState = useSelector(state => state.gif.toolState);
     const dispatch = useDispatch();
 
@@ -214,7 +215,7 @@ const Gif = () => {
     };
 
     //Call to the API
-    useGetHomographics(filesToSend, modeHomo);
+    useGetHomographics(filesToSend, modeHomo, keyword);
 
     //Loading bar
     /*
