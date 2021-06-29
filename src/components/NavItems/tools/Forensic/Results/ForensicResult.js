@@ -670,6 +670,7 @@ const ForensicResults = (props) => {
 
                                         <div className={classes.wrapperImageFilter}>
                                             <CardMedia
+                                                crossOrigin={"anonymous"}
                                                 component="img"
                                                 className={classes.imageUploaded}
                                                 image={imageDisplayed}

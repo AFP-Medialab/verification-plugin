@@ -15,6 +15,7 @@ import { ReactComponent as IconGif } from '../../../NavBar/images/SVG/Image/Gif.
 import DragAndDrop from './DragAndDrop'
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/CheckGIF.tsv";
+import tsvAlltools from "../../../../LocalDictionary/components/NavItems/tools/Alltools.tsv";
 import LinkIcon from '@material-ui/icons/Link';
 import FileIcon from '@material-ui/icons/InsertDriveFile';
 import TextField from '@material-ui/core/TextField';
@@ -26,16 +27,15 @@ import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 import IconButton from '@material-ui/core/IconButton';
 import { StylesProvider } from "@material-ui/core/styles";
+import {submissionEvent} from "../../../Shared/GoogleAnalytics/GoogleAnalytics";
 
 
 const Gif = () => {
-    
-
     //Init variables
     //============================================================================================
     const classes = useMyStyles();
     const keyword = useLoadLanguage("components/NavItems/tools/CheckGIF.tsv", tsv);
-    const keywordAllTools = useLoadLanguage("components/NavItems/tools/Alltools.tsv", tsv);
+    const keywordAllTools = useLoadLanguage("components/NavItems/tools/Alltools.tsv", tsvAlltools);
     const toolState = useSelector(state => state.gif.toolState);
     const dispatch = useDispatch();
 
@@ -197,6 +197,8 @@ const Gif = () => {
 
     //Function to prepare the files to trigger the submission
     const handleSubmissionURL = () => {
+        submissionEvent(imageURL1);
+        submissionEvent(imageURL2);
         var files = {
             "url_0": imageURL1,
             "url_1": imageURL2,
@@ -207,6 +209,8 @@ const Gif = () => {
 
 
     const handleSubmission = () => {
+        submissionEvent(selectedFile1);
+        submissionEvent(selectedFile2);
         var files = {
             "file1": selectedFile1,
             "file2": selectedFile2,
@@ -216,7 +220,7 @@ const Gif = () => {
     };
 
     //Call to the API
-    useGetHomographics(filesToSend, modeHomo);
+    useGetHomographics(filesToSend, modeHomo, keyword);
 
     //Loading bar
     /*

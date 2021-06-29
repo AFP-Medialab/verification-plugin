@@ -3,10 +3,9 @@ import axios from "axios";
 import {useDispatch} from "react-redux";
 import {setKeyframesResult, setKeyframesLoading, setKeyframesMessage, cleanKeyframesState} from "../../../../../redux/actions/tools/keyframesActions"
 import {setError} from "../../../../../redux/actions/errorActions"
-import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
-import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Keyframes.tsv";
-export const useKeyframeWrapper = (url) => {
-    const keyword = useLoadLanguage("components/NavItems/tools/Keyframes.tsv", tsv);
+
+export const useKeyframeWrapper = (url, keyword) => {
+    
     const dispatch = useDispatch();
 
     useEffect(() => {

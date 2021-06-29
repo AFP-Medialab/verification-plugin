@@ -10,6 +10,8 @@ import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import {useParams} from 'react-router-dom'
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/Forensic.tsv";
+import tsvAllTools from "../../../../LocalDictionary/components/NavItems/tools/Alltools.tsv";
+import tsvWarning from "../../../../LocalDictionary/components/Shared/OnWarningInfo.tsv";
 import {submissionEvent} from "../../../Shared/GoogleAnalytics/GoogleAnalytics";
 import LocalFile from "../Forensic/LocalFile/LocalFile";
 import {KNOWN_LINKS} from "../../Assistant/AssistantRuleBook";
@@ -25,14 +27,13 @@ import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import Divider from '@material-ui/core/Divider';
 import Alert from '@material-ui/lab/Alert';
 
-import CardMedia from "@material-ui/core/CardMedia";
 
 const Forensic = () => {
     const {url} = useParams();
     const classes = useMyStyles();
     const keyword = useLoadLanguage("components/NavItems/tools/Forensic.tsv", tsv);
-    const keywordAllTools = useLoadLanguage("components/NavItems/tools/Alltools.tsv", tsv);
-    const keywordWarning = useLoadLanguage("components/Shared/OnWarningInfo.tsv", tsv);
+    const keywordAllTools = useLoadLanguage("components/NavItems/tools/Alltools.tsv", tsvAllTools);
+    const keywordWarning = useLoadLanguage("components/Shared/OnWarningInfo.tsv", tsvWarning);
 
     const theme = createMuiTheme({
         overrides: {
@@ -86,7 +87,7 @@ const Forensic = () => {
     const [urlDetected, setUrlDetected] = useState(false)
     const [loaded, setLoaded] = useState(false);
 
-    useGetImages(image);
+    useGetImages(image, keyword);
 
     
     const submitUrl = () => {

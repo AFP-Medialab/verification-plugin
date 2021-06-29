@@ -16,6 +16,7 @@ import useGenerateApiUrl from "./Hooks/useGenerateApiUrl";
 import FacebookResults from "./Results/FacebookResults";
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/Analysis.tsv";
+import tsvAllTools from "../../../../LocalDictionary/components/NavItems/tools/Alltools.tsv";
 import {submissionEvent} from "../../../Shared/GoogleAnalytics/GoogleAnalytics";
 import {cleanAnalysisState,setAnalysisLoading, setAnalysisResult} from "../../../../redux/actions/tools/analysisActions";
 import {useParams} from "react-router-dom";
@@ -34,7 +35,7 @@ const Analysis = () => {
     const {url} = useParams();
     const classes = useMyStyles();
     const keyword = useLoadLanguage("components/NavItems/tools/Analysis.tsv", tsv);
-    const keywordAllTools = useLoadLanguage("components/NavItems/tools/Alltools.tsv", tsv);
+    const keywordAllTools = useLoadLanguage("components/NavItems/tools/Alltools.tsv", tsvAllTools);
     const dispatch = useDispatch();
 
     const resultUrl = useSelector(state => state.analysis.url);
@@ -47,7 +48,7 @@ const Analysis = () => {
     const [reprocess, setReprocess] = useState(false);
     const serviceUrl = "https://mever.iti.gr/caa/api/v4/videos";
     const [finalUrl, showFacebookIframe] = useGenerateApiUrl(serviceUrl, submittedUrl, reprocess);
-    useAnalysisWrapper(setAnalysisLoading, setAnalysisResult, serviceUrl, finalUrl, submittedUrl);
+    useAnalysisWrapper(setAnalysisLoading, setAnalysisResult, serviceUrl, finalUrl, submittedUrl, keyword);
 
 
     var [warning, setWarning] = useState(false);
@@ -71,9 +72,9 @@ const Analysis = () => {
 
     useEffect(()=>{
         if (urlDetected) {
-            
             submitForm()
         }
+        // eslint-disable-next-line
     }, [urlDetected])
 
     useEffect(() => {

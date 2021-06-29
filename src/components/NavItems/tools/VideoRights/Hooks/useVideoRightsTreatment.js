@@ -3,13 +3,9 @@ import axios from "axios";
 import {useDispatch} from "react-redux";
 import {setVideoRightsResult, setVideoRightsLoading} from "../../../../../redux/actions/tools/videoRightsActions"
 import {setError} from "../../../../../redux/actions/errorActions"
-import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
-import tsv from "../../../../../LocalDictionary/components/NavItems/tools/VideoRights.tsv";
 
-const useVideoRightsTreatment = (url) => {
+const useVideoRightsTreatment = (url, keyword) => {
     const dispatch = useDispatch();
-    const keyword = useLoadLanguage("components/NavItems/tools/VideoRights.tsv", tsv);
-
 
     useEffect(() => {
         const handleError = (error) => {

@@ -32,7 +32,7 @@ const SourceCredibilityResults = (props) => {
                                     </Box>
                                 </Typography>}
                             secondary={
-                                <Typography>
+                                <Typography component={"div"}>
                                     {value.credibility_labels ?
                                         <Typography> {keyword("labelled_as")} "{value.credibility_labels}" </Typography>
                                         : null
