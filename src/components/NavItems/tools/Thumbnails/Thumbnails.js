@@ -150,7 +150,8 @@ const Thumbnails = () => {
     const computeHeight = async() =>{
         loadImageSize(resultData, cols)
                 .then((height) => {setHeight(height); setShowResult(true)})
-                .then((height) => {return height} );
+                .then((height) => {return height} )
+                .catch((e) => {return null});
     };
     
     const [getHeight, isImgLoading] = useLoading(computeHeight);

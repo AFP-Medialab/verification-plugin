@@ -55,7 +55,7 @@ const FacebookResults = (props) => {
   };  
   var nextPage = props.report.pagination.next;
   const url = useState(nextPage);
-  var last_page_all_comments;
+    var last_page_all_comments;
     var last_page_verified_comments;
     var last_page_link_comments;
 
@@ -110,9 +110,7 @@ const FacebookResults = (props) => {
   const handleClick_first_page = (event) => {
     if(count_comments!==1){
       
-      console.log("CALL ",axios.get("https://mever.iti.gr" + first_page_all_comments1))
       axios.get("https://mever.iti.gr" + first_page_all_comments1).then((response) => {
-        console.log("response.data ",response.data)
         setCount_comments(1);
         dispatch(setAnalysisComments(response.data));
         
@@ -123,9 +121,7 @@ const FacebookResults = (props) => {
     if(count_link_comments!==last_page_all_comments){
     
     
-      console.log("CALL ",axios.get("https://mever.iti.gr" + last_page_all_comments1))
       axios.get("https://mever.iti.gr" + last_page_all_comments1).then((response) => {
-        console.log("response.data ",response.data)
         setCount_comments(last_page_all_comments);
         dispatch(setAnalysisComments(response.data));
       });
@@ -135,9 +131,7 @@ const FacebookResults = (props) => {
   const handleClick_first_page1 = (event) => {
     if(count_link_comments!==1){
       
-      console.log("CALL ",axios.get("https://mever.iti.gr" + first_page_link_comments1))
       axios.get("https://mever.iti.gr" + first_page_link_comments1).then((response) => {
-        console.log("response.data ",response.data)
         setCount_link_comments(1);
         dispatch(setAnalysisLinkComments(response.data));
         
@@ -148,9 +142,7 @@ const FacebookResults = (props) => {
     if(count_link_comments!==last_page_link_comments){
     
     
-      console.log("CALL ",axios.get("https://mever.iti.gr" + last_page_link_comments1))
       axios.get("https://mever.iti.gr" + last_page_link_comments1).then((response) => {
-        console.log("response.data ",response.data)
           setCount_link_comments(last_page_link_comments);
           dispatch(setAnalysisLinkComments(response.data));
  
@@ -161,9 +153,7 @@ const FacebookResults = (props) => {
   const handleClick_first_page2 = (event) => {
     if(count_verified_comments!==1){
       
-      console.log("CALL ",axios.get("https://mever.iti.gr" + first_page_verified_comments1))
       axios.get("https://mever.iti.gr" + first_page_verified_comments1).then((response) => {
-        console.log("response.data ",response.data)
         setCount_verified_comments(1);
         dispatch(setAnalysisVerifiedComments(response.data));
         
@@ -174,9 +164,7 @@ const FacebookResults = (props) => {
     if(count_verified_comments!==last_page_verified_comments){
     
     
-      console.log("CALL ",axios.get("https://mever.iti.gr" + last_page_verified_comments1))
       axios.get("https://mever.iti.gr" + last_page_verified_comments1).then((response) => {
-        console.log("response.data ",response.data)
         setCount_verified_comments(last_page_verified_comments);
         dispatch(setAnalysisVerifiedComments(response.data));
  
@@ -187,26 +175,20 @@ const FacebookResults = (props) => {
 
 
   const handleClick_next_page = (event) => {
-    console.log("page_verified INSIDE ",next_page_comments)
-      console.log("CALL ",axios.get("https://mever.iti.gr" + next_page_comments))
+    if(count_comments!==last_page_all_comments){
       axios.get("https://mever.iti.gr" + next_page_comments).then((response) => {
-        console.log("response.data ",response.data)
         if(!response.data.error){
           setCount_comments(count_comments + 1);
-          console.log("PAGE NUMBER: ",count_comments)
           dispatch(setAnalysisComments(response.data));
         }
       });
+    };
   };
 
   const handleClick_previous_page = (event) => {
       if(count_comments>1){
       setCount_comments(count_comments - 1);
-      console.log("PAGE NUMBER: ",count_comments)
-      console.log("page_link INSIDE ",previous_page_comments)
-      console.log("CALL ",axios.get("https://mever.iti.gr" + previous_page_comments))
       axios.get("https://mever.iti.gr" + previous_page_comments).then((response) => {
-        console.log("response.data ",response.data)
         if(!response.data.error){
           dispatch(setAnalysisComments(response.data));
         }
@@ -215,27 +197,20 @@ const FacebookResults = (props) => {
   };
   
   const handleClick_next_page2 = (event) => {
-    
-      console.log("page_verified INSIDE ",next_page_verified)
-      console.log("CALL ",axios.get("https://mever.iti.gr" + next_page_verified))
+    if(count_verified_comments!==last_page_verified_comments){
       axios.get("https://mever.iti.gr" + next_page_verified).then((response) => {
-        console.log("response.data ",response.data)
         if(!response.data.error){
           setCount_verified_comments(count_verified_comments + 1);
-          console.log("PAGE NUMBER: ",count_verified_comments)
           dispatch(setAnalysisVerifiedComments(response.data));
         }
-      });   
-  } 
+      }); 
+    };  
+  };
 
   const handleClick_previous_page2 = (event) => {
     if(count_verified_comments>1){
       setCount_verified_comments(count_verified_comments - 1);
-      console.log("PAGE NUMBER: ",count_verified_comments)
-      console.log("page_link INSIDE ",previous_page_verified)
-      console.log("CALL ",axios.get("https://mever.iti.gr" + previous_page_verified))
       axios.get("https://mever.iti.gr" + previous_page_verified).then((response) => {
-        console.log("response.data ",response.data)
         if(!response.data.error){
           dispatch(setAnalysisVerifiedComments(response.data));
         }
@@ -244,29 +219,21 @@ const FacebookResults = (props) => {
     }
 
     const handleClick_next_page1 = (event) => {
-
-      console.log("page_link INSIDE ", next_page_link)
-      console.log("CALL ",axios.get("https://mever.iti.gr" + next_page_link))
+      if(count_link_comments!==last_page_link_comments){
       axios.get("https://mever.iti.gr" + next_page_link).then((response) => {
-        console.log("response.data ",response.data)
         if(!response.data.error){
           setCount_link_comments(count_link_comments + 1);
-          console.log("PAGE NUMBER: ",count_link_comments)
           dispatch(setAnalysisLinkComments(response.data));
         }
         
       });
-      
+    };
     };
 
     const handleClick_previous_page1 = (event) => {
           if(count_link_comments>1){
             setCount_link_comments(count_link_comments - 1);
-            console.log("PAGE NUMBER: ",count_link_comments)
-            console.log("page_verified INSIDE ",previous_page_link)
-            console.log("CALL ",axios.get("http://mever.iti.gr" + previous_page_link))
             axios.get("http://mever.iti.gr" + previous_page_link).then((response) => {
-              console.log("response.data ",response.data)
               if(!response.data.error){
                 dispatch(setAnalysisLinkComments(response.data));
               }
@@ -276,21 +243,14 @@ const FacebookResults = (props) => {
 
   const dispatch = useDispatch();
   const report = props.report;
-  console.log("Report ", report);
-  //console.log("report.pagination.next ",report.pagination.next)
   const verificationComments = report.comments ? report.comments : [];
   const linkComments = report.link_comments ? report.link_comments : [];
   const verifiedComments = report.verification_comments ? report.verification_comments : [];
-  console.log("linkComments ",linkComments)
 
-  
-
-  //console.log("linkComments ",linkComments)
- // console.log("verifiedComments ",verifiedComments)
 
   const thumbnails = report.thumbnails.others;
 
-  //console.log("nothing ", nothing)
+  
   return (
     <div>
       {report !== null &&
@@ -321,6 +281,9 @@ const FacebookResults = (props) => {
               <Box m={2} />
               <Divider />
               <Box m={2} />
+              <Typography variant={"h6"}>
+                                    {keyword("source") + ": " + report["source"]["from"]}
+                                </Typography>
               <Typography
                 variant="body2"
                 color="textSecondary"
@@ -338,6 +301,14 @@ const FacebookResults = (props) => {
                   aria-label="a dense table"
                 >
                   <TableBody>
+                  {report.source.from && (
+                      <TableRow>
+                        <TableCell component="th" scope="row">
+                        {keyword("source")}
+                        </TableCell>
+                        <TableCell align="right">{report.source.from}</TableCell>
+                      </TableRow>
+                    )}
                     {report.video_id && (
                       <TableRow>
                         <TableCell component="th" scope="row">
@@ -347,7 +318,7 @@ const FacebookResults = (props) => {
                       </TableRow>
                     )}
 {
-                      //report.video.title &&
+                     
                       <TableRow>
                         <TableCell component="th" scope="row">
                           {keyword("facebook_video_name_2")}
@@ -466,11 +437,9 @@ const FacebookResults = (props) => {
                         <TableBody
                           className={
                             styles.container
-                          } /* class="fixed_headers" */
+                          } 
                         >
                           {verificationComments.map((comment, key) => {
-                            //  console.log("comment ", comment)
-                            //   console.log("key ", key)
 
                             return (
                               <TableRow key={key}>
@@ -517,7 +486,7 @@ const FacebookResults = (props) => {
                       onClick={handleClick_previous_page}
                     >
                       <NavigateBeforeIcon/>
-                      {/*keyword("previous_button")*/}
+                      
                     </Button>
                     <div className={styles.inline}>
                     {"  "+ count_comments +"  "+keyword("page_number") +"  "+ last_page_all_comments+"  "}
@@ -531,7 +500,7 @@ const FacebookResults = (props) => {
                       onClick={handleClick_next_page}
                     >
                       <NavigateNextIcon/>                    
-                      {/*keyword("next_button")*/}
+                      
                     </Button>
                     <Button
                       variant="contained"
@@ -547,7 +516,7 @@ const FacebookResults = (props) => {
                 )}
                  <Box m={2} />
                 {
-                  //verifiedComments.length > 0 &&
+                  
                   <Accordion>
                     <AccordionSummary
                       expandIcon={<ExpandMoreIcon />}
@@ -628,7 +597,7 @@ const FacebookResults = (props) => {
                       onClick={handleClick_previous_page2}
                     >  
                      <NavigateBeforeIcon/>                    
-                      {/*keyword("previous_button")*/}
+                      
                     </Button>
                     <div className={styles.inline}>
                     {"  "+ count_verified_comments +"  "+keyword("page_number")+"  "+ last_page_verified_comments+"  "}
@@ -642,7 +611,7 @@ const FacebookResults = (props) => {
                       onClick={handleClick_next_page2}
                     >
                       <NavigateNextIcon/>                    
-                      {/*keyword("next_button")*/}
+                      
                     </Button>
                     
                     <Button
@@ -660,7 +629,7 @@ const FacebookResults = (props) => {
                 
                 <Box m={2} />
                 {
-                  //linkComments.length > 0 &&
+                  
                   <Accordion>
                     <AccordionSummary
                       expandIcon={<ExpandMoreIcon />}
@@ -743,7 +712,7 @@ const FacebookResults = (props) => {
                       onClick={handleClick_previous_page1}
                     >  
                      <NavigateBeforeIcon/>                    
-                      {/*keyword("previous_button")*/}
+                      
                     </Button>
                     <div className={styles.inline}>
                     { "  "+ count_link_comments +"  "+keyword("page_number")+"  "+ last_page_link_comments+"  "}
@@ -757,7 +726,7 @@ const FacebookResults = (props) => {
                       onClick={handleClick_next_page1}
                     >
                       <NavigateNextIcon/>                    
-                      {/*keyword("next_button")*/}
+                      
                     </Button>
                     <Button
                       variant="contained"
@@ -774,16 +743,7 @@ const FacebookResults = (props) => {
 
               </div>
               <Box m={4} />
-              {/*report.mentioned_locations &&
-                report.mentioned_locations.detected_locations &&
-                report.mentioned_locations.detected_locations.length > 0 && (
-                  <div>
-                    <AsynchMyMap
-                      locations={report.mentioned_locations.detected_locations}
-                    />
-                    <Box m={4} />
-                  </div>
-                )*/}
+              
               {thumbnails !== undefined && (
                 <div>
                   <Box m={4} />

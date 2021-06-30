@@ -15,6 +15,7 @@ import useGenerateApiUrl from "../Analysis/Hooks/useGenerateApiUrl";
 import FacebookResults from "./Results/FacebookResults";
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/Analysis.tsv";
+import tsvAlltools from "../../../../LocalDictionary/components/NavItems/tools/Alltools.tsv";
 import {submissionEvent} from "../../../Shared/GoogleAnalytics/GoogleAnalytics";
 import {cleanAnalysisState, setAnalysisLoading, setAnalysisResult} from "../../../../redux/actions/tools/image_analysisActions";
 import {useParams} from "react-router-dom";
@@ -24,18 +25,13 @@ import CardHeader from "@material-ui/core/CardHeader";
 import { ReactComponent as AnalysisIcon } from '../../../NavBar/images/SVG/Video/Video_analysis.svg';
 import Grid from "@material-ui/core/Grid";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
-import Typography from "@material-ui/core/Typography";
-import styles from "./Results/layout.module.css";
-
-
-
 
 const Analysis = () => {
 
     const {url} = useParams();
     const classes = useMyStyles();
     const keyword = useLoadLanguage("components/NavItems/tools/Analysis.tsv", tsv);
-    const keywordAllTools = useLoadLanguage("components/NavItems/tools/Alltools.tsv", tsv);
+    const keywordAllTools = useLoadLanguage("components/NavItems/tools/Alltools.tsv", tsvAlltools);
     const dispatch = useDispatch();
 
     const resultUrl = useSelector(state => state.analysisImage.url);
@@ -50,7 +46,7 @@ const Analysis = () => {
     const serviceUrl = "https://mever.iti.gr/caa/api/v4/images";
 
     const [finalUrl, showFacebookIframe] = useGenerateApiUrl(serviceUrl, submittedUrl, reprocess);
-    useAnalysisWrapper(setAnalysisLoading, setAnalysisResult, serviceUrl, finalUrl, submittedUrl);
+    useAnalysisWrapper(setAnalysisLoading, setAnalysisResult, serviceUrl, finalUrl, submittedUrl, keyword);
 
     const reprocessToggle = () => {
         setReprocess(!reprocess);
@@ -72,6 +68,7 @@ const Analysis = () => {
         if (urlDetected) {
             submitForm()
         }
+        // eslint-disable-next-line
     }, [urlDetected])
 
     useEffect(() => {

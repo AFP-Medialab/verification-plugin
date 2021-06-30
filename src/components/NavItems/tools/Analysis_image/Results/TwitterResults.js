@@ -18,7 +18,6 @@ import {cleanAnalysisState} from "../../../../../redux/actions/tools/image_analy
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Analysis.tsv";
-//import AsynchMyMap from "../../../../Shared/MyMap/AsynchMyMap";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 import styles from "../../Analysis/Results/layout.module.css";
@@ -85,10 +84,6 @@ const TwitterResults = (props) => {
         setExpanded(isExpanded ? panel : false);
     };
 
-    
-
-    
-   
     var next_page_comments=url[0].substring(0, real+1)+(count_comments+1)+"&type=coms"
     var previous_page_comments=url[0].substring(0, real+1)+(count_comments-1)+"&type=coms"
     var next_page_verified=url[0].substring(0, real+1)+(count_verified_comments+1)+"&type=vercoms"
@@ -107,9 +102,7 @@ const TwitterResults = (props) => {
     const handleClick_first_page = (event) => {
         if(count_comments!==1){
           
-          console.log("CALL ",axios.get("https://mever.iti.gr" + first_page_all_comments1))
           axios.get("https://mever.iti.gr" + first_page_all_comments1).then((response) => {
-            console.log("response.data ",response.data)
             setCount_comments(1);
             dispatch(setAnalysisComments(response.data));
             
@@ -120,9 +113,7 @@ const TwitterResults = (props) => {
         if(count_link_comments!==last_page_all_comments){
         
         
-          console.log("CALL ",axios.get("https://mever.iti.gr" + last_page_all_comments1))
           axios.get("https://mever.iti.gr" + last_page_all_comments1).then((response) => {
-            console.log("response.data ",response.data)
             setCount_comments(last_page_all_comments);
             dispatch(setAnalysisComments(response.data));
           });
@@ -132,9 +123,7 @@ const TwitterResults = (props) => {
       const handleClick_first_page1 = (event) => {
         if(count_link_comments!==1){
           
-          console.log("CALL ",axios.get("https://mever.iti.gr" + first_page_link_comments1))
           axios.get("https://mever.iti.gr" + first_page_link_comments1).then((response) => {
-            console.log("response.data ",response.data)
             setCount_link_comments(1);
             dispatch(setAnalysisLinkComments(response.data));
             
@@ -145,9 +134,7 @@ const TwitterResults = (props) => {
         if(count_link_comments!==last_page_link_comments){
         
         
-          console.log("CALL ",axios.get("https://mever.iti.gr" + last_page_link_comments1))
           axios.get("https://mever.iti.gr" + last_page_link_comments1).then((response) => {
-            console.log("response.data ",response.data)
               setCount_link_comments(last_page_link_comments);
               dispatch(setAnalysisLinkComments(response.data));
      
@@ -158,9 +145,7 @@ const TwitterResults = (props) => {
       const handleClick_first_page2 = (event) => {
         if(count_verified_comments!==1){
           
-          console.log("CALL ",axios.get("https://mever.iti.gr" + first_page_verified_comments1))
           axios.get("https://mever.iti.gr" + first_page_verified_comments1).then((response) => {
-            console.log("response.data ",response.data)
             setCount_verified_comments(1);
             dispatch(setAnalysisVerifiedComments(response.data));
             
@@ -171,9 +156,7 @@ const TwitterResults = (props) => {
         if(count_verified_comments!==last_page_verified_comments){
         
         
-          console.log("CALL ",axios.get("https://mever.iti.gr" + last_page_verified_comments1))
           axios.get("https://mever.iti.gr" + last_page_verified_comments1).then((response) => {
-            console.log("response.data ",response.data)
             setCount_verified_comments(last_page_verified_comments);
             dispatch(setAnalysisVerifiedComments(response.data));
      
@@ -181,27 +164,21 @@ const TwitterResults = (props) => {
         }
       };
 
-    const handleClick_next_page = (event) => {
-        console.log("page_verified INSIDE ",next_page_comments)
-          console.log("CALL ",axios.get("https://mever.iti.gr" + next_page_comments))
+      const handleClick_next_page = (event) => {
+        if(count_comments!==last_page_all_comments){
           axios.get("https://mever.iti.gr" + next_page_comments).then((response) => {
-            console.log("response.data ",response.data)
             if(!response.data.error){
               setCount_comments(count_comments + 1);
-              console.log("PAGE NUMBER: ",count_comments)
               dispatch(setAnalysisComments(response.data));
             }
           });
+        };
       };
     
       const handleClick_previous_page = (event) => {
           if(count_comments>1){
           setCount_comments(count_comments - 1);
-          console.log("PAGE NUMBER: ",count_comments)
-          console.log("page_link INSIDE ",previous_page_comments)
-          console.log("CALL ",axios.get("https://mever.iti.gr" + previous_page_comments))
           axios.get("https://mever.iti.gr" + previous_page_comments).then((response) => {
-            console.log("response.data ",response.data)
             if(!response.data.error){
               dispatch(setAnalysisComments(response.data));
             }
@@ -210,27 +187,20 @@ const TwitterResults = (props) => {
       };
       
       const handleClick_next_page2 = (event) => {
-        
-          console.log("page_verified INSIDE ",next_page_verified)
-          console.log("CALL ",axios.get("https://mever.iti.gr" + next_page_verified))
+        if(count_verified_comments!==last_page_verified_comments){
           axios.get("https://mever.iti.gr" + next_page_verified).then((response) => {
-            console.log("response.data ",response.data)
             if(!response.data.error){
               setCount_verified_comments(count_verified_comments + 1);
-              console.log("PAGE NUMBER: ",count_verified_comments)
               dispatch(setAnalysisVerifiedComments(response.data));
             }
-          });   
-      } 
+          }); 
+        };  
+      };
     
       const handleClick_previous_page2 = (event) => {
         if(count_verified_comments>1){
           setCount_verified_comments(count_verified_comments - 1);
-          console.log("PAGE NUMBER: ",count_verified_comments)
-          console.log("page_link INSIDE ",previous_page_verified)
-          console.log("CALL ",axios.get("https://mever.iti.gr" + previous_page_verified))
           axios.get("https://mever.iti.gr" + previous_page_verified).then((response) => {
-            console.log("response.data ",response.data)
             if(!response.data.error){
               dispatch(setAnalysisVerifiedComments(response.data));
             }
@@ -239,29 +209,21 @@ const TwitterResults = (props) => {
         }
     
         const handleClick_next_page1 = (event) => {
-    
-          console.log("page_link INSIDE ", next_page_link)
-          console.log("CALL ",axios.get("https://mever.iti.gr" + next_page_link))
+          if(count_link_comments!==last_page_link_comments){
           axios.get("https://mever.iti.gr" + next_page_link).then((response) => {
-            console.log("response.data ",response.data)
             if(!response.data.error){
               setCount_link_comments(count_link_comments + 1);
-              console.log("PAGE NUMBER: ",count_link_comments)
               dispatch(setAnalysisLinkComments(response.data));
             }
             
           });
-          
+        };
         };
     
         const handleClick_previous_page1 = (event) => {
               if(count_link_comments>1){
                 setCount_link_comments(count_link_comments - 1);
-                console.log("PAGE NUMBER: ",count_link_comments)
-                console.log("page_verified INSIDE ",previous_page_link)
-                console.log("CALL ",axios.get("http://mever.iti.gr" + previous_page_link))
                 axios.get("http://mever.iti.gr" + previous_page_link).then((response) => {
-                  console.log("response.data ",response.data)
                   if(!response.data.error){
                     dispatch(setAnalysisLinkComments(response.data));
                   }
@@ -271,12 +233,9 @@ const TwitterResults = (props) => {
 
         const dispatch = useDispatch();
         const report = props.report;
-        console.log("report ",report)
         const verificationComments = report.comments ? report.comments : [];
         const linkComments = report.link_comments ? report.link_comments : [];
         const verifiedComments = report.verification_comments ? report.verification_comments : [];
-        console.log("linkComments ",linkComments)    
-       // const thumbnails = [report["thumbnails"]["preferred"]];
 
     return (
         <div>
@@ -299,7 +258,7 @@ const TwitterResults = (props) => {
                         <Divider/>
                         <Box m={2}/>
                         <Typography variant={"h6"}>
-                            {keyword("image_description")}
+                        {keyword("profile_creator") + ": " + report["source"]["user_name"]}
                         </Typography>
                         {
                             report["image"] &&
@@ -445,7 +404,6 @@ const TwitterResults = (props) => {
                                 
                                 <Box m={2}/>
                                 {
-                                    //verificationComments.length > 0 &&
                                     <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
                                         <AccordionSummary
                                             expandIcon={<ExpandMoreIcon/>}
@@ -459,7 +417,7 @@ const TwitterResults = (props) => {
                                             <Table className={classes.table} size="small" aria-label="a dense table">
                                                 <TableHead>
                                                     <TableRow>
-                                                        <TableCell align="center">{keyword("twitter_user_title")}</TableCell>
+                                                        <TableCell align="center">{keyword("user")}</TableCell>
                                                         <TableCell
                                                             className={styles.size} align="center">{keyword("twitter_user_name_13")}</TableCell>
                                                         <TableCell
@@ -516,7 +474,6 @@ const TwitterResults = (props) => {
                       onClick={handleClick_previous_page}
                     >
                       <NavigateBeforeIcon/>
-                      {/*keyword("previous_button")*/}
                     </Button>
                     <div className={styles.inline}>
                     {"  "+ count_comments +"  "+keyword("page_number")+"  "+ last_page_all_comments+"  "}
@@ -530,7 +487,6 @@ const TwitterResults = (props) => {
                       onClick={handleClick_next_page}
                     >
                       <NavigateNextIcon/>                    
-                      {/*keyword("next_button")*/}
                     </Button>
                     <Button
                       variant="contained"
@@ -546,7 +502,6 @@ const TwitterResults = (props) => {
                                 }
                       <Box m={2} />
                 {
-                  //verifiedComments.length > 0 &&
                   <Accordion>
                     <AccordionSummary
                       expandIcon={<ExpandMoreIcon />}
@@ -570,7 +525,7 @@ const TwitterResults = (props) => {
                         <TableHead>
                           <TableRow>
                               
-                            <TableCell align="center">{keyword("twitter_user_title")}</TableCell>
+                            <TableCell align="center">{keyword("user")}</TableCell>
                             <TableCell className={styles.size} align="center">
                               {keyword("twitter_user_name_13")}
                             </TableCell>
@@ -627,7 +582,6 @@ const TwitterResults = (props) => {
                       onClick={handleClick_previous_page2}
                     >  
                      <NavigateBeforeIcon/>                    
-                      {/*keyword("previous_button")*/}
                     </Button>
                     <div className={styles.inline}>
                     {"  "+ count_verified_comments +"  "+keyword("page_number")+"  "+ last_page_verified_comments+"  "}
@@ -641,7 +595,6 @@ const TwitterResults = (props) => {
                       onClick={handleClick_next_page2}
                     >
                       <NavigateNextIcon/>                    
-                      {/*keyword("next_button")*/}
                     </Button>
                     
                     <Button
@@ -658,7 +611,6 @@ const TwitterResults = (props) => {
                 }
                 <Box m={2} />
                 {
-                  //linkComments.length > 0 &&
                   
                   <Accordion>
                     <AccordionSummary
@@ -683,7 +635,7 @@ const TwitterResults = (props) => {
                         <TableHead>
                           <TableRow>
                               
-                            <TableCell align="center">{keyword("twitter_user_title")}</TableCell>
+                            <TableCell align="center">{keyword("user")}</TableCell>
                             <TableCell className={styles.size} align="center">
                               {keyword("twitter_user_name_13")}
                             </TableCell>
@@ -722,10 +674,6 @@ const TwitterResults = (props) => {
                       </Table>
                     </AccordionDetails>
                     
-                
-
-                  
-
                     <Button
                       variant="contained"
                       aria-controls="simple-menu"
@@ -745,7 +693,6 @@ const TwitterResults = (props) => {
                       onClick={handleClick_previous_page1}
                     >  
                      <NavigateBeforeIcon/>                    
-                      {/*keyword("previous_button")*/}
                     </Button>
                     <div className={styles.inline}>
                     { "  "+ count_link_comments +"  "+keyword("page_number")+"  "+ last_page_link_comments+"  "}
@@ -759,7 +706,6 @@ const TwitterResults = (props) => {
                       onClick={handleClick_next_page1}
                     >
                       <NavigateNextIcon/>                    
-                      {/*keyword("next_button")*/}
                     </Button>
                     <Button
                       variant="contained"
@@ -771,9 +717,7 @@ const TwitterResults = (props) => {
                     >                     
                       <SkipNextIcon/> 
                     </Button>
-                    
-                    
-
+  
                   </Accordion>
                 }
 

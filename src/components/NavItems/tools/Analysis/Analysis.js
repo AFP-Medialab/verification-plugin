@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useState, useCallback } from "react";
 import {useSelector} from "react-redux";
 import {useDispatch} from "react-redux";
 import TextField from "@material-ui/core/TextField";
@@ -56,14 +56,18 @@ const Analysis = () => {
     const reprocessToggle = () => {
         setReprocess(!reprocess);
     };
-
+    
+    
     const submitForm = () => {
         submissionEvent(input.trim());
         setSubmittedUrl(input.trim());
         dispatch(cleanAnalysisState());
-
     };
     
+
+
+    
+
     useEffect(() => {       
         if (finalUrl !== undefined) {
             setSubmittedUrl(undefined);
@@ -71,11 +75,12 @@ const Analysis = () => {
     }, [finalUrl]);
 
     useEffect(()=>{
+        
         if (urlDetected) {
             submitForm()
         }
         // eslint-disable-next-line
-    }, [urlDetected])
+    }, [urlDetected])  
 
     useEffect(() => {
         if (url && url !== KNOWN_LINKS.OWN) {
@@ -127,10 +132,7 @@ const Analysis = () => {
                                     }
                                     
                                 }
-                                
-                                
-                                
-                                
+
                                 }
                             />
                             
@@ -186,17 +188,14 @@ const Analysis = () => {
                 </Box>
             }
             {
-                //(resultData !== null && resultUrl != null && resultUrl.startsWith("https://www.youtube.com/")) ?
                 (resultData  && resultData.platform.startsWith("youtube")) ?
                     <YoutubeResults report={resultData}/> : null
             }
             {
-                //(resultData !== null && resultUrl != null && resultUrl.startsWith("https://twitter.com/")) ?
                 (resultData  && resultData.platform.startsWith("twitter")) ?
                     <TwitterResults report={resultData}/> : null
             }
             {
-                //(resultData !== null && resultUrl != null && resultUrl.startsWith("https://www.facebook.com/")) ?
                 (resultData  && resultData.platform.startsWith("facebook")) ?
                     <FacebookResults report={resultData}/> : null
                     

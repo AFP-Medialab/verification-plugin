@@ -24,7 +24,7 @@ const useVideoTreatment = (mediaUrl, keyword) => {
             };
 
             video.onError = (error) => {
-                console.log("mp4 error : " + error);
+                //console.log("mp4 error : " + error);
                 handleError("metadata_table_error")
             };
 

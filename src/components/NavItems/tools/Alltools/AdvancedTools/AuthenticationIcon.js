@@ -8,14 +8,6 @@ const AuthenticationIcon = () => {
 
     const userAuthenticated = useSelector(state => state.userSession && state.userSession.userAuthenticated);
 
-    /*
-    if(userAuthenticated){
-        console.log("LOGGED");
-    }else{
-        console.log("NO");
-    }
-    */
-
     return (
 
         <div>

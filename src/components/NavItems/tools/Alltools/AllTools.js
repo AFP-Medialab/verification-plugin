@@ -43,16 +43,16 @@ const AllTools = (props) => {
     const [openAlert, setOpenAlert] = React.useState(false);
 
     const handleClick = (path, mediaTool, type) => {
-        console.log(type);
+        //console.log(type);
         if (type === "lock" || type === "lock and new"){
             if (userAuthenticated){
-                console.log("LOGGED");
+                //console.log("LOGGED");
                 handlePush(path, mediaTool);
             }else{
                 setOpenAlert(true);
             }
         }else{
-            console.log("NOT LOGGED");
+            //console.log("NOT LOGGED");
             handlePush(path, mediaTool);
         }
     };

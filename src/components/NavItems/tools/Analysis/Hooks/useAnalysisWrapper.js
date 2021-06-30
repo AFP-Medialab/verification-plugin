@@ -52,7 +52,7 @@ export const useAnalysisWrapper = (setAnalysisLoading, setAnalysisResult, servic
                     }
                 })
                 .catch(error => {
-                    console.log("error waituntildone", error);
+                
                 })
         };
 
