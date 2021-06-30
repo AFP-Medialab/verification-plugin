@@ -178,8 +178,6 @@ const ForensicResults = (props) => {
         
     ];
 
-
-
     const idStartCompression = 0;
     const idStartNoise = 6;
     const idStartDeepLearning = 8;
