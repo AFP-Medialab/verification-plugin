@@ -25,15 +25,15 @@ const useGetGif = (images, delayInput, enableDownload) => {
 
 
         const downloadGif = (response) => {
-            console.log(response);
+            //console.log(response);
             const file = new Blob([response.data], { type: 'image/gif' });
             saveAs(file, "image.gif");
             dispatch(setStateBackResults());
         }
 
-        console.log("files", images);
-        console.log("speed", delayInput);
-        console.log("enable", enableDownload);
+        //console.log("files", images);
+        //console.log("speed", delayInput);
+        //console.log("enable", enableDownload);
 
         if (enableDownload) {
             dispatch(setStateDownloading());

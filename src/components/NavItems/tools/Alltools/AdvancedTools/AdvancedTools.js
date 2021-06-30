@@ -170,7 +170,7 @@ const AdvancedTools = (props) => {
             accessCode: codeInput
         }).then(result => {
             setDialogState(2);
-            console.log(result);
+            //console.log(result);
         }).catch(error => {
             handleError(error.error ? error.error.code : ERR_AUTH_UNKNOWN_ERROR);
             setStateUnlockTools(false);

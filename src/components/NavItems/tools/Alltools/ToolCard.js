@@ -1,13 +1,10 @@
 import React, { Component } from 'react';
-//import { ReactComponent as GifIcon } from "../../../NavBar/images/SVG/Image/Gif.svg"
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
 import FiberNewIcon from '@material-ui/icons/FiberNew';
-import isAuthenticated from "./AdvancedTools/AdvancedTools";
 import AuthenticationIcon from "./AdvancedTools/AuthenticationIcon";
 import { ReactComponent as ImprovedIcon } from "../../../NavBar/images/SVG/Improved.svg";
-
 
 export class ToolCard extends Component {
 
@@ -31,24 +28,6 @@ export class ToolCard extends Component {
 
     render() {
 
-        const userSession = state => ({
-            userSession: state.userSession
-        });
-
-        const userAuthenticated = state => ({
-            userAuthenticated: state.userSession.userAuthenticated
-        });
-
-        if (!(userSession && userAuthenticated)) {
-            console.log("AUTH 1");
-        }
-
-        if (!isAuthenticated) {
-            console.log("AUTH 2");
-        }
-
-
-
         var showNew = false;
         var showRedesign = false;
         var showLock = false;
@@ -71,8 +50,6 @@ export class ToolCard extends Component {
             showLock = true;
             showNew = true;
         }
-
-
 
         const { hovered } = this.state;
         const styleCard = hovered ? {

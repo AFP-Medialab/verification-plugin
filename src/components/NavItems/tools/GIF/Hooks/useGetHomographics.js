@@ -18,7 +18,7 @@ const useGetHomographics = (files, mode, keyword) => {
         const handleError = (e) => {
             if (keyword(e) !== ""){
                 dispatch(setError(keyword(e)));
-                console.log("ERROR HOMO: " + keyword(e));
+                //console.log("ERROR HOMO: " + keyword(e));
             }else{
                 dispatch(setError(keyword("error_homo")));
             }
@@ -28,8 +28,8 @@ const useGetHomographics = (files, mode, keyword) => {
         };
 
         const getImages = (response) => {
-            console.log("RESPONSE RECIEVED");
-            console.log(response);
+            //console.log("RESPONSE RECIEVED");
+            //console.log(response);
 
             if(response.data.status === "KO"){
                 if (response.data.errorCode === "NO_MATCHES_FOUND"){
@@ -51,7 +51,7 @@ const useGetHomographics = (files, mode, keyword) => {
         }
 
         if (files && mode === 1 && toolState === 3) {
-            console.log("UPLOADING IMAGES");
+            //console.log("UPLOADING IMAGES");
 
             dispatch(setStateLoading());
             //console.log(files.file1);
@@ -82,7 +82,7 @@ const useGetHomographics = (files, mode, keyword) => {
 
 
         if (files && mode === 2 && toolState === 3) {
-            console.log("UPLOADING IMAGES");
+            //console.log("UPLOADING IMAGES");
 
             dispatch(setStateLoading());
             //console.log(files.file1);

@@ -185,13 +185,13 @@ const Gif = () => {
     
     //Code to enable the button to upload the images
     if (toolState === 22 && imageURL1 !== "" && imageURL2 !== "") {
-        console.log("Ready to send"); //DEBUG
+        //console.log("Ready to send"); //DEBUG
         dispatch(setStateReady());
     }
 
     //Code to enable the button to upload the images
     if (toolState === 21 && imageDropped1 !== null && imageDropped2 !== null) {
-        console.log("Ready to send"); //DEBUG
+        //console.log("Ready to send"); //DEBUG
         dispatch(setStateReady());
     }
 
@@ -221,14 +221,6 @@ const Gif = () => {
 
     //Call to the API
     useGetHomographics(filesToSend, modeHomo, keyword);
-
-    //Loading bar
-    /*
-    if (loading && readyToSend){
-        setReadyToSend(false);
-        console.log("Disable button"); //DEBUG
-    }
-    */
 
     if(toolState === 6){
         cleanInputs();
@@ -272,7 +264,7 @@ const Gif = () => {
 
     //Loop function
     function animateImages() {
-        console.log("Loop function" + interval); //DEBUG
+        //console.log("Loop function" + interval); //DEBUG
         //console.log(interval); //DEBUG
         var x = document.getElementById("gifFilterElement");
 
@@ -386,7 +378,7 @@ const Gif = () => {
         return () => {
             // componentwillunmount in functional component.
             // Anything in here is fired on component unmount.
-            console.log("Stop loop "  + interval);
+            //console.log("Stop loop "  + interval);
             clearInterval(interval);
             newGif();
         }
