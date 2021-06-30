@@ -159,12 +159,14 @@ const FacebookResults = (props) => {
   };
  
   const handleClick_next_page = (event) => {
+    if(count_comments!==last_page_all_comments){
       axios.get("https://mever.iti.gr" + next_page_comments).then((response) => {
         if(!response.data.error){
           setCount_comments(count_comments + 1);
           dispatch(setAnalysisComments(response.data));
         }
       });
+    };
   };
 
   const handleClick_previous_page = (event) => {
@@ -179,14 +181,15 @@ const FacebookResults = (props) => {
   };
   
   const handleClick_next_page2 = (event) => {
- 
+    if(count_verified_comments!==last_page_verified_comments){
       axios.get("https://mever.iti.gr" + next_page_verified).then((response) => {
         if(!response.data.error){
           setCount_verified_comments(count_verified_comments + 1);
           dispatch(setAnalysisVerifiedComments(response.data));
         }
-      });   
-  } 
+      }); 
+    };  
+  };
 
   const handleClick_previous_page2 = (event) => {
     if(count_verified_comments>1){
@@ -200,8 +203,7 @@ const FacebookResults = (props) => {
     }
 
     const handleClick_next_page1 = (event) => {
-
-
+      if(count_link_comments!==last_page_link_comments){
       axios.get("https://mever.iti.gr" + next_page_link).then((response) => {
         if(!response.data.error){
           setCount_link_comments(count_link_comments + 1);
@@ -209,7 +211,7 @@ const FacebookResults = (props) => {
         }
         
       });
-      
+    };
     };
 
     const handleClick_previous_page1 = (event) => {

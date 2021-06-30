@@ -26,9 +26,6 @@ import { ReactComponent as AnalysisIcon } from '../../../NavBar/images/SVG/Video
 import Grid from "@material-ui/core/Grid";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 
-
-
-
 const Analysis = () => {
 
     const {url} = useParams();

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useState, useCallback } from "react";
 import {useSelector} from "react-redux";
 import {useDispatch} from "react-redux";
 import TextField from "@material-ui/core/TextField";
@@ -64,13 +64,10 @@ const Analysis = () => {
         dispatch(cleanAnalysisState());
     };
     
-    /*
-    const submitForm = useCallback(() => {
-        submissionEvent(input.trim());
-        setSubmittedUrl(input.trim());
-        dispatch(cleanAnalysisState());
-    });
-    */
+
+
+    
+
     useEffect(() => {       
         if (finalUrl !== undefined) {
             setSubmittedUrl(undefined);
@@ -134,10 +131,7 @@ const Analysis = () => {
                                     }
                                     
                                 }
-                                
-                                
-                                
-                                
+
                                 }
                             />
                             
