@@ -243,6 +243,7 @@ const ForensicResults = (props) => {
                 "id": value,
                 "name": keyword("forensic_title_" + value),
                 "map": results[value],
+                "popover": false,
             }
 
            

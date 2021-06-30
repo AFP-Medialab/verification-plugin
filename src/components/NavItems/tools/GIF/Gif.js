@@ -314,7 +314,7 @@ const Gif = () => {
 
     //Function to prepare the files to trigger the download
     const handleDownloadGif = () => {
-        console.log(toolState);
+        //console.log(toolState);
         var files = {
             "image1": homoImg1,
             "image2": homoImg2,
