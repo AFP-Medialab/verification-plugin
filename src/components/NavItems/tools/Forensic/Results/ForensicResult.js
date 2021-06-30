@@ -1110,7 +1110,7 @@ const ForensicResults = (props) => {
 
                                                     <CardMedia
                                                         image={MakoScale}
-                                                        style={{ height: "2vh" }}
+                                                        style={{ height: "20px", transform: "scale(-1)", backgroundSize: "contain"}}
                                                     />
 
                                                     <Grid
