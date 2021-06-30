@@ -11,8 +11,6 @@ import Snackbar from '@material-ui/core/Snackbar';
 import SnackbarContent from '@material-ui/core/SnackbarContent';
 import WarningIcon from '@material-ui/icons/Warning';
 import {makeStyles} from '@material-ui/core/styles';
-import useLoadLanguage from "../../Hooks/useLoadLanguage";
-import tsv from "../../LocalDictionary/components/Shared/OnWarningInfo.tsv";
 
 const variantIcon = {
     success: CheckCircleIcon,
@@ -49,10 +47,6 @@ const useStyles1 = makeStyles(theme => ({
 }));
 
 function MySnackbarContentWrapper(props) {
-    const keyword = useLoadLanguage(
-        "components/Shared/OnWarningInfo.tsv",
-        tsv
-      );
     const classes = useStyles1();
     const {className, message, onClose, variant, ...other} = props;
     const Icon = variantIcon[variant];

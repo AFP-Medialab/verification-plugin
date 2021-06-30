@@ -27,16 +27,17 @@ import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
 import Fade from '@material-ui/core/Fade';
 import Slider from '@material-ui/core/Slider';
 import useGetGif from "../../GIF/Hooks/useGetGif";
-import { setStateDownloading } from "../../../../../redux/actions/tools/gifActions";
 import { useDispatch } from "react-redux";
 import { StylesProvider } from "@material-ui/core/styles";
 import { cleanForensicState } from "../../../../../redux/actions/tools/forensicActions"
+import { setStateInit } from "../../../../../redux/actions/tools/gifActions"
 import LinkIcon from '@material-ui/icons/Link';
 import IconButton from '@material-ui/core/IconButton';
 import Snackbar from '@material-ui/core/Snackbar';
 import WarningIcon from '@material-ui/icons/Warning';
 import Alert from '@material-ui/lab/Alert';
 import MakoScale from '../../../../NavBar/images/SVG/MakoScale.png';
+import { useEffect } from "react";
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -124,31 +125,6 @@ const ForensicResults = (props) => {
     );
     const [openAlert, setOpenAlert] = React.useState(false);
 
-    /*
-        --- COMPRESSION ---
-        zero_report - Zero
-        ghost_report - GHOST
-        cagi_report - CAGI
-        adq1_report - DQ
-        dct_report - DCT
-        blk_report - BLOCK
-        --- NOISE ---
-        splicebuster_report - Splicebuster
-        wavelet_report - Wavelet
-        --- DEEP LEARNING ---
-        mantranet_report - MANTRANET
-        fusion_report - FUSION
-        --- CLONING ---
-        cmfd_report - CMFD
-        rcmfd_report - RCMFD
-        
-        
-        --- LENSES ---
-        ela_report - ELA
-        laplacian_report - LAPLACIAN
-        median_report - Median
-    */
-
     const filtersIDs = [
         //COMPRESSION
         "zero_report",  //0
@@ -184,15 +160,12 @@ const ForensicResults = (props) => {
     const idStartCloning = 10;
     const idStartLenses = 12;
 
-    console.log();
-
-
     //console.log(results);
 
     const filters = useRef(filtersIDs.map((value) => {
 
         var filter;
-        console.log(results[value]);
+        //console.log(results[value]);
 
         if (results[value] === undefined) {
             filter = {
@@ -272,6 +245,7 @@ const ForensicResults = (props) => {
                 "id": value,
                 "name": keyword("forensic_title_" + value),
                 "map": results[value],
+                "popover": false,
             }
 
            
@@ -398,11 +372,6 @@ const ForensicResults = (props) => {
 
     const gifState = useSelector(state => state.gif.toolState);
 
-
-    //const [readyTransparency, setReadyTransparency] = React.useState(false);
-
-    //nsparent(gifFilter, readyTransparency);
-
     function clickGifPopover(event, filter) {
         if(userAuthenticated){
             var url;
@@ -410,24 +379,19 @@ const ForensicResults = (props) => {
                 url = filters.current.find(x => x.id === filter).mask[filters.current.find(x => x.id === filter).currentDisplayed]
                 setGifFilter(url);
                 //console.log(url);
-
                 //setReadyTransparency(true);
 
             } else {
                 url = filters.current.find(x => x.id === filter).mask;
                 setGifFilter(url);
                 //console.log(url);
-
                 //setReadyTransparency(true);
             }
             setIntervalVar(setInterval(() => animateFilter(), 1100));
             setAnchorGifPopover(event.currentTarget);
         }else{
             setOpenAlert(true);
-        }
-
-
-        
+        }   
 
     }
 
@@ -437,15 +401,12 @@ const ForensicResults = (props) => {
         //setReadyTransparency(false);
     }
 
-
-
-
     function animateFilter() {
-        console.log("Loop function");
-        console.log(interval);
+        //console.log("Loop function");
+        //console.log(interval);
         var x = document.getElementById("gifFilterElement");
         if (x.style.display === "none") {
-            console.log("display");
+            //console.log("display");
             x.style.display = "block";
         } else {
             x.style.display = "none";
@@ -467,12 +428,12 @@ const ForensicResults = (props) => {
     const [speed, setSpeed] = React.useState(1100);
 
     function changeValueSpeed(value) {
-        console.log("Change value speed: " + value);
+        //console.log("Change value speed: " + value);
         setSpeed(value * -1);
     }
 
     function changeSpeed(value) {
-        console.log("Change speed: " + value);
+        //console.log("Change speed: " + value);
         clearInterval(interval);
         setIntervalVar(setInterval(() => animateFilter(), (value)));
 
@@ -501,43 +462,17 @@ const ForensicResults = (props) => {
         setEnableDownload(false);
     }
 
-
-    //const dispatch = useDispatch();
-
-    //const variable = useSelector(state => state.forensic.gifAnimation);
-
-    /*
-    //const [gifAnimation, setGifAnimation] = React.useState(props.gifAnimation)
-    useEffect(() => {
-    function blinkFilter() {
-        console.log("blinking");
-        const variable = useSelector(state => state.forensic.gifAnimation);
-        console.log(variable);
-        if(variable){
-            dispatch(setForensicsGifAnimateHide());
-        }else{
-            dispatch(setForensicsGifAnimateShow());
-        }
-        
-        //console.log(useSelector(state => state.forensic.gifAnimation));
-        //setGifAnimation(false);
-    }});
-    */
-
-
-    // para organizar
     const imageDisplayed = props.url;
+    
+    
     //tabs
     const [value, setValue] = React.useState(0)
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
 
-
-
     //console.log("Downloading: " + downloading);
-
-
+    
     //Copy url to clipboard
     const [openToast, setOpenToast] = React.useState(false);
 
@@ -596,6 +531,14 @@ const ForensicResults = (props) => {
         }
         setOpenAlert(false);
     };
+
+    useEffect(() => {
+        return () => {
+            clearInterval(interval);
+            dispatch(setStateInit());
+        }
+        // eslint-disable-next-line
+    }, [])
 
     return (
         <StylesProvider injectFirst>

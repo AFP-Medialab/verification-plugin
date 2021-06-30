@@ -22,7 +22,7 @@ import TextField from '@material-ui/core/TextField';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
-import { setStateSelectingLocal, setStateSelectingUrl, setStateReady, setStateInit, setStateDownloading } from "../../../../redux/actions/tools/gifActions";
+import { setStateSelectingLocal, setStateSelectingUrl, setStateReady, setStateInit } from "../../../../redux/actions/tools/gifActions";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 import IconButton from '@material-ui/core/IconButton';
@@ -185,13 +185,13 @@ const Gif = () => {
     
     //Code to enable the button to upload the images
     if (toolState === 22 && imageURL1 !== "" && imageURL2 !== "") {
-        console.log("Ready to send"); //DEBUG
+        //console.log("Ready to send"); //DEBUG
         dispatch(setStateReady());
     }
 
     //Code to enable the button to upload the images
     if (toolState === 21 && imageDropped1 !== null && imageDropped2 !== null) {
-        console.log("Ready to send"); //DEBUG
+        //console.log("Ready to send"); //DEBUG
         dispatch(setStateReady());
     }
 
@@ -222,14 +222,6 @@ const Gif = () => {
     //Call to the API
     useGetHomographics(filesToSend, modeHomo, keyword);
 
-    //Loading bar
-    /*
-    if (loading && readyToSend){
-        setReadyToSend(false);
-        console.log("Disable button"); //DEBUG
-    }
-    */
-
     if(toolState === 6){
         cleanInputs();
         if (selectedMode === "URL"){
@@ -257,21 +249,22 @@ const Gif = () => {
 
     //Trigger of the loop function
     useEffect(() => {
-    if (toolState === 5 && (interval === null || interval === undefined)) {
-            setIntervalVar(setInterval(() => animateImages(), speed));
-    }
-    return () => {
-        if(interval !==null ){
-            clearInterval(interval); 
-            setIntervalVar(null)
+        if (toolState === 5 && (interval === null || interval === undefined)) {
+                setIntervalVar(setInterval(() => animateImages(), speed));
         }
-    }
+        return () => {
+            if(interval !==null ){
+                clearInterval(interval); 
+                setIntervalVar(null);
+            }
+        }
+    // eslint-disable-next-line
     }, [setIntervalVar, interval, toolState, speed]);
     
 
     //Loop function
     function animateImages() {
-        console.log("Loop function" + interval); //DEBUG
+        //console.log("Loop function" + interval); //DEBUG
         //console.log(interval); //DEBUG
         var x = document.getElementById("gifFilterElement");
 
@@ -321,7 +314,7 @@ const Gif = () => {
 
     //Function to prepare the files to trigger the download
     const handleDownloadGif = () => {
-        console.log(toolState);
+        //console.log(toolState);
         var files = {
             "image1": homoImg1,
             "image2": homoImg2,
@@ -385,7 +378,7 @@ const Gif = () => {
         return () => {
             // componentwillunmount in functional component.
             // Anything in here is fired on component unmount.
-            console.log("Stop loop "  + interval);
+            //console.log("Stop loop "  + interval);
             clearInterval(interval);
             newGif();
         }
