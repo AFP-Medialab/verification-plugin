@@ -32,7 +32,6 @@ export const cleanMetadataState = () => {
 }
 
 export const setMetadataMediaType = (type) => {
-    console.log("HOLA ACTION");
     return {
         type: "SET_METADATA_MEDIA_TYPE",
         payload: type

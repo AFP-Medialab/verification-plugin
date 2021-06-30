@@ -89,19 +89,12 @@ const Metadata = () => {
     if(initTool){
 
         if (location.state != null){
-            console.log(location.state.media);
             if (location.state.media === "image") {
                 dispatch(setMetadataMediaType("image"));
-                console.log("Hola image");
-                console.log(mediaType);
-
                 setRadioImage(true)
 
             } else if (location.state.media === "video") {
                 dispatch(setMetadataMediaType("video"));
-                console.log("Hola video");
-                console.log(mediaType);
-
                 setRadioImage(false)
             }
         }else{
