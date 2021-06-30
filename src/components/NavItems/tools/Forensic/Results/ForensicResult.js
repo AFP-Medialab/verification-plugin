@@ -664,7 +664,7 @@ const ForensicResults = (props) => {
                                                                 container
                                                                 direction="row"
                                                                 justify="space-between"
-                                                                alignItems="strech">
+                                                                alignItems="stretch">
 
                                                                 <Typography variant="h6" gutterBottom>
                                                                     {keyword("forensic_title_what")}
@@ -725,12 +725,12 @@ const ForensicResults = (props) => {
                                                                             horizontal: 'center',
                                                                         }}
                                                                     >
-                                                                        <Box p={1}>
+                                                                        <Box p={3}>
                                                                             <Grid
                                                                                 container
                                                                                 direction="row"
                                                                                 justify="space-between"
-                                                                                alignItems="strech">
+                                                                                alignItems="stretch">
 
 
                                                                                 <Typography variant="body1">
@@ -742,7 +742,7 @@ const ForensicResults = (props) => {
                                                                             </Grid>
                                                                             <Box m={1} />
 
-                                                                            <Typography variant="body2">
+                                                                            <Typography variant="body2" align="justify">
                                                                                 {keyword("forensic_card_" + value.id)}
                                                                             </Typography>
                                                                             
@@ -803,7 +803,7 @@ const ForensicResults = (props) => {
                                                                 container
                                                                 direction="row"
                                                                 justify="space-between"
-                                                                alignItems="strech">
+                                                                alignItems="stretch">
 
                                                                 <Typography variant="h6" gutterBottom>
                                                                     {keyword("forensic_title_what")}
@@ -1003,24 +1003,24 @@ const ForensicResults = (props) => {
                                                                             horizontal: 'center',
                                                                         }}
                                                                     >
-                                                                        <Box p={1}>
+                                                                        <Box p={3}>
                                                                             <Grid
                                                                                 container
                                                                                 direction="row"
                                                                                 justify="space-between"
-                                                                                alignItems="strech">
+                                                                                alignItems="stretch">
 
-                                                                                <Typography variant="body1" gutterBottom>
-                                                                                    {(value.id === "cagi_report")
-                                                                                        ? <Typography variant="body1">
-                                                                                            {titleCagiPopover}
-                                                                                        </Typography>
+                                                                                
+                                                                                {(value.id === "cagi_report")
+                                                                                    ? <Typography variant="body1">
+                                                                                        {titleCagiPopover}
+                                                                                    </Typography>
 
-                                                                                        : <Typography variant="body1">
-                                                                                            {value.name}
-                                                                                        </Typography>
-                                                                                    }
-                                                                                </Typography>
+                                                                                    : <Typography variant="body1">
+                                                                                        {value.name}
+                                                                                    </Typography>
+                                                                                }
+                                                                                
 
                                                                                 <CloseIcon onClick={handleCloseFilterExplanation} />
                                                                             </Grid>
@@ -1031,7 +1031,7 @@ const ForensicResults = (props) => {
                                                                                         {textCagiPopover}
                                                                                     </Typography>
 
-                                                                                :   <Typography variant="body2">
+                                                                                :   <Typography variant="body2" align="justify">
                                                                                         {keyword("forensic_card_" + value.id)}
                                                                                     </Typography>
                                                                             }
