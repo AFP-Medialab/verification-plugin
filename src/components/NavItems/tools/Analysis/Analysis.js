@@ -56,14 +56,21 @@ const Analysis = () => {
     const reprocessToggle = () => {
         setReprocess(!reprocess);
     };
-
+    
+    
     const submitForm = () => {
         submissionEvent(input.trim());
         setSubmittedUrl(input.trim());
         dispatch(cleanAnalysisState());
-
     };
     
+    /*
+    const submitForm = useCallback(() => {
+        submissionEvent(input.trim());
+        setSubmittedUrl(input.trim());
+        dispatch(cleanAnalysisState());
+    });
+    */
     useEffect(() => {       
         if (finalUrl !== undefined) {
             setSubmittedUrl(undefined);
@@ -71,10 +78,11 @@ const Analysis = () => {
     }, [finalUrl]);
 
     useEffect(()=>{
+        
         if (urlDetected) {
             submitForm()
         }
-    }, [urlDetected])
+    }, [urlDetected])  
 
     useEffect(() => {
         if (url && url !== KNOWN_LINKS.OWN) {
