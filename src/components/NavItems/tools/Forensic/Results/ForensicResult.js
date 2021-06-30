@@ -27,7 +27,6 @@ import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
 import Fade from '@material-ui/core/Fade';
 import Slider from '@material-ui/core/Slider';
 import useGetGif from "../../GIF/Hooks/useGetGif";
-import { setStateDownloading } from "../../../../../redux/actions/tools/gifActions";
 import { useDispatch } from "react-redux";
 import { StylesProvider } from "@material-ui/core/styles";
 import { cleanForensicState } from "../../../../../redux/actions/tools/forensicActions"

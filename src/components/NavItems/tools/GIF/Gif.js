@@ -22,7 +22,7 @@ import TextField from '@material-ui/core/TextField';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
-import { setStateSelectingLocal, setStateSelectingUrl, setStateReady, setStateInit, setStateDownloading } from "../../../../redux/actions/tools/gifActions";
+import { setStateSelectingLocal, setStateSelectingUrl, setStateReady, setStateInit } from "../../../../redux/actions/tools/gifActions";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 import IconButton from '@material-ui/core/IconButton';
@@ -257,15 +257,16 @@ const Gif = () => {
 
     //Trigger of the loop function
     useEffect(() => {
-    if (toolState === 5 && (interval === null || interval === undefined)) {
-            setIntervalVar(setInterval(() => animateImages(), speed));
-    }
-    return () => {
-        if(interval !==null ){
-            clearInterval(interval); 
-            setIntervalVar(null)
+        if (toolState === 5 && (interval === null || interval === undefined)) {
+                setIntervalVar(setInterval(() => animateImages(), speed));
         }
-    }
+        return () => {
+            if(interval !==null ){
+                clearInterval(interval); 
+                setIntervalVar(null)
+            }
+        }
+    // eslint-disable-next-line
     }, [setIntervalVar, interval, toolState, speed]);
     
 

@@ -6,15 +6,12 @@ import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Forens
 import { setStateDownloading,setStateBackResults } from "../../../../../redux/actions/tools/gifActions";
 import { saveAs } from 'file-saver';
 import useAuthenticatedRequest from "../../../../Shared/Authentication/useAuthenticatedRequest";
-import { useSelector } from "react-redux";
 
 const useGetGif = (images, delayInput, enableDownload) => {
     const keyword = useLoadLanguage("components/NavItems/tools/Forensic.tsv", tsv);
     const dispatch = useDispatch();
     const authenticatedRequest = useAuthenticatedRequest();
     const baseURL = process.env.REACT_APP_BASEURL;
-    const toolState = useSelector(state => state.gif.toolState);
-
 
     useEffect(() => {
       
