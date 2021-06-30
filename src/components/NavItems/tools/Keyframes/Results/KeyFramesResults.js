@@ -50,7 +50,8 @@ const KeyFramesResults = (props) => {
     const computeHeight = async() =>{
         loadImageSize(simpleList, cols)
                 .then((height) => {setHeight(height); setFindHeight(true)})
-                .then((height) => {return height} );
+                .then((height) => {return height} )
+                .catch((e) => {return null});
     };
     
     const [getHeight, isLoading] = useLoading(computeHeight);
