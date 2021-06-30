@@ -23,7 +23,6 @@ import OnClickInfo from "../../../../Shared/OnClickInfo/OnClickInfo";
 import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Analysis.tsv";
 import TimeToLocalTime from "./TimeToLocalTime";
-//import AsynchMyMap from "../../../../Shared/MyMap/AsynchMyMap";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 import styles from "./layout.module.css";
@@ -40,8 +39,6 @@ import Linkify from 'react-linkify';
 const YoutubeResults = (props) => {
     const classes = useMyStyles();
     const keyword = useLoadLanguage("components/NavItems/tools/Analysis.tsv", tsv);
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     const [count_comments, setCount_comments] = useState(1);
     const [count_verified_comments, setCount_verified_comments] = useState(1);
@@ -90,8 +87,6 @@ const YoutubeResults = (props) => {
       }
     }
 
-    
-    
         var next_page_comments=url[0].substring(0, real+1)+(count_comments+1)+"&type=coms"
         var previous_page_comments=url[0].substring(0, real+1)+(count_comments-1)+"&type=coms"
         var next_page_verified=url[0].substring(0, real+1)+(count_verified_comments+1)+"&type=vercoms"
@@ -276,26 +271,6 @@ const YoutubeResults = (props) => {
           }
         };
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     const [expanded, setExpanded] = React.useState(false);
 
@@ -305,7 +280,6 @@ const YoutubeResults = (props) => {
     const dispatch = useDispatch();
     const report = props.report;
     console.log("report ",report)
-    //const verificationComments = report["verification_comments"];
     const verificationComments = report.comments ? report.comments : [];
     const linkComments = report.link_comments ? report.link_comments : [];
     const verifiedComments = report.verification_comments ? report.verification_comments : [];
@@ -468,7 +442,6 @@ const YoutubeResults = (props) => {
                                 <Box m={2} />
 
                                 {
-                                    //verificationComments.length > 0 &&
                                     <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
                                         <AccordionSummary
                                             expandIcon={<ExpandMoreIcon/>}
@@ -537,7 +510,6 @@ const YoutubeResults = (props) => {
                       onClick={handleClick_previous_page}
                     >
                       <NavigateBeforeIcon/>
-                      {/*keyword("previous_button")*/}
                     </Button>
                     <div className={styles.inline}>
                     {"  "+ count_comments +"  "+keyword("page_number")+"  "+ last_page_all_comments+"  "}
@@ -551,7 +523,6 @@ const YoutubeResults = (props) => {
                       onClick={handleClick_next_page}
                     >
                       <NavigateNextIcon/>                    
-                      {/*keyword("next_button")*/}
                     </Button>
                     <Button
                       variant="contained"
@@ -567,7 +538,6 @@ const YoutubeResults = (props) => {
                                 }
                                 <Box m={2} />
                 {
-                  //verifiedComments.length > 0 &&
                   <Accordion>
                     <AccordionSummary
                       expandIcon={<ExpandMoreIcon />}
@@ -648,7 +618,6 @@ const YoutubeResults = (props) => {
                       onClick={handleClick_previous_page2}
                     >  
                      <NavigateBeforeIcon/>                    
-                      {/*keyword("previous_button")*/}
                     </Button>
                     <div className={styles.inline}>
                     {"  "+ count_verified_comments +"  "+keyword("page_number")+"  "+ last_page_verified_comments+"  "}
@@ -662,7 +631,6 @@ const YoutubeResults = (props) => {
                       onClick={handleClick_next_page2}
                     >
                       <NavigateNextIcon/>                    
-                      {/*keyword("next_button")*/}
                     </Button>
                     
                     <Button
@@ -679,7 +647,6 @@ const YoutubeResults = (props) => {
                 }
                 <Box m={2} />
                 {
-                  //linkComments.length > 0 &&
                   <Accordion>
                     <AccordionSummary
                       expandIcon={<ExpandMoreIcon />}
@@ -759,7 +726,6 @@ const YoutubeResults = (props) => {
                       onClick={handleClick_previous_page1}
                     >  
                      <NavigateBeforeIcon/>                    
-                      {/*keyword("previous_button")*/}
                     </Button>
                     <div className={styles.inline}>
                     { "  "+ count_link_comments +"  "+keyword("page_number")+"  "+ last_page_link_comments+"  "}
@@ -773,7 +739,6 @@ const YoutubeResults = (props) => {
                       onClick={handleClick_next_page1}
                     >
                       <NavigateNextIcon/>                    
-                      {/*keyword("next_button")*/}
                     </Button>
                     <Button
                       variant="contained"
@@ -793,17 +758,6 @@ const YoutubeResults = (props) => {
                         }
 
                         <Box m={4}/>
-                        {
-                           /* report.mentioned_locations &&
-                            report.mentioned_locations.detected_locations &&
-                            report.mentioned_locations.detected_locations.length > 0 &&
-                            <div>
-                            <AsynchMyMap locations={report.mentioned_locations.detected_locations}/>
-                            <Box m={4}/>
-                            </div>
-                        */ }
-
-
                         {
                             thumbnails !== undefined &&
                             <div>

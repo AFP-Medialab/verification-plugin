@@ -18,7 +18,6 @@ import {cleanAnalysisState} from "../../../../../redux/actions/tools/image_analy
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Analysis.tsv";
-//import AsynchMyMap from "../../../../Shared/MyMap/AsynchMyMap";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 import styles from "../../Analysis/Results/layout.module.css";
@@ -85,10 +84,6 @@ const TwitterResults = (props) => {
         setExpanded(isExpanded ? panel : false);
     };
 
-    
-
-    
-   
     var next_page_comments=url[0].substring(0, real+1)+(count_comments+1)+"&type=coms"
     var previous_page_comments=url[0].substring(0, real+1)+(count_comments-1)+"&type=coms"
     var next_page_verified=url[0].substring(0, real+1)+(count_verified_comments+1)+"&type=vercoms"
@@ -276,7 +271,6 @@ const TwitterResults = (props) => {
         const linkComments = report.link_comments ? report.link_comments : [];
         const verifiedComments = report.verification_comments ? report.verification_comments : [];
         console.log("linkComments ",linkComments)    
-       // const thumbnails = [report["thumbnails"]["preferred"]];
 
     return (
         <div>
@@ -299,7 +293,7 @@ const TwitterResults = (props) => {
                         <Divider/>
                         <Box m={2}/>
                         <Typography variant={"h6"}>
-                        {keyword("post_creator") + ": " + report["source"]["user_name"]}
+                        {keyword("profile_creator") + ": " + report["source"]["user_name"]}
                         </Typography>
                         {
                             report["image"] &&
@@ -445,7 +439,6 @@ const TwitterResults = (props) => {
                                 
                                 <Box m={2}/>
                                 {
-                                    //verificationComments.length > 0 &&
                                     <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
                                         <AccordionSummary
                                             expandIcon={<ExpandMoreIcon/>}
@@ -516,7 +509,6 @@ const TwitterResults = (props) => {
                       onClick={handleClick_previous_page}
                     >
                       <NavigateBeforeIcon/>
-                      {/*keyword("previous_button")*/}
                     </Button>
                     <div className={styles.inline}>
                     {"  "+ count_comments +"  "+keyword("page_number")+"  "+ last_page_all_comments+"  "}
@@ -530,7 +522,6 @@ const TwitterResults = (props) => {
                       onClick={handleClick_next_page}
                     >
                       <NavigateNextIcon/>                    
-                      {/*keyword("next_button")*/}
                     </Button>
                     <Button
                       variant="contained"
@@ -546,7 +537,6 @@ const TwitterResults = (props) => {
                                 }
                       <Box m={2} />
                 {
-                  //verifiedComments.length > 0 &&
                   <Accordion>
                     <AccordionSummary
                       expandIcon={<ExpandMoreIcon />}
@@ -627,7 +617,6 @@ const TwitterResults = (props) => {
                       onClick={handleClick_previous_page2}
                     >  
                      <NavigateBeforeIcon/>                    
-                      {/*keyword("previous_button")*/}
                     </Button>
                     <div className={styles.inline}>
                     {"  "+ count_verified_comments +"  "+keyword("page_number")+"  "+ last_page_verified_comments+"  "}
@@ -641,7 +630,6 @@ const TwitterResults = (props) => {
                       onClick={handleClick_next_page2}
                     >
                       <NavigateNextIcon/>                    
-                      {/*keyword("next_button")*/}
                     </Button>
                     
                     <Button
@@ -658,7 +646,6 @@ const TwitterResults = (props) => {
                 }
                 <Box m={2} />
                 {
-                  //linkComments.length > 0 &&
                   
                   <Accordion>
                     <AccordionSummary
@@ -722,10 +709,6 @@ const TwitterResults = (props) => {
                       </Table>
                     </AccordionDetails>
                     
-                
-
-                  
-
                     <Button
                       variant="contained"
                       aria-controls="simple-menu"
@@ -745,7 +728,6 @@ const TwitterResults = (props) => {
                       onClick={handleClick_previous_page1}
                     >  
                      <NavigateBeforeIcon/>                    
-                      {/*keyword("previous_button")*/}
                     </Button>
                     <div className={styles.inline}>
                     { "  "+ count_link_comments +"  "+keyword("page_number")+"  "+ last_page_link_comments+"  "}
@@ -759,7 +741,6 @@ const TwitterResults = (props) => {
                       onClick={handleClick_next_page1}
                     >
                       <NavigateNextIcon/>                    
-                      {/*keyword("next_button")*/}
                     </Button>
                     <Button
                       variant="contained"
@@ -771,9 +752,7 @@ const TwitterResults = (props) => {
                     >                     
                       <SkipNextIcon/> 
                     </Button>
-                    
-                    
-
+  
                   </Accordion>
                 }
 

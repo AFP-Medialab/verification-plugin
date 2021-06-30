@@ -74,7 +74,6 @@ const Analysis = () => {
         if (urlDetected) {
             submitForm()
         }
-        // eslint-disable-next-line
     }, [urlDetected])
 
     useEffect(() => {
@@ -186,17 +185,14 @@ const Analysis = () => {
                 </Box>
             }
             {
-                //(resultData !== null && resultUrl != null && resultUrl.startsWith("https://www.youtube.com/")) ?
                 (resultData  && resultData.platform.startsWith("youtube")) ?
                     <YoutubeResults report={resultData}/> : null
             }
             {
-                //(resultData !== null && resultUrl != null && resultUrl.startsWith("https://twitter.com/")) ?
                 (resultData  && resultData.platform.startsWith("twitter")) ?
                     <TwitterResults report={resultData}/> : null
             }
             {
-                //(resultData !== null && resultUrl != null && resultUrl.startsWith("https://www.facebook.com/")) ?
                 (resultData  && resultData.platform.startsWith("facebook")) ?
                     <FacebookResults report={resultData}/> : null
                     

@@ -277,20 +277,15 @@ const FacebookResults = (props) => {
   const dispatch = useDispatch();
   const report = props.report;
   console.log("Report ", report);
-  //console.log("report.pagination.next ",report.pagination.next)
   const verificationComments = report.comments ? report.comments : [];
   const linkComments = report.link_comments ? report.link_comments : [];
   const verifiedComments = report.verification_comments ? report.verification_comments : [];
   console.log("linkComments ",linkComments)
 
-  
-
-  //console.log("linkComments ",linkComments)
- // console.log("verifiedComments ",verifiedComments)
 
   const thumbnails = report.thumbnails.others;
 
-  //console.log("nothing ", nothing)
+  
   return (
     <div>
       {report !== null &&
@@ -321,6 +316,9 @@ const FacebookResults = (props) => {
               <Box m={2} />
               <Divider />
               <Box m={2} />
+              <Typography variant={"h6"}>
+                                    {keyword("source") + ": " + report["source"]["from"]}
+                                </Typography>
               <Typography
                 variant="body2"
                 color="textSecondary"
@@ -338,6 +336,14 @@ const FacebookResults = (props) => {
                   aria-label="a dense table"
                 >
                   <TableBody>
+                  {report.source.from && (
+                      <TableRow>
+                        <TableCell component="th" scope="row">
+                        {keyword("source")}
+                        </TableCell>
+                        <TableCell align="right">{report.source.from}</TableCell>
+                      </TableRow>
+                    )}
                     {report.video_id && (
                       <TableRow>
                         <TableCell component="th" scope="row">
@@ -347,7 +353,7 @@ const FacebookResults = (props) => {
                       </TableRow>
                     )}
 {
-                      //report.video.title &&
+                     
                       <TableRow>
                         <TableCell component="th" scope="row">
                           {keyword("facebook_video_name_2")}
@@ -466,11 +472,9 @@ const FacebookResults = (props) => {
                         <TableBody
                           className={
                             styles.container
-                          } /* class="fixed_headers" */
+                          } 
                         >
                           {verificationComments.map((comment, key) => {
-                            //  console.log("comment ", comment)
-                            //   console.log("key ", key)
 
                             return (
                               <TableRow key={key}>
@@ -517,7 +521,7 @@ const FacebookResults = (props) => {
                       onClick={handleClick_previous_page}
                     >
                       <NavigateBeforeIcon/>
-                      {/*keyword("previous_button")*/}
+                      
                     </Button>
                     <div className={styles.inline}>
                     {"  "+ count_comments +"  "+keyword("page_number") +"  "+ last_page_all_comments+"  "}
@@ -531,7 +535,7 @@ const FacebookResults = (props) => {
                       onClick={handleClick_next_page}
                     >
                       <NavigateNextIcon/>                    
-                      {/*keyword("next_button")*/}
+                      
                     </Button>
                     <Button
                       variant="contained"
@@ -547,7 +551,7 @@ const FacebookResults = (props) => {
                 )}
                  <Box m={2} />
                 {
-                  //verifiedComments.length > 0 &&
+                  
                   <Accordion>
                     <AccordionSummary
                       expandIcon={<ExpandMoreIcon />}
@@ -628,7 +632,7 @@ const FacebookResults = (props) => {
                       onClick={handleClick_previous_page2}
                     >  
                      <NavigateBeforeIcon/>                    
-                      {/*keyword("previous_button")*/}
+                      
                     </Button>
                     <div className={styles.inline}>
                     {"  "+ count_verified_comments +"  "+keyword("page_number")+"  "+ last_page_verified_comments+"  "}
@@ -642,7 +646,7 @@ const FacebookResults = (props) => {
                       onClick={handleClick_next_page2}
                     >
                       <NavigateNextIcon/>                    
-                      {/*keyword("next_button")*/}
+                      
                     </Button>
                     
                     <Button
@@ -660,7 +664,7 @@ const FacebookResults = (props) => {
                 
                 <Box m={2} />
                 {
-                  //linkComments.length > 0 &&
+                  
                   <Accordion>
                     <AccordionSummary
                       expandIcon={<ExpandMoreIcon />}
@@ -743,7 +747,7 @@ const FacebookResults = (props) => {
                       onClick={handleClick_previous_page1}
                     >  
                      <NavigateBeforeIcon/>                    
-                      {/*keyword("previous_button")*/}
+                      
                     </Button>
                     <div className={styles.inline}>
                     { "  "+ count_link_comments +"  "+keyword("page_number")+"  "+ last_page_link_comments+"  "}
@@ -757,7 +761,7 @@ const FacebookResults = (props) => {
                       onClick={handleClick_next_page1}
                     >
                       <NavigateNextIcon/>                    
-                      {/*keyword("next_button")*/}
+                      
                     </Button>
                     <Button
                       variant="contained"
@@ -774,16 +778,7 @@ const FacebookResults = (props) => {
 
               </div>
               <Box m={4} />
-              {/*report.mentioned_locations &&
-                report.mentioned_locations.detected_locations &&
-                report.mentioned_locations.detected_locations.length > 0 && (
-                  <div>
-                    <AsynchMyMap
-                      locations={report.mentioned_locations.detected_locations}
-                    />
-                    <Box m={4} />
-                  </div>
-                )*/}
+              
               {thumbnails !== undefined && (
                 <div>
                   <Box m={4} />

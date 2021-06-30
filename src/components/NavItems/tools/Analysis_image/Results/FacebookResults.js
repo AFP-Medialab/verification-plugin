@@ -18,7 +18,6 @@ import TableHead from "@material-ui/core/TableHead";
 import Button from "@material-ui/core/Button";
 import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Analysis.tsv";
-//import AsynchMyMap from "../../../../Shared/MyMap/AsynchMyMap";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 import styles from "../../Analysis/Results/layout.module.css";
@@ -396,7 +395,6 @@ const FacebookResults = (props) => {
                 
                 <Box m={2} />
                 {
-                //verificationComments.length > 0 && 
                 (
                   <Accordion>
                     <AccordionSummary
@@ -483,7 +481,6 @@ const FacebookResults = (props) => {
                       onClick={handleClick_previous_page}
                     >
                       <NavigateBeforeIcon/>
-                      {/*keyword("previous_button")*/}
                     </Button>
                     <div className={styles.inline}>
                     {"  "+ count_comments +"  "+keyword("page_number")+"  "+ last_page_all_comments+"  "}
@@ -497,7 +494,6 @@ const FacebookResults = (props) => {
                       onClick={handleClick_next_page}
                     >
                       <NavigateNextIcon/>                    
-                      {/*keyword("next_button")*/}
                     </Button>
                     <Button
                       variant="contained"
@@ -513,7 +509,6 @@ const FacebookResults = (props) => {
                 )}
                 <Box m={2} />
                 {
-                  //verifiedComments.length > 0 &&
                   <Accordion>
                     <AccordionSummary
                       expandIcon={<ExpandMoreIcon />}
@@ -595,7 +590,6 @@ const FacebookResults = (props) => {
                       onClick={handleClick_previous_page2}
                     >  
                      <NavigateBeforeIcon/>                    
-                      {/*keyword("previous_button")*/}
                     </Button>
                     <div className={styles.inline}>
                     {"  "+ count_verified_comments +"  "+keyword("page_number")+"  "+ last_page_verified_comments+"  "}
@@ -609,7 +603,6 @@ const FacebookResults = (props) => {
                       onClick={handleClick_next_page2}
                     >
                       <NavigateNextIcon/>                    
-                      {/*keyword("next_button")*/}
                     </Button>
                     
                     <Button
@@ -626,7 +619,6 @@ const FacebookResults = (props) => {
                 }
                 <Box m={2} />
                 {
-                  //linkComments.length > 0 &&
                   <Accordion>
                     <AccordionSummary
                       expandIcon={<ExpandMoreIcon />}
@@ -707,7 +699,6 @@ const FacebookResults = (props) => {
                       onClick={handleClick_previous_page1}
                     >  
                      <NavigateBeforeIcon/>                    
-                      {/*keyword("previous_button")*/}
                     </Button>
                     <div className={styles.inline}>
                     { "  "+ count_link_comments +"  "+keyword("page_number")+"  "+ last_page_link_comments+"  "}
@@ -721,7 +712,6 @@ const FacebookResults = (props) => {
                       onClick={handleClick_next_page1}
                     >
                       <NavigateNextIcon/>                    
-                      {/*keyword("next_button")*/}
                     </Button>
                     <Button
                       variant="contained"
@@ -736,13 +726,6 @@ const FacebookResults = (props) => {
                   </Accordion>
                 }
 
-
-                
-
-
-
-
-                
               </div>
               
             </div>
