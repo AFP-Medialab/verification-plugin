@@ -45,11 +45,9 @@ const About = () => {
                     {
                         keyword("source_part_1")
                     }
-                    <Link target="_blank" href={keyword("mit_licence_link")}>
-                        {
-                            keyword("mit_licence_link_label")
-                        }
-                    </Link>
+                    {
+                        keyword("mit_licence_link_label")
+                    }
                     {
                         keyword("source_part_2")
                     }
@@ -63,8 +61,8 @@ const About = () => {
                         {
                             keyword("invid_email")
                         }
-                    </Link>
-                    {
+                    </Link> 
+                    {/*
                         keyword("feedBack_part_2")
                     }
                     {
@@ -72,7 +70,7 @@ const About = () => {
                     }
                     {
                         keyword("feedback_part_3")
-                    }
+                    */}
                 </Typography>
                 <Box m={3}/>
                 <Typography variant={"h6"}>{keyword("disclaimer")}</Typography>
@@ -89,27 +87,6 @@ const About = () => {
                     }
                 </Typography>
                 <Box m={3}/>
-                <Typography variant={"body2"} align={"justify"}>
-                    {
-                        keyword("info_invid_part_1")
-                    }
-                    <Link target="_blank" href={keyword("info_invid_website")}>
-                        {
-                            keyword("info_invid_website")
-                        }
-                    </Link>
-                    {
-                        keyword("info_invid_part_2")
-                    }
-                    <Link target="_blank" href={keyword("info_invid_link_twitter")}>
-                        {
-                            keyword("twitter")
-                        }
-                    </Link>
-                    {
-                        keyword("info_invid_part_3")
-                    }
-                </Typography>
                 <Typography variant={"body2"} align={"justify"}>
                     {
                         keyword("info_weverify_part_1")
@@ -129,6 +106,27 @@ const About = () => {
                     </Link>
                     {
                         keyword("info_weverify_part_3")
+                    }
+                </Typography>
+                <Typography variant={"body2"} align={"justify"}>
+                    {
+                        keyword("info_invid_part_1")
+                    }
+                    <Link target="_blank" href={keyword("info_invid_website")}>
+                        {
+                            keyword("info_invid_website")
+                        }
+                    </Link>
+                    {
+                        keyword("info_invid_part_2")
+                    }
+                    <Link target="_blank" href={keyword("info_invid_link_twitter")}>
+                        {
+                            keyword("twitter")
+                        }
+                    </Link>
+                    {
+                        keyword("info_invid_part_3")
                     }
                 </Typography>
                 <Typography variant={"body2"} align={"justify"}>
@@ -156,9 +154,19 @@ const About = () => {
                             keyword("lleida_link_label")
                         }
                     </Link>
+                    <Link target="_blank" href={keyword("borelli_link")}>
+                        {
+                        keyword("borelli_link_Label")
+                        }
+                    </Link>
                     {
                         keyword("developed_text_part_4")
                     }
+                    <Link target="_blank" href={keyword("usfd_link")}>
+                        {
+                        keyword("usfd_link_label")    
+                        }
+                    </Link>
                 </Typography>
 
                 {
