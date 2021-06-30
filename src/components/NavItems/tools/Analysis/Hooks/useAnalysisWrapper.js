@@ -69,6 +69,6 @@ export const useAnalysisWrapper = (setAnalysisLoading, setAnalysisResult, servic
                 .then(response => handleJob(response["data"]))
                 .catch(error => handleError(error))
         }
-        
+        // eslint-disable-next-line
     }, [apiUrl, keyword, dispatch, processUrl]);
 };

@@ -68,6 +68,7 @@ const Analysis = () => {
         if (urlDetected) {
             submitForm()
         }
+        // eslint-disable-next-line
     }, [urlDetected])
 
     useEffect(() => {
