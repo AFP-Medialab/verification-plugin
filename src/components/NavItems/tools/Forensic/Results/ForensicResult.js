@@ -30,12 +30,14 @@ import useGetGif from "../../GIF/Hooks/useGetGif";
 import { useDispatch } from "react-redux";
 import { StylesProvider } from "@material-ui/core/styles";
 import { cleanForensicState } from "../../../../../redux/actions/tools/forensicActions"
+import { setStateInit } from "../../../../../redux/actions/tools/gifActions"
 import LinkIcon from '@material-ui/icons/Link';
 import IconButton from '@material-ui/core/IconButton';
 import Snackbar from '@material-ui/core/Snackbar';
 import WarningIcon from '@material-ui/icons/Warning';
 import Alert from '@material-ui/lab/Alert';
 import MakoScale from '../../../../NavBar/images/SVG/MakoScale.png';
+import { useEffect } from "react";
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -529,6 +531,14 @@ const ForensicResults = (props) => {
         }
         setOpenAlert(false);
     };
+
+    useEffect(() => {
+        return () => {
+            clearInterval(interval);
+            dispatch(setStateInit());
+        }
+        // eslint-disable-next-line
+    }, [])
 
     return (
         <StylesProvider injectFirst>

@@ -255,7 +255,7 @@ const Gif = () => {
         return () => {
             if(interval !==null ){
                 clearInterval(interval); 
-                setIntervalVar(null)
+                setIntervalVar(null);
             }
         }
     // eslint-disable-next-line
