@@ -11,6 +11,7 @@ import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
 import popUpEn from "./images/popUpImage/popUp_EN.png";
 import popUpFr from "./images/popUpImage/popUp_FR.png";
 import popUpEs from "./images/popUpImage/popUp_ES.png";
+import popUpEl from "./images/popUpImage/popUp_EL.png";
 import AccordionSummary from "@material-ui/core/AccordionSummary";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
@@ -41,6 +42,9 @@ const Tutorial = () => {
         case "es":
             popImg = popUpEs;
             break;
+        case "el":
+            popImg = popUpEl;
+            break;
         default:
             popImg = popUpEn;
             break;
@@ -63,7 +67,6 @@ const Tutorial = () => {
                 <div className={"content"} style={dangerousDivStyle}
                      dangerouslySetInnerHTML={{__html: keyword("tuto_2")}}></div>
 
-                <Typography variant="body1">{keyword("tuto_3")}</Typography>
                 <Box m={1}/>
                 <Typography variant="h3">{keyword("tuto_h_2")}</Typography>
                 <Box m={1}/>
@@ -235,6 +238,92 @@ const Tutorial = () => {
                     <AccordionDetails>
                         <div className={"content"} style={dangerousDivStyle}
                              dangerouslySetInnerHTML={{__html: keyword("tuto_12")}}></div>
+                    </AccordionDetails>
+                </Accordion>
+                
+                <Accordion>
+                    <AccordionSummary
+                        expandIcon={<ExpandMoreIcon/>}
+                        aria-controls="panel1a-content"
+                        id="panel1a-header"
+                    >
+                        <Typography className={classes.heading}>
+                            {
+                                keyword("analysis_image_title")
+                            }
+                        </Typography>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                        <div className={"content"} style={dangerousDivStyle}
+                             dangerouslySetInnerHTML={{__html: keyword("tuto_analysis_img")}}></div>
+                    </AccordionDetails>
+                </Accordion>
+                <Accordion>
+                    <AccordionSummary
+                        expandIcon={<ExpandMoreIcon/>}
+                        aria-controls="panel1a-content"
+                        id="panel1a-header"
+                    >
+                        <Typography className={classes.heading}>
+                            {
+                                keyword("ocr_title")
+                            }
+                        </Typography>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                        <div className={"content"} style={dangerousDivStyle}
+                             dangerouslySetInnerHTML={{__html: keyword("tuto_ocr")}}></div>
+                    </AccordionDetails>
+                </Accordion>
+                <Accordion>
+                    <AccordionSummary
+                        expandIcon={<ExpandMoreIcon/>}
+                        aria-controls="panel1a-content"
+                        id="panel1a-header"
+                    >
+                        <Typography className={classes.heading}>
+                            {
+                                keyword("checkgif_title")
+                            }
+                        </Typography>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                        <div className={"content"} style={dangerousDivStyle}
+                             dangerouslySetInnerHTML={{__html: keyword("tuto_checkgif")}}></div>
+                    </AccordionDetails>
+                </Accordion>
+                <Accordion>
+                    <AccordionSummary
+                        expandIcon={<ExpandMoreIcon/>}
+                        aria-controls="panel1a-content"
+                        id="panel1a-header"
+                    >
+                        <Typography className={classes.heading}>
+                            {
+                                keyword("factcheck_title")
+                            }
+                        </Typography>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                        <div className={"content"} style={dangerousDivStyle}
+                             dangerouslySetInnerHTML={{__html: keyword("tuto_factcheck")}}></div>
+                    </AccordionDetails>
+                </Accordion>
+                <Accordion>
+                    <AccordionSummary
+                        expandIcon={<ExpandMoreIcon/>}
+                        aria-controls="panel1a-content"
+                        id="panel1a-header"
+                    >
+                        <Typography className={classes.heading}>
+                            {
+                                keyword("xnetwork_title")
+                            }
+                        </Typography>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                        <div className={"content"} style={dangerousDivStyle}
+                             dangerouslySetInnerHTML={{__html: keyword("tuto_xnetwork")}}></div>
                     </AccordionDetails>
                 </Accordion>
             </Box>

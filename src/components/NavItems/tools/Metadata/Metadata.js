@@ -44,7 +44,6 @@ const Metadata = () => {
     const resultUrl = useSelector(state => state.metadata.url);
     const resultData = useSelector(state => state.metadata.result);
     const resultIsImage = useSelector(state => state.metadata.isImage);
-    const mediaType = useSelector(state => state.metadata.mediaType);
 
     const [radioImage, setRadioImage] = useState( true);
     const [input, setInput] = useState((resultUrl) ? resultUrl : "");
@@ -151,9 +150,6 @@ const Metadata = () => {
                                 onChange={e => setInput(e.target.value)}
                             />
                         </Grid>
-
-                        
-
                         <Grid item>
 
                             
@@ -174,12 +170,9 @@ const Metadata = () => {
                                 />
 
                             </RadioGroup>
-
                             
                         </Grid>
                                 
-
-
                         <Grid item>
                             <Button variant="contained" color="primary" onClick={submitUrl}>
                                 {keyword("button_submit")}
@@ -213,16 +206,10 @@ const Metadata = () => {
                             </Button>
                         </Grid>
 
-                        
-
                     </Grid>
                 </Box>
             </Card>
-
-
             <Box m={3} />
-
-
             {
                 (resultData) ?
                     (
