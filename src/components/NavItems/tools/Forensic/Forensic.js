@@ -26,7 +26,8 @@ import FileIcon from '@material-ui/icons/InsertDriveFile';
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import Divider from '@material-ui/core/Divider';
 import Alert from '@material-ui/lab/Alert';
-
+import { useDispatch } from "react-redux";
+import { cleanForensicState } from "../../../../redux/actions/tools/forensicActions";
 
 const Forensic = () => {
     const {url} = useParams();
@@ -89,6 +90,8 @@ const Forensic = () => {
 
     useGetImages(image, keyword);
 
+    const dispatch = useDispatch();
+
     
     const submitUrl = () => {
         if (input && input !== "") {
@@ -100,6 +103,8 @@ const Forensic = () => {
 
     useEffect(() => {
         if (url) {
+            dispatch(cleanForensicState());
+
             if (url === KNOWN_LINKS.OWN) {
                 setLocalFile(true)
             } else {
@@ -109,7 +114,7 @@ const Forensic = () => {
             setUrlDetected(true)
         }
 
-    }, [url]);
+    }, [url, dispatch]);
 
     useEffect(() => {
         if (urlDetected){

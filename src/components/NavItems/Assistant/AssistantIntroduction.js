@@ -25,21 +25,48 @@ const AssistantIntroduction = (props) => {
     const dispatch = useDispatch();
     const keyword = useLoadLanguage("components/NavItems/tools/Assistant.tsv", tsv);
 
+    const [classButtonURL, setClassButtonURL] = useState(null);
+    const [classButtonLocal, setClassButtonLocal] = useState(null);
+
+    const [classIconURL, setClassIconURL] = useState(classes.bigButtonIcon);
+    const [classIconLocal, setClassIconLocal] = useState(classes.bigButtonIcon);
+
+    const [showURL, setShowURL] = useState(false);
+    const [showLocal, setShowLocal] = useState(false);
+
+    const[firstRender, setFirstRender] = useState(true);
+
+    
+    if (!showURL && !showLocal && classButtonURL !== classes.bigButtonDivSelectted && classButtonLocal !== classes.bigButtonDiv && firstRender) {
+        setClassButtonURL(classes.bigButtonDiv);
+        setClassButtonLocal(classes.bigButtonDiv);
+        setFirstRender(false);
+    }
+    
+
+    
+
     //form states
     const urlMode = useSelector(state => state.assistant.urlMode);
     const imageVideoSelected = useSelector(state => state.assistant.imageVideoSelected);
 
-    //local state
-    const [useLinkHoverColour, setUseLinkHoverColour] = useState(false)
-    const [useFileHoverColour, setUseFileHoverColour] = useState(false)
-    const cleanAssistant = () => props.cleanAssistant()
+    if (urlMode && classButtonURL !== classes.bigButtonDivSelectted) {
+        setClassButtonURL(classes.bigButtonDivSelectted);
+        setClassIconURL(classes.bigButtonIconSelectted);
+    } else if (imageVideoSelected && classButtonLocal !== classes.bigButtonDivSelectted){
+        setClassButtonLocal(classes.bigButtonDivSelectted);
+        setClassIconLocal(classes.bigButtonIconSelectted);
+    }
+
+    const cleanAssistant = () => props.cleanAssistant();
+    
 
 
     return (
         <Grid item xs={12} className={classes.assistantGrid}>
 
             <Typography variant={"h4"} color={"primary"}>
-                <Icon><img className={classes.svgIcon} src={assistantIcon} alt={""}/></Icon>
+                <Icon style={{marginRight: "10px"}}><img className={classes.svgIcon} src={assistantIcon} alt={""}/></Icon>
                 {keyword("assistant_title")}
             </Typography>
 
@@ -73,87 +100,127 @@ const AssistantIntroduction = (props) => {
                             </div>
                         }
                     />
+
                     <CardContent>
                         <Box m={2}>
-                            <Grid container spacing={5}>
+                            <Grid container spacing={3} alignItems="center">
                                 <Grid item xs={6}>
-                                    <Card variant={"outlined"}
-                                          className={urlMode ? classes.assistantSelected : classes.assistantHover}
-                                          onMouseOver={() => {setUseLinkHoverColour(true)}}
-                                          onMouseOut={() => setUseLinkHoverColour(false)}
-                                          style={{height: 250, borderWidth: 3}}
-                                          onClick={() => {
-                                              window.scroll({top: 400,left: 0,behavior: 'smooth'});
-                                              cleanAssistant()
-                                              dispatch(setUrlMode(!urlMode))
-                                          }}
-                                    >
-                                        <Box my={3}>
-                                            <Box color={"gray"}>
-                                                <LinkIcon
-                                                    fontSize={"large"}
-                                                    style={{height: 80, width: "100%",}}
-                                                    color={useLinkHoverColour || urlMode ? "primary" : "inherit"}
-                                                />
-                                            </Box>
-                                            <Box m={1}>
-                                                <Typography variant={"h6"}
-                                                            style={{fontWeight: "bold"}}
-                                                            align={"center"}>
-                                                    {keyword("assistant_webpage_header")}
-                                                </Typography>
-                                            </Box>
 
-                                            <Box mx={5}>
-                                                <Typography align={"center"}>
-                                                    {keyword("assistant_webpage_text")}
-                                                </Typography>
-                                            </Box>
+                                    <Box p={3} className={classButtonURL} 
+                                        onClick={() => {
+                                            if (!urlMode){
+                                                window.scroll({ top: 200, left: 0, behavior: 'smooth' });
+                                                cleanAssistant()
+                                                dispatch(setUrlMode(!urlMode))
+                                                setClassButtonURL(classes.bigButtonDivSelectted);
+                                                setClassIconURL(classes.bigButtonIconSelectted);
 
-                                        </Box>
-                                    </Card>
+                                                setClassButtonLocal(classes.bigButtonDiv);
+                                                setClassIconLocal(classes.bigButtonIcon);
+
+                                                setShowURL(true);
+                                                setShowLocal(false);
+                                            }
+                                        }}>
+                                        <Grid
+                                            container
+                                            direction="row"
+                                            alignItems="center"
+                                            style={{flexWrap:"nowrap"}}
+                                        >
+                                            <Grid item>
+                                                <Box ml={1} mr={2}>
+                                                    <LinkIcon className={classIconURL} />
+                                                </Box>
+
+                                            </Grid>
+
+                                            <Grid item>
+                                                <Grid
+                                                    container
+                                                    direction="column"
+                                                    justify="flex-start"
+                                                    alignItems="flex-start"
+                                                >
+                                                    <Grid item>
+                                                        <Typography variant="body1" style={{ fontWeight: 600 }}>{keyword("assistant_webpage_header")}</Typography>
+                                                    </Grid>
+
+                                                    <Box mt={1} />
+
+                                                    <Grid item>
+                                                        <Typography variant="body1">{keyword("assistant_webpage_text") }</Typography>
+                                                    </Grid>
+
+                                                </Grid>
+                                            </Grid>
+
+                                        </Grid>
+                                    </Box>
+
                                 </Grid>
 
+
                                 <Grid item xs={6}>
-                                    <Card variant={"outlined"}
-                                          className={imageVideoSelected ? classes.assistantSelected : classes.assistantHover}
-                                          style={{height: 250, borderWidth: 3}}
-                                          onMouseOver={() => {setUseFileHoverColour(true)}}
-                                          onMouseOut={() => setUseFileHoverColour(false)}
-                                          onClick={() => {
-                                              setTimeout(function () { window.scroll({ top: 520, left: 0, behavior: 'smooth' });}, 100);
-                                              
-                                              cleanAssistant()
-                                              dispatch(setImageVideoSelected(!imageVideoSelected))
-                                          }}
-                                    >
-                                        <Box my={3}>
-                                            <Box color={"gray"}>
-                                                <InsertDriveFileIcon
-                                                    fontSize={"large"}
-                                                    style={{height: 80, width: "100%"}}
-                                                    color={useFileHoverColour || imageVideoSelected ? "primary" : "inherit"}
-                                                />
-                                            </Box>
 
-                                            <Box m={1}>
-                                                <Typography variant={"h6"} style={{fontWeight: "bold"}}
-                                                            align={"center"}>
-                                                    {keyword("assistant_file_header")}
-                                                </Typography>
-                                            </Box>
+                                    <Box p={3} className={classButtonLocal} 
+                                        onClick={() => {
+                                            if (!imageVideoSelected) {
+                                                setTimeout(function () { window.scroll({ top: 320, left: 0, behavior: 'smooth' }); }, 100);
 
-                                            <Box mx={5}>
-                                                <Typography align={"center"}>
-                                                    {keyword("assistant_file_text")}
-                                                </Typography>
-                                            </Box>
+                                                cleanAssistant()
+                                                dispatch(setImageVideoSelected(!imageVideoSelected))
+                                                setClassButtonURL(classes.bigButtonDiv);
+                                                setClassIconURL(classes.bigButtonIcon);
 
-                                        </Box>
-                                    </Card>
+                                                setClassButtonLocal(classes.bigButtonDivSelectted);
+                                                setClassIconLocal(classes.bigButtonIconSelectted);
+
+                                                setShowURL(false);
+                                                setShowLocal(true);
+                                            }
+                                        }}>
+                                        <Grid
+                                            container
+                                            direction="row"
+                                            alignItems="center"
+                                            style={{ flexWrap:"nowrap" }}
+                                        >
+                                            <Grid item>
+                                                <Box ml={1} mr={2}>
+                                                    <InsertDriveFileIcon className={classIconLocal} />
+                                                </Box>
+
+                                            </Grid>
+
+                                            <Grid item>
+                                                <Grid
+                                                    container
+                                                    direction="column"
+                                                    justify="flex-start"
+                                                    alignItems="flex-start"
+                                                >
+                                                    <Grid item>
+                                                        <Typography variant="body1" style={{ fontWeight: 600 }}>{keyword("assistant_file_header")}</Typography>
+                                                    </Grid>
+
+                                                    <Box mt={1} />
+
+                                                    <Grid item>
+                                                        <Typography variant="body1">{keyword("assistant_file_text")}</Typography>
+                                                    </Grid>
+
+                                                </Grid>
+                                            </Grid>
+
+                                        </Grid>
+                                    </Box>
+
                                 </Grid>
+
                             </Grid>
                         </Box>
+
                     </CardContent>
                 </Card>
             </Box>
