@@ -11,6 +11,7 @@ import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
 import popUpEn from "./images/popUpImage/popUp_EN.png";
 import popUpFr from "./images/popUpImage/popUp_FR.png";
 import popUpEs from "./images/popUpImage/popUp_ES.png";
+import popUpEl from "./images/popUpImage/popUp_EL.png";
 import AccordionSummary from "@material-ui/core/AccordionSummary";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
@@ -41,6 +42,8 @@ const Tutorial = () => {
         case "es":
             popImg = popUpEs;
             break;
+        case "el":
+            popImg = popUpEl;
         default:
             popImg = popUpEn;
             break;
