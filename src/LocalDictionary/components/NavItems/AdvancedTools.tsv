@@ -1,25 +1,7 @@
 	en	fr	es	el
-title	Advanced tools			
-text_general	There are some advanced tools that are restricted for general users. You need to register to use this tools.			
-text_account	Do you already have an account?			
-button_code	GET CODE			
-text_notaccount	You don't have an account?			
-button_register	REGISTER			
-title_email	Check your email			
-text_code_email	We have sent you a code to your email, insert it to unlock the advanced tools.			
-text_problem	If you have not recieved the code check the spam folder or go back and review that you introduced the email correctly.			
-button_unlock	UNLOCK TOOLS			
+title	Advanced tools	Outils Avancés	Herramientas Avanzadas	Προηγμένα εργαλεία
+text_general	Access to advanced tools is reserved for journalists, fact-checkers and researchers. You need to apply and register to use them.	L'accès aux outils avancés est réservé aux journalistes, fact-checkers et chercheurs. Vous devez postuler et vous inscrire pour les utiliser.	El acceso a herramientas avanzadas está reservado a periodistas, verificadores de datos e investigadores. Necesita solicitar y registrarse para usarlos.	Η πρόσβαση σε προηγμένα εργαλεία προορίζεται για δημοσιογράφους, ελεγκτές γεγονότων και ερευνητές. Πρέπει να κάνετε αίτηση και να εγγραφείτε για να τα χρησιμοποιήσετε.
 title_tools_unlocked	Tools unlocked			
-text_success	You have unlocked the advanced tools susccesfully, now you can close this window and start using them.			
-button_close	CLOSE			
-title_registration	Registration			
-text_description_resgitration	Provide the requiered information to ask for the registration.			
-title_approval	Wait for the approval.			
-text_review	We will review your information and we will approve your registration if you fulfill the requirements. You will recive an email when the registration is approved.			
-text_unlocked	The advanced tools are unlocked			
-text_locked	The advanced tools are locked			
-button_unlock2	UNLOCK			
-button_exit	EXIT			
-alert_text	This tool is restricted, you need to unlock the advanced tools to use it			
-placeholder_email	Introduce your email here			
-placeholder_code	Introudce the code here			
+text_success	You have unlocked the advanced tools susccesfully, now you can close this window and start using them.	Vous avez déverrouillé les outils avancés avec succès, vous pouvez maintenant fermer cette fenêtre et commencer à les utiliser.	Has desbloqueado las herramientas avanzadas correctamente, ahora puedes cerrar esta ventana y empezar a usarlas.	Ξεκλειδώσατε με επιτυχία τα προηγμένα εργαλεία, τώρα μπορείτε να κλείσετε αυτό το παράθυρο και να αρχίσετε να τα χρησιμοποιείτε.
+text_unlocked	The advanced tools are unlocked	Les outils avancés sont déverrouillés	Las herramientas avanzadas están desbloqueadas	Τα προηγμένα εργαλεία είναι ξεκλείδωτα
+text_locked	The advanced tools are locked	Les outils avancés sont verrouillés	Las herramientas avanzadas están bloqueadas	Τα προηγμένα εργαλεία είναι κλειδωμένα

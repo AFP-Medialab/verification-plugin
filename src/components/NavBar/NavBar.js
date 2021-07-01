@@ -67,8 +67,7 @@ import { ReactComponent as LogoWeVerify2 } from "./images/SVG/Navbar/WeVerify.sv
 import { getSupportedBrowserLanguage } from "../Shared/Languages/getSupportedBrowserLanguage";
 import useLoadLanguage from "../../Hooks/useLoadLanguage";
 import tsv from "../../LocalDictionary/components/NavBar.tsv";
-import tsvAdvTools from "../../LocalDictionary/components/NavItems/AdvancedTools.tsv";
-//import FactCheck from "../NavItems/FactCheck/FactCheck";
+import tsvWarning from "../../LocalDictionary/components/Shared/OnWarningInfo.tsv";
 import Snackbar from "@material-ui/core/Snackbar";
 import { setFalse, setTrue } from "../../redux/actions/cookiesActions";
 import { changeLanguage } from "../../redux/actions";
@@ -129,7 +128,8 @@ const NavBar = (props) => {
 
     const error = useSelector(state => state.error);
     const keyword = useLoadLanguage("components/NavBar.tsv", tsv);
-    const keywordAdvancedTools = useLoadLanguage("components/NavItems/AdvancedTools.tsv", tsvAdvTools);
+    const keywordWarning = useLoadLanguage("components/Shared/OnWarningInfo.tsv", tsvWarning);
+
 
 
     const handleDrawerToggle = () => {
@@ -360,7 +360,7 @@ const NavBar = (props) => {
         <div className={classes.flex}>
             <Snackbar open={openAlert} autoHideDuration={6000} onClose={handleCloseAlert}>
                 <Alert onClose={handleCloseAlert} severity="warning">
-                    {keywordAdvancedTools("alert_text")}
+                    {keywordWarning("warning_advanced_tools")}
                 </Alert>
             </Snackbar>
 
