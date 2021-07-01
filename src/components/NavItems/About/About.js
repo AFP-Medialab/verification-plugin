@@ -112,7 +112,7 @@ const About = () => {
                     {
                         keyword("info_invid_part_1")
                     }
-                    <Link target="_blank" href={keyword("info_invid_website")}>
+                    <Link target="_blank" href={keyword("info_invid_link_website")}>
                         {
                             keyword("info_invid_website")
                         }

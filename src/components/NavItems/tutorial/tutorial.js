@@ -240,6 +240,92 @@ const Tutorial = () => {
                              dangerouslySetInnerHTML={{__html: keyword("tuto_12")}}></div>
                     </AccordionDetails>
                 </Accordion>
+                
+                <Accordion>
+                    <AccordionSummary
+                        expandIcon={<ExpandMoreIcon/>}
+                        aria-controls="panel1a-content"
+                        id="panel1a-header"
+                    >
+                        <Typography className={classes.heading}>
+                            {
+                                keyword("analysis_image_title")
+                            }
+                        </Typography>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                        <div className={"content"} style={dangerousDivStyle}
+                             dangerouslySetInnerHTML={{__html: keyword("tuto_analysis_img")}}></div>
+                    </AccordionDetails>
+                </Accordion>
+                <Accordion>
+                    <AccordionSummary
+                        expandIcon={<ExpandMoreIcon/>}
+                        aria-controls="panel1a-content"
+                        id="panel1a-header"
+                    >
+                        <Typography className={classes.heading}>
+                            {
+                                keyword("ocr_title")
+                            }
+                        </Typography>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                        <div className={"content"} style={dangerousDivStyle}
+                             dangerouslySetInnerHTML={{__html: keyword("tuto_ocr")}}></div>
+                    </AccordionDetails>
+                </Accordion>
+                <Accordion>
+                    <AccordionSummary
+                        expandIcon={<ExpandMoreIcon/>}
+                        aria-controls="panel1a-content"
+                        id="panel1a-header"
+                    >
+                        <Typography className={classes.heading}>
+                            {
+                                keyword("checkgif_title")
+                            }
+                        </Typography>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                        <div className={"content"} style={dangerousDivStyle}
+                             dangerouslySetInnerHTML={{__html: keyword("tuto_checkgif")}}></div>
+                    </AccordionDetails>
+                </Accordion>
+                <Accordion>
+                    <AccordionSummary
+                        expandIcon={<ExpandMoreIcon/>}
+                        aria-controls="panel1a-content"
+                        id="panel1a-header"
+                    >
+                        <Typography className={classes.heading}>
+                            {
+                                keyword("factcheck_title")
+                            }
+                        </Typography>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                        <div className={"content"} style={dangerousDivStyle}
+                             dangerouslySetInnerHTML={{__html: keyword("tuto_factcheck")}}></div>
+                    </AccordionDetails>
+                </Accordion>
+                <Accordion>
+                    <AccordionSummary
+                        expandIcon={<ExpandMoreIcon/>}
+                        aria-controls="panel1a-content"
+                        id="panel1a-header"
+                    >
+                        <Typography className={classes.heading}>
+                            {
+                                keyword("xnetwork_title")
+                            }
+                        </Typography>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                        <div className={"content"} style={dangerousDivStyle}
+                             dangerouslySetInnerHTML={{__html: keyword("tuto_xnetwork")}}></div>
+                    </AccordionDetails>
+                </Accordion>
             </Box>
         </Paper>
     );
