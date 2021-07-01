@@ -102,7 +102,9 @@ const FacebookResults = (props) => {
         dispatch(setAnalysisComments(response.data));
         
       })
-      .catch(console.clear)
+      .catch(err => {
+          
+      })
     }
   };
   const handleClick_last_page = (event) => {
@@ -112,7 +114,9 @@ const FacebookResults = (props) => {
         setCount_comments(last_page_all_comments);
         dispatch(setAnalysisComments(response.data));
       })
-      .catch(console.clear)
+      .catch(err => {
+          
+      })
     }
   };
 
@@ -124,7 +128,9 @@ const FacebookResults = (props) => {
         dispatch(setAnalysisLinkComments(response.data));
         
       })
-      .catch(console.clear)
+      .catch(err => {
+          
+      })
     }
   };
   const handleClick_last_page1 = (event) => {
@@ -136,7 +142,9 @@ const FacebookResults = (props) => {
           dispatch(setAnalysisLinkComments(response.data));
  
       })
-      .catch(console.clear)
+      .catch(err => {
+          
+      })
     }
   };
 
@@ -148,7 +156,9 @@ const FacebookResults = (props) => {
         dispatch(setAnalysisVerifiedComments(response.data));
         
       })
-      .catch(console.clear)
+      .catch(err => {
+          
+      })
     }
   };
   const handleClick_last_page2 = (event) => {
@@ -160,7 +170,9 @@ const FacebookResults = (props) => {
         dispatch(setAnalysisVerifiedComments(response.data));
  
       })
-      .catch(console.clear)
+      .catch(err => {
+          
+      })
     }
   };
  
@@ -172,7 +184,9 @@ const FacebookResults = (props) => {
           dispatch(setAnalysisComments(response.data));
         }
       })
-      .catch(console.clear)
+      .catch(err => {
+          
+      })
     };
   };
 
@@ -184,7 +198,9 @@ const FacebookResults = (props) => {
           dispatch(setAnalysisComments(response.data));
         }
       })
-      .catch(console.clear)
+      .catch(err => {
+          
+      })
   };
   };
   
@@ -196,7 +212,9 @@ const FacebookResults = (props) => {
           dispatch(setAnalysisVerifiedComments(response.data));
         }
       })
-      .catch(console.clear)
+      .catch(err => {
+          
+      })
     };  
   };
 
@@ -208,7 +226,9 @@ const FacebookResults = (props) => {
           dispatch(setAnalysisVerifiedComments(response.data));
         }
       })
-      .catch(console.clear)
+      .catch(err => {
+          
+      })
   };
     }
 
@@ -221,7 +241,9 @@ const FacebookResults = (props) => {
         }
         
       })
-      .catch(console.clear)
+      .catch(err => {
+          
+      })
     };
     };
 
@@ -233,7 +255,9 @@ const FacebookResults = (props) => {
                 dispatch(setAnalysisLinkComments(response.data));
               }
             })
-            .catch(console.clear)
+            .catch(err => {
+          
+            })
       }
     };
 

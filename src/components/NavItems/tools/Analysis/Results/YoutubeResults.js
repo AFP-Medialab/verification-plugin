@@ -110,7 +110,9 @@ const YoutubeResults = (props) => {
               dispatch(setAnalysisComments(response.data));
               
             })
-            .catch(console.clear)
+            .catch(err => {
+          
+            })
           }
         };
         const handleClick_last_page = (event) => {
@@ -121,7 +123,9 @@ const YoutubeResults = (props) => {
               setCount_comments(last_page_all_comments);
               dispatch(setAnalysisComments(response.data));
             })
-            .catch(console.clear)
+            .catch(err => {
+          
+            })
           }
         };
       
@@ -133,7 +137,9 @@ const YoutubeResults = (props) => {
               dispatch(setAnalysisLinkComments(response.data));
               
             })
-            .catch(console.clear)
+            .catch(err => {
+          
+            })
           }
         };
         const handleClick_last_page1 = (event) => {
@@ -144,7 +150,9 @@ const YoutubeResults = (props) => {
                 dispatch(setAnalysisLinkComments(response.data));
        
             })
-            .catch(console.clear)
+            .catch(err => {
+          
+            })
           }
         };
       
@@ -156,7 +164,9 @@ const YoutubeResults = (props) => {
               dispatch(setAnalysisVerifiedComments(response.data));
               
             })
-            .catch(console.clear)
+            .catch(err => {
+          
+            })
           }
         };
         const handleClick_last_page2 = (event) => {
@@ -168,7 +178,9 @@ const YoutubeResults = (props) => {
               dispatch(setAnalysisVerifiedComments(response.data));
        
             })
-            .catch(console.clear)
+            .catch(err => {
+          
+            })
           }
         };
 
@@ -180,7 +192,9 @@ const YoutubeResults = (props) => {
                 dispatch(setAnalysisComments(response.data));
               }
             })
-            .catch(console.clear)
+            .catch(err => {
+          
+            })
           };
         };
     
@@ -192,7 +206,9 @@ const YoutubeResults = (props) => {
               dispatch(setAnalysisComments(response.data));
             }
           })
-          .catch(console.clear)
+          .catch(err => {
+          
+          })
       };
       };
       
@@ -204,7 +220,9 @@ const YoutubeResults = (props) => {
               dispatch(setAnalysisVerifiedComments(response.data));
             }
           })
-          .catch(console.clear)
+          .catch(err => {
+          
+          }) 
         };  
       };
     
@@ -216,7 +234,9 @@ const YoutubeResults = (props) => {
               dispatch(setAnalysisVerifiedComments(response.data));
             }
           })
-          .catch(console.clear)
+          .catch(err => {
+          
+          })
       };
         }
     
@@ -229,7 +249,9 @@ const YoutubeResults = (props) => {
             }
             
           })
-          .catch(console.clear)
+          .catch(err => {
+          
+          })
         };
         };
     
@@ -242,7 +264,11 @@ const YoutubeResults = (props) => {
                     dispatch(setAnalysisLinkComments(response.data));
                   }
                 })
-                .catch(console.clear)
+                .catch(err => {
+          
+                })
+            
+            
           }
         };
 

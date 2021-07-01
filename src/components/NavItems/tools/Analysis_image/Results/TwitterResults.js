@@ -107,7 +107,9 @@ const TwitterResults = (props) => {
             dispatch(setAnalysisComments(response.data));
             
           })
-          .catch(console.clear)
+          .catch(err => {
+          
+          })
         }
       };
       const handleClick_last_page = (event) => {
@@ -118,7 +120,9 @@ const TwitterResults = (props) => {
             setCount_comments(last_page_all_comments);
             dispatch(setAnalysisComments(response.data));
           })
-          .catch(console.clear)
+          .catch(err => {
+          
+          })
         }
       };
     
@@ -130,7 +134,9 @@ const TwitterResults = (props) => {
             dispatch(setAnalysisLinkComments(response.data));
             
           })
-          .catch(console.clear)
+          .catch(err => {
+          
+          })
         }
       };
       const handleClick_last_page1 = (event) => {
@@ -142,7 +148,9 @@ const TwitterResults = (props) => {
               dispatch(setAnalysisLinkComments(response.data));
      
           })
-          .catch(console.clear)
+          .catch(err => {
+          
+          })
         }
       };
     
@@ -154,7 +162,9 @@ const TwitterResults = (props) => {
             dispatch(setAnalysisVerifiedComments(response.data));
             
           })
-          .catch(console.clear)
+          .catch(err => {
+          
+          })
         }
       };
       const handleClick_last_page2 = (event) => {
@@ -166,7 +176,9 @@ const TwitterResults = (props) => {
             dispatch(setAnalysisVerifiedComments(response.data));
      
           })
-          .catch(console.clear)
+          .catch(err => {
+          
+          })
         }
       };
 
@@ -178,7 +190,9 @@ const TwitterResults = (props) => {
               dispatch(setAnalysisComments(response.data));
             }
           })
-          .catch(console.clear)
+          .catch(err => {
+          
+          })
         };
       };
     
@@ -190,7 +204,9 @@ const TwitterResults = (props) => {
               dispatch(setAnalysisComments(response.data));
             }
           })
-          .catch(console.clear)
+          .catch(err => {
+          
+          })
       };
       };
       
@@ -202,7 +218,9 @@ const TwitterResults = (props) => {
               dispatch(setAnalysisVerifiedComments(response.data));
             }
           })
-          .catch(console.clear)
+          .catch(err => {
+          
+          })
         };  
       };
     
@@ -214,7 +232,9 @@ const TwitterResults = (props) => {
               dispatch(setAnalysisVerifiedComments(response.data));
             }
           })
-          .catch(console.clear)
+          .catch(err => {
+          
+          })
       };
         }
     
@@ -227,7 +247,9 @@ const TwitterResults = (props) => {
             }
             
           })
-          .catch(console.clear)
+          .catch(err => {
+          
+          })
         };
         };
     
@@ -239,7 +261,9 @@ const TwitterResults = (props) => {
                     dispatch(setAnalysisLinkComments(response.data));
                   }
                 })
-                .catch(console.clear)
+                .catch(err => {
+          
+                })
           }
         };
 
