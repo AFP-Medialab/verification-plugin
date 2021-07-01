@@ -124,7 +124,7 @@ export const setDbkfVideoMatchDetails = (videoMatch, dbkfMediaMatchLoading, dbkf
     return {
         type: "SET_DBKF_VIDEO_MATCH_DETAILS",
         payload: {
-            dbkfImageMatch: videoMatch,
+            dbkfVideoMatch: videoMatch,
             dbkfMediaMatchLoading: dbkfMediaMatchLoading,
             dbkfMediaMatchDone: dbkfMediaMatchDone,
             dbkfMediaMatchFail: dbkfMediaMatchFail

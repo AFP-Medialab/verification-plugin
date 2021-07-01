@@ -160,11 +160,14 @@ function* similaritySearch(searchEndpoint, stateStorageFunction) {
                         "claimUrl": key,
                         "similarity": appearance.similarity})
                 })
+                result[key].evidencesResults.forEach(evidence=>{
+                    resultList.push({
+                        "claimUrl": key,
+                        "similarity": evidence.similarity})
+                })
             })
-
-            //resultList.sort((a, b) => b.similarity - a.similarity);
+            resultList.sort((a, b) => b.similarity - a.similarity);
             resultList = resultList.slice(0,3)
-
             yield put(stateStorageFunction(resultList, false, true, false))
         } else {
             yield put(stateStorageFunction(null, false, true, false))
