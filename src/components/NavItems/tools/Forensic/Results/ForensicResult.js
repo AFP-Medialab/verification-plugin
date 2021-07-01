@@ -8,6 +8,7 @@ import CardMedia from "@material-ui/core/CardMedia";
 import Typography from "@material-ui/core/Typography";
 import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Forensic.tsv";
+import tsvWarning from "../../../../../LocalDictionary/components/Shared/OnWarningInfo.tsv";
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import Tabs from '@material-ui/core/Tabs';
@@ -114,8 +115,7 @@ const ForensicResults = (props) => {
 
     const classes = useMyStyles();
     const keyword = useLoadLanguage("components/NavItems/tools/Forensic.tsv", tsv);
-    const keywordAdvancedTools = useLoadLanguage("components/NavItems/AdvancedTools.tsv", tsv);
-    const keywordWarning = useLoadLanguage("components/Shared/OnWarningInfo.tsv", tsv);
+    const keywordWarning = useLoadLanguage("components/Shared/OnWarningInfo.tsv", tsvWarning);
     const results = props.result.filters;
     //const masks = props.masksData;
     //console.log(results);
@@ -546,7 +546,7 @@ const ForensicResults = (props) => {
             <div>
                 <Snackbar open={openAlert} autoHideDuration={6000} onClose={handleCloseAlert}>
                     <Alert onClose={handleCloseAlert} severity="warning">
-                        {keywordAdvancedTools("alert_text")}
+                        {keywordWarning("warning_advanced_tools")}
                     </Alert>
                 </Snackbar>
                 <Box mt={3}  style={{marginBottom: "50px"}}>
