@@ -283,6 +283,7 @@ const ForensicResults = (props) => {
 
     function hideFilterHover(e) {
         setFilterHoverEnabled(false);
+        setFilterHover(props.url);
     }
 
 
