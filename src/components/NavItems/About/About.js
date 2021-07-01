@@ -156,7 +156,7 @@ const About = () => {
                     </Link>
                     <Link target="_blank" href={keyword("borelli_link")}>
                         {
-                        keyword("borelli_link_Label")
+                        keyword("borelli_link_label")
                         }
                     </Link>
                     {
