@@ -1,6 +1,5 @@
 import React from 'react';
 import { useEffect } from "react";
-//import { ReactComponent as GifIcon } from "../../../NavBar/images/SVG/Image/Gif.svg"
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
@@ -17,9 +16,9 @@ import { useSelector, useDispatch } from 'react-redux';
 import { ERR_AUTH_UNKNOWN_ERROR } from '../../../../Shared/Authentication/authenticationErrors';
 import { setError } from "../../../../../redux/actions/errorActions";
 import tsv from "../../../../../LocalDictionary/components/Shared/Authentication.tsv";
+import tsvAdvTools from "../../../../../LocalDictionary/components/NavItems/AdvancedTools.tsv";
 import IconButton from '@material-ui/core/IconButton';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
-//import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 import { useForm, Controller } from "react-hook-form";
 import * as yup from "yup";
 import _ from "lodash";
@@ -27,10 +26,26 @@ import MenuItem from '@material-ui/core/MenuItem';
 //import { userRegistrationSentAction } from "../../../../../redux/actions/authenticationActions";
 import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
 
-
-const AdvancedTools = (props) => {
-     //const keyword = useLoadLanguage("components/NavItems/AdvancedTools.tsv", tsv);
-     const keyword = props.keyword;
+const registrationValidationSchema = yup.object().shape({
+    email: yup.string()
+        .required("REGISTRATIONFORM_EMAIL_ERR_REQUIRED")
+        .email("REGISTRATIONFORM_EMAIL_ERR_EMAIL"),
+    firstName: yup.string()
+        .required("REGISTRATIONFORM_FIRSTNAME_ERR_REQUIRED"),
+    lastName: yup.string()
+        .required("REGISTRATIONFORM_LASTNAME_ERR_REQUIRED"),
+    organization: yup.string()
+        .required("REGISTRATIONFORM_ORGANIZATION_ERR_REQUIRED"),
+    organizationRole: yup.string()
+        .required("REGISTRATIONFORM_ORGANIZATIONROLE_ERR_REQUIRED"),
+    organizationRoleOther: yup.string().when('organizationRole', {
+        is: 'OTHER',
+        then: yup.string().required("REGISTRATIONFORM_ORGANIZATIONROLEOTHER_ERR_REQUIRED"),
+        otherwise: yup.string().notRequired()
+    })
+});
+const AdvancedTools = () => {
+     const keyword = useLoadLanguage("components/NavItems/AdvancedTools.tsv", tsvAdvTools);
 
     //const classes = useMyStyles();
     // Redux store
@@ -38,70 +53,40 @@ const AdvancedTools = (props) => {
     const userAuthenticated = useSelector(
         (state) => state.userSession && state.userSession.userAuthenticated
     );
-
-   
-    //const userRegistrationLoading = useSelector(state => state.userSession && state.userSession.userRegistrationLoading);
-
-    const registrationValidationSchema = yup.object().shape({
-        email: yup.string()
-            .required("REGISTRATIONFORM_EMAIL_ERR_REQUIRED")
-            .email("REGISTRATIONFORM_EMAIL_ERR_EMAIL"),
-        firstName: yup.string()
-            .required("REGISTRATIONFORM_FIRSTNAME_ERR_REQUIRED"),
-        lastName: yup.string()
-            .required("REGISTRATIONFORM_LASTNAME_ERR_REQUIRED"),
-        organization: yup.string()
-            .required("REGISTRATIONFORM_ORGANIZATION_ERR_REQUIRED"),
-        organizationRole: yup.string()
-            .required("REGISTRATIONFORM_ORGANIZATIONROLE_ERR_REQUIRED"),
-        organizationRoleOther: yup.string().when('organizationRole', {
-            is: 'OTHER',
-            then: yup.string().required("REGISTRATIONFORM_ORGANIZATIONROLEOTHER_ERR_REQUIRED"),
-            otherwise: yup.string().notRequired()
-        })
-    });
-
     
-
     // i18n
     const messageI18NResolver = useLoadLanguage("components/Shared/Authentication.tsv", tsv);
 
 
     const [dialogState, setDialogState] = React.useState(0);
-    const [textToolsState, setTextToolsState] = React.useState("The advanced tools are locked");
-    const [textButton, setTextButton] = React.useState("UNLOCK");
     const [colorButton, setColorButton] = React.useState("primary");
     const [iconState, setIconState] = React.useState(<LockIcon fontSize="small" />);
 
     const [open, setOpen] = React.useState(false);
     
-    
-    useEffect(() => {
-        if (userAuthenticated){
-            setAuthenticatedData();
-        }else{
-            setNotAuthenticatedData();
-        }
-    // eslint-disable-next-line
-    }, [userAuthenticated, keyword]);
-
     const setAuthenticatedData = () => {
         setDialogState(2);
-        setTextToolsState(keyword("text_unlocked"));
-        setTextButton(keyword("button_exit"));
         setColorButton("secondary");
         setIconState(<LockOpenIcon fontSize="small" />);
     }
 
     const setNotAuthenticatedData = () => {
         setDialogState(0);
-        setTextToolsState(keyword("text_locked"));
-        setTextButton(keyword("button_unlock2"));
         setColorButton("primary");
         setIconState(<LockIcon fontSize="small" />);
     }
 
+    useEffect(() => {
+        console.log("use ....");
+        if (userAuthenticated){
+            setAuthenticatedData();
+        }else{
+            setNotAuthenticatedData();
+        }
+    // eslint-disable-next-line
+    }, [userAuthenticated]);
 
+    
     const handleClickOpen = () => {
         if(dialogState===0){
             setOpen(true);
@@ -150,8 +135,6 @@ const AdvancedTools = (props) => {
         setDialogState(3);
     };
 
-
-
     // Authentication API
     const authenticationAPI = useAuthenticationAPI();
 
@@ -184,8 +167,6 @@ const AdvancedTools = (props) => {
     };
 
 
-
-
     // User Registration form
     const registrationForm = useForm({
         mode: "onBlur",
@@ -206,17 +187,12 @@ const AdvancedTools = (props) => {
             handleError(error.error ? error.error.code : ERR_AUTH_UNKNOWN_ERROR);
         });
     };
-    
-
-    
+      
 
     const handleCloseRegistration = () => {
         setOpen(false);
         setDialogState(0);
     };
-
-
-
 
     // Error handler
     const handleError = (errorKey) => {
@@ -267,7 +243,7 @@ const AdvancedTools = (props) => {
 
                         <Grid item>
                             <Typography variant="body2" style={{ color: "#737373"}}>
-                                {textToolsState}
+                                {userAuthenticated ? keyword("text_unlocked") :  keyword("text_locked")}                
                             </Typography>
                         </Grid>
 
@@ -278,7 +254,7 @@ const AdvancedTools = (props) => {
 
                 <Grid item>
                     <Button variant="outlined" color={colorButton} onClick={handleClickOpen} style={{ border: "2px solid", heigth: "40px" }}>
-                        {textButton} 
+                        {userAuthenticated ? messageI18NResolver("LOGUSER_LOGOUT_LABEL"): messageI18NResolver("LOGINFORM_SUBMIT_LABEL")}                
                     </Button>
                 </Grid>
 
@@ -311,13 +287,13 @@ const AdvancedTools = (props) => {
                             <Box m={4}/>
 
                             <Typography variant="body2" style={{ color: "#818B95"}}>
-                                {keyword("text_account")}
+                                {messageI18NResolver("ACCESSCODEFORM_TITLE")}
                             </Typography>
                             <Box m={2} />
                             <TextField                        
                                 label={"Email"}
                                 value={email}
-                                placeholder={keyword("placeholder_email")}
+                                placeholder={messageI18NResolver("ACCESSCODEFORM_EMAIL_PLACEHOLDER")}
                                 fullWidth
                                 variant="outlined"
                                 onChange={e => {
@@ -333,23 +309,18 @@ const AdvancedTools = (props) => {
                             />
                             <Box m={2} />
                             <Button variant="contained" color="primary" fullWidth disabled={stateGetCode} onClick={handleGetCode}>
-                                {keyword("button_code")}
+                                {messageI18NResolver("ACCESSCODEFORM_SUBMIT_LABEL")}
                             </Button>
-
-
-                            
-                            
-                            
 
                         </DialogContent>
                         <DialogActions>
                             <Grid container direction="column" style={{ width: "100%" }}>
                                 <Typography variant="body2" style={{ color: "#818B95", textAlign: "center" }}>
-                                    {keyword("text_notaccount")}
+                                    {messageI18NResolver("REGISTRATIONFORM_TITLE")}
                                 </Typography>
                                 <Box m={2} />
                                 <Button variant="outlined" color="primary" onClick={handleClickOpenRegister} style={{ border: "2px solid" }} fullWidth>
-                                    {keyword("button_register")}
+                                    {messageI18NResolver("REGISTRATIONFORM_SUBMIT_LABEL")}
                                 </Button>
 
                             </Grid>
@@ -358,7 +329,6 @@ const AdvancedTools = (props) => {
                     </Box>
 
                 }
-
 
                 {dialogState === 1 &&
                     <Box p={2}>
@@ -379,7 +349,7 @@ const AdvancedTools = (props) => {
 
                                     <Grid item>
                                         <Typography style={{ color: "#51A5B2", fontSize: "24px" }}>
-                                            {keyword("title_email")}
+                                            {messageI18NResolver("ACCESSCODEFORM_EMAIL_CHECK")}
                                         </Typography>
                                     </Grid>
                                 
@@ -387,7 +357,7 @@ const AdvancedTools = (props) => {
                         </DialogTitle>
                         <DialogContent style={{ height: '300px' }}>
                             <Typography variant="body2">
-                                {keyword("text_code_email")}
+                                {messageI18NResolver("ACCESSCODEFORM_SUCCESS_TEXT")}
                             </Typography>
 
                             <Box m={2} />
@@ -395,7 +365,7 @@ const AdvancedTools = (props) => {
                             <TextField
                                 label={"Code"}
                                 value={code}
-                                placeholder={keyword("placeholder_code")}
+                                placeholder={messageI18NResolver("LOGINFORM_ACCESSCODE_PLACEHOLDER")}
                                 fullWidth
                                 variant="outlined"
                                 onChange={e => {
@@ -414,7 +384,7 @@ const AdvancedTools = (props) => {
 
                             <Box ml={1} margin={1}>
                                 <Typography variant="body2" style={{ color: "#989898", fontSize: "13px"}}>
-                                    {keyword("text_problem")}
+                                    {messageI18NResolver("ACCESSCODEFORM_SUCCESS_TEXT_SPAM")}
                                 </Typography>
                             </Box>
 
@@ -423,7 +393,7 @@ const AdvancedTools = (props) => {
                         </DialogContent>
                         <DialogActions>
                             <Button variant="contained" color="primary" onClick={handleClickUnlock} fullWidth disabled={stateUnlockTools}>
-                                {keyword("button_unlock")}
+                                {messageI18NResolver("LOGINFORM_SUBMIT_LABEL")}
                             </Button>
                         </DialogActions>
                     </Box>
@@ -445,7 +415,7 @@ const AdvancedTools = (props) => {
                         </DialogContent>
                         <DialogActions>
                             <Button color="default" onClick={handleCloseFinish} fullWidth >
-                                {keyword("button_close")}
+                                {messageI18NResolver("AUTHENTICATION_FORM_CLOSE")}
                             </Button>
                         </DialogActions>
                     </Box>
@@ -456,12 +426,12 @@ const AdvancedTools = (props) => {
                     <Box p={2}>
                         <DialogTitle id="max-width-dialog-title">
                             <Typography gutterBottom style={{ color: "#51A5B2", fontSize: "24px" }}>
-                                {keyword("title_registration")}
+                                {messageI18NResolver("REGISTRATIONFORM_TITLE")}
                             </Typography>
                         </DialogTitle>
                         <DialogContent>
                             <Typography variant="body2">
-                                {keyword("text_description_resgitration")}
+                                {messageI18NResolver("AUTHCARD_EXPLANATION_TEXT")}
                             </Typography>
                             <Box m={2} />
                             <form onSubmit={registrationForm.handleSubmit(registrationOnSubmit)}>
@@ -600,7 +570,7 @@ const AdvancedTools = (props) => {
                                     <Grid item xs={12}>
                                         <Box mt={2}>
                                             <Button color="default" fullWidth type="submit" >
-                                                {keyword("button_register")}
+                                                {messageI18NResolver("REGISTRATIONFORM_SUBMIT_LABEL")}
                                             </Button>
                                         </Box>
                                     </Grid>
@@ -619,18 +589,18 @@ const AdvancedTools = (props) => {
                     <Box p={2}>
                         <DialogTitle id="max-width-dialog-title">
                             <Typography gutterBottom style={{ color: "#51A5B2", fontSize: "24px" }}>
-                                {keyword("title_approval")}
+                                {messageI18NResolver("REGISTRATIONFORM_SUCCESS_TITLE")}
                             </Typography>
                         </DialogTitle>
                         <DialogContent style={{ height: '300px' }}>
                             <Typography variant="body2">
-                                {keyword("text_review")}
+                                {messageI18NResolver("REGISTRATIONFORM_SUCCESS_TEXT")}
                             </Typography>
 
                         </DialogContent>
                         <DialogActions>
                             <Button v color="default" onClick={handleCloseRegistration} fullWidth >
-                                {keyword("button_close")}
+                                {messageI18NResolver("AUTHENTICATION_FORM_CLOSE")}
                             </Button>
                         </DialogActions>
                     </Box>

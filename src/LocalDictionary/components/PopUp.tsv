@@ -1,9 +1,10 @@
-	en	fr	es
-open_website	Open Website	Ouvrir le site	Abrir el sitio
-open_assistant	Assistant	Temp	Temp
-open_assistant_on_page	Assistant for Current Page	Temp	Temp
-video_urls	Videos Urls	Urls de vidéos	Vídeos urls
-copy	Copy	Copier	Copiar
-no_video_found	No video found	Pas de vidéo	Ningún vídeo
-images_url	Images	Images	Imágenes
-no_images	No images	Pas d'images	Ningunas imágenes
+	en	fr	es	el
+open_website	Open Toolbox	Ouvrir le plugin	Abrir el plugin	Άνοιγμα Σετ Εργαλείων
+open_assistant	Open Assistant	Ouvrir l'assistant	Abrir el assistente	Άνοιγμα Βοηθού
+open_assistant_on_page	Assistant for Current Page	Assistant pour cette page	Assistente para este sitio	Βοηθός για τρέχουσα σελίδα
+open_classroom	Open Classroom	Ouvrir la salle de classe	Abrir la aula	Άνοιγμα Αίθουσας Διδασκαλίας
+video_urls	Videos Urls	Urls de vidéos	Vídeos urls	Διευθύνσεις Urls των βίντεο
+copy	Copy	Copier	Copiar	Αντιγραφή
+no_video_found	No video found	Pas de vidéo	Ningún vídeo	Δεν βρέθηκε κανένα βίντεο
+images_url	Images	Images	Imágenes	Εικόνες
+no_images	No images	Pas d'images	Ningunas imágenes	Χωρίς εικόνες

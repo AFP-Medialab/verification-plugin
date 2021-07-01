@@ -11,7 +11,7 @@
     "axios": "^0.21.1",
     "big-integer": "^1.6.48",
     "clsx": "^1.1.1",
-    "d3-selection": "^2.0.0",
+    "d3-selection": "1.4.2",
     "dateformat": "^4.5.1",
     "exif-js": "^2.3.0",
     "file-saver": "^2.0.5",

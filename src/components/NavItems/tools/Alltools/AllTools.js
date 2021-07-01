@@ -9,7 +9,7 @@ import history from "../../../Shared/History/History";
 import Typography from "@material-ui/core/Typography";
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/Alltools.tsv";
-import advancedToolTsv from "../../../../LocalDictionary/components/NavItems/AdvancedTools.tsv";
+import tsvWarning from "../../../../LocalDictionary/components/Shared/OnWarningInfo.tsv";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import ToolCard from "./ToolCard"
 import Card from "@material-ui/core/Card";
@@ -26,13 +26,10 @@ import Snackbar from '@material-ui/core/Snackbar';
 import Alert from '@material-ui/lab/Alert';
 
 
-
-
-
 const AllTools = (props) => {
     const classes = useMyStyles();
     const keyword = useLoadLanguage("components/NavItems/tools/Alltools.tsv", tsv);
-    const keywordAdvancedTools = useLoadLanguage("components/NavItems/AdvancedTools.tsv", advancedToolTsv);
+    const keywordWarning = useLoadLanguage("components/Shared/OnWarningInfo.tsv", tsvWarning);
     
     const tools = props.tools;
     const [videoUrl, setVideoUrl] = useState(null);
@@ -133,19 +130,6 @@ const AllTools = (props) => {
 
     })
 
-    /*
-    console.log("Video");
-    console.log(toolsVideo);
-    console.log("Images");
-    console.log(toolsImages);
-    console.log("Search");
-    console.log(toolsSearch);
-    console.log("SNA");
-    console.log(toolsData);
-    */
-
-    
-
     const handleCloseAlert = (event, reason) => {
         if (reason === 'clickaway') {
             return;
@@ -153,13 +137,11 @@ const AllTools = (props) => {
         setOpenAlert(false);
     };
 
-
-
     return (
         <div>
             <Snackbar open={openAlert} autoHideDuration={6000} onClose={handleCloseAlert}>
                 <Alert onClose={handleCloseAlert} severity="warning">
-                    {keywordAdvancedTools("alert_text")}
+                    {keywordWarning("warning_advanced_tools")}
                 </Alert>
             </Snackbar>
 
@@ -175,12 +157,10 @@ const AllTools = (props) => {
                 </Grid>
 
                 <Grid item>
-                    <AdvancedTools keyword={keywordAdvancedTools}/>
+                    <AdvancedTools />
                 </Grid>
 
             </Grid>
-
-            
 
             <Card>
                 <Box p={2}>

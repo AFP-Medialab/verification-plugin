@@ -29,7 +29,6 @@ import { replaceAll } from "../TwitterAdvancedSearch/createUrl";
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/TwitterSna.tsv";
 import { submissionEvent } from "../../../Shared/GoogleAnalytics/GoogleAnalytics";
-import AuthenticationCard from "../../../Shared/Authentication/AuthenticationCard";
 import { StylesProvider } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
@@ -448,8 +447,6 @@ const TwitterSna = () => {
             className={classes.headerUpladedImage}
           />
           <div className={classes.root2}>
-
-            <AuthenticationCard />
 
             <TextField
               disabled={searchFormDisabled}
