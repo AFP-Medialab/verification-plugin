@@ -327,7 +327,7 @@ const NavBar = (props) => {
         },*/
         {
             title: "navbar_about",
-            icon: (tabValue === 6) ? <AboutIcon width="40px" height="40px" style={{ fill: "#51A5B2" }} />
+            icon: (tabValue === 5) ? <AboutIcon width="40px" height="40px" style={{ fill: "#51A5B2" }} />
                 : <AboutIcon width="40px" height="40px" style={{ fill: "#4c4c4c" }} />,
             content: <About />,
             path: "about",
