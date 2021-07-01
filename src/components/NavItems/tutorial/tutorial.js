@@ -44,6 +44,7 @@ const Tutorial = () => {
             break;
         case "el":
             popImg = popUpEl;
+            break;
         default:
             popImg = popUpEn;
             break;
@@ -66,7 +67,6 @@ const Tutorial = () => {
                 <div className={"content"} style={dangerousDivStyle}
                      dangerouslySetInnerHTML={{__html: keyword("tuto_2")}}></div>
 
-                <Typography variant="body1">{keyword("tuto_3")}</Typography>
                 <Box m={1}/>
                 <Typography variant="h3">{keyword("tuto_h_2")}</Typography>
                 <Box m={1}/>
