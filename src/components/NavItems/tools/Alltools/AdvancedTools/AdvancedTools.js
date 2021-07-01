@@ -77,7 +77,6 @@ const AdvancedTools = () => {
     }
 
     useEffect(() => {
-        console.log("use ....");
         if (userAuthenticated){
             setAuthenticatedData();
         }else{
