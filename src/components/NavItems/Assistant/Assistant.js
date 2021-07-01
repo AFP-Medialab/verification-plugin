@@ -107,8 +107,8 @@ const Assistant = () => {
 
 
     return (
-        <Paper>
-            <Paper className={classes.root}>
+        <div>
+            <div className={classes.root}>
                 {/* introduction */}
                 <AssistantIntroduction cleanAssistant={cleanAssistant}/>
 
@@ -148,7 +148,7 @@ const Assistant = () => {
                         }
                     </Grid>
                 </Grid>
-            </Paper>
+            </div>
 
             <Box m={3}/>
 
@@ -207,7 +207,7 @@ const Assistant = () => {
                     }
                 </Grid>
             </Paper>
-        </Paper>
+        </div>
     )
 };
 
