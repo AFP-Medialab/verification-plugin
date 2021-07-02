@@ -39,9 +39,10 @@ const get_images = (url) => {
 const karmadecaySearch = function(word){
     // from User JavaScript @https://static.karmadecay.com/js/karma-decay.user.js
     let search_url = "http://karmadecay.com/search?kdtoolver=b1&q=";
-    let url = getUrlImg(word);
-    if (url !== "") {
-        window.chrome.tabs.create({ url: search_url + url});
+    let img = getUrlImg(word);
+    if (img !== ""){
+        let url = search_url + encodeURIComponent(img);
+        window.chrome.tabs.create({url: url, selected: false});
         //Google analytics
         rightClickEvent("Image Reverse Search Reddit", url)
     }
@@ -61,9 +62,14 @@ const thumbnailsSearch = function(word){
 };
 
 const getUrlImg = (word) => {
-    if (word.srcUrl)
+    var query = word.pageUrl;
+    if(word.mediaType==="image"){
+       return word.srcUrl;
+    }
+    return query;
+    /*if (word.srcUrl)
         return String(word.srcUrl);
-    return String(word.linkUrl);
+    return String(word.linkUrl);*/
 };
 
 const analysisVideo = function(word){
@@ -75,6 +81,7 @@ const analysisVideo = function(word){
         //ga("send", "event", "ContextualMenu - AnalysisVideo", "click", url);
     }
 };
+
 
 const imageMagnifier = function(word){
     let url = getUrlImg(word);
@@ -106,25 +113,26 @@ const ocr = function(word){
 
 const imageReversesearch = function(word){
     let search_url = "https://www.google.com/searchbyimage?image_url=";
-    let url = getUrlImg(word);
-
-    if (url !== ""){
-        window.chrome.tabs.create({url:search_url + url});
+    let img = getUrlImg(word);
+    if (img !== ""){
+        let url = search_url + encodeURIComponent(img);
+        window.chrome.tabs.create({url: url, selected: false});
         // Google analytics
-        let bool = rightClickEvent("Image Reverse Search Google", url)
-        console.error("right Click : " + bool)
+        rightClickEvent("Image Reverse Search Google", url)
+        //console.error("right Click : " + bool)
         //ga("send", "event", "ContextualMenu - Google", "click", url);
     }
 };
 
 const imageReversesearchDBKF = function(word){
-    let search_url = "http://weverify-demo.ontotext.com/#!/similaritySearchResults&params=";
-    let url = getUrlImg(word);
-    if (url !== ""){
-        window.chrome.tabs.create({url:search_url + url});
+    let search_url = "http://weverify-demo.ontotext.com/#!/similaritySearchResults&type=Images&params=";
+    let img = getUrlImg(word);
+    if (img !== ""){
+        let url = search_url + encodeURIComponent(img);
+        window.chrome.tabs.create({url: url, selected: false});
         // Google analytics
         rightClickEvent("Image Reverse Search - DBKF (beta)", url)
-        //ga("send", "event", "ContextualMenu - Baidu", "click", url);
+        //ga("send", "event", "ContextualMenu - DBKF", "click", url);
     }
 };
 
@@ -140,9 +148,10 @@ const imageForensic = function(word){
 
 const imageReversesearchBaidu = function(word){
     let search_url = "https://image.baidu.com/n/pc_search?queryImageUrl=";
-    let url = getUrlImg(word);
-    if (url !== ""){
-        window.chrome.tabs.create({url:search_url + url + "&fm=index&uptype=urlsearch"});
+    let img = getUrlImg(word);
+    if (img !== ""){
+        let url = search_url + encodeURIComponent(img) + "&fm=index&uptype=urlsearch";
+        window.chrome.tabs.create({url: url, selected: false});
         // Google analytics
         rightClickEvent("Image Reverse Search Baidu", url)
         //ga("send", "event", "ContextualMenu - Baidu", "click", url);
@@ -151,9 +160,10 @@ const imageReversesearchBaidu = function(word){
 
 const imageReversesearchYandex = function(word){
     let search_url = "https://yandex.com/images/search?url=";
-    let url = getUrlImg(word);
-    if (url !== ""){
-        window.chrome.tabs.create({url:search_url + url + "&rpt=imageview"});
+    let img = getUrlImg(word);
+    if (img !== ""){
+        let url = search_url + encodeURIComponent(img)+ "&rpt=imageview";
+        window.chrome.tabs.create({url: url, selected: false});
         // Google analytics
         rightClickEvent("Image Reverse Search Yandex", url)
         //ga("send", "event", "ContextualMenu - Yandex", "click", url);
@@ -162,9 +172,10 @@ const imageReversesearchYandex = function(word){
 
 const imageReversesearchTineye = function(word){
     let search_url = "https://www.tineye.com/search?url=";
-    let url = getUrlImg(word);
-    if (url !== "") {
-        window.chrome.tabs.create({url:search_url + url});
+    let img = getUrlImg(word);
+    if (img !== ""){
+        let url = search_url + encodeURIComponent(img);
+        window.chrome.tabs.create({url: url, selected: false});
         // Google analytics
         rightClickEvent("Image Reverse Search Tineye", url)
 
@@ -174,9 +185,10 @@ const imageReversesearchTineye = function(word){
 
 const imageReversesearchBing = function(word){
     let search_url = "https://www.bing.com/images/search?q=imgurl:";
-    let url = getUrlImg(word);
-    if (url !== "") {
-        window.chrome.tabs.create({url:search_url + url + "&view=detailv2&iss=sbi"});
+    let img = getUrlImg(word);
+    if (img !== ""){
+        let url = search_url + encodeURIComponent(img) + "&view=detailv2&iss=sbi";
+        window.chrome.tabs.create({url: url, selected: false});
         // Google analytics
         rightClickEvent("Image Reverse Search Bing", url)
         //ga("send", "event", "ContextualMenu - Bing", "click", url);
@@ -223,6 +235,7 @@ window.chrome.contextMenus.create({
     onclick: analysisVideo,
     targetUrlPatterns: ["https://www.youtube.com/*", "https://youtu.be/*", "https://www.facebook.com/*/videos/*", "https://www.facebook.com/*", "https://twitter.com/*"]
 });
+
 
 window.chrome.contextMenus.create({
     title: "Image Magnifier",

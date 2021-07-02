@@ -17,13 +17,17 @@ import thumbnailsReducer from "./tools/thumbnailsReducer";
 import twitterSnaReducer from "./tools/twitterSnaReducer";
 import videoRightsReducer from "./tools/videoRightsReducer";
 import cookiesReducer from "./cookiesReducers";
+import googleAnalyticReducer from "./googleAnalyticReducer";
 import covidSearchReducer from "./tools/covidSearchReducer";
 import assistantReducer from "./assistantReducer";
 import ocrReducer from "./tools/ocrReducer";
-
+import defaultLanguageReducer from "./defaultLanguageReducer";
+import gifReducer from "./tools/gifReducer";
+import ImageAnalysisReducer from "./tools/analysisReducerImage";
 
 const allReducers = combineReducers({
     language : languageReducer,
+    defaultLanguage : defaultLanguageReducer,
     dictionary : dictionaryReducer,
     nav : navReducer,
     tool : toolReducer,
@@ -32,6 +36,7 @@ const allReducers = combineReducers({
     error : errorReducer,
     userSession: authenticationReducer,
     analysis: analysisReducer,
+    analysisImage: ImageAnalysisReducer,
     forensic : forensicReducer,
     keyframes : keyframesReducer,
     magnifier: magnifierReducer,
@@ -40,9 +45,11 @@ const allReducers = combineReducers({
     twitterSna : twitterSnaReducer,
     videoRights : videoRightsReducer,
     cookies : cookiesReducer,
+    googleAnalytic: googleAnalyticReducer,
     covidSearch: covidSearchReducer,
     assistant : assistantReducer,
-    ocr: ocrReducer
+    ocr: ocrReducer,
+    gif: gifReducer,
 });
 
 export default allReducers;

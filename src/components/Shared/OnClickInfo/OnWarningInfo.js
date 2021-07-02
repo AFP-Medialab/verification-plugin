@@ -15,7 +15,8 @@ const OnWarningInfo = (props) => {
 
     useEffect(() => {
         setChecked(props.trueClick ? true : false);
-    }, [props.keyword]);
+    }, [props.keyword, props.trueClick]);
+    
 
     const handleClick = () => {
         setChecked((prev) => !prev);

@@ -9,6 +9,30 @@ export const setAnalysisResult = (url, result, notification, loading) => {
         }
     }
 };
+export const setAnalysisComments = (data) => {
+    return {
+        type : "SET_ANALYSIS_PAGINATION_COMMENTS",
+        payload : data
+            
+        
+    }
+};
+export const setAnalysisLinkComments = (data) => {
+    return {
+        type : "SET_ANALYSIS_PAGINATION_LINK_COMMENTS",
+        payload : data
+            
+        
+    }
+};
+export const setAnalysisVerifiedComments = (data) => {
+    return {
+        type : "SET_ANALYSIS_PAGINATION_VERIFIED_COMMENTS",
+        payload : data
+            
+        
+    }
+};
 
 export const setAnalysisLoading = (loading) => {
     return {

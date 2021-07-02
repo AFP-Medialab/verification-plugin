@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
 
-const useGenerateApiUrl = (url, reprocess) => {
+const useGenerateApiUrl = (serviceUrl, url, reprocess) => {
     const [finalUrl, setFinalUrl] = useState(undefined);
     const [facebookToken, setFacebookToken] = useState(null);
     const [showFacebookIframe, setFacebookIframe] = useState(false);
@@ -25,7 +25,7 @@ const useGenerateApiUrl = (url, reprocess) => {
             return;
         }
 
-        let analysis_url = "http://mever.iti.gr/caa/api/v4/videos/jobs?url=" + url.replace("&", "%26");
+        let analysis_url = serviceUrl+"/jobs?url=" + url.replace("&", "%26");
         if (reprocess)
             analysis_url += "&reprocess=1";
 
@@ -44,6 +44,7 @@ const useGenerateApiUrl = (url, reprocess) => {
             setFacebookIframe(false);
             setFinalUrl(analysis_url);
         }
+        // eslint-disable-next-line
     }, [url, facebookToken, reprocess]);
 
 

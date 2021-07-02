@@ -1,5 +1,7 @@
 const cookiesReducer = (state = null, action) => {
     switch (action.type) {
+        case "SET_STORAGE_TRUE":
+            return true;
         case "SET_TRUE":
             return true;
         case "SET_FALSE":

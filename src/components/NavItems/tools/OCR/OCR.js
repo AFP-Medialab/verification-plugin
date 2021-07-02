@@ -2,18 +2,23 @@ import React, {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {useParams} from 'react-router-dom'
 
-import {Box, Button, Paper, TextField, Typography} from "@material-ui/core";
+import {Box, Button, TextField} from "@material-ui/core";
 import FolderOpenIcon from '@material-ui/icons/FolderOpen';
 
-import CustomTile from "../../../Shared/CustomTitle/CustomTitle";
 import {KNOWN_LINKS} from "../../Assistant/AssistantRuleBook";
 import {setError} from "../../../../redux/actions/errorActions";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/OCR.tsv";
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 
-import {setOcrB64Img, setOcrInput} from "../../../../redux/actions/tools/ocrActions";
+import {cleanOcr, setOcrB64Img, setOcrInput} from "../../../../redux/actions/tools/ocrActions";
 import OcrResult from "./Results/OcrResult";
+
+import Card from "@material-ui/core/Card";
+import CardHeader from "@material-ui/core/CardHeader";
+import { ReactComponent as OCRIcon } from '../../../NavBar/images/SVG/Image/OCR.svg';
+import Grid from "@material-ui/core/Grid";
+import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 
 const OCR = () => {
 
@@ -21,6 +26,7 @@ const OCR = () => {
     const classes = useMyStyles();
     const dispatch = useDispatch();
     const keyword = useLoadLanguage("components/NavItems/tools/OCR.tsv", tsv);
+    const keywordAllTools = useLoadLanguage("components/NavItems/tools/Alltools.tsv", tsv);
 
     const ocrInputUrl = useSelector(state => state.ocr.url);
     const errorKey = useSelector(state => state.ocr.errorKey);
@@ -67,6 +73,7 @@ const OCR = () => {
         let error_message_key = errorKey ? errorKey : "ocr_error"
         if (fail) {
             dispatch(setError(keyword(error_message_key)));
+            dispatch(cleanOcr())
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [fail, errorKey])
@@ -83,32 +90,61 @@ const OCR = () => {
 
     return (
         <div>
-            <Paper className={classes.root}>
-                <CustomTile text={keyword("ocr_title")}/>
-                <Box m={1}/>
-                <TextField
-                    id="standard-full-width"
-                    label={keyword("ocr_urlbox")}
-                    style={{margin: 8}}
-                    placeholder={""}
-                    fullWidth
-                    value={userInput || ""}
-                    onChange={e => setUserInput(e.target.value)}
+            <HeaderTool name={keywordAllTools("navbar_ocr")} description={keywordAllTools("navbar_ocr_description")} icon={<OCRIcon style={{ fill: "#51A5B2" }} />} />
+
+            <Card>
+                <CardHeader
+                    title={keyword("cardheader_source")}
+                    className={classes.headerUpladedImage}
                 />
-                <Button>
-                    <label htmlFor="fileInputMagnifier">
-                        <FolderOpenIcon/>
-                        <Typography variant={"subtitle2"}>{keyword("button_localfile")}</Typography>
-                    </label>
-                    <input id="fileInputMagnifier" type="file" hidden={true} onChange={e => {
-                        uploadImg(URL.createObjectURL(e.target.files[0]))
-                    }}/>
-                </Button>
-                <Box m={2}/>
-                <Button variant="contained" color="primary" onClick={() => submitUrl(userInput)}>
-                    {keyword("button_submit") || ""}
-                </Button>
-            </Paper>
+                <Box p={3}>
+
+                    <Grid
+                        container
+                        direction="row"
+                        spacing={3}
+                        alignItems="center"
+                    >
+                        <Grid item xs>
+                            <TextField
+                                id="standard-full-width"
+                                label={keyword("ocr_urlbox")}
+                                placeholder={keyword("ocr_urlbox_placeholder")}
+                                fullWidth
+                                value={userInput || ""}
+                                variant="outlined"
+                                onChange={e => setUserInput(e.target.value)}
+                            />
+
+            
+                        </Grid>
+
+                        <Grid item>
+                            <Button variant="contained" color="primary" onClick={() => submitUrl(userInput)}>
+                                {keyword("button_submit") || ""}
+                            </Button>
+
+                        </Grid>
+
+                    </Grid>
+
+                    <Box m={2} />
+                    
+                    <Button startIcon={<FolderOpenIcon />} >
+                        <label htmlFor="fileInputMagnifier">
+                            {keyword("button_localfile")}
+                        </label>
+                        <input id="fileInputMagnifier" type="file" hidden={true} onChange={e => {
+                            uploadImg(URL.createObjectURL(e.target.files[0]))
+                        }}/>
+                    </Button>
+                    
+
+                </Box>
+            </Card>
+
+            <Box m={3} />
+
             {ocrInputUrl && !fail ? <OcrResult/> : null}
         </div>
     )

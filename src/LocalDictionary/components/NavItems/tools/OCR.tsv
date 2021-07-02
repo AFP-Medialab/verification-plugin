@@ -1,9 +1,14 @@
 	en	fr	es	el
-ocr_title	OCR	Temp	Temp	Temp
-ocr_urlbox	Image URL	Temp	Temp	Temp
-ocr_error	Could not extract text. Please try another input	Temp	Temp	Temp
-ocr_no_text	No text has been found in the image	Temp	Temp	Temp
-ocr_too_big	Your uploaded image must be below 4MB in size.	Temp	Temp	Temp
-
-button_localfile	Local file	Fichier local	Fichero local
-button_submit	Submit	Envoyer	Enviar	Temp
+ocr_title	OCR	OCR	LOC	OCR
+ocr_urlbox	Image link	URL de l'image	URL de la imagen	URL εικόνας
+ocr_urlbox_placeholder	Paste the link here	Coller le lien ici	Pegar el enlace aquí	Επικολλήστε τον σύνδεσμο εδώ
+ocr_error	Could not extract text. Please try another input	Le texte n'a pas pu être extrait. Essayer svp une autre image	No se pudo extraer el texto. Intente porfa con otro imagen	Δεν ήταν δυνατή η εξαγωγή κειμένου. Δοκιμάστε μια άλλη είσοδο
+ocr_no_text	No text has been found in the image	Pas de texte trouvé dans l'image	No se encontro texto en la imagen	Δεν βρέθηκε κείμενο στην εικόνα
+ocr_too_big	Your uploaded image must be below 4MB in size	Votre image doit avoir une taille inférieure à 4Mb	Su imagen debe tener un tamaño inferior a 4Mb	Η μεταφορτωμένη εικόνα σας πρέπει να έχει μέγεθος μικρότερο από 4 MB
+service_error	Service currently unavailable. Please contact support through the feedback button if the problem persists	Service actuellement indisponible. Veuillez contacter le support via le bouton de feedback si le problème persiste.	El servicio no está disponible actualmente. Por favor, póngase en contacto con el soporte a través del botón de feedback si el problema persiste.	Η υπηρεσία αυτή τη στιγμή δεν είναι διαθέσιμη. Παρακαλούμε επικοινωνήστε με την υποστήριξη μέσω του κουμπιού ανατροφοδότησης εάν το πρόβλημα παραμένει.
+button_localfile	Load local file	Charger un fichier local	Cargar fichero local	Τοποθετήστε τοπικό αρχείο
+button_submit	Submit	Envoyer	Enviar	Υποβολή
+ocr_search_yandex	Yandex	Yandex	Yandex	Γιάντεξ
+ocr_search_bing	Bing	Bing	Bing	Bing
+cardheader_source	Source of the image	Source de l'image	Fuente de la imagen	Πηγή της εικόνας
+cardheader_results	Results	Résultats	Resultados 	Αποτελέσματα

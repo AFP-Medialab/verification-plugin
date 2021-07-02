@@ -1,5 +1,5 @@
 const defaultState = {
-    urlMode: true,
+    urlMode: false,
     imageVideoSelected: false,
     singleMediaPresent: null,
 
@@ -13,8 +13,10 @@ const defaultState = {
     textLang: null,
     processUrlActions : [],
     processUrlType: null,
+    inputUrlType: null,
 
     inputUrlSourceCredibility: null,
+    inputUrlFactCheckers: null,
     inputSCLoading: false,
     inputSCDone: false,
     inputSCFail: false,
@@ -48,6 +50,7 @@ const defaultState = {
 
     loading: false,
     warningExpanded: false,
+    assuranceExpanded: false,
     stateExpanded: false
 };
 
@@ -70,6 +73,7 @@ const assistantReducer = (state = defaultState, action) => {
         case "SET_NE_DETAILS":
         case "SET_LOADING":
         case "SET_WARNING_EXPANDED":
+        case "SET_ASSURANCE_EXPANDED":
         case "SET_STATE_EXPANDED":
         case "SET_MT_DETAILS":
             return Object.assign({}, state, action.payload)
@@ -77,7 +81,7 @@ const assistantReducer = (state = defaultState, action) => {
 
         case "CLEAN_STATE":
             state = {
-                urlMode: true,
+                urlMode: false,
                 imageVideoSelected: false,
                 singleMediaPresent: null,
 
@@ -91,8 +95,10 @@ const assistantReducer = (state = defaultState, action) => {
                 textLang: null,
                 processUrlActions : [],
                 processUrlType: null,
+                inputUrlType: null,
 
                 inputUrlSourceCredibility: null,
+                inputUrlFactCheckers: null,
                 inputSCLoading: false,
                 inputSCDone: false,
                 inputSCFail: false,
@@ -126,6 +132,7 @@ const assistantReducer = (state = defaultState, action) => {
 
                 loading: false,
                 warningExpanded: false,
+                assuranceExpanded: false,
                 stateExpanded: false
             };
             return state;

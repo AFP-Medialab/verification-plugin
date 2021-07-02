@@ -1,17 +1,19 @@
 import React, { useEffect } from "react";
-
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
-import Paper from "@material-ui/core/Paper";
 import Box from "@material-ui/core/Box";
-
-import CustomTile from "../../../Shared/CustomTitle/CustomTitle";
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/XNetwork.tsv";
+import alltoolstsv from "../../../../LocalDictionary/components/NavItems/tools/Alltools.tsv";
 import OnClickInfo from "../../../Shared/OnClickInfo/OnClickInfo";
+import Card from "@material-ui/core/Card";
+import CardHeader from "@material-ui/core/CardHeader";
+import { ReactComponent as XNetworkIcon } from '../../../NavBar/images/SVG/Search/Xnetwork.svg';
+import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 
 const XNetwork = () => {
   const classes = useMyStyles();
   const keyword = useLoadLanguage("components/NavItems/tools/XNetwork.tsv", tsv);
+  const keywordAllTools = useLoadLanguage("components/NavItems/tools/Alltools.tsv", alltoolstsv);
 
   useEffect(() => {
 
@@ -29,14 +31,19 @@ const XNetwork = () => {
 
   return (
     <div>
-      <Paper className={classes.root}>
-       <CustomTile text={keyword("navbar_xnetwork")} />
+      <HeaderTool name={keywordAllTools("navbar_xnetwork")} description={keywordAllTools("navbar_xnetwork_description")} icon={<XNetworkIcon style={{ fill: "#51A5B2" }} />} />
 
-        <Box m={3} />
-        <div className="gcse-search"></div>
-        <Box m={1} />
-        <OnClickInfo keyword={"xnetwork_tip"}/>
-      </Paper>
+      <Card>
+        <CardHeader
+          title={keyword("navbar_xnetwork")}
+          className={classes.headerUpladedImage}
+        />
+        <div className={classes.root2}>
+          <div className="gcse-search"></div>
+          <Box m={1} />
+          <OnClickInfo keyword={"xnetwork_tip"}/>
+        </div>
+      </Card>
       
     </div>);
 };

@@ -3,11 +3,8 @@ import * as mp4box from "mp4box";
 import {useDispatch} from "react-redux";
 import {setMetadadaResult, setMetadadaLoading} from "../../../../../redux/actions/tools/metadataActions";
 import {setError} from "../../../../../redux/actions/errorActions";
-import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
-import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Metadata.tsv";
 
-const useVideoTreatment = (mediaUrl) => {
-    const keyword = useLoadLanguage("components/NavItems/tools/Metadata.tsv", tsv);
+const useVideoTreatment = (mediaUrl, keyword) => {
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -27,7 +24,7 @@ const useVideoTreatment = (mediaUrl) => {
             };
 
             video.onError = (error) => {
-                console.log("mp4 error : " + error);
+                //console.log("mp4 error : " + error);
                 handleError("metadata_table_error")
             };
 
@@ -61,6 +58,8 @@ const useVideoTreatment = (mediaUrl) => {
 
         if (mediaUrl)
             videoTreatment();
+
+    
     }, [mediaUrl, keyword, dispatch]);
 
 };

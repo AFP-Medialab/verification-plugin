@@ -1,23 +1,43 @@
-	en	fr	es
-navbar_tools	Tools	Outils	Herramientas
-navbar_analysis	Analysis	Analyse	Análisis
-navbar_keyframes	Keyframes	Images clés	Imágenes claves
-navbar_thumbnails	Thumbnails	Imagettes	Miniaturas
-navbar_twitter	Tw. search	Recherche Tw.	Búsqueda Tw.
-navbar_magnifier	Magnifier	Loupe	Lupa
-navbar_metadata	Metadata	Metadonnées	Metadatos
-navbar_rights	Video rights	Droits vidéo	Derechos video
-navbar_forensic	Forensic	Forensic	Forensic
-navbar_twitter_sna	Twitter SNA.	Twitter SNA.	Twitter SNA.
-navbar_ocr	OCR	Temp	Temp	Temp
-api_help_video	https://www.youtube.com/embed/eEVTYq1LMxM?rel=0	https://www.youtube.com/embed/6kkulKrgtLQ?rel=0	https://www.youtube.com/embed/FtAbxbrJMMY?rel=0
-keyframes_help_video	https://www.youtube.com/embed/iNs8y5DoxP8?rel=0	https://www.youtube.com/embed/kXtjUWTqgFQ?rel=0	https://www.youtube.com/embed/0seFvJXegyc?rel=0
-thumbnails_help_video	https://www.youtube.com/embed/Vn0XGlOkSRQ?rel=0	https://www.youtube.com/embed/Ioe5yDqPaL8?rel=0	https://www.youtube.com/embed/cmv_1KJlbhE?rel=0
-twitter_help_video	https://www.youtube.com/embed/wzMCtpENuHA?rel=0	https://www.youtube.com/embed/g0GldCZCh_Q?rel=0	https://www.youtube.com/embed/zHYJ43lhhOY?rel=0
-magnifier_help_video	https://www.youtube.com/embed/JljRs8p4aK4?rel=0	https://www.youtube.com/embed/_FVyFgMqErM?rel=0	https://www.youtube.com/embed/IMutZWgZEGk?rel=0
-metadata_help_video	https://www.youtube.com/embed/Mg6Z-Jc54yo?rel=0	https://www.youtube.com/embed/RtG3kWzZfO0?rel=0	https://www.youtube.com/embed/uM-tlI6DpIE?rel=0
-copyright_help_video	https://www.youtube.com/embed/NjTXsbF5Wu8?rel=0	https://www.youtube.com/embed/dDQWlR8u-mk?rel=0	https://www.youtube.com/embed/36hvLnIugjI?rel=0
-forensic_help_video	https://www.youtube.com/embed/de862rAPne4?rel=0	https://www.youtube.com/embed/jiqcixMzmpo?rel=0	https://www.youtube.com/embed/B2D0kPOAWxM?rel=0
-close	Close	Fermer	Cerrar
-navbar_covidsearch	COVID-19 Debunk search	Recherche COVID-19	Búsqueda COVID-19
-navbar_xnetwork	XNetwork Debunk search	Recherche XNetwork	Búsqueda XNetwork
+	en	fr	es	el
+navbar_tools	Tools	Outils	Herramientas	Εργαλεία
+navbar_analysis_video	Video analysis	Analyse Vidéo	Análisis de vídeo	Βίντεο ανάλυση
+navbar_analysis_image	Image analysis	Analyse d'image	Análisis de imagen	ανάλυση εικόνας
+navbar_keyframes	Keyframes	Images clés	Fotogramas clave	Χαρακτηριστικά καρέ
+navbar_thumbnails	Thumbnails	Imagettes	Miniaturas	Μικρογραφίες
+navbar_twitter	Twitter search	Recherche Tw.	Búsqueda Tw.	Tw. Αναζήτηση
+navbar_magnifier	Magnifier	Loupe	Lupa	Μεγεθυντικός φακός
+navbar_metadata	Metadata	Metadonnées	Metadatos	Μεταδεδομένα
+navbar_rights	Video rights	Droits vidéo	Derechos video	Βίντεο δικαιώματα
+navbar_forensic	Forensic	Forensic	Forensic	Αυθεντικότητα εικόνων
+navbar_twitter_sna	Twitter SNA.	Twitter SNA.	Twitter SNA.	Twitter SNA.
+navbar_ocr	OCR	OCR	OCR	OCR
+navbar_covidsearch	Factchecks	Vérifications	Chequeos	Ελέγχοι
+navbar_xnetwork	XNetwork	XNetwork	XNetwork	XNetwork
+navbar_gif	CheckGif	CheckGif	CheckGif	CheckGif
+navbar_twitter_sna_description	Social network analysis on Twitter (available on registration)	Analyse de réseau sociaux sur Twitter (sur enregistrement) 	Análisis de redes sociales en Twitter (disponible con registro)	Η ανάλυση των κοινωνικών δικτύων στο Twitter (διαθέσιμο κατά την εγγραφή)
+navbar_analysis_description	Video analysis brings you the contextual information of a Youtube, Facebook or Twitter video	Analyse Vidéo vous apporte les informations contextuelles d'une vidéo de Youtube, Facebook ou Twitter	Análisis le ofrece la información del contexto de un vídeo de Youtube, Facebook o Twitter	Ανάλυση σας φέρνει την συναφείς πληροφορίες από το YouTube, το Facebook ή το Twitter βίντεο
+navbar_analysis_image_description	Image analysis brings you the contextual information of an image on Facebook or Twitter	Analyse d'image vous apportte les informations contextuelles de photos postées sur Facebook ou Twitter	El análisis de imagen le ofrece la información del contexto de una imagen en Facebook o Twitter	Η ανάλυση εικόνας σας φέρνει την συναφείς πληροφορίες μιας εικόνας
+navbar_keyframes_description	Keyframes fragments a YouTube, Facebook or Twitter video or a mp4 file into frames to help you perform reverse image search	Pour fragmenter une vidéo de YouTube, Facebook ou Twitter ou encore un fichier mp4 en images clés pour vous aider à effectuer une recherche d'image inversée	Para fragmentar un vídeo de YouTube, Facebook o Twitter o un archivo MP4 en fotogramas para ayudarle a realizar la búsqueda de imágenes inversa	Keyframes θραύσματα Α YouTube, το Facebook ή το Twitter βίντεο ή ένα αρχείο mp4 σε πλαίσια για να σας βοηθήσει να εκτελέσετε αντίστροφη αναζήτηση εικόνων
+navbar_thumbnails_description	Extraction and reverse search of the thumnails of a Youtube video	L'extraction et la recherche inverse des thumnails d'une vidéo Youtube	Extracción y búsqueda hacia atrás de los thumnails de un vídeo de Youtube	Εξόρυξη και αντίστροφη αναζήτηση των thumnails ενός βίντεο Youtube
+navbar_twitter_description	A form to launch advanced search queries on Twitter including by time interval up to the minute	Formulaire pour lancer des requêtes de recherche avancée sur Twitter, y compris par intervalle de temps à la minute	Una forma de lanzar consultas de búsqueda avanzada en Twitter incluyendo por intervalo de tiempo hasta el minuto	Μια φόρμα για να ξεκινήσει την προηγμένη ερωτήματα αναζήτησης στο Twitter μεταξύ άλλων μέσω χρονικό διάστημα μέχρι στιγμής
+navbar_magnifier_description	A magnifying lens and a photo editor to help you examine an image thoroughly	Une loupe et un éditeur de photos pour vous aider à examiner à fond une image	Una lente de aumento y un editor de fotos para ayudarle a examinar a fondo una imagen	Ένας μεγεθυντικός φακός και ένα πρόγραμμα επεξεργασίας φωτογραφιών που σας βοηθά να εξετάσει σε βάθος μια εικόνα
+navbar_metadata_description	A metadata extractor for jpeg images and videos (in mp4 or m4v format)	Un extracteur de métadonnées pour les images JPEG et des vidéos (en format MP4 ou M4V) de	Un extractor de metadatos para imágenes y vídeos (en formato m4v mp4 o jpeg)	Ένας απαγωγέας μεταδεδομένων για jpeg εικόνες και βίντεο (σε mp4 ή μορφή m4v)
+navbar_rights_description	Information about the legal rights of a Youtube or Twitter video	Informations sur les droits juridiques d'une vidéo Youtube ou Twitter	Información sobre los derechos legales de un vídeo de Youtube o Twitter	Πληροφορίες σχετικά με τα νόμιμα δικαιώματα του Youtube ή το Twitter βίντεο
+navbar_forensic_description	An enhanced toolkit to detect image forgeries	Une boîte à outils améliorée pour détecter les falsifications d'images	Un conjunto de herramientas mejorado para detectar falsificaciones imagen	Μια ενισχυμένη εργαλειοθήκη για την ανίχνευση πλαστά εικόνα
+navbar_covidsearch_description	A customised search engine on Factchecks and debunks.	Un moteur de recherche personnalisé pour retrouver des factchecks	Un motor personalizado de búsqueda de chequeos	Μια προσαρμοσμένη μηχανή αναζήτησης σε ένταξη και debunks.
+navbar_xnetwork_description	A customised search engine for cross-network queries	Un moteur de recherche personnalisé pour les requêtes inter-réseaux	Un motor de búsqueda personalizada para consultas entre redes	Μια προσαρμοσμένη μηχανή αναζήτησης για ερωτήματα cross-δίκτυο
+navbar_ocr_description	Optical character recognition for images	Reconnaissance optique de caractères pour les images	Reconocimiento óptico de caracteres para imágenes	Οπτική αναγνώριση χαρακτήρων για εικόνες
+navbar_gif_description	Generates a gif image composed of an original image and a tampered one (including if the image has been cropped)	Génère une image gif composée d'une image originale et une manipulée (y compris si l'image a été rognée)	Genera una imagen gif compuesta de una imagen original y una manipulada (incluyendo si la imagen ha sido recortada)	Δημιουργεί μια εικόνα GIF αποτελείται από μια πρωτότυπη εικόνα και μιας παραβιασμένης όνη (συμπεριλαμβανομένου του αν έχει περικοπεί η εικόνα)
+api_help_video	https://www.youtube.com/embed/eEVTYq1LMxM?rel=0	https://www.youtube.com/embed/6kkulKrgtLQ?rel=0	https://www.youtube.com/embed/FtAbxbrJMMY?rel=0	https://www.youtube.com/embed/eEVTYq1LMxM?rel=0
+keyframes_help_video	https://www.youtube.com/embed/iNs8y5DoxP8?rel=0	https://www.youtube.com/embed/kXtjUWTqgFQ?rel=0	https://www.youtube.com/embed/0seFvJXegyc?rel=0	https://www.youtube.com/embed/iNs8y5DoxP8?rel=0
+thumbnails_help_video	https://www.youtube.com/embed/Vn0XGlOkSRQ?rel=0	https://www.youtube.com/embed/Ioe5yDqPaL8?rel=0	https://www.youtube.com/embed/cmv_1KJlbhE?rel=0	https://www.youtube.com/embed/Vn0XGlOkSRQ?rel=0
+twitter_help_video	https://www.youtube.com/embed/wzMCtpENuHA?rel=0	https://www.youtube.com/embed/g0GldCZCh_Q?rel=0	https://www.youtube.com/embed/zHYJ43lhhOY?rel=0	https://www.youtube.com/embed/wzMCtpENuHA?rel=0
+magnifier_help_video	https://www.youtube.com/embed/JljRs8p4aK4?rel=0	https://www.youtube.com/embed/_FVyFgMqErM?rel=0	https://www.youtube.com/embed/IMutZWgZEGk?rel=0	https://www.youtube.com/embed/JljRs8p4aK4?rel=0
+metadata_help_video	https://www.youtube.com/embed/Mg6Z-Jc54yo?rel=0	https://www.youtube.com/embed/RtG3kWzZfO0?rel=0	https://www.youtube.com/embed/uM-tlI6DpIE?rel=0	https://www.youtube.com/embed/Mg6Z-Jc54yo?rel=0
+copyright_help_video	https://www.youtube.com/embed/NjTXsbF5Wu8?rel=0	https://www.youtube.com/embed/dDQWlR8u-mk?rel=0	https://www.youtube.com/embed/36hvLnIugjI?rel=0	https://www.youtube.com/embed/NjTXsbF5Wu8?rel=0
+forensic_help_video	https://www.youtube.com/embed/de862rAPne4?rel=0	https://www.youtube.com/embed/jiqcixMzmpo?rel=0	https://www.youtube.com/embed/B2D0kPOAWxM?rel=0	https://www.youtube.com/embed/de862rAPne4?rel=0
+close	Close	Fermer	Cerrar	Κλείσιμο
+category_video	Video	Vidéo	Video	βίντεο
+category_image	Image	Image	Imagen	Εικόνα
+category_search	Search	Recherche	Busqueda	Αναζήτηση
+category_data	Data analysis	Analyse des données	Análisis de datos	Ανάλυση δεδομένων

@@ -1,7 +1,9 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
-import ReactMapGL, {Marker} from "react-map-gl"
+import MapGL, {Marker} from "react-map-gl"
 import LocationOnIcon from '@material-ui/icons/LocationOn';
+import 'mapbox-gl/dist/mapbox-gl.css';
+
 
 const MyMap = (props) => {
 
@@ -14,7 +16,7 @@ const MyMap = (props) => {
             longitude: default_long,
             width: "100%",
             height: "400px",
-            zoom: 10
+            zoom: 6
         }
     );
 
@@ -46,10 +48,11 @@ const MyMap = (props) => {
 
 
     return (
-        <ReactMapGL
+        <MapGL
             {...view}
             onViewportChange={view => setView(view)}
-            mapStyle={"https://api.maptiler.com/maps/basic/style.json?key="+process.env.REACT_APP_MAP_TOKEN}
+            mapboxApiAccessToken={process.env.REACT_APP_MAP_TOKEN}
+            mapStyle="mapbox://styles/mapbox/streets-v11"
         >
             <Marker
                 latitude={markerLat}
@@ -61,7 +64,7 @@ const MyMap = (props) => {
                     onClick={() => window.open(infoLink, "_blank")}
                 />
             </Marker>
-        </ReactMapGL>
+        </MapGL>
     )
 };
 export default MyMap;

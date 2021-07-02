@@ -1,19 +1,26 @@
-	en	fr	es
-navbar_tools	Tools	Outils	Herramientas
-navbar_about	About	A propos	Sobre nosotros
-navbar_tuto	Tutorial	Tutoriel	Tutorial
-navbar_twitter_sna	Twitter SNA.	Twitter SNA.	Twitter SNA.
-navbar_classroom	Classroom	Salle de cours	Aula
-navbar_quiz	Interactive	Interactif	Interactivo
-navbar_analysis	Analysis	Analyse	Análisis
-navbar_keyframes	Keyframes	Images clés	Imágenes claves
-navbar_thumbnails	Thumbnails	Imagettes	Miniaturas
-navbar_twitter	Tw. search	Recherche Tw.	Búsqueda Tw.
-navbar_magnifier	Magnifier	Loupe	Lupa
-navbar_metadata	Metadata	Metadonnées	Metadatos
-navbar_rights	Video rights	Droits vidéo	Derechos video
-navbar_forensic	Forensic	Forensic	Forensic
-navbar_factCheck	Fact Check	Factuel	Factual
-navbar_covidsearch	COVID-19 Debunk search	Recherche COVID-19	Búsqueda COVID-19
-navbar_xnetwork	XNetwork Debunk search	Recherche XNetwork	Búsqueda XNetwork
-navbar_assistant	Assistant	Temp	Temp
+	en	fr	es	el
+navbar_tools	Tools	Outils	Herramientas	Εργαλεία
+navbar_about	About	A propos	Sobre nosotros	Σχετικά με
+navbar_tuto	Guide	Guider	Guía	Οδηγός
+navbar_twitter_sna	Twitter SNA.	Twitter SNA.	Twitter SNA.	Twitter SNA.
+navbar_classroom	Classroom	Salle de cours	Aula	ΣΧΟΛΙΚΗ ΑΙΘΟΥΣΑ
+navbar_quiz	Demo	Demo	Demo	Διαδήλωση
+navbar_analysis	Video analysis	Analyse	Video análisis	Ανάλυση
+navbar_keyframes	Keyframes	Images clés	Fotogramas clave	Χαρακτηριστικά καρέ
+navbar_thumbnails	Thumbnails	Imagettes	Miniaturas	Μικρογραφίες
+navbar_twitter	Tw. search	Recherche Tw.	Búsqueda Tw.	Αναζήτηση στο Twitter
+navbar_magnifier	Magnifier	Loupe	Lupa	Μεγεθυντικός φακός
+navbar_metadata	Metadata	Metadonnées	Metadatos	Μεταδεδομένα
+navbar_rights	Video rights	Droits vidéo	Derechos video	Δικαιώματα βίντεο
+navbar_forensic	Forensic	Forensic	Forensic	Αυθεντικότητας Εικόνων
+navbar_factCheck	Fact Check	Factuel	Factual	Έλεγχος γεγονότων
+navbar_covidsearch	Covid-19 SE	Rech. Covid-19	Búsq. Covid-19	Covid-19
+navbar_assistant	Assistant	Assistant	Asistente	Βοηθός
+navbar_xnetwork	Xnetwork	Xnetwork	Xnetwork	Xnetwork
+navbar_ocr	OCR	OCR	OCR	OCR
+navbar_gif	CheckGif	CheckGif	CheckGif	CheckGif
+cookies_decline	Decline	Refuser	Rechazar	Aπόρριψη
+cookies_accept	Accept	Accepter	Aceptar	Αποδοχή
+cookies_message	The plugin needs your authorization to use cookies to enhance your user experience. No personal data is recorded.	Cette extension a besoin de votre autorisation pour utiliser des cookies afin d'améliorer votre expérience utilisateur. Aucune donnée personnelle n'est enregistrée.	El plugin necesita su autorización para utilizar cookies para mejorar su experiencia de usuario. No se guardan datos personales.	Η προσθήκη χρειάζεται την εξουσιοδότησή σας για τη χρήση cookie για τη βελτίωση της εμπειρίας του χρήστη σας.
+navbar_analysis_image	Image Analysis	Analyse d'image	Análisis de Imagen	Ανάλυση εικόνας
+navbar_analysis_video	Video Analysis	Analyse Vidéo	Análisis de Vídeo	Βίντεο ανάλυση

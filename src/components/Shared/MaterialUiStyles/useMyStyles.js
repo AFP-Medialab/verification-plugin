@@ -1,4 +1,4 @@
-import makeStyles from "@material-ui/core/styles/makeStyles";
+import {makeStyles} from "@material-ui/core/styles";
 import {green} from "@material-ui/core/colors";
 
 const drawerWidth = 200;
@@ -10,6 +10,16 @@ const useMyStyles = makeStyles(theme => ({
         textAlign: "center",
        
     },
+
+    rootNoCenter: {
+        padding: theme.spacing(2),
+    },
+
+    noMargin: {
+        marginLeft: "0px!important",
+        marginRight: "0px!important"
+    },
+
     circularProgress: {
         margin: "auto",
         width: "100%"
@@ -54,6 +64,8 @@ const useMyStyles = makeStyles(theme => ({
     },
     appBar: {
         zIndex: theme.zIndex.drawer + 1,
+        height: "83px",
+        backgroundColor: "#ffffff"
     },
     drawer: {
         width: drawerWidth,
@@ -83,7 +95,11 @@ const useMyStyles = makeStyles(theme => ({
     },
     content: {
         flexGrow: 1,
-        padding: theme.spacing(3),
+        paddingLeft: theme.spacing(3),
+        paddingRight: theme.spacing(3),
+        paddingTop: "50px",
+        backgroundColor: "#fafafa",
+        minHeight: "97vh"
     },
     logoLeft: {
         cursor: "pointer",
@@ -340,32 +356,32 @@ const useMyStyles = makeStyles(theme => ({
         [theme.breakpoints.up('sm')]: {
             fontSize: theme.typography.pxToRem(13),
             minWidth: 100,
+            color: "#4c4c4c"
         },
-    },
-    assistantCards: {
-        marginBottom: 2,
-        backgroundColor: theme.palette.primary.light,
-        '&:hover': {
-            backgroundColor: theme.palette.secondary.main,
-        },
-        borderColor:"darkcyan",
-        borderStyle: "solid",
-        borderWidth: "2px"
     },
     toolTipIcon: {
         color: theme.palette.secondary,
         position: "relative",
         opacity: 0.7,
-        top: theme.spacing.unit,
+        top: theme.spacing(1),
         width: theme.typography.h5.fontSize,
         height: theme.typography.h5.fontSize,
         marginRight: 3,
         marginLeft: 5
     },
+    svgIcon: {
+        fill: theme.palette.primary,
+        position: "relative",
+        top: theme.spacing(1),
+        width: theme.typography.h3.fontSize,
+        height: theme.typography.h3.fontSize,
+        marginRight: 7,
+        marginLeft: 5,
+    },
     toolTipWarning: {
         color: "red",
         position: "relative",
-        top: theme.spacing.unit,
+        top: theme.spacing(1),
         width: theme.typography.h5.fontSize,
         height: theme.typography.h5.fontSize,
         marginRight: 3,
@@ -388,17 +404,23 @@ const useMyStyles = makeStyles(theme => ({
         lineHeight: 1.5,
         letterSpacing: "0.00938em",
     },
-    assistantRoot: {
-        padding: theme.spacing(3, 2),
-        backgroundColor: "#F7F7F7",
-        marginTop: 5,
-        textAlign: "left",
-    },
     assistantGrid: {
         width: "100%",
         marginBottom: 2,
         textAlign: "left",
         font: theme.typography.h6.fontSize
+    },
+    assistantHover: {
+        borderWidth: 3,
+        '&:hover': {
+            borderColor: theme.palette.primary.main,
+        },
+    },
+    assistantSelected: {
+        borderColor: theme.palette.primary.main,
+        '&:hover': {
+            borderColor: theme.palette.primary.main,
+        }
     },
     customAllToolsButton: {
         padding: 0,
@@ -414,7 +436,226 @@ const useMyStyles = makeStyles(theme => ({
     customAllToolsIconSelected: {
         fontSize: "inherit",
         color: theme.palette.primary.main
-    }
+    },
+
+
+
+    /* Forensic classes */
+    /* ================================================================================== */
+    newForensics:{
+        spacing: 8,
+        marginTop: -40
+    },
+
+    cardFilters:{
+        height: "100%"
+    },
+
+    lensesCard: {
+        flexGrow: 1,
+    },
+
+    imageUploaded:{
+        objectFit: "contain",
+        objectPosition: "top",
+        maxHeight:"48vh",
+    },
+
+    imageFilter: {
+        height: "13vh",
+        backgroundPosition: "center",
+        backgroundSize: "contain",
+    },
+
+    headerUpladedImage: {
+        paddingTop: "11px!important",
+        paddingBottom: "11px!important",
+    },
+
+    imageOverlayWrapper: {
+        position: "relative",
+    },
+
+    imageOverlay: {
+        position: "absolute",
+        top: 0,
+        bottom: 0,
+        left: 0,
+        right: 0,
+        display: "flex",
+        alignItems: "center",
+        transition: "visibility 0s, opacity 0.2s linear",
+        opacity: 0,
+        '&:hover': {
+            opacity: 1,
+        }
+    },
+
+    filterDisplayedClass: {
+        position: "absolute",
+        objectFit: "contain",
+        objectPosition: "top",
+        maxHeight: "48vh",
+        top:0,
+        left: 0,
+        bottom: 0,
+        right:0,
+    },
+
+    wrapperImageFilter: {
+        position: "relative",
+    },
+
+
+    imagesGifImage: {
+        backgroundPosition: "center",
+        backgroundSize: "contain",
+        objectFit: "contain",
+        objectPosition: "top",
+        maxHeight: "30vh",
+
+        position: "relative",
+        top: 0,
+        left: 0,
+    },
+
+    imagesGifFilter: {
+        backgroundPosition: "center",
+        backgroundSize: "contain",
+        objectFit: "contain",
+        objectPosition: "top",
+        maxHeight: "30vh",
+
+        position: "absolute",
+        top: 0,
+        left: 0,
+    },
+
+    sliderClass: {
+        maxWidth:"30vw"
+    },
+
+
+    /* CheckGIF classes */
+    /* ================================================================================== */
+
+    dropArea: {
+        height: "20vh"
+
+    },
+
+
+    dropZone: {
+        border: 'dashed grey 2px',
+        borderRadius: "25px",
+        height: "25vh",
+        minHeight: "200px"
+    },
+
+    dropZoneInside: {
+        width: "100%",
+        height: "100%",
+
+    },
+
+
+    imageDropped: {
+        height: "25vh",
+        minHeight: "200px"
+    },
+
+    inputContainer:{
+        position: "relative",
+    },
+
+    
+
+    inputLabel: {
+        cursor: "pointer",
+    },
+
+    inputInput: {
+        position: "absolute",
+        zIndex: 2,
+        width: "0.1px",
+        height: "0.1px",
+        opacity: 0,
+        overflow: "hidden",
+    },
+
+    headingGif: {
+        fontSize: "1rem",
+        fontWeight: "600",
+    },
+
+    buttonGif: {
+        weight: "100%!important",
+    },
+
+
+
+
+    bigButtonDiv: {
+        border: 'solid #E1E1E1 2px',
+        borderRadius: "25px",
+        cursor: "pointer",
+
+        "&:hover": {
+            border: 'solid #51A5B2 2px',
+
+        },
+    },
+
+
+    bigButtonDivSelectted: {
+        border: 'solid #51A5B2 3px',
+        borderRadius: "25px",
+    },
+
+    bigButtonIcon: {
+
+        height: "50px",
+        width: "auto",
+        color: "#9A9A9A"
+
+    },
+
+    bigButtonIconSelectted: {
+
+        height: "50px",
+        width: "auto",
+        color: "#51A5B2"
+
+    },
+
+
+    height100: {
+        height: "100%",
+    },
+
+    root2: {
+        textAlign: "center",
+        padding: theme.spacing(3),
+
+    },
+
+    toolCardStyle: {
+        width: "25%", 
+        maxWidth: "350px", 
+        minWidth: "250px",
+    },
+
+    dialogTitleWithButton: {
+        display: "flex",
+        justifyContent: "space - between",
+        alignItems: "center",
+    },
 
 }));
+export const myCardStyles = makeStyles({
+    root: {
+        overflow: "visible"
+    }
+});
 export default useMyStyles;
+

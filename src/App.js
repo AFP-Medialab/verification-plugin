@@ -54,6 +54,7 @@ const NotFound = () => {
 function App() {
 
   const cookies = useSelector(state => state.cookies);
+  const googleAnalytic = useSelector(state => state.googleAnalytic);
 
   useEffect(() => {
     const trackingId = process.env.REACT_APP_GOOGLE_ANALYTICS_KEY;
@@ -71,13 +72,13 @@ function App() {
   }, []);
 
   useEffect(() => {
-    if (cookies !== null && cookies) {
+    if (googleAnalytic!== null && googleAnalytic) {
       window['ga-disable-' + process.env.REACT_APP_GOOGLE_ANALYTICS_KEY] = false;
     } else {
       window['ga-disable-' + process.env.REACT_APP_GOOGLE_ANALYTICS_KEY] = true;
     }
 
-  }, [cookies]);
+  }, [cookies, googleAnalytic]);
 
   const authenticationAPI = useAuthenticationAPI();
 
@@ -105,7 +106,7 @@ function App() {
         <Switch>
           <Route exact path={"/"} component={PopUp} />
           <Route path={"/app"} component={NavBar} />
-          <Route component={NotFound} />
+          <Route id="test" component={NotFound} />
         </Switch>
       </MuiThemeProvider>
     </Router>

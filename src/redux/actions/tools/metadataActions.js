@@ -30,3 +30,10 @@ export const cleanMetadataState = () => {
         type: "METADATA_CLEAN_STATE"
     }
 }
+
+export const setMetadataMediaType = (type) => {
+    return {
+        type: "SET_METADATA_MEDIA_TYPE",
+        payload: type
+    }
+}

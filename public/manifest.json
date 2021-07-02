@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name" :"Fake news debunker by InVID & WeVerify",
-  "version" :"0.73",
+  "version" :"0.74",
   "description" :"InVID WeVerify extension",
   "short_name": "Verification Plugin",
   "browser_action": {
@@ -22,6 +22,7 @@
     "48": "img/icon-48.png",
     "128": "img/icon-128.png"
   },
+  "options_page": "",
   "permissions": ["activeTab", "tabs", "contextMenus"],
   "content_security_policy": "script-src 'self' 'unsafe-eval' https://www.google-analytics.com https://cse.google.com https://www.google.com chrome-extension://cse.google.com; object-src 'self'",
   "web_accessible_resources": ["/popup.html"]

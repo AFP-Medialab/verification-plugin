@@ -1,4 +1,3 @@
-import {Paper} from "@material-ui/core";
 import React, {useState} from "react";
 import Loop from "./Loop";
 import Box from "@material-ui/core/Box";
@@ -21,6 +20,8 @@ import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Magnif
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 import OnClickInfo from "../../../../Shared/OnClickInfo/OnClickInfo";
 import ImageReverseSearch from "../../ImageReverseSearch"
+import Card from "@material-ui/core/Card";
+import CardHeader from "@material-ui/core/CardHeader";
 
 const myTheme = {
     'loadButton.backgroundColor': "#151515",
@@ -45,9 +46,9 @@ const myTheme = {
 
 
     // submenu icons
-    'submenu.normalIcon.path': '../dist/svg/icon-a.svg',
+    'submenu.normalIcon.path': icona,
     'submenu.normalIcon.name': 'icon-a',
-    'submenu.activeIcon.path': '../dist/svg/icon-c.svg',
+    'submenu.activeIcon.path': iconc,
     'submenu.activeIcon.name': 'icon-c',
     'submenu.iconSize.width': '64px',
     'submenu.iconSize.height': '64px',
@@ -118,180 +119,188 @@ const ImageResult = () => {
     };
 
     return (
-        <Paper className={classes.root}>
-            <CloseResult onClick={() => dispatch(cleanMagnifierState())}/>
-            <Modal
-                aria-labelledby="transition-modal-title"
-                aria-describedby="transition-modal-description"
-                className={classes.modal}
-                open={open}
-                onClose={handleClose}
-                closeAfterTransition
-                BackdropComponent={Backdrop}
-                BackdropProps={{
-                    timeout: 500,
-                }}
-            >
-                <Fade in={open}>
-                    <div className={classes.paper}>
-                        <ImageEditor
-                            includeUI={{
-                                loadImage: {
-                                    path: resultImage,
-                                    name: 'SampleImage'
-                                },
-                                theme: myTheme,
-                                menu: ["crop", "flip", "rotate", "filter"],
-                                initMenu: "",
-                                uiSize: {
-                                    height: `calc(100vh - 160px)`,
-                                },
-                                menuBarPosition: "bottom",
-                            }}
-                            cssMaxHeight={window.innerHeight * 0.8}
-                            cssMaxWidth={window.innerWidth * 0.8}
-                            selectionStyle={{
-                                cornerSize: 20,
-                                rotatingPointOffset: 70,
-                            }}
-                            usageStatistics={false}
-                            ref={imageEditor}
-                        />
-                        <Box m={1}/>
+        <Card>
+            <CardHeader
+                title={keyword("cardheader_results")}
+                className={classes.headerUpladedImage}
+            />
 
-                        <div className={classes.modalButton}>
-                            <Button variant="contained" color="secondary" onClick={() => setOpen(false)}>
-                                {
-                                    keyword("quit")
-                                }
-                            </Button>
-                            <div className={classes.grow}/>
-                            <Button variant="contained" color="secondary" onClick={handleClose}>
-                                {
-                                    keyword("save")
-                                }
-                            </Button>
+            <div className={classes.root2}>
+                <CloseResult onClick={() => dispatch(cleanMagnifierState())}/>
+                <Modal
+                    aria-labelledby="transition-modal-title"
+                    aria-describedby="transition-modal-description"
+                    className={classes.modal}
+                    open={open}
+                    onClose={handleClose}
+                    closeAfterTransition
+                    BackdropComponent={Backdrop}
+                    BackdropProps={{
+                        timeout: 500,
+                    }}
+                >
+                    <Fade in={open}>
+                        <div className={classes.paper}>
+                            <ImageEditor
+                                includeUI={{
+                                    loadImage: {
+                                        path: resultImage,
+                                        name: 'SampleImage'
+                                    },
+                                    theme: myTheme,
+                                    menu: ["crop", "flip", "rotate", "filter"],
+                                    initMenu: "",
+                                    uiSize: {
+                                        height: `calc(100vh - 160px)`,
+                                    },
+                                    menuBarPosition: "bottom",
+                                }}
+                                cssMaxHeight={window.innerHeight * 0.8}
+                                cssMaxWidth={window.innerWidth * 0.8}
+                                selectionStyle={{
+                                    cornerSize: 20,
+                                    rotatingPointOffset: 70,
+                                }}
+                                usageStatistics={false}
+                                ref={imageEditor}
+                            />
+                            <Box m={1}/>
+
+                            <div className={classes.modalButton}>
+                                <Button variant="contained" color="secondary" onClick={() => setOpen(false)}>
+                                    {
+                                        keyword("quit")
+                                    }
+                                </Button>
+                                <div className={classes.grow}/>
+                                <Button variant="contained" color="secondary" onClick={handleClose}>
+                                    {
+                                        keyword("save")
+                                    }
+                                </Button>
+                            </div>
                         </div>
-                    </div>
-                </Fade>
-            </Modal>
+                    </Fade>
+                </Modal>
 
-            <Box m={1}/>
-            <Grid
-                container
-                direction="row"
-                justify="center"
-                alignItems="center"
-                spacing={3}
-            >
-                <Grid item>
-                    <Button color="primary" variant="contained" onClick={handleOpen}>
-                        {
-                            keyword("edit_image")
-                        }
-                    </Button>
-                </Grid>
-                <Grid item>
-                    <a style={{"text-decoration": "none"}} href={resultImage} download={downLoadLink(resultImage)}>
-                        <Button color="primary" variant="contained">
+                <Box m={1}/>
+                <Grid
+                    container
+                    direction="row"
+                    justify="center"
+                    alignItems="center"
+                    spacing={3}
+                >
+                    <Grid item>
+                        <Button color="primary" variant="contained" onClick={handleOpen}>
+
                             {
-                                keyword("download")
+                                keyword("edit_image")
                             }
                         </Button>
-                    </a>
+                    </Grid>
+                    <Grid item>
+                        <a style={{"textDecoration": "none"}} href={resultImage} download={downLoadLink(resultImage)}>
+                            <Button color="primary" variant="contained">
+                                {
+                                    keyword("download")
+                                }
+                            </Button>
+                        </a>
+                    </Grid>
                 </Grid>
-            </Grid>
-            <Box m={2}/>
-            <Loop src={resultImage}/>
-            <Box m={2}/>
-            {
-                !imageIsUrl ?
-                    <Grid
-                        container
-                        direction="row"
-                        justify="center"
-                        alignItems="center"
-                        spacing={3}
-                    >
-                        <Grid item>
-                            <OnClickInfo keyword={"magnifier_tip"}/>
+                <Box m={2}/>
+                <Loop src={resultImage}/>
+                <Box m={2}/>
+                {
+                    !imageIsUrl ?
+                        <Grid
+                            container
+                            direction="column"
+                            justify="center"
+                            alignItems="center"
+                            spacing={3}
+                        >
+                            <Grid item>
+                                <OnClickInfo keyword={"magnifier_tip"}/>
+                            </Grid>
+                            <Grid item>
+                                <Button color="primary"
+                                        variant="contained"
+                                        onClick={GoogleClick}>
+                                    {
+                                        keyword("magnifier_google")
+                                    }
+                                </Button>
+                            </Grid>
                         </Grid>
-                        <Grid item>
-                            <Button color="primary"
-                                    variant="contained"
-                                    onClick={GoogleClick}>
-                                {
-                                    keyword("magnifier_google")
-                                }
-                            </Button>
+                        :
+                        <Grid
+                            container
+                            direction="row"
+                            justify="center"
+                            alignItems="center"
+                            spacing={3}
+                        >
+                            <Grid item>
+                                <Button color="primary"
+                                        variant="contained"
+                                        onClick={() => ImageReverseSearch("google", original)}>
+                                    {
+                                        "Google " +  keyword("reverse_search")
+                                    }
+                                </Button>
+                            </Grid>
+                            <Grid item>
+                                <Button color="primary"
+                                        variant="contained"
+                                        onClick={() => ImageReverseSearch("baidu", original)}>
+                                    {
+                                        "Baidu " + keyword("reverse_search")
+                                    }
+                                </Button>
+                            </Grid>
+                            <Grid item>
+                                <Button color="primary"
+                                        variant="contained"
+                                        onClick={() => ImageReverseSearch("bing", original)}>
+                                    {
+                                        "Bing " + keyword("reverse_search")
+                                    }
+                                </Button>
+                            </Grid>
+                            <Grid item>
+                                <Button color="primary"
+                                        variant="contained"
+                                        onClick={() => ImageReverseSearch("tineye", original)}>
+                                    {
+                                        "Tineye " + keyword("reverse_search")
+                                    }
+                                </Button>
+                            </Grid>
+                            <Grid item>
+                                <Button color="primary"
+                                        variant="contained"
+                                        onClick={() => ImageReverseSearch("yandex", original)}>
+                                    {
+                                        "Yandex " + keyword("reverse_search")
+                                    }
+                                </Button>
+                            </Grid>
+                            <Grid item>
+                                <Button color="primary"
+                                        variant="contained"
+                                        onClick={() => ImageReverseSearch("reddit", original)}>
+                                    {
+                                        "Reddit " + keyword("reverse_search")
+                                    }
+                                </Button>
+                            </Grid>
                         </Grid>
-                    </Grid>
-                    :
-                    <Grid
-                        container
-                        direction="row"
-                        justify="center"
-                        alignItems="center"
-                        spacing={3}
-                    >
-                        <Grid item>
-                            <Button color="primary"
-                                    variant="contained"
-                                    onClick={() => ImageReverseSearch("google", original)}>
-                                {
-                                    "Google " +  keyword("reverse_search")
-                                }
-                            </Button>
-                        </Grid>
-                        <Grid item>
-                            <Button color="primary"
-                                    variant="contained"
-                                    onClick={() => ImageReverseSearch("baidu", original)}>
-                                {
-                                    "Baidu " + keyword("reverse_search")
-                                }
-                            </Button>
-                        </Grid>
-                        <Grid item>
-                            <Button color="primary"
-                                    variant="contained"
-                                    onClick={() => ImageReverseSearch("bing", original)}>
-                                {
-                                    "Bing " + keyword("reverse_search")
-                                }
-                            </Button>
-                        </Grid>
-                        <Grid item>
-                            <Button color="primary"
-                                    variant="contained"
-                                    onClick={() => ImageReverseSearch("tineye", original)}>
-                                {
-                                    "Tineye " + keyword("reverse_search")
-                                }
-                            </Button>
-                        </Grid>
-                        <Grid item>
-                            <Button color="primary"
-                                    variant="contained"
-                                    onClick={() => ImageReverseSearch("yandex", original)}>
-                                {
-                                    "Yandex " + keyword("reverse_search")
-                                }
-                            </Button>
-                        </Grid>
-                        <Grid item>
-                            <Button color="primary"
-                                    variant="contained"
-                                    onClick={() => ImageReverseSearch("reddit", original)}>
-                                {
-                                    "Reddit " + keyword("reverse_search")
-                                }
-                            </Button>
-                        </Grid>
-                    </Grid>
 
-            }
-        </Paper>
+                }
+            </div>
+        </Card>
     )
 };
 export default ImageResult;

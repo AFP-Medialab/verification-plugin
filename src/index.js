@@ -17,7 +17,9 @@ function saveToLocalStorage(state) {
             humanRightsCheckBox: state.humanRightsCheckBox,
             interactiveExplanation: state.interactiveExplanation,
             language: state.language,
+            defaultLanguage: state.defaultLanguage,
             cookies: state.cookies,
+            googleAnalytic: state.googleAnalytic,
             userSession: state.userSession
         };
         const serializedState = JSON.stringify(savedState);

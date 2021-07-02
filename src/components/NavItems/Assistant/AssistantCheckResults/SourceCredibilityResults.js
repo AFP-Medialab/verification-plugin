@@ -1,5 +1,4 @@
 import React from "react";
-import {useSelector} from "react-redux";
 
 import Avatar from "@material-ui/core/Avatar";
 import Box from "@material-ui/core/Box";
@@ -13,11 +12,10 @@ import Typography from "@material-ui/core/Typography";
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/Assistant.tsv";
 
-const SourceCredibilityResults = () => {
+const SourceCredibilityResults = (props) => {
 
-    const sourceCredibilityResults = useSelector(state => state.assistant.inputUrlSourceCredibility)
+    const sourceCredibilityResults = props.scResultFiltered
     const keyword = useLoadLanguage("components/NavItems/tools/Assistant.tsv", tsv);
-
     return (
         <List disablePadding={true}>
             {sourceCredibilityResults ?
@@ -30,16 +28,25 @@ const SourceCredibilityResults = () => {
                             primary={
                                 <Typography component={"div"} align={"left"}>
                                     <Box fontWeight="fontWeightBold">
-                                        {keyword("source_credibility_warning")}
+                                        {keyword("source_credibility_warning")} {value.credibility_source}
                                     </Box>
                                 </Typography>}
                             secondary={
-                                <Typography>
-                                    "{value.credibility_labels}" {keyword("according_to")} {value.credibility_source}
-                                </Typography>}/>
-                    </ListItem>))  :
+                                <Typography component={"div"}>
+                                    {value.credibility_labels ?
+                                        <Typography> {keyword("labelled_as")} "{value.credibility_labels}" </Typography>
+                                        : null
+                                    }
+                                    {value.credibility_description ?
+                                        <Typography> {keyword("commented_as")} "{value.credibility_description}" </Typography>
+                                        : null
+                                    }
+                                </Typography>
+                            }/>
+                    </ListItem>)) :
                 null
             }
         </List>
-        )};
+    )
+};
 export default SourceCredibilityResults;

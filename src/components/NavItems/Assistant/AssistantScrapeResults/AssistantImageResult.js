@@ -22,11 +22,11 @@ const AssistantImageResult = () => {
     return (
         <Card variant={"outlined"}>
             <CardMedia>
-                <img src={processUrl} height={"100%"} alt={processUrl} width={"100%"}/>
+                <img crossOrigin={"anonymous"} src={processUrl} height={"100%"} alt={processUrl} width={"100%"}/>
             </CardMedia>
             <CardActions>
                 <ImageIcon color={"action"}/>
-                <Link href={processUrl} color={"textSecondary"} variant={"subtitle2"}>
+                <Link href={processUrl} target={"_blank"} color={"textSecondary"} variant={"subtitle2"}>
                     {processUrl.length>60 ? processUrl.substring(0,60) + "...": processUrl}
                 </Link>
                 <Tooltip title={"Copy link"}>

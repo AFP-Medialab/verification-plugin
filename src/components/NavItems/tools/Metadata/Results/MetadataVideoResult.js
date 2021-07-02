@@ -1,4 +1,3 @@
-import {Paper} from "@material-ui/core";
 import {useDispatch} from "react-redux";
 import React from "react";
 import Typography from "@material-ui/core/Typography";
@@ -16,6 +15,8 @@ import MapIcon from "@material-ui/icons/Map";
 import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Metadata.tsv";
 import OnClickInfo from "../../../../Shared/OnClickInfo/OnClickInfo";
+import Card from "@material-ui/core/Card";
+import CardHeader from "@material-ui/core/CardHeader";
 
 const MetadataVideoResult = (result) => {
     const classes = useMyStyles();
@@ -308,139 +309,146 @@ const MetadataVideoResult = (result) => {
 
     const dispatch = useDispatch();
     return (
-        <Paper className={classes.root}>
-            <CloseResult onClick={() => dispatch(cleanMetadataState())}/>
-            <Box m={1}/>
-            <OnClickInfo keyword={"metadata_tip"}/>
-            <Box m={3}/>
-            <Typography variant={"h5"}>
-                {keyword("metadata_title")}
-            </Typography>
-            <div>
-                <Table size="small" aria-label="a dense table">
-                    <TableBody>
-                        {
-                            videoMetadata &&
-                            videoMetadata.map((value, key) => {
-                                if (value.value)
-                                    return (
-                                        <TableRow key={key}>
-                                            <Tooltip title={value.description} placement="right">
-                                                <TableCell component="th" scope="row">
-                                                    {value.title}
-                                                </TableCell>
-                                            </Tooltip>
-                                            <TableCell align="right">{value.value}</TableCell>
-                                        </TableRow>
-                                    );
-                                return null;
-                            })
-                        }
-                    </TableBody>
-                </Table>
-            </div>
-            <Box m={3}/>
-            <Typography variant={"h5"}>
-                {keyword("track_title")}
-            </Typography>
-            <div>
-                <Table size="small" aria-label="a dense table">
-                    <TableBody>
-                        {
-                            videoTrack &&
-                            videoTrack.map((value, key) => {
-                                if (value.value)
-                                    return (
-                                        value.value &&
-                                        <TableRow key={key}>
-                                            <Tooltip title={value.description} placement="right">
-                                                <TableCell component="th" scope="row">
-                                                    {value.title}
-                                                </TableCell>
-                                            </Tooltip>
-                                            <TableCell align="right">{value.value}</TableCell>
-                                        </TableRow>
-                                    );
-                                return null;
-                            })
-                        }
-                    </TableBody>
-                </Table>
-            </div>
-            <Box m={3}/>
-            {
-                audioTrack &&
+        <Card>
+            <CardHeader
+                title={keyword("cardheader_results")}
+                className={classes.headerUpladedImage}
+            />
+
+            <div className={classes.root2}>
+                <CloseResult onClick={() => dispatch(cleanMetadataState())}/>
+                <Box m={1}/>
+                <OnClickInfo keyword={"metadata_tip"}/>
+                <Box m={3}/>
+                <Typography variant={"h5"}>
+                    {keyword("metadata_title")}
+                </Typography>
                 <div>
-                    <Typography variant={"h5"}>
-                        {keyword("audio_title")}
-                    </Typography>
-                    <div>
-                        <Table size="small" aria-label="a dense table">
-                            <TableBody>
-                                {
-                                    audioTrack.map((value, key) => {
-                                        if (value.value)
-                                            return (
-                                                value.value &&
-                                                <TableRow key={key}>
-                                                    <Tooltip title={value.description} placement="right">
-                                                        <TableCell component="th" scope="row">
-                                                            {value.title}
-                                                        </TableCell>
-                                                    </Tooltip>
-                                                    <TableCell align="right">{value.value}</TableCell>
-                                                </TableRow>
-                                            );
-                                        return null;
-                                    })
-                                }
-                            </TableBody>
-                        </Table>
-                    </div>
+                    <Table size="small" aria-label="a dense table">
+                        <TableBody>
+                            {
+                                videoMetadata &&
+                                videoMetadata.map((value, key) => {
+                                    if (value.value)
+                                        return (
+                                            <TableRow key={key}>
+                                                <Tooltip title={value.description} placement="right">
+                                                    <TableCell component="th" scope="row">
+                                                        {value.title}
+                                                    </TableCell>
+                                                </Tooltip>
+                                                <TableCell align="right">{value.value}</TableCell>
+                                            </TableRow>
+                                        );
+                                    return null;
+                                })
+                            }
+                        </TableBody>
+                    </Table>
                 </div>
-            }
-            {
-                report.GPSLatitudeRef &&
+                <Box m={3}/>
+                <Typography variant={"h5"}>
+                    {keyword("track_title")}
+                </Typography>
                 <div>
-                    <Box m={3}/>
-                    <Typography variant={"h5"}>
-                        {keyword("metadata_img_gps_title")}
-                    </Typography>
-                    <div>
-                        <Table size="small" aria-label="a dense table">
-                            <TableBody>
-                                {
-                                    gpsInfo.map((value, key) => {
-                                        if (value.value)
-                                            return (
-                                                value.value &&
-                                                <TableRow key={key}>
-                                                    <Tooltip title={value.description} placement="right">
-                                                        <TableCell component="th" scope="row">
-                                                            {value.title}
-                                                        </TableCell>
-                                                    </Tooltip>
-                                                    <TableCell align="right">{value.value}</TableCell>
-                                                </TableRow>
-                                            );
-                                        return null;
-                                    })
-                                }
-                            </TableBody>
-                        </Table>
-                    </div>
-                    <Box m={2}/>
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={() => window.open(getGoogleMapsLink(report.GPSLatitude, report.GPSLatitudeRef, report.GPSLongitude, report.GPSLongitudeRef), "_blank")}
-                    >
-                        <MapIcon/>
-                        <Typography variant={"subtitle2"}>{keyword("metadata_gps_button")}</Typography>
-                    </Button>
+                    <Table size="small" aria-label="a dense table">
+                        <TableBody>
+                            {
+                                videoTrack &&
+                                videoTrack.map((value, key) => {
+                                    if (value.value)
+                                        return (
+                                            value.value &&
+                                            <TableRow key={key}>
+                                                <Tooltip title={value.description} placement="right">
+                                                    <TableCell component="th" scope="row">
+                                                        {value.title}
+                                                    </TableCell>
+                                                </Tooltip>
+                                                <TableCell align="right">{value.value}</TableCell>
+                                            </TableRow>
+                                        );
+                                    return null;
+                                })
+                            }
+                        </TableBody>
+                    </Table>
                 </div>
-            }
-        </Paper>
+                <Box m={3}/>
+                {
+                    audioTrack &&
+                    <div>
+                        <Typography variant={"h5"}>
+                            {keyword("audio_title")}
+                        </Typography>
+                        <div>
+                            <Table size="small" aria-label="a dense table">
+                                <TableBody>
+                                    {
+                                        audioTrack.map((value, key) => {
+                                            if (value.value)
+                                                return (
+                                                    value.value &&
+                                                    <TableRow key={key}>
+                                                        <Tooltip title={value.description} placement="right">
+                                                            <TableCell component="th" scope="row">
+                                                                {value.title}
+                                                            </TableCell>
+                                                        </Tooltip>
+                                                        <TableCell align="right">{value.value}</TableCell>
+                                                    </TableRow>
+                                                );
+                                            return null;
+                                        })
+                                    }
+                                </TableBody>
+                            </Table>
+                        </div>
+                    </div>
+                }
+                {
+                    report.GPSLatitudeRef &&
+                    <div>
+                        <Box m={3}/>
+                        <Typography variant={"h5"}>
+                            {keyword("metadata_img_gps_title")}
+                        </Typography>
+                        <div>
+                            <Table size="small" aria-label="a dense table">
+                                <TableBody>
+                                    {
+                                        gpsInfo.map((value, key) => {
+                                            if (value.value)
+                                                return (
+                                                    value.value &&
+                                                    <TableRow key={key}>
+                                                        <Tooltip title={value.description} placement="right">
+                                                            <TableCell component="th" scope="row">
+                                                                {value.title}
+                                                            </TableCell>
+                                                        </Tooltip>
+                                                        <TableCell align="right">{value.value}</TableCell>
+                                                    </TableRow>
+                                                );
+                                            return null;
+                                        })
+                                    }
+                                </TableBody>
+                            </Table>
+                        </div>
+                        <Box m={2}/>
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            onClick={() => window.open(getGoogleMapsLink(report.GPSLatitude, report.GPSLatitudeRef, report.GPSLongitude, report.GPSLongitudeRef), "_blank")}
+                        >
+                            <MapIcon/>
+                            <Typography variant={"subtitle2"}>{keyword("metadata_gps_button")}</Typography>
+                        </Button>
+                    </div>
+                }
+            </div>
+        </Card>
     );
 };
 export default MetadataVideoResult;

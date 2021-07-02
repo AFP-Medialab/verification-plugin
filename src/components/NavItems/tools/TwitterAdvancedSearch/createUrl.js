@@ -29,7 +29,7 @@ export const createUrl = (term, account, filter, lang, geocode, near, within, fr
     }
     if (from_date){
         let epoch = (localTime === "false") ? convertToGMT(from_date) : from_date;
-        console.log(epoch)
+        //console.log(epoch)
         twitter_url += "%20since%3A" +  epoch.getTime() / 1000;
     }
     if (to_date) {

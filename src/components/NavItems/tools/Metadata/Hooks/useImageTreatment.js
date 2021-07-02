@@ -3,16 +3,15 @@ import EXIF from "exif-js/exif";
 import {useDispatch} from "react-redux";
 import {setMetadadaResult} from "../../../../../redux/actions/tools/metadataActions";
 import {setError} from "../../../../../redux/actions/errorActions";
-import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
-import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Metadata.tsv";
 
-const useImageTreatment = (mediaUrl) => {
-    const keyword = useLoadLanguage("components/NavItems/tools/Metadata.tsv", tsv);
+const useImageTreatment = (mediaUrl, keyword) => {
     const dispatch = useDispatch();
 
     useEffect(() => {
 
+
         function isEmpty(obj) {
+
             for (let key in obj) {
                 if (obj.hasOwnProperty(key))
                     return false;
@@ -46,6 +45,8 @@ const useImageTreatment = (mediaUrl) => {
 
         if (mediaUrl)
             imageTreatment();
+
+
     }, [mediaUrl, keyword, dispatch]);
 };
 export default useImageTreatment;

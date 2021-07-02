@@ -1,0 +1,26 @@
+	en	fr	es	el
+checkGIF_title	CheckGIF	CheckGIF	CheckGIF	CheckGIF
+checkGIF_description	This feature generates an animated gif image composed of an original image and a tampered one (including if the image has been cropped) to better reveal visually the image manipulation	Cet outil génère une image gif animé composée d'une image originale et une image truquée (y compris si l'image a été recadrée) afin de mieux montrer visuellement la manipulation de l'image.	Esta herramienta genera una imagen gif animada compuesta de una imagen original y una alterada (incluyendo si la imagen ha sido recortada) para revelar mejor visualmente la manipulación de la imagen.	Αυτό το χαρακτηριστικό δημιουργεί μια κινούμενη εικόνα gif αποτελείται από μια πρωτότυπη εικόνα και μιας παραβιασμένης όνη (συμπεριλαμβανομένου του αν έχει περικοπεί η εικόνα) για την καλύτερη αποκαλύψει οπτικά την εικόνα. χειρισμός
+cardTitle_images	Images for the GIF	Images du GIF	Imagenes para el GIF	Εικόνες για το GIF
+title_image1	First image (suspicious or altered one)	Première image (suspecte ou manipulée)	Primera imagen (sospechosa o manipulada)	Πρώτη εικόνα (ύποπτη ή αλλοιωμένη)
+title_image2	Second image (supposedly original)	Deuxième image (supposée originale)	Segunda imagen (supuestamente original)	Δεύτερη εικόνα (υποτιθέμενη πρωτότυπο)
+body_droparea	Drop here an image file or click to browse for an image	Glisser et déposer une image ou cliquer pour chercher une image locale	Colocar aquí un archivo de imagen o haga clic para buscar una imagen	Πτώση εδώ ένα αρχείο εικόνας ή κάντε κλικ για να αναζητήσετε μια εικόνα
+button_loadImages	Load images	Charger les images	Cargar imágenes	Φόρτωση εικόνων
+cardTitle_generatedGIF	Preview of the GIF	Vue préalable du GIF	Vista previa del GIF	Preview του GIF
+slider_title	Speed of the animation	Vitesse de l'animation	Velocidad de la animación	Ταχύτητα της κίνησης
+slider_label_slow	Slow	Lente	Lento	Αργός
+slider_label_fast	Fast	Rapide	Rápido	Γρήγορα
+button_download	Download GIF	Télécharger le GIF	Descargar GIF	Λήψη GIF
+cardTitle_source	Source of the images	Source des images	Fuente de las imágenes	Πηγή των εικόνων
+title_URL	Links	Liens	Enlaces	Συνδέσεις
+description_URL	The two images are provided with two URL links	Les deux images sont fournies avec deux liens urls	Se proveen las dos imágenes con dos enlaces	Οι δύο εικόνες που παρέχονται με δύο συνδέσεις URL
+title_local	Local files	Fichiers locaux	Ficheros locales	τοπικά αρχεία
+description_local	The two images are provided with two local files	Les deux images sont fournies avec deux fichiers locaux	Se proveen las dos imágenes con ficheros locales	Οι δύο εικόνες που παρέχονται με δύο τοπικά αρχεία
+title_gifcreation	GIF Creation	Création du GIF	Creación de GIF	GIF Δημιουργία
+text_preview	You need to select the two images on the left and click the button to see the preview	Vous devez sélectionner deux images à gauche et cliquer sur le bouton pour voir l'aperçu	Tiene que seleccionar dos imágenes en la parte izquierda y cliquear sobre el botón para ver la vista previa	Θα πρέπει να επιλέξετε τις δύο εικόνες για το αριστερό και κάντε κλικ στο κουμπί για να δείτε την προεπισκόπηση
+input_label1	Link of the suspicious or altered image	Lien de l'image suspecte ou manipulée	Enlace de la imagen sospechosa o manipulada	Σύνδεση της ύποπτης ή της τροποποιημένης εικόνας
+input_label2	Link of the supposedly original image	Lien de l'image supposée originale	Enlace de la imagen supuestamente original	Σύνδεσμος της υποτιθέμενης πρωτότυπης εικόνας
+input_placeholder	Paste here the link	Copier ici le lien	Copiar aquí el enlace	Επικολλήστε εδώ το σύνδεσμο
+title_preview	Preview of the GIF	Aperçu du GIF	Vista previa del GIF	Preview του GIF
+error_homo	No match has been found between the two images.	Aucune similarité n'a été trouvée entre les deux images	No se encontro similaridad alguna entre las dos imágenes	Δεν έχει επιτευχθεί αντιστοιχία μεταξύ των δύο εικόνων.
+button_new	New GIF	Nouveau GIF	Nuevo GIF	νέα GIF

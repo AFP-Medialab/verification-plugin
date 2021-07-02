@@ -18,8 +18,14 @@ import TwitterSna from "../../NavItems/tools/TwitterSna/TwitterSna";
 import CovidSearch from "../../NavItems/tools/CovidSearch/CovidSearch";
 import XNetwork from "../../NavItems/tools/XNetwork/XNetwork";
 import OCR from "../../NavItems/tools/OCR/OCR";
+import Gif from "../../NavItems/tools/GIF/Gif";
+import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
+import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
+import AnalysisImg from "../../NavItems/tools/Analysis_image/Analysis"
 
 const DrawerItem = (props) => {
+
+    const classes = useMyStyles();
 
     const drawerItemsContent = [
         {
@@ -43,6 +49,10 @@ const DrawerItem = (props) => {
             footer: <Footer type={"afp"}/>
         },
         {
+            content: <AnalysisImg/>,
+            footer: <Footer type={"iti"}/>
+        },
+        {
             content: <Magnifier/>,
             footer: <Footer type={"afp"}/>
         },
@@ -56,7 +66,7 @@ const DrawerItem = (props) => {
         },
         {
             content: <Forensic/>,
-            footer: <Footer type={"iti"}/>
+            footer: <Footer type={"iti-borelli-afp"}/>
         },
         {
             content: <TwitterSna/>,
@@ -73,10 +83,54 @@ const DrawerItem = (props) => {
         {
             content: <OCR/>,
             footer: <Footer type={"usfd"}/>
+        },
+        {
+            content: <Gif />,
+            footer: <Footer type={"borelli-afp"} />
         }
     ];
 
     const dispatch = useDispatch();
+
+    //Style elements
+    //============================================================================================
+
+    const theme = createMuiTheme({
+        overrides: {
+
+            MuiCardHeader: {
+                root: {
+                    backgroundColor: "#05A9B4",
+                },
+                title: {
+                    color: 'white',
+                    fontSize: 20,
+                    fontweight: 500,
+                }
+            },
+
+            MuiTab: {
+                wrapper: {
+                    fontSize: 12,
+
+                },
+                root: {
+                    minWidth: "25%!important",
+                }
+            },
+
+        },
+
+        palette: {
+            primary: {
+                light: '#5cdbe6',
+                main: '#05a9b4',
+                dark: '#007984',
+                contrastText: '#fff',
+            },
+        },
+
+    });
 
     return (
         <Switch>
@@ -91,11 +145,13 @@ const DrawerItem = (props) => {
                                     () => {
                                         dispatch(selectTool(index));
                                         return (
-                                            <Container key={index}>
+                                            <Container key={index} className={classes.noMargin} maxWidth={false}>
                                                 <Fade in={true}>
                                                     <div>
-                                                        {drawerItemsContent[index].content}
-                                                        {drawerItemsContent[index].footer}
+                                                        <ThemeProvider theme={theme}>
+                                                            {drawerItemsContent[index].content}
+                                                            {drawerItemsContent[index].footer}
+                                                        </ThemeProvider>
                                                     </div>
                                                 </Fade>
                                             </Container>

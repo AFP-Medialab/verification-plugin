@@ -31,7 +31,7 @@ To setup this project you need to run:
     REACT_APP_MY_WEB_HOOK_URL=<yourSlackAppUrlHook>
     REACT_APP_GOOGLE_ANALYTICS_KEY=<yourGoogleAnaliticsToken>
     REACT_APP_MAP_TOKEN=<MAP_TOKEN>
-    REACT_APP_AUTH_BASE_URL=<TWINT-WRAPPER-URL>
+    REACT_APP_BASEURL=<TWINT-WRAPPER-URL>
 
 
 ####Then you need to load the extension in your browser: 
