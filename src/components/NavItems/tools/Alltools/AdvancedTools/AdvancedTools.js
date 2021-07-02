@@ -313,17 +313,18 @@ const AdvancedTools = () => {
 
                         </DialogContent>
                         <DialogActions>
-                            <Grid container direction="column" style={{ width: "100%" }}>
-                                <Typography variant="body2" style={{ color: "#818B95", textAlign: "center" }}>
-                                    {messageI18NResolver("REGISTRATIONFORM_TITLE")}
-                                </Typography>
-                                <Box m={2} />
-                                <Button variant="outlined" color="primary" onClick={handleClickOpenRegister} style={{ border: "2px solid" }} fullWidth>
-                                    {messageI18NResolver("REGISTRATIONFORM_SUBMIT_LABEL")}
-                                </Button>
+                            <Box p={2}>
+                                <Grid container direction="column" style={{ width: "100%" }}>
+                                    <Typography variant="body2" style={{ color: "#818B95", textAlign: "center" }}>
+                                        {messageI18NResolver("REGISTRATIONFORM_TITLE")}
+                                    </Typography>
+                                    <Box m={2} />
+                                    <Button variant="outlined" color="primary" onClick={handleClickOpenRegister} style={{ border: "2px solid" }} fullWidth>
+                                        {messageI18NResolver("REGISTRATIONFORM_SUBMIT_LABEL")}
+                                    </Button>
 
-                            </Grid>
-                            
+                                </Grid>
+                            </Box>
                         </DialogActions>
                     </Box>
 
@@ -568,7 +569,7 @@ const AdvancedTools = () => {
                                     </Grid>
                                     <Grid item xs={12}>
                                         <Box mt={2}>
-                                            <Button color="default" fullWidth type="submit" >
+                                            <Button variant="contained" color="primary"fullWidth type="submit" >
                                                 {messageI18NResolver("REGISTRATIONFORM_SUBMIT_LABEL")}
                                             </Button>
                                         </Box>
