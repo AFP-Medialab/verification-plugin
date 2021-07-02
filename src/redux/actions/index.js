@@ -55,14 +55,9 @@ export const toggleUnlockExplanationCheckBox = () => {
     }
 };
 
-
-
-
-
-
-
-
-
-
-
-
+export const toggleGACheckBox = () => {
+    return {
+        type : "TOGGLE_GA_STATE"
+    }
+    
+}
