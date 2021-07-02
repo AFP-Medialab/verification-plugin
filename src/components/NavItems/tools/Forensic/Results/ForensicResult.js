@@ -938,7 +938,7 @@ const ForensicResults = (props) => {
                                                                             className={classes.imageOverlayWrapper}
                                                                             onMouseOver={() => displayFilterHover(value.mask)}
                                                                             onMouseLeave={hideFilterHover}>
-
+                                                                            
                                                                             <CardMedia
                                                                                 className={classes.imageFilter}
                                                                                 image={value.map}
@@ -983,6 +983,11 @@ const ForensicResults = (props) => {
 
                                                                         </div>
                                                                     }
+
+
+                                                                    
+                                                                    
+
 
                                                                     <Popover
                                                                         id={idExpl}
@@ -1048,31 +1053,44 @@ const ForensicResults = (props) => {
                                                             )
                                                         })}
 
-                                                    </Grid>
+                                                        
 
-                                                    <Box m={2}/>
-
-                                                    <CardMedia
-                                                        image={MakoScale}
-                                                        style={{ height: "20px", transform: "scale(-1)", backgroundSize: "contain"}}
-                                                    />
-
-                                                    <Grid
-                                                        container
-                                                        direction="row"
-                                                        justify="space-between"
-                                                        alignItems="center"
-                                                    >
-
-                                                        <Grid item>
-                                                            <Typography variant="body1">{keyword("forensic_text_nodetection")}</Typography>
-                                                        </Grid>
-
-                                                        <Grid item>
-                                                            <Typography variant="body1">{keyword("forensic_text_detection")}</Typography>
-                                                        </Grid>
 
                                                     </Grid>
+
+
+                                                    {valueTab !== 3 &&
+
+                                                        <div>
+
+                                                            <Box m={2} />
+
+                                                            <CardMedia
+                                                                image={MakoScale}
+                                                                style={{ height: "20px", transform: "scale(-1)", backgroundSize: "contain" }}
+                                                            />
+
+                                                            <Grid
+                                                                container
+                                                                direction="row"
+                                                                justify="space-between"
+                                                                alignItems="center"
+                                                            >
+
+                                                                <Grid item>
+                                                                    <Typography variant="body1">{keyword("forensic_text_nodetection")}</Typography>
+                                                                </Grid>
+
+                                                                <Grid item>
+                                                                    <Typography variant="body1">{keyword("forensic_text_detection")}</Typography>
+                                                                </Grid>
+
+                                                            </Grid>
+
+                                                        </div>
+
+                                                    }
+                                                    
  
 
                                                     <Box mt={2} mb={2}>
