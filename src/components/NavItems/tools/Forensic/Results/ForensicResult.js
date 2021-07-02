@@ -167,7 +167,7 @@ const ForensicResults = (props) => {
         var filter;
         //console.log(results[value]);
 
-        if (results[value] === undefined) {
+        if (results[value] === undefined || !(results[value].completed)) {
             filter = {
                 "id": "",
                 "name": "",
@@ -233,8 +233,8 @@ const ForensicResults = (props) => {
             filter = {
                 "id": value,
                 "name": keyword("forensic_title_" + value),
-                "map": results[value],
-                "mask": results[value],
+                "map": results[value].map,
+                "mask": results[value].map,
                 "popover": false,
             }
             
@@ -244,7 +244,7 @@ const ForensicResults = (props) => {
             filter = {
                 "id": value,
                 "name": keyword("forensic_title_" + value),
-                "map": results[value],
+                "map": results[value].map,
                 "popover": false,
             }
 
