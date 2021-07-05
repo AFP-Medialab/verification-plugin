@@ -1,15 +1,15 @@
-const cookiesReducer = (state = null, action) => {
+const googleAnalyticReducer = (state = null, action) => {
     switch (action.type) {
-        case "SET_STORAGE_TRUE":
-            return true;
         case "SET_TRUE":
             return true;
         case "SET_FALSE":
             return false;
-        case "TOGGLE_STATE":
+        case "TOGGLE_GA_STATE":
             return !state;
+        case "TOGGLE_STATE":
+            return action.payload;
         default:
             return state;
     }
 };
-export default cookiesReducer;
+export default googleAnalyticReducer;

@@ -4,14 +4,21 @@ export const setTrue = () => {
     }
 };
 
+export const setStorageTrue = () => {
+    return {
+        type : "SET_STORAGE_TRUE",
+    }
+};
+
 export const setFalse = () => {
     return {
         type : "SET_FALSE",
     }
 };
 
-export const toggleState = () => {
+export const toggleState = (cookiestate) => {
     return {
         type: "TOGGLE_STATE",
+        payload: !cookiestate
     }
 };

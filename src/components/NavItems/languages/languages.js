@@ -7,7 +7,7 @@ import IconButton from "@material-ui/core/IconButton";
 
 import {changeDefaultLanguage, changeLanguage} from "../../../redux/actions";
 import DefaultLanguageDialog from "./defaultLanguageDialog";
-import {setTrue} from "../../../redux/actions/cookiesActions";
+import {setStorageTrue} from "../../../redux/actions/cookiesActions";
 import tsv from "../../../LocalDictionary/components/NavItems/languages.tsv";
 import useLoadLanguage from "../../../Hooks/useLoadLanguage";
 import TranslateIcon from '@material-ui/icons/Translate';
@@ -38,7 +38,7 @@ const Languages = () => {
         setOpen(false);
         dispatch(changeLanguage(lang));
         if (defaultLang) {
-            dispatch(setTrue())
+            dispatch(setStorageTrue())
             dispatch(changeDefaultLanguage(lang))
         }
     };

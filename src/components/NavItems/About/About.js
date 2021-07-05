@@ -8,7 +8,7 @@ import itiImage from "./images/iti.jpg"
 import afpImage from "./images/Logo-AFP-384.png"
 import Checkbox from "@material-ui/core/Checkbox";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
-import {toggleHumanRightsCheckBox, toggleUnlockExplanationCheckBox} from "../../../redux/actions"
+import {toggleHumanRightsCheckBox, toggleUnlockExplanationCheckBox, toggleGACheckBox} from "../../../redux/actions"
 import useLoadLanguage from "../../../Hooks/useLoadLanguage";
 import tsv from "../../../LocalDictionary/components/NavItems/About.tsv";
 import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
@@ -24,6 +24,7 @@ const About = () => {
     const humanRights = useSelector(state => state.humanRightsCheckBox);
     const interactiveExplanation = useSelector(state => state.interactiveExplanation);
     const cookiesUsage = useSelector(state => state.cookies);
+    const gaUsage = useSelector(state => state.googleAnalytic);
     const dispatch = useDispatch();
 
     const additionalDangerousContent = () => {
@@ -205,18 +206,32 @@ const About = () => {
                 label={keyword("quiz_unlock_explanations")}
             />
             {
-                cookiesUsage !== null &&
-                <FormControlLabel
-                    control={
-                        <Checkbox
-                            checked={cookiesUsage}
-                            onChange={() => dispatch(toggleState())}
-                            value="checkedBox"
-                            color="primary"
-                        />
-                    }
-                    label={keyword("cookies_usage")}
-                />
+            cookiesUsage !== null &&
+            <FormControlLabel
+                control={
+                    <Checkbox
+                        checked={cookiesUsage}
+                        onChange={() => dispatch(toggleState(cookiesUsage))}
+                        value="checkedBox"
+                        color="primary"
+                    />
+                }
+                label={keyword("storage_usage")}
+            />
+            }
+            {
+            gaUsage !== null &&
+            <FormControlLabel
+                control={
+                    <Checkbox
+                        checked={gaUsage}
+                        onChange={() => dispatch(toggleGACheckBox())}
+                        value="checkedBox"
+                        color="primary"
+                    />
+                }
+                label={keyword("cookies_usage")}
+            />
             }
         </Paper>
     );
