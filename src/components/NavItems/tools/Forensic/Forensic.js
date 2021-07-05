@@ -330,7 +330,12 @@ const Forensic = () => {
             </Card>
             
             {loading &&
-                <LinearProgress />
+                <div>
+                    <Alert severity="warning">{keywordWarning("warning_forensic")}</Alert>
+                    <Box mt={3}/>
+                    <LinearProgress />
+                </div>
+                
             }
             
             {
