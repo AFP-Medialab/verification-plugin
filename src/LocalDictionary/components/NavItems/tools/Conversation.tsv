@@ -1,2 +1,7 @@
-    en  fr  es  el
-conversation_title  Twitter Conversation
+	en	fr	es	el
+conversation_title	Twitter Conversation	Temp	Temp	Temp
+conversation_urlbox	URL of the Tweet	Temp	Temp	Temp
+conversation_urlbox_placeholder	Paste the link here	Coller le lien ici	Pegar el enlace aquí	Επικολλήστε τον σύνδεσμο εδώ
+cardheader_source	Conversation Starter	Temp	Temp	Temp
+cardheader_results	Results	Résultats	Resultados 	Αποτελέσματα
+button_submit	Submit	Envoyer	Enviar	Υποβολή

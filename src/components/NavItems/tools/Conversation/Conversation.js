@@ -1,5 +1,8 @@
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
-import tsv from "../../../../LocalDictionary/components/NavItems/tools/Conversation.tsv";
+import tsvConversation from "../../../../LocalDictionary/components/NavItems/tools/Conversation.tsv";
+import tsvAllTools from "../../../../LocalDictionary/components/NavItems/tools/Alltools.tsv";
+
+import { setConversationInput}  from "../../../../redux/actions/tools/conversationActions";
 
 import { ReactComponent as ConversationIcon } from "../../../NavBar/images/SVG/DataAnalysis/Twitter_sna.svg"
 
@@ -12,8 +15,8 @@ import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 
 const Conversation = () => {
 
-    const keyword = useLoadLanguage("components/NavItems/tools/Conversation.tsv", tsv);
-    const keywordAllTools = useLoadLanguage("components/NavItems/tools/Alltools.tsv", tsv);
+    const keyword = useLoadLanguage("components/NavItems/tools/Conversation.tsv", tsvConversation);
+    const keywordAllTools = useLoadLanguage("components/NavItems/tools/Alltools.tsv", tsvAllTools);
 
     const classes = useMyStyles();
 
@@ -27,7 +30,34 @@ const Conversation = () => {
                     className={classes.headerUpladedImage}
                 />
                 <Box p={3}>
+                    <Grid
+                        container
+                        direction="row"
+                        spacing={3}
+                        alignItems="center"
+                    >
+                        <Grid item xs>
+                            <TextField
+                                id="standard-full-width"
+                                label={keyword("conversation_urlbox")}
+                                placeholder={keyword("conversation_urlbox_placeholder")}
+                                fullWidth
+                                
+                                variant="outlined"
+                                
+                            />
 
+            
+                        </Grid>
+
+                        <Grid item>
+                            <Button variant="contained" color="primary">
+                                {keyword("button_submit") || ""}
+                            </Button>
+
+                        </Grid>
+
+                    </Grid>
                 </Box>
             </Card>
         </div>
