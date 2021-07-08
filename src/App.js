@@ -14,9 +14,10 @@ import useAuthenticationAPI from './components/Shared/Authentication/useAuthenti
 const theme = createMuiTheme({
   palette: {
     primary: {
-      light: '#fff',
-      main: 'rgb(0,170,180)',
-      dark: '#00707e'
+      light: '#5cdbe6',
+      main: '#05a9b4',
+      dark: '#007984',
+      contrastText: '#fff',
     },
     secondary: {
       main: '#ffaf33',
@@ -38,7 +39,7 @@ const theme = createMuiTheme({
       root: {
         overflow: "visible"
       }
-    }
+    },
   },
   zIndex: {
     drawer: 1099
