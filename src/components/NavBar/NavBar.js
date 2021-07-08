@@ -272,6 +272,15 @@ const NavBar = (props) => {
             iconColored: <GifIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title="CheckGIF"/>,
             tsvPrefix: "gif",
             path: "gif"
+        },
+        {
+            title: "navbar_conversation",
+            description: "navbar_conversation_description",
+            icon: (drawerValue === 14)  ? <TwitterSnaIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} />
+                                        : <TwitterSnaIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} />,
+            iconColored: <TwitterSnaIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} />,
+            tsvPrefix: "conversation",
+            path: "conversation"
         }
     ];
 

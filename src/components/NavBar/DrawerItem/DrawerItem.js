@@ -19,6 +19,7 @@ import CovidSearch from "../../NavItems/tools/CovidSearch/CovidSearch";
 import XNetwork from "../../NavItems/tools/XNetwork/XNetwork";
 import OCR from "../../NavItems/tools/OCR/OCR";
 import Gif from "../../NavItems/tools/GIF/Gif";
+import Conversation from "../../NavItems/tools/Conversation/Conversation"
 import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import AnalysisImg from "../../NavItems/tools/Analysis_image/Analysis"
@@ -87,6 +88,10 @@ const DrawerItem = (props) => {
         {
             content: <Gif />,
             footer: <Footer type={"borelli-afp"} />
+        },
+        {
+            content: <Conversation/>,
+            footer: <Footer type={"usfd"}/>
         }
     ];
 

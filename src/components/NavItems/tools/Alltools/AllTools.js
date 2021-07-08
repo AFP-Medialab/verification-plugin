@@ -122,7 +122,8 @@ const AllTools = (props) => {
         }
 
         if (
-            value.title === "navbar_twitter_sna"
+            value.title === "navbar_twitter_sna" ||
+            value.title === "navbar_conversation"
         ) {
             toolsData.push(value);
         }
