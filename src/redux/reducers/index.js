@@ -24,6 +24,7 @@ import ocrReducer from "./tools/ocrReducer";
 import defaultLanguageReducer from "./defaultLanguageReducer";
 import gifReducer from "./tools/gifReducer";
 import ImageAnalysisReducer from "./tools/analysisReducerImage";
+import conversationReducer from "./tools/conversationReducer";
 
 const allReducers = combineReducers({
     language : languageReducer,
@@ -50,6 +51,7 @@ const allReducers = combineReducers({
     assistant : assistantReducer,
     ocr: ocrReducer,
     gif: gifReducer,
+    conversation: conversationReducer,
 });
 
 export default allReducers;

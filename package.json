@@ -40,6 +40,7 @@
     "react-router-dom": "^5.2.0",
     "react-sigma": "^1.2.35",
     "react-slack-feedback": "^2.1.1",
+    "react-twitter-embed": "^3.0.3",
     "react-wordcloud": "^1.2.7",
     "redux": "^4.1.0",
     "redux-observable": "^1.2.0",

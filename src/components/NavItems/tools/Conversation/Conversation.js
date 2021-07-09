@@ -1,3 +1,7 @@
+import React, {useEffect, useState} from "react";
+import {useDispatch, useSelector} from "react-redux";
+import {useParams} from 'react-router-dom'
+
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import tsvConversation from "../../../../LocalDictionary/components/NavItems/tools/Conversation.tsv";
 import tsvAllTools from "../../../../LocalDictionary/components/NavItems/tools/Alltools.tsv";
@@ -13,12 +17,26 @@ import Grid from "@material-ui/core/Grid";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 
+import ConversationView from "./Results/ConversationView"
+
 const Conversation = () => {
 
     const keyword = useLoadLanguage("components/NavItems/tools/Conversation.tsv", tsvConversation);
     const keywordAllTools = useLoadLanguage("components/NavItems/tools/Alltools.tsv", tsvAllTools);
+    const dispatch = useDispatch();
+
+    const conversationInputUrl = useSelector(state => state.conversation.url);
+    const conversationID = useSelector(state => state.conversation.id_str);
+    const errorKey = useSelector(state => state.conversation.errorKey);
+    const fail = useSelector(state => state.conversation.fail);
 
     const classes = useMyStyles();
+
+    const [userInput, setUserInput] = useState(conversationInputUrl);
+
+    const submitUrl = (src) => {
+        dispatch(setConversationInput(src))
+    };
 
     return (
         <div>
@@ -42,16 +60,16 @@ const Conversation = () => {
                                 label={keyword("conversation_urlbox")}
                                 placeholder={keyword("conversation_urlbox_placeholder")}
                                 fullWidth
-                                
+                                value={userInput || ""}
                                 variant="outlined"
-                                
+                                onChange={e => setUserInput(e.target.value)}
                             />
 
             
                         </Grid>
 
                         <Grid item>
-                            <Button variant="contained" color="primary">
+                            <Button variant="contained" color="primary" onClick={() => submitUrl(userInput)}>
                                 {keyword("button_submit") || ""}
                             </Button>
 
@@ -60,6 +78,10 @@ const Conversation = () => {
                     </Grid>
                 </Box>
             </Card>
+
+            <Box m={3} />
+
+            {conversationID && !fail ? <ConversationView/> : null}
         </div>
     )
 };
