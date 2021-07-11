@@ -27,6 +27,7 @@ const Conversation = () => {
 
     const conversationInputUrl = useSelector(state => state.conversation.url);
     const conversationID = useSelector(state => state.conversation.id_str);
+    const urls = useSelector(state => state.conversation.urls);
     const errorKey = useSelector(state => state.conversation.errorKey);
     const fail = useSelector(state => state.conversation.fail);
 
@@ -81,7 +82,7 @@ const Conversation = () => {
 
             <Box m={3} />
 
-            {conversationID && !fail ? <ConversationView/> : null}
+            {urls && !fail ? <ConversationView/> : null}
         </div>
     )
 };
