@@ -26,7 +26,7 @@ const Conversation = () => {
     const dispatch = useDispatch();
 
     const conversationInputUrl = useSelector(state => state.conversation.url);
-    const urls = useSelector(state => state.conversation.urls);
+    const cloud = useSelector(state => state.conversation.cloud);
     const errorKey = useSelector(state => state.conversation.errorKey);
     const fail = useSelector(state => state.conversation.fail);
 
@@ -81,7 +81,7 @@ const Conversation = () => {
 
             <Box m={3} />
 
-            {urls && !fail ? <ConversationView/> : null}
+            {cloud && !fail ? <ConversationView/> : null}
         </div>
     )
 };

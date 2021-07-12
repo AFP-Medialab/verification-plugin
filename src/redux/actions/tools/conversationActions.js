@@ -25,15 +25,6 @@ export const setHashtagCloud = (cloud) => {
     }
 }
 
-export const setURLTable = (urls) => {
-    return {
-        type: "SET_CONVERSATION_URLS",
-        payload: {
-            urls: urls,
-        }
-    }
-}
-
 export const setTweet = (tweet) => {
     console.log("inside setConversationTweet: "+tweet);
     return {

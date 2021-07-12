@@ -43,8 +43,6 @@ function* handleConversationCall(action) {
     console.log(cloud)
 
     yield put(setHashtagCloud(cloud))
-
-    yield put(setURLTable(conversation.urls))
 }
 
 export default function* conversationSaga() {

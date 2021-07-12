@@ -29,7 +29,7 @@ const ConversationView = () => {
     const tweetID = useSelector(state => state.conversation.tweet.id);
     
     const hashtagCloud = useSelector(state => state.conversation.cloud)
-    const urlTableData = useSelector(state => state.conversation.urls)
+    const urlTableData = useSelector(state => state.conversation.conversation.urls)
     const dispatch = useDispatch();
 
     function getCallback(callback) {
@@ -85,8 +85,8 @@ const ConversationView = () => {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {Object.keys(urlTableData).map((row) => (
-                                <TableRow>
+                            {Object.keys(urlTableData).map((row, key) => (
+                                <TableRow key={key}>
                                     <TableCell><Link href="{row}" target="_blank">{row}</Link></TableCell>
                                     <TableCell>{urlTableData[row]}</TableCell>
                                 </TableRow>
