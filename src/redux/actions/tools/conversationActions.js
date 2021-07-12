@@ -3,6 +3,7 @@ export const setConversationInput = (url) => {
         type: "SET_CONVERSATION_INPUT",
         payload: {
             url: url,
+            loading: true
         }
     }
 };
@@ -21,6 +22,7 @@ export const setHashtagCloud = (cloud) => {
         type: "SET_CONVERSATION_CLOUD",
         payload: {
             cloud: cloud,
+            loading: false
         }
     }
 }

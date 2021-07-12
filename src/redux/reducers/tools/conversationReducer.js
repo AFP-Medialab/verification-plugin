@@ -1,6 +1,6 @@
 const defaultState = {
     url: undefined,
-    //loading : false,
+    loading : false,
     fail: false,
     errorKey: null,
     //done: false,

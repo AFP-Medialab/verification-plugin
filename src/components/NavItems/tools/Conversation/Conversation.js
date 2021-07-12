@@ -17,6 +17,8 @@ import Grid from "@material-ui/core/Grid";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 
+import LinearProgress from "@material-ui/core/LinearProgress";
+
 import ConversationView from "./Results/ConversationView"
 
 const Conversation = () => {
@@ -29,6 +31,7 @@ const Conversation = () => {
     const cloud = useSelector(state => state.conversation.cloud);
     const errorKey = useSelector(state => state.conversation.errorKey);
     const fail = useSelector(state => state.conversation.fail);
+    const loading = useSelector(state => state.conversation.loading);
 
     const classes = useMyStyles();
 
@@ -80,6 +83,8 @@ const Conversation = () => {
             </Card>
 
             <Box m={3} />
+
+            <LinearProgress hidden={!loading}/>
 
             {cloud && !fail ? <ConversationView/> : null}
         </div>
