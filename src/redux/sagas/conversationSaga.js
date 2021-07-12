@@ -1,5 +1,5 @@
 import {all, call, fork, put, select, takeLatest} from "redux-saga/effects";
-import { setConversationID, setHashtagCloud, setTweetID, setURLTable } from "../actions/tools/conversationActions";
+import { setConversation, setHashtagCloud, setTweet, setURLTable } from "../actions/tools/conversationActions";
 import ConversationAPI from "../../components/NavItems/tools/Conversation/ConversationAPI";
 
 const conversationApi = ConversationAPI()
@@ -19,17 +19,19 @@ function* handleConversationCall(action) {
 
     const id_str = tweetURL.substring(tweetURL.lastIndexOf("/")+1)
 
-    yield put(setTweetID(id_str))
+    
 
     console.log(id_str)
 
     let tweet = yield call(conversationApi.getTweet, id_str)
 
+    yield put(setTweet(tweet))
+
     //console.log(tweet)
 
     let conversation = yield call(conversationApi.getConversation, tweet.conversation_id)
 
-    yield put(setConversationID(conversation.root.id))
+    yield put(setConversation(conversation))
 
     const cloud = [];
 

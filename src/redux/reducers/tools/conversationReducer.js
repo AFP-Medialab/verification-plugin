@@ -5,16 +5,18 @@ const defaultState = {
     errorKey: null,
     //done: false,
     //result: null,
-    id_str: null,
+    //id_str: null,
     cloud: null,
     urls: null,
-    tweet_id: null
+    //tweet_id: null,
+    tweet: null,
+    conversation: null,
 };
 
 const conversationReducer = (state = defaultState, action) => {
     switch (action.type) {
         case "SET_CONVERSATION_INPUT":
-        case "SET_CONVERSATION_ID":
+        case "SET_CONVERSATION_ROOT":
         case "SET_CONVERSATION_TWEET":
         case "SET_CONVERSATION_CLOUD":
         case "SET_CONVERSATION_URLS":

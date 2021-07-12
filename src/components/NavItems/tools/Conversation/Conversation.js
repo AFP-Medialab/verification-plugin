@@ -26,7 +26,6 @@ const Conversation = () => {
     const dispatch = useDispatch();
 
     const conversationInputUrl = useSelector(state => state.conversation.url);
-    const conversationID = useSelector(state => state.conversation.id_str);
     const urls = useSelector(state => state.conversation.urls);
     const errorKey = useSelector(state => state.conversation.errorKey);
     const fail = useSelector(state => state.conversation.fail);

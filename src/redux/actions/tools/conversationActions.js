@@ -7,12 +7,11 @@ export const setConversationInput = (url) => {
     }
 };
 
-export const setConversationID = (id_str) => {
-    console.log("inside setConversationTweet: "+id_str);
+export const setConversation = (conversation) => {
     return {
-        type: "SET_CONVERSATION_ID",
+        type: "SET_CONVERSATION_ROOT",
         payload: {
-            id_str: id_str,
+            conversation: conversation,
         }
     }
 }
@@ -35,12 +34,12 @@ export const setURLTable = (urls) => {
     }
 }
 
-export const setTweetID = (id_str) => {
-    console.log("inside setConversationTweet: "+id_str);
+export const setTweet = (tweet) => {
+    console.log("inside setConversationTweet: "+tweet);
     return {
         type: "SET_CONVERSATION_TWEET",
         payload: {
-            tweet_id: id_str,
+            tweet: tweet,
         }
     }
 }

@@ -25,8 +25,8 @@ const ConversationView = () => {
     
     const classes = useMyStyles();
     const keyword = useLoadLanguage("components/NavItems/tools/Conversation.tsv", tsv);
-    const tweetID = useSelector(state => state.conversation.tweet_id);
-    const statusID = useSelector(state => state.conversation.id_str);
+    const statusID = useSelector(state => state.conversation.conversation.root.id);
+    const tweetID = useSelector(state => state.conversation.tweet.id);
     
     const hashtagCloud = useSelector(state => state.conversation.cloud)
     const urlTableData = useSelector(state => state.conversation.urls)
