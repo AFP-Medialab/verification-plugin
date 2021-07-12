@@ -39,6 +39,7 @@ import WarningIcon from '@material-ui/icons/Warning';
 import Alert from '@material-ui/lab/Alert';
 import MakoScale from '../../../../NavBar/images/SVG/MakoScale.png';
 import { useEffect } from "react";
+import EmojiObjectsIcon from '@material-ui/icons/EmojiObjects';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -1093,7 +1094,7 @@ const ForensicResults = (props) => {
                                                     }
                                                     
                                                     <Box m={2} />
-                                                    <Alert severity="info">{keyword("forensic_text_hoverinfo")}</Alert>
+                                                    <Alert icon={<EmojiObjectsIcon fontSize="inherit" />} severity="info">{keyword("forensic_text_hoverinfo")}</Alert>
                                                     <Box mt={2} mb={2}>
                                                         <Divider />
                                                     </Box>
