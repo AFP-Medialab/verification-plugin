@@ -17,6 +17,7 @@ const defaultState = {
 const conversationReducer = (state = defaultState, action) => {
     switch (action.type) {
         case "SET_CONVERSATION_INPUT":
+            state = defaultState;
         case "SET_CONVERSATION_ROOT":
         case "SET_CONVERSATION_TWEET":
         case "SET_CONVERSATION_CLOUD":
