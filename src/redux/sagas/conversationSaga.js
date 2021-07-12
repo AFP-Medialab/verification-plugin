@@ -34,11 +34,20 @@ function* handleConversationCall(action) {
     yield put(setConversation(conversation))
 
 
-    const stance = [];
+    const stance = {
+        values: [],
+        labels: [],
+        type: "pie",
+        textinfo: "label+percent",
+        textposition: "outside",
+        automargin: true
+    };
 
     Object.keys(conversation.stance).forEach(entry => {
         console.log(entry +" ==> " + conversation.stance[entry])
-        stance.push({x: entry, y: conversation.stance[entry]})
+        //stance.push({x: entry, y: conversation.stance[entry]})
+        stance.labels.push(entry)
+        stance.values.push(conversation.stance[entry])
     })
 
     yield put(setStance(stance))

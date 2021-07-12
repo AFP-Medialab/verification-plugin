@@ -21,7 +21,7 @@ import Paper from '@material-ui/core/Paper';
 import Link from "@material-ui/core/Link";
 import Typography from "@material-ui/core/Typography";
 
-import { PieChart } from "react-d3-components"
+import Plot from 'react-plotly.js';
 
 const ConversationView = () => {
     
@@ -67,11 +67,6 @@ const ConversationView = () => {
         onWordMouseOver: getCallback("onWordMouseOver")
     }
 
-    var data = {
-        label: 'Stance',
-        values: stance
-    };
-
     return (
         <Grid
             container
@@ -91,14 +86,14 @@ const ConversationView = () => {
                 </Grid>
             <Grid item xs={6}>
                 <Typography variant="body1">The stance of the {conversation.number_of_replies} replies within the conversation breaks down as follows:</Typography>
-                <PieChart data={data} width={500} height={400}/>
+                <Plot style= {{width:"100%"}} data={[stance]} layout={ { autosize:true, showlegend: false }} useResizeHandler={true} config = {{'displayModeBar': false}} />
                 
                 <Typography variant="body1">The {hashtagCloud.length !== 100 ? "hashtags" : "top 100 hashtags"} appearing in the replies:</Typography>
                 <div style={{height: 500}}>
                     <ReactWordcloud words={hashtagCloud} options={options} callbacks={callbacks} />
                 </div>
 
-                <Typography variant="body1">The {Object.keys(urlTableData).length == 10 ? "ten most frequently occuring" : ""} URLs within the replies are:</Typography>
+                <Typography variant="body1">The {Object.keys(urlTableData).length === 10 ? "ten most frequently occuring" : ""} URLs within the replies are:</Typography>
                 <TableContainer component={Paper}>
                     <Table className={classes.table} aria-label="simple table">
                         <TableHead>
