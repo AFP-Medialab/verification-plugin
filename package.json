@@ -27,6 +27,7 @@
     "react-browser-extension-scripts": "^4.0.10",
     "react-compare-image": "^3.1.0",
     "react-csv": "^2.0.3",
+    "react-d3-components": "^0.9.1",
     "react-datetime": "^3.0.4",
     "react-dom": "^16.14.0",
     "react-dropzone": "^11.3.2",

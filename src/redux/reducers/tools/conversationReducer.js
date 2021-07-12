@@ -11,6 +11,7 @@ const defaultState = {
     //tweet_id: null,
     tweet: null,
     conversation: null,
+    stance: null,
 };
 
 const conversationReducer = (state = defaultState, action) => {
@@ -19,6 +20,7 @@ const conversationReducer = (state = defaultState, action) => {
         case "SET_CONVERSATION_ROOT":
         case "SET_CONVERSATION_TWEET":
         case "SET_CONVERSATION_CLOUD":
+        case "SET_CONVERSATION_STANCE":
             console.log("hit a " + action.type);
             console.log(action.payload);
             return Object.assign({}, state, action.payload)

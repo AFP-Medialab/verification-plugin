@@ -25,6 +25,15 @@ export const setHashtagCloud = (cloud) => {
     }
 }
 
+export const setStance = (stance) => {
+    return {
+        type: "SET_CONVERSATION_STANCE",
+        payload: {
+            stance: stance,
+        }
+    }
+}
+
 export const setTweet = (tweet) => {
     console.log("inside setConversationTweet: "+tweet);
     return {

@@ -21,16 +21,23 @@ import Paper from '@material-ui/core/Paper';
 import Link from "@material-ui/core/Link";
 import Typography from "@material-ui/core/Typography";
 
+import { PieChart } from "react-d3-components"
+
 const ConversationView = () => {
     
     const classes = useMyStyles();
     const keyword = useLoadLanguage("components/NavItems/tools/Conversation.tsv", tsv);
     const statusID = useSelector(state => state.conversation.conversation.root.id);
     const tweetID = useSelector(state => state.conversation.tweet.id);
+    const conversation = useSelector(state => state.conversation.conversation);
+    const conversationStance = useSelector(state => state.conversation.tweet.stance_conversation);
     
     const hashtagCloud = useSelector(state => state.conversation.cloud)
-    const urlTableData = useSelector(state => state.conversation.conversation.urls)
+    const stance = useSelector(state => state.conversation.stance)
+    const urlTableData = conversation.urls
     const dispatch = useDispatch();
+
+    console.log(Object.keys(urlTableData).length);
 
     function getCallback(callback) {
         return function (word, event) {
@@ -60,6 +67,11 @@ const ConversationView = () => {
         onWordMouseOver: getCallback("onWordMouseOver")
     }
 
+    var data = {
+        label: 'Stance',
+        values: stance
+    };
+
     return (
         <Grid
             container
@@ -68,14 +80,25 @@ const ConversationView = () => {
             alignItems="flex-start">
             
             <Grid item xs={6}>
+                { tweetID !== statusID ? <div>
                 <Typography variant="body1">The tweet you entered</Typography>
                 <TwitterTweetEmbed tweetId={tweetID} options={{conversation: 'none', lang: 'en', dnt: true}} />
 
-                <Typography variant="body1">The tweet at the root of the conversation</Typography>
+                <Typography variant="body1">has a stance label of "{conversationStance}" to the tweet at the root of the conversation:  </Typography>
+                </div>
+                : null }
                 <TwitterTweetEmbed tweetId={statusID} options={{conversation: 'none', lang: 'en', dnt: true}} />
                 </Grid>
             <Grid item xs={6}>
-                <ReactWordcloud words={hashtagCloud} options={options} callbacks={callbacks} />
+                <Typography variant="body1">The stance of the {conversation.number_of_replies} replies within the conversation breaks down as follows:</Typography>
+                <PieChart data={data} width={500} height={400}/>
+                
+                <Typography variant="body1">The {hashtagCloud.length !== 100 ? "hashtags" : "top 100 hashtags"} appearing in the replies:</Typography>
+                <div style={{height: 500}}>
+                    <ReactWordcloud words={hashtagCloud} options={options} callbacks={callbacks} />
+                </div>
+
+                <Typography variant="body1">The {Object.keys(urlTableData).length == 10 ? "ten most frequently occuring" : ""} URLs within the replies are:</Typography>
                 <TableContainer component={Paper}>
                     <Table className={classes.table} aria-label="simple table">
                         <TableHead>

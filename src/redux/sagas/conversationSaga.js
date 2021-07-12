@@ -1,5 +1,5 @@
 import {all, call, fork, put, select, takeLatest} from "redux-saga/effects";
-import { setConversation, setHashtagCloud, setTweet, setURLTable } from "../actions/tools/conversationActions";
+import { setConversation, setHashtagCloud, setTweet, setStance } from "../actions/tools/conversationActions";
 import ConversationAPI from "../../components/NavItems/tools/Conversation/ConversationAPI";
 
 const conversationApi = ConversationAPI()
@@ -33,10 +33,19 @@ function* handleConversationCall(action) {
 
     yield put(setConversation(conversation))
 
+
+    const stance = [];
+
+    Object.keys(conversation.stance).forEach(entry => {
+        console.log(entry +" ==> " + conversation.stance[entry])
+        stance.push({x: entry, y: conversation.stance[entry]})
+    })
+
+    yield put(setStance(stance))
+
     const cloud = [];
 
     Object.keys(conversation.hashtags).forEach(hashtag => {
-        console.log(hashtag +" ==> " + conversation.hashtags[hashtag])
         cloud.push({text: "#"+hashtag, value: conversation.hashtags[hashtag]})
     })
 
