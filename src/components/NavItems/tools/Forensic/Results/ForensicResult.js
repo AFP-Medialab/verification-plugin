@@ -39,6 +39,7 @@ import WarningIcon from '@material-ui/icons/Warning';
 import Alert from '@material-ui/lab/Alert';
 import MakoScale from '../../../../NavBar/images/SVG/MakoScale.png';
 import { useEffect } from "react";
+import EmojiObjectsIcon from '@material-ui/icons/EmojiObjects';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -137,28 +138,29 @@ const ForensicResults = (props) => {
         //NOISE
         "splicebuster_report",  //6
         "wavelet_report",       //7
+        "cfa_report",       //8
 
         //DEEP LEARNING
-        "mantranet_report", //8
-        "fusion_report",    //9
+        "mantranet_report", //9
+        "fusion_report",    //10
 
         //CLONING
-        "cmfd_report",  //10
-        "rcmfd_report", //11
+        "cmfd_report",  //11
+        "rcmfd_report", //12
 
         //LENSES
         
-        "ela_report",       //12
-        "laplacian_report", //13
-        "median_report",    //14
+        "ela_report",       //13
+        "laplacian_report", //14
+        "median_report",    //15
         
     ];
 
     const idStartCompression = 0;
     const idStartNoise = 6;
-    const idStartDeepLearning = 8;
-    const idStartCloning = 10;
-    const idStartLenses = 12;
+    const idStartDeepLearning = 9;
+    const idStartCloning = 11;
+    const idStartLenses = 13;
 
     //console.log(results);
 
@@ -183,13 +185,13 @@ const ForensicResults = (props) => {
                 "name": keyword("forensic_title_" + value),
                 "map": [
                     results[value]["forgery"]["colormap"],
-                    results[value]["votemap"]["colormap"],
+                    //results[value]["votemap"]["colormap"],
                 ],
                 "currentDisplayed": 0,
                 "arrows": [false, false],
                 "mask": [
                     results[value]["forgery"]["transparent"],
-                    results[value]["votemap"]["transparent"],
+                    //results[value]["votemap"]["transparent"],
                 ],
                 "popover": false,
             }
@@ -1091,8 +1093,8 @@ const ForensicResults = (props) => {
 
                                                     }
                                                     
- 
-
+                                                    <Box m={2} />
+                                                    <Alert icon={<EmojiObjectsIcon fontSize="inherit" />} severity="info">{keyword("forensic_text_hoverinfo")}</Alert>
                                                     <Box mt={2} mb={2}>
                                                         <Divider />
                                                     </Box>

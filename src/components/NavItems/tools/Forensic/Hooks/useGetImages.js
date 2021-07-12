@@ -28,7 +28,7 @@ const useGetImages = (url, keyword) => {
             //console.log("TEST3");
             axios.get("https://mever.iti.gr/envisu4/utils/process_filters?id=" + hash + "&threshold=" + threshold +"&cmap=" + colormap)
                 .then(response => {
-                    //console.log(response.data);
+                    console.log(response.data);
                     if (response.data != null) {
                         //getTransparent(response.data.id, url, response.data)
                         //dispatch(setForensicsResult(url, response.data, false, false));
