@@ -1,10 +1,10 @@
 import React from "react";
-import {useDispatch, useSelector} from "react-redux";
+import {useSelector} from "react-redux";
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 import Grid from "@material-ui/core/Grid";
 import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Conversation.tsv";
-import { TwitterTweetEmbed } from 'react-twitter-embed';
+import InnerHTML from 'dangerously-set-html-content'
 import ReactWordcloud from 'react-wordcloud';
 import {select} from "d3-selection";
 import 'tippy.js/dist/tippy.css';
@@ -27,18 +27,18 @@ const ConversationView = () => {
     
     const classes = useMyStyles();
     const keyword = useLoadLanguage("components/NavItems/tools/Conversation.tsv", tsv);
-    const statusID = useSelector(state => state.conversation.conversation.root.id);
-    const tweetID = useSelector(state => state.conversation.tweet.id);
+
     const conversation = useSelector(state => state.conversation.conversation);
-    const conversationStance = useSelector(state => state.conversation.tweet.stance_conversation);
-    const lang = useSelector(state => state.language);
-    
+    const tweet = useSelector(state => state.conversation.tweet);
+
+    const statusID = conversation.root.id //useSelector(state => state.conversation.conversation.root.id);
+    const tweetID = tweet.id //useSelector(state => state.conversation.tweet.id);
+    const conversationStance = tweet.stance_conversation //useSelector(state => state.conversation.tweet.stance_conversation);
+
     const hashtagCloud = useSelector(state => state.conversation.cloud)
     const stance = useSelector(state => state.conversation.stance)
     const urlTableData = conversation.urls
-    const dispatch = useDispatch();
-
-    console.log(Object.keys(urlTableData).length);
+    const users = conversation.users
 
     function getCallback(callback) {
         return function (word, event) {
@@ -68,8 +68,6 @@ const ConversationView = () => {
         onWordMouseOver: getCallback("onWordMouseOver")
     }
 
-    const timeline = [{"x":["2013-10-04","2013-10-05","2013-11-04","2013-12-04"],"y":[1,7,3,6],"type":"bar"},{"x":["2013-10-04","2013-10-05","2013-11-04","2013-12-04"],"y":[1,7,3,6],"type":"bar"}];
-
     return (
         <Grid
             container
@@ -78,20 +76,21 @@ const ConversationView = () => {
             alignItems="flex-start">
             
             <Grid item xs={6}>
+
                 { tweetID !== statusID ? <div>
                 <Typography variant="body1">The tweet you entered</Typography>
-                <TwitterTweetEmbed tweetId={tweetID} options={{conversation: 'none', lang: lang, dnt: true}} />
-
+                <InnerHTML html={tweet.html} />
+                
                 <Typography variant="body1">has a stance label of "{conversationStance}" to the tweet at the root of the conversation:  </Typography>
                 </div>
                 : null }
-                <TwitterTweetEmbed tweetId={statusID} options={{conversation: 'none', lang: lang, dnt: true}} />
+                <InnerHTML html={conversation.root.html} />
                 </Grid>
             <Grid item xs={6}>
-            <Typography variant="body1">The timeline of the replies within the conversation is as follows:</Typography>
+            <Typography variant="body1">The timeline of the {conversation.number_of_replies.toLocaleString()} replies within this conversation is as follows:</Typography>
                 <Plot style= {{width:"100%"}} data={conversation.timeline} layout={ { barmode: "stack", autosize:true, showlegend: true }} useResizeHandler={true} config = {{'displayModeBar': false}} />
 
-                <Typography variant="body1">The stance of the {conversation.number_of_replies} replies within the conversation breaks down as follows:</Typography>
+                <Typography variant="body1">The stance of the {conversation.number_of_replies.toLocaleString()} replies within the conversation breaks down as follows:</Typography>
                 <Plot style= {{width:"100%"}} data={[stance]} layout={ { autosize:true, showlegend: false }} useResizeHandler={true} config = {{'displayModeBar': false}} />
                 
                 <Typography variant="body1">The {hashtagCloud.length !== 100 ? "hashtags" : "top 100 hashtags"} appearing in the replies:</Typography>
@@ -111,8 +110,28 @@ const ConversationView = () => {
                         <TableBody>
                             {Object.keys(urlTableData).map((row, key) => (
                                 <TableRow key={key}>
-                                    <TableCell><Link href="{row}" target="_blank">{row}</Link></TableCell>
-                                    <TableCell>{urlTableData[row]}</TableCell>
+                                    <TableCell><Link href={row} target="_blank">{row}</Link></TableCell>
+                                    <TableCell>{urlTableData[row].toLocaleString()}</TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+
+                <Typography variant="body1">The {Object.keys(users).length === 10 ? "ten most active" : ""} users contributing to this conversation are:</Typography>
+                <TableContainer component={Paper}>
+                    <Table className={classes.table} aria-label="simple table">
+                        <TableHead>
+                            <TableRow>
+                                <TableCell>Screen Name</TableCell>
+                                <TableCell>Tweets</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {Object.keys(users).map((screen_name, key) => (
+                                <TableRow key={key}>
+                                    <TableCell><Link href={"https://twitter.com/"+screen_name} target="_blank">{screen_name}</Link></TableCell>
+                                    <TableCell>{users[screen_name].toLocaleString()} ({(100*users[screen_name]/conversation.number_of_replies).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}%)</TableCell>
                                 </TableRow>
                             ))}
                         </TableBody>
@@ -120,8 +139,6 @@ const ConversationView = () => {
                 </TableContainer>
             </Grid>
         </Grid>
-
-
     )
 }
 
