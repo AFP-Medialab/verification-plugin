@@ -31,6 +31,7 @@ const ConversationView = () => {
     const tweetID = useSelector(state => state.conversation.tweet.id);
     const conversation = useSelector(state => state.conversation.conversation);
     const conversationStance = useSelector(state => state.conversation.tweet.stance_conversation);
+    const lang = useSelector(state => state.language);
     
     const hashtagCloud = useSelector(state => state.conversation.cloud)
     const stance = useSelector(state => state.conversation.stance)
@@ -67,6 +68,8 @@ const ConversationView = () => {
         onWordMouseOver: getCallback("onWordMouseOver")
     }
 
+    const timeline = [{"x":["2013-10-04","2013-10-05","2013-11-04","2013-12-04"],"y":[1,7,3,6],"type":"bar"},{"x":["2013-10-04","2013-10-05","2013-11-04","2013-12-04"],"y":[1,7,3,6],"type":"bar"}];
+
     return (
         <Grid
             container
@@ -77,14 +80,17 @@ const ConversationView = () => {
             <Grid item xs={6}>
                 { tweetID !== statusID ? <div>
                 <Typography variant="body1">The tweet you entered</Typography>
-                <TwitterTweetEmbed tweetId={tweetID} options={{conversation: 'none', lang: 'en', dnt: true}} />
+                <TwitterTweetEmbed tweetId={tweetID} options={{conversation: 'none', lang: lang, dnt: true}} />
 
                 <Typography variant="body1">has a stance label of "{conversationStance}" to the tweet at the root of the conversation:  </Typography>
                 </div>
                 : null }
-                <TwitterTweetEmbed tweetId={statusID} options={{conversation: 'none', lang: 'en', dnt: true}} />
+                <TwitterTweetEmbed tweetId={statusID} options={{conversation: 'none', lang: lang, dnt: true}} />
                 </Grid>
             <Grid item xs={6}>
+            <Typography variant="body1">The timeline of the replies within the conversation is as follows:</Typography>
+                <Plot style= {{width:"100%"}} data={conversation.timeline} layout={ { barmode: "stack", autosize:true, showlegend: true }} useResizeHandler={true} config = {{'displayModeBar': false}} />
+
                 <Typography variant="body1">The stance of the {conversation.number_of_replies} replies within the conversation breaks down as follows:</Typography>
                 <Plot style= {{width:"100%"}} data={[stance]} layout={ { autosize:true, showlegend: false }} useResizeHandler={true} config = {{'displayModeBar': false}} />
                 
