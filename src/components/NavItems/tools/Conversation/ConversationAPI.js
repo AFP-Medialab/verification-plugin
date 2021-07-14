@@ -46,6 +46,8 @@ export default function ConversationAPI() {
      */
     const getTweetHTML = async (tweet, lang) => {
 
+        // TODO make this a call to our backend and cache the response in elasticsearch
+
         // for options we centre the tweet, hide the conversation, enable do-not-track,
         // and set the UI language so the tweet sits nicely in the page
         // TODO can we get the link colour from somewhere, if so then we can pass this
@@ -54,13 +56,6 @@ export default function ConversationAPI() {
 
         // TODO better error handling and generation of
         // fake twitter HTML for deleted tweets
-
-        // Can we use react-twitter-embed with a callback function
-        // https://saurabhnemade.github.io/react-twitter-embed/?path=/story/twitter-tweet-embed--tweet-with-media-embed-with-text-placeholder
-        // The loading of tweets using that is much nicer but not sure
-        // how to handle deleted tweets. The callback looks as if it's passed
-        // the HTML element that's just been added so maybe we can inspect that
-        // and then replace the content if the tweet has been deleted.
 
         if (json.status === 200)
             return json.data.html;

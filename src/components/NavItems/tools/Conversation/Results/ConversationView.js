@@ -69,13 +69,14 @@ const ConversationView = () => {
     }
 
     return (
+        <Paper className={classes.root}>
         <Grid
             container
             direction="row"
             spacing={3}
             alignItems="flex-start">
             
-            <Grid item xs={6}>
+            <Grid item xs={4}>
 
                 { tweetID !== statusID ? <div>
                 <Typography variant="body1">The tweet you entered</Typography>
@@ -85,40 +86,46 @@ const ConversationView = () => {
                 </div>
                 : null }
                 <InnerHTML html={conversation.root.html} />
-                </Grid>
-            <Grid item xs={6}>
-            <Typography variant="body1">The timeline of the {conversation.number_of_replies.toLocaleString()} replies within this conversation is as follows:</Typography>
-                <Plot style= {{width:"100%"}} data={conversation.timeline} layout={ { barmode: "stack", autosize:true, showlegend: true }} useResizeHandler={true} config = {{'displayModeBar': false}} />
+            </Grid>
 
-                <Typography variant="body1">The stance of the {conversation.number_of_replies.toLocaleString()} replies within the conversation breaks down as follows:</Typography>
-                <Plot style= {{width:"100%"}} data={[stance]} layout={ { autosize:true, showlegend: false }} useResizeHandler={true} config = {{'displayModeBar': false}} />
+            <Grid item xs={8}>
                 
                 <Typography variant="body1">The {hashtagCloud.length !== 100 ? "hashtags" : "top 100 hashtags"} appearing in the replies:</Typography>
                 <div style={{height: 500}}>
                     <ReactWordcloud words={hashtagCloud} options={options} callbacks={callbacks} />
                 </div>
 
-                <Typography variant="body1">The {Object.keys(urlTableData).length === 10 ? "ten most frequently occuring" : ""} URLs within the replies are:</Typography>
-                <TableContainer component={Paper}>
-                    <Table className={classes.table} aria-label="simple table">
-                        <TableHead>
-                            <TableRow>
-                                <TableCell>URL</TableCell>
-                                <TableCell>Appearances</TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {Object.keys(urlTableData).map((row, key) => (
-                                <TableRow key={key}>
-                                    <TableCell><Link href={row} target="_blank">{row}</Link></TableCell>
-                                    <TableCell>{urlTableData[row].toLocaleString()}</TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
+               
 
-                <Typography variant="body1">The {Object.keys(users).length === 10 ? "ten most active" : ""} users contributing to this conversation are:</Typography>
+                
+            </Grid>
+        </Grid>
+
+        <Grid
+                container
+                direction="row"
+                spacing={3}
+                alignItems="flex-start">
+
+<Grid item xs={4}>
+<Typography variant="body1">The stance of the {conversation.number_of_replies.toLocaleString()} replies within the conversation breaks down as follows:</Typography>
+                <Plot style= {{width:"100%"}} data={[stance]} layout={ { autosize:true, showlegend: false }} useResizeHandler={true} config = {{'displayModeBar': false}} />
+                
+                </Grid>
+                <Grid item xs={8}>
+                <Typography variant="body1">The timeline of the {conversation.number_of_replies.toLocaleString()} replies within this conversation is as follows:</Typography>
+                <Plot style= {{width:"100%"}} data={conversation.timeline} layout={ { barmode: "stack", autosize:true, showlegend: true }} useResizeHandler={true} config = {{'displayModeBar': false}} />
+
+                </Grid>
+        </Grid>
+
+            <Grid
+                container
+                direction="row"
+                spacing={3}
+                alignItems="flex-start">
+                    <Grid item xs={3}>
+                    <Typography variant="body1">The {Object.keys(users).length === 10 ? "ten most active" : ""} users contributing to this conversation are:</Typography>
                 <TableContainer component={Paper}>
                     <Table className={classes.table} aria-label="simple table">
                         <TableHead>
@@ -137,8 +144,31 @@ const ConversationView = () => {
                         </TableBody>
                     </Table>
                 </TableContainer>
+                    </Grid>
+
+                    <Grid item xs={9}>
+                    <Typography variant="body1">The {Object.keys(urlTableData).length === 10 ? "ten most frequently occuring" : ""} URLs within the replies are:</Typography>
+                <TableContainer component={Paper}>
+                    <Table className={classes.table} aria-label="simple table">
+                        <TableHead>
+                            <TableRow>
+                                <TableCell>URL</TableCell>
+                                <TableCell>Appearances</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {Object.keys(urlTableData).map((row, key) => (
+                                <TableRow key={key}>
+                                    <TableCell><Link href={row} target="_blank">{row}</Link></TableCell>
+                                    <TableCell>{urlTableData[row].toLocaleString()}</TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+                    </Grid>
             </Grid>
-        </Grid>
+        </Paper>
     )
 }
 
