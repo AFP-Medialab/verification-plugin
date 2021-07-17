@@ -69,7 +69,7 @@ const ConversationView = () => {
     }
 
     return (
-        <Paper className={classes.root}>
+        <Paper className={classes.rootNoCenter}>
         <Grid
             container
             direction="row"
@@ -107,13 +107,15 @@ const ConversationView = () => {
                 spacing={3}
                 alignItems="flex-start">
 
+                    <Grid item xs={12}>
+                        <Typography variant="body1">There are {conversation.number_of_replies.toLocaleString()} replies within this conversation. The following charts show the overall stance breakdown as well as the timeline of the conversation.</Typography>
+                    </Grid>
+
 <Grid item xs={4}>
-<Typography variant="body1">The stance of the {conversation.number_of_replies.toLocaleString()} replies within the conversation breaks down as follows:</Typography>
                 <Plot style= {{width:"100%"}} data={[stance]} layout={ { autosize:true, showlegend: false }} useResizeHandler={true} config = {{'displayModeBar': false}} />
                 
                 </Grid>
                 <Grid item xs={8}>
-                <Typography variant="body1">The timeline of the {conversation.number_of_replies.toLocaleString()} replies within this conversation is as follows:</Typography>
                 <Plot style= {{width:"100%"}} data={conversation.timeline} layout={ { barmode: "stack", autosize:true, showlegend: true }} useResizeHandler={true} config = {{'displayModeBar': false}} />
 
                 </Grid>
@@ -124,6 +126,7 @@ const ConversationView = () => {
                 direction="row"
                 spacing={3}
                 alignItems="flex-start">
+
                     <Grid item xs={3}>
                     <Typography variant="body1">The {Object.keys(users).length === 10 ? "ten most active" : ""} users contributing to this conversation are:</Typography>
                 <TableContainer component={Paper}>
