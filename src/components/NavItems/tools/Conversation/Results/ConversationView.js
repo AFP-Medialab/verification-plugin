@@ -31,10 +31,8 @@ const ConversationView = () => {
     const conversation = useSelector(state => state.conversation.conversation);
     const tweet = useSelector(state => state.conversation.tweet);
 
-    const statusID = conversation.root.id //useSelector(state => state.conversation.conversation.root.id);
     const tweetID = tweet.id //useSelector(state => state.conversation.tweet.id);
-    const conversationStance = tweet.stance_conversation //useSelector(state => state.conversation.tweet.stance_conversation);
-
+    
     const hashtagCloud = useSelector(state => state.conversation.cloud)
     const stance = useSelector(state => state.conversation.stance)
     const urlTableData = conversation.urls
@@ -78,14 +76,8 @@ const ConversationView = () => {
             
             <Grid item xs={4}>
 
-                { tweetID !== statusID ? <div>
-                <Typography variant="body1">The tweet you entered</Typography>
                 <InnerHTML html={tweet.html} />
                 
-                <Typography variant="body1">has a stance label of "{conversationStance}" to the tweet at the root of the conversation:  </Typography>
-                </div>
-                : null }
-                <InnerHTML html={conversation.root.html} />
             </Grid>
 
             <Grid item xs={8}>

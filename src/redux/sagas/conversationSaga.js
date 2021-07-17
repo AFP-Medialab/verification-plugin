@@ -30,16 +30,9 @@ function* handleConversationCall(action) {
     // store the tweet object into the state
     yield put(setTweet(tweet))
 
-    // now we get the conversation object from elasticsearch via the backend
+    // now we get the conversation object from the backend (this is essentially
+    // a summary of the direct replies to the tweet)
     let conversation = yield call(conversationApi.getConversation, tweet.conversation_id)
-    
-    // if the tweet we have been asked for is the root of the conversation then
-    // we can re-use the HTML, there is no need to ask twitter for it a second time
-    if (conversation.root.id === tweet.id)
-        conversation.root.html = tweet.html
-    else {
-        conversation.root.html = yield call(conversationApi.getTweetHTML, conversation.root, lang)
-    }
 
     // store the conversation object into the state
     yield put(setConversation(conversation))
