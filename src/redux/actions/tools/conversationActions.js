@@ -8,6 +8,17 @@ export const setConversationInput = (url) => {
     }
 };
 
+export const setTweetID = (id_str) => {
+    return {
+        type: "SET_CONVERSATION_TWEET_ID",
+        payload: {
+            id_str: id_str,
+            loading: true
+        }
+    }
+};
+
+
 export const setConversation = (conversation) => {
     return {
         type: "SET_CONVERSATION_ROOT",
@@ -36,12 +47,13 @@ export const setStance = (stance) => {
     }
 }
 
-export const setTweet = (tweet) => {
+export const setTweet = (tweet, url) => {
     console.log("inside setConversationTweet: "+tweet);
     return {
         type: "SET_CONVERSATION_TWEET",
         payload: {
             tweet: tweet,
+            url: url,
         }
     }
 }

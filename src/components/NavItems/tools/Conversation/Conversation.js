@@ -86,7 +86,7 @@ const Conversation = () => {
 
             <LinearProgress hidden={!loading}/>
 
-            {cloud && !fail ? <ConversationView/> : null}
+            {cloud && !fail ? <ConversationView value="testing" /> : null}
         </div>
     )
 };

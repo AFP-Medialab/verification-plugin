@@ -1,14 +1,15 @@
 import React from "react";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 import Grid from "@material-ui/core/Grid";
 import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Conversation.tsv";
-import InnerHTML from 'dangerously-set-html-content'
 import ReactWordcloud from 'react-wordcloud';
 import {select} from "d3-selection";
 import 'tippy.js/dist/tippy.css';
 import 'tippy.js/animations/scale.css';
+
+import {Box, Button, TextField} from "@material-ui/core";
 
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -23,10 +24,15 @@ import Typography from "@material-ui/core/Typography";
 
 import Plot from 'react-plotly.js';
 
+import { setConversationInput}  from "../../../../../redux/actions/tools/conversationActions";
+
+import Tweet from "./Tweet"
+
 const ConversationView = () => {
-    
+
     const classes = useMyStyles();
     const keyword = useLoadLanguage("components/NavItems/tools/Conversation.tsv", tsv);
+    const dispatch = useDispatch();
 
     const conversation = useSelector(state => state.conversation.conversation);
     const tweet = useSelector(state => state.conversation.tweet);
@@ -66,6 +72,10 @@ const ConversationView = () => {
         onWordMouseOver: getCallback("onWordMouseOver")
     }
 
+    const submitID = (src) => {
+        dispatch(setConversationInput(src));
+    };
+
     return (
         <Paper className={classes.rootNoCenter}>
         <Grid
@@ -75,8 +85,9 @@ const ConversationView = () => {
             alignItems="flex-start">
             
             <Grid item xs={4}>
-
-                <InnerHTML html={tweet.html} />
+                {tweet.in_reply_to ? <Button variant="contained" color="primary" onClick={() => submitID(tweet.in_reply_to)}>Parent</Button>  : null }
+                {tweet.in_reply_to && tweet.in_reply_to !== tweet.conversation_id ? <Button variant="contained" color="primary" onClick={() => submitID(tweet.conversation_id)}>Root</Button> : null }
+                <Tweet tweet={tweet} />
                 
             </Grid>
 

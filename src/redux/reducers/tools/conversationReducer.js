@@ -1,5 +1,6 @@
 const defaultState = {
     url: undefined,
+    id_str: undefined,
     loading : false,
 //  fail: false,
 //  errorKey: null,
@@ -19,6 +20,7 @@ const conversationReducer = (state = defaultState, action) => {
         case "SET_CONVERSATION_TWEET":
         case "SET_CONVERSATION_CLOUD":
         case "SET_CONVERSATION_STANCE":
+        case "SET_CONVERSATION_TWEET_ID":
             // whatever we are being asked to do just push
             // the payload into the state
             return Object.assign({}, state, action.payload)
