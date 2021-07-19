@@ -33,39 +33,8 @@ export default function ConversationAPI() {
         return json.data
     }
 
-    /**
-     * Generates a HTML fragment used to display the given tweet. This is
-     * normally generated usng the official Twitter oEmbed endpoint, but
-     * if we hit an error or request a deleted tweet then we generate HTML
-     * ourselves so that there is something to display in the UI.
-     * @param {*} tweet a JSON object representing a tweet (usually a response
-     *                  from a call to getTweet)
-     * @param {*} lang the language to use for the UI elements of the rendered
-     *                 tweet. This doesn;t effect the text of the tweet itself
-     * @returns a HTML fragment to embed in the UI to render the given tweet
-     */
-    const getTweetHTML = async (tweet, lang) => {
-
-        // TODO make this a call to our backend and cache the response in elasticsearch
-
-        // for options we centre the tweet, hide the conversation, enable do-not-track,
-        // and set the UI language so the tweet sits nicely in the page
-        // TODO can we get the link colour from somewhere, if so then we can pass this
-        // via the link_color option
-        let json = await axios.get("https://publish.twitter.com/oembed?align=center&hide_thread=true&dnt=true&lang="+lang+"&url="+encodeURIComponent("https://twitter.com/"+tweet.user.screen_name+"/status/"+tweet.id))
-
-        // TODO better error handling and generation of
-        // fake twitter HTML for deleted tweets
-
-        if (json.status === 200)
-            return json.data.html;
-        else
-            return "tweet not available";
-    }
-
     return {
         getTweet,
-        getConversation,
-        getTweetHTML
+        getConversation
     }
 }

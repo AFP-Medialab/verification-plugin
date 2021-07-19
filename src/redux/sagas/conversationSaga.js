@@ -31,13 +31,9 @@ function* handleConversationTweetID(action) {
 
     // get the tweet from the elasticsearch index via the backend
     let tweet = yield call(conversationApi.getTweet, id_str)
-    
-    // get the language to use in the UI
-    const lang = yield select(state => state.language);
 
-    // get the HTML used to display the tweet
-    tweet.html = yield call(conversationApi.getTweetHTML, tweet, lang)
-
+    // work out the full URL for the tweet in case we started from the ID only
+    // (i.e. navigating for an in_reply_to_status_id_str link etc.)
     const tweetURL = "https:twitter.com/"+tweet.user.screen_name+"/status/"+id_str;
     
     // store the tweet object into the state
