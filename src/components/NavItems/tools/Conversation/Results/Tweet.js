@@ -28,6 +28,7 @@ class Tweet extends Component {
             "https://publish.twitter.com/oembed?align=center&hide_thread=true&dnt=true&lang="+lang+"&url="+encodeURIComponent("https://twitter.com/"+tweet.user.screen_name+"/status/"+tweet.id)
         )
         .then((response) => {
+
             // if we didn't hit an error then set the state with the relevant data
             this.setState({
                 html: response.data.html
@@ -38,6 +39,12 @@ class Tweet extends Component {
         }, (error) => {
             // for now just log the error to the console
             console.log(error);
+
+            // and show the raw tweet text with little or no styling. This will be less of
+            // an issue once we move the retrieval into the backend, see the TODO above
+            this.setState({
+                html: tweet.text
+            })
         });
     }
 

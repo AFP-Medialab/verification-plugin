@@ -27,6 +27,12 @@ import Plot from 'react-plotly.js';
 import { setConversationInput}  from "../../../../../redux/actions/tools/conversationActions";
 
 import Tweet from "./Tweet"
+import TweetList from "./TweetList"
+import User from "./User"
+
+import axios from "axios";
+
+import InfiniteScroll from "react-infinite-scroll-component";
 
 const ConversationView = () => {
 
@@ -76,6 +82,8 @@ const ConversationView = () => {
         dispatch(setConversationInput(src));
     };
 
+//
+
     return (
         <Paper className={classes.rootNoCenter}>
         <Grid
@@ -85,20 +93,19 @@ const ConversationView = () => {
             alignItems="flex-start">
             
             <Grid item xs={4}>
+
+
+
                 {tweet.in_reply_to ? <Button variant="contained" color="primary" onClick={() => submitID(tweet.in_reply_to)}>Parent</Button>  : null }
                 {tweet.in_reply_to && tweet.in_reply_to !== tweet.conversation_id ? <Button variant="contained" color="primary" onClick={() => submitID(tweet.conversation_id)}>Root</Button> : null }
                 <Tweet tweet={tweet} />
+                
                 
             </Grid>
 
             <Grid item xs={8}>
                 
-                <Typography variant="body1">The {hashtagCloud.length !== 100 ? "hashtags" : "top 100 hashtags"} appearing in the replies:</Typography>
-                <div style={{height: 500}}>
-                    <ReactWordcloud words={hashtagCloud} options={options} callbacks={callbacks} />
-                </div>
-
-               
+                    <User user={tweet.user} />
 
                 
             </Grid>
@@ -111,7 +118,7 @@ const ConversationView = () => {
                 alignItems="flex-start">
 
                     <Grid item xs={12}>
-                        <Typography variant="body1">There are {conversation.number_of_replies.toLocaleString()} replies within this conversation. The following charts show the overall stance breakdown as well as the timeline of the conversation.</Typography>
+                        <Typography variant="body1">We have currently processed {conversation.number_of_replies.toLocaleString()} replies to the selected tweet. The following charts show the overall stance breakdown as well as the timeline of these replies.</Typography>
                     </Grid>
 
 <Grid item xs={4}>
@@ -123,6 +130,23 @@ const ConversationView = () => {
 
                 </Grid>
         </Grid>
+
+        <Grid
+            container
+            direction="row"
+            spacing={3}
+            alignItems="flex-start">
+                <Grid item xs={4}>
+                <TweetList conversation={conversation}/>
+
+                </Grid>
+                <Grid item xs={8}>
+             <Typography variant="body1">The {hashtagCloud.length !== 100 ? "hashtags" : "top 100 hashtags"} appearing in the replies:</Typography>
+                <div style={{height: 500}}>
+                    <ReactWordcloud words={hashtagCloud} options={options} callbacks={callbacks} />
+                </div>
+                </Grid>
+            </Grid>
 
             <Grid
                 container
