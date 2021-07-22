@@ -36,7 +36,7 @@ import axios from "axios";
 
 import InfiniteScroll from "react-infinite-scroll-component";
 
-const ConversationView = () => {
+const RepliesExplorer = () => {
 
     const classes = useMyStyles();
     const keyword = useLoadLanguage("components/NavItems/tools/Conversation.tsv", tsv);
@@ -87,60 +87,8 @@ const ConversationView = () => {
 //
 
     return (
-        <div>
-        <Card>
-                <CardHeader
-                    title={"Tweet Summary"}
-                    className={classes.headerUpladedImage}
-                />
-                <Box p={3}>
-        <Grid
-            container
-            direction="row"
-            spacing={3}
-            alignItems="flex-start">
-            
-            <Grid item xs={4}>
-
-
-
-                {tweet.in_reply_to ? <Button variant="contained" color="primary" onClick={() => submitID(tweet.in_reply_to)}>Parent</Button>  : null }
-                {tweet.in_reply_to && tweet.in_reply_to !== tweet.conversation_id ? <Button variant="contained" color="primary" onClick={() => submitID(tweet.conversation_id)}>Root</Button> : null }
-                <Tweet tweet={tweet} />
-                
-                
-            </Grid>
-
-            <Grid item xs={8}>
-                
-                    <User user={tweet.user} />
-
-                
-            </Grid>
-        </Grid>
-
-        <Grid
-                container
-                direction="row"
-                spacing={3}
-                alignItems="flex-start">
-
-                    <Grid item xs={12}>
-                        <Typography variant="body1">We have currently processed {conversation.number_of_replies.toLocaleString()} replies to the selected tweet. The following charts show the overall stance breakdown as well as the timeline of these replies.</Typography>
-                    </Grid>
-
-<Grid item xs={4}>
-                <Plot style= {{width:"100%"}} data={[stance]} layout={ { autosize:true, showlegend: false }} useResizeHandler={true} config = {{'displayModeBar': false}} />
-                
-                </Grid>
-                <Grid item xs={8}>
-                <Plot style= {{width:"100%"}} data={conversation.timeline} layout={ { barmode: "stack", autosize:true, showlegend: true }} useResizeHandler={true} config = {{'displayModeBar': false}} />
-
-                </Grid>
-        </Grid>
-        </Box>
-        </Card>
-        <Box m={3} />
+        
+        
         <Card>
                 <CardHeader
                     title={"Replies Explorer"}
@@ -217,8 +165,8 @@ const ConversationView = () => {
             </Grid>
             </Box>
             </Card>
-        </div>
+
     )
 }
 
-export default ConversationView;
+export default RepliesExplorer;

@@ -19,7 +19,9 @@ import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 
 import LinearProgress from "@material-ui/core/LinearProgress";
 
-import ConversationView from "./Results/ConversationView"
+import TweetSummary from "./Results/TweetSummary"
+import RepliesExplorer from "./Results/RepliesExplorer"
+
 
 const Conversation = () => {
 
@@ -32,6 +34,7 @@ const Conversation = () => {
     const errorKey = useSelector(state => state.conversation.errorKey);
     const fail = useSelector(state => state.conversation.fail);
     const loading = useSelector(state => state.conversation.loading);
+    const conversation = useSelector(state => state.conversation.conversation);
 
     const classes = useMyStyles();
 
@@ -84,11 +87,16 @@ const Conversation = () => {
 
             <Box m={3} />
 
-            <LinearProgress hidden={!loading}/>
+            
+            {cloud && !fail ? <TweetSummary/> : null}
 
-            {cloud && !fail ? <ConversationView value="testing" /> : null}
+            {cloud && conversation && conversation.number_of_replies > 0 ? <Box m={3}><RepliesExplorer/></Box> : null}
+
+            <LinearProgress hidden={!loading}/>
         </div>
     )
 };
+
+// TODO move the display logic for the two results parts into their own classes
 
 export default Conversation;
