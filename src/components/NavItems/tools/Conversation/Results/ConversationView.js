@@ -18,6 +18,8 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import Card from "@material-ui/core/Card";
+import CardHeader from "@material-ui/core/CardHeader";
 
 import Link from "@material-ui/core/Link";
 import Typography from "@material-ui/core/Typography";
@@ -85,7 +87,13 @@ const ConversationView = () => {
 //
 
     return (
-        <Paper className={classes.rootNoCenter}>
+        <div>
+        <Card>
+                <CardHeader
+                    title={"Tweet Summary"}
+                    className={classes.headerUpladedImage}
+                />
+                <Box p={3}>
         <Grid
             container
             direction="row"
@@ -130,6 +138,15 @@ const ConversationView = () => {
 
                 </Grid>
         </Grid>
+        </Box>
+        </Card>
+        <Box m={3} />
+        <Card>
+                <CardHeader
+                    title={"Replies Explorer"}
+                    className={classes.headerUpladedImage}
+                />
+                <Box p={3}>
 
         <Grid
             container
@@ -198,7 +215,9 @@ const ConversationView = () => {
                 </TableContainer>
                     </Grid>
             </Grid>
-        </Paper>
+            </Box>
+            </Card>
+        </div>
     )
 }
 

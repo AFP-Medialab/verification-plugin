@@ -60,7 +60,7 @@ class TweetList extends Component {
           height={500}
           endMessage={
             <p style={{ textAlign: "center" }}>
-              <b>Yay! You have seen it all</b>
+              <b>That's all the replies, so far...</b>
             </p>
           }
         >
