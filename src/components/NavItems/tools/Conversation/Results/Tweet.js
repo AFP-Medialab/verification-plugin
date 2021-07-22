@@ -1,6 +1,7 @@
-import React, { Component } from "react";
+import React, { Component, useState } from "react";
 import InnerHTML from 'dangerously-set-html-content'
 import axios from "axios";
+import { Button } from "@material-ui/core";
 
 class Tweet extends Component {
 
@@ -20,6 +21,20 @@ class Tweet extends Component {
 
         const lang = this.props.lang || "en"
 
+        const plain = this.props.plain || false
+
+        // assume it's a comment
+        var color = "rgb(31, 119, 180)";
+        
+        if (tweet.stance_parent === "query")
+		    color = "rgb(255, 127, 14)";
+		else if (tweet.stance_parent === "support")
+            color = "rgb(44, 160, 44)";
+		else if (tweet.stance_parent === "deny")
+            color = "rgb(214, 39, 40)";
+
+        // TODO put all the styles into a map in the state to make the HTML easier
+
         // get the data from twitter
         axios.get(
             // TODO use our own endpoint so we can cache these in elastic for the right
@@ -31,7 +46,10 @@ class Tweet extends Component {
 
             // if we didn't hit an error then set the state with the relevant data
             this.setState({
-                html: response.data.html
+                html: response.data.html,
+                plain: plain,
+                color: color,
+                id: tweet.id,
             })
 
             //TODO check what the response looks like for deleted tweet? is it an error code
@@ -43,14 +61,30 @@ class Tweet extends Component {
             // and show the raw tweet text with little or no styling. This will be less of
             // an issue once we move the retrieval into the backend, see the TODO above
             this.setState({
-                html: tweet.text
+                html: tweet.text,
+                plain: plain,
+                color: color,
+                id: tweet.id
             })
         });
     }
 
     render() {
+
+        console.log(this.props.viewTweet)
+
+
+        if (this.state.plain)  {
+            return (
+                <InnerHTML html={this.state.html} />
+            )
+        }
+
         return (
-            <InnerHTML html={this.state.html} />
+            <div style={{background: this.state.color, padding: 6, borderRadius: "12px"}}>
+                <InnerHTML html={this.state.html} />
+                <Button size="small" style={{color: "white"}} onClick={() => this.props.viewTweet(this.state.id)}>Switch To...</Button>
+            </div>
         )
     }
 }

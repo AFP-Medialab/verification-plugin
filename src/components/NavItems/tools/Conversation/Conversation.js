@@ -90,7 +90,9 @@ const Conversation = () => {
             
             {cloud && !fail ? <TweetSummary/> : null}
 
-            {cloud && conversation && conversation.number_of_replies > 0 ? <Box m={3}><RepliesExplorer/></Box> : null}
+            <Box m={3}/>
+
+            {cloud && conversation && conversation.number_of_replies > 0 ? <RepliesExplorer/> : null}
 
             <LinearProgress hidden={!loading}/>
         </div>

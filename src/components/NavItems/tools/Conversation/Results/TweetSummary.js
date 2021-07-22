@@ -73,9 +73,9 @@ const TweetSummary = () => {
 
 
 
-                {tweet.in_reply_to ? <Button variant="contained" color="primary" onClick={() => submitID(tweet.in_reply_to)}>Parent</Button>  : null }
-                {tweet.in_reply_to && tweet.in_reply_to !== tweet.conversation_id ? <Button variant="contained" color="primary" onClick={() => submitID(tweet.conversation_id)}>Root</Button> : null }
-                <Tweet tweet={tweet} />
+                {tweet.in_reply_to && tweet.in_reply_to !== tweet.conversation_id ? <Button variant="outlined" color="primary" onClick={() => submitID(tweet.conversation_id)}>Switch to Root</Button> : null }
+                {tweet.in_reply_to ? <Button variant="outlined" color="primary" onClick={() => submitID(tweet.in_reply_to)}>Switch to Parent</Button>  : null }
+                <Tweet tweet={tweet} plain/>
                 
                 
             </Grid>

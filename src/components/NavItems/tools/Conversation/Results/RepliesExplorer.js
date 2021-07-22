@@ -102,7 +102,7 @@ const RepliesExplorer = () => {
             spacing={3}
             alignItems="flex-start">
                 <Grid item xs={4}>
-                <TweetList conversation={conversation}/>
+                <TweetList conversation={conversation} viewTweet={submitID} />
 
                 </Grid>
                 <Grid item xs={8}>

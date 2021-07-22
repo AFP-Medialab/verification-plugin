@@ -67,7 +67,7 @@ class TweetList extends Component {
           {this.state.items.map((i, index) => (
               
             <div style={style} key={index}>
-              <Tweet tweet={i}/>
+              <Tweet tweet={i} viewTweet={this.props.viewTweet} />
             </div>
           ))}
         </InfiniteScroll>
