@@ -1,12 +1,13 @@
 import React from "react";
-
 import Avatar from "@material-ui/core/Avatar";
 import Box from "@material-ui/core/Box";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
+import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import PublicIcon from "@material-ui/icons/Public";
+import SourceCredibilityDBKFDialog from "./SourceCredibilityDBKFDialog";
 import Typography from "@material-ui/core/Typography";
 
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
@@ -39,6 +40,12 @@ const SourceCredibilityResults = (props) => {
                                     }
                                     {value.credibility_description ?
                                         <Typography> {keyword("commented_as")} "{value.credibility_description}" </Typography>
+                                        : null
+                                    }
+                                    {value.credibility_debunks.length > 0 ?
+                                        <ListItemSecondaryAction>
+                                            <SourceCredibilityDBKFDialog debunks={value.credibility_debunks}/>
+                                        </ListItemSecondaryAction>
                                         : null
                                     }
                                 </Typography>

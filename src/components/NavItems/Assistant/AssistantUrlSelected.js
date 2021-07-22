@@ -34,16 +34,14 @@ const AssistantUrlSelected = (props) => {
     const cleanAssistant = () => props.cleanAssistant()
 
     const handleArchive = () =>{
-        let archiveUrl = inputUrl
+        let archiveUrl = ""
+
         switch (inputUrlType) {
             case KNOWN_LINKS.FACEBOOK:
                 archiveUrl = "https://www.facebook.com/plugins/post.php?href=" + encodeURIComponent(inputUrl)
                 break;
-            case KNOWN_LINKS.INSTAGRAM:
-                if (inputUrl.endsWith("/")){
-                    archiveUrl = archiveUrl.substring(0, archiveUrl.length - 1)
-                }
-                archiveUrl = archiveUrl + "/?utm_source=ig_embed&amp;utm_campaign=loading"
+            default:
+                archiveUrl = inputUrl
         }
         navigator.clipboard.writeText(archiveUrl).then(()=>{
             window.open("https://web.archive.org/save/" + archiveUrl, "_blank")

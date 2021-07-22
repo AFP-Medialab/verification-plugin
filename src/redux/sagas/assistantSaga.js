@@ -474,14 +474,22 @@ const filterSourceCredibilityResults = (originalResult) => {
             factCheckerResult.push({
                 "credibility_source": result["source"],
                 "credibility_labels": result["type"],
-                "credibility_description": result["description"]
+                "credibility_description": result["description"],
+                "credibility_debunks": []
             })
         }
         else {
+            let resultDebunks = result["debunks"] ? result["debunks"] : []
+            if(resultDebunks.length){
+                resultDebunks = resultDebunks.toString()
+                resultDebunks = resultDebunks.substring(1, resultDebunks.length-1)
+                resultDebunks = resultDebunks.split(",")
+            }
             sourceCredResult.push({
                 "credibility_source": result["source"],
                 "credibility_labels": result["type"],
-                "credibility_description": result["description"]
+                "credibility_description": result["description"],
+                "credibility_debunks": resultDebunks
             })
         }
     })
