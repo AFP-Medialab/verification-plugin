@@ -21,6 +21,12 @@ import Paper from '@material-ui/core/Paper';
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+
 import Link from "@material-ui/core/Link";
 import Typography from "@material-ui/core/Typography";
 
@@ -92,6 +98,19 @@ const RepliesExplorer = () => {
         dispatch(setConversationFilter(event.target.value));
     };
 
+    const [open, setOpen] = React.useState(false);
+    const [screenName, setScreenName] = React.useState(null);
+
+    const handleClickOpen = (screen_name) => {
+        setScreenName(screen_name);
+        setOpen(true);
+      };
+    
+      const handleClose = () => {
+        setOpen(false);
+        setScreenName(null);
+      };
+
     return (
         
         
@@ -127,7 +146,6 @@ const RepliesExplorer = () => {
             alignItems="flex-start">
                 <Grid item xs={4}>
                 <TweetList conversation={conversation} viewTweet={submitID} />
-
                 </Grid>
                 <Grid item xs={8}>
              <Typography variant="body1">The {hashtagCloud.length !== 100 ? "hashtags" : "top 100 hashtags"} appearing in the replies:</Typography>
@@ -156,13 +174,33 @@ const RepliesExplorer = () => {
                         <TableBody>
                             {Object.keys(users).map((screen_name, key) => (
                                 <TableRow key={key}>
-                                    <TableCell><Link href={"https://twitter.com/"+screen_name} target="_blank">{screen_name}</Link></TableCell>
+                                    <TableCell><Button color="primary" size="small" style={{textTransform: "none"}} onClick={() => handleClickOpen(screen_name)}>{screen_name}</Button></TableCell>
                                     <TableCell>{users[screen_name].toLocaleString()} ({(100*users[screen_name]/conversation.number_of_replies).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}%)</TableCell>
                                 </TableRow>
                             ))}
                         </TableBody>
                     </Table>
                 </TableContainer>
+                <Dialog
+                    open={open}
+                    onClose={handleClose}
+                    maxWidth="md">
+                    <DialogContent>
+                    <Grid
+                container
+                direction="row"
+                spacing={3}
+                alignItems="flex-start">
+                        <Grid item xs={7}>
+                        <User screen_name={screenName}/></Grid>
+                    <Grid item xs={5}>
+
+
+                    </Grid>
+                    
+                    </Grid></DialogContent>
+                        
+                </Dialog>
                     </Grid>
 
                     <Grid item xs={9}>

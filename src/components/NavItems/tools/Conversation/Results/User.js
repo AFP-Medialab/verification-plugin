@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 
+import axios from "axios";
+
 import Grid from "@material-ui/core/Grid";
 import Link from "@material-ui/core/Link";
 import Typography from "@material-ui/core/Typography";
@@ -18,40 +20,63 @@ class User extends Component {
 
     componentDidMount() {
 
-        
-        /**{
-            "friends_count":174,
-            "profile_image_url_https":"https://pbs.twimg.com/profile_images/378800000651059744/75794617eb12b4938721fc8f3c7fdae6_normal.jpeg",
-            "listed_count":13,
-            "verified":false,
-            "description":"always drinking coffee while @ work: #nlproc with @GateAcUk at @sheffielduni, @ home: lots including #arduino, #3dprinting",
-            "created_at":"Tue Oct 22 17:56:03 +0000 2013",
-            "url":"",
-            "protected":false,
-            "screen_name":"encoffeedrinker",
-            "statuses_count":2088,
-            "id_str":"2149467956",
-            "followers_count":156,
-            "name":"Mark A. Greenwood",
-            "location":"Sheffield, UK"
-        }**/
-        
-        this.setState({
-            name: this.props.user.name,
-            screen_name: this.props.user.screen_name,
-            img: this.props.user.profile_image_url_https.replace("_normal",""),
-            description: this.props.user.description,
-            url: this.props.user.url,
-            following: this.props.user.friends_count.toLocaleString(),
-            followers: this.props.user.followers_count.toLocaleString(),
-            tweets: this.props.user.statuses_count.toLocaleString(),
-            lists: this.props.user.listed_count.toLocaleString(),
-            created_at: this.props.user.created_at,
-            account_age: this.props.user.account_age.toLocaleString(),
-            tweets_per_day: this.props.user.tweets_per_day.toFixed(2),
-            verified: this.props.user.verified,
-            protected: this.props.user.protected,
-        })
+        if (this.props.user) {
+            this.setState({
+                name: this.props.user.name,
+                screen_name: this.props.user.screen_name,
+                img: this.props.user.profile_image_url_https.replace("_normal",""),
+                description: this.props.user.description,
+                url: this.props.user.url,
+                following: this.props.user.friends_count.toLocaleString(),
+                followers: this.props.user.followers_count.toLocaleString(),
+                tweets: this.props.user.statuses_count.toLocaleString(),
+                lists: this.props.user.listed_count.toLocaleString(),
+                created_at: this.props.user.created_at,
+                account_age: this.props.user.account_age.toLocaleString(),
+                tweets_per_day: this.props.user.tweets_per_day.toFixed(2),
+                verified: this.props.user.verified,
+                protected: this.props.user.protected,
+            })
+        } else {
+            axios.get(
+                // TODO use our own endpoint so we can cache these in elastic for the right
+                //      length of time and generate something similar for the deleted ones
+                //      The only downside to that would be the loss of language options
+                "http://localhost:7000/user?screen_name="+this.props.screen_name
+            )
+            .then((response) => {
+                
+                // if we didn't hit an error then set the state with the relevant data
+                this.setState({
+                    name: response.data.name,
+                    screen_name: response.data.screen_name,
+                    img: response.data.profile_image_url_https.replace("_normal",""),
+                    description: response.data.description,
+                    url: response.data.url,
+                    following: response.data.friends_count.toLocaleString(),
+                    followers: response.data.followers_count.toLocaleString(),
+                    tweets: response.data.statuses_count.toLocaleString(),
+                    lists: response.data.listed_count.toLocaleString(),
+                    created_at: response.data.created_at,
+                    account_age: response.data.account_age.toLocaleString(),
+                    tweets_per_day: response.data.tweets_per_day.toFixed(2),
+                    verified: response.data.verified,
+                    protected: response.data.protected,
+                })
+    
+                //TODO check what the response looks like for deleted tweet? is it an error code
+                //     or a success but with a deleted message in the HTML
+            }, (error) => {
+                // for now just log the error to the console
+                console.log(error);
+    
+                // and show the raw tweet text with little or no styling. This will be less of
+                // an issue once we move the retrieval into the backend, see the TODO above
+                this.setState({
+                    name: "unknown user",
+                })
+            });
+        }
     }
 
     render() {

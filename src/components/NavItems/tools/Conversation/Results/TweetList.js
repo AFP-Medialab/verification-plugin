@@ -34,7 +34,7 @@ class TweetList extends Component {
         // TODO use our own endpoint so we can cache these in elastic for the right
         //      length of time and generate something similar for the deleted ones
         //      The only downside to that would be the loss of language options
-        "http://localhost:7000/conversation/scroll?id="+this.props.conversation.scroll_id
+        "http://localhost:7000/replies/scroll?id="+this.props.conversation.scroll_id
     )
     .then((response) => {
         // if we didn't hit an error then set the state with the relevant data
