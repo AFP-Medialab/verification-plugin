@@ -109,7 +109,7 @@ const RepliesExplorer = () => {
             alignItems="flex-start">
                 
                 <Grid item xs={12}>
-                <Typography variant="body1"><label>There are {conversation.number_of_replies} replies with a stance label of&nbsp;
+                <Typography variant="body1"><label>There are {conversation.number_of_replies.toLocaleString()} replies with a stance label of&nbsp;
                     <select value={filter} onChange={changeFilter}>
                         <option>any</option>
                         <option>comment</option>
