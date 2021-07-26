@@ -26,7 +26,7 @@ import Typography from "@material-ui/core/Typography";
 
 import Plot from 'react-plotly.js';
 
-import { setConversationInput}  from "../../../../../redux/actions/tools/conversationActions";
+import { setConversationInput, setConversationFilter }  from "../../../../../redux/actions/tools/conversationActions";
 
 import Tweet from "./Tweet"
 import TweetList from "./TweetList"
@@ -51,6 +51,10 @@ const RepliesExplorer = () => {
     const stance = useSelector(state => state.conversation.stance)
     const urlTableData = conversation.urls
     const users = conversation.users
+
+    const filter = useSelector(state => state.conversation.filter)
+
+    console.log(conversation.number_of_replies);
 
     function getCallback(callback) {
         return function (word, event) {
@@ -84,7 +88,9 @@ const RepliesExplorer = () => {
         dispatch(setConversationInput(src));
     };
 
-//
+    const changeFilter = (event) => {
+        dispatch(setConversationFilter(event.target.value));
+    };
 
     return (
         
@@ -95,6 +101,24 @@ const RepliesExplorer = () => {
                     className={classes.headerUpladedImage}
                 />
                 <Box p={3}>
+
+        <Grid
+            container
+            direction="row"
+            spacing={3}
+            alignItems="flex-start">
+                
+                <Grid item xs={12}>
+                <Typography variant="body1"><label>There are {conversation.number_of_replies} replies with a stance label of&nbsp;
+                    <select value={filter} onChange={changeFilter}>
+                        <option>any</option>
+                        <option>comment</option>
+                        <option>deny</option>
+                        <option>query</option>
+                        <option>support</option>
+                    </select></label></Typography>
+                </Grid>
+        </Grid>
 
         <Grid
             container

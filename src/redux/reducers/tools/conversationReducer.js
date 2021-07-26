@@ -9,6 +9,7 @@ const defaultState = {
     tweet: null,
     conversation: null,
     stance: null,
+    filter: 'any'
 };
 
 const conversationReducer = (state = defaultState, action) => {
@@ -21,6 +22,8 @@ const conversationReducer = (state = defaultState, action) => {
         case "SET_CONVERSATION_CLOUD":
         case "SET_CONVERSATION_STANCE":
         case "SET_CONVERSATION_TWEET_ID":
+        case "SET_CONVERSATION_FILTER":
+            console.log(action.type)
             // whatever we are being asked to do just push
             // the payload into the state
             return Object.assign({}, state, action.payload)

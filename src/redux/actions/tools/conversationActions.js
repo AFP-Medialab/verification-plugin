@@ -18,6 +18,16 @@ export const setTweetID = (id_str) => {
     }
 };
 
+export const setConversationFilter = (filter) => {
+    return {
+        type: "SET_CONVERSATION_FILTER",
+        payload: {
+            filter: filter,
+            cloud: null
+        }
+    }
+};
+
 
 export const setConversation = (conversation) => {
     return {

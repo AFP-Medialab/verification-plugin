@@ -31,10 +31,12 @@ const Conversation = () => {
 
     const conversationInputUrl = useSelector(state => state.conversation.url);
     const cloud = useSelector(state => state.conversation.cloud);
+    const stance = useSelector(state => state.conversation.cloud);
     const errorKey = useSelector(state => state.conversation.errorKey);
     const fail = useSelector(state => state.conversation.fail);
     const loading = useSelector(state => state.conversation.loading);
     const conversation = useSelector(state => state.conversation.conversation);
+    const tweet = useSelector(state => state.conversation.tweet)
 
     const classes = useMyStyles();
 
@@ -88,11 +90,11 @@ const Conversation = () => {
             <Box m={3} />
 
             
-            {cloud && !fail ? <TweetSummary/> : null}
+            {stance && !fail ? <TweetSummary/> : null}
 
             <Box m={3}/>
 
-            {cloud && conversation && conversation.number_of_replies > 0 ? <RepliesExplorer/> : null}
+            {cloud && conversation && tweet && tweet.number_of_replies > 0 ? <RepliesExplorer/> : null}
 
             <LinearProgress hidden={!loading}/>
         </div>

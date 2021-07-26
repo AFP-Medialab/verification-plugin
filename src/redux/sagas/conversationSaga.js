@@ -12,6 +12,35 @@ function* getConversationTweetSaga() {
     yield takeLatest(["SET_CONVERSATION_TWEET_ID"], handleConversationTweetID)
 }
 
+function* getConversationExplorterSaga() {
+    yield takeLatest(["SET_CONVERSATION_TWEET", "SET_CONVERSATION_FILTER"], handConversationExplorer)
+}
+
+function* handConversationExplorer(action) {
+
+    const id_str = yield select(state => state.conversation.id_str)
+    const filter = yield select(state => state.conversation.filter)
+
+     // now we get the conversation object from the backend (this is essentially
+    // a summary of the direct replies to the tweet)
+    let conversation = yield call(conversationApi.getConversation, id_str, filter)
+
+    // store the conversation object into the state
+    yield put(setConversation(conversation))
+
+    // in a similar way the hashtag info isn't in the format needed for drawing
+    // the word cloud either so again we'll set up the data structure...
+    const cloud = [];
+
+    // ... push the data into it and finally...
+    Object.keys(conversation.hashtags).forEach(hashtag => {
+        cloud.push({text: "#"+hashtag, value: conversation.hashtags[hashtag]})
+    })
+
+    // ... stick the object into the state ready for use
+    yield put(setHashtagCloud(cloud))
+}
+
 function* handleConversationURL(action) {
 
     // get the URL of the tweet we have been given through the UI
@@ -39,13 +68,6 @@ function* handleConversationTweetID(action) {
     // store the tweet object into the state
     yield put(setTweet(tweet, tweetURL))
 
-    // now we get the conversation object from the backend (this is essentially
-    // a summary of the direct replies to the tweet)
-    let conversation = yield call(conversationApi.getConversation, id_str)
-
-    // store the conversation object into the state
-    yield put(setConversation(conversation))
-
     // the stance info in the conversation object isn't exactly what we need in
     // order to generate the pie chart so let's setup the data object...
     const stance = {
@@ -61,10 +83,10 @@ function* handleConversationTweetID(action) {
     };
 
     // and then push the info from the original structure into the right places
-    Object.keys(conversation.stance).forEach(entry => {
-        console.log(entry +" ==> " + conversation.stance[entry])
+    Object.keys(tweet.stance).forEach(entry => {
+        console.log(entry +" ==> " + tweet.stance[entry])
         stance.labels.push(entry)
-        stance.values.push(conversation.stance[entry])
+        stance.values.push(tweet.stance[entry])
 
         if (entry === "comment")
 		    stance.marker.colors.push("rgb(31, 119, 180)");
@@ -78,24 +100,12 @@ function* handleConversationTweetID(action) {
 
     // and then put the built object into the state ready for use
     yield put(setStance(stance))
-
-    // in a similar way the hashtag info isn't in the format needed for drawing
-    // the word cloud either so again we'll set up the data structure...
-    const cloud = [];
-
-    // ... push the data into it and finally...
-    Object.keys(conversation.hashtags).forEach(hashtag => {
-        cloud.push({text: "#"+hashtag, value: conversation.hashtags[hashtag]})
-    })
-
-    // ... stick the object into the state ready for use
-    yield put(setHashtagCloud(cloud))
 }
 
 export default function* conversationSaga() {
     yield all([
         fork(getConversationURLSaga),
         fork(getConversationTweetSaga),
-
+        fork(getConversationExplorterSaga),
     ])
 }

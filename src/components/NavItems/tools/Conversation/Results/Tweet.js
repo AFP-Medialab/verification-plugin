@@ -71,9 +71,6 @@ class Tweet extends Component {
 
     render() {
 
-        console.log(this.props.viewTweet)
-
-
         if (this.state.plain)  {
             return (
                 <InnerHTML html={this.state.html} />
