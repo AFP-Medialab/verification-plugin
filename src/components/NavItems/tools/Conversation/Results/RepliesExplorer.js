@@ -194,8 +194,7 @@ const RepliesExplorer = () => {
                         <Grid item xs={7}>
                         <User screen_name={screenName}/></Grid>
                     <Grid item xs={5}>
-
-
+                        <TweetList stance={filter} screen_name={screenName} id_str={tweetID} viewTweet={submitID} />
                     </Grid>
                     
                     </Grid></DialogContent>

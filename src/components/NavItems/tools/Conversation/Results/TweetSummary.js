@@ -109,8 +109,8 @@ const TweetSummary = () => {
 
 
 
-                {tweet.in_reply_to && tweet.in_reply_to !== tweet.conversation_id ? <Button variant="outlined" color="primary" onClick={() => submitID(tweet.conversation_id)}>Switch to Root</Button> : null }
-                {tweet.in_reply_to ? <Button variant="outlined" color="primary" onClick={() => submitID(tweet.in_reply_to)}>Switch to Parent</Button>  : null }
+                {tweet.in_reply_to && tweet.in_reply_to !== tweet.conversation_id ? <Button variant="outlined" color="primary" onClick={() => submitID(tweet.conversation_id)}>Explore from Root...</Button> : null }
+                {tweet.in_reply_to ? <Button variant="outlined" color="primary" onClick={() => submitID(tweet.in_reply_to)}>Explore Parent...</Button>  : null }
                 <Tweet tweet={tweet} plain/>
                 
                 
