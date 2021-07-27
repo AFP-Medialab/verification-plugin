@@ -93,7 +93,7 @@ const AssistantUrlSelected = (props) => {
                                 <Box ml={1}>
                                     <Button onClick={() => handleArchive()} startIcon={<ArchiveOutlinedIcon /> }>
                                         <label>
-                                            Archive
+                                            {keyword("archive_link")}
                                         </label>
                                     </Button>
                                 </Box>
