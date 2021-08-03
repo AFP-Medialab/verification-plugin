@@ -88,7 +88,7 @@ const AssistantUrlSelected = (props) => {
                                         </Button>}
                                 </Box>
                             </Grid>
-                            {inputUrl === null ? null :
+                            {inputUrl === null || inputUrlType === KNOWN_LINKS.INSTAGRAM  ? null :
                             <Grid item xs={1}>
                                 <Box ml={1}>
                                     <Button onClick={() => handleArchive()} startIcon={<ArchiveOutlinedIcon /> }>
