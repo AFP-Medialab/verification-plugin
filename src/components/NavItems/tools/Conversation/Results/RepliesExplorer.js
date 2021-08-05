@@ -9,7 +9,7 @@ import {select} from "d3-selection";
 import 'tippy.js/dist/tippy.css';
 import 'tippy.js/animations/scale.css';
 
-import {Box, Button, TextField} from "@material-ui/core";
+import {Box, Button} from "@material-ui/core";
 
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -22,25 +22,14 @@ import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 
 import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
-
 import Link from "@material-ui/core/Link";
 import Typography from "@material-ui/core/Typography";
 
-import Plot from 'react-plotly.js';
-
 import { setConversationInput, setConversationFilter }  from "../../../../../redux/actions/tools/conversationActions";
 
-import Tweet from "./Tweet"
 import TweetList from "./TweetList"
 import User from "./User"
-
-import axios from "axios";
-
-import InfiniteScroll from "react-infinite-scroll-component";
 
 const RepliesExplorer = () => {
 
@@ -54,7 +43,6 @@ const RepliesExplorer = () => {
     const tweetID = tweet.id //useSelector(state => state.conversation.tweet.id);
     
     const hashtagCloud = useSelector(state => state.conversation.cloud)
-    const stance = useSelector(state => state.conversation.stance)
     const urlTableData = conversation.urls
     const users = conversation.users
 

@@ -4,20 +4,10 @@ import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 import Grid from "@material-ui/core/Grid";
 import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Conversation.tsv";
-import ReactWordcloud from 'react-wordcloud';
-import {select} from "d3-selection";
 import 'tippy.js/dist/tippy.css';
 import 'tippy.js/animations/scale.css';
 
-import {Box, Button, TextField} from "@material-ui/core";
-
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
+import {Box, Button} from "@material-ui/core";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 
@@ -29,12 +19,7 @@ import Plot from 'react-plotly.js';
 import { setConversationInput }  from "../../../../../redux/actions/tools/conversationActions";
 
 import Tweet from "./Tweet"
-import TweetList from "./TweetList"
 import User from "./User"
-
-import axios from "axios";
-
-import InfiniteScroll from "react-infinite-scroll-component";
 
 const TweetSummary = () => {
 
@@ -43,8 +28,7 @@ const TweetSummary = () => {
     const dispatch = useDispatch();
 
     const tweet = useSelector(state => state.conversation.tweet);
-    const tweetID = tweet.id
-    
+        
     const stance = useSelector(state => state.conversation.stance)
     
     const submitID = (src) => {
@@ -60,37 +44,6 @@ const TweetSummary = () => {
             rangeslider: { },
         }
     }
-
-/**
- title: 'Time Series with Rangeslider',
-  barmode: "stack",
-  xaxis: {
-    autorange: true,
-    range: ['2015-02-17', '2017-02-16'],
-    rangeselector: {buttons: [
-        {
-          count: 1,
-          label: '1m',
-          step: 'month',
-          stepmode: 'backward'
-        },
-        {
-          count: 6,
-          label: '6m',
-          step: 'month',
-          stepmode: 'backward'
-        },
-        {step: 'all'}
-      ]},
-    rangeslider: {range: ['2015-02-17', '2017-02-16']},
-    type: 'date'
-  },
-  yaxis: {
-    autorange: true,
-    range: [86.8700008333, 138.870004167],
-    type: 'linear'
-  }
- */
 
     return (
         <Card>

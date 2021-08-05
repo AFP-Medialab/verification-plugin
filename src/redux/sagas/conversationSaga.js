@@ -1,5 +1,5 @@
 import {all, call, fork, put, select, takeLatest} from "redux-saga/effects";
-import { setConversation, setHashtagCloud, setTweet, setStance, setTweetID } from "../actions/tools/conversationActions";
+import { setConversation, setHashtagCloud, setTweet, setStance, setTweetID, setFlashMessage } from "../actions/tools/conversationActions";
 import ConversationAPI from "../../components/NavItems/tools/Conversation/ConversationAPI";
 
 const conversationApi = ConversationAPI()
@@ -60,6 +60,11 @@ function* handleConversationTweetID(action) {
 
     // get the tweet from the elasticsearch index via the backend
     let tweet = yield call(conversationApi.getTweet, id_str)
+
+    if (tweet.flashMessage) {
+        yield put(setFlashMessage(tweet.flashType, tweet.flashMessage));
+        return;
+    }
 
     // work out the full URL for the tweet in case we started from the ID only
     // (i.e. navigating for an in_reply_to_status_id_str link etc.)

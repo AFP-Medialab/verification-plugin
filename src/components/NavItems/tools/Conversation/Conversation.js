@@ -1,6 +1,5 @@
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {useParams} from 'react-router-dom'
 
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import tsvConversation from "../../../../LocalDictionary/components/NavItems/tools/Conversation.tsv";
@@ -22,6 +21,7 @@ import LinearProgress from "@material-ui/core/LinearProgress";
 import TweetSummary from "./Results/TweetSummary"
 import RepliesExplorer from "./Results/RepliesExplorer"
 
+import Alert from '@material-ui/lab/Alert';
 
 const Conversation = () => {
 
@@ -32,7 +32,8 @@ const Conversation = () => {
     const conversationInputUrl = useSelector(state => state.conversation.url);
     const cloud = useSelector(state => state.conversation.cloud);
     const stance = useSelector(state => state.conversation.cloud);
-    const errorKey = useSelector(state => state.conversation.errorKey);
+    const flashType = useSelector(state => state.conversation.flashType);
+    const flashMessage = useSelector(state => state.conversation.flashMessage);
     const fail = useSelector(state => state.conversation.fail);
     const loading = useSelector(state => state.conversation.loading);
     const conversation = useSelector(state => state.conversation.conversation);
@@ -89,7 +90,8 @@ const Conversation = () => {
 
             <Box m={3} />
 
-            
+            {flashMessage ? <Alert severity={flashType}>{flashMessage}</Alert> : null }
+
             {stance && !fail ? <TweetSummary/> : null}
 
             <Box m={3}/>

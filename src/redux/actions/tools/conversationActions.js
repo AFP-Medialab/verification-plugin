@@ -58,12 +58,22 @@ export const setStance = (stance) => {
 }
 
 export const setTweet = (tweet, url) => {
-    console.log("inside setConversationTweet: "+tweet);
     return {
         type: "SET_CONVERSATION_TWEET",
         payload: {
             tweet: tweet,
             url: url,
+        }
+    }
+}
+
+export const setFlashMessage = (type, message) => {
+    return {
+        type: "SET_CONVERSATION_FLASH",
+        payload: {
+            loading: false,
+            flashType: type,
+            flashMessage: message
         }
     }
 }

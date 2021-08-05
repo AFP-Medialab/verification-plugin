@@ -1,4 +1,4 @@
-import React, { Component, useState } from "react";
+import React, { Component } from "react";
 import InnerHTML from 'dangerously-set-html-content'
 import axios from "axios";
 import { Button } from "@material-ui/core";

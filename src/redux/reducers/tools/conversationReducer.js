@@ -9,7 +9,9 @@ const defaultState = {
     tweet: null,
     conversation: null,
     stance: null,
-    filter: 'any'
+    filter: 'any',
+    flashType: null,
+    flashMessage: null,
 };
 
 const conversationReducer = (state = defaultState, action) => {
@@ -17,12 +19,14 @@ const conversationReducer = (state = defaultState, action) => {
         case "SET_CONVERSATION_INPUT":
             // if we have a new URL then start a clean state
             state = defaultState;
+        // eslint-disable-next-line
         case "SET_CONVERSATION_ROOT":
         case "SET_CONVERSATION_TWEET":
         case "SET_CONVERSATION_CLOUD":
         case "SET_CONVERSATION_STANCE":
         case "SET_CONVERSATION_TWEET_ID":
         case "SET_CONVERSATION_FILTER":
+        case "SET_CONVERSATION_FLASH":
             console.log(action.type)
             // whatever we are being asked to do just push
             // the payload into the state
