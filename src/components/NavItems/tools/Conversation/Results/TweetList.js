@@ -8,6 +8,8 @@ const style = {
   marginBottom: 4,
 };
 
+const endpoint = process.env.REACT_APP_CONVERSATION_API
+
 class TweetList extends Component {
     constructor(props) {
         super(props);
@@ -29,7 +31,7 @@ class TweetList extends Component {
             }
             
             axios.get (
-                "http://localhost:7000/replies?screen_name="+this.props.screen_name+"&id_str="+this.props.id_str+"&stance="+this.props.stance
+                endpoint+"/replies?screen_name="+this.props.screen_name+"&id_str="+this.props.id_str+"&stance="+this.props.stance
             )
             .then((response) => {
                 this.setState({
@@ -55,7 +57,7 @@ class TweetList extends Component {
         }
 
         axios.get(
-            "http://localhost:7000/replies/scroll?id="+this.state.scroll_id
+            endpoint+"/replies/scroll?id="+this.state.scroll_id
         )
         .then((response) => {
             // if we didn't hit an error then set the state with the relevant data
@@ -69,8 +71,6 @@ class TweetList extends Component {
             // for now just log the error to the console
             console.log(error);
         });
-
-        return;
     }
 
     render() {

@@ -7,6 +7,8 @@ import Link from "@material-ui/core/Link";
 import Typography from "@material-ui/core/Typography";
 import Paper from '@material-ui/core/Paper';
 
+const endpoint = process.env.REACT_APP_CONVERSATION_API
+
 class User extends Component {
 
     constructor(props) {
@@ -42,7 +44,7 @@ class User extends Component {
                 // TODO use our own endpoint so we can cache these in elastic for the right
                 //      length of time and generate something similar for the deleted ones
                 //      The only downside to that would be the loss of language options
-                "http://localhost:7000/user?screen_name="+this.props.screen_name
+                endpoint+"/user?screen_name="+this.props.screen_name
             )
             .then((response) => {
                 

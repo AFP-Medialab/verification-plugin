@@ -2,6 +2,8 @@ import axios from "axios";
 
 export default function ConversationAPI() {
 
+    const endpoint = process.env.REACT_APP_CONVERSATION_API
+
     /**
      * Retrieves a JSON object respresenting an individual tweet from
      * the backend. This includes some summary information derived
@@ -11,7 +13,7 @@ export default function ConversationAPI() {
      * @returns a JSON object representing the requested tweet
      */
     const getTweet = async (id) => {
-        let json = await axios.get("http://localhost:7000/tweet?id="+id)
+        let json = await axios.get(endpoint+"/tweet?id="+id)
 
         // TODO add error handling
 
@@ -26,7 +28,7 @@ export default function ConversationAPI() {
      * @returns a JSON object representing the requested conversation
      */
     const getConversation = async (id, stance) => {
-        let json = await axios.get("http://localhost:7000/conversation?id="+id+"&stance="+stance)
+        let json = await axios.get(endpoint+"/conversation?id="+id+"&stance="+stance)
 
         // TODO add error handling
 
