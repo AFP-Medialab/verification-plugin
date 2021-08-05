@@ -160,9 +160,10 @@ const RepliesExplorer = () => {
                 <Dialog
                     open={openHashtag}
                     onClose={handleCloseHashtag}
-                    maxWidth="md">
+                    maxWidth="sm">
                     <DialogContent>
                     <Typography variant="h3">#{hashtag}</Typography>
+                    <Button color="primary" size="small" style={{textTransform: "none"}} onClick={() => window.open(`https://twitter.com/hashtag/${hashtag}?f=live`,`blank`)}>View on Twitter</Button>
                     <TweetList stance={filter} hashtag={hashtag} id_str={tweetID} viewTweet={submitID} />
                     </DialogContent>
                         
