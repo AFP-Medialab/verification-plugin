@@ -29,10 +29,20 @@ class TweetList extends Component {
                 items: [],
                 hasMore: true
             }
+
+            let url = endpoint+"/replies?id_str="+this.props.id_str+"&stance="+this.props.stance;
+
+            // TODO I think these will need URL encoding to be 100% safe
+
+            if (this.props.screen_name) {
+                url = url + "&screen_name="+this.props.screen_name;
+            }
+
+            if (this.props.hashtag) {
+                url = url + "&hashtag="+this.props.hashtag;
+            }
             
-            axios.get (
-                endpoint+"/replies?screen_name="+this.props.screen_name+"&id_str="+this.props.id_str+"&stance="+this.props.stance
-            )
+            axios.get (url)
             .then((response) => {
                 this.setState({
                     items: response.data.replies,

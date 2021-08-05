@@ -57,10 +57,14 @@ const RepliesExplorer = () => {
             const text = select(element);
             text
                 .on("click", () => {
-                    if (isActive) {window.open(`https://twitter.com/hashtag/${word.text.substring(1)}?f=live`, "_blank");}
+                    //if (isActive) {window.open(`https://twitter.com/hashtag/${word.text.substring(1)}?f=live`, "_blank");}
+                    if (isActive) {
+                        handleOpenHashtag(word.text.substring(1));
+                    }
                 })
                 .transition()
-                .attr("text-decoration", isActive ? "underline" : "none");
+                .attr("font-weight", isActive ? "bold" : "normal");
+                //.attr("text-decoration", isActive ? "underline" : "none");
         };
     }
 
@@ -86,18 +90,31 @@ const RepliesExplorer = () => {
         dispatch(setConversationFilter(event.target.value));
     };
 
-    const [open, setOpen] = React.useState(false);
+    const [openUser, setOpenUser] = React.useState(false);
     const [screenName, setScreenName] = React.useState(null);
 
-    const handleClickOpen = (screen_name) => {
+    const handleOpenUser = (screen_name) => {
         setScreenName(screen_name);
-        setOpen(true);
-      };
+        setOpenUser(true);
+    };
     
-      const handleClose = () => {
-        setOpen(false);
+    const handleCloseUser = () => {
+        setOpenUser(false);
         setScreenName(null);
-      };
+    };
+
+    const [openHashtag, setOpenHashtag] = React.useState(false);
+    const [hashtag, setHashtag] = React.useState(null);
+
+    const handleOpenHashtag = (hashtag) => {
+        setHashtag(hashtag);
+        setOpenHashtag(true);
+    };
+
+    const handleCloseHashtag = () => {
+        setOpenHashtag(false);
+        setHashtag(null);
+    };
 
     return (
         
@@ -140,6 +157,16 @@ const RepliesExplorer = () => {
                 <div style={{height: 500}}>
                     <ReactWordcloud words={hashtagCloud} options={options} callbacks={callbacks} />
                 </div>
+                <Dialog
+                    open={openHashtag}
+                    onClose={handleCloseHashtag}
+                    maxWidth="md">
+                    <DialogContent>
+                    <Typography variant="h3">#{hashtag}</Typography>
+                    <TweetList stance={filter} hashtag={hashtag} id_str={tweetID} viewTweet={submitID} />
+                    </DialogContent>
+                        
+                </Dialog>
                 </Grid>
             </Grid>
 
@@ -162,7 +189,7 @@ const RepliesExplorer = () => {
                         <TableBody>
                             {Object.keys(users).map((screen_name, key) => (
                                 <TableRow key={key}>
-                                    <TableCell><Button color="primary" size="small" style={{textTransform: "none"}} onClick={() => handleClickOpen(screen_name)}>{screen_name}</Button></TableCell>
+                                    <TableCell><Button color="primary" size="small" style={{textTransform: "none"}} onClick={() => handleOpenUser(screen_name)}>{screen_name}</Button></TableCell>
                                     <TableCell>{users[screen_name].toLocaleString()} ({(100*users[screen_name]/conversation.number_of_replies).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}%)</TableCell>
                                 </TableRow>
                             ))}
@@ -170,8 +197,8 @@ const RepliesExplorer = () => {
                     </Table>
                 </TableContainer>
                 <Dialog
-                    open={open}
-                    onClose={handleClose}
+                    open={openUser}
+                    onClose={handleCloseUser}
                     maxWidth="md">
                     <DialogContent>
                     <Grid
