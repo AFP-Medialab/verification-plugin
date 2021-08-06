@@ -27,8 +27,8 @@ export default function ConversationAPI() {
      * @param {*} id the ID of the conversation we are interested in
      * @returns a JSON object representing the requested conversation
      */
-    const getConversation = async (id, stance) => {
-        let json = await axios.get(endpoint+"/conversation?id="+id+"&stance="+stance)
+    const getConversation = async (id, stance, restrict) => {
+        let json = await axios.get(endpoint+"/conversation?id="+id+"&stance="+stance+"&restrict="+restrict)
 
         // TODO add error handling
 

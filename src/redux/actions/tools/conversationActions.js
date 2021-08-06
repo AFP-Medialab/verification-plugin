@@ -28,6 +28,15 @@ export const setConversationFilter = (filter) => {
     }
 };
 
+export const setConversationRestriction = (restriction) => {
+    return {
+        type: "SET_CONVERSATION_RESTRICTION",
+        payload: {
+            restriction: restriction,
+            cloud: null,
+        }
+    }
+};
 
 export const setConversation = (conversation) => {
     return {

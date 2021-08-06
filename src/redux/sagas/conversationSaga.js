@@ -13,17 +13,18 @@ function* getConversationTweetSaga() {
 }
 
 function* getConversationExplorterSaga() {
-    yield takeLatest(["SET_CONVERSATION_TWEET", "SET_CONVERSATION_FILTER"], handConversationExplorer)
+    yield takeLatest(["SET_CONVERSATION_TWEET", "SET_CONVERSATION_FILTER", "SET_CONVERSATION_RESTRICTION"], handConversationExplorer)
 }
 
 function* handConversationExplorer(action) {
 
     const id_str = yield select(state => state.conversation.id_str)
     const filter = yield select(state => state.conversation.filter)
+    const restrict = yield select(state => state.conversation.restriction)
 
      // now we get the conversation object from the backend (this is essentially
     // a summary of the direct replies to the tweet)
-    let conversation = yield call(conversationApi.getConversation, id_str, filter)
+    let conversation = yield call(conversationApi.getConversation, id_str, filter, restrict)
 
     // store the conversation object into the state
     yield put(setConversation(conversation))

@@ -2,14 +2,13 @@ const defaultState = {
     url: undefined,
     id_str: undefined,
     loading : false,
-//  fail: false,
-//  errorKey: null,
     cloud: null,
     urls: null,
     tweet: null,
     conversation: null,
     stance: null,
     filter: 'any',
+    restriction: 'none',
     flashType: null,
     flashMessage: null,
 };
@@ -26,8 +25,8 @@ const conversationReducer = (state = defaultState, action) => {
         case "SET_CONVERSATION_STANCE":
         case "SET_CONVERSATION_TWEET_ID":
         case "SET_CONVERSATION_FILTER":
+        case "SET_CONVERSATION_RESTRICTION":
         case "SET_CONVERSATION_FLASH":
-            console.log(action.type)
             // whatever we are being asked to do just push
             // the payload into the state
             return Object.assign({}, state, action.payload)

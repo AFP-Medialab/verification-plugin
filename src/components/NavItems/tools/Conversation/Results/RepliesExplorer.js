@@ -26,7 +26,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import Link from "@material-ui/core/Link";
 import Typography from "@material-ui/core/Typography";
 
-import { setConversationInput, setConversationFilter }  from "../../../../../redux/actions/tools/conversationActions";
+import { setConversationInput, setConversationFilter, setConversationRestriction }  from "../../../../../redux/actions/tools/conversationActions";
 
 import TweetList from "./TweetList"
 import User from "./User"
@@ -47,8 +47,7 @@ const RepliesExplorer = () => {
     const users = conversation.users
 
     const filter = useSelector(state => state.conversation.filter)
-
-    console.log(conversation.number_of_replies);
+    const restrict = useSelector(state => state.conversation.restriction)
 
     function getCallback(callback) {
         return function (word, event) {
@@ -89,6 +88,10 @@ const RepliesExplorer = () => {
     const changeFilter = (event) => {
         dispatch(setConversationFilter(event.target.value));
     };
+
+    const changeRestriction = (event) => {
+        dispatch(setConversationRestriction(event.target.value));
+    }
 
     const [openUser, setOpenUser] = React.useState(false);
     const [screenName, setScreenName] = React.useState(null);
@@ -140,7 +143,14 @@ const RepliesExplorer = () => {
                         <option>deny</option>
                         <option>query</option>
                         <option>support</option>
-                    </select></label></Typography>
+                    </select></label> and which contain&nbsp;
+                    <select value={restrict} onChange={changeRestriction}>
+                        <option value="none">(no restriction)</option>
+                        <option value="hashtags">hashtags</option>
+                        <option value="user_mentions">user mentions</option>
+                        <option value="urls.unwound_url">URLs</option>
+                    </select>
+                    </Typography>
                 </Grid>
         </Grid>
 
