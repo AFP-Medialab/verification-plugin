@@ -49,6 +49,20 @@ const RepliesExplorer = () => {
     const filter = useSelector(state => state.conversation.filter)
     const restrict = useSelector(state => state.conversation.restriction)
 
+    let repliesLabel  = `in replies `
+    
+    if (restrict === "hashtags") {
+        repliesLabel = repliesLabel + `containing hashtags and `
+    }
+    else if (restrict === "user_mentions") {
+        repliesLabel = repliesLabel + `containing a user mention and `
+    }
+    else if (restrict === "urls.unwound_url") {
+        repliesLabel = repliesLabel + `containing a URL and `
+    }
+
+    repliesLabel = repliesLabel + `with the stance label '${filter}'`
+
     function getCallback(callback) {
         return function (word, event) {
             const isActive = callback !== "onWordMouseOut";
@@ -163,7 +177,7 @@ const RepliesExplorer = () => {
                 <TweetList conversation={conversation} viewTweet={submitID} />
                 </Grid>
                 <Grid item xs={8}>
-             <Typography variant="body1">The {hashtagCloud.length !== 100 ? "hashtags" : "top 100 hashtags"} appearing in the replies:</Typography>
+             <Typography variant="body1">The {hashtagCloud.length !== 100 ? "hashtags" : "top 100 hashtags"} appearing in {repliesLabel}:</Typography>
                 <div style={{height: 500}}>
                     <ReactWordcloud words={hashtagCloud} options={options} callbacks={callbacks} />
                 </div>
@@ -188,7 +202,7 @@ const RepliesExplorer = () => {
                 alignItems="flex-start">
 
                     <Grid item xs={3}>
-                    <Typography variant="body1">The {Object.keys(users).length === 10 ? "ten most active" : ""} users contributing to this conversation are:</Typography>
+                    <Typography variant="body1">The {Object.keys(users).length === 10 ? "ten most active" : ""} users in {repliesLabel}:</Typography>
                 <TableContainer component={Paper}>
                     <Table className={classes.table} aria-label="simple table">
                         <TableHead>
@@ -229,7 +243,7 @@ const RepliesExplorer = () => {
                     </Grid>
 
                     <Grid item xs={9}>
-                    <Typography variant="body1">The {Object.keys(urlTableData).length === 10 ? "ten most frequently occuring" : ""} URLs within the replies are:</Typography>
+                    <Typography variant="body1">The {Object.keys(urlTableData).length === 10 ? "ten most frequently occuring" : ""} URLs in {repliesLabel}:</Typography>
                 <TableContainer component={Paper}>
                     <Table className={classes.table} aria-label="simple table">
                         <TableHead>
