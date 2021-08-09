@@ -60,7 +60,7 @@ const useLoadLanguage = (onlineTsv, localTsv) => {
                 .then(result => {
                     dispatch(addDictionary(gitHubFullUrl, translate_csv(result.data)));
                 })
-                .catch(error => {console.error("this is an error"); console.error(error)})
+                .catch(error => console.error(error))
         };
 
         axios.get(gitHubFullUrl)
@@ -68,8 +68,7 @@ const useLoadLanguage = (onlineTsv, localTsv) => {
                 if (result.data === "")
                     backUpLocal();
                 else
-                    //dispatch(addDictionary(gitHubFullUrl, translate_csv(result.data)));
-                    backUpLocal();
+                    dispatch(addDictionary(gitHubFullUrl, translate_csv(result.data)));
             })
             .catch(() => {
                 backUpLocal();
