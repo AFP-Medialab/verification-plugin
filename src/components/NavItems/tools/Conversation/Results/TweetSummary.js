@@ -28,21 +28,24 @@ const TweetSummary = () => {
     const dispatch = useDispatch();
 
     const tweet = useSelector(state => state.conversation.tweet);
-        
+
     const stance = useSelector(state => state.conversation.stance)
     
     const submitID = (src) => {
         dispatch(setConversationInput(src));
     };
 
-    const layout = {
+    let layout = {
         barmode: "stack",
         autosize:true,
         showlegend: true,
-        xaxis : {
-            range: tweet.range,
-            rangeslider: { },
+        xaxis: {
+            range: tweet.range
         }
+    }
+
+    if (tweet.rangeSlider) {
+       layout.xaxis.rangeslider = { }
     }
 
     return (
@@ -93,8 +96,11 @@ const TweetSummary = () => {
                 
                 </Grid>
                 <Grid item xs={8}>
-                <Plot style= {{width:"100%"}} data={tweet.timeline} layout={layout} useResizeHandler={true} config = {{'displayModeBar': false}} />
-
+                {tweet.timeline ?
+                    <Plot style= {{width:"100%"}} data={tweet.timeline} layout={layout} useResizeHandler={true} config = {{'displayModeBar': false}} />
+                    :
+                    <Typography variant="body1">All the replies occured on the same day so we aren't showing the timeline.</Typography>
+                }
                 </Grid>
         </Grid>
         : null }

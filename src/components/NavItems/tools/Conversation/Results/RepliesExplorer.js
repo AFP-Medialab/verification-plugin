@@ -72,7 +72,7 @@ const RepliesExplorer = () => {
                 .on("click", () => {
                     //if (isActive) {window.open(`https://twitter.com/hashtag/${word.text.substring(1)}?f=live`, "_blank");}
                     if (isActive) {
-                        handleOpenHashtag(word.text.substring(1));
+                        handleOpenHashtag(word.text.substring(1), word.value);
                     }
                 })
                 .transition()
@@ -122,9 +122,11 @@ const RepliesExplorer = () => {
 
     const [openHashtag, setOpenHashtag] = React.useState(false);
     const [hashtag, setHashtag] = React.useState(null);
+    const [hashtagCount, setHashtagCount] = React.useState(null);
 
-    const handleOpenHashtag = (hashtag) => {
+    const handleOpenHashtag = (hashtag, value) => {
         setHashtag(hashtag);
+        setHashtagCount(value);
         setOpenHashtag(true);
     };
 
@@ -187,7 +189,7 @@ const RepliesExplorer = () => {
                     maxWidth="sm">
                     <DialogContent>
                     <Typography variant="h3">#{hashtag}</Typography>
-                    <Typography variant="body1">{repliesLabel}</Typography>
+                    <Typography variant="body1">For #{hashtag} there are {hashtagCount} {repliesLabel}</Typography>
                     <Button color="primary" size="small" style={{textTransform: "none"}} onClick={() => window.open(`https://twitter.com/hashtag/${hashtag}?f=live`,`blank`)}>View on Twitter</Button>
                     <TweetList stance={filter} hashtag={hashtag} id_str={tweetID} viewTweet={submitID} />
                     </DialogContent>
