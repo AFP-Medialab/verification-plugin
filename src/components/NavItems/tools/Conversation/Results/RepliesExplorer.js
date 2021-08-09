@@ -49,7 +49,7 @@ const RepliesExplorer = () => {
     const filter = useSelector(state => state.conversation.filter)
     const restrict = useSelector(state => state.conversation.restriction)
 
-    let repliesLabel  = `in replies `
+    let repliesLabel  = `replies `
     
     if (restrict === "hashtags") {
         repliesLabel = repliesLabel + `containing hashtags and `
@@ -187,6 +187,7 @@ const RepliesExplorer = () => {
                     maxWidth="sm">
                     <DialogContent>
                     <Typography variant="h3">#{hashtag}</Typography>
+                    <Typography variant="body1">{repliesLabel}</Typography>
                     <Button color="primary" size="small" style={{textTransform: "none"}} onClick={() => window.open(`https://twitter.com/hashtag/${hashtag}?f=live`,`blank`)}>View on Twitter</Button>
                     <TweetList stance={filter} hashtag={hashtag} id_str={tweetID} viewTweet={submitID} />
                     </DialogContent>
@@ -232,7 +233,10 @@ const RepliesExplorer = () => {
                 spacing={3}
                 alignItems="flex-start">
                         <Grid item xs={7}>
-                        <User screen_name={screenName}/></Grid>
+                        <User screen_name={screenName}/>
+                        <Typography variant="body1">{repliesLabel}</Typography>
+                    </Grid>
+                        
                     <Grid item xs={5}>
                         <TweetList stance={filter} screen_name={screenName} id_str={tweetID} viewTweet={submitID} />
                     </Grid>
