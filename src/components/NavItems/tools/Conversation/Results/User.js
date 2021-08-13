@@ -7,7 +7,34 @@ import Link from "@material-ui/core/Link";
 import Typography from "@material-ui/core/Typography";
 import Paper from '@material-ui/core/Paper';
 
+const processString = require('react-process-string');
+
 const endpoint = process.env.REACT_APP_CONVERSATION_API
+
+const config = [{
+    regex: /\@([a-zA-Z0-9_]+)/gim, //regex to match a username
+    fn: (key, result) => {
+        let username = result[1];
+        
+        return <Link key={key} href={`https://twitter.com/${username}`} target="_blank">@{username}</Link>
+    }
+},
+{
+    regex: /\#([a-zA-Z0-9_]+)/gim, //regex to match a hashtag
+    fn: (key, result) => {
+        let hashtag = result[1];
+        
+        return <Link key={key} href={`https://twitter.com/hashtag/${hashtag}?f=live`} target="_blank">#{hashtag}</Link>
+    }
+},
+{
+    regex: /(http[^\s]+)/gim, //regex to match a URL
+    fn: (key, result) => {
+        let url = result[1];
+        
+        return <Link key={key} href={url} target="_blank">{url}</Link>
+    }
+}];
 
 class User extends Component {
 
@@ -27,7 +54,7 @@ class User extends Component {
                 name: this.props.user.name,
                 screen_name: this.props.user.screen_name,
                 img: this.props.user.profile_image_url_https.replace("_normal",""),
-                description: this.props.user.description,
+                description: processString(config)(this.props.user.description),
                 url: this.props.user.url,
                 following: this.props.user.friends_count.toLocaleString(),
                 followers: this.props.user.followers_count.toLocaleString(),
@@ -54,7 +81,7 @@ class User extends Component {
                     name: response.data.name,
                     screen_name: response.data.screen_name,
                     img: response.data.profile_image_url_https.replace("_normal",""),
-                    description: response.data.description,
+                    description: processString(config)(response.data.description),
                     url: response.data.url,
                     following: response.data.friends_count.toLocaleString(),
                     followers: response.data.followers_count.toLocaleString(),

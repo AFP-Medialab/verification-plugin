@@ -40,6 +40,7 @@
     "react-magnifier": "^3.0.4",
     "react-map-gl": "^6.1.15",
     "react-plotly.js": "^2.5.1",
+    "react-process-string": "^1.2.0",
     "react-redux": "^7.2.4",
     "react-router-dom": "^5.2.0",
     "react-sigma": "^1.2.35",
