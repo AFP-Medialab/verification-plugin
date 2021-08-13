@@ -164,7 +164,7 @@ const RepliesExplorer = () => {
                         <option value="none">(no restriction)</option>
                         <option value="hashtags">hashtags</option>
                         <option value="user_mentions">user mentions</option>
-                        <option value="urls.unwound_url">URLs</option>
+                        <option value="urls">URLs and media</option>
                     </select>
                     </Typography>
                 </Grid>
