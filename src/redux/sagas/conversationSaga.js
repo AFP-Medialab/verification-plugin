@@ -63,7 +63,12 @@ function* handleConversationTweetID(action) {
     let tweet = yield call(conversationApi.getTweet, id_str)
 
     if (tweet.flashMessage) {
+        // set the falsh message but don't assume this is a fatal error
         yield put(setFlashMessage(tweet.flashType, tweet.flashMessage, tweet.flashRefresh));
+    }
+
+    if (!tweet.id) {
+        // only stop processing if we don't have a tweet
         return;
     }
 
@@ -90,7 +95,6 @@ function* handleConversationTweetID(action) {
 
     // and then push the info from the original structure into the right places
     Object.keys(tweet.stance).forEach(entry => {
-        console.log(entry +" ==> " + tweet.stance[entry])
         stance.labels.push(entry)
         stance.values.push(tweet.stance[entry])
 

@@ -42,8 +42,6 @@ const Conversation = () => {
     const conversation = useSelector(state => state.conversation.conversation);
     const tweet = useSelector(state => state.conversation.tweet)
 
-    console.log("\n\n"+flashMessage+"\n"+flashRefresh);
-
     const classes = useMyStyles();
 
     const [userInput, setUserInput] = useState(conversationInputUrl);
@@ -54,7 +52,6 @@ const Conversation = () => {
 
     // Renderer callback with condition
     const renderer = ({ hours, minutes, seconds, completed }) => {
-        console.log("inside renderer");
         if (completed) {
             // Render a completed state
             return <span>reloading...</span>;
@@ -63,7 +60,6 @@ const Conversation = () => {
             return <span>Page will automatically reload in {seconds}s</span>;
         }
     };
-
   
     return (
         <div>
@@ -90,6 +86,11 @@ const Conversation = () => {
                                 value={userInput || ""}
                                 variant="outlined"
                                 onChange={e => setUserInput(e.target.value)}
+                                onKeyPress={e => {
+                                    if (e.key === 'Enter') {
+                                        submitUrl(userInput);
+                                    }
+                                  }}
                             />
 
             
@@ -114,7 +115,7 @@ const Conversation = () => {
     onComplete={() => submitUrl(userInput)}  />
 : null }</Alert> : null }
 
-            
+            {flashMessage ? <Box m={3} /> : null}
 
             {stance && !fail ? <TweetSummary/> : null}
 
