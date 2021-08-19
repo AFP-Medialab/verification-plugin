@@ -12,7 +12,7 @@ const processString = require('react-process-string');
 const endpoint = process.env.REACT_APP_CONVERSATION_API
 
 const config = [{
-    regex: /\@([a-zA-Z0-9_]+)/gim, //regex to match a username
+    regex: /@([a-zA-Z0-9_]+)/gim, //regex to match a username
     fn: (key, result) => {
         let username = result[1];
         
@@ -20,7 +20,7 @@ const config = [{
     }
 },
 {
-    regex: /\#([a-zA-Z0-9_]+)/gim, //regex to match a hashtag
+    regex: /#([a-zA-Z0-9_]+)/gim, //regex to match a hashtag
     fn: (key, result) => {
         let hashtag = result[1];
         
