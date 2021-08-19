@@ -11,6 +11,7 @@ const defaultState = {
     restriction: 'none',
     flashType: null,
     flashMessage: null,
+    flashRefresh: false,
 };
 
 const conversationReducer = (state = defaultState, action) => {

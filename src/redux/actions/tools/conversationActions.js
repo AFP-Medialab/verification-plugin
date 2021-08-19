@@ -76,13 +76,14 @@ export const setTweet = (tweet, url) => {
     }
 }
 
-export const setFlashMessage = (type, message) => {
+export const setFlashMessage = (type, message, refresh) => {
     return {
         type: "SET_CONVERSATION_FLASH",
         payload: {
             loading: false,
             flashType: type,
-            flashMessage: message
+            flashMessage: message,
+            flashRefresh: refresh,
         }
     }
 }

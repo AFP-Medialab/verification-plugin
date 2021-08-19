@@ -23,6 +23,8 @@ import RepliesExplorer from "./Results/RepliesExplorer"
 
 import Alert from '@material-ui/lab/Alert';
 
+import Countdown from 'react-countdown';
+
 const Conversation = () => {
 
     const keyword = useLoadLanguage("components/NavItems/tools/Conversation.tsv", tsvConversation);
@@ -34,10 +36,13 @@ const Conversation = () => {
     const stance = useSelector(state => state.conversation.cloud);
     const flashType = useSelector(state => state.conversation.flashType);
     const flashMessage = useSelector(state => state.conversation.flashMessage);
+    const flashRefresh = useSelector(state => state.conversation.flashRefresh);
     const fail = useSelector(state => state.conversation.fail);
     const loading = useSelector(state => state.conversation.loading);
     const conversation = useSelector(state => state.conversation.conversation);
     const tweet = useSelector(state => state.conversation.tweet)
+
+    console.log("\n\n"+flashMessage+"\n"+flashRefresh);
 
     const classes = useMyStyles();
 
@@ -47,6 +52,19 @@ const Conversation = () => {
         dispatch(setConversationInput(src))
     };
 
+    // Renderer callback with condition
+    const renderer = ({ hours, minutes, seconds, completed }) => {
+        console.log("inside renderer");
+        if (completed) {
+            // Render a completed state
+            return <span>reloading...</span>;
+        } else {
+            // Render a countdown
+            return <span>Page will automatically reload in {seconds}s</span>;
+        }
+    };
+
+  
     return (
         <div>
             <HeaderTool name={keywordAllTools("navbar_conversation")} description={keywordAllTools("navbar_conversation_description")} icon={<ConversationIcon style={{ fill: "#51A5B2" }} />} />
@@ -90,7 +108,13 @@ const Conversation = () => {
 
             <Box m={3} />
 
-            {flashMessage ? <Alert severity={flashType}>{flashMessage}</Alert> : null }
+            {flashMessage ? <Alert severity={flashType}>{flashMessage} {flashRefresh === true ? <Countdown
+    date={Date.now() + 30000}
+    renderer={renderer}
+    onComplete={() => submitUrl(userInput)}  />
+: null }</Alert> : null }
+
+            
 
             {stance && !fail ? <TweetSummary/> : null}
 

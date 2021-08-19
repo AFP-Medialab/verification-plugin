@@ -63,7 +63,7 @@ function* handleConversationTweetID(action) {
     let tweet = yield call(conversationApi.getTweet, id_str)
 
     if (tweet.flashMessage) {
-        yield put(setFlashMessage(tweet.flashType, tweet.flashMessage));
+        yield put(setFlashMessage(tweet.flashType, tweet.flashMessage, tweet.flashRefresh));
         return;
     }
 
