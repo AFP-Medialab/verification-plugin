@@ -76,8 +76,9 @@ const TweetSummary = () => {
                 
                     <User user={tweet.user} />
 
-                    <Typography variant="body1" paragraph>In here there should be some description of what the tool is showing and how it works, incuding details on how the timeline view works if we are showing the range selector. This would be essentially static</Typography>
-                    {tweet.number_of_replies === 0 ? <Typography variant="body1" paragraph>unless the tweet has no replies when we could add something different and not show the replies explorer section or the graphs</Typography> : null}
+                    <Typography variant="body1" paragraph>This tool is designed to allow you to explore conversations happening on Twitter, and especially how replies support, deny, or comment on tweets.
+                    The top section of the page presents an overview of the selected tweet and the user who posted it. While the bottom half of the page allows you to interactively explore the replies.</Typography>
+                    {tweet.reply_count === 0 ? <Typography variant="body1" paragraph>No one has replied to this tweet so there is no further analysis we can perform.</Typography> : <Typography variant="body1" paragraph>We have currently processed {tweet.number_of_replies.toLocaleString()} replies to the currently selected tweet.</Typography>}
             </Grid>
         </Grid>
         {tweet.number_of_replies > 0 ?
@@ -87,19 +88,23 @@ const TweetSummary = () => {
                 spacing={3}
                 alignItems="flex-start">
 
-                    <Grid item xs={12}>
-                        <Typography variant="body1">We have currently processed {tweet.number_of_replies.toLocaleString()} replies to the selected tweet. The following charts show the overall stance breakdown as well as the timeline of these replies.</Typography>
-                    </Grid>
-
 <Grid item xs={4}>
+                <Typography variant="body1">We automatically assign one of four possible stance labels to each reply; support, query, deny, or comment. This pie chart shows the proportion of stance labels across all the replies we have processed so far.</Typography>
                 <Plot style= {{width:"100%"}} data={[stance]} layout={ { autosize:true, showlegend: false }} useResizeHandler={true} config = {{'displayModeBar': false}} />
                 
                 </Grid>
                 <Grid item xs={8}>
+                <Typography variant="body1" paragraph>Replies clearly don't all happen at once and it's useful to be able to see how the volume of replies, as well as the stance, changes over time.</Typography>
                 {tweet.timeline ?
+                <Grid
+                container
+                direction="row">
+                    <Typography variant="body1">This histogram allows you to do both, and initially shows the first week after the selected tweet was published.
+                    If replies were posted outside the initial week, then you can adjust the graph to view these, either by dragging the x-axis or, if the replies occur over a very long period, using the range selector shown below the graph.</Typography>
                     <Plot style= {{width:"100%"}} data={tweet.timeline} layout={layout} useResizeHandler={true} config = {{'displayModeBar': false}} />
+                    </Grid>
                     :
-                    <Typography variant="body1">All the replies occured on the same day so we aren't showing the timeline.</Typography>
+                    <Typography variant="body1">In this case, however, all the replies occured on the same day so the pie chart gives a clearer breakdown than a histogram would.</Typography>
                 }
                 </Grid>
         </Grid>
