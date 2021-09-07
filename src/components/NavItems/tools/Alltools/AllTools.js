@@ -177,7 +177,7 @@ const AllTools = (props) => {
             <Grid
                 container
                 direction="row"
-                justify="space-between"
+                justifyContent="space-between"
                 alignItems="center">
 
 
@@ -198,7 +198,7 @@ const AllTools = (props) => {
                             <Grid
                                 container
                                 direction="row"
-                                justify="flex-start"
+                                justifyContent="flex-start"
                                 alignItems="center"
                             >
                                 <Grid item>
@@ -221,7 +221,7 @@ const AllTools = (props) => {
                             <Grid
                                 container
                                 direction="row"
-                                justify="flex-start"
+                                justifyContent="flex-start"
                                 alignItems="center"
                             >
                                 <Grid item>
@@ -244,7 +244,7 @@ const AllTools = (props) => {
                             <Grid
                                 container
                                 direction="row"
-                                justify="flex-start"
+                                justifyContent="flex-start"
                                 alignItems="center"
                             >
                                 <Grid item>
@@ -267,7 +267,7 @@ const AllTools = (props) => {
                             <Grid
                                 container
                                 direction="row"
-                                justify="flex-start"
+                                justifyContent="flex-start"
                                 alignItems="center"
                             >
                                 <Grid item>
@@ -291,7 +291,7 @@ const AllTools = (props) => {
                 
                 <div style={{minHeight: "340px"}}>
                     <TabPanel value={value} index={0}>
-                        <Grid container justify="flex-start" spacing={2} className={classes.toolCardsContainer}>
+                        <Grid container justifyContent="flex-start" spacing={2} className={classes.toolCardsContainer}>
 
                             {
                                 toolsVideo.map((value, key) => {
@@ -314,7 +314,7 @@ const AllTools = (props) => {
                         </Grid>
                     </TabPanel>
                     <TabPanel value={value} index={1}>
-                        <Grid container justify="flex-start" spacing={2} className={classes.toolCardsContainer}>
+                        <Grid container justifyContent="flex-start" spacing={2} className={classes.toolCardsContainer}>
 
                             {
                                 toolsImages.map((value, key) => {
@@ -334,7 +334,7 @@ const AllTools = (props) => {
                         </Grid>
                     </TabPanel>
                     <TabPanel value={value} index={2}>
-                        <Grid container justify="flex-start" spacing={2} className={classes.toolCardsContainer}>
+                        <Grid container justifyContent="flex-start" spacing={2} className={classes.toolCardsContainer}>
 
                             {
                                 toolsSearch.map((value, key) => {
@@ -353,7 +353,7 @@ const AllTools = (props) => {
                         </Grid>
                     </TabPanel>
                     <TabPanel value={value} index={3}>
-                        <Grid container justify="flex-start" spacing={2} className={classes.toolCardsContainer}>
+                        <Grid container justifyContent="flex-start" spacing={2} className={classes.toolCardsContainer}>
 
                             {
                                 toolsData.map((value, key) => {
@@ -386,7 +386,7 @@ const AllTools = (props) => {
                     <Grid
                         container
                         direction="row"
-                        justify="flex-start"
+                        justifyContent="flex-start"
                         alignItems="center"
                     >
                         <Grid item>
@@ -405,7 +405,7 @@ const AllTools = (props) => {
 
                     <Box m={2}/>
 
-                    <Grid container justify="flex-start" spacing={2} className={classes.toolCardsContainer}>
+                    <Grid container justifyContent="flex-start" spacing={2} className={classes.toolCardsContainer}>
                         
                             {
                                 toolsVideo.map((value, key) => {
@@ -436,7 +436,7 @@ const AllTools = (props) => {
                     <Grid
                         container
                         direction="row"
-                        justify="flex-start"
+                        justifyContent="flex-start"
                         alignItems="center"
                     >
                         <Grid item>
@@ -455,7 +455,7 @@ const AllTools = (props) => {
 
                     <Box m={2} />
 
-                    <Grid container justify="flex-start" spacing={2} className={classes.toolCardsContainer}>
+                    <Grid container justifyContent="flex-start" spacing={2} className={classes.toolCardsContainer}>
 
                         {
                             toolsImages.map((value, key) => {
@@ -483,7 +483,7 @@ const AllTools = (props) => {
                     <Grid
                         container
                         direction="row"
-                        justify="flex-start"
+                        justifyContent="flex-start"
                         alignItems="center"
                     >
                         <Grid item>
@@ -502,7 +502,7 @@ const AllTools = (props) => {
 
                     <Box m={2} />
 
-                    <Grid container justify="flex-start" spacing={2} className={classes.toolCardsContainer}>
+                    <Grid container justifyContent="flex-start" spacing={2} className={classes.toolCardsContainer}>
 
                         {
                             toolsSearch.map((value, key) => {
@@ -529,7 +529,7 @@ const AllTools = (props) => {
                     <Grid
                         container
                         direction="row"
-                        justify="flex-start"
+                        justifyContent="flex-start"
                         alignItems="center"
                     >
                         <Grid item>
@@ -548,7 +548,7 @@ const AllTools = (props) => {
 
                     <Box m={2} />
 
-                    <Grid container justify="flex-start" spacing={2} className={classes.toolCardsContainer}>
+                    <Grid container justifyContent="flex-start" spacing={2} className={classes.toolCardsContainer}>
 
                         {
                             toolsData.map((value, key) => {

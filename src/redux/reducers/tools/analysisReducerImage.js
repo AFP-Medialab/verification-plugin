@@ -31,12 +31,9 @@ const ImageAnalysisReducer = (state = defaultState, action) => {
                         pagination:action.payload.pagination },
                   };         
         case "SET_ANALYSIS_LOADING_IMAGE":
-            state.loading = action.payload;
-            return state;
+            return {...state, loading:action.payload };
         case "ANALYSIS_CLEAN_STATE_IMAGE":
-            state.result = null;
-            state.url = "";
-            return state;
+            return {...state, result:null, url:""};
         default:
             return state;
     }

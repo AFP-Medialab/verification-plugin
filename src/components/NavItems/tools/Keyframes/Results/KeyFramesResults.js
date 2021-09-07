@@ -87,7 +87,7 @@ const KeyFramesResults = (props) => {
                     <Divider/>
                     <Box m={2}/>
                     {findHeight &&
-                    <Grid container justify="center" spacing={2}
+                    <Grid container justifyContent="center" spacing={2}
                                                 alignContent={"center"}>
                         <Grid item>
                             <Button variant="contained" color={"primary"} onClick={() => toggleDetail()}>

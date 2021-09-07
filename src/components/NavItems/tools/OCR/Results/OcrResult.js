@@ -57,7 +57,7 @@ const OcrResult = () => {
                     dispatch(cleanOcr())
                     history.push("/app/tools/ocr");
                 }}/>
-                <Grid container justify={"center"}>
+                <Grid container justifyContent={"center"}>
                     <Card variant={"outlined"} style={{"width": "50%"}}>
                         <CardMedia>
                             <LinearProgress hidden={!loading}/>
@@ -79,7 +79,7 @@ const OcrResult = () => {
                     <OnClickInfo keyword={"ocr_tip"}/>
                 </Grid>
                 <Box m={2} />
-                <Grid container justify="center" spacing={5}
+                <Grid container justifyContent="center" spacing={5}
                                                 alignContent={"center"}>
                         <Grid item>
                         <Button variant="contained" color={"primary"} onClick={() => reversesearchYandex(inputUrl)}>
