@@ -25,7 +25,8 @@
   "options_page": "",
   "permissions": ["activeTab", "contextMenus", "https://mever.iti.gr/*", 
     "https://weverify-assistant.gate.ac.uk/*","https://weverify-tsna.gate.ac.uk/*", 
-    "*://weverify-demo-similarity.ontotext.com/*", "*://weverify-demo-search.ontotext.com/*", "*://weverify-demo.ontotext.com/*"],
+    "*://weverify-demo-similarity.ontotext.com/*", "*://weverify-demo-search.ontotext.com/*", "*://weverify-demo.ontotext.com/*", 
+    "http://multimedia2.iti.gr/video_analysis/*"],
   "content_security_policy": "script-src 'self' 'unsafe-eval' https://www.google-analytics.com https://*.google.com ; object-src 'self'",
   "web_accessible_resources": ["/popup.html"]
 }
