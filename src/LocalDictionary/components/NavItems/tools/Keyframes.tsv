@@ -1,31 +1,31 @@
-	en	fr	es	el
-keyframes_title	Video fragmentation and reverse image search	Fragmentation vidéo et recherche inversée d'image	Fragmentación del video y búsqueda inversa de imagen	Αντίστροφη αναζήτηση βίντεο μέσω χαρακτηριστικών καρε
-button_localfile	Local file	Fichier local	Fichero local	Τοπικό αρχείο
+	en	fr	es	el	
+keyframes_title	Video fragmentation and reverse image search	Fragmentation vidéo et recherche inversée d'image	Fragmentación del video y búsqueda inversa de imagen	Αντίστροφη αναζήτηση βίντεο μέσω χαρακτηριστικών καρε	
+button_localfile	Local file	Fichier local	Fichero local	Τοπικό αρχείο	
 keyframes_input	Insert the video URL	Adresse de la vidéo	Enlace del video	Εισάγετε τη διεύθυνση URL του βίντεο	
-keyframes_input_placeholder	Paste the link here	Coller le lien ici	Pegar el enlace aquí	Επικολλήστε τον σύνδεσμο εδώ
-button_submit	Submit	Envoyer	Enviar	Υποβολή
-forensic_card_back	Back	Retour	Volver	Πίσω
-keyframes_error_VIDEO_DOWNLOAD_FAILED	Video cache failed. Try with another video	La mise en cache de la vidéo à échoué. Veuillez essayer avec une autre vidéo	Falló el almacenamiento en caché del video. Inténtalo con otro vídeo	Η προσωρινή αποθήκευση του βίντεο απέτυχε. Δοκιμάστε με ένα άλλο βίντεο
-keyframes_error_VIDEO_DOWNLOAD_TIMEOUT	Video cache failed. The video cache has timed out	La mise en cache de la vidéo à échoué. La vidéo a mis trop de temps à charger	Falló el almacenamiento en caché del video. El tiempo de espera se ha agotado.	Η προσωρινή αποθήκευση του βίντεο απέτυχε. Το χρονικό διάστημα προσπάθειας προσωρινής αποθήκευσης βίντεο έληξε
-keyframes_error_VIDEO_SEGMENTATION_FAILED	Video segmentation analysis failed	L'analyse de segmentation vidéo à échoué	Fallo en el análisis de segmentación de vídeo	Η τμηματοποίηση του βίντεο απέτυχε
-keyframes_error_PROCESS_INTERRUPTED	Video analysis interrupted due to unknown cause. Please re-submit the video	L'analyse de la vidéo à été interrompue dû à une cause inconnue. Veuillez ré-envoyer la vidéo	El análisis de vídeo se interrumpió debido a una causa desconocida. Por favor, vuelva a enviar el vídeo	Η ανάλυση του βίντεο διακόπηκε λόγω άγνωστης αιτίας. Παρακαλώ, υποβάλετε ξανά το βίντεο
-keyframes_error_ANALYSIS_STOPPED_CORRUPTED_VIDEO_FILE	Video analysis quitted due to corrupted video file	L'analyse de la vidéo s'est arrêté dû à des fichiers vidéos corrompus	El análisis de vídeo se ha interrumpido debido a que el archivo de vídeo está dañado.	Η ανάλυση του βίντεο τερματίστηκε λόγω κατεστραμμένου αρχείου βίντεο
-keyframes_error_ANALYSIS_STOPPED_UNSUPPORTED_FILE_EXTENSION	Video analysis quitted due to unsupported file extension	L'analyse de la vidéo s'est arrêté dû à un format vidéo non supporté	El análisis de vídeo se ha interrumpido debido a que la extensión del archivo no es compatible.	Η ανάλυση του βίντεο τερματίστηκε λόγω μη υποστηριζόμενης επέκτασης αρχείου
-keyframes_error_MAX_VIDEO_DURATION_EXCEEDED	Video duration overcomes the limit	La durée de la video est trop élevée	La duración del video sobrepasa el límite	Η διάρκεια του βίντεο ξεπερνά το όριο
-keyframes_error_unavailable	The service is currently unavailable. Try again later	Le service est actuellement indisponible. Veuillez réessayez plus tard	El servicio no está disponible en este momento. Inténtalo de nuevo más tarde	Η υπηρεσία αυτή τη στιγμή δεν είναι διαθέσιμη. Προσπαθήστε ξανά αργότερα
-keyframes_error_default	Unknown error occured. Please try again later or with another video.	Une erreur inconnue s'est produite. Veuillez réessayer plus tard ou avec une autre vidéo.	Se ha producido un error desconocido. Por favor, inténtelo de nuevo más tarde o con otro vídeo.	Παρουσιάστηκε άγνωστο σφάλμα. Δοκιμάστε ξανά αργότερα ή με άλλο βίντεο.
-keyframes_wait_VIDEO_WAITING_IN_QUEUE	Video in queue for analysis. The analysis of your video will start immediately after all preceding videos in the queue have been processed	Vidéo en file d'attente pour analyse. L'analyse de votre vidéo commencera immédiatement après que toutes les vidéos précédentes de la file d'attente auront été traitées	Vídeo en cola para análisis. El análisis de su vídeo se iniciará inmediatamente después de que se hayan procesado todos los vídeos anteriores de la cola.	Το βίντεο προστέθηκε στην ουρά για ανάλυση. Η ανάλυση του βίντεό σας θα ξεκινήσει αμέσως μετά την επεξεργασία όλων των προηγούμενων βίντεο στην ουρά
-keyframes_wait_VIDEO_DOWNLOAD_STARTED	The video is being cached before its analysis	La vidéo est en train d'être téléchargé avant analyse	El video está siendo descargado antes de su análisis	Το βίντεο αποθηκεύεται προσωρινά ωστε να γινει η ανάλυσή του
-keyframes_wait_STARTED	Video analysis running. Step	Analyse de la vidéo en cours. Etape	Análisis de vídeo en marcha. Paso	Εκτελείται η ανάλυση του βίντεο. Βήμα
-keyframes_content_title	Video keyframes	Images clés de la vidéo	Imágenes claves del video	Χαρακτηριστικά καρε
-keyframe_title_get_detail	+ Show detailed view	+ Afficher la vue détaillée	+ Mostrar la vista detallada	+ Εμφάνιση λεπτομερούς προβολής
-keyframe_title_get_simple	- Show simple view	- Afficher la vue minimal	- Mostrar vista simple	+ Εμφάνιση απλής προβολής
-keyframes_download_subshots	Download keyframes	Télecharger les images clés	Descargar imágenes claves	Λήψη χαρακτηριστικών καρέ
-zoom_in	zoom in	augmenter	aumentar	μεγεθύνετε
-zoom_out	zoom out	réduire	reducir	Σμίκρυνση
-cardheader_source	Source of the video			
-cardheader_results	Results			
-linkmode_title	Link mode			
-linkmode_description	The video to extract the keyframes is provided with a URL Link			
-filemode_title	File mode			
-filemode_description	The image to analyze is provided with a local file			
+keyframes_input_placeholder	Paste the link here	Coller le lien ici	Pegar el enlace aquí	Επικολλήστε τον σύνδεσμο εδώ	
+button_submit	Submit	Envoyer	Enviar	Υποβολή	
+forensic_card_back	Back	Retour	Volver	Πίσω	
+keyframes_error_VIDEO_DOWNLOAD_FAILED	Video cache failed. Try with another video	La mise en cache de la vidéo à échoué. Veuillez essayer avec une autre vidéo	Falló el almacenamiento en caché del video. Inténtalo con otro vídeo	Η προσωρινή αποθήκευση του βίντεο απέτυχε. Δοκιμάστε με ένα άλλο βίντεο	
+keyframes_error_VIDEO_DOWNLOAD_TIMEOUT	Video cache failed. The video cache has timed out	La mise en cache de la vidéo à échoué. La vidéo a mis trop de temps à charger	Falló el almacenamiento en caché del video. El tiempo de espera se ha agotado.	Η προσωρινή αποθήκευση του βίντεο απέτυχε. Το χρονικό διάστημα προσπάθειας προσωρινής αποθήκευσης βίντεο έληξε	
+keyframes_error_VIDEO_SEGMENTATION_FAILED	Video segmentation analysis failed	L'analyse de segmentation vidéo à échoué	Fallo en el análisis de segmentación de vídeo	Η τμηματοποίηση του βίντεο απέτυχε	
+keyframes_error_PROCESS_INTERRUPTED	Video analysis interrupted due to unknown cause. Please re-submit the video	L'analyse de la vidéo à été interrompue dû à une cause inconnue. Veuillez ré-envoyer la vidéo	El análisis de vídeo se interrumpió debido a una causa desconocida. Por favor, vuelva a enviar el vídeo	Η ανάλυση του βίντεο διακόπηκε λόγω άγνωστης αιτίας. Παρακαλώ, υποβάλετε ξανά το βίντεο	
+keyframes_error_ANALYSIS_STOPPED_CORRUPTED_VIDEO_FILE	Video analysis quitted due to corrupted video file	L'analyse de la vidéo s'est arrêté dû à des fichiers vidéos corrompus	El análisis de vídeo se ha interrumpido debido a que el archivo de vídeo está dañado.	Η ανάλυση του βίντεο τερματίστηκε λόγω κατεστραμμένου αρχείου βίντεο	
+keyframes_error_ANALYSIS_STOPPED_UNSUPPORTED_FILE_EXTENSION	Video analysis quitted due to unsupported file extension	L'analyse de la vidéo s'est arrêté dû à un format vidéo non supporté	El análisis de vídeo se ha interrumpido debido a que la extensión del archivo no es compatible.	Η ανάλυση του βίντεο τερματίστηκε λόγω μη υποστηριζόμενης επέκτασης αρχείου	
+keyframes_error_MAX_VIDEO_DURATION_EXCEEDED	Video duration overcomes the limit	La durée de la video est trop élevée	La duración del video sobrepasa el límite	Η διάρκεια του βίντεο ξεπερνά το όριο	
+keyframes_error_unavailable	The service is currently unavailable. Try again later	Le service est actuellement indisponible. Veuillez réessayez plus tard	El servicio no está disponible en este momento. Inténtalo de nuevo más tarde	Η υπηρεσία αυτή τη στιγμή δεν είναι διαθέσιμη. Προσπαθήστε ξανά αργότερα	
+keyframes_error_default	Unknown error occured. Please try again later or with another video.	Une erreur inconnue s'est produite. Veuillez réessayer plus tard ou avec une autre vidéo.	Se ha producido un error desconocido. Por favor, inténtelo de nuevo más tarde o con otro vídeo.	Παρουσιάστηκε άγνωστο σφάλμα. Δοκιμάστε ξανά αργότερα ή με άλλο βίντεο.	
+keyframes_wait_VIDEO_WAITING_IN_QUEUE	Video in queue for analysis. The analysis of your video will start immediately after all preceding videos in the queue have been processed	Vidéo en file d'attente pour analyse. L'analyse de votre vidéo commencera immédiatement après que toutes les vidéos précédentes de la file d'attente auront été traitées	Vídeo en cola para análisis. El análisis de su vídeo se iniciará inmediatamente después de que se hayan procesado todos los vídeos anteriores de la cola.	Το βίντεο προστέθηκε στην ουρά για ανάλυση. Η ανάλυση του βίντεό σας θα ξεκινήσει αμέσως μετά την επεξεργασία όλων των προηγούμενων βίντεο στην ουρά	
+keyframes_wait_VIDEO_DOWNLOAD_STARTED	The video is being cached before its analysis	La vidéo est mise en cache pour analyse.	El video se almacena en caché antes del análisis.	το βίντεο αποθηκεύεται στην κρυφή μνήμη πριν από την ανάλυση.	
+keyframes_wait_STARTED	Video analysis running. Step	Analyse de la vidéo en cours. Etape	Análisis de vídeo en marcha. Paso	Εκτελείται η ανάλυση του βίντεο. Βήμα	
+keyframes_content_title	Video keyframes	Images clés de la vidéo	Imágenes claves del video	Χαρακτηριστικά καρε	
+keyframe_title_get_detail	+ Show detailed view	+ Afficher la vue détaillée	+ Mostrar la vista detallada	+ Εμφάνιση λεπτομερούς προβολής	
+keyframe_title_get_simple	- Show simple view	- Afficher la vue minimal	- Mostrar vista simple	+ Εμφάνιση απλής προβολής	
+keyframes_download_subshots	Download keyframes	Télecharger les images clés	Descargar imágenes claves	Λήψη χαρακτηριστικών καρέ	
+zoom_in	zoom in	augmenter	aumentar	μεγεθύνετε	
+zoom_out	zoom out	réduire	reducir	Σμίκρυνση	
+cardheader_source	Source of the video	Source de la vidéo	Fuente del video	Πηγή του βίντεο	
+cardheader_results	Results	Résultats	Resultados	Αποτελέσματα	
+linkmode_title	Link 	Lien	Enlace	Σύνδεσμος	
+linkmode_description	The video to fragment into keyframes is provided with a URL Link	La vidéo à fragmenter en images clés est fournie avec un lien URL	El video a fragmentar en fotogramas clave se proporciona con un enlace URL	Το βίντεο που πρόκειται να κατακερματιστεί σε keyframes παρέχεται με έναν σύνδεσμο URL	
+filemode_title	File 	Fichier	Fichero	αρχείου	
+filemode_description	The video to fragment is provided with a local file	La vidéo à fragmenter est fournie avec un fichier local	El video a fragmentar se proporciona con un archivo local.	Το βίντεο προς κατακερματισμό παρέχεται με ένα τοπικό αρχείο	

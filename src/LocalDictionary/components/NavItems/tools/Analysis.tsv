@@ -73,22 +73,23 @@ table_error_unavailable	This url is not valid	Cette URL n'est pas valide	Esta ur
 page_number	out of	de	sobre	Εκτός
 api_title_image	Image contextual verification	Vérification du contexte de la image	Verificación del contexto del imagen	Επαλήθευση με βάση τα συμφραζόμενα της εικόνας
 link_comments	Comments that contain links	Commentaires contenant des liens	Comentarios que contienen enlaces	Σχόλια που περιέχουν συνδέσμους
-api_comments_verified	Verified comments	Commentaires vérifiés	Comentarios verificados	Επαληθευμένα σχόλια
+api_comments_verified	Verification comments	Commentaires de vérification	Comentarios de verificación	Σχόλια επαλήθευσης
 intro_tip	Tip	Conseils	Consejo	συμβουλή
 platform	Platform	Plate-forme	Plataforma	Πλατφόρμα
 source	Source	Source	Fuente	Πηγή
 image_link	Image link	Lien de l'image	Enlace de imágen	Σύνδεσμος εικόνας
 twitter_search	Search on Twitter	Rechercher sur Twitter	Buscar en Twitter	Αναζήτηση στο Twitter
 comments_links	Number of comments that contain links	Nombre de commentaires contenant des liens	Número de comentarios que contienen enlaces	Αριθμός σχολίων που περιέχουν συνδέσμους
-facebook_tip	For Facebook only: If the input link does not work, enter the video and copy the link manually instead of using the facebook's option: 'copy link'	Pour Facebook uniquement: Si le lien d'entrée ne fonctionne pas, entrez la vidéo et copiez le lien manuellement au lieu d'utiliser l'option de facebook: 'copier le lien'	Solo para Facebook: Si el enlace de entrada no funciona, ingrese el video y copie el enlace manualmente en lugar de usar la opción de Facebook: 'copiar enlace'	Μόνο για Facebook: Εάν ο σύνδεσμος εισαγωγής δεν λειτουργεί, εισαγάγετε το βίντεο και αντιγράψτε τον σύνδεσμο χειροκίνητα αντί να χρησιμοποιήσετε την επιλογή του facebook: «copy link»
+facebook_tip	This kind of Facebook link or shortener is not working properly. Try to click on the video and to get the url address instead. 	Ce genre de lien ou raccourci de Facebook ne fonctionne pas correctement. Cliquez sur la vidéo et récupérer le lien de la barre d'adresse URL.	Este tipo de enlace o de acortador de Facebook no funciona correctamente. Intenté cliquear sobre el video y de recuperar el enlace en la barra de URL. 	ΜΑυτό το είδος του συνδέσμου Facebook ή του shortener δεν λειτουργεί σωστά. Προσπαθήστε να κάνετε κλικ στο βίντεο και να λάβετε τη διεύθυνση url.
 api_input_image	Facebook or Twitter link	Adresse Facebook ou Twitter	Enlace de Facebook o Twitter	Σύνδεσμος Facebook ή Twitter
 image_description	Image description	Description de l'image	Descripción de la imagen	περιγραφή εικόνας
 twitter_reply	All replies	Toutes les réponses	Todas las respuestas	Όλες οι απαντήσεις
-twitter_reply_verified	Verified replies	Réponses vérifiées	Respuestas verificadas	Επαληθευμένες απαντήσεις
+twitter_reply_verified	Verification replies	Réponses de vérification	Respuestas de verificación	Απαντήσεις επαλήθευσης
 twitter_reply_link	Replies that contain links	Réponses contenant des liens	Respuestas que contienen enlaces	Απαντήσεις που περιέχουν συνδέσμους
 twitter_replies	Replies	Réponses	Respuestas	Απαντήσεις
 twitter_video_replies	Video replies	Réponses vidéo	Respuestas en video	Απαντήσεις βίντεο
-video_card_header	Source of the video			
-image_card_header	Source of the image	
+video_card_header	Source of the video	Source de la vidéo	Fuente del video	Πηγή του βίντεο
+image_card_header	Source of the image	Origine de l'image	Fuente de la imagen	Πηγή της εικόνας
 user	User	Utilisateur	Usuario	Χρήστης
 profile_creator	Profile	Profil	Perfil	Προφίλ
+cardheader_results	Results	Résultats	Resultados	Αποτελέσματα
