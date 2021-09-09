@@ -10,12 +10,9 @@ const thumbnailsReducer = (state = defaultState, action) => {
         case "SET_THUMBNAILS_RESULT":
             return action.payload;
         case "SET_THUMBNAILS_LOADING":
-            state.loading = action.payload;
-            return state;
+            return {...state, loading: action.payload};
         case "THUMBNAILS_CLEAN_STATE":
-            state.url = "";
-            state.result = null;
-            return state;
+            return {...state, url:"", result:null};
         default:
             return state;
     }

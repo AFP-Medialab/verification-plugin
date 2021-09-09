@@ -50,7 +50,8 @@ const sagaMiddleware = createSagaMiddleware();
 const store = createStore(
     allReducers,
     persistedState,  // uncomment to keep redux state on refresh,
-    applyMiddleware(sagaMiddleware)
+    applyMiddleware(sagaMiddleware),
+    + window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 );
 
 /*SAGA*/

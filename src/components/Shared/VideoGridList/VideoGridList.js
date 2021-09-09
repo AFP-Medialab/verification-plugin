@@ -1,7 +1,7 @@
 import React from 'react';
 import {makeStyles} from '@material-ui/core/styles';
-import GridList from '@material-ui/core/GridList';
-import GridListTile from "@material-ui/core/GridListTile";
+import ImageList from '@material-ui/core/ImageList';
+import ImageListItem from "@material-ui/core/ImageListItem";
 import Link from "@material-ui/core/Link";
 import LinkIcon from '@material-ui/icons/Link';
 
@@ -13,7 +13,7 @@ const useStyles = makeStyles(theme => ({
         overflow: 'hidden',
         backgroundColor: theme.palette.background.paper,
     },
-    gridList: {
+    imageList: {
         width: "100%",
         maxHeight: "500px",
     },
@@ -27,22 +27,22 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const VideoGridList = (props) => {
+const VideoImageList = (props) => {
     const classes = useStyles();
 
     return (
         <div className={classes.root}>
-            <GridList cellHeight={'auto'} className={classes.gridList} cols={1}>
+            <ImageList rowHeight={'auto'} className={classes.imageList} cols={1}>
                 {props.list.map((tile, index) => (
-                    <GridListTile key={index} cols={1}>
+                    <ImageListItem key={index} cols={1}>
                         <LinkIcon className={classes.icon}/>
                         <Link variant="body2" onClick={() => {
                             props.handleClick(tile)
                         }}>{tile}</Link>
-                    </GridListTile>
+                    </ImageListItem>
                 ))}
-            </GridList>
+            </ImageList>
         </div>
     );
 }
-export default VideoGridList;
+export default VideoImageList;

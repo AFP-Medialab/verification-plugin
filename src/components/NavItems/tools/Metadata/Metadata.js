@@ -187,7 +187,7 @@ const Metadata = () => {
                         container
                         direction="column"
                         spacing={1}
-                        alignItems="left"
+                        alignItems="flex-start"
                     >
 
                         <Grid item xs>

@@ -10,12 +10,9 @@ const magnifierReducer = (state = defaultState, action) => {
         case "SET_MAGNIFIER_RESULT":
             return action.payload;
         case "SET_MAGNIFIER_LOADING":
-            state.loading = action.payload;
-            return state;
+            return {...state, loading:action.payload};
         case "MAGNIFIER_CLEAN_STATE":
-            state.url = "";
-            state.result = null;
-            return state;
+            return {...state, url:"", result: null};
         default:
             return state;
     }

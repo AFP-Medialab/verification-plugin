@@ -209,7 +209,7 @@ const AdvancedTools = () => {
             <Grid
                 container
                 direction="row"
-                justify="flex-start"
+                justifyContent="flex-start"
                 alignItems="center"
                 spacing={2}
             >
@@ -218,14 +218,14 @@ const AdvancedTools = () => {
                     <Grid
                         container
                         direction="column"
-                        justify="flex-start"
+                        justifyContent="flex-start"
                         alignItems="flex-end"
                     >
 
                         <Grid item
                             container
                             direction="row"
-                            justify="flex-end"
+                            justifyContent="flex-end"
                             alignItems="center"
                             spacing={1}>
                                 <Grid item>
@@ -337,7 +337,7 @@ const AdvancedTools = () => {
                             <Grid 
                                 container
                                 direction="row"
-                                justify="flex-start"
+                                justifyContent="flex-start"
                                 alignItems="center"
                                 style={{ width: "100%" }} >
 
@@ -435,7 +435,7 @@ const AdvancedTools = () => {
                             </Typography>
                             <Box m={2} />
                             <form onSubmit={registrationForm.handleSubmit(registrationOnSubmit)}>
-                                <Grid container justify="center" spacing={2}>
+                                <Grid container justifyContent="center" spacing={2}>
                                     <Grid item xs={12}>
                                         <Controller
                                             name="email"

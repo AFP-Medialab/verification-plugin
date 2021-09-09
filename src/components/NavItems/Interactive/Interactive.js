@@ -87,7 +87,7 @@ const Interactive = () => {
                                                     height={window.innerHeight / 2}/>
                                     }
                                 </div>
-                                <Grid container justify="space-between" spacing={2}
+                                <Grid container justifyContent="space-between" spacing={2}
                                       alignContent={"center"}>
                                     <Grid item>
                                         <Fab color={"primary"} onClick={previous} >
@@ -104,7 +104,7 @@ const Interactive = () => {
                                 </Grid>
                                 {
                                     (isImage) ?
-                                        <Grid container justify="center" spacing={2}
+                                        <Grid container justifyContent="center" spacing={2}
                                               alignContent={"center"}>
                                             <Grid item>
                                                 <Button p={3} variant="contained" color="primary" onClick={() => {
@@ -138,7 +138,7 @@ const Interactive = () => {
                                         aria-controls="panel4bh-content"
                                         id="panel4bh-header"
                                     >
-                                        <Grid container justify="space-between" spacing={2}
+                                        <Grid container justifyContent="space-between" spacing={2}
                                               alignContent={"center"}>
                                             <Grid item>
                                                 <Typography className={classes.heading} align={"justify"}>

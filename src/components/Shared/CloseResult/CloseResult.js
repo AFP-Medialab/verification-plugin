@@ -8,7 +8,7 @@ const CloseResult = (props) => {
         <div className={classes.closeResult}>
             <CancelIcon
                 color={"secondary"}
-                fontSize={"default"}
+                fontSize={"medium"}
                 onClick={() => props.onClick()}
             />
         </div>

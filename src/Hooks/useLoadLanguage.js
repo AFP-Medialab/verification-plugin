@@ -1,5 +1,5 @@
 import {useEffect} from "react";
-import {useDispatch, useSelector} from "react-redux";
+import {useDispatch, useSelector, shallowEqual} from "react-redux";
 import axios from "axios";
 import {addDictionary} from "../redux/actions";
 
@@ -48,13 +48,11 @@ function translate_csv(text) {
 const useLoadLanguage = (onlineTsv, localTsv) => {
     const gitHubFullUrl = process.env.REACT_APP_TRANSLATION_GITHUB + onlineTsv;
     const lang = useSelector(state => state.language);
-    const dictionary = useSelector(state => state.dictionary[gitHubFullUrl]);
+    const dictionary = useSelector(state => state.dictionary[gitHubFullUrl], shallowEqual);    
     const dispatch = useDispatch();
 
     useEffect(() => {
-        if (dictionary)
-            return;
-
+        if (dictionary === undefined){
         const backUpLocal = () => {
             axios.get(localTsv)
                 .then(result => {
@@ -67,12 +65,14 @@ const useLoadLanguage = (onlineTsv, localTsv) => {
             .then(result => {
                 if (result.data === "")
                     backUpLocal();
-                else
+                else{
                     dispatch(addDictionary(gitHubFullUrl, translate_csv(result.data)));
+                }
             })
             .catch(() => {
                 backUpLocal();
             })
+        }
     }, [gitHubFullUrl, localTsv, dictionary, dispatch]);
 
     return (key) => {
