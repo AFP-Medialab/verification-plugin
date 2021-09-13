@@ -382,11 +382,11 @@ const AdvancedTools = () => {
                                 variant="outlined"
                                 onChange={e => {
                                     setCode(e.target.value);
-                                    if (email !== "") {
+                                    if (e.target.value !== "") {
                                         setStateUnlockTools(false);
                                     }
 
-                                    if (email === "") {
+                                    if (e.target.value === "") {
                                         setStateUnlockTools(true);
                                     }
                                 }}

@@ -7,7 +7,7 @@ export function replaceAll(str, find, replace)
 
 export const createUrl = (term, account, filter, lang, geocode, near, within, from_date, to_date, localTime) =>
 {
-    let twitter_url = "https://twitter.com/search?f=tweets&q=";
+    let twitter_url = "https://twitter.com/search?&src=typed_query&f=top&q=";
     twitter_url = twitter_url +  replaceAll(term, "#", "%23");
     if (account !== ""){
         twitter_url += "%20from:" + account;
