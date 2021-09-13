@@ -177,7 +177,7 @@ const ClassRoom = () => {
                                 return (
                                     <div key={index}>
                                         <Box m={1}/>
-                                        <Grid key={index} container justify="space-between" spacing={2}
+                                        <Grid key={index} container justifyContent="space-between" spacing={2}
                                               alignContent={"center"}>
                                             <Grid item>
                                                 <CastForEducationIcon fontSize={"large"}/>

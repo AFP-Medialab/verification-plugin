@@ -23,7 +23,10 @@
     "128": "img/icon-128.png"
   },
   "options_page": "",
-  "permissions": ["activeTab", "tabs", "contextMenus"],
-  "content_security_policy": "script-src 'self' 'unsafe-eval' https://platform.twitter.com https://www.google-analytics.com https://cse.google.com https://www.google.com chrome-extension://cse.google.com; object-src 'self'",
+  "permissions": ["activeTab", "contextMenus", "https://mever.iti.gr/*", 
+    "https://weverify-assistant.gate.ac.uk/*","https://weverify-tsna.gate.ac.uk/*", 
+    "*://weverify-demo-similarity.ontotext.com/*", "*://weverify-demo-search.ontotext.com/*", "*://weverify-demo.ontotext.com/*", 
+    "http://multimedia2.iti.gr/video_analysis/*"],
+  "content_security_policy": "script-src 'self' 'unsafe-eval' https://platform.twitter.com https://www.google-analytics.com https://*.google.com ; object-src 'self'",
   "web_accessible_resources": ["/popup.html"]
 }

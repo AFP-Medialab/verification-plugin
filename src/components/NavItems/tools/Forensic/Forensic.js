@@ -20,7 +20,7 @@ import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
-import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
+import { createTheme, ThemeProvider } from '@material-ui/core/styles';
 import LinkIcon from '@material-ui/icons/Link';
 import FileIcon from '@material-ui/icons/InsertDriveFile';
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
@@ -36,7 +36,7 @@ const Forensic = () => {
     const keywordAllTools = useLoadLanguage("components/NavItems/tools/Alltools.tsv", tsvAllTools);
     const keywordWarning = useLoadLanguage("components/Shared/OnWarningInfo.tsv", tsvWarning);
 
-    const theme = createMuiTheme({
+    const theme = createTheme({
         overrides: {
 
             MuiCardHeader: {
@@ -211,7 +211,7 @@ const Forensic = () => {
                                         <Grid
                                             container
                                             direction="column"
-                                            justify="flex-start"
+                                            justifyContent="flex-start"
                                             alignItems="flex-start"
                                         >
                                             <Grid item>
@@ -253,7 +253,7 @@ const Forensic = () => {
                                         <Grid
                                             container
                                             direction="column"
-                                            justify="flex-start"
+                                            justifyContent="flex-start"
                                             alignItems="flex-start"
                                         >
                                             <Grid item>

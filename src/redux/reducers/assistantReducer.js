@@ -80,8 +80,7 @@ const assistantReducer = (state = defaultState, action) => {
 
 
         case "CLEAN_STATE":
-            state = {
-                urlMode: false,
+            return { ...state, urlMode: false,
                 imageVideoSelected: false,
                 singleMediaPresent: null,
 
@@ -133,9 +132,7 @@ const assistantReducer = (state = defaultState, action) => {
                 loading: false,
                 warningExpanded: false,
                 assuranceExpanded: false,
-                stateExpanded: false
-            };
-            return state;
+                stateExpanded: false};
 
         default:
             return state;

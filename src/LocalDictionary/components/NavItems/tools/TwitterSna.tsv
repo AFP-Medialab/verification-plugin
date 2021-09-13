@@ -92,4 +92,4 @@ twittersna_nb_followers	Number of followers	Nombre d'abonnés	Número de abonado
 disable_cache	Disable cache	Désactiver le cache	Desactivar el caché	απενεργοποίηση προσωρινής μνήμης
 twittersna_invalid_credentials	Invalid authentication information	Les informations d'authentification ne sont pas valables	La información de autenticación no es válida	Μη έγκυρη πληροφόρηση αυθεντικοποίησης
 twittersna_start	Loading	Chargement	Cargando	Φόρτωση
-cardheader_parameters				
+cardheader_parameters	Parameters	Paramètres	Parámetros	Παράμετροι

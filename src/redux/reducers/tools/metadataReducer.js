@@ -12,18 +12,13 @@ const metadataReducer = (state = defaultState, action) => {
         case "SET_METADATA_RESULT":
             return action.payload;
         case "SET_METADATA_LOADING":
-            state.loading = action.payload;
-            return state;
+            return {...state, loading:action.payload};
         case "SET_METADATA_IS_IMAGE":
-            state.isImage = action.payload;
-            return state;
+            return {...state, isImage: action.payload};
         case "METADATA_CLEAN_STATE":
-            state.url = "";
-            state.result = null;
-            return state;
+            return {...state, url:"", result:null};
         case "SET_METADATA_MEDIA_TYPE":
-            state.mediaType = action.payload;
-            return state;
+            return {...state, mediaType:action.payload};
         default:
             return state;
     }

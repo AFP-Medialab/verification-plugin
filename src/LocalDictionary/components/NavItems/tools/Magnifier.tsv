@@ -1,8 +1,8 @@
 	en	fr	es	el
 magnifier_title	Image Magnifier	Inspecteur d'image	Amplificador de imagen	Μεγεθυντικός φακός εικόνας
 magnifier_urlbox	Image link	Adresse URL de l'image	URL de la imagen	Διεύθυνση URL εικόνας
-magnifier_urlbox_placeholder	Paste the link here		Coller le lien	Pegar el enlace 	Επικολλήστε τον σύνδεσμο εδώ
-button_localfile	Load local file		Cargar fichero local	Τοπικό αρχείο
+magnifier_urlbox_placeholder	Paste the link here	Coller le lien ici	Pegar el enlace	Επικολλήστε τον σύνδεσμο εδώ
+button_localfile	Load local file	Fichier local	Cargar fichero local	Τοπικό αρχείο
 button_submit	Submit	Envoyer	Enviar	Υποβολή
 please_give_a_correct_link	Please give a correct link	Donner un lien valide s'il vous plaît	Por favor, dé un enlace válido	Παρακαλώ εισάγετε έναν σωστό σύνδεσμο
 magnifier_google	Google Image	Google Image	Google imágenes	Εικόνα Google
@@ -15,5 +15,5 @@ save	Save	Enregistrer	Gardar	Αποθήκευση
 edit_image	Edit Image	Modifier l’image	Editar imagen	Επεξεργασία εικόνας
 download	Download	Télécharger	Descargar	Λήψη
 reverse_search	Reverse search	Recherche inversée	Búsqueda inversa	Αντίστροφη αναζήτηση
-cardheader_source	Source of the image			
-cardheader_results	Results			
+cardheader_source	Source of the image	Origine de l'image	Fuente de la imagen	Πηγή της εικόνας
+cardheader_results	Results	Résultats	Resultados	Αποτελέσματα

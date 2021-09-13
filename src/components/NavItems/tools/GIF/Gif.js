@@ -409,7 +409,7 @@ const Gif = () => {
                             <Grid
                                 container
                                 direction="row"
-                                justify="space-between"
+                                justifyContent="space-between"
                                 alignItems="center">
 
                             <span>{keyword("cardTitle_source")}</span>
@@ -442,7 +442,7 @@ const Gif = () => {
                                             <Grid
                                                 container
                                                 direction="column"
-                                                justify="flex-start"
+                                                justifyContent="flex-start"
                                                 alignItems="flex-start"
                                             >
                                                 <Grid item>
@@ -484,7 +484,7 @@ const Gif = () => {
                                             <Grid
                                                 container
                                                 direction="column"
-                                                justify="flex-start"
+                                                justifyContent="flex-start"
                                                 alignItems="flex-start"
                                             >
                                                 <Grid item>
@@ -523,7 +523,7 @@ const Gif = () => {
                             <Grid
                                 container
                                 direction="row"
-                                justify="space-between"
+                                justifyContent="space-between"
                                 alignItems="center">
 
                                 <span>{keyword("title_gifcreation")}</span>
@@ -556,7 +556,7 @@ const Gif = () => {
                                                 container
                                                 spacing={1}
                                                 direction="row"
-                                                justify="flex-start"
+                                                justifyContent="flex-start"
                                                 alignItems="flex-start"
 
                                             >
@@ -575,7 +575,7 @@ const Gif = () => {
                                                     spacing={0}
                                                     direction="column"
                                                     alignItems="center"
-                                                    justify="center"
+                                                    justifyContent="center"
                                                     className={classes.dropZone}
                                                     
                                                 >
@@ -618,7 +618,7 @@ const Gif = () => {
                                                 container
                                                 spacing={1}
                                                 direction="row"
-                                                justify="flex-start"
+                                                justifyContent="flex-start"
                                                 alignItems="flex-start"
 
                                             >
@@ -637,7 +637,7 @@ const Gif = () => {
                                                     spacing={0}
                                                     direction="column"
                                                     alignItems="center"
-                                                    justify="center"
+                                                    justifyContent="center"
                                                     className={classes.dropZone}
                                                 >
 
@@ -739,7 +739,7 @@ const Gif = () => {
                                         <Grid
                                             container
                                             direction="column"
-                                            justify="center"
+                                            justifyContent="center"
                                             alignItems="center"
                                             className={classes.height100}
                                         >
@@ -759,7 +759,7 @@ const Gif = () => {
                                         <Grid
                                             container
                                             direction="column"
-                                            justify="center"
+                                            justifyContent="center"
                                             alignItems="center"
                                             className={classes.height100}
                                         >
@@ -775,7 +775,7 @@ const Gif = () => {
                                             <Grid
                                                 container
                                                 direction="column"
-                                                justify="space-between"
+                                                justifyContent="space-between"
                                                 alignItems="flex-start"
                                                 className={classes.height100}
                                             >
@@ -806,7 +806,7 @@ const Gif = () => {
                                                 <Grid
                                                     container
                                                     direction="column"
-                                                    justify="center"
+                                                    justifyContent="center"
                                                     alignItems="center"
                                                 >
                                                     <Box m={4} />
@@ -868,7 +868,7 @@ const Gif = () => {
                             <Grid
                                 container
                                 direction="row"
-                                justify="space-between"
+                                justifyContent="space-between"
                                 alignItems="center">
 
                                 <span>{keyword("cardTitle_images")}</span>
@@ -902,7 +902,7 @@ const Gif = () => {
                                             spacing={0}
                                             direction="column"
                                             alignItems="center"
-                                            justify="center"
+                                            justifyContent="center"
                                             className={classes.dropZone}
                                         >
 
@@ -955,7 +955,7 @@ const Gif = () => {
                                             spacing={0}
                                             direction="column"
                                             alignItems="center"
-                                            justify="center"
+                                            justifyContent="center"
                                             className={classes.dropZone}
                                         >
 
@@ -1013,7 +1013,7 @@ const Gif = () => {
                                 <Grid
                                     container
                                     direction="row"
-                                    justify="space-between"
+                                    justifyContent="space-between"
                                     alignItems="center">
 
                                     <span>{keyword("cardTitle_generatedGIF")}</span>
@@ -1049,7 +1049,7 @@ const Gif = () => {
                             <Grid
                                 container
                                 direction="column"
-                                justify="center"
+                                justifyContent="center"
                                 alignItems="center"
                             >
                                 <Box m={4} />

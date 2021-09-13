@@ -16,16 +16,13 @@ const ocrReducer = (state = defaultState, action) => {
         case "SET_OCR_ERROR_KEY":
             return Object.assign({}, state, action.payload)
         case "OCR_CLEAN_STATE":
-            state = {
-                url: undefined,
+            return {...state, url: undefined,
                 b64Image: undefined,
                 loading : false,
                 errorKey: null,
                 fail: false,
                 done: false,
-                result: null,
-            };
-            return state;
+                result: null};
         default:
             return state;
     }

@@ -10,7 +10,7 @@ import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Forensic.tsv";
 import tsvWarning from "../../../../../LocalDictionary/components/Shared/OnWarningInfo.tsv";
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
-import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
+import { createTheme, ThemeProvider } from '@material-ui/core/styles';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Divider from '@material-ui/core/Divider';
@@ -39,6 +39,7 @@ import WarningIcon from '@material-ui/icons/Warning';
 import Alert from '@material-ui/lab/Alert';
 import MakoScale from '../../../../NavBar/images/SVG/MakoScale.png';
 import { useEffect } from "react";
+import EmojiObjectsIcon from '@material-ui/icons/EmojiObjects';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -76,7 +77,7 @@ const ForensicResults = (props) => {
 
     const dispatch = useDispatch();
 
-    const theme = createMuiTheme({
+    const theme = createTheme({
         overrides: {
 
             MuiCardHeader: {
@@ -137,28 +138,29 @@ const ForensicResults = (props) => {
         //NOISE
         "splicebuster_report",  //6
         "wavelet_report",       //7
+        "cfa_report",       //8
 
         //DEEP LEARNING
-        "mantranet_report", //8
-        "fusion_report",    //9
+        "mantranet_report", //9
+        "fusion_report",    //10
 
         //CLONING
-        "cmfd_report",  //10
-        "rcmfd_report", //11
+        "cmfd_report",  //11
+        "rcmfd_report", //12
 
         //LENSES
         
-        "ela_report",       //12
-        "laplacian_report", //13
-        "median_report",    //14
+        "ela_report",       //13
+        "laplacian_report", //14
+        "median_report",    //15
         
     ];
 
     const idStartCompression = 0;
     const idStartNoise = 6;
-    const idStartDeepLearning = 8;
-    const idStartCloning = 10;
-    const idStartLenses = 12;
+    const idStartDeepLearning = 9;
+    const idStartCloning = 11;
+    const idStartLenses = 13;
 
     //console.log(results);
 
@@ -183,13 +185,13 @@ const ForensicResults = (props) => {
                 "name": keyword("forensic_title_" + value),
                 "map": [
                     results[value]["forgery"]["colormap"],
-                    results[value]["votemap"]["colormap"],
+                    //results[value]["votemap"]["colormap"],
                 ],
                 "currentDisplayed": 0,
                 "arrows": [false, false],
                 "mask": [
                     results[value]["forgery"]["transparent"],
-                    results[value]["votemap"]["transparent"],
+                    //results[value]["votemap"]["transparent"],
                 ],
                 "popover": false,
             }
@@ -584,7 +586,7 @@ const ForensicResults = (props) => {
                                                 <Grid
                                                     container
                                                     direction="row"
-                                                    justify="space-between"
+                                                    justifyContent="space-between"
                                                     alignItems="center">
 
                                                     <Grid item>
@@ -635,7 +637,7 @@ const ForensicResults = (props) => {
                                                 <Grid
                                                     container
                                                     direction="row"
-                                                    justify="space-between"
+                                                    justifyContent="space-between"
                                                     alignItems="center">
                                                     <span>{keyword("forensic_title_lenses")}</span>
                                                     <WarningIcon style={{ color: "#FFFFFF" }} onClick={clickHelpLenses} />
@@ -664,7 +666,7 @@ const ForensicResults = (props) => {
                                                             <Grid
                                                                 container
                                                                 direction="row"
-                                                                justify="space-between"
+                                                                justifyContent="space-between"
                                                                 alignItems="stretch">
 
                                                                 <Typography variant="h6" gutterBottom>
@@ -730,7 +732,7 @@ const ForensicResults = (props) => {
                                                                             <Grid
                                                                                 container
                                                                                 direction="row"
-                                                                                justify="space-between"
+                                                                                justifyContent="space-between"
                                                                                 alignItems="stretch">
 
 
@@ -743,7 +745,7 @@ const ForensicResults = (props) => {
                                                                             </Grid>
                                                                             <Box m={1} />
 
-                                                                            <Typography variant="body2" align="justify">
+                                                                            <Typography variant="body2" align="justifyContent">
                                                                                 {keyword("forensic_card_" + value.id)}
                                                                             </Typography>
                                                                             
@@ -773,7 +775,7 @@ const ForensicResults = (props) => {
                                                 <Grid
                                                     container
                                                     direction="row"
-                                                    justify="space-between"
+                                                    justifyContent="space-between"
                                                     alignItems="center">
 
                                                     <span>{keyword("forensic_title_filters")}</span>
@@ -803,7 +805,7 @@ const ForensicResults = (props) => {
                                                             <Grid
                                                                 container
                                                                 direction="row"
-                                                                justify="space-between"
+                                                                justifyContent="space-between"
                                                                 alignItems="stretch">
 
                                                                 <Typography variant="h6" gutterBottom>
@@ -904,7 +906,7 @@ const ForensicResults = (props) => {
                                                                                 <Grid
                                                                                     container
                                                                                     direction="row"
-                                                                                    justify="space-around"
+                                                                                    justifyContent="space-around"
                                                                                     alignItems="center">
 
                                                                                     {value.arrows[0]
@@ -949,7 +951,7 @@ const ForensicResults = (props) => {
                                                                                 <Grid
                                                                                     container
                                                                                     direction="row"
-                                                                                    justify="space-around"
+                                                                                    justifyContent="space-around"
                                                                                     alignItems="center">
 
                                                                                     <Fab size="medium" style={{ backgroundColor: "#ffffff" }} onClick={(e) => clickGifPopover(e, value.id)}>
@@ -1013,7 +1015,7 @@ const ForensicResults = (props) => {
                                                                             <Grid
                                                                                 container
                                                                                 direction="row"
-                                                                                justify="space-between"
+                                                                                justifyContent="space-between"
                                                                                 alignItems="stretch">
 
                                                                                 
@@ -1037,7 +1039,7 @@ const ForensicResults = (props) => {
                                                                                         {textCagiPopover}
                                                                                     </Typography>
 
-                                                                                :   <Typography variant="body2" align="justify">
+                                                                                :   <Typography variant="body2" align="justifyContent">
                                                                                         {keyword("forensic_card_" + value.id)}
                                                                                     </Typography>
                                                                             }
@@ -1073,7 +1075,7 @@ const ForensicResults = (props) => {
                                                             <Grid
                                                                 container
                                                                 direction="row"
-                                                                justify="space-between"
+                                                                justifyContent="space-between"
                                                                 alignItems="center"
                                                             >
 
@@ -1091,8 +1093,8 @@ const ForensicResults = (props) => {
 
                                                     }
                                                     
- 
-
+                                                    <Box m={2} />
+                                                    <Alert icon={<EmojiObjectsIcon fontSize="inherit" />} severity="info">{keyword("forensic_text_hoverinfo")}</Alert>
                                                     <Box mt={2} mb={2}>
                                                         <Divider />
                                                     </Box>
@@ -1165,7 +1167,7 @@ const ForensicResults = (props) => {
                                     <Grid
                                         container
                                         direction="row"
-                                        justify="space-between"
+                                        justifyContent="space-between"
                                         alignItems="stretch">
 
                                         <Typography variant="h6" gutterBottom>
@@ -1199,7 +1201,7 @@ const ForensicResults = (props) => {
                                     <Grid
                                         container
                                         direction="column"
-                                        justify="center"
+                                        justifyContent="center"
                                         alignItems="center"
                                     >
                                         <Box m={4} />

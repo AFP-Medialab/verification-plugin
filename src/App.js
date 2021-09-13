@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import NavBar from "./components/NavBar/NavBar";
 import { MuiThemeProvider } from "@material-ui/core";
-import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
+import {createTheme} from "@material-ui/core/styles";
 import { Router, Route, Switch } from "react-router-dom";
 import history from "./components/Shared/History/History";
 import PopUp from "./components/PopUp/PopUp";
@@ -11,12 +11,13 @@ import { useSelector } from "react-redux";
 //import auth from './auth.ts'; // Sample authentication provider
 import useAuthenticationAPI from './components/Shared/Authentication/useAuthenticationAPI';
 
-const theme = createMuiTheme({
+const theme = createTheme({
   palette: {
     primary: {
-      light: '#fff',
-      main: 'rgb(0,170,180)',
-      dark: '#00707e'
+      light: '#5cdbe6',
+      main: '#05a9b4',
+      dark: '#007984',
+      contrastText: '#fff',
     },
     secondary: {
       main: '#ffaf33',
@@ -38,7 +39,7 @@ const theme = createMuiTheme({
       root: {
         overflow: "visible"
       }
-    }
+    },
   },
   zIndex: {
     drawer: 1099

@@ -24,6 +24,28 @@ import AdvancedTools from "./AdvancedTools/AdvancedTools";
 import { useSelector } from 'react-redux';
 import Snackbar from '@material-ui/core/Snackbar';
 import Alert from '@material-ui/lab/Alert';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+
+function TabPanel(props) {
+    const { children, value, index, ...other } = props;
+
+    return (
+        <div
+            role="tabpanel"
+            hidden={value !== index}
+            id={`simple-tabpanel-${index}`}
+            aria-labelledby={`simple-tab-${index}`}
+            {...other}
+        >
+            {value === index && (
+                <Box p={3}>
+                    <div>{children}</div>
+                </Box>
+            )}
+        </div>
+    );
+}
 
 
 const AllTools = (props) => {
@@ -144,6 +166,13 @@ const AllTools = (props) => {
         setOpenAlert(false);
     };
 
+
+    const [value, setValue] = React.useState(0);
+
+    const handleChange = (event, newValue) => {
+        setValue(newValue);
+    };
+
     return (
         <div>
             <Snackbar open={openAlert} autoHideDuration={6000} onClose={handleCloseAlert}>
@@ -155,7 +184,7 @@ const AllTools = (props) => {
             <Grid
                 container
                 direction="row"
-                justify="space-between"
+                justifyContent="space-between"
                 alignItems="center">
 
 
@@ -170,11 +199,201 @@ const AllTools = (props) => {
             </Grid>
 
             <Card>
+                <Tabs value={value} onChange={handleChange} indicatorColor={'primary'}>
+                    <Tab label={
+                        <Box mt={1}>
+                            <Grid
+                                container
+                                direction="row"
+                                justifyContent="flex-start"
+                                alignItems="center"
+                            >
+                                <Grid item>
+                                    <IconVideo width="45px" height="45px" style={{ fill: "#596977" }} />
+                                </Grid>
+
+                                <Grid item>
+                                    <Box m={1} />
+                                </Grid>
+
+                                <Grid item>
+                                    <Typography variant="h6" style={{ color: "#596977", textTransform: "capitalize" }}>{keyword("category_video")}</Typography>
+                                </Grid>
+
+                            </Grid>
+                        </Box>
+                    }/>
+                    <Tab label={
+                        <Box mt={1}>
+                            <Grid
+                                container
+                                direction="row"
+                                justifyContent="flex-start"
+                                alignItems="center"
+                            >
+                                <Grid item>
+                                    <IconImage width="45px" height="45px" style={{ fill: "#596977" }} />
+                                </Grid>
+
+                                <Grid item>
+                                    <Box m={1} />
+                                </Grid>
+
+                                <Grid item>
+                                    <Typography variant="h6" style={{ color: "#596977", textTransform: "capitalize" }}>{keyword("category_image")}</Typography>
+                                </Grid>
+
+                            </Grid>
+                        </Box>
+                    } />
+                    <Tab label={
+                        <Box mt={1}>
+                            <Grid
+                                container
+                                direction="row"
+                                justifyContent="flex-start"
+                                alignItems="center"
+                            >
+                                <Grid item>
+                                    <IconSearch width="45px" height="45px" style={{ fill: "#596977" }} />
+                                </Grid>
+
+                                <Grid item>
+                                    <Box m={1} />
+                                </Grid>
+
+                                <Grid item>
+                                    <Typography variant="h6" style={{ color: "#596977", textTransform: "capitalize" }}>{keyword("category_search")}</Typography>
+                                </Grid>
+
+                            </Grid>
+                        </Box>
+                    } />
+                    <Tab label={
+                        <Box mt={1}>
+                            <Grid
+                                container
+                                direction="row"
+                                justifyContent="flex-start"
+                                alignItems="center"
+                            >
+                                <Grid item>
+                                    <IconData width="45px" height="45px" style={{ fill: "#596977" }} />
+                                </Grid>
+
+                                <Grid item>
+                                    <Box m={1} />
+                                </Grid>
+
+                                <Grid item>
+                                    <Typography variant="h6" style={{ color: "#596977", textTransform: "capitalize" }}>{keyword("category_data")}</Typography>
+                                </Grid>
+
+                            </Grid>
+                        </Box>
+                    } />
+                </Tabs>
+
+                <Box m={1} />
+                
+                <div style={{minHeight: "340px"}}>
+                    <TabPanel value={value} index={0}>
+                        <Grid container justifyContent="flex-start" spacing={2} className={classes.toolCardsContainer}>
+
+                            {
+                                toolsVideo.map((value, key) => {
+                                    //console.log(value);
+
+                                    return (
+                                        <Grid className={classes.toolCardStyle} item key={key} onClick={() => handleClick(value.path, "video", value.type)}>
+                                            <ToolCard
+                                                name={keyword(value.title)}
+                                                description={keyword(value.description)}
+                                                icon={value.iconColored}
+                                                type={value.type}
+                                                path="../../../NavBar/images/SVG/Image/Gif.svg" />
+
+                                        </Grid>
+                                    );
+                                })
+                            }
+
+                        </Grid>
+                    </TabPanel>
+                    <TabPanel value={value} index={1}>
+                        <Grid container justifyContent="flex-start" spacing={2} className={classes.toolCardsContainer}>
+
+                            {
+                                toolsImages.map((value, key) => {
+                                    //console.log(value);
+                                    return (
+                                        <Grid className={classes.toolCardStyle} item key={key} onClick={() => handleClick(value.path, "image", value.type)}>
+                                            <ToolCard
+                                                name={keyword(value.title)}
+                                                description={keyword(value.description)}
+                                                icon={value.iconColored}
+                                                type={value.type} />
+                                        </Grid>
+                                    );
+                                })
+                            }
+
+                        </Grid>
+                    </TabPanel>
+                    <TabPanel value={value} index={2}>
+                        <Grid container justifyContent="flex-start" spacing={2} className={classes.toolCardsContainer}>
+
+                            {
+                                toolsSearch.map((value, key) => {
+                                    return (
+                                        <Grid className={classes.toolCardStyle} item key={key} onClick={() => handleClick(value.path, "search", value.type)}>
+                                            <ToolCard
+                                                name={keyword(value.title)}
+                                                description={keyword(value.description)}
+                                                icon={value.iconColored}
+                                                type={value.type} />
+                                        </Grid>
+                                    );
+                                })
+                            }
+
+                        </Grid>
+                    </TabPanel>
+                    <TabPanel value={value} index={3}>
+                        <Grid container justifyContent="flex-start" spacing={2} className={classes.toolCardsContainer}>
+
+                            {
+                                toolsData.map((value, key) => {
+                                    return (
+                                        <Grid className={classes.toolCardStyle} item key={key} onClick={() => handleClick(value.path, "datas", value.type)}>
+                                            <ToolCard
+                                                name={keyword(value.title)}
+                                                description={keyword(value.description)}
+                                                icon={value.iconColored}
+                                                type={value.type} />
+                                        </Grid>
+                                    );
+                                })
+                            }
+
+                        </Grid>
+                    </TabPanel>
+                </div>
+            </Card>
+
+
+            <Box m={3} />
+            
+            {/*
+
+            <Card>
+
+
                 <Box p={2}>
                     <Grid
                         container
                         direction="row"
-                        justify="flex-start"
+                        justifyContent="flex-start"
                         alignItems="center"
                     >
                         <Grid item>
@@ -193,7 +412,7 @@ const AllTools = (props) => {
 
                     <Box m={2}/>
 
-                    <Grid container justify="flex-start" spacing={2} className={classes.toolCardsContainer}>
+                    <Grid container justifyContent="flex-start" spacing={2} className={classes.toolCardsContainer}>
                         
                             {
                                 toolsVideo.map((value, key) => {
@@ -224,7 +443,7 @@ const AllTools = (props) => {
                     <Grid
                         container
                         direction="row"
-                        justify="flex-start"
+                        justifyContent="flex-start"
                         alignItems="center"
                     >
                         <Grid item>
@@ -243,7 +462,7 @@ const AllTools = (props) => {
 
                     <Box m={2} />
 
-                    <Grid container justify="flex-start" spacing={2} className={classes.toolCardsContainer}>
+                    <Grid container justifyContent="flex-start" spacing={2} className={classes.toolCardsContainer}>
 
                         {
                             toolsImages.map((value, key) => {
@@ -271,7 +490,7 @@ const AllTools = (props) => {
                     <Grid
                         container
                         direction="row"
-                        justify="flex-start"
+                        justifyContent="flex-start"
                         alignItems="center"
                     >
                         <Grid item>
@@ -290,7 +509,7 @@ const AllTools = (props) => {
 
                     <Box m={2} />
 
-                    <Grid container justify="flex-start" spacing={2} className={classes.toolCardsContainer}>
+                    <Grid container justifyContent="flex-start" spacing={2} className={classes.toolCardsContainer}>
 
                         {
                             toolsSearch.map((value, key) => {
@@ -317,7 +536,7 @@ const AllTools = (props) => {
                     <Grid
                         container
                         direction="row"
-                        justify="flex-start"
+                        justifyContent="flex-start"
                         alignItems="center"
                     >
                         <Grid item>
@@ -336,7 +555,7 @@ const AllTools = (props) => {
 
                     <Box m={2} />
 
-                    <Grid container justify="flex-start" spacing={2} className={classes.toolCardsContainer}>
+                    <Grid container justifyContent="flex-start" spacing={2} className={classes.toolCardsContainer}>
 
                         {
                             toolsData.map((value, key) => {
@@ -355,6 +574,8 @@ const AllTools = (props) => {
                     </Grid>
                 </Box>
             </Card>
+
+                    */}
 
             <Box m={4} />
 

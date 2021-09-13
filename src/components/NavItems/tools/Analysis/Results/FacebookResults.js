@@ -15,8 +15,8 @@ import AccordionSummary from "@material-ui/core/AccordionSummary";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import TableHead from "@material-ui/core/TableHead";
-import GridList from "@material-ui/core/GridList";
-import GridListTile from "@material-ui/core/GridListTile";
+import ImageList from "@material-ui/core/ImageList";
+import ImageListItem from "@material-ui/core/ImageListItem";
 import Button from "@material-ui/core/Button";
 import ImageReverseSearch from "../../ImageReverseSearch";
 import OnClickInfo from "../../../../Shared/OnClickInfo/OnClickInfo";
@@ -790,17 +790,17 @@ const FacebookResults = (props) => {
                   <OnClickInfo keyword={"keyframes_tip"} />
                   <Box m={1} />
                   <div className={classes.imagesRoot}>
-                    <GridList
-                      cellHeight={160}
-                      className={classes.gridList}
+                    <ImageList
+                      rowHeight={160}
+                      className={classes.ImageList}
                       cols={3}
                     >
                       {thumbnails.map((tile, key) => (
-                        <GridListTile key={key} cols={1}>
+                        <ImageListItem key={key} cols={1}>
                           <img src={tile.url} alt={"img"} />
-                        </GridListTile>
+                        </ImageListItem>
                       ))}
-                    </GridList>
+                    </ImageList>
                   </div>
                   <Box m={2} />
                   <Button

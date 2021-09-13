@@ -5,8 +5,7 @@ const defaultState = {
 const toolReducer = (state = defaultState, action) => {
     switch (action.type) {
         case "SELECT_TOOL":
-            state.selected = action.payload;
-            return state;
+            return {...state, selected:action.payload};
         case "CLEAN_STATE":
             return defaultState;
         default:

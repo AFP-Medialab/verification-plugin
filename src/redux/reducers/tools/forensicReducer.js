@@ -13,11 +13,9 @@ const forensicReducer = (state = defaultState, action) => {
         case "SET_FORENSIC_RESULT":
             return action.payload;
         case "SET_FORENSIC_MASK":
-            state.masks = action.payload;
-            return state;
+            return {...state, masks:action.payload};
         case "SET_FORENSIC_LOADING":
-            state.loading = action.payload;
-            return state;
+            return {...state, loading:action.payload};
         case "FORENSIC_CLEAN_STATE":
             return {
                 ...state, notification: false, loading: false,
@@ -27,14 +25,11 @@ const forensicReducer = (state = defaultState, action) => {
                 maskUrl: ""
             }
         case "SET_FORENSIC_GIF_HIDE":
-            state.gifAnimation = false;
-            return state;
+            return {...state, gifAnimation:false};
         case "SET_FORENSIC_GIF_SHOW":
-            state.gifAnimation = true;
-            return state;
+            return {...state, gifAnimation:true};
         case "SET_FORENSIC_MASK_GIF":
-            state.maskUrl = action.payload;
-            return state;
+            return {...state, maskUrl:action.payload};
         default:
             return state;
     }
