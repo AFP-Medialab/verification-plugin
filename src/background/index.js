@@ -239,7 +239,7 @@ window.chrome.contextMenus.create({
 
 window.chrome.contextMenus.create({
     title: "Image Magnifier",
-    contexts:["image", "link"],
+    contexts:["image"],
     onclick: imageMagnifier,
 });
 
@@ -251,7 +251,7 @@ window.chrome.contextMenus.create({
 
 window.chrome.contextMenus.create({
     title: "Image Reverse Search - ALL",
-    contexts:["image", "link"],
+    contexts:["image"],
     onclick: imageReversesearchAll,
 });
 
@@ -263,13 +263,13 @@ window.chrome.contextMenus.create({
 
 window.chrome.contextMenus.create({
     title: "Image Reverse Search - Google",
-    contexts:["image", "link"],
+    contexts:["image"],
     onclick: imageReversesearch,
 });
 
 window.chrome.contextMenus.create({
     title: "Image Reverse Search - Yandex",
-    contexts:["image", "link"],
+    contexts:["image"],
     onclick: imageReversesearchYandex,
 });
 
@@ -281,13 +281,13 @@ window.chrome.contextMenus.create({
 
 window.chrome.contextMenus.create({
     title: "Image Reverse Search - Tineye",
-    contexts:["image", "link"],
+    contexts:["image"],
     onclick: imageReversesearchTineye,
 });
 
 window.chrome.contextMenus.create({
     title: "Image Reverse Search - Baidu",
-    contexts:["image", "link"],
+    contexts:["image"],
     onclick: imageReversesearchBaidu,
 });
 
