@@ -569,7 +569,7 @@ const AdvancedTools = () => {
                                     </Grid>
                                     <Grid item xs={12}>
                                         <Box mt={2}>
-                                            <Button variant="contained" color="primary"fullWidth type="submit" >
+                                            <Button variant="contained" color="primary" fullWidth type="submit" >
                                                 {messageI18NResolver("REGISTRATIONFORM_SUBMIT_LABEL")}
                                             </Button>
                                         </Box>
@@ -599,7 +599,7 @@ const AdvancedTools = () => {
 
                         </DialogContent>
                         <DialogActions>
-                            <Button v color="default" onClick={handleCloseRegistration} fullWidth >
+                            <Button v="true" color="default" onClick={handleCloseRegistration} fullWidth >
                                 {messageI18NResolver("AUTHENTICATION_FORM_CLOSE")}
                             </Button>
                         </DialogActions>
