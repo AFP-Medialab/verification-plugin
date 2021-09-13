@@ -17,14 +17,6 @@ const useVideoTreatment = (mediaUrl, keyword) => {
         };
 
         let videoTreatment = () => {
-
-            let extension = mediaUrl.slice(-3);
-            console.log(extension);
-
-            if(extension !== "mp4" || extension !== "m4v"){
-                handleError("description_limitations")
-            }
-
             let video = mp4box.createFile();
 
             video.onReady = (info) => {

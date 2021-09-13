@@ -44,10 +44,7 @@ const registrationValidationSchema = yup.object().shape({
         otherwise: yup.string().notRequired()
     })
 });
-
-
 const AdvancedTools = () => {
-
      const keyword = useLoadLanguage("components/NavItems/AdvancedTools.tsv", tsvAdvTools);
 
     //const classes = useMyStyles();
@@ -113,10 +110,6 @@ const AdvancedTools = () => {
     const handleGetCode = () => {
         submitGetCode(email);
         
-    };
-
-    const handleAlreadyCode = () => {
-        setDialogState(1);
     };
 
     const [stateUnlockTools, setStateUnlockTools] = React.useState(true);
@@ -273,6 +266,8 @@ const AdvancedTools = () => {
                 open={open}
                 onClose={handleClose}
                 aria-labelledby="max-width-dialog-title"
+                
+                
             >
 
                 {dialogState === 0 &&
@@ -282,7 +277,7 @@ const AdvancedTools = () => {
                                 {keyword("title")}
                             </Typography>
                         </DialogTitle>
-                        <DialogContent style={{ height: '300px' }}>
+                        <DialogContent style={{ height: '270px' }}>
                             
                             <Typography variant="body2">
                                 {keyword("text_general")}
@@ -316,21 +311,14 @@ const AdvancedTools = () => {
                                 {messageI18NResolver("ACCESSCODEFORM_SUBMIT_LABEL")}
                             </Button>
 
-                            <Box m={2} />
-
-                            <Typography variant="body2" style={{ color: "#818B95", textAlign: "left" }}>
-                                {keyword("text_alreadycode")}
-                                <span style={{ color: "#000000", marginLeft: "5px", fontWeight: "500", cursor: "pointer" }} onClick={handleAlreadyCode}>{keyword("text_clickhere")}</span>
-                            </Typography>
-
                         </DialogContent>
                         <DialogActions>
                             <Box p={2}>
                                 <Grid container direction="column" style={{ width: "100%" }}>
-                                    <Typography variant="body2" style={{ color: "#818B95", textAlign: "left" }}>
+                                    <Typography variant="body2" style={{ color: "#818B95", textAlign: "center" }}>
                                         {messageI18NResolver("REGISTRATIONFORM_TITLE")}
                                     </Typography>
-                                    <Box m={1} />
+                                    <Box m={2} />
                                     <Button variant="outlined" color="primary" onClick={handleClickOpenRegister} style={{ border: "2px solid" }} fullWidth>
                                         {messageI18NResolver("REGISTRATIONFORM_SUBMIT_LABEL")}
                                     </Button>

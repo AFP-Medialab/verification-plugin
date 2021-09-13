@@ -16,7 +16,7 @@ const XNetwork = () => {
   const keywordAllTools = useLoadLanguage("components/NavItems/tools/Alltools.tsv", alltoolstsv);
 
   useEffect(() => {
-    console.log("HOLA");
+
     const script = document.createElement('script');
     script.src = "https://cse.google.com/cse.js?cx=000556916517770601014:k08mmqlnmih";
     script.async = true;
