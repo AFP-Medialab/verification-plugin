@@ -1,8 +1,8 @@
-import { useEffect} from "react";
+import { useEffect } from "react";
 import * as mp4box from "mp4box";
-import {useDispatch} from "react-redux";
-import {setMetadadaResult, setMetadadaLoading} from "../../../../../redux/actions/tools/metadataActions";
-import {setError} from "../../../../../redux/actions/errorActions";
+import { useDispatch } from "react-redux";
+import { setMetadadaResult, setMetadadaLoading } from "../../../../../redux/actions/tools/metadataActions";
+import { setError } from "../../../../../redux/actions/errorActions";
 
 const useVideoTreatment = (mediaUrl, keyword) => {
     const dispatch = useDispatch();
@@ -17,6 +17,14 @@ const useVideoTreatment = (mediaUrl, keyword) => {
         };
 
         let videoTreatment = () => {
+
+            let extension = mediaUrl.slice(-3);
+            console.log(extension);
+
+            if (extension !== "mp4" || extension !== "m4v") {
+                handleError("description_limitations")
+            }
+
             let video = mp4box.createFile();
 
             video.onReady = (info) => {
@@ -59,7 +67,7 @@ const useVideoTreatment = (mediaUrl, keyword) => {
         if (mediaUrl)
             videoTreatment();
 
-    
+
     }, [mediaUrl, keyword, dispatch]);
 
 };
