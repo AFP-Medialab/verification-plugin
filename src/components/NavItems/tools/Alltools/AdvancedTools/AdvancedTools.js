@@ -44,8 +44,11 @@ const registrationValidationSchema = yup.object().shape({
         otherwise: yup.string().notRequired()
     })
 });
+
+
 const AdvancedTools = () => {
-     const keyword = useLoadLanguage("components/NavItems/AdvancedTools.tsv", tsvAdvTools);
+
+    const keyword = useLoadLanguage("components/NavItems/AdvancedTools.tsv", tsvAdvTools);
 
     //const classes = useMyStyles();
     // Redux store
@@ -53,7 +56,7 @@ const AdvancedTools = () => {
     const userAuthenticated = useSelector(
         (state) => state.userSession && state.userSession.userAuthenticated
     );
-    
+
     // i18n
     const messageI18NResolver = useLoadLanguage("components/Shared/Authentication.tsv", tsv);
 
@@ -63,7 +66,7 @@ const AdvancedTools = () => {
     const [iconState, setIconState] = React.useState(<LockIcon fontSize="small" />);
 
     const [open, setOpen] = React.useState(false);
-    
+
     const setAuthenticatedData = () => {
         setDialogState(2);
         setColorButton("secondary");
@@ -77,24 +80,24 @@ const AdvancedTools = () => {
     }
 
     useEffect(() => {
-        if (userAuthenticated){
+        if (userAuthenticated) {
             setAuthenticatedData();
-        }else{
+        } else {
             setNotAuthenticatedData();
         }
-    // eslint-disable-next-line
+        // eslint-disable-next-line
     }, [userAuthenticated]);
 
-    
+
     const handleClickOpen = () => {
-        if(dialogState===0){
+        if (dialogState === 0) {
             setOpen(true);
-        }else{
+        } else {
             logoutOnClick();
-            
+
             setNotAuthenticatedData();
         }
-        
+
     };
 
     const handleClose = () => {
@@ -109,12 +112,16 @@ const AdvancedTools = () => {
 
     const handleGetCode = () => {
         submitGetCode(email);
-        
+
+    };
+
+    const handleAlreadyCode = () => {
+        setDialogState(1);
     };
 
     const [stateUnlockTools, setStateUnlockTools] = React.useState(true);
 
-    
+
     const handleClickUnlock = () => {
         setStateUnlockTools(true);
         submitCode(code);
@@ -125,7 +132,7 @@ const AdvancedTools = () => {
         setAuthenticatedData();
     };
 
-    
+
     const handleClickBack = () => {
         setDialogState(0);
     };
@@ -186,7 +193,7 @@ const AdvancedTools = () => {
             handleError(error.error ? error.error.code : ERR_AUTH_UNKNOWN_ERROR);
         });
     };
-      
+
 
     const handleCloseRegistration = () => {
         setOpen(false);
@@ -228,21 +235,21 @@ const AdvancedTools = () => {
                             justifyContent="flex-end"
                             alignItems="center"
                             spacing={1}>
-                                <Grid item>
-                                    {iconState}
-                                </Grid>
+                            <Grid item>
+                                {iconState}
+                            </Grid>
 
-                                <Grid item>
-                                    <Typography variant="subtitle2">
-                                        {keyword("title")}
-                                    </Typography>
-                                </Grid>
-                            
+                            <Grid item>
+                                <Typography variant="subtitle2">
+                                    {keyword("title")}
+                                </Typography>
+                            </Grid>
+
                         </Grid>
 
                         <Grid item>
-                            <Typography variant="body2" style={{ color: "#737373"}}>
-                                {userAuthenticated ? keyword("text_unlocked") :  keyword("text_locked")}                
+                            <Typography variant="body2" style={{ color: "#737373" }}>
+                                {userAuthenticated ? keyword("text_unlocked") : keyword("text_locked")}
                             </Typography>
                         </Grid>
 
@@ -253,7 +260,7 @@ const AdvancedTools = () => {
 
                 <Grid item>
                     <Button variant="outlined" color={colorButton} onClick={handleClickOpen} style={{ border: "2px solid", heigth: "40px" }}>
-                        {userAuthenticated ? messageI18NResolver("LOGUSER_LOGOUT_LABEL"): messageI18NResolver("LOGINFORM_SUBMIT_LABEL")}                
+                        {userAuthenticated ? messageI18NResolver("LOGUSER_LOGOUT_LABEL") : messageI18NResolver("LOGINFORM_SUBMIT_LABEL")}
                     </Button>
                 </Grid>
 
@@ -266,30 +273,28 @@ const AdvancedTools = () => {
                 open={open}
                 onClose={handleClose}
                 aria-labelledby="max-width-dialog-title"
-                
-                
             >
 
                 {dialogState === 0 &&
                     <Box p={2}>
                         <DialogTitle id="max-width-dialog-title">
-                            <Typography gutterBottom style={{ color: "#51A5B2",  fontSize: "24px" }}>
+                            <Typography gutterBottom style={{ color: "#51A5B2", fontSize: "24px" }}>
                                 {keyword("title")}
                             </Typography>
                         </DialogTitle>
-                        <DialogContent style={{ height: '270px' }}>
-                            
+                        <DialogContent style={{ height: '300px' }}>
+
                             <Typography variant="body2">
                                 {keyword("text_general")}
                             </Typography>
 
-                            <Box m={4}/>
+                            <Box m={4} />
 
-                            <Typography variant="body2" style={{ color: "#818B95"}}>
+                            <Typography variant="body2" style={{ color: "#818B95" }}>
                                 {messageI18NResolver("ACCESSCODEFORM_TITLE")}
                             </Typography>
                             <Box m={2} />
-                            <TextField                        
+                            <TextField
                                 label={"Email"}
                                 value={email}
                                 placeholder={messageI18NResolver("ACCESSCODEFORM_EMAIL_PLACEHOLDER")}
@@ -311,14 +316,21 @@ const AdvancedTools = () => {
                                 {messageI18NResolver("ACCESSCODEFORM_SUBMIT_LABEL")}
                             </Button>
 
+                            <Box m={2} />
+
+                            <Typography variant="body2" style={{ color: "#818B95", textAlign: "left" }}>
+                                {keyword("text_alreadycode")}
+                                <span style={{ color: "#000000", marginLeft: "5px", fontWeight: "500", cursor: "pointer" }} onClick={handleAlreadyCode}>{keyword("text_clickhere")}</span>
+                            </Typography>
+
                         </DialogContent>
                         <DialogActions>
                             <Box p={2}>
                                 <Grid container direction="column" style={{ width: "100%" }}>
-                                    <Typography variant="body2" style={{ color: "#818B95", textAlign: "center" }}>
+                                    <Typography variant="body2" style={{ color: "#818B95", textAlign: "left" }}>
                                         {messageI18NResolver("REGISTRATIONFORM_TITLE")}
                                     </Typography>
-                                    <Box m={2} />
+                                    <Box m={1} />
                                     <Button variant="outlined" color="primary" onClick={handleClickOpenRegister} style={{ border: "2px solid" }} fullWidth>
                                         {messageI18NResolver("REGISTRATIONFORM_SUBMIT_LABEL")}
                                     </Button>
@@ -334,25 +346,25 @@ const AdvancedTools = () => {
                     <Box p={2}>
                         <DialogTitle id="max-width-dialog-title">
 
-                            <Grid 
+                            <Grid
                                 container
                                 direction="row"
                                 justifyContent="flex-start"
                                 alignItems="center"
                                 style={{ width: "100%" }} >
 
-                                    <Grid item>
-                                        <IconButton color="primary" onClick={handleClickBack} component="span">
-                                            <ArrowBackIosIcon />
-                                        </IconButton>
-                                    </Grid>
+                                <Grid item>
+                                    <IconButton color="primary" onClick={handleClickBack} component="span">
+                                        <ArrowBackIosIcon />
+                                    </IconButton>
+                                </Grid>
 
-                                    <Grid item>
-                                        <Typography style={{ color: "#51A5B2", fontSize: "24px" }}>
-                                            {messageI18NResolver("ACCESSCODEFORM_EMAIL_CHECK")}
-                                        </Typography>
-                                    </Grid>
-                                
+                                <Grid item>
+                                    <Typography style={{ color: "#51A5B2", fontSize: "24px" }}>
+                                        {messageI18NResolver("ACCESSCODEFORM_EMAIL_CHECK")}
+                                    </Typography>
+                                </Grid>
+
                             </Grid>
                         </DialogTitle>
                         <DialogContent style={{ height: '300px' }}>
@@ -383,12 +395,12 @@ const AdvancedTools = () => {
                             <Box m={2} />
 
                             <Box ml={1} margin={1}>
-                                <Typography variant="body2" style={{ color: "#989898", fontSize: "13px"}}>
+                                <Typography variant="body2" style={{ color: "#989898", fontSize: "13px" }}>
                                     {messageI18NResolver("ACCESSCODEFORM_SUCCESS_TEXT_SPAM")}
                                 </Typography>
                             </Box>
 
-                            
+
 
                         </DialogContent>
                         <DialogActions>
@@ -403,7 +415,7 @@ const AdvancedTools = () => {
                 {dialogState === 2 &&
                     <Box p={2}>
                         <DialogTitle id="max-width-dialog-title">
-                            <Typography gutterBottom style={{ color: "#51A5B2", fontSize: "24px"  }}>
+                            <Typography gutterBottom style={{ color: "#51A5B2", fontSize: "24px" }}>
                                 {keyword("title_tools_unlocked")}
                             </Typography>
                         </DialogTitle>
@@ -579,7 +591,7 @@ const AdvancedTools = () => {
 
                         </DialogContent>
                         <DialogActions>
-                            
+
                         </DialogActions>
                     </Box>
 
@@ -599,25 +611,25 @@ const AdvancedTools = () => {
 
                         </DialogContent>
                         <DialogActions>
-                            <Button v="true" color="default" onClick={handleCloseRegistration} fullWidth >
+                            <Button v color="default" onClick={handleCloseRegistration} fullWidth >
                                 {messageI18NResolver("AUTHENTICATION_FORM_CLOSE")}
                             </Button>
                         </DialogActions>
                     </Box>
 
                 }
-                
+
             </Dialog>
 
 
 
-            
+
 
 
         </div>
 
     )
-    
+
 
 }
 
