@@ -16,33 +16,23 @@ const defaultState = {
 const gifReducer = (state = defaultState, action) => {
     switch (action.type) {
         case "SET_STATE_INIT":
-            state.homoImg1 = "";
-            state.homoImg2 = "";
-            state.toolState = 1;
-            return state;
+            return {...state, homoImg1:"", homoImg2:"", toolState:1};
         case "SET_STATE_SELECTINGFILES_LOCAL":
-            state.toolState = 21;
-            return state;
+            return {...state, toolState:21};
         case "SET_STATE_SELECTINGFILES_URL":
-            state.toolState = 22;
-            return state;
+            return {...state, toolState:22};
         case "SET_STATE_READY":
-            state.toolState = 3;
-            return state;
+            return {...state, toolState:3};
         case "SET_STATE_LOADING":
-            state.toolState = 4;
-            return state;
+            return {...state, toolState:4};
         case "SET_STATE_SHOW":
             return action.payload;
         case "SET_STATE_ERROR":
-            state.toolState = 6;
-            return state;
+            return {...state, toolState:6};
         case "SET_STATE_DOWNLOADING":
-            state.toolState = 7;
-            return state;
+            return {...state, toolState:7};
         case "SET_STATE_BACKRESULTS":
-            state.toolState = 5;
-            return state;
+            return {...state, toolState:5};
         default:
             return state;
 

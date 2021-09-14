@@ -18,18 +18,21 @@ const CovidSearch = () => {
   const keywordAllTools = useLoadLanguage("components/NavItems/tools/Alltools.tsv", tsv);
 
   useEffect(() => {
-      
-      const script = document.createElement('script');
-      script.src = "https://cse.google.com/cse.js?cx=000556916517770601014:" + keyword("covidsearch_engines");
-      script.async = true;
-    
+    const script = document.createElement('script');
+
+    script.src = "https://cse.google.com/cse.js?cx=000556916517770601014:" + keyword("covidsearch_engines");
+    script.async = true;
+
+    if (script.src !== "https://cse.google.com/cse.js?cx=000556916517770601014:") {
       document.head.appendChild(script);
-    
+
       return () => {
         document.head.removeChild(script);
       }
-    
+    }
+
   }, [keyword]);
+
 
   return (
     <div>
@@ -41,13 +44,13 @@ const CovidSearch = () => {
           className={classes.headerUpladedImage}
         />
         <div className={classes.root2}>
-            <div className="gcse-search"></div>
-            <Box m={1} />
-            <OnClickInfo keyword={"covid19_tip"}/>
+          <div className="gcse-search"></div>
+          <Box m={1} />
+          <OnClickInfo keyword={"covid19_tip"} />
         </div>
-        
+
       </Card>
-      
+
     </div>);
 };
 export default CovidSearch;

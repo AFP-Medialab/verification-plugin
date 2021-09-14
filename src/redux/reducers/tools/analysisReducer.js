@@ -31,12 +31,9 @@ const analysisReducer = (state = defaultState, action) => {
                         pagination:action.payload.pagination },
                   };         
         case "SET_ANALYSIS_LOADING":
-            state.loading = action.payload;
-            return state;
+            return {...state, loading: action.payload};
         case "ANALYSIS_CLEAN_STATE":
-            state.result = null;
-            state.url = "";
-            return state;
+            return {...state, result:null, url:""};
         default:
             return state;
     }

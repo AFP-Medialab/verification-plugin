@@ -187,7 +187,7 @@ const ImageResult = () => {
                 <Grid
                     container
                     direction="row"
-                    justify="center"
+                    justifyContent="center"
                     alignItems="center"
                     spacing={3}
                 >
@@ -217,7 +217,7 @@ const ImageResult = () => {
                         <Grid
                             container
                             direction="column"
-                            justify="center"
+                            justifyContent="center"
                             alignItems="center"
                             spacing={3}
                         >
@@ -238,7 +238,7 @@ const ImageResult = () => {
                         <Grid
                             container
                             direction="row"
-                            justify="center"
+                            justifyContent="center"
                             alignItems="center"
                             spacing={3}
                         >

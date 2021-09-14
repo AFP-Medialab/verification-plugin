@@ -21,7 +21,7 @@ export const setDictionary = (text) => {
 
 export const addDictionary = (label, json) => {
     return {
-        type : "ADD",
+        type : "ADD_DICO",
         payload : {
             label: label,
             json: json

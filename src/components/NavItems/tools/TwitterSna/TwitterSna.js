@@ -498,7 +498,7 @@ const TwitterSna = () => {
               placeholder={keyword("user_placeholder")}
               fullWidth
             />
-            <Grid container justify={"center"} spacing={4} className={classes.grow}>
+            <Grid container justifyContent={"center"} spacing={4} className={classes.grow}>
               <Grid item>
                 <DateTimePicker
                   disabled={searchFormDisabled}
@@ -552,7 +552,7 @@ const TwitterSna = () => {
             </FormControl>
             <Box m={2} />
             <Box m={2} />
-            <Grid container justify={"space-around"} spacing={5}>
+            <Grid container justifyContent={"space-around"} spacing={5}>
               <FormControlLabel
                 control={
                   <Checkbox

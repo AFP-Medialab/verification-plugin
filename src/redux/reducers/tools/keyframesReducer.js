@@ -11,15 +11,11 @@ const keyframesReducer = (state = defaultState, action) => {
         case "SET_KEYFRAMES_RESULT":
             return action.payload;
         case "SET_KEYFRAMES_LOADING":
-            state.loading = action.payload;
-            return state;
+            return {...state, loading: action.payload};
         case "SET_KEYFRAMES_MESSAGE":
-            state.message = action.payload;
-            return state;
-        case "KEYFRAMES_CLEAN_STATE":
-            state.url = "";
-            state.result = null;
-            return state;
+            return {...state, message:action.payload};
+        case "KEYFRAMES_CLEAN_STATE":                        
+            return {...state, url:"", result:null};
         default:
             return state;
     }

@@ -6,7 +6,7 @@ import ImageResult from "./Results/ImageResult";
 import FolderOpenIcon from '@material-ui/icons/FolderOpen';
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import {useParams} from 'react-router-dom'
-import {setMagnifierResult} from "../../../../redux/actions/tools/magnifierActions";
+import {setMagnifierResult, setMagnifierLoading} from "../../../../redux/actions/tools/magnifierActions";
 import {setError} from "../../../../redux/actions/errorActions";
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/Magnifier.tsv";
@@ -63,6 +63,7 @@ const Magnifier = () => {
         if (url) {
             if(url !== KNOWN_LINKS.OWN) {
                 const uri = (url !== null) ? decodeURIComponent(url) : undefined;
+                dispatch(setMagnifierLoading(true));
                 setInput(uri);
                 submitUrl(uri)
             }
