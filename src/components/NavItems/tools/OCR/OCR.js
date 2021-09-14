@@ -20,6 +20,7 @@ import { ReactComponent as OCRIcon } from '../../../NavBar/images/SVG/Image/OCR.
 import Grid from "@material-ui/core/Grid";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 
+// todo: tsv file on result, clean up formatting, remove ugly b64-unencoded mess, add bounding boxes, run tests on all cases
 const OCR = () => {
 
     const {url} = useParams();

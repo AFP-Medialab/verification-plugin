@@ -88,24 +88,11 @@ export default function assistantApiCalls() {
         return result.data
     }
 
-    const callOcrService = async (urlList) => {
-        let urls = urlList.join(" ")
-
+    const callOcrService = async (data, mode) => {
         const result = await axios.post(
             assistantEndpoint + "gcloud/ocr",
-            {text: urls, data_type: "url"}
+            {text: data, data_type: mode}
         )
-
-        return result.data
-    }
-
-    const callOcrB64Service = async (b64Img) => {
-        b64Img = b64Img.replace("data:image/png;base64,", "")
-
-        const result = await axios.post(
-            assistantEndpoint + "gcloud/ocr",
-            {text: b64Img, data_type:"upload"}
-            )
 
         return result.data
     }
@@ -117,8 +104,7 @@ export default function assistantApiCalls() {
         callNamedEntityService,
         callAssistantTranslator,
         callHyperpartisanService,
-        callOcrService,
-        callOcrB64Service
+        callOcrService
     }
 }
 

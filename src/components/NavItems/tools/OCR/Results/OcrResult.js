@@ -2,7 +2,6 @@ import React from "react";
 import {useDispatch, useSelector} from "react-redux";
 import Card from "@material-ui/core/Card";
 import CardMedia from "@material-ui/core/CardMedia";
-import CardActions from "@material-ui/core/CardActions";
 import Divider from "@material-ui/core/Divider";
 import Grid from "@material-ui/core/Grid";
 import LinearProgress from "@material-ui/core/LinearProgress";
@@ -19,6 +18,12 @@ import tsv from "../../../../../LocalDictionary/components/NavItems/tools/OCR.ts
 import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
 import CardHeader from "@material-ui/core/CardHeader";
+import TableContainer from "@material-ui/core/TableContainer";
+import Table from "@material-ui/core/Table";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
+import TableCell from "@material-ui/core/TableCell";
+import TableBody from "@material-ui/core/TableBody";
 
 
 const OcrResult = () => {
@@ -65,12 +70,31 @@ const OcrResult = () => {
                         </CardMedia>
                         <Divider variant={"middle"}/>
                         {result ?
-                            <CardActions style={{justifyContent: 'center'}}>
-                                <Typography variant={"h5"}>
-                                    {result === "ocr_no_text" ? keyword("ocr_no_text") : result}
-                                </Typography>
-                            </CardActions> :
-                            null
+                            result.length ?
+                                <TableContainer>
+                                    <Table size="small">
+                                        <TableHead>
+                                            <TableRow>
+                                                <TableCell style={{fontWeight: "bold"}} align="left">Box</TableCell>
+                                                <TableCell style={{fontWeight: "bold"}} align="left">Text</TableCell>
+                                                <TableCell style={{fontWeight: "bold"}} align="left">Language</TableCell>
+                                                <TableCell style={{fontWeight: "bold"}} align="left">Confidence(%)</TableCell>
+                                            </TableRow>
+                                        </TableHead>
+                                        <TableBody>
+                                            {result.map((ocrResult, index) => (
+                                                <TableRow key={index}>
+                                                    <TableCell align="left">{index + 1}</TableCell>
+                                                    <TableCell align="left">{ocrResult.text}</TableCell>
+                                                    <TableCell align="left">{ocrResult.language.name}</TableCell>
+                                                    <TableCell align="left">{(ocrResult.language.probability * 100).toFixed(2)}</TableCell>
+                                                </TableRow>
+                                            ))}
+                                        </TableBody>
+                                    </Table>
+                                </TableContainer>
+                                :<Typography variant={"h5"}>{keyword("ocr_no_text")}</Typography>
+                            :null
                         }
                     </Card>
                 </Grid>

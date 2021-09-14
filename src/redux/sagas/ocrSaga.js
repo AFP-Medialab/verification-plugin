@@ -13,29 +13,21 @@ function* handleOcrCall(action) {
 
     const inputUrl = yield select(state => state.ocr.url);
     const b64Encoding =  yield select(state => state.ocr.b64Image);
-    let ocrText = null
 
     try {
         yield put(setOcrResult(true, false, false, null))
+        let ocrResult = []
 
         if (b64Encoding) {
-            checkImageSize(b64Encoding)
-            let ocrResult = yield call(assistantApi.callOcrB64Service,  b64Encoding)
-            ocrText = ocrResult.text
+            let image = b64Encoding.substr(22)
+            let decoded_image = atob(image)
+            checkImageSize(decoded_image)
+            ocrResult = yield call(assistantApi.callOcrService,  decoded_image, "upload")
         }
         else{
-            let ocrResult = yield call(assistantApi.callOcrService, [inputUrl])
-            let ocrSuccess = ocrResult.entities.URL[0].ocr_ok
-            if(!ocrSuccess) {
-                throw new Error();
-            }
-            ocrText = ocrResult.entities.URL[0].ocr_text
+            ocrResult = yield call(assistantApi.callOcrService, inputUrl, "url")
         }
-
-        ocrText === "" ?
-            yield put(setOcrResult(false, false, true, "ocr_no_text")) :
-            yield put(setOcrResult(false, false, true, ocrText))
-
+        yield put(setOcrResult(false, false, true, ocrResult))
     } catch (error) {
         console.log(error)
         if(error.message==="ocr_too_big"){
@@ -47,9 +39,7 @@ function* handleOcrCall(action) {
     }
 }
 
-function checkImageSize (b64Image) {
-    let image=  b64Image.substr(22)
-    let decoded_image = atob(image)
+function checkImageSize (decoded_image) {
     if(decoded_image.length > 4000000){
         throw  Error("ocr_too_big")
     }
