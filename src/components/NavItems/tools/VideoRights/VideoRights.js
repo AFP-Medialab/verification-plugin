@@ -4,6 +4,7 @@ import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import React, {useEffect, useState} from "react";
+import {useDispatch} from "react-redux";
 import useVideoRightsTreatment from "./Hooks/useVideoRightsTreatment";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import VideoRightsResults from "./Results/VideoRightsResults";
@@ -17,6 +18,7 @@ import {KNOWN_LINKS} from "../../Assistant/AssistantRuleBook";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 import { ReactComponent as VideoRightsIcon } from '../../../NavBar/images/SVG/Video/Video_rights.svg';
+import {setVideoRightsLoading} from "../../../../redux/actions/tools/videoRightsActions"
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import Grid from "@material-ui/core/Grid";
 
@@ -33,12 +35,16 @@ const VideoRights = () => {
     const [input, setInput] = useState(resultUrl);
     const [urlDetected, setUrlDetected] = useState(false);
     const [submitted, setSubmitted] = useState(null);
+   
     useVideoRightsTreatment(submitted, keyword);
+    const dispatch = useDispatch();
 
     const submitForm = () => {
         if (!isLoading) {
+            console.log("submitForm loading ", input);
             submissionEvent(input);
             setSubmitted(input);
+            dispatch(setVideoRightsLoading(true));
         }
     };
 
@@ -56,6 +62,12 @@ const VideoRights = () => {
             setUrlDetected(true)
         }
     }, [url]);
+
+    useEffect(() => {
+        if(submitted){
+        console.log("submitted ");
+        setSubmitted("")}
+    }, [submitted]);
 
     return (
         <div>

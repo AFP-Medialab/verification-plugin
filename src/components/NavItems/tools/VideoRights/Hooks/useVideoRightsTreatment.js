@@ -45,8 +45,6 @@ const useVideoRightsTreatment = (url, keyword) => {
                 return;
             }
             api_url += kind;
-
-            dispatch(setVideoRightsLoading(true));
             axios.post(api_url, {"url": url}, {headers: {ContentType: 'application/json'}})
                 .then(response => {
                     let result = response.data;
