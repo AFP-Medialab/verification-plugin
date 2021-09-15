@@ -41,7 +41,6 @@ const VideoRights = () => {
 
     const submitForm = () => {
         if (!isLoading) {
-            console.log("submitForm loading ", input);
             submissionEvent(input);
             setSubmitted(input);
             dispatch(setVideoRightsLoading(true));
@@ -65,7 +64,6 @@ const VideoRights = () => {
 
     useEffect(() => {
         if(submitted){
-        console.log("submitted ");
         setSubmitted("")}
     }, [submitted]);
 
