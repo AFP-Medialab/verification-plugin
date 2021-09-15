@@ -20,7 +20,7 @@ import { ReactComponent as OCRIcon } from '../../../NavBar/images/SVG/Image/OCR.
 import Grid from "@material-ui/core/Grid";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 
-// todo: tsv file on result, clean up formatting, remove ugly b64-unencoded mess, add bounding boxes, run tests on all cases
+//todo: scale image, fix incorrect image size check and move away from img-b64-img
 const OCR = () => {
 
     const {url} = useParams();
@@ -48,7 +48,7 @@ const OCR = () => {
             canvas.height = uploadedImg.naturalHeight
 
             let canvas_context = canvas.getContext("2d")
-            canvas_context.scale(0.75, 0.75)
+            // canvas_context.scale(0.75, 0.75)
             canvas_context.drawImage(uploadedImg, 0, 0);
             // canvas.getContext('2d').drawImage(uploadedImg, 0, 0);
 

@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect, useRef} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import Card from "@material-ui/core/Card";
 import CardMedia from "@material-ui/core/CardMedia";
@@ -35,20 +35,62 @@ const OcrResult = () => {
     const loading = useSelector(state => state.ocr.loading);
     const result = useSelector(state => state.ocr.result);
     const dispatch = useDispatch();
+    const canvas_ref = useRef();
 
-    const reversesearchYandex = function(url){
+
+    const reversesearchYandex = function (url) {
         let search_url = "https://yandex.com/images/search?rpt=imageview&from=tabbar&url=" + url;
         if (url !== "") {
             window.open(search_url);
         }
     };
-    
-    const reversesearchBing = function(url){
+
+    const reversesearchBing = function (url) {
         let search_url = "https://www.bing.com/images/search?view=detailv2&iss=sbi&form=SBIIRP&sbisrc=ImgDropper&q=imgurl:" + url;
         if (url !== "") {
             window.open(search_url);
         }
     };
+
+
+    // rebuild image with bounding boxes if result changes
+    useEffect(() => {
+        const canvas = canvas_ref.current
+        const context = canvas.getContext('2d')
+
+        let img = new Image()
+
+        img.onload = () => {
+            canvas.width = img.naturalWidth;
+            canvas.height = img.naturalHeight;
+
+            context.drawImage(img, 0, 0)
+
+            context.strokeStyle = 'red'
+            context.lineWidth = 3
+            context.fillStyle = 'black'
+            context.font = 'bold 20px serif'
+
+            if (result && result.length) {
+                result.map((text, index) => {
+                    let bounding_box = text.bounding_box
+                    // we are assuming that the first co-ordinate is the top left hand corner
+                    let x = bounding_box[0][0];
+                    let y = bounding_box[0][1];
+
+                    // and the third is the bottom right so we can use that to work out width and height
+                    let w = bounding_box[2][0] - x;
+                    let h = bounding_box[2][1] - y;
+
+                    context.strokeRect(x, y, w, h)
+                    context.strokeText(index + 1, x + 3, y + 25)
+                    context.fillText(index + 1, x + 3, y + 25)
+                })
+            }
+        }
+
+        img.src = inputUrl
+    }, [result])
 
     return (
         <Card>
@@ -66,7 +108,7 @@ const OcrResult = () => {
                     <Card variant={"outlined"} style={{"width": "50%"}}>
                         <CardMedia>
                             <LinearProgress hidden={!loading}/>
-                            <img crossOrigin={"anonymous"} src={inputUrl} height={"100%"} alt={inputUrl} width={"100%"}/>
+                            <canvas ref={canvas_ref} width={"100%"} height={"100%"}/>
                         </CardMedia>
                         <Divider variant={"middle"}/>
                         {result ?
@@ -75,10 +117,12 @@ const OcrResult = () => {
                                     <Table size="small">
                                         <TableHead>
                                             <TableRow>
-                                                <TableCell style={{fontWeight: "bold"}} align="left">Box</TableCell>
-                                                <TableCell style={{fontWeight: "bold"}} align="left">Text</TableCell>
-                                                <TableCell style={{fontWeight: "bold"}} align="left">Language</TableCell>
-                                                <TableCell style={{fontWeight: "bold"}} align="left">Confidence(%)</TableCell>
+                                                <TableCell style={{fontWeight: "bold"}} align="left">{keyword("table_box")}</TableCell>
+                                                <TableCell style={{fontWeight: "bold"}} align="left">{keyword("table_text")}</TableCell>
+                                                <TableCell style={{fontWeight: "bold"}}
+                                                           align="left">{keyword("table_language")}</TableCell>
+                                                <TableCell style={{fontWeight: "bold"}}
+                                                           align="left">{keyword("table_confidence")}</TableCell>
                                             </TableRow>
                                         </TableHead>
                                         <TableBody>
@@ -98,28 +142,23 @@ const OcrResult = () => {
                         }
                     </Card>
                 </Grid>
-                <Box m={2} />
+                <Box m={2}/>
                 <Grid>
                     <OnClickInfo keyword={"ocr_tip"}/>
                 </Grid>
-                <Box m={2} />
-                <Grid container justifyContent="center" spacing={5}
-                                                alignContent={"center"}>
-                        <Grid item>
+                <Box m={2}/>
+                <Grid container justifyContent="center" spacing={5} alignContent={"center"}>
+                    <Grid item>
                         <Button variant="contained" color={"primary"} onClick={() => reversesearchYandex(inputUrl)}>
-                            {
-                                keyword("ocr_search_yandex")
-                            }
+                            {keyword("ocr_search_yandex")}
                         </Button>
-                        </Grid>
-                        <Grid item>
-                        <Button variant="contained" color={"primary"} onClick={() => reversesearchBing(inputUrl)}>
-                            {
-                                keyword("ocr_search_bing")
-                            }
-                        </Button>
-                        </Grid>
                     </Grid>
+                    <Grid item>
+                        <Button variant="contained" color={"primary"} onClick={() => reversesearchBing(inputUrl)}>
+                            {keyword("ocr_search_bing")}
+                        </Button>
+                    </Grid>
+                </Grid>
 
             </div>
 

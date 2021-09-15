@@ -12,3 +12,7 @@ ocr_search_yandex	Yandex	Yandex	Yandex	Γιάντεξ
 ocr_search_bing	Bing	Bing	Bing	Bing
 cardheader_source	Source of the image	Source de l'image	Fuente de la imagen	Πηγή της εικόνας
 cardheader_results	Results	Résultats	Resultados 	Αποτελέσματα
+table_box	Box	Temp	Temp	Temp
+table_text	Text	Temp	Temp	Temp
+table_language	Language	Temp	Temp	Temp
+table_confidence	Confidence (%)	Temp	Temp	Temp
