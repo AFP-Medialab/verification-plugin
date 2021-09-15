@@ -438,7 +438,7 @@ const AdvancedTools = () => {
                     <Box p={2}>
                         <DialogTitle id="max-width-dialog-title">
                             <Typography gutterBottom style={{ color: "#51A5B2", fontSize: "24px" }}>
-                                {messageI18NResolver("REGISTRATIONFORM_TITLE")}
+                                {messageI18NResolver("REGISTRATIONFORM_TITLE_WINDOW")}
                             </Typography>
                         </DialogTitle>
                         <DialogContent>
@@ -461,11 +461,19 @@ const AdvancedTools = () => {
                                                     autoComplete="email"
                                                     required
                                                     variant="outlined"
+
                                                     error={_.hasIn(registrationForm.formState.errors, "email")}
                                                     helperText={registrationForm.formState.errors.email
                                                         && (messageI18NResolver(registrationForm.formState.errors.email.message) || "A valid email address is required")}
                                                 />
                                             }
+                                            rules={{
+                                                pattern: {
+                                                    value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                                                    message: "invalid email address"
+                                                },
+                                                required: true
+                                            }}
                                             control={registrationForm.control}
                                             defaultValue=""
                                         />
@@ -488,6 +496,9 @@ const AdvancedTools = () => {
                                                         && (messageI18NResolver(registrationForm.formState.errors.firstName.message) || "First name is required")}
                                                 />
                                             }
+                                            rules={{
+                                                required: true
+                                            }}
                                             control={registrationForm.control}
                                             defaultValue=""
                                         />
@@ -510,6 +521,9 @@ const AdvancedTools = () => {
                                                         && (messageI18NResolver(registrationForm.formState.errors.lastName.message) || "Last name is required")}
                                                 />
                                             }
+                                            rules={{
+                                                required: true
+                                            }}
                                             control={registrationForm.control}
                                             defaultValue=""
                                         />
@@ -532,6 +546,9 @@ const AdvancedTools = () => {
                                                         && (messageI18NResolver(registrationForm.formState.errors.organization.message) || "Organization name is required")}
                                                 />
                                             }
+                                            rules={{
+                                                required: true
+                                            }}
                                             control={registrationForm.control}
                                             defaultValue=""
                                         />
@@ -556,35 +573,42 @@ const AdvancedTools = () => {
                                                 >
                                                     <MenuItem key="REPORTER" value="REPORTER">{messageI18NResolver("REGISTRATIONFORM_ORGANIZATIONROLE_REPORTER_LABEL") || "Reporter"}</MenuItem>
                                                     <MenuItem key="FAKE_NEWS_CHECKER" value="FAKE_NEWS_CHECKER">{messageI18NResolver("REGISTRATIONFORM_ORGANIZATIONROLE_FAKENEWSCHECKER_LABEL") || "Fake news checker"}</MenuItem>
+                                                    <MenuItem key="RESEARCHER" value="RESEARCHER">{messageI18NResolver("REGISTRATIONFORM_ORGANIZATIONROLE_RESEARCHER_LABEL") || "Researcher"}</MenuItem>
                                                     <MenuItem key="OTHER" value="OTHER">{messageI18NResolver("REGISTRATIONFORM_ORGANIZATIONROLE_OTHER_LABEL") || "Other"}</MenuItem>
                                                 </TextField>
                                             }
+                                            rules={{
+                                                required: true
+                                            }}
+                                            
                                             control={registrationForm.control}
                                             defaultValue=""
                                         />
                                     </Grid>
-                                    <Grid item xs={12}>
-                                        <Controller
-                                            name="organizationRoleOther"
-                                            render={({ field }) =>
-                                                <TextField
-                                                    {...field}
-                                                    id="registration-organizationRoleOther"
-                                                    label={messageI18NResolver("REGISTRATIONFORM_ORGANIZATIONROLEOTHER_LABEL") || "Role (other)"}
-                                                    placeholder={messageI18NResolver("REGISTRATIONFORM_ORGANIZATIONROLEOTHER_PLACEHOLDER") || "Enter your role within organization"}
-                                                    fullWidth
-                                                    variant="outlined"
-                                                    autoComplete="organization-title"
-                                                    // required
-                                                    error={_.hasIn(registrationForm.formState.errors, "organizationRoleOther")}
-                                                    helperText={registrationForm.formState.errors.organizationRoleOther
-                                                        && (messageI18NResolver(registrationForm.formState.errors.organizationRoleOther.message) || "Please fill in your role within organization")}
-                                                />
-                                            }
-                                            control={registrationForm.control}
-                                            defaultValue=""
-                                        />
-                                    </Grid>
+                                    
+                                        <Grid item xs={12}>
+                                            <Controller
+                                                name="organizationRoleOther"
+                                                render={({ field }) =>
+                                                    <TextField
+                                                        {...field}
+                                                        id="registration-organizationRoleOther"
+                                                        label={messageI18NResolver("REGISTRATIONFORM_ORGANIZATIONROLEOTHER_LABEL") || "Role (other)"}
+                                                        placeholder={messageI18NResolver("REGISTRATIONFORM_ORGANIZATIONROLEOTHER_PLACEHOLDER") || "Enter your role within organization"}
+                                                        fullWidth
+                                                        variant="outlined"
+                                                        autoComplete="organization-title"
+                                                        // required
+                                                        error={_.hasIn(registrationForm.formState.errors, "organizationRoleOther")}
+                                                        helperText={registrationForm.formState.errors.organizationRoleOther
+                                                            && (messageI18NResolver(registrationForm.formState.errors.organizationRoleOther.message) || "Please fill in your role within organization")}
+                                                    />
+                                                }
+                                                control={registrationForm.control}
+                                                defaultValue=""
+                                            />
+                                        </Grid>
+                                    
                                     <Grid item xs={12}>
                                         <Box mt={2}>
                                             <Button variant="contained" color="primary" fullWidth type="submit" >
