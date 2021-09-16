@@ -464,13 +464,13 @@ const AdvancedTools = () => {
 
                                                     error={_.hasIn(registrationForm.formState.errors, "email")}
                                                     helperText={registrationForm.formState.errors.email
-                                                        && (messageI18NResolver(registrationForm.formState.errors.email.message) || "A valid email address is required")}
+                                                        && (messageI18NResolver(registrationForm.formState.errors.email.message) || "A valid organizational email address is required")}
                                                 />
                                             }
                                             rules={{
                                                 pattern: {
-                                                    value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                                                    message: "invalid email address"
+                                                    value: /^[A-Z0-9._%+-]+@(?!gmail|yahoo|hotmail|outlook|inbox|icloud)[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                                                    message: "invalid organizational email address"
                                                 },
                                                 required: true
                                             }}
