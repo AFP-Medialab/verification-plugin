@@ -67,6 +67,15 @@ const AdvancedTools = () => {
 
     const [open, setOpen] = React.useState(false);
 
+    const defaultValues = {
+        email: "",
+        firstName: "",
+        lastName: "",
+        organization: "",
+        organizationRole: "",
+        organizationRoleOther: ""
+    };
+
     const setAuthenticatedData = () => {
         setDialogState(2);
         setColorButton("secondary");
@@ -176,7 +185,8 @@ const AdvancedTools = () => {
     // User Registration form
     const registrationForm = useForm({
         mode: "onBlur",
-        validationSchema: registrationValidationSchema
+        validationSchema: registrationValidationSchema,
+        defaultValues 
     });
     const registrationOnSubmit = (data) => {
         authenticationAPI.registerUser({
@@ -438,7 +448,7 @@ const AdvancedTools = () => {
                     <Box p={2}>
                         <DialogTitle id="max-width-dialog-title">
                             <Typography gutterBottom style={{ color: "#51A5B2", fontSize: "24px" }}>
-                                {messageI18NResolver("REGISTRATIONFORM_TITLE")}
+                                {messageI18NResolver("REGISTRATIONFORM_TITLE_WINDOW")}
                             </Typography>
                         </DialogTitle>
                         <DialogContent>
@@ -451,8 +461,9 @@ const AdvancedTools = () => {
                                     <Grid item xs={12}>
                                         <Controller
                                             name="email"
-                                            as={
+                                            render={({ field }) =>
                                                 <TextField
+                                                    {...field}
                                                     id="registration-email"
                                                     label={messageI18NResolver("REGISTRATIONFORM_EMAIL_LABEL") || "Email address"}
                                                     placeholder={messageI18NResolver("REGISTRATIONFORM_EMAIL_PLACEHOLDER") || "Enter your email address"}
@@ -460,20 +471,29 @@ const AdvancedTools = () => {
                                                     autoComplete="email"
                                                     required
                                                     variant="outlined"
-                                                    error={_.hasIn(registrationForm.errors, "email")}
-                                                    helperText={registrationForm.errors.email
-                                                        && (messageI18NResolver(registrationForm.errors.email.message) || "A valid email address is required")}
+
+                                                    error={_.hasIn(registrationForm.formState.errors, "email")}
+                                                    helperText={registrationForm.formState.errors.email
+                                                        && (messageI18NResolver(registrationForm.formState.errors.email.message) || "A valid organizational email address is required")}
                                                 />
                                             }
+                                            rules={{
+                                                pattern: {
+                                                    value: /^[A-Z0-9._%+-]+@(?!gmail|yahoo|hotmail|outlook|inbox|icloud)[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                                                    message: "invalid organizational email address"
+                                                },
+                                                required: true
+                                            }}
                                             control={registrationForm.control}
-                                            defaultValue=""
+                                            
                                         />
                                     </Grid>
                                     <Grid item xs={12}>
                                         <Controller
                                             name="firstName"
-                                            as={
+                                            render={({ field }) =>
                                                 <TextField
+                                                    {...field}
                                                     id="registration-firstName"
                                                     label={messageI18NResolver("REGISTRATIONFORM_FIRSTNAME_LABEL") || "First name"}
                                                     placeholder={messageI18NResolver("REGISTRATIONFORM_FIRSTNAME_PLACEHOLDER") || "Enter your first name"}
@@ -481,20 +501,24 @@ const AdvancedTools = () => {
                                                     autoComplete="given-name"
                                                     required
                                                     variant="outlined"
-                                                    error={_.hasIn(registrationForm.errors, "firstName")}
-                                                    helperText={registrationForm.errors.firstName
-                                                        && (messageI18NResolver(registrationForm.errors.firstName.message) || "First name is required")}
+                                                    error={_.hasIn(registrationForm.formState.errors, "firstName")}
+                                                    helperText={registrationForm.formState.errors.firstName
+                                                        && (messageI18NResolver(registrationForm.formState.errors.firstName.message) || "First name is required")}
                                                 />
                                             }
+                                            rules={{
+                                                required: true
+                                            }}
                                             control={registrationForm.control}
-                                            defaultValue=""
+                                            
                                         />
                                     </Grid>
                                     <Grid item xs={12}>
                                         <Controller
                                             name="lastName"
-                                            as={
+                                            render={({ field }) =>
                                                 <TextField
+                                                    {...field}
                                                     id="registration-lastName"
                                                     label={messageI18NResolver("REGISTRATIONFORM_LASTNAME_LABEL") || "Last name"}
                                                     placeholder={messageI18NResolver("REGISTRATIONFORM_LASTNAME_PLACEHOLDER") || "Enter your last name"}
@@ -502,20 +526,24 @@ const AdvancedTools = () => {
                                                     autoComplete="family-name"
                                                     required
                                                     variant="outlined"
-                                                    error={_.hasIn(registrationForm.errors, "lastName")}
-                                                    helperText={registrationForm.errors.lastName
-                                                        && (messageI18NResolver(registrationForm.errors.lastName.message) || "Last name is required")}
+                                                    error={_.hasIn(registrationForm.formState.errors, "lastName")}
+                                                    helperText={registrationForm.formState.errors.lastName
+                                                        && (messageI18NResolver(registrationForm.formState.errors.lastName.message) || "Last name is required")}
                                                 />
                                             }
+                                            rules={{
+                                                required: true
+                                            }}
                                             control={registrationForm.control}
-                                            defaultValue=""
+                                            
                                         />
                                     </Grid>
                                     <Grid item xs={12}>
                                         <Controller
                                             name="organization"
-                                            as={
+                                            render={({ field }) =>
                                                 <TextField
+                                                    {...field}
                                                     id="registration-organization"
                                                     label={messageI18NResolver("REGISTRATIONFORM_ORGANIZATION_LABEL") || "Organization"}
                                                     placeholder={messageI18NResolver("REGISTRATIONFORM_ORGANIZATION_PLACEHOLDER") || "Enter your organization name"}
@@ -523,20 +551,24 @@ const AdvancedTools = () => {
                                                     autoComplete="organization"
                                                     required
                                                     variant="outlined"
-                                                    error={_.hasIn(registrationForm.errors, "organization")}
-                                                    helperText={registrationForm.errors.organization
-                                                        && (messageI18NResolver(registrationForm.errors.organization.message) || "Organization name is required")}
+                                                    error={_.hasIn(registrationForm.formState.errors, "organization")}
+                                                    helperText={registrationForm.formState.errors.organization
+                                                        && (messageI18NResolver(registrationForm.formState.errors.organization.message) || "Organization name is required")}
                                                 />
                                             }
+                                            rules={{
+                                                required: true
+                                            }}
                                             control={registrationForm.control}
-                                            defaultValue=""
+                                            
                                         />
                                     </Grid>
                                     <Grid item xs={12}>
                                         <Controller
                                             name="organizationRole"
-                                            as={
+                                            render={({ field }) =>
                                                 <TextField
+                                                    {...field}
                                                     id="registration-organizationRole"
                                                     label={messageI18NResolver("REGISTRATIONFORM_ORGANIZATIONROLE_LABEL") || "Role"}
                                                     placeholder={messageI18NResolver("REGISTRATIONFORM_ORGANIZATIONROLE_PLACEHOLDER") || "Select your role within organization"}
@@ -545,40 +577,47 @@ const AdvancedTools = () => {
                                                     autoComplete="organization-title"
                                                     required
                                                     variant="outlined"
-                                                    error={_.hasIn(registrationForm.errors, "organizationRole")}
-                                                    helperText={registrationForm.errors.organizationRole
-                                                        && (messageI18NResolver(registrationForm.errors.organizationRole.message) || "Role within organization is required")}
+                                                    error={_.hasIn(registrationForm.formState.errors, "organizationRole")}
+                                                    helperText={registrationForm.formState.errors.organizationRole
+                                                        && (messageI18NResolver(registrationForm.formState.errors.organizationRole.message) || "Role within organization is required")}
                                                 >
                                                     <MenuItem key="REPORTER" value="REPORTER">{messageI18NResolver("REGISTRATIONFORM_ORGANIZATIONROLE_REPORTER_LABEL") || "Reporter"}</MenuItem>
-                                                    <MenuItem key="FAKE_NEWS_CHECKER" value="FAKE_NEWS_CHECKER">{messageI18NResolver("REGISTRATIONFORM_ORGANIZATIONROLE_FAKENEWSCHECKER_LABEL") || "Fake news checker"}</MenuItem>
+                                                    <MenuItem key="FAKE_NEWS_CHECKER" value="FAKE_NEWS_CHECKER">{messageI18NResolver("REGISTRATIONFORM_ORGANIZATIONROLE_FAKENEWSCHECKER_LABEL") || "Fake news checker"}</MenuItem>                                            
                                                     <MenuItem key="OTHER" value="OTHER">{messageI18NResolver("REGISTRATIONFORM_ORGANIZATIONROLE_OTHER_LABEL") || "Other"}</MenuItem>
                                                 </TextField>
                                             }
+                                            rules={{
+                                                required: true
+                                            }}
+                                            
                                             control={registrationForm.control}
-                                            defaultValue=""
+                                            
                                         />
                                     </Grid>
-                                    <Grid item xs={12}>
-                                        <Controller
-                                            name="organizationRoleOther"
-                                            as={
-                                                <TextField
-                                                    id="registration-organizationRoleOther"
-                                                    label={messageI18NResolver("REGISTRATIONFORM_ORGANIZATIONROLEOTHER_LABEL") || "Role (other)"}
-                                                    placeholder={messageI18NResolver("REGISTRATIONFORM_ORGANIZATIONROLEOTHER_PLACEHOLDER") || "Enter your role within organization"}
-                                                    fullWidth
-                                                    variant="outlined"
-                                                    autoComplete="organization-title"
-                                                    // required
-                                                    error={_.hasIn(registrationForm.errors, "organizationRoleOther")}
-                                                    helperText={registrationForm.errors.organizationRoleOther
-                                                        && (messageI18NResolver(registrationForm.errors.organizationRoleOther.message) || "Please fill in your role within organization")}
-                                                />
-                                            }
-                                            control={registrationForm.control}
-                                            defaultValue=""
-                                        />
-                                    </Grid>
+                                    
+                                        <Grid item xs={12}>
+                                            <Controller
+                                                name="organizationRoleOther"
+                                                render={({ field }) =>
+                                                    <TextField
+                                                        {...field}
+                                                        id="registration-organizationRoleOther"
+                                                        label={messageI18NResolver("REGISTRATIONFORM_ORGANIZATIONROLEOTHER_LABEL") || "Role (other)"}
+                                                        placeholder={messageI18NResolver("REGISTRATIONFORM_ORGANIZATIONROLEOTHER_PLACEHOLDER") || "Enter your role within organization"}
+                                                        fullWidth
+                                                        variant="outlined"
+                                                        autoComplete="organization-title"
+                                                        // required
+                                                        error={_.hasIn(registrationForm.formState.errors, "organizationRoleOther")}
+                                                        helperText={registrationForm.formState.errors.organizationRoleOther
+                                                            && (messageI18NResolver(registrationForm.formState.errors.organizationRoleOther.message) || "Please fill in your role within organization")}
+                                                    />
+                                                }
+                                                control={registrationForm.control}
+                                                
+                                            />
+                                        </Grid>
+                                    
                                     <Grid item xs={12}>
                                         <Box mt={2}>
                                             <Button variant="contained" color="primary" fullWidth type="submit" >
@@ -611,7 +650,7 @@ const AdvancedTools = () => {
 
                         </DialogContent>
                         <DialogActions>
-                            <Button v color="default" onClick={handleCloseRegistration} fullWidth >
+                            <Button v="true" color="default" onClick={handleCloseRegistration} fullWidth >
                                 {messageI18NResolver("AUTHENTICATION_FORM_CLOSE")}
                             </Button>
                         </DialogActions>
