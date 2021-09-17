@@ -67,6 +67,15 @@ const AdvancedTools = () => {
 
     const [open, setOpen] = React.useState(false);
 
+    const defaultValues = {
+        email: "",
+        firstName: "",
+        lastName: "",
+        organization: "",
+        organizationRole: "",
+        organizationRoleOther: ""
+    };
+
     const setAuthenticatedData = () => {
         setDialogState(2);
         setColorButton("secondary");
@@ -176,7 +185,8 @@ const AdvancedTools = () => {
     // User Registration form
     const registrationForm = useForm({
         mode: "onBlur",
-        validationSchema: registrationValidationSchema
+        validationSchema: registrationValidationSchema,
+        defaultValues 
     });
     const registrationOnSubmit = (data) => {
         authenticationAPI.registerUser({
@@ -475,7 +485,7 @@ const AdvancedTools = () => {
                                                 required: true
                                             }}
                                             control={registrationForm.control}
-                                            defaultValue=""
+                                            
                                         />
                                     </Grid>
                                     <Grid item xs={12}>
@@ -500,7 +510,7 @@ const AdvancedTools = () => {
                                                 required: true
                                             }}
                                             control={registrationForm.control}
-                                            defaultValue=""
+                                            
                                         />
                                     </Grid>
                                     <Grid item xs={12}>
@@ -525,7 +535,7 @@ const AdvancedTools = () => {
                                                 required: true
                                             }}
                                             control={registrationForm.control}
-                                            defaultValue=""
+                                            
                                         />
                                     </Grid>
                                     <Grid item xs={12}>
@@ -550,7 +560,7 @@ const AdvancedTools = () => {
                                                 required: true
                                             }}
                                             control={registrationForm.control}
-                                            defaultValue=""
+                                            
                                         />
                                     </Grid>
                                     <Grid item xs={12}>
@@ -582,7 +592,7 @@ const AdvancedTools = () => {
                                             }}
                                             
                                             control={registrationForm.control}
-                                            defaultValue=""
+                                            
                                         />
                                     </Grid>
                                     
@@ -605,7 +615,7 @@ const AdvancedTools = () => {
                                                     />
                                                 }
                                                 control={registrationForm.control}
-                                                defaultValue=""
+                                                
                                             />
                                         </Grid>
                                     
