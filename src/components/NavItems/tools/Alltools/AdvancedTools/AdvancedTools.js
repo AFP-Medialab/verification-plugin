@@ -582,8 +582,7 @@ const AdvancedTools = () => {
                                                         && (messageI18NResolver(registrationForm.formState.errors.organizationRole.message) || "Role within organization is required")}
                                                 >
                                                     <MenuItem key="REPORTER" value="REPORTER">{messageI18NResolver("REGISTRATIONFORM_ORGANIZATIONROLE_REPORTER_LABEL") || "Reporter"}</MenuItem>
-                                                    <MenuItem key="FAKE_NEWS_CHECKER" value="FAKE_NEWS_CHECKER">{messageI18NResolver("REGISTRATIONFORM_ORGANIZATIONROLE_FAKENEWSCHECKER_LABEL") || "Fake news checker"}</MenuItem>
-                                                    <MenuItem key="RESEARCHER" value="RESEARCHER">{messageI18NResolver("REGISTRATIONFORM_ORGANIZATIONROLE_RESEARCHER_LABEL") || "Researcher"}</MenuItem>
+                                                    <MenuItem key="FAKE_NEWS_CHECKER" value="FAKE_NEWS_CHECKER">{messageI18NResolver("REGISTRATIONFORM_ORGANIZATIONROLE_FAKENEWSCHECKER_LABEL") || "Fake news checker"}</MenuItem>                                            
                                                     <MenuItem key="OTHER" value="OTHER">{messageI18NResolver("REGISTRATIONFORM_ORGANIZATIONROLE_OTHER_LABEL") || "Other"}</MenuItem>
                                                 </TextField>
                                             }
@@ -651,7 +650,7 @@ const AdvancedTools = () => {
 
                         </DialogContent>
                         <DialogActions>
-                            <Button v color="default" onClick={handleCloseRegistration} fullWidth >
+                            <Button v="true" color="default" onClick={handleCloseRegistration} fullWidth >
                                 {messageI18NResolver("AUTHENTICATION_FORM_CLOSE")}
                             </Button>
                         </DialogActions>
