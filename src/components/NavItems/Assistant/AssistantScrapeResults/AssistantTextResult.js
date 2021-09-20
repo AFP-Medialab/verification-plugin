@@ -93,7 +93,7 @@ const AssistantTextResult = () => {
                 />
                 <CardContent>
                         <Collapse in={expanded}
-                                  collapsedHeight={100}
+                                  collapsedSize={100}
                                   id={"element-to-check"}>
                             <Typography align={"center"}>
                                 <FormatQuoteIcon fontSize={"large"}/>{!displayOrigLang && translatedText ? translatedText : text}
