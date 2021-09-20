@@ -18,13 +18,14 @@ import tsv from "../../../../../LocalDictionary/components/NavItems/tools/OCR.ts
 import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
 import CardHeader from "@material-ui/core/CardHeader";
+import IconButton from "@material-ui/core/IconButton";
 import TableContainer from "@material-ui/core/TableContainer";
 import Table from "@material-ui/core/Table";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
+import GTranslateIcon from '@material-ui/icons/GTranslate';
 import TableBody from "@material-ui/core/TableBody";
-
 
 const OcrResult = () => {
 
@@ -36,6 +37,7 @@ const OcrResult = () => {
     const result = useSelector(state => state.ocr.result);
     const dispatch = useDispatch();
     const canvas_ref = useRef();
+    const card_ref = useRef();
 
 
     const reversesearchYandex = function (url) {
@@ -52,19 +54,28 @@ const OcrResult = () => {
         }
     };
 
+    const googleTranslate = function (text) {
+        let translate_url = "https://translate.google.co.uk/?sl=auto&text=" + encodeURIComponent(text)  +"&op=translate"
+        window.open(translate_url, "_blank")
+    }
 
-    // rebuild image with bounding boxes if result changes
-    useEffect(() => {
+    const generateImageCanvas = () => {
         const canvas = canvas_ref.current
         const context = canvas.getContext('2d')
-
         let img = new Image()
 
         img.onload = () => {
-            canvas.width = img.naturalWidth;
-            canvas.height = img.naturalHeight;
+            let img_width = card_ref.current.offsetWidth
+            let img_scale = img_width/img.width
+            let img_height = Math.ceil(img.height * img_scale)
+            
+            img.width = img_width
+            img.height = img_height
 
-            context.drawImage(img, 0, 0)
+            canvas.width = img_width
+            canvas.height = img_height
+
+            context.drawImage(img, 0, 0, img_width, img_height)
 
             context.strokeStyle = 'red'
             context.lineWidth = 3
@@ -75,22 +86,32 @@ const OcrResult = () => {
                 result.map((text, index) => {
                     let bounding_box = text.bounding_box
                     // we are assuming that the first co-ordinate is the top left hand corner
-                    let x = bounding_box[0][0];
-                    let y = bounding_box[0][1];
+                    let x = bounding_box[0][0] * img_scale ;
+                    let y = bounding_box[0][1] * img_scale;
 
                     // and the third is the bottom right so we can use that to work out width and height
-                    let w = bounding_box[2][0] - x;
-                    let h = bounding_box[2][1] - y;
+                    let w = (bounding_box[2][0] * img_scale) - x;
+                    let h = (bounding_box[2][1] * img_scale) - y;
+
 
                     context.strokeRect(x, y, w, h)
                     context.strokeText(index + 1, x + 3, y + 25)
                     context.fillText(index + 1, x + 3, y + 25)
+                    return context
                 })
             }
         }
-
         img.src = inputUrl
-    }, [result])
+    }
+
+    window.addEventListener("resize", generateImageCanvas)
+
+    // rebuild image with bounding boxes if result changes
+    useEffect(() => {
+        generateImageCanvas()
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [result, inputUrl])
+
 
     return (
         <Card>
@@ -105,10 +126,10 @@ const OcrResult = () => {
                     history.push("/app/tools/ocr");
                 }}/>
                 <Grid container justifyContent={"center"}>
-                    <Card variant={"outlined"} style={{"width": "50%"}}>
+                    <Card ref={card_ref} variant={"outlined"} style={{"width": "50%"}}>
                         <CardMedia>
                             <LinearProgress hidden={!loading}/>
-                            <canvas ref={canvas_ref} width={"100%"} height={"100%"}/>
+                            <canvas ref={canvas_ref}/>
                         </CardMedia>
                         <Divider variant={"middle"}/>
                         {result ?
@@ -119,10 +140,9 @@ const OcrResult = () => {
                                             <TableRow>
                                                 <TableCell style={{fontWeight: "bold"}} align="left">{keyword("table_box")}</TableCell>
                                                 <TableCell style={{fontWeight: "bold"}} align="left">{keyword("table_text")}</TableCell>
-                                                <TableCell style={{fontWeight: "bold"}}
-                                                           align="left">{keyword("table_language")}</TableCell>
-                                                <TableCell style={{fontWeight: "bold"}}
-                                                           align="left">{keyword("table_confidence")}</TableCell>
+                                                <TableCell style={{fontWeight: "bold"}} align="left">{keyword("table_language")}</TableCell>
+                                                <TableCell style={{fontWeight: "bold"}} align="left">{keyword("table_confidence")}</TableCell>
+                                                <TableCell style={{fontWeight: "bold"}} align="left">{keyword("table_translate")}</TableCell>
                                             </TableRow>
                                         </TableHead>
                                         <TableBody>
@@ -132,6 +152,11 @@ const OcrResult = () => {
                                                     <TableCell align="left">{ocrResult.text}</TableCell>
                                                     <TableCell align="left">{ocrResult.language.name}</TableCell>
                                                     <TableCell align="left">{(ocrResult.language.probability * 100).toFixed(2)}</TableCell>
+                                                    <TableCell align="left">
+                                                        <IconButton onClick={()=>googleTranslate(ocrResult.text)}>
+                                                            <GTranslateIcon color={"action"}/>
+                                                        </IconButton>
+                                                    </TableCell>
                                                 </TableRow>
                                             ))}
                                         </TableBody>
@@ -165,5 +190,4 @@ const OcrResult = () => {
         </Card>
     )
 }
-
 export default OcrResult;

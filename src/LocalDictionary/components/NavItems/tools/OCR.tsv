@@ -16,3 +16,4 @@ table_box	Box	Temp	Temp	Temp
 table_text	Text	Temp	Temp	Temp
 table_language	Language	Temp	Temp	Temp
 table_confidence	Confidence (%)	Temp	Temp	Temp
+table_translate	Translate	Temp	Temp	Temp
