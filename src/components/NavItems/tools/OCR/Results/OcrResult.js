@@ -126,7 +126,7 @@ const OcrResult = () => {
                     history.push("/app/tools/ocr");
                 }}/>
                 <Grid container justifyContent={"center"}>
-                    <Card ref={card_ref} variant={"outlined"} style={{"width": "50%"}}>
+                    <Card ref={card_ref} variant={"outlined"} style={{"width": "60%"}}>
                         <CardMedia>
                             <LinearProgress hidden={!loading}/>
                             <canvas ref={canvas_ref}/>
@@ -140,9 +140,10 @@ const OcrResult = () => {
                                             <TableRow>
                                                 <TableCell style={{fontWeight: "bold"}} align="left">{keyword("table_box")}</TableCell>
                                                 <TableCell style={{fontWeight: "bold"}} align="left">{keyword("table_text")}</TableCell>
-                                                <TableCell style={{fontWeight: "bold"}} align="left">{keyword("table_language")}</TableCell>
-                                                <TableCell style={{fontWeight: "bold"}} align="left">{keyword("table_confidence")}</TableCell>
+                                                <TableCell style={{fontWeight: "bold"}} align="left">{keyword("table_language")} {keyword("table_confidence")}</TableCell>
+                                                <TableCell style={{fontWeight: "bold"}} align="left">{keyword("table_script")} {keyword("table_confidence")}</TableCell>
                                                 <TableCell style={{fontWeight: "bold"}} align="left">{keyword("table_translate")}</TableCell>
+
                                             </TableRow>
                                         </TableHead>
                                         <TableBody>
@@ -150,8 +151,12 @@ const OcrResult = () => {
                                                 <TableRow key={index}>
                                                     <TableCell align="left">{index + 1}</TableCell>
                                                     <TableCell align="left">{ocrResult.text}</TableCell>
-                                                    <TableCell align="left">{ocrResult.language.name}</TableCell>
-                                                    <TableCell align="left">{(ocrResult.language.probability * 100).toFixed(2)}</TableCell>
+                                                    <TableCell align="left">
+                                                        {ocrResult.language.name} ({(ocrResult.language.probability * 100).toFixed(2)})
+                                                    </TableCell>
+                                                    <TableCell align="left">
+                                                        {(ocrResult.script.name)} ({(ocrResult.script.probability * 100).toFixed(2)})
+                                                    </TableCell>
                                                     <TableCell align="left">
                                                         <IconButton onClick={()=>googleTranslate(ocrResult.text)}>
                                                             <GTranslateIcon color={"action"}/>

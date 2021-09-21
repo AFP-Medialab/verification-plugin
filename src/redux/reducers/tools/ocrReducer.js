@@ -6,6 +6,8 @@ const defaultState = {
     errorKey: null,
     done: false,
     result: null,
+    scripts: null,
+    selectedScript: "auto"
 };
 
 const ocrReducer = (state = defaultState, action) => {
@@ -14,6 +16,8 @@ const ocrReducer = (state = defaultState, action) => {
         case "SET_OCR_RESULT":
         case "SET_B64_IMG":
         case "SET_OCR_ERROR_KEY":
+        case "SET_SCRIPTS":
+        case "SET_SELECTED_SCRIPT":
             return Object.assign({}, state, action.payload)
         case "OCR_CLEAN_STATE":
             return {...state, url: undefined,
@@ -22,7 +26,8 @@ const ocrReducer = (state = defaultState, action) => {
                 errorKey: null,
                 fail: false,
                 done: false,
-                result: null};
+                result: null,
+                selectedScript: "auto"};
         default:
             return state;
     }

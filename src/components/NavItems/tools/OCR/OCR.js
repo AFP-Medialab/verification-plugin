@@ -11,16 +11,18 @@ import tsv from "../../../../LocalDictionary/components/NavItems/tools/OCR.tsv";
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 
-import {cleanOcr, setOcrB64Img, setOcrInput} from "../../../../redux/actions/tools/ocrActions";
+import {cleanOcr, loadOcrScripts, setOcrB64Img, setOcrInput, setSelectedScript
+} from "../../../../redux/actions/tools/ocrActions";
 import OcrResult from "./Results/OcrResult";
 
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
-import { ReactComponent as OCRIcon } from '../../../NavBar/images/SVG/Image/OCR.svg';
+import {ReactComponent as OCRIcon} from '../../../NavBar/images/SVG/Image/OCR.svg';
 import Grid from "@material-ui/core/Grid";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
+import MenuItem from "@material-ui/core/MenuItem";
+import Typography from "@material-ui/core/Typography";
 
-//todo: scale image, fix incorrect image size check and move away from img-b64-img
 const OCR = () => {
 
     const {url} = useParams();
@@ -30,13 +32,23 @@ const OCR = () => {
     const keywordAllTools = useLoadLanguage("components/NavItems/tools/Alltools.tsv", tsv);
 
     const ocrInputUrl = useSelector(state => state.ocr.url);
+    const selectedScript = useSelector(state => state.ocr.selectedScript)
+    const scripts = useSelector(state => state.ocr.scripts)
     const errorKey = useSelector(state => state.ocr.errorKey);
     const fail = useSelector(state => state.ocr.fail);
 
     const [userInput, setUserInput] = useState(ocrInputUrl);
 
+    const handleScriptChange = (event) => {
+        dispatch(setSelectedScript(event.target.value))
+    };
+
+    if (!scripts){
+        dispatch(loadOcrScripts())
+    }
+
     const submitUrl = (src) => {
-        dispatch(setOcrInput(src))
+        dispatch(setOcrInput(src, selectedScript))
     };
 
     const uploadImg = (localFile) => {
@@ -116,9 +128,18 @@ const OCR = () => {
                                 variant="outlined"
                                 onChange={e => setUserInput(e.target.value)}
                             />
-
-            
                         </Grid>
+
+                        {scripts ?
+                            <Grid item>
+                                <TextField select variant={"outlined"} label= {keyword("ocr_script_label")} value={selectedScript}
+                                           onChange={(e) => handleScriptChange(e)}>
+                                    {Object.keys(scripts).map(code =>
+                                        <MenuItem key={code} value={code}>{scripts[code]}</MenuItem>)
+                                    }
+                                </TextField>
+                            </Grid>
+                            : null}
 
                         <Grid item>
                             <Button variant="contained" color="primary" onClick={() => submitUrl(userInput)}>
@@ -130,7 +151,13 @@ const OCR = () => {
                     </Grid>
 
                     <Box m={2} />
-                    
+
+                    <Typography>
+                        {keyword("ocr_script_use")}
+                    </Typography>
+
+
+                    <Box m={2} />
                     <Button startIcon={<FolderOpenIcon />} >
                         <label htmlFor="fileInputMagnifier">
                             {keyword("button_localfile")}

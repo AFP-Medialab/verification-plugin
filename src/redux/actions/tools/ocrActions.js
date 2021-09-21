@@ -2,7 +2,7 @@ export const setOcrInput = (url) => {
     return {
         type: "SET_OCR_INPUT",
         payload: {
-            url: url,
+            url: url
         }
     }
 };
@@ -33,6 +33,30 @@ export const setOcrErrorKey = (errorKey) => {
         type: "SET_OCR_ERROR_KEY",
         payload: {
             errorKey: errorKey,
+        }
+    }
+};
+
+export const loadOcrScripts = () => {
+    return {
+        type: "OCR_LOAD_SCRIPTS"
+    }
+};
+
+export const setOcrScripts = (scripts) => {
+    return {
+        type: "SET_SCRIPTS",
+        payload: {
+            scripts: scripts
+        }
+    }
+};
+
+export const setSelectedScript = (script) => {
+    return {
+        type: "SET_SELECTED_SCRIPT",
+        payload: {
+            selectedScript: script
         }
     }
 };

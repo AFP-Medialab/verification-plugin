@@ -88,12 +88,17 @@ export default function assistantApiCalls() {
         return result.data
     }
 
-    const callOcrService = async (data, mode) => {
+    const callOcrService = async (data, script, mode) => {
         const result = await axios.post(
             assistantEndpoint + "gcloud/ocr",
-            {text: data, data_type: mode}
+            {text: data, script: script, data_type: mode}
         )
 
+        return result.data
+    }
+
+    const callOcrScriptService = async () => {
+        const result = await axios.get(assistantEndpoint + "gcloud/ocr-scripts")
         return result.data
     }
 
@@ -104,7 +109,8 @@ export default function assistantApiCalls() {
         callNamedEntityService,
         callAssistantTranslator,
         callHyperpartisanService,
-        callOcrService
+        callOcrService,
+        callOcrScriptService
     }
 }
 
