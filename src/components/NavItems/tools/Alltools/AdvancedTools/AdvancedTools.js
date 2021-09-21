@@ -219,6 +219,8 @@ const AdvancedTools = () => {
         dispatch(setError(errMsg));
     };
 
+    console.log(registrationForm.formState.errors);
+
     return (
 
         <div>
@@ -474,7 +476,7 @@ const AdvancedTools = () => {
 
                                                     error={_.hasIn(registrationForm.formState.errors, "email")}
                                                     helperText={registrationForm.formState.errors.email
-                                                        && (messageI18NResolver(registrationForm.formState.errors.email.message) || "A valid organizational email address is required")}
+                                                        && (messageI18NResolver("ACCESSCODEFORM_EMAIL_ERR_EMAIL") || "A valid fact-checking, media or research organization email address is required")}
                                                 />
                                             }
                                             rules={{
@@ -503,7 +505,7 @@ const AdvancedTools = () => {
                                                     variant="outlined"
                                                     error={_.hasIn(registrationForm.formState.errors, "firstName")}
                                                     helperText={registrationForm.formState.errors.firstName
-                                                        && (messageI18NResolver(registrationForm.formState.errors.firstName.message) || "First name is required")}
+                                                        && (messageI18NResolver("REGISTRATIONFORM_FIRSTNAME_ERR_REQUIRED") || "First name is required")}
                                                 />
                                             }
                                             rules={{
@@ -528,7 +530,7 @@ const AdvancedTools = () => {
                                                     variant="outlined"
                                                     error={_.hasIn(registrationForm.formState.errors, "lastName")}
                                                     helperText={registrationForm.formState.errors.lastName
-                                                        && (messageI18NResolver(registrationForm.formState.errors.lastName.message) || "Last name is required")}
+                                                        && (messageI18NResolver("REGISTRATIONFORM_LASTNAME_ERR_REQUIRED") || "Last name is required")}
                                                 />
                                             }
                                             rules={{
@@ -553,7 +555,7 @@ const AdvancedTools = () => {
                                                     variant="outlined"
                                                     error={_.hasIn(registrationForm.formState.errors, "organization")}
                                                     helperText={registrationForm.formState.errors.organization
-                                                        && (messageI18NResolver(registrationForm.formState.errors.organization.message) || "Organization name is required")}
+                                                        && (messageI18NResolver("REGISTRATIONFORM_ORGANIZATION_ERR_REQUIRED") || "Organization name is required")}
                                                 />
                                             }
                                             rules={{
@@ -579,7 +581,7 @@ const AdvancedTools = () => {
                                                     variant="outlined"
                                                     error={_.hasIn(registrationForm.formState.errors, "organizationRole")}
                                                     helperText={registrationForm.formState.errors.organizationRole
-                                                        && (messageI18NResolver(registrationForm.formState.errors.organizationRole.message) || "Role within organization is required")}
+                                                        && (messageI18NResolver("REGISTRATIONFORM_ORGANIZATIONROLE_ERR_REQUIRED") || "Role within organization is required")}
                                                 >
                                                     <MenuItem key="REPORTER" value="REPORTER">{messageI18NResolver("REGISTRATIONFORM_ORGANIZATIONROLE_REPORTER_LABEL") || "Reporter"}</MenuItem>
                                                     <MenuItem key="FAKE_NEWS_CHECKER" value="FAKE_NEWS_CHECKER">{messageI18NResolver("REGISTRATIONFORM_ORGANIZATIONROLE_FAKENEWSCHECKER_LABEL") || "Fake news checker"}</MenuItem>                                            
@@ -610,7 +612,7 @@ const AdvancedTools = () => {
                                                         // required
                                                         error={_.hasIn(registrationForm.formState.errors, "organizationRoleOther")}
                                                         helperText={registrationForm.formState.errors.organizationRoleOther
-                                                            && (messageI18NResolver(registrationForm.formState.errors.organizationRoleOther.message) || "Please fill in your role within organization")}
+                                                            && (messageI18NResolver("REGISTRATIONFORM_ORGANIZATIONROLEOTHER_ERR_REQUIRED") || "Please fill in your role within organization")}
                                                     />
                                                 }
                                                 control={registrationForm.control}
