@@ -65,7 +65,7 @@ const OcrResult = () => {
         let img = new Image()
 
         img.onload = () => {
-            let img_width = card_ref.current.offsetWidth
+            let img_width = (card_ref.current.offsetWidth/2)
             let img_scale = img_width/img.width
             let img_height = Math.ceil(img.height * img_scale)
             
@@ -132,8 +132,8 @@ const OcrResult = () => {
                             <canvas ref={canvas_ref}/>
                         </CardMedia>
                         <Divider variant={"middle"}/>
-                        {result ?
-                            result.length ?
+                        {result  ?
+                            result.bounding_boxes.length ?
                                 <TableContainer>
                                     <Table size="small">
                                         <TableHead>
@@ -147,7 +147,7 @@ const OcrResult = () => {
                                             </TableRow>
                                         </TableHead>
                                         <TableBody>
-                                            {result.map((ocrResult, index) => (
+                                            {result.bounding_boxes.map((ocrResult, index) => (
                                                 <TableRow key={index}>
                                                     <TableCell align="left">{index + 1}</TableCell>
                                                     <TableCell align="left">{ocrResult.text}</TableCell>
