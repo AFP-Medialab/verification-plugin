@@ -1,8 +1,16 @@
 	en	fr	es	el
-conversation_title	Twitter Conversation	Temp	Temp	Temp
-conversation_urlbox	URL of the Tweet	Temp	Temp	Temp
-conversation_urlbox_placeholder	Paste the link here	Coller le lien ici	Pegar el enlace aquí	Επικολλήστε τον σύνδεσμο εδώ
-cardheader_source	Conversation Starter	Temp	Temp	Temp
-cardheader_results	Results	Résultats	Resultados 	Αποτελέσματα
-button_submit	Submit	Envoyer	Enviar	Υποβολή
-conversation_explore	Explore Tweet	Temp	Temp
+title	Twitter Conversation Explorer	Temp	Temp	Temp
+description	This tool aims to provide a simply way to explore a Twitter based conversation. From a starting Tweet you can view, and explore, the replies or the parent Tweet. We also automatically classify replies based on whether they support, refute, query, or just comment on a Tweet. We divide the results into two sections; the top half summaries the Tweet you are currently exploring, whilst the bottom half allows you to interactively explore its replies.	Temp	Temp	Temp
+section_explore_from	Explore from this Tweet	Temp	Temp	Temp
+section_tweet_summary	Tweet Summary	Temp	Temp 	Temp
+button_explore_tweet	Explore Tweet...	Temp	Temp
+button_explore_parent	Explore Parent Tweet...	Temp	Temp
+button_explore_root	Explore Root Tweet...	Temp	Temp
+urlbox	What is the URL of the Tweet you want to start exploring from?	Temp	Temp	Temp
+urlbox_placeholder	Paste the Tweet URL here	Temp	Temp	Temp
+summary_no_replies	No one has replied to this tweet so there is no further analysis we can perform.	Temp	Temp	Temp
+summary_replies_processed	We have currently processed ${tweet.number_of_replies.toLocaleString()} replies to the currently selected tweet.	Temp	Temp	Temp
+summary_piechart	We automatically assign one of four possible labels to each reply based on how they support, refute, query, or just comment on the Tweet. This pie chart shows the proportion of these labels across all the replies to this Tweet which we have processed so far.	Temp	Temp
+summary_histogram_time	Replies clearly don't all happen at once and it's useful to be able to see how the volume of replies, as well as how they relate to the Tweet, changes over time.	Temp	Temp	Temp
+summary_histogram_week	This histogram allows you to do both, and initially shows the first week after the selected tweet was published. If replies were posted outside the initial week, then you can adjust the graph to view these, either by dragging the x-axis or, if the replies occur over a very long period, using the range selector shown below the graph.	Temp	Temp	Temp
+summary_histogram_day	In this case, however, all the replies occured on the same day so the pie chart gives a clearer breakdown than a histogram would.	Temp	Temp	Temp

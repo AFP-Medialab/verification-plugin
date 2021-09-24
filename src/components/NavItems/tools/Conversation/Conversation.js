@@ -63,11 +63,11 @@ const Conversation = () => {
   
     return (
         <div>
-            <HeaderTool name={keywordAllTools("navbar_conversation")} description={keywordAllTools("navbar_conversation_description")} icon={<ConversationIcon style={{ fill: "#51A5B2" }} />} />
+            <HeaderTool name={keyword("title")} description={keyword("description")} icon={<ConversationIcon style={{ fill: "#51A5B2" }} />} />
 
             <Card>
                 <CardHeader
-                    title={keyword("cardheader_source")}
+                    title={keyword("section_explore_from")}
                     className={classes.headerUpladedImage}
                 />
                 <Box p={3}>
@@ -80,8 +80,8 @@ const Conversation = () => {
                         <Grid item xs>
                             <TextField
                                 id="standard-full-width"
-                                label={keyword("conversation_urlbox")}
-                                placeholder={keyword("conversation_urlbox_placeholder")}
+                                label={keyword("urlbox")}
+                                placeholder={keyword("urlbox_placeholder")}
                                 fullWidth
                                 value={userInput || ""}
                                 variant="outlined"
@@ -98,7 +98,7 @@ const Conversation = () => {
 
                         <Grid item>
                             <Button variant="contained" color="primary" onClick={() => submitUrl(userInput)}>
-                                {keyword("button_submit") || ""}
+                                {keyword("button_explore_tweet") || ""}
                             </Button>
 
                         </Grid>
