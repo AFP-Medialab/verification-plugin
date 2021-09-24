@@ -86,7 +86,7 @@ const TweetSummary = () => {
 
             <Grid item xs={8}>
                 
-                    <User user={tweet.user} />
+                    <User user={tweet.user} keyword={keyword} />
 
                     {tweet.reply_count === 0 ? <Typography variant="body1" paragraph>{keyword("summary_no_replies")}</Typography> : <Typography variant="body1" paragraph>{evalKeyword("summary_replies_processed")}</Typography>}
             </Grid>

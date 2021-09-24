@@ -32,3 +32,4 @@ contains_hashtags	hashtag	Temp	Temp	Temp
 contains_user_mentions	user mention	Temp	Temp	Temp
 contains_urls	URL or media	Temp	Temp	Temp
 repliesLabel	replies ${restrict !== "none" ? "containing a "+ keyword("contains_"+restrict) + " and" : ""} with the stance label '${keyword("stance_"+filter)}'	Temp	Temp	Temp
+user_overview	Joined Twitter ${this.state.account_age} days ago on the ${this.state.created_at} and averages ${this.state.tweets_per_day} tweets a day.	Temp	Temp	Temp

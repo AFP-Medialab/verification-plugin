@@ -226,12 +226,12 @@ const RepliesExplorer = () => {
                 spacing={3}
                 alignItems="flex-start">
                         <Grid item xs={7}>
-                        <User screen_name={screenName}/>
+                        <User screen_name={screenName} keyword={keyword}/>
                         <Typography variant="body1">{repliesLabel}</Typography>
                     </Grid>
                         
                     <Grid item xs={5}>
-                        <TweetList stance={filter} screen_name={screenName} id_str={tweetID} viewTweet={submitID} />
+                        <TweetList stance={filter} screen_name={screenName} id_str={tweetID} viewTweet={submitID} keyword={keyword} />
                     </Grid>
                     
                     </Grid></DialogContent>

@@ -112,6 +112,11 @@ class User extends Component {
 
     render() {
 
+        const evalKeyword = (key) => {
+            // eslint-disable-next-line
+            return eval("`"+this.props.keyword(key)+"`");
+        }
+
         return (
             <Paper style={{ padding: 10, marginTop: 10, marginBottom: 10}}>
             <Grid
@@ -134,7 +139,7 @@ class User extends Component {
 
                 <Typography variant="body1" paragraph>{this.state.description}</Typography>
 
-                <Typography variant="body1" paragraph>Joined Twitter {this.state.account_age} days ago on the {this.state.created_at} and averages {this.state.tweets_per_day} tweets a day.</Typography>
+                <Typography variant="body1" paragraph>{evalKeyword("user_overview")}</Typography>
 
                 <Grid
             container
