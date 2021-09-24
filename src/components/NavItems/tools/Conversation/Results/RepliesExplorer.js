@@ -35,12 +35,18 @@ const RepliesExplorer = () => {
 
     const classes = useMyStyles();
     const keyword = useLoadLanguage("components/NavItems/tools/Conversation.tsv", tsv);
+
+    const evalKeyword = (key) => {
+        // eslint-disable-next-line
+        return eval("`"+keyword(key)+"`");
+    }
+
     const dispatch = useDispatch();
 
     const conversation = useSelector(state => state.conversation.conversation);
     const tweet = useSelector(state => state.conversation.tweet);
 
-    const tweetID = tweet.id //useSelector(state => state.conversation.tweet.id);
+    const tweetID = tweet.id
     
     const hashtagCloud = useSelector(state => state.conversation.cloud)
     const urlTableData = conversation.urls
@@ -49,7 +55,7 @@ const RepliesExplorer = () => {
     const filter = useSelector(state => state.conversation.filter)
     const restrict = useSelector(state => state.conversation.restriction)
 
-    let repliesLabel  = eval("`"+keyword("repliesLabel")+"`")
+    let repliesLabel  = evalKeyword("repliesLabel")
 
     function getCallback(callback) {
         return function (word, event) {
@@ -84,10 +90,6 @@ const RepliesExplorer = () => {
     const submitID = (src) => {
         dispatch(setConversationInput(src));
     };
-
-    const getTranslatedLabel = (key) => {
-        return keyword(key);
-    }
 
     const changeFilter = (event) => {
         dispatch(setConversationFilter(event.target.value));
@@ -168,7 +170,7 @@ const RepliesExplorer = () => {
                 <TweetList conversation={conversation} viewTweet={submitID} keyword={keyword} />
                 </Grid>
                 <Grid item xs={8}>
-             <Typography variant="body1">{eval("`"+keyword("summary_hashcloud")+"`")}</Typography>
+             <Typography variant="body1">{evalKeyword("summary_hashcloud")}</Typography>
                 <div style={{height: 500}}>
                     <ReactWordcloud words={hashtagCloud} options={options} callbacks={callbacks} />
                 </div>
@@ -194,7 +196,7 @@ const RepliesExplorer = () => {
                 alignItems="flex-start">
 
                     <Grid item xs={3}>
-                    <Typography variant="body1">{eval("`"+keyword("table_description_users")+"`")}</Typography>
+                    <Typography variant="body1">{evalKeyword("table_description_users")}</Typography>
                 <TableContainer component={Paper}>
                     <Table className={classes.table} aria-label="simple table">
                         <TableHead>
@@ -238,7 +240,7 @@ const RepliesExplorer = () => {
                     </Grid>
 
                     <Grid item xs={9}>
-                    <Typography variant="body1">{eval("`"+keyword("table_description_urls")+"`")}</Typography>
+                    <Typography variant="body1">{evalKeyword("table_description_urls")}</Typography>
                 <TableContainer component={Paper}>
                     <Table className={classes.table} aria-label="simple table">
                         <TableHead>

@@ -31,4 +31,4 @@ contains_none	(no restriction)	Temp	Temp	Temp
 contains_hashtags	hashtag	Temp	Temp	Temp
 contains_user_mentions	user mention	Temp	Temp	Temp
 contains_urls	URL or media	Temp	Temp	Temp
-repliesLabel	replies ${restrict !== "none" ? "containing a "+ keyword("contains_"+restrict) + " and" : ""} with the stance label '${filter}'	Temp	Temp	Temp
+repliesLabel	replies ${restrict !== "none" ? "containing a "+ keyword("contains_"+restrict) + " and" : ""} with the stance label '${keyword("stance_"+filter)}'	Temp	Temp	Temp
