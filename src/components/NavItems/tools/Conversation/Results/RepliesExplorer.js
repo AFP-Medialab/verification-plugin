@@ -49,19 +49,7 @@ const RepliesExplorer = () => {
     const filter = useSelector(state => state.conversation.filter)
     const restrict = useSelector(state => state.conversation.restriction)
 
-    let repliesLabel  = `replies `
-    
-    if (restrict === "hashtags") {
-        repliesLabel = repliesLabel + `containing hashtags and `
-    }
-    else if (restrict === "user_mentions") {
-        repliesLabel = repliesLabel + `containing a user mention and `
-    }
-    else if (restrict === "urls.unwound_url") {
-        repliesLabel = repliesLabel + `containing a URL and `
-    }
-
-    repliesLabel = repliesLabel + `with the stance label '${filter}'`
+    let repliesLabel  = eval("`"+keyword("repliesLabel")+"`")
 
     function getCallback(callback) {
         return function (word, event) {
@@ -70,14 +58,12 @@ const RepliesExplorer = () => {
             const text = select(element);
             text
                 .on("click", () => {
-                    //if (isActive) {window.open(`https://twitter.com/hashtag/${word.text.substring(1)}?f=live`, "_blank");}
                     if (isActive) {
                         handleOpenHashtag(word.text.substring(1), word.value);
                     }
                 })
                 .transition()
                 .attr("font-weight", isActive ? "bold" : "normal");
-                //.attr("text-decoration", isActive ? "underline" : "none");
         };
     }
 
@@ -98,6 +84,10 @@ const RepliesExplorer = () => {
     const submitID = (src) => {
         dispatch(setConversationInput(src));
     };
+
+    const getTranslatedLabel = (key) => {
+        return keyword(key);
+    }
 
     const changeFilter = (event) => {
         dispatch(setConversationFilter(event.target.value));
@@ -136,11 +126,10 @@ const RepliesExplorer = () => {
     };
 
     return (
-        
-        
+    
         <Card>
                 <CardHeader
-                    title={"Replies Explorer"}
+                    title={keyword("section_replies_explorer")}
                     className={classes.headerUpladedImage}
                 />
                 <Box p={3}>
@@ -154,17 +143,17 @@ const RepliesExplorer = () => {
                 <Grid item xs={12}>
                 <Typography variant="body1"><label>There are {conversation.number_of_replies.toLocaleString()} replies with a stance label of&nbsp;
                     <select value={filter} onChange={changeFilter}>
-                        <option>any</option>
-                        <option>comment</option>
-                        <option>deny</option>
-                        <option>query</option>
-                        <option>support</option>
+                        <option value="any">{keyword("stance_any")}</option>
+                        <option value="support">{keyword("stance_support")}</option>
+                        <option value="deny">{keyword("stance_deny")}</option>
+                        <option value="query">{keyword("stance_query")}</option>
+                        <option value="comment">{keyword("stance_comment")}</option>
                     </select></label> and which contain&nbsp;
                     <select value={restrict} onChange={changeRestriction}>
-                        <option value="none">(no restriction)</option>
-                        <option value="hashtags">hashtags</option>
-                        <option value="user_mentions">user mentions</option>
-                        <option value="urls">URLs and media</option>
+                        <option value="none">{keyword("contains_none")}</option>
+                        <option value="hashtags">{keyword("contains_hashtags")}</option>
+                        <option value="user_mentions">{keyword("contains_user_mentions")}</option>
+                        <option value="urls">{keyword("contains_urls")}</option>
                     </select>
                     </Typography>
                 </Grid>
@@ -176,10 +165,10 @@ const RepliesExplorer = () => {
             spacing={3}
             alignItems="flex-start">
                 <Grid item xs={4}>
-                <TweetList conversation={conversation} viewTweet={submitID} />
+                <TweetList conversation={conversation} viewTweet={submitID} keyword={keyword} />
                 </Grid>
                 <Grid item xs={8}>
-             <Typography variant="body1">The {hashtagCloud.length !== 100 ? "hashtags" : "top 100 hashtags"} appearing in {repliesLabel}:</Typography>
+             <Typography variant="body1">{eval("`"+keyword("summary_hashcloud")+"`")}</Typography>
                 <div style={{height: 500}}>
                     <ReactWordcloud words={hashtagCloud} options={options} callbacks={callbacks} />
                 </div>
@@ -205,13 +194,13 @@ const RepliesExplorer = () => {
                 alignItems="flex-start">
 
                     <Grid item xs={3}>
-                    <Typography variant="body1">The {Object.keys(users).length === 10 ? "ten most active" : ""} users in {repliesLabel}:</Typography>
+                    <Typography variant="body1">{eval("`"+keyword("table_description_users")+"`")}</Typography>
                 <TableContainer component={Paper}>
                     <Table className={classes.table} aria-label="simple table">
                         <TableHead>
                             <TableRow>
-                                <TableCell>Screen Name</TableCell>
-                                <TableCell>Tweets</TableCell>
+                                <TableCell>{keyword("table_header_screen_name")}</TableCell>
+                                <TableCell>{keyword("table_header_tweets")}</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -249,13 +238,13 @@ const RepliesExplorer = () => {
                     </Grid>
 
                     <Grid item xs={9}>
-                    <Typography variant="body1">The {Object.keys(urlTableData).length === 10 ? "ten most frequently occuring" : ""} URLs in {repliesLabel}:</Typography>
+                    <Typography variant="body1">{eval("`"+keyword("table_description_urls")+"`")}</Typography>
                 <TableContainer component={Paper}>
                     <Table className={classes.table} aria-label="simple table">
                         <TableHead>
                             <TableRow>
-                                <TableCell>URL</TableCell>
-                                <TableCell>Appearances</TableCell>
+                                <TableCell>{keyword("table_header_url")}</TableCell>
+                                <TableCell>{keyword("table_header_appearances")}</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>

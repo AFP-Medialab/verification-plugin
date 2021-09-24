@@ -3,7 +3,6 @@ import {useDispatch, useSelector} from "react-redux";
 
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import tsvConversation from "../../../../LocalDictionary/components/NavItems/tools/Conversation.tsv";
-import tsvAllTools from "../../../../LocalDictionary/components/NavItems/tools/Alltools.tsv";
 
 import { setConversationInput}  from "../../../../redux/actions/tools/conversationActions";
 
@@ -28,7 +27,6 @@ import Countdown from 'react-countdown';
 const Conversation = () => {
 
     const keyword = useLoadLanguage("components/NavItems/tools/Conversation.tsv", tsvConversation);
-    const keywordAllTools = useLoadLanguage("components/NavItems/tools/Alltools.tsv", tsvAllTools);
     const dispatch = useDispatch();
 
     const conversationInputUrl = useSelector(state => state.conversation.url);

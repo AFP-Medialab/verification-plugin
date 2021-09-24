@@ -3,6 +3,7 @@ title	Twitter Conversation Explorer	Temp	Temp	Temp
 description	This tool aims to provide a simply way to explore a Twitter based conversation. From a starting Tweet you can view, and explore, the replies or the parent Tweet. We also automatically classify replies based on whether they support, refute, query, or just comment on a Tweet. We divide the results into two sections; the top half summaries the Tweet you are currently exploring, whilst the bottom half allows you to interactively explore its replies.	Temp	Temp	Temp
 section_explore_from	Explore from this Tweet	Temp	Temp	Temp
 section_tweet_summary	Tweet Summary	Temp	Temp 	Temp
+section_replies_explorer	Replies Explorer	Temp	Temp	Temp
 button_explore_tweet	Explore Tweet...	Temp	Temp
 button_explore_parent	Explore Parent Tweet...	Temp	Temp
 button_explore_root	Explore Root Tweet...	Temp	Temp
@@ -14,3 +15,20 @@ summary_piechart	We automatically assign one of four possible labels to each rep
 summary_histogram_time	Replies clearly don't all happen at once and it's useful to be able to see how the volume of replies, as well as how they relate to the Tweet, changes over time.	Temp	Temp	Temp
 summary_histogram_week	This histogram allows you to do both, and initially shows the first week after the selected tweet was published. If replies were posted outside the initial week, then you can adjust the graph to view these, either by dragging the x-axis or, if the replies occur over a very long period, using the range selector shown below the graph.	Temp	Temp	Temp
 summary_histogram_day	In this case, however, all the replies occured on the same day so the pie chart gives a clearer breakdown than a histogram would.	Temp	Temp	Temp
+summary_hashcloud	The ${hashtagCloud.length !== 100 ? "hashtags" : "top 100 hashtags"} appearing in ${repliesLabel}:	Temp	Temp	Temp
+table_description_users	The ${Object.keys(users).length === 10 ? "ten most active" : ""} users in ${repliesLabel}:	Temp	Temp	Temp
+table_description_urls	The ${Object.keys(urlTableData).length === 10 ? "ten most frequently occuring" : ""} URLs in ${repliesLabel}:	Temp	Temp	Temp
+table_header_screen_name	Screen Name	Temp	Temp	Temp
+table_header_tweets	Tweets	Temp	Temp	Temp
+table_header_url	URL	URL	URL	URL
+table_header_appearances	Appearances		Temp	Temp	Temp
+stance_support	support	Temp	Temp	Temp
+stance_query	query	Temp	Temp	Temp
+stance_deny	refute	Temp	Temp	Temp
+stance_comment	comment	Temp	Temp	Temp
+stance_any	any	Temp	Temp	Temp
+contains_none	(no restriction)	Temp	Temp	Temp
+contains_hashtags	hashtag	Temp	Temp	Temp
+contains_user_mentions	user mention	Temp	Temp	Temp
+contains_urls	URL or media	Temp	Temp	Temp
+repliesLabel	replies ${restrict !== "none" ? "containing a "+ keyword("contains_"+restrict) + " and" : ""} with the stance label '${filter}'	Temp	Temp	Temp

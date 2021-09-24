@@ -11,7 +11,6 @@ import {Box, Button} from "@material-ui/core";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 
-import Link from "@material-ui/core/Link";
 import Typography from "@material-ui/core/Typography";
 
 import Plot from 'react-plotly.js';
@@ -30,10 +29,21 @@ const TweetSummary = () => {
     const tweet = useSelector(state => state.conversation.tweet);
 
     const stance = useSelector(state => state.conversation.stance)
+
+    // convert the stance labels to whatever they are in the current language
+    for (var i = 0 ; i < stance["labels"].length ; ++i) {
+        stance["labels"][i] = keyword("stance_"+stance["labels"][i]);
+
+        tweet.timeline[i]["name"] = keyword("stance_"+tweet.timeline[i]["name"]);
+    }
     
     const submitID = (src) => {
         dispatch(setConversationInput(src));
     };
+
+    const getTranslatedLabel = (key) => {
+        return keyword(key);
+    }
 
     let layout = {
         barmode: "stack",
@@ -67,7 +77,7 @@ const TweetSummary = () => {
 
                 {tweet.in_reply_to && tweet.in_reply_to !== tweet.conversation_id ? <Button variant="outlined" color="primary" onClick={() => submitID(tweet.conversation_id)}>{keyword("button_explore_root")}</Button> : null }
                 {tweet.in_reply_to ? <Button variant="outlined" color="primary" onClick={() => submitID(tweet.in_reply_to)}>{keyword("button_explore_parent")}</Button>  : null }
-                <Tweet tweet={tweet} plain/>
+                <Tweet tweet={tweet} plain keyword={keyword} />
                 
                 
             </Grid>

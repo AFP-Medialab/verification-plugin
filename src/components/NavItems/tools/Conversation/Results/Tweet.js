@@ -80,7 +80,7 @@ class Tweet extends Component {
         return (
             <div style={{background: this.state.color, padding: 6, borderRadius: "12px"}}>
                 <InnerHTML html={this.state.html} />
-                <Button size="small" style={{color: "white"}} onClick={() => this.props.viewTweet(this.state.id)}>Explore Tweet...</Button>
+                <Button size="small" style={{color: "white"}} onClick={() => this.props.viewTweet(this.state.id)}>{this.props.keyword("button_explore_tweet")}</Button>
             </div>
         )
     }
