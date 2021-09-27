@@ -21,10 +21,13 @@ import Paper from '@material-ui/core/Paper';
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 
+import {Radio, RadioGroup, FormControl, FormControlLabel} from "@material-ui/core"
+
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import Link from "@material-ui/core/Link";
 import Typography from "@material-ui/core/Typography";
+import Alert from '@material-ui/lab/Alert';
 
 import { setConversationInput, setConversationFilter, setConversationRestriction }  from "../../../../../redux/actions/tools/conversationActions";
 
@@ -54,8 +57,6 @@ const RepliesExplorer = () => {
 
     const filter = useSelector(state => state.conversation.filter)
     const restrict = useSelector(state => state.conversation.restriction)
-
-    let repliesLabel  = evalKeyword("repliesLabel")
 
     function getCallback(callback) {
         return function (word, event) {
@@ -102,7 +103,8 @@ const RepliesExplorer = () => {
     const [openUser, setOpenUser] = React.useState(false);
     const [screenName, setScreenName] = React.useState(null);
 
-    const handleOpenUser = (screen_name) => {
+    const handleOpenUser = (e, screen_name) => {
+        e.preventDefault();
         setScreenName(screen_name);
         setOpenUser(true);
     };
@@ -114,6 +116,8 @@ const RepliesExplorer = () => {
 
     const [openHashtag, setOpenHashtag] = React.useState(false);
     const [hashtag, setHashtag] = React.useState(null);
+
+    // eslint-disable-next-line
     const [hashtagCount, setHashtagCount] = React.useState(null);
 
     const handleOpenHashtag = (hashtag, value) => {
@@ -127,11 +131,16 @@ const RepliesExplorer = () => {
         setHashtag(null);
     };
 
+    const moreTweets = (tweet.number_of_replies / tweet.reply_count) < 0.5;
+
+    // eslint-disable-next-line
+    const filterPercent = 100 * (conversation.number_of_replies / tweet.number_of_replies)
+
     return (
     
         <Card>
                 <CardHeader
-                    title={keyword("section_replies_explorer")}
+                    title={evalKeyword("section_replies_explorer")}
                     className={classes.headerUpladedImage}
                 />
                 <Box p={3}>
@@ -143,35 +152,83 @@ const RepliesExplorer = () => {
             alignItems="flex-start">
                 
                 <Grid item xs={12}>
-                <Typography variant="body1"><label>There are {conversation.number_of_replies.toLocaleString()} replies with a stance label of&nbsp;
-                    <select value={filter} onChange={changeFilter}>
-                        <option value="any">{keyword("stance_any")}</option>
-                        <option value="support">{keyword("stance_support")}</option>
-                        <option value="deny">{keyword("stance_deny")}</option>
-                        <option value="query">{keyword("stance_query")}</option>
-                        <option value="comment">{keyword("stance_comment")}</option>
-                    </select></label> and which contain&nbsp;
-                    <select value={restrict} onChange={changeRestriction}>
-                        <option value="none">{keyword("contains_none")}</option>
-                        <option value="hashtags">{keyword("contains_hashtags")}</option>
-                        <option value="user_mentions">{keyword("contains_user_mentions")}</option>
-                        <option value="urls">{keyword("contains_urls")}</option>
-                    </select>
-                    </Typography>
+
+                {moreTweets ? <Alert severity="info">{keyword("more_tweets_prefix")} <Button size="small" variant="outlined" onClick={() => submitID(tweet.id)}>{keyword("button_refresh")}</Button> {keyword("more_tweets_suffix")}</Alert> : null }
+
+                <Typography variant="body1" paragraph>{keyword("summary_replies_1")}</Typography>
+
+                <Typography variant="body1" paragraph>{keyword("summary_replies_2")}</Typography>
+
                 </Grid>
+            </Grid>
+            <Paper style={{ padding: 10, marginTop: 10, marginBottom: 10}}>
+            <Grid
+            container
+            direction="row"
+            spacing={3}
+            alignItems="flex-start">
+
+            <Grid item xs={6}>
+                <FormControl component="fieldset">
+
+  <Typography  variant="body1">{keyword("replies_filter_stance")}</Typography>
+  <RadioGroup row aria-label="stance" name="row-radio-buttons-group" value={filter} onChange={changeFilter}>
+    <FormControlLabel value="support" control={<Radio />} label={keyword("stance_support")} />
+    <FormControlLabel value="deny" control={<Radio />} label={keyword("stance_deny")} />
+    <FormControlLabel value="query" control={<Radio />} label={keyword("stance_query")} />
+    <FormControlLabel value="comment" control={<Radio />} label={keyword("stance_comment")} />
+    <FormControlLabel value="any" control={<Radio />} label={keyword("stance_any")} />
+  </RadioGroup>
+</FormControl>
         </Grid>
 
+        <Grid item xs={6}>
+<FormControl component="fieldset">
+<Typography  variant="body1">{keyword("replies_filter_contain")}</Typography>
+  <RadioGroup row aria-label="contain" name="row-radio-buttons-group" value={restrict} onChange={changeRestriction}>
+    <FormControlLabel value="hashtags" control={<Radio />} label={keyword("contains_hashtags")} />
+    <FormControlLabel value="user_mentions" control={<Radio />} label={keyword("contains_user_mentions")} />
+    <FormControlLabel value="urls" control={<Radio />} label={keyword("contains_urls")} />
+    <FormControlLabel value="none" control={<Radio />} label={keyword("contains_none")} />
+  </RadioGroup>
+</FormControl>
+</Grid>
+</Grid>
+
+<Grid
+            container
+            direction="row"
+            spacing={3}
+            alignItems="flex-start">
+                
+                <Grid item xs={12}>
+<Typography variant="body1">{evalKeyword("replies_filtered")}</Typography>
+                </Grid>
+        </Grid>
+</Paper>
         <Grid
             container
             direction="row"
             spacing={3}
             alignItems="flex-start">
                 <Grid item xs={4}>
-                <TweetList conversation={conversation} viewTweet={submitID} keyword={keyword} />
+                
+                <Card>
+                <CardHeader
+                    title={keyword("the_replies")}
+                    className={classes.headerUpladedImage}
+                />
+                    <TweetList conversation={conversation} viewTweet={submitID} keyword={keyword} />
+                </Card>
                 </Grid>
                 <Grid item xs={8}>
-             <Typography variant="body1">{evalKeyword("summary_hashcloud")}</Typography>
-                <div style={{height: 500}}>
+                <Card>
+                <CardHeader
+                    title={keyword("the_hashtags")}
+                    className={classes.headerUpladedImage}
+                />
+             <Box p={2}><Typography variant="body1">{evalKeyword("summary_hashcloud")}</Typography></Box>
+                <div style={{height: 450}}>
                     <ReactWordcloud words={hashtagCloud} options={options} callbacks={callbacks} />
                 </div>
                 <Dialog
@@ -180,12 +237,13 @@ const RepliesExplorer = () => {
                     maxWidth="sm">
                     <DialogContent>
                     <Typography variant="h3">#{hashtag}</Typography>
-                    <Typography variant="body1">For #{hashtag} there are {hashtagCount} {repliesLabel}</Typography>
-                    <Button color="primary" size="small" style={{textTransform: "none"}} onClick={() => window.open(`https://twitter.com/hashtag/${hashtag}?f=live`,`blank`)}>View on Twitter</Button>
-                    <TweetList stance={filter} hashtag={hashtag} id_str={tweetID} viewTweet={submitID} />
+                    <Typography variant="body1">{evalKeyword("hashtags_summary")}</Typography>
+                    <Button color="primary" size="small" style={{textTransform: "none"}} onClick={() => window.open(`https://twitter.com/hashtag/${hashtag}?f=live`,`blank`)}>{keyword("hashtags_view_on_twitter")}</Button>
+                    <TweetList stance={filter} hashtag={hashtag} id_str={tweetID} viewTweet={submitID} keyword={keyword}/>
                     </DialogContent>
                         
                 </Dialog>
+                </Card>
                 </Grid>
             </Grid>
 
@@ -196,7 +254,12 @@ const RepliesExplorer = () => {
                 alignItems="flex-start">
 
                     <Grid item xs={3}>
-                    <Typography variant="body1">{evalKeyword("table_description_users")}</Typography>
+                        <Card>
+                    <CardHeader
+                    title={keyword("the_people")}
+                    className={classes.headerUpladedImage}
+                />
+                    <Box p={2}><Typography variant="body1">{evalKeyword("table_description_users")}</Typography></Box>
                 <TableContainer component={Paper}>
                     <Table className={classes.table} aria-label="simple table">
                         <TableHead>
@@ -208,7 +271,7 @@ const RepliesExplorer = () => {
                         <TableBody>
                             {Object.keys(users).map((screen_name, key) => (
                                 <TableRow key={key}>
-                                    <TableCell><Button color="primary" size="small" style={{textTransform: "none"}} onClick={() => handleOpenUser(screen_name)}>{screen_name}</Button></TableCell>
+                                    <TableCell><Link href="#" onClick={(e) => handleOpenUser(e, screen_name)}>{screen_name}</Link></TableCell>
                                     <TableCell>{users[screen_name].toLocaleString()} ({(100*users[screen_name]/conversation.number_of_replies).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}%)</TableCell>
                                 </TableRow>
                             ))}
@@ -227,7 +290,6 @@ const RepliesExplorer = () => {
                 alignItems="flex-start">
                         <Grid item xs={7}>
                         <User screen_name={screenName} keyword={keyword}/>
-                        <Typography variant="body1">{repliesLabel}</Typography>
                     </Grid>
                         
                     <Grid item xs={5}>
@@ -237,10 +299,16 @@ const RepliesExplorer = () => {
                     </Grid></DialogContent>
                         
                 </Dialog>
+                </Card>
                     </Grid>
 
                     <Grid item xs={9}>
-                    <Typography variant="body1">{evalKeyword("table_description_urls")}</Typography>
+                        <Card>
+                    <CardHeader
+                    title={keyword("the_urls")}
+                    className={classes.headerUpladedImage}
+                />
+                    <Box p={2}><Typography variant="body1">{evalKeyword("table_description_urls")}</Typography></Box>
                 <TableContainer component={Paper}>
                     <Table className={classes.table} aria-label="simple table">
                         <TableHead>
@@ -259,7 +327,9 @@ const RepliesExplorer = () => {
                         </TableBody>
                     </Table>
                 </TableContainer>
+                </Card>
                     </Grid>
+                    
             </Grid>
             </Box>
             </Card>

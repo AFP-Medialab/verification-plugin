@@ -25,11 +25,6 @@ const TweetSummary = () => {
     const classes = useMyStyles();
     const keyword = useLoadLanguage("components/NavItems/tools/Conversation.tsv", tsv);
 
-    const evalKeyword = (key) => {
-        // eslint-disable-next-line
-        return eval("`"+keyword(key)+"`");
-    }
-
     const dispatch = useDispatch();
 
     const tweet = useSelector(state => state.conversation.tweet);
@@ -88,7 +83,7 @@ const TweetSummary = () => {
                 
                     <User user={tweet.user} keyword={keyword} />
 
-                    {tweet.reply_count === 0 ? <Typography variant="body1" paragraph>{keyword("summary_no_replies")}</Typography> : <Typography variant="body1" paragraph>{evalKeyword("summary_replies_processed")}</Typography>}
+                    {tweet.reply_count === 0 ? <Typography variant="body1" paragraph>{keyword("summary_no_replies")}</Typography> : "" }
             </Grid>
         </Grid>
         {tweet.number_of_replies > 0 ?

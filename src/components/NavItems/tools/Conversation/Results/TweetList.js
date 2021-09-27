@@ -24,7 +24,6 @@ class TweetList extends Component {
             }
         }
         else {
-            console.log("no conversation so starting from an empty list")
             this.state = {
                 items: [],
                 hasMore: true
@@ -89,11 +88,11 @@ class TweetList extends Component {
             dataLength={this.state.items.length}
             next={this.fetchMoreData}
             hasMore={this.state.hasMore}
-            loader={<h4>Loading...</h4>}
+            loader={<h4>{this.props.keyword("tweets_loading")}</h4>}
             height={500}
             endMessage={
                 <p style={{ textAlign: "center" }}>
-                <b>That's all the replies, so far...</b>
+                <b>{this.props.keyword("tweets_all")}</b>
                 </p>
             }
             >

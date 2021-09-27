@@ -27,6 +27,12 @@ import Countdown from 'react-countdown';
 const Conversation = () => {
 
     const keyword = useLoadLanguage("components/NavItems/tools/Conversation.tsv", tsvConversation);
+
+    const evalKeyword = (key) => {
+        // eslint-disable-next-line
+        return eval("`"+keyword(key)+"`");
+    }
+    
     const dispatch = useDispatch();
 
     const conversationInputUrl = useSelector(state => state.conversation.url);
@@ -52,10 +58,10 @@ const Conversation = () => {
     const renderer = ({ hours, minutes, seconds, completed }) => {
         if (completed) {
             // Render a completed state
-            return <span>reloading...</span>;
+            return <span>{keyword("refresh_reloading")}</span>;
         } else {
             // Render a countdown
-            return <span>Page will automatically reload in {seconds}s</span>;
+            return <span>{evalKeyword("refresh_countdown")}</span>;
         }
     };
   
