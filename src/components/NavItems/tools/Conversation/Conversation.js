@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import {useDispatch, useSelector} from "react-redux";
 
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
@@ -28,11 +28,6 @@ const Conversation = () => {
 
     const keyword = useLoadLanguage("components/NavItems/tools/Conversation.tsv", tsvConversation);
 
-    const evalKeyword = (key) => {
-        // eslint-disable-next-line
-        return eval("`"+keyword(key)+"`");
-    }
-    
     const dispatch = useDispatch();
 
     const conversationInputUrl = useSelector(state => state.conversation.url);
@@ -50,6 +45,11 @@ const Conversation = () => {
 
     const [userInput, setUserInput] = useState(conversationInputUrl);
 
+    // make sure we link the input field state with the main persistent state
+    useEffect(() => {
+        setUserInput(conversationInputUrl)
+     },[conversationInputUrl])
+
     const submitUrl = (src) => {
         dispatch(setConversationInput(src))
     };
@@ -61,7 +61,9 @@ const Conversation = () => {
             return <span>{keyword("refresh_reloading")}</span>;
         } else {
             // Render a countdown
-            return <span>{evalKeyword("refresh_countdown")}</span>;
+            // can't use evalKeyword as seconds isn't within it's scope
+            // eslint-disable-next-line
+            return <span>{eval("`"+keyword("refresh_countdown")+"`")}</span>;
         }
     };
   

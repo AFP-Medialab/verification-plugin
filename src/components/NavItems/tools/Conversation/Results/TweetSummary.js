@@ -35,7 +35,8 @@ const TweetSummary = () => {
     for (var i = 0 ; i < stance["labels"].length ; ++i) {
         stance["labels"][i] = keyword("stance_"+stance["labels"][i]);
 
-        tweet.timeline[i]["name"] = keyword("stance_"+tweet.timeline[i]["name"]);
+        if (tweet.timeline)
+            tweet.timeline[i]["name"] = keyword("stance_"+tweet.timeline[i]["name"]);
     }
     
     const submitID = (src) => {

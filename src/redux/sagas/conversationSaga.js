@@ -47,10 +47,28 @@ function* handleConversationURL(action) {
     // get the URL of the tweet we have been given through the UI
     const tweetURL = yield select(state => state.conversation.url)
 
+    if (tweetURL.match(/^[0-9]+$/)) {
+        yield put(setTweetID(tweetURL))
+        return;
+
+    }
+
+    // use a regex to grab the status ID from the URL, and hence
+    // do some validation of the URL
+    const data = tweetURL.match(/twitter\.com\/.*\/status(?:es)?\/([^/?]+)/)
+
+    if (data == null) {
+        // if the regex didn't match then the URL isn't to a tweet so we
+        // stop and report an error message of some kind
+        // TODO how do I get the translations into here
+        console.log("not a twitter URL");
+        yield put(setFlashMessage("error", "Please enter a URL which points to a single Tweet", false));
+        
+        return;
+    }
+
     // Get the status ID which is all we really need to get the rest of the info
-    // TODO we should probably do some error handling at this point to check that
-    //      the URL we have been given is actually a valid status URL
-    const id_str = tweetURL.substring(tweetURL.lastIndexOf("/")+1)
+    const id_str = data[1];
 
     yield put(setTweetID(id_str))
 }
@@ -58,6 +76,8 @@ function* handleConversationURL(action) {
 function* handleConversationTweetID(action) {
 
     const id_str = yield select(state => state.conversation.id_str)
+
+    console.log("handling tweet ID");
 
     // get the tweet from the elasticsearch index via the backend
     let tweet = yield call(conversationApi.getTweet, id_str)
