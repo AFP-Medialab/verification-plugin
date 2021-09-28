@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import InnerHTML from 'dangerously-set-html-content'
 import axios from "axios";
 import { Button } from "@material-ui/core";
+import Typography from "@material-ui/core/Typography";
 
 class Tweet extends Component {
 
@@ -88,6 +89,7 @@ class Tweet extends Component {
 
         return (
             <div style={{background: this.state.color, padding: 6, borderRadius: "12px"}}>
+                <Typography align="right" style={{color: "white"}}>{this.props.keyword("stance_"+this.props.tweet.stance_parent)}</Typography>
                 <InnerHTML html={this.state.html} />
                 <Button size="small" style={{color: "white"}} onClick={() => this.props.viewTweet(this.state.id)}>{this.props.keyword("button_explore_tweet")}</Button>
             </div>
