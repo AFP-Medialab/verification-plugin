@@ -15,7 +15,7 @@ import Typography from "@material-ui/core/Typography";
 
 import Plot from 'react-plotly.js';
 
-import { setConversationInput }  from "../../../../../redux/actions/tools/conversationActions";
+import { setTweetID }  from "../../../../../redux/actions/tools/conversationActions";
 
 import Tweet from "./Tweet"
 import User from "./User"
@@ -40,7 +40,7 @@ const TweetSummary = () => {
     }
     
     const submitID = (src) => {
-        dispatch(setConversationInput(src));
+        dispatch(setTweetID(src));
     };
 
     let layout = {

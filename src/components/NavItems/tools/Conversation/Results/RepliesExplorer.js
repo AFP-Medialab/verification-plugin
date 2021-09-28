@@ -29,7 +29,7 @@ import Link from "@material-ui/core/Link";
 import Typography from "@material-ui/core/Typography";
 import Alert from '@material-ui/lab/Alert';
 
-import { setConversationInput, setConversationFilter, setConversationRestriction }  from "../../../../../redux/actions/tools/conversationActions";
+import { setTweetID, setConversationFilter, setConversationRestriction }  from "../../../../../redux/actions/tools/conversationActions";
 
 import TweetList from "./TweetList"
 import User from "./User"
@@ -89,7 +89,7 @@ const RepliesExplorer = () => {
     }
 
     const submitID = (src) => {
-        dispatch(setConversationInput(src));
+        dispatch(setTweetID(src));
     };
 
     const changeFilter = (event) => {

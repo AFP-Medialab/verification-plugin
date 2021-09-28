@@ -77,8 +77,6 @@ function* handleConversationTweetID(action) {
 
     const id_str = yield select(state => state.conversation.id_str)
 
-    console.log("handling tweet ID");
-
     // get the tweet from the elasticsearch index via the backend
     let tweet = yield call(conversationApi.getTweet, id_str)
 

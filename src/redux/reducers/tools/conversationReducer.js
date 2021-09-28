@@ -17,6 +17,7 @@ const defaultState = {
 const conversationReducer = (state = defaultState, action) => {
     switch (action.type) {
         case "SET_CONVERSATION_INPUT":
+        case "SET_CONVERSATION_TWEET_ID":
             // if we have a new URL then start a clean state
             state = defaultState;
         // eslint-disable-next-line
@@ -24,7 +25,6 @@ const conversationReducer = (state = defaultState, action) => {
         case "SET_CONVERSATION_TWEET":
         case "SET_CONVERSATION_CLOUD":
         case "SET_CONVERSATION_STANCE":
-        case "SET_CONVERSATION_TWEET_ID":
         case "SET_CONVERSATION_FILTER":
         case "SET_CONVERSATION_RESTRICTION":
         case "SET_CONVERSATION_FLASH":
