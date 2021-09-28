@@ -15,6 +15,8 @@ import Grid from "@material-ui/core/Grid";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 
+import Typography from "@material-ui/core/Typography";
+
 import LinearProgress from "@material-ui/core/LinearProgress";
 
 import TweetSummary from "./Results/TweetSummary"
@@ -70,7 +72,7 @@ const Conversation = () => {
     return (
         <div>
             <HeaderTool name={keyword("title")} description={keyword("description")} icon={<ConversationIcon style={{ fill: "#51A5B2" }} />} />
-
+            <Typography variant="body1" paragraph>{keyword("description_needs_replies")}</Typography>
             <Card>
                 <CardHeader
                     title={keyword("section_explore_from")}

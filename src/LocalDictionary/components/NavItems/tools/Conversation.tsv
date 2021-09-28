@@ -1,6 +1,7 @@
 	en	fr	es	el
 title	Twitter Conversation Explorer	Temp	Temp	Temp
 description	This tool aims to provide a simply way to explore a Twitter based conversation. From a starting Tweet you can view, and explore, the replies or the parent Tweet. We also automatically classify replies based on whether they support, refute, query, or just comment on a Tweet. We divide the results into two sections; the top half summaries the Tweet you are currently exploring, whilst the bottom half allows you to interactively explore its replies.	Temp	Temp	Temp
+description_needs_replies	Note that this tool works best for Tweets with a reasonably large number of replies. Analysis of Tweets with just a small handful, or no, replies is unlikely to be particularly enlightening.	Temp	Temp	Temp
 section_explore_from	Start from this Tweet	Temp	Temp	Temp
 section_tweet_summary	Tweet Summary	Temp	Temp 	Temp
 section_replies_explorer	Explore ${tweet.number_of_replies.toLocaleString()} Replies	Temp	Temp	Temp
@@ -16,9 +17,9 @@ summary_piechart	We automatically assign one of four possible labels to each rep
 summary_histogram_time	Replies clearly don't all happen at once and it's useful to be able to see how the volume of replies, as well as how they relate to the Tweet, changes over time.	Temp	Temp	Temp
 summary_histogram_week	This histogram allows you to do both, and initially shows the first week after the selected tweet was published. If replies were posted outside the initial week, then you can adjust the graph to view these, either by dragging the x-axis or, if the replies occur over a very long period, using the range selector shown below the graph.	Temp	Temp	Temp
 summary_histogram_day	In this case, however, all the replies occured on the same day so the pie chart gives a clearer breakdown than a histogram would.	Temp	Temp	Temp
-summary_hashcloud	The ${hashtagCloud.length !== 100 ? "hashtags" : "top 100 hashtags"} appearing in the selected replies:	Temp	Temp	Temp
-table_description_users	The ${Object.keys(users).length === 10 ? "ten most active" : ""} users in the selected replies:	Temp	Temp	Temp
-table_description_urls	The ${Object.keys(urlTableData).length === 10 ? "ten most frequently occuring" : ""} URLs in the selected reples:	Temp	Temp	Temp
+summary_hashcloud	The ${hashtagCloud.length !== 100 ? "hashtags" : "top 100 hashtags"} appearing within the selected replies:	Temp	Temp	Temp
+table_description_users	The ${Object.keys(users).length === 10 ? "ten most active" : ""} users within the selected replies:	Temp	Temp	Temp
+table_description_urls	The ${Object.keys(urlTableData).length === 10 ? "ten most frequently occuring" : ""} URLs within the selected reples:	Temp	Temp	Temp
 table_header_screen_name	Screen Name	Temp	Temp	Temp
 table_header_tweets	Tweets	Temp	Temp	Temp
 table_header_url	URL	URL	URL	URL
@@ -55,3 +56,5 @@ user_following	Following	Temp	Temp	Temp
 user_followers	Followers	Temp	Temp	Temp
 user_tweets	Tweets	Temp	Temp	Temp
 user_lists	Lists	Temp	Temp	Temp
+hashtags_none	There are no hashtags within the selected replies	Temp	Temp	Temp
+urls_none	There are no URLs within the selected replies	Temp	Temp	Temp

@@ -13,6 +13,8 @@ import CardHeader from "@material-ui/core/CardHeader";
 
 import Typography from "@material-ui/core/Typography";
 
+import Alert from '@material-ui/lab/Alert';
+
 import Plot from 'react-plotly.js';
 
 import { setTweetID }  from "../../../../../redux/actions/tools/conversationActions";
@@ -84,7 +86,7 @@ const TweetSummary = () => {
                 
                     <User user={tweet.user} keyword={keyword} />
 
-                    {tweet.reply_count === 0 ? <Typography variant="body1" paragraph>{keyword("summary_no_replies")}</Typography> : "" }
+                    {tweet.reply_count === 0 ? <Alert severity="warning">{keyword("summary_no_replies")}</Alert> : "" }
             </Grid>
         </Grid>
         {tweet.number_of_replies > 0 ?
