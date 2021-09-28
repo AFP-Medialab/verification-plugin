@@ -16,10 +16,10 @@ summary_replies_processed	We have currently processed ${tweet.number_of_replies.
 summary_piechart	We automatically assign one of four possible labels to each reply based on how they support, refute, query, or just comment on the Tweet. This pie chart shows the proportion of these labels across all the replies to this Tweet which we have processed so far.	Temp	Temp
 summary_histogram_time	Replies clearly don't all happen at once and it's useful to be able to see how the volume of replies, as well as how they relate to the Tweet, changes over time.	Temp	Temp	Temp
 summary_histogram_week	This histogram allows you to do both, and initially shows the first week after the selected tweet was published. If replies were posted outside the initial week, then you can adjust the graph to view these, either by dragging the x-axis or, if the replies occur over a very long period, using the range selector shown below the graph.	Temp	Temp	Temp
-summary_histogram_day	In this case, however, all the replies occured on the same day so the pie chart gives a clearer breakdown than a histogram would.	Temp	Temp	Temp
+summary_histogram_day	In this case, however, all the replies occurred on the same day so the pie chart gives a clearer breakdown than a histogram would.	Temp	Temp	Temp
 summary_hashcloud	The ${hashtagCloud.length !== 100 ? "hashtags" : "top 100 hashtags"} appearing within the selected replies:	Temp	Temp	Temp
 table_description_users	The ${Object.keys(users).length === 10 ? "ten most active" : ""} users within the selected replies:	Temp	Temp	Temp
-table_description_urls	The ${Object.keys(urlTableData).length === 10 ? "ten most frequently occuring" : ""} URLs within the selected reples:	Temp	Temp	Temp
+table_description_urls	The ${Object.keys(urlTableData).length === 10 ? "ten most frequently occurring" : ""} URLs within the selected replies:	Temp	Temp	Temp
 table_header_screen_name	Screen Name	Temp	Temp	Temp
 table_header_tweets	Tweets	Temp	Temp	Temp
 table_header_url	URL	URL	URL	URL
@@ -40,7 +40,7 @@ the_people	The People	Temp	Temp	Temp
 the_urls	The URLs	Temp	Temp	Temp
 more_tweets_prefix	It is likely that we are still collecting and processing replies for this tweet. You can	Temp	Temp	Temp
 more_tweets_suffix	the page to check for more replies.	Temp	Temp	Temp
-summary_replies_1	This section of the results focuses on the replies to the Tweet you are exploring. Each reply is shown in chronological order. We also automatically classify replies based on whether they support, refute, query, or just comment on a Tweet. This information is used in two ways in this section. Firstly each replie is colour coded to match the auotmatic labelling (using the same colours as above). Secondly these labels can be used to filter the replies to allow you to focus in on particular types of reply.	Temp	Temp	Temp
+summary_replies_1	This section of the results focuses on the replies to the Tweet you are exploring. Each reply is shown in chronological order. We also automatically classify replies based on whether they support, refute, query, or just comment on a Tweet. This information is used in two ways in this section. Firstly each reply is colour coded to match the automatic labelling (using the same colours as above). Secondly these labels can be used to filter the replies to allow you to focus in on particular types of reply.	Temp	Temp	Temp
 summary_replies_2	Replies can also be filtered to show just those containing a hashtag, a user mention, or a URL or image/video. This could, for example, allow you to focus on replies which refute the Tweet and contain a URL or image.	Temp	Temp	Temp
 replies_filter_stance	Filter replies to show only those that...	Temp	Temp	Temp
 replies_filter_contain	and which contain a...	Temp	Temp	Temp

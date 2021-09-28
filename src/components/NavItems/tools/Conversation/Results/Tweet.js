@@ -46,25 +46,34 @@ class Tweet extends Component {
 
             // if we didn't hit an error then set the state with the relevant data
             this.setState({
-                html: response.data.html,
+                html: "<div style='background: white; border-radius: 12px'>"+response.data.html+"</div>",
                 plain: plain,
                 color: color,
                 id: tweet.id,
+                error: false
             })
 
-            //TODO check what the response looks like for deleted tweet? is it an error code
-            //     or a success but with a deleted message in the HTML
-        }, (error) => {
+            // Rather annoyingly it seems that this endpoint returns the bare HTML even for
+            // tweets which have been deleted. The 404 only occurs when the embedded Javascript
+            // runs and the styling fails. For now we add a white background just to ensure
+            // that the tweet is readable, but we need to think of a better way of handling these.
+            // Possibly a scheduled event on the server that validates each Tweet/User to check
+            // if they still exist.
+        })
+        .catch((error) => {
             // for now just log the error to the console
-            console.log(error);
+            console.log(error.response);
 
-            // and show the raw tweet text with little or no styling. This will be less of
-            // an issue once we move the retrieval into the backend, see the TODO above
+            // and show the raw tweet text pulled from elasticsearch. Note that this code
+            // doesn't seem to run for deleted tweets, so is mainly likely to occur for
+            // other network issues. In otherwords if this code runs we probably have bigger
+            // problems to worry about!
             this.setState({
-                html: tweet.text,
+                html: "<div style='background: rgb(247, 249, 249); color: rgb(83, 100, 113); border: 1px solid rgb(239, 243, 244); margin: 10px auto; padding: 12px; border-radius: 12px'>"+error.response.data.error+"</div>",
                 plain: plain,
                 color: color,
-                id: tweet.id
+                id: tweet.id,
+                error: true
             })
         });
     }

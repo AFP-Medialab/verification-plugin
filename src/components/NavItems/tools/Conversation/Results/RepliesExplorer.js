@@ -131,7 +131,7 @@ const RepliesExplorer = () => {
         setHashtag(null);
     };
 
-    const moreTweets = (tweet.number_of_replies / tweet.reply_count) < 0.5;
+    const moreTweets = (tweet.number_of_replies / tweet.reply_count) > 0.5;
 
     // eslint-disable-next-line
     const filterPercent = 100 * (conversation.number_of_replies / tweet.number_of_replies)
