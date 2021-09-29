@@ -651,6 +651,14 @@ const useMyStyles = makeStyles(theme => ({
         alignItems: "center",
     },
 
+
+
+    imageAnalysis: {
+        height: "50vh",
+        backgroundPosition: "center",
+        backgroundSize: "contain",
+    }
+
 }));
 export const myCardStyles = makeStyles({
     root: {
