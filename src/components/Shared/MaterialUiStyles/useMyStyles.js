@@ -657,7 +657,26 @@ const useMyStyles = makeStyles(theme => ({
         height: "50vh",
         backgroundPosition: "center",
         backgroundSize: "contain",
-    }
+    },
+
+
+    feedbackButtonTitleHide: {
+        display: "none",
+    },
+
+    feedbackButtonTitleShow: {
+        marginLeft: "12px",
+        display: "block",
+    },
+
+    fabTop: {
+        margin: "0px",
+        top: "auto",
+        right: "14px",
+        bottom: "100px",
+        left: "auto",
+        position: "fixed",
+    },
 
 }));
 export const myCardStyles = makeStyles({

@@ -1,13 +1,18 @@
-import React from "react";
+import React, { useState } from "react";
 import SlackFeedback from "react-slack-feedback";
 import feedBackTheme from "./feedBackTheme";
 import useLoadLanguage from "../../Hooks/useLoadLanguage";
 import tsv from "../../LocalDictionary/components/FeedBack.tsv";
+import QuestionAnswerOutlinedIcon from '@material-ui/icons/QuestionAnswerOutlined';
+import useMyStyles from "../Shared/MaterialUiStyles/useMyStyles";
 
 
 const FeedBack = () => {
     const API_URL = process.env.REACT_APP_MY_WEB_HOOK_URL;
     const keyword = useLoadLanguage("components/FeedBack.tsv", tsv);
+    const classes = useMyStyles();
+    const [classTitle, setClassTitle] = useState(classes.feedbackButtonTitleHide);
+
     const translationJson = {
         "checkbox.option": "Send url with feedback",
         "close": keyword("close"),
@@ -31,7 +36,7 @@ const FeedBack = () => {
         "submit.sent": keyword("sent"),
         "submit.text": keyword("submit_text"),
         "upload.text": "Attach Image",
-        "trigger.text": keyword("button"),
+        "trigger.text": <span className={classTitle}>{keyword("button")}</span>,
         "footer.text": "React Slack Feedback"
     };
 
@@ -53,7 +58,14 @@ const FeedBack = () => {
     };
 
     return (
-        <div>
+        <div 
+            onMouseEnter={e => {
+                setClassTitle(classes.feedbackButtonTitleShow);
+            }}
+            onMouseLeave={e => {
+                setClassTitle(classes.feedbackButtonTitleHide);
+            }}>
+
             <SlackFeedback
                 disabled={false}
                 errorTimeout={8 * 1000}
@@ -63,13 +75,14 @@ const FeedBack = () => {
                 }}
                 sentTimeout={5 * 1000}
                 showChannel={false}
-                showIcon={false}
+                showIcon={true}
                 theme={feedBackTheme}
                 onSubmit={(payload, success, error) =>
                     sendToSlack(payload, success, error)
                 }
                 user={"Invid Feed Back"}
                 translations={translationJson}
+                icon={() => <QuestionAnswerOutlinedIcon/>}
             />
         </div>
     )

@@ -68,20 +68,20 @@ export default {
   button: {
     fontWeight: 500,
     boxShadow: `0 2px 8px 2px ${rgba('#0087ff', 0.2)}`,
-    opacity: 0.8
+    opacity: 0.5
   },
   trigger: {
     color: '#ffffff',
-    hoverColor: 'rgb(0,170,180)',
+    hoverColor: 'white',
     backgroundColor: 'rgb(0,170,180)',
     border: 'none',
-    padding: '12px 1.25em',
-    borderRadius: '6px',
+    padding: '17px 1.25em',
+    borderRadius: '50px',
     fontSize: '14px',
     fontWeight: '400',
     boxShadow: '0 3px 12px 1px rgba(34, 44, 79, 0.1)',
     hoverBoxShadow: '0 6px 16px 2px rgba(0, 0, 0, 0.2)',
-    hoverBackgroundColor: 'rgba(0, 170, 160, 0.5)'
+    hoverBackgroundColor: 'rgba(0, 170, 180, 1)'
   },
   input: {
     backgroundColor: 'white',
@@ -102,7 +102,7 @@ export default {
     selectedBackgroundColor: '#0087ff',
     border: '1px solid #d0d8e1',
     borderRadius: '4px',
-    backgroundColor: 'rgba(0, 170, 160, 0.5)'
+    backgroundColor: 'rgba(255, 255, 255, 1)'
   },
   image: {
     height: '140px',
@@ -118,5 +118,7 @@ export default {
   },
   overlay: {
     backgroundColor: rgba('#00aaa0', 0.3)
-  }
+  },
+
+    
 }
