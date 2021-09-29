@@ -268,7 +268,7 @@ const ForensicResults = (props) => {
     }));
 
 
-    //console.log(filters);
+    //onsole.log(filters);
     //console.log(results);
 
     const tabs = [0, 1, 2, 3];
@@ -936,7 +936,7 @@ const ForensicResults = (props) => {
 
                                                                         </div>
 
-                                                                        : <div
+                                                                        : (value.id !== "") && <div
                                                                             className={classes.imageOverlayWrapper}
                                                                             onMouseOver={() => displayFilterHover(value.mask)}
                                                                             onMouseLeave={hideFilterHover}>
