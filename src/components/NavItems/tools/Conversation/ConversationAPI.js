@@ -13,7 +13,15 @@ export default function ConversationAPI() {
      * @returns a JSON object representing the requested tweet
      */
     const getTweet = async (id) => {
-        let json = await axios.get(endpoint+"/tweet?id="+id)
+        let json = await axios.get(endpoint+"/tweet?id="+id).catch((error) =>{
+            console.log("an error occured getting the tweet by ID");
+            return {data: {
+                    flashMessage: "Unfortunately the service is currently down. Please try again later.",
+                    flashType: "error",
+                    flashRefresh: false
+                }
+            };
+        });
 
         // TODO add error handling
 
@@ -28,7 +36,15 @@ export default function ConversationAPI() {
      * @returns a JSON object representing the requested conversation
      */
     const getConversation = async (id, stance, restrict) => {
-        let json = await axios.get(endpoint+"/conversation?id="+id+"&stance="+stance+"&restrict="+restrict)
+        let json = await axios.get(endpoint+"/conversation?id="+id+"&stance="+stance+"&restrict="+restrict).catch((error) =>{
+            console.log("an error occured getting the conversation by ID");
+            return {data: {
+                    flashMessage: "Unfortunately the service is currently down. Please try again later.",
+                    flashType: "error",
+                    flashRefresh: false
+                }
+            };
+        });
 
         // TODO add error handling
 
