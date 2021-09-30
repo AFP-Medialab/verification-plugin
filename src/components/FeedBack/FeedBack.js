@@ -11,6 +11,7 @@ const FeedBack = () => {
     const API_URL = process.env.REACT_APP_MY_WEB_HOOK_URL;
     const keyword = useLoadLanguage("components/FeedBack.tsv", tsv);
     const classes = useMyStyles();
+    const [isOpened, setIsOpened] = useState(false);
     const [classTitle, setClassTitle] = useState(classes.feedbackButtonTitleHide);
 
     const translationJson = {
@@ -26,7 +27,7 @@ const FeedBack = () => {
         "feedback.type.improvement": keyword("improvement"),
         "feedback.type.bug": keyword("bug"),
         "feedback.type.feature": keyword("feature"),
-        "header.title": keyword("title"),
+        "header.title": <span className={classes.feedbackHeaderTitle}>{keyword("title")}</span>,
         "image.remove": keyword("remove"),
         "label.channel": "Channel",
         "label.message": keyword("message"),
@@ -39,7 +40,7 @@ const FeedBack = () => {
         "trigger.text": <span className={classTitle}>{keyword("button")}</span>,
         "footer.text": "React Slack Feedback"
     };
-
+    
     const sendToSlack = (payload, success, error) => {
 
         return fetch(API_URL, {
@@ -63,15 +64,20 @@ const FeedBack = () => {
                 setClassTitle(classes.feedbackButtonTitleShow);
             }}
             onMouseLeave={e => {
-                setClassTitle(classes.feedbackButtonTitleHide);
+                if(!isOpened){
+                    setClassTitle(classes.feedbackButtonTitleHide);
+                }
             }}>
 
             <SlackFeedback
                 disabled={false}
                 errorTimeout={8 * 1000}
                 onClose={() => {
+                    setIsOpened(false);
+                    setClassTitle(classes.feedbackButtonTitleHide);
                 }}
                 onOpen={() => {
+                    setIsOpened(true);
                 }}
                 sentTimeout={5 * 1000}
                 showChannel={false}

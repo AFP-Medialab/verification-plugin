@@ -42,14 +42,14 @@ export default {
     border: '#d0d8e1',
     primary: 'rgb(0,170,180)',
     secondary: 'rgb(0,170,180)',
-    background: '#f4f4f7',
+    background: '#ffffff',
     success: '#3dc86f',
     error: '#ec3c3c',
     text: '#333333'
   },
   content: {
     width: '380px',
-    padding: '0.6em',
+    padding: '1.5em',
     borderRadius: '4px',
     fontSize: '14px',
     fontWeight: 500,

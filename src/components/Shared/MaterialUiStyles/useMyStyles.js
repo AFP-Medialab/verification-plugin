@@ -678,6 +678,10 @@ const useMyStyles = makeStyles(theme => ({
         position: "fixed",
     },
 
+    feedbackHeaderTitle: {
+        marginLeft: "12px",
+    },
+
 }));
 export const myCardStyles = makeStyles({
     root: {
