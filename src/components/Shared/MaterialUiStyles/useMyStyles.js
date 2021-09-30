@@ -651,6 +651,37 @@ const useMyStyles = makeStyles(theme => ({
         alignItems: "center",
     },
 
+
+
+    imageAnalysis: {
+        height: "50vh",
+        backgroundPosition: "center",
+        backgroundSize: "contain",
+    },
+
+
+    feedbackButtonTitleHide: {
+        display: "none",
+    },
+
+    feedbackButtonTitleShow: {
+        marginLeft: "12px",
+        display: "block",
+    },
+
+    fabTop: {
+        margin: "0px",
+        top: "auto",
+        right: "14px",
+        bottom: "100px",
+        left: "auto",
+        position: "fixed",
+    },
+
+    feedbackHeaderTitle: {
+        marginLeft: "12px",
+    },
+
 }));
 export const myCardStyles = makeStyles({
     root: {
