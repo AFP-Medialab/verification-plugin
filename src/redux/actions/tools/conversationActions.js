@@ -8,11 +8,12 @@ export const setConversationInput = (url) => {
     }
 };
 
-export const setTweetID = (id_str) => {
+export const setTweetID = (id_str, url) => {
     return {
         type: "SET_CONVERSATION_TWEET_ID",
         payload: {
             id_str: id_str,
+            url: url,
             loading: true
         }
     }

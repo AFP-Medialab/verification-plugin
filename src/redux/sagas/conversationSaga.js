@@ -70,7 +70,7 @@ function* handleConversationURL(action) {
     // Get the status ID which is all we really need to get the rest of the info
     const id_str = data[1];
 
-    yield put(setTweetID(id_str))
+    yield put(setTweetID(id_str, tweetURL))
 }
 
 function* handleConversationTweetID(action) {

@@ -121,7 +121,7 @@ const Conversation = () => {
             {flashMessage ? <Alert severity={flashType}>{flashMessage} {flashRefresh === true ? <Countdown
     date={Date.now() + 30000}
     renderer={renderer}
-    onComplete={() => submitUrl(userInput)}  />
+    onComplete={() => submitUrl(conversationInputUrl)}  />
 : null }</Alert> : null }
 
             {flashMessage ? <Box m={3} /> : null}
