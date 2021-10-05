@@ -4,6 +4,8 @@ import axios from "axios";
 import { Button } from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
 
+import StanceLabel from "./StanceLabel";
+
 class Tweet extends Component {
 
     constructor(props) {
@@ -25,14 +27,14 @@ class Tweet extends Component {
         const plain = this.props.plain || false
 
         // assume it's a comment
-        var color = "rgb(31, 119, 180)";
+        var color = "rgb(3, 155, 229)";
         
         if (tweet.stance_parent === "query")
-		    color = "rgb(255, 127, 14)";
+		    color = "rgb(255, 179, 0)";
 		else if (tweet.stance_parent === "support")
-            color = "rgb(44, 160, 44)";
+            color = "rgb(124, 179, 66)";
 		else if (tweet.stance_parent === "deny")
-            color = "rgb(214, 39, 40)";
+            color = "rgb(229, 57, 53)";
 
         // TODO put all the styles into a map in the state to make the HTML easier
 
@@ -88,10 +90,13 @@ class Tweet extends Component {
         }
 
         return (
-            <div style={{background: this.state.color, padding: 6, borderRadius: "12px"}}>
-                <Typography align="right" style={{color: "white"}}>{this.props.keyword("stance_"+this.props.tweet.stance_parent)}</Typography>
+            <div style={{border: "4px solid "+this.state.color, padding: 6, borderRadius: "12px"}}>
+                <div style={{display: 'flex'}}>
+                    <Typography component="div" style={{ flexGrow: 1, display: "flex", alignContent: "center", flexDirection: "column", justifyContent: "center" }}><StanceLabel type={this.props.tweet.stance_parent}/></Typography>
+                    <Button variant="outlined" color="primary" onClick={() => this.props.viewTweet(this.state.id)}>{this.props.keyword("button_explore_tweet")}</Button>
+                </div>
                 <InnerHTML html={this.state.html} />
-                <Button size="small" style={{color: "white"}} onClick={() => this.props.viewTweet(this.state.id)}>{this.props.keyword("button_explore_tweet")}</Button>
+                
             </div>
         )
     }

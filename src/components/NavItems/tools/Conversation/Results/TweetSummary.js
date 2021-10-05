@@ -11,11 +11,7 @@ import {Box, Button} from "@material-ui/core";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 
-import Typography from "@material-ui/core/Typography";
-
 import Alert from '@material-ui/lab/Alert';
-
-import Plot from 'react-plotly.js';
 
 import { setTweetID }  from "../../../../../redux/actions/tools/conversationActions";
 
@@ -30,16 +26,6 @@ const TweetSummary = () => {
     const dispatch = useDispatch();
 
     const tweet = useSelector(state => state.conversation.tweet);
-
-    const stance = useSelector(state => state.conversation.stance)
-
-    // convert the stance labels to whatever they are in the current language
-    for (var i = 0 ; i < stance["labels"].length ; ++i) {
-        stance["labels"][i] = keyword("stance_"+stance["labels"][i]);
-
-        if (tweet.timeline)
-            tweet.timeline[i]["name"] = keyword("stance_"+tweet.timeline[i]["name"]);
-    }
     
     const submitID = (src) => {
         dispatch(setTweetID(src));
@@ -59,6 +45,7 @@ const TweetSummary = () => {
     }
 
     return (
+        <Box mt={3}>
         <Card>
                 <CardHeader
                     title={keyword("section_tweet_summary")}
@@ -71,7 +58,7 @@ const TweetSummary = () => {
             spacing={3}
             alignItems="flex-start">
             
-            <Grid item xs={4}>
+            <Grid item xs={5}>
 
 
 
@@ -82,42 +69,16 @@ const TweetSummary = () => {
                 
             </Grid>
 
-            <Grid item xs={8}>
+            <Grid item xs={7}>
                 
                     <User user={tweet.user} keyword={keyword} />
 
                     {tweet.reply_count === 0 ? <Alert severity="warning">{keyword("summary_no_replies")}</Alert> : "" }
             </Grid>
         </Grid>
-        {tweet.number_of_replies > 0 ?
-        <Grid
-                container
-                direction="row"
-                spacing={3}
-                alignItems="flex-start">
-
-<Grid item xs={4}>
-                <Typography variant="body1">{keyword("summary_piechart")}</Typography>
-                <Plot style= {{width:"100%"}} data={[stance]} layout={ { autosize:true, showlegend: false }} useResizeHandler={true} config = {{'displayModeBar': false}} />
-                
-                </Grid>
-                <Grid item xs={8}>
-                <Typography variant="body1" paragraph>{keyword("summary_histogram_time")}</Typography>
-                {tweet.timeline ?
-                <Grid
-                container
-                direction="row">
-                    <Typography variant="body1">{keyword("summary_histogram_week")}</Typography>
-                    <Plot style= {{width:"100%"}} data={tweet.timeline} layout={layout} useResizeHandler={true} config = {{'displayModeBar': false}} />
-                    </Grid>
-                    :
-                    <Typography variant="body1">{keyword("summary_histogram_day")}</Typography>
-                }
-                </Grid>
-        </Grid>
-        : null }
         </Box>
         </Card>
+        </Box>
     )
 }
 

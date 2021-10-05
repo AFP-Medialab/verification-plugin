@@ -2,12 +2,13 @@
 title	Twitter Conversation Explorer	Temp	Temp	Temp
 description	This tool aims to provide a simply way to explore a Twitter based conversation. From a starting Tweet you can view, and explore, the replies or the parent Tweet. We also automatically classify replies based on whether they support, refute, query, or just comment on a Tweet. We divide the results into two sections; the top half summaries the Tweet you are currently exploring, whilst the bottom half allows you to interactively explore its replies.	Temp	Temp	Temp
 description_needs_replies	Note that this tool works best for Tweets with a reasonably large number of replies. Analysis of Tweets with just a small handful, or no, replies is unlikely to be particularly enlightening.	Temp	Temp	Temp
-section_explore_from	Start from this Tweet	Temp	Temp	Temp
-section_tweet_summary	Tweet Summary	Temp	Temp 	Temp
-section_replies_explorer	Explore ${tweet.number_of_replies.toLocaleString()} Replies	Temp	Temp	Temp
-button_explore_tweet	Explore Tweet...	Temp	Temp
-button_explore_parent	Explore Parent Tweet...	Temp	Temp
-button_explore_root	Explore Root Tweet...	Temp	Temp
+section_explore_from	Tweet to analyse	Temp	Temp	Temp
+section_tweet_summary	Tweet	Temp	Temp 	Temp
+section_replies_explorer	Responses	Temp	Temp	Temp
+section_statistics	Statistics	Temp	Temp	Temp
+button_explore_tweet	Analyse Tweet	Temp	Temp
+button_explore_parent	Analyse Parent Tweet	Temp	Temp
+button_explore_root	Analyse Root Tweet...	Temp	Temp
 button_refresh	Refresh
 urlbox	What is the URL of the Tweet you want to start exploring from?	Temp	Temp	Temp
 urlbox_placeholder	Paste the Tweet URL here	Temp	Temp	Temp
@@ -24,10 +25,10 @@ table_header_screen_name	Screen Name	Temp	Temp	Temp
 table_header_tweets	Tweets	Temp	Temp	Temp
 table_header_url	URL	URL	URL	URL
 table_header_appearances	Appearances		Temp	Temp	Temp
-stance_support	support	Temp	Temp	Temp
-stance_query	query	Temp	Temp	Temp
-stance_deny	refute	Temp	Temp	Temp
-stance_comment	comment	Temp	Temp	Temp
+stance_support	Support	Temp	Temp	Temp
+stance_query	Query	Temp	Temp	Temp
+stance_deny	Disapprove	Temp	Temp	Temp
+stance_comment	Comment	Temp	Temp	Temp
 stance_any	(all)	Temp	Temp	Temp
 contains_none	(no restriction)	Temp	Temp	Temp
 contains_hashtags	hashtag	Temp	Temp	Temp
@@ -58,3 +59,5 @@ user_tweets	Tweets	Temp	Temp	Temp
 user_lists	Lists	Temp	Temp	Temp
 hashtags_none	There are no hashtags within the selected replies	Temp	Temp	Temp
 urls_none	There are no URLs within the selected replies	Temp	Temp	Temp
+distribution_piechart	Distribution by categories	Temp	Temp	Temp
+distribution_histogram	Distribution over time	Temp	Temp	Temp

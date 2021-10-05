@@ -117,13 +117,13 @@ function* handleConversationTweetID(action) {
         stance.values.push(tweet.stance[entry])
 
         if (entry === "comment")
-		    stance.marker.colors.push("rgb(31, 119, 180)");
+		    stance.marker.colors.push("rgb(3, 155, 229)");
 		else if (entry === "support")
-            stance.marker.colors.push("rgb(44, 160, 44)");
+            stance.marker.colors.push("rgb(124, 179, 66)");
 		else if (entry === "deny")
-            stance.marker.colors.push("rgb(214, 39, 40)");
+            stance.marker.colors.push("rgb(229, 57, 53)");
 		else
-            stance.marker.colors.push("rgb(255, 127, 14)");
+            stance.marker.colors.push("rgb(255, 179, 0)");
     })
 
     // and then put the built object into the state ready for use

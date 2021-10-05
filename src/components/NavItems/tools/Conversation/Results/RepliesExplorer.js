@@ -137,10 +137,10 @@ const RepliesExplorer = () => {
     const filterPercent = 100 * (conversation.number_of_replies / tweet.number_of_replies)
 
     return (
-
+        <Box mt={3}>
         <Card>
             <CardHeader
-                title={evalKeyword("section_replies_explorer")}
+                title={keyword("section_replies_explorer")}
                 className={classes.headerUpladedImage}
             />
             <Box p={3}>
@@ -342,7 +342,7 @@ const RepliesExplorer = () => {
                     : ""}
             </Box>
         </Card>
-
+        </Box>
 
 
     )

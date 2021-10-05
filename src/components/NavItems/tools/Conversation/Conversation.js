@@ -20,6 +20,7 @@ import Typography from "@material-ui/core/Typography";
 import LinearProgress from "@material-ui/core/LinearProgress";
 
 import TweetSummary from "./Results/TweetSummary"
+import TweetStatistics from "./Results/Statistics"
 import RepliesExplorer from "./Results/RepliesExplorer"
 
 import Alert from '@material-ui/lab/Alert';
@@ -116,21 +117,19 @@ const Conversation = () => {
                 </Box>
             </Card>
 
-            <Box m={3} />
-
-            {flashMessage ? <Alert severity={flashType}>{flashMessage} {flashRefresh === true ? <Countdown
+            {flashMessage ? <Box mt={3}><Alert severity={flashType}>{flashMessage} {flashRefresh === true ? <Countdown
     date={Date.now() + 30000}
     renderer={renderer}
     onComplete={() => submitUrl(conversationInputUrl)}  />
-: null }</Alert> : null }
-
-            {flashMessage ? <Box m={3} /> : null}
+: null }</Alert></Box> : null }
 
             {stance && !fail ? <TweetSummary/> : null}
 
-            <Box m={3}/>
+            {stance && !fail && tweet.number_of_replies > 0 ? <TweetStatistics/> : null}
 
             {cloud && conversation && tweet && tweet.number_of_replies > 0 ? <RepliesExplorer/> : null}
+
+            
 
             <LinearProgress hidden={!loading}/>
         </div>
