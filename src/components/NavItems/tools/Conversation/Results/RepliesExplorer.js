@@ -37,6 +37,10 @@ import { Checkbox } from "@material-ui/core";
 
 import StanceLabel from "./StanceLabel"
 
+import { default as HashtagIcon } from "../images/Hashtag";
+import AlternateEmailOutlinedIcon from '@material-ui/icons/AlternateEmailOutlined';
+import LinkOutlinedIcon from '@material-ui/icons//LinkOutlined';
+
 const RepliesExplorer = () => {
 
     const classes = useMyStyles();
@@ -59,7 +63,7 @@ const RepliesExplorer = () => {
     const users = conversation.users
 
     var filter = useSelector(state => state.conversation.filter)
-    const restrict = useSelector(state => state.conversation.restriction)
+    var restrict = useSelector(state => state.conversation.restriction)
 
     function getCallback(callback) {
         return function (word, event) {
@@ -98,8 +102,6 @@ const RepliesExplorer = () => {
     const changeFilter = (event) => {
         const changing = event.target.name;
         
-
-
         if (filter.includes(changing)) {
             filter = filter.filter(item => item !== changing)
         }
@@ -111,7 +113,17 @@ const RepliesExplorer = () => {
     };
 
     const changeRestriction = (event) => {
-        dispatch(setConversationRestriction(event.target.value));
+
+        const changing = event.target.name;
+        
+        if (restrict.includes(changing)) {
+            restrict = restrict.filter(item => item !== changing)
+        }
+        else {
+            restrict.push(changing);
+        }
+
+        dispatch(setConversationRestriction(restrict));
     }
 
     const [openUser, setOpenUser] = React.useState(false);
@@ -150,6 +162,13 @@ const RepliesExplorer = () => {
     // eslint-disable-next-line
     const filterPercent = 100 * (conversation.number_of_replies / tweet.number_of_replies)
 
+    const style = {
+        fill: "black",
+        height: "1.2em",
+        width: "1.2em",
+        verticalAlign:"middle"
+    }
+
     return (
         <Box mt={3}>
         <Card>
@@ -184,7 +203,6 @@ const RepliesExplorer = () => {
 
                         <Grid item xs={6}>
                             <FormControl component="fieldset">
-
                                 <Typography variant="body1">{keyword("replies_filter_stance")}</Typography>
                                 <FormGroup>
                                     <FormControlLabel control={<Checkbox name="comment" onChange={changeFilter} checked={filter.includes("comment")} />} label={<StanceLabel type="comment"/>} labelPlacement="start" />
@@ -198,12 +216,11 @@ const RepliesExplorer = () => {
                         <Grid item xs={6}>
                             <FormControl component="fieldset">
                                 <Typography variant="body1">{keyword("replies_filter_contain")}</Typography>
-                                <RadioGroup row aria-label="contain" name="row-radio-buttons-group" value={restrict} onChange={changeRestriction}>
-                                    <FormControlLabel value="hashtags" control={<Radio />} label={keyword("contains_hashtags")} />
-                                    <FormControlLabel value="user_mentions" control={<Radio />} label={keyword("contains_user_mentions")} />
-                                    <FormControlLabel value="urls" control={<Radio />} label={keyword("contains_urls")} />
-                                    <FormControlLabel value="none" control={<Radio />} label={keyword("contains_none")} />
-                                </RadioGroup>
+                                <FormGroup>
+                                    <FormControlLabel control={<Checkbox name="hashtags" onChange={changeRestriction} checked={restrict.includes("hashtags")} />} label={<span><HashtagIcon style={style}/> {keyword("contains_hashtags")}</span>} labelPlacement="start" />
+                                    <FormControlLabel control={<Checkbox name="user_mentions" onChange={changeRestriction} checked={restrict.includes("user_mentions")} />} label={<span><AlternateEmailOutlinedIcon style={style}/> {keyword("contains_user_mentions")}</span>} labelPlacement="start" />
+                                    <FormControlLabel control={<Checkbox name="urls" onChange={changeRestriction} checked={restrict.includes("urls")} />} label={<span><LinkOutlinedIcon style={style}/> {keyword("contains_urls")}</span>} labelPlacement="start" />
+                                </FormGroup>
                             </FormControl>
                         </Grid>
                     </Grid>

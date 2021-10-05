@@ -8,7 +8,7 @@ const defaultState = {
     conversation: null,
     stance: null,
     filter: ["comment","query","support","deny"],
-    restriction: 'none',
+    restriction: [],
     flashType: null,
     flashMessage: null,
     flashRefresh: false,
