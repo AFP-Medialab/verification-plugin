@@ -7,7 +7,7 @@ const defaultState = {
     tweet: null,
     conversation: null,
     stance: null,
-    filter: 'any',
+    filter: ["comment","query","support","deny"],
     restriction: 'none',
     flashType: null,
     flashMessage: null,

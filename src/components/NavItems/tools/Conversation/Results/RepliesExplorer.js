@@ -21,7 +21,7 @@ import Paper from '@material-ui/core/Paper';
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 
-import { Radio, RadioGroup, FormControl, FormControlLabel } from "@material-ui/core"
+import { Radio, RadioGroup, FormControl, FormControlLabel, FormGroup } from "@material-ui/core"
 
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -33,6 +33,9 @@ import { setTweetID, setConversationFilter, setConversationRestriction } from ".
 
 import TweetList from "./TweetList"
 import User from "./User"
+import { Checkbox } from "@material-ui/core";
+
+import StanceLabel from "./StanceLabel"
 
 const RepliesExplorer = () => {
 
@@ -55,7 +58,7 @@ const RepliesExplorer = () => {
     const urlTableData = conversation.urls
     const users = conversation.users
 
-    const filter = useSelector(state => state.conversation.filter)
+    var filter = useSelector(state => state.conversation.filter)
     const restrict = useSelector(state => state.conversation.restriction)
 
     function getCallback(callback) {
@@ -93,7 +96,18 @@ const RepliesExplorer = () => {
     };
 
     const changeFilter = (event) => {
-        dispatch(setConversationFilter(event.target.value));
+        const changing = event.target.name;
+        
+
+
+        if (filter.includes(changing)) {
+            filter = filter.filter(item => item !== changing)
+        }
+        else {
+            filter.push(changing);
+        }
+
+        dispatch(setConversationFilter(filter));
     };
 
     const changeRestriction = (event) => {
@@ -172,13 +186,12 @@ const RepliesExplorer = () => {
                             <FormControl component="fieldset">
 
                                 <Typography variant="body1">{keyword("replies_filter_stance")}</Typography>
-                                <RadioGroup row aria-label="stance" name="row-radio-buttons-group" value={filter} onChange={changeFilter}>
-                                    <FormControlLabel value="support" control={<Radio />} label={keyword("stance_support")} />
-                                    <FormControlLabel value="deny" control={<Radio />} label={keyword("stance_deny")} />
-                                    <FormControlLabel value="query" control={<Radio />} label={keyword("stance_query")} />
-                                    <FormControlLabel value="comment" control={<Radio />} label={keyword("stance_comment")} />
-                                    <FormControlLabel value="any" control={<Radio />} label={keyword("stance_any")} />
-                                </RadioGroup>
+                                <FormGroup>
+                                    <FormControlLabel control={<Checkbox name="comment" onChange={changeFilter} checked={filter.includes("comment")} />} label={<StanceLabel type="comment"/>} labelPlacement="start" />
+                                    <FormControlLabel control={<Checkbox name="query" onChange={changeFilter} checked={filter.includes("query")} />} label={<StanceLabel type="query"/>} labelPlacement="start" />
+                                    <FormControlLabel control={<Checkbox name="support" onChange={changeFilter} checked={filter.includes("support")} />} label={<StanceLabel type="support"/>} labelPlacement="start" />
+                                    <FormControlLabel control={<Checkbox name="deny" onChange={changeFilter} checked={filter.includes("deny")} />} label={<StanceLabel type="deny"/>} labelPlacement="start" />
+                                </FormGroup>
                             </FormControl>
                         </Grid>
 

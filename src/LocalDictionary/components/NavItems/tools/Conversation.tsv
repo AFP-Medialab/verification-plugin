@@ -43,7 +43,7 @@ more_tweets_prefix	It is likely that we are still collecting and processing repl
 more_tweets_suffix	the page to check for more replies.	Temp	Temp	Temp
 summary_replies_1	This section of the results focuses on the replies to the Tweet you are exploring. Each reply is shown in chronological order. We also automatically classify replies based on whether they support, refute, query, or just comment on a Tweet. This information is used in two ways in this section. Firstly each reply is colour coded to match the automatic labelling (using the same colours as above). Secondly these labels can be used to filter the replies to allow you to focus in on particular types of reply.	Temp	Temp	Temp
 summary_replies_2	Replies can also be filtered to show just those containing a hashtag, a user mention, or a URL or image/video. This could, for example, allow you to focus on replies which refute the Tweet and contain a URL or image.	Temp	Temp	Temp
-replies_filter_stance	Filter replies to show only those that...	Temp	Temp	Temp
+replies_filter_stance	Categories	Temp	Temp	Temp
 replies_filter_contain	and which must contain a...	Temp	Temp	Temp
 replies_filtered	After filtering the are ${conversation.number_of_replies.toLocaleString()} replies (${filterPercent.toFixed().toLocaleString()}% of all replies) to explore.	Temp	Temp	Temp
 hashtags_summary	${hashtagCount} of the selected replies contain the hashtag #${hashtag}.	Temp	Temp	Temp
