@@ -51,6 +51,7 @@ import { ReactComponent as CovidSearchIcon } from "./images/SVG/Search/Covid19.s
 import { ReactComponent as XnetworkIcon } from "./images/SVG/Search/Xnetwork.svg"
 
 import { ReactComponent as TwitterSnaIcon } from "./images/SVG/DataAnalysis/Twitter_sna.svg"
+import { ReactComponent as TwitterConversationIcon } from "./images/SVG/DataAnalysis/Twitter_conversation.svg"
 
 import { ReactComponent as ToolsIcon } from "./images/SVG/Navbar/Tools.svg"
 import { ReactComponent as ClassroomIcon } from "./images/SVG/Navbar/Classroom.svg"
@@ -278,9 +279,9 @@ const NavBar = (props) => {
         {
             title: "navbar_conversation",
             description: "navbar_conversation_description",
-            icon: (drawerValue === 14)  ? <TwitterSnaIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} />
-                                        : <TwitterSnaIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} />,
-            iconColored: <TwitterSnaIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} />,
+            icon: (drawerValue === 14)  ? <TwitterConversationIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} />
+                                        : <TwitterConversationIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} />,
+            iconColored: <TwitterConversationIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} />,
             tsvPrefix: "conversation",
             path: "conversation"
         }

@@ -6,7 +6,7 @@ import tsvConversation from "../../../../LocalDictionary/components/NavItems/too
 
 import { setConversationInput}  from "../../../../redux/actions/tools/conversationActions";
 
-import { ReactComponent as ConversationIcon } from "../../../NavBar/images/SVG/DataAnalysis/Twitter_sna.svg"
+import { ReactComponent as ConversationIcon } from "../../../NavBar/images/SVG/DataAnalysis/Twitter_conversation.svg"
 
 import {Box, Button, TextField} from "@material-ui/core";
 import Card from "@material-ui/core/Card";
@@ -125,11 +125,9 @@ const Conversation = () => {
 
             {stance && !fail ? <TweetSummary/> : null}
 
-            {stance && !fail && tweet.number_of_replies > 0 ? <TweetStatistics/> : null}
-
             {cloud && conversation && tweet && tweet.number_of_replies > 0 ? <RepliesExplorer/> : null}
 
-            
+            {stance && !fail && tweet.number_of_replies > 0 ? <TweetStatistics/> : null}
 
             <LinearProgress hidden={!loading}/>
         </div>

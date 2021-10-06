@@ -7,7 +7,7 @@ import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Conver
 import 'tippy.js/dist/tippy.css';
 import 'tippy.js/animations/scale.css';
 
-import {Box} from "@material-ui/core";
+import {Box, Divider} from "@material-ui/core";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 
@@ -64,13 +64,14 @@ const TweetStatistics = () => {
                 spacing={3}
                 alignItems="flex-start">
 
-<Grid item xs={4} style={{borderRight: "1px solid silver"}}>
+<Grid item xs={4} >
                 <Typography variant="h6"><AboutIcon style={{ fill: "black", height: "1.5em", width: "1.5em", verticalAlign:"text-bottom" }}/> {keyword("distribution_piechart")}</Typography>
                 
                 <Plot style= {{width:"100%"}} data={[stance]} layout={ { autosize:true, showlegend: false }} useResizeHandler={true} config = {{'displayModeBar': false}} />
                 
                 </Grid>
-                <Grid item xs={8}>
+                <Divider orientation="vertical" flexItem />
+                <Grid item xs>
                 <Typography variant="h6"><AboutIcon style={{ fill: "black", height: "1.5em", width: "1.5em", verticalAlign:"text-bottom" }}/> {keyword("distribution_histogram")}</Typography>
                 {tweet.timeline ?
                 
