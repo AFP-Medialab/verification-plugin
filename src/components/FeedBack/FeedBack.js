@@ -1,13 +1,19 @@
-import React from "react";
+import React, { useState } from "react";
 import SlackFeedback from "react-slack-feedback";
 import feedBackTheme from "./feedBackTheme";
 import useLoadLanguage from "../../Hooks/useLoadLanguage";
 import tsv from "../../LocalDictionary/components/FeedBack.tsv";
+import QuestionAnswerOutlinedIcon from '@material-ui/icons/QuestionAnswerOutlined';
+import useMyStyles from "../Shared/MaterialUiStyles/useMyStyles";
 
 
 const FeedBack = () => {
     const API_URL = process.env.REACT_APP_MY_WEB_HOOK_URL;
     const keyword = useLoadLanguage("components/FeedBack.tsv", tsv);
+    const classes = useMyStyles();
+    const [isOpened, setIsOpened] = useState(false);
+    const [classTitle, setClassTitle] = useState(classes.feedbackButtonTitleHide);
+
     const translationJson = {
         "checkbox.option": "Send url with feedback",
         "close": keyword("close"),
@@ -21,7 +27,7 @@ const FeedBack = () => {
         "feedback.type.improvement": keyword("improvement"),
         "feedback.type.bug": keyword("bug"),
         "feedback.type.feature": keyword("feature"),
-        "header.title": keyword("title"),
+        "header.title": <span className={classes.feedbackHeaderTitle}>{keyword("title")}</span>,
         "image.remove": keyword("remove"),
         "label.channel": "Channel",
         "label.message": keyword("message"),
@@ -31,10 +37,10 @@ const FeedBack = () => {
         "submit.sent": keyword("sent"),
         "submit.text": keyword("submit_text"),
         "upload.text": "Attach Image",
-        "trigger.text": keyword("button"),
+        "trigger.text": <span className={classTitle}>{keyword("button")}</span>,
         "footer.text": "React Slack Feedback"
     };
-
+    
     const sendToSlack = (payload, success, error) => {
 
         return fetch(API_URL, {
@@ -53,23 +59,36 @@ const FeedBack = () => {
     };
 
     return (
-        <div>
+        <div 
+            onMouseEnter={e => {
+                setClassTitle(classes.feedbackButtonTitleShow);
+            }}
+            onMouseLeave={e => {
+                if(!isOpened){
+                    setClassTitle(classes.feedbackButtonTitleHide);
+                }
+            }}>
+
             <SlackFeedback
                 disabled={false}
                 errorTimeout={8 * 1000}
                 onClose={() => {
+                    setIsOpened(false);
+                    setClassTitle(classes.feedbackButtonTitleHide);
                 }}
                 onOpen={() => {
+                    setIsOpened(true);
                 }}
                 sentTimeout={5 * 1000}
                 showChannel={false}
-                showIcon={false}
+                showIcon={true}
                 theme={feedBackTheme}
                 onSubmit={(payload, success, error) =>
                     sendToSlack(payload, success, error)
                 }
                 user={"Invid Feed Back"}
                 translations={translationJson}
+                icon={() => <QuestionAnswerOutlinedIcon/>}
             />
         </div>
     )

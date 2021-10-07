@@ -30,6 +30,7 @@ import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
 import SkipNextIcon from '@material-ui/icons/SkipNext';
 import SkipPreviousIcon from '@material-ui/icons/SkipPrevious';
 import Linkify from 'react-linkify';
+import CardMedia from "@material-ui/core/CardMedia";
 
 
 const TwitterResults = (props) => {
@@ -286,8 +287,13 @@ const TwitterResults = (props) => {
 
                         <CloseResult onClick={() => dispatch(cleanAnalysisState())}/>
                         
+                        <CardMedia
+                          className={classes.imageAnalysis}
+                          image={report["image"]["media"][0]}
+                        />
+
                         <Typography variant={"subtitle1"}>
-                            {report["image"]["created_time"]}
+                            {report["image"]["created_at"]}
                         </Typography>
                         
                         <Box m={2}/>
