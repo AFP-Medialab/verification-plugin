@@ -43,7 +43,7 @@ class Tweet extends Component {
             // TODO use our own endpoint so we can cache these in elastic for the right
             //      length of time and generate something similar for the deleted ones
             //      The only downside to that would be the loss of language options
-            "https://publish.twitter.com/oembed?align=center&hide_thread=true&dnt=true&lang="+lang+"&url="+encodeURIComponent("https://twitter.com/"+tweet.user.screen_name+"/status/"+tweet.id)
+            "https://publish.twitter.com/oembed?maxwidth=550&align=center&hide_thread=true&dnt=true&lang="+lang+"&url="+encodeURIComponent("https://twitter.com/"+tweet.user.screen_name+"/status/"+tweet.id)
         )
         .then((response) => {
 
@@ -90,13 +90,14 @@ class Tweet extends Component {
         }
 
         return (
-            <div style={{border: "4px solid "+this.state.color, padding: 15, borderRadius: "12px"}}>
-                <div style={{display: 'flex'}}>
+            <div style={{display: "inline-block", margin: "auto", border: "4px solid "+this.state.color, padding: 15, borderRadius: "12px"}}>
+                <div style={{width:"550px"}}>
+                <div style={{display: 'flex', textAlign:"left"}}>
                     <Typography component="div" style={{ flexGrow: 1, display: "flex", alignContent: "center", flexDirection: "column", justifyContent: "center" }}><StanceLabel type={this.props.tweet.stance_parent}/></Typography>
                     <Button variant="outlined" color="primary" onClick={() => this.props.viewTweet(this.state.id)} style={{border: "2px solid"}}>{this.props.keyword("button_explore_tweet")}</Button>
                 </div>
                 <InnerHTML html={this.state.html} />
-                
+                </div>
             </div>
         )
     }

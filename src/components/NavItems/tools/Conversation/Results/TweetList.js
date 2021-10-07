@@ -6,6 +6,7 @@ import Tweet from "./Tweet"
 const style = {
   padding: 8,
   marginBottom: 4,
+  textAlign: "center"
 };
 
 const endpoint = process.env.REACT_APP_CONVERSATION_API

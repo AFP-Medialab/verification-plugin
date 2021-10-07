@@ -5,7 +5,6 @@ import {default as CommentIcon} from "../images/Comment";
 import {default as SupportIcon} from "../images/Support";
 import {default as QueryIcon} from "../images/Query";
 import {default as DenyIcon} from "../images/Deny";
-import Typography from "@material-ui/core/Typography";
 
 const StanceLabel = ({type}) => {
     
