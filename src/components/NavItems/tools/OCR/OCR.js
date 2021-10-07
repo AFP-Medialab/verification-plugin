@@ -23,7 +23,7 @@ import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import MenuItem from "@material-ui/core/MenuItem";
 import Typography from "@material-ui/core/Typography";
 
-
+//todo: add "copied" popup to ocrresult
 const OCR = () => {
 
     const {url} = useParams();
@@ -39,19 +39,19 @@ const OCR = () => {
 
     const [userInput, setUserInput] = useState(ocrInputUrl);
 
-    const handleScriptChange = (event) => {
-        dispatch(setSelectedScript(event.target.value))
-    };
-
     if (!scripts) {
         dispatch(loadOcrScripts())
     }
 
-    const submitUrl = (src) => {
+    const handleScriptChange = (event) => {
+        dispatch(setSelectedScript(event.target.value))
+    };
+
+    const handleSubmitUrl = (src) => {
         dispatch(setOcrInput(src, selectedScript))
     };
 
-    const uploadImg = (file) => {
+    const handleUploadImg = (file) => {
         if (file.size >= 4000000) {
             dispatch(setOcrErrorKey("ocr_too_big"))
             dispatch(setOcrResult(false, true, false, null))
@@ -67,7 +67,7 @@ const OCR = () => {
         }
     }
 
-    // store changes to the input text box
+    // store any changes to the input text box to local state
     useEffect(() => {
         if (!ocrInputUrl) {
             setUserInput(undefined)
@@ -80,7 +80,7 @@ const OCR = () => {
         if (url && url !== KNOWN_LINKS.OWN) {
             const uri = (url !== null) ? decodeURIComponent(url) : undefined;
             setUserInput(uri);
-            submitUrl(uri)
+            handleSubmitUrl(uri)
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [url]);
@@ -130,7 +130,7 @@ const OCR = () => {
 
                         <Grid item>
                             {!result ?
-                                <Button variant="contained" color="primary" onClick={() => submitUrl(userInput)}>
+                                <Button variant="contained" color="primary" onClick={() => handleSubmitUrl(userInput)}>
                                     {keyword("button_submit") || ""}
                                 </Button>
                                 :
@@ -155,11 +155,9 @@ const OCR = () => {
                             {keyword("button_localfile")}
                         </label>
                         <input id="fileInputMagnifier" type="file" hidden={true} onChange={e => {
-                            uploadImg(e.target.files[0])
+                            handleUploadImg(e.target.files[0])
                         }}/>
                     </Button>
-
-
                 </Box>
             </Card>
 
