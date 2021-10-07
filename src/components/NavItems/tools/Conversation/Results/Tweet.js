@@ -90,10 +90,10 @@ class Tweet extends Component {
         }
 
         return (
-            <div style={{border: "4px solid "+this.state.color, padding: 6, borderRadius: "12px"}}>
+            <div style={{border: "4px solid "+this.state.color, padding: 15, borderRadius: "12px"}}>
                 <div style={{display: 'flex'}}>
                     <Typography component="div" style={{ flexGrow: 1, display: "flex", alignContent: "center", flexDirection: "column", justifyContent: "center" }}><StanceLabel type={this.props.tweet.stance_parent}/></Typography>
-                    <Button variant="outlined" color="primary" onClick={() => this.props.viewTweet(this.state.id)}>{this.props.keyword("button_explore_tweet")}</Button>
+                    <Button variant="outlined" color="primary" onClick={() => this.props.viewTweet(this.state.id)} style={{border: "2px solid"}}>{this.props.keyword("button_explore_tweet")}</Button>
                 </div>
                 <InnerHTML html={this.state.html} />
                 

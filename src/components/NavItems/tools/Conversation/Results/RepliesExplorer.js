@@ -169,9 +169,10 @@ const RepliesExplorer = () => {
 
     const style = {
         fill: "black",
-        height: "1.2em",
-        width: "1.2em",
-        verticalAlign:"middle"
+        height: "0.9em",
+        width: "0.9em",
+        verticalAlign:"middle",
+        marginRight: "15px"
     }
 
     return (
@@ -194,34 +195,118 @@ const RepliesExplorer = () => {
                         spacing={3}
                         alignItems="flex-start">
 
-                        <Grid item xs={2}>
+                        <Grid item xs={3}>
                             <Typography variant="h6">{keyword("filter_by")}</Typography>
-                            <FormControl component="fieldset">
-                                <Typography variant="overline">{keyword("replies_filter_stance")}</Typography>
+                            <Box m={2}/>
+                            <FormControl component="fieldset" style={{width: "100%"}}>
+                                <Typography variant="overline" style={{ color: "#B0B0B0"}}>{keyword("replies_filter_stance")}</Typography>
                                 <FormGroup>
-                                    <FormControlLabel control={<Checkbox color="primary" name="comment" onChange={changeFilter} checked={filter.includes("comment")} />} label={<StanceLabel type="comment"/>} labelPlacement="start" />
-                                    <Box m={1}/>
-                                    <FormControlLabel control={<Checkbox color="primary" name="query" onChange={changeFilter} checked={filter.includes("query")} />} label={<StanceLabel type="query"/>} labelPlacement="start" />
-                                    <Box m={1}/>
-                                    <FormControlLabel control={<Checkbox color="primary" name="support" onChange={changeFilter} checked={filter.includes("support")} />} label={<StanceLabel type="support"/>} labelPlacement="start" />
-                                    <Box m={1}/>
-                                    <FormControlLabel control={<Checkbox color="primary" name="deny" onChange={changeFilter} checked={filter.includes("deny")} />} label={<StanceLabel type="deny"/>} labelPlacement="start" />
+
+                                    <Grid
+                                        container
+                                        direction="row"
+                                        justifyContent="space-between"
+                                        alignItems="center">
+                                        <Grid item xs>
+                                            <StanceLabel type="comment" />
+                                        </Grid>
+                                        <Grid item>
+                                            <FormControlLabel control={<Checkbox color="primary" name="comment" onChange={changeFilter} checked={filter.includes("comment")} />} />
+                                        </Grid>
+                                    </Grid>
+
+
+                                    <Grid
+                                        container
+                                        direction="row"
+                                        justifyContent="space-between"
+                                        alignItems="center">
+                                        <Grid item xs>
+                                            <StanceLabel type="query" />
+                                        </Grid>
+                                        <Grid item>
+                                            <FormControlLabel control={<Checkbox color="primary" name="query" onChange={changeFilter} checked={filter.includes("query")} />} />
+                                        </Grid>
+                                    </Grid>
+
+                                    <Grid
+                                        container
+                                        direction="row"
+                                        justifyContent="space-between"
+                                        alignItems="center">
+                                        <Grid item xs>
+                                            <StanceLabel type="support" />
+                                        </Grid>
+                                        <Grid item>
+                                            <FormControlLabel control={<Checkbox color="primary" name="support" onChange={changeFilter} checked={filter.includes("support")} />} />
+                                        </Grid>
+                                    </Grid>
+
+                                    <Grid
+                                        container
+                                        direction="row"
+                                        justifyContent="space-between"
+                                        alignItems="center">
+                                        <Grid item xs>
+                                            <StanceLabel type="deny" />
+                                        </Grid>
+                                        <Grid item>
+                                            <FormControlLabel control={<Checkbox color="primary" name="deny" onChange={changeFilter} checked={filter.includes("deny")} />} />
+                                        </Grid>
+                                    </Grid>
                                 </FormGroup>
                             </FormControl>
                             <Box m={4}/>
-                            <FormControl component="fieldset">
-                                <Typography variant="overline">{keyword("replies_filter_contain")}</Typography>
+                            <FormControl component="fieldset" style={{ width: "100%" }}>
+                                <Typography variant="overline" style={{ color: "#B0B0B0" }}>{keyword("replies_filter_contain")}</Typography>
                                 <FormGroup>
-                                    <FormControlLabel control={<Checkbox color="primary" name="hashtags" onChange={changeRestriction} checked={restrict.includes("hashtags")} />} label={<span style={{display: "inline-block", minWidth:"15ch"}}><HashtagIcon style={style}/> {keyword("contains_hashtags")}</span>} labelPlacement="start" />
-                                    <Box m={1}/>
-                                    <FormControlLabel control={<Checkbox color="primary" name="user_mentions" onChange={changeRestriction} checked={restrict.includes("user_mentions")} />} label={<span style={{display: "inline-block", minWidth:"15ch"}}><AlternateEmailOutlinedIcon style={style}/> {keyword("contains_user_mentions")}</span>} labelPlacement="start" />
-                                    <Box m={1}/>
-                                    <FormControlLabel control={<Checkbox color="primary" name="urls" onChange={changeRestriction} checked={restrict.includes("urls")} />} label={<span style={{display: "inline-block", minWidth:"15ch"}}><LinkOutlinedIcon style={style}/> {keyword("contains_urls")}</span>} labelPlacement="start" />
-                                </FormGroup>
+                                    <Grid
+                                        container
+                                        direction="row"
+                                        justifyContent="space-between"
+                                        alignItems="center">
+                                        <Grid item xs>
+                                            <span style={{ display: "inline-block", minWidth: "15ch", fontSize: "14px", fontWeight: "600", paddingTop: "12px", paddingBottom: "12px"}}><HashtagIcon style={style} /> {keyword("contains_hashtags")}</span>
+                                        </Grid>
+                                        <Grid item>
+                                            <FormControlLabel control={<Checkbox color="primary" name="hashtags" onChange={changeRestriction} checked={restrict.includes("hashtags")} />} />
+                                        </Grid>
+                                    </Grid>
+
+                                    <Grid
+                                        container
+                                        direction="row"
+                                        justifyContent="space-between"
+                                        alignItems="center">
+                                        <Grid item xs>
+                                            <span style={{ display: "inline-block", minWidth: "15ch", fontSize: "14px", fontWeight: "600", paddingTop: "12px", paddingBottom: "12px"}}><AlternateEmailOutlinedIcon style={style} /> {keyword("contains_user_mentions")}</span>
+                                        </Grid>
+                                        <Grid item>
+                                            <FormControlLabel control={<Checkbox color="primary" name="user_mentions" onChange={changeRestriction} checked={restrict.includes("user_mentions")} />} />
+                                        </Grid>
+                                    </Grid>
+
+                                    <Grid
+                                        container
+                                        direction="row"
+                                        justifyContent="space-between"
+                                        alignItems="center">
+                                        <Grid item xs>
+                                            <span style={{ display: "inline-block", minWidth: "15ch", fontSize: "14px", fontWeight: "600", paddingTop: "12px", paddingBottom: "12px"}}><LinkOutlinedIcon style={style} /> {keyword("contains_urls")}</span>
+                                        </Grid>
+                                        <Grid item>
+                                            <FormControlLabel control={<Checkbox color="primary" name="urls" onChange={changeRestriction} checked={restrict.includes("urls")} />}/>
+                                        </Grid>
+                                    </Grid>
+
+
+
+                                    
+                                    </FormGroup>
                             </FormControl>
                         </Grid>
                     
-                        <Divider orientation="vertical" flexItem variant="middle" style={{marginRight:"-1px", marginLeft: 0}}/>
+                        <Divider orientation="vertical" flexItem variant="middle" style={{marginRight:"-1px", marginLeft: "-16px"}}/>
                         
                         {conversation.number_of_replies > 0 ?
                         <React.Fragment>
@@ -229,11 +314,12 @@ const RepliesExplorer = () => {
 
                             
                                 <Typography variant="h6">{evalKeyword("replies_filtered")}</Typography>
+                                <Box m={2} />
                                 <TweetList conversation={conversation} viewTweet={submitID} height="80vh" keyword={keyword} />
                             
                         </Grid>
                         <Divider orientation="vertical" flexItem variant="middle" style={{marginRight:"-1px", marginLeft: 0}}/>
-                        <Grid item xs={4}>
+                        <Grid item xs={3}>
                             <div style={{ opacity: hashtagCloud.length > 0 ? 1 : 0.5 }}>
                                 <Typography variant="h6">{keyword("the_hashtags")}</Typography>
                                 <Box p={2}><Typography variant="body1">{hashtagCloud.length > 0 ? evalKeyword("summary_hashcloud") : keyword("hashtags_none")}</Typography></Box>
