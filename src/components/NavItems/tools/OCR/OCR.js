@@ -6,12 +6,12 @@ import {Box, Button, TextField} from "@material-ui/core";
 import FolderOpenIcon from '@material-ui/icons/FolderOpen';
 
 import {KNOWN_LINKS} from "../../Assistant/AssistantRuleBook";
-import {setError} from "../../../../redux/actions/errorActions";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/OCR.tsv";
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 
-import {cleanOcr, loadOcrScripts, setOcrB64Img, setOcrInput, setSelectedScript
+import {
+    cleanOcr, loadOcrScripts, setOcrBinaryImage, setOcrErrorKey, setOcrInput, setOcrResult, setSelectedScript
 } from "../../../../redux/actions/tools/ocrActions";
 import OcrResult from "./Results/OcrResult";
 
@@ -22,6 +22,7 @@ import Grid from "@material-ui/core/Grid";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import MenuItem from "@material-ui/core/MenuItem";
 import Typography from "@material-ui/core/Typography";
+
 
 const OCR = () => {
 
@@ -34,8 +35,7 @@ const OCR = () => {
     const ocrInputUrl = useSelector(state => state.ocr.url);
     const selectedScript = useSelector(state => state.ocr.selectedScript)
     const scripts = useSelector(state => state.ocr.scripts)
-    const errorKey = useSelector(state => state.ocr.errorKey);
-    const fail = useSelector(state => state.ocr.fail);
+    const result = useSelector(state => state.ocr.result);
 
     const [userInput, setUserInput] = useState(ocrInputUrl);
 
@@ -43,7 +43,7 @@ const OCR = () => {
         dispatch(setSelectedScript(event.target.value))
     };
 
-    if (!scripts){
+    if (!scripts) {
         dispatch(loadOcrScripts())
     }
 
@@ -51,51 +51,36 @@ const OCR = () => {
         dispatch(setOcrInput(src, selectedScript))
     };
 
-    const uploadImg = (localFile) => {
-        let uploadedImg = new Image();
-
-        uploadedImg.onload = () => {
-            let canvas = document.createElement('canvas');
-            canvas.width = uploadedImg.naturalWidth
-            canvas.height = uploadedImg.naturalHeight
-
-            let canvas_context = canvas.getContext("2d")
-            // canvas_context.scale(0.75, 0.75)
-            canvas_context.drawImage(uploadedImg, 0, 0);
-            // canvas.getContext('2d').drawImage(uploadedImg, 0, 0);
-
-            dispatch(setOcrB64Img(canvas.toDataURL('image/png')))
-            canvas.remove();
-        };
-
-        uploadedImg.onerror = () => {
-            dispatch(setError(keyword("ocr_error")));
-        };
-
-        uploadedImg.src = localFile;
-        setUserInput(localFile)
+    const uploadImg = (file) => {
+        if (file.size >= 4000000) {
+            dispatch(setOcrErrorKey("ocr_too_big"))
+            dispatch(setOcrResult(false, true, false, null))
+        }
+        else {
+            let reader = new FileReader()
+            reader.onload = () => {
+                dispatch(setOcrBinaryImage(reader.result))
+                let localFile = URL.createObjectURL(file)
+                setUserInput(localFile)
+            }
+            reader.readAsBinaryString(file)
+        }
     }
 
+    // store changes to the input text box
     useEffect(() => {
         if (!ocrInputUrl) {
             setUserInput(undefined)
         }
     }, [ocrInputUrl]);
 
-    useEffect(() => {
-        let error_message_key = errorKey ? errorKey : "ocr_error"
-        if (fail) {
-            dispatch(setError(keyword(error_message_key)));
-            dispatch(cleanOcr())
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [fail, errorKey])
 
+    // automatically run if url param in current page url
     useEffect(() => {
         if (url && url !== KNOWN_LINKS.OWN) {
-                const uri = (url !== null) ? decodeURIComponent(url) : undefined;
-                setUserInput(uri);
-                submitUrl(uri)
+            const uri = (url !== null) ? decodeURIComponent(url) : undefined;
+            setUserInput(uri);
+            submitUrl(uri)
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [url]);
@@ -103,7 +88,8 @@ const OCR = () => {
 
     return (
         <div>
-            <HeaderTool name={keywordAllTools("navbar_ocr")} description={keywordAllTools("navbar_ocr_description")} icon={<OCRIcon style={{ fill: "#51A5B2" }} />} />
+            <HeaderTool name={keywordAllTools("navbar_ocr")} description={keywordAllTools("navbar_ocr_description")}
+                        icon={<OCRIcon style={{fill: "#51A5B2"}}/>}/>
 
             <Card>
                 <CardHeader
@@ -132,7 +118,8 @@ const OCR = () => {
 
                         {scripts ?
                             <Grid item>
-                                <TextField select variant={"outlined"} label= {keyword("ocr_script_label")} value={selectedScript}
+                                <TextField select variant={"outlined"} label={keyword("ocr_script_label")}
+                                           value={selectedScript}
                                            onChange={(e) => handleScriptChange(e)}>
                                     {Object.keys(scripts).map(code =>
                                         <MenuItem key={code} value={code}>{scripts[code]}</MenuItem>)
@@ -142,38 +129,43 @@ const OCR = () => {
                             : null}
 
                         <Grid item>
-                            <Button variant="contained" color="primary" onClick={() => submitUrl(userInput)}>
-                                {keyword("button_submit") || ""}
-                            </Button>
-
+                            {!result ?
+                                <Button variant="contained" color="primary" onClick={() => submitUrl(userInput)}>
+                                    {keyword("button_submit") || ""}
+                                </Button>
+                                :
+                                <Button variant="contained" color="primary" onClick={() => dispatch(cleanOcr())}>
+                                    {keyword("button_remove")}
+                                </Button>
+                            }
                         </Grid>
 
                     </Grid>
 
-                    <Box m={2} />
+                    <Box m={2}/>
 
                     <Typography>
                         {keyword("ocr_script_use")}
                     </Typography>
 
 
-                    <Box m={2} />
-                    <Button startIcon={<FolderOpenIcon />} >
+                    <Box m={2}/>
+                    <Button startIcon={<FolderOpenIcon/>}>
                         <label htmlFor="fileInputMagnifier">
                             {keyword("button_localfile")}
                         </label>
                         <input id="fileInputMagnifier" type="file" hidden={true} onChange={e => {
-                            uploadImg(URL.createObjectURL(e.target.files[0]))
+                            uploadImg(e.target.files[0])
                         }}/>
                     </Button>
-                    
+
 
                 </Box>
             </Card>
 
-            <Box m={3} />
+            <Box m={3}/>
 
-            {ocrInputUrl && !fail ? <OcrResult/> : null}
+            {ocrInputUrl ? <OcrResult/> : null}
         </div>
     )
 };

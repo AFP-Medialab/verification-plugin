@@ -422,6 +422,33 @@ const useMyStyles = makeStyles(theme => ({
             borderColor: theme.palette.primary.main,
         }
     },
+    ocrImageCard: {
+        justifyContent: "center",
+        display: "flex"
+    },
+    ocrImageDiv: {
+        position: "relative"
+    },
+    ocrImageCanvas: {
+        position: "absolute",
+        left: 0
+    },
+    ocrImage:{
+        objectFit: "contain",
+        position:  "relative",
+        maxHeight:"48vh",
+    },
+    ocrActionArea:{
+        justifyContent: "right",
+        display: "flex"
+    },
+    ocrButton:{
+      borderWidth: "medium",
+      marginRight: "10px"
+    },
+    fontBold:{
+        fontWeight: "bold"
+    },
     customAllToolsButton: {
         padding: 0,
         minHeight:0,

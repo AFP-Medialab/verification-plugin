@@ -7,23 +7,24 @@ export const setOcrInput = (url) => {
     }
 };
 
-export const setOcrB64Img = (b64EncodedImg) => {
+export const setOcrBinaryImage = (binaryImage) => {
     return {
-        type: "SET_B64_IMG",
+        type: "SET_IMAGE_BINARY",
         payload: {
-            b64Image: b64EncodedImg,
+            binaryImage: binaryImage,
         }
     }
 };
 
-export const setOcrResult = (loading, fail, done, result) => {
+export const setOcrResult = (loading, fail, done, result, fullText) => {
     return {
         type: "SET_OCR_RESULT",
         payload: {
             loading: loading,
             fail: fail,
             done: done,
-            result: result
+            result: result,
+            fullText: fullText
         }
     }
 }

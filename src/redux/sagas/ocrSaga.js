@@ -16,28 +16,33 @@ function* handleOcrCall(action) {
     if (action.type === "CLEAN_STATE") return
 
     const inputUrl = yield select(state => state.ocr.url);
-    const b64Encoding =  yield select(state => state.ocr.b64Image);
+    const binaryImage =  yield select(state => state.ocr.binaryImage);
     const script =  yield select(state => state.ocr.selectedScript);
+    const uploadMode = "upload"
+    const urlMode = "url"
+    let fullText =""
 
     try {
         yield put(setOcrResult(true, false, false, null))
         let ocrResult = []
 
-        if (b64Encoding) {
-            let image = b64Encoding.substr(22)
-            let decoded_image = atob(image)
-            checkImageSize(decoded_image)
-            ocrResult = yield call(assistantApi.callOcrService,  decoded_image, script, "upload")
+        if (binaryImage) {
+            ocrResult = yield call(assistantApi.callOcrService, binaryImage, script, uploadMode)
         }
         else{
-            ocrResult = yield call(assistantApi.callOcrService, inputUrl, script, "url")
+            ocrResult = yield call(assistantApi.callOcrService, inputUrl, script, urlMode)
         }
-        yield put(setOcrResult(false, false, true, ocrResult))
+
+        if(ocrResult.bounding_boxes) {
+            ocrResult.bounding_boxes.forEach((value, key) => {
+                fullText = fullText + " " + value.text
+            })
+        }
+
+        yield put(setOcrResult(false, false, true, ocrResult, fullText))
     } catch (error) {
         console.log(error)
-        if(error.message==="ocr_too_big"){
-            yield put (setOcrErrorKey("ocr_too_big"))
-        } else if (error.message==="Network Error") {
+        if (error.message==="Network Error") {
             yield put (setOcrErrorKey("service_error"))
         }
         yield put(setOcrResult(false, true, false, null))
@@ -51,12 +56,6 @@ function* loadOcrScripts () {
     }
     catch(error){
         console.log(error)
-    }
-}
-
-function checkImageSize (decoded_image) {
-    if(decoded_image.length > 4000000){
-        throw  Error("ocr_too_big")
     }
 }
 

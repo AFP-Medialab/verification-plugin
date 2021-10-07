@@ -1,198 +1,268 @@
-import React, {useEffect, useRef} from "react";
+import React, {useEffect} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import Card from "@material-ui/core/Card";
-import CardMedia from "@material-ui/core/CardMedia";
-import Divider from "@material-ui/core/Divider";
-import Grid from "@material-ui/core/Grid";
-import LinearProgress from "@material-ui/core/LinearProgress";
-import Typography from "@material-ui/core/Typography";
 
-import CloseResult from "../../../../Shared/CloseResult/CloseResult";
-import history from "../../../../Shared/History/History";
-import OnClickInfo from "../../../../Shared/OnClickInfo/OnClickInfo";
-import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
-
-import {cleanOcr} from "../../../../../redux/actions/tools/ocrActions";
-import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
-import tsv from "../../../../../LocalDictionary/components/NavItems/tools/OCR.tsv";
 import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
+import Card from "@material-ui/core/Card";
+import {CardContent} from "@material-ui/core";
 import CardHeader from "@material-ui/core/CardHeader";
+import Divider from "@material-ui/core/Divider";
+import FileCopyOutlined from "@material-ui/icons/FileCopy"
+import Grid from "@material-ui/core/Grid";
 import IconButton from "@material-ui/core/IconButton";
-import TableContainer from "@material-ui/core/TableContainer";
-import Table from "@material-ui/core/Table";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import TableCell from "@material-ui/core/TableCell";
-import GTranslateIcon from '@material-ui/icons/GTranslate';
-import TableBody from "@material-ui/core/TableBody";
+import LinearProgress from "@material-ui/core/LinearProgress";
+import TranslateIcon from '@material-ui/icons/Translate';
+import Typography from "@material-ui/core/Typography";
+
+import tsv from "../../../../../LocalDictionary/components/NavItems/tools/OCR.tsv";
+import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
+import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
+import {setError} from "../../../../../redux/actions/errorActions";
+import {cleanOcr} from "../../../../../redux/actions/tools/ocrActions";
+
 
 const OcrResult = () => {
 
     const classes = useMyStyles();
+    const dispatch = useDispatch();
     const keyword = useLoadLanguage("components/NavItems/tools/OCR.tsv", tsv);
 
     const inputUrl = useSelector(state => state.ocr.url);
     const loading = useSelector(state => state.ocr.loading);
     const result = useSelector(state => state.ocr.result);
-    const dispatch = useDispatch();
-    const canvas_ref = useRef();
-    const card_ref = useRef();
+    const fullText = useSelector(state => state.ocr.fullText)
+    const fail = useSelector(state => state.ocr.fail);
+    const errorKey = useSelector(state => state.ocr.errorKey);
 
+    const canvasPrefix = "cropCanvas"
+    const imgPrefix = "cropImage"
+    const mainCanvasId = "ocrMainCanvasId"
+    const mainImageId = "ocrMainImageId"
 
-    const reversesearchYandex = function (url) {
-        let search_url = "https://yandex.com/images/search?rpt=imageview&from=tabbar&url=" + url;
-        if (url !== "") {
-            window.open(search_url);
-        }
-    };
+    // draw bounding boxes on image
+    const drawBoundingBoxes = (boundingBoxes) => {
+        const img = document.getElementById(mainImageId)
+        const canvas = document.getElementById(mainCanvasId)
 
-    const reversesearchBing = function (url) {
-        let search_url = "https://www.bing.com/images/search?view=detailv2&iss=sbi&form=SBIIRP&sbisrc=ImgDropper&q=imgurl:" + url;
-        if (url !== "") {
-            window.open(search_url);
-        }
-    };
-
-    const googleTranslate = function (text) {
-        let translate_url = "https://translate.google.co.uk/?sl=auto&text=" + encodeURIComponent(text)  +"&op=translate"
-        window.open(translate_url, "_blank")
-    }
-
-    const generateImageCanvas = () => {
-        const canvas = canvas_ref.current
-        const context = canvas.getContext('2d')
-        let img = new Image()
+        const context = canvas.getContext("2d")
 
         img.onload = () => {
-            let img_width = (card_ref.current.offsetWidth/2)
-            let img_scale = img_width/img.width
-            let img_height = Math.ceil(img.height * img_scale)
-            
-            img.width = img_width
-            img.height = img_height
+            canvas.height = img.height
+            canvas.width = img.width
 
-            canvas.width = img_width
-            canvas.height = img_height
+            let img_scale = img.width / img.naturalWidth
 
-            context.drawImage(img, 0, 0, img_width, img_height)
+            boundingBoxes.map((text, index) => {
+                let boundingBox = text.bounding_box
 
-            context.strokeStyle = 'red'
-            context.lineWidth = 3
-            context.fillStyle = 'black'
-            context.font = 'bold 20px serif'
+                // the first co-ordinate is the top left hand corner
+                let x = boundingBox[0][0] * img_scale;
+                let y = boundingBox[0][1] * img_scale;
 
-            if (result && result.length) {
-                result.map((text, index) => {
-                    let bounding_box = text.bounding_box
-                    // we are assuming that the first co-ordinate is the top left hand corner
-                    let x = bounding_box[0][0] * img_scale ;
-                    let y = bounding_box[0][1] * img_scale;
+                // and the third is the bottom right so we can use that to work out width and height
+                let w = (boundingBox[2][0] * img_scale) - x;
+                let h = (boundingBox[2][1] * img_scale) - y;
 
-                    // and the third is the bottom right so we can use that to work out width and height
-                    let w = (bounding_box[2][0] * img_scale) - x;
-                    let h = (bounding_box[2][1] * img_scale) - y;
+                context.strokeStyle = 'lime'
+                context.fillStyle = 'lime'
+                context.lineWidth = 3
+                context.strokeRect(x, y, w, h)
 
-
-                    context.strokeRect(x, y, w, h)
-                    context.strokeText(index + 1, x + 3, y + 25)
-                    context.fillText(index + 1, x + 3, y + 25)
-                    return context
-                })
-            }
+                context.strokeStyle = "red"
+                context.fillStyle = "red"
+                context.font = '20px serif'
+                context.strokeText(index + 1, x + 3, y + 25)
+                return 0
+            })
         }
+
         img.src = inputUrl
     }
 
-    window.addEventListener("resize", generateImageCanvas)
 
-    // rebuild image with bounding boxes if result changes
+    // crop given image to display only the part in the given bounding box
+    const cropImage = (img, boundingBox, index) => {
+        // element 0 has top left hand coords of bounding boxes
+        let x = boundingBox[0][0];
+        let y = boundingBox[0][1];
+
+        // element 2 has bottom right hand coords. hence width/height easy to do.
+        let width = (boundingBox[2][0]) - x;
+        let height = (boundingBox[2][1]) - y;
+
+        // adjusting size to fit image size on UI rather than orig image size
+        let scaleFactor = img.width / img.naturalWidth
+        let scaledWidth = width * scaleFactor
+        let scaledHeight = height * scaleFactor
+
+        // get the canvas we should be redrawing on
+        let drawingCanvas = document.getElementById(canvasPrefix + index)
+        let context = drawingCanvas.getContext("2d")
+
+        // and draw the relevant part of the image, scaled to the right size
+        drawingCanvas.height = scaledHeight
+        drawingCanvas.width = scaledWidth
+        drawingCanvas.style.border = "3px solid lime"
+        context.drawImage(img, x, y, width, height, 0, 0, scaledWidth, scaledHeight)
+
+        img.hidden = true
+    }
+
+    // if the image (or really pixel) size changes, the bounding boxes and image crops need recalculation
+    const handleImageResizing = () => {
+        if (result && result.bounding_boxes.length) {
+            drawBoundingBoxes(result.bounding_boxes)
+            result.bounding_boxes.map((text, index) => {
+                let img = document.getElementById(imgPrefix + index)
+                img.hidden = false
+                let bbox = text.bounding_box
+                cropImage(img, bbox, index)
+                return 0
+            })
+        }
+    }
+
+    // forward text on to google translate
+    const googleTranslate = function (text) {
+        let translate_url = "https://translate.google.co.uk/?sl=auto&text=" + encodeURIComponent(text) + "&op=translate"
+        window.open(translate_url, "_blank")
+    }
+
+
+    //copy text to clipboard
+    const copyText = (text) => {
+        navigator.clipboard.writeText(text)
+    }
+
     useEffect(() => {
-        generateImageCanvas()
+        let error_message_key = errorKey ? errorKey : "ocr_error"
+        if (fail) {
+            dispatch(setError(keyword(error_message_key)));
+            dispatch(cleanOcr())
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [result, inputUrl])
+    }, [fail, errorKey])
+
+    // when the result comes in, draw the bounding boxes and add the event listener for changes to image size
+    useEffect(() => {
+        if (result && result.bounding_boxes.length) {
+            drawBoundingBoxes(result.bounding_boxes)
+
+            //add and remove listener on result change: react state variables don't update on native DOM listeners!
+            window.addEventListener('resize', handleImageResizing);
+            return () => {
+                console.log("removing")
+                window.removeEventListener('resize', handleImageResizing)
+            };
+        }
+        // eslint-disable-next-line
+    }, [result])
 
 
     return (
-        <Card>
-            <CardHeader
-                title={keyword("cardheader_results")}
-                className={classes.headerUpladedImage}
-            />
+        <Grid container spacing={4} >
+            <Grid item xs={6}>
+                <Card variant={"outlined"}>
+                    <CardHeader
+                        title={keyword("image_analysed")}>
+                    </CardHeader>
+                    <LinearProgress hidden={!loading}/>
+                    <CardContent className={classes.ocrImageCard}>
+                        <div className={classes.ocrImageDiv}>
+                            <img id={mainImageId}
+                                 crossOrigin={"anonymous"}
+                                 className={classes.ocrImage}
+                                 src={inputUrl}
+                                 alt={"input for ocr"}
+                            >
+                            </img>
+                            <canvas id={mainCanvasId} className={classes.ocrImageCanvas}/>
+                        </div>
+                    </CardContent>
+                </Card>
+            </Grid>
+            <Grid item xs={6} hidden={!result}>
+                <Card>
+                    <CardHeader
+                        title={keyword("extracted_text")}>
+                    </CardHeader>
+                    <CardContent>
+                        <Typography variant={"subtitle1"} className={classes.fontBold}>
+                            {keyword("complete_text")}
+                        </Typography>
 
-            <div className={classes.root2}>
-                <CloseResult onClick={() => {
-                    dispatch(cleanOcr())
-                    history.push("/app/tools/ocr");
-                }}/>
-                <Grid container justifyContent={"center"}>
-                    <Card ref={card_ref} variant={"outlined"} style={{"width": "60%"}}>
-                        <CardMedia>
-                            <LinearProgress hidden={!loading}/>
-                            <canvas ref={canvas_ref}/>
-                        </CardMedia>
-                        <Divider variant={"middle"}/>
-                        {result  ?
+                        <Box m={2}/>
+
+                        <Typography>
+                            {fullText}
+                        </Typography>
+
+                        <Box mt={4} mb={4}>
+                            <Button className={classes.ocrButton}
+                                    variant={"outlined"}
+                                    color={"primary"}
+                                    onClick={() => {copyText(fullText)}}>
+                                <FileCopyOutlined style={{"marginRight": "10px"}}/>{keyword("copy_to_clipboard")}
+                            </Button>
+
+
+                            <Button className={classes.ocrButton}
+                                    variant={"outlined"}
+                                    color={"primary"}
+                                    onClick={() => {googleTranslate(fullText)}}>
+                                <TranslateIcon className={classes.ocrButton}/>{keyword("translate")}
+                            </Button>
+                        </Box>
+
+                        <Box mt={2} mb={2}>
+                            <Typography variant={"subtitle1"} className={classes.fontBold}>
+                                {keyword("blocks")}
+                            </Typography>
+                        </Box>
+
+                        {result ?
                             result.bounding_boxes.length ?
-                                <TableContainer>
-                                    <Table size="small">
-                                        <TableHead>
-                                            <TableRow>
-                                                <TableCell style={{fontWeight: "bold"}} align="left">{keyword("table_box")}</TableCell>
-                                                <TableCell style={{fontWeight: "bold"}} align="left">{keyword("table_text")}</TableCell>
-                                                <TableCell style={{fontWeight: "bold"}} align="left">{keyword("table_language")} {keyword("table_confidence")}</TableCell>
-                                                <TableCell style={{fontWeight: "bold"}} align="left">{keyword("table_script")} {keyword("table_confidence")}</TableCell>
-                                                <TableCell style={{fontWeight: "bold"}} align="left">{keyword("table_translate")}</TableCell>
+                                result.bounding_boxes.map((ocrResult, index) => (
+                                    <Grid container spacing={2} key={index}>
 
-                                            </TableRow>
-                                        </TableHead>
-                                        <TableBody>
-                                            {result.bounding_boxes.map((ocrResult, index) => (
-                                                <TableRow key={index}>
-                                                    <TableCell align="left">{index + 1}</TableCell>
-                                                    <TableCell align="left">{ocrResult.text}</TableCell>
-                                                    <TableCell align="left">
-                                                        {ocrResult.language.name} ({(ocrResult.language.probability * 100).toFixed(2)})
-                                                    </TableCell>
-                                                    <TableCell align="left">
-                                                        {(ocrResult.script.name)} ({(ocrResult.script.probability * 100).toFixed(2)})
-                                                    </TableCell>
-                                                    <TableCell align="left">
-                                                        <IconButton onClick={()=>googleTranslate(ocrResult.text)}>
-                                                            <GTranslateIcon color={"action"}/>
-                                                        </IconButton>
-                                                    </TableCell>
-                                                </TableRow>
-                                            ))}
-                                        </TableBody>
-                                    </Table>
-                                </TableContainer>
-                                :<Typography variant={"h5"}>{keyword("ocr_no_text")}</Typography>
-                            :null
+                                        <Grid item xs={6}>
+                                            <img id={imgPrefix + index}
+                                                 alt={"bounding box" + index}
+                                                 src={inputUrl}
+                                                 width={"100%"}
+                                                 onLoad={(imgEvent) =>
+                                                     cropImage(imgEvent.target, ocrResult.bounding_box, index)}
+
+                                            />
+                                            <canvas id={canvasPrefix + index}/>
+                                        </Grid>
+
+                                        <Grid item xs={6}>
+                                            <Typography>{ocrResult.text}</Typography>
+                                        </Grid>
+
+                                        <Grid item xs={12} className={classes.ocrActionArea}>
+                                            <IconButton onClick={() => copyText(ocrResult.text)}>
+                                                <FileCopyOutlined color={"primary"}/>
+                                            </IconButton>
+                                            <IconButton onClick={() => googleTranslate(ocrResult.text)}>
+                                                <TranslateIcon color={"primary"}/>
+                                            </IconButton>
+                                        </Grid>
+
+                                        <Grid item xs={12}>
+                                            <Divider/>
+                                        </Grid>
+
+                                    </Grid>
+                                ))
+                                : <Typography variant={"h5"}>{keyword("ocr_no_text")}</Typography>
+                            : null
                         }
-                    </Card>
-                </Grid>
-                <Box m={2}/>
-                <Grid>
-                    <OnClickInfo keyword={"ocr_tip"}/>
-                </Grid>
-                <Box m={2}/>
-                <Grid container justifyContent="center" spacing={5} alignContent={"center"}>
-                    <Grid item>
-                        <Button variant="contained" color={"primary"} onClick={() => reversesearchYandex(inputUrl)}>
-                            {keyword("ocr_search_yandex")}
-                        </Button>
-                    </Grid>
-                    <Grid item>
-                        <Button variant="contained" color={"primary"} onClick={() => reversesearchBing(inputUrl)}>
-                            {keyword("ocr_search_bing")}
-                        </Button>
-                    </Grid>
-                </Grid>
-
-            </div>
-
-        </Card>
+                    </CardContent>
+                </Card>
+            </Grid>
+        </Grid>
     )
 }
 export default OcrResult;
