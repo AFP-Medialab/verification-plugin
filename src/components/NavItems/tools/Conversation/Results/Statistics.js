@@ -70,8 +70,8 @@ const TweetStatistics = () => {
                 <Plot style= {{width:"100%"}} data={[stance]} layout={ { autosize:true, showlegend: false }} useResizeHandler={true} config = {{'displayModeBar': false}} />
                 
                 </Grid>
-                <Divider orientation="vertical" flexItem />
-                <Grid item xs>
+                <Divider orientation="vertical" flexItem variant="middle" style={{marginRight:"-1px", marginLeft:0}}/>
+                <Grid item xs={8}>
                 <Typography variant="h6"><AboutIcon style={{ fill: "black", height: "1.5em", width: "1.5em", verticalAlign:"text-bottom" }}/> {keyword("distribution_histogram")}</Typography>
                 {tweet.timeline ?
                 

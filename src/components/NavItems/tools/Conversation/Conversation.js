@@ -72,9 +72,7 @@ const Conversation = () => {
   
     return (
         <div>
-            <HeaderTool name={keyword("title")} icon={<ConversationIcon style={{ fill: "#51A5B2" }} />} />
-            <Typography variant="body1" paragraph>{keyword("description")}</Typography>
-            <Typography variant="body1" paragraph>{keyword("description_needs_replies")}</Typography>
+            <HeaderTool name={keyword("title")} description={keyword("description")} icon={<ConversationIcon style={{ fill: "#51A5B2" }} />} />
             <Card>
                 <CardHeader
                     title={keyword("section_explore_from")}

@@ -1,7 +1,6 @@
 	en	fr	es	el
-title	Twitter Conversation Explorer	Temp	Temp	Temp
-description	This tool aims to provide a simply way to explore a Twitter based conversation. From a starting Tweet you can view, and explore, the replies or the parent Tweet. We also automatically classify replies based on whether they support, refute, query, or just comment on a Tweet. We divide the results into two sections; the top half summaries the Tweet you are currently exploring, whilst the bottom half allows you to interactively explore its replies.	Temp	Temp	Temp
-description_needs_replies	Note that this tool works best for Tweets with a reasonably large number of replies. Analysis of Tweets with just a small handful, or no, replies is unlikely to be particularly enlightening.	Temp	Temp	Temp
+title	Twitter Conversation	Temp	Temp	Temp
+description	It explores and analyzes the replies of a tweet classifying them, offering statistics and tools to filter the tweet responses.	Temp	Temp	Temp
 section_explore_from	Tweet to analyse	Temp	Temp	Temp
 section_tweet_summary	Tweet	Temp	Temp 	Temp
 section_replies_explorer	Responses	Temp	Temp	Temp
@@ -13,8 +12,6 @@ button_refresh	Refresh
 urlbox	What is the URL of the Tweet you want to start exploring from?	Temp	Temp	Temp
 urlbox_placeholder	Paste the Tweet URL here	Temp	Temp	Temp
 summary_no_replies	No one has replied to this tweet so there is no further analysis we can perform.	Temp	Temp	Temp
-summary_replies_processed	We have currently processed ${tweet.number_of_replies.toLocaleString()} replies to the currently selected tweet.	Temp	Temp	Temp
-summary_piechart	We automatically assign one of four possible labels to each reply based on how they support, refute, query, or just comment on the Tweet. This pie chart shows the proportion of these labels across all the replies to this Tweet which we have processed so far.	Temp	Temp
 summary_histogram_time	Replies clearly don't all happen at once and it's useful to be able to see how the volume of replies, as well as how they relate to the Tweet, changes over time.	Temp	Temp	Temp
 summary_histogram_week	This histogram allows you to do both, and initially shows the first week after the selected tweet was published. If replies were posted outside the initial week, then you can adjust the graph to view these, either by dragging the x-axis or, if the replies occur over a very long period, using the range selector shown below the graph.	Temp	Temp	Temp
 summary_histogram_day	In this case, however, all the replies occurred on the same day so the pie chart gives a clearer breakdown than a histogram would.	Temp	Temp	Temp
@@ -29,19 +26,16 @@ stance_support	Support	Temp	Temp	Temp
 stance_query	Query	Temp	Temp	Temp
 stance_deny	Disapprove	Temp	Temp	Temp
 stance_comment	Comment	Temp	Temp	Temp
-contains_none	(no restriction)	Temp	Temp	Temp
 contains_hashtags	Hashtag	Temp	Temp	Temp
 contains_user_mentions	User mention	Temp	Temp	Temp
 contains_urls	URL or media	Temp	Temp	Temp
-user_overview	Joined Twitter ${this.state.account_age} days ago on the ${this.state.created_at} and averages ${this.state.tweets_per_day} tweets a day.	Temp	Temp	Temp
-filter_by	Filter by	Temp	Temp	Temp
+user_overview	Joined Twitter on the ${this.state.created_at} - ${this.state.account_age} days ago	Temp	Temp	Temp
 the_hashtags	Hashtags	Temp	Temp
 the_people	Users	Temp	Temp	Temp
 the_urls	URLs	Temp	Temp	Temp
 more_tweets_prefix	It is likely that we are still collecting and processing replies for this tweet. You can	Temp	Temp	Temp
 more_tweets_suffix	the page to check for more replies.	Temp	Temp	Temp
-summary_replies_1	This section of the results focuses on the replies to the Tweet you are exploring. Each reply is shown in chronological order. We also automatically classify replies based on whether they support, refute, query, or just comment on a Tweet. This information is used in two ways in this section. Firstly each reply is colour coded to match the automatic labelling (using the same colours as above). Secondly these labels can be used to filter the replies to allow you to focus in on particular types of reply.	Temp	Temp	Temp
-summary_replies_2	Replies can also be filtered to show just those containing a hashtag, a user mention, or a URL or image/video. This could, for example, allow you to focus on replies which refute the Tweet and contain a URL or image.	Temp	Temp	Temp
+filter_by	Filter by	Temp	Temp	Temp
 replies_filter_stance	Categories	Temp	Temp	Temp
 replies_filter_contain	Contains	Temp	Temp	Temp
 replies_filtered	${conversation.number_of_replies.toLocaleString()} Tweets (${filterPercent.toFixed().toLocaleString()}%)	Temp	Temp	Temp
@@ -56,6 +50,7 @@ user_following	Following	Temp	Temp	Temp
 user_followers	Followers	Temp	Temp	Temp
 user_tweets	Tweets	Temp	Temp	Temp
 user_lists	Lists	Temp	Temp	Temp
+user_tweets_average	Tweets/Day	Temp	Temp	Temp
 hashtags_none	There are no hashtags within the selected replies	Temp	Temp	Temp
 urls_none	There are no URLs within the selected replies	Temp	Temp	Temp
 distribution_piechart	Distribution by categories	Temp	Temp	Temp

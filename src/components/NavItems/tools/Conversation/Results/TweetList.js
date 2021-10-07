@@ -83,13 +83,14 @@ class TweetList extends Component {
     }
 
     render() {
+
         return (
             <InfiniteScroll
             dataLength={this.state.items.length}
             next={this.fetchMoreData}
             hasMore={this.state.hasMore}
             loader={<h4>{this.props.keyword("tweets_loading")}</h4>}
-            height={500}
+            height={this.props.height ? this.props.height : 500}
             endMessage={
                 <p style={{ textAlign: "center" }}>
                 <b>{this.props.keyword("tweets_all")}</b>

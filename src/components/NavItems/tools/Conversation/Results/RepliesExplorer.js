@@ -21,7 +21,7 @@ import Paper from '@material-ui/core/Paper';
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 
-import { Radio, RadioGroup, FormControl, FormControlLabel, FormGroup } from "@material-ui/core"
+import { FormControl, FormControlLabel, FormGroup } from "@material-ui/core"
 
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -40,6 +40,8 @@ import StanceLabel from "./StanceLabel"
 import { default as HashtagIcon } from "../images/Hashtag";
 import AlternateEmailOutlinedIcon from '@material-ui/icons/AlternateEmailOutlined';
 import LinkOutlinedIcon from '@material-ui/icons//LinkOutlined';
+
+import { ReactComponent as AboutIcon } from "../../../../NavBar/images/SVG/Navbar/About.svg"
 
 const RepliesExplorer = () => {
 
@@ -159,6 +161,8 @@ const RepliesExplorer = () => {
 
     const moreTweets = (tweet.number_of_replies / tweet.reply_count) < 0.5;
 
+    console.log(window.innerHeight);
+
     // eslint-disable-next-line
     const filterPercent = 100 * (conversation.number_of_replies / tweet.number_of_replies)
 
@@ -174,20 +178,13 @@ const RepliesExplorer = () => {
         <Card>
             <CardHeader
                 title={keyword("section_replies_explorer")}
+                action={<AboutIcon style={{ fill: "white", height: 30, width: 30, paddingTop: 9, verticalAlign:"text-bottom" }}/>}
                 className={classes.headerUpladedImage}
             />
             <Box p={3}>
             {moreTweets ?
-                <Grid
-                    container
-                    direction="row"
-                    spacing={3}
-                    alignItems="flex-start">
-
-                    
-                         <Grid item xs={12}><Alert severity="info">{keyword("more_tweets_prefix")} <Button size="small" variant="outlined" onClick={() => submitID(tweet.id)}>{keyword("button_refresh")}</Button> {keyword("more_tweets_suffix")}</Alert></Grid>
-                    
-                </Grid>
+            <Box mb={3}><Alert severity="info">{keyword("more_tweets_prefix")} <Button size="small" variant="outlined" onClick={() => submitID(tweet.id)}>{keyword("button_refresh")}</Button> {keyword("more_tweets_suffix")}</Alert></Box>
+            
                 : null }
                 
                     <Grid
@@ -218,23 +215,23 @@ const RepliesExplorer = () => {
                             </FormControl>
                         </Grid>
                     
-                        <Divider orientation="vertical" flexItem variant="middle"/>
+                        <Divider orientation="vertical" flexItem variant="middle" style={{marginRight:"-1px", marginLeft: 0}}/>
                         
                         {conversation.number_of_replies > 0 ?
                         <React.Fragment>
-                        <Grid item xs={4}>
+                        <Grid item xs={6}>
 
                             
                                 <Typography variant="h6">{evalKeyword("replies_filtered")}</Typography>
-                                <TweetList conversation={conversation} viewTweet={submitID} keyword={keyword} />
+                                <TweetList conversation={conversation} viewTweet={submitID} height="80vh" keyword={keyword} />
                             
                         </Grid>
-                        <Divider orientation="vertical" flexItem variant="middle"/>
-                        <Grid item xs>
+                        <Divider orientation="vertical" flexItem variant="middle" style={{marginRight:"-1px", marginLeft: 0}}/>
+                        <Grid item xs={4}>
                             <div style={{ opacity: hashtagCloud.length > 0 ? 1 : 0.5 }}>
                                 <Typography variant="h6">{keyword("the_hashtags")}</Typography>
                                 <Box p={2}><Typography variant="body1">{hashtagCloud.length > 0 ? evalKeyword("summary_hashcloud") : keyword("hashtags_none")}</Typography></Box>
-                                <div style={{ height: 444 }}>
+                                <div style={{ height: "calc(80vh - 56px)" }}>
                                     <ReactWordcloud words={hashtagCloud} options={options} callbacks={callbacks} />
                                 </div>
                                 <Dialog
@@ -294,9 +291,9 @@ const RepliesExplorer = () => {
                                 </div>
                             </Grid>
 
-                            <Divider orientation="vertical" flexItem variant="middle"/>
+                            <Divider orientation="vertical" flexItem variant="middle" style={{marginRight:"-1px", marginLeft:0}}/>
 
-                            <Grid item xs>
+                            <Grid item xs={4}>
                                 <div>
                                     <Typography variant="h6">{keyword("the_people")}</Typography>
                                     <Box p={2}><Typography variant="body1">{evalKeyword("table_description_users")}</Typography></Box>
@@ -328,12 +325,12 @@ const RepliesExplorer = () => {
                                                 direction="row"
                                                 spacing={3}
                                                 alignItems="flex-start">
-                                                <Grid item xs={7}>
+                                                <Grid item xs={6}>
                                                     <User screen_name={screenName} keyword={keyword} />
                                                 </Grid>
 
-                                                <Grid item xs={5}>
-                                                    <TweetList stance={filter} screen_name={screenName} id_str={tweetID} viewTweet={submitID} keyword={keyword} />
+                                                <Grid item xs={6}>
+                                                    <TweetList stance={filter} screen_name={screenName} id_str={tweetID} height="75vh" viewTweet={submitID} keyword={keyword} />
                                                 </Grid>
 
                                             </Grid>

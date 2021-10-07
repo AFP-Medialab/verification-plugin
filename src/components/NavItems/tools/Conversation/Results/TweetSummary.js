@@ -58,7 +58,7 @@ const TweetSummary = () => {
             spacing={3}
             alignItems="flex-start">
             
-            <Grid item xs={5}>
+            <Grid item xs={6}>
 
 
 
@@ -69,7 +69,7 @@ const TweetSummary = () => {
                 
             </Grid>
 
-            <Grid item xs={7}>
+            <Grid item xs={6}>
                 
                     <User user={tweet.user} keyword={keyword} />
 
