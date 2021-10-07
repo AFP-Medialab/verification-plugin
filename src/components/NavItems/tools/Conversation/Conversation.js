@@ -33,7 +33,7 @@ const Conversation = () => {
 
     const conversationInputUrl = useSelector(state => state.conversation.url);
     const cloud = useSelector(state => state.conversation.cloud);
-    const stance = useSelector(state => state.conversation.cloud);
+    const stance = useSelector(state => state.conversation.stance);
     const flashType = useSelector(state => state.conversation.flashType);
     const flashMessage = useSelector(state => state.conversation.flashMessage);
     const flashRefresh = useSelector(state => state.conversation.flashRefresh);
@@ -119,7 +119,7 @@ const Conversation = () => {
     onComplete={() => submitUrl(conversationInputUrl)}  />
 : null }</Alert></Box> : null }
 
-            {stance && !fail ? <TweetSummary/> : null}
+            {tweet && !fail ? <TweetSummary/> : null}
 
             {cloud && conversation && tweet && tweet.number_of_replies > 0 ? <RepliesExplorer/> : null}
 
