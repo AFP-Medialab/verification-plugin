@@ -15,8 +15,6 @@ import Grid from "@material-ui/core/Grid";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 
-import Typography from "@material-ui/core/Typography";
-
 import LinearProgress from "@material-ui/core/LinearProgress";
 
 import TweetSummary from "./Results/TweetSummary"

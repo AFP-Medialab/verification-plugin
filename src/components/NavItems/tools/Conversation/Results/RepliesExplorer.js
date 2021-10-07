@@ -42,6 +42,7 @@ import AlternateEmailOutlinedIcon from '@material-ui/icons/AlternateEmailOutline
 import LinkOutlinedIcon from '@material-ui/icons//LinkOutlined';
 
 import { ReactComponent as AboutIcon } from "../../../../NavBar/images/SVG/Navbar/About.svg"
+import Tooltip from "@material-ui/core/Tooltip";
 
 const RepliesExplorer = () => {
 
@@ -178,7 +179,7 @@ const RepliesExplorer = () => {
         <Card>
             <CardHeader
                 title={keyword("section_replies_explorer")}
-                action={<AboutIcon style={{ fill: "white", height: 30, width: 30, paddingTop: 9, verticalAlign:"text-bottom" }}/>}
+                action={<Tooltip title={keyword("tooltip_responses")}><AboutIcon style={{ fill: "white", height: 30, width: 30, paddingTop: 9, verticalAlign:"text-bottom" }}/></Tooltip>}
                 className={classes.headerUpladedImage}
             />
             <Box p={3}>

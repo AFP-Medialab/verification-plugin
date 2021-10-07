@@ -12,9 +12,7 @@ button_refresh	Refresh
 urlbox	What is the URL of the Tweet you want to start exploring from?	Temp	Temp	Temp
 urlbox_placeholder	Paste the Tweet URL here	Temp	Temp	Temp
 summary_no_replies	No one has replied to this tweet so there is no further analysis we can perform.	Temp	Temp	Temp
-summary_histogram_time	Replies clearly don't all happen at once and it's useful to be able to see how the volume of replies, as well as how they relate to the Tweet, changes over time.	Temp	Temp	Temp
-summary_histogram_week	This histogram allows you to do both, and initially shows the first week after the selected tweet was published. If replies were posted outside the initial week, then you can adjust the graph to view these, either by dragging the x-axis or, if the replies occur over a very long period, using the range selector shown below the graph.	Temp	Temp	Temp
-summary_histogram_day	In this case, however, all the replies occurred on the same day so the pie chart gives a clearer breakdown than a histogram would.	Temp	Temp	Temp
+summary_histogram_day	All the replies occurred on the same day so the pie chart gives a clearer breakdown than a histogram would.	Temp	Temp	Temp
 summary_hashcloud	The ${hashtagCloud.length !== 100 ? "hashtags" : "top 100 hashtags"} appearing within the selected replies:	Temp	Temp	Temp
 table_description_users	The ${Object.keys(users).length === 10 ? "ten most active" : ""} users within the selected replies:	Temp	Temp	Temp
 table_description_urls	The ${Object.keys(urlTableData).length === 10 ? "ten most frequently occurring" : ""} URLs within the selected replies:	Temp	Temp	Temp
@@ -55,3 +53,6 @@ hashtags_none	There are no hashtags within the selected replies	Temp	Temp	Temp
 urls_none	There are no URLs within the selected replies	Temp	Temp	Temp
 distribution_piechart	Distribution by categories	Temp	Temp	Temp
 distribution_histogram	Distribution over time	Temp	Temp	Temp
+tooltip_piechart	We automatically assign one of four possible labels to each reply based on how they support, refute, query, or just comment on the Tweet. This pie chart shows the proportion of these labels across all the replies to this Tweet, which we have processed so far.	Temp	Temp
+tooltip_histogram	This histogram shows how the replies, and thier labels, occur over time. Initially we show 7 days after the tweet, but you can select a different time period by dragging the axis or range selector.	Temp	Temp	Temp
+tooltip_responses	This section allows you to explore the replies to the Tweet, including the ability to filter the replies to allow you to focus on certain types or content.	Temp	Temp	Temp
