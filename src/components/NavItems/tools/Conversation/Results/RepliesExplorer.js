@@ -197,20 +197,25 @@ const RepliesExplorer = () => {
                         <Grid item xs={2}>
                             <Typography variant="h6">{keyword("filter_by")}</Typography>
                             <FormControl component="fieldset">
-                                <Typography variant="body1">{keyword("replies_filter_stance")}</Typography>
+                                <Typography variant="overline">{keyword("replies_filter_stance")}</Typography>
                                 <FormGroup>
                                     <FormControlLabel control={<Checkbox name="comment" onChange={changeFilter} checked={filter.includes("comment")} />} label={<StanceLabel type="comment"/>} labelPlacement="start" />
+                                    <Box m={1}/>
                                     <FormControlLabel control={<Checkbox name="query" onChange={changeFilter} checked={filter.includes("query")} />} label={<StanceLabel type="query"/>} labelPlacement="start" />
+                                    <Box m={1}/>
                                     <FormControlLabel control={<Checkbox name="support" onChange={changeFilter} checked={filter.includes("support")} />} label={<StanceLabel type="support"/>} labelPlacement="start" />
+                                    <Box m={1}/>
                                     <FormControlLabel control={<Checkbox name="deny" onChange={changeFilter} checked={filter.includes("deny")} />} label={<StanceLabel type="deny"/>} labelPlacement="start" />
                                 </FormGroup>
                             </FormControl>
-                        
+                            <Box m={4}/>
                             <FormControl component="fieldset">
-                                <Typography variant="body1">{keyword("replies_filter_contain")}</Typography>
+                                <Typography variant="overline">{keyword("replies_filter_contain")}</Typography>
                                 <FormGroup>
                                     <FormControlLabel control={<Checkbox name="hashtags" onChange={changeRestriction} checked={restrict.includes("hashtags")} />} label={<span style={{display: "inline-block", minWidth:"15ch"}}><HashtagIcon style={style}/> {keyword("contains_hashtags")}</span>} labelPlacement="start" />
+                                    <Box m={1}/>
                                     <FormControlLabel control={<Checkbox name="user_mentions" onChange={changeRestriction} checked={restrict.includes("user_mentions")} />} label={<span style={{display: "inline-block", minWidth:"15ch"}}><AlternateEmailOutlinedIcon style={style}/> {keyword("contains_user_mentions")}</span>} labelPlacement="start" />
+                                    <Box m={1}/>
                                     <FormControlLabel control={<Checkbox name="urls" onChange={changeRestriction} checked={restrict.includes("urls")} />} label={<span style={{display: "inline-block", minWidth:"15ch"}}><LinkOutlinedIcon style={style}/> {keyword("contains_urls")}</span>} labelPlacement="start" />
                                 </FormGroup>
                             </FormControl>
