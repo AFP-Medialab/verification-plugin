@@ -6,7 +6,8 @@ import Tweet from "./Tweet"
 const style = {
   padding: 8,
   marginBottom: 4,
-  textAlign: "center"
+  textAlign: "center",
+  width: "calc(100% - 20px)"
 };
 
 const endpoint = process.env.REACT_APP_CONVERSATION_API
@@ -97,6 +98,7 @@ class TweetList extends Component {
                 <b>{this.props.keyword("tweets_all")}</b>
                 </p>
             }
+            style={{maxWidth:"575px", overflowY:"scoll", margin: "auto"}}
             >
             {this.state.items.map((i, index) => (
                 
