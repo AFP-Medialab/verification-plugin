@@ -23,7 +23,6 @@ import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import MenuItem from "@material-ui/core/MenuItem";
 import Typography from "@material-ui/core/Typography";
 
-//todo: add "copied" popup to ocrresult
 const OCR = () => {
 
     const {url} = useParams();
