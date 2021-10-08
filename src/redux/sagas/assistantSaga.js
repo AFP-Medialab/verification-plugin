@@ -203,7 +203,7 @@ function* handleDbkfTextCall(action) {
 
         if (text) {
             let textToUse = text.length > 500 ? text.substring(0, 500) : text
-            textToUse = textToUse.replace(/[^\w\s]/gi, '')
+            textToUse = textToUse.replace(/\s\s/gi,'')
 
             let result = yield call(dbkfAPI.callTextSimilarityEndpoint, textToUse)
             let filteredResult = filterDbkfTextResult(result)
@@ -485,7 +485,7 @@ const filterSourceCredibilityResults = (originalResult) => {
 const filterDbkfTextResult = (result) => {
     let resultList = []
     result.forEach((value) => {
-        if (value.score > 900) {
+        if (value.score > 700) {
             resultList.push({
                 "text": value.text,
                 "claimUrl": value.claimUrl,
