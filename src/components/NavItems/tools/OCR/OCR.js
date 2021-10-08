@@ -117,7 +117,7 @@ const OCR = () => {
                         </Grid>
 
                         {scripts ?
-                            <Grid item>
+                            <Grid item hidden={true}>
                                 <TextField select variant={"outlined"} label={keyword("ocr_script_label")}
                                            value={selectedScript}
                                            onChange={(e) => handleScriptChange(e)}>
@@ -144,7 +144,7 @@ const OCR = () => {
 
                     <Box m={2}/>
 
-                    <Typography>
+                    <Typography hidden={true}>
                         {keyword("ocr_script_use")}
                     </Typography>
 

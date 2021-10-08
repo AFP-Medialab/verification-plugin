@@ -17,4 +17,5 @@ complete_text	Complete Text	Temp	Temp	Temp
 copy_to_clipboard	Copy to Clipboard	Temp	Temp	Temp
 translate	Translate	Temp	Temp	Temp
 blocks	Blocks	Temp	Temp	Temp
+tooltip_copy	Copied!	Temp	Temp	Temp
 ocr_script_use	* This field can be left as auto detect, or used to specify which script the OCR model should look for should it fail to detect it automatically	Temp	Temp	Temp

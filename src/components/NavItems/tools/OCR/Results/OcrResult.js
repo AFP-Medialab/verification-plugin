@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 
 import Box from "@material-ui/core/Box";
@@ -11,6 +11,7 @@ import FileCopyOutlined from "@material-ui/icons/FileCopy"
 import Grid from "@material-ui/core/Grid";
 import IconButton from "@material-ui/core/IconButton";
 import LinearProgress from "@material-ui/core/LinearProgress";
+import Tooltip from "@material-ui/core/Tooltip";
 import TranslateIcon from '@material-ui/icons/Translate';
 import Typography from "@material-ui/core/Typography";
 
@@ -33,6 +34,10 @@ const OcrResult = () => {
     const fullText = useSelector(state => state.ocr.fullText)
     const fail = useSelector(state => state.ocr.fail);
     const errorKey = useSelector(state => state.ocr.errorKey);
+
+    const [tooltipOpen, setTooltipOpen] = useState(false)
+    const [tooltipIndex, setTooltipIndex] = useState(0)
+
 
     const canvasPrefix = "cropCanvas"
     const imgPrefix = "cropImage"
@@ -160,7 +165,7 @@ const OcrResult = () => {
 
 
     return (
-        <Grid container spacing={4} >
+        <Grid container spacing={4}>
             <Grid item xs={6}>
                 <Card variant={"outlined"}>
                     <CardHeader
@@ -186,80 +191,113 @@ const OcrResult = () => {
                     <CardHeader
                         title={keyword("extracted_text")}>
                     </CardHeader>
-                    <CardContent>
-                        <Typography variant={"subtitle1"} className={classes.fontBold}>
-                            {keyword("complete_text")}
-                        </Typography>
 
-                        <Box m={2}/>
-
-                        <Typography>
-                            {fullText}
-                        </Typography>
-
-                        <Box mt={4} mb={4}>
-                            <Button className={classes.ocrButton}
-                                    variant={"outlined"}
-                                    color={"primary"}
-                                    onClick={() => {copyText(fullText)}}>
-                                <FileCopyOutlined style={{"marginRight": "10px"}}/>{keyword("copy_to_clipboard")}
-                            </Button>
-
-
-                            <Button className={classes.ocrButton}
-                                    variant={"outlined"}
-                                    color={"primary"}
-                                    onClick={() => {googleTranslate(fullText)}}>
-                                <TranslateIcon className={classes.ocrButton}/>{keyword("translate")}
-                            </Button>
-                        </Box>
-
-                        <Box mt={2} mb={2}>
+                    {result && result.bounding_boxes && result.bounding_boxes.length ?
+                        <CardContent>
                             <Typography variant={"subtitle1"} className={classes.fontBold}>
-                                {keyword("blocks")}
+                                {keyword("complete_text")}
                             </Typography>
-                        </Box>
 
-                        {result ?
-                            result.bounding_boxes.length ?
-                                result.bounding_boxes.map((ocrResult, index) => (
-                                    <Grid container spacing={2} key={index}>
+                            <Box m={2}/>
 
-                                        <Grid item xs={6}>
-                                            <img id={imgPrefix + index}
-                                                 alt={"bounding box" + index}
-                                                 src={inputUrl}
-                                                 width={"100%"}
-                                                 onLoad={(imgEvent) =>
-                                                     cropImage(imgEvent.target, ocrResult.bounding_box, index)}
+                            <Typography>
+                                {fullText}
+                            </Typography>
 
-                                            />
-                                            <canvas id={canvasPrefix + index}/>
-                                        </Grid>
+                            <Box mt={4} mb={4}>
 
-                                        <Grid item xs={6}>
-                                            <Typography>{ocrResult.text}</Typography>
-                                        </Grid>
+                                <Tooltip open={tooltipIndex === -1 && tooltipOpen}
+                                         className = {classes.assistantTooltip}
+                                         disableFocusListener
+                                         disableHoverListener
+                                         disableTouchListener
+                                         title={keyword("tooltip_copy")}>
+                                    <Button className={classes.ocrButton}
+                                            variant={"outlined"}
+                                            color={"primary"}
+                                            onClick={() => {
+                                                setTooltipIndex(-1)
+                                                setTooltipOpen(true)
+                                                copyText(fullText)
+                                                setTimeout(()=>{
+                                                    setTooltipOpen(false)
+                                                }, 1000)
+                                            }}>
+                                        <FileCopyOutlined style={{"marginRight": "10px"}}/>{keyword("copy_to_clipboard")}
+                                    </Button>
+                                </Tooltip>
 
-                                        <Grid item xs={12} className={classes.ocrActionArea}>
-                                            <IconButton onClick={() => copyText(ocrResult.text)}>
+
+                                <Button className={classes.ocrButton}
+                                        variant={"outlined"}
+                                        color={"primary"}
+                                        onClick={() => {
+                                            googleTranslate(fullText)
+                                        }}>
+                                    <TranslateIcon className={classes.ocrButton}/>{keyword("translate")}
+                                </Button>
+                            </Box>
+
+                            <Box mt={2} mb={2}>
+                                <Typography variant={"subtitle1"} className={classes.fontBold}>
+                                    {keyword("blocks")}
+                                </Typography>
+                            </Box>
+
+                            {result.bounding_boxes.map((ocrResult, index) => (
+                                <Grid container spacing={2} key={index}>
+
+                                    <Grid item xs={6}>
+                                        <img id={imgPrefix + index}
+                                             alt={"bounding box" + index}
+                                             src={inputUrl}
+                                             width={"100%"}
+                                             onLoad={(imgEvent) =>
+                                                 cropImage(imgEvent.target, ocrResult.bounding_box, index)}
+
+                                        />
+                                        <canvas id={canvasPrefix + index}/>
+                                    </Grid>
+
+                                    <Grid item xs={6}>
+                                        <Typography>{ocrResult.text}</Typography>
+                                    </Grid>
+
+                                    <Grid item xs={12} className={classes.ocrActionArea}>
+                                        <Tooltip open={tooltipIndex === index && tooltipOpen}
+                                                 className = {classes.assistantTooltip}
+                                                 disableFocusListener
+                                                 disableHoverListener
+                                                 disableTouchListener
+                                                 title={keyword("tooltip_copy")}>
+                                            <IconButton onClick={() => {
+                                                copyText(ocrResult.text)
+                                                setTooltipIndex(index)
+                                                setTooltipOpen(true)
+                                                setTimeout(()=>{
+                                                    setTooltipOpen(false)
+                                                }, 1000)
+                                            }}>
                                                 <FileCopyOutlined color={"primary"}/>
                                             </IconButton>
-                                            <IconButton onClick={() => googleTranslate(ocrResult.text)}>
-                                                <TranslateIcon color={"primary"}/>
-                                            </IconButton>
-                                        </Grid>
-
-                                        <Grid item xs={12}>
-                                            <Divider/>
-                                        </Grid>
-
+                                        </Tooltip>
+                                        <IconButton onClick={() => googleTranslate(ocrResult.text)}>
+                                            <TranslateIcon color={"primary"}/>
+                                        </IconButton>
                                     </Grid>
-                                ))
-                                : <Typography variant={"h5"}>{keyword("ocr_no_text")}</Typography>
-                            : null
-                        }
-                    </CardContent>
+
+                                    <Grid item xs={12}>
+                                        <Divider/>
+                                    </Grid>
+
+                                </Grid>
+                            ))}
+                        </CardContent>
+                        :
+                        <CardContent>
+                            <Typography variant={"h5"}>{keyword("ocr_no_text")}</Typography>
+                        </CardContent>
+                    }
                 </Card>
             </Grid>
         </Grid>
