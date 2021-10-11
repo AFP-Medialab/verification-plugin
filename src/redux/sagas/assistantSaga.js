@@ -390,7 +390,7 @@ const filterAssistantResults = (urlType, contentType, userInput, scrapeResult) =
             if (scrapeResult.videos.length === 1) {
                 videoList = [scrapeResult.videos[0]]
             } else {
-                imageList = [scrapeResult.images[1]]
+                imageList = [scrapeResult.images[0]]
             }
             break;
         case KNOWN_LINKS.FACEBOOK:
