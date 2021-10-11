@@ -1,0 +1,58 @@
+	en	fr	es	el
+title	Twitter Conversation	Temp	Temp	Temp
+description	It explores and analyzes the replies of a tweet classifying them, offering statistics and tools to filter the tweet responses.	Temp	Temp	Temp
+section_explore_from	Tweet to analyse	Temp	Temp	Temp
+section_tweet_summary	Tweet	Temp	Temp 	Temp
+section_replies_explorer	Responses	Temp	Temp	Temp
+section_statistics	Statistics	Temp	Temp	Temp
+button_explore_tweet	Analyse Tweet	Temp	Temp
+button_explore_parent	Analyse Parent Tweet	Temp	Temp
+button_explore_root	Analyse Root Tweet...	Temp	Temp
+button_refresh	Refresh
+urlbox	What is the URL of the Tweet you want to start exploring from?	Temp	Temp	Temp
+urlbox_placeholder	Paste the Tweet URL here	Temp	Temp	Temp
+summary_no_replies	No one has replied to this tweet so there is no further analysis we can perform.	Temp	Temp	Temp
+summary_histogram_day	All the replies occurred on the same day so the pie chart gives a clearer breakdown than a histogram would.	Temp	Temp	Temp
+summary_hashcloud	The ${hashtagCloud.length !== 100 ? "hashtags" : "top 100 hashtags"} appearing within the selected replies:	Temp	Temp	Temp
+table_description_users	The ${Object.keys(users).length === 10 ? "ten most active" : ""} users within the selected replies:	Temp	Temp	Temp
+table_description_urls	The ${Object.keys(urlTableData).length === 10 ? "ten most frequently occurring" : ""} URLs within the selected replies:	Temp	Temp	Temp
+table_header_screen_name	Screen Name	Temp	Temp	Temp
+table_header_tweets	Tweets	Temp	Temp	Temp
+table_header_url	URL	URL	URL	URL
+table_header_appearances	Appearances		Temp	Temp	Temp
+stance_support	Support	Temp	Temp	Temp
+stance_query	Query	Temp	Temp	Temp
+stance_deny	Disapprove	Temp	Temp	Temp
+stance_comment	Comment	Temp	Temp	Temp
+contains_hashtags	Hashtag	Temp	Temp	Temp
+contains_user_mentions	User mention	Temp	Temp	Temp
+contains_urls	URL or media	Temp	Temp	Temp
+user_overview	Joined Twitter on the ${this.state.created_at} - ${this.state.account_age} days ago	Temp	Temp	Temp
+the_hashtags	Hashtags	Temp	Temp
+the_people	Users	Temp	Temp	Temp
+the_urls	URLs	Temp	Temp	Temp
+more_tweets_prefix	It is likely that we are still collecting and processing replies for this tweet. You can	Temp	Temp	Temp
+more_tweets_suffix	the page to check for more replies.	Temp	Temp	Temp
+filter_by	Filter by	Temp	Temp	Temp
+replies_filter_stance	Categories	Temp	Temp	Temp
+replies_filter_contain	Contains	Temp	Temp	Temp
+replies_filtered	${conversation.number_of_replies.toLocaleString()} Tweets (${filterPercent.toFixed().toLocaleString()}%)	Temp	Temp	Temp
+hashtags_summary	${hashtagCount} of the selected replies contain the hashtag #${hashtag}.	Temp	Temp	Temp
+hashtags_view_on_twitter	View hashtag on Twitter	Temp	Temp	Temp
+tweets_loading	Loading...	Temp	Temp	Temp
+tweets_all	That's all the replies, so far...	Temp	Temp	Temp
+refresh_reloading	reloading...	Temp	Temp	Temp
+refresh_countdown	Page will automatically reload in ${seconds}s	Temp	Temp	Temp
+user_homepage	Homepage	Temp	Temp	Temp
+user_following	Following	Temp	Temp	Temp
+user_followers	Followers	Temp	Temp	Temp
+user_tweets	Tweets	Temp	Temp	Temp
+user_lists	Lists	Temp	Temp	Temp
+user_tweets_average	Tweets/Day	Temp	Temp	Temp
+hashtags_none	There are no hashtags within the selected replies	Temp	Temp	Temp
+urls_none	There are no URLs within the selected replies	Temp	Temp	Temp
+distribution_piechart	Distribution by categories	Temp	Temp	Temp
+distribution_histogram	Distribution over time	Temp	Temp	Temp
+tooltip_piechart	We automatically assign one of four possible labels to each reply based on how they support, refute, query, or just comment on the Tweet. This pie chart shows the proportion of these labels across all the replies to this Tweet, which we have processed so far.	Temp	Temp
+tooltip_histogram	This histogram shows how the replies, and thier labels, occur over time. Initially we show 7 days after the tweet, but you can select a different time period by dragging the axis or range selector.	Temp	Temp	Temp
+tooltip_responses	This section allows you to explore the replies to the Tweet, including the ability to filter the replies to allow you to focus on certain types or content.	Temp	Temp	Temp

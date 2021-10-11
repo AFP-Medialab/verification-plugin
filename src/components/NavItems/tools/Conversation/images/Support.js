@@ -1,0 +1,18 @@
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
+
+var _interopRequireWildcard = require("@babel/runtime/helpers/interopRequireWildcard");
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var React = _interopRequireWildcard(require("react"));
+
+var _createSvgIcon = _interopRequireDefault(require("@material-ui/icons/utils/createSvgIcon"));
+
+var _default = (0, _createSvgIcon.default)( /*#__PURE__*/React.createElement("path", {
+  d: "M 12 2 C 6.485613 2 2 6.485613 2 12 C 2 17.514387 6.485613 22 12 22 C 17.514387 22 22 17.514387 22 12 C 22 6.485613 17.514387 2 12 2 z M 12 3.4277344 C 16.74233 3.4277344 20.572266 7.25767 20.572266 12 C 20.572266 16.74233 16.74233 20.572266 12 20.572266 C 7.25767 20.572266 3.4277344 16.74233 3.4277344 12 C 3.4277344 7.25767 7.25767 3.4277344 12 3.4277344 z M 16.460938 9.0957031 C 16.248822 9.0957031 16.045569 9.1811723 15.896484 9.3320312 L 10.923828 14.285156 L 8.1015625 11.462891 C 7.9525335 11.312034 7.7492234 11.228516 7.5371094 11.228516 C 7.3250524 11.228516 7.1236954 11.312032 6.9746094 11.462891 C 6.6602094 11.777348 6.6602094 12.27734 6.9746094 12.591797 L 10.351562 15.970703 C 10.66602 16.28516 11.173881 16.28516 11.488281 15.970703 L 17.025391 10.460938 C 17.339848 10.146481 17.339848 9.6464883 17.025391 9.3320312 C 16.876362 9.1811742 16.672995 9.0957031 16.460938 9.0957031 z "
+}), 'Support');
+
+exports.default = _default;
