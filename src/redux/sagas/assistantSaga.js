@@ -203,8 +203,6 @@ function* handleDbkfTextCall(action) {
 
         if (text) {
             let textToUse = text.length > 500 ? text.substring(0, 500) : text
-            textToUse = textToUse.replace(/\s\s/gi,'')
-
             let result = yield call(dbkfAPI.callTextSimilarityEndpoint, textToUse)
             let filteredResult = filterDbkfTextResult(result)
 
