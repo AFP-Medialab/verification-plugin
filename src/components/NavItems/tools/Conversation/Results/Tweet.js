@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import InnerHTML from 'dangerously-set-html-content'
 import axios from "axios";
 import { Button } from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
@@ -15,6 +14,25 @@ class Tweet extends Component {
         this.state = {
             // TODO is there anything we need to default to?
         }
+    }
+
+    componentDidUpdate() {
+        if (!window?.twttr?.widgets) return;
+
+        if (!this?.state?.id) return;
+
+        // We should be speeding things up by only
+        // processing the right element, but we need
+        // a unique ID for that, and we can't use the
+        // tweet ID as we can have the same tweet on
+        // the page twice (thing the popups)
+        /*var element = document.getElementById(this.state.id);
+
+        if (element) {
+            window.twttr.widgets.load(element);
+        }*/
+
+        window.twttr.widgets.load();
     }
 
     componentDidMount() {
@@ -43,7 +61,7 @@ class Tweet extends Component {
             // TODO use our own endpoint so we can cache these in elastic for the right
             //      length of time and generate something similar for the deleted ones
             //      The only downside to that would be the loss of language options
-            "https://publish.twitter.com/oembed?maxwidth=550&align=center&hide_thread=true&dnt=true&lang="+lang+"&url="+encodeURIComponent("https://twitter.com/"+tweet.user.screen_name+"/status/"+tweet.id)
+            "https://publish.twitter.com/oembed?omit_script=true&maxwidth=550&align=center&hide_thread=true&dnt=true&lang="+lang+"&url="+encodeURIComponent("https://twitter.com/"+tweet.user.screen_name+"/status/"+tweet.id)
         )
         .then((response) => {
 
@@ -85,7 +103,7 @@ class Tweet extends Component {
 
         if (this.state.plain)  {
             return (
-                <InnerHTML html={this.state.html} />
+                <div id={this.state.id} dangerouslySetInnerHTML={{ __html: this.state.html }}></div>
             )
         }
 
@@ -96,7 +114,7 @@ class Tweet extends Component {
                     <Typography component="div" style={{ flexGrow: 1, display: "flex", alignContent: "center", flexDirection: "column", justifyContent: "center" }}><StanceLabel type={this.props.tweet.stance_parent}/></Typography>
                     <Button variant="outlined" color="primary" onClick={() => this.props.viewTweet(this.state.id)} style={{border: "2px solid"}}>{this.props.keyword("button_explore_tweet")}</Button>
                 </div>
-                <InnerHTML html={this.state.html} />
+                <div id={this.state.id} dangerouslySetInnerHTML={{ __html: this.state.html }}></div>
                 
             </div>
         )

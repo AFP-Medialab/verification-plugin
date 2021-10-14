@@ -55,6 +55,12 @@ const Conversation = () => {
         dispatch(setConversationInput(src))
     };
 
+    useEffect(() => {
+        const script = document.createElement('script');
+        script.src = "https://platform.twitter.com/widgets.js"
+        document.body.appendChild(script);
+      }, []);
+
     // Renderer callback with condition
     const renderer = ({ hours, minutes, seconds, completed }) => {
         if (completed) {
@@ -69,7 +75,7 @@ const Conversation = () => {
     };
   
     return (
-        <div>
+        <React.Fragment>
             <HeaderTool name={keyword("title")} description={keyword("description")} icon={<ConversationIcon style={{ fill: "#51A5B2" }} />} />
             <Card>
                 <CardHeader
@@ -126,7 +132,7 @@ const Conversation = () => {
             {stance && !fail && tweet.number_of_replies > 0 ? <TweetStatistics/> : null}
 
             <LinearProgress hidden={!loading}/>
-        </div>
+        </React.Fragment>
     )
 };
 
