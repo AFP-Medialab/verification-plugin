@@ -219,8 +219,6 @@ const AdvancedTools = () => {
         dispatch(setError(errMsg));
     };
 
-    console.log(registrationForm.formState.errors);
-
     return (
 
         <div>

@@ -73,6 +73,8 @@ import { setFalse, setTrue } from "../../redux/actions/cookiesActions";
 import { changeLanguage } from "../../redux/actions";
 import Button from "@material-ui/core/Button";
 import Alert from "@material-ui/lab/Alert";
+import { MuiThemeProvider } from "@material-ui/core";
+import { createTheme } from "@material-ui/core/styles";
 
 
 function a11yProps(index) {
@@ -356,6 +358,18 @@ const NavBar = (props) => {
     }, [])
 
 
+    const themeFab = createTheme({
+        palette: {
+            primary: {
+                light: '#ffffff',
+                main: '#ffffff',
+                dark: '#cccccc',
+                contrastText: '#000000',
+            },
+        },
+    });
+
+
     return (
         <div className={classes.flex}>
             <Snackbar open={openAlert} autoHideDuration={6000} onClose={handleCloseAlert}>
@@ -455,9 +469,11 @@ const NavBar = (props) => {
                 <div className={classes.toolbar} id="back-to-top-anchor" />
                 <TabItem className={classes.noMargin} tabItems={tabItems} drawerItems={drawerItems} />
                 <ScrollTop {...props}>
-                    <Fab color="secondary" size="small" aria-label="scroll back to top">
-                        <KeyboardArrowUpIcon />
-                    </Fab>
+                    <MuiThemeProvider theme={themeFab}>
+                        <Fab color="primary" size="large" aria-label="scroll back to top" className={classes.fabTop}>
+                            <KeyboardArrowUpIcon />
+                        </Fab>
+                    </MuiThemeProvider>
                 </ScrollTop>
                 {
                     (error !== null) &&
