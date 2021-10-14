@@ -24,6 +24,7 @@ export default function useAuthenticationAPI() {
   const defaultTimeout = 5000;
   const loginTimeout = 30000;
   const jsonContentType = "application/json";
+  const textContentType = "text/plain";
   const authSrvBaseURL = `${process.env.REACT_APP_BASEURL}/api/v1/auth`;
 
   // Services URL
@@ -299,10 +300,11 @@ export default function useAuthenticationAPI() {
    * @returns {Promise<Object>} Result as a Promise.
    */
   const refreshToken = (refreshToken) => {
+    
     return axios.post(AUTH_SRV_REFRESH_TOKEN_URL, refreshToken, {
       baseURL: authSrvBaseURL,
        headers: {
-         "Content-Type": jsonContentType
+         "Content-Type": textContentType
        },
       // timeout: defaultTimeout
       timeout: 10000
