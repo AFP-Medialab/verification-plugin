@@ -14,10 +14,13 @@ import CardHeader from "@material-ui/core/CardHeader";
 import Typography from "@material-ui/core/Typography";
 import Tooltip from "@material-ui/core/Tooltip";
 
-import Plot from 'react-plotly.js';
+//import Plot from 'react-plotly.js';
+import Plotly from 'plotly.js-dist-min'
 
-
+import createPlotlyComponent from 'react-plotly.js/factory';
 import { ReactComponent as AboutIcon } from "../../../../NavBar/images/SVG/Navbar/About.svg"
+
+const Plot = createPlotlyComponent(Plotly);
 
 const TweetStatistics = () => {
 
@@ -29,11 +32,15 @@ const TweetStatistics = () => {
     const stance = useSelector(state => state.conversation.stance)
 
     // convert the stance labels to whatever they are in the current language
+    // TODO figure out why this needs the || protection, i.e. why does it get
+    //      run multiple times causing the labels to get messed up?
     for (var i = 0 ; i < stance["labels"].length ; ++i) {
-        stance["labels"][i] = keyword("stance_"+stance["labels"][i]);
+        stance["labels"][i] = keyword("stance_"+stance["labels"][i]) || stance["labels"][i];
 
-        if (tweet.timeline)
-            tweet.timeline[i]["name"] = keyword("stance_"+tweet.timeline[i]["name"]);
+        if (tweet.timeline) {
+            tweet.timeline[i]["name"] = keyword("stance_"+tweet.timeline[i]["name"]) || tweet.timeline[i]["name"];
+        }
+            
     }
 
     let layout = {
