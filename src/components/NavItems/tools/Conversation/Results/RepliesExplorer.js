@@ -44,6 +44,10 @@ import LinkOutlinedIcon from '@material-ui/icons//LinkOutlined';
 import { ReactComponent as AboutIcon } from "../../../../NavBar/images/SVG/Navbar/About.svg"
 import Tooltip from "@material-ui/core/Tooltip";
 
+import ConversationAPI from "../ConversationAPI"
+
+const conversationAPI = ConversationAPI()
+
 const RepliesExplorer = () => {
 
     const classes = useMyStyles();
@@ -85,11 +89,13 @@ const RepliesExplorer = () => {
     }
 
     const options = {
-        rotations: 1,
-        rotationAngles: [0],
-        fontSizes: [15, 60],
+        rotations: 2,
+        rotationAngles: [0, 90],
+        fontSizes: [15, 30],
         // TODO pull this automatically from somewhere?
-        fontFamily: "'Roboto', 'Helvetica', 'Arial', sans-serif"
+        fontFamily: "'Roboto', 'Helvetica', 'Arial', sans-serif",
+        enableOptimizations: true,
+        deterministic: true
     };
 
     const callbacks = {
@@ -160,12 +166,11 @@ const RepliesExplorer = () => {
         setHashtag(null);
     };
 
-    const moreTweets = (tweet.number_of_replies / tweet.reply_count) < 0.5;
-
-    console.log(window.innerHeight);
+    const moreTweets = (tweet.replies_processed !== tweet.number_of_replies)
+    const tweetsProcessed = Math.floor(100 * (tweet.replies_processed / tweet.number_of_replies));
 
     // eslint-disable-next-line
-    const filterPercent = 100 * (conversation.number_of_replies / tweet.number_of_replies)
+    const filterPercent = Math.floor(100 * (conversation.number_of_replies / tweet.replies_processed));
 
     const style = {
         fill: "black",
@@ -185,7 +190,7 @@ const RepliesExplorer = () => {
             />
             <Box p={3}>
             {moreTweets ?
-            <Box mb={3}><Alert severity="info">{keyword("more_tweets_prefix")} <Button size="small" variant="outlined" onClick={() => submitID(tweet.id)}>{keyword("button_refresh")}</Button> {keyword("more_tweets_suffix")}</Alert></Box>
+            <Box mb={3}><Alert severity="info">{evalKeyword("more_tweets_prefix")} <Button size="small" variant="outlined" onClick={() => submitID(tweet.id)}>{keyword("button_refresh")}</Button> {keyword("more_tweets_suffix")}</Alert></Box>
             
                 : null }
                 
@@ -304,6 +309,49 @@ const RepliesExplorer = () => {
                                     
                                     </FormGroup>
                             </FormControl>
+
+                            <Box m={4}/>
+                            <div>
+                                <Typography variant="overline" style={{ color: "#B0B0B0" }}>{keyword("replies_filter_statistics")}</Typography>
+                                <Grid
+                                    container
+                                    direction="row"
+                                    justifyContent="space-between"
+                                    alignItems="center">
+                                    <Grid item xs>
+                                        <span style={{ display: "inline-block", minWidth: "15ch", fontSize: "14px", fontWeight: "600", paddingTop: "12px", paddingBottom: "12px"}}>{keyword("statistics_known")}</span>
+                                    </Grid>
+                                    <Grid item>
+                                        <Typography style={{ minWidth: "15ch", fontSize: "14px"}} variant="body1">{conversationAPI.formatLargeNumber(tweet.number_of_replies)}</Typography>
+                                    </Grid>
+                                </Grid>
+
+                                <Grid
+                                    container
+                                    direction="row"
+                                    justifyContent="space-between"
+                                    alignItems="center">
+                                    <Grid item xs>
+                                        <span style={{ display: "inline-block", minWidth: "15ch", fontSize: "14px", fontWeight: "600", paddingTop: "12px", paddingBottom: "12px"}}>{keyword("statistics_processed")}</span>
+                                    </Grid>
+                                    <Grid item>
+                                        <Typography style={{ minWidth: "15ch", fontSize: "14px"}} variant="body1">{conversationAPI.formatLargeNumber(tweet.replies_processed)} ({tweetsProcessed}%)</Typography>
+                                    </Grid>
+                                </Grid>
+
+                                <Grid
+                                    container
+                                    direction="row"
+                                    justifyContent="space-between"
+                                    alignItems="center">
+                                    <Grid item xs>
+                                        <span style={{ display: "inline-block", minWidth: "15ch", fontSize: "14px", fontWeight: "600", paddingTop: "12px", paddingBottom: "12px"}}>{keyword("statistics_filtered")}</span>
+                                    </Grid>
+                                    <Grid item>
+                                        <Typography style={{ minWidth: "15ch", fontSize: "14px"}} variant="body1">{conversationAPI.formatLargeNumber(conversation.number_of_replies)} ({filterPercent}%)</Typography>
+                                    </Grid>
+                                </Grid>
+                            </div>
                         </Grid>
                     
                         <Divider orientation="vertical" flexItem variant="middle" style={{marginRight:"-1px", marginLeft: "-16px"}}/>
@@ -322,7 +370,7 @@ const RepliesExplorer = () => {
                         <Grid item xs={3}>
                             <div style={{ opacity: hashtagCloud.length > 0 ? 1 : 0.5 }}>
                                 <Typography variant="h6">{keyword("the_hashtags")}</Typography>
-                                <Box p={2}><Typography variant="body1">{hashtagCloud.length > 0 ? evalKeyword("summary_hashcloud") : keyword("hashtags_none")}</Typography></Box>
+                                {hashtagCloud.length < 1 ? <Box p={2}><Typography variant="body1">{keyword("hashtags_none")}</Typography></Box> : null}
                                 <div style={{ height: "calc(80vh - 56px)" }}>
                                     <ReactWordcloud words={hashtagCloud} options={options} callbacks={callbacks} />
                                 </div>

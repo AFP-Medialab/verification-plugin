@@ -31,12 +31,13 @@ user_overview	Joined Twitter on the ${this.state.created_at} - ${this.state.acco
 the_hashtags	Hashtags	Temp	Temp
 the_people	Users	Temp	Temp	Temp
 the_urls	URLs	Temp	Temp	Temp
-more_tweets_prefix	It is likely that we are still collecting and processing replies for this tweet. You can	Temp	Temp	Temp
-more_tweets_suffix	the page to check for more replies.	Temp	Temp	Temp
+more_tweets_prefix	We are still processing the collected Tweets. So far we have processed ${tweetsProcessed.toFixed()}% of the known replies. You can	Temp	Temp	Temp
+more_tweets_suffix	the page to see if we have processed more.	Temp	Temp	Temp
 filter_by	Filter by	Temp	Temp	Temp
 replies_filter_stance	Categories	Temp	Temp	Temp
 replies_filter_contain	Contains	Temp	Temp	Temp
-replies_filtered	${conversation.number_of_replies.toLocaleString()} Tweets (${filterPercent.toFixed().toLocaleString()}%)	Temp	Temp	Temp
+replies_filter_statistics	Reply Statistics	Temp	Temp	Temp
+replies_filtered	${conversation.number_of_replies.toLocaleString()} Tweets	Temp	Temp	Temp
 hashtags_summary	${hashtagCount} of the selected replies contain the hashtag #${hashtag}.	Temp	Temp	Temp
 hashtags_view_on_twitter	View hashtag on Twitter	Temp	Temp	Temp
 tweets_loading	Loading...	Temp	Temp	Temp
@@ -55,4 +56,7 @@ distribution_piechart	Distribution by categories	Temp	Temp	Temp
 distribution_histogram	Distribution over time	Temp	Temp	Temp
 tooltip_piechart	We automatically assign one of four possible labels to each reply based on how they support, refute, query, or just comment on the Tweet. This pie chart shows the proportion of these labels across all the replies to this Tweet, which we have processed so far.	Temp	Temp
 tooltip_histogram	This histogram shows how the replies, and thier labels, occur over time. Initially we show 7 days after the tweet, but you can select a different time period by dragging the axis or range selector.	Temp	Temp	Temp
-tooltip_responses	This section allows you to explore the replies to the Tweet, including the ability to filter the replies to allow you to focus on certain types or content.	Temp	Temp	Temp
+tooltip_responses	This section allows you to explore the replies to the Tweet, including the ability to filter the replies to allow you to focus on certain types or content.	Note that only direct replies, which we have processed, are shown in this section.	Temp	Temp	Temp
+statistics_known	Known Replies	Temp	Temp	Temp
+statistics_processed	Processed Replies	Temp	Temp	Temp
+statistics_filtered	Filtered Replies	Temp	Temp	Temp

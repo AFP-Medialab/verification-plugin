@@ -9,9 +9,13 @@ import Paper from '@material-ui/core/Paper';
 
 import { Box, Divider } from "@material-ui/core";
 
+import ConversationAPI from "../ConversationAPI"
+
 const processString = require('react-process-string');
 
 const endpoint = process.env.REACT_APP_CONVERSATION_API
+
+const conversationApi = ConversationAPI()
 
 const config = [{
     regex: /@([a-zA-Z0-9_]+)/gim, //regex to match a username
@@ -38,25 +42,6 @@ const config = [{
     }
 }];
 
-const formatLargeNumber = (labelValue) => {
-
-    // Nine Zeroes for Billions
-    return Math.abs(Number(labelValue)) >= 1.0e+9
-
-    ? (Math.abs(Number(labelValue)) / 1.0e+9).toFixed(2) + "B"
-    // Six Zeroes for Millions 
-    : Math.abs(Number(labelValue)) >= 1.0e+6
-
-    ? (Math.abs(Number(labelValue)) / 1.0e+6).toFixed(2) + "M"
-    // Three Zeroes for Thousands
-    : Math.abs(Number(labelValue)) >= 1.0e+3
-
-    ? (Math.abs(Number(labelValue)) / 1.0e+3).toFixed(2) + "K"
-
-    : Math.abs(Number(labelValue));
-
-}
-
 class User extends Component {
 
     constructor(props) {
@@ -77,10 +62,10 @@ class User extends Component {
                 img: this.props.user.profile_image_url_https.replace("_normal",""),
                 description: processString(config)(this.props.user.description),
                 url: this.props.user.url,
-                following: formatLargeNumber(this.props.user.friends_count),
-                followers: formatLargeNumber(this.props.user.followers_count),
-                tweets: formatLargeNumber(this.props.user.statuses_count),
-                lists: formatLargeNumber(this.props.user.listed_count),
+                following: conversationApi.formatLargeNumber(this.props.user.friends_count),
+                followers: conversationApi.formatLargeNumber(this.props.user.followers_count),
+                tweets: conversationApi.formatLargeNumber(this.props.user.statuses_count),
+                lists: conversationApi.formatLargeNumber(this.props.user.listed_count),
                 created_at: this.props.user.created_at,
                 account_age: this.props.user.account_age.toLocaleString(),
                 tweets_per_day: this.props.user.tweets_per_day.toFixed(2),
@@ -101,10 +86,10 @@ class User extends Component {
                     img: response.data.profile_image_url_https.replace("_normal",""),
                     description: processString(config)(response.data.description),
                     url: response.data.url,
-                    following: formatLargeNumber(response.data.friends_count),
-                    followers: formatLargeNumber(response.data.followers_count),
-                    tweets: formatLargeNumber(response.data.statuses_count),
-                    lists: formatLargeNumber(response.data.listed_count),
+                    following: conversationApi.formatLargeNumber(response.data.friends_count),
+                    followers: conversationApi.formatLargeNumber(response.data.followers_count),
+                    tweets: conversationApi.formatLargeNumber(response.data.statuses_count),
+                    lists: conversationApi.formatLargeNumber(response.data.listed_count),
                     created_at: response.data.created_at,
                     account_age: response.data.account_age.toLocaleString(),
                     tweets_per_day: response.data.tweets_per_day.toFixed(2),
