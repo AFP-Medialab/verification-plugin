@@ -47,6 +47,11 @@ function* handleConversationURL(action) {
     // get the URL of the tweet we have been given through the UI
     const tweetURL = yield select(state => state.conversation.url)
 
+    if (!tweetURL) {
+        yield put(setFlashMessage("error", "Please enter a URL which points to a single Tweet", false));
+        return;
+    }
+
     if (tweetURL.match(/^[0-9]+$/)) {
         yield put(setTweetID(tweetURL))
         return;

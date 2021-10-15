@@ -5,7 +5,7 @@ import Typography from "@material-ui/core/Typography";
 
 import StanceLabel from "./StanceLabel";
 
-import _ from "lodash";
+import uniqueId from "lodash/uniqueId";
 
 class Tweet extends Component {
 
@@ -15,7 +15,7 @@ class Tweet extends Component {
         // set default values for the state
         this.state = {
             // a unique ID for the containing div
-            uuid: _.uniqueId('tweet-')
+            uuid: uniqueId('tweet-')
         };
     }
 
