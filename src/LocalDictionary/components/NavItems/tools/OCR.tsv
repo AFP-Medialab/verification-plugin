@@ -18,4 +18,6 @@ copy_to_clipboard	Copy to Clipboard	Temp	Temp	Temp
 translate	Translate	Temp	Temp	Temp
 blocks	Blocks	Temp	Temp	Temp
 tooltip_copy	Copied!	Temp	Temp	Temp
-ocr_script_use	* This field can be left as auto detect, or used to specify which script the OCR model should look for should it fail to detect it automatically	Temp	Temp	Temp
+ocr_script_label	Specify script	Temp	Temp	Temp
+reprocess_text	If you think the predicted language is wrong, you can reprocess this block by selecting the script you think this text is in from the box below.	Temp	Temp	Temp
+reprocess_button	Reprocess Block	Temp	Temp	Temp
