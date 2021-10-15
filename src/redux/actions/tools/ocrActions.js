@@ -67,3 +67,30 @@ export const cleanOcr = () => {
         type: "OCR_CLEAN_STATE"
     }
 };
+
+export const setOcrReprocess = (boundingBox) => {
+    return {
+        type: "OCR_REPROCESS",
+        payload: {
+            boundingBox: boundingBox
+        }
+    }
+};
+
+export const setReprocessLoading = (loading) => {
+    return {
+        type: "SET_REPROCESS_LOADING",
+        payload: {
+            reprocessBlockLoading: loading
+        }
+    }
+}
+
+export const setReprocessOpen = (open) => {
+    return {
+        type: "SET_REPROCESS_OPEN",
+        payload: {
+            reprocessBlockOpen: open
+        }
+    }
+}

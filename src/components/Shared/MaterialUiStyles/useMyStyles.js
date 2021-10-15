@@ -438,13 +438,23 @@ const useMyStyles = makeStyles(theme => ({
         position:  "relative",
         maxHeight:"48vh",
     },
-    ocrActionArea:{
-        justifyContent: "right",
+    ocrFlex:{
         display: "flex"
+    },
+    ocrActionAreaLeft:{
+        justifyContent: "left",
+    },
+    ocrActionAreaRight:{
+        display: "flex",
+        justifyContent: "right",
     },
     ocrButton:{
       borderWidth: "medium",
       marginRight: "10px"
+    },
+    ocrReprocessBox:{
+      backgroundColor: "whitesmoke",
+      padding: 20
     },
     fontBold:{
         fontWeight: "bold"

@@ -2,26 +2,27 @@ import React, {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {useParams} from 'react-router-dom'
 
-import {Box, Button, TextField} from "@material-ui/core";
-import FolderOpenIcon from '@material-ui/icons/FolderOpen';
-
 import {KNOWN_LINKS} from "../../Assistant/AssistantRuleBook";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/OCR.tsv";
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 
 import {
-    cleanOcr, loadOcrScripts, setOcrBinaryImage, setOcrErrorKey, setOcrInput, setOcrResult, setSelectedScript
+    cleanOcr,
+    setOcrBinaryImage,
+    setOcrErrorKey,
+    setOcrInput,
+    setOcrResult
 } from "../../../../redux/actions/tools/ocrActions";
 import OcrResult from "./Results/OcrResult";
 
+import {Box, Button, TextField} from "@material-ui/core";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
+import FolderOpenIcon from '@material-ui/icons/FolderOpen';
 import {ReactComponent as OCRIcon} from '../../../NavBar/images/SVG/Image/OCR.svg';
 import Grid from "@material-ui/core/Grid";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
-import MenuItem from "@material-ui/core/MenuItem";
-import Typography from "@material-ui/core/Typography";
 
 const OCR = () => {
 
@@ -33,18 +34,10 @@ const OCR = () => {
 
     const ocrInputUrl = useSelector(state => state.ocr.url);
     const selectedScript = useSelector(state => state.ocr.selectedScript)
-    const scripts = useSelector(state => state.ocr.scripts)
     const result = useSelector(state => state.ocr.result);
 
     const [userInput, setUserInput] = useState(ocrInputUrl);
 
-    if (!scripts) {
-        dispatch(loadOcrScripts())
-    }
-
-    const handleScriptChange = (event) => {
-        dispatch(setSelectedScript(event.target.value))
-    };
 
     const handleSubmitUrl = (src) => {
         dispatch(setOcrInput(src, selectedScript))
@@ -54,8 +47,7 @@ const OCR = () => {
         if (file.size >= 4000000) {
             dispatch(setOcrErrorKey("ocr_too_big"))
             dispatch(setOcrResult(false, true, false, null))
-        }
-        else {
+        } else {
             let reader = new FileReader()
             reader.onload = () => {
                 dispatch(setOcrBinaryImage(reader.result))
@@ -115,18 +107,6 @@ const OCR = () => {
                             />
                         </Grid>
 
-                        {scripts ?
-                            <Grid item hidden={true}>
-                                <TextField select variant={"outlined"} label={keyword("ocr_script_label")}
-                                           value={selectedScript}
-                                           onChange={(e) => handleScriptChange(e)}>
-                                    {Object.keys(scripts).map(code =>
-                                        <MenuItem key={code} value={code}>{scripts[code]}</MenuItem>)
-                                    }
-                                </TextField>
-                            </Grid>
-                            : null}
-
                         <Grid item>
                             {!result ?
                                 <Button variant="contained" color="primary" onClick={() => handleSubmitUrl(userInput)}>
@@ -140,13 +120,6 @@ const OCR = () => {
                         </Grid>
 
                     </Grid>
-
-                    <Box m={2}/>
-
-                    <Typography hidden={true}>
-                        {keyword("ocr_script_use")}
-                    </Typography>
-
 
                     <Box m={2}/>
                     <Button startIcon={<FolderOpenIcon/>}>
