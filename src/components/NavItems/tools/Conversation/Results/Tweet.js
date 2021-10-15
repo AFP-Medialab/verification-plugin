@@ -5,6 +5,8 @@ import Typography from "@material-ui/core/Typography";
 
 import StanceLabel from "./StanceLabel";
 
+import _ from "lodash";
+
 class Tweet extends Component {
 
     constructor(props) {
@@ -12,8 +14,9 @@ class Tweet extends Component {
 
         // set default values for the state
         this.state = {
-            // TODO is there anything we need to default to?
-        }
+            // a unique ID for the containing div
+            uuid: _.uniqueId('tweet-')
+        };
     }
 
     componentDidUpdate() {
@@ -21,18 +24,11 @@ class Tweet extends Component {
 
         if (!this?.state?.id) return;
 
-        // We should be speeding things up by only
-        // processing the right element, but we need
-        // a unique ID for that, and we can't use the
-        // tweet ID as we can have the same tweet on
-        // the page twice (thing the popups)
-        /*var element = document.getElementById(this.state.id);
+        var element = document.getElementById(this.state.uuid);
 
         if (element) {
             window.twttr.widgets.load(element);
-        }*/
-
-        window.twttr.widgets.load();
+        }
     }
 
     componentDidMount() {
@@ -103,7 +99,7 @@ class Tweet extends Component {
 
         if (this.state.plain)  {
             return (
-                <div id={this.state.id} dangerouslySetInnerHTML={{ __html: this.state.html }}></div>
+                <div id={this.state.uuid} dangerouslySetInnerHTML={{ __html: this.state.html }}></div>
             )
         }
 
@@ -114,7 +110,7 @@ class Tweet extends Component {
                     <Typography component="div" style={{ flexGrow: 1, display: "flex", alignContent: "center", flexDirection: "column", justifyContent: "center" }}><StanceLabel type={this.props.tweet.stance_parent}/></Typography>
                     <Button variant="outlined" color="primary" onClick={() => this.props.viewTweet(this.state.id)} style={{border: "2px solid"}}>{this.props.keyword("button_explore_tweet")}</Button>
                 </div>
-                <div id={this.state.id} dangerouslySetInnerHTML={{ __html: this.state.html }}></div>
+                <div id={this.state.uuid} dangerouslySetInnerHTML={{ __html: this.state.html }}></div>
                 
             </div>
         )
