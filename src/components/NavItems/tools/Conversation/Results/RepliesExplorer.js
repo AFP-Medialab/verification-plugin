@@ -53,10 +53,12 @@ const RepliesExplorer = () => {
     const classes = useMyStyles();
     const keyword = useLoadLanguage("components/NavItems/tools/Conversation.tsv", tsv);
 
-    const evalKeyword = (key) => {
+    var evalKeyword = (key) => {
         // eslint-disable-next-line
         return eval("`" + keyword(key) + "`");
     }
+
+    evalKeyword = evalKeyword.bind(this);
 
     const dispatch = useDispatch();
 

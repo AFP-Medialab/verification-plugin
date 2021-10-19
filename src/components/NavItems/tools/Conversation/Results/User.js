@@ -44,6 +44,11 @@ const config = [{
 
 class User extends Component {
 
+    evalKeyword = (key) => {
+        // eslint-disable-next-line
+        return eval("`"+this.props.keyword(key)+"`");
+    }
+
     constructor(props) {
         super(props);
 
@@ -51,6 +56,8 @@ class User extends Component {
         this.state = {
             // TODO is there anything we need to default to?
         }
+
+        this.evalKeyword = this.evalKeyword.bind(this);
     }
 
     componentDidMount() {
@@ -110,11 +117,6 @@ class User extends Component {
     }
 
     render() {
-
-        const evalKeyword = (key) => {
-            // eslint-disable-next-line
-            return eval("`"+this.props.keyword(key)+"`");
-        }
 
         return (
             <Paper style={{ padding: 10, marginTop: 10, marginBottom: 5, textAlign: "center"}}>
@@ -190,7 +192,7 @@ class User extends Component {
 
             </Grid>
             <Box m={5}/>
-            <Typography variant="body1" paragraph>{evalKeyword("user_overview")}</Typography>
+            <Typography variant="body1" paragraph>{this.evalKeyword("user_overview")}</Typography>
 <Divider />
 <Box m={1}>
                 <Grid
