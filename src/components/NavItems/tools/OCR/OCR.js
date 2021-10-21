@@ -19,6 +19,7 @@ import CardHeader from "@material-ui/core/CardHeader";
 import { ReactComponent as OCRIcon } from '../../../NavBar/images/SVG/Image/OCR.svg';
 import Grid from "@material-ui/core/Grid";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
+import { submissionEvent } from "../../../Shared/GoogleAnalytics/GoogleAnalytics";
 
 const OCR = () => {
 
@@ -35,6 +36,7 @@ const OCR = () => {
     const [userInput, setUserInput] = useState(ocrInputUrl);
 
     const submitUrl = (src) => {
+        submissionEvent(src);
         dispatch(setOcrInput(src))
     };
 
