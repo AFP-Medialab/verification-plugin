@@ -179,7 +179,7 @@ const useMyStyles = makeStyles(theme => ({
         padding: theme.spacing(2),
     },
     formControl: {
-        margin: theme.spacing(1),
+        width: "100%",
         minWidth: 200,
     },
     histogram: {
