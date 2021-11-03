@@ -97,7 +97,7 @@ function* handleConversationTweetID(action) {
 
     // work out the full URL for the tweet in case we started from the ID only
     // (i.e. navigating for an in_reply_to_status_id_str link etc.)
-    const tweetURL = "https:twitter.com/"+tweet.user.screen_name+"/status/"+id_str;
+    const tweetURL = "https://twitter.com/"+tweet.user.screen_name+"/status/"+id_str;
     
     // store the tweet object into the state
     yield put(setTweet(tweet, tweetURL))
