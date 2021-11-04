@@ -3,6 +3,7 @@ const defaultState = {
     loading : false,
     url: "",
     result: null,
+    image: null
 };
 
 const ImageAnalysisReducer = (state = defaultState, action) => {

@@ -22,7 +22,20 @@ export const useAnalysisWrapper = (setAnalysisLoading, setAnalysisResult, servic
                     if (keyword("table_error_" + response.data.status) !== "")
                         handleError("table_error_" + response.data.status.status);
                     else if (response.data.status !== "unavailable"){
-                        dispatch(setAnalysisResult(processUrl, response.data, false, false));
+
+                        //console.log(response.data);
+
+                        if (response.data.platform === "facebook"){
+                            axios.get("https://weverify-assistant-dev.gate.ac.uk/scrape/facebook?url=" + processUrl)
+                                .then(responseImg => {
+                                    //console.log(responseImg);
+                                    //console.log(responseImg.data.images[0]);
+                                    dispatch(setAnalysisResult(processUrl, response.data, false, false, responseImg.data.images[0]));
+                                })
+                        }else{
+                            dispatch(setAnalysisResult(processUrl, response.data, false, false, null));
+                        }
+                        
                     }
                 })
                 .catch(errors => handleError(errors));
@@ -40,7 +53,8 @@ export const useAnalysisWrapper = (setAnalysisLoading, setAnalysisResult, servic
         const waitUntilDonne = (data) => {
             axios.get(serviceUrl+"/jobs/" + data.id)
                 .then(response => {
-                    if (response.data.status === "done") {
+                    //console.log(response);
+                    if (response.status === 200 && response.data.status !== "unavailable") {
                         getReport(response.data.media_id)
                     } else if ( keyword("table_error_" +  response.data.status) !== "") {
                         handleError("table_error_" + response.data.status);
