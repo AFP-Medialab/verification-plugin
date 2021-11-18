@@ -181,7 +181,7 @@ const Forensic = () => {
             {//=== Title ===
             }
 
-            <HeaderTool name={keywordAllTools("navbar_forensic")} description={keywordAllTools("navbar_forensic_description")} icon={<ForensicIcon style={{ fill: "#51A5B2" }} />}/>
+                <HeaderTool name={keywordAllTools("navbar_forensic")} description={keywordAllTools("navbar_forensic_description")} icon={<ForensicIcon style={{ fill: "#51A5B2" }} />} advanced="true"/>
 
                 <Card style={{ display: (resultData || loading) ? "none" : "block" }}>
                 <CardHeader

@@ -30,6 +30,7 @@ import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
 import SkipNextIcon from '@material-ui/icons/SkipNext';
 import SkipPreviousIcon from '@material-ui/icons/SkipPrevious';
 import Linkify from 'react-linkify';
+import CardMedia from "@material-ui/core/CardMedia";
 
 const FacebookResults = (props) => {
   const classes = useMyStyles();
@@ -267,7 +268,7 @@ const FacebookResults = (props) => {
   const linkComments = report.link_comments ? report.link_comments : [];
   const verifiedComments = report.verification_comments ? report.verification_comments : [];
 
-  
+
   return (
     <div>
       {report !== null &&
@@ -280,13 +281,22 @@ const FacebookResults = (props) => {
             />
             <div className={classes.root2}>
               <CloseResult onClick={() => dispatch(cleanAnalysisState())} />
+
+
+              <CardMedia
+                className={classes.imageAnalysis}
+                image={props.image}
+              />
+
+              <Box m={2} />
+                <Divider />
+              <Box m={2} />
+
+
               <Typography variant={"h6"}>
                 {keyword("image_description")}
               </Typography>
               
-              <Box m={2} />
-              <Divider />
-              <Box m={2} />
               <Typography
                 variant="body2"
                 color="textSecondary"

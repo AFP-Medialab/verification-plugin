@@ -396,7 +396,7 @@ const Gif = () => {
                 {//=== Title ===
                 }
 
-                <HeaderTool name={keywordAllTools("navbar_gif")} description={keywordAllTools("navbar_gif_description")} icon={<IconGif style={{ fill: "#51A5B2" }} />} />
+                <HeaderTool name={keywordAllTools("navbar_gif")} description={keywordAllTools("navbar_gif_description")} icon={<IconGif style={{ fill: "#51A5B2" }} />} advanced="true" />
             
 
                 {//=== Load of the images ===

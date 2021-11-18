@@ -20,7 +20,6 @@ import { ReactComponent as IconData } from '../../../NavBar/images/SVG/DataAnaly
 import { ReactComponent as IconTools } from '../../../NavBar/images/SVG/Navbar/Tools.svg';
 import Box from "@material-ui/core/Box";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
-import AdvancedTools from "./AdvancedTools/AdvancedTools";
 import { useSelector } from 'react-redux';
 import Snackbar from '@material-ui/core/Snackbar';
 import Alert from '@material-ui/lab/Alert';
@@ -174,22 +173,7 @@ const AllTools = (props) => {
                 </Alert>
             </Snackbar>
 
-            <Grid
-                container
-                direction="row"
-                justifyContent="space-between"
-                alignItems="center">
-
-
-                <Grid item xs>
-                    <HeaderTool name={keyword("navbar_tools")} icon={<IconTools style={{ fill: "#51A5B2" }} />} />
-                </Grid>
-
-                <Grid item>
-                    <AdvancedTools />
-                </Grid>
-
-            </Grid>
+            <HeaderTool name={keyword("navbar_tools")} icon={<IconTools style={{ fill: "#51A5B2" }} />} advanced="true"/>
 
             <Card>
                 <Tabs value={value} onChange={handleChange} indicatorColor={'primary'}>

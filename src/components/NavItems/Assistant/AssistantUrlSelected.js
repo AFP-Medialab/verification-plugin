@@ -14,6 +14,8 @@ import useLoadLanguage from "../../../Hooks/useLoadLanguage";
 import {submitInputUrl} from "../../../redux/actions/tools/assistantActions";
 import tsv from "../../../LocalDictionary/components/NavItems/tools/Assistant.tsv";
 
+import { submissionEvent } from "../../Shared/GoogleAnalytics/GoogleAnalytics";
+
 const AssistantUrlSelected = (props) => {
 
     // styles, language, dispatch, params
@@ -23,12 +25,17 @@ const AssistantUrlSelected = (props) => {
 
     //form states
     const inputUrl = useSelector(state => state.assistant.inputUrl);
-    const loading = useSelector(state => state.assistant.loading)
+    const loading = useSelector(state => state.assistant.loading);
 
     //local state
-    const formInput = props.formInput
-    const setFormInput = (value) => props.setFormInput(value)
-    const cleanAssistant = () => props.cleanAssistant()
+    const formInput = props.formInput;
+    const setFormInput = (value) => props.setFormInput(value);
+    const cleanAssistant = () => props.cleanAssistant();
+
+    const handleSubmissionURL = () => {
+        dispatch(submitInputUrl(formInput));
+        submissionEvent(formInput);
+    };
 
     return (
         <Box my={3} boxShadow={3}>
@@ -60,9 +67,9 @@ const AssistantUrlSelected = (props) => {
                             <Grid item xs={2}>
                                 <Box mt={2} ml={6}>
                                     {inputUrl === null ?
-                                        <Button variant="contained" color="primary" onClick={() => {
-                                            dispatch(submitInputUrl(formInput))
-                                        }}>
+                                        <Button variant="contained" color="primary" onClick={
+                                            handleSubmissionURL
+                                        }>
                                             {keyword("button_analyse")}
                                         </Button> :
                                         <Button variant="contained" color="primary" onClick={() => cleanAssistant()}>

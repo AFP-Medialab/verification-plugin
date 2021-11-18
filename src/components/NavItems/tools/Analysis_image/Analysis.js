@@ -37,11 +37,12 @@ const Analysis = () => {
     const resultUrl = useSelector(state => state.analysisImage.url);
     const resultData = useSelector(state => state.analysisImage.result);
     const isLoading = useSelector(state => state.analysisImage.loading);
+    const imageFB = useSelector(state => state.analysisImage.image);
 
 
     const [input, setInput] = useState((resultUrl) ? resultUrl : "");
     const [urlDetected, setUrlDetected] = useState(false)
-    const [submittedUrl, setSubmittedUrl] = useState(undefined);
+    const [submittedUrl, setSubmittedUrl] = useState(undefined); 
     const [reprocess, setReprocess] = useState(false);
     const serviceUrl = "https://mever.iti.gr/caa/api/v4/images";
 
@@ -170,7 +171,7 @@ const Analysis = () => {
             {
                 //(resultData !== null && resultUrl != null && resultUrl.startsWith("https://www.facebook.com/")) ?
                 (resultData  && resultData.platform.startsWith("facebook")) ?
-                    <FacebookResults report={resultData}/> : null
+                    <FacebookResults report={resultData} image={imageFB}/> : null
             }
              
         </div>);
