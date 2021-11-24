@@ -32,6 +32,8 @@ const useImageTreatment = (mediaUrl, keyword) => {
             img.onload = () => {
                 EXIF.getData(img, () => {
                     let res = EXIF.getAllTags(img);
+                    
+                    console.log(res);
                     if (!isEmpty(res)) {
                         dispatch(setMetadadaResult(mediaUrl, res, false, false, true));
                     } else

@@ -136,6 +136,20 @@ const imageReversesearchDBKF = function (word) {
     }
 };
 
+const videoReversesearchDBKF = function (word) {
+    let search_url = "https://weverify-demo.ontotext.com/#!/similaritySearchResults&type=Videos&params=";
+    let urlvideo = word.linkUrl;
+    if (urlvideo !== "") {
+        let url = search_url + encodeURIComponent(urlvideo);
+        window.chrome.tabs.create({ url: url, selected: false });
+        // Google analytics
+        rightClickEvent("Video Reverse Search - DBKF (beta)", url)
+        //ga("send", "event", "ContextualMenu - DBKF", "click", url);
+    }
+
+};
+
+
 const imageForensic = function (word) {
     let url = getUrlImg(word);
     if (url !== "") {
@@ -227,6 +241,12 @@ window.chrome.contextMenus.create({
     contexts: ["link", "video"],
     onclick: thumbnailsSearch,
     targetUrlPatterns: ["https://www.youtube.com/*", "https://youtu.be/*"]
+});
+
+window.chrome.contextMenus.create({
+    title: "Video Reverse Search - DBKF (beta)",
+    contexts: ["link", "video"],
+    onclick: videoReversesearchDBKF,
 });
 
 window.chrome.contextMenus.create({
