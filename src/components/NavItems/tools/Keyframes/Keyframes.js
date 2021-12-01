@@ -144,6 +144,8 @@ const Keyframes = () => {
     }
 
 
+    console.log("Mensaje keyframes", message);
+
     return (
         <div>
             <HeaderTool name={keywordAllTools("navbar_keyframes")} description={keywordAllTools("navbar_keyframes_description")} icon={<KeframesIcon style={{ fill: "#51A5B2" }} />}/>
@@ -284,7 +286,7 @@ const Keyframes = () => {
                         <Box m={3} hidden={!isLoading}/>
                         <LinearProgress hidden={!isLoading}/>
                         <Typography variant="body1" hidden={!isLoading}>
-                            {message}
+                            {/*message*/}
                         </Typography>
                     </Box>
                     <Box display={!localFile ? "none" : "block"}>
