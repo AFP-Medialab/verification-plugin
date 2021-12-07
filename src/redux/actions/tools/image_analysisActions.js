@@ -1,11 +1,12 @@
-export const setAnalysisResult = (url, result, notification, loading) => {
+export const setAnalysisResult = (url, result, notification, loading, image) => {
     return {
         type : "SET_ANALYSIS_RESULT_IMAGE",
         payload : {
             notification : notification,
             loading : loading,
             url : url,
-            result : result
+            result : result,
+            image: image
         }
     }
 };

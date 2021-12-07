@@ -23,6 +23,7 @@ import FolderOpenIcon from '@material-ui/icons/FolderOpen';
 import {ReactComponent as OCRIcon} from '../../../NavBar/images/SVG/Image/OCR.svg';
 import Grid from "@material-ui/core/Grid";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
+import { submissionEvent } from "../../../Shared/GoogleAnalytics/GoogleAnalytics";
 
 const OCR = () => {
 
@@ -39,7 +40,8 @@ const OCR = () => {
     const [userInput, setUserInput] = useState(ocrInputUrl);
 
 
-    const handleSubmitUrl = (src) => {
+    const submitUrl = (src) => {
+        submissionEvent(src);
         dispatch(setOcrInput(src, selectedScript))
     };
 
@@ -109,7 +111,7 @@ const OCR = () => {
 
                         <Grid item>
                             {!result ?
-                                <Button variant="contained" color="primary" onClick={() => handleSubmitUrl(userInput)}>
+                                <Button variant="contained" color="primary" onClick={() => submitUrl(userInput)}>
                                     {keyword("button_submit") || ""}
                                 </Button>
                                 :
