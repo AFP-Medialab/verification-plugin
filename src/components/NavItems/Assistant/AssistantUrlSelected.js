@@ -40,6 +40,10 @@ const AssistantUrlSelected = (props) => {
             case KNOWN_LINKS.FACEBOOK:
                 archiveUrl = "https://www.facebook.com/plugins/post.php?href=" + encodeURIComponent(inputUrl)
                 break;
+            case KNOWN_LINKS.INSTAGRAM:
+                if(inputUrl.endsWith("/"))
+                    archiveUrl = inputUrl.endsWith("/") ? inputUrl + "embed/captioned/" : inputUrl + "/embed/captioned/"
+                break;
             default:
                 archiveUrl = inputUrl
         }
@@ -88,7 +92,7 @@ const AssistantUrlSelected = (props) => {
                                         </Button>}
                                 </Box>
                             </Grid>
-                            {inputUrl === null || inputUrlType === KNOWN_LINKS.INSTAGRAM  ? null :
+                            {inputUrl === null ? null :
                             <Grid item xs={1}>
                                 <Box ml={1}>
                                     <Button onClick={() => handleArchive()} startIcon={<ArchiveOutlinedIcon /> }>
