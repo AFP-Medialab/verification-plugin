@@ -73,7 +73,7 @@ const OCR = () => {
         if (url && url !== KNOWN_LINKS.OWN) {
             const uri = (url !== null) ? decodeURIComponent(url) : undefined;
             setUserInput(uri);
-            handleSubmitUrl(uri)
+            submitUrl(uri)
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [url]);
