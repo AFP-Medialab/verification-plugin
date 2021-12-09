@@ -309,14 +309,15 @@ const AdvancedTools = () => {
                                 value={email}
                                 placeholder={messageI18NResolver("ACCESSCODEFORM_EMAIL_PLACEHOLDER")}
                                 fullWidth
+                                autoComplete="email"
                                 variant="outlined"
                                 onChange={e => {
                                     setEmail(e.target.value);
-                                    if (email !== "") {
+                                    if (e.target.value !== "") {
                                         setStateGetCode(false);
                                     }
 
-                                    if (email === "") {
+                                    if (e.target.value === "") {
                                         setStateGetCode(true);
                                     }
                                 }}
