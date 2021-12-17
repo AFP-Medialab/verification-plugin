@@ -452,30 +452,29 @@ const filterSourceCredibilityResults = (originalResult) => {
     sourceCredibility = uniqWith(sourceCredibility, isEqual)
 
     sourceCredibility.forEach(result => {
-        if(result["type"] === "fact checker"){
-            factCheckerResult.push({
-                "credibility_source": result["source"],
-                "credibility_labels": result["type"],
-                "credibility_description": result["description"],
-                "credibility_debunks": []
-            })
-        }
-        else {
-            let resultDebunks = result["debunks"] ? result["debunks"] : []
-            if(resultDebunks.length){
-                resultDebunks = resultDebunks.toString()
-                resultDebunks = resultDebunks.substring(1, resultDebunks.length-1)
-                resultDebunks = resultDebunks.split(",")
-            }
-            sourceCredResult.push({
-                "credibility_source": result["source"],
-                "credibility_labels": result["type"],
-                "credibility_description": result["description"],
-                "credibility_debunks": resultDebunks
-            })
-        }
+            // if (result["source-type"] != "neutral") {
+                if (result["type"] === "fact checker") {
+                    factCheckerResult.push({
+                        "credibility_source": result["source"],
+                        "credibility_labels": result["labels"],
+                        "credibility_description": result["description"],
+                        "credibility_debunks": []
+                    })
+                } else {
+                    let resultDebunks = result["evidence"] ? result["evidence"] : []
+                    if (resultDebunks.length) {
+                        resultDebunks = resultDebunks.toString()
+                        resultDebunks = resultDebunks.split(",")
+                    }
+                    sourceCredResult.push({
+                        "credibility_source": result["source"],
+                        "credibility_labels": result["labels"],
+                        "credibility_description": result["description"],
+                        "credibility_debunks": resultDebunks
+                    })
+                }
+            // }
     })
-
     return [sourceCredResult, factCheckerResult]
 }
 

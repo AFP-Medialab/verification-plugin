@@ -15,6 +15,7 @@ import tsv from "../../../../LocalDictionary/components/NavItems/tools/Assistant
 
 const SourceCredibilityResults = (props) => {
 
+    //The domain/account has been mentioned in a lookup against: {value.credibility_source}
     const sourceCredibilityResults = props.scResultFiltered
     const keyword = useLoadLanguage("components/NavItems/tools/Assistant.tsv", tsv);
     return (
