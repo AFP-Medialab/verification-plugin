@@ -53,8 +53,8 @@ export const useAnalysisWrapper = (setAnalysisLoading, setAnalysisResult, servic
         const waitUntilDonne = (data) => {
             axios.get(serviceUrl+"/jobs/" + data.id)
                 .then(response => {
-                    console.log(response);
-                    if (response.status === 200 && response.data.status !== "unavailable") {
+                    //console.log(response);
+                    if (response.status === 200 && response.data.status === "done") {
                         getReport(response.data.media_id)
                     } else if ( keyword("table_error_" +  response.data.status) !== "") {
                         handleError("table_error_" + response.data.status);
