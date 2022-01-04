@@ -481,7 +481,7 @@ const TwitterSna = () => {
       setLocalTime("true");
       setLangInput(userAuthenticated ? "lang_all" : "lang_all");
       setFilers("none");
-      setVerifiedUsers("false");
+      setVerifiedUsers(false);
 
       const newSubmittedRequest = makeRequestParams(
         userAuthenticated ? "" : "",
