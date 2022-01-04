@@ -344,7 +344,7 @@ const AllTools = (props) => {
                                 toolsData.map((value, key) => {
                                     if (value.title === "navbar_twitter_crowdtangle"){
                                         return(
-                                            <Grid className={classes.toolCardStyle} item key={key} onClick={() => window.open("https://weverify-tsna-app.gate.ac.uk/csvSna", "_blank")}>
+                                            <Grid className={classes.toolCardStyle} item key={key} onClick={() => window.open(process.env.REACT_APP_TSNA_SERVER + "csvSna", "_blank")}>
                                                 <ToolCard
                                                     name={keyword(value.title)}
                                                     description={keyword(value.description)}
