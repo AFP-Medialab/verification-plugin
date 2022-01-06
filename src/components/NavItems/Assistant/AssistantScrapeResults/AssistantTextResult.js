@@ -95,13 +95,13 @@ const AssistantTextResult = () => {
                         <Collapse in={expanded}
                                   collapsedSize={100}
                                   id={"element-to-check"}>
-                            <Typography align={"center"}>
+                            <Typography align={"left"}>
                                 <FormatQuoteIcon fontSize={"large"}/>{!displayOrigLang && translatedText ? translatedText : text}
                             </Typography>
                         </Collapse>
                 </CardContent>
 
-                <Box m={1.5}>
+                <Box mb={1.5}>
                     <Divider/>
                     <Grid container>
                         <Grid item xs={6} style={{"display": "flex"}}>
