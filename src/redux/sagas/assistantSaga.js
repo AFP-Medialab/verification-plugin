@@ -487,7 +487,7 @@ const addToRelevantSourceCred = (sourceCredList, result) => {
 const filterDbkfTextResult = (result) => {
     let resultList = []
     result.forEach((value) => {
-        if (value.score > 700) {
+        if (value.score > 2000) {
             resultList.push({
                 "text": value.text,
                 "claimUrl": value.claimUrl,
