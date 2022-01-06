@@ -289,7 +289,7 @@ const OcrResult = () => {
                                         <Typography>{ocrResult.text}</Typography>
                                     </Grid>
 
-                                    <Grid item xs={12} className={classes.ocrFlex}>
+                                    <Grid item xs={12} className={classes.displayFlex}>
                                         <Grid item xs={6} className={classes.ocrActionAreaLeft}>
                                             <Typography variant={"subtitle1"} className={classes.fontBold}>
                                                 {ocrResult.language.name}

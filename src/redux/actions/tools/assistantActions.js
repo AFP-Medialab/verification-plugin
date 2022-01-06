@@ -73,12 +73,13 @@ export const setScrapedData = (text,lang, links, images, videos) => {
     }
 }
 
-export const setInputSourceCredDetails = (inputSC, inputFC, inputSCLoading, inputSCDone, inputSCFail) => {
+export const setInputSourceCredDetails = (positiveSC, negativeSC, neutralSC, inputSCLoading, inputSCDone, inputSCFail) => {
     return {
         type: "SET_INPUT_SC_DETAILS",
         payload: {
-            inputUrlSourceCredibility: inputSC,
-            inputUrlFactCheckers: inputFC,
+            positiveSourceCred: positiveSC,
+            negativeSourceCred: negativeSC,
+            neutralSourceCred: neutralSC,
             inputSCLoading: inputSCLoading,
             inputSCDone: inputSCDone,
             inputSCFail: inputSCFail

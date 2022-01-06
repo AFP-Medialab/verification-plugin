@@ -79,7 +79,7 @@ const AssistantTextResult = () => {
                                         }}/>
                                 </Tooltip>
                             </div>
-                            <Tooltip title= {
+                            <Tooltip interactive={true} title= {
                                 <div className={"content"} dangerouslySetInnerHTML={{__html: keyword("text_tooltip")}}/> }
                                      classes={{ tooltip: classes.assistantTooltip }}>
                                 <HelpOutlineOutlinedIcon className={classes.toolTipIcon}/>

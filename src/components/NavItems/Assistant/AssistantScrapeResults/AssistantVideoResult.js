@@ -16,10 +16,13 @@ import Typography from "@material-ui/core/Typography";
 import {KNOWN_LINKS} from "../AssistantRuleBook";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/Assistant.tsv";
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
+import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 
 const AssistantVideoResult = () => {
 
     const keyword = useLoadLanguage("components/NavItems/tools/Assistant.tsv", tsv);
+    const classes = useMyStyles()
+
     const processUrl = useSelector(state => state.assistant.processUrl);
     const process_url_type = useSelector(state => state.assistant.processUrlType);
     const input_url_type = useSelector(state => state.assistant.inputUrlType)
@@ -108,7 +111,7 @@ const AssistantVideoResult = () => {
                     {processUrl.length > 60 ? processUrl.substring(0, 60) + "..." : processUrl}
                 </Link>
                 <Tooltip title={keyword("copy_link")}>
-                    <IconButton style={{"marginLeft": "auto"}} onClick={() => {
+                    <IconButton className={classes.assistantIconRight} onClick={() => {
                         copyUrl()
                     }}>
                         <FileCopyIcon color={"action"}/>

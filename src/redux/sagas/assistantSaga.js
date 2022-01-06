@@ -185,10 +185,11 @@ function* handleSourceCredibilityCall(action) {
         const inputUrl = yield select((state) => state.assistant.inputUrl)
         const result = yield call(assistantApi.callSourceCredibilityService, [inputUrl])
         const filteredResults = filterSourceCredibilityResults(result)
-        const uncredibleResults = filteredResults[0].length ? filteredResults[0] : null
-        const credibleResults = filteredResults[1].length ? filteredResults[1] : null
+        const positiveResults = filteredResults[0].length ? filteredResults[0] : null
+        const negativeResults = filteredResults[1].length ? filteredResults[1] : null
+        const neutralResults = filteredResults[2].length ? filteredResults[2] : null
 
-        yield put(setInputSourceCredDetails(uncredibleResults, credibleResults, false, true, false))
+        yield put(setInputSourceCredDetails(positiveResults, negativeResults, neutralResults, false, true, false))
     } catch (error) {
         console.log(error)
         yield put(setInputSourceCredDetails(null, false, false, true))
@@ -438,10 +439,11 @@ const filterAssistantResults = (urlType, contentType, userInput, scrapeResult) =
 }
 
 const filterSourceCredibilityResults = (originalResult) => {
-    let sourceCredResult = []
-    let factCheckerResult = []
+    let negativeResult = []
+    let positiveResult = []
+    let neutralResult = []
 
-    if(!(originalResult.entities.SourceCredibility)) {return [sourceCredResult, factCheckerResult]}
+    if(!(originalResult.entities.SourceCredibility)) {return [positiveResult, negativeResult, neutralResult]}
 
     let sourceCredibility = originalResult.entities.SourceCredibility
 
@@ -452,32 +454,35 @@ const filterSourceCredibilityResults = (originalResult) => {
     sourceCredibility = uniqWith(sourceCredibility, isEqual)
 
     sourceCredibility.forEach(result => {
-            // if (result["source-type"] != "neutral") {
-                if (result["type"] === "fact checker") {
-                    factCheckerResult.push({
-                        "credibility_source": result["source"],
-                        "credibility_labels": result["labels"],
-                        "credibility_description": result["description"],
-                        "credibility_debunks": []
-                    })
-                } else {
-                    let resultDebunks = result["evidence"] ? result["evidence"] : []
-                    if (resultDebunks.length) {
-                        resultDebunks = resultDebunks.toString()
-                        resultDebunks = resultDebunks.split(",")
-                    }
-                    sourceCredResult.push({
-                        "credibility_source": result["source"],
-                        "credibility_labels": result["labels"],
-                        "credibility_description": result["description"],
-                        "credibility_debunks": resultDebunks
-                    })
-                }
-            // }
+        if (result["source-type"] === "positive") {
+            addToRelevantSourceCred(positiveResult, result)
+        }
+        else if (result["source-type"] === "neutral") {
+            addToRelevantSourceCred(neutralResult, result)
+        }
+        else if (result["source-type"] === "negative") {
+            addToRelevantSourceCred(negativeResult, result)
+        }
+
     })
-    return [sourceCredResult, factCheckerResult]
+    return [positiveResult, negativeResult, neutralResult]
 }
 
+const addToRelevantSourceCred = (sourceCredList, result) => {
+
+    let result_evidence = result["evidence"] ? result["evidence"] : []
+    if (result_evidence.length) {
+        result_evidence = result_evidence.toString()
+        result_evidence = result_evidence.split(",")
+    }
+
+    sourceCredList.push({
+        "credibility_source": result["source"],
+        "credibility_labels": result["labels"],
+        "credibility_description": result["description"],
+        "credibility_evidence": result_evidence
+    })
+}
 
 const filterDbkfTextResult = (result) => {
     let resultList = []

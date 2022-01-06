@@ -15,11 +15,13 @@ import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
+import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 
 
 const AssistantCheckStatus = () => {
 
     const keyword = useLoadLanguage("components/NavItems/tools/Assistant.tsv", tsv);
+    const classes = useMyStyles()
     const dispatch = useDispatch()
     const stateExpanded = useSelector(state => state.assistant.stateExpanded)
 
@@ -50,14 +52,14 @@ const AssistantCheckStatus = () => {
             <Typography component={"span"}>
                 <Box color={"orange"} fontStyle="italic">
                     {keyword("status_subtitle")}
-                    <IconButton style={{"marginLeft": "auto"}}
+                    <IconButton className={classes.assistantIconRight}
                                 onClick={() => dispatch(setStateExpanded(!stateExpanded))}>
                         <ExpandMoreIcon style={{"color": "orange"}}/>
                     </IconButton>
                 </Box>
             </Typography>
 
-            <Collapse in={stateExpanded} style={{"backgroundColor": "transparent"}}>
+            <Collapse in={stateExpanded} className={classes.assistantBackground}>
                 <List disablePadding={true}>
                     {failStates.map((value, key) => (
                         value.failed ?

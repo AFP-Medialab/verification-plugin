@@ -15,8 +15,9 @@ const defaultState = {
     processUrlType: null,
     inputUrlType: null,
 
-    inputUrlSourceCredibility: null,
-    inputUrlFactCheckers: null,
+    positiveSourceCred: null,
+    negativeSourceCred: null,
+    neutralSourceCred: null,
     inputSCLoading: false,
     inputSCDone: false,
     inputSCFail: false,
@@ -96,8 +97,9 @@ const assistantReducer = (state = defaultState, action) => {
                 processUrlType: null,
                 inputUrlType: null,
 
-                inputUrlSourceCredibility: null,
-                inputUrlFactCheckers: null,
+                positiveSourceCred: null,
+                negativeSourceCred: null,
+                neutralSourceCred: null,
                 inputSCLoading: false,
                 inputSCDone: false,
                 inputSCFail: false,

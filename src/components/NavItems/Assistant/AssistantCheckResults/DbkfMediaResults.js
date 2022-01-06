@@ -1,6 +1,5 @@
 import React from "react";
 
-import Avatar from "@material-ui/core/Avatar";
 import Box from "@material-ui/core/Box";
 import {DuoOutlined} from "@material-ui/icons";
 import ImageIconOutlined from "@material-ui/icons/Image";
@@ -28,20 +27,24 @@ const DbkfMediaResults = () => {
                 dbkfImageMatch.map((value, key) => (
                     <ListItem key={key}>
                         <ListItemAvatar>
-                            <Avatar variant={"square"}><ImageIconOutlined fontSize={"large"}/> </Avatar>
+                            <ImageIconOutlined fontSize={"large"}/>
                         </ListItemAvatar>
                         <ListItemText
                             primary={
-                                <Typography component={"div"} align={"left"}>
-                                    <Box fontWeight="fontWeightBold">
+                                <div>
+                                    <Typography variant={"body1"} color={"textPrimary"} component={"div"} align={"left"}>
                                         {keyword("dbkf_image_warning") + parseFloat(value.similarity).toFixed(2)}
-                                    </Box>
-                                </Typography>}
+                                    </Typography>
+                                    <Box mb={0.5}/>
+                                </div>
+                            }
                             secondary={
-                                <a href={uiUrl + value.claimUrl} key={key} target="_blank"
-                                   rel="noopener noreferrer">
-                                    {value.claimUrl}
-                                </a>
+                                <Typography variant={"caption"} component={"div"} color={"textSecondary"}>
+                                    <a href={uiUrl + value.claimUrl} key={key} target="_blank"
+                                       rel="noopener noreferrer">
+                                        {value.claimUrl}
+                                    </a>
+                                </Typography>
                             }/>
                     </ListItem>
                 ))
@@ -51,20 +54,24 @@ const DbkfMediaResults = () => {
                 dbkfVideoMatch.map((value, key) => (
                     <ListItem key={key}>
                         <ListItemAvatar>
-                            <Avatar variant={"square"}><DuoOutlined fontSize={"large"}/> </Avatar>
+                            <DuoOutlined fontSize={"large"}/>
                         </ListItemAvatar>
                         <ListItemText
                             primary={
-                                <Typography component={"div"} align={"left"}>
-                                    <Box fontWeight="fontWeightBold">
+                                <div>
+                                    <Typography variant={"body1"} color={"textPrimary"} component={"div"} align={"left"}>
                                         {keyword("dbkf_video_warning") + parseFloat(value.similarity).toFixed(2)}
-                                    </Box>
-                                </Typography>}
+                                    </Typography>
+                                    <Box mb={0.5}/>
+                                </div>
+                            }
                             secondary={
-                                <a href={uiUrl + value.claimUrl} key={key} target="_blank"
-                                   rel="noopener noreferrer">
-                                    {value.claimUrl}
-                                </a>
+                                <Typography variant={"caption"} component={"div"} color={"textSecondary"}>
+                                    <a href={uiUrl + value.claimUrl} key={key} target="_blank"
+                                       rel="noopener noreferrer">
+                                        {value.claimUrl}
+                                    </a>
+                                </Typography>
                             }/>
                     </ListItem>
                 ))

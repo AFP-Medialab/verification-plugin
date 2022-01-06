@@ -359,6 +359,26 @@ const useMyStyles = makeStyles(theme => ({
             color: "#4c4c4c"
         },
     },
+    customAllToolsButton: {
+        padding: 0,
+        minHeight:0,
+        minWidth: 0,
+        backgroundColor: 'transparent',
+        fontSize: 40
+    },
+    customAllToolsIconDeselected: {
+        fontSize: "inherit",
+        color: "#9A9A9A"
+    },
+    customAllToolsIconSelected: {
+        fontSize: "inherit",
+        color: theme.palette.primary.main
+    },
+
+
+    /* Assistant classes */
+    /* ================================================================================== */
+
     toolTipIcon: {
         color: theme.palette.secondary,
         position: "relative",
@@ -422,6 +442,31 @@ const useMyStyles = makeStyles(theme => ({
             borderColor: theme.palette.primary.main,
         }
     },
+    sourceCredibilityBorder: {
+        border: "2px solid",
+        borderColor: theme.palette.primary.main,
+        borderRadius: "15px",
+        display: "flex"
+    },
+    assistantWarningBorder: {
+        border: "2px solid",
+        borderColor: "red",
+        borderRadius: "15px",
+        display: "flex"
+    },
+    assistantBackground: {
+        backgroundColor: "transparent"
+    },
+    assistantIconRight: {
+        marginLeft: "auto"
+    },
+
+    /* OCR classes */
+    /* ================================================================================== */
+
+    displayFlex:{
+        display: "flex"
+    },
     ocrImageCard: {
         justifyContent: "center",
         display: "flex"
@@ -438,9 +483,6 @@ const useMyStyles = makeStyles(theme => ({
         position:  "relative",
         maxHeight:"48vh",
     },
-    ocrFlex:{
-        display: "flex"
-    },
     ocrActionAreaLeft:{
         justifyContent: "left",
     },
@@ -449,33 +491,16 @@ const useMyStyles = makeStyles(theme => ({
         justifyContent: "right",
     },
     ocrButton:{
-      borderWidth: "medium",
-      marginRight: "10px"
+        borderWidth: "medium",
+        marginRight: "10px"
     },
     ocrReprocessBox:{
-      backgroundColor: "whitesmoke",
-      padding: 20
+        backgroundColor: "whitesmoke",
+        padding: 20
     },
     fontBold:{
         fontWeight: "bold"
     },
-    customAllToolsButton: {
-        padding: 0,
-        minHeight:0,
-        minWidth: 0,
-        backgroundColor: 'transparent',
-        fontSize: 40
-    },
-    customAllToolsIconDeselected: {
-        fontSize: "inherit",
-        color: "#9A9A9A"
-    },
-    customAllToolsIconSelected: {
-        fontSize: "inherit",
-        color: theme.palette.primary.main
-    },
-
-
 
     /* Forensic classes */
     /* ================================================================================== */

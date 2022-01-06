@@ -19,10 +19,13 @@ import tsv from "../../../../LocalDictionary/components/NavItems/tools/Assistant
 
 const SourceCredibilityDBKFDialog = (props) => {
 
+    //central
     const keyword = useLoadLanguage("components/NavItems/tools/Assistant.tsv", tsv);
     const [open, setOpen] = useState(false);
 
-    const debunks = props.debunks
+    // props
+    const source = props.source
+    const evidence = props.evidence
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -41,12 +44,12 @@ const SourceCredibilityDBKFDialog = (props) => {
                         <IconButton onClick={handleClose}>
                             <CloseIcon/>
                         </IconButton>
-                        {keyword("source_cred_popup_header")}
+                        {keyword("source_cred_popup_header")} {source}
                     </Typography>
                 </DialogTitle>
                 <DialogContent dividers>
                     <List>
-                        {debunks.map((result, index) =>
+                        {evidence.map((result, index) =>
                             <ListItem key={index}>
                                 <ListItemIcon><ArrowRightIcon/></ListItemIcon>
                                 <Typography>
