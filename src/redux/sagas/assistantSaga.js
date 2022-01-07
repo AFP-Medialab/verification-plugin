@@ -415,6 +415,8 @@ const filterAssistantResults = (urlType, contentType, userInput, scrapeResult) =
                 contentType === CONTENT_TYPE.IMAGE ? imageList = [userInput] : videoList = [userInput]
             } else {
                 imageList = scrapeResult.images
+                // very specific. consider reworking to all svg images!
+                imageList = imageList.filter(imageUrl => !(imageUrl.includes("loader.svg")));
                 videoList = scrapeResult.videos
             }
             break;
