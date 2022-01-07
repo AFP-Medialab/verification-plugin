@@ -492,7 +492,7 @@ const useMyStyles = makeStyles(theme => ({
     },
     ocrButton:{
         borderWidth: "medium",
-        marginRight: "10px"
+        width: "49%"
     },
     ocrReprocessBox:{
         backgroundColor: "whitesmoke",

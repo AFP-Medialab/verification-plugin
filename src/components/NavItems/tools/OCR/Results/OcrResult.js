@@ -220,15 +220,14 @@ const OcrResult = () => {
                                     {fullText}
                                 </Typography>
 
-                                <Box mt={4} mb={4}>
+                                <Box mt={4}>
 
                                     <Tooltip open={tooltipIndex === -1 && tooltipOpen}
-                                             className={classes.assistantTooltip}
                                              disableFocusListener
                                              disableHoverListener
                                              disableTouchListener
                                              title={keyword("tooltip_copy")}>
-                                        <Button className={classes.ocrButton}
+                                        <Button style={{"marginRight": "2%", "borderWidth": "medium", "width": "49%"}}
                                                 variant={"outlined"}
                                                 color={"primary"}
                                                 size={"large"}
@@ -245,7 +244,6 @@ const OcrResult = () => {
                                         </Button>
                                     </Tooltip>
 
-
                                     <Button className={classes.ocrButton}
                                             variant={"outlined"}
                                             color={"primary"}
@@ -253,7 +251,7 @@ const OcrResult = () => {
                                             onClick={() => {
                                                 googleTranslate(fullText)
                                             }}>
-                                        <TranslateIcon className={classes.ocrButton}/>{keyword("translate")}
+                                        <TranslateIcon style={{"marginRight": "10px"}}/>{keyword("translate")}
                                     </Button>
                                 </Box>
                             </CardContent>
@@ -272,6 +270,17 @@ const OcrResult = () => {
                         <CardContent>
                             {result.bounding_boxes.map((ocrResult, index) => (
                                 <Grid container spacing={2} key={index}>
+
+                                    {index > 0 ?
+                                        <Grid item xs={12}>
+                                            <Divider/>
+                                            <Box m={2}/>
+                                        </Grid>
+                                        :
+                                        <Grid item xs={12}>
+                                            <Box m={1}/>
+                                        </Grid>
+                                    }
 
                                     <Grid item xs={6}>
                                         <img id={imgPrefix + index}
@@ -372,10 +381,6 @@ const OcrResult = () => {
                                                 : null
                                             }
                                         </Card>
-                                    </Grid>
-
-                                    <Grid item xs={12}>
-                                        <Divider/>
                                     </Grid>
 
                                 </Grid>
