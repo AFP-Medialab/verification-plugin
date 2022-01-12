@@ -42,11 +42,11 @@ export default function assistantApiCalls() {
         }
     }
 
-    const callNamedEntityService = async (text) => {
+    const callNamedEntityService = async (text, lang) => {
 
         const namedEntityResult = await axios.post(
             assistantEndpoint + "gcloud/named-entity",
-            {content: text}
+            {content: text, lang: lang}
         )
 
         return namedEntityResult.data

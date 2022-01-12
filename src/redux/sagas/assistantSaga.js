@@ -245,7 +245,7 @@ function* handleNamedEntityCall(action) {
         const textLang = yield select((state) => state.assistant.textLang)
         if (text !== null && NE_SUPPORTED_LANGS.includes(textLang)) {
             yield put(setNeDetails(null, null, true, false, false))
-            const result = yield call(assistantApi.callNamedEntityService, text)
+            const result = yield call(assistantApi.callNamedEntityService, text, textLang)
             let entities = []
 
             Object.entries(result.response.annotations).forEach(entity => {
