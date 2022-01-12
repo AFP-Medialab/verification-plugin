@@ -167,7 +167,7 @@ const Keyframes = () => {
                                     container
                                     direction="row"
                                     alignItems="center"
-
+                                    className={classes.bigButtonResponsive}
                                 >
                                     <Grid item>
                                         <Box ml={1} mr={2}>
@@ -209,7 +209,7 @@ const Keyframes = () => {
                                     container
                                     direction="row"
                                     alignItems="center"
-
+                                    className={classes.bigButtonResponsive}
                                 >
                                     <Grid item>
                                         <Box ml={1} mr={2}>
