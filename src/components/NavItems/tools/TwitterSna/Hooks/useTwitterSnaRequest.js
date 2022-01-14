@@ -38,7 +38,7 @@ const useTwitterSnaRequest = (request) => {
       const requestData = encodeURIComponent(JSON.stringify(request));
       const userData = encodeURIComponent(JSON.stringify(userLogined));
       // userToken
-      window.open(process.env.REACT_APP_TSNA_SERVER+ "pluginredirect" + "?data=" + requestData + "&token=" + userToken + "&refreshToken=" + refreshtoken + "&user=" + userData);
+      window.open(process.env.REACT_APP_TSNA_SERVER+ "pluginredirect?data=" + requestData + "&token=" + userToken + "&refreshToken=" + refreshtoken + "&user=" + userData);
       dispatch(setTwitterSnaLoading(false));     
     } else {
     }
