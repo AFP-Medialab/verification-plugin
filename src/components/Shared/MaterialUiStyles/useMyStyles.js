@@ -446,13 +446,15 @@ const useMyStyles = makeStyles(theme => ({
         border: "2px solid",
         borderColor: theme.palette.primary.main,
         borderRadius: "15px",
-        display: "flex"
+        display: "flex",
+        padding: "12px"
     },
     assistantWarningBorder: {
         border: "2px solid",
         borderColor: "red",
         borderRadius: "15px",
-        display: "flex"
+        display: "flex",
+        padding: "12px"
     },
     assistantBackground: {
         backgroundColor: "transparent"
