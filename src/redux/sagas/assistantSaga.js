@@ -488,8 +488,17 @@ const addToRelevantSourceCred = (sourceCredList, result) => {
 
 const filterDbkfTextResult = (result) => {
     let resultList = []
-    result.forEach((value) => {
-        if (value.score > 2000) {
+    let scores = []
+
+    result.forEach(res=>{
+        scores.push(res.score)
+    })
+
+    let scaled = scaleNumbers(scores, 0, 100)
+
+    // to be reviewed. only really fixes some minor cases.
+    result.forEach((value, index) => {
+        if (value.score > 1000 && scaled[index] > 70)  {
             resultList.push({
                 "text": value.text,
                 "claimUrl": value.claimUrl,
@@ -498,6 +507,21 @@ const filterDbkfTextResult = (result) => {
         }
     })
     return resultList.length ? resultList : null
+}
+
+
+const scaleNumbers = (unscaledNums, min, max) => {
+    let scaled = []
+    let maxRange = Math.max.apply(Math, unscaledNums);
+    let minRange = Math.min.apply(Math, unscaledNums);
+
+    for (let i = 0; i < unscaledNums.length; i++) {
+        let unscaled = unscaledNums[i];
+        let scaledNum =  (100) * (unscaled - minRange) / (maxRange - minRange);
+
+        scaled.push(scaledNum)
+    }
+    return scaled
 }
 
 /**
