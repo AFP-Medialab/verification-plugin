@@ -131,7 +131,7 @@ const KeyFramesResults = (props) => {
                                                 similarityResults.map((value, key) => {
                                                     return (
                                                         <Typography variant="body1" align="left" style={{ color: "#17717e" }} key={key}>
-                                                            {value.externalLink}
+                                                            <a href={value.externalLink} target="_blank" style={{ color: "#17717e" }}>{value.externalLink}</a>
                                                         </Typography>
                                                     )
                                                 })
