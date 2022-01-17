@@ -19,6 +19,7 @@ import { useLoading, loadImageSize } from "../../../../../Hooks/useInput"
 import { Accordion, AccordionDetails, AccordionSummary, LinearProgress, Typography } from "@material-ui/core";
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ReportProblemOutlinedIcon from '@material-ui/icons/ReportProblemOutlined';
+import { createTheme, ThemeProvider } from '@material-ui/core/styles';
 
 const KeyFramesResults = (props) => {
     const classes = useMyStyles();
@@ -32,6 +33,19 @@ const KeyFramesResults = (props) => {
     const [height, setHeight] = useState(0);
     const similarityResults = useSelector(state => state.keyframes.similarity);
     const isLoadingSimilarity = useSelector(state => state.keyframes.similarityLoading);
+
+    const theme = createTheme({
+        overrides: {
+
+            MuiImageList: {
+                root: {
+                    maxHeight: "none!important",
+                },
+            },
+
+        },
+
+    });
 
     const toggleDetail = () => {
         setDetailed(!detailed);
@@ -195,16 +209,18 @@ const KeyFramesResults = (props) => {
                                 </Grid>
                             }
                             <Box m={2} />
+                            <ThemeProvider theme={theme}>
                             {
                                 detailed &&
                                 //<ImageGridList list={detailedList} height={160} onClick={(url) => ImageReverseSearch("google", url)}/>
-                                <ImageGridList list={detailedList} height={height} cols={cols} handleClick={imageClick} />
+                                <ImageGridList list={detailedList} height={height} cols={cols} handleClick={imageClick} style={{maxHeigth: "none"}}/>
                             }
                             {
                                 !detailed &&
                                 //<ImageGridList list={simpleList}  height={160} onClick={(url) => ImageReverseSearch("google", url)}/>
-                                <ImageGridList list={simpleList} height={height} cols={cols} handleClick={imageClick} />
+                                <ImageGridList list={simpleList} height={height} cols={cols} handleClick={imageClick} style={{maxHeigth: "none"}}/>
                             }
+                            </ThemeProvider>
                         </div>
                     </Card>
                 </>
