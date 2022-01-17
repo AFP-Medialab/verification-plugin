@@ -53,8 +53,8 @@ const Assistant = () => {
 
     // source credibility
     const positiveSourCred = useSelector(state => state.assistant.positiveSourceCred)
-    const negativeSourceCred = useSelector(state => state.assistant.negativeSourceCred)
-    const neutralSourceCred = useSelector(state => state.assistant.neutralSourceCred)
+    const cautionSourceCred = useSelector(state => state.assistant.cautionSourceCred)
+    const mixedSourceCred = useSelector(state => state.assistant.mixedSourceCred)
 
     const dbkfTextMatch = useSelector(state => state.assistant.dbkfTextMatch);
     const dbkfImageResult = useSelector(state => state.assistant.dbkfImageMatch);
@@ -132,7 +132,7 @@ const Assistant = () => {
                     </Grid>
 
                     <Grid item xs={12}>
-                        {positiveSourCred || negativeSourceCred || neutralSourceCred ?
+                        {positiveSourCred || cautionSourceCred || mixedSourceCred ?
                             <AssistantSCResults/> : null
                         }
                     </Grid>

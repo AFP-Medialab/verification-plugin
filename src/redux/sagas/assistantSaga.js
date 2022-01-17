@@ -186,10 +186,10 @@ function* handleSourceCredibilityCall(action) {
         const result = yield call(assistantApi.callSourceCredibilityService, [inputUrl])
         const filteredResults = filterSourceCredibilityResults(result)
         const positiveResults = filteredResults[0].length ? filteredResults[0] : null
-        const negativeResults = filteredResults[1].length ? filteredResults[1] : null
-        const neutralResults = filteredResults[2].length ? filteredResults[2] : null
+        const cautionResults = filteredResults[1].length ? filteredResults[1] : null
+        const mixedResults = filteredResults[2].length ? filteredResults[2] : null
 
-        yield put(setInputSourceCredDetails(positiveResults, negativeResults, neutralResults, false, true, false))
+        yield put(setInputSourceCredDetails(positiveResults, cautionResults, mixedResults, false, true, false))
     } catch (error) {
         console.log(error)
         yield put(setInputSourceCredDetails(null, false, false, true))
@@ -441,11 +441,11 @@ const filterAssistantResults = (urlType, contentType, userInput, scrapeResult) =
 }
 
 const filterSourceCredibilityResults = (originalResult) => {
-    let negativeResult = []
+    let cautionResult = []
     let positiveResult = []
-    let neutralResult = []
+    let mixedResult = []
 
-    if(!(originalResult.entities.SourceCredibility)) {return [positiveResult, negativeResult, neutralResult]}
+    if(!(originalResult.entities.SourceCredibility)) {return [positiveResult, cautionResult, mixedResult]}
 
     let sourceCredibility = originalResult.entities.SourceCredibility
 
@@ -459,15 +459,15 @@ const filterSourceCredibilityResults = (originalResult) => {
         if (result["source-type"] === "positive") {
             addToRelevantSourceCred(positiveResult, result)
         }
-        else if (result["source-type"] === "neutral") {
-            addToRelevantSourceCred(neutralResult, result)
+        else if (result["source-type"] === "mixed") {
+            addToRelevantSourceCred(mixedResult, result)
         }
-        else if (result["source-type"] === "negative") {
-            addToRelevantSourceCred(negativeResult, result)
+        else if (result["source-type"] === "caution") {
+            addToRelevantSourceCred(cautionResult, result)
         }
 
     })
-    return [positiveResult, negativeResult, neutralResult]
+    return [positiveResult, cautionResult, mixedResult]
 }
 
 const addToRelevantSourceCred = (sourceCredList, result) => {

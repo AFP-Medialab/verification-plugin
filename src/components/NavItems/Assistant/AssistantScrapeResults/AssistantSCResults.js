@@ -33,8 +33,8 @@ const AssistantSCResults = () => {
     // state
     const assuranceExpanded = useSelector(state => state.assistant.assuranceExpanded)
     const positiveSourCred = useSelector(state => state.assistant.positiveSourceCred)
-    const negativeSourceCred = useSelector(state => state.assistant.negativeSourceCred)
-    const neutralSourceCred = useSelector(state => state.assistant.neutralSourceCred)
+    const cautionSourceCred = useSelector(state => state.assistant.cautionSourceCred)
+    const mixedSourceCred = useSelector(state => state.assistant.mixedSourceCred)
 
 
     return (
@@ -76,23 +76,23 @@ const AssistantSCResults = () => {
                                     : null
                                 }
 
-                                {negativeSourceCred ?
+                                {cautionSourceCred ?
                                     <div>
                                         <Typography variant={"subtitle1"} className={classes.fontBold}>
                                             {keyword("warning_title")}
                                         </Typography>
-                                        <SourceCredibilityResult scResultFiltered={negativeSourceCred}
+                                        <SourceCredibilityResult scResultFiltered={cautionSourceCred}
                                                                  icon={ErrorOutlineOutlinedIcon} iconColor="error"/>
                                     </div>
                                     : null
                                 }
 
-                                {neutralSourceCred ?
+                                {mixedSourceCred ?
                                     <div>
                                         <Typography variant={"subtitle1"} className={classes.fontBold}>
                                             {keyword("mentions")}
                                         </Typography>
-                                        <SourceCredibilityResult scResultFiltered={neutralSourceCred}
+                                        <SourceCredibilityResult scResultFiltered={mixedSourceCred}
                                                                  icon={SentimentSatisfied} iconColor="action"/>
                                     </div>
                                     : null

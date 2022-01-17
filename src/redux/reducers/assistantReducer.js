@@ -16,8 +16,8 @@ const defaultState = {
     inputUrlType: null,
 
     positiveSourceCred: null,
-    negativeSourceCred: null,
-    neutralSourceCred: null,
+    cautionSourceCred: null,
+    mixedSourceCred: null,
     inputSCLoading: false,
     inputSCDone: false,
     inputSCFail: false,
@@ -98,8 +98,8 @@ const assistantReducer = (state = defaultState, action) => {
                 inputUrlType: null,
 
                 positiveSourceCred: null,
-                negativeSourceCred: null,
-                neutralSourceCred: null,
+                cautionSourceCred: null,
+                mixedSourceCred: null,
                 inputSCLoading: false,
                 inputSCDone: false,
                 inputSCFail: false,
