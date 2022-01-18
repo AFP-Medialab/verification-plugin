@@ -78,8 +78,8 @@ export const setInputSourceCredDetails = (positiveSC, cautionSC, mixedSC, inputS
         type: "SET_INPUT_SC_DETAILS",
         payload: {
             positiveSourceCred: positiveSC,
-            negativeSourceCred: cautionSC,
-            neutralSourceCred: mixedSC,
+            cautionSourceCred: cautionSC,
+            mixedSourceCred: mixedSC,
             inputSCLoading: inputSCLoading,
             inputSCDone: inputSCDone,
             inputSCFail: inputSCFail
