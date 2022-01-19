@@ -19,6 +19,8 @@ import CovidSearch from "../../NavItems/tools/CovidSearch/CovidSearch";
 import XNetwork from "../../NavItems/tools/XNetwork/XNetwork";
 import OCR from "../../NavItems/tools/OCR/OCR";
 import Gif from "../../NavItems/tools/GIF/Gif";
+import Deepfake from "../../NavItems/tools/Deepfake/Deepfake";
+import Geolocation from "../../NavItems/tools/Geolocation/Geolocation";
 import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
 import { createTheme, ThemeProvider } from '@material-ui/core/styles';
 import AnalysisImg from "../../NavItems/tools/Analysis_image/Analysis"
@@ -87,6 +89,14 @@ const DrawerItem = (props) => {
         {
             content: <Gif />,
             footer: <Footer type={"borelli-afp"} />
+        },
+        {
+            content: <Deepfake />,
+            footer: <Footer type={"afp"} />
+        },
+        {
+            content: <Geolocation />,
+            footer: <Footer type={"afp"} />
         }
     ];
 

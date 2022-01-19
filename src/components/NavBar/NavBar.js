@@ -279,10 +279,29 @@ const NavBar = (props) => {
         {
             title: "navbar_twitter_crowdtangle",
             description: "navbar_twitter_crowdtangle_description",
-            icon: (drawerValue === 10) ? <TwitterSnaIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title="Twitter SNA" />
+            icon: (drawerValue === 15) ? <CsvSnaIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title="Twitter SNA" />
                 : <CsvSnaIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} title={keyword("navbar_twitter_sna")} />,
             iconColored: <CsvSnaIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title={keyword("navbar_twitter_sna")} />,
             tsvPrefix: "twitter_sna",
+        },
+        {
+            title: "navbar_deepfake",
+            description: "navbar_deepfake_description",
+            icon: (drawerValue === 16) ? <MetadataIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title="Twitter SNA" />
+                : <MetadataIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} title={keyword("navbar_twitter_sna")} />,
+            iconColored: <MetadataIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title={keyword("navbar_twitter_sna")} />,
+            tsvPrefix: "deepfake",
+            path: "deepfake"
+            
+        },
+        {
+            title: "navbar_geolocation",
+            description: "navbar_geolocation_description",
+            icon: (drawerValue === 16) ? <MetadataIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title="Twitter SNA" />
+                : <MetadataIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} title={keyword("navbar_twitter_sna")} />,
+            iconColored: <MetadataIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title={keyword("navbar_twitter_sna")} />,
+            tsvPrefix: "geolocation",
+            path: "geolocation"
         },
     ];
 

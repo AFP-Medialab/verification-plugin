@@ -128,7 +128,9 @@ const AllTools = (props) => {
             value.title === "navbar_forensic" ||
             value.title === "navbar_magnifier" ||
             value.title === "navbar_metadata" ||
-            value.title === "navbar_gif"
+            value.title === "navbar_gif" ||
+            value.title === "navbar_deepfake" ||
+            value.title === "navbar_geolocation"
         ) {
             toolsImages.push(value);
         }

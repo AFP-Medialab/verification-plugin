@@ -24,6 +24,8 @@ import ocrReducer from "./tools/ocrReducer";
 import defaultLanguageReducer from "./defaultLanguageReducer";
 import gifReducer from "./tools/gifReducer";
 import ImageAnalysisReducer from "./tools/analysisReducerImage";
+import deepfakeReducer from "./tools/deepfake";
+import geolocationReducer from "./tools/geolcoation";
 
 const allReducers = combineReducers({
     language : languageReducer,
@@ -50,6 +52,8 @@ const allReducers = combineReducers({
     assistant : assistantReducer,
     ocr: ocrReducer,
     gif: gifReducer,
+    deepfake: deepfakeReducer,
+    geolocation: geolocationReducer,
 });
 
 export default allReducers;
