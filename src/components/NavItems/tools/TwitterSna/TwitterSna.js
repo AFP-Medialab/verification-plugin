@@ -149,7 +149,13 @@ const TwitterSna = () => {
         : ""
       : ""
   );
+
+  const [keyWordsAny, setKeywordsAny] = useState(
+    request && request.keywordAnyList ? request.keywordAnyList.join(" ") : ""
+  );
+  
   const [keyWordsError, setKeyWordsError] = useState(false);
+  const [keyWordsAnyError, setKeyWordsAnyError] = useState(false);
   const [bannedWords, setBannedWords] = useState(
     request && request.bannedWords ? request.bannedWords.join(" ") : ""
   );
@@ -244,6 +250,9 @@ const TwitterSna = () => {
     let trimedKeywords = !_.isNil(keywordsP)
       ? removeQuotes(keywordsP.trim().match(/("[^"]+"|[^"\s]+)/g))
       : [];
+    let trimedKeywordsAny = !_.isNil(keyWordsAny)
+      ? removeQuotes(keyWordsAny.trim().match(/("[^"]+"|[^"\s]+)/g))
+      : [];
 
     let trimedBannedWords = null;
     if (!_.isNil(bannedWordsP) && bannedWordsP.trim() !== "")
@@ -267,6 +276,7 @@ const TwitterSna = () => {
 
     return {
       keywordList: trimedKeywords,
+      keywordAnyList: trimedKeywordsAny,
       bannedWords: trimedBannedWords,
       lang: langInputP === "lang_all" ? null : langInputP.replace("lang_", ""),
       userList: stringToList(usersInputP),
@@ -343,10 +353,17 @@ const TwitterSna = () => {
 
   const onSubmit = () => {
     //Mandatory Fields errors
-    if (keyWords.trim() === "") {
-      handleErrors(keyword("twitterStatsErrorMessage"));
-      setKeyWordsError(true);
-      return;
+    if ((keyWords.trim() === "") && (keyWordsAny.trim() === "")) {
+      if (keyWords.trim() === "") {
+        handleErrors(keyword("twitterStatsErrorMessage"));
+        setKeyWordsError(true);
+        return;
+      }
+      if (keyWordsAny.trim() === "") {
+        handleErrors(keyword("twitterStatsErrorMessage"));
+        setKeyWordsAnyError(true);
+        return;
+      }
     }
     if (since === null || since === "") {
       handleErrors(keyword("twitterStatsErrorMessage"));
@@ -527,41 +544,88 @@ const TwitterSna = () => {
 
             <Grid container direction="column">
 
-              <Grid container spacing={4} alignItems="center">
-                <Grid item xs={8}>
-                  <TextField
-                    disabled={searchFormDisabled}
-                    error={keyWordsError}
-                    value={keyWords}
-                    onChange={(e) => {
-                      setKeywords(e.target.value);
-                      setKeyWordsError(false);
-                    }}
-                    id="standard-full-width"
-                    label={"*  " + keyword("twitter_sna_searchelement")}
-                    className={classes.neededField}
-                    placeholder={keyword("twitter_sna_search")}
-                    fullWidth
-                    variant="outlined"
-                  />
+                <Typography variant="h6" align="left" style={{ paddingLeft: "0px" }}>
+                  {keyword("twittersna_title_elements")}
+                </Typography>
+                <Box m={1} />
+
+
+                <Grid container spacing={4} alignItems="center">
+                  <Grid item xs={8}>
+                    <TextField
+                      disabled={searchFormDisabled}
+                      error={keyWordsError}
+                      value={keyWords}
+                      onChange={(e) => {
+                        setKeywords(e.target.value);
+                        setKeyWordsError(false);
+                      }}
+                      id="standard-full-width"
+                      label={"* " + keyword("twittersna_field_all")}
+                      className={classes.neededField}
+                      placeholder={keyword("twitter_sna_search")}
+                      fullWidth
+                      variant="outlined"
+                    />
+                  </Grid>
+
+                  <Grid item xs={4} container direction="row" justifyContent="flex-start" alignItems="center">
+                    <Grid item>
+                      <SearchIcon style={{ color: "#757575" }} />
+                    </Grid>
+                    <Grid>
+                      <Box m={1} />
+                    </Grid>
+                    <Grid item xs>
+                      <Typography variant="body2" align="left" style={{ color: "#757575" }}>
+                        {keyword("explanation_allelements")}
+                      </Typography>
+                    </Grid>
+                  </Grid>
                 </Grid>
 
-                <Grid item xs={4} container direction="row" justifyContent="flex-start" alignItems="center">
-                  <Grid item>
-                    <SearchIcon style={{ color: "#757575" }} />
+                <Box m={1} />
+
+                <Grid container spacing={4} alignItems="center">
+                  <Grid item xs={8}>
+                    <TextField
+                      disabled={searchFormDisabled}
+                      error={keyWordsAnyError}
+                      value={keyWordsAny}
+                      onChange={(e) => {
+                        setKeywordsAny(e.target.value);
+                        setKeyWordsAnyError(false);
+                      }}
+                      id="standard-full-width"
+                      label={"*  " + keyword("twittersna_field_any")}
+                      className={classes.neededField}
+                      placeholder={keyword("twitter_sna_search")}
+                      fullWidth
+                      variant="outlined"
+                    />
                   </Grid>
-                  <Grid>
-                    <Box m={1} />
-                  </Grid>
-                  <Grid item xs>
-                    <Typography variant="body2" align="left" style={{ color: "#757575" }}>
-                      {keyword("explanation_keyword")}
-                    </Typography>
+
+                  <Grid item xs={4} container direction="row" justifyContent="flex-start" alignItems="center">
+                    <Grid item>
+                      <SearchIcon style={{ color: "#757575" }} />
+                    </Grid>
+                    <Grid>
+                      <Box m={1} />
+                    </Grid>
+                    <Grid item xs>
+                      <Typography variant="body2" align="left" style={{ color: "#757575" }}>
+                        {keyword("explanation_anyelements")}
+                      </Typography>
+                    </Grid>
                   </Grid>
                 </Grid>
-              </Grid>
 
-              <Box m={1} />
+                <Box m={2} />
+
+                <Typography variant="h6" align="left" style={{ paddingLeft: "0px" }}>
+                  {keyword("twittersna_title_time")}
+                </Typography>
+                <Box m={1} />
 
               <Grid container spacing={4} alignItems="center">
                 <Grid item xs={4}>
