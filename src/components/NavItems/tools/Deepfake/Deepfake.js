@@ -63,7 +63,7 @@ const Deepfake = () => {
 
                             <TextField
                                 id="standard-full-width"
-                                label={keyword("api_input_image")}
+                                label={"Link of the image"}
                                 placeholder={keyword("api_input_placeholder")}
                                 fullWidth
                                 disabled={isLoading}
@@ -74,20 +74,7 @@ const Deepfake = () => {
 
                         </Grid>
 
-                        <Grid item>
-                            <FormControlLabel
-                                control={
-                                    <Checkbox
-                                        checked={reprocess}
-                                        disabled={isLoading}
-                                        value="checkedBox"
-                                        color="primary"
-                                    />
-                                }
-                                label={keyword("api_repro")}
-                            />
-
-                        </Grid>
+                    
 
                         <Grid item>
                             <Button
@@ -111,4 +98,4 @@ const Deepfake = () => {
 
         </div>);
 };
-export default React.memo(Deepfake);
+export default Deepfake;
