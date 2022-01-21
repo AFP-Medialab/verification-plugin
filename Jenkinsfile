@@ -21,8 +21,10 @@ pipeline {
                 branch 'pre-master'
             }
             steps {
-                version = "${env.BUILD_ID}-${GIT_COMMIT}"
-                zip zipFile: "we-werify-plugin-${version}.zip", dir: "./build"
+                script {
+                    version = "${env.BUILD_ID}-${GIT_COMMIT}"
+                    zip zipFile: "we-werify-plugin-${version}.zip", dir: "./build"
+                }
             }
         }
     }
