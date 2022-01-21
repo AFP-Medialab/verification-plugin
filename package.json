@@ -7,7 +7,7 @@
     "@material-ui/icons": "^4.11.2",
     "@material-ui/lab": "^4.0.0-alpha.58",
     "@svgr/webpack": "^5.5.0",
-    "@toast-ui/react-image-editor": "3.15.0",
+    "@toast-ui/react-image-editor": "3.15.2",
     "axios": "^0.21.4",
     "big-integer": "^1.6.51",
     "clsx": "^1.1.1",
