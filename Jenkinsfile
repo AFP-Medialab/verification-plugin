@@ -1,5 +1,6 @@
 pipeline {
     agent none
+    
     environment {
         version = "${env.BUILD_ID}-${GIT_COMMIT}"
     }
