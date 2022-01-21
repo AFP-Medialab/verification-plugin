@@ -462,6 +462,9 @@ const useMyStyles = makeStyles(theme => ({
     assistantIconRight: {
         marginLeft: "auto"
     },
+    assistantIconLeft: {
+        marginRight: "-15px"
+    },
 
     /* OCR classes */
     /* ================================================================================== */

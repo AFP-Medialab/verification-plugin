@@ -111,7 +111,7 @@ const AssistantVideoResult = () => {
                     {processUrl.length > 60 ? processUrl.substring(0, 60) + "..." : processUrl}
                 </Link>
                 <Tooltip title={keyword("copy_link")}>
-                    <IconButton className={classes.assistantIconRight} onClick={() => {
+                    <IconButton className={classes.assistantIconLeft} onClick={() => {
                         copyUrl()
                     }}>
                         <FileCopyIcon color={"action"}/>
