@@ -4,7 +4,7 @@ pipeline {
         version = "${env.BRANCH_NAME}-${env.BUILD_ID}"
     }
     stages {
-        stage ('Build Node') {
+        stage ('Build Test') {
             agent {
                 docker {
                     image 'node:16.13.2-slim'
@@ -15,7 +15,24 @@ pipeline {
                 branch 'pre-master'
             }
             steps {
-                configFileProvider([configFile(fileId: 'weverify-plugin-${env.BRANCH_NAME}-env', targetLocation: '.env')]){
+                configFileProvider([configFile(fileId: 'weverify-plugin-pre-master-env', targetLocation: '.env')]){
+                    sh "npm ci"
+                    sh "npm run build"
+                }
+            }
+        }
+        stage ('Build Prod') {
+            agent {
+                docker {
+                    image 'node:16.13.2-slim'
+                    reuseNode true
+                }
+            }
+             when {
+                branch 'master'
+            }
+            steps {
+                configFileProvider([configFile(fileId: 'weverify-plugin-master-env', targetLocation: '.env')]){
                     sh "npm ci"
                     sh "npm run build"
                 }
@@ -23,7 +40,11 @@ pipeline {
         }
         stage ('Deliver') {
             when {
-                branch 'pre-master'
+                anyOf {
+                    branch 'pre-master';
+                    branch 'master';
+                }
+                
             }
             steps {
                 zip zipFile: "/var/build/${env.BRANCH_NAME}/we-werify-plugin-${version}-${GIT_COMMIT}.zip", dir: "./build"
