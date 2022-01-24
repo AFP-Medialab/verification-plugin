@@ -15,7 +15,7 @@ pipeline {
                 branch 'pre-master'
             }
             steps {
-                configFileProvider([configFile(fileId: '.env')]){
+                configFileProvider([configFile(fileId: 'production-env', targetLocation: '.env')]){
                     sh "npm ci"
                     sh "npm run build"
                 }
