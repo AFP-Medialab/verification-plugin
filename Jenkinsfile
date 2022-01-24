@@ -1,13 +1,13 @@
 pipeline {
     agent none
-    
-    environment {
-        version = "${env.BUILD_ID}-${GIT_COMMIT}"
-    }
+
     stages {
         stage ('Build Node') {
             agent {
-                docker 'node:16.13.2-slim'
+                docker {
+                    images 'node:16.13.2-slim'
+                    reuseNode true
+                }
             }
              when {
                 branch 'pre-master'
@@ -25,7 +25,8 @@ pipeline {
                 branch 'pre-master'
             }
             steps {
-                zip zipFile: "we-werify-plugin-${version}.zip", dir: "./build"
+                version = "${env.BRANCH_NAME}-${env.BUILD_ID}-${GIT_COMMIT}"
+                zip zipFile: "/var/build/we-werify-plugin-${version}.zip", dir: "./build"
             }
         }
     }
