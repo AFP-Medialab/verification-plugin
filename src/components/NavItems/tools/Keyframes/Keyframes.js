@@ -283,8 +283,8 @@ const Keyframes = () => {
                         </Grid>
 
                         
-                        <Box m={3} hidden={!isLoading || !isLoadingSimilarity}/>
-                        <LinearProgress hidden={!isLoading || !isLoadingSimilarity}/>
+                        <Box m={3} hidden={!isLoading}/>
+                        <LinearProgress hidden={!isLoading}/>
                         <Typography variant="body1" hidden={!isLoading || !isLoadingSimilarity}>
                             {/*message*/}
                         </Typography>
