@@ -1,5 +1,5 @@
 pipeline {
-    agent none
+    agent any
     environment {
         version = "${env.BRANCH_NAME}-${env.BUILD_ID}"
     }
@@ -22,7 +22,6 @@ pipeline {
             }
         }
         stage ('Deliver') {
-            agent any
             when {
                 branch 'pre-master'
             }
