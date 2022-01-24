@@ -15,7 +15,7 @@ pipeline {
                 branch 'pre-master'
             }
             steps {
-                configFileProvider([configFile(fileId: 'production-env', targetLocation: '.env')]){
+                configFileProvider([configFile(fileId: 'weverify-plugin-${env.BRANCH_NAME}-env', targetLocation: '.env')]){
                     sh "npm ci"
                     sh "npm run build"
                 }
@@ -26,8 +26,7 @@ pipeline {
                 branch 'pre-master'
             }
             steps {
-                
-                zip zipFile: "/var/build/we-werify-plugin-${version}-${GIT_COMMIT}.zip", dir: "./build"
+                zip zipFile: "/var/build/${env.BRANCH_NAME}/we-werify-plugin-${version}-${GIT_COMMIT}.zip", dir: "./build"
             }
         }
     }
