@@ -1,6 +1,8 @@
 pipeline {
     agent none
-
+    environment {
+        version=""
+    }
     stages {
         stage ('Build Node') {
             agent {
