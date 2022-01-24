@@ -16,6 +16,7 @@ import AccordionSummary from "@material-ui/core/AccordionSummary";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import Accordion from "@material-ui/core/Accordion";
+import { submissionEvent } from "../../Shared/GoogleAnalytics/GoogleAnalytics";
 
 
 // from https://material-ui.com/customization/default-theme/
@@ -50,6 +51,9 @@ const Tutorial = () => {
             break;
     }
 
+    useEffect(() => {
+        submissionEvent();
+    }, []);
 
     return (
         <Paper className={classes.root}>

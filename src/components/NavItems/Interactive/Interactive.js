@@ -28,6 +28,10 @@ const Interactive = () => {
     const keyword = useLoadLanguage("components/NavItems/Interactive.tsv", tsv);
     const answersAvailable = useSelector(state => state.interactiveExplanation);
 
+    useEffect(() => {
+        submissionEvent();
+    }, []);
+
     const carouselItems = () => {
         let res = [];
         let cpt = 1;

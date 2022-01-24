@@ -15,6 +15,7 @@ import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
 import Link from "@material-ui/core/Link";
 import Typography from "@material-ui/core/Typography";
 import {toggleState} from "../../../redux/actions/cookiesActions";
+import { submissionEvent } from "../../Shared/GoogleAnalytics/GoogleAnalytics";
 
 
 
@@ -26,6 +27,10 @@ const About = () => {
     const cookiesUsage = useSelector(state => state.cookies);
     const gaUsage = useSelector(state => state.googleAnalytic);
     const dispatch = useDispatch();
+
+    useEffect(() => {
+        submissionEvent();
+    }, []);
 
     const additionalDangerousContent = () => {
         let res = [];
