@@ -143,7 +143,8 @@ const AllTools = (props) => {
         }
 
         if (
-            value.title === "navbar_twitter_sna"
+            value.title === "navbar_twitter_sna" ||
+            value.title === "navbar_twitter_crowdtangle"
         ) {
             toolsData.push(value);
         }
@@ -341,15 +342,28 @@ const AllTools = (props) => {
 
                             {
                                 toolsData.map((value, key) => {
-                                    return (
-                                        <Grid className={classes.toolCardStyle} item key={key} onClick={() => handleClick(value.path, "datas", value.type)}>
-                                            <ToolCard
-                                                name={keyword(value.title)}
-                                                description={keyword(value.description)}
-                                                icon={value.iconColored}
-                                                type={value.type} />
-                                        </Grid>
-                                    );
+                                    if (value.title === "navbar_twitter_crowdtangle"){
+                                        return(
+                                            <Grid className={classes.toolCardStyle} item key={key} onClick={() => window.open(process.env.REACT_APP_TSNA_SERVER + "csvSna", "_blank")}>
+                                                <ToolCard
+                                                    name={keyword(value.title)}
+                                                    description={keyword(value.description)}
+                                                    icon={value.iconColored}
+                                                    type={value.type} />
+                                            </Grid>
+                                        )
+                                    }else{
+                                        return (
+                                            <Grid className={classes.toolCardStyle} item key={key} onClick={() => handleClick(value.path, "datas", value.type)}>
+                                                <ToolCard
+                                                    name={keyword(value.title)}
+                                                    description={keyword(value.description)}
+                                                    icon={value.iconColored}
+                                                    type={value.type} />
+                                            </Grid>
+                                        );
+                                    }
+                                    
                                 })
                             }
 

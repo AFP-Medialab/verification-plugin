@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState, useEffect} from "react";
 import {Paper} from "@material-ui/core";
 import {useSelector} from "react-redux";
 import Box from "@material-ui/core/Box";
@@ -22,11 +22,16 @@ import useLoadLanguage from "../../../Hooks/useLoadLanguage";
 import tsv from "../../../LocalDictionary/components/NavItems/Interactive.tsv";
 import Link from "@material-ui/core/Link";
 import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
+import { submissionEvent } from "../../Shared/GoogleAnalytics/GoogleAnalytics";
 
 const Interactive = () => {
     const classes = useMyStyles();
     const keyword = useLoadLanguage("components/NavItems/Interactive.tsv", tsv);
     const answersAvailable = useSelector(state => state.interactiveExplanation);
+
+    useEffect(() => {
+        submissionEvent();
+    }, []);
 
     const carouselItems = () => {
         let res = [];

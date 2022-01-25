@@ -6,7 +6,7 @@ export const setKeyframesResult = (url, result, notification, loading, video_id)
             loading : loading,
             url : url,
             result : result,
-            video_id : video_id
+            video_id : video_id,
         }
     }
 };
@@ -15,6 +15,13 @@ export const setKeyframesLoading = (loading) => {
     return {
         type : "SET_KEYFRAMES_LOADING",
         payload : loading
+    }
+};
+
+export const setKeyframesSimilarityLoading = (loading) => {
+    return {
+        type: "SET_KEYFRAMES_SIMILARITY_LOADING",
+        payload: loading
     }
 };
 
@@ -30,3 +37,11 @@ export const cleanKeyframesState = () => {
         type : "KEYFRAMES_CLEAN_STATE"
     }
 }
+
+export const setSimilarity = (data) => {
+    return {
+        type: "KEYFRAMES_UPDATE_SIMILARITY",
+        payload: data
+    }
+}
+
