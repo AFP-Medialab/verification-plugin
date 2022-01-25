@@ -2,6 +2,7 @@ pipeline {
     agent any
     environment {
         version = "${env.BRANCH_NAME}-${env.BUILD_ID}"
+        CONFIG_FILE_ID = "weverify-plugin-${env.BRANCH_NAME}-env"
     }
     stages {
          stage ('Build Plugin') {
@@ -18,7 +19,6 @@ pipeline {
                 }  
             }
             steps {
-                CONFIG_FILE_ID = "weverify-plugin-${env.BRANCH_NAME}-env"
                 configFileProvider([configFile(fileId: '$CONFIG_FILE_ID', targetLocation: '.env')]){
                     sh "npm ci"
                     sh "npm run build"
