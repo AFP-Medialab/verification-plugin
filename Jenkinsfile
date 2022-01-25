@@ -19,7 +19,7 @@ pipeline {
                 }  
             }
             steps {
-                configFileProvider([configFile(fileId: '$CONFIG_FILE_ID', targetLocation: '.env')]){
+                configFileProvider([configFile(fileId: CONFIG_FILE_ID, targetLocation: '.env')]){
                     sh "npm ci"
                     sh "npm run build"
                 }
