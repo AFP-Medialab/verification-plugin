@@ -39,7 +39,7 @@ import GlobeIcon from '@material-ui/icons/Public';
 import ExcludeIcon from '@material-ui/icons/HighlightOff';
 import TranslateIcon from '@material-ui/icons/Translate';
 import PersonOutlineIcon from '@material-ui/icons/PersonOutline';
-import DoneIcon from '@material-ui/icons/Done';
+//import DoneIcon from '@material-ui/icons/Done';
 import PermMediaIcon from '@material-ui/icons/PermMedia';
 import LaptopIcon from '@material-ui/icons/Laptop';
 
@@ -532,9 +532,11 @@ const TwitterSna = () => {
     return false;
   }
 
+  /*
   const verifiedChange = () => {
     setVerifiedUsers(!verifiedUsers);
   };
+  */
 
 
   return (
@@ -895,6 +897,8 @@ const TwitterSna = () => {
                           </Grid>
                         </Grid>
 
+                        {/*
+
                         <Box m={1} />
 
                         <Grid container spacing={4} alignItems="center" style={{ paddingLeft: "0px" }}>
@@ -933,6 +937,8 @@ const TwitterSna = () => {
                             </Grid>
                           </Grid>
                         </Grid>
+
+                                */}
 
                         <Box m={2} />
 

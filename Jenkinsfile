@@ -4,40 +4,28 @@ pipeline {
         version = "${env.BRANCH_NAME}-${env.BUILD_ID}"
     }
     stages {
-        stage ('Build Test') {
+         stage ('Build Plugin') {
             agent {
                 docker {
                     image 'node:16.13.2-slim'
                     reuseNode true
                 }
             }
-             when {
-                branch 'pre-master'
+            when {
+                anyOf {
+                    branch 'pre-master';
+                    branch 'master';
+                }  
             }
             steps {
-                configFileProvider([configFile(fileId: 'weverify-plugin-pre-master-env', targetLocation: '.env')]){
+                CONFIG_FILE_ID = "weverify-plugin-${env.BRANCH_NAME}-env"
+                configFileProvider([configFile(fileId: '$CONFIG_FILE_ID', targetLocation: '.env')]){
                     sh "npm ci"
                     sh "npm run build"
                 }
             }
         }
-        stage ('Build Prod') {
-            agent {
-                docker {
-                    image 'node:16.13.2-slim'
-                    reuseNode true
-                }
-            }
-             when {
-                branch 'master'
-            }
-            steps {
-                configFileProvider([configFile(fileId: 'weverify-plugin-master-env', targetLocation: '.env')]){
-                    sh "npm ci"
-                    sh "npm run build"
-                }
-            }
-        }
+
         stage ('Deliver') {
             when {
                 anyOf {
