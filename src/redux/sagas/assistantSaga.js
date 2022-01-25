@@ -130,15 +130,17 @@ function * handleSubmitUpload(action) {
 function* handleMediaSimilarityCall(action) {
     if (action.type === "CLEAN_STATE") return
 
+    const inputUrlType = yield select((state) => state.assistant.inputUrlType)
     const processUrl = yield select((state) => state.assistant.processUrl)
     const contentType = yield select(state => state.assistant.processUrlType);
+    const unprocessbleTypes = [KNOWN_LINKS.YOUTUBE, KNOWN_LINKS.VIMEO, KNOWN_LINKS.LIVELEAK, KNOWN_LINKS.DAILYMOTION]
 
     if (contentType === CONTENT_TYPE.IMAGE) {
         yield call(similaritySearch,
             () => dbkfAPI.callImageSimilarityEndpoint(processUrl),
             (result, loading, done, fail) => setDbkfImageMatchDetails(result, loading, done, fail)
         )
-    } else if (contentType === CONTENT_TYPE.VIDEO) {
+    } else if (contentType === CONTENT_TYPE.VIDEO && !unprocessbleTypes.includes(inputUrlType))   {
         yield call(similaritySearch,
             () => dbkfAPI.callVideoSimilarityEndpoint(processUrl),
             (result, loading, done, fail) => setDbkfVideoMatchDetails(result, loading, done, fail)
