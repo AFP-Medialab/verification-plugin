@@ -695,6 +695,10 @@ const useMyStyles = makeStyles(theme => ({
 
     },
 
+    bigButtonResponsive: {
+        flexWrap: "nowrap"
+    },
+
 
     height100: {
         height: "100%",

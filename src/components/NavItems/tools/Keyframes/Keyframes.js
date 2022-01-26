@@ -9,6 +9,7 @@ import Typography from "@material-ui/core/Typography";
 import Divider from '@material-ui/core/Divider';
 import KeyFramesResults from "./Results/KeyFramesResults";
 import {useKeyframeWrapper} from "./Hooks/useKeyframeWrapper";
+import { useVideoSimilarity } from "./Hooks/useVideoSimilarity";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import {useParams} from 'react-router-dom'
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
@@ -44,14 +45,17 @@ const Keyframes = () => {
     const resultUrl = useSelector(state => state.keyframes.url);
     const resultData = useSelector(state => state.keyframes.result);
     const isLoading = useSelector(state => state.keyframes.loading);
-    const message = useSelector(state => state.keyframes.message);
+    const isLoadingSimilarity = useSelector(state => state.keyframes.similarityLoading);
+    //const message = useSelector(state => state.keyframes.message);
     const video_id = useSelector(state => state.keyframes.video_id);
 
     // State used to load images
     const [input, setInput] = useState((resultUrl) ? resultUrl : "");
     const [submittedUrl, setSubmittedUrl] = useState(undefined);
     const [urlDetected, setUrlDetected] = useState(false)
+    useVideoSimilarity(submittedUrl, keyword);
     useKeyframeWrapper(submittedUrl, keyword);
+    
 
     //human right
     const downloadShubshots = useSelector(state => state.humanRightsCheckBox)
@@ -71,7 +75,6 @@ const Keyframes = () => {
     const submitUrl = () => {
         submissionEvent(input);
         setSubmittedUrl(input);
-        
     };
 
     useEffect(()=>{
@@ -143,9 +146,6 @@ const Keyframes = () => {
         setLocalFile(true);
     }
 
-
-    console.log("Mensaje keyframes", message);
-
     return (
         <div>
             <HeaderTool name={keywordAllTools("navbar_keyframes")} description={keywordAllTools("navbar_keyframes_description")} icon={<KeframesIcon style={{ fill: "#51A5B2" }} />}/>
@@ -167,7 +167,7 @@ const Keyframes = () => {
                                     container
                                     direction="row"
                                     alignItems="center"
-
+                                    className={classes.bigButtonResponsive}
                                 >
                                     <Grid item>
                                         <Box ml={1} mr={2}>
@@ -209,7 +209,7 @@ const Keyframes = () => {
                                     container
                                     direction="row"
                                     alignItems="center"
-
+                                    className={classes.bigButtonResponsive}
                                 >
                                     <Grid item>
                                         <Box ml={1} mr={2}>
@@ -265,7 +265,7 @@ const Keyframes = () => {
                                     label={keyword("keyframes_input")}
                                     placeholder={keyword("keyframes_input_placeholder")}
                                     fullWidth
-                                    disabled={isLoading}
+                                    disabled={isLoading || isLoadingSimilarity}
                                     value={input}
                                     variant="outlined"
                                     onChange={e => setInput(e.target.value)}
@@ -274,7 +274,7 @@ const Keyframes = () => {
                             </Grid>
 
                             <Grid item>
-                                <Button variant="contained" color="primary" onClick={submitUrl} disabled={isLoading}>
+                                <Button variant="contained" color="primary" onClick={submitUrl} disabled={isLoading || isLoadingSimilarity}>
                                     {keyword("button_submit")}
                                 </Button>
 
@@ -285,7 +285,7 @@ const Keyframes = () => {
                         
                         <Box m={3} hidden={!isLoading}/>
                         <LinearProgress hidden={!isLoading}/>
-                        <Typography variant="body1" hidden={!isLoading}>
+                        <Typography variant="body1" hidden={!isLoading || !isLoadingSimilarity}>
                             {/*message*/}
                         </Typography>
                     </Box>
@@ -298,7 +298,7 @@ const Keyframes = () => {
             <Box m={3} />
                 {
                     resultData &&
-                    <KeyFramesResults result={resultData}/>
+                <KeyFramesResults result={resultData}/>
                 }
             <div>
                 {

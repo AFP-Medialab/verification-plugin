@@ -16,6 +16,7 @@ const useGetHomographics = (files, mode, keyword) => {
 
 
         const handleError = (e) => {
+            
             if (keyword(e) !== ""){
                 dispatch(setError(keyword(e)));
                 //console.log("ERROR HOMO: " + keyword(e));
@@ -28,8 +29,8 @@ const useGetHomographics = (files, mode, keyword) => {
         };
 
         const getImages = (response) => {
-            //console.log("RESPONSE RECIEVED");
-            //console.log(response);
+            console.log("RESPONSE RECIEVED");
+            console.log(response);
 
             if(response.data.status === "KO"){
                 if (response.data.errorCode === "NO_MATCHES_FOUND"){
@@ -74,7 +75,9 @@ const useGetHomographics = (files, mode, keyword) => {
             authenticatedRequest(axiosConfig)
                 .then(response => getImages(response))
                 .catch(error => {
-                    handleError("gif_error_" + error.status);
+                    console.log("ERROR", error.response);
+                    //console.log("RESPONSE", response);
+                    handleError(error.response.data.errorCode);
             });
             
                 
@@ -105,7 +108,7 @@ const useGetHomographics = (files, mode, keyword) => {
             authenticatedRequest(axiosConfig)
                 .then(response => getImages(response))
                 .catch(error => {
-                    handleError("gif_error_" + error.status);
+                    handleError(error.response.data.errorCode);
                 });
 
 

@@ -18,12 +18,14 @@ const useTwitterSnaRequest = (request) => {
   useEffect(() => {
 
     // Check request
-    if (_.isNil(request)
-      || (_.isNil(request.keywordList) || _.isEmpty(request.keywordList))
+    if (
+      _.isNil(request) ||
+      _.isNil(request.keywordList) ||
+      (_.isEmpty(request.keywordList) && _.isEmpty(request.keywordAnyList)) ||
       // || (_.isNil(request.userList) || _.isEmpty(request.userList))
-      || _.isNil(request.from)
-      || _.isNil(request.until)) {
-      // console.log("Empty request, resetting result: ", request);
+      _.isNil(request.from) ||
+      _.isNil(request.until)
+    ) {
       dispatch(setTwitterSnaResult(request, null, false, false));
       return;
     }
@@ -38,7 +40,7 @@ const useTwitterSnaRequest = (request) => {
       const requestData = encodeURIComponent(JSON.stringify(request));
       const userData = encodeURIComponent(JSON.stringify(userLogined));
       // userToken
-      window.open(process.env.REACT_APP_TSNA_SERVER+"?data=" + requestData + "&token=" + userToken + "&refreshToken=" + refreshtoken + "&user=" + userData);
+      window.open(process.env.REACT_APP_TSNA_SERVER+ "pluginredirect?data=" + requestData + "&token=" + userToken + "&refreshToken=" + refreshtoken + "&user=" + userData);
       dispatch(setTwitterSnaLoading(false));     
     } else {
     }
