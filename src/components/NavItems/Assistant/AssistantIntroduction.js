@@ -59,8 +59,6 @@ const AssistantIntroduction = (props) => {
     }
 
     const cleanAssistant = () => props.cleanAssistant();
-    
-
 
     return (
         <Grid item xs={12} className={classes.assistantGrid}>

@@ -130,15 +130,17 @@ function * handleSubmitUpload(action) {
 function* handleMediaSimilarityCall(action) {
     if (action.type === "CLEAN_STATE") return
 
+    const inputUrlType = yield select((state) => state.assistant.inputUrlType)
     const processUrl = yield select((state) => state.assistant.processUrl)
     const contentType = yield select(state => state.assistant.processUrlType);
+    const unprocessbleTypes = [KNOWN_LINKS.YOUTUBE, KNOWN_LINKS.VIMEO, KNOWN_LINKS.LIVELEAK, KNOWN_LINKS.DAILYMOTION]
 
     if (contentType === CONTENT_TYPE.IMAGE) {
         yield call(similaritySearch,
             () => dbkfAPI.callImageSimilarityEndpoint(processUrl),
             (result, loading, done, fail) => setDbkfImageMatchDetails(result, loading, done, fail)
         )
-    } else if (contentType === CONTENT_TYPE.VIDEO) {
+    } else if (contentType === CONTENT_TYPE.VIDEO && !unprocessbleTypes.includes(inputUrlType))   {
         yield call(similaritySearch,
             () => dbkfAPI.callVideoSimilarityEndpoint(processUrl),
             (result, loading, done, fail) => setDbkfVideoMatchDetails(result, loading, done, fail)
@@ -185,10 +187,11 @@ function* handleSourceCredibilityCall(action) {
         const inputUrl = yield select((state) => state.assistant.inputUrl)
         const result = yield call(assistantApi.callSourceCredibilityService, [inputUrl])
         const filteredResults = filterSourceCredibilityResults(result)
-        const uncredibleResults = filteredResults[0].length ? filteredResults[0] : null
-        const credibleResults = filteredResults[1].length ? filteredResults[1] : null
+        const positiveResults = filteredResults[0].length ? filteredResults[0] : null
+        const cautionResults = filteredResults[1].length ? filteredResults[1] : null
+        const mixedResults = filteredResults[2].length ? filteredResults[2] : null
 
-        yield put(setInputSourceCredDetails(uncredibleResults, credibleResults, false, true, false))
+        yield put(setInputSourceCredDetails(positiveResults, cautionResults, mixedResults, false, true, false))
     } catch (error) {
         console.log(error)
         yield put(setInputSourceCredDetails(null, false, false, true))
@@ -203,8 +206,6 @@ function* handleDbkfTextCall(action) {
 
         if (text) {
             let textToUse = text.length > 500 ? text.substring(0, 500) : text
-            textToUse = textToUse.replace(/[^\w\s]/gi, '')
-
             let result = yield call(dbkfAPI.callTextSimilarityEndpoint, textToUse)
             let filteredResult = filterDbkfTextResult(result)
 
@@ -246,7 +247,7 @@ function* handleNamedEntityCall(action) {
         const textLang = yield select((state) => state.assistant.textLang)
         if (text !== null && NE_SUPPORTED_LANGS.includes(textLang)) {
             yield put(setNeDetails(null, null, true, false, false))
-            const result = yield call(assistantApi.callNamedEntityService, text)
+            const result = yield call(assistantApi.callNamedEntityService, text, textLang)
             let entities = []
 
             Object.entries(result.response.annotations).forEach(entity => {
@@ -323,25 +324,9 @@ function * handleAssistantScrapeCall(action) {
 }
 
 
-
 /**
 * PREPROCESS FUNCTIONS
 **/
-const removeUrlsAndEmojisFromText = (text) => {
-    if (text !== null) {
-        let urlRegex = new RegExp("(http(s)?://.)?(www\\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\\.[a-z]{2,6}\\b([-a-zA-Z0-9@:%_+.~#?&//=]*)", "g");
-        // credit where credit is due: https://thekevinscott.com/emojis-in-javascript/
-        let emojiRegex = new RegExp("(?:[\u2700-\u27bf]|(?:\ud83c[\udde6-\uddff]){2}|[\ud800-\udbff][\udc00-\udfff]|" +
-            "[\u0023-\u0039]\ufe0f?\u20e3|\u3299|\u3297|\u303d|\u3030|\u24c2|\ud83c[\udd70-\udd71]|\ud83c[\udd7e-\udd7f]|" +
-            "\ud83c\udd8e|\ud83c[\udd91-\udd9a]|\ud83c[\udde6-\uddff]|[\ud83c\ude01-\ude02]|\ud83c\ude1a|\ud83c\ude2f|" +
-            "[\ud83c\ude32-\ude3a]|[\ud83c\ude50-\ude51]|\u203c|\u2049|[\u25aa-\u25ab]|\u25b6|\u25c0|[\u25fb-\u25fe]|\u00a9|" +
-            "\u00ae|\u2122|\u2139|\ud83c\udc04|[\u2600-\u26FF]|\u2b05|\u2b06|\u2b07|\u2b1b|\u2b1c|\u2b50|\u2b55|\u231a|\u231b|" +
-            "\u2328|\u23cf|[\u23e9-\u23f3]|[\u23f8-\u23fa]|\ud83c\udccf|\u2934|\u2935|[\u2190-\u21ff])", "g")
-        return text.replace(urlRegex, "").replaceAll(emojiRegex, "")
-    }
-    return text
-}
-
 const decideWhetherToScrape = (urlType, contentType) => {
     switch (urlType) {
         case KNOWN_LINKS.YOUTUBE:
@@ -408,7 +393,7 @@ const filterAssistantResults = (urlType, contentType, userInput, scrapeResult) =
             if (scrapeResult.videos.length === 1) {
                 videoList = [scrapeResult.videos[0]]
             } else {
-                imageList = [scrapeResult.images[1]]
+                imageList = [scrapeResult.images[0]]
             }
             break;
         case KNOWN_LINKS.FACEBOOK:
@@ -432,6 +417,8 @@ const filterAssistantResults = (urlType, contentType, userInput, scrapeResult) =
                 contentType === CONTENT_TYPE.IMAGE ? imageList = [userInput] : videoList = [userInput]
             } else {
                 imageList = scrapeResult.images
+                // very specific. consider reworking to all svg images!
+                imageList = imageList.filter(imageUrl => !(imageUrl.includes("loader.svg")));
                 videoList = scrapeResult.videos
             }
             break;
@@ -440,7 +427,7 @@ const filterAssistantResults = (urlType, contentType, userInput, scrapeResult) =
     }
 
     if (scrapeResult) {
-        urlText = removeUrlsAndEmojisFromText(scrapeResult.text)
+        urlText = scrapeResult.text
         textLang = scrapeResult.lang
         linkList = scrapeResult.links
     }
@@ -456,10 +443,11 @@ const filterAssistantResults = (urlType, contentType, userInput, scrapeResult) =
 }
 
 const filterSourceCredibilityResults = (originalResult) => {
-    let sourceCredResult = []
-    let factCheckerResult = []
+    let cautionResult = []
+    let positiveResult = []
+    let mixedResult = []
 
-    if(!(originalResult.entities.SourceCredibility)) {return [sourceCredResult, factCheckerResult]}
+    if(!(originalResult.entities.SourceCredibility)) {return [positiveResult, cautionResult, mixedResult]}
 
     let sourceCredibility = originalResult.entities.SourceCredibility
 
@@ -470,30 +458,49 @@ const filterSourceCredibilityResults = (originalResult) => {
     sourceCredibility = uniqWith(sourceCredibility, isEqual)
 
     sourceCredibility.forEach(result => {
-        if(result["type"] === "fact checker"){
-            factCheckerResult.push({
-                "credibility_source": result["source"],
-                "credibility_labels": result["type"],
-                "credibility_description": result["description"]
-            })
+        if (result["source-type"] === "positive") {
+            addToRelevantSourceCred(positiveResult, result)
         }
-        else {
-            sourceCredResult.push({
-                "credibility_source": result["source"],
-                "credibility_labels": result["type"],
-                "credibility_description": result["description"]
-            })
+        else if (result["source-type"] === "mixed") {
+            addToRelevantSourceCred(mixedResult, result)
         }
-    })
+        else if (result["source-type"] === "caution") {
+            addToRelevantSourceCred(cautionResult, result)
+        }
 
-    return [sourceCredResult, factCheckerResult]
+    })
+    return [positiveResult, cautionResult, mixedResult]
 }
 
+const addToRelevantSourceCred = (sourceCredList, result) => {
+
+    let result_evidence = result["evidence"] ? result["evidence"] : []
+    if (result_evidence.length) {
+        result_evidence = result_evidence.toString()
+        result_evidence = result_evidence.split(",")
+    }
+
+    sourceCredList.push({
+        "credibility_source": result["source"],
+        "credibility_labels": result["labels"],
+        "credibility_description": result["description"],
+        "credibility_evidence": result_evidence
+    })
+}
 
 const filterDbkfTextResult = (result) => {
     let resultList = []
-    result.forEach((value) => {
-        if (value.score > 900) {
+    let scores = []
+
+    result.forEach(res=>{
+        scores.push(res.score)
+    })
+
+    let scaled = scaleNumbers(scores, 0, 100)
+
+    // to be reviewed. only really fixes some minor cases.
+    result.forEach((value, index) => {
+        if (value.score > 1000 && scaled[index] > 70)  {
             resultList.push({
                 "text": value.text,
                 "claimUrl": value.claimUrl,
@@ -502,6 +509,21 @@ const filterDbkfTextResult = (result) => {
         }
     })
     return resultList.length ? resultList : null
+}
+
+
+const scaleNumbers = (unscaledNums, min, max) => {
+    let scaled = []
+    let maxRange = Math.max.apply(Math, unscaledNums);
+    let minRange = Math.min.apply(Math, unscaledNums);
+
+    for (let i = 0; i < unscaledNums.length; i++) {
+        let unscaled = unscaledNums[i];
+        let scaledNum =  (100) * (unscaled - minRange) / (maxRange - minRange);
+
+        scaled.push(scaledNum)
+    }
+    return scaled
 }
 
 /**

@@ -359,6 +359,26 @@ const useMyStyles = makeStyles(theme => ({
             color: "#4c4c4c"
         },
     },
+    customAllToolsButton: {
+        padding: 0,
+        minHeight:0,
+        minWidth: 0,
+        backgroundColor: 'transparent',
+        fontSize: 40
+    },
+    customAllToolsIconDeselected: {
+        fontSize: "inherit",
+        color: "#9A9A9A"
+    },
+    customAllToolsIconSelected: {
+        fontSize: "inherit",
+        color: theme.palette.primary.main
+    },
+
+
+    /* Assistant classes */
+    /* ================================================================================== */
+
     toolTipIcon: {
         color: theme.palette.secondary,
         position: "relative",
@@ -422,23 +442,70 @@ const useMyStyles = makeStyles(theme => ({
             borderColor: theme.palette.primary.main,
         }
     },
-    customAllToolsButton: {
-        padding: 0,
-        minHeight:0,
-        minWidth: 0,
-        backgroundColor: 'transparent',
-        fontSize: 40
+    sourceCredibilityBorder: {
+        border: "2px solid",
+        borderColor: theme.palette.primary.main,
+        borderRadius: "15px",
+        display: "flex",
+        padding: "12px"
     },
-    customAllToolsIconDeselected: {
-        fontSize: "inherit",
-        color: "#9A9A9A"
+    assistantWarningBorder: {
+        border: "2px solid",
+        borderColor: "red",
+        borderRadius: "15px",
+        display: "flex",
+        padding: "12px"
     },
-    customAllToolsIconSelected: {
-        fontSize: "inherit",
-        color: theme.palette.primary.main
+    assistantBackground: {
+        backgroundColor: "transparent"
+    },
+    assistantIconRight: {
+        marginLeft: "auto"
+    },
+    assistantIconLeft: {
+        marginRight: "-15px"
     },
 
+    /* OCR classes */
+    /* ================================================================================== */
 
+    displayFlex:{
+        display: "flex"
+    },
+    ocrImageCard: {
+        justifyContent: "center",
+        display: "flex"
+    },
+    ocrImageDiv: {
+        position: "relative"
+    },
+    ocrImageCanvas: {
+        position: "absolute",
+        left: 0
+    },
+    ocrImage:{
+        objectFit: "contain",
+        position:  "relative",
+        maxHeight:"48vh",
+    },
+    ocrActionAreaLeft:{
+        justifyContent: "left",
+    },
+    ocrActionAreaRight:{
+        display: "flex",
+        justifyContent: "right",
+    },
+    ocrButton:{
+        borderWidth: "medium",
+        width: "49%"
+    },
+    ocrReprocessBox:{
+        backgroundColor: "whitesmoke",
+        padding: 20
+    },
+    fontBold:{
+        fontWeight: "bold"
+    },
 
     /* Forensic classes */
     /* ================================================================================== */

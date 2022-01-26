@@ -42,11 +42,11 @@ export default function assistantApiCalls() {
         }
     }
 
-    const callNamedEntityService = async (text) => {
+    const callNamedEntityService = async (text, lang) => {
 
         const namedEntityResult = await axios.post(
             assistantEndpoint + "gcloud/named-entity",
-            {content: text}
+            {content: text, lang: lang}
         )
 
         return namedEntityResult.data
@@ -88,25 +88,17 @@ export default function assistantApiCalls() {
         return result.data
     }
 
-    const callOcrService = async (urlList) => {
-        let urls = urlList.join(" ")
-
+    const callOcrService = async (data, script, mode) => {
         const result = await axios.post(
             assistantEndpoint + "gcloud/ocr",
-            {text: urls, data_type: "url"}
+            {text: data, script: script, data_type: mode}
         )
 
         return result.data
     }
 
-    const callOcrB64Service = async (b64Img) => {
-        b64Img = b64Img.replace("data:image/png;base64,", "")
-
-        const result = await axios.post(
-            assistantEndpoint + "gcloud/ocr",
-            {text: b64Img, data_type:"upload"}
-            )
-
+    const callOcrScriptService = async () => {
+        const result = await axios.get(assistantEndpoint + "gcloud/ocr-scripts")
         return result.data
     }
 
@@ -118,7 +110,7 @@ export default function assistantApiCalls() {
         callAssistantTranslator,
         callHyperpartisanService,
         callOcrService,
-        callOcrB64Service
+        callOcrScriptService
     }
 }
 

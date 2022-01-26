@@ -1,6 +1,5 @@
 import React from "react";
 
-import Avatar from "@material-ui/core/Avatar";
 import Box from "@material-ui/core/Box";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
@@ -25,20 +24,24 @@ const DbkfTextResults = () => {
                 dbkfTextMatch.map((value, key) => (
                     <ListItem key={key}>
                         <ListItemAvatar>
-                            <Avatar variant={"square"}><TextFieldsIcon fontSize={"large"}/> </Avatar>
+                            <TextFieldsIcon fontSize={"large"}/>
                         </ListItemAvatar>
                         <ListItemText
                             primary={
-                                <Typography component={"div"} align={"left"}>
-                                    <Box fontWeight="fontWeightBold">
+                                <div>
+                                    <Typography variant={"body1"} color={"textPrimary"} component={"div"} align={"left"}>
                                         {keyword("dbkf_text_warning")}
-                                    </Box>
-                                </Typography>}
+                                    </Typography>
+                                    <Box mb={0.5}/>
+                                </div>
+                            }
                             secondary={
-                                <a href={uiUrl + value.claimUrl} key={key} target="_blank"
-                                   rel="noopener noreferrer">
-                                    {value.text}
-                                </a>
+                                <Typography variant={"caption"} component={"div"} color={"textSecondary"}>
+                                    <a href={uiUrl + value.claimUrl} key={key} target="_blank"
+                                       rel="noopener noreferrer">
+                                        {value.text}
+                                    </a>
+                                </Typography>
                             }/>
                     </ListItem>
                 )) : null
