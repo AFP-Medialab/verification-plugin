@@ -52,6 +52,8 @@ import { ReactComponent as XnetworkIcon } from "./images/SVG/Search/Xnetwork.svg
 
 import { ReactComponent as TwitterSnaIcon } from "./images/SVG/DataAnalysis/Twitter_sna.svg"
 import { ReactComponent as CsvSnaIcon } from "./images/SVG/DataAnalysis/CSV_SNA.svg"
+import { ReactComponent as DeepfakeIcon } from "./images/SVG/Image/Deepfake.svg"
+import { ReactComponent as GeolactionIcon } from "./images/SVG/Image/Geolocation.svg"
 
 import { ReactComponent as ToolsIcon } from "./images/SVG/Navbar/Tools.svg"
 import { ReactComponent as ClassroomIcon } from "./images/SVG/Navbar/Classroom.svg"
@@ -277,19 +279,11 @@ const NavBar = (props) => {
             path: "gif"
         },
         {
-            title: "navbar_twitter_crowdtangle",
-            description: "navbar_twitter_crowdtangle_description",
-            icon: (drawerValue === 15) ? <CsvSnaIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title="Twitter SNA" />
-                : <CsvSnaIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} title={keyword("navbar_twitter_sna")} />,
-            iconColored: <CsvSnaIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title={keyword("navbar_twitter_sna")} />,
-            tsvPrefix: "twitter_sna",
-        },
-        {
             title: "navbar_deepfake",
             description: "navbar_deepfake_description",
-            icon: (drawerValue === 16) ? <MetadataIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title="Twitter SNA" />
-                : <MetadataIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} title={keyword("navbar_twitter_sna")} />,
-            iconColored: <MetadataIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title={keyword("navbar_twitter_sna")} />,
+            icon: (drawerValue === 15) ? <DeepfakeIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title="Twitter SNA" />
+                : <DeepfakeIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} title={keyword("navbar_twitter_sna")} />,
+            iconColored: <DeepfakeIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title={keyword("navbar_twitter_sna")} />,
             tsvPrefix: "deepfake",
             path: "deepfake"
             
@@ -297,11 +291,19 @@ const NavBar = (props) => {
         {
             title: "navbar_geolocation",
             description: "navbar_geolocation_description",
-            icon: (drawerValue === 16) ? <MetadataIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title="Twitter SNA" />
-                : <MetadataIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} title={keyword("navbar_twitter_sna")} />,
-            iconColored: <MetadataIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title={keyword("navbar_twitter_sna")} />,
+            icon: (drawerValue === 16) ? <GeolactionIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title="Twitter SNA" />
+                : <GeolactionIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} title={keyword("navbar_twitter_sna")} />,
+            iconColored: <GeolactionIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title={keyword("navbar_twitter_sna")} />,
             tsvPrefix: "geolocation",
             path: "geolocation"
+        },
+        {
+            title: "navbar_twitter_crowdtangle",
+            description: "navbar_twitter_crowdtangle_description",
+            icon: (drawerValue === 17) ? <CsvSnaIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title="Twitter SNA" />
+                : <CsvSnaIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} title={keyword("navbar_twitter_sna")} />,
+            iconColored: <CsvSnaIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title={keyword("navbar_twitter_sna")} />,
+            tsvPrefix: "twitter_sna",
         },
     ];
 

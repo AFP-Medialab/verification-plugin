@@ -1,21 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useSelector } from "react-redux";
-import { useDispatch } from "react-redux";
+//import { useDispatch } from "react-redux";
 import TextField from "@material-ui/core/TextField";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
 import Button from "@material-ui/core/Button";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import Box from "@material-ui/core/Box";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles"
-import Iframe from "react-iframe";
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/Analysis.tsv";
 import tsvAlltools from "../../../../LocalDictionary/components/NavItems/tools/Alltools.tsv";
-import { submissionEvent } from "../../../Shared/GoogleAnalytics/GoogleAnalytics";
-import { cleanAnalysisState, setAnalysisLoading, setAnalysisResult } from "../../../../redux/actions/tools/image_analysisActions";
-import { useParams } from "react-router-dom";
-import { KNOWN_LINKS } from "../../Assistant/AssistantRuleBook";
+//import { useParams } from "react-router-dom";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 import { ReactComponent as AnalysisIcon } from '../../../NavBar/images/SVG/Video/Video_analysis.svg';
@@ -24,22 +18,22 @@ import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 
 const Deepfake = () => {
 
-    const { url } = useParams();
+    //const { url } = useParams();
     const classes = useMyStyles();
     const keyword = useLoadLanguage("components/NavItems/tools/Analysis.tsv", tsv);
     const keywordAllTools = useLoadLanguage("components/NavItems/tools/Alltools.tsv", tsvAlltools);
-    const dispatch = useDispatch();
+    //const dispatch = useDispatch();
 
     const resultUrl = useSelector(state => state.analysisImage.url);
-    const resultData = useSelector(state => state.analysisImage.result);
+    //const resultData = useSelector(state => state.analysisImage.result);
     const isLoading = useSelector(state => state.analysisImage.loading);
 
 
     const [input, setInput] = useState((resultUrl) ? resultUrl : "");
-    const [urlDetected, setUrlDetected] = useState(false)
-    const [submittedUrl, setSubmittedUrl] = useState(undefined);
-    const [reprocess, setReprocess] = useState(false);
-    const serviceUrl = "https://mever.iti.gr/caa/api/v4/images";
+    //const [urlDetected, setUrlDetected] = useState(false)
+    //const [submittedUrl, setSubmittedUrl] = useState(undefined);
+    //const [reprocess, setReprocess] = useState(false);
+    //const serviceUrl = "https://mever.iti.gr/caa/api/v4/images";
 
     return (
         <div>

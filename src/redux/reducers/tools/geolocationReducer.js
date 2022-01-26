@@ -1,14 +1,25 @@
-const defaultState = true;
+const defaultState = {
+    urlImage: "",
+    result: null,
+    loading: false,
+};
+
 const geolocationReducer = (state = defaultState, action) => {
     switch (action.type) {
-        case "SET_TRUE":
-            return true;
-        case "SET_FALSE":
-            return false;
-        case "SET_CUSTOM":
+        case "GEOLOCATION_RESET":
+            return {
+                ...state, 
+                urlImage: "",
+                result: null,
+                loading: false,
+            }
+        case "SET_GEOLOCATION_LOADING":
+            return {
+                ...state,
+                loading: action.payload,
+            }
+        case "SET_GEOLOCATION_RESULT":
             return action.payload;
-        case "TOGGLE_STATE":
-            return !state;
         default:
             return state;
     }

@@ -94,6 +94,11 @@ const AllTools = (props) => {
 
     tools.forEach((value) => {
 
+        if (value.title === "navbar_deepfake" ||
+            value.title === "navbar_geolocation"){
+                console.log(value.title, value);
+            }
+
         if (value.title === "navbar_forensic" ){
             value.type = "redesigned";
         }
