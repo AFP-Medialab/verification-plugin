@@ -489,6 +489,7 @@ const useMyStyles = makeStyles(theme => ({
         objectFit: "contain",
         position:  "relative",
         maxHeight:"48vh",
+        minHeight:"400px"
     },
     ocrActionAreaLeft:{
         justifyContent: "left",

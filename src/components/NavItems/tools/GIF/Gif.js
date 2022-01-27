@@ -784,7 +784,7 @@ const Gif = () => {
                                                     {keyword("title_preview")}
                                                 </Typography>
 
-                                                <Box justifyContent="center" className={classes.wrapperImageFilter}>
+                                                <Box justifyContent="center" className={classes.wrapperImageFilter} style ={{width: "100%"}}>
 
                                                     <CardMedia
                                                         component="img"
