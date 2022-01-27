@@ -39,4 +39,12 @@ pipeline {
             }
         }
     }
+    post {
+        success {
+                slackSend channel: 'medialab_builds', message: "Success build ${env.JOB_NAME} - ID: ${env.BUILD_ID} artefact ready: /var/build/${env.BRANCH_NAME}/we-werify-plugin-${version}-${GIT_COMMIT}.zip", tokenCredentialId: 'medialab_slack_token'
+        }
+        failure {
+            slackSend channel: 'medialab_builds', message: "Error building project ${env.JOB_NAME} - ID: ${env.BUILD_ID}", tokenCredentialId: 'medialab_slack_token'
+        }
+    }
 }
