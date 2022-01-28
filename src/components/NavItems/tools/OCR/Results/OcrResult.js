@@ -155,6 +155,12 @@ const OcrResult = () => {
         window.open(translate_url, "_blank")
     }
 
+    // Open yandex search
+    const searchYandex = function () {
+        let search_url = "https://yandex.com/images/search?rpt=imageview&url=" + encodeURIComponent(inputUrl);
+        window.open(search_url, "_blank")
+    }
+
 
     //copy text to clipboard
     const copyText = (text) => {
@@ -207,6 +213,11 @@ const OcrResult = () => {
                                     </img>
                                     <canvas id={mainCanvasId} className={classes.ocrImageCanvas}/>
                                 </div>
+                                <Box m={2}/>
+                                <Button variant="outlined" color="primary" fullWidth onClick={() => {searchYandex()}}> 
+                                    {keyword("ocr_search_yandex")}
+                                </Button>
+                                
                             </CardContent>
                         </Card>
                     </Grid>
@@ -222,37 +233,54 @@ const OcrResult = () => {
 
                                 <Box mt={4}>
 
-                                    <Tooltip open={tooltipIndex === -1 && tooltipOpen}
-                                             disableFocusListener
-                                             disableHoverListener
-                                             disableTouchListener
-                                             title={keyword("tooltip_copy")}>
-                                        <Button style={{"marginRight": "2%", "borderWidth": "medium", "width": "49%"}}
-                                                variant={"outlined"}
-                                                color={"primary"}
-                                                size={"large"}
-                                                onClick={() => {
-                                                    setTooltipIndex(-1)
-                                                    setTooltipOpen(true)
-                                                    copyText(fullText)
-                                                    setTimeout(() => {
-                                                        setTooltipOpen(false)
-                                                    }, 1000)
-                                                }}>
-                                            <FileCopyOutlined
-                                                style={{"marginRight": "10px"}}/>{keyword("copy_to_clipboard")}
-                                        </Button>
-                                    </Tooltip>
+                                    <Grid
+                                        container
+                                        direction="row"
+                                        justifyContent="space-between"
+                                        alignItems="flex-start"
+                                        spacing={2}
+                                    >
+                                        <Grid item xs={6}>
+                                            <Tooltip open={tooltipIndex === -1 && tooltipOpen}
+                                                disableFocusListener
+                                                disableHoverListener
+                                                disableTouchListener
+                                                title={keyword("tooltip_copy")}>
+                                                <Button variant="outlined" color="primary"
+                                                    size={"large"}
+                                                    fullWidth
+                                                    onClick={() => {
+                                                        setTooltipIndex(-1)
+                                                        setTooltipOpen(true)
+                                                        copyText(fullText)
+                                                        setTimeout(() => {
+                                                            setTooltipOpen(false)
+                                                        }, 1000)
+                                                    }}>
+                                                    <FileCopyOutlined
+                                                        style={{ "marginRight": "10px" }} />{keyword("copy_to_clipboard")}
+                                                </Button>
+                                            </Tooltip>
+                                        </Grid>
 
-                                    <Button className={classes.ocrButton}
-                                            variant={"outlined"}
-                                            color={"primary"}
-                                            size={"large"}
-                                            onClick={() => {
-                                                googleTranslate(fullText)
-                                            }}>
-                                        <TranslateIcon style={{"marginRight": "10px"}}/>{keyword("translate")}
-                                    </Button>
+                                        <Grid item xs={6}>
+                                            <Button variant="outlined" color="primary"
+                                                size={"large"}
+                                                fullWidth
+                                                onClick={() => {
+                                                    googleTranslate(fullText)
+                                                }}>
+                                                <TranslateIcon style={{ "marginRight": "10px" }} />{keyword("translate")}
+                                            </Button>
+                                        </Grid>
+
+                                        
+
+                                        
+
+                                    </Grid>
+
+                                   
                                 </Box>
                             </CardContent>
                         </Card>

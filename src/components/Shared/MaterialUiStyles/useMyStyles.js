@@ -474,7 +474,9 @@ const useMyStyles = makeStyles(theme => ({
     },
     ocrImageCard: {
         justifyContent: "center",
-        display: "flex"
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center"
     },
     ocrImageDiv: {
         position: "relative"
@@ -487,6 +489,7 @@ const useMyStyles = makeStyles(theme => ({
         objectFit: "contain",
         position:  "relative",
         maxHeight:"48vh",
+        minHeight:"400px"
     },
     ocrActionAreaLeft:{
         justifyContent: "left",

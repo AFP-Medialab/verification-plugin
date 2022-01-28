@@ -542,7 +542,7 @@ const TwitterSna = () => {
   return (
     <div>
       <ThemeProvider theme={theme}>
-        <HeaderTool name={keywordAllTools("navbar_twitter_sna")} description={keywordAllTools("navbar_twitter_sna_description")} icon={<TwitterSNAIcon style={{ fill: "#51A5B2" }} />} />
+        <HeaderTool name={keywordAllTools("navbar_twitter_sna")} description={keywordAllTools("navbar_twitter_sna_description")} icon={<TwitterSNAIcon style={{ fill: "#51A5B2" }} />} advanced="true"/>
         <StylesProvider injectFirst>
           <Card className={cardClasses.root}>
             <CardHeader
