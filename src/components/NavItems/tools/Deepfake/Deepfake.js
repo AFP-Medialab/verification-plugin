@@ -19,7 +19,8 @@ import ImageOutlinedIcon from '@material-ui/icons/ImageOutlined';
 import TheatersRoundedIcon from '@material-ui/icons/TheatersRounded';
 import { Divider, Typography } from "@material-ui/core";
 import UseGetDeepfake from "./Hooks/useGetDeepfake";
-import DeepfakeResutlsImage from "./Results/DeepfakeResultsImage";
+import DeepfakeResultsImage from "./Results/DeepfakeResultsImage";
+import DeepfakeResultsVideo from "./Results/DeepfakeResultsVideo";
 
 const Deepfake = () => {
 
@@ -274,7 +275,11 @@ const Deepfake = () => {
 
 
             {result && selectedMode==="IMAGE" &&
-                <DeepfakeResutlsImage result={result} url={url} />
+                <DeepfakeResultsImage result={result} url={url} />
+            }
+
+            {result && selectedMode === "VIDEO" &&
+                <DeepfakeResultsVideo result={result} url={url} />
             }
 
         </div>);

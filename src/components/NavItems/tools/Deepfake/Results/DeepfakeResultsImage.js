@@ -6,7 +6,7 @@ import CardHeader from "@material-ui/core/CardHeader";
 import { Typography } from "@material-ui/core";
 
 
-const DeepfakeResutls = (props) => {
+const DeepfakeResutlsImage = (props) => {
 
     const classes = useMyStyles();
     //const keyword = useLoadLanguage("components/NavItems/tools/Analysis.tsv", tsv);
@@ -140,6 +140,6 @@ const DeepfakeResutls = (props) => {
 
         </div>);
 };
-export default DeepfakeResutls;
+export default DeepfakeResutlsImage;
 
 
