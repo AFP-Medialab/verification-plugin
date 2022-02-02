@@ -1,18 +1,9 @@
 import React, { useState } from "react";
-import Button from "@material-ui/core/Button";
 import Box from "@material-ui/core/Box";
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles"
-//import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
-//import tsv from "../../../../LocalDictionary/components/NavItems/tools/Analysis.tsv";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
-import Grid from "@material-ui/core/Grid";
-import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
-import 'leaflet/dist/leaflet.css'
-import MarkerIcon from '../../../../NavBar/images/SVG/Others/marker_location.svg';
-import { Icon } from "leaflet";
-import { CardMedia, Typography } from "@material-ui/core";
-import { result } from "lodash";
+import { Typography } from "@material-ui/core";
 
 
 const DeepfakeResutls = (props) => {
@@ -22,11 +13,6 @@ const DeepfakeResutls = (props) => {
     const results = props.result;
     const url = props.url;
     const imgElement = React.useRef(null);
-
-    const [recTop, setRecTop] = useState(null);
-    const [recLeft, setRecLeft] = useState(null);
-    const [recWidth, setRecWidth] = useState(null);
-    const [recHeight, setRecHeight] = useState(null);
 
     const [rectangles, setRectangles] = useState(null);
     const [rectanglesReady, setRectanglesReady] = useState(false);
@@ -143,6 +129,7 @@ const DeepfakeResutls = (props) => {
 
                     <img 
                         src={url} 
+                        alt={"Displays the results of the deepfake tool"}
                         style={{position: "absolute", left: "0px", top:"0px", width: "100%", height: "auto"}} 
                         ref={imgElement}
                         onLoad={() => drawRectangles()}/>

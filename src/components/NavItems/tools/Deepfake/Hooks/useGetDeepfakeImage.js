@@ -5,21 +5,16 @@ import { setDeepfakeLoading, setDeepfakeResult } from "../../../../../redux/acti
 import { setError } from "../../../../../redux/actions/errorActions";
 
 
-const UseDeepfakeImage = (url, processURL, keyword) => {
+const UseDeepfakeImage = (url, processURL, mode) => {
 
     const dispatch = useDispatch();
 
     useEffect(() => {
-        if (processURL && url !== "") {
+        if (processURL && url !== "" && mode === "IMAGE") {
 
-            dispatch(setDeepfakeLoading(true));
-
-            var body = {
-                url: url
-            }
+            dispatch(setDeepfakeLoading(true))
             
-
-            axios.post("https://mever.iti.gr/deepfake/api/v3/images/jobs" + "?url=" + url)
+            axios.post("https://mever.iti.gr/deepfake/api/v3/images/jobs?url=" + url)
                 .then(response => {
                     //console.log(response.data);
                     waitUntilFinish(response.data.id)
@@ -71,14 +66,12 @@ const UseDeepfakeImage = (url, processURL, keyword) => {
 
 
         const handleError = (e) => {
-            if (keyword(e) !== "")
-                dispatch(setError(keyword(e)));
-            else
-                dispatch(setError(keyword("please_give_a_correct_link")));
+            
+            dispatch(setError(e));
             dispatch(setDeepfakeLoading(false));
         };
 
-    }, [processURL, dispatch, keyword, url]);
+    }, [url, processURL, mode, dispatch]);
 
 };
 export default UseDeepfakeImage;

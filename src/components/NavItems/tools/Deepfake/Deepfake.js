@@ -7,7 +7,7 @@ import LinearProgress from "@material-ui/core/LinearProgress";
 import Box from "@material-ui/core/Box";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles"
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
-import tsv from "../../../../LocalDictionary/components/NavItems/tools/Analysis.tsv";
+//import tsv from "../../../../LocalDictionary/components/NavItems/tools/Analysis.tsv";
 import tsvAlltools from "../../../../LocalDictionary/components/NavItems/tools/Alltools.tsv";
 //import { useParams } from "react-router-dom";
 import Card from "@material-ui/core/Card";
@@ -19,13 +19,13 @@ import ImageOutlinedIcon from '@material-ui/icons/ImageOutlined';
 import TheatersRoundedIcon from '@material-ui/icons/TheatersRounded';
 import { Divider, Typography } from "@material-ui/core";
 import UseDeepfakeImage from "./Hooks/useGetDeepfakeImage";
-import DeepfakeResutls from "./Results/DeepfakeResults";
+import DeepfakeResutlsImage from "./Results/DeepfakeResultsImage";
 
 const Deepfake = () => {
 
     //const { url } = useParams();
     const classes = useMyStyles();
-    const keyword = useLoadLanguage("components/NavItems/tools/Analysis.tsv", tsv);
+    //const keyword = useLoadLanguage("components/NavItems/tools/Analysis.tsv", tsv);
     const keywordAllTools = useLoadLanguage("components/NavItems/tools/Alltools.tsv", tsvAlltools);
     //const dispatch = useDispatch();
 
@@ -40,52 +40,52 @@ const Deepfake = () => {
     //Selecting mode
     //============================================================================================
 
-    const [classButtonURL, setClassButtonURL] = useState(classes.bigButtonDiv);
-    const [classButtonLocal, setClassButtonLocal] = useState(classes.bigButtonDiv);
+    const [classButtonImage, setClassButtonImage] = useState(classes.bigButtonDiv);
+    const [classButtonVideo, setClassButtonVideo] = useState(classes.bigButtonDiv);
 
-    const [classIconURL, setClassIconURL] = useState(classes.bigButtonIcon);
-    const [classIconLocal, setClassIconLocal] = useState(classes.bigButtonIcon);
+    const [classIconImage, setClassIconImage] = useState(classes.bigButtonIcon);
+    const [classIconVideo, setClassIconVideo] = useState(classes.bigButtonIcon);
 
     const [selectedMode, setSelectedMode] = useState("");
 
-    if (classButtonURL !== classes.bigButtonDiv && classButtonLocal !== classes.bigButtonDiv) {
+    if (classButtonImage !== classes.bigButtonDiv && classButtonVideo !== classes.bigButtonDiv) {
 
-        setClassButtonURL(classes.bigButtonDiv);
-        setClassButtonLocal(classes.bigButtonDiv);
+        setClassButtonImage(classes.bigButtonDiv);
+        setClassButtonVideo(classes.bigButtonDiv);
 
-        setClassIconURL(classes.bigButtonIcon);
-        setClassIconLocal(classes.bigButtonIcon);
+        setClassIconImage(classes.bigButtonIcon);
+        setClassIconVideo(classes.bigButtonIcon);
 
     }
 
-    function clickURL() {
-        changeStylesToUrl();
-        setSelectedMode("URL");
+    function clickImage() {
+        changeStylesToImage();
+        setSelectedMode("IMAGE");
     }
 
-    function clickLocal() {
-        changeStylesToLocal();
-        setSelectedMode("LOCAL");
+    function clickVideo() {
+        changeStylesToVideo();
+        setSelectedMode("VIDEO");
     }
 
-    function changeStylesToLocal() {
-        //Change styles of the local button to selected
-        setClassButtonLocal(classes.bigButtonDivSelectted);
-        setClassIconLocal(classes.bigButtonIconSelectted);
+    function changeStylesToVideo() {
+        //Change styles of the video button to selected
+        setClassButtonVideo(classes.bigButtonDivSelectted);
+        setClassIconVideo(classes.bigButtonIconSelectted);
 
-        //Change styles of the URL button to not selected
-        setClassButtonURL(classes.bigButtonDiv);
-        setClassIconURL(classes.bigButtonIcon);
+        //Change styles of the image button to not selected
+        setClassButtonImage(classes.bigButtonDiv);
+        setClassIconImage(classes.bigButtonIcon);
     }
 
-    function changeStylesToUrl() {
-        //Change styles of the url button to selected
-        setClassButtonURL(classes.bigButtonDivSelectted);
-        setClassIconURL(classes.bigButtonIconSelectted);
+    function changeStylesToImage() {
+        //Change styles of the image button to selected
+        setClassButtonImage(classes.bigButtonDivSelectted);
+        setClassIconImage(classes.bigButtonIconSelectted);
 
-        //Change styles of the Local button to not selected
-        setClassButtonLocal(classes.bigButtonDiv);
-        setClassIconLocal(classes.bigButtonIcon);
+        //Change styles of the video button to not selected
+        setClassButtonVideo(classes.bigButtonDiv);
+        setClassIconVideo(classes.bigButtonIcon);
     }
 
 
@@ -97,7 +97,7 @@ const Deepfake = () => {
         setProcessUrl(true);
     };
 
-    UseDeepfakeImage(input, processUrl);
+    UseDeepfakeImage(input, processUrl,selectedMode);
     
 
     return (
@@ -126,7 +126,7 @@ const Deepfake = () => {
                     <Grid container spacing={3} alignItems="center">
                         <Grid item xs={6}>
 
-                            <Box p={3} className={classButtonURL} onClick={clickURL}>
+                            <Box p={3} className={classButtonImage} onClick={clickImage}>
                                 <Grid
                                     container
                                     direction="row"
@@ -135,7 +135,7 @@ const Deepfake = () => {
                                 >
                                     <Grid item>
                                         <Box ml={1} mr={2}>
-                                            <ImageOutlinedIcon className={classIconURL} />
+                                            <ImageOutlinedIcon className={classIconImage} />
                                         </Box>
 
                                     </Grid>
@@ -168,7 +168,7 @@ const Deepfake = () => {
 
                         <Grid item xs={6}>
 
-                            <Box p={3} className={classButtonLocal} onClick={clickLocal}>
+                            <Box p={3} className={classButtonVideo} onClick={clickVideo}>
                                 <Grid
                                     container
                                     direction="row"
@@ -177,7 +177,7 @@ const Deepfake = () => {
                                 >
                                     <Grid item>
                                         <Box ml={1} mr={2}>
-                                            <TheatersRoundedIcon className={classIconLocal} />
+                                            <TheatersRoundedIcon className={classIconVideo} />
                                         </Box>
 
                                     </Grid>
@@ -231,13 +231,14 @@ const Deepfake = () => {
                                     fullWidth
                                     value={input}
                                     variant="outlined"
+                                    disabled={selectedMode===""}
                                     onChange={e => setInput(e.target.value)}
                                 />
 
                             </Grid>
 
                             <Grid item>
-                                <Button variant="contained" color="primary" onClick={submitUrl}>
+                                <Button variant="contained" color="primary" onClick={submitUrl} disabled={selectedMode === "" || input === ""}>
                                     {"Submit"}
                                 </Button>
 
@@ -264,8 +265,8 @@ const Deepfake = () => {
             <Box m={3} />
 
 
-            {result &&
-                <DeepfakeResutls result={result} url={url} />
+            {result && selectedMode==="IMAGE" &&
+                <DeepfakeResutlsImage result={result} url={url} />
             }
 
         </div>);

@@ -20,6 +20,7 @@ import { Accordion, AccordionDetails, AccordionSummary, LinearProgress, Typograp
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ReportProblemOutlinedIcon from '@material-ui/icons/ReportProblemOutlined';
 import { createTheme, ThemeProvider } from '@material-ui/core/styles';
+import Link from "@material-ui/core/Link";
 
 const KeyFramesResults = (props) => {
     const classes = useMyStyles();
@@ -131,7 +132,7 @@ const KeyFramesResults = (props) => {
                                                 similarityResults.map((value, key) => {
                                                     return (
                                                         <Typography variant="body1" align="left" style={{ color: "#17717e" }} key={key}>
-                                                            <a href={value.externalLink} target="_blank" style={{ color: "#17717e" }}>{value.externalLink}</a>
+                                                            <Link target="_blank" href={value.externalLink} style={{ color: "#17717e" }} >{value.externalLink}</Link>
                                                         </Typography>
                                                     )
                                                 })
