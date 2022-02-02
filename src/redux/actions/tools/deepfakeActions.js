@@ -14,7 +14,7 @@ export const setDeepfakeType = (type) => {
 
 export const setDeepfakeLoading = (loading) => {
     return {
-        type: "SET_DEEPFAKE_VIDEO",
+        type: "SET_DEEPFAKE_LOADING",
         payload: loading
     }
 };

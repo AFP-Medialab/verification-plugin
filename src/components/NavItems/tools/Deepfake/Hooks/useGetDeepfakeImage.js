@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import axios from "axios"
 import { setDeepfakeLoading, setDeepfakeResult } from "../../../../../redux/actions/tools/deepfakeActions";
 import { setError } from "../../../../../redux/actions/errorActions";
@@ -8,11 +8,16 @@ import { setError } from "../../../../../redux/actions/errorActions";
 const UseDeepfakeImage = (url, processURL, mode) => {
 
     const dispatch = useDispatch();
+    const isLoading = useSelector(state => state.deepfake.loading);
 
     useEffect(() => {
         if (processURL && url !== "" && mode === "IMAGE") {
 
             dispatch(setDeepfakeLoading(true))
+            
+            
+            console.log("loading", isLoading);
+
             
             axios.post("https://mever.iti.gr/deepfake/api/v3/images/jobs?url=" + url)
                 .then(response => {

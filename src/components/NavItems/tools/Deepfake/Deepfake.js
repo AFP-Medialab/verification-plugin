@@ -31,6 +31,7 @@ const Deepfake = () => {
 
     
     const [input, setInput] = useState("");
+    const [inputToSend, setInputToSend] = useState("");
     const [processUrl, setProcessUrl] = useState(false);
     
     const isLoading = useSelector(state => state.deepfake.loading);
@@ -95,9 +96,10 @@ const Deepfake = () => {
 
     const submitUrl = () => {
         setProcessUrl(true);
+        setInputToSend(input)
     };
 
-    UseDeepfakeImage(input, processUrl,selectedMode);
+    UseDeepfakeImage(inputToSend, processUrl,selectedMode);
     
 
     return (
@@ -209,51 +211,57 @@ const Deepfake = () => {
 
                     </Grid>
 
-                    <Box mt={4} mb={4}>
-                        <Divider />
-                    </Box>
+                    {selectedMode !== "" &&
+
+                        <div>
+
+                            <Box mt={4} mb={4}>
+                                <Divider />
+                            </Box>
+
+                            
+                            <Box m={1} />
+                            <Box>
+
+                                <Grid container
+                                    direction="row"
+                                    spacing={3}
+                                    alignItems="center"
+                                >
+
+                                    <Grid item xs>
+                                        <TextField
+                                            id="standard-full-width"
+                                            label={"Media URL"}
+                                            placeholder={"Paste the URL here"}
+                                            fullWidth
+                                            value={input}
+                                            variant="outlined"
+                                            disabled={selectedMode === "" || isLoading}
+                                            onChange={e => setInput(e.target.value)}
+                                        />
+
+                                    </Grid>
+
+                                    <Grid item>
+                                        <Button variant="contained" color="primary" onClick={submitUrl} disabled={selectedMode === "" || input === "" || isLoading}>
+                                            {"Submit"}
+                                        </Button>
+
+                                    </Grid>
+
+                                </Grid>
+
+                                {isLoading &&
+                                    <Box mt={3}>
+                                        <LinearProgress/>
+                                    </Box> 
+                                }
 
 
-                    <Box m={1} />
-                    <Box>
-
-                        <Grid container
-                            direction="row"
-                            spacing={3}
-                            alignItems="center"
-                        >
-
-                            <Grid item xs>
-                                <TextField
-                                    id="standard-full-width"
-                                    label={"Media URL"}
-                                    placeholder={"Paste the URL here"}
-                                    fullWidth
-                                    value={input}
-                                    variant="outlined"
-                                    disabled={selectedMode===""}
-                                    onChange={e => setInput(e.target.value)}
-                                />
-
-                            </Grid>
-
-                            <Grid item>
-                                <Button variant="contained" color="primary" onClick={submitUrl} disabled={selectedMode === "" || input === ""}>
-                                    {"Submit"}
-                                </Button>
-
-                            </Grid>
-
-                        </Grid>
-
-                        {isLoading &&
-                            <Box m={3}>
-                                <LinearProgress/>
-                            </Box> 
-                        }
-
-
-                    </Box>
+                            </Box>
+                        </div>
+                    }
 
                 </Box>
 
