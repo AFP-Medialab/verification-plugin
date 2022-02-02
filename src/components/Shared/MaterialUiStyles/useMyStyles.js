@@ -686,6 +686,24 @@ const useMyStyles = makeStyles(theme => ({
         marginLeft: "12px",
     },
 
+
+    deepfakeSquare: {
+        position: "absolute",
+        zIndex: 1,
+        display: "flex",
+        flexDirection: "column",
+    },
+
+    deepfakeSquareBorderRed: {
+        border: "8px solid red",
+        borderRadius: "10px",
+    },
+
+    deepfakeSquareBorderWhite: {
+        border: "8px solid white",
+        borderRadius: "10px",
+    },
+
 }));
 export const myCardStyles = makeStyles({
     root: {

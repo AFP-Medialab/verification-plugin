@@ -1,14 +1,37 @@
-const defaultState = true;
+const defaultState = {
+    url: "",
+    result: null,
+    loading: false,
+    type: "",
+};
+
 const deepfakeReducer = (state = defaultState, action) => {
     switch (action.type) {
-        case "SET_TRUE":
-            return true;
-        case "SET_FALSE":
-            return false;
-        case "SET_CUSTOM":
-            return action.payload;
-        case "TOGGLE_STATE":
-            return !state;
+        case "DEEPFAKE_RESET":
+            return {
+                ...state,
+                url: "",
+                result: null,
+                loading: false,
+                type: "",
+            }
+        case "SET_DEEPFAKE_TYPE":
+            return {
+                ...state,
+                type: action.payload,
+            }
+        case "SET_DEEPFAKE_LOADING":
+            return {
+                ...state,
+                loading: action.payload,
+            }
+        case "SET_DEEPFAKE_RESULT":
+            return {
+                ...state,
+                url: action.payload.url,
+                result: action.payload.result,
+                loading: false,
+            }
         default:
             return state;
     }

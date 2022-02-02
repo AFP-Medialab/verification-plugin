@@ -103,7 +103,7 @@ const AllTools = (props) => {
             value.type = "redesigned";
         }
 
-        if (value.title === "navbar_ocr" || value.title === "navbar_xnetwork" || value.title === "navbar_covidsearch" || value.title === "navbar_analysis_image") {
+        if (value.title === "navbar_ocr" || value.title === "navbar_xnetwork" || value.title === "navbar_covidsearch" || value.title === "navbar_analysis_image" || value.title === "navbar_deepfake" || value.title === "navbar_geolocation") {
             value.type = "new";
         }
 
