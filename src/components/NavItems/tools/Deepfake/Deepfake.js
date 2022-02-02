@@ -18,7 +18,7 @@ import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import ImageOutlinedIcon from '@material-ui/icons/ImageOutlined';
 import TheatersRoundedIcon from '@material-ui/icons/TheatersRounded';
 import { Divider, Typography } from "@material-ui/core";
-import UseDeepfakeImage from "./Hooks/useGetDeepfakeImage";
+import UseGetDeepfake from "./Hooks/useGetDeepfake";
 import DeepfakeResutlsImage from "./Results/DeepfakeResultsImage";
 
 const Deepfake = () => {
@@ -99,7 +99,7 @@ const Deepfake = () => {
         setInputToSend(input)
     };
 
-    UseDeepfakeImage(inputToSend, processUrl,selectedMode);
+    UseGetDeepfake(inputToSend, processUrl,selectedMode);
     
 
     return (
