@@ -159,12 +159,12 @@ function* similaritySearch(searchEndpoint, stateStorageFunction) {
             Object.keys(similarityResult).forEach(key=>{
                 result[key].appearancesResults.forEach(appearance=>{
                     resultList.push({
-                        "claimUrl": key,
+                        "claimUrl": result[key].externalLink,
                         "similarity": appearance.similarity})
                 })
                 result[key].evidencesResults.forEach(evidence=>{
                     resultList.push({
-                        "claimUrl": key,
+                        "claimUrl": result[key].externalLink,
                         "similarity": evidence.similarity})
                 })
             })
@@ -206,6 +206,11 @@ function* handleDbkfTextCall(action) {
 
         if (text) {
             let textToUse = text.length > 500 ? text.substring(0, 500) : text
+            let textRegex = /[\W]$/
+            while(textToUse.match(textRegex)){
+                if(textToUse.length === 1) break
+                textToUse = text.slice(0, -1)
+            }
             let result = yield call(dbkfAPI.callTextSimilarityEndpoint, textToUse)
             let filteredResult = filterDbkfTextResult(result)
 
@@ -543,7 +548,7 @@ const filterDbkfTextResult = (result) => {
         if (value.score > 1000 && scaled[index] > 70)  {
             resultList.push({
                 "text": value.text,
-                "claimUrl": value.claimUrl,
+                "claimUrl": value.externalLink,
                 "score": value.score
             })
         }
