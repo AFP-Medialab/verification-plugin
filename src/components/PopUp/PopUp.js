@@ -30,11 +30,43 @@ const PopUp = () => {
         window.open("/popup.html#/app/assistant/" + encodeURIComponent(pageUrl))
     }
 
+
+    const createScript = () => {
+        let script =
+            "var images = document.getElementsByTagName(\"img\")\n" +
+            "var image = images ? images[0].src : \"\" \n" +
+            "var scripts = document.getElementsByTagName(\"script\")\n" +
+            "var arr = [].slice.call(scripts)\n" +
+            "var script_to_use = arr.filter(ar=>ar.outerText.toString().includes(\"edge_media_to_caption\"))[0].outerText\n" +
+            "var text_regex = /(?<=edge_media_to_caption\":\\{\"edges\":\\[\\{\"node\"\:\\{\"text\":\").*(?=\"\\}\\}\\]\\},\"can_see_insights_as_brand\")/\n" +
+            "var video_regex = /(?<=video_url\":\").*(?=\",\"video_view_count)/\n" +
+            "var text_found = script_to_use.match(text_regex) ? script_to_use.match(text_regex)[0] : \"\"\n"+
+            "var video_found = script_to_use.match(video_regex) ?  script_to_use.match(video_regex)[0] : \"\"\n"+
+            "video_found = video_found.replace(/\\\\u0026/g, \"&\")\n" +
+            "var results = [text_found,\"plugin-split\",image,\"plugin-split\",video_found] \n" +
+            "results;\n"
+        return script;
+    };
+
+    const getInstagramUrls = () => {
+        const script = createScript();
+        navigator.tabs.executeScript({
+            code: script
+        }, (results) => {
+            if (results) {
+                window.localStorage.setItem("instagram_result", results)
+            }
+        })
+    };
+
     const loadData = () => {
         //get url of window
         navigator.tabs.query({active: true, lastFocusedWindow: true}, tabs => {
             let url = tabs[0].url;
             setPageUrl(url);
+            if (url.includes("instagram")){
+                getInstagramUrls()
+            }
         })
     }
 
