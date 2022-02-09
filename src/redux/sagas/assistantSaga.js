@@ -506,7 +506,7 @@ const filterSourceCredibilityResults = (originalResult) => {
         if (result["source-type"] === "positive") {
             addToRelevantSourceCred(positiveResult, result)
         }
-        else if (result["source-type"] === "mixed") {
+        else if (result["source-type"] === "mixed" && result["source"] !== "GDI-MMR") {
             addToRelevantSourceCred(mixedResult, result)
         }
         else if (result["source-type"] === "caution") {
