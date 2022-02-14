@@ -15,7 +15,6 @@ import tsv from "../../../../LocalDictionary/components/NavItems/tools/Assistant
 
 const DbkfMediaResults = () => {
 
-    const uiUrl = process.env.REACT_APP_DBKF_UI
     const keyword = useLoadLanguage("components/NavItems/tools/Assistant.tsv", tsv);
 
     const dbkfImageMatch = useSelector(state => state.assistant.dbkfImageMatch)
@@ -40,7 +39,7 @@ const DbkfMediaResults = () => {
                             }
                             secondary={
                                 <Typography variant={"caption"} component={"div"} color={"textSecondary"}>
-                                    <a href={uiUrl + value.claimUrl} key={key} target="_blank"
+                                    <a href={value.claimUrl} key={key} target="_blank"
                                        rel="noopener noreferrer">
                                         {value.claimUrl}
                                     </a>
@@ -67,7 +66,7 @@ const DbkfMediaResults = () => {
                             }
                             secondary={
                                 <Typography variant={"caption"} component={"div"} color={"textSecondary"}>
-                                    <a href={uiUrl + value.claimUrl} key={key} target="_blank"
+                                    <a href={value.claimUrl} key={key} target="_blank"
                                        rel="noopener noreferrer">
                                         {value.claimUrl}
                                     </a>

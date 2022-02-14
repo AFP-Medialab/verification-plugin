@@ -159,12 +159,12 @@ function* similaritySearch(searchEndpoint, stateStorageFunction) {
             Object.keys(similarityResult).forEach(key=>{
                 result[key].appearancesResults.forEach(appearance=>{
                     resultList.push({
-                        "claimUrl": key,
+                        "claimUrl": result[key].externalLink,
                         "similarity": appearance.similarity})
                 })
                 result[key].evidencesResults.forEach(evidence=>{
                     resultList.push({
-                        "claimUrl": key,
+                        "claimUrl": result[key].externalLink,
                         "similarity": evidence.similarity})
                 })
             })
@@ -206,6 +206,11 @@ function* handleDbkfTextCall(action) {
 
         if (text) {
             let textToUse = text.length > 500 ? text.substring(0, 500) : text
+            let textRegex = /[\W]$/
+            while(textToUse.match(textRegex)){
+                if(textToUse.length === 1) break
+                textToUse = text.slice(0, -1)
+            }
             let result = yield call(dbkfAPI.callTextSimilarityEndpoint, textToUse)
             let filteredResult = filterDbkfTextResult(result)
 
@@ -297,14 +302,20 @@ function * handleAssistantScrapeCall(action) {
 
     let inputUrl = action.payload.inputUrl
 
+    yield put(cleanAssistantState())
+    yield put(setUrlMode(true))
+    yield put(setAssistantLoading(true))
+
+    let urlType = matchPattern(inputUrl, KNOWN_LINK_PATTERNS)
+    let contentType = matchPattern(inputUrl, TYPE_PATTERNS)
+    let instagram_local = window.localStorage.getItem("instagram_result")
+
+    if (urlType === KNOWN_LINKS.INSTAGRAM && instagram_local){
+        yield call(extractFromLocalStorage, instagram_local, inputUrl, urlType)
+        return
+    }
+
     try {
-        yield put(cleanAssistantState())
-        yield put(setUrlMode(true))
-        yield put(setAssistantLoading(true))
-
-        let urlType = matchPattern(inputUrl, KNOWN_LINK_PATTERNS)
-        let contentType = matchPattern(inputUrl, TYPE_PATTERNS)
-
         let scrapeResult = null
         if (decideWhetherToScrape(urlType, contentType, inputUrl)) {
             scrapeResult = urlType === KNOWN_LINKS.TIKTOK ?
@@ -319,10 +330,44 @@ function * handleAssistantScrapeCall(action) {
         yield put(setAssistantLoading(false))
     } catch (error) {
         yield put(setAssistantLoading(false))
-        yield put(setErrorKey(error.message));
+
+        if (urlType === KNOWN_LINKS.INSTAGRAM && !instagram_local) {
+            yield put(setErrorKey("assistant_error_instagram"))
+        }
+        else {
+            yield put(setErrorKey(error.message));
+        }
     }
 }
 
+function * extractFromLocalStorage(instagram_result, inputUrl, urlType) {
+    instagram_result = instagram_result.split(",plugin-split,")
+
+    let text_result = instagram_result[0]
+    let image_result = [instagram_result[1]]
+    let video_result = instagram_result[2]
+
+    if (text_result === "") {
+        text_result = null
+    }
+    else{
+        let regex_emoji = /\\u.{4}/g
+        text_result = text_result.replaceAll(regex_emoji, "")
+        text_result = text_result.replaceAll("\\n", " ")
+    }
+
+    if(video_result !== ""){
+        video_result.replace("\\u0026", "%")
+        video_result = [video_result]
+        image_result = []
+    }
+
+    window.localStorage.removeItem("instagram_result")
+
+    yield put(setInputUrl(inputUrl, urlType))
+    yield put(setScrapedData(text_result, null, [], image_result, video_result))
+    yield put(setAssistantLoading(false))
+}
 
 /**
 * PREPROCESS FUNCTIONS
@@ -461,7 +506,7 @@ const filterSourceCredibilityResults = (originalResult) => {
         if (result["source-type"] === "positive") {
             addToRelevantSourceCred(positiveResult, result)
         }
-        else if (result["source-type"] === "mixed") {
+        else if (result["source-type"] === "mixed" && result["source"] !== "GDI-MMR") {
             addToRelevantSourceCred(mixedResult, result)
         }
         else if (result["source-type"] === "caution") {
@@ -503,7 +548,7 @@ const filterDbkfTextResult = (result) => {
         if (value.score > 1000 && scaled[index] > 70)  {
             resultList.push({
                 "text": value.text,
-                "claimUrl": value.claimUrl,
+                "claimUrl": value.externalLink,
                 "score": value.score
             })
         }

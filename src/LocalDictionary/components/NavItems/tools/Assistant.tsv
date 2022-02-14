@@ -32,6 +32,7 @@ media_found	The following media has been found on the page	Les médias suivants 
 media_below	Select the media you would like to verify	Sélectionner le média que vous souhaitez vérifier	Seleccionar el tipo de media que quiere verificar	Επιλέξτε το μέσο που θέλετε να επαληθεύσετε
 media_to_process	Media to Process	Média à analyser	Medios para procesar	Media με τη Μέθοδο
 assistant_error	An unexpected assistant error has occurred. If the problem persists, contact support.	Une erreur inattendue s'est produite. Si le problème persiste, contacter le support via le bouton de feedback.	Se ha producido un error inesperado. Si persiste el problema, póngase en contacto con el botón de feedback.	Παρουσιάστηκε μη αναμενόμενο σφάλμα βοηθός. Αν το πρόβλημα παραμένει, επικοινωνήστε με την υποστήριξη.
+assistant_error_instagram	The assistant has failed to retrieve this instagram post. Please open this URL in a new tab (you may need to log in to instagram), then use the ASSISTANT FOR CURRENT PAGE button to retry.	Temp	Temp	Temp
 things_you_can_do_header	Potential Tools	Outils proposés	Herramientas propuestas	Πιθανές Εργαλεία
 things_you_can_do	Below are the tools you can use on this media type	Vous pouvez utiliser les outils ci-dessous avec ce type de média	A continuación se presentan las herramientas que puede utilizar en este tipo de medios	Παρακάτω είναι τα εργαλεία που μπορείτε να χρησιμοποιήσετε για αυτό το είδος των μέσων ενημέρωσης
 navbar_analysis_image	Image Analysis	Analyse	Análisis	Ανάλυση

@@ -14,7 +14,6 @@ import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 
 const DbkfTextResults = () => {
 
-    const uiUrl = process.env.REACT_APP_DBKF_UI
     const keyword = useLoadLanguage("components/NavItems/tools/Assistant.tsv", tsv);
     const dbkfTextMatch = useSelector(state => state.assistant.dbkfTextMatch)
 
@@ -37,7 +36,7 @@ const DbkfTextResults = () => {
                             }
                             secondary={
                                 <Typography variant={"caption"} component={"div"} color={"textSecondary"}>
-                                    <a href={uiUrl + value.claimUrl} key={key} target="_blank"
+                                    <a href={value.claimUrl} key={key} target="_blank"
                                        rel="noopener noreferrer">
                                         {value.text}
                                     </a>
