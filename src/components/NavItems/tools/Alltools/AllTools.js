@@ -103,7 +103,11 @@ const AllTools = (props) => {
             value.type = "redesigned";
         }
 
-        if (value.title === "navbar_ocr" || value.title === "navbar_xnetwork" || value.title === "navbar_covidsearch" || value.title === "navbar_analysis_image" || value.title === "navbar_deepfake" || value.title === "navbar_geolocation") {
+        if (value.title === "navbar_ocr" || 
+            value.title === "navbar_xnetwork" || 
+            value.title === "navbar_covidsearch" || 
+            value.title === "navbar_analysis_image") {
+            
             value.type = "new";
         }
 
@@ -111,7 +115,10 @@ const AllTools = (props) => {
             value.type = "lock";
         }
 
-        if (value.title === "navbar_gif") {
+        if (value.title === "navbar_gif" || 
+            value.title === "navbar_deepfake" ||
+            value.title === "navbar_geolocation") {
+                
             value.type = "lock and new";
         }
 
