@@ -38,7 +38,7 @@ const PopUp = () => {
             "var scripts = document.getElementsByTagName(\"script\")\n" +
             "var arr = [].slice.call(scripts)\n" +
             "var script_to_use = arr.filter(ar=>ar.outerText.toString().includes(\"edge_media_to_caption\"))[0].outerText\n" +
-            "var text_regex = /(?<=edge_media_to_caption\":\\{\"edges\":\\[\\{\"node\"\:\\{\"text\":\").*(?=\"\\}\\}\\]\\},\"can_see_insights_as_brand\")/\n" +
+            "var text_regex = /(?<=edge_media_to_caption\":\\{\"edges\":\\[\\{\"node\"\:\\{\"text\":\").*(?=\"\\}\\}\\]\\},\"can_see_insights_as_brand\")/\n" + // eslint-disable-line
             "var video_regex = /(?<=video_url\":\").*(?=\",\"video_view_count)/\n" +
             "var text_found = script_to_use.match(text_regex) ? script_to_use.match(text_regex)[0] : \"\"\n"+
             "var video_found = script_to_use.match(video_regex) ?  script_to_use.match(video_regex)[0] : \"\"\n"+
