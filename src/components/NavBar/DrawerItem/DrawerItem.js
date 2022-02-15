@@ -47,8 +47,8 @@ const DrawerItem = (props) => {
             footer: <Footer type={"afp"}/>
         },
         {
-            content: <TwitterAdvancedSearch/>,
-            footer: <Footer type={"afp"}/>
+            content: <VideoRights />,
+            footer: <Footer type={"GRIHO"} />
         },
         {
             content: <AnalysisImg/>,
@@ -62,29 +62,14 @@ const DrawerItem = (props) => {
             content: <Metadata/>,
             footer: <Footer type={"afp"}/>
         },
-        {
-            content: <VideoRights/>,
-            footer: <Footer type={"GRIHO"}/>
-        },
+        
         {
             content: <Forensic/>,
             footer: <Footer type={"iti-borelli-afp"}/>
         },
         {
-            content: <TwitterSna/>,
-            footer: <Footer type={"afp-usfd-eudisinfolab"}/>
-        },
-        {
-            content: <CovidSearch/>,
-            footer: <Footer type={"afp"}/>
-        },
-        {
-            content: <XNetwork/>,
-            footer: <Footer type={"afp"}/>
-        },
-        {
-            content: <OCR/>,
-            footer: <Footer type={"usfd"}/>
+            content: <OCR />,
+            footer: <Footer type={"usfd"} />
         },
         {
             content: <Gif />,
@@ -97,7 +82,26 @@ const DrawerItem = (props) => {
         {
             content: <Geolocation />,
             footer: <Footer type={"afp"} />
-        }
+        },
+        {
+            content: <TwitterAdvancedSearch />,
+            footer: <Footer type={"afp"} />
+        },
+        
+        {
+            content: <CovidSearch/>,
+            footer: <Footer type={"afp"}/>
+        },
+        {
+            content: <XNetwork/>,
+            footer: <Footer type={"afp"}/>
+        },
+        {
+            content: <TwitterSna />,
+            footer: <Footer type={"afp-usfd-eudisinfolab"} />
+        },
+        
+        
     ];
 
     const dispatch = useDispatch();
@@ -128,6 +132,11 @@ const DrawerItem = (props) => {
                     minWidth: "25%!important",
                 }
             },
+            MuiCard: {
+                root: {
+                    borderRadius: "10px"
+                }
+            }
 
         },
 
@@ -151,8 +160,7 @@ const DrawerItem = (props) => {
                             <Route
                                 key={index}
                                 path={"/app/tools/" + item.path + "/:url?/:type?/"}
-                                render={
-                                    () => {
+                                render={() => {
                                         dispatch(selectTool(index));
                                         return (
                                             <Container key={index} className={classes.noMargin} maxWidth={false}>

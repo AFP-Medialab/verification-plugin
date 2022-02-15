@@ -1,7 +1,8 @@
 import {makeStyles} from "@material-ui/core/styles";
 import {green} from "@material-ui/core/colors";
+import { BorderBottom } from "@material-ui/icons";
 
-const drawerWidth = 200;
+const drawerWidth = 300;
 
 const useMyStyles = makeStyles(theme => ({
     root: {
@@ -63,21 +64,44 @@ const useMyStyles = makeStyles(theme => ({
         display: 'flex',
     },
     appBar: {
-        zIndex: theme.zIndex.drawer + 1,
-        height: "83px",
-        backgroundColor: "#ffffff"
+        zIndex: 9999,
+        height: "87px",
+        backgroundColor: "#ffffff",
+        boxShadow: "none",
+        paddingTop: "12px"
     },
     drawer: {
         width: drawerWidth,
         flexShrink: 0,
         whiteSpace: 'nowrap',
+        overflowX: "hidden",
+        
     },
+
+    drawerCategoryBorder: {
+        border: "1px solid #c4c4c4",
+    },
+
+    drawerWidth: {
+        width: "300px"
+    },
+
+    drawerWidthClose: {
+        width: "84px"
+    },
+
+
     drawerOpen: {
         width: drawerWidth,
         transition: theme.transitions.create('width', {
             easing: theme.transitions.easing.sharp,
             duration: theme.transitions.duration.enteringScreen,
         }),
+        overflowX: "hidden",
+        "&::-webkit-scrollbar": {
+            display: 'none',
+
+        },
     },
     drawerClose: {
         transition: theme.transitions.create('width', {
@@ -85,13 +109,51 @@ const useMyStyles = makeStyles(theme => ({
             duration: theme.transitions.duration.leavingScreen,
         }),
         overflowX: 'hidden',
-        width: theme.spacing(7) + 1,
+        width: "85px",
         [theme.breakpoints.up('sm')]: {
-            width: theme.spacing(9) + 1,
+            width: "85px",
         },
+        overflowX: "hidden",
+        "&::-webkit-scrollbar": {
+            display: 'none',
+
+        },
+
     },
+
+    drawerListText: {
+        fontWeight: "500", 
+        fontSize: "14px"
+    },
+
+    drawerListHeadingCenter: {
+        textAlign: "center"
+    },
+
+    drawerListHeadingLeft: {
+        textAlign: "left"
+    },
+
+
+    drawerListIcon: {
+        width: "24px", 
+        height: "24px"
+    },
+    
+    drawerListNested: {
+        paddingLeft: theme.spacing(4),
+    },
+
+    drawerListIcons: {
+        height: "30px",
+        width: "30px"
+    },
+
+
     toolbar: {
-        ...theme.mixins.toolbar,
+        //...theme.mixins.toolbar,
+        height: "70px",
+        paddingBottom: "10px",
     },
     content: {
         flexGrow: 1,
@@ -103,12 +165,12 @@ const useMyStyles = makeStyles(theme => ({
     },
     logoLeft: {
         cursor: "pointer",
-        marginRight: theme.spacing(2),
+        marginRight: theme.spacing(1),
         maxHeight: "60px",
     },
     logoRight: {
         cursor: "pointer",
-        marginLeft: theme.spacing(2),
+        marginLeft: theme.spacing(1),
         maxHeight: "70px",
     },
     selectedApp: {
@@ -425,7 +487,6 @@ const useMyStyles = makeStyles(theme => ({
     customAllToolsButton: {
         padding: 0,
         minHeight:0,
-        minWidth: 0,
         backgroundColor: 'transparent',
         fontSize: 40
     },
@@ -644,8 +705,8 @@ const useMyStyles = makeStyles(theme => ({
     },
 
     toolCardStyle: {
-        width: "25%", 
-        maxWidth: "350px", 
+        width: "33%", 
+        maxWidth: "400px", 
         minWidth: "250px",
     },
 
@@ -680,6 +741,8 @@ const useMyStyles = makeStyles(theme => ({
         bottom: "100px",
         left: "auto",
         position: "fixed",
+        backgroundColor:"#fff",
+        color:"#000"
     },
 
     feedbackHeaderTitle: {
