@@ -66,6 +66,10 @@ import { ReactComponent as GuideIcon } from "./images/SVG/Navbar/Guide.svg"
 import { ReactComponent as LogoInvid2 } from "./images/SVG/Navbar/InVID.svg"
 import { ReactComponent as LogoWeVerify2 } from "./images/SVG/Navbar/WeVerify.svg"
 
+import { ReactComponent as VideoIcon } from "./images/SVG/Video/Video.svg"
+import { ReactComponent as ImageIcon } from "./images/SVG/Image/Images.svg"
+import { ReactComponent as SearchIcon } from "./images/SVG/Search/Search.svg"
+import { ReactComponent as DataIcon } from "./images/SVG/DataAnalysis/Data_analysis.svg"
 
 import { getSupportedBrowserLanguage } from "../Shared/Languages/getSupportedBrowserLanguage";
 import useLoadLanguage from "../../Hooks/useLoadLanguage";
@@ -76,8 +80,16 @@ import { setFalse, setTrue } from "../../redux/actions/cookiesActions";
 import { changeLanguage } from "../../redux/actions";
 import Button from "@material-ui/core/Button";
 import Alert from "@material-ui/lab/Alert";
-import { MuiThemeProvider } from "@material-ui/core";
+import { Collapse, Grid, ListSubheader, MuiThemeProvider } from "@material-ui/core";
 import { createTheme } from "@material-ui/core/styles";
+import Typography from "@material-ui/core/Typography";
+import ExpandLess from '@material-ui/icons/ExpandLess';
+import ExpandMore from '@material-ui/icons/ExpandMore';
+
+import TextField from '@material-ui/core/TextField';
+import Autocomplete from '@material-ui/lab/Autocomplete';
+import transitions from '@material-ui/core/styles/transitions';
+import SearchIconMaterial from '@material-ui/icons/Search';
 
 
 function a11yProps(index) {
@@ -89,7 +101,8 @@ function a11yProps(index) {
 
 const NavBar = (props) => {
     const classes = useMyStyles();
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = React.useState(true);
+    const [classWidthToolbar, setClassWidthToolbar] = React.useState(classes.drawerWidth);
 
     const tabValue = useSelector(state => state.nav);
     const drawerValue = useSelector(state => state.tool.selected);
@@ -99,12 +112,18 @@ const NavBar = (props) => {
 
     const dispatch = useDispatch();
 
+    const drawerRef = React.createRef();
+
+    /*
+
     const handleChange = (event, newValue) => {
         if (tabItems[newValue].path === "tools")
             history.push("/app/tools/" + drawerItems[newValue].path);
         else
             history.push("/app/" + tabItems[newValue].path)
     };
+
+    */
 
     const [openAlert, setOpenAlert] = React.useState(false);
 
@@ -119,16 +138,32 @@ const NavBar = (props) => {
         (state) => state.userSession && state.userSession.userAuthenticated
     );
     
-    const changeValue = (newValue) => {
-        if (drawerItems[newValue].title === "navbar_twitter_sna" || drawerItems[newValue].title === "navbar_gif"){
-            if (userAuthenticated){
-                history.push("/app/tools/" + drawerItems[newValue].path);
-            }else{
-                setOpenAlert(true);
+    const changeValue = (newValueTitle, newValueType) => {
+
+        var value = null;
+
+        if (newValueType === "TOOL"){
+            value = drawerItems.find(element => element.title === newValueTitle);
+
+            if (newValueTitle === "navbar_twitter_sna" || newValueTitle === "navbar_gif") {
+                if (userAuthenticated) {
+                    history.push("/app/tools/" + value.path);
+                } else {
+                    setOpenAlert(true);
+                }
+            } else {
+                history.push("/app/tools/" + value.path);
             }
-        }else{
-            history.push("/app/tools/" + drawerItems[newValue].path);
+
+
+        } else if (newValueType === "OTHER"){
+            value = tabItems.find(element => element.title === newValueTitle);
+            history.push("/app/" + value.path) 
+
         }
+
+        
+
     };
 
     const error = useSelector(state => state.error);
@@ -136,20 +171,38 @@ const NavBar = (props) => {
     const keywordWarning = useLoadLanguage("components/Shared/OnWarningInfo.tsv", tsvWarning);
 
 
+    const [classListHeading, setClassListHeading] = React.useState(classes.drawerListHeadingLeft);
 
     const handleDrawerToggle = () => {
         setOpen(!open);
+
+        if (classWidthToolbar === classes.drawerWidth){
+            setClassWidthToolbar(classes.drawerWidthClose);
+            setTimeout(function () {
+                setClassListHeading(classes.drawerListHeadingCenter);
+            }, 194);
+            
+        }else{
+            setClassWidthToolbar(classes.drawerWidth);
+            setClassListHeading(classes.drawerListHeadingLeft);
+            
+        }
+
     };
 
     const drawerItems = [
         {
+            id: 1,
             title: "navbar_tools",
             icon: <ToolsIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} />,
             tsvPrefix: "all",
             path: "all",
+            type: "General",
+            typeId: 0,
         },
 
         {
+            id: 2,
             title: "navbar_analysis_video",
             description: "navbar_analysis_description",
             icon: (drawerValue === 1) ? <AnalysisIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title="Video analysis"/>
@@ -157,8 +210,11 @@ const NavBar = (props) => {
             iconColored: <AnalysisIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title={keyword("navbar_analysis_video")}/>,
             tsvPrefix: "api",
             path: "analysis",
+            type: "video",
+            typeId: 1,
         },
         {
+            id: 3,
             title: "navbar_keyframes",
             description: "navbar_keyframes_description",
             icon: (drawerValue === 2) ? <KeyframesIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title="Keyframes"/>
@@ -166,8 +222,11 @@ const NavBar = (props) => {
             iconColored: <KeyframesIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title={keyword("navbar_keyframes")}/>,
             tsvPrefix: "keyframes",
             path: "keyframes",
+            type: "video",
+            typeId: 1,
         },
         {
+            id: 4,
             title: "navbar_thumbnails",
             description: "navbar_thumbnails_description",
             icon: (drawerValue === 3) ? <ThumbnailsIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title="Thumbnails"/>
@@ -175,17 +234,24 @@ const NavBar = (props) => {
             iconColored: <ThumbnailsIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title={keyword("navbar_thumbnails")}/>,
             tsvPrefix: "thumbnails",
             path: "thumbnails",
+            type: "video",
+            typeId: 1,
         },
         {
-            title: "navbar_twitter",
-            description: "navbar_twitter_description",
-            icon: (drawerValue === 4) ? <TwitterSearchIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title="Twitter search"/>
-                : <TwitterSearchIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} title={keyword("navbar_twitter")}/>,
-            iconColored: <TwitterSearchIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title={keyword("navbar_twitter")}/>,
-            tsvPrefix: "twitter",
-            path: "twitter",
+            id: 5,
+            title: "navbar_rights",
+            description: "navbar_rights_description",
+            icon: (drawerValue === 4) ? <VideoRightsIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title="Video rights" />
+                : <VideoRightsIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} title={keyword("navbar_rights")} />,
+            iconColored: <VideoRightsIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title={keyword("navbar_rights")} />,
+            tsvPrefix: "copyright",
+            path: "copyright",
+            type: "video",
+            typeId: 1,
         },
+        
         {
+            id: 6,
             title: "navbar_analysis_image",
             description: "navbar_analysis_image_description",
             icon: (drawerValue === 5) ? <AnalysisIconImage width="45px" height="45px" style={{ fill: "#51A5B2" }} title="Image analysis"/>
@@ -193,8 +259,11 @@ const NavBar = (props) => {
             iconColored: <AnalysisIconImage width="45px" height="45px" style={{ fill: "#51A5B2" }} title={keyword("navbar_analysis_image")}/>,
             tsvPrefix: "api",
             path: "analysisImage",
+            type: "image",
+            typeId: 2,
         },
         {
+            id: 7,
             title: "navbar_magnifier",
             description: "navbar_magnifier_description",
             icon: (drawerValue === 6) ? <MagnifierIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title="Magnifier"/>
@@ -202,8 +271,11 @@ const NavBar = (props) => {
             iconColored: <MagnifierIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title={keyword("navbar_magnifier")}/>,
             tsvPrefix: "magnifier",
             path: "magnifier",
+            type: "image",
+            typeId: 2,
         },
         {
+            id: 8,
             title: "navbar_metadata",
             description: "navbar_metadata_description",
             icon: (drawerValue === 7) ? <MetadataIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title="Metadata"/>
@@ -211,99 +283,134 @@ const NavBar = (props) => {
             iconColored: <MetadataIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title={keyword("navbar_metadata")}/>,
             tsvPrefix: "metadata",
             path: "metadata",
+            type: "image",
+            typeId: 2,
         },
+        
+        
         {
-            title: "navbar_rights",
-            description: "navbar_rights_description",
-            icon: (drawerValue === 8) ? <VideoRightsIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title="Video rights"/>
-                : <VideoRightsIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} title={keyword("navbar_rights")}/>,
-            iconColored: <VideoRightsIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title={keyword("navbar_rights")}/>,
-            tsvPrefix: "copyright",
-            path: "copyright",
-        },
-        {
+            id: 9,
             title: "navbar_forensic",
             description: "navbar_forensic_description",
-            icon: (drawerValue === 9) ? <ForensicIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title="Forensic"/>
+            icon: (drawerValue === 8) ? <ForensicIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title="Forensic"/>
                 : <ForensicIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} title={keyword("navbar_forensic")}/>,
             iconColored: <ForensicIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title={keyword("navbar_forensic")}/>,
             tsvPrefix: "forensic",
             path: "forensic",
+            type: "image",
+            typeId: 2,
         },
-        
         {
-            title: "navbar_twitter_sna",
-            description: "navbar_twitter_sna_description",
-            icon: (drawerValue === 10) ? <TwitterSnaIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title="Twitter SNA"/>
-                : <TwitterSnaIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} title={keyword("navbar_twitter_sna")}/>,
-            iconColored: <TwitterSnaIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title={keyword("navbar_twitter_sna")}/>,
-            tsvPrefix: "twitter_sna",
-            path: "twitterSna"
+            id: 10,
+            title: "navbar_ocr",
+            description: "navbar_ocr_description",
+            icon: (drawerValue === 9) ? <OcrIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title="OCR" />
+                : <OcrIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} title={keyword("navbar_ocr")} />,
+            iconColored: <OcrIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title={keyword("navbar_ocr")} />,
+            tsvPrefix: "ocr",
+            path: "ocr",
+            type: "image",
+            typeId: 2,
         },
 
         {
+            id: 11,
+            title: "navbar_gif",
+            description: "navbar_gif_description",
+            icon: (drawerValue === 10) ? <GifIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title="CheckGIF" />
+                : <GifIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} title={keyword("navbar_gif")} />,
+            iconColored: <GifIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title={keyword("navbar_gif")} />,
+            tsvPrefix: "gif",
+            path: "gif",
+            type: "image",
+            typeId: 2,
+        },
+        {
+            id: 12,
+            title: "navbar_deepfake",
+            description: "navbar_deepfake_description",
+            icon: (drawerValue === 11) ? <DeepfakeIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title="Twitter SNA" />
+                : <DeepfakeIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} title={keyword("navbar_deepfake")} />,
+            iconColored: <DeepfakeIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title={keyword("navbar_deepfake")} />,
+            tsvPrefix: "deepfake",
+            path: "deepfake",
+            type: "image",
+            typeId: 2,
+
+        },
+        {
+            id: 13,
+            title: "navbar_geolocation",
+            description: "navbar_geolocation_description",
+            icon: (drawerValue === 12) ? <GeolactionIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title="Twitter SNA" />
+                : <GeolactionIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} title={keyword("navbar_geolocation")} />,
+            iconColored: <GeolactionIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title={keyword("navbar_geolocation")} />,
+            tsvPrefix: "geolocation",
+            path: "geolocation",
+            type: "image",
+            typeId: 2,
+        },
+        
+        
+        {
+            id: 14,
+            title: "navbar_twitter",
+            description: "navbar_twitter_description",
+            icon: (drawerValue === 13) ? <TwitterSearchIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title="Twitter search" />
+                : <TwitterSearchIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} title={keyword("navbar_twitter")} />,
+            iconColored: <TwitterSearchIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title={keyword("navbar_twitter")} />,
+            tsvPrefix: "twitter",
+            path: "twitter",
+            type: "search",
+            typeId: 3,
+        },
+        {
+            id: 15,
             title: "navbar_covidsearch",
             description: "navbar_covidsearch_description",
-            icon: (drawerValue === 11) ? <CovidSearchIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title="Covid search"/>
+            icon: (drawerValue === 14) ? <CovidSearchIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title="Covid search"/>
                 : <CovidSearchIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} title={keyword("navbar_covidsearch")}/>,
             iconColored: <CovidSearchIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title={keyword("navbar_covidsearch")}/>,
             tsvPrefix: "covidsearch",
-            path: "covidSearch"
+            path: "covidSearch",
+            type: "search",
+            typeId: 3,
         },
         {
+            id: 16,
             title: "navbar_xnetwork",
             description: "navbar_xnetwork_description",
-            icon: (drawerValue === 12) ? <XnetworkIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title="Xnetwork"/>
+            icon: (drawerValue === 15) ? <XnetworkIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title="Xnetwork"/>
                 : <XnetworkIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} title={keyword("navbar_xnetwork")}/>,
             iconColored: <XnetworkIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title={keyword("navbar_xnetwork")}/>,
             tsvPrefix: "xnetwork",
-            path: "xnetwork"
+            path: "xnetwork",
+            type: "search",
+            typeId: 3,
+        },
+        
+        {
+            id: 17,
+            title: "navbar_twitter_sna",
+            description: "navbar_twitter_sna_description",
+            icon: (drawerValue === 16) ? <TwitterSnaIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title="Twitter SNA" />
+                : <TwitterSnaIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} title={keyword("navbar_twitter_sna")} />,
+            iconColored: <TwitterSnaIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title={keyword("navbar_twitter_sna")} />,
+            tsvPrefix: "twitter_sna",
+            path: "twitterSna",
+            type: "data",
+            typeId: 4,
         },
         {
-            title: "navbar_ocr",
-            description: "navbar_ocr_description",
-            icon: (drawerValue === 13) ? <OcrIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title="OCR"/>
-                : <OcrIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} title={keyword("navbar_ocr")}/>,
-            iconColored: <OcrIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title={keyword("navbar_ocr")}/>,
-            tsvPrefix: "ocr",
-            path: "ocr"
-        },
-
-        {
-            title: "navbar_gif",
-            description: "navbar_gif_description",
-            icon: (drawerValue === 14) ? <GifIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title="CheckGIF"/>
-                : <GifIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} title={keyword("navbar_gif")}/>,
-            iconColored: <GifIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title={keyword("navbar_gif")}/>,
-            tsvPrefix: "gif",
-            path: "gif"
-        },
-        {
-            title: "navbar_deepfake",
-            description: "navbar_deepfake_description",
-            icon: (drawerValue === 15) ? <DeepfakeIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title="Twitter SNA" />
-                : <DeepfakeIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} title={keyword("navbar_twitter_sna")} />,
-            iconColored: <DeepfakeIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title={keyword("navbar_twitter_sna")} />,
-            tsvPrefix: "deepfake",
-            path: "deepfake"
-            
-        },
-        {
-            title: "navbar_geolocation",
-            description: "navbar_geolocation_description",
-            icon: (drawerValue === 16) ? <GeolactionIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title="Twitter SNA" />
-                : <GeolactionIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} title={keyword("navbar_twitter_sna")} />,
-            iconColored: <GeolactionIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title={keyword("navbar_twitter_sna")} />,
-            tsvPrefix: "geolocation",
-            path: "geolocation"
-        },
-        {
+            id: 18,
             title: "navbar_twitter_crowdtangle",
             description: "navbar_twitter_crowdtangle_description",
             icon: (drawerValue === 17) ? <CsvSnaIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title="Twitter SNA" />
-                : <CsvSnaIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} title={keyword("navbar_twitter_sna")} />,
-            iconColored: <CsvSnaIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title={keyword("navbar_twitter_sna")} />,
-            tsvPrefix: "twitter_sna",
+                : <CsvSnaIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} title={keyword("navbar_twitter_crowdtangle")} />,
+            iconColored: <CsvSnaIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title={keyword("navbar_twitter_crowdtangle")} />,
+            tsvPrefix: "twitter_crowdtangle",
+            type: "data",
+            typeId: 4,
         },
     ];
 
@@ -311,11 +418,12 @@ const NavBar = (props) => {
     const tabItems = [
         {
             title: "navbar_tools",
-            icon: (tabValue === 0) ? <ToolsIcon width="40px" height="40px" style={{ fill: "#51A5B2" }} />
+            icon: (tabValue === 0 && drawerValue === 0) ? <ToolsIcon width="40px" height="40px" style={{ fill: "#51A5B2" }} />
                 : <ToolsIcon width="40px" height="40px" style={{ fill: "#4c4c4c" }} />,
             content: <div />,
             path: "tools",
             footer: <div />,
+            type: "verification",
         },
         {
             title: "navbar_assistant",
@@ -323,7 +431,8 @@ const NavBar = (props) => {
                 : <AssistantIcon width="40px" height="40px" style={{ fill: "#4c4c4c" }} />,
             content: <Assistant />,
             path: "assistant",
-            footer: <Footer type={"usfd"} />
+            footer: <Footer type={"usfd"} />,
+            type: "verification",
         },
         {
             title: "navbar_tuto",
@@ -331,7 +440,8 @@ const NavBar = (props) => {
                 : <GuideIcon width="40px" height="40px" style={{ fill: "#4c4c4c" }} />,
             content: <Tutorial />,
             path: "tutorial",
-            footer: <Footer type={"afp"} />
+            footer: <Footer type={"afp"} />,
+            type: "learning"
         },
         {
             title: "navbar_quiz",
@@ -339,7 +449,8 @@ const NavBar = (props) => {
                 : <InteractiveIcon width="40px" height="40px" style={{ fill: "#4c4c4c" }} />,
             content: <Interactive />,
             path: "interactive",
-            footer: <Footer type={"afp"} />
+            footer: <Footer type={"afp"} />,
+            type: "learning"
         },
         {
             title: "navbar_classroom",
@@ -347,7 +458,8 @@ const NavBar = (props) => {
                 : <ClassroomIcon width="40px" height="40px" style={{ fill: "#4c4c4c" }} />,
             content: <ClassRoom />,
             path: "classroom",
-            footer: <Footer type={"afp"} />
+            footer: <Footer type={"afp"} />,
+            type: "learning"
         },
         /*{
             title: "navbar_factCheck",
@@ -363,7 +475,8 @@ const NavBar = (props) => {
                 : <AboutIcon width="40px" height="40px" style={{ fill: "#4c4c4c" }} />,
             content: <About />,
             path: "about",
-            footer: <Footer type={"afp"} />
+            footer: <Footer type={"afp"} />,
+            type: "more"
         },
 
     ];
@@ -391,13 +504,151 @@ const NavBar = (props) => {
     const themeFab = createTheme({
         palette: {
             primary: {
-                light: '#ffffff',
-                main: '#ffffff',
-                dark: '#cccccc',
-                contrastText: '#000000',
+                light: '#5cdbe6',
+                main: '#05a9b4',
+                dark: '#007984',
+                contrastText: '#fff',
             },
         },
+        overrides: {
+            MuiListItem:{
+                gutters:{
+                    paddingLeft: "26px"
+                },
+                
+            },
+            MuiAutocomplete:{
+                popupIndicatorOpen: {
+                    transform: "none!important"
+                },
+                popper:{
+                    zIndex: 99999
+                }
+                
+            },
+            
+            
+            
+        }
     });
+
+
+    //Video items
+    const drawerItemsVideo = drawerItems.filter(item => item.type === "video");
+    const [openListVideo, setOpenListVideo] = React.useState(false);
+    const [classBorderVideo, setClassBorderVideo] = React.useState(null);
+
+    const handleClickListVideo = () => {
+        setOpenListVideo(!openListVideo);
+        if (!classBorderVideo) {
+            setClassBorderVideo(classes.drawerCategoryBorder);
+        } else {
+            setClassBorderVideo(null);
+        }
+    };
+
+
+    //Image items
+    const drawerItemsImage = drawerItems.filter(item => item.type === "image");
+    const [openListImage, setOpenListImage] = React.useState(false);
+    const [classBorderImage, setClassBorderImage] = React.useState(null);
+
+    const handleClickListImage = () => {
+        setOpenListImage(!openListImage);
+        if (!openListImage){
+            setClassBorderImage(classes.drawerCategoryBorder);
+        }else{
+            setClassBorderImage(null);
+        }
+    };
+
+    //Search items
+    const drawerItemsSearch = drawerItems.filter(item => item.type === "search");
+    const [openListSeach, setOpenListSeach] = React.useState(false);
+    const [classBorderSearch, setClassBorderSearch] = React.useState(null);
+
+    const handleClickListSearch = () => {
+        setOpenListSeach(!openListSeach);
+        if (!openListSeach) {
+            setClassBorderSearch(classes.drawerCategoryBorder);
+        } else {
+            setClassBorderSearch(null);
+        }
+    };
+
+    //Data items
+    const drawerItemsData = drawerItems.filter(item => item.type === "data");
+    const [openListData, setOpenListData] = React.useState(false);
+    const [classBorderData, setClassBorderData] = React.useState(null);
+
+    const handleClickListData = () => {
+        setOpenListData(!openListData);
+        if (!openListData) {
+            setClassBorderData(classes.drawerCategoryBorder);
+        } else {
+            setClassBorderData(null);
+        }
+    };
+
+    
+
+    const listItems = [
+        {
+            title: "Video",
+            icon: <VideoIcon style={{ fill: "#4c4c4c" }} />,
+            list: drawerItemsVideo,
+            variableOpen: openListVideo,
+            setVariableOpen: setOpenListVideo,
+            functionHandleClick: handleClickListVideo,
+            classBorder: classBorderVideo,
+        },
+        {
+            title: "Image",
+            icon: <ImageIcon style={{ fill: "#4c4c4c" }} />,
+            list: drawerItemsImage,
+            variableOpen: openListImage,
+            setVariableOpen: setOpenListImage,
+            functionHandleClick: handleClickListImage,
+            classBorder: classBorderImage,
+        },
+        {
+            title: "Search",
+            icon: <SearchIcon style = {{ fill: "#4c4c4c" }} />,
+            list: drawerItemsSearch,
+            variableOpen: openListSeach,
+            setVariableOpen: setOpenListSeach,
+            functionHandleClick: handleClickListSearch,
+            classBorder: classBorderSearch,
+        },
+        {
+            title: "Data analysis",
+            icon: <DataIcon style={{ fill: "#4c4c4c" }} />,
+            list: drawerItemsData,
+            variableOpen: openListData,
+            setVariableOpen: setOpenListData,
+            functionHandleClick: handleClickListData,
+            classBorder: classBorderData,
+        },
+
+
+    ];
+
+
+    const toolsItem = tabItems.find(data => data.title === 'navbar_tools');
+    const assistantItem = tabItems.find(data => data.title === 'navbar_assistant');
+    const tutorialItem = tabItems.find(data => data.title === 'navbar_tuto');
+    const demoItem = tabItems.find(data => data.title === 'navbar_quiz');
+    const classroomItem = tabItems.find(data => data.title === 'navbar_classroom');
+    const aboutItem = tabItems.find(data => data.title === 'navbar_about');
+
+    const drawerItemsLearning = tabItems.filter(item => item.type === "learning");
+    const drawerItemsMore = tabItems.filter(item => item.type === "more");
+
+
+    const [elementSelectedSearch, setElementSelectedSearch] = React.useState(null);
+
+  
+    const [value, setValue] = React.useState(null);
 
 
     return (
@@ -408,56 +659,75 @@ const NavBar = (props) => {
                 </Alert>
             </Snackbar>
 
-            <AppBar position="fixed" color="default" className={classes.appBar}>
-                <Toolbar className={classes.toolbar}>
-                    <Box display={{ xs: 'none', md: 'block' }}>
-                    <LogoWeVerify2
-                            height="55px"
-                            width="77px"
+            
+            <MuiThemeProvider theme={themeFab}>
+
+            {
+                
+                <AppBar position="fixed" className={classes.appBar}>
+                    <Toolbar className={classes.toolbar} style={{ borderBottom: "solid 1px #dedbdb"}}>
+
+                       
+                        {/*<div style ={{transition: "width .3s"}} className={classWidthToolbar} />*/}
+
+                        <LogoWeVerify2
+                            style={{ height: "35px", width: "auto" }}
                             alt="logo"
                             className={classes.logoLeft}
                             onClick={handleImageClick}
-                        />  
-                    </Box>
+                        /> 
 
-                    <Box display={{ xs: 'none', md: 'block' }}>
-                    <LogoInvid2
-                            height="40px"
-                            width="60px"
+                        <LogoInvid2
+                            style={{ height: "30px", width: "auto" }}
                             alt="logo"
                             className={classes.logoRight}
                             onClick={handleImageClick}
                         />
-                    </Box>
 
+                        <div className={classes.grow} />
+                        
+                        <Autocomplete
+                                options={drawerItems.sort(function (a, b) { return a.typeId - b.typeId })}
+                            getOptionLabel={(option) => keyword(option.title)}
+                            style={{ width: 400 }}
+                            popupIcon={<SearchIconMaterial />}
+                            forcePopupIcon={true}
+                            value={value}
+                            groupBy={(option) => option.type}
+                            getOptionSelected={(option, value) => option.typeId === value.typeId}
+                            onChange={(event, newValue) => {
+                                setValue(newValue);
+                                changeValue(newValue.title, "TOOL");
+                            }}
+                            renderOption={(option) => (
+                                <React.Fragment key={option.title}>
+                                    <IconButton className={classes.customAllToolsButton} style={{ "width": 24, "height": 24, marginRight :"20px" }}>{option.icon}</IconButton>
+                                    {keyword(option.title)}
+                                </React.Fragment>
+                            )}
+                                
+                           
+                            renderInput={(params) => 
+                                <TextField 
+                                    {...params} 
+                                    size="small" 
+                                    label="Search tools"
+                                    variant="outlined"
+                                    />
+                            }
+                        />
+                        <div className={classes.grow} />
 
-                    <div className={classes.grow} />
-                    <Tabs
-                        value={tabValue}
-                        variant="scrollable"
-                        onChange={handleChange}
-                        scrollButtons="on"
-                        indicatorColor="primary"
-                        textColor="primary"
-                        aria-label="scrollable force tabs example"
-                        style={{ marginRight: "30px" }}
-                    >
-                        {
-                            tabItems.map((item, index) => {
-                                return <Tab key={index}
-                                    label={keyword(item.title)}
-                                    icon={item.icon}
-                                    className={classes.tab}
-                                    {...a11yProps(index)} />
-                            })
-                        }
-                    </Tabs>
-                    <div className={classes.grow} />
-                    <Languages />
+                        <Languages />
 
-                </Toolbar>
-            </AppBar>
-            <Drawer hidden={tabValue !== 0 || (tabValue === 0 && drawerValue === 0)}
+                    </Toolbar>
+                </AppBar>
+                
+            }
+            
+            
+            
+            <Drawer 
                 variant="permanent"
                 className={clsx(classes.drawer, {
                     [classes.drawerOpen]: open,
@@ -469,32 +739,207 @@ const NavBar = (props) => {
                         [classes.drawerClose]: !open,
                     }),
                 }}
+                ref={drawerRef}
+                
                 open={open}
             >
-                <Box m={5} />
-                <IconButton onClick={handleDrawerToggle}>
-                    {!open ? <ChevronRightIcon /> : <ChevronLeftIcon />}
-                </IconButton>
-                <Divider />
-                <List>
+                
+                
+                <List style={{marginTop: "80px", paddingLeft: "4px"}}> 
+
+                    <ListSubheader style={{ paddingTop: "16px", paddingBottom: "16px", backgroundColor: "#ffffff" }} className={classListHeading}>
+                        <Typography type="body1" style={{ fontWeight: "500", fontSize: "10px", color: "#B0B0B0" }}>{open ? "VERIFICATION" : "VERIFI..."}</Typography>
+                    </ListSubheader>
+
+                    <ListItem button onClick={() => changeValue(toolsItem.title, "TOOL")} >
+                        <ListItemIcon color="primary.main">
+                            {
+                                <IconButton className={classes.customAllToolsButton} style={{ "width": 24, "height": 24 }}>
+                                    {toolsItem.icon}
+                                </IconButton>
+                            }
+                        </ListItemIcon>
+                        <ListItemText primary={<Typography type="body1" className={classes.drawerListText}>{keyword(toolsItem.title)}</Typography>} />
+                    </ListItem>
+
                     {
+                        listItems.map((item, key) => {
+                            const element = 
+                                <div style={{ margin: "-5px -15px -5px -15px" }}>
+                                    <ListItem button onClick={item.functionHandleClick}>
+
+                                        <ListItemIcon color="primary.main">
+                                            <IconButton className={classes.customAllToolsButton} style={{ "width": 24, "height": 24 }}>{item.icon}</IconButton>
+                                        </ListItemIcon>
+
+                                        <ListItemText primary={<Typography type="body1" className={classes.drawerListText}>{item.title}</Typography>} />
+
+                                        {openListVideo ? <ExpandLess /> : <ExpandMore />}
+
+                                    </ListItem>
+
+                                    <Collapse in={item.variableOpen} timeout="auto" unmountOnExit>
+
+                                        <List component="div" disablePadding>
+                                            {
+                                                item.list.map((itemList, keyList) => {
+                                                    return (
+                                                        <ListItem button key={keyList} onClick={() => changeValue(itemList.title, "TOOL")} >
+                                                            {
+                                                                open ?
+                                                                    <ListItemIcon color="primary.main" className={classes.drawerListNested}>
+                                                                        {
+                                                                            <IconButton className={classes.customAllToolsButton} style={{ "width": 24, "height": 24 }}>
+                                                                                {itemList.icon}
+                                                                            </IconButton>
+                                                                        }
+                                                                    </ListItemIcon>
+                                                                : 
+                                                                    <ListItemIcon color="primary.main">
+                                                                        {
+                                                                            <IconButton className={classes.customAllToolsButton} style={{ "width": 24, "height": 24 }}>
+                                                                                {itemList.icon}
+                                                                            </IconButton>
+                                                                        }
+                                                                    </ListItemIcon>
+
+                                                            }
+                                                            <ListItemText primary={<Typography type="body1" className={classes.drawerListText}>{keyword(itemList.title)}</Typography>} />
+                                                        </ListItem>
+                                                    )
+                                                })
+                                            }
+                                        </List>
+
+                                    </Collapse>
+                                
+                                </div>
+
+                            return(
+                                <div key={key}>
+
+                                    {open ? 
+                                        <div style={{ margin: "5px 18px 5px 14px", borderRadius: "10px" }}>
+                                            {element}
+                                        </div>
+                                        :
+                                        <div style={{ margin: "14px 18px 14px 14px", borderRadius: "10px" }} className={item.classBorder}>
+                                            {element}
+                                        </div>
+                                    }
+                                    
+                                </div>
+                                
+                                
+                            )
+                        })
+                    }
+
+                    <ListItem button onClick={() => changeValue(assistantItem.title, "OTHER")} >
+                        <ListItemIcon color="primary.main">
+                            {
+                                <IconButton className={classes.customAllToolsButton} style={{ "width": 24, "height": 24 }}>
+                                    {assistantItem.icon}
+                                </IconButton>
+                            }
+                        </ListItemIcon>
+                        <ListItemText primary={<Typography type="body1" className={classes.drawerListText}>{keyword(assistantItem.title)}</Typography>} />
+                    </ListItem>
+
+                    <Box m={2} />
+
+                    <ListSubheader style={{ paddingTop: "16px", paddingBottom: "16px" }} className={classListHeading}>
+                        <Typography type="body1" style={{ fontWeight: "500", fontSize: "10px", color: "#B0B0B0" }}>LEARNING</Typography>
+                    </ListSubheader>
+
+                    {
+                        drawerItemsLearning.map((item, key) => {
+                            return(
+                                <ListItem button key={key} onClick={() => changeValue(item.title, "OTHER") }>
+                                    <ListItemIcon color="primary.main">
+                                        {
+                                            <IconButton className={classes.customAllToolsButton} style={{ "width": 24, "height": 24 }}>
+                                                {item.icon}
+                                            </IconButton>
+                                        }
+                                    </ListItemIcon>
+                                    <ListItemText primary={<Typography type="body1" className={classes.drawerListText}>{keyword(item.title)}</Typography>} />
+                                </ListItem>
+
+                            )
+                        })
+                    }
+
+
+                    <Box m={2} />
+
+                    <ListSubheader style={{ paddingTop: "16px", paddingBottom: "16px" }} className={classListHeading} >
+                        <Typography type="body1" style={{ fontWeight: "500", fontSize: "10px", color: "#B0B0B0" }}>MORE</Typography>
+                    </ListSubheader>
+
+                    {
+                        drawerItemsMore.map((item, key) => {
+                            return (
+                                <ListItem button key={key} onClick={() => changeValue(item.title, "OTHER")}>
+                                    <ListItemIcon color="primary.main">
+                                        {
+                                            <IconButton className={classes.customAllToolsButton} style={{ "width": 24, "height": 24 }}>
+                                                {item.icon}
+                                            </IconButton>
+                                        }
+                                    </ListItemIcon>
+                                    <ListItemText primary={<Typography type="body1" className={classes.drawerListText}>{keyword(item.title)}</Typography>} />
+                                </ListItem>
+
+                            )
+                        })
+                    }
+
+                   
+                    
+                    
+
+                    {
+                        /*
                         drawerItems.map((item, key) => {
                             return (
                                 <ListItem button key={key} onClick={() => changeValue(key)} >
                                     <ListItemIcon color="primary.main">
                                         {
-                                            <IconButton className={classes.customAllToolsButton} style={{ "width": 40, "height": 40 }}>
+                                            <IconButton className={classes.customAllToolsButton} style={{ "width": 24, "height": 24 }}>
                                                 {item.icon}
                                             </IconButton>
                                         }
                                     </ListItemIcon>
-                                    <ListItemText primary={keyword(item.title)} />
+                                    <ListItemText primary={<Typography type="body1" className={classes.drawerListText}>{keyword(item.title)}</Typography>} />
                                 </ListItem>
                             )
                         })
+                        */
                     }
                 </List>
+
+                <div className={classes.grow}/>
+                
+                
+                <div style={{ display: "flex", flexDirection: "column", alignItems: "stretch", position: "sticky", bottom: "0px", backgroundColor:"#ffffff", zIndex: "9" }}>
+                    <Box p={1}><Divider /></Box>
+                    <Button
+                        onClick={handleDrawerToggle}
+                        style={{ alignSelf: "center" }}
+                        startIcon={!open ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+
+                    >
+                        {open ? "COLLAPSE" : ""}
+                    </Button>
+                    <Box m={1}/>
+                </div>
             </Drawer>
+
+            
+
+            </MuiThemeProvider>
+
             <main className={classes.content}>
                 <div className={classes.toolbar} id="back-to-top-anchor" />
                 <TabItem className={classes.noMargin} tabItems={tabItems} drawerItems={drawerItems} />
@@ -526,6 +971,7 @@ const NavBar = (props) => {
                 }
                 <FeedBack />
             </main>
+            
         </div>
     );
 };

@@ -96,7 +96,7 @@ const AllTools = (props) => {
 
         if (value.title === "navbar_deepfake" ||
             value.title === "navbar_geolocation"){
-                console.log(value.title, value);
+                //console.log(value.title, value);
             }
 
         if (value.title === "navbar_forensic" ){
@@ -201,7 +201,7 @@ const AllTools = (props) => {
                                 alignItems="center"
                             >
                                 <Grid item>
-                                    <IconVideo width="45px" height="45px" style={{ fill: "#596977" }} />
+                                    <IconVideo width="40px" height="40px" style={{ fill: "#596977" }} />
                                 </Grid>
 
                                 <Grid item>
@@ -224,7 +224,7 @@ const AllTools = (props) => {
                                 alignItems="center"
                             >
                                 <Grid item>
-                                    <IconImage width="45px" height="45px" style={{ fill: "#596977" }} />
+                                    <IconImage width="40px" height="40px" style={{ fill: "#596977" }} />
                                 </Grid>
 
                                 <Grid item>
@@ -247,7 +247,7 @@ const AllTools = (props) => {
                                 alignItems="center"
                             >
                                 <Grid item>
-                                    <IconSearch width="45px" height="45px" style={{ fill: "#596977" }} />
+                                    <IconSearch width="40px" height="40px" style={{ fill: "#596977" }} />
                                 </Grid>
 
                                 <Grid item>
@@ -270,7 +270,7 @@ const AllTools = (props) => {
                                 alignItems="center"
                             >
                                 <Grid item>
-                                    <IconData width="45px" height="45px" style={{ fill: "#596977" }} />
+                                    <IconData width="40px" height="40px" style={{ fill: "#596977" }} />
                                 </Grid>
 
                                 <Grid item>
