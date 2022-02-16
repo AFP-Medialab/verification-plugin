@@ -4,15 +4,12 @@ import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles"
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 import { Grid, Typography } from "@material-ui/core";
-import { selectPage } from "../../../../../redux/actions";
-import { of } from "rxjs";
-
 const DeepfakeResutlsVideo = (props) => {
 
     const classes = useMyStyles();
     //const keyword = useLoadLanguage("components/NavItems/tools/Analysis.tsv", tsv);
     const results = props.result;
-    const url = props.url;
+    //const url = props.url;
 
     const [shotSelectedKey, setShotSelectedKey] = useState(-1);
     const [shotSelectedValue, setShotSelectedValue] = useState(null);
@@ -112,7 +109,7 @@ const DeepfakeResutlsVideo = (props) => {
                                                 alignItems: "center",
                                                 boxShadow: "0px 2px 1px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%)"
                                             }}>
-                                            <img src={valueShot.shot_image} style={{ width: "100%", height: "auto" }} />
+                                            <img alt="shot" src={valueShot.shot_image} style={{ width: "100%", height: "auto" }} />
                                             <Box mt={1} />
                                             <Typography variant="body1" style={{ fontSize: "14px", color: "#ffffff" }}>{startMin}:{startSec}{" - "}{endMin}:{endSec}</Typography>
                                             <Box mt={1} />
@@ -132,7 +129,7 @@ const DeepfakeResutlsVideo = (props) => {
                                                 alignItems: "center",
                                                 boxShadow: "0px 2px 1px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%)"
                                             }}>
-                                            <img src={valueShot.shot_image} style={{ width: "100%", height: "auto" }} />
+                                            <img alt="shot" src={valueShot.shot_image} style={{ width: "100%", height: "auto" }} />
                                             <Box mt={1} />
                                             <Typography variant="body1" style={{ fontSize: "14px" }}>{startMin}:{startSec}{" - "}{endMin}:{endSec}</Typography>
                                             <Box mt={1} />
@@ -233,7 +230,7 @@ const DeepfakeResutlsVideo = (props) => {
                                                 return(
                                                     <Grid item xs={12} sm={4} key={keyFace} style={{display: "flex",flexDirection: "column",alignItems: "center"}}>
 
-                                                        <img src={valueFace} style={{ width: "100%", height: "auto" }} />
+                                                        <img alt="face" src={valueFace} style={{ width: "100%", height: "auto" }} />
                                                         <Box mt={1} />
                                                         <Typography variant="h3">{Math.round(shotSelectedValue.face_predictions[keyFace]*100)}%</Typography>
                                                         <Typography variant="h6" style={{ color: "#989898" }}>Deepfake</Typography>

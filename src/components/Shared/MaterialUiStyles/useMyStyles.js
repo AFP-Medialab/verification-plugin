@@ -1,6 +1,5 @@
 import {makeStyles} from "@material-ui/core/styles";
 import {green} from "@material-ui/core/colors";
-import { BorderBottom } from "@material-ui/icons";
 
 const drawerWidth = 300;
 
@@ -113,7 +112,6 @@ const useMyStyles = makeStyles(theme => ({
         [theme.breakpoints.up('sm')]: {
             width: "85px",
         },
-        overflowX: "hidden",
         "&::-webkit-scrollbar": {
             display: 'none',
 
