@@ -1,5 +1,4 @@
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
+
 import Box from '@material-ui/core/Box';
 import { useDispatch, useSelector } from "react-redux";
 import Languages from "../NavItems/languages/languages";
@@ -80,7 +79,7 @@ import { setFalse, setTrue } from "../../redux/actions/cookiesActions";
 import { changeLanguage } from "../../redux/actions";
 import Button from "@material-ui/core/Button";
 import Alert from "@material-ui/lab/Alert";
-import { Collapse, Grid, ListSubheader, MuiThemeProvider } from "@material-ui/core";
+import { Collapse, ListSubheader, MuiThemeProvider } from "@material-ui/core";
 import { createTheme } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import ExpandLess from '@material-ui/icons/ExpandLess';
@@ -88,16 +87,17 @@ import ExpandMore from '@material-ui/icons/ExpandMore';
 
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
-import transitions from '@material-ui/core/styles/transitions';
 import SearchIconMaterial from '@material-ui/icons/Search';
 
 
+/*
 function a11yProps(index) {
     return {
         id: `scrollable-force-tab-${index}`,
         'aria-controls': `scrollable-force-tabpanel-${index}`,
     };
 }
+*/
 
 const NavBar = (props) => {
     const classes = useMyStyles();
@@ -636,17 +636,8 @@ const NavBar = (props) => {
 
     const toolsItem = tabItems.find(data => data.title === 'navbar_tools');
     const assistantItem = tabItems.find(data => data.title === 'navbar_assistant');
-    const tutorialItem = tabItems.find(data => data.title === 'navbar_tuto');
-    const demoItem = tabItems.find(data => data.title === 'navbar_quiz');
-    const classroomItem = tabItems.find(data => data.title === 'navbar_classroom');
-    const aboutItem = tabItems.find(data => data.title === 'navbar_about');
-
     const drawerItemsLearning = tabItems.filter(item => item.type === "learning");
     const drawerItemsMore = tabItems.filter(item => item.type === "more");
-
-
-    const [elementSelectedSearch, setElementSelectedSearch] = React.useState(null);
-
   
     const [value, setValue] = React.useState(null);
 
