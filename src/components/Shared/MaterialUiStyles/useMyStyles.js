@@ -756,6 +756,15 @@ const useMyStyles = makeStyles(theme => ({
         marginLeft: "12px",
     },
 
+
+    hideElement: {
+        display: "none",
+    },
+
+    showElement: {
+        display: "block",
+    },
+
 }));
 export const myCardStyles = makeStyles({
     root: {
