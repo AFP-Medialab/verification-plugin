@@ -213,12 +213,12 @@ const KeyFramesResults = (props) => {
                             {
                                 detailed &&
                                 //<ImageGridList list={detailedList} height={160} onClick={(url) => ImageReverseSearch("google", url)}/>
-                                <ImageGridList list={detailedList} height={height} cols={cols} handleClick={imageClick} style={{maxHeigth: "none"}}/>
+                                <ImageGridList list={detailedList} cols={cols} handleClick={imageClick} style={{maxHeigth: "none", height: "auto"}}/>
                             }
                             {
                                 !detailed &&
                                 //<ImageGridList list={simpleList}  height={160} onClick={(url) => ImageReverseSearch("google", url)}/>
-                                <ImageGridList list={simpleList} height={height} cols={cols} handleClick={imageClick} style={{maxHeigth: "none"}}/>
+                                <ImageGridList list={simpleList} cols={cols} handleClick={imageClick} style={{ maxHeigth: "none", height: "auto"}}/>
                             }
                             </ThemeProvider>
                         </div>
