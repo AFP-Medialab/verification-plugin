@@ -63,7 +63,7 @@ const useMyStyles = makeStyles(theme => ({
         display: 'flex',
     },
     appBar: {
-        zIndex: 9999,
+        zIndex: 1300,
         height: "87px",
         backgroundColor: "#ffffff",
         boxShadow: "none",
