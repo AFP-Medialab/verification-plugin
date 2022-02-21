@@ -739,7 +739,7 @@ const NavBar = (props) => {
                 <List style={{marginTop: "80px", paddingLeft: "4px"}}> 
 
                     <ListSubheader style={{ paddingTop: "16px", paddingBottom: "16px", backgroundColor: "#ffffff" }} className={classListHeading}>
-                        <Typography type="body1" style={{ fontWeight: "500", fontSize: "10px", color: "#B0B0B0" }}>{open ? "VERIFICATION" : "VERIFI..."}</Typography>
+                            <Typography type="body1" style={{ fontWeight: "500", fontSize: "10px", color: "#B0B0B0", textTransform: "uppercase" }}>{open ? keyword("navbar_verification") : keyword("navbar_verification_short")}</Typography>
                     </ListSubheader>
 
                     <ListItem button onClick={() => changeValue(toolsItem.title, "TOOL")} >
@@ -840,7 +840,7 @@ const NavBar = (props) => {
                     <Box m={2} />
 
                     <ListSubheader style={{ paddingTop: "16px", paddingBottom: "16px" }} className={classListHeading}>
-                        <Typography type="body1" style={{ fontWeight: "500", fontSize: "10px", color: "#B0B0B0" }}>LEARNING</Typography>
+                        <Typography type="body1" style={{ fontWeight: "500", fontSize: "10px", color: "#B0B0B0", textTransform: "uppercase" }}>{open ? keyword("navbar_learning") : keyword("navbar_learning_short")}</Typography>
                     </ListSubheader>
 
                     {
@@ -865,7 +865,7 @@ const NavBar = (props) => {
                     <Box m={2} />
 
                     <ListSubheader style={{ paddingTop: "16px", paddingBottom: "16px" }} className={classListHeading} >
-                        <Typography type="body1" style={{ fontWeight: "500", fontSize: "10px", color: "#B0B0B0" }}>MORE</Typography>
+                        <Typography type="body1" style={{ fontWeight: "500", fontSize: "10px", color: "#B0B0B0", textTransform: "uppercase" }}>{open ? keyword("navbar_more") : keyword("navbar_more_short")}</Typography>
                     </ListSubheader>
 
                     {
