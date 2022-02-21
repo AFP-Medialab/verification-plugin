@@ -79,7 +79,7 @@ const AssistantTextResult = () => {
                                         }}/>
                                 </Tooltip>
                             </div>
-                            <Tooltip title= {
+                            <Tooltip interactive={true} title= {
                                 <div className={"content"} dangerouslySetInnerHTML={{__html: keyword("text_tooltip")}}/> }
                                      classes={{ tooltip: classes.assistantTooltip }}>
                                 <HelpOutlineOutlinedIcon className={classes.toolTipIcon}/>
@@ -93,15 +93,15 @@ const AssistantTextResult = () => {
                 />
                 <CardContent>
                         <Collapse in={expanded}
-                                  collapsedHeight={100}
+                                  collapsedSize={100}
                                   id={"element-to-check"}>
-                            <Typography align={"center"}>
+                            <Typography align={"left"}>
                                 <FormatQuoteIcon fontSize={"large"}/>{!displayOrigLang && translatedText ? translatedText : text}
                             </Typography>
                         </Collapse>
                 </CardContent>
 
-                <Box m={1.5}>
+                <Box mb={1.5}>
                     <Divider/>
                     <Grid container>
                         <Grid item xs={6} style={{"display": "flex"}}>
