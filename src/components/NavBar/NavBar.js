@@ -655,7 +655,7 @@ const NavBar = (props) => {
 
             {
                 
-                <AppBar position="fixed" className={classes.appBar}>
+                <AppBar position="fixed" className={classes.applicationBar}>
                     <Toolbar className={classes.toolbar} style={{ borderBottom: "solid 1px #dedbdb"}}>
 
                        
