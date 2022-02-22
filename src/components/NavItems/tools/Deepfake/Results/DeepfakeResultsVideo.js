@@ -4,10 +4,13 @@ import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles"
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 import { Grid, Typography } from "@material-ui/core";
+import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Keyframes.tsv";
+import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
+
 const DeepfakeResutlsVideo = (props) => {
 
     const classes = useMyStyles();
-    //const keyword = useLoadLanguage("components/NavItems/tools/Analysis.tsv", tsv);
+    const keyword = useLoadLanguage("components/NavItems/tools/Deepfake.tsv", tsv);
     const results = props.result;
     //const url = props.url;
 
@@ -56,13 +59,13 @@ const DeepfakeResutlsVideo = (props) => {
                         container
                         direction="column"
                     >
-                        <Typography variant="body1" style={{ color: "#51A5B2", fontSize: "24px", fontWeight: "500" }}>Video analyzed</Typography>
+                        <Typography variant="body1" style={{ color: "#51A5B2", fontSize: "24px", fontWeight: "500" }}>{keyword("deepfake_video")}</Typography>
 
                         <Box m={1}/>
 
                         <video width="100%" height="auto" controls style={{ borderRadius: "10px", boxShadow:"0px 2px 1px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%)"}}>
                             <source src={results.deepfake_video_report.video_path + "#t=2,4"} type="video/mp4"/>
-                                Your browser does not support the video tag.
+                            {keyword("deepfake_support")}
                         </video>
 
 
@@ -74,7 +77,7 @@ const DeepfakeResutlsVideo = (props) => {
                         container
                         direction="column"
                     >
-                        <Typography variant="body1" style={{ color: "#51A5B2", fontSize: "24px", fontWeight:"500" }}>Shots of the video</Typography>
+                        <Typography variant="body1" style={{ color: "#51A5B2", fontSize: "24px", fontWeight: "500" }}>{keyword("deepfake_clips")}</Typography>
                         <Box m={1} />
 
                         <Grid container spacing={3}>
@@ -163,7 +166,7 @@ const DeepfakeResutlsVideo = (props) => {
 
                 <CardHeader
                     style={{ borderRadius: "4px 4px 0px 0px" }}
-                    title={"Results of the shot"}
+                    title={keyword("deepfake_results")}
                     className={classes.headerUpladedImage}
                 />
                 <div>
@@ -182,7 +185,7 @@ const DeepfakeResutlsVideo = (props) => {
                             >
                                 <Box p={4}>
                                     <Typography variant="h6" style={{ color: "#C9C9C9" }} align="center">
-                                        Select a shot to see the analysis results of that shot
+                                        {keyword("deepfake_select")}
                                     </Typography>
                                 </Box>
 
@@ -200,14 +203,14 @@ const DeepfakeResutlsVideo = (props) => {
                                     <Grid item container direction="column" xs={6}>
 
                                         <Typography variant="h6">
-                                            Video clip
+                                        {keyword("deepfake_clip")}
                                         </Typography>
 
                                         <Box m={1}/>
 
                                         <video ref={videoClip} width="100%" height="auto" controls style={{ borderRadius: "10px", boxShadow: "0px 2px 1px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%)" }}>
                                             <source src={results.deepfake_video_report.video_path + "#t=" + shotSelectedValue.shot_start + "," + shotSelectedValue.shot_end} type="video/mp4" />
-                                            Your browser does not support the video tag.
+                                            {keyword("deepfake_support")}
                                         </video>
 
                                     </Grid>
@@ -215,7 +218,7 @@ const DeepfakeResutlsVideo = (props) => {
                                     <Grid item container direction="column" xs={6} style={{ borderLeft: '0.1em solid #ECECEC'}}>
 
                                         <Typography variant="h6">
-                                            Faces recognized
+                                            {keyword("deepfake_faces")}
                                         </Typography>
                                         <Box m={1} />
 
@@ -233,7 +236,7 @@ const DeepfakeResutlsVideo = (props) => {
                                                         <img alt="face" src={valueFace} style={{ width: "100%", height: "auto" }} />
                                                         <Box mt={1} />
                                                         <Typography variant="h3">{Math.round(shotSelectedValue.face_predictions[keyFace]*100)}%</Typography>
-                                                        <Typography variant="h6" style={{ color: "#989898" }}>Deepfake</Typography>
+                                                        <Typography variant="h6" style={{ color: "#989898" }}>{keyword("deepfake_name")}</Typography>
 
                                                     </Grid>
                                                     

@@ -19,7 +19,7 @@ import GeolocationResults from "./Results/GeolocationResults";
 const Geolocation = () => {
 
     const classes = useMyStyles();
-    const keyword = useLoadLanguage("components/NavItems/tools/Analysis.tsv", tsv);
+    const keyword = useLoadLanguage("components/NavItems/tools/Geolocalizer.tsv", tsv);
     const keywordAllTools = useLoadLanguage("components/NavItems/tools/Alltools.tsv", tsvAlltools);
 
     const result = useSelector(state => state.geolocation.result);
@@ -44,7 +44,7 @@ const Geolocation = () => {
             <Card>
 
                 <CardHeader
-                    title={"Source of the image"}
+                    title={keyword("geo_source")}
                     className={classes.headerUpladedImage}
                 />
                 <div className={classes.root2}>
@@ -58,8 +58,8 @@ const Geolocation = () => {
 
                             <TextField
                                 id="standard-full-width"
-                                label={"Link of the image "}
-                                placeholder={"Paste the image here"}
+                                label={keyword("geo_link")}
+                                placeholder={keyword("geo_paste")}
                                 fullWidth
                                 disabled={isLoading}
                                 value={input}
@@ -76,7 +76,7 @@ const Geolocation = () => {
                                 disabled={isLoading}
                                 onClick={submitUrl}
                             >
-                                {keyword("button_submit")}
+                                {keyword("geo_submit")}
                             </Button>
                         </Grid>
 

@@ -4,12 +4,14 @@ import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles"
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 import { Typography } from "@material-ui/core";
+import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Keyframes.tsv";
+import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
 
 
 const DeepfakeResutlsImage = (props) => {
 
     const classes = useMyStyles();
-    //const keyword = useLoadLanguage("components/NavItems/tools/Analysis.tsv", tsv);
+    const keyword = useLoadLanguage("components/NavItems/tools/Deepfake.tsv", tsv);
     const results = props.result;
     const url = props.url;
     const imgElement = React.useRef(null);
@@ -115,7 +117,7 @@ const DeepfakeResutlsImage = (props) => {
                                         minWidth:"120px"
                                         }}>
                                     <Typography variant="h3">{valueRectangle.probability}%</Typography>
-                                    <Typography variant="h6" style={{ color: "#989898"}}>Deepfake</Typography>
+                                    <Typography variant="h6" style={{ color: "#989898" }}>{keyword("deepfake_name")}</Typography>
                                 </Box> 
 
                                 </div>

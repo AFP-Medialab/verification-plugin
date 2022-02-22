@@ -12,12 +12,14 @@ import 'leaflet/dist/leaflet.css'
 import MarkerIcon  from '../../../../NavBar/images/SVG/Others/marker_location.svg';
 import { Icon } from "leaflet";
 import { CardMedia, Typography } from "@material-ui/core";
+import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Keyframes.tsv";
+import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
 
 
 const GeolocationResults = (props) => {
 
     const classes = useMyStyles();
-    //const keyword = useLoadLanguage("components/NavItems/tools/Analysis.tsv", tsv);
+    const keyword = useLoadLanguage("components/NavItems/tools/Geolocalizer.tsv", tsv);
     const results = props.result[0];
     const urlImage = props.urlImage;
 
@@ -72,7 +74,7 @@ const GeolocationResults = (props) => {
                         <Card>
 
                             <CardHeader
-                                title={"Location"}
+                                title={keyword("geo_location")}
                                 className={classes.headerUpladedImage}
                             />
                             <div className={classes.root2}>
@@ -94,7 +96,7 @@ const GeolocationResults = (props) => {
                                     >
 
                                         <Typography variant="body1" style={{ color: "#697684" }}>
-                                            {"Latitude"}
+                                            {keyword("geo_lat")}
                                         </Typography>
 
                                         <Typography variant="h5" >
@@ -111,7 +113,7 @@ const GeolocationResults = (props) => {
                                     >
 
                                         <Typography variant="body1" style={{ color: "#697684" }}>
-                                            {"Longitude"}
+                                            {keyword("geo_lon")}
                                         </Typography>
 
                                         <Typography variant="h5">
@@ -125,7 +127,7 @@ const GeolocationResults = (props) => {
                                 <Box m={4} />
 
                                 <Button variant="outlined" color="primary" fullWidth onClick={() => window.open(("http://www.google.com/maps/place/" + position[0] + "," + position[1]), "_blank ")}> 
-                                    Open in google maps
+                                    {keyword("geo_maps")}
                                 </Button>
 
 
@@ -142,7 +144,7 @@ const GeolocationResults = (props) => {
                     <Card>
 
                         <CardHeader
-                            title={"Map"}
+                            title={keyword("geo_map")}
                             className={classes.headerUpladedImage}
                         />
                         <div className={classes.root2}>
@@ -155,7 +157,7 @@ const GeolocationResults = (props) => {
                                     />
                                     <Marker position={position} icon={new Icon({ iconUrl: MarkerIcon, iconSize: [60, 60], iconAnchor: [30, 0] })}>
                                         <Popup>
-                                            Location prediction of the image
+                                            {keyword("geo_prediction")}
                                         </Popup>
                                     </Marker>
                                 </MapContainer>

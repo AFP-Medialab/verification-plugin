@@ -6,7 +6,6 @@ import Button from "@material-ui/core/Button";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import Box from "@material-ui/core/Box";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles"
-import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 //import tsv from "../../../../LocalDictionary/components/NavItems/tools/Analysis.tsv";
 import tsvAlltools from "../../../../LocalDictionary/components/NavItems/tools/Alltools.tsv";
 //import { useParams } from "react-router-dom";
@@ -21,12 +20,14 @@ import { Divider, Typography } from "@material-ui/core";
 import UseGetDeepfake from "./Hooks/useGetDeepfake";
 import DeepfakeResultsImage from "./Results/DeepfakeResultsImage";
 import DeepfakeResultsVideo from "./Results/DeepfakeResultsVideo";
+import tsv from "../../../../LocalDictionary/components/NavItems/tools/Keyframes.tsv";
+import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 
 const Deepfake = () => {
 
     //const { url } = useParams();
     const classes = useMyStyles();
-    //const keyword = useLoadLanguage("components/NavItems/tools/Analysis.tsv", tsv);
+    const keyword = useLoadLanguage("components/NavItems/tools/Deepfake.tsv", tsv);
     const keywordAllTools = useLoadLanguage("components/NavItems/tools/Alltools.tsv", tsvAlltools);
     //const dispatch = useDispatch();
 
@@ -233,8 +234,8 @@ const Deepfake = () => {
                                     <Grid item xs>
                                         <TextField
                                             id="standard-full-width"
-                                            label={"Media URL"}
-                                            placeholder={"Paste the URL here"}
+                                            label={keyword("deepfake_label")}
+                                            placeholder={keyword("deepfake_placeholder")}
                                             fullWidth
                                             value={input}
                                             variant="outlined"
