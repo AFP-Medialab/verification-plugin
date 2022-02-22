@@ -63,13 +63,6 @@ const useMyStyles = makeStyles(theme => (
     flex: {
         display: 'flex',
     },
-    applicationBar: {
-        zIndex: 1300,
-        height: "87px",
-        backgroundColor: "#ffffff",
-        boxShadow: "none",
-        paddingTop: "12px"
-    },
     drawer: {
         width: drawerWidth,
         flexShrink: 0,
