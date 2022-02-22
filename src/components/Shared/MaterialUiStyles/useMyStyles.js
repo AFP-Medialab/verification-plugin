@@ -3,7 +3,8 @@ import {green} from "@material-ui/core/colors";
 
 const drawerWidth = 300;
 
-const useMyStyles = makeStyles(theme => ({
+const useMyStyles = makeStyles(theme => (
+    {
     root: {
         padding: theme.spacing(3, 2),
         marginTop: 5,
@@ -62,7 +63,7 @@ const useMyStyles = makeStyles(theme => ({
     flex: {
         display: 'flex',
     },
-    appBar: {
+    applicationBar: {
         zIndex: 1300,
         height: "87px",
         backgroundColor: "#ffffff",
