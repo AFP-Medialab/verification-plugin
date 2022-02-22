@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import NavBar from "./components/NavBar/NavBar";
-import { MuiThemeProvider } from "@material-ui/core";
-import {createTheme} from "@material-ui/core/styles";
+//import { MuiThemeProvider } from "@material-ui/core";
+import {createTheme, MuiThemeProvider} from "@material-ui/core/styles";
 import { Router, Route, Switch } from "react-router-dom";
 import history from "./components/Shared/History/History";
 import PopUp from "./components/PopUp/PopUp";
