@@ -1,27 +1,27 @@
 
 export const resetDeepfake = () => {
     return {
-        type: "DEEPFAKE_RESET"
+        type: "DEEPFAKE_IMAGE_RESET"
     }
 };
 
 export const setDeepfakeType = (type) => {
     return {
-        type: "SET_DEEPFAKE_TYPE",
+        type: "SET_DEEPFAKE_IMAGE_TYPE",
         payload: type
     }
 };
 
-export const setDeepfakeLoading = (loading) => {
+export const setDeepfakeLoadingImage = (loading) => {
     return {
-        type: "SET_DEEPFAKE_LOADING",
+        type: "SET_DEEPFAK_IMAGE_LOADING",
         payload: loading
     }
 };
 
-export const setDeepfakeResult = (url, result) => {
+export const setDeepfakeResultImage = (url, result) => {
     return {
-        type: "SET_DEEPFAKE_RESULT",
+        type: "SET_DEEPFAKE_IMAGE_RESULT",
         payload: {
             url: url,
             result: result,

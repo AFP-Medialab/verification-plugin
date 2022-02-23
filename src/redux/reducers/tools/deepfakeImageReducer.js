@@ -5,9 +5,9 @@ const defaultState = {
     type: "",
 };
 
-const deepfakeReducer = (state = defaultState, action) => {
+const deepfakeImageReducer = (state = defaultState, action) => {
     switch (action.type) {
-        case "DEEPFAKE_RESET":
+        case "DEEPFAKE_IMAGE_RESET":
             return {
                 ...state,
                 url: "",
@@ -15,17 +15,17 @@ const deepfakeReducer = (state = defaultState, action) => {
                 loading: false,
                 type: "",
             }
-        case "SET_DEEPFAKE_TYPE":
+        case "SET_DEEPFAKE_IMAGE_TYPE":
             return {
                 ...state,
                 type: action.payload,
             }
-        case "SET_DEEPFAKE_LOADING":
+        case "SET_DEEPFAKE_IMAGE_LOADING":
             return {
                 ...state,
                 loading: action.payload,
             }
-        case "SET_DEEPFAKE_RESULT":
+        case "SET_DEEPFAKE_IMAGE_RESULT":
             return {
                 ...state,
                 url: action.payload.url,
@@ -36,4 +36,4 @@ const deepfakeReducer = (state = defaultState, action) => {
             return state;
     }
 };
-export default deepfakeReducer;
+export default deepfakeImageReducer;

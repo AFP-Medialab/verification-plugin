@@ -279,13 +279,13 @@ const NavBar = (props) => {
 
         {
             id: 7,
-            title: "navbar_deepfake",
-            description: "navbar_deepfake_description",
+            title: "navbar_deepfake_video",
+            description: "navbar_deepfake_video_description",
             icon: (drawerValue === 6) ? <DeepfakeIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title="Twitter SNA" />
                 : <DeepfakeIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} title={keyword("navbar_deepfake")} />,
             iconColored: <DeepfakeIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title={keyword("navbar_deepfake")} />,
             tsvPrefix: "deepfake",
-            path: "deepfake",
+            path: "deepfakeVideo",
             type: "video",
             typeId: 1,
             icons: ["new", "lock"],
@@ -381,13 +381,13 @@ const NavBar = (props) => {
         },
         {
             id: 14,
-            title: "navbar_deepfake",
-            description: "navbar_deepfake_description",
+            title: "navbar_deepfake_image",
+            description: "navbar_deepfake_image_description",
             icon: (drawerValue === 13) ? <DeepfakeIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title="Twitter SNA" />
                 : <DeepfakeIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} title={keyword("navbar_deepfake")} />,
             iconColored: <DeepfakeIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title={keyword("navbar_deepfake")} />,
             tsvPrefix: "deepfake",
-            path: "deepfake",
+            path: "deepfakeImage",
             type: "image",
             typeId: 2,
             icons: ["new", "lock"],

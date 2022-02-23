@@ -20,7 +20,7 @@ const DeepfakeResutlsImage = (props) => {
     const [rectanglesReady, setRectanglesReady] = useState(false);
 
 
-    console.log(results);
+    //console.log(results);
 
 
     const drawRectangles = () => {

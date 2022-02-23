@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Box from "@material-ui/core/Box";
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles"
 import Card from "@material-ui/core/Card";
@@ -23,13 +23,28 @@ const DeepfakeResutlsVideo = (props) => {
         setShotSelectedKey(-1);
         setShotSelectedKey(key);
         setShotSelectedValue(value);
-
-        videoClip.current.load();
+        if (videoClip.current !== null){
+            videoClip.current.load();
+        }
     }
 
+    //console.log("Results", results);
 
+    useEffect(() => {
+        
+        var prediction = results.deepfake_video_report.prediction;
+        var shot = -1;
+        for (var i = 0; i < results.deepfake_video_report.results.length && shot === -1 ; i++){
+            if (results.deepfake_video_report.results[i].prediction === prediction){
+                shot = i;
+            }
+        }
 
-    console.log("Results", results);
+        if(shot !== -1){
+            clickShot(results.deepfake_video_report.results[shot], shot)
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
 
     
@@ -173,7 +188,7 @@ const DeepfakeResutlsVideo = (props) => {
 
                     <Box p={3}>
 
-                    {shotSelectedKey === -1 
+                    {shotSelectedValue === null 
                         ?
 
                             <Grid

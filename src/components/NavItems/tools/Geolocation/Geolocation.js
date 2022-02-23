@@ -15,12 +15,15 @@ import Grid from "@material-ui/core/Grid";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import useGeolacate from "./Hooks/useGeolacte";
 import GeolocationResults from "./Results/GeolocationResults";
+import Alert from "@material-ui/lab/Alert";
+import tsvWarning from "../../../../LocalDictionary/components/Shared/OnWarningInfo.tsv";
 
 const Geolocation = () => {
 
     const classes = useMyStyles();
     const keyword = useLoadLanguage("components/NavItems/tools/Geolocalizer.tsv", tsv);
     const keywordAllTools = useLoadLanguage("components/NavItems/tools/Alltools.tsv", tsvAlltools);
+    const keywordWarning = useLoadLanguage("components/Shared/OnWarningInfo.tsv", tsvWarning);
 
     const result = useSelector(state => state.geolocation.result);
     const urlImage = useSelector(state => state.geolocation.urlImage);
@@ -40,6 +43,10 @@ const Geolocation = () => {
         <div>
 
             <HeaderTool name={keywordAllTools("navbar_geolocation")} description={keywordAllTools("navbar_geolocation_description")} icon={<GeolocationIcon style={{ fill: "#51A5B2", width: "75px", height: "75px" }} />} />
+
+            <Alert severity="warning">{keywordWarning("warning_beta")}</Alert>
+            
+            <Box m={3} />
 
             <Card>
 
