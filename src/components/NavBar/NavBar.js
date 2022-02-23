@@ -79,8 +79,8 @@ import { setFalse, setTrue } from "../../redux/actions/cookiesActions";
 import { changeLanguage } from "../../redux/actions";
 import Button from "@material-ui/core/Button";
 import Alert from "@material-ui/lab/Alert";
-import { Collapse, ListSubheader, MuiThemeProvider } from "@material-ui/core";
-import { createTheme } from "@material-ui/core/styles";
+import { Collapse, ListSubheader } from "@material-ui/core";
+import { createTheme, ThemeProvider } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
@@ -579,6 +579,17 @@ const NavBar = (props) => {
             },
         },
         overrides: {
+            MuiAppBar:{
+                colorPrimary:{
+                    backgroundColor: "#ffffff",
+                },
+                root:{
+                    zIndex: 1300,
+                    height: "87px",
+                    boxShadow: "none",
+                    paddingTop: "12px"
+                }
+            },
             MuiListItem:{
                 gutters:{
                     paddingLeft: "26px"
@@ -719,11 +730,11 @@ const NavBar = (props) => {
             </Snackbar>
 
             
-            <MuiThemeProvider theme={themeFab}>
+            <ThemeProvider theme={themeFab}>
 
             {
                 
-                <AppBar position="fixed" className={classes.appBar}>
+                <AppBar position="fixed">
                     <Toolbar className={classes.toolbar} style={{ borderBottom: "solid 1px #dedbdb"}}>
 
                        
@@ -997,17 +1008,17 @@ const NavBar = (props) => {
 
             
 
-            </MuiThemeProvider>
+            </ThemeProvider>
 
             <main className={classes.content}>
                 <div className={classes.toolbar} id="back-to-top-anchor" />
                 <TabItem className={classes.noMargin} tabItems={tabItems} drawerItems={drawerItems} />
                 <ScrollTop {...props}>
-                    <MuiThemeProvider theme={themeFab}>
+                    <ThemeProvider theme={themeFab}>
                         <Fab color="primary" size="large" aria-label="scroll back to top" className={classes.fabTop}>
                             <KeyboardArrowUpIcon />
                         </Fab>
-                    </MuiThemeProvider>
+                    </ThemeProvider>
                 </ScrollTop>
                 {
                     (error !== null) &&
