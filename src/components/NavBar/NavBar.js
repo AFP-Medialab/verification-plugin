@@ -388,7 +388,7 @@ const NavBar = (props) => {
         },
         {
             id: 14,
-            title: "navbar_deepfake_image",
+            title: "navbar_deepfake",
             description: "navbar_deepfake_image_description",
             icon: (drawerValue === 13) ? <DeepfakeIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title="Twitter SNA" />
                 : <DeepfakeIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} title={keyword("navbar_deepfake")} />,
@@ -764,6 +764,8 @@ const NavBar = (props) => {
                             className={classes.logoRight}
                             onClick={handleImageClick}
                         />
+
+                        <Box m={3}></Box>
 
                         <div className={classes.grow} />
                         
