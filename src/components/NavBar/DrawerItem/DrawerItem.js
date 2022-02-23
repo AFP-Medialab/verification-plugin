@@ -142,7 +142,7 @@ const DrawerItem = (props) => {
             },
             MuiCard: {
                 root: {
-                    borderRadius: "10px"
+                    borderRadius: "10px!important"
                 }
             }
 

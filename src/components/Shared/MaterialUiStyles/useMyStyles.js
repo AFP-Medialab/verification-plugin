@@ -16,6 +16,10 @@ const useMyStyles = makeStyles(theme => (
         padding: theme.spacing(2),
     },
 
+    rootNoPadding: {
+        textAlign: "center",
+    },
+
     noMargin: {
         marginLeft: "0px!important",
         marginRight: "0px!important"

@@ -605,7 +605,11 @@ const NavBar = (props) => {
                 }
                 
             },
-            
+            MuiCard: {
+                root: {
+                    borderRadius: "10px!important"
+                }
+            }
             
             
         }
@@ -1008,7 +1012,7 @@ const NavBar = (props) => {
 
             
 
-            </ThemeProvider>
+            
 
             <main className={classes.content}>
                 <div className={classes.toolbar} id="back-to-top-anchor" />
@@ -1041,6 +1045,7 @@ const NavBar = (props) => {
                 }
                 <FeedBack />
             </main>
+            </ThemeProvider>
             
         </div>
     );
