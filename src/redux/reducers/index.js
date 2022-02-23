@@ -24,7 +24,8 @@ import ocrReducer from "./tools/ocrReducer";
 import defaultLanguageReducer from "./defaultLanguageReducer";
 import gifReducer from "./tools/gifReducer";
 import ImageAnalysisReducer from "./tools/analysisReducerImage";
-import deepfakeReducer from "./tools/deepfakeReducer";
+import deepfakeReducerImage from "./tools/deepfakeImageReducer";
+import deepfakeReducerVideo from "./tools/deepfakeVideoReducer";
 import geolocationReducer from "./tools/geolocationReducer";
 
 const allReducers = combineReducers({
@@ -52,7 +53,8 @@ const allReducers = combineReducers({
     assistant : assistantReducer,
     ocr: ocrReducer,
     gif: gifReducer,
-    deepfake: deepfakeReducer,
+    deepfakeImage: deepfakeReducerImage,
+    deepfakeVideo: deepfakeReducerVideo,
     geolocation: geolocationReducer,
 });
 

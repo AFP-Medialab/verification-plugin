@@ -60,19 +60,21 @@ const AllTools = (props) => {
     );
     const [openAlert, setOpenAlert] = React.useState(false);
 
-    const handleClick = (path, mediaTool, type) => {
+    const handleClick = (path, mediaTool, restrictions) => {
         //console.log(type);
-        if (type === "lock" || type === "lock and new"){
-            if (userAuthenticated){
+
+        if (restrictions !== undefined && restrictions.includes("lock")) {
+            if (userAuthenticated) {
                 //console.log("LOGGED");
                 handlePush(path, mediaTool);
-            }else{
+            } else {
                 setOpenAlert(true);
             }
         }else{
-            //console.log("NOT LOGGED");
+            console.log(path);
             handlePush(path, mediaTool);
         }
+
     };
 
     const handlePush = (path, mediaTool) => {
@@ -94,74 +96,22 @@ const AllTools = (props) => {
 
     tools.forEach((value) => {
 
-        if (value.title === "navbar_deepfake" ||
-            value.title === "navbar_geolocation"){
-                //console.log(value.title, value);
-            }
-
-        if (value.title === "navbar_forensic" ){
-            value.type = "redesigned";
-        }
-
-        if (value.title === "navbar_ocr" || 
-            value.title === "navbar_xnetwork" || 
-            value.title === "navbar_covidsearch" || 
-            value.title === "navbar_analysis_image") {
-            
-            value.type = "new";
-        }
-
-        if (value.title === "navbar_twitter_sna") {
-            value.type = "lock";
-        }
-
-        if (value.title === "navbar_gif" || 
-            value.title === "navbar_deepfake" ||
-            value.title === "navbar_geolocation") {
-                
-            value.type = "lock and new";
-        }
-
-
-        if(
-            value.title === "navbar_analysis_video" ||
-            value.title === "navbar_keyframes" ||
-            value.title === "navbar_thumbnails" ||
-            value.title === "navbar_rights" ||
-            value.title === "navbar_metadata"
-        ){
+        if(value.type === "video"){
             toolsVideo.push(value);
         }
 
-
-        if (
-            value.title === "navbar_analysis_image" ||
-            value.title === "navbar_ocr" ||
-            value.title === "navbar_forensic" ||
-            value.title === "navbar_magnifier" ||
-            value.title === "navbar_metadata" ||
-            value.title === "navbar_gif" ||
-            value.title === "navbar_deepfake" ||
-            value.title === "navbar_geolocation"
-        ) {
+        if (value.type === "image") {
             toolsImages.push(value);
         }
 
-
-        if (
-            value.title === "navbar_xnetwork" ||
-            value.title === "navbar_covidsearch" ||
-            value.title === "navbar_twitter"
-        ) {
+        if (value.type === "search") {
             toolsSearch.push(value);
         }
 
-        if (
-            value.title === "navbar_twitter_sna" ||
-            value.title === "navbar_twitter_crowdtangle"
-        ) {
+        if (value.type === "data") {
             toolsData.push(value);
         }
+
         
 
     })
@@ -179,6 +129,9 @@ const AllTools = (props) => {
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
+
+    const role = useSelector((state) => state.userSession.user.roles);
+    const betaTester = role.includes('BETA_TESTER')
 
     return (
         <div>
@@ -294,19 +247,33 @@ const AllTools = (props) => {
 
                             {
                                 toolsVideo.map((value, key) => {
-                                    //console.log(value);
-
-                                    return (
-                                        <Grid className={classes.toolCardStyle} item key={key} onClick={() => handleClick(value.path, "video", value.type)}>
+                                    var element = 
+                                        <Grid className={classes.toolCardStyle} item key={key} onClick={() => handleClick(value.path, "video", value.toolRestrictions)}>
                                             <ToolCard
                                                 name={keyword(value.title)}
                                                 description={keyword(value.description)}
                                                 icon={value.iconColored}
-                                                type={value.type}
+                                                iconsAttributes={value.icons}
                                                 path="../../../NavBar/images/SVG/Image/Gif.svg" />
 
                                         </Grid>
-                                    );
+                                    //console.log(value);
+                                    if (value.toolRestrictions.includes("beta")) {
+                                        if (betaTester) {
+                                            return (
+                                                element
+                                            )
+                                        } else {
+                                            return (
+                                                null
+                                            )
+                                        }
+                                    } else {
+                                        return (
+                                            element
+                                        )
+                                    }
+                                    
                                 })
                             }
 
@@ -317,16 +284,30 @@ const AllTools = (props) => {
 
                             {
                                 toolsImages.map((value, key) => {
-                                    //console.log(value);
-                                    return (
-                                        <Grid className={classes.toolCardStyle} item key={key} onClick={() => handleClick(value.path, "image", value.type)}>
+                                    var element = 
+                                        <Grid className={classes.toolCardStyle} item key={key} onClick={() => handleClick(value.path, "image", value.toolRestrictions)}>
                                             <ToolCard
                                                 name={keyword(value.title)}
                                                 description={keyword(value.description)}
                                                 icon={value.iconColored}
-                                                type={value.type} />
+                                                iconsAttributes={value.icons} />
                                         </Grid>
-                                    );
+                                    //console.log(value);
+                                    if (value.toolRestrictions.includes("beta")) {
+                                        if (betaTester) {
+                                            return (
+                                                element
+                                            )
+                                        } else {
+                                            return (
+                                                null
+                                            )
+                                        }
+                                    } else {
+                                        return (
+                                            element
+                                        )
+                                    }
                                 })
                             }
 
@@ -337,15 +318,29 @@ const AllTools = (props) => {
 
                             {
                                 toolsSearch.map((value, key) => {
-                                    return (
-                                        <Grid className={classes.toolCardStyle} item key={key} onClick={() => handleClick(value.path, "search", value.type)}>
+                                    var element = 
+                                        <Grid className={classes.toolCardStyle} item key={key} onClick={() => handleClick(value.path, "search", value.toolRestrictions)}>
                                             <ToolCard
                                                 name={keyword(value.title)}
                                                 description={keyword(value.description)}
                                                 icon={value.iconColored}
-                                                type={value.type} />
+                                                iconsAttributes={value.icons} />
                                         </Grid>
-                                    );
+                                    if (value.toolRestrictions.includes("beta")) {
+                                        if (betaTester) {
+                                            return (
+                                                element
+                                            )
+                                        } else {
+                                            return (
+                                                null
+                                            )
+                                        }
+                                    } else {
+                                        return (
+                                            element
+                                        )
+                                    }
                                 })
                             }
 
@@ -356,26 +351,44 @@ const AllTools = (props) => {
 
                             {
                                 toolsData.map((value, key) => {
+                                    var element;
                                     if (value.title === "navbar_twitter_crowdtangle"){
-                                        return(
+                                        element = 
                                             <Grid className={classes.toolCardStyle} item key={key} onClick={() => window.open(process.env.REACT_APP_TSNA_SERVER + "csvSna", "_blank")}>
                                                 <ToolCard
                                                     name={keyword(value.title)}
                                                     description={keyword(value.description)}
                                                     icon={value.iconColored}
-                                                    type={value.type} />
+                                                    iconsAttributes={value.icons} />
                                             </Grid>
-                                        )
+                                        
                                     }else{
-                                        return (
-                                            <Grid className={classes.toolCardStyle} item key={key} onClick={() => handleClick(value.path, "datas", value.type)}>
+
+                                        element = 
+                                            <Grid className={classes.toolCardStyle} item key={key} onClick={() => handleClick(value.path, "data", value.toolRestrictions)}>
                                                 <ToolCard
                                                     name={keyword(value.title)}
                                                     description={keyword(value.description)}
                                                     icon={value.iconColored}
-                                                    type={value.type} />
+                                                    iconsAttributes={value.icons} />
                                             </Grid>
-                                        );
+                                        
+                                    }
+
+                                    if (value.toolRestrictions.includes("beta")) {
+                                        if (betaTester) {
+                                            return (
+                                                element
+                                            )
+                                        }else{
+                                            return(
+                                                null
+                                            )
+                                        }
+                                    } else {
+                                        return (
+                                            element
+                                        )
                                     }
                                     
                                 })
@@ -389,198 +402,7 @@ const AllTools = (props) => {
 
             <Box m={3} />
             
-            {/*
 
-            <Card>
-
-
-                <Box p={2}>
-                    <Grid
-                        container
-                        direction="row"
-                        justifyContent="flex-start"
-                        alignItems="center"
-                    >
-                        <Grid item>
-                            <IconVideo width="45px" height="45px" style={{ fill: "#596977" }} />
-                        </Grid>
-
-                        <Grid item>
-                            <Box m={1} />
-                        </Grid>
-
-                        <Grid item>
-                            <Typography variant="h5" style={{ color: "#596977" }}>{keyword("category_video")}</Typography>
-                        </Grid>
-
-                    </Grid>
-
-                    <Box m={2}/>
-
-                    <Grid container justifyContent="flex-start" spacing={2} className={classes.toolCardsContainer}>
-                        
-                            {
-                                toolsVideo.map((value, key) => {
-                                    //console.log(value);
-
-                                    return (
-                                        <Grid className={classes.toolCardStyle} item key={key} onClick={() => handleClick(value.path, "video", value.type)}>
-                                            <ToolCard
-                                                name={keyword(value.title)}
-                                                description={keyword(value.description)}
-                                                icon={value.iconColored} 
-                                                type={value.type}
-                                                path="../../../NavBar/images/SVG/Image/Gif.svg" />
-                                                
-                                        </Grid>
-                                    );
-                                })
-                            }
-                        
-                    </Grid>
-                </Box>
-            </Card>
-            
-            <Box m={3} />
-
-            <Card>
-                <Box p={2}>
-                    <Grid
-                        container
-                        direction="row"
-                        justifyContent="flex-start"
-                        alignItems="center"
-                    >
-                        <Grid item>
-                            <IconImage width="45px" height="45px" style={{ fill: "#596977" }} />
-                        </Grid>
-
-                        <Grid item>
-                            <Box m={1} />
-                        </Grid>
-
-                        <Grid item>
-                            <Typography variant="h5" style={{ color: "#596977" }}>{keyword("category_image")}</Typography>
-                        </Grid>
-
-                    </Grid>
-
-                    <Box m={2} />
-
-                    <Grid container justifyContent="flex-start" spacing={2} className={classes.toolCardsContainer}>
-
-                        {
-                            toolsImages.map((value, key) => {
-                                //console.log(value);
-                                return (
-                                    <Grid className={classes.toolCardStyle} item key={key} onClick={() => handleClick(value.path, "image", value.type)}>
-                                        <ToolCard
-                                            name={keyword(value.title)}
-                                            description={keyword(value.description)}
-                                            icon={value.iconColored}
-                                            type={value.type}/>
-                                    </Grid>
-                                );
-                            })
-                        }
-
-                    </Grid>
-                </Box>
-            </Card>
-
-            <Box m={3} />
-
-            <Card>
-                <Box p={2}>
-                    <Grid
-                        container
-                        direction="row"
-                        justifyContent="flex-start"
-                        alignItems="center"
-                    >
-                        <Grid item>
-                            <IconSearch width="45px" height="45px" style={{ fill: "#596977" }} />
-                        </Grid>
-
-                        <Grid item>
-                            <Box m={1} />
-                        </Grid>
-
-                        <Grid item>
-                            <Typography variant="h5" style={{ color: "#596977" }}>{keyword("category_search")}</Typography>
-                        </Grid>
-
-                    </Grid>
-
-                    <Box m={2} />
-
-                    <Grid container justifyContent="flex-start" spacing={2} className={classes.toolCardsContainer}>
-
-                        {
-                            toolsSearch.map((value, key) => {
-                                return (
-                                    <Grid className={classes.toolCardStyle} item key={key} onClick={() => handleClick(value.path, "search", value.type)}>
-                                        <ToolCard
-                                            name={keyword(value.title)}
-                                            description={keyword(value.description)}
-                                            icon={value.iconColored}
-                                            type={value.type}/>
-                                    </Grid>
-                                );
-                            })
-                        }
-
-                    </Grid>
-                </Box>
-            </Card>
-
-            <Box m={3} />
-
-            <Card>
-                <Box p={2}>
-                    <Grid
-                        container
-                        direction="row"
-                        justifyContent="flex-start"
-                        alignItems="center"
-                    >
-                        <Grid item>
-                            <IconData width="45px" height="45px" style={{ fill: "#596977" }} />
-                        </Grid>
-
-                        <Grid item>
-                            <Box m={1} />
-                        </Grid>
-
-                        <Grid item>
-                            <Typography variant="h5" style={{ color: "#596977" }}>{keyword("category_data")}</Typography>
-                        </Grid>
-
-                    </Grid>
-
-                    <Box m={2} />
-
-                    <Grid container justifyContent="flex-start" spacing={2} className={classes.toolCardsContainer}>
-
-                        {
-                            toolsData.map((value, key) => {
-                                return (
-                                    <Grid className={classes.toolCardStyle} item key={key} onClick={() => handleClick(value.path, "datas", value.type)}>
-                                        <ToolCard
-                                            name={keyword(value.title)}
-                                            description={keyword(value.description)}
-                                            icon={value.iconColored}
-                                            type={value.type}/>
-                                    </Grid>
-                                );
-                            })
-                        }
-
-                    </Grid>
-                </Box>
-            </Card>
-
-                    */}
 
             <Box m={4} />
 

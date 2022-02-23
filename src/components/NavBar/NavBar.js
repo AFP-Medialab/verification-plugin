@@ -138,27 +138,29 @@ const NavBar = (props) => {
         (state) => state.userSession && state.userSession.userAuthenticated
     );
     
-    const changeValue = (newValueTitle, newValueType) => {
-
-        var value = null;
+    const changeValue = (newValue, newValueType, mediaTool) => {
 
         if (newValueType === "TOOL"){
-            value = drawerItems.find(element => element.title === newValueTitle);
 
-            if (newValueTitle === "navbar_twitter_sna" || newValueTitle === "navbar_gif") {
+            if (newValue.toolRestrictions !== undefined && newValue.toolRestrictions.includes("lock")) {
                 if (userAuthenticated) {
-                    history.push("/app/tools/" + value.path);
+                    history.push({
+                        pathname: "/app/tools/" + newValue.path,
+                        state: { media: mediaTool }
+                    })
                 } else {
                     setOpenAlert(true);
                 }
             } else {
-                history.push("/app/tools/" + value.path);
+                history.push({
+                    pathname: "/app/tools/" + newValue.path,
+                    state: { media: mediaTool }
+                })
             }
 
 
         } else if (newValueType === "OTHER"){
-            value = tabItems.find(element => element.title === newValueTitle);
-            history.push("/app/" + value.path) 
+            history.push("/app/" + newValue.path) 
 
         }
 
@@ -190,6 +192,13 @@ const NavBar = (props) => {
 
     };
 
+
+    const role = useSelector((state) => state.userSession.user.roles);
+    const betaTester = role.includes('BETA_TESTER')
+
+    //console.log("Role", role);
+    //console.log("Beta", betaTester);
+
     const drawerItems = [
         {
             id: 1,
@@ -199,6 +208,8 @@ const NavBar = (props) => {
             path: "all",
             type: "General",
             typeId: 0,
+            icons: [],
+            toolRestrictions: [],
         },
 
         {
@@ -212,6 +223,8 @@ const NavBar = (props) => {
             path: "analysis",
             type: "video",
             typeId: 1,
+            icons: [],
+            toolRestrictions: [],
         },
         {
             id: 3,
@@ -224,6 +237,8 @@ const NavBar = (props) => {
             path: "keyframes",
             type: "video",
             typeId: 1,
+            icons: [],
+            toolRestrictions: [],
         },
         {
             id: 4,
@@ -236,6 +251,8 @@ const NavBar = (props) => {
             path: "thumbnails",
             type: "video",
             typeId: 1,
+            icons: [],
+            toolRestrictions: [],
         },
         {
             id: 5,
@@ -248,169 +265,227 @@ const NavBar = (props) => {
             path: "copyright",
             type: "video",
             typeId: 1,
+            icons: [],
+            toolRestrictions: [],
+        },
+
+        {
+            id: 6,
+            title: "navbar_metadata",
+            description: "navbar_metadata_description",
+            icon: (drawerValue === 5) ? <MetadataIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title="Metadata" />
+                : <MetadataIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} title={keyword("navbar_metadata")} />,
+            iconColored: <MetadataIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title={keyword("navbar_metadata")} />,
+            tsvPrefix: "metadata",
+            path: "metadata",
+            type: "video",
+            typeId: 1,
+            icons: [],
+            toolRestrictions: [],
+        },
+
+        {
+            id: 7,
+            title: "navbar_deepfake_video",
+            description: "navbar_deepfake_video_description",
+            icon: (drawerValue === 6) ? <DeepfakeIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title="Twitter SNA" />
+                : <DeepfakeIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} title={keyword("navbar_deepfake")} />,
+            iconColored: <DeepfakeIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title={keyword("navbar_deepfake")} />,
+            tsvPrefix: "deepfake",
+            path: "deepfakeVideo",
+            type: "video",
+            typeId: 1,
+            icons: ["experimental", "lock"],
+            toolRestrictions: ["beta"],
         },
         
         {
-            id: 6,
+            id: 8,
             title: "navbar_analysis_image",
             description: "navbar_analysis_image_description",
-            icon: (drawerValue === 5) ? <AnalysisIconImage width="45px" height="45px" style={{ fill: "#51A5B2" }} title="Image analysis"/>
+            icon: (drawerValue === 7) ? <AnalysisIconImage width="45px" height="45px" style={{ fill: "#51A5B2" }} title="Image analysis"/>
                 : < AnalysisIconImage width="45px" height="45px" style={{ fill: "#4c4c4c" }} title={keyword("navbar_analysis_image")}/>,
             iconColored: <AnalysisIconImage width="45px" height="45px" style={{ fill: "#51A5B2" }} title={keyword("navbar_analysis_image")}/>,
             tsvPrefix: "api",
             path: "analysisImage",
             type: "image",
             typeId: 2,
+            icons: ["new"],
+            toolRestrictions: [],
         },
         {
-            id: 7,
+            id: 9,
             title: "navbar_magnifier",
             description: "navbar_magnifier_description",
-            icon: (drawerValue === 6) ? <MagnifierIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title="Magnifier"/>
+            icon: (drawerValue === 8) ? <MagnifierIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title="Magnifier"/>
                 : <MagnifierIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} title={keyword("navbar_magnifier")}/>,
             iconColored: <MagnifierIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title={keyword("navbar_magnifier")}/>,
             tsvPrefix: "magnifier",
             path: "magnifier",
             type: "image",
             typeId: 2,
+            icons: [],
+            toolRestrictions: [],
         },
         {
-            id: 8,
+            id: 10,
             title: "navbar_metadata",
             description: "navbar_metadata_description",
-            icon: (drawerValue === 7) ? <MetadataIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title="Metadata"/>
+            icon: (drawerValue === 9) ? <MetadataIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title="Metadata"/>
                 : <MetadataIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} title={keyword("navbar_metadata")}/>,
             iconColored: <MetadataIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title={keyword("navbar_metadata")}/>,
             tsvPrefix: "metadata",
             path: "metadata",
             type: "image",
             typeId: 2,
+            icons: [],
+            toolRestrictions: [],
         },
         
         
         {
-            id: 9,
+            id: 11,
             title: "navbar_forensic",
             description: "navbar_forensic_description",
-            icon: (drawerValue === 8) ? <ForensicIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title="Forensic"/>
+            icon: (drawerValue === 10) ? <ForensicIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title="Forensic"/>
                 : <ForensicIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} title={keyword("navbar_forensic")}/>,
             iconColored: <ForensicIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title={keyword("navbar_forensic")}/>,
             tsvPrefix: "forensic",
             path: "forensic",
             type: "image",
             typeId: 2,
+            icons: ["redesigned"],
+            toolRestrictions: [],
         },
         {
-            id: 10,
+            id: 12,
             title: "navbar_ocr",
             description: "navbar_ocr_description",
-            icon: (drawerValue === 9) ? <OcrIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title="OCR" />
+            icon: (drawerValue === 11) ? <OcrIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title="OCR" />
                 : <OcrIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} title={keyword("navbar_ocr")} />,
             iconColored: <OcrIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title={keyword("navbar_ocr")} />,
             tsvPrefix: "ocr",
             path: "ocr",
             type: "image",
             typeId: 2,
+            icons: ["new"],
+            toolRestrictions: [],
         },
 
         {
-            id: 11,
+            id: 13,
             title: "navbar_gif",
             description: "navbar_gif_description",
-            icon: (drawerValue === 10) ? <GifIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title="CheckGIF" />
+            icon: (drawerValue === 12) ? <GifIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title="CheckGIF" />
                 : <GifIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} title={keyword("navbar_gif")} />,
             iconColored: <GifIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title={keyword("navbar_gif")} />,
             tsvPrefix: "gif",
             path: "gif",
             type: "image",
             typeId: 2,
+            icons: ["new", "lock"],
+            toolRestrictions: ["lock"],
         },
         {
-            id: 12,
+            id: 14,
             title: "navbar_deepfake",
-            description: "navbar_deepfake_description",
-            icon: (drawerValue === 11) ? <DeepfakeIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title="Twitter SNA" />
+            description: "navbar_deepfake_image_description",
+            icon: (drawerValue === 13) ? <DeepfakeIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title="Twitter SNA" />
                 : <DeepfakeIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} title={keyword("navbar_deepfake")} />,
             iconColored: <DeepfakeIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title={keyword("navbar_deepfake")} />,
             tsvPrefix: "deepfake",
-            path: "deepfake",
+            path: "deepfakeImage",
             type: "image",
             typeId: 2,
+            icons: ["experimental", "lock"],
+            toolRestrictions: ["beta"],
 
         },
         {
-            id: 13,
+            id: 15,
             title: "navbar_geolocation",
             description: "navbar_geolocation_description",
-            icon: (drawerValue === 12) ? <GeolactionIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title="Twitter SNA" />
+            icon: (drawerValue === 14) ? <GeolactionIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title="Twitter SNA" />
                 : <GeolactionIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} title={keyword("navbar_geolocation")} />,
             iconColored: <GeolactionIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title={keyword("navbar_geolocation")} />,
             tsvPrefix: "geolocation",
             path: "geolocation",
             type: "image",
             typeId: 2,
+            icons: ["experimental", "lock"],
+            toolRestrictions: ["beta"],
         },
         
         
         {
-            id: 14,
+            id: 16,
             title: "navbar_twitter",
             description: "navbar_twitter_description",
-            icon: (drawerValue === 13) ? <TwitterSearchIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title="Twitter search" />
+            icon: (drawerValue === 15) ? <TwitterSearchIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title="Twitter search" />
                 : <TwitterSearchIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} title={keyword("navbar_twitter")} />,
             iconColored: <TwitterSearchIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title={keyword("navbar_twitter")} />,
             tsvPrefix: "twitter",
             path: "twitter",
             type: "search",
             typeId: 3,
+            icons: [],
+            toolRestrictions: [],
         },
         {
-            id: 15,
+            id: 17,
             title: "navbar_covidsearch",
             description: "navbar_covidsearch_description",
-            icon: (drawerValue === 14) ? <CovidSearchIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title="Covid search"/>
+            icon: (drawerValue === 16) ? <CovidSearchIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title="Covid search"/>
                 : <CovidSearchIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} title={keyword("navbar_covidsearch")}/>,
             iconColored: <CovidSearchIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title={keyword("navbar_covidsearch")}/>,
             tsvPrefix: "covidsearch",
             path: "covidSearch",
             type: "search",
             typeId: 3,
+            icons: ["new"],
+            toolRestrictions: [],
         },
         {
-            id: 16,
+            id: 18,
             title: "navbar_xnetwork",
             description: "navbar_xnetwork_description",
-            icon: (drawerValue === 15) ? <XnetworkIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title="Xnetwork"/>
+            icon: (drawerValue === 17) ? <XnetworkIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title="Xnetwork"/>
                 : <XnetworkIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} title={keyword("navbar_xnetwork")}/>,
             iconColored: <XnetworkIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title={keyword("navbar_xnetwork")}/>,
             tsvPrefix: "xnetwork",
             path: "xnetwork",
             type: "search",
             typeId: 3,
+            icons: ["new"],
+            toolRestrictions: [],
         },
         
         {
-            id: 17,
+            id: 19,
             title: "navbar_twitter_sna",
             description: "navbar_twitter_sna_description",
-            icon: (drawerValue === 16) ? <TwitterSnaIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title="Twitter SNA" />
+            icon: (drawerValue === 18) ? <TwitterSnaIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title="Twitter SNA" />
                 : <TwitterSnaIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} title={keyword("navbar_twitter_sna")} />,
             iconColored: <TwitterSnaIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title={keyword("navbar_twitter_sna")} />,
             tsvPrefix: "twitter_sna",
             path: "twitterSna",
             type: "data",
             typeId: 4,
+            icons: ["lock"],
+            toolRestrictions: ["lock"],
         },
         {
-            id: 18,
+            id: 20,
             title: "navbar_twitter_crowdtangle",
             description: "navbar_twitter_crowdtangle_description",
-            icon: (drawerValue === 17) ? <CsvSnaIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title="Twitter SNA" />
+            icon: (drawerValue === 19) ? <CsvSnaIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title="Twitter SNA" />
                 : <CsvSnaIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} title={keyword("navbar_twitter_crowdtangle")} />,
             iconColored: <CsvSnaIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title={keyword("navbar_twitter_crowdtangle")} />,
             tsvPrefix: "twitter_crowdtangle",
             type: "data",
             typeId: 4,
+            icons: [],
+            toolRestrictions: [],
         },
     ];
 
@@ -537,7 +612,11 @@ const NavBar = (props) => {
                 }
                 
             },
-            
+            MuiCard: {
+                root: {
+                    borderRadius: "10px!important"
+                }
+            }
             
             
         }
@@ -645,7 +724,7 @@ const NavBar = (props) => {
     ];
 
 
-    const toolsItem = tabItems.find(data => data.title === 'navbar_tools');
+    const toolsItem = drawerItems.find(data => data.title === 'navbar_tools');
     const assistantItem = tabItems.find(data => data.title === 'navbar_assistant');
     const drawerItemsLearning = tabItems.filter(item => item.type === "learning");
     const drawerItemsMore = tabItems.filter(item => item.type === "more");
@@ -686,6 +765,8 @@ const NavBar = (props) => {
                             onClick={handleImageClick}
                         />
 
+                        <Box m={3}></Box>
+
                         <div className={classes.grow} />
                         
                         <Autocomplete
@@ -699,7 +780,7 @@ const NavBar = (props) => {
                             getOptionSelected={(option, value) => option.typeId === value.typeId}
                             onChange={(event, newValue) => {
                                 setValue(newValue);
-                                changeValue(newValue.title, "TOOL");
+                                changeValue(newValue, "TOOL", newValue.type);
                             }}
                             renderOption={(option) => (
                                 <React.Fragment key={option.title}>
@@ -753,7 +834,7 @@ const NavBar = (props) => {
                             <Typography type="body1" style={{ fontWeight: "500", fontSize: "10px", color: "#B0B0B0", textTransform: "uppercase" }}>{open ? keyword("navbar_verification") : keyword("navbar_verification_short")}</Typography>
                     </ListSubheader>
 
-                    <ListItem button onClick={() => changeValue(toolsItem.title, "TOOL")} >
+                    <ListItem button onClick={() => changeValue(toolsItem, "TOOL")} >
                         <ListItemIcon color="primary.main">
                             {
                                 <IconButton className={classes.customAllToolsButton} style={{ "width": 24, "height": 24 }}>
@@ -785,8 +866,9 @@ const NavBar = (props) => {
                                         <List component="div" disablePadding>
                                             {
                                                 item.list.map((itemList, keyList) => {
-                                                    return (
-                                                        <ListItem button key={keyList} onClick={() => changeValue(itemList.title, "TOOL")} >
+
+                                                    var element = 
+                                                        <ListItem button key={keyList} onClick={() => changeValue(itemList, "TOOL")} >
                                                             {
                                                                 open ?
                                                                     <ListItemIcon color="primary.main" className={classes.drawerListNested}>
@@ -796,7 +878,7 @@ const NavBar = (props) => {
                                                                             </IconButton>
                                                                         }
                                                                     </ListItemIcon>
-                                                                : 
+                                                                    :
                                                                     <ListItemIcon color="primary.main">
                                                                         {
                                                                             <IconButton className={classes.customAllToolsButton} style={{ "width": 24, "height": 24 }}>
@@ -808,7 +890,23 @@ const NavBar = (props) => {
                                                             }
                                                             <ListItemText primary={<Typography type="body1" className={classes.drawerListText}>{keyword(itemList.title)}</Typography>} />
                                                         </ListItem>
-                                                    )
+                                                    
+                                                    if (itemList.toolRestrictions.includes("beta")){
+                                                        if(betaTester){
+                                                            return (
+                                                                element
+                                                            )
+                                                        } else {
+                                                            return (
+                                                                null
+                                                            )
+                                                        }
+                                                    }else{
+                                                        return (
+                                                            element
+                                                        )
+                                                    }
+                                                    
                                                 })
                                             }
                                         </List>
@@ -837,7 +935,7 @@ const NavBar = (props) => {
                         })
                     }
 
-                    <ListItem button onClick={() => changeValue(assistantItem.title, "OTHER")} >
+                    <ListItem button onClick={() => changeValue(assistantItem, "OTHER")} >
                         <ListItemIcon color="primary.main">
                             {
                                 <IconButton className={classes.customAllToolsButton} style={{ "width": 24, "height": 24 }}>
@@ -857,7 +955,7 @@ const NavBar = (props) => {
                     {
                         drawerItemsLearning.map((item, key) => {
                             return(
-                                <ListItem button key={key} onClick={() => changeValue(item.title, "OTHER") }>
+                                <ListItem button key={key} onClick={() => changeValue(item, "OTHER") }>
                                     <ListItemIcon color="primary.main">
                                         {
                                             <IconButton className={classes.customAllToolsButton} style={{ "width": 24, "height": 24 }}>
@@ -882,7 +980,7 @@ const NavBar = (props) => {
                     {
                         drawerItemsMore.map((item, key) => {
                             return (
-                                <ListItem button key={key} onClick={() => changeValue(item.title, "OTHER")}>
+                                <ListItem button key={key} onClick={() => changeValue(item, "OTHER")}>
                                     <ListItemIcon color="primary.main">
                                         {
                                             <IconButton className={classes.customAllToolsButton} style={{ "width": 24, "height": 24 }}>
@@ -940,7 +1038,7 @@ const NavBar = (props) => {
 
             
 
-            </ThemeProvider>
+            
 
             <main className={classes.content}>
                 <div className={classes.toolbar} id="back-to-top-anchor" />
@@ -973,6 +1071,7 @@ const NavBar = (props) => {
                 }
                 <FeedBack />
             </main>
+            </ThemeProvider>
             
         </div>
     );

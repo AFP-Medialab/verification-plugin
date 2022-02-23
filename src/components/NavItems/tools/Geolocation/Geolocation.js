@@ -15,12 +15,15 @@ import Grid from "@material-ui/core/Grid";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import useGeolacate from "./Hooks/useGeolacte";
 import GeolocationResults from "./Results/GeolocationResults";
+import Alert from "@material-ui/lab/Alert";
+import tsvWarning from "../../../../LocalDictionary/components/Shared/OnWarningInfo.tsv";
 
 const Geolocation = () => {
 
     const classes = useMyStyles();
-    const keyword = useLoadLanguage("components/NavItems/tools/Analysis.tsv", tsv);
+    const keyword = useLoadLanguage("components/NavItems/tools/Geolocalizer.tsv", tsv);
     const keywordAllTools = useLoadLanguage("components/NavItems/tools/Alltools.tsv", tsvAlltools);
+    const keywordWarning = useLoadLanguage("components/Shared/OnWarningInfo.tsv", tsvWarning);
 
     const result = useSelector(state => state.geolocation.result);
     const urlImage = useSelector(state => state.geolocation.urlImage);
@@ -41,10 +44,14 @@ const Geolocation = () => {
 
             <HeaderTool name={keywordAllTools("navbar_geolocation")} description={keywordAllTools("navbar_geolocation_description")} icon={<GeolocationIcon style={{ fill: "#51A5B2", width: "75px", height: "75px" }} />} />
 
+            <Alert severity="warning">{keywordWarning("warning_beta")}</Alert>
+            
+            <Box m={3} />
+
             <Card>
 
                 <CardHeader
-                    title={"Source of the image"}
+                    title={keyword("geo_source")}
                     className={classes.headerUpladedImage}
                 />
                 <div className={classes.root2}>
@@ -58,8 +65,8 @@ const Geolocation = () => {
 
                             <TextField
                                 id="standard-full-width"
-                                label={"Link of the image "}
-                                placeholder={"Paste the image here"}
+                                label={keyword("geo_link")}
+                                placeholder={keyword("geo_paste")}
                                 fullWidth
                                 disabled={isLoading}
                                 value={input}
@@ -76,7 +83,7 @@ const Geolocation = () => {
                                 disabled={isLoading}
                                 onClick={submitUrl}
                             >
-                                {keyword("button_submit")}
+                                {keyword("geo_submit")}
                             </Button>
                         </Grid>
 

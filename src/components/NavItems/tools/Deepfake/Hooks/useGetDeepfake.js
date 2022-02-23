@@ -1,7 +1,8 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import axios from "axios"
-import { setDeepfakeLoading, setDeepfakeResult } from "../../../../../redux/actions/tools/deepfakeActions";
+import { setDeepfakeLoadingImage, setDeepfakeResultImage } from "../../../../../redux/actions/tools/deepfakeImageActions";
+import { setDeepfakeLoadingVideo, setDeepfakeResultVideo } from "../../../../../redux/actions/tools/deepfakeVideoActions";
 import { setError } from "../../../../../redux/actions/errorActions";
 
 
@@ -13,13 +14,15 @@ const UseGetDeepfake = (url, processURL, mode) => {
 
     useEffect(() => {
         if (processURL && url !== "") {
-            dispatch(setDeepfakeLoading(true));
+            
             var modeURL = "";
 
             if (mode === "IMAGE"){
+                dispatch(setDeepfakeLoadingImage(true));
                 modeURL = "images/";
 
             } else if (mode === "VIDEO"){
+                dispatch(setDeepfakeLoadingVideo(true));
                 modeURL = "videos/";
             }
 
@@ -58,7 +61,12 @@ const UseGetDeepfake = (url, processURL, mode) => {
                         .then(response => {
                             //console.log(response.data);
                             if (response.data != null) {
-                                dispatch(setDeepfakeResult(url, response.data));
+                                if (mode === "IMAGE") {
+                                    dispatch(setDeepfakeResultImage(url, response.data));
+                                } else if (mode === "VIDEO") {
+                                    dispatch(setDeepfakeResultVideo(url, response.data));
+                                }
+                                
                                 //getTransparent(response.data.id, url, response.data)
                                 //dispatch(setForensicsResult(url, response.data, false, false));
                                 //dispatch(setForensicsResult(url, response.data, false, false));
@@ -80,7 +88,12 @@ const UseGetDeepfake = (url, processURL, mode) => {
         const handleError = (e) => {
             
             dispatch(setError(e));
-            dispatch(setDeepfakeLoading(false));
+            if (mode === "IMAGE") {
+                dispatch(setDeepfakeLoadingImage(false));
+            } else if (mode === "VIDEO") {
+                dispatch(setDeepfakeLoadingVideo(false));
+            }
+            
         };
 
     }, [url, processURL, mode, dispatch]);
