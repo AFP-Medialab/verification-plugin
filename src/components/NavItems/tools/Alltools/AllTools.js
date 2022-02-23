@@ -130,6 +130,9 @@ const AllTools = (props) => {
         setValue(newValue);
     };
 
+    const role = useSelector((state) => state.userSession.user.roles);
+    const betaTester = role.includes('BETA_TESTER')
+
     return (
         <div>
             <Snackbar open={openAlert} autoHideDuration={6000} onClose={handleCloseAlert}>
@@ -244,9 +247,7 @@ const AllTools = (props) => {
 
                             {
                                 toolsVideo.map((value, key) => {
-                                    //console.log(value);
-
-                                    return (
+                                    var element = 
                                         <Grid className={classes.toolCardStyle} item key={key} onClick={() => handleClick(value.path, "video", value.toolRestrictions)}>
                                             <ToolCard
                                                 name={keyword(value.title)}
@@ -256,7 +257,23 @@ const AllTools = (props) => {
                                                 path="../../../NavBar/images/SVG/Image/Gif.svg" />
 
                                         </Grid>
-                                    );
+                                    //console.log(value);
+                                    if (value.toolRestrictions.includes("beta")) {
+                                        if (betaTester) {
+                                            return (
+                                                element
+                                            )
+                                        } else {
+                                            return (
+                                                null
+                                            )
+                                        }
+                                    } else {
+                                        return (
+                                            element
+                                        )
+                                    }
+                                    
                                 })
                             }
 
@@ -267,16 +284,30 @@ const AllTools = (props) => {
 
                             {
                                 toolsImages.map((value, key) => {
-                                    //console.log(value);
-                                    return (
+                                    var element = 
                                         <Grid className={classes.toolCardStyle} item key={key} onClick={() => handleClick(value.path, "image", value.toolRestrictions)}>
                                             <ToolCard
                                                 name={keyword(value.title)}
                                                 description={keyword(value.description)}
                                                 icon={value.iconColored}
-                                                iconsAttributes={value.icons}/>
+                                                iconsAttributes={value.icons} />
                                         </Grid>
-                                    );
+                                    //console.log(value);
+                                    if (value.toolRestrictions.includes("beta")) {
+                                        if (betaTester) {
+                                            return (
+                                                element
+                                            )
+                                        } else {
+                                            return (
+                                                null
+                                            )
+                                        }
+                                    } else {
+                                        return (
+                                            element
+                                        )
+                                    }
                                 })
                             }
 
@@ -287,15 +318,29 @@ const AllTools = (props) => {
 
                             {
                                 toolsSearch.map((value, key) => {
-                                    return (
+                                    var element = 
                                         <Grid className={classes.toolCardStyle} item key={key} onClick={() => handleClick(value.path, "search", value.toolRestrictions)}>
                                             <ToolCard
                                                 name={keyword(value.title)}
                                                 description={keyword(value.description)}
                                                 icon={value.iconColored}
-                                                iconsAttributes={value.icons}/>
+                                                iconsAttributes={value.icons} />
                                         </Grid>
-                                    );
+                                    if (value.toolRestrictions.includes("beta")) {
+                                        if (betaTester) {
+                                            return (
+                                                element
+                                            )
+                                        } else {
+                                            return (
+                                                null
+                                            )
+                                        }
+                                    } else {
+                                        return (
+                                            element
+                                        )
+                                    }
                                 })
                             }
 
@@ -306,18 +351,20 @@ const AllTools = (props) => {
 
                             {
                                 toolsData.map((value, key) => {
+                                    var element;
                                     if (value.title === "navbar_twitter_crowdtangle"){
-                                        return(
+                                        element = 
                                             <Grid className={classes.toolCardStyle} item key={key} onClick={() => window.open(process.env.REACT_APP_TSNA_SERVER + "csvSna", "_blank")}>
                                                 <ToolCard
                                                     name={keyword(value.title)}
                                                     description={keyword(value.description)}
                                                     icon={value.iconColored}
-                                                    iconsAttributes={value.icons}/>
+                                                    iconsAttributes={value.icons} />
                                             </Grid>
-                                        )
+                                        
                                     }else{
-                                        return (
+
+                                        element = 
                                             <Grid className={classes.toolCardStyle} item key={key} onClick={() => handleClick(value.path, "data", value.toolRestrictions)}>
                                                 <ToolCard
                                                     name={keyword(value.title)}
@@ -325,7 +372,23 @@ const AllTools = (props) => {
                                                     icon={value.iconColored}
                                                     iconsAttributes={value.icons} />
                                             </Grid>
-                                        );
+                                        
+                                    }
+
+                                    if (value.toolRestrictions.includes("beta")) {
+                                        if (betaTester) {
+                                            return (
+                                                element
+                                            )
+                                        }else{
+                                            return(
+                                                null
+                                            )
+                                        }
+                                    } else {
+                                        return (
+                                            element
+                                        )
                                     }
                                     
                                 })

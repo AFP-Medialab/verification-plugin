@@ -192,6 +192,13 @@ const NavBar = (props) => {
 
     };
 
+
+    const role = useSelector((state) => state.userSession.user.roles);
+    const betaTester = role.includes('BETA_TESTER')
+
+    //console.log("Role", role);
+    //console.log("Beta", betaTester);
+
     const drawerItems = [
         {
             id: 1,
@@ -288,8 +295,8 @@ const NavBar = (props) => {
             path: "deepfakeVideo",
             type: "video",
             typeId: 1,
-            icons: ["new", "lock"],
-            toolRestrictions: ["lock"],
+            icons: ["experimental", "lock"],
+            toolRestrictions: ["beta"],
         },
         
         {
@@ -390,8 +397,8 @@ const NavBar = (props) => {
             path: "deepfakeImage",
             type: "image",
             typeId: 2,
-            icons: ["new", "lock"],
-            toolRestrictions: ["lock"],
+            icons: ["experimental", "lock"],
+            toolRestrictions: ["beta"],
 
         },
         {
@@ -405,8 +412,8 @@ const NavBar = (props) => {
             path: "geolocation",
             type: "image",
             typeId: 2,
-            icons: ["new", "lock"],
-            toolRestrictions: ["lock"],
+            icons: ["experimental", "lock"],
+            toolRestrictions: ["beta"],
         },
         
         
@@ -857,7 +864,8 @@ const NavBar = (props) => {
                                         <List component="div" disablePadding>
                                             {
                                                 item.list.map((itemList, keyList) => {
-                                                    return (
+
+                                                    var element = 
                                                         <ListItem button key={keyList} onClick={() => changeValue(itemList, "TOOL")} >
                                                             {
                                                                 open ?
@@ -868,7 +876,7 @@ const NavBar = (props) => {
                                                                             </IconButton>
                                                                         }
                                                                     </ListItemIcon>
-                                                                : 
+                                                                    :
                                                                     <ListItemIcon color="primary.main">
                                                                         {
                                                                             <IconButton className={classes.customAllToolsButton} style={{ "width": 24, "height": 24 }}>
@@ -880,7 +888,23 @@ const NavBar = (props) => {
                                                             }
                                                             <ListItemText primary={<Typography type="body1" className={classes.drawerListText}>{keyword(itemList.title)}</Typography>} />
                                                         </ListItem>
-                                                    )
+                                                    
+                                                    if (itemList.toolRestrictions.includes("beta")){
+                                                        if(betaTester){
+                                                            return (
+                                                                element
+                                                            )
+                                                        } else {
+                                                            return (
+                                                                null
+                                                            )
+                                                        }
+                                                    }else{
+                                                        return (
+                                                            element
+                                                        )
+                                                    }
+                                                    
                                                 })
                                             }
                                         </List>
