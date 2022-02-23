@@ -51,6 +51,14 @@ const DrawerItem = (props) => {
             footer: <Footer type={"GRIHO"} />
         },
         {
+            content: <Metadata />,
+            footer: <Footer type={"afp"} />
+        },
+        {
+            content: <Deepfake />,
+            footer: <Footer type={"afp"} />
+        },
+        {
             content: <AnalysisImg/>,
             footer: <Footer type={"iti"}/>
         },

@@ -34,22 +34,21 @@ export class ToolCard extends Component {
 
         //console.log(this.props);
 
-        if (this.props.type === "redesigned") {
-            showRedesign = true;
+        if (this.props.iconsAttributes !== undefined){
+            if (this.props.iconsAttributes.includes("redesigned")) {
+                showRedesign = true;
+            }
+
+            if (this.props.iconsAttributes.includes("new")) {
+                showNew = true;
+            }
+
+            if (this.props.iconsAttributes.includes("lock")) {
+                showLock = true;
+            }
         }
 
-        if (this.props.type === "new") {
-            showNew = true;
-        }
-
-        if (this.props.type === "lock") {
-            showLock = true;
-        }
-
-        if (this.props.type === "lock and new") {
-            showLock = true;
-            showNew = true;
-        }
+        
 
         const { hovered } = this.state;
         const styleCard = hovered ? {
