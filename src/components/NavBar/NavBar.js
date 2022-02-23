@@ -118,15 +118,22 @@ const NavBar = (props) => {
     );
     
     const changeValue = (newValue) => {
-        if (drawerItems[newValue].title === "navbar_twitter_sna" || drawerItems[newValue].title === "navbar_gif"){
-            if (userAuthenticated){
-                history.push("/app/tools/" + drawerItems[newValue].path);
-            }else{
-                setOpenAlert(true);
-            }
+
+
+        if (drawerItems[newValue].title === "navbar_twitter_crowdtangle") {
+            window.open(process.env.REACT_APP_TSNA_SERVER + "csvSna", "_blank");
         }else{
-            history.push("/app/tools/" + drawerItems[newValue].path);
+            if (drawerItems[newValue].title === "navbar_twitter_sna" || drawerItems[newValue].title === "navbar_gif") {
+                if (userAuthenticated) {
+                    history.push("/app/tools/" + drawerItems[newValue].path);
+                } else {
+                    setOpenAlert(true);
+                }
+            } else {
+                history.push("/app/tools/" + drawerItems[newValue].path);
+            }
         }
+       
     };
 
     const error = useSelector(state => state.error);
@@ -279,10 +286,10 @@ const NavBar = (props) => {
         {
             title: "navbar_twitter_crowdtangle",
             description: "navbar_twitter_crowdtangle_description",
-            icon: (drawerValue === 10) ? <TwitterSnaIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title="Twitter SNA" />
-                : <CsvSnaIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} title={keyword("navbar_twitter_sna")} />,
-            iconColored: <CsvSnaIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title={keyword("navbar_twitter_sna")} />,
-            tsvPrefix: "twitter_sna",
+            icon: (drawerValue === 15) ? <TwitterSnaIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title="Twitter SNA" />
+                : <CsvSnaIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} title={keyword("navbar_twitter_crowdtangle")} />,
+            iconColored: <CsvSnaIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title={keyword("navbar_twitter_crowdtangle")} />,
+            tsvPrefix: "crowdtangle",
         },
     ];
 
@@ -378,6 +385,8 @@ const NavBar = (props) => {
         },
     });
 
+
+    console.log("TITULO", keyword("navbar_twitter_crowdtangle"));
 
     return (
         <div className={classes.flex}>
