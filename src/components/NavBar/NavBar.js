@@ -385,9 +385,6 @@ const NavBar = (props) => {
         },
     });
 
-
-    console.log("TITULO", keyword("navbar_twitter_crowdtangle"));
-
     return (
         <div className={classes.flex}>
             <Snackbar open={openAlert} autoHideDuration={6000} onClose={handleCloseAlert}>
