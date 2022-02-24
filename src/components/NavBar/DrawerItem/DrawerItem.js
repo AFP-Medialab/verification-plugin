@@ -19,6 +19,9 @@ import CovidSearch from "../../NavItems/tools/CovidSearch/CovidSearch";
 import XNetwork from "../../NavItems/tools/XNetwork/XNetwork";
 import OCR from "../../NavItems/tools/OCR/OCR";
 import Gif from "../../NavItems/tools/GIF/Gif";
+import DeepfakeImage from "../../NavItems/tools/Deepfake/DeepfakeImage";
+import DeepfakeVideo from "../../NavItems/tools/Deepfake/DeepfakeVideo";
+import Geolocation from "../../NavItems/tools/Geolocation/Geolocation";
 import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
 import { createTheme, ThemeProvider } from '@material-ui/core/styles';
 import AnalysisImg from "../../NavItems/tools/Analysis_image/Analysis"
@@ -45,8 +48,16 @@ const DrawerItem = (props) => {
             footer: <Footer type={"afp"}/>
         },
         {
-            content: <TwitterAdvancedSearch/>,
-            footer: <Footer type={"afp"}/>
+            content: <VideoRights />,
+            footer: <Footer type={"GRIHO"} />
+        },
+        {
+            content: <Metadata />,
+            footer: <Footer type={"afp"} />
+        },
+        {
+            content: <DeepfakeVideo />,
+            footer: <Footer type={"afp"} />
         },
         {
             content: <AnalysisImg/>,
@@ -60,18 +71,32 @@ const DrawerItem = (props) => {
             content: <Metadata/>,
             footer: <Footer type={"afp"}/>
         },
-        {
-            content: <VideoRights/>,
-            footer: <Footer type={"GRIHO"}/>
-        },
+        
         {
             content: <Forensic/>,
             footer: <Footer type={"iti-borelli-afp"}/>
         },
         {
-            content: <TwitterSna/>,
-            footer: <Footer type={"afp-usfd-eudisinfolab"}/>
+            content: <OCR />,
+            footer: <Footer type={"usfd"} />
         },
+        {
+            content: <Gif />,
+            footer: <Footer type={"borelli-afp"} />
+        },
+        {
+            content: <DeepfakeImage />,
+            footer: <Footer type={"afp"} />
+        },
+        {
+            content: <Geolocation />,
+            footer: <Footer type={"afp"} />
+        },
+        {
+            content: <TwitterAdvancedSearch />,
+            footer: <Footer type={"afp"} />
+        },
+        
         {
             content: <CovidSearch/>,
             footer: <Footer type={"afp"}/>
@@ -81,13 +106,11 @@ const DrawerItem = (props) => {
             footer: <Footer type={"afp"}/>
         },
         {
-            content: <OCR/>,
-            footer: <Footer type={"usfd"}/>
+            content: <TwitterSna />,
+            footer: <Footer type={"afp-usfd-eudisinfolab"} />
         },
-        {
-            content: <Gif />,
-            footer: <Footer type={"borelli-afp"} />
-        }
+        
+        
     ];
 
     const dispatch = useDispatch();
@@ -118,6 +141,11 @@ const DrawerItem = (props) => {
                     minWidth: "25%!important",
                 }
             },
+            MuiCard: {
+                root: {
+                    borderRadius: "10px!important"
+                }
+            }
 
         },
 
@@ -141,8 +169,7 @@ const DrawerItem = (props) => {
                             <Route
                                 key={index}
                                 path={"/app/tools/" + item.path + "/:url?/:type?/"}
-                                render={
-                                    () => {
+                                render={() => {
                                         dispatch(selectTool(index));
                                         return (
                                             <Container key={index} className={classes.noMargin} maxWidth={false}>

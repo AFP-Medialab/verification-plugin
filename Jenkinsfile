@@ -48,4 +48,6 @@ pipeline {
             slackSend channel: 'medialab_builds', message: "Error building project ${env.JOB_NAME} - ID: ${env.BUILD_ID}", tokenCredentialId: 'medialab_slack_token'
         }
     }
+
 }
+
