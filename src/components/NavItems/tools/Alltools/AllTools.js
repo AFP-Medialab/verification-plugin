@@ -50,6 +50,7 @@ function TabPanel(props) {
 const AllTools = (props) => {
     const classes = useMyStyles();
     const keyword = useLoadLanguage("components/NavItems/tools/Alltools.tsv", tsv);
+    const keywordNavbar = useLoadLanguage("components/NavBar.tsv", tsv);
     const keywordWarning = useLoadLanguage("components/Shared/OnWarningInfo.tsv", tsvWarning);
     
     const tools = props.tools;
@@ -96,19 +97,19 @@ const AllTools = (props) => {
 
     tools.forEach((value) => {
 
-        if(value.type === "video"){
+        if (value.type === keywordNavbar("navbar_category_video")){
             toolsVideo.push(value);
         }
 
-        if (value.type === "image") {
+        if (value.type === keywordNavbar("navbar_category_image")) {
             toolsImages.push(value);
         }
 
-        if (value.type === "search") {
+        if (value.type === keywordNavbar("navbar_category_search")) {
             toolsSearch.push(value);
         }
 
-        if (value.type === "data") {
+        if (value.type === keywordNavbar("navbar_category_data")) {
             toolsData.push(value);
         }
 
