@@ -1,6 +1,7 @@
 import React from "react";
 import {useDispatch, useSelector} from "react-redux";
 
+import ArchiveOutlinedIcon from '@material-ui/icons/ArchiveOutlined';
 import {Box, CardHeader, TextField} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import Card from "@material-ui/core/Card";
@@ -11,6 +12,7 @@ import Typography from "@material-ui/core/Typography";
 import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
 import useLoadLanguage from "../../../Hooks/useLoadLanguage";
 
+import {KNOWN_LINKS} from "./AssistantRuleBook";
 import {submitInputUrl} from "../../../redux/actions/tools/assistantActions";
 import tsv from "../../../LocalDictionary/components/NavItems/tools/Assistant.tsv";
 
@@ -25,7 +27,8 @@ const AssistantUrlSelected = (props) => {
 
     //form states
     const inputUrl = useSelector(state => state.assistant.inputUrl);
-    const loading = useSelector(state => state.assistant.loading);
+    const inputUrlType = useSelector(state => state.assistant.inputUrlType);
+    const loading = useSelector(state => state.assistant.loading)
 
     //local state
     const formInput = props.formInput;
@@ -36,6 +39,25 @@ const AssistantUrlSelected = (props) => {
         dispatch(submitInputUrl(formInput));
         submissionEvent(formInput);
     };
+
+    const handleArchive = () =>{
+        let archiveUrl = ""
+
+        switch (inputUrlType) {
+            case KNOWN_LINKS.FACEBOOK:
+                archiveUrl = "https://www.facebook.com/plugins/post.php?href=" + encodeURIComponent(inputUrl)
+                break;
+            case KNOWN_LINKS.INSTAGRAM:
+                if(inputUrl.endsWith("/"))
+                    archiveUrl = inputUrl.endsWith("/") ? inputUrl + "embed/captioned/" : inputUrl + "/embed/captioned/"
+                break;
+            default:
+                archiveUrl = inputUrl
+        }
+        navigator.clipboard.writeText(archiveUrl).then(()=>{
+            window.open("https://web.archive.org/save/" + archiveUrl, "_blank")
+        })
+    }
 
     return (
         <Box my={3} boxShadow={3}>
@@ -77,6 +99,16 @@ const AssistantUrlSelected = (props) => {
                                         </Button>}
                                 </Box>
                             </Grid>
+                            {inputUrl === null ? null :
+                            <Grid item xs={1}>
+                                <Box ml={1}>
+                                    <Button onClick={() => handleArchive()} startIcon={<ArchiveOutlinedIcon /> }>
+                                        <label>
+                                            {keyword("archive_link")}
+                                        </label>
+                                    </Button>
+                                </Box>
+                            </Grid>}
                         </Grid>
                     </Box>
                 </CardContent>

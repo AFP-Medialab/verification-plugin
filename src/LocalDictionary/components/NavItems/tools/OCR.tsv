@@ -8,7 +8,16 @@ ocr_too_big	Your uploaded image must be below 4MB in size	Votre image doit avoir
 service_error	Service currently unavailable. Please contact support through the feedback button if the problem persists	Service actuellement indisponible. Veuillez contacter le support via le bouton de feedback si le problème persiste.	El servicio no está disponible actualmente. Por favor, póngase en contacto con el soporte a través del botón de feedback si el problema persiste.	Η υπηρεσία αυτή τη στιγμή δεν είναι διαθέσιμη. Παρακαλούμε επικοινωνήστε με την υποστήριξη μέσω του κουμπιού ανατροφοδότησης εάν το πρόβλημα παραμένει.
 button_localfile	Load local file	Charger un fichier local	Cargar fichero local	Τοποθετήστε τοπικό αρχείο
 button_submit	Submit	Envoyer	Enviar	Υποβολή
+button_remove	Remove	Temp	Temp	Temp
 ocr_search_yandex	Yandex	Yandex	Yandex	Γιάντεξ
 ocr_search_bing	Bing	Bing	Bing	Bing
-cardheader_source	Source of the image	Source de l'image	Fuente de la imagen	Πηγή της εικόνας
-cardheader_results	Results	Résultats	Resultados 	Αποτελέσματα
+image_analysed	Image Analysed	Temp	Temp	Temp
+extracted_text	Extracted Text	Temp	Temp	Temp
+complete_text	Complete Text	Temp	Temp	Temp
+copy_to_clipboard	Copy to Clipboard	Temp	Temp	Temp
+translate	Translate	Temp	Temp	Temp
+blocks	Blocks	Temp	Temp	Temp
+tooltip_copy	Copied!	Temp	Temp	Temp
+ocr_script_label	Specify script	Temp	Temp	Temp
+reprocess_text	If you think the predicted language is wrong, you can reprocess this block by selecting the script you think this text is in from the box below.	Temp	Temp	Temp
+reprocess_button	Reprocess Block	Temp	Temp	Temp

@@ -9,13 +9,13 @@ import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
 
-import AssistantAssurances from "./AssistantScrapeResults/AssistantAssurances";
 import AssistantCheckStatus from "./AssistantCheckResults/AssistantCheckStatus";
 import AssistantFileSelected from "./AssistantFileSelected";
 import AssistantIntroduction from "./AssistantIntroduction";
 import AssistantLinkResult from "./AssistantScrapeResults/AssistantLinkResult";
 import AssistantMediaResult from "./AssistantScrapeResults/AssistantMediaResult";
 import AssistantNEResult from "./AssistantCheckResults/AssistantNEResult";
+import AssistantSCResults from "./AssistantScrapeResults/AssistantSCResults";
 import AssistantTextResult from "./AssistantScrapeResults/AssistantTextResult";
 import AssistantUrlSelected from "./AssistantUrlSelected";
 import AssistantWarnings from "./AssistantScrapeResults/AssistantWarnings";
@@ -26,14 +26,6 @@ import {setError} from "../../../redux/actions/errorActions";
 import tsv from "../../../LocalDictionary/components/NavItems/tools/Assistant.tsv";
 import useLoadLanguage from "../../../Hooks/useLoadLanguage";
 
-
-/*
-* todo:
-*  - fix video type bug
-*  - check if any states now redundant
-*  - check if any styles now redundant
-*
-* */
 
 const Assistant = () => {
 
@@ -58,8 +50,11 @@ const Assistant = () => {
     //third party check states
     const neResult = useSelector(state => state.assistant.neResultCategory);
     const hpResult = useSelector(state => state.assistant.hpResult)
-    const inputUrlSourceCred = useSelector(state => state.assistant.inputUrlSourceCredibility)
-    const inputUrlFactCheckers = useSelector(state => state.assistant.inputUrlFactCheckers)
+
+    // source credibility
+    const positiveSourCred = useSelector(state => state.assistant.positiveSourceCred)
+    const cautionSourceCred = useSelector(state => state.assistant.cautionSourceCred)
+    const mixedSourceCred = useSelector(state => state.assistant.mixedSourceCred)
 
     const dbkfTextMatch = useSelector(state => state.assistant.dbkfTextMatch);
     const dbkfImageResult = useSelector(state => state.assistant.dbkfImageMatch);
@@ -131,16 +126,17 @@ const Assistant = () => {
                       hidden={urlMode === null || urlMode === false}>
 
                     <Grid item xs={12}>
-                        {inputUrlFactCheckers ?
-                            <AssistantAssurances/> : null
+                        {dbkfTextMatch || dbkfImageResult || dbkfVideoMatch || hpResult ?
+                            <AssistantWarnings/> : null
                         }
                     </Grid>
 
                     <Grid item xs={12}>
-                        {dbkfTextMatch || dbkfImageResult || inputUrlSourceCred || dbkfVideoMatch || hpResult ?
-                            <AssistantWarnings/> : null
+                        {positiveSourCred || cautionSourceCred || mixedSourceCred ?
+                            <AssistantSCResults/> : null
                         }
                     </Grid>
+
 
                     <Grid item xs={12}>
                         {hpFailState || scFailState || dbkfTextFailState || dbkfMediaFailState || neFailState ?

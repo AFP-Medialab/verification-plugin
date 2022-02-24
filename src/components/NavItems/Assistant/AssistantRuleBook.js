@@ -6,7 +6,7 @@ import metadataIconOff from "../../NavBar/images/tools/metadataOff.png";
 import videoRightsIconOff from "../../NavBar/images/tools/copyrightOff.png";
 import forensicIconOff from "../../NavBar/images/tools/forensic_logoOff.png";
 
-export const NE_SUPPORTED_LANGS =  ["en", "pt", "fr", "de", "el", "es"]
+export const NE_SUPPORTED_LANGS =  ["en", "pt", "fr", "de", "el", "es", "it"]
 
 export const CONTENT_TYPE = {
     VIDEO: "video",

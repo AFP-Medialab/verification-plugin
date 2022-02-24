@@ -1,7 +1,8 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import ImageList from '@material-ui/core/ImageList';
-import ImageListItem from '@material-ui/core/ImageListItem';
+//import ImageList from '@material-ui/core/ImageList';
+//import ImageListItem from '@material-ui/core/ImageListItem';
+import { Grid } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -14,7 +15,7 @@ const useStyles = makeStyles(theme => ({
     },
     imageList: {
         width: "100%",
-        maxHeight: "500px",
+        
         paddingBottom: "10px"
     },
 }));
@@ -24,15 +25,24 @@ const useStyles = makeStyles(theme => ({
 
 const ImageImageList = (props) => {
     const classes = useStyles();
+
     return (
         <div className={classes.root}>
-            <ImageList rowHeight={props.height} className={classes.imageList} cols={props.cols!=null ? props.cols : 3}>
-                {props.list.map((tile, index) => (
-                    <ImageListItem  key={index} cols={1} >
-                         <img src={tile} alt={tile} onClick={() => props.handleClick(props.list[index])}/>
-                    </ImageListItem>
-                ))}
-            </ImageList>
+            <Grid container spacing={1}>
+                {props.list.map((tile, index) => { 
+                return(
+                    <Grid item  key={index} xs={(12/props.cols)} >
+                        {
+                            index === (props.list.length - 1) && props.setLoading !== null 
+                            ?
+                                <img src={tile} alt={tile} onClick={() => props.handleClick(props.list[index])} onLoad={props.setLoading} style={{width: "100%", height: "auto"}} />
+                            :
+                                <img src={tile} alt={tile} onClick={() => props.handleClick(props.list[index])} style={{ width: "100%", height: "auto" }} />
+                        }
+                        
+                    </Grid>
+                )})}
+            </Grid>
         </div>
     );
 }
