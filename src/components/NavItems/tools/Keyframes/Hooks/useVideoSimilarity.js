@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { setKeyframesSimilarityLoading, setSimilarity } from "../../../../../redux/actions/tools/keyframesActions"
-import { setError } from "../../../../../redux/actions/errorActions"
+//import { setError } from "../../../../../redux/actions/errorActions"
 
 export const useVideoSimilarity = (url, keyword) => {
 
@@ -10,6 +10,7 @@ export const useVideoSimilarity = (url, keyword) => {
 
     useEffect(() => {
     
+        /*
         const handleError = (e) => {
             if (keyword(e) !== "")
                 dispatch(setError(keyword(e)));
@@ -17,6 +18,7 @@ export const useVideoSimilarity = (url, keyword) => {
                 dispatch(setError(keyword("keyframes_error_default")));
             dispatch(setKeyframesSimilarityLoading(false));
         };
+        */
 
         const getData = (dbkfApiUrl) => {
             axios.get(dbkfApiUrl)
@@ -32,7 +34,8 @@ export const useVideoSimilarity = (url, keyword) => {
                     dispatch(setKeyframesSimilarityLoading(false));
                 })
                 .catch(errors => {
-                    handleError("keyframes_error_" + errors)
+                    //handleError("keyframes_error_VIDEO_SIMILARITY");
+                    dispatch(setKeyframesSimilarityLoading(false));
                 });
         };
 
@@ -40,7 +43,7 @@ export const useVideoSimilarity = (url, keyword) => {
             return;
         }else{
             dispatch(setKeyframesSimilarityLoading(true));
-            getData("https://weverify-demo.ontotext.com/similarity/similarVideos?collection_id=similarity&threshold_similarity=0.5&url=" + url);
+            getData("https://weverify-demo.ontotext.com/similarity/similarVideos?collection_id=similarity&threshold_similarity=" + keyword("dbkf_threshold") + "&url=" + url);
         }
             
         //postUrl("http://multimedia2.iti.gr/video_analysis/segmentation", jsonData);

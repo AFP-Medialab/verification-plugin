@@ -29,8 +29,8 @@ const useGetHomographics = (files, mode, keyword) => {
         };
 
         const getImages = (response) => {
-            console.log("RESPONSE RECIEVED");
-            console.log(response);
+            //console.log("RESPONSE RECIEVED");
+            //console.log(response);
 
             if(response.data.status === "KO"){
                 if (response.data.errorCode === "NO_MATCHES_FOUND"){
@@ -75,7 +75,7 @@ const useGetHomographics = (files, mode, keyword) => {
             authenticatedRequest(axiosConfig)
                 .then(response => getImages(response))
                 .catch(error => {
-                    console.log("ERROR", error.response);
+                    //console.log("ERROR", error.response);
                     //console.log("RESPONSE", response);
                     handleError(error.response.data.errorCode);
             });

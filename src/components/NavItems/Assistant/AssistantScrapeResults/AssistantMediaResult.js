@@ -86,8 +86,8 @@ const AssistantMediaResult = () => {
                                     </Tooltip>
                                 </div>
                                 <div>
-                                    <Tooltip title={<div className={"content"}
-                                                         dangerouslySetInnerHTML={{__html: keyword("media_tooltip")}}/>}
+                                    <Tooltip interactive={true}
+                                             title={<div className={"content"} dangerouslySetInnerHTML={{__html: keyword("media_tooltip")}}/>}
                                              classes={{tooltip: classes.assistantTooltip}}>
                                         <HelpOutlineOutlinedIcon className={classes.toolTipIcon}/>
                                     </Tooltip>

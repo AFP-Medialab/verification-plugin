@@ -203,10 +203,12 @@ const NavBar = (props) => {
         {
             id: 1,
             title: "navbar_tools",
-            icon: <ToolsIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} />,
+            icon: (tabValue === 0 && drawerValue === 0) ? <ToolsIcon width="40px" height="40px" style={{ fill: "#51A5B2" }} />
+                : <ToolsIcon width="40px" height="40px" style={{ fill: "#4c4c4c" }} />,
             tsvPrefix: "all",
             path: "all",
-            type: "General",
+            pathGroup: "TOOL",
+            type: keyword("navbar_category_general"),
             typeId: 0,
             icons: [],
             toolRestrictions: [],
@@ -216,12 +218,13 @@ const NavBar = (props) => {
             id: 2,
             title: "navbar_analysis_video",
             description: "navbar_analysis_description",
-            icon: (drawerValue === 1) ? <AnalysisIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title="Video analysis"/>
-                : <AnalysisIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} title={keyword("navbar_analysis_video")}/>,
+            icon: (drawerValue === 1) ? <AssistantIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title="Video analysis"/>
+                : <AssistantIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} title={keyword("navbar_analysis_video")}/>,
             iconColored: <AnalysisIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title={keyword("navbar_analysis_video")}/>,
             tsvPrefix: "api",
             path: "analysis",
-            type: "video",
+            pathGroup: "TOOL",
+            type: keyword("navbar_category_video"),
             typeId: 1,
             icons: [],
             toolRestrictions: [],
@@ -235,7 +238,8 @@ const NavBar = (props) => {
             iconColored: <KeyframesIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title={keyword("navbar_keyframes")}/>,
             tsvPrefix: "keyframes",
             path: "keyframes",
-            type: "video",
+            pathGroup: "TOOL",
+            type: keyword("navbar_category_video"),
             typeId: 1,
             icons: [],
             toolRestrictions: [],
@@ -249,7 +253,8 @@ const NavBar = (props) => {
             iconColored: <ThumbnailsIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title={keyword("navbar_thumbnails")}/>,
             tsvPrefix: "thumbnails",
             path: "thumbnails",
-            type: "video",
+            pathGroup: "TOOL",
+            type: keyword("navbar_category_video"),
             typeId: 1,
             icons: [],
             toolRestrictions: [],
@@ -263,7 +268,8 @@ const NavBar = (props) => {
             iconColored: <VideoRightsIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title={keyword("navbar_rights")} />,
             tsvPrefix: "copyright",
             path: "copyright",
-            type: "video",
+            pathGroup: "TOOL",
+            type: keyword("navbar_category_video"),
             typeId: 1,
             icons: [],
             toolRestrictions: [],
@@ -278,7 +284,8 @@ const NavBar = (props) => {
             iconColored: <MetadataIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title={keyword("navbar_metadata")} />,
             tsvPrefix: "metadata",
             path: "metadata",
-            type: "video",
+            pathGroup: "TOOL",
+            type: keyword("navbar_category_video"),
             typeId: 1,
             icons: [],
             toolRestrictions: [],
@@ -293,7 +300,8 @@ const NavBar = (props) => {
             iconColored: <DeepfakeIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title={keyword("navbar_deepfake")} />,
             tsvPrefix: "deepfake",
             path: "deepfakeVideo",
-            type: "video",
+            pathGroup: "TOOL",
+            type: keyword("navbar_category_video"),
             typeId: 1,
             icons: ["experimental", "lock"],
             toolRestrictions: ["beta"],
@@ -308,7 +316,8 @@ const NavBar = (props) => {
             iconColored: <AnalysisIconImage width="45px" height="45px" style={{ fill: "#51A5B2" }} title={keyword("navbar_analysis_image")}/>,
             tsvPrefix: "api",
             path: "analysisImage",
-            type: "image",
+            pathGroup: "TOOL",
+            type: keyword("navbar_category_image"),
             typeId: 2,
             icons: ["new"],
             toolRestrictions: [],
@@ -322,7 +331,8 @@ const NavBar = (props) => {
             iconColored: <MagnifierIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title={keyword("navbar_magnifier")}/>,
             tsvPrefix: "magnifier",
             path: "magnifier",
-            type: "image",
+            pathGroup: "TOOL",
+            type: keyword("navbar_category_image"),
             typeId: 2,
             icons: [],
             toolRestrictions: [],
@@ -336,7 +346,8 @@ const NavBar = (props) => {
             iconColored: <MetadataIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title={keyword("navbar_metadata")}/>,
             tsvPrefix: "metadata",
             path: "metadata",
-            type: "image",
+            pathGroup: "TOOL",
+            type: keyword("navbar_category_image"),
             typeId: 2,
             icons: [],
             toolRestrictions: [],
@@ -352,7 +363,8 @@ const NavBar = (props) => {
             iconColored: <ForensicIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title={keyword("navbar_forensic")}/>,
             tsvPrefix: "forensic",
             path: "forensic",
-            type: "image",
+            pathGroup: "TOOL",
+            type: keyword("navbar_category_image"),
             typeId: 2,
             icons: ["redesigned"],
             toolRestrictions: [],
@@ -366,7 +378,8 @@ const NavBar = (props) => {
             iconColored: <OcrIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title={keyword("navbar_ocr")} />,
             tsvPrefix: "ocr",
             path: "ocr",
-            type: "image",
+            pathGroup: "TOOL",
+            type: keyword("navbar_category_image"),
             typeId: 2,
             icons: ["new"],
             toolRestrictions: [],
@@ -381,21 +394,23 @@ const NavBar = (props) => {
             iconColored: <GifIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title={keyword("navbar_gif")} />,
             tsvPrefix: "gif",
             path: "gif",
-            type: "image",
+            pathGroup: "TOOL",
+            type: keyword("navbar_category_image"),
             typeId: 2,
             icons: ["new", "lock"],
             toolRestrictions: ["lock"],
         },
         {
             id: 14,
-            title: "navbar_deepfake",
+            title: "navbar_deepfake_image",
             description: "navbar_deepfake_image_description",
             icon: (drawerValue === 13) ? <DeepfakeIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title="Twitter SNA" />
                 : <DeepfakeIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} title={keyword("navbar_deepfake")} />,
             iconColored: <DeepfakeIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title={keyword("navbar_deepfake")} />,
             tsvPrefix: "deepfake",
             path: "deepfakeImage",
-            type: "image",
+            pathGroup: "TOOL",
+            type: keyword("navbar_category_image"),
             typeId: 2,
             icons: ["experimental", "lock"],
             toolRestrictions: ["beta"],
@@ -410,7 +425,8 @@ const NavBar = (props) => {
             iconColored: <GeolactionIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title={keyword("navbar_geolocation")} />,
             tsvPrefix: "geolocation",
             path: "geolocation",
-            type: "image",
+            pathGroup: "TOOL",
+            type: keyword("navbar_category_image"),
             typeId: 2,
             icons: ["experimental", "lock"],
             toolRestrictions: ["beta"],
@@ -426,7 +442,8 @@ const NavBar = (props) => {
             iconColored: <TwitterSearchIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title={keyword("navbar_twitter")} />,
             tsvPrefix: "twitter",
             path: "twitter",
-            type: "search",
+            pathGroup: "TOOL",
+            type: keyword("navbar_category_search"),
             typeId: 3,
             icons: [],
             toolRestrictions: [],
@@ -440,7 +457,8 @@ const NavBar = (props) => {
             iconColored: <CovidSearchIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title={keyword("navbar_covidsearch")}/>,
             tsvPrefix: "covidsearch",
             path: "covidSearch",
-            type: "search",
+            pathGroup: "TOOL",
+            type: keyword("navbar_category_search"),
             typeId: 3,
             icons: ["new"],
             toolRestrictions: [],
@@ -454,7 +472,8 @@ const NavBar = (props) => {
             iconColored: <XnetworkIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title={keyword("navbar_xnetwork")}/>,
             tsvPrefix: "xnetwork",
             path: "xnetwork",
-            type: "search",
+            pathGroup: "TOOL",
+            type: keyword("navbar_category_search"),
             typeId: 3,
             icons: ["new"],
             toolRestrictions: [],
@@ -469,7 +488,8 @@ const NavBar = (props) => {
             iconColored: <TwitterSnaIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title={keyword("navbar_twitter_sna")} />,
             tsvPrefix: "twitter_sna",
             path: "twitterSna",
-            type: "data",
+            pathGroup: "TOOL",
+            type: keyword("navbar_category_data"),
             typeId: 4,
             icons: ["lock"],
             toolRestrictions: ["lock"],
@@ -482,7 +502,8 @@ const NavBar = (props) => {
                 : <CsvSnaIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} title={keyword("navbar_twitter_crowdtangle")} />,
             iconColored: <CsvSnaIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title={keyword("navbar_twitter_crowdtangle")} />,
             tsvPrefix: "twitter_crowdtangle",
-            type: "data",
+            pathGroup: "TOOL",
+            type: keyword("navbar_category_data"),
             typeId: 4,
             icons: [],
             toolRestrictions: [],
@@ -497,8 +518,11 @@ const NavBar = (props) => {
                 : <ToolsIcon width="40px" height="40px" style={{ fill: "#4c4c4c" }} />,
             content: <div />,
             path: "tools",
+            pathGroup: "OTHER",
             footer: <div />,
-            type: "verification",
+            typeTab: "verification",
+            type: keyword("navbar_category_general"),
+            typeId: 0,
         },
         {
             title: "navbar_assistant",
@@ -506,8 +530,11 @@ const NavBar = (props) => {
                 : <AssistantIcon width="40px" height="40px" style={{ fill: "#4c4c4c" }} />,
             content: <Assistant />,
             path: "assistant",
+            pathGroup: "OTHER",
             footer: <Footer type={"usfd"} />,
-            type: "verification",
+            typeTab: "verification",
+            type: keyword("navbar_category_general"),
+            typeId: 0,
         },
         {
             title: "navbar_tuto",
@@ -515,8 +542,11 @@ const NavBar = (props) => {
                 : <GuideIcon width="40px" height="40px" style={{ fill: "#4c4c4c" }} />,
             content: <Tutorial />,
             path: "tutorial",
+            pathGroup: "OTHER",
             footer: <Footer type={"afp"} />,
-            type: "learning"
+            typeTab: "learning",
+            type: keyword("navbar_category_general"),
+            typeId: 0,
         },
         {
             title: "navbar_quiz",
@@ -524,8 +554,11 @@ const NavBar = (props) => {
                 : <InteractiveIcon width="40px" height="40px" style={{ fill: "#4c4c4c" }} />,
             content: <Interactive />,
             path: "interactive",
+            pathGroup: "OTHER",
             footer: <Footer type={"afp"} />,
-            type: "learning"
+            typeTab: "learning",
+            type: keyword("navbar_category_general"),
+            typeId: 0,
         },
         {
             title: "navbar_classroom",
@@ -533,8 +566,11 @@ const NavBar = (props) => {
                 : <ClassroomIcon width="40px" height="40px" style={{ fill: "#4c4c4c" }} />,
             content: <ClassRoom />,
             path: "classroom",
+            pathGroup: "OTHER",
             footer: <Footer type={"afp"} />,
-            type: "learning"
+            typeTab: "learning",
+            type: keyword("navbar_category_general"),
+            typeId: 0,
         },
         /*{
             title: "navbar_factCheck",
@@ -550,8 +586,10 @@ const NavBar = (props) => {
                 : <AboutIcon width="40px" height="40px" style={{ fill: "#4c4c4c" }} />,
             content: <About />,
             path: "about",
+            pathGroup: "OTHER",
             footer: <Footer type={"afp"} />,
-            type: "more"
+            typeTab: "more",
+            typeId: 0,
         },
 
     ];
@@ -624,7 +662,7 @@ const NavBar = (props) => {
 
 
     //Video items
-    const drawerItemsVideo = drawerItems.filter(item => item.type === "video");
+    const drawerItemsVideo = drawerItems.filter(item => item.type === keyword("navbar_category_video"));
     const [openListVideo, setOpenListVideo] = React.useState(false);
     const [classBorderVideo, setClassBorderVideo] = React.useState(null);
 
@@ -639,7 +677,7 @@ const NavBar = (props) => {
 
 
     //Image items
-    const drawerItemsImage = drawerItems.filter(item => item.type === "image");
+    const drawerItemsImage = drawerItems.filter(item => item.type === keyword("navbar_category_image"));
     const [openListImage, setOpenListImage] = React.useState(false);
     const [classBorderImage, setClassBorderImage] = React.useState(null);
 
@@ -653,7 +691,7 @@ const NavBar = (props) => {
     };
 
     //Search items
-    const drawerItemsSearch = drawerItems.filter(item => item.type === "search");
+    const drawerItemsSearch = drawerItems.filter(item => item.type === keyword("navbar_category_search"));
     const [openListSeach, setOpenListSeach] = React.useState(false);
     const [classBorderSearch, setClassBorderSearch] = React.useState(null);
 
@@ -667,7 +705,7 @@ const NavBar = (props) => {
     };
 
     //Data items
-    const drawerItemsData = drawerItems.filter(item => item.type === "data");
+    const drawerItemsData = drawerItems.filter(item => item.type === keyword("navbar_category_data"));
     const [openListData, setOpenListData] = React.useState(false);
     const [classBorderData, setClassBorderData] = React.useState(null);
 
@@ -684,7 +722,7 @@ const NavBar = (props) => {
 
     const listItems = [
         {
-            title: "Video",
+            title: keyword("navbar_category_video"),
             icon: <VideoIcon style={{ fill: "#4c4c4c" }} />,
             list: drawerItemsVideo,
             variableOpen: openListVideo,
@@ -693,7 +731,7 @@ const NavBar = (props) => {
             classBorder: classBorderVideo,
         },
         {
-            title: "Image",
+            title: keyword("navbar_category_image"),
             icon: <ImageIcon style={{ fill: "#4c4c4c" }} />,
             list: drawerItemsImage,
             variableOpen: openListImage,
@@ -702,7 +740,7 @@ const NavBar = (props) => {
             classBorder: classBorderImage,
         },
         {
-            title: "Search",
+            title: keyword("navbar_category_search"),
             icon: <SearchIcon style = {{ fill: "#4c4c4c" }} />,
             list: drawerItemsSearch,
             variableOpen: openListSeach,
@@ -711,7 +749,7 @@ const NavBar = (props) => {
             classBorder: classBorderSearch,
         },
         {
-            title: "Data analysis",
+            title: keyword("navbar_category_data"),
             icon: <DataIcon style={{ fill: "#4c4c4c" }} />,
             list: drawerItemsData,
             variableOpen: openListData,
@@ -726,8 +764,8 @@ const NavBar = (props) => {
 
     const toolsItem = drawerItems.find(data => data.title === 'navbar_tools');
     const assistantItem = tabItems.find(data => data.title === 'navbar_assistant');
-    const drawerItemsLearning = tabItems.filter(item => item.type === "learning");
-    const drawerItemsMore = tabItems.filter(item => item.type === "more");
+    const drawerItemsLearning = tabItems.filter(item => item.typeTab === "learning");
+    const drawerItemsMore = tabItems.filter(item => item.typeTab === "more");
   
     const [value, setValue] = React.useState(null);
 
@@ -770,7 +808,7 @@ const NavBar = (props) => {
                         <div className={classes.grow} />
                         
                         <Autocomplete
-                                options={drawerItems.sort(function (a, b) { return a.typeId - b.typeId })}
+                                options={drawerItems.concat(tabItems.slice(1)).sort(function (a, b) { return a.typeId - b.typeId })}
                             getOptionLabel={(option) => keyword(option.title)}
                             style={{ width: 400 }}
                             popupIcon={<SearchIconMaterial />}
@@ -780,7 +818,7 @@ const NavBar = (props) => {
                             getOptionSelected={(option, value) => option.typeId === value.typeId}
                             onChange={(event, newValue) => {
                                 setValue(newValue);
-                                changeValue(newValue, "TOOL", newValue.type);
+                                changeValue(newValue, newValue.pathGroup, newValue.type);
                             }}
                             renderOption={(option) => (
                                 <React.Fragment key={option.title}>
@@ -788,8 +826,6 @@ const NavBar = (props) => {
                                     {keyword(option.title)}
                                 </React.Fragment>
                             )}
-                                
-                           
                             renderInput={(params) => 
                                 <TextField 
                                     {...params} 

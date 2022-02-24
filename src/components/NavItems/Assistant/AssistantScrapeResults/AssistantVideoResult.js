@@ -1,6 +1,7 @@
 import React from "react";
 import {useSelector} from "react-redux";
 
+import ArchiveOutlinedIcon from "@material-ui/icons/ArchiveOutlined";
 import Card from "@material-ui/core/Card";
 import CardMedia from "@material-ui/core/CardMedia";
 import CardActions from "@material-ui/core/CardActions";
@@ -15,10 +16,13 @@ import Typography from "@material-ui/core/Typography";
 import {KNOWN_LINKS} from "../AssistantRuleBook";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/Assistant.tsv";
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
+import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 
 const AssistantVideoResult = () => {
 
     const keyword = useLoadLanguage("components/NavItems/tools/Assistant.tsv", tsv);
+    const classes = useMyStyles()
+
     const processUrl = useSelector(state => state.assistant.processUrl);
     const process_url_type = useSelector(state => state.assistant.processUrlType);
     const input_url_type = useSelector(state => state.assistant.inputUrlType)
@@ -106,11 +110,16 @@ const AssistantVideoResult = () => {
                       rel="noopener noreferrer">
                     {processUrl.length > 60 ? processUrl.substring(0, 60) + "..." : processUrl}
                 </Link>
-                <Tooltip title={"Copy link"}>
-                    <IconButton style={{"marginLeft": "auto"}} onClick={() => {
+                <Tooltip title={keyword("copy_link")}>
+                    <IconButton className={classes.assistantIconLeft} onClick={() => {
                         copyUrl()
                     }}>
                         <FileCopyIcon color={"action"}/>
+                    </IconButton>
+                </Tooltip>
+                <Tooltip title={keyword("archive_link")}>
+                    <IconButton onClick={()=>{window.open("https://web.archive.org/save/" + processUrl, "_blank")}}>
+                        <ArchiveOutlinedIcon color={"action"}/>
                     </IconButton>
                 </Tooltip>
             </CardActions>
