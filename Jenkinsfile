@@ -14,6 +14,7 @@ pipeline {
             }
             when {
                 anyOf {
+                    branch 'beta-master';
                     branch 'pre-master';
                     branch 'master';
                 }  
@@ -30,6 +31,7 @@ pipeline {
         stage ('Deliver') {
             when {
                 anyOf {
+                    branch 'beta-master';
                     branch 'pre-master';
                     branch 'master';
                 }
