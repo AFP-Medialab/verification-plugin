@@ -85,9 +85,9 @@ import Typography from "@material-ui/core/Typography";
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 
-import TextField from '@material-ui/core/TextField';
-import Autocomplete from '@material-ui/lab/Autocomplete';
-import SearchIconMaterial from '@material-ui/icons/Search';
+//import TextField from '@material-ui/core/TextField';
+//import Autocomplete from '@material-ui/lab/Autocomplete';
+//import SearchIconMaterial from '@material-ui/icons/Search';
 
 
 
@@ -763,11 +763,11 @@ const NavBar = (props) => {
 
 
     const toolsItem = drawerItems.find(data => data.title === 'navbar_tools');
-    const assistantItem = tabItems.find(data => data.title === 'navbar_assistant');
-    const drawerItemsLearning = tabItems.filter(item => item.typeTab === "learning");
+    //const assistantItem = tabItems.find(data => data.title === 'navbar_assistant');
+    //const drawerItemsLearning = tabItems.filter(item => item.typeTab === "learning");
     const drawerItemsMore = tabItems.filter(item => item.typeTab === "more");
   
-    const [value, setValue] = React.useState(null);
+    //const [value, setValue] = React.useState(null);
 
 
     return (
