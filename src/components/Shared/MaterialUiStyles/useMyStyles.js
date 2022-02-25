@@ -500,12 +500,6 @@ const useMyStyles = makeStyles(theme => (
             borderColor: theme.palette.primary.main,
         }
     },
-    customAllToolsButton: {
-        padding: 0,
-        minHeight:0,
-        backgroundColor: 'transparent',
-        fontSize: 40
-    },
     sourceCredibilityBorder: {
         border: "2px solid",
         borderColor: theme.palette.primary.main,
