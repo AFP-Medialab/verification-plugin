@@ -807,6 +807,7 @@ const NavBar = (props) => {
 
                         <div className={classes.grow} />
                         
+                        {/* 
                         <Autocomplete
                                 options={drawerItems.concat(tabItems.slice(1)).sort(function (a, b) { return a.typeId - b.typeId })}
                             getOptionLabel={(option) => keyword(option.title)}
@@ -835,6 +836,7 @@ const NavBar = (props) => {
                                     />
                             }
                         />
+                        */}
                         <div className={classes.grow} />
 
                         <Languages />
