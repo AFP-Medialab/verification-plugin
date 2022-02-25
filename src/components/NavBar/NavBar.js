@@ -79,7 +79,7 @@ import { setFalse, setTrue } from "../../redux/actions/cookiesActions";
 import { changeLanguage } from "../../redux/actions";
 import Button from "@material-ui/core/Button";
 import Alert from "@material-ui/lab/Alert";
-import { Collapse, ListSubheader } from "@material-ui/core";
+import { Collapse, ListSubheader, Tab, Tabs } from "@material-ui/core";
 import { createTheme, ThemeProvider } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import ExpandLess from '@material-ui/icons/ExpandLess';
@@ -90,14 +90,14 @@ import Autocomplete from '@material-ui/lab/Autocomplete';
 import SearchIconMaterial from '@material-ui/icons/Search';
 
 
-/*
+
 function a11yProps(index) {
     return {
         id: `scrollable-force-tab-${index}`,
         'aria-controls': `scrollable-force-tabpanel-${index}`,
     };
 }
-*/
+
 
 const NavBar = (props) => {
     const classes = useMyStyles();
@@ -114,7 +114,7 @@ const NavBar = (props) => {
 
     const drawerRef = React.createRef();
 
-    /*
+    
 
     const handleChange = (event, newValue) => {
         if (tabItems[newValue].path === "tools")
@@ -123,7 +123,7 @@ const NavBar = (props) => {
             history.push("/app/" + tabItems[newValue].path)
     };
 
-    */
+    
 
     const [openAlert, setOpenAlert] = React.useState(false);
 
@@ -514,8 +514,8 @@ const NavBar = (props) => {
     const tabItems = [
         {
             title: "navbar_tools",
-            icon: (tabValue === 0 && drawerValue === 0) ? <ToolsIcon width="40px" height="40px" style={{ fill: "#51A5B2" }} />
-                : <ToolsIcon width="40px" height="40px" style={{ fill: "#4c4c4c" }} />,
+            icon: (tabValue === 0 && drawerValue === 0) ? <ToolsIcon width="30px" height="30px" style={{ fill: "#51A5B2" }} />
+                : <ToolsIcon width="30px" height="30px" style={{ fill: "#4c4c4c" }} />,
             content: <div />,
             path: "tools",
             pathGroup: "OTHER",
@@ -526,8 +526,8 @@ const NavBar = (props) => {
         },
         {
             title: "navbar_assistant",
-            icon: (tabValue === 1) ? <AssistantIcon width="40px" height="40px" style={{ fill: "#51A5B2" }} />
-                : <AssistantIcon width="40px" height="40px" style={{ fill: "#4c4c4c" }} />,
+            icon: (tabValue === 1) ? <AssistantIcon width="30px" height="30px" style={{ fill: "#51A5B2" }} />
+                : <AssistantIcon width="30px" height="30px" style={{ fill: "#4c4c4c" }} />,
             content: <Assistant />,
             path: "assistant",
             pathGroup: "OTHER",
@@ -538,8 +538,8 @@ const NavBar = (props) => {
         },
         {
             title: "navbar_tuto",
-            icon: (tabValue === 2) ? <GuideIcon width="40px" height="40px" style={{ fill: "#51A5B2" }} />
-                : <GuideIcon width="40px" height="40px" style={{ fill: "#4c4c4c" }} />,
+            icon: (tabValue === 2) ? <GuideIcon width="30px" height="30px" style={{ fill: "#51A5B2" }} />
+                : <GuideIcon width="30px" height="30px" style={{ fill: "#4c4c4c" }} />,
             content: <Tutorial />,
             path: "tutorial",
             pathGroup: "OTHER",
@@ -550,8 +550,8 @@ const NavBar = (props) => {
         },
         {
             title: "navbar_quiz",
-            icon: (tabValue === 3) ? <InteractiveIcon width="40px" height="40px" style={{ fill: "#51A5B2" }} />
-                : <InteractiveIcon width="40px" height="40px" style={{ fill: "#4c4c4c" }} />,
+            icon: (tabValue === 3) ? <InteractiveIcon width="30px" height="30px" style={{ fill: "#51A5B2" }} />
+                : <InteractiveIcon width="30px" height="30px" style={{ fill: "#4c4c4c" }} />,
             content: <Interactive />,
             path: "interactive",
             pathGroup: "OTHER",
@@ -562,8 +562,8 @@ const NavBar = (props) => {
         },
         {
             title: "navbar_classroom",
-            icon: (tabValue === 4) ? <ClassroomIcon width="40px" height="40px" style={{ fill: "#51A5B2" }} />
-                : <ClassroomIcon width="40px" height="40px" style={{ fill: "#4c4c4c" }} />,
+            icon: (tabValue === 4) ? <ClassroomIcon width="30px" height="30px" style={{ fill: "#51A5B2" }} />
+                : <ClassroomIcon width="30px" height="30px" style={{ fill: "#4c4c4c" }} />,
             content: <ClassRoom />,
             path: "classroom",
             pathGroup: "OTHER",
@@ -582,8 +582,8 @@ const NavBar = (props) => {
         },*/
         {
             title: "navbar_about",
-            icon: (tabValue === 5) ? <AboutIcon width="40px" height="40px" style={{ fill: "#51A5B2" }} />
-                : <AboutIcon width="40px" height="40px" style={{ fill: "#4c4c4c" }} />,
+            icon: (tabValue === 5) ? <AboutIcon width="30px" height="30px" style={{ fill: "#51A5B2" }} />
+                : <AboutIcon width="30px" height="30px" style={{ fill: "#4c4c4c" }} />,
             content: <About />,
             path: "about",
             pathGroup: "OTHER",
@@ -806,6 +806,30 @@ const NavBar = (props) => {
                         <Box m={3}></Box>
 
                         <div className={classes.grow} />
+
+                        <Tabs
+                            value={tabValue}
+                            variant="scrollable"
+                            onChange={handleChange}
+                            scrollButtons="on"
+                            indicatorColor="primary"
+                            textColor="primary"
+                            aria-label="scrollable force tabs example"
+                            style={{ marginRight: "30px" }}
+                            TabIndicatorProps={{
+                                style: { display: 'none' }
+                            }}
+                        >
+                            {
+                                tabItems.map((item, index) => {
+                                    return <Tab key={index}
+                                        label={keyword(item.title)}
+                                        icon={item.icon}
+                                        className={classes.tab}
+                                        {...a11yProps(index)} />
+                                })
+                            }
+                        </Tabs>
                         
                         {/* 
                         <Autocomplete
@@ -973,6 +997,7 @@ const NavBar = (props) => {
                         })
                     }
 
+                    {/*
                     <ListItem button onClick={() => changeValue(assistantItem, "OTHER")} >
                         <ListItemIcon color="primary.main">
                             {
@@ -985,6 +1010,10 @@ const NavBar = (props) => {
                     </ListItem>
 
                     <Box m={2} />
+
+                    */}
+
+                    {/*
 
                     <ListSubheader style={{ paddingTop: "16px", paddingBottom: "16px" }} className={classListHeading}>
                         <Typography type="body1" style={{ fontWeight: "500", fontSize: "10px", color: "#B0B0B0", textTransform: "uppercase" }}>{open ? keyword("navbar_learning") : keyword("navbar_learning_short")}</Typography>
@@ -1007,6 +1036,8 @@ const NavBar = (props) => {
                             )
                         })
                     }
+
+                     */}
 
 
                     <Box m={2} />

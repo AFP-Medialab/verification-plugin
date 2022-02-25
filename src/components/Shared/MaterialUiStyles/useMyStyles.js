@@ -412,7 +412,7 @@ const useMyStyles = makeStyles(theme => (
     },
     tab: {
         [theme.breakpoints.up('sm')]: {
-            fontSize: theme.typography.pxToRem(13),
+            fontSize: "10px",
             minWidth: 100,
             color: "#4c4c4c"
         },
