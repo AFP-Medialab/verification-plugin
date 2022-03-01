@@ -12,7 +12,7 @@ import tsvWarning from "../../../../LocalDictionary/components/Shared/OnWarningI
 //import { useParams } from "react-router-dom";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
-import { ReactComponent as AnalysisIcon } from '../../../NavBar/images/SVG/Video/Video_analysis.svg';
+import { ReactComponent as DeepfakeIcon } from '../../../NavBar/images/SVG/Image/Deepfake.svg';
 import Grid from "@material-ui/core/Grid";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import UseGetDeepfake from "./Hooks/useGetDeepfake";
@@ -64,7 +64,7 @@ const Deepfake = () => {
     return (
         <div>
 
-            <HeaderTool name={keywordAllTools("navbar_deepfake_image")} description={keywordAllTools("navbar_deepfake_image_description")} icon={<AnalysisIcon style={{ fill: "#51A5B2" }} />} />
+            <HeaderTool name={keywordAllTools("navbar_deepfake_image")} description={keywordAllTools("navbar_deepfake_image_description")} icon={<DeepfakeIcon style={{ fill: "#51A5B2", height: "75px", width: "auto" }} />} />
 
             <Alert severity="warning">{keywordWarning("warning_beta")}</Alert>
 
