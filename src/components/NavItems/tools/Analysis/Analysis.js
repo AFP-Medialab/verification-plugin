@@ -33,6 +33,7 @@ import _ from "lodash";
 
 const Analysis = () => {
 
+    const caa_analysis_url = process.env.REACT_APP_CAA_ANALYSIS_URL
     const {url} = useParams();
     const classes = useMyStyles();
     const keyword = useLoadLanguage("components/NavItems/tools/Analysis.tsv", tsv);
@@ -47,7 +48,7 @@ const Analysis = () => {
     const [urlDetected, setUrlDetected] = useState(false)
     const [submittedUrl, setSubmittedUrl] = useState(undefined);
     const [reprocess, setReprocess] = useState(false);
-    const serviceUrl = "https://mever.iti.gr/caa/api/v4/videos";
+    const serviceUrl = caa_analysis_url+"videos";
     const [finalUrl, showFacebookIframe] = useGenerateApiUrl(serviceUrl, submittedUrl, reprocess);
     useAnalysisWrapper(setAnalysisLoading, setAnalysisResult, serviceUrl, finalUrl, submittedUrl, keyword);
     
@@ -194,7 +195,6 @@ const Analysis = () => {
                     warning===true &&
                     <Alert className={styles.margin1} variant="outlined" severity="warning">{keyword("facebook_tip")}</Alert>
             }
-                
                 
         </div>);
 };

@@ -5,6 +5,7 @@ import {useEffect, useState} from "react";
 import _ from "lodash";
 
 export const useAnalysisWrapper = (setAnalysisLoading, setAnalysisResult, serviceUrl, apiUrl, processUrl, keyword) => {    
+    const assistantEndpoint = process.env.REACT_APP_ASSISTANT_URL
     const dispatch = useDispatch();
     const isLoading = useSelector(state => state.analysis.loading);
     const [data, setData] = useState(null)
@@ -42,7 +43,7 @@ export const useAnalysisWrapper = (setAnalysisLoading, setAnalysisResult, servic
                     handleError("table_error_" + response.data.status.status);
                 else if (response.data.status !== "unavailable"){
                     if (response.data.platform === "facebook"){
-                        axios.get("https://weverify-assistant-dev.gate.ac.uk/scrape/facebook?url=" + currentURL)
+                        axios.get(assistantEndpoint+"scrape/facebook?url=" + currentURL)
                             .then(responseImg => {
                                 dispatch(setAnalysisResult(currentURL, response.data, false, processing, responseImg.data.images[0]));
                             })
