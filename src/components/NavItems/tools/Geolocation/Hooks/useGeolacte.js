@@ -8,13 +8,13 @@ import { setError } from "../../../../../redux/actions/errorActions";
 const useGeolacate = (url, processURL, keyword) => {
 
     const dispatch = useDispatch();
-
+    const caa_localtion_base_url = process.env.REACT_APP_CAA_LOCATION_URL
     useEffect(() => {
         if (processURL && url !== "") {
 
             dispatch(setGeolocationLoading(true));
 
-            axios.get("https://mever.iti.gr/location/api/v3/geolocate?image_url=" + url + "&use_gradcam=0")
+            axios.get(caa_localtion_base_url+"geolocate?image_url=" + url + "&use_gradcam=0")
                 .then(response => {
                     console.log(response.data);
                     if (response.data != null) {
@@ -26,10 +26,8 @@ const useGeolacate = (url, processURL, keyword) => {
                 .catch(error => {
                     //console.log("ERROR 1");
                     handleError("forensic_error_" + error.status);
-            })
-        
+            })  
         }
-
 
         const handleError = (e) => {
             if (keyword(e) !== "")
@@ -38,7 +36,7 @@ const useGeolacate = (url, processURL, keyword) => {
                 dispatch(setError(keyword("please_give_a_correct_link")));
             dispatch(setGeolocationLoading(false));
         };
-
+        // eslint-disable-next-line
     }, [processURL, dispatch, keyword, url]);
 
 };

@@ -28,10 +28,12 @@ import Grid from "@material-ui/core/Grid";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import styles from "./Results/layout.module.css";
 import Alert from '@material-ui/lab/Alert';
+import _ from "lodash";
 
 
 const Analysis = () => {
 
+    const caa_analysis_url = process.env.REACT_APP_CAA_ANALYSIS_URL
     const {url} = useParams();
     const classes = useMyStyles();
     const keyword = useLoadLanguage("components/NavItems/tools/Analysis.tsv", tsv);
@@ -46,11 +48,10 @@ const Analysis = () => {
     const [urlDetected, setUrlDetected] = useState(false)
     const [submittedUrl, setSubmittedUrl] = useState(undefined);
     const [reprocess, setReprocess] = useState(false);
-    const serviceUrl = "https://mever.iti.gr/caa/api/v4/videos";
+    const serviceUrl = caa_analysis_url+"videos";
     const [finalUrl, showFacebookIframe] = useGenerateApiUrl(serviceUrl, submittedUrl, reprocess);
     useAnalysisWrapper(setAnalysisLoading, setAnalysisResult, serviceUrl, finalUrl, submittedUrl, keyword);
-
-
+    
     var [warning, setWarning] = useState(false);
     
     const reprocessToggle = () => {
@@ -62,6 +63,10 @@ const Analysis = () => {
         setSubmittedUrl(input.trim());
         dispatch(cleanAnalysisState());
     };
+    useEffect(() => {
+        if(_.isEmpty(resultUrl))
+            setInput(resultUrl)
+    }, [resultUrl])
   
     useEffect(() => {       
         if (finalUrl !== undefined) {
@@ -120,19 +125,15 @@ const Analysis = () => {
                                     var found1 =e.target.value.match(regex1);
                                     if(found!==null || found1!==null ){
                                         setWarning(true)
-
                                     }
                                     else{
                                         setWarning(false)
-                                    }
-                                    
+                                    }                                    
                                 }
-
                                 }
                             />
                             
                         </Grid>
-
                         <Grid item>
                             <FormControlLabel
                                 control={
@@ -146,7 +147,6 @@ const Analysis = () => {
                                 }
                                 label={keyword("api_repro")}
                             />
-
                         </Grid>
 
                         <Grid item>
@@ -158,12 +158,8 @@ const Analysis = () => {
                                 >
                                 {keyword("button_submit")}
                             </Button>
-                        </Grid>
-
-                        
-
+                        </Grid>                        
                         <Box m={1}/>
-                        
                     </Grid>
                 </div>
                 <LinearProgress hidden={!isLoading} />
@@ -193,17 +189,12 @@ const Analysis = () => {
             {
                 (resultData  && resultData.platform.startsWith("facebook")) ?
                     <FacebookResults report={resultData}/> : null
-                    
-
             }
             
             {
-                
                     warning===true &&
                     <Alert className={styles.margin1} variant="outlined" severity="warning">{keyword("facebook_tip")}</Alert>
-
             }
-                
                 
         </div>);
 };

@@ -546,8 +546,8 @@ const useMyStyles = makeStyles(theme => (
     ocrImage:{
         objectFit: "contain",
         position:  "relative",
-        maxHeight:"48vh",
-        minHeight:"400px"
+        maxHeight:"100%",
+        maxWidth:"100%"
     },
     ocrActionAreaLeft:{
         justifyContent: "left",

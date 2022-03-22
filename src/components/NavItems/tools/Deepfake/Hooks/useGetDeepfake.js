@@ -10,7 +10,7 @@ const UseGetDeepfake = (url, processURL, mode) => {
 
     const dispatch = useDispatch();
 
-    const baseURL = "https://mever.iti.gr/deepfake/api/v3/";
+    const baseURL = process.env.REACT_APP_CAA_DEEPFAKE_URL;
 
     useEffect(() => {
         if (processURL && url !== "") {
@@ -95,7 +95,7 @@ const UseGetDeepfake = (url, processURL, mode) => {
             }
             
         };
-
+        // eslint-disable-next-line
     }, [url, processURL, mode, dispatch]);
 
 };

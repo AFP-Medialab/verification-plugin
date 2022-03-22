@@ -34,7 +34,7 @@ const ImageAnalysisReducer = (state = defaultState, action) => {
         case "SET_ANALYSIS_LOADING_IMAGE":
             return {...state, loading:action.payload };
         case "ANALYSIS_CLEAN_STATE_IMAGE":
-            return {...state, result:null, url:""};
+            return {...state, result:null, url:"", loading: false};
         default:
             return state;
     }
