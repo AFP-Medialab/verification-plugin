@@ -152,10 +152,14 @@ const NavBar = (props) => {
                     setOpenAlert(true);
                 }
             } else {
-                history.push({
-                    pathname: "/app/tools/" + newValue.path,
-                    state: { media: mediaTool }
-                })
+                if(newValue.title === "navbar_twitter_crowdtangle")
+                    window.open(process.env.REACT_APP_TSNA_SERVER + "csvSna", "_blank");
+                else{
+                    history.push({
+                        pathname: "/app/tools/" + newValue.path,
+                        state: { media: mediaTool }
+                    })
+                }
             }
 
 
