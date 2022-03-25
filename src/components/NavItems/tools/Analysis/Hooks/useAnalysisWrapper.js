@@ -29,6 +29,10 @@ export const useAnalysisWrapper = (setAnalysisLoading, setAnalysisResult, servic
                         //Every 10 requests get a report content for temporary display
                         getReport(response.data.media_id, true)
                     }
+                    if(cpt === 60){
+                        console.log("stop processing")
+                        getReport(response.data.media_id, false)
+                    }
                     setCpt(cpt + 1)
                 }
             })
