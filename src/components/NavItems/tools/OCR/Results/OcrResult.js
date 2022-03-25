@@ -184,7 +184,6 @@ const OcrResult = () => {
             //add and remove listener on result change: react state variables don't update on native DOM listeners!
             window.addEventListener('resize', handleImageResizing);
             return () => {
-                console.log("removing")
                 window.removeEventListener('resize', handleImageResizing)
             };
         }

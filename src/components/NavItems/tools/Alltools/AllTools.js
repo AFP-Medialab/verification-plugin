@@ -72,7 +72,7 @@ const AllTools = (props) => {
                 setOpenAlert(true);
             }
         }else{
-            console.log(path);
+            //console.log(path);
             handlePush(path, mediaTool);
         }
 
