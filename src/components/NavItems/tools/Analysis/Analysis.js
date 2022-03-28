@@ -120,10 +120,11 @@ const Analysis = () => {
                                 onChange={e => {
                                     setInput(e.target.value)
                                     const regex = /fb.watch\//g;
-                                    const regex1 = /www.facebook.com\/watch\//g;
+                                    //const regex1 = /www.facebook.com\/watch\//g;
                                     var found = e.target.value.match(regex);
-                                    var found1 =e.target.value.match(regex1);
-                                    if(found!==null || found1!==null ){
+                                    //var found1 =e.target.value.match(regex1);
+                                    //if(found!==null || found1!==null ){
+                                    if(found!==null){
                                         setWarning(true)
                                     }
                                     else{
