@@ -16,6 +16,7 @@ import Tooltip from "@material-ui/core/Tooltip";
 import TranslateIcon from '@material-ui/icons/Translate';
 import Typography from "@material-ui/core/Typography";
 import {WarningOutlined} from "@material-ui/icons";
+import ImageReverseSearch from "../../../tools/ImageReverseSearch"
 
 import tsv from "../../../../../LocalDictionary/components/NavItems/tools/OCR.tsv";
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
@@ -155,12 +156,9 @@ const OcrResult = () => {
         window.open(translate_url, "_blank")
     }
 
-    // Open yandex search
-    const searchYandex = function () {
-        let search_url = "https://yandex.com/images/search?rpt=imageview&url=" + encodeURIComponent(inputUrl);
-        window.open(search_url, "_blank")
-    }
-
+    const reverseSearch = (website) => {
+          ImageReverseSearch(website, inputUrl);
+      }; 
 
     //copy text to clipboard
     const copyText = (text) => {
@@ -213,9 +211,24 @@ const OcrResult = () => {
                                     <canvas id={mainCanvasId} className={classes.ocrImageCanvas}/>
                                 </div>
                                 <Box m={2}/>
-                                <Button variant="outlined" color="primary" fullWidth onClick={() => {searchYandex()}}> 
-                                    {keyword("ocr_search_yandex")}
-                                </Button>
+                                <Grid
+                                        container
+                                        direction="row"
+                                        justifyContent="space-between"
+                                        alignItems="flex-start"
+                                        spacing={2}
+                                    > 
+                                    <Grid item xs={6}>
+                                        <Button variant="outlined" color="primary" fullWidth onClick={() => {reverseSearch("yandex")}}> 
+                                            {keyword("ocr_search_yandex")}
+                                        </Button>
+                                    </Grid>
+                                    <Grid item xs={6}>
+                                        <Button variant="outlined" color="primary" fullWidth onClick={() => {reverseSearch("bing")}}> 
+                                            {keyword("ocr_search_bing")}
+                                        </Button>
+                                    </Grid>
+                                </Grid>
                                 
                             </CardContent>
                         </Card>
@@ -272,14 +285,7 @@ const OcrResult = () => {
                                                 <TranslateIcon style={{ "marginRight": "10px" }} />{keyword("translate")}
                                             </Button>
                                         </Grid>
-
-                                        
-
-                                        
-
                                     </Grid>
-
-                                   
                                 </Box>
                             </CardContent>
                         </Card>
