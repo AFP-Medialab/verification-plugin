@@ -39,7 +39,6 @@ const XNetwork = () => {
           className={classes.headerUpladedImage}
         />
         <div className={classes.root2}>
-          <span>Disable</span>
           <div className="gcse-search"></div>
           <Box m={1} />
           <OnClickInfo keyword={"xnetwork_tip"}/>
