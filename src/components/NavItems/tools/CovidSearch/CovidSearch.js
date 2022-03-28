@@ -24,10 +24,10 @@ const CovidSearch = () => {
     script.async = true;
 
     if (script.src !== "https://cse.google.com/cse.js?cx=000556916517770601014:") {
-      document.head.appendChild(script);
+      //document.head.appendChild(script);
 
       return () => {
-        document.head.removeChild(script);
+        //document.head.removeChild(script);
       }
     }
 
