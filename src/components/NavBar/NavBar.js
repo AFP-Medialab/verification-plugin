@@ -207,8 +207,8 @@ const NavBar = (props) => {
         {
             id: 1,
             title: "navbar_tools",
-            icon: (tabValue === 0 && drawerValue === 0) ? <ToolsIcon width="40px" height="40px" style={{ fill: "#51A5B2" }} />
-                : <ToolsIcon width="40px" height="40px" style={{ fill: "#4c4c4c" }} />,
+            icon: (tabValue === 0 && drawerValue === 0) ? <ToolsIcon width="40px" height="40px" style={{ fill: "#51A5B2" }} title={keyword("navbar_tools")}/>
+                : <ToolsIcon width="40px" height="40px" style={{ fill: "#4c4c4c" }} title={keyword("navbar_tools")}/>,
             tsvPrefix: "all",
             path: "all",
             pathGroup: "TOOL",
@@ -223,7 +223,7 @@ const NavBar = (props) => {
             title: "navbar_analysis_video",
             description: "navbar_analysis_description",
             icon: (drawerValue === 1) ? <AssistantIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title="Video analysis"/>
-                : <AssistantIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} title={keyword("navbar_analysis_video")}/>,
+                : <AnalysisIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} title={keyword("navbar_analysis_video")}/>,
             iconColored: <AnalysisIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title={keyword("navbar_analysis_video")}/>,
             tsvPrefix: "api",
             path: "analysis",
@@ -727,7 +727,7 @@ const NavBar = (props) => {
     const listItems = [
         {
             title: keyword("navbar_category_video"),
-            icon: <VideoIcon style={{ fill: "#4c4c4c" }} />,
+            icon: <VideoIcon style={{ fill: "#4c4c4c" }} title={keyword("navbar_category_video")}/>,
             list: drawerItemsVideo,
             variableOpen: openListVideo,
             setVariableOpen: setOpenListVideo,
@@ -736,7 +736,7 @@ const NavBar = (props) => {
         },
         {
             title: keyword("navbar_category_image"),
-            icon: <ImageIcon style={{ fill: "#4c4c4c" }} />,
+            icon: <ImageIcon style={{ fill: "#4c4c4c" }} title={keyword("navbar_category_image")}/>,
             list: drawerItemsImage,
             variableOpen: openListImage,
             setVariableOpen: setOpenListImage,
@@ -745,7 +745,7 @@ const NavBar = (props) => {
         },
         {
             title: keyword("navbar_category_search"),
-            icon: <SearchIcon style = {{ fill: "#4c4c4c" }} />,
+            icon: <SearchIcon style = {{ fill: "#4c4c4c" }} title={keyword("navbar_category_search")}/>,
             list: drawerItemsSearch,
             variableOpen: openListSeach,
             setVariableOpen: setOpenListSeach,
@@ -754,7 +754,7 @@ const NavBar = (props) => {
         },
         {
             title: keyword("navbar_category_data"),
-            icon: <DataIcon style={{ fill: "#4c4c4c" }} />,
+            icon: <DataIcon style={{ fill: "#4c4c4c" }} title={keyword("navbar_category_data")}/>,
             list: drawerItemsData,
             variableOpen: openListData,
             setVariableOpen: setOpenListData,

@@ -22,7 +22,8 @@ import {useParams} from "react-router-dom";
 import {KNOWN_LINKS} from "../../Assistant/AssistantRuleBook";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
-import { ReactComponent as AnalysisIcon } from '../../../NavBar/images/SVG/Video/Video_analysis.svg';
+import { ReactComponent as AnalysisIconImage } from "../../../NavBar/images/SVG/Image/Image_analysis.svg"
+
 import Grid from "@material-ui/core/Grid";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 
@@ -83,7 +84,7 @@ const Analysis = () => {
     return (
         <div>
 
-            <HeaderTool name={keywordAllTools("navbar_analysis_image")} description={keywordAllTools("navbar_analysis_image_description")} icon={<AnalysisIcon style={{ fill: "#51A5B2" }} />}/>
+            <HeaderTool name={keywordAllTools("navbar_analysis_image")} description={keywordAllTools("navbar_analysis_image_description")} icon={<AnalysisIconImage style={{ fill: "#51A5B2" }} />}/>
 
             <Card>
                 
