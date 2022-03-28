@@ -311,6 +311,7 @@ const AdvancedTools = () => {
                                 fullWidth
                                 autoComplete="email"
                                 variant="outlined"
+                                name='email'
                                 onChange={e => {
                                     setEmail(e.target.value);
                                     if (e.target.value !== "") {

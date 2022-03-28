@@ -27,7 +27,7 @@ import Grid from "@material-ui/core/Grid";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 
 const Analysis = () => {
-
+    const caa_analysis_url = process.env.REACT_APP_CAA_ANALYSIS_URL
     const {url} = useParams();
     const classes = useMyStyles();
     const keyword = useLoadLanguage("components/NavItems/tools/Analysis.tsv", tsv);
@@ -44,7 +44,7 @@ const Analysis = () => {
     const [urlDetected, setUrlDetected] = useState(false)
     const [submittedUrl, setSubmittedUrl] = useState(undefined); 
     const [reprocess, setReprocess] = useState(false);
-    const serviceUrl = "https://mever.iti.gr/caa/api/v4/images";
+    const serviceUrl = caa_analysis_url+"images";
 
     const [finalUrl, showFacebookIframe] = useGenerateApiUrl(serviceUrl, submittedUrl, reprocess);
     useAnalysisWrapper(setAnalysisLoading, setAnalysisResult, serviceUrl, finalUrl, submittedUrl, keyword);

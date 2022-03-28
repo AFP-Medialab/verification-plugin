@@ -20,6 +20,9 @@ import { Accordion, AccordionDetails, AccordionSummary, CircularProgress, Linear
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ReportProblemOutlinedIcon from '@material-ui/icons/ReportProblemOutlined';
 import { createTheme, ThemeProvider } from '@material-ui/core/styles';
+
+import Link from "@material-ui/core/Link";
+
 import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
 import Popover from '@material-ui/core/Popover';
 import CloseIcon from '@material-ui/icons/Close';
@@ -27,6 +30,7 @@ import ZoomInIcon from '@material-ui/icons/ZoomIn';
 import ZoomOutIcon from '@material-ui/icons/ZoomOut';
 import DetailedIcon from '@material-ui/icons/ViewComfyRounded';
 import SimpleIcon from '@material-ui/icons/ViewStreamRounded';
+
 
 const KeyFramesResults = (props) => {
     const classes = useMyStyles();
@@ -211,7 +215,9 @@ const KeyFramesResults = (props) => {
                                                 similarityResults.map((value, key) => {
                                                     return (
                                                         <Typography variant="body1" align="left" style={{ color: "#17717e" }} key={key}>
-                                                            <a href={value.externalLink} target="_blank" rel="noreferrer" style={{ color: "#17717e" }}>{value.externalLink}</a>
+
+                                                            <Link target="_blank" href={value.externalLink} style={{ color: "#17717e" }} >{value.externalLink}</Link>
+
                                                         </Typography>
                                                     )
                                                 })

@@ -5,6 +5,7 @@ import Typography from "@material-ui/core/Typography";
 import FiberNewIcon from '@material-ui/icons/FiberNew';
 import AuthenticationIcon from "./AdvancedTools/AuthenticationIcon";
 import { ReactComponent as ImprovedIcon } from "../../../NavBar/images/SVG/Improved.svg";
+import BugReportIcon from '@material-ui/icons/BugReport';
 
 export class ToolCard extends Component {
 
@@ -31,25 +32,30 @@ export class ToolCard extends Component {
         var showNew = false;
         var showRedesign = false;
         var showLock = false;
+        var showExperimental = false;
+
 
         //console.log(this.props);
 
-        if (this.props.type === "redesigned") {
-            showRedesign = true;
+        if (this.props.iconsAttributes !== undefined){
+            if (this.props.iconsAttributes.includes("redesigned")) {
+                showRedesign = true;
+            }
+
+            if (this.props.iconsAttributes.includes("new")) {
+                showNew = true;
+            }
+
+            if (this.props.iconsAttributes.includes("lock")) {
+                showLock = true;
+            }
+
+            if (this.props.iconsAttributes.includes("experimental")) {
+                showExperimental = true;
+            }
         }
 
-        if (this.props.type === "new") {
-            showNew = true;
-        }
-
-        if (this.props.type === "lock") {
-            showLock = true;
-        }
-
-        if (this.props.type === "lock and new") {
-            showLock = true;
-            showNew = true;
-        }
+        
 
         const { hovered } = this.state;
         const styleCard = hovered ? {
@@ -102,6 +108,12 @@ export class ToolCard extends Component {
                             {showNew &&
                                 <Grid item style={{ marginLeft: 'auto', color: "#F44336" }} >
                                     <FiberNewIcon />
+                                </Grid>
+                            }
+
+                            {showExperimental &&
+                                <Grid item style={{ marginLeft: 'auto', color: "#F44336" }} >
+                                    <BugReportIcon />
                                 </Grid>
                             }
 

@@ -48,8 +48,8 @@ const FactCheck = () => {
         updateFeed(language);
     }, [language]);
 
-    if (feed)
-        console.log(feed.items);
+    /*if (feed)
+        console.log(feed.items);*/
 
     const finishXMLParsing = (str) => {
         if(str)

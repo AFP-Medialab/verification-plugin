@@ -37,7 +37,6 @@ export class HeaderTool extends Component {
                                 {description}
                             </Typography>
                         </Box>
-                        <Box m={3} />
                     </Grid>
 
 
@@ -50,7 +49,7 @@ export class HeaderTool extends Component {
 
                 </Grid>
 
-
+                <Box m={3} />
                 
 
             </div>

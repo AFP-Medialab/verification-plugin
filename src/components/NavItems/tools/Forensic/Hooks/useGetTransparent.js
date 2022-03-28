@@ -7,6 +7,7 @@ import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Forensic.tsv";
 
 const useGetTransparent = (url, ready) => {
+    const envisu4_utils_base_url = process.env.REACT_APP_CAA_ENVISU4_UTILS_URL
     const keyword = useLoadLanguage("components/NavItems/tools/Forensic.tsv", tsv);
     const dispatch = useDispatch();
 
@@ -21,11 +22,8 @@ const useGetTransparent = (url, ready) => {
             dispatch(setForensicsLoading(false));
         };
 
-
-
-
         if (url && ready) {
-            axios.get("https://mever.iti.gr/envisu4/utils/mask?url=" + url)
+            axios.get(envisu4_utils_base_url+"mask?url=" + url)
                 .then(response => {
                     //console.log(response);
                     if (response.data != null) {
@@ -38,9 +36,7 @@ const useGetTransparent = (url, ready) => {
                     handleError("forensic_error_" + error.status);
                 })
         }
-
-
-
+    // eslint-disable-next-line
     }, [url, ready, keyword, dispatch]);
 };
 export default useGetTransparent;
