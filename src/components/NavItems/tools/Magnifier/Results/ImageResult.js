@@ -21,7 +21,7 @@ import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 import ImageReverseSearch from "../../ImageReverseSearch"
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
-import {localImageGoogleSearch, localImageBingSearch} from "../../../../Shared/ReverseSearch/reverseSearchUtils"
+import {localImageGoogleSearch, localImageBingSearch, localImageGoogleLens, localImageYandexSearch} from "../../../../Shared/ReverseSearch/reverseSearchUtils"
 
 const myTheme = {
     'loadButton.backgroundColor': "#151515",
@@ -109,6 +109,12 @@ const ImageResult = () => {
 
     const BingClick = () => {
         localImageBingSearch(resultImage);
+    }
+    const GoogleLens= () => {
+        localImageGoogleLens(resultImage)
+    }
+    const YandexClick = () => {
+        localImageYandexSearch(resultImage)
     }
 
     return (
@@ -229,6 +235,24 @@ const ImageResult = () => {
                                         onClick={BingClick}>
                                      {
                                         "Bing " + keyword("reverse_search")
+                                    }
+                                </Button>
+                            </Grid>
+                            <Grid item>
+                                <Button color="primary"
+                                        variant="contained"
+                                        onClick={YandexClick}>
+                                     {
+                                        "Yandex " + keyword("reverse_search")
+                                    }
+                                </Button>
+                            </Grid>
+                            <Grid item>
+                                <Button color="primary"
+                                        variant="contained"
+                                        onClick={GoogleLens}>
+                                     {
+                                        "Google Lens " + keyword("reverse_search")
                                     }
                                 </Button>
                             </Grid>
