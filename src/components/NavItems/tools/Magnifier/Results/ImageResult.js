@@ -22,7 +22,7 @@ import OnClickInfo from "../../../../Shared/OnClickInfo/OnClickInfo";
 import ImageReverseSearch from "../../ImageReverseSearch"
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
-import {searchLocalImageGoogleSearch} from "../../../../Shared/ReverseSearch/reverseSearchUtils"
+import {localImageGoogleSearch} from "../../../../Shared/ReverseSearch/reverseSearchUtils"
 
 const myTheme = {
     'loadButton.backgroundColor': "#151515",
@@ -105,7 +105,7 @@ const ImageResult = () => {
         return image_name.substring(0, image_name.lastIndexOf("."));
     };
     const GoogleClick = () => {
-        searchLocalImageGoogleSearch(resultImage)
+        localImageGoogleSearch(resultImage)
     };
 
     return (

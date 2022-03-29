@@ -50,7 +50,7 @@ const Analysis = () => {
     const [reprocess, setReprocess] = useState(false);
     const serviceUrl = caa_analysis_url+"videos";
     const [finalUrl, showFacebookIframe] = useGenerateApiUrl(serviceUrl, submittedUrl, reprocess);
-    useAnalysisWrapper(setAnalysisLoading, setAnalysisResult, serviceUrl, finalUrl, submittedUrl, keyword);
+    useAnalysisWrapper(setAnalysisLoading, setAnalysisResult, serviceUrl, finalUrl, submittedUrl, keyword, isLoading);
     
     var [warning, setWarning] = useState(false);
     
