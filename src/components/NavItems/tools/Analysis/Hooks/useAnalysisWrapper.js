@@ -1,13 +1,12 @@
 import axios from "axios"
-import {useDispatch, useSelector} from "react-redux";
+import {useDispatch} from "react-redux";
 import {setError} from "../../../../../redux/actions/errorActions";
 import {useEffect, useState} from "react";
 import _ from "lodash";
 
-export const useAnalysisWrapper = (setAnalysisLoading, setAnalysisResult, serviceUrl, apiUrl, processUrl, keyword) => {    
+export const useAnalysisWrapper = (setAnalysisLoading, setAnalysisResult, serviceUrl, apiUrl, processUrl, keyword, isLoading) => {    
     const assistantEndpoint = process.env.REACT_APP_ASSISTANT_URL
     const dispatch = useDispatch();
-    const isLoading = useSelector(state => state.analysis.loading);
     const [data, setData] = useState(null)
     const [cpt, setCpt] = useState(0)
     const [currentURL, setCurrentURL] = useState(processUrl)
@@ -60,6 +59,7 @@ export const useAnalysisWrapper = (setAnalysisLoading, setAnalysisResult, servic
             .catch(errors => handleError(errors));
     };
     const handleError = (error) => {
+        console.log("error   ", error)
         if (keyword(error) !== "")
             dispatch(setError((keyword(error))));
         else
@@ -68,6 +68,8 @@ export const useAnalysisWrapper = (setAnalysisLoading, setAnalysisResult, servic
     };
 
     useEffect(()=> {
+        console.log("loading ....", isLoading)
+        console.log("data ....", data)
         let timer = null
         if(!_.isNull(data)){
             timer = setTimeout(() => waitUntilDonne(data, cpt), 2000);
@@ -98,7 +100,8 @@ export const useAnalysisWrapper = (setAnalysisLoading, setAnalysisResult, servic
             handleError("table_error_empty_url");
         else if (apiUrl.includes(" "))
             handleError("table_error_unavailable");
-        else if (processUrl) {        
+        else if (processUrl) {
+            console.log("proceee ", processUrl)        
             setCurrentURL(processUrl)   
             dispatch(setAnalysisLoading(true));
             axios.post(apiUrl)

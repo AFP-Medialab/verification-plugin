@@ -48,7 +48,7 @@ const Analysis = () => {
     const serviceUrl = caa_analysis_url+"images";
 
     const [finalUrl, showFacebookIframe] = useGenerateApiUrl(serviceUrl, submittedUrl, reprocess);
-    useAnalysisWrapper(setAnalysisLoading, setAnalysisResult, serviceUrl, finalUrl, submittedUrl, keyword);
+    useAnalysisWrapper(setAnalysisLoading, setAnalysisResult, serviceUrl, finalUrl, submittedUrl, keyword, isLoading);
 
     const reprocessToggle = () => {
         setReprocess(!reprocess);

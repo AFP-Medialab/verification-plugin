@@ -1103,7 +1103,7 @@ const NavBar = (props) => {
                         startIcon={!open ? <ChevronRightIcon /> : <ChevronLeftIcon />}
 
                     >
-                        {open ? "COLLAPSE" : ""}
+                        {open ? keyword("navbar_collapse") : ""}
                     </Button>
                     <Box m={1}/>
                 </div>
