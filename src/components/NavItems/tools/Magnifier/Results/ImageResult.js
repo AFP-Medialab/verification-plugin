@@ -22,6 +22,7 @@ import OnClickInfo from "../../../../Shared/OnClickInfo/OnClickInfo";
 import ImageReverseSearch from "../../ImageReverseSearch"
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
+import {searchLocalImageGoogleSearch} from "../../../../Shared/ReverseSearch/reverseSearchUtils"
 
 const myTheme = {
     'loadButton.backgroundColor': "#151515",
@@ -103,19 +104,8 @@ const ImageResult = () => {
         let image_name = image.substring(image.lastIndexOf("/") + 1);
         return image_name.substring(0, image_name.lastIndexOf("."));
     };
-
-    const copyToClipBoard = (string) => {
-        let textArea = document.createElement("textarea");
-        textArea.innerHTML = string;
-        document.body.appendChild(textArea);
-        textArea.select();
-        document.execCommand('copy');
-        textArea.remove();
-    };
-
     const GoogleClick = () => {
-        copyToClipBoard(resultImage);
-        window.open("https://www.google.com/imghp?sbi=1", "_blank");
+        searchLocalImageGoogleSearch(resultImage)
     };
 
     return (
@@ -297,7 +287,6 @@ const ImageResult = () => {
                                 </Button>
                             </Grid>
                         </Grid>
-
                 }
             </div>
         </Card>
