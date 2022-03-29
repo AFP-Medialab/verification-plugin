@@ -13,40 +13,33 @@ export const localImageGoogleSearch = (content) => {
         console.log("response ", response)
         window.open(response.url, "_blank");
     })
-    .then(data => {
-      console.log("data ", data)
-    }).then(request => {console.log("request ", request)})
     .catch(error => {
       console.error(error)
     })
 }
 
 export const localImageBingSearch = (content) => {
-    let image = content.substring("data:image/png;base64,".length)
-    let url = "https://www.bing.com/images/search?view=detailv2&iss=sbiupload&FORM=SBIHMP"
+    let image = content.substring(content.indexOf(',') + 1)
+    let url = "https://www.bing.com/images/search?view=detailv2&iss=sbiupload&FORM=SBIHMP&sbifnm=weverify-local-file"
     const formData  = new FormData()
     formData.append("data-imgurl", "")
     formData.append("cbir", "sbi")
     formData.append("imageBin", image)
     fetch(url, {
-        referrer: '',
-        mode: 'cors',
+      
         method: 'POST',
         body: formData
     }).then(response => {
-        console.log("response ", response)
+        //console.log("response ", response)
         window.open(response.url, "_blank");
     })
-    .then(data => {
-      console.log("data ", data)
-    }).then(request => {console.log("request ", request)})
     .catch(error => {
       console.error(error)
     })
 }
 
 const b64toBlob = (content, contentType='', sliceSize=512) => {
-    let image = content.substring("data:image/png;base64,".length)
+    let image = content.substring(content.indexOf(',') + 1)
     const byteCharacters = atob(image);
     const byteArrays = [];
   
