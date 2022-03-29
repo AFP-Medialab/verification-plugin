@@ -68,8 +68,6 @@ export const useAnalysisWrapper = (setAnalysisLoading, setAnalysisResult, servic
     };
 
     useEffect(()=> {
-        console.log("loading ....", isLoading)
-        console.log("data ....", data)
         let timer = null
         if(!_.isNull(data)){
             timer = setTimeout(() => waitUntilDonne(data, cpt), 2000);
