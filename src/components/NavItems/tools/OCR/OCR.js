@@ -12,7 +12,8 @@ import {
     setOcrBinaryImage,
     setOcrErrorKey,
     setOcrInput,
-    setOcrResult
+    setOcrResult,
+    setb64InputFile
 } from "../../../../redux/actions/tools/ocrActions";
 import OcrResult from "./Results/OcrResult";
 
@@ -51,12 +52,24 @@ const OCR = () => {
             dispatch(setOcrResult(false, true, false, null))
         } else {
             let reader = new FileReader()
+            let localurl = URL.createObjectURL(file)
+            setUserInput(localurl)
             reader.onload = () => {
                 dispatch(setOcrBinaryImage(reader.result))
-                let localFile = URL.createObjectURL(file)
-                setUserInput(localFile)
             }
             reader.readAsBinaryString(file)
+            let img = new Image();
+            img.crossOrigin="anonymous"
+            img.onload = () => {
+                let canvas = document.createElement('canvas');
+                canvas.width = img.width;
+                canvas.height = img.height;
+                canvas.getContext('2d').drawImage(img, 0, 0);
+                dispatch(setb64InputFile(canvas.toDataURL('image/png')))
+                // Get raw image data
+                canvas.remove();
+            };
+        img.src = localurl
         }
     }
 

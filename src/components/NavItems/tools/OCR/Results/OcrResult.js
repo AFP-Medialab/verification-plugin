@@ -29,6 +29,9 @@ import {
     setReprocessOpen,
     setSelectedScript
 } from "../../../../../redux/actions/tools/ocrActions";
+import {
+    localImageBingSearch, localImageGoogleLens, localImageYandexSearch
+} from "../../../../Shared/ReverseSearch/reverseSearchUtils"
 
 
 
@@ -48,7 +51,9 @@ const OcrResult = () => {
     const scripts = useSelector(state => state.ocr.scripts)
     const selectedScript = useSelector(state => state.ocr.selectedScript)
     const reprocessBlockOpen = useSelector(state => state.ocr.reprocessBlockOpen)
+    const b64Content = useSelector(state => state.ocr.b64Content)
 
+    const [imageIsUrl] = useState(inputUrl.startsWith("http:") || inputUrl.startsWith("https:"));
 
     const [tooltipOpen, setTooltipOpen] = useState(false)
     const [tooltipIndex, setTooltipIndex] = useState(0)
@@ -160,6 +165,17 @@ const OcrResult = () => {
           ImageReverseSearch(website, inputUrl);
       }; 
 
+    const GoogleLens = () =>{
+        localImageGoogleLens(b64Content)
+    }
+
+    const YandexClick = () => {
+        localImageYandexSearch(b64Content)
+    }
+
+    const BingClick = () => {
+        localImageBingSearch(b64Content);
+    }
     //copy text to clipboard
     const copyText = (text) => {
         navigator.clipboard.writeText(text)
@@ -219,15 +235,22 @@ const OcrResult = () => {
                                         spacing={2}
                                     > 
                                     <Grid item xs={6}>
-                                        <Button variant="outlined" color="primary" fullWidth onClick={() => {reverseSearch("yandex")}}> 
+                                        <Button variant="outlined" color="primary" fullWidth onClick={() => {imageIsUrl ? reverseSearch("yandex"): YandexClick()}}> 
                                             {keyword("ocr_search_yandex")}
                                         </Button>
                                     </Grid>
                                     <Grid item xs={6}>
-                                        <Button variant="outlined" color="primary" fullWidth onClick={() => {reverseSearch("bing")}}> 
+                                        <Button variant="outlined" color="primary" fullWidth onClick={() => {imageIsUrl? reverseSearch("bing"): BingClick()}}> 
                                             {keyword("ocr_search_bing")}
                                         </Button>
                                     </Grid>
+                                    {!imageIsUrl ? 
+                                        <Grid item xs={6}>
+                                        <Button variant="outlined" color="primary" fullWidth onClick={() => {GoogleLens()}}> 
+                                            {keyword("ocr_search_google_lens")}
+                                        </Button>
+                                    </Grid> : null}
+                                                            
                                 </Grid>
                                 
                             </CardContent>
