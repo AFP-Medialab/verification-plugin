@@ -18,11 +18,10 @@ import CloseResult from "../../../../Shared/CloseResult/CloseResult";
 import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Magnifier.tsv";
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
-import OnClickInfo from "../../../../Shared/OnClickInfo/OnClickInfo";
 import ImageReverseSearch from "../../ImageReverseSearch"
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
-import {localImageGoogleSearch} from "../../../../Shared/ReverseSearch/reverseSearchUtils"
+import {localImageGoogleSearch, localImageBingSearch} from "../../../../Shared/ReverseSearch/reverseSearchUtils"
 
 const myTheme = {
     'loadButton.backgroundColor': "#151515",
@@ -107,6 +106,10 @@ const ImageResult = () => {
     const GoogleClick = () => {
         localImageGoogleSearch(resultImage)
     };
+
+    const BingClick = () => {
+        localImageBingSearch(resultImage);
+    }
 
     return (
         <Card>
@@ -206,20 +209,26 @@ const ImageResult = () => {
                     !imageIsUrl ?
                         <Grid
                             container
-                            direction="column"
+                            direction="row"
                             justifyContent="center"
                             alignItems="center"
                             spacing={3}
                         >
                             <Grid item>
-                                <OnClickInfo keyword={"magnifier_tip"}/>
-                            </Grid>
-                            <Grid item>
                                 <Button color="primary"
                                         variant="contained"
                                         onClick={GoogleClick}>
                                     {
-                                        keyword("magnifier_google")
+                                        "Google " +  keyword("reverse_search")
+                                    }
+                                </Button>
+                            </Grid>
+                            <Grid item>
+                                <Button color="primary"
+                                        variant="contained"
+                                        onClick={BingClick}>
+                                     {
+                                        "Bing " + keyword("reverse_search")
                                     }
                                 </Button>
                             </Grid>
