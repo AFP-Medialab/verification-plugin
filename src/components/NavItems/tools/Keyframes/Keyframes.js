@@ -297,12 +297,12 @@ const Keyframes = () => {
 
             <Box m={3} />
                 {
-                    resultData &&
-                <KeyFramesResults result={resultData}/>
+                    (resultData && !localFile) ?
+                <KeyFramesResults result={resultData}/> : <div/>
                 }
             <div>
                 {
-                    (resultData && downloadShubshots) ? 
+                    (resultData && downloadShubshots && !localFile) ? 
                     <Button color="primary" onClick={downloadAction}>
                         {keyword("keyframes_download_subshots")}
                     </Button> : <div/>
