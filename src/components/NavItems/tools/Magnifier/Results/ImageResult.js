@@ -21,7 +21,12 @@ import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 import ImageReverseSearch from "../../ImageReverseSearch"
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
-import {localImageGoogleSearch, localImageBingSearch, localImageGoogleLens, localImageYandexSearch} from "../../../../Shared/ReverseSearch/reverseSearchUtils"
+import {
+    localImageGoogleSearch, 
+    localImageBingSearch, 
+    localImageGoogleLens, 
+    localImageYandexSearch,
+    localImageBaiduSearch} from "../../../../Shared/ReverseSearch/reverseSearchUtils"
 
 const myTheme = {
     'loadButton.backgroundColor': "#151515",
@@ -115,6 +120,9 @@ const ImageResult = () => {
     }
     const YandexClick = () => {
         localImageYandexSearch(resultImage)
+    }
+    const BaiduClick = () => {
+        localImageBaiduSearch(resultImage)
     }
 
     return (
@@ -233,7 +241,7 @@ const ImageResult = () => {
                                 <Button color="primary"
                                         variant="contained"
                                         onClick={BingClick}>
-                                     {
+                                    {
                                         "Bing " + keyword("reverse_search")
                                     }
                                 </Button>
@@ -242,7 +250,7 @@ const ImageResult = () => {
                                 <Button color="primary"
                                         variant="contained"
                                         onClick={YandexClick}>
-                                     {
+                                    {
                                         "Yandex " + keyword("reverse_search")
                                     }
                                 </Button>
@@ -251,8 +259,17 @@ const ImageResult = () => {
                                 <Button color="primary"
                                         variant="contained"
                                         onClick={GoogleLens}>
-                                     {
+                                    {
                                         "Google Lens " + keyword("reverse_search")
+                                    }
+                                </Button>
+                            </Grid>
+                            <Grid item>
+                                <Button color="primary"
+                                        variant="contained"
+                                        onClick={BaiduClick}>
+                                    {
+                                        "Baidu " + keyword("reverse_search")
                                     }
                                 </Button>
                             </Grid>

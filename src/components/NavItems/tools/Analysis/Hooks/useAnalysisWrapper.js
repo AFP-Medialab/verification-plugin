@@ -45,11 +45,13 @@ export const useAnalysisWrapper = (setAnalysisLoading, setAnalysisResult, servic
                 if (keyword("table_error_" + response.data.status) !== "")
                     handleError("table_error_" + response.data.status.status);
                 else if (response.data.status !== "unavailable"){
-                    if (response.data.platform === "facebook"){
+                    if (response.data.platform === "facebook" && _.isUndefined(response.data.video)){
                         axios.get(assistantEndpoint+"scrape/facebook?url=" + currentURL)
                             .then(responseImg => {
                                 dispatch(setAnalysisResult(currentURL, response.data, false, processing, responseImg.data.images[0]));
-                            })
+                            }).catch(error => {
+                                console.log("error assistance image scrapping ", error)
+                                dispatch(setAnalysisResult(currentURL, response.data, false, processing, null)) })
                     }else{
                         dispatch(setAnalysisResult(currentURL, response.data, false, processing, null));
                     }
@@ -99,7 +101,6 @@ export const useAnalysisWrapper = (setAnalysisLoading, setAnalysisResult, servic
         else if (apiUrl.includes(" "))
             handleError("table_error_unavailable");
         else if (processUrl) {
-            console.log("proceee ", processUrl)        
             setCurrentURL(processUrl)   
             dispatch(setAnalysisLoading(true));
             axios.post(apiUrl)
