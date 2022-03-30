@@ -25,6 +25,7 @@ import {ReactComponent as OCRIcon} from '../../../NavBar/images/SVG/Image/OCR.sv
 import Grid from "@material-ui/core/Grid";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import { submissionEvent } from "../../../Shared/GoogleAnalytics/GoogleAnalytics";
+import _ from "lodash";
 
 const OCR = () => {
 
@@ -124,7 +125,10 @@ const OCR = () => {
 
                         <Grid item>
                             {!result ?
-                                <Button variant="contained" color="primary" onClick={() => submitUrl(userInput)}>
+                                <Button variant="contained" color="primary" onClick={() => {
+                                                                                            if(!_.isUndefined)
+                                                                                                submitUrl(userInput)
+                                                                                            }}>
                                     {keyword("button_submit") || ""}
                                 </Button>
                                 :
