@@ -1,3 +1,24 @@
+export const localImageBaiduSearch = (content) => {
+    let url = "https://graph.baidu.com/upload"
+    const blob = b64toBlob(content, 'image/png')
+    const data = new FormData();
+    data.append('tn', 'pc');
+    data.append('from', 'pc');
+    data.append('range', '{"page_from": "searchIndex"}');
+    data.append("image", blob)
+    data.append('image_source', 'PC_UPLOAD_SEARCH_FILE');
+    fetch(url, {
+        mode: 'cors',
+        method: 'POST',
+        body: data
+      }).then(response => {
+        return response.json()})
+    .then( json => {
+        let tabUrl = json.data.url
+        window.open(tabUrl, "_blank");
+    })
+}
+
 export const localImageGoogleLens = (content) => {
     const blob = b64toBlob(content, 'image/png')
     let url = `https://lens.google.com/upload?ep=ccm&s=&st=${Date.now()}`
