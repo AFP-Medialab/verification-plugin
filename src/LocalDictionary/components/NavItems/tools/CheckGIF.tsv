@@ -24,3 +24,10 @@ input_placeholder	Paste here the link	Copier ici le lien	Copiar aquí el enlace	
 title_preview	Preview of the GIF	Aperçu du GIF	Vista previa del GIF	Preview του GIF
 error_homo	No match has been found between the two images.	Aucune similarité n'a été trouvée entre les deux images	No se encontro similaridad alguna entre las dos imágenes	Δεν έχει επιτευχθεί αντιστοιχία μεταξύ των δύο εικόνων.
 button_new	New GIF	Nouveau GIF	Nuevo GIF	νέα GIF
+IPOL_IMAGE_UPLOAD_EXCEEDED	The size of the images exceed the limit of 1MB	La taille des images dépasse la limite de 1 Mo	El tamaño de las imágenes excede el límite de 1MB.	Το μέγεθος των εικόνων υπερβαίνει το όριο 1MB
+IPOL_REMOTE_SERVICE_ERROR	There was an network error while processing the two images	Il y a eu une erreur réseau lors du traitement des deux images	Hubo un error de red al procesar las dos imágenes.	Υπήρξε ένα σφάλμα δικτύου κατά την επεξεργασία των δύο εικόνων
+IPOL_RESOURCE_NOT_FOUND	There was an internal error while processing the two images	Il y a eu une erreur interne lors du traitement des deux images	Hubo un error interno al procesar las dos imágenes.	Υπήρχε ένα εσωτερικό σφάλμα κατά την επεξεργασία των δύο εικόνων
+IPOL_FILE_IMAGE_ERROR	There was an error while downlading the image	Il y a eu une erreur en téléchargeant l'image	Hubo un error al bajar la imagen.	Υπήρχε ένα σφάλμα κατά την απομάκρυνση της εικόνας
+IPOL_BAD_URL_ERROR	The format of the URLs are not valid	Le format des URL ne sont pas valides	El formato de las URL no es válido.	Η μορφή των διευθύνσεων URL δεν είναι έγκυρη
+NO_MATCHES_FOUND	No match has been found between the two images	Aucune similitude n'a été trouvée entre les deux images	No se ha encontrado ninguna similaridad entre las dos imágenes.	Δεν βρέθηκε καμία αντιστοιχία μεταξύ των δύο εικόνων
+INTERNAL_SERVER_ERROR	There was an internal error while processing the two images	Il y a eu une erreur interne lors du traitement des deux images	Hubo un error interno al procesar las dos imágenes.	Υπήρχε ένα εσωτερικό σφάλμα κατά την επεξεργασία των δύο εικόνων
