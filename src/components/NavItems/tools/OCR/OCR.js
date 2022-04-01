@@ -12,7 +12,8 @@ import {
     setOcrBinaryImage,
     setOcrErrorKey,
     setOcrInput,
-    setOcrResult
+    setOcrResult,
+    setb64InputFile
 } from "../../../../redux/actions/tools/ocrActions";
 import OcrResult from "./Results/OcrResult";
 
@@ -24,6 +25,7 @@ import {ReactComponent as OCRIcon} from '../../../NavBar/images/SVG/Image/OCR.sv
 import Grid from "@material-ui/core/Grid";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import { submissionEvent } from "../../../Shared/GoogleAnalytics/GoogleAnalytics";
+import _ from "lodash";
 
 const OCR = () => {
 
@@ -51,12 +53,24 @@ const OCR = () => {
             dispatch(setOcrResult(false, true, false, null))
         } else {
             let reader = new FileReader()
+            let localurl = URL.createObjectURL(file)
+            setUserInput(localurl)
             reader.onload = () => {
                 dispatch(setOcrBinaryImage(reader.result))
-                let localFile = URL.createObjectURL(file)
-                setUserInput(localFile)
             }
             reader.readAsBinaryString(file)
+            let img = new Image();
+            img.crossOrigin="anonymous"
+            img.onload = () => {
+                let canvas = document.createElement('canvas');
+                canvas.width = img.width;
+                canvas.height = img.height;
+                canvas.getContext('2d').drawImage(img, 0, 0);
+                dispatch(setb64InputFile(canvas.toDataURL('image/png')))
+                // Get raw image data
+                canvas.remove();
+            };
+        img.src = localurl
         }
     }
 
@@ -111,7 +125,10 @@ const OCR = () => {
 
                         <Grid item>
                             {!result ?
-                                <Button variant="contained" color="primary" onClick={() => submitUrl(userInput)}>
+                                <Button variant="contained" color="primary" onClick={() => {
+                                                                                            if(!_.isUndefined(userInput))
+                                                                                                submitUrl(userInput)
+                                                                                            }}>
                                     {keyword("button_submit") || ""}
                                 </Button>
                                 :

@@ -21,10 +21,10 @@ const XNetwork = () => {
     script.src = "https://cse.google.com/cse.js?cx=000556916517770601014:k08mmqlnmih";
     script.async = true;
   
-    document.head.appendChild(script);
+    //document.head.appendChild(script);
   
     return () => {
-      document.head.removeChild(script);
+      //document.head.removeChild(script);
     }
     
   }, []);

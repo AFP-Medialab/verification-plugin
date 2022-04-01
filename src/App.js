@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import NavBar from "./components/NavBar/NavBar";
-import { MuiThemeProvider } from "@material-ui/core";
-import {createTheme} from "@material-ui/core/styles";
+import {createTheme, ThemeProvider} from "@material-ui/core/styles";
 import { Router, Route, Switch } from "react-router-dom";
 import history from "./components/Shared/History/History";
 import PopUp from "./components/PopUp/PopUp";
@@ -103,13 +102,13 @@ function App() {
 
   return (
     <Router history={history}>
-      <MuiThemeProvider theme={theme}>
+      <ThemeProvider theme={theme}>
         <Switch>
           <Route exact path={"/"} component={PopUp} />
           <Route path={"/app"} component={NavBar} />
           <Route id="test" component={NotFound} />
         </Switch>
-      </MuiThemeProvider>
+      </ThemeProvider>
     </Router>
   );
 }

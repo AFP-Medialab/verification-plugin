@@ -12,7 +12,7 @@ import tsv from "../../../LocalDictionary/components/NavItems/languages.tsv";
 import useLoadLanguage from "../../../Hooks/useLoadLanguage";
 import TranslateIcon from '@material-ui/icons/Translate';
 
-const Languages = () => {
+const Languages = (props) => {
     const dictionary = useSelector(state => state.dictionary);
     const onlineTsv = process.env.REACT_APP_TRANSLATION_GITHUB + "components/NavItems/languages.tsv";
     const keyword = useLoadLanguage("components/NavItems/languages.tsv", tsv);
@@ -30,6 +30,7 @@ const Languages = () => {
     const [anchorEl, setAnchorEl] = useState(null);
 
     const handleClick = event => {
+        console.log("");
         setAnchorEl(document.getElementById("language"));
     };
 
@@ -53,19 +54,24 @@ const Languages = () => {
     return (
         <div>
                 
-            <span   id="language" 
-                    style={{color: "#596977", 
-                            fontSize: "16px", 
-                            fontWeight: "500", 
-                            marginRight: "5px", 
-                            }}>
+            {props.variant !== "notext" &&
+                <span id="language"
+                    style={{
+                        color: "#596977",
+                        fontSize: "14px",
+                        fontWeight: "500",
+                        marginRight: "2px",
+                    }}>
 
-                            {keywordByLang(storeLanguage)}
-            </span>
+                    {keywordByLang(storeLanguage)}
+                </span>
+            
+            }
+            
 
             <Tooltip title={keyword("translations")} placement="bottom">
                 <IconButton onClick={handleClick}>
-                    <TranslateIcon fontSize="large" style={{ color: "#596977" }} />
+                    <TranslateIcon fontSize="medium" style={{ color: "#596977" }} />
                 </IconButton>
             </Tooltip>
 

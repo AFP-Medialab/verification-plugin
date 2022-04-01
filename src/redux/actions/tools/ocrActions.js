@@ -6,6 +6,14 @@ export const setOcrInput = (url) => {
         }
     }
 };
+export const setb64InputFile = (b64Content) => {
+    return {
+        type: "SET_B64_CONTENT",
+        payload: {
+            b64Content: b64Content,
+        }
+    }
+}
 
 export const setOcrBinaryImage = (binaryImage) => {
     return {

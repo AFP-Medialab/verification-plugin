@@ -93,3 +93,29 @@ disable_cache	Disable cache	Désactiver le cache	Desactivar el caché	απενε
 twittersna_invalid_credentials	Invalid authentication information	Les informations d'authentification ne sont pas valables	La información de autenticación no es válida	Μη έγκυρη πληροφόρηση αυθεντικοποίησης
 twittersna_start	Loading	Chargement	Cargando	Φόρτωση
 cardheader_parameters	Parameters	Paramètres	Parámetros	Παράμετροι
+explanation_keyword	Element to search, it can be a keyword, a URL or a Hastag	Élément à rechercher, il peut s'agir d'un mot-clé, d'une URL ou d'un hastag	Elemento para buscar, puede ser una palabra clave, una URL o una agonía	Στοιχείο για αναζήτηση, μπορεί να είναι μια λέξη-κλειδί, μια διεύθυνση URL ή ένα hastag
+explanation_dates	Dates between the tweets were analyzed for the search term indicated	Les dates entre les tweets ont été analysées pour le terme de recherche indiqué	Las fechas entre los tweets fueron analizadas para el término de búsqueda indicado	Οι ημερομηνίες μεταξύ των Tweets αναλύθηκαν για τον όρο αναζήτησης που υποδεικνύεται
+explanation_timezone	Specify the time zone of the dates introduced before	Spécifiez le fuseau horaire des dates introduites avant	Especifique la zona horaria de las fechas introducidas antes.	Καθορίστε τη ζώνη ώρας των ημερομηνιών που εισάγονται πριν
+explanation_exclude	Specify words that you don’t want to analyze in the search results	Spécifiez des mots que vous ne voulez pas analyser dans les résultats de la recherche	Especifique palabras que no desea analizar en los resultados de búsqueda	Καθορίστε λέξεις που δεν θέλετε να αναλύσετε στα αποτελέσματα αναζήτησης
+explanation_language	Specify the language in which the tweets are going to be analyzed	Spécifiez la langue dans laquelle les tweets vont être analysés	Especifique el idioma en el que se analizarán los tweets.	Καθορίστε τη γλώσσα στην οποία θα αναλυθούν τα tweets
+explanation_account	Specify the twitter account whose tweets are going to be analyzed	Spécifiez le compte Twitter dont les tweets vont être analysés	Especifique la cuenta de Twitter cuyos tweets se analizarán	Καθορίστε τον λογαριασμό Twitter του οποίου θα αναλυθούν τα tweets
+explanation_verified	Specify if you only want to analyze tweets of verified accounts	Spécifiez si vous voulez seulement analyser les tweets des comptes vérifiés	Especifique si solo desea analizar tweets de cuentas verificadas	Καθορίστε εάν θέλετε μόνο να αναλύσετε τα tweets των επαληθευμένων λογαριασμών
+explanation_media	Specify the media elements that you want to analyze	Spécifiez les éléments de support que vous souhaitez analyser	Especifique los elementos de medios que desea analizar.	Καθορίστε τα στοιχεία πολυμέσων που θέλετε να αναλύσετε
+explanation_cache	Specify if you want to ignore the caché of the server and process the search as a new one	Spécifiez si vous souhaitez ignorer le caché du serveur et traiter la recherche en tant que nouvelle	Especifique si desea ignorar el Caché del servidor y procese la búsqueda como una nueva	Καθορίστε εάν θέλετε να αγνοήσετε την Caché του διακομιστή και να επεξεργαστείτε την αναζήτηση ως ένα νέο
+twittersna_searchparameters	Search parameters	Paramètres de recherche	Parámetros de búsqueda	Παράμετροι αναζήτησης
+twittersna_title_timezone	Time zone of the dates	Fuseau horaire des dates	Zona horaria de las fechas	Ζώνη ώρας των ημερομηνιών
+twittersna_title_optional	Optional parameters	Paramètres facultatifs	Parámetros opcionales	Προαιρετικές παράμετροι
+twittersna_title_words	Words	Mots	Palabras	Λόγια
+twittersna_title_accounts	Accounts	Comptes	Cuentas	Λογαριασμοί
+twittersna_title_media	Media	Médias	Medios de comunicación	Μεσο ΜΑΖΙΚΗΣ ΕΝΗΜΕΡΩΣΗΣ
+twittersna_title_advanced	Advanced tools	Outils avancés	Herramientas avanzadas	Προχωρημένα Εργαλεία
+twitter_sna_searchelement	Search element	Élément de recherche	Elemento de búsqueda	Στοιχείο αναζήτησης
+twitter_sna_selectdate	Select a date	Sélectionnez une date	Seleccione una fecha	Επιλέξτε μια ημερομηνία
+twitter_sna_placholder_tweetedby	Twitter account name	Nom du compte Twitter	Nombre de la cuenta de Twitter	Όνομα λογαριασμού Twitter
+tweet_similarity_title	Tweet Similarity	Similarité des tweets	Tweet similitud	Tweet Ομοιότητα
+twittersna_title_time	Time	Temps	Hora	χρόνος
+twittersna_title_elements	Search elements	Éléments de recherche	Elementos de búsqueda	Στοιχεία αναζήτησης
+explanation_allelements	All the elements in this field must appear in the search results	Tous les éléments de ce champ doivent apparaître dans les résultats de la recherche	Todos los elementos en este campo deben aparecer en los resultados de búsqueda	Όλα τα στοιχεία σε αυτό το πεδίο πρέπει να εμφανίζονται στα αποτελέσματα αναζήτησης
+explanation_anyelements	At least one of the elements of this field must appear in the search results	Au moins un des éléments de ce champ doit apparaître dans les résultats de la recherche	Al menos uno de los elementos de este campo debe aparecer en los resultados de búsqueda	Τουλάχιστον ένα από τα στοιχεία αυτού του πεδίου πρέπει να εμφανίζεται στα αποτελέσματα αναζήτησης
+twittersna_field_all	All the elements	Tous les éléments	Todos los elementos	Όλα τα στοιχεία
+twittersna_field_any	Any of the elements	L'un des éléments	Cualquiera de los elementos	Οποιοδήποτε από τα στοιχεία

@@ -22,12 +22,13 @@ import {useParams} from "react-router-dom";
 import {KNOWN_LINKS} from "../../Assistant/AssistantRuleBook";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
-import { ReactComponent as AnalysisIcon } from '../../../NavBar/images/SVG/Video/Video_analysis.svg';
+import { ReactComponent as AnalysisIconImage } from "../../../NavBar/images/SVG/Image/Image_analysis.svg"
+
 import Grid from "@material-ui/core/Grid";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 
 const Analysis = () => {
-
+    const caa_analysis_url = process.env.REACT_APP_CAA_ANALYSIS_URL
     const {url} = useParams();
     const classes = useMyStyles();
     const keyword = useLoadLanguage("components/NavItems/tools/Analysis.tsv", tsv);
@@ -44,10 +45,10 @@ const Analysis = () => {
     const [urlDetected, setUrlDetected] = useState(false)
     const [submittedUrl, setSubmittedUrl] = useState(undefined); 
     const [reprocess, setReprocess] = useState(false);
-    const serviceUrl = "https://mever.iti.gr/caa/api/v4/images";
+    const serviceUrl = caa_analysis_url+"images";
 
     const [finalUrl, showFacebookIframe] = useGenerateApiUrl(serviceUrl, submittedUrl, reprocess);
-    useAnalysisWrapper(setAnalysisLoading, setAnalysisResult, serviceUrl, finalUrl, submittedUrl, keyword);
+    useAnalysisWrapper(setAnalysisLoading, setAnalysisResult, serviceUrl, finalUrl, submittedUrl, keyword, isLoading);
 
     const reprocessToggle = () => {
         setReprocess(!reprocess);
@@ -83,7 +84,7 @@ const Analysis = () => {
     return (
         <div>
 
-            <HeaderTool name={keywordAllTools("navbar_analysis_image")} description={keywordAllTools("navbar_analysis_image_description")} icon={<AnalysisIcon style={{ fill: "#51A5B2" }} />}/>
+            <HeaderTool name={keywordAllTools("navbar_analysis_image")} description={keywordAllTools("navbar_analysis_image_description")} icon={<AnalysisIconImage style={{ fill: "#51A5B2" }} />}/>
 
             <Card>
                 

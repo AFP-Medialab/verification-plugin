@@ -18,10 +18,15 @@ import CloseResult from "../../../../Shared/CloseResult/CloseResult";
 import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Magnifier.tsv";
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
-import OnClickInfo from "../../../../Shared/OnClickInfo/OnClickInfo";
 import ImageReverseSearch from "../../ImageReverseSearch"
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
+import {
+    localImageGoogleSearch, 
+    localImageBingSearch, 
+    localImageGoogleLens, 
+    localImageYandexSearch,
+    localImageBaiduSearch} from "../../../../Shared/ReverseSearch/reverseSearchUtils"
 
 const myTheme = {
     'loadButton.backgroundColor': "#151515",
@@ -103,20 +108,22 @@ const ImageResult = () => {
         let image_name = image.substring(image.lastIndexOf("/") + 1);
         return image_name.substring(0, image_name.lastIndexOf("."));
     };
-
-    const copyToClipBoard = (string) => {
-        let textArea = document.createElement("textarea");
-        textArea.innerHTML = string;
-        document.body.appendChild(textArea);
-        textArea.select();
-        document.execCommand('copy');
-        textArea.remove();
-    };
-
     const GoogleClick = () => {
-        copyToClipBoard(resultImage);
-        window.open("https://www.google.com/imghp?sbi=1", "_blank");
+        localImageGoogleSearch(resultImage)
     };
+
+    const BingClick = () => {
+        localImageBingSearch(resultImage);
+    }
+    const GoogleLens= () => {
+        localImageGoogleLens(resultImage)
+    }
+    const YandexClick = () => {
+        localImageYandexSearch(resultImage)
+    }
+    const BaiduClick = () => {
+        localImageBaiduSearch(resultImage)
+    }
 
     return (
         <Card>
@@ -212,93 +219,81 @@ const ImageResult = () => {
                 <Box m={2}/>
                 <Loop src={resultImage}/>
                 <Box m={2}/>
-                {
-                    !imageIsUrl ?
-                        <Grid
-                            container
-                            direction="column"
-                            justifyContent="center"
-                            alignItems="center"
-                            spacing={3}
-                        >
-                            <Grid item>
-                                <OnClickInfo keyword={"magnifier_tip"}/>
-                            </Grid>
-                            <Grid item>
-                                <Button color="primary"
-                                        variant="contained"
-                                        onClick={GoogleClick}>
-                                    {
-                                        keyword("magnifier_google")
-                                    }
-                                </Button>
-                            </Grid>
-                        </Grid>
-                        :
-                        <Grid
-                            container
-                            direction="row"
-                            justifyContent="center"
-                            alignItems="center"
-                            spacing={3}
-                        >
-                            <Grid item>
-                                <Button color="primary"
-                                        variant="contained"
-                                        onClick={() => ImageReverseSearch("google", original)}>
-                                    {
-                                        "Google " +  keyword("reverse_search")
-                                    }
-                                </Button>
-                            </Grid>
-                            <Grid item>
-                                <Button color="primary"
-                                        variant="contained"
-                                        onClick={() => ImageReverseSearch("baidu", original)}>
-                                    {
-                                        "Baidu " + keyword("reverse_search")
-                                    }
-                                </Button>
-                            </Grid>
-                            <Grid item>
-                                <Button color="primary"
-                                        variant="contained"
-                                        onClick={() => ImageReverseSearch("bing", original)}>
-                                    {
-                                        "Bing " + keyword("reverse_search")
-                                    }
-                                </Button>
-                            </Grid>
-                            <Grid item>
-                                <Button color="primary"
-                                        variant="contained"
-                                        onClick={() => ImageReverseSearch("tineye", original)}>
-                                    {
-                                        "Tineye " + keyword("reverse_search")
-                                    }
-                                </Button>
-                            </Grid>
-                            <Grid item>
-                                <Button color="primary"
-                                        variant="contained"
-                                        onClick={() => ImageReverseSearch("yandex", original)}>
-                                    {
-                                        "Yandex " + keyword("reverse_search")
-                                    }
-                                </Button>
-                            </Grid>
-                            <Grid item>
-                                <Button color="primary"
-                                        variant="contained"
-                                        onClick={() => ImageReverseSearch("reddit", original)}>
-                                    {
-                                        "Reddit " + keyword("reverse_search")
-                                    }
-                                </Button>
-                            </Grid>
-                        </Grid>
-
-                }
+                <Grid
+                    container
+                    direction="row"
+                    justifyContent="center"
+                    alignItems="center"
+                    spacing={3}
+                >
+                    <Grid item>
+                        <Button color="primary"
+                                variant="contained"
+                                onClick={GoogleClick}>
+                            {
+                                "Google " +  keyword("reverse_search")
+                            }
+                        </Button>
+                    </Grid>
+                    <Grid item>
+                        <Button color="primary"
+                                variant="contained"
+                                onClick={() => imageIsUrl ? ImageReverseSearch("bing", original) : BingClick()}>
+                            {
+                                "Bing " + keyword("reverse_search")
+                            }
+                        </Button>
+                    </Grid>
+                    <Grid item>
+                        <Button color="primary"
+                                variant="contained"
+                                onClick={YandexClick}>
+                            {
+                                "Yandex " + keyword("reverse_search")
+                            }
+                        </Button>
+                    </Grid>
+                    <Grid item>
+                        <Button color="primary"
+                                variant="contained"
+                                onClick={GoogleLens}>
+                            {
+                                "Google Lens " + keyword("reverse_search")
+                            }
+                        </Button>
+                    </Grid>
+                    <Grid item>
+                        <Button color="primary"
+                                variant="contained"
+                                onClick={BaiduClick}>
+                            {
+                                "Baidu " + keyword("reverse_search")
+                            }
+                        </Button>
+                    </Grid>
+                    {imageIsUrl ?
+                    <>
+                    <Grid item>
+                        <Button color="primary"
+                                variant="contained"
+                                onClick={() => ImageReverseSearch("tineye", original)}>
+                            {
+                                "Tineye " + keyword("reverse_search")
+                            }
+                        </Button>
+                    </Grid>
+                    <Grid item>
+                        <Button color="primary"
+                                variant="contained"
+                                onClick={() => ImageReverseSearch("reddit", original)}>
+                            {
+                                "Reddit " + keyword("reverse_search")
+                            }
+                        </Button>
+                    </Grid>
+                    </>: null }
+                </Grid>
+                        
             </div>
         </Card>
     )

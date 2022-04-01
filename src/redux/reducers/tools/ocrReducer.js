@@ -1,6 +1,7 @@
 const defaultState = {
     url: undefined,
     binaryImage: undefined,
+    b64Content: undefined,
     loading : false,
     fail: false,
     errorKey: null,
@@ -19,6 +20,7 @@ const ocrReducer = (state = defaultState, action) => {
         case "SET_OCR_INPUT":
         case "SET_OCR_RESULT":
         case "SET_IMAGE_BINARY":
+        case "SET_B64_CONTENT":
         case "SET_OCR_ERROR_KEY":
         case "SET_SCRIPTS":
         case "SET_SELECTED_SCRIPT":
@@ -29,6 +31,7 @@ const ocrReducer = (state = defaultState, action) => {
             return {...state,
                 url: undefined,
                 binaryImage: undefined,
+                b64Content: undefined,
                 loading : false,
                 errorKey: null,
                 fail: false,

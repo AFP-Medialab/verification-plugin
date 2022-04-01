@@ -5,6 +5,9 @@ import { setForensicsLoading, setForensicsResult } from "../../../../../redux/ac
 import { setError } from "../../../../../redux/actions/errorActions";
 
 const useGetImages = (url, keyword) => {
+    const envisu4_base_url = process.env.REACT_APP_CAA_ENVISU4_URL
+    const envisu4_utils_base_url = process.env.REACT_APP_CAA_ENVISU4_UTILS_URL
+
     const dispatch = useDispatch();
 
     //const gifTransparencyMasks = [];
@@ -26,7 +29,7 @@ const useGetImages = (url, keyword) => {
 
         const getResult = (hash) => {
             //console.log("TEST3");
-            axios.get("https://mever.iti.gr/envisu4/utils/process_filters?id=" + hash + "&threshold=" + threshold +"&cmap=" + colormap)
+            axios.get(envisu4_utils_base_url+"process_filters?id=" + hash + "&threshold=" + threshold +"&cmap=" + colormap)
                 .then(response => {
                     //console.log(response.data);
                     if (response.data != null) {
@@ -46,7 +49,7 @@ const useGetImages = (url, keyword) => {
 
         const waitUntilFinish = (id) => {
             //console.log("TEST2");
-            axios.get("https://mever.iti.gr/envisu4/api/v4/images/jobs/" + id)
+            axios.get(envisu4_base_url+"images/jobs/" + id)
                 .then((response) => {
                     if (response.data.status === "PROCESSING") {
                         setTimeout(function () {
@@ -68,17 +71,13 @@ const useGetImages = (url, keyword) => {
         if (url) {
             dispatch(setForensicsLoading(true));
             //console.log("TEST1");
-            axios.post("https://mever.iti.gr/envisu4/api/v4/images/jobs?url=" + encodeURIComponent(url))
+            axios.post(envisu4_base_url+"images/jobs?url=" + encodeURIComponent(url))
                 .then(response => waitUntilFinish(response.data.id))
                 .catch(error => {
                     handleError("forensic_error_" + error.status);
                 })
         }
-
-
-
-
-
+        // eslint-disable-next-line
     }, [url, keyword, dispatch]);
 };
 export default useGetImages;

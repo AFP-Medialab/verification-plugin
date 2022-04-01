@@ -16,6 +16,7 @@ import Tooltip from "@material-ui/core/Tooltip";
 import TranslateIcon from '@material-ui/icons/Translate';
 import Typography from "@material-ui/core/Typography";
 import {WarningOutlined} from "@material-ui/icons";
+import ImageReverseSearch from "../../../tools/ImageReverseSearch"
 
 import tsv from "../../../../../LocalDictionary/components/NavItems/tools/OCR.tsv";
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
@@ -28,6 +29,9 @@ import {
     setReprocessOpen,
     setSelectedScript
 } from "../../../../../redux/actions/tools/ocrActions";
+import {
+    localImageBingSearch, localImageGoogleLens, localImageYandexSearch
+} from "../../../../Shared/ReverseSearch/reverseSearchUtils"
 
 
 
@@ -47,7 +51,9 @@ const OcrResult = () => {
     const scripts = useSelector(state => state.ocr.scripts)
     const selectedScript = useSelector(state => state.ocr.selectedScript)
     const reprocessBlockOpen = useSelector(state => state.ocr.reprocessBlockOpen)
+    const b64Content = useSelector(state => state.ocr.b64Content)
 
+    const [imageIsUrl] = useState(inputUrl.startsWith("http:") || inputUrl.startsWith("https:"));
 
     const [tooltipOpen, setTooltipOpen] = useState(false)
     const [tooltipIndex, setTooltipIndex] = useState(0)
@@ -155,13 +161,21 @@ const OcrResult = () => {
         window.open(translate_url, "_blank")
     }
 
-    // Open yandex search
-    const searchYandex = function () {
-        let search_url = "https://yandex.com/images/search?rpt=imageview&url=" + encodeURIComponent(inputUrl);
-        window.open(search_url, "_blank")
+    const reverseSearch = (website) => {
+          ImageReverseSearch(website, inputUrl);
+      }; 
+
+    const GoogleLens = () =>{
+        localImageGoogleLens(b64Content)
     }
 
+    const YandexClick = () => {
+        localImageYandexSearch(b64Content)
+    }
 
+    const BingClick = () => {
+        localImageBingSearch(b64Content);
+    }
     //copy text to clipboard
     const copyText = (text) => {
         navigator.clipboard.writeText(text)
@@ -184,7 +198,6 @@ const OcrResult = () => {
             //add and remove listener on result change: react state variables don't update on native DOM listeners!
             window.addEventListener('resize', handleImageResizing);
             return () => {
-                console.log("removing")
                 window.removeEventListener('resize', handleImageResizing)
             };
         }
@@ -214,9 +227,31 @@ const OcrResult = () => {
                                     <canvas id={mainCanvasId} className={classes.ocrImageCanvas}/>
                                 </div>
                                 <Box m={2}/>
-                                <Button variant="outlined" color="primary" fullWidth onClick={() => {searchYandex()}}> 
-                                    {keyword("ocr_search_yandex")}
-                                </Button>
+                                <Grid
+                                        container
+                                        direction="row"
+                                        justifyContent="space-between"
+                                        alignItems="flex-start"
+                                        spacing={2}
+                                    > 
+                                    <Grid item xs={6}>
+                                        <Button variant="outlined" color="primary" fullWidth onClick={() => {imageIsUrl ? reverseSearch("yandex"): YandexClick()}}> 
+                                            {keyword("ocr_search_yandex")}
+                                        </Button>
+                                    </Grid>
+                                    <Grid item xs={6}>
+                                        <Button variant="outlined" color="primary" fullWidth onClick={() => {imageIsUrl? reverseSearch("bing"): BingClick()}}> 
+                                            {keyword("ocr_search_bing")}
+                                        </Button>
+                                    </Grid>
+                                    {!imageIsUrl ? 
+                                        <Grid item xs={6}>
+                                        <Button variant="outlined" color="primary" fullWidth onClick={() => {GoogleLens()}}> 
+                                            {keyword("ocr_search_google_lens")}
+                                        </Button>
+                                    </Grid> : null}
+                                                            
+                                </Grid>
                                 
                             </CardContent>
                         </Card>
@@ -273,14 +308,7 @@ const OcrResult = () => {
                                                 <TranslateIcon style={{ "marginRight": "10px" }} />{keyword("translate")}
                                             </Button>
                                         </Grid>
-
-                                        
-
-                                        
-
                                     </Grid>
-
-                                   
                                 </Box>
                             </CardContent>
                         </Card>

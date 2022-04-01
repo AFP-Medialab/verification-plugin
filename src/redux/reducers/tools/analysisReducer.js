@@ -33,7 +33,7 @@ const analysisReducer = (state = defaultState, action) => {
         case "SET_ANALYSIS_LOADING":
             return {...state, loading: action.payload};
         case "ANALYSIS_CLEAN_STATE":
-            return {...state, result:null, url:""};
+            return {...state, result:null, url:"", loading: false};
         default:
             return state;
     }
