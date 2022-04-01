@@ -14,7 +14,7 @@ import Button from "@material-ui/core/Button";
 import CastForEducationIcon from '@material-ui/icons/CastForEducation';
 import Divider from "@material-ui/core/Divider";
 import TextField from "@material-ui/core/TextField";
-import youCheckImage from "./Images/YouVerify_Logo.png"
+import youverifyImage from "./Images/YouVerify_Logo.png"
 import useLoadLanguage from "../../../Hooks/useLoadLanguage";
 import tsv from "../../../LocalDictionary/components/NavItems/ClassRoom.tsv";
 import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
@@ -315,11 +315,17 @@ const ClassRoom = () => {
                                 }
                             </TabPanel>
                             <TabPanel value={value} index={6}>
-                                <span>Game Here</span>
+                                <Iframe 
+                                        frameBorder="0"
+                                        url={keyword("quiz_url")}
+                                        allow="fullscreen"
+                                        height="450"
+                                        width="100%"
+                                    />
                             </TabPanel>
                         </Box>
-                        <a href="http://project-youcheck.com/" target="_blank" rel="noopener noreferrer">
-                            <img src={youCheckImage} width={"10%"} alt={youCheckImage}/>
+                        <a href={keyword("youverify_link")} target="_blank" rel="noopener noreferrer">
+                            <img src={youverifyImage} width={"10%"} alt={youverifyImage}/>
                         </a>
                         <Dialog
                             height={"400px"}
