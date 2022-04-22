@@ -156,7 +156,7 @@ const Analysis = () => {
                 <Box m={4}>
                     <Iframe
                         frameBorder="0"
-                        url={"https://caa.iti.gr/plugin_login_fb"}
+                        url={"https://mever.iti.gr/plugin_login_fb"}
                         allow="fullscreen"
                         height="400"
                         width="100%"
