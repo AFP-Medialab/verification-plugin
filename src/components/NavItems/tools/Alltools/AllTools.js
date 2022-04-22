@@ -79,11 +79,16 @@ const AllTools = (props) => {
     };
 
     const handlePush = (path, mediaTool) => {
-        history.push({
-            pathname: "/app/tools/" + path,
-            state: { media: mediaTool }
-        })
-        
+        console.log("path   ", path)
+        if(path === "factcheck" || path === "xnetwork"){
+            window.open(process.env.REACT_APP_TSNA_SERVER + path, "_blank") 
+        }
+        else {
+            history.push({
+                pathname: "/app/tools/" + path,
+                state: { media: mediaTool }
+            })
+        }
     };
     
 

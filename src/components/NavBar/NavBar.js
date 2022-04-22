@@ -117,8 +117,9 @@ const NavBar = (props) => {
     
 
     const handleChange = (event, newValue) => {
+        let path = drawerItems[newValue].path;
         if (tabItems[newValue].path === "tools")
-            history.push("/app/tools/" + drawerItems[newValue].path);
+            history.push("/app/tools/" + path);
         else
             history.push("/app/" + tabItems[newValue].path)
     };
@@ -154,6 +155,8 @@ const NavBar = (props) => {
             } else {
                 if(newValue.title === "navbar_twitter_crowdtangle")
                     window.open(process.env.REACT_APP_TSNA_SERVER + "csvSna", "_blank");
+                else if (newValue.path === "factcheck" || newValue.path === "xnetwork")
+                    window.open(process.env.REACT_APP_TSNA_SERVER + newValue.path, "_blank") 
                 else{
                     history.push({
                         pathname: "/app/tools/" + newValue.path,
@@ -460,7 +463,7 @@ const NavBar = (props) => {
                 : <CovidSearchIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} title={keyword("navbar_covidsearch")}/>,
             iconColored: <CovidSearchIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title={keyword("navbar_covidsearch")}/>,
             tsvPrefix: "covidsearch",
-            path: "covidSearch",
+            path: "factcheck",
             pathGroup: "TOOL",
             type: keyword("navbar_category_search"),
             typeId: 3,
