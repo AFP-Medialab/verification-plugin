@@ -29,7 +29,7 @@ const HpTextResult = () => {
                         <div>
                             <Typography variant={"body1"} color={"textPrimary"} component={"div"} align={"left"}>
                                 {keyword("hp_warning")}
-                            </Typography>}
+                            </Typography>
                             <Box mb={0.5}/>
                         </div>
                     }
