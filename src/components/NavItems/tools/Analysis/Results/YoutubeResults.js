@@ -12,8 +12,6 @@ import AccordionSummary from "@material-ui/core/AccordionSummary";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import TableHead from "@material-ui/core/TableHead";
-import ImageList from "@material-ui/core/ImageList";
-import ImageListItem from "@material-ui/core/ImageListItem";
 import Button from "@material-ui/core/Button";
 import ImageReverseSearch from "../../ImageReverseSearch";
 import CloseResult from "../../../../Shared/CloseResult/CloseResult";
@@ -35,6 +33,8 @@ import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
 import SkipNextIcon from '@material-ui/icons/SkipNext';
 import SkipPreviousIcon from '@material-ui/icons/SkipPrevious';
 import Linkify from 'react-linkify';
+import ImageUrlGridList from "../../../../Shared/ImageGridList/ImageUrlGridList";
+
 
 const YoutubeResults = (props) => {
     const classes = useMyStyles();
@@ -48,7 +48,7 @@ const YoutubeResults = (props) => {
             ImageReverseSearch(website, image.url);
         }
     };
-    
+  
     var nextPage = props.report.pagination.next;
     const url = useState(nextPage);
     var last_page_all_comments;
@@ -767,13 +767,7 @@ const YoutubeResults = (props) => {
                                 <OnClickInfo keyword={"keyframes_tip"}/>
                                 <Box m={1}/>
                                 <div className={classes.imagesRoot}>
-                                    <ImageList rowHeight={160} className={classes.ImageList} cols={3}>
-                                        {thumbnails.map((tile, key) => (
-                                            <ImageListItem key={key} cols={1}>
-                                                <img src={tile.url} alt={'img'}/>
-                                            </ImageListItem>
-                                        ))}
-                                    </ImageList>
+                                  <ImageUrlGridList list={thumbnails} cols={3} style={{ maxHeigth: "none", height: "auto" }} />
                                 </div>
                                 <Box m={2}/>
                                 <Button className={classes.button} variant="contained" color={"primary"}

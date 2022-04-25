@@ -85,12 +85,6 @@ import Typography from "@material-ui/core/Typography";
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 
-//import TextField from '@material-ui/core/TextField';
-//import Autocomplete from '@material-ui/lab/Autocomplete';
-//import SearchIconMaterial from '@material-ui/icons/Search';
-
-
-
 function a11yProps(index) {
     return {
         id: `scrollable-force-tab-${index}`,
@@ -156,7 +150,7 @@ const NavBar = (props) => {
                 if(newValue.title === "navbar_twitter_crowdtangle")
                     window.open(process.env.REACT_APP_TSNA_SERVER + "csvSna", "_blank");
                 else if (newValue.path === "factcheck" || newValue.path === "xnetwork")
-                    window.open(process.env.REACT_APP_TSNA_SERVER + newValue.path, "_blank") 
+                    window.open(process.env.REACT_APP_TSNA_SERVER + newValue.path + "?lang="+currentLang, "_blank") 
                 else{
                     history.push({
                         pathname: "/app/tools/" + newValue.path,
