@@ -15,8 +15,6 @@ import Forensic from "../../NavItems/tools/Forensic/Forensic";
 import {Route, Switch} from 'react-router-dom'
 import Footer from "../../Shared/Footer/Footer";
 import TwitterSna from "../../NavItems/tools/TwitterSna/TwitterSna";
-import CovidSearch from "../../NavItems/tools/CovidSearch/CovidSearch";
-import XNetwork from "../../NavItems/tools/XNetwork/XNetwork";
 import OCR from "../../NavItems/tools/OCR/OCR";
 import Gif from "../../NavItems/tools/GIF/Gif";
 import DeepfakeImage from "../../NavItems/tools/Deepfake/DeepfakeImage";
@@ -95,15 +93,6 @@ const DrawerItem = (props) => {
         {
             content: <TwitterAdvancedSearch />,
             footer: <Footer type={"afp"} />
-        },
-        
-        {
-            content: <CovidSearch/>,
-            footer: <Footer type={"afp"}/>
-        },
-        {
-            content: <XNetwork/>,
-            footer: <Footer type={"afp"}/>
         },
         {
             content: <TwitterSna />,

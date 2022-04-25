@@ -15,13 +15,18 @@ export const useAnalysisWrapper = (setAnalysisLoading, setAnalysisResult, servic
        
         axios.get(serviceUrl+"/jobs/" + data.id)
             .then(response => {
-                //console.log(response);
                 if (response.status === 200 && response.data.status === "done") {
                     getReport(response.data.media_id, false)
-                } else if ( keyword("table_error_" +  response.data.status) !== "") {
+                }
+                else if (response.data.status === "unavailable"){
+                    if(!_.isUndefined(response.data.sjob.code))
+                        handleError("table_error_" + response.data.sjob.code)
+                    else{
+                        handleError("table_error_unavailable")
+                    }
+                }
+                else if ( keyword("table_error_" +  response.data.status) !== "") {
                     handleError("table_error_" + response.data.status);
-                } else if (response.data.status === "unavailable"){
-                    handleError("table_error_unavailable")
                 }
                 else {
                     if(cpt % 10 === 1){
@@ -61,7 +66,6 @@ export const useAnalysisWrapper = (setAnalysisLoading, setAnalysisResult, servic
             .catch(errors => handleError(errors));
     };
     const handleError = (error) => {
-        console.log("error   ", error)
         if (keyword(error) !== "")
             dispatch(setError((keyword(error))));
         else
