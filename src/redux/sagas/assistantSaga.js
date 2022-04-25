@@ -203,14 +203,15 @@ function* handleDbkfTextCall(action) {
 
     try {
         const text = yield select((state) => state.assistant.urlText)
-
         if (text) {
             let textToUse = text.length > 500 ? text.substring(0, 500) : text
+            /*
             let textRegex = /[\W]$/
+            //Infinite loop for some url exemple: https://twitter.com/TheArchitect009/status/1427280578496303107
             while(textToUse.match(textRegex)){
                 if(textToUse.length === 1) break
                 textToUse = text.slice(0, -1)
-            }
+            }*/
             let result = yield call(dbkfAPI.callTextSimilarityEndpoint, textToUse)
             let filteredResult = filterDbkfTextResult(result)
 
