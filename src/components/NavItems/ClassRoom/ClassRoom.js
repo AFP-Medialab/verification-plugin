@@ -121,11 +121,11 @@ const ClassRoom = () => {
                         return keyword("classroom_game");
                 case 4:
                     return keyword("classroom_gamification");
+                /*case 5:
+                    return keyword("classroom_gamification_2");*/
                 case 5:
-                    return keyword("classroom_gamification_2");
-                case 6:
                     return keyword("user_resources_title");
-                case 7:
+                case 6:
                     return keyword("glossary_title");
                 default:
                     return keyword("classroom_introduction");
@@ -174,9 +174,9 @@ const ClassRoom = () => {
                                 <Tab label={tabTitle(2)} {...a11yProps(2)} />
                                 <Tab label={tabTitle(3)} {...a11yProps(3)} />
                                 <Tab label={tabTitle(4)}  {...a11yProps(4)} />
+                                {/* <Tab label={tabTitle(5)}  {...a11yProps(5)} />*/}
                                 <Tab label={tabTitle(5)}  {...a11yProps(5)} />
                                 <Tab label={tabTitle(6)}  {...a11yProps(6)} />
-                                <Tab label={tabTitle(7)}  {...a11yProps(7)} />
                             </Tabs>
                             <TabPanel value={value} index={0}>
                                 {
@@ -262,7 +262,7 @@ const ClassRoom = () => {
                                     width="100%"
                                 />
                             </TabPanel>
-                            <TabPanel value={value} index={5}>
+                            {/*<TabPanel value={value} index={5}>
                                 <Iframe
                                     frameBorder="0"
                                     url={keyword("gamification_url_2")}
@@ -270,8 +270,8 @@ const ClassRoom = () => {
                                     height="450"
                                     width="100%"
                                 />
-                            </TabPanel>
-                            <TabPanel value={value} index={6}>
+                            </TabPanel>*/}
+                            <TabPanel value={value} index={5}>
                                 <Typography variant={"h5"}>{keyword("user_resources_intro")}</Typography>
                                 <Box m={2}/>
                                 <Typography variant="body1" align={"justify"}>{keyword("user_resources_intro_remote")}</Typography>
@@ -314,7 +314,7 @@ const ClassRoom = () => {
                                     }
                                 </Typography>
                             </TabPanel>
-                            <TabPanel value={value} index={7}>
+                            <TabPanel value={value} index={6}>
                                 {
                                     glossary().map((obj, key) => {
                                         return (
