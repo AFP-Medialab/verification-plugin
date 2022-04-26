@@ -60,6 +60,7 @@ const AllTools = (props) => {
         (state) => state.userSession && state.userSession.userAuthenticated
     );
     const [openAlert, setOpenAlert] = React.useState(false);
+    const currentLang = useSelector(state => state.language);
 
     const handleClick = (path, mediaTool, restrictions) => {
         //console.log(type);
@@ -360,7 +361,7 @@ const AllTools = (props) => {
                                     var element;
                                     if (value.title === "navbar_twitter_crowdtangle"){
                                         element = 
-                                            <Grid className={classes.toolCardStyle} item key={key} onClick={() => window.open(process.env.REACT_APP_TSNA_SERVER + "csvSna", "_blank")}>
+                                            <Grid className={classes.toolCardStyle} item key={key} onClick={() => window.open(process.env.REACT_APP_TSNA_SERVER + "csvSna?lang="+currentLang, "_blank")}>
                                                 <ToolCard
                                                     name={keyword(value.title)}
                                                     description={keyword(value.description)}

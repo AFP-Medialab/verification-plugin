@@ -97,9 +97,7 @@ const DrawerItem = (props) => {
         {
             content: <TwitterSna />,
             footer: <Footer type={"afp-usfd-eudisinfolab"} />
-        },
-        
-        
+        }            
     ];
 
     const dispatch = useDispatch();

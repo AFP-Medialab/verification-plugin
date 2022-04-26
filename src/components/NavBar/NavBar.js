@@ -148,7 +148,7 @@ const NavBar = (props) => {
                 }
             } else {
                 if(newValue.title === "navbar_twitter_crowdtangle")
-                    window.open(process.env.REACT_APP_TSNA_SERVER + "csvSna", "_blank");
+                    window.open(process.env.REACT_APP_TSNA_SERVER + "csvSna?lang="+currentLang, "_blank");
                 else if (newValue.path === "factcheck" || newValue.path === "xnetwork")
                     window.open(process.env.REACT_APP_TSNA_SERVER + newValue.path + "?lang="+currentLang, "_blank") 
                 else{
@@ -448,40 +448,9 @@ const NavBar = (props) => {
             typeId: 3,
             icons: [],
             toolRestrictions: [],
-        },
+        },        
         {
             id: 17,
-            title: "navbar_covidsearch",
-            description: "navbar_covidsearch_description",
-            icon: (drawerValue === 16) ? <CovidSearchIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title="Covid search"/>
-                : <CovidSearchIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} title={keyword("navbar_covidsearch")}/>,
-            iconColored: <CovidSearchIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title={keyword("navbar_covidsearch")}/>,
-            tsvPrefix: "covidsearch",
-            path: "factcheck",
-            pathGroup: "TOOL",
-            type: keyword("navbar_category_search"),
-            typeId: 3,
-            icons: ["new"],
-            toolRestrictions: [],
-        },
-        {
-            id: 18,
-            title: "navbar_xnetwork",
-            description: "navbar_xnetwork_description",
-            icon: (drawerValue === 17) ? <XnetworkIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title="Xnetwork"/>
-                : <XnetworkIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} title={keyword("navbar_xnetwork")}/>,
-            iconColored: <XnetworkIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title={keyword("navbar_xnetwork")}/>,
-            tsvPrefix: "xnetwork",
-            path: "xnetwork",
-            pathGroup: "TOOL",
-            type: keyword("navbar_category_search"),
-            typeId: 3,
-            icons: ["new"],
-            toolRestrictions: [],
-        },
-        
-        {
-            id: 19,
             title: "navbar_twitter_sna",
             description: "navbar_twitter_sna_description",
             icon: (drawerValue === 18) ? <TwitterSnaIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title="Twitter SNA" />
@@ -496,7 +465,7 @@ const NavBar = (props) => {
             toolRestrictions: ["lock"],
         },
         {
-            id: 20,
+            id: 18,
             title: "navbar_twitter_crowdtangle",
             description: "navbar_twitter_crowdtangle_description",
             icon: (drawerValue === 19) ? <CsvSnaIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title="Twitter SNA" />
@@ -509,6 +478,37 @@ const NavBar = (props) => {
             icons: [],
             toolRestrictions: [],
         },
+        {
+            id: 19,
+            title: "navbar_covidsearch",
+            description: "navbar_covidsearch_description",
+            icon: (drawerValue === 16) ? <CovidSearchIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title="Covid search"/>
+                : <CovidSearchIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} title={keyword("navbar_covidsearch")}/>,
+            iconColored: <CovidSearchIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title={keyword("navbar_covidsearch")}/>,
+            tsvPrefix: "covidsearch",
+            path: "factcheck",
+            pathGroup: "TOOL",
+            type: keyword("navbar_category_search"),
+            typeId: 3,
+            icons: ["new"],
+            toolRestrictions: [],
+        },
+        {
+            id: 20,
+            title: "navbar_xnetwork",
+            description: "navbar_xnetwork_description",
+            icon: (drawerValue === 17) ? <XnetworkIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title="Xnetwork"/>
+                : <XnetworkIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} title={keyword("navbar_xnetwork")}/>,
+            iconColored: <XnetworkIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title={keyword("navbar_xnetwork")}/>,
+            tsvPrefix: "xnetwork",
+            path: "xnetwork",
+            pathGroup: "TOOL",
+            type: keyword("navbar_category_search"),
+            typeId: 3,
+            icons: ["new"],
+            toolRestrictions: [],
+        },
+        
     ];
 
 

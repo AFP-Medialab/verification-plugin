@@ -30,7 +30,6 @@ const Languages = (props) => {
     const [anchorEl, setAnchorEl] = useState(null);
 
     const handleClick = event => {
-        console.log("");
         setAnchorEl(document.getElementById("language"));
     };
 
