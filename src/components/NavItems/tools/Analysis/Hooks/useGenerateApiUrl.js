@@ -7,7 +7,7 @@ const useGenerateApiUrl = (serviceUrl, url, reprocess) => {
 
     useEffect(() => {
         function facebooktokenChange(e){
-            if (e.origin === "https://caa.iti.gr") {
+            if (e.origin === "https://mever.iti.gr") {
                 setFacebookToken(e.data[1]);
                 setFacebookIframe(false);
             }

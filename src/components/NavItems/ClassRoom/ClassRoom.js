@@ -118,13 +118,15 @@ const ClassRoom = () => {
                 case 2:
                     return keyword("remote_resources_title");
                 case 3:
-                    return keyword("classroom_gamification");
+                        return keyword("classroom_game");
                 case 4:
-                    return keyword("user_resources_title");
+                    return keyword("classroom_gamification");
+                /*case 5:
+                    return keyword("classroom_gamification_2");*/
                 case 5:
-                    return keyword("glossary_title");
+                    return keyword("user_resources_title");
                 case 6:
-                    return keyword("classroom_game");
+                    return keyword("glossary_title");
                 default:
                     return keyword("classroom_introduction");
             }
@@ -172,6 +174,7 @@ const ClassRoom = () => {
                                 <Tab label={tabTitle(2)} {...a11yProps(2)} />
                                 <Tab label={tabTitle(3)} {...a11yProps(3)} />
                                 <Tab label={tabTitle(4)}  {...a11yProps(4)} />
+                                {/* <Tab label={tabTitle(5)}  {...a11yProps(5)} />*/}
                                 <Tab label={tabTitle(5)}  {...a11yProps(5)} />
                                 <Tab label={tabTitle(6)}  {...a11yProps(6)} />
                             </Tabs>
@@ -242,6 +245,15 @@ const ClassRoom = () => {
                                 }
                             </TabPanel>
                             <TabPanel value={value} index={3}>
+                                <Iframe 
+                                        frameBorder="0"
+                                        url={keyword("quiz_url")}
+                                        allow="fullscreen"
+                                        height="450"
+                                        width="100%"
+                                    />
+                            </TabPanel>
+                            <TabPanel value={value} index={4}>
                                 <Iframe
                                     frameBorder="0"
                                     url={keyword("gamification_url")}
@@ -250,7 +262,16 @@ const ClassRoom = () => {
                                     width="100%"
                                 />
                             </TabPanel>
-                            <TabPanel value={value} index={4}>
+                            {/*<TabPanel value={value} index={5}>
+                                <Iframe
+                                    frameBorder="0"
+                                    url={keyword("gamification_url_2")}
+                                    allow="fullscreen"
+                                    height="450"
+                                    width="100%"
+                                />
+                            </TabPanel>*/}
+                            <TabPanel value={value} index={5}>
                                 <Typography variant={"h5"}>{keyword("user_resources_intro")}</Typography>
                                 <Box m={2}/>
                                 <Typography variant="body1" align={"justify"}>{keyword("user_resources_intro_remote")}</Typography>
@@ -293,7 +314,7 @@ const ClassRoom = () => {
                                     }
                                 </Typography>
                             </TabPanel>
-                            <TabPanel value={value} index={5}>
+                            <TabPanel value={value} index={6}>
                                 {
                                     glossary().map((obj, key) => {
                                         return (
@@ -314,15 +335,7 @@ const ClassRoom = () => {
                                     })
                                 }
                             </TabPanel>
-                            <TabPanel value={value} index={6}>
-                                <Iframe 
-                                        frameBorder="0"
-                                        url={keyword("quiz_url")}
-                                        allow="fullscreen"
-                                        height="450"
-                                        width="100%"
-                                    />
-                            </TabPanel>
+                           
                         </Box>
                         <a href={keyword("youverify_link")} target="_blank" rel="noopener noreferrer">
                             <img src={youverifyImage} width={"10%"} alt={youverifyImage}/>
