@@ -640,7 +640,7 @@ const useMyStyles = makeStyles(theme => (
         backgroundSize: "contain",
         objectFit: "contain",
         objectPosition: "top",
-        maxHeight: "30vh",
+        maxHeight: "40vh",
 
         position: "relative",
         top: 0,
@@ -652,7 +652,7 @@ const useMyStyles = makeStyles(theme => (
         backgroundSize: "contain",
         objectFit: "contain",
         objectPosition: "top",
-        maxHeight: "30vh",
+        maxHeight: "40vh",
 
         position: "absolute",
         top: 0,
