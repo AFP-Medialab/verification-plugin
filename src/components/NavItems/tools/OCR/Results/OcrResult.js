@@ -189,21 +189,26 @@ const OcrResult = () => {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [fail, errorKey])
-
+    var ro = new ResizeObserver(entries => {
+        handleImageResizing()
+       
+      });
     // when the result comes in, draw the bounding boxes and add the event listener for changes to image size
     useEffect(() => {
         if (result && result.bounding_boxes.length) {
             drawBoundingBoxes(result.bounding_boxes)
 
-            //add and remove listener on result change: react state variables don't update on native DOM listeners!
-            window.addEventListener('resize', handleImageResizing);
+            //add and remove listener on result change: react state variables don't update on native DOM listeners!           
+            const parentImage = document.querySelector("#"+mainImageId);
+            ro.observe(parentImage);
+            
             return () => {
-                window.removeEventListener('resize', handleImageResizing)
+                ro.disconnect()
             };
         }
         // eslint-disable-next-line
     }, [result])
-
+   
 
     return (
         <Grid container spacing={4}>
@@ -216,7 +221,7 @@ const OcrResult = () => {
                             </CardHeader>
                             <LinearProgress hidden={!loading}/>
                             <CardContent className={classes.ocrImageCard}>
-                                <div className={classes.ocrImageDiv}>
+                                <div className={classes.ocrImageDiv} id="ocr_parent"> 
                                     <img id={mainImageId}
                                          crossOrigin={"anonymous"}
                                          className={classes.ocrImage}
@@ -224,7 +229,7 @@ const OcrResult = () => {
                                          alt={"input for ocr"}
                                     >
                                     </img>
-                                    <canvas id={mainCanvasId} className={classes.ocrImageCanvas}/>
+                                    <canvas id={mainCanvasId} className={classes.ocrImageCanvas} />
                                 </div>
                                 <Box m={2}/>
                                 <Grid
