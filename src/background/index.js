@@ -1,5 +1,11 @@
 // If your extension doesn't need a background script, just leave this file empty
 import ReactGA, { ga } from "react-ga"
+import {localImageGoogleSearch, 
+        localImageYandexSearch,
+        localImageBingSearch,
+        localImageBaiduSearch,
+        loadImage} 
+        from "../components/Shared/ReverseSearch/reverseSearchUtils"
 let page_name = 'popup.html';
 
 const trackingId = process.env.REACT_APP_GOOGLE_ANALYTICS_KEY;
@@ -40,7 +46,7 @@ const karmadecaySearch = function (word) {
     // from User JavaScript @https://static.karmadecay.com/js/karma-decay.user.js
     let search_url = "http://karmadecay.com/search?kdtoolver=b1&q=";
     let img = getUrlImg(word);
-    if (img !== "") {
+    if (img !== "" && img.startsWith("http")) {
         let url = search_url + encodeURIComponent(img);
         window.chrome.tabs.create({ url: url, selected: false });
         //Google analytics
@@ -50,14 +56,13 @@ const karmadecaySearch = function (word) {
 
 const thumbnailsSearch = function (word) {
     let url = word.linkUrl;
-    if (url !== "") {
+    if (url !== "" &&  url.startsWith("http")) {
         let lst = get_images(url);
         for (let index in lst) {
             window.chrome.tabs.create({ url: lst[index] });
         }
         // Google analytics
         rightClickEvent("YouTubeThumbnails", url)
-        //ga("send", "event", "ContextualMenu - ThumbnailYouTube", "click", url);
     }
 };
 
@@ -114,20 +119,21 @@ const ocr = function (word) {
 const imageReversesearch = function (word) {
     let search_url = "https://www.google.com/searchbyimage?image_url=";
     let img = getUrlImg(word);
-    if (img !== "") {
+    if (img !== "" && img.startsWith("http")) {
         let url = search_url + encodeURIComponent(img);
         window.chrome.tabs.create({ url: url, selected: false });
         // Google analytics
         rightClickEvent("Image Reverse Search Google", url)
-        //console.error("right Click : " + bool)
-        //ga("send", "event", "ContextualMenu - Google", "click", url);
+    }
+    else if(img !== "" ){
+        loadImage(img, localImageGoogleSearch)
     }
 };
 
 const imageReversesearchDBKF = function (word) {
     let search_url = "http://weverify-demo.ontotext.com/#!/similaritySearchResults&type=Images&params=";
     let img = getUrlImg(word);
-    if (img !== "") {
+    if (img !== "" && img.startsWith("http")) {
         let url = search_url + encodeURIComponent(img);
         window.chrome.tabs.create({ url: url, selected: false });
         // Google analytics
@@ -139,7 +145,7 @@ const imageReversesearchDBKF = function (word) {
 const videoReversesearchDBKF = function (word) {
     let search_url = "https://weverify-demo.ontotext.com/#!/similaritySearchResults&type=Videos&params=";
     let urlvideo = word.linkUrl;
-    if (urlvideo !== "") {
+    if (urlvideo !== "" && urlvideo.startsWith("http")) {
         let url = search_url + encodeURIComponent(urlvideo);
         window.chrome.tabs.create({ url: url, selected: false });
         // Google analytics
@@ -149,10 +155,9 @@ const videoReversesearchDBKF = function (word) {
 
 };
 
-
 const imageForensic = function (word) {
     let url = getUrlImg(word);
-    if (url !== "") {
+    if (url !== "" && url.startsWith("http")) {
         window.chrome.tabs.create({ url: page_name + "#/app/tools/forensic/" + encodeURIComponent(url) });
         // Google analytics
         rightClickEvent("Forensic", url)
@@ -163,31 +168,37 @@ const imageForensic = function (word) {
 const imageReversesearchBaidu = function (word) {
     let search_url = "https://image.baidu.com/n/pc_search?queryImageUrl=";
     let img = getUrlImg(word);
-    if (img !== "") {
+    if (img !== "" && img.startsWith("http")) {
         let url = search_url + encodeURIComponent(img) + "&fm=index&uptype=urlsearch";
         window.chrome.tabs.create({ url: url, selected: false });
         // Google analytics
         rightClickEvent("Image Reverse Search Baidu", url)
         //ga("send", "event", "ContextualMenu - Baidu", "click", url);
     }
+    else if(img !== ""){
+        loadImage(img, localImageBaiduSearch)
+    }
 };
 
 const imageReversesearchYandex = function (word) {
     let search_url = "https://yandex.com/images/search?url=";
     let img = getUrlImg(word);
-    if (img !== "") {
+    if (img !== "" && img.startsWith("http")) {
         let url = search_url + encodeURIComponent(img) + "&rpt=imageview";
         window.chrome.tabs.create({ url: url, selected: false });
         // Google analytics
         rightClickEvent("Image Reverse Search Yandex", url)
         //ga("send", "event", "ContextualMenu - Yandex", "click", url);
     }
+    else if(img !== ""){
+        loadImage(img, localImageYandexSearch)
+    }
 };
 
 const imageReversesearchTineye = function (word) {
     let search_url = "https://www.tineye.com/search?url=";
     let img = getUrlImg(word);
-    if (img !== "") {
+    if (img !== "" && img.startsWith("http")) {
         let url = search_url + encodeURIComponent(img);
         window.chrome.tabs.create({ url: url, selected: false });
         // Google analytics
@@ -200,12 +211,14 @@ const imageReversesearchTineye = function (word) {
 const imageReversesearchBing = function (word) {
     let search_url = "https://www.bing.com/images/search?q=imgurl:";
     let img = getUrlImg(word);
-    if (img !== "") {
+    if (img !== "" && img.startsWith("http")) {
         let url = search_url + encodeURIComponent(img) + "&view=detailv2&iss=sbi";
         window.chrome.tabs.create({ url: url, selected: false });
         // Google analytics
         rightClickEvent("Image Reverse Search Bing", url)
-        //ga("send", "event", "ContextualMenu - Bing", "click", url);
+    }
+    else if(img !== ""){
+        loadImage(img, localImageBingSearch)
     }
 };
 
