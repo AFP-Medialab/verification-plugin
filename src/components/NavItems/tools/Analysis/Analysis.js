@@ -13,7 +13,8 @@ import {useAnalysisWrapper} from "./Hooks/useAnalysisWrapper";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles"
 import Iframe from "react-iframe";
 import useGenerateApiUrl from "./Hooks/useGenerateApiUrl";
-import FacebookResults from "./Results/FacebookResults";
+import AFacebookResults from "./Results/AFacebookResults";
+import FacebookVideoDescription from "./Results/FacebookVideoDescription.js";
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/Analysis.tsv";
 import tsvAllTools from "../../../../LocalDictionary/components/NavItems/tools/Alltools.tsv";
@@ -29,6 +30,7 @@ import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import styles from "./Results/layout.module.css";
 import Alert from '@material-ui/lab/Alert';
 import _ from "lodash";
+
 
 
 const Analysis = () => {
@@ -189,7 +191,9 @@ const Analysis = () => {
             }
             {
                 (resultData  && resultData.platform.startsWith("facebook")) ?
-                    <FacebookResults report={resultData}/> : null
+                    <AFacebookResults report={resultData} cleanAnalysisState={cleanAnalysisState}>
+                        <FacebookVideoDescription classes={classes} keyword={keyword} report={resultData} />
+                    </AFacebookResults> : null
             }
             
             {

@@ -12,7 +12,8 @@ import {useAnalysisWrapper} from "../Analysis/Hooks/useAnalysisWrapper";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles"
 import Iframe from "react-iframe";
 import useGenerateApiUrl from "../Analysis/Hooks/useGenerateApiUrl";
-import FacebookResults from "./Results/FacebookResults";
+import AFacebookResults from "../Analysis/Results/AFacebookResults";
+import FacebookImageDescription from "./Results/FacebookImageDescription";
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/Analysis.tsv";
 import tsvAlltools from "../../../../LocalDictionary/components/NavItems/tools/Alltools.tsv";
@@ -172,7 +173,9 @@ const Analysis = () => {
             {
                 //(resultData !== null && resultUrl != null && resultUrl.startsWith("https://www.facebook.com/")) ?
                 (resultData  && resultData.platform.startsWith("facebook")) ?
-                    <FacebookResults report={resultData} image={imageFB}/> : null
+                    <AFacebookResults report={resultData} image={imageFB} cleanAnalysisState={cleanAnalysisState}>
+                        <FacebookImageDescription classes={classes} keyword={keyword} report={resultData} />
+                    </AFacebookResults> : null
             }
              
         </div>);

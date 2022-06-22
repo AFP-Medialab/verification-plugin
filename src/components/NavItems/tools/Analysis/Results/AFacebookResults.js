@@ -2,7 +2,6 @@ import { useDispatch } from "react-redux";
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 import React, { useState } from "react";
 import CloseResult from "../../../../Shared/CloseResult/CloseResult";
-import { cleanAnalysisState } from "../../../../../redux/actions/tools/image_analysisActions";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import Divider from "@material-ui/core/Divider";
@@ -16,34 +15,43 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import TableHead from "@material-ui/core/TableHead";
 import Button from "@material-ui/core/Button";
+import ImageReverseSearch from "../../ImageReverseSearch";
+import OnClickInfo from "../../../../Shared/OnClickInfo/OnClickInfo";
 import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Analysis.tsv";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
-import styles from "../../Analysis/Results/layout.module.css";
+import styles from "./layout.module.css";
 import axios from "axios";
-import { setAnalysisComments } from "../../../../../redux/actions/tools/image_analysisActions";
-import {setAnalysisLinkComments} from "../../../../../redux/actions/tools/image_analysisActions"
-import {setAnalysisVerifiedComments} from "../../../../../redux/actions/tools/image_analysisActions"
+import { setAnalysisComments } from "../../../../../redux/actions/tools/analysisActions";
+import {setAnalysisLinkComments} from "../../../../../redux/actions/tools/analysisActions"
+import {setAnalysisVerifiedComments} from "../../../../../redux/actions/tools/analysisActions"
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
 import SkipNextIcon from '@material-ui/icons/SkipNext';
 import SkipPreviousIcon from '@material-ui/icons/SkipPrevious';
 import Linkify from 'react-linkify';
-import CardMedia from "@material-ui/core/CardMedia";
+import ImageUrlGridList from "../../../../Shared/ImageGridList/ImageUrlGridList"
+import {submissionEvent} from "../../../../Shared/GoogleAnalytics/GoogleAnalytics"
+import _ from "lodash";
 
-const FacebookResults = (props) => {
+const AFacebookResults = (props) => {
+  const cleanAnalysisState=props.cleanAnalysisState
   const classes = useMyStyles();
   const keyword = useLoadLanguage(
     "components/NavItems/tools/Analysis.tsv",
     tsv
   );
+  
   const [count_comments, setCount_comments] = useState(1);
   const [count_verified_comments, setCount_verified_comments] = useState(1);
   const [count_link_comments, setCount_link_comments] = useState(1);
-
   
-  
+  const reverseSearch = (website) => {
+    for (let image of thumbnails) {
+      ImageReverseSearch(website, image.url);
+    }
+  };  
   var nextPage = props.report.pagination.next;
   const url = useState(nextPage);
     var last_page_all_comments;
@@ -68,6 +76,8 @@ const FacebookResults = (props) => {
     else{
       last_page_link_comments=1
     }
+
+  
   var index=0
   var real
 
@@ -86,7 +96,7 @@ const FacebookResults = (props) => {
   var previous_page_verified=url[0].substring(0, real+1)+(count_verified_comments-1)+"&type=vercoms"
   var next_page_link=url[0].substring(0,real+1)+(count_link_comments+1)+"&type=linkcoms"
   var previous_page_link=url[0].substring(0,real+1)+(count_link_comments-1)+"&type=linkcoms"
-
+  
   var last_page_all_comments1=url[0].substring(0, real+1)+(last_page_all_comments)+"&type=coms"
   var last_page_verified_comments1=url[0].substring(0, real+1)+(last_page_verified_comments)+"&type=vercoms"
   var last_page_link_comments1=url[0].substring(0, real+1)+(last_page_link_comments)+"&type=linkcoms"
@@ -94,7 +104,8 @@ const FacebookResults = (props) => {
   var first_page_all_comments1=url[0].substring(0, real+1)+(1)+"&type=coms"
   var first_page_verified_comments1=url[0].substring(0, real+1)+(1)+"&type=vercoms"
   var first_page_link_comments1=url[0].substring(0, real+1)+(1)+"&type=linkcoms"
-
+  
+ 
   const handleClick_first_page = (event) => {
     if(count_comments!==1){
       
@@ -110,7 +121,8 @@ const FacebookResults = (props) => {
   };
   const handleClick_last_page = (event) => {
     if(count_link_comments!==last_page_all_comments){
-
+    
+    
       axios.get("https://mever.iti.gr" + last_page_all_comments1).then((response) => {
         setCount_comments(last_page_all_comments);
         dispatch(setAnalysisComments(response.data));
@@ -176,7 +188,9 @@ const FacebookResults = (props) => {
       })
     }
   };
- 
+
+
+
   const handleClick_next_page = (event) => {
     if(count_comments!==last_page_all_comments){
       axios.get("https://mever.iti.gr" + next_page_comments).then((response) => {
@@ -250,7 +264,7 @@ const FacebookResults = (props) => {
 
     const handleClick_previous_page1 = (event) => {
           if(count_link_comments>1){
-            setCount_link_comments(count_link_comments - 1); 
+            setCount_link_comments(count_link_comments - 1);
             axios.get("https://mever.iti.gr" + previous_page_link).then((response) => {
               if(!response.data.error){
                 dispatch(setAnalysisLinkComments(response.data));
@@ -262,6 +276,34 @@ const FacebookResults = (props) => {
       }
     };
 
+  const handleClick_delete_result = (report) => {
+    let media_id = report.video_id ? report.video_id : report.image_id;
+    submissionEvent("delete media id "+ media_id)
+    axios.delete(" https://mever.iti.gr/caa/api/v4/media/reports/" + media_id).then(() => {
+      dispatch(cleanAnalysisState())
+    })
+    .catch(err => {
+      console.log("error calling delete service")
+      dispatch(cleanAnalysisState())
+    })
+  }
+  const titleReader = (report) => {
+    if(!_.isNil(report.video))
+      return {title : report.video.title, created_time : report.video.created_time};
+    else if (!_.isNil(report.image))
+      return {title : report.image.source, created_time : report.image.created_time};
+    return {title : null, created_time : null};
+  }
+  const thumbnailReader = (props) => {
+      let image_url =  props.report.thumbnails ? props.report.thumbnails.preferred.url : props.image
+      let google_reverse_search = null
+      if(!_.isNil(props.report.thumbnails))
+        google_reverse_search = props.report.thumbnails.preferred.google_reverse_image_search
+      else if (!_.isNil(props.report.representations[0]))
+        google_reverse_search = props.report.representations[0].google_reverse_image_search
+      return {image_url: image_url, google_reverse_search: google_reverse_search}
+  }
+
   const dispatch = useDispatch();
   const report = props.report;
   const verificationComments = report.comments ? report.comments : [];
@@ -269,10 +311,14 @@ const FacebookResults = (props) => {
   const verifiedComments = report.verification_comments ? report.verification_comments : [];
 
 
+  const thumbnails = report.thumbnails ? report.thumbnails.others : null;
+  const process_show_image = thumbnailReader(props)
+  const process_title = titleReader(report)
+
+  
   return (
     <div>
       {report !== null &&
-       
         (
           <Card>
             <CardHeader
@@ -281,131 +327,47 @@ const FacebookResults = (props) => {
             />
             <div className={classes.root2}>
               <CloseResult onClick={() => dispatch(cleanAnalysisState())} />
-
-
-              <CardMedia
-                className={classes.imageAnalysis}
-                image={props.image}
+              <Typography variant={"h5"}>{process_title.title}</Typography>
+              <Typography variant={"subtitle1"}>
+              {process_title.created_time}
+              </Typography>
+              <img
+                src={process_show_image.image_url}
+                onClick={() => {
+                  if(!_.isNil(process_show_image.google_reverse_search))
+                    window.open(
+                      process_show_image.google_reverse_search,
+                      "_blank"
+                    );
+                }}
+                className={classes.image}
+                alt={"img"}
               />
-
               <Box m={2} />
-                <Divider />
+              <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={() => handleClick_delete_result(report)} 
+                  >
+                  {keyword("facebook_delete_result")}
+              </Button>
               <Box m={2} />
-
-
+              <Divider />
+              <Box m={2} />
               <Typography variant={"h6"}>
-                {keyword("image_description")}
-              </Typography>
-              
-              <Typography
-                variant="body2"
-                color="textSecondary"
-                component="p"
-                className={classes.text}
-              >
-                {report.image.source}
-              </Typography>
+                {report.video && keyword("video_description")}
+                {report.image && keyword("image_description")}
+              </Typography>              
               <Box m={2} />
-              {report["image"] && (
-                <Table
-                  className={classes.table}
-                  size="small"
-                  aria-label="a dense table"
-                >
-                  <TableBody>
-                    {report.image_id && (
-                      <TableRow>
-                        <TableCell component="th" scope="row">
-                          {keyword("image_id")}
-                        </TableCell>
-                        <TableCell align="right">{report.image_id}</TableCell>
-                      </TableRow>
-                    )}
-                    {report.platform && (
-                                        <TableRow>
-                                            <TableCell component="th" scope="row">
-                                            {keyword("platform")}
-                                            </TableCell>
-                                            <TableCell align="right">{report.platform}</TableCell>
-                                        </TableRow>
-                                        )}
-                    {report.source.from && (
-                                        <TableRow>
-                                            <TableCell component="th" scope="row">
-                                            {keyword("source")}
-                                            </TableCell>
-                                            <TableCell align="right">{report.source.from}</TableCell>
-                                        </TableRow>
-                                        )}                    
-                    
-                    {report.image.length && (
-                      <TableRow>
-                        <TableCell component="th" scope="row">
-                          {keyword("facebook_video_name_3")}
-                        </TableCell>
-                        <TableCell align="right">
-                          {report.image.length}
-                        </TableCell>
-                      </TableRow>
-                    )}
-                    
-                    {report.image.can_tag && (
-                      <TableRow>
-                        <TableCell component="th" scope="row">
-                          {keyword("facebook_video_name_5")}
-                        </TableCell>
-                        <TableCell align="right">
-                          {"" + report.image.can_tag.join(", ")}
-                        </TableCell>
-                      </TableRow>
-                    )}
-                    
-                    {report.image.created_time && (
-                      <TableRow>
-                        <TableCell component="th" scope="row">
-                          {keyword("facebook_video_name_9")}
-                        </TableCell>
-                        <TableCell align="right">
-                          {report.image.created_time}
-                        </TableCell>
-                      </TableRow>
-                    )}
-                    {report.image.updated_time && (
-                      <TableRow>
-                        <TableCell component="th" scope="row">
-                          {keyword("facebook_video_name_8")}
-                        </TableCell>
-                        <TableCell align="right">
-                          {report.image.updated_time}
-                        </TableCell>
-                      </TableRow>
-                    )}
-                    {report.verification_cues.twitter_search_url && (
-                      <TableRow>
-                        <TableCell component="th" scope="row">
-                          {keyword("twitter_search")}
-                        </TableCell>
-                        <TableCell align="right">
-                        <a href={report.verification_cues.twitter_search_url}
-                                rel="noopener noreferrer"
-                                target="_blank">
-                          {report.verification_cues.twitter_search_url}</a>
-                        </TableCell>
-                      </TableRow>
-                    )}
-                  </TableBody>
-                </Table>
-              )}
+                {props.children}
               <div>
                 <Box m={4} />
                 <Typography variant={"h6"}>
                   {keyword("facebook_comment_title")}
                 </Typography>
-              
                 
                 <Box m={2} />
-                {
-                (
+                {verificationComments.length  && (
                   <Accordion>
                     <AccordionSummary
                       expandIcon={<ExpandMoreIcon />}
@@ -428,9 +390,10 @@ const FacebookResults = (props) => {
                       >
                         <TableHead>
                           <TableRow>
-                          <TableCell className={styles.size} align="center">
+                            
+                            <TableCell className={styles.size} align="center">
                               {keyword("twitter_user_title")}
-                              </TableCell>
+                            </TableCell>
                             <TableCell className={styles.size} align="center">
                               {keyword("twitter_user_name_13")}
                             </TableCell>
@@ -446,13 +409,13 @@ const FacebookResults = (props) => {
                           } 
                         >
                           {verificationComments.map((comment, key) => {
-                            
 
                             return (
                               <TableRow key={key}>
-                                <TableCell align="center" size="small">
+                                
+                                <TableCell align="center" scope="row" size="small">
                                   {comment.authorDisplayName}
-                                  </TableCell>
+                                </TableCell>
                                 <TableCell align="center" size="small">
                                   {comment.publishedAt}
                                 </TableCell>
@@ -465,7 +428,8 @@ const FacebookResults = (props) => {
                                   )}
   
                                 >{comment.textDisplay}</Linkify>
-                                </TableCell>
+                                  
+                                 </TableCell>
                               </TableRow>
                             );
                           })}
@@ -491,9 +455,10 @@ const FacebookResults = (props) => {
                       onClick={handleClick_previous_page}
                     >
                       <NavigateBeforeIcon/>
+                      
                     </Button>
                     <div className={styles.inline}>
-                    {"  "+ count_comments +"  "+keyword("page_number")+"  "+ last_page_all_comments+"  "}
+                    {"  "+ count_comments +"  "+keyword("page_number") +"  "+ last_page_all_comments+"  "}
                     </div>
                     <Button
                       variant="contained"
@@ -504,6 +469,7 @@ const FacebookResults = (props) => {
                       onClick={handleClick_next_page}
                     >
                       <NavigateNextIcon/>                    
+                      
                     </Button>
                     <Button
                       variant="contained"
@@ -517,8 +483,9 @@ const FacebookResults = (props) => {
                     </Button>
                   </Accordion>
                 )}
-                <Box m={2} />
+                 <Box m={2} />
                 {
+                  
                   <Accordion>
                     <AccordionSummary
                       expandIcon={<ExpandMoreIcon />}
@@ -541,8 +508,7 @@ const FacebookResults = (props) => {
                       >
                         <TableHead>
                           <TableRow>
-                            
-                            <TableCell className={styles.size} align="center">
+                          <TableCell className={styles.size} align="center">
                               {keyword("twitter_user_title")}
                             </TableCell>
                             <TableCell className={styles.size} align="center">
@@ -600,6 +566,7 @@ const FacebookResults = (props) => {
                       onClick={handleClick_previous_page2}
                     >  
                      <NavigateBeforeIcon/>                    
+                      
                     </Button>
                     <div className={styles.inline}>
                     {"  "+ count_verified_comments +"  "+keyword("page_number")+"  "+ last_page_verified_comments+"  "}
@@ -613,6 +580,7 @@ const FacebookResults = (props) => {
                       onClick={handleClick_next_page2}
                     >
                       <NavigateNextIcon/>                    
+                      
                     </Button>
                     
                     <Button
@@ -626,9 +594,11 @@ const FacebookResults = (props) => {
                       <SkipNextIcon/> 
                     </Button>
                   </Accordion>
-                }
+                }      
+                
                 <Box m={2} />
                 {
+                  
                   <Accordion>
                     <AccordionSummary
                       expandIcon={<ExpandMoreIcon />}
@@ -667,6 +637,7 @@ const FacebookResults = (props) => {
                           {linkComments.map((comment, key) => {
                             return (
                               <TableRow key={key}>
+                                
                                 <TableCell align="center" scope="row" size="small">
                                   {comment.authorDisplayName}
                                 </TableCell>
@@ -682,7 +653,8 @@ const FacebookResults = (props) => {
                                   )}
   
                                 >{comment.textDisplay}</Linkify>
-
+                                
+                                  
                                 </TableCell>
                               </TableRow>
                             );
@@ -709,6 +681,7 @@ const FacebookResults = (props) => {
                       onClick={handleClick_previous_page1}
                     >  
                      <NavigateBeforeIcon/>                    
+                      
                     </Button>
                     <div className={styles.inline}>
                     { "  "+ count_link_comments +"  "+keyword("page_number")+"  "+ last_page_link_comments+"  "}
@@ -722,6 +695,7 @@ const FacebookResults = (props) => {
                       onClick={handleClick_next_page1}
                     >
                       <NavigateNextIcon/>                    
+                      
                     </Button>
                     <Button
                       variant="contained"
@@ -737,11 +711,66 @@ const FacebookResults = (props) => {
                 }
 
               </div>
+              <Box m={4} />
               
+              {thumbnails !== null && (
+                <div>
+                  <Box m={4} />
+                  <Typography variant={"h6"}>
+                    {keyword("navbar_thumbnails")}
+                  </Typography>
+                  <Box m={1} />
+                  <OnClickInfo keyword={"keyframes_tip"} />
+                  <Box m={1} />
+                  <div className={classes.imagesRoot}>
+                    <ImageUrlGridList list={thumbnails} cols={3} style={{ maxHeigth: "none", height: "auto" }} />
+                  </div>
+                  <Box m={2} />
+                  <Button
+                    className={classes.button}
+                    variant="contained"
+                    color={"primary"}
+                    onClick={() => reverseSearch("google")}
+                  >
+                    {keyword("button_reverse_google")}
+                  </Button>
+                  <Button
+                    className={classes.button}
+                    variant="contained"
+                    color={"primary"}
+                    onClick={() => reverseSearch("yandex")}
+                  >
+                    {keyword("button_reverse_yandex")}
+                  </Button>
+                  <Button
+                    className={classes.button}
+                    variant="contained"
+                    color={"primary"}
+                    onClick={() => reverseSearch("tineye")}
+                  >
+                    {keyword("button_reverse_tineye")}
+                  </Button>
+                  {report["verification_cues"] &&
+                    report["verification_cues"]["twitter_search_url"] && (
+                      <Button
+                        className={classes.button}
+                        variant="contained"
+                        color={"primary"}
+                        onClick={() =>
+                          window.open(
+                            report["verification_cues"]["twitter_search_url"]
+                          )
+                        }
+                      >
+                        {keyword("button_reverse_twitter")}
+                      </Button>
+                    )}
+                </div>
+              )}
             </div>
           </Card>
         )}
     </div>
   );
 };
-export default FacebookResults;
+export default AFacebookResults;
