@@ -7,17 +7,13 @@ import Card from "@material-ui/core/Card";
 import {CardContent, TextField} from "@material-ui/core";
 import CardHeader from "@material-ui/core/CardHeader";
 import Divider from "@material-ui/core/Divider";
-import FileCopyOutlined from "@material-ui/icons/FileCopy"
 import Grid from "@material-ui/core/Grid";
 import IconButton from "@material-ui/core/IconButton";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import MenuItem from "@material-ui/core/MenuItem";
-import Tooltip from "@material-ui/core/Tooltip";
-import TranslateIcon from '@material-ui/icons/Translate';
 import Typography from "@material-ui/core/Typography";
 import {WarningOutlined} from "@material-ui/icons";
 import ImageReverseSearch from "../../../tools/ImageReverseSearch"
-
 import tsv from "../../../../../LocalDictionary/components/NavItems/tools/OCR.tsv";
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
@@ -32,6 +28,8 @@ import {
 import {
     localImageBingSearch, localImageGoogleLens, localImageYandexSearch
 } from "../../../../Shared/ReverseSearch/reverseSearchUtils"
+import { TextCopy } from "../../../../Shared/Utils/TextCopy";
+import { Translate } from "../../../../Shared/Utils/Transalate";
 
 
 
@@ -55,8 +53,6 @@ const OcrResult = () => {
 
     const [imageIsUrl] = useState(inputUrl.startsWith("http:") || inputUrl.startsWith("https:"));
 
-    const [tooltipOpen, setTooltipOpen] = useState(false)
-    const [tooltipIndex, setTooltipIndex] = useState(0)
     const [reprocessBlockSelected, selectReprocessBlock] = useState(null)
 
     const canvasPrefix = "cropCanvas"
@@ -155,12 +151,6 @@ const OcrResult = () => {
         }
     }
 
-    // forward text on to google translate
-    const googleTranslate = function (text) {
-        let translate_url = "https://translate.google.co.uk/?sl=auto&text=" + encodeURIComponent(text) + "&op=translate"
-        window.open(translate_url, "_blank")
-    }
-
     const reverseSearch = (website) => {
           ImageReverseSearch(website, inputUrl);
       }; 
@@ -175,10 +165,6 @@ const OcrResult = () => {
 
     const BingClick = () => {
         localImageBingSearch(b64Content);
-    }
-    //copy text to clipboard
-    const copyText = (text) => {
-        navigator.clipboard.writeText(text)
     }
 
     useEffect(() => {
@@ -281,37 +267,11 @@ const OcrResult = () => {
                                         spacing={2}
                                     >
                                         <Grid item xs={6}>
-                                            <Tooltip open={tooltipIndex === -1 && tooltipOpen}
-                                                disableFocusListener
-                                                disableHoverListener
-                                                disableTouchListener
-                                                title={keyword("tooltip_copy")}>
-                                                <Button variant="outlined" color="primary"
-                                                    size={"large"}
-                                                    fullWidth
-                                                    onClick={() => {
-                                                        setTooltipIndex(-1)
-                                                        setTooltipOpen(true)
-                                                        copyText(fullText)
-                                                        setTimeout(() => {
-                                                            setTooltipOpen(false)
-                                                        }, 1000)
-                                                    }}>
-                                                    <FileCopyOutlined
-                                                        style={{ "marginRight": "10px" }} />{keyword("copy_to_clipboard")}
-                                                </Button>
-                                            </Tooltip>
+                                            <TextCopy text={fullText} index="-1" type={"BUTTON"}/>
                                         </Grid>
 
                                         <Grid item xs={6}>
-                                            <Button variant="outlined" color="primary"
-                                                size={"large"}
-                                                fullWidth
-                                                onClick={() => {
-                                                    googleTranslate(fullText)
-                                                }}>
-                                                <TranslateIcon style={{ "marginRight": "10px" }} />{keyword("translate")}
-                                            </Button>
+                                           <Translate text={fullText} type={"BUTTON"}/>
                                         </Grid>
                                     </Grid>
                                 </Box>
@@ -379,27 +339,8 @@ const OcrResult = () => {
                                         </Grid>
 
                                         <Grid item xs={6} className={classes.ocrActionAreaRight}>
-
-                                            <Tooltip open={tooltipIndex === index && tooltipOpen}
-                                                     className={classes.assistantTooltip}
-                                                     disableFocusListener
-                                                     disableHoverListener
-                                                     disableTouchListener
-                                                     title={keyword("tooltip_copy")}>
-                                                <IconButton onClick={() => {
-                                                    copyText(ocrResult.text)
-                                                    setTooltipIndex(index)
-                                                    setTooltipOpen(true)
-                                                    setTimeout(() => {
-                                                        setTooltipOpen(false)
-                                                    }, 1000)
-                                                }}>
-                                                    <FileCopyOutlined color={"primary"}/>
-                                                </IconButton>
-                                            </Tooltip>
-                                            <IconButton onClick={() => googleTranslate(ocrResult.text)}>
-                                                <TranslateIcon color={"primary"}/>
-                                            </IconButton>
+                                            <TextCopy text={ocrResult.text} index={index} />
+                                            <Translate text={ocrResult.text} />
                                         </Grid>
                                     </Grid>
 
