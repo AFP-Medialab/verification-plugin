@@ -30,7 +30,9 @@ import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import styles from "./Results/layout.module.css";
 import Alert from '@material-ui/lab/Alert';
 import _ from "lodash";
-
+import {setAnalysisComments, 
+        setAnalysisLinkComments, 
+        setAnalysisVerifiedComments } from "../../../../redux/actions/tools/analysisActions";
 
 
 const Analysis = () => {
@@ -191,7 +193,11 @@ const Analysis = () => {
             }
             {
                 (resultData  && resultData.platform.startsWith("facebook")) ?
-                    <AFacebookResults report={resultData} cleanAnalysisState={cleanAnalysisState}>
+                    <AFacebookResults report={resultData} cleanAnalysisState={cleanAnalysisState}
+                    setAnalysisComments={setAnalysisComments}
+                    setAnalysisLinkComments={setAnalysisLinkComments}
+                    setAnalysisVerifiedComments={setAnalysisVerifiedComments}
+                    >
                         <FacebookVideoDescription classes={classes} keyword={keyword} report={resultData} />
                     </AFacebookResults> : null
             }

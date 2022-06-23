@@ -24,9 +24,10 @@ import {KNOWN_LINKS} from "../../Assistant/AssistantRuleBook";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 import { ReactComponent as AnalysisIconImage } from "../../../NavBar/images/SVG/Image/Image_analysis.svg"
-
 import Grid from "@material-ui/core/Grid";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
+import {setAnalysisComments, setAnalysisLinkComments, setAnalysisVerifiedComments } from "../../../../redux/actions/tools/image_analysisActions";
+
 
 const Analysis = () => {
     const caa_analysis_url = process.env.REACT_APP_CAA_ANALYSIS_URL
@@ -173,7 +174,14 @@ const Analysis = () => {
             {
                 //(resultData !== null && resultUrl != null && resultUrl.startsWith("https://www.facebook.com/")) ?
                 (resultData  && resultData.platform.startsWith("facebook")) ?
-                    <AFacebookResults report={resultData} image={imageFB} cleanAnalysisState={cleanAnalysisState}>
+                    <AFacebookResults 
+                        report={resultData} 
+                        image={imageFB} 
+                        cleanAnalysisState={cleanAnalysisState}
+                        setAnalysisComments={setAnalysisComments}
+                        setAnalysisLinkComments={setAnalysisLinkComments}
+                        setAnalysisVerifiedComments={setAnalysisVerifiedComments}
+                    >
                         <FacebookImageDescription classes={classes} keyword={keyword} report={resultData} />
                     </AFacebookResults> : null
             }
