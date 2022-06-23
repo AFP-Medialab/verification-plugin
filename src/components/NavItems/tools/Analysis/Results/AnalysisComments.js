@@ -19,6 +19,8 @@ import SkipNextIcon from '@material-ui/icons/SkipNext';
 import SkipPreviousIcon from '@material-ui/icons/SkipPrevious';
 import Typography from "@material-ui/core/Typography";
 import styles from "./layout.module.css"
+import { TextCopy } from "../../../../Shared/Utils/TextCopy";
+import { Translate } from "../../../../Shared/Utils/Transalate";
 
 const CommentsPanel = (props) => {
 
@@ -132,6 +134,7 @@ const CommentsPanel = (props) => {
                           className={styles.size} align="center">{keyword("twitter_user_name_13")}</TableCell>
                       <TableCell
                           align="center">{keyword("twitter_user_name_5")}</TableCell>
+                      <TableCell/>
                   </TableRow>
               </TableHead>
               <TableBody className={
@@ -163,6 +166,10 @@ const CommentsPanel = (props) => {
                                         )}
         
                                       >{comment.textDisplay}</Linkify>
+                                  </TableCell>
+                                  <TableCell>
+                                    <TextCopy text={comment.textDisplay} index={key} />
+                                    <Translate text={comment.textDisplay} />
                                   </TableCell>
                               </TableRow>);
                       })
@@ -228,6 +235,7 @@ const AnalysisComments = (props) => {
     const linkComments = report.link_comments ? report.link_comments : [];
     const verifiedComments = report.verification_comments ? report.verification_comments : [];
     return (
+      (verificationComments.length >= 1 || verifiedComments.length >= 1 || linkComments.length >= 1) &&
         <div>
             <Box m={4}/>
             <Typography variant={"h6"}>
