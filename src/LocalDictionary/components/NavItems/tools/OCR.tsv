@@ -18,9 +18,6 @@ ocr_script_label	Specify script	Spécifier le script	Especificar script	Καθο
 image_analysed	Image Analysed	Image analysée	Imagen analizada	Αναλύθηκε η εικόνα
 extracted_text	Extracted Text	Texte extrait	Texto extraído	Εξαγόμενο κείμενο
 complete_text	Complete Text	Texte complet	Texto completo	Πλήρες κείμενο
-copy_to_clipboard	Copy to Clipboard	Copier dans le presse-papier	Copiar al portapapeles	Αντιγραφή στο πρόχειρο
-translate	Translate	Traduire	Traducir	Μεταφράζω
 blocks	Blocks	Blocs	Bloques	Μπλοκ
-tooltip_copy	Copied!	Copié!	¡Copiado!	Αντιγραφή!
 reprocess_text	If you think the predicted language is wrong, you can reprocess this block by selecting the script you think this text is in from the box below.	Si vous pensez que la langue détectée est fausse, vous pouvez reproduire ce bloc en sélectionnant le script que vous pensez correct pour ce texte dans la case ci-dessous.	Si cree que el idioma detectado es incorrecto, puede reprocesar este bloque seleccionando el script que cree correcto para este texto desde el cuadro de abajo.	Εάν νομίζετε ότι η προβλεπόμενη γλώσσα είναι λάθος, μπορείτε να επανεπεξεργαστείτε αυτό το μπλοκ επιλέγοντας το σενάριο που νομίζετε ότι αυτό το κείμενο είναι από το παρακάτω πλαίσιο.
 reprocess_button	Reprocess Block	Bloc pour processer à nouveau	Bloque para volver a reprocesar	Μπλοκ επανεπεξεργασίας

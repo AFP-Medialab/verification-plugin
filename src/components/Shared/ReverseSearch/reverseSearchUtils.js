@@ -1,3 +1,22 @@
+export const loadImage = (src, reverseSearchFunction) => {
+    let img = new Image();
+    img.crossOrigin="anonymous"
+    img.onload = () => {
+        let canvas = document.createElement('canvas');
+        canvas.width = img.width;
+        canvas.height = img.height;
+        canvas.getContext('2d').drawImage(img, 0, 0);
+
+        // Get raw image data
+        reverseSearchFunction(canvas.toDataURL('image/png'));
+        canvas.remove();
+    };
+    img.onerror = (error) => {
+        
+    };
+    img.src = src;
+}
+
 export const localImageBaiduSearch = (content) => {
     let url = "https://graph.baidu.com/upload"
     const blob = b64toBlob(content, 'image/png')
@@ -111,7 +130,7 @@ export const localImageBingSearch = (content) => {
 }
 
 
-const b64toBlob = (content, contentType='', sliceSize=512) => {
+export const b64toBlob = (content, contentType='', sliceSize=512) => {
     let image = content.substring(content.indexOf(',') + 1)
     const byteCharacters = atob(image);
     const byteArrays = [];

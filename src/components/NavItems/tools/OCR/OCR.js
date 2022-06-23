@@ -74,6 +74,34 @@ const OCR = () => {
         }
     }
 
+    const localImage = (src) => {
+        let img = new Image();
+        img.crossOrigin="anonymous"
+        fetch(src).then((r) => {
+            return  r.blob()
+        }).then((blob) => {
+            let url = URL.createObjectURL(blob)
+            setUserInput(url);
+            let reader = new FileReader()
+            reader.readAsBinaryString(blob)
+            reader.onloadend = () => {
+                var base64String = reader.result;
+                dispatch(setOcrBinaryImage(base64String))
+                submitUrl(url)
+            }
+        });
+        img.onload = () => {
+            let canvas = document.createElement('canvas');
+            canvas.width = img.width;
+            canvas.height = img.height;
+            canvas.getContext('2d').drawImage(img, 0, 0);
+            // Get raw image data
+            dispatch(setb64InputFile(canvas.toDataURL('image/png')))
+            canvas.remove();
+        };
+        img.src = src;
+    };
+
     // store any changes to the input text box to local state
     useEffect(() => {
         if (!ocrInputUrl) {
@@ -86,8 +114,14 @@ const OCR = () => {
     useEffect(() => {
         if (url && url !== KNOWN_LINKS.OWN) {
             const uri = (url !== null) ? decodeURIComponent(url) : undefined;
-            setUserInput(uri);
-            submitUrl(uri)
+           
+            if(!uri.startsWith("http")){
+                localImage(uri)
+            }
+            else {
+                setUserInput(uri);
+                submitUrl(uri)
+            }
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [url]);
