@@ -12,7 +12,8 @@ import {useAnalysisWrapper} from "../Analysis/Hooks/useAnalysisWrapper";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles"
 import Iframe from "react-iframe";
 import useGenerateApiUrl from "../Analysis/Hooks/useGenerateApiUrl";
-import FacebookResults from "./Results/FacebookResults";
+import AFacebookResults from "../Analysis/Results/AFacebookResults";
+import FacebookImageDescription from "./Results/FacebookImageDescription";
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/Analysis.tsv";
 import tsvAlltools from "../../../../LocalDictionary/components/NavItems/tools/Alltools.tsv";
@@ -23,9 +24,10 @@ import {KNOWN_LINKS} from "../../Assistant/AssistantRuleBook";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 import { ReactComponent as AnalysisIconImage } from "../../../NavBar/images/SVG/Image/Image_analysis.svg"
-
 import Grid from "@material-ui/core/Grid";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
+import {setAnalysisComments, setAnalysisLinkComments, setAnalysisVerifiedComments } from "../../../../redux/actions/tools/image_analysisActions";
+
 
 const Analysis = () => {
     const caa_analysis_url = process.env.REACT_APP_CAA_ANALYSIS_URL
@@ -172,7 +174,16 @@ const Analysis = () => {
             {
                 //(resultData !== null && resultUrl != null && resultUrl.startsWith("https://www.facebook.com/")) ?
                 (resultData  && resultData.platform.startsWith("facebook")) ?
-                    <FacebookResults report={resultData} image={imageFB}/> : null
+                    <AFacebookResults 
+                        report={resultData} 
+                        image={imageFB} 
+                        cleanAnalysisState={cleanAnalysisState}
+                        setAnalysisComments={setAnalysisComments}
+                        setAnalysisLinkComments={setAnalysisLinkComments}
+                        setAnalysisVerifiedComments={setAnalysisVerifiedComments}
+                    >
+                        <FacebookImageDescription classes={classes} keyword={keyword} report={resultData} />
+                    </AFacebookResults> : null
             }
              
         </div>);
