@@ -384,6 +384,7 @@ const decideWhetherToScrape = (urlType, contentType) => {
         case KNOWN_LINKS.INSTAGRAM:
         case KNOWN_LINKS.FACEBOOK:
         case KNOWN_LINKS.TWITTER:
+        case KNOWN_LINKS.TELEGRAM:
             return true;
         case KNOWN_LINKS.MISC:
             if (contentType === null) {
@@ -451,12 +452,12 @@ const filterAssistantResults = (urlType, contentType, userInput, scrapeResult) =
             }
             break;
         case KNOWN_LINKS.TWITTER:
-            if (scrapeResult.images.length > 0) {
-                imageList = scrapeResult.images
-            }
-            if (scrapeResult.videos.length > 0) {
-                videoList = scrapeResult.videos
-            }
+            if (scrapeResult.images.length > 0) {imageList = scrapeResult.images}
+            if (scrapeResult.videos.length > 0) {videoList = scrapeResult.videos}
+            break;
+        case KNOWN_LINKS.TELEGRAM:
+            if (scrapeResult.images.length > 0) {imageList = scrapeResult.images}
+            if (scrapeResult.videos.length > 0) {videoList = scrapeResult.videos}
             break;
         case KNOWN_LINKS.MISC:
             if (contentType) {

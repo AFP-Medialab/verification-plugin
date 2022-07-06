@@ -18,6 +18,7 @@ export const KNOWN_LINKS = {
     INSTAGRAM: "instagram",
     FACEBOOK: "facebook",
     TIKTOK: "tiktok",
+    TELEGRAM: "telegram",
     YOUTUBE: "youtube",
     DAILYMOTION: "dailymotion",
     LIVELEAK: "liveleak",
@@ -53,6 +54,10 @@ export const KNOWN_LINK_PATTERNS = [
     {
         key: KNOWN_LINKS.FACEBOOK,
         patterns: ["^(https?:/{2})?(www.)?facebook.com/.*/(videos|photos|posts)/.*"]
+    },
+    {
+        key: KNOWN_LINKS.TELEGRAM,
+        patterns: ["^(https?:/{2})?(www.)?t.me/s/\\w*/\\d*"]
     },
     {
         key: KNOWN_LINKS.YOUTUBE,
@@ -104,7 +109,7 @@ export const ASSISTANT_ACTIONS = [
         icon:  keyframesIconOff,
         linksAccepted: [KNOWN_LINKS.YOUTUBE, KNOWN_LINKS.FACEBOOK, KNOWN_LINKS.TWITTER,
             KNOWN_LINKS.DAILYMOTION, KNOWN_LINKS.VIMEO, KNOWN_LINKS.YOUTUBE, KNOWN_LINKS.LIVELEAK,
-            KNOWN_LINKS.OWN],
+            KNOWN_LINKS.OWN, KNOWN_LINKS.TELEGRAM],
         cTypes: [CONTENT_TYPE.VIDEO],
         exceptions: [],
         useInputUrl: true,
