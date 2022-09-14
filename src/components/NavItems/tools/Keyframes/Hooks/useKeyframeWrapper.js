@@ -36,7 +36,7 @@ export const useKeyframeWrapper = (url, keyword) => {
             const interval = setInterval(() => {
                 if (data && data["status"].endsWith("COMPLETED"))
                 {
-                    lastGet("http://multimedia2.iti.gr/video_analysis/result/" + video_id + "_json", video_id);
+                    lastGet("https://multimedia2.iti.gr/video_analysis/result/" + video_id + "_json", video_id);
                     clearInterval(interval);
                 }
                 else if (data && data["status"] !== undefined && keyword("keyframes_error_" + data["status"]) !== "") {
@@ -63,7 +63,7 @@ export const useKeyframeWrapper = (url, keyword) => {
         const postUrl = (multimediaUrl, data) => {
             axios.post(multimediaUrl, data)
                 .then(response => {
-                    getUntil("http://multimedia2.iti.gr/video_analysis/status/" + response.data.video_id, response.data.video_id)
+                    getUntil("https://multimedia2.iti.gr/video_analysis/status/" + response.data.video_id, response.data.video_id)
                 })
                 .catch(errors => handleError(errors));
         };
@@ -72,7 +72,6 @@ export const useKeyframeWrapper = (url, keyword) => {
             return;
         dispatch(cleanKeyframesState());
         dispatch(setKeyframesLoading(true));
-        postUrl("http://multimedia2.iti.gr/video_analysis/subshot", jsonData);
-        //postUrl("http://multimedia2.iti.gr/video_analysis/segmentation", jsonData);
+        postUrl("https://multimedia2.iti.gr/video_analysis/subshot", jsonData);
     }, [url, keyword, dispatch]);
 };
