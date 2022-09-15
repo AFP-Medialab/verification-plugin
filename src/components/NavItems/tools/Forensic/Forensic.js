@@ -13,21 +13,16 @@ import tsv from "../../../../LocalDictionary/components/NavItems/tools/Forensic.
 import tsvAllTools from "../../../../LocalDictionary/components/NavItems/tools/Alltools.tsv";
 import tsvWarning from "../../../../LocalDictionary/components/Shared/OnWarningInfo.tsv";
 import {submissionEvent} from "../../../Shared/GoogleAnalytics/GoogleAnalytics";
-import LocalFile from "../Forensic/LocalFile/LocalFile";
-import {KNOWN_LINKS} from "../../Assistant/AssistantRuleBook";
 import { ReactComponent as ForensicIcon } from '../../../NavBar/images/SVG/Image/Forensic.svg';
-import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 import { createTheme, ThemeProvider } from '@material-ui/core/styles';
-import LinkIcon from '@material-ui/icons/Link';
-import FileIcon from '@material-ui/icons/InsertDriveFile';
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
-import Divider from '@material-ui/core/Divider';
 import Alert from '@material-ui/lab/Alert';
 import { useDispatch } from "react-redux";
-import { cleanForensicState } from "../../../../redux/actions/tools/forensicActions";
+import { cleanForensicState, setForensicKey } from "../../../../redux/actions/tools/forensicActions";
+import FolderOpenIcon from '@material-ui/icons/FolderOpen';
 
 const Forensic = () => {
     const {url} = useParams();
@@ -73,28 +68,27 @@ const Forensic = () => {
 
     });
 
-    // state used to toggle localFile view
-    const [localFile, setLocalFile] = useState(false);
+
     const resultUrl = useSelector(state => state.forensic.url);
     const resultData = useSelector(state => state.forensic.result);
     const isLoading = useSelector(state => state.forensic.loading);
     const gifAnimationState = useSelector(state => state.forensic.gifAnimation);
     const masks = useSelector(state => state.forensic.masks);
 
-    //console.log(gifAnimationState);
-
     const [input, setInput] = useState(resultUrl);
     const [image, setImage] = useState("");
     const [urlDetected, setUrlDetected] = useState(false)
     const [loaded, setLoaded] = useState(false);
+    const [type, setType] = useState("");
 
-    useGetImages(image, keyword);
+    useGetImages(image, type, keyword);
 
     const dispatch = useDispatch();
 
     
     const submitUrl = () => {
         if (input && input !== "") {
+            setType("url")
             setLoaded(true);
             submissionEvent(input);
             setImage(input);
@@ -104,13 +98,8 @@ const Forensic = () => {
     useEffect(() => {
         if (url) {
             dispatch(cleanForensicState());
-
-            if (url === KNOWN_LINKS.OWN) {
-                setLocalFile(true)
-            } else {
-                const uri = decodeURIComponent(url);
-                setInput(uri)
-            }
+            const uri = decodeURIComponent(url);
+            setInput(uri)
             setUrlDetected(true)
         }
 
@@ -128,47 +117,17 @@ const Forensic = () => {
         setImage("")
     }, [image]);
 
+    const handleUploadImg = (file) => {
+        if (file.size >= 4000000) {
+            dispatch(setForensicKey("forensic_too_big"))
+        } else {        
+            setImage(file)
+            setType("local")
+        }
+    }
+
     const loading = useSelector(state => state.forensic.loading);
 
-    const [classButtonURL, setClassButtonURL] = useState(null);
-    const [classButtonLocal, setClassButtonLocal] = useState(null);
-
-    const [classIconURL, setClassIconURL] = useState(classes.bigButtonIconSelectted);
-    const [classIconLocal, setClassIconLocal] = useState(classes.bigButtonIcon);
-
-    const [showURL, setShowURL] = useState(true);
-    const [showLocal, setShowLocal] = useState(false);
-
-    if (showURL && !showLocal && classButtonURL !== classes.bigButtonDivSelectted && classButtonLocal !== classes.bigButtonDiv) {
-        setClassButtonURL(classes.bigButtonDivSelectted);
-        setClassButtonLocal(classes.bigButtonDiv);
-    }
-
-    const clickURL = () => {
-        setClassButtonURL(classes.bigButtonDivSelectted);
-        setClassIconURL(classes.bigButtonIconSelectted);
-
-        setClassButtonLocal(classes.bigButtonDiv);
-        setClassIconLocal(classes.bigButtonIcon);
-
-        setShowURL(true);
-        setShowLocal(false);
-
-        setLocalFile(false);
-    }
-
-    const clickLocal = () => {
-        setClassButtonURL(classes.bigButtonDiv);
-        setClassIconURL(classes.bigButtonIcon);
-
-        setClassButtonLocal(classes.bigButtonDivSelectted);
-        setClassIconLocal(classes.bigButtonIconSelectted);
-
-        setShowURL(false);
-        setShowLocal(true);
-
-        setLocalFile(true);
-    }
     const resetImage = () => {
         setLoaded(false);
         setInput("");
@@ -189,114 +148,17 @@ const Forensic = () => {
                     className={classes.headerUpladedImage}
                 />
                 <Box p={3}>
+                
+                    <Box display={"block"}>
 
-                    <Grid container spacing={3} alignItems="center">
-                        <Grid item xs={6}>
-
-                            <Box p={3} className={classButtonURL} onClick={clickURL}>
-                                <Grid
-                                    container
-                                    direction="row"
-                                    alignItems="center"
-
-                                >
-                                    <Grid item>
-                                        <Box ml={1} mr={2}>
-                                            <LinkIcon className={classIconURL} />
-                                        </Box>
-
-                                    </Grid>
-
-                                    <Grid item>
-                                        <Grid
-                                            container
-                                            direction="column"
-                                            justifyContent="flex-start"
-                                            alignItems="flex-start"
-                                        >
-                                            <Grid item>
-                                                <Typography variant="body1" style={{ fontWeight: 600 }}>{keyword("linkmode_title")}</Typography>
-                                            </Grid>
-
-                                            <Box mt={1} />
-
-                                            <Grid item>
-                                                <Typography variant="body1">{keyword("linkmode_description")}</Typography>
-                                            </Grid>
-
-                                        </Grid>
-                                    </Grid>
-
-                                </Grid>
-                            </Box>
-
-                        </Grid>
-
-
-                        <Grid item xs={6}>
-
-                            <Box p={3} className={classButtonLocal} onClick={clickLocal}>
-                                <Grid
-                                    container
-                                    direction="row"
-                                    alignItems="center"
-
-                                >
-                                    <Grid item>
-                                        <Box ml={1} mr={2}>
-                                            <FileIcon className={classIconLocal} />
-                                        </Box>
-
-                                    </Grid>
-
-                                    <Grid item>
-                                        <Grid
-                                            container
-                                            direction="column"
-                                            justifyContent="flex-start"
-                                            alignItems="flex-start"
-                                        >
-                                            <Grid item>
-                                                <Typography variant="body1" style={{ fontWeight: 600 }}>{keyword("filemode_title")}</Typography>
-                                            </Grid>
-
-                                            <Box mt={1} />
-
-                                            <Grid item>
-                                                    <Typography variant="body1">{keyword("filemode_description")}</Typography>
-                                            </Grid>
-
-                                        </Grid>
-                                    </Grid>
-
-                                </Grid>
-                            </Box>
-
-                        </Grid>
-
-                    </Grid>
-
-                    <Box mt={4} mb={4}>
-                        <Divider />
-                    </Box>
-                    
-
-                    <Box display={localFile ? "none" : "block"}>
-
-                            <Alert severity="warning">{keywordWarning("warning_forensic")}</Alert>
-
+                        <Alert severity="warning">{keywordWarning("warning_forensic")}</Alert>
                         <Box mt={3}/>
-
                         <Grid container
                             direction="row"
                             spacing={3}
                             alignItems="center"
                         >
-
-
-
                             <Grid item xs>
-
                                 <TextField
                                     value={input}
                                     id="standard-full-width"
@@ -315,16 +177,17 @@ const Forensic = () => {
                                     {keyword("button_submit")}
                                 </Button>
                             </Grid>
+                            <Box m={2}/>
+                            <Button startIcon={<FolderOpenIcon/>}>
+                                <label htmlFor="fileInputMagnifier">
+                                    {keyword("button_localfile")}
+                                </label>
+                                <input id="fileInputMagnifier" type="file" hidden={true} onChange={e => {
+                                    handleUploadImg(e.target.files[0])
+                                }}/>
+                             </Button>
                         </Grid>
-                        
-                        
                     </Box>
-
-
-                    <Box display={!localFile ? "none" : "block"}>
-                        {localFile &&<LocalFile />}
-                    </Box>
-
                 
                 </Box>
             </Card>
@@ -343,6 +206,7 @@ const Forensic = () => {
                 <ForensicResults 
                     result={resultData}
                     url={resultUrl}
+                    type={type}
                     loaded={loaded}
                     gifAnimation={gifAnimationState}
                     resetImage={resetImage}
