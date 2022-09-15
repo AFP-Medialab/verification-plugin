@@ -51,3 +51,27 @@ export const setForensicMaskGif = (url) => {
         payload: url
     }
 };
+
+export const setForensicKey = (errorKey) => {
+    return {
+        type: "SET_FORENSIC_ERROR_KEY",
+        payload: {
+            errorKey: errorKey,
+        }
+    }
+};
+export const setForensicDisplayItem = (itemUrl) => {
+    return {
+        type: "SET_FORENSIC_DISPLAY_ITEM",
+        payload: itemUrl
+    }
+}
+
+export const setForensicInputFile = (localurl) => {
+    return {
+        type: "SET_FORENSIC_LOCAL_FILE",
+        payload: {
+            localurl: localurl,
+        }
+    }
+}
