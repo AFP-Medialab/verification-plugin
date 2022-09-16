@@ -4,7 +4,7 @@ import React, {useEffect} from "react";
 import {useDispatch} from "react-redux";
 import {selectTool} from "../../../redux/actions";
 import AllTools from "../../NavItems/tools/Alltools/AllTools";
-//import Analysis from "../../NavItems/tools/Analysis/Analysis";
+import Analysis from "../../NavItems/tools/Analysis/Analysis";
 //import Keyframes from "../../NavItems/tools/Keyframes/Keyframes";
 //import Thumbnails from "../../NavItems/tools/Thumbnails/Thumbnails";
 //import TwitterAdvancedSearch from "../../NavItems/tools/TwitterAdvancedSearch/TwitterAdvancedSearch";
@@ -13,7 +13,7 @@ import AllTools from "../../NavItems/tools/Alltools/AllTools";
 //import VideoRights from "../../NavItems/tools/VideoRights/VideoRights";
 //import Forensic from "../../NavItems/tools/Forensic/Forensic";
 import {Route, Routes} from 'react-router-dom'
-//import Footer from "../../Shared/Footer/Footer";
+import Footer from "../../Shared/Footer/Footer";
 //import TwitterSna from "../../NavItems/tools/TwitterSna/TwitterSna";
 //import OCR from "../../NavItems/tools/OCR/OCR";
 //import Gif from "../../NavItems/tools/GIF/Gif";
@@ -31,11 +31,11 @@ const DrawerItem = ({drawerItems}) => {
             content: <AllTools tools={drawerItems}/>,
             footer: <div/>
         },
-       /* {
+       {
             content: <Analysis/>,
             footer: <Footer type={"iti"}/>
         },
-        {
+        /*{
             content: <Keyframes/>,
             footer: <Footer type={"iti"}/>
         },

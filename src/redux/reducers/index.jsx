@@ -9,6 +9,7 @@ import toolReducer from './tools/toolReducer';
 import assistantReducer from './assistantReducer';
 import humanRightsCheckBoxReducer from './humanRightsCheckBoxReducer';
 import interactiveExplanationReducer from './interactiveExplanationReducer';
+import analysisReducer from './tools/analysisReducer';
 
 
 
@@ -22,6 +23,7 @@ const allReducers = combineReducers({
     interactiveExplanation : interactiveExplanationReducer,
     error : errorReducer,
     userSession : authenticationReducer,
+    analysis: analysisReducer,
     assistant : assistantReducer,
     
 })
