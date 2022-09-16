@@ -21,7 +21,8 @@ import { createTheme, ThemeProvider } from '@material-ui/core/styles';
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import Alert from '@material-ui/lab/Alert';
 import { useDispatch } from "react-redux";
-import { cleanForensicState, setForensicKey } from "../../../../redux/actions/tools/forensicActions";
+import { cleanForensicState } from "../../../../redux/actions/tools/forensicActions";
+import { setError } from "../../../../redux/actions/errorActions";
 import FolderOpenIcon from '@material-ui/icons/FolderOpen';
 
 const Forensic = () => {
@@ -118,8 +119,8 @@ const Forensic = () => {
     }, [image]);
 
     const handleUploadImg = (file) => {
-        if (file.size >= 4000000) {
-            dispatch(setForensicKey("forensic_too_big"))
+        if (file.size >= 6000000) {
+            dispatch(setError(keyword("forensic_too_big")))
         } else {        
             setImage(file)
             setType("local")

@@ -219,7 +219,7 @@ const NavBar = (props) => {
             id: 2,
             title: "navbar_analysis_video",
             description: "navbar_analysis_description",
-            icon: (drawerValue === 1) ? <AssistantIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title="Video analysis"/>
+            icon: (drawerValue === 1) ? <AnalysisIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title="Video analysis"/>
                 : <AnalysisIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} title={keyword("navbar_analysis_video")}/>,
             iconColored: <AnalysisIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title={keyword("navbar_analysis_video")}/>,
             tsvPrefix: "api",
