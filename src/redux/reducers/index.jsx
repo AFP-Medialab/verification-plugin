@@ -7,6 +7,8 @@ import languageReducer from './languageReducer'
 import navReducer from './navReducer';
 import toolReducer from './tools/toolReducer';
 import assistantReducer from './assistantReducer';
+import humanRightsCheckBoxReducer from './humanRightsCheckBoxReducer';
+import interactiveExplanationReducer from './interactiveExplanationReducer';
 
 
 
@@ -16,6 +18,8 @@ const allReducers = combineReducers({
     dictionary : dictionaryReducer,
     nav : navReducer,
     tool : toolReducer,
+    humanRightsCheckBox : humanRightsCheckBoxReducer,
+    interactiveExplanation : interactiveExplanationReducer,
     error : errorReducer,
     userSession : authenticationReducer,
     assistant : assistantReducer,

@@ -52,17 +52,21 @@ export const selectTool = createAction("SELECT_TOOL")
     }
 };*/
 
-export const toggleHumanRightsCheckBox = () => {
+export const toggleHumanRightsCheckBox = createAction("TOGGLE_HUMAN_RIGHTS_CHECKBOX")
+
+/*export const toggleHumanRightsCheckBox = () => {
     return {
         type : "TOGGLE_HUMAN_RIGHTS_CHECKBOX"
     }
-};
+};*/
 
-export const toggleUnlockExplanationCheckBox = () => {
+export const toggleUnlockExplanationCheckBox = createAction("TOGGLE_INTERACTIVE_EXPLANATION_CHECKBOX");
+
+/*export const toggleUnlockExplanationCheckBox = () => {
     return {
         type : "TOGGLE_INTERACTIVE_EXPLANATION_CHECKBOX"
     }
-};
+};*/
 
 export const toggleGACheckBox = () => {
     return {

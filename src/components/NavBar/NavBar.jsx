@@ -2,7 +2,7 @@
 import Box from '@mui/material/Box';
 import { useDispatch, useSelector } from "react-redux";
 import Languages from "../NavItems/languages/languages";
-//import Tutorial from "../NavItems/tutorial/tutorial";
+import Tutorial from "../NavItems/tutorial/tutorial";
 import React, { useEffect, memo, useState, createRef } from 'react';
 import clsx from 'clsx';
 import Drawer from '@mui/material/Drawer';
@@ -23,7 +23,7 @@ import history from '../Shared/History/History';
 import { cleanError } from "../../redux/actions/errorActions";
 import TabItem from "./TabItem/TabItem";
 import ClassRoom from "../NavItems/ClassRoom/ClassRoom";
-//import Interactive from "../NavItems/Interactive/Interactive";
+import Interactive from "../NavItems/Interactive/Interactive";
 import About from "../NavItems/About/About";
 import Assistant from "../NavItems/Assistant/Assistant";
 import MySnackbar from "../MySnackbar/MySnackbar";
@@ -539,8 +539,7 @@ const NavBar = (props) => {
             title: "navbar_tuto",
             icon: (tabValue === 2) ? <GuideIcon width="30px" height="30px" style={{ fill: "#51A5B2" }} />
                 : <GuideIcon width="30px" height="30px" style={{ fill: "#4c4c4c" }} />,
-            //content: <Tutorial />,
-            content: <div />,
+            content: <Tutorial />,
             path: "tutorial",
             pathGroup: "OTHER",
             footer: <Footer type={"afp"} />,
@@ -552,8 +551,7 @@ const NavBar = (props) => {
             title: "navbar_quiz",
             icon: (tabValue === 3) ? <InteractiveIcon width="30px" height="30px" style={{ fill: "#51A5B2" }} />
                 : <InteractiveIcon width="30px" height="30px" style={{ fill: "#4c4c4c" }} />,
-            //content: <Interactive />,
-            content: <div />,
+            content: <Interactive />,
             path: "interactive",
             pathGroup: "OTHER",
             footer: <Footer type={"afp"} />,
