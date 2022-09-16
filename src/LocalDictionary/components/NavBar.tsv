@@ -1,0 +1,42 @@
+	en	fr	es	el
+navbar_tools	Tools	Outils	Herramientas	Εργαλεία
+navbar_about	About	A propos	Sobre nosotros	Σχετικά με
+navbar_tuto	Tutorial	Tutoriel	Guía	Οδηγός
+navbar_twitter_sna	Twitter SNA.	Twitter SNA.	Twitter SNA.	Twitter SNA.
+navbar_classroom	Classroom	Salle de cours	Aula	ΣΧΟΛΙΚΗ ΑΙΘΟΥΣΑ
+navbar_quiz	Demo	Demo	Demo	Διαδήλωση
+navbar_analysis	Video analysis	Analyse	Video análisis	Ανάλυση
+navbar_keyframes	Keyframes	Images clés	Fotogramas clave	Χαρακτηριστικά καρέ
+navbar_thumbnails	Thumbnails	Imagettes	Miniaturas	Μικρογραφίες
+navbar_twitter	Tw. search	Recherche Tw.	Búsqueda Tw.	Αναζήτηση στο Twitter
+navbar_magnifier	Magnifier	Loupe	Lupa	Μεγεθυντικός φακός
+navbar_metadata	Metadata	Metadonnées	Metadatos	Μεταδεδομένα
+navbar_rights	Video rights	Droits vidéo	Derechos video	Δικαιώματα βίντεο
+navbar_forensic	Forensic	Forensic	Forensic	Αυθεντικότητας Εικόνων
+navbar_factCheck	Fact Check	Factuel	Factual	Έλεγχος γεγονότων
+navbar_covidsearch	Factcheck search	Recherche de Factchecks	Búsqueda de chequeos	Αναζήτηση Factcheck
+navbar_assistant	Assistant	Assistant	Asistente	Βοηθός
+navbar_xnetwork	Xnetwork	Xnetwork	Xnetwork	Xnetwork
+navbar_ocr	OCR	OCR	OCR	OCR
+navbar_gif	CheckGif	CheckGif	CheckGif	CheckGif
+cookies_decline	Decline	Refuser	Rechazar	Aπόρριψη
+cookies_accept	Accept	Accepter	Aceptar	Αποδοχή
+cookies_message	We use your browser local storage for your preferences (language, features) to make it work properly. We do not use any cookies : therefore no personal data will be saved and your browsing data will not be tracked. Nevertheless, we need your consent to use Google Analytics for the sole purpose of understanding which tools are being used and how, in order to enhance the verification plugin. If you do not consent, Google Analytics will be disabled as well as your preferences when you close your session.	Cette extension utilise le stockage local de votre navigateur afin d'y stocker vos préférences (langue, outils). Nous n'utilisons pas de cookies : aucune donnée personnelle (y compris vos données de navigation) n'est enregistrée. Nous avons en revanche besoin de votre autorisation pour utiliser Google Analytics, uniquement pour mieux comprendre les usages des outils de vérification afin d'améliorer le plugin. Si vous ne donnez pas votre autorisation, Google Analytics sera désactivé ainsi que vos paramètres si vous relancer une nouvelle session.	El plugin utiliza el almacenamiento local de su navegador para conservar sus preferencias (lengua, herramientas). No usamos cookies, no se guardan datos personales y tampoco datos de su navegación. Usamos en cambio Google Analytics con el único objetivo de entender mejor el uso de las herramientos y usar ese conocimiento para mejorar el plugin. Por lo tanto, necesitamos su autorización. Si no da su consentimiento, Google Analytics será desactivado y tambien sus preferencias si cierra su sessión.	Χρησιμοποιούμε τον τοπικό αποθηκευτικό χώρο του προγράμματος περιήγησης για τις προτιμήσεις σας (γλώσσα, λειτουργίες), ώστε να λειτουργεί σωστά. Δεν χρησιμοποιούμε cookies : επομένως δεν αποθηκεύονται προσωπικά δεδομένα και δεν παρακολουθούνται τα δεδομένα περιήγησής σας. Ωστόσο, χρειαζόμαστε τη συγκατάθεσή σας για να χρησιμοποιήσουμε το Google Analytics με μοναδικό σκοπό να κατανοήσουμε ποια εργαλεία χρησιμοποιούνται και πώς, προκειμένου να βελτιώσουμε το πρόσθετο επαλήθευσης. Εάν δεν συναινέσετε, το Google Analytics θα απενεργοποιηθεί καθώς και οι προτιμήσεις σας όταν κλείσετε τη συνεδρία σας.
+navbar_analysis_image	Image Analysis	Analyse d'image	Análisis de Imagen	Ανάλυση εικόνας
+navbar_analysis_video	Video Analysis	Analyse Vidéo	Análisis de Vídeo	Βίντεο ανάλυση
+navbar_twitter_crowdtangle	CSV Analysis	Analyse CSV	Analisis CSV	Ανάλυση CSV
+navbar_deepfake_image	Deepfake	Deepfake	Deepfake	Deepfake
+navbar_geolocation	Geolocalizer	Géolocalisation	Geolocalizador	Geolocalizer
+navbar_verification	Verification	Vérification	Verificación	Επαλήθευση
+navbar_verification_short	Verifi...	Vérifi...	Verifi...	Επαλή...
+navbar_learning	Learning	Apprendre	Aprender	Μάθηση
+navbar_learning_short	Learning	Appre...	Aprend...	Μάθηση
+navbar_more	More	Plus	Más	Περισσότερα
+navbar_more_short	More	Plus	Más	Περισσ...
+navbar_deepfake_video	Deepfake	Deepfake	Deepfake	Deepfake
+navbar_category_general	General	Général	General	Γενικά
+navbar_category_video	Video	Vidéo	Video	βίντεο
+navbar_category_image	Image	Image	Imagen	Εικόνα
+navbar_category_search	Search	Recherche	Busqueda	Αναζήτηση
+navbar_category_data	Data analysis	Analyse des données	Análisis de datos	Ανάλυση δεδομένων
+navbar_collapse	Hide	Masquer	Ocultar	Απόκρυψη
