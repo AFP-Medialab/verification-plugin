@@ -23,7 +23,7 @@
     "mapbox-gl": "^2.6.1",
     "material-table": "^1.63.0",
     "moment": "^2.29.3",
-    "moment-timezone": "0.5.33",
+    "moment-timezone": "0.5.35",
     "querystring": "^0.2.1",
     "react": "^17.0.2",
     "react-compare-image": "^3.1.0",

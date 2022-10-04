@@ -1,10 +1,10 @@
 import { useEffect } from "react";
 import axios from "axios"
 import { useDispatch } from "react-redux";
-import { setForensicsLoading, setForensicsResult } from "../../../../../redux/actions/tools/forensicActions";
+import { setForensicsLoading, setForensicsResult, setForensicDisplayItem } from "../../../../../redux/actions/tools/forensicActions";
 import { setError } from "../../../../../redux/actions/errorActions";
 
-const useGetImages = (url, keyword) => {
+const useGetImages = (url, type, keyword) => {
     const envisu4_base_url = process.env.REACT_APP_CAA_ENVISU4_URL
     const envisu4_utils_base_url = process.env.REACT_APP_CAA_ENVISU4_UTILS_URL
 
@@ -19,6 +19,7 @@ const useGetImages = (url, keyword) => {
     useEffect(() => {
 
         const handleError = (e) => {
+            //console.log("error key", e)
             if (keyword(e) !== "")
                 dispatch(setError(keyword(e)));
             else
@@ -33,8 +34,7 @@ const useGetImages = (url, keyword) => {
                 .then(response => {
                     //console.log(response.data);
                     if (response.data != null) {
-                        //getTransparent(response.data.id, url, response.data)
-                        //dispatch(setForensicsResult(url, response.data, false, false));
+                        //getTransparent(response.data.id, url, response.data)                        
                         dispatch(setForensicsResult(url, response.data, false, false));
                     } else {
                         handleError("forensic_error_" + response.data.status);
@@ -57,6 +57,7 @@ const useGetImages = (url, keyword) => {
                         }, 2000);
                     } else if (response.data.status === "COMPLETED") {
                         getResult(response.data.itemHash);
+                        dispatch(setForensicDisplayItem(type === "local" ? response.data.displayItem : url))
                         //getResult(id);
                     } else {
                         handleError("forensic_error_" + response.data.status);
@@ -67,15 +68,55 @@ const useGetImages = (url, keyword) => {
                 })
         };
 
+        const configService = (type) =>
+        {
+            switch (type) {
+                case "local":
+                    var bodyFormData = new FormData();
+                    bodyFormData.append('file', url);
+        
+                    return {
+                        method: 'post',
+                        url: envisu4_base_url + "images/jobs",
+                        data: bodyFormData,
+                        headers: { 
+                            "Content-Type": "multipart/form-data",
+                        },
+                    } 
+                case "url":
+                    return {
+                        method: 'post', 
+                        url: envisu4_base_url+"images/jobs?url=" + encodeURIComponent(url)
+                    }
+                default:
+                    break;
+            }
+            
+        }
+    
 
-        if (url) {
+
+        if (url) {            
             dispatch(setForensicsLoading(true));
             //console.log("TEST1");
-            axios.post(envisu4_base_url+"images/jobs?url=" + encodeURIComponent(url))
-                .then(response => waitUntilFinish(response.data.id))
+            axios(configService(type))
+            .then(response => waitUntilFinish(response.data.id))
                 .catch(error => {
-                    handleError("forensic_error_" + error.status);
+                    let httpStatus = error.response.status;
+                    //console.log("error status", httpStatus)
+                    switch (httpStatus){
+                        case 400:
+                            if(error.response.data){
+                                let errorCode = error.response.data.error;
+                                handleError("forensic_error_" + errorCode.toLowerCase());
+                            }
+                            else  handleError("forensic_error_" + httpStatus);
+                        break;
+                        default:
+                            handleError("forensic_error_" + httpStatus);
+                    }
                 })
+
         }
         // eslint-disable-next-line
     }, [url, keyword, dispatch]);

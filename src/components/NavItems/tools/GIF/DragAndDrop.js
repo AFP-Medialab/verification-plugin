@@ -70,7 +70,7 @@ class DragAndDrop extends Component {
 						spacing={0}
 						direction="column"
 						alignItems="center"
-						justify="center"
+						justifyContent="center"
 						style={{
 							border: 'dashed #51A5B2 2px',
 							backgroundColor: 'rgba(255,255,255,.8)',
