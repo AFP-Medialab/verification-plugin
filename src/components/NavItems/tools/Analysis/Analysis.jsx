@@ -1,4 +1,4 @@
-import React, {useEffect, useState } from "react";
+import {useEffect, useState, memo } from "react";
 import {useSelector, useDispatch} from "react-redux";
 import TextField from "@mui/material/TextField";
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -208,4 +208,4 @@ const Analysis = () => {
                 
         </div>);
 };
-export default React.memo(Analysis);
+export default memo(Analysis);

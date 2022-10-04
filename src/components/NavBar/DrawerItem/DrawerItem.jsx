@@ -5,7 +5,7 @@ import {useDispatch} from "react-redux";
 import {selectTool} from "../../../redux/actions";
 import AllTools from "../../NavItems/tools/Alltools/AllTools";
 import Analysis from "../../NavItems/tools/Analysis/Analysis";
-//import Keyframes from "../../NavItems/tools/Keyframes/Keyframes";
+import Keyframes from "../../NavItems/tools/Keyframes/Keyframes";
 //import Thumbnails from "../../NavItems/tools/Thumbnails/Thumbnails";
 //import TwitterAdvancedSearch from "../../NavItems/tools/TwitterAdvancedSearch/TwitterAdvancedSearch";
 //import Magnifier from "../../NavItems/tools/Magnifier/Magnifier";
@@ -22,7 +22,7 @@ import Footer from "../../Shared/Footer/Footer";
 //import Geolocation from "../../NavItems/tools/Geolocation/Geolocation";
 import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-//import AnalysisImg from "../../NavItems/tools/Analysis_image/Analysis"
+import AnalysisImg from "../../NavItems/tools/Analysis_images/Analysis"
 
 const DrawerItem = ({drawerItems}) => {
 
@@ -35,11 +35,11 @@ const DrawerItem = ({drawerItems}) => {
             content: <Analysis/>,
             footer: <Footer type={"iti"}/>
         },
-        /*{
+        {
             content: <Keyframes/>,
             footer: <Footer type={"iti"}/>
         },
-        {
+        /*{
             content: <Thumbnails/>,
             footer: <Footer type={"afp"}/>
         },
@@ -54,12 +54,12 @@ const DrawerItem = ({drawerItems}) => {
         {
             content: <DeepfakeVideo />,
             footer: <Footer type={"afp"} />
-        },
+        },*/
         {
             content: <AnalysisImg/>,
             footer: <Footer type={"iti"}/>
         },
-        {
+        /*{
             content: <Magnifier/>,
             footer: <Footer type={"afp"}/>
         },

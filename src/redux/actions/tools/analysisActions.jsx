@@ -1,4 +1,3 @@
-
 import { createAction } from "@reduxjs/toolkit"
 export const setAnalysisResult = createAction("SET_ANALYSIS_RESULT")
 /*export const setAnalysisResult = (url, result, notification, loading) => {

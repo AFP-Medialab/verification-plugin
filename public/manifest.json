@@ -8,6 +8,12 @@
     "default_title": "InVID WeVerify",
     "default_popup": "popup.html"
   },
+  "background":{
+    "service_worker" : "background.js"
+  },
+  "permissions": [
+    "nativeMessaging"
+  ],
   "icons": {
     "16": "img/icon-16.png",
     "48": "img/icon-48.png",
