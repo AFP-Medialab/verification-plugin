@@ -353,6 +353,11 @@ function * extractFromLocalStorage(instagram_result, inputUrl, urlType) {
         let regex_emoji = /\\u.{4}/g
         text_result = text_result.replaceAll(regex_emoji, "")
         text_result = text_result.replaceAll("\\n", " ")
+
+        if (text_result.includes("on Instagram")){
+            let text = text_result.split("on Instagram: ")
+            text_result = text.length > 1 ? text[1] : text_result
+        }
     }
 
     if(video_result !== ""){
