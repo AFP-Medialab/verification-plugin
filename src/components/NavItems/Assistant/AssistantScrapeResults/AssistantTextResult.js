@@ -12,19 +12,23 @@ import FormatQuoteIcon from "@material-ui/icons/FormatQuote";
 import Grid from "@material-ui/core/Grid";
 import HelpOutlineOutlinedIcon from "@material-ui/icons/HelpOutlineOutlined";
 import LinearProgress from "@material-ui/core/LinearProgress";
-import SpeakerNotesIcon from '@material-ui/icons/SpeakerNotes';
+import TranslateIcon from '@material-ui/icons/Translate';
 import Tooltip from "@material-ui/core/Tooltip";
 import Typography from "@material-ui/core/Typography";
 
-import {runTranslation, setWarningExpanded} from "../../../../redux/actions/tools/assistantActions";
+import {setWarningExpanded} from "../../../../redux/actions/tools/assistantActions";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/Assistant.tsv";
+import sharedTsv from "../../../../LocalDictionary/components/Shared/utils.tsv"
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import IconButton from "@material-ui/core/IconButton";
+import FileCopyOutlined from "@material-ui/icons/FileCopy";
 
 const AssistantTextResult = () => {
 
     const keyword = useLoadLanguage("components/NavItems/tools/Assistant.tsv", tsv);
+    const sharedKeyword = useLoadLanguage("components/Shared/utils.tsv", sharedTsv);
+
     const classes = useMyStyles()
     const dispatch = useDispatch()
 
@@ -106,14 +110,24 @@ const AssistantTextResult = () => {
                     <Grid container>
                         <Grid item xs={6} style={{"display": "flex"}}>
                             <Typography className={classes.toolTipIcon} onClick={()=>setDisplayOrigLang(!displayOrigLang)}>{textLang}</Typography>
-                            {textLang === "en" ?
+
+                            <Tooltip title={sharedKeyword("copy_to_clipboard")}>
+                                <IconButton className={classes.toolTipIcon} onClick={() => {navigator.clipboard.writeText(text)}}>
+                                    <FileCopyOutlined/>
+                                </IconButton>
+                            </Tooltip>
+
+                            {textLang && textLang !== "en" && textLang !== "" ?
                                 <Tooltip title={keyword("translate")}>
-                                    <IconButton className={classes.toolTipIcon} onClick={()=>dispatch(runTranslation("fr", text))}>
-                                        <SpeakerNotesIcon/>
+                                    <IconButton className={classes.toolTipIcon}
+                                                onClick={()=>window.open("https://translate.google.com/?sl=auto&text=" + encodeURIComponent(text) + "&op=translate", "_blank"
+                                    )}>
+                                        <TranslateIcon/>
                                     </IconButton>
                                 </Tooltip> : null
                             }
                         </Grid>
+
                         <Grid item xs={6} align={"right"}>
                             {displayExpander ?
                                 expanded ?
