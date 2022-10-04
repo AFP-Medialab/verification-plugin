@@ -86,6 +86,7 @@ const Analysis = () => {
 
     useEffect(() => {
         if (url && url !== KNOWN_LINKS.OWN) {
+            console.log("url effect if", url);
              const uri = (url !== null) ? decodeURIComponent(url) : undefined;
              setInput(uri);
              setUrlDetected(true)
@@ -95,7 +96,7 @@ const Analysis = () => {
     return (
         <div>
 
-            <HeaderTool name={keywordAllTools("navbar_analysis_video")} description={keywordAllTools("navbar_analysis_description")} icon={<AnalysisIcon style={{ fill: "#51A5B2" }} />}/>
+            <HeaderTool name={keywordAllTools("navbar_analysis_video")} description={keywordAllTools("navbar_analysis_description")} icon={<AnalysisIcon style={{ fill: "#51A5B2" }} width="40px" height="40px" />}/>
 
             <Card>
                 <CardHeader
@@ -165,7 +166,7 @@ const Analysis = () => {
                         <Box m={1}/>
                     </Grid>
                 </div>
-                <LinearProgress hidden={!isLoading} />
+                {isLoading ? <LinearProgress hidden={!isLoading} /> : null}
             </Card>
             <Box m={3} />
 

@@ -25,6 +25,7 @@ import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
+import { useNavigate } from "react-router-dom";
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -48,6 +49,7 @@ function TabPanel(props) {
 
 
 const AllTools = (props) => {
+    const navigate = useNavigate();
     const classes = useMyStyles();
     const keyword = useLoadLanguage("components/NavItems/tools/Alltools.tsv", tsv);
     const keywordNavbar = useLoadLanguage("components/NavBar.tsv", tsv);
@@ -85,10 +87,11 @@ const AllTools = (props) => {
             window.open(process.env.REACT_APP_TSNA_SERVER + path, "_blank") 
         }
         else {
-            history.push({
+            navigate("/app/tools/" + path)
+           /* history.push({
                 pathname: "/app/tools/" + path,
                 state: { media: mediaTool }
-            })
+            })*/
         }
     };
     
@@ -148,7 +151,7 @@ const AllTools = (props) => {
                 </Alert>
             </Snackbar>
 
-            <HeaderTool name={keyword("navbar_tools")} icon={<IconTools style={{ fill: "#51A5B2" }} />} advanced="true"/>
+            <HeaderTool name={keyword("navbar_tools")} icon={<IconTools width="40px" height="40px" style={{ fill: "#51A5B2" }} />} advanced="true"/>
 
             <Card>
                 <Tabs value={value} onChange={handleChange} indicatorColor={'primary'}>

@@ -101,37 +101,23 @@ const DrawerItem = ({drawerItems}) => {
 
     return (
         <Routes>
+            <Route path={"*"} element={<DrawerItemContent index={0} drawContent={drawerItemsContent} />} />
             {
                 drawerItems.map((item, index) => {
-                   // if (item.path) {
+                    if (item.path) {
                         return (
                             <Route
                                 key={index}
                                 //path={"/*/:url?/:type?/"}
-                                path={"*"}
-                                element={<DrawerItemContent index={index} drawContent={drawerItemsContent} />}
-                                /*render={() => {
-                                        dispatch(selectTool(index));
-                                        return (
-                                            <Container key={index} className={classes.noMargin} maxWidth={false}>
-                                                <Fade in={true}>
-                                                    <div>
-                                                        <ThemeProvider theme={theme}>
-                                                            {drawerItemsContent[index].content}
-                                                            {drawerItemsContent[index].footer}
-                                                        </ThemeProvider>
-                                                    </div>
-                                                </Fade>
-                                            </Container>
-                                        )
-                                    }
-                                }*/
+                                path={item.path}
+                                element={<DrawerItemContent index={index} drawContent={drawerItemsContent} />}                                
                             />
                         );
-                   // }
+                    }
                     return null;
                 })
             }
+            
         </Routes>
     );
 };

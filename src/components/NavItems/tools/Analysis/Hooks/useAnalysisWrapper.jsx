@@ -53,12 +53,12 @@ export const useAnalysisWrapper = (setAnalysisLoading, setAnalysisResult, servic
                     if (response.data.platform === "facebook" && _.isUndefined(response.data.video)){
                         axios.get(assistantEndpoint+"scrape/facebook?url=" + currentURL)
                             .then(responseImg => {
-                                dispatch(setAnalysisResult(currentURL, response.data, false, processing, responseImg.data.images[0]));
+                                dispatch(setAnalysisResult({url:currentURL, result: response.data, notification: false, loading: processing, image: responseImg.data.images[0]}));
                             }).catch(error => {
                                 console.log("error assistance image scrapping ", error)
-                                dispatch(setAnalysisResult(currentURL, response.data, false, processing, null)) })
-                    }else{
-                        dispatch(setAnalysisResult(currentURL, response.data, false, processing, null));
+                                dispatch(setAnalysisResult({url: currentURL, result: response.data, notification:false, loading:processing, image:null}))});
+                    } else {
+                        dispatch(setAnalysisResult({url: currentURL, result: response.data, notification: false, loading: processing, image: null}));
                     }
                     
                 }

@@ -7,6 +7,8 @@ import rootSaga from "./redux/sagas";
 import { Provider } from "react-redux";
 import App from "./App";
 import { createRoot } from 'react-dom/client';
+import createCache from '@emotion/cache';
+import { CacheProvider } from '@emotion/react';
 
 function saveToLocalStorage(state) {
   try {
@@ -57,9 +59,14 @@ store.subscribe(() => {
 
 const container = document.getElementById('root')
 const root = createRoot(container)
-
+export const muiCache = createCache({
+  'key': 'mui',
+  'prepend': true
+})
 root.render(
   <Provider store={store}>
-    <App />
+    <CacheProvider  value={muiCache}>
+      <App />
+    </CacheProvider>
   </Provider>
 );

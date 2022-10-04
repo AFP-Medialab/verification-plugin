@@ -688,7 +688,6 @@ const styles = theme => (
 
     },
 
-
     imageDropped: {
         height: "25vh",
         minHeight: "200px"
@@ -697,8 +696,6 @@ const styles = theme => (
     inputContainer:{
         position: "relative",
     },
-
-    
 
     inputLabel: {
         cursor: "pointer",
@@ -721,9 +718,6 @@ const styles = theme => (
     buttonGif: {
         weight: "100%!important",
     },
-
-
-
 
     bigButtonDiv: {
         border: 'solid #E1E1E1 2px',
@@ -817,8 +811,6 @@ const styles = theme => (
     feedbackHeaderTitle: {
         marginLeft: "12px",
     },
-
-
 
     deepfakeSquare: {
         position: "absolute",
