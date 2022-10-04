@@ -319,9 +319,7 @@ function * handleAssistantScrapeCall(action) {
     try {
         let scrapeResult = null
         if (decideWhetherToScrape(urlType, contentType, inputUrl)) {
-            scrapeResult = urlType === KNOWN_LINKS.TIKTOK ?
-                yield call(assistantApi.callTiktokScraper, inputUrl) :
-                yield call(assistantApi.callAssistantScraper, urlType, inputUrl)
+            scrapeResult = yield call(assistantApi.callAssistantScraper, urlType, inputUrl)
         }
 
         let filteredSR = filterAssistantResults(urlType, contentType, inputUrl, scrapeResult)
