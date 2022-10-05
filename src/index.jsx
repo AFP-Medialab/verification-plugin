@@ -45,7 +45,7 @@ const sagaMiddleware = createSagaMiddleware();
 const store = configureStore({
   reducer: allReducers,
   middleware: (getDefaultMiddleware) => {
-    return getDefaultMiddleware({ thunk: false }).prepend(sagaMiddleware);
+    return getDefaultMiddleware({ thunk: false, serializableCheck:{ignoredActions:["SET_METADATA_RESULT"]} }).prepend(sagaMiddleware);
   },
   persistedState,
 });

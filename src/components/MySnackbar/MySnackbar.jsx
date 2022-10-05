@@ -46,40 +46,6 @@ const useStyles1 = theme => ({
 
 });
 
-const MySnackbarContentWrapper = (props) => {
-    
-    const classes = useClasses(useStyles1);
-    const {className, message, onClose, variant, ...other} = props;
-    const Icon = variantIcon[variant];
-    console.log("props ", props)
-
-    return (
-        <SnackbarContent
-            className={clsx(classes[variant], className)}
-            aria-describedby="client-snackbar"
-            message={
-                <span id="client-snackbar" className={classes.message}>
-                    <Icon className={clsx(classes.icon, classes.iconVariant)}/>
-                    {message}
-                </span>
-            }
-            action={[
-                <IconButton key="close" aria-label="close" color="inherit" onClick={onClose}>
-                    <CloseIcon className={classes.icon}/>
-                </IconButton>,
-            ]}
-            {...other}
-        />
-    );
-}
-
-MySnackbarContentWrapper.propTypes = {
-    className: PropTypes.string,
-    message: PropTypes.string,
-    onClose: PropTypes.func,
-    variant: PropTypes.oneOf(['error', 'info', 'success', 'warning']).isRequired,
-};
-
 // variant can bee : "success", "error", "warning", "info"
 const MySnackbar = (props) => {
     const [open, setOpen] = React.useState(true);
@@ -90,7 +56,9 @@ const MySnackbar = (props) => {
         props.onClick();
         setOpen(false);
     };
-
+    const classes = useClasses(useStyles1);
+    const {message, onClose, variant, ...other} = props;
+    const Icon = variantIcon[variant];
     return (
         <div>
             <Snackbar
@@ -101,11 +69,22 @@ const MySnackbar = (props) => {
                 open={open}
                 onClose={handleClose}
             >
-                <MySnackbarContentWrapper
-                    onClose={handleClose}
-                    variant={props.variant}
-                    message={props.message}
-                />
+                 <SnackbarContent
+                className={classes[variant]}
+                aria-describedby="client-snackbar"
+                message={
+                    <span id="client-snackbar" className={classes.message}>
+                        <Icon className={clsx(classes.icon, classes.iconVariant)}/>
+                        {message}
+                    </span>
+                }
+                action={[
+                    <IconButton key="close" aria-label="close" color="inherit" onClick={onClose}>
+                        <CloseIcon className={classes.icon}/>
+                    </IconButton>,
+                ]}
+                {...other}
+                />               
             </Snackbar>
         </div>
     );

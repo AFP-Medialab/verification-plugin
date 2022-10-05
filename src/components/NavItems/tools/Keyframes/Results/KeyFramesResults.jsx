@@ -7,7 +7,6 @@ import Button from "@mui/material/Button";
 import { useKeyframes } from "../Hooks/usekeyframes";
 import CloseResult from "../../../../Shared/CloseResult/CloseResult";
 import { cleanKeyframesState } from "../../../../../redux/actions/tools/keyframesActions";
-//import OnClickInfo from "../../../../Shared/OnClickInfo/OnClickInfo";
 import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Keyframes.tsv";
 import tsv2 from "../../../../../LocalDictionary/components/Shared/OnClickInfo.tsv";
@@ -162,7 +161,7 @@ const KeyFramesResults = (props) => {
 
     //Help
     //============================================================================================
-    const [anchorHelp, setAnchorHelp] = React.useState(null);
+    const [anchorHelp, setAnchorHelp] = useState(null);
     const openHelp = Boolean(anchorHelp);
     const help = openHelp ? 'simple-popover' : undefined;
 

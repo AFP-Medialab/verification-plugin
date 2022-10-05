@@ -9,7 +9,7 @@ import Keyframes from "../../NavItems/tools/Keyframes/Keyframes";
 import Thumbnails from "../../NavItems/tools/Thumbnails/Thumbnails";
 //import TwitterAdvancedSearch from "../../NavItems/tools/TwitterAdvancedSearch/TwitterAdvancedSearch";
 //import Magnifier from "../../NavItems/tools/Magnifier/Magnifier";
-//import Metadata from "../../NavItems/tools/Metadata/Metadata";
+import Metadata from "../../NavItems/tools/Metadata/Metadata";
 import VideoRights from "../../NavItems/tools/VideoRights/VideoRights";
 //import Forensic from "../../NavItems/tools/Forensic/Forensic";
 import {Route, Routes} from 'react-router-dom'
@@ -18,7 +18,7 @@ import Footer from "../../Shared/Footer/Footer";
 //import OCR from "../../NavItems/tools/OCR/OCR";
 //import Gif from "../../NavItems/tools/GIF/Gif";
 //import DeepfakeImage from "../../NavItems/tools/Deepfake/DeepfakeImage";
-//import DeepfakeVideo from "../../NavItems/tools/Deepfake/DeepfakeVideo";
+import DeepfakeVideo from "../../NavItems/tools/Deepfake/DeepfakeVideo";
 //import Geolocation from "../../NavItems/tools/Geolocation/Geolocation";
 import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
@@ -47,14 +47,14 @@ const DrawerItem = ({drawerItems}) => {
             content: <VideoRights />,
             footer: <Footer type={"GRIHO"} />
         },
-        /*{
+        {
             content: <Metadata />,
             footer: <Footer type={"afp"} />
         },
         {
             content: <DeepfakeVideo />,
             footer: <Footer type={"afp"} />
-        },*/
+        },
         {
             content: <AnalysisImg/>,
             footer: <Footer type={"iti"}/>
