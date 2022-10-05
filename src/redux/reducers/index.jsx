@@ -11,6 +11,7 @@ import humanRightsCheckBoxReducer from './humanRightsCheckBoxReducer';
 import interactiveExplanationReducer from './interactiveExplanationReducer';
 import analysisReducer from './tools/analysisReducer';
 import keyframesReducer from './tools/keyframesReducer';
+import thumbnailsReducer from './tools/thumbnailsReducer';
 
 
 
@@ -26,6 +27,7 @@ const allReducers = combineReducers({
     userSession : authenticationReducer,
     analysis: analysisReducer,
     keyframes : keyframesReducer,
+    thumbnails : thumbnailsReducer,
     assistant : assistantReducer,
     
 })

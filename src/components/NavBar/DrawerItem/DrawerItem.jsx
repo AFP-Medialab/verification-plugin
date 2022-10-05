@@ -6,7 +6,7 @@ import {selectTool} from "../../../redux/actions";
 import AllTools from "../../NavItems/tools/Alltools/AllTools";
 import Analysis from "../../NavItems/tools/Analysis/Analysis";
 import Keyframes from "../../NavItems/tools/Keyframes/Keyframes";
-//import Thumbnails from "../../NavItems/tools/Thumbnails/Thumbnails";
+import Thumbnails from "../../NavItems/tools/Thumbnails/Thumbnails";
 //import TwitterAdvancedSearch from "../../NavItems/tools/TwitterAdvancedSearch/TwitterAdvancedSearch";
 //import Magnifier from "../../NavItems/tools/Magnifier/Magnifier";
 //import Metadata from "../../NavItems/tools/Metadata/Metadata";
@@ -39,11 +39,11 @@ const DrawerItem = ({drawerItems}) => {
             content: <Keyframes/>,
             footer: <Footer type={"iti"}/>
         },
-        /*{
+        {
             content: <Thumbnails/>,
             footer: <Footer type={"afp"}/>
         },
-        {
+        /*{
             content: <VideoRights />,
             footer: <Footer type={"GRIHO"} />
         },
