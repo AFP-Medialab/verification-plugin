@@ -10,7 +10,7 @@ import Thumbnails from "../../NavItems/tools/Thumbnails/Thumbnails";
 //import TwitterAdvancedSearch from "../../NavItems/tools/TwitterAdvancedSearch/TwitterAdvancedSearch";
 //import Magnifier from "../../NavItems/tools/Magnifier/Magnifier";
 //import Metadata from "../../NavItems/tools/Metadata/Metadata";
-//import VideoRights from "../../NavItems/tools/VideoRights/VideoRights";
+import VideoRights from "../../NavItems/tools/VideoRights/VideoRights";
 //import Forensic from "../../NavItems/tools/Forensic/Forensic";
 import {Route, Routes} from 'react-router-dom'
 import Footer from "../../Shared/Footer/Footer";
@@ -43,11 +43,11 @@ const DrawerItem = ({drawerItems}) => {
             content: <Thumbnails/>,
             footer: <Footer type={"afp"}/>
         },
-        /*{
+        {
             content: <VideoRights />,
             footer: <Footer type={"GRIHO"} />
         },
-        {
+        /*{
             content: <Metadata />,
             footer: <Footer type={"afp"} />
         },

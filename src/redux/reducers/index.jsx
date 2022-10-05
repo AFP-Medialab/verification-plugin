@@ -12,6 +12,7 @@ import interactiveExplanationReducer from './interactiveExplanationReducer';
 import analysisReducer from './tools/analysisReducer';
 import keyframesReducer from './tools/keyframesReducer';
 import thumbnailsReducer from './tools/thumbnailsReducer';
+import videoRightsReducer from "./tools/videoRightsReducer";
 
 
 
@@ -28,6 +29,7 @@ const allReducers = combineReducers({
     analysis: analysisReducer,
     keyframes : keyframesReducer,
     thumbnails : thumbnailsReducer,
+    videoRights : videoRightsReducer,
     assistant : assistantReducer,
     
 })
