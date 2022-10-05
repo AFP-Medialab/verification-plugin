@@ -16,6 +16,7 @@ import videoRightsReducer from "./tools/videoRightsReducer";
 import metadataReducer from './tools/metadataReducer';
 import deepfakeReducerImage from "./tools/deepfakeImageReducer";
 import deepfakeReducerVideo from "./tools/deepfakeVideoReducer";
+import ImageAnalysisReducer from "./tools/analysisReducerImage";
 
 
 const allReducers = combineReducers({
@@ -29,6 +30,7 @@ const allReducers = combineReducers({
     error : errorReducer,
     userSession : authenticationReducer,
     analysis: analysisReducer,
+    analysisImage: ImageAnalysisReducer,
     keyframes : keyframesReducer,
     metadata : metadataReducer,
     thumbnails : thumbnailsReducer,

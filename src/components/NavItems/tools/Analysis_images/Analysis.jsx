@@ -34,6 +34,7 @@ import {
 } from "../../../../redux/actions/tools/image_analysisActions";
 
 const Analysis = () => {
+    
   const caa_analysis_url = process.env.REACT_APP_CAA_ANALYSIS_URL;
   const { url } = useParams();
   const classes = useMyStyles();
@@ -46,7 +47,6 @@ const Analysis = () => {
     tsvAlltools
   );
   const dispatch = useDispatch();
-
   const resultUrl = useSelector((state) => state.analysisImage.url);
   const resultData = useSelector((state) => state.analysisImage.result);
   const isLoading = useSelector((state) => state.analysisImage.loading);
@@ -57,7 +57,7 @@ const Analysis = () => {
   const [submittedUrl, setSubmittedUrl] = useState(undefined);
   const [reprocess, setReprocess] = useState(false);
   const serviceUrl = caa_analysis_url + "images";
-
+  
   const [finalUrl, showFacebookIframe] = useGenerateApiUrl(
     serviceUrl,
     submittedUrl,
@@ -95,7 +95,7 @@ const Analysis = () => {
     }
     // eslint-disable-next-line
   }, [urlDetected]);
-
+  
   useEffect(() => {
     if (url && url !== KNOWN_LINKS.OWN) {
       const uri = url !== null ? decodeURIComponent(url) : undefined;
@@ -103,7 +103,7 @@ const Analysis = () => {
       setUrlDetected(true);
     }
   }, [url]);
-
+  
   return (
     <div>
       <HeaderTool
@@ -167,7 +167,9 @@ const Analysis = () => {
             <Box m={1} />
           </Grid>
         </div>
-        <LinearProgress hidden={!isLoading} />
+        {
+            isLoading && <LinearProgress />
+        }        
       </Card>
       <Box m={3} />
 
