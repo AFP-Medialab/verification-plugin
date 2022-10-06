@@ -377,9 +377,9 @@ const styles = theme => (
     },
     imgMagnifierContainer: {
         position: "relative",
-        cursor: "none",
-        margin: 0,
-        padding: 0,
+        display: "inline-block",
+        maxWidth: "1000px",
+        lineHeight: "0"
     },
     imgMagnifierGlass: {
         width: "175px",
@@ -391,9 +391,7 @@ const styles = theme => (
         display: "none",
     },
     imgMagnifierImg: {
-        position: "relative",
         cursor: "none",
-        display: "block",
     },
     FactCheckCard : {
         maxWidth: "80%"

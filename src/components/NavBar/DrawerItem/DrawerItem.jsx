@@ -8,7 +8,7 @@ import Analysis from "../../NavItems/tools/Analysis/Analysis";
 import Keyframes from "../../NavItems/tools/Keyframes/Keyframes";
 import Thumbnails from "../../NavItems/tools/Thumbnails/Thumbnails";
 //import TwitterAdvancedSearch from "../../NavItems/tools/TwitterAdvancedSearch/TwitterAdvancedSearch";
-//import Magnifier from "../../NavItems/tools/Magnifier/Magnifier";
+import Magnifier from "../../NavItems/tools/Magnifier/Magnifier";
 import Metadata from "../../NavItems/tools/Metadata/Metadata";
 import VideoRights from "../../NavItems/tools/VideoRights/VideoRights";
 //import Forensic from "../../NavItems/tools/Forensic/Forensic";
@@ -59,7 +59,7 @@ const DrawerItem = ({drawerItems}) => {
             content: <AnalysisImg/>,
             footer: <Footer type={"iti"}/>
         },
-        /*{
+        {
             content: <Magnifier/>,
             footer: <Footer type={"afp"}/>
         },
@@ -68,7 +68,7 @@ const DrawerItem = ({drawerItems}) => {
             footer: <Footer type={"afp"}/>
         },
         
-        {
+        /*{
             content: <Forensic/>,
             footer: <Footer type={"iti-borelli-afp"}/>
         },
