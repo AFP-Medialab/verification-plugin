@@ -1,23 +1,15 @@
 import { createAction } from "@reduxjs/toolkit"
 
 
-export const changeLanguage = createAction('CHANGE')
+//export const changeLanguage = createAction('CHANGE')
 
 
-/*export const changeLanguage = (lang) => {
-    console.log("lang ", lang)
-    return {
-        type : 'CHANGE',
-        payload : lang
-    };
-};*/
-
-export const changeDefaultLanguage = (lang) => {
+/*export const changeDefaultLanguage = (lang) => {
     return {
         type : 'CHANGE_DEFAULT',
         payload : lang
     };
-};
+};*/
 
 export const setDictionary = (text) => {
     return {

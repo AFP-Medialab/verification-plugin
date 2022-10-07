@@ -4,8 +4,8 @@ import MenuItem from '@mui/material/MenuItem';
 import {useDispatch, useSelector} from "react-redux";
 import Tooltip from "@mui/material/Tooltip";
 import IconButton from "@mui/material/IconButton";
-
-import {changeDefaultLanguage, changeLanguage} from "../../../redux/actions";
+import {changeLanguage} from "../../../redux/reducers/languageReducer";
+import {changeDefaultLanguage} from "../../../redux/reducers/defaultLanguageReducer";
 import DefaultLanguageDialog from "./defaultLanguageDialog";
 import {setStorageTrue} from "../../../redux/actions/cookiesActions";
 import tsv from "../../../LocalDictionary/components/NavItems/languages.tsv";

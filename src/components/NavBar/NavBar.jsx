@@ -75,7 +75,7 @@ import tsv from "../../LocalDictionary/components/NavBar.tsv";
 import tsvWarning from "../../LocalDictionary/components/Shared/OnWarningInfo.tsv";
 import Snackbar from "@mui/material/Snackbar";
 import { setFalse, setTrue } from "../../redux/actions/cookiesActions";
-import { changeLanguage } from "../../redux/actions";
+import { changeLanguage } from "../../redux/reducers/languageReducer";
 import Button from "@mui/material/Button";
 import Alert from "@mui/material/Alert";
 import { Collapse, ListSubheader, Tab, Tabs } from "@mui/material";
@@ -103,6 +103,7 @@ const NavBar = (props) => {
     const drawerValue = useSelector(state => state.tool.selected);
     const cookiesUsage = useSelector(state => state.cookies);
     const currentLang = useSelector(state => state.language);
+    console.log("Lang ", currentLang);
     const defaultLanguage = useSelector(state => state.defaultLanguage);
 
     const dispatch = useDispatch();

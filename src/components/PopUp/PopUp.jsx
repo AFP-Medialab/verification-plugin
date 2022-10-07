@@ -10,7 +10,7 @@ import invidLogo from "../Shared/images/InVID-logo.svg?url";
 import tsv from "../../LocalDictionary/components/PopUp.tsv";
 import useMyStyles from "../Shared/MaterialUiStyles/useMyStyles";
 import useLoadLanguage from "../../Hooks/useLoadLanguage";
-import {changeLanguage} from "../../redux/actions";
+import {changeLanguage} from "../../redux/reducers/languageReducer";
 import {getSupportedBrowserLanguage} from "../Shared/Languages/getSupportedBrowserLanguage";
 
 const navigator = (window.browser) ? window.browser : window.chrome;
