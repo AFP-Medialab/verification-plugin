@@ -62,16 +62,18 @@ const KeyFramesResults = (props) => {
                 main: 'rgb(198,57,59)'
             }
         },
-        overrides: {
-
+        components:{
             MuiImageList: {
-                root: {
-                    maxHeight: "none!important",
-                    height: "auto!important"
-                },
+                styleOverrides: {
+                    root: {
+                        maxHeight: "none!important",
+                        height: "auto!important"
+                    },
+                }
             },
-
-        },
+    
+        }
+        
 
     });
 

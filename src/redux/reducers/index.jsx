@@ -18,6 +18,8 @@ import deepfakeReducerImage from "./tools/deepfakeImageReducer";
 import deepfakeReducerVideo from "./tools/deepfakeVideoReducer";
 import ImageAnalysisReducer from "./tools/analysisReducerImage";
 import magnifierReducer from "./tools/magnifierReducer";
+import forensicReducer from './tools/forensicReducer';
+import gifReducer from './tools/gifReducer';
 
 
 const allReducers = combineReducers({
@@ -32,12 +34,14 @@ const allReducers = combineReducers({
     userSession : authenticationReducer,
     analysis: analysisReducer,
     analysisImage: ImageAnalysisReducer,
+    forensic : forensicReducer,
     keyframes : keyframesReducer,
     magnifier: magnifierReducer,
     metadata : metadataReducer,
     thumbnails : thumbnailsReducer,
     videoRights : videoRightsReducer,
     assistant : assistantReducer,
+    gif: gifReducer,
     deepfakeImage: deepfakeReducerImage,
     deepfakeVideo: deepfakeReducerVideo,
     

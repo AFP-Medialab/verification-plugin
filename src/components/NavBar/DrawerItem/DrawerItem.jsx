@@ -11,7 +11,7 @@ import Thumbnails from "../../NavItems/tools/Thumbnails/Thumbnails";
 import Magnifier from "../../NavItems/tools/Magnifier/Magnifier";
 import Metadata from "../../NavItems/tools/Metadata/Metadata";
 import VideoRights from "../../NavItems/tools/VideoRights/VideoRights";
-//import Forensic from "../../NavItems/tools/Forensic/Forensic";
+import Forensic from "../../NavItems/tools/Forensic/Forensic";
 import {Route, Routes} from 'react-router-dom'
 import Footer from "../../Shared/Footer/Footer";
 //import TwitterSna from "../../NavItems/tools/TwitterSna/TwitterSna";
@@ -68,11 +68,11 @@ const DrawerItem = ({drawerItems}) => {
             footer: <Footer type={"afp"}/>
         },
         
-        /*{
+        {
             content: <Forensic/>,
             footer: <Footer type={"iti-borelli-afp"}/>
         },
-        {
+        /*{
             content: <OCR />,
             footer: <Footer type={"usfd"} />
         },
