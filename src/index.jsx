@@ -59,7 +59,7 @@ const persistedReducer = persistReducer(persistConfig, allReducers)
 const store = configureStore({
   reducer: allReducers,
   middleware: (getDefaultMiddleware) => 
-    getDefaultMiddleware({ serializableCheck:{ignoredActions:["SET_METADATA_RESULT", FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER]} }).prepend(sagaMiddleware),
+    getDefaultMiddleware({ serializableCheck:false}).prepend(sagaMiddleware),
   preloadedState: persistedState
 });
 sagaMiddleware.run(rootSaga);

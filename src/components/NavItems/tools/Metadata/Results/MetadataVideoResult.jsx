@@ -8,7 +8,7 @@ import Box from "@mui/material/Box";
 import Tooltip from "@mui/material/Tooltip";
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 import CloseResult from "../../../../Shared/CloseResult/CloseResult";
-import {cleanMetadataState} from "../../../../../redux/actions/tools/metadataActions";
+import {cleanMetadataState} from "../../../../../redux/reducers/tools/metadataReducer";
 import Button from "@mui/material/Button";
 import MapIcon from "@mui/icons-material/Map";
 import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
@@ -22,7 +22,6 @@ const MetadataVideoResult = (result) => {
     const keyword = useLoadLanguage("components/NavItems/tools/Metadata.tsv", tsv);
 
     const report = result["result"];
-    console.log("report ", report)
     const convertDMSToDD = (GPStitude, direction) => {
         if (!GPStitude || !direction)
             return null;

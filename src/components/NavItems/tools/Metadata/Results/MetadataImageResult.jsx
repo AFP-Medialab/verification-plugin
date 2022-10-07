@@ -11,7 +11,7 @@ import MapIcon from "@mui/icons-material/Map";
 import Tooltip from "@mui/material/Tooltip";
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 import CloseResult from "../../../../Shared/CloseResult/CloseResult";
-import {cleanMetadataState} from "../../../../../redux/actions/tools/metadataActions";
+import {cleanMetadataState} from "../../../../../redux/reducers/tools/metadataReducer";
 import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Metadata.tsv";
 import OnClickInfo from "../../../../Shared/OnClickInfo/OnClickInfo";

@@ -29,7 +29,7 @@ import MetadataIcon from '../../../NavBar/images/SVG/Image/Metadata.svg';
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 
 import { useDispatch } from "react-redux";
-import { setMetadataMediaType } from "../../../../redux/actions/tools/metadataActions";
+import { setMetadataMediaType } from "../../../../redux/reducers/tools/metadataReducer";
 
 
 const Metadata = () => {

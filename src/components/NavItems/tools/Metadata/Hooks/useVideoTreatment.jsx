@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import * as mp4box from "mp4box";
 import { useDispatch } from "react-redux";
-import { setMetadadaResult, setMetadadaLoading } from "../../../../../redux/actions/tools/metadataActions";
+import { setMetadadaResult, setMetadadaLoading } from "../../../../../redux/reducers/tools/metadataReducer";
 import { setError } from "../../../../../redux/actions/errorActions";
 
 const useVideoTreatment = (mediaUrl, keyword) => {
