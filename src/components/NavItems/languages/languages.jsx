@@ -7,7 +7,7 @@ import IconButton from "@mui/material/IconButton";
 import {changeLanguage} from "../../../redux/reducers/languageReducer";
 import {changeDefaultLanguage} from "../../../redux/reducers/defaultLanguageReducer";
 import DefaultLanguageDialog from "./defaultLanguageDialog";
-import {setStorageTrue} from "../../../redux/actions/cookiesActions";
+import {setStorageTrue} from "../../../redux/reducers/cookiesReducers";
 import tsv from "../../../LocalDictionary/components/NavItems/languages.tsv";
 import useLoadLanguage from "../../../Hooks/useLoadLanguage";
 import TranslateIcon from '@mui/icons-material/Translate';

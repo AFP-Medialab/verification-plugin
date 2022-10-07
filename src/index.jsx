@@ -9,6 +9,14 @@ import App from "./App";
 import { createRoot } from 'react-dom/client';
 import createCache from '@emotion/cache';
 import { CacheProvider } from '@emotion/react';
+import {persistStore, persistReducer,
+  FLUSH,
+  REHYDRATE,
+  PAUSE,
+  PERSIST,
+  PURGE,
+  REGISTER,} from 'redux-persist'
+import storage from "redux-persist/lib/storage"
 
 function saveToLocalStorage(state) {
   try {
@@ -22,7 +30,7 @@ function saveToLocalStorage(state) {
       userSession: state.userSession,
     };
     const serializedState = JSON.stringify(savedState);
-    localStorage.setItem("state", serializedState);
+    localStorage.setItem("persist:state", serializedState);
   } catch (e) {
     console.error(e);
   }
@@ -30,7 +38,7 @@ function saveToLocalStorage(state) {
 
 function loadFromLocalStorage() {
   try {
-    const serializedState = localStorage.getItem("state");
+    const serializedState = localStorage.getItem("persist:state");
     if (serializedState === null) return undefined;
     return JSON.parse(serializedState);
   } catch (e) {
@@ -38,23 +46,28 @@ function loadFromLocalStorage() {
     return undefined;
   }
 }
+const persistConfig = {
+  key: 'state',
+  storage: storage,
+  whitelist: ['humanRightsCheckBox', 'interactiveExplanation', 'language', 'defaultLanguage', 'cookies', 'googleAnalytic', 'userSession']
+  
+}
 
 const persistedState = loadFromLocalStorage();
 const sagaMiddleware = createSagaMiddleware();
-
+const persistedReducer = persistReducer(persistConfig, allReducers)
 const store = configureStore({
   reducer: allReducers,
-  middleware: (getDefaultMiddleware) => {
-    return getDefaultMiddleware({ thunk: false, serializableCheck:{ignoredActions:["SET_METADATA_RESULT"]} }).prepend(sagaMiddleware);
-  },
-  persistedState,
+  middleware: (getDefaultMiddleware) => 
+    getDefaultMiddleware({ serializableCheck:{ignoredActions:["SET_METADATA_RESULT", FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER]} }).prepend(sagaMiddleware),
+  preloadedState: persistedState
 });
 sagaMiddleware.run(rootSaga);
 
 store.subscribe(() => {
   if (store.getState().cookies !== null && store.getState().cookies)
     saveToLocalStorage(store.getState());
-  else localStorage.removeItem("state");
+  else localStorage.removeItem("persist:state");
 });
 
 const container = document.getElementById('root')
@@ -64,7 +77,7 @@ export const muiCache = createCache({
   'prepend': true
 })
 root.render(
-  <Provider store={store}>
+  <Provider store={(store)}>
     <CacheProvider  value={muiCache}>
       <App />
     </CacheProvider>

@@ -14,7 +14,7 @@ import tsv from "../../../LocalDictionary/components/NavItems/About.tsv";
 import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
 import Link from "@mui/material/Link";
 import Typography from "@mui/material/Typography";
-import {toggleState} from "../../../redux/actions/cookiesActions";
+import {toggleState} from "../../../redux/reducers/cookiesReducers";
 import { submissionEvent } from "../../Shared/GoogleAnalytics/GoogleAnalytics";
 
 

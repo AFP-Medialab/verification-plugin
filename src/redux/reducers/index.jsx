@@ -20,6 +20,7 @@ import ImageAnalysisReducer from "./tools/analysisReducerImage";
 import magnifierReducer from "./tools/magnifierReducer";
 import forensicReducer from './tools/forensicReducer';
 import gifReducer from './tools/gifReducer';
+import cookiesReducer from './cookiesReducers';
 
 
 const allReducers = combineReducers({
@@ -40,6 +41,7 @@ const allReducers = combineReducers({
     metadata : metadataReducer,
     thumbnails : thumbnailsReducer,
     videoRights : videoRightsReducer,
+    cookies : cookiesReducer,
     assistant : assistantReducer,
     gif: gifReducer,
     deepfakeImage: deepfakeReducerImage,
