@@ -15,7 +15,7 @@ import Forensic from "../../NavItems/tools/Forensic/Forensic";
 import {Route, Routes} from 'react-router-dom'
 import Footer from "../../Shared/Footer/Footer";
 //import TwitterSna from "../../NavItems/tools/TwitterSna/TwitterSna";
-//import OCR from "../../NavItems/tools/OCR/OCR";
+import OCR from "../../NavItems/tools/OCR/OCR";
 //import Gif from "../../NavItems/tools/GIF/Gif";
 //import DeepfakeImage from "../../NavItems/tools/Deepfake/DeepfakeImage";
 import DeepfakeVideo from "../../NavItems/tools/Deepfake/DeepfakeVideo";
@@ -72,11 +72,11 @@ const DrawerItem = ({drawerItems}) => {
             content: <Forensic/>,
             footer: <Footer type={"iti-borelli-afp"}/>
         },
-        /*{
+        {
             content: <OCR />,
             footer: <Footer type={"usfd"} />
         },
-        {
+        /*{
             content: <Gif />,
             footer: <Footer type={"borelli-afp"} />
         },

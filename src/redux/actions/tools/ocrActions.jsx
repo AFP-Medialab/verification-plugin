@@ -25,6 +25,7 @@ export const setOcrBinaryImage = (binaryImage) => {
 };
 
 export const setOcrResult = (loading, fail, done, result, fullText) => {
+
     return {
         type: "SET_OCR_RESULT",
         payload: {

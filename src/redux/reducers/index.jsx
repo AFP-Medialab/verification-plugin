@@ -21,7 +21,7 @@ import magnifierReducer from "./tools/magnifierReducer";
 import forensicReducer from './tools/forensicReducer';
 import gifReducer from './tools/gifReducer';
 import cookiesReducer from './cookiesReducers';
-
+import ocrReducer from './tools/ocrReducer';
 
 const allReducers = combineReducers({
     language: languageReducer,
@@ -43,6 +43,7 @@ const allReducers = combineReducers({
     videoRights : videoRightsReducer,
     cookies : cookiesReducer,
     assistant : assistantReducer,
+    ocr: ocrReducer,
     gif: gifReducer,
     deepfakeImage: deepfakeReducerImage,
     deepfakeVideo: deepfakeReducerVideo,

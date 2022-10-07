@@ -33,21 +33,4 @@ const metadataSlice = createSlice({
 })
 export const {setMetadadaResult, setMetadadaLoading, setMetadataIsImage, cleanMetadataState, setMetadataMediaType} = metadataSlice.actions
 const metadataReducer = metadataSlice.reducer
-
-/*const metadataReducer = (state = initialState, action) => {
-    switch (action.type) {
-        case "SET_METADATA_RESULT":
-            return action.payload;
-        case "SET_METADATA_LOADING":
-            return {...state, loading:action.payload};
-        case "SET_METADATA_IS_IMAGE":
-            return {...state, isImage: action.payload};
-        case "METADATA_CLEAN_STATE":
-            return {...state, url:"", result:null};
-        case "SET_METADATA_MEDIA_TYPE":
-            return {...state, mediaType:action.payload};
-        default:
-            return state;
-    }
-};*/
 export default metadataReducer;

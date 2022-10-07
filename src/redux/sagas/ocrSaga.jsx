@@ -35,7 +35,7 @@ function* handleOcrCall(action) {
     let fullText =""
 
     try {
-        yield put(setOcrResult(true, false, false, null))
+        yield put(setOcrResult({loading:true, fail:false, done:false, result:null}))
         let ocrResult = []
 
         if (binaryImage) {
@@ -53,10 +53,10 @@ function* handleOcrCall(action) {
 
         yield put(setOcrResult(false, false, true, ocrResult, fullText))
     } catch (error) {
-        console.log(error)
-        if (error.message==="Network Error") {
+        console.log("Error", error)
+        //if (error.message==="Network Error") {
             yield put (setOcrErrorKey("service_error"))
-        }
+        //}
         yield put(setOcrResult(false, true, false, null))
     }
 }
