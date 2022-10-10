@@ -19,7 +19,7 @@ import OCR from "../../NavItems/tools/OCR/OCR";
 import Gif from "../../NavItems/tools/GIF/Gif";
 import DeepfakeImage from "../../NavItems/tools/Deepfake/DeepfakeImage";
 import DeepfakeVideo from "../../NavItems/tools/Deepfake/DeepfakeVideo";
-//import Geolocation from "../../NavItems/tools/Geolocation/Geolocation";
+import Geolocation from "../../NavItems/tools/Geolocation/Geolocation";
 import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import AnalysisImg from "../../NavItems/tools/Analysis_images/Analysis"
@@ -84,11 +84,11 @@ const DrawerItem = ({drawerItems}) => {
             content: <DeepfakeImage />,
             footer: <Footer type={"afp"} />
         },
-        /*{
+        {
             content: <Geolocation />,
             footer: <Footer type={"afp"} />
         },
-        {
+        /*{
             content: <TwitterAdvancedSearch />,
             footer: <Footer type={"afp"} />
         },

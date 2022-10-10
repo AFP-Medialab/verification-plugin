@@ -22,6 +22,7 @@ import forensicReducer from './tools/forensicReducer';
 import gifReducer from './tools/gifReducer';
 import cookiesReducer from './cookiesReducers';
 import ocrReducer from './tools/ocrReducer';
+import geolocationReducer from './tools/geolocationReducer';
 
 const allReducers = combineReducers({
     language: languageReducer,
@@ -47,7 +48,7 @@ const allReducers = combineReducers({
     gif: gifReducer,
     deepfakeImage: deepfakeReducerImage,
     deepfakeVideo: deepfakeReducerVideo,
-    
+    geolocation: geolocationReducer,
 })
 
 export default allReducers;
