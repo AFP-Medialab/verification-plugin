@@ -5,7 +5,6 @@ import DialogContent from "@mui/material/DialogContent";
 import Iframe from "react-iframe";
 import DialogActions from "@mui/material/DialogActions";
 import Dialog from "@mui/material/Dialog";
-import history from "../../../Shared/History/History";
 import Typography from "@mui/material/Typography";
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/Alltools.tsv";

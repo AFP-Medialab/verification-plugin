@@ -83,7 +83,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
-import {Link, useLocation} from 'react-router-dom'
+import {Link, useNavigate} from 'react-router-dom'
 
 function a11yProps(index) {
     return {
@@ -95,6 +95,7 @@ function a11yProps(index) {
 
 const NavBar = (props) => {
     const classes = useMyStyles();
+    const navigate = useNavigate();
     const [open, setOpen] = useState(true);
     const [classWidthToolbar, setClassWidthToolbar] = useState(classes.drawerWidth);
 
@@ -114,9 +115,11 @@ const NavBar = (props) => {
     const handleChange = (event, newValue) => {
         let path = drawerItems[newValue].path;
         if (tabItems[newValue].path === "tools")
-            history.push("/app/tools/" + path);
+            navigate("/app/tools/" + path)
+            //history.push("/app/tools/" + path);
         else
-            history.push("/app/" + tabItems[newValue].path)
+            navigate("/app/" + tabItems[newValue].path)
+            //history.push("/app/" + tabItems[newValue].path)
     };
 
     
@@ -140,10 +143,11 @@ const NavBar = (props) => {
 
             if (newValue.toolRestrictions !== undefined && newValue.toolRestrictions.includes("lock")) {
                 if (userAuthenticated) {
-                    history.push({
+                    navigate("/app/tools/" + newValue.path)
+                   /* history.push({
                         pathname: "/app/tools/" + newValue.path,
                         state: { media: mediaTool }
-                    })
+                    })*/
                 } else {
                     setOpenAlert(true);
                 }
@@ -153,15 +157,17 @@ const NavBar = (props) => {
                 else if (newValue.path === "factcheck" || newValue.path === "xnetwork")
                     window.open(process.env.REACT_APP_TSNA_SERVER + newValue.path + "?lang="+currentLang, "_blank") 
                 else{
-                    history.push({
+                    navigate("/app/tools/" + newValue.path)
+                    /*history.push({
                         pathname: "/app/tools/" + newValue.path,
                         state: { media: mediaTool }
-                    })
+                    })*/
                 }
             }
 
         } else if (newValueType === "OTHER"){
-            history.push("/app/" + newValue.path) 
+            navigate("/app/" + newValue.path)
+            //history.push("/app/" + newValue.path) 
 
         }
 
