@@ -17,7 +17,7 @@ import Footer from "../../Shared/Footer/Footer";
 //import TwitterSna from "../../NavItems/tools/TwitterSna/TwitterSna";
 import OCR from "../../NavItems/tools/OCR/OCR";
 import Gif from "../../NavItems/tools/GIF/Gif";
-//import DeepfakeImage from "../../NavItems/tools/Deepfake/DeepfakeImage";
+import DeepfakeImage from "../../NavItems/tools/Deepfake/DeepfakeImage";
 import DeepfakeVideo from "../../NavItems/tools/Deepfake/DeepfakeVideo";
 //import Geolocation from "../../NavItems/tools/Geolocation/Geolocation";
 import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
@@ -80,11 +80,11 @@ const DrawerItem = ({drawerItems}) => {
             content: <Gif />,
             footer: <Footer type={"borelli-afp"} />
         },
-        /*{
+        {
             content: <DeepfakeImage />,
             footer: <Footer type={"afp"} />
         },
-        {
+        /*{
             content: <Geolocation />,
             footer: <Footer type={"afp"} />
         },
