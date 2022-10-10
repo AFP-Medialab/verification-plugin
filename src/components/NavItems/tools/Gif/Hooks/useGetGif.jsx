@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import { setError } from "../../../../../redux/actions/errorActions";
 import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Forensic.tsv";
-import { setStateDownloading,setStateBackResults } from "../../../../../redux/actions/tools/gifActions";
+import { setStateDownloading,setStateBackResults } from "../../../../../redux/reducers/tools/gifReducer";
 import { saveAs } from 'file-saver';
 import useAuthenticatedRequest from "../../../../Shared/Authentication/useAuthenticatedRequest";
 

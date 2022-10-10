@@ -37,26 +37,15 @@ function authenticationReducer(state = defaultState, action) {
   switch (action.type) {
 
     case AUTH_USER_REGISTRATION_LOADING:
-      state.userRegistrationLoading = action.payload;
-      break;
-
+      return { ...state, userRegistrationLoading: action.payload};
     case AUTH_USER_REGISTRATION_SENT:
-      state.userRegistrationLoading = false;
-      state.userRegistrationSent = action.payload;
-      break;
-
+      return { ...state, userRegistrationLoading: false, userRegistrationSent: action.payload};
     case AUTH_ACCESS_CODE_REQUEST_LOADING:
-      state.accessCodeRequestLoading = action.payload;
-      break;
-
+      return {...state, accessCodeRequestLoading: action.payload};
     case AUTH_ACCESS_CODE_REQUEST_SENT:
-      state.accessCodeRequestLoading = false;
-      state.accessCodeRequestSent = action.payload;
-      break;
-
+      return {...state, accessCodeRequestLoading:false, accessCodeRequestSent:action.payload}
     case AUTH_USER_LOGIN_LOADING:
-      state.userLoginLoading = action.payload;
-      break;
+      return {...state, userLoginLoading: action.payload};
 
     case AUTH_USER_LOGIN:
       // State user as logged in and add user authentication information.
@@ -92,12 +81,15 @@ function authenticationReducer(state = defaultState, action) {
 
     case AUTH_TOKEN_REFRESHED:
       // TODO
-      state.userAuthenticated = true;
+      return {
+        ...state, userAuthenticated: true, accessToken: action.payload.accessToken, accessTokenExpiry: action.payload.accessTokenExpiry, user: action.payload.user
+      };
+      /*state.userAuthenticated = true;
       state.accessToken = action.payload.accessToken;
       state.accessTokenExpiry = action.payload.accessTokenExpiry;
       // state.user = action.payload.user;
       _.merge(state.user, action.payload.user);
-      break;
+      break;*/
 
     case AUTH_USER_SESSION_EXPIRED:
       return {...state, 

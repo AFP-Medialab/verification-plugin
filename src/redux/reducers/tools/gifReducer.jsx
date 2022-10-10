@@ -1,4 +1,6 @@
-const defaultState = {
+import { createSlice } from "@reduxjs/toolkit";
+
+const initialState = {
     //1 - Init
     //21 - Selecting files local
     //22 - Selecting files url
@@ -13,7 +15,45 @@ const defaultState = {
     homoImg2: "",
 };
 
-const gifReducer = (state = defaultState, action) => {
+const gifSlice = createSlice({
+    name:"gif",
+    initialState,
+    reducers:{
+        setStateInit(state, action){
+            return initialState
+        },
+        setStateSelectingLocal(state){
+            state.toolState=21
+        },
+        setStateSelectingUrl(state){
+            state.toolState=22
+        },
+        setStateReady(state){
+            state.toolState=3
+        },
+        setStateLoading(state){
+            state.toolState=4
+        },
+        setStateDownloading(state){
+            state.toolState=7
+        },
+        setStateError(state){
+            state.toolState=6
+        },
+        setStateBackResults(state){
+            state.toolState=5
+        },
+        setStateShow(state, action){
+            return action.payload
+        }
+    }
+})
+
+export const {setStateInit, setStateSelectingLocal, setStateSelectingUrl, setStateReady,
+    setStateLoading, setStateDownloading, setStateError, setStateBackResults, setStateShow} = gifSlice.actions
+
+const gifReducer = gifSlice.reducer;
+/*const gifReducer = (state = defaultState, action) => {
     switch (action.type) {
         case "SET_STATE_INIT":
             return {...state, homoImg1:"", homoImg2:"", toolState:1};
@@ -37,5 +77,5 @@ const gifReducer = (state = defaultState, action) => {
             return state;
 
     }
-};
+};*/
 export default gifReducer;
