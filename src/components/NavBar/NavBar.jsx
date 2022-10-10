@@ -19,7 +19,6 @@ import ListItemText from '@mui/material/ListItemText';
 import ScrollTop from "../Shared/ScrollTop/ScrollTop";
 import Fab from "@mui/material/Fab";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
-import history from '../Shared/History/History';
 import { cleanError } from "../../redux/actions/errorActions";
 import TabItem from "./TabItem/TabItem";
 import ClassRoom from "../NavItems/ClassRoom/ClassRoom";
@@ -600,7 +599,8 @@ const NavBar = (props) => {
     ];
 
     const handleImageClick = () => {
-        history.push("/app/tools/all");
+        navigate("/app/tools/all")
+        //history.push("/app/tools/all");
     };
 
     useEffect(() => {

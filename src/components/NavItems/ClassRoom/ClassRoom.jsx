@@ -159,7 +159,7 @@ const ClassRoom = () => {
         return (
             <div>
                 <ThemeProvider theme={theme}>
-                    <HeaderTool name={keyword("classroom_title")} icon={<IconClassRoom style={{ fill: "#51A5B2", marginRight: "10px"}} />} advanced={false} />
+                    <HeaderTool name={keyword("classroom_title")} icon={<IconClassRoom style={{ fill: "#51A5B2", marginRight: "10px"}} width="40px" height="40px"/>} advanced={false} />
 
                     <Card className={classes.rootNoPadding}>
                         <Box justifyContent="center" display="flex" flexDirection="column">
