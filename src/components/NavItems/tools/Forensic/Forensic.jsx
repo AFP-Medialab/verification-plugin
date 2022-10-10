@@ -32,26 +32,32 @@ const Forensic = () => {
     const keywordWarning = useLoadLanguage("components/Shared/OnWarningInfo.tsv", tsvWarning);
 
     const theme = createTheme({
-        overrides: {
+
+         components:{
 
             MuiCardHeader: {
-                root: {
-                    backgroundColor: "#05A9B4",
-                },
-                title: {
-                    color: 'white',
-                    fontSize: 20,
-                    fontweight: 500,
+                styleOverrides:{
+                    root: {
+                        backgroundColor: "#05A9B4",
+                    },
+                    title: {
+                        color: 'white',
+                        fontSize: 20,
+                        fontweight: 500,
+                    }
                 }
+                
             },
 
             MuiTab: {
-                wrapper: {
-                    fontSize: 12,
-
-                },
-                root: {
-                    minWidth: "25%!important",
+                styleOverrides:{
+                    wrapper: {
+                        fontSize: 12,
+    
+                    },
+                    root: {
+                        minWidth: "25%!important",
+                    }
                 }
             },
 

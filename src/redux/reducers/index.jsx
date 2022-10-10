@@ -23,6 +23,7 @@ import gifReducer from './tools/gifReducer';
 import cookiesReducer from './cookiesReducers';
 import ocrReducer from './tools/ocrReducer';
 import geolocationReducer from './tools/geolocationReducer';
+import twitterSnaReducer from './tools/twitterSnaReducer';
 
 const allReducers = combineReducers({
     language: languageReducer,
@@ -41,6 +42,7 @@ const allReducers = combineReducers({
     magnifier: magnifierReducer,
     metadata : metadataReducer,
     thumbnails : thumbnailsReducer,
+    twitterSna : twitterSnaReducer,
     videoRights : videoRightsReducer,
     cookies : cookiesReducer,
     assistant : assistantReducer,
