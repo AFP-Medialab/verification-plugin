@@ -7,7 +7,7 @@ import AllTools from "../../NavItems/tools/Alltools/AllTools";
 import Analysis from "../../NavItems/tools/Analysis/Analysis";
 import Keyframes from "../../NavItems/tools/Keyframes/Keyframes";
 import Thumbnails from "../../NavItems/tools/Thumbnails/Thumbnails";
-//import TwitterAdvancedSearch from "../../NavItems/tools/TwitterAdvancedSearch/TwitterAdvancedSearch";
+import TwitterAdvancedSearch from "../../NavItems/tools/TwitterAdvancedSearch/TwitterAdvancedSearch";
 import Magnifier from "../../NavItems/tools/Magnifier/Magnifier";
 import Metadata from "../../NavItems/tools/Metadata/Metadata";
 import VideoRights from "../../NavItems/tools/VideoRights/VideoRights";
@@ -88,11 +88,11 @@ const DrawerItem = ({drawerItems}) => {
             content: <Geolocation />,
             footer: <Footer type={"afp"} />
         },
-        /*{
+        {
             content: <TwitterAdvancedSearch />,
             footer: <Footer type={"afp"} />
         },
-        {
+        /*{
             content: <TwitterSna />,
             footer: <Footer type={"afp-usfd-eudisinfolab"} />
         }  */          

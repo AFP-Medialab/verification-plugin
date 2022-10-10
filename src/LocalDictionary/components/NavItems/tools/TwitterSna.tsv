@@ -1,0 +1,121 @@
+	en	fr	es	el
+twitterStatsErrorMessage	Please fill the required fields (＊)	Veuillez remplir les champs requis (＊)	Rellene los campos requeridos (＊)	Παρακαλώ συμπληρώστε τα απαιτούμενα πεδία (＊)
+twitter_sna_title	Twitter Social network analysis (beta)	Analyse des réseaux sociaux sur Twitter (beta)	Twitter Análisis de redes sociales (beta)	Ανάλυση κοινωνικού δικτύου Twitter (beta)
+twitter_sna_search	Keyword, URL or #	Mot clé, URL ou #	Palabra clave, URL o #	Λέξη-κλειδί, διεύθυνση URL ή #
+twitter_sna_not	Words to exclude in the query	Mots à exclure de la requête	Palabras a excluir en la consulta	Λέξεις για εξαίρεση στο ερώτημα
+twitter_sna_user	Tweeted by (Twitter account name)	Tweeté par (Nom de compte Twitter)	Twiteado por (Nombre de una cuenta de Twitter)	Tweet από (Όνομα λογαριασμού Twitter)
+twitter_sna_from_date	Since	Depuis	Desde	Από
+twitter_sna_until_date	Until	Jusqu'à	Hasta	Εως
+twitter_local_time	Local time	Heure locale	Hora local	Τοπική ώρα
+twitter_sna_gmt	GMT	GMT	GMT	GMT
+twitter_sna_media	Filters :	Filtres :	Filtros :	Φιλτρα:
+twitterStats_media_none	none	aucune	ninguna	κανένα
+twitterStats_media_images	pictures	images	fotos	εικόνες
+twitterStats_media_videos	videos	vidéos	vídeo	βίντεο
+twitterStats_media_medias	media	média	medios de comunicación	μεσο ΜΑΖΙΚΗΣ ΕΝΗΜΕΡΩΣΗΣ
+twitterStats_media_both	both	les deux	ambos	και ταδύο
+twitterStats_media_both	both	les deux	ambos	και τα δύο
+twitter_sna_verified	Verified users Only :	Utilisateurs verifiés uniquement :	Usuarios verificados únicamente :	Μόνο επαληθευμένοι χρήστες:
+twitterStats_verified_no	no	non	no	ναι
+twitterStats_verified_yes	yes	oui	si	οχι
+lang_choices	Language :	Langue :	Lengua :	Γλώσσα:
+lang_all	none	aucun	ninguno	κανένα
+lang_fr	French	Français	Francés	Γαλλικά
+lang_en	English	Anglais	Inglés	Αγγλικά
+lang_es	Spanish	Espagnol	Español	Ισπανικά
+lang_ar	Arabic	Arabe	Árabe	Αράβικα
+lang_de	German	Allemand	Alemán	Γερμανικά
+lang_it	Italian	Italien	Italiano	Ιταλικά
+lang_id	Indonesian	Indonésien	Indonesio	Ινδονησιακά
+lang_pt	Portuguese	Portugais	Portugués	Πορτογαλικά
+lang_ko	Korean	Coréen	Coreano	Κορεάτικα
+lang_tr	Turkish	Turc	Turco	Τούρκικα
+lang_ru	Russian	Russe	Ruso	Ρώσικα
+lang_nl	Dutch	Néerlandais	Holandés	Ολλανδικά
+lang_hi	Hindi	Indou	Hindú	Χίντι
+lang_no	Norwegian	Norvégien	Noruego	Νορβηγικά
+lang_sv	Swedish	Suédois	Sueco	Σουηδικά
+lang_fi	Finnish	Finlandais	Finlandés	Φινλανδικά
+lang_da	Danish	Danois	Danés	Δανικά
+lang_pl	Polish	Polonais	Polaco	Πολωνικά
+lang_hu	Hungarian	Hongrois	Húngaro	Ούγγρικα
+lang_fa	Farsi	Persan	Farsi	Φαρσί
+lang_he	Hebrew	Hébreu	Hebreo	Εβραϊκά
+lang_ur	Urdu	Ourdou	Urdu	Ουρντού
+lang_th	Thai	Thaï	Tailandés	Ταϊλανδέζικα
+button_submit	Submit	Envoyer	Enviar	Υποβολή
+default_sna_error	Twitter analysis failed due to an unknown cause.	L'analyse de Twitter a été interrompue pour une raison inconnue.	El análisis de Twitter se ha interrumpido por una causa desconocida.	Η ανάλυση του Twitter απέτυχε λόγω άγνωστης αιτίας.
+twitterSnaErrorMessage	An error occurred while processing tweets	Une erreur s'est produite lors du traitement des tweets	Se produjo un error en el procesamiento de tweets	Παρουσιάστηκε σφάλμα κατά την επεξεργασία των tweets
+top_users_pie_chart_title	Most active users	Utilisateurs les plus actifs	Usuarios más activos	Πιο ενεργοί χρήστες
+mention_cloud_chart_title	Most mentioned accounts	Compte les plus mentionnés	Usuarios más mencionados	Λογαριασμοί που έχουν αναφερθεί πιο πολύ
+user_time_chart_title	Propagation timeline	Frise chronologique de propagation	Línea de tiempo de propagación	Χρονοδιάγραμμα διάδοσης
+hashtag_graph_title	Most associated hashtags	Hashtags les plus associés	Hashtags más Asociados	Πιο σχετικά hashtag
+retweets_cloud_chart_title	Most retweeted users	Utilisateurs les plus retweetés	Usuarios más retweeteados	Χρήστες που έχουν γίνει περισσότερο retweet
+likes_cloud_chart_title	Most liked users	Utilisateurs les plus likés	Usuarios con más likes	Χρήστες που εχουν γίνεi περισσότερο like
+top_words_cloud_chart_title	Most used words in tweets	Mots les plus utilisés dans les tweets	Palabras más utilizadas en tweets	Λέξεις που χρησιμοποιήθηκαν πιο πολύ στα tweets
+tweetCounter_title	Tweets number	Nombre de tweets	Número de Tweet	Αριθμος tweets
+sosem_graph_title	Socio-semantic graph (hashtags and mentioned users)	Graphe socio-sémantique (hashtags et utilisateurs mentionnés)	Grafo socio-semantico (hashtags y usuarios mencionados)	Κοινωνικο-σημασιολογικό γράφημα (hashtag και αναφερόμενοι χρήστες)
+sosem_4mode_graph_title	Socio-semantic graph (hashtags, URLs, mentions, quoted RTs, unedited RTs, replies)	Graphe socio-sémantique (hashtags, URLs, mentions, RTs, RTs avec commentaire, réponses)	Grafo socio-semantico (hashtags, URLs, mencionados, RTs, RTs con comentarios, respuestas)	Κοινωνικο σημασιολογικό γράφημα (hashtag, URLs, αναφορές, RT, RT με σχόλιο, απαντήσεις)
+account_creation_date_chart_title	Count of account creation date chart	Graphique des créations de compte	Gráfico de fechas de creación de cuentas	Διάγραμμα των ημερομηνιών δημιουργίας λογαριασμών
+bubble_chart_title	Bubble chart of top 100 most active accounts	Graphique des 100 comptes les plus actifs	Gráfico de las 100 cuentas más activas	Διάγραμμα φυσαλίδων με τους 100 πιο ενεργούς λογαριασμούς
+user_graph_title	User accounts graph	Graphe de comptes utilisateurs	Grafo de cuentas de usuarios	ράφημα λογαριασμών χρηστών
+export_graph_title	Export Interaction graph (gexf format)	Exporter un graphe des interactions au format Gexf	Exportar el grafo de interacciones en formato Gexf	Εξαγωγή γραφήματος αλληλεπίδρασης (μορφή gexf)
+heatmap_chart_title	Heatmap of tweets distribution	Cartographie d'activité	Mapa de actividad	Heatmap της διανομής των tweets
+elastic_url	Url	Url	Url	Σύνδεσμος
+elastic_count	Number	Nombre	Candidad	Αριθμός
+twittersna_result_username	Username	Nom d'utilisateur	Nombre de usuario	Όνομα χρήστη
+twittersna_result_date	Date	Date	Fecha	Ημερομηνία
+twittersna_result_tweet	Tweet	Tweet	Tweet	Tweet
+twittersna_result_retweet_nb	Retweet number	Nombre de retweets	Candidad de retweets	Αριθμός Retweets
+twittersna_result_like_nb	Like number	Nombre de likes	Candidad de ''me gusta''	Αριθμός likes
+twittersna_result_hide	Hide	Fermer	Ocultar	Απόκρυψη
+twittersna_result_download	Download	Télécharger	Descargar	Λήψη
+twittersna_result_slected_tweets	Selected Tweets	Tweets selectionnés	Tweets seleccionados	Επιλεγμένα Tweets
+twittersna_result_url_in_tweets	Urls in tweets	Urls dans les tweets	Urls en tweets	Urls στα tweets
+twittersna_result_go_to	Go to url	Ouvrir le lien	Ir a la pagina	Μετάβαση στη διεύθυνση url
+twittersna_result_go_to_tweet	Go to tweet	Ouvrir le tweet	Ir a tweet	Μετάβαση στο tweet
+twittersna_result_download_png	Download as PNG	Télécharger en tant que PNG	Descargar como PNG	Λήψη ως PNG
+twittersna_result_download_svg	Download as SVG	Télécharger en tant que SVG	Descargar como SVG	Λήψη ως SVG
+twittersna_result_word	Word	Mot	Palabra	Λέξη
+twittersna_result_nb_occ	Number of occurrences	Nombre d'occurrences	Cantidad de ocurrencias	Αριθμός εμφανίσεων
+twittersna_result_entity	Named entity	Entité nommée	Entidad nombrada	Ονομαζόμενη οντότητα
+twittersna_no_data	No data available	Aucune donnée disponible	Datos no disponibles	Δεν υπάρχουν διαθέσιμα δεδομένα
+user_placeholder	user	utilisateur	usuario	χρήστης
+twittersna_counting_words	Counting Words	Comptage des mots	Contando palabras	Μέτρηση λέξεων
+twittersna_fetching_tweets	Fetching tweets	Récupération des tweets	Recuperando tweets	Λήψη tweets
+twittersna_building_graphs	Building graphs	Construction des graphes	Construyendo el gráfico	Δημιουργία γραφημάτων
+twittersna_result_submit_twitter_sna	Submit to Twitter SNA	Envoyer à Twitter SNA	Enviar a Twitter SNA	Υποβολή στο Twitter SNA
+twittersna_result_view_graph	View graph	Voir le graphe	Ver el grafo	Προβολή γραφήματος
+twittersna_no_community	No community detected	Pas de communauté détectée	No se encontro comunidad	Δεν εντοπίστηκε κοινότητα
+twittersna_acd	Account Creation Date	Date de création du compte	Fecha de creación de la cuenta	Ημερομηνία δημιουργίας λογαριασμού
+twittersna_nb_followers	Number of followers	Nombre d'abonnés	Número de abonados	Αριθμός ακολούθων
+disable_cache	Disable cache	Désactiver le cache	Desactivar el caché	απενεργοποίηση προσωρινής μνήμης
+twittersna_invalid_credentials	Invalid authentication information	Les informations d'authentification ne sont pas valables	La información de autenticación no es válida	Μη έγκυρη πληροφόρηση αυθεντικοποίησης
+twittersna_start	Loading	Chargement	Cargando	Φόρτωση
+cardheader_parameters	Parameters	Paramètres	Parámetros	Παράμετροι
+explanation_keyword	Element to search, it can be a keyword, a URL or a Hastag	Élément à rechercher, il peut s'agir d'un mot-clé, d'une URL ou d'un hastag	Elemento para buscar, puede ser una palabra clave, una URL o una agonía	Στοιχείο για αναζήτηση, μπορεί να είναι μια λέξη-κλειδί, μια διεύθυνση URL ή ένα hastag
+explanation_dates	Dates between the tweets were analyzed for the search term indicated	Les dates entre les tweets ont été analysées pour le terme de recherche indiqué	Las fechas entre los tweets fueron analizadas para el término de búsqueda indicado	Οι ημερομηνίες μεταξύ των Tweets αναλύθηκαν για τον όρο αναζήτησης που υποδεικνύεται
+explanation_timezone	Specify the time zone of the dates introduced before	Spécifiez le fuseau horaire des dates introduites avant	Especifique la zona horaria de las fechas introducidas antes.	Καθορίστε τη ζώνη ώρας των ημερομηνιών που εισάγονται πριν
+explanation_exclude	Specify words that you don’t want to analyze in the search results	Spécifiez des mots que vous ne voulez pas analyser dans les résultats de la recherche	Especifique palabras que no desea analizar en los resultados de búsqueda	Καθορίστε λέξεις που δεν θέλετε να αναλύσετε στα αποτελέσματα αναζήτησης
+explanation_language	Specify the language in which the tweets are going to be analyzed	Spécifiez la langue dans laquelle les tweets vont être analysés	Especifique el idioma en el que se analizarán los tweets.	Καθορίστε τη γλώσσα στην οποία θα αναλυθούν τα tweets
+explanation_account	Specify the twitter account whose tweets are going to be analyzed	Spécifiez le compte Twitter dont les tweets vont être analysés	Especifique la cuenta de Twitter cuyos tweets se analizarán	Καθορίστε τον λογαριασμό Twitter του οποίου θα αναλυθούν τα tweets
+explanation_verified	Specify if you only want to analyze tweets of verified accounts	Spécifiez si vous voulez seulement analyser les tweets des comptes vérifiés	Especifique si solo desea analizar tweets de cuentas verificadas	Καθορίστε εάν θέλετε μόνο να αναλύσετε τα tweets των επαληθευμένων λογαριασμών
+explanation_media	Specify the media elements that you want to analyze	Spécifiez les éléments de support que vous souhaitez analyser	Especifique los elementos de medios que desea analizar.	Καθορίστε τα στοιχεία πολυμέσων που θέλετε να αναλύσετε
+explanation_cache	Specify if you want to ignore the caché of the server and process the search as a new one	Spécifiez si vous souhaitez ignorer le caché du serveur et traiter la recherche en tant que nouvelle	Especifique si desea ignorar el Caché del servidor y procese la búsqueda como una nueva	Καθορίστε εάν θέλετε να αγνοήσετε την Caché του διακομιστή και να επεξεργαστείτε την αναζήτηση ως ένα νέο
+twittersna_searchparameters	Search parameters	Paramètres de recherche	Parámetros de búsqueda	Παράμετροι αναζήτησης
+twittersna_title_timezone	Time zone of the dates	Fuseau horaire des dates	Zona horaria de las fechas	Ζώνη ώρας των ημερομηνιών
+twittersna_title_optional	Optional parameters	Paramètres facultatifs	Parámetros opcionales	Προαιρετικές παράμετροι
+twittersna_title_words	Words	Mots	Palabras	Λόγια
+twittersna_title_accounts	Accounts	Comptes	Cuentas	Λογαριασμοί
+twittersna_title_media	Media	Médias	Medios de comunicación	Μεσο ΜΑΖΙΚΗΣ ΕΝΗΜΕΡΩΣΗΣ
+twittersna_title_advanced	Advanced tools	Outils avancés	Herramientas avanzadas	Προχωρημένα Εργαλεία
+twitter_sna_searchelement	Search element	Élément de recherche	Elemento de búsqueda	Στοιχείο αναζήτησης
+twitter_sna_selectdate	Select a date	Sélectionnez une date	Seleccione una fecha	Επιλέξτε μια ημερομηνία
+twitter_sna_placholder_tweetedby	Twitter account name	Nom du compte Twitter	Nombre de la cuenta de Twitter	Όνομα λογαριασμού Twitter
+tweet_similarity_title	Tweet Similarity	Similarité des tweets	Tweet similitud	Tweet Ομοιότητα
+twittersna_title_time	Time	Temps	Hora	χρόνος
+twittersna_title_elements	Search elements	Éléments de recherche	Elementos de búsqueda	Στοιχεία αναζήτησης
+explanation_allelements	All the elements in this field must appear in the search results	Tous les éléments de ce champ doivent apparaître dans les résultats de la recherche	Todos los elementos en este campo deben aparecer en los resultados de búsqueda	Όλα τα στοιχεία σε αυτό το πεδίο πρέπει να εμφανίζονται στα αποτελέσματα αναζήτησης
+explanation_anyelements	At least one of the elements of this field must appear in the search results	Au moins un des éléments de ce champ doit apparaître dans les résultats de la recherche	Al menos uno de los elementos de este campo debe aparecer en los resultados de búsqueda	Τουλάχιστον ένα από τα στοιχεία αυτού του πεδίου πρέπει να εμφανίζεται στα αποτελέσματα αναζήτησης
+twittersna_field_all	All the elements	Tous les éléments	Todos los elementos	Όλα τα στοιχεία
+twittersna_field_any	Any of the elements	L'un des éléments	Cualquiera de los elementos	Οποιοδήποτε από τα στοιχεία
