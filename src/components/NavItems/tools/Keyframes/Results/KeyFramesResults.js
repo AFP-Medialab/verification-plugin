@@ -11,6 +11,7 @@ import { cleanKeyframesState } from "../../../../../redux/actions/tools/keyframe
 //import OnClickInfo from "../../../../Shared/OnClickInfo/OnClickInfo";
 import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Keyframes.tsv";
+import tsv2 from "../../../../../LocalDictionary/components/Shared/OnClickInfo.tsv"
 import Grid from "@material-ui/core/Grid";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
@@ -35,7 +36,7 @@ import SimpleIcon from '@material-ui/icons/ViewStreamRounded';
 const KeyFramesResults = (props) => {
     const classes = useMyStyles();
     const keyword = useLoadLanguage("components/NavItems/tools/Keyframes.tsv", tsv);
-    const keywordHelp = useLoadLanguage("components/Shared/OnClickInfo.tsv", tsv);
+    const keywordHelp = useLoadLanguage("components/Shared/OnClickInfo.tsv", tsv2);
     const dispatch = useDispatch();
 
     const [detailed, setDetailed] = useState(false);

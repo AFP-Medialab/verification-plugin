@@ -4,28 +4,6 @@ export default function assistantApiCalls() {
 
     const assistantEndpoint = process.env.REACT_APP_ASSISTANT_URL
 
-    const callTiktokScraper = async (url) => {
-        try{
-            let video_id = url.match(/(?<=\/video\/)\d+/)
-            let account_id = url.match(/(?<=www.tiktok.com\/).*?(?=\/video\/)/)
-
-            let result = await axios.get("https://www.tiktok.com/node/share/video/" + account_id + "/" + video_id)
-
-            let scrapeResult = {}
-            scrapeResult.videos = [result.data.itemInfo.itemStruct.video.downloadAddr]
-            scrapeResult.text = result.data.itemInfo.itemStruct.desc
-            scrapeResult.lang = result.data.seoProps.predictedLanguage
-            scrapeResult.images = []
-            scrapeResult.links = []
-
-            return scrapeResult
-        }
-        catch (error){
-            console.log(error)
-            throw new Error("assistant_error")
-        }
-    }
-
     const callAssistantScraper = async (urlType, userInput) => {
         try {
             let scrapeResult = await axios
@@ -104,7 +82,6 @@ export default function assistantApiCalls() {
 
     return {
         callAssistantScraper,
-        callTiktokScraper,
         callSourceCredibilityService,
         callNamedEntityService,
         callAssistantTranslator,

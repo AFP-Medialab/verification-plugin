@@ -1,7 +1,7 @@
 import Box from "@material-ui/core/Box";
 import Grid from "@material-ui/core/Grid";
 import React, { useState, Component, useRef } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 import CardMedia from "@material-ui/core/CardMedia";
@@ -28,7 +28,6 @@ import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
 import Fade from '@material-ui/core/Fade';
 import Slider from '@material-ui/core/Slider';
 import useGetGif from "../../GIF/Hooks/useGetGif";
-import { useDispatch } from "react-redux";
 import { StylesProvider } from "@material-ui/core/styles";
 import { cleanForensicState } from "../../../../../redux/actions/tools/forensicActions"
 import { setStateInit } from "../../../../../redux/actions/tools/gifActions"
@@ -76,6 +75,7 @@ export class Instructions extends Component {
 const ForensicResults = (props) => {
 
     const dispatch = useDispatch();
+    const displayItem = useSelector(state => state.forensic.displayItem)
 
     const theme = createTheme({
         overrides: {
@@ -276,7 +276,7 @@ const ForensicResults = (props) => {
     //Hover effect of the filters
     //============================================================================================
     const [filterHoverEnabled, setFilterHoverEnabled] = React.useState(false);
-    const [filterHover, setFilterHover] = useState(props.url);
+    const [filterHover, setFilterHover] = useState(displayItem);
 
     function displayFilterHover(map) {
         setFilterHover(map);
@@ -285,7 +285,7 @@ const ForensicResults = (props) => {
 
     function hideFilterHover(e) {
         setFilterHoverEnabled(false);
-        setFilterHover(props.url);
+        setFilterHover(displayItem);
     }
 
 
@@ -366,8 +366,8 @@ const ForensicResults = (props) => {
     const [anchorGifPopover, setAnchorGifPopover] = React.useState(null);
     const openGifPopover = Boolean(anchorGifPopover);
     const gifPopover = openGifPopover ? 'simple-popover' : undefined;
-    const gifImage = props.url;
-    const [gifFilter, setGifFilter] = React.useState(props.url);
+    const gifImage = displayItem;
+    const [gifFilter, setGifFilter] = React.useState(displayItem);
     //const gifFilterMask = useSelector(state => state.forensic.maskUrl);
     //console.log(gifFilterMask);
 
@@ -464,8 +464,7 @@ const ForensicResults = (props) => {
     if (gifState === 7 && enableDownload) {
         setEnableDownload(false);
     }
-
-    const imageDisplayed = props.url;
+    const imageDisplayed = displayItem;
     
     
     //tabs
@@ -480,7 +479,7 @@ const ForensicResults = (props) => {
     const [openToast, setOpenToast] = React.useState(false);
 
     const handleClickCopyURL = () => {
-        navigator.clipboard.writeText(props.url);
+        navigator.clipboard.writeText(displayItem);
         setOpenToast(true);
     };
 

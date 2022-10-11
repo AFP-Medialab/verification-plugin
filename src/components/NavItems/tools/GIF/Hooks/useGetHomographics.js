@@ -14,7 +14,19 @@ const useGetHomographics = (files, mode, keyword) => {
 
     useEffect(() => {
 
+        const buildError = (error) => {
+            //handle http error
+            let httpStatus = error.response.status;
+            switch (httpStatus){
+                case 500:
+                    handleError(error.response.data.errorCode);
+                break;
+                default:
+                    handleError("checkGIF_".httpStatus)
+            }
+        } 
 
+        
         const handleError = (e) => {
             
             if (keyword(e) !== ""){
@@ -77,7 +89,7 @@ const useGetHomographics = (files, mode, keyword) => {
                 .catch(error => {
                     //console.log("ERROR", error.response);
                     //console.log("RESPONSE", response);
-                    handleError(error.response.data.errorCode);
+                    buildError(error)
             });
             
                 
@@ -108,7 +120,7 @@ const useGetHomographics = (files, mode, keyword) => {
             authenticatedRequest(axiosConfig)
                 .then(response => getImages(response))
                 .catch(error => {
-                    handleError(error.response.data.errorCode);
+                    buildError(error)
                 });
 
 

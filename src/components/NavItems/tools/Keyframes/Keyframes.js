@@ -61,7 +61,7 @@ const Keyframes = () => {
     const downloadShubshots = useSelector(state => state.humanRightsCheckBox)
     //download subshots results
     const downloadAction = () => {
-        let downloadlink = "http://multimedia2.iti.gr/video_analysis/keyframes/" + video_id + "/Subshots";
+        let downloadlink = "https://multimedia2.iti.gr/video_analysis/keyframes/" + video_id + "/Subshots";
         fetch(downloadlink).then(
             response => {
                 response.blob().then(blob => {

@@ -34,15 +34,12 @@ const PopUp = () => {
     const createScript = () => {
         let script =
             "var images = document.getElementsByTagName(\"img\")\n" +
-            "var image = images ? images[0].src : \"\" \n" +
-            "var scripts = document.getElementsByTagName(\"script\")\n" +
-            "var arr = [].slice.call(scripts)\n" +
-            "var script_to_use = arr.filter(ar=>ar.outerText.toString().includes(\"edge_media_to_caption\"))[0].outerText\n" +
-            "var text_regex = /(?<=edge_media_to_caption\":\\{\"edges\":\\[\\{\"node\"\:\\{\"text\":\").*(?=\"\\}\\}\\]\\},\"can_see_insights_as_brand\")/\n" + // eslint-disable-line
-            "var video_regex = /(?<=video_url\":\").*(?=\",\"video_view_count)/\n" +
-            "var text_found = script_to_use.match(text_regex) ? script_to_use.match(text_regex)[0] : \"\"\n"+
-            "var video_found = script_to_use.match(video_regex) ?  script_to_use.match(video_regex)[0] : \"\"\n"+
-            "video_found = video_found.replace(/\\\\u0026/g, \"&\")\n" +
+            "var image_meta = document.querySelector('meta[property=\"og:image\"]') \n" +
+            "var video_meta = document.querySelector('meta[property=\"og:video\"]') \n" +
+            "var text_meta = document.querySelector('meta[property=\"og:title\"]') \n" +
+            "var text_found = text_meta ? text_meta.content : \"\"\n"+
+            "var video_found = video_meta ?  video_meta.content : \"\"\n"+
+            "var image = image_meta ?  image_meta.content : \"\"\n"+
             "var results = [text_found,\"plugin-split\",image,\"plugin-split\",video_found] \n" +
             "results;\n"
         return script;
