@@ -2,7 +2,7 @@ import {Container} from "@mui/material";
 import Fade from "@mui/material/Fade";
 import React, {useEffect} from "react";
 import {useDispatch} from "react-redux";
-import {selectTool} from "../../../redux/actions";
+import {selectTool} from "../../../redux/reducers/tools/toolReducer";
 import AllTools from "../../NavItems/tools/Alltools/AllTools";
 import Analysis from "../../NavItems/tools/Analysis/Analysis";
 import Keyframes from "../../NavItems/tools/Keyframes/Keyframes";
@@ -106,12 +106,20 @@ const DrawerItem = ({drawerItems}) => {
                 drawerItems.map((item, index) => {
                     if (item.path) {
                         return (
-                            <Route
-                                key={index}
-                                //path={"/*/:url?/:type?/"}
-                                path={item.path}
-                                element={<DrawerItemContent index={index} drawContent={drawerItemsContent} />}                                
-                            />
+                            <Route path={item.path} key={index}>
+                                <Route
+                                    index
+                                    element={<DrawerItemContent index={index} drawContent={drawerItemsContent} />}                                
+                                />
+                                 <Route
+                                    path={":url"}
+                                    element={<DrawerItemContent index={index} drawContent={drawerItemsContent} />}                                
+                                />
+                                <Route
+                                    path={":url/:type"}
+                                    element={<DrawerItemContent index={index} drawContent={drawerItemsContent} />}                                
+                                />
+                            </Route>
                         );
                     }
                     return null;

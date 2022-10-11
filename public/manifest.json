@@ -12,7 +12,7 @@
     "service_worker" : "background.js"
   },
   "permissions": [
-    "nativeMessaging"
+    "contextMenus"
   ],
   "host_permissions": ["<all_urls>"],
   "icons": {

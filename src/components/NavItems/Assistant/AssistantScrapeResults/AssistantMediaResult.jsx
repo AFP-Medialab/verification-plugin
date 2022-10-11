@@ -95,7 +95,7 @@ const AssistantMediaResult = () => {
                             </div>
                         }
                     />
-                    <LinearProgress variant={"indeterminate"} color={"secondary"} hidden={!ocrLoading && !dbkfMediaMatchLoading}/>
+                    {!ocrLoading && !dbkfMediaMatchLoading && <LinearProgress variant={"indeterminate"} color={"secondary"} />}
                     <CardContent>
                         {processUrl !== null ? resultIsImage ? <AssistantImageResult/> : <AssistantVideoResult/> : null}
                     </CardContent>

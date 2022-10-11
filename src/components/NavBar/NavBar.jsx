@@ -843,7 +843,6 @@ const NavBar = (props) => {
                         >
                             {
                                 tabItems.map((item, index) => {
-                                    console.log("tb ", tabValue)
                                     return <Tab key={index}
                                         label={keyword(item.title)}
                                         icon={item.icon}
@@ -855,9 +854,7 @@ const NavBar = (props) => {
                             }
                         </Tabs>
                         <div className={classes.grow} />
-
                         <Languages />
-
                     </Toolbar>
                 </AppBar>
                 

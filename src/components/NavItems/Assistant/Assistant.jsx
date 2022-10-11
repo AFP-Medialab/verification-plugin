@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 
 import {useDispatch, useSelector} from "react-redux";
-import {useParams} from "react-router-dom";
+import {useParams, useNavigate} from "react-router-dom";
 
 import {Box, Paper} from "@mui/material";
 import Divider from "@mui/material/Divider";
@@ -21,7 +21,6 @@ import AssistantUrlSelected from "./AssistantUrlSelected";
 import AssistantWarnings from "./AssistantScrapeResults/AssistantWarnings";
 
 import {cleanAssistantState, setUrlMode, submitInputUrl} from "../../../redux/actions/tools/assistantActions";
-import history from "../../Shared/History/History";
 import {setError} from "../../../redux/actions/errorActions";
 import tsv from "../../../LocalDictionary/components/NavItems/tools/Assistant.tsv";
 import useLoadLanguage from "../../../Hooks/useLoadLanguage";
@@ -31,6 +30,7 @@ const Assistant = () => {
 
     // styles, language, dispatch, params
     const {url} = useParams();
+    const navigate = useNavigate();
     const classes = useMyStyles();
     const dispatch = useDispatch();
     const keyword = useLoadLanguage("components/NavItems/tools/Assistant.tsv", tsv);
@@ -95,7 +95,8 @@ const Assistant = () => {
             dispatch(setUrlMode(true));
             setFormInput(uri)
             dispatch(submitInputUrl(uri))
-            history.push("/app/assistant/");
+            navigate("/app/assistant/")
+            //history.push("/app/assistant/");
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [url])

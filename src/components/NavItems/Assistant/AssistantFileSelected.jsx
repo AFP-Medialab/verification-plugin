@@ -14,14 +14,14 @@ import Typography from "@mui/material/Typography";
 
 import {CONTENT_TYPE, KNOWN_LINKS, selectCorrectActions} from "./AssistantRuleBook";
 import Divider from "@mui/material/Divider";
-import history from "../../Shared/History/History";
 import tsv from "../../../LocalDictionary/components/NavItems/tools/Assistant.tsv";
 import useLoadLanguage from "../../../Hooks/useLoadLanguage";
 import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
-
+import { useNavigate } from "react-router-dom";
 const AssistantFileSelected = () => {
 
     const classes = useMyStyles();
+    const navigate = useNavigate();
     const keyword = useLoadLanguage("components/NavItems/tools/Assistant.tsv", tsv);
 
     const getActionList = (contentType) => {
@@ -33,7 +33,8 @@ const AssistantFileSelected = () => {
     const videoActions = getActionList(CONTENT_TYPE.VIDEO)
 
     const handleClick = (path, cType) => {
-        history.push("/app/" + path + "/" + KNOWN_LINKS.OWN + "/" + cType)
+        //history.push("/app/" + path + "/" + KNOWN_LINKS.OWN + "/" + cType)
+        navigate("/app/" + path + "/" + KNOWN_LINKS.OWN + "/" + cType)
     };
 
     const generateList = (title, cType, actionList) => {return (

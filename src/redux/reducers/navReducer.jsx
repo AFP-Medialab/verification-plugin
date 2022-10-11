@@ -1,4 +1,19 @@
-const navReducer = (state = 0, action) => {
+import { createSlice } from "@reduxjs/toolkit";
+const initialState = 0
+
+const navSlice = createSlice({
+    name: "nav",
+    initialState,
+    reducers:{
+        selectPage(state, action){
+            return action.payload;
+        }
+    }
+})
+export const {selectPage} = navSlice.actions
+const navReducer = navSlice.reducer
+
+/*const navReducer = (state = 0, action) => {
     switch (action.type) {
         case "SELECT_PAGE":
             console.log("nav ...", action.payload)
@@ -6,5 +21,5 @@ const navReducer = (state = 0, action) => {
         default:
             return state;
     }
-};
+};*/
 export default navReducer;

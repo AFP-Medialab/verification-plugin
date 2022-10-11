@@ -1,8 +1,25 @@
-const defaultState = {
+import { createSlice } from "@reduxjs/toolkit";
+
+const initialState = {
     selected: 0,
 };
+const toolSlice = createSlice({
+    name: "tools",
+    initialState,
+    reducers: {
+        selectTool(state, action){
+            state.selected = action.payload
+        },
+        cleanTool(){
+            return initialState
+        }
+    }
+})
 
-const toolReducer = (state = defaultState, action) => {
+export const {selectTool, cleanTool} = toolSlice.actions
+const toolReducer = toolSlice.reducer
+
+/*const toolReducer = (state = defaultState, action) => {
     switch (action.type) {
         case "SELECT_TOOL":
             console.log("selected ", action.payload)
@@ -12,5 +29,5 @@ const toolReducer = (state = defaultState, action) => {
         default:
             return state;
     }
-};
+};*/
 export default toolReducer;

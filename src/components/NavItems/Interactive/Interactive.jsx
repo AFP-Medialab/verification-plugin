@@ -17,15 +17,16 @@ import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
 import ExpandMoreIcon from '@mui/icons-material//ExpandMore';
 import ImageReverseSearch from "../tools/ImageReverseSearch";
-import history from '../../Shared/History/History';
 import useLoadLanguage from "../../../Hooks/useLoadLanguage";
 import tsv from "../../../LocalDictionary/components/NavItems/Interactive.tsv";
 import Link from "@mui/material/Link";
 import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
 import { submissionEvent } from "../../Shared/GoogleAnalytics/GoogleAnalytics";
+import { useNavigate } from "react-router-dom";
 
 const Interactive = () => {
     const classes = useMyStyles();
+    const navigate = useNavigate();
     const keyword = useLoadLanguage("components/NavItems/Interactive.tsv", tsv);
     const answersAvailable = useSelector(state => state.interactiveExplanation);
 
@@ -120,7 +121,8 @@ const Interactive = () => {
                                             </Grid>
                                             <Grid item>
                                                 <Button p={3} variant="contained" color="primary" onClick={() => {
-                                                    history.push("tools/forensic/" + encodeURIComponent(obj.url))
+                                                    navigate("/app/tools/forensic?url=" + encodeURIComponent(obj.url))
+                                                    //history.push("tools/forensic/" + encodeURIComponent(obj.url))
                                                 }}>
                                                     {keyword("quiz_forensic")}
                                                 </Button>
@@ -128,7 +130,8 @@ const Interactive = () => {
                                         </Grid>
                                         :
                                         <Button p={3} variant="contained" color="primary" onClick={() => {
-                                            history.push("tools/keyframes/" + encodeURIComponent(obj.url))
+                                            navigate("/app/tools/keyframes?url=" + encodeURIComponent(obj.url))
+                                            //history.push("tools/keyframes/" + encodeURIComponent(obj.url))
                                         }}>
                                             {keyword("quiz_keyframes")}
                                         </Button>

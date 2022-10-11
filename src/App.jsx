@@ -1,5 +1,5 @@
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { HashRouter, Route, Routes, BrowserRouter } from "react-router-dom";
+import { HashRouter, Route, Routes } from "react-router-dom";
 
 import PopUp from "./components/PopUp/PopUp";
 import NavBar from "./components/NavBar/NavBar";
@@ -67,7 +67,7 @@ const App = () => {
     }
   }
   return (
-    <HashRouter >
+    <HashRouter>
       <ThemeProvider theme={theme}>
         <Routes>
           <Route index path="/" element={<PopUp />} />

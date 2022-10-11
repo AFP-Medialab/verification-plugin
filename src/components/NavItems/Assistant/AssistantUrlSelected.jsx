@@ -70,7 +70,7 @@ const AssistantUrlSelected = (props) => {
                         </Typography>}
                 />
 
-                <LinearProgress color={"secondary"} hidden={!loading}/>
+                {loading &&<LinearProgress color={"secondary"}/>}
 
                 <CardContent>
                     <Box mr={2}>

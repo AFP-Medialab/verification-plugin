@@ -10,16 +10,17 @@ import ListItemAvatar from "@mui/material/ListItemAvatar";
 import ListItemText from "@mui/material/ListItemText";
 import Typography from "@mui/material/Typography";
 
-import history from "../../../Shared/History/History";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/Assistant.tsv";
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import Divider from "@mui/material/Divider";
 import {KNOWN_LINKS} from "../AssistantRuleBook";
+import { useNavigate } from "react-router-dom";
 
 const AssistantProcessUrlActions = () => {
 
     const classes = useMyStyles();
+    const navigate = useNavigate();
     const keyword = useLoadLanguage("components/NavItems/tools/Assistant.tsv", tsv);
 
     const inputUrl = useSelector(state => state.assistant.inputUrl);
@@ -29,9 +30,11 @@ const AssistantProcessUrlActions = () => {
 
     const handleClick = (path, resultUrl) => {
         if (resultUrl != null) {
-            history.push("/app/" + path + "/" + encodeURIComponent(resultUrl) + "/" + contentType)
+            navigate("/app/" + path + "/" + encodeURIComponent(resultUrl) + "/" + contentType)
+            //history.push("/app/" + path + "/" + encodeURIComponent(resultUrl) + "/" + contentType)
         } else {
-            history.push("/app/" + path + "/" + KNOWN_LINKS.OWN + "/" + contentType)
+            navigate("/app/" + path + "/" + KNOWN_LINKS.OWN + "/" + contentType)
+            //history.push("/app/" + path + "/" + KNOWN_LINKS.OWN + "/" + contentType)
         }
     };
 

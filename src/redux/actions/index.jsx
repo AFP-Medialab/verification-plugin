@@ -28,15 +28,11 @@ export const addDictionary = (label, json) => {
     };
 };
 
-export const selectPage = createAction("SELECT_PAGE")
-/*export const selectPage = (number) => {
-    return {
-        type: "SELECT_PAGE",
-        payload : number,
-    }
-};*/
+//DEPRECATED
+//export const selectPage = createAction("SELECT_PAGE")
 
-export const selectTool = createAction("SELECT_TOOL")
+//DEPRECATED
+//export const selectTool = createAction("SELECT_TOOL")
 /*export const selectTool = (number) => {
     return {
         type : "SELECT_TOOL",
