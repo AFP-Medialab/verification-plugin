@@ -121,7 +121,7 @@ const Interactive = () => {
                                             </Grid>
                                             <Grid item>
                                                 <Button p={3} variant="contained" color="primary" onClick={() => {
-                                                    navigate("/app/tools/forensic?url=" + encodeURIComponent(obj.url))
+                                                    navigate("/app/tools/forensic/" + encodeURIComponent(obj.url))
                                                     //history.push("tools/forensic/" + encodeURIComponent(obj.url))
                                                 }}>
                                                     {keyword("quiz_forensic")}
@@ -130,7 +130,7 @@ const Interactive = () => {
                                         </Grid>
                                         :
                                         <Button p={3} variant="contained" color="primary" onClick={() => {
-                                            navigate("/app/tools/keyframes?url=" + encodeURIComponent(obj.url))
+                                            navigate("/app/tools/keyframes/" + encodeURIComponent(obj.url))
                                             //history.push("tools/keyframes/" + encodeURIComponent(obj.url))
                                         }}>
                                             {keyword("quiz_keyframes")}

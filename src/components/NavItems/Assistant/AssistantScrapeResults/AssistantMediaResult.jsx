@@ -43,7 +43,7 @@ const AssistantMediaResult = () => {
     const videoList = useSelector(state => state.assistant.videoList);
 
     // third party tool states
-    const ocrLoading = useSelector(state=>state.assistant.ocrLoading)
+    //const ocrLoading = useSelector(state=>state.assistant.ocrLoading)
     const dbkfMediaMatchLoading = useSelector(state=>state.assistant.dbkfMediaMatchLoading)
     const dbkfImageMatch = useSelector(state => state.assistant.dbkfImageMatch);
     const dbkfVideoMatch = useSelector(state => state.assistant.dbkfVideoMatch);
@@ -66,7 +66,6 @@ const AssistantMediaResult = () => {
         ;
         dispatch(setProcessUrl(url, cType));
     }
-
     return (
         <Grid container spacing={2}>
             <Grid item xs={6} hidden={!urlMode}>
@@ -95,7 +94,7 @@ const AssistantMediaResult = () => {
                             </div>
                         }
                     />
-                    {!ocrLoading && !dbkfMediaMatchLoading && <LinearProgress variant={"indeterminate"} color={"secondary"} />}
+                    {/*!ocrLoading && */dbkfMediaMatchLoading && <LinearProgress variant={"indeterminate"} color={"secondary"} />}
                     <CardContent>
                         {processUrl !== null ? resultIsImage ? <AssistantImageResult/> : <AssistantVideoResult/> : null}
                     </CardContent>

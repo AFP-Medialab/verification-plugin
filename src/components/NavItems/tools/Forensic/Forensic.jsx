@@ -26,9 +26,6 @@ import FolderOpenIcon from '@mui/icons-material/FolderOpen';
 
 const Forensic = () => {
     const {url} = useParams();
-    const params = useParams()
-    console.log("url ", url);
-    console.log("params ", params);
     const classes = useMyStyles();
     const keyword = useLoadLanguage("components/NavItems/tools/Forensic.tsv", tsv);
     const keywordAllTools = useLoadLanguage("components/NavItems/tools/Alltools.tsv", tsvAllTools);
