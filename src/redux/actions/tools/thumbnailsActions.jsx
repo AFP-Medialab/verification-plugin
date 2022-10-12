@@ -1,3 +1,5 @@
+//DEPRECATED TO REMOVED
+
 import { createAction } from "@reduxjs/toolkit"
 
 export const setThumbnailsResult = createAction("SET_THUMBNAILS_RESULT")

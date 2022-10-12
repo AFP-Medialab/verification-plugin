@@ -32,7 +32,7 @@ import { useDispatch } from "react-redux";
 import { setMetadataMediaType } from "../../../../redux/reducers/tools/metadataReducer";
 
 
-const Metadata = () => {
+const Metadata = ({mediaType}) => {
     const {url, type} = useParams();
     const location = useLocation();
 
@@ -44,7 +44,7 @@ const Metadata = () => {
     const resultData = useSelector(state => state.metadata.result);
     const resultIsImage = useSelector(state => state.metadata.isImage);
 
-    const [radioImage, setRadioImage] = useState( true);
+    const [radioImage, setRadioImage] = useState(mediaType === 'video' ? false : true);
     const [input, setInput] = useState((resultUrl) ? resultUrl : "");
     const [imageUrl, setImageurl] = useState(null);
     const [videoUrl, setVideoUrl] = useState(null);

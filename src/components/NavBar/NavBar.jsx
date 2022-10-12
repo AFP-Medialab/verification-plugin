@@ -349,7 +349,7 @@ const NavBar = (props) => {
                 : <MetadataIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} title={keyword("navbar_metadata")}/>,
             iconColored: <MetadataIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title={keyword("navbar_metadata")}/>,
             tsvPrefix: "metadata",
-            path: "metadata",
+            path: "metadata_image",
             pathGroup: "TOOL",
             type: keyword("navbar_category_image"),
             typeId: 2,

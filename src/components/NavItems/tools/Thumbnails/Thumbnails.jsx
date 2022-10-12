@@ -11,7 +11,7 @@ import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import {useInput, loadImageSize, useLoading} from "../../../../Hooks/useInput";
 import {
     cleanThumbnailsState,
-    setThumbnailsResult, setThumbnailsLoading} from "../../../../redux/actions/tools/thumbnailsActions"
+    setThumbnailsResult, setThumbnailsLoading} from "../../../../redux/reducers/tools/thumbnailsReducer"
 import {setError} from "../../../../redux/actions/errorActions"
 import CloseResult from "../../../Shared/CloseResult/CloseResult";
 import Checkbox from "@mui/material/Checkbox";
@@ -42,11 +42,17 @@ const Thumbnails = () => {
     const isLoading = useSelector(state => state.thumbnails.loading);
     const [height, setHeight] = useState(0);
     const [showResult, setShowResult] = useState(false);
+    const [input, setInput] = useState(resultUrl)
+    const [urlDetected, setUrlDetected] = useState(false)
     var cols = 3;
 
     const dispatch = useDispatch();
 
-    const input = useInput(resultUrl);
+    const handleChangeValue = (e) => {
+        setInput(e.target.value);
+    };
+
+    
     const [selectedValue, setSelectedValue] = useState({
         'google': true,
         'bing': false,
@@ -123,7 +129,7 @@ const Thumbnails = () => {
     const submitForm = () => {
         setShowResult(false);
         dispatch(setError(null));
-        let url = input.value.replace("?rel=0", "");
+        let url = input.replace("?rel=0", "");
         if (url !== null && url !== "" && isYtUrl(url)) {
             submissionEvent(url);
             let images = get_images(url);
@@ -156,15 +162,22 @@ const Thumbnails = () => {
     
     const [getHeight, isImgLoading] = useLoading(computeHeight);
     useEffect(() => {
+
         if (url !== undefined) {
             const uri = (url !== null) ? decodeURIComponent(url) : undefined;
-            dispatch(setThumbnailsResult({url:uri, result:resultData, notification:false, loading:false}));
+            setInput(uri)
+            setSelectedValue({
+                ...selectedValue,
+                openTabs: false
+            });
+            setUrlDetected(true)           
         }
-        if(resultData){
-            getHeight();
-        }
-        // eslint-disable-next-line 
-    }, [url, dispatch, resultData]);
+    }, [url]);
+
+    useEffect(() => {
+        if(urlDetected)
+            submitForm()
+    }, [urlDetected])
 
    // const response = getHeight();
     useEffect(() => {
@@ -207,7 +220,8 @@ const Thumbnails = () => {
                                 placeholder={keyword("api_input")}
                                 fullWidth
                                 variant="outlined"
-                                {...input}
+                                onChange={e => handleChangeValue(e)}
+                                value={input}
                             />
 
                         </Grid>
