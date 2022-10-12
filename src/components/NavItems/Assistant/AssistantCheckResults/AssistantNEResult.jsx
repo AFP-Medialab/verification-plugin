@@ -35,7 +35,8 @@ const AssistantNEResult = () => {
     const neLoading = useSelector(state => state.assistant.neLoading);
 
     const [selectedIndex, setSelectedIndex] = useState(null);
-
+    console.log("neResult ", neResult);
+    console.log("neResultCount ", neResultCount);
     const handleCollapse = (index) => {
         index === selectedIndex ?
             setSelectedIndex(null) : setSelectedIndex(index)
@@ -85,6 +86,44 @@ const AssistantNEResult = () => {
         onWordMouseOut: getCallback("onWordMouseOut"),
         onWordMouseOver: getCallback("onWordMouseOver")
     }
+    function getWordColor(tag) {
+        switch (tag.category) {
+            case "Person":
+                return "blue"
+            case "Location":
+                return "red"
+            case "Organization":
+                return "green"
+            case "Hashtag":
+                return "orange"
+            case "UserId":
+                return "purple"
+            default:
+                return "black"
+        }
+    }
+    const styles = {
+        margin: '0px 3px',
+        verticalAlign: 'middle',
+        display: 'inline-block',
+      }
+    const customRenderer = (tag, size, color) => {        
+        const { className, style, ...props } = tag.props || {}
+        const fontSize = size + 'px'
+        const key = tag.key || tag.value
+        const tagStyle = { ...styles, color: getWordColor(tag), fontSize, ...style }
+
+        let tagClassName = 'tag-cloud-tag'
+        if (className) {
+            tagClassName += ' ' + className
+  }
+
+        return (
+          <span key={key} style={tagStyle} className={tagClassName} >
+            {tag.value}
+          </span>
+        )
+      }
 
     return (
         <Grid item xs={12}>
@@ -92,7 +131,7 @@ const AssistantNEResult = () => {
                 <CardHeader className={classes.assistantCardHeader}
                             title={keyword("named_entity_title")}
                 />
-                <LinearProgress hidden={!neLoading}/>
+                {neLoading && <LinearProgress />}
                 <CardContent>
                     <Grid container>
                         <Grid item xs={4} style={{"maxHeight": 300, "overflowY": 'auto'}}>
@@ -113,12 +152,12 @@ const AssistantNEResult = () => {
                                                 {value["words"].map((v, k)=>(
                                                     <ListItem key={k}>
                                                             <ListItemText>
-                                                                <Link href={"https://www.google.com/search?q=" + v.text}
+                                                                <Link href={"https://www.google.com/search?q=" + v.value}
                                                                       rel="noopener noreferrer"
                                                                       target={"_blank"}>
-                                                                    {v.text} &nbsp;
+                                                                    {v.value} &nbsp;
                                                                 </Link>
-                                                                ({v.value})
+                                                                ({v.count})
                                                             </ListItemText>
                                                     </ListItem>
                                                 ))}
@@ -132,8 +171,8 @@ const AssistantNEResult = () => {
                             <Divider orientation="vertical"/>
                         </Grid>
                         <Grid item xs={7} align={"center"}>
-                            /*{<ReactWordcloud words={neResultCount} callbacks={callbacks} options={options}/>}*/
-                            <TagCloud tags={neResultCount} />
+                            {/*<ReactWordcloud words={neResultCount} callbacks={callbacks} options={options}/>*/}
+                            <TagCloud tags={neResultCount} minSize={20} maxSize={45} renderer={customRenderer}/>
                         </Grid>
                     </Grid>
                 </CardContent>

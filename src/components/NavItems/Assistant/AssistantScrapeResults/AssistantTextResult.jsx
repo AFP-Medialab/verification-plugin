@@ -87,10 +87,8 @@ const AssistantTextResult = () => {
                         </div>
                     }
                 />
-                <LinearProgress variant={"indeterminate"}
-                                color = {"secondary"}
-                                hidden={!dbkfMatchLoading && !hpLoading && !mtLoading}
-                />
+                {dbkfMatchLoading && hpLoading && mtLoading && <LinearProgress variant={"indeterminate"}
+                                color = {"secondary"} />}
                 <CardContent>
                         <Collapse in={expanded}
                                   collapsedSize={100}

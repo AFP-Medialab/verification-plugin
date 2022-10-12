@@ -469,14 +469,14 @@ const decideWhetherToScrape = (urlType, contentType) => {
  **/
 const buildWordCloudList = (entities) => {
   return entities.reduce((accumulator, currentWord) => {
-    accumulator.filter((wordObj) => wordObj.text === currentWord["word"]).length
+    accumulator.filter((wordObj) => wordObj.value === currentWord["word"]).length
       ? (accumulator.filter(
-          (wordObj) => wordObj.text === currentWord["word"]
-        )[0].value += 1)
+          (wordObj) => wordObj.value === currentWord["word"]
+        )[0].count += 1)
       : accumulator.push({
-          text: currentWord["word"],
+          value: currentWord["word"],
           category: currentWord["category"],
-          value: 1,
+          count: 1,
         });
 
     return accumulator;
