@@ -19,7 +19,7 @@ const gifSlice = createSlice({
     name:"gif",
     initialState,
     reducers:{
-        setStateInit(state, action){
+        setStateInit(){
             return initialState
         },
         setStateSelectingLocal(state){
@@ -53,29 +53,5 @@ export const {setStateInit, setStateSelectingLocal, setStateSelectingUrl, setSta
     setStateLoading, setStateDownloading, setStateError, setStateBackResults, setStateShow} = gifSlice.actions
 
 const gifReducer = gifSlice.reducer;
-/*const gifReducer = (state = defaultState, action) => {
-    switch (action.type) {
-        case "SET_STATE_INIT":
-            return {...state, homoImg1:"", homoImg2:"", toolState:1};
-        case "SET_STATE_SELECTINGFILES_LOCAL":
-            return {...state, toolState:21};
-        case "SET_STATE_SELECTINGFILES_URL":
-            return {...state, toolState:22};
-        case "SET_STATE_READY":
-            return {...state, toolState:3};
-        case "SET_STATE_LOADING":
-            return {...state, toolState:4};
-        case "SET_STATE_SHOW":
-            return action.payload;
-        case "SET_STATE_ERROR":
-            return {...state, toolState:6};
-        case "SET_STATE_DOWNLOADING":
-            return {...state, toolState:7};
-        case "SET_STATE_BACKRESULTS":
-            return {...state, toolState:5};
-        default:
-            return state;
 
-    }
-};*/
 export default gifReducer;

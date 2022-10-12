@@ -28,9 +28,8 @@ import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 import Fade from '@mui/material/Fade';
 import Slider from '@mui/material/Slider';
 import useGetGif from "../../GIF/Hooks/useGetGif";
-import { StyledEngineProvider } from "@mui/material/styles";
 import { cleanForensicState } from "../../../../../redux/actions/tools/forensicActions"
-import { setStateInit } from "../../../../../redux/actions/tools/gifActions"
+import { setStateInit } from "../../../../../redux/reducers/tools/gifReducer"
 import LinkIcon from '@mui/icons-material/Link';
 import IconButton from '@mui/material/IconButton';
 import Snackbar from '@mui/material/Snackbar';
@@ -38,7 +37,6 @@ import WarningIcon from '@mui/icons-material/Warning';
 import Alert from '@mui/material/Alert';
 import MakoScale from '../../../../NavBar/images/SVG/MakoScale.png';
 import EmojiObjectsIcon from '@mui/icons-material/EmojiObjects';
-import { FormatColorReset } from "@mui/icons-material";
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
