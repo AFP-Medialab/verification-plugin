@@ -168,7 +168,6 @@ const AdvancedTools = () => {
             accessCode: codeInput
         }).then(result => {
             setDialogState(2);
-            //console.log(result);
         }).catch(error => {
             handleError(error.error ? error.error.code : ERR_AUTH_UNKNOWN_ERROR);
             setStateUnlockTools(false);
@@ -412,8 +411,6 @@ const AdvancedTools = () => {
                                 </Typography>
                             </Box>
 
-
-
                         </DialogContent>
                         <DialogActions>
                             <Button variant="contained" color="primary" onClick={handleClickUnlock} fullWidth disabled={stateUnlockTools}>
@@ -435,10 +432,9 @@ const AdvancedTools = () => {
                             <Typography variant="body2">
                                 {keyword("text_success")}
                             </Typography>
-
                         </DialogContent>
                         <DialogActions>
-                            <Button color="default" onClick={handleCloseFinish} fullWidth >
+                            <Button variant="contained" color="primary" onClick={handleCloseFinish} fullWidth >
                                 {messageI18NResolver("AUTHENTICATION_FORM_CLOSE")}
                             </Button>
                         </DialogActions>
@@ -652,7 +648,7 @@ const AdvancedTools = () => {
 
                         </DialogContent>
                         <DialogActions>
-                            <Button v="true" color="default" onClick={handleCloseRegistration} fullWidth >
+                            <Button variant="contained" color="primary" onClick={handleCloseRegistration} fullWidth >
                                 {messageI18NResolver("AUTHENTICATION_FORM_CLOSE")}
                             </Button>
                         </DialogActions>
