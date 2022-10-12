@@ -40,7 +40,7 @@ const AssistantVideoResult = () => {
     }
 
     const downloadVideoFound = () => {
-        return (input_url_type === KNOWN_LINKS.TIKTOK || input_url_type === KNOWN_LINKS.INSTAGRAM)
+        return (input_url_type === KNOWN_LINKS.INSTAGRAM)
     }
 
     const preprocessLinkForEmbed = (processUrl) => {

@@ -12,19 +12,21 @@ import FormatQuoteIcon from "@mui/icons-material/FormatQuote";
 import Grid from "@mui/material/Grid";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import LinearProgress from "@mui/material/LinearProgress";
-import SpeakerNotesIcon from '@mui/icons-material/SpeakerNotes';
+import TranslateIcon from '@mui/icons-material/Translate'
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
-
-import {runTranslation, setWarningExpanded} from "../../../../redux/actions/tools/assistantActions";
-import tsv from "../../../../LocalDictionary/components/NavItems/tools/Assistant.tsv";
+import {setWarningExpanded} from "../../../../redux/actions/tools/assistantActions";import tsv from "../../../../LocalDictionary/components/NavItems/tools/Assistant.tsv";
+import sharedTsv from "../../../../LocalDictionary/components/Shared/utils.tsv"
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import IconButton from "@mui/material/IconButton";
+import FileCopyOutlined from '@mui/icons-material/FileCopy'
 
 const AssistantTextResult = () => {
 
     const keyword = useLoadLanguage("components/NavItems/tools/Assistant.tsv", tsv);
+    const sharedKeyword = useLoadLanguage("components/Shared/utils.tsv", sharedTsv);
+
     const classes = useMyStyles()
     const dispatch = useDispatch()
 
@@ -104,10 +106,17 @@ const AssistantTextResult = () => {
                     <Grid container>
                         <Grid item xs={6} style={{"display": "flex"}}>
                             <Typography className={classes.toolTipIcon} onClick={()=>setDisplayOrigLang(!displayOrigLang)}>{textLang}</Typography>
-                            {textLang === "en" ?
+                            <Tooltip title={sharedKeyword("copy_to_clipboard")}>
+                                <IconButton className={classes.toolTipIcon} onClick={() => {navigator.clipboard.writeText(text)}}>
+                                    <FileCopyOutlined/>
+                                </IconButton>
+                            </Tooltip>
+                            {textLang && textLang !== "en" && textLang !== "" ?
                                 <Tooltip title={keyword("translate")}>
-                                    <IconButton className={classes.toolTipIcon} onClick={()=>dispatch(runTranslation("fr", text))}>
-                                        <SpeakerNotesIcon/>
+                                    <IconButton className={classes.toolTipIcon}
+                                        onClick={()=>window.open("https://translate.google.com/?sl=auto&text=" + encodeURIComponent(text) + "&op=translate", "_blank"
+                                    )}>
+                                        <TranslateIcon/>
                                     </IconButton>
                                 </Tooltip> : null
                             }
