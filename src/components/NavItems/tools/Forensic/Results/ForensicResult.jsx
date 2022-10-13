@@ -27,7 +27,7 @@ import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 import Fade from '@mui/material/Fade';
 import Slider from '@mui/material/Slider';
-import useGetGif from "../../GIF/Hooks/useGetGif";
+import useGetGif from "../../Gif/Hooks/useGetGif";
 import { cleanForensicState } from "../../../../../redux/actions/tools/forensicActions"
 import { setStateInit } from "../../../../../redux/reducers/tools/gifReducer"
 import LinkIcon from '@mui/icons-material/Link';

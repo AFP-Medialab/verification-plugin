@@ -16,7 +16,7 @@ import {Route, Routes} from 'react-router-dom'
 import Footer from "../../Shared/Footer/Footer";
 import TwitterSna from "../../NavItems/tools/TwitterSna/TwitterSna";
 import OCR from "../../NavItems/tools/OCR/OCR";
-import Gif from "../../NavItems/tools/GIF/Gif";
+import CheckGif from "../../NavItems/tools/Gif/CheckGif";
 import DeepfakeImage from "../../NavItems/tools/Deepfake/DeepfakeImage";
 import DeepfakeVideo from "../../NavItems/tools/Deepfake/DeepfakeVideo";
 import Geolocation from "../../NavItems/tools/Geolocation/Geolocation";
@@ -77,7 +77,7 @@ const DrawerItem = ({drawerItems}) => {
             footer: <Footer type={"usfd"} />
         },
         {
-            content: <Gif />,
+            content: <CheckGif />,
             footer: <Footer type={"borelli-afp"} />
         },
         {
