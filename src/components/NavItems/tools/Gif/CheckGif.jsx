@@ -27,7 +27,7 @@ import IconButton from '@mui/material/IconButton';
 import {submissionEvent} from "../../../Shared/GoogleAnalytics/GoogleAnalytics";
 
 
-const Gif = () => {
+const CheckGif = () => {
     //Init variables
     //============================================================================================
     const classes = useMyStyles();
@@ -863,4 +863,4 @@ const Gif = () => {
                 
         </div>);
 };
-export default Gif;
+export default CheckGif;
