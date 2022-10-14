@@ -17,7 +17,7 @@ import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 //import { useLoading, loadImageSize } from "../../../../../Hooks/useInput"
-import { Accordion, AccordionDetails, AccordionSummary, CircularProgress, LinearProgress, Typography } from "@material-ui/core";
+import { Accordion, AccordionDetails, AccordionSummary, CircularProgress, Typography } from "@material-ui/core";
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ReportProblemOutlinedIcon from '@material-ui/icons/ReportProblemOutlined';
 import { createTheme, ThemeProvider } from '@material-ui/core/styles';
