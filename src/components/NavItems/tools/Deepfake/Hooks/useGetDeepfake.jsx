@@ -96,7 +96,7 @@ const UseGetDeepfake = (url, processURL, mode) => {
             
         };
         // eslint-disable-next-line
-    }, [url, processURL, mode, dispatch]);
+    }, [url, processURL, mode]);
 
 };
 export default UseGetDeepfake;

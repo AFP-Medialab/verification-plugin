@@ -112,5 +112,5 @@ export const useAnalysisWrapper = (setAnalysisLoading, setAnalysisResult, servic
                 .catch(error => handleError(error))
         }
         // eslint-disable-next-line
-    }, [apiUrl, keyword, dispatch, processUrl]);
+    }, [apiUrl, processUrl]);
 };

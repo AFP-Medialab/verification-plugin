@@ -132,35 +132,6 @@ const KeyFramesResults = (props) => {
         setClassDetailed(classes.showElement)
     }
 
-
-    /*
-    const computeHeight = async () => {
-        loadImageSize(simpleList, cols)
-            .then((height) => { setHeight(height); setFindHeight(true) })
-            .then((height) => { return height })
-            .catch((e) => { return null });
-    };  
-    */
-    //const [getHeight, isLoading] = useLoading(computeHeight);
-    // const response = getHeight();
-
-    /*
-    useEffect(() => {
-        if (simpleList) {
-            getHeight();
-        }
-        // eslint-disable-next-line 
-    }, [simpleList]);
-    
-
-    useEffect(() => {
-        if (findHeight) {
-            dispatch(setKeyframesLoading(false));
-        }
-    }, [findHeight, dispatch]);
-
-    */
-
     //Help
     //============================================================================================
     const [anchorHelp, setAnchorHelp] = useState(null);
@@ -177,11 +148,7 @@ const KeyFramesResults = (props) => {
     }
 
     return (
-
-
                 <>
-
-
                     <Card>
 
                         {
@@ -234,25 +201,10 @@ const KeyFramesResults = (props) => {
                             </Box>
 
                         }
-                        {
-                            isLoadingSimilarity &&
-
-                            <Box p={4}>
-
-                                <LinearProgress hidden={!isLoadingSimilarity} />
-                                <Box m={1} />
-                                <Typography variant="body1" align="center" hidden={!isLoadingSimilarity}>
-                                        {keyword("loading_dbkf")}
-                                </Typography>
-
-                            </Box>
-                        }
-
+                       
                     </Card>
 
                     <Box m={3} />
-
-
 
                     <CloseResult onClick={() => dispatch(cleanKeyframesState())} />
 
@@ -386,9 +338,7 @@ const KeyFramesResults = (props) => {
                                     <ImageGridList list={simpleList} cols={cols} handleClick={imageClick} style={{ maxHeigth: "none", height: "auto" }} setLoading={showElementsSimple} />
                                 </div>
                             }
-                            
-
-
+                        
                             </ThemeProvider>
                         </div>
                     </Card>

@@ -9,6 +9,7 @@ export const useKeyframeWrapper = (url, keyword) => {
     const dispatch = useDispatch();
 
     useEffect(() => {
+        let source = axios.CancelToken.source();
         let jsonData = {
             "video_url": url,
             "user_key": process.env.REACT_APP_KEYFRAME_TOKEN,
@@ -44,7 +45,7 @@ export const useKeyframeWrapper = (url, keyword) => {
                     clearInterval(interval);
                 }
                 else {
-                    axios.get(url)
+                    axios.get(url, { cancelToken: source.token})
                         .then(response => {
                             data = response["data"];
                             if (keyword("keyframes_wait_" + data["status"]) !== "") {
@@ -61,14 +62,17 @@ export const useKeyframeWrapper = (url, keyword) => {
         };
 
         const postUrl = (multimediaUrl, data) => {
+            console.log("post ", data);
            /* chrome.runtime.sendMessage({contentScriptQuery: "keyframes", url: multimediaUrl, body: data}, (response) => {
                 console.log("response ", response);
             })*/
-            axios.post(multimediaUrl, data)
+           
+            axios.post(multimediaUrl, data, { cancelToken: source.token})
                 .then(response => {
                     getUntil("https://multimedia2.iti.gr/video_analysis/status/" + response.data.video_id, response.data.video_id)
                 })
                 .catch(errors => handleError(errors));
+            
         };
 
         if (url === undefined || url === "")
@@ -76,5 +80,7 @@ export const useKeyframeWrapper = (url, keyword) => {
         dispatch(cleanKeyframesState());
         dispatch(setKeyframesLoading(true));
         postUrl("https://multimedia2.iti.gr/video_analysis/subshot", jsonData);
-    }, [url, keyword, dispatch]);
+        return () => {
+        }
+    }, [url]);
 };

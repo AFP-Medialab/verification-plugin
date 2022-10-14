@@ -73,7 +73,7 @@ const useLoadLanguage = (onlineTsv, localTsv) => {
                 backUpLocal();
             })
         }
-    }, [gitHubFullUrl, localTsv, dictionary, dispatch]);
+    }, [localTsv]);
 
     return (key) => {
         return (dictionary && dictionary[lang] && dictionary[lang][key]) ? dictionary[lang][key] : "";

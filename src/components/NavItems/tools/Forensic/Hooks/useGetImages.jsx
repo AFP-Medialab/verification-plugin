@@ -119,7 +119,7 @@ const useGetImages = (url, type, keyword) => {
 
         }
         // eslint-disable-next-line
-    }, [url, keyword, dispatch]);
+    }, [url]);
 };
 export default useGetImages;
 

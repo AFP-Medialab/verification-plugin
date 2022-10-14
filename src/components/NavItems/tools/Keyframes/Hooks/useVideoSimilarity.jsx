@@ -47,5 +47,5 @@ export const useVideoSimilarity = (url, keyword) => {
         }
             
         //postUrl("http://multimedia2.iti.gr/video_analysis/segmentation", jsonData);
-    }, [url, keyword, dispatch]);
+    }, [url]);
 };

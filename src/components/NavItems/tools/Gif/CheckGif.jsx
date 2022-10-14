@@ -201,7 +201,7 @@ const CheckGif = () => {
             //console.log("Ready to send"); //DEBUG
             dispatch(setStateReady());
         }
-    }, [dispatch, toolState, imageDropped1, imageDropped2, imageURL1, imageURL2])
+    }, [toolState, imageDropped1, imageDropped2, imageURL1, imageURL2])
     
     //Function to prepare the files to trigger the submission
     const handleSubmissionURL = () => {

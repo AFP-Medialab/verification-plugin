@@ -62,6 +62,7 @@ import GuideIcon  from "./images/SVG/Navbar/Guide.svg"
 
 import LogoInvid2  from "./images/SVG/Navbar/InVID.svg"
 import LogoWeVerify2  from "./images/SVG/Navbar/WeVerify.svg"
+import LogoVera from "./images/SVG/Navbar/vera-logo_black.svg"
 
 import VideoIcon from "./images/SVG/Video/Video.svg"
 import ImageIcon  from "./images/SVG/Image/Images.svg"
@@ -822,6 +823,11 @@ const NavBar = (props) => {
                             className={classes.logoRight}
                             onClick={handleImageClick}
                         />
+
+                        <LogoVera  style={{ height: "50px", width: "auto" }}
+                            alt="logo"
+                            className={classes.logoRight}
+                            onClick={handleImageClick} />
 
                         <Box m={3}></Box>
 

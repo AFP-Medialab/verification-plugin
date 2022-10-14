@@ -63,6 +63,6 @@ const useGetGif = (images, delayInput, enableDownload) => {
 
 
 
-    }, [images, delayInput, enableDownload, keyword, dispatch, baseURL, authenticatedRequest]);
+    }, [images, delayInput, enableDownload, authenticatedRequest]);
 };
 export default useGetGif;
