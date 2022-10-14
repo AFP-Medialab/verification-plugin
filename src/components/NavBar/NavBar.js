@@ -346,7 +346,7 @@ const NavBar = (props) => {
                 : <MetadataIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} title={keyword("navbar_metadata")}/>,
             iconColored: <MetadataIcon width="45px" height="45px" style={{ fill: "#51A5B2" }} title={keyword("navbar_metadata")}/>,
             tsvPrefix: "metadata",
-            path: "metadata",
+            path: "metadata_image",
             pathGroup: "TOOL",
             type: keyword("navbar_category_image"),
             typeId: 2,
@@ -832,36 +832,6 @@ const NavBar = (props) => {
                             }
                         </Tabs>
                         
-                        {/* 
-                        <Autocomplete
-                                options={drawerItems.concat(tabItems.slice(1)).sort(function (a, b) { return a.typeId - b.typeId })}
-                            getOptionLabel={(option) => keyword(option.title)}
-                            style={{ width: 400 }}
-                            popupIcon={<SearchIconMaterial />}
-                            forcePopupIcon={true}
-                            value={value}
-                            groupBy={(option) => option.type}
-                            getOptionSelected={(option, value) => option.typeId === value.typeId}
-                            onChange={(event, newValue) => {
-                                setValue(newValue);
-                                changeValue(newValue, newValue.pathGroup, newValue.type);
-                            }}
-                            renderOption={(option) => (
-                                <React.Fragment key={option.title}>
-                                    <IconButton className={classes.customAllToolsButton} style={{ "width": 24, "height": 24, marginRight :"20px" }}>{option.icon}</IconButton>
-                                    {keyword(option.title)}
-                                </React.Fragment>
-                            )}
-                            renderInput={(params) => 
-                                <TextField 
-                                    {...params} 
-                                    size="small" 
-                                    label="Search tools"
-                                    variant="outlined"
-                                    />
-                            }
-                        />
-                        */}
                         <div className={classes.grow} />
 
                         <Languages />
@@ -998,49 +968,6 @@ const NavBar = (props) => {
                         })
                     }
 
-                    {/*
-                    <ListItem button onClick={() => changeValue(assistantItem, "OTHER")} >
-                        <ListItemIcon color="primary.main">
-                            {
-                                <IconButton className={classes.customAllToolsButton} style={{ "width": 24, "height": 24 }}>
-                                    {assistantItem.icon}
-                                </IconButton>
-                            }
-                        </ListItemIcon>
-                        <ListItemText primary={<Typography type="body1" className={classes.drawerListText}>{keyword(assistantItem.title)}</Typography>} />
-                    </ListItem>
-
-                    <Box m={2} />
-
-                    */}
-
-                    {/*
-
-                    <ListSubheader style={{ paddingTop: "16px", paddingBottom: "16px" }} className={classListHeading}>
-                        <Typography type="body1" style={{ fontWeight: "500", fontSize: "10px", color: "#B0B0B0", textTransform: "uppercase" }}>{open ? keyword("navbar_learning") : keyword("navbar_learning_short")}</Typography>
-                    </ListSubheader>
-
-                    {
-                        drawerItemsLearning.map((item, key) => {
-                            return(
-                                <ListItem button key={key} onClick={() => changeValue(item, "OTHER") }>
-                                    <ListItemIcon color="primary.main">
-                                        {
-                                            <IconButton className={classes.customAllToolsButton} style={{ "width": 24, "height": 24 }}>
-                                                {item.icon}
-                                            </IconButton>
-                                        }
-                                    </ListItemIcon>
-                                    <ListItemText primary={<Typography type="body1" className={classes.drawerListText}>{keyword(item.title)}</Typography>} />
-                                </ListItem>
-
-                            )
-                        })
-                    }
-
-                     */}
-
-
                     <Box m={2} />
 
                     <ListSubheader style={{ paddingTop: "16px", paddingBottom: "16px" }} className={classListHeading} >
@@ -1065,28 +992,6 @@ const NavBar = (props) => {
                         })
                     }
 
-                   
-                    
-                    
-
-                    {
-                        /*
-                        drawerItems.map((item, key) => {
-                            return (
-                                <ListItem button key={key} onClick={() => changeValue(key)} >
-                                    <ListItemIcon color="primary.main">
-                                        {
-                                            <IconButton className={classes.customAllToolsButton} style={{ "width": 24, "height": 24 }}>
-                                                {item.icon}
-                                            </IconButton>
-                                        }
-                                    </ListItemIcon>
-                                    <ListItemText primary={<Typography type="body1" className={classes.drawerListText}>{keyword(item.title)}</Typography>} />
-                                </ListItem>
-                            )
-                        })
-                        */
-                    }
                 </List>
 
                 <div className={classes.grow}/>
@@ -1105,10 +1010,6 @@ const NavBar = (props) => {
                     <Box m={1}/>
                 </div>
             </Drawer>
-
-            
-
-            
 
             <main className={classes.content}>
                 <div className={classes.toolbar} id="back-to-top-anchor" />
