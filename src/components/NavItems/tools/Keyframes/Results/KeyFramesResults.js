@@ -234,19 +234,6 @@ const KeyFramesResults = (props) => {
                             </Box>
 
                         }
-                        {
-                            isLoadingSimilarity &&
-
-                            <Box p={4}>
-
-                                <LinearProgress hidden={!isLoadingSimilarity} />
-                                <Box m={1} />
-                                <Typography variant="body1" align="center" hidden={!isLoadingSimilarity}>
-                                        {keyword("loading_dbkf")}
-                                </Typography>
-
-                            </Box>
-                        }
 
                     </Card>
 

@@ -64,6 +64,7 @@ import { ReactComponent as GuideIcon } from "./images/SVG/Navbar/Guide.svg"
 
 import { ReactComponent as LogoInvid2 } from "./images/SVG/Navbar/InVID.svg"
 import { ReactComponent as LogoWeVerify2 } from "./images/SVG/Navbar/WeVerify.svg"
+import { ReactComponent as LogoVera } from "./images/SVG/Navbar/vera-logo_black.svg"
 
 import { ReactComponent as VideoIcon } from "./images/SVG/Video/Video.svg"
 import { ReactComponent as ImageIcon } from "./images/SVG/Image/Images.svg"
@@ -789,7 +790,6 @@ const NavBar = (props) => {
 
                        
                         {/*<div style ={{transition: "width .3s"}} className={classWidthToolbar} />*/}
-
                         <LogoWeVerify2
                             style={{ height: "35px", width: "auto" }}
                             alt="logo"
@@ -803,6 +803,10 @@ const NavBar = (props) => {
                             className={classes.logoRight}
                             onClick={handleImageClick}
                         />
+                        <LogoVera  style={{ height: "50px", width: "auto" }}
+                            alt="logo"
+                            className={classes.logoRight}
+                            onClick={handleImageClick} />
 
                         <Box m={3}></Box>
 
