@@ -109,7 +109,7 @@ const Forensic = () => {
             setUrlDetected(true)
         }
 
-    }, [url, dispatch]);
+    }, [url]);
 
     useEffect(() => {
         if (urlDetected){

@@ -37,6 +37,6 @@ const useGetTransparent = (url, ready) => {
                 })
         }
     // eslint-disable-next-line
-    }, [url, ready, keyword, dispatch]);
+    }, [url, ready]);
 };
 export default useGetTransparent;

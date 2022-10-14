@@ -191,7 +191,7 @@ const Thumbnails = () => {
         if(showResult){
             dispatch(setThumbnailsLoading(false));
         }
-    },[showResult, dispatch]);
+    },[showResult]);
 
 
 

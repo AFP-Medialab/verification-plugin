@@ -52,7 +52,7 @@ const Keyframes = () => {
     // State used to load images
     const [input, setInput] = useState((resultUrl) ? resultUrl : "");
     const [submittedUrl, setSubmittedUrl] = useState(undefined);
-    const [urlDetected, setUrlDetected] = useState(false)
+    //const [urlDetected, setUrlDetected] = useState(false)
     useVideoSimilarity(submittedUrl, keyword);
     useKeyframeWrapper(submittedUrl, keyword);
     
@@ -77,12 +77,13 @@ const Keyframes = () => {
         setSubmittedUrl(input);
     };
 
-    useEffect(()=>{
+    /*useEffect(()=>{
+        console.log("detected");
         if (urlDetected) {
             submitUrl()
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [urlDetected])
+    }, [urlDetected])*/
 
 
     useEffect(() => {
@@ -93,7 +94,8 @@ const Keyframes = () => {
                 const uri = decodeURIComponent(url);
                 setInput(uri)
             }
-            setUrlDetected(true)
+            submitUrl()
+            //setUrlDetected(true)
         }
         
     }, [url]);

@@ -16,7 +16,7 @@ const useGenerateApiUrl = (serviceUrl, url, reprocess) => {
         return () => {
             window.removeEventListener("message", facebooktokenChange);
         }
-    }, [facebookToken]);
+    }, []);
 
     useEffect(() => {
         if (!url || url === "") {

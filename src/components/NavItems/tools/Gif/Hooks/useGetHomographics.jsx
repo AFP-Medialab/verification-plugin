@@ -122,6 +122,6 @@ const useGetHomographics = (files, mode, keyword) => {
 
         
 
-    }, [baseURL, toolState, files, mode, keyword, dispatch, authenticatedRequest]);
+    }, [toolState, files, mode, authenticatedRequest]);
 };
 export default useGetHomographics;

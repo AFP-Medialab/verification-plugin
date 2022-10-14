@@ -49,6 +49,6 @@ const useImageTreatment = (mediaUrl, keyword) => {
             imageTreatment();
 
 
-    }, [mediaUrl, keyword, dispatch]);
+    }, [mediaUrl]);
 };
 export default useImageTreatment;
