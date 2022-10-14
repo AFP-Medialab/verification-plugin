@@ -50,7 +50,7 @@ const DrawerItem = (props) => {
             footer: <Footer type={"GRIHO"} />
         },
         {
-            content: <Metadata />,
+            content: <Metadata mediaType={"video"} />,
             footer: <Footer type={"afp"} />
         },
         {
@@ -66,7 +66,7 @@ const DrawerItem = (props) => {
             footer: <Footer type={"afp"}/>
         },
         {
-            content: <Metadata/>,
+            content: <Metadata  mediaType={"image"} />,
             footer: <Footer type={"afp"}/>
         },
         

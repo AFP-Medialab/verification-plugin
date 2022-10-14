@@ -17,7 +17,7 @@ import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 //import { useLoading, loadImageSize } from "../../../../../Hooks/useInput"
-import { Accordion, AccordionDetails, AccordionSummary, CircularProgress, LinearProgress, Typography } from "@material-ui/core";
+import { Accordion, AccordionDetails, AccordionSummary, CircularProgress, Typography } from "@material-ui/core";
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ReportProblemOutlinedIcon from '@material-ui/icons/ReportProblemOutlined';
 import { createTheme, ThemeProvider } from '@material-ui/core/styles';
@@ -233,19 +233,6 @@ const KeyFramesResults = (props) => {
                                 </Accordion>
                             </Box>
 
-                        }
-                        {
-                            isLoadingSimilarity &&
-
-                            <Box p={4}>
-
-                                <LinearProgress hidden={!isLoadingSimilarity} />
-                                <Box m={1} />
-                                <Typography variant="body1" align="center" hidden={!isLoadingSimilarity}>
-                                        {keyword("loading_dbkf")}
-                                </Typography>
-
-                            </Box>
                         }
 
                     </Card>

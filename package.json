@@ -11,6 +11,7 @@
     "@toast-ui/react-image-editor": "3.15.2",
     "axios": "^0.21.4",
     "big-integer": "^1.6.51",
+    "caniuse-lite": "^1.0.30001419",
     "clsx": "^1.1.1",
     "dateformat": "^4.5.1",
     "exif-js": "^2.3.0",
