@@ -22,7 +22,7 @@ window.fbAsyncInit = function () {
 
 export function checkLoginState() {//call whenever you want to check if a user is logged
     FB.getLoginStatus(function (response) {
-        console.log(response)
+        //console.log(response)
         if (response.status === "connected") {
             // The user is logged in and has authenticated your
             // app, and response.authResponse supplies
