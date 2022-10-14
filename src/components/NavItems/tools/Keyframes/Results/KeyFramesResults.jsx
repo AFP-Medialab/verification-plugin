@@ -234,7 +234,7 @@ const KeyFramesResults = (props) => {
                             </Box>
 
                         }
-                        {
+                        {/*
                             isLoadingSimilarity &&
 
                             <Box p={4}>
@@ -245,7 +245,7 @@ const KeyFramesResults = (props) => {
                                         {keyword("loading_dbkf")}
                                 </Typography>
 
-                            </Box>
+                            </Box>*/
                         }
 
                     </Card>
