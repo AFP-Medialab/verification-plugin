@@ -31,3 +31,4 @@ IPOL_FILE_IMAGE_ERROR	There was an error while downlading the image	Il y a eu un
 IPOL_BAD_URL_ERROR	The format of the URLs are not valid	Le format des URL ne sont pas valides	El formato de las URL no es válido.	Η μορφή των διευθύνσεων URL δεν είναι έγκυρη
 NO_MATCHES_FOUND	No match has been found between the two images	Aucune similitude n'a été trouvée entre les deux images	No se ha encontrado ninguna similaridad entre las dos imágenes.	Δεν βρέθηκε καμία αντιστοιχία μεταξύ των δύο εικόνων
 INTERNAL_SERVER_ERROR	There was an internal error while processing the two images	Il y a eu une erreur interne lors du traitement des deux images	Hubo un error interno al procesar las dos imágenes.	Υπήρχε ένα εσωτερικό σφάλμα κατά την επεξεργασία των δύο εικόνων
+checkGIF_413	Uploaded file is too large	Le fichier téléchargé est trop volumineux	El archivo subido es demasiado grande	Το αρχείο που μεταφορτώθηκε είναι πολύ μεγάλο

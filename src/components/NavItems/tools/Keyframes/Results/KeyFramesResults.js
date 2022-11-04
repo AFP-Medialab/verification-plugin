@@ -11,12 +11,13 @@ import { cleanKeyframesState } from "../../../../../redux/actions/tools/keyframe
 //import OnClickInfo from "../../../../Shared/OnClickInfo/OnClickInfo";
 import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Keyframes.tsv";
+import tsv2 from "../../../../../LocalDictionary/components/Shared/OnClickInfo.tsv"
 import Grid from "@material-ui/core/Grid";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 //import { useLoading, loadImageSize } from "../../../../../Hooks/useInput"
-import { Accordion, AccordionDetails, AccordionSummary, CircularProgress, LinearProgress, Typography } from "@material-ui/core";
+import { Accordion, AccordionDetails, AccordionSummary, CircularProgress, Typography } from "@material-ui/core";
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ReportProblemOutlinedIcon from '@material-ui/icons/ReportProblemOutlined';
 import { createTheme, ThemeProvider } from '@material-ui/core/styles';
@@ -35,7 +36,7 @@ import SimpleIcon from '@material-ui/icons/ViewStreamRounded';
 const KeyFramesResults = (props) => {
     const classes = useMyStyles();
     const keyword = useLoadLanguage("components/NavItems/tools/Keyframes.tsv", tsv);
-    const keywordHelp = useLoadLanguage("components/Shared/OnClickInfo.tsv", tsv);
+    const keywordHelp = useLoadLanguage("components/Shared/OnClickInfo.tsv", tsv2);
     const dispatch = useDispatch();
 
     const [detailed, setDetailed] = useState(false);
@@ -232,19 +233,6 @@ const KeyFramesResults = (props) => {
                                 </Accordion>
                             </Box>
 
-                        }
-                        {
-                            isLoadingSimilarity &&
-
-                            <Box p={4}>
-
-                                <LinearProgress hidden={!isLoadingSimilarity} />
-                                <Box m={1} />
-                                <Typography variant="body1" align="center" hidden={!isLoadingSimilarity}>
-                                        {keyword("loading_dbkf")}
-                                </Typography>
-
-                            </Box>
                         }
 
                     </Card>

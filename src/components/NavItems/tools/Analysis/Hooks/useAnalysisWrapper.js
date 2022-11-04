@@ -34,7 +34,7 @@ export const useAnalysisWrapper = (setAnalysisLoading, setAnalysisResult, servic
                         getReport(response.data.media_id, true)
                     }
                     if(cpt === 60){
-                        console.log("stop processing")
+                        //console.log("stop processing")
                         getReport(response.data.media_id, false)
                     }
                     setCpt(cpt + 1)
@@ -55,7 +55,7 @@ export const useAnalysisWrapper = (setAnalysisLoading, setAnalysisResult, servic
                             .then(responseImg => {
                                 dispatch(setAnalysisResult(currentURL, response.data, false, processing, responseImg.data.images[0]));
                             }).catch(error => {
-                                console.log("error assistance image scrapping ", error)
+                                //console.log("error assistance image scrapping ", error)
                                 dispatch(setAnalysisResult(currentURL, response.data, false, processing, null)) })
                     }else{
                         dispatch(setAnalysisResult(currentURL, response.data, false, processing, null));
