@@ -158,19 +158,25 @@ function* similaritySearch(searchEndpoint, stateStorageFunction) {
             let resultList = []
             Object.keys(similarityResult).forEach(key=>{
                 result[key].appearancesResults.forEach(appearance=>{
-                    resultList.push({
-                        "claimUrl": result[key].externalLink,
-                        "similarity": appearance.similarity})
+                    if (appearance.similarity > 0.7) {
+                        resultList.push({
+                            "claimUrl": result[key].externalLink,
+                            "similarity": appearance.similarity
+                        })
+                    }
                 })
                 result[key].evidencesResults.forEach(evidence=>{
-                    resultList.push({
-                        "claimUrl": result[key].externalLink,
-                        "similarity": evidence.similarity})
+                    if(evidence.similarity > 0.7) {
+                        resultList.push({
+                            "claimUrl": result[key].externalLink,
+                            "similarity": evidence.similarity
+                        })
+                    }
                 })
             })
             resultList.sort((a, b) => b.similarity - a.similarity);
             resultList = resultList.slice(0,3)
-            yield put(stateStorageFunction(resultList, false, true, false))
+            yield put(stateStorageFunction(resultList.length ? resultList : null, false, true, false))
         } else {
             yield put(stateStorageFunction(null, false, true, false))
         }
