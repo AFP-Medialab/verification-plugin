@@ -97,7 +97,7 @@ const YoutubeResults = (props) => {
   ];
 
   return (
-    <div>
+    <div data-testid="analysis-yt-result">
       {report !== null &&
         report["thumbnails"] !== undefined &&
         report["thumbnails"]["preferred"]["url"] && (

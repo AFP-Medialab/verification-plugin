@@ -43,7 +43,7 @@ const TwitterResults = (props) => {
   const thumbnails = [report["thumbnails"]["preferred"]];
 
   return (
-    <div>
+    <div data-testid="analysis-tw-result">
       {report !== null &&
         report["thumbnails"] !== undefined &&
         report["thumbnails"]["preferred"]["url"] && (

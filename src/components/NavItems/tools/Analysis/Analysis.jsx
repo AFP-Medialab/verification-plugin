@@ -114,6 +114,7 @@ const Analysis = () => {
 
                             <TextField
                                 id="standard-full-width"
+                                data-testid="analysis_video_input"
                                 label={keyword("api_input")}
                                 placeholder={keyword("api_input_placeholder")}
                                 fullWidth
@@ -155,6 +156,7 @@ const Analysis = () => {
 
                         <Grid item>
                             <Button
+                                data-testid="analysis_video_submit"
                                 variant="contained"
                                 color="primary"
                                 disabled={isLoading}

@@ -120,7 +120,7 @@ const Interactive = () => {
                                                 </Button>
                                             </Grid>
                                             <Grid item>
-                                                <Button p={3} variant="contained" color="primary" onClick={() => {
+                                                <Button data-testid="interactive-forensic" p={3} variant="contained" color="primary" onClick={() => {
                                                     navigate("/app/tools/forensic/" + encodeURIComponent(obj.url))
                                                     //history.push("tools/forensic/" + encodeURIComponent(obj.url))
                                                 }}>
