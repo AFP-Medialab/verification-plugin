@@ -21,7 +21,7 @@ import { Accordion, AccordionDetails, AccordionSummary, CircularProgress, Typogr
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ReportProblemOutlinedIcon from '@material-ui/icons/ReportProblemOutlined';
 import { createTheme, ThemeProvider } from '@material-ui/core/styles';
-
+import { GoogleReversSearch } from "../../../../Shared/ReverseSearch/ImageReverseSearch";
 import Link from "@material-ui/core/Link";
 
 import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
@@ -81,12 +81,8 @@ const KeyFramesResults = (props) => {
         setDetailed(!detailed);
     };
     const imageClick = (event) => {
-        let search_url = "https://www.google.com/searchbyimage?image_url=";
         let url = event
-
-        if (url !== "") {
-            window.chrome.tabs.create({ url: search_url + url });
-        }
+        GoogleReversSearch(url)
     };
     const zoom = (zoom) => {
 

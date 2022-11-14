@@ -5,7 +5,7 @@ import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import Divider from "@material-ui/core/Divider";
 import Button from "@material-ui/core/Button";
-import ImageReverseSearch from "../../ImageReverseSearch";
+import ImageReverseSearch, {GoogleReversSearch} from "../../../../Shared/ReverseSearch/ImageReverseSearch";
 import OnClickInfo from "../../../../Shared/OnClickInfo/OnClickInfo";
 import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Analysis.tsv";
@@ -30,9 +30,16 @@ const AFacebookResults = (props) => {
   
   
   const reverseSearch = (website) => {
-    for (let image of thumbnails) {
-      ImageReverseSearch(website, image.url);
-    }
+    if(website === 'google'){
+      for (let image of thumbnails) {
+        GoogleReversSearch(image.url)
+      }
+  }
+  else {
+      for (let image of thumbnails) {
+          ImageReverseSearch(website, image.url);
+      }
+  }
   };  
   const handleClick_delete_result = (report) => {
     let media_id = report.video_id ? report.video_id : report.image_id;

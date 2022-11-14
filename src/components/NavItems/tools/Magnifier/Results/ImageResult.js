@@ -18,7 +18,7 @@ import CloseResult from "../../../../Shared/CloseResult/CloseResult";
 import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Magnifier.tsv";
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
-import ImageReverseSearch from "../../ImageReverseSearch"
+import ImageReverseSearch from "../../../../Shared/ReverseSearch/ImageReverseSearch"
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 import {

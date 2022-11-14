@@ -1,4 +1,6 @@
+import { loadImage, localImageGoogleSearch } from "./reverseSearchUtils";
 const ImageReverseSearch = (type, urls) => {
+
   
     let baseUrl = {
         baidu: {
@@ -28,7 +30,8 @@ const ImageReverseSearch = (type, urls) => {
     {
         ImageReverseSearch("baidu", urls);
         ImageReverseSearch("bing", urls);
-        ImageReverseSearch("google", urls);
+        //ImageReverseSearch("google", urls);
+        GoogleReversSearch(urls)
         ImageReverseSearch("tineye", urls);
         ImageReverseSearch("yandex", urls);
         ImageReverseSearch("reddit", urls);
@@ -40,4 +43,11 @@ const ImageReverseSearch = (type, urls) => {
         window.open(urlStart + encodeURIComponent(image) + urlEnd)
     }
 };
+
+export const GoogleReversSearch = (urls) => {
+    if( typeof urls === "string" ) urls = [urls];
+    for (let image of urls){
+        loadImage(image, localImageGoogleSearch)
+    }    
+}
 export default ImageReverseSearch;
