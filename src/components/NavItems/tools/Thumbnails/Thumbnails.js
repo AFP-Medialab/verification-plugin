@@ -2,7 +2,7 @@ import TextField from "@material-ui/core/TextField";
 import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
 import React, {useEffect, useState} from "react";
-import ImageReverseSearch from "../ImageReverseSearch";
+import ImageReverseSearch, {GoogleReversSearch} from "../../../Shared/ReverseSearch/ImageReverseSearch";
 import ImageGridList from "../../../Shared/ImageGridList/ImageGridList";
 import {useDispatch, useSelector} from "react-redux";
 import FormControl from "@material-ui/core/FormControl";
@@ -136,7 +136,7 @@ const Thumbnails = () => {
 
     const imageClickUrl = (url) => {
         if (selectedValue.google)
-            ImageReverseSearch("google", [url]);
+            GoogleReversSearch([url])
         if (selectedValue.yandex)
             ImageReverseSearch("yandex", [url]);
         if (selectedValue.bing)

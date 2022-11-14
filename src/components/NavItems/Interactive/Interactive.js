@@ -16,7 +16,7 @@ import Fab from "@material-ui/core/Fab";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import ImageReverseSearch from "../tools/ImageReverseSearch";
+import {GoogleReversSearch} from "../../Shared/ReverseSearch/ImageReverseSearch";
 import history from '../../Shared/History/History';
 import useLoadLanguage from "../../../Hooks/useLoadLanguage";
 import tsv from "../../../LocalDictionary/components/NavItems/Interactive.tsv";
@@ -113,7 +113,7 @@ const Interactive = () => {
                                               alignContent={"center"}>
                                             <Grid item>
                                                 <Button p={3} variant="contained" color="primary" onClick={() => {
-                                                    ImageReverseSearch("google", obj.url);
+                                                    GoogleReversSearch(obj.url);
                                                 }}>
                                                     {keyword("quiz_similarity")}
                                                 </Button>

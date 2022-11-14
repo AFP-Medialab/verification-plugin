@@ -13,7 +13,7 @@ import LinearProgress from "@material-ui/core/LinearProgress";
 import MenuItem from "@material-ui/core/MenuItem";
 import Typography from "@material-ui/core/Typography";
 import {WarningOutlined} from "@material-ui/icons";
-import ImageReverseSearch from "../../../tools/ImageReverseSearch"
+import ImageReverseSearch from "../../../../Shared/ReverseSearch/ImageReverseSearch"
 import tsv from "../../../../../LocalDictionary/components/NavItems/tools/OCR.tsv";
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
