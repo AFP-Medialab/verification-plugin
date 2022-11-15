@@ -1,3 +1,10 @@
+import {
+    localImageGoogleSearch,
+    localImageYandexSearch,
+    localImageBingSearch,
+    localImageBaiduSearch,
+    loadImage} from "../components/Shared/ReverseSearch/reverseSearchUtils"
+
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         if(request.contentScriptQuery === "keyframes"){
             fetch((request.url), {
@@ -105,15 +112,8 @@ const ocr = (info) => {
     }
 };
 const imageReversesearch = (info) => {
-    let search_url = "https://www.google.com/searchbyimage?image_url=";
     let img = getUrlImg(info);
-    if (img !== "" && img.startsWith("http")) {
-        let url = search_url + encodeURIComponent(img);
-        chrome.tabs.create({ url: url, selected: false });
-        // Google analytics
-        rightClickEvent("Image Reverse Search Google", url)
-    }
-    else if(img !== "" ){
+    if(img !== "" ){
         loadImage(img, localImageGoogleSearch)
     }
 };

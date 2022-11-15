@@ -1,4 +1,7 @@
+import { Timeout } from "../Utils/URLUtils";
+
 export const loadImage = (src, reverseSearchFunction) => {
+    document.body.style.cursor='wait';
     let img = new Image();
     img.crossOrigin="anonymous"
     img.onload = () => {
@@ -12,7 +15,8 @@ export const loadImage = (src, reverseSearchFunction) => {
         canvas.remove();
     };
     img.onerror = (error) => {
-        
+        console.log("failed to load image")
+        document.body.style.cursor='default'
     };
     img.src = src;
 }
@@ -36,6 +40,7 @@ export const localImageBaiduSearch = (content) => {
         let tabUrl = json.data.url
         window.open(tabUrl, "_blank");
     })
+    .finally(() => {document.body.style.cursor='default'})
 }
 
 export const localImageGoogleLens = (content) => {
@@ -57,6 +62,7 @@ export const localImageGoogleLens = (content) => {
     .catch(error => {
       console.error(error)
     })
+    .finally(() => {document.body.style.cursor='default'})
 }
 
 export const localImageYandexSearch = (content) => {
@@ -87,6 +93,7 @@ export const localImageYandexSearch = (content) => {
     .catch(error => {
       console.error(error)
     })
+    .finally(() => {document.body.style.cursor='default'})
 }
 
 export const localImageGoogleSearch = (content) => {
@@ -99,14 +106,17 @@ export const localImageGoogleSearch = (content) => {
         referrer: '',
         mode: 'cors',
         method: 'POST',
-        body: formData
+        body: formData,
+        signal: Timeout(10).signal
     }).then(response => {
-        //console.log("response ", response)
         window.open(response.url, "_blank");
     })
     .catch(error => {
       console.error(error)
+       //try google lens
+      localImageGoogleLens(content)
     })
+    .finally(() => {document.body.style.cursor='default'})
 }
 
 export const localImageBingSearch = (content) => {
@@ -127,6 +137,7 @@ export const localImageBingSearch = (content) => {
     .catch(error => {
       console.error(error)
     })
+    .finally(() => {document.body.style.cursor='default'})
 }
 
 

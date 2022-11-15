@@ -5,7 +5,7 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Divider from "@mui/material/Divider";
 import Button from "@mui/material/Button";
-import ImageReverseSearch from "../../ImageReverseSearch";
+import ImageReverseSearch, {GoogleReversSearch} from "../../../../Shared/ReverseSearch/ImageReverseSearch";
 import OnClickInfo from "../../../../Shared/OnClickInfo/OnClickInfo";
 import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Analysis.tsv";
@@ -28,12 +28,19 @@ const AFacebookResults = (props) => {
     tsv
   );
   
-  
   const reverseSearch = (website) => {
-    for (let image of thumbnails) {
-      ImageReverseSearch(website, image.url);
+    if(website === 'google'){
+      for (let image of thumbnails) {
+        GoogleReversSearch(image.url)
+      }
+    }
+    else {
+        for (let image of thumbnails) {
+            ImageReverseSearch(website, image.url);
+        }
     }
   };  
+  
   const handleClick_delete_result = (report) => {
     let media_id = report.video_id ? report.video_id : report.image_id;
     submissionEvent("delete media id "+ media_id)
