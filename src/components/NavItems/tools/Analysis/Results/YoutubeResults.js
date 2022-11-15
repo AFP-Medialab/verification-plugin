@@ -7,7 +7,7 @@ import TableBody from "@material-ui/core/TableBody";
 import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
 import Button from "@material-ui/core/Button";
-import ImageReverseSearch from "../../ImageReverseSearch";
+import ImageReverseSearch, {GoogleReversSearch} from "../../../../Shared/ReverseSearch/ImageReverseSearch";
 import CloseResult from "../../../../Shared/CloseResult/CloseResult";
 import {cleanAnalysisState} from "../../../../../redux/actions/tools/analysisActions";
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
@@ -30,10 +30,16 @@ const YoutubeResults = (props) => {
     const keyword = useLoadLanguage("components/NavItems/tools/Analysis.tsv", tsv);
 
    const reverseSearch = (website) => {
+      if(website === 'google'){
         for (let image of thumbnails) {
-            ImageReverseSearch(website, image.url);
+          GoogleReversSearch(image.url)
         }
-    };
+      } else {
+        for (let image of thumbnails) {
+          ImageReverseSearch(website, image.url);
+      }
+      }
+  };
   
     const dispatch = useDispatch();
     const report = props.report;

@@ -117,15 +117,8 @@ const ocr = function (word) {
 };
 
 const imageReversesearch = function (word) {
-    let search_url = "https://www.google.com/searchbyimage?image_url=";
     let img = getUrlImg(word);
-    if (img !== "" && img.startsWith("http")) {
-        let url = search_url + encodeURIComponent(img);
-        window.chrome.tabs.create({ url: url, selected: false });
-        // Google analytics
-        rightClickEvent("Image Reverse Search Google", url)
-    }
-    else if(img !== "" ){
+    if(img !== "" ){
         loadImage(img, localImageGoogleSearch)
     }
 };
