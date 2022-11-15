@@ -133,7 +133,7 @@ const Thumbnails = () => {
         if (url !== null && url !== "" && isYtUrl(url)) {
             submissionEvent(url);
             let images = get_images(url);
-            dispatch(setThumbnailsResult({url:url, result:images, notification:false, loading:true}));
+            dispatch(setThumbnailsResult({url:url, result:images, notification:false, loading:false}));
             if(selectedValue.openTabs)
                 images.forEach(img => imageClickUrl(img));
         } else
