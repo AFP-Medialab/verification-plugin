@@ -619,6 +619,27 @@ const NavBar = (props) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
+    useEffect(() => {
+       //select tool category
+       switch(drawerItems[drawerValue].typeId){
+        case 1:
+            setOpenListVideo(true)
+        break;
+        case 2:
+            setOpenListImage(true)
+        break;
+        case 3:
+            setOpenListSeach(true)
+        break;
+        case 4:
+            setOpenListData(true)
+        break;
+        default:
+        break;
+       }
+
+    }, [drawerValue])
+
 
     const themeFab = createTheme({
         palette: {
