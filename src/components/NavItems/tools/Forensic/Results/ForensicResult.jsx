@@ -447,10 +447,10 @@ const ForensicResults = (props) => {
     const [filesForGif, setFilesForGif] = useState();
     const [delayGif, setDelayGif] = useState();
     const [enableDownload, setEnableDownload] = useState(false);
-    
+    const [downloadType, setDownloadType] = useState(null);
 
 
-    const handleDownloadGif = () => {
+    const handleDownloadGif = (type) => {
 
         var files = {
             "image1": gifImage,
@@ -459,6 +459,7 @@ const ForensicResults = (props) => {
         setFilesForGif(files);
         setDelayGif(speed);
         setEnableDownload(true);
+        setDownloadType(type)
     };
 
     useGetGif(filesForGif, delayGif, enableDownload);

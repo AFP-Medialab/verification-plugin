@@ -319,9 +319,10 @@ const CheckGif = () => {
     const [filesForGif, setFilesForGif] = useState(null);
     const [delayGif, setDelayGif] = useState(null);
     const [enableDownload, setEnableDownload] = useState(false);
+    const [downloadType, setDownloadType] = useState(null);
 
     //Function to prepare the files to trigger the download
-    const handleDownloadGif = () => {
+    const handleDownload = (type) => {
         //console.log(toolState);
         var files = {
             "image1": homoImg1,
@@ -331,6 +332,7 @@ const CheckGif = () => {
         setFilesForGif(files);
         setDelayGif(speed);
         setEnableDownload(true);
+        setDownloadType(type)
     };
 
     //console.log(filesForGif);
@@ -338,7 +340,7 @@ const CheckGif = () => {
     //console.log(toolState);
     //Call to the API    
 
-    useGetGif(filesForGif, delayGif, enableDownload);
+    useGetGif(filesForGif, delayGif, enableDownload, downloadType);
     if (toolState === 7 && enableDownload) {
         setEnableDownload(false);
     }
@@ -838,10 +840,20 @@ const CheckGif = () => {
 
                                                     <Box m={2} />
 
-
-                                                    <Button variant="contained" color="primary" disabled={toolState===7} fullWidth onClick={(e) => handleDownloadGif(e)}>
-                                                        {keyword("button_download")}
-                                                    </Button>
+                                                    <Grid item container
+                                                        spacing={3} justifyContent="space-evenly">
+                                                        <Grid item>
+                                                            <Button variant="contained" color="primary" disabled={toolState===7}  onClick={(e) => handleDownload("gif")}>
+                                                                {keyword("button_download")}
+                                                            </Button>
+                                                        </Grid>
+                                                        <Grid item>
+                                                            <Button variant="contained" color="primary" disabled={toolState===7}  onClick={(e) => handleDownload("mp4")}>
+                                                                {keyword("button_video")}
+                                                            </Button>
+                                                        </Grid>
+                                                    </Grid>
+                                                    
                                                     <Box m={2} />
                                                 </Grid>
 
