@@ -39,6 +39,7 @@ const DateTime = (props) => {
                 {...props}
                 onChange={checkIfDate}
                 renderInput={renderInput}
+                ampm={false}
                 disableFuture
             />
         </LocalizationProvider>

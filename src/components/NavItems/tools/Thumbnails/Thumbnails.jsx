@@ -2,13 +2,13 @@ import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import {useEffect, useState} from "react";
-import ImageReverseSearch from "../ImageReverseSearch";
+import ImageReverseSearch, {GoogleReversSearch} from "../../../Shared/ReverseSearch/ImageReverseSearch";
 import ImageGridList from "../../../Shared/ImageGridList/ImageGridList";
 import {useDispatch, useSelector} from "react-redux";
 import FormControl from "@mui/material/FormControl";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
-import {useInput, loadImageSize, useLoading} from "../../../../Hooks/useInput";
+import {loadImageSize, useLoading} from "../../../../Hooks/useInput";
 import {
     cleanThumbnailsState,
     setThumbnailsResult, setThumbnailsLoading} from "../../../../redux/reducers/tools/thumbnailsReducer"
@@ -133,7 +133,7 @@ const Thumbnails = () => {
         if (url !== null && url !== "" && isYtUrl(url)) {
             submissionEvent(url);
             let images = get_images(url);
-            dispatch(setThumbnailsResult({url:url, result:images, notification:false, loading:true}));
+            dispatch(setThumbnailsResult({url:url, result:images, notification:false, loading:false}));
             if(selectedValue.openTabs)
                 images.forEach(img => imageClickUrl(img));
         } else
@@ -142,7 +142,7 @@ const Thumbnails = () => {
 
     const imageClickUrl = (url) => {
         if (selectedValue.google)
-            ImageReverseSearch("google", [url]);
+            GoogleReversSearch([url]);
         if (selectedValue.yandex)
             ImageReverseSearch("yandex", [url]);
         if (selectedValue.bing)

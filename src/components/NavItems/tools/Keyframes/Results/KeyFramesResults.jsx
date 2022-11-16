@@ -19,7 +19,7 @@ import { Accordion, AccordionDetails, AccordionSummary, CircularProgress, Linear
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ReportProblemOutlinedIcon from '@mui/icons-material/ReportProblemOutlined';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-
+import { GoogleReversSearch } from "../../../../Shared/ReverseSearch/ImageReverseSearch";
 import Link from "@mui/material/Link";
 
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
@@ -81,12 +81,9 @@ const KeyFramesResults = (props) => {
         setDetailed(!detailed);
     };
     const imageClick = (event) => {
-        let search_url = "https://www.google.com/searchbyimage?image_url=";
         let url = event
-
-        if (url !== "") {
-            window.chrome.tabs.create({ url: search_url + url });
-        }
+        if(url !== "")
+            GoogleReversSearch(url)
     };
     const zoom = (zoom) => {
 

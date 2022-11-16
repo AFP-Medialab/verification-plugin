@@ -7,7 +7,7 @@ import TableBody from "@mui/material/TableBody";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
 import Button from "@mui/material/Button";
-import ImageReverseSearch from "../../ImageReverseSearch";
+import ImageReverseSearch, {GoogleReversSearch} from "../../../../Shared/ReverseSearch/ImageReverseSearch";
 import CloseResult from "../../../../Shared/CloseResult/CloseResult";
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 import OnClickInfo from "../../../../Shared/OnClickInfo/OnClickInfo";
@@ -33,17 +33,24 @@ const TwitterResults = (props) => {
     tsv
   );
   const reverseSearch = (website) => {
-    for (let image of thumbnails) {
-      ImageReverseSearch(website, image.url);
+    if(website === 'google'){
+      for (let image of thumbnails) {
+        GoogleReversSearch(image.url)
+      }
     }
-  };
+    else {
+        for (let image of thumbnails) {
+            ImageReverseSearch(website, image.url);
+        }
+    }
+  };  
 
   const dispatch = useDispatch();
   const report = props.report;
   const thumbnails = [report["thumbnails"]["preferred"]];
 
   return (
-    <div>
+    <div data-testid="analysis-tw-result">
       {report !== null &&
         report["thumbnails"] !== undefined &&
         report["thumbnails"]["preferred"]["url"] && (
