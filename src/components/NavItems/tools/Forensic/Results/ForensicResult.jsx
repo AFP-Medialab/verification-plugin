@@ -26,10 +26,8 @@ import Fab from '@mui/material/Fab';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 import Fade from '@mui/material/Fade';
-import Slider from '@mui/material/Slider';
-import useGetGif from "../../Gif/Hooks/useGetGif";
 import { cleanForensicState } from "../../../../../redux/actions/tools/forensicActions"
-import { setStateInit } from "../../../../../redux/reducers/tools/gifReducer"
+import { setStateInit, setStateBackResults } from "../../../../../redux/reducers/tools/gifReducer"
 import LinkIcon from '@mui/icons-material/Link';
 import IconButton from '@mui/material/IconButton';
 import Snackbar from '@mui/material/Snackbar';
@@ -37,6 +35,7 @@ import WarningIcon from '@mui/icons-material/Warning';
 import Alert from '@mui/material/Alert';
 import MakoScale from '../../../../NavBar/images/SVG/MakoScale.png';
 import EmojiObjectsIcon from '@mui/icons-material/EmojiObjects';
+import AnimatedGif from "../../Gif/AnimatedGif";
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -372,9 +371,10 @@ const ForensicResults = (props) => {
     //const gifFilterMask = useSelector(state => state.forensic.maskUrl);
     //console.log(gifFilterMask);
 
-    const [interval, setIntervalVar] = React.useState(null);
+    //const [interval, setIntervalVar] = React.useState(null);
 
     const gifState = useSelector(state => state.gif.toolState);
+    //const [gifToolState, setgifToolState] = useState(1)
 
     function clickGifPopover(event, filter) {
         if(userAuthenticated){
@@ -391,7 +391,8 @@ const ForensicResults = (props) => {
                 //console.log(url);
                 //setReadyTransparency(true);
             }
-            setIntervalVar(setInterval(() => animateFilter(), 1100));
+            dispatch(setStateBackResults())
+           //setIntervalVar(setInterval(() => animateFilter(), 1100));
             setAnchorGifPopover(event.currentTarget);
         }else{
             setOpenAlert(true);
@@ -400,72 +401,11 @@ const ForensicResults = (props) => {
     }
 
     function closeGifPopover() {
-        clearInterval(interval);
+        //clearInterval(interval);
         setAnchorGifPopover(false);
         //setReadyTransparency(false);
     }
 
-    function animateFilter() {
-        //console.log("Loop function");
-        //console.log(interval);
-        var x = document.getElementById("gifFilterElement");
-        if (x.style.display === "none") {
-            //console.log("display");
-            x.style.display = "block";
-        } else {
-            x.style.display = "none";
-        }
-    }
-
-
-    const marks = [
-        {
-            value: -1700,
-            label: keyword("forensic_text_slow"),
-        },
-        {
-            value: -500,
-            label: keyword("forensic_text_fast"),
-        },
-    ];
-
-    const [speed, setSpeed] = React.useState(1100);
-
-    function changeValueSpeed(value) {
-        //console.log("Change value speed: " + value);
-        setSpeed(value * -1);
-    }
-
-    function changeSpeed(value) {
-        //console.log("Change speed: " + value);
-        clearInterval(interval);
-        setIntervalVar(setInterval(() => animateFilter(), (value)));
-
-    }
-
-
-    const [filesForGif, setFilesForGif] = useState();
-    const [delayGif, setDelayGif] = useState();
-    const [enableDownload, setEnableDownload] = useState(false);
-    const [downloadType, setDownloadType] = useState(null);
-
-
-    const handleDownloadGif = (type) => {
-
-        var files = {
-            "image1": gifImage,
-            "image2": gifFilter,
-        }
-        setFilesForGif(files);
-        setDelayGif(speed);
-        setEnableDownload(true);
-        setDownloadType(type)
-    };
-
-    useGetGif(filesForGif, delayGif, enableDownload);
-    if (gifState === 7 && enableDownload) {
-        setEnableDownload(false);
-    }
     const imageDisplayed = displayItem;
     
     
@@ -538,7 +478,7 @@ const ForensicResults = (props) => {
 
     useEffect(() => {
         return () => {
-            clearInterval(interval);
+            //clearInterval(interval);
             dispatch(setStateInit());
         }
         // eslint-disable-next-line
@@ -1125,12 +1065,12 @@ const ForensicResults = (props) => {
                                 anchorPosition={{ top: 0, left: 0 }}
                                 PaperProps={{
                                     style: {
-                                        width: '70vw',
+                                        width: '40vw',
                                         height: '70vh',
-                                        marginTop: '15vh',
-                                        marginLeft: '15vw',
-                                        marginBottom: '15vh',
-                                        marginRight: '15vw',
+                                        marginTop: '5vh',
+                                        marginLeft: '5vw',
+                                        marginBottom: '5vh',
+                                        marginRight: '5vw',
                                         fontSize: 14,
                                         justifyContent: 'center',
                                         alignItems: 'center',
@@ -1144,8 +1084,7 @@ const ForensicResults = (props) => {
                                     vertical: 'center',
                                     horizontal: 'center',
                                 }}
-                            >
-
+                            >  
                                 <Box p={3}>
                                     <Grid
                                         container
@@ -1160,60 +1099,8 @@ const ForensicResults = (props) => {
                                         <CloseIcon onClick={closeGifPopover} />
                                     </Grid>
                                     <Box m={1} />
-
-                                    <Box justifyContent="center" className={classes.wrapperImageFilter}>
-
-                                        <CardMedia
-                                            component="img"
-                                            className={classes.imagesGifImage}
-                                            image={gifImage}
-                                        />
-                                        {true &&
-                                            <CardMedia
-                                                component="img"
-                                                className={classes.imagesGifFilter}
-                                                style={{ display: "none" }}
-                                                image={gifFilter}
-                                                id="gifFilterElement"
-                                            />
-                                        }
-                                    </Box>
-
-                                    <Grid
-                                        container
-                                        direction="column"
-                                        justifyContent="center"
-                                        alignItems="center"
-                                    >
-                                        <Box m={4} />
-
-                                        <Typography gutterBottom>
-                                            {keyword("forensic_text_speed")}
-                                        </Typography>
-
-                                        <Slider
-                                            defaultValue={-1100}
-                                            aria-labelledby="discrete-slider"
-                                            step={300}
-                                            marks={marks}
-                                            min={-1700}
-                                            max={-500}
-                                            scale={x => -x}
-                                            onChange={(e, val) => changeValueSpeed(val)}
-                                            onChangeCommitted={(e) => changeSpeed(speed)}
-                                            className={classes.sliderClass}
-                                        />
-
-                                        <Box m={2} />
-
-                                        <Button variant="contained" disabled={gifState === 7} color="primary" onClick={(e) => handleDownloadGif(e)}>
-                                            {keyword("forensic_button_download")}
-                                        </Button>
-                                    </Grid>
-
-
+                                    <AnimatedGif toolState={gifState} homoImg1={gifImage} homoImg2={gifFilter}/>
                                 </Box>
-
                             </Popover>
 
                         </Box>
