@@ -4,6 +4,7 @@ import {
     localImageBingSearch,
     localImageBaiduSearch,
     loadImage} from "../components/Shared/ReverseSearch/reverseSearchUtils"
+import {toolEvent, getclientId} from "../components/Shared/GoogleAnalytics/MatomoAnalytics"
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         if(request.contentScriptQuery === "keyframes"){
@@ -21,6 +22,7 @@ chrome.contextMenus.removeAll()
 let page_name = 'popup.html';
 
 const rightClickEvent = (toolName, media) => {
+    toolEvent("Contextual Menu", "right_click", toolName, toolName, media, getclientId())
     /*ga('send', 'event',
         'Contextual menu',
         'Contextual menu click on :' + toolName + " for " + media,

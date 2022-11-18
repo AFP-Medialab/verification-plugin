@@ -62,7 +62,7 @@ export const useKeyframeWrapper = (url, keyword) => {
         };
 
         const postUrl = (multimediaUrl, data) => {
-            console.log("post ", data);
+            //console.log("post ", data);
            /* chrome.runtime.sendMessage({contentScriptQuery: "keyframes", url: multimediaUrl, body: data}, (response) => {
                 console.log("response ", response);
             })*/

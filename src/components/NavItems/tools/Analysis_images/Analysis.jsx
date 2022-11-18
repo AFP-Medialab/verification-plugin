@@ -16,7 +16,7 @@ import FacebookImageDescription from "./Results/FacebookImageDescription";
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/Analysis.tsv";
 import tsvAlltools from "../../../../LocalDictionary/components/NavItems/tools/Alltools.tsv";
-import { submissionEvent } from "../../../Shared/GoogleAnalytics/GoogleAnalytics";
+import { trackEvent, getclientId } from "../../../Shared/GoogleAnalytics/MatomoAnalytics";
 import { useParams } from "react-router-dom";
 import { KNOWN_LINKS } from "../../Assistant/AssistantRuleBook";
 import Card from "@mui/material/Card";
@@ -57,7 +57,7 @@ const Analysis = () => {
   const [submittedUrl, setSubmittedUrl] = useState(undefined);
   const [reprocess, setReprocess] = useState(false);
   const serviceUrl = caa_analysis_url + "images";
-  
+  const client_id = getclientId()
   const [finalUrl, showFacebookIframe] = useGenerateApiUrl(
     serviceUrl,
     submittedUrl,
@@ -78,7 +78,7 @@ const Analysis = () => {
   };
 
   const submitForm = () => {
-    submissionEvent(input.trim());
+    trackEvent('submission', 'analysis', 'image caa analysis', input.trim(), client_id)
     setSubmittedUrl(input.trim());
     dispatch(cleanAnalysisState());
   };

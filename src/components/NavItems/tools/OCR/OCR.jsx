@@ -25,6 +25,7 @@ import OCRIcon from '../../../NavBar/images/SVG/Image/OCR.svg';
 import Grid from "@mui/material/Grid";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import { submissionEvent } from "../../../Shared/GoogleAnalytics/GoogleAnalytics";
+import { trackEvent, getclientId } from "../../../Shared/GoogleAnalytics/MatomoAnalytics";
 import { setError } from "../../../../redux/actions/errorActions";
 import _ from "lodash";
 
@@ -44,14 +45,15 @@ const OCR = () => {
 
     const [userInput, setUserInput] = useState(ocrInputUrl);
 
-
+    const client_id = getclientId()
     const submitUrl = (src) => {
+        trackEvent('submission', 'ocr', 'image ocr processing', src, client_id)        
         submissionEvent(src);
         dispatch(setOcrInput(src, selectedScript))
     };
 
     const handleUploadImg = (file) => {
-        console.log("file ", file);
+        //console.log("file ", file);
         if (file.size >= 4000000) {
             dispatch(setOcrErrorKey("ocr_too_big"))
             dispatch(setOcrResult(false, true, false, null))

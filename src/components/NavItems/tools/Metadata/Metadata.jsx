@@ -18,7 +18,7 @@ import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/Metadata.tsv";
 import tsvAllTools from "../../../../LocalDictionary/components/NavItems/tools/Alltools.tsv";
-import {submissionEvent} from "../../../Shared/GoogleAnalytics/GoogleAnalytics";
+import { trackEvent, getclientId } from "../../../Shared/GoogleAnalytics/MatomoAnalytics";
 import {useParams, useLocation} from "react-router-dom";
 
 import {CONTENT_TYPE, KNOWN_LINKS} from "../../Assistant/AssistantRuleBook";
@@ -53,9 +53,10 @@ const Metadata = ({mediaType}) => {
     useVideoTreatment(videoUrl, keyword);
     useImageTreatment(imageUrl, keyword);
 
+    const client_id = getclientId()
     const submitUrl = () => {
         if (input) {
-            submissionEvent(input);
+            trackEvent('submission', 'metadata', 'extract metadata', input, client_id)
             if (radioImage) {
                 setImageurl(input);
             } else {

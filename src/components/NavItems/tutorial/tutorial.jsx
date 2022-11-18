@@ -16,7 +16,6 @@ import AccordionSummary from "@mui/material//AccordionSummary";
 import ExpandMoreIcon from "@mui/icons-material//ExpandMore";
 import AccordionDetails from "@mui/material//AccordionDetails";
 import Accordion from "@mui/material//Accordion";
-import { submissionEvent } from "../../Shared/GoogleAnalytics/GoogleAnalytics";
 
 
 // from https://material-ui.com/customization/default-theme/
@@ -50,10 +49,6 @@ const Tutorial = () => {
             popImg = popUpEn;
             break;
     }
-
-    useEffect(() => {
-        submissionEvent();
-    }, []);
 
     return (
         <Paper className={classes.root}>

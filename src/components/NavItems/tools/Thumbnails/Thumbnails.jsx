@@ -18,7 +18,7 @@ import Checkbox from "@mui/material/Checkbox";
 import FormGroup from "@mui/material/FormGroup";
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/Thumbnails.tsv";
-import {submissionEvent} from "../../../Shared/GoogleAnalytics/GoogleAnalytics";
+import { trackEvent, getclientId } from "../../../Shared/GoogleAnalytics/MatomoAnalytics";
 import OnClickInfo from "../../../Shared/OnClickInfo/OnClickInfo";
 import {useParams} from 'react-router-dom'
 
@@ -125,13 +125,13 @@ const Thumbnails = () => {
         let start_url_short = "https://youtu.be/";
         return url.startsWith(start_url) || url.startsWith(start_url_short);
     };
-
+    const client_id = getclientId();
     const submitForm = () => {
         setShowResult(false);
         dispatch(setError(null));
         let url = input.replace("?rel=0", "");
         if (url !== null && url !== "" && isYtUrl(url)) {
-            submissionEvent(url);
+            trackEvent('submission', 'thumbnails', 'youtube thumbnail', url, client_id)   
             let images = get_images(url);
             dispatch(setThumbnailsResult({url:url, result:images, notification:false, loading:false}));
             if(selectedValue.openTabs)

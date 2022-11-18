@@ -16,7 +16,7 @@ import {KNOWN_LINKS} from "./AssistantRuleBook";
 import {submitInputUrl} from "../../../redux/actions/tools/assistantActions";
 import tsv from "../../../LocalDictionary/components/NavItems/tools/Assistant.tsv";
 
-import { submissionEvent } from "../../Shared/GoogleAnalytics/GoogleAnalytics";
+import { trackEvent } from "../../Shared/GoogleAnalytics/MatomoAnalytics";
 
 const AssistantUrlSelected = (props) => {
 
@@ -37,7 +37,7 @@ const AssistantUrlSelected = (props) => {
 
     const handleSubmissionURL = () => {
         dispatch(submitInputUrl(formInput));
-        submissionEvent(formInput);
+        trackEvent('submission', 'assistant', 'page assistant', formInput)
     };
 
     const handleArchive = () =>{

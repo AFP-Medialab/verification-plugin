@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { v4 as uuid } from 'uuid';
 const initialState = null;
 
 const cookiesSlice = createSlice({
@@ -6,16 +7,21 @@ const cookiesSlice = createSlice({
     initialState,
     reducers:{
         setTrue(state, action){
-            return true;
+        const id = uuid()
+        return {
+            active : true,
+            id : id
+        }
         },
         setStorageTrue(state, action){
-            return true;
+            state.active = true;
+            state.id = uuid()
         },
         setFalse(state, action){
-            return false;
+            state.active = false;
         },
         toggleState(state, action){
-            return !state;
+            state.active = !action.payload;
         }
     }
 })

@@ -10,7 +10,8 @@ import VideoRightsResults from "./Results/VideoRightsResults";
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/VideoRights.tsv";
 import tsvAlltools from "../../../../LocalDictionary/components/NavItems/tools/Alltools.tsv";
-import {submissionEvent} from "../../../Shared/GoogleAnalytics/GoogleAnalytics";
+//import {submissionEvent} from "../../../Shared/GoogleAnalytics/GoogleAnalytics";
+import { trackEvent, getclientId } from "../../../Shared/GoogleAnalytics/MatomoAnalytics";
 import {useParams} from "react-router-dom";
 import {KNOWN_LINKS} from "../../Assistant/AssistantRuleBook";
 
@@ -37,10 +38,10 @@ const VideoRights = () => {
    
     useVideoRightsTreatment(submitted, keyword);
     const dispatch = useDispatch();
-
+    const client_id = getclientId()
     const submitForm = () => {
         if (!isLoading) {
-            submissionEvent(input);
+            trackEvent('submission', 'videorights', 'video rights', input, client_id)
             setSubmitted(input);
             dispatch(setVideoRightsLoading(true));
         }
