@@ -64,7 +64,16 @@ const AnimatedGif = ({toolState, homoImg1, homoImg2}) => {
         }
     // eslint-disable-next-line
     }, [setIntervalVar, interval, toolState, speed])
-
+    
+    useEffect(() => {
+        return () => {
+            //console.log("Stop loop 2 "  + interval);
+            if(interval !==null ){
+                
+                clearInterval(interval); 
+                setIntervalVar(null);
+            }}
+    }, [])
     //Function to prepare the files to trigger the download
     const handleDownload = (type) => {
         //console.log(toolState);
