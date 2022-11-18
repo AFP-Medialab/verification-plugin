@@ -3,12 +3,9 @@ import { useSelector, useDispatch } from "react-redux";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import Box from "@mui/material/Box";
 import useGetHomographics from "./Hooks/useGetHomographics";
-import useGetGif from "./Hooks/useGetGif";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
-import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
-import Slider from '@mui/material/Slider';
 import Grid from "@mui/material/Grid";
 import Button from '@mui/material/Button';
 import IconGif from '../../../NavBar/images/SVG/Image/Gif.svg';
@@ -24,7 +21,7 @@ import { setStateSelectingLocal, setStateSelectingUrl, setStateReady, setStateIn
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import IconButton from '@mui/material/IconButton';
-import {submissionEvent} from "../../../Shared/GoogleAnalytics/GoogleAnalytics";
+import { trackEvent, getclientId } from "../../../Shared/GoogleAnalytics/MatomoAnalytics";
 import AnimatedGif from "./AnimatedGif";
 
 
@@ -36,7 +33,7 @@ const CheckGif = () => {
     const keywordAllTools = useLoadLanguage("components/NavItems/tools/Alltools.tsv", tsvAlltools);
     const toolState = useSelector(state => state.gif.toolState);
     const dispatch = useDispatch();
-
+    const client_id = getclientId()
 
     //Selecting mode
     //============================================================================================
@@ -206,8 +203,11 @@ const CheckGif = () => {
     
     //Function to prepare the files to trigger the submission
     const handleSubmissionURL = () => {
-        submissionEvent(imageURL1);
-        submissionEvent(imageURL2);
+
+        trackEvent('submission', 'checkgif', 'url fake image', imageURL1, client_id)
+        trackEvent('submission', 'checkgif', 'url original image', imageURL2, client_id)
+        /*submissionEvent(imageURL1);
+        submissionEvent(imageURL2);*/
         var files = {
             "url_0": imageURL1,
             "url_1": imageURL2,
@@ -218,8 +218,10 @@ const CheckGif = () => {
 
 
     const handleSubmission = () => {
-        submissionEvent(selectedFile1);
-        submissionEvent(selectedFile2);
+        trackEvent('submission', 'checkgif', 'file fake image', selectedFile1, client_id)
+        trackEvent('submission', 'checkgif', 'file original image', selectedFile2, client_id)
+        /*submissionEvent(selectedFile1);
+        submissionEvent(selectedFile2);*/
         var files = {
             "file1": selectedFile1,
             "file2": selectedFile2,

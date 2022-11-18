@@ -4,6 +4,9 @@ import { HashRouter, Route, Routes } from "react-router-dom";
 import PopUp from "./components/PopUp/PopUp";
 import NavBar from "./components/NavBar/NavBar";
 import useAuthenticationAPI from './components/Shared/Authentication/useAuthenticationAPI';
+import { useEffect } from "react";
+import { useSelector } from "react-redux"
+import {trackPageView} from "./components/Shared/GoogleAnalytics/MatomoAnalytics"
 
 const theme = createTheme({
   palette: {
@@ -52,6 +55,14 @@ const NotFound = () => {
 };
 
 const App = () => {
+  const cookies = useSelector(state => state.cookies)
+  const clientId = (cookies !== null) ? cookies.id : null
+  const path = window.location.pathname
+  useEffect(() => {
+    trackPageView(path, clientId)
+  
+  }, [])
+  
   const authenticationAPI = useAuthenticationAPI();
   const locationSearchStart = window.location.href.lastIndexOf("?");
   if (locationSearchStart > 0) {

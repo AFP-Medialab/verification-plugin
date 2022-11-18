@@ -1,7 +1,7 @@
 import {Container} from "@mui/material";
 import Fade from "@mui/material/Fade";
 import React, {useEffect} from "react";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {selectTool} from "../../../redux/reducers/tools/toolReducer";
 import AllTools from "../../NavItems/tools/Alltools/AllTools";
 import Analysis from "../../NavItems/tools/Analysis/Analysis";
@@ -12,7 +12,7 @@ import Magnifier from "../../NavItems/tools/Magnifier/Magnifier";
 import Metadata from "../../NavItems/tools/Metadata/Metadata";
 import VideoRights from "../../NavItems/tools/VideoRights/VideoRights";
 import Forensic from "../../NavItems/tools/Forensic/Forensic";
-import {Route, Routes} from 'react-router-dom'
+import {Route, Routes, useLocation} from 'react-router-dom'
 import Footer from "../../Shared/Footer/Footer";
 import TwitterSna from "../../NavItems/tools/TwitterSna/TwitterSna";
 import OCR from "../../NavItems/tools/OCR/OCR";
@@ -23,6 +23,7 @@ import Geolocation from "../../NavItems/tools/Geolocation/Geolocation";
 import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import AnalysisImg from "../../NavItems/tools/Analysis_images/Analysis"
+import { trackPageView, getclientId } from "../../Shared/GoogleAnalytics/MatomoAnalytics";
 
 const DrawerItem = ({drawerItems}) => {
 
@@ -180,7 +181,10 @@ const DrawerItemContent = ({index, drawContent}) =>{
 
     });
     const classes = useMyStyles();
+    const path = useLocation()
+   const client_id = getclientId()
     useEffect(() => {
+        trackPageView(path, client_id)
         dispatch(selectTool(index));
       }, [index])
 

@@ -10,7 +10,7 @@ import {setMagnifierResult, setMagnifierLoading} from "../../../../redux/actions
 import {setError} from "../../../../redux/actions/errorActions";
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/Magnifier.tsv";
-import {submissionEvent} from "../../../Shared/GoogleAnalytics/GoogleAnalytics";
+import { trackEvent, getclientId } from "../../../Shared/GoogleAnalytics/MatomoAnalytics";
 import {KNOWN_LINKS} from "../../Assistant/AssistantRuleBook";
 
 import Card from "@mui/material/Card";
@@ -38,11 +38,11 @@ const Magnifier = () => {
         return keyword("please_give_a_correct_link");
     };
 
-
+    const client_id = getclientId()
     const submitUrl = (src) => {
-        submissionEvent(src);
+        trackEvent('submission', 'magnifier', 'image magnifier caa analysis', src, client_id)
         let img = new Image();
-        img.crossOrigin="anonymous"
+        img.crossOrigin = "anonymous"
         img.onload = () => {
             let canvas = document.createElement('canvas');
             canvas.width = img.width;

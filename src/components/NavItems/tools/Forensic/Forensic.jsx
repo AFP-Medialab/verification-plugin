@@ -12,7 +12,7 @@ import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/Forensic.tsv";
 import tsvAllTools from "../../../../LocalDictionary/components/NavItems/tools/Alltools.tsv";
 import tsvWarning from "../../../../LocalDictionary/components/Shared/OnWarningInfo.tsv";
-import {submissionEvent} from "../../../Shared/GoogleAnalytics/GoogleAnalytics";
+import { trackEvent, getclientId } from "../../../Shared/GoogleAnalytics/MatomoAnalytics";
 import ForensicIcon from '../../../NavBar/images/SVG/Image/Forensic.svg';
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
@@ -91,12 +91,12 @@ const Forensic = () => {
 
     const dispatch = useDispatch();
 
-    
+    const client_id = getclientId()
     const submitUrl = () => {
         if (input && input !== "") {
             setType("url")
             setLoaded(true);
-            submissionEvent(input);
+            trackEvent('submission', 'forensic', 'Forensice analysis assistant', input, client_id)
             setImage(input);
         }
     };

@@ -8,7 +8,6 @@ const defaultState = {
 const analysisReducer = (state = defaultState, action) => {
     switch (action.type) {
         case "SET_ANALYSIS_RESULT":
-            console.log("SET_ANALYSIS_RESULT ", action)
             return action.payload;
         case "SET_ANALYSIS_PAGINATION_COMMENTS":
             return {
@@ -32,7 +31,6 @@ const analysisReducer = (state = defaultState, action) => {
                         pagination:action.payload.pagination },
                   };         
         case "SET_ANALYSIS_LOADING":
-            console.log("SET_ANALYSIS_LOADING ", action);
             return {...state, loading: action.payload};
         case "ANALYSIS_CLEAN_STATE":
             return {...state, result:null, url:"", loading: false};

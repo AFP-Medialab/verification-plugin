@@ -21,7 +21,6 @@ import useLoadLanguage from "../../../Hooks/useLoadLanguage";
 import tsv from "../../../LocalDictionary/components/NavItems/Interactive.tsv";
 import Link from "@mui/material/Link";
 import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
-import { submissionEvent } from "../../Shared/GoogleAnalytics/GoogleAnalytics";
 import { useNavigate } from "react-router-dom";
 
 const Interactive = () => {
@@ -29,10 +28,6 @@ const Interactive = () => {
     const navigate = useNavigate();
     const keyword = useLoadLanguage("components/NavItems/Interactive.tsv", tsv);
     const answersAvailable = useSelector(state => state.interactiveExplanation);
-
-    useEffect(() => {
-        submissionEvent();
-    }, []);
 
     const carouselItems = () => {
         let res = [];

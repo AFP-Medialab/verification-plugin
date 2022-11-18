@@ -15,7 +15,7 @@ import {useParams} from 'react-router-dom'
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/Keyframes.tsv";
 import tsvAllTools from "../../../../LocalDictionary/components/NavItems/tools/Alltools.tsv";
-import {submissionEvent} from "../../../Shared/GoogleAnalytics/GoogleAnalytics";
+import { trackEvent, getclientId } from "../../../Shared/GoogleAnalytics/MatomoAnalytics";
 import {KNOWN_LINKS} from "../../Assistant/AssistantRuleBook";
 
 import Card from "@mui/material/Card";
@@ -72,8 +72,9 @@ const Keyframes = () => {
             });
     }
 
+    const client_id = getclientId()
     const submitUrl = () => {
-        submissionEvent(input);
+        trackEvent('submission', 'keyframe', 'video key frame analysis', input.trim())
         setSubmittedUrl(input);
     };
 

@@ -15,9 +15,6 @@ import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
 import Link from "@mui/material/Link";
 import Typography from "@mui/material/Typography";
 import {toggleState} from "../../../redux/reducers/cookiesReducers";
-import { submissionEvent } from "../../Shared/GoogleAnalytics/GoogleAnalytics";
-
-
 
 const About = () => {
     const classes = useMyStyles();
@@ -27,10 +24,6 @@ const About = () => {
     const cookiesUsage = useSelector(state => state.cookies);
     const gaUsage = useSelector(state => state.googleAnalytic);
     const dispatch = useDispatch();
-
-    useEffect(() => {
-        submissionEvent();
-    }, []);
 
     const additionalDangerousContent = () => {
         let res = [];
@@ -215,8 +208,8 @@ const About = () => {
             <FormControlLabel
                 control={
                     <Checkbox
-                        checked={cookiesUsage}
-                        onChange={() => dispatch(toggleState(cookiesUsage))}
+                        checked={cookiesUsage.active}
+                        onChange={() => dispatch(toggleState(cookiesUsage.active))}
                         value="checkedBox"
                         color="primary"
                     />

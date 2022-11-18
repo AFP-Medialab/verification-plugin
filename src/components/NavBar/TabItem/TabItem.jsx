@@ -1,11 +1,12 @@
-import {Route, Routes} from 'react-router-dom'
+import {Route, Routes, useLocation} from 'react-router-dom'
 import {Container} from "@mui/material";
 import Fade from "@mui/material/Fade";
 import React, {useEffect} from "react";
 import DrawerItem from "../DrawerItem/DrawerItem";
 import {useDispatch} from "react-redux";
 import {selectPage} from "../../../redux/reducers/navReducer";
-import { useParams, useSearchParams, useLocation } from 'react-router-dom';
+import { trackPageView } from '../../Shared/GoogleAnalytics/MatomoAnalytics';
+import { useSelector } from 'react-redux';
 
 const TabItem = (props) => {
     
@@ -58,6 +59,12 @@ const TabContent = ({index, path, drawerItems, tabItems}) => {
 }
 
 const ContentContainer = ({tabItems, index}) => {
+    var path = useLocation()
+    const cookies = useSelector(state => state.cookies)
+    const clientId = (cookies !== null) ? cookies.id : null
+    useEffect(() => {
+        trackPageView(path, clientId)
+    }, [])
     return (
         <Container key={index}>
             <Fade in={true}>

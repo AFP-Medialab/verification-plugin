@@ -17,7 +17,6 @@ import FacebookVideoDescription from "./Results/FacebookVideoDescription";
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/Analysis.tsv";
 import tsvAllTools from "../../../../LocalDictionary/components/NavItems/tools/Alltools.tsv";
-import {submissionEvent} from "../../../Shared/GoogleAnalytics/GoogleAnalytics";
 import {cleanAnalysisState,setAnalysisLoading, setAnalysisResult,setAnalysisComments, 
     setAnalysisLinkComments, 
     setAnalysisVerifiedComments} from "../../../../redux/actions/tools/analysisActions";
@@ -31,6 +30,7 @@ import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import styles from "./Results/layout.module.css";
 import Alert from '@mui/material/Alert';
 import _ from "lodash";
+import { trackEvent, getclientId } from "../../../Shared/GoogleAnalytics/MatomoAnalytics";
 
 
 const Analysis = () => {
@@ -59,9 +59,10 @@ const Analysis = () => {
     const reprocessToggle = () => {
         setReprocess(!reprocess);
     };
-    
+    const client_id = getclientId()
+
     const submitForm = () => {
-        submissionEvent(input.trim());
+        trackEvent('submission', 'analysis', 'video caa analysis', input.trim(), client_id)
         setSubmittedUrl(input.trim());
         dispatch(cleanAnalysisState());
     };
@@ -86,7 +87,7 @@ const Analysis = () => {
 
     useEffect(() => {
         if (url && url !== KNOWN_LINKS.OWN) {
-            console.log("url effect if", url);
+            //("url effect if", url);
              const uri = (url !== null) ? decodeURIComponent(url) : undefined;
              setInput(uri);
              setUrlDetected(true)

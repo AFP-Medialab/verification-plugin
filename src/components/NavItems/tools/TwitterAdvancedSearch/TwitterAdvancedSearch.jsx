@@ -13,7 +13,7 @@ import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/TwitterAdvancedSearch.tsv";
 import tsvAllTools from "../../../../LocalDictionary/components/NavItems/tools/Alltools.tsv"
 import useMyStyles, {myCardStyles} from "../../../Shared/MaterialUiStyles/useMyStyles";
-import {submissionEvent} from "../../../Shared/GoogleAnalytics/GoogleAnalytics";
+import { trackEvent, getclientId } from "../../../Shared/GoogleAnalytics/MatomoAnalytics";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import TwitterAdvancedSearchIcon from '../../../NavBar/images/SVG/Search/Twitter_search.svg';
@@ -100,10 +100,11 @@ const TwitterAdvancedSearch = () => {
             return itemDate <= currentDate && fromDate < itemDate ;
         return itemDate <= currentDate;
     };
+    const client_id = getclientId();
 
     const onSubmit = () => {
         let url = createUrl(term.value, account.value, filter.value, tweetLang.value, geocode.value, near.value, within.value, fromDate, toDate, localTime);
-        submissionEvent(url);
+        trackEvent('submission', 'twitter_advance_search', 'search twitter request', url, client_id)   
         window.open(url);
     };
 

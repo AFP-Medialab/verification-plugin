@@ -61,10 +61,12 @@ export const muiCache = createCache({
   'key': 'mui',
   'prepend': true
 })
+
+
 root.render(
   <Provider store={(store)}>
     <CacheProvider  value={muiCache}>
-      <App />
+        <App />
     </CacheProvider>
   </Provider>
 );

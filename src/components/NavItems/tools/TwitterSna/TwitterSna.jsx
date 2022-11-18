@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setError } from "../../../../redux/actions/errorActions";
 import dateFormat from "dateformat";
-import _ from "lodash";
+import _, { get } from "lodash";
 import useMyStyles, { myCardStyles } from "../../../Shared/MaterialUiStyles/useMyStyles";
 import TextField from "@mui/material/TextField";
 import FormControl from "@mui/material/FormControl";
@@ -28,8 +28,8 @@ import { replaceAll } from "../TwitterAdvancedSearch/createUrl";
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/TwitterSna.tsv";
 import tsvAllTools from "../../../../LocalDictionary/components/NavItems/tools/Alltools.tsv";
-import { submissionEvent } from "../../../Shared/GoogleAnalytics/GoogleAnalytics";
-import { StylesProvider } from "@mui/material/styles";
+//import { submissionEvent } from "../../../Shared/GoogleAnalytics/GoogleAnalytics";
+import { trackEvent, getclientId } from "../../../Shared/GoogleAnalytics/MatomoAnalytics";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import TwitterSNAIcon from '../../../NavBar/images/SVG/DataAnalysis/Twitter_sna.svg';
@@ -357,7 +357,7 @@ const TwitterSna = () => {
   };
   */
 
-
+  const client_id = getclientId()
   const onSubmit = () => {
     //Mandatory Fields errors
     if ((keyWords.trim() === "") && (keyWordsAny.trim() === "")) {
@@ -396,8 +396,7 @@ const TwitterSna = () => {
       if (prevResult && prevResult.socioSemantic4ModeGraph) {
         delete prevResult.socioSemantic4ModeGraph;
       }
-
-      submissionEvent(JSON.stringify(newRequest));
+      trackEvent('submission', 'tsna', 'redirect to tsna', JSON.stringify(newRequest), client_id)
       setSubmittedRequest(newRequest);
     }
   };

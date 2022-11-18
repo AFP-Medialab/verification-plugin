@@ -46,6 +46,7 @@
     "remove": "^0.1.5",
     "tippy.js": "^6.3.7",
     "tui-image-editor": "^3.15.3",
+    "uuidv4": "^6.2.13",
     "yup": "^0.32.11"
   },
   "devDependencies": {
