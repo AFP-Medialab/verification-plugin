@@ -1,11 +1,13 @@
 // If your extension doesn't need a background script, just leave this file empty
 import ReactGA, { ga } from "react-ga"
-import {localImageGoogleSearch, 
+import {
         localImageYandexSearch,
         localImageBingSearch,
         localImageBaiduSearch,
+        localImageGoogleLens,
         loadImage} 
         from "../components/Shared/ReverseSearch/reverseSearchUtils"
+import ImageReverseSearch from "../components/Shared/ReverseSearch/ImageReverseSearch"
 let page_name = 'popup.html';
 
 const trackingId = process.env.REACT_APP_GOOGLE_ANALYTICS_KEY;
@@ -33,7 +35,7 @@ function rightClickEvent(toolName, media) {
 const get_images = (url) => {
     let video_id = url.split('v=')[1].split('&')[0];
     let img_url = "http://img.youtube.com/vi/%s/%d.jpg";
-    let search_url = "https://www.google.com/searchbyimage?&image_url="
+    let search_url = "https://www.google.com/searchbyimage?sbisrc=cr_1_5_2&image_url="
     let img_arr = ["", "", "", ""];
     for (let count = 0; count < 4; count++) {
         img_arr[count] = search_url + img_url.replace("%s", video_id).replace("%d", count);
@@ -118,8 +120,8 @@ const ocr = function (word) {
 
 const imageReversesearch = function (word) {
     let img = getUrlImg(word);
-    if(img !== "" ){
-        loadImage(img, localImageGoogleSearch)
+    if(img !== "" && img.startsWith("http")){
+        ImageReverseSearch("google", img)
     }
 };
 
@@ -214,11 +216,18 @@ const imageReversesearchBing = function (word) {
         loadImage(img, localImageBingSearch)
     }
 };
+const imageReversesearchGoogleLens = function (word) {
+    let img = getUrlImg(word);
+    if(img !== "" ){
+        loadImage(img, localImageGoogleLens)
+    }
+}
 
 const imageReversesearchAll = function (word) {
     rightClickEvent("Image Reverse Search All", getUrlImg(word));
     imageReversesearchDBKF(word);
     imageReversesearch(word);
+    imageReversesearchGoogleLens(word);
     imageReversesearchBaidu(word);
     imageReversesearchBing(word);
     imageReversesearchTineye(word);
@@ -291,6 +300,12 @@ window.chrome.contextMenus.create({
     title: "Image Reverse Search - Google",
     contexts: ["image"],
     onclick: imageReversesearch,
+});
+
+window.chrome.contextMenus.create({
+    title: "Image Reverse Search - Google Lens",
+    contexts: ["image"],
+    onclick: imageReversesearchGoogleLens,
 });
 
 window.chrome.contextMenus.create({

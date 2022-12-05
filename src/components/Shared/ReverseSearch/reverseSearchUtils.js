@@ -98,10 +98,13 @@ export const localImageYandexSearch = (content) => {
 
 
 export const localImageGoogleSearch = (content) => {
+    const chromeSbiSrc = 'Google Chrome 107.0.5304.107 (Official) Windows';
     const blob = b64toBlob(content, 'image/png')
     let url = "https://www.google.com/searchbyimage/upload"
     const formData  = new FormData();
     formData.append("encoded_image", blob)
+    formData.append('image_url', '');
+    formData.append('sbisrc', chromeSbiSrc)
     fetch(url, {
         referrer: '',
         mode: 'cors',
