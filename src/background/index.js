@@ -33,7 +33,7 @@ function rightClickEvent(toolName, media) {
 const get_images = (url) => {
     let video_id = url.split('v=')[1].split('&')[0];
     let img_url = "http://img.youtube.com/vi/%s/%d.jpg";
-    let search_url = "https://www.google.com/searchbyimage?&image_url="
+    let search_url = "https://www.google.com/searchbyimage?sbisrc=cr_1_5_2&image_url="
     let img_arr = ["", "", "", ""];
     for (let count = 0; count < 4; count++) {
         img_arr[count] = search_url + img_url.replace("%s", video_id).replace("%d", count);
