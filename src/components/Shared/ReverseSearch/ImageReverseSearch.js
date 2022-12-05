@@ -11,7 +11,7 @@ const ImageReverseSearch = (type, urls) => {
             end: "&view=detailv2&iss=sbi"
         },
         google: {
-            search: "https://www.google.com/searchbyimage?image_url="
+            search: "https://www.google.com/searchbyimage?sbisrc=cr_1_5_2&image_url="
         },
         tineye: {
             search: "https://www.tineye.com/search?url="
