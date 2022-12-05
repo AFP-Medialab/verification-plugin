@@ -1,11 +1,13 @@
 // If your extension doesn't need a background script, just leave this file empty
 import ReactGA, { ga } from "react-ga"
-import {localImageGoogleSearch, 
+import {
         localImageYandexSearch,
         localImageBingSearch,
         localImageBaiduSearch,
+        localImageGoogleLens,
         loadImage} 
         from "../components/Shared/ReverseSearch/reverseSearchUtils"
+import ImageReverseSearch from "../components/Shared/ReverseSearch/ImageReverseSearch"
 let page_name = 'popup.html';
 
 const trackingId = process.env.REACT_APP_GOOGLE_ANALYTICS_KEY;
@@ -118,8 +120,8 @@ const ocr = function (word) {
 
 const imageReversesearch = function (word) {
     let img = getUrlImg(word);
-    if(img !== "" ){
-        loadImage(img, localImageGoogleSearch)
+    if(img !== "" && img.startsWith("http")){
+        ImageReverseSearch("google", img)
     }
 };
 
@@ -214,11 +216,18 @@ const imageReversesearchBing = function (word) {
         loadImage(img, localImageBingSearch)
     }
 };
+const imageReversesearchGoogleLens = function (word) {
+    let img = getUrlImg(word);
+    if(img !== "" ){
+        loadImage(img, localImageGoogleLens)
+    }
+}
 
 const imageReversesearchAll = function (word) {
     rightClickEvent("Image Reverse Search All", getUrlImg(word));
     imageReversesearchDBKF(word);
     imageReversesearch(word);
+    imageReversesearchGoogleLens(word);
     imageReversesearchBaidu(word);
     imageReversesearchBing(word);
     imageReversesearchTineye(word);
@@ -291,6 +300,12 @@ window.chrome.contextMenus.create({
     title: "Image Reverse Search - Google",
     contexts: ["image"],
     onclick: imageReversesearch,
+});
+
+window.chrome.contextMenus.create({
+    title: "Image Reverse Search - Google Lens",
+    contexts: ["image"],
+    onclick: imageReversesearchGoogleLens,
 });
 
 window.chrome.contextMenus.create({
