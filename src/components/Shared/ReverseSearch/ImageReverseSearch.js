@@ -30,8 +30,8 @@ const ImageReverseSearch = (type, urls) => {
     {
         ImageReverseSearch("baidu", urls);
         ImageReverseSearch("bing", urls);
-        //ImageReverseSearch("google", urls);
-        GoogleReversSearch(urls)
+        ImageReverseSearch("google", urls);
+        //GoogleReversSearch(urls)
         ImageReverseSearch("tineye", urls);
         ImageReverseSearch("yandex", urls);
         ImageReverseSearch("reddit", urls);
