@@ -3,12 +3,9 @@ import { useSelector } from "react-redux";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import Box from "@material-ui/core/Box";
 import useGetHomographics from "./Hooks/useGetHomographics";
-import useGetGif from "./Hooks/useGetGif";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
-import CardMedia from "@material-ui/core/CardMedia";
 import Typography from "@material-ui/core/Typography";
-import Slider from '@material-ui/core/Slider';
 import Grid from "@material-ui/core/Grid";
 import Button from '@material-ui/core/Button';
 import { ReactComponent as IconGif } from '../../../NavBar/images/SVG/Image/Gif.svg';
@@ -28,9 +25,10 @@ import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 import IconButton from '@material-ui/core/IconButton';
 import { StylesProvider } from "@material-ui/core/styles";
 import {submissionEvent} from "../../../Shared/GoogleAnalytics/GoogleAnalytics";
+import AnimatedGif from "./AnimatedGif";
 
 
-const Gif = () => {
+const CheckGif = () => {
     //Init variables
     //============================================================================================
     const classes = useMyStyles();
@@ -239,110 +237,12 @@ const Gif = () => {
     const homoImg1 = useSelector(state => state.gif.homoImg1);
     const homoImg2 = useSelector(state => state.gif.homoImg2);
 
-    const [interval, setIntervalVar] = React.useState(null);
-
-    //=== SPEED SLIDER ===
-    const [speed, setSpeed] = React.useState(1100);
-
-
-    //=== CSS ANIMATION ===
-
-    //Trigger of the loop function
-    useEffect(() => {
-        if (toolState === 5 && (interval === null || interval === undefined)) {
-                setIntervalVar(setInterval(() => animateImages(), speed));
-        }
-        return () => {
-            if(interval !==null ){
-                clearInterval(interval); 
-                setIntervalVar(null);
-            }
-        }
-    // eslint-disable-next-line
-    }, [setIntervalVar, interval, toolState, speed]);
-    
-
-    //Loop function
-    function animateImages() {
-        //console.log("Loop function" + interval); //DEBUG
-        //console.log(interval); //DEBUG
-        var x = document.getElementById("gifFilterElement");
-
-        if (x.style.display === "none") {
-            x.style.display = "block";
-        } else {
-            x.style.display = "none";
-        }
-    }
-
-    const marks = [
-        {
-            value: -1700,
-            label: keyword("slider_label_slow"),
-        },
-        {
-            value: -500,
-            label: keyword("slider_label_fast"),
-        },
-    ];
-
-    //On hold function (while sliding this function is triggered)
-    function changeSpeed(value) {
-        //console.log("Change speed: " + value); //DEBUG
-        setSpeed(value * -1);
-    }
-
-    //On release function (when the click is released this function is triggered)
-    function commitChangeSpeed(value) {
-        //console.log("Commit change speed: " + value); //DEBUG
-        //clearInterval(interval);
-        setIntervalVar(setInterval(() => animateImages(), (value)));
-    }
-
-    function stopLoop() {
-        clearInterval(interval);
-    }
-
-    
-
-
-    //Download GIF
-    //============================================================================================
-    const [filesForGif, setFilesForGif] = useState(null);
-    const [delayGif, setDelayGif] = useState(null);
-    const [enableDownload, setEnableDownload] = useState(false);
-
-    //Function to prepare the files to trigger the download
-    const handleDownloadGif = () => {
-        //console.log(toolState);
-        var files = {
-            "image1": homoImg1,
-            "image2": homoImg2,
-        }
-        
-        setFilesForGif(files);
-        setDelayGif(speed);
-        setEnableDownload(true);
-    };
-
-    //console.log(filesForGif);
-    //console.log(delayGif);
-    //console.log(toolState);
-    //Call to the API    
-
-    useGetGif(filesForGif, delayGif, enableDownload);
-    if (toolState === 7 && enableDownload) {
-        setEnableDownload(false);
-    }
-    
-
-
     //Reset states
     //============================================================================================
 
 
     const newGif = (event) => {
-        stopLoop();
+        //stopLoop();
         cleanInputs();
         
         setClassButtonURL(classes.bigButtonDiv);
@@ -378,8 +278,7 @@ const Gif = () => {
         return () => {
             // componentwillunmount in functional component.
             // Anything in here is fired on component unmount.
-            //console.log("Stop loop "  + interval);
-            clearInterval(interval);
+            //console.log("Stop loop "  + interval);           
             newGif();
         }
     // eslint-disable-next-line
@@ -391,14 +290,12 @@ const Gif = () => {
 
     return (
         <div >
-            
 
                 {//=== Title ===
                 }
 
                 <HeaderTool name={keywordAllTools("navbar_gif")} description={keywordAllTools("navbar_gif_description")} icon={<IconGif style={{ fill: "#51A5B2" }} />} advanced="true" />
             
-
                 {//=== Load of the images ===
                 }
 
@@ -686,7 +583,7 @@ const Gif = () => {
                                             label={keyword("input_label1")}
                                             placeholder={keyword("input_placeholder")}
                                             multiline
-                                            rows={8}
+                                            minRows={8}
                                             fullWidth
                                             variant="outlined"
                                             onChange={e => {
@@ -708,7 +605,7 @@ const Gif = () => {
                                             label={keyword("input_label2")}
                                             placeholder={keyword("input_placeholder")}
                                             multiline
-                                            rows={8}
+                                            minRows={8}
                                             fullWidth
                                             variant="outlined"
                                             onChange={e => {
@@ -753,8 +650,6 @@ const Gif = () => {
                                         </Grid>
                                     }
 
-
-
                                     {toolState === 4 &&
                                         <Grid
                                             container
@@ -768,82 +663,9 @@ const Gif = () => {
                                     }
 
                                     {(toolState === 5 || toolState === 7) &&
-
-                                        <Box p={2} className={classes.height100}>
-
-                                        
-                                            <Grid
-                                                container
-                                                direction="column"
-                                                justifyContent="space-between"
-                                                alignItems="flex-start"
-                                                className={classes.height100}
-                                            >
-                                                
-                                                <Typography variant="h6" className={classes.headingGif}>
-                                                    {keyword("title_preview")}
-                                                </Typography>
-
-                                                <Box justifyContent="center" className={classes.wrapperImageFilter} style ={{width: "100%"}}>
-
-                                                    <CardMedia
-                                                        component="img"
-                                                        className={classes.imagesGifImage}
-                                                        image={homoImg1}
-                                                    />
-                                                    {true &&
-                                                        <CardMedia
-                                                            component="img"
-                                                            className={classes.imagesGifFilter}
-                                                            image={homoImg2}
-                                                            id="gifFilterElement"
-                                                        />
-                                                    }
-                                                </Box>
-
-
-
-                                                <Grid
-                                                    container
-                                                    direction="column"
-                                                    justifyContent="center"
-                                                    alignItems="center"
-                                                >
-                                                    <Box m={4} />
-
-                                                    <Typography gutterBottom>
-                                                        {keyword("slider_title")}
-                                                    </Typography>
-
-
-                                                    <Slider
-                                                        defaultValue={-1100}
-                                                        aria-labelledby="discrete-slider"
-                                                        step={300}
-                                                        marks={marks}
-                                                        min={-1700}
-                                                        max={-500}
-                                                        scale={x => -x}
-                                                        onChange={(e, val) => changeSpeed(val)}
-                                                        onChangeCommitted={(e) => commitChangeSpeed(speed)}
-                                                        className={classes.sliderClass}
-                                                    />
-
-
-
-                                                    <Box m={2} />
-
-
-                                                    <Button variant="contained" color="primary" disabled={toolState===7} fullWidth onClick={(e) => handleDownloadGif(e)}>
-                                                        {keyword("button_download")}
-                                                    </Button>
-                                                    <Box m={2} />
-                                                </Grid>
-
-                                            
-                                            </Grid>
-                                        </Box>
-
+                                        <AnimatedGif 
+                                            toolState={toolState}
+                                            homoImg1={homoImg1} homoImg2={homoImg2}  />
                                     }
 
                             </Grid>
@@ -858,4 +680,4 @@ const Gif = () => {
                 
         </div>);
 };
-export default Gif;
+export default CheckGif;
