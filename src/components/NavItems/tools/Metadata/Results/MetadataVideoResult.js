@@ -36,6 +36,15 @@ const MetadataVideoResult = (result) => {
         return dd;
     };
 
+    const defaultDate = (inputDate) =>{
+        const defaultMP4BoxDate = "1-0-1904"
+        let inDate = `${inputDate.getDate()}-${inputDate.getMonth()}-${inputDate.getFullYear()}`
+        if(defaultMP4BoxDate === inDate)
+            return "NA"
+        else return inputDate.toString()
+
+    }
+
     const getGoogleMapsLink = (latitue, latitudeRef, longitude, longitudeRef) => {
         let url = "https://www.google.com/maps/place/";
         let lat = latitue[0] + "%C2%B0" + latitue[1] + "'" + latitue[2] + "%22" + latitudeRef;
@@ -115,12 +124,12 @@ const MetadataVideoResult = (result) => {
         },
         {
             title: keyword("metadata_name_9"),
-            value: (report.created) ? report.created.toString() : null,
+            value: (report.created) ? defaultDate(report.created) : null,
             description: keyword("metadata_desc_9"),
         },
         {
             title: keyword("metadata_name_10"),
-            value: (report.modified) ? report.modified.toString() : null,
+            value: (report.modified) ? defaultDate(report.modified) : null,
             description: keyword("metadata_desc_10"),
         },
     ];
@@ -140,12 +149,12 @@ const MetadataVideoResult = (result) => {
             },
             {
                 title: keyword("track_name_3"),
-                value: (report.videoTracks[0].created) ? report.videoTracks[0].created.toString() : null,
+                value: (report.videoTracks[0].created) ? defaultDate(report.videoTracks[0].created) : null,
                 description: keyword("track_name_3"),
             },
             {
                 title: keyword("track_name_4"),
-                value: (report.videoTracks[0].modified) ? report.videoTracks[0].modified.toString() : null,
+                value: (report.videoTracks[0].modified) ? defaultDate(report.videoTracks[0].modified) : null,
                 description: keyword("track_name_4"),
             },
             {
