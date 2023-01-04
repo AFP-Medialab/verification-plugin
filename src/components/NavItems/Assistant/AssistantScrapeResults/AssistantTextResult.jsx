@@ -13,6 +13,7 @@ import Grid from "@mui/material/Grid";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import LinearProgress from "@mui/material/LinearProgress";
 import TranslateIcon from '@mui/icons-material/Translate'
+import { Translate } from "../../../Shared/Utils/Translate";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 import {setWarningExpanded} from "../../../../redux/actions/tools/assistantActions";import tsv from "../../../../LocalDictionary/components/NavItems/tools/Assistant.tsv";
@@ -103,22 +104,23 @@ const AssistantTextResult = () => {
 
                 <Box mb={1.5}>
                     <Divider/>
-                    <Grid container>
-                        <Grid item xs={6} style={{"display": "flex"}}>
-                            <Typography className={classes.toolTipIcon} onClick={()=>setDisplayOrigLang(!displayOrigLang)}>{textLang}</Typography>
-                            <Tooltip title={sharedKeyword("copy_to_clipboard")}>
-                                <IconButton className={classes.toolTipIcon} onClick={() => {navigator.clipboard.writeText(text)}}>
-                                    <FileCopyOutlined/>
-                                </IconButton>
-                            </Tooltip>
-                            {textLang && textLang !== "en" && textLang !== "" ?
-                                <Tooltip title={keyword("translate")}>
-                                    <IconButton className={classes.toolTipIcon}
-                                        onClick={()=>window.open("https://translate.google.com/?sl=auto&text=" + encodeURIComponent(text) + "&op=translate", "_blank"
-                                    )}>
-                                        <TranslateIcon/>
+                    <Grid container direction="row">
+                        <Grid item xs={6} spacing={0.5} container direction="row" justifyContent="flex-start" alignItems="flex-start">
+                            <Grid item>
+                                <Typography className={classes.toolTipIcon} onClick={()=>setDisplayOrigLang(!displayOrigLang)}>{textLang}</Typography>
+                            </Grid>
+                            <Grid item>
+                                <Tooltip title={sharedKeyword("copy_to_clipboard")}>
+                                    <IconButton className={classes.toolTipIcon} onClick={() => {navigator.clipboard.writeText(text)}}>
+                                        <FileCopyOutlined/>
                                     </IconButton>
-                                </Tooltip> : null
+                                </Tooltip>
+                            </Grid>
+                            {textLang && textLang !== "en" && textLang !== "" ?
+                                    <Grid item>
+                                        <Translate className={classes.toolTipIcon} text={text} />
+                                    </Grid>
+                                : null
                             }
                         </Grid>
                         <Grid item xs={6} align={"right"}>
