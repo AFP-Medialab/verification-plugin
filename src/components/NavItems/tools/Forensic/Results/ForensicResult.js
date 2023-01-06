@@ -401,6 +401,7 @@ const ForensicResults = (props) => {
     function closeGifPopover() {
         //clearInterval(interval);
         setAnchorGifPopover(null);
+        dispatch(setStateInit());
         //setReadyTransparency(false);
     }
 
