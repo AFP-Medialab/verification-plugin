@@ -665,7 +665,7 @@ const CheckGif = () => {
                                     {(toolState === 5 || toolState === 7) &&
                                         <AnimatedGif 
                                             toolState={toolState}
-                                            homoImg1={homoImg1} homoImg2={homoImg2}  />
+                                            homoImg1={homoImg1} homoImg2={homoImg2} classes={classes} />
                                     }
 
                             </Grid>
