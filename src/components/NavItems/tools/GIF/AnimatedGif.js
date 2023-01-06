@@ -7,7 +7,6 @@ import {
   Slider,
   Button,
 } from "@material-ui/core";
-import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/CheckGIF.tsv";
 import { useState, useEffect } from "react";
