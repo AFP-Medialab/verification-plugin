@@ -9,7 +9,6 @@ import Typography from "@material-ui/core/Typography";
 import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Forensic.tsv";
 import tsvWarning from "../../../../../LocalDictionary/components/Shared/OnWarningInfo.tsv";
-import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 import { createTheme, ThemeProvider } from "@material-ui/core/styles";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
@@ -41,6 +40,7 @@ import MakoScale from "../../../../NavBar/images/SVG/MakoScale.png";
 import { useEffect } from "react";
 import EmojiObjectsIcon from "@material-ui/icons/EmojiObjects";
 import AnimatedGif from "../../GIF/AnimatedGif";
+import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -1229,6 +1229,7 @@ const ForensicResults = (props) => {
                         homoImg1={gifImage}
                         homoImg2={gifFilter}
                         isPopup={true}
+                        classes={classes}
                       />
                     </Grid>
                   </Grid>

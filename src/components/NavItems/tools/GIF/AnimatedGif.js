@@ -12,8 +12,8 @@ import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/CheckGIF.tsv";
 import { useState, useEffect } from "react";
 
-const AnimatedGif = ({ toolState, homoImg1, homoImg2, isPopup }) => {
-  const classes = useMyStyles();
+const AnimatedGif = ({ toolState, homoImg1, homoImg2, isPopup, classes }) => {
+  //const classes = useMyStyles();
   const keyword = useLoadLanguage(
     "components/NavItems/tools/CheckGIF.tsv",
     tsv
