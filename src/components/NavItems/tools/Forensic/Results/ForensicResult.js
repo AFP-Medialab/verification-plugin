@@ -1228,6 +1228,7 @@ const ForensicResults = (props) => {
                         toolState={gifState}
                         homoImg1={gifImage}
                         homoImg2={gifFilter}
+                        isPopup={true}
                       />
                     </Grid>
                   </Grid>

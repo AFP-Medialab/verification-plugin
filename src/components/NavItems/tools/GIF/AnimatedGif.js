@@ -12,7 +12,7 @@ import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/CheckGIF.tsv";
 import { useState, useEffect } from "react";
 
-const AnimatedGif = ({ toolState, homoImg1, homoImg2 }) => {
+const AnimatedGif = ({ toolState, homoImg1, homoImg2, isPopup }) => {
   const classes = useMyStyles();
   const keyword = useLoadLanguage(
     "components/NavItems/tools/CheckGIF.tsv",
@@ -109,7 +109,7 @@ const AnimatedGif = ({ toolState, homoImg1, homoImg2 }) => {
     setEnableDownload(false);
   }
 
-  return (
+  return isPopup ? (
     <Grid
       container
       spacing={4}
@@ -129,14 +129,14 @@ const AnimatedGif = ({ toolState, homoImg1, homoImg2 }) => {
             image={homoImg1}
           />
           {true && (
-                <CardMedia
-                  component="img"
-                  className={classes.imagesGifFilter}
-                  image={homoImg2}
-                  id="gifFilterElement"
-                  style={{position: "absolute", top: 0, left: 0}}
-                />
-              )}
+            <CardMedia
+              component="img"
+              className={classes.imagesGifFilter}
+              image={homoImg2}
+              id="gifFilterElement"
+              style={{ position: "absolute", top: 0, left: 0 }}
+            />
+          )}
         </Box>
       </Grid>
       <Grid
@@ -194,6 +194,91 @@ const AnimatedGif = ({ toolState, homoImg1, homoImg2 }) => {
         </Grid>
       </Grid>
     </Grid>
+  ) : (
+    <div>
+      <Box p={2} className={classes.height100}>
+        <Grid
+          container
+          direction="column"
+          justifyContent="space-between"
+          alignItems="flex-start"
+          className={classes.height100}
+        >
+          <Typography variant="h6" className={classes.headingGif}>
+            {keyword("title_preview")}
+          </Typography>
+          <Box
+            justifyContent="center"
+            className={classes.wrapperImageFilter}
+            style={{ width: "100%" }}
+          >
+            <CardMedia
+              component="img"
+              className={classes.imagesGifImage}
+              image={homoImg1}
+            />
+            {true && (
+              <CardMedia
+                component="img"
+                className={classes.imagesGifFilter}
+                image={homoImg2}
+                id="gifFilterElement"
+              />
+            )}
+          </Box>
+          <Grid
+            container
+            direction="column"
+            justifyContent="center"
+            alignItems="center"
+          >
+            <Box m={4} />
+
+            <Typography gutterBottom>{keyword("slider_title")}</Typography>
+
+            <Slider
+              defaultValue={-1100}
+              aria-labelledby="discrete-slider"
+              step={300}
+              marks={marks}
+              min={-1700}
+              max={-500}
+              scale={(x) => -x}
+              onChange={(e, val) => changeSpeed(val)}
+              onChangeCommitted={(e) => commitChangeSpeed(speed)}
+              className={classes.sliderClass}
+            />
+
+            <Box m={2} />
+
+            <Grid item container spacing={3} justifyContent="space-evenly">
+              <Grid item>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  disabled={toolState === 7}
+                  onClick={(e) => handleDownload("gif")}
+                >
+                  {keyword("button_download")}
+                </Button>
+              </Grid>
+              <Grid item>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  disabled={toolState === 7}
+                  onClick={(e) => handleDownload("mp4")}
+                >
+                  {keyword("button_video")}
+                </Button>
+              </Grid>
+            </Grid>
+
+            <Box m={2} />
+          </Grid>
+        </Grid>
+      </Box>
+    </div>
   );
 };
 export default AnimatedGif;
