@@ -397,7 +397,7 @@ const ForensicResults = (props) => {
     dispatch(setStateInit());
     //setReadyTransparency(false);
   }
-
+  
   const imageDisplayed = displayItem;
 
   //tabs
