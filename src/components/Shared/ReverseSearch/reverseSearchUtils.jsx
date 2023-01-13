@@ -1,7 +1,16 @@
 import { Timeout } from "../Utils/URLUtils";
 
+export const loadImageContent(src, reverseSearchFunction) => {
+    let img = FileReader()
+    img.onload = () => {
+        fileReader.readAsDataURL(fileObject);
+    }
+}
+
 export const loadImage = (src, reverseSearchFunction) => {
-    document.body.style.cursor='wait';
+   // window.body.style.cursor='wait';
+   if (document !== undefined) 
+        document.body.style.cursor='wait';
     let img = new Image();
     img.crossOrigin="anonymous"
     img.onload = () => {
@@ -16,7 +25,8 @@ export const loadImage = (src, reverseSearchFunction) => {
     };
     img.onerror = (error) => {
         console.log("failed to load image")
-        document.body.style.cursor='default'
+        if (document !== undefined) {
+            document.body.style.cursor='default'
     };
     img.src = src;
 }

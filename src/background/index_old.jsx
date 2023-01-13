@@ -10,7 +10,7 @@ import {
     getclientId
 } from "../components/Shared/GoogleAnalytics/MatomoAnalytics"
 
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+/*chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request.contentScriptQuery === "keyframes") {
         fetch((request.url), {
                 mode: 'cors',
@@ -27,9 +27,9 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
                 sendResponse(errors)
             })
     }
-});
+});*/
 
-chrome.contextMenus.removeAll();
+//chrome.contextMenus.removeAll();
 
 let page_name = 'popup.html';
 
@@ -353,40 +353,40 @@ function contextClick(info, tab) {
             thumbnailsSearch(info)
             break;
         case "dbkf":
-            videoReversesearchDBKF(info)
+            //videoReversesearchDBKF(info)
             break;
         case "video_analysis":
-            analysisVideo(info)
+            //analysisVideo(info)
             break;
         case "magnifier":
-            imageMagnifier(info)
+            //imageMagnifier(info)
             break;
         case "forensic":
-            imageForensic(info)
+            //imageForensic(info)
             break;
         case "reverse_search_all":
-            imageReversesearchAll(info)
+            //imageReversesearchAll(info)
             break;
         case "dbkf_image":
-            imageReversesearchDBKF(info)
+            //imageReversesearchDBKF(info)
             break;
         case "reverse_search_google":
-            imageReversesearch(info)
+            //imageReversesearch(info)
             break;
         case "reverse_search_yandex":
-            imageReversesearchYandex(info)
+            //imageReversesearchYandex(info)
             break;
         case "reverse_search_bing":
-            imageReversesearchBing(info)
+            //imageReversesearchBing(info)
             break;
         case "reverse_search_tineye":
-            imageReversesearchTineye(info)
+            //imageReversesearchTineye(info)
             break;
         case "reverse_search_baidu":
-            imageReversesearchBaidu(info)
+            //imageReversesearchBaidu(info)
             break;
         case "reverse_search_reddit":
-            karmadecaySearch(info)
+            //karmadecaySearch(info)
             break;
         default:
             break;
