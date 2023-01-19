@@ -19,7 +19,6 @@ import { Accordion, AccordionDetails, AccordionSummary, CircularProgress, Linear
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ReportProblemOutlinedIcon from '@mui/icons-material/ReportProblemOutlined';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { GoogleReversSearch } from "../../../../Shared/ReverseSearch/ImageReverseSearch";
 import Link from "@mui/material/Link";
 
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
@@ -29,6 +28,7 @@ import ZoomInIcon from '@mui/icons-material/ZoomIn';
 import ZoomOutIcon from '@mui/icons-material/ZoomOut';
 import DetailedIcon from '@mui/icons-material/ViewComfyRounded';
 import SimpleIcon from '@mui/icons-material/ViewStreamRounded';
+import { SEARCH_ENGINE_SETTINGS, imageReverseSearch } from "../../../../Shared/ReverseSearch/reverseSearchUtils";
 
 
 const KeyFramesResults = (props) => {
@@ -83,7 +83,7 @@ const KeyFramesResults = (props) => {
     const imageClick = (event) => {
         let url = event
         if(url !== "")
-            GoogleReversSearch(url)
+        imageReverseSearch(url, SEARCH_ENGINE_SETTINGS.GOOGLE_SEARCH.NAME);
     };
     const zoom = (zoom) => {
 

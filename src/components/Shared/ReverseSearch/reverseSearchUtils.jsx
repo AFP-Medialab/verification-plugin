@@ -7,6 +7,12 @@ const IMAGE_FORMATS = {
 };
 
 export const SEARCH_ENGINE_SETTINGS = {
+  // To open all search engines at once
+  ALL: {
+    NAME: "All",
+    CONTEXT_MENU_ID: "reverse_search_all",
+    CONTEXT_MENU_TITLE: "Image Reverse Search - ALL",
+  },
   GOOGLE_SEARCH: {
     NAME: "Google",
     CONTEXT_MENU_ID: "reverse_search_google",
@@ -46,19 +52,17 @@ export const SEARCH_ENGINE_SETTINGS = {
     NAME: "Tineye",
     CONTEXT_MENU_ID: "reverse_search_tineye",
     CONTEXT_MENU_TITLE: "Image Reverse Search - Tineye",
-    URI: "",
+    URI: "https://www.tineye.com/search?url=",
     IMAGE_FORMAT: IMAGE_FORMATS.B64,
   },
   REDDIT_SEARCH: {
     NAME: "Reddit",
     CONTEXT_MENU_ID: "reverse_search_reddit",
     CONTEXT_MENU_TITLE: "Image Reverse Search - Reddit",
-    URI: "",
+    URI: "http://karmadecay.com/search?kdtoolver=b1&q=",
     IMAGE_FORMAT: IMAGE_FORMATS.B64,
   },
 };
-
-const reverseSearch = async (searchEngineSetting) => {};
 
 const fetchImage = async (url) => {
   const response = await fetch(url, {
@@ -208,7 +212,7 @@ export const localImageYandexSearch = (content) => {
 export const localImageGoogleSearch = (content) => {
   const chromeSbiSrc = "Google Chrome 107.0.5304.107 (Official) Windows";
   const blob = content;
-  let url = URIS.GOOGLE_SEARCH;
+  let url = SEARCH_ENGINE_SETTINGS.GOOGLE_SEARCH.URI;
   const formData = new FormData();
   formData.append("encoded_image", blob);
   formData.append("image_url", "");
@@ -259,4 +263,44 @@ export const localImageBingSearch = async (content) => {
     .finally(() => {
       // document.body.style.cursor = "default";
     });
+};
+
+
+export const getImgUrl = (info) => {
+  var query = info.pageUrl;
+  if (info.mediaType === "image") {
+    return info.srcUrl;
+  }
+  return query;
+};
+
+export const imageReverseSearch = (info, searchEngine) => {
+  const imgUrl = getImgUrl(info);
+
+  if (imgUrl === "") {
+    // TODO: Error handling
+    throw new Error("[imageReversesearch] Error: Empty URL string");
+  }
+
+  if (searchEngine === SEARCH_ENGINE_SETTINGS.GOOGLE_SEARCH.NAME)
+    loadImageContent(imgUrl, localImageGoogleSearch);
+  else if (searchEngine === SEARCH_ENGINE_SETTINGS.YANDEX_SEARCH.NAME)
+    loadImageContent(imgUrl, localImageYandexSearch);
+  else if (searchEngine === SEARCH_ENGINE_SETTINGS.BAIDU_SEARCH.NAME)
+    loadImageContent(imgUrl, localImageBaiduSearch);
+  else if (searchEngine === SEARCH_ENGINE_SETTINGS.BING_SEARCH.NAME) {
+    // TODO: move all the logic in one single function
+    const search_url = "https://www.bing.com/images/search?q=imgurl:";
+    if (imgUrl !== "" && imgUrl.startsWith("http")) {
+      const url =
+        search_url + encodeURIComponent(imgUrl) + "&view=detailv2&iss=sbi";
+      chrome.tabs.create({ url: url });
+    } else if (imgUrl !== "") {
+      loadImageContent(imgUrl, localImageBingSearch);
+    }
+  } else if (searchEngine === SEARCH_ENGINE_SETTINGS.REDDIT_SEARCH.NAME) {
+    // TODO
+  } else if (searchEngine === SEARCH_ENGINE_SETTINGS.TINEYE_SEARCH.NAME) {
+    // TODO
+  }
 };

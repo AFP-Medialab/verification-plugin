@@ -1,29 +1,17 @@
 import {
-  localImageGoogleSearch,
-  localImageYandexSearch,
-  localImageBingSearch,
-  localImageBaiduSearch,
-  loadImage,
-  loadImageContent,
   SEARCH_ENGINE_SETTINGS,
+  imageReverseSearch,
+  getImgUrl,
 } from "../components/Shared/ReverseSearch/reverseSearchUtils";
 
-let page_name = "popup.html";
+const page_name = "popup.html";
 
 const rightClickEvent = (toolName, media) => {
   return true;
 };
 
-const getUrlImg = (info) => {
-  var query = info.pageUrl;
-  if (info.mediaType === "image") {
-    return info.srcUrl;
-  }
-  return query;
-};
-
 const mediaAssistant = (info) => {
-  let url = getUrlImg(info);
+  let url = getImgUrl(info);
   if (url !== "") {
     chrome.tabs.create({
       url: page_name + "#/app/assistant/" + encodeURIComponent(url),
@@ -34,7 +22,7 @@ const mediaAssistant = (info) => {
 };
 
 const ocr = (info) => {
-  let url = getUrlImg(info);
+  let url = getImgUrl(info);
   if (url !== "") {
     chrome.tabs.create({
       url: page_name + "#/app/tools/ocr/" + encodeURIComponent(url),
@@ -85,7 +73,7 @@ const analysisVideo = (info) => {
 };
 
 const imageMagnifier = (info) => {
-  let url = getUrlImg(info);
+  let url = getImgUrl(info);
   if (url !== "") {
     chrome.tabs.create({
       url: page_name + "#/app/tools/magnifier/" + encodeURIComponent(url),
@@ -96,7 +84,7 @@ const imageMagnifier = (info) => {
 };
 
 const imageForensic = (info) => {
-  let url = getUrlImg(info);
+  let url = getImgUrl(info);
   if (url !== "" && url.startsWith("http")) {
     chrome.tabs.create({
       url: page_name + "#/app/tools/forensic/" + encodeURIComponent(url),
@@ -109,7 +97,7 @@ const imageForensic = (info) => {
 const imageReversesearchDBKF = (info) => {
   let search_url =
     "http://weverify-demo.ontotext.com/#!/similaritySearchResults&type=Images&params=";
-  let img = getUrlImg(info);
+  let img = getImgUrl(info);
   if (img !== "" && img.startsWith("http")) {
     let url = search_url + encodeURIComponent(img);
     chrome.tabs.create({
@@ -118,38 +106,6 @@ const imageReversesearchDBKF = (info) => {
     });
     // Google analytics
     rightClickEvent("Image Reverse Search - DBKF (beta)", url);
-  }
-};
-
-const imageReversesearch = (info, searchEngine) => {
-  let img = getUrlImg(info);
-
-  if (img === "") {
-    // TODO: Error handling
-    throw new Error("[imageReversesearch] Error: Empty string");
-  }
-
-  if (searchEngine === SEARCH_ENGINE_SETTINGS.GOOGLE_SEARCH.NAME)
-    loadImageContent(img, localImageGoogleSearch);
-  else if (searchEngine === SEARCH_ENGINE_SETTINGS.YANDEX_SEARCH.NAME)
-    loadImageContent(img, localImageYandexSearch);
-  else if (searchEngine === SEARCH_ENGINE_SETTINGS.BAIDU_SEARCH.NAME)
-    loadImageContent(img, localImageBaiduSearch);
-  else if (searchEngine === SEARCH_ENGINE_SETTINGS.BING_SEARCH.NAME) {
-    // TODO: move all the logic in one single function
-    const search_url = "https://www.bing.com/images/search?q=imgurl:";
-    const img = getUrlImg(info);
-    if (img !== "" && img.startsWith("http")) {
-      const url =
-        search_url + encodeURIComponent(img) + "&view=detailv2&iss=sbi";
-      chrome.tabs.create({ url: url });
-    } else if (img !== "") {
-      loadImageContent(img, localImageBingSearch);
-    }
-  } else if (searchEngine === SEARCH_ENGINE_SETTINGS.REDDIT_SEARCH.NAME) {
-    // TODO
-  } else if (searchEngine === SEARCH_ENGINE_SETTINGS.TINEYE_SEARCH.NAME) {
-    // TODO
   }
 };
 
@@ -198,8 +154,8 @@ chrome.runtime.onInstalled.addListener(() => {
     contexts: ["image"],
   });
   chrome.contextMenus.create({
-    id: "reverse_search_all",
-    title: "Image Reverse Search - ALL",
+    id: SEARCH_ENGINE_SETTINGS.ALL.CONTEXT_MENU_ID,
+    title: SEARCH_ENGINE_SETTINGS.ALL.CONTEXT_MENU_TITLE,
     contexts: ["image"],
   });
   chrome.contextMenus.create({
@@ -223,8 +179,8 @@ chrome.runtime.onInstalled.addListener(() => {
     contexts: ["image"],
   });
   chrome.contextMenus.create({
-    id: "reverse_search_tineye",
-    title: "Image Reverse Search - Tineye",
+    id: SEARCH_ENGINE_SETTINGS.TINEYE_SEARCH.CONTEXT_MENU_ID,
+    title: SEARCH_ENGINE_SETTINGS.TINEYE_SEARCH.CONTEXT_MENU_TITLE,
     contexts: ["image"],
   });
   chrome.contextMenus.create({
@@ -233,8 +189,8 @@ chrome.runtime.onInstalled.addListener(() => {
     contexts: ["image"],
   });
   chrome.contextMenus.create({
-    id: "reverse_search_reddit",
-    title: "Image Reverse Search - Reddit",
+    id: SEARCH_ENGINE_SETTINGS.REDDIT_SEARCH.CONTEXT_MENU_ID,
+    title: SEARCH_ENGINE_SETTINGS.REDDIT_SEARCH.CONTEXT_MENU_TITLE,
     contexts: ["image"],
   });
 });
@@ -263,29 +219,29 @@ function contextClick(info, tab) {
     case "forensic":
       imageForensic(info);
       break;
-    case "reverse_search_all":
+    case SEARCH_ENGINE_SETTINGS.ALL.CONTEXT_MENU_ID:
       imageReversesearchAll(info);
       break;
     case "dbkf_image":
       imageReversesearchDBKF(info);
       break;
     case SEARCH_ENGINE_SETTINGS.GOOGLE_SEARCH.CONTEXT_MENU_ID:
-      imageReversesearch(info, SEARCH_ENGINE_SETTINGS.GOOGLE_SEARCH.NAME);
+      imageReverseSearch(info, SEARCH_ENGINE_SETTINGS.GOOGLE_SEARCH.NAME);
       break;
     case SEARCH_ENGINE_SETTINGS.YANDEX_SEARCH.CONTEXT_MENU_ID:
-      imageReversesearch(info, SEARCH_ENGINE_SETTINGS.YANDEX_SEARCH.NAME);
+      imageReverseSearch(info, SEARCH_ENGINE_SETTINGS.YANDEX_SEARCH.NAME);
       break;
     case SEARCH_ENGINE_SETTINGS.BING_SEARCH.CONTEXT_MENU_ID:
-      imageReversesearch(info, SEARCH_ENGINE_SETTINGS.BING_SEARCH.NAME);
+      imageReverseSearch(info, SEARCH_ENGINE_SETTINGS.BING_SEARCH.NAME);
       break;
     case SEARCH_ENGINE_SETTINGS.TINEYE_SEARCH.CONTEXT_MENU_ID:
-      imageReversesearch(info, SEARCH_ENGINE_SETTINGS.TINEYE_SEARCH.NAME);
+      imageReverseSearch(info, SEARCH_ENGINE_SETTINGS.TINEYE_SEARCH.NAME);
       break;
     case SEARCH_ENGINE_SETTINGS.BAIDU_SEARCH.CONTEXT_MENU_ID:
-      imageReversesearch(info, SEARCH_ENGINE_SETTINGS.BAIDU_SEARCH.NAME);
+      imageReverseSearch(info, SEARCH_ENGINE_SETTINGS.BAIDU_SEARCH.NAME);
       break;
     case SEARCH_ENGINE_SETTINGS.REDDIT_SEARCH.CONTEXT_MENU_ID:
-      imageReversesearch(info, SEARCH_ENGINE_SETTINGS.REDDIT_SEARCH.NAME);
+      imageReverseSearch(info, SEARCH_ENGINE_SETTINGS.REDDIT_SEARCH.NAME);
       break;
     default:
       break;

@@ -7,7 +7,7 @@ import TableBody from "@mui/material/TableBody";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
 import Button from "@mui/material/Button";
-import ImageReverseSearch, {GoogleReversSearch} from "../../../../Shared/ReverseSearch/ImageReverseSearch";
+import ImageReverseSearch from "../../../../Shared/ReverseSearch/ImageReverseSearch";
 import CloseResult from "../../../../Shared/CloseResult/CloseResult";
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 import OnClickInfo from "../../../../Shared/OnClickInfo/OnClickInfo";
@@ -25,6 +25,7 @@ import {
 
 import ImageUrlGridList from "../../../../Shared/ImageGridList/ImageUrlGridList";
 import AnalysisComments from "./AnalysisComments";
+import { SEARCH_ENGINE_SETTINGS, imageReverseSearch } from "../../../../Shared/ReverseSearch/reverseSearchUtils";
 
 const TwitterResults = (props) => {
   const classes = useMyStyles();
@@ -35,7 +36,7 @@ const TwitterResults = (props) => {
   const reverseSearch = (website) => {
     if(website === 'google'){
       for (let image of thumbnails) {
-        GoogleReversSearch(image.url)
+        imageReverseSearch(image.url, SEARCH_ENGINE_SETTINGS.GOOGLE_SEARCH.NAME);
       }
     }
     else {

@@ -2,7 +2,7 @@ import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import {useEffect, useState} from "react";
-import ImageReverseSearch, {GoogleReversSearch} from "../../../Shared/ReverseSearch/ImageReverseSearch";
+import ImageReverseSearch from "../../../Shared/ReverseSearch/ImageReverseSearch";
 import ImageGridList from "../../../Shared/ImageGridList/ImageGridList";
 import {useDispatch, useSelector} from "react-redux";
 import FormControl from "@mui/material/FormControl";
@@ -28,6 +28,7 @@ import ThumbnailsIcon from '../../../NavBar/images/SVG/Video/Thumbnails.svg';
 import Grid from "@mui/material/Grid";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import LinearProgress from "@mui/material/LinearProgress";
+import { SEARCH_ENGINE_SETTINGS } from "../../../Shared/ReverseSearch/reverseSearchUtils";
 
 
 const Thumbnails = () => {
@@ -142,7 +143,7 @@ const Thumbnails = () => {
 
     const imageClickUrl = (url) => {
         if (selectedValue.google)
-            GoogleReversSearch([url]);
+            ImageReverseSearch(url, SEARCH_ENGINE_SETTINGS.GOOGLE_SEARCH.NAME);
         if (selectedValue.yandex)
             ImageReverseSearch("yandex", [url]);
         if (selectedValue.bing)
