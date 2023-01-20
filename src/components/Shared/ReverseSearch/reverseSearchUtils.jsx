@@ -13,6 +13,13 @@ export const SEARCH_ENGINE_SETTINGS = {
     CONTEXT_MENU_ID: "reverse_search_all",
     CONTEXT_MENU_TITLE: "Image Reverse Search - ALL",
   },
+  DBKF_SEARCH: {
+    NAME: "DBKF",
+    CONTEXT_MENU_ID: "reverse_search_dbkf",
+    CONTEXT_MENU_TITLE: "Image Reverse Search - DBKF (beta)",
+    URI: "http://weverify-demo.ontotext.com/#!/similaritySearchResults&type=Images&params=",
+    IMAGE_FORMAT: IMAGE_FORMATS.BLOB,
+  },
   GOOGLE_SEARCH: {
     NAME: "Google",
     CONTEXT_MENU_ID: "reverse_search_google",
@@ -23,7 +30,7 @@ export const SEARCH_ENGINE_SETTINGS = {
   GOOGLE_LENS_SEARCH: {
     NAME: "Google Lens",
     CONTEXT_MENU_ID: "reverse_search_google_lens",
-    CONTEXT_MENU_TITLE: "",
+    CONTEXT_MENU_TITLE: "Image Reverse Search - Google Lens",
     URI: `https://lens.google.com/upload?ep=ccm&s=&st=${Date.now()}`,
     IMAGE_FORMAT: IMAGE_FORMATS.BLOB,
   },
@@ -82,12 +89,6 @@ const blobToBase64 = async (blob) => {
   });
 };
 
-export const loadImageContent = async (imgUrl, reverseSearchFunction) => {
-  const imgBlob = await fetchImage(imgUrl);
-
-  reverseSearchFunction(imgBlob);
-};
-
 export const loadImage = (src, reverseSearchFunction) => {
   window.body.style.cursor = "wait";
   if (document !== undefined) document.body.style.cursor = "wait";
@@ -112,15 +113,29 @@ export const loadImage = (src, reverseSearchFunction) => {
   };
 };
 
-export const localImageBaiduSearch = (content) => {
-  let url = "https://graph.baidu.com/upload";
-  const blob = content;
+export const reverseImageSearchDBKF = (imgUrl) => {
+
+  const url = SEARCH_ENGINE_SETTINGS.DBKF_SEARCH.URI + encodeURIComponent(imgUrl);
+
+  chrome.tabs.create({
+    url: url,
+    selected: false,
+  });
+
+  // Google analytics
+  rightClickEvent("Image Reverse Search - DBKF (beta)", url);
+};
+
+export const reverseImageSearchBaidu = (imgBlob) => {
+  const url = SEARCH_ENGINE_SETTINGS.BAIDU_SEARCH.URI;
   const data = new FormData();
+
   data.append("tn", "pc");
   data.append("from", "pc");
   data.append("range", '{"page_from": "searchIndex"}');
-  data.append("image", blob);
+  data.append("image", imgBlob);
   data.append("image_source", "PC_UPLOAD_SEARCH_FILE");
+
   fetch(url, {
     mode: "cors",
     method: "POST",
@@ -137,12 +152,11 @@ export const localImageBaiduSearch = (content) => {
     });
 };
 
-export const localImageGoogleLens = (content) => {
-  // const blob = b64toBlob(content, "image/png");
-  const blob = content;
-  let url = `https://lens.google.com/upload?ep=ccm&s=&st=${Date.now()}`;
+export const reverseImageSearchGoogleLens = (imgBlob) => {
+  const url = `https://lens.google.com/upload?ep=ccm&s=&st=${Date.now()}`;
   const formData = new FormData();
-  formData.append("encoded_image", blob);
+
+  formData.append("encoded_image", imgBlob);
   fetch(url, {
     referrer: "",
     mode: "cors",
@@ -164,13 +178,13 @@ export const localImageGoogleLens = (content) => {
     });
 };
 
-export const localImageYandexSearch = (content) => {
+export const reverseImageSearchYandex = (imgBlob) => {
   const url =
     'https://yandex.com/images/touch/search?rpt=imageview&format=json&request={"blocks":[{"block":"cbir-uploader__get-cbir-id"}]}';
-  const blob = content;
+
   const formData = new FormData();
 
-  formData.append("upfile", blob);
+  formData.append("upfile", imgBlob);
 
   fetch(url, {
     method: "POST",
@@ -209,12 +223,12 @@ export const localImageYandexSearch = (content) => {
 //   formData.append("sbisrc", chromeSbiSrc);
 // };
 
-export const localImageGoogleSearch = (content) => {
+export const reverseImageSearchGoogle = (imgBlob) => {
   const chromeSbiSrc = "Google Chrome 107.0.5304.107 (Official) Windows";
-  const blob = content;
+
   let url = SEARCH_ENGINE_SETTINGS.GOOGLE_SEARCH.URI;
   const formData = new FormData();
-  formData.append("encoded_image", blob);
+  formData.append("encoded_image", imgBlob);
   formData.append("image_url", "");
   formData.append("sbisrc", chromeSbiSrc);
 
@@ -231,14 +245,14 @@ export const localImageGoogleSearch = (content) => {
     .catch((error) => {
       console.error(error);
       //try google lens
-      localImageGoogleLens(content);
+      // reverseImageSearchGoogleLens(content);
     });
   // .finally(() => {
   //   document.body.style.cursor = "default";
   // });
 };
 
-export const localImageBingSearch = async (content) => {
+export const reverseImageSearchBing = async (content) => {
   // let image = content.substring(content.indexOf(",") + 1);
   // let image = content;
   const image = await blobToBase64(content);
@@ -265,6 +279,19 @@ export const localImageBingSearch = async (content) => {
     });
 };
 
+const reverseImageSearchTineye = (imageUrl) => {
+  chrome.tabs.create({
+    url:
+      SEARCH_ENGINE_SETTINGS.TINEYE_SEARCH.URI + encodeURIComponent(imageUrl),
+  });
+};
+
+const reverseImageSearchReddit = (imageUrl) => {
+  chrome.tabs.create({
+    url:
+      SEARCH_ENGINE_SETTINGS.REDDIT_SEARCH.URI + encodeURIComponent(imageUrl),
+  });
+};
 
 export const getImgUrl = (info) => {
   var query = info.pageUrl;
@@ -274,33 +301,56 @@ export const getImgUrl = (info) => {
   return query;
 };
 
-export const imageReverseSearch = (info, searchEngine) => {
+export const imageReverseSearch = async (info, searchEngine) => {
   const imgUrl = getImgUrl(info);
 
   if (imgUrl === "") {
     // TODO: Error handling
-    throw new Error("[imageReversesearch] Error: Empty URL string");
+    throw new Error("[imageReverseSearch] Error: Empty URL string");
   }
 
-  if (searchEngine === SEARCH_ENGINE_SETTINGS.GOOGLE_SEARCH.NAME)
-    loadImageContent(imgUrl, localImageGoogleSearch);
-  else if (searchEngine === SEARCH_ENGINE_SETTINGS.YANDEX_SEARCH.NAME)
-    loadImageContent(imgUrl, localImageYandexSearch);
-  else if (searchEngine === SEARCH_ENGINE_SETTINGS.BAIDU_SEARCH.NAME)
-    loadImageContent(imgUrl, localImageBaiduSearch);
-  else if (searchEngine === SEARCH_ENGINE_SETTINGS.BING_SEARCH.NAME) {
-    // TODO: move all the logic in one single function
+  if (searchEngine === SEARCH_ENGINE_SETTINGS.DBKF_SEARCH.NAME) {
+    reverseImageSearchDBKF(imgUrl);
+  } else if (searchEngine === SEARCH_ENGINE_SETTINGS.GOOGLE_SEARCH.NAME) {
+    const imgBlob = await fetchImage(imgUrl);
+    reverseImageSearchGoogle(imgBlob);
+  } else if (searchEngine === SEARCH_ENGINE_SETTINGS.GOOGLE_LENS_SEARCH.NAME) {
+    const imgBlob = await fetchImage(imgUrl);
+    reverseImageSearchGoogleLens(imgBlob);
+  } else if (searchEngine === SEARCH_ENGINE_SETTINGS.YANDEX_SEARCH.NAME) {
+    const imgBlob = await fetchImage(imgUrl);
+    reverseImageSearchYandex(imgBlob);
+  } else if (searchEngine === SEARCH_ENGINE_SETTINGS.BAIDU_SEARCH.NAME) {
+    const imgBlob = await fetchImage(imgUrl);
+    reverseImageSearchBaidu(imgBlob);
+  } else if (searchEngine === SEARCH_ENGINE_SETTINGS.BING_SEARCH.NAME) {
+    // TODO: move all the logic in a single function
     const search_url = "https://www.bing.com/images/search?q=imgurl:";
     if (imgUrl !== "" && imgUrl.startsWith("http")) {
       const url =
         search_url + encodeURIComponent(imgUrl) + "&view=detailv2&iss=sbi";
       chrome.tabs.create({ url: url });
     } else if (imgUrl !== "") {
-      loadImageContent(imgUrl, localImageBingSearch);
+      const imgBlob = await fetchImage(imgUrl);
+      reverseImageSearchBing(imgBlob);
     }
   } else if (searchEngine === SEARCH_ENGINE_SETTINGS.REDDIT_SEARCH.NAME) {
-    // TODO
+    reverseImageSearchReddit(imgUrl);
   } else if (searchEngine === SEARCH_ENGINE_SETTINGS.TINEYE_SEARCH.NAME) {
-    // TODO
+    reverseImageSearchTineye(imgUrl);
+  } else {
+    // TODO: Throw error
   }
+};
+
+export const imageReverseSearchAll = async (info) => {
+  let promises = [];
+
+  for (const searchEngineSetting of Object.values(SEARCH_ENGINE_SETTINGS)) {
+    if (searchEngineSetting.NAME === SEARCH_ENGINE_SETTINGS.ALL.NAME) {
+      continue;
+    }
+    promises.push(imageReverseSearch(info, searchEngineSetting.NAME));
+  }
+  await Promise.all(promises);
 };

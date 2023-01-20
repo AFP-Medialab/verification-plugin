@@ -2,6 +2,7 @@ import {
   SEARCH_ENGINE_SETTINGS,
   imageReverseSearch,
   getImgUrl,
+  imageReverseSearchAll,
 } from "../components/Shared/ReverseSearch/reverseSearchUtils";
 
 const page_name = "popup.html";
@@ -94,21 +95,6 @@ const imageForensic = (info) => {
   }
 };
 
-const imageReversesearchDBKF = (info) => {
-  let search_url =
-    "http://weverify-demo.ontotext.com/#!/similaritySearchResults&type=Images&params=";
-  let img = getImgUrl(info);
-  if (img !== "" && img.startsWith("http")) {
-    let url = search_url + encodeURIComponent(img);
-    chrome.tabs.create({
-      url: url,
-      selected: false,
-    });
-    // Google analytics
-    rightClickEvent("Image Reverse Search - DBKF (beta)", url);
-  }
-};
-
 chrome.runtime.onInstalled.addListener(() => {
   chrome.contextMenus.create({
     id: "assistant",
@@ -159,13 +145,18 @@ chrome.runtime.onInstalled.addListener(() => {
     contexts: ["image"],
   });
   chrome.contextMenus.create({
-    id: "dbkf_image",
-    title: "Image Reverse Search - DBKF (beta)",
+    id: SEARCH_ENGINE_SETTINGS.DBKF_SEARCH.CONTEXT_MENU_ID,
+    title: SEARCH_ENGINE_SETTINGS.DBKF_SEARCH.CONTEXT_MENU_TITLE,
     contexts: ["image"],
   });
   chrome.contextMenus.create({
     id: SEARCH_ENGINE_SETTINGS.GOOGLE_SEARCH.CONTEXT_MENU_ID,
     title: SEARCH_ENGINE_SETTINGS.GOOGLE_SEARCH.CONTEXT_MENU_TITLE,
+    contexts: ["image"],
+  });
+  chrome.contextMenus.create({
+    id: SEARCH_ENGINE_SETTINGS.GOOGLE_LENS_SEARCH.CONTEXT_MENU_ID,
+    title: SEARCH_ENGINE_SETTINGS.GOOGLE_LENS_SEARCH.CONTEXT_MENU_TITLE,
     contexts: ["image"],
   });
   chrome.contextMenus.create({
@@ -220,13 +211,16 @@ function contextClick(info, tab) {
       imageForensic(info);
       break;
     case SEARCH_ENGINE_SETTINGS.ALL.CONTEXT_MENU_ID:
-      imageReversesearchAll(info);
+      imageReverseSearchAll(info);
       break;
-    case "dbkf_image":
-      imageReversesearchDBKF(info);
+    case SEARCH_ENGINE_SETTINGS.DBKF_SEARCH.CONTEXT_MENU_ID:
+      imageReverseSearch(info, SEARCH_ENGINE_SETTINGS.DBKF_SEARCH.NAME);
       break;
     case SEARCH_ENGINE_SETTINGS.GOOGLE_SEARCH.CONTEXT_MENU_ID:
       imageReverseSearch(info, SEARCH_ENGINE_SETTINGS.GOOGLE_SEARCH.NAME);
+      break;
+    case SEARCH_ENGINE_SETTINGS.GOOGLE_LENS_SEARCH.CONTEXT_MENU_ID:
+      imageReverseSearch(info, SEARCH_ENGINE_SETTINGS.GOOGLE_LENS_SEARCH.NAME);
       break;
     case SEARCH_ENGINE_SETTINGS.YANDEX_SEARCH.CONTEXT_MENU_ID:
       imageReverseSearch(info, SEARCH_ENGINE_SETTINGS.YANDEX_SEARCH.NAME);
