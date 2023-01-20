@@ -16,7 +16,7 @@ import ImageUrlGridList from "../../../../Shared/ImageGridList/ImageUrlGridList"
 import {submissionEvent} from "../../../../Shared/GoogleAnalytics/GoogleAnalytics"
 import _ from "lodash";
 import AnalysisComments from "./AnalysisComments";
-import { SEARCH_ENGINE_SETTINGS, imageReverseSearch } from "../../../../Shared/ReverseSearch/reverseSearchUtils";
+import { SEARCH_ENGINE_SETTINGS, reverseImageSearch } from "../../../../Shared/ReverseSearch/reverseSearchUtils";
 
 const AFacebookResults = (props) => {
   const cleanAnalysisState=props.cleanAnalysisState
@@ -32,7 +32,7 @@ const AFacebookResults = (props) => {
   const reverseSearch = (website) => {
     if(website === 'google'){
       for (let image of thumbnails) {
-        imageReverseSearch(image.url, SEARCH_ENGINE_SETTINGS.GOOGLE_SEARCH.NAME);
+        reverseImageSearch(image.url, SEARCH_ENGINE_SETTINGS.GOOGLE_SEARCH.NAME);
       }
     }
     else {

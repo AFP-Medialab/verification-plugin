@@ -301,12 +301,12 @@ export const getImgUrl = (info) => {
   return query;
 };
 
-export const imageReverseSearch = async (info, searchEngine) => {
+export const reverseImageSearch = async (info, searchEngine) => {
   const imgUrl = getImgUrl(info);
 
   if (imgUrl === "") {
     // TODO: Error handling
-    throw new Error("[imageReverseSearch] Error: Empty URL string");
+    throw new Error("[reverseImageSearch] Error: Empty URL string");
   }
 
   if (searchEngine === SEARCH_ENGINE_SETTINGS.DBKF_SEARCH.NAME) {
@@ -339,18 +339,18 @@ export const imageReverseSearch = async (info, searchEngine) => {
   } else if (searchEngine === SEARCH_ENGINE_SETTINGS.TINEYE_SEARCH.NAME) {
     reverseImageSearchTineye(imgUrl);
   } else {
-    // TODO: Throw error
+    throw new Error('[reverseImageSearch] Error: Search Engine not supported');
   }
 };
 
-export const imageReverseSearchAll = async (info) => {
+export const reverseImageSearchAll = async (info) => {
   let promises = [];
 
   for (const searchEngineSetting of Object.values(SEARCH_ENGINE_SETTINGS)) {
     if (searchEngineSetting.NAME === SEARCH_ENGINE_SETTINGS.ALL.NAME) {
       continue;
     }
-    promises.push(imageReverseSearch(info, searchEngineSetting.NAME));
+    promises.push(reverseImageSearch(info, searchEngineSetting.NAME));
   }
   await Promise.all(promises);
 };

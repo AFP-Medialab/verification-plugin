@@ -1,8 +1,8 @@
 import {
   SEARCH_ENGINE_SETTINGS,
-  imageReverseSearch,
+  reverseImageSearch,
   getImgUrl,
-  imageReverseSearchAll,
+  reverseImageSearchAll,
 } from "../components/Shared/ReverseSearch/reverseSearchUtils";
 
 const page_name = "popup.html";
@@ -211,31 +211,31 @@ function contextClick(info, tab) {
       imageForensic(info);
       break;
     case SEARCH_ENGINE_SETTINGS.ALL.CONTEXT_MENU_ID:
-      imageReverseSearchAll(info);
+      reverseImageSearchAll(info);
       break;
     case SEARCH_ENGINE_SETTINGS.DBKF_SEARCH.CONTEXT_MENU_ID:
-      imageReverseSearch(info, SEARCH_ENGINE_SETTINGS.DBKF_SEARCH.NAME);
+      reverseImageSearch(info, SEARCH_ENGINE_SETTINGS.DBKF_SEARCH.NAME);
       break;
     case SEARCH_ENGINE_SETTINGS.GOOGLE_SEARCH.CONTEXT_MENU_ID:
-      imageReverseSearch(info, SEARCH_ENGINE_SETTINGS.GOOGLE_SEARCH.NAME);
+      reverseImageSearch(info, SEARCH_ENGINE_SETTINGS.GOOGLE_SEARCH.NAME);
       break;
     case SEARCH_ENGINE_SETTINGS.GOOGLE_LENS_SEARCH.CONTEXT_MENU_ID:
-      imageReverseSearch(info, SEARCH_ENGINE_SETTINGS.GOOGLE_LENS_SEARCH.NAME);
+      reverseImageSearch(info, SEARCH_ENGINE_SETTINGS.GOOGLE_LENS_SEARCH.NAME);
       break;
     case SEARCH_ENGINE_SETTINGS.YANDEX_SEARCH.CONTEXT_MENU_ID:
-      imageReverseSearch(info, SEARCH_ENGINE_SETTINGS.YANDEX_SEARCH.NAME);
+      reverseImageSearch(info, SEARCH_ENGINE_SETTINGS.YANDEX_SEARCH.NAME);
       break;
     case SEARCH_ENGINE_SETTINGS.BING_SEARCH.CONTEXT_MENU_ID:
-      imageReverseSearch(info, SEARCH_ENGINE_SETTINGS.BING_SEARCH.NAME);
+      reverseImageSearch(info, SEARCH_ENGINE_SETTINGS.BING_SEARCH.NAME);
       break;
     case SEARCH_ENGINE_SETTINGS.TINEYE_SEARCH.CONTEXT_MENU_ID:
-      imageReverseSearch(info, SEARCH_ENGINE_SETTINGS.TINEYE_SEARCH.NAME);
+      reverseImageSearch(info, SEARCH_ENGINE_SETTINGS.TINEYE_SEARCH.NAME);
       break;
     case SEARCH_ENGINE_SETTINGS.BAIDU_SEARCH.CONTEXT_MENU_ID:
-      imageReverseSearch(info, SEARCH_ENGINE_SETTINGS.BAIDU_SEARCH.NAME);
+      reverseImageSearch(info, SEARCH_ENGINE_SETTINGS.BAIDU_SEARCH.NAME);
       break;
     case SEARCH_ENGINE_SETTINGS.REDDIT_SEARCH.CONTEXT_MENU_ID:
-      imageReverseSearch(info, SEARCH_ENGINE_SETTINGS.REDDIT_SEARCH.NAME);
+      reverseImageSearch(info, SEARCH_ENGINE_SETTINGS.REDDIT_SEARCH.NAME);
       break;
     default:
       break;

@@ -24,7 +24,7 @@ import {
 } from "../../../../../redux/actions/tools/analysisActions";
 import ImageUrlGridList from "../../../../Shared/ImageGridList/ImageUrlGridList";
 import AnalysisComments from "./AnalysisComments";
-import { SEARCH_ENGINE_SETTINGS, imageReverseSearch } from "../../../../Shared/ReverseSearch/reverseSearchUtils";
+import { SEARCH_ENGINE_SETTINGS, reverseImageSearch } from "../../../../Shared/ReverseSearch/reverseSearchUtils";
 
 const YoutubeResults = (props) => {
   const classes = useMyStyles();
@@ -36,7 +36,7 @@ const YoutubeResults = (props) => {
   const reverseSearch = (website) => {
     if (website === "google") {
       for (let image of thumbnails) {
-        imageReverseSearch(image.url, SEARCH_ENGINE_SETTINGS.GOOGLE_SEARCH.NAME);
+        reverseImageSearch(image.url, SEARCH_ENGINE_SETTINGS.GOOGLE_SEARCH.NAME);
       }
     } else {
       for (let image of thumbnails) {

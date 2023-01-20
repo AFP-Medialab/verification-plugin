@@ -28,7 +28,7 @@ import ZoomInIcon from '@mui/icons-material/ZoomIn';
 import ZoomOutIcon from '@mui/icons-material/ZoomOut';
 import DetailedIcon from '@mui/icons-material/ViewComfyRounded';
 import SimpleIcon from '@mui/icons-material/ViewStreamRounded';
-import { SEARCH_ENGINE_SETTINGS, imageReverseSearch } from "../../../../Shared/ReverseSearch/reverseSearchUtils";
+import { SEARCH_ENGINE_SETTINGS, reverseImageSearch } from "../../../../Shared/ReverseSearch/reverseSearchUtils";
 
 
 const KeyFramesResults = (props) => {
@@ -83,7 +83,7 @@ const KeyFramesResults = (props) => {
     const imageClick = (event) => {
         let url = event
         if(url !== "")
-        imageReverseSearch(url, SEARCH_ENGINE_SETTINGS.GOOGLE_SEARCH.NAME);
+        reverseImageSearch(url, SEARCH_ENGINE_SETTINGS.GOOGLE_SEARCH.NAME);
     };
     const zoom = (zoom) => {
 

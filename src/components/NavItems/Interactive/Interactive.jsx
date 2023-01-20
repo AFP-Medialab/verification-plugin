@@ -22,7 +22,7 @@ import Link from "@mui/material/Link";
 import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
 import { useNavigate } from "react-router-dom";
 import { SEARCH_ENGINE_SETTINGS } from "../../Shared/ReverseSearch/reverseSearchUtils";
-import { imageReverseSearch } from "../../Shared/ReverseSearch/reverseSearchUtils";
+import { reverseImageSearch } from "../../Shared/ReverseSearch/reverseSearchUtils";
 
 const Interactive = () => {
     const classes = useMyStyles();
@@ -110,7 +110,7 @@ const Interactive = () => {
                                               alignContent={"center"}>
                                             <Grid item>
                                                 <Button p={3} variant="contained" color="primary" onClick={() => {
-                                                    imageReverseSearch(obj.url, SEARCH_ENGINE_SETTINGS.GOOGLE_SEARCH.NAME);
+                                                    reverseImageSearch(obj.url, SEARCH_ENGINE_SETTINGS.GOOGLE_SEARCH.NAME);
                                                 }}>
                                                     {keyword("quiz_similarity")}
                                                 </Button>
