@@ -7,7 +7,7 @@ import TableBody from "@mui/material/TableBody";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
 import Button from "@mui/material/Button";
-import ImageReverseSearch, {GoogleReversSearch} from "../../../../Shared/ReverseSearch/ImageReverseSearch";
+import ImageReverseSearch from "../../../../Shared/ReverseSearch/ImageReverseSearch";
 import CloseResult from "../../../../Shared/CloseResult/CloseResult";
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 import OnClickInfo from "../../../../Shared/OnClickInfo/OnClickInfo";
@@ -24,6 +24,7 @@ import {
 } from "../../../../../redux/actions/tools/analysisActions";
 import ImageUrlGridList from "../../../../Shared/ImageGridList/ImageUrlGridList";
 import AnalysisComments from "./AnalysisComments";
+import { SEARCH_ENGINE_SETTINGS, reverseImageSearch } from "../../../../Shared/ReverseSearch/reverseSearchUtils";
 
 const YoutubeResults = (props) => {
   const classes = useMyStyles();
@@ -33,17 +34,16 @@ const YoutubeResults = (props) => {
   );
 
   const reverseSearch = (website) => {
-    if(website === 'google'){
+    if (website === "google") {
       for (let image of thumbnails) {
-        GoogleReversSearch(image.url)
+        reverseImageSearch(image.url, SEARCH_ENGINE_SETTINGS.GOOGLE_SEARCH.NAME);
+      }
+    } else {
+      for (let image of thumbnails) {
+        ImageReverseSearch(website, image.url);
       }
     }
-    else {
-        for (let image of thumbnails) {
-            ImageReverseSearch(website, image.url);
-        }
-    }
-  };  
+  };
 
   const dispatch = useDispatch();
   const report = props.report;

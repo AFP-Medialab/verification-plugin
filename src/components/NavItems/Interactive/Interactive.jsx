@@ -16,12 +16,13 @@ import Fab from "@mui/material/Fab";
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
 import ExpandMoreIcon from '@mui/icons-material//ExpandMore';
-import {GoogleReversSearch} from "../../Shared/ReverseSearch/ImageReverseSearch";
 import useLoadLanguage from "../../../Hooks/useLoadLanguage";
 import tsv from "../../../LocalDictionary/components/NavItems/Interactive.tsv";
 import Link from "@mui/material/Link";
 import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
 import { useNavigate } from "react-router-dom";
+import { SEARCH_ENGINE_SETTINGS } from "../../Shared/ReverseSearch/reverseSearchUtils";
+import { reverseImageSearch } from "../../Shared/ReverseSearch/reverseSearchUtils";
 
 const Interactive = () => {
     const classes = useMyStyles();
@@ -109,7 +110,7 @@ const Interactive = () => {
                                               alignContent={"center"}>
                                             <Grid item>
                                                 <Button p={3} variant="contained" color="primary" onClick={() => {
-                                                    GoogleReversSearch(obj.url);
+                                                    reverseImageSearch(obj.url, SEARCH_ENGINE_SETTINGS.GOOGLE_SEARCH.NAME);
                                                 }}>
                                                     {keyword("quiz_similarity")}
                                                 </Button>

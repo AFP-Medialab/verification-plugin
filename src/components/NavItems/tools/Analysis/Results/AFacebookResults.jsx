@@ -5,7 +5,7 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Divider from "@mui/material/Divider";
 import Button from "@mui/material/Button";
-import ImageReverseSearch, {GoogleReversSearch} from "../../../../Shared/ReverseSearch/ImageReverseSearch";
+import ImageReverseSearch from "../../../../Shared/ReverseSearch/ImageReverseSearch";
 import OnClickInfo from "../../../../Shared/OnClickInfo/OnClickInfo";
 import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Analysis.tsv";
@@ -16,6 +16,7 @@ import ImageUrlGridList from "../../../../Shared/ImageGridList/ImageUrlGridList"
 import {submissionEvent} from "../../../../Shared/GoogleAnalytics/GoogleAnalytics"
 import _ from "lodash";
 import AnalysisComments from "./AnalysisComments";
+import { SEARCH_ENGINE_SETTINGS, reverseImageSearch } from "../../../../Shared/ReverseSearch/reverseSearchUtils";
 
 const AFacebookResults = (props) => {
   const cleanAnalysisState=props.cleanAnalysisState
@@ -31,7 +32,7 @@ const AFacebookResults = (props) => {
   const reverseSearch = (website) => {
     if(website === 'google'){
       for (let image of thumbnails) {
-        GoogleReversSearch(image.url)
+        reverseImageSearch(image.url, SEARCH_ENGINE_SETTINGS.GOOGLE_SEARCH.NAME);
       }
     }
     else {

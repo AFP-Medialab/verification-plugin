@@ -25,11 +25,9 @@ import {
     setReprocessOpen,
     setSelectedScript
 } from "../../../../../redux/actions/tools/ocrActions";
-import {
-    localImageBingSearch, localImageGoogleLens, localImageYandexSearch
-} from "../../../../Shared/ReverseSearch/reverseSearchUtils"
 import { TextCopy } from "../../../../Shared/Utils/TextCopy";
 import { Translate } from "../../../../Shared/Utils/Translate";
+import { reverseImageSearchBing, reverseImageSearchGoogleLens, reverseImageSearchYandex } from "../../../../Shared/ReverseSearch/reverseSearchUtils";
 
 
 
@@ -156,15 +154,15 @@ const OcrResult = () => {
       }; 
 
     const GoogleLens = () =>{
-        localImageGoogleLens(b64Content)
+        reverseImageSearchGoogleLens(b64Content)
     }
 
     const YandexClick = () => {
-        localImageYandexSearch(b64Content)
+        reverseImageSearchYandex(b64Content)
     }
 
     const BingClick = () => {
-        localImageBingSearch(b64Content);
+        reverseImageSearchBing(b64Content);
     }
 
     useEffect(() => {

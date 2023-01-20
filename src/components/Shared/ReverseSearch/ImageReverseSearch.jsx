@@ -1,5 +1,3 @@
-import { loadImage, localImageGoogleSearch } from "./reverseSearchUtils";
-
 const ImageReverseSearch = (type, urls) => {
   
     let baseUrl = {
@@ -30,8 +28,6 @@ const ImageReverseSearch = (type, urls) => {
     {
         ImageReverseSearch("baidu", urls);
         ImageReverseSearch("bing", urls);
-        //ImageReverseSearch("google", urls);
-        GoogleReversSearch(urls);
         ImageReverseSearch("tineye", urls);
         ImageReverseSearch("yandex", urls);
         ImageReverseSearch("reddit", urls);
@@ -40,14 +36,8 @@ const ImageReverseSearch = (type, urls) => {
     let urlStart = baseUrl[type].search;
     let urlEnd = ( baseUrl[type].end !== undefined ? baseUrl[type].end : "" );
     for (let image of urls){
-        window.open(urlStart + encodeURIComponent(image) + urlEnd)
+        chrome.tabs.create({url: urlStart + encodeURIComponent(image) + urlEnd});
     }
 };
 
-export const GoogleReversSearch = (urls) => {
-    if( typeof urls === "string" ) urls = [urls];
-    for (let image of urls){
-        loadImage(image, localImageGoogleSearch)
-    }    
-}
 export default ImageReverseSearch;

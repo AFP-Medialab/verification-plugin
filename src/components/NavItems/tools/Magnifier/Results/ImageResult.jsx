@@ -21,12 +21,7 @@ import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 import ImageReverseSearch from "../../../../Shared/ReverseSearch/ImageReverseSearch"
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
-import {
-    localImageGoogleSearch, 
-    localImageBingSearch, 
-    localImageGoogleLens, 
-    localImageYandexSearch,
-    localImageBaiduSearch} from "../../../../Shared/ReverseSearch/reverseSearchUtils"
+import { reverseImageSearchBaidu, reverseImageSearchBing, reverseImageSearchGoogle, reverseImageSearchGoogleLens, reverseImageSearchYandex } from "../../../../Shared/ReverseSearch/reverseSearchUtils";
 
 const myTheme = {
     'loadButton.backgroundColor': "#151515",
@@ -109,20 +104,20 @@ const ImageResult = () => {
         return image_name.substring(0, image_name.lastIndexOf("."));
     };
     const GoogleClick = () => {
-        localImageGoogleSearch(resultImage)
+        reverseImageSearchGoogle(resultImage)
     };
 
     const BingClick = () => {
-        localImageBingSearch(resultImage);
+        reverseImageSearchBing(resultImage);
     }
     const GoogleLens= () => {
-        localImageGoogleLens(resultImage)
+        reverseImageSearchGoogleLens(resultImage)
     }
     const YandexClick = () => {
-        localImageYandexSearch(resultImage)
+        reverseImageSearchYandex(resultImage)
     }
     const BaiduClick = () => {
-        localImageBaiduSearch(resultImage)
+        reverseImageSearchBaidu(resultImage)
     }
 
     return (
