@@ -72,9 +72,7 @@ export const SEARCH_ENGINE_SETTINGS = {
 };
 
 const fetchImage = async (url) => {
-  const response = await fetch(url, {
-    mode: "no-cors",
-  });
+  const response = await fetch(url);
   const blob = await response.blob();
 
   return blob;
@@ -301,8 +299,8 @@ export const getImgUrl = (info) => {
   return query;
 };
 
-export const reverseImageSearch = async (info, searchEngine) => {
-  const imgUrl = getImgUrl(info);
+export const reverseImageSearch = async (info, isImgUrl, searchEngine) => {
+  const imgUrl = isImgUrl ? info : getImgUrl(info);
 
   if (imgUrl === "") {
     // TODO: Error handling
@@ -343,14 +341,14 @@ export const reverseImageSearch = async (info, searchEngine) => {
   }
 };
 
-export const reverseImageSearchAll = async (info) => {
+export const reverseImageSearchAll = async (info, isImageUrl) => {
   let promises = [];
 
   for (const searchEngineSetting of Object.values(SEARCH_ENGINE_SETTINGS)) {
     if (searchEngineSetting.NAME === SEARCH_ENGINE_SETTINGS.ALL.NAME) {
       continue;
     }
-    promises.push(reverseImageSearch(info, searchEngineSetting.NAME));
+    promises.push(reverseImageSearch(info, isImageUrl, searchEngineSetting.NAME));
   }
   await Promise.all(promises);
 };

@@ -33,10 +33,10 @@ const YoutubeResults = (props) => {
     tsv
   );
 
-  const reverseSearch = (website) => {
+  const reverseSearch = async (website) => {
     if (website === "google") {
       for (let image of thumbnails) {
-        reverseImageSearch(image.url, SEARCH_ENGINE_SETTINGS.GOOGLE_SEARCH.NAME);
+        await reverseImageSearch(image.url, true, SEARCH_ENGINE_SETTINGS.GOOGLE_SEARCH.NAME);
       }
     } else {
       for (let image of thumbnails) {
@@ -231,7 +231,7 @@ const YoutubeResults = (props) => {
                     className={classes.button}
                     variant="contained"
                     color={"primary"}
-                    onClick={() => reverseSearch("google")}
+                    onClick={async () => await reverseSearch("google")}
                   >
                     {keyword("button_reverse_google")}
                   </Button>
@@ -239,7 +239,7 @@ const YoutubeResults = (props) => {
                     className={classes.button}
                     variant="contained"
                     color={"primary"}
-                    onClick={() => reverseSearch("yandex")}
+                    onClick={async () => await reverseSearch("yandex")}
                   >
                     {keyword("button_reverse_yandex")}
                   </Button>
@@ -247,7 +247,7 @@ const YoutubeResults = (props) => {
                     className={classes.button}
                     variant="contained"
                     color={"primary"}
-                    onClick={() => reverseSearch("tineye")}
+                    onClick={async () => await reverseSearch("tineye")}
                   >
                     {keyword("button_reverse_tineye")}
                   </Button>

@@ -36,7 +36,7 @@ const TwitterResults = (props) => {
   const reverseSearch = (website) => {
     if(website === 'google'){
       for (let image of thumbnails) {
-        reverseImageSearch(image.url, SEARCH_ENGINE_SETTINGS.GOOGLE_SEARCH.NAME);
+        reverseImageSearch(image.url, true, SEARCH_ENGINE_SETTINGS.GOOGLE_SEARCH.NAME);
       }
     }
     else {
