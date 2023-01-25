@@ -55,7 +55,7 @@ const DrawerItem = (props) => {
         },
         {
             content: <DeepfakeVideo />,
-            footer: <Footer type={"afp"} />
+            footer: <Footer type={"iti"} />
         },
         {
             content: <AnalysisImg/>,
@@ -84,7 +84,7 @@ const DrawerItem = (props) => {
         },
         {
             content: <DeepfakeImage />,
-            footer: <Footer type={"afp"} />
+            footer: <Footer type={"iti"} />
         },
         {
             content: <Geolocation />,
