@@ -9,6 +9,7 @@ import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 
 import {
     cleanOcr,
+    setOcrImageFilename,
     setOcrBinaryImage,
     setOcrErrorKey,
     setOcrInput,
@@ -48,7 +49,7 @@ const OCR = () => {
     };
 
     const handleUploadImg = (file) => {
-        if (file.size >= 4000000) {
+        if (file.size >= 5*1024*1024) {  //5 MB
             dispatch(setOcrErrorKey("ocr_too_big"))
             dispatch(setOcrResult(false, true, false, null))
         } else {
@@ -56,6 +57,7 @@ const OCR = () => {
             let localurl = URL.createObjectURL(file)
             setUserInput(localurl)
             reader.onload = () => {
+                dispatch(setOcrImageFilename(file.name))
                 dispatch(setOcrBinaryImage(reader.result))
             }
             reader.readAsBinaryString(file)

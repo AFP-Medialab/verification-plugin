@@ -3,6 +3,7 @@ import {
     setOcrErrorKey,
     setOcrResult,
     setOcrScripts,
+    setFastTextLanguages,
     setReprocessLoading,
     setReprocessOpen, setSelectedScript
 } from "../actions/tools/ocrActions";
@@ -18,6 +19,9 @@ function* getOcrLoadScriptsSaga() {
 function* getImageOcrSaga() {
     yield takeLatest(["OCR_LOAD_SCRIPTS"], loadOcrScripts)
 }
+function* getOcrFastextLanguages() {
+    yield takeLatest(["OCR_LOAD_FASTTEXT_LANGUAGES"], loadOcrFastextLanguages)
+}
 
 function* getOcrReprocessSaga() {
     yield takeLatest("OCR_REPROCESS", handleReprocessCall)
@@ -28,6 +32,7 @@ function* handleOcrCall(action) {
     if (action.type === "CLEAN_STATE") return
 
     const inputUrl = yield select(state => state.ocr.url);
+    const filename =  yield select(state => state.ocr.filename);
     const binaryImage =  yield select(state => state.ocr.binaryImage);
     const script =  yield select(state => state.ocr.selectedScript);
     const uploadMode = "upload"
@@ -39,7 +44,7 @@ function* handleOcrCall(action) {
         let ocrResult = []
 
         if (binaryImage) {
-            ocrResult = yield call(assistantApi.callOcrService, binaryImage, script, uploadMode)
+            ocrResult = yield call(assistantApi.callOcrService, filename, binaryImage, script, uploadMode)
         }
         else{
             ocrResult = yield call(assistantApi.callOcrService, inputUrl, script, urlMode)
@@ -125,11 +130,22 @@ function* loadOcrScripts () {
         console.log(error)
     }
 }
+function* loadOcrFastextLanguages () {
+    try {
+        let result = yield call(assistantApi.callOcrFastextLanguagesService)
+        yield put (setFastTextLanguages( result))
+    }
+    catch(error){
+        console.log(error)
+    }
+}
+
 
 export default function* ocrSaga() {
     yield all([
         fork(getImageOcrSaga),
         fork(getOcrLoadScriptsSaga),
-        fork(getOcrReprocessSaga)
+        fork(getOcrReprocessSaga),
+        fork(getOcrFastextLanguages)
     ])
 }

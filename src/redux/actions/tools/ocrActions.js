@@ -15,6 +15,14 @@ export const setb64InputFile = (b64Content) => {
     }
 }
 
+export const setOcrImageFilename = (filename) => {
+    return {
+        type: "SET_IMAGE_FILENAME",
+        payload: {
+            filename: filename,
+        }
+    }
+};
 export const setOcrBinaryImage = (binaryImage) => {
     return {
         type: "SET_IMAGE_BINARY",
@@ -69,6 +77,24 @@ export const setSelectedScript = (script) => {
         }
     }
 };
+
+
+export const loadFastTextLanguages = (fastTextLanguages) => {
+    return {
+        type: "OCR_LOAD_FASTTEXT_LANGUAGES"
+    }
+};
+
+
+export const setFastTextLanguages = (fastTextLanguages) => {
+    return {
+        type: "SET_FASTTEXT_LANGUAGES",
+        payload: {
+            fastTextLanguages: fastTextLanguages
+        }   
+    }
+};
+
 
 export const cleanOcr = () => {
     return {

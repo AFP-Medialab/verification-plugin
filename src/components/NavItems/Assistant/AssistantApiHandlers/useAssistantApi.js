@@ -66,10 +66,11 @@ export default function assistantApiCalls() {
         return result.data
     }
 
-    const callOcrService = async (data, script, mode) => {
+    const callOcrService = async (filename, data, script, mode) => {
         const result = await axios.post(
-            assistantEndpoint + "gcloud/ocr",
-            {text: data, script: script, data_type: mode}
+            // assistantEndpoint + "gcloud/ocr",
+            "http://localhost:8025/process",//TODO: change this to assistantEndpoint + "gcloud/ocr" when the assistant is deployed
+            {filename:filename, text: data, script: script, data_type: mode}
         )
 
         return result.data
@@ -77,6 +78,10 @@ export default function assistantApiCalls() {
 
     const callOcrScriptService = async () => {
         const result = await axios.get(assistantEndpoint + "gcloud/ocr-scripts")
+        return result.data
+    }
+    const callOcrFastextLanguagesService = async () => {
+        const result = await axios.get("http://localhost:8025/fasttext_languages")
         return result.data
     }
 
@@ -87,7 +92,8 @@ export default function assistantApiCalls() {
         callAssistantTranslator,
         callHyperpartisanService,
         callOcrService,
-        callOcrScriptService
+        callOcrScriptService,
+        callOcrFastextLanguagesService
     }
 }
 

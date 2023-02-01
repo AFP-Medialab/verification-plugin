@@ -9,6 +9,7 @@ const defaultState = {
     result: null,
     scripts: null,
     selectedScript: "loop",
+    fastTextLanguages: null,
     fullText: null,
     reprocessBlockLoading: false,
     reprocessBlockOpen: false
@@ -19,11 +20,13 @@ const ocrReducer = (state = defaultState, action) => {
     switch (action.type) {
         case "SET_OCR_INPUT":
         case "SET_OCR_RESULT":
+        case "SET_IMAGE_FILENAME":
         case "SET_IMAGE_BINARY":
         case "SET_B64_CONTENT":
         case "SET_OCR_ERROR_KEY":
         case "SET_SCRIPTS":
         case "SET_SELECTED_SCRIPT":
+        case "SET_FASTTEXT_LANGUAGES":
         case "SET_REPROCESS_LOADING":
         case "SET_REPROCESS_OPEN":
             return Object.assign({}, state, action.payload)
