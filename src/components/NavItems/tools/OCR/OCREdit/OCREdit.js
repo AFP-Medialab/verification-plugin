@@ -31,17 +31,6 @@ export const OCREdit = ({ ocrResult, type, image_id }) => {
   const assistantEndpoint = "http://localhost:8025/"; //process.env.REACT_APP_ASSISTANT_URL;
 
   const keyword = useLoadLanguage("components/Shared/utils.tsv", tsv);
-  // const scripts = useSelector((state) => state.ocr.scripts);
-  // add each key in the scripts to object with the key named code and put the values of the scipt in the name
-  // the following code is to make the scripts object compatible with the Autocomplete component
-  // const scripts = useSelector((state) => {
-  //   const scripts = state.ocr.scripts;
-  //   const scriptArray = Object.keys(scripts).map((key) => ({
-  //     code: key,
-  //     name: scripts[key],
-  //   }));
-  //   return scriptArray;
-  // });
 
   const fastTextLanguages = useSelector(
     (state) => state.ocr.fastTextLanguages?.languages
@@ -49,8 +38,7 @@ export const OCREdit = ({ ocrResult, type, image_id }) => {
   const feedbackScripts = useSelector(
     (state) => state.ocr.feedbackScripts?.scripts
   );
-  // const scripts = feedbackScripts['scripts'];
-  
+
   //selected feedback script and language
   const [selectedScript, setSelectedScript] = useState({
     code: ocrResult.script.code,
@@ -121,10 +109,6 @@ export const OCREdit = ({ ocrResult, type, image_id }) => {
       setSelectedLanguage(value);
     }
   };
-
-  // const handleLanguageChange = (event, value) => {
-  //   setSelectedLanguage(value);
-  // };
 
   const handleTextChange = (event) => {
     setText(event.target.value);
@@ -248,23 +232,6 @@ export const OCREdit = ({ ocrResult, type, image_id }) => {
             )}
           />
         )}
-
-        {/* {fastTextLanguages && (
-          <Autocomplete
-            options={Object.values(fastTextLanguages)}
-            // getOptionLabel={(option) => option.name}
-            value={selectedLanguage}
-            freeSolo
-            selectOnFocus
-            clearOnBlur
-            handleHomeEndKeys
-            // getOptionSelected={(option, value) => option.name === value.name}
-            onChange={handleLanguageChange}
-            renderInput={(params) => (
-              <TextField {...params} label="Language" variant="outlined" />
-            )}
-          />
-        )} */}
       </Grid>
       <Grid item xs={12}>
         <TextField
