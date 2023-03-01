@@ -94,6 +94,21 @@ export const setFastTextLanguages = (fastTextLanguages) => {
         }   
     }
 };
+export const loadFeedbackScripts = (feedbackScripts) => {
+    return {
+        type: "OCR_LOAD_FEEDBACK_SCRIPTS"
+    }
+};
+
+
+export const setFeedbackScripts = (feedbackScripts) => {
+    return {
+        type: "SET_FEEDBACK_SCRIPTS",
+        payload: {
+            feedbackScripts: feedbackScripts
+        }   
+    }
+};
 
 
 export const cleanOcr = () => {

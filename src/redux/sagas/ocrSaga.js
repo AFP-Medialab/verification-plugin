@@ -4,6 +4,7 @@ import {
     setOcrResult,
     setOcrScripts,
     setFastTextLanguages,
+    setFeedbackScripts,
     setReprocessLoading,
     setReprocessOpen, setSelectedScript
 } from "../actions/tools/ocrActions";
@@ -21,6 +22,9 @@ function* getImageOcrSaga() {
 }
 function* getOcrFastextLanguages() {
     yield takeLatest(["OCR_LOAD_FASTTEXT_LANGUAGES"], loadOcrFastextLanguages)
+}
+function* getOcrFeedbackScripts() {
+    yield takeLatest(["OCR_LOAD_FEEDBACK_SCRIPTS"], loadOcrFeedbackScripts)
 }
 
 function* getOcrReprocessSaga() {
@@ -47,7 +51,7 @@ function* handleOcrCall(action) {
             ocrResult = yield call(assistantApi.callOcrService, filename, binaryImage, script, uploadMode)
         }
         else{
-            ocrResult = yield call(assistantApi.callOcrService, inputUrl, script, urlMode)
+            ocrResult = yield call(assistantApi.callOcrService, null, inputUrl, script, urlMode)
         }
 
         if(ocrResult.bounding_boxes) {
@@ -140,12 +144,23 @@ function* loadOcrFastextLanguages () {
     }
 }
 
+function* loadOcrFeedbackScripts () {
+    try {
+        let result = yield call(assistantApi.callOcrFeedbackScriptService)
+        yield put (setFeedbackScripts( result))
+    }
+    catch(error){
+        console.log(error)
+    }
+}
+
 
 export default function* ocrSaga() {
     yield all([
         fork(getImageOcrSaga),
         fork(getOcrLoadScriptsSaga),
         fork(getOcrReprocessSaga),
-        fork(getOcrFastextLanguages)
+        fork(getOcrFastextLanguages),
+        fork(getOcrFeedbackScripts)
     ])
 }

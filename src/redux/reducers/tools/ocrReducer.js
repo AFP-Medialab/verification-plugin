@@ -1,5 +1,6 @@
 const defaultState = {
     url: undefined,
+    filename:undefined,
     binaryImage: undefined,
     b64Content: undefined,
     loading : false,
@@ -10,6 +11,7 @@ const defaultState = {
     scripts: null,
     selectedScript: "loop",
     fastTextLanguages: null,
+    feedbackScripts: null,
     fullText: null,
     reprocessBlockLoading: false,
     reprocessBlockOpen: false
@@ -27,12 +29,14 @@ const ocrReducer = (state = defaultState, action) => {
         case "SET_SCRIPTS":
         case "SET_SELECTED_SCRIPT":
         case "SET_FASTTEXT_LANGUAGES":
+        case "SET_FEEDBACK_SCRIPTS":
         case "SET_REPROCESS_LOADING":
         case "SET_REPROCESS_OPEN":
             return Object.assign({}, state, action.payload)
         case "OCR_CLEAN_STATE":
             return {...state,
                 url: undefined,
+                filename:undefined,
                 binaryImage: undefined,
                 b64Content: undefined,
                 loading : false,
