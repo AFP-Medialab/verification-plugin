@@ -12,9 +12,11 @@ import Link from "@material-ui/core/Link";
 import Tooltip from "@material-ui/core/Tooltip";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/Assistant.tsv";
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
-
+import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 
 const AssistantImageResult = () => {
+
+    const classes = useMyStyles()
 
     const processUrl = useSelector(state => state.assistant.processUrl);
     const keyword = useLoadLanguage("components/NavItems/tools/Assistant.tsv", tsv);
@@ -30,8 +32,8 @@ const AssistantImageResult = () => {
             </CardMedia>
             <CardActions>
                 <ImageIcon color={"action"}/>
-                <Link href={processUrl} target={"_blank"} color={"textSecondary"} variant={"subtitle2"}>
-                    {processUrl.length>60 ? processUrl.substring(0,60) + "...": processUrl}
+                <Link className={classes.longText} href={processUrl} target={"_blank"} color={"textSecondary"} variant={"subtitle2"}>
+                    {processUrl}
                 </Link>
                 <Tooltip title={keyword("copy_link")}>
                     <IconButton style={{"marginLeft":"auto"}} onClick={()=>{copyUrl()}}>
