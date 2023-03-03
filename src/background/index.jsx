@@ -217,7 +217,7 @@ function contextClick(info, tab) {
       reverseImageSearch(info, false, SEARCH_ENGINE_SETTINGS.DBKF_SEARCH.NAME);
       break;
     case SEARCH_ENGINE_SETTINGS.GOOGLE_SEARCH.CONTEXT_MENU_ID:
-      reverseImageSearch(info, false, SEARCH_ENGINE_SETTINGS.GOOGLE_SEARCH.NAME);
+      reverseImageSearch(info, true, SEARCH_ENGINE_SETTINGS.GOOGLE_SEARCH.NAME);
       break;
     case SEARCH_ENGINE_SETTINGS.GOOGLE_LENS_SEARCH.CONTEXT_MENU_ID:
       reverseImageSearch(info, false, SEARCH_ENGINE_SETTINGS.GOOGLE_LENS_SEARCH.NAME);
