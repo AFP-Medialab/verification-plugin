@@ -106,9 +106,10 @@ const AssistantVideoResult = () => {
 
             <CardActions>
                 <ImageIcon color={"action"}/>
-                <Link href={processUrl} color={"textSecondary"} variant={"subtitle2"} target="_blank"
-                      rel="noopener noreferrer">
-                    {processUrl.length > 60 ? processUrl.substring(0, 60) + "..." : processUrl}
+                <Link className={classes.longText} href={processUrl} color={"textSecondary"} variant={"subtitle2"} target="_blank"
+                      rel="noopener noreferrer"
+                      >
+                    {processUrl}
                 </Link>
                 <Tooltip title={keyword("copy_link")}>
                     <IconButton className={classes.assistantIconLeft} onClick={() => {
