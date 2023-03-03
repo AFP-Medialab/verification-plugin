@@ -279,7 +279,13 @@ const useMyStyles = makeStyles(theme => (
     },
     text: {
         overflow: "hidden",
-        textOverflow: "ellipsis"
+        textOverflow: "ellipsis",
+    },
+    longText: {
+        maxWidth: "100%",
+        overflow: "hidden",
+        whiteSpace: "nowrap",
+        textOverflow: "ellipsis",
     },
     secondaryHeading: {
         fontSize: theme.typography.pxToRem(15),
