@@ -28,9 +28,6 @@ import { TextCopy } from "../../../../Shared/Utils/TextCopy";
 import { Translate } from "../../../../Shared/Utils/Translate";
 import {
   reverseImageSearch,
-  reverseImageSearchBing,
-  reverseImageSearchGoogleLens,
-  reverseImageSearchYandex,
   SEARCH_ENGINE_SETTINGS,
 } from "../../../../Shared/ReverseSearch/reverseSearchUtils";
 
@@ -164,22 +161,6 @@ const OcrResult = () => {
         return 0;
       });
     }
-  };
-
-  const reverseSearch = (website) => {
-    // ImageReverseSearch(website, inputUrl);
-  };
-
-  const GoogleLens = () => {
-    reverseImageSearchGoogleLens(b64Content);
-  };
-
-  const YandexClick = () => {
-    reverseImageSearchYandex(b64Content);
-  };
-
-  const BingClick = () => {
-    reverseImageSearchBing(b64Content);
   };
 
   useEffect(() => {
