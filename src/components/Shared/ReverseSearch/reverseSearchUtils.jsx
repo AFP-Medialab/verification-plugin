@@ -77,7 +77,10 @@ export const SEARCH_ENGINE_SETTINGS = {
     CONTEXT_MENU_ID: "reverse_search_bing",
     CONTEXT_MENU_TITLE: "Image Reverse Search - Bing",
     URI: "https://www.bing.com/images/search?view=detailv2&iss=sbiupload&FORM=SBIHMP&sbifnm=weverify-local-file",
-    IMAGE_FORMAT: IMAGE_FORMATS.B64,
+    URI_LOCAL:
+      "https://www.bing.com/images/search?view=detailv2&iss=sbiupload&FORM=SBIHMP&sbifnm=weverify-local-file",
+    IMAGE_FORMAT: IMAGE_FORMATS.URI,
+    IMAGE_FORMAT_LOCAL: IMAGE_FORMATS.B64,
   },
   TINEYE_SEARCH: {
     NAME: "Tineye",
@@ -127,7 +130,7 @@ const isBase64 = (str) => {
     return false;
   }
 
-return true;
+  return true;
 
   // const regex = new RegExp(
   //   "/^([0-9a-zA-Z+/]{4})*(([0-9a-zA-Z+/]{2}==)|([0-9a-zA-Z+/]{3}=))?$/"
@@ -373,7 +376,11 @@ const reverseImageSearchReddit = (imageUrl) => {
 };
 
 export const getImgUrl = (info) => {
-  var query = info.pageUrl;
+  if (typeof info === "string" && info.startsWith("http")) {
+    return info;
+  }
+
+  const query = info.pageUrl;
   if (info.mediaType === "image") {
     return info.srcUrl;
   }
@@ -443,7 +450,7 @@ export const getBlob = async (info) => {
   if (!info) {
     throw new Error(`[getBlob] Error : bad parameter`);
   }
-    //  && getImgUrl(info).startsWith("http")
+  //  && getImgUrl(info).startsWith("http")
   const isImgUrl = typeof getImgUrl(info) === "string";
 
   const isb64 = isBase64(info);
@@ -452,14 +459,13 @@ export const getBlob = async (info) => {
   console.log(isImgUrl);
   console.log(isb64);
 
-  if (isImgUrl && !isb64) {
-  }
-
   console.log(getImgUrl(info));
 
   let imgBlob;
 
-  if (isImgUrl && !isb64) {
+  if (typeof info === "string" && (info.startsWith("http") || info.startsWith("blob"))) {
+    imgBlob = await fetchImage(info);
+  } else if (isImgUrl && !isb64) {
     console.log(getImgUrl(info));
     imgBlob = await fetchImage(getImgUrl(info));
   } else if (isb64) {
@@ -504,12 +510,24 @@ const getSearchEngineFromName = (searchEngineName) => {
 const retrieveImgObjectForSearchEngine = async (
   info,
   isImgUrl,
-  searchEngineName
+  searchEngineName,
+  isLocalImg = false
 ) => {
   const searchEngine = getSearchEngineFromName(searchEngineName);
 
-  if (searchEngine.IMAGE_FORMAT === IMAGE_FORMATS.URI) {
+  const imgFormat = isLocalImg
+    ? searchEngine.IMAGE_FORMAT_LOCAL
+    : searchEngine.IMAGE_FORMAT;
 
+  let src;
+
+  try {
+    src = getImgUrl(info);
+  } catch (e) {
+    console.log("Cannot retrieve img src url");
+  }
+
+  if (imgFormat === IMAGE_FORMATS.URI) {
     // if (!isImgUrl) {
     //   throw new Error(
     //     `[retrieveImgObjectForSearchEngine] Error: info is not URI`
@@ -521,15 +539,16 @@ const retrieveImgObjectForSearchEngine = async (
     return new ImageObject(getImgUrl(info), IMAGE_FORMATS.URI);
   }
 
-  if (searchEngine.IMAGE_FORMAT === IMAGE_FORMATS.BLOB) {
+  if (imgFormat === IMAGE_FORMATS.BLOB) {
     return await getBlob(info);
   }
 
-  if (searchEngine.IMAGE_FORMAT === IMAGE_FORMATS.B64) {
+  if (imgFormat === IMAGE_FORMATS.B64) {
     if (isBase64(info)) {
-      return new ImageObject(info, IMAGE_FORMATS.B64)
+      return new ImageObject(info, IMAGE_FORMATS.B64);
     } else {
-      await getLocalImageFromSourcePath(info, IMAGE_FORMATS.B64)
+      if (src) return await getLocalImageFromSourcePath(src, IMAGE_FORMATS.B64);
+      else return await getLocalImageFromSourcePath(info, IMAGE_FORMATS.B64);
     }
     // TODO: local image
   }
@@ -601,8 +620,6 @@ export const reverseImageSearch = async (info, isImgUrl, searchEngineName) => {
     }
 
     reverseImageSearchGoogleLens(imageObject.obj);
-
-
   } else if (searchEngineName === SEARCH_ENGINE_SETTINGS.YANDEX_SEARCH.NAME) {
     if (
       imageObject.imageFormat !==
@@ -613,7 +630,6 @@ export const reverseImageSearch = async (info, isImgUrl, searchEngineName) => {
 
     reverseImageSearchYandex(imageObject.obj);
   } else if (searchEngineName === SEARCH_ENGINE_SETTINGS.BAIDU_SEARCH.NAME) {
-
     if (
       imageObject.imageFormat !==
       SEARCH_ENGINE_SETTINGS.BAIDU_SEARCH.IMAGE_FORMAT
@@ -623,79 +639,59 @@ export const reverseImageSearch = async (info, isImgUrl, searchEngineName) => {
 
     reverseImageSearchBaidu(imageObject.obj);
   } else if (searchEngineName === SEARCH_ENGINE_SETTINGS.BING_SEARCH.NAME) {
+    if (
+      imageObject.imageFormat !==
+      SEARCH_ENGINE_SETTINGS.BING_SEARCH.IMAGE_FORMAT
+    ) {
+      throw new Error(`[reverseImageSearch] Error: invalid image format`);
+    }
+
     // TODO: move all the logic in a single function
     const search_url = "https://www.bing.com/images/search?q=imgurl:";
+
     console.log(info);
+    console.log(imageObject);
+
     if (
-      typeof imgUrl === "string" &&
-      imgUrl !== "" &&
-      imgUrl.startsWith("http")
+      typeof imageObject.obj === "string" &&
+      imageObject.obj !== "" &&
+      imageObject.obj.startsWith("http")
     ) {
       const url =
-        search_url + encodeURIComponent(imgUrl) + "&view=detailv2&iss=sbi";
+        search_url +
+        encodeURIComponent(imageObject.obj) +
+        "&view=detailv2&iss=sbi";
       chrome.tabs.create({ url: url });
-    } else if (imgUrl !== "") {
-      let reader = new FileReader();
-      reader.readAsDataURL(info); // converts the blob to base64 and calls onload
+    } else if (imageObject.obj !== "") {
+      const b64Img = await retrieveImgObjectForSearchEngine(
+        info,
+        isImgUrl,
+        searchEngineName,
+        true
+      );
 
-      reader.onload = function () {
-        console.log(reader.result);
-      };
+      console.log(b64Img);
 
-      // const blob = await fs.readFile(info.pageUrl);
-      // reverseImageSearchBing(blob);
-      // const url =
-      // search_url + encodeURIComponent(info.pageUrl) + "&view=detailv2&iss=sbi";
-      // chrome.tabs.create({ url: url });
-      //   const content = info;
-      //   let image = content.substring(content.indexOf(",") + 1);
-      // let url =
-      //   "https://www.bing.com/images/search?view=detailv2&iss=sbiupload&FORM=SBIHMP&sbifnm=weverify-local-file";
-      // const formData = new FormData();
-      // formData.append("data-imgurl", "");
-      // formData.append("cbir", "sbi");
-      // formData.append("imageBin", info);
-      // fetch(url, {
-      //   method: "POST",
-      //   body: formData,
-      // })
-      //   .then((response) => {
-      //     //console.log("response ", response)
-      //     chrome.tabs.create({ url: response.url });
-      //   })
-      //   .catch((error) => {
-      //     console.error(error);
-      //   })
-      //   .finally(() => {
-      //     // document.body.style.cursor = "default";
-      //   });
+      let url =
+        "https://www.bing.com/images/search?view=detailv2&iss=sbiupload&FORM=SBIHMP&sbifnm=weverify-local-file";
+      const formData = new FormData();
+      formData.append("data-imgurl", "");
+      formData.append("cbir", "sbi");
+      formData.append("imageBin", b64Img.obj);
+      fetch(url, {
+        method: "POST",
+        body: formData,
+      })
+        .then((response) => {
+          //console.log("response ", response)
+          chrome.tabs.create({ url: response.url });
+        })
+        .catch((error) => {
+          console.error(error);
+        });
 
-      // console.log(imgUrl);
-
-      // const x = new XMLHttpRequest();
-      // x.responseType = 'blob';
-      // // x.responseType = 'blob';
-      // x.onload = function () {
-      //   alert(x.responseText);
-      // };
-      // x.open("get", blobUrl);
-      // x.send();
-
-      // const processedImgUrl = URL.createObjectURL(imgUrl);
-      // const url =
-      //   search_url + encodeURIComponent(processedImgUrl) + "&view=detailv2&iss=sbi";
-      // chrome.tabs.create({ url: url });
-
-      // const isB64 = isBase64(imgUrl);
-      // console.log(imgUrl);
-      // console.error("isb64? " + isB64);
-      // // TODO naming
-      // const imgBlob = isB64 ? imgUrl : await fetchImage(imgUrl);
-
-      // reverseImageSearchBing(imgUrl);
     }
   } else if (searchEngineName === SEARCH_ENGINE_SETTINGS.REDDIT_SEARCH.NAME) {
-
     if (
       imageObject.imageFormat !==
       SEARCH_ENGINE_SETTINGS.REDDIT_SEARCH.IMAGE_FORMAT
@@ -705,7 +701,6 @@ export const reverseImageSearch = async (info, isImgUrl, searchEngineName) => {
 
     reverseImageSearchReddit(imageObject.obj);
   } else if (searchEngineName === SEARCH_ENGINE_SETTINGS.TINEYE_SEARCH.NAME) {
-
     if (
       imageObject.imageFormat !==
       SEARCH_ENGINE_SETTINGS.TINEYE_SEARCH.IMAGE_FORMAT

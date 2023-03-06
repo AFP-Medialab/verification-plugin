@@ -244,7 +244,7 @@ const OcrResult = () => {
                       fullWidth
                       onClick={() => {
                         reverseImageSearch(
-                          testImg,
+                          inputUrl,
                           imageIsUrl,
                           SEARCH_ENGINE_SETTINGS.BING_SEARCH.NAME
                         );

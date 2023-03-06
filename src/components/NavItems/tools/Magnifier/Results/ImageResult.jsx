@@ -250,7 +250,7 @@ const ImageResult = () => {
               variant="contained"
               onClick={() =>
                 handleClick(
-                  resultImage,
+                  original,
                   isImageUrl,
                   SEARCH_ENGINE_SETTINGS.BING_SEARCH.NAME
                 )
