@@ -213,41 +213,47 @@ const Thumbnails = () => {
           className={classes.headerUpladedImage}
         />
         <Box p={3}>
-          <Grid container direction="row" spacing={3} alignItems="center">
-            <Grid item xs>
-              <TextField
-                id="standard-full-width"
-                label={keyword("youtube_input")}
-                placeholder={keyword("api_input")}
-                fullWidth
-                variant="outlined"
-                onChange={(e) => handleChangeValue(e)}
-                value={input}
-              />
-            </Grid>
-
-            <Grid item>
-              {
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      checked={selectedValue["openTabs"]}
-                      value={"openTabs"}
-                      onChange={(e) => handleChange(e)}
-                      color="primary"
-                    />
-                  }
-                  label={keyword("openTabs")}
-                  labelPlacement="end"
+          <form>
+            <Grid container direction="row" spacing={3} alignItems="center">
+              <Grid item xs>
+                <TextField
+                  id="standard-full-width"
+                  label={keyword("youtube_input")}
+                  placeholder={keyword("api_input")}
+                  fullWidth
+                  variant="outlined"
+                  onChange={(e) => handleChangeValue(e)}
+                  value={input}
                 />
-              }
+              </Grid>
+              <Grid item>
+                {
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={selectedValue["openTabs"]}
+                        value={"openTabs"}
+                        onChange={(e) => handleChange(e)}
+                        color="primary"
+                      />
+                    }
+                    label={keyword("openTabs")}
+                    labelPlacement="end"
+                  />
+                }
+              </Grid>
+              <Grid item>
+                <Button
+                  type="submit"
+                  variant="contained"
+                  color="primary"
+                  onClick={submitForm}
+                >
+                  {keyword("button_submit")}
+                </Button>
+              </Grid>
             </Grid>
-            <Grid item>
-              <Button variant="contained" color="primary" onClick={submitForm}>
-                {keyword("button_submit")}
-              </Button>
-            </Grid>
-          </Grid>
+          </form>
 
           <Box m={2} />
           <FormControl component="fieldset">
