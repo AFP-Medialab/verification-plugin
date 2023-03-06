@@ -16,7 +16,10 @@ import FacebookImageDescription from "./Results/FacebookImageDescription";
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/Analysis.tsv";
 import tsvAlltools from "../../../../LocalDictionary/components/NavItems/tools/Alltools.tsv";
-import { trackEvent, getclientId } from "../../../Shared/GoogleAnalytics/MatomoAnalytics";
+import {
+  trackEvent,
+  getclientId,
+} from "../../../Shared/GoogleAnalytics/MatomoAnalytics";
 import { useParams } from "react-router-dom";
 import { KNOWN_LINKS } from "../../Assistant/AssistantRuleBook";
 import Card from "@mui/material/Card";
@@ -34,7 +37,6 @@ import {
 } from "../../../../redux/actions/tools/image_analysisActions";
 
 const Analysis = () => {
-    
   const caa_analysis_url = process.env.REACT_APP_CAA_ANALYSIS_URL;
   const { url } = useParams();
   const classes = useMyStyles();
@@ -57,7 +59,7 @@ const Analysis = () => {
   const [submittedUrl, setSubmittedUrl] = useState(undefined);
   const [reprocess, setReprocess] = useState(false);
   const serviceUrl = caa_analysis_url + "images";
-  const client_id = getclientId()
+  const client_id = getclientId();
   const [finalUrl, showFacebookIframe] = useGenerateApiUrl(
     serviceUrl,
     submittedUrl,
@@ -78,7 +80,13 @@ const Analysis = () => {
   };
 
   const submitForm = () => {
-    trackEvent('submission', 'analysis', 'image caa analysis', input.trim(), client_id)
+    trackEvent(
+      "submission",
+      "analysis",
+      "image caa analysis",
+      input.trim(),
+      client_id
+    );
     setSubmittedUrl(input.trim());
     dispatch(cleanAnalysisState());
   };
@@ -95,7 +103,7 @@ const Analysis = () => {
     }
     // eslint-disable-next-line
   }, [urlDetected]);
-  
+
   useEffect(() => {
     if (url && url !== KNOWN_LINKS.OWN) {
       const uri = url !== null ? decodeURIComponent(url) : undefined;
@@ -103,7 +111,7 @@ const Analysis = () => {
       setUrlDetected(true);
     }
   }, [url]);
-  
+
   return (
     <div>
       <HeaderTool
@@ -124,52 +132,53 @@ const Analysis = () => {
           className={classes.headerUpladedImage}
         />
         <div className={classes.root2}>
-          <Grid container direction="row" spacing={3} alignItems="center">
-            <Grid item xs>
-              <TextField
-                id="standard-full-width"
-                label={keyword("api_input_image")}
-                placeholder={keyword("api_input_placeholder")}
-                fullWidth
-                disabled={isLoading}
-                value={input}
-                variant="outlined"
-                onChange={(e) => setInput(e.target.value)}
-              />
-            </Grid>
+          <form>
+            <Grid container direction="row" spacing={3} alignItems="center">
+              <Grid item xs>
+                <TextField
+                  id="standard-full-width"
+                  label={keyword("api_input_image")}
+                  placeholder={keyword("api_input_placeholder")}
+                  fullWidth
+                  disabled={isLoading}
+                  value={input}
+                  variant="outlined"
+                  onChange={(e) => setInput(e.target.value)}
+                />
+              </Grid>
 
-            <Grid item>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={reprocess}
-                    onChange={reprocessToggle}
-                    disabled={isLoading}
-                    value="checkedBox"
-                    color="primary"
-                  />
-                }
-                label={keyword("api_repro")}
-              />
-            </Grid>
+              <Grid item>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={reprocess}
+                      onChange={reprocessToggle}
+                      disabled={isLoading}
+                      value="checkedBox"
+                      color="primary"
+                    />
+                  }
+                  label={keyword("api_repro")}
+                />
+              </Grid>
 
-            <Grid item>
-              <Button
-                variant="contained"
-                color="primary"
-                disabled={isLoading}
-                onClick={submitForm}
-              >
-                {keyword("button_submit")}
-              </Button>
-            </Grid>
+              <Grid item>
+                <Button
+                  type="submit"
+                  variant="contained"
+                  color="primary"
+                  disabled={isLoading}
+                  onClick={submitForm}
+                >
+                  {keyword("button_submit")}
+                </Button>
+              </Grid>
 
-            <Box m={1} />
-          </Grid>
+              <Box m={1} />
+            </Grid>
+          </form>
         </div>
-        {
-            isLoading && <LinearProgress />
-        }        
+        {isLoading && <LinearProgress />}
       </Card>
       <Box m={3} />
 
