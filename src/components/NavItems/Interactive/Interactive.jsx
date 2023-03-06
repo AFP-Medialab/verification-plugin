@@ -110,7 +110,7 @@ const Interactive = () => {
                                               alignContent={"center"}>
                                             <Grid item>
                                                 <Button p={3} variant="contained" color="primary" onClick={() => {
-                                                    reverseImageSearch(obj.url, SEARCH_ENGINE_SETTINGS.GOOGLE_SEARCH.NAME);
+                                                    reverseImageSearch(obj.url, true, SEARCH_ENGINE_SETTINGS.GOOGLE_SEARCH.NAME);
                                                 }}>
                                                     {keyword("quiz_similarity")}
                                                 </Button>
