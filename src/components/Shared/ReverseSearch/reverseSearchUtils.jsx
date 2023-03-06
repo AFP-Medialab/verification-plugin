@@ -131,12 +131,6 @@ const isBase64 = (str) => {
   }
 
   return true;
-
-  // const regex = new RegExp(
-  //   "/^([0-9a-zA-Z+/]{4})*(([0-9a-zA-Z+/]{2}==)|([0-9a-zA-Z+/]{3}=))?$/"
-  // );
-
-  // return regex.test(b64Str);
 };
 
 export const b64toBlob = (content, contentType = "", sliceSize = 512) => {
@@ -278,13 +272,10 @@ export const reverseImageSearchYandex = (imgBlob) => {
       return response.json();
     })
     .then((json) => {
-      //console.log("response ", json)
-      let block = json.blocks[0];
-      //console.log("block ", block)
-      let originalImageUrl = block.params.originalImageUrl;
-      //console.log("originalImageUrl : ", originalImageUrl)
-      let cbirId = block.params.url;
-      let fullUrl = `https://yandex.com/images/search?rpt=imageview&url=${originalImageUrl}&${cbirId}`;
+      const block = json.blocks[0];
+      const originalImageUrl = block.params.originalImageUrl;
+      const cbirId = block.params.url;
+      const fullUrl = `https://yandex.com/images/search?rpt=imageview&url=${originalImageUrl}&${cbirId}`;
       chrome.tabs.create({ url: fullUrl });
     })
     .catch((error) => {
@@ -294,14 +285,6 @@ export const reverseImageSearchYandex = (imgBlob) => {
       // document.body.style.cursor = "default";
     });
 };
-
-// const getGoogleSearchFormData = () => {
-//   const chromeSbiSrc = "Google Chrome 107.0.5304.107 (Official) Windows";
-//   const formData = new FormData();
-//   formData.append("encoded_image", blob);
-//   formData.append("image_url", "");
-//   formData.append("sbisrc", chromeSbiSrc);
-// };
 
 export const reverseImageSearchGoogle = (imgBlob) => {
   const chromeSbiSrc = "Google Chrome 107.0.5304.107 (Official) Windows";
@@ -324,8 +307,6 @@ export const reverseImageSearchGoogle = (imgBlob) => {
     })
     .catch((error) => {
       console.error(error);
-      //try google lens
-      // reverseImageSearchGoogleLens(content);
     });
   // .finally(() => {
   //   document.body.style.cursor = "default";
@@ -423,22 +404,10 @@ export const getLocalImageFromSourcePath = async (src, imgFormat) => {
       console.log(base64String);
 
       return new ImageObject(base64String, IMAGE_FORMATS.B64);
-      // dispatch(setOcrBinaryImage(base64String));
-      // submitUrl(url);
     };
 
     img.src = src;
   }
-
-  // img.onload = () => {
-  // let canvas = document.createElement("canvas");
-  // canvas.width = img.width;
-  // canvas.height = img.height;
-  // canvas.getContext("2d").drawImage(img, 0, 0);
-  // Get raw image data
-  // dispatch(setb64InputFile(canvas.toDataURL("image/png")));
-  // canvas.remove();
-  // };
 };
 
 /**
@@ -450,7 +419,7 @@ export const getBlob = async (info) => {
   if (!info) {
     throw new Error(`[getBlob] Error : bad parameter`);
   }
-  //  && getImgUrl(info).startsWith("http")
+
   const isImgUrl = typeof getImgUrl(info) === "string";
 
   const isb64 = isBase64(info);
@@ -463,7 +432,10 @@ export const getBlob = async (info) => {
 
   let imgBlob;
 
-  if (typeof info === "string" && (info.startsWith("http") || info.startsWith("blob"))) {
+  if (
+    typeof info === "string" &&
+    (info.startsWith("http") || info.startsWith("blob"))
+  ) {
     imgBlob = await fetchImage(info);
   } else if (isImgUrl && !isb64) {
     console.log(getImgUrl(info));
@@ -559,32 +531,6 @@ const retrieveImgObjectForSearchEngine = async (
 };
 
 export const reverseImageSearch = async (info, isImgUrl, searchEngineName) => {
-  // TODO separate local and non local processing with isBase64 and isImgUrl
-
-  // process info: check if object has srcUrl => get b64 stuff or blob as needed by the search engine
-
-  // console.log(isBase64(info));
-  // reverseImageSearchTineye(info);
-  // reverseImageSearchGoogle(b64toBlob(info));
-  // const imgUrl = isImgUrl ? info : getImgUrl(info);
-  // console.log(info);
-  // console.log(isImgUrl);
-  // console.log(getImgUrl(info));
-  // if (imgUrl === "") {
-  //   // TODO: Error handling
-  //   throw new Error("[reverseImageSearch] Error: Empty URL string");
-  // }
-
-  // const localImg = await getLocalImageFromSourcePath(
-  //   getImgUrl(info),
-  //   IMAGE_FORMATS.BLOB
-  // );
-  // console.log(localImg);
-
-  // const blobLocalImg = b64toBlob(localImg);
-  // const blobLocalImg = localImg;
-  // reverseImageSearchGoogle(blobLocalImg);
-
   const imageObject = await retrieveImgObjectForSearchEngine(
     info,
     isImgUrl,
@@ -649,9 +595,6 @@ export const reverseImageSearch = async (info, isImgUrl, searchEngineName) => {
     // TODO: move all the logic in a single function
     const search_url = "https://www.bing.com/images/search?q=imgurl:";
 
-    console.log(info);
-    console.log(imageObject);
-
     if (
       typeof imageObject.obj === "string" &&
       imageObject.obj !== "" &&
@@ -683,13 +626,11 @@ export const reverseImageSearch = async (info, isImgUrl, searchEngineName) => {
         body: formData,
       })
         .then((response) => {
-          //console.log("response ", response)
           chrome.tabs.create({ url: response.url });
         })
         .catch((error) => {
           console.error(error);
         });
-
     }
   } else if (searchEngineName === SEARCH_ENGINE_SETTINGS.REDDIT_SEARCH.NAME) {
     if (
