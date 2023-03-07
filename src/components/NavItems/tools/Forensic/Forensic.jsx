@@ -202,7 +202,9 @@ const Forensic = () => {
                       type="submit"
                       variant="contained"
                       color="primary"
-                      onClick={submitUrl}
+                      onClick={(e) => {
+                        e.preventDefault(), submitUrl();
+                      }}
                       disabled={isLoading}
                       style={{ height: "50px" }}
                     >

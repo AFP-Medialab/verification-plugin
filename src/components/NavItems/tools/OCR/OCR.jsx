@@ -178,7 +178,8 @@ const OCR = () => {
                     type="submit"
                     variant="contained"
                     color="primary"
-                    onClick={() => {
+                    onClick={(e) => {
+                      e.preventDefault();
                       if (!_.isUndefined(userInput)) submitUrl(userInput);
                     }}
                   >
@@ -188,7 +189,9 @@ const OCR = () => {
                   <Button
                     variant="contained"
                     color="primary"
-                    onClick={() => dispatch(cleanOcr())}
+                    onClick={(e) => {
+                      e.preventDefault(), dispatch(cleanOcr());
+                    }}
                   >
                     {keyword("button_remove")}
                   </Button>

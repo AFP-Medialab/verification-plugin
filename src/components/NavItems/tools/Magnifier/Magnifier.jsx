@@ -133,7 +133,9 @@ const Magnifier = () => {
                   type="submit"
                   variant="contained"
                   color="primary"
-                  onClick={() => submitUrl(input)}
+                  onClick={(e) => {
+                    e.preventDefault(), submitUrl(input);
+                  }}
                 >
                   {keyword("button_submit") || ""}
                 </Button>

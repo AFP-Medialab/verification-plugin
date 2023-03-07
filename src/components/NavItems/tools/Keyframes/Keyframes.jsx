@@ -295,7 +295,9 @@ const Keyframes = () => {
                     type="submit"
                     variant="contained"
                     color="primary"
-                    onClick={submitUrl}
+                    onClick={(e) => {
+                      e.preventDefault(), submitUrl();
+                    }}
                     disabled={isLoading || isLoadingSimilarity}
                   >
                     {keyword("button_submit")}

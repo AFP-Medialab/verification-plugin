@@ -249,7 +249,9 @@ const Thumbnails = () => {
                   type="submit"
                   variant="contained"
                   color="primary"
-                  onClick={submitForm}
+                  onClick={(e) => {
+                    e.preventDefault(), submitForm();
+                  }}
                 >
                   {keyword("button_submit")}
                 </Button>
