@@ -193,7 +193,9 @@ const Metadata = ({ mediaType }) => {
                   type="submit"
                   variant="contained"
                   color="primary"
-                  onClick={submitUrl}
+                  onClick={(e) => {
+                    e.preventDefault(), submitUrl();
+                  }}
                 >
                   {keyword("button_submit")}
                 </Button>
