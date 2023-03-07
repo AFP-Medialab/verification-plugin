@@ -190,7 +190,9 @@ const Analysis = () => {
                 variant="contained"
                 color="primary"
                 disabled={isLoading}
-                onClick={submitForm}
+                onClick={(e) => {
+                  e.preventDefault(), submitForm();
+                }}
               >
                 {keyword("button_submit")}
               </Button>
