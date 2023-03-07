@@ -376,7 +376,11 @@ function* handleAssistantScrapeCall(action) {
   try {
     let scrapeResult = null;
     if (decideWhetherToScrape(urlType, contentType, inputUrl)) {
-      scrapeResult = yield call(assistantApi.callAssistantScraper, urlType, inputUrl)
+      scrapeResult = yield call(
+        assistantApi.callAssistantScraper,
+        urlType,
+        inputUrl
+      );
     }
 
     let filteredSR = filterAssistantResults(
@@ -422,10 +426,10 @@ function* extractFromLocalStorage(instagram_result, inputUrl, urlType) {
     text_result = text_result.replaceAll(regex_emoji, "");
     text_result = text_result.replaceAll("\\n", " ");
 
-    if (text_result.includes("on Instagram")){
-      let text = text_result.split("on Instagram: ")
-      text_result = text.length > 1 ? text[1] : text_result
-  }
+    if (text_result.includes("on Instagram")) {
+      let text = text_result.split("on Instagram: ");
+      text_result = text.length > 1 ? text[1] : text_result;
+    }
   }
 
   if (video_result !== "") {
@@ -472,7 +476,8 @@ const decideWhetherToScrape = (urlType, contentType) => {
  **/
 const buildWordCloudList = (entities) => {
   return entities.reduce((accumulator, currentWord) => {
-    accumulator.filter((wordObj) => wordObj.value === currentWord["word"]).length
+    accumulator.filter((wordObj) => wordObj.value === currentWord["word"])
+      .length
       ? (accumulator.filter(
           (wordObj) => wordObj.value === currentWord["word"]
         )[0].count += 1)
@@ -544,12 +549,20 @@ const filterAssistantResults = (
       }
       break;
     case KNOWN_LINKS.TWITTER:
-      if (scrapeResult.images.length > 0) {imageList = scrapeResult.images}
-      if (scrapeResult.videos.length > 0) {videoList = scrapeResult.videos}
+      if (scrapeResult.images.length > 0) {
+        imageList = scrapeResult.images;
+      }
+      if (scrapeResult.videos.length > 0) {
+        videoList = scrapeResult.videos;
+      }
       break;
-  case KNOWN_LINKS.TELEGRAM:
-      if (scrapeResult.images.length > 0) {imageList = scrapeResult.images}
-      if (scrapeResult.videos.length > 0) {videoList = scrapeResult.videos}
+    case KNOWN_LINKS.TELEGRAM:
+      if (scrapeResult.images.length > 0) {
+        imageList = scrapeResult.images;
+      }
+      if (scrapeResult.videos.length > 0) {
+        videoList = scrapeResult.videos;
+      }
       break;
     case KNOWN_LINKS.MISC:
       if (contentType) {
@@ -654,7 +667,7 @@ const filterDbkfTextResult = (result) => {
   return resultList.length ? resultList : null;
 };
 
-const scaleNumbers = (unscaledNums, min, max) => {
+const scaleNumbers = (unscaledNums) => {
   let scaled = [];
   let maxRange = Math.max.apply(Math, unscaledNums);
   let minRange = Math.min.apply(Math, unscaledNums);

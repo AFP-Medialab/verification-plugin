@@ -50,7 +50,6 @@ const OcrResult = () => {
   const reprocessBlockOpen = useSelector(
     (state) => state.ocr.reprocessBlockOpen
   );
-  const b64Content = useSelector((state) => state.ocr.b64Content);
 
   const [imageIsUrl] = useState(
     inputUrl.startsWith("http:") || inputUrl.startsWith("https:")
@@ -169,9 +168,8 @@ const OcrResult = () => {
       dispatch(setError(keyword(error_message_key)));
       dispatch(cleanOcr());
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fail, errorKey]);
-  var ro = new ResizeObserver((entries) => {
+  var ro = new ResizeObserver(() => {
     handleImageResizing();
   });
   // when the result comes in, draw the bounding boxes and add the event listener for changes to image size

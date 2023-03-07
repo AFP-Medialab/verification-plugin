@@ -1,3 +1,4 @@
+import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
@@ -60,7 +61,6 @@ const VideoRights = () => {
     if (urlDetected) {
       submitForm();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [urlDetected]);
 
   useEffect(() => {

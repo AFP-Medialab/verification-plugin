@@ -1,7 +1,7 @@
-import {useEffect} from "react";
-import {useDispatch, useSelector, shallowEqual} from "react-redux";
+import { useEffect } from "react";
+import { useDispatch, useSelector, shallowEqual } from "react-redux";
 import axios from "axios";
-import {addDictionary} from "../redux/actions";
+import { addDictionary } from "../redux/actions";
 
 /**
  * @func transform array in json representation of translation (access this way: json[global_language][id_translate])
@@ -9,19 +9,19 @@ import {addDictionary} from "../redux/actions";
  * @return the json representation of the csv
  */
 function array_to_json(array) {
-    let json = {};
-    for (let i = 1; i < array[0].length; ++i) {
-        let lang = array[0][i].replace("\r", "");
-        json[lang] = {};
-        for (let j = 1; j < array.length; ++j) {
-            if (array[j] && array[j][i] && typeof array[j][i] !== undefined) {
-                json[lang][array[j][0]] = array[j][i].replace("\r", "");
-            } else {
-                json[lang][array[j][0]] = "";
-            }
-        }
+  let json = {};
+  for (let i = 1; i < array[0].length; ++i) {
+    let lang = array[0][i].replace("\r", "");
+    json[lang] = {};
+    for (let j = 1; j < array.length; ++j) {
+      if (array[j] && array[j][i] && array[j][i] !== undefined) {
+        json[lang][array[j][0]] = array[j][i].replace("\r", "");
+      } else {
+        json[lang][array[j][0]] = "";
+      }
     }
-    return json;
+  }
+  return json;
 }
 
 /**
@@ -30,10 +30,10 @@ function array_to_json(array) {
  * @return array representation of csv string
  */
 function csv_to_array(csv) {
-    let rows = csv.split("\n");
-    return rows.map(function (row) {
-        return row.split("\t");
-    });
+  let rows = csv.split("\n");
+  return rows.map(function (row) {
+    return row.split("\t");
+  });
 }
 
 /**
@@ -41,42 +41,48 @@ function csv_to_array(csv) {
  * @path url to google spreadsheet or path to csv local file
  */
 function translate_csv(text) {
-    let lang_array_csv = csv_to_array(text);
-    return array_to_json(lang_array_csv);
+  let lang_array_csv = csv_to_array(text);
+  return array_to_json(lang_array_csv);
 }
 
 const useLoadLanguage = (onlineTsv, localTsv) => {
-    const gitHubFullUrl = process.env.REACT_APP_TRANSLATION_GITHUB + onlineTsv;
-    const lang = useSelector(state => state.language);
-    const dictionary = useSelector(state => state.dictionary[gitHubFullUrl], shallowEqual);    
-    const dispatch = useDispatch();
+  const gitHubFullUrl = process.env.REACT_APP_TRANSLATION_GITHUB + onlineTsv;
+  const lang = useSelector((state) => state.language);
+  const dictionary = useSelector(
+    (state) => state.dictionary[gitHubFullUrl],
+    shallowEqual
+  );
+  const dispatch = useDispatch();
 
-    useEffect(() => {
-        if (dictionary === undefined){
-        const backUpLocal = () => {
-            axios.get(localTsv)
-                .then(result => {
-                    dispatch(addDictionary(gitHubFullUrl, translate_csv(result.data)));
-                })
-                .catch(error => console.error(error))
-        };
+  useEffect(() => {
+    if (dictionary === undefined) {
+      const backUpLocal = () => {
+        axios
+          .get(localTsv)
+          .then((result) => {
+            dispatch(addDictionary(gitHubFullUrl, translate_csv(result.data)));
+          })
+          .catch((error) => console.error(error));
+      };
 
-        axios.get(gitHubFullUrl)
-            .then(result => {
-                if (result.data === "")
-                    backUpLocal();
-                else{
-                    dispatch(addDictionary(gitHubFullUrl, translate_csv(result.data)));
-                }
-            })
-            .catch(() => {
-                backUpLocal();
-            })
-        }
-    }, [localTsv]);
+      axios
+        .get(gitHubFullUrl)
+        .then((result) => {
+          if (result.data === "") backUpLocal();
+          else {
+            dispatch(addDictionary(gitHubFullUrl, translate_csv(result.data)));
+          }
+        })
+        .catch(() => {
+          backUpLocal();
+        });
+    }
+  }, [localTsv]);
 
-    return (key) => {
-        return (dictionary && dictionary[lang] && dictionary[lang][key]) ? dictionary[lang][key] : "";
-    };
+  return (key) => {
+    return dictionary && dictionary[lang] && dictionary[lang][key]
+      ? dictionary[lang][key]
+      : "";
+  };
 };
 export default useLoadLanguage;

@@ -1,3 +1,4 @@
+import React from "react";
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -158,6 +159,7 @@ const Thumbnails = () => {
         return height;
       })
       .catch((e) => {
+        console.error(e);
         return null;
       });
   };

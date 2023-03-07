@@ -1,3 +1,4 @@
+import React from "react";
 import { useDispatch } from "react-redux";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
@@ -37,11 +38,7 @@ const TwitterResults = (props) => {
   );
   const reverseSearch = (website) => {
     for (let image of thumbnails) {
-      reverseImageSearch(
-        image.url,
-        true,
-        website
-      );
+      reverseImageSearch(image.url, true, website);
     }
   };
 
@@ -442,7 +439,9 @@ const TwitterResults = (props) => {
                     className={classes.button}
                     variant="contained"
                     color={"primary"}
-                    onClick={() => reverseSearch(SEARCH_ENGINE_SETTINGS.GOOGLE_SEARCH.NAME)}
+                    onClick={() =>
+                      reverseSearch(SEARCH_ENGINE_SETTINGS.GOOGLE_SEARCH.NAME)
+                    }
                   >
                     {keyword("button_reverse_google")}
                   </Button>
@@ -450,7 +449,9 @@ const TwitterResults = (props) => {
                     className={classes.button}
                     variant="contained"
                     color={"primary"}
-                    onClick={() => reverseSearch(SEARCH_ENGINE_SETTINGS.YANDEX_SEARCH.NAME)}
+                    onClick={() =>
+                      reverseSearch(SEARCH_ENGINE_SETTINGS.YANDEX_SEARCH.NAME)
+                    }
                   >
                     {keyword("button_reverse_yandex")}
                   </Button>
@@ -458,7 +459,9 @@ const TwitterResults = (props) => {
                     className={classes.button}
                     variant="contained"
                     color={"primary"}
-                    onClick={() => reverseSearch(SEARCH_ENGINE_SETTINGS.TINEYE_SEARCH.NAME)}
+                    onClick={() =>
+                      reverseSearch(SEARCH_ENGINE_SETTINGS.TINEYE_SEARCH.NAME)
+                    }
                   >
                     {keyword("button_reverse_tineye")}
                   </Button>

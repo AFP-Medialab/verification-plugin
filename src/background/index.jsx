@@ -7,7 +7,7 @@ import {
 
 const page_name = "popup.html";
 
-const rightClickEvent = (toolName, media) => {
+const rightClickEvent = () => {
   return true;
 };
 
@@ -220,22 +220,38 @@ function contextClick(info, tab) {
       reverseImageSearch(info, true, SEARCH_ENGINE_SETTINGS.GOOGLE_SEARCH.NAME);
       break;
     case SEARCH_ENGINE_SETTINGS.GOOGLE_LENS_SEARCH.CONTEXT_MENU_ID:
-      reverseImageSearch(info, false, SEARCH_ENGINE_SETTINGS.GOOGLE_LENS_SEARCH.NAME);
+      reverseImageSearch(
+        info,
+        false,
+        SEARCH_ENGINE_SETTINGS.GOOGLE_LENS_SEARCH.NAME
+      );
       break;
-      case SEARCH_ENGINE_SETTINGS.YANDEX_SEARCH.CONTEXT_MENU_ID:
-      reverseImageSearch(info, false, SEARCH_ENGINE_SETTINGS.YANDEX_SEARCH.NAME);
+    case SEARCH_ENGINE_SETTINGS.YANDEX_SEARCH.CONTEXT_MENU_ID:
+      reverseImageSearch(
+        info,
+        false,
+        SEARCH_ENGINE_SETTINGS.YANDEX_SEARCH.NAME
+      );
       break;
     case SEARCH_ENGINE_SETTINGS.BING_SEARCH.CONTEXT_MENU_ID:
       reverseImageSearch(info, false, SEARCH_ENGINE_SETTINGS.BING_SEARCH.NAME);
       break;
     case SEARCH_ENGINE_SETTINGS.TINEYE_SEARCH.CONTEXT_MENU_ID:
-      reverseImageSearch(info, false, SEARCH_ENGINE_SETTINGS.TINEYE_SEARCH.NAME);
+      reverseImageSearch(
+        info,
+        false,
+        SEARCH_ENGINE_SETTINGS.TINEYE_SEARCH.NAME
+      );
       break;
     case SEARCH_ENGINE_SETTINGS.BAIDU_SEARCH.CONTEXT_MENU_ID:
       reverseImageSearch(info, false, SEARCH_ENGINE_SETTINGS.BAIDU_SEARCH.NAME);
       break;
     case SEARCH_ENGINE_SETTINGS.REDDIT_SEARCH.CONTEXT_MENU_ID:
-      reverseImageSearch(info, false, SEARCH_ENGINE_SETTINGS.REDDIT_SEARCH.NAME);
+      reverseImageSearch(
+        info,
+        false,
+        SEARCH_ENGINE_SETTINGS.REDDIT_SEARCH.NAME
+      );
       break;
     default:
       break;

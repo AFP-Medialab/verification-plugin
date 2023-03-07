@@ -1,27 +1,27 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    request: "",
-    result: null,
-    loading: false,
+  request: "",
+  result: null,
+  loading: false,
 };
 
 const twitterSnaSlice = createSlice({
-    name : "tsna",
-    initialState,
-    reducers : {
-        setTwitterSnaLoading(state, action){
-            state.loading = action.payload
-        },
-        setTwitterSnaResult(state, action){
-            return action.payload
-        }
-    }
+  name: "tsna",
+  initialState,
+  reducers: {
+    setTwitterSnaLoading(state, action) {
+      state.loading = action.payload;
+    },
+    setTwitterSnaResult(state, action) {
+      return action.payload;
+    },
+  },
+});
 
-})
-
-export const {setTwitterSnaLoading, setTwitterSnaResult} = twitterSnaSlice.actions
-const twitterSnaReducer = twitterSnaSlice.reducer
+export const { setTwitterSnaLoading, setTwitterSnaResult } =
+  twitterSnaSlice.actions;
+const twitterSnaReducer = twitterSnaSlice.reducer;
 
 /*const twitterSnaReducer = (state = initialState, action) => {
     switch (action.type) {

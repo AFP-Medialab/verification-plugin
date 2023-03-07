@@ -91,7 +91,6 @@ const Magnifier = () => {
         submitUrl(uri);
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [url]);
 
   return (

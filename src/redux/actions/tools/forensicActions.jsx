@@ -1,6 +1,6 @@
-import { createAction } from "@reduxjs/toolkit"
+import { createAction } from "@reduxjs/toolkit";
 
-export const setForensicsResult = createAction("SET_FORENSIC_RESULT")
+export const setForensicsResult = createAction("SET_FORENSIC_RESULT");
 
 /*export const setForensicsResult = (url, result, notification, loading) => {
     return {
@@ -16,7 +16,7 @@ export const setForensicsResult = createAction("SET_FORENSIC_RESULT")
     }
 };*/
 //masks: masks,
-export const setForensicMask = createAction("SET_FORENSIC_MASK")
+export const setForensicMask = createAction("SET_FORENSIC_MASK");
 /*export const setForensicMask = (masks) => {
     return {
         type: "SET_FORENSIC_MASK",
@@ -25,7 +25,7 @@ export const setForensicMask = createAction("SET_FORENSIC_MASK")
     }
 };*/
 
-export const setForensicsLoading = createAction("SET_FORENSIC_LOADING")
+export const setForensicsLoading = createAction("SET_FORENSIC_LOADING");
 
 /*export const setForensicsLoading = (loading) => {
     return {
@@ -34,28 +34,28 @@ export const setForensicsLoading = createAction("SET_FORENSIC_LOADING")
     }
 };*/
 
-export const cleanForensicState = createAction("FORENSIC_CLEAN_STATE") 
+export const cleanForensicState = createAction("FORENSIC_CLEAN_STATE");
 /*export const cleanForensicState = () => {
     return {
         type: "FORENSIC_CLEAN_STATE"
     }
 };*/
 
-export const setForensicsGifAnimateShow = createAction("SET_FORENSIC_GIF_SHOW")
+export const setForensicsGifAnimateShow = createAction("SET_FORENSIC_GIF_SHOW");
 /*export const setForensicsGifAnimateShow = () => {
     return {
         type: "SET_FORENSIC_GIF_SHOW",
     }
 };*/
 
-export const setForensicsGifAnimateHide = createAction("SET_FORENSIC_GIF_HIDE")
+export const setForensicsGifAnimateHide = createAction("SET_FORENSIC_GIF_HIDE");
 /*export const setForensicsGifAnimateHide = () => {
     return {
         type: "SET_FORENSIC_GIF_HIDE",
     }
 };*/
 
-export const setForensicMaskGif = createAction("SET_FORENSIC_MASK_GIF")
+export const setForensicMaskGif = createAction("SET_FORENSIC_MASK_GIF");
 /*export const setForensicMaskGif = (url) => {
     return {
         type: "SET_FORENSIC_MASK_GIF",
@@ -63,7 +63,7 @@ export const setForensicMaskGif = createAction("SET_FORENSIC_MASK_GIF")
     }
 };*/
 
-export const setForensicKey = createAction("SET_FORENSIC_ERROR_KEY")
+export const setForensicKey = createAction("SET_FORENSIC_ERROR_KEY");
 
 /*export const setForensicKey = (errorKey) => {
     return {
@@ -75,7 +75,7 @@ export const setForensicKey = createAction("SET_FORENSIC_ERROR_KEY")
 
 };*/
 
-export const setForensicDisplayItem = createAction("SET_FORENSIC_DISPLAY_ITEM")
+export const setForensicDisplayItem = createAction("SET_FORENSIC_DISPLAY_ITEM");
 /*export const setForensicDisplayItem = (itemUrl) => {
     return {
         type: "SET_FORENSIC_DISPLAY_ITEM",
@@ -83,7 +83,7 @@ export const setForensicDisplayItem = createAction("SET_FORENSIC_DISPLAY_ITEM")
     }
 }*/
 
-export const setForensicInputFile = createAction("SET_FORENSIC_LOCAL_FILE")
+export const setForensicInputFile = createAction("SET_FORENSIC_LOCAL_FILE");
 /*export const setForensicInputFile = (localurl) => {
     return {
         type: "SET_FORENSIC_LOCAL_FILE",

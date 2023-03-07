@@ -90,7 +90,6 @@ const OCR = () => {
       dispatch(setError(keyword(error_message_key)));
       dispatch(cleanOcr());
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fail, errorKey]);
 
   const localImage = (src) => {
@@ -142,7 +141,6 @@ const OCR = () => {
         submitUrl(uri);
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [url]);
 
   return (
@@ -177,7 +175,7 @@ const OCR = () => {
               <Grid item>
                 {!result ? (
                   <Button
-                  type="submit"
+                    type="submit"
                     variant="contained"
                     color="primary"
                     onClick={() => {
