@@ -29,14 +29,6 @@ import {
   getclientId,
 } from "../../Shared/GoogleAnalytics/MatomoAnalytics";
 
-DrawerItem.propTypes = {
-  drawerItems: PropTypes.any,
-};
-
-DrawerItemContent.propTypes = {
-  drawContent: PropTypes.array.isRequired,
-  index: PropTypes.number.isRequired,
-};
 
 const DrawerItem = ({ drawerItems }) => {
   const drawerItemsContent = [
@@ -226,4 +218,14 @@ const DrawerItemContent = ({ index, drawContent }) => {
     </Container>
   );
 };
+
+DrawerItem.propTypes = {
+  drawerItems: PropTypes.any,
+};
+
+DrawerItemContent.propTypes = {
+  drawContent: PropTypes.array.isRequired,
+  index: PropTypes.number.isRequired,
+};
+
 export default DrawerItem;

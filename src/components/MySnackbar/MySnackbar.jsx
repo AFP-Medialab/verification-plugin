@@ -45,13 +45,6 @@ const useStyles1 = (theme) => ({
   },
 });
 
-MySnackbar.propTypes = {
-  onClick: PropTypes.func.isRequired,
-  message: PropTypes.string.isRequired,
-  onClose: PropTypes.func.isRequired,
-  variant: PropTypes.string.isRequired,
-};
-
 // variant can bee : "success", "error", "warning", "info"
 const MySnackbar = (props) => {
   const [open, setOpen] = React.useState(true);
@@ -100,4 +93,12 @@ const MySnackbar = (props) => {
     </div>
   );
 };
+
+MySnackbar.propTypes = {
+  onClick: PropTypes.func.isRequired,
+  message: PropTypes.string.isRequired,
+  onClose: PropTypes.func.isRequired,
+  variant: PropTypes.string.isRequired,
+};
+
 export default MySnackbar;
