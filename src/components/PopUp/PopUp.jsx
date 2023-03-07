@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from "react";
-import {useDispatch, useSelector} from "react-redux";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -10,116 +10,141 @@ import invidLogo from "../Shared/images/InVID-logo.svg?url";
 import tsv from "../../LocalDictionary/components/PopUp.tsv";
 import useMyStyles from "../Shared/MaterialUiStyles/useMyStyles";
 import useLoadLanguage from "../../Hooks/useLoadLanguage";
-import {changeLanguage} from "../../redux/reducers/languageReducer";
-import {getSupportedBrowserLanguage} from "../Shared/Languages/getSupportedBrowserLanguage";
+import { changeLanguage } from "../../redux/reducers/languageReducer";
+import { getSupportedBrowserLanguage } from "../Shared/Languages/getSupportedBrowserLanguage";
 
-const navigator = (window.browser) ? window.browser : window.chrome;
+const navigator = window.browser ? window.browser : window.chrome;
 
 const PopUp = () => {
-    const classes = useMyStyles();
-    const dispatch = useDispatch();
-    const keyword = useLoadLanguage("components/PopUp.tsv", tsv);
-    const currentLang = useSelector(state => state.language);
-    const defaultLanguage = useSelector(state => state.defaultLanguage);
+  const classes = useMyStyles();
+  const dispatch = useDispatch();
+  const keyword = useLoadLanguage("components/PopUp.tsv", tsv);
+  const currentLang = useSelector((state) => state.language);
+  const defaultLanguage = useSelector((state) => state.defaultLanguage);
 
+  const [pageUrl, setPageUrl] = useState(null);
 
-    const [pageUrl, setPageUrl] = useState(null);
+  const urlOpenAssistant = () => {
+    window.open("/popup.html#/app/assistant/" + encodeURIComponent(pageUrl));
+  };
 
+  const createScript = () => {
+    let script =
+      'var images = document.getElementsByTagName("img")\n' +
+      "var image_meta = document.querySelector('meta[property=\"og:image\"]') \n" +
+      "var video_meta = document.querySelector('meta[property=\"og:video\"]') \n" +
+      "var text_meta = document.querySelector('meta[property=\"og:title\"]') \n" +
+      'var text_found = text_meta ? text_meta.content : ""\n' +
+      'var video_found = video_meta ?  video_meta.content : ""\n' +
+      'var image = image_meta ?  image_meta.content : ""\n' +
+      "results;\n";
+    return script;
+  };
 
-    const urlOpenAssistant = () => {
-        window.open("/popup.html#/app/assistant/" + encodeURIComponent(pageUrl))
-    }
-
-
-    const createScript = () => {
-        let script =
-            "var images = document.getElementsByTagName(\"img\")\n" +
-            "var image_meta = document.querySelector('meta[property=\"og:image\"]') \n" +
-            "var video_meta = document.querySelector('meta[property=\"og:video\"]') \n" +
-            "var text_meta = document.querySelector('meta[property=\"og:title\"]') \n" +
-            "var text_found = text_meta ? text_meta.content : \"\"\n"+
-            "var video_found = video_meta ?  video_meta.content : \"\"\n"+
-            "var image = image_meta ?  image_meta.content : \"\"\n"+
-            "results;\n"
-        return script;
-    };
-
-    const getInstagramUrls = () => {
-        const script = createScript();
-        navigator.tabs.executeScript({
-            code: script
-        }, (results) => {
-            if (results) {
-                window.localStorage.setItem("instagram_result", results)
-            }
-        })
-    };
-
-    const loadData = () => {
-        //get url of window
-        navigator.tabs.query({active: true, lastFocusedWindow: true}, tabs => {
-            let url = tabs[0].url;
-            setPageUrl(url);
-            if (url.includes("instagram")){
-                getInstagramUrls()
-            }
-        })
-    }
-
-    useEffect(() => {
-        let supportedBrowserLang = getSupportedBrowserLanguage()
-
-        if (defaultLanguage !== null) {
-            if (defaultLanguage !== currentLang)  dispatch(changeLanguage(defaultLanguage))
+  const getInstagramUrls = () => {
+    const script = createScript();
+    navigator.tabs.executeScript(
+      {
+        code: script,
+      },
+      (results) => {
+        if (results) {
+          window.localStorage.setItem("instagram_result", results);
         }
+      }
+    );
+  };
 
-        else if (supportedBrowserLang !== undefined && supportedBrowserLang !== currentLang) {
-            dispatch(changeLanguage(supportedBrowserLang))
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+  const loadData = () => {
+    //get url of window
+    navigator.tabs.query({ active: true, lastFocusedWindow: true }, (tabs) => {
+      let url = tabs[0].url;
+      setPageUrl(url);
+      if (url.includes("instagram")) {
+        getInstagramUrls();
+      }
+    });
+  };
 
-    return (
-        <div className={classes.popUp}>
-            <Grid container>
-                <Grid item xs={6}>
-                    <img src={invidLogo} alt={invidLogo} style={{width: "100px"}}/>
-                </Grid>
-                <Grid item xs={6}>
-                    <img src={weVerifyLogo} alt={weVerifyLogo} style={{width: "100px"}}/>
-                </Grid>
-                <Grid item xs={12}>
-                    <Button variant="outlined" color="primary" fullWidth={true} width={"100%"} onClick={
-                        () => window.open("/popup.html#/app/tools/all")
-                    }>
-                        {keyword("open_website")}
-                    </Button>
-                </Grid>
-                <Box m={1}/>
-                <Grid item xs={12}>
-                    <Button variant="outlined" color="primary" fullWidth={true} width={"100%"} onClick={
-                        () => window.open("/popup.html#/app/assistant/")}>
-                        {keyword("open_assistant")}
-                    </Button>
-                </Grid>
-                <Box m={1}/>
-                <Grid item xs={12}>
-                    <Button variant="outlined" color="primary" fullWidth={true} width={"100%"} onMouseOver={()=>loadData()} onClick={
-                        () => urlOpenAssistant()}>
-                        {keyword("open_assistant_on_page")}
-                    </Button>
-                </Grid>
-                <Box m={1}/>
-                <Grid item xs={12}>
-                    <Button variant="outlined" color="primary" fullWidth={true} width={"100%"} onClick={
-                        () => window.open("/popup.html#/app/classroom/")}>
-                        {keyword("open_classroom")}
-                    </Button>
-                </Grid>
-            </Grid>
+  useEffect(() => {
+    let supportedBrowserLang = getSupportedBrowserLanguage();
 
-            <Box m={1}/>
-        </div>
-    )
+    if (defaultLanguage !== null) {
+      if (defaultLanguage !== currentLang)
+        dispatch(changeLanguage(defaultLanguage));
+    } else if (
+      supportedBrowserLang !== undefined &&
+      supportedBrowserLang !== currentLang
+    ) {
+      dispatch(changeLanguage(supportedBrowserLang));
+    }
+  }, []);
+
+  return (
+    <div className={classes.popUp}>
+      <Grid container>
+        <Grid item xs={6}>
+          <img src={invidLogo} alt={invidLogo} style={{ width: "100px" }} />
+        </Grid>
+        <Grid item xs={6}>
+          <img
+            src={weVerifyLogo}
+            alt={weVerifyLogo}
+            style={{ width: "100px" }}
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <Button
+            variant="outlined"
+            color="primary"
+            fullWidth={true}
+            width={"100%"}
+            onClick={() => window.open("/popup.html#/app/tools/all")}
+          >
+            {keyword("open_website")}
+          </Button>
+        </Grid>
+        <Box m={1} />
+        <Grid item xs={12}>
+          <Button
+            variant="outlined"
+            color="primary"
+            fullWidth={true}
+            width={"100%"}
+            onClick={() => window.open("/popup.html#/app/assistant/")}
+          >
+            {keyword("open_assistant")}
+          </Button>
+        </Grid>
+        <Box m={1} />
+        <Grid item xs={12}>
+          <Button
+            variant="outlined"
+            color="primary"
+            fullWidth={true}
+            width={"100%"}
+            onMouseOver={() => loadData()}
+            onClick={() => urlOpenAssistant()}
+          >
+            {keyword("open_assistant_on_page")}
+          </Button>
+        </Grid>
+        <Box m={1} />
+        <Grid item xs={12}>
+          <Button
+            variant="outlined"
+            color="primary"
+            fullWidth={true}
+            width={"100%"}
+            onClick={() => window.open("/popup.html#/app/classroom/")}
+          >
+            {keyword("open_classroom")}
+          </Button>
+        </Grid>
+      </Grid>
+
+      <Box m={1} />
+    </div>
+  );
 };
 export default PopUp;

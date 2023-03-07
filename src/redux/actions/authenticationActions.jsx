@@ -1,6 +1,6 @@
 /**
  * Authentication Redux actions.
-*/
+ */
 
 /**
  * User registration loading event.
@@ -13,7 +13,8 @@ export const AUTH_USER_REGISTRATION_SENT = "AUTH_USER_REGISTRATION_SENT";
 /**
  * Access code request loading event.
  */
-export const AUTH_ACCESS_CODE_REQUEST_LOADING = "AUTH_ACCESS_CODE_REQUEST_LOADING";
+export const AUTH_ACCESS_CODE_REQUEST_LOADING =
+  "AUTH_ACCESS_CODE_REQUEST_LOADING";
 /**
  * Access code request sent event.
  */
@@ -43,7 +44,6 @@ export const AUTH_TOKEN_REFRESHED = "AUTH_TOKEN_REFRESHED";
  */
 export const AUTH_USER_SESSION_EXPIRED = "AUTH_USER_SESSION_EXPIRED";
 
-
 /**
  *
  *
@@ -53,7 +53,7 @@ export const AUTH_USER_SESSION_EXPIRED = "AUTH_USER_SESSION_EXPIRED";
 export function userRegistrationLoadingAction(loading = true) {
   return {
     type: AUTH_USER_REGISTRATION_LOADING,
-    payload: loading
+    payload: loading,
   };
 }
 
@@ -66,9 +66,9 @@ export function userRegistrationLoadingAction(loading = true) {
 export function userRegistrationSentAction(sent = true) {
   return {
     type: AUTH_USER_REGISTRATION_SENT,
-    payload: sent
+    payload: sent,
   };
-};
+}
 
 /**
  * TODO
@@ -79,9 +79,9 @@ export function userRegistrationSentAction(sent = true) {
 export function userAccessCodeRequestLoadingAction(loading = true) {
   return {
     type: AUTH_ACCESS_CODE_REQUEST_LOADING,
-    payload: loading
+    payload: loading,
   };
-};
+}
 
 /**
  * TODO
@@ -92,9 +92,9 @@ export function userAccessCodeRequestLoadingAction(loading = true) {
 export function userAccessCodeRequestSentAction(sent = true) {
   return {
     type: AUTH_ACCESS_CODE_REQUEST_SENT,
-    payload: sent
+    payload: sent,
   };
-};
+}
 
 /**
  * TODO
@@ -105,9 +105,9 @@ export function userAccessCodeRequestSentAction(sent = true) {
 export function userLoginLoadingAction(loading = true) {
   return {
     type: AUTH_USER_LOGIN_LOADING,
-    payload: loading
+    payload: loading,
   };
-};
+}
 
 /**
  * TODO
@@ -117,17 +117,22 @@ export function userLoginLoadingAction(loading = true) {
  * @param {Object} user Logged in user information.
  * @returns
  */
-export function userLoginAction(accessToken, accessTokenExpiry, refreshToken, user) {
+export function userLoginAction(
+  accessToken,
+  accessTokenExpiry,
+  refreshToken,
+  user
+) {
   return {
     type: AUTH_USER_LOGIN,
     payload: {
       accessToken,
       accessTokenExpiry,
       refreshToken,
-      user
-    }
+      user,
+    },
   };
-};
+}
 
 /**
  * TODO
@@ -136,7 +141,7 @@ export function userLoginAction(accessToken, accessTokenExpiry, refreshToken, us
  */
 export function userLogoutAction() {
   return {
-    type: AUTH_USER_LOGOUT
+    type: AUTH_USER_LOGOUT,
   };
 }
 
@@ -154,10 +159,10 @@ export function userTokenRefreshedAction(accessToken, accessTokenExpiry, user) {
     payload: {
       accessToken,
       accessTokenExpiry,
-      user
-    }
+      user,
+    },
   };
-};
+}
 
 /**
  * TODO
@@ -166,9 +171,9 @@ export function userTokenRefreshedAction(accessToken, accessTokenExpiry, user) {
  */
 export function userSessionExpiredAction() {
   return {
-    type: AUTH_USER_SESSION_EXPIRED
+    type: AUTH_USER_SESSION_EXPIRED,
   };
-};
+}
 
 /* eslint import/no-anonymous-default-export: [2, {"allowObject": true}] */
 export default {
@@ -178,5 +183,5 @@ export default {
   userAccessCodeRequestSentAction,
   userLoginAction,
   userTokenRefreshed: userTokenRefreshedAction,
-  userSessionExpired: userSessionExpiredAction
+  userSessionExpired: userSessionExpiredAction,
 };

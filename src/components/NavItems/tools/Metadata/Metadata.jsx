@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import { useSelector } from "react-redux";
 import TextField from "@mui/material/TextField";
@@ -94,7 +94,6 @@ const Metadata = ({ mediaType }) => {
     if (urlDetected) {
       submitUrl();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [urlDetected]);
 
   const [initTool, setInitTool] = useState(true);
@@ -190,7 +189,12 @@ const Metadata = ({ mediaType }) => {
                 </RadioGroup>
               </Grid>
               <Grid item>
-                <Button type="submit" variant="contained" color="primary" onClick={submitUrl}>
+                <Button
+                  type="submit"
+                  variant="contained"
+                  color="primary"
+                  onClick={submitUrl}
+                >
                   {keyword("button_submit")}
                 </Button>
               </Grid>

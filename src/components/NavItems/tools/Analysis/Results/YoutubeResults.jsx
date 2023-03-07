@@ -1,3 +1,4 @@
+import React from "react";
 import { useDispatch } from "react-redux";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
@@ -223,9 +224,9 @@ const YoutubeResults = (props) => {
                     />
                   </div>
                   <Box m={2} />
-                  
+
                   {/* TODO: Loop through all search engines */}
-                  
+
                   <Button
                     className={classes.button}
                     variant="contained"

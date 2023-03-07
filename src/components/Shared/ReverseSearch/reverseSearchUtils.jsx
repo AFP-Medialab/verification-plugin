@@ -154,14 +154,14 @@ export const b64toBlob = (content, contentType = "", sliceSize = 512) => {
   return new ImageObject(blob, IMAGE_FORMATS.BLOB);
 };
 
-const blobToBase64 = async (blob) => {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(reader.result);
-    reader.error = (err) => reject(err);
-    reader.readAsDataURL(blob);
-  });
-};
+// const blobToBase64 = async (blob) => {
+//   return new Promise((resolve, reject) => {
+//     const reader = new FileReader();
+//     reader.onload = () => resolve(reader.result);
+//     reader.error = (err) => reject(err);
+//     reader.readAsDataURL(blob);
+//   });
+// };
 
 export const loadImage = (src, reverseSearchFunction) => {
   window.body.style.cursor = "wait";
@@ -179,7 +179,7 @@ export const loadImage = (src, reverseSearchFunction) => {
     canvas.remove();
   };
   img.onerror = (error) => {
-    console.log("failed to load image");
+    console.log("failed to load image", error);
     if (document !== undefined) {
       document.body.style.cursor = "default";
     }
@@ -197,7 +197,7 @@ export const reverseImageSearchDBKF = (imgUrl) => {
   });
 
   // Google analytics
-  rightClickEvent("Image Reverse Search - DBKF (beta)", url);
+  // rightClickEvent("Image Reverse Search - DBKF (beta)", url);
 };
 
 export const reverseImageSearchBaidu = (imgBlob) => {
@@ -382,7 +382,7 @@ export const getLocalImageFromSourcePath = async (src, imgFormat) => {
 
   const blob = await (await fetch(src)).blob();
 
-  const url = URL.createObjectURL(blob);
+  // const url = URL.createObjectURL(blob);
 
   if (imgFormat === IMAGE_FORMATS.BLOB) {
     return new ImageObject(blob, IMAGE_FORMATS.BLOB);

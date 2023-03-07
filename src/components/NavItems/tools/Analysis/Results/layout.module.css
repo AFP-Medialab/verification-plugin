@@ -1,27 +1,24 @@
 .container {
-  overflow:scroll;
-  height:100px;
-  }
-.size{
-  font-size:14px;
+  overflow: scroll;
+  height: 100px;
+}
+.size {
+  font-size: 14px;
   font-style: normal;
   font-weight: normal;
-  width:180px;
-}  
-.margin{
+  width: 180px;
+}
+.margin {
   text-align: center;
   margin-left: 100px;
 }
-.inline{
-  display:inline-block;
-  font-size:medium;
+.inline {
+  display: inline-block;
+  font-size: medium;
   padding-right: 30px;
   padding-left: 30px;
 }
-.margin1{
+.margin1 {
   margin-left: 100px;
   margin-right: 100px;
-  
-
 }
-  

@@ -1,3 +1,4 @@
+import React from "react";
 import { useDispatch } from "react-redux";
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 import CloseResult from "../../../../Shared/CloseResult/CloseResult";
@@ -46,7 +47,7 @@ const AFacebookResults = (props) => {
         dispatch(cleanAnalysisState());
       })
       .catch((err) => {
-        console.log("error calling delete service");
+        console.log("error calling delete service", err);
         dispatch(cleanAnalysisState());
       });
   };

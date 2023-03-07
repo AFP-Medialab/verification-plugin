@@ -1,4 +1,4 @@
-import { useState, createRef } from "react";
+import React, { useState, createRef } from "react";
 import Loop from "./Loop";
 import Box from "@mui/material/Box";
 import { useDispatch, useSelector } from "react-redux";
@@ -8,10 +8,6 @@ import ImageEditor from "../Utils/ImageEditor";
 import Fade from "@mui/material/Fade";
 import Modal from "@mui/material/Modal";
 import Backdrop from "@mui/material/Backdrop";
-import icona from "tui-image-editor/dist/svg/icon-a.svg";
-import iconb from "tui-image-editor/dist/svg/icon-b.svg";
-import iconc from "tui-image-editor/dist/svg/icon-c.svg";
-import icond from "tui-image-editor/dist/svg/icon-d.svg";
 import Grid from "@mui/material/Grid";
 import {
   cleanMagnifierState,

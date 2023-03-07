@@ -1,23 +1,22 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialState = null
+const initialState = null;
 
 const defaultLanguageSlice = createSlice({
-    name: "defaultLanguage",
-    initialState,
-    reducers:{
-        changeDefaultLanguage(state, action){
-            return action.payload
-        }
-    }
-})
+  name: "defaultLanguage",
+  initialState,
+  reducers: {
+    changeDefaultLanguage(state, action) {
+      return action.payload;
+    },
+  },
+});
 
-export const {changeDefaultLanguage} = defaultLanguageSlice.actions
+export const { changeDefaultLanguage } = defaultLanguageSlice.actions;
 
-const defaultLanguageReducer = defaultLanguageSlice.reducer
+const defaultLanguageReducer = defaultLanguageSlice.reducer;
 
 export default defaultLanguageReducer;
-
 
 /*const defaultLanguageReducer = (state = null, action) => {
     switch (action.type) {
