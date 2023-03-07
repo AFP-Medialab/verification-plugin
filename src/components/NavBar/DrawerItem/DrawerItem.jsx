@@ -29,7 +29,6 @@ import {
   getclientId,
 } from "../../Shared/GoogleAnalytics/MatomoAnalytics";
 
-
 const DrawerItem = ({ drawerItems }) => {
   const drawerItemsContent = [
     {

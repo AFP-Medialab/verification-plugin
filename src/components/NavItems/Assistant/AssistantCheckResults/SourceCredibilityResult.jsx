@@ -55,12 +55,16 @@ const SourceCredibilityResult = (props) => {
                   >
                     {value.credibility_labels ? (
                       <Typography variant={"subtitle2"}>
-                        {` ${keyword("labelled_as")} ${value.credibility_labels} `}
+                        {` ${keyword("labelled_as")} ${
+                          value.credibility_labels
+                        } `}
                       </Typography>
                     ) : null}
                     {value.credibility_description ? (
                       <Typography variant={"subtitle2"}>
-                        {` ${keyword("commented_as")} ${value.credibility_description} `}
+                        {` ${keyword("commented_as")} ${
+                          value.credibility_description
+                        } `}
                       </Typography>
                     ) : null}
                     {value.credibility_evidence.length > 0 ? (

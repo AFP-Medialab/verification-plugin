@@ -34,7 +34,6 @@ export const get = (obj, key, fallback) => {
   );
 };
 
-
 export default {
   fontFamily:
     '-apple-system, BlinkMacSystemFont, Arial, Arial Unicode, "Helvetica Neue", Helvetica, "Hiragino Sans GB", "Microsoft YaHei", SimSun, sans-serif',

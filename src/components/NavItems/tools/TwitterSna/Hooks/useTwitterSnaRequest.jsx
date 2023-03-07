@@ -62,7 +62,9 @@ const useTwitterSnaRequest = (request) => {
           storeLanguage
       );
       dispatch(setTwitterSnaLoading(false));
-    } else { /* TODO:empty */ }
+    } else {
+      /* TODO:empty */
+    }
   }, [JSON.stringify(request)]);
 };
 export default useTwitterSnaRequest;

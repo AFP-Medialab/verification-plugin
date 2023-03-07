@@ -79,7 +79,9 @@ const CommentsPanel = (props) => {
           setCount_comments(1);
           dispatch(props.setCommentsAction(response.data));
         })
-        .catch((err) => {console.error(err)});
+        .catch((err) => {
+          console.error(err);
+        });
     }
   };
   const handleClick_last_page = () => {
@@ -90,7 +92,9 @@ const CommentsPanel = (props) => {
           setCount_comments(last_page_all_comments);
           dispatch(props.setCommentsAction(response.data));
         })
-        .catch((err) => {console.error(err)});
+        .catch((err) => {
+          console.error(err);
+        });
     }
   };
   const handleClick_next_page = () => {
@@ -103,7 +107,9 @@ const CommentsPanel = (props) => {
             dispatch(props.setCommentsAction(response.data));
           }
         })
-        .catch((err) => {console.error(err)});
+        .catch((err) => {
+          console.error(err);
+        });
     }
   };
 
@@ -117,7 +123,9 @@ const CommentsPanel = (props) => {
             dispatch(props.setCommentsAction(response.data));
           }
         })
-        .catch((err) => {console.error(err)});
+        .catch((err) => {
+          console.error(err);
+        });
     }
   };
   const dispatch = useDispatch();

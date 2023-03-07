@@ -45,7 +45,9 @@ export const useAnalysisWrapper = (
           setCpt(cpt + 1);
         }
       })
-      .catch((error) => {console.error(error)});
+      .catch((error) => {
+        console.error(error);
+      });
   };
   const getReport = (id, processing) => {
     axios
