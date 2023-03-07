@@ -81,52 +81,57 @@ const AssistantUrlSelected = (props) => {
 
         <CardContent>
           <Box mr={2}>
-            <Grid container>
-              <Grid item xs={10}>
-                <TextField
-                  variant="outlined"
-                  label={keyword("assistant_paste_url")}
-                  style={{ margin: 8 }}
-                  placeholder={""}
-                  fullWidth
-                  value={formInput || ""}
-                  onChange={(e) => setFormInput(e.target.value)}
-                />
-              </Grid>
-              <Grid item xs={2}>
-                <Box mt={2} ml={6}>
-                  {inputUrl === null ? (
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      onClick={handleSubmissionURL}
-                    >
-                      {keyword("button_analyse")}
-                    </Button>
-                  ) : (
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      onClick={() => cleanAssistant()}
-                    >
-                      {keyword("button_clean")}
-                    </Button>
-                  )}
-                </Box>
-              </Grid>
-              {inputUrl === null ? null : (
-                <Grid item xs={1}>
-                  <Box ml={1}>
-                    <Button
-                      onClick={() => handleArchive()}
-                      startIcon={<ArchiveOutlinedIcon />}
-                    >
-                      <label>{keyword("archive_link")}</label>
-                    </Button>
+            <form>
+              <Grid container>
+                <Grid item xs={10}>
+                  <TextField
+                    variant="outlined"
+                    label={keyword("assistant_paste_url")}
+                    style={{ margin: 8 }}
+                    placeholder={""}
+                    fullWidth
+                    value={formInput || ""}
+                    onChange={(e) => setFormInput(e.target.value)}
+                  />
+                </Grid>
+                <Grid item xs={2}>
+                  <Box mt={2} ml={6}>
+                    {inputUrl === null ? (
+                      <Button
+                        type="submit"
+                        variant="contained"
+                        color="primary"
+                        onClick={(e) => {
+                          e.preventDefault(), handleSubmissionURL();
+                        }}
+                      >
+                        {keyword("button_analyse")}
+                      </Button>
+                    ) : (
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={() => cleanAssistant()}
+                      >
+                        {keyword("button_clean")}
+                      </Button>
+                    )}
                   </Box>
                 </Grid>
-              )}
-            </Grid>
+                {inputUrl === null ? null : (
+                  <Grid item xs={1}>
+                    <Box ml={1}>
+                      <Button
+                        onClick={() => handleArchive()}
+                        startIcon={<ArchiveOutlinedIcon />}
+                      >
+                        <label>{keyword("archive_link")}</label>
+                      </Button>
+                    </Box>
+                  </Grid>
+                )}
+              </Grid>
+            </form>
           </Box>
         </CardContent>
       </Card>
