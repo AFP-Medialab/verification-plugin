@@ -95,6 +95,79 @@ const imageForensic = (info) => {
   }
 };
 
+function contextClick(info, tab) {
+  const { menuItemId } = info;
+
+  switch (menuItemId) {
+    case "assistant":
+      mediaAssistant(info);
+      break;
+    case "ocr":
+      ocr(info);
+      break;
+    case "thumbnail":
+      thumbnailsSearch(info);
+      break;
+    case "dbkf":
+      videoReversesearchDBKF(info);
+      break;
+    case "video_analysis":
+      analysisVideo(info);
+      break;
+    case "magnifier":
+      imageMagnifier(info);
+      break;
+    case "forensic":
+      imageForensic(info);
+      break;
+    case SEARCH_ENGINE_SETTINGS.ALL.CONTEXT_MENU_ID:
+      reverseImageSearchAll(info, false);
+      break;
+    case SEARCH_ENGINE_SETTINGS.DBKF_SEARCH.CONTEXT_MENU_ID:
+      reverseImageSearch(info, false, SEARCH_ENGINE_SETTINGS.DBKF_SEARCH.NAME);
+      break;
+    case SEARCH_ENGINE_SETTINGS.GOOGLE_SEARCH.CONTEXT_MENU_ID:
+      reverseImageSearch(info, true, SEARCH_ENGINE_SETTINGS.GOOGLE_SEARCH.NAME);
+      break;
+    case SEARCH_ENGINE_SETTINGS.GOOGLE_LENS_SEARCH.CONTEXT_MENU_ID:
+      reverseImageSearch(
+        info,
+        false,
+        SEARCH_ENGINE_SETTINGS.GOOGLE_LENS_SEARCH.NAME
+      );
+      break;
+    case SEARCH_ENGINE_SETTINGS.YANDEX_SEARCH.CONTEXT_MENU_ID:
+      reverseImageSearch(
+        info,
+        false,
+        SEARCH_ENGINE_SETTINGS.YANDEX_SEARCH.NAME
+      );
+      break;
+    case SEARCH_ENGINE_SETTINGS.BING_SEARCH.CONTEXT_MENU_ID:
+      reverseImageSearch(info, false, SEARCH_ENGINE_SETTINGS.BING_SEARCH.NAME);
+      break;
+    case SEARCH_ENGINE_SETTINGS.TINEYE_SEARCH.CONTEXT_MENU_ID:
+      reverseImageSearch(
+        info,
+        false,
+        SEARCH_ENGINE_SETTINGS.TINEYE_SEARCH.NAME
+      );
+      break;
+    case SEARCH_ENGINE_SETTINGS.BAIDU_SEARCH.CONTEXT_MENU_ID:
+      reverseImageSearch(info, false, SEARCH_ENGINE_SETTINGS.BAIDU_SEARCH.NAME);
+      break;
+    case SEARCH_ENGINE_SETTINGS.REDDIT_SEARCH.CONTEXT_MENU_ID:
+      reverseImageSearch(
+        info,
+        false,
+        SEARCH_ENGINE_SETTINGS.REDDIT_SEARCH.NAME
+      );
+      break;
+    default:
+      break;
+  }
+}
+
 chrome.runtime.onInstalled.addListener(() => {
   chrome.contextMenus.create({
     id: "assistant",
@@ -184,78 +257,6 @@ chrome.runtime.onInstalled.addListener(() => {
     title: SEARCH_ENGINE_SETTINGS.REDDIT_SEARCH.CONTEXT_MENU_TITLE,
     contexts: ["image"],
   });
+
+  chrome.contextMenus.onClicked.addListener(contextClick);
 });
-
-function contextClick(info, tab) {
-  const { menuItemId } = info;
-  switch (menuItemId) {
-    case "assistant":
-      mediaAssistant(info);
-      break;
-    case "ocr":
-      ocr(info);
-      break;
-    case "thumbnail":
-      thumbnailsSearch(info);
-      break;
-    case "dbkf":
-      videoReversesearchDBKF(info);
-      break;
-    case "video_analysis":
-      analysisVideo(info);
-      break;
-    case "magnifier":
-      imageMagnifier(info);
-      break;
-    case "forensic":
-      imageForensic(info);
-      break;
-    case SEARCH_ENGINE_SETTINGS.ALL.CONTEXT_MENU_ID:
-      reverseImageSearchAll(info, false);
-      break;
-    case SEARCH_ENGINE_SETTINGS.DBKF_SEARCH.CONTEXT_MENU_ID:
-      reverseImageSearch(info, false, SEARCH_ENGINE_SETTINGS.DBKF_SEARCH.NAME);
-      break;
-    case SEARCH_ENGINE_SETTINGS.GOOGLE_SEARCH.CONTEXT_MENU_ID:
-      reverseImageSearch(info, true, SEARCH_ENGINE_SETTINGS.GOOGLE_SEARCH.NAME);
-      break;
-    case SEARCH_ENGINE_SETTINGS.GOOGLE_LENS_SEARCH.CONTEXT_MENU_ID:
-      reverseImageSearch(
-        info,
-        false,
-        SEARCH_ENGINE_SETTINGS.GOOGLE_LENS_SEARCH.NAME
-      );
-      break;
-    case SEARCH_ENGINE_SETTINGS.YANDEX_SEARCH.CONTEXT_MENU_ID:
-      reverseImageSearch(
-        info,
-        false,
-        SEARCH_ENGINE_SETTINGS.YANDEX_SEARCH.NAME
-      );
-      break;
-    case SEARCH_ENGINE_SETTINGS.BING_SEARCH.CONTEXT_MENU_ID:
-      reverseImageSearch(info, false, SEARCH_ENGINE_SETTINGS.BING_SEARCH.NAME);
-      break;
-    case SEARCH_ENGINE_SETTINGS.TINEYE_SEARCH.CONTEXT_MENU_ID:
-      reverseImageSearch(
-        info,
-        false,
-        SEARCH_ENGINE_SETTINGS.TINEYE_SEARCH.NAME
-      );
-      break;
-    case SEARCH_ENGINE_SETTINGS.BAIDU_SEARCH.CONTEXT_MENU_ID:
-      reverseImageSearch(info, false, SEARCH_ENGINE_SETTINGS.BAIDU_SEARCH.NAME);
-      break;
-    case SEARCH_ENGINE_SETTINGS.REDDIT_SEARCH.CONTEXT_MENU_ID:
-      reverseImageSearch(
-        info,
-        false,
-        SEARCH_ENGINE_SETTINGS.REDDIT_SEARCH.NAME
-      );
-      break;
-    default:
-      break;
-  }
-}
-
-chrome.contextMenus.onClicked.addListener(contextClick);
