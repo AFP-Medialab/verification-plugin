@@ -98,8 +98,6 @@ const imageForensic = (info) => {
 function contextClick(info, tab) {
   const { menuItemId } = info;
 
-  console.log(info);
-
   switch (menuItemId) {
     case "assistant":
       mediaAssistant(info);
