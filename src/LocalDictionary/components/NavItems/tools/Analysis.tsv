@@ -15,8 +15,10 @@ facebook_video_name_6	Video description	Description de la vidéo	Descripción de
 facebook_video_name_7	Like count	Nombre de ''j'aime''	Número de ''me gusta''	Αριθμός likes
 facebook_video_name_8	Updated time	Date de mise en ligne	Fecha de puesta en línea	Ώρα ενημέρωσης
 facebook_video_name_9	Created time	Date de création	Fecha de creación	Ώρα δημιουγίας
+facebook_image_caption	Caption	Légende	Subtítulo	Λεζάντα
 facebook_comment_title	Comments	Commentaires	Comentarios	Σχόλια
 facebook_comment_name_1	Video comment count	Nombre de commentaires	Comentarios sobre el video	Αριθμός σχολίων βίντεο
+facebook_delete_result	Remove result	Effacer le résultat	Borrar el resultado 	Διαγραφή του αποτελέσματος της διαδικασίας
 image_comment_count	Image comment count	Nombre de commentaires d'image	Recuento de comentarios de imagen	Αριθμός σχολίων εικόνας
 facebook_comment_name_2	Number verification comments	Nombre de commentaires vérifiés	Número de comentarios verificados	Αριθμός σχολίων επαλήθευσης
 twitter_user_name_13	Created	Date de création	Fecha de creación	Δημιουργήθηκε
@@ -70,6 +72,11 @@ youtube_channel_title	Channel:	Chaîne:	Cadena:	Κανάλι:
 youtube_comment_name_1	Video comment count	Nombre de commentaires	Número de comentarios	Αριθμός σχολίων βίντεο
 convert_to_local_time	Convert to local time	Convertir à l'heure locale	Pasar a la hora local	Μετατροπή σε τοπική ώρα
 table_error_unavailable	This url is not valid	Cette URL n'est pas valide	Esta url no es válida	Αυτή η διεύθυνση URL δεν είναι έγκυρη
+table_error_no_image_id	We cannot extract an image ID from the submitted URL. Please note also that Facebook does not allow us to process photos from Users or Groups.	Nous ne pouvons pas extraire un ID d'image à partir de l'URL soumise. Veuillez également noter que Facebook ne nous permet pas de traiter les photos des utilisateurs ou des groupes.	No podemos extraer una identificación de imagen de la URL enviada. Tenga en cuenta también que Facebook no nos permite procesar fotos de Usuarios o Grupos.	Δεν μπορούμε να εξαγάγουμε ένα αναγνωριστικό εικόνας από την υποβληθείσα διεύθυνση URL. Λάβετε επίσης υπόψη ότι το Facebook δεν μας επιτρέπει να επεξεργαζόμαστε φωτογραφίες από Χρήστες ή Ομάδες.
+table_error_no_video_id	We cannot extract an video ID from the submitted URL. Please note also that Facebook does not allow us to process videos from Users or Groups.	Nous ne pouvons pas extraire un ID vidéo de l'URL soumise. Veuillez également noter que Facebook ne nous permet pas de traiter les vidéos des Utilisateurs ou des Groupes.	No podemos extraer una identificación de video de la URL enviada. Tenga en cuenta también que Facebook no nos permite procesar videos de Usuarios o Grupos.	Δεν μπορούμε να εξαγάγουμε ένα αναγνωριστικό βίντεο από την υποβληθείσα διεύθυνση URL. Σημειώστε επίσης ότι το Facebook δεν μας επιτρέπει να επεξεργαζόμαστε βίντεο από Χρήστες ή Ομάδες.
+table_error_unavailable_image	This image is not available	Cette image n'est pas disponible	Esta imagen no es disponible	Αυτή η εικόνα δεν είναι διαθέσιμη
+table_error_unavailable_video	We cannot process this video. Please note also that Facebook does not allow us to process videos from Users or Groups.	Nous ne pouvons pas traiter cette vidéo. Veuillez également noter que Facebook ne nous permet pas de traiter les vidéos des Utilisateurs ou des Groupes.	No podemos procesar este video. Tenga en cuenta también que Facebook no nos permite procesar videos de Usuarios o Grupos.	Αυτό το βίντεο δεν είναι διαθέσιμο. Σημειώστε επίσης ότι το Facebook δεν μας επιτρέπει να επεξεργαζόμαστε βίντεο από Χρήστες ή Ομάδες.
+table_error_unsupported_platform	Content from this platform are not supported by this service	Le contenu de cette plateforme n'est pas pris en charge par ce service	El contenido de esta plataforma no es compatible con este servicio	Το περιεχόμενο από αυτήν την πλατφόρμα δεν υποστηρίζεται από αυτήν την υπηρεσία
 page_number	out of	de	sobre	Εκτός
 api_title_image	Image contextual verification	Vérification du contexte de la image	Verificación del contexto del imagen	Επαλήθευση με βάση τα συμφραζόμενα της εικόνας
 link_comments	Comments that contain links	Commentaires contenant des liens	Comentarios que contienen enlaces	Σχόλια που περιέχουν συνδέσμους
@@ -83,6 +90,7 @@ comments_links	Number of comments that contain links	Nombre de commentaires cont
 facebook_tip	This kind of Facebook link or shortener is not working properly. Try to click on the video and to get the url address instead. 	Ce genre de lien ou raccourci de Facebook ne fonctionne pas correctement. Cliquez sur la vidéo et récupérer le lien de la barre d'adresse URL.	Este tipo de enlace o de acortador de Facebook no funciona correctamente. Intenté cliquear sobre el video y de recuperar el enlace en la barra de URL. 	ΜΑυτό το είδος του συνδέσμου Facebook ή του shortener δεν λειτουργεί σωστά. Προσπαθήστε να κάνετε κλικ στο βίντεο και να λάβετε τη διεύθυνση url.
 api_input_image	Facebook or Twitter link	Adresse Facebook ou Twitter	Enlace de Facebook o Twitter	Σύνδεσμος Facebook ή Twitter
 image_description	Image description	Description de l'image	Descripción de la imagen	περιγραφή εικόνας
+video_description	Video description	Description de la vidéo	Descripción del video	Περιγραφή βίντεο
 twitter_reply	All replies	Toutes les réponses	Todas las respuestas	Όλες οι απαντήσεις
 twitter_reply_verified	Verification replies	Réponses de vérification	Respuestas de verificación	Απαντήσεις επαλήθευσης
 twitter_reply_link	Replies that contain links	Réponses contenant des liens	Respuestas que contienen enlaces	Απαντήσεις που περιέχουν συνδέσμους
