@@ -115,6 +115,7 @@ const styles = (theme) => ({
   drawerListText: {
     fontWeight: "500",
     fontSize: "14px",
+    textAlign: "start",
   },
 
   drawerListTextClosed: {
@@ -125,10 +126,6 @@ const styles = (theme) => ({
 
   drawerListHeadingCenter: {
     textAlign: "center",
-  },
-
-  drawerListHeadingLeft: {
-    textAlign: "start",
   },
 
   drawerListIcon: {

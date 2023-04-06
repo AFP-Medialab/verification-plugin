@@ -1401,8 +1401,8 @@ const NavBar = (props) => {
                 paddingTop: "16px",
                 paddingBottom: "16px",
                 backgroundColor: "#ffffff",
+                textAlign: "start",
               }}
-              className={classListHeading}
             >
               <Typography
                 type="body1"
