@@ -93,37 +93,35 @@ const AssistantFileSelected = () => {
   };
 
   return (
-    <Box my={3} boxShadow={3}>
-      <Card variant={"outlined"}>
-        <CardHeader
-          className={classes.assistantCardHeader}
-          title={
-            <Typography style={{ fontWeight: "bold", fontSize: 20 }}>
-              {keyword("assistant_choose_tool")}
-            </Typography>
-          }
-        />
-        <CardContent>
-          <Grid container spacing={3}>
-            {generateList(
-              keyword("upload_image"),
-              CONTENT_TYPE.IMAGE,
-              imageActions
-            )}
-            <Divider
-              orientation="vertical"
-              flexItem
-              style={{ marginRight: "-1px", marginTop: "20px" }}
-            />
-            {generateList(
-              keyword("upload_video"),
-              CONTENT_TYPE.VIDEO,
-              videoActions
-            )}
-          </Grid>
-        </CardContent>
-      </Card>
-    </Box>
+    <Card>
+      <CardHeader
+        className={classes.assistantCardHeader}
+        title={
+          <Typography style={{ fontWeight: "bold", fontSize: 20 }}>
+            {keyword("assistant_choose_tool")}
+          </Typography>
+        }
+      />
+      <CardContent>
+        <Grid container spacing={3}>
+          {generateList(
+            keyword("upload_image"),
+            CONTENT_TYPE.IMAGE,
+            imageActions
+          )}
+          <Divider
+            orientation="vertical"
+            flexItem
+            style={{ marginRight: "-1px", marginTop: "20px" }}
+          />
+          {generateList(
+            keyword("upload_video"),
+            CONTENT_TYPE.VIDEO,
+            videoActions
+          )}
+        </Grid>
+      </CardContent>
+    </Card>
   );
 };
 export default AssistantFileSelected;

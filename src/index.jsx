@@ -17,6 +17,7 @@ function saveToLocalStorage(state) {
       interactiveExplanation: state.interactiveExplanation,
       language: state.language,
       defaultLanguage: state.defaultLanguage,
+      ltr: state.ltr,
       cookies: state.cookies,
       googleAnalytic: state.googleAnalytic,
       userSession: state.userSession,

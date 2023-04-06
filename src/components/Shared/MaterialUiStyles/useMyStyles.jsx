@@ -1,7 +1,8 @@
 import { green } from "@mui/material/colors";
 import useClasses from "./useClasses";
 
-const drawerWidth = 300;
+const drawerWidthOpen = 300;
+const drawerWidthClose = 85;
 
 const styles = (theme) => ({
   root: {
@@ -64,7 +65,7 @@ const styles = (theme) => ({
     display: "flex",
   },
   drawer: {
-    width: drawerWidth,
+    width: drawerWidthOpen,
     flexShrink: 0,
     whiteSpace: "nowrap",
     overflowX: "hidden",
@@ -75,15 +76,15 @@ const styles = (theme) => ({
   },
 
   drawerWidth: {
-    width: "300px",
+    width: drawerWidthOpen,
   },
 
   drawerWidthClose: {
-    width: "84px",
+    width: drawerWidthClose,
   },
 
   drawerOpen: {
-    width: drawerWidth,
+    width: drawerWidthOpen,
     transition: theme.transitions.create("width", {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
@@ -92,25 +93,34 @@ const styles = (theme) => ({
     "&::-webkit-scrollbar": {
       display: "none",
     },
+    left: "auto",
   },
+
   drawerClose: {
     transition: theme.transitions.create("width", {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
     overflowX: "hidden",
-    width: "85px",
+    width: drawerWidthClose,
     [theme.breakpoints.up("sm")]: {
-      width: "85px",
+      width: drawerWidthClose,
     },
     "&::-webkit-scrollbar": {
       display: "none",
     },
+    left: "auto",
   },
 
   drawerListText: {
     fontWeight: "500",
     fontSize: "14px",
+  },
+
+  drawerListTextClosed: {
+    fontWeight: "500",
+    fontSize: "14px",
+    display: "none",
   },
 
   drawerListHeadingCenter: {
@@ -472,7 +482,7 @@ const styles = (theme) => ({
   assistantGrid: {
     width: "100%",
     marginBottom: 2,
-    textAlign: "left",
+    textAlign: "initial",
     font: theme.typography.h6.fontSize,
   },
   assistantHover: {
@@ -798,7 +808,7 @@ const styles = (theme) => ({
     borderRadius: "10px",
   },
 
-  hideElement: {
+  hidden: {
     display: "none",
   },
 
@@ -806,7 +816,7 @@ const styles = (theme) => ({
     display: "block",
   },
 });
-const cardStyles = (theme) => ({
+const cardStyles = () => ({
   root: {
     overflow: "visible",
   },

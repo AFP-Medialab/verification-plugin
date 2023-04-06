@@ -124,8 +124,8 @@ const KeyFramesResults = (props) => {
 
   const [loadingSimple, setLoadingSimple] = useState(true);
   const [loadingDetailed, setLoadingDetailed] = useState(true);
-  const [classSimple, setClassSimple] = useState(classes.hideElement);
-  const [classDetailed, setClassDetailed] = useState(classes.hideElement);
+  const [classSimple, setClassSimple] = useState(classes.hidden);
+  const [classDetailed, setClassDetailed] = useState(classes.hidden);
 
   const showElementsSimple = () => {
     setLoadingSimple(false);

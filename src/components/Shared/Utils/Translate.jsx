@@ -1,4 +1,5 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import TranslateIcon from "@mui/icons-material/Translate";
 import Button from "@mui/material/Button";
 import useLoadLanguage from "../../../Hooks/useLoadLanguage";
@@ -34,4 +35,9 @@ export const Translate = ({ text, type }) => {
       <TranslateIcon color={"primary"} />
     </IconButton>
   );
+};
+
+export const isCurrentLanguageLeftToRight = () => {
+  const language = useSelector((state) => state.language);
+  return language !== "ar";
 };

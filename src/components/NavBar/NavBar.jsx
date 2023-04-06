@@ -83,6 +83,7 @@ import Typography from "@mui/material/Typography";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 import { Link, useNavigate } from "react-router-dom";
+import { isCurrentLanguageLeftToRight } from "../Shared/Utils/Translate";
 
 function a11yProps(index) {
   return {
@@ -1290,7 +1291,10 @@ const NavBar = (props) => {
   //const [value, setValue] = useState(null);
 
   return (
-    <div className={classes.flex}>
+    <div
+      dir={isCurrentLanguageLeftToRight() ? null : "rtl"}
+      className={classes.flex}
+    >
       <Snackbar
         open={openAlert}
         autoHideDuration={6000}
@@ -1385,7 +1389,13 @@ const NavBar = (props) => {
           ref={drawerRef}
           open={open}
         >
-          <List style={{ marginTop: "80px", paddingLeft: "4px" }}>
+          <List
+            style={{
+              marginTop: "80px",
+              paddingLeft: isCurrentLanguageLeftToRight() ? "4px" : null,
+              paddingRight: isCurrentLanguageLeftToRight() ? null : "4px",
+            }}
+          >
             <ListSubheader
               style={{
                 paddingTop: "16px",
@@ -1426,7 +1436,12 @@ const NavBar = (props) => {
               </ListItemIcon>
               <ListItemText
                 primary={
-                  <Typography type="body1" className={classes.drawerListText}>
+                  <Typography
+                    type="body1"
+                    className={`${
+                      open ? classes.drawerListText : classes.hidden
+                    }`}
+                  >
                     {keyword(toolsItem.title)}
                   </Typography>
                 }
@@ -1449,7 +1464,9 @@ const NavBar = (props) => {
                       primary={
                         <Typography
                           type="body1"
-                          className={classes.drawerListText}
+                          className={`${
+                            open ? classes.drawerListText : classes.hidden
+                          }`}
                         >
                           {item.title}
                         </Typography>
@@ -1498,7 +1515,11 @@ const NavBar = (props) => {
                               primary={
                                 <Typography
                                   type="body1"
-                                  className={classes.drawerListText}
+                                  className={`${
+                                    open
+                                      ? classes.drawerListText
+                                      : classes.hidden
+                                  }`}
                                 >
                                   {keyword(itemList.title)}
                                 </Typography>
@@ -1585,7 +1606,9 @@ const NavBar = (props) => {
                     primary={
                       <Typography
                         type="body1"
-                        className={classes.drawerListText}
+                        className={`${
+                          open ? classes.drawerListText : classes.hidden
+                        }`}
                       >
                         {keyword(item.title)}
                       </Typography>
