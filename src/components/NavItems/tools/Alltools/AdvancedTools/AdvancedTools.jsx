@@ -343,7 +343,7 @@ const AdvancedTools = () => {
 
               <Typography
                 variant="body2"
-                style={{ color: "#818B95", textAlign: "left" }}
+                style={{ color: "#818B95", textAlign: "start" }}
               >
                 {keyword("text_alreadycode")}
                 <span
@@ -364,7 +364,7 @@ const AdvancedTools = () => {
                 <Grid container direction="column" style={{ width: "100%" }}>
                   <Typography
                     variant="body2"
-                    style={{ color: "#818B95", textAlign: "left" }}
+                    style={{ color: "#818B95", textAlign: "start" }}
                   >
                     {messageI18NResolver("REGISTRATIONFORM_TITLE")}
                   </Typography>

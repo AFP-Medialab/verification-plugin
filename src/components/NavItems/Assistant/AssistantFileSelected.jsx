@@ -48,7 +48,7 @@ const AssistantFileSelected = () => {
       <Grid item xs={6}>
         <Box mx={2} my={0.5}>
           <Typography
-            align={"left"}
+            textAlign={"start"}
             variant={"h6"}
             style={{ fontWeight: "bold" }}
           >
@@ -70,14 +70,18 @@ const AssistantFileSelected = () => {
                     </ListItemAvatar>
                     <ListItemText
                       primary={
-                        <Typography component={"span"}>
+                        <Typography textAlign={"start"} component={"span"}>
                           <Box fontWeight="fontWeightBold">
                             {keyword(action.title)}
                           </Box>
                         </Typography>
                       }
                       secondary={
-                        <Typography color={"textSecondary"} component={"span"}>
+                        <Typography
+                          textAlign={"start"}
+                          color={"textSecondary"}
+                          component={"span"}
+                        >
                           <Box fontStyle="italic">{keyword(action.text)}</Box>
                         </Typography>
                       }

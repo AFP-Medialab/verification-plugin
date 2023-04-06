@@ -128,7 +128,7 @@ const styles = (theme) => ({
   },
 
   drawerListHeadingLeft: {
-    textAlign: "left",
+    textAlign: "start",
   },
 
   drawerListIcon: {
@@ -186,7 +186,7 @@ const styles = (theme) => ({
   popUp: {
     width: "300px",
     padding: theme.spacing(1, 2),
-    textAlign: "center",
+    textAlign: "start",
   },
   grow: {
     flexGrow: 1,
@@ -212,7 +212,7 @@ const styles = (theme) => ({
   textPaper: {
     elevation: 4,
     padding: theme.spacing(1, 2),
-    textAlign: "left",
+    textAlign: "start",
   },
   footer: {
     padding: theme.spacing(10, 5),
@@ -465,34 +465,11 @@ const styles = (theme) => ({
   assistantCardHeader: {
     fontSize: theme.typography.h6.fontSize,
     color: "white",
-    textAlign: "left",
+    textAlign: "start",
     backgroundColor: theme.palette.primary.main,
-  },
-  assistantTooltip: {
-    backgroundColor: theme.palette.secondary,
-    opacity: 0.9,
-    fontSize: "1.2rem",
-    maxWidth: 700,
-    textAlign: "left",
-    fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
-    fontWeight: 40,
-    lineHeight: 1.5,
-    letterSpacing: "0.00938em",
-  },
-  assistantGrid: {
-    width: "100%",
-    marginBottom: 2,
-    textAlign: "initial",
-    font: theme.typography.h6.fontSize,
   },
   assistantHover: {
     borderWidth: 3,
-    "&:hover": {
-      borderColor: theme.palette.primary.main,
-    },
-  },
-  assistantSelected: {
-    borderColor: theme.palette.primary.main,
     "&:hover": {
       borderColor: theme.palette.primary.main,
     },

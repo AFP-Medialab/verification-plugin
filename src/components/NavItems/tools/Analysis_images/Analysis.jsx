@@ -35,7 +35,6 @@ import {
   setAnalysisLoading,
   setAnalysisResult,
 } from "../../../../redux/actions/tools/image_analysisActions";
-import { isCurrentLanguageLeftToRight } from "../../../Shared/Utils/Translate";
 
 const Analysis = () => {
   const caa_analysis_url = process.env.REACT_APP_CAA_ANALYSIS_URL;
