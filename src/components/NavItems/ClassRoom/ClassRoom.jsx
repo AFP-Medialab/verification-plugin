@@ -200,10 +200,7 @@ const ClassRoom = () => {
                       </Typography>
                     </AccordionSummary>
                     <AccordionDetails>
-                      <div
-                        className={"content"}
-                        dangerouslySetInnerHTML={{ __html: obj.content }}
-                      ></div>
+                      <Typography textAlign={"start"}>{obj.content}</Typography>
                     </AccordionDetails>
                   </Accordion>
                 );
@@ -229,7 +226,7 @@ const ClassRoom = () => {
                       container
                       justifyContent="space-between"
                       spacing={2}
-                      alignContent={"center"}
+                      alignContent={"start"}
                     >
                       <Grid item>
                         <CastForEducationIcon fontSize={"large"} />
