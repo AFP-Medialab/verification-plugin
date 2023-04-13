@@ -83,7 +83,6 @@ import Typography from "@mui/material/Typography";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 import { Link, useNavigate } from "react-router-dom";
-import { isCurrentLanguageLeftToRight } from "../Shared/Utils/Translate";
 
 function a11yProps(index) {
   return {
@@ -110,6 +109,8 @@ const NavBar = (props) => {
   const dispatch = useDispatch();
 
   const drawerRef = createRef();
+
+  const isCurrentLanguageLeftToRight = currentLang !== "ar";
 
   const handleChange = (event, newValue) => {
     let path = drawerItems[newValue].path;
@@ -1292,7 +1293,7 @@ const NavBar = (props) => {
 
   return (
     <div
-      dir={isCurrentLanguageLeftToRight() ? null : "rtl"}
+      dir={isCurrentLanguageLeftToRight ? null : "rtl"}
       className={classes.flex}
     >
       <Snackbar
@@ -1392,8 +1393,8 @@ const NavBar = (props) => {
           <List
             style={{
               marginTop: "80px",
-              paddingLeft: isCurrentLanguageLeftToRight() ? "4px" : null,
-              paddingRight: isCurrentLanguageLeftToRight() ? null : "4px",
+              paddingLeft: isCurrentLanguageLeftToRight ? "4px" : null,
+              paddingRight: isCurrentLanguageLeftToRight ? null : "4px",
             }}
           >
             <ListSubheader
