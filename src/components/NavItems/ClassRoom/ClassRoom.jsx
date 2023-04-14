@@ -166,8 +166,8 @@ const ClassRoom = () => {
           advanced={false}
         />
 
-        <Card className={classes.rootNoPadding}>
-          <Box justifyContent="center" display="flex" flexDirection="column">
+        <Card>
+          <Box display="flex" flexDirection="column">
             <Box mt={1} />
 
             <Tabs
@@ -224,17 +224,27 @@ const ClassRoom = () => {
                     <Grid
                       key={index}
                       container
+                      direction="row"
                       justifyContent="space-between"
                       spacing={2}
-                      alignContent={"start"}
                     >
-                      <Grid item>
-                        <CastForEducationIcon fontSize={"large"} />
+                      <Grid
+                        container
+                        direction="row"
+                        item
+                        xs={10}
+                        justifyContent="flex-start"
+                        alignItems="flex-start"
+                        spacing={2}
+                      >
+                        <Grid item xs={1}>
+                          <CastForEducationIcon fontSize={"large"} />
+                        </Grid>
+                        <Grid item xs>
+                          <Typography variant={"h6"}>{value.title}</Typography>
+                        </Grid>
                       </Grid>
-                      <Grid item align="left">
-                        <Typography variant={"h6"}>{value.title}</Typography>
-                      </Grid>
-                      <Grid item align="right">
+                      <Grid item xs>
                         <Button
                           variant="contained"
                           color="primary"
