@@ -287,58 +287,48 @@ const ClassRoom = () => {
                                 />
                             </TabPanel>*/}
             <TabPanel value={value} index={5}>
-              <Typography variant={"h5"}>
-                {keyword("user_resources_intro")}
-              </Typography>
-              <Box m={2} />
-              <Typography variant="body1" align={"justify"}>
-                {keyword("user_resources_intro_remote")}
-              </Typography>
-              <div>
-                <TextField
-                  inputRef={(ref) => setInputRef(ref)}
-                  id="standard-full-width"
-                  label={keyword("api_input")}
-                  placeholder="URL"
-                  fullWidth
-                />
-                <Box m={1} />
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={() => setVideoUrl(inputRef.value)}
-                >
-                  {keyword("display")}
-                </Button>
-              </div>
-              <Typography
-                variant="body1"
-                color="textSecondary"
-                align={"justify"}
-              >
-                {keyword("examples")}
-              </Typography>
-              <Typography
-                variant="body1"
-                color="textSecondary"
-                align={"justify"}
-              >
-                {keyword("youtube_example")}
-              </Typography>
-              <Typography
-                variant="body1"
-                color="textSecondary"
-                align={"justify"}
-              >
-                {keyword("twitter_example")}
-              </Typography>
-              <Typography
-                variant="body1"
-                color="textSecondary"
-                align={"justify"}
-              >
-                {keyword("website_example")}
-              </Typography>
+              <Grid container direction="column" spacing={2}>
+                <Grid item mb={2}>
+                  <Typography variant={"h5"}>
+                    {keyword("user_resources_intro")}
+                  </Typography>
+                </Grid>
+                <Grid item>
+                  <Typography variant="body1" align={"justify"}>
+                    {keyword("user_resources_intro_remote")}
+                  </Typography>
+                </Grid>
+                <Grid item>
+                  <TextField
+                    inputRef={(ref) => setInputRef(ref)}
+                    id="standard-full-width"
+                    label={keyword("api_input")}
+                    placeholder="URL"
+                    fullWidth
+                  />
+                </Grid>
+                <Grid item>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => setVideoUrl(inputRef.value)}
+                  >
+                    {keyword("display")}
+                  </Button>
+                </Grid>
+                <Grid item mt={4}>
+                  <Typography variant="body1">{keyword("examples")}</Typography>
+                  <Typography variant="body1">
+                    {keyword("youtube_example")}
+                  </Typography>
+                  <Typography variant="body1">
+                    {keyword("twitter_example")}
+                  </Typography>
+                  <Typography variant="body1">
+                    {keyword("website_example")}
+                  </Typography>
+                </Grid>
+              </Grid>
             </TabPanel>
             <TabPanel value={value} index={6}>
               {glossary().map((obj, key) => {
