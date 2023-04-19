@@ -268,18 +268,16 @@ const AdvancedTools = () => {
         </Grid>
 
         <Grid item>
-          <form>
-            <Button
-              variant="outlined"
-              color={colorButton}
-              onClick={handleClickOpen}
-              style={{ border: "2px solid", heigth: "40px" }}
-            >
-              {userAuthenticated
-                ? messageI18NResolver("LOGUSER_LOGOUT_LABEL")
-                : messageI18NResolver("LOGINFORM_SUBMIT_LABEL")}
-            </Button>
-          </form>
+          <Button
+            variant="outlined"
+            color={colorButton}
+            onClick={handleClickOpen}
+            style={{ border: "2px solid", heigth: "40px" }}
+          >
+            {userAuthenticated
+              ? messageI18NResolver("LOGUSER_LOGOUT_LABEL")
+              : messageI18NResolver("LOGINFORM_SUBMIT_LABEL")}
+          </Button>
         </Grid>
       </Grid>
 
@@ -292,176 +290,188 @@ const AdvancedTools = () => {
       >
         {dialogState === 0 && (
           <Box p={2}>
-            <DialogTitle id="max-width-dialog-title">
-              <Typography
-                gutterBottom
-                style={{ color: "#51A5B2", fontSize: "24px" }}
-              >
-                {keyword("title")}
-              </Typography>
-            </DialogTitle>
-            <DialogContent style={{ height: "300px" }}>
-              <Typography variant="body2">{keyword("text_general")}</Typography>
-
-              <Box m={4} />
-
-              <Typography variant="body2" style={{ color: "#818B95" }}>
-                {messageI18NResolver("ACCESSCODEFORM_TITLE")}
-              </Typography>
-              <Box m={2} />
-              <TextField
-                label={"Email"}
-                value={email}
-                placeholder={messageI18NResolver(
-                  "ACCESSCODEFORM_EMAIL_PLACEHOLDER"
-                )}
-                fullWidth
-                autoComplete="email"
-                variant="outlined"
-                name="email"
-                onChange={(e) => {
-                  setEmail(e.target.value);
-                  if (e.target.value !== "") {
-                    setStateGetCode(false);
-                  }
-
-                  if (e.target.value === "") {
-                    setStateGetCode(true);
-                  }
-                }}
-              />
-              <Box m={2} />
-              <Button
-                variant="contained"
-                color="primary"
-                fullWidth
-                disabled={stateGetCode}
-                onClick={handleGetCode}
-              >
-                {messageI18NResolver("ACCESSCODEFORM_SUBMIT_LABEL")}
-              </Button>
-
-              <Box m={2} />
-
-              <Typography
-                variant="body2"
-                style={{ color: "#818B95", textAlign: "left" }}
-              >
-                {keyword("text_alreadycode")}
-                <span
-                  style={{
-                    color: "#000000",
-                    marginLeft: "5px",
-                    fontWeight: "500",
-                    cursor: "pointer",
-                  }}
-                  onClick={handleAlreadyCode}
+            <form>
+              <DialogTitle id="max-width-dialog-title">
+                <Typography
+                  gutterBottom
+                  style={{ color: "#51A5B2", fontSize: "24px" }}
                 >
-                  {keyword("text_clickhere")}
-                </span>
-              </Typography>
-            </DialogContent>
-            <DialogActions>
-              <Box p={2}>
-                <Grid container direction="column" style={{ width: "100%" }}>
-                  <Typography
-                    variant="body2"
-                    style={{ color: "#818B95", textAlign: "left" }}
+                  {keyword("title")}
+                </Typography>
+              </DialogTitle>
+              <DialogContent style={{ height: "300px" }}>
+                <Typography variant="body2">
+                  {keyword("text_general")}
+                </Typography>
+
+                <Box m={4} />
+
+                <Typography variant="body2" style={{ color: "#818B95" }}>
+                  {messageI18NResolver("ACCESSCODEFORM_TITLE")}
+                </Typography>
+                <Box m={2} />
+                <TextField
+                  label={"Email"}
+                  value={email}
+                  placeholder={messageI18NResolver(
+                    "ACCESSCODEFORM_EMAIL_PLACEHOLDER"
+                  )}
+                  fullWidth
+                  autoComplete="email"
+                  variant="outlined"
+                  name="email"
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                    if (e.target.value !== "") {
+                      setStateGetCode(false);
+                    }
+
+                    if (e.target.value === "") {
+                      setStateGetCode(true);
+                    }
+                  }}
+                />
+                <Box m={2} />
+                <Button
+                  type="submit"
+                  variant="contained"
+                  color="primary"
+                  fullWidth
+                  disabled={stateGetCode}
+                  onClick={(e) => {
+                    e.preventDefault(), handleGetCode();
+                  }}
+                >
+                  {messageI18NResolver("ACCESSCODEFORM_SUBMIT_LABEL")}
+                </Button>
+
+                <Box m={2} />
+
+                <Typography
+                  variant="body2"
+                  style={{ color: "#818B95", textAlign: "left" }}
+                >
+                  {keyword("text_alreadycode")}
+                  <span
+                    style={{
+                      color: "#000000",
+                      marginLeft: "5px",
+                      fontWeight: "500",
+                      cursor: "pointer",
+                    }}
+                    onClick={handleAlreadyCode}
                   >
-                    {messageI18NResolver("REGISTRATIONFORM_TITLE")}
-                  </Typography>
-                  <Box m={1} />
-                  <Button
-                    variant="outlined"
-                    color="primary"
-                    onClick={handleClickOpenRegister}
-                    style={{ border: "2px solid" }}
-                    fullWidth
-                  >
-                    {messageI18NResolver("REGISTRATIONFORM_SUBMIT_LABEL")}
-                  </Button>
-                </Grid>
-              </Box>
-            </DialogActions>
+                    {keyword("text_clickhere")}
+                  </span>
+                </Typography>
+              </DialogContent>
+              <DialogActions>
+                <Box p={2}>
+                  <Grid container direction="column" style={{ width: "100%" }}>
+                    <Typography
+                      variant="body2"
+                      style={{ color: "#818B95", textAlign: "left" }}
+                    >
+                      {messageI18NResolver("REGISTRATIONFORM_TITLE")}
+                    </Typography>
+                    <Box m={1} />
+                    <Button
+                      variant="outlined"
+                      color="primary"
+                      onClick={handleClickOpenRegister}
+                      style={{ border: "2px solid" }}
+                      fullWidth
+                    >
+                      {messageI18NResolver("REGISTRATIONFORM_SUBMIT_LABEL")}
+                    </Button>
+                  </Grid>
+                </Box>
+              </DialogActions>
+            </form>
           </Box>
         )}
 
         {dialogState === 1 && (
           <Box p={2}>
-            <DialogTitle id="max-width-dialog-title">
-              <Grid
-                container
-                direction="row"
-                justifyContent="flex-start"
-                alignItems="center"
-                style={{ width: "100%" }}
-              >
-                <Grid item>
-                  <IconButton
-                    color="primary"
-                    onClick={handleClickBack}
-                    component="span"
-                  >
-                    <ArrowBackIosIcon />
-                  </IconButton>
-                </Grid>
-
-                <Grid item>
-                  <Typography style={{ color: "#51A5B2", fontSize: "24px" }}>
-                    {messageI18NResolver("ACCESSCODEFORM_EMAIL_CHECK")}
-                  </Typography>
-                </Grid>
-              </Grid>
-            </DialogTitle>
-            <DialogContent style={{ height: "300px" }}>
-              <Typography variant="body2">
-                {messageI18NResolver("ACCESSCODEFORM_SUCCESS_TEXT")}
-              </Typography>
-
-              <Box m={2} />
-
-              <TextField
-                label={"Code"}
-                value={code}
-                placeholder={messageI18NResolver(
-                  "LOGINFORM_ACCESSCODE_PLACEHOLDER"
-                )}
-                fullWidth
-                variant="outlined"
-                onChange={(e) => {
-                  setCode(e.target.value);
-                  if (e.target.value !== "") {
-                    setStateUnlockTools(false);
-                  }
-
-                  if (e.target.value === "") {
-                    setStateUnlockTools(true);
-                  }
-                }}
-              />
-
-              <Box m={2} />
-
-              <Box ml={1} margin={1}>
-                <Typography
-                  variant="body2"
-                  style={{ color: "#989898", fontSize: "13px" }}
+            <form>
+              <DialogTitle id="max-width-dialog-title">
+                <Grid
+                  container
+                  direction="row"
+                  justifyContent="flex-start"
+                  alignItems="center"
+                  style={{ width: "100%" }}
                 >
-                  {messageI18NResolver("ACCESSCODEFORM_SUCCESS_TEXT_SPAM")}
+                  <Grid item>
+                    <IconButton
+                      color="primary"
+                      onClick={handleClickBack}
+                      component="span"
+                    >
+                      <ArrowBackIosIcon />
+                    </IconButton>
+                  </Grid>
+
+                  <Grid item>
+                    <Typography style={{ color: "#51A5B2", fontSize: "24px" }}>
+                      {messageI18NResolver("ACCESSCODEFORM_EMAIL_CHECK")}
+                    </Typography>
+                  </Grid>
+                </Grid>
+              </DialogTitle>
+              <DialogContent style={{ height: "300px" }}>
+                <Typography variant="body2">
+                  {messageI18NResolver("ACCESSCODEFORM_SUCCESS_TEXT")}
                 </Typography>
-              </Box>
-            </DialogContent>
-            <DialogActions>
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={handleClickUnlock}
-                fullWidth
-                disabled={stateUnlockTools}
-              >
-                {messageI18NResolver("LOGINFORM_SUBMIT_LABEL")}
-              </Button>
-            </DialogActions>
+
+                <Box m={2} />
+
+                <TextField
+                  label={"Code"}
+                  value={code}
+                  placeholder={messageI18NResolver(
+                    "LOGINFORM_ACCESSCODE_PLACEHOLDER"
+                  )}
+                  fullWidth
+                  variant="outlined"
+                  onChange={(e) => {
+                    setCode(e.target.value);
+                    if (e.target.value !== "") {
+                      setStateUnlockTools(false);
+                    }
+
+                    if (e.target.value === "") {
+                      setStateUnlockTools(true);
+                    }
+                  }}
+                />
+
+                <Box m={2} />
+
+                <Box ml={1} margin={1}>
+                  <Typography
+                    variant="body2"
+                    style={{ color: "#989898", fontSize: "13px" }}
+                  >
+                    {messageI18NResolver("ACCESSCODEFORM_SUCCESS_TEXT_SPAM")}
+                  </Typography>
+                </Box>
+              </DialogContent>
+              <DialogActions>
+                <Button
+                  type="submit"
+                  variant="contained"
+                  color="primary"
+                  onClick={(e) => {
+                    e.preventDefault(), handleClickUnlock();
+                  }}
+                  fullWidth
+                  disabled={stateUnlockTools}
+                >
+                  {messageI18NResolver("LOGINFORM_SUBMIT_LABEL")}
+                </Button>
+              </DialogActions>
+            </form>
           </Box>
         )}
 
