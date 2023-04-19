@@ -235,7 +235,7 @@ const AdvancedTools = () => {
         alignItems="center"
         spacing={2}
       >
-        <Grid item xs>
+        <Grid item>
           <Grid
             container
             direction="column"
@@ -267,7 +267,7 @@ const AdvancedTools = () => {
           </Grid>
         </Grid>
 
-        <Grid item>
+        <Grid item xs>
           <Button
             variant="outlined"
             color={colorButton}
@@ -289,108 +289,131 @@ const AdvancedTools = () => {
         aria-labelledby="max-width-dialog-title"
       >
         {dialogState === 0 && (
-          <Box p={2}>
+          <Grid
+            container
+            direction="column"
+            justifyContent="flex-start"
+            alignItems="flex-start"
+            p={2}
+          >
             <form>
-              <DialogTitle id="max-width-dialog-title">
-                <Typography
-                  gutterBottom
-                  style={{ color: "#51A5B2", fontSize: "24px" }}
-                >
-                  {keyword("title")}
-                </Typography>
-              </DialogTitle>
-              <DialogContent style={{ height: "300px" }}>
-                <Typography variant="body2">
-                  {keyword("text_general")}
-                </Typography>
-
-                <Box m={4} />
-
-                <Typography variant="body2" style={{ color: "#818B95" }}>
-                  {messageI18NResolver("ACCESSCODEFORM_TITLE")}
-                </Typography>
-                <Box m={2} />
-                <TextField
-                  label={"Email"}
-                  value={email}
-                  placeholder={messageI18NResolver(
-                    "ACCESSCODEFORM_EMAIL_PLACEHOLDER"
-                  )}
-                  fullWidth
-                  autoComplete="email"
-                  variant="outlined"
-                  name="email"
-                  onChange={(e) => {
-                    setEmail(e.target.value);
-                    if (e.target.value !== "") {
-                      setStateGetCode(false);
-                    }
-
-                    if (e.target.value === "") {
-                      setStateGetCode(true);
-                    }
-                  }}
-                />
-                <Box m={2} />
-                <Button
-                  type="submit"
-                  variant="contained"
-                  color="primary"
-                  fullWidth
-                  disabled={stateGetCode}
-                  onClick={(e) => {
-                    e.preventDefault(), handleGetCode();
-                  }}
-                >
-                  {messageI18NResolver("ACCESSCODEFORM_SUBMIT_LABEL")}
-                </Button>
-
-                <Box m={2} />
-
-                <Typography
-                  variant="body2"
-                  style={{ color: "#818B95", textAlign: "left" }}
-                >
-                  {keyword("text_alreadycode")}
-                  <span
-                    style={{
-                      color: "#000000",
-                      marginLeft: "5px",
-                      fontWeight: "500",
-                      cursor: "pointer",
-                    }}
-                    onClick={handleAlreadyCode}
+              <Grid item>
+                <DialogTitle id="max-width-dialog-title">
+                  <Typography style={{ color: "#51A5B2", fontSize: "24px" }}>
+                    {keyword("title")}
+                  </Typography>
+                </DialogTitle>
+              </Grid>
+              <Grid item>
+                <DialogContent sx={{ overflow: "hidden" }}>
+                  <Grid
+                    container
+                    item
+                    direction="column"
+                    justifyContent="flex-start"
+                    alignItems="stretch"
+                    spacing={2}
                   >
-                    {keyword("text_clickhere")}
-                  </span>
-                </Typography>
-              </DialogContent>
-              <DialogActions>
-                <Box p={2}>
-                  <Grid container direction="column" style={{ width: "100%" }}>
-                    <Typography
-                      variant="body2"
-                      style={{ color: "#818B95", textAlign: "left" }}
+                    <Grid
+                      container
+                      item
+                      direction="column"
+                      justifyContent="flex-start"
+                      alignItems="stretch"
+                      spacing={2}
                     >
-                      {messageI18NResolver("REGISTRATIONFORM_TITLE")}
-                    </Typography>
-                    <Box m={1} />
-                    <Button
-                      variant="outlined"
-                      color="primary"
-                      onClick={handleClickOpenRegister}
-                      style={{ border: "2px solid" }}
-                      fullWidth
-                    >
-                      {messageI18NResolver("REGISTRATIONFORM_SUBMIT_LABEL")}
-                    </Button>
-                  </Grid>
-                </Box>
-              </DialogActions>
-            </form>
-          </Box>
-        )}
+                      <Grid item>
+                        <Typography variant="body2">
+                          {keyword("text_general")}
+                        </Typography>
+                      </Grid>
+                      <Grid item mt={2}>
+                        <Typography
+                          variant="body2"
+                          style={{ color: "#818B95" }}
+                        >
+                          {messageI18NResolver("ACCESSCODEFORM_TITLE")}
+                        </Typography>
+                      </Grid>
+                      <Grid item>
+                        <TextField
+                          label={"Email"}
+                          value={email}
+                          placeholder={messageI18NResolver(
+                            "ACCESSCODEFORM_EMAIL_PLACEHOLDER"
+                          )}
+                          fullWidth
+                          autoComplete="email"
+                          variant="outlined"
+                          name="email"
+                          onChange={(e) => {
+                            setEmail(e.target.value);
+                            if (e.target.value !== "") {
+                              setStateGetCode(false);
+                            }
 
+                            if (e.target.value === "") {
+                              setStateGetCode(true);
+                            }
+                          }}
+                        />
+                      </Grid>
+                      <Grid item>
+                        <Button
+                          type="submit"
+                          variant="contained"
+                          color="primary"
+                          fullWidth
+                          disabled={stateGetCode}
+                          onClick={(e) => {
+                            e.preventDefault(), handleGetCode();
+                          }}
+                        >
+                          {messageI18NResolver("ACCESSCODEFORM_SUBMIT_LABEL")}
+                        </Button>
+                      </Grid>
+                      <Grid item>
+                        <Typography
+                          variant="body2"
+                          style={{ color: "#818B95", textAlign: "start" }}
+                        >
+                          {keyword("text_alreadycode")}
+                          <span
+                            style={{
+                              color: "#000000",
+                              marginLeft: "5px",
+                              fontWeight: "500",
+                              cursor: "pointer",
+                            }}
+                            onClick={handleAlreadyCode}
+                          >
+                            {keyword("text_clickhere")}
+                          </span>
+                        </Typography>
+                      </Grid>
+                    </Grid>
+                    <Grid item mt={6}>
+                      <Typography variant="body2" style={{ color: "#818B95" }}>
+                        {messageI18NResolver("REGISTRATIONFORM_TITLE")}
+                      </Typography>
+                    </Grid>
+                    <Grid item>
+                      <Button
+                        variant="outlined"
+                        color="primary"
+                        onClick={handleClickOpenRegister}
+                        style={{ border: "2px solid" }}
+                        fullWidth
+                      >
+                        {messageI18NResolver("REGISTRATIONFORM_SUBMIT_LABEL")}
+                      </Button>
+                    </Grid>
+                  </Grid>
+                </DialogContent>
+              </Grid>
+            </form>
+          </Grid>
+        )}
         {dialogState === 1 && (
           <Box p={2}>
             <form>

@@ -5,10 +5,12 @@ import allReducers from "./redux/reducers";
 import "./index.css";
 import rootSaga from "./redux/sagas";
 import { Provider } from "react-redux";
-import App from "./App";
 import { createRoot } from "react-dom/client";
 import createCache from "@emotion/cache";
 import { CacheProvider } from "@emotion/react";
+
+import App from "./App";
+import AppWrapper from "./AppWrapper";
 
 function saveToLocalStorage(state) {
   try {
@@ -17,6 +19,7 @@ function saveToLocalStorage(state) {
       interactiveExplanation: state.interactiveExplanation,
       language: state.language,
       defaultLanguage: state.defaultLanguage,
+      ltr: state.ltr,
       cookies: state.cookies,
       googleAnalytic: state.googleAnalytic,
       userSession: state.userSession,
@@ -65,7 +68,9 @@ export const muiCache = createCache({
 root.render(
   <Provider store={store}>
     <CacheProvider value={muiCache}>
-      <App />
+      <AppWrapper>
+        <App />
+      </AppWrapper>
     </CacheProvider>
   </Provider>
 );

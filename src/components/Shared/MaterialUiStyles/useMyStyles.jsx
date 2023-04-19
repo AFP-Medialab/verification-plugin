@@ -1,7 +1,8 @@
 import { green } from "@mui/material/colors";
 import useClasses from "./useClasses";
 
-const drawerWidth = 300;
+const drawerWidthOpen = 300;
+const drawerWidthClose = 85;
 
 const styles = (theme) => ({
   root: {
@@ -12,10 +13,6 @@ const styles = (theme) => ({
 
   rootNoCenter: {
     padding: theme.spacing(2),
-  },
-
-  rootNoPadding: {
-    textAlign: "center",
   },
 
   noMargin: {
@@ -64,7 +61,7 @@ const styles = (theme) => ({
     display: "flex",
   },
   drawer: {
-    width: drawerWidth,
+    width: drawerWidthOpen,
     flexShrink: 0,
     whiteSpace: "nowrap",
     overflowX: "hidden",
@@ -75,15 +72,15 @@ const styles = (theme) => ({
   },
 
   drawerWidth: {
-    width: "300px",
+    width: drawerWidthOpen,
   },
 
   drawerWidthClose: {
-    width: "84px",
+    width: drawerWidthClose,
   },
 
   drawerOpen: {
-    width: drawerWidth,
+    width: drawerWidthOpen,
     transition: theme.transitions.create("width", {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
@@ -92,33 +89,39 @@ const styles = (theme) => ({
     "&::-webkit-scrollbar": {
       display: "none",
     },
+    left: "auto",
   },
+
   drawerClose: {
     transition: theme.transitions.create("width", {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
     overflowX: "hidden",
-    width: "85px",
+    width: drawerWidthClose,
     [theme.breakpoints.up("sm")]: {
-      width: "85px",
+      width: drawerWidthClose,
     },
     "&::-webkit-scrollbar": {
       display: "none",
     },
+    left: "auto",
   },
 
   drawerListText: {
     fontWeight: "500",
     fontSize: "14px",
+    textAlign: "start",
+  },
+
+  drawerListTextClosed: {
+    fontWeight: "500",
+    fontSize: "14px",
+    display: "none",
   },
 
   drawerListHeadingCenter: {
     textAlign: "center",
-  },
-
-  drawerListHeadingLeft: {
-    textAlign: "left",
   },
 
   drawerListIcon: {
@@ -176,7 +179,7 @@ const styles = (theme) => ({
   popUp: {
     width: "300px",
     padding: theme.spacing(1, 2),
-    textAlign: "center",
+    textAlign: "start",
   },
   grow: {
     flexGrow: 1,
@@ -202,7 +205,7 @@ const styles = (theme) => ({
   textPaper: {
     elevation: 4,
     padding: theme.spacing(1, 2),
-    textAlign: "left",
+    textAlign: "start",
   },
   footer: {
     padding: theme.spacing(10, 5),
@@ -455,34 +458,11 @@ const styles = (theme) => ({
   assistantCardHeader: {
     fontSize: theme.typography.h6.fontSize,
     color: "white",
-    textAlign: "left",
+    textAlign: "start",
     backgroundColor: theme.palette.primary.main,
-  },
-  assistantTooltip: {
-    backgroundColor: theme.palette.secondary,
-    opacity: 0.9,
-    fontSize: "1.2rem",
-    maxWidth: 700,
-    textAlign: "left",
-    fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
-    fontWeight: 40,
-    lineHeight: 1.5,
-    letterSpacing: "0.00938em",
-  },
-  assistantGrid: {
-    width: "100%",
-    marginBottom: 2,
-    textAlign: "left",
-    font: theme.typography.h6.fontSize,
   },
   assistantHover: {
     borderWidth: 3,
-    "&:hover": {
-      borderColor: theme.palette.primary.main,
-    },
-  },
-  assistantSelected: {
-    borderColor: theme.palette.primary.main,
     "&:hover": {
       borderColor: theme.palette.primary.main,
     },
@@ -798,7 +778,7 @@ const styles = (theme) => ({
     borderRadius: "10px",
   },
 
-  hideElement: {
+  hidden: {
     display: "none",
   },
 
@@ -806,7 +786,7 @@ const styles = (theme) => ({
     display: "block",
   },
 });
-const cardStyles = (theme) => ({
+const cardStyles = () => ({
   root: {
     overflow: "visible",
   },
