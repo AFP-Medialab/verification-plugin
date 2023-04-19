@@ -110,8 +110,6 @@ const NavBar = (props) => {
 
   const drawerRef = createRef();
 
-  const isCurrentLanguageLeftToRight = currentLang !== "ar";
-
   const handleChange = (event, newValue) => {
     let path = drawerItems[newValue].path;
     if (tabItems[newValue].path === "tools") navigate("/app/tools/" + path);
@@ -1292,10 +1290,7 @@ const NavBar = (props) => {
   //const [value, setValue] = useState(null);
 
   return (
-    <div
-      dir={isCurrentLanguageLeftToRight ? null : "rtl"}
-      className={classes.flex}
-    >
+    <div className={classes.flex}>
       <Snackbar
         open={openAlert}
         autoHideDuration={6000}
@@ -1393,8 +1388,7 @@ const NavBar = (props) => {
           <List
             style={{
               marginTop: "80px",
-              paddingLeft: isCurrentLanguageLeftToRight ? "4px" : null,
-              paddingRight: isCurrentLanguageLeftToRight ? null : "4px",
+              paddingLeft: "4px",
             }}
           >
             <ListSubheader

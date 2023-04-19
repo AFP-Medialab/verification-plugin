@@ -85,7 +85,7 @@ const Interactive = () => {
             obj.ext === "gif";
           return (
             <div key={key} hidden={key !== carouselIndex}>
-              <div align={"center"}>
+              <div>
                 {isImage ? (
                   <img
                     src={obj.url}

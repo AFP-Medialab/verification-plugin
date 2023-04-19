@@ -60,9 +60,6 @@ const AdvancedTools = () => {
   const userAuthenticated = useSelector(
     (state) => state.userSession && state.userSession.userAuthenticated
   );
-  const currentLang = useSelector((state) => state.language);
-
-  const isCurrentLanguageLeftToRight = currentLang !== "ar";
 
   // i18n
   const messageI18NResolver = useLoadLanguage(
@@ -285,7 +282,6 @@ const AdvancedTools = () => {
       </Grid>
 
       <Dialog
-        dir={isCurrentLanguageLeftToRight ? null : "rtl"}
         fullWidth
         maxWidth={"xs"}
         open={open}
