@@ -166,8 +166,8 @@ const ClassRoom = () => {
           advanced={false}
         />
 
-        <Card className={classes.rootNoPadding}>
-          <Box justifyContent="center" display="flex" flexDirection="column">
+        <Card>
+          <Box display="flex" flexDirection="column">
             <Box mt={1} />
 
             <Tabs
@@ -200,10 +200,7 @@ const ClassRoom = () => {
                       </Typography>
                     </AccordionSummary>
                     <AccordionDetails>
-                      <div
-                        className={"content"}
-                        dangerouslySetInnerHTML={{ __html: obj.content }}
-                      ></div>
+                      <Typography textAlign={"start"}>{obj.content}</Typography>
                     </AccordionDetails>
                   </Accordion>
                 );
@@ -227,17 +224,27 @@ const ClassRoom = () => {
                     <Grid
                       key={index}
                       container
+                      direction="row"
                       justifyContent="space-between"
                       spacing={2}
-                      alignContent={"center"}
                     >
-                      <Grid item>
-                        <CastForEducationIcon fontSize={"large"} />
+                      <Grid
+                        container
+                        direction="row"
+                        item
+                        xs={10}
+                        justifyContent="flex-start"
+                        alignItems="flex-start"
+                        spacing={2}
+                      >
+                        <Grid item xs={1}>
+                          <CastForEducationIcon fontSize={"large"} />
+                        </Grid>
+                        <Grid item xs>
+                          <Typography variant={"h6"}>{value.title}</Typography>
+                        </Grid>
                       </Grid>
-                      <Grid item align="left">
-                        <Typography variant={"h6"}>{value.title}</Typography>
-                      </Grid>
-                      <Grid item align="right">
+                      <Grid item xs>
                         <Button
                           variant="contained"
                           color="primary"
@@ -280,58 +287,48 @@ const ClassRoom = () => {
                                 />
                             </TabPanel>*/}
             <TabPanel value={value} index={5}>
-              <Typography variant={"h5"}>
-                {keyword("user_resources_intro")}
-              </Typography>
-              <Box m={2} />
-              <Typography variant="body1" align={"justify"}>
-                {keyword("user_resources_intro_remote")}
-              </Typography>
-              <div>
-                <TextField
-                  inputRef={(ref) => setInputRef(ref)}
-                  id="standard-full-width"
-                  label={keyword("api_input")}
-                  placeholder="URL"
-                  fullWidth
-                />
-                <Box m={1} />
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={() => setVideoUrl(inputRef.value)}
-                >
-                  {keyword("display")}
-                </Button>
-              </div>
-              <Typography
-                variant="body1"
-                color="textSecondary"
-                align={"justify"}
-              >
-                {keyword("examples")}
-              </Typography>
-              <Typography
-                variant="body1"
-                color="textSecondary"
-                align={"justify"}
-              >
-                {keyword("youtube_example")}
-              </Typography>
-              <Typography
-                variant="body1"
-                color="textSecondary"
-                align={"justify"}
-              >
-                {keyword("twitter_example")}
-              </Typography>
-              <Typography
-                variant="body1"
-                color="textSecondary"
-                align={"justify"}
-              >
-                {keyword("website_example")}
-              </Typography>
+              <Grid container direction="column" spacing={2}>
+                <Grid item mb={2}>
+                  <Typography variant={"h5"}>
+                    {keyword("user_resources_intro")}
+                  </Typography>
+                </Grid>
+                <Grid item>
+                  <Typography variant="body1" align={"justify"}>
+                    {keyword("user_resources_intro_remote")}
+                  </Typography>
+                </Grid>
+                <Grid item>
+                  <TextField
+                    inputRef={(ref) => setInputRef(ref)}
+                    id="standard-full-width"
+                    label={keyword("api_input")}
+                    placeholder="URL"
+                    fullWidth
+                  />
+                </Grid>
+                <Grid item>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => setVideoUrl(inputRef.value)}
+                  >
+                    {keyword("display")}
+                  </Button>
+                </Grid>
+                <Grid item mt={4}>
+                  <Typography variant="body1">{keyword("examples")}</Typography>
+                  <Typography variant="body1">
+                    {keyword("youtube_example")}
+                  </Typography>
+                  <Typography variant="body1">
+                    {keyword("twitter_example")}
+                  </Typography>
+                  <Typography variant="body1">
+                    {keyword("website_example")}
+                  </Typography>
+                </Grid>
+              </Grid>
             </TabPanel>
             <TabPanel value={value} index={6}>
               {glossary().map((obj, key) => {

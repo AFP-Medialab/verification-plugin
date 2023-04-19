@@ -3,10 +3,10 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom";
 
-import { Box, Paper } from "@mui/material";
 import Divider from "@mui/material/Divider";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
+import Card from "@mui/material/Card";
 import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
 
 import AssistantCheckStatus from "./AssistantCheckResults/AssistantCheckStatus";
@@ -120,121 +120,132 @@ const Assistant = () => {
 
   return (
     <div>
-      <div className={classes.root}>
+      <Grid
+        container
+        spacing={4}
+        direction="column"
+        justifyContent="flex-start"
+        alignItems="center"
+        className={classes.root}
+      >
         {/* introduction */}
-        <AssistantIntroduction cleanAssistant={cleanAssistant} />
+        <Grid item xs width={"inherit"}>
+          <AssistantIntroduction cleanAssistant={cleanAssistant} />
+        </Grid>
 
         {/* url entry field */}
         {urlMode ? (
-          <AssistantUrlSelected
-            formInput={formInput}
-            setFormInput={setFormInput}
-            cleanAssistant={cleanAssistant}
-          />
+          <Grid item xs width={"inherit"}>
+            <AssistantUrlSelected
+              formInput={formInput}
+              setFormInput={setFormInput}
+              cleanAssistant={cleanAssistant}
+            />
+          </Grid>
         ) : null}
 
         {/* local file selection field */}
-        {imageVideoSelected ? <AssistantFileSelected /> : null}
+        {imageVideoSelected ? (
+          <Grid item xs width={"inherit"}>
+            <AssistantFileSelected />
+          </Grid>
+        ) : null}
 
         {/* warnings and api status checks */}
-        <Grid
-          item
-          xs={12}
-          className={classes.assistantGrid}
-          hidden={urlMode === null || urlMode === false}
-        >
-          <Grid item xs={12}>
-            {dbkfTextMatch || dbkfImageResult || dbkfVideoMatch || hpResult ? (
-              <AssistantWarnings />
-            ) : null}
+        {dbkfTextMatch || dbkfImageResult || dbkfVideoMatch || hpResult ? (
+          <Grid
+            item
+            xs
+            className={classes.assistantGrid}
+            hidden={urlMode === null || urlMode === false}
+          >
+            <AssistantWarnings />
           </Grid>
+        ) : null}
 
-          <Grid item xs={12}>
-            {positiveSourCred || cautionSourceCred || mixedSourceCred ? (
-              <AssistantSCResults />
-            ) : null}
+        {positiveSourCred || cautionSourceCred || mixedSourceCred ? (
+          <Grid item xs>
+            <AssistantSCResults />
           </Grid>
+        ) : null}
 
-          <Grid item xs={12}>
-            {hpFailState ||
-            scFailState ||
-            dbkfTextFailState ||
-            dbkfMediaFailState ||
-            neFailState ? (
-              <AssistantCheckStatus />
-            ) : null}
+        {hpFailState ||
+        scFailState ||
+        dbkfTextFailState ||
+        dbkfMediaFailState ||
+        neFailState ? (
+          <Grid item xs>
+            <AssistantCheckStatus />
           </Grid>
+        ) : null}
+
+        {/* media results */}
+        <Grid item xs width={"inherit"}>
+          <Card
+            className={classes.root}
+            hidden={
+              !urlMode ||
+              (urlMode && inputUrl === null) ||
+              (urlMode &&
+                inputUrl !== null &&
+                !imageList.length &&
+                !videoList.length)
+            }
+          >
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <Typography variant={"h5"} align={"left"}>
+                  {keyword("url_media")}
+                </Typography>
+                <Divider />
+              </Grid>
+
+              {imageList.length > 0 ||
+              videoList.length > 0 ||
+              imageVideoSelected ? (
+                <Grid item xs={12}>
+                  <AssistantMediaResult />
+                </Grid>
+              ) : null}
+            </Grid>
+          </Card>
         </Grid>
-      </div>
 
-      <Box m={3} />
+        {/* text results */}
+        <Grid item xs width={"inherit"}>
+          <Card
+            className={classes.root}
+            hidden={linkList.length === 0 && text === null && neResult === null}
+          >
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <Typography variant={"h5"} align={"left"}>
+                  {keyword("url_text")}
+                </Typography>
+                <Divider />
+              </Grid>
 
-      {/* media results */}
-      <Paper
-        className={classes.root}
-        hidden={
-          !urlMode ||
-          (urlMode && inputUrl === null) ||
-          (urlMode &&
-            inputUrl !== null &&
-            !imageList.length &&
-            !videoList.length)
-        }
-      >
-        <Grid container spacing={2}>
-          <Grid item xs={12}>
-            <Typography variant={"h5"} align={"left"}>
-              {keyword("url_media")}
-            </Typography>
-            <Divider />
-            <Box m={2} />
-          </Grid>
+              {text ? (
+                <Grid item xs={12}>
+                  <AssistantTextResult />
+                </Grid>
+              ) : null}
 
-          {imageList.length > 0 ||
-          videoList.length > 0 ||
-          imageVideoSelected ? (
-            <Grid item xs={12}>
-              <AssistantMediaResult />
+              {neResult ? (
+                <Grid item xs={12}>
+                  <AssistantNEResult />
+                </Grid>
+              ) : null}
+
+              {linkList.length !== 0 ? (
+                <Grid item xs={5}>
+                  <AssistantLinkResult />
+                </Grid>
+              ) : null}
             </Grid>
-          ) : null}
+          </Card>
         </Grid>
-      </Paper>
-
-      <Box m={3} />
-
-      {/* text results */}
-      <Paper
-        className={classes.root}
-        hidden={linkList.length === 0 && text === null && neResult === null}
-      >
-        <Grid container spacing={2}>
-          <Grid item xs={12}>
-            <Typography variant={"h5"} align={"left"}>
-              {keyword("url_text")}
-            </Typography>
-            <Divider />
-            <Box m={2} />
-          </Grid>
-
-          {text ? (
-            <Grid item xs={12}>
-              <AssistantTextResult />
-            </Grid>
-          ) : null}
-
-          {neResult ? (
-            <Grid item xs={12}>
-              <AssistantNEResult />
-            </Grid>
-          ) : null}
-
-          {linkList.length !== 0 ? (
-            <Grid item xs={5}>
-              <AssistantLinkResult />
-            </Grid>
-          ) : null}
-        </Grid>
-      </Paper>
+      </Grid>
     </div>
   );
 };

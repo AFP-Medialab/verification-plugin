@@ -29,6 +29,9 @@ const Interactive = () => {
   const navigate = useNavigate();
   const keyword = useLoadLanguage("components/NavItems/Interactive.tsv", tsv);
   const answersAvailable = useSelector((state) => state.interactiveExplanation);
+  const currentLang = useSelector((state) => state.language);
+
+  const isCurrentLanguageLeftToRight = currentLang !== "ar";
 
   const carouselItems = () => {
     let res = [];
@@ -82,7 +85,7 @@ const Interactive = () => {
             obj.ext === "gif";
           return (
             <div key={key} hidden={key !== carouselIndex}>
-              <div align={"center"}>
+              <div>
                 {isImage ? (
                   <img
                     src={obj.url}
@@ -106,19 +109,32 @@ const Interactive = () => {
               >
                 <Grid item>
                   <Fab color={"primary"} onClick={previous}>
-                    <NavigateBeforeIcon
-                      fontSize={"large"}
-                      style={{ color: "white" }}
-                    />
+                    {isCurrentLanguageLeftToRight ? (
+                      <NavigateBeforeIcon
+                        fontSize={"large"}
+                        style={{ color: "white" }}
+                      />
+                    ) : (
+                      <NavigateNextIcon
+                        fontSize={"large"}
+                        style={{ color: "white" }}
+                      />
+                    )}
                   </Fab>
                 </Grid>
-                <Grid item align="center"></Grid>
                 <Grid item>
                   <Fab color={"primary"} onClick={next}>
-                    <NavigateNextIcon
-                      fontSize={"large"}
-                      style={{ color: "white" }}
-                    />
+                    {isCurrentLanguageLeftToRight ? (
+                      <NavigateNextIcon
+                        fontSize={"large"}
+                        style={{ color: "white" }}
+                      />
+                    ) : (
+                      <NavigateBeforeIcon
+                        fontSize={"large"}
+                        style={{ color: "white" }}
+                      />
+                    )}
                   </Fab>
                 </Grid>
               </Grid>
