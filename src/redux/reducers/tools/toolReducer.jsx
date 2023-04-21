@@ -1,23 +1,23 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    selected: 0,
+  selected: 0,
 };
 const toolSlice = createSlice({
-    name: "tools",
-    initialState,
-    reducers: {
-        selectTool(state, action){
-            state.selected = action.payload
-        },
-        cleanTool(){
-            return initialState
-        }
-    }
-})
+  name: "tools",
+  initialState,
+  reducers: {
+    selectTool(state, action) {
+      state.selected = action.payload;
+    },
+    cleanTool() {
+      return initialState;
+    },
+  },
+});
 
-export const {selectTool, cleanTool} = toolSlice.actions
-const toolReducer = toolSlice.reducer
+export const { selectTool, cleanTool } = toolSlice.actions;
+const toolReducer = toolSlice.reducer;
 
 /*const toolReducer = (state = defaultState, action) => {
     switch (action.type) {

@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useImperativeHandle,forwardRef  } from "react";
+import React, { useState, useEffect, useRef, forwardRef } from "react";
 import TuiImageEditor from "tui-image-editor";
 
 import "tui-image-editor/dist/tui-image-editor.css";
@@ -34,7 +34,7 @@ const ImageEditor = forwardRef((props, instance) => {
       instance.current = null;
     };
   }, [instance, props]);
-  
+
   const zoomChange = (type) => {
     let updated = zoom;
     if (type === "in") {
@@ -79,14 +79,14 @@ const ImageEditor = forwardRef((props, instance) => {
     <div className="PR">
       <div className="zoom">
         <span
-          className={maxZoom <= zoom ? "disabled": undefined}
+          className={maxZoom <= zoom ? "disabled" : undefined}
           onClick={() => zoomChange("in")}
         >
           +
         </span>{" "}
         {zoom * 100}%
         <span
-          className={minZoom >= zoom ? "disabled": undefined}
+          className={minZoom >= zoom ? "disabled" : undefined}
           onClick={() => zoomChange("out")}
         >
           -

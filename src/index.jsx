@@ -1,14 +1,16 @@
-import React from 'react';
+import React from "react";
 import { configureStore } from "@reduxjs/toolkit";
 import createSagaMiddleware from "redux-saga";
 import allReducers from "./redux/reducers";
 import "./index.css";
 import rootSaga from "./redux/sagas";
 import { Provider } from "react-redux";
+import { createRoot } from "react-dom/client";
+import createCache from "@emotion/cache";
+import { CacheProvider } from "@emotion/react";
+
 import App from "./App";
-import { createRoot } from 'react-dom/client';
-import createCache from '@emotion/cache';
-import { CacheProvider } from '@emotion/react';
+import AppWrapper from "./AppWrapper";
 
 function saveToLocalStorage(state) {
   try {
@@ -17,6 +19,7 @@ function saveToLocalStorage(state) {
       interactiveExplanation: state.interactiveExplanation,
       language: state.language,
       defaultLanguage: state.defaultLanguage,
+      ltr: state.ltr,
       cookies: state.cookies,
       googleAnalytic: state.googleAnalytic,
       userSession: state.userSession,
@@ -43,9 +46,9 @@ const persistedState = loadFromLocalStorage();
 const sagaMiddleware = createSagaMiddleware();
 const store = configureStore({
   reducer: allReducers,
-  middleware: (getDefaultMiddleware) => 
-    getDefaultMiddleware({ serializableCheck:false}).prepend(sagaMiddleware),
-  preloadedState: persistedState
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({ serializableCheck: false }).prepend(sagaMiddleware),
+  preloadedState: persistedState,
 });
 sagaMiddleware.run(rootSaga);
 
@@ -55,18 +58,19 @@ store.subscribe(() => {
   else localStorage.removeItem("persist:state");
 });
 
-const container = document.getElementById('root')
-const root = createRoot(container)
+const container = document.getElementById("root");
+const root = createRoot(container);
 export const muiCache = createCache({
-  'key': 'mui',
-  'prepend': true
-})
-
+  key: "mui",
+  prepend: true,
+});
 
 root.render(
-  <Provider store={(store)}>
-    <CacheProvider  value={muiCache}>
+  <Provider store={store}>
+    <CacheProvider value={muiCache}>
+      <AppWrapper>
         <App />
+      </AppWrapper>
     </CacheProvider>
   </Provider>
 );

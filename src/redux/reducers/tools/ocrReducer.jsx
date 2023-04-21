@@ -2,7 +2,7 @@ const defaultState = {
   url: undefined,
   binaryImage: undefined,
   b64Content: undefined,
-  loading : false,
+  loading: false,
   fail: false,
   errorKey: null,
   done: false,
@@ -11,42 +11,42 @@ const defaultState = {
   selectedScript: "loop",
   fullText: null,
   reprocessBlockLoading: false,
-  reprocessBlockOpen: false
+  reprocessBlockOpen: false,
 };
-
 
 const ocrReducer = (state = defaultState, action) => {
   switch (action.type) {
-      case "SET_OCR_INPUT":
-      case "SET_OCR_RESULT":
-      case "SET_IMAGE_BINARY":
-      case "SET_B64_CONTENT":
-      case "SET_OCR_ERROR_KEY":
-      case "SET_SCRIPTS":
-      case "SET_SELECTED_SCRIPT":
-      case "SET_REPROCESS_LOADING":
-      case "SET_REPROCESS_OPEN":
-          return Object.assign({}, state, action.payload)
-      case "OCR_CLEAN_STATE":
-          return {...state,
-              url: undefined,
-              binaryImage: undefined,
-              b64Content: undefined,
-              loading : false,
-              errorKey: null,
-              fail: false,
-              done: false,
-              result: null,
-              fullText: null,
-              selectedScript: "loop",
-              reprocessBlockLoading: false,
-              reprocessBlockOpen: false};
-      default:
-          return state;
+    case "SET_OCR_INPUT":
+    case "SET_OCR_RESULT":
+    case "SET_IMAGE_BINARY":
+    case "SET_B64_CONTENT":
+    case "SET_OCR_ERROR_KEY":
+    case "SET_SCRIPTS":
+    case "SET_SELECTED_SCRIPT":
+    case "SET_REPROCESS_LOADING":
+    case "SET_REPROCESS_OPEN":
+      return Object.assign({}, state, action.payload);
+    case "OCR_CLEAN_STATE":
+      return {
+        ...state,
+        url: undefined,
+        binaryImage: undefined,
+        b64Content: undefined,
+        loading: false,
+        errorKey: null,
+        fail: false,
+        done: false,
+        result: null,
+        fullText: null,
+        selectedScript: "loop",
+        reprocessBlockLoading: false,
+        reprocessBlockOpen: false,
+      };
+    default:
+      return state;
   }
 };
 export default ocrReducer;
-
 
 // todo: remove. here until UI mock ups are all sent through so I don't need to bother making any actual calls to the API
 // const defaultState = {

@@ -1,3 +1,4 @@
+import React from "react";
 import { useDispatch } from "react-redux";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
@@ -7,7 +8,6 @@ import TableBody from "@mui/material/TableBody";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
 import Button from "@mui/material/Button";
-import ImageReverseSearch, {GoogleReversSearch} from "../../../../Shared/ReverseSearch/ImageReverseSearch";
 import CloseResult from "../../../../Shared/CloseResult/CloseResult";
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 import OnClickInfo from "../../../../Shared/OnClickInfo/OnClickInfo";
@@ -25,6 +25,10 @@ import {
 
 import ImageUrlGridList from "../../../../Shared/ImageGridList/ImageUrlGridList";
 import AnalysisComments from "./AnalysisComments";
+import {
+  SEARCH_ENGINE_SETTINGS,
+  reverseImageSearch,
+} from "../../../../Shared/ReverseSearch/reverseSearchUtils";
 
 const TwitterResults = (props) => {
   const classes = useMyStyles();
@@ -33,17 +37,10 @@ const TwitterResults = (props) => {
     tsv
   );
   const reverseSearch = (website) => {
-    if(website === 'google'){
-      for (let image of thumbnails) {
-        GoogleReversSearch(image.url)
-      }
+    for (let image of thumbnails) {
+      reverseImageSearch(image.url, true, website);
     }
-    else {
-        for (let image of thumbnails) {
-            ImageReverseSearch(website, image.url);
-        }
-    }
-  };  
+  };
 
   const dispatch = useDispatch();
   const report = props.report;
@@ -442,7 +439,9 @@ const TwitterResults = (props) => {
                     className={classes.button}
                     variant="contained"
                     color={"primary"}
-                    onClick={() => reverseSearch("google")}
+                    onClick={() =>
+                      reverseSearch(SEARCH_ENGINE_SETTINGS.GOOGLE_SEARCH.NAME)
+                    }
                   >
                     {keyword("button_reverse_google")}
                   </Button>
@@ -450,7 +449,9 @@ const TwitterResults = (props) => {
                     className={classes.button}
                     variant="contained"
                     color={"primary"}
-                    onClick={() => reverseSearch("yandex")}
+                    onClick={() =>
+                      reverseSearch(SEARCH_ENGINE_SETTINGS.YANDEX_SEARCH.NAME)
+                    }
                   >
                     {keyword("button_reverse_yandex")}
                   </Button>
@@ -458,7 +459,9 @@ const TwitterResults = (props) => {
                     className={classes.button}
                     variant="contained"
                     color={"primary"}
-                    onClick={() => reverseSearch("tineye")}
+                    onClick={() =>
+                      reverseSearch(SEARCH_ENGINE_SETTINGS.TINEYE_SEARCH.NAME)
+                    }
                   >
                     {keyword("button_reverse_tineye")}
                   </Button>

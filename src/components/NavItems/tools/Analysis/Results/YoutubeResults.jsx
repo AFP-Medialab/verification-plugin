@@ -1,3 +1,4 @@
+import React from "react";
 import { useDispatch } from "react-redux";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
@@ -7,7 +8,6 @@ import TableBody from "@mui/material/TableBody";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
 import Button from "@mui/material/Button";
-import ImageReverseSearch, {GoogleReversSearch} from "../../../../Shared/ReverseSearch/ImageReverseSearch";
 import CloseResult from "../../../../Shared/CloseResult/CloseResult";
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 import OnClickInfo from "../../../../Shared/OnClickInfo/OnClickInfo";
@@ -24,6 +24,10 @@ import {
 } from "../../../../../redux/actions/tools/analysisActions";
 import ImageUrlGridList from "../../../../Shared/ImageGridList/ImageUrlGridList";
 import AnalysisComments from "./AnalysisComments";
+import {
+  SEARCH_ENGINE_SETTINGS,
+  reverseImageSearch,
+} from "../../../../Shared/ReverseSearch/reverseSearchUtils";
 
 const YoutubeResults = (props) => {
   const classes = useMyStyles();
@@ -32,18 +36,11 @@ const YoutubeResults = (props) => {
     tsv
   );
 
-  const reverseSearch = (website) => {
-    if(website === 'google'){
-      for (let image of thumbnails) {
-        GoogleReversSearch(image.url)
-      }
+  const reverseSearch = async (website) => {
+    for (let image of thumbnails) {
+      await reverseImageSearch(image.url, true, website);
     }
-    else {
-        for (let image of thumbnails) {
-            ImageReverseSearch(website, image.url);
-        }
-    }
-  };  
+  };
 
   const dispatch = useDispatch();
   const report = props.report;
@@ -227,11 +224,18 @@ const YoutubeResults = (props) => {
                     />
                   </div>
                   <Box m={2} />
+
+                  {/* TODO: Loop through all search engines */}
+
                   <Button
                     className={classes.button}
                     variant="contained"
                     color={"primary"}
-                    onClick={() => reverseSearch("google")}
+                    onClick={async () =>
+                      await reverseSearch(
+                        SEARCH_ENGINE_SETTINGS.GOOGLE_SEARCH.NAME
+                      )
+                    }
                   >
                     {keyword("button_reverse_google")}
                   </Button>
@@ -239,7 +243,11 @@ const YoutubeResults = (props) => {
                     className={classes.button}
                     variant="contained"
                     color={"primary"}
-                    onClick={() => reverseSearch("yandex")}
+                    onClick={async () =>
+                      await reverseSearch(
+                        SEARCH_ENGINE_SETTINGS.YANDEX_SEARCH.NAME
+                      )
+                    }
                   >
                     {keyword("button_reverse_yandex")}
                   </Button>
@@ -247,7 +255,11 @@ const YoutubeResults = (props) => {
                     className={classes.button}
                     variant="contained"
                     color={"primary"}
-                    onClick={() => reverseSearch("tineye")}
+                    onClick={async () =>
+                      await reverseSearch(
+                        SEARCH_ENGINE_SETTINGS.TINEYE_SEARCH.NAME
+                      )
+                    }
                   >
                     {keyword("button_reverse_tineye")}
                   </Button>

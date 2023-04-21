@@ -1,29 +1,30 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    urlImage: "",
-    result: null,
-    loading: false,
+  urlImage: "",
+  result: null,
+  loading: false,
 };
 
 const geolocalisationSlice = createSlice({
-    name : "geolocalisation",
-    initialState,
-    reducers : {
-        resetGeolocation(){
-            return initialState;
-        },
-        setGeolocationLoading(state, action) {
-            state.loading = action.payload
-        },
-        setGeolocationResult(state, action){
-            return action.payload
-        }
-    }
-})
+  name: "geolocalisation",
+  initialState,
+  reducers: {
+    resetGeolocation() {
+      return initialState;
+    },
+    setGeolocationLoading(state, action) {
+      state.loading = action.payload;
+    },
+    setGeolocationResult(state, action) {
+      return action.payload;
+    },
+  },
+});
 
-export const {resetGeolocation, setGeolocationLoading, setGeolocationResult} = geolocalisationSlice.actions
-const geolocationReducer = geolocalisationSlice.reducer
+export const { resetGeolocation, setGeolocationLoading, setGeolocationResult } =
+  geolocalisationSlice.actions;
+const geolocationReducer = geolocalisationSlice.reducer;
 
 /*const geolocationReducer = (state = initialState, action) => {
     switch (action.type) {

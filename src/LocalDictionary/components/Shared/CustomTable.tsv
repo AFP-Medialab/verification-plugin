@@ -1,0 +1,10 @@
+	en	fr	es	el
+first_page	First Page	Première page	Primera página	Πρώτη σελίδα
+previous_page	Previous Page	Page précédente	Página anterior	Προηγούμενη σελίδα
+next_page	Next Page	Page suivante	siguiente página	Επόμενη σελίδα
+last_page	Last Page	Dernière page	Ùltima página	Τελευταία σελίδα
+from_to_text	{from}-{to} of {count}	{from}-{to} de {count}	{from}-{to} de {count}	{Από} - {έως} του {αριθμός}
+row_selected	{0} row(s) selected	{0} ligne(s) selectionée(s)	{0} fila(s) seleccionada(s)	{0} σειρά (ες) που επιλέγεται
+search	Search	Rechercher	Buscar	Αναζήτηση
+no_records	No records to display	Rien à afficher	Nada que mostrar	Δεν υπάρχουν αρχεία για προβολή
+filter	Filter	Filtre	Filtro	Φίλτρο

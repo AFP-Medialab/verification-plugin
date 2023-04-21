@@ -1,5 +1,5 @@
-import { createAction } from "@reduxjs/toolkit"
-export const setAnalysisResult = createAction("SET_ANALYSIS_RESULT")
+import { createAction } from "@reduxjs/toolkit";
+export const setAnalysisResult = createAction("SET_ANALYSIS_RESULT");
 /*export const setAnalysisResult = (url, result, notification, loading) => {
     return {
         type : "SET_ANALYSIS_RESULT",
@@ -12,7 +12,9 @@ export const setAnalysisResult = createAction("SET_ANALYSIS_RESULT")
     }
 };*/
 
-export const setAnalysisComments = createAction("SET_ANALYSIS_PAGINATION_COMMENTS")
+export const setAnalysisComments = createAction(
+  "SET_ANALYSIS_PAGINATION_COMMENTS"
+);
 /*export const setAnalysisComments = (data) => {
     return {
         type : "SET_ANALYSIS_PAGINATION_COMMENTS",
@@ -22,7 +24,9 @@ export const setAnalysisComments = createAction("SET_ANALYSIS_PAGINATION_COMMENT
     }
 };*/
 
-export const setAnalysisLinkComments = createAction("SET_ANALYSIS_PAGINATION_LINK_COMMENTS")
+export const setAnalysisLinkComments = createAction(
+  "SET_ANALYSIS_PAGINATION_LINK_COMMENTS"
+);
 
 /*export const setAnalysisLinkComments = (data) => {
     return {
@@ -33,7 +37,9 @@ export const setAnalysisLinkComments = createAction("SET_ANALYSIS_PAGINATION_LIN
     }
 };*/
 
-export const setAnalysisVerifiedComments = createAction("SET_ANALYSIS_PAGINATION_VERIFIED_COMMENTS")
+export const setAnalysisVerifiedComments = createAction(
+  "SET_ANALYSIS_PAGINATION_VERIFIED_COMMENTS"
+);
 
 /*export const setAnalysisVerifiedComments = (data) => {
     return {
@@ -44,7 +50,7 @@ export const setAnalysisVerifiedComments = createAction("SET_ANALYSIS_PAGINATION
     }
 };*/
 
-export const setAnalysisLoading = createAction("SET_ANALYSIS_LOADING")
+export const setAnalysisLoading = createAction("SET_ANALYSIS_LOADING");
 
 /*export const setAnalysisLoading = (loading) => {
     return {
@@ -53,7 +59,7 @@ export const setAnalysisLoading = createAction("SET_ANALYSIS_LOADING")
     }
 };*/
 
-export const cleanAnalysisState = createAction("ANALYSIS_CLEAN_STATE")
+export const cleanAnalysisState = createAction("ANALYSIS_CLEAN_STATE");
 
 /*export const cleanAnalysisState = () => {
     return {

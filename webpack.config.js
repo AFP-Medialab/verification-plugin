@@ -7,18 +7,19 @@ const Dotenv = require("dotenv-webpack");
 module.exports = {
   entry: {
     popup: "./src/index.jsx",
-    background: "./src/background/index.jsx"
+    background: "./src/background/index.jsx",
   },
   output: {
     path: path.resolve(__dirname, "build"),
     filename: "[name].js",
+    iife: false,
   },
-  optimization: {
-    runtimeChunk: 'single',
-    splitChunks: {
-      chunks: 'all',
-    },
-  },
+  // optimization: {
+  //   runtimeChunk: 'single',
+  //   splitChunks: {
+  //     chunks: 'all',
+  //   },
+  // },
   module: {
     rules: [
       {
