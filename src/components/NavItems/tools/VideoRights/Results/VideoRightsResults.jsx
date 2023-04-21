@@ -11,7 +11,7 @@ import YouTubeIcon from "@mui/icons-material/YouTube";
 import TwitterIcon from "@mui/icons-material/Twitter";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import Divider from "@mui/material/Divider";
-import invidLogo from "../images/InVID-logo.svg";
+import invidLogo from "../images/InVID-logo.svg?url";
 import Icon from "@mui/material/Icon";
 import Grid from "@mui/material/Grid";
 import CloseResult from "../../../../Shared/CloseResult/CloseResult";
