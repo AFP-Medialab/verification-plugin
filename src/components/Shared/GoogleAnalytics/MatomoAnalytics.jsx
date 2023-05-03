@@ -64,9 +64,8 @@ const resolution = () => {
 
 function matomoCall(actions) {
   const { innerWidth, innerHeight } = resolution();
-  const matomo_site = 1;
   const url_params = new URLSearchParams();
-  url_params.append("idsite", matomo_site);
+  url_params.append("idsite", process.env.MATOMO_SITE);
   url_params.append("rec", 1);
   url_params.append("apiv", 1);
   url_params.append("action_name", actions.action_name);
