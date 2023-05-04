@@ -1,4 +1,4 @@
-	en	fr	es	el
-extraction_face	Faces extraction	Extraction des visages	 Extracción de la cara	Εξαγωγή προσώπων
-extraction_video	Extraction from video	Extraction depuis une vidéo	Extracto del video	Εξαγωγή απο βίντεο
-extraction_directory	Extraction from directory	Extraction depuis un dossier	 Extracción de una carpeta	Εξαγωγή απο κατάλογο
+	en	fr	es	el	hy
+extraction_face	Faces extraction	Extraction des visages	 Extracción de la cara	Εξαγωγή προσώπων	Դեմքերի դուրսբերում
+extraction_video	Extraction from video	Extraction depuis une vidéo	Extracto del video	Εξαγωγή απο βίντεο	Դուրսբերում տեսանյութից
+extraction_directory	Extraction from directory	Extraction depuis un dossier	 Extracción de una carpeta	Εξαγωγή απο κατάλογο	Դուրսբերում պանակից

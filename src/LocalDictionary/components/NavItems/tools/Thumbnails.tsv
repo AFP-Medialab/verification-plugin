@@ -1,9 +1,9 @@
-	en	fr	es	el
-youtube_title	YouTube thumbnails reverse search	Recherche inversée des imagettes YouTube	Búsqueda inversa de miniaturas YouTube	Αντίστροφη αναζήτηση μικρογραφιών YouTube
-api_input	Copy and paste a Youtube	Copier et coller une adresse YouTube	Copiar y pegar un enlace de YouTube	Κάντε αντιγραφή και επικόλληση μιας διεύθυνσης URL Youtube
-youtube_input	YouTube video URL	Adresse de la vidéo YouTube	Enlace del video YouTube	Διεύθυνση URL YouTube βίντεο
-button_submit	Submit	Envoyer	Enviar	Υποβολή
-openTabs	Open Tabs	Ouvrir les onglets	Abrir pestañas	Άνοιγμα καρτελών
-show_result	Display results	Montrer les résultats	Mostrar los resultados	Εμφάνιση αποτελεσμάτων
-cardheader_link	Source of the video	Source de la vidéo	Fuente del vídeo	Πηγή του βίντεο
-cardheader_results	Results	Résultats	Resultados	Αποτελέσματα
+	en	fr	es	el	hy
+youtube_title	YouTube thumbnails reverse search	Recherche inversée des imagettes YouTube	Búsqueda inversa de miniaturas YouTube	Αντίστροφη αναζήτηση μικρογραφιών YouTube	YouTube-ի մանրապատկերներով որոնում 
+api_input	Copy and paste a Youtube	Copier et coller une adresse YouTube	Copiar y pegar un enlace de YouTube	Κάντε αντιγραφή και επικόλληση μιας διεύθυνσης URL Youtube	Տեղադրեք տեսանյութի URL-ը ՅուԹուբից
+youtube_input	YouTube video URL	Adresse de la vidéo YouTube	Enlace del video YouTube	Διεύθυνση URL YouTube βίντεο	ՅուԹուբում տեսանյութի URL-ը
+button_submit	Submit	Envoyer	Enviar	Υποβολή	Վերլուծել
+openTabs	Open Tabs	Ouvrir les onglets	Abrir pestañas	Άνοιγμα καρτελών	Բացել ներդիրներում
+show_result	Display results	Montrer les résultats	Mostrar los resultados	Εμφάνιση αποτελεσμάτων	Ցուցադրել արդյունքները
+cardheader_link	Source of the video	Source de la vidéo	Fuente del vídeo	Πηγή του βίντεο	Տեսանյութի աղբյուրը
+cardheader_results	Results	Résultats	Resultados	Αποτελέσματα	Արդյունքները
