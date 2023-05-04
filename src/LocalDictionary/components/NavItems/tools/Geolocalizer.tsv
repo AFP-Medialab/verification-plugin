@@ -1,11 +1,11 @@
-	en	fr	es	el
-geo_link	Link of the image	Lien de l'image	Link de la imagen	Ανάλυση Αυθεντικότητας Εικόνων (image forensics)
-geo_paste	Paste the link here	Collez le lien ici	Pegue el link aquí	Επικολλήστε τον σύνδεσμο εδώ
-geo_submit	Submit	Envoyer	Enviar	Υποβολή
-geo_maps	Open in Google Maps	Ouvrir dans Google Maps	Abrir en Google Maps	Ανοίξτε στο Google Maps
-geo_prediction	Location prediction of the image	Prédiction de l'emplacement de l'image	Predicción de la ubicación de la imagen	Πρόβλεψη θέσης της εικόνας
-geo_source	Source of the image	Source de l'image	Origen de la imagen	Πηγή της εικόνας
-geo_location	Location	Localisation	Ubicación	Τοποθεσία
-geo_lat	Latitude	Latitude	Latitud	Γεωγραφικό πλάτος
-geo_lon	Longitude	Longitude	Longitud	Γεωγραφικό μήκος
-geo_map	Map	Carte	Mapa	Χάρτης
+	en	fr	es	el	hy
+geo_link	Link of the image	Lien de l'image	Link de la imagen	Ανάλυση Αυθεντικότητας Εικόνων (image forensics)	Պատկերի հղումը
+geo_paste	Paste the link here	Collez le lien ici	Pegue el link aquí	Επικολλήστε τον σύνδεσμο εδώ	Տեղադրեք հղումը այստեղ
+geo_submit	Submit	Envoyer	Enviar	Υποβολή	Ուղարկել
+geo_maps	Open in Google Maps	Ouvrir dans Google Maps	Abrir en Google Maps	Ανοίξτε στο Google Maps	Բացեք Google Քարտեզներում
+geo_prediction	Location prediction of the image	Prédiction de l'emplacement de l'image	Predicción de la ubicación de la imagen	Πρόβλεψη θέσης της εικόνας	Նկարահանման հնարավոր վայր
+geo_source	Source of the image	Source de l'image	Origen de la imagen	Πηγή της εικόνας	Պատկերի աղբյուր
+geo_location	Location	Localisation	Ubicación	Τοποθεσία	Գտնվելու վայր
+geo_lat	Latitude	Latitude	Latitud	Γεωγραφικό πλάτος	Լայնություն
+geo_lon	Longitude	Longitude	Longitud	Γεωγραφικό μήκος	Երկայնություն
+geo_map	Map	Carte	Mapa	Χάρτης	Քարտեզ

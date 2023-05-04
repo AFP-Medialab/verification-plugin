@@ -1,103 +1,103 @@
-	en	fr	es	el
-api_title	Video contextual verification	Vérification du contexte de la vidéo	Verificación del contexto del video	Επαλήθευση βίντεο μέσω ανάλυσης δεικτών εγκυρότητας
-api_input	Youtube, Facebook or Twitter link	Adresse YouTube, Facebook ou Twitter	Enlace de YouTube, Facebook o Twitter	Σύνδεσμος Youtube, Facebook ή Twitter
-api_input_placeholder	Paste here the link	Coller ici le lien	Pegar aquí el enlace	Επικολλήστε εδώ το σύνδεσμο
-api_repro	Reprocess	Retraiter	Volver a procesar	Επανεπεξεργασία
-api_comments	All comments	Tous les commentaires	Todos los comentarios	Όλα τα σχόλια
-button_submit	Submit	Envoyer	Enviar	Υποβολή
-facebook_video_name_1	Video id	Identifiant de la vidéo	Identificación del video	Βίντεο id
-image_id	Image id	Identifiant de l'image	Identificación de imagen	Αναγνωριστικό εικόνας
-facebook_video_name_2	Video title	Titre de la vidéo	Títular del video	Τίτλος Βίντεο
-facebook_video_name_3	Duration	Durée	Duración	Διάρκεια
-facebook_video_name_4	Content category	Catégorie du contenu	Categoría del contenido	Κατηγορία περιεχομένου
-facebook_video_name_5	Content tags	Tag du contenu	Tag del contenido	Ετικέτες περιεχομένου
-facebook_video_name_6	Video description	Description de la vidéo	Descripción del video	Περιγραφή Βίντεο
-facebook_video_name_7	Like count	Nombre de ''j'aime''	Número de ''me gusta''	Αριθμός likes
-facebook_video_name_8	Updated time	Date de mise en ligne	Fecha de puesta en línea	Ώρα ενημέρωσης
-facebook_video_name_9	Created time	Date de création	Fecha de creación	Ώρα δημιουγίας
-facebook_image_caption	Caption	Légende	Subtítulo	Λεζάντα
-facebook_comment_title	Comments	Commentaires	Comentarios	Σχόλια
-facebook_comment_name_1	Video comment count	Nombre de commentaires	Comentarios sobre el video	Αριθμός σχολίων βίντεο
-facebook_delete_result	Remove result	Effacer le résultat	Borrar el resultado 	Διαγραφή του αποτελέσματος της διαδικασίας
-image_comment_count	Image comment count	Nombre de commentaires d'image	Recuento de comentarios de imagen	Αριθμός σχολίων εικόνας
-facebook_comment_name_2	Number verification comments	Nombre de commentaires vérifiés	Número de comentarios verificados	Αριθμός σχολίων επαλήθευσης
-twitter_user_name_13	Created	Date de création	Fecha de creación	Δημιουργήθηκε
-twitter_user_name_4	Profile	Profil	Perfil	Προφίλ
-button_reverse_google	Google Image reverse search	Recherche inversée Google image	Búsqueda inversa de imagen Google	Αντίστροφη αναζήτηση εικόνας Google
-button_reverse_yandex	Yandex Image reverse search	Recherche inversée Yandex image	Búsqueda inversa de imagen Yandex	Αντίστροφη αναζήτηση εικόνας Yandex
-button_reverse_tineye	Tineye Image reverse search	Recherche inversée Tineye	Búsqueda inversa de imagen Tineye	Αντίστροφη αναζήτηση εικόνας Tineye
-button_reverse_twitter	Twitter video search	Recherche sur Twitter	Búsqueda en Twitter	Αναζήτηση βίντεο Twitter
-youtube_video_name1_2	Video description	Description de la vidéo	Descripción del video	Περιγραφή Βίντεο
-twitter_video_name_3	Origin	Origine	Origen	Προέλευση
-twitter_video_name_4	Likes count	Nombre de ''j'aime''	Número de ''me gusta''	Αριθμός likes
-twitter_video_name_5	Retweets count	Nombre de retweets	Número de retweets	Αριθμός retweets
-twitter_video_name_6	Hashtags	Hashtags	Hashtags	Hashtags
-twitter_video_name_7	Urls included	Urls incluses	Urls incluidas	URLs που περιλαμβάνονται
-twitter_video_name_8	Mentionned by	Mentionné par	Mencionado por	Αναφέρθηκε από
-twitter_video_name_9	Language	Langue	Lengua	Γλώσσα
-twitter_video_name_10	Thumbnail	Imagette	Miniaturas	Μικρογραφία
-twitter_video_name_11	Size	Taille	Talla	Μέγεθος
-twitter_video_name_12	Duration	Durée	Duración	Διάρκεια
-twitter_video_name_13	Locations mentioned	Lieux mentionnés	Lugares mencionados	Τοποθεσίες που αναφέρονται
-twitter_video_name_14	Embedded YouTube	Incorporé de YouTube	Integrable desde YouTube	Ενσωματωμένo YouTube βίντεο
-twitter_video_name_15	Created	Date de création	Fecha de creación	Δημιουργήθηκε
-twitter_video_name_16	Video	Vidéo	Video	Βίντεο
-twitter_user_title	Public User	Utilisateur public	Usuario público	Δημόσιος χρήστης
-twitter_user_name_2	Screen name	Pseudonyme	Nombre de usuario	Ονομα οθόνης
-twitter_user_name_3	Location	Localisation	Lugar	Τοποθεσία
-twitter_user_name_4	Profile	Profil	Perfil	Προφίλ
-twitter_user_name_5	Description	Description	Descripción	Περιγραφή
-twitter_user_name_6	Protected user	Utilisateur protégé	Usuario protegido	Προστατευμένος χρήστης
-twitter_user_name_7	Verified user	Utilisateur vérifié	Usuario verificado	Επαληθευμένος χρήστης
-twitter_user_name_8	Followers	Nombre d'abonnés	Seguidores	Ακόλουθοι
-twitter_user_name_9	Following	Nombre d'abonnements	Seguidos	Σε ακολούθηση
-twitter_user_name_10	Lists	Listes	Listas	Λίστες
-twitter_user_name_11	Tweets liked	Tweets ''aimés''	Tweets ''likeados''	Αριθμός Tweets που άρεσαν
-twitter_user_name_12	Tweets count	Nombre de tweets	Número de tweets	Αριθμός Tweets
-twitter_user_name_13	Created	Date de création	Fecha de creación	Δημιουργήθηκε
-youtube_comment_title	Video comments:	Commentaires sur la vidéo:	Comentarios sobre el video:	Σχόλια βίντεο:
-youtube_comment_name_2	Verification comments number	Nbre de com. pour vérification	Número de comentarios para verificación	Αριθμός σχολίων επαλήθευσης
-navbar_thumbnails	Thumbnails	Imagettes	Miniaturas	Μικρογραφίες
-youtube_video_name2_1	Video view count	Nombre de vues	Número de vistas	Αριθμός προβολών βίντεο
-youtube_video_name2_2	Like count	Nombre de ''j'aime''	Número de ''me gusta''	Αριθμός likes
-youtube_video_name2_3	Dislike count	Nombre de ''je n'aime pas''	Número de ''no me gusta''	Αριθμός dislikes
-youtube_video_name2_4	Duration	Durée	Duración	Διάρκεια
-youtube_video_name2_5	Licensed content	Contenu sous license	Contenido bajo licencia	Περιεχόμενο υπό άδεια χρήσης
-youtube_video_name2_6	Upload time	Date de mise en ligne	Fecha de puesta en línea	Ώρα μεταφόρτωσης
-youtube_channel_name_2	Channel created time	Date de la création de la chaîne	Fecha de la creación de la cadena	Ώρα δημιουργίας καναλιού
-youtube_channel_name_3	Channel view count	Nombre de vues de la chaine	Número de vistas de la cadena	Αριθμός προβολών καναλιού
-youtube_channel_name_4	Channel page	Page de la chaîne	Página de la cadena	Σελίδα καναλιού
-youtube_channel_name_5	Number of subscribers	Nombre d'abonnés	Numero de suscriptores	Αριθμός συνδρομητών
-youtube_channel_title	Channel:	Chaîne:	Cadena:	Κανάλι:
-youtube_comment_name_1	Video comment count	Nombre de commentaires	Número de comentarios	Αριθμός σχολίων βίντεο
-convert_to_local_time	Convert to local time	Convertir à l'heure locale	Pasar a la hora local	Μετατροπή σε τοπική ώρα
-table_error_unavailable	This url is not valid	Cette URL n'est pas valide	Esta url no es válida	Αυτή η διεύθυνση URL δεν είναι έγκυρη
-table_error_no_image_id	We cannot extract an image ID from the submitted URL. Please note also that Facebook does not allow us to process photos from Users or Groups.	Nous ne pouvons pas extraire un ID d'image à partir de l'URL soumise. Veuillez également noter que Facebook ne nous permet pas de traiter les photos des utilisateurs ou des groupes.	No podemos extraer una identificación de imagen de la URL enviada. Tenga en cuenta también que Facebook no nos permite procesar fotos de Usuarios o Grupos.	Δεν μπορούμε να εξαγάγουμε ένα αναγνωριστικό εικόνας από την υποβληθείσα διεύθυνση URL. Λάβετε επίσης υπόψη ότι το Facebook δεν μας επιτρέπει να επεξεργαζόμαστε φωτογραφίες από Χρήστες ή Ομάδες.
-table_error_no_video_id	We cannot extract an video ID from the submitted URL. Please note also that Facebook does not allow us to process videos from Users or Groups.	Nous ne pouvons pas extraire un ID vidéo de l'URL soumise. Veuillez également noter que Facebook ne nous permet pas de traiter les vidéos des Utilisateurs ou des Groupes.	No podemos extraer una identificación de video de la URL enviada. Tenga en cuenta también que Facebook no nos permite procesar videos de Usuarios o Grupos.	Δεν μπορούμε να εξαγάγουμε ένα αναγνωριστικό βίντεο από την υποβληθείσα διεύθυνση URL. Σημειώστε επίσης ότι το Facebook δεν μας επιτρέπει να επεξεργαζόμαστε βίντεο από Χρήστες ή Ομάδες.
-table_error_unavailable_image	This image is not available	Cette image n'est pas disponible	Esta imagen no es disponible	Αυτή η εικόνα δεν είναι διαθέσιμη
-table_error_unavailable_video	We cannot process this video. Please note also that Facebook does not allow us to process videos from Users or Groups.	Nous ne pouvons pas traiter cette vidéo. Veuillez également noter que Facebook ne nous permet pas de traiter les vidéos des Utilisateurs ou des Groupes.	No podemos procesar este video. Tenga en cuenta también que Facebook no nos permite procesar videos de Usuarios o Grupos.	Αυτό το βίντεο δεν είναι διαθέσιμο. Σημειώστε επίσης ότι το Facebook δεν μας επιτρέπει να επεξεργαζόμαστε βίντεο από Χρήστες ή Ομάδες.
-table_error_unsupported_platform	Content from this platform are not supported by this service	Le contenu de cette plateforme n'est pas pris en charge par ce service	El contenido de esta plataforma no es compatible con este servicio	Το περιεχόμενο από αυτήν την πλατφόρμα δεν υποστηρίζεται από αυτήν την υπηρεσία
-page_number	out of	de	sobre	Εκτός
-api_title_image	Image contextual verification	Vérification du contexte de la image	Verificación del contexto del imagen	Επαλήθευση με βάση τα συμφραζόμενα της εικόνας
-link_comments	Comments that contain links	Commentaires contenant des liens	Comentarios que contienen enlaces	Σχόλια που περιέχουν συνδέσμους
-api_comments_verified	Verification comments	Commentaires de vérification	Comentarios de verificación	Σχόλια επαλήθευσης
-intro_tip	Tip	Conseils	Consejo	συμβουλή
-platform	Platform	Plate-forme	Plataforma	Πλατφόρμα
-source	Source	Source	Fuente	Πηγή
-image_link	Image link	Lien de l'image	Enlace de imágen	Σύνδεσμος εικόνας
-twitter_search	Search on Twitter	Rechercher sur Twitter	Buscar en Twitter	Αναζήτηση στο Twitter
-comments_links	Number of comments that contain links	Nombre de commentaires contenant des liens	Número de comentarios que contienen enlaces	Αριθμός σχολίων που περιέχουν συνδέσμους
-facebook_tip	This kind of Facebook link or shortener is not working properly. Try to click on the video and to get the url address instead. 	Ce genre de lien ou raccourci de Facebook ne fonctionne pas correctement. Cliquez sur la vidéo et récupérer le lien de la barre d'adresse URL.	Este tipo de enlace o de acortador de Facebook no funciona correctamente. Intenté cliquear sobre el video y de recuperar el enlace en la barra de URL. 	ΜΑυτό το είδος του συνδέσμου Facebook ή του shortener δεν λειτουργεί σωστά. Προσπαθήστε να κάνετε κλικ στο βίντεο και να λάβετε τη διεύθυνση url.
-api_input_image	Facebook or Twitter link	Adresse Facebook ou Twitter	Enlace de Facebook o Twitter	Σύνδεσμος Facebook ή Twitter
-image_description	Image description	Description de l'image	Descripción de la imagen	περιγραφή εικόνας
-video_description	Video description	Description de la vidéo	Descripción del video	Περιγραφή βίντεο
-twitter_reply	All replies	Toutes les réponses	Todas las respuestas	Όλες οι απαντήσεις
-twitter_reply_verified	Verification replies	Réponses de vérification	Respuestas de verificación	Απαντήσεις επαλήθευσης
-twitter_reply_link	Replies that contain links	Réponses contenant des liens	Respuestas que contienen enlaces	Απαντήσεις που περιέχουν συνδέσμους
-twitter_replies	Replies	Réponses	Respuestas	Απαντήσεις
-twitter_video_replies	Video replies	Réponses vidéo	Respuestas en video	Απαντήσεις βίντεο
-video_card_header	Source of the video	Source de la vidéo	Fuente del video	Πηγή του βίντεο
-image_card_header	Source of the image	Origine de l'image	Fuente de la imagen	Πηγή της εικόνας
-user	User	Utilisateur	Usuario	Χρήστης
-profile_creator	Profile	Profil	Perfil	Προφίλ
-cardheader_results	Results	Résultats	Resultados	Αποτελέσματα
+	en	fr	es	el	hy
+api_title	Video contextual verification	Vérification du contexte de la vidéo	Verificación del contexto del video	Επαλήθευση βίντεο μέσω ανάλυσης δεικτών εγκυρότητας	Տեսանյութի համատեքստի ստուգում
+api_input	Youtube, Facebook or Twitter link	Adresse YouTube, Facebook ou Twitter	Enlace de YouTube, Facebook o Twitter	Σύνδεσμος Youtube, Facebook ή Twitter	ՅուԹուբի, Ֆեյսբուքի կամ Թվիթերի հղում
+api_input_placeholder	Paste here the link	Coller ici le lien	Pegar aquí el enlace	Επικολλήστε εδώ το σύνδεσμο	Տեղադրեք այստեղ հղումը
+api_repro	Reprocess	Retraiter	Volver a procesar	Επανεπεξεργασία	Վերամշակել
+api_comments	All comments	Tous les commentaires	Todos los comentarios	Όλα τα σχόλια	Բոլոր մեկնաբանությունները
+button_submit	Submit	Envoyer	Enviar	Υποβολή	Վերլուծել
+facebook_video_name_1	Video id	Identifiant de la vidéo	Identificación del video	Βίντεο id	Տեսանյութի ID
+image_id	Image id	Identifiant de l'image	Identificación de imagen	Αναγνωριστικό εικόνας	Պատկերի ID
+facebook_video_name_2	Video title	Titre de la vidéo	Títular del video	Τίτλος Βίντεο	Տեսանյութի վերնագիր
+facebook_video_name_3	Duration	Durée	Duración	Διάρκεια	Տևողությունը
+facebook_video_name_4	Content category	Catégorie du contenu	Categoría del contenido	Κατηγορία περιεχομένου	Բովանդակության կատեգորիա
+facebook_video_name_5	Content tags	Tag du contenu	Tag del contenido	Ετικέτες περιεχομένου	Բովանդակության պիտակներ
+facebook_video_name_6	Video description	Description de la vidéo	Descripción del video	Περιγραφή Βίντεο	Տեսանյութի նկարագրությունը
+facebook_video_name_7	Like count	Nombre de ''j'aime''	Número de ''me gusta''	Αριθμός likes	Հավանումների թիվը
+facebook_video_name_8	Updated time	Date de mise en ligne	Fecha de puesta en línea	Ώρα ενημέρωσης	Փոփոխման ամսաթիվ
+facebook_video_name_9	Created time	Date de création	Fecha de creación	Ώρα δημιουγίας	Ստեղծման ամսաթիվ
+facebook_image_caption	Caption	Légende	Subtítulo	Λεζάντα	Վերնագիր
+facebook_comment_title	Comments	Commentaires	Comentarios	Σχόλια	Մեկնաբանություններ
+facebook_comment_name_1	Video comment count	Nombre de commentaires	Comentarios sobre el video	Αριθμός σχολίων βίντεο	Տեսանյութի մեկնաբանությունների թիվ 
+facebook_delete_result	Remove result	Effacer le résultat	Borrar el resultado 	Διαγραφή του αποτελέσματος της διαδικασίας	Հեռացրեք արդյունքը
+image_comment_count	Image comment count	Nombre de commentaires d'image	Recuento de comentarios de imagen	Αριθμός σχολίων εικόνας	Պատկերի մեկնաբանությունների թիվ
+facebook_comment_name_2	Number verification comments	Nombre de commentaires vérifiés	Número de comentarios verificados	Αριθμός σχολίων επαλήθευσης	Համարի վերիֆիկացնող մեկնաբանություններ
+twitter_user_name_13	Created	Date de création	Fecha de creación	Δημιουργήθηκε	Ստեղծված
+twitter_user_name_4	Profile	Profil	Perfil	Προφίλ	Պրոֆիլ
+button_reverse_google	Google Image reverse search	Recherche inversée Google image	Búsqueda inversa de imagen Google	Αντίστροφη αναζήτηση εικόνας Google	Google Image Reverse որոնում
+button_reverse_yandex	Yandex Image reverse search	Recherche inversée Yandex image	Búsqueda inversa de imagen Yandex	Αντίστροφη αναζήτηση εικόνας Yandex	Yandex Image Reverse որոնում
+button_reverse_tineye	Tineye Image reverse search	Recherche inversée Tineye	Búsqueda inversa de imagen Tineye	Αντίστροφη αναζήτηση εικόνας Tineye	Tineye Image Հակադարձ որոնում
+button_reverse_twitter	Twitter video search	Recherche sur Twitter	Búsqueda en Twitter	Αναζήτηση βίντεο Twitter	Թվիթերի վիդեո որոնում
+youtube_video_name1_2	Video description	Description de la vidéo	Descripción del video	Περιγραφή Βίντεο	Տեսանյութի նկարագրությունը
+twitter_video_name_3	Origin	Origine	Origen	Προέλευση	Սկզբնաղբյուր
+twitter_video_name_4	Likes count	Nombre de ''j'aime''	Número de ''me gusta''	Αριθμός likes	Հավանումների թիվ
+twitter_video_name_5	Retweets count	Nombre de retweets	Número de retweets	Αριθμός retweets	Կիսումների (ռեթվիթերի) թիվ
+twitter_video_name_6	Hashtags	Hashtags	Hashtags	Hashtags	Հեշթեգեր
+twitter_video_name_7	Urls included	Urls incluses	Urls incluidas	URLs που περιλαμβάνονται	Ներառված URL-ներ
+twitter_video_name_8	Mentionned by	Mentionné par	Mencionado por	Αναφέρθηκε από	Նշվել է
+twitter_video_name_9	Language	Langue	Lengua	Γλώσσα	Լեզու
+twitter_video_name_10	Thumbnail	Imagette	Miniaturas	Μικρογραφία	Մանրապատկեր
+twitter_video_name_11	Size	Taille	Talla	Μέγεθος	Չափ
+twitter_video_name_12	Duration	Durée	Duración	Διάρκεια	Տևողությունը
+twitter_video_name_13	Locations mentioned	Lieux mentionnés	Lugares mencionados	Τοποθεσίες που αναφέρονται	Նշված տեղանքները
+twitter_video_name_14	Embedded YouTube	Incorporé de YouTube	Integrable desde YouTube	Ενσωματωμένo YouTube βίντεο	Ներկառուցված YouTube
+twitter_video_name_15	Created	Date de création	Fecha de creación	Δημιουργήθηκε	Ստեղծված
+twitter_video_name_16	Video	Vidéo	Video	Βίντεο	Տեսանյութ
+twitter_user_title	Public User	Utilisateur public	Usuario público	Δημόσιος χρήστης	Հրապարակայաին օգտվող
+twitter_user_name_2	Screen name	Pseudonyme	Nombre de usuario	Ονομα οθόνης	Կեղծանուն
+twitter_user_name_3	Location	Localisation	Lugar	Τοποθεσία	Գտնվելու վայր
+twitter_user_name_4	Profile	Profil	Perfil	Προφίλ	Պրոֆիլ
+twitter_user_name_5	Description	Description	Descripción	Περιγραφή	Նկարագրություն
+twitter_user_name_6	Protected user	Utilisateur protégé	Usuario protegido	Προστατευμένος χρήστης	Պաշտպանված օգտվող
+twitter_user_name_7	Verified user	Utilisateur vérifié	Usuario verificado	Επαληθευμένος χρήστης	Ստուգված օգտվող
+twitter_user_name_8	Followers	Nombre d'abonnés	Seguidores	Ακόλουθοι	Հետևորդներ
+twitter_user_name_9	Following	Nombre d'abonnements	Seguidos	Σε ακολούθηση	Հաջորդ
+twitter_user_name_10	Lists	Listes	Listas	Λίστες	Ցուցակներ
+twitter_user_name_11	Tweets liked	Tweets ''aimés''	Tweets ''likeados''	Αριθμός Tweets που άρεσαν	Իր հավանած թվիթների քանակ
+twitter_user_name_12	Tweets count	Nombre de tweets	Número de tweets	Αριθμός Tweets	Թվիթների քանակ
+twitter_user_name_13	Created	Date de création	Fecha de creación	Δημιουργήθηκε	Ստեղծված
+youtube_comment_title	Video comments:	Commentaires sur la vidéo:	Comentarios sobre el video:	Σχόλια βίντεο:	Տեսանյութի մեկնաբանություններ.
+youtube_comment_name_2	Verification comments number	Nbre de com. pour vérification	Número de comentarios para verificación	Αριθμός σχολίων επαλήθευσης	Ստուգման մեկնաբանությունների համարը
+navbar_thumbnails	Thumbnails	Imagettes	Miniaturas	Μικρογραφίες	Մանրապատկեր
+youtube_video_name2_1	Video view count	Nombre de vues	Número de vistas	Αριθμός προβολών βίντεο	Տեսանյութի դիտումների թիվը
+youtube_video_name2_2	Like count	Nombre de ''j'aime''	Número de ''me gusta''	Αριθμός likes	Հավանումների թիվը
+youtube_video_name2_3	Dislike count	Nombre de ''je n'aime pas''	Número de ''no me gusta''	Αριθμός dislikes	Չհավանումների թիվը
+youtube_video_name2_4	Duration	Durée	Duración	Διάρκεια	Տևողությունը
+youtube_video_name2_5	Licensed content	Contenu sous license	Contenido bajo licencia	Περιεχόμενο υπό άδεια χρήσης	Լիցենզավորված բովանդակություն
+youtube_video_name2_6	Upload time	Date de mise en ligne	Fecha de puesta en línea	Ώρα μεταφόρτωσης	Վերբեռնման ամսաթիվ
+youtube_channel_name_2	Channel created time	Date de la création de la chaîne	Fecha de la creación de la cadena	Ώρα δημιουργίας καναλιού	Ալիքի ստեղծման ամսաթիվ
+youtube_channel_name_3	Channel view count	Nombre de vues de la chaine	Número de vistas de la cadena	Αριθμός προβολών καναλιού	Ալիքում դիտումների թիվը
+youtube_channel_name_4	Channel page	Page de la chaîne	Página de la cadena	Σελίδα καναλιού	Ալիքի էջ
+youtube_channel_name_5	Number of subscribers	Nombre d'abonnés	Numero de suscriptores	Αριθμός συνδρομητών	Բաժանորդների քանակը
+youtube_channel_title	Channel:	Chaîne:	Cadena:	Κανάλι:	Ալիք՝ 
+youtube_comment_name_1	Video comment count	Nombre de commentaires	Número de comentarios	Αριθμός σχολίων βίντεο	Տեսանյութի մեկնաբանությունների թիվը
+convert_to_local_time	Convert to local time	Convertir à l'heure locale	Pasar a la hora local	Μετατροπή σε τοπική ώρα	Դիտել տեղական ժամանակով
+table_error_unavailable	This url is not valid	Cette URL n'est pas valide	Esta url no es válida	Αυτή η διεύθυνση URL δεν είναι έγκυρη	Ոչ վավեր հասցե (URL)
+table_error_no_image_id	We cannot extract an image ID from the submitted URL. Please note also that Facebook does not allow us to process photos from Users or Groups.	Nous ne pouvons pas extraire un ID d'image à partir de l'URL soumise. Veuillez également noter que Facebook ne nous permet pas de traiter les photos des utilisateurs ou des groupes.	No podemos extraer una identificación de imagen de la URL enviada. Tenga en cuenta también que Facebook no nos permite procesar fotos de Usuarios o Grupos.	Δεν μπορούμε να εξαγάγουμε ένα αναγνωριστικό εικόνας από την υποβληθείσα διεύθυνση URL. Λάβετε επίσης υπόψη ότι το Facebook δεν μας επιτρέπει να επεξεργαζόμαστε φωτογραφίες από Χρήστες ή Ομάδες.	Ձեր նշված URL-ից հնարավոր չէ ստանալ պատկերի ID: Խնդրում ենք նկատի ունենալ նաև, որ Ֆեյսբուքը մեզ թույլ չի տալիս լուսանկարներ մշակել օգտվողներից կամ խմբերից:
+table_error_no_video_id	We cannot extract an video ID from the submitted URL. Please note also that Facebook does not allow us to process videos from Users or Groups.	Nous ne pouvons pas extraire un ID vidéo de l'URL soumise. Veuillez également noter que Facebook ne nous permet pas de traiter les vidéos des Utilisateurs ou des Groupes.	No podemos extraer una identificación de video de la URL enviada. Tenga en cuenta también que Facebook no nos permite procesar videos de Usuarios o Grupos.	Δεν μπορούμε να εξαγάγουμε ένα αναγνωριστικό βίντεο από την υποβληθείσα διεύθυνση URL. Σημειώστε επίσης ότι το Facebook δεν μας επιτρέπει να επεξεργαζόμαστε βίντεο από Χρήστες ή Ομάδες.	Ձեր նշված URL-ից հնարավոր չէ ստանալ տեսանյութի ID։ Խնդրում ենք նաև նկատի ունենալ, որ Ֆեյսբուքը մեզ թույլ չի տալի օգտվողներից կամ խմբերից տեսանյութեր մշակել:
+table_error_unavailable_image	This image is not available	Cette image n'est pas disponible	Esta imagen no es disponible	Αυτή η εικόνα δεν είναι διαθέσιμη	Այս պատկերը հասանելի չէ
+table_error_unavailable_video	We cannot process this video. Please note also that Facebook does not allow us to process videos from Users or Groups.	Nous ne pouvons pas traiter cette vidéo. Veuillez également noter que Facebook ne nous permet pas de traiter les vidéos des Utilisateurs ou des Groupes.	No podemos procesar este video. Tenga en cuenta también que Facebook no nos permite procesar videos de Usuarios o Grupos.	Αυτό το βίντεο δεν είναι διαθέσιμο. Σημειώστε επίσης ότι το Facebook δεν μας επιτρέπει να επεξεργαζόμαστε βίντεο από Χρήστες ή Ομάδες.	Մենք չենք կարող մշակել այս տեսանյութը: Խնդրում ենք նաև նկատի ունենալ, որ Ֆեյսբուքը մեզ թույլ չի տալիս տեսանյութեր մշակել օգտվողներից կամ խմբերից:
+table_error_unsupported_platform	Content from this platform are not supported by this service	Le contenu de cette plateforme n'est pas pris en charge par ce service	El contenido de esta plataforma no es compatible con este servicio	Το περιεχόμενο από αυτήν την πλατφόρμα δεν υποστηρίζεται από αυτήν την υπηρεσία	Տվյալ հարթակից բովանդակությունը չի աջակցվում այս ծառայության կողմից
+page_number	out of	de	sobre	Εκτός	/
+api_title_image	Image contextual verification	Vérification du contexte de la image	Verificación del contexto del imagen	Επαλήθευση με βάση τα συμφραζόμενα της εικόνας	Պատկերի համատեքստի ստուգում
+link_comments	Comments that contain links	Commentaires contenant des liens	Comentarios que contienen enlaces	Σχόλια που περιέχουν συνδέσμους	Հղումներ պարունակող մեկնաբանություններ
+api_comments_verified	Verification comments	Commentaires de vérification	Comentarios de verificación	Σχόλια επαλήθευσης	Վերիֆիկացնող մեկնաբանություններ
+intro_tip	Tip	Conseils	Consejo	συμβουλή	Հուշում
+platform	Platform	Plate-forme	Plataforma	Πλατφόρμα	Հարթակ
+source	Source	Source	Fuente	Πηγή	Աղբյուր
+image_link	Image link	Lien de l'image	Enlace de imágen	Σύνδεσμος εικόνας	Պատկերի հղում
+twitter_search	Search on Twitter	Rechercher sur Twitter	Buscar en Twitter	Αναζήτηση στο Twitter	Որոնել Թվիթերում
+comments_links	Number of comments that contain links	Nombre de commentaires contenant des liens	Número de comentarios que contienen enlaces	Αριθμός σχολίων που περιέχουν συνδέσμους	Հղումներ պարունակող մեկնաբանությունների քանակ
+facebook_tip	This kind of Facebook link or shortener is not working properly. Try to click on the video and to get the url address instead. 	Ce genre de lien ou raccourci de Facebook ne fonctionne pas correctement. Cliquez sur la vidéo et récupérer le lien de la barre d'adresse URL.	Este tipo de enlace o de acortador de Facebook no funciona correctamente. Intenté cliquear sobre el video y de recuperar el enlace en la barra de URL. 	ΜΑυτό το είδος του συνδέσμου Facebook ή του shortener δεν λειτουργεί σωστά. Προσπαθήστε να κάνετε κλικ στο βίντεο και να λάβετε τη διεύθυνση url.	Ֆեյսբուքի այս տեսակի հղումը կամ հղման կարճ տարբերակը չի աջակցվում: Փորձեք սեղմել տեսանյութի վրա և ստանալ ամբողջական URL հասցեն:
+api_input_image	Facebook or Twitter link	Adresse Facebook ou Twitter	Enlace de Facebook o Twitter	Σύνδεσμος Facebook ή Twitter	Ֆեսյբուքի կամ Թվիթերի հղում
+image_description	Image description	Description de l'image	Descripción de la imagen	περιγραφή εικόνας	Պատկերի նկարագրություն
+video_description	Video description	Description de la vidéo	Descripción del video	Περιγραφή βίντεο	Տեսանյութի նկարագրություն
+twitter_reply	All replies	Toutes les réponses	Todas las respuestas	Όλες οι απαντήσεις	Բոլոր պատասխաններ
+twitter_reply_verified	Verification replies	Réponses de vérification	Respuestas de verificación	Απαντήσεις επαλήθευσης	Վերիֆիկացնող պատասխաններ
+twitter_reply_link	Replies that contain links	Réponses contenant des liens	Respuestas que contienen enlaces	Απαντήσεις που περιέχουν συνδέσμους	Պատասխաններ, որոնք պարունակում են հղումներ
+twitter_replies	Replies	Réponses	Respuestas	Απαντήσεις	Պատասխաններ
+twitter_video_replies	Video replies	Réponses vidéo	Respuestas en video	Απαντήσεις βίντεο	Տեսապատասխաններ
+video_card_header	Source of the video	Source de la vidéo	Fuente del video	Πηγή του βίντεο	Տեսանյութի աղբյուրը
+image_card_header	Source of the image	Origine de l'image	Fuente de la imagen	Πηγή της εικόνας	Պատկերի աղբյուր
+user	User	Utilisateur	Usuario	Χρήστης	Օգտատեր
+profile_creator	Profile	Profil	Perfil	Προφίλ	Պրոֆիլ
+cardheader_results	Results	Résultats	Resultados	Αποτελέσματα	Արդյունքները

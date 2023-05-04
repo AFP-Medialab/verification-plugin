@@ -1,20 +1,20 @@
-	en	fr	es	el
-close	Close	Fermer	Cerrar	Κλείσε
-archived	Channel is Archived!	La chaîne est archivée!	El canal está archivado!	Το κανάλι έχει αρχειοθετηθεί!
-badrequest	Bad Request!	Mauvaise Demande!	¡Solicitud incorrecta!	Κακό Αίτημα!
-forbidden	Forbidden!	Interdit!	¡Prohibido!	Απαγορευμένο!
-internal	Server Error!	Erreur du serveur!	¡Error del Servidor!	Σφάλμα Διακομιστή!
-notfound	Channel Not Found!	Chaîne introuvable!	¡Canal no encontrado!	Κανάλι δεν βρέθηκε!
-unexpected	Unexpected error!	Erreur inattendue!	¡Error inesperado!	Απρόσμενο σφάλμα!
-improvement	Improvement	Amélioration	Mejora	Βελτίωση
-bug	Bug	Bug	Bug	Σφάλμα
-feature	Feature	Fonctionnalité	Característica	Χαρακτηριστικό
-title	Send Feedback	Envoyer un commentaire	Enviar un comentario	Στείλετε τα σχόλιά σας
-remove	Remove	Retirer	Eliminar	Αφαίρεσε
-message	Message	Message	Mensaje	Μήνυμα
-type	Feedback type	Type de commentaire	Tipo de Comentarios	Τύπος σχολίων
-placeholder	Your message... Add your email if you want us to contact you	Votre message ... Ajoutez votre email si vous souhaitez que nous vous contactions	Su mensaje ... Agregue su correo electrónico si desea que nos comuniquemos con usted	Το μήνυμά σας ... Προσθέστε το e-mail σας αν θέλετε να επικοινωνήσουμε μαζί σας
-sending	Sending feedback...	Envoi de commentaires ...	Enviando comentarios ...	Αποστολή σχολίων ...
-sent	Sent!	Envoyé!	Expedido!	Εστάλη!
-submit_text	Send Feedback	Envoyer des commentaires	Enviar comentarios	Στείλετε τα σχόλιά σας
-button	Feedback	Feedback	Feedback	Σχόλια
+	en	fr	es	el	hy
+close	Close	Fermer	Cerrar	Κλείσε	Փակել
+archived	Channel is Archived!	La chaîne est archivée!	El canal está archivado!	Το κανάλι έχει αρχειοθετηθεί!	Արխիվացված է
+badrequest	Bad Request!	Mauvaise Demande!	¡Solicitud incorrecta!	Κακό Αίτημα!	Վատ հարցում
+forbidden	Forbidden!	Interdit!	¡Prohibido!	Απαγορευμένο!	Արգելված է
+internal	Server Error!	Erreur du serveur!	¡Error del Servidor!	Σφάλμα Διακομιστή!	Սեռվերի սխալ
+notfound	Channel Not Found!	Chaîne introuvable!	¡Canal no encontrado!	Κανάλι δεν βρέθηκε!	Կապի միջոց չի գտնվել
+unexpected	Unexpected error!	Erreur inattendue!	¡Error inesperado!	Απρόσμενο σφάλμα!	Անսպասելի սխալ
+improvement	Improvement	Amélioration	Mejora	Βελτίωση	Բարելավում
+bug	Bug	Bug	Bug	Σφάλμα	Սխալ
+feature	Feature	Fonctionnalité	Característica	Χαρακτηριστικό	Նոր գործառույթ
+title	Send Feedback	Envoyer un commentaire	Enviar un comentario	Στείλετε τα σχόλιά σας	Հետադարձ կապ
+remove	Remove	Retirer	Eliminar	Αφαίρεσε	Հեռացնել
+message	Message	Message	Mensaje	Μήνυμα	Հաղորդագրություն
+type	Feedback type	Type de commentaire	Tipo de Comentarios	Τύπος σχολίων	Հաղորդագրության թեմա
+placeholder	Your message... Add your email if you want us to contact you	Votre message ... Ajoutez votre email si vous souhaitez que nous vous contactions	Su mensaje ... Agregue su correo electrónico si desea que nos comuniquemos con usted	Το μήνυμά σας ... Προσθέστε το e-mail σας αν θέλετε να επικοινωνήσουμε μαζί σας	Մուտքագրեք ձեր հաղորդագրությունը… Իսկ եթե ուզում եք, որ մենք կապվենք ձեր հետ նաև նշեք ձեր էլփոստի հասցեն
+sending	Sending feedback...	Envoi de commentaires ...	Enviando comentarios ...	Αποστολή σχολίων ...	Ուղարկվում է…
+sent	Sent!	Envoyé!	Expedido!	Εστάλη!	Ուղարկվեց
+submit_text	Send Feedback	Envoyer des commentaires	Enviar comentarios	Στείλετε τα σχόλιά σας	Ուղարկել
+button	Feedback	Feedback	Feedback	Σχόλια	Հետադարձ կապ

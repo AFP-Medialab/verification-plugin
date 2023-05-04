@@ -1,202 +1,202 @@
-	en	fr	es	el
-metadata_content_title	Metadata	Métadonnées	Metadatos	Μεταδεδομένα
-metadata_content_input	Image or video URL link	Lien URL de l'image ou de la vidéo	Enlace URL de la imagen o el video	Σύνδεσμος URL εικόνας ή βίντεο
-metadata_content_input_placeholder	Paste the video or image link here	Collez le lien de la vidéo ou de l'image ici	Pegue el enlace del video o la imagen aquí	Επικολλήστε τον σύνδεσμο βίντεο ή εικόνας εδώ
-button_localfile	Local file	Fichier local	Fichero local	Τοπικό αρχείο
-metadata_radio_image	Image	Image	Imagen	Εικόνα
-metadata_radio_video	Video	Vidéo	Video	Βίντεο
-button_submit	Submit	Envoyer	Enviar	Υποβολή
-please_give_a_correct_link	Please give a correct link	Donner un lien valide s'il vous plaît	Por favor, dé un enlace válido	Παρακαλώ δώστε έναν σωστό σύνδεσμο
-metadata_img_error_exif	No EXIF Metadata was found. Note: The EXIF standard applies only to .jpg and .tiff images	Aucune métadonnée EXIF n'a été trouvée. Note: Le Format EXIF s'applique uniquement aux images .jpg et .tiff	No se encontraron metadatos EXIF. Note: El estándar EXIF se aplica sólo a imágenes.jpg y.tiff	Δεν βρέθηκαν EXIF μεταδεδομένα. Σημείωση: Το πρότυπο EXIF ​​ισχύει μόνο για εικόνες .jpg και .tiff
-metadata_table_error	Video failed loading. Check the URL and try again	Vidéo impossible à charger. Veuillez verifier l'URL et réessayer	Fue imposible descargar el video. Verifica el URL y vuelve a intentarlo	Η φόρτωση του βίντεο απέτυχε. Ελέγξτε τη διεύθυνση URL και δοκιμάστε ξανά
-metadata_img_software_fields_1	Make	Marque	Marca	Μάρκα
-metadata_img_software_fields_2	Model	Modèle	Modelo	Μοντέλο
-metadata_img_software_fields_3	Orientation	Orientation	Orientación	Προσανατολισμός
-metadata_img_software_fields_4	X Resolution	Résolution X	Resolución X	X Ανάλυση
-metadata_img_software_fields_5	Y Resolution	Résolution Y	Resolución Y	Y Ανάλυση
-metadata_img_software_fields_6	Resolution Unit	Unité de résolution	Unidad de resolución	Μονάδα ανάλυσης
-metadata_img_software_fields_7	Host Computer	Ordinateur hôte	Ordenador host	Εξυπηρετητής
-metadata_img_software_fields_8	Software	Logiciel	Software	Λογισμικό
-metadata_img_software_fields_9	Modify Date	Date modification	Fecha de modificación	Τροποποίηση ημερομηνίας
-metadata_img_software_fields_10	YCbCr Positioning	Positionnement YCbCr	Posicionamiento YCbCr	Θέση YCbCr
-metadata_img_software_fields_11	Copyright	Droits d'auteurs	Derechos de autor	Πνευματική ιδιοκτησία
-metadata_img_software_desc_1				
-metadata_img_software_desc_2				
-metadata_img_software_desc_3				
-metadata_img_software_desc_4				
-metadata_img_software_desc_5				
-metadata_img_software_desc_6				
-metadata_img_software_desc_7	The computer and/or operating system in use at the time of image creation	L'ordinateur et/ou système opérateur utilisé au moment où la photo à été créée	El ordenador y/o el sistema operador utilizado en el momento en el que se crea la foto	Ο υπολογιστής ή / και το λειτουργικό σύστημα που χρησιμοποιήθηκε τη στιγμή της δημιουργίας εικόνας
-metadata_img_software_desc_8				
-metadata_img_software_desc_9	Timestamp for when you might alter the image or it's metadata	Horodatage de la possibilité de modification de l'image ou de ses métadonnées	Cronomarcador de la posibilidad de modificación de la imagen o de sus metadatos	Χρονική σήμανση για το πότε μπορείτε να αλλάξετε την εικόνα ή τα μεταδεδομένα
-metadata_img_software_desc_10	Specifies the positioning of subsampled chrominance components relative to luminance samples. Field value 1 (centered) must be specified for compatibility with industry standards such as PostScript Level 2 and QuickTime. Field value 2 (cosited) must be specified for compatibility with most digital video standards, such as CCIR Recommendation 601-1	Spécifie le positionnement des composants de chrominance sous-échantillonnés par rapport aux échantillons de luminance. La valeur de champ 1 (center) doit être spécifiée pour la compatibilité avec les normes de l'industrie telles que PostScript Level 2 et QuickTime. La valeur de champ 2 (cosited) doit être spécifiée pour la compatibilité avec la plupart des normes vidéo numériques, telles que la Recommandation 601-1 du CCIR	Especifica el posicionamiento de los componentes de crominancia submuestreados en relación con las muestras de luminancia. El valor del campo 1 (centrado) debe especificarse para que sea compatible con los estándares del sector, como PostScript Level 2 y QuickTime. El valor del campo 2 (cosited) debe especificarse para que sea compatible con la mayoría de las normas de vídeo digital, como la Recomendación 601-1 del CCIR.	Καθορίζει τη θέση των συνιστωσών χρωματομεταβλητού δείγματος σε σχέση με τα δείγματα φωτεινότητας. Η τιμή πεδίου 1 (στο κέντρο) πρέπει να καθοριστεί για συμβατότητα με τα πρότυπα του κλάδου, όπως το PostScript Level 2 και το QuickTime. Η τιμή πεδίου 2 (κατάλληλη) πρέπει να καθοριστεί για συμβατότητα με τα περισσότερα ψηφιακά πρότυπα βίντεο, όπως η σύσταση 601-1 της CCIR
-metadata_img_software_desc_11				
-metadata_img_general_fields_1	Artist	Artiste	Artista	Καλλιτέχνης
-metadata_img_general_fields_2	Document Name	Nom du document	Nombre del documento	Όνομα εγγράφου
-metadata_img_general_fields_3	Page Name	Nom de la page	Nombre de la página	Όνομα σελίδας
-metadata_img_general_fields_4	Exposure Time	Temps d'exposition	Tiempo de exposición	Χρόνος έκθεσης
-metadata_img_general_fields_5	F-Number	Nombre F	Número F	F-Αριθμός
-metadata_img_general_fields_6	Exposure Program	Programme d'exposition	Programa de exposición	Πρόγραμμα έκθεσης
-metadata_img_general_fields_7	EXIF Version	Version EXIF	Versión EXIF	Έκδοση EXIF
-metadata_img_general_fields_8	Date Time Original	Horodatage d'origine	Cronomarcador de origen	Ημερομηνία Ώρα πρωτότυπης εικόνας
-metadata_img_general_fields_9	Date Time Digitized	Horodatage numérisée	Cronomarcador numerizado	Ημερομηνία Ώρα Ψηφιοποιημένη εικόνας
-metadata_img_general_fields_10	Components Configuration	Configuration des composants	Configuración de los componentes	Διαμόρφωση στοιχείων
-metadata_img_general_fields_11	Compressed Bits Per Pixel	Bits compressés par pixel	Bits comprimidos por pixel	Συμπιεσμένα bit ανά εικονοστοιχείο
-metadata_img_general_fields_12	Exposure Bias	Biais d'exposition	Sesgo de exposición	Μεροληψία έκθεσης
-metadata_img_general_fields_13	Max Aperture Value	Valeur d'ouverture maximale	Valor de apertura maxima	Μέγιστη τιμή διαφράγματος
-metadata_img_general_fields_14	Metering Mode	Mode de mesure	Modo de medida	Λειτουργία μέτρησης
-metadata_img_general_fields_15	Flash	Flash	Flash	Φλάς
-metadata_img_general_fields_16	Focal Length	Longueur focale	Distancia focal	Εστιακό μήκος
-metadata_img_general_fields_17	User Comment	Commentaire utilisateur	Comentario usuario	Σχόλιο χρήστη
-metadata_img_general_fields_18	Image Description	Description de l'image	Descripción de la imagen	Περιγραφή εικόνας
-metadata_img_general_fields_19	Maker Note	Note du fabricant	Nota del fabricante	Σημείωση κατασκευαστή
-metadata_img_general_fields_20	Subject Distance	Distance du sujet	Distancia del sujeto	Απόσταση θέματος
-metadata_img_general_fields_21	Flashpix Version	Version Flashpix	Versión Flashpix	Έκδοση Flashpix
-metadata_img_general_fields_22	Color Space	Espace colorimétrique	Espacio ...	Πρότυπο Χρώματος
-metadata_img_general_fields_23	X Dimension	Dimension X	Dimensión X	X Διάσταση
-metadata_img_general_fields_24	Y Dimension	Dimension Y	Dimensión Y	Y Διάσταση
-metadata_img_general_fields_25	File Source	Source du fichier	Fuente del fichero	Πηγή αρχείου
-metadata_img_general_desc_1	Person who created the image	Personne qui a créé l'image	Persona que ha creado la imagen	Πρόσωπο που δημιούργησε την εικόνα
-metadata_img_general_desc_2				
-metadata_img_general_desc_3				
-metadata_img_general_desc_4	The length of time when the film or digital sensor inside the camera is exposed to light	La durée pendant laquelle le film ou le capteur numérique à l'intérieur de l'appareil photo est exposé à la lumière	La duración durante la cual se expone al sol la película o el captor numérico al interior de la cámara	Το χρονικό διάστημα κατά το οποίο η ταινία ή ο ψηφιακός αισθητήρας μέσα στην κάμερα είναι εκτεθειμένο σε φως
-metadata_img_general_desc_5	The ratio of the system's focal length to the diameter of the entrance pupil	Le rapport entre la distance focale du système et le diamètre de la pupille d'entrée	La diferencia entre la distancia focal del sistema y el diámetro de la pupila de entrada	Η αναλογία εστιακού μήκους του συστήματος προς τη διάμετρο του μαθητή εισόδου
-metadata_img_general_desc_6	The program used by the camera to set exposure when the picture is taken	Le programme utilisé par l'appareil photo pour définir l'exposition lorsque la photo est prise	El programa utilizado por la cámara para definir la exposición cuando se toma la foto	Το πρόγραμμα που χρησιμοποιεί η κάμερα για να ρυθμίσει την έκθεση κατά τη λήψη της φωτογραφίας
-metadata_img_general_desc_7				
-metadata_img_general_desc_8	The date and time when the original image data was generated	La date et l'heure auxquelles les données de l'image d'origine ont été générées	La fecha y la hora en las cuales los datos de la imagen de origen han sido generadas	Η ημερομηνία και η ώρα δημιουργίας των αρχικών δεδομένων εικόνας
-metadata_img_general_desc_9	The date and time when the image was stored as digital data	La date et l'heure à laquelle l'image a été stockée sous forme de données numériques	La fecha y la hora en la cual la imagen ha sido archivada bajo datos numéricos	Η ημερομηνία και η ώρα αποθήκευσης της εικόνας ως ψηφιακά δεδομένα
-metadata_img_general_desc_10	Provided for cases when compressed data uses components other than Y, Cb, and Cr and to enable support of other sequences	Fourni pour les cas où des données compressées utilisent des composants autres que Y, Cb et Cr et pour permettre la prise en charge d'autres séquences	Proporcionado para casos en los que los datos comprimidos utilizan componentes distintos de Y, Cb y Cr y para permitir el soporte de otras secuencias.	Παρέχεται για περιπτώσεις κατά τις οποίες τα συμπιεσμένα δεδομένα χρησιμοποιούν στοιχεία διαφορετικά από τα Y, Cb και Cr και επιτρέπουν την υποστήριξη άλλων ακολουθιών
-metadata_img_general_desc_11				
-metadata_img_general_desc_12	Adjustment to either underexpose or overexpose the image	Réglage pour sous-exposer ou surexposer l'image	Ajuste para subexponer o sobreexponer la imagen	Προσαρμογή είτε στην μέτρια ή στην υπερβολική έκθεση της εικόνας
-metadata_img_general_desc_13	The smallest F number of the lens	Le plus petit nombre F de l'objectif	El número F más pequeño de la lente	Ο μικρότερος αριθμός F του φακού
-metadata_img_general_desc_14				
-metadata_img_general_desc_15				
-metadata_img_general_desc_16	The actual focal length of the lens, in mm	La distance focale réelle de l'objectif, en mm	La distancia focal real de la lente, en mm	Το πραγματικό εστιακό μήκος του φακού, σε mm
-metadata_img_general_desc_17	Keywords or comments on the image	Mots-clés ou commentaires sur l'image	Palabras clave o comentarios sobre la imagen	Λέξεις-κλειδιά ή σχόλια στην εικόνα
-metadata_img_general_desc_18	A string that describes the subject of the image	Un texte décrivant le sujet de l'image	Una cadena que describe el objeto de la imagen	Μια συμβολοσειρά που περιγράφει το θέμα της εικόνας
-metadata_img_general_desc_19	Manufacturer specific information	Note du fabricant	Información específica del fabricante	Ειδικές πληροφορίες κατασκευαστή
-metadata_img_general_desc_20	The distance to the subject, given in meters (0 if unknown and FFFFFFFF if infinite)	La distance jusqu'au sujet de la photo, en mètre (0 si inconnu et FFFFFFFF si infini)	La distancia al sujeto, dada en metros (0 si es desconocida y FFFFFFFFFF si es infinita).	Η απόσταση από το θέμα, σε μέτρα (0 αν είναι άγνωστη και FFFFFFFF εάν είναι άπειρη)
-metadata_img_general_desc_21				
-metadata_img_general_desc_22	Normally sRGB (=1) is used to define the color space based on the PC monitor conditions and environment. If a color space other than sRGB is used, Uncalibrated (=65535) is set	Normalement, sRGB (= 1) est utilisé pour définir l’espace colorimétrique en fonction des conditions et de l’environnement du moniteur. Si un espace colorimétrique autre que sRGB est utilisé, le paramètre 'Uncalibrated' (= 65535) est défini	Normalmente se utiliza sRGB (=1) para definir el espacio de color basándose en las condiciones y el entorno del monitor de PC. Si se utiliza un espacio de color distinto de sRGB, se establece sin calibrar (=65535).	Κανονικά το sRGB (= 1) χρησιμοποιείται για τον καθορισμό του πρότυπου χρώματος βάσει των συνθηκών και του περιβάλλοντος της οθόνης του υπολογιστή. Εάν χρησιμοποιείται πρότυπο χρώματος διαφορετικό από το sRGB, ορίζεται Uncalibrated (= 65535)
-metadata_img_general_desc_23				
-metadata_img_general_desc_24				
-metadata_img_general_desc_25				
-metadata_img_gps_fields_1	GPS Latitude Ref.	Ref. Latitude GPS	Latitud GPS Ref.	Αναφορά GPS γεωγραφικό πλάτος
-metadata_img_gps_fields_2	GPS Latitude	Latitude GPS	Latitud GPS	GPS γεωγραφικό πλάτος
-metadata_img_gps_fields_3	GPS Longitude Ref.	Ref. Longitude GPS	Longitud GPS Ref.	Αναφορά γεωγραφικού μήκους GPS
-metadata_img_gps_fields_4	GPS Longitude	Longitude GPS	Longitud GPS	"GPS Γεωγραφικό μήκος "
-metadata_img_gps_fields_5	GPS Time Stamp	Horodatage GPS	Marca de tiempo GPS	Χρονική σφραγίδα GPS
-metadata_img_gps_desc_1				
-metadata_img_gps_desc_2				
-metadata_img_gps_desc_3				
-metadata_img_gps_desc_4				
-metadata_img_gps_desc_5				
-metadata_img_software_title	Software infos	Informations logicielles	Informaciones del software	Πληροφορίες λογισμικού
-metadata_img_general_title	General EXIF infos	Informations EXIF	Informaciones EXIF	Γενικές πληροφορίες EXIF
-metadata_img_gps_title	GPS Informations	Informations GPS	Información GPS	Πληροφορίες GPS
-metadata_gps_button	View GPS location	Afficher localisation GPS	Ver ubicación GPS	Προβολή τοποθεσίας GPS
-metadata_img_gps_fields_1	GPS Latitude Ref.	Ref. Latitude GPS	Latitud GPS Ref.	Αναφορά GPS γεωγραφικό πλάτος
-metadata_img_gps_fields_2	GPS Latitude	Latitude GPS	Latitud GPS	GPS γεωγραφικό πλάτος
-metadata_img_gps_fields_3	GPS Longitude Ref.	Ref. Longitude GPS	Longitud GPS Ref.	Αναφορά γεωγραφικού μήκους GPS
-metadata_img_gps_fields_4	GPS Longitude	Longitude GPS	Longitud GPS	"GPS Γεωγραφικό μήκος "
-metadata_img_gps_fields_5	GPS Time Stamp	Horodatage GPS	Marca de tiempo GPS	Χρονική σφραγίδα GPS
-metadata_img_gps_desc_1				
-metadata_img_gps_desc_2				
-metadata_img_gps_desc_3				
-metadata_img_gps_desc_4				
-metadata_img_gps_desc_5				
-metadata_name_1	Movie atom	Movie atom	Movie atom	Άτομο ταινίας
-metadata_name_2	Duration	Durée	Duración	Διάρκεια
-metadata_name_3	Timescale	Unité de temps	Escala temporal	Χρονοδιάγραμμα
-metadata_name_4	Duration of fragment	Durée d'un fragment	Duración del fragmento	Διάρκεια του τμήματος
-metadata_name_5	Fragmented	Fragmenté	Fragmentado	Κατακερματισμένο
-metadata_name_6	Progressive	Progressive	Progresiva	Προοδευτικός
-metadata_name_7	IOD	IOD	IOD	IOD
-metadata_name_8	Brands	Type	Marcas	Μάρκες
-metadata_name_9	Created time	Date de création	Fecha de creación	Ημερομηνία δημιουργίας
-metadata_name_10	Modified time	Date de modification	Fecha de modificación	Ημερομηνία τροποποίσης
-metadata_desc_1				
-metadata_desc_2	Number providing the duration of the movie (unfragmented part) in timescale units	Nombre donnant la durée du film (partie défragmentée) en unité de temps	Número que indica la duración del video (parte no fragmentada) en unidades de tiempo.	Αριθμός που παρέχει τη διάρκεια της ταινίας (μη τεμαχισμένο τμήμα) σε μονάδες κλίμακας χρόνου
-metadata_desc_3	Number corresponding to the timescale as given in the movie header	Nombre correspondant è l'unité de temps donnée dans l'entête du film	Número correspondiente a la escala de tiempo tal y como aparece en el encabezamiento del video	Αριθμός που αντιστοιχεί στη κλίμακα χρόνου όπως αναφέρεται στην κεφαλίδα της ταινίας
-metadata_desc_4	Boolean indicating if the file is already fragmented	Booléen indiquant si le film est déjà fragmenté	Booleano que indica si el archivo ya está fragmentado	Boolean που δείχνει εάν το αρχείο είναι ήδη κατακερματισμένο
-metadata_desc_5	Number giving the duration of the fragmented part of the file in timescale units	Number donnant la durée de la partie fragmentée du film en unité de temps	Número que indica la duración de la parte fragmentada del video en unidades de tiempo	Αριθμός που δίνει τη διάρκεια του κατακερματισμένου μέρους του αρχείου σε μονάδες κλίμακας χρόνου
-metadata_desc_6	Boolean indicating if the file can be played progressively	Booléen indiquant si le fichier peut être lu progressivement	Booleano que indica si el archivo puede ser leido progresivamente	Boolean που δείχνει εάν το αρχείο μπορεί να αναπαραχθεί σταδιακά
-metadata_desc_7	Boolean indicating if the the file contains an MPEG-4 Initial Object Descriptor	Booléen indiquant si le fichier contient un MPEG-4 Initial Object Descriptor	Booleano que indica si el archivo contiene un descriptor de objeto MPEG-4	Boolean που δείχνει εάν το αρχείο περιέχει ένα MPEG-4 Initial Object Descriptor
-metadata_desc_8	Array of 4CC codes corresponding to the file brands as given in the ftyp box	Tableau de code 4CC correspondant au type de fichier comme donné dans la boite ftyp	Matriz de códigos 4CC correspondientes a las marcas de archivo tal y como aparecen en la casilla ftyp	Πίνακας απο 4CC κωδικούς που αντιστοιχούν στις μάρκες αρχείων όπως αναφέρονται στο πλαίσιο ftyp
-metadata_desc_9	Date object indicating the creation date of the file as given in the movie header	Date indiquant la date de création du fichier comme donné dans l'entête du film	Fecha que indica la fecha de creación del archivo tal y como aparece en la cabecera de la película.	Αντικείμενο ημερομηνίας που υποδεικνύει την ημερομηνία δημιουργίας του αρχείου όπως αναφέρεται στην κεφαλίδα της ταινίας
-metadata_desc_10	Date object indicating the last modification date of the file as given in the movie header	Date indiquant la date de dernière modification du fichier comme donnée dans l'entête du film	Fecha que indica la fecha de última modificación del archivo como dato en la cabecera del video	Αντικείμενο ημερομηνίας που δείχνει την τελευταία ημερομηνία τροποποίησης του αρχείου όπως αναφέρεται στην κεφαλίδα της ταινίας
-track_name_1	Identifier	Identifiant	Identificador	Αναγνωριστικό
-track_name_2	References	Réferences	Referencias	Αναφορές
-track_name_3	Created time	Date de création	Fecha de creación	Ημερομηνία δημιουργίας
-track_name_4	Modified time	Date de modification	Fecha de modificación	Ημερομηνία τροποποίσης
-track_name_5	Movie duration	Durée du film	Duración del video	Διάρκεια ταινίας
-track_name_6	Layer	Couches	Capas	Επίπεδο
-track_name_7	Alternate group	Groupes alternatifs	Grupo alternativo	Εναλλακτική ομάδα
-track_name_8	Volume	Volume	Volumen	Ενταση
-track_name_9	Width	Largeur	Largo	Πλάτος
-track_name_10	Height	Hauteur	Altura	Υψος
-track_name_11	Timescale	Unité de temps	Escala de tiempo	Κλίμακα χρόνου
-track_name_12	Duration	Durée	Duración	Διάρκεια
-track_name_13	Codec	Codec	códec	Κωδικοποιητής
-track_name_14	Language	Langage	Idioma	Γλώσσα
-track_name_15	Samples	Echantillon	Muestras	Δείγματα
-track_name_16	Size	Taille	Tamaño	Μέγεθος
-track_name_17	Bitrate	Taux de bit	Tasa de bits	Ρυθμός bit
-track_desc_1	Number; giving track identifier	Nombre; Identifiant de la piste	Número; identificador de la pista	Αριθμός; δίνοντας αναγνωριστικό κομματιού
-track_desc_2				
-track_desc_3	Date object; indicating the creation date of the file as given in the track header	Date; indiquant la date de création du fichier comme donnée dans l'entête de la piste	Fecha; indicando la fecha de creación del fichero tal y como aparece en la cabecera de la pista	Αντικείμενο ημερομηνίας; υποδεικνύοντας την ημερομηνία δημιουργίας του αρχείου όπως αναφέρεται στην κεφαλίδα του κομματιού
-track_desc_4	Date object; indicating the last modification date of the file as given in the track header	Date; indiquant la date de dernière modification du fichier comme donnée dans l'entête de la piste	Fecha; indicando la fecha de última modificación del fichero tal y como aparece en la cabecera de la pista	Αντικείμενο ημερομηνίας; υποδεικνύοντας την τελευταία ημερομηνία τροποποίησης του αρχείου όπως αναφέρεται στην κεφαλίδα του κομματιού
-track_desc_5				
-track_desc_6	Number; layer information as indicated in the track header	Nombre; information de couche indiqué dans l'entête de piste	Número; información de capa como se indica en el encabezado de la pista	Αριθμός; πληροφορίες επιπέδου όπως αναφέρεται στην κεφαλίδα του κομματιού
-track_desc_7	Number; identifier of the alternate group the track belongs to	Nombre; identifiant du groupe alternatif auquel la piste appartient	Número; identificador del grupo alternativo del cual pertenece la pista	Αριθμός; αναγνωριστικό της εναλλακτικής ομάδας στην οποία ανήκει το κομμάτι
-track_desc_8				
-track_desc_9	Number; width of the track as indicated in the track header	Nombre; largeur de la piste comme indiqué dans l'entête de piste	Número; anchura de la pista como indicado en el encabezamiento de la pista	Αριθμός; πλάτος του κομματιού όπως υποδεικνύεται στην κεφαλίδα του κομματιού
-track_desc_10	Number; height of the track as indicated in the track header	Nombre; hauteur de la piste comme indiqué dans l'entête de piste	Número; altura de la pista como indicado en el encabezamiento de la pista	Αριθμός; ύψος του κομματιού όπως υποδεικνύεται στην κεφαλίδα του κομματιού
-track_desc_11	Number; indicating the track timescale as given in the track header	Nombre; indiquant l'unité de temps de la piste comme donné dans l'entête de la piste	Número; indicando la unidad de tiempo de la pista como indicado en el encabezamiento de la pista	Αριθμός; υποδεικνύοντας την χρονική κλίμακα του κομματιού όπως αναφέρεται στην κεφαλίδα του κομματιού
-track_desc_12	Number; providing the duration of the (unfragmented part of) track in timescale units	Nombre; donnant la duréee de la (partie défragmentée de la) piste en unité de temps	Número; indicando la duración de la (parte desfragmentada de la) pista en unidad de tiempo	Αριθμός; παρέχοντας τη διάρκεια (μη τεμαχισμένου τμήματος) του κομματιού σε μονάδες της κλίμακας χρόνου
-track_desc_13	String; giving the MIME codecs parameter for this track (e.g. ''avc1.42c00d'' or ''mp4a.40.2'') to be used to create SourceBuffer objects with Media Source Extensions	Chaîne de charactère; donnant les paramètres codecs MIME pour cette piste (ex. ''avc1.42c00d'' ou ''mp4a.40.2'') pour être utilisé pour créer un objet SourceBuffer avec Media Source Extensions	Cadena de carácter; indicando los parametros codecs MIME para esta pista (ej. ''avc1.42c00d'' o ''mp4a.40.2'') para utilizarla para crear un objeto SourceBuffer con Media Source Extensions	"Συμβολοσειρά; δίνοντας την παράμετρο κωδικοποιητών MIME για αυτό το κομμάτι (π.χ. ""avc1.42c00d"" ή ""mp4a.40.2"") για χρήση για τη δημιουργία αντικειμένων SourceBuffer με επεκτάσεις πηγής πολυμέσων"
-track_desc_14	String; giving the 3-letter language code	Chaîne de charactère; donnant le code de langage à 3 lettres	Cadena de carácter; indicando el código de idioma con 3 letras	Συμβολοσειρά; δίνοντας τον κωδικό γλώσσας 3 γραμμάτων
-track_desc_15	Number; giving the number of track samples (ie. frames)	Nombre; donnant le nombre d'échantillons de piste (c-à-d images)	Número; indicando el número de muestras de pista (es decir imágenes)	Αριθμός; δίνοντας τον αριθμό των δειγμάτων κομματιού (π.χ. καρέ)
-track_desc_16				
-track_desc_17	Number; providing the bitrate of the track in bits per second	Nombre; taux de bits par second de la piste	Número; tasa de bits por segundo de la pista	Αριθμός; παρέχοντας το ρυθμό bit του κομματιού σε bits ανά δευτερόλεπτο
-audio_name_1	Identifier	Identifiant	Identificador	Αναγνωριστικό
-audio_name_2	References	Réferences	Referencias	Αναφορές
-audio_name_3	Created time	Date de création	Fecha de creación	Ημερομηνία δημιουργίας
-audio_name_4	Modified time	Date de modification	Fecha de modificación	Ημερομηνία τροποποίσης
-audio_name_5	Movie duration	Durée du film	Duración del video	Διάρκεια ταινίας
-audio_name_6	Layer	Couches	Capa	Επίπεδο
-audio_name_7	Alternate group	Groupes alternatifs	Grupo alternativo	Εναλλακτική ομάδα
-audio_name_8	Volume	Volume	Volumen	Ενταση
-audio_name_9	Width	Largeur	Anchura	Πλάτος
-audio_name_10	Height	Hauteur	Altura	Υψος
-audio_name_11	Timescale	Unité de temps	Unidad de tiempo	Κλίμακα χρόνου
-audio_name_12	Duration	Durée	Duración	Διάρκεια
-audio_name_13	Codec	Codec	Códec	Κωδικοποιητής
-audio_name_14	Language	Langage	Idioma	Γλώσσα
-audio_name_15	Samples	Echantillon	Muestras	Δείγματα
-audio_name_16	Size	Taille	Tamaño	Μέγεθος
-audio_name_17	Bitrate	Taux de bit	Tasa de bits	Ρυθμός bit
-audio_desc_1	Number; giving track identifier	Nombre; Identifiant de la piste	Número; identificador de pista	Αριθμός; δίνοντας αναγνωριστικό κομματιού
-audio_desc_2				
-audio_desc_3	Date object; indicating the creation date of the file as given in the track header	Date; indiquant la date de création du fichier comme donnée dans l'entête de la piste	Fecha; indicando la fecha de creación del fichero como indicado en el encabezamiento de la pista	Αντικείμενο ημερομηνίας; υποδεικνύοντας την ημερομηνία δημιουργίας του αρχείου όπως αναφέρεται στην κεφαλίδα του κομματιού
-audio_desc_4	Date object; indicating the last modification date of the file as given in the track header	Date; indiquant la date de dernière modification du fichier comme donnée dans l'entête de la piste	Fecha; indicando la fecha de la ultima modificación del fichero como indicado en el encabezamiento de la pista	Αντικείμενο ημερομηνίας; υποδεικνύοντας την τελευταία ημερομηνία τροποποίησης του αρχείου όπως αναφέρεται στην κεφαλίδα του κομματιού
-audio_desc_5				
-audio_desc_6	Number; layer information as indicated in the track header	Nombre; information de couche indiqué dans l'entête de piste	Número; información de la capa indicada en el encabezamiento de la pista	Αριθμός; πληροφορίες επιπέδου όπως αναφέρεται στην κεφαλίδα του κομματιού
-audio_desc_7	Number; identifier of the alternate group the track belongs to	Nombre; identifiant du groupe alternatif auquel la piste appartient	Número; identificación del grupo alternativo del cual pertenece la pista	Αριθμός; αναγνωριστικό της εναλλακτικής ομάδας στην οποία ανήκει το κομμάτι
-audio_desc_8				
-audio_desc_9	Number; width of the track as indicated in the track header	Nombre; largeur de la piste comme indiqué dans l'entête de piste	Número; anchura de la pista como indicado en el encabezamiento de la pista	Αριθμός; πλάτος του κομματιού όπως υποδεικνύεται στην κεφαλίδα του κομματιού
-audio_desc_10	Number; height of the track as indicated in the track header	Nombre; hauteur de la piste comme indiqué dans l'entête de piste	Número; altura de la pista como indicado en el encabezamiento de la pista	Αριθμός; ύψος του κομματιού όπως υποδεικνύεται στην κεφαλίδα του κομματιού
-audio_desc_11	Number; indicating the track timescale as given in the track header	Nombre; indiquant l'unité de temps de la piste comme donné dans l'entête de la piste	Número; indicando la unidad de tiempo de la pista como indicado en el encabezamiento de la pista	Αριθμός; υποδεικνύοντας την χρονική κλίμακα του κομματιού όπως αναφέρεται στην κεφαλίδα του κομματιού
-audio_desc_12	Number; providing the duration of the (unfragmented part of) track in timescale units	Nombre; donnant la duréee de la (partie défragmentée de la) piste en unité de temps	Número; indicando la duración de la (parte desfragmentada de la) pista en unidad de tiempo	Αριθμός; παρέχοντας τη διάρκεια (μη τεμαχισμένου τμήματος) του κομματιού σε μονάδες της κλίμακας χρόνου
-audio_desc_13	String; giving the MIME codecs parameter for this track (e.g. ''avc1.42c00d'' or ''mp4a.40.2'') to be used to create SourceBuffer objects with Media Source Extensions	Chaîne de charactère; donnant les paramètres codecs MIME pour cette piste (ex. ''avc1.42c00d'' ou ''mp4a.40.2'') pour être utilisé pour créer un objet SourceBuffer avec Media Source Extensions	Cadena de carácter; indicando los parametros codecs MIME para esta pista (ej. ''avc1.42c00d'' o ''mp4a.40.2''') para utilizarla para crear un objeto SourceBuffer con Media Source Extensions	"Συμβολοσειρά; δίνοντας την παράμετρο κωδικοποιητών MIME για αυτό το κομμάτι (π.χ. ""avc1.42c00d"" ή ""mp4a.40.2"") για χρήση για τη δημιουργία αντικειμένων SourceBuffer με επεκτάσεις πηγής πολυμέσων"
-audio_desc_14	String; giving the 3-letter language code	Chaîne de charactère; donnant le code de langage à 3 lettres	Cadena de carácter; indicando el código de idioma con 3 letras	Συμβολοσειρά; δίνοντας τον κωδικό γλώσσας 3 γραμμάτων
-audio_desc_15	Number; giving the number of track samples (ie. frames)	Nombre; donnant le nombre d'échantillons de piste (c-à-d images)	Número; indicando el número de muestras de pista (es decir imágenes)	Αριθμός; δίνοντας τον αριθμό των δειγμάτων κομματιού (π.χ. καρέ)
-audio_desc_16				
-audio_desc_17	Number; providing the bitrate of the track in bits per second	Nombre; taux de bits par second de la piste	Número; tasa de bits por segundo de la pista	Αριθμός; παρέχοντας το ρυθμό bit του κομματιού σε bits ανά δευτερόλεπτο
-metadata_content_title	Metadata	Métadonnées	Metadatos	Μεταδεδομένα
-metadata_title	Video Metadata	Métadonnées de la video	Metadatos del video	Μεταδεδομένα βίντεο
-track_title	Video Track	Piste vidéo	Pista de video	Κομμάτι βίντεο
-audio_title	Audio track	Piste audio	Pista audio	"Kομμάτι ήχου "
-cardheader_source	Source of the media	Source des médias	Fuente de los medios	Πηγή των μέσων ενημέρωσης
-cardheader_results	Results	Résultats	Resultados	Αποτελέσματα
-description_limitations	The images must be in jpg/jpeg format and the videos in mp4/m4v format	Les images doivent être au format jpg/jpeg et les vidéos au format mp4/m4v	Las imágenes deben estar en formato jpg / jpeg y los videos en formato mp4 / m4v	Οι εικόνες πρέπει να είναι σε μορφή jpg / jpeg και τα βίντεο σε μορφή mp4 / m4v
+	en	fr	es	el	hy
+metadata_content_title	Metadata	Métadonnées	Metadatos	Μεταδεδομένα	Մետատվյալներ
+metadata_content_input	Image or video URL link	Lien URL de l'image ou de la vidéo	Enlace URL de la imagen o el video	Σύνδεσμος URL εικόνας ή βίντεο	Պատկերի կամ տեսանյութի հղում
+metadata_content_input_placeholder	Paste the video or image link here	Collez le lien de la vidéo ou de l'image ici	Pegue el enlace del video o la imagen aquí	Επικολλήστε τον σύνδεσμο βίντεο ή εικόνας εδώ	Տեղադրեք տեսանյութի կամ պատկերի հղումը այստեղ
+button_localfile	Local file	Fichier local	Fichero local	Τοπικό αρχείο	Ֆայլ համակարգչից
+metadata_radio_image	Image	Image	Imagen	Εικόνα	Պատկեր
+metadata_radio_video	Video	Vidéo	Video	Βίντεο	Տեսանյութ
+button_submit	Submit	Envoyer	Enviar	Υποβολή	Վերլուծել
+please_give_a_correct_link	Please give a correct link	Donner un lien valide s'il vous plaît	Por favor, dé un enlace válido	Παρακαλώ δώστε έναν σωστό σύνδεσμο	Խնդրում ենք տրամադրել ճիշտ հղում
+metadata_img_error_exif	No EXIF Metadata was found. Note: The EXIF standard applies only to .jpg and .tiff images	Aucune métadonnée EXIF n'a été trouvée. Note: Le Format EXIF s'applique uniquement aux images .jpg et .tiff	No se encontraron metadatos EXIF. Note: El estándar EXIF se aplica sólo a imágenes.jpg y.tiff	Δεν βρέθηκαν EXIF μεταδεδομένα. Σημείωση: Το πρότυπο EXIF ​​ισχύει μόνο για εικόνες .jpg και .tiff	Ոչ մի EXIF մետատվյալ չի գտնվել: Նշում. EXIF ստանդարտը կիրառվում է միայն .jpg և .tiff պատկերներում
+metadata_table_error	Video failed loading. Check the URL and try again	Vidéo impossible à charger. Veuillez verifier l'URL et réessayer	Fue imposible descargar el video. Verifica el URL y vuelve a intentarlo	Η φόρτωση του βίντεο απέτυχε. Ελέγξτε τη διεύθυνση URL και δοκιμάστε ξανά	Տեսանյութի բեռնում ձախողվեց: Ստուգեք URL-ը և կրկին փորձեք
+metadata_img_software_fields_1	Make	Marque	Marca	Μάρκα	Արտադրող
+metadata_img_software_fields_2	Model	Modèle	Modelo	Μοντέλο	Մոդել
+metadata_img_software_fields_3	Orientation	Orientation	Orientación	Προσανατολισμός	Դիրք
+metadata_img_software_fields_4	X Resolution	Résolution X	Resolución X	X Ανάλυση	X կետայնություն
+metadata_img_software_fields_5	Y Resolution	Résolution Y	Resolución Y	Y Ανάλυση	Y կետայնություն
+metadata_img_software_fields_6	Resolution Unit	Unité de résolution	Unidad de resolución	Μονάδα ανάλυσης	Կետայնության միավոր
+metadata_img_software_fields_7	Host Computer	Ordinateur hôte	Ordenador host	Εξυπηρετητής	Համակարգիչ
+metadata_img_software_fields_8	Software	Logiciel	Software	Λογισμικό	Ծրագիր
+metadata_img_software_fields_9	Modify Date	Date modification	Fecha de modificación	Τροποποίηση ημερομηνίας	Փոփոխման ամսաթիվը
+metadata_img_software_fields_10	YCbCr Positioning	Positionnement YCbCr	Posicionamiento YCbCr	Θέση YCbCr	YCBCR դիրքավորում
+metadata_img_software_fields_11	Copyright	Droits d'auteurs	Derechos de autor	Πνευματική ιδιοκτησία	Հեղինակային իրավունք
+metadata_img_software_desc_1					
+metadata_img_software_desc_2					
+metadata_img_software_desc_3					
+metadata_img_software_desc_4					
+metadata_img_software_desc_5					
+metadata_img_software_desc_6					
+metadata_img_software_desc_7	The computer and/or operating system in use at the time of image creation	L'ordinateur et/ou système opérateur utilisé au moment où la photo à été créée	El ordenador y/o el sistema operador utilizado en el momento en el que se crea la foto	Ο υπολογιστής ή / και το λειτουργικό σύστημα που χρησιμοποιήθηκε τη στιγμή της δημιουργίας εικόνας	Համակարգչային և (կամ) օպերացիոն համակարգը որը օգտագործվել է պատկեր ստեղծելիս
+metadata_img_software_desc_8					
+metadata_img_software_desc_9	Timestamp for when you might alter the image or it's metadata	Horodatage de la possibilité de modification de l'image ou de ses métadonnées	Cronomarcador de la posibilidad de modificación de la imagen o de sus metadatos	Χρονική σήμανση για το πότε μπορείτε να αλλάξετε την εικόνα ή τα μεταδεδομένα	Պատկերի կամ մետատվյալների փոփոխման հնարավոր ամսաթիվը
+metadata_img_software_desc_10	Specifies the positioning of subsampled chrominance components relative to luminance samples. Field value 1 (centered) must be specified for compatibility with industry standards such as PostScript Level 2 and QuickTime. Field value 2 (cosited) must be specified for compatibility with most digital video standards, such as CCIR Recommendation 601-1	Spécifie le positionnement des composants de chrominance sous-échantillonnés par rapport aux échantillons de luminance. La valeur de champ 1 (center) doit être spécifiée pour la compatibilité avec les normes de l'industrie telles que PostScript Level 2 et QuickTime. La valeur de champ 2 (cosited) doit être spécifiée pour la compatibilité avec la plupart des normes vidéo numériques, telles que la Recommandation 601-1 du CCIR	Especifica el posicionamiento de los componentes de crominancia submuestreados en relación con las muestras de luminancia. El valor del campo 1 (centrado) debe especificarse para que sea compatible con los estándares del sector, como PostScript Level 2 y QuickTime. El valor del campo 2 (cosited) debe especificarse para que sea compatible con la mayoría de las normas de vídeo digital, como la Recomendación 601-1 del CCIR.	Καθορίζει τη θέση των συνιστωσών χρωματομεταβλητού δείγματος σε σχέση με τα δείγματα φωτεινότητας. Η τιμή πεδίου 1 (στο κέντρο) πρέπει να καθοριστεί για συμβατότητα με τα πρότυπα του κλάδου, όπως το PostScript Level 2 και το QuickTime. Η τιμή πεδίου 2 (κατάλληλη) πρέπει να καθοριστεί για συμβατότητα με τα περισσότερα ψηφιακά πρότυπα βίντεο, όπως η σύσταση 601-1 της CCIR	Նշում է ենթաբաժանման քրոմի բաղադրիչների դիրքավորումը լուսավորության նմուշների համեմատ: Դաշտային արժեքը 1 (կենտրոնացված) պետք է հստակեցվի արդյունաբերության ստանդարտների հետ համատեղելիության համար, ինչպիսիք են PostScript-ի մակարդակը 2 և QuickTime: Field Value 2 (Cositized) պետք է հստակեցվի թվային տեսանյութերի մեծ մասի համար համատեղելիության համար, ինչպիսիք են CCIR-ի առաջարկությունը 601-1
+metadata_img_software_desc_11					
+metadata_img_general_fields_1	Artist	Artiste	Artista	Καλλιτέχνης	Արտիստ
+metadata_img_general_fields_2	Document Name	Nom du document	Nombre del documento	Όνομα εγγράφου	Փաստաթղթի անվանումը
+metadata_img_general_fields_3	Page Name	Nom de la page	Nombre de la página	Όνομα σελίδας	Էջի անվանումը
+metadata_img_general_fields_4	Exposure Time	Temps d'exposition	Tiempo de exposición	Χρόνος έκθεσης	Ազդեցության ենթարկման ժամանակ
+metadata_img_general_fields_5	F-Number	Nombre F	Número F	F-Αριθμός	F-համարի
+metadata_img_general_fields_6	Exposure Program	Programme d'exposition	Programa de exposición	Πρόγραμμα έκθεσης	Բացահայտման ծրագիր
+metadata_img_general_fields_7	EXIF Version	Version EXIF	Versión EXIF	Έκδοση EXIF	Exif տարբերակ
+metadata_img_general_fields_8	Date Time Original	Horodatage d'origine	Cronomarcador de origen	Ημερομηνία Ώρα πρωτότυπης εικόνας	Ամսաթիվ ժամանակ բնօրինակը
+metadata_img_general_fields_9	Date Time Digitized	Horodatage numérisée	Cronomarcador numerizado	Ημερομηνία Ώρα Ψηφιοποιημένη εικόνας	Ամսաթիվ ժամանակի թվայնացված
+metadata_img_general_fields_10	Components Configuration	Configuration des composants	Configuración de los componentes	Διαμόρφωση στοιχείων	Բաղադրիչների կազմաձևում
+metadata_img_general_fields_11	Compressed Bits Per Pixel	Bits compressés par pixel	Bits comprimidos por pixel	Συμπιεσμένα bit ανά εικονοστοιχείο	Սեղմված բիտերը մեկ պիքսել
+metadata_img_general_fields_12	Exposure Bias	Biais d'exposition	Sesgo de exposición	Μεροληψία έκθεσης	Ex ուցահանդեսային կողմնակալություն
+metadata_img_general_fields_13	Max Aperture Value	Valeur d'ouverture maximale	Valor de apertura maxima	Μέγιστη τιμή διαφράγματος	Max Aperture արժեքը
+metadata_img_general_fields_14	Metering Mode	Mode de mesure	Modo de medida	Λειτουργία μέτρησης	Չափիչ ռեժիմ
+metadata_img_general_fields_15	Flash	Flash	Flash	Φλάς	Փայլ
+metadata_img_general_fields_16	Focal Length	Longueur focale	Distancia focal	Εστιακό μήκος	Կիզակետային երկարությունը
+metadata_img_general_fields_17	User Comment	Commentaire utilisateur	Comentario usuario	Σχόλιο χρήστη	Օգտագործողի մեկնաբանությունը
+metadata_img_general_fields_18	Image Description	Description de l'image	Descripción de la imagen	Περιγραφή εικόνας	Պատկերի նկարագրությունը
+metadata_img_general_fields_19	Maker Note	Note du fabricant	Nota del fabricante	Σημείωση κατασκευαστή	Ստեղծող նոտա
+metadata_img_general_fields_20	Subject Distance	Distance du sujet	Distancia del sujeto	Απόσταση θέματος	Առարկայի հեռավորությունը
+metadata_img_general_fields_21	Flashpix Version	Version Flashpix	Versión Flashpix	Έκδοση Flashpix	FlashPix տարբերակը
+metadata_img_general_fields_22	Color Space	Espace colorimétrique	Espacio ...	Πρότυπο Χρώματος	Գույնի տարածություն
+metadata_img_general_fields_23	X Dimension	Dimension X	Dimensión X	X Διάσταση	X հարթություն
+metadata_img_general_fields_24	Y Dimension	Dimension Y	Dimensión Y	Y Διάσταση	Y հարթություն
+metadata_img_general_fields_25	File Source	Source du fichier	Fuente del fichero	Πηγή αρχείου	Ֆայլի աղբյուրը
+metadata_img_general_desc_1	Person who created the image	Personne qui a créé l'image	Persona que ha creado la imagen	Πρόσωπο που δημιούργησε την εικόνα	Պատկերը ստեղծած անձ
+metadata_img_general_desc_2					
+metadata_img_general_desc_3					
+metadata_img_general_desc_4	The length of time when the film or digital sensor inside the camera is exposed to light	La durée pendant laquelle le film ou le capteur numérique à l'intérieur de l'appareil photo est exposé à la lumière	La duración durante la cual se expone al sol la película o el captor numérico al interior de la cámara	Το χρονικό διάστημα κατά το οποίο η ταινία ή ο ψηφιακός αισθητήρας μέσα στην κάμερα είναι εκτεθειμένο σε φως	Ժամանակի երկարությունը, երբ ֆոտոխցիկի ներսում ֆիլմը կամ թվային ցուցիչը ենթարկվում է լույսի
+metadata_img_general_desc_5	The ratio of the system's focal length to the diameter of the entrance pupil	Le rapport entre la distance focale du système et le diamètre de la pupille d'entrée	La diferencia entre la distancia focal del sistema y el diámetro de la pupila de entrada	Η αναλογία εστιακού μήκους του συστήματος προς τη διάμετρο του μαθητή εισόδου	Համակարգի կիզակետային երկարության հարաբերակցությունը մուտքի աշակերտի տրամագծով
+metadata_img_general_desc_6	The program used by the camera to set exposure when the picture is taken	Le programme utilisé par l'appareil photo pour définir l'exposition lorsque la photo est prise	El programa utilizado por la cámara para definir la exposición cuando se toma la foto	Το πρόγραμμα που χρησιμοποιεί η κάμερα για να ρυθμίσει την έκθεση κατά τη λήψη της φωτογραφίας	Տեսախցիկի կողմից օգտագործվող ծրագիրը, երբ նկարը վերցվում է
+metadata_img_general_desc_7					
+metadata_img_general_desc_8	The date and time when the original image data was generated	La date et l'heure auxquelles les données de l'image d'origine ont été générées	La fecha y la hora en las cuales los datos de la imagen de origen han sido generadas	Η ημερομηνία και η ώρα δημιουργίας των αρχικών δεδομένων εικόνας	Այն ամսաթիվը և ժամը, երբ ստեղծվել է բնօրինակ պատկերի տվյալները
+metadata_img_general_desc_9	The date and time when the image was stored as digital data	La date et l'heure à laquelle l'image a été stockée sous forme de données numériques	La fecha y la hora en la cual la imagen ha sido archivada bajo datos numéricos	Η ημερομηνία και η ώρα αποθήκευσης της εικόνας ως ψηφιακά δεδομένα	Այն ամսաթիվը և ժամը, երբ պատկերը պահվում էր որպես թվային տվյալներ
+metadata_img_general_desc_10	Provided for cases when compressed data uses components other than Y, Cb, and Cr and to enable support of other sequences	Fourni pour les cas où des données compressées utilisent des composants autres que Y, Cb et Cr et pour permettre la prise en charge d'autres séquences	Proporcionado para casos en los que los datos comprimidos utilizan componentes distintos de Y, Cb y Cr y para permitir el soporte de otras secuencias.	Παρέχεται για περιπτώσεις κατά τις οποίες τα συμπιεσμένα δεδομένα χρησιμοποιούν στοιχεία διαφορετικά από τα Y, Cb και Cr και επιτρέπουν την υποστήριξη άλλων ακολουθιών	Տրամադրվում է այն դեպքերի համար, երբ սեղմված տվյալները օգտագործում են Y, CB և CR-ից բացի այլ բաղադրիչներ և հնարավորություն տալ աջակցել այլ հաջորդականությունների
+metadata_img_general_desc_11					
+metadata_img_general_desc_12	Adjustment to either underexpose or overexpose the image	Réglage pour sous-exposer ou surexposer l'image	Ajuste para subexponer o sobreexponer la imagen	Προσαρμογή είτε στην μέτρια ή στην υπερβολική έκθεση της εικόνας	Ճշգրտում կամ թերագնահատել կամ գերազանցել պատկերը
+metadata_img_general_desc_13	The smallest F number of the lens	Le plus petit nombre F de l'objectif	El número F más pequeño de la lente	Ο μικρότερος αριθμός F του φακού	Ոսպնյակների ամենափոքր f թիվը
+metadata_img_general_desc_14					
+metadata_img_general_desc_15					
+metadata_img_general_desc_16	The actual focal length of the lens, in mm	La distance focale réelle de l'objectif, en mm	La distancia focal real de la lente, en mm	Το πραγματικό εστιακό μήκος του φακού, σε mm	Ոսպնյակների իրական կիզակետային երկարությունը, մմ-ով
+metadata_img_general_desc_17	Keywords or comments on the image	Mots-clés ou commentaires sur l'image	Palabras clave o comentarios sobre la imagen	Λέξεις-κλειδιά ή σχόλια στην εικόνα	Հիմնաբառեր կամ մեկնաբանություններ պատկերի վերաբերյալ
+metadata_img_general_desc_18	A string that describes the subject of the image	Un texte décrivant le sujet de l'image	Una cadena que describe el objeto de la imagen	Μια συμβολοσειρά που περιγράφει το θέμα της εικόνας	Մի տող, որը նկարագրում է պատկերի առարկան
+metadata_img_general_desc_19	Manufacturer specific information	Note du fabricant	Información específica del fabricante	Ειδικές πληροφορίες κατασκευαστή	Արտադրողի հատուկ տեղեկատվություն
+metadata_img_general_desc_20	The distance to the subject, given in meters (0 if unknown and FFFFFFFF if infinite)	La distance jusqu'au sujet de la photo, en mètre (0 si inconnu et FFFFFFFF si infini)	La distancia al sujeto, dada en metros (0 si es desconocida y FFFFFFFFFF si es infinita).	Η απόσταση από το θέμα, σε μέτρα (0 αν είναι άγνωστη και FFFFFFFF εάν είναι άπειρη)	Թեմայի հեռավորությունը, որը տրված է մետրերով (0 եթե անսահման և ffffffff, եթե անսահման է)
+metadata_img_general_desc_21					
+metadata_img_general_desc_22	Normally sRGB (=1) is used to define the color space based on the PC monitor conditions and environment. If a color space other than sRGB is used, Uncalibrated (=65535) is set	Normalement, sRGB (= 1) est utilisé pour définir l’espace colorimétrique en fonction des conditions et de l’environnement du moniteur. Si un espace colorimétrique autre que sRGB est utilisé, le paramètre 'Uncalibrated' (= 65535) est défini	Normalmente se utiliza sRGB (=1) para definir el espacio de color basándose en las condiciones y el entorno del monitor de PC. Si se utiliza un espacio de color distinto de sRGB, se establece sin calibrar (=65535).	Κανονικά το sRGB (= 1) χρησιμοποιείται για τον καθορισμό του πρότυπου χρώματος βάσει των συνθηκών και του περιβάλλοντος της οθόνης του υπολογιστή. Εάν χρησιμοποιείται πρότυπο χρώματος διαφορετικό από το sRGB, ορίζεται Uncalibrated (= 65535)	Սովորաբար SRGB (= 1) օգտագործվում է գունային տարածքը սահմանելու համար համակարգչի մոնիտորի պայմանների և շրջակա միջավայրի հիման վրա: Եթե ​​օգտագործվում է SRGB-ից բացի գունային տարածքը, սահմանված է անթերի (= 65535)
+metadata_img_general_desc_23					
+metadata_img_general_desc_24					
+metadata_img_general_desc_25					
+metadata_img_gps_fields_1	GPS Latitude Ref.	Ref. Latitude GPS	Latitud GPS Ref.	Αναφορά GPS γεωγραφικό πλάτος	GPS լայնության Ref.
+metadata_img_gps_fields_2	GPS Latitude	Latitude GPS	Latitud GPS	GPS γεωγραφικό πλάτος	GPS լայնություն
+metadata_img_gps_fields_3	GPS Longitude Ref.	Ref. Longitude GPS	Longitud GPS Ref.	Αναφορά γεωγραφικού μήκους GPS	GPS երկայնություն Ref.
+metadata_img_gps_fields_4	GPS Longitude	Longitude GPS	Longitud GPS	GPS Γεωγραφικό μήκος 	GPS երկայնություն
+metadata_img_gps_fields_5	GPS Time Stamp	Horodatage GPS	Marca de tiempo GPS	Χρονική σφραγίδα GPS	GPS ժամանակի դրոշմակնիք
+metadata_img_gps_desc_1					
+metadata_img_gps_desc_2					
+metadata_img_gps_desc_3					
+metadata_img_gps_desc_4					
+metadata_img_gps_desc_5					
+metadata_img_software_title	Software infos	Informations logicielles	Informaciones del software	Πληροφορίες λογισμικού	Ծրագրային ապահովում
+metadata_img_general_title	General EXIF infos	Informations EXIF	Informaciones EXIF	Γενικές πληροφορίες EXIF	Ընդհանուր EXIF ​​տվյալներ
+metadata_img_gps_title	GPS Informations	Informations GPS	Información GPS	Πληροφορίες GPS	GPS տվյլաներ
+metadata_gps_button	View GPS location	Afficher localisation GPS	Ver ubicación GPS	Προβολή τοποθεσίας GPS	Դիտեք գտնվելու վայրը ըստ GPS-ի
+metadata_img_gps_fields_1	GPS Latitude Ref.	Ref. Latitude GPS	Latitud GPS Ref.	Αναφορά GPS γεωγραφικό πλάτος	GPS լայնության Ref.
+metadata_img_gps_fields_2	GPS Latitude	Latitude GPS	Latitud GPS	GPS γεωγραφικό πλάτος	GPS լայնություն
+metadata_img_gps_fields_3	GPS Longitude Ref.	Ref. Longitude GPS	Longitud GPS Ref.	Αναφορά γεωγραφικού μήκους GPS	GPS երկայնություն Ref.
+metadata_img_gps_fields_4	GPS Longitude	Longitude GPS	Longitud GPS	GPS Γεωγραφικό μήκος 	GPS երկայնություն
+metadata_img_gps_fields_5	GPS Time Stamp	Horodatage GPS	Marca de tiempo GPS	Χρονική σφραγίδα GPS	GPS ժամանակի դրոշմակնիք
+metadata_img_gps_desc_1					
+metadata_img_gps_desc_2					
+metadata_img_gps_desc_3					
+metadata_img_gps_desc_4					
+metadata_img_gps_desc_5					
+metadata_name_1	Movie atom	Movie atom	Movie atom	Άτομο ταινίας	Ֆիլմի ատոմ
+metadata_name_2	Duration	Durée	Duración	Διάρκεια	Տևողություն
+metadata_name_3	Timescale	Unité de temps	Escala temporal	Χρονοδιάγραμμα	Ժամանակացույց
+metadata_name_4	Duration of fragment	Durée d'un fragment	Duración del fragmento	Διάρκεια του τμήματος	Հատվածի տևողությունը
+metadata_name_5	Fragmented	Fragmenté	Fragmentado	Κατακερματισμένο	Մասնատված
+metadata_name_6	Progressive	Progressive	Progresiva	Προοδευτικός	Առաջադիմական
+metadata_name_7	IOD	IOD	IOD	IOD	IOD
+metadata_name_8	Brands	Type	Marcas	Μάρκες	Ապրանքանիշեր
+metadata_name_9	Created time	Date de création	Fecha de creación	Ημερομηνία δημιουργίας	Ստեղծման ամսաթիվ
+metadata_name_10	Modified time	Date de modification	Fecha de modificación	Ημερομηνία τροποποίσης	Փոփոխման ամսաթիվ
+metadata_desc_1					
+metadata_desc_2	Number providing the duration of the movie (unfragmented part) in timescale units	Nombre donnant la durée du film (partie défragmentée) en unité de temps	Número que indica la duración del video (parte no fragmentada) en unidades de tiempo.	Αριθμός που παρέχει τη διάρκεια της ταινίας (μη τεμαχισμένο τμήμα) σε μονάδες κλίμακας χρόνου	Թվն է, որն ապահովում է կինոնկարի (չնախատեսված մաս) տևողությունը ժամանակացույցի ստորաբաժանումներում
+metadata_desc_3	Number corresponding to the timescale as given in the movie header	Nombre correspondant è l'unité de temps donnée dans l'entête du film	Número correspondiente a la escala de tiempo tal y como aparece en el encabezamiento del video	Αριθμός που αντιστοιχεί στη κλίμακα χρόνου όπως αναφέρεται στην κεφαλίδα της ταινίας	Ժամանակին համապատասխան համարը, ինչպես տրված է կինոնկարի վերնագրում
+metadata_desc_4	Boolean indicating if the file is already fragmented	Booléen indiquant si le film est déjà fragmenté	Booleano que indica si el archivo ya está fragmentado	Boolean που δείχνει εάν το αρχείο είναι ήδη κατακερματισμένο	Բուլենը նշում է, որ ֆայլն արդեն մասնատված է
+metadata_desc_5	Number giving the duration of the fragmented part of the file in timescale units	Number donnant la durée de la partie fragmentée du film en unité de temps	Número que indica la duración de la parte fragmentada del video en unidades de tiempo	Αριθμός που δίνει τη διάρκεια του κατακερματισμένου μέρους του αρχείου σε μονάδες κλίμακας χρόνου	ԹվԱԿ-ն, որը տալիս է ֆայլի մասնատված հատվածի տևողությունը TimeScale ստորաբաժանումներում
+metadata_desc_6	Boolean indicating if the file can be played progressively	Booléen indiquant si le fichier peut être lu progressivement	Booleano que indica si el archivo puede ser leido progresivamente	Boolean που δείχνει εάν το αρχείο μπορεί να αναπαραχθεί σταδιακά	Բուլյան նշում է, որ ֆայլը կարող է առաջ ընթանալ աստիճանաբար
+metadata_desc_7	Boolean indicating if the the file contains an MPEG-4 Initial Object Descriptor	Booléen indiquant si le fichier contient un MPEG-4 Initial Object Descriptor	Booleano que indica si el archivo contiene un descriptor de objeto MPEG-4	Boolean που δείχνει εάν το αρχείο περιέχει ένα MPEG-4 Initial Object Descriptor	Բուլենը նշում է, որ ֆայլը պարունակում է MPEG-4 սկզբնական օբյեկտի նկարագրիչ
+metadata_desc_8	Array of 4CC codes corresponding to the file brands as given in the ftyp box	Tableau de code 4CC correspondant au type de fichier comme donné dans la boite ftyp	Matriz de códigos 4CC correspondientes a las marcas de archivo tal y como aparecen en la casilla ftyp	Πίνακας απο 4CC κωδικούς που αντιστοιχούν στις μάρκες αρχείων όπως αναφέρονται στο πλαίσιο ftyp	4CC կոդերի զանգված, համապատասխան ֆայլերի ապրանքանիշներին, ինչպես տրված է FTYP տուփի մեջ
+metadata_desc_9	Date object indicating the creation date of the file as given in the movie header	Date indiquant la date de création du fichier comme donné dans l'entête du film	Fecha que indica la fecha de creación del archivo tal y como aparece en la cabecera de la película.	Αντικείμενο ημερομηνίας που υποδεικνύει την ημερομηνία δημιουργίας του αρχείου όπως αναφέρεται στην κεφαλίδα της ταινίας	Ամսաթվի օբյեկտը, որը նշում է ֆայլի վերնագրում ֆայլի ստեղծման ամսաթիվը
+metadata_desc_10	Date object indicating the last modification date of the file as given in the movie header	Date indiquant la date de dernière modification du fichier comme donnée dans l'entête du film	Fecha que indica la fecha de última modificación del archivo como dato en la cabecera del video	Αντικείμενο ημερομηνίας που δείχνει την τελευταία ημερομηνία τροποποίησης του αρχείου όπως αναφέρεται στην κεφαλίδα της ταινίας	Ամսաթվի օբյեկտը, որը նշում է ֆայլի վերնագրում ֆայլի վերջին փոփոխության վերջին ամսաթիվը
+track_name_1	Identifier	Identifiant	Identificador	Αναγνωριστικό	Նույնացնող
+track_name_2	References	Réferences	Referencias	Αναφορές	Հղումներ
+track_name_3	Created time	Date de création	Fecha de creación	Ημερομηνία δημιουργίας	Ստեղծված ժամանակ
+track_name_4	Modified time	Date de modification	Fecha de modificación	Ημερομηνία τροποποίσης	Փոփոխված ժամանակը
+track_name_5	Movie duration	Durée du film	Duración del video	Διάρκεια ταινίας	Կինոյի տևողությունը
+track_name_6	Layer	Couches	Capas	Επίπεδο	Շերտ
+track_name_7	Alternate group	Groupes alternatifs	Grupo alternativo	Εναλλακτική ομάδα	Այլընտրանքային խումբ
+track_name_8	Volume	Volume	Volumen	Ενταση	Ծավալ
+track_name_9	Width	Largeur	Largo	Πλάτος	Լայնություն
+track_name_10	Height	Hauteur	Altura	Υψος	Բարձրություն
+track_name_11	Timescale	Unité de temps	Escala de tiempo	Κλίμακα χρόνου	Ժամանակացույց
+track_name_12	Duration	Durée	Duración	Διάρκεια	Տևողությունը
+track_name_13	Codec	Codec	códec	Κωδικοποιητής	Կոդեկ
+track_name_14	Language	Langage	Idioma	Γλώσσα	Լեզու
+track_name_15	Samples	Echantillon	Muestras	Δείγματα	Նմուշներ
+track_name_16	Size	Taille	Tamaño	Μέγεθος	Չափ
+track_name_17	Bitrate	Taux de bit	Tasa de bits	Ρυθμός bit	Բիտրացնել
+track_desc_1	Number; giving track identifier	Nombre; Identifiant de la piste	Número; identificador de la pista	Αριθμός; δίνοντας αναγνωριστικό κομματιού	Թիվ; Ուղեկցող նույնացուցիչ
+track_desc_2					
+track_desc_3	Date object; indicating the creation date of the file as given in the track header	Date; indiquant la date de création du fichier comme donnée dans l'entête de la piste	Fecha; indicando la fecha de creación del fichero tal y como aparece en la cabecera de la pista	Αντικείμενο ημερομηνίας; υποδεικνύοντας την ημερομηνία δημιουργίας του αρχείου όπως αναφέρεται στην κεφαλίδα του κομματιού	Ամսաթիվ օբյեկտ; նշելով ֆայլի ստեղծման ամսաթիվը, ինչպես տրված է հետքի վերնագրում
+track_desc_4	Date object; indicating the last modification date of the file as given in the track header	Date; indiquant la date de dernière modification du fichier comme donnée dans l'entête de la piste	Fecha; indicando la fecha de última modificación del fichero tal y como aparece en la cabecera de la pista	Αντικείμενο ημερομηνίας; υποδεικνύοντας την τελευταία ημερομηνία τροποποίησης του αρχείου όπως αναφέρεται στην κεφαλίδα του κομματιού	Ամսաթիվ օբյեկտ; նշելով ֆայլի վերջին փոփոխության ամսաթիվը, ինչպես տրված է հետքի վերնագրում
+track_desc_5					
+track_desc_6	Number; layer information as indicated in the track header	Nombre; information de couche indiqué dans l'entête de piste	Número; información de capa como se indica en el encabezado de la pista	Αριθμός; πληροφορίες επιπέδου όπως αναφέρεται στην κεφαλίδα του κομματιού	Թիվ; շերտի տեղեկատվություն, ինչպես նշված է հետքի վերնագրում
+track_desc_7	Number; identifier of the alternate group the track belongs to	Nombre; identifiant du groupe alternatif auquel la piste appartient	Número; identificador del grupo alternativo del cual pertenece la pista	Αριθμός; αναγνωριστικό της εναλλακτικής ομάδας στην οποία ανήκει το κομμάτι	Թիվ; Այլընտրանքային խմբի նույնականացումը, որին պատկանում է
+track_desc_8					
+track_desc_9	Number; width of the track as indicated in the track header	Nombre; largeur de la piste comme indiqué dans l'entête de piste	Número; anchura de la pista como indicado en el encabezamiento de la pista	Αριθμός; πλάτος του κομματιού όπως υποδεικνύεται στην κεφαλίδα του κομματιού	Թիվ; Հետագծի լայնությունը, ինչպես նշված է ուղու վերնագրում
+track_desc_10	Number; height of the track as indicated in the track header	Nombre; hauteur de la piste comme indiqué dans l'entête de piste	Número; altura de la pista como indicado en el encabezamiento de la pista	Αριθμός; ύψος του κομματιού όπως υποδεικνύεται στην κεφαλίδα του κομματιού	Թիվ; Ուղու բարձրությունը, ինչպես նշված է հետքի վերնագրում
+track_desc_11	Number; indicating the track timescale as given in the track header	Nombre; indiquant l'unité de temps de la piste comme donné dans l'entête de la piste	Número; indicando la unidad de tiempo de la pista como indicado en el encabezamiento de la pista	Αριθμός; υποδεικνύοντας την χρονική κλίμακα του κομματιού όπως αναφέρεται στην κεφαλίδα του κομματιού	Թիվ; Նշելով Track Timescale-ը, ինչպես տրված է հետքի վերնագրում
+track_desc_12	Number; providing the duration of the (unfragmented part of) track in timescale units	Nombre; donnant la duréee de la (partie défragmentée de la) piste en unité de temps	Número; indicando la duración de la (parte desfragmentada de la) pista en unidad de tiempo	Αριθμός; παρέχοντας τη διάρκεια (μη τεμαχισμένου τμήματος) του κομματιού σε μονάδες της κλίμακας χρόνου	Թիվ; Timescale ստորաբաժանումներում (չնախատեսված մասի) տևողությունը տրամադրելը
+track_desc_13	String; giving the MIME codecs parameter for this track (e.g. ''avc1.42c00d'' or ''mp4a.40.2'') to be used to create SourceBuffer objects with Media Source Extensions	Chaîne de charactère; donnant les paramètres codecs MIME pour cette piste (ex. ''avc1.42c00d'' ou ''mp4a.40.2'') pour être utilisé pour créer un objet SourceBuffer avec Media Source Extensions	Cadena de carácter; indicando los parametros codecs MIME para esta pista (ej. ''avc1.42c00d'' o ''mp4a.40.2'') para utilizarla para crear un objeto SourceBuffer con Media Source Extensions	"Συμβολοσειρά; δίνοντας την παράμετρο κωδικοποιητών MIME για αυτό το κομμάτι (π.χ. ""avc1.42c00d"" ή ""mp4a.40.2"") για χρήση για τη δημιουργία αντικειμένων SourceBuffer με επεκτάσεις πηγής πολυμέσων"	Լարային; Այս ուղու համար MIME կոդեկների պարամետրը տալը (E.G. '' AVC1.42C00D 'կամ' 'MP4A.40.2' ') օգտագործվելու է լրատվամիջոցների աղբյուրի ընդարձակման միջոցով աղբյուրների գութային առարկաներ ստեղծելու համար
+track_desc_14	String; giving the 3-letter language code	Chaîne de charactère; donnant le code de langage à 3 lettres	Cadena de carácter; indicando el código de idioma con 3 letras	Συμβολοσειρά; δίνοντας τον κωδικό γλώσσας 3 γραμμάτων	Լարային; տալով 3-տառի լեզվով ծածկագիրը
+track_desc_15	Number; giving the number of track samples (ie. frames)	Nombre; donnant le nombre d'échantillons de piste (c-à-d images)	Número; indicando el número de muestras de pista (es decir imágenes)	Αριθμός; δίνοντας τον αριθμό των δειγμάτων κομματιού (π.χ. καρέ)	Թիվ; Track նմուշների քանակը տալով (այսինքն `շրջանակներ)
+track_desc_16					
+track_desc_17	Number; providing the bitrate of the track in bits per second	Nombre; taux de bits par second de la piste	Número; tasa de bits por segundo de la pista	Αριθμός; παρέχοντας το ρυθμό bit του κομματιού σε bits ανά δευτερόλεπτο	Թիվ; Ուղու բիտրատը ապահովելով երկու վայրկյանով
+audio_name_1	Identifier	Identifiant	Identificador	Αναγνωριστικό	Նույնացնող
+audio_name_2	References	Réferences	Referencias	Αναφορές	Հղումներ
+audio_name_3	Created time	Date de création	Fecha de creación	Ημερομηνία δημιουργίας	Ստեղծված ժամանակ
+audio_name_4	Modified time	Date de modification	Fecha de modificación	Ημερομηνία τροποποίσης	Փոփոխված ժամանակը
+audio_name_5	Movie duration	Durée du film	Duración del video	Διάρκεια ταινίας	Կինոյի տևողությունը
+audio_name_6	Layer	Couches	Capa	Επίπεδο	Շերտ
+audio_name_7	Alternate group	Groupes alternatifs	Grupo alternativo	Εναλλακτική ομάδα	Այլընտրանքային խումբ
+audio_name_8	Volume	Volume	Volumen	Ενταση	Ծավալ
+audio_name_9	Width	Largeur	Anchura	Πλάτος	Լայնություն
+audio_name_10	Height	Hauteur	Altura	Υψος	Բարձրություն
+audio_name_11	Timescale	Unité de temps	Unidad de tiempo	Κλίμακα χρόνου	Ժամանակացույց
+audio_name_12	Duration	Durée	Duración	Διάρκεια	Տևողությունը
+audio_name_13	Codec	Codec	Códec	Κωδικοποιητής	Կոդեկ
+audio_name_14	Language	Langage	Idioma	Γλώσσα	Լեզու
+audio_name_15	Samples	Echantillon	Muestras	Δείγματα	Նմուշներ
+audio_name_16	Size	Taille	Tamaño	Μέγεθος	Չափ
+audio_name_17	Bitrate	Taux de bit	Tasa de bits	Ρυθμός bit	Բիթրեյթ
+audio_desc_1	Number; giving track identifier	Nombre; Identifiant de la piste	Número; identificador de pista	Αριθμός; δίνοντας αναγνωριστικό κομματιού	Թիվ; Ուղեկցող նույնացուցիչ
+audio_desc_2					
+audio_desc_3	Date object; indicating the creation date of the file as given in the track header	Date; indiquant la date de création du fichier comme donnée dans l'entête de la piste	Fecha; indicando la fecha de creación del fichero como indicado en el encabezamiento de la pista	Αντικείμενο ημερομηνίας; υποδεικνύοντας την ημερομηνία δημιουργίας του αρχείου όπως αναφέρεται στην κεφαλίδα του κομματιού	Ամսաթիվ օբյեկտ; նշելով ֆայլի ստեղծման ամսաթիվը, ինչպես տրված է հետքի վերնագրում
+audio_desc_4	Date object; indicating the last modification date of the file as given in the track header	Date; indiquant la date de dernière modification du fichier comme donnée dans l'entête de la piste	Fecha; indicando la fecha de la ultima modificación del fichero como indicado en el encabezamiento de la pista	Αντικείμενο ημερομηνίας; υποδεικνύοντας την τελευταία ημερομηνία τροποποίησης του αρχείου όπως αναφέρεται στην κεφαλίδα του κομματιού	Ամսաթիվ օբյեկտ; նշելով ֆայլի վերջին փոփոխության ամսաթիվը, ինչպես տրված է հետքի վերնագրում
+audio_desc_5					
+audio_desc_6	Number; layer information as indicated in the track header	Nombre; information de couche indiqué dans l'entête de piste	Número; información de la capa indicada en el encabezamiento de la pista	Αριθμός; πληροφορίες επιπέδου όπως αναφέρεται στην κεφαλίδα του κομματιού	Թիվ; շերտի տեղեկատվություն, ինչպես նշված է հետքի վերնագրում
+audio_desc_7	Number; identifier of the alternate group the track belongs to	Nombre; identifiant du groupe alternatif auquel la piste appartient	Número; identificación del grupo alternativo del cual pertenece la pista	Αριθμός; αναγνωριστικό της εναλλακτικής ομάδας στην οποία ανήκει το κομμάτι	Թիվ; Այլընտրանքային խմբի նույնականացումը, որին պատկանում է
+audio_desc_8					
+audio_desc_9	Number; width of the track as indicated in the track header	Nombre; largeur de la piste comme indiqué dans l'entête de piste	Número; anchura de la pista como indicado en el encabezamiento de la pista	Αριθμός; πλάτος του κομματιού όπως υποδεικνύεται στην κεφαλίδα του κομματιού	Թիվ; Հետագծի լայնությունը, ինչպես նշված է ուղու վերնագրում
+audio_desc_10	Number; height of the track as indicated in the track header	Nombre; hauteur de la piste comme indiqué dans l'entête de piste	Número; altura de la pista como indicado en el encabezamiento de la pista	Αριθμός; ύψος του κομματιού όπως υποδεικνύεται στην κεφαλίδα του κομματιού	Թիվ; Ուղու բարձրությունը, ինչպես նշված է հետքի վերնագրում
+audio_desc_11	Number; indicating the track timescale as given in the track header	Nombre; indiquant l'unité de temps de la piste comme donné dans l'entête de la piste	Número; indicando la unidad de tiempo de la pista como indicado en el encabezamiento de la pista	Αριθμός; υποδεικνύοντας την χρονική κλίμακα του κομματιού όπως αναφέρεται στην κεφαλίδα του κομματιού	Թիվ; Նշելով Track Timescale-ը, ինչպես տրված է հետքի վերնագրում
+audio_desc_12	Number; providing the duration of the (unfragmented part of) track in timescale units	Nombre; donnant la duréee de la (partie défragmentée de la) piste en unité de temps	Número; indicando la duración de la (parte desfragmentada de la) pista en unidad de tiempo	Αριθμός; παρέχοντας τη διάρκεια (μη τεμαχισμένου τμήματος) του κομματιού σε μονάδες της κλίμακας χρόνου	Թիվ; Timescale ստորաբաժանումներում (չնախատեսված մասի) տևողությունը տրամադրելը
+audio_desc_13	String; giving the MIME codecs parameter for this track (e.g. ''avc1.42c00d'' or ''mp4a.40.2'') to be used to create SourceBuffer objects with Media Source Extensions	Chaîne de charactère; donnant les paramètres codecs MIME pour cette piste (ex. ''avc1.42c00d'' ou ''mp4a.40.2'') pour être utilisé pour créer un objet SourceBuffer avec Media Source Extensions	Cadena de carácter; indicando los parametros codecs MIME para esta pista (ej. ''avc1.42c00d'' o ''mp4a.40.2''') para utilizarla para crear un objeto SourceBuffer con Media Source Extensions	"Συμβολοσειρά; δίνοντας την παράμετρο κωδικοποιητών MIME για αυτό το κομμάτι (π.χ. ""avc1.42c00d"" ή ""mp4a.40.2"") για χρήση για τη δημιουργία αντικειμένων SourceBuffer με επεκτάσεις πηγής πολυμέσων"	Լարային; Այս ուղու համար MIME կոդեկների պարամետրը տալը (E.G. '' AVC1.42C00D 'կամ' 'MP4A.40.2' ') օգտագործվելու է լրատվամիջոցների աղբյուրի ընդարձակման միջոցով աղբյուրների գութային առարկաներ ստեղծելու համար
+audio_desc_14	String; giving the 3-letter language code	Chaîne de charactère; donnant le code de langage à 3 lettres	Cadena de carácter; indicando el código de idioma con 3 letras	Συμβολοσειρά; δίνοντας τον κωδικό γλώσσας 3 γραμμάτων	Լարային; տալով 3-տառի լեզվով ծածկագիրը
+audio_desc_15	Number; giving the number of track samples (ie. frames)	Nombre; donnant le nombre d'échantillons de piste (c-à-d images)	Número; indicando el número de muestras de pista (es decir imágenes)	Αριθμός; δίνοντας τον αριθμό των δειγμάτων κομματιού (π.χ. καρέ)	Թիվ; Track նմուշների քանակը տալով (այսինքն `շրջանակներ)
+audio_desc_16					
+audio_desc_17	Number; providing the bitrate of the track in bits per second	Nombre; taux de bits par second de la piste	Número; tasa de bits por segundo de la pista	Αριθμός; παρέχοντας το ρυθμό bit του κομματιού σε bits ανά δευτερόλεπτο	Թիվ; Ցույց է տալիս ուղու բիթրեյթը՝ բիթ վարկյանում միավորով
+metadata_content_title	Metadata	Métadonnées	Metadatos	Μεταδεδομένα	Մետատվյալներ
+metadata_title	Video Metadata	Métadonnées de la video	Metadatos del video	Μεταδεδομένα βίντεο	Տեսանյութի մետատվյալներ
+track_title	Video Track	Piste vidéo	Pista de video	Κομμάτι βίντεο	Վիդեո ուղի
+audio_title	Audio track	Piste audio	Pista audio	Kομμάτι ήχου 	Աուդիո ուղի
+cardheader_source	Source of the media	Source des médias	Fuente de los medios	Πηγή των μέσων ενημέρωσης	Պատկերի աղբյուրը
+cardheader_results	Results	Résultats	Resultados	Αποτελέσματα	Արդյունքները
+description_limitations	The images must be in jpg/jpeg format and the videos in mp4/m4v format	Les images doivent être au format jpg/jpeg et les vidéos au format mp4/m4v	Las imágenes deben estar en formato jpg / jpeg y los videos en formato mp4 / m4v	Οι εικόνες πρέπει να είναι σε μορφή jpg / jpeg και τα βίντεο σε μορφή mp4 / m4v	Պատկերները պետք է լինեն JPG/JPEG ձևաչափով, իսկ տեսանյութերը MP4/M4V ձևաչափով
