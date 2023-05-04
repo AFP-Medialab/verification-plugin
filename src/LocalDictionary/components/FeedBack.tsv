@@ -1,10 +1,10 @@
 	en	fr	es	el	ar
 close	Close	Fermer	Cerrar	Κλείσε	إغلاق
 archived	Channel is Archived!	La chaîne est archivée!	El canal está archivado!	Το κανάλι έχει αρχειοθετηθεί!	القناة  مؤرشفة
-badrequest	Bad Request!	Mauvaise Demande!	¡Solicitud incorrecta!	Κακό Αίτημα!	اقتراح غير جيد!
+badrequest	Bad Request!	Mauvaise Demande!	¡Solicitud incorrecta!	Κακό Αίτημα!	طلب سيء!
 forbidden	Forbidden!	Interdit!	¡Prohibido!	Απαγορευμένο!	ممنوع!
 internal	Server Error!	Erreur du serveur!	¡Error del Servidor!	Σφάλμα Διακομιστή!	خطأ في الخادم!
-notfound	Channel Not Found!	Chaîne introuvable!	¡Canal no encontrado!	Κανάλι δεν βρέθηκε!	قناة لم يتم العثور عليها!
+notfound	Channel Not Found!	Chaîne introuvable!	¡Canal no encontrado!	Κανάλι δεν βρέθηκε!	لم يتم العثور على القناة!
 unexpected	Unexpected error!	Erreur inattendue!	¡Error inesperado!	Απρόσμενο σφάλμα!	خطأ غير متوقع!
 improvement	Improvement	Amélioration	Mejora	Βελτίωση	تحسين
 bug	Bug	Bug	Bug	Σφάλμα	خلل
@@ -17,4 +17,4 @@ placeholder	Your message... Add your email if you want us to contact you	Votre m
 sending	Sending feedback...	Envoi de commentaires ...	Enviando comentarios ...	Αποστολή σχολίων ...	إرسال ردود الفعل...
 sent	Sent!	Envoyé!	Expedido!	Εστάλη!	تم الإرسال
 submit_text	Send Feedback	Envoyer des commentaires	Enviar comentarios	Στείλετε τα σχόλιά σας	ارسل انطباعك
-button	Feedback	Feedback	Feedback	Σχόλια	ردود الفعل (التغذية الراجعة)
+button	Feedback	Feedback	Feedback	Σχόλια	  التغذية الراجعة

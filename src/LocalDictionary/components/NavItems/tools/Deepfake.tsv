@@ -1,16 +1,16 @@
-	en	fr	es	el
-deepfake_label	Media link	Media lien	Media link	σύνδεσμος πολυμέσων
-deepfake_name	Deepfake	Deepfake	Deepfake	Deepfake
-deepfake_placeholder	Paste the URL here	Collez le lien ici	Pega aquí el link	Επικολλήστε τη διεύθυνση σύνδεσμος εδώ
-deepfake_support	Your browser does not support the video tag.	Votre navigateur ne prend pas en charge la balise vidéo.	Su navegador no soporta la etiqueta de vídeo.	Το πρόγραμμα περιήγησής σας δεν υποστηρίζει την ετικέτα βίντεο.
-deepfake_clips	Clips of the video	Clips de la vidéo	Clips del vídeo	Αποσπάσματα του βίντεο
-deepfake_select	Select a shot to see the analysis results of that clip	Sélectionnez un plan pour voir les résultats de l'analyse de ce clip.	Seleccione un clip para ver los resultados del análisis de ese clip	Επιλέξτε ένα πλάνο για να δείτε τα αποτελέσματα της ανάλυσης του συγκεκριμένου κλιπ
-deepfake_clip	Clip selected	Clip sélectionné	Clip seleccionado	Επιλεγμένο κλιπ
-deepfake_faces	Faces recognized	Visages reconnus	Caras reconocidas	Αναγνωρισμένα πρόσωπα
-deepfake_video	Video analyzed	Vidéo analysée	Vídeo analizado	Αναλυμένο βίντεο
-deepfake_results	Results of the clip selected	Résultats du clip sélectionné	Resultados del clip seleccionado	Αποτελέσματα του επιλεγμένου κλιπ
-deepfake_image_link	Image link	Lien image	Link de la imagen	Σύνδεσμος εικόνας
-deepfake_video_link	Video link	Lien vidéo	Link del video	Σύνδεσμος βίντεο
-deepfake_title_what	What is Thumbnails
-deepfake_filters_explanation_image	Explanation image
-deepfake_filters_explanation_cideo	Explanation video
+	en	fr	es	el	ar
+deepfake_label	Media link	Media lien	Media link	σύνδεσμος πολυμέσων	رابط الوسائط
+deepfake_name	Deepfake	Deepfake	Deepfake	Deepfake	تزوير عميق
+deepfake_placeholder	Paste the URL here	Collez le lien ici	Pega aquí el link	Επικολλήστε τη διεύθυνση σύνδεσμος εδώ	الصق عنوان URL هنا
+deepfake_support	Your browser does not support the video tag.	Votre navigateur ne prend pas en charge la balise vidéo.	Su navegador no soporta la etiqueta de vídeo.	Το πρόγραμμα περιήγησής σας δεν υποστηρίζει την ετικέτα βίντεο.	متصفحك الحالي لا يدعم تشغيل الفيديو.
+deepfake_clips	Clips of the video	Clips de la vidéo	Clips del vídeo	Αποσπάσματα του βίντεο	مقاطع فيديو
+deepfake_select	Select a shot to see the analysis results of that clip	Sélectionnez un plan pour voir les résultats de l'analyse de ce clip.	Seleccione un clip para ver los resultados del análisis de ese clip	Επιλέξτε ένα πλάνο για να δείτε τα αποτελέσματα της ανάλυσης του συγκεκριμένου κλιπ	حدد لقطة لرؤية نتائج التحليل لهذا المقطع
+deepfake_clip	Clip selected	Clip sélectionné	Clip seleccionado	Επιλεγμένο κλιπ	مقطع محدد
+deepfake_faces	Faces recognized	Visages reconnus	Caras reconocidas	Αναγνωρισμένα πρόσωπα	الوجوه المعرفة
+deepfake_video	Video analyzed	Vidéo analysée	Vídeo analizado	Αναλυμένο βίντεο	تم تحليل الفيديو
+deepfake_results	Results of the clip selected	Résultats du clip sélectionné	Resultados del clip seleccionado	Αποτελέσματα του επιλεγμένου κλιπ	نتائج المقطع المحدد
+deepfake_image_link	Image link	Lien image	Link de la imagen	Σύνδεσμος εικόνας	رابط الصورة
+deepfake_video_link	Video link	Lien vidéo	Link del video	Σύνδεσμος βίντεο	رابط الفيديو
+deepfake_title_what	What is Thumbnails				ما هي الصورة المصغرة (الغلاف)
+deepfake_filters_explanation_image	Explanation image				شرح الصورة
+deepfake_filters_explanation_cideo	Explanation video				شرح الفيديو
