@@ -112,7 +112,7 @@ const AssistantIntroduction = (props) => {
 
         <CardContent>
           <Box m={2}>
-            <Grid container spacing={3} alignItems="center">
+            <Grid container spacing={3} alignItems="flex-start">
               <Grid item xs={6}>
                 <Box
                   p={3}
@@ -140,13 +140,14 @@ const AssistantIntroduction = (props) => {
                   <Grid
                     container
                     direction="row"
-                    alignItems="center"
+                    // alignItems="center"
                     style={{ flexWrap: "nowrap" }}
+                    spacing={2}
                   >
-                    <Grid item>
-                      <Box ml={1} mr={2}>
-                        <LinkIcon className={classIconURL} />
-                      </Box>
+                    <Grid item xs={1}>
+                      {/* <Box ml={1} mr={2}> */}
+                      <LinkIcon className={classIconURL} />
+                      {/* </Box> */}
                     </Grid>
 
                     <Grid item>
@@ -160,6 +161,7 @@ const AssistantIntroduction = (props) => {
                           <Typography
                             variant="body1"
                             style={{ fontWeight: 600 }}
+                            textAlign={"start"}
                           >
                             {keyword("assistant_webpage_header")}
                           </Typography>
@@ -168,7 +170,7 @@ const AssistantIntroduction = (props) => {
                         <Box mt={1} />
 
                         <Grid item>
-                          <Typography variant="body1">
+                          <Typography variant="body1" textAlign={"start"}>
                             {keyword("assistant_webpage_text")}
                           </Typography>
                         </Grid>
@@ -208,13 +210,11 @@ const AssistantIntroduction = (props) => {
                   <Grid
                     container
                     direction="row"
-                    alignItems="center"
                     style={{ flexWrap: "nowrap" }}
+                    spacing={2}
                   >
-                    <Grid item>
-                      <Box ml={1} mr={2}>
-                        <InsertDriveFileIcon className={classIconLocal} />
-                      </Box>
+                    <Grid item xs={1}>
+                      <InsertDriveFileIcon className={classIconLocal} />
                     </Grid>
 
                     <Grid item>
@@ -223,20 +223,22 @@ const AssistantIntroduction = (props) => {
                         direction="column"
                         justifyContent="flex-start"
                         alignItems="flex-start"
+                        spacing={1}
                       >
-                        <Grid item>
+                        <Grid item xs={12}>
                           <Typography
                             variant="body1"
                             style={{ fontWeight: 600 }}
+                            textAlign={"start"}
                           >
                             {keyword("assistant_file_header")}
                           </Typography>
                         </Grid>
 
-                        <Box mt={1} />
+                        {/* <Box mt={1} /> */}
 
-                        <Grid item>
-                          <Typography variant="body1">
+                        <Grid item xs={12}>
+                          <Typography variant="body1" textAlign={"start"}>
                             {keyword("assistant_file_text")}
                           </Typography>
                         </Grid>
