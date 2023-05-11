@@ -39,6 +39,8 @@ const Magnifier = () => {
 
   const resultUrl = useSelector((state) => state.magnifier.url);
   const resultResult = useSelector((state) => state.magnifier.result);
+  const session = useSelector((state) => state.userSession);
+  const uid = session && session.user ? session.user.email : null;
   const dispatch = useDispatch();
 
   const [input, setInput] = useState(resultUrl);
@@ -56,7 +58,7 @@ const Magnifier = () => {
       "image magnifier caa analysis",
       src,
       client_id,
-      client_id
+      uid
     );
     let img = new Image();
     img.crossOrigin = "anonymous";

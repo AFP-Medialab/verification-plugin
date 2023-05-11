@@ -201,7 +201,6 @@ const DrawerItemContent = ({ index, drawContent }) => {
   const client_id = getclientId();
 
   const session = useSelector((state) => state.userSession);
-  console.log(session);
   const uid = session && session.user ? session.user.email : null;
 
   useEffect(() => {

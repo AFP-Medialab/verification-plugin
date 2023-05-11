@@ -31,8 +31,6 @@ const AssistantUrlSelected = (props) => {
   const inputUrl = useSelector((state) => state.assistant.inputUrl);
   const inputUrlType = useSelector((state) => state.assistant.inputUrlType);
   const loading = useSelector((state) => state.assistant.loading);
-  const uid = useSelector((state) => state.userSession.user.email);
-  const user = useSelector((state) => state.userSession.user);
 
   //local state
   const formInput = props.formInput;
@@ -41,9 +39,7 @@ const AssistantUrlSelected = (props) => {
 
   const handleSubmissionURL = () => {
     dispatch(submitInputUrl(formInput));
-    console.log(`uid is ${uid}`);
-    console.log(user);
-    trackEvent("submission", "assistant", "page assistant", formInput, "test");
+    trackEvent("submission", "assistant", "page assistant", formInput);
   };
 
   const handleArchive = () => {

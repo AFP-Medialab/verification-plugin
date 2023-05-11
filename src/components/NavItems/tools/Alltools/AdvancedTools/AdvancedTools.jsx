@@ -182,9 +182,11 @@ const AdvancedTools = () => {
   };
 
   const logoutOnClick = () => {
+    // server logout
     authenticationAPI.logout().catch((error) => {
       handleError(error.error ? error.error.code : ERR_AUTH_UNKNOWN_ERROR);
     });
+    // update redux state
   };
 
   // User Registration form

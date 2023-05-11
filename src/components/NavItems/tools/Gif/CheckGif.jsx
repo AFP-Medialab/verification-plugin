@@ -45,8 +45,11 @@ const CheckGif = () => {
     tsvAlltools
   );
   const toolState = useSelector((state) => state.gif.toolState);
-  const dispatch = useDispatch();
+  const session = useSelector((state) => state.userSession);
+  const uid = session && session.user ? session.user.email : null;
   const client_id = getclientId();
+
+  const dispatch = useDispatch();
 
   //Selecting mode
   //============================================================================================
@@ -216,7 +219,7 @@ const CheckGif = () => {
       "url fake image",
       imageURL1,
       client_id,
-      client_id
+      uid
     );
     trackEvent(
       "submission",
@@ -224,7 +227,7 @@ const CheckGif = () => {
       "url original image",
       imageURL2,
       client_id,
-      client_id
+      uid
     );
     /*submissionEvent(imageURL1);
         submissionEvent(imageURL2);*/
@@ -243,7 +246,7 @@ const CheckGif = () => {
       "file fake image",
       selectedFile1,
       client_id,
-      client_id
+      uid
     );
     trackEvent(
       "submission",
@@ -251,7 +254,7 @@ const CheckGif = () => {
       "file original image",
       selectedFile2,
       client_id,
-      client_id
+      uid
     );
     /*submissionEvent(selectedFile1);
         submissionEvent(selectedFile2);*/

@@ -351,7 +351,10 @@ const TwitterSna = () => {
   };
   */
 
+  const session = useSelector((state) => state.userSession);
+  const uid = session && session.user ? session.user.email : null;
   const client_id = getclientId();
+
   const onSubmit = () => {
     //Mandatory Fields errors
     if (keyWords.trim() === "" && keyWordsAny.trim() === "") {
@@ -396,7 +399,7 @@ const TwitterSna = () => {
         "redirect to tsna",
         JSON.stringify(newRequest),
         client_id,
-        client_id
+        uid
       );
       setSubmittedRequest(newRequest);
     }

@@ -1,5 +1,6 @@
 import { Box } from "@mui/material";
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { useInput } from "../../../../Hooks/useInput";
@@ -107,6 +108,9 @@ const TwitterAdvancedSearch = () => {
     if (fromDate) return itemDate <= currentDate && fromDate < itemDate;
     return itemDate <= currentDate;
   };
+
+  const session = useSelector((state) => state.userSession);
+  const uid = session && session.user ? session.user.email : null;
   const client_id = getclientId();
 
   const onSubmit = () => {
@@ -128,7 +132,7 @@ const TwitterAdvancedSearch = () => {
       "search twitter request",
       url,
       client_id,
-      client_id
+      uid
     );
     window.open(url);
   };
