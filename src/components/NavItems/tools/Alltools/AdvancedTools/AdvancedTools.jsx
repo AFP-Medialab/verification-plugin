@@ -23,7 +23,6 @@ import { useForm, Controller } from "react-hook-form";
 import * as yup from "yup";
 import _ from "lodash";
 import MenuItem from "@mui/material/MenuItem";
-//import { userRegistrationSentAction } from "../../../../../redux/actions/authenticationActions";
 import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
 
 const registrationValidationSchema = yup.object().shape({

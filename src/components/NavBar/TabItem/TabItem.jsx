@@ -63,11 +63,17 @@ const TabContent = ({ index, path, drawerItems, tabItems }) => {
 
 const ContentContainer = ({ tabItems, index }) => {
   var path = useLocation();
-  const cookies = useSelector((state) => state.cookies);
-  const clientId = cookies !== null ? cookies.id : null;
+  // const cookies = useSelector((state) => state.cookies);
+  // const clientId = cookies !== null ? cookies.id : null;
+
+  const session = useSelector((state) => state.userSession);
+  const uid = session && session.user ? session.user.email : null;
+  const clientId = uid;
+
   useEffect(() => {
-    trackPageView(path, clientId);
+    trackPageView(path, clientId, uid);
   }, []);
+
   return (
     <Container key={index}>
       <Fade in={true}>

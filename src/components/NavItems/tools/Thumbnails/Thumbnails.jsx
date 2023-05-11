@@ -55,6 +55,9 @@ const Thumbnails = () => {
   const resultUrl = useSelector((state) => state.thumbnails.url);
   const resultData = useSelector((state) => state.thumbnails.result);
   const isLoading = useSelector((state) => state.thumbnails.loading);
+  const session = useSelector((state) => state.userSession);
+  const uid = session && session.user ? session.user.email : null;
+
   const [height, setHeight] = useState(0);
   const [showResult, setShowResult] = useState(false);
   const [input, setInput] = useState(resultUrl);
@@ -122,7 +125,8 @@ const Thumbnails = () => {
         "thumbnails",
         "youtube thumbnail",
         url,
-        client_id
+        client_id,
+        uid
       );
       let images = get_images(url);
       dispatch(

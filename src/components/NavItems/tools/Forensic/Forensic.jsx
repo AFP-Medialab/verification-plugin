@@ -86,6 +86,8 @@ const Forensic = () => {
   const isLoading = useSelector((state) => state.forensic.loading);
   const gifAnimationState = useSelector((state) => state.forensic.gifAnimation);
   const masks = useSelector((state) => state.forensic.masks);
+  const session = useSelector((state) => state.userSession);
+  const uid = session && session.user ? session.user.email : null;
 
   const [input, setInput] = useState(resultUrl);
   const [image, setImage] = useState("");
@@ -107,7 +109,8 @@ const Forensic = () => {
         "forensic",
         "Forensice analysis assistant",
         input,
-        client_id
+        client_id,
+        uid
       );
       setImage(input);
     }
@@ -127,7 +130,6 @@ const Forensic = () => {
       submitUrl();
     }
     return () => setUrlDetected(false);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [urlDetected]);
 
   useEffect(() => {
