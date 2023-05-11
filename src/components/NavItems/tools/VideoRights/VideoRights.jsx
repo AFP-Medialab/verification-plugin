@@ -51,7 +51,14 @@ const VideoRights = () => {
   const client_id = getclientId();
   const submitForm = () => {
     if (!isLoading) {
-      trackEvent("submission", "videorights", "video rights", input, client_id);
+      trackEvent(
+        "submission",
+        "videorights",
+        "video rights",
+        input,
+        client_id,
+        client_id
+      );
       setSubmitted(input);
       dispatch(setVideoRightsLoading(true));
     }

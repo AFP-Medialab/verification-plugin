@@ -107,6 +107,7 @@ const Forensic = () => {
         "forensic",
         "Forensice analysis assistant",
         input,
+        client_id,
         client_id
       );
       setImage(input);

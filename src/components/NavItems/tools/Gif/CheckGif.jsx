@@ -215,6 +215,7 @@ const CheckGif = () => {
       "checkgif",
       "url fake image",
       imageURL1,
+      client_id,
       client_id
     );
     trackEvent(
@@ -222,6 +223,7 @@ const CheckGif = () => {
       "checkgif",
       "url original image",
       imageURL2,
+      client_id,
       client_id
     );
     /*submissionEvent(imageURL1);
@@ -240,6 +242,7 @@ const CheckGif = () => {
       "checkgif",
       "file fake image",
       selectedFile1,
+      client_id,
       client_id
     );
     trackEvent(
@@ -247,6 +250,7 @@ const CheckGif = () => {
       "checkgif",
       "file original image",
       selectedFile2,
+      client_id,
       client_id
     );
     /*submissionEvent(selectedFile1);

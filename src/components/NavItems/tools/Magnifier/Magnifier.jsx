@@ -55,6 +55,7 @@ const Magnifier = () => {
       "magnifier",
       "image magnifier caa analysis",
       src,
+      client_id,
       client_id
     );
     let img = new Image();

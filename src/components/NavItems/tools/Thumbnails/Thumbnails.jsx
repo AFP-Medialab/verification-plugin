@@ -122,6 +122,7 @@ const Thumbnails = () => {
         "thumbnails",
         "youtube thumbnail",
         url,
+        client_id,
         client_id
       );
       let images = get_images(url);

@@ -127,6 +127,7 @@ const TwitterAdvancedSearch = () => {
       "twitter_advance_search",
       "search twitter request",
       url,
+      client_id,
       client_id
     );
     window.open(url);

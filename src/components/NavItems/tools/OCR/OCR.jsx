@@ -52,7 +52,14 @@ const OCR = () => {
 
   const client_id = getclientId();
   const submitUrl = (src) => {
-    trackEvent("submission", "ocr", "image ocr processing", src, client_id);
+    trackEvent(
+      "submission",
+      "ocr",
+      "image ocr processing",
+      src,
+      client_id,
+      client_id
+    );
     submissionEvent(src);
     dispatch(setOcrInput(src, selectedScript));
   };

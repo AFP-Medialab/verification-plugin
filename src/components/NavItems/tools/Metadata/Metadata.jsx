@@ -71,6 +71,7 @@ const Metadata = ({ mediaType }) => {
         "metadata",
         "extract metadata",
         input,
+        client_id,
         client_id
       );
       if (radioImage) {

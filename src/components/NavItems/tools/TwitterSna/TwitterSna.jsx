@@ -395,6 +395,7 @@ const TwitterSna = () => {
         "tsna",
         "redirect to tsna",
         JSON.stringify(newRequest),
+        client_id,
         client_id
       );
       setSubmittedRequest(newRequest);
