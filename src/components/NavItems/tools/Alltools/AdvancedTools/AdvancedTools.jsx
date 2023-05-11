@@ -23,7 +23,6 @@ import { useForm, Controller } from "react-hook-form";
 import * as yup from "yup";
 import _ from "lodash";
 import MenuItem from "@mui/material/MenuItem";
-//import { userRegistrationSentAction } from "../../../../../redux/actions/authenticationActions";
 import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
 
 const registrationValidationSchema = yup.object().shape({
@@ -182,11 +181,9 @@ const AdvancedTools = () => {
   };
 
   const logoutOnClick = () => {
-    // server logout
     authenticationAPI.logout().catch((error) => {
       handleError(error.error ? error.error.code : ERR_AUTH_UNKNOWN_ERROR);
     });
-    // update redux state
   };
 
   // User Registration form
