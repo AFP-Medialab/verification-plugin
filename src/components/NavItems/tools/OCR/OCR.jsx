@@ -47,12 +47,21 @@ const OCR = () => {
   const result = useSelector((state) => state.ocr.result);
   const fail = useSelector((state) => state.ocr.fail);
   const errorKey = useSelector((state) => state.ocr.errorKey);
+  const session = useSelector((state) => state.userSession);
+  const uid = session && session.user ? session.user.email : null;
 
   const [userInput, setUserInput] = useState(ocrInputUrl);
 
   const client_id = getclientId();
   const submitUrl = (src) => {
-    trackEvent("submission", "ocr", "image ocr processing", src, client_id);
+    trackEvent(
+      "submission",
+      "ocr",
+      "image ocr processing",
+      src,
+      client_id,
+      uid
+    );
     submissionEvent(src);
     dispatch(setOcrInput(src, selectedScript));
   };

@@ -11,9 +11,11 @@ import { setError } from "../../../../../redux/actions/errorActions";
 
 export const useKeyframeWrapper = (url, keyword) => {
   const dispatch = useDispatch();
+  const keyframe_url = process.env.REACT_APP_KEYFRAME_API;
 
   useEffect(() => {
     let source = axios.CancelToken.source();
+
     let jsonData = {
       video_url: url,
       user_key: process.env.REACT_APP_KEYFRAME_TOKEN,
@@ -48,7 +50,9 @@ export const useKeyframeWrapper = (url, keyword) => {
       const interval = setInterval(() => {
         if (data && data["status"].endsWith("COMPLETED")) {
           lastGet(
-            "https://multimedia2.iti.gr/video_analysis/result/" +
+            keyframe_url +
+              "/result/" +
+              //"https://multimedia2.iti.gr/video_analysis/result/" +
               video_id +
               "_json",
             video_id
@@ -102,7 +106,9 @@ export const useKeyframeWrapper = (url, keyword) => {
         .post(multimediaUrl, data, { cancelToken: source.token })
         .then((response) => {
           getUntil(
-            "https://multimedia2.iti.gr/video_analysis/status/" +
+            keyframe_url +
+              "/status/" +
+              //"https://multimedia2.iti.gr/video_analysis/status/" +
               response.data.video_id,
             response.data.video_id
           );
@@ -113,7 +119,8 @@ export const useKeyframeWrapper = (url, keyword) => {
     if (url === undefined || url === "") return;
     dispatch(cleanKeyframesState());
     dispatch(setKeyframesLoading(true));
-    postUrl("https://multimedia2.iti.gr/video_analysis/subshot", jsonData);
+    //postUrl("https://multimedia2.iti.gr/video_analysis/subshot", jsonData);
+    postUrl(keyframe_url + "/subshot", jsonData);
     return () => {};
   }, [url]);
 };

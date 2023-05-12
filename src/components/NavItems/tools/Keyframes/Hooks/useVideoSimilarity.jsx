@@ -9,7 +9,7 @@ import {
 
 export const useVideoSimilarity = (url, keyword) => {
   const dispatch = useDispatch();
-
+  const similarityAPI = process.env.REACT_APP_DBKF_SIMILARITY_API;
   useEffect(() => {
     /*
         const handleError = (e) => {
@@ -47,7 +47,9 @@ export const useVideoSimilarity = (url, keyword) => {
     } else {
       dispatch(setKeyframesSimilarityLoading(true));
       getData(
-        "https://weverify-demo.ontotext.com/similarity/similarVideos?collection_id=similarity&threshold_similarity=" +
+        //"https://weverify-demo.ontotext.com/similarity/similarVideos?collection_id=similarity&threshold_similarity=" +
+        similarityAPI +
+          "/similarVideos?collection_id=similarity&threshold_similarity=" +
           keyword("dbkf_threshold") +
           "&url=" +
           url

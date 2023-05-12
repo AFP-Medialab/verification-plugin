@@ -17,7 +17,7 @@ import tsv from "../../../../LocalDictionary/components/NavItems/tools/Keyframes
 import tsvAllTools from "../../../../LocalDictionary/components/NavItems/tools/Alltools.tsv";
 import {
   trackEvent,
-  getclientId,
+  //getclientId,
 } from "../../../Shared/GoogleAnalytics/MatomoAnalytics";
 import { KNOWN_LINKS } from "../../Assistant/AssistantRuleBook";
 
@@ -69,12 +69,13 @@ const Keyframes = () => {
 
   //human right
   const downloadShubshots = useSelector((state) => state.humanRightsCheckBox);
+  const keyframe_url = process.env.REACT_APP_KEYFRAME_API;
   //download subshots results
   const downloadAction = () => {
     let downloadlink =
-      "https://multimedia2.iti.gr/video_analysis/keyframes/" +
-      video_id +
-      "/Subshots";
+      // "https://multimedia2.iti.gr/video_analysis/keyframes/" +
+      keyframe_url + "/keyframes/";
+    video_id + "/Subshots";
     fetch(downloadlink).then((response) => {
       response.blob().then((blob) => {
         let url = window.URL.createObjectURL(blob);
@@ -85,7 +86,7 @@ const Keyframes = () => {
     });
   };
 
-  const client_id = getclientId();
+  //const client_id = getclientId();
   const submitUrl = () => {
     trackEvent(
       "submission",

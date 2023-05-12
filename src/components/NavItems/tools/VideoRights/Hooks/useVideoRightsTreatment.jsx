@@ -9,6 +9,7 @@ import { setError } from "../../../../../redux/actions/errorActions";
 
 const useVideoRightsTreatment = (url, keyword) => {
   const dispatch = useDispatch();
+  const video_url = process.env.REACT_APP_VIDEORIGHT_API;
 
   useEffect(() => {
     const handleError = (error) => {
@@ -18,12 +19,19 @@ const useVideoRightsTreatment = (url, keyword) => {
     };
 
     const addTermsAndUsers = (result) => {
+      let href = result._links.reuseTerms.href;
+      href = href.replace("https://rights-api.invid.udl.cat/", video_url);
+      let href_user = result._links.user.href;
+      href_user = href_user.replace(
+        "https://rights-api.invid.udl.cat/",
+        video_url
+      );
       axios
-        .get(result._links.reuseTerms.href)
+        .get(href)
         .then((terms) => {
           result.terms = terms.data._embedded.defaultReuseTerms;
           axios
-            .get(result._links.user.href)
+            .get(href_user)
             .then((user) => {
               result.user = user.data;
               dispatch(setVideoRightsResult(url, result, false, false));
@@ -35,7 +43,8 @@ const useVideoRightsTreatment = (url, keyword) => {
 
     let kind = "";
     if (url && url !== "" && url !== undefined) {
-      let api_url = "https://rights-api.invid.udl.cat/";
+      //let api_url = "https://rights-api.invid.udl.cat/";
+      let api_url = video_url;
       if (url.startsWith("https://www.youtube.com/")) kind = "youTubeVideos";
       else if (url.startsWith("https://www.facebook.com/"))
         kind = "facebookVideos";

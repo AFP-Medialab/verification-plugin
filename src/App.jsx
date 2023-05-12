@@ -52,10 +52,14 @@ const theme = createTheme({
 
 const App = () => {
   const cookies = useSelector((state) => state.cookies);
+  const session = useSelector((state) => state.userSession);
+
   const clientId = cookies !== null ? cookies.id : null;
+  const uid = session && session.user ? session.user.email : null;
+
   const path = window.location.pathname;
   useEffect(() => {
-    trackPageView(path, clientId);
+    trackPageView(path, clientId, uid);
   }, []);
 
   const authenticationAPI = useAuthenticationAPI();

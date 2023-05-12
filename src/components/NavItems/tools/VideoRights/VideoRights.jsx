@@ -48,10 +48,21 @@ const VideoRights = () => {
 
   useVideoRightsTreatment(submitted, keyword);
   const dispatch = useDispatch();
+
+  const session = useSelector((state) => state.userSession);
+  const uid = session && session.user ? session.user.email : null;
   const client_id = getclientId();
+
   const submitForm = () => {
     if (!isLoading) {
-      trackEvent("submission", "videorights", "video rights", input, client_id);
+      trackEvent(
+        "submission",
+        "videorights",
+        "video rights",
+        input,
+        client_id,
+        uid
+      );
       setSubmitted(input);
       dispatch(setVideoRightsLoading(true));
     }

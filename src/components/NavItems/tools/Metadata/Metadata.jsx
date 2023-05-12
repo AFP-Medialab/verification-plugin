@@ -51,6 +51,8 @@ const Metadata = ({ mediaType }) => {
   const resultUrl = useSelector((state) => state.metadata.url);
   const resultData = useSelector((state) => state.metadata.result);
   const resultIsImage = useSelector((state) => state.metadata.isImage);
+  const session = useSelector((state) => state.userSession);
+  const uid = session && session.user ? session.user.email : null;
 
   const [radioImage, setRadioImage] = useState(
     mediaType === "video" ? false : true
@@ -71,7 +73,8 @@ const Metadata = ({ mediaType }) => {
         "metadata",
         "extract metadata",
         input,
-        client_id
+        client_id,
+        uid
       );
       if (radioImage) {
         setImageurl(input);

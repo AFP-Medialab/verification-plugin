@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import { Container } from "@mui/material";
 import Fade from "@mui/material/Fade";
-import { useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { selectTool } from "../../../redux/reducers/tools/toolReducer";
 import AllTools from "../../NavItems/tools/Alltools/AllTools";
 import Analysis from "../../NavItems/tools/Analysis/Analysis";
@@ -199,8 +199,12 @@ const DrawerItemContent = ({ index, drawContent }) => {
   const classes = useMyStyles();
   const path = useLocation();
   const client_id = getclientId();
+
+  const session = useSelector((state) => state.userSession);
+  const uid = session && session.user ? session.user.email : null;
+
   useEffect(() => {
-    trackPageView(path, client_id);
+    trackPageView(path, client_id, uid);
     dispatch(selectTool(index));
   }, [index]);
 
