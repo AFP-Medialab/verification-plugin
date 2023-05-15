@@ -57,7 +57,7 @@ const DrawerItem = ({ drawerItems }) => {
     },
     {
       content: <DeepfakeVideo />,
-      footer: <Footer type={"afp"} />,
+      footer: <Footer type={"iti"} />,
     },
     {
       content: <AnalysisImg />,
@@ -86,7 +86,7 @@ const DrawerItem = ({ drawerItems }) => {
     },
     {
       content: <DeepfakeImage />,
-      footer: <Footer type={"afp"} />,
+      footer: <Footer type={"iti"} />,
     },
     {
       content: <Geolocation />,
