@@ -8,7 +8,7 @@ import {
 export const useTrackPageView = (path, client_id, uid, index) => {
   const analytics = useSelector((state) => state.cookies.analytics);
   useEffect(() => {
-    console.log("general page view");
+    //console.log("general page view");
     if (analytics) {
       //go to analytics
       trackPageView(path, client_id, uid);
@@ -26,10 +26,10 @@ export const useTrackEvent = (
   uid = ""
 ) => {
   const analytics = useSelector((state) => state.cookies.analytics);
-  console.log("event tracked ", event);
+  //console.log("event tracked ", event);
   useEffect(() => {
     if (event !== undefined && event !== null) {
-      console.log("Track event");
+      //console.log("Track event");
       if (analytics) {
         //go to analytics
         trackEvent(category, action, name, url, client_id, uid);
