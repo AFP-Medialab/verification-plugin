@@ -27,9 +27,10 @@ import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import IconButton from "@mui/material/IconButton";
 import {
-  trackEvent,
+  //trackEvent,
   getclientId,
 } from "../../../Shared/GoogleAnalytics/MatomoAnalytics";
+import { useTrackEvent } from "../../../../Hooks/useAnalytics";
 import AnimatedGif from "./AnimatedGif";
 
 const CheckGif = () => {
@@ -122,9 +123,9 @@ const CheckGif = () => {
   const [imageDropped2, setImageDropped2] = useState(null);
   const [showDropZone2, setShowDropZone2] = useState(true);
 
-  const [selectedFile1, setSelectedFile1] = useState();
-  const [selectedFile2, setSelectedFile2] = useState();
-  const [filesToSend, setFilesToSend] = useState();
+  const [selectedFile1, setSelectedFile1] = useState(undefined);
+  const [selectedFile2, setSelectedFile2] = useState(undefined);
+  const [filesToSend, setFilesToSend] = useState(undefined);
 
   //--- Local files mode ---
 
@@ -185,8 +186,8 @@ const CheckGif = () => {
   //--- URL mode ---
 
   //URL
-  const [imageURL1, setImageURL1] = useState("");
-  const [imageURL2, setImageURL2] = useState("");
+  const [imageURL1, setImageURL1] = useState(undefined);
+  const [imageURL2, setImageURL2] = useState(undefined);
 
   //Code to enable the button to upload the images
   /* if (toolState === 22 && imageURL1 !== "" && imageURL2 !== "") {
@@ -210,10 +211,35 @@ const CheckGif = () => {
       dispatch(setStateReady());
     }
   }, [toolState, imageDropped1, imageDropped2, imageURL1, imageURL2]);
-
+  const [eventUrl1, setEventUrl1] = useState(undefined);
+  const [eventUrl2, setEventUrl2] = useState(undefined);
+  const [eventUrlType1, setEventUrlType1] = useState(undefined);
+  const [eventUrlType2, setEventUrlType2] = useState(undefined);
   //Function to prepare the files to trigger the submission
+  useTrackEvent(
+    "submission",
+    "checkgif",
+    eventUrlType1,
+    eventUrl1,
+    client_id,
+    eventUrl1,
+    uid
+  );
+  useTrackEvent(
+    "submission",
+    "checkgif",
+    eventUrlType2,
+    eventUrl2,
+    client_id,
+    eventUrl1,
+    uid
+  );
   const handleSubmissionURL = () => {
-    trackEvent(
+    setEventUrl1(imageURL1);
+    setEventUrlType1("url fake image");
+    setEventUrl2(imageURL2);
+    setEventUrlType2("url original image");
+    /*trackEvent(
       "submission",
       "checkgif",
       "url fake image",
@@ -228,7 +254,7 @@ const CheckGif = () => {
       imageURL2,
       client_id,
       uid
-    );
+    );*/
     /*submissionEvent(imageURL1);
         submissionEvent(imageURL2);*/
     var files = {
@@ -240,7 +266,11 @@ const CheckGif = () => {
   };
 
   const handleSubmission = () => {
-    trackEvent(
+    setEventUrl1(selectedFile1);
+    setEventUrlType1("file fake image");
+    setEventUrl2(selectedFile2);
+    setEventUrlType2("file original image");
+    /* trackEvent(
       "submission",
       "checkgif",
       "file fake image",
@@ -255,7 +285,7 @@ const CheckGif = () => {
       selectedFile2,
       client_id,
       uid
-    );
+    );*/
     /*submissionEvent(selectedFile1);
         submissionEvent(selectedFile2);*/
     var files = {

@@ -5,8 +5,9 @@ import React, { useEffect } from "react";
 import DrawerItem from "../DrawerItem/DrawerItem";
 import { useDispatch } from "react-redux";
 import { selectPage } from "../../../redux/reducers/navReducer";
-import { trackPageView } from "../../Shared/GoogleAnalytics/MatomoAnalytics";
+//import { trackPageView } from "../../Shared/GoogleAnalytics/MatomoAnalytics";
 import { useSelector } from "react-redux";
+import { useTrackPageView } from "../../../Hooks/useAnalytics";
 
 const TabItem = (props) => {
   if (!props.tabItems || props.tabItems.length === 0) return null;
@@ -69,9 +70,9 @@ const ContentContainer = ({ tabItems, index }) => {
   const session = useSelector((state) => state.userSession);
   const uid = session && session.user ? session.user.email : null;
   const clientId = uid;
-
+  useTrackPageView(path, clientId, uid);
   useEffect(() => {
-    trackPageView(path, clientId, uid);
+    //  trackPageView(path, clientId, uid);
   }, []);
 
   return (

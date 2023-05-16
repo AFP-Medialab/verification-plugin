@@ -1679,7 +1679,7 @@ const NavBar = (props) => {
               onClick={() => dispatch(cleanError())}
             />
           )}
-          {cookiesUsage === null && (
+          {cookiesUsage.active === null && (
             <Snackbar
               anchorOrigin={{
                 vertical: "top",

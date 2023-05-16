@@ -24,11 +24,12 @@ import FolderOpenIcon from "@mui/icons-material/FolderOpen";
 import OCRIcon from "../../../NavBar/images/SVG/Image/OCR.svg";
 import Grid from "@mui/material/Grid";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
-import { submissionEvent } from "../../../Shared/GoogleAnalytics/GoogleAnalytics";
+//import { submissionEvent } from "../../../Shared/GoogleAnalytics/GoogleAnalytics";
 import {
-  trackEvent,
+  //trackEvent,
   getclientId,
 } from "../../../Shared/GoogleAnalytics/MatomoAnalytics";
+import { useTrackEvent } from "../../../../Hooks/useAnalytics";
 import { setError } from "../../../../redux/actions/errorActions";
 import _ from "lodash";
 
@@ -51,18 +52,30 @@ const OCR = () => {
   const uid = session && session.user ? session.user.email : null;
 
   const [userInput, setUserInput] = useState(ocrInputUrl);
+  const [eventUrl, setEventUrl] = useState(undefined);
 
   const client_id = getclientId();
+  useTrackEvent(
+    "submission",
+    "ocr",
+    "image ocr processing",
+    eventUrl,
+    client_id,
+    eventUrl,
+    uid
+  );
+
   const submitUrl = (src) => {
-    trackEvent(
+    setEventUrl(src);
+    /*trackEvent(
       "submission",
       "ocr",
       "image ocr processing",
       src,
       client_id,
       uid
-    );
-    submissionEvent(src);
+    );*/
+    //submissionEvent(src);
     dispatch(setOcrInput(src, selectedScript));
   };
 

@@ -1,32 +1,51 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { v4 as uuid } from "uuid";
-const initialState = null;
+const initialState = {
+  active: null,
+  analytics: null,
+  id: null,
+};
 
 const cookiesSlice = createSlice({
   name: "cookies",
   initialState,
   reducers: {
-    setTrue(state, action) {
+    setTrue() {
       const id = uuid();
+      //state.id = uuid();
       return {
         active: true,
+        //analytics: true,
+        analytics: false, //tempory disable for test
         id: id,
       };
     },
-    setStorageTrue(state, action) {
+    setStorageTrue(state) {
       state.active = true;
       state.id = uuid();
     },
-    setFalse(state, action) {
-      state.active = false;
+    setFalse() {
+      return {
+        active: false,
+        analytics: false,
+        id: null,
+      };
     },
     toggleState(state, action) {
       state.active = !action.payload;
     },
+    toggleAnalyticsCheckBox(state, action) {
+      state.analytics = !action.payload;
+    },
   },
 });
 
-export const { setTrue, setStorageTrue, setFalse, toggleState } =
-  cookiesSlice.actions;
+export const {
+  setTrue,
+  setStorageTrue,
+  setFalse,
+  toggleState,
+  toggleAnalyticsCheckBox,
+} = cookiesSlice.actions;
 const cookiesReducer = cookiesSlice.reducer;
 export default cookiesReducer;

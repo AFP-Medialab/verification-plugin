@@ -17,9 +17,10 @@ import useMyStyles, {
   myCardStyles,
 } from "../../../Shared/MaterialUiStyles/useMyStyles";
 import {
-  trackEvent,
+  //trackEvent,
   getclientId,
 } from "../../../Shared/GoogleAnalytics/MatomoAnalytics";
+import { useTrackEvent } from "../../../../Hooks/useAnalytics";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import TwitterAdvancedSearchIcon from "../../../NavBar/images/SVG/Search/Twitter_search.svg";
@@ -112,7 +113,17 @@ const TwitterAdvancedSearch = () => {
   const session = useSelector((state) => state.userSession);
   const uid = session && session.user ? session.user.email : null;
   const client_id = getclientId();
+  const [eventUrl, setEventUrl] = useState(undefined);
 
+  useTrackEvent(
+    "submission",
+    "twitter_advance_search",
+    "search twitter request",
+    eventUrl,
+    client_id,
+    eventUrl,
+    uid
+  );
   const onSubmit = () => {
     let url = createUrl(
       term.value,
@@ -126,14 +137,15 @@ const TwitterAdvancedSearch = () => {
       toDate,
       localTime
     );
-    trackEvent(
+    setEventUrl(url);
+    /*trackEvent(
       "submission",
       "twitter_advance_search",
       "search twitter request",
       url,
       client_id,
       uid
-    );
+    );*/
     window.open(url);
   };
 

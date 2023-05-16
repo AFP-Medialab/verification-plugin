@@ -14,9 +14,10 @@ import tsv from "../../../../LocalDictionary/components/NavItems/tools/Forensic.
 import tsvAllTools from "../../../../LocalDictionary/components/NavItems/tools/Alltools.tsv";
 import tsvWarning from "../../../../LocalDictionary/components/Shared/OnWarningInfo.tsv";
 import {
-  trackEvent,
+  //trackEvent,
   getclientId,
 } from "../../../Shared/GoogleAnalytics/MatomoAnalytics";
+import { useTrackEvent } from "../../../../Hooks/useAnalytics";
 import ForensicIcon from "../../../NavBar/images/SVG/Image/Forensic.svg";
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
@@ -90,7 +91,7 @@ const Forensic = () => {
   const uid = session && session.user ? session.user.email : null;
 
   const [input, setInput] = useState(resultUrl);
-  const [image, setImage] = useState("");
+  const [image, setImage] = useState(undefined);
   const [urlDetected, setUrlDetected] = useState(false);
   const [loaded, setLoaded] = useState(false);
   const [type, setType] = useState("");
@@ -100,18 +101,27 @@ const Forensic = () => {
   const dispatch = useDispatch();
 
   const client_id = getclientId();
+  useTrackEvent(
+    "submission",
+    "forensic",
+    "Forensice analysis assistant",
+    input,
+    client_id,
+    image,
+    uid
+  );
   const submitUrl = () => {
     if (input && input !== "") {
       setType("url");
       setLoaded(true);
-      trackEvent(
+      /*trackEvent(
         "submission",
         "forensic",
         "Forensice analysis assistant",
         input,
         client_id,
         uid
-      );
+      );*/
       setImage(input);
     }
   };
@@ -133,7 +143,7 @@ const Forensic = () => {
   }, [urlDetected]);
 
   useEffect(() => {
-    setImage("");
+    setImage(undefined);
   }, [image]);
 
   const handleUploadImg = (file) => {
