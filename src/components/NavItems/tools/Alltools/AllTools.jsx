@@ -67,6 +67,7 @@ const AllTools = (props) => {
   );
   const [openAlert, setOpenAlert] = React.useState(false);
   const currentLang = useSelector((state) => state.language);
+  const isCurrentLanguageLeftToRight = currentLang !== "ar";
 
   const handleClick = (path, mediaTool, restrictions) => {
     //console.log(type);
@@ -143,6 +144,17 @@ const AllTools = (props) => {
         open={openAlert}
         autoHideDuration={6000}
         onClose={handleCloseAlert}
+        anchorOrigin={
+          isCurrentLanguageLeftToRight
+            ? {
+                vertical: "bottom",
+                horizontal: "left",
+              }
+            : {
+                vertical: "bottom",
+                horizontal: "right",
+              }
+        }
       >
         <Alert onClose={handleCloseAlert} severity="warning">
           {keywordWarning("warning_advanced_tools")}

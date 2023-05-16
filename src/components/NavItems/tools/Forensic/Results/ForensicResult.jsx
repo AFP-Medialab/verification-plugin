@@ -489,6 +489,17 @@ const ForensicResults = (props) => {
         open={openAlert}
         autoHideDuration={6000}
         onClose={handleCloseAlert}
+        anchorOrigin={
+          isCurrentLanguageLeftToRight
+            ? {
+                vertical: "bottom",
+                horizontal: "left",
+              }
+            : {
+                vertical: "bottom",
+                horizontal: "right",
+              }
+        }
       >
         <Alert onClose={handleCloseAlert} severity="warning">
           {keywordWarning("warning_advanced_tools")}
@@ -501,10 +512,17 @@ const ForensicResults = (props) => {
         <ThemeProvider theme={theme}>
           <Box mt={5} mb={5}>
             <Snackbar
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "left",
-              }}
+              anchorOrigin={
+                isCurrentLanguageLeftToRight
+                  ? {
+                      vertical: "bottom",
+                      horizontal: "left",
+                    }
+                  : {
+                      vertical: "bottom",
+                      horizontal: "right",
+                    }
+              }
               open={openToast}
               autoHideDuration={6000}
               onClose={handleCloseToast}
