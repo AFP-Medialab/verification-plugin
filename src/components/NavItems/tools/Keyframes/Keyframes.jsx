@@ -15,10 +15,9 @@ import { useParams } from "react-router-dom";
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/Keyframes.tsv";
 import tsvAllTools from "../../../../LocalDictionary/components/NavItems/tools/Alltools.tsv";
-import {
-  trackEvent,
-  //getclientId,
-} from "../../../Shared/GoogleAnalytics/MatomoAnalytics";
+import //trackEvent,
+//getclientId,
+"../../../Shared/GoogleAnalytics/MatomoAnalytics";
 import { KNOWN_LINKS } from "../../Assistant/AssistantRuleBook";
 
 import Card from "@mui/material/Card";
@@ -28,6 +27,7 @@ import Grid from "@mui/material/Grid";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import LinkIcon from "@mui/icons-material/Link";
 import FileIcon from "@mui/icons-material/InsertDriveFile";
+import { useTrackEvent } from "../../../../Hooks/useAnalytics";
 
 const Keyframes = () => {
   const { url } = useParams();
@@ -66,6 +66,14 @@ const Keyframes = () => {
   //const [urlDetected, setUrlDetected] = useState(false)
   useVideoSimilarity(submittedUrl, keyword);
   useKeyframeWrapper(submittedUrl, keyword);
+  useTrackEvent(
+    "submission",
+    "keyframe",
+    "video key frame analysis",
+    input.trim(),
+    null,
+    submittedUrl
+  );
 
   //human right
   const downloadShubshots = useSelector((state) => state.humanRightsCheckBox);
@@ -88,12 +96,12 @@ const Keyframes = () => {
 
   //const client_id = getclientId();
   const submitUrl = () => {
-    trackEvent(
+    /*trackEvent(
       "submission",
       "keyframe",
       "video key frame analysis",
       input.trim()
-    );
+    );*/
     setSubmittedUrl(input);
   };
 

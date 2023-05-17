@@ -19,9 +19,10 @@ import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/Metadata.tsv";
 import tsvAllTools from "../../../../LocalDictionary/components/NavItems/tools/Alltools.tsv";
 import {
-  trackEvent,
+  //trackEvent,
   getclientId,
 } from "../../../Shared/GoogleAnalytics/MatomoAnalytics";
+import { useTrackEvent } from "../../../../Hooks/useAnalytics";
 import { useParams, useLocation } from "react-router-dom";
 
 import { CONTENT_TYPE, KNOWN_LINKS } from "../../Assistant/AssistantRuleBook";
@@ -66,16 +67,34 @@ const Metadata = ({ mediaType }) => {
   useImageTreatment(imageUrl, keyword);
 
   const client_id = getclientId();
+  useTrackEvent(
+    "submission",
+    "metadata",
+    "extract metadata",
+    input,
+    client_id,
+    imageUrl,
+    uid
+  );
+  useTrackEvent(
+    "submission",
+    "metadata",
+    "extract metadata",
+    input,
+    client_id,
+    videoUrl,
+    uid
+  );
   const submitUrl = () => {
     if (input) {
-      trackEvent(
+      /* trackEvent(
         "submission",
         "metadata",
         "extract metadata",
         input,
         client_id,
         uid
-      );
+      );*/
       if (radioImage) {
         setImageurl(input);
       } else {

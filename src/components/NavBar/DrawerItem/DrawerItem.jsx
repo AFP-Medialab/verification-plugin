@@ -25,9 +25,10 @@ import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import AnalysisImg from "../../NavItems/tools/Analysis_images/Analysis";
 import {
-  trackPageView,
+  //trackPageView,
   getclientId,
 } from "../../Shared/GoogleAnalytics/MatomoAnalytics";
+import { useTrackPageView } from "../../../Hooks/useAnalytics";
 
 const DrawerItem = ({ drawerItems }) => {
   const drawerItemsContent = [
@@ -57,7 +58,7 @@ const DrawerItem = ({ drawerItems }) => {
     },
     {
       content: <DeepfakeVideo />,
-      footer: <Footer type={"afp"} />,
+      footer: <Footer type={"iti"} />,
     },
     {
       content: <AnalysisImg />,
@@ -86,7 +87,7 @@ const DrawerItem = ({ drawerItems }) => {
     },
     {
       content: <DeepfakeImage />,
-      footer: <Footer type={"afp"} />,
+      footer: <Footer type={"iti"} />,
     },
     {
       content: <Geolocation />,
@@ -202,9 +203,9 @@ const DrawerItemContent = ({ index, drawContent }) => {
 
   const session = useSelector((state) => state.userSession);
   const uid = session && session.user ? session.user.email : null;
-
+  useTrackPageView(path, client_id, uid, index);
   useEffect(() => {
-    trackPageView(path, client_id, uid);
+    //trackPageView(path, client_id, uid);
     dispatch(selectTool(index));
   }, [index]);
 

@@ -36,10 +36,10 @@ import styles from "./Results/layout.module.css";
 import Alert from "@mui/material/Alert";
 import _ from "lodash";
 import {
-  trackEvent,
+  //trackEvent,
   getclientId,
 } from "../../../Shared/GoogleAnalytics/MatomoAnalytics";
-
+import { useTrackEvent } from "../../../../Hooks/useAnalytics";
 const Analysis = () => {
   const caa_analysis_url = process.env.REACT_APP_CAA_ANALYSIS_URL;
   const { url } = useParams();
@@ -84,15 +84,22 @@ const Analysis = () => {
     setReprocess(!reprocess);
   };
   const client_id = getclientId();
-
+  useTrackEvent(
+    "submission",
+    "analysis",
+    "video caa analysis",
+    input.trim(),
+    client_id,
+    submittedUrl
+  );
   const submitForm = () => {
-    trackEvent(
+    /*trackEvent(
       "submission",
       "analysis",
       "video caa analysis",
       input.trim(),
       client_id
-    );
+    );*/
     setSubmittedUrl(input.trim());
     dispatch(cleanAnalysisState());
   };

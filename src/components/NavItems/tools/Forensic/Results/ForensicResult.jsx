@@ -59,7 +59,6 @@ function TabPanel(props) {
     </div>
   );
 }
-
 export class Instructions extends Component {
   render() {
     return <HelpOutlineIcon />;
@@ -481,12 +480,26 @@ const ForensicResults = (props) => {
     // eslint-disable-next-line
   }, []);
 
+  const currentLang = useSelector((state) => state.language);
+  const isCurrentLanguageLeftToRight = currentLang !== "ar";
+
   return (
     <div>
       <Snackbar
         open={openAlert}
         autoHideDuration={6000}
         onClose={handleCloseAlert}
+        anchorOrigin={
+          isCurrentLanguageLeftToRight
+            ? {
+                vertical: "bottom",
+                horizontal: "left",
+              }
+            : {
+                vertical: "bottom",
+                horizontal: "right",
+              }
+        }
       >
         <Alert onClose={handleCloseAlert} severity="warning">
           {keywordWarning("warning_advanced_tools")}
@@ -499,10 +512,17 @@ const ForensicResults = (props) => {
         <ThemeProvider theme={theme}>
           <Box mt={5} mb={5}>
             <Snackbar
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "left",
-              }}
+              anchorOrigin={
+                isCurrentLanguageLeftToRight
+                  ? {
+                      vertical: "bottom",
+                      horizontal: "left",
+                    }
+                  : {
+                      vertical: "bottom",
+                      horizontal: "right",
+                    }
+              }
               open={openToast}
               autoHideDuration={6000}
               onClose={handleCloseToast}
@@ -906,17 +926,21 @@ const ForensicResults = (props) => {
                                               clickArrowFilter(value.id, -1)
                                             }
                                           >
-                                            <NavigateBeforeIcon
-                                              style={{ color: "#000000" }}
-                                            />
+                                            {isCurrentLanguageLeftToRight ? (
+                                              <NavigateBeforeIcon
+                                                style={{ color: "#00000" }}
+                                              />
+                                            ) : (
+                                              <NavigateNextIcon
+                                                style={{ color: "#00000" }}
+                                              />
+                                            )}
                                           </Fab>
                                         ) : (
                                           <Fab
                                             size="small"
                                             style={{ visibility: "hidden" }}
-                                          >
-                                            <NavigateBeforeIcon />
-                                          </Fab>
+                                          ></Fab>
                                         )}
                                         <Fab
                                           size="medium"
@@ -940,17 +964,21 @@ const ForensicResults = (props) => {
                                               clickArrowFilter(value.id, 1)
                                             }
                                           >
-                                            <NavigateNextIcon
-                                              style={{ color: "#000000" }}
-                                            />
+                                            {isCurrentLanguageLeftToRight ? (
+                                              <NavigateNextIcon
+                                                style={{ color: "#00000" }}
+                                              />
+                                            ) : (
+                                              <NavigateBeforeIcon
+                                                style={{ color: "#00000" }}
+                                              />
+                                            )}
                                           </Fab>
                                         ) : (
                                           <Fab
                                             size="small"
                                             style={{ visibility: "hidden" }}
-                                          >
-                                            <NavigateNextIcon />
-                                          </Fab>
+                                          ></Fab>
                                         )}
                                       </Grid>
                                     </div>

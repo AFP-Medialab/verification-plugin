@@ -5,9 +5,10 @@ import { HashRouter, Route, Routes } from "react-router-dom";
 import PopUp from "./components/PopUp/PopUp";
 import NavBar from "./components/NavBar/NavBar";
 import useAuthenticationAPI from "./components/Shared/Authentication/useAuthenticationAPI";
-import { useEffect } from "react";
+//import { useEffect } from "react";
 import { useSelector } from "react-redux";
-import { trackPageView } from "./components/Shared/GoogleAnalytics/MatomoAnalytics";
+//import { trackPageView } from "./components/Shared/GoogleAnalytics/MatomoAnalytics";
+import { useTrackPageView } from "./Hooks/useAnalytics";
 
 const theme = createTheme({
   palette: {
@@ -58,10 +59,10 @@ const App = () => {
   const uid = session && session.user ? session.user.email : null;
 
   const path = window.location.pathname;
-  useEffect(() => {
+  /*useEffect(() => {
     trackPageView(path, clientId, uid);
-  }, []);
-
+  }, []);*/
+  useTrackPageView(path, clientId, uid);
   const authenticationAPI = useAuthenticationAPI();
   const locationSearchStart = window.location.href.lastIndexOf("?");
   if (locationSearchStart > 0) {

@@ -21,9 +21,10 @@ import FormGroup from "@mui/material/FormGroup";
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/Thumbnails.tsv";
 import {
-  trackEvent,
+  //trackEvent,
   getclientId,
 } from "../../../Shared/GoogleAnalytics/MatomoAnalytics";
+import { useTrackEvent } from "../../../../Hooks/useAnalytics";
 import OnClickInfo from "../../../Shared/OnClickInfo/OnClickInfo";
 import { useParams } from "react-router-dom";
 
@@ -115,19 +116,30 @@ const Thumbnails = () => {
     return url.startsWith(start_url) || url.startsWith(start_url_short);
   };
   const client_id = getclientId();
+  const [eventUrl, setEventUrl] = useState(undefined);
+  useTrackEvent(
+    "submission",
+    "thumbnails",
+    "youtube thumbnail",
+    eventUrl,
+    client_id,
+    eventUrl,
+    uid
+  );
   const submitForm = () => {
     setShowResult(false);
     dispatch(setError(null));
     let url = input.replace("?rel=0", "");
     if (url !== null && url !== "" && isYtUrl(url)) {
-      trackEvent(
+      setEventUrl(url);
+      /*trackEvent(
         "submission",
         "thumbnails",
         "youtube thumbnail",
         url,
         client_id,
         uid
-      );
+      );*/
       let images = get_images(url);
       dispatch(
         setThumbnailsResult({

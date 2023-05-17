@@ -17,9 +17,10 @@ import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/Analysis.tsv";
 import tsvAlltools from "../../../../LocalDictionary/components/NavItems/tools/Alltools.tsv";
 import {
-  trackEvent,
+  // trackEvent,
   getclientId,
 } from "../../../Shared/GoogleAnalytics/MatomoAnalytics";
+import { useTrackEvent } from "../../../../Hooks/useAnalytics";
 import { useParams } from "react-router-dom";
 import { KNOWN_LINKS } from "../../Assistant/AssistantRuleBook";
 import Card from "@mui/material/Card";
@@ -78,15 +79,22 @@ const Analysis = () => {
   const reprocessToggle = () => {
     setReprocess(!reprocess);
   };
-
+  useTrackEvent(
+    "submission",
+    "analysis",
+    "image caa analysis",
+    input.trim(),
+    client_id,
+    submittedUrl
+  );
   const submitForm = () => {
-    trackEvent(
+    /*trackEvent(
       "submission",
       "analysis",
       "image caa analysis",
       input.trim(),
       client_id
-    );
+    );*/
     setSubmittedUrl(input.trim());
     dispatch(cleanAnalysisState());
   };

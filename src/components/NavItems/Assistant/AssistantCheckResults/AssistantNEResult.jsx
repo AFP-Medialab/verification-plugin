@@ -37,8 +37,8 @@ const AssistantNEResult = () => {
   const neLoading = useSelector((state) => state.assistant.neLoading);
 
   const [selectedIndex, setSelectedIndex] = useState(null);
-  console.log("neResult ", neResult);
-  console.log("neResultCount ", neResultCount);
+  //console.log("neResult ", neResult);
+  //console.log("neResultCount ", neResultCount);
   const handleCollapse = (index) => {
     index === selectedIndex ? setSelectedIndex(null) : setSelectedIndex(index);
   };

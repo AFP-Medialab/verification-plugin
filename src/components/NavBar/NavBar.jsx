@@ -105,6 +105,7 @@ const NavBar = (props) => {
   const cookiesUsage = useSelector((state) => state.cookies);
   const currentLang = useSelector((state) => state.language);
   const defaultLanguage = useSelector((state) => state.defaultLanguage);
+  const isCurrentLanguageLeftToRight = currentLang !== "ar";
 
   const dispatch = useDispatch();
 
@@ -1295,6 +1296,17 @@ const NavBar = (props) => {
         open={openAlert}
         autoHideDuration={6000}
         onClose={handleCloseAlert}
+        anchorOrigin={
+          isCurrentLanguageLeftToRight
+            ? {
+                vertical: "bottom",
+                horizontal: "left",
+              }
+            : {
+                vertical: "bottom",
+                horizontal: "right",
+              }
+        }
       >
         <Alert onClose={handleCloseAlert} severity="warning">
           {keywordWarning("warning_advanced_tools")}
@@ -1667,7 +1679,7 @@ const NavBar = (props) => {
               onClick={() => dispatch(cleanError())}
             />
           )}
-          {cookiesUsage === null && (
+          {cookiesUsage.active === null && (
             <Snackbar
               anchorOrigin={{
                 vertical: "top",

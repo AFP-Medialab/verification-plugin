@@ -32,9 +32,10 @@ import tsv from "../../../../LocalDictionary/components/NavItems/tools/TwitterSn
 import tsvAllTools from "../../../../LocalDictionary/components/NavItems/tools/Alltools.tsv";
 //import { submissionEvent } from "../../../Shared/GoogleAnalytics/GoogleAnalytics";
 import {
-  trackEvent,
+  //trackEvent,
   getclientId,
 } from "../../../Shared/GoogleAnalytics/MatomoAnalytics";
+import { useTrackEvent } from "../../../../Hooks/useAnalytics";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import TwitterSNAIcon from "../../../NavBar/images/SVG/DataAnalysis/Twitter_sna.svg";
@@ -393,18 +394,26 @@ const TwitterSna = () => {
       if (prevResult && prevResult.socioSemantic4ModeGraph) {
         delete prevResult.socioSemantic4ModeGraph;
       }
-      trackEvent(
+      /*trackEvent(
         "submission",
         "tsna",
         "redirect to tsna",
         JSON.stringify(newRequest),
         client_id,
         uid
-      );
+      );*/
       setSubmittedRequest(newRequest);
     }
   };
-
+  useTrackEvent(
+    "submission",
+    "tsna",
+    "redirect to tsna",
+    JSON.stringify(submittedRequest),
+    client_id,
+    submittedRequest,
+    uid
+  );
   // const [submittedRequest, setSubmittedRequest] = useState(null);
   const [submittedRequest, setSubmittedRequest] = useState(
     userAuthenticated ? null : makeRequest()

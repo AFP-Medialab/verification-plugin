@@ -171,7 +171,7 @@ const AnimatedGif = ({ toolState, homoImg1, homoImg2 }) => {
                   variant="contained"
                   color="primary"
                   disabled={toolState === 7}
-                  onClick={(e) => handleDownload("gif")}
+                  onClick={() => handleDownload("gif")}
                 >
                   {keyword("button_download")}
                 </Button>

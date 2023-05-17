@@ -11,14 +11,16 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import {
   toggleHumanRightsCheckBox,
   toggleUnlockExplanationCheckBox,
-  toggleGACheckBox,
 } from "../../../redux/actions";
 import useLoadLanguage from "../../../Hooks/useLoadLanguage";
 import tsv from "../../../LocalDictionary/components/NavItems/About.tsv";
 import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
 import Link from "@mui/material/Link";
 import Typography from "@mui/material/Typography";
-import { toggleState } from "../../../redux/reducers/cookiesReducers";
+import {
+  toggleState,
+  toggleAnalyticsCheckBox,
+} from "../../../redux/reducers/cookiesReducers";
 
 const About = () => {
   const classes = useMyStyles();
@@ -27,8 +29,8 @@ const About = () => {
   const interactiveExplanation = useSelector(
     (state) => state.interactiveExplanation
   );
-  const cookiesUsage = useSelector((state) => state.cookies);
-  const gaUsage = useSelector((state) => state.googleAnalytic);
+  const cookiesUsage = useSelector((state) => state.cookies.active);
+  const gaUsage = useSelector((state) => state.cookies.analytics);
   const dispatch = useDispatch();
 
   const additionalDangerousContent = () => {
@@ -170,8 +172,8 @@ const About = () => {
         <FormControlLabel
           control={
             <Checkbox
-              checked={cookiesUsage.active}
-              onChange={() => dispatch(toggleState(cookiesUsage.active))}
+              checked={cookiesUsage}
+              onChange={() => dispatch(toggleState(cookiesUsage))}
               value="checkedBox"
               color="primary"
             />
@@ -184,7 +186,7 @@ const About = () => {
           control={
             <Checkbox
               checked={gaUsage}
-              onChange={() => dispatch(toggleGACheckBox())}
+              onChange={() => dispatch(toggleAnalyticsCheckBox(gaUsage))}
               value="checkedBox"
               color="primary"
             />
