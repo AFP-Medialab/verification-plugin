@@ -395,17 +395,19 @@ const CheckGif = () => {
           className={classes.headerUpladedImage}
         />
 
-        <Box p={3}>
-          <Grid container spacing={3} alignItems="center">
+        <Box m={2}>
+          <Grid container spacing={3} alignItems="flex-start">
             <Grid item xs={6}>
               <Box p={3} className={classButtonURL} onClick={clickURL}>
-                <Grid container direction="row" alignItems="center">
-                  <Grid item>
-                    <Box ml={1} mr={2}>
-                      <LinkIcon className={classIconURL} />
-                    </Box>
+                <Grid
+                  container
+                  direction="row"
+                  style={{ flexWrap: "nowrap" }}
+                  spacing={2}
+                >
+                  <Grid item xs={1}>
+                    <LinkIcon className={classIconURL} />
                   </Grid>
-
                   <Grid item>
                     <Grid
                       container
@@ -414,7 +416,11 @@ const CheckGif = () => {
                       alignItems="flex-start"
                     >
                       <Grid item>
-                        <Typography variant="body1" style={{ fontWeight: 600 }}>
+                        <Typography
+                          variant="body1"
+                          style={{ fontWeight: 600 }}
+                          textAlign={"start"}
+                        >
                           {keyword("title_URL")}
                         </Typography>
                       </Grid>
@@ -422,7 +428,7 @@ const CheckGif = () => {
                       <Box mt={1} />
 
                       <Grid item>
-                        <Typography variant="body1">
+                        <Typography variant="body1" textAlign={"start"}>
                           {keyword("description_URL")}
                         </Typography>
                       </Grid>
@@ -431,14 +437,16 @@ const CheckGif = () => {
                 </Grid>
               </Box>
             </Grid>
-
             <Grid item xs={6}>
               <Box p={3} className={classButtonLocal} onClick={clickLocal}>
-                <Grid container direction="row" alignItems="center">
-                  <Grid item>
-                    <Box ml={1} mr={2}>
-                      <FileIcon className={classIconLocal} />
-                    </Box>
+                <Grid
+                  container
+                  direction="row"
+                  style={{ flexWrap: "nowrap" }}
+                  spacing={2}
+                >
+                  <Grid item xs={1}>
+                    <FileIcon className={classIconLocal} />
                   </Grid>
 
                   <Grid item>
@@ -447,17 +455,19 @@ const CheckGif = () => {
                       direction="column"
                       justifyContent="flex-start"
                       alignItems="flex-start"
+                      spacing={1}
                     >
-                      <Grid item>
-                        <Typography variant="body1" style={{ fontWeight: 600 }}>
+                      <Grid item xs={12}>
+                        <Typography
+                          variant="body1"
+                          style={{ fontWeight: 600 }}
+                          textAlign={"start"}
+                        >
                           {keyword("title_local")}
                         </Typography>
                       </Grid>
-
-                      <Box mt={1} />
-
-                      <Grid item>
-                        <Typography variant="body1">
+                      <Grid item xs={12}>
+                        <Typography variant="body1" textAlign={"start"}>
                           {keyword("description_local")}
                         </Typography>
                       </Grid>
