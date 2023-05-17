@@ -1,7 +1,6 @@
 	en	fr	es	el	ar
 checkGIF_title	CheckGIF	CheckGIF	CheckGIF	CheckGIF	CheckGif
 checkGIF_description	This feature generates an animated gif image composed of an original image and a tampered one (including if the image has been cropped) to better reveal visually the image manipulation	Cet outil génère une image gif animé composée d'une image originale et une image truquée (y compris si l'image a été recadrée) afin de mieux montrer visuellement la manipulation de l'image.	Esta herramienta genera una imagen gif animada compuesta de una imagen original y una alterada (incluyendo si la imagen ha sido recortada) para revelar mejor visualmente la manipulación de la imagen.	Αυτό το χαρακτηριστικό δημιουργεί μια κινούμενη εικόνα gif αποτελείται από μια πρωτότυπη εικόνα και μιας παραβιασμένης όνη (συμπεριλαμβανομένου του αν έχει περικοπεί η εικόνα) για την καλύτερη αποκαλύψει οπτικά την εικόνα. χειρισμός	تنشئ هذه الميزة صورة gif متحركة مكونة من صورة أصلية وصورة تم التلاعب بها (بما في ذلك إذا تم اقتصاص الصورة) لإظهار معالجة الصورة بشكل أفضل
- 
 cardTitle_images	Images for the GIF	Images du GIF	Imagenes para el GIF	Εικόνες για το GIF	صور لـ GIF
 title_image1	First image (suspicious or altered one)	Première image (suspecte ou manipulée)	Primera imagen (sospechosa o manipulada)	Πρώτη εικόνα (ύποπτη ή αλλοιωμένη)	الصورة الأولى (مشبوهة أو تم تغييرها)
 title_image2	Second image (supposedly original)	Deuxième image (supposée originale)	Segunda imagen (supuestamente original)	Δεύτερη εικόνα (υποτιθέμενη πρωτότυπο)	الصورة الثانية (من المفترض أن تكون أصلية)
@@ -12,6 +11,7 @@ slider_title	Speed of the animation	Vitesse de l'animation	Velocidad de la anima
 slider_label_slow	Slow	Lente	Lento	Αργός	بطيء
 slider_label_fast	Fast	Rapide	Rápido	Γρήγορα	سريع
 button_download	Download GIF	Télécharger le GIF	Descargar GIF	Λήψη GIF	تنزيل GIF
+button_video	Download as Video	Télécharger en Vidéo	Descargar como vídeo	Λήψη ως βίντεο	حمّل بصيغة فيديو
 cardTitle_source	Source of the images	Source des images	Fuente de las imágenes	Πηγή των εικόνων	مصدر الصور
 title_URL	Links	Liens	Enlaces	Συνδέσεις	الروابط
 description_URL	The two images are provided with two URL links	Les deux images sont fournies avec deux liens urls	Se proveen las dos imágenes con dos enlaces	Οι δύο εικόνες που παρέχονται με δύο συνδέσεις URL	يتم تزويد الصورتين برابطين بصيغة عناوين URL
