@@ -37,9 +37,9 @@ function ScrollTop(props) {
     <Zoom in={trigger}>
       <div
         style={{
-          left: isCurrentLanguageLeftToRight ? "auto" : 26,
-          right: isCurrentLanguageLeftToRight ? 26 : "auto",
-          bottom: 10,
+          left: isCurrentLanguageLeftToRight ? "auto" : 14,
+          right: isCurrentLanguageLeftToRight ? 14 : "auto",
+          bottom: 100,
         }}
         onClick={handleClick}
         role="presentation"
