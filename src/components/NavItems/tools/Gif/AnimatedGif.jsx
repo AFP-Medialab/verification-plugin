@@ -13,7 +13,7 @@ import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/CheckGIF.tsv";
 import { useState, useEffect } from "react";
 
-const AnimatedGif = ({ toolState, homoImg1, homoImg2 }) => {
+const AnimatedGif = ({ toolState, homoImg1, homoImg2, isPopup }) => {
   const classes = useMyStyles();
   const keyword = useLoadLanguage(
     "components/NavItems/tools/CheckGIF.tsv",
@@ -108,7 +108,92 @@ const AnimatedGif = ({ toolState, homoImg1, homoImg2 }) => {
     setEnableDownload(false);
   }
 
-  return (
+  return isPopup ? (
+    <Grid
+      container
+      spacing={4}
+      direction="row"
+      justifyContent="flex-start"
+      alignItems="flex-start"
+    >
+      <Grid item xs={8}>
+        <Box
+          justifyContent="center"
+          className={classes.wrapperImageFilter}
+          // style={{ width: "100%" }}
+        >
+          <CardMedia
+            component="img"
+            className={classes.imagesGifImage}
+            image={homoImg1}
+          />
+          {true && (
+            <CardMedia
+              component="img"
+              className={classes.imagesGifFilter}
+              image={homoImg2}
+              id="gifFilterElement"
+              style={{ position: "absolute", top: 0, left: 0 }}
+            />
+          )}
+        </Box>
+      </Grid>
+      <Grid
+        item
+        xs={4}
+        container
+        spacing={6}
+        direction="column"
+        justifyContent="flex-start"
+      >
+        <Grid item>
+          <Typography gutterBottom>{keyword("slider_title")}</Typography>
+          <Slider
+            p={6}
+            defaultValue={-1100}
+            aria-labelledby="discrete-slider"
+            step={300}
+            marks={marks}
+            min={-1700}
+            max={-500}
+            scale={(x) => -x}
+            onChange={(e, val) => changeSpeed(val)}
+            onChangeCommitted={(e) => commitChangeSpeed(speed)}
+          />
+        </Grid>
+        <Grid
+          item
+          container
+          spacing={2}
+          justifyContent="flex-start"
+          alignItems="stretch"
+        >
+          <Grid item xs={12}>
+            <Button
+              fullWidth={true}
+              variant="contained"
+              color="primary"
+              disabled={toolState === 7}
+              onClick={(e) => handleDownload("gif")}
+            >
+              {keyword("button_download")}
+            </Button>
+          </Grid>
+          <Grid item xs={12}>
+            <Button
+              fullWidth={true}
+              variant="contained"
+              color="primary"
+              disabled={toolState === 7}
+              onClick={(e) => handleDownload("mp4")}
+            >
+              {keyword("button_video")}
+            </Button>
+          </Grid>
+        </Grid>
+      </Grid>
+    </Grid>
+  ) : (
     <div>
       <Box p={2} className={classes.height100}>
         <Grid
@@ -121,11 +206,7 @@ const AnimatedGif = ({ toolState, homoImg1, homoImg2 }) => {
           <Typography variant="h6" className={classes.headingGif}>
             {keyword("title_preview")}
           </Typography>
-          <Box
-            justifyContent="center"
-            className={classes.wrapperImageFilter}
-            style={{ width: "100%" }}
-          >
+          <Box justifyContent="center" className={classes.wrapperImageFilter}>
             <CardMedia
               component="img"
               className={classes.imagesGifImage}
