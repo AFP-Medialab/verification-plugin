@@ -749,9 +749,6 @@ const styles = (theme) => ({
   fabTop: {
     margin: "0px",
     top: "auto",
-    right: "14px",
-    bottom: "100px",
-    left: "auto",
     position: "fixed",
     backgroundColor: "#fff",
     color: "#000",
