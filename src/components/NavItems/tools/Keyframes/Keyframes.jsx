@@ -177,6 +177,13 @@ const Keyframes = () => {
     setLocalFile(true);
   };
 
+  /**
+   * Resets input
+   */
+  const handleCloseResult = () => {
+    setInput("");
+  };
+
   return (
     <div>
       <HeaderTool
@@ -329,7 +336,7 @@ const Keyframes = () => {
 
       <Box m={3} />
       {resultData && !localFile ? (
-        <KeyFramesResults result={resultData} />
+        <KeyFramesResults closeResult={handleCloseResult} result={resultData} />
       ) : (
         <div />
       )}
