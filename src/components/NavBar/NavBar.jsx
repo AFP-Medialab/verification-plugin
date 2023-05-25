@@ -1678,6 +1678,7 @@ const NavBar = (props) => {
               variant="error"
               message={error}
               onClick={() => dispatch(cleanError())}
+              onClose={() => {}}
             />
           )}
           {cookiesUsage.active === null && (
