@@ -154,6 +154,10 @@ const Metadata = ({ mediaType }) => {
     }
   }, [url, type]);
 
+  const handleCloseResult = () => {
+    setInput("");
+  };
+
   return (
     <div>
       <HeaderTool
@@ -249,7 +253,11 @@ const Metadata = ({ mediaType }) => {
                   type="file"
                   hidden={true}
                   onChange={(e) => {
-                    setInput(URL.createObjectURL(e.target.files[0]));
+                    if (e.target.files[0]) {
+                      setInput(URL.createObjectURL(e.target.files[0]));
+                      // reset value
+                      e.target.value = null;
+                    }
                   }}
                 />
               </Button>
@@ -260,9 +268,16 @@ const Metadata = ({ mediaType }) => {
       <Box m={3} />
       {resultData ? (
         resultIsImage ? (
-          <MetadataImageResult result={resultData} image={resultUrl} />
+          <MetadataImageResult
+            result={resultData}
+            image={resultUrl}
+            closeResult={handleCloseResult}
+          />
         ) : (
-          <MetadataVideoResult result={resultData} />
+          <MetadataVideoResult
+            result={resultData}
+            closeResult={handleCloseResult}
+          />
         )
       ) : null}
     </div>

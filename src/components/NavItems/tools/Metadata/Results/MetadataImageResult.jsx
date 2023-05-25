@@ -38,7 +38,12 @@ const MetadataImageResult = (props) => {
         />
 
         <div className={classes.root2}>
-          <CloseResult onClick={() => dispatch(cleanMetadataState())} />
+          <CloseResult
+            onClick={() => {
+              props.closeResult();
+              dispatch(cleanMetadataState());
+            }}
+          />
           <Box m={1} />
           <OnClickInfo keyword={"metadata_tip"} />
           <Box m={3} />
