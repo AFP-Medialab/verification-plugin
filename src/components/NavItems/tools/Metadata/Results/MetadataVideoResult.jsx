@@ -18,14 +18,14 @@ import OnClickInfo from "../../../../Shared/OnClickInfo/OnClickInfo";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 
-const MetadataVideoResult = (result) => {
+const MetadataVideoResult = (props) => {
   const classes = useMyStyles();
   const keyword = useLoadLanguage(
     "components/NavItems/tools/Metadata.tsv",
     tsv
   );
 
-  const report = result["result"];
+  const report = props["result"];
   const convertDMSToDD = (GPStitude, direction) => {
     if (!GPStitude || !direction) return null;
 
@@ -354,7 +354,12 @@ const MetadataVideoResult = (result) => {
       />
 
       <div className={classes.root2}>
-        <CloseResult onClick={() => dispatch(cleanMetadataState())} />
+        <CloseResult
+          onClick={() => {
+            props.closeResult();
+            dispatch(cleanMetadataState());
+          }}
+        />
         <Box m={1} />
         <OnClickInfo keyword={"metadata_tip"} />
         <Box m={3} />
