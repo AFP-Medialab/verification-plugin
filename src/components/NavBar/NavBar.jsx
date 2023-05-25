@@ -106,7 +106,6 @@ const NavBar = (props) => {
   const currentLang = useSelector((state) => state.language);
   const defaultLanguage = useSelector((state) => state.defaultLanguage);
   const isCurrentLanguageLeftToRight = currentLang !== "ar";
-
   const dispatch = useDispatch();
 
   const drawerRef = createRef();
@@ -1660,7 +1659,9 @@ const NavBar = (props) => {
             tabItems={tabItems}
             drawerItems={drawerItems}
           />
-          <ScrollTop {...props}>
+          <ScrollTop
+            {...{ isCurrentLanguageLeftToRight: isCurrentLanguageLeftToRight }}
+          >
             <ThemeProvider theme={themeFab}>
               <Fab
                 color="primary"
@@ -1677,6 +1678,7 @@ const NavBar = (props) => {
               variant="error"
               message={error}
               onClick={() => dispatch(cleanError())}
+              onClose={() => {}}
             />
           )}
           {cookiesUsage.active === null && (

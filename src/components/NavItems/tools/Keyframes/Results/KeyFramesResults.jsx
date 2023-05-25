@@ -219,7 +219,12 @@ const KeyFramesResults = (props) => {
 
       <Box m={3} />
 
-      <CloseResult onClick={() => dispatch(cleanKeyframesState())} />
+      <CloseResult
+        onClick={() => {
+          props.closeResult();
+          dispatch(cleanKeyframesState());
+        }}
+      />
 
       <Card>
         <CardHeader

@@ -552,8 +552,7 @@ const styles = (theme) => ({
 
   imageUploaded: {
     objectFit: "contain",
-    objectPosition: "top",
-    maxHeight: "48vh",
+    objectPosition: "center top",
   },
 
   imageFilter: {
@@ -589,8 +588,7 @@ const styles = (theme) => ({
   filterDisplayedClass: {
     position: "absolute",
     objectFit: "contain",
-    objectPosition: "top",
-    maxHeight: "48vh",
+    objectPosition: "center top",
     top: 0,
     left: 0,
     bottom: 0,
@@ -606,7 +604,6 @@ const styles = (theme) => ({
     backgroundSize: "contain",
     objectFit: "contain",
     objectPosition: "top",
-    maxHeight: "40vh",
 
     position: "relative",
     top: 0,
@@ -618,7 +615,6 @@ const styles = (theme) => ({
     backgroundSize: "contain",
     objectFit: "contain",
     objectPosition: "top",
-    maxHeight: "40vh",
 
     position: "absolute",
     top: 0,
@@ -749,9 +745,6 @@ const styles = (theme) => ({
   fabTop: {
     margin: "0px",
     top: "auto",
-    right: "14px",
-    bottom: "100px",
-    left: "auto",
     position: "fixed",
     backgroundColor: "#fff",
     color: "#000",

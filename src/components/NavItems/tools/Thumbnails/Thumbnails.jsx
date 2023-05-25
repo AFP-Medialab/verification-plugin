@@ -71,10 +71,27 @@ const Thumbnails = () => {
     setInput(e.target.value);
   };
 
-  const [selectedValue, setSelectedValue] = useState({
-    [SEARCH_ENGINE_SETTINGS.GOOGLE_SEARCH.NAME]: true,
-    openTabs: true,
-  });
+  /**
+   * Initialize selected values with Google Search and open tabs set to true by default
+   * @returns {selectedValue}
+   */
+  const initializeSelectedValue = () => {
+    let selectedList = {};
+
+    for (const searchEngine of Object.values(SEARCH_ENGINE_SETTINGS)) {
+      if (searchEngine.NAME === SEARCH_ENGINE_SETTINGS.GOOGLE_SEARCH.NAME)
+        selectedList[searchEngine.NAME] = true;
+      else selectedList[searchEngine.NAME] = false;
+    }
+
+    selectedList["openTabs"] = true;
+
+    return selectedList;
+  };
+
+  const [selectedValue, setSelectedValue] = useState(() =>
+    initializeSelectedValue()
+  );
 
   const handleChange = (event) => {
     setSelectedValue({
@@ -157,6 +174,12 @@ const Thumbnails = () => {
     for (const [searchEngineName, isSearchEngineSelected] of Object.entries(
       selectedValue
     )) {
+      // Prevent error
+      const searchEngineExists = Object.values(SEARCH_ENGINE_SETTINGS).some(
+        (searchEngine) => searchEngine.NAME === searchEngineName
+      );
+      if (!searchEngineExists) continue;
+
       if (isSearchEngineSelected) {
         if (searchEngineName === SEARCH_ENGINE_SETTINGS.ALL.NAME)
           reverseImageSearchAll(url, true);

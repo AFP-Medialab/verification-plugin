@@ -1208,7 +1208,7 @@ const ForensicResults = (props) => {
               anchorPosition={{ top: 0, left: 0 }}
               PaperProps={{
                 style: {
-                  width: "40vw",
+                  width: "60vw",
                   height: "70vh",
                   marginTop: "5vh",
                   marginLeft: "5vw",
@@ -1238,14 +1238,16 @@ const ForensicResults = (props) => {
                   <Typography variant="h6" gutterBottom>
                     {keyword("forensic_title_export")}
                   </Typography>
-
-                  <CloseIcon onClick={closeGifPopover} />
+                  <IconButton onClick={closeGifPopover}>
+                    <CloseIcon />
+                  </IconButton>
                 </Grid>
-                <Box m={1} />
+                <Box m={2} />
                 <AnimatedGif
                   toolState={gifState}
                   homoImg1={gifImage}
                   homoImg2={gifFilter}
+                  isPopup={true}
                 />
               </Box>
             </Popover>
