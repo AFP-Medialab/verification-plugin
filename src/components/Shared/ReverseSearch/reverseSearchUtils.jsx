@@ -377,8 +377,8 @@ export const getLocalImageFromSourcePath = async (src, imgFormat) => {
 
   let img = new Image();
   img.crossOrigin = "anonymous";
-  console.log(src);
-  console.log(src.toDataURL());
+  // console.log(src);
+  // console.log(src.toDataURL());
 
   const blob = await (await fetch(src)).blob();
 
@@ -401,7 +401,7 @@ export const getLocalImageFromSourcePath = async (src, imgFormat) => {
         );
       }
 
-      console.log(base64String);
+      // console.log(base64String);
 
       return new ImageObject(base64String, IMAGE_FORMATS.B64);
     };
@@ -424,11 +424,11 @@ export const getBlob = async (info) => {
 
   const isb64 = isBase64(info);
 
-  console.log(info);
-  console.log(isImgUrl);
-  console.log(isb64);
+  // console.log(info);
+  // console.log(isImgUrl);
+  // console.log(isb64);
 
-  console.log(getImgUrl(info));
+  // console.log(getImgUrl(info));
 
   let imgBlob;
 
@@ -438,7 +438,7 @@ export const getBlob = async (info) => {
   ) {
     imgBlob = await fetchImage(info);
   } else if (isImgUrl && !isb64) {
-    console.log(getImgUrl(info));
+    // console.log(getImgUrl(info));
     imgBlob = await fetchImage(getImgUrl(info));
   } else if (isb64) {
     imgBlob = b64toBlob(info);
@@ -506,7 +506,7 @@ const retrieveImgObjectForSearchEngine = async (
     //   );
     // }
 
-    console.log(info);
+    // console.log(info);
     // TODO: Error handling for getImgUrl
     return new ImageObject(getImgUrl(info), IMAGE_FORMATS.URI);
   }
@@ -613,7 +613,7 @@ export const reverseImageSearch = async (info, isImgUrl, searchEngineName) => {
         true
       );
 
-      console.log(b64Img);
+      // console.log(b64Img);
 
       let url =
         "https://www.bing.com/images/search?view=detailv2&iss=sbiupload&FORM=SBIHMP&sbifnm=weverify-local-file";
