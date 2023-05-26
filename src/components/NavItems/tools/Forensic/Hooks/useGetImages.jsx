@@ -45,7 +45,7 @@ const useGetImages = (url, type, keyword) => {
             //getTransparent(response.data.id, url, response.data)
             dispatch(
               setForensicsResult({
-                url: url,
+                url: type === "local" ? response.data.displayItem : url,
                 result: response.data,
                 notification: false,
                 loading: false,
