@@ -99,9 +99,7 @@ const Assistant = () => {
   // set correct error message
   useEffect(() => {
     if (errorKey) {
-      errorKey.startsWith("assistant_error")
-        ? dispatch(setError(keyword(errorKey)))
-        : dispatch(setError(errorKey));
+      dispatch(setError(keyword(errorKey)));
       cleanAssistant();
     }
   }, [errorKey]);
