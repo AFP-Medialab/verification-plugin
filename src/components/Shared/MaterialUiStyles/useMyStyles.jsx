@@ -273,6 +273,12 @@ const styles = (theme) => ({
     overflow: "hidden",
     textOverflow: "ellipsis",
   },
+  longText: {
+    maxWidth: "100%",
+    overflow: "hidden",
+    whiteSpace: "nowrap",
+    textOverflow: "ellipsis",
+  },
   secondaryHeading: {
     fontSize: theme.typography.pxToRem(15),
     color: theme.palette.text.secondary,

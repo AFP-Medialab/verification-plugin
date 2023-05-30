@@ -125,6 +125,7 @@ const AssistantVideoResult = () => {
       <CardActions>
         <ImageIcon color={"action"} />
         <Link
+          className={classes.longText}
           href={processUrl}
           color={"textSecondary"}
           variant={"subtitle2"}
