@@ -1679,6 +1679,7 @@ const NavBar = (props) => {
               message={error}
               onClick={() => dispatch(cleanError())}
               onClose={() => {}}
+              sx={{ mr: 8 }}
             />
           )}
           {cookiesUsage.active === null && (

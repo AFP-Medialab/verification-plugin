@@ -66,17 +66,10 @@ const MySnackbar = (props) => {
   return (
     <div>
       <Snackbar
-        anchorOrigin={
-          isCurrentLanguageLeftToRight
-            ? {
-                vertical: "bottom",
-                horizontal: "left",
-              }
-            : {
-                vertical: "bottom",
-                horizontal: "right",
-              }
-        }
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "right",
+        }}
         open={open}
         onClose={handleClose}
       >
