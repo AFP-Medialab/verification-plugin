@@ -240,23 +240,25 @@ const ImageResult = () => {
               )}`}
             </Button>
           </Grid>
-          <Grid item>
-            <Button
-              color="primary"
-              variant="contained"
-              onClick={() =>
-                handleClick(
-                  original,
-                  isImageUrl,
-                  SEARCH_ENGINE_SETTINGS.BING_SEARCH.NAME
-                )
-              }
-            >
-              {`${SEARCH_ENGINE_SETTINGS.BING_SEARCH.NAME} ${keyword(
-                "reverse_search"
-              )}`}
-            </Button>
-          </Grid>
+          {isImageUrl ? (
+            <Grid item>
+              <Button
+                color="primary"
+                variant="contained"
+                onClick={() =>
+                  handleClick(
+                    original,
+                    isImageUrl,
+                    SEARCH_ENGINE_SETTINGS.BING_SEARCH.NAME
+                  )
+                }
+              >
+                {`${SEARCH_ENGINE_SETTINGS.BING_SEARCH.NAME} ${keyword(
+                  "reverse_search"
+                )}`}
+              </Button>
+            </Grid>
+          ) : null}
           <Grid item>
             <Button
               color="primary"

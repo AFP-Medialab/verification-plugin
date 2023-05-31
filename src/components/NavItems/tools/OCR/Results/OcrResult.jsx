@@ -235,22 +235,24 @@ const OcrResult = () => {
                       {keyword("ocr_search_yandex")}
                     </Button>
                   </Grid>
-                  <Grid item xs={6}>
-                    <Button
-                      variant="outlined"
-                      color="primary"
-                      fullWidth
-                      onClick={() => {
-                        reverseImageSearch(
-                          inputUrl,
-                          imageIsUrl,
-                          SEARCH_ENGINE_SETTINGS.BING_SEARCH.NAME
-                        );
-                      }}
-                    >
-                      {keyword("ocr_search_bing")}
-                    </Button>
-                  </Grid>
+                  {imageIsUrl ? (
+                    <Grid item xs={6}>
+                      <Button
+                        variant="outlined"
+                        color="primary"
+                        fullWidth
+                        onClick={() => {
+                          reverseImageSearch(
+                            inputUrl,
+                            imageIsUrl,
+                            SEARCH_ENGINE_SETTINGS.BING_SEARCH.NAME
+                          );
+                        }}
+                      >
+                        {keyword("ocr_search_bing")}
+                      </Button>
+                    </Grid>
+                  ) : null}
                   <Grid item xs={6}>
                     <Button
                       variant="outlined"
