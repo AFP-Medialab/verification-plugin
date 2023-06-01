@@ -72,7 +72,7 @@ const AssistantIntroduction = (props) => {
   const cleanAssistant = () => props.cleanAssistant();
 
   return (
-    <div className={classes.assistantGrid}>
+    <div>
       <HeaderTool
         name={keyword("assistant_title")}
         description={keyword("assistant_intro")}

@@ -18,7 +18,7 @@ import IconSearch from "../../../NavBar/images/SVG/Search/Search.svg";
 import IconData from "../../../NavBar/images/SVG/DataAnalysis/Data_analysis.svg";
 import IconTools from "../../../NavBar/images/SVG/Navbar/Tools.svg";
 import Box from "@mui/material/Box";
-import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
+import LoginHeader from "../../../Shared/LoginHeader/LoginHeader";
 import { useSelector } from "react-redux";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
@@ -161,12 +161,11 @@ const AllTools = (props) => {
         </Alert>
       </Snackbar>
 
-      <HeaderTool
+      <LoginHeader
         name={keyword("navbar_tools")}
         icon={
           <IconTools width="40px" height="40px" style={{ fill: "#51A5B2" }} />
         }
-        advanced="true"
       />
 
       <Card>
