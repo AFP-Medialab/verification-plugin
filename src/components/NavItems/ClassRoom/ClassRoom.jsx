@@ -163,7 +163,6 @@ const ClassRoom = () => {
               height="40px"
             />
           }
-          advanced={false}
         />
 
         <Card>

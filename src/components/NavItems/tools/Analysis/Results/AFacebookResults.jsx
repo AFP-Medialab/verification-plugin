@@ -1,11 +1,12 @@
 import React from "react";
 import { useDispatch } from "react-redux";
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
-import CloseResult from "../../../../Shared/CloseResult/CloseResult";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Divider from "@mui/material/Divider";
 import Button from "@mui/material/Button";
+import { IconButton } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 import OnClickInfo from "../../../../Shared/OnClickInfo/OnClickInfo";
 import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Analysis.tsv";
@@ -95,9 +96,18 @@ const AFacebookResults = (props) => {
           <CardHeader
             title={keyword("cardheader_results")}
             className={classes.headerUpladedImage}
+            action={
+              <IconButton
+                aria-label="close"
+                onClick={() => {
+                  dispatch(cleanAnalysisState());
+                }}
+              >
+                <CloseIcon sx={{ color: "white" }} />
+              </IconButton>
+            }
           />
           <div className={classes.root2}>
-            <CloseResult onClick={() => dispatch(cleanAnalysisState())} />
             <Typography variant={"h5"}>{process_title.title}</Typography>
             <Typography variant={"subtitle1"}>
               {process_title.created_time}

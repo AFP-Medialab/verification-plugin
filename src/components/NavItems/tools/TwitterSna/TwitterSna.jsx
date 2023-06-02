@@ -562,7 +562,6 @@ const TwitterSna = () => {
               height="40px"
             />
           }
-          advanced="true"
         />
         <Card className={cardClasses.root}>
           <CardHeader

@@ -373,7 +373,6 @@ const CheckGif = () => {
         icon={
           <IconGif style={{ fill: "#51A5B2" }} width="40px" height="40px" />
         }
-        advanced="true"
       />
 
       {
