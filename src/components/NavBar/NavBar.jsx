@@ -91,7 +91,7 @@ function a11yProps(index) {
   };
 }
 
-const NavBar = (props) => {
+const NavBar = () => {
   const classes = useMyStyles();
   const navigate = useNavigate();
   const [open, setOpen] = useState(true);
@@ -1295,17 +1295,11 @@ const NavBar = (props) => {
         open={openAlert}
         autoHideDuration={6000}
         onClose={handleCloseAlert}
-        anchorOrigin={
-          isCurrentLanguageLeftToRight
-            ? {
-                vertical: "bottom",
-                horizontal: "left",
-              }
-            : {
-                vertical: "bottom",
-                horizontal: "right",
-              }
-        }
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "right",
+        }}
+        sx={{ mr: 8 }}
       >
         <Alert onClose={handleCloseAlert} severity="warning">
           {keywordWarning("warning_advanced_tools")}
