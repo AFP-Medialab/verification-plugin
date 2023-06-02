@@ -7,6 +7,8 @@ import ImageGridList from "../../../Shared/ImageGridList/ImageGridList";
 import { useDispatch, useSelector } from "react-redux";
 import FormControl from "@mui/material/FormControl";
 import FormControlLabel from "@mui/material/FormControlLabel";
+import { IconButton } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import { loadImageSize, useLoading } from "../../../../Hooks/useInput";
 import {
@@ -15,7 +17,6 @@ import {
   setThumbnailsLoading,
 } from "../../../../redux/reducers/tools/thumbnailsReducer";
 import { setError } from "../../../../redux/actions/errorActions";
-import CloseResult from "../../../Shared/CloseResult/CloseResult";
 import Checkbox from "@mui/material/Checkbox";
 import FormGroup from "@mui/material/FormGroup";
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
@@ -338,9 +339,16 @@ const Thumbnails = () => {
           <CardHeader
             title={keyword("cardheader_results")}
             className={classes.headerUpladedImage}
+            action={
+              <IconButton
+                aria-label="close"
+                onClick={() => dispatch(cleanThumbnailsState())}
+              >
+                <CloseIcon sx={{ color: "white" }} />
+              </IconButton>
+            }
           />
           <div className={classes.root2}>
-            <CloseResult onClick={() => dispatch(cleanThumbnailsState())} />
             <OnClickInfo keyword={"thumbnails_tip"} />
             <Box m={2} />
 

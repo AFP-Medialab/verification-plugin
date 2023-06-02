@@ -74,7 +74,7 @@ const ForensicResults = (props) => {
       MuiCardHeader: {
         styleOverrides: {
           root: {
-            backgroundColor: "#05A9B4",
+            backgroundColor: "#05a9b4",
           },
           title: {
             color: "white",

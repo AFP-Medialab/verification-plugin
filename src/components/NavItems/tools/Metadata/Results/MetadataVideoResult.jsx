@@ -8,7 +8,6 @@ import Table from "@mui/material/Table";
 import Box from "@mui/material/Box";
 import Tooltip from "@mui/material/Tooltip";
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
-import CloseResult from "../../../../Shared/CloseResult/CloseResult";
 import { cleanMetadataState } from "../../../../../redux/reducers/tools/metadataReducer";
 import Button from "@mui/material/Button";
 import MapIcon from "@mui/icons-material/Map";
@@ -17,6 +16,8 @@ import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Metada
 import OnClickInfo from "../../../../Shared/OnClickInfo/OnClickInfo";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
+import { IconButton } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 
 const MetadataVideoResult = (props) => {
   const classes = useMyStyles();
@@ -351,15 +352,19 @@ const MetadataVideoResult = (props) => {
       <CardHeader
         title={keyword("cardheader_results")}
         className={classes.headerUpladedImage}
+        action={
+          <IconButton
+            aria-label="close"
+            onClick={() => {
+              props.closeResult();
+              dispatch(cleanMetadataState());
+            }}
+          >
+            <CloseIcon sx={{ color: "white" }} />
+          </IconButton>
+        }
       />
-
       <div className={classes.root2}>
-        <CloseResult
-          onClick={() => {
-            props.closeResult();
-            dispatch(cleanMetadataState());
-          }}
-        />
         <Box m={1} />
         <OnClickInfo keyword={"metadata_tip"} />
         <Box m={3} />
