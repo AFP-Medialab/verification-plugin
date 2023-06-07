@@ -330,6 +330,11 @@ const styles = (theme) => ({
     width: "auto",
     maxWidth: "60%",
   },
+  AboutMediaSmall: {
+    height: "auto",
+    width: "auto",
+    maxWidth: "100px",
+  },
   InteractiveMedia: {
     maxWidth: "80%",
     maxHeight: window.innerHeight / 2,
