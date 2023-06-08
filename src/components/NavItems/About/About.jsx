@@ -133,8 +133,15 @@ const About = () => {
           <Link target="_blank" href={keyword("usfd_link")}>
             {keyword("usfd_link_label")}
           </Link>
+          {keyword("arabic_translation_part_1")}
+          <Link target="_blank" href={keyword("afcn_link")}>
+            {keyword("afcn_link_label")}
+          </Link>
+          {keyword("arabic_translation_part_2")}
+          <Link target="_blank" href={keyword("arij_link")}>
+            {keyword("arij_link_label")}
+          </Link>
         </Typography>
-
         {additionalDangerousContent().map((value, key) => {
           return (
             <div
