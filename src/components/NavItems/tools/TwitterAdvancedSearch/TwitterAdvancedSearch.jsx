@@ -81,6 +81,9 @@ const TwitterAdvancedSearch = () => {
 
   const [fromDate, setSelectedFromDate] = useState(null);
   const [fromDatError, setSelectedFromDateError] = useState(false);
+  ``;
+  const [toDate, setSelectedToDate] = useState(null);
+  const [toDateError, setSelectedToDateError] = useState(null);
 
   const handleFromDateChange = (date) => {
     setSelectedFromDateError(date === null);
@@ -88,26 +91,16 @@ const TwitterAdvancedSearch = () => {
     setSelectedFromDate(date);
   };
 
-  const fromDateIsValid = (momentDate) => {
-    const itemDate = momentDate.toDate();
-    const currentDate = new Date();
-    if (toDate) return itemDate <= currentDate && itemDate < toDate;
-    return itemDate <= currentDate;
-  };
-  const [toDate, setSelectedToDate] = useState(null);
-  const [toDateError, setSelectedToDateError] = useState(null);
-
   const handleToDateChange = (date) => {
     setSelectedToDateError(date === null);
     if (fromDate && date <= fromDate) setSelectedToDateError(true);
     setSelectedToDate(date);
   };
 
-  const toDateIsValid = (momentDate) => {
-    const itemDate = momentDate.toDate();
-    const currentDate = new Date();
-    if (fromDate) return itemDate <= currentDate && fromDate < itemDate;
-    return itemDate <= currentDate;
+  const pastDate = (currentDate) => {
+    const itemDate = currentDate.toDate();
+    if (fromDate) return fromDate > itemDate;
+    return false;
   };
 
   const session = useSelector((state) => state.userSession);
@@ -185,7 +178,6 @@ const TwitterAdvancedSearch = () => {
           <div>
             <DateTime
               input={true}
-              isValidDate={fromDateIsValid}
               label={keyword("twitter_from_date")}
               dateFormat={"YYYY-MM-DD"}
               timeFormat={"HH:mm:ss"}
@@ -197,13 +189,13 @@ const TwitterAdvancedSearch = () => {
           <div>
             <DateTime
               input={true}
-              isValidDate={toDateIsValid}
               label={keyword("twitter_to_date")}
               dateFormat={"YYYY-MM-DD"}
               timeFormat={"HH:mm:ss"}
               handleChange={handleToDateChange}
               error={toDateError}
               value={toDate}
+              shouldDisableDate={pastDate}
             />
           </div>
 

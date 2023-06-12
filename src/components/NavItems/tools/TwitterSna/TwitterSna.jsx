@@ -320,24 +320,10 @@ const TwitterSna = () => {
     setMediaImage(!mediaImage);
   };
 
-  const sinceDateIsValid = (momentDate) => {
-    const itemDate = momentDate.toDate();
-    const currentDate = new Date();
-    if (until) return itemDate <= currentDate && itemDate < until;
-    return itemDate <= currentDate;
-  };
-
   const handleSinceDateChange = (date) => {
     setSinceError(date === null);
     if (until && date >= until) setSinceError(true);
     setSince(date);
-  };
-
-  const untilDateIsValid = (momentDate) => {
-    const itemDate = momentDate.toDate();
-    const currentDate = new Date();
-    if (since) return itemDate <= currentDate && since < itemDate;
-    return itemDate <= currentDate;
   };
 
   const handleUntilDateChange = (date) => {
@@ -345,12 +331,11 @@ const TwitterSna = () => {
     if (since && date < since) setUntilError(true);
     setUntil(date);
   };
-
-  /*
-  const handleFiltersChange = (event) => {
-    setFilers(event.target.value);
+  const pastDate = (currentDate) => {
+    const itemDate = currentDate.toDate();
+    if (since) return since > itemDate;
+    return false;
   };
-  */
 
   const session = useSelector((state) => state.userSession);
   const uid = session && session.user ? session.user.email : null;
@@ -688,7 +673,6 @@ const TwitterSna = () => {
                     id="standard-full-width-since"
                     disabled={searchFormDisabled}
                     input={true}
-                    isValidDate={sinceDateIsValid}
                     label={"*  " + keyword("twitter_sna_from_date")}
                     className={classes.neededField}
                     dateFormat={"YYYY-MM-DD"}
@@ -704,7 +688,6 @@ const TwitterSna = () => {
                     id="standard-full-width-until"
                     disabled={searchFormDisabled}
                     input={true}
-                    isValidDate={untilDateIsValid}
                     label={"*  " + keyword("twitter_sna_until_date")}
                     className={classes.neededField}
                     dateFormat={"YYYY-MM-DD"}
@@ -713,6 +696,7 @@ const TwitterSna = () => {
                     handleChange={handleUntilDateChange}
                     error={untilError}
                     placeholder={keyword("twitter_sna_selectdate")}
+                    shouldDisableDate={pastDate}
                   />
                 </Grid>
 
