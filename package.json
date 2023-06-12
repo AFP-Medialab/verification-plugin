@@ -20,7 +20,7 @@
     "@emotion/styled": "^11.11.0",
     "@mui/icons-material": "^5.11.16",
     "@mui/material": "^5.13.3",
-    "@mui/x-date-pickers": "^6.6.0",
+    "@mui/x-date-pickers": "^6.7.0",
     "@reduxjs/toolkit": "^1.9.5",
     "axios": "^1.4.0",
     "d3-selection": "^3.0.0",
