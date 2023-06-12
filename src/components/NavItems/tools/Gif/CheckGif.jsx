@@ -210,7 +210,18 @@ const CheckGif = () => {
       //console.log("Ready to send"); //DEBUG
       dispatch(setStateReady());
     }
+
+    if (toolState === 6) {
+      console.log("error");
+      cleanInputs();
+      if (selectedMode === "URL") {
+        dispatch(setStateSelectingUrl());
+      } else if (selectedMode === "LOCAL") {
+        dispatch(setStateSelectingLocal());
+      }
+    }
   }, [toolState, imageDropped1, imageDropped2, imageURL1, imageURL2]);
+
   const [eventUrl1, setEventUrl1] = useState(undefined);
   const [eventUrl2, setEventUrl2] = useState(undefined);
   const [eventUrlType1, setEventUrlType1] = useState(undefined);
@@ -257,7 +268,7 @@ const CheckGif = () => {
     );*/
     /*submissionEvent(imageURL1);
         submissionEvent(imageURL2);*/
-    var files = {
+    const files = {
       url_0: imageURL1,
       url_1: imageURL2,
     };
@@ -288,7 +299,7 @@ const CheckGif = () => {
     );*/
     /*submissionEvent(selectedFile1);
         submissionEvent(selectedFile2);*/
-    var files = {
+    const files = {
       file1: selectedFile1,
       file2: selectedFile2,
     };
@@ -298,15 +309,6 @@ const CheckGif = () => {
 
   //Call to the API
   useGetHomographics(filesToSend, modeHomo, keyword);
-
-  if (toolState === 6) {
-    cleanInputs();
-    if (selectedMode === "URL") {
-      dispatch(setStateSelectingUrl());
-    } else if (selectedMode === "LOCAL") {
-      dispatch(setStateSelectingLocal());
-    }
-  }
 
   //GIF preview
   //============================================================================================
