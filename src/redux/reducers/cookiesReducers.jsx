@@ -15,8 +15,8 @@ const cookiesSlice = createSlice({
       //state.id = uuid();
       return {
         active: true,
-        //analytics: true,
-        analytics: false, //tempory disable for test
+        analytics: true,
+        //analytics: false, //tempory disable for test
         id: id,
       };
     },
