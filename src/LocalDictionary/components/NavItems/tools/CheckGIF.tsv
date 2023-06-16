@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 	en	fr	es	el	ar
 checkGIF_title	CheckGIF	CheckGIF	CheckGIF	CheckGIF	CheckGif
 checkGIF_description	This feature generates an animated gif image composed of an original image and a tampered one (including if the image has been cropped) to better reveal visually the image manipulation	Cet outil génère une image gif animé composée d'une image originale et une image truquée (y compris si l'image a été recadrée) afin de mieux montrer visuellement la manipulation de l'image.	Esta herramienta genera una imagen gif animada compuesta de una imagen original y una alterada (incluyendo si la imagen ha sido recortada) para revelar mejor visualmente la manipulación de la imagen.	Αυτό το χαρακτηριστικό δημιουργεί μια κινούμενη εικόνα gif αποτελείται από μια πρωτότυπη εικόνα και μιας παραβιασμένης όνη (συμπεριλαμβανομένου του αν έχει περικοπεί η εικόνα) για την καλύτερη αποκαλύψει οπτικά την εικόνα. χειρισμός	تنشئ هذه الميزة صورة gif متحركة مكونة من صورة أصلية وصورة تم التلاعب بها (بما في ذلك إذا تم اقتصاص الصورة) لإظهار معالجة الصورة بشكل أفضل
@@ -32,3 +33,40 @@ IPOL_FILE_IMAGE_ERROR	There was an error while downlading the image	Il y a eu un
 IPOL_BAD_URL_ERROR	The format of the URLs are not valid	Le format des URL ne sont pas valides	El formato de las URL no es válido.	Η μορφή των διευθύνσεων URL δεν είναι έγκυρη	صيغة عناوين URL غير صالحة
 NO_MATCHES_FOUND	No match has been found between the two images	Aucune similitude n'a été trouvée entre les deux images	No se ha encontrado ninguna similaridad entre las dos imágenes.	Δεν βρέθηκε καμία αντιστοιχία μεταξύ των δύο εικόνων	لم يتم العثور على تطابق بين الصورتين
 INTERNAL_SERVER_ERROR	There was an internal error while processing the two images	Il y a eu une erreur interne lors du traitement des deux images	Hubo un error interno al procesar las dos imágenes.	Υπήρχε ένα εσωτερικό σφάλμα κατά την επεξεργασία των δύο εικόνων	حدث خطأ داخلي أثناء معالجة الصورتين
+=======
+	en	fr	es	el	hy
+checkGIF_title	CheckGIF	CheckGIF	CheckGIF	CheckGIF	CheckGIF
+checkGIF_description	This feature generates an animated gif image composed of an original image and a tampered one (including if the image has been cropped) to better reveal visually the image manipulation	Cet outil génère une image gif animé composée d'une image originale et une image truquée (y compris si l'image a été recadrée) afin de mieux montrer visuellement la manipulation de l'image.	Esta herramienta genera una imagen gif animada compuesta de una imagen original y una alterada (incluyendo si la imagen ha sido recortada) para revelar mejor visualmente la manipulación de la imagen.	Αυτό το χαρακτηριστικό δημιουργεί μια κινούμενη εικόνα gif αποτελείται από μια πρωτότυπη εικόνα και μιας παραβιασμένης όνη (συμπεριλαμβανομένου του αν έχει περικοπεί η εικόνα) για την καλύτερη αποκαλύψει οπτικά την εικόνα. χειρισμός	Այս գործառույթը ստեղծում է անիմացված GIF պատկեր, որը հերթականորեն ցույց է տալիս բնօրինակ և ձևափոխված պատկերները (անգամ, կտրված պատկերի դեպքում), թույլ տալով ավելի ակնառու տեսնել պատկերի ձևափոխությունները։
+cardTitle_images	Images for the GIF	Images du GIF	Imagenes para el GIF	Εικόνες για το GIF	Պատկերներ GIF-ի համար
+title_image1	First image (suspicious or altered one)	Première image (suspecte ou manipulée)	Primera imagen (sospechosa o manipulada)	Πρώτη εικόνα (ύποπτη ή αλλοιωμένη)	Առաջին պատկեր (կասկածելի կամ փոփոխված)
+title_image2	Second image (supposedly original)	Deuxième image (supposée originale)	Segunda imagen (supuestamente original)	Δεύτερη εικόνα (υποτιθέμενη πρωτότυπο)	Երկրորդ պատկերը (ենթադրաբար բնօրինակ)
+body_droparea	Drop here an image file or click to browse for an image	Glisser et déposer une image ou cliquer pour chercher une image locale	Colocar aquí un archivo de imagen o haga clic para buscar una imagen	Πτώση εδώ ένα αρχείο εικόνας ή κάντε κλικ για να αναζητήσετε μια εικόνα	Քցեք այստեղ պատկերի ֆայլը կամ կտտացրեք ֆայլ ընտրելու համար
+button_loadImages	Load images	Charger les images	Cargar imágenes	Φόρτωση εικόνων	Ներբեռնեք պատկերներ
+cardTitle_generatedGIF	Preview of the GIF	Vue préalable du GIF	Vista previa del GIF	Preview του GIF	GIF-ի նախադիտում
+slider_title	Speed of the animation	Vitesse de l'animation	Velocidad de la animación	Ταχύτητα της κίνησης	Անիմացիայի արագությունը
+slider_label_slow	Slow	Lente	Lento	Αργός	Դանդաղ
+slider_label_fast	Fast	Rapide	Rápido	Γρήγορα	Արագ
+button_download	Download GIF	Télécharger le GIF	Descargar GIF	Λήψη GIF	Ներբեռնել GIF-ի տեսքով
+button_video	Download as Video	Télécharger en Vidéo	Descargar como vídeo	Λήψη ως βίντεο	Ներբեռնել տեսանյութի տեսքով
+cardTitle_source	Source of the images	Source des images	Fuente de las imágenes	Πηγή των εικόνων	Պատկերների աղբյուրը
+title_URL	Links	Liens	Enlaces	Συνδέσεις	Հղումներ
+description_URL	The two images are provided with two URL links	Les deux images sont fournies avec deux liens urls	Se proveen las dos imágenes con dos enlaces	Οι δύο εικόνες που παρέχονται με δύο συνδέσεις URL	Երկու պատկերներն ապահովված են երկու URL հղումներով
+title_local	Local files	Fichiers locaux	Ficheros locales	τοπικά αρχεία	Տեղական ֆայլեր
+description_local	The two images are provided with two local files	Les deux images sont fournies avec deux fichiers locaux	Se proveen las dos imágenes con ficheros locales	Οι δύο εικόνες που παρέχονται με δύο τοπικά αρχεία	Երկու պատկերներն կազմված են երկու տեղական ֆայլերից
+title_gifcreation	GIF Creation	Création du GIF	Creación de GIF	GIF Δημιουργία	GIF ստեղծում
+text_preview	You need to select the two images on the left and click the button to see the preview	Vous devez sélectionner deux images à gauche et cliquer sur le bouton pour voir l'aperçu	Tiene que seleccionar dos imágenes en la parte izquierda y cliquear sobre el botón para ver la vista previa	Θα πρέπει να επιλέξετε τις δύο εικόνες για το αριστερό και κάντε κλικ στο κουμπί για να δείτε την προεπισκόπηση	Նախադիտումը տեսնելու համար հարկավոր է ընտրել երկու պատկերները, ապա սեղմել կոճակը
+input_label1	Link of the suspicious or altered image	Lien de l'image suspecte ou manipulée	Enlace de la imagen sospechosa o manipulada	Σύνδεση της ύποπτης ή της τροποποιημένης εικόνας	Կասկածելի կամ փոփոխված պատկերի հղումը
+input_label2	Link of the supposedly original image	Lien de l'image supposée originale	Enlace de la imagen supuestamente original	Σύνδεσμος της υποτιθέμενης πρωτότυπης εικόνας	Ենթադրաբար բնօրինակ պատկերի հղումը
+input_placeholder	Paste here the link	Copier ici le lien	Copiar aquí el enlace	Επικολλήστε εδώ το σύνδεσμο	Տեղադրեք հղումը այստեղ
+title_preview	Preview of the GIF	Aperçu du GIF	Vista previa del GIF	Preview του GIF	GIF-ի նախադիտում
+error_homo	No match has been found between the two images.	Aucune similarité n'a été trouvée entre les deux images	No se encontro similaridad alguna entre las dos imágenes	Δεν έχει επιτευχθεί αντιστοιχία μεταξύ των δύο εικόνων.	Երկու պատկերների միջև ոչ մի համընկնում չի հայտնաբերվել:
+button_new	New GIF	Nouveau GIF	Nuevo GIF	νέα GIF	Նոր GIF
+IPOL_IMAGE_UPLOAD_EXCEEDED	The size of the images exceed the limit of 1MB	La taille des images dépasse la limite de 1 Mo	El tamaño de las imágenes excede el límite de 1MB.	Το μέγεθος των εικόνων υπερβαίνει το όριο 1MB	Պատկերների չափը գերազանցում է 1 ՄԲ սահմանաչափը
+IPOL_REMOTE_SERVICE_ERROR	There was an network error while processing the two images	Il y a eu une erreur réseau lors du traitement des deux images	Hubo un error de red al procesar las dos imágenes.	Υπήρξε ένα σφάλμα δικτύου κατά την επεξεργασία των δύο εικόνων	Երկու պատկերները մշակելիս ցանցի սխալ տեղի ունեցավ
+IPOL_RESOURCE_NOT_FOUND	There was an internal error while processing the two images	Il y a eu une erreur interne lors du traitement des deux images	Hubo un error interno al procesar las dos imágenes.	Υπήρχε ένα εσωτερικό σφάλμα κατά την επεξεργασία των δύο εικόνων	Երկու պատկերները մշակելիս ներքին սխալ տեղի ունեցավ
+IPOL_FILE_IMAGE_ERROR	There was an error while downlading the image	Il y a eu une erreur en téléchargeant l'image	Hubo un error al bajar la imagen.	Υπήρχε ένα σφάλμα κατά την απομάκρυνση της εικόνας	Պատկերը ներբեռնելիս սխալ տեղի ունեցավ
+IPOL_BAD_URL_ERROR	The format of the URLs are not valid	Le format des URL ne sont pas valides	El formato de las URL no es válido.	Η μορφή των διευθύνσεων URL δεν είναι έγκυρη	Որ վավեր URL-ներ
+NO_MATCHES_FOUND	No match has been found between the two images	Aucune similitude n'a été trouvée entre les deux images	No se ha encontrado ninguna similaridad entre las dos imágenes.	Δεν βρέθηκε καμία αντιστοιχία μεταξύ των δύο εικόνων	Երկու պատկերների միջև ոչ մի համընկնում չի գտնվել
+INTERNAL_SERVER_ERROR	There was an internal error while processing the two images	Il y a eu une erreur interne lors du traitement des deux images	Hubo un error interno al procesar las dos imágenes.	Υπήρχε ένα εσωτερικό σφάλμα κατά την επεξεργασία των δύο εικόνων	Երկու պատկերները մշակելիս ներքին սխալ տեղի ունեցավ
+checkGIF_413	Uploaded file is too large	Le fichier téléchargé est trop volumineux	El archivo subido es demasiado grande	Το αρχείο που μεταφορτώθηκε είναι πολύ μεγάλο	Վերբեռնված ֆայլը չափազանց մեծ է
+>>>>>>> master

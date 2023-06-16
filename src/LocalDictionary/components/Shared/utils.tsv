@@ -1,4 +1,11 @@
+<<<<<<< HEAD
 	en	fr	es	el	ar
 tooltip_copy	Copied!	Copié!	¡Copiado!	Αντιγραφή!	نسخ!
 copy_to_clipboard	Copy to Clipboard	Copier dans le presse-papier	Copiar al portapapeles	Αντιγραφή στο πρόχειρο	نسخ إلى الحافظة
 translate	Translate	Traduire	Traducir	Μεταφράζω	ترجم
+=======
+	en	fr	es	el	hy
+tooltip_copy	Copied!	Copié!	¡Copiado!	Αντιγραφή!	Պատճենվե՛ց
+copy_to_clipboard	Copy to Clipboard	Copier dans le presse-papier	Copiar al portapapeles	Αντιγραφή στο πρόχειρο	Պատճենել
+translate	Translate	Traduire	Traducir	Μεταφράζω	Թարգմանել
+>>>>>>> master
