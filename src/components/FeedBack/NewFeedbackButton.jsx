@@ -114,6 +114,7 @@ export default function IconLabelButtons() {
               easing={{ enter: "ease", exit: "ease" }}
               timeout={250}
               in={displayCard}
+              unmountOnExit
             >
               {
                 <Box width={380}>
