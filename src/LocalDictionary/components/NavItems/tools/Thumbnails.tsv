@@ -1,3 +1,14 @@
+<<<<<<< HEAD
+	en	fr	es	el	ar
+youtube_title	YouTube thumbnails reverse search	Recherche inversée des imagettes YouTube	Búsqueda inversa de miniaturas YouTube	Αντίστροφη αναζήτηση μικρογραφιών YouTube	بحث عكسي عن الصورة في يوتيوب 
+api_input	Copy and paste a Youtube	Copier et coller une adresse YouTube	Copiar y pegar un enlace de YouTube	Κάντε αντιγραφή και επικόλληση μιας διεύθυνσης URL Youtube	نسخ ولصق يوتيوب
+youtube_input	YouTube video URL	Adresse de la vidéo YouTube	Enlace del video YouTube	Διεύθυνση URL YouTube βίντεο	url فيديو يوتيوب
+button_submit	Submit	Envoyer	Enviar	Υποβολή	إرسال
+openTabs	Open Tabs	Ouvrir les onglets	Abrir pestañas	Άνοιγμα καρτελών	فتح علامات التبويب
+show_result	Display results	Montrer les résultats	Mostrar los resultados	Εμφάνιση αποτελεσμάτων	عرض النتائج
+cardheader_link	Source of the video	Source de la vidéo	Fuente del vídeo	Πηγή του βίντεο	مصدر الفيديو
+cardheader_results	Results	Résultats	Resultados	Αποτελέσματα	النتائج
+=======
 	en	fr	es	el	hy
 youtube_title	YouTube thumbnails reverse search	Recherche inversée des imagettes YouTube	Búsqueda inversa de miniaturas YouTube	Αντίστροφη αναζήτηση μικρογραφιών YouTube	YouTube-ի մանրապատկերներով որոնում 
 api_input	Copy and paste a Youtube	Copier et coller une adresse YouTube	Copiar y pegar un enlace de YouTube	Κάντε αντιγραφή και επικόλληση μιας διεύθυνσης URL Youtube	Տեղադրեք տեսանյութի URL-ը ՅուԹուբից
@@ -7,3 +18,4 @@ openTabs	Open Tabs	Ouvrir les onglets	Abrir pestañas	Άνοιγμα καρτε�
 show_result	Display results	Montrer les résultats	Mostrar los resultados	Εμφάνιση αποτελεσμάτων	Ցուցադրել արդյունքները
 cardheader_link	Source of the video	Source de la vidéo	Fuente del vídeo	Πηγή του βίντεο	Տեսանյութի աղբյուրը
 cardheader_results	Results	Résultats	Resultados	Αποτελέσματα	Արդյունքները
+>>>>>>> master

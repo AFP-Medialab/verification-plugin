@@ -1,3 +1,28 @@
+<<<<<<< HEAD
+	en	fr	es	el	ar
+ocr_title	OCR	OCR	LOC	OCR	OCR
+ocr_urlbox	Image link	URL de l'image	URL de la imagen	URL εικόνας	رابط الصورة
+ocr_urlbox_placeholder	Paste the link here	Coller le lien ici	Pegar el enlace aquí	Επικολλήστε τον σύνδεσμο εδώ	الصق الرابط هنا
+ocr_error	Could not extract text. Please try another input	Le texte n'a pas pu être extrait. Essayer svp une autre image	No se pudo extraer el texto. Intente porfa con otro imagen	Δεν ήταν δυνατή η εξαγωγή κειμένου. Δοκιμάστε μια άλλη είσοδο	لا يمكن استخراج النص. الرجاء تجربة مدخلات أخرى
+ocr_no_text	No text has been found in the image	Pas de texte trouvé dans l'image	No se encontro texto en la imagen	Δεν βρέθηκε κείμενο στην εικόνα	لم يتم العثور على نص في الصورة
+ocr_too_big	Your uploaded image must be below 4MB in size	Votre image doit avoir une taille inférieure à 4Mb	Su imagen debe tener un tamaño inferior a 4Mb	Η μεταφορτωμένη εικόνα σας πρέπει να έχει μέγεθος μικρότερο από 4 MB	يجب أن تكون صورتك التي تم تحميلها أقل من 4 ميجابايت 
+service_error	Service currently unavailable. Please contact support through the feedback button if the problem persists	Service actuellement indisponible. Veuillez contacter le support via le bouton de feedback si le problème persiste.	El servicio no está disponible actualmente. Por favor, póngase en contacto con el soporte a través del botón de feedback si el problema persiste.	Η υπηρεσία αυτή τη στιγμή δεν είναι διαθέσιμη. Παρακαλούμε επικοινωνήστε με την υποστήριξη μέσω του κουμπιού ανατροφοδότησης εάν το πρόβλημα παραμένει.	الخدمة غير متوفرة حاليا. يرجى الاتصال بالدعم من خلال زر التغذية الراجعة إذا استمرت المشكلة
+button_localfile	Load local file	Charger un fichier local	Cargar fichero local	Τοποθετήστε τοπικό αρχείο	تحميل الملف المحلي
+button_submit	Submit	Envoyer	Enviar	Υποβολή	إرسال
+button_remove	Remove	Supprimer	Eliminar	Αφαιρώ	إزالة
+ocr_search_yandex	Yandex	Yandex	Yandex	Γιάντεξ	Yandex
+ocr_search_bing	Bing	Bing	Bing	Bing	Bing
+ocr_search_google_lens	Google Lens	Google Lens	Google Lens	Google Lens	عدسة جوجل
+cardheader_source	Source of the image	Source de l'image	Fuente de la imagen	Πηγή της εικόνας	مصدر الصورة
+cardheader_results	Results	Résultats	Resultados	Αποτελέσματα	النتائج
+ocr_script_label	Specify script	Spécifier le script	Especificar script	Καθορίστε το σενάριο	حدد النص
+image_analysed	Image Analysed	Image analysée	Imagen analizada	Αναλύθηκε η εικόνα	صورة تم تحليلها
+extracted_text	Extracted Text	Texte extrait	Texto extraído	Εξαγόμενο κείμενο	نص مستخرج
+complete_text	Complete Text	Texte complet	Texto completo	Πλήρες κείμενο	نص كامل
+blocks	Blocks	Blocs	Bloques	Μπλοκ	أقسام
+reprocess_text	If you think the predicted language is wrong, you can reprocess this block by selecting the script you think this text is in from the box below.	Si vous pensez que la langue détectée est fausse, vous pouvez reproduire ce bloc en sélectionnant le script que vous pensez correct pour ce texte dans la case ci-dessous.	Si cree que el idioma detectado es incorrecto, puede reprocesar este bloque seleccionando el script que cree correcto para este texto desde el cuadro de abajo.	Εάν νομίζετε ότι η προβλεπόμενη γλώσσα είναι λάθος, μπορείτε να επανεπεξεργαστείτε αυτό το μπλοκ επιλέγοντας το σενάριο που νομίζετε ότι αυτό το κείμενο είναι από το παρακάτω πλαίσιο.	إذا كنت تعتقد أن اللغة المتوقعة خاطئة، فيمكنك إعادة معالجة هذا القسم عن طريق تحديد النص الذي تعتقد أنه موجود من المربع أدناه.
+reprocess_button	Reprocess Block	Bloc pour processer à nouveau	Bloque para volver a reprocesar	Μπλοκ επανεπεξεργασίας	إعادة  معالجة القسم 
+=======
 	en	fr	es	el	hy
 ocr_title	OCR	OCR	LOC	OCR	Տառաճանաչում
 ocr_urlbox	Image link	URL de l'image	URL de la imagen	URL εικόνας	Պատկերի հղում
@@ -21,3 +46,4 @@ complete_text	Complete Text	Texte complet	Texto completo	Πλήρες κείμε
 blocks	Blocks	Blocs	Bloques	Μπλοκ	Հատվածներ
 reprocess_text	If you think the predicted language is wrong, you can reprocess this block by selecting the script you think this text is in from the box below.	Si vous pensez que la langue détectée est fausse, vous pouvez reproduire ce bloc en sélectionnant le script que vous pensez correct pour ce texte dans la case ci-dessous.	Si cree que el idioma detectado es incorrecto, puede reprocesar este bloque seleccionando el script que cree correcto para este texto desde el cuadro de abajo.	Εάν νομίζετε ότι η προβλεπόμενη γλώσσα είναι λάθος, μπορείτε να επανεπεξεργαστείτε αυτό το μπλοκ επιλέγοντας το σενάριο που νομίζετε ότι αυτό το κείμενο είναι από το παρακάτω πλαίσιο.	Եթե կարծում եք, որ լեզուն սխալ է որոշվել, կարող եք կրկին տառաճանաչել հատվածը՝ ներքևի վանդակից նշելով ճիշտ գրային համակարգը:
 reprocess_button	Reprocess Block	Bloc pour processer à nouveau	Bloque para volver a reprocesar	Μπλοκ επανεπεξεργασίας	Վերամշակման բլոկ
+>>>>>>> master

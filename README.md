@@ -55,7 +55,7 @@ Build the extension using the available scripts to generate the file `dev` or `b
 
 In the project directory, you can run:
 
-### `npm start` or `yarn start`
+### `npm run dev` or `yarn dev`
 
 Runs the app in the development mode.<br>
 This will run on port [3000](http://localhost:3000).
@@ -340,13 +340,6 @@ return (
 }
 ```
 
-
-## Learn More
-This project was bootstrapped with [Create React Extension](https://github.com/VasilyShelkov/create-react-extension).
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).<br>
-You should also check out [React Hooks](https://reactjs.org/docs/hooks-intro.html).
 
 
 

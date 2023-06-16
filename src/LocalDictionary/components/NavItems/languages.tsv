@@ -1,4 +1,11 @@
+<<<<<<< HEAD
+	en	fr	es	el	ar
+lang_code	EN	FR	ES	EL	AR
+lang_label	English	Français	Español	Ελληνικά	العربية
+translations	Translations	Traductions	Traducciones	Μεταφράσεις	الترجمات
+=======
 	en	fr	es	el	hy
 lang_code	EN	FR	ES	EL	HY
 lang_label	English	Français	Español	Ελληνικά	Հայերեն
 translations	Translations	Traductions	Traducciones	Μεταφράσεις	Թարգմանություններ
+>>>>>>> master

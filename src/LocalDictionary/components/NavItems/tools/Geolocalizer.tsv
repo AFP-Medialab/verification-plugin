@@ -1,3 +1,16 @@
+<<<<<<< HEAD
+	en	fr	es	el	ar
+geo_link	Link of the image	Lien de l'image	Link de la imagen	Ανάλυση Αυθεντικότητας Εικόνων (image forensics)	رابط الصورة
+geo_paste	Paste the link here	Collez le lien ici	Pegue el link aquí	Επικολλήστε τον σύνδεσμο εδώ	الصق الرابط هنا
+geo_submit	Submit	Envoyer	Enviar	Υποβολή	إرسال
+geo_maps	Open in Google Maps	Ouvrir dans Google Maps	Abrir en Google Maps	Ανοίξτε στο Google Maps	افتح في خرائط جوجل
+geo_prediction	Location prediction of the image	Prédiction de l'emplacement de l'image	Predicción de la ubicación de la imagen	Πρόβλεψη θέσης της εικόνας	التنبؤ بموقع الصورة
+geo_source	Source of the image	Source de l'image	Origen de la imagen	Πηγή της εικόνας	مصدر الصورة
+geo_location	Location	Localisation	Ubicación	Τοποθεσία	موقع
+geo_lat	Latitude	Latitude	Latitud	Γεωγραφικό πλάτος	خط العرض
+geo_lon	Longitude	Longitude	Longitud	Γεωγραφικό μήκος	خط الطول
+geo_map	Map	Carte	Mapa	Χάρτης	الخريطة
+=======
 	en	fr	es	el	hy
 geo_link	Link of the image	Lien de l'image	Link de la imagen	Ανάλυση Αυθεντικότητας Εικόνων (image forensics)	Պատկերի հղումը
 geo_paste	Paste the link here	Collez le lien ici	Pegue el link aquí	Επικολλήστε τον σύνδεσμο εδώ	Տեղադրեք հղումը այստեղ
@@ -9,3 +22,4 @@ geo_location	Location	Localisation	Ubicación	Τοποθεσία	Գտնվելո�
 geo_lat	Latitude	Latitude	Latitud	Γεωγραφικό πλάτος	Լայնություն
 geo_lon	Longitude	Longitude	Longitud	Γεωγραφικό μήκος	Երկայնություն
 geo_map	Map	Carte	Mapa	Χάρτης	Քարտեզ
+>>>>>>> master

@@ -1,3 +1,15 @@
+<<<<<<< HEAD
+	en	fr	es	el	ar
+open_website	Open Toolbox	Ouvrir le plugin	Abrir el plugin	Άνοιγμα Σετ Εργαλείων	افتح صندوق الأدوات
+open_assistant	Open Assistant	Ouvrir l'assistant	Abrir el assistente	Άνοιγμα Βοηθού	افتح المساعد
+open_assistant_on_page	Assistant for Current Page	Assistant pour cette page	Assistente para este sitio	Βοηθός για τρέχουσα σελίδα	مساعد للصفحة الحالية
+open_classroom	Open Classroom	Ouvrir la salle de classe	Abrir la aula	Άνοιγμα Αίθουσας Διδασκαλίας	فتح الفصل الدراسي
+video_urls	Videos Urls	Urls de vidéos	Vídeos urls	Διευθύνσεις Urls των βίντεο	روابط الفيديوهات
+copy	Copy	Copier	Copiar	Αντιγραφή	نسخ
+no_video_found	No video found	Pas de vidéo	Ningún vídeo	Δεν βρέθηκε κανένα βίντεο	لم يتم العثور على فيديو
+images_url	Images	Images	Imágenes	Εικόνες	الصور
+no_images	No images	Pas d'images	Ningunas imágenes	Χωρίς εικόνες	لا توجد صور
+=======
 	en	fr	es	el	hy
 open_website	Open Toolbox	Ouvrir le plugin	Abrir el plugin	Άνοιγμα Σετ Εργαλείων	Բացել Գործիքները
 open_assistant	Open Assistant	Ouvrir l'assistant	Abrir el asistente	Άνοιγμα Βοηθού	Բացել Օգնականը
@@ -8,3 +20,4 @@ copy	Copy	Copier	Copiar	Αντιγραφή	Պատճե
 no_video_found	No video found	Pas de vidéo	Ningún vídeo	Δεν βρέθηκε κανένα βίντεο	Տեսանյութ չի գտնվել
 images_url	Images	Images	Imágenes	Εικόνες	Պատկերներ
 no_images	No images	Pas d'images	Ninguna imagen	Χωρίς εικόνες	Պատկեր չկա
+>>>>>>> master
