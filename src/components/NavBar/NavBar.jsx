@@ -27,8 +27,7 @@ import Assistant from "../NavItems/Assistant/Assistant";
 import MySnackbar from "../MySnackbar/MySnackbar";
 import useMyStyles from "../Shared/MaterialUiStyles/useMyStyles";
 import Footer from "../Shared/Footer/Footer";
-import FeedBack from "../FeedBack/FeedBack";
-import NewFeedbackButton from "../FeedBack/NewFeedbackButton";
+import Feedback from "../Feedback/Feedback";
 
 import AnalysisIcon from "./images/SVG/Video/Video_analysis.svg";
 import KeyframesIcon from "./images/SVG/Video/Keyframes.svg";
@@ -1707,8 +1706,7 @@ const NavBar = () => {
               ]}
             />
           )}
-          <NewFeedbackButton />
-          {/* <FeedBack /> */}
+          <Feedback />
         </main>
       </ThemeProvider>
     </div>
