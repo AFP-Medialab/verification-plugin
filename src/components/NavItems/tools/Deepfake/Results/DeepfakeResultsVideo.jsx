@@ -76,7 +76,7 @@ const DeepfakeResutlsVideo = (props) => {
           <Grid item xs={6} container direction="column">
             <Typography
               variant="body1"
-              style={{ color: "#51A5B2", fontSize: "24px", fontWeight: "500" }}
+              style={{ color: "#00926c", fontSize: "24px", fontWeight: "500" }}
             >
               {keyword("deepfake_video")}
             </Typography>
@@ -104,7 +104,7 @@ const DeepfakeResutlsVideo = (props) => {
           <Grid item xs={6} container direction="column">
             <Typography
               variant="body1"
-              style={{ color: "#51A5B2", fontSize: "24px", fontWeight: "500" }}
+              style={{ color: "#00926c", fontSize: "24px", fontWeight: "500" }}
             >
               {keyword("deepfake_clips")}
             </Typography>
@@ -127,7 +127,7 @@ const DeepfakeResutlsVideo = (props) => {
                         <Box
                           onClick={() => clickShot(valueShot, keyShot)}
                           style={{
-                            backgroundColor: "#51A5B2",
+                            backgroundColor: "#00926c",
                             borderRadius: "10px",
                             overflow: "hidden",
                             display: "flex",

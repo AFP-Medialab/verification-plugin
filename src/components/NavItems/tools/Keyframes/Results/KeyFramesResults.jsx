@@ -65,9 +65,9 @@ const KeyFramesResults = (props) => {
   const theme = createTheme({
     palette: {
       primary: {
-        light: "#5cdbe6",
-        main: "#05a9b4",
-        dark: "#007984",
+        light: "#00926c",
+        main: "#00926c",
+        dark: "#00926c",
         contrastText: "#fff",
       },
       secondary: {
@@ -158,7 +158,7 @@ const KeyFramesResults = (props) => {
           !isLoadingSimilarity &&
           similarityResults.length > 0 && (
             <Box>
-              <Accordion style={{ border: "2px solid #05a9b4" }}>
+              <Accordion style={{ border: "2px solid #00926c" }}>
                 <AccordionSummary
                   expandIcon={<ExpandMoreIcon style={{ color: "#17717e" }} />}
                   aria-controls="panel1a-content"

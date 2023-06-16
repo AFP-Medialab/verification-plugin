@@ -27,7 +27,7 @@ import Assistant from "../NavItems/Assistant/Assistant";
 import MySnackbar from "../MySnackbar/MySnackbar";
 import useMyStyles from "../Shared/MaterialUiStyles/useMyStyles";
 import Footer from "../Shared/Footer/Footer";
-import FeedBack from "../FeedBack/FeedBack";
+import Feedback from "../Feedback/Feedback";
 
 import AnalysisIcon from "./images/SVG/Video/Video_analysis.svg";
 import KeyframesIcon from "./images/SVG/Video/Keyframes.svg";
@@ -214,7 +214,7 @@ const NavBar = () => {
           <ToolsIcon
             width="40px"
             height="40px"
-            style={{ fill: "#51A5B2" }}
+            style={{ fill: "#00926c" }}
             title={keyword("navbar_tools")}
           />
         ) : (
@@ -243,7 +243,7 @@ const NavBar = () => {
           <AnalysisIcon
             width="45px"
             height="45px"
-            style={{ fill: "#51A5B2" }}
+            style={{ fill: "#00926c" }}
             title="Video analysis"
           />
         ) : (
@@ -258,7 +258,7 @@ const NavBar = () => {
         <AnalysisIcon
           width="45px"
           height="45px"
-          style={{ fill: "#51A5B2" }}
+          style={{ fill: "#00926c" }}
           title={keyword("navbar_analysis_video")}
         />
       ),
@@ -279,7 +279,7 @@ const NavBar = () => {
           <KeyframesIcon
             width="45px"
             height="45px"
-            style={{ fill: "#51A5B2" }}
+            style={{ fill: "#00926c" }}
             title="Keyframes"
           />
         ) : (
@@ -294,7 +294,7 @@ const NavBar = () => {
         <KeyframesIcon
           width="45px"
           height="45px"
-          style={{ fill: "#51A5B2" }}
+          style={{ fill: "#00926c" }}
           title={keyword("navbar_keyframes")}
         />
       ),
@@ -315,7 +315,7 @@ const NavBar = () => {
           <ThumbnailsIcon
             width="45px"
             height="45px"
-            style={{ fill: "#51A5B2" }}
+            style={{ fill: "#00926c" }}
             title="Thumbnails"
           />
         ) : (
@@ -330,7 +330,7 @@ const NavBar = () => {
         <ThumbnailsIcon
           width="45px"
           height="45px"
-          style={{ fill: "#51A5B2" }}
+          style={{ fill: "#00926c" }}
           title={keyword("navbar_thumbnails")}
         />
       ),
@@ -351,7 +351,7 @@ const NavBar = () => {
           <VideoRightsIcon
             width="45px"
             height="45px"
-            style={{ fill: "#51A5B2" }}
+            style={{ fill: "#00926c" }}
             title="Video rights"
           />
         ) : (
@@ -366,7 +366,7 @@ const NavBar = () => {
         <VideoRightsIcon
           width="45px"
           height="45px"
-          style={{ fill: "#51A5B2" }}
+          style={{ fill: "#00926c" }}
           title={keyword("navbar_rights")}
         />
       ),
@@ -388,7 +388,7 @@ const NavBar = () => {
           <MetadataIcon
             width="45px"
             height="45px"
-            style={{ fill: "#51A5B2" }}
+            style={{ fill: "#00926c" }}
             title="Metadata"
           />
         ) : (
@@ -403,7 +403,7 @@ const NavBar = () => {
         <MetadataIcon
           width="45px"
           height="45px"
-          style={{ fill: "#51A5B2" }}
+          style={{ fill: "#00926c" }}
           title={keyword("navbar_metadata")}
         />
       ),
@@ -425,7 +425,7 @@ const NavBar = () => {
           <DeepfakeIcon
             width="45px"
             height="45px"
-            style={{ fill: "#51A5B2" }}
+            style={{ fill: "#00926c" }}
             title="Twitter SNA"
           />
         ) : (
@@ -440,7 +440,7 @@ const NavBar = () => {
         <DeepfakeIcon
           width="45px"
           height="45px"
-          style={{ fill: "#51A5B2" }}
+          style={{ fill: "#00926c" }}
           title={keyword("navbar_deepfake")}
         />
       ),
@@ -462,7 +462,7 @@ const NavBar = () => {
           <AnalysisIconImage
             width="45px"
             height="45px"
-            style={{ fill: "#51A5B2" }}
+            style={{ fill: "#00926c" }}
             title="Image analysis"
           />
         ) : (
@@ -477,7 +477,7 @@ const NavBar = () => {
         <AnalysisIconImage
           width="45px"
           height="45px"
-          style={{ fill: "#51A5B2" }}
+          style={{ fill: "#00926c" }}
           title={keyword("navbar_analysis_image")}
         />
       ),
@@ -498,7 +498,7 @@ const NavBar = () => {
           <MagnifierIcon
             width="45px"
             height="45px"
-            style={{ fill: "#51A5B2" }}
+            style={{ fill: "#00926c" }}
             title="Magnifier"
           />
         ) : (
@@ -513,7 +513,7 @@ const NavBar = () => {
         <MagnifierIcon
           width="45px"
           height="45px"
-          style={{ fill: "#51A5B2" }}
+          style={{ fill: "#00926c" }}
           title={keyword("navbar_magnifier")}
         />
       ),
@@ -534,7 +534,7 @@ const NavBar = () => {
           <MetadataIcon
             width="45px"
             height="45px"
-            style={{ fill: "#51A5B2" }}
+            style={{ fill: "#00926c" }}
             title="Metadata"
           />
         ) : (
@@ -549,7 +549,7 @@ const NavBar = () => {
         <MetadataIcon
           width="45px"
           height="45px"
-          style={{ fill: "#51A5B2" }}
+          style={{ fill: "#00926c" }}
           title={keyword("navbar_metadata")}
         />
       ),
@@ -571,7 +571,7 @@ const NavBar = () => {
           <ForensicIcon
             width="45px"
             height="45px"
-            style={{ fill: "#51A5B2" }}
+            style={{ fill: "#00926c" }}
             title="Forensic"
           />
         ) : (
@@ -586,7 +586,7 @@ const NavBar = () => {
         <ForensicIcon
           width="45px"
           height="45px"
-          style={{ fill: "#51A5B2" }}
+          style={{ fill: "#00926c" }}
           title={keyword("navbar_forensic")}
         />
       ),
@@ -607,7 +607,7 @@ const NavBar = () => {
           <OcrIcon
             width="45px"
             height="45px"
-            style={{ fill: "#51A5B2" }}
+            style={{ fill: "#00926c" }}
             title="OCR"
           />
         ) : (
@@ -622,7 +622,7 @@ const NavBar = () => {
         <OcrIcon
           width="45px"
           height="45px"
-          style={{ fill: "#51A5B2" }}
+          style={{ fill: "#00926c" }}
           title={keyword("navbar_ocr")}
         />
       ),
@@ -644,7 +644,7 @@ const NavBar = () => {
           <GifIcon
             width="45px"
             height="45px"
-            style={{ fill: "#51A5B2" }}
+            style={{ fill: "#00926c" }}
             title="CheckGIF"
           />
         ) : (
@@ -659,7 +659,7 @@ const NavBar = () => {
         <GifIcon
           width="45px"
           height="45px"
-          style={{ fill: "#51A5B2" }}
+          style={{ fill: "#00926c" }}
           title={keyword("navbar_gif")}
         />
       ),
@@ -680,7 +680,7 @@ const NavBar = () => {
           <DeepfakeIcon
             width="45px"
             height="45px"
-            style={{ fill: "#51A5B2" }}
+            style={{ fill: "#00926c" }}
             title="Twitter SNA"
           />
         ) : (
@@ -695,7 +695,7 @@ const NavBar = () => {
         <DeepfakeIcon
           width="45px"
           height="45px"
-          style={{ fill: "#51A5B2" }}
+          style={{ fill: "#00926c" }}
           title={keyword("navbar_deepfake")}
         />
       ),
@@ -716,7 +716,7 @@ const NavBar = () => {
           <GeolactionIcon
             width="45px"
             height="45px"
-            style={{ fill: "#51A5B2" }}
+            style={{ fill: "#00926c" }}
             title="Twitter SNA"
           />
         ) : (
@@ -731,7 +731,7 @@ const NavBar = () => {
         <GeolactionIcon
           width="45px"
           height="45px"
-          style={{ fill: "#51A5B2" }}
+          style={{ fill: "#00926c" }}
           title={keyword("navbar_geolocation")}
         />
       ),
@@ -753,7 +753,7 @@ const NavBar = () => {
           <TwitterSearchIcon
             width="45px"
             height="45px"
-            style={{ fill: "#51A5B2" }}
+            style={{ fill: "#00926c" }}
             title="Twitter search"
           />
         ) : (
@@ -768,7 +768,7 @@ const NavBar = () => {
         <TwitterSearchIcon
           width="45px"
           height="45px"
-          style={{ fill: "#51A5B2" }}
+          style={{ fill: "#00926c" }}
           title={keyword("navbar_twitter")}
         />
       ),
@@ -789,7 +789,7 @@ const NavBar = () => {
           <TwitterSnaIcon
             width="45px"
             height="45px"
-            style={{ fill: "#51A5B2" }}
+            style={{ fill: "#00926c" }}
             title="Twitter SNA"
           />
         ) : (
@@ -804,7 +804,7 @@ const NavBar = () => {
         <TwitterSnaIcon
           width="45px"
           height="45px"
-          style={{ fill: "#51A5B2" }}
+          style={{ fill: "#00926c" }}
           title={keyword("navbar_twitter_sna")}
         />
       ),
@@ -825,7 +825,7 @@ const NavBar = () => {
           <CsvSnaIcon
             width="45px"
             height="45px"
-            style={{ fill: "#51A5B2" }}
+            style={{ fill: "#00926c" }}
             title="Twitter SNA"
           />
         ) : (
@@ -840,7 +840,7 @@ const NavBar = () => {
         <CsvSnaIcon
           width="45px"
           height="45px"
-          style={{ fill: "#51A5B2" }}
+          style={{ fill: "#00926c" }}
           title={keyword("navbar_twitter_crowdtangle")}
         />
       ),
@@ -860,7 +860,7 @@ const NavBar = () => {
           <CovidSearchIcon
             width="45px"
             height="45px"
-            style={{ fill: "#51A5B2" }}
+            style={{ fill: "#00926c" }}
             title="Covid search"
           />
         ) : (
@@ -875,7 +875,7 @@ const NavBar = () => {
         <CovidSearchIcon
           width="45px"
           height="45px"
-          style={{ fill: "#51A5B2" }}
+          style={{ fill: "#00926c" }}
           title={keyword("navbar_covidsearch")}
         />
       ),
@@ -896,7 +896,7 @@ const NavBar = () => {
           <XnetworkIcon
             width="45px"
             height="45px"
-            style={{ fill: "#51A5B2" }}
+            style={{ fill: "#00926c" }}
             title="Xnetwork"
           />
         ) : (
@@ -911,7 +911,7 @@ const NavBar = () => {
         <XnetworkIcon
           width="45px"
           height="45px"
-          style={{ fill: "#51A5B2" }}
+          style={{ fill: "#00926c" }}
           title={keyword("navbar_xnetwork")}
         />
       ),
@@ -930,7 +930,7 @@ const NavBar = () => {
       title: "navbar_tools",
       icon:
         tabValue === 0 && drawerValue === 0 ? (
-          <ToolsIcon width="30px" height="30px" style={{ fill: "#51A5B2" }} />
+          <ToolsIcon width="30px" height="30px" style={{ fill: "#00926c" }} />
         ) : (
           <ToolsIcon width="30px" height="30px" style={{ fill: "#4c4c4c" }} />
         ),
@@ -949,7 +949,7 @@ const NavBar = () => {
           <AssistantIcon
             width="30px"
             height="30px"
-            style={{ fill: "#51A5B2" }}
+            style={{ fill: "#00926c" }}
           />
         ) : (
           <AssistantIcon
@@ -970,7 +970,7 @@ const NavBar = () => {
       title: "navbar_tuto",
       icon:
         tabValue === 2 ? (
-          <GuideIcon width="30px" height="30px" style={{ fill: "#51A5B2" }} />
+          <GuideIcon width="30px" height="30px" style={{ fill: "#00926c" }} />
         ) : (
           <GuideIcon width="30px" height="30px" style={{ fill: "#4c4c4c" }} />
         ),
@@ -989,7 +989,7 @@ const NavBar = () => {
           <InteractiveIcon
             width="30px"
             height="30px"
-            style={{ fill: "#51A5B2" }}
+            style={{ fill: "#00926c" }}
           />
         ) : (
           <InteractiveIcon
@@ -1013,7 +1013,7 @@ const NavBar = () => {
           <ClassroomIcon
             width="30px"
             height="30px"
-            style={{ fill: "#51A5B2" }}
+            style={{ fill: "#00926c" }}
           />
         ) : (
           <ClassroomIcon
@@ -1032,7 +1032,7 @@ const NavBar = () => {
     },
     /*{
             title: "navbar_factCheck",
-            icon: (tabValue === 5) ? <FactcheckIcon width="40px" height="40px" style={{ fill: "#51A5B2" }} />
+            icon: (tabValue === 5) ? <FactcheckIcon width="40px" height="40px" style={{ fill: "#00926c" }} />
                 : <FactcheckIcon width="40px" height="40px" style={{ fill: "#4c4c4c" }} />,
             content: <FactCheck />,
             path: "factCheck",
@@ -1042,7 +1042,7 @@ const NavBar = () => {
       title: "navbar_about",
       icon:
         tabValue === 5 ? (
-          <AboutIcon width="30px" height="30px" style={{ fill: "#51A5B2" }} />
+          <AboutIcon width="30px" height="30px" style={{ fill: "#00926c" }} />
         ) : (
           <AboutIcon width="30px" height="30px" style={{ fill: "#4c4c4c" }} />
         ),
@@ -1098,9 +1098,9 @@ const NavBar = () => {
   const themeFab = createTheme({
     palette: {
       primary: {
-        light: "#5cdbe6",
-        main: "#05a9b4",
-        dark: "#007984",
+        light: "#00926c",
+        main: "#00926c",
+        dark: "#00926c",
         contrastText: "#fff",
       },
     },
@@ -1706,7 +1706,7 @@ const NavBar = () => {
               ]}
             />
           )}
-          <FeedBack />
+          <Feedback />
         </main>
       </ThemeProvider>
     </div>

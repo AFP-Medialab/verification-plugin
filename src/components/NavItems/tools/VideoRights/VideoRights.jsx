@@ -106,7 +106,7 @@ const VideoRights = () => {
         description={keywordAllTools("navbar_rights_description")}
         icon={
           <VideoRightsIcon
-            style={{ fill: "#51A5B2" }}
+            style={{ fill: "#00926c" }}
             width="40px"
             height="40px"
           />
