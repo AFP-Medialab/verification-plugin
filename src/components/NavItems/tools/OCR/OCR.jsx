@@ -171,7 +171,7 @@ const OCR = () => {
         name={keywordAllTools("navbar_ocr")}
         description={keywordAllTools("navbar_ocr_description")}
         icon={
-          <OCRIcon style={{ fill: "#51A5B2" }} width="40px" height="40px" />
+          <OCRIcon style={{ fill: "#00926c" }} width="40px" height="40px" />
         }
       />
 

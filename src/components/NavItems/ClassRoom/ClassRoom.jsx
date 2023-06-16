@@ -143,9 +143,9 @@ const ClassRoom = () => {
     },
     palette: {
       primary: {
-        light: "#5cdbe6",
-        main: "#51a5b2",
-        dark: "#007984",
+        light: "#00926c",
+        main: "#00926c",
+        dark: "#00926c",
         contrastText: "#fff",
       },
     },
@@ -158,7 +158,7 @@ const ClassRoom = () => {
           name={keyword("classroom_title")}
           icon={
             <IconClassRoom
-              style={{ fill: "#51A5B2", marginRight: "10px" }}
+              style={{ fill: "#00926c", marginRight: "10px" }}
               width="40px"
               height="40px"
             />

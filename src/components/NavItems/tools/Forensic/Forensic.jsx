@@ -50,7 +50,7 @@ const Forensic = () => {
       MuiCardHeader: {
         styleOverrides: {
           root: {
-            backgroundColor: "#05a9b4",
+            backgroundColor: "#00926c",
           },
           title: {
             color: "white",
@@ -74,9 +74,9 @@ const Forensic = () => {
 
     palette: {
       primary: {
-        light: "#5cdbe6",
-        main: "#05a9b4",
-        dark: "#007984",
+        light: "#00926c",
+        main: "#00926c",
+        dark: "#00926c",
         contrastText: "#fff",
       },
     },
@@ -174,7 +174,7 @@ const Forensic = () => {
           description={keywordAllTools("navbar_forensic_description")}
           icon={
             <ForensicIcon
-              style={{ fill: "#51A5B2" }}
+              style={{ fill: "#00926c" }}
               width="40px"
               height="40px"
             />

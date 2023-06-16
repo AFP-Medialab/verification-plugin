@@ -157,7 +157,7 @@ const AllTools = (props) => {
       <LoginHeader
         name={keyword("navbar_tools")}
         icon={
-          <IconTools width="40px" height="40px" style={{ fill: "#51A5B2" }} />
+          <IconTools width="40px" height="40px" style={{ fill: "#00926c" }} />
         }
       />
 
