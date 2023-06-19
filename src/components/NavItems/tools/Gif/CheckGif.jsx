@@ -373,7 +373,7 @@ const CheckGif = () => {
         name={keywordAllTools("navbar_gif")}
         description={keywordAllTools("navbar_gif_description")}
         icon={
-          <IconGif style={{ fill: "#51A5B2" }} width="40px" height="40px" />
+          <IconGif style={{ fill: "#00926c" }} width="40px" height="40px" />
         }
       />
 

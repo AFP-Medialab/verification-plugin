@@ -13,9 +13,9 @@ import { useTrackPageView } from "./Hooks/useAnalytics";
 const theme = createTheme({
   palette: {
     primary: {
-      light: "#5cdbe6",
-      main: "#05a9b4",
-      dark: "#007984",
+      light: "#00926c",
+      main: "#00926c",
+      dark: "#00926c",
       contrastText: "#fff",
     },
     secondary: {

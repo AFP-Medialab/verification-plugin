@@ -692,12 +692,12 @@ const styles = (theme) => ({
     cursor: "pointer",
 
     "&:hover": {
-      border: "solid #51A5B2 2px",
+      border: "solid #00926c 2px",
     },
   },
 
   bigButtonDivSelectted: {
-    border: "solid #51A5B2 3px",
+    border: "solid #00926c 3px",
     borderRadius: "25px",
   },
 
@@ -710,7 +710,7 @@ const styles = (theme) => ({
   bigButtonIconSelectted: {
     height: "50px",
     width: "auto",
-    color: "#51A5B2",
+    color: "#00926c",
   },
 
   bigButtonResponsive: {

@@ -161,7 +161,7 @@ const DrawerItemContent = ({ index, drawContent }) => {
       MuiCardHeader: {
         styleOverrides: {
           root: {
-            backgroundColor: "#05A9B4",
+            backgroundColor: "#00926c",
           },
           title: {
             color: "white",
@@ -190,9 +190,9 @@ const DrawerItemContent = ({ index, drawContent }) => {
     },
     palette: {
       primary: {
-        light: "#5cdbe6",
-        main: "#05a9b4",
-        dark: "#007984",
+        light: "#00926c",
+        main: "#00926c",
+        dark: "#00926c",
         contrastText: "#fff",
       },
     },

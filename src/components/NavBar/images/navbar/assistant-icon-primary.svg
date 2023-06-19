@@ -1,21 +1,21 @@
 <svg width="346" height="279" viewBox="0 0 346 279" fill="none" xmlns="http://www.w3.org/2000/svg">
-<rect x="51.5" y="100.5" width="243" height="171" rx="42.5" stroke="rgb(0,170,180)" stroke-width="15"/>
+<rect x="51.5" y="100.5" width="243" height="171" rx="42.5" stroke="#00926c" stroke-width="15"/>
 <mask id="mask0" mask-type="alpha" maskUnits="userSpaceOnUse" x="0" y="142" width="88" height="88">
-<circle cx="44" cy="186" r="36.5" stroke="rgb(0,170,180)" stroke-width="15"/>
+<circle cx="44" cy="186" r="36.5" stroke="#00926c" stroke-width="15"/>
 </mask>
 <g mask="url(#mask0)">
-<rect x="-10" y="93" width="54" height="186" fill="rgb(0,170,180)"/>
+<rect x="-10" y="93" width="54" height="186" fill="#00926c"/>
 </g>z
 <mask id="mask1" mask-type="alpha" maskUnits="userSpaceOnUse" x="258" y="142" width="88" height="88">
-<circle cx="302" cy="186" r="36.5" transform="rotate(-180 302 186)" stroke="rgb(0,170,180)" stroke-width="15"/>
+<circle cx="302" cy="186" r="36.5" transform="rotate(-180 302 186)" stroke="#00926c" stroke-width="15"/>
 </mask>
 <g mask="url(#mask1)">
-<rect x="356" y="230" width="54" height="186" transform="rotate(-180 356 230)" fill="rgb(0,170,180)"/>
+<rect x="356" y="230" width="54" height="186" transform="rotate(-180 356 230)" fill="#00926c"/>
 </g>
-<path d="M151.5 157.5C151.5 172.31 139.29 184.5 124 184.5C108.71 184.5 96.5 172.31 96.5 157.5C96.5 142.69 108.71 130.5 124 130.5C139.29 130.5 151.5 142.69 151.5 157.5Z" stroke="rgb(0,170,180)" stroke-width="15"/>
-<path d="M200.5 34.5C200.5 49.3103 188.29 61.5 173 61.5C157.71 61.5 145.5 49.3103 145.5 34.5C145.5 19.6897 157.71 7.5 173 7.5C188.29 7.5 200.5 19.6897 200.5 34.5Z" stroke="rgb(0,170,180)" stroke-width="15"/>
-<path d="M250.5 157.5C250.5 172.31 238.29 184.5 223 184.5C207.71 184.5 195.5 172.31 195.5 157.5C195.5 142.69 207.71 130.5 223 130.5C238.29 130.5 250.5 142.69 250.5 157.5Z" stroke="rgb(0,170,180)" stroke-width="15"/>
-<path d="M121 223C121 223 138.558 238 173.675 238C208.792 238 225 223 225 223" stroke="rgb(0,170,180)" stroke-width="15" stroke-linecap="round"/>
-<line x1="173.5" y1="94.5" x2="173.5" y2="64.5" stroke="rgb(0,170,180)" stroke-width="15" stroke-linecap="round"/>
+<path d="M151.5 157.5C151.5 172.31 139.29 184.5 124 184.5C108.71 184.5 96.5 172.31 96.5 157.5C96.5 142.69 108.71 130.5 124 130.5C139.29 130.5 151.5 142.69 151.5 157.5Z" stroke="#00926c" stroke-width="15"/>
+<path d="M200.5 34.5C200.5 49.3103 188.29 61.5 173 61.5C157.71 61.5 145.5 49.3103 145.5 34.5C145.5 19.6897 157.71 7.5 173 7.5C188.29 7.5 200.5 19.6897 200.5 34.5Z" stroke="#00926c" stroke-width="15"/>
+<path d="M250.5 157.5C250.5 172.31 238.29 184.5 223 184.5C207.71 184.5 195.5 172.31 195.5 157.5C195.5 142.69 207.71 130.5 223 130.5C238.29 130.5 250.5 142.69 250.5 157.5Z" stroke="#00926c" stroke-width="15"/>
+<path d="M121 223C121 223 138.558 238 173.675 238C208.792 238 225 223 225 223" stroke="#00926c" stroke-width="15" stroke-linecap="round"/>
+<line x1="173.5" y1="94.5" x2="173.5" y2="64.5" stroke="#00926c" stroke-width="15" stroke-linecap="round"/>
 </svg>
 

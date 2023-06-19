@@ -298,7 +298,7 @@ const AdvancedTools = () => {
             <form>
               <Grid item>
                 <DialogTitle id="max-width-dialog-title">
-                  <Typography style={{ color: "#51A5B2", fontSize: "24px" }}>
+                  <Typography style={{ color: "#00926c", fontSize: "24px" }}>
                     {keyword("title")}
                   </Typography>
                 </DialogTitle>
@@ -435,7 +435,7 @@ const AdvancedTools = () => {
                   </Grid>
 
                   <Grid item>
-                    <Typography style={{ color: "#51A5B2", fontSize: "24px" }}>
+                    <Typography style={{ color: "#00926c", fontSize: "24px" }}>
                       {messageI18NResolver("ACCESSCODEFORM_EMAIL_CHECK")}
                     </Typography>
                   </Grid>
@@ -502,7 +502,7 @@ const AdvancedTools = () => {
             <DialogTitle id="max-width-dialog-title">
               <Typography
                 gutterBottom
-                style={{ color: "#51A5B2", fontSize: "24px" }}
+                style={{ color: "#00926c", fontSize: "24px" }}
               >
                 {keyword("title_tools_unlocked")}
               </Typography>
@@ -528,7 +528,7 @@ const AdvancedTools = () => {
             <DialogTitle id="max-width-dialog-title">
               <Typography
                 gutterBottom
-                style={{ color: "#51A5B2", fontSize: "24px" }}
+                style={{ color: "#00926c", fontSize: "24px" }}
               >
                 {messageI18NResolver("REGISTRATIONFORM_TITLE_WINDOW")}
               </Typography>
@@ -832,7 +832,7 @@ const AdvancedTools = () => {
             <DialogTitle id="max-width-dialog-title">
               <Typography
                 gutterBottom
-                style={{ color: "#51A5B2", fontSize: "24px" }}
+                style={{ color: "#00926c", fontSize: "24px" }}
               >
                 {messageI18NResolver("REGISTRATIONFORM_SUCCESS_TITLE")}
               </Typography>

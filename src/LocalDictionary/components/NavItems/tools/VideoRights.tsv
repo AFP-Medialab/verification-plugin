@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 	en	fr	es	el	ar
 copyright_title	Check Video Copyright Status	Vérifier le copyright de la vidéo	Verificar los derechos de autor del video	Ελέγξτε τα δικαιώματα πνευματικής ιδιοκτησίας του βίντεο	تحقق من حالة حقوق الطبع والنشر للفيديو
 copyright_input	YouTube or Twitter video link	Lien YouTube ou Twitter	Enlance YouTube o Twitter	Σύνδεσμος βίντεο στο YouTube ή στο Twitter	رابط فيديو يوتيوب أو تويتر
@@ -6,3 +7,13 @@ button_submit	Submit	Envoyer	Enviar	Υποβολή	إرسال
 keyframes_error_default	Unknown error occured. Please try again later or with another video.	Une erreur inconnue s'est produite. Veuillez réessayer plus tard ou avec une autre vidéo.	Se ha producido un error desconocido. Por favor, inténtelo de nuevo más tarde o con otro vídeo.	Άγνωστο σφάλμα. Παρακαλούμε δοκιμάστε αργότερα ή δοκιμάστε κάποιο άλλο βίντεοcardheader_link	حدث خطأ غير معروف. يرجى المحاولة مرة أخرى لاحقاً أو مع فيديو آخر.
 cardheader_results	Results	Résultats	Resultados	Αποτελέσματα	النتائج
 cardheader_link	Source of the video	Source de la vidéo	Fuente del video	Πηγή του βίντεο	مصدر الفيديو
+=======
+	en	fr	es	el	hy
+copyright_title	Check Video Copyright Status	Vérifier le copyright de la vidéo	Verificar los derechos de autor del video	Ελέγξτε τα δικαιώματα πνευματικής ιδιοκτησίας του βίντεο	Ստուգեք տեսանյութերի հեղինակային իրավունքի կարգավիճակը
+copyright_input	YouTube or Twitter video link	Lien YouTube ou Twitter	Enlance YouTube o Twitter	Σύνδεσμος βίντεο στο YouTube ή στο Twitter	ՅուԹուբի կամ Twitter-ի տեսանյութի հղում
+copyright_input_placeholder	Paste here the link	Copier ici le lien	Copiar aquí el enlace	επικολλήστε εδώ τον σύνδεσμο	Տեղադրեք այստեղ հղումը
+button_submit	Submit	Envoyer	Enviar	Υποβολή	Վերլուծել
+keyframes_error_default	Unknown error occured. Please try again later or with another video.	Une erreur inconnue s'est produite. Veuillez réessayer plus tard ou avec une autre vidéo.	Se ha producido un error desconocido. Por favor, inténtelo de nuevo más tarde o con otro vídeo.	Άγνωστο σφάλμα. Παρακαλούμε δοκιμάστε αργότερα ή δοκιμάστε κάποιο άλλο βίντεοcardheader_link	Անհայտ սխալ է տեղի ունեցել: Խնդրում ենք փորձել ավելի ուշ կամ մեկ այլ տեսանյութով:
+cardheader_results	Results	Résultats	Resultados	Αποτελέσματα	Արդյունքներ
+cardheader_link	Source of the video	Source de la vidéo	Fuente del video	Πηγή του βίντεο	Տեսանյութի աղբյուրը
+>>>>>>> master

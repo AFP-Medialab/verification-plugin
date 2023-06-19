@@ -1,97 +1,234 @@
-import React from "react";
+import * as React from "react";
 import { useState } from "react";
-import SlackFeedback from "react-slack-feedback";
-import feedBackTheme from "./feedBackTheme";
+import QuestionAnswerOutlinedIcon from "@mui/icons-material/QuestionAnswerOutlined";
+import Box from "@mui/material/Box";
+import Stack from "@mui/material/Stack";
+import Paper from "@mui/material/Paper";
+import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
+import ToggleButton from "@mui/material/ToggleButton";
+import Typography from "@mui/material/Typography";
+import TextField from "@mui/material/TextField";
+import Fab from "@mui/material/Fab";
+import CloseIcon from "@mui/icons-material/Close";
+import IconButton from "@mui/material/IconButton";
 import useLoadLanguage from "../../Hooks/useLoadLanguage";
 import tsv from "../../LocalDictionary/components/FeedBack.tsv";
-import QuestionAnswerOutlinedIcon from "@mui/icons-material/QuestionAnswerOutlined";
-import useMyStyles from "../Shared/MaterialUiStyles/useMyStyles";
+import { Fade } from "@mui/material";
+import Slide from "@mui/material/Slide";
+import LoadingButton from "@mui/lab/LoadingButton";
 
-const FeedBack = () => {
-  const API_URL = process.env.REACT_APP_MY_WEB_HOOK_URL;
+const Feedback = () => {
   const keyword = useLoadLanguage("components/FeedBack.tsv", tsv);
-  const classes = useMyStyles();
-  const [isOpened, setIsOpened] = useState(false);
-  const [classTitle, setClassTitle] = useState(classes.feedbackButtonTitleHide);
+  const API_URL = process.env.REACT_APP_MY_WEB_HOOK_URL;
 
-  const translationJson = {
-    "checkbox.option": "Send url with feedback",
-    close: keyword("close"),
-    "error.archived": keyword("archived"),
-    "error.badrequest": keyword("badrequest"),
-    "error.forbidden": keyword("forbidden"),
-    "error.internal": keyword("internal"),
-    "error.notfound": keyword("notfound"),
-    "error.unexpected": keyword("unexpected"),
-    "error.upload": "Error uploading image!",
-    "feedback.type.improvement": keyword("improvement"),
-    "feedback.type.bug": keyword("bug"),
-    "feedback.type.feature": keyword("feature"),
-    "header.title": (
-      <span className={classes.feedbackHeaderTitle}>{keyword("title")}</span>
-    ),
-    "image.remove": keyword("remove"),
-    "label.channel": "Channel",
-    "label.message": keyword("message"),
-    "label.type": keyword("type"),
-    placeholder: keyword("placeholder"),
-    "submit.sending": keyword("sending"),
-    "submit.sent": keyword("sent"),
-    "submit.text": keyword("submit_text"),
-    "upload.text": "Attach Image",
-    "trigger.text": <span className={classTitle}>{keyword("button")}</span>,
-    "footer.text": "React Slack Feedback",
+  const [isButtonHovered, setIsButtonHovered] = useState(false);
+  const [displayCard, setDisplayCard] = useState(false);
+
+  const [messageType, setMessageType] = useState("Bug");
+
+  const [message, setMessage] = useState("");
+
+  const [isFeedbackSending, setIsFeedbackSending] = useState(false);
+
+  const [isFeedbackSent, setIsFeedbackSent] = useState(false);
+
+  const containerRef = React.useRef(null);
+
+  const getFeedbackMessage = (message, messageType) => {
+    if (typeof message !== "string" || typeof messageType !== "string")
+      throw new Error("Invalid message type");
+
+    return {
+      blocks: [
+        {
+          type: "header",
+          text: {
+            type: "plain_text",
+            text: "" + messageType + "",
+          },
+        },
+        {
+          type: "section",
+          text: {
+            type: "mrkdwn",
+            text: "" + message + "",
+          },
+        },
+      ],
+    };
   };
 
-  const sendToSlack = (payload, success, error) => {
-    return fetch(API_URL, {
+  const sendToSlack = async (message, messageType) => {
+    const feedbackMessage = getFeedbackMessage(message, messageType);
+    console.log(feedbackMessage);
+    console.log(JSON.stringify(feedbackMessage));
+    const response = await fetch(API_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    })
-      .then((res) => {
-        if (!res.ok) {
-          error(res);
-          throw res;
-        }
-        return res;
-      })
-      .then(success);
+      body: JSON.stringify(feedbackMessage),
+    });
+
+    if (!response.ok) throw response;
+
+    return response;
+  };
+
+  const handleChange = (e, messageType) => {
+    e.preventDefault();
+    setMessageType(messageType);
+  };
+
+  const handleClick = async (e, message, messageType) => {
+    setIsFeedbackSending(true);
+
+    await sendToSlack(message, messageType);
+
+    console.log("submitted");
+
+    setIsFeedbackSending(false);
+    setIsFeedbackSent(true);
+    setMessage("");
+
+    setTimeout(() => {
+      setIsFeedbackSent(false);
+    }, 1000);
   };
 
   return (
-    <div
-      onMouseEnter={() => {
-        setClassTitle(classes.feedbackButtonTitleShow);
-      }}
-      onMouseLeave={() => {
-        if (!isOpened) {
-          setClassTitle(classes.feedbackButtonTitleHide);
-        }
-      }}
+    <Stack
+      direction="column"
+      justifyContent="flex-end"
+      alignItems="flex-end"
+      spacing={2}
+      sx={{ position: "fixed", bottom: 20, right: 15, zIndex: 9998 }}
     >
-      <SlackFeedback
-        disabled={false}
-        errorTimeout={8 * 1000}
-        onClose={() => {
-          setIsOpened(false);
-          setClassTitle(classes.feedbackButtonTitleHide);
-        }}
-        onOpen={() => {
-          setIsOpened(true);
-        }}
-        sentTimeout={5 * 1000}
-        showChannel={false}
-        showIcon={true}
-        theme={feedBackTheme}
-        onSubmit={(payload, success, error) =>
-          sendToSlack(payload, success, error)
-        }
-        user={"Invid Feed Back"}
-        translations={translationJson}
-        icon={() => <QuestionAnswerOutlinedIcon />}
-      />
-    </div>
+      <Box ref={containerRef}>
+        <Slide
+          direction="up"
+          in={displayCard}
+          container={containerRef.current}
+          timeout={250}
+        >
+          <Box>
+            <Fade
+              easing={{ enter: "ease", exit: "ease" }}
+              timeout={250}
+              in={displayCard}
+              unmountOnExit
+            >
+              {
+                <Box width={380}>
+                  <Paper
+                    component="form"
+                    elevation={6}
+                    sx={{ overflow: "hidden" }}
+                  >
+                    <Stack
+                      direction="row"
+                      justifyContent="space-between"
+                      alignItems="center"
+                      spacing={0}
+                      height={50}
+                      backgroundColor="#00926c"
+                      pl={1}
+                      pr={1}
+                    >
+                      <Stack
+                        direction="row"
+                        justifyContent="flex-start"
+                        alignItems="center"
+                        spacing={2}
+                      >
+                        <QuestionAnswerOutlinedIcon sx={{ color: "white" }} />
+                        <Typography color="white">
+                          {keyword("title")}
+                        </Typography>
+                      </Stack>
+                      <IconButton
+                        key="close"
+                        aria-label="close"
+                        onClick={() => setDisplayCard(false)}
+                      >
+                        <CloseIcon sx={{ color: "white" }} />
+                      </IconButton>
+                    </Stack>
+
+                    <Stack spacing={2} p={2}>
+                      <Stack>
+                        <Typography color="primary">
+                          {keyword("type")}
+                        </Typography>
+                        <ToggleButtonGroup
+                          color="primary"
+                          variant="contained"
+                          aria-label="outlined primary button group"
+                          fullWidth
+                          value={messageType}
+                          exclusive
+                          onChange={handleChange}
+                        >
+                          <ToggleButton value="Bug">
+                            {keyword("bug")}
+                          </ToggleButton>
+                          <ToggleButton value="Improvement">
+                            {keyword("improvement")}
+                          </ToggleButton>
+                          <ToggleButton value="Feature">
+                            {keyword("feature")}
+                          </ToggleButton>
+                        </ToggleButtonGroup>
+                      </Stack>
+                      <Stack>
+                        <Typography color="primary">
+                          {keyword("message")}
+                        </Typography>
+                        <TextField
+                          id="text"
+                          multiline
+                          rows={6}
+                          placeholder={keyword("placeholder")}
+                          value={message}
+                          onChange={(e) => setMessage(e.target.value)}
+                        />
+                      </Stack>
+                      <LoadingButton
+                        type="submit"
+                        fullWidth
+                        variant="contained"
+                        disabled={message && !isFeedbackSending ? false : true}
+                        loading={isFeedbackSending}
+                        onClick={(e) => {
+                          e.preventDefault(),
+                            handleClick(e, message, messageType);
+                        }}
+                      >
+                        {isFeedbackSent
+                          ? keyword("sent")
+                          : keyword("submit_text")}
+                      </LoadingButton>
+                    </Stack>
+                  </Paper>
+                </Box>
+              }
+            </Fade>
+          </Box>
+        </Slide>
+      </Box>
+      <Fab
+        color="primary"
+        variant={isButtonHovered ? "extended" : ""}
+        onMouseEnter={() => setIsButtonHovered(true)}
+        onMouseLeave={() => setIsButtonHovered(false)}
+        onClick={() => setDisplayCard(!displayCard)}
+        sx={{ height: 56 }}
+      >
+        <QuestionAnswerOutlinedIcon
+          sx={isButtonHovered ? { mr: 1 } : { height: 56 }}
+        />
+        {isButtonHovered ? "Feedback" : null}
+      </Fab>
+    </Stack>
   );
 };
-export default FeedBack;
+
+export default Feedback;
