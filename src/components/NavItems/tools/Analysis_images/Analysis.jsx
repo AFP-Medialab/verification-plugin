@@ -127,7 +127,7 @@ const Analysis = () => {
         description={keywordAllTools("navbar_analysis_image_description")}
         icon={
           <AnalysisIconImage
-            style={{ fill: "#51A5B2" }}
+            style={{ fill: "#00926c" }}
             width="40px"
             height="40px"
           />
