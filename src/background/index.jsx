@@ -1,3 +1,4 @@
+import { trackEvent } from "../components/Shared/GoogleAnalytics/MatomoAnalytics";
 import {
   SEARCH_ENGINE_SETTINGS,
   reverseImageSearch,
@@ -7,10 +8,6 @@ import {
 
 const page_name = "popup.html";
 
-const rightClickEvent = () => {
-  return true;
-};
-
 const mediaAssistant = (info) => {
   let url = getImgUrl(info);
   if (url !== "") {
@@ -18,7 +15,7 @@ const mediaAssistant = (info) => {
       url: page_name + "#/app/assistant/" + encodeURIComponent(url),
     });
     // Google analytics
-    rightClickEvent("Assistant", url);
+    trackEvent("contextMenu", "contextMenuClick", "Assistant", url, "");
   }
 };
 
@@ -29,7 +26,7 @@ const ocr = (info) => {
       url: page_name + "#/app/tools/ocr/" + encodeURIComponent(url),
     });
     // Google analytics
-    rightClickEvent("OCR", url);
+    trackEvent("contextMenu", "contextMenuClick", "OCR", url, "");
   }
 };
 
@@ -40,7 +37,7 @@ const thumbnailsSearch = (info) => {
       url: page_name + "#/app/tools/thumbnails/" + encodeURIComponent(url),
     });
     // Google analytics
-    rightClickEvent("YouTubeThumbnails", url);
+    trackEvent("contextMenu", "contextMenuClick", "YouTubeThumbnails", url, "");
   }
 };
 
@@ -55,7 +52,12 @@ const videoReversesearchDBKF = (info) => {
       selected: false,
     });
     // Google analytics
-    rightClickEvent("Video Reverse Search - DBKF (beta)", url);
+    trackEvent(
+      "contextMenu",
+      "contextMenuClick",
+      "Video Reverse Search - DBKF (beta)",
+      url
+    );
   }
 };
 
@@ -66,7 +68,7 @@ const analysisVideo = (info) => {
       url: page_name + "#/app/tools/Analysis/" + encodeURIComponent(url),
     });
     // Google analytics
-    rightClickEvent("Analysis", url);
+    trackEvent("contextMenu", "contextMenuClick", "Analysis", url, "");
   }
 };
 
@@ -77,7 +79,7 @@ const imageMagnifier = (info) => {
       url: page_name + "#/app/tools/magnifier/" + encodeURIComponent(url),
     });
     // Google analytics
-    rightClickEvent("Magnifier", url);
+    trackEvent("contextMenu", "contextMenuClick", "Magnifier", url, "");
   }
 };
 
@@ -88,7 +90,7 @@ const imageForensic = (info) => {
       url: page_name + "#/app/tools/forensic/" + encodeURIComponent(url),
     });
     // Google analytics
-    rightClickEvent("Forensic", url);
+    trackEvent("contextMenu", "contextMenuClick", "Forensic", url, "");
   }
 };
 
