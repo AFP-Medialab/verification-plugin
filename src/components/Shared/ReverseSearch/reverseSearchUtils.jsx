@@ -191,7 +191,7 @@ export const reverseImageSearchDBKF = (imgUrl) => {
   const url =
     SEARCH_ENGINE_SETTINGS.DBKF_SEARCH.URI + encodeURIComponent(imgUrl);
 
-  chrome.tabs.create({
+  openTabs({
     url: url,
     selected: false,
   });
@@ -219,7 +219,7 @@ export const reverseImageSearchBaidu = (imgBlob) => {
       return response.json();
     })
     .then((json) => {
-      chrome.tabs.create({ url: json.data.url });
+      openTabs({ url: json.data.url });
     })
     .finally(() => {
       // document.body.style.cursor = "default";
@@ -242,7 +242,7 @@ export const reverseImageSearchGoogleLens = (imgBlob) => {
     })
     .then((body) => {
       const tabUrl = body.match(/<meta .*URL=(https?:\/\/.*)"/)[1];
-      chrome.tabs.create({ url: tabUrl });
+      openTabs({ url: tabUrl });
     })
     .catch((error) => {
       console.error(error);
@@ -276,7 +276,7 @@ export const reverseImageSearchYandex = (imgBlob) => {
       const originalImageUrl = block.params.originalImageUrl;
       const cbirId = block.params.url;
       const fullUrl = `https://yandex.com/images/search?rpt=imageview&url=${originalImageUrl}&${cbirId}`;
-      chrome.tabs.create({ url: fullUrl });
+      openTabs({ url: fullUrl });
     })
     .catch((error) => {
       console.error(error);
@@ -303,7 +303,7 @@ export const reverseImageSearchGoogle = (imgBlob) => {
     signal: Timeout(10).signal,
   })
     .then((response) => {
-      chrome.tabs.create({ url: response.url });
+      openTabs({ url: response.url });
     })
     .catch((error) => {
       console.error(error);
@@ -332,7 +332,7 @@ export const reverseImageSearchBing = async (blob) => {
     body: formData,
   })
     .then((response) => {
-      chrome.tabs.create({ url: response.url });
+      openTabs({ url: response.url });
     })
     .catch((error) => {
       console.error(error);
@@ -343,14 +343,14 @@ export const reverseImageSearchBing = async (blob) => {
 };
 
 const reverseImageSearchTineye = (imageUrl) => {
-  chrome.tabs.create({
+  openTabs({
     url:
       SEARCH_ENGINE_SETTINGS.TINEYE_SEARCH.URI + encodeURIComponent(imageUrl),
   });
 };
 
 const reverseImageSearchReddit = (imageUrl) => {
-  chrome.tabs.create({
+  openTabs({
     url:
       SEARCH_ENGINE_SETTINGS.REDDIT_SEARCH.URI + encodeURIComponent(imageUrl),
   });
@@ -604,7 +604,7 @@ export const reverseImageSearch = async (info, isImgUrl, searchEngineName) => {
         search_url +
         encodeURIComponent(imageObject.obj) +
         "&view=detailv2&iss=sbi";
-      chrome.tabs.create({ url: url });
+      openTabs({ url: url });
     } else if (imageObject.obj !== "") {
       const b64Img = await retrieveImgObjectForSearchEngine(
         info,
@@ -626,7 +626,7 @@ export const reverseImageSearch = async (info, isImgUrl, searchEngineName) => {
         body: formData,
       })
         .then((response) => {
-          chrome.tabs.create({ url: response.url });
+          openTabs({ url: response.url });
         })
         .catch((error) => {
           console.error(error);
@@ -667,4 +667,29 @@ export const reverseImageSearchAll = async (info, isImageUrl) => {
     );
   }
   await Promise.all(promises);
+};
+export const openTabs = (url) => {
+  chrome.tabs.create(url, (createdTab) => {
+    chrome.tabs.onUpdated.addListener(async function _(tabId) {
+      //console.log("createdTab ", createdTab.id)
+      //console.log("tab_Id ", tabId)
+      if (tabId === createdTab.id) {
+        //console.log("remove .... listerner" , tabId)
+        chrome.tabs.onUpdated.removeListener(_);
+      } else {
+        //console.log("remove id ", tabId)
+        await chrome.tabs.get(tabId, async () => {
+          if (chrome.runtime.lastError) {
+            //console.log("tab not exist yet")
+          } else {
+            //console.log("tab exist ", tabId)
+            await chrome.tabs.remove(tabId, () => {
+              if (!chrome.runtime.lastError)
+                chrome.tabs.onUpdated.removeListener(_);
+            });
+          }
+        });
+      }
+    });
+  });
 };

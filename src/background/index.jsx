@@ -1,17 +1,20 @@
-import { trackEvent } from "../components/Shared/GoogleAnalytics/MatomoAnalytics";
+//import { trackEvent } from "../components/Shared/GoogleAnalytics/MatomoAnalytics";
 import {
   SEARCH_ENGINE_SETTINGS,
   reverseImageSearch,
   getImgUrl,
   reverseImageSearchAll,
+  openTabs,
 } from "../components/Shared/ReverseSearch/reverseSearchUtils";
 
 const page_name = "popup.html";
 
+const trackEvent = () => {};
+
 const mediaAssistant = (info) => {
   let url = getImgUrl(info);
   if (url !== "") {
-    chrome.tabs.create({
+    openTabs({
       url: page_name + "#/app/assistant/" + encodeURIComponent(url),
     });
     // Google analytics
@@ -22,7 +25,7 @@ const mediaAssistant = (info) => {
 const ocr = (info) => {
   let url = getImgUrl(info);
   if (url !== "") {
-    chrome.tabs.create({
+    openTabs({
       url: page_name + "#/app/tools/ocr/" + encodeURIComponent(url),
     });
     // Google analytics
@@ -33,7 +36,7 @@ const ocr = (info) => {
 const thumbnailsSearch = (info) => {
   let url = info.linkUrl;
   if (url !== "" && url.startsWith("http")) {
-    chrome.tabs.create({
+    openTabs({
       url: page_name + "#/app/tools/thumbnails/" + encodeURIComponent(url),
     });
     // Google analytics
@@ -47,7 +50,7 @@ const videoReversesearchDBKF = (info) => {
   let urlvideo = info.linkUrl;
   if (urlvideo !== "" && urlvideo.startsWith("http")) {
     let url = search_url + encodeURIComponent(urlvideo);
-    chrome.tabs.create({
+    openTabs({
       url: url,
       selected: false,
     });
@@ -64,7 +67,7 @@ const videoReversesearchDBKF = (info) => {
 const analysisVideo = (info) => {
   let url = info.linkUrl;
   if (url !== "") {
-    chrome.tabs.create({
+    openTabs({
       url: page_name + "#/app/tools/Analysis/" + encodeURIComponent(url),
     });
     // Google analytics
@@ -75,7 +78,7 @@ const analysisVideo = (info) => {
 const imageMagnifier = (info) => {
   let url = getImgUrl(info);
   if (url !== "") {
-    chrome.tabs.create({
+    openTabs({
       url: page_name + "#/app/tools/magnifier/" + encodeURIComponent(url),
     });
     // Google analytics
@@ -86,7 +89,7 @@ const imageMagnifier = (info) => {
 const imageForensic = (info) => {
   let url = getImgUrl(info);
   if (url !== "" && url.startsWith("http")) {
-    chrome.tabs.create({
+    openTabs({
       url: page_name + "#/app/tools/forensic/" + encodeURIComponent(url),
     });
     // Google analytics
@@ -256,6 +259,5 @@ chrome.runtime.onInstalled.addListener(() => {
     title: SEARCH_ENGINE_SETTINGS.REDDIT_SEARCH.CONTEXT_MENU_TITLE,
     contexts: ["image"],
   });
-
-  chrome.contextMenus.onClicked.addListener(contextClick);
 });
+chrome.contextMenus.onClicked.addListener(contextClick);
