@@ -36,12 +36,9 @@ const ocr = (info) => {
 const thumbnailsSearch = (info) => {
   let url = info.linkUrl;
   if (url !== "" && url.startsWith("http")) {
-    let lst = get_images(url);
-    for (let index in lst) {
-      chrome.tabs.create({
-        url: lst[index],
-      });
-    }
+    chrome.tabs.create({
+      url: page_name + "#/app/tools/thumbnails/" + encodeURIComponent(url),
+    });
     // Google analytics
     rightClickEvent("YouTubeThumbnails", url);
   }
@@ -95,7 +92,7 @@ const imageForensic = (info) => {
   }
 };
 
-function contextClick(info, tab) {
+function contextClick(info) {
   const { menuItemId } = info;
 
   switch (menuItemId) {
