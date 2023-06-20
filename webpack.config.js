@@ -13,6 +13,7 @@ module.exports = {
     path: path.resolve(__dirname, "build"),
     filename: "[name].js",
     iife: false,
+   
   },
   // optimization: {
   //   runtimeChunk: 'single',
