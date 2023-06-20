@@ -60,8 +60,8 @@ const Feedback = () => {
 
   const sendToSlack = async (message, messageType) => {
     const feedbackMessage = getFeedbackMessage(message, messageType);
-    console.log(feedbackMessage);
-    console.log(JSON.stringify(feedbackMessage));
+    //console.log(feedbackMessage);
+    //console.log(JSON.stringify(feedbackMessage));
     const response = await fetch(API_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -83,7 +83,7 @@ const Feedback = () => {
 
     await sendToSlack(message, messageType);
 
-    console.log("submitted");
+    //console.log("submitted");
 
     setIsFeedbackSending(false);
     setIsFeedbackSent(true);
