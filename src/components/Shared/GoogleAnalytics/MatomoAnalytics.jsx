@@ -75,9 +75,18 @@ export const trackEvent = (
   matomoCall(actions);
 };
 
-export const trackPageView = (path, client_id, uid = "") => {
-  if (path !== null) history.push(path.pathname);
-  const pathname = history.location.pathname;
+export const trackPageView = (
+  path,
+  client_id,
+  history = undefined,
+  uid = ""
+) => {
+  let pathname = "";
+  if (typeof history !== "undefined" && path !== null) {
+    history.push(path.pathname);
+    pathname = history.location.pathname;
+  }
+
   let actions;
   if (!uid) {
     actions = {

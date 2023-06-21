@@ -12,7 +12,7 @@ export const useTrackPageView = (path, client_id, uid, index) => {
     //console.log("general page view");
     if (analytics) {
       //go to analytics
-      trackPageView(path, client_id, uid);
+      trackPageView(path, client_id, history, uid);
     }
   }, [index]);
 };
