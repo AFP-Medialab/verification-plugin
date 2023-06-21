@@ -1,4 +1,4 @@
-//import { trackEvent } from "../components/Shared/GoogleAnalytics/MatomoAnalytics";
+import { trackEvent } from "../components/Shared/GoogleAnalytics/MatomoAnalytics";
 import {
   SEARCH_ENGINE_SETTINGS,
   reverseImageSearch,
@@ -8,8 +8,6 @@ import {
 } from "../components/Shared/ReverseSearch/reverseSearchUtils";
 
 const page_name = "popup.html";
-
-const trackEvent = () => {};
 
 const mediaAssistant = (info) => {
   let url = getImgUrl(info);
