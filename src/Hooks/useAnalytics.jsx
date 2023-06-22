@@ -4,6 +4,7 @@ import {
   trackPageView,
   trackEvent,
 } from "../components/Shared/GoogleAnalytics/MatomoAnalytics";
+import { history } from "../components/Shared/History/History";
 
 export const useTrackPageView = (path, client_id, uid, index) => {
   const analytics = useSelector((state) => state.cookies.analytics);
@@ -11,7 +12,7 @@ export const useTrackPageView = (path, client_id, uid, index) => {
     //console.log("general page view");
     if (analytics) {
       //go to analytics
-      trackPageView(path, client_id, uid);
+      trackPageView(path, client_id, history, uid);
     }
   }, [index]);
 };
@@ -32,7 +33,7 @@ export const useTrackEvent = (
       //console.log("Track event");
       if (analytics) {
         //go to analytics
-        trackEvent(category, action, name, url, client_id, uid);
+        trackEvent(category, action, name, url, client_id, history, uid);
       }
     }
   }, [event]);

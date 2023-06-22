@@ -1,7 +1,4 @@
-//import ReactGA from "react-ga";
-//import history from "../History/History";
-// import { useLocation } from "react-router-dom";
-import history from "../History/History";
+import { history } from "../History/History";
 
 export function submissionEvent(payload) {
   var pathname = history.location.pathname;

@@ -1,0 +1,29 @@
+{
+    "manifest_version": 2,
+    "name" :"Fake news debunker by InVID & WeVerify",
+    "version" :"0.76.1",
+    "description" :"InVID WeVerify extension",
+    "short_name": "Verification Plugin",
+    "browser_action": {
+      "default_title": "InVID WeVerify",
+      "default_popup": "popup.html"
+    },
+    "background": {
+      "scripts": ["background.js"]
+    },
+    "content_scripts": [
+      {
+        "matches": ["<all_urls>"],
+        "js": ["popup.js"]
+      }
+    ],
+    "icons": {
+      "16": "img/icon-16.png",
+      "48": "img/icon-48.png",
+      "128": "img/icon-128.png"
+    },
+    "options_page": "",
+    "permissions": ["activeTab", "contextMenus"],
+    "content_security_policy": "script-src 'self' 'unsafe-eval' https://www.google-analytics.com https://*.google.com ; object-src 'self'",
+    "web_accessible_resources": ["/popup.html"]
+  }
