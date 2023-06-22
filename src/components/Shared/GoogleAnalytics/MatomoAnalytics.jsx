@@ -1,4 +1,3 @@
-import history from "../History/History";
 import { useSelector } from "react-redux";
 
 const matomo_site = process.env.MATOMO_SITE;
@@ -40,9 +39,11 @@ export const trackEvent = (
   name,
   url,
   client_id,
+  history = null,
   uid = ""
 ) => {
-  const pathname = history.location.pathname;
+  const pathname =
+    history && history.location ? history.location.pathname : null;
 
   let actions;
 
@@ -74,9 +75,18 @@ export const trackEvent = (
   matomoCall(actions);
 };
 
-export const trackPageView = (path, client_id, uid = "") => {
-  if (path !== null) history.push(path.pathname);
-  const pathname = history.location.pathname;
+export const trackPageView = (
+  path,
+  client_id,
+  history = undefined,
+  uid = ""
+) => {
+  let pathname = "";
+  if (typeof history !== "undefined" && path !== null) {
+    history.push(path.pathname);
+    pathname = history.location.pathname;
+  }
+
   let actions;
   if (!uid) {
     actions = {
@@ -107,7 +117,12 @@ function matomoCall(actions) {
     return;
   }
 
-  const { innerWidth, innerHeight } = resolution();
+  let innerWidth;
+  let innerHeight;
+
+  if (typeof window !== "undefined")
+    ({ innerWidth, innerHeight } = resolution());
+
   const url_params = new URLSearchParams();
 
   url_params.append("idsite", matomo_site);
@@ -127,7 +142,9 @@ function matomoCall(actions) {
   if (actions.uid) url_params.append("uid", actions.uid);
 
   url_params.append("cookie", 1);
-  url_params.append("res", innerWidth + "x" + innerHeight);
+
+  if (innerWidth && innerHeight)
+    url_params.append("res", innerWidth + "x" + innerHeight);
 
   const url = process.env.REACT_APP_MATOMO_URL;
 
