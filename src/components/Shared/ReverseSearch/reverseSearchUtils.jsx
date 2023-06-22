@@ -191,7 +191,7 @@ export const reverseImageSearchDBKF = (imgUrl) => {
   const url =
     SEARCH_ENGINE_SETTINGS.DBKF_SEARCH.URI + encodeURIComponent(imgUrl);
 
-  openTabs({
+  openTabsSearch({
     url: url,
     selected: false,
   });
@@ -219,7 +219,7 @@ export const reverseImageSearchBaidu = (imgBlob) => {
       return response.json();
     })
     .then((json) => {
-      openTabs({ url: json.data.url });
+      openTabsSearch({ url: json.data.url });
     })
     .finally(() => {
       // document.body.style.cursor = "default";
@@ -242,7 +242,7 @@ export const reverseImageSearchGoogleLens = (imgBlob) => {
     })
     .then((body) => {
       const tabUrl = body.match(/<meta .*URL=(https?:\/\/.*)"/)[1];
-      openTabs({ url: tabUrl });
+      openTabsSearch({ url: tabUrl });
     })
     .catch((error) => {
       console.error(error);
@@ -276,7 +276,7 @@ export const reverseImageSearchYandex = (imgBlob) => {
       const originalImageUrl = block.params.originalImageUrl;
       const cbirId = block.params.url;
       const fullUrl = `https://yandex.com/images/search?rpt=imageview&url=${originalImageUrl}&${cbirId}`;
-      openTabs({ url: fullUrl });
+      openTabsSearch({ url: fullUrl });
     })
     .catch((error) => {
       console.error(error);
@@ -303,7 +303,7 @@ export const reverseImageSearchGoogle = (imgBlob) => {
     signal: Timeout(10).signal,
   })
     .then((response) => {
-      openTabs({ url: response.url });
+      openTabsSearch({ url: response.url });
     })
     .catch((error) => {
       console.error(error);
@@ -332,7 +332,7 @@ export const reverseImageSearchBing = async (blob) => {
     body: formData,
   })
     .then((response) => {
-      openTabs({ url: response.url });
+      openTabsSearch({ url: response.url });
     })
     .catch((error) => {
       console.error(error);
@@ -343,14 +343,14 @@ export const reverseImageSearchBing = async (blob) => {
 };
 
 const reverseImageSearchTineye = (imageUrl) => {
-  openTabs({
+  openTabsSearch({
     url:
       SEARCH_ENGINE_SETTINGS.TINEYE_SEARCH.URI + encodeURIComponent(imageUrl),
   });
 };
 
 const reverseImageSearchReddit = (imageUrl) => {
-  openTabs({
+  openTabsSearch({
     url:
       SEARCH_ENGINE_SETTINGS.REDDIT_SEARCH.URI + encodeURIComponent(imageUrl),
   });
@@ -604,7 +604,7 @@ export const reverseImageSearch = async (info, isImgUrl, searchEngineName) => {
         search_url +
         encodeURIComponent(imageObject.obj) +
         "&view=detailv2&iss=sbi";
-      openTabs({ url: url });
+      openTabsSearch({ url: url });
     } else if (imageObject.obj !== "") {
       const b64Img = await retrieveImgObjectForSearchEngine(
         info,
@@ -626,7 +626,7 @@ export const reverseImageSearch = async (info, isImgUrl, searchEngineName) => {
         body: formData,
       })
         .then((response) => {
-          openTabs({ url: response.url });
+          openTabsSearch({ url: response.url });
         })
         .catch((error) => {
           console.error(error);
@@ -693,3 +693,46 @@ export const openTabs = (url) => {
     });
   });
 };
+
+const openTabsSearch = (url) => {
+  chrome.tabs.create(url, (createdTab) => {
+    chrome.tabs.onUpdated.addListener(async function _(tabId, info, tab) {
+      let pending_url = ns(createdTab.pendingUrl);
+      let tab_url = ns(tab.url);
+      if (pending_url === "yandex.com" || pending_url === "graph.baidu.com") {
+        console.log("createdTab ID", createdTab.id);
+        console.log("createdTab ", createdTab);
+        console.log("tab ", tab);
+        console.log("info ", info);
+        console.log("tab_Id ", tabId);
+        console.log("pendingUrl ", pending_url);
+        console.log("tab url ", tab_url);
+      }
+      if (tabId === createdTab.id && pending_url === tab_url) {
+        console.log("remove .... listerner", tabId);
+        chrome.tabs.onUpdated.removeListener(_);
+      } else {
+        if (pending_url === tab_url) {
+          console.log("remove id ", tabId);
+          await chrome.tabs.get(tabId, async () => {
+            if (chrome.runtime.lastError) {
+              //console.log("tab not exist yet")
+            } else {
+              //console.log("tab exist ", tabId)
+              await chrome.tabs.remove(tabId, () => {
+                if (!chrome.runtime.lastError)
+                  chrome.tabs.onUpdated.removeListener(_);
+              });
+            }
+          });
+        }
+      }
+    });
+  });
+};
+
+function ns(url) {
+  let domain = new URL(url);
+  domain = domain.hostname.replace("www.", "");
+  return domain;
+}
