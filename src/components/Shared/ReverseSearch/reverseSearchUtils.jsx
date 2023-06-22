@@ -245,7 +245,7 @@ export const reverseImageSearchGoogleLens = (imgBlob) => {
       openTabsSearch({ url: tabUrl });
     })
     .catch((error) => {
-      console.error(error);
+      //console.error(error);
     })
     .finally(() => {
       // document.body.style.cursor = "default";
@@ -279,7 +279,7 @@ export const reverseImageSearchYandex = (imgBlob) => {
       openTabsSearch({ url: fullUrl });
     })
     .catch((error) => {
-      console.error(error);
+      //console.error(error);
     })
     .finally(() => {
       // document.body.style.cursor = "default";
@@ -306,7 +306,7 @@ export const reverseImageSearchGoogle = (imgBlob) => {
       openTabsSearch({ url: response.url });
     })
     .catch((error) => {
-      console.error(error);
+      //console.error(error);
     });
   // .finally(() => {
   //   document.body.style.cursor = "default";
@@ -335,7 +335,7 @@ export const reverseImageSearchBing = async (blob) => {
       openTabsSearch({ url: response.url });
     })
     .catch((error) => {
-      console.error(error);
+      //console.error(error);
     })
     .finally(() => {
       // document.body.style.cursor = "default";
@@ -629,7 +629,7 @@ export const reverseImageSearch = async (info, isImgUrl, searchEngineName) => {
           openTabsSearch({ url: response.url });
         })
         .catch((error) => {
-          console.error(error);
+          //console.error(error);
         });
     }
   } else if (searchEngineName === SEARCH_ENGINE_SETTINGS.REDDIT_SEARCH.NAME) {
@@ -671,17 +671,11 @@ export const reverseImageSearchAll = async (info, isImageUrl) => {
 export const openTabs = (url) => {
   chrome.tabs.create(url, (createdTab) => {
     chrome.tabs.onUpdated.addListener(async function _(tabId) {
-      //console.log("createdTab ", createdTab.id)
-      //console.log("tab_Id ", tabId)
       if (tabId === createdTab.id) {
-        //console.log("remove .... listerner" , tabId)
         chrome.tabs.onUpdated.removeListener(_);
       } else {
-        //console.log("remove id ", tabId)
         await chrome.tabs.get(tabId, async () => {
-          if (chrome.runtime.lastError) {
-            //console.log("tab not exist yet")
-          } else {
+          if (!chrome.runtime.lastError) {
             //console.log("tab exist ", tabId)
             await chrome.tabs.remove(tabId, () => {
               if (!chrome.runtime.lastError)
@@ -699,30 +693,23 @@ const openTabsSearch = (url) => {
     chrome.tabs.onUpdated.addListener(async function _(tabId, info, tab) {
       let pending_url = ns(createdTab.pendingUrl);
       let tab_url = ns(tab.url);
-      if (pending_url === "yandex.com" || pending_url === "graph.baidu.com") {
-        console.log("createdTab ID", createdTab.id);
-        console.log("createdTab ", createdTab);
-        console.log("tab ", tab);
-        console.log("info ", info);
-        console.log("tab_Id ", tabId);
-        console.log("pendingUrl ", pending_url);
-        console.log("tab url ", tab_url);
-      }
       if (tabId === createdTab.id && pending_url === tab_url) {
-        console.log("remove .... listerner", tabId);
+        //console.log("remove .... listerner", tabId);
         chrome.tabs.onUpdated.removeListener(_);
       } else {
         if (pending_url === tab_url) {
-          console.log("remove id ", tabId);
+          //console.log("remove id ", tabId);
           await chrome.tabs.get(tabId, async () => {
-            if (chrome.runtime.lastError) {
-              //console.log("tab not exist yet")
-            } else {
+            if (!chrome.runtime.lastError) {
               //console.log("tab exist ", tabId)
-              await chrome.tabs.remove(tabId, () => {
-                if (!chrome.runtime.lastError)
-                  chrome.tabs.onUpdated.removeListener(_);
+              await chrome.tabs.remove(tabId, async () => {
+                //nothing todo
+                if (!chrome.runtime.lastError) {
+                  //nothing todo
+                }
               });
+            } else {
+              //nothing todo
             }
           });
         }
