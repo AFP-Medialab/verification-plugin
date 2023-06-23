@@ -42,7 +42,7 @@ export const SEARCH_ENGINE_SETTINGS = {
     CONTEXT_MENU_ID: "reverse_search_dbkf",
     CONTEXT_MENU_TITLE: "Image Reverse Search - DBKF (beta)",
     URI: "http://weverify-demo.ontotext.com/#!/similaritySearchResults&type=Images&params=",
-    IMAGE_FORMAT: IMAGE_FORMATS.BLOB,
+    IMAGE_FORMAT: IMAGE_FORMATS.URI,
   },
   GOOGLE_SEARCH: {
     NAME: "Google",
