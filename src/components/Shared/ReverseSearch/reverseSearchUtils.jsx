@@ -678,8 +678,10 @@ export const openTabs = (url) => {
           if (!chrome.runtime.lastError) {
             //console.log("tab exist ", tabId)
             await chrome.tabs.remove(tabId, () => {
-              if (!chrome.runtime.lastError)
-                chrome.tabs.onUpdated.removeListener(_);
+              if (!chrome.runtime.lastError) {
+                //nothing todo
+              }
+              //chrome.tabs.onUpdated.removeListener(_);
             });
           }
         });
