@@ -116,7 +116,7 @@ const ImageResult = () => {
   };
 
   const handleClick = (img, isImgUrl, searchEngineName) => {
-    reverseImageSearch(img, isImgUrl, searchEngineName);
+    reverseImageSearch(img, isImgUrl, searchEngineName, false);
   };
 
   return (
