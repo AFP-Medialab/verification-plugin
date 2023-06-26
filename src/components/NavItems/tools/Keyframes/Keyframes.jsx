@@ -80,10 +80,7 @@ const Keyframes = () => {
   const keyframe_url = process.env.REACT_APP_KEYFRAME_API;
   //download subshots results
   const downloadAction = () => {
-    let downloadlink =
-      // "https://multimedia2.iti.gr/video_analysis/keyframes/" +
-      keyframe_url + "/keyframes/";
-    video_id + "/Subshots";
+    let downloadlink = keyframe_url + "/keyframes/" + video_id + "/Subshots";
     fetch(downloadlink).then((response) => {
       response.blob().then((blob) => {
         let url = window.URL.createObjectURL(blob);
