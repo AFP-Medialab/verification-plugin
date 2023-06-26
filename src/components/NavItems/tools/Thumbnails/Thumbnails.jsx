@@ -183,8 +183,8 @@ const Thumbnails = () => {
 
       if (isSearchEngineSelected) {
         if (searchEngineName === SEARCH_ENGINE_SETTINGS.ALL.NAME)
-          reverseImageSearchAll(url, true);
-        else reverseImageSearch(url, true, searchEngineName);
+          reverseImageSearchAll(url, true, false);
+        else reverseImageSearch(url, true, searchEngineName, false);
       }
     }
   };

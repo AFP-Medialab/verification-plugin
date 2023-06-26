@@ -95,7 +95,12 @@ const KeyFramesResults = (props) => {
   const imageClick = (event) => {
     let url = event;
     if (url !== "")
-      reverseImageSearch(url, true, SEARCH_ENGINE_SETTINGS.GOOGLE_SEARCH.NAME);
+      reverseImageSearch(
+        url,
+        true,
+        SEARCH_ENGINE_SETTINGS.GOOGLE_SEARCH.NAME,
+        false
+      );
   };
   const zoom = (zoom) => {
     if (zoom === -1) {
