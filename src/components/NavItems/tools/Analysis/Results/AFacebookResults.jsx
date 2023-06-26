@@ -35,7 +35,7 @@ const AFacebookResults = (props) => {
 
   const reverseSearch = async (website) => {
     for (let image of thumbnails) {
-      await reverseImageSearch(image.url, true, website);
+      await reverseImageSearch(image.url, true, website, false);
     }
   };
 

@@ -106,6 +106,16 @@ const fetchImage = async (url) => {
 };
 
 /**
+ * Wrapper function to open a new tab from the context menus or from the app
+ * @param {} url The url object
+ * @param {boolean} isRequestFromContextMenu
+ */
+const openNewTabWithUrl = async (url, isRequestFromContextMenu) => {
+  if (isRequestFromContextMenu) openTabsSearch(url);
+  else await chrome.tabs.create(url);
+};
+
+/**
  * Returns true if the string is in the base64 format, else false
  * @param {string} str
  * @returns {boolean}
@@ -187,20 +197,25 @@ export const loadImage = (src, reverseSearchFunction) => {
   };
 };
 
-export const reverseImageSearchDBKF = (imgUrl) => {
+export const reverseImageSearchDBKF = (
+  imgUrl,
+  isRequestFromContextMenu = true
+) => {
   const url =
     SEARCH_ENGINE_SETTINGS.DBKF_SEARCH.URI + encodeURIComponent(imgUrl);
 
-  openTabsSearch({
-    url: url,
-    selected: false,
-  });
+  const urlObject = { url: url };
+
+  openNewTabWithUrl(urlObject, isRequestFromContextMenu);
 
   // Google analytics
   // rightClickEvent("Image Reverse Search - DBKF (beta)", url);
 };
 
-export const reverseImageSearchBaidu = (imgBlob) => {
+export const reverseImageSearchBaidu = (
+  imgBlob,
+  isRequestFromContextMenu = true
+) => {
   const url = SEARCH_ENGINE_SETTINGS.BAIDU_SEARCH.URI;
   const data = new FormData();
 
@@ -219,14 +234,19 @@ export const reverseImageSearchBaidu = (imgBlob) => {
       return response.json();
     })
     .then((json) => {
-      openTabsSearch({ url: json.data.url });
+      const urlObject = { url: json.data.url };
+
+      openNewTabWithUrl(urlObject, isRequestFromContextMenu);
     })
     .finally(() => {
       // document.body.style.cursor = "default";
     });
 };
 
-export const reverseImageSearchGoogleLens = (imgBlob) => {
+export const reverseImageSearchGoogleLens = (
+  imgBlob,
+  isRequestFromContextMenu = true
+) => {
   const url = `https://lens.google.com/upload?ep=ccm&s=&st=${Date.now()}`;
   const formData = new FormData();
 
@@ -242,7 +262,10 @@ export const reverseImageSearchGoogleLens = (imgBlob) => {
     })
     .then((body) => {
       const tabUrl = body.match(/<meta .*URL=(https?:\/\/.*)"/)[1];
-      openTabsSearch({ url: tabUrl });
+
+      const urlObject = { url: tabUrl };
+
+      openNewTabWithUrl(urlObject, isRequestFromContextMenu);
     })
     .catch((error) => {
       //console.error(error);
@@ -252,7 +275,10 @@ export const reverseImageSearchGoogleLens = (imgBlob) => {
     });
 };
 
-export const reverseImageSearchYandex = (imgBlob) => {
+export const reverseImageSearchYandex = (
+  imgBlob,
+  isRequestFromContextMenu = true
+) => {
   const url =
     'https://yandex.com/images/touch/search?rpt=imageview&format=json&request={"blocks":[{"block":"cbir-uploader__get-cbir-id"}]}';
 
@@ -276,7 +302,10 @@ export const reverseImageSearchYandex = (imgBlob) => {
       const originalImageUrl = block.params.originalImageUrl;
       const cbirId = block.params.url;
       const fullUrl = `https://yandex.com/images/search?rpt=imageview&url=${originalImageUrl}&${cbirId}`;
-      openTabsSearch({ url: fullUrl });
+
+      const urlObject = { url: fullUrl };
+
+      openNewTabWithUrl(urlObject, isRequestFromContextMenu);
     })
     .catch((error) => {
       //console.error(error);
@@ -286,7 +315,10 @@ export const reverseImageSearchYandex = (imgBlob) => {
     });
 };
 
-export const reverseImageSearchGoogle = (imgBlob) => {
+export const reverseImageSearchGoogle = (
+  imgBlob,
+  isRequestFromContextMenu = true
+) => {
   const chromeSbiSrc = "Google Chrome 107.0.5304.107 (Official) Windows";
 
   let url = SEARCH_ENGINE_SETTINGS.GOOGLE_SEARCH.URI;
@@ -303,7 +335,9 @@ export const reverseImageSearchGoogle = (imgBlob) => {
     signal: Timeout(10).signal,
   })
     .then((response) => {
-      openTabsSearch({ url: response.url });
+      const urlObject = { url: response.url };
+
+      openNewTabWithUrl(urlObject, isRequestFromContextMenu);
     })
     .catch((error) => {
       //console.error(error);
@@ -313,7 +347,10 @@ export const reverseImageSearchGoogle = (imgBlob) => {
   // });
 };
 
-export const reverseImageSearchBing = async (blob) => {
+export const reverseImageSearchBing = async (
+  blob,
+  isRequestFromContextMenu = true
+) => {
   // let image = content.substring(content.indexOf(",") + 1);
   // let image = content;
 
@@ -332,7 +369,9 @@ export const reverseImageSearchBing = async (blob) => {
     body: formData,
   })
     .then((response) => {
-      openTabsSearch({ url: response.url });
+      const urlObject = { url: response.url };
+
+      openNewTabWithUrl(urlObject, isRequestFromContextMenu);
     })
     .catch((error) => {
       //console.error(error);
@@ -342,18 +381,28 @@ export const reverseImageSearchBing = async (blob) => {
     });
 };
 
-const reverseImageSearchTineye = (imageUrl) => {
-  openTabsSearch({
+const reverseImageSearchTineye = (
+  imageUrl,
+  isRequestFromContextMenu = true
+) => {
+  const urlObject = {
     url:
       SEARCH_ENGINE_SETTINGS.TINEYE_SEARCH.URI + encodeURIComponent(imageUrl),
-  });
+  };
+
+  openNewTabWithUrl(urlObject, isRequestFromContextMenu);
 };
 
-const reverseImageSearchReddit = (imageUrl) => {
-  openTabsSearch({
+const reverseImageSearchReddit = (
+  imageUrl,
+  isRequestFromContextMenu = true
+) => {
+  const urlObject = {
     url:
       SEARCH_ENGINE_SETTINGS.REDDIT_SEARCH.URI + encodeURIComponent(imageUrl),
-  });
+  };
+
+  openNewTabWithUrl(urlObject, isRequestFromContextMenu);
 };
 
 export const getImgUrl = (info) => {
@@ -530,7 +579,12 @@ const retrieveImgObjectForSearchEngine = async (
   );
 };
 
-export const reverseImageSearch = async (info, isImgUrl, searchEngineName) => {
+export const reverseImageSearch = async (
+  info,
+  isImgUrl,
+  searchEngineName,
+  isRequestFromContextMenu = true
+) => {
   const imageObject = await retrieveImgObjectForSearchEngine(
     info,
     isImgUrl,
@@ -545,7 +599,7 @@ export const reverseImageSearch = async (info, isImgUrl, searchEngineName) => {
       throw new Error(`[reverseImageSearch] Error: invalid image format`);
     }
 
-    reverseImageSearchDBKF(imageObject.obj);
+    reverseImageSearchDBKF(imageObject.obj, isRequestFromContextMenu);
   } else if (searchEngineName === SEARCH_ENGINE_SETTINGS.GOOGLE_SEARCH.NAME) {
     if (
       imageObject.imageFormat !==
@@ -554,7 +608,7 @@ export const reverseImageSearch = async (info, isImgUrl, searchEngineName) => {
       throw new Error(`[reverseImageSearch] Error: invalid image format`);
     }
 
-    reverseImageSearchGoogle(imageObject.obj);
+    reverseImageSearchGoogle(imageObject.obj, isRequestFromContextMenu);
   } else if (
     searchEngineName === SEARCH_ENGINE_SETTINGS.GOOGLE_LENS_SEARCH.NAME
   ) {
@@ -565,7 +619,7 @@ export const reverseImageSearch = async (info, isImgUrl, searchEngineName) => {
       throw new Error(`[reverseImageSearch] Error: invalid image format`);
     }
 
-    reverseImageSearchGoogleLens(imageObject.obj);
+    reverseImageSearchGoogleLens(imageObject.obj, isRequestFromContextMenu);
   } else if (searchEngineName === SEARCH_ENGINE_SETTINGS.YANDEX_SEARCH.NAME) {
     if (
       imageObject.imageFormat !==
@@ -574,7 +628,7 @@ export const reverseImageSearch = async (info, isImgUrl, searchEngineName) => {
       throw new Error(`[reverseImageSearch] Error: invalid image format`);
     }
 
-    reverseImageSearchYandex(imageObject.obj);
+    reverseImageSearchYandex(imageObject.obj, isRequestFromContextMenu);
   } else if (searchEngineName === SEARCH_ENGINE_SETTINGS.BAIDU_SEARCH.NAME) {
     if (
       imageObject.imageFormat !==
@@ -583,7 +637,7 @@ export const reverseImageSearch = async (info, isImgUrl, searchEngineName) => {
       throw new Error(`[reverseImageSearch] Error: invalid image format`);
     }
 
-    reverseImageSearchBaidu(imageObject.obj);
+    reverseImageSearchBaidu(imageObject.obj, isRequestFromContextMenu);
   } else if (searchEngineName === SEARCH_ENGINE_SETTINGS.BING_SEARCH.NAME) {
     if (
       imageObject.imageFormat !==
@@ -604,7 +658,9 @@ export const reverseImageSearch = async (info, isImgUrl, searchEngineName) => {
         search_url +
         encodeURIComponent(imageObject.obj) +
         "&view=detailv2&iss=sbi";
-      openTabsSearch({ url: url });
+
+      const urlObject = { url: url };
+      openNewTabWithUrl(urlObject, isRequestFromContextMenu);
     } else if (imageObject.obj !== "") {
       const b64Img = await retrieveImgObjectForSearchEngine(
         info,
@@ -640,7 +696,7 @@ export const reverseImageSearch = async (info, isImgUrl, searchEngineName) => {
       throw new Error(`[reverseImageSearch] Error: invalid image format`);
     }
 
-    reverseImageSearchReddit(imageObject.obj);
+    reverseImageSearchReddit(imageObject.obj, isRequestFromContextMenu);
   } else if (searchEngineName === SEARCH_ENGINE_SETTINGS.TINEYE_SEARCH.NAME) {
     if (
       imageObject.imageFormat !==
@@ -649,13 +705,17 @@ export const reverseImageSearch = async (info, isImgUrl, searchEngineName) => {
       throw new Error(`[reverseImageSearch] Error: invalid image format`);
     }
 
-    reverseImageSearchTineye(imageObject.obj);
+    reverseImageSearchTineye(imageObject.obj, isRequestFromContextMenu);
   } else {
     throw new Error("[reverseImageSearch] Error: Search Engine not supported");
   }
 };
 
-export const reverseImageSearchAll = async (info, isImageUrl) => {
+export const reverseImageSearchAll = async (
+  info,
+  isImageUrl,
+  isRequestFromContextMenu = true
+) => {
   let promises = [];
 
   for (const searchEngineSetting of Object.values(SEARCH_ENGINE_SETTINGS)) {
@@ -663,7 +723,12 @@ export const reverseImageSearchAll = async (info, isImageUrl) => {
       continue;
     }
     promises.push(
-      reverseImageSearch(info, isImageUrl, searchEngineSetting.NAME)
+      reverseImageSearch(
+        info,
+        isImageUrl,
+        searchEngineSetting.NAME,
+        isRequestFromContextMenu
+      )
     );
   }
   await Promise.all(promises);

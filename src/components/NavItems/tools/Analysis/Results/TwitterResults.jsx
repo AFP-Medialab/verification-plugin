@@ -39,7 +39,7 @@ const TwitterResults = (props) => {
   );
   const reverseSearch = (website) => {
     for (let image of thumbnails) {
-      reverseImageSearch(image.url, true, website);
+      reverseImageSearch(image.url, true, website, false);
     }
   };
 
