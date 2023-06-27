@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 	en	fr	es	el	ar
 deepfake_label	Media link	Media lien	Media link	σύνδεσμος πολυμέσων	رابط الوسائط
 deepfake_name	Deepfake	Deepfake	Deepfake	Deepfake	تزوير عميق
@@ -15,21 +14,3 @@ deepfake_video_link	Video link	Lien vidéo	Link del video	Σύνδεσμος β�
 deepfake_title_what	What is Thumbnails				ما هي الصورة المصغرة (الغلاف)
 deepfake_filters_explanation_image	Explanation image				شرح الصورة
 deepfake_filters_explanation_cideo	Explanation video				شرح الفيديو
-=======
-	en	fr	es	el	hy
-deepfake_label	Media link	Media lien	Media link	σύνδεσμος πολυμέσων	Հղում նյութին
-deepfake_name	Deepfake	Deepfake	Deepfake	Deepfake	Դիփֆեյք
-deepfake_placeholder	Paste the URL here	Collez le lien ici	Pega aquí el link	Επικολλήστε τη διεύθυνση σύνδεσμος εδώ	Տեղադրեք URL-ն այստեղ
-deepfake_support	Your browser does not support the video tag.	Votre navigateur ne prend pas en charge la balise vidéo.	Su navegador no soporta la etiqueta de vídeo.	Το πρόγραμμα περιήγησής σας δεν υποστηρίζει την ετικέτα βίντεο.	Ձեր դիտարկիչը չի աջակցում տեսանյութի պիտակ:
-deepfake_clips	Clips of the video	Clips de la vidéo	Clips del vídeo	Αποσπάσματα του βίντεο	Տեսանյութի հատվածներ
-deepfake_select	Select a shot to see the analysis results of that clip	Sélectionnez un plan pour voir les résultats de l'analyse de ce clip.	Seleccione un clip para ver los resultados del análisis de ese clip	Επιλέξτε ένα πλάνο για να δείτε τα αποτελέσματα της ανάλυσης του συγκεκριμένου κλιπ	Ընտրեք կադրեր, այդ հոլովակի վերլուծության արդյունքները տեսնելու համար
-deepfake_clip	Clip selected	Clip sélectionné	Clip seleccionado	Επιλεγμένο κλιπ	Ընտրված տեսահոլովակը
-deepfake_faces	Faces recognized	Visages reconnus	Caras reconocidas	Αναγνωρισμένα πρόσωπα	Դեմքերը ճանաչված են
-deepfake_video	Video analyzed	Vidéo analysée	Vídeo analizado	Αναλυμένο βίντεο	Տեսանյութը վերլուծեց
-deepfake_results	Results of the clip selected	Résultats du clip sélectionné	Resultados del clip seleccionado	Αποτελέσματα του επιλεγμένου κλιπ	Ընտրված տեսահոլովակի արդյունքները
-deepfake_image_link	Image link	Lien image	Link de la imagen	Σύνδεσμος εικόνας	Պատկերի հղում
-deepfake_video_link	Video link	Lien vidéo	Link del video	Σύνδεσμος βίντεο	Տեսանյութերի հղում
-deepfake_title_what	What is Thumbnails				Ինչ է մանրապատկերները
-deepfake_filters_explanation_image	Explanation image				Բացատրական պատկեր
-deepfake_filters_explanation_cideo	Explanation video				Բացատրական տեսանյութ
->>>>>>> master
