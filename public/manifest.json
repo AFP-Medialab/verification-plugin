@@ -11,7 +11,7 @@
   "background": {
     "service_worker": "background.js"
   },
-  "permissions": ["contextMenus", "activeTab", "nativeMessaging"],
+  "permissions": ["contextMenus", "activeTab"],
   "host_permissions": ["<all_urls>"],
   "icons": {
     "16": "img/icon-16.png",
