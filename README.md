@@ -8,7 +8,7 @@ For further details about the tool and the already released versions, please vis
 
 For any feedback (bugs, enhancement, suggestions), please use the feedback tool within the plugin (on the bottom right).
 
-This plugin was initially developed by the InVID European project (2016-2018), a Horizon 2020 Innovation Action funded by the European Union under Grant Agreement 687786. It has been enhanced by the WeVerify European project (2018-2021), a Horizon 2020 Innovation Action funded by the European Union under Grant Agreement 825297. Since September 2022, it is improved within the [vera.ai website](https://veraai.eu) project 
+This plugin was initially developed by the InVID European project (2016-2018), a Horizon 2020 Innovation Action funded by the European Union under Grant Agreement 687786. It has been enhanced by the WeVerify European project (2018-2021), a Horizon 2020 Innovation Action funded by the European Union under Grant Agreement 825297. Since September 2022, it is improved within the [vera.ai project](https://veraai.eu) under Grant Agreement 101070093. 
 
 For more information about those three projects, visit the [vera.ai website](https://veraai.eu), the [WeVerify website](https://weverify.eu/), and [InVID website](http://www.invid-project.eu) or follow us on [veraai_eu](https://twitter.com/veraai_eu), [InVID_EU](https://twitter.com/InVID_EU) or on [WeVerify](https://twitter.com/WeVerify).
 
