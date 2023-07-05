@@ -1,4 +1,4 @@
-# Fake news debunker by InVID & WeVerify
+# Fake news debunker by InVID, WeVerify and vera.ai
 
 This plugin has been designed as a verification “Swiss army knife” helping journalists to save time and be more efficient in their fact-checking and debunking tasks on social networks especially when verifying videos and images.
 
