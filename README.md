@@ -10,7 +10,7 @@ For any feedback (bugs, enhancement, suggestions), please use the feedback tool 
 
 This plugin was initially developed by the InVID European project (2016-2018), a Horizon 2020 Innovation Action funded by the European Union under Grant Agreement 687786. It has been enhanced by the WeVerify European project (2018-2021), a Horizon 2020 Innovation Action funded by the European Union under Grant Agreement 825297. Since September 2022, it is improved within the [vera.ai website](https://veraai.eu) project 
 
-For more information about those three projects, visit the [vera.ai website](https://veraai.eu), the [WeVerify website](https://weverify.eu/), and [InVID website](http://www.invid-project.eu) or follow us on [veraai_eu] (https://twitter.com/veraai_eu), [InVID_EU](https://twitter.com/InVID_EU) or on [WeVerify](https://twitter.com/WeVerify).
+For more information about those three projects, visit the [vera.ai website](https://veraai.eu), the [WeVerify website](https://weverify.eu/), and [InVID website](http://www.invid-project.eu) or follow us on [veraai_eu](https://twitter.com/veraai_eu), [InVID_EU](https://twitter.com/InVID_EU) or on [WeVerify](https://twitter.com/WeVerify).
 
 **Disclaimer:** This software is provided "as is", without warranty of any kind, express or implied, including but not limited to the warranties of merchantability, fitness for a particular purpose and non-infringement. In no event shall the authors or copyright holders be liable for any claim, damages or other liability, whether in an action of contract, tort or otherwise, arising from, out of or in connection with the software or the use or other dealings in the software.
 
