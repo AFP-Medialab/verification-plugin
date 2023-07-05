@@ -12,7 +12,7 @@ This plugin was initially developed by the InVID European project (2016-2018), a
 
 For more information about those three projects, visit the [vera.ai website](https://veraai.eu), the [WeVerify website](https://weverify.eu/), and [InVID website](http://www.invid-project.eu) or follow us on [veraai_eu] (https://twitter.com/veraai_eu), [InVID_EU](https://twitter.com/InVID_EU) or on [WeVerify](https://twitter.com/WeVerify).
 
-**Disclaimer:** this software is provided "as is", without warranty of any kind, express or implied, including but not limited to the warranties of merchantability, fitness for a particular purpose and noninfringement. In no event shall the authors or copyright holders be liable for any claim, damages or other liability, whether in an action of contract, tort or otherwise, arising from, out of or in connection with the software or the use or other dealings in the software.
+**Disclaimer:** This software is provided "as is", without warranty of any kind, express or implied, including but not limited to the warranties of merchantability, fitness for a particular purpose and non-infringement. In no event shall the authors or copyright holders be liable for any claim, damages or other liability, whether in an action of contract, tort or otherwise, arising from, out of or in connection with the software or the use or other dealings in the software.
 
 
 ## Project setup
