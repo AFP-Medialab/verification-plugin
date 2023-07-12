@@ -44,6 +44,11 @@ const defaultState = {
   neDone: false,
   neFail: false,
 
+  newsTopicResult: null,
+  newsTopicLoading: false,
+  newsTopicDone: false,
+  newsTopicFail: false,
+
   mtResult: null,
   mtLoading: false,
   mtDone: false,
@@ -71,6 +76,7 @@ const assistantReducer = (state = defaultState, action) => {
     case "SET_DBKF_VIDEO_MATCH_DETAILS":
     case "SET_HP_DETAILS":
     case "SET_NE_DETAILS":
+    case "SET_NEWS_TOPIC_DETAILS":
     case "SET_LOADING":
     case "SET_WARNING_EXPANDED":
     case "SET_ASSURANCE_EXPANDED":

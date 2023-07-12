@@ -14,6 +14,7 @@ import {
   setInputUrl,
   setMtDetails,
   setNeDetails,
+  setNewsTopicDetails,
   setProcessUrl,
   setProcessUrlActions,
   setScrapedData,
@@ -75,6 +76,10 @@ function* getHyperpartisanSaga() {
     ["SET_SCRAPED_DATA", "CLEAN_STATE"],
     handleHyperpartisanCall
   );
+}
+
+function* getNewsTopicSaga() {
+  yield takeLatest(["SET_SCRAPED_DATA", "CLEAN_STATE"], handleNewsTopicCall);
 }
 
 function* getSourceCredSaga() {
@@ -283,7 +288,6 @@ function* handleHyperpartisanCall(action) {
       yield put(setHpDetails(null, true, false, false));
 
       const result = yield call(assistantApi.callHyperpartisanService, text);
-
       let hpProb = result.entities.hyperpartisan[0].hyperpartisan_probability;
       hpProb =
         parseFloat(hpProb).toFixed(2) > 0.7
@@ -294,6 +298,28 @@ function* handleHyperpartisanCall(action) {
     }
   } catch (error) {
     yield put(setHpDetails(null, false, false, true));
+  }
+}
+
+function* handleNewsTopicCall(action) {
+  if (action.type === "CLEAN_STATE") return;
+
+  try {
+    const text = yield select((state) => state.assistant.urlText);
+
+    if (text) {
+      yield put(setNewsTopicDetails(null, true, false, false));
+
+      const result = yield call(assistantApi.callNewsTopicService, text);
+      let ntResult = result.entities;
+      let filteredResult = Object.entries(ntResult).filter(
+        ([key, value]) => value[0].score > 0.8
+      );
+      filteredResult = filteredResult.length ? filteredResult : null;
+      yield put(setNewsTopicDetails(filteredResult, false, true, false));
+    }
+  } catch (error) {
+    yield put(setNewsTopicDetails(null, false, false, true));
   }
 }
 
@@ -696,5 +722,6 @@ export default function* assistantSaga() {
     fork(getTranslationSaga),
     fork(getAssistantScrapeSaga),
     fork(getUploadSaga),
+    fork(getNewsTopicSaga),
   ]);
 }

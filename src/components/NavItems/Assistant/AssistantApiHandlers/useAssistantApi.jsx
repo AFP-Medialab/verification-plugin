@@ -76,6 +76,14 @@ export default function assistantApiCalls() {
     return result.data;
   };
 
+  const callNewsTopicService = async (text) => {
+    const result = await axios.post(
+      assistantEndpoint + "gcloud/news-topic-clfr",
+      { text: text }
+    );
+    return result.data;
+  };
+
   const callOcrService = async (data, script, mode) => {
     const result = await axios.post(assistantEndpoint + "gcloud/ocr", {
       text: data,
@@ -99,5 +107,6 @@ export default function assistantApiCalls() {
     callHyperpartisanService,
     callOcrService,
     callOcrScriptService,
+    callNewsTopicService,
   };
 }

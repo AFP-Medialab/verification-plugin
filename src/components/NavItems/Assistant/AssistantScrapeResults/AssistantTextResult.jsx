@@ -49,6 +49,10 @@ const AssistantTextResult = () => {
   const dbkfMatch = useSelector((state) => state.assistant.dbkfTextMatch);
   const hpLoading = useSelector((state) => state.assistant.hpLoading);
   const mtLoading = useSelector((state) => state.assistant.mtLoading);
+  const newsTopicLoading = useSelector(
+    (state) => state.assistant.newsTopicLoading
+  );
+
   const dbkfMatchLoading = useSelector(
     (state) => state.assistant.dbkfTextMatchLoading
   );
@@ -112,7 +116,7 @@ const AssistantTextResult = () => {
             </div>
           }
         />
-        {dbkfMatchLoading && hpLoading && mtLoading && (
+        {dbkfMatchLoading && hpLoading && newsTopicLoading && (
           <LinearProgress variant={"indeterminate"} color={"secondary"} />
         )}
         <CardContent>

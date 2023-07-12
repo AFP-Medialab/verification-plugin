@@ -43,6 +43,11 @@ const AssistantCheckStatus = () => {
   const neTitle = keyword("ne_title");
   const neFailState = useSelector((state) => state.assistant.neFail);
 
+  const newsTopicTitle = "news topic";
+  const newsTopicFailState = useSelector(
+    (state) => state.assistant.newsTopicFail
+  );
+
   const failStates = [
     { title: hpTitle, failed: hpFailState },
     { title: scTitle, failed: scFailState },
@@ -50,6 +55,7 @@ const AssistantCheckStatus = () => {
     { title: dbkfTextTitle, failed: dbkfTextFailState },
     // {"title": mtTitle, "failed": mtFailState},
     { title: neTitle, failed: neFailState },
+    { title: newsTopicTitle, failed: newsTopicFailState },
   ];
 
   return (

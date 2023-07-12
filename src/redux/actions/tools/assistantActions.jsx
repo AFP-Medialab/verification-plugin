@@ -161,6 +161,18 @@ export const setHpDetails = (hpResult, hpLoading, hpDone, hpFail) => {
   };
 };
 
+export const setNewsTopicDetails = (ntResult, ntLoading, ntDone, ntFail) => {
+  return {
+    type: "SET_NEWS_TOPIC_DETAILS",
+    payload: {
+      newsTopicResult: ntResult,
+      newsTopicLoading: ntLoading,
+      newsTopicDone: ntDone,
+      newsTopicFail: ntFail,
+    },
+  };
+};
+
 export const setNeDetails = (
   neResultCategory,
   neResultCount,

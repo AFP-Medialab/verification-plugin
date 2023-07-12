@@ -90,7 +90,6 @@ const AssistantUrlSelected = (props) => {
       />
 
       {loading && <LinearProgress color={"secondary"} />}
-
       <CardContent>
         <Box mr={2}>
           <form>

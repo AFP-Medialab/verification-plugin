@@ -15,6 +15,7 @@ import AssistantIntroduction from "./AssistantIntroduction";
 import AssistantLinkResult from "./AssistantScrapeResults/AssistantLinkResult";
 import AssistantMediaResult from "./AssistantScrapeResults/AssistantMediaResult";
 import AssistantNEResult from "./AssistantCheckResults/AssistantNEResult";
+import AssistantNewsTopicResult from "./AssistantScrapeResults/AssistantNewsTopicResult";
 import AssistantSCResults from "./AssistantScrapeResults/AssistantSCResults";
 import AssistantTextResult from "./AssistantScrapeResults/AssistantTextResult";
 import AssistantUrlSelected from "./AssistantUrlSelected";
@@ -56,6 +57,9 @@ const Assistant = () => {
 
   //third party check states
   const neResult = useSelector((state) => state.assistant.neResultCategory);
+  const newsTopicResult = useSelector(
+    (state) => state.assistant.newsTopicResult
+  );
   const hpResult = useSelector((state) => state.assistant.hpResult);
 
   // source credibility
@@ -85,7 +89,9 @@ const Assistant = () => {
     (state) => state.assistant.dbkfMediaMatchFail
   );
   const neFailState = useSelector((state) => state.assistant.neFail);
-  // const mtFailState = useSelector(state => state.assistant.mtFail)
+  const newsTopicFailState = useSelector(
+    (state) => state.assistant.newsTopicFail
+  );
 
   //local state
   const [formInput, setFormInput] = useState(inputUrl);
@@ -171,7 +177,8 @@ const Assistant = () => {
         scFailState ||
         dbkfTextFailState ||
         dbkfMediaFailState ||
-        neFailState ? (
+        neFailState ||
+        newsTopicFailState ? (
           <Grid item xs>
             <AssistantCheckStatus />
           </Grid>
@@ -235,8 +242,14 @@ const Assistant = () => {
                 </Grid>
               ) : null}
 
+              {newsTopicResult ? (
+                <Grid item xs={6}>
+                  <AssistantNewsTopicResult />
+                </Grid>
+              ) : null}
+
               {linkList.length !== 0 ? (
-                <Grid item xs={5}>
+                <Grid item xs={6}>
                   <AssistantLinkResult />
                 </Grid>
               ) : null}

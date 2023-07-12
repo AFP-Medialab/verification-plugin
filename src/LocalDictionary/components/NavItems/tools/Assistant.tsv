@@ -101,3 +101,5 @@ fact_checker	Fact checker	Fact checker	Chequeador	Ελέγχου	مدقق الم
 warning	Warning	Avertissement	Advertencia	Προειδοποίηση	تحذير
 mentions	Mentions	Mention	Menciones	Αναφέρει	إشارات
 assistant_error_instagram	The assistant has failed to retrieve this instagram post. Please open this URL in a new tab (you may need to log in to instagram), then use the ASSISTANT FOR CURRENT PAGE button to retry.	Temp	Temp	Temp	فشل المساعد في استرداد منشور انستغرام هذا. يرجى فتح عنوان URL هذا في علامة تبويب جديدة (قد تحتاج إلى تسجيل الدخول إلى انستغرام) ، ثم استخدام زر مساعد للصفحة الحالية لإعادة المحاولة.
+extracted_topics	Extracted Topics	Temp	Temp	Temp	Temp
+news_topic_tooltip	<b>What is this?</b></br>The text has been sent to a text processing tool designed to identify common topics in news articles. The topics identified with a confidence score above a certain threshold are displayed here. For more information, see: <a href="https://gatenlp.github.io/we-verify-app-assistant/supported-tools" target="_blank" rel="noopener noreferrer">this page</a>	Temp	Temp	Temp	Temp
