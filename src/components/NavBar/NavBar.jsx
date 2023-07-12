@@ -862,10 +862,10 @@ const NavBar = () => {
       tsvPrefix: "archiving",
       path: "archive",
       pathGroup: "TOOL",
-      type: "other",
+      type: keyword("navbar_category_other"),
       typeId: 5,
-      icons: ["new", "lock"],
-      toolRestrictions: ["lock"],
+      icons: ["experimental", "new", "lock"],
+      toolRestrictions: ["lock", "beta"],
     },
     {
       id: 19,
@@ -1278,7 +1278,7 @@ const NavBar = () => {
   };
 
   const drawerItemsOtherTools = drawerItems.filter(
-    (item) => item.type === "other",
+    (item) => item.type === keyword("navbar_category_other"),
   );
   const [openListOtherTools, setOpenListOtherTools] = useState(false);
   const [classBorderOtherTools, setClassBorderOtherTools] = useState(null);
