@@ -15,7 +15,7 @@ import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 const DbkfTextResults = () => {
   const keyword = useLoadLanguage(
     "components/NavItems/tools/Assistant.tsv",
-    tsv
+    tsv,
   );
   const dbkfTextMatch = useSelector((state) => state.assistant.dbkfTextMatch);
 

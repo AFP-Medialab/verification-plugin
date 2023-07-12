@@ -31,7 +31,7 @@ const About = () => {
   const currentLang = useSelector((state) => state.language);
   const humanRights = useSelector((state) => state.humanRightsCheckBox);
   const interactiveExplanation = useSelector(
-    (state) => state.interactiveExplanation
+    (state) => state.interactiveExplanation,
   );
   const cookiesUsage = useSelector((state) => state.cookies.active);
   const gaUsage = useSelector((state) => state.cookies.analytics);

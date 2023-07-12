@@ -11,7 +11,7 @@ export const useAnalysisWrapper = (
   apiUrl,
   processUrl,
   keyword,
-  isLoading
+  isLoading,
 ) => {
   const assistantEndpoint = process.env.REACT_APP_ASSISTANT_URL;
   const dispatch = useDispatch();
@@ -70,7 +70,7 @@ export const useAnalysisWrapper = (
                     notification: false,
                     loading: processing,
                     image: responseImg.data.images[0],
-                  })
+                  }),
                 );
               })
               .catch((error) => {
@@ -82,7 +82,7 @@ export const useAnalysisWrapper = (
                     notification: false,
                     loading: processing,
                     image: null,
-                  })
+                  }),
                 );
               });
           } else {
@@ -93,7 +93,7 @@ export const useAnalysisWrapper = (
                 notification: false,
                 loading: processing,
                 image: null,
-              })
+              }),
             );
           }
         }

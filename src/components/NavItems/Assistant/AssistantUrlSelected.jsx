@@ -26,7 +26,7 @@ const AssistantUrlSelected = (props) => {
   const dispatch = useDispatch();
   const keyword = useLoadLanguage(
     "components/NavItems/tools/Assistant.tsv",
-    tsv
+    tsv,
   );
 
   //form states
@@ -46,7 +46,7 @@ const AssistantUrlSelected = (props) => {
     "page assistant",
     formInput,
     null,
-    url
+    url,
   );
 
   const handleSubmissionURL = () => {

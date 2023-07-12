@@ -116,11 +116,11 @@ const TwitterSna = () => {
   const cardClasses = myCardStyles();
   const keyword = useLoadLanguage(
     "components/NavItems/tools/TwitterSna.tsv",
-    tsv
+    tsv,
   );
   const keywordAllTools = useLoadLanguage(
     "components/NavItems/tools/Alltools.tsv",
-    tsvAllTools
+    tsvAllTools,
   );
 
   const request = useSelector((state) => state.twitterSna.request);
@@ -137,7 +137,7 @@ const TwitterSna = () => {
   const langPage = useSelector((state) => state.language);
   // Authentication Redux state
   const userAuthenticated = useSelector(
-    (state) => state.userSession && state.userSession.userAuthenticated
+    (state) => state.userSession && state.userSession.userAuthenticated,
   );
 
   const dispatch = useDispatch();
@@ -148,24 +148,24 @@ const TwitterSna = () => {
       ? request && request.keywordList
         ? request.keywordList.join(" ")
         : ""
-      : ""
+      : "",
   );
 
   const [keyWordsAny, setKeywordsAny] = useState(
-    request && request.keywordAnyList ? request.keywordAnyList.join(" ") : ""
+    request && request.keywordAnyList ? request.keywordAnyList.join(" ") : "",
   );
 
   const [keyWordsError, setKeyWordsError] = useState(false);
   const [keyWordsAnyError, setKeyWordsAnyError] = useState(false);
   const [bannedWords, setBannedWords] = useState(
-    request && request.bannedWords ? request.bannedWords.join(" ") : ""
+    request && request.bannedWords ? request.bannedWords.join(" ") : "",
   );
   const [usersInput, setUsersInput] = useState(
     userAuthenticated
       ? request && request.userList
         ? request.userList.join(" ")
         : ""
-      : ""
+      : "",
   );
   const [since, setSince] = useState(null);
 
@@ -182,14 +182,14 @@ const TwitterSna = () => {
       ? request && request.lang
         ? "lang_" + request.lang
         : "lang_all"
-      : "lang_all"
+      : "lang_all",
   );
   const [openLangInput, setLangInputOpen] = React.useState(false);
   const [filters, setFilers] = useState(
-    request && request.media ? request.media : "none"
+    request && request.media ? request.media : "none",
   );
   const [verifiedUsers, setVerifiedUsers] = useState(
-    request && request.verified ? request.verified : false
+    request && request.verified ? request.verified : false,
   );
   const [localTime, setLocalTime] = useState("true");
 
@@ -238,7 +238,7 @@ const TwitterSna = () => {
     localTimeP,
     langInputP,
     filtersP,
-    verifiedUsersP
+    verifiedUsersP,
   ) => {
     //Creating Request Object.
     const removeQuotes = (list) => {
@@ -260,7 +260,7 @@ const TwitterSna = () => {
     let trimedBannedWords = null;
     if (!_.isNil(bannedWordsP) && bannedWordsP.trim() !== "")
       trimedBannedWords = removeQuotes(
-        bannedWordsP.trim().match(/("[^"]+"|[^"\s]+)/g)
+        bannedWordsP.trim().match(/("[^"]+"|[^"\s]+)/g),
       );
 
     const newFrom = localTimeP === "false" ? convertToGMT(sinceP) : sinceP;
@@ -304,7 +304,7 @@ const TwitterSna = () => {
       localTime,
       langInput,
       filters,
-      verifiedUsers
+      verifiedUsers,
     );
   };
 
@@ -397,11 +397,11 @@ const TwitterSna = () => {
     JSON.stringify(submittedRequest),
     client_id,
     submittedRequest,
-    uid
+    uid,
   );
   // const [submittedRequest, setSubmittedRequest] = useState(null);
   const [submittedRequest, setSubmittedRequest] = useState(
-    userAuthenticated ? null : makeRequest()
+    userAuthenticated ? null : makeRequest(),
   );
   useTwitterSnaRequest(submittedRequest);
 
@@ -415,56 +415,56 @@ const TwitterSna = () => {
           ? urlObj.request.bannedWords
             ? urlObj.request.bannedWords.join(" ")
             : ""
-          : ""
+          : "",
       );
       setUsersInput(
         userAuthenticated
           ? urlObj.request.userList
             ? urlObj.request.userList.join(" ")
             : ""
-          : ""
+          : "",
       );
       setSince(
         userAuthenticated
           ? urlObj.request.from
             ? urlObj.request.from
             : null
-          : null
+          : null,
       );
       setUntil(
         userAuthenticated
           ? urlObj.request.until
             ? urlObj.request.until
             : null
-          : null
+          : null,
       );
       setLocalTime(
         userAuthenticated
           ? urlObj.request.localTime
             ? urlObj.request.localTime
             : "true"
-          : "true"
+          : "true",
       );
       setLangInput(
         userAuthenticated
           ? urlObj.request.lang
             ? "lang_" + urlObj.request.lang
             : "lang_all"
-          : "lang_all"
+          : "lang_all",
       );
       setFilers(
         userAuthenticated
           ? urlObj.request.media
             ? urlObj.request.media
             : "none"
-          : "none"
+          : "none",
       );
       setVerifiedUsers(
         userAuthenticated
           ? urlObj.request.verified
             ? urlObj.request.verified
             : "false"
-          : "false"
+          : "false",
       );
 
       const newSubmittedRequest = makeRequestParams(
@@ -488,7 +488,7 @@ const TwitterSna = () => {
         "true",
         userAuthenticated ? "lang_all" : "lang_all",
         "none",
-        "false"
+        "false",
       );
 
       setSubmittedRequest(newSubmittedRequest);
@@ -513,7 +513,7 @@ const TwitterSna = () => {
         "true",
         userAuthenticated ? "lang_all" : "lang_en",
         "none",
-        "false"
+        "false",
       );
       setSubmittedRequest(newSubmittedRequest);
     }
@@ -1014,7 +1014,7 @@ const TwitterSna = () => {
                             id="standard-full-width"
                             label={keyword("twitter_sna_user")}
                             placeholder={keyword(
-                              "twitter_sna_placholder_tweetedby"
+                              "twitter_sna_placholder_tweetedby",
                             )}
                             fullWidth
                             variant="outlined"

@@ -35,11 +35,11 @@ const Keyframes = () => {
   const classes = useMyStyles();
   const keyword = useLoadLanguage(
     "components/NavItems/tools/Keyframes.tsv",
-    tsv
+    tsv,
   );
   const keywordAllTools = useLoadLanguage(
     "components/NavItems/tools/Alltools.tsv",
-    tsvAllTools
+    tsvAllTools,
   );
 
   // state used to toggle localFile view
@@ -55,7 +55,7 @@ const Keyframes = () => {
   const resultData = useSelector((state) => state.keyframes.result);
   const isLoading = useSelector((state) => state.keyframes.loading);
   const isLoadingSimilarity = useSelector(
-    (state) => state.keyframes.similarityLoading
+    (state) => state.keyframes.similarityLoading,
   );
   //const message = useSelector(state => state.keyframes.message);
   const video_id = useSelector((state) => state.keyframes.video_id);
@@ -72,7 +72,7 @@ const Keyframes = () => {
     "video key frame analysis",
     input.trim(),
     null,
-    submittedUrl
+    submittedUrl,
   );
 
   //human right
@@ -131,7 +131,7 @@ const Keyframes = () => {
   const [classButtonLocal, setClassButtonLocal] = useState(null);
 
   const [classIconURL, setClassIconURL] = useState(
-    classes.bigButtonIconSelectted
+    classes.bigButtonIconSelectted,
   );
   const [classIconLocal, setClassIconLocal] = useState(classes.bigButtonIcon);
 

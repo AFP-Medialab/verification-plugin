@@ -19,7 +19,7 @@ const useGeolacate = (url, processURL, keyword) => {
           caa_localtion_base_url +
             "geolocate?image_url=" +
             url +
-            "&use_gradcam=0"
+            "&use_gradcam=0",
         )
         .then((response) => {
           console.log(response.data);
@@ -29,7 +29,7 @@ const useGeolacate = (url, processURL, keyword) => {
                 urlImage: url,
                 result: response.data.predictions,
                 loading: false,
-              })
+              }),
             );
           } else {
             handleError("forensic_error_" + response.data.status);

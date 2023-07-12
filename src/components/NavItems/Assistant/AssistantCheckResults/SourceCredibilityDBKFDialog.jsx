@@ -21,7 +21,7 @@ const SourceCredibilityDBKFDialog = (props) => {
   //central
   const keyword = useLoadLanguage(
     "components/NavItems/tools/Assistant.tsv",
-    tsv
+    tsv,
   );
   const [open, setOpen] = useState(false);
 

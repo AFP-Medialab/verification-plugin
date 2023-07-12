@@ -186,7 +186,7 @@ const CommentsPanel = (props) => {
                       componentDecorator={(
                         decoratedHref,
                         decoratedText,
-                        key
+                        key,
                       ) => (
                         <a target="blank" href={decoratedHref} key={key}>
                           {decoratedText}

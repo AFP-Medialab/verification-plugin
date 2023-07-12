@@ -51,7 +51,7 @@ const PopUp = () => {
         if (results) {
           window.localStorage.setItem("instagram_result", results);
         }
-      }
+      },
     );
   };
 

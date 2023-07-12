@@ -11,7 +11,7 @@ import tsv from "../../../LocalDictionary/components/NavItems/defaultLanguage.ts
 const DefaultLanguageDialog = (props) => {
   const keyword = useLoadLanguage(
     "components/NavItems/defaultLanguage.tsv",
-    tsv
+    tsv,
   );
   const { open, onCancel, onClose } = props;
 

@@ -33,11 +33,11 @@ const VideoRights = () => {
   const classes = useMyStyles();
   const keyword = useLoadLanguage(
     "components/NavItems/tools/VideoRights.tsv",
-    tsv
+    tsv,
   );
   const keywordAllTools = useLoadLanguage(
     "components/NavItems/tools/Alltools.tsv",
-    tsvAlltools
+    tsvAlltools,
   );
 
   const resultUrl = useSelector((state) => state.videoRights.url);
@@ -61,7 +61,7 @@ const VideoRights = () => {
     input,
     client_id,
     submitted,
-    uid
+    uid,
   );
 
   const submitForm = () => {

@@ -26,7 +26,7 @@ const AssistantIntroduction = (props) => {
   const dispatch = useDispatch();
   const keyword = useLoadLanguage(
     "components/NavItems/tools/Assistant.tsv",
-    tsv
+    tsv,
   );
 
   const [classButtonURL, setClassButtonURL] = useState(null);
@@ -55,7 +55,7 @@ const AssistantIntroduction = (props) => {
   //form states
   const urlMode = useSelector((state) => state.assistant.urlMode);
   const imageVideoSelected = useSelector(
-    (state) => state.assistant.imageVideoSelected
+    (state) => state.assistant.imageVideoSelected,
   );
 
   if (urlMode && classButtonURL !== classes.bigButtonDivSelectted) {

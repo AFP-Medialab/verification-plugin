@@ -74,7 +74,7 @@ export const setInputSourceCredDetails = (
   mixedSC,
   inputSCLoading,
   inputSCDone,
-  inputSCFail
+  inputSCFail,
 ) => {
   return {
     type: "SET_INPUT_SC_DETAILS",
@@ -102,7 +102,7 @@ export const setDbkfTextMatchDetails = (
   textMatch,
   textMatchLoading,
   textMatchDone,
-  textMatchFail
+  textMatchFail,
 ) => {
   return {
     type: "SET_DBKF_TEXT_MATCH_DETAILS",
@@ -119,7 +119,7 @@ export const setDbkfImageMatchDetails = (
   imageMatch,
   dbkfMediaMatchLoading,
   dbkfMediaMatchDone,
-  dbkfMediaMatchFail
+  dbkfMediaMatchFail,
 ) => {
   return {
     type: "SET_DBKF_IMAGE_MATCH_DETAILS",
@@ -136,7 +136,7 @@ export const setDbkfVideoMatchDetails = (
   videoMatch,
   dbkfMediaMatchLoading,
   dbkfMediaMatchDone,
-  dbkfMediaMatchFail
+  dbkfMediaMatchFail,
 ) => {
   return {
     type: "SET_DBKF_VIDEO_MATCH_DETAILS",
@@ -166,7 +166,7 @@ export const setNeDetails = (
   neResultCount,
   neLoading,
   neDone,
-  neFail
+  neFail,
 ) => {
   return {
     type: "SET_NE_DETAILS",

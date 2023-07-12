@@ -39,7 +39,7 @@ const useImageTreatment = (mediaUrl, keyword) => {
                 notification: false,
                 loading: false,
                 isImage: true,
-              })
+              }),
             );
           } else
             dispatch(
@@ -49,7 +49,7 @@ const useImageTreatment = (mediaUrl, keyword) => {
                 notification: false,
                 loading: false,
                 isImage: true,
-              })
+              }),
             );
         });
       };

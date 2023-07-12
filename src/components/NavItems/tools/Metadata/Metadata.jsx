@@ -42,11 +42,11 @@ const Metadata = ({ mediaType }) => {
   const classes = useMyStyles();
   const keyword = useLoadLanguage(
     "components/NavItems/tools/Metadata.tsv",
-    tsv
+    tsv,
   );
   const keywordAllTools = useLoadLanguage(
     "components/NavItems/tools/Alltools.tsv",
-    tsvAllTools
+    tsvAllTools,
   );
 
   const resultUrl = useSelector((state) => state.metadata.url);
@@ -56,7 +56,7 @@ const Metadata = ({ mediaType }) => {
   const uid = session && session.user ? session.user.email : null;
 
   const [radioImage, setRadioImage] = useState(
-    mediaType === "video" ? false : true
+    mediaType === "video" ? false : true,
   );
   const [input, setInput] = useState(resultUrl ? resultUrl : "");
   const [imageUrl, setImageurl] = useState(null);
@@ -74,7 +74,7 @@ const Metadata = ({ mediaType }) => {
     input,
     client_id,
     imageUrl,
-    uid
+    uid,
   );
   useTrackEvent(
     "submission",
@@ -83,7 +83,7 @@ const Metadata = ({ mediaType }) => {
     input,
     client_id,
     videoUrl,
-    uid
+    uid,
   );
   const submitUrl = () => {
     if (input) {

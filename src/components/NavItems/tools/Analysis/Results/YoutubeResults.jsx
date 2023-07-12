@@ -34,7 +34,7 @@ const YoutubeResults = (props) => {
   const classes = useMyStyles();
   const keyword = useLoadLanguage(
     "components/NavItems/tools/Analysis.tsv",
-    tsv
+    tsv,
   );
 
   const reverseSearch = async (website) => {
@@ -243,7 +243,7 @@ const YoutubeResults = (props) => {
                     color={"primary"}
                     onClick={async () =>
                       await reverseSearch(
-                        SEARCH_ENGINE_SETTINGS.GOOGLE_SEARCH.NAME
+                        SEARCH_ENGINE_SETTINGS.GOOGLE_SEARCH.NAME,
                       )
                     }
                   >
@@ -255,7 +255,7 @@ const YoutubeResults = (props) => {
                     color={"primary"}
                     onClick={async () =>
                       await reverseSearch(
-                        SEARCH_ENGINE_SETTINGS.YANDEX_SEARCH.NAME
+                        SEARCH_ENGINE_SETTINGS.YANDEX_SEARCH.NAME,
                       )
                     }
                   >
@@ -267,7 +267,7 @@ const YoutubeResults = (props) => {
                     color={"primary"}
                     onClick={async () =>
                       await reverseSearch(
-                        SEARCH_ENGINE_SETTINGS.TINEYE_SEARCH.NAME
+                        SEARCH_ENGINE_SETTINGS.TINEYE_SEARCH.NAME,
                       )
                     }
                   >
@@ -281,7 +281,7 @@ const YoutubeResults = (props) => {
                         color={"primary"}
                         onClick={() =>
                           window.open(
-                            report["verification_cues"]["twitter_search_url"]
+                            report["verification_cues"]["twitter_search_url"],
                           )
                         }
                       >

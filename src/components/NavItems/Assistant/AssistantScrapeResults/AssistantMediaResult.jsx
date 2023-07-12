@@ -35,17 +35,17 @@ const AssistantMediaResult = () => {
   const dispatch = useDispatch();
   const keyword = useLoadLanguage(
     "components/NavItems/tools/Assistant.tsv",
-    tsv
+    tsv,
   );
 
   // assistant media states
   const processUrl = useSelector((state) => state.assistant.processUrl);
   const urlMode = useSelector((state) => state.assistant.urlMode);
   const resultProcessType = useSelector(
-    (state) => state.assistant.processUrlType
+    (state) => state.assistant.processUrlType,
   );
   const singleMediaPresent = useSelector(
-    (state) => state.assistant.singleMediaPresent
+    (state) => state.assistant.singleMediaPresent,
   );
   const imageList = useSelector((state) => state.assistant.imageList);
   const videoList = useSelector((state) => state.assistant.videoList);
@@ -53,19 +53,19 @@ const AssistantMediaResult = () => {
   // third party tool states
   //const ocrLoading = useSelector(state=>state.assistant.ocrLoading)
   const dbkfMediaMatchLoading = useSelector(
-    (state) => state.assistant.dbkfMediaMatchLoading
+    (state) => state.assistant.dbkfMediaMatchLoading,
   );
   const dbkfImageMatch = useSelector((state) => state.assistant.dbkfImageMatch);
   const dbkfVideoMatch = useSelector((state) => state.assistant.dbkfVideoMatch);
 
   const warningExpanded = useSelector(
-    (state) => state.assistant.warningExpanded
+    (state) => state.assistant.warningExpanded,
   );
   const resultIsImage = resultProcessType === CONTENT_TYPE.IMAGE;
 
   // local control state
   const [expandMedia, setExpandMedia] = useState(
-    !singleMediaPresent || processUrl == null
+    !singleMediaPresent || processUrl == null,
   );
 
   // select the correct media to process, then load actions possible

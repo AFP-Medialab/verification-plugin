@@ -13,7 +13,7 @@ export const setAnalysisResult = createAction("SET_ANALYSIS_RESULT");
 };*/
 
 export const setAnalysisComments = createAction(
-  "SET_ANALYSIS_PAGINATION_COMMENTS"
+  "SET_ANALYSIS_PAGINATION_COMMENTS",
 );
 /*export const setAnalysisComments = (data) => {
     return {
@@ -25,7 +25,7 @@ export const setAnalysisComments = createAction(
 };*/
 
 export const setAnalysisLinkComments = createAction(
-  "SET_ANALYSIS_PAGINATION_LINK_COMMENTS"
+  "SET_ANALYSIS_PAGINATION_LINK_COMMENTS",
 );
 
 /*export const setAnalysisLinkComments = (data) => {
@@ -38,7 +38,7 @@ export const setAnalysisLinkComments = createAction(
 };*/
 
 export const setAnalysisVerifiedComments = createAction(
-  "SET_ANALYSIS_PAGINATION_VERIFIED_COMMENTS"
+  "SET_ANALYSIS_PAGINATION_VERIFIED_COMMENTS",
 );
 
 /*export const setAnalysisVerifiedComments = (data) => {

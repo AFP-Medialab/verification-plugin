@@ -28,7 +28,7 @@ import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 const AssistantNEResult = () => {
   const keyword = useLoadLanguage(
     "components/NavItems/tools/Assistant.tsv",
-    tsv
+    tsv,
   );
   const classes = useMyStyles();
 

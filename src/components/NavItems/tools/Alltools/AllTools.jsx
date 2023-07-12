@@ -51,19 +51,19 @@ const AllTools = (props) => {
   const classes = useMyStyles();
   const keyword = useLoadLanguage(
     "components/NavItems/tools/Alltools.tsv",
-    tsv
+    tsv,
   );
   const keywordNavbar = useLoadLanguage("components/NavBar.tsv", tsv);
   const keywordWarning = useLoadLanguage(
     "components/Shared/OnWarningInfo.tsv",
-    tsvWarning
+    tsvWarning,
   );
 
   const tools = props.tools;
   const [videoUrl, setVideoUrl] = useState(null);
 
   const userAuthenticated = useSelector(
-    (state) => state.userSession && state.userSession.userAuthenticated
+    (state) => state.userSession && state.userSession.userAuthenticated,
   );
   const [openAlert, setOpenAlert] = React.useState(false);
   const currentLang = useSelector((state) => state.language);
@@ -102,6 +102,7 @@ const AllTools = (props) => {
   const toolsImages = [];
   const toolsSearch = [];
   const toolsData = [];
+  const otherTools = [];
 
   tools.forEach((value) => {
     if (value.type === keywordNavbar("navbar_category_video")) {
@@ -118,6 +119,10 @@ const AllTools = (props) => {
 
     if (value.type === keywordNavbar("navbar_category_data")) {
       toolsData.push(value);
+    }
+
+    if (value.type === "other") {
+      otherTools.push(value);
     }
   });
 
@@ -434,7 +439,7 @@ const AllTools = (props) => {
                           process.env.REACT_APP_TSNA_SERVER +
                             "csvSna?lang=" +
                             currentLang,
-                          "_blank"
+                          "_blank",
                         )
                       }
                     >

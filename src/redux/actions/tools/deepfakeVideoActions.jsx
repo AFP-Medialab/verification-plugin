@@ -16,7 +16,7 @@ export const setDeepfakeType = createAction("SET_DEEPFAKE_VIDEO_TYPE");
 };*/
 
 export const setDeepfakeLoadingVideo = createAction(
-  "SET_DEEPFAKE_VIDEO_LOADING"
+  "SET_DEEPFAKE_VIDEO_LOADING",
 );
 /*export const setDeepfakeLoadingVideo = (loading) => {
     return {

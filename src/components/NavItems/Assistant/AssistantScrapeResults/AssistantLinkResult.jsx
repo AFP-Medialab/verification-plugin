@@ -20,7 +20,7 @@ const AssistantLinkResult = () => {
   const classes = useMyStyles();
   const keyword = useLoadLanguage(
     "components/NavItems/tools/Assistant.tsv",
-    tsv
+    tsv,
   );
 
   const linkList = useSelector((state) => state.assistant.linkList);

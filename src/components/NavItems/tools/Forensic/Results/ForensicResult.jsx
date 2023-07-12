@@ -109,18 +109,18 @@ const ForensicResults = (props) => {
   const classes = useMyStyles();
   const keyword = useLoadLanguage(
     "components/NavItems/tools/Forensic.tsv",
-    tsv
+    tsv,
   );
   const keywordWarning = useLoadLanguage(
     "components/Shared/OnWarningInfo.tsv",
-    tsvWarning
+    tsvWarning,
   );
   const results = props.result.filters;
   //const masks = props.masksData;
   //console.log(results);
 
   const userAuthenticated = useSelector(
-    (state) => state.userSession && state.userSession.userAuthenticated
+    (state) => state.userSession && state.userSession.userAuthenticated,
   );
   const [openAlert, setOpenAlert] = React.useState(false);
 
@@ -259,7 +259,7 @@ const ForensicResults = (props) => {
       }
 
       return filter;
-    })
+    }),
   );
 
   //onsole.log(filters);
@@ -346,7 +346,7 @@ const ForensicResults = (props) => {
     displayFilterHover(
       filters.current.find((x) => x.id === filter).mask[
         filters.current.find((x) => x.id === filter).currentDisplayed
-      ]
+      ],
     );
   }
 
@@ -440,12 +440,12 @@ const ForensicResults = (props) => {
       ) {
         setTextCagiPopover(keyword("forensic_card_cagiNormal"));
         setTitleCagiPopover(
-          filters.current.find((x) => x.id === "cagi_report").name[0]
+          filters.current.find((x) => x.id === "cagi_report").name[0],
         );
       } else {
         setTextCagiPopover(keyword("forensic_card_cagiInversed"));
         setTitleCagiPopover(
-          filters.current.find((x) => x.id === "cagi_report").name[1]
+          filters.current.find((x) => x.id === "cagi_report").name[1],
         );
       }
       setAnchorFilterExplanation(event.currentTarget);
@@ -825,42 +825,42 @@ const ForensicResults = (props) => {
                     if (valueTab === 0) {
                       filtersTab = filters.current.slice(
                         idStartCompression,
-                        idStartNoise
+                        idStartNoise,
                       );
                       textDescription = keyword(
-                        "forensic_family_compression_description"
+                        "forensic_family_compression_description",
                       );
                       textLook = keyword("forensic_family_compression_look");
                       textIgnore = keyword(
-                        "forensic_family_compression_ignore"
+                        "forensic_family_compression_ignore",
                       );
                     } else if (valueTab === 1) {
                       filtersTab = filters.current.slice(
                         idStartNoise,
-                        idStartDeepLearning
+                        idStartDeepLearning,
                       );
                       textDescription = keyword(
-                        "forensic_family_noise_description"
+                        "forensic_family_noise_description",
                       );
                       textLook = keyword("forensic_family_noise_look");
                       textIgnore = keyword("forensic_family_noise_ignore");
                     } else if (valueTab === 2) {
                       filtersTab = filters.current.slice(
                         idStartDeepLearning,
-                        idStartCloning
+                        idStartCloning,
                       );
                       textDescription = keyword(
-                        "forensic_family_ai_description"
+                        "forensic_family_ai_description",
                       );
                       textLook = keyword("forensic_family_ai_look");
                       textIgnore = keyword("forensic_family_ai_ignore");
                     } else {
                       filtersTab = filters.current.slice(
                         idStartCloning,
-                        idStartLenses
+                        idStartLenses,
                       );
                       textDescription = keyword(
-                        "forensic_family_cloning_description"
+                        "forensic_family_cloning_description",
                       );
                       textLook = keyword("forensic_family_cloning_look");
                       textIgnore = keyword("forensic_family_cloning_ignore");
@@ -893,7 +893,7 @@ const ForensicResults = (props) => {
                                     className={classes.imageOverlayWrapper}
                                     onMouseOver={() =>
                                       displayFilterHover(
-                                        value.mask[value.currentDisplayed]
+                                        value.mask[value.currentDisplayed],
                                       )
                                     }
                                     onMouseLeave={hideFilterHover}
@@ -1028,7 +1028,7 @@ const ForensicResults = (props) => {
                                           onClick={(e) =>
                                             handleOpenFilterExplanation(
                                               e,
-                                              "cagi"
+                                              "cagi",
                                             )
                                           }
                                         >
@@ -1044,7 +1044,7 @@ const ForensicResults = (props) => {
                                           onClick={(e) =>
                                             handleOpenFilterExplanation(
                                               e,
-                                              value.id
+                                              value.id,
                                             )
                                           }
                                         >

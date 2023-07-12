@@ -43,11 +43,11 @@ const KeyFramesResults = (props) => {
   const classes = useMyStyles();
   const keyword = useLoadLanguage(
     "components/NavItems/tools/Keyframes.tsv",
-    tsv
+    tsv,
   );
   const keywordHelp = useLoadLanguage(
     "components/Shared/OnClickInfo.tsv",
-    tsv2
+    tsv2,
   );
   const dispatch = useDispatch();
 
@@ -59,7 +59,7 @@ const KeyFramesResults = (props) => {
   const similarityResults = useSelector((state) => state.keyframes.similarity);
   //const isLoading = useSelector(state => state.keyframes.loading);
   const isLoadingSimilarity = useSelector(
-    (state) => state.keyframes.similarityLoading
+    (state) => state.keyframes.similarityLoading,
   );
 
   const theme = createTheme({
@@ -99,7 +99,7 @@ const KeyFramesResults = (props) => {
         url,
         true,
         SEARCH_ENGINE_SETTINGS.GOOGLE_SEARCH.NAME,
-        false
+        false,
       );
   };
   const zoom = (zoom) => {
