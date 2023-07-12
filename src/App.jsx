@@ -67,7 +67,7 @@ const App = () => {
   const locationSearchStart = window.location.href.lastIndexOf("?");
   if (locationSearchStart > 0) {
     const locationSearch = window.location.href.substring(
-      locationSearchStart + 1
+      locationSearchStart + 1,
     );
     // console.log("Query params: ", locationSearch);
     if (locationSearch) {
