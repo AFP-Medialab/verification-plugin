@@ -373,6 +373,11 @@ function* handleAssistantScrapeCall(action) {
     return;
   }
 
+  // if urlType is TELEGRAM, check formatting
+  if (urlType === KNOWN_LINKS.TELEGRAM) {
+    inputUrl = formatTelegramLink(inputUrl);
+  }
+
   try {
     let scrapeResult = null;
     if (decideWhetherToScrape(urlType, contentType, inputUrl)) {
@@ -443,6 +448,27 @@ function* extractFromLocalStorage(instagram_result, inputUrl, urlType) {
   yield put(setInputUrl(inputUrl, urlType));
   yield put(setScrapedData(text_result, null, [], image_result, video_result));
   yield put(setAssistantLoading(false));
+}
+
+/**
+ * Replaces "t.me/" with "t.me/s/" in telegram links if required.
+ * @param {String} url
+ * @return {String} url
+ */
+function formatTelegramLink(url) {
+  let urlType = matchPattern(url, KNOWN_LINK_PATTERNS);
+  if (urlType !== KNOWN_LINKS.TELEGRAM) {
+    throw new Error(
+      "formatTelegramLink: Expected telegram link but got " + urlType
+    );
+  }
+
+  // this pattern only matches telegram links of the format t.me/{channel}/{id} and NOT t.me/s/{channel}/{id}
+  const nonSPattern = "^(?:https:/{2})?(?:www.)?t.me/(?!s/)\\w*/\\d*";
+
+  return url.match(nonSPattern) !== null
+    ? url.replace("t.me/", "t.me/s/")
+    : url;
 }
 
 /**
