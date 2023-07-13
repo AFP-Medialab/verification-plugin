@@ -1,6 +1,7 @@
+import React, { useState } from "react";
+
 import {
   Box,
-  TextField,
   Card,
   Grid,
   Stack,
@@ -10,43 +11,24 @@ import {
   Button,
 } from "@mui/material";
 
-import React, { useState } from "react";
 import LoadingButton from "@mui/lab/LoadingButton";
-import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import ArchiveIcon from "@mui/icons-material/Archive";
 import FolderOpenIcon from "@mui/icons-material/FolderOpen";
 
 import ArchiveTable from "./components/archiveTable";
+import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
+import useAuthenticatedRequest from "../../../Shared/Authentication/useAuthenticatedRequest";
+import { prettifyLargeString } from "./utils";
 
-//TODO: Matomo analyics
-
-// Only WACZ files
-
-function createData(archivedUrl, originalUrl) {
-  return { archivedUrl, originalUrl };
-}
-
-const rows = [
-  createData("https://test1.com", "https://original-test.com"),
-  createData("https://test2.com", "https://original-test.com"),
-  createData(
-    "https://niwvknoyyiblkqhetawtuvojkngxht1e.com",
-    "https://niwvknoyyiblkqhetawtuvojkngxhtue.com",
-  ),
-  createData(
-    "https://test4.com",
-    "https://niwvknoyyiblkqhetawtuvojkngxhtue.com",
-  ),
-  createData(
-    "https://niwvknoyyiblkqhetawtuvojkngxhtue.com",
-    "https://original-test.com",
-  ),
-];
+//TODO: Matomo analytics
+// UI for long strings
 
 const Archive = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const [input, setInput] = useState("");
+
+  const [fileToUpload, setFileToUpload] = useState();
 
   const [archiveLinks, setArchiveLinks] = useState([]);
 
@@ -54,80 +36,168 @@ const Archive = () => {
 
   const [errorMessage, setErrorMessage] = useState("");
 
-  const isFileAWaczFile = (fileUrl) => {
-    return fileUrl.split(".").pop() === "wacz";
+  const authenticatedRequest = useAuthenticatedRequest();
+
+  const isFileAWaczFile = (fileName) => {
+    return fileName.split(".").pop() === "wacz";
   };
 
-  const handleSubmit = (e) => {
+  const fetchArchivedUrls = async (waczFileUrl) => {
+    const fetchUrl = process.env.ARCHIVE_BACKEND;
+
+    if (!waczFileUrl) {
+      throw new Error("[fetchArchivedUrls] Error: waczFileUrl is not defined");
+    }
+
+    try {
+      let data = new FormData();
+      data.append("file", waczFileUrl);
+
+      console.log(data);
+
+      const axiosConfig = {
+        method: "post",
+        url: fetchUrl,
+        data: data,
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      };
+
+      const response = await authenticatedRequest(axiosConfig);
+
+      console.log(response);
+
+      return response;
+    } catch (error) {
+      console.error(error);
+      throw new Error(error);
+    }
+  };
+
+  const handleSubmit = async () => {
+    // Reset states
     setErrorMessage("");
     setHasArchiveBeenCreated(false);
-    setIsLoading(!isLoading);
 
-    console.log(input.split(".").pop());
+    setIsLoading(true);
 
-    if (!isFileAWaczFile(input)) {
+    if (!isFileAWaczFile(fileToUpload.name)) {
       setErrorMessage("File error — The file is not a .wacz file");
       setIsLoading(false);
       setHasArchiveBeenCreated(false);
-    } else {
-      setTimeout(() => {
-        setArchiveLinks(["url1", "url2"]);
-        setIsLoading(false);
-        setHasArchiveBeenCreated(true);
-      }, 200);
+      return;
     }
+
+    let result;
+
+    try {
+      result = await fetchArchivedUrls(fileToUpload);
+    } catch (error) {
+      setErrorMessage(
+        "Upload error — An error happened with the file upload. Try with another file.",
+      );
+      setIsLoading(false);
+      setHasArchiveBeenCreated(false);
+      setInput("");
+      setArchiveLinks([]);
+      return;
+    }
+
+    if (!result) {
+      setErrorMessage(
+        "Upload error — An error happened wit the upload of the file. Try again or with another file.",
+      );
+      setIsLoading(false);
+      setHasArchiveBeenCreated(false);
+      return;
+    }
+
+    let results = [];
+
+    for (const page of Object.keys(result.data.pages)) {
+      let archivedUrl = result.data.pages[page].capture_url;
+      let originalUrl = result.data.pages[page].url;
+
+      results.push({ archivedUrl, originalUrl });
+    }
+
+    if (results === []) {
+      setErrorMessage(
+        "Upload error — An error happened wit the upload of the file. Try again or with another file.",
+      );
+      setIsLoading(false);
+      setHasArchiveBeenCreated(false);
+      return;
+    }
+
+    setArchiveLinks(results);
+    setIsLoading(false);
+    setHasArchiveBeenCreated(true);
+    setInput("");
+    return;
   };
 
   return (
     <div>
       <HeaderTool
-        name={"Archive"}
-        description={"Archive a link with Web Archive (Wayback Machine)"}
+        name={"Archiving"}
+        description={"Archive a .wacz file with Web Archive (Wayback Machine)"}
         icon={<ArchiveIcon sx={{ fill: "#00926c", width: 40, height: 40 }} />}
       />
       <Card>
         <Box p={3}>
           <form>
             <Stack spacing={4}>
-              <Grid container direction="row" spacing={3} alignItems="center">
-                <Grid item xs>
+              <Grid container direction="row" spacing={3} alignItems="start">
+                {/* <Grid item>
                   <TextField
                     disabled={isLoading}
                     id="standard-full-width"
-                    label={"wacz file to archive"}
+                    label={".wacz file to archive"}
                     placeholder={"my-example-file.wacz"}
                     fullWidth
                     value={input}
                     variant="outlined"
                     onChange={(e) => setInput(e.target.value)}
                   />
-                </Grid>
+                </Grid> */}
+
                 <Grid item>
-                  <Button startIcon={<FolderOpenIcon />}>
-                    <label htmlFor="fileInputMagnifier">Select file</label>
-                    <input
-                      id="fileInputMagnifier"
-                      type="file"
-                      hidden={true}
-                      onChange={(e) => {
-                        setInput(URL.createObjectURL(e.target.files[0]));
-                      }}
-                    />
-                  </Button>
-                </Grid>
-                <Grid item>
-                  <LoadingButton
-                    loading={isLoading}
-                    type="submit"
-                    variant="contained"
-                    color="primary"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      handleSubmit(e);
-                    }}
+                  <Stack
+                    direction="column"
+                    spacing={2}
+                    justifyContent="flex-start"
+                    alignItems="flex-start"
                   >
-                    {"Submit"}
-                  </LoadingButton>
+                    <Button variant="outlined" startIcon={<FolderOpenIcon />}>
+                      <label htmlFor="fileInputMagnifier">
+                        {input !== "" ? input : "Select a .wacz file"}
+                      </label>
+                      <input
+                        id="fileInputMagnifier"
+                        type="file"
+                        hidden={true}
+                        onChange={(e) => {
+                          setInput(prettifyLargeString(e.target.files[0].name));
+                          setFileToUpload(e.target.files[0]);
+                        }}
+                      />
+                    </Button>
+                    <LoadingButton
+                      loading={isLoading}
+                      disabled={!input}
+                      type="submit"
+                      variant="contained"
+                      color="primary"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handleSubmit(e);
+                      }}
+                    >
+                      {"Archive File"}
+                    </LoadingButton>
+                  </Stack>
                 </Grid>
               </Grid>
               <Box>
@@ -151,17 +221,25 @@ const Archive = () => {
                 {isLoading || archiveLinks.length === 0 ? (
                   <>
                     {isLoading && (
-                      <>
-                        <Skeleton variant="text" height={40} />
-                        <Skeleton variant="text" height={40} />
-                      </>
+                      <Fade in={isLoading} timeout={750}>
+                        <Box>
+                          <Alert severity="info">
+                            Loading... This can take up to a few minutes
+                          </Alert>
+                          <Box>
+                            <Skeleton variant="text" height={40} />
+                            <Skeleton variant="text" height={40} />
+                          </Box>
+                        </Box>
+                      </Fade>
                     )}
                   </>
                 ) : (
-                  <Box>
-                    <ArchiveTable rows={rows} />
-                    {/* <Typography variant="h5">Archived links</Typography> */}
-                  </Box>
+                  <Fade in={!isLoading} timeout={1000}>
+                    <Box>
+                      <ArchiveTable rows={archiveLinks} />
+                    </Box>
+                  </Fade>
                 )}
               </Box>
             </Stack>
@@ -171,4 +249,5 @@ const Archive = () => {
     </div>
   );
 };
+
 export default Archive;

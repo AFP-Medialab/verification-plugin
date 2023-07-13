@@ -15,6 +15,7 @@ import {
 
 import FileCopyIcon from "@mui/icons-material/FileCopy";
 import DoneIcon from "@mui/icons-material/Done";
+import { prettifyLargeString } from "../utils";
 
 export const ArchiveTable = (props) => {
   const [clicks, setClicks] = useState([]);
@@ -47,9 +48,7 @@ export const ArchiveTable = (props) => {
               <TableCell component="th" scope="row">
                 <Tooltip
                   title={
-                    clicks.includes(row.archivedUrl)
-                      ? "Copied!"
-                      : "Copy to clipboard"
+                    clicks.includes(row.archivedUrl) ? "Copied!" : "Copy link"
                   }
                 >
                   <IconButton
@@ -67,15 +66,13 @@ export const ArchiveTable = (props) => {
                   </IconButton>
                 </Tooltip>
                 <Link href={row.archivedUrl} target="_blank">
-                  {row.archivedUrl}
+                  {prettifyLargeString(row.archivedUrl)}
                 </Link>
               </TableCell>
               <TableCell>
                 <Tooltip
                   title={
-                    clicks.includes(row.archivedUrl)
-                      ? "Copied!"
-                      : "Copy to clipboard"
+                    clicks.includes(row.archivedUrl) ? "Copied!" : "Copy link"
                   }
                 >
                   <IconButton
@@ -93,7 +90,7 @@ export const ArchiveTable = (props) => {
                   </IconButton>
                 </Tooltip>
                 <Link href={row.originalUrl} target="_blank">
-                  {row.originalUrl}
+                  {prettifyLargeString(row.originalUrl)}
                 </Link>
               </TableCell>
             </TableRow>
