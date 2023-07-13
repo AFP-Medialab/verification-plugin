@@ -14,7 +14,7 @@ export const setAnalysisResult = createAction("SET_ANALYSIS_RESULT_IMAGE");
 };*/
 
 export const setAnalysisComments = createAction(
-  "SET_ANALYSIS_PAGINATION_COMMENTS_IMAGE"
+  "SET_ANALYSIS_PAGINATION_COMMENTS_IMAGE",
 );
 /*export const setAnalysisComments = (data) => {
     return {
@@ -26,7 +26,7 @@ export const setAnalysisComments = createAction(
 };*/
 
 export const setAnalysisLinkComments = createAction(
-  "SET_ANALYSIS_PAGINATION_LINK_COMMENTS_IMAGE"
+  "SET_ANALYSIS_PAGINATION_LINK_COMMENTS_IMAGE",
 );
 /*export const setAnalysisLinkComments = (data) => {
     return {
@@ -37,7 +37,7 @@ export const setAnalysisLinkComments = createAction(
     }
 };*/
 export const setAnalysisVerifiedComments = createAction(
-  "SET_ANALYSIS_PAGINATION_VERIFIED_COMMENTS_IMAGE"
+  "SET_ANALYSIS_PAGINATION_VERIFIED_COMMENTS_IMAGE",
 );
 /*export const setAnalysisVerifiedComments = (data) => {
     return {

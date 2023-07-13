@@ -43,11 +43,11 @@ const Analysis = () => {
   const classes = useMyStyles();
   const keyword = useLoadLanguage(
     "components/NavItems/tools/Analysis.tsv",
-    tsv
+    tsv,
   );
   const keywordAllTools = useLoadLanguage(
     "components/NavItems/tools/Alltools.tsv",
-    tsvAlltools
+    tsvAlltools,
   );
   const dispatch = useDispatch();
   const resultUrl = useSelector((state) => state.analysisImage.url);
@@ -64,7 +64,7 @@ const Analysis = () => {
   const [finalUrl, showFacebookIframe] = useGenerateApiUrl(
     serviceUrl,
     submittedUrl,
-    reprocess
+    reprocess,
   );
   useAnalysisWrapper(
     setAnalysisLoading,
@@ -73,7 +73,7 @@ const Analysis = () => {
     finalUrl,
     submittedUrl,
     keyword,
-    isLoading
+    isLoading,
   );
 
   const reprocessToggle = () => {
@@ -85,7 +85,7 @@ const Analysis = () => {
     "image caa analysis",
     input.trim(),
     client_id,
-    submittedUrl
+    submittedUrl,
   );
   const submitForm = () => {
     /*trackEvent(

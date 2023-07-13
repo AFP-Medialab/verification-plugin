@@ -28,7 +28,7 @@ const VideoRightsResults = (props) => {
   const dispatch = useDispatch();
   const keyword = useLoadLanguage(
     "components/NavItems/tools/VideoRights.tsv",
-    tsv
+    tsv,
   );
 
   const result = props.result;

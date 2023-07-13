@@ -16,7 +16,7 @@ export const toolEvent = (
   name,
   url,
   client_id,
-  uid = ""
+  uid = "",
 ) => {
   console.log("action_name ", action_name);
   let actions = {
@@ -40,7 +40,7 @@ export const trackEvent = (
   url,
   client_id,
   history = null,
-  uid = ""
+  uid = "",
 ) => {
   const pathname =
     history && history.location ? history.location.pathname : null;
@@ -79,7 +79,7 @@ export const trackPageView = (
   path,
   client_id,
   history = undefined,
-  uid = ""
+  uid = "",
 ) => {
   let pathname = "";
   if (typeof history !== "undefined" && path !== null) {

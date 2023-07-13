@@ -36,7 +36,7 @@ function* handleOcrCall(action) {
 
   try {
     yield put(
-      setOcrResult({ loading: true, fail: false, done: false, result: null })
+      setOcrResult({ loading: true, fail: false, done: false, result: null }),
     );
     let ocrResult = [];
 
@@ -45,14 +45,14 @@ function* handleOcrCall(action) {
         assistantApi.callOcrService,
         binaryImage,
         script,
-        uploadMode
+        uploadMode,
       );
     } else {
       ocrResult = yield call(
         assistantApi.callOcrService,
         inputUrl,
         script,
-        urlMode
+        urlMode,
       );
     }
 
@@ -92,24 +92,24 @@ function* handleReprocessCall(action) {
         assistantApi.callOcrService,
         binaryImage,
         script,
-        uploadMode
+        uploadMode,
       );
     } else {
       newResult = yield call(
         assistantApi.callOcrService,
         inputUrl,
         script,
-        urlMode
+        urlMode,
       );
     }
 
     if (newResult && newResult.bounding_boxes) {
       // find the result you're replacing in both the old and new result set
       let oldIndex = resultToEdit.bounding_boxes.findIndex((bbox) =>
-        _.isEqual(bbox.bounding_box, boxToChange)
+        _.isEqual(bbox.bounding_box, boxToChange),
       );
       let newIndex = newResult.bounding_boxes.findIndex((bbox) =>
-        _.isEqual(bbox.bounding_box, boxToChange)
+        _.isEqual(bbox.bounding_box, boxToChange),
       );
       // replace only the bounding box which needed changing with the result from the new response
       resultToEdit.bounding_boxes[oldIndex] =

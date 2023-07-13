@@ -31,11 +31,11 @@ const Magnifier = () => {
   const classes = useMyStyles();
   const keyword = useLoadLanguage(
     "components/NavItems/tools/Magnifier.tsv",
-    tsv
+    tsv,
   );
   const keywordAllTools = useLoadLanguage(
     "components/NavItems/tools/Alltools.tsv",
-    tsv
+    tsv,
   );
 
   const resultUrl = useSelector((state) => state.magnifier.url);
@@ -59,7 +59,7 @@ const Magnifier = () => {
     eventUrl,
     client_id,
     eventUrl,
-    uid
+    uid,
   );
   const submitUrl = (src) => {
     setEventUrl(src);
@@ -86,7 +86,7 @@ const Magnifier = () => {
           result: canvas.toDataURL("image/png"),
           notification: false,
           loading: false,
-        })
+        }),
       );
       canvas.remove();
     };

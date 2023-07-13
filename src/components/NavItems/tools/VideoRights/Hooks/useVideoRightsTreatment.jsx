@@ -24,7 +24,7 @@ const useVideoRightsTreatment = (url, keyword) => {
       let href_user = result._links.user.href;
       href_user = href_user.replace(
         "https://rights-api.invid.udl.cat/",
-        video_url
+        video_url,
       );
       axios
         .get(href)
@@ -58,7 +58,7 @@ const useVideoRightsTreatment = (url, keyword) => {
         .post(
           api_url,
           { url: url },
-          { headers: { ContentType: "application/json" } }
+          { headers: { ContentType: "application/json" } },
         )
         .then((response) => {
           let result = response.data;

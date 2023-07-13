@@ -24,7 +24,7 @@ export const useTrackEvent = (
   url,
   client_id,
   event,
-  uid = ""
+  uid = "",
 ) => {
   const analytics = useSelector((state) => state.cookies.analytics);
   //console.log("event tracked ", event);

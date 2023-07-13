@@ -23,15 +23,15 @@ const Deepfake = () => {
   const classes = useMyStyles();
   const keyword = useLoadLanguage(
     "components/NavItems/tools/Deepfake.tsv",
-    tsv
+    tsv,
   );
   const keywordAllTools = useLoadLanguage(
     "components/NavItems/tools/Alltools.tsv",
-    tsvAlltools
+    tsvAlltools,
   );
   const keywordWarning = useLoadLanguage(
     "components/Shared/OnWarningInfo.tsv",
-    tsvWarning
+    tsvWarning,
   );
   //const dispatch = useDispatch();
 

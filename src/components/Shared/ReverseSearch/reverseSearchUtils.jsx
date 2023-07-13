@@ -16,13 +16,13 @@ class ImageObject {
       !Object.values(IMAGE_FORMATS).includes(imageFormat)
     ) {
       throw new Error(
-        "[ImageObject.constructor] Error: Image format is not a string"
+        "[ImageObject.constructor] Error: Image format is not a string",
       );
     }
 
     if (!Object.values(IMAGE_FORMATS).includes(imageFormat)) {
       throw new Error(
-        "[ImageObject.constructor] Error: Image format not supported"
+        "[ImageObject.constructor] Error: Image format not supported",
       );
     }
 
@@ -199,7 +199,7 @@ export const loadImage = (src, reverseSearchFunction) => {
 
 export const reverseImageSearchDBKF = (
   imgUrl,
-  isRequestFromContextMenu = true
+  isRequestFromContextMenu = true,
 ) => {
   const url =
     SEARCH_ENGINE_SETTINGS.DBKF_SEARCH.URI + encodeURIComponent(imgUrl);
@@ -214,7 +214,7 @@ export const reverseImageSearchDBKF = (
 
 export const reverseImageSearchBaidu = (
   imgBlob,
-  isRequestFromContextMenu = true
+  isRequestFromContextMenu = true,
 ) => {
   const url = SEARCH_ENGINE_SETTINGS.BAIDU_SEARCH.URI;
   const data = new FormData();
@@ -245,7 +245,7 @@ export const reverseImageSearchBaidu = (
 
 export const reverseImageSearchGoogleLens = (
   imgBlob,
-  isRequestFromContextMenu = true
+  isRequestFromContextMenu = true,
 ) => {
   const url = `https://lens.google.com/upload?ep=ccm&s=&st=${Date.now()}`;
   const formData = new FormData();
@@ -277,7 +277,7 @@ export const reverseImageSearchGoogleLens = (
 
 export const reverseImageSearchYandex = (
   imgBlob,
-  isRequestFromContextMenu = true
+  isRequestFromContextMenu = true,
 ) => {
   const url =
     'https://yandex.com/images/touch/search?rpt=imageview&format=json&request={"blocks":[{"block":"cbir-uploader__get-cbir-id"}]}';
@@ -317,7 +317,7 @@ export const reverseImageSearchYandex = (
 
 export const reverseImageSearchGoogle = (
   imgBlob,
-  isRequestFromContextMenu = true
+  isRequestFromContextMenu = true,
 ) => {
   const chromeSbiSrc = "Google Chrome 107.0.5304.107 (Official) Windows";
 
@@ -349,7 +349,7 @@ export const reverseImageSearchGoogle = (
 
 export const reverseImageSearchBing = async (
   blob,
-  isRequestFromContextMenu = true
+  isRequestFromContextMenu = true,
 ) => {
   // let image = content.substring(content.indexOf(",") + 1);
   // let image = content;
@@ -383,7 +383,7 @@ export const reverseImageSearchBing = async (
 
 const reverseImageSearchTineye = (
   imageUrl,
-  isRequestFromContextMenu = true
+  isRequestFromContextMenu = true,
 ) => {
   const urlObject = {
     url:
@@ -395,7 +395,7 @@ const reverseImageSearchTineye = (
 
 const reverseImageSearchReddit = (
   imageUrl,
-  isRequestFromContextMenu = true
+  isRequestFromContextMenu = true,
 ) => {
   const urlObject = {
     url:
@@ -420,7 +420,7 @@ export const getImgUrl = (info) => {
 export const getLocalImageFromSourcePath = async (src, imgFormat) => {
   if (!Object.values(IMAGE_FORMATS).includes(imgFormat)) {
     throw new Error(
-      `[getLocalImageFromSourcePath] Error: Image format ${imgFormat} not supported`
+      `[getLocalImageFromSourcePath] Error: Image format ${imgFormat} not supported`,
     );
   }
 
@@ -446,7 +446,7 @@ export const getLocalImageFromSourcePath = async (src, imgFormat) => {
 
       if (!base64String) {
         throw new Error(
-          `[getLocalImageFromSourcePath] Error: Invalid type for base64string`
+          `[getLocalImageFromSourcePath] Error: Invalid type for base64string`,
         );
       }
 
@@ -494,7 +494,7 @@ export const getBlob = async (info) => {
   } else {
     imgBlob = await getLocalImageFromSourcePath(
       getImgUrl(info),
-      IMAGE_FORMATS.BLOB
+      IMAGE_FORMATS.BLOB,
     );
   }
 
@@ -517,7 +517,7 @@ const getSearchEngineFromName = (searchEngineName) => {
   }
 
   throw new Error(
-    `[getSearchEngineFromName] Error: Search Engine not found for searchEngineName ${searchEngineName}`
+    `[getSearchEngineFromName] Error: Search Engine not found for searchEngineName ${searchEngineName}`,
   );
 };
 
@@ -532,7 +532,7 @@ const retrieveImgObjectForSearchEngine = async (
   info,
   isImgUrl,
   searchEngineName,
-  isLocalImg = false
+  isLocalImg = false,
 ) => {
   const searchEngine = getSearchEngineFromName(searchEngineName);
 
@@ -575,7 +575,7 @@ const retrieveImgObjectForSearchEngine = async (
   }
 
   throw new Error(
-    `[retrieveImgObjectForSearchEngine] Error: Image format ${searchEngine.IMAGE_FORMAT} not supported`
+    `[retrieveImgObjectForSearchEngine] Error: Image format ${searchEngine.IMAGE_FORMAT} not supported`,
   );
 };
 
@@ -583,12 +583,12 @@ export const reverseImageSearch = async (
   info,
   isImgUrl,
   searchEngineName,
-  isRequestFromContextMenu = true
+  isRequestFromContextMenu = true,
 ) => {
   const imageObject = await retrieveImgObjectForSearchEngine(
     info,
     isImgUrl,
-    searchEngineName
+    searchEngineName,
   );
 
   if (searchEngineName === SEARCH_ENGINE_SETTINGS.DBKF_SEARCH.NAME) {
@@ -666,7 +666,7 @@ export const reverseImageSearch = async (
         info,
         isImgUrl,
         searchEngineName,
-        true
+        true,
       );
 
       // console.log(b64Img);
@@ -714,7 +714,7 @@ export const reverseImageSearch = async (
 export const reverseImageSearchAll = async (
   info,
   isImageUrl,
-  isRequestFromContextMenu = true
+  isRequestFromContextMenu = true,
 ) => {
   let promises = [];
 
@@ -727,8 +727,8 @@ export const reverseImageSearchAll = async (
         info,
         isImageUrl,
         searchEngineSetting.NAME,
-        isRequestFromContextMenu
-      )
+        isRequestFromContextMenu,
+      ),
     );
   }
   await Promise.all(promises);

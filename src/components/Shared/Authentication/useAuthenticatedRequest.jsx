@@ -60,7 +60,7 @@ export default function useAuthenticatedRequest() {
           (authErr) => {
             console.error(authErr);
             return Promise.reject(error);
-          }
+          },
         );
       }
 

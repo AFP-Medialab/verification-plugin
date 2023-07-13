@@ -17,7 +17,7 @@ const AnimatedGif = ({ toolState, homoImg1, homoImg2, isPopup }) => {
   const classes = useMyStyles();
   const keyword = useLoadLanguage(
     "components/NavItems/tools/CheckGIF.tsv",
-    tsv
+    tsv,
   );
   const [filesForGif, setFilesForGif] = useState(null);
   const [delayGif, setDelayGif] = useState(null);

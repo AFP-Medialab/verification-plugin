@@ -29,6 +29,7 @@ import {
   getclientId,
 } from "../../Shared/GoogleAnalytics/MatomoAnalytics";
 import { useTrackPageView } from "../../../Hooks/useAnalytics";
+import Archive from "../../NavItems/tools/Archive";
 
 const DrawerItem = ({ drawerItems }) => {
   const drawerItemsContent = [
@@ -100,6 +101,10 @@ const DrawerItem = ({ drawerItems }) => {
     {
       content: <TwitterSna />,
       footer: <Footer type={"afp-usfd-eudisinfolab"} />,
+    },
+    {
+      content: <Archive />,
+      footer: <Footer type={"afp"} />,
     },
   ];
 

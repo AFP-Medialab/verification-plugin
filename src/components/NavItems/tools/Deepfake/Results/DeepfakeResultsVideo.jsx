@@ -13,7 +13,7 @@ const DeepfakeResutlsVideo = (props) => {
   const classes = useMyStyles();
   const keyword = useLoadLanguage(
     "components/NavItems/tools/Deepfake.tsv",
-    tsv
+    tsv,
   );
   const results = props.result;
   //const url = props.url;
@@ -186,7 +186,7 @@ const DeepfakeResutlsVideo = (props) => {
                       )}
                     </Grid>
                   );
-                }
+                },
               )}
             </Grid>
           </Grid>
@@ -344,7 +344,7 @@ const DeepfakeResutlsVideo = (props) => {
                             <Typography variant="h3">
                               {Math.round(
                                 shotSelectedValue.face_predictions[keyFace] *
-                                  100
+                                  100,
                               )}
                               %
                             </Typography>
@@ -356,7 +356,7 @@ const DeepfakeResutlsVideo = (props) => {
                             </Typography>
                           </Grid>
                         );
-                      }
+                      },
                     )}
                   </Grid>
                 </Grid>

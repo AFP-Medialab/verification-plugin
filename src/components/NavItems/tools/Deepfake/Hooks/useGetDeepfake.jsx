@@ -67,11 +67,11 @@ const UseGetDeepfake = (url, processURL, mode) => {
               if (response.data != null) {
                 if (mode === "IMAGE") {
                   dispatch(
-                    setDeepfakeResultImage({ url: url, result: response.data })
+                    setDeepfakeResultImage({ url: url, result: response.data }),
                   );
                 } else if (mode === "VIDEO") {
                   dispatch(
-                    setDeepfakeResultVideo({ url: url, result: response.data })
+                    setDeepfakeResultVideo({ url: url, result: response.data }),
                   );
                 }
 

@@ -5,7 +5,7 @@ import LockOpenIcon from "@mui/icons-material/LockOpen";
 
 const AuthenticationIcon = () => {
   const userAuthenticated = useSelector(
-    (state) => state.userSession && state.userSession.userAuthenticated
+    (state) => state.userSession && state.userSession.userAuthenticated,
   );
   return (
     <div>

@@ -57,7 +57,7 @@ const videoReversesearchDBKF = (info) => {
       "contextMenu",
       "contextMenuClick",
       "Video Reverse Search - DBKF (beta)",
-      url
+      url,
     );
   }
 };
@@ -133,14 +133,14 @@ function contextClick(info) {
       reverseImageSearch(
         info,
         false,
-        SEARCH_ENGINE_SETTINGS.GOOGLE_LENS_SEARCH.NAME
+        SEARCH_ENGINE_SETTINGS.GOOGLE_LENS_SEARCH.NAME,
       );
       break;
     case SEARCH_ENGINE_SETTINGS.YANDEX_SEARCH.CONTEXT_MENU_ID:
       reverseImageSearch(
         info,
         false,
-        SEARCH_ENGINE_SETTINGS.YANDEX_SEARCH.NAME
+        SEARCH_ENGINE_SETTINGS.YANDEX_SEARCH.NAME,
       );
       break;
     case SEARCH_ENGINE_SETTINGS.BING_SEARCH.CONTEXT_MENU_ID:
@@ -150,7 +150,7 @@ function contextClick(info) {
       reverseImageSearch(
         info,
         false,
-        SEARCH_ENGINE_SETTINGS.TINEYE_SEARCH.NAME
+        SEARCH_ENGINE_SETTINGS.TINEYE_SEARCH.NAME,
       );
       break;
     case SEARCH_ENGINE_SETTINGS.BAIDU_SEARCH.CONTEXT_MENU_ID:
@@ -160,7 +160,7 @@ function contextClick(info) {
       reverseImageSearch(
         info,
         false,
-        SEARCH_ENGINE_SETTINGS.REDDIT_SEARCH.NAME
+        SEARCH_ENGINE_SETTINGS.REDDIT_SEARCH.NAME,
       );
       break;
     default:

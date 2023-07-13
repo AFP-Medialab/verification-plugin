@@ -21,13 +21,13 @@ import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 const AssistantVideoResult = () => {
   const keyword = useLoadLanguage(
     "components/NavItems/tools/Assistant.tsv",
-    tsv
+    tsv,
   );
   const classes = useMyStyles();
 
   const processUrl = useSelector((state) => state.assistant.processUrl);
   const process_url_type = useSelector(
-    (state) => state.assistant.processUrlType
+    (state) => state.assistant.processUrlType,
   );
   const input_url_type = useSelector((state) => state.assistant.inputUrlType);
 
@@ -151,7 +151,7 @@ const AssistantVideoResult = () => {
             onClick={() => {
               window.open(
                 "https://web.archive.org/save/" + processUrl,
-                "_blank"
+                "_blank",
               );
             }}
           >

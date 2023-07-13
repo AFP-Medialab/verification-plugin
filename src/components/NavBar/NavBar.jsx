@@ -1,23 +1,44 @@
-import Box from "@mui/material/Box";
+import React, { useEffect, memo, useState, createRef } from "react";
+
 import { useDispatch, useSelector } from "react-redux";
 import Languages from "../NavItems/languages/languages";
 import Tutorial from "../NavItems/tutorial/tutorial";
-import React, { useEffect, memo, useState, createRef } from "react";
 import clsx from "clsx";
-import Drawer from "@mui/material/Drawer";
-import AppBar from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
-import List from "@mui/material/List";
-import Divider from "@mui/material/Divider";
-import IconButton from "@mui/material/IconButton";
+
+import {
+  Alert,
+  AppBar,
+  Box,
+  Button,
+  Collapse,
+  Divider,
+  Drawer,
+  Fab,
+  IconButton,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  ListSubheader,
+  Snackbar,
+  Tab,
+  Tabs,
+  Toolbar,
+  Typography,
+} from "@mui/material";
+
+import ArchiveIcon from "@mui/icons-material/Archive";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import ListItem from "@mui/material/ListItem";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
-import ScrollTop from "../Shared/ScrollTop/ScrollTop";
-import Fab from "@mui/material/Fab";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import ExpandLess from "@mui/icons-material/ExpandLess";
+import ExpandMore from "@mui/icons-material/ExpandMore";
+
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+
+import ScrollTop from "../Shared/ScrollTop/ScrollTop";
+
 import { cleanError } from "../../redux/actions/errorActions";
 import TabItem from "./TabItem/TabItem";
 import ClassRoom from "../NavItems/ClassRoom/ClassRoom";
@@ -72,16 +93,10 @@ import { getSupportedBrowserLanguage } from "../Shared/Languages/getSupportedBro
 import useLoadLanguage from "../../Hooks/useLoadLanguage";
 import tsv from "../../LocalDictionary/components/NavBar.tsv";
 import tsvWarning from "../../LocalDictionary/components/Shared/OnWarningInfo.tsv";
-import Snackbar from "@mui/material/Snackbar";
+
 import { setFalse, setTrue } from "../../redux/reducers/cookiesReducers";
 import { changeLanguage } from "../../redux/reducers/languageReducer";
-import Button from "@mui/material/Button";
-import Alert from "@mui/material/Alert";
-import { Collapse, ListSubheader, Tab, Tabs } from "@mui/material";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-import Typography from "@mui/material/Typography";
-import ExpandLess from "@mui/icons-material/ExpandLess";
-import ExpandMore from "@mui/icons-material/ExpandMore";
+
 import { Link, useNavigate } from "react-router-dom";
 
 function a11yProps(index) {
@@ -96,7 +111,7 @@ const NavBar = () => {
   const navigate = useNavigate();
   const [open, setOpen] = useState(true);
   const [classWidthToolbar, setClassWidthToolbar] = useState(
-    classes.drawerWidth
+    classes.drawerWidth,
   );
 
   const tabValue = useSelector((state) => state.nav);
@@ -128,7 +143,7 @@ const NavBar = () => {
   };
 
   const userAuthenticated = useSelector(
-    (state) => state.userSession && state.userSession.userAuthenticated
+    (state) => state.userSession && state.userSession.userAuthenticated,
   );
 
   const changeValue = (newValue, newValueType) => {
@@ -150,7 +165,7 @@ const NavBar = () => {
         if (newValue.title === "navbar_twitter_crowdtangle")
           window.open(
             process.env.REACT_APP_TSNA_SERVER + "csvSna?lang=" + currentLang,
-            "_blank"
+            "_blank",
           );
         else if (newValue.path === "factcheck" || newValue.path === "xnetwork")
           window.open(
@@ -158,7 +173,7 @@ const NavBar = () => {
               newValue.path +
               "?lang=" +
               currentLang,
-            "_blank"
+            "_blank",
           );
         else {
           navigate("/app/tools/" + newValue.path);
@@ -178,11 +193,11 @@ const NavBar = () => {
   const keyword = useLoadLanguage("components/NavBar.tsv", tsv);
   const keywordWarning = useLoadLanguage(
     "components/Shared/OnWarningInfo.tsv",
-    tsvWarning
+    tsvWarning,
   );
 
   const [classListHeading, setClassListHeading] = useState(
-    classes.drawerListHeadingLeft
+    classes.drawerListHeadingLeft,
   );
 
   const handleDrawerToggle = () => {
@@ -785,7 +800,7 @@ const NavBar = () => {
       title: "navbar_twitter_sna",
       description: "navbar_twitter_sna_description",
       icon:
-        tabValue === 0 && drawerValue === 18 ? (
+        tabValue === 0 && drawerValue === 16 ? (
           <TwitterSnaIcon
             width="45px"
             height="45px"
@@ -818,10 +833,46 @@ const NavBar = () => {
     },
     {
       id: 18,
+      title: "navbar_archiving",
+      description: "navbar_archiving_description",
+      icon:
+        tabValue === 0 && drawerValue === 17 ? (
+          <ArchiveIcon
+            width="45px"
+            height="45px"
+            style={{ fill: "#00926c" }}
+            title="Archiving"
+          />
+        ) : (
+          <ArchiveIcon
+            width="45px"
+            height="45px"
+            style={{ fill: "#4c4c4c" }}
+            title="Archiving"
+          />
+        ),
+      iconColored: (
+        <ArchiveIcon
+          width="45px"
+          height="45px"
+          style={{ fill: "#00926c" }}
+          title={keyword("navbar_archiving")}
+        />
+      ),
+      tsvPrefix: "archiving",
+      path: "archive",
+      pathGroup: "TOOL",
+      type: keyword("navbar_category_other"),
+      typeId: 5,
+      icons: ["experimental", "new", "lock"],
+      toolRestrictions: ["lock", "beta"],
+    },
+    {
+      id: 19,
       title: "navbar_twitter_crowdtangle",
       description: "navbar_twitter_crowdtangle_description",
       icon:
-        tabValue === 0 && drawerValue === 19 ? (
+        tabValue === 0 && drawerValue === 18 ? (
           <CsvSnaIcon
             width="45px"
             height="45px"
@@ -852,11 +903,11 @@ const NavBar = () => {
       toolRestrictions: [],
     },
     {
-      id: 19,
+      id: 20,
       title: "navbar_covidsearch",
       description: "navbar_covidsearch_description",
       icon:
-        tabValue === 0 && drawerValue === 16 ? (
+        tabValue === 0 && drawerValue === 19 ? (
           <CovidSearchIcon
             width="45px"
             height="45px"
@@ -888,11 +939,11 @@ const NavBar = () => {
       toolRestrictions: [],
     },
     {
-      id: 20,
+      id: 21,
       title: "navbar_xnetwork",
       description: "navbar_xnetwork_description",
       icon:
-        tabValue === 0 && drawerValue === 17 ? (
+        tabValue === 0 && drawerValue === 20 ? (
           <XnetworkIcon
             width="45px"
             height="45px"
@@ -1090,6 +1141,9 @@ const NavBar = () => {
       case 4:
         setOpenListData(true);
         break;
+      case 5:
+        setOpenListOtherTools(true);
+        break;
       default:
         break;
     }
@@ -1161,7 +1215,7 @@ const NavBar = () => {
 
   //Video items
   const drawerItemsVideo = drawerItems.filter(
-    (item) => item.type === keyword("navbar_category_video")
+    (item) => item.type === keyword("navbar_category_video"),
   );
   const [openListVideo, setOpenListVideo] = useState(false);
   const [classBorderVideo, setClassBorderVideo] = useState(null);
@@ -1177,7 +1231,7 @@ const NavBar = () => {
 
   //Image items
   const drawerItemsImage = drawerItems.filter(
-    (item) => item.type === keyword("navbar_category_image")
+    (item) => item.type === keyword("navbar_category_image"),
   );
   const [openListImage, setOpenListImage] = useState(false);
   const [classBorderImage, setClassBorderImage] = useState(null);
@@ -1193,7 +1247,7 @@ const NavBar = () => {
 
   //Search items
   const drawerItemsSearch = drawerItems.filter(
-    (item) => item.type === keyword("navbar_category_search")
+    (item) => item.type === keyword("navbar_category_search"),
   );
   const [openListSeach, setOpenListSeach] = useState(false);
   const [classBorderSearch, setClassBorderSearch] = useState(null);
@@ -1209,7 +1263,7 @@ const NavBar = () => {
 
   //Data items
   const drawerItemsData = drawerItems.filter(
-    (item) => item.type === keyword("navbar_category_data")
+    (item) => item.type === keyword("navbar_category_data"),
   );
   const [openListData, setOpenListData] = useState(false);
   const [classBorderData, setClassBorderData] = useState(null);
@@ -1220,6 +1274,21 @@ const NavBar = () => {
       setClassBorderData(classes.drawerCategoryBorder);
     } else {
       setClassBorderData(null);
+    }
+  };
+
+  const drawerItemsOtherTools = drawerItems.filter(
+    (item) => item.type === keyword("navbar_category_other"),
+  );
+  const [openListOtherTools, setOpenListOtherTools] = useState(false);
+  const [classBorderOtherTools, setClassBorderOtherTools] = useState(null);
+
+  const handleClickListOtherTools = () => {
+    setOpenListOtherTools(!openListOtherTools);
+    if (!openListOtherTools) {
+      setClassBorderOtherTools(classes.drawerCategoryBorder);
+    } else {
+      setClassBorderOtherTools(null);
     }
   };
 
@@ -1279,6 +1348,20 @@ const NavBar = () => {
       setVariableOpen: setOpenListData,
       functionHandleClick: handleClickListData,
       classBorder: classBorderData,
+    },
+    {
+      title: keyword("navbar_category_other"),
+      icon: (
+        <MoreHorizIcon
+          style={{ fill: "#4c4c4c" }}
+          title={keyword("navbar_category_other")}
+        />
+      ),
+      list: drawerItemsOtherTools,
+      variableOpen: openListOtherTools,
+      setVariableOpen: setOpenListOtherTools,
+      functionHandleClick: handleClickListOtherTools,
+      classBorder: classBorderOtherTools,
     },
   ];
 

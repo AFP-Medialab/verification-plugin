@@ -34,15 +34,15 @@ const Forensic = () => {
   const classes = useMyStyles();
   const keyword = useLoadLanguage(
     "components/NavItems/tools/Forensic.tsv",
-    tsv
+    tsv,
   );
   const keywordAllTools = useLoadLanguage(
     "components/NavItems/tools/Alltools.tsv",
-    tsvAllTools
+    tsvAllTools,
   );
   const keywordWarning = useLoadLanguage(
     "components/Shared/OnWarningInfo.tsv",
-    tsvWarning
+    tsvWarning,
   );
 
   const theme = createTheme({
@@ -108,7 +108,7 @@ const Forensic = () => {
     input,
     client_id,
     image,
-    uid
+    uid,
   );
   const submitUrl = () => {
     if (input && input !== "") {

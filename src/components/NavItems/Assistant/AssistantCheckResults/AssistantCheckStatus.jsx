@@ -20,7 +20,7 @@ import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 const AssistantCheckStatus = () => {
   const keyword = useLoadLanguage(
     "components/NavItems/tools/Assistant.tsv",
-    tsv
+    tsv,
   );
   const classes = useMyStyles();
   const dispatch = useDispatch();
@@ -32,11 +32,11 @@ const AssistantCheckStatus = () => {
   const scFailState = useSelector((state) => state.assistant.inputSCFail);
   const dbkfTextTitle = keyword("dbkf_text_title");
   const dbkfTextFailState = useSelector(
-    (state) => state.assistant.dbkfTextMatchFail
+    (state) => state.assistant.dbkfTextMatchFail,
   );
   const dbkfMediaTitle = keyword("dbkf_media_title");
   const dbkfMediaFailState = useSelector(
-    (state) => state.assistant.dbkfMediaMatchFail
+    (state) => state.assistant.dbkfMediaMatchFail,
   );
   // const mtTitle = keyword("mt_title")
   // const mtFailState = useSelector(state => state.assistant.mtFail)
@@ -76,7 +76,7 @@ const AssistantCheckStatus = () => {
                 </IconButton>
                 <ListItemText primary={value.title} />
               </ListItem>
-            ) : null
+            ) : null,
           )}
         </List>
       </Collapse>

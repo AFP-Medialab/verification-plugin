@@ -32,11 +32,11 @@ const TwitterAdvancedSearch = () => {
   const cardClasses = myCardStyles();
   const keyword = useLoadLanguage(
     "components/NavItems/tools/TwitterAdvancedSearch.tsv",
-    tsv
+    tsv,
   );
   const keywordAllTools = useLoadLanguage(
     "components/NavItems/tools/Alltools.tsv",
-    tsvAllTools
+    tsvAllTools,
   );
 
   const term = useInput("");
@@ -115,7 +115,7 @@ const TwitterAdvancedSearch = () => {
     eventUrl,
     client_id,
     eventUrl,
-    uid
+    uid,
   );
   const onSubmit = () => {
     let url = createUrl(
@@ -128,7 +128,7 @@ const TwitterAdvancedSearch = () => {
       within.value,
       fromDate,
       toDate,
-      localTime
+      localTime,
     );
     setEventUrl(url);
     /*trackEvent(

@@ -40,7 +40,7 @@ const OCR = () => {
   const keyword = useLoadLanguage("components/NavItems/tools/OCR.tsv", tsv);
   const keywordAllTools = useLoadLanguage(
     "components/NavItems/tools/Alltools.tsv",
-    tsv
+    tsv,
   );
 
   const ocrInputUrl = useSelector((state) => state.ocr.url);
@@ -62,7 +62,7 @@ const OCR = () => {
     eventUrl,
     client_id,
     eventUrl,
-    uid
+    uid,
   );
 
   const submitUrl = (src) => {

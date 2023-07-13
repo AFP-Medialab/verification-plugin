@@ -9,7 +9,7 @@ const TimeToLocalTime = (props) => {
   const classes = useMyStyles();
   const keyword = useLoadLanguage(
     "components/NavItems/tools/Analysis.tsv",
-    tsv
+    tsv,
   );
   const regex = /(.*), (.*) \(?UTC\)?/;
   let link = undefined;
