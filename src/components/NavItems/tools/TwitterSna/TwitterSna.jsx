@@ -32,9 +32,10 @@ import tsv from "../../../../LocalDictionary/components/NavItems/tools/TwitterSn
 import tsvAllTools from "../../../../LocalDictionary/components/NavItems/tools/Alltools.tsv";
 //import { submissionEvent } from "../../../Shared/GoogleAnalytics/GoogleAnalytics";
 import {
-  trackEvent,
+  //trackEvent,
   getclientId,
 } from "../../../Shared/GoogleAnalytics/MatomoAnalytics";
+import { useTrackEvent } from "../../../../Hooks/useAnalytics";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import TwitterSNAIcon from "../../../NavBar/images/SVG/DataAnalysis/Twitter_sna.svg";
@@ -62,7 +63,7 @@ const TwitterSna = () => {
       MuiCardHeader: {
         styleOverrides: {
           root: {
-            backgroundColor: "#05A9B4",
+            backgroundColor: "#00926c",
             paddingTop: "11px!important",
             paddingBottom: "11px!important",
           },
@@ -92,7 +93,7 @@ const TwitterSna = () => {
             "&:before": {
               width: "0px",
             },
-            border: "1px solid #51A5B2",
+            border: "1px solid #00926c",
           },
           rounded: {
             borderRadius: "15px",
@@ -103,9 +104,9 @@ const TwitterSna = () => {
 
     palette: {
       primary: {
-        light: "#5cdbe6",
-        main: "#05a9b4",
-        dark: "#007984",
+        light: "#00926c",
+        main: "#00926c",
+        dark: "#00926c",
         contrastText: "#fff",
       },
     },
@@ -115,11 +116,11 @@ const TwitterSna = () => {
   const cardClasses = myCardStyles();
   const keyword = useLoadLanguage(
     "components/NavItems/tools/TwitterSna.tsv",
-    tsv
+    tsv,
   );
   const keywordAllTools = useLoadLanguage(
     "components/NavItems/tools/Alltools.tsv",
-    tsvAllTools
+    tsvAllTools,
   );
 
   const request = useSelector((state) => state.twitterSna.request);
@@ -136,7 +137,7 @@ const TwitterSna = () => {
   const langPage = useSelector((state) => state.language);
   // Authentication Redux state
   const userAuthenticated = useSelector(
-    (state) => state.userSession && state.userSession.userAuthenticated
+    (state) => state.userSession && state.userSession.userAuthenticated,
   );
 
   const dispatch = useDispatch();
@@ -147,24 +148,24 @@ const TwitterSna = () => {
       ? request && request.keywordList
         ? request.keywordList.join(" ")
         : ""
-      : ""
+      : "",
   );
 
   const [keyWordsAny, setKeywordsAny] = useState(
-    request && request.keywordAnyList ? request.keywordAnyList.join(" ") : ""
+    request && request.keywordAnyList ? request.keywordAnyList.join(" ") : "",
   );
 
   const [keyWordsError, setKeyWordsError] = useState(false);
   const [keyWordsAnyError, setKeyWordsAnyError] = useState(false);
   const [bannedWords, setBannedWords] = useState(
-    request && request.bannedWords ? request.bannedWords.join(" ") : ""
+    request && request.bannedWords ? request.bannedWords.join(" ") : "",
   );
   const [usersInput, setUsersInput] = useState(
     userAuthenticated
       ? request && request.userList
         ? request.userList.join(" ")
         : ""
-      : ""
+      : "",
   );
   const [since, setSince] = useState(null);
 
@@ -181,14 +182,14 @@ const TwitterSna = () => {
       ? request && request.lang
         ? "lang_" + request.lang
         : "lang_all"
-      : "lang_all"
+      : "lang_all",
   );
   const [openLangInput, setLangInputOpen] = React.useState(false);
   const [filters, setFilers] = useState(
-    request && request.media ? request.media : "none"
+    request && request.media ? request.media : "none",
   );
   const [verifiedUsers, setVerifiedUsers] = useState(
-    request && request.verified ? request.verified : false
+    request && request.verified ? request.verified : false,
   );
   const [localTime, setLocalTime] = useState("true");
 
@@ -237,7 +238,7 @@ const TwitterSna = () => {
     localTimeP,
     langInputP,
     filtersP,
-    verifiedUsersP
+    verifiedUsersP,
   ) => {
     //Creating Request Object.
     const removeQuotes = (list) => {
@@ -259,7 +260,7 @@ const TwitterSna = () => {
     let trimedBannedWords = null;
     if (!_.isNil(bannedWordsP) && bannedWordsP.trim() !== "")
       trimedBannedWords = removeQuotes(
-        bannedWordsP.trim().match(/("[^"]+"|[^"\s]+)/g)
+        bannedWordsP.trim().match(/("[^"]+"|[^"\s]+)/g),
       );
 
     const newFrom = localTimeP === "false" ? convertToGMT(sinceP) : sinceP;
@@ -303,7 +304,7 @@ const TwitterSna = () => {
       localTime,
       langInput,
       filters,
-      verifiedUsers
+      verifiedUsers,
     );
   };
 
@@ -319,24 +320,10 @@ const TwitterSna = () => {
     setMediaImage(!mediaImage);
   };
 
-  const sinceDateIsValid = (momentDate) => {
-    const itemDate = momentDate.toDate();
-    const currentDate = new Date();
-    if (until) return itemDate <= currentDate && itemDate < until;
-    return itemDate <= currentDate;
-  };
-
   const handleSinceDateChange = (date) => {
     setSinceError(date === null);
     if (until && date >= until) setSinceError(true);
     setSince(date);
-  };
-
-  const untilDateIsValid = (momentDate) => {
-    const itemDate = momentDate.toDate();
-    const currentDate = new Date();
-    if (since) return itemDate <= currentDate && since < itemDate;
-    return itemDate <= currentDate;
   };
 
   const handleUntilDateChange = (date) => {
@@ -344,14 +331,16 @@ const TwitterSna = () => {
     if (since && date < since) setUntilError(true);
     setUntil(date);
   };
-
-  /*
-  const handleFiltersChange = (event) => {
-    setFilers(event.target.value);
+  const pastDate = (currentDate) => {
+    const itemDate = currentDate.toDate();
+    if (since) return since > itemDate;
+    return false;
   };
-  */
 
+  const session = useSelector((state) => state.userSession);
+  const uid = session && session.user ? session.user.email : null;
   const client_id = getclientId();
+
   const onSubmit = () => {
     //Mandatory Fields errors
     if (keyWords.trim() === "" && keyWordsAny.trim() === "") {
@@ -390,20 +379,29 @@ const TwitterSna = () => {
       if (prevResult && prevResult.socioSemantic4ModeGraph) {
         delete prevResult.socioSemantic4ModeGraph;
       }
-      trackEvent(
+      /*trackEvent(
         "submission",
         "tsna",
         "redirect to tsna",
         JSON.stringify(newRequest),
-        client_id
-      );
+        client_id,
+        uid
+      );*/
       setSubmittedRequest(newRequest);
     }
   };
-
+  useTrackEvent(
+    "submission",
+    "tsna",
+    "redirect to tsna",
+    JSON.stringify(submittedRequest),
+    client_id,
+    submittedRequest,
+    uid,
+  );
   // const [submittedRequest, setSubmittedRequest] = useState(null);
   const [submittedRequest, setSubmittedRequest] = useState(
-    userAuthenticated ? null : makeRequest()
+    userAuthenticated ? null : makeRequest(),
   );
   useTwitterSnaRequest(submittedRequest);
 
@@ -417,56 +415,56 @@ const TwitterSna = () => {
           ? urlObj.request.bannedWords
             ? urlObj.request.bannedWords.join(" ")
             : ""
-          : ""
+          : "",
       );
       setUsersInput(
         userAuthenticated
           ? urlObj.request.userList
             ? urlObj.request.userList.join(" ")
             : ""
-          : ""
+          : "",
       );
       setSince(
         userAuthenticated
           ? urlObj.request.from
             ? urlObj.request.from
             : null
-          : null
+          : null,
       );
       setUntil(
         userAuthenticated
           ? urlObj.request.until
             ? urlObj.request.until
             : null
-          : null
+          : null,
       );
       setLocalTime(
         userAuthenticated
           ? urlObj.request.localTime
             ? urlObj.request.localTime
             : "true"
-          : "true"
+          : "true",
       );
       setLangInput(
         userAuthenticated
           ? urlObj.request.lang
             ? "lang_" + urlObj.request.lang
             : "lang_all"
-          : "lang_all"
+          : "lang_all",
       );
       setFilers(
         userAuthenticated
           ? urlObj.request.media
             ? urlObj.request.media
             : "none"
-          : "none"
+          : "none",
       );
       setVerifiedUsers(
         userAuthenticated
           ? urlObj.request.verified
             ? urlObj.request.verified
             : "false"
-          : "false"
+          : "false",
       );
 
       const newSubmittedRequest = makeRequestParams(
@@ -490,7 +488,7 @@ const TwitterSna = () => {
         "true",
         userAuthenticated ? "lang_all" : "lang_all",
         "none",
-        "false"
+        "false",
       );
 
       setSubmittedRequest(newSubmittedRequest);
@@ -515,7 +513,7 @@ const TwitterSna = () => {
         "true",
         userAuthenticated ? "lang_all" : "lang_en",
         "none",
-        "false"
+        "false",
       );
       setSubmittedRequest(newSubmittedRequest);
     }
@@ -544,12 +542,11 @@ const TwitterSna = () => {
           description={keywordAllTools("navbar_twitter_sna_description")}
           icon={
             <TwitterSNAIcon
-              style={{ fill: "#51A5B2" }}
+              style={{ fill: "#00926c" }}
               width="40px"
               height="40px"
             />
           }
-          advanced="true"
         />
         <Card className={cardClasses.root}>
           <CardHeader
@@ -676,7 +673,6 @@ const TwitterSna = () => {
                     id="standard-full-width-since"
                     disabled={searchFormDisabled}
                     input={true}
-                    isValidDate={sinceDateIsValid}
                     label={"*  " + keyword("twitter_sna_from_date")}
                     className={classes.neededField}
                     dateFormat={"YYYY-MM-DD"}
@@ -692,7 +688,6 @@ const TwitterSna = () => {
                     id="standard-full-width-until"
                     disabled={searchFormDisabled}
                     input={true}
-                    isValidDate={untilDateIsValid}
                     label={"*  " + keyword("twitter_sna_until_date")}
                     className={classes.neededField}
                     dateFormat={"YYYY-MM-DD"}
@@ -701,6 +696,7 @@ const TwitterSna = () => {
                     handleChange={handleUntilDateChange}
                     error={untilError}
                     placeholder={keyword("twitter_sna_selectdate")}
+                    shouldDisableDate={pastDate}
                   />
                 </Grid>
 
@@ -1018,7 +1014,7 @@ const TwitterSna = () => {
                             id="standard-full-width"
                             label={keyword("twitter_sna_user")}
                             placeholder={keyword(
-                              "twitter_sna_placholder_tweetedby"
+                              "twitter_sna_placholder_tweetedby",
                             )}
                             fullWidth
                             variant="outlined"

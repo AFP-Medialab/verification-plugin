@@ -24,11 +24,12 @@ import FolderOpenIcon from "@mui/icons-material/FolderOpen";
 import OCRIcon from "../../../NavBar/images/SVG/Image/OCR.svg";
 import Grid from "@mui/material/Grid";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
-import { submissionEvent } from "../../../Shared/GoogleAnalytics/GoogleAnalytics";
+//import { submissionEvent } from "../../../Shared/GoogleAnalytics/GoogleAnalytics";
 import {
-  trackEvent,
+  //trackEvent,
   getclientId,
 } from "../../../Shared/GoogleAnalytics/MatomoAnalytics";
+import { useTrackEvent } from "../../../../Hooks/useAnalytics";
 import { setError } from "../../../../redux/actions/errorActions";
 import _ from "lodash";
 
@@ -39,7 +40,7 @@ const OCR = () => {
   const keyword = useLoadLanguage("components/NavItems/tools/OCR.tsv", tsv);
   const keywordAllTools = useLoadLanguage(
     "components/NavItems/tools/Alltools.tsv",
-    tsv
+    tsv,
   );
 
   const ocrInputUrl = useSelector((state) => state.ocr.url);
@@ -47,13 +48,34 @@ const OCR = () => {
   const result = useSelector((state) => state.ocr.result);
   const fail = useSelector((state) => state.ocr.fail);
   const errorKey = useSelector((state) => state.ocr.errorKey);
+  const session = useSelector((state) => state.userSession);
+  const uid = session && session.user ? session.user.email : null;
 
   const [userInput, setUserInput] = useState(ocrInputUrl);
+  const [eventUrl, setEventUrl] = useState(undefined);
 
   const client_id = getclientId();
+  useTrackEvent(
+    "submission",
+    "ocr",
+    "image ocr processing",
+    eventUrl,
+    client_id,
+    eventUrl,
+    uid,
+  );
+
   const submitUrl = (src) => {
-    trackEvent("submission", "ocr", "image ocr processing", src, client_id);
-    submissionEvent(src);
+    setEventUrl(src);
+    /*trackEvent(
+      "submission",
+      "ocr",
+      "image ocr processing",
+      src,
+      client_id,
+      uid
+    );*/
+    //submissionEvent(src);
     dispatch(setOcrInput(src, selectedScript));
   };
 
@@ -149,7 +171,7 @@ const OCR = () => {
         name={keywordAllTools("navbar_ocr")}
         description={keywordAllTools("navbar_ocr_description")}
         icon={
-          <OCRIcon style={{ fill: "#51A5B2" }} width="40px" height="40px" />
+          <OCRIcon style={{ fill: "#00926c" }} width="40px" height="40px" />
         }
       />
 

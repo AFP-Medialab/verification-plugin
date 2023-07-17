@@ -7,7 +7,8 @@ import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
-import CloseResult from "../../../../Shared/CloseResult/CloseResult";
+import { IconButton } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 import { cleanAnalysisState } from "../../../../../redux/actions/tools/image_analysisActions";
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
@@ -26,7 +27,7 @@ const TwitterResults = (props) => {
   const classes = useMyStyles();
   const keyword = useLoadLanguage(
     "components/NavItems/tools/Analysis.tsv",
-    tsv
+    tsv,
   );
 
   const dispatch = useDispatch();
@@ -39,10 +40,16 @@ const TwitterResults = (props) => {
           <CardHeader
             title={keyword("cardheader_results")}
             className={classes.headerUpladedImage}
+            action={
+              <IconButton
+                aria-label="close"
+                onClick={() => dispatch(cleanAnalysisState())}
+              >
+                <CloseIcon sx={{ color: "white" }} />
+              </IconButton>
+            }
           />
           <div className={classes.root2}>
-            <CloseResult onClick={() => dispatch(cleanAnalysisState())} />
-
             <CardMedia
               className={classes.imageAnalysis}
               image={report["image"]["media"][0]}

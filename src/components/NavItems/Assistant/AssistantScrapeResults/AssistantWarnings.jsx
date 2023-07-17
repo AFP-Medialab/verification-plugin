@@ -23,13 +23,13 @@ import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 const AssistantWarnings = () => {
   const keyword = useLoadLanguage(
     "components/NavItems/tools/Assistant.tsv",
-    tsv
+    tsv,
   );
   const classes = useMyStyles();
   const dispatch = useDispatch();
 
   const warningExpanded = useSelector(
-    (state) => state.assistant.warningExpanded
+    (state) => state.assistant.warningExpanded,
   );
 
   return (

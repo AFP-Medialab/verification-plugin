@@ -1,6 +1,7 @@
 import { createHashHistory } from "history";
 import { useLocation, matchPath } from "react-router-dom";
-export default createHashHistory();
+
+export const history = createHashHistory();
 
 export const useRouteMatch = (patterns) => {
   const { pathname } = useLocation();

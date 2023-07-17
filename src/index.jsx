@@ -21,7 +21,6 @@ function saveToLocalStorage(state) {
       defaultLanguage: state.defaultLanguage,
       ltr: state.ltr,
       cookies: state.cookies,
-      googleAnalytic: state.googleAnalytic,
       userSession: state.userSession,
     };
     const serializedState = JSON.stringify(savedState);
@@ -72,5 +71,5 @@ root.render(
         <App />
       </AppWrapper>
     </CacheProvider>
-  </Provider>
+  </Provider>,
 );

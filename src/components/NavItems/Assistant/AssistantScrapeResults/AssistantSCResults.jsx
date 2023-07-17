@@ -26,23 +26,23 @@ const AssistantSCResults = () => {
   // central
   const keyword = useLoadLanguage(
     "components/NavItems/tools/Assistant.tsv",
-    tsv
+    tsv,
   );
   const dispatch = useDispatch();
   const classes = useMyStyles();
 
   // state
   const assuranceExpanded = useSelector(
-    (state) => state.assistant.assuranceExpanded
+    (state) => state.assistant.assuranceExpanded,
   );
   const positiveSourCred = useSelector(
-    (state) => state.assistant.positiveSourceCred
+    (state) => state.assistant.positiveSourceCred,
   );
   const cautionSourceCred = useSelector(
-    (state) => state.assistant.cautionSourceCred
+    (state) => state.assistant.cautionSourceCred,
   );
   const mixedSourceCred = useSelector(
-    (state) => state.assistant.mixedSourceCred
+    (state) => state.assistant.mixedSourceCred,
   );
 
   return (

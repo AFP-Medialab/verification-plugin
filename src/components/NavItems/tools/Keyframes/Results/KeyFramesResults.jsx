@@ -5,7 +5,8 @@ import Box from "@mui/material/Box";
 import Divider from "@mui/material/Divider";
 import Button from "@mui/material/Button";
 import { useKeyframes } from "../Hooks/usekeyframes";
-import CloseResult from "../../../../Shared/CloseResult/CloseResult";
+import { IconButton } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 import { cleanKeyframesState } from "../../../../../redux/actions/tools/keyframesActions";
 import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Keyframes.tsv";
@@ -29,7 +30,6 @@ import Link from "@mui/material/Link";
 
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import Popover from "@mui/material/Popover";
-import CloseIcon from "@mui/icons-material/Close";
 import ZoomInIcon from "@mui/icons-material/ZoomIn";
 import ZoomOutIcon from "@mui/icons-material/ZoomOut";
 import DetailedIcon from "@mui/icons-material/ViewComfyRounded";
@@ -43,11 +43,11 @@ const KeyFramesResults = (props) => {
   const classes = useMyStyles();
   const keyword = useLoadLanguage(
     "components/NavItems/tools/Keyframes.tsv",
-    tsv
+    tsv,
   );
   const keywordHelp = useLoadLanguage(
     "components/Shared/OnClickInfo.tsv",
-    tsv2
+    tsv2,
   );
   const dispatch = useDispatch();
 
@@ -59,15 +59,15 @@ const KeyFramesResults = (props) => {
   const similarityResults = useSelector((state) => state.keyframes.similarity);
   //const isLoading = useSelector(state => state.keyframes.loading);
   const isLoadingSimilarity = useSelector(
-    (state) => state.keyframes.similarityLoading
+    (state) => state.keyframes.similarityLoading,
   );
 
   const theme = createTheme({
     palette: {
       primary: {
-        light: "#5cdbe6",
-        main: "#05a9b4",
-        dark: "#007984",
+        light: "#00926c",
+        main: "#00926c",
+        dark: "#00926c",
         contrastText: "#fff",
       },
       secondary: {
@@ -95,7 +95,12 @@ const KeyFramesResults = (props) => {
   const imageClick = (event) => {
     let url = event;
     if (url !== "")
-      reverseImageSearch(url, true, SEARCH_ENGINE_SETTINGS.GOOGLE_SEARCH.NAME);
+      reverseImageSearch(
+        url,
+        true,
+        SEARCH_ENGINE_SETTINGS.GOOGLE_SEARCH.NAME,
+        false,
+      );
   };
   const zoom = (zoom) => {
     if (zoom === -1) {
@@ -158,7 +163,7 @@ const KeyFramesResults = (props) => {
           !isLoadingSimilarity &&
           similarityResults.length > 0 && (
             <Box>
-              <Accordion style={{ border: "2px solid #05A9B4" }}>
+              <Accordion style={{ border: "2px solid #00926c" }}>
                 <AccordionSummary
                   expandIcon={<ExpandMoreIcon style={{ color: "#17717e" }} />}
                   aria-controls="panel1a-content"
@@ -219,8 +224,6 @@ const KeyFramesResults = (props) => {
 
       <Box m={3} />
 
-      <CloseResult onClick={() => dispatch(cleanKeyframesState())} />
-
       <Card>
         <CardHeader
           title={
@@ -279,6 +282,17 @@ const KeyFramesResults = (props) => {
             </Grid>
           }
           className={classes.headerUpladedImage}
+          action={
+            <IconButton
+              aria-label="close"
+              onClick={() => {
+                props.closeResult();
+                dispatch(cleanKeyframesState());
+              }}
+            >
+              <CloseIcon sx={{ color: "white" }} />
+            </IconButton>
+          }
         />
 
         <div className={classes.root2}>

@@ -125,7 +125,7 @@ export default function useAuthenticationAPI() {
               message: error.message,
             },
           });
-        }
+        },
       );
   };
 
@@ -188,7 +188,7 @@ export default function useAuthenticationAPI() {
               message: error.message,
             },
           });
-        }
+        },
       );
   };
 
@@ -237,8 +237,8 @@ export default function useAuthenticationAPI() {
                 accessToken,
                 tokenContent.accessTokenExpiry,
                 refreshToken,
-                userInfo
-              )
+                userInfo,
+              ),
             );
             return Promise.resolve({
               status: response.status,
@@ -321,7 +321,7 @@ export default function useAuthenticationAPI() {
               message: error.message,
             },
           });
-        }
+        },
       );
   };
 
@@ -361,8 +361,8 @@ export default function useAuthenticationAPI() {
               userTokenRefreshedAction(
                 accessToken,
                 tokenContent.accessTokenExpiry,
-                tokenContent.user
-              )
+                tokenContent.user,
+              ),
             );
             return Promise.resolve({
               status: response.status,
@@ -421,7 +421,7 @@ export default function useAuthenticationAPI() {
               message: error.message,
             },
           });
-        }
+        },
       );
   };
 

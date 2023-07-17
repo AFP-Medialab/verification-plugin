@@ -39,7 +39,7 @@ const OcrResult = () => {
   const inputUrl = useSelector((state) => state.ocr.url);
   const loading = useSelector((state) => state.ocr.loading);
   const reprocessLoading = useSelector(
-    (state) => state.ocr.reprocessBlockLoading
+    (state) => state.ocr.reprocessBlockLoading,
   );
   const result = useSelector((state) => state.ocr.result);
   const fullText = useSelector((state) => state.ocr.fullText);
@@ -48,11 +48,11 @@ const OcrResult = () => {
   const scripts = useSelector((state) => state.ocr.scripts);
   const selectedScript = useSelector((state) => state.ocr.selectedScript);
   const reprocessBlockOpen = useSelector(
-    (state) => state.ocr.reprocessBlockOpen
+    (state) => state.ocr.reprocessBlockOpen,
   );
 
   const [imageIsUrl] = useState(
-    inputUrl.startsWith("http:") || inputUrl.startsWith("https:")
+    inputUrl.startsWith("http:") || inputUrl.startsWith("https:"),
   );
 
   const [reprocessBlockSelected, selectReprocessBlock] = useState(null);
@@ -142,7 +142,7 @@ const OcrResult = () => {
       0,
       0,
       scaledWidth,
-      scaledHeight
+      scaledHeight,
     );
 
     img.hidden = true;
@@ -228,13 +228,33 @@ const OcrResult = () => {
                         reverseImageSearch(
                           inputUrl,
                           imageIsUrl,
-                          SEARCH_ENGINE_SETTINGS.YANDEX_SEARCH.NAME
+                          SEARCH_ENGINE_SETTINGS.YANDEX_SEARCH.NAME,
+                          false,
                         )
                       }
                     >
                       {keyword("ocr_search_yandex")}
                     </Button>
                   </Grid>
+                  {imageIsUrl ? (
+                    <Grid item xs={6}>
+                      <Button
+                        variant="outlined"
+                        color="primary"
+                        fullWidth
+                        onClick={() => {
+                          reverseImageSearch(
+                            inputUrl,
+                            imageIsUrl,
+                            SEARCH_ENGINE_SETTINGS.BING_SEARCH.NAME,
+                            false,
+                          );
+                        }}
+                      >
+                        {keyword("ocr_search_bing")}
+                      </Button>
+                    </Grid>
+                  ) : null}
                   <Grid item xs={6}>
                     <Button
                       variant="outlined"
@@ -244,23 +264,8 @@ const OcrResult = () => {
                         reverseImageSearch(
                           inputUrl,
                           imageIsUrl,
-                          SEARCH_ENGINE_SETTINGS.BING_SEARCH.NAME
-                        );
-                      }}
-                    >
-                      {keyword("ocr_search_bing")}
-                    </Button>
-                  </Grid>
-                  <Grid item xs={6}>
-                    <Button
-                      variant="outlined"
-                      color="primary"
-                      fullWidth
-                      onClick={() => {
-                        reverseImageSearch(
-                          inputUrl,
-                          imageIsUrl,
-                          SEARCH_ENGINE_SETTINGS.GOOGLE_LENS_SEARCH.NAME
+                          SEARCH_ENGINE_SETTINGS.GOOGLE_LENS_SEARCH.NAME,
+                          false,
                         );
                       }}
                     >
@@ -329,7 +334,7 @@ const OcrResult = () => {
                         cropImage(
                           imgEvent.target,
                           ocrResult.bounding_box,
-                          index
+                          index,
                         )
                       }
                     />
@@ -411,7 +416,7 @@ const OcrResult = () => {
                               color={"primary"}
                               onClick={() =>
                                 dispatch(
-                                  setOcrReprocess(ocrResult.bounding_box)
+                                  setOcrReprocess(ocrResult.bounding_box),
                                 )
                               }
                             >

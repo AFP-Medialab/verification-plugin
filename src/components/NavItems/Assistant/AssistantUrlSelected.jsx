@@ -16,7 +16,9 @@ import { KNOWN_LINKS } from "./AssistantRuleBook";
 import { submitInputUrl } from "../../../redux/actions/tools/assistantActions";
 import tsv from "../../../LocalDictionary/components/NavItems/tools/Assistant.tsv";
 
-import { trackEvent } from "../../Shared/GoogleAnalytics/MatomoAnalytics";
+//import { trackEvent } from "../../Shared/GoogleAnalytics/MatomoAnalytics";
+import { useTrackEvent } from "../../../Hooks/useAnalytics";
+import { useState } from "react";
 
 const AssistantUrlSelected = (props) => {
   // styles, language, dispatch, params
@@ -24,7 +26,7 @@ const AssistantUrlSelected = (props) => {
   const dispatch = useDispatch();
   const keyword = useLoadLanguage(
     "components/NavItems/tools/Assistant.tsv",
-    tsv
+    tsv,
   );
 
   //form states
@@ -36,10 +38,21 @@ const AssistantUrlSelected = (props) => {
   const formInput = props.formInput;
   const setFormInput = (value) => props.setFormInput(value);
   const cleanAssistant = () => props.cleanAssistant();
+  const [url, setUrl] = useState(undefined);
+
+  useTrackEvent(
+    "submission",
+    "assistant",
+    "page assistant",
+    formInput,
+    null,
+    url,
+  );
 
   const handleSubmissionURL = () => {
+    setUrl(formInput);
     dispatch(submitInputUrl(formInput));
-    trackEvent("submission", "assistant", "page assistant", formInput);
+    //trackEvent("submission", "assistant", "page assistant", formInput);
   };
 
   const handleArchive = () => {

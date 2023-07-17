@@ -16,13 +16,13 @@ class ImageObject {
       !Object.values(IMAGE_FORMATS).includes(imageFormat)
     ) {
       throw new Error(
-        "[ImageObject.constructor] Error: Image format is not a string"
+        "[ImageObject.constructor] Error: Image format is not a string",
       );
     }
 
     if (!Object.values(IMAGE_FORMATS).includes(imageFormat)) {
       throw new Error(
-        "[ImageObject.constructor] Error: Image format not supported"
+        "[ImageObject.constructor] Error: Image format not supported",
       );
     }
 
@@ -42,7 +42,7 @@ export const SEARCH_ENGINE_SETTINGS = {
     CONTEXT_MENU_ID: "reverse_search_dbkf",
     CONTEXT_MENU_TITLE: "Image Reverse Search - DBKF (beta)",
     URI: "http://weverify-demo.ontotext.com/#!/similaritySearchResults&type=Images&params=",
-    IMAGE_FORMAT: IMAGE_FORMATS.BLOB,
+    IMAGE_FORMAT: IMAGE_FORMATS.URI,
   },
   GOOGLE_SEARCH: {
     NAME: "Google",
@@ -103,6 +103,16 @@ const fetchImage = async (url) => {
   const blob = await response.blob();
 
   return new ImageObject(blob, IMAGE_FORMATS.BLOB);
+};
+
+/**
+ * Wrapper function to open a new tab from the context menus or from the app
+ * @param {} url The url object
+ * @param {boolean} isRequestFromContextMenu
+ */
+const openNewTabWithUrl = async (url, isRequestFromContextMenu) => {
+  if (isRequestFromContextMenu) openTabsSearch(url);
+  else await chrome.tabs.create(url);
 };
 
 /**
@@ -187,20 +197,25 @@ export const loadImage = (src, reverseSearchFunction) => {
   };
 };
 
-export const reverseImageSearchDBKF = (imgUrl) => {
+export const reverseImageSearchDBKF = (
+  imgUrl,
+  isRequestFromContextMenu = true,
+) => {
   const url =
     SEARCH_ENGINE_SETTINGS.DBKF_SEARCH.URI + encodeURIComponent(imgUrl);
 
-  chrome.tabs.create({
-    url: url,
-    selected: false,
-  });
+  const urlObject = { url: url };
+
+  openNewTabWithUrl(urlObject, isRequestFromContextMenu);
 
   // Google analytics
   // rightClickEvent("Image Reverse Search - DBKF (beta)", url);
 };
 
-export const reverseImageSearchBaidu = (imgBlob) => {
+export const reverseImageSearchBaidu = (
+  imgBlob,
+  isRequestFromContextMenu = true,
+) => {
   const url = SEARCH_ENGINE_SETTINGS.BAIDU_SEARCH.URI;
   const data = new FormData();
 
@@ -219,14 +234,19 @@ export const reverseImageSearchBaidu = (imgBlob) => {
       return response.json();
     })
     .then((json) => {
-      chrome.tabs.create({ url: json.data.url });
+      const urlObject = { url: json.data.url };
+
+      openNewTabWithUrl(urlObject, isRequestFromContextMenu);
     })
     .finally(() => {
       // document.body.style.cursor = "default";
     });
 };
 
-export const reverseImageSearchGoogleLens = (imgBlob) => {
+export const reverseImageSearchGoogleLens = (
+  imgBlob,
+  isRequestFromContextMenu = true,
+) => {
   const url = `https://lens.google.com/upload?ep=ccm&s=&st=${Date.now()}`;
   const formData = new FormData();
 
@@ -242,17 +262,23 @@ export const reverseImageSearchGoogleLens = (imgBlob) => {
     })
     .then((body) => {
       const tabUrl = body.match(/<meta .*URL=(https?:\/\/.*)"/)[1];
-      chrome.tabs.create({ url: tabUrl });
+
+      const urlObject = { url: tabUrl };
+
+      openNewTabWithUrl(urlObject, isRequestFromContextMenu);
     })
     .catch((error) => {
-      console.error(error);
+      //console.error(error);
     })
     .finally(() => {
       // document.body.style.cursor = "default";
     });
 };
 
-export const reverseImageSearchYandex = (imgBlob) => {
+export const reverseImageSearchYandex = (
+  imgBlob,
+  isRequestFromContextMenu = true,
+) => {
   const url =
     'https://yandex.com/images/touch/search?rpt=imageview&format=json&request={"blocks":[{"block":"cbir-uploader__get-cbir-id"}]}';
 
@@ -276,17 +302,23 @@ export const reverseImageSearchYandex = (imgBlob) => {
       const originalImageUrl = block.params.originalImageUrl;
       const cbirId = block.params.url;
       const fullUrl = `https://yandex.com/images/search?rpt=imageview&url=${originalImageUrl}&${cbirId}`;
-      chrome.tabs.create({ url: fullUrl });
+
+      const urlObject = { url: fullUrl };
+
+      openNewTabWithUrl(urlObject, isRequestFromContextMenu);
     })
     .catch((error) => {
-      console.error(error);
+      //console.error(error);
     })
     .finally(() => {
       // document.body.style.cursor = "default";
     });
 };
 
-export const reverseImageSearchGoogle = (imgBlob) => {
+export const reverseImageSearchGoogle = (
+  imgBlob,
+  isRequestFromContextMenu = true,
+) => {
   const chromeSbiSrc = "Google Chrome 107.0.5304.107 (Official) Windows";
 
   let url = SEARCH_ENGINE_SETTINGS.GOOGLE_SEARCH.URI;
@@ -303,17 +335,22 @@ export const reverseImageSearchGoogle = (imgBlob) => {
     signal: Timeout(10).signal,
   })
     .then((response) => {
-      chrome.tabs.create({ url: response.url });
+      const urlObject = { url: response.url };
+
+      openNewTabWithUrl(urlObject, isRequestFromContextMenu);
     })
     .catch((error) => {
-      console.error(error);
+      //console.error(error);
     });
   // .finally(() => {
   //   document.body.style.cursor = "default";
   // });
 };
 
-export const reverseImageSearchBing = async (blob) => {
+export const reverseImageSearchBing = async (
+  blob,
+  isRequestFromContextMenu = true,
+) => {
   // let image = content.substring(content.indexOf(",") + 1);
   // let image = content;
 
@@ -332,28 +369,40 @@ export const reverseImageSearchBing = async (blob) => {
     body: formData,
   })
     .then((response) => {
-      chrome.tabs.create({ url: response.url });
+      const urlObject = { url: response.url };
+
+      openNewTabWithUrl(urlObject, isRequestFromContextMenu);
     })
     .catch((error) => {
-      console.error(error);
+      //console.error(error);
     })
     .finally(() => {
       // document.body.style.cursor = "default";
     });
 };
 
-const reverseImageSearchTineye = (imageUrl) => {
-  chrome.tabs.create({
+const reverseImageSearchTineye = (
+  imageUrl,
+  isRequestFromContextMenu = true,
+) => {
+  const urlObject = {
     url:
       SEARCH_ENGINE_SETTINGS.TINEYE_SEARCH.URI + encodeURIComponent(imageUrl),
-  });
+  };
+
+  openNewTabWithUrl(urlObject, isRequestFromContextMenu);
 };
 
-const reverseImageSearchReddit = (imageUrl) => {
-  chrome.tabs.create({
+const reverseImageSearchReddit = (
+  imageUrl,
+  isRequestFromContextMenu = true,
+) => {
+  const urlObject = {
     url:
       SEARCH_ENGINE_SETTINGS.REDDIT_SEARCH.URI + encodeURIComponent(imageUrl),
-  });
+  };
+
+  openNewTabWithUrl(urlObject, isRequestFromContextMenu);
 };
 
 export const getImgUrl = (info) => {
@@ -371,14 +420,14 @@ export const getImgUrl = (info) => {
 export const getLocalImageFromSourcePath = async (src, imgFormat) => {
   if (!Object.values(IMAGE_FORMATS).includes(imgFormat)) {
     throw new Error(
-      `[getLocalImageFromSourcePath] Error: Image format ${imgFormat} not supported`
+      `[getLocalImageFromSourcePath] Error: Image format ${imgFormat} not supported`,
     );
   }
 
   let img = new Image();
   img.crossOrigin = "anonymous";
-  console.log(src);
-  console.log(src.toDataURL());
+  // console.log(src);
+  // console.log(src.toDataURL());
 
   const blob = await (await fetch(src)).blob();
 
@@ -397,11 +446,11 @@ export const getLocalImageFromSourcePath = async (src, imgFormat) => {
 
       if (!base64String) {
         throw new Error(
-          `[getLocalImageFromSourcePath] Error: Invalid type for base64string`
+          `[getLocalImageFromSourcePath] Error: Invalid type for base64string`,
         );
       }
 
-      console.log(base64String);
+      // console.log(base64String);
 
       return new ImageObject(base64String, IMAGE_FORMATS.B64);
     };
@@ -424,11 +473,11 @@ export const getBlob = async (info) => {
 
   const isb64 = isBase64(info);
 
-  console.log(info);
-  console.log(isImgUrl);
-  console.log(isb64);
+  // console.log(info);
+  // console.log(isImgUrl);
+  // console.log(isb64);
 
-  console.log(getImgUrl(info));
+  // console.log(getImgUrl(info));
 
   let imgBlob;
 
@@ -438,14 +487,14 @@ export const getBlob = async (info) => {
   ) {
     imgBlob = await fetchImage(info);
   } else if (isImgUrl && !isb64) {
-    console.log(getImgUrl(info));
+    // console.log(getImgUrl(info));
     imgBlob = await fetchImage(getImgUrl(info));
   } else if (isb64) {
     imgBlob = b64toBlob(info);
   } else {
     imgBlob = await getLocalImageFromSourcePath(
       getImgUrl(info),
-      IMAGE_FORMATS.BLOB
+      IMAGE_FORMATS.BLOB,
     );
   }
 
@@ -468,7 +517,7 @@ const getSearchEngineFromName = (searchEngineName) => {
   }
 
   throw new Error(
-    `[getSearchEngineFromName] Error: Search Engine not found for searchEngineName ${searchEngineName}`
+    `[getSearchEngineFromName] Error: Search Engine not found for searchEngineName ${searchEngineName}`,
   );
 };
 
@@ -483,7 +532,7 @@ const retrieveImgObjectForSearchEngine = async (
   info,
   isImgUrl,
   searchEngineName,
-  isLocalImg = false
+  isLocalImg = false,
 ) => {
   const searchEngine = getSearchEngineFromName(searchEngineName);
 
@@ -506,7 +555,7 @@ const retrieveImgObjectForSearchEngine = async (
     //   );
     // }
 
-    console.log(info);
+    // console.log(info);
     // TODO: Error handling for getImgUrl
     return new ImageObject(getImgUrl(info), IMAGE_FORMATS.URI);
   }
@@ -526,15 +575,20 @@ const retrieveImgObjectForSearchEngine = async (
   }
 
   throw new Error(
-    `[retrieveImgObjectForSearchEngine] Error: Image format ${searchEngine.IMAGE_FORMAT} not supported`
+    `[retrieveImgObjectForSearchEngine] Error: Image format ${searchEngine.IMAGE_FORMAT} not supported`,
   );
 };
 
-export const reverseImageSearch = async (info, isImgUrl, searchEngineName) => {
+export const reverseImageSearch = async (
+  info,
+  isImgUrl,
+  searchEngineName,
+  isRequestFromContextMenu = true,
+) => {
   const imageObject = await retrieveImgObjectForSearchEngine(
     info,
     isImgUrl,
-    searchEngineName
+    searchEngineName,
   );
 
   if (searchEngineName === SEARCH_ENGINE_SETTINGS.DBKF_SEARCH.NAME) {
@@ -545,7 +599,7 @@ export const reverseImageSearch = async (info, isImgUrl, searchEngineName) => {
       throw new Error(`[reverseImageSearch] Error: invalid image format`);
     }
 
-    reverseImageSearchDBKF(imageObject.obj);
+    reverseImageSearchDBKF(imageObject.obj, isRequestFromContextMenu);
   } else if (searchEngineName === SEARCH_ENGINE_SETTINGS.GOOGLE_SEARCH.NAME) {
     if (
       imageObject.imageFormat !==
@@ -554,7 +608,7 @@ export const reverseImageSearch = async (info, isImgUrl, searchEngineName) => {
       throw new Error(`[reverseImageSearch] Error: invalid image format`);
     }
 
-    reverseImageSearchGoogle(imageObject.obj);
+    reverseImageSearchGoogle(imageObject.obj, isRequestFromContextMenu);
   } else if (
     searchEngineName === SEARCH_ENGINE_SETTINGS.GOOGLE_LENS_SEARCH.NAME
   ) {
@@ -565,7 +619,7 @@ export const reverseImageSearch = async (info, isImgUrl, searchEngineName) => {
       throw new Error(`[reverseImageSearch] Error: invalid image format`);
     }
 
-    reverseImageSearchGoogleLens(imageObject.obj);
+    reverseImageSearchGoogleLens(imageObject.obj, isRequestFromContextMenu);
   } else if (searchEngineName === SEARCH_ENGINE_SETTINGS.YANDEX_SEARCH.NAME) {
     if (
       imageObject.imageFormat !==
@@ -574,7 +628,7 @@ export const reverseImageSearch = async (info, isImgUrl, searchEngineName) => {
       throw new Error(`[reverseImageSearch] Error: invalid image format`);
     }
 
-    reverseImageSearchYandex(imageObject.obj);
+    reverseImageSearchYandex(imageObject.obj, isRequestFromContextMenu);
   } else if (searchEngineName === SEARCH_ENGINE_SETTINGS.BAIDU_SEARCH.NAME) {
     if (
       imageObject.imageFormat !==
@@ -583,7 +637,7 @@ export const reverseImageSearch = async (info, isImgUrl, searchEngineName) => {
       throw new Error(`[reverseImageSearch] Error: invalid image format`);
     }
 
-    reverseImageSearchBaidu(imageObject.obj);
+    reverseImageSearchBaidu(imageObject.obj, isRequestFromContextMenu);
   } else if (searchEngineName === SEARCH_ENGINE_SETTINGS.BING_SEARCH.NAME) {
     if (
       imageObject.imageFormat !==
@@ -604,16 +658,18 @@ export const reverseImageSearch = async (info, isImgUrl, searchEngineName) => {
         search_url +
         encodeURIComponent(imageObject.obj) +
         "&view=detailv2&iss=sbi";
-      chrome.tabs.create({ url: url });
+
+      const urlObject = { url: url };
+      openNewTabWithUrl(urlObject, isRequestFromContextMenu);
     } else if (imageObject.obj !== "") {
       const b64Img = await retrieveImgObjectForSearchEngine(
         info,
         isImgUrl,
         searchEngineName,
-        true
+        true,
       );
 
-      console.log(b64Img);
+      // console.log(b64Img);
 
       let url =
         "https://www.bing.com/images/search?view=detailv2&iss=sbiupload&FORM=SBIHMP&sbifnm=weverify-local-file";
@@ -626,10 +682,10 @@ export const reverseImageSearch = async (info, isImgUrl, searchEngineName) => {
         body: formData,
       })
         .then((response) => {
-          chrome.tabs.create({ url: response.url });
+          openTabsSearch({ url: response.url });
         })
         .catch((error) => {
-          console.error(error);
+          //console.error(error);
         });
     }
   } else if (searchEngineName === SEARCH_ENGINE_SETTINGS.REDDIT_SEARCH.NAME) {
@@ -640,7 +696,7 @@ export const reverseImageSearch = async (info, isImgUrl, searchEngineName) => {
       throw new Error(`[reverseImageSearch] Error: invalid image format`);
     }
 
-    reverseImageSearchReddit(imageObject.obj);
+    reverseImageSearchReddit(imageObject.obj, isRequestFromContextMenu);
   } else if (searchEngineName === SEARCH_ENGINE_SETTINGS.TINEYE_SEARCH.NAME) {
     if (
       imageObject.imageFormat !==
@@ -649,13 +705,17 @@ export const reverseImageSearch = async (info, isImgUrl, searchEngineName) => {
       throw new Error(`[reverseImageSearch] Error: invalid image format`);
     }
 
-    reverseImageSearchTineye(imageObject.obj);
+    reverseImageSearchTineye(imageObject.obj, isRequestFromContextMenu);
   } else {
     throw new Error("[reverseImageSearch] Error: Search Engine not supported");
   }
 };
 
-export const reverseImageSearchAll = async (info, isImageUrl) => {
+export const reverseImageSearchAll = async (
+  info,
+  isImageUrl,
+  isRequestFromContextMenu = true,
+) => {
   let promises = [];
 
   for (const searchEngineSetting of Object.values(SEARCH_ENGINE_SETTINGS)) {
@@ -663,8 +723,70 @@ export const reverseImageSearchAll = async (info, isImageUrl) => {
       continue;
     }
     promises.push(
-      reverseImageSearch(info, isImageUrl, searchEngineSetting.NAME)
+      reverseImageSearch(
+        info,
+        isImageUrl,
+        searchEngineSetting.NAME,
+        isRequestFromContextMenu,
+      ),
     );
   }
   await Promise.all(promises);
 };
+export const openTabs = (url) => {
+  chrome.tabs.create(url, (createdTab) => {
+    chrome.tabs.onUpdated.addListener(async function _(tabId) {
+      if (tabId === createdTab.id) {
+        chrome.tabs.onUpdated.removeListener(_);
+      } else {
+        await chrome.tabs.get(tabId, async () => {
+          if (!chrome.runtime.lastError) {
+            //console.log("tab exist ", tabId)
+            await chrome.tabs.remove(tabId, () => {
+              if (!chrome.runtime.lastError) {
+                //nothing todo
+              }
+              //chrome.tabs.onUpdated.removeListener(_);
+            });
+          }
+        });
+      }
+    });
+  });
+};
+
+const openTabsSearch = (url) => {
+  chrome.tabs.create(url, (createdTab) => {
+    chrome.tabs.onUpdated.addListener(async function _(tabId, info, tab) {
+      let pending_url = ns(createdTab.pendingUrl);
+      let tab_url = ns(tab.url);
+      if (tabId === createdTab.id && pending_url === tab_url) {
+        //console.log("remove .... listerner", tabId);
+        chrome.tabs.onUpdated.removeListener(_);
+      } else {
+        if (pending_url === tab_url) {
+          //console.log("remove id ", tabId);
+          await chrome.tabs.get(tabId, async () => {
+            if (!chrome.runtime.lastError) {
+              //console.log("tab exist ", tabId)
+              await chrome.tabs.remove(tabId, async () => {
+                //nothing todo
+                if (!chrome.runtime.lastError) {
+                  //nothing todo
+                }
+              });
+            } else {
+              //nothing todo
+            }
+          });
+        }
+      }
+    });
+  });
+};
+
+function ns(url) {
+  let domain = new URL(url);
+  domain = domain.hostname.replace("www.", "");
+  return domain;
+}

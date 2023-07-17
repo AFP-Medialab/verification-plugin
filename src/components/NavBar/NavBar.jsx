@@ -1,23 +1,44 @@
-import Box from "@mui/material/Box";
+import React, { useEffect, memo, useState, createRef } from "react";
+
 import { useDispatch, useSelector } from "react-redux";
 import Languages from "../NavItems/languages/languages";
 import Tutorial from "../NavItems/tutorial/tutorial";
-import React, { useEffect, memo, useState, createRef } from "react";
 import clsx from "clsx";
-import Drawer from "@mui/material/Drawer";
-import AppBar from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
-import List from "@mui/material/List";
-import Divider from "@mui/material/Divider";
-import IconButton from "@mui/material/IconButton";
+
+import {
+  Alert,
+  AppBar,
+  Box,
+  Button,
+  Collapse,
+  Divider,
+  Drawer,
+  Fab,
+  IconButton,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  ListSubheader,
+  Snackbar,
+  Tab,
+  Tabs,
+  Toolbar,
+  Typography,
+} from "@mui/material";
+
+import ArchiveIcon from "@mui/icons-material/Archive";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import ListItem from "@mui/material/ListItem";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
-import ScrollTop from "../Shared/ScrollTop/ScrollTop";
-import Fab from "@mui/material/Fab";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import ExpandLess from "@mui/icons-material/ExpandLess";
+import ExpandMore from "@mui/icons-material/ExpandMore";
+
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+
+import ScrollTop from "../Shared/ScrollTop/ScrollTop";
+
 import { cleanError } from "../../redux/actions/errorActions";
 import TabItem from "./TabItem/TabItem";
 import ClassRoom from "../NavItems/ClassRoom/ClassRoom";
@@ -27,7 +48,7 @@ import Assistant from "../NavItems/Assistant/Assistant";
 import MySnackbar from "../MySnackbar/MySnackbar";
 import useMyStyles from "../Shared/MaterialUiStyles/useMyStyles";
 import Footer from "../Shared/Footer/Footer";
-import FeedBack from "../FeedBack/FeedBack";
+import Feedback from "../Feedback/Feedback";
 
 import AnalysisIcon from "./images/SVG/Video/Video_analysis.svg";
 import KeyframesIcon from "./images/SVG/Video/Keyframes.svg";
@@ -72,16 +93,10 @@ import { getSupportedBrowserLanguage } from "../Shared/Languages/getSupportedBro
 import useLoadLanguage from "../../Hooks/useLoadLanguage";
 import tsv from "../../LocalDictionary/components/NavBar.tsv";
 import tsvWarning from "../../LocalDictionary/components/Shared/OnWarningInfo.tsv";
-import Snackbar from "@mui/material/Snackbar";
+
 import { setFalse, setTrue } from "../../redux/reducers/cookiesReducers";
 import { changeLanguage } from "../../redux/reducers/languageReducer";
-import Button from "@mui/material/Button";
-import Alert from "@mui/material/Alert";
-import { Collapse, ListSubheader, Tab, Tabs } from "@mui/material";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-import Typography from "@mui/material/Typography";
-import ExpandLess from "@mui/icons-material/ExpandLess";
-import ExpandMore from "@mui/icons-material/ExpandMore";
+
 import { Link, useNavigate } from "react-router-dom";
 
 function a11yProps(index) {
@@ -91,12 +106,12 @@ function a11yProps(index) {
   };
 }
 
-const NavBar = (props) => {
+const NavBar = () => {
   const classes = useMyStyles();
   const navigate = useNavigate();
   const [open, setOpen] = useState(true);
   const [classWidthToolbar, setClassWidthToolbar] = useState(
-    classes.drawerWidth
+    classes.drawerWidth,
   );
 
   const tabValue = useSelector((state) => state.nav);
@@ -105,7 +120,7 @@ const NavBar = (props) => {
   const cookiesUsage = useSelector((state) => state.cookies);
   const currentLang = useSelector((state) => state.language);
   const defaultLanguage = useSelector((state) => state.defaultLanguage);
-
+  const isCurrentLanguageLeftToRight = currentLang !== "ar";
   const dispatch = useDispatch();
 
   const drawerRef = createRef();
@@ -128,7 +143,7 @@ const NavBar = (props) => {
   };
 
   const userAuthenticated = useSelector(
-    (state) => state.userSession && state.userSession.userAuthenticated
+    (state) => state.userSession && state.userSession.userAuthenticated,
   );
 
   const changeValue = (newValue, newValueType) => {
@@ -150,7 +165,7 @@ const NavBar = (props) => {
         if (newValue.title === "navbar_twitter_crowdtangle")
           window.open(
             process.env.REACT_APP_TSNA_SERVER + "csvSna?lang=" + currentLang,
-            "_blank"
+            "_blank",
           );
         else if (newValue.path === "factcheck" || newValue.path === "xnetwork")
           window.open(
@@ -158,7 +173,7 @@ const NavBar = (props) => {
               newValue.path +
               "?lang=" +
               currentLang,
-            "_blank"
+            "_blank",
           );
         else {
           navigate("/app/tools/" + newValue.path);
@@ -178,11 +193,11 @@ const NavBar = (props) => {
   const keyword = useLoadLanguage("components/NavBar.tsv", tsv);
   const keywordWarning = useLoadLanguage(
     "components/Shared/OnWarningInfo.tsv",
-    tsvWarning
+    tsvWarning,
   );
 
   const [classListHeading, setClassListHeading] = useState(
-    classes.drawerListHeadingLeft
+    classes.drawerListHeadingLeft,
   );
 
   const handleDrawerToggle = () => {
@@ -214,7 +229,7 @@ const NavBar = (props) => {
           <ToolsIcon
             width="40px"
             height="40px"
-            style={{ fill: "#51A5B2" }}
+            style={{ fill: "#00926c" }}
             title={keyword("navbar_tools")}
           />
         ) : (
@@ -243,7 +258,7 @@ const NavBar = (props) => {
           <AnalysisIcon
             width="45px"
             height="45px"
-            style={{ fill: "#51A5B2" }}
+            style={{ fill: "#00926c" }}
             title="Video analysis"
           />
         ) : (
@@ -258,7 +273,7 @@ const NavBar = (props) => {
         <AnalysisIcon
           width="45px"
           height="45px"
-          style={{ fill: "#51A5B2" }}
+          style={{ fill: "#00926c" }}
           title={keyword("navbar_analysis_video")}
         />
       ),
@@ -279,7 +294,7 @@ const NavBar = (props) => {
           <KeyframesIcon
             width="45px"
             height="45px"
-            style={{ fill: "#51A5B2" }}
+            style={{ fill: "#00926c" }}
             title="Keyframes"
           />
         ) : (
@@ -294,7 +309,7 @@ const NavBar = (props) => {
         <KeyframesIcon
           width="45px"
           height="45px"
-          style={{ fill: "#51A5B2" }}
+          style={{ fill: "#00926c" }}
           title={keyword("navbar_keyframes")}
         />
       ),
@@ -315,7 +330,7 @@ const NavBar = (props) => {
           <ThumbnailsIcon
             width="45px"
             height="45px"
-            style={{ fill: "#51A5B2" }}
+            style={{ fill: "#00926c" }}
             title="Thumbnails"
           />
         ) : (
@@ -330,7 +345,7 @@ const NavBar = (props) => {
         <ThumbnailsIcon
           width="45px"
           height="45px"
-          style={{ fill: "#51A5B2" }}
+          style={{ fill: "#00926c" }}
           title={keyword("navbar_thumbnails")}
         />
       ),
@@ -351,7 +366,7 @@ const NavBar = (props) => {
           <VideoRightsIcon
             width="45px"
             height="45px"
-            style={{ fill: "#51A5B2" }}
+            style={{ fill: "#00926c" }}
             title="Video rights"
           />
         ) : (
@@ -366,7 +381,7 @@ const NavBar = (props) => {
         <VideoRightsIcon
           width="45px"
           height="45px"
-          style={{ fill: "#51A5B2" }}
+          style={{ fill: "#00926c" }}
           title={keyword("navbar_rights")}
         />
       ),
@@ -388,7 +403,7 @@ const NavBar = (props) => {
           <MetadataIcon
             width="45px"
             height="45px"
-            style={{ fill: "#51A5B2" }}
+            style={{ fill: "#00926c" }}
             title="Metadata"
           />
         ) : (
@@ -403,7 +418,7 @@ const NavBar = (props) => {
         <MetadataIcon
           width="45px"
           height="45px"
-          style={{ fill: "#51A5B2" }}
+          style={{ fill: "#00926c" }}
           title={keyword("navbar_metadata")}
         />
       ),
@@ -425,7 +440,7 @@ const NavBar = (props) => {
           <DeepfakeIcon
             width="45px"
             height="45px"
-            style={{ fill: "#51A5B2" }}
+            style={{ fill: "#00926c" }}
             title="Twitter SNA"
           />
         ) : (
@@ -440,7 +455,7 @@ const NavBar = (props) => {
         <DeepfakeIcon
           width="45px"
           height="45px"
-          style={{ fill: "#51A5B2" }}
+          style={{ fill: "#00926c" }}
           title={keyword("navbar_deepfake")}
         />
       ),
@@ -462,7 +477,7 @@ const NavBar = (props) => {
           <AnalysisIconImage
             width="45px"
             height="45px"
-            style={{ fill: "#51A5B2" }}
+            style={{ fill: "#00926c" }}
             title="Image analysis"
           />
         ) : (
@@ -477,7 +492,7 @@ const NavBar = (props) => {
         <AnalysisIconImage
           width="45px"
           height="45px"
-          style={{ fill: "#51A5B2" }}
+          style={{ fill: "#00926c" }}
           title={keyword("navbar_analysis_image")}
         />
       ),
@@ -498,7 +513,7 @@ const NavBar = (props) => {
           <MagnifierIcon
             width="45px"
             height="45px"
-            style={{ fill: "#51A5B2" }}
+            style={{ fill: "#00926c" }}
             title="Magnifier"
           />
         ) : (
@@ -513,7 +528,7 @@ const NavBar = (props) => {
         <MagnifierIcon
           width="45px"
           height="45px"
-          style={{ fill: "#51A5B2" }}
+          style={{ fill: "#00926c" }}
           title={keyword("navbar_magnifier")}
         />
       ),
@@ -534,7 +549,7 @@ const NavBar = (props) => {
           <MetadataIcon
             width="45px"
             height="45px"
-            style={{ fill: "#51A5B2" }}
+            style={{ fill: "#00926c" }}
             title="Metadata"
           />
         ) : (
@@ -549,7 +564,7 @@ const NavBar = (props) => {
         <MetadataIcon
           width="45px"
           height="45px"
-          style={{ fill: "#51A5B2" }}
+          style={{ fill: "#00926c" }}
           title={keyword("navbar_metadata")}
         />
       ),
@@ -571,7 +586,7 @@ const NavBar = (props) => {
           <ForensicIcon
             width="45px"
             height="45px"
-            style={{ fill: "#51A5B2" }}
+            style={{ fill: "#00926c" }}
             title="Forensic"
           />
         ) : (
@@ -586,7 +601,7 @@ const NavBar = (props) => {
         <ForensicIcon
           width="45px"
           height="45px"
-          style={{ fill: "#51A5B2" }}
+          style={{ fill: "#00926c" }}
           title={keyword("navbar_forensic")}
         />
       ),
@@ -607,7 +622,7 @@ const NavBar = (props) => {
           <OcrIcon
             width="45px"
             height="45px"
-            style={{ fill: "#51A5B2" }}
+            style={{ fill: "#00926c" }}
             title="OCR"
           />
         ) : (
@@ -622,7 +637,7 @@ const NavBar = (props) => {
         <OcrIcon
           width="45px"
           height="45px"
-          style={{ fill: "#51A5B2" }}
+          style={{ fill: "#00926c" }}
           title={keyword("navbar_ocr")}
         />
       ),
@@ -644,7 +659,7 @@ const NavBar = (props) => {
           <GifIcon
             width="45px"
             height="45px"
-            style={{ fill: "#51A5B2" }}
+            style={{ fill: "#00926c" }}
             title="CheckGIF"
           />
         ) : (
@@ -659,7 +674,7 @@ const NavBar = (props) => {
         <GifIcon
           width="45px"
           height="45px"
-          style={{ fill: "#51A5B2" }}
+          style={{ fill: "#00926c" }}
           title={keyword("navbar_gif")}
         />
       ),
@@ -680,7 +695,7 @@ const NavBar = (props) => {
           <DeepfakeIcon
             width="45px"
             height="45px"
-            style={{ fill: "#51A5B2" }}
+            style={{ fill: "#00926c" }}
             title="Twitter SNA"
           />
         ) : (
@@ -695,7 +710,7 @@ const NavBar = (props) => {
         <DeepfakeIcon
           width="45px"
           height="45px"
-          style={{ fill: "#51A5B2" }}
+          style={{ fill: "#00926c" }}
           title={keyword("navbar_deepfake")}
         />
       ),
@@ -716,7 +731,7 @@ const NavBar = (props) => {
           <GeolactionIcon
             width="45px"
             height="45px"
-            style={{ fill: "#51A5B2" }}
+            style={{ fill: "#00926c" }}
             title="Twitter SNA"
           />
         ) : (
@@ -731,7 +746,7 @@ const NavBar = (props) => {
         <GeolactionIcon
           width="45px"
           height="45px"
-          style={{ fill: "#51A5B2" }}
+          style={{ fill: "#00926c" }}
           title={keyword("navbar_geolocation")}
         />
       ),
@@ -753,7 +768,7 @@ const NavBar = (props) => {
           <TwitterSearchIcon
             width="45px"
             height="45px"
-            style={{ fill: "#51A5B2" }}
+            style={{ fill: "#00926c" }}
             title="Twitter search"
           />
         ) : (
@@ -768,7 +783,7 @@ const NavBar = (props) => {
         <TwitterSearchIcon
           width="45px"
           height="45px"
-          style={{ fill: "#51A5B2" }}
+          style={{ fill: "#00926c" }}
           title={keyword("navbar_twitter")}
         />
       ),
@@ -785,11 +800,11 @@ const NavBar = (props) => {
       title: "navbar_twitter_sna",
       description: "navbar_twitter_sna_description",
       icon:
-        tabValue === 0 && drawerValue === 18 ? (
+        tabValue === 0 && drawerValue === 16 ? (
           <TwitterSnaIcon
             width="45px"
             height="45px"
-            style={{ fill: "#51A5B2" }}
+            style={{ fill: "#00926c" }}
             title="Twitter SNA"
           />
         ) : (
@@ -804,7 +819,7 @@ const NavBar = (props) => {
         <TwitterSnaIcon
           width="45px"
           height="45px"
-          style={{ fill: "#51A5B2" }}
+          style={{ fill: "#00926c" }}
           title={keyword("navbar_twitter_sna")}
         />
       ),
@@ -818,14 +833,50 @@ const NavBar = (props) => {
     },
     {
       id: 18,
+      title: "navbar_archiving",
+      description: "navbar_archiving_description",
+      icon:
+        tabValue === 0 && drawerValue === 17 ? (
+          <ArchiveIcon
+            width="45px"
+            height="45px"
+            style={{ fill: "#00926c" }}
+            title="Archiving"
+          />
+        ) : (
+          <ArchiveIcon
+            width="45px"
+            height="45px"
+            style={{ fill: "#4c4c4c" }}
+            title="Archiving"
+          />
+        ),
+      iconColored: (
+        <ArchiveIcon
+          width="45px"
+          height="45px"
+          style={{ fill: "#00926c" }}
+          title={keyword("navbar_archiving")}
+        />
+      ),
+      tsvPrefix: "archiving",
+      path: "archive",
+      pathGroup: "TOOL",
+      type: keyword("navbar_category_other"),
+      typeId: 5,
+      icons: ["experimental", "new", "lock"],
+      toolRestrictions: ["lock", "beta"],
+    },
+    {
+      id: 19,
       title: "navbar_twitter_crowdtangle",
       description: "navbar_twitter_crowdtangle_description",
       icon:
-        tabValue === 0 && drawerValue === 19 ? (
+        tabValue === 0 && drawerValue === 18 ? (
           <CsvSnaIcon
             width="45px"
             height="45px"
-            style={{ fill: "#51A5B2" }}
+            style={{ fill: "#00926c" }}
             title="Twitter SNA"
           />
         ) : (
@@ -840,7 +891,7 @@ const NavBar = (props) => {
         <CsvSnaIcon
           width="45px"
           height="45px"
-          style={{ fill: "#51A5B2" }}
+          style={{ fill: "#00926c" }}
           title={keyword("navbar_twitter_crowdtangle")}
         />
       ),
@@ -852,15 +903,15 @@ const NavBar = (props) => {
       toolRestrictions: [],
     },
     {
-      id: 19,
+      id: 20,
       title: "navbar_covidsearch",
       description: "navbar_covidsearch_description",
       icon:
-        tabValue === 0 && drawerValue === 16 ? (
+        tabValue === 0 && drawerValue === 19 ? (
           <CovidSearchIcon
             width="45px"
             height="45px"
-            style={{ fill: "#51A5B2" }}
+            style={{ fill: "#00926c" }}
             title="Covid search"
           />
         ) : (
@@ -875,7 +926,7 @@ const NavBar = (props) => {
         <CovidSearchIcon
           width="45px"
           height="45px"
-          style={{ fill: "#51A5B2" }}
+          style={{ fill: "#00926c" }}
           title={keyword("navbar_covidsearch")}
         />
       ),
@@ -888,15 +939,15 @@ const NavBar = (props) => {
       toolRestrictions: [],
     },
     {
-      id: 20,
+      id: 21,
       title: "navbar_xnetwork",
       description: "navbar_xnetwork_description",
       icon:
-        tabValue === 0 && drawerValue === 17 ? (
+        tabValue === 0 && drawerValue === 20 ? (
           <XnetworkIcon
             width="45px"
             height="45px"
-            style={{ fill: "#51A5B2" }}
+            style={{ fill: "#00926c" }}
             title="Xnetwork"
           />
         ) : (
@@ -911,7 +962,7 @@ const NavBar = (props) => {
         <XnetworkIcon
           width="45px"
           height="45px"
-          style={{ fill: "#51A5B2" }}
+          style={{ fill: "#00926c" }}
           title={keyword("navbar_xnetwork")}
         />
       ),
@@ -930,7 +981,7 @@ const NavBar = (props) => {
       title: "navbar_tools",
       icon:
         tabValue === 0 && drawerValue === 0 ? (
-          <ToolsIcon width="30px" height="30px" style={{ fill: "#51A5B2" }} />
+          <ToolsIcon width="30px" height="30px" style={{ fill: "#00926c" }} />
         ) : (
           <ToolsIcon width="30px" height="30px" style={{ fill: "#4c4c4c" }} />
         ),
@@ -949,7 +1000,7 @@ const NavBar = (props) => {
           <AssistantIcon
             width="30px"
             height="30px"
-            style={{ fill: "#51A5B2" }}
+            style={{ fill: "#00926c" }}
           />
         ) : (
           <AssistantIcon
@@ -970,7 +1021,7 @@ const NavBar = (props) => {
       title: "navbar_tuto",
       icon:
         tabValue === 2 ? (
-          <GuideIcon width="30px" height="30px" style={{ fill: "#51A5B2" }} />
+          <GuideIcon width="30px" height="30px" style={{ fill: "#00926c" }} />
         ) : (
           <GuideIcon width="30px" height="30px" style={{ fill: "#4c4c4c" }} />
         ),
@@ -989,7 +1040,7 @@ const NavBar = (props) => {
           <InteractiveIcon
             width="30px"
             height="30px"
-            style={{ fill: "#51A5B2" }}
+            style={{ fill: "#00926c" }}
           />
         ) : (
           <InteractiveIcon
@@ -1013,7 +1064,7 @@ const NavBar = (props) => {
           <ClassroomIcon
             width="30px"
             height="30px"
-            style={{ fill: "#51A5B2" }}
+            style={{ fill: "#00926c" }}
           />
         ) : (
           <ClassroomIcon
@@ -1032,7 +1083,7 @@ const NavBar = (props) => {
     },
     /*{
             title: "navbar_factCheck",
-            icon: (tabValue === 5) ? <FactcheckIcon width="40px" height="40px" style={{ fill: "#51A5B2" }} />
+            icon: (tabValue === 5) ? <FactcheckIcon width="40px" height="40px" style={{ fill: "#00926c" }} />
                 : <FactcheckIcon width="40px" height="40px" style={{ fill: "#4c4c4c" }} />,
             content: <FactCheck />,
             path: "factCheck",
@@ -1042,7 +1093,7 @@ const NavBar = (props) => {
       title: "navbar_about",
       icon:
         tabValue === 5 ? (
-          <AboutIcon width="30px" height="30px" style={{ fill: "#51A5B2" }} />
+          <AboutIcon width="30px" height="30px" style={{ fill: "#00926c" }} />
         ) : (
           <AboutIcon width="30px" height="30px" style={{ fill: "#4c4c4c" }} />
         ),
@@ -1090,6 +1141,9 @@ const NavBar = (props) => {
       case 4:
         setOpenListData(true);
         break;
+      case 5:
+        setOpenListOtherTools(true);
+        break;
       default:
         break;
     }
@@ -1098,9 +1152,9 @@ const NavBar = (props) => {
   const themeFab = createTheme({
     palette: {
       primary: {
-        light: "#5cdbe6",
-        main: "#05a9b4",
-        dark: "#007984",
+        light: "#00926c",
+        main: "#00926c",
+        dark: "#00926c",
         contrastText: "#fff",
       },
     },
@@ -1161,7 +1215,7 @@ const NavBar = (props) => {
 
   //Video items
   const drawerItemsVideo = drawerItems.filter(
-    (item) => item.type === keyword("navbar_category_video")
+    (item) => item.type === keyword("navbar_category_video"),
   );
   const [openListVideo, setOpenListVideo] = useState(false);
   const [classBorderVideo, setClassBorderVideo] = useState(null);
@@ -1177,7 +1231,7 @@ const NavBar = (props) => {
 
   //Image items
   const drawerItemsImage = drawerItems.filter(
-    (item) => item.type === keyword("navbar_category_image")
+    (item) => item.type === keyword("navbar_category_image"),
   );
   const [openListImage, setOpenListImage] = useState(false);
   const [classBorderImage, setClassBorderImage] = useState(null);
@@ -1193,7 +1247,7 @@ const NavBar = (props) => {
 
   //Search items
   const drawerItemsSearch = drawerItems.filter(
-    (item) => item.type === keyword("navbar_category_search")
+    (item) => item.type === keyword("navbar_category_search"),
   );
   const [openListSeach, setOpenListSeach] = useState(false);
   const [classBorderSearch, setClassBorderSearch] = useState(null);
@@ -1209,7 +1263,7 @@ const NavBar = (props) => {
 
   //Data items
   const drawerItemsData = drawerItems.filter(
-    (item) => item.type === keyword("navbar_category_data")
+    (item) => item.type === keyword("navbar_category_data"),
   );
   const [openListData, setOpenListData] = useState(false);
   const [classBorderData, setClassBorderData] = useState(null);
@@ -1220,6 +1274,21 @@ const NavBar = (props) => {
       setClassBorderData(classes.drawerCategoryBorder);
     } else {
       setClassBorderData(null);
+    }
+  };
+
+  const drawerItemsOtherTools = drawerItems.filter(
+    (item) => item.type === keyword("navbar_category_other"),
+  );
+  const [openListOtherTools, setOpenListOtherTools] = useState(false);
+  const [classBorderOtherTools, setClassBorderOtherTools] = useState(null);
+
+  const handleClickListOtherTools = () => {
+    setOpenListOtherTools(!openListOtherTools);
+    if (!openListOtherTools) {
+      setClassBorderOtherTools(classes.drawerCategoryBorder);
+    } else {
+      setClassBorderOtherTools(null);
     }
   };
 
@@ -1280,6 +1349,20 @@ const NavBar = (props) => {
       functionHandleClick: handleClickListData,
       classBorder: classBorderData,
     },
+    {
+      title: keyword("navbar_category_other"),
+      icon: (
+        <MoreHorizIcon
+          style={{ fill: "#4c4c4c" }}
+          title={keyword("navbar_category_other")}
+        />
+      ),
+      list: drawerItemsOtherTools,
+      variableOpen: openListOtherTools,
+      setVariableOpen: setOpenListOtherTools,
+      functionHandleClick: handleClickListOtherTools,
+      classBorder: classBorderOtherTools,
+    },
   ];
 
   const toolsItem = drawerItems.find((data) => data.title === "navbar_tools");
@@ -1295,6 +1378,11 @@ const NavBar = (props) => {
         open={openAlert}
         autoHideDuration={6000}
         onClose={handleCloseAlert}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "right",
+        }}
+        sx={{ mr: 8 }}
       >
         <Alert onClose={handleCloseAlert} severity="warning">
           {keywordWarning("warning_advanced_tools")}
@@ -1648,7 +1736,9 @@ const NavBar = (props) => {
             tabItems={tabItems}
             drawerItems={drawerItems}
           />
-          <ScrollTop {...props}>
+          <ScrollTop
+            {...{ isCurrentLanguageLeftToRight: isCurrentLanguageLeftToRight }}
+          >
             <ThemeProvider theme={themeFab}>
               <Fab
                 color="primary"
@@ -1665,9 +1755,11 @@ const NavBar = (props) => {
               variant="error"
               message={error}
               onClick={() => dispatch(cleanError())}
+              onClose={() => {}}
+              sx={{ mr: 8 }}
             />
           )}
-          {cookiesUsage === null && (
+          {cookiesUsage.active === null && (
             <Snackbar
               anchorOrigin={{
                 vertical: "top",
@@ -1697,7 +1789,7 @@ const NavBar = (props) => {
               ]}
             />
           )}
-          <FeedBack />
+          <Feedback />
         </main>
       </ThemeProvider>
     </div>

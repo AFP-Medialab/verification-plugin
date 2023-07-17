@@ -1,4 +1,5 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import PropTypes from "prop-types";
 import clsx from "clsx";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
@@ -45,7 +46,7 @@ const useStyles1 = (theme) => ({
   },
 });
 
-// variant can bee : "success", "error", "warning", "info"
+// variant can be : "success", "error", "warning", "info"
 const MySnackbar = (props) => {
   const [open, setOpen] = React.useState(true);
   const handleClose = (event, reason) => {
@@ -58,12 +59,16 @@ const MySnackbar = (props) => {
   const classes = useClasses(useStyles1);
   const { message, onClose, variant, ...other } = props;
   const Icon = variantIcon[variant];
+
+  const currentLang = useSelector((state) => state.language);
+  const isCurrentLanguageLeftToRight = currentLang !== "ar";
+
   return (
     <div>
       <Snackbar
         anchorOrigin={{
           vertical: "bottom",
-          horizontal: "center",
+          horizontal: "right",
         }}
         open={open}
         onClose={handleClose}

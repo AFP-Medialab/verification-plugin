@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import { Container } from "@mui/material";
 import Fade from "@mui/material/Fade";
-import { useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { selectTool } from "../../../redux/reducers/tools/toolReducer";
 import AllTools from "../../NavItems/tools/Alltools/AllTools";
 import Analysis from "../../NavItems/tools/Analysis/Analysis";
@@ -25,9 +25,11 @@ import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import AnalysisImg from "../../NavItems/tools/Analysis_images/Analysis";
 import {
-  trackPageView,
+  //trackPageView,
   getclientId,
 } from "../../Shared/GoogleAnalytics/MatomoAnalytics";
+import { useTrackPageView } from "../../../Hooks/useAnalytics";
+import Archive from "../../NavItems/tools/Archive";
 
 const DrawerItem = ({ drawerItems }) => {
   const drawerItemsContent = [
@@ -57,7 +59,7 @@ const DrawerItem = ({ drawerItems }) => {
     },
     {
       content: <DeepfakeVideo />,
-      footer: <Footer type={"afp"} />,
+      footer: <Footer type={"iti"} />,
     },
     {
       content: <AnalysisImg />,
@@ -86,7 +88,7 @@ const DrawerItem = ({ drawerItems }) => {
     },
     {
       content: <DeepfakeImage />,
-      footer: <Footer type={"afp"} />,
+      footer: <Footer type={"iti"} />,
     },
     {
       content: <Geolocation />,
@@ -99,6 +101,10 @@ const DrawerItem = ({ drawerItems }) => {
     {
       content: <TwitterSna />,
       footer: <Footer type={"afp-usfd-eudisinfolab"} />,
+    },
+    {
+      content: <Archive />,
+      footer: <Footer type={"afp"} />,
     },
   ];
 
@@ -160,7 +166,7 @@ const DrawerItemContent = ({ index, drawContent }) => {
       MuiCardHeader: {
         styleOverrides: {
           root: {
-            backgroundColor: "#05A9B4",
+            backgroundColor: "#00926c",
           },
           title: {
             color: "white",
@@ -189,9 +195,9 @@ const DrawerItemContent = ({ index, drawContent }) => {
     },
     palette: {
       primary: {
-        light: "#5cdbe6",
-        main: "#05a9b4",
-        dark: "#007984",
+        light: "#00926c",
+        main: "#00926c",
+        dark: "#00926c",
         contrastText: "#fff",
       },
     },
@@ -199,8 +205,12 @@ const DrawerItemContent = ({ index, drawContent }) => {
   const classes = useMyStyles();
   const path = useLocation();
   const client_id = getclientId();
+
+  const session = useSelector((state) => state.userSession);
+  const uid = session && session.user ? session.user.email : null;
+  useTrackPageView(path, client_id, uid, index);
   useEffect(() => {
-    trackPageView(path, client_id);
+    //trackPageView(path, client_id, uid);
     dispatch(selectTool(index));
   }, [index]);
 

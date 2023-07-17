@@ -1,15 +1,15 @@
-	en	fr	es	el
-twitter_title	Twitter advanced search	Recherche avancée Twitter	Búsqueda avanzada Twitter	Σύνθετη αναζήτηση στο Twitter
-twitter_termbox	Keyword or #	Mot clé ou #	Palabra clave o #	Λέξη κλειδί ή #
-twitter_tw-account	From (Twitter account name)	De (Nom de compte Twitter)	De (Nombre de una cuenta de Twitter)	Από (Όνομα λογαριασμού Twitter)
-twitter_filter	Filter (e.g. safe, media, retweets, native_video, periscope, vine, images, twimg or links)	Filtre (ex. safe, media, retweets, native_video, periscope, vine, images, twimg or links)	Filtro (ej. safe, media, retweets, native_video, periscope, vine, images, twimg or links)	Φίλτρο (π.χ. safe, media, retweets, native_video, periscope, vine, images, twimg or links)
-twitter_lang	Language (e.g. en, fr, de, es, ru, ja, zh...)	Langue (ex: en, fr, de, es ru, ja, zh...)	Idioma (ej: en, fr, de, es ru, ja, zh...)	Γλώσσα (π.χ. en, fr, de, es, ru, ja, zh, gr ...)
-twitter_geocode	Geocode (e.g. -22.912214,-43.230182,1km or -22.912214,-43.230182,1mi)	Geocode (ex: -22.912214,-43.230182,1km ou -22.912214,-43.230182,1mi)	Geocodigo (ej: -22.912214,-43.230182,1km ou -22.912214,-43.230182,1mi)	Συντεταγμένες ( π.χ. -22.912214,-43.230182,1χλμ. ή -22.912214,-43.230182,1μίλια)
-twitter_near	Near (city name)	Proche de : (nom de ville)	Cerca de (nombre de ciudad)	Κοντά (όνομα πόλης)
-twitter_within	Within (e.g. 15mi or 15km)	Dans (ex: 15mi ou 15km)	Dentro de (ej: 15mi o 15 km)	Εντός (π.χ. 15μίλια ή 15χλμ)
-twitter_from_date	Since	Depuis	Desde	Από
-twitter_to_date	Until	Jusqu'à	Hasta	Εως
-twitter_local_time	Local time	Heure locale	Hora local	Τοπική ώρα
-twitter_gmt	GMT	GMT	GMT	GMT
-button_submit	Submit	Envoyer	Enviar	Υποβολή
-cardheader_parameters	Search parameters	Paramètres de recherche	Parámetros de búsqueda	Παράμετροι αναζήτησης
+	en	fr	es	el	ar
+twitter_title	Twitter advanced search	Recherche avancée Twitter	Búsqueda avanzada Twitter	Σύνθετη αναζήτηση στο Twitter	البحث المتقدم على تويتر
+twitter_termbox	Keyword or #	Mot clé ou #	Palabra clave o #	Λέξη κλειδί ή #	الكلمة الرئيسية أو #
+twitter_tw-account	From (Twitter account name)	De (Nom de compte Twitter)	De (Nombre de una cuenta de Twitter)	Από (Όνομα λογαριασμού Twitter)	من (اسم حساب تويتر)
+twitter_filter	Filter (e.g. safe, media, retweets, native_video, periscope, vine, images, twimg or links)	Filtre (ex. safe, media, retweets, native_video, periscope, vine, images, twimg or links)	Filtro (ej. safe, media, retweets, native_video, periscope, vine, images, twimg or links)	Φίλτρο (π.χ. safe, media, retweets, native_video, periscope, vine, images, twimg or links)	الفلتر (على سبيل المثال، آمن، وسائط، إعادة تغريد، الفيديو الأصلي، مكبر، vine، صور، twimg أو روابط)
+twitter_lang	Language (e.g. en, fr, de, es, ru, ja, zh...)	Langue (ex: en, fr, de, es ru, ja, zh...)	Idioma (ej: en, fr, de, es ru, ja, zh...)	Γλώσσα (π.χ. en, fr, de, es, ru, ja, zh, gr ...)	اللغة (على سبيل المثال en ، fr ، de ، es ، ru ، ja ، zh ...)
+twitter_geocode	Geocode (e.g. -22.912214,-43.230182,1km or -22.912214,-43.230182,1mi)	Geocode (ex: -22.912214,-43.230182,1km ou -22.912214,-43.230182,1mi)	Geocodigo (ej: -22.912214,-43.230182,1km ou -22.912214,-43.230182,1mi)	Συντεταγμένες ( π.χ. -22.912214,-43.230182,1χλμ. ή -22.912214,-43.230182,1μίλια)	Geocode (e.g. -22.912214,-43.230182,1km or -22.912214,-43.230182,1mi)
+twitter_near	Near (city name)	Proche de : (nom de ville)	Cerca de (nombre de ciudad)	Κοντά (όνομα πόλης)	بالقرب من : (اسم المدينة)
+twitter_within	Within (e.g. 15mi or 15km)	Dans (ex: 15mi ou 15km)	Dentro de (ej: 15mi o 15 km)	Εντός (π.χ. 15μίλια ή 15χλμ)	داخل (على سبيل المثال 15 ميل أو 15 كم)
+twitter_from_date	Since	Depuis	Desde	Από	منذ
+twitter_to_date	Until	Jusqu'à	Hasta	Εως	حتى
+twitter_local_time	Local time	Heure locale	Hora local	Τοπική ώρα	التوقيت المحلي
+twitter_gmt	GMT	GMT	GMT	GMT	GMT
+button_submit	Submit	Envoyer	Enviar	Υποβολή	إرسال
+cardheader_parameters	Search parameters	Paramètres de recherche	Parámetros de búsqueda	Παράμετροι αναζήτησης	معايير البحث

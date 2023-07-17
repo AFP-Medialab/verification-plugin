@@ -19,9 +19,10 @@ import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/Metadata.tsv";
 import tsvAllTools from "../../../../LocalDictionary/components/NavItems/tools/Alltools.tsv";
 import {
-  trackEvent,
+  //trackEvent,
   getclientId,
 } from "../../../Shared/GoogleAnalytics/MatomoAnalytics";
+import { useTrackEvent } from "../../../../Hooks/useAnalytics";
 import { useParams, useLocation } from "react-router-dom";
 
 import { CONTENT_TYPE, KNOWN_LINKS } from "../../Assistant/AssistantRuleBook";
@@ -41,19 +42,21 @@ const Metadata = ({ mediaType }) => {
   const classes = useMyStyles();
   const keyword = useLoadLanguage(
     "components/NavItems/tools/Metadata.tsv",
-    tsv
+    tsv,
   );
   const keywordAllTools = useLoadLanguage(
     "components/NavItems/tools/Alltools.tsv",
-    tsvAllTools
+    tsvAllTools,
   );
 
   const resultUrl = useSelector((state) => state.metadata.url);
   const resultData = useSelector((state) => state.metadata.result);
   const resultIsImage = useSelector((state) => state.metadata.isImage);
+  const session = useSelector((state) => state.userSession);
+  const uid = session && session.user ? session.user.email : null;
 
   const [radioImage, setRadioImage] = useState(
-    mediaType === "video" ? false : true
+    mediaType === "video" ? false : true,
   );
   const [input, setInput] = useState(resultUrl ? resultUrl : "");
   const [imageUrl, setImageurl] = useState(null);
@@ -64,15 +67,34 @@ const Metadata = ({ mediaType }) => {
   useImageTreatment(imageUrl, keyword);
 
   const client_id = getclientId();
+  useTrackEvent(
+    "submission",
+    "metadata",
+    "extract metadata",
+    input,
+    client_id,
+    imageUrl,
+    uid,
+  );
+  useTrackEvent(
+    "submission",
+    "metadata",
+    "extract metadata",
+    input,
+    client_id,
+    videoUrl,
+    uid,
+  );
   const submitUrl = () => {
     if (input) {
-      trackEvent(
+      /* trackEvent(
         "submission",
         "metadata",
         "extract metadata",
         input,
-        client_id
-      );
+        client_id,
+        uid
+      );*/
       if (radioImage) {
         setImageurl(input);
       } else {
@@ -132,6 +154,10 @@ const Metadata = ({ mediaType }) => {
     }
   }, [url, type]);
 
+  const handleCloseResult = () => {
+    setInput("");
+  };
+
   return (
     <div>
       <HeaderTool
@@ -139,7 +165,7 @@ const Metadata = ({ mediaType }) => {
         description={keywordAllTools("navbar_metadata_description")}
         icon={
           <MetadataIcon
-            style={{ fill: "#51A5B2" }}
+            style={{ fill: "#00926c" }}
             width="40px"
             height="40px"
           />
@@ -227,7 +253,11 @@ const Metadata = ({ mediaType }) => {
                   type="file"
                   hidden={true}
                   onChange={(e) => {
-                    setInput(URL.createObjectURL(e.target.files[0]));
+                    if (e.target.files[0]) {
+                      setInput(URL.createObjectURL(e.target.files[0]));
+                      // reset value
+                      e.target.value = null;
+                    }
                   }}
                 />
               </Button>
@@ -238,9 +268,16 @@ const Metadata = ({ mediaType }) => {
       <Box m={3} />
       {resultData ? (
         resultIsImage ? (
-          <MetadataImageResult result={resultData} image={resultUrl} />
+          <MetadataImageResult
+            result={resultData}
+            image={resultUrl}
+            closeResult={handleCloseResult}
+          />
         ) : (
-          <MetadataVideoResult result={resultData} />
+          <MetadataVideoResult
+            result={resultData}
+            closeResult={handleCloseResult}
+          />
         )
       ) : null}
     </div>

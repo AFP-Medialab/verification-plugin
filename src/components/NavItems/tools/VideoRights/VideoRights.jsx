@@ -13,9 +13,10 @@ import tsv from "../../../../LocalDictionary/components/NavItems/tools/VideoRigh
 import tsvAlltools from "../../../../LocalDictionary/components/NavItems/tools/Alltools.tsv";
 //import {submissionEvent} from "../../../Shared/GoogleAnalytics/GoogleAnalytics";
 import {
-  trackEvent,
+  //trackEvent,
   getclientId,
 } from "../../../Shared/GoogleAnalytics/MatomoAnalytics";
+//import { useTrackEvent } from "../../../../Hooks/useAnalytics";
 import { useParams } from "react-router-dom";
 import { KNOWN_LINKS } from "../../Assistant/AssistantRuleBook";
 
@@ -25,17 +26,18 @@ import VideoRightsIcon from "../../../NavBar/images/SVG/Video/Video_rights.svg";
 import { setVideoRightsLoading } from "../../../../redux/actions/tools/videoRightsActions";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import Grid from "@mui/material/Grid";
+import { useTrackEvent } from "../../../../Hooks/useAnalytics";
 
 const VideoRights = () => {
   const { url } = useParams();
   const classes = useMyStyles();
   const keyword = useLoadLanguage(
     "components/NavItems/tools/VideoRights.tsv",
-    tsv
+    tsv,
   );
   const keywordAllTools = useLoadLanguage(
     "components/NavItems/tools/Alltools.tsv",
-    tsvAlltools
+    tsvAlltools,
   );
 
   const resultUrl = useSelector((state) => state.videoRights.url);
@@ -48,10 +50,30 @@ const VideoRights = () => {
 
   useVideoRightsTreatment(submitted, keyword);
   const dispatch = useDispatch();
+
+  const session = useSelector((state) => state.userSession);
+  const uid = session && session.user ? session.user.email : null;
   const client_id = getclientId();
+  useTrackEvent(
+    "submission",
+    "videorights",
+    "video rights",
+    input,
+    client_id,
+    submitted,
+    uid,
+  );
+
   const submitForm = () => {
     if (!isLoading) {
-      trackEvent("submission", "videorights", "video rights", input, client_id);
+      /*trackEvent(
+        "submission",
+        "videorights",
+        "video rights",
+        input,
+        client_id,
+        uid
+      );*/
       setSubmitted(input);
       dispatch(setVideoRightsLoading(true));
     }
@@ -73,7 +95,7 @@ const VideoRights = () => {
 
   useEffect(() => {
     if (submitted) {
-      setSubmitted("");
+      setSubmitted(null);
     }
   }, [submitted]);
 
@@ -84,7 +106,7 @@ const VideoRights = () => {
         description={keywordAllTools("navbar_rights_description")}
         icon={
           <VideoRightsIcon
-            style={{ fill: "#51A5B2" }}
+            style={{ fill: "#00926c" }}
             width="40px"
             height="40px"
           />

@@ -62,13 +62,13 @@ const Interactive = () => {
 
   const previous = () => {
     setCarouselIndex(
-      carouselIndex === 0 ? carousel.length - 1 : carouselIndex - 1
+      carouselIndex === 0 ? carousel.length - 1 : carouselIndex - 1,
     );
   };
 
   const next = () => {
     setCarouselIndex(
-      carouselIndex === carousel.length - 1 ? 0 : carouselIndex + 1
+      carouselIndex === carousel.length - 1 ? 0 : carouselIndex + 1,
     );
   };
 
@@ -154,7 +154,8 @@ const Interactive = () => {
                         reverseImageSearch(
                           obj.url,
                           true,
-                          SEARCH_ENGINE_SETTINGS.GOOGLE_SEARCH.NAME
+                          SEARCH_ENGINE_SETTINGS.GOOGLE_SEARCH.NAME,
+                          false,
                         );
                       }}
                     >
@@ -169,7 +170,7 @@ const Interactive = () => {
                       color="primary"
                       onClick={() => {
                         navigate(
-                          "/app/tools/forensic/" + encodeURIComponent(obj.url)
+                          "/app/tools/forensic/" + encodeURIComponent(obj.url),
                         );
                         //history.push("tools/forensic/" + encodeURIComponent(obj.url))
                       }}
@@ -185,7 +186,7 @@ const Interactive = () => {
                   color="primary"
                   onClick={() => {
                     navigate(
-                      "/app/tools/keyframes/" + encodeURIComponent(obj.url)
+                      "/app/tools/keyframes/" + encodeURIComponent(obj.url),
                     );
                     //history.push("tools/keyframes/" + encodeURIComponent(obj.url))
                   }}

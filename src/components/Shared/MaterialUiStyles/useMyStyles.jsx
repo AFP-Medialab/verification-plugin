@@ -273,6 +273,12 @@ const styles = (theme) => ({
     overflow: "hidden",
     textOverflow: "ellipsis",
   },
+  longText: {
+    maxWidth: "100%",
+    overflow: "hidden",
+    whiteSpace: "nowrap",
+    textOverflow: "ellipsis",
+  },
   secondaryHeading: {
     fontSize: theme.typography.pxToRem(15),
     color: theme.palette.text.secondary,
@@ -323,6 +329,11 @@ const styles = (theme) => ({
     height: "auto",
     width: "auto",
     maxWidth: "60%",
+  },
+  AboutMediaSmall: {
+    height: "auto",
+    width: "auto",
+    maxWidth: "100px",
   },
   InteractiveMedia: {
     maxWidth: "80%",
@@ -552,8 +563,7 @@ const styles = (theme) => ({
 
   imageUploaded: {
     objectFit: "contain",
-    objectPosition: "top",
-    maxHeight: "48vh",
+    objectPosition: "center top",
   },
 
   imageFilter: {
@@ -589,8 +599,7 @@ const styles = (theme) => ({
   filterDisplayedClass: {
     position: "absolute",
     objectFit: "contain",
-    objectPosition: "top",
-    maxHeight: "48vh",
+    objectPosition: "center top",
     top: 0,
     left: 0,
     bottom: 0,
@@ -606,7 +615,6 @@ const styles = (theme) => ({
     backgroundSize: "contain",
     objectFit: "contain",
     objectPosition: "top",
-    maxHeight: "40vh",
 
     position: "relative",
     top: 0,
@@ -618,7 +626,6 @@ const styles = (theme) => ({
     backgroundSize: "contain",
     objectFit: "contain",
     objectPosition: "top",
-    maxHeight: "40vh",
 
     position: "absolute",
     top: 0,
@@ -685,12 +692,12 @@ const styles = (theme) => ({
     cursor: "pointer",
 
     "&:hover": {
-      border: "solid #51A5B2 2px",
+      border: "solid #00926c 2px",
     },
   },
 
   bigButtonDivSelectted: {
-    border: "solid #51A5B2 3px",
+    border: "solid #00926c 3px",
     borderRadius: "25px",
   },
 
@@ -703,7 +710,7 @@ const styles = (theme) => ({
   bigButtonIconSelectted: {
     height: "50px",
     width: "auto",
-    color: "#51A5B2",
+    color: "#00926c",
   },
 
   bigButtonResponsive: {
@@ -749,9 +756,6 @@ const styles = (theme) => ({
   fabTop: {
     margin: "0px",
     top: "auto",
-    right: "14px",
-    bottom: "100px",
-    left: "auto",
     position: "fixed",
     backgroundColor: "#fff",
     color: "#000",

@@ -15,10 +15,9 @@ import { useParams } from "react-router-dom";
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/Keyframes.tsv";
 import tsvAllTools from "../../../../LocalDictionary/components/NavItems/tools/Alltools.tsv";
-import {
-  trackEvent,
-  //getclientId,
-} from "../../../Shared/GoogleAnalytics/MatomoAnalytics";
+import //trackEvent,
+//getclientId,
+"../../../Shared/GoogleAnalytics/MatomoAnalytics";
 import { KNOWN_LINKS } from "../../Assistant/AssistantRuleBook";
 
 import Card from "@mui/material/Card";
@@ -28,6 +27,7 @@ import Grid from "@mui/material/Grid";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import LinkIcon from "@mui/icons-material/Link";
 import FileIcon from "@mui/icons-material/InsertDriveFile";
+import { useTrackEvent } from "../../../../Hooks/useAnalytics";
 
 const Keyframes = () => {
   const { url } = useParams();
@@ -35,11 +35,11 @@ const Keyframes = () => {
   const classes = useMyStyles();
   const keyword = useLoadLanguage(
     "components/NavItems/tools/Keyframes.tsv",
-    tsv
+    tsv,
   );
   const keywordAllTools = useLoadLanguage(
     "components/NavItems/tools/Alltools.tsv",
-    tsvAllTools
+    tsvAllTools,
   );
 
   // state used to toggle localFile view
@@ -55,7 +55,7 @@ const Keyframes = () => {
   const resultData = useSelector((state) => state.keyframes.result);
   const isLoading = useSelector((state) => state.keyframes.loading);
   const isLoadingSimilarity = useSelector(
-    (state) => state.keyframes.similarityLoading
+    (state) => state.keyframes.similarityLoading,
   );
   //const message = useSelector(state => state.keyframes.message);
   const video_id = useSelector((state) => state.keyframes.video_id);
@@ -66,16 +66,21 @@ const Keyframes = () => {
   //const [urlDetected, setUrlDetected] = useState(false)
   useVideoSimilarity(submittedUrl, keyword);
   useKeyframeWrapper(submittedUrl, keyword);
+  useTrackEvent(
+    "submission",
+    "keyframe",
+    "video key frame analysis",
+    input.trim(),
+    null,
+    submittedUrl,
+  );
 
   //human right
   const downloadShubshots = useSelector((state) => state.humanRightsCheckBox);
   const keyframe_url = process.env.REACT_APP_KEYFRAME_API;
   //download subshots results
   const downloadAction = () => {
-    let downloadlink =
-      // "https://multimedia2.iti.gr/video_analysis/keyframes/" +
-      keyframe_url + "/keyframes/";
-    video_id + "/Subshots";
+    let downloadlink = keyframe_url + "/keyframes/" + video_id + "/Subshots";
     fetch(downloadlink).then((response) => {
       response.blob().then((blob) => {
         let url = window.URL.createObjectURL(blob);
@@ -88,12 +93,12 @@ const Keyframes = () => {
 
   //const client_id = getclientId();
   const submitUrl = () => {
-    trackEvent(
+    /*trackEvent(
       "submission",
       "keyframe",
       "video key frame analysis",
       input.trim()
-    );
+    );*/
     setSubmittedUrl(input);
   };
 
@@ -126,7 +131,7 @@ const Keyframes = () => {
   const [classButtonLocal, setClassButtonLocal] = useState(null);
 
   const [classIconURL, setClassIconURL] = useState(
-    classes.bigButtonIconSelectted
+    classes.bigButtonIconSelectted,
   );
   const [classIconLocal, setClassIconLocal] = useState(classes.bigButtonIcon);
 
@@ -169,6 +174,13 @@ const Keyframes = () => {
     setLocalFile(true);
   };
 
+  /**
+   * Resets input
+   */
+  const handleCloseResult = () => {
+    setInput("");
+  };
+
   return (
     <div>
       <HeaderTool
@@ -176,7 +188,7 @@ const Keyframes = () => {
         description={keywordAllTools("navbar_keyframes_description")}
         icon={
           <KeyframesIcon
-            style={{ fill: "#51A5B2" }}
+            style={{ fill: "#00926c" }}
             width="40px"
             height="40px"
           />
@@ -321,7 +333,7 @@ const Keyframes = () => {
 
       <Box m={3} />
       {resultData && !localFile ? (
-        <KeyFramesResults result={resultData} />
+        <KeyFramesResults closeResult={handleCloseResult} result={resultData} />
       ) : (
         <div />
       )}

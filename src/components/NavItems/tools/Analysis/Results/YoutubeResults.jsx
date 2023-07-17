@@ -8,7 +8,8 @@ import TableBody from "@mui/material/TableBody";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
 import Button from "@mui/material/Button";
-import CloseResult from "../../../../Shared/CloseResult/CloseResult";
+import { IconButton } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 import OnClickInfo from "../../../../Shared/OnClickInfo/OnClickInfo";
 import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
@@ -33,12 +34,12 @@ const YoutubeResults = (props) => {
   const classes = useMyStyles();
   const keyword = useLoadLanguage(
     "components/NavItems/tools/Analysis.tsv",
-    tsv
+    tsv,
   );
 
   const reverseSearch = async (website) => {
     for (let image of thumbnails) {
-      await reverseImageSearch(image.url, true, website);
+      await reverseImageSearch(image.url, true, website, false);
     }
   };
 
@@ -109,9 +110,18 @@ const YoutubeResults = (props) => {
             <CardHeader
               title={keyword("cardheader_results")}
               className={classes.headerUpladedImage}
+              action={
+                <IconButton
+                  aria-label="close"
+                  onClick={() => {
+                    dispatch(cleanAnalysisState());
+                  }}
+                >
+                  <CloseIcon sx={{ color: "white" }} />
+                </IconButton>
+              }
             />
             <div className={classes.root2}>
-              <CloseResult onClick={() => dispatch(cleanAnalysisState())} />
               <Typography variant={"h5"}>{report["video"]["title"]}</Typography>
               <Typography variant={"subtitle1"}>
                 {report["video"]["publishedAt"]}
@@ -233,7 +243,7 @@ const YoutubeResults = (props) => {
                     color={"primary"}
                     onClick={async () =>
                       await reverseSearch(
-                        SEARCH_ENGINE_SETTINGS.GOOGLE_SEARCH.NAME
+                        SEARCH_ENGINE_SETTINGS.GOOGLE_SEARCH.NAME,
                       )
                     }
                   >
@@ -245,7 +255,7 @@ const YoutubeResults = (props) => {
                     color={"primary"}
                     onClick={async () =>
                       await reverseSearch(
-                        SEARCH_ENGINE_SETTINGS.YANDEX_SEARCH.NAME
+                        SEARCH_ENGINE_SETTINGS.YANDEX_SEARCH.NAME,
                       )
                     }
                   >
@@ -257,7 +267,7 @@ const YoutubeResults = (props) => {
                     color={"primary"}
                     onClick={async () =>
                       await reverseSearch(
-                        SEARCH_ENGINE_SETTINGS.TINEYE_SEARCH.NAME
+                        SEARCH_ENGINE_SETTINGS.TINEYE_SEARCH.NAME,
                       )
                     }
                   >
@@ -271,7 +281,7 @@ const YoutubeResults = (props) => {
                         color={"primary"}
                         onClick={() =>
                           window.open(
-                            report["verification_cues"]["twitter_search_url"]
+                            report["verification_cues"]["twitter_search_url"],
                           )
                         }
                       >

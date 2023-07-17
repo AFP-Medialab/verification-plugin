@@ -14,9 +14,10 @@ import { setError } from "../../../../redux/actions/errorActions";
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/Magnifier.tsv";
 import {
-  trackEvent,
+  //trackEvent,
   getclientId,
 } from "../../../Shared/GoogleAnalytics/MatomoAnalytics";
+import { useTrackEvent } from "../../../../Hooks/useAnalytics";
 import { KNOWN_LINKS } from "../../Assistant/AssistantRuleBook";
 
 import Card from "@mui/material/Card";
@@ -30,15 +31,17 @@ const Magnifier = () => {
   const classes = useMyStyles();
   const keyword = useLoadLanguage(
     "components/NavItems/tools/Magnifier.tsv",
-    tsv
+    tsv,
   );
   const keywordAllTools = useLoadLanguage(
     "components/NavItems/tools/Alltools.tsv",
-    tsv
+    tsv,
   );
 
   const resultUrl = useSelector((state) => state.magnifier.url);
   const resultResult = useSelector((state) => state.magnifier.result);
+  const session = useSelector((state) => state.userSession);
+  const uid = session && session.user ? session.user.email : null;
   const dispatch = useDispatch();
 
   const [input, setInput] = useState(resultUrl);
@@ -47,16 +50,27 @@ const Magnifier = () => {
     if (keyword(error) !== "") return keyword(error);
     return keyword("please_give_a_correct_link");
   };
-
+  const [eventUrl, setEventUrl] = useState(undefined);
   const client_id = getclientId();
+  useTrackEvent(
+    "submission",
+    "magnifier",
+    "image magnifier caa analysis",
+    eventUrl,
+    client_id,
+    eventUrl,
+    uid,
+  );
   const submitUrl = (src) => {
-    trackEvent(
+    setEventUrl(src);
+    /*trackEvent(
       "submission",
       "magnifier",
       "image magnifier caa analysis",
       src,
-      client_id
-    );
+      client_id,
+      uid
+    );*/
     let img = new Image();
     img.crossOrigin = "anonymous";
     img.onload = () => {
@@ -72,7 +86,7 @@ const Magnifier = () => {
           result: canvas.toDataURL("image/png"),
           notification: false,
           loading: false,
-        })
+        }),
       );
       canvas.remove();
     };
@@ -100,7 +114,7 @@ const Magnifier = () => {
         description={keywordAllTools("navbar_magnifier_description")}
         icon={
           <MagnifierIcon
-            style={{ fill: "#51A5B2" }}
+            style={{ fill: "#00926c" }}
             width="40px"
             height="40px"
           />

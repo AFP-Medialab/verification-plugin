@@ -17,9 +17,10 @@ import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/Analysis.tsv";
 import tsvAlltools from "../../../../LocalDictionary/components/NavItems/tools/Alltools.tsv";
 import {
-  trackEvent,
+  // trackEvent,
   getclientId,
 } from "../../../Shared/GoogleAnalytics/MatomoAnalytics";
+import { useTrackEvent } from "../../../../Hooks/useAnalytics";
 import { useParams } from "react-router-dom";
 import { KNOWN_LINKS } from "../../Assistant/AssistantRuleBook";
 import Card from "@mui/material/Card";
@@ -42,11 +43,11 @@ const Analysis = () => {
   const classes = useMyStyles();
   const keyword = useLoadLanguage(
     "components/NavItems/tools/Analysis.tsv",
-    tsv
+    tsv,
   );
   const keywordAllTools = useLoadLanguage(
     "components/NavItems/tools/Alltools.tsv",
-    tsvAlltools
+    tsvAlltools,
   );
   const dispatch = useDispatch();
   const resultUrl = useSelector((state) => state.analysisImage.url);
@@ -63,7 +64,7 @@ const Analysis = () => {
   const [finalUrl, showFacebookIframe] = useGenerateApiUrl(
     serviceUrl,
     submittedUrl,
-    reprocess
+    reprocess,
   );
   useAnalysisWrapper(
     setAnalysisLoading,
@@ -72,21 +73,28 @@ const Analysis = () => {
     finalUrl,
     submittedUrl,
     keyword,
-    isLoading
+    isLoading,
   );
 
   const reprocessToggle = () => {
     setReprocess(!reprocess);
   };
-
+  useTrackEvent(
+    "submission",
+    "analysis",
+    "image caa analysis",
+    input.trim(),
+    client_id,
+    submittedUrl,
+  );
   const submitForm = () => {
-    trackEvent(
+    /*trackEvent(
       "submission",
       "analysis",
       "image caa analysis",
       input.trim(),
       client_id
-    );
+    );*/
     setSubmittedUrl(input.trim());
     dispatch(cleanAnalysisState());
   };
@@ -119,7 +127,7 @@ const Analysis = () => {
         description={keywordAllTools("navbar_analysis_image_description")}
         icon={
           <AnalysisIconImage
-            style={{ fill: "#51A5B2" }}
+            style={{ fill: "#00926c" }}
             width="40px"
             height="40px"
           />

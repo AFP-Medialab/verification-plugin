@@ -14,9 +14,10 @@ import tsv from "../../../../LocalDictionary/components/NavItems/tools/Forensic.
 import tsvAllTools from "../../../../LocalDictionary/components/NavItems/tools/Alltools.tsv";
 import tsvWarning from "../../../../LocalDictionary/components/Shared/OnWarningInfo.tsv";
 import {
-  trackEvent,
+  //trackEvent,
   getclientId,
 } from "../../../Shared/GoogleAnalytics/MatomoAnalytics";
+import { useTrackEvent } from "../../../../Hooks/useAnalytics";
 import ForensicIcon from "../../../NavBar/images/SVG/Image/Forensic.svg";
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
@@ -33,15 +34,15 @@ const Forensic = () => {
   const classes = useMyStyles();
   const keyword = useLoadLanguage(
     "components/NavItems/tools/Forensic.tsv",
-    tsv
+    tsv,
   );
   const keywordAllTools = useLoadLanguage(
     "components/NavItems/tools/Alltools.tsv",
-    tsvAllTools
+    tsvAllTools,
   );
   const keywordWarning = useLoadLanguage(
     "components/Shared/OnWarningInfo.tsv",
-    tsvWarning
+    tsvWarning,
   );
 
   const theme = createTheme({
@@ -49,7 +50,7 @@ const Forensic = () => {
       MuiCardHeader: {
         styleOverrides: {
           root: {
-            backgroundColor: "#05A9B4",
+            backgroundColor: "#00926c",
           },
           title: {
             color: "white",
@@ -73,9 +74,9 @@ const Forensic = () => {
 
     palette: {
       primary: {
-        light: "#5cdbe6",
-        main: "#05a9b4",
-        dark: "#007984",
+        light: "#00926c",
+        main: "#00926c",
+        dark: "#00926c",
         contrastText: "#fff",
       },
     },
@@ -86,9 +87,11 @@ const Forensic = () => {
   const isLoading = useSelector((state) => state.forensic.loading);
   const gifAnimationState = useSelector((state) => state.forensic.gifAnimation);
   const masks = useSelector((state) => state.forensic.masks);
+  const session = useSelector((state) => state.userSession);
+  const uid = session && session.user ? session.user.email : null;
 
   const [input, setInput] = useState(resultUrl);
-  const [image, setImage] = useState("");
+  const [image, setImage] = useState(undefined);
   const [urlDetected, setUrlDetected] = useState(false);
   const [loaded, setLoaded] = useState(false);
   const [type, setType] = useState("");
@@ -98,17 +101,27 @@ const Forensic = () => {
   const dispatch = useDispatch();
 
   const client_id = getclientId();
+  useTrackEvent(
+    "submission",
+    "forensic",
+    "Forensice analysis assistant",
+    input,
+    client_id,
+    image,
+    uid,
+  );
   const submitUrl = () => {
     if (input && input !== "") {
       setType("url");
       setLoaded(true);
-      trackEvent(
+      /*trackEvent(
         "submission",
         "forensic",
         "Forensice analysis assistant",
         input,
-        client_id
-      );
+        client_id,
+        uid
+      );*/
       setImage(input);
     }
   };
@@ -127,11 +140,10 @@ const Forensic = () => {
       submitUrl();
     }
     return () => setUrlDetected(false);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [urlDetected]);
 
   useEffect(() => {
-    setImage("");
+    setImage(undefined);
   }, [image]);
 
   const handleUploadImg = (file) => {
@@ -162,12 +174,11 @@ const Forensic = () => {
           description={keywordAllTools("navbar_forensic_description")}
           icon={
             <ForensicIcon
-              style={{ fill: "#51A5B2" }}
+              style={{ fill: "#00926c" }}
               width="40px"
               height="40px"
             />
           }
-          advanced="true"
         />
 
         <Card style={{ display: resultData || loading ? "none" : "block" }}>

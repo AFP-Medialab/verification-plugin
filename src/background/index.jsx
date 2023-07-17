@@ -1,49 +1,44 @@
+import { trackEvent } from "../components/Shared/GoogleAnalytics/MatomoAnalytics";
 import {
   SEARCH_ENGINE_SETTINGS,
   reverseImageSearch,
   getImgUrl,
   reverseImageSearchAll,
+  openTabs,
 } from "../components/Shared/ReverseSearch/reverseSearchUtils";
 
 const page_name = "popup.html";
 
-const rightClickEvent = () => {
-  return true;
-};
-
 const mediaAssistant = (info) => {
   let url = getImgUrl(info);
   if (url !== "") {
-    chrome.tabs.create({
+    openTabs({
       url: page_name + "#/app/assistant/" + encodeURIComponent(url),
     });
     // Google analytics
-    rightClickEvent("Assistant", url);
+    trackEvent("contextMenu", "contextMenuClick", "Assistant", url, "");
   }
 };
 
 const ocr = (info) => {
   let url = getImgUrl(info);
   if (url !== "") {
-    chrome.tabs.create({
+    openTabs({
       url: page_name + "#/app/tools/ocr/" + encodeURIComponent(url),
     });
     // Google analytics
-    rightClickEvent("OCR", url);
+    trackEvent("contextMenu", "contextMenuClick", "OCR", url, "");
   }
 };
 
 const thumbnailsSearch = (info) => {
   let url = info.linkUrl;
   if (url !== "" && url.startsWith("http")) {
-    let lst = get_images(url);
-    for (let index in lst) {
-      chrome.tabs.create({
-        url: lst[index],
-      });
-    }
+    openTabs({
+      url: page_name + "#/app/tools/thumbnails/" + encodeURIComponent(url),
+    });
     // Google analytics
-    rightClickEvent("YouTubeThumbnails", url);
+    trackEvent("contextMenu", "contextMenuClick", "YouTubeThumbnails", url, "");
   }
 };
 
@@ -53,49 +48,54 @@ const videoReversesearchDBKF = (info) => {
   let urlvideo = info.linkUrl;
   if (urlvideo !== "" && urlvideo.startsWith("http")) {
     let url = search_url + encodeURIComponent(urlvideo);
-    chrome.tabs.create({
+    openTabs({
       url: url,
       selected: false,
     });
     // Google analytics
-    rightClickEvent("Video Reverse Search - DBKF (beta)", url);
+    trackEvent(
+      "contextMenu",
+      "contextMenuClick",
+      "Video Reverse Search - DBKF (beta)",
+      url,
+    );
   }
 };
 
 const analysisVideo = (info) => {
   let url = info.linkUrl;
   if (url !== "") {
-    chrome.tabs.create({
+    openTabs({
       url: page_name + "#/app/tools/Analysis/" + encodeURIComponent(url),
     });
     // Google analytics
-    rightClickEvent("Analysis", url);
+    trackEvent("contextMenu", "contextMenuClick", "Analysis", url, "");
   }
 };
 
 const imageMagnifier = (info) => {
   let url = getImgUrl(info);
   if (url !== "") {
-    chrome.tabs.create({
+    openTabs({
       url: page_name + "#/app/tools/magnifier/" + encodeURIComponent(url),
     });
     // Google analytics
-    rightClickEvent("Magnifier", url);
+    trackEvent("contextMenu", "contextMenuClick", "Magnifier", url, "");
   }
 };
 
 const imageForensic = (info) => {
   let url = getImgUrl(info);
   if (url !== "" && url.startsWith("http")) {
-    chrome.tabs.create({
+    openTabs({
       url: page_name + "#/app/tools/forensic/" + encodeURIComponent(url),
     });
     // Google analytics
-    rightClickEvent("Forensic", url);
+    trackEvent("contextMenu", "contextMenuClick", "Forensic", url, "");
   }
 };
 
-function contextClick(info, tab) {
+function contextClick(info) {
   const { menuItemId } = info;
 
   switch (menuItemId) {
@@ -133,14 +133,14 @@ function contextClick(info, tab) {
       reverseImageSearch(
         info,
         false,
-        SEARCH_ENGINE_SETTINGS.GOOGLE_LENS_SEARCH.NAME
+        SEARCH_ENGINE_SETTINGS.GOOGLE_LENS_SEARCH.NAME,
       );
       break;
     case SEARCH_ENGINE_SETTINGS.YANDEX_SEARCH.CONTEXT_MENU_ID:
       reverseImageSearch(
         info,
         false,
-        SEARCH_ENGINE_SETTINGS.YANDEX_SEARCH.NAME
+        SEARCH_ENGINE_SETTINGS.YANDEX_SEARCH.NAME,
       );
       break;
     case SEARCH_ENGINE_SETTINGS.BING_SEARCH.CONTEXT_MENU_ID:
@@ -150,7 +150,7 @@ function contextClick(info, tab) {
       reverseImageSearch(
         info,
         false,
-        SEARCH_ENGINE_SETTINGS.TINEYE_SEARCH.NAME
+        SEARCH_ENGINE_SETTINGS.TINEYE_SEARCH.NAME,
       );
       break;
     case SEARCH_ENGINE_SETTINGS.BAIDU_SEARCH.CONTEXT_MENU_ID:
@@ -160,7 +160,7 @@ function contextClick(info, tab) {
       reverseImageSearch(
         info,
         false,
-        SEARCH_ENGINE_SETTINGS.REDDIT_SEARCH.NAME
+        SEARCH_ENGINE_SETTINGS.REDDIT_SEARCH.NAME,
       );
       break;
     default:
@@ -257,6 +257,5 @@ chrome.runtime.onInstalled.addListener(() => {
     title: SEARCH_ENGINE_SETTINGS.REDDIT_SEARCH.CONTEXT_MENU_TITLE,
     contexts: ["image"],
   });
-
-  chrome.contextMenus.onClicked.addListener(contextClick);
 });
+chrome.contextMenus.onClicked.addListener(contextClick);

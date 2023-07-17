@@ -121,7 +121,7 @@ export function userLoginAction(
   accessToken,
   accessTokenExpiry,
   refreshToken,
-  user
+  user,
 ) {
   return {
     type: AUTH_USER_LOGIN,
@@ -175,7 +175,6 @@ export function userSessionExpiredAction() {
   };
 }
 
-/* eslint import/no-anonymous-default-export: [2, {"allowObject": true}] */
 export default {
   userRegistrationLoadingAction,
   userRegistrationSentAction,

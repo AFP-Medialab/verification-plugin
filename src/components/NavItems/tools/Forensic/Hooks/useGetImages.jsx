@@ -37,7 +37,7 @@ const useGetImages = (url, type, keyword) => {
             "&threshold=" +
             threshold +
             "&cmap=" +
-            colormap
+            colormap,
         )
         .then((response) => {
           //console.log(response.data);
@@ -45,12 +45,12 @@ const useGetImages = (url, type, keyword) => {
             //getTransparent(response.data.id, url, response.data)
             dispatch(
               setForensicsResult({
-                url: url,
+                url: type === "local" ? response.data.displayItem : url,
                 result: response.data,
                 notification: false,
                 loading: false,
                 gifAnimation: false,
-              })
+              }),
             );
           } else {
             handleError("forensic_error_" + response.data.status);
@@ -75,8 +75,8 @@ const useGetImages = (url, type, keyword) => {
             getResult(response.data.itemHash);
             dispatch(
               setForensicDisplayItem(
-                type === "local" ? response.data.displayItem : url
-              )
+                type === "local" ? response.data.displayItem : url,
+              ),
             );
             //getResult(id);
           } else {

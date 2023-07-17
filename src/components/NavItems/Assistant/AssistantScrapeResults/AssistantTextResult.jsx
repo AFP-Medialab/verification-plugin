@@ -30,11 +30,11 @@ import FileCopyOutlined from "@mui/icons-material/FileCopy";
 const AssistantTextResult = () => {
   const keyword = useLoadLanguage(
     "components/NavItems/tools/Assistant.tsv",
-    tsv
+    tsv,
   );
   const sharedKeyword = useLoadLanguage(
     "components/Shared/utils.tsv",
-    sharedTsv
+    sharedTsv,
   );
 
   const classes = useMyStyles();
@@ -50,10 +50,10 @@ const AssistantTextResult = () => {
   const hpLoading = useSelector((state) => state.assistant.hpLoading);
   const mtLoading = useSelector((state) => state.assistant.mtLoading);
   const dbkfMatchLoading = useSelector(
-    (state) => state.assistant.dbkfTextMatchLoading
+    (state) => state.assistant.dbkfTextMatchLoading,
   );
   const warningExpanded = useSelector(
-    (state) => state.assistant.warningExpanded
+    (state) => state.assistant.warningExpanded,
   );
 
   // display states
@@ -153,7 +153,7 @@ const AssistantTextResult = () => {
                         "https://translate.google.com/?sl=auto&text=" +
                           encodeURIComponent(text) +
                           "&op=translate",
-                        "_blank"
+                        "_blank",
                       )
                     }
                   >

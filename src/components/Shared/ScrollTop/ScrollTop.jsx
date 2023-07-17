@@ -7,14 +7,12 @@ import useClasses from "../MaterialUiStyles/useClasses";
 const styles = (theme) => ({
   root: {
     position: "fixed",
-    bottom: theme.spacing(2),
-    left: theme.spacing(2),
     zIndex: theme.zIndex.drawer + 1,
   },
 });
 
 function ScrollTop(props) {
-  const { children, window } = props;
+  const { children, window, isCurrentLanguageLeftToRight } = props;
   const classes = useClasses(styles);
   // Note that you normally won't need to set the window ref as useScrollTrigger
   // will default to window.
@@ -27,7 +25,7 @@ function ScrollTop(props) {
 
   const handleClick = (event) => {
     const anchor = (event.target.ownerDocument || document).querySelector(
-      "#back-to-top-anchor"
+      "#back-to-top-anchor",
     );
 
     if (anchor) {
@@ -37,7 +35,16 @@ function ScrollTop(props) {
 
   return (
     <Zoom in={trigger}>
-      <div onClick={handleClick} role="presentation" className={classes.root}>
+      <div
+        style={{
+          left: isCurrentLanguageLeftToRight ? "auto" : 14,
+          right: isCurrentLanguageLeftToRight ? 14 : "auto",
+          bottom: 100,
+        }}
+        onClick={handleClick}
+        role="presentation"
+        className={classes.root}
+      >
         {children}
       </div>
     </Zoom>

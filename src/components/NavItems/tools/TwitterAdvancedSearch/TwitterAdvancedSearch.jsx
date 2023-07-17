@@ -1,5 +1,6 @@
 import { Box } from "@mui/material";
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { useInput } from "../../../../Hooks/useInput";
@@ -16,9 +17,10 @@ import useMyStyles, {
   myCardStyles,
 } from "../../../Shared/MaterialUiStyles/useMyStyles";
 import {
-  trackEvent,
+  //trackEvent,
   getclientId,
 } from "../../../Shared/GoogleAnalytics/MatomoAnalytics";
+import { useTrackEvent } from "../../../../Hooks/useAnalytics";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import TwitterAdvancedSearchIcon from "../../../NavBar/images/SVG/Search/Twitter_search.svg";
@@ -30,11 +32,11 @@ const TwitterAdvancedSearch = () => {
   const cardClasses = myCardStyles();
   const keyword = useLoadLanguage(
     "components/NavItems/tools/TwitterAdvancedSearch.tsv",
-    tsv
+    tsv,
   );
   const keywordAllTools = useLoadLanguage(
     "components/NavItems/tools/Alltools.tsv",
-    tsvAllTools
+    tsvAllTools,
   );
 
   const term = useInput("");
@@ -79,6 +81,9 @@ const TwitterAdvancedSearch = () => {
 
   const [fromDate, setSelectedFromDate] = useState(null);
   const [fromDatError, setSelectedFromDateError] = useState(false);
+  ``;
+  const [toDate, setSelectedToDate] = useState(null);
+  const [toDateError, setSelectedToDateError] = useState(null);
 
   const handleFromDateChange = (date) => {
     setSelectedFromDateError(date === null);
@@ -86,29 +91,32 @@ const TwitterAdvancedSearch = () => {
     setSelectedFromDate(date);
   };
 
-  const fromDateIsValid = (momentDate) => {
-    const itemDate = momentDate.toDate();
-    const currentDate = new Date();
-    if (toDate) return itemDate <= currentDate && itemDate < toDate;
-    return itemDate <= currentDate;
-  };
-  const [toDate, setSelectedToDate] = useState(null);
-  const [toDateError, setSelectedToDateError] = useState(null);
-
   const handleToDateChange = (date) => {
     setSelectedToDateError(date === null);
     if (fromDate && date <= fromDate) setSelectedToDateError(true);
     setSelectedToDate(date);
   };
 
-  const toDateIsValid = (momentDate) => {
-    const itemDate = momentDate.toDate();
-    const currentDate = new Date();
-    if (fromDate) return itemDate <= currentDate && fromDate < itemDate;
-    return itemDate <= currentDate;
+  const pastDate = (currentDate) => {
+    const itemDate = currentDate.toDate();
+    if (fromDate) return fromDate > itemDate;
+    return false;
   };
-  const client_id = getclientId();
 
+  const session = useSelector((state) => state.userSession);
+  const uid = session && session.user ? session.user.email : null;
+  const client_id = getclientId();
+  const [eventUrl, setEventUrl] = useState(undefined);
+
+  useTrackEvent(
+    "submission",
+    "twitter_advance_search",
+    "search twitter request",
+    eventUrl,
+    client_id,
+    eventUrl,
+    uid,
+  );
   const onSubmit = () => {
     let url = createUrl(
       term.value,
@@ -120,15 +128,17 @@ const TwitterAdvancedSearch = () => {
       within.value,
       fromDate,
       toDate,
-      localTime
+      localTime,
     );
-    trackEvent(
+    setEventUrl(url);
+    /*trackEvent(
       "submission",
       "twitter_advance_search",
       "search twitter request",
       url,
-      client_id
-    );
+      client_id,
+      uid
+    );*/
     window.open(url);
   };
 
@@ -139,7 +149,7 @@ const TwitterAdvancedSearch = () => {
         description={keywordAllTools("navbar_twitter_description")}
         icon={
           <TwitterAdvancedSearchIcon
-            style={{ fill: "#51A5B2" }}
+            style={{ fill: "#00926c" }}
             width="40px"
             height="40px"
           />
@@ -168,7 +178,6 @@ const TwitterAdvancedSearch = () => {
           <div>
             <DateTime
               input={true}
-              isValidDate={fromDateIsValid}
               label={keyword("twitter_from_date")}
               dateFormat={"YYYY-MM-DD"}
               timeFormat={"HH:mm:ss"}
@@ -180,13 +189,13 @@ const TwitterAdvancedSearch = () => {
           <div>
             <DateTime
               input={true}
-              isValidDate={toDateIsValid}
               label={keyword("twitter_to_date")}
               dateFormat={"YYYY-MM-DD"}
               timeFormat={"HH:mm:ss"}
               handleChange={handleToDateChange}
               error={toDateError}
               value={toDate}
+              shouldDisableDate={pastDate}
             />
           </div>
 

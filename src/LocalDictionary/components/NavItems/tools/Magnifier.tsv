@@ -1,19 +1,19 @@
-	en	fr	es	el
-magnifier_title	Image Magnifier	Inspecteur d'image	Amplificador de imagen	Μεγεθυντικός φακός εικόνας
-magnifier_urlbox	Image link	Adresse URL de l'image	URL de la imagen	Διεύθυνση URL εικόνας
-magnifier_urlbox_placeholder	Paste the link here	Coller le lien ici	Pegar el enlace	Επικολλήστε τον σύνδεσμο εδώ
-button_localfile	Load local file	Fichier local	Cargar fichero local	Τοπικό αρχείο
-button_submit	Submit	Envoyer	Enviar	Υποβολή
-please_give_a_correct_link	Please give a correct link	Donner un lien valide s'il vous plaît	Por favor, dé un enlace válido	Παρακαλώ εισάγετε έναν σωστό σύνδεσμο
-magnifier_google	Google Image	Google Image	Google imágenes	Εικόνα Google
-magnifier_baidu	Baidu Image	Baidu Image	Baidu imágenes	Εικόνα Baidu
-magnifier_yandex	Yandex Image	Yandex Image	Yandex imágenes	Εικόνα Yandex
-magnifier_tineye	Tineye Image	Tineye Image	Tineye imágenes	Εικόνα Tineye
-magnifier_forensic	Forensic	Forensic	Forensic	Αυθεντικότητα Εικόνων
-quit	Quit	Quitter	Salir	Κλείσιμο
-save	Save	Enregistrer	Gardar	Αποθήκευση
-edit_image	Edit Image	Modifier l’image	Editar imagen	Επεξεργασία εικόνας
-download	Download	Télécharger	Descargar	Λήψη
-reverse_search	Reverse search	Recherche inversée	Búsqueda inversa	Αντίστροφη αναζήτηση
-cardheader_source	Source of the image	Origine de l'image	Fuente de la imagen	Πηγή της εικόνας
-cardheader_results	Results	Résultats	Resultados	Αποτελέσματα
+	en	fr	es	el	ar	
+magnifier_title	Image Magnifier	Inspecteur d'image	Amplificador de imagen	Μεγεθυντικός φακός εικόνας	مكبّر الصورة	
+magnifier_urlbox	Image link	Adresse URL de l'image	URL de la imagen	Διεύθυνση URL εικόνας	رابط الصورة	
+magnifier_urlbox_placeholder	Paste the link here	Coller le lien ici	Pegar el enlace	Επικολλήστε τον σύνδεσμο εδώ	الصق الرابط هنا	
+button_localfile	Load local file	Fichier local	Cargar fichero local	Τοπικό αρχείο	تحميل الملف المحلي	
+button_submit	Submit	Envoyer	Enviar	Υποβολή	إرسال	
+please_give_a_correct_link	Please give a correct link	Donner un lien valide s'il vous plaît	Por favor, dé un enlace válido	Παρακαλώ εισάγετε έναν σωστό σύνδεσμο	يرجى إعطاء رابط صحيح	
+magnifier_google	Google Image	Google Image	Google imágenes	Εικόνα Google	صورة جوجل	
+magnifier_baidu	Baidu Image	Baidu Image	Baidu imágenes	Εικόνα Baidu	صورة Baidu	
+magnifier_yandex	Yandex Image	Yandex Image	Yandex imágenes	Εικόνα Yandex	صورة Yandex	
+magnifier_tineye	Tineye Image	Tineye Image	Tineye imágenes	Εικόνα Tineye	صورة Tineye	
+magnifier_forensic	Forensic	Forensic	Forensic	Αυθεντικότητα Εικόνων	التحقق الرقمي للصور
+quit	Quit	Quitter	Salir	Κλείσιμο	خروج	
+save	Save	Enregistrer	Gardar	Αποθήκευση	حفظ	
+edit_image	Edit Image	Modifier l’image	Editar imagen	Επεξεργασία εικόνας	تعديل الصورة	
+download	Download	Télécharger	Descargar	Λήψη	تنزيل	
+reverse_search	Reverse search	Recherche inversée	Búsqueda inversa	Αντίστροφη αναζήτηση	البحث العكسي	
+cardheader_source	Source of the image	Origine de l'image	Fuente de la imagen	Πηγή της εικόνας	مصدر الصورة	
+cardheader_results	Results	Résultats	Resultados	Αποτελέσματα	نتائج	

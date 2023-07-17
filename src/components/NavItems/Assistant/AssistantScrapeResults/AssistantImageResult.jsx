@@ -12,12 +12,15 @@ import Link from "@mui/material/Link";
 import Tooltip from "@mui/material/Tooltip";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/Assistant.tsv";
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
+import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 
 const AssistantImageResult = () => {
+  const classes = useMyStyles();
+
   const processUrl = useSelector((state) => state.assistant.processUrl);
   const keyword = useLoadLanguage(
     "components/NavItems/tools/Assistant.tsv",
-    tsv
+    tsv,
   );
 
   const copyUrl = () => {
@@ -38,6 +41,7 @@ const AssistantImageResult = () => {
       <CardActions>
         <ImageIcon color={"action"} />
         <Link
+          className={classes.longText}
           href={processUrl}
           target={"_blank"}
           color={"textSecondary"}
@@ -62,7 +66,7 @@ const AssistantImageResult = () => {
             onClick={() => {
               window.open(
                 "https://web.archive.org/save/" + processUrl,
-                "_blank"
+                "_blank",
               );
             }}
           >

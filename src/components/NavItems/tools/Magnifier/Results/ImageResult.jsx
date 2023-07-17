@@ -13,7 +13,8 @@ import {
   cleanMagnifierState,
   setMagnifierResult,
 } from "../../../../../redux/actions/tools/magnifierActions";
-import CloseResult from "../../../../Shared/CloseResult/CloseResult";
+import { IconButton } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Magnifier.tsv";
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
@@ -63,7 +64,7 @@ const ImageResult = () => {
   const classes = useMyStyles();
   const keyword = useLoadLanguage(
     "components/NavItems/tools/Magnifier.tsv",
-    tsv
+    tsv,
   );
 
   const original = useSelector((state) => state.magnifier.url);
@@ -73,7 +74,7 @@ const ImageResult = () => {
   const imageEditor = createRef();
 
   const [isImageUrl, setIsImageUrl] = useState(
-    original.startsWith("http:") || original.startsWith("https:")
+    original.startsWith("http:") || original.startsWith("https:"),
   );
 
   const updateImage = () => {
@@ -85,7 +86,7 @@ const ImageResult = () => {
         result: data,
         notification: false,
         loading: false,
-      })
+      }),
     );
     setIsImageUrl(false);
   };
@@ -115,7 +116,7 @@ const ImageResult = () => {
   };
 
   const handleClick = (img, isImgUrl, searchEngineName) => {
-    reverseImageSearch(img, isImgUrl, searchEngineName);
+    reverseImageSearch(img, isImgUrl, searchEngineName, false);
   };
 
   return (
@@ -123,10 +124,17 @@ const ImageResult = () => {
       <CardHeader
         title={keyword("cardheader_results")}
         className={classes.headerUpladedImage}
+        action={
+          <IconButton
+            aria-label="close"
+            onClick={() => dispatch(cleanMagnifierState())}
+          >
+            <CloseIcon sx={{ color: "white" }} />
+          </IconButton>
+        }
       />
 
       <div className={classes.root2}>
-        <CloseResult onClick={() => dispatch(cleanMagnifierState())} />
         <Modal
           aria-labelledby="transition-modal-title"
           aria-describedby="transition-modal-description"
@@ -231,32 +239,34 @@ const ImageResult = () => {
                 handleClick(
                   resultImage,
                   isImageUrl,
-                  SEARCH_ENGINE_SETTINGS.GOOGLE_SEARCH.NAME
+                  SEARCH_ENGINE_SETTINGS.GOOGLE_SEARCH.NAME,
                 )
               }
             >
               {`${SEARCH_ENGINE_SETTINGS.GOOGLE_SEARCH.NAME} ${keyword(
-                "reverse_search"
+                "reverse_search",
               )}`}
             </Button>
           </Grid>
-          <Grid item>
-            <Button
-              color="primary"
-              variant="contained"
-              onClick={() =>
-                handleClick(
-                  original,
-                  isImageUrl,
-                  SEARCH_ENGINE_SETTINGS.BING_SEARCH.NAME
-                )
-              }
-            >
-              {`${SEARCH_ENGINE_SETTINGS.BING_SEARCH.NAME} ${keyword(
-                "reverse_search"
-              )}`}
-            </Button>
-          </Grid>
+          {isImageUrl ? (
+            <Grid item>
+              <Button
+                color="primary"
+                variant="contained"
+                onClick={() =>
+                  handleClick(
+                    original,
+                    isImageUrl,
+                    SEARCH_ENGINE_SETTINGS.BING_SEARCH.NAME,
+                  )
+                }
+              >
+                {`${SEARCH_ENGINE_SETTINGS.BING_SEARCH.NAME} ${keyword(
+                  "reverse_search",
+                )}`}
+              </Button>
+            </Grid>
+          ) : null}
           <Grid item>
             <Button
               color="primary"
@@ -265,12 +275,12 @@ const ImageResult = () => {
                 handleClick(
                   resultImage,
                   isImageUrl,
-                  SEARCH_ENGINE_SETTINGS.YANDEX_SEARCH.NAME
+                  SEARCH_ENGINE_SETTINGS.YANDEX_SEARCH.NAME,
                 )
               }
             >
               {`${SEARCH_ENGINE_SETTINGS.YANDEX_SEARCH.NAME} ${keyword(
-                "reverse_search"
+                "reverse_search",
               )}`}
             </Button>
           </Grid>
@@ -282,12 +292,12 @@ const ImageResult = () => {
                 handleClick(
                   resultImage,
                   isImageUrl,
-                  SEARCH_ENGINE_SETTINGS.GOOGLE_LENS_SEARCH.NAME
+                  SEARCH_ENGINE_SETTINGS.GOOGLE_LENS_SEARCH.NAME,
                 )
               }
             >
               {`${SEARCH_ENGINE_SETTINGS.GOOGLE_LENS_SEARCH.NAME} ${keyword(
-                "reverse_search"
+                "reverse_search",
               )}`}
             </Button>
           </Grid>
@@ -299,12 +309,12 @@ const ImageResult = () => {
                 handleClick(
                   resultImage,
                   isImageUrl,
-                  SEARCH_ENGINE_SETTINGS.BAIDU_SEARCH.NAME
+                  SEARCH_ENGINE_SETTINGS.BAIDU_SEARCH.NAME,
                 )
               }
             >
               {`${SEARCH_ENGINE_SETTINGS.BAIDU_SEARCH.NAME} ${keyword(
-                "reverse_search"
+                "reverse_search",
               )}`}
             </Button>
           </Grid>
@@ -318,12 +328,12 @@ const ImageResult = () => {
                     handleClick(
                       original,
                       isImageUrl,
-                      SEARCH_ENGINE_SETTINGS.TINEYE_SEARCH.NAME
+                      SEARCH_ENGINE_SETTINGS.TINEYE_SEARCH.NAME,
                     )
                   }
                 >
                   {`${SEARCH_ENGINE_SETTINGS.TINEYE_SEARCH.NAME} ${keyword(
-                    "reverse_search"
+                    "reverse_search",
                   )}`}
                 </Button>
               </Grid>
@@ -335,12 +345,12 @@ const ImageResult = () => {
                     handleClick(
                       original,
                       isImageUrl,
-                      SEARCH_ENGINE_SETTINGS.REDDIT_SEARCH.NAME
+                      SEARCH_ENGINE_SETTINGS.REDDIT_SEARCH.NAME,
                     )
                   }
                 >
                   {`${SEARCH_ENGINE_SETTINGS.REDDIT_SEARCH.NAME} ${keyword(
-                    "reverse_search"
+                    "reverse_search",
                   )}`}
                 </Button>
               </Grid>

@@ -59,7 +59,6 @@ function TabPanel(props) {
     </div>
   );
 }
-
 export class Instructions extends Component {
   render() {
     return <HelpOutlineIcon />;
@@ -75,7 +74,7 @@ const ForensicResults = (props) => {
       MuiCardHeader: {
         styleOverrides: {
           root: {
-            backgroundColor: "#05A9B4",
+            backgroundColor: "#00926c",
           },
           title: {
             color: "white",
@@ -99,9 +98,9 @@ const ForensicResults = (props) => {
 
     palette: {
       primary: {
-        light: "#5cdbe6",
-        main: "#05a9b4",
-        dark: "#007984",
+        light: "#00926c",
+        main: "#00926c",
+        dark: "#00926c",
         contrastText: "#fff",
       },
     },
@@ -110,18 +109,18 @@ const ForensicResults = (props) => {
   const classes = useMyStyles();
   const keyword = useLoadLanguage(
     "components/NavItems/tools/Forensic.tsv",
-    tsv
+    tsv,
   );
   const keywordWarning = useLoadLanguage(
     "components/Shared/OnWarningInfo.tsv",
-    tsvWarning
+    tsvWarning,
   );
   const results = props.result.filters;
   //const masks = props.masksData;
   //console.log(results);
 
   const userAuthenticated = useSelector(
-    (state) => state.userSession && state.userSession.userAuthenticated
+    (state) => state.userSession && state.userSession.userAuthenticated,
   );
   const [openAlert, setOpenAlert] = React.useState(false);
 
@@ -260,7 +259,7 @@ const ForensicResults = (props) => {
       }
 
       return filter;
-    })
+    }),
   );
 
   //onsole.log(filters);
@@ -347,7 +346,7 @@ const ForensicResults = (props) => {
     displayFilterHover(
       filters.current.find((x) => x.id === filter).mask[
         filters.current.find((x) => x.id === filter).currentDisplayed
-      ]
+      ],
     );
   }
 
@@ -441,12 +440,12 @@ const ForensicResults = (props) => {
       ) {
         setTextCagiPopover(keyword("forensic_card_cagiNormal"));
         setTitleCagiPopover(
-          filters.current.find((x) => x.id === "cagi_report").name[0]
+          filters.current.find((x) => x.id === "cagi_report").name[0],
         );
       } else {
         setTextCagiPopover(keyword("forensic_card_cagiInversed"));
         setTitleCagiPopover(
-          filters.current.find((x) => x.id === "cagi_report").name[1]
+          filters.current.find((x) => x.id === "cagi_report").name[1],
         );
       }
       setAnchorFilterExplanation(event.currentTarget);
@@ -481,12 +480,20 @@ const ForensicResults = (props) => {
     // eslint-disable-next-line
   }, []);
 
+  const currentLang = useSelector((state) => state.language);
+  const isCurrentLanguageLeftToRight = currentLang !== "ar";
+
   return (
     <div>
       <Snackbar
         open={openAlert}
         autoHideDuration={6000}
         onClose={handleCloseAlert}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "right",
+        }}
+        sx={{ mr: 8 }}
       >
         <Alert onClose={handleCloseAlert} severity="warning">
           {keywordWarning("warning_advanced_tools")}
@@ -499,10 +506,17 @@ const ForensicResults = (props) => {
         <ThemeProvider theme={theme}>
           <Box mt={5} mb={5}>
             <Snackbar
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "left",
-              }}
+              anchorOrigin={
+                isCurrentLanguageLeftToRight
+                  ? {
+                      vertical: "bottom",
+                      horizontal: "left",
+                    }
+                  : {
+                      vertical: "bottom",
+                      horizontal: "right",
+                    }
+              }
               open={openToast}
               autoHideDuration={6000}
               onClose={handleCloseToast}
@@ -811,42 +825,42 @@ const ForensicResults = (props) => {
                     if (valueTab === 0) {
                       filtersTab = filters.current.slice(
                         idStartCompression,
-                        idStartNoise
+                        idStartNoise,
                       );
                       textDescription = keyword(
-                        "forensic_family_compression_description"
+                        "forensic_family_compression_description",
                       );
                       textLook = keyword("forensic_family_compression_look");
                       textIgnore = keyword(
-                        "forensic_family_compression_ignore"
+                        "forensic_family_compression_ignore",
                       );
                     } else if (valueTab === 1) {
                       filtersTab = filters.current.slice(
                         idStartNoise,
-                        idStartDeepLearning
+                        idStartDeepLearning,
                       );
                       textDescription = keyword(
-                        "forensic_family_noise_description"
+                        "forensic_family_noise_description",
                       );
                       textLook = keyword("forensic_family_noise_look");
                       textIgnore = keyword("forensic_family_noise_ignore");
                     } else if (valueTab === 2) {
                       filtersTab = filters.current.slice(
                         idStartDeepLearning,
-                        idStartCloning
+                        idStartCloning,
                       );
                       textDescription = keyword(
-                        "forensic_family_ai_description"
+                        "forensic_family_ai_description",
                       );
                       textLook = keyword("forensic_family_ai_look");
                       textIgnore = keyword("forensic_family_ai_ignore");
                     } else {
                       filtersTab = filters.current.slice(
                         idStartCloning,
-                        idStartLenses
+                        idStartLenses,
                       );
                       textDescription = keyword(
-                        "forensic_family_cloning_description"
+                        "forensic_family_cloning_description",
                       );
                       textLook = keyword("forensic_family_cloning_look");
                       textIgnore = keyword("forensic_family_cloning_ignore");
@@ -879,7 +893,7 @@ const ForensicResults = (props) => {
                                     className={classes.imageOverlayWrapper}
                                     onMouseOver={() =>
                                       displayFilterHover(
-                                        value.mask[value.currentDisplayed]
+                                        value.mask[value.currentDisplayed],
                                       )
                                     }
                                     onMouseLeave={hideFilterHover}
@@ -906,17 +920,21 @@ const ForensicResults = (props) => {
                                               clickArrowFilter(value.id, -1)
                                             }
                                           >
-                                            <NavigateBeforeIcon
-                                              style={{ color: "#000000" }}
-                                            />
+                                            {isCurrentLanguageLeftToRight ? (
+                                              <NavigateBeforeIcon
+                                                style={{ color: "#00000" }}
+                                              />
+                                            ) : (
+                                              <NavigateNextIcon
+                                                style={{ color: "#00000" }}
+                                              />
+                                            )}
                                           </Fab>
                                         ) : (
                                           <Fab
                                             size="small"
                                             style={{ visibility: "hidden" }}
-                                          >
-                                            <NavigateBeforeIcon />
-                                          </Fab>
+                                          ></Fab>
                                         )}
                                         <Fab
                                           size="medium"
@@ -940,17 +958,21 @@ const ForensicResults = (props) => {
                                               clickArrowFilter(value.id, 1)
                                             }
                                           >
-                                            <NavigateNextIcon
-                                              style={{ color: "#000000" }}
-                                            />
+                                            {isCurrentLanguageLeftToRight ? (
+                                              <NavigateNextIcon
+                                                style={{ color: "#00000" }}
+                                              />
+                                            ) : (
+                                              <NavigateBeforeIcon
+                                                style={{ color: "#00000" }}
+                                              />
+                                            )}
                                           </Fab>
                                         ) : (
                                           <Fab
                                             size="small"
                                             style={{ visibility: "hidden" }}
-                                          >
-                                            <NavigateNextIcon />
-                                          </Fab>
+                                          ></Fab>
                                         )}
                                       </Grid>
                                     </div>
@@ -1006,7 +1028,7 @@ const ForensicResults = (props) => {
                                           onClick={(e) =>
                                             handleOpenFilterExplanation(
                                               e,
-                                              "cagi"
+                                              "cagi",
                                             )
                                           }
                                         >
@@ -1022,7 +1044,7 @@ const ForensicResults = (props) => {
                                           onClick={(e) =>
                                             handleOpenFilterExplanation(
                                               e,
-                                              value.id
+                                              value.id,
                                             )
                                           }
                                         >
@@ -1180,7 +1202,7 @@ const ForensicResults = (props) => {
               anchorPosition={{ top: 0, left: 0 }}
               PaperProps={{
                 style: {
-                  width: "40vw",
+                  width: "60vw",
                   height: "70vh",
                   marginTop: "5vh",
                   marginLeft: "5vw",
@@ -1210,14 +1232,16 @@ const ForensicResults = (props) => {
                   <Typography variant="h6" gutterBottom>
                     {keyword("forensic_title_export")}
                   </Typography>
-
-                  <CloseIcon onClick={closeGifPopover} />
+                  <IconButton onClick={closeGifPopover}>
+                    <CloseIcon />
+                  </IconButton>
                 </Grid>
-                <Box m={1} />
+                <Box m={2} />
                 <AnimatedGif
                   toolState={gifState}
                   homoImg1={gifImage}
                   homoImg2={gifFilter}
+                  isPopup={true}
                 />
               </Box>
             </Popover>

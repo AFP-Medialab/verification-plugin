@@ -1,2 +1,0 @@
-@material-ui deprecated use @mui for React 18
-npm i @material-ui/core --legacy-peer-deps

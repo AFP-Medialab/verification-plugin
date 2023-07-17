@@ -14,7 +14,7 @@ export const createUrl = (
   within,
   from_date,
   to_date,
-  localTime
+  localTime,
 ) => {
   let twitter_url = "https://twitter.com/search?&src=typed_query&f=top&q=";
   twitter_url = twitter_url + replaceAll(term, "#", "%23");

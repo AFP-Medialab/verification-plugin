@@ -22,15 +22,15 @@ const Geolocation = () => {
   const classes = useMyStyles();
   const keyword = useLoadLanguage(
     "components/NavItems/tools/Geolocalizer.tsv",
-    tsv
+    tsv,
   );
   const keywordAllTools = useLoadLanguage(
     "components/NavItems/tools/Alltools.tsv",
-    tsvAlltools
+    tsvAlltools,
   );
   const keywordWarning = useLoadLanguage(
     "components/Shared/OnWarningInfo.tsv",
-    tsvWarning
+    tsvWarning,
   );
 
   const result = useSelector((state) => state.geolocation.result);
@@ -53,7 +53,7 @@ const Geolocation = () => {
         description={keywordAllTools("navbar_geolocation_description")}
         icon={
           <GeolocationIcon
-            style={{ fill: "#51A5B2", width: "75px", height: "75px" }}
+            style={{ fill: "#00926c", width: "75px", height: "75px" }}
           />
         }
       />

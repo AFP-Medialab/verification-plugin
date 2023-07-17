@@ -8,7 +8,6 @@ import Table from "@mui/material/Table";
 import Box from "@mui/material/Box";
 import Tooltip from "@mui/material/Tooltip";
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
-import CloseResult from "../../../../Shared/CloseResult/CloseResult";
 import { cleanMetadataState } from "../../../../../redux/reducers/tools/metadataReducer";
 import Button from "@mui/material/Button";
 import MapIcon from "@mui/icons-material/Map";
@@ -17,15 +16,17 @@ import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Metada
 import OnClickInfo from "../../../../Shared/OnClickInfo/OnClickInfo";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
+import { IconButton } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 
-const MetadataVideoResult = (result) => {
+const MetadataVideoResult = (props) => {
   const classes = useMyStyles();
   const keyword = useLoadLanguage(
     "components/NavItems/tools/Metadata.tsv",
-    tsv
+    tsv,
   );
 
-  const report = result["result"];
+  const report = props["result"];
   const convertDMSToDD = (GPStitude, direction) => {
     if (!GPStitude || !direction) return null;
 
@@ -351,10 +352,19 @@ const MetadataVideoResult = (result) => {
       <CardHeader
         title={keyword("cardheader_results")}
         className={classes.headerUpladedImage}
+        action={
+          <IconButton
+            aria-label="close"
+            onClick={() => {
+              props.closeResult();
+              dispatch(cleanMetadataState());
+            }}
+          >
+            <CloseIcon sx={{ color: "white" }} />
+          </IconButton>
+        }
       />
-
       <div className={classes.root2}>
-        <CloseResult onClick={() => dispatch(cleanMetadataState())} />
         <Box m={1} />
         <OnClickInfo keyword={"metadata_tip"} />
         <Box m={3} />
@@ -477,9 +487,9 @@ const MetadataVideoResult = (result) => {
                     report.GPSLatitude,
                     report.GPSLatitudeRef,
                     report.GPSLongitude,
-                    report.GPSLongitudeRef
+                    report.GPSLongitudeRef,
                   ),
-                  "_blank"
+                  "_blank",
                 )
               }
             >

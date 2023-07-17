@@ -13,7 +13,7 @@ const useGetTransparent = (url, ready) => {
   const envisu4_utils_base_url = process.env.REACT_APP_CAA_ENVISU4_UTILS_URL;
   const keyword = useLoadLanguage(
     "components/NavItems/tools/Forensic.tsv",
-    tsv
+    tsv,
   );
   const dispatch = useDispatch();
 

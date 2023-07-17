@@ -50,19 +50,16 @@ const useLoadLanguage = (onlineTsv, localTsv) => {
   const lang = useSelector((state) => state.language);
   const dictionary = useSelector(
     (state) => state.dictionary[gitHubFullUrl],
-    shallowEqual
+    shallowEqual,
   );
   const dispatch = useDispatch();
 
   useEffect(() => {
     if (dictionary === undefined) {
-      const backUpLocal = () => {
-        axios
-          .get(localTsv)
-          .then((result) => {
-            dispatch(addDictionary(gitHubFullUrl, translate_csv(result.data)));
-          })
-          .catch((error) => console.error(error));
+      const backUpLocal = async () => {
+        const response = await fetch(localTsv);
+        const tsvString = await response.text();
+        dispatch(addDictionary(gitHubFullUrl, translate_csv(tsvString)));
       };
 
       axios
@@ -77,7 +74,7 @@ const useLoadLanguage = (onlineTsv, localTsv) => {
           backUpLocal();
         });
     }
-  }, [localTsv]);
+  }, [gitHubFullUrl, localTsv, dictionary, dispatch]);
 
   return (key) => {
     return dictionary && dictionary[lang] && dictionary[lang][key]

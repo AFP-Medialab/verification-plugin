@@ -5,16 +5,17 @@ import { HashRouter, Route, Routes } from "react-router-dom";
 import PopUp from "./components/PopUp/PopUp";
 import NavBar from "./components/NavBar/NavBar";
 import useAuthenticationAPI from "./components/Shared/Authentication/useAuthenticationAPI";
-import { useEffect } from "react";
+//import { useEffect } from "react";
 import { useSelector } from "react-redux";
-import { trackPageView } from "./components/Shared/GoogleAnalytics/MatomoAnalytics";
+//import { trackPageView } from "./components/Shared/GoogleAnalytics/MatomoAnalytics";
+import { useTrackPageView } from "./Hooks/useAnalytics";
 
 const theme = createTheme({
   palette: {
     primary: {
-      light: "#5cdbe6",
-      main: "#05a9b4",
-      dark: "#007984",
+      light: "#00926c",
+      main: "#00926c",
+      dark: "#00926c",
       contrastText: "#fff",
     },
     secondary: {
@@ -52,17 +53,21 @@ const theme = createTheme({
 
 const App = () => {
   const cookies = useSelector((state) => state.cookies);
-  const clientId = cookies !== null ? cookies.id : null;
-  const path = window.location.pathname;
-  useEffect(() => {
-    trackPageView(path, clientId);
-  }, []);
+  const session = useSelector((state) => state.userSession);
 
+  const clientId = cookies !== null ? cookies.id : null;
+  const uid = session && session.user ? session.user.email : null;
+
+  const path = window.location.pathname;
+  /*useEffect(() => {
+    trackPageView(path, clientId, uid);
+  }, []);*/
+  useTrackPageView(path, clientId, uid);
   const authenticationAPI = useAuthenticationAPI();
   const locationSearchStart = window.location.href.lastIndexOf("?");
   if (locationSearchStart > 0) {
     const locationSearch = window.location.href.substring(
-      locationSearchStart + 1
+      locationSearchStart + 1,
     );
     // console.log("Query params: ", locationSearch);
     if (locationSearch) {

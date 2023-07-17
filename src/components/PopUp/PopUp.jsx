@@ -51,7 +51,7 @@ const PopUp = () => {
         if (results) {
           window.localStorage.setItem("instagram_result", results);
         }
-      }
+      },
     );
   };
 
@@ -60,7 +60,7 @@ const PopUp = () => {
     navigator.tabs.query({ active: true, lastFocusedWindow: true }, (tabs) => {
       let url = tabs[0].url;
       setPageUrl(url);
-      if (url.includes("instagram")) {
+      if (url && url.includes("instagram")) {
         getInstagramUrls();
       }
     });

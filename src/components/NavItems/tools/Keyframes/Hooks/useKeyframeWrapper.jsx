@@ -39,7 +39,7 @@ export const useKeyframeWrapper = (url, keyword) => {
               notification: false,
               loading: false,
               video_id: video_id,
-            })
+            }),
           );
         })
         .catch((error) => handleError(error));
@@ -55,7 +55,7 @@ export const useKeyframeWrapper = (url, keyword) => {
               //"https://multimedia2.iti.gr/video_analysis/result/" +
               video_id +
               "_json",
-            video_id
+            video_id,
           );
           clearInterval(interval);
         } else if (
@@ -73,8 +73,8 @@ export const useKeyframeWrapper = (url, keyword) => {
               if (keyword("keyframes_wait_" + data["status"]) !== "") {
                 dispatch(
                   setKeyframesMessage(
-                    keyword("keyframes_wait_" + data["status"])
-                  )
+                    keyword("keyframes_wait_" + data["status"]),
+                  ),
                 );
               } else if (data["status"].endsWith("STARTED")) {
                 dispatch(
@@ -84,8 +84,8 @@ export const useKeyframeWrapper = (url, keyword) => {
                       " (" +
                       data["process"] +
                       ") " +
-                      (data["progress"] === "N/A" ? "" : data["progress"])
-                  )
+                      (data["progress"] === "N/A" ? "" : data["progress"]),
+                  ),
                 );
               }
             })
@@ -110,7 +110,7 @@ export const useKeyframeWrapper = (url, keyword) => {
               "/status/" +
               //"https://multimedia2.iti.gr/video_analysis/status/" +
               response.data.video_id,
-            response.data.video_id
+            response.data.video_id,
           );
         })
         .catch((errors) => handleError(errors));

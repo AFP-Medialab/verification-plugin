@@ -3,6 +3,7 @@ import EXIF from "exif-js/exif";
 import { useDispatch } from "react-redux";
 import { setMetadadaResult } from "../../../../../redux/reducers/tools/metadataReducer";
 import { setError } from "../../../../../redux/actions/errorActions";
+import _ from "lodash";
 
 const useImageTreatment = (mediaUrl, keyword) => {
   const dispatch = useDispatch();
@@ -10,7 +11,11 @@ const useImageTreatment = (mediaUrl, keyword) => {
   useEffect(() => {
     function isEmpty(obj) {
       for (let key in obj) {
-        if (obj.prototype.hasOwnProperty.call(key)) return false;
+        if (!_.isUndefined(obj.prototype)) {
+          if (obj.prototype.hasOwnProperty.call(key)) return false;
+        } else {
+          return false;
+        }
       }
       return true;
     }
@@ -26,8 +31,6 @@ const useImageTreatment = (mediaUrl, keyword) => {
       img.onload = () => {
         EXIF.getData(img, () => {
           let res = EXIF.getAllTags(img);
-
-          //console.log(res);
           if (!isEmpty(res)) {
             dispatch(
               setMetadadaResult({
@@ -36,7 +39,7 @@ const useImageTreatment = (mediaUrl, keyword) => {
                 notification: false,
                 loading: false,
                 isImage: true,
-              })
+              }),
             );
           } else
             dispatch(
@@ -46,7 +49,7 @@ const useImageTreatment = (mediaUrl, keyword) => {
                 notification: false,
                 loading: false,
                 isImage: true,
-              })
+              }),
             );
         });
       };
@@ -54,8 +57,10 @@ const useImageTreatment = (mediaUrl, keyword) => {
         handleErrors(error);
       };
     };
-
-    if (mediaUrl) imageTreatment();
+    if (!_.isNull(mediaUrl)) {
+      console.log("process");
+      imageTreatment();
+    }
   }, [mediaUrl]);
 };
 export default useImageTreatment;

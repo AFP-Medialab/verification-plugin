@@ -13,7 +13,7 @@ const DeepfakeResutlsImage = (props) => {
   const classes = useMyStyles();
   const keyword = useLoadLanguage(
     "components/NavItems/tools/Deepfake.tsv",
-    tsv
+    tsv,
   );
   const results = props.result;
   const url = props.url;
@@ -36,10 +36,10 @@ const DeepfakeResutlsImage = (props) => {
       var elementTop = Math.round(rectangleAtributes.top * imgHeight);
       var elementLeft = Math.round(rectangleAtributes.left * imgWidth);
       var elementHeight = Math.round(
-        (rectangleAtributes.bottom - rectangleAtributes.top) * imgHeight
+        (rectangleAtributes.bottom - rectangleAtributes.top) * imgHeight,
       );
       var elementWidth = Math.round(
-        (rectangleAtributes.right - rectangleAtributes.left) * imgWidth
+        (rectangleAtributes.right - rectangleAtributes.left) * imgWidth,
       );
 
       var elementProbability = Math.round(element.prediction * 100);

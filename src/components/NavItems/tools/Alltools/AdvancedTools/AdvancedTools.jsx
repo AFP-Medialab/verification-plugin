@@ -23,7 +23,6 @@ import { useForm, Controller } from "react-hook-form";
 import * as yup from "yup";
 import _ from "lodash";
 import MenuItem from "@mui/material/MenuItem";
-//import { userRegistrationSentAction } from "../../../../../redux/actions/authenticationActions";
 import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
 
 const registrationValidationSchema = yup.object().shape({
@@ -51,26 +50,26 @@ const registrationValidationSchema = yup.object().shape({
 const AdvancedTools = () => {
   const keyword = useLoadLanguage(
     "components/NavItems/AdvancedTools.tsv",
-    tsvAdvTools
+    tsvAdvTools,
   );
 
   //const classes = useMyStyles();
   // Redux store
   const dispatch = useDispatch();
   const userAuthenticated = useSelector(
-    (state) => state.userSession && state.userSession.userAuthenticated
+    (state) => state.userSession && state.userSession.userAuthenticated,
   );
 
   // i18n
   const messageI18NResolver = useLoadLanguage(
     "components/Shared/Authentication.tsv",
-    tsv
+    tsv,
   );
 
   const [dialogState, setDialogState] = React.useState(0);
   const [colorButton, setColorButton] = React.useState("primary");
   const [iconState, setIconState] = React.useState(
-    <LockIcon fontSize="small" />
+    <LockIcon fontSize="small" />,
   );
 
   const [open, setOpen] = React.useState(false);
@@ -299,7 +298,7 @@ const AdvancedTools = () => {
             <form>
               <Grid item>
                 <DialogTitle id="max-width-dialog-title">
-                  <Typography style={{ color: "#51A5B2", fontSize: "24px" }}>
+                  <Typography style={{ color: "#00926c", fontSize: "24px" }}>
                     {keyword("title")}
                   </Typography>
                 </DialogTitle>
@@ -340,7 +339,7 @@ const AdvancedTools = () => {
                           label={"Email"}
                           value={email}
                           placeholder={messageI18NResolver(
-                            "ACCESSCODEFORM_EMAIL_PLACEHOLDER"
+                            "ACCESSCODEFORM_EMAIL_PLACEHOLDER",
                           )}
                           fullWidth
                           autoComplete="email"
@@ -436,7 +435,7 @@ const AdvancedTools = () => {
                   </Grid>
 
                   <Grid item>
-                    <Typography style={{ color: "#51A5B2", fontSize: "24px" }}>
+                    <Typography style={{ color: "#00926c", fontSize: "24px" }}>
                       {messageI18NResolver("ACCESSCODEFORM_EMAIL_CHECK")}
                     </Typography>
                   </Grid>
@@ -453,7 +452,7 @@ const AdvancedTools = () => {
                   label={"Code"}
                   value={code}
                   placeholder={messageI18NResolver(
-                    "LOGINFORM_ACCESSCODE_PLACEHOLDER"
+                    "LOGINFORM_ACCESSCODE_PLACEHOLDER",
                   )}
                   fullWidth
                   variant="outlined"
@@ -503,7 +502,7 @@ const AdvancedTools = () => {
             <DialogTitle id="max-width-dialog-title">
               <Typography
                 gutterBottom
-                style={{ color: "#51A5B2", fontSize: "24px" }}
+                style={{ color: "#00926c", fontSize: "24px" }}
               >
                 {keyword("title_tools_unlocked")}
               </Typography>
@@ -529,7 +528,7 @@ const AdvancedTools = () => {
             <DialogTitle id="max-width-dialog-title">
               <Typography
                 gutterBottom
-                style={{ color: "#51A5B2", fontSize: "24px" }}
+                style={{ color: "#00926c", fontSize: "24px" }}
               >
                 {messageI18NResolver("REGISTRATIONFORM_TITLE_WINDOW")}
               </Typography>
@@ -552,12 +551,12 @@ const AdvancedTools = () => {
                           id="registration-email"
                           label={
                             messageI18NResolver(
-                              "REGISTRATIONFORM_EMAIL_LABEL"
+                              "REGISTRATIONFORM_EMAIL_LABEL",
                             ) || "Email address"
                           }
                           placeholder={
                             messageI18NResolver(
-                              "REGISTRATIONFORM_EMAIL_PLACEHOLDER"
+                              "REGISTRATIONFORM_EMAIL_PLACEHOLDER",
                             ) || "Enter your email address"
                           }
                           fullWidth
@@ -566,12 +565,12 @@ const AdvancedTools = () => {
                           variant="outlined"
                           error={_.hasIn(
                             registrationForm.formState.errors,
-                            "email"
+                            "email",
                           )}
                           helperText={
                             registrationForm.formState.errors.email &&
                             (messageI18NResolver(
-                              "ACCESSCODEFORM_EMAIL_ERR_EMAIL"
+                              "ACCESSCODEFORM_EMAIL_ERR_EMAIL",
                             ) ||
                               "A valid fact-checking, media or research organization email address is required")
                           }
@@ -597,12 +596,12 @@ const AdvancedTools = () => {
                           id="registration-firstName"
                           label={
                             messageI18NResolver(
-                              "REGISTRATIONFORM_FIRSTNAME_LABEL"
+                              "REGISTRATIONFORM_FIRSTNAME_LABEL",
                             ) || "First name"
                           }
                           placeholder={
                             messageI18NResolver(
-                              "REGISTRATIONFORM_FIRSTNAME_PLACEHOLDER"
+                              "REGISTRATIONFORM_FIRSTNAME_PLACEHOLDER",
                             ) || "Enter your first name"
                           }
                           fullWidth
@@ -611,12 +610,12 @@ const AdvancedTools = () => {
                           variant="outlined"
                           error={_.hasIn(
                             registrationForm.formState.errors,
-                            "firstName"
+                            "firstName",
                           )}
                           helperText={
                             registrationForm.formState.errors.firstName &&
                             (messageI18NResolver(
-                              "REGISTRATIONFORM_FIRSTNAME_ERR_REQUIRED"
+                              "REGISTRATIONFORM_FIRSTNAME_ERR_REQUIRED",
                             ) ||
                               "First name is required")
                           }
@@ -637,12 +636,12 @@ const AdvancedTools = () => {
                           id="registration-lastName"
                           label={
                             messageI18NResolver(
-                              "REGISTRATIONFORM_LASTNAME_LABEL"
+                              "REGISTRATIONFORM_LASTNAME_LABEL",
                             ) || "Last name"
                           }
                           placeholder={
                             messageI18NResolver(
-                              "REGISTRATIONFORM_LASTNAME_PLACEHOLDER"
+                              "REGISTRATIONFORM_LASTNAME_PLACEHOLDER",
                             ) || "Enter your last name"
                           }
                           fullWidth
@@ -651,12 +650,12 @@ const AdvancedTools = () => {
                           variant="outlined"
                           error={_.hasIn(
                             registrationForm.formState.errors,
-                            "lastName"
+                            "lastName",
                           )}
                           helperText={
                             registrationForm.formState.errors.lastName &&
                             (messageI18NResolver(
-                              "REGISTRATIONFORM_LASTNAME_ERR_REQUIRED"
+                              "REGISTRATIONFORM_LASTNAME_ERR_REQUIRED",
                             ) ||
                               "Last name is required")
                           }
@@ -677,12 +676,12 @@ const AdvancedTools = () => {
                           id="registration-organization"
                           label={
                             messageI18NResolver(
-                              "REGISTRATIONFORM_ORGANIZATION_LABEL"
+                              "REGISTRATIONFORM_ORGANIZATION_LABEL",
                             ) || "Organization"
                           }
                           placeholder={
                             messageI18NResolver(
-                              "REGISTRATIONFORM_ORGANIZATION_PLACEHOLDER"
+                              "REGISTRATIONFORM_ORGANIZATION_PLACEHOLDER",
                             ) || "Enter your organization name"
                           }
                           fullWidth
@@ -691,12 +690,12 @@ const AdvancedTools = () => {
                           variant="outlined"
                           error={_.hasIn(
                             registrationForm.formState.errors,
-                            "organization"
+                            "organization",
                           )}
                           helperText={
                             registrationForm.formState.errors.organization &&
                             (messageI18NResolver(
-                              "REGISTRATIONFORM_ORGANIZATION_ERR_REQUIRED"
+                              "REGISTRATIONFORM_ORGANIZATION_ERR_REQUIRED",
                             ) ||
                               "Organization name is required")
                           }
@@ -717,12 +716,12 @@ const AdvancedTools = () => {
                           id="registration-organizationRole"
                           label={
                             messageI18NResolver(
-                              "REGISTRATIONFORM_ORGANIZATIONROLE_LABEL"
+                              "REGISTRATIONFORM_ORGANIZATIONROLE_LABEL",
                             ) || "Role"
                           }
                           placeholder={
                             messageI18NResolver(
-                              "REGISTRATIONFORM_ORGANIZATIONROLE_PLACEHOLDER"
+                              "REGISTRATIONFORM_ORGANIZATIONROLE_PLACEHOLDER",
                             ) || "Select your role within organization"
                           }
                           select
@@ -732,20 +731,20 @@ const AdvancedTools = () => {
                           variant="outlined"
                           error={_.hasIn(
                             registrationForm.formState.errors,
-                            "organizationRole"
+                            "organizationRole",
                           )}
                           helperText={
                             registrationForm.formState.errors
                               .organizationRole &&
                             (messageI18NResolver(
-                              "REGISTRATIONFORM_ORGANIZATIONROLE_ERR_REQUIRED"
+                              "REGISTRATIONFORM_ORGANIZATIONROLE_ERR_REQUIRED",
                             ) ||
                               "Role within organization is required")
                           }
                         >
                           <MenuItem key="REPORTER" value="REPORTER">
                             {messageI18NResolver(
-                              "REGISTRATIONFORM_ORGANIZATIONROLE_REPORTER_LABEL"
+                              "REGISTRATIONFORM_ORGANIZATIONROLE_REPORTER_LABEL",
                             ) || "Reporter"}
                           </MenuItem>
                           <MenuItem
@@ -753,12 +752,12 @@ const AdvancedTools = () => {
                             value="FAKE_NEWS_CHECKER"
                           >
                             {messageI18NResolver(
-                              "REGISTRATIONFORM_ORGANIZATIONROLE_FAKENEWSCHECKER_LABEL"
+                              "REGISTRATIONFORM_ORGANIZATIONROLE_FAKENEWSCHECKER_LABEL",
                             ) || "Fake news checker"}
                           </MenuItem>
                           <MenuItem key="OTHER" value="OTHER">
                             {messageI18NResolver(
-                              "REGISTRATIONFORM_ORGANIZATIONROLE_OTHER_LABEL"
+                              "REGISTRATIONFORM_ORGANIZATIONROLE_OTHER_LABEL",
                             ) || "Other"}
                           </MenuItem>
                         </TextField>
@@ -779,12 +778,12 @@ const AdvancedTools = () => {
                           id="registration-organizationRoleOther"
                           label={
                             messageI18NResolver(
-                              "REGISTRATIONFORM_ORGANIZATIONROLEOTHER_LABEL"
+                              "REGISTRATIONFORM_ORGANIZATIONROLEOTHER_LABEL",
                             ) || "Role (other)"
                           }
                           placeholder={
                             messageI18NResolver(
-                              "REGISTRATIONFORM_ORGANIZATIONROLEOTHER_PLACEHOLDER"
+                              "REGISTRATIONFORM_ORGANIZATIONROLEOTHER_PLACEHOLDER",
                             ) || "Enter your role within organization"
                           }
                           fullWidth
@@ -793,13 +792,13 @@ const AdvancedTools = () => {
                           // required
                           error={_.hasIn(
                             registrationForm.formState.errors,
-                            "organizationRoleOther"
+                            "organizationRoleOther",
                           )}
                           helperText={
                             registrationForm.formState.errors
                               .organizationRoleOther &&
                             (messageI18NResolver(
-                              "REGISTRATIONFORM_ORGANIZATIONROLEOTHER_ERR_REQUIRED"
+                              "REGISTRATIONFORM_ORGANIZATIONROLEOTHER_ERR_REQUIRED",
                             ) ||
                               "Please fill in your role within organization")
                           }
@@ -833,7 +832,7 @@ const AdvancedTools = () => {
             <DialogTitle id="max-width-dialog-title">
               <Typography
                 gutterBottom
-                style={{ color: "#51A5B2", fontSize: "24px" }}
+                style={{ color: "#00926c", fontSize: "24px" }}
               >
                 {messageI18NResolver("REGISTRATIONFORM_SUCCESS_TITLE")}
               </Typography>

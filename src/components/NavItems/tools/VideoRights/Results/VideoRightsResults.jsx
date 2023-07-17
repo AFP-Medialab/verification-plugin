@@ -14,20 +14,21 @@ import Divider from "@mui/material/Divider";
 import invidLogo from "../images/InVID-logo.svg?url";
 import Icon from "@mui/material/Icon";
 import Grid from "@mui/material/Grid";
-import CloseResult from "../../../../Shared/CloseResult/CloseResult";
 import { cleanVideoRightsState } from "../../../../../redux/actions/tools/videoRightsActions";
 import { useDispatch } from "react-redux";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../../LocalDictionary/components/NavItems/tools/VideoRights.tsv";
+import { IconButton } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 
 const VideoRightsResults = (props) => {
   const classes = useMyStyles();
   const dispatch = useDispatch();
   const keyword = useLoadLanguage(
     "components/NavItems/tools/VideoRights.tsv",
-    tsv
+    tsv,
   );
 
   const result = props.result;
@@ -87,9 +88,16 @@ const VideoRightsResults = (props) => {
       <CardHeader
         title={keyword("cardheader_results")}
         className={classes.headerUpladedImage}
+        action={
+          <IconButton
+            aria-label="close"
+            onClick={() => dispatch(cleanVideoRightsState())}
+          >
+            <CloseIcon sx={{ color: "white" }} />
+          </IconButton>
+        }
       />
       <div className={classes.root2}>
-        <CloseResult onClick={() => dispatch(cleanVideoRightsState())} />
         <Typography variant={"h5"}>{"Reuse Conditions"}</Typography>
         <Box m={2} />
         {result.kind === "youTubeVideos" && result.license === "youtube" && (

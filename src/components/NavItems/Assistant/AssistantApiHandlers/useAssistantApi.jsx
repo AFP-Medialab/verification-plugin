@@ -10,7 +10,7 @@ export default function assistantApiCalls() {
           "scrape/" +
           urlType +
           "?url=" +
-          encodeURIComponent(userInput)
+          encodeURIComponent(userInput),
       );
       if (scrapeResult.data.status === "success") {
         return scrapeResult.data;
@@ -27,7 +27,7 @@ export default function assistantApiCalls() {
   const callNamedEntityService = async (text, lang) => {
     const namedEntityResult = await axios.post(
       assistantEndpoint + "gcloud/named-entity",
-      { content: text, lang: lang }
+      { content: text, lang: lang },
     );
 
     return namedEntityResult.data;
@@ -40,7 +40,7 @@ export default function assistantApiCalls() {
           "translate/" +
           lang +
           "?text=" +
-          encodeURIComponent(text)
+          encodeURIComponent(text),
       );
       if (translationResult.data.status === "success") {
         return translationResult.data;
@@ -61,7 +61,7 @@ export default function assistantApiCalls() {
 
     const result = await axios.post(
       assistantEndpoint + "gcloud/source-credibility",
-      { text: urls }
+      { text: urls },
     );
 
     return result.data;
@@ -70,7 +70,7 @@ export default function assistantApiCalls() {
   const callHyperpartisanService = async (text) => {
     const result = await axios.post(
       assistantEndpoint + "gcloud/hyperpartisan",
-      { text: text }
+      { text: text },
     );
 
     return result.data;

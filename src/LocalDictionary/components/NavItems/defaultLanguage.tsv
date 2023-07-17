@@ -1,6 +1,6 @@
-	en	fr	es	el
-set_as_default	Would you like to set this as the default language?	Voulez-vous définir votre choix comme langue par défaut?	¿Quiere guardar su elección como el idioma por defecto?	Θα θέλατε να ορίσετε ως προεπιλεγμένη γλώσσα;
-enable_cookies	This setting will be stored in your preferences	Ce paramétrage sera conservé dans vos préférences	Este parametro se conservará en sus preferencias	Αυτή η ρύθμιση θα αποθηκευτεί στις προτιμήσεις σας
-yes	Yes	Oui	Sí	Ναί
-no	No	Non	No	Οχι
-cancel	Cancel	Annuler	Cancelar	Ματαίωση
+	en	fr	es	el	ar
+set_as_default	Would you like to set this as the default language?	Voulez-vous définir votre choix comme langue par défaut?	¿Quiere guardar su elección como el idioma por defecto?	Θα θέλατε να ορίσετε ως προεπιλεγμένη γλώσσα;	هل ترغب في ضبط هذا كلغة افتراضية؟
+enable_cookies	This setting will be stored in your preferences	Ce paramétrage sera conservé dans vos préférences	Este parametro se conservará en sus preferencias	Αυτή η ρύθμιση θα αποθηκευτεί στις προτιμήσεις σας	سيتم تخزين هذا الإعداد في تفضيلاتك
+yes	Yes	Oui	Sí	Ναί	نعم
+no	No	Non	No	Οχι	لا
+cancel	Cancel	Annuler	Cancelar	Ματαίωση	الغاء

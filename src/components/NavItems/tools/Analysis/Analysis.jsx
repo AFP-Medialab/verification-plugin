@@ -36,21 +36,21 @@ import styles from "./Results/layout.module.css";
 import Alert from "@mui/material/Alert";
 import _ from "lodash";
 import {
-  trackEvent,
+  //trackEvent,
   getclientId,
 } from "../../../Shared/GoogleAnalytics/MatomoAnalytics";
-
+import { useTrackEvent } from "../../../../Hooks/useAnalytics";
 const Analysis = () => {
   const caa_analysis_url = process.env.REACT_APP_CAA_ANALYSIS_URL;
   const { url } = useParams();
   const classes = useMyStyles();
   const keyword = useLoadLanguage(
     "components/NavItems/tools/Analysis.tsv",
-    tsv
+    tsv,
   );
   const keywordAllTools = useLoadLanguage(
     "components/NavItems/tools/Alltools.tsv",
-    tsvAllTools
+    tsvAllTools,
   );
   const dispatch = useDispatch();
 
@@ -66,7 +66,7 @@ const Analysis = () => {
   const [finalUrl, showFacebookIframe] = useGenerateApiUrl(
     serviceUrl,
     submittedUrl,
-    reprocess
+    reprocess,
   );
   useAnalysisWrapper(
     setAnalysisLoading,
@@ -75,7 +75,7 @@ const Analysis = () => {
     finalUrl,
     submittedUrl,
     keyword,
-    isLoading
+    isLoading,
   );
 
   var [warning, setWarning] = useState(false);
@@ -84,15 +84,22 @@ const Analysis = () => {
     setReprocess(!reprocess);
   };
   const client_id = getclientId();
-
+  useTrackEvent(
+    "submission",
+    "analysis",
+    "video caa analysis",
+    input.trim(),
+    client_id,
+    submittedUrl,
+  );
   const submitForm = () => {
-    trackEvent(
+    /*trackEvent(
       "submission",
       "analysis",
       "video caa analysis",
       input.trim(),
       client_id
-    );
+    );*/
     setSubmittedUrl(input.trim());
     dispatch(cleanAnalysisState());
   };
@@ -129,7 +136,7 @@ const Analysis = () => {
         description={keywordAllTools("navbar_analysis_description")}
         icon={
           <AnalysisIcon
-            style={{ fill: "#51A5B2" }}
+            style={{ fill: "#00926c" }}
             width="40px"
             height="40px"
           />

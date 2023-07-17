@@ -7,6 +7,8 @@ import ImageGridList from "../../../Shared/ImageGridList/ImageGridList";
 import { useDispatch, useSelector } from "react-redux";
 import FormControl from "@mui/material/FormControl";
 import FormControlLabel from "@mui/material/FormControlLabel";
+import { IconButton } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import { loadImageSize, useLoading } from "../../../../Hooks/useInput";
 import {
@@ -15,15 +17,15 @@ import {
   setThumbnailsLoading,
 } from "../../../../redux/reducers/tools/thumbnailsReducer";
 import { setError } from "../../../../redux/actions/errorActions";
-import CloseResult from "../../../Shared/CloseResult/CloseResult";
 import Checkbox from "@mui/material/Checkbox";
 import FormGroup from "@mui/material/FormGroup";
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/Thumbnails.tsv";
 import {
-  trackEvent,
+  //trackEvent,
   getclientId,
 } from "../../../Shared/GoogleAnalytics/MatomoAnalytics";
+import { useTrackEvent } from "../../../../Hooks/useAnalytics";
 import OnClickInfo from "../../../Shared/OnClickInfo/OnClickInfo";
 import { useParams } from "react-router-dom";
 
@@ -45,16 +47,19 @@ const Thumbnails = () => {
   const classes = useMyStyles();
   const keyword = useLoadLanguage(
     "components/NavItems/tools/Thumbnails.tsv",
-    tsv
+    tsv,
   );
   const keywordAllTools = useLoadLanguage(
     "components/NavItems/tools/Alltools.tsv",
-    tsv
+    tsv,
   );
 
   const resultUrl = useSelector((state) => state.thumbnails.url);
   const resultData = useSelector((state) => state.thumbnails.result);
   const isLoading = useSelector((state) => state.thumbnails.loading);
+  const session = useSelector((state) => state.userSession);
+  const uid = session && session.user ? session.user.email : null;
+
   const [height, setHeight] = useState(0);
   const [showResult, setShowResult] = useState(false);
   const [input, setInput] = useState(resultUrl);
@@ -67,10 +72,27 @@ const Thumbnails = () => {
     setInput(e.target.value);
   };
 
-  const [selectedValue, setSelectedValue] = useState({
-    [SEARCH_ENGINE_SETTINGS.GOOGLE_SEARCH.NAME]: true,
-    openTabs: true,
-  });
+  /**
+   * Initialize selected values with Google Search and open tabs set to true by default
+   * @returns {selectedValue}
+   */
+  const initializeSelectedValue = () => {
+    let selectedList = {};
+
+    for (const searchEngine of Object.values(SEARCH_ENGINE_SETTINGS)) {
+      if (searchEngine.NAME === SEARCH_ENGINE_SETTINGS.GOOGLE_SEARCH.NAME)
+        selectedList[searchEngine.NAME] = true;
+      else selectedList[searchEngine.NAME] = false;
+    }
+
+    selectedList["openTabs"] = true;
+
+    return selectedList;
+  };
+
+  const [selectedValue, setSelectedValue] = useState(() =>
+    initializeSelectedValue(),
+  );
 
   const handleChange = (event) => {
     setSelectedValue({
@@ -112,18 +134,30 @@ const Thumbnails = () => {
     return url.startsWith(start_url) || url.startsWith(start_url_short);
   };
   const client_id = getclientId();
+  const [eventUrl, setEventUrl] = useState(undefined);
+  useTrackEvent(
+    "submission",
+    "thumbnails",
+    "youtube thumbnail",
+    eventUrl,
+    client_id,
+    eventUrl,
+    uid,
+  );
   const submitForm = () => {
     setShowResult(false);
     dispatch(setError(null));
     let url = input.replace("?rel=0", "");
     if (url !== null && url !== "" && isYtUrl(url)) {
-      trackEvent(
+      setEventUrl(url);
+      /*trackEvent(
         "submission",
         "thumbnails",
         "youtube thumbnail",
         url,
-        client_id
-      );
+        client_id,
+        uid
+      );*/
       let images = get_images(url);
       dispatch(
         setThumbnailsResult({
@@ -131,7 +165,7 @@ const Thumbnails = () => {
           result: images,
           notification: false,
           loading: false,
-        })
+        }),
       );
       if (selectedValue.openTabs) images.forEach((img) => imageClickUrl(img));
     } else dispatch(setError("Please use a valid Youtube Url (add to tsv)"));
@@ -139,12 +173,18 @@ const Thumbnails = () => {
 
   const imageClickUrl = (url) => {
     for (const [searchEngineName, isSearchEngineSelected] of Object.entries(
-      selectedValue
+      selectedValue,
     )) {
+      // Prevent error
+      const searchEngineExists = Object.values(SEARCH_ENGINE_SETTINGS).some(
+        (searchEngine) => searchEngine.NAME === searchEngineName,
+      );
+      if (!searchEngineExists) continue;
+
       if (isSearchEngineSelected) {
         if (searchEngineName === SEARCH_ENGINE_SETTINGS.ALL.NAME)
-          reverseImageSearchAll(url, true);
-        else reverseImageSearch(url, true, searchEngineName);
+          reverseImageSearchAll(url, true, false);
+        else reverseImageSearch(url, true, searchEngineName, false);
       }
     }
   };
@@ -202,7 +242,7 @@ const Thumbnails = () => {
         description={keywordAllTools("navbar_thumbnails_description")}
         icon={
           <ThumbnailsIcon
-            style={{ fill: "#51A5B2" }}
+            style={{ fill: "#00926c" }}
             width="40px"
             height="40px"
           />
@@ -279,7 +319,7 @@ const Thumbnails = () => {
                       labelPlacement="end"
                     />
                   );
-                }
+                },
               )}
             </FormGroup>
           </FormControl>
@@ -299,9 +339,16 @@ const Thumbnails = () => {
           <CardHeader
             title={keyword("cardheader_results")}
             className={classes.headerUpladedImage}
+            action={
+              <IconButton
+                aria-label="close"
+                onClick={() => dispatch(cleanThumbnailsState())}
+              >
+                <CloseIcon sx={{ color: "white" }} />
+              </IconButton>
+            }
           />
           <div className={classes.root2}>
-            <CloseResult onClick={() => dispatch(cleanThumbnailsState())} />
             <OnClickInfo keyword={"thumbnails_tip"} />
             <Box m={2} />
 

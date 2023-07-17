@@ -37,14 +37,14 @@ const Assistant = () => {
   const dispatch = useDispatch();
   const keyword = useLoadLanguage(
     "components/NavItems/tools/Assistant.tsv",
-    tsv
+    tsv,
   );
 
   //form states
   const inputUrl = useSelector((state) => state.assistant.inputUrl);
   const urlMode = useSelector((state) => state.assistant.urlMode);
   const imageVideoSelected = useSelector(
-    (state) => state.assistant.imageVideoSelected
+    (state) => state.assistant.imageVideoSelected,
   );
 
   //result states
@@ -60,18 +60,18 @@ const Assistant = () => {
 
   // source credibility
   const positiveSourCred = useSelector(
-    (state) => state.assistant.positiveSourceCred
+    (state) => state.assistant.positiveSourceCred,
   );
   const cautionSourceCred = useSelector(
-    (state) => state.assistant.cautionSourceCred
+    (state) => state.assistant.cautionSourceCred,
   );
   const mixedSourceCred = useSelector(
-    (state) => state.assistant.mixedSourceCred
+    (state) => state.assistant.mixedSourceCred,
   );
 
   const dbkfTextMatch = useSelector((state) => state.assistant.dbkfTextMatch);
   const dbkfImageResult = useSelector(
-    (state) => state.assistant.dbkfImageMatch
+    (state) => state.assistant.dbkfImageMatch,
   );
   const dbkfVideoMatch = useSelector((state) => state.assistant.dbkfVideoMatch);
 
@@ -79,10 +79,10 @@ const Assistant = () => {
   const hpFailState = useSelector((state) => state.assistant.hpFail);
   const scFailState = useSelector((state) => state.assistant.inputSCFail);
   const dbkfTextFailState = useSelector(
-    (state) => state.assistant.dbkfTextMatchFail
+    (state) => state.assistant.dbkfTextMatchFail,
   );
   const dbkfMediaFailState = useSelector(
-    (state) => state.assistant.dbkfMediaMatchFail
+    (state) => state.assistant.dbkfMediaMatchFail,
   );
   const neFailState = useSelector((state) => state.assistant.neFail);
   // const mtFailState = useSelector(state => state.assistant.mtFail)
@@ -99,9 +99,7 @@ const Assistant = () => {
   // set correct error message
   useEffect(() => {
     if (errorKey) {
-      errorKey.startsWith("assistant_error")
-        ? dispatch(setError(keyword(errorKey)))
-        : dispatch(setError(errorKey));
+      dispatch(setError(keyword(errorKey)));
       cleanAssistant();
     }
   }, [errorKey]);

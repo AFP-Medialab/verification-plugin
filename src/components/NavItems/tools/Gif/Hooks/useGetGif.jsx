@@ -13,7 +13,7 @@ import useAuthenticatedRequest from "../../../../Shared/Authentication/useAuthen
 const useGetGif = (images, delayInput, enableDownload, downloadType) => {
   const keyword = useLoadLanguage(
     "components/NavItems/tools/Forensic.tsv",
-    tsv
+    tsv,
   );
   const dispatch = useDispatch();
   const authenticatedRequest = useAuthenticatedRequest();

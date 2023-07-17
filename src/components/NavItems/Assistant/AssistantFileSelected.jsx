@@ -27,7 +27,7 @@ const AssistantFileSelected = () => {
   const navigate = useNavigate();
   const keyword = useLoadLanguage(
     "components/NavItems/tools/Assistant.tsv",
-    tsv
+    tsv,
   );
 
   const getActionList = (contentType) => {
@@ -111,7 +111,7 @@ const AssistantFileSelected = () => {
           {generateList(
             keyword("upload_image"),
             CONTENT_TYPE.IMAGE,
-            imageActions
+            imageActions,
           )}
           <Divider
             orientation="vertical"
@@ -121,7 +121,7 @@ const AssistantFileSelected = () => {
           {generateList(
             keyword("upload_video"),
             CONTENT_TYPE.VIDEO,
-            videoActions
+            videoActions,
           )}
         </Grid>
       </CardContent>
