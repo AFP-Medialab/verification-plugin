@@ -132,6 +132,11 @@ const assistantReducer = (state = defaultState, action) => {
         neDone: false,
         neFail: false,
 
+        newsTopicResult: null,
+        newsTopicLoading: false,
+        newsTopicDone: false,
+        newsTopicFail: false,
+
         mtResult: null,
         mtLoading: false,
         mtDone: false,
