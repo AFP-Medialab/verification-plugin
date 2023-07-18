@@ -6,6 +6,7 @@ import Card from "@mui/material/Card";
 import { CardHeader } from "@mui/material";
 import CardContent from "@mui/material/CardContent";
 import Collapse from "@mui/material/Collapse";
+import Chip from "@mui/material/Chip";
 import Divider from "@mui/material/Divider";
 import {
   ExpandLessOutlined,
@@ -47,6 +48,9 @@ const AssistantTextResult = () => {
 
   // third party check states
   const dbkfMatch = useSelector((state) => state.assistant.dbkfTextMatch);
+  const newsTopicResult = useSelector(
+    (state) => state.assistant.newsTopicResult
+  );
   const newsGenreResult = useSelector(
     (state) => state.assistant.newsGenreResult
   );
@@ -192,24 +196,48 @@ const AssistantTextResult = () => {
                 </Tooltip>
               ) : null}
             </Grid>
-            <Grid item xs={6} align={"right"}>
-              {displayExpander ? (
-                expanded ? (
-                  <ExpandLessOutlined
-                    className={classes.toolTipIcon}
-                    onClick={() => {
-                      setExpanded(!expanded);
-                    }}
-                  />
-                ) : (
-                  <ExpandMoreOutlined
-                    className={classes.toolTipIcon}
-                    onClick={() => {
-                      setExpanded(!expanded);
-                    }}
-                  />
-                )
-              ) : null}
+            <Grid item xs={5}>
+              <Box
+                display="flex"
+                justifyContent="flex-end"
+                style={{ margin: 0 }}
+              >
+                {newsTopicResult
+                  ? newsTopicResult.map((topic, index) => (
+                      <Chip
+                        className={classes.assistantChip}
+                        key={index}
+                        variant={"outlined"}
+                        label={topic[0].replaceAll("_", " ")}
+                      />
+                    ))
+                  : null}
+              </Box>
+            </Grid>
+            <Grid item xs={1}>
+              <Box
+                display="flex"
+                justifyContent="flex-end"
+                style={{ margin: 1 }}
+              >
+                {displayExpander ? (
+                  expanded ? (
+                    <ExpandLessOutlined
+                      className={classes.toolTipIcon}
+                      onClick={() => {
+                        setExpanded(!expanded);
+                      }}
+                    />
+                  ) : (
+                    <ExpandMoreOutlined
+                      className={classes.toolTipIcon}
+                      onClick={() => {
+                        setExpanded(!expanded);
+                      }}
+                    />
+                  )
+                ) : null}
+              </Box>
             </Grid>
           </Grid>
         </Box>

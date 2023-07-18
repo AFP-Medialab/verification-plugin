@@ -15,7 +15,6 @@ import AssistantIntroduction from "./AssistantIntroduction";
 import AssistantLinkResult from "./AssistantScrapeResults/AssistantLinkResult";
 import AssistantMediaResult from "./AssistantScrapeResults/AssistantMediaResult";
 import AssistantNEResult from "./AssistantCheckResults/AssistantNEResult";
-import AssistantNewsTopicResult from "./AssistantScrapeResults/AssistantNewsTopicResult";
 import AssistantSCResults from "./AssistantScrapeResults/AssistantSCResults";
 import AssistantTextResult from "./AssistantScrapeResults/AssistantTextResult";
 import AssistantUrlSelected from "./AssistantUrlSelected";
@@ -239,12 +238,6 @@ const Assistant = () => {
               {neResult ? (
                 <Grid item xs={12}>
                   <AssistantNEResult />
-                </Grid>
-              ) : null}
-
-              {newsTopicResult ? (
-                <Grid item xs={6}>
-                  <AssistantNewsTopicResult />
                 </Grid>
               ) : null}
 

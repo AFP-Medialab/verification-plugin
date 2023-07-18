@@ -501,7 +501,10 @@ const styles = (theme) => ({
   assistantIconLeft: {
     marginRight: "-15px",
   },
-
+  assistantChip: {
+    marginRight: "5px",
+    marginTop: "7px",
+  },
   /* OCR classes */
   /* ================================================================================== */
 
