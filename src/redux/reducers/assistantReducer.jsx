@@ -49,6 +49,11 @@ const defaultState = {
   newsTopicDone: false,
   newsTopicFail: false,
 
+  newsGenreResult: null,
+  newsGenreLoading: false,
+  newsGenreDone: false,
+  newsGenreFail: false,
+
   mtResult: null,
   mtLoading: false,
   mtDone: false,
@@ -77,6 +82,7 @@ const assistantReducer = (state = defaultState, action) => {
     case "SET_HP_DETAILS":
     case "SET_NE_DETAILS":
     case "SET_NEWS_TOPIC_DETAILS":
+    case "SET_NEWS_GENRE_DETAILS":
     case "SET_LOADING":
     case "SET_WARNING_EXPANDED":
     case "SET_ASSURANCE_EXPANDED":
@@ -136,6 +142,11 @@ const assistantReducer = (state = defaultState, action) => {
         newsTopicLoading: false,
         newsTopicDone: false,
         newsTopicFail: false,
+
+        newsGenreResult: null,
+        newsGenreLoading: false,
+        newsGenreDone: false,
+        newsGenreFail: false,
 
         mtResult: null,
         mtLoading: false,

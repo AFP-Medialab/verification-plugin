@@ -84,6 +84,14 @@ export default function assistantApiCalls() {
     return result.data;
   };
 
+  const callNewsGenreService = async (text) => {
+    const result = await axios.post(
+      assistantEndpoint + "gcloud/news-genre-clfr",
+      { text: text }
+    );
+    return result.data;
+  };
+
   const callOcrService = async (data, script, mode) => {
     const result = await axios.post(assistantEndpoint + "gcloud/ocr", {
       text: data,
@@ -108,5 +116,6 @@ export default function assistantApiCalls() {
     callOcrService,
     callOcrScriptService,
     callNewsTopicService,
+    callNewsGenreService,
   };
 }

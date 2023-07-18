@@ -173,6 +173,18 @@ export const setNewsTopicDetails = (ntResult, ntLoading, ntDone, ntFail) => {
   };
 };
 
+export const setNewsGenreDetails = (ngResult, ngLoading, ngDone, ngFail) => {
+  return {
+    type: "SET_NEWS_GENRE_DETAILS",
+    payload: {
+      newsGenreResult: ngResult,
+      newsGenreLoading: ngLoading,
+      newsGenreDone: ngDone,
+      newsGenreFail: ngFail,
+    },
+  };
+};
+
 export const setNeDetails = (
   neResultCategory,
   neResultCount,

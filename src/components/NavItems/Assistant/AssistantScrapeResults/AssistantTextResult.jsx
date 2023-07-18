@@ -47,15 +47,21 @@ const AssistantTextResult = () => {
 
   // third party check states
   const dbkfMatch = useSelector((state) => state.assistant.dbkfTextMatch);
+  const newsGenreResult = useSelector(
+    (state) => state.assistant.newsGenreResult
+  );
   const hpLoading = useSelector((state) => state.assistant.hpLoading);
   const mtLoading = useSelector((state) => state.assistant.mtLoading);
   const newsTopicLoading = useSelector(
     (state) => state.assistant.newsTopicLoading
   );
-
   const dbkfMatchLoading = useSelector(
     (state) => state.assistant.dbkfTextMatchLoading
   );
+  const newsGenreLoading = useSelector(
+    (state) => state.assistant.newsGenreLoading
+  );
+
   const warningExpanded = useSelector(
     (state) => state.assistant.warningExpanded
   );
@@ -88,6 +94,15 @@ const AssistantTextResult = () => {
           title={keyword("text_title")}
           action={
             <div style={{ display: "flex" }}>
+              <div hidden={newsGenreResult === null}>
+                {newsGenreResult
+                  ? newsGenreResult.map((genre, index) => (
+                      <Typography style={{ marginTop: 10 }} key={index}>
+                        {genre[0][0] + genre[0].slice(1).toLowerCase()}
+                      </Typography>
+                    ))
+                  : null}
+              </div>
               <div hidden={dbkfMatch === null}>
                 <Tooltip title={keyword("text_warning")}>
                   <WarningOutlined
@@ -116,9 +131,20 @@ const AssistantTextResult = () => {
             </div>
           }
         />
-        {dbkfMatchLoading && hpLoading && newsTopicLoading && (
-          <LinearProgress variant={"indeterminate"} color={"secondary"} />
-        )}
+        {
+          <LinearProgress
+            variant={"indeterminate"}
+            color={"secondary"}
+            hidden={
+              !(
+                dbkfMatchLoading ||
+                hpLoading ||
+                newsTopicLoading ||
+                newsGenreLoading
+              )
+            }
+          />
+        }
         <CardContent>
           <Collapse in={expanded} collapsedSize={100} id={"element-to-check"}>
             <Typography align={"left"}>

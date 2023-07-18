@@ -14,6 +14,7 @@ import {
   setInputUrl,
   setMtDetails,
   setNeDetails,
+  setNewsGenreDetails,
   setNewsTopicDetails,
   setProcessUrl,
   setProcessUrlActions,
@@ -80,6 +81,10 @@ function* getHyperpartisanSaga() {
 
 function* getNewsTopicSaga() {
   yield takeLatest(["SET_SCRAPED_DATA", "CLEAN_STATE"], handleNewsTopicCall);
+}
+
+function* getNewsGenreSaga() {
+  yield takeLatest(["SET_SCRAPED_DATA", "CLEAN_STATE"], handleNewsGenreCall);
 }
 
 function* getSourceCredSaga() {
@@ -320,6 +325,28 @@ function* handleNewsTopicCall(action) {
     }
   } catch (error) {
     yield put(setNewsTopicDetails(null, false, false, true));
+  }
+}
+
+function* handleNewsGenreCall(action) {
+  if (action.type === "CLEAN_STATE") return;
+
+  try {
+    const text = yield select((state) => state.assistant.urlText);
+
+    if (text) {
+      yield put(setNewsGenreDetails(null, true, false, false));
+
+      const result = yield call(assistantApi.callNewsGenreService, text);
+      let ntResult = result.entities;
+      let filteredResult = Object.entries(ntResult).filter(
+        ([key, value]) => value[0].score > 0.8
+      );
+      filteredResult = filteredResult.length ? filteredResult : null;
+      yield put(setNewsGenreDetails(filteredResult, false, true, false));
+    }
+  } catch (error) {
+    yield put(setNewsGenreDetails(null, false, false, true));
   }
 }
 
@@ -723,5 +750,6 @@ export default function* assistantSaga() {
     fork(getAssistantScrapeSaga),
     fork(getUploadSaga),
     fork(getNewsTopicSaga),
+    fork(getNewsGenreSaga),
   ]);
 }
