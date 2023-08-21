@@ -3,11 +3,19 @@ import Box from "@mui/material/Box";
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
-import { Grid, Popover, Typography } from "@mui/material";
+import {
+  Grid,
+  Popover,
+  Typography,
+  Stack,
+  LinearProgress,
+  linearProgressClasses,
+} from "@mui/material";
 import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Keyframes.tsv";
 import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
 import CloseIcon from "@mui/icons-material/Close";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
+import styled from "@emotion/styled";
 
 const DeepfakeResutlsImage = (props) => {
   const classes = useMyStyles();
@@ -25,25 +33,25 @@ const DeepfakeResutlsImage = (props) => {
   //console.log(results);
 
   const drawRectangles = () => {
-    var imgHeight = imgElement.current.offsetHeight;
-    var imgWidth = imgElement.current.offsetWidth;
+    const imgHeight = imgElement.current.offsetHeight;
+    const imgWidth = imgElement.current.offsetWidth;
 
-    var rectanglesTemp = [];
+    const rectanglesTemp = [];
 
     results.deepfake_image_report.info.forEach((element) => {
-      var rectangleAtributes = element.bbox;
+      const rectangleAtributes = element.bbox;
 
-      var elementTop = Math.round(rectangleAtributes.top * imgHeight);
-      var elementLeft = Math.round(rectangleAtributes.left * imgWidth);
-      var elementHeight = Math.round(
+      const elementTop = Math.round(rectangleAtributes.top * imgHeight);
+      const elementLeft = Math.round(rectangleAtributes.left * imgWidth);
+      const elementHeight = Math.round(
         (rectangleAtributes.bottom - rectangleAtributes.top) * imgHeight,
       );
-      var elementWidth = Math.round(
+      const elementWidth = Math.round(
         (rectangleAtributes.right - rectangleAtributes.left) * imgWidth,
       );
 
-      var elementProbability = Math.round(element.prediction * 100);
-      var elementBorderClass = null;
+      const elementProbability = Math.round(element.prediction * 100);
+      let elementBorderClass = null;
 
       if (elementProbability >= 80) {
         elementBorderClass = classes.deepfakeSquareBorderRed;
@@ -51,7 +59,7 @@ const DeepfakeResutlsImage = (props) => {
         elementBorderClass = classes.deepfakeSquareBorderWhite;
       }
 
-      var rectangle = {
+      const rectangle = {
         top: elementTop,
         left: elementLeft,
         height: elementHeight,
@@ -86,9 +94,44 @@ const DeepfakeResutlsImage = (props) => {
     setAnchorHelp(null);
   }
 
+  const BorderLinearProgress = styled(LinearProgress)(({ theme, value }) => ({
+    height: 10,
+    borderRadius: 8,
+    [`&.${linearProgressClasses.colorPrimary}`]: {
+      backgroundColor:
+        theme.palette.grey[theme.palette.mode === "light" ? 200 : 800],
+    },
+    [`& .${linearProgressClasses.bar}`]: {
+      borderRadius: 5,
+      background: `linear-gradient(90deg, green ${100 - value}%,yellow ${
+        150 - value
+      }%, red ${200 - value}%)`,
+    },
+  }));
+
+  function LinearProgressWithLabel(props) {
+    return (
+      <Box sx={{ display: "flex", alignItems: "center" }}>
+        <Box sx={{ width: "100%", mr: 1 }}>
+          <BorderLinearProgress variant="determinate" {...props} />
+        </Box>
+        <Box sx={{ minWidth: 35 }}>
+          <Typography variant="body2" color="text.secondary">{`${Math.round(
+            props.value,
+          )}%`}</Typography>
+        </Box>
+      </Box>
+    );
+  }
+
   return (
-    <div>
-      <Card style={{ overflow: "visible" }}>
+    <Stack
+      direction="row"
+      justifyContent="flex-start"
+      alignItems="flex-start"
+      spacing={2}
+    >
+      <Card style={{ overflow: "visible", width: "50%", height: "80vh" }}>
         <CardHeader
           style={{ borderRadius: "4px 4px 0px 0px" }}
           title={
@@ -131,14 +174,14 @@ const DeepfakeResutlsImage = (props) => {
                     justifyContent="space-between"
                     alignItems="stretch"
                   >
-                    <Typography variant="h6" gutterBottom>
+                    <Typography constiant="h6" gutterBottom>
                       {keyword("deepfake_title_what")}
                     </Typography>
 
                     <CloseIcon onClick={closeHelp} />
                   </Grid>
                   <Box m={1} />
-                  <Typography variant="body2">
+                  <Typography constiant="body2">
                     {keyword("deepfake_filters_explanation_image")}
                   </Typography>
                 </Box>
@@ -182,10 +225,10 @@ const DeepfakeResutlsImage = (props) => {
                       minWidth: "120px",
                     }}
                   >
-                    <Typography variant="h3">
+                    <Typography constiant="h3">
                       {valueRectangle.probability}%
                     </Typography>
-                    <Typography variant="h6" style={{ color: "#989898" }}>
+                    <Typography constiant="h6" style={{ color: "#989898" }}>
                       {keyword("deepfake_name")}
                     </Typography>
                   </Box>
@@ -208,7 +251,27 @@ const DeepfakeResutlsImage = (props) => {
           />
         </div>
       </Card>
-    </div>
+      <Card sx={{ height: "80vh", width: "50%" }}>
+        <CardHeader
+          style={{ borderRadius: "4px 4px 0px 0px" }}
+          title="Detection Results"
+        />
+        <Stack direction="column" p={4} spacing={4}>
+          <Stack direction="column">
+            <Typography variant="h5">Faceswap</Typography>
+            <LinearProgressWithLabel value={50} />
+          </Stack>
+          <Stack direction="column">
+            <Typography variant="h5">GAN</Typography>
+            <LinearProgressWithLabel value={50} />
+          </Stack>
+          <Stack direction="column">
+            <Typography variant="h5">Diffusion</Typography>
+            <LinearProgressWithLabel value={99} />
+          </Stack>
+        </Stack>
+      </Card>
+    </Stack>
   );
 };
 export default DeepfakeResutlsImage;
