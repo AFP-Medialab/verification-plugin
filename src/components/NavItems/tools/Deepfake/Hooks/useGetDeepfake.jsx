@@ -28,7 +28,10 @@ const UseGetDeepfake = (url, processURL, mode) => {
         modeURL = "videos/";
       }
 
-      const services = "faceswap,gan,diffusion,unina";
+      const services =
+        modeURL === "images/"
+          ? "faceswap,gan,diffusion,unina"
+          : "deepfake_video,ftcn,face_reenact";
 
       if (modeURL !== "") {
         axios

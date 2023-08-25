@@ -3,11 +3,12 @@ import Box from "@mui/material/Box";
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
-import { Grid, Popover, Typography } from "@mui/material";
+import { Grid, Popover, Typography, Stack } from "@mui/material";
 import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Keyframes.tsv";
 import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
 import CloseIcon from "@mui/icons-material/Close";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
+import { LinearProgressWithLabel } from "../../../../Shared/LinearProgressWithLabel/LinearProgressWithLabel";
 
 const DeepfakeResutlsVideo = (props) => {
   const classes = useMyStyles();
@@ -20,6 +21,11 @@ const DeepfakeResutlsVideo = (props) => {
 
   const [shotSelectedKey, setShotSelectedKey] = useState(-1);
   const [shotSelectedValue, setShotSelectedValue] = useState(null);
+
+  const [fTCNScore, setFTCNScore] = useState(0);
+
+  const [faceReenactScore, setFaceReenactScore] = useState(0);
+
   const videoClip = React.useRef(null);
 
   function clickShot(value, key) {
@@ -50,6 +56,16 @@ const DeepfakeResutlsVideo = (props) => {
       clickShot(results.deepfake_video_report.results[shot], shot);
     }
   }, []);
+
+  useEffect(() => {
+    if (!results) return;
+
+    if (results.ftcn_report && results.ftcn_report.prediction)
+      setFTCNScore(results.ftcn_report.prediction * 100);
+
+    if (results.face_reenact_report && results.face_reenact_report.prediction)
+      setFaceReenactScore(results.face_reenact_report.prediction * 100);
+  }, [results]);
 
   //console.log("Rectangles: ", rectangles);
 
@@ -195,7 +211,7 @@ const DeepfakeResutlsVideo = (props) => {
 
       <Box m={3} />
 
-      <Card style={{ overflow: "visible" }}>
+      <Card style={{ overflow: "visible" }} mb={3}>
         <CardHeader
           style={{ borderRadius: "4px 4px 0px 0px" }}
           title={
@@ -365,6 +381,21 @@ const DeepfakeResutlsVideo = (props) => {
           </Box>
         </div>
       </Card>
+      <Stack spacing={4} mt={4}>
+        <Card>
+          <CardHeader title={"Other detections"} />
+          <Stack direction="column" p={4} spacing={4}>
+            <Stack direction="column">
+              <Typography variant="h5">FTCN</Typography>
+              <LinearProgressWithLabel value={fTCNScore} />
+            </Stack>
+            <Stack direction="column">
+              <Typography variant="h5">Face Reenact</Typography>
+              <LinearProgressWithLabel value={faceReenactScore} />
+            </Stack>
+          </Stack>
+        </Card>
+      </Stack>
     </div>
   );
 };

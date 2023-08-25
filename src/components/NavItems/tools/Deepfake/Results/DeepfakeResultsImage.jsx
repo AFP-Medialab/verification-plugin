@@ -3,19 +3,12 @@ import Box from "@mui/material/Box";
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
-import {
-  Grid,
-  Popover,
-  Typography,
-  Stack,
-  LinearProgress,
-  linearProgressClasses,
-} from "@mui/material";
+import { Grid, Popover, Typography, Stack } from "@mui/material";
 import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Keyframes.tsv";
 import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
 import CloseIcon from "@mui/icons-material/Close";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
-import styled from "@emotion/styled";
+import { LinearProgressWithLabel } from "../../../../Shared/LinearProgressWithLabel/LinearProgressWithLabel";
 
 const DeepfakeResutlsImage = (props) => {
   const classes = useMyStyles();
@@ -110,36 +103,6 @@ const DeepfakeResutlsImage = (props) => {
 
   function closeHelp() {
     setAnchorHelp(null);
-  }
-
-  const BorderLinearProgress = styled(LinearProgress)(({ theme, value }) => ({
-    height: 8,
-    borderRadius: 2,
-    [`&.${linearProgressClasses.colorPrimary}`]: {
-      backgroundColor:
-        theme.palette.grey[theme.palette.mode === "light" ? 200 : 800],
-    },
-    [`& .${linearProgressClasses.bar}`]: {
-      borderRadius: 2,
-      background: `linear-gradient(90deg, #D7F4DF ${101 - value}%,#2A6591 ${
-        150 - value
-      }%,#0B0506 ${200 - value}%)`,
-    },
-  }));
-
-  function LinearProgressWithLabel(props) {
-    return (
-      <Box sx={{ display: "flex", alignItems: "center" }}>
-        <Box sx={{ width: "100%", mr: 1 }}>
-          <BorderLinearProgress variant="determinate" {...props} />
-        </Box>
-        <Box sx={{ minWidth: 35 }}>
-          <Typography variant="body2" color="text.secondary">{`${Math.round(
-            props.value,
-          )}%`}</Typography>
-        </Box>
-      </Box>
-    );
   }
 
   return (
