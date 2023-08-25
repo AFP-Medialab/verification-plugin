@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 import Card from "@mui/material/Card";
@@ -30,15 +30,13 @@ const DeepfakeResutlsImage = (props) => {
   const [rectangles, setRectangles] = useState(null);
   const [rectanglesReady, setRectanglesReady] = useState(false);
 
-  //console.log(results);
-
   const drawRectangles = () => {
     const imgHeight = imgElement.current.offsetHeight;
     const imgWidth = imgElement.current.offsetWidth;
 
     const rectanglesTemp = [];
 
-    results.deepfake_image_report.info.forEach((element) => {
+    results.faceswap_report.info.forEach((element) => {
       const rectangleAtributes = element.bbox;
 
       const elementTop = Math.round(rectangleAtributes.top * imgHeight);
@@ -86,6 +84,26 @@ const DeepfakeResutlsImage = (props) => {
   const openHelp = Boolean(anchorHelp);
   const help = openHelp ? "simple-popover" : undefined;
 
+  const [faceSwapScore, setFaceswapScore] = useState(0);
+  const [gANScore, setGANScore] = useState(0);
+  const [diffusionScore, setDiffusionScore] = useState(0);
+
+  useEffect(() => {
+    if (results && results.unina_report && results.unina_report.prediction) {
+      setDiffusionScore(results.unina_report.prediction * 100);
+    }
+    if (
+      results &&
+      results.faceswap_report &&
+      results.faceswap_report.prediction
+    ) {
+      setFaceswapScore(results.faceswap_report.prediction * 100);
+    }
+    if (results && results.gan_report && results.gan_report.prediction) {
+      setGANScore(results.gan_report.prediction * 100);
+    }
+  }, [results]);
+
   function clickHelp(event) {
     setAnchorHelp(event.currentTarget);
   }
@@ -95,17 +113,17 @@ const DeepfakeResutlsImage = (props) => {
   }
 
   const BorderLinearProgress = styled(LinearProgress)(({ theme, value }) => ({
-    height: 10,
-    borderRadius: 8,
+    height: 8,
+    borderRadius: 2,
     [`&.${linearProgressClasses.colorPrimary}`]: {
       backgroundColor:
         theme.palette.grey[theme.palette.mode === "light" ? 200 : 800],
     },
     [`& .${linearProgressClasses.bar}`]: {
-      borderRadius: 5,
-      background: `linear-gradient(90deg, green ${100 - value}%,yellow ${
+      borderRadius: 2,
+      background: `linear-gradient(90deg, #D7F4DF ${101 - value}%,#2A6591 ${
         150 - value
-      }%, red ${200 - value}%)`,
+      }%,#0B0506 ${200 - value}%)`,
     },
   }));
 
@@ -259,15 +277,15 @@ const DeepfakeResutlsImage = (props) => {
         <Stack direction="column" p={4} spacing={4}>
           <Stack direction="column">
             <Typography variant="h5">Faceswap</Typography>
-            <LinearProgressWithLabel value={50} />
+            <LinearProgressWithLabel value={faceSwapScore} />
           </Stack>
           <Stack direction="column">
             <Typography variant="h5">GAN</Typography>
-            <LinearProgressWithLabel value={50} />
+            <LinearProgressWithLabel value={gANScore} />
           </Stack>
           <Stack direction="column">
             <Typography variant="h5">Diffusion</Typography>
-            <LinearProgressWithLabel value={99} />
+            <LinearProgressWithLabel value={diffusionScore} />
           </Stack>
         </Stack>
       </Card>

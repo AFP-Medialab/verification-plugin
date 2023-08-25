@@ -28,11 +28,14 @@ const UseGetDeepfake = (url, processURL, mode) => {
         modeURL = "videos/";
       }
 
+      const services = "faceswap,gan,diffusion,unina";
+
       if (modeURL !== "") {
         axios
-          .post(baseURL + modeURL + "jobs?url=" + url)
+          .post(baseURL + modeURL + "jobs", null, {
+            params: { url: url, services: services },
+          })
           .then((response) => {
-            //console.log(response.data);
             waitUntilFinish(response.data.id);
           })
           .catch((error) => {
@@ -59,7 +62,6 @@ const UseGetDeepfake = (url, processURL, mode) => {
         };
 
         const getResult = (id) => {
-          //console.log("TEST3");
           axios
             .get(baseURL + modeURL + "reports/" + id)
             .then((response) => {
