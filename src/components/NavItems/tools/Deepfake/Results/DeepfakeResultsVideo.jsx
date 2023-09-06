@@ -10,7 +10,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import { LinearProgressWithLabel } from "../../../../Shared/LinearProgressWithLabel/LinearProgressWithLabel";
 
-const DeepfakeResutlsVideo = (props) => {
+const DeepfakeResultsVideo = (props) => {
   const classes = useMyStyles();
   const keyword = useLoadLanguage(
     "components/NavItems/tools/Deepfake.tsv",
@@ -127,83 +127,84 @@ const DeepfakeResutlsVideo = (props) => {
             <Box m={1} />
 
             <Grid container spacing={3}>
-              {results.deepfake_video_report.results.map(
-                (valueShot, keyShot) => {
-                  var shotStart = valueShot.shot_start;
-                  var shotEnd = valueShot.shot_end;
+              {results.deepfake_video_report.results &&
+                results.deepfake_video_report.results.map(
+                  (valueShot, keyShot) => {
+                    var shotStart = valueShot.shot_start;
+                    var shotEnd = valueShot.shot_end;
 
-                  var startMin = ("0" + Math.floor(shotStart / 60)).slice(-2);
-                  var startSec = ("0" + (shotStart % 60)).slice(-2);
-                  var endMin = ("0" + Math.floor(shotEnd / 60)).slice(-2);
-                  var endSec = ("0" + (shotEnd % 60)).slice(-2);
+                    var startMin = ("0" + Math.floor(shotStart / 60)).slice(-2);
+                    var startSec = ("0" + (shotStart % 60)).slice(-2);
+                    var endMin = ("0" + Math.floor(shotEnd / 60)).slice(-2);
+                    var endSec = ("0" + (shotEnd % 60)).slice(-2);
 
-                  return (
-                    <Grid item xs={12} sm={4} key={keyShot}>
-                      {keyShot === shotSelectedKey ? (
-                        <Box
-                          onClick={() => clickShot(valueShot, keyShot)}
-                          style={{
-                            backgroundColor: "#00926c",
-                            borderRadius: "10px",
-                            overflow: "hidden",
-                            display: "flex",
-                            flexDirection: "column",
-                            alignItems: "center",
-                            boxShadow:
-                              "0px 2px 1px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%)",
-                          }}
-                        >
-                          <img
-                            alt="shot"
-                            src={valueShot.shot_image}
-                            style={{ width: "100%", height: "auto" }}
-                          />
-                          <Box mt={1} />
-                          <Typography
-                            variant="body1"
-                            style={{ fontSize: "14px", color: "#ffffff" }}
+                    return (
+                      <Grid item xs={12} sm={4} key={keyShot}>
+                        {keyShot === shotSelectedKey ? (
+                          <Box
+                            onClick={() => clickShot(valueShot, keyShot)}
+                            style={{
+                              backgroundColor: "#00926c",
+                              borderRadius: "10px",
+                              overflow: "hidden",
+                              display: "flex",
+                              flexDirection: "column",
+                              alignItems: "center",
+                              boxShadow:
+                                "0px 2px 1px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%)",
+                            }}
                           >
-                            {startMin}:{startSec}
-                            {" - "}
-                            {endMin}:{endSec}
-                          </Typography>
-                          <Box mt={1} />
-                        </Box>
-                      ) : (
-                        <Box
-                          onClick={() => clickShot(valueShot, keyShot)}
-                          style={{
-                            backgroundColor: "#ffffff",
-                            borderRadius: "10px",
-                            overflow: "hidden",
-                            display: "flex",
-                            flexDirection: "column",
-                            alignItems: "center",
-                            boxShadow:
-                              "0px 2px 1px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%)",
-                          }}
-                        >
-                          <img
-                            alt="shot"
-                            src={valueShot.shot_image}
-                            style={{ width: "100%", height: "auto" }}
-                          />
-                          <Box mt={1} />
-                          <Typography
-                            variant="body1"
-                            style={{ fontSize: "14px" }}
+                            <img
+                              alt="shot"
+                              src={valueShot.shot_image}
+                              style={{ width: "100%", height: "auto" }}
+                            />
+                            <Box mt={1} />
+                            <Typography
+                              variant="body1"
+                              style={{ fontSize: "14px", color: "#ffffff" }}
+                            >
+                              {startMin}:{startSec}
+                              {" - "}
+                              {endMin}:{endSec}
+                            </Typography>
+                            <Box mt={1} />
+                          </Box>
+                        ) : (
+                          <Box
+                            onClick={() => clickShot(valueShot, keyShot)}
+                            style={{
+                              backgroundColor: "#ffffff",
+                              borderRadius: "10px",
+                              overflow: "hidden",
+                              display: "flex",
+                              flexDirection: "column",
+                              alignItems: "center",
+                              boxShadow:
+                                "0px 2px 1px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%)",
+                            }}
                           >
-                            {startMin}:{startSec}
-                            {" - "}
-                            {endMin}:{endSec}
-                          </Typography>
-                          <Box mt={1} />
-                        </Box>
-                      )}
-                    </Grid>
-                  );
-                },
-              )}
+                            <img
+                              alt="shot"
+                              src={valueShot.shot_image}
+                              style={{ width: "100%", height: "auto" }}
+                            />
+                            <Box mt={1} />
+                            <Typography
+                              variant="body1"
+                              style={{ fontSize: "14px" }}
+                            >
+                              {startMin}:{startSec}
+                              {" - "}
+                              {endMin}:{endSec}
+                            </Typography>
+                            <Box mt={1} />
+                          </Box>
+                        )}
+                      </Grid>
+                    );
+                  },
+                )}
             </Grid>
           </Grid>
         </Grid>
@@ -399,4 +400,4 @@ const DeepfakeResutlsVideo = (props) => {
     </div>
   );
 };
-export default DeepfakeResutlsVideo;
+export default DeepfakeResultsVideo;

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import LinearProgress from "@mui/material/LinearProgress";
@@ -33,7 +33,6 @@ const Deepfake = () => {
     "components/Shared/OnWarningInfo.tsv",
     tsvWarning,
   );
-  //const dispatch = useDispatch();
 
   const [input, setInput] = useState("");
   const [inputToSend, setInputToSend] = useState("");
@@ -54,12 +53,13 @@ const Deepfake = () => {
   //Submiting the URL
   //============================================================================================
 
+  const dispatch = useDispatch();
+
   const submitUrl = () => {
     setProcessUrl(true);
     setInputToSend(input);
+    UseGetDeepfake(inputToSend, processUrl, selectedMode, dispatch);
   };
-
-  UseGetDeepfake(inputToSend, processUrl, selectedMode);
 
   return (
     <div>
