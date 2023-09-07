@@ -3,14 +3,48 @@ import Box from "@mui/material/Box";
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
-import { Grid, Popover, Typography, Stack } from "@mui/material";
+import {
+  Grid,
+  Popover,
+  Typography,
+  Stack,
+  Tooltip,
+  IconButton,
+} from "@mui/material";
 import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Keyframes.tsv";
 import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
 import CloseIcon from "@mui/icons-material/Close";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
+import Help from "@mui/icons-material/Help";
 import { LinearProgressWithLabel } from "../../../../Shared/LinearProgressWithLabel/LinearProgressWithLabel";
 
 const DeepfakeResultsVideo = (props) => {
+  class DeepfakeResult {
+    constructor(methodName, predictionScore) {
+      (this.methodName = methodName), (this.predictionScore = predictionScore);
+    }
+  }
+
+  // todo: move to tsv
+  const DeepfakeImageDetectionMethodNames = Object.freeze({
+    deepfakeVideoReport: {
+      name: "Deepfake Video Report",
+      description:
+        "This method aims to detect if the person's face has been replaced in the video.",
+    },
+    ftcn: {
+      name: "Fully Temporal Convolution Network",
+      description:
+        "This method aims to detect temporal anomalies for videos with faces.",
+    },
+
+    faceReenact: {
+      name: "Face Reenactment",
+      description:
+        "This method aims to detect if the faces in the video have been synthesized with a transfer from a source face shape to a target face while preserving the appearance and the identity of the target face.",
+    },
+  });
+
   const classes = useMyStyles();
   const keyword = useLoadLanguage(
     "components/NavItems/tools/Deepfake.tsv",
@@ -22,9 +56,7 @@ const DeepfakeResultsVideo = (props) => {
   const [shotSelectedKey, setShotSelectedKey] = useState(-1);
   const [shotSelectedValue, setShotSelectedValue] = useState(null);
 
-  const [fTCNScore, setFTCNScore] = useState(0);
-
-  const [faceReenactScore, setFaceReenactScore] = useState(0);
+  const [deepfakeScores, setDeepfakeScores] = useState([]);
 
   const videoClip = React.useRef(null);
 
@@ -60,11 +92,41 @@ const DeepfakeResultsVideo = (props) => {
   useEffect(() => {
     if (!results) return;
 
-    if (results.ftcn_report && results.ftcn_report.prediction)
-      setFTCNScore(results.ftcn_report.prediction * 100);
+    let res = [];
 
-    if (results.face_reenact_report && results.face_reenact_report.prediction)
-      setFaceReenactScore(results.face_reenact_report.prediction * 100);
+    if (
+      results.deepfake_video_report &&
+      results.deepfake_video_report.prediction
+    ) {
+      res.push(
+        new DeepfakeResult(
+          Object.keys(DeepfakeImageDetectionMethodNames)[0],
+          results.deepfake_video_report.prediction * 100,
+        ),
+      );
+    }
+
+    if (results.ftcn_report && results.ftcn_report.prediction) {
+      res.push(
+        new DeepfakeResult(
+          Object.keys(DeepfakeImageDetectionMethodNames)[1],
+          results.ftcn_report.prediction * 100,
+        ),
+      );
+    }
+
+    if (results.face_reenact_report && results.face_reenact_report.prediction) {
+      res.push(
+        new DeepfakeResult(
+          Object.keys(DeepfakeImageDetectionMethodNames)[2],
+          results.face_reenact_report.prediction * 100,
+        ),
+      );
+    }
+
+    setDeepfakeScores(res);
+
+    res = res.sort((a, b) => b.predictionScore - a.predictionScore);
   }, [results]);
 
   //console.log("Rectangles: ", rectangles);
@@ -384,16 +446,35 @@ const DeepfakeResultsVideo = (props) => {
       </Card>
       <Stack spacing={4} mt={4}>
         <Card>
-          <CardHeader title={"Other detections"} />
+          <CardHeader title={"Detections"} />
           <Stack direction="column" p={4} spacing={4}>
-            <Stack direction="column">
-              <Typography variant="h5">FTCN</Typography>
-              <LinearProgressWithLabel value={fTCNScore} />
-            </Stack>
-            <Stack direction="column">
-              <Typography variant="h5">Face Reenact</Typography>
-              <LinearProgressWithLabel value={faceReenactScore} />
-            </Stack>
+            {deepfakeScores.map((item, key) => {
+              return (
+                <Stack direction="column" key={key}>
+                  <Stack
+                    direction="row"
+                    justifyContent="flex-start"
+                    alignItems="center"
+                    spacing={2}
+                  >
+                    <Typography variant="h5">
+                      {DeepfakeImageDetectionMethodNames[item.methodName].name}
+                    </Typography>
+                    <Tooltip
+                      title={
+                        DeepfakeImageDetectionMethodNames[item.methodName]
+                          .description
+                      }
+                    >
+                      <IconButton>
+                        <Help />
+                      </IconButton>
+                    </Tooltip>
+                  </Stack>
+                  <LinearProgressWithLabel value={item.predictionScore} />
+                </Stack>
+              );
+            })}
           </Stack>
         </Card>
       </Stack>
