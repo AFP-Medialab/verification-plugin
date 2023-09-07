@@ -35,8 +35,6 @@ const Deepfake = () => {
   );
 
   const [input, setInput] = useState("");
-  const [inputToSend, setInputToSend] = useState("");
-  const [processUrl, setProcessUrl] = useState(false);
 
   const isLoading = useSelector((state) => state.deepfakeVideo.loading);
   const result = useSelector((state) => state.deepfakeVideo.result);
@@ -56,9 +54,7 @@ const Deepfake = () => {
   const dispatch = useDispatch();
 
   const submitUrl = () => {
-    setProcessUrl(true);
-    setInputToSend(input);
-    UseGetDeepfake(inputToSend, processUrl, selectedMode, dispatch);
+    UseGetDeepfake(input, true, selectedMode, dispatch);
   };
 
   return (

@@ -15,23 +15,21 @@ async function UseGetDeepfake(url, processURL, mode, dispatch) {
   }
 
   let modeURL = "";
+  let services = "";
 
   if (mode === "IMAGE") {
     dispatch(setDeepfakeLoadingImage(true));
     modeURL = "images/";
+    services = "faceswap,gan,diffusion,unina";
   } else if (mode === "VIDEO") {
     dispatch(setDeepfakeLoadingVideo(true));
     modeURL = "videos/";
+    services = "deepfake_video,ftcn,face_reenact";
   }
 
   if (!modeURL) {
     return;
   }
-
-  const services =
-    modeURL === "images/"
-      ? "faceswap,gan,diffusion,unina"
-      : "deepfake_video,ftcn,face_reenact";
 
   const baseURL = process.env.REACT_APP_CAA_DEEPFAKE_URL;
 
