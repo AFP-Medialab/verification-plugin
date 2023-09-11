@@ -74,6 +74,15 @@ const DeepfakeResultsVideo = (props) => {
   useEffect(() => {
     var prediction = results.deepfake_video_report.prediction;
     var shot = -1;
+
+    if (
+      !results ||
+      !results.deepfake_video_report ||
+      !results.deepfake_video_report.results
+    ) {
+      return;
+    }
+
     for (
       var i = 0;
       i < results.deepfake_video_report.results.length && shot === -1;
