@@ -1,20 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Box from "@mui/material/Box";
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
-import {
-  Grid,
-  Popover,
-  Typography,
-  Stack,
-  IconButton,
-  Tooltip,
-} from "@mui/material";
+import { Grid, Typography, Stack, IconButton, Tooltip } from "@mui/material";
 import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Keyframes.tsv";
 import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
-import CloseIcon from "@mui/icons-material/Close";
-import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import { LinearProgressWithLabel } from "../../../../Shared/LinearProgressWithLabel/LinearProgressWithLabel";
 import { Help } from "@mui/icons-material";
 
@@ -57,13 +48,7 @@ const DeepfakeResultsImage = (props) => {
   const [rectangles, setRectangles] = useState(null);
   const [rectanglesReady, setRectanglesReady] = useState(false);
 
-  //console.log("Rectangles: ", rectangles);
-
-  //Help
-  //============================================================================================
-  const [anchorHelp, setAnchorHelp] = React.useState(null);
-  const openHelp = Boolean(anchorHelp);
-  const help = openHelp ? "simple-popover" : undefined;
+  const imgContainerRef = useRef(null);
 
   const [deepfakeScores, setDeepfakeScores] = useState([]);
 
@@ -80,8 +65,6 @@ const DeepfakeResultsImage = (props) => {
     }
 
     let faceswapScore;
-
-    console.log(results);
 
     if (!results.faceswap_report || !results.faceswap_report.prediction) {
       faceswapScore = new DeepfakeResult(
@@ -111,15 +94,10 @@ const DeepfakeResultsImage = (props) => {
     setDeepfakeScores(res);
   }, [results]);
 
-  function clickHelp(event) {
-    setAnchorHelp(event.currentTarget);
-  }
-
-  function closeHelp() {
-    setAnchorHelp(null);
-  }
-
   const drawRectangles = () => {
+    setRectangles(null);
+    setRectanglesReady(false);
+
     if (
       deepfakeScores[0].methodName !==
       Object.keys(DeepfakeImageDetectionMethodNames)[0]
@@ -131,6 +109,7 @@ const DeepfakeResultsImage = (props) => {
 
     const imgHeight = imgElement.current.offsetHeight;
     const imgWidth = imgElement.current.offsetWidth;
+    const containerWidth = imgContainerRef.current.offsetWidth;
 
     const rectanglesTemp = [];
 
@@ -138,7 +117,9 @@ const DeepfakeResultsImage = (props) => {
       const rectangleAtributes = element.bbox;
 
       const elementTop = Math.round(rectangleAtributes.top * imgHeight);
-      const elementLeft = Math.round(rectangleAtributes.left * imgWidth);
+      const elementLeft = Math.round(
+        rectangleAtributes.left * imgWidth + (containerWidth - imgWidth) / 2,
+      );
       const elementHeight = Math.round(
         (rectangleAtributes.bottom - rectangleAtributes.top) * imgHeight,
       );
@@ -171,6 +152,18 @@ const DeepfakeResultsImage = (props) => {
     setRectanglesReady(true);
   };
 
+  useEffect(() => {
+    const resizeObserver = new ResizeObserver(() => {
+      drawRectangles();
+    });
+
+    resizeObserver.observe(imgContainerRef.current);
+
+    return () => {
+      resizeObserver.disconnect();
+    };
+  }, [deepfakeScores]);
+
   return (
     <Stack
       direction="row"
@@ -181,119 +174,74 @@ const DeepfakeResultsImage = (props) => {
       <Card style={{ overflow: "hidden", width: "50%", height: "auto" }}>
         <CardHeader
           style={{ borderRadius: "4px 4px 0px 0px" }}
-          title={
-            <Grid
-              container
-              direction="row"
-              justifyContent="space-between"
-              alignItems="center"
-            >
-              <span>Image</span>
-              <HelpOutlineIcon
-                style={{ color: "#FFFFFF" }}
-                onClick={clickHelp}
-              />
-
-              <Popover
-                id={help}
-                open={openHelp}
-                anchorEl={anchorHelp}
-                onClose={closeHelp}
-                PaperProps={{
-                  style: {
-                    width: "300px",
-                    fontSize: 14,
-                  },
-                }}
-                anchorOrigin={{
-                  vertical: "bottom",
-                  horizontal: "center",
-                }}
-                transformOrigin={{
-                  vertical: "top",
-                  horizontal: "center",
-                }}
-              >
-                <Box p={3}>
-                  <Grid
-                    container
-                    direction="row"
-                    justifyContent="space-between"
-                    alignItems="stretch"
-                  >
-                    <Typography constiant="h6" gutterBottom>
-                      {keyword("deepfake_title_what")}
-                    </Typography>
-
-                    <CloseIcon onClick={closeHelp} />
-                  </Grid>
-                  <Box m={1} />
-                  <Typography constiant="body2">
-                    {keyword("deepfake_filters_explanation_image")}
-                  </Typography>
-                </Box>
-              </Popover>
-            </Grid>
-          }
+          title={"Image"}
           className={classes.headerUpladedImage}
         />
         <Box sx={{ width: "100%", height: "100%", position: "relative" }}>
-          {rectanglesReady &&
-            rectangles &&
-            rectangles.map((valueRectangle, keyRectangle) => {
-              return (
-                <Box
-                  key={keyRectangle}
-                  className={classes.deepfakeSquare}
-                  sx={{
-                    top: valueRectangle.top,
-                    left: valueRectangle.left,
-                  }}
-                >
-                  <Box
-                    className={valueRectangle.borderClass}
-                    sx={{
-                      width: valueRectangle.width,
-                      height: valueRectangle.height,
-                    }}
-                  />
+          <Grid
+            container
+            direction="row"
+            justifyContent="center"
+            alignItems="flex-start"
+            ref={imgContainerRef}
+          >
+            <Grid item>
+              {rectanglesReady &&
+                rectangles &&
+                rectangles.map((valueRectangle, keyRectangle) => {
+                  return (
+                    <Box
+                      key={keyRectangle}
+                      className={classes.deepfakeSquare}
+                      sx={{
+                        top: valueRectangle.top,
+                        left: valueRectangle.left,
+                      }}
+                    >
+                      <Box
+                        className={valueRectangle.borderClass}
+                        sx={{
+                          width: valueRectangle.width,
+                          height: valueRectangle.height,
+                        }}
+                      />
 
-                  <Box
-                    mt={2}
-                    pl={1}
-                    pr={1}
-                    pt={1}
-                    pb={1}
-                    sx={{
-                      backgroundColor: "#ffffff",
-                      borderRadius: "2px",
-                      display: "flex",
-                      flexDirection: "column",
-                      alignItems: "start",
-                      minWidth: "80px",
-                    }}
-                  >
-                    <Typography constiant="h3">
-                      {valueRectangle.probability}%
-                    </Typography>
-                    <Typography constiant="h6" style={{ color: "#989898" }}>
-                      {keyword("deepfake_name")}
-                    </Typography>
-                  </Box>
-                </Box>
-              );
-            })}
+                      <Box
+                        mt={2}
+                        pl={1}
+                        pr={1}
+                        pt={1}
+                        pb={1}
+                        sx={{
+                          backgroundColor: "#ffffff",
+                          borderRadius: "2px",
+                          display: "flex",
+                          flexDirection: "column",
+                          alignItems: "start",
+                          minWidth: "80px",
+                        }}
+                      >
+                        <Typography>{valueRectangle.probability}%</Typography>
+                        <Typography style={{ color: "#989898" }}>
+                          {keyword("deepfake_name")}
+                        </Typography>
+                      </Box>
+                    </Box>
+                  );
+                })}
+            </Grid>
 
-          <img
-            src={url}
-            alt={"Displays the results of the deepfake tool"}
-            style={{
-              maxWidth: "100%",
-              maxHeight: "100%",
-            }}
-            ref={imgElement}
-            onLoad={drawRectangles}
-          />
+            <img
+              src={url}
+              alt={"Displays the results of the deepfake tool"}
+              style={{
+                maxWidth: "100%",
+                maxHeight: "100%",
+              }}
+              ref={imgElement}
+              onLoad={drawRectangles}
+            />
+          </Grid>
         </Box>
       </Card>
       <Card sx={{ width: "50%" }}>
@@ -306,13 +254,14 @@ const DeepfakeResultsImage = (props) => {
             deepfakeScores.length > 0 &&
             deepfakeScores[0].predictionScore &&
             deepfakeScores[0].predictionScore >= 70 && (
-              <Typography variant="h4" sx={{ color: "red" }}>
-                This image has been detected as generated by a{" "}
+              <Typography variant="h5" sx={{ color: "red" }}>
+                This image has been detected as generated with a{" "}
                 {
                   DeepfakeImageDetectionMethodNames[
                     deepfakeScores[0].methodName
                   ].name
-                }
+                }{" "}
+                algorithm
               </Typography>
             )}
           {deepfakeScores &&
@@ -325,7 +274,7 @@ const DeepfakeResultsImage = (props) => {
                     alignItems="center"
                     spacing={2}
                   >
-                    <Typography variant="h5">
+                    <Typography variant="h6">
                       {DeepfakeImageDetectionMethodNames[item.methodName].name}
                     </Typography>
                     <Tooltip
