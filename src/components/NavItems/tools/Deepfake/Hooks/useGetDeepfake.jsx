@@ -35,6 +35,15 @@ async function UseGetDeepfake(url, processURL, mode, dispatch) {
 
   let res;
 
+  const handleError = (e) => {
+    dispatch(setError(e));
+    if (mode === "IMAGE") {
+      dispatch(setDeepfakeLoadingImage(false));
+    } else if (mode === "VIDEO") {
+      dispatch(setDeepfakeLoadingVideo(false));
+    }
+  };
+
   try {
     res = await axios.post(baseURL + modeURL + "jobs", null, {
       params: { url: url, services: services },
@@ -85,15 +94,6 @@ async function UseGetDeepfake(url, processURL, mode, dispatch) {
   };
 
   waitUntilFinish(res.data.id);
-
-  const handleError = (e) => {
-    dispatch(setError(e));
-    if (mode === "IMAGE") {
-      dispatch(setDeepfakeLoadingImage(false));
-    } else if (mode === "VIDEO") {
-      dispatch(setDeepfakeLoadingVideo(false));
-    }
-  };
 }
 
 function sleep(fn, param) {

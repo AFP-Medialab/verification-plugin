@@ -19,6 +19,11 @@ import Help from "@mui/icons-material/Help";
 import { LinearProgressWithLabel } from "../../../../Shared/LinearProgressWithLabel/LinearProgressWithLabel";
 
 const DeepfakeResultsVideo = (props) => {
+  const classes = useMyStyles();
+  const keyword = useLoadLanguage(
+    "components/NavItems/tools/Deepfake.tsv",
+    tsv,
+  );
   class DeepfakeResult {
     constructor(methodName, predictionScore) {
       (this.methodName = methodName), (this.predictionScore = predictionScore);
@@ -28,28 +33,20 @@ const DeepfakeResultsVideo = (props) => {
   // todo: move to tsv
   const DeepfakeImageDetectionMethodNames = Object.freeze({
     deepfakeVideoReport: {
-      name: "Deepfake Video Report",
-      description:
-        "This method aims to detect if the person's face has been replaced in the video.",
+      name: keyword("deepfake_video_videoreport_name"),
+      description: keyword("deepfake_video_videoreport_description"),
     },
     ftcn: {
-      name: "Fully Temporal Convolution Network",
-      description:
-        "This method aims to detect temporal anomalies for videos with faces.",
+      name: keyword("deepfake_video_ftcn_name"),
+      description: keyword("deepfake_video_ftcn_description"),
     },
 
     faceReenact: {
-      name: "Face Reenactment",
-      description:
-        "This method aims to detect if the faces in the video have been synthesized with a transfer from a source face shape to a target face while preserving the appearance and the identity of the target face.",
+      name: keyword("deepfake_video_facereenact_name"),
+      description: keyword("deepfake_video_facereenact_description"),
     },
   });
 
-  const classes = useMyStyles();
-  const keyword = useLoadLanguage(
-    "components/NavItems/tools/Deepfake.tsv",
-    tsv,
-  );
   const results = props.result;
   //const url = props.url;
 
@@ -157,19 +154,9 @@ const DeepfakeResultsVideo = (props) => {
   return (
     <div>
       <Box m={3} />
-
       <Grid container direction="column">
         <Grid item container direction="row" spacing={3}>
           <Grid item xs={6} container direction="column">
-            <Typography
-              variant="body1"
-              style={{ color: "#00926c", fontSize: "24px", fontWeight: "500" }}
-            >
-              {keyword("deepfake_video")}
-            </Typography>
-
-            <Box m={1} />
-
             <video
               width="100%"
               height="auto"
@@ -187,7 +174,43 @@ const DeepfakeResultsVideo = (props) => {
               {keyword("deepfake_support")}
             </video>
           </Grid>
-
+          <Grid item xs={6}>
+            <Card>
+              <CardHeader title={keyword("deepfake_video_title")} />
+              <Stack direction="column" p={4} spacing={4}>
+                {deepfakeScores.map((item, key) => {
+                  return (
+                    <Stack direction="column" key={key}>
+                      <Stack
+                        direction="row"
+                        justifyContent="flex-start"
+                        alignItems="center"
+                        spacing={2}
+                      >
+                        <Typography variant="h6">
+                          {
+                            DeepfakeImageDetectionMethodNames[item.methodName]
+                              .name
+                          }
+                        </Typography>
+                        <Tooltip
+                          title={
+                            DeepfakeImageDetectionMethodNames[item.methodName]
+                              .description
+                          }
+                        >
+                          <IconButton>
+                            <Help />
+                          </IconButton>
+                        </Tooltip>
+                      </Stack>
+                      <LinearProgressWithLabel value={item.predictionScore} />
+                    </Stack>
+                  );
+                })}
+              </Stack>
+            </Card>
+          </Grid>
           <Grid item xs={6} container direction="column">
             <Typography
               variant="body1"
@@ -453,40 +476,6 @@ const DeepfakeResultsVideo = (props) => {
           </Box>
         </div>
       </Card>
-      <Stack spacing={4} mt={4}>
-        <Card>
-          <CardHeader title={"Detections"} />
-          <Stack direction="column" p={4} spacing={4}>
-            {deepfakeScores.map((item, key) => {
-              return (
-                <Stack direction="column" key={key}>
-                  <Stack
-                    direction="row"
-                    justifyContent="flex-start"
-                    alignItems="center"
-                    spacing={2}
-                  >
-                    <Typography variant="h5">
-                      {DeepfakeImageDetectionMethodNames[item.methodName].name}
-                    </Typography>
-                    <Tooltip
-                      title={
-                        DeepfakeImageDetectionMethodNames[item.methodName]
-                          .description
-                      }
-                    >
-                      <IconButton>
-                        <Help />
-                      </IconButton>
-                    </Tooltip>
-                  </Stack>
-                  <LinearProgressWithLabel value={item.predictionScore} />
-                </Stack>
-              );
-            })}
-          </Stack>
-        </Card>
-      </Stack>
     </div>
   );
 };
