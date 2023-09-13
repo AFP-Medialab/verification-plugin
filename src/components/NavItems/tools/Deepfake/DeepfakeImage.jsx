@@ -103,6 +103,7 @@ const Deepfake = () => {
                   >
                     <Grid item xs>
                       <TextField
+                        type="url"
                         id="standard-full-width"
                         label={keyword("deepfake_image_link")}
                         placeholder={keyword("deepfake_placeholder")}

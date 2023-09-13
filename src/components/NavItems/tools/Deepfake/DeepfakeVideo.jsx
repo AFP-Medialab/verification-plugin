@@ -99,6 +99,7 @@ const Deepfake = () => {
                       label={keyword("deepfake_video_link")}
                       placeholder={keyword("deepfake_placeholder")}
                       fullWidth
+                      type="url"
                       value={input}
                       variant="outlined"
                       disabled={selectedMode === "" || isLoading}
