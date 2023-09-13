@@ -174,7 +174,6 @@ const DeepfakeResultsImage = (props) => {
         <CardHeader
           style={{ borderRadius: "4px 4px 0px 0px" }}
           title={"Image"}
-          className={classes.headerUpladedImage}
         />
         <Box sx={{ width: "100%", height: "100%", position: "relative" }}>
           <Grid
@@ -235,7 +234,7 @@ const DeepfakeResultsImage = (props) => {
               alt={"Displays the results of the deepfake tool"}
               style={{
                 maxWidth: "100%",
-                maxHeight: "100%",
+                maxHeight: "60vh",
               }}
               ref={imgElement}
               onLoad={drawRectangles}

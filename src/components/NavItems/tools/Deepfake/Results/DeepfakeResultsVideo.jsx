@@ -168,6 +168,7 @@ const DeepfakeResultsVideo = (props) => {
                 borderRadius: "10px",
                 boxShadow:
                   "0px 2px 1px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%)",
+                maxHeight: "40vh",
               }}
             >
               <source
@@ -178,7 +179,7 @@ const DeepfakeResultsVideo = (props) => {
             </video>
           </Grid>
           <Grid item xs={6}>
-            <Card>
+            <Card sx={{ height: "40vh" }}>
               <CardHeader title={keyword("deepfake_video_title")} />
               <Stack direction="column" p={4} spacing={4}>
                 {deepfakeScores.map((item, key) => {
@@ -368,7 +369,6 @@ const DeepfakeResultsVideo = (props) => {
               </Popover>
             </Grid>
           }
-          className={classes.headerUpladedImage}
         />
         <div>
           <Box p={3}>
@@ -401,7 +401,6 @@ const DeepfakeResultsVideo = (props) => {
 
                   <video
                     ref={videoClip}
-                    width="100%"
                     height="auto"
                     controls
                     key={
@@ -415,6 +414,8 @@ const DeepfakeResultsVideo = (props) => {
                       borderRadius: "10px",
                       boxShadow:
                         "0px 2px 1px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%)",
+                      maxHeight: "60vh",
+                      maxWidth: "60vw",
                     }}
                   >
                     <source
@@ -431,13 +432,7 @@ const DeepfakeResultsVideo = (props) => {
                   </video>
                 </Grid>
 
-                <Grid
-                  item
-                  container
-                  direction="column"
-                  xs={6}
-                  style={{ borderLeft: "0.1em solid #ECECEC" }}
-                >
+                <Grid item container direction="column" xs={6}>
                   <Typography variant="h6">
                     {keyword("deepfake_faces")}
                   </Typography>
