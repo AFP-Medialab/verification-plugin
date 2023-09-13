@@ -171,10 +171,6 @@ const DeepfakeResultsImage = (props) => {
       spacing={2}
     >
       <Card style={{ overflow: "hidden", width: "50%", height: "auto" }}>
-        <CardHeader
-          style={{ borderRadius: "4px 4px 0px 0px" }}
-          title={"Image"}
-        />
         <Box sx={{ width: "100%", height: "100%", position: "relative" }}>
           <Grid
             container
