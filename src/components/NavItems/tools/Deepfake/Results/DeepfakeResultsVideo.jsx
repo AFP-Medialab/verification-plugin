@@ -96,6 +96,10 @@ const DeepfakeResultsVideo = (props) => {
   useEffect(() => {
     if (!results) return;
 
+    // reset clip selection state
+    setShotSelectedValue(null);
+    setShotSelectedKey(-1);
+
     let res = [];
 
     if (
@@ -249,6 +253,7 @@ const DeepfakeResultsVideo = (props) => {
                           >
                             <img
                               alt="shot"
+                              key={keyShot}
                               src={valueShot.shot_image}
                               style={{ width: "100%", height: "auto" }}
                             />
@@ -279,6 +284,7 @@ const DeepfakeResultsVideo = (props) => {
                           >
                             <img
                               alt="shot"
+                              key={keyShot}
                               src={valueShot.shot_image}
                               style={{ width: "100%", height: "auto" }}
                             />
@@ -398,6 +404,13 @@ const DeepfakeResultsVideo = (props) => {
                     width="100%"
                     height="auto"
                     controls
+                    key={
+                      results.deepfake_video_report.video_path +
+                      "#t=" +
+                      shotSelectedValue.shot_start +
+                      "," +
+                      shotSelectedValue.shot_end
+                    }
                     style={{
                       borderRadius: "10px",
                       boxShadow:
@@ -433,6 +446,7 @@ const DeepfakeResultsVideo = (props) => {
                   <Grid container direction="row" spacing={3}>
                     {shotSelectedValue.face_image_paths.map(
                       (valueFace, keyFace) => {
+                        console.log(valueFace);
                         return (
                           <Grid
                             item
@@ -447,6 +461,7 @@ const DeepfakeResultsVideo = (props) => {
                           >
                             <img
                               alt="face"
+                              key={keyFace}
                               src={valueFace}
                               style={{ width: "100%", height: "auto" }}
                             />
