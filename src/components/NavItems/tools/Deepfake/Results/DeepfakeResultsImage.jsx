@@ -93,7 +93,11 @@ const DeepfakeResultsImage = (props) => {
     setRectangles(null);
     setRectanglesReady(false);
 
-    if (!deepfakeScores || deepfakeScores[0].methodName) {
+    if (
+      !deepfakeScores ||
+      deepfakeScores.length === 0 ||
+      !deepfakeScores[0].methodName
+    ) {
       return;
     }
 
@@ -111,7 +115,7 @@ const DeepfakeResultsImage = (props) => {
     const containerWidth = imgContainerRef.current.offsetWidth;
 
     const rectanglesTemp = [];
-
+    console.log(results.faceswap_report.info);
     results.faceswap_report.info.forEach((element) => {
       const rectangleAtributes = element.bbox;
 
@@ -201,24 +205,18 @@ const DeepfakeResultsImage = (props) => {
                       />
 
                       <Box
-                        mt={2}
-                        pl={1}
-                        pr={1}
-                        pt={1}
-                        pb={1}
+                        mt={1}
+                        p={1}
                         sx={{
                           backgroundColor: "#ffffff",
                           borderRadius: "2px",
                           display: "flex",
                           flexDirection: "column",
                           alignItems: "start",
-                          minWidth: "80px",
+                          width: "fit-content",
                         }}
                       >
                         <Typography>{valueRectangle.probability}%</Typography>
-                        <Typography style={{ color: "#989898" }}>
-                          {keyword("deepfake_name")}
-                        </Typography>
                       </Box>
                     </Box>
                   );
