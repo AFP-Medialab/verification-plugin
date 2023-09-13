@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import Box from "@mui/material/Box";
-import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import {
@@ -19,7 +18,6 @@ import Help from "@mui/icons-material/Help";
 import { LinearProgressWithLabel } from "../../../../Shared/LinearProgressWithLabel/LinearProgressWithLabel";
 
 const DeepfakeResultsVideo = (props) => {
-  const classes = useMyStyles();
   const keyword = useLoadLanguage(
     "components/NavItems/tools/Deepfake.tsv",
     tsv,
