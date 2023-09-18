@@ -8,6 +8,7 @@ import {
   setDeepfakeResultVideo,
 } from "../../../../../redux/actions/tools/deepfakeVideoActions";
 import { setError } from "../../../../../redux/actions/errorActions";
+import { isValidUrl } from "../../../../Shared/Utils/URLUtils";
 
 async function UseGetDeepfake(url, processURL, mode, dispatch) {
   if (!processURL || !url) {
@@ -43,6 +44,11 @@ async function UseGetDeepfake(url, processURL, mode, dispatch) {
       dispatch(setDeepfakeLoadingVideo(false));
     }
   };
+
+  if (!isValidUrl(url)) {
+    handleError("Error: not a valid url");
+    return;
+  }
 
   try {
     res = await axios.post(baseURL + modeURL + "jobs", null, {
