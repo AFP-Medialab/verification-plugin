@@ -9,6 +9,7 @@ import {
 } from "../../../../../redux/actions/tools/deepfakeVideoActions";
 import { setError } from "../../../../../redux/actions/errorActions";
 import { isValidUrl } from "../../../../Shared/Utils/URLUtils";
+import { useSelector } from "react-redux";
 
 async function UseGetDeepfake(url, processURL, mode, dispatch) {
   if (!processURL || !url) {
@@ -25,7 +26,10 @@ async function UseGetDeepfake(url, processURL, mode, dispatch) {
   } else if (mode === "VIDEO") {
     dispatch(setDeepfakeLoadingVideo(true));
     modeURL = "videos/";
-    services = "deepfake_video,ftcn,face_reenact";
+    // services = "deepfake_video,ftcn,face_reenact";
+    services = "deepfake_video";
+    const role = useSelector((state) => state.userSession.user.roles);
+    if (role.includes("EXTRA_FEATURE")) services += ",ftcn";
   }
 
   if (!modeURL) {
