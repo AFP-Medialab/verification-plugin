@@ -24,17 +24,15 @@ import tsvWarning from "../../../../LocalDictionary/components/Shared/OnWarningI
 import { Gradient } from "@mui/icons-material";
 
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
-// import DeepfakeResultsImage from "./Results/DeepfakeResultsImage";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/SyntheticImageDetection.tsv";
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 
 import { isValidUrl } from "../../../Shared/Utils/URLUtils";
-// import SyntheticImageDetectionResults from "./syntheticImageDetectionResults";
+import SyntheticImageDetectionResults from "./syntheticImageDetectionResults";
 
 //TODO: Matomo analytics
 
 const SyntheticImageDetection = () => {
-  //const { url } = useParams();
   const classes = useMyStyles();
   const keyword = useLoadLanguage(
     "components/NavItems/tools/SyntheticImageDetection.tsv",
@@ -51,9 +49,11 @@ const SyntheticImageDetection = () => {
 
   const [input, setInput] = useState("");
 
-  const isLoading = useSelector((state) => state.deepfakeImage.loading);
-  const result = useSelector((state) => state.deepfakeImage.result);
-  const url = useSelector((state) => state.deepfakeImage.url);
+  const isLoading = useSelector(
+    (state) => state.syntheticImageDetection.loading,
+  );
+  const result = useSelector((state) => state.syntheticImageDetection.result);
+  const url = useSelector((state) => state.syntheticImageDetection.url);
 
   const dispatch = useDispatch();
 
@@ -91,6 +91,7 @@ const SyntheticImageDetection = () => {
       res = await axios.post(baseURL + modeURL + "jobs", null, {
         params: { url: url, services: services },
       });
+      console.log(res);
     } catch (error) {
       // handleError("error_" + error.status);
     }
@@ -228,10 +229,7 @@ const SyntheticImageDetection = () => {
 
       <Box m={3} />
 
-      {
-        result && <></>
-        //   <SyntheticImageDetectionResults result={result} url={url}/>
-      }
+      {result && <SyntheticImageDetectionResults result={result} url={url} />}
     </div>
   );
 };

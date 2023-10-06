@@ -3,14 +3,14 @@ import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import { Grid, Typography, Stack, IconButton, Tooltip } from "@mui/material";
-import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Keyframes.tsv";
+import tsv from "../../../../LocalDictionary/components/NavItems/tools/SyntheticImageDetection.tsv";
 import useLoadLanguage from "Hooks/useLoadLanguage";
 import { LinearProgressWithLabel } from "components/Shared/LinearProgressWithLabel/LinearProgressWithLabel";
 import { Help } from "@mui/icons-material";
 
 const SyntheticImageDetectionResults = (props) => {
   const keyword = useLoadLanguage(
-    "components/NavItems/tools/Deepfake.tsv",
+    "components/NavItems/tools/SyntheticImageDetection.tsv",
     tsv,
   );
   class DeepfakeResult {
@@ -30,7 +30,7 @@ const SyntheticImageDetectionResults = (props) => {
       description: keyword("synthetic_image_detection_diffusion_description"),
     },
   };
-
+  console.log(DeepfakeImageDetectionMethodNames);
   const results = props.result;
   const url = props.url;
   const imgElement = React.useRef(null);
@@ -49,7 +49,7 @@ const SyntheticImageDetectionResults = (props) => {
     ) {
       return;
     }
-
+    console.log(results);
     const diffusionScore = new DeepfakeResult(
       Object.keys(DeepfakeImageDetectionMethodNames)[2],
       results.unina_report.prediction * 100,
@@ -114,6 +114,10 @@ const SyntheticImageDetectionResults = (props) => {
             )}
           {deepfakeScores &&
             deepfakeScores.map((item, key) => {
+              console.log(deepfakeScores);
+              console.log(item);
+              console.log(item.methodName);
+              console.log(DeepfakeImageDetectionMethodNames[item.methodName]);
               return (
                 <Stack direction="column" key={key}>
                   <Stack
