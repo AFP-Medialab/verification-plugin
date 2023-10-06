@@ -30,7 +30,6 @@ const SyntheticImageDetectionResults = (props) => {
       description: keyword("synthetic_image_detection_diffusion_description"),
     },
   };
-  console.log(DeepfakeImageDetectionMethodNames);
   const results = props.result;
   const url = props.url;
   const imgElement = React.useRef(null);
@@ -49,7 +48,6 @@ const SyntheticImageDetectionResults = (props) => {
     ) {
       return;
     }
-    console.log(results);
     const diffusionScore = new DeepfakeResult(
       Object.keys(DeepfakeImageDetectionMethodNames)[1],
       results.unina_report.prediction * 100,
@@ -114,10 +112,6 @@ const SyntheticImageDetectionResults = (props) => {
             )}
           {deepfakeScores &&
             deepfakeScores.map((item, key) => {
-              console.log(deepfakeScores);
-              console.log(item);
-              console.log(item.methodName);
-              console.log(DeepfakeImageDetectionMethodNames[item.methodName]);
               return (
                 <Stack direction="column" key={key}>
                   <Stack

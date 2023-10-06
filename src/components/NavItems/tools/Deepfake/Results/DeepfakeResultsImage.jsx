@@ -21,21 +21,13 @@ const DeepfakeResultsImage = (props) => {
     }
   }
 
-  const DeepfakeImageDetectionMethodNames = Object.freeze({
+  const DeepfakeImageDetectionMethodNames = {
     faceswap: {
       name: keyword("deepfake_image_faceswap_name"),
       description: keyword("deepfake_image_faceswap_description"),
     },
-    gan: {
-      name: keyword("deepfake_image_gan_name"),
-      description: keyword("deepfake_image_gan_description"),
-    },
+  };
 
-    diffusion: {
-      name: keyword("deepfake_image_diffusion_name"),
-      description: keyword("deepfake_image_diffusion_description"),
-    },
-  });
   const results = props.result;
   const url = props.url;
   const imgElement = React.useRef(null);
@@ -45,17 +37,10 @@ const DeepfakeResultsImage = (props) => {
 
   const imgContainerRef = useRef(null);
 
-  const [deepfakeScores, setDeepfakeScores] = useState([]);
+  const [deepfakeScores, setDeepfakeScores] = useState(undefined);
 
   useEffect(() => {
-    if (
-      !results ||
-      !results.unina_report ||
-      !results.unina_report.prediction ||
-      !results.faceswap_report ||
-      !results.gan_report ||
-      !results.gan_report.prediction
-    ) {
+    if (!results || !results.faceswap_report) {
       return;
     }
 
@@ -73,19 +58,8 @@ const DeepfakeResultsImage = (props) => {
       );
     }
 
-    const diffusionScore = new DeepfakeResult(
-      Object.keys(DeepfakeImageDetectionMethodNames)[2],
-      results.unina_report.prediction * 100,
-    );
-    const ganScore = new DeepfakeResult(
-      Object.keys(DeepfakeImageDetectionMethodNames)[1],
-      results.gan_report.prediction * 100,
-    );
-
-    const res = [faceswapScore, diffusionScore, ganScore].sort(
-      (a, b) => b.predictionScore - a.predictionScore,
-    );
-
+    const res = faceswapScore;
+    console.log(res);
     setDeepfakeScores(res);
   }, [results]);
 
@@ -93,16 +67,12 @@ const DeepfakeResultsImage = (props) => {
     setRectangles(null);
     setRectanglesReady(false);
 
-    if (
-      !deepfakeScores ||
-      deepfakeScores.length === 0 ||
-      !deepfakeScores[0].methodName
-    ) {
+    if (!deepfakeScores || !deepfakeScores.methodName) {
       return;
     }
 
     if (
-      deepfakeScores[0].methodName !==
+      deepfakeScores.methodName !==
       Object.keys(DeepfakeImageDetectionMethodNames)[0]
     ) {
       setRectangles(null);
@@ -243,45 +213,43 @@ const DeepfakeResultsImage = (props) => {
         />
         <Stack direction="column" p={4} spacing={4}>
           {deepfakeScores &&
-            deepfakeScores.length > 0 &&
-            deepfakeScores[0].predictionScore &&
-            deepfakeScores[0].predictionScore >= 70 && (
+            deepfakeScores.predictionScore &&
+            deepfakeScores.predictionScore >= 70 && (
               <Typography variant="h5" sx={{ color: "red" }}>
                 {keyword("deepfake_image_detection_alert") +
-                  DeepfakeImageDetectionMethodNames[
-                    deepfakeScores[0].methodName
-                  ].name +
+                  DeepfakeImageDetectionMethodNames[deepfakeScores.methodName]
+                    .name +
                   keyword("deepfake_image_detection_alert_2")}
               </Typography>
             )}
-          {deepfakeScores &&
-            deepfakeScores.map((item, key) => {
-              return (
-                <Stack direction="column" key={key}>
-                  <Stack
-                    direction="row"
-                    justifyContent="flex-start"
-                    alignItems="center"
-                    spacing={2}
-                  >
-                    <Typography variant="h6">
-                      {DeepfakeImageDetectionMethodNames[item.methodName].name}
-                    </Typography>
-                    <Tooltip
-                      title={
-                        DeepfakeImageDetectionMethodNames[item.methodName]
-                          .description
-                      }
-                    >
-                      <IconButton>
-                        <Help />
-                      </IconButton>
-                    </Tooltip>
-                  </Stack>
-                  <LinearProgressWithLabel value={item.predictionScore} />
-                </Stack>
-              );
-            })}
+          {deepfakeScores && (
+            <Stack direction="column">
+              <Stack
+                direction="row"
+                justifyContent="flex-start"
+                alignItems="center"
+                spacing={2}
+              >
+                <Typography variant="h6">
+                  {
+                    DeepfakeImageDetectionMethodNames[deepfakeScores.methodName]
+                      .name
+                  }
+                </Typography>
+                <Tooltip
+                  title={
+                    DeepfakeImageDetectionMethodNames[deepfakeScores.methodName]
+                      .description
+                  }
+                >
+                  <IconButton>
+                    <Help />
+                  </IconButton>
+                </Tooltip>
+              </Stack>
+              <LinearProgressWithLabel value={deepfakeScores.predictionScore} />
+            </Stack>
+          )}
         </Stack>
       </Card>
     </Stack>

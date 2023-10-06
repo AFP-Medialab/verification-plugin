@@ -22,7 +22,7 @@ async function UseGetDeepfake(url, processURL, mode, dispatch) {
   if (mode === "IMAGE") {
     dispatch(setDeepfakeLoadingImage(true));
     modeURL = "images/";
-    services = "faceswap,gan,diffusion,unina";
+    services = "faceswap";
   } else if (mode === "VIDEO") {
     dispatch(setDeepfakeLoadingVideo(true));
     modeURL = "videos/";
