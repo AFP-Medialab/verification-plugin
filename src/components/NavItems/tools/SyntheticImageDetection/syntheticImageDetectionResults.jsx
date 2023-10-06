@@ -51,11 +51,11 @@ const SyntheticImageDetectionResults = (props) => {
     }
     console.log(results);
     const diffusionScore = new DeepfakeResult(
-      Object.keys(DeepfakeImageDetectionMethodNames)[2],
+      Object.keys(DeepfakeImageDetectionMethodNames)[1],
       results.unina_report.prediction * 100,
     );
     const ganScore = new DeepfakeResult(
-      Object.keys(DeepfakeImageDetectionMethodNames)[1],
+      Object.keys(DeepfakeImageDetectionMethodNames)[0],
       results.gan_report.prediction * 100,
     );
 

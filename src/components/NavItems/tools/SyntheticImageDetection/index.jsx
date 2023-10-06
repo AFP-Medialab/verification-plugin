@@ -67,7 +67,7 @@ const SyntheticImageDetection = () => {
 
     dispatch(setSyntheticImageDetectionLoading(true));
     modeURL = "images/";
-    services = "gan,diffusion,unina";
+    services = "gan,unina";
 
     if (!modeURL) {
       return;

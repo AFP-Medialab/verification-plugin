@@ -4,7 +4,7 @@ import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import { Grid, Typography, Stack, IconButton, Tooltip } from "@mui/material";
-import tsv from "../../../LocalDictionary/components/NavItems/tools/Deepfake.tsv";
+import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Deepfake.tsv";
 import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
 import { LinearProgressWithLabel } from "../../../../Shared/LinearProgressWithLabel/LinearProgressWithLabel";
 import { Help } from "@mui/icons-material";
