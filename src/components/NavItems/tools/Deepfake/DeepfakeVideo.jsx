@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import LinearProgress from "@mui/material/LinearProgress";
@@ -17,6 +17,7 @@ import DeepfakeResultsVideo from "./Results/DeepfakeResultsVideo";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/Deepfake.tsv";
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import Alert from "@mui/material/Alert";
+import { resetDeepfake } from "../../../../redux/actions/tools/deepfakeVideoActions";
 
 const Deepfake = () => {
   //const { url } = useParams();
@@ -33,16 +34,12 @@ const Deepfake = () => {
     "components/Shared/OnWarningInfo.tsv",
     tsvWarning,
   );
-  //const dispatch = useDispatch();
-
-  const [input, setInput] = useState("");
-  const [inputToSend, setInputToSend] = useState("");
-  const [processUrl, setProcessUrl] = useState(false);
 
   const isLoading = useSelector((state) => state.deepfakeVideo.loading);
   const result = useSelector((state) => state.deepfakeVideo.result);
   const url = useSelector((state) => state.deepfakeVideo.url);
-
+  const role = useSelector((state) => state.userSession.user.roles);
+  const [input, setInput] = useState(url ? url : "");
   //Selecting mode
   //============================================================================================
   const [selectedMode, setSelectedMode] = useState("");
@@ -54,12 +51,22 @@ const Deepfake = () => {
   //Submiting the URL
   //============================================================================================
 
-  const submitUrl = () => {
-    setProcessUrl(true);
-    setInputToSend(input);
-  };
+  const dispatch = useDispatch();
 
-  UseGetDeepfake(inputToSend, processUrl, selectedMode);
+  const cleanup = () => {
+    dispatch(resetDeepfake());
+    setInput("");
+  };
+  const submitUrl = () => {
+    UseGetDeepfake(
+      input,
+      true,
+      selectedMode,
+      dispatch,
+      role,
+      keywordWarning("error_invalid_url"),
+    );
+  };
 
   return (
     <div>
@@ -103,6 +110,7 @@ const Deepfake = () => {
                       label={keyword("deepfake_video_link")}
                       placeholder={keyword("deepfake_placeholder")}
                       fullWidth
+                      type="url"
                       value={input}
                       variant="outlined"
                       disabled={selectedMode === "" || isLoading}
@@ -111,19 +119,31 @@ const Deepfake = () => {
                   </Grid>
 
                   <Grid item>
-                    <Button
-                      type="submit"
-                      variant="contained"
-                      color="primary"
-                      onClick={(e) => {
-                        e.preventDefault(), submitUrl();
-                      }}
-                      disabled={
-                        selectedMode === "" || input === "" || isLoading
-                      }
-                    >
-                      {"Submit"}
-                    </Button>
+                    {!result ? (
+                      <Button
+                        type="submit"
+                        variant="contained"
+                        color="primary"
+                        onClick={(e) => {
+                          e.preventDefault(), submitUrl();
+                        }}
+                        disabled={
+                          selectedMode === "" || input === "" || isLoading
+                        }
+                      >
+                        {"Submit"}
+                      </Button>
+                    ) : (
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={(e) => {
+                          e.preventDefault(), cleanup();
+                        }}
+                      >
+                        {keyword("button_remove")}
+                      </Button>
+                    )}
                   </Grid>
                 </Grid>
 
