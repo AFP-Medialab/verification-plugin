@@ -62,7 +62,7 @@ function* getAssistantScrapeSaga() {
 function* getMediaSimilaritySaga() {
   yield takeLatest(
     ["SET_PROCESS_URL", "CLEAN_STATE"],
-    handleMediaSimilarityCall
+    handleMediaSimilarityCall,
   );
 }
 
@@ -73,14 +73,14 @@ function* getDbkfTextMatchSaga() {
 function* getHyperpartisanSaga() {
   yield takeLatest(
     ["SET_SCRAPED_DATA", "CLEAN_STATE"],
-    handleHyperpartisanCall
+    handleHyperpartisanCall,
   );
 }
 
 function* getSourceCredSaga() {
   yield takeLatest(
     ["SET_INPUT_URL", "CLEAN_STATE"],
-    handleSourceCredibilityCall
+    handleSourceCredibilityCall,
   );
 }
 
@@ -117,19 +117,19 @@ function* handleMediaActionList() {
     let knownInputLink = yield call(
       matchPattern,
       inputUrl,
-      KNOWN_LINK_PATTERNS
+      KNOWN_LINK_PATTERNS,
     );
     let knownProcessLink = yield call(
       matchPattern,
       processUrl,
-      KNOWN_LINK_PATTERNS
+      KNOWN_LINK_PATTERNS,
     );
     let actions = yield call(
       selectCorrectActions,
       contentType,
       knownInputLink,
       knownProcessLink,
-      processUrl
+      processUrl,
     );
 
     yield put(setProcessUrlActions(contentType, actions));
@@ -165,7 +165,7 @@ function* handleMediaSimilarityCall(action) {
       similaritySearch,
       () => dbkfAPI.callImageSimilarityEndpoint(processUrl),
       (result, loading, done, fail) =>
-        setDbkfImageMatchDetails(result, loading, done, fail)
+        setDbkfImageMatchDetails(result, loading, done, fail),
     );
   } else if (
     contentType === CONTENT_TYPE.VIDEO &&
@@ -175,7 +175,7 @@ function* handleMediaSimilarityCall(action) {
       similaritySearch,
       () => dbkfAPI.callVideoSimilarityEndpoint(processUrl),
       (result, loading, done, fail) =>
-        setDbkfVideoMatchDetails(result, loading, done, fail)
+        setDbkfVideoMatchDetails(result, loading, done, fail),
     );
   }
 }
@@ -238,8 +238,8 @@ function* handleSourceCredibilityCall(action) {
         mixedResults,
         false,
         true,
-        false
-      )
+        false,
+      ),
     );
   } catch (error) {
     console.log(error);
@@ -308,7 +308,7 @@ function* handleNamedEntityCall(action) {
       const result = yield call(
         assistantApi.callNamedEntityService,
         text,
-        textLang
+        textLang,
       );
       let entities = [];
 
@@ -332,7 +332,7 @@ function* handleNamedEntityCall(action) {
           });
         });
         yield put(
-          setNeDetails(categoryList, wordCloudList, false, true, false)
+          setNeDetails(categoryList, wordCloudList, false, true, false),
         );
       }
     }
@@ -373,13 +373,18 @@ function* handleAssistantScrapeCall(action) {
     return;
   }
 
+  // if urlType is TELEGRAM, check formatting
+  if (urlType === KNOWN_LINKS.TELEGRAM) {
+    inputUrl = formatTelegramLink(inputUrl);
+  }
+
   try {
     let scrapeResult = null;
     if (decideWhetherToScrape(urlType, contentType, inputUrl)) {
       scrapeResult = yield call(
         assistantApi.callAssistantScraper,
         urlType,
-        inputUrl
+        inputUrl,
       );
     }
 
@@ -387,7 +392,7 @@ function* handleAssistantScrapeCall(action) {
       urlType,
       contentType,
       inputUrl,
-      scrapeResult
+      scrapeResult,
     );
 
     yield put(setInputUrl(inputUrl, urlType));
@@ -397,8 +402,8 @@ function* handleAssistantScrapeCall(action) {
         filteredSR.textLang,
         filteredSR.linkList,
         filteredSR.imageList,
-        filteredSR.videoList
-      )
+        filteredSR.videoList,
+      ),
     );
     yield put(setAssistantLoading(false));
   } catch (error) {
@@ -446,6 +451,27 @@ function* extractFromLocalStorage(instagram_result, inputUrl, urlType) {
 }
 
 /**
+ * Replaces "t.me/" with "t.me/s/" in telegram links if required.
+ * @param {String} url
+ * @return {String} url
+ */
+function formatTelegramLink(url) {
+  let urlType = matchPattern(url, KNOWN_LINK_PATTERNS);
+  if (urlType !== KNOWN_LINKS.TELEGRAM) {
+    throw new Error(
+      "formatTelegramLink: Expected telegram link but got " + urlType
+    );
+  }
+
+  // this pattern only matches telegram links of the format t.me/{channel}/{id} and NOT t.me/s/{channel}/{id}
+  const nonSPattern = "^(?:https:/{2})?(?:www.)?t.me/(?!s/)\\w*/\\d*";
+
+  return url.match(nonSPattern) !== null
+    ? url.replace("t.me/", "t.me/s/")
+    : url;
+}
+
+/**
  * PREPROCESS FUNCTIONS
  **/
 const decideWhetherToScrape = (urlType, contentType) => {
@@ -479,7 +505,7 @@ const buildWordCloudList = (entities) => {
     accumulator.filter((wordObj) => wordObj.value === currentWord["word"])
       .length
       ? (accumulator.filter(
-          (wordObj) => wordObj.value === currentWord["word"]
+          (wordObj) => wordObj.value === currentWord["word"],
         )[0].count += 1)
       : accumulator.push({
           value: currentWord["word"],
@@ -495,7 +521,7 @@ const buildCategoryList = (wordCloudList) => {
   // group by category
   return wordCloudList.reduce((accumulator, currentWord) => {
     accumulator.filter(
-      (wordObj) => wordObj.category === currentWord["category"]
+      (wordObj) => wordObj.category === currentWord["category"],
     ).length
       ? accumulator
           .filter((wordObj) => wordObj.category === currentWord["category"])[0]
@@ -513,7 +539,7 @@ const filterAssistantResults = (
   urlType,
   contentType,
   userInput,
-  scrapeResult
+  scrapeResult,
 ) => {
   let videoList = [];
   let imageList = [];
@@ -542,7 +568,7 @@ const filterAssistantResults = (
         imageList = scrapeResult.images;
         imageList = imageList.filter(
           (imageUrl) =>
-            imageUrl.includes("//scontent") && !imageUrl.includes("/cp0/")
+            imageUrl.includes("//scontent") && !imageUrl.includes("/cp0/"),
         );
       } else {
         videoList = scrapeResult.videos;
@@ -573,7 +599,7 @@ const filterAssistantResults = (
         imageList = scrapeResult.images;
         // very specific. consider reworking to all svg images!
         imageList = imageList.filter(
-          (imageUrl) => !imageUrl.includes("loader.svg")
+          (imageUrl) => !imageUrl.includes("loader.svg"),
         );
         videoList = scrapeResult.videos;
       }

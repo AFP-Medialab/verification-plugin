@@ -23,7 +23,7 @@ const MetadataVideoResult = (props) => {
   const classes = useMyStyles();
   const keyword = useLoadLanguage(
     "components/NavItems/tools/Metadata.tsv",
-    tsv
+    tsv,
   );
 
   const report = props["result"];
@@ -487,9 +487,9 @@ const MetadataVideoResult = (props) => {
                     report.GPSLatitude,
                     report.GPSLatitudeRef,
                     report.GPSLongitude,
-                    report.GPSLongitudeRef
+                    report.GPSLongitudeRef,
                   ),
-                  "_blank"
+                  "_blank",
                 )
               }
             >

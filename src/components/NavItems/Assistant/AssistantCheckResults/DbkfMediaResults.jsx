@@ -16,7 +16,7 @@ import tsv from "../../../../LocalDictionary/components/NavItems/tools/Assistant
 const DbkfMediaResults = () => {
   const keyword = useLoadLanguage(
     "components/NavItems/tools/Assistant.tsv",
-    tsv
+    tsv,
   );
 
   const dbkfImageMatch = useSelector((state) => state.assistant.dbkfImageMatch);

@@ -34,7 +34,7 @@ const useVideoTreatment = (mediaUrl, keyword) => {
             notification: false,
             loading: false,
             isImage: false,
-          })
+          }),
         );
       };
 

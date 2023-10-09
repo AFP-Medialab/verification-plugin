@@ -16,7 +16,7 @@ export const toolEvent = (
   name,
   url,
   client_id,
-  uid = ""
+  uid = "",
 ) => {
   console.log("action_name ", action_name);
   let actions = {
@@ -40,7 +40,7 @@ export const trackEvent = (
   url,
   client_id,
   history = null,
-  uid = ""
+  uid = "",
 ) => {
   const pathname =
     history && history.location ? history.location.pathname : null;
@@ -74,12 +74,21 @@ export const trackEvent = (
 
   matomoCall(actions);
 };
+export const trackEventAnonymous = (
+  category,
+  action,
+  name,
+  url,
+  history = null,
+) => {
+  trackEvent(category, action, name, url, null, history, "");
+};
 
 export const trackPageView = (
   path,
   client_id,
   history = undefined,
-  uid = ""
+  uid = "",
 ) => {
   let pathname = "";
   if (typeof history !== "undefined" && path !== null) {
@@ -104,6 +113,10 @@ export const trackPageView = (
   }
 
   matomoCall(actions);
+};
+
+export const trackPageViewAnonymous = (path, history = undefined) => {
+  trackPageView(path, null, history, "");
 };
 
 const resolution = () => {

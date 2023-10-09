@@ -16,7 +16,7 @@ const SourceCredibilityResult = (props) => {
   // central
   const keyword = useLoadLanguage(
     "components/NavItems/tools/Assistant.tsv",
-    tsv
+    tsv,
   );
 
   // props

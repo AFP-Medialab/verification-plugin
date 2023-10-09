@@ -71,5 +71,5 @@ root.render(
         <App />
       </AppWrapper>
     </CacheProvider>
-  </Provider>
+  </Provider>,
 );

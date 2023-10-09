@@ -57,20 +57,20 @@ const ImageEditor = forwardRef((props, instance) => {
       document.querySelector(".tui-image-editor"),
       updated,
       ["height", "width"],
-      [maxHeight, maxWidth]
+      [maxHeight, maxWidth],
     );
     resizeElement(
       document.querySelector(".tui-image-editor-canvas-container"),
       updated,
       ["maxHeight", "maxWidth"],
-      [maxHeight, maxWidth]
+      [maxHeight, maxWidth],
     );
     document.querySelectorAll("canvas").forEach((element) => {
       resizeElement(
         element,
         updated,
         ["maxHeight", "maxWidth"],
-        [maxHeight, maxWidth]
+        [maxHeight, maxWidth],
       );
     });
   };

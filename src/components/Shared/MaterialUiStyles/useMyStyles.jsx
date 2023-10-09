@@ -767,19 +767,17 @@ const styles = (theme) => ({
 
   deepfakeSquare: {
     position: "absolute",
-    zIndex: 1,
+    zIndex: 10,
     display: "flex",
     flexDirection: "column",
   },
 
   deepfakeSquareBorderRed: {
-    border: "8px solid red",
-    borderRadius: "10px",
+    border: "4px solid red",
   },
 
   deepfakeSquareBorderWhite: {
-    border: "8px solid white",
-    borderRadius: "10px",
+    border: "4px solid white",
   },
 
   hidden: {

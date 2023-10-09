@@ -22,7 +22,7 @@ export const setKeyframesLoading = createAction("SET_KEYFRAMES_LOADING");
 };*/
 
 export const setKeyframesSimilarityLoading = createAction(
-  "SET_KEYFRAMES_SIMILARITY_LOADING"
+  "SET_KEYFRAMES_SIMILARITY_LOADING",
 );
 /*export const setKeyframesSimilarityLoading = (loading) => {
     return {

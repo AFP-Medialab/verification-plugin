@@ -35,7 +35,7 @@ const TwitterResults = (props) => {
   const classes = useMyStyles();
   const keyword = useLoadLanguage(
     "components/NavItems/tools/Analysis.tsv",
-    tsv
+    tsv,
   );
   const reverseSearch = (website) => {
     for (let image of thumbnails) {
@@ -185,7 +185,7 @@ const TwitterResults = (props) => {
                           {report["video"]["user_mentions"].map(
                             (value, key) => {
                               return <span key={key}>{value + " "}</span>;
-                            }
+                            },
                           )}
                         </TableCell>
                       </TableRow>
@@ -264,7 +264,7 @@ const TwitterResults = (props) => {
                                   {value + " "}
                                 </a>
                               );
-                            }
+                            },
                           )}
                         </TableCell>
                       </TableRow>

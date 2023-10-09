@@ -22,20 +22,25 @@ const AssistantProcessUrlActions = () => {
   const navigate = useNavigate();
   const keyword = useLoadLanguage(
     "components/NavItems/tools/Assistant.tsv",
-    tsv
+    tsv,
   );
 
   const inputUrl = useSelector((state) => state.assistant.inputUrl);
   const processUrl = useSelector((state) => state.assistant.processUrl);
   const contentType = useSelector((state) => state.assistant.processUrlType);
   const processUrlActions = useSelector(
-    (state) => state.assistant.processUrlActions
+    (state) => state.assistant.processUrlActions,
   );
 
   const handleClick = (path, resultUrl) => {
     if (resultUrl != null) {
       navigate(
-        "/app/" + path + "/" + encodeURIComponent(resultUrl) + "/" + contentType
+        "/app/" +
+          path +
+          "/" +
+          encodeURIComponent(resultUrl) +
+          "/" +
+          contentType,
       );
       //history.push("/app/" + path + "/" + encodeURIComponent(resultUrl) + "/" + contentType)
     } else {
@@ -62,7 +67,7 @@ const AssistantProcessUrlActions = () => {
                   onClick={() =>
                     handleClick(
                       action.path,
-                      action.useInputUrl ? inputUrl : processUrl
+                      action.useInputUrl ? inputUrl : processUrl,
                     )
                   }
                 >

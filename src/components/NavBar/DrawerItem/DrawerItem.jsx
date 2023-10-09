@@ -20,6 +20,7 @@ import OCR from "../../NavItems/tools/OCR/OCR";
 import CheckGif from "../../NavItems/tools/Gif/CheckGif";
 import DeepfakeImage from "../../NavItems/tools/Deepfake/DeepfakeImage";
 import DeepfakeVideo from "../../NavItems/tools/Deepfake/DeepfakeVideo";
+import SyntheticImageDetection from "../../NavItems/tools/SyntheticImageDetection";
 import Geolocation from "../../NavItems/tools/Geolocation/Geolocation";
 import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
@@ -29,6 +30,7 @@ import {
   getclientId,
 } from "../../Shared/GoogleAnalytics/MatomoAnalytics";
 import { useTrackPageView } from "../../../Hooks/useAnalytics";
+import Archive from "../../NavItems/tools/Archive";
 
 const DrawerItem = ({ drawerItems }) => {
   const drawerItemsContent = [
@@ -86,6 +88,10 @@ const DrawerItem = ({ drawerItems }) => {
       footer: <Footer type={"borelli-afp"} />,
     },
     {
+      content: <SyntheticImageDetection />,
+      footer: <Footer type={"iti-unina"} />,
+    },
+    {
       content: <DeepfakeImage />,
       footer: <Footer type={"iti"} />,
     },
@@ -100,6 +106,10 @@ const DrawerItem = ({ drawerItems }) => {
     {
       content: <TwitterSna />,
       footer: <Footer type={"afp-usfd-eudisinfolab"} />,
+    },
+    {
+      content: <Archive />,
+      footer: <Footer type={"afp"} />,
     },
   ];
 

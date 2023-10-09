@@ -9,16 +9,16 @@ import _ from "lodash";
 const useTwitterSnaRequest = (request) => {
   const dispatch = useDispatch();
   const userAuthenticated = useSelector(
-    (state) => state.userSession && state.userSession.userAuthenticated
+    (state) => state.userSession && state.userSession.userAuthenticated,
   );
   const userToken = useSelector(
-    (state) => state.userSession && state.userSession.accessToken
+    (state) => state.userSession && state.userSession.accessToken,
   );
   const userLogined = useSelector(
-    (state) => state.userSession && state.userSession.user
+    (state) => state.userSession && state.userSession.user,
   );
   const refreshtoken = useSelector(
-    (state) => state.userSession && state.userSession.refreshToken
+    (state) => state.userSession && state.userSession.refreshToken,
   );
   const storeLanguage = useSelector((state) => state.language);
 
@@ -33,7 +33,7 @@ const useTwitterSnaRequest = (request) => {
       _.isNil(request.until)
     ) {
       dispatch(
-        setTwitterSnaResult({ request: request, result: null, loading: false })
+        setTwitterSnaResult({ request: request, result: null, loading: false }),
       );
       return;
     }
@@ -59,7 +59,7 @@ const useTwitterSnaRequest = (request) => {
           "&user=" +
           userData +
           "&lang=" +
-          storeLanguage
+          storeLanguage,
       );
       dispatch(setTwitterSnaLoading(false));
     } else {

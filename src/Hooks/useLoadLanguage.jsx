@@ -50,7 +50,7 @@ const useLoadLanguage = (onlineTsv, localTsv) => {
   const lang = useSelector((state) => state.language);
   const dictionary = useSelector(
     (state) => state.dictionary[gitHubFullUrl],
-    shallowEqual
+    shallowEqual,
   );
   const dispatch = useDispatch();
 

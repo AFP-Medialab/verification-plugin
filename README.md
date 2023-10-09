@@ -14,7 +14,6 @@ For more information about those three projects, visit the [vera.ai website](htt
 
 **Disclaimer:** This software is provided "as is", without warranty of any kind, express or implied, including but not limited to the warranties of merchantability, fitness for a particular purpose and non-infringement. In no event shall the authors or copyright holders be liable for any claim, damages or other liability, whether in an action of contract, tort or otherwise, arising from, out of or in connection with the software or the use or other dealings in the software.
 
-
 ## Project setup
 
 To setup this project you need to run:
@@ -33,18 +32,19 @@ To setup this project you need to run:
     REACT_APP_MAP_TOKEN=<MAP_TOKEN>
     REACT_APP_BASEURL=<TWINT-WRAPPER-URL>
 
-
-####Then you need to load the extension in your browser: 
+####Then you need to load the extension in your browser:
 
 Build the extension using the available scripts to generate the file `dev` or `build`. (#some-markdown-heading)
 
-#### For  Chrome :
+#### For Chrome :
+
 - In chrome menu go to `More tools` then click `Extentions`
 - Activate the `Developer mode` toggle
 - The click the `Load Unpacked` button
 - Select the `dev` or `build` file you generated earlier.
 
-#### For  Firefox :
+#### For Firefox :
+
 - In firefox menu click on `Add-ons`
 - Then click on the gear button `⚙⌄`
 - Then click on `Debug Add-ons`
@@ -79,11 +79,11 @@ See the section about [deployment](https://facebook.github.io/create-react-app/d
 
 `src/background` : Contains the srcipts that are executed in the web browser background by the extension. The right click menu for example.
 
-`src/contentScript`  : Contains the srcipts executed in the visited pages.(Now empty)
+`src/contentScript` : Contains the srcipts executed in the visited pages.(Now empty)
 
 `src/Hooks` : Contains react custom hooks used in this project.
 
-`src/LocalDictionary` : Contains the `components` file from this  [github repository](https://github.com/AFP-Medialab/InVID-Translations/tree/react) (This is used as a local backup for the extension if the github is unavailable)
+`src/LocalDictionary` : Contains the `components` file from this [github repository](https://github.com/AFP-Medialab/InVID-Translations/tree/react) (This is used as a local backup for the extension if the github is unavailable)
 
 `src/redux` : Contains react-redux actions and reducers. [Documentation](https://react-redux.js.org/) [basic Tutorial](https://www.youtube.com/watch?v=CVpUuw9XSjY)
 
@@ -93,18 +93,17 @@ This file contains all the different components that are used in this project.
 
 `src/components/Shared` : Contains all the components that are reused in multiple different components.
 
-`src/components/FeedBack`: The FeedBack tool 
+`src/components/FeedBack`: The FeedBack tool
 
-`src/components/PopUp`: The PopUp of the extension. 
+`src/components/PopUp`: The PopUp of the extension.
 
 `src/components/MySnackBar`: The little arrow that enable you to get back to the top of the page quickly.
 
-`src/components/Navbar`: The NavBar and its Drawer (for tools) 
+`src/components/Navbar`: The NavBar and its Drawer (for tools)
 
 `src/components/NavItems`: All components that the navBar can display.
 
 `src/components/NavItems/tools`: All components that the `tools drawer` can display.
-
 
 ## How do I add an item to the `Navbar` of this project ?
 
@@ -144,10 +143,11 @@ const tabItems = [
 
     ];
 ```
+
 ###⚠
- Dont forget to add `title` to `NavBar.tsv` file.
- 
- `path` must be unique. No other object in the list should have the same `path` value.
+Dont forget to add `title` to `NavBar.tsv` file.
+
+`path` must be unique. No other object in the list should have the same `path` value.
 ###⚠
 
 ## How do I add a tool to this project ?
@@ -180,14 +180,15 @@ const drawerItems = [
 ```
 
 ###⚠
- Dont forget to add `title` to `NavBar.tsv` and `allTools.tsv` files.
+Dont forget to add `title` to `NavBar.tsv` and `allTools.tsv` files.
 
- Dont forget to add `tsvPrefix + "_help_video"` to `allTools.tsv` file.
- 
- `path` must be unique. No other object in the list should have the same `path` value.
+Dont forget to add `tsvPrefix + "_help_video"` to `allTools.tsv` file.
+
+`path` must be unique. No other object in the list should have the same `path` value.
 ###⚠
 
 - go to `src/components/NavBar/DrawerItem/DrawerItem.js` file. Add an object to the `drawerItemsContent` list like so :
+
 ```
 const drawerItemsContent = [
         {
@@ -220,9 +221,9 @@ These are the steps to add redux to your component.
 go to `src/redux/reducers` and create a file in the appropriate location calling it `<YourTool>Reducer.js`
 
 - create an exported function called `<YourTool>Reducer` in this file
-This function takes two parameters: `defaultState` and `action`
+  This function takes two parameters: `defaultState` and `action`
 
-`defaultState` : is the default state you will have in your redux global state. 
+`defaultState` : is the default state you will have in your redux global state.
 `action` : is the object that contains the action to do `action.type` and he action parameters `action.payload` (we will go into details later)
 
 This function should contain a switch for `action.type`.
@@ -246,11 +247,13 @@ const exampleReducer = (state = defaultState, action) => {
 };
 export default exampleReducer;
 ```
+
 In this example if `action.type` equals :
-- `SET_TRUE` the new state will be true. 
-- `SET_FALSE` the new state will be false. 
-- `SET_CUSTOM` the new state will be 'action.payload' value. 
-- `TOGGLE_STATE` the new state will be set to the opposite. 
+
+- `SET_TRUE` the new state will be true.
+- `SET_FALSE` the new state will be false.
+- `SET_CUSTOM` the new state will be 'action.payload' value.
+- `TOGGLE_STATE` the new state will be set to the opposite.
 
 By default the state doesnt change.
 
@@ -258,7 +261,7 @@ reducers can be more complex and use objects as default state. have a look to `s
 
 - Add your new reducer to the `src/redux/reducers/index.js` file.
 
-import it and add it to the `allReducers`  variable.
+import it and add it to the `allReducers` variable.
 
 ```
 // imports...
@@ -278,11 +281,11 @@ export default allReducers;
 
 Go to `src/redux/actions` and create a file in the appropriate location calling it `<YourTool>Actions.js`
 
-- Create functions corresponding to the action.type you needed. 
+- Create functions corresponding to the action.type you needed.
 
 For example, I used `SET_TRUE`, `SET_FALSE`,`SET_CUSTOM`,`TOGGLE_STATE`.
 
-I will create : 
+I will create :
 
 ```
 export const setTrue = () => {
@@ -322,7 +325,7 @@ import {setTrue, setFale, setCustom, toggleState} from "./path/to/exampleActions
 const Example = () => {
     const myReduxState = useSelector(state => state.example);
     const dispatch = useDispatch();
-    
+
     const setReduxStateToTrue = () => dispatch(setTrue());
     const setReduxStateCustom = (bool) => dispatch(setCustom(bool));
 
@@ -339,7 +342,3 @@ return (
     );
 }
 ```
-
-
-
-

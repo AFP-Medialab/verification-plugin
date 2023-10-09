@@ -52,7 +52,7 @@ export const useVideoSimilarity = (url, keyword) => {
           "/similarVideos?collection_id=similarity&threshold_similarity=" +
           keyword("dbkf_threshold") +
           "&url=" +
-          url
+          url,
       );
     }
 

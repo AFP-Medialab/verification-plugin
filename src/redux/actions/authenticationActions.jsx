@@ -121,7 +121,7 @@ export function userLoginAction(
   accessToken,
   accessTokenExpiry,
   refreshToken,
-  user
+  user,
 ) {
   return {
     type: AUTH_USER_LOGIN,

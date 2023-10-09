@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import LinearProgress from "@mui/material/LinearProgress";
@@ -23,26 +23,22 @@ const Deepfake = () => {
   const classes = useMyStyles();
   const keyword = useLoadLanguage(
     "components/NavItems/tools/Deepfake.tsv",
-    tsv
+    tsv,
   );
   const keywordAllTools = useLoadLanguage(
     "components/NavItems/tools/Alltools.tsv",
-    tsvAlltools
+    tsvAlltools,
   );
   const keywordWarning = useLoadLanguage(
     "components/Shared/OnWarningInfo.tsv",
-    tsvWarning
+    tsvWarning,
   );
   //const dispatch = useDispatch();
-
-  const [input, setInput] = useState("");
-  const [inputToSend, setInputToSend] = useState("");
-  const [processUrl, setProcessUrl] = useState(false);
-
   const isLoading = useSelector((state) => state.deepfakeImage.loading);
   const result = useSelector((state) => state.deepfakeImage.result);
   const url = useSelector((state) => state.deepfakeImage.url);
-
+  const role = useSelector((state) => state.userSession.user.roles);
+  const [input, setInput] = useState(url ? url : "");
   //Selecting mode
   //============================================================================================
 
@@ -52,15 +48,25 @@ const Deepfake = () => {
     setSelectedMode("IMAGE");
   }
 
+  const dispatch = useDispatch();
+
   //Submiting the URL
   //============================================================================================
 
   const submitUrl = () => {
-    setProcessUrl(true);
-    setInputToSend(input);
+    UseGetDeepfake(
+      input,
+      true,
+      selectedMode,
+      dispatch,
+      role,
+      keywordWarning("error_invalid_url"),
+    );
   };
 
-  UseGetDeepfake(inputToSend, processUrl, selectedMode);
+  const handleClose = () => {
+    setInput("");
+  };
 
   return (
     <div>
@@ -106,6 +112,7 @@ const Deepfake = () => {
                   >
                     <Grid item xs>
                       <TextField
+                        type="url"
                         id="standard-full-width"
                         label={keyword("deepfake_image_link")}
                         placeholder={keyword("deepfake_placeholder")}
@@ -147,7 +154,13 @@ const Deepfake = () => {
 
       <Box m={3} />
 
-      {result && <DeepfakeResultsImage result={result} url={url} />}
+      {result && (
+        <DeepfakeResultsImage
+          result={result}
+          url={url}
+          handleClose={handleClose}
+        />
+      )}
     </div>
   );
 };

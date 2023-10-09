@@ -59,7 +59,7 @@ export const KNOWN_LINK_PATTERNS = [
   },
   {
     key: KNOWN_LINKS.TELEGRAM,
-    patterns: ["^(https?:/{2})?(www.)?t.me/s/\\w*/\\d*"],
+    patterns: ["^(https?:/{2})?(www.)?t.me/(s/)?\\w*/\\d*"],
   },
   {
     key: KNOWN_LINKS.YOUTUBE,
@@ -213,7 +213,7 @@ export const selectCorrectActions = (
   contentType,
   inputUrlTYpe,
   processUrlType,
-  processUrl
+  processUrl,
 ) => {
   let possibleActions = ASSISTANT_ACTIONS.filter(
     (action) =>
@@ -223,7 +223,7 @@ export const selectCorrectActions = (
         (!action.useInputUrl &&
           action.linksAccepted.includes(processUrlType) &&
           action.cTypes.includes(contentType))) &&
-      (action.exceptions.length === 0 || !processUrl.match(action.exceptions))
+      (action.exceptions.length === 0 || !processUrl.match(action.exceptions)),
   );
   return possibleActions;
 };
@@ -231,7 +231,7 @@ export const selectCorrectActions = (
 export const matchPattern = (toMatch, matchObject) => {
   // find the record where from the regex patterns in said record, one of them matches "toMatch"
   let match = matchObject.find((record) =>
-    record.patterns.some((rgxpattern) => toMatch.match(rgxpattern) != null)
+    record.patterns.some((rgxpattern) => toMatch.match(rgxpattern) != null),
   );
   return match != null ? match.key : null;
 };

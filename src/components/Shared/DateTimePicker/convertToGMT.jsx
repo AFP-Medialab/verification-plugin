@@ -6,8 +6,8 @@ const convertToGMT = (date) => {
       result.getMonth(),
       result.getDate(),
       result.getHours(),
-      result.getMinutes()
-    )
+      result.getMinutes(),
+    ),
   );
 };
 export default convertToGMT;

@@ -16,6 +16,7 @@ import videoRightsReducer from "./tools/videoRightsReducer";
 import metadataReducer from "./tools/metadataReducer";
 import deepfakeReducerImage from "./tools/deepfakeImageReducer";
 import deepfakeReducerVideo from "./tools/deepfakeVideoReducer";
+import syntheticImageDetectionReducer from "./tools/syntheticImageDetectionReducer";
 import ImageAnalysisReducer from "./tools/analysisReducerImage";
 import magnifierReducer from "./tools/magnifierReducer";
 import forensicReducer from "./tools/forensicReducer";
@@ -48,6 +49,7 @@ const allReducers = combineReducers({
   assistant: assistantReducer,
   ocr: ocrReducer,
   gif: gifReducer,
+  syntheticImageDetection: syntheticImageDetectionReducer,
   deepfakeImage: deepfakeReducerImage,
   deepfakeVideo: deepfakeReducerVideo,
   geolocation: geolocationReducer,

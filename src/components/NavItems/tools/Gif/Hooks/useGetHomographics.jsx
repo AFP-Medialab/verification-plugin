@@ -58,7 +58,7 @@ const useGetHomographics = (files, mode, keyword) => {
             homoImg1: homoImage1,
             homoImg2: homoImage2,
             toolState: 5,
-          })
+          }),
         );
       }
     };

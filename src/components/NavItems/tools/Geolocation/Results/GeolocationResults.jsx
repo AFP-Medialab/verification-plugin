@@ -19,7 +19,7 @@ const GeolocationResults = (props) => {
   const classes = useMyStyles();
   const keyword = useLoadLanguage(
     "components/NavItems/tools/Geolocalizer.tsv",
-    tsv
+    tsv,
   );
   const results = props.result[0];
   const urlImage = props.urlImage;
@@ -118,7 +118,7 @@ const GeolocationResults = (props) => {
                         position[0] +
                         "," +
                         position[1],
-                      "_blank "
+                      "_blank ",
                     )
                   }
                 >

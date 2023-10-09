@@ -39,7 +39,7 @@ export const addDictionary = (label, json) => {
 };*/
 
 export const toggleHumanRightsCheckBox = createAction(
-  "TOGGLE_HUMAN_RIGHTS_CHECKBOX"
+  "TOGGLE_HUMAN_RIGHTS_CHECKBOX",
 );
 
 /*export const toggleHumanRightsCheckBox = () => {
@@ -49,7 +49,7 @@ export const toggleHumanRightsCheckBox = createAction(
 };*/
 
 export const toggleUnlockExplanationCheckBox = createAction(
-  "TOGGLE_INTERACTIVE_EXPLANATION_CHECKBOX"
+  "TOGGLE_INTERACTIVE_EXPLANATION_CHECKBOX",
 );
 
 /*export const toggleUnlockExplanationCheckBox = () => {

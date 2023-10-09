@@ -27,7 +27,7 @@ const TwitterResults = (props) => {
   const classes = useMyStyles();
   const keyword = useLoadLanguage(
     "components/NavItems/tools/Analysis.tsv",
-    tsv
+    tsv,
   );
 
   const dispatch = useDispatch();

@@ -20,7 +20,7 @@ const AssistantImageResult = () => {
   const processUrl = useSelector((state) => state.assistant.processUrl);
   const keyword = useLoadLanguage(
     "components/NavItems/tools/Assistant.tsv",
-    tsv
+    tsv,
   );
 
   const copyUrl = () => {
@@ -66,7 +66,7 @@ const AssistantImageResult = () => {
             onClick={() => {
               window.open(
                 "https://web.archive.org/save/" + processUrl,
-                "_blank"
+                "_blank",
               );
             }}
           >

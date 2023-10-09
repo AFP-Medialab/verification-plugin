@@ -15,7 +15,7 @@ import tsv from "../../../../LocalDictionary/components/NavItems/tools/Assistant
 const HpTextResult = () => {
   const keyword = useLoadLanguage(
     "components/NavItems/tools/Assistant.tsv",
-    tsv
+    tsv,
   );
   const hpResult = useSelector((state) => state.assistant.hpResult);
 

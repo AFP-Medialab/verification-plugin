@@ -32,11 +32,11 @@ const TwitterAdvancedSearch = () => {
   const cardClasses = myCardStyles();
   const keyword = useLoadLanguage(
     "components/NavItems/tools/TwitterAdvancedSearch.tsv",
-    tsv
+    tsv,
   );
   const keywordAllTools = useLoadLanguage(
     "components/NavItems/tools/Alltools.tsv",
-    tsvAllTools
+    tsvAllTools,
   );
 
   const term = useInput("");
@@ -80,7 +80,7 @@ const TwitterAdvancedSearch = () => {
   ];
 
   const [fromDate, setSelectedFromDate] = useState(null);
-  const [fromDatError, setSelectedFromDateError] = useState(false);
+  const [fromDateError, setSelectedFromDateError] = useState(false);
   ``;
   const [toDate, setSelectedToDate] = useState(null);
   const [toDateError, setSelectedToDateError] = useState(null);
@@ -115,7 +115,7 @@ const TwitterAdvancedSearch = () => {
     eventUrl,
     client_id,
     eventUrl,
-    uid
+    uid,
   );
   const onSubmit = () => {
     let url = createUrl(
@@ -128,7 +128,7 @@ const TwitterAdvancedSearch = () => {
       within.value,
       fromDate,
       toDate,
-      localTime
+      localTime,
     );
     setEventUrl(url);
     /*trackEvent(
@@ -182,7 +182,7 @@ const TwitterAdvancedSearch = () => {
               dateFormat={"YYYY-MM-DD"}
               timeFormat={"HH:mm:ss"}
               handleChange={handleFromDateChange}
-              error={fromDatError}
+              error={fromDateError}
               value={fromDate}
             />
           </div>

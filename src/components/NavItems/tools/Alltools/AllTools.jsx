@@ -1,29 +1,36 @@
-import Grid from "@mui/material/Grid";
 import React, { useState } from "react";
-import Button from "@mui/material/Button";
-import DialogContent from "@mui/material/DialogContent";
+
+import {
+  Alert,
+  Box,
+  Button,
+  Card,
+  Dialog,
+  DialogContent,
+  Grid,
+  Snackbar,
+  Tab,
+  Tabs,
+  Typography,
+} from "@mui/material";
+
+import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+
 import Iframe from "react-iframe";
 import DialogActions from "@mui/material/DialogActions";
-import Dialog from "@mui/material/Dialog";
-import Typography from "@mui/material/Typography";
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/Alltools.tsv";
 import tsvWarning from "../../../../LocalDictionary/components/Shared/OnWarningInfo.tsv";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import ToolCard from "./ToolCard";
-import Card from "@mui/material/Card";
 import IconImage from "../../../NavBar/images/SVG/Image/Images.svg";
 import IconVideo from "../../../NavBar/images/SVG/Video/Video.svg";
 import IconSearch from "../../../NavBar/images/SVG/Search/Search.svg";
 import IconData from "../../../NavBar/images/SVG/DataAnalysis/Data_analysis.svg";
 import IconTools from "../../../NavBar/images/SVG/Navbar/Tools.svg";
-import Box from "@mui/material/Box";
 import LoginHeader from "../../../Shared/LoginHeader/LoginHeader";
 import { useSelector } from "react-redux";
-import Snackbar from "@mui/material/Snackbar";
-import Alert from "@mui/material/Alert";
-import Tabs from "@mui/material/Tabs";
-import Tab from "@mui/material/Tab";
+
 import { useNavigate } from "react-router-dom";
 
 function TabPanel(props) {
@@ -51,19 +58,19 @@ const AllTools = (props) => {
   const classes = useMyStyles();
   const keyword = useLoadLanguage(
     "components/NavItems/tools/Alltools.tsv",
-    tsv
+    tsv,
   );
   const keywordNavbar = useLoadLanguage("components/NavBar.tsv", tsv);
   const keywordWarning = useLoadLanguage(
     "components/Shared/OnWarningInfo.tsv",
-    tsvWarning
+    tsvWarning,
   );
 
   const tools = props.tools;
   const [videoUrl, setVideoUrl] = useState(null);
 
   const userAuthenticated = useSelector(
-    (state) => state.userSession && state.userSession.userAuthenticated
+    (state) => state.userSession && state.userSession.userAuthenticated,
   );
   const [openAlert, setOpenAlert] = React.useState(false);
   const currentLang = useSelector((state) => state.language);
@@ -102,6 +109,7 @@ const AllTools = (props) => {
   const toolsImages = [];
   const toolsSearch = [];
   const toolsData = [];
+  const otherTools = [];
 
   tools.forEach((value) => {
     if (value.type === keywordNavbar("navbar_category_video")) {
@@ -118,6 +126,10 @@ const AllTools = (props) => {
 
     if (value.type === keywordNavbar("navbar_category_data")) {
       toolsData.push(value);
+    }
+
+    if (value.type === keywordNavbar("navbar_category_other")) {
+      otherTools.push(value);
     }
   });
 
@@ -138,7 +150,7 @@ const AllTools = (props) => {
   const betaTester = role.includes("BETA_TESTER");
 
   return (
-    <div>
+    <>
       <Snackbar
         open={openAlert}
         autoHideDuration={6000}
@@ -162,7 +174,13 @@ const AllTools = (props) => {
       />
 
       <Card>
-        <Tabs value={value} onChange={handleChange} indicatorColor={"primary"}>
+        <Tabs
+          value={value}
+          onChange={handleChange}
+          indicatorColor={"primary"}
+          variant="scrollable"
+          scrollButtons="auto"
+        >
           <Tab
             label={
               <Box mt={1}>
@@ -289,6 +307,39 @@ const AllTools = (props) => {
                       style={{ color: "#596977", textTransform: "capitalize" }}
                     >
                       {keyword("category_data")}
+                    </Typography>
+                  </Grid>
+                </Grid>
+              </Box>
+            }
+          />
+          <Tab
+            label={
+              <Box mt={1}>
+                <Grid
+                  container
+                  direction="row"
+                  justifyContent="flex-start"
+                  alignItems="center"
+                >
+                  <Grid item>
+                    <MoreHorizIcon
+                      width="40px"
+                      height="40px"
+                      style={{ fill: "#596977" }}
+                    />
+                  </Grid>
+
+                  <Grid item>
+                    <Box m={1} />
+                  </Grid>
+
+                  <Grid item>
+                    <Typography
+                      variant="h6"
+                      style={{ color: "#596977", textTransform: "capitalize" }}
+                    >
+                      {keyword("category_other")}
                     </Typography>
                   </Grid>
                 </Grid>
@@ -434,7 +485,7 @@ const AllTools = (props) => {
                           process.env.REACT_APP_TSNA_SERVER +
                             "csvSna?lang=" +
                             currentLang,
-                          "_blank"
+                          "_blank",
                         )
                       }
                     >
@@ -478,6 +529,44 @@ const AllTools = (props) => {
               })}
             </Grid>
           </TabPanel>
+          <TabPanel value={value} index={4}>
+            <Grid
+              container
+              justifyContent="flex-start"
+              spacing={2}
+              className={classes.toolCardsContainer}
+            >
+              {otherTools.map((value, key) => {
+                const element = (
+                  <Grid
+                    className={classes.toolCardStyle}
+                    item
+                    key={key}
+                    onClick={() =>
+                      handleClick(value.path, "data", value.toolRestrictions)
+                    }
+                  >
+                    <ToolCard
+                      name={keyword(value.title)}
+                      description={keyword(value.description)}
+                      icon={value.iconColored}
+                      iconsAttributes={value.icons}
+                    />
+                  </Grid>
+                );
+
+                if (value.toolRestrictions.includes("beta")) {
+                  if (betaTester) {
+                    return element;
+                  } else {
+                    return null;
+                  }
+                } else {
+                  return element;
+                }
+              })}
+            </Grid>
+          </TabPanel>
         </div>
       </Card>
 
@@ -508,7 +597,7 @@ const AllTools = (props) => {
           </Button>
         </DialogActions>
       </Dialog>
-    </div>
+    </>
   );
 };
 export default AllTools;

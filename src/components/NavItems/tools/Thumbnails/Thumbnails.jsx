@@ -47,11 +47,11 @@ const Thumbnails = () => {
   const classes = useMyStyles();
   const keyword = useLoadLanguage(
     "components/NavItems/tools/Thumbnails.tsv",
-    tsv
+    tsv,
   );
   const keywordAllTools = useLoadLanguage(
     "components/NavItems/tools/Alltools.tsv",
-    tsv
+    tsv,
   );
 
   const resultUrl = useSelector((state) => state.thumbnails.url);
@@ -91,7 +91,7 @@ const Thumbnails = () => {
   };
 
   const [selectedValue, setSelectedValue] = useState(() =>
-    initializeSelectedValue()
+    initializeSelectedValue(),
   );
 
   const handleChange = (event) => {
@@ -142,7 +142,7 @@ const Thumbnails = () => {
     eventUrl,
     client_id,
     eventUrl,
-    uid
+    uid,
   );
   const submitForm = () => {
     setShowResult(false);
@@ -165,7 +165,7 @@ const Thumbnails = () => {
           result: images,
           notification: false,
           loading: false,
-        })
+        }),
       );
       if (selectedValue.openTabs) images.forEach((img) => imageClickUrl(img));
     } else dispatch(setError("Please use a valid Youtube Url (add to tsv)"));
@@ -173,11 +173,11 @@ const Thumbnails = () => {
 
   const imageClickUrl = (url) => {
     for (const [searchEngineName, isSearchEngineSelected] of Object.entries(
-      selectedValue
+      selectedValue,
     )) {
       // Prevent error
       const searchEngineExists = Object.values(SEARCH_ENGINE_SETTINGS).some(
-        (searchEngine) => searchEngine.NAME === searchEngineName
+        (searchEngine) => searchEngine.NAME === searchEngineName,
       );
       if (!searchEngineExists) continue;
 
@@ -319,7 +319,7 @@ const Thumbnails = () => {
                       labelPlacement="end"
                     />
                   );
-                }
+                },
               )}
             </FormGroup>
           </FormControl>

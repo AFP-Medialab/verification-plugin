@@ -39,11 +39,11 @@ const CheckGif = () => {
   const classes = useMyStyles();
   const keyword = useLoadLanguage(
     "components/NavItems/tools/CheckGIF.tsv",
-    tsv
+    tsv,
   );
   const keywordAllTools = useLoadLanguage(
     "components/NavItems/tools/Alltools.tsv",
-    tsvAlltools
+    tsvAlltools,
   );
   const toolState = useSelector((state) => state.gif.toolState);
   const session = useSelector((state) => state.userSession);
@@ -57,7 +57,7 @@ const CheckGif = () => {
 
   const [classButtonURL, setClassButtonURL] = useState(classes.bigButtonDiv);
   const [classButtonLocal, setClassButtonLocal] = useState(
-    classes.bigButtonDiv
+    classes.bigButtonDiv,
   );
 
   const [classIconURL, setClassIconURL] = useState(classes.bigButtonIcon);
@@ -234,7 +234,7 @@ const CheckGif = () => {
     eventUrl1,
     client_id,
     eventUrl1,
-    uid
+    uid,
   );
   useTrackEvent(
     "submission",
@@ -243,7 +243,7 @@ const CheckGif = () => {
     eventUrl2,
     client_id,
     eventUrl1,
-    uid
+    uid,
   );
   const handleSubmissionURL = () => {
     setEventUrl1(imageURL1);
