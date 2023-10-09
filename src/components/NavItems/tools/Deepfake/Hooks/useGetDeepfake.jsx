@@ -11,7 +11,7 @@ import { setError } from "../../../../../redux/actions/errorActions";
 import { isValidUrl } from "../../../../Shared/Utils/URLUtils";
 import { useSelector } from "react-redux";
 
-async function UseGetDeepfake(url, processURL, mode, dispatch) {
+async function UseGetDeepfake(url, processURL, mode, dispatch, errorMsg) {
   if (!processURL || !url) {
     return;
   }
@@ -50,7 +50,7 @@ async function UseGetDeepfake(url, processURL, mode, dispatch) {
   };
 
   if (!isValidUrl(url)) {
-    handleError("Error: not a valid url");
+    handleError(errorMsg);
     return;
   }
 
