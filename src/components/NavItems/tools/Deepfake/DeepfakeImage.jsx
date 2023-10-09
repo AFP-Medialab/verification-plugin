@@ -62,6 +62,10 @@ const Deepfake = () => {
     );
   };
 
+  const handleClose = () => {
+    setInput("");
+  };
+
   return (
     <div>
       <HeaderTool
@@ -148,7 +152,13 @@ const Deepfake = () => {
 
       <Box m={3} />
 
-      {result && <DeepfakeResultsImage result={result} url={url} />}
+      {result && (
+        <DeepfakeResultsImage
+          result={result}
+          url={url}
+          handleClose={handleClose}
+        />
+      )}
     </div>
   );
 };

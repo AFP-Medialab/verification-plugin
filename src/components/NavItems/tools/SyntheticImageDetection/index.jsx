@@ -91,9 +91,8 @@ const SyntheticImageDetection = () => {
       res = await axios.post(baseURL + modeURL + "jobs", null, {
         params: { url: url, services: services },
       });
-      console.log(res);
     } catch (error) {
-      // handleError("error_" + error.status);
+      handleError("error_" + error.status);
     }
 
     const getResult = async (id) => {
@@ -145,6 +144,10 @@ const SyntheticImageDetection = () => {
       setTimeout(() => resolve(fn(param)), 2000);
     });
   }
+
+  const handleClose = () => {
+    setInput("");
+  };
 
   return (
     <div>
@@ -229,7 +232,13 @@ const SyntheticImageDetection = () => {
 
       <Box m={3} />
 
-      {result && <SyntheticImageDetectionResults result={result} url={url} />}
+      {result && (
+        <SyntheticImageDetectionResults
+          result={result}
+          url={url}
+          handleClose={handleClose}
+        />
+      )}
     </div>
   );
 };

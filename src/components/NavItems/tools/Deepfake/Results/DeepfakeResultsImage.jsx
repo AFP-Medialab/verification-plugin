@@ -63,7 +63,6 @@ const DeepfakeResultsImage = (props) => {
     }
 
     const res = faceswapScore;
-    console.log(res);
     setDeepfakeScores(res);
   }, [results]);
 
@@ -141,6 +140,11 @@ const DeepfakeResultsImage = (props) => {
     };
   }, [deepfakeScore]);
 
+  const handleClose = () => {
+    props.handleClose();
+    dispatch(resetDeepfake());
+  };
+
   return (
     <Stack
       direction="row"
@@ -153,10 +157,7 @@ const DeepfakeResultsImage = (props) => {
           style={{ borderRadius: "4px 4px 0px 0px" }}
           title={keyword("deepfake_image_title")}
           action={
-            <IconButton
-              aria-label="close"
-              onClick={() => dispatch(resetDeepfake())}
-            >
+            <IconButton aria-label="close" onClick={handleClose}>
               <Close sx={{ color: "white" }} />
             </IconButton>
           }
@@ -185,6 +186,8 @@ const DeepfakeResultsImage = (props) => {
                         <Box
                           key={keyRectangle}
                           className={classes.deepfakeSquare}
+                          pr={4}
+                          pb={4}
                           mt={4}
                           sx={{
                             top: valueRectangle.top,

@@ -438,7 +438,6 @@ const DeepfakeResultsVideo = (props) => {
                   <Grid container direction="row" spacing={3}>
                     {shotSelectedValue.face_image_paths.map(
                       (valueFace, keyFace) => {
-                        console.log(valueFace);
                         return (
                           <Grid
                             item
