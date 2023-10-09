@@ -70,6 +70,11 @@ const SyntheticImageDetectionResults = (props) => {
     setDeepfakeScores(res);
   }, [results]);
 
+  const handleClose = () => {
+    props.handleClose();
+    dispatch(resetSyntheticImageDetectionImage());
+  };
+
   return (
     <Stack
       direction="row"
@@ -82,10 +87,7 @@ const SyntheticImageDetectionResults = (props) => {
           style={{ borderRadius: "4px 4px 0px 0px" }}
           title={keyword("synthetic_image_detection_title")}
           action={
-            <IconButton
-              aria-label="close"
-              onClick={() => dispatch(resetSyntheticImageDetectionImage())}
-            >
+            <IconButton aria-label="close" onClick={handleClose}>
               <Close sx={{ color: "white" }} />
             </IconButton>
           }
