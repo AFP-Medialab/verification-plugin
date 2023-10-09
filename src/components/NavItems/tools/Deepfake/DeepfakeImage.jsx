@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import LinearProgress from "@mui/material/LinearProgress";
@@ -36,8 +36,6 @@ const Deepfake = () => {
   //const dispatch = useDispatch();
 
   const [input, setInput] = useState("");
-  const [inputToSend, setInputToSend] = useState("");
-  const [processUrl, setProcessUrl] = useState(false);
 
   const isLoading = useSelector((state) => state.deepfakeImage.loading);
   const result = useSelector((state) => state.deepfakeImage.result);
@@ -52,15 +50,14 @@ const Deepfake = () => {
     setSelectedMode("IMAGE");
   }
 
+  const dispatch = useDispatch();
+
   //Submiting the URL
   //============================================================================================
 
   const submitUrl = () => {
-    setProcessUrl(true);
-    setInputToSend(input);
+    UseGetDeepfake(input, true, selectedMode, dispatch);
   };
-
-  UseGetDeepfake(inputToSend, processUrl, selectedMode);
 
   return (
     <div>
@@ -106,6 +103,7 @@ const Deepfake = () => {
                   >
                     <Grid item xs>
                       <TextField
+                        type="url"
                         id="standard-full-width"
                         label={keyword("deepfake_image_link")}
                         placeholder={keyword("deepfake_placeholder")}

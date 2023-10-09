@@ -59,7 +59,7 @@ export const KNOWN_LINK_PATTERNS = [
   },
   {
     key: KNOWN_LINKS.TELEGRAM,
-    patterns: ["^(https?:/{2})?(www.)?t.me/s/\\w*/\\d*"],
+    patterns: ["^(https?:/{2})?(www.)?t.me/(s/)?\\w*/\\d*"],
   },
   {
     key: KNOWN_LINKS.YOUTUBE,

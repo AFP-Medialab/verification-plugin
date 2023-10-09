@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import LinearProgress from "@mui/material/LinearProgress";
@@ -33,11 +33,8 @@ const Deepfake = () => {
     "components/Shared/OnWarningInfo.tsv",
     tsvWarning,
   );
-  //const dispatch = useDispatch();
 
   const [input, setInput] = useState("");
-  const [inputToSend, setInputToSend] = useState("");
-  const [processUrl, setProcessUrl] = useState(false);
 
   const isLoading = useSelector((state) => state.deepfakeVideo.loading);
   const result = useSelector((state) => state.deepfakeVideo.result);
@@ -54,12 +51,11 @@ const Deepfake = () => {
   //Submiting the URL
   //============================================================================================
 
-  const submitUrl = () => {
-    setProcessUrl(true);
-    setInputToSend(input);
-  };
+  const dispatch = useDispatch();
 
-  UseGetDeepfake(inputToSend, processUrl, selectedMode);
+  const submitUrl = () => {
+    UseGetDeepfake(input, true, selectedMode, dispatch);
+  };
 
   return (
     <div>
@@ -103,6 +99,7 @@ const Deepfake = () => {
                       label={keyword("deepfake_video_link")}
                       placeholder={keyword("deepfake_placeholder")}
                       fullWidth
+                      type="url"
                       value={input}
                       variant="outlined"
                       disabled={selectedMode === "" || isLoading}

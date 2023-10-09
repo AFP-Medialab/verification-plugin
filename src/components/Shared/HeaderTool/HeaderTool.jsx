@@ -15,7 +15,7 @@ const HeaderTool = (props) => {
           item
           direction="row"
           justifyContent="flex-start"
-          alignItems="start"
+          alignItems="center"
         >
           {icon}
           <Typography variant="h4" color={"primary"}>

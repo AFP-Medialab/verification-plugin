@@ -80,7 +80,7 @@ const TwitterAdvancedSearch = () => {
   ];
 
   const [fromDate, setSelectedFromDate] = useState(null);
-  const [fromDatError, setSelectedFromDateError] = useState(false);
+  const [fromDateError, setSelectedFromDateError] = useState(false);
   ``;
   const [toDate, setSelectedToDate] = useState(null);
   const [toDateError, setSelectedToDateError] = useState(null);
@@ -182,7 +182,7 @@ const TwitterAdvancedSearch = () => {
               dateFormat={"YYYY-MM-DD"}
               timeFormat={"HH:mm:ss"}
               handleChange={handleFromDateChange}
-              error={fromDatError}
+              error={fromDateError}
               value={fromDate}
             />
           </div>

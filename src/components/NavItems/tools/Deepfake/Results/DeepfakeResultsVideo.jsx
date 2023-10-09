@@ -1,25 +1,58 @@
 import React, { useState, useEffect } from "react";
 import Box from "@mui/material/Box";
-import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
-import { Grid, Popover, Typography } from "@mui/material";
+import {
+  Grid,
+  Popover,
+  Typography,
+  Stack,
+  Tooltip,
+  IconButton,
+} from "@mui/material";
 import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Keyframes.tsv";
 import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
 import CloseIcon from "@mui/icons-material/Close";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
+import Help from "@mui/icons-material/Help";
+import { LinearProgressWithLabel } from "../../../../Shared/LinearProgressWithLabel/LinearProgressWithLabel";
 
-const DeepfakeResutlsVideo = (props) => {
-  const classes = useMyStyles();
+const DeepfakeResultsVideo = (props) => {
   const keyword = useLoadLanguage(
     "components/NavItems/tools/Deepfake.tsv",
     tsv,
   );
+  class DeepfakeResult {
+    constructor(methodName, predictionScore) {
+      (this.methodName = methodName), (this.predictionScore = predictionScore);
+    }
+  }
+
+  // todo: move to tsv
+  const DeepfakeImageDetectionMethodNames = Object.freeze({
+    deepfakeVideoReport: {
+      name: keyword("deepfake_video_videoreport_name"),
+      description: keyword("deepfake_video_videoreport_description"),
+    },
+    ftcn: {
+      name: keyword("deepfake_video_ftcn_name"),
+      description: keyword("deepfake_video_ftcn_description"),
+    },
+
+    faceReenact: {
+      name: keyword("deepfake_video_facereenact_name"),
+      description: keyword("deepfake_video_facereenact_description"),
+    },
+  });
+
   const results = props.result;
   //const url = props.url;
 
   const [shotSelectedKey, setShotSelectedKey] = useState(-1);
   const [shotSelectedValue, setShotSelectedValue] = useState(null);
+
+  const [deepfakeScores, setDeepfakeScores] = useState([]);
+
   const videoClip = React.useRef(null);
 
   function clickShot(value, key) {
@@ -31,11 +64,18 @@ const DeepfakeResutlsVideo = (props) => {
     }
   }
 
-  //console.log("Results", results);
-
   useEffect(() => {
     var prediction = results.deepfake_video_report.prediction;
     var shot = -1;
+
+    if (
+      !results ||
+      !results.deepfake_video_report ||
+      !results.deepfake_video_report.results
+    ) {
+      return;
+    }
+
     for (
       var i = 0;
       i < results.deepfake_video_report.results.length && shot === -1;
@@ -50,6 +90,50 @@ const DeepfakeResutlsVideo = (props) => {
       clickShot(results.deepfake_video_report.results[shot], shot);
     }
   }, []);
+
+  useEffect(() => {
+    if (!results) return;
+
+    // reset clip selection state
+    setShotSelectedValue(null);
+    setShotSelectedKey(-1);
+
+    let res = [];
+
+    if (
+      results.deepfake_video_report &&
+      results.deepfake_video_report.prediction
+    ) {
+      res.push(
+        new DeepfakeResult(
+          Object.keys(DeepfakeImageDetectionMethodNames)[0],
+          results.deepfake_video_report.prediction * 100,
+        ),
+      );
+    }
+
+    if (results.ftcn_report && results.ftcn_report.prediction) {
+      res.push(
+        new DeepfakeResult(
+          Object.keys(DeepfakeImageDetectionMethodNames)[1],
+          results.ftcn_report.prediction * 100,
+        ),
+      );
+    }
+
+    if (results.face_reenact_report && results.face_reenact_report.prediction) {
+      res.push(
+        new DeepfakeResult(
+          Object.keys(DeepfakeImageDetectionMethodNames)[2],
+          results.face_reenact_report.prediction * 100,
+        ),
+      );
+    }
+
+    setDeepfakeScores(res);
+
+    res = res.sort((a, b) => b.predictionScore - a.predictionScore);
+  }, [results]);
 
   //console.log("Rectangles: ", rectangles);
 
@@ -70,23 +154,14 @@ const DeepfakeResutlsVideo = (props) => {
   return (
     <div>
       <Box m={3} />
-
       <Grid container direction="column">
         <Grid item container direction="row" spacing={3}>
           <Grid item xs={6} container direction="column">
-            <Typography
-              variant="body1"
-              style={{ color: "#00926c", fontSize: "24px", fontWeight: "500" }}
-            >
-              {keyword("deepfake_video")}
-            </Typography>
-
-            <Box m={1} />
-
             <video
               width="100%"
               height="auto"
               controls
+              key={results.deepfake_video_report.video_path}
               style={{
                 borderRadius: "10px",
                 boxShadow:
@@ -100,7 +175,43 @@ const DeepfakeResutlsVideo = (props) => {
               {keyword("deepfake_support")}
             </video>
           </Grid>
-
+          <Grid item xs={6}>
+            <Card sx={{ height: "40vh" }}>
+              <CardHeader title={keyword("deepfake_video_title")} />
+              <Stack direction="column" p={4} spacing={4}>
+                {deepfakeScores.map((item, key) => {
+                  return (
+                    <Stack direction="column" key={key}>
+                      <Stack
+                        direction="row"
+                        justifyContent="flex-start"
+                        alignItems="center"
+                        spacing={2}
+                      >
+                        <Typography variant="h6">
+                          {
+                            DeepfakeImageDetectionMethodNames[item.methodName]
+                              .name
+                          }
+                        </Typography>
+                        <Tooltip
+                          title={
+                            DeepfakeImageDetectionMethodNames[item.methodName]
+                              .description
+                          }
+                        >
+                          <IconButton>
+                            <Help />
+                          </IconButton>
+                        </Tooltip>
+                      </Stack>
+                      <LinearProgressWithLabel value={item.predictionScore} />
+                    </Stack>
+                  );
+                })}
+              </Stack>
+            </Card>
+          </Grid>
           <Grid item xs={6} container direction="column">
             <Typography
               variant="body1"
@@ -111,83 +222,86 @@ const DeepfakeResutlsVideo = (props) => {
             <Box m={1} />
 
             <Grid container spacing={3}>
-              {results.deepfake_video_report.results.map(
-                (valueShot, keyShot) => {
-                  var shotStart = valueShot.shot_start;
-                  var shotEnd = valueShot.shot_end;
+              {results.deepfake_video_report.results &&
+                results.deepfake_video_report.results.map(
+                  (valueShot, keyShot) => {
+                    var shotStart = valueShot.shot_start;
+                    var shotEnd = valueShot.shot_end;
 
-                  var startMin = ("0" + Math.floor(shotStart / 60)).slice(-2);
-                  var startSec = ("0" + (shotStart % 60)).slice(-2);
-                  var endMin = ("0" + Math.floor(shotEnd / 60)).slice(-2);
-                  var endSec = ("0" + (shotEnd % 60)).slice(-2);
+                    var startMin = ("0" + Math.floor(shotStart / 60)).slice(-2);
+                    var startSec = ("0" + (shotStart % 60)).slice(-2);
+                    var endMin = ("0" + Math.floor(shotEnd / 60)).slice(-2);
+                    var endSec = ("0" + (shotEnd % 60)).slice(-2);
 
-                  return (
-                    <Grid item xs={12} sm={4} key={keyShot}>
-                      {keyShot === shotSelectedKey ? (
-                        <Box
-                          onClick={() => clickShot(valueShot, keyShot)}
-                          style={{
-                            backgroundColor: "#00926c",
-                            borderRadius: "10px",
-                            overflow: "hidden",
-                            display: "flex",
-                            flexDirection: "column",
-                            alignItems: "center",
-                            boxShadow:
-                              "0px 2px 1px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%)",
-                          }}
-                        >
-                          <img
-                            alt="shot"
-                            src={valueShot.shot_image}
-                            style={{ width: "100%", height: "auto" }}
-                          />
-                          <Box mt={1} />
-                          <Typography
-                            variant="body1"
-                            style={{ fontSize: "14px", color: "#ffffff" }}
+                    return (
+                      <Grid item xs={12} sm={4} key={keyShot}>
+                        {keyShot === shotSelectedKey ? (
+                          <Box
+                            onClick={() => clickShot(valueShot, keyShot)}
+                            style={{
+                              backgroundColor: "#00926c",
+                              borderRadius: "10px",
+                              overflow: "hidden",
+                              display: "flex",
+                              flexDirection: "column",
+                              alignItems: "center",
+                              boxShadow:
+                                "0px 2px 1px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%)",
+                            }}
                           >
-                            {startMin}:{startSec}
-                            {" - "}
-                            {endMin}:{endSec}
-                          </Typography>
-                          <Box mt={1} />
-                        </Box>
-                      ) : (
-                        <Box
-                          onClick={() => clickShot(valueShot, keyShot)}
-                          style={{
-                            backgroundColor: "#ffffff",
-                            borderRadius: "10px",
-                            overflow: "hidden",
-                            display: "flex",
-                            flexDirection: "column",
-                            alignItems: "center",
-                            boxShadow:
-                              "0px 2px 1px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%)",
-                          }}
-                        >
-                          <img
-                            alt="shot"
-                            src={valueShot.shot_image}
-                            style={{ width: "100%", height: "auto" }}
-                          />
-                          <Box mt={1} />
-                          <Typography
-                            variant="body1"
-                            style={{ fontSize: "14px" }}
+                            <img
+                              alt="shot"
+                              key={keyShot}
+                              src={valueShot.shot_image}
+                              style={{ width: "100%", height: "auto" }}
+                            />
+                            <Box mt={1} />
+                            <Typography
+                              variant="body1"
+                              style={{ fontSize: "14px", color: "#ffffff" }}
+                            >
+                              {startMin}:{startSec}
+                              {" - "}
+                              {endMin}:{endSec}
+                            </Typography>
+                            <Box mt={1} />
+                          </Box>
+                        ) : (
+                          <Box
+                            onClick={() => clickShot(valueShot, keyShot)}
+                            style={{
+                              backgroundColor: "#ffffff",
+                              borderRadius: "10px",
+                              overflow: "hidden",
+                              display: "flex",
+                              flexDirection: "column",
+                              alignItems: "center",
+                              boxShadow:
+                                "0px 2px 1px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%)",
+                            }}
                           >
-                            {startMin}:{startSec}
-                            {" - "}
-                            {endMin}:{endSec}
-                          </Typography>
-                          <Box mt={1} />
-                        </Box>
-                      )}
-                    </Grid>
-                  );
-                },
-              )}
+                            <img
+                              alt="shot"
+                              key={keyShot}
+                              src={valueShot.shot_image}
+                              style={{ width: "100%", height: "auto" }}
+                            />
+                            <Box mt={1} />
+                            <Typography
+                              variant="body1"
+                              style={{ fontSize: "14px" }}
+                            >
+                              {startMin}:{startSec}
+                              {" - "}
+                              {endMin}:{endSec}
+                            </Typography>
+                            <Box mt={1} />
+                          </Box>
+                        )}
+                      </Grid>
+                    );
+                  },
+                )}
             </Grid>
           </Grid>
         </Grid>
@@ -195,7 +309,7 @@ const DeepfakeResutlsVideo = (props) => {
 
       <Box m={3} />
 
-      <Card style={{ overflow: "visible" }}>
+      <Card style={{ overflow: "visible" }} mb={3}>
         <CardHeader
           style={{ borderRadius: "4px 4px 0px 0px" }}
           title={
@@ -252,7 +366,6 @@ const DeepfakeResutlsVideo = (props) => {
               </Popover>
             </Grid>
           }
-          className={classes.headerUpladedImage}
         />
         <div>
           <Box p={3}>
@@ -285,13 +398,21 @@ const DeepfakeResutlsVideo = (props) => {
 
                   <video
                     ref={videoClip}
-                    width="100%"
                     height="auto"
                     controls
+                    key={
+                      results.deepfake_video_report.video_path +
+                      "#t=" +
+                      shotSelectedValue.shot_start +
+                      "," +
+                      shotSelectedValue.shot_end
+                    }
                     style={{
                       borderRadius: "10px",
                       boxShadow:
                         "0px 2px 1px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%)",
+                      maxHeight: "60vh",
+                      maxWidth: "60vw",
                     }}
                   >
                     <source
@@ -308,13 +429,7 @@ const DeepfakeResutlsVideo = (props) => {
                   </video>
                 </Grid>
 
-                <Grid
-                  item
-                  container
-                  direction="column"
-                  xs={6}
-                  style={{ borderLeft: "0.1em solid #ECECEC" }}
-                >
+                <Grid item container direction="column" xs={6}>
                   <Typography variant="h6">
                     {keyword("deepfake_faces")}
                   </Typography>
@@ -323,6 +438,7 @@ const DeepfakeResutlsVideo = (props) => {
                   <Grid container direction="row" spacing={3}>
                     {shotSelectedValue.face_image_paths.map(
                       (valueFace, keyFace) => {
+                        console.log(valueFace);
                         return (
                           <Grid
                             item
@@ -337,6 +453,7 @@ const DeepfakeResutlsVideo = (props) => {
                           >
                             <img
                               alt="face"
+                              key={keyFace}
                               src={valueFace}
                               style={{ width: "100%", height: "auto" }}
                             />
@@ -368,4 +485,4 @@ const DeepfakeResutlsVideo = (props) => {
     </div>
   );
 };
-export default DeepfakeResutlsVideo;
+export default DeepfakeResultsVideo;
