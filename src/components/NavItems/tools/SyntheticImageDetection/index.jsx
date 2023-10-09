@@ -49,14 +49,12 @@ const SyntheticImageDetection = () => {
     tsvWarning,
   );
 
-  const [input, setInput] = useState("");
-
   const isLoading = useSelector(
     (state) => state.syntheticImageDetection.loading,
   );
   const result = useSelector((state) => state.syntheticImageDetection.result);
   const url = useSelector((state) => state.syntheticImageDetection.url);
-
+  const [input, setInput] = useState(url ? url : "");
   const dispatch = useDispatch();
 
   const useGetSyntheticImageScores = async (url, processURL, dispatch) => {

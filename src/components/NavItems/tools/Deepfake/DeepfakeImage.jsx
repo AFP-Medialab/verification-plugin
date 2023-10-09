@@ -34,13 +34,10 @@ const Deepfake = () => {
     tsvWarning,
   );
   //const dispatch = useDispatch();
-
-  const [input, setInput] = useState("");
-
   const isLoading = useSelector((state) => state.deepfakeImage.loading);
   const result = useSelector((state) => state.deepfakeImage.result);
   const url = useSelector((state) => state.deepfakeImage.url);
-
+  const [input, setInput] = useState(url ? url : "");
   //Selecting mode
   //============================================================================================
 
