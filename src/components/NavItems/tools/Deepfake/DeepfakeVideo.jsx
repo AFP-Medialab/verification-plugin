@@ -54,7 +54,13 @@ const Deepfake = () => {
   const dispatch = useDispatch();
 
   const submitUrl = () => {
-    UseGetDeepfake(input, true, selectedMode, dispatch);
+    UseGetDeepfake(
+      input,
+      true,
+      selectedMode,
+      dispatch,
+      keywordWarning("error_invalid_url"),
+    );
   };
 
   return (

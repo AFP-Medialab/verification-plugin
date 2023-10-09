@@ -30,6 +30,8 @@ import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import { isValidUrl } from "../../../Shared/Utils/URLUtils";
 import SyntheticImageDetectionResults from "./syntheticImageDetectionResults";
 
+import { setError } from "redux/actions/errorActions";
+
 //TODO: Matomo analytics
 
 const SyntheticImageDetection = () => {
@@ -77,13 +79,13 @@ const SyntheticImageDetection = () => {
 
     let res;
 
-    const handleError = () => {
-      // dispatch(setError(e));
+    const handleError = (e) => {
+      dispatch(setError(e));
       dispatch(setSyntheticImageDetectionLoading(false));
     };
 
     if (!isValidUrl(url)) {
-      handleError("Error: not a valid url");
+      handleError(keywordWarning("error_invalid_url"));
       return;
     }
 
