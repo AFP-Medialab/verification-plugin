@@ -56,7 +56,8 @@ export const SEARCH_ENGINE_SETTINGS = {
     CONTEXT_MENU_ID: "reverse_search_google_lens",
     CONTEXT_MENU_TITLE: "Image Reverse Search - Google Lens",
     URI: `https://lens.google.com/upload?ep=ccm&s=&st=${Date.now()}`,
-    IMAGE_FORMAT: IMAGE_FORMATS.BLOB,
+    IMAGE_FORMAT: IMAGE_FORMATS.URI,
+    IMAGE_FORMAT_LOCAL: IMAGE_FORMATS.BLOB,
   },
   BAIDU_SEARCH: {
     NAME: "Baidu",
@@ -242,7 +243,14 @@ export const reverseImageSearchBaidu = (
       // document.body.style.cursor = "default";
     });
 };
-
+export const reverseRemoteGoogleLens = (
+  url,
+  isRequestFromContextMenu = true,
+) => {
+  const tabUrl = `https://lens.google.com/uploadbyurl?url=${url}`;
+  const urlObject = { url: tabUrl };
+  openNewTabWithUrl(urlObject, isRequestFromContextMenu);
+};
 export const reverseImageSearchGoogleLens = (
   imgBlob,
   isRequestFromContextMenu = true,
@@ -557,6 +565,8 @@ const retrieveImgObjectForSearchEngine = async (
 
     // console.log(info);
     // TODO: Error handling for getImgUrl
+    console.log("info ", info);
+    console.log("getiknfo ", getImgUrl(info));
     return new ImageObject(getImgUrl(info), IMAGE_FORMATS.URI);
   }
 
@@ -612,14 +622,18 @@ export const reverseImageSearch = async (
   } else if (
     searchEngineName === SEARCH_ENGINE_SETTINGS.GOOGLE_LENS_SEARCH.NAME
   ) {
+    console.log("image ", imageObject);
     if (
-      imageObject.imageFormat !==
+      imageObject.imageFormat ==
+      SEARCH_ENGINE_SETTINGS.GOOGLE_LENS_SEARCH.IMAGE_FORMAT_LOCAL
+    )
+      reverseImageSearchGoogleLens(imageObject.obj, isRequestFromContextMenu);
+    else if (
+      imageObject.imageFormat ==
       SEARCH_ENGINE_SETTINGS.GOOGLE_LENS_SEARCH.IMAGE_FORMAT
     ) {
-      throw new Error(`[reverseImageSearch] Error: invalid image format`);
+      reverseRemoteGoogleLens(imageObject.obj, isRequestFromContextMenu);
     }
-
-    reverseImageSearchGoogleLens(imageObject.obj, isRequestFromContextMenu);
   } else if (searchEngineName === SEARCH_ENGINE_SETTINGS.YANDEX_SEARCH.NAME) {
     if (
       imageObject.imageFormat !==

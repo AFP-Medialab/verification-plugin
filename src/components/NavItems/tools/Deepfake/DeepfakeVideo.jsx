@@ -17,6 +17,7 @@ import DeepfakeResultsVideo from "./Results/DeepfakeResultsVideo";
 import tsv from "../../../../LocalDictionary/components/NavItems/tools/Deepfake.tsv";
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import Alert from "@mui/material/Alert";
+import { resetDeepfake } from "../../../../redux/actions/tools/deepfakeVideoActions";
 
 const Deepfake = () => {
   //const { url } = useParams();
@@ -52,6 +53,10 @@ const Deepfake = () => {
 
   const dispatch = useDispatch();
 
+  const cleanup = () => {
+    dispatch(resetDeepfake());
+    setInput("");
+  };
   const submitUrl = () => {
     UseGetDeepfake(
       input,
@@ -114,19 +119,31 @@ const Deepfake = () => {
                   </Grid>
 
                   <Grid item>
-                    <Button
-                      type="submit"
-                      variant="contained"
-                      color="primary"
-                      onClick={(e) => {
-                        e.preventDefault(), submitUrl();
-                      }}
-                      disabled={
-                        selectedMode === "" || input === "" || isLoading
-                      }
-                    >
-                      {"Submit"}
-                    </Button>
+                    {!result ? (
+                      <Button
+                        type="submit"
+                        variant="contained"
+                        color="primary"
+                        onClick={(e) => {
+                          e.preventDefault(), submitUrl();
+                        }}
+                        disabled={
+                          selectedMode === "" || input === "" || isLoading
+                        }
+                      >
+                        {"Submit"}
+                      </Button>
+                    ) : (
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={(e) => {
+                          e.preventDefault(), cleanup();
+                        }}
+                      >
+                        {keyword("button_remove")}
+                      </Button>
+                    )}
                   </Grid>
                 </Grid>
 
