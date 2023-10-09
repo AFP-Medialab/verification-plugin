@@ -34,13 +34,11 @@ const Deepfake = () => {
     tsvWarning,
   );
   //const dispatch = useDispatch();
-
-  const [input, setInput] = useState("");
-
   const isLoading = useSelector((state) => state.deepfakeImage.loading);
   const result = useSelector((state) => state.deepfakeImage.result);
   const url = useSelector((state) => state.deepfakeImage.url);
-
+  const role = useSelector((state) => state.userSession.user.roles);
+  const [input, setInput] = useState(url ? url : "");
   //Selecting mode
   //============================================================================================
 
@@ -61,8 +59,13 @@ const Deepfake = () => {
       true,
       selectedMode,
       dispatch,
+      role,
       keywordWarning("error_invalid_url"),
     );
+  };
+
+  const handleClose = () => {
+    setInput("");
   };
 
   return (
@@ -151,7 +154,13 @@ const Deepfake = () => {
 
       <Box m={3} />
 
-      {result && <DeepfakeResultsImage result={result} url={url} />}
+      {result && (
+        <DeepfakeResultsImage
+          result={result}
+          url={url}
+          handleClose={handleClose}
+        />
+      )}
     </div>
   );
 };

@@ -49,14 +49,12 @@ const SyntheticImageDetection = () => {
     tsvWarning,
   );
 
-  const [input, setInput] = useState("");
-
   const isLoading = useSelector(
     (state) => state.syntheticImageDetection.loading,
   );
   const result = useSelector((state) => state.syntheticImageDetection.result);
   const url = useSelector((state) => state.syntheticImageDetection.url);
-
+  const [input, setInput] = useState(url ? url : "");
   const dispatch = useDispatch();
 
   const useGetSyntheticImageScores = async (url, processURL, dispatch) => {
@@ -93,9 +91,8 @@ const SyntheticImageDetection = () => {
       res = await axios.post(baseURL + modeURL + "jobs", null, {
         params: { url: url, services: services },
       });
-      console.log(res);
     } catch (error) {
-      // handleError("error_" + error.status);
+      handleError("error_" + error.status);
     }
 
     const getResult = async (id) => {
@@ -147,6 +144,10 @@ const SyntheticImageDetection = () => {
       setTimeout(() => resolve(fn(param)), 2000);
     });
   }
+
+  const handleClose = () => {
+    setInput("");
+  };
 
   return (
     <div>
@@ -231,7 +232,13 @@ const SyntheticImageDetection = () => {
 
       <Box m={3} />
 
-      {result && <SyntheticImageDetectionResults result={result} url={url} />}
+      {result && (
+        <SyntheticImageDetectionResults
+          result={result}
+          url={url}
+          handleClose={handleClose}
+        />
+      )}
     </div>
   );
 };
