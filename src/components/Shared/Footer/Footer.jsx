@@ -18,6 +18,16 @@ const Footer = (props) => {
       linkLabel = keyword("iti_link_label");
       contactUs = keyword("iti_part_2");
       break;
+    case "iti-unina":
+      provideBy = keyword("iti_part_1");
+      link = [keyword("iti_link"), keyword("unina_link")];
+      linkLabel = keyword("iti_link_label");
+      linkLabel = [
+        keyword("iti_link_label"),
+        " " + keyword("and") + " " + keyword("unina_link_label"),
+      ];
+      contactUs = keyword("iti_part_2");
+      break;
     case "GRIHO":
       return (
         <div className={classes.footer}>

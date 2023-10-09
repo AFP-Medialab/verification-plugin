@@ -89,7 +89,7 @@ const DrawerItem = ({ drawerItems }) => {
     },
     {
       content: <SyntheticImageDetection />,
-      footer: <Footer type={"iti"} />,
+      footer: <Footer type={"iti-unina"} />,
     },
     {
       content: <DeepfakeImage />,

@@ -1357,7 +1357,10 @@ const NavBar = () => {
       functionHandleClick: handleClickListData,
       classBorder: classBorderData,
     },
-    {
+  ];
+
+  if (role.includes("BETA_TESTER"))
+    listItems.push({
       title: keyword("navbar_category_other"),
       icon: <MoreHorizIcon style={{ fill: "#4c4c4c" }} />,
       list: drawerItemsOtherTools,
@@ -1365,8 +1368,7 @@ const NavBar = () => {
       setVariableOpen: setOpenListOtherTools,
       functionHandleClick: handleClickListOtherTools,
       classBorder: classBorderOtherTools,
-    },
-  ];
+    });
 
   const toolsItem = drawerItems.find((data) => data.title === "navbar_tools");
   //const assistantItem = tabItems.find(data => data.title === 'navbar_assistant');
