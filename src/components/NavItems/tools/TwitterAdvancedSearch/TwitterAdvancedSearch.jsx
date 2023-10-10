@@ -83,17 +83,17 @@ const TwitterAdvancedSearch = () => {
   const [fromDateError, setSelectedFromDateError] = useState(false);
   ``;
   const [toDate, setSelectedToDate] = useState(null);
-  const [toDateError, setSelectedToDateError] = useState(null);
+  const [toDateError, setSelectedToDateError] = useState(false);
 
   const handleFromDateChange = (date) => {
     setSelectedFromDateError(date === null);
-    if (toDate && date >= toDate) setSelectedFromDateError(true);
+    if (toDate && date > toDate) setSelectedFromDateError(true);
     setSelectedFromDate(date);
   };
 
   const handleToDateChange = (date) => {
     setSelectedToDateError(date === null);
-    if (fromDate && date <= fromDate) setSelectedToDateError(true);
+    if (fromDate && date < fromDate) setSelectedToDateError(true);
     setSelectedToDate(date);
   };
 
@@ -130,8 +130,10 @@ const TwitterAdvancedSearch = () => {
       toDate,
       localTime,
     );
-    setEventUrl(url);
-    /*trackEvent(
+    if (toDateError === false && fromDateError === false) {
+      setEventUrl(url);
+      window.open(url);
+      /*trackEvent(
       "submission",
       "twitter_advance_search",
       "search twitter request",
@@ -139,7 +141,7 @@ const TwitterAdvancedSearch = () => {
       client_id,
       uid
     );*/
-    window.open(url);
+    }
   };
 
   return (
