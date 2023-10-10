@@ -53,7 +53,7 @@ const Archive = () => {
       let data = new FormData();
       data.append("file", waczFileUrl);
 
-      console.log(data);
+      //console.log(data);
 
       const axiosConfig = {
         method: "post",
@@ -66,7 +66,7 @@ const Archive = () => {
 
       const response = await authenticatedRequest(axiosConfig);
 
-      console.log(response);
+      //console.log(response);
 
       return response;
     } catch (error) {
