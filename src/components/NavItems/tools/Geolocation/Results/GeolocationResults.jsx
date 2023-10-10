@@ -9,7 +9,6 @@ import CardHeader from "@mui/material/CardHeader";
 import Grid from "@mui/material/Grid";
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-import MarkerIcon from "../../../../NavBar/images/SVG/Others/marker_location.svg";
 import { Icon } from "leaflet";
 import { CardMedia, Typography } from "@mui/material";
 import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Keyframes.tsv";
@@ -151,7 +150,7 @@ const GeolocationResults = (props) => {
                     position={position}
                     icon={
                       new Icon({
-                        iconUrl: MarkerIcon,
+                        iconUrl: "img/marker_location.svg",
                         iconSize: [60, 60],
                         iconAnchor: [30, 0],
                       })
