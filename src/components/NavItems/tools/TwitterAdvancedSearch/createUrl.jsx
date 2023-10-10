@@ -1,5 +1,4 @@
-import convertToGMT from "../../../Shared/DateTimePicker/convertToGMT";
-
+import { convertMomentToGMT } from "../../../Shared/DateTimePicker/convertToGMT";
 export function replaceAll(str, find, replace) {
   return str.replace(new RegExp(find, "g"), replace);
 }
@@ -37,13 +36,14 @@ export const createUrl = (
     }
   }
   if (from_date) {
-    let epoch = localTime === "false" ? convertToGMT(from_date) : from_date;
+    let epoch =
+      localTime === "false" ? convertMomentToGMT(from_date) : from_date;
     //console.log(epoch)
-    twitter_url += "%20since%3A" + epoch.getTime() / 1000;
+    twitter_url += "%20since%3A" + epoch.toDate().getTime() / 1000;
   }
   if (to_date) {
-    let epoch = localTime === "false" ? convertToGMT(to_date) : to_date;
-    twitter_url += "%20until%3A" + epoch.getTime() / 1000;
+    let epoch = localTime === "false" ? convertMomentToGMT(to_date) : to_date;
+    twitter_url += "%20until%3A" + epoch.toDate().getTime() / 1000;
   }
   // twitter_url = twitter_url + "&src=typd"
   return twitter_url;

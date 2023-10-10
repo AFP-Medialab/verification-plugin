@@ -24,7 +24,7 @@ import Typography from "@mui/material/Typography";
 import OnWarningInfo from "../../../Shared/OnClickInfo/OnWarningInfo";
 import SearchIcon from "@mui/icons-material/Search";
 import DateTime from "../../../Shared/DateTimePicker/DateTime";
-import convertToGMT from "../../../Shared/DateTimePicker/convertToGMT";
+import { convertMomentToGMT } from "../../../Shared/DateTimePicker/convertToGMT";
 import useTwitterSnaRequest from "./Hooks/useTwitterSnaRequest";
 import { replaceAll } from "../TwitterAdvancedSearch/createUrl";
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
@@ -263,8 +263,10 @@ const TwitterSna = () => {
         bannedWordsP.trim().match(/("[^"]+"|[^"\s]+)/g),
       );
 
-    const newFrom = localTimeP === "false" ? convertToGMT(sinceP) : sinceP;
-    const newUntil = localTimeP === "false" ? convertToGMT(untilP) : untilP;
+    const newFrom =
+      localTimeP === "false" ? convertMomentToGMT(sinceP) : sinceP;
+    const newUntil =
+      localTimeP === "false" ? convertMomentToGMT(untilP) : untilP;
 
     let filter;
     if (mediaImage && mediaVideo) {
