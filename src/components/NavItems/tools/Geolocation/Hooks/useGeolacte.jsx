@@ -17,7 +17,6 @@ const useGeolacate = (url, processURL, keyword) => {
       axios
         .get(caa_localtion_base_url + "?image_url=" + url + "&use_gradcam=0")
         .then((response) => {
-          console.log(response.data);
           if (response.data != null) {
             dispatch(
               setGeolocationResult({
