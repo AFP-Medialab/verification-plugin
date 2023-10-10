@@ -284,7 +284,8 @@ const ImageResult = () => {
               )}`}
             </Button>
           </Grid>
-          {isImageUrl && (
+          {/*  TEMPORARY DISABLE GOOGLE LENS 
+          isImageUrl && (
             <Grid item>
               <Button
                 color="primary"
@@ -302,7 +303,7 @@ const ImageResult = () => {
                 )}`}
               </Button>
             </Grid>
-          )}
+                )*/}
           <Grid item>
             <Button
               color="primary"
