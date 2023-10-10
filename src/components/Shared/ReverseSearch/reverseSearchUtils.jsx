@@ -243,6 +243,7 @@ export const reverseImageSearchBaidu = (
       // document.body.style.cursor = "default";
     });
 };
+
 export const reverseRemoteGoogleLens = (
   url,
   isRequestFromContextMenu = true,

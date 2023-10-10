@@ -2,17 +2,17 @@
 
 This plugin has been designed as a verification “Swiss army knife” helping journalists to save time and be more efficient in their fact-checking and debunking tasks on social networks especially when verifying videos and images.
 
-The provided tools allow you to quickly get contextual information on Facebook and YouΤube videos, to perform reverse image search on Google, Baidu or Yandex search engines, to fragment videos from various platforms (Facebook, Instagram, YouTube, Twitter, Daily Motion) into keyframes, to enhance and explore keyframes and images through a magnifying lens, to query Twitter more efficiently through time intervals and many other filters, to read video and image metadata, and to apply forensic filters on still images.
+The provided tools allow you to quickly get contextual information on Facebook and YouTube videos, perform a reverse image search on Google, Baidu or Yandex search engines, to fragment videos from various platforms (Facebook, Instagram, YouTube, Twitter, Daily Motion) into keyframes, to enhance and explore keyframes and images through a magnifying lens, to query Twitter more efficiently through time intervals and many other filters, to read video and image metadata, and to apply forensic filters on still images.
 
-For further details about the tool and the already released versions, please visit the plugin [website](https://weverify.eu/verification-plugin/).
+For further details about the tool and the already released versions, please visit the plugin page on our latest project [website](https://www.veraai.eu/category/verification-plugin/).
 
-For any feedback (bugs, enhancement, suggestions), please use the feeback tool within the plugin (on bottom right).
+For any feedback (bugs, enhancement, suggestions), please use the feedback tool within the plugin (on the bottom right).
 
-This plugin was initially developed by the InVID European project (2016-2018), a Horizon 2020 Innovation Action funded by the European Union under Grant Agreement 687786. It is now maintained and further enhanced by the WeVerify European project (2018-2021). WeVerify is a new Horizon 2020 Innovation Action funded by the European Union under Grant Agreement 825297.
+This plugin was initially developed by the InVID European project (2016-2018), a Horizon 2020 Innovation Action funded by the European Union under Grant Agreement 687786. It has been enhanced by the WeVerify European project (2018-2021), a Horizon 2020 Innovation Action funded by the European Union under Grant Agreement 825297. Since September 2022, it is improved within the [vera.ai project](https://veraai.eu) under Grant Agreement 101070093. 
 
-For more information about those two projects, visit the [WeVerify website](https://weverify.eu/), [InVID website](http://www.invid-project.eu) or follow us on [InVID_EU](https://twitter.com/InVID_EU) and on [WeVerify](https://twitter.com/WeVerify).
+For more information about those three projects, visit the [vera.ai website](https://veraai.eu), the [WeVerify website](https://weverify.eu/), and [InVID website](http://www.invid-project.eu) or follow us on [veraai_eu](https://twitter.com/veraai_eu), [InVID_EU](https://twitter.com/InVID_EU) or on [WeVerify](https://twitter.com/WeVerify).
 
-**Disclaimer:** this software is provided "as is", without warranty of any kind, express or implied, including but not limited to the warranties of merchantability, fitness for a particular purpose and noninfringement. In no event shall the authors or copyright holders be liable for any claim, damages or other liability, whether in an action of contract, tort or otherwise, arising from, out of or in connection with the software or the use or other dealings in the software.
+**Disclaimer:** This software is provided "as is", without warranty of any kind, express or implied, including but not limited to the warranties of merchantability, fitness for a particular purpose and non-infringement. In no event shall the authors or copyright holders be liable for any claim, damages or other liability, whether in an action of contract, tort or otherwise, arising from, out of or in connection with the software or the use or other dealings in the software.
 
 ## Project setup
 
