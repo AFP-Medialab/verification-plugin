@@ -93,7 +93,7 @@ export const useKeyframeWrapper = (url, keyword) => {
               handleError("keyframes_error_" + errors);
             });
         }
-      }, 2000);
+      }, 3000);
     };
 
     const postUrl = (multimediaUrl, data) => {

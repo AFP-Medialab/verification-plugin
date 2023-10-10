@@ -35,6 +35,6 @@ export const loadImageSize = (resultData, cols) => {
           resolve(height);
         }
       } else reject("no images");
-    }, 2000);
+    }, 3000);
   });
 };

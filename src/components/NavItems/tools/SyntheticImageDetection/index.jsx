@@ -141,7 +141,7 @@ const SyntheticImageDetection = () => {
 
   function sleep(fn, param) {
     return new Promise((resolve) => {
-      setTimeout(() => resolve(fn(param)), 2000);
+      setTimeout(() => resolve(fn(param)), 3000);
     });
   }
 
