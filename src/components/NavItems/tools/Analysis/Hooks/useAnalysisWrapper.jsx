@@ -109,7 +109,7 @@ export const useAnalysisWrapper = (
   useEffect(() => {
     let timer = null;
     if (!_.isNull(data)) {
-      timer = setTimeout(() => waitUntilDonne(data, cpt), 2000);
+      timer = setTimeout(() => waitUntilDonne(data, cpt), 3000);
       if (!isLoading && !_.isNull(timer)) {
         clearTimeout(timer);
         setCpt(0);

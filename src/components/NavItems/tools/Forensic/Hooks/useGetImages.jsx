@@ -70,7 +70,7 @@ const useGetImages = (url, type, keyword) => {
           if (response.data.status === "PROCESSING") {
             setTimeout(function () {
               waitUntilFinish(id);
-            }, 2000);
+            }, 3000);
           } else if (response.data.status === "COMPLETED") {
             getResult(response.data.itemHash);
             dispatch(
