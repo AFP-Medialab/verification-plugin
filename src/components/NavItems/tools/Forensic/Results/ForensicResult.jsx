@@ -36,9 +36,9 @@ import IconButton from "@mui/material/IconButton";
 import Snackbar from "@mui/material/Snackbar";
 import WarningIcon from "@mui/icons-material/Warning";
 import Alert from "@mui/material/Alert";
-import MakoScale from "../../../../NavBar/images/SVG/MakoScale.png";
 import EmojiObjectsIcon from "@mui/icons-material/EmojiObjects";
 import AnimatedGif from "../../Gif/AnimatedGif";
+import { DetectionProgressBar } from "components/Shared/DetectionProgressBar/DetectionProgressBar";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -1122,39 +1122,7 @@ const ForensicResults = (props) => {
                           })}
                         </Grid>
 
-                        {valueTab !== 3 && (
-                          <div>
-                            <Box m={2} />
-
-                            <CardMedia
-                              image={MakoScale}
-                              style={{
-                                height: "20px",
-                                transform: "scale(-1)",
-                                backgroundSize: "contain",
-                              }}
-                            />
-
-                            <Grid
-                              container
-                              direction="row"
-                              justifyContent="space-between"
-                              alignItems="center"
-                            >
-                              <Grid item>
-                                <Typography variant="body1">
-                                  {keyword("forensic_text_nodetection")}
-                                </Typography>
-                              </Grid>
-
-                              <Grid item>
-                                <Typography variant="body1">
-                                  {keyword("forensic_text_detection")}
-                                </Typography>
-                              </Grid>
-                            </Grid>
-                          </div>
-                        )}
+                        {valueTab !== 3 && <DetectionProgressBar />}
 
                         <Box m={2} />
                         <Alert

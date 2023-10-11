@@ -16,6 +16,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import Help from "@mui/icons-material/Help";
 import { LinearProgressWithLabel } from "../../../../Shared/LinearProgressWithLabel/LinearProgressWithLabel";
+import { DetectionProgressBar } from "components/Shared/DetectionProgressBar/DetectionProgressBar";
 
 const DeepfakeResultsVideo = (props) => {
   const keyword = useLoadLanguage(
@@ -209,6 +210,15 @@ const DeepfakeResultsVideo = (props) => {
                     </Stack>
                   );
                 })}
+                {deepfakeScores && (
+                  <Stack>
+                    <DetectionProgressBar
+                      style={{
+                        height: "8px",
+                      }}
+                    />
+                  </Stack>
+                )}
               </Stack>
             </Card>
           </Grid>
