@@ -13,7 +13,7 @@ import CardHeader from "@mui/material/CardHeader";
 import GeolocationIcon from "../../../NavBar/images/SVG/Image/Geolocation.svg";
 import Grid from "@mui/material/Grid";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
-import useGeolacate from "./Hooks/useGeolacte";
+import useGeolocate from "./Hooks/useGeolocate";
 import GeolocationResults from "./Results/GeolocationResults";
 import Alert from "@mui/material/Alert";
 import tsvWarning from "../../../../LocalDictionary/components/Shared/OnWarningInfo.tsv";
@@ -42,13 +42,13 @@ const Geolocation = () => {
   const urlImage = useSelector((state) => state.geolocation.urlImage);
   const isLoading = useSelector((state) => state.geolocation.loading);
   const [processUrl, setProcessUrl] = useState(false);
-  const [input, setInput] = useState(processUrl ? processUrl : "");
+  const [input, setInput] = useState(urlImage ? urlImage : "");
 
   const submitUrl = () => {
     setProcessUrl(true);
   };
 
-  useGeolacate(input, processUrl);
+  useGeolocate(input, processUrl, keyword);
 
   return (
     <div>
