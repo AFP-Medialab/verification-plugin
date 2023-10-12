@@ -1,13 +1,11 @@
-const convertToGMT = (date) => {
-  let result = new Date(date);
+export const convertMomentToGMT = (moment) => {
   return new Date(
     Date.UTC(
-      result.getFullYear(),
-      result.getMonth(),
-      result.getDate(),
-      result.getHours(),
-      result.getMinutes(),
+      moment.toYear(),
+      moment.toMonth(),
+      moment.toDate(),
+      moment.toHours(),
+      moment.toMinutes(),
     ),
   );
 };
-export default convertToGMT;

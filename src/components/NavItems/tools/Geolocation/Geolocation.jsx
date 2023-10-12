@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import LinearProgress from "@mui/material/LinearProgress";
@@ -13,11 +13,11 @@ import CardHeader from "@mui/material/CardHeader";
 import GeolocationIcon from "../../../NavBar/images/SVG/Image/Geolocation.svg";
 import Grid from "@mui/material/Grid";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
-import useGeolacate from "./Hooks/useGeolacte";
+import useGeolocate from "./Hooks/useGeolocate";
 import GeolocationResults from "./Results/GeolocationResults";
 import Alert from "@mui/material/Alert";
 import tsvWarning from "../../../../LocalDictionary/components/Shared/OnWarningInfo.tsv";
-
+import { resetGeolocation } from "../../../../redux/reducers/tools/geolocationReducer";
 const Geolocation = () => {
   const classes = useMyStyles();
   const keyword = useLoadLanguage(
@@ -32,19 +32,23 @@ const Geolocation = () => {
     "components/Shared/OnWarningInfo.tsv",
     tsvWarning,
   );
+  const dispatch = useDispatch();
+  const cleanup = () => {
+    dispatch(resetGeolocation());
+    setInput("");
+  };
 
   const result = useSelector((state) => state.geolocation.result);
   const urlImage = useSelector((state) => state.geolocation.urlImage);
   const isLoading = useSelector((state) => state.geolocation.loading);
-
-  const [input, setInput] = useState("");
   const [processUrl, setProcessUrl] = useState(false);
+  const [input, setInput] = useState(urlImage ? urlImage : "");
 
   const submitUrl = () => {
     setProcessUrl(true);
   };
 
-  useGeolacate(input, processUrl);
+  useGeolocate(input, processUrl, keyword);
 
   return (
     <div>
@@ -82,15 +86,27 @@ const Geolocation = () => {
               />
             </Grid>
             <Grid item>
-              <Button
-                type="submit"
-                variant="contained"
-                color="primary"
-                disabled={isLoading}
-                onClick={submitUrl}
-              >
-                {keyword("geo_submit")}
-              </Button>
+              {!result ? (
+                <Button
+                  type="submit"
+                  variant="contained"
+                  color="primary"
+                  disabled={isLoading}
+                  onClick={submitUrl}
+                >
+                  {keyword("geo_submit")}
+                </Button>
+              ) : (
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={(e) => {
+                    e.preventDefault(), cleanup();
+                  }}
+                >
+                  {keyword("button_remove")}
+                </Button>
+              )}
             </Grid>
             <Box m={1} />
           </Grid>

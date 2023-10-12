@@ -89,6 +89,8 @@ import ImageIcon from "./images/SVG/Image/Images.svg";
 import SearchIcon from "./images/SVG/Search/Search.svg";
 import DataIcon from "./images/SVG/DataAnalysis/Data_analysis.svg";
 
+import Gradient from "@mui/icons-material/Gradient";
+
 import { getSupportedBrowserLanguage } from "../Shared/Languages/getSupportedBrowserLanguage";
 import useLoadLanguage from "../../Hooks/useLoadLanguage";
 import tsvWarning from "../../LocalDictionary/components/Shared/OnWarningInfo.tsv";
@@ -689,10 +691,31 @@ const NavBar = () => {
     },
     {
       id: 14,
+      title: "navbar_synthetic_image_detection",
+      description: "navbar_synthetic_image_detection_description",
+      icon:
+        tabValue === 0 && drawerValue === 13 ? (
+          <Gradient width="45px" height="45px" style={{ fill: "#00926c" }} />
+        ) : (
+          <Gradient width="45px" height="45px" style={{ fill: "#4c4c4c" }} />
+        ),
+      iconColored: (
+        <Gradient width="45px" height="45px" style={{ fill: "#00926c" }} />
+      ),
+      tsvPrefix: "synthetic_image_detection",
+      path: "syntheticImageDetection",
+      pathGroup: "TOOL",
+      type: keyword("navbar_category_image"),
+      typeId: 2,
+      icons: ["new", "experimental", "lock"],
+      toolRestrictions: ["beta"],
+    },
+    {
+      id: 15,
       title: "navbar_deepfake_image",
       description: "navbar_deepfake_image_description",
       icon:
-        tabValue === 0 && drawerValue === 13 ? (
+        tabValue === 0 && drawerValue === 14 ? (
           <DeepfakeIcon
             width="45px"
             height="45px"
@@ -724,11 +747,11 @@ const NavBar = () => {
       toolRestrictions: ["beta"],
     },
     {
-      id: 15,
+      id: 16,
       title: "navbar_geolocation",
       description: "navbar_geolocation_description",
       icon:
-        tabValue === 0 && drawerValue === 14 ? (
+        tabValue === 0 && drawerValue === 15 ? (
           <GeolactionIcon
             width="45px"
             height="45px"
@@ -761,11 +784,11 @@ const NavBar = () => {
     },
 
     {
-      id: 16,
+      id: 17,
       title: "navbar_twitter",
       description: "navbar_twitter_description",
       icon:
-        tabValue === 0 && drawerValue === 15 ? (
+        tabValue === 0 && drawerValue === 16 ? (
           <TwitterSearchIcon
             width="45px"
             height="45px"
@@ -797,11 +820,11 @@ const NavBar = () => {
       toolRestrictions: [],
     },
     {
-      id: 17,
+      id: 18,
       title: "navbar_twitter_sna",
       description: "navbar_twitter_sna_description",
       icon:
-        tabValue === 0 && drawerValue === 16 ? (
+        tabValue === 0 && drawerValue === 17 ? (
           <TwitterSnaIcon
             width="45px"
             height="45px"
@@ -833,32 +856,17 @@ const NavBar = () => {
       toolRestrictions: ["lock"],
     },
     {
-      id: 18,
+      id: 19,
       title: "navbar_archiving",
       description: "navbar_archiving_description",
       icon:
-        tabValue === 0 && drawerValue === 17 ? (
-          <ArchiveIcon
-            width="45px"
-            height="45px"
-            style={{ fill: "#00926c" }}
-            title="Archiving"
-          />
+        tabValue === 0 && drawerValue === 18 ? (
+          <ArchiveIcon width="45px" height="45px" style={{ fill: "#00926c" }} />
         ) : (
-          <ArchiveIcon
-            width="45px"
-            height="45px"
-            style={{ fill: "#4c4c4c" }}
-            title="Archiving"
-          />
+          <ArchiveIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} />
         ),
       iconColored: (
-        <ArchiveIcon
-          width="45px"
-          height="45px"
-          style={{ fill: "#00926c" }}
-          title={t("navbar_archiving")}
-        />
+        <ArchiveIcon width="45px" height="45px" style={{ fill: "#00926c" }} />
       ),
       tsvPrefix: "archiving",
       path: "archive",
@@ -869,11 +877,11 @@ const NavBar = () => {
       toolRestrictions: ["lock", "beta"],
     },
     {
-      id: 19,
+      id: 20,
       title: "navbar_twitter_crowdtangle",
       description: "navbar_twitter_crowdtangle_description",
       icon:
-        tabValue === 0 && drawerValue === 18 ? (
+        tabValue === 0 && drawerValue === 19 ? (
           <CsvSnaIcon
             width="45px"
             height="45px"
@@ -904,11 +912,11 @@ const NavBar = () => {
       toolRestrictions: [],
     },
     {
-      id: 20,
+      id: 21,
       title: "navbar_covidsearch",
       description: "navbar_covidsearch_description",
       icon:
-        tabValue === 0 && drawerValue === 19 ? (
+        tabValue === 0 && drawerValue === 20 ? (
           <CovidSearchIcon
             width="45px"
             height="45px"
@@ -940,11 +948,11 @@ const NavBar = () => {
       toolRestrictions: [],
     },
     {
-      id: 21,
+      id: 22,
       title: "navbar_xnetwork",
       description: "navbar_xnetwork_description",
       icon:
-        tabValue === 0 && drawerValue === 20 ? (
+        tabValue === 0 && drawerValue === 21 ? (
           <XnetworkIcon
             width="45px"
             height="45px"
@@ -1350,21 +1358,18 @@ const NavBar = () => {
       functionHandleClick: handleClickListData,
       classBorder: classBorderData,
     },
-    {
+  ];
+
+  if (role.includes("BETA_TESTER"))
+    listItems.push({
       title: t("navbar_category_other"),
-      icon: (
-        <MoreHorizIcon
-          style={{ fill: "#4c4c4c" }}
-          title={t("navbar_category_other")}
-        />
-      ),
+      icon: <MoreHorizIcon style={{ fill: "#4c4c4c" }} />,
       list: drawerItemsOtherTools,
       variableOpen: openListOtherTools,
       setVariableOpen: setOpenListOtherTools,
       functionHandleClick: handleClickListOtherTools,
       classBorder: classBorderOtherTools,
-    },
-  ];
+    });
 
   const toolsItem = drawerItems.find((data) => data.title === "navbar_tools");
   //const assistantItem = tabItems.find(data => data.title === 'navbar_assistant');
@@ -1489,7 +1494,6 @@ const NavBar = () => {
               }}
             >
               <Typography
-                type="body1"
                 style={{
                   fontWeight: "500",
                   fontSize: "10px",
@@ -1521,7 +1525,6 @@ const NavBar = () => {
               <ListItemText
                 primary={
                   <Typography
-                    type="body1"
                     className={`${
                       open ? classes.drawerListText : classes.hidden
                     }`}
@@ -1547,7 +1550,6 @@ const NavBar = () => {
                     <ListItemText
                       primary={
                         <Typography
-                          type="body1"
                           className={`${
                             open ? classes.drawerListText : classes.hidden
                           }`}
@@ -1598,7 +1600,6 @@ const NavBar = () => {
                             <ListItemText
                               primary={
                                 <Typography
-                                  type="body1"
                                   className={`${
                                     open
                                       ? classes.drawerListText
@@ -1658,7 +1659,6 @@ const NavBar = () => {
               className={classListHeading}
             >
               <Typography
-                type="body1"
                 style={{
                   fontWeight: "500",
                   fontSize: "10px",
@@ -1689,7 +1689,6 @@ const NavBar = () => {
                   <ListItemText
                     primary={
                       <Typography
-                        type="body1"
                         className={`${
                           open ? classes.drawerListText : classes.hidden
                         }`}

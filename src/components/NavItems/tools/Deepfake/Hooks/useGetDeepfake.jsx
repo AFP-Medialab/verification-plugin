@@ -8,8 +8,9 @@ import {
   setDeepfakeResultVideo,
 } from "../../../../../redux/actions/tools/deepfakeVideoActions";
 import { setError } from "../../../../../redux/actions/errorActions";
+import { isValidUrl } from "../../../../Shared/Utils/URLUtils";
 
-async function UseGetDeepfake(url, processURL, mode, dispatch) {
+async function UseGetDeepfake(url, processURL, mode, dispatch, role, errorMsg) {
   if (!processURL || !url) {
     return;
   }
@@ -20,11 +21,13 @@ async function UseGetDeepfake(url, processURL, mode, dispatch) {
   if (mode === "IMAGE") {
     dispatch(setDeepfakeLoadingImage(true));
     modeURL = "images/";
-    services = "faceswap,gan,diffusion,unina";
+    services = "faceswap";
   } else if (mode === "VIDEO") {
     dispatch(setDeepfakeLoadingVideo(true));
     modeURL = "videos/";
-    services = "deepfake_video,ftcn,face_reenact";
+    // services = "deepfake_video,ftcn,face_reenact";
+    services = "deepfake_video";
+    if (role.includes("EXTRA_FEATURE")) services += ",ftcn";
   }
 
   if (!modeURL) {
@@ -43,6 +46,11 @@ async function UseGetDeepfake(url, processURL, mode, dispatch) {
       dispatch(setDeepfakeLoadingVideo(false));
     }
   };
+
+  if (!isValidUrl(url)) {
+    handleError(errorMsg);
+    return;
+  }
 
   try {
     res = await axios.post(baseURL + modeURL + "jobs", null, {
@@ -98,7 +106,7 @@ async function UseGetDeepfake(url, processURL, mode, dispatch) {
 
 function sleep(fn, param) {
   return new Promise((resolve) => {
-    setTimeout(() => resolve(fn(param)), 2000);
+    setTimeout(() => resolve(fn(param)), 3000);
   });
 }
 

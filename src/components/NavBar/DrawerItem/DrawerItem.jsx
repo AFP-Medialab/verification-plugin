@@ -20,6 +20,7 @@ import OCR from "../../NavItems/tools/OCR/OCR";
 import CheckGif from "../../NavItems/tools/Gif/CheckGif";
 import DeepfakeImage from "../../NavItems/tools/Deepfake/DeepfakeImage";
 import DeepfakeVideo from "../../NavItems/tools/Deepfake/DeepfakeVideo";
+import SyntheticImageDetection from "../../NavItems/tools/SyntheticImageDetection";
 import Geolocation from "../../NavItems/tools/Geolocation/Geolocation";
 import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
@@ -85,6 +86,10 @@ const DrawerItem = ({ drawerItems }) => {
     {
       content: <CheckGif />,
       footer: <Footer type={"borelli-afp"} />,
+    },
+    {
+      content: <SyntheticImageDetection />,
+      footer: <Footer type={"iti-unina"} />,
     },
     {
       content: <DeepfakeImage />,

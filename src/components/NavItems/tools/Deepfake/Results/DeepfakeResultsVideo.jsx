@@ -16,6 +16,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import Help from "@mui/icons-material/Help";
 import { LinearProgressWithLabel } from "../../../../Shared/LinearProgressWithLabel/LinearProgressWithLabel";
+import { DetectionProgressBar } from "components/Shared/DetectionProgressBar/DetectionProgressBar";
 
 const DeepfakeResultsVideo = (props) => {
   const keyword = useLoadLanguage(
@@ -166,7 +167,6 @@ const DeepfakeResultsVideo = (props) => {
                 borderRadius: "10px",
                 boxShadow:
                   "0px 2px 1px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%)",
-                maxHeight: "40vh",
               }}
             >
               <source
@@ -210,6 +210,15 @@ const DeepfakeResultsVideo = (props) => {
                     </Stack>
                   );
                 })}
+                {deepfakeScores && (
+                  <Stack>
+                    <DetectionProgressBar
+                      style={{
+                        height: "8px",
+                      }}
+                    />
+                  </Stack>
+                )}
               </Stack>
             </Card>
           </Grid>
@@ -439,7 +448,6 @@ const DeepfakeResultsVideo = (props) => {
                   <Grid container direction="row" spacing={3}>
                     {shotSelectedValue.face_image_paths.map(
                       (valueFace, keyFace) => {
-                        console.log(valueFace);
                         return (
                           <Grid
                             item

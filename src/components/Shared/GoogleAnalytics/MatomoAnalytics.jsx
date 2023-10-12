@@ -74,6 +74,15 @@ export const trackEvent = (
 
   matomoCall(actions);
 };
+export const trackEventAnonymous = (
+  category,
+  action,
+  name,
+  url,
+  history = null,
+) => {
+  trackEvent(category, action, name, url, null, history, "");
+};
 
 export const trackPageView = (
   path,
@@ -104,6 +113,10 @@ export const trackPageView = (
   }
 
   matomoCall(actions);
+};
+
+export const trackPageViewAnonymous = (path, history = undefined) => {
+  trackPageView(path, null, history, "");
 };
 
 const resolution = () => {
