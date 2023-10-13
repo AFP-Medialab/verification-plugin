@@ -40,18 +40,24 @@ import {
   getclientId,
 } from "../../../Shared/GoogleAnalytics/MatomoAnalytics";
 import { useTrackEvent } from "../../../../Hooks/useAnalytics";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+
 const Analysis = () => {
   const caa_analysis_url = process.env.REACT_APP_CAA_ANALYSIS_URL;
   const { url } = useParams();
   const classes = useMyStyles();
-  const keyword = useLoadLanguage(
+  const keyword = i18nLoadNamespace("components/NavItems/tools/Analysis");
+  /*const keyword = useLoadLanguage(
     "components/NavItems/tools/Analysis.tsv",
     tsv,
+  );*/
+  const keywordAllTools = i18nLoadNamespace(
+    "components/NavItems/tools/Alltools",
   );
-  const keywordAllTools = useLoadLanguage(
+  /*const keywordAllTools = useLoadLanguage(
     "components/NavItems/tools/Alltools.tsv",
     tsvAllTools,
-  );
+  );*/
   const dispatch = useDispatch();
 
   const resultUrl = useSelector((state) => state.analysis.url);
