@@ -38,7 +38,6 @@ export const createUrl = (
   if (from_date) {
     let epoch =
       localTime === "false" ? convertMomentToGMT(from_date) : from_date;
-    //console.log(epoch)
     twitter_url += "%20since%3A" + epoch.toDate().getTime() / 1000;
   }
   if (to_date) {
