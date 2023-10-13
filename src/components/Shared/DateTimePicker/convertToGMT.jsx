@@ -1,11 +1,5 @@
-export const convertMomentToGMT = (moment) => {
-  return new Date(
-    Date.UTC(
-      moment.toYear(),
-      moment.toMonth(),
-      moment.toDate(),
-      moment.toHours(),
-      moment.toMinutes(),
-    ),
-  );
+import moment from "moment-timezone";
+export const convertMomentToGMT = (datetime) => {
+  let date = datetime.format("YYYY-MM-DDTHH:mm:ss").toString();
+  return moment.tz(date, "UTC");
 };
