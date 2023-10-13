@@ -93,9 +93,8 @@ import Gradient from "@mui/icons-material/Gradient";
 
 import { getSupportedBrowserLanguage } from "../Shared/Languages/getSupportedBrowserLanguage";
 import useLoadLanguage from "../../Hooks/useLoadLanguage";
+import tsv from "../../LocalDictionary/components/NavBar.tsv";
 import tsvWarning from "../../LocalDictionary/components/Shared/OnWarningInfo.tsv";
-
-import { useTranslation } from "react-i18next";
 
 import { setFalse, setTrue } from "../../redux/reducers/cookiesReducers";
 import { changeLanguage } from "../../redux/reducers/languageReducer";
@@ -193,11 +192,11 @@ const NavBar = () => {
   };
 
   const error = useSelector((state) => state.error);
-  const tWarning = useLoadLanguage(
+  const keyword = useLoadLanguage("components/NavBar.tsv", tsv);
+  const keywordWarning = useLoadLanguage(
     "components/Shared/OnWarningInfo.tsv",
     tsvWarning,
   );
-  const { t } = useTranslation("components/NavBar");
 
   const [classListHeading, setClassListHeading] = useState(
     classes.drawerListHeadingLeft,
@@ -233,20 +232,20 @@ const NavBar = () => {
             width="40px"
             height="40px"
             style={{ fill: "#00926c" }}
-            title={t("navbar_tools")}
+            title={keyword("navbar_tools")}
           />
         ) : (
           <ToolsIcon
             width="40px"
             height="40px"
             style={{ fill: "#4c4c4c" }}
-            title={t("navbar_tools")}
+            title={keyword("navbar_tools")}
           />
         ),
       tsvPrefix: "all",
       path: "all",
       pathGroup: "TOOL",
-      type: t("navbar_category_general"),
+      type: keyword("navbar_category_general"),
       typeId: 0,
       icons: [],
       toolRestrictions: [],
@@ -269,7 +268,7 @@ const NavBar = () => {
             width="45px"
             height="45px"
             style={{ fill: "#4c4c4c" }}
-            title={t("navbar_analysis_video")}
+            title={keyword("navbar_analysis_video")}
           />
         ),
       iconColored: (
@@ -277,13 +276,13 @@ const NavBar = () => {
           width="45px"
           height="45px"
           style={{ fill: "#00926c" }}
-          title={t("navbar_analysis_video")}
+          title={keyword("navbar_analysis_video")}
         />
       ),
       tsvPrefix: "api",
       path: "analysis",
       pathGroup: "TOOL",
-      type: t("navbar_category_video"),
+      type: keyword("navbar_category_video"),
       typeId: 1,
       icons: [],
       toolRestrictions: [],
@@ -305,7 +304,7 @@ const NavBar = () => {
             width="45px"
             height="45px"
             style={{ fill: "#4c4c4c" }}
-            title={t("navbar_keyframes")}
+            title={keyword("navbar_keyframes")}
           />
         ),
       iconColored: (
@@ -313,13 +312,13 @@ const NavBar = () => {
           width="45px"
           height="45px"
           style={{ fill: "#00926c" }}
-          title={t("navbar_keyframes")}
+          title={keyword("navbar_keyframes")}
         />
       ),
       tsvPrefix: "keyframes",
       path: "keyframes",
       pathGroup: "TOOL",
-      type: t("navbar_category_video"),
+      type: keyword("navbar_category_video"),
       typeId: 1,
       icons: [],
       toolRestrictions: [],
@@ -341,7 +340,7 @@ const NavBar = () => {
             width="45px"
             height="45px"
             style={{ fill: "#4c4c4c" }}
-            title={t("navbar_thumbnails")}
+            title={keyword("navbar_thumbnails")}
           />
         ),
       iconColored: (
@@ -349,13 +348,13 @@ const NavBar = () => {
           width="45px"
           height="45px"
           style={{ fill: "#00926c" }}
-          title={t("navbar_thumbnails")}
+          title={keyword("navbar_thumbnails")}
         />
       ),
       tsvPrefix: "thumbnails",
       path: "thumbnails",
       pathGroup: "TOOL",
-      type: t("navbar_category_video"),
+      type: keyword("navbar_category_video"),
       typeId: 1,
       icons: [],
       toolRestrictions: [],
@@ -377,7 +376,7 @@ const NavBar = () => {
             width="45px"
             height="45px"
             style={{ fill: "#4c4c4c" }}
-            title={t("navbar_rights")}
+            title={keyword("navbar_rights")}
           />
         ),
       iconColored: (
@@ -385,13 +384,13 @@ const NavBar = () => {
           width="45px"
           height="45px"
           style={{ fill: "#00926c" }}
-          title={t("navbar_rights")}
+          title={keyword("navbar_rights")}
         />
       ),
       tsvPrefix: "copyright",
       path: "copyright",
       pathGroup: "TOOL",
-      type: t("navbar_category_video"),
+      type: keyword("navbar_category_video"),
       typeId: 1,
       icons: [],
       toolRestrictions: [],
@@ -414,7 +413,7 @@ const NavBar = () => {
             width="45px"
             height="45px"
             style={{ fill: "#4c4c4c" }}
-            title={t("navbar_metadata")}
+            title={keyword("navbar_metadata")}
           />
         ),
       iconColored: (
@@ -422,13 +421,13 @@ const NavBar = () => {
           width="45px"
           height="45px"
           style={{ fill: "#00926c" }}
-          title={t("navbar_metadata")}
+          title={keyword("navbar_metadata")}
         />
       ),
       tsvPrefix: "metadata",
       path: "metadata",
       pathGroup: "TOOL",
-      type: t("navbar_category_video"),
+      type: keyword("navbar_category_video"),
       typeId: 1,
       icons: [],
       toolRestrictions: [],
@@ -451,7 +450,7 @@ const NavBar = () => {
             width="45px"
             height="45px"
             style={{ fill: "#4c4c4c" }}
-            title={t("navbar_deepfake")}
+            title={keyword("navbar_deepfake")}
           />
         ),
       iconColored: (
@@ -459,13 +458,13 @@ const NavBar = () => {
           width="45px"
           height="45px"
           style={{ fill: "#00926c" }}
-          title={t("navbar_deepfake")}
+          title={keyword("navbar_deepfake")}
         />
       ),
       tsvPrefix: "deepfake",
       path: "deepfakeVideo",
       pathGroup: "TOOL",
-      type: t("navbar_category_video"),
+      type: keyword("navbar_category_video"),
       typeId: 1,
       icons: ["experimental", "lock"],
       toolRestrictions: ["beta"],
@@ -488,7 +487,7 @@ const NavBar = () => {
             width="45px"
             height="45px"
             style={{ fill: "#4c4c4c" }}
-            title={t("navbar_analysis_image")}
+            title={keyword("navbar_analysis_image")}
           />
         ),
       iconColored: (
@@ -496,13 +495,13 @@ const NavBar = () => {
           width="45px"
           height="45px"
           style={{ fill: "#00926c" }}
-          title={t("navbar_analysis_image")}
+          title={keyword("navbar_analysis_image")}
         />
       ),
       tsvPrefix: "api",
       path: "analysisImage",
       pathGroup: "TOOL",
-      type: t("navbar_category_image"),
+      type: keyword("navbar_category_image"),
       typeId: 2,
       icons: ["new"],
       toolRestrictions: [],
@@ -524,7 +523,7 @@ const NavBar = () => {
             width="45px"
             height="45px"
             style={{ fill: "#4c4c4c" }}
-            title={t("navbar_magnifier")}
+            title={keyword("navbar_magnifier")}
           />
         ),
       iconColored: (
@@ -532,13 +531,13 @@ const NavBar = () => {
           width="45px"
           height="45px"
           style={{ fill: "#00926c" }}
-          title={t("navbar_magnifier")}
+          title={keyword("navbar_magnifier")}
         />
       ),
       tsvPrefix: "magnifier",
       path: "magnifier",
       pathGroup: "TOOL",
-      type: t("navbar_category_image"),
+      type: keyword("navbar_category_image"),
       typeId: 2,
       icons: [],
       toolRestrictions: [],
@@ -560,7 +559,7 @@ const NavBar = () => {
             width="45px"
             height="45px"
             style={{ fill: "#4c4c4c" }}
-            title={t("navbar_metadata")}
+            title={keyword("navbar_metadata")}
           />
         ),
       iconColored: (
@@ -568,13 +567,13 @@ const NavBar = () => {
           width="45px"
           height="45px"
           style={{ fill: "#00926c" }}
-          title={t("navbar_metadata")}
+          title={keyword("navbar_metadata")}
         />
       ),
       tsvPrefix: "metadata",
       path: "metadata_image",
       pathGroup: "TOOL",
-      type: t("navbar_category_image"),
+      type: keyword("navbar_category_image"),
       typeId: 2,
       icons: [],
       toolRestrictions: [],
@@ -597,7 +596,7 @@ const NavBar = () => {
             width="45px"
             height="45px"
             style={{ fill: "#4c4c4c" }}
-            title={t("navbar_forensic")}
+            title={keyword("navbar_forensic")}
           />
         ),
       iconColored: (
@@ -605,13 +604,13 @@ const NavBar = () => {
           width="45px"
           height="45px"
           style={{ fill: "#00926c" }}
-          title={t("navbar_forensic")}
+          title={keyword("navbar_forensic")}
         />
       ),
       tsvPrefix: "forensic",
       path: "forensic",
       pathGroup: "TOOL",
-      type: t("navbar_category_image"),
+      type: keyword("navbar_category_image"),
       typeId: 2,
       icons: ["redesigned"],
       toolRestrictions: [],
@@ -633,7 +632,7 @@ const NavBar = () => {
             width="45px"
             height="45px"
             style={{ fill: "#4c4c4c" }}
-            title={t("navbar_ocr")}
+            title={keyword("navbar_ocr")}
           />
         ),
       iconColored: (
@@ -641,13 +640,13 @@ const NavBar = () => {
           width="45px"
           height="45px"
           style={{ fill: "#00926c" }}
-          title={t("navbar_ocr")}
+          title={keyword("navbar_ocr")}
         />
       ),
       tsvPrefix: "ocr",
       path: "ocr",
       pathGroup: "TOOL",
-      type: t("navbar_category_image"),
+      type: keyword("navbar_category_image"),
       typeId: 2,
       icons: ["new"],
       toolRestrictions: [],
@@ -670,7 +669,7 @@ const NavBar = () => {
             width="45px"
             height="45px"
             style={{ fill: "#4c4c4c" }}
-            title={t("navbar_gif")}
+            title={keyword("navbar_gif")}
           />
         ),
       iconColored: (
@@ -678,13 +677,13 @@ const NavBar = () => {
           width="45px"
           height="45px"
           style={{ fill: "#00926c" }}
-          title={t("navbar_gif")}
+          title={keyword("navbar_gif")}
         />
       ),
       tsvPrefix: "gif",
       path: "gif",
       pathGroup: "TOOL",
-      type: t("navbar_category_image"),
+      type: keyword("navbar_category_image"),
       typeId: 2,
       icons: ["new", "lock"],
       toolRestrictions: ["lock"],
@@ -727,7 +726,7 @@ const NavBar = () => {
             width="45px"
             height="45px"
             style={{ fill: "#4c4c4c" }}
-            title={t("navbar_deepfake")}
+            title={keyword("navbar_deepfake")}
           />
         ),
       iconColored: (
@@ -735,13 +734,13 @@ const NavBar = () => {
           width="45px"
           height="45px"
           style={{ fill: "#00926c" }}
-          title={t("navbar_deepfake")}
+          title={keyword("navbar_deepfake")}
         />
       ),
       tsvPrefix: "deepfake",
       path: "deepfakeImage",
       pathGroup: "TOOL",
-      type: t("navbar_category_image"),
+      type: keyword("navbar_category_image"),
       typeId: 2,
       icons: ["experimental", "lock"],
       toolRestrictions: ["beta"],
@@ -763,7 +762,7 @@ const NavBar = () => {
             width="45px"
             height="45px"
             style={{ fill: "#4c4c4c" }}
-            title={t("navbar_geolocation")}
+            title={keyword("navbar_geolocation")}
           />
         ),
       iconColored: (
@@ -771,13 +770,13 @@ const NavBar = () => {
           width="45px"
           height="45px"
           style={{ fill: "#00926c" }}
-          title={t("navbar_geolocation")}
+          title={keyword("navbar_geolocation")}
         />
       ),
       tsvPrefix: "geolocation",
       path: "geolocation",
       pathGroup: "TOOL",
-      type: t("navbar_category_image"),
+      type: keyword("navbar_category_image"),
       typeId: 2,
       icons: ["experimental", "lock"],
       toolRestrictions: ["beta"],
@@ -800,7 +799,7 @@ const NavBar = () => {
             width="45px"
             height="45px"
             style={{ fill: "#4c4c4c" }}
-            title={t("navbar_twitter")}
+            title={keyword("navbar_twitter")}
           />
         ),
       iconColored: (
@@ -808,13 +807,13 @@ const NavBar = () => {
           width="45px"
           height="45px"
           style={{ fill: "#00926c" }}
-          title={t("navbar_twitter")}
+          title={keyword("navbar_twitter")}
         />
       ),
       tsvPrefix: "twitter",
       path: "twitter",
       pathGroup: "TOOL",
-      type: t("navbar_category_search"),
+      type: keyword("navbar_category_search"),
       typeId: 3,
       icons: [],
       toolRestrictions: [],
@@ -836,7 +835,7 @@ const NavBar = () => {
             width="45px"
             height="45px"
             style={{ fill: "#4c4c4c" }}
-            title={t("navbar_twitter_sna")}
+            title={keyword("navbar_twitter_sna")}
           />
         ),
       iconColored: (
@@ -844,13 +843,13 @@ const NavBar = () => {
           width="45px"
           height="45px"
           style={{ fill: "#00926c" }}
-          title={t("navbar_twitter_sna")}
+          title={keyword("navbar_twitter_sna")}
         />
       ),
       tsvPrefix: "twitter_sna",
       path: "twitterSna",
       pathGroup: "TOOL",
-      type: t("navbar_category_data"),
+      type: keyword("navbar_category_data"),
       typeId: 4,
       icons: ["lock"],
       toolRestrictions: ["lock"],
@@ -871,7 +870,7 @@ const NavBar = () => {
       tsvPrefix: "archiving",
       path: "archive",
       pathGroup: "TOOL",
-      type: t("navbar_category_other"),
+      type: keyword("navbar_category_other"),
       typeId: 5,
       icons: ["experimental", "new", "lock"],
       toolRestrictions: ["lock", "beta"],
@@ -893,7 +892,7 @@ const NavBar = () => {
             width="45px"
             height="45px"
             style={{ fill: "#4c4c4c" }}
-            title={t("navbar_twitter_crowdtangle")}
+            title={keyword("navbar_twitter_crowdtangle")}
           />
         ),
       iconColored: (
@@ -901,12 +900,12 @@ const NavBar = () => {
           width="45px"
           height="45px"
           style={{ fill: "#00926c" }}
-          title={t("navbar_twitter_crowdtangle")}
+          title={keyword("navbar_twitter_crowdtangle")}
         />
       ),
       tsvPrefix: "twitter_crowdtangle",
       pathGroup: "TOOL",
-      type: t("navbar_category_data"),
+      type: keyword("navbar_category_data"),
       typeId: 4,
       icons: [],
       toolRestrictions: [],
@@ -928,7 +927,7 @@ const NavBar = () => {
             width="45px"
             height="45px"
             style={{ fill: "#4c4c4c" }}
-            title={t("navbar_covidsearch")}
+            title={keyword("navbar_covidsearch")}
           />
         ),
       iconColored: (
@@ -936,13 +935,13 @@ const NavBar = () => {
           width="45px"
           height="45px"
           style={{ fill: "#00926c" }}
-          title={t("navbar_covidsearch")}
+          title={keyword("navbar_covidsearch")}
         />
       ),
       tsvPrefix: "covidsearch",
       path: "factcheck",
       pathGroup: "TOOL",
-      type: t("navbar_category_search"),
+      type: keyword("navbar_category_search"),
       typeId: 3,
       icons: ["new"],
       toolRestrictions: [],
@@ -964,7 +963,7 @@ const NavBar = () => {
             width="45px"
             height="45px"
             style={{ fill: "#4c4c4c" }}
-            title={t("navbar_xnetwork")}
+            title={keyword("navbar_xnetwork")}
           />
         ),
       iconColored: (
@@ -972,13 +971,13 @@ const NavBar = () => {
           width="45px"
           height="45px"
           style={{ fill: "#00926c" }}
-          title={t("navbar_xnetwork")}
+          title={keyword("navbar_xnetwork")}
         />
       ),
       tsvPrefix: "xnetwork",
       path: "xnetwork",
       pathGroup: "TOOL",
-      type: t("navbar_category_search"),
+      type: keyword("navbar_category_search"),
       typeId: 3,
       icons: ["new"],
       toolRestrictions: [],
@@ -999,7 +998,7 @@ const NavBar = () => {
       pathGroup: "OTHER",
       footer: <div />,
       typeTab: "verification",
-      type: t("navbar_category_general"),
+      type: keyword("navbar_category_general"),
       typeId: 0,
     },
     {
@@ -1023,7 +1022,7 @@ const NavBar = () => {
       pathGroup: "OTHER",
       footer: <Footer type={"usfd"} />,
       typeTab: "verification",
-      type: t("navbar_category_general"),
+      type: keyword("navbar_category_general"),
       typeId: 0,
     },
     {
@@ -1039,7 +1038,7 @@ const NavBar = () => {
       pathGroup: "OTHER",
       footer: <Footer type={"afp"} />,
       typeTab: "learning",
-      type: t("navbar_category_general"),
+      type: keyword("navbar_category_general"),
       typeId: 0,
     },
     {
@@ -1063,7 +1062,7 @@ const NavBar = () => {
       pathGroup: "OTHER",
       footer: <Footer type={"afp"} />,
       typeTab: "learning",
-      type: t("navbar_category_general"),
+      type: keyword("navbar_category_general"),
       typeId: 0,
     },
     {
@@ -1087,7 +1086,7 @@ const NavBar = () => {
       pathGroup: "OTHER",
       footer: <Footer type={"afp"} />,
       typeTab: "learning",
-      type: t("navbar_category_general"),
+      type: keyword("navbar_category_general"),
       typeId: 0,
     },
     /*{
@@ -1224,7 +1223,7 @@ const NavBar = () => {
 
   //Video items
   const drawerItemsVideo = drawerItems.filter(
-    (item) => item.type === t("navbar_category_video"),
+    (item) => item.type === keyword("navbar_category_video"),
   );
   const [openListVideo, setOpenListVideo] = useState(false);
   const [classBorderVideo, setClassBorderVideo] = useState(null);
@@ -1240,7 +1239,7 @@ const NavBar = () => {
 
   //Image items
   const drawerItemsImage = drawerItems.filter(
-    (item) => item.type === t("navbar_category_image"),
+    (item) => item.type === keyword("navbar_category_image"),
   );
   const [openListImage, setOpenListImage] = useState(false);
   const [classBorderImage, setClassBorderImage] = useState(null);
@@ -1256,7 +1255,7 @@ const NavBar = () => {
 
   //Search items
   const drawerItemsSearch = drawerItems.filter(
-    (item) => item.type === t("navbar_category_search"),
+    (item) => item.type === keyword("navbar_category_search"),
   );
   const [openListSeach, setOpenListSeach] = useState(false);
   const [classBorderSearch, setClassBorderSearch] = useState(null);
@@ -1272,7 +1271,7 @@ const NavBar = () => {
 
   //Data items
   const drawerItemsData = drawerItems.filter(
-    (item) => item.type === t("navbar_category_data"),
+    (item) => item.type === keyword("navbar_category_data"),
   );
   const [openListData, setOpenListData] = useState(false);
   const [classBorderData, setClassBorderData] = useState(null);
@@ -1287,7 +1286,7 @@ const NavBar = () => {
   };
 
   const drawerItemsOtherTools = drawerItems.filter(
-    (item) => item.type === t("navbar_category_other"),
+    (item) => item.type === keyword("navbar_category_other"),
   );
   const [openListOtherTools, setOpenListOtherTools] = useState(false);
   const [classBorderOtherTools, setClassBorderOtherTools] = useState(null);
@@ -1303,11 +1302,11 @@ const NavBar = () => {
 
   const listItems = [
     {
-      title: t("navbar_category_video"),
+      title: keyword("navbar_category_video"),
       icon: (
         <VideoIcon
           style={{ fill: "#4c4c4c" }}
-          title={t("navbar_category_video")}
+          title={keyword("navbar_category_video")}
         />
       ),
       list: drawerItemsVideo,
@@ -1317,11 +1316,11 @@ const NavBar = () => {
       classBorder: classBorderVideo,
     },
     {
-      title: t("navbar_category_image"),
+      title: keyword("navbar_category_image"),
       icon: (
         <ImageIcon
           style={{ fill: "#4c4c4c" }}
-          title={t("navbar_category_image")}
+          title={keyword("navbar_category_image")}
         />
       ),
       list: drawerItemsImage,
@@ -1331,11 +1330,11 @@ const NavBar = () => {
       classBorder: classBorderImage,
     },
     {
-      title: t("navbar_category_search"),
+      title: keyword("navbar_category_search"),
       icon: (
         <SearchIcon
           style={{ fill: "#4c4c4c" }}
-          title={t("navbar_category_search")}
+          title={keyword("navbar_category_search")}
         />
       ),
       list: drawerItemsSearch,
@@ -1345,11 +1344,11 @@ const NavBar = () => {
       classBorder: classBorderSearch,
     },
     {
-      title: t("navbar_category_data"),
+      title: keyword("navbar_category_data"),
       icon: (
         <DataIcon
           style={{ fill: "#4c4c4c" }}
-          title={t("navbar_category_data")}
+          title={keyword("navbar_category_data")}
         />
       ),
       list: drawerItemsData,
@@ -1362,7 +1361,7 @@ const NavBar = () => {
 
   if (role.includes("BETA_TESTER"))
     listItems.push({
-      title: t("navbar_category_other"),
+      title: keyword("navbar_category_other"),
       icon: <MoreHorizIcon style={{ fill: "#4c4c4c" }} />,
       list: drawerItemsOtherTools,
       variableOpen: openListOtherTools,
@@ -1391,7 +1390,7 @@ const NavBar = () => {
         sx={{ mr: 8 }}
       >
         <Alert onClose={handleCloseAlert} severity="warning">
-          {tWarning("warning_advanced_tools")}
+          {keywordWarning("warning_advanced_tools")}
         </Alert>
       </Snackbar>
       <ThemeProvider theme={themeFab}>
@@ -1448,7 +1447,7 @@ const NavBar = () => {
                   return (
                     <Tab
                       key={index}
-                      label={t(item.title)}
+                      label={keyword(item.title)}
                       icon={item.icon}
                       className={classes.tab}
                       {...a11yProps(index)}
@@ -1502,8 +1501,8 @@ const NavBar = () => {
                 }}
               >
                 {open
-                  ? t("navbar_verification")
-                  : t("navbar_verification_short")}
+                  ? keyword("navbar_verification")
+                  : keyword("navbar_verification_short")}
               </Typography>
             </ListSubheader>
             <ListItem
@@ -1529,7 +1528,7 @@ const NavBar = () => {
                       open ? classes.drawerListText : classes.hidden
                     }`}
                   >
-                    {t(toolsItem.title)}
+                    {keyword(toolsItem.title)}
                   </Typography>
                 }
               />
@@ -1606,7 +1605,7 @@ const NavBar = () => {
                                       : classes.hidden
                                   }`}
                                 >
-                                  {t(itemList.title)}
+                                  {keyword(itemList.title)}
                                 </Typography>
                               }
                             />
@@ -1666,7 +1665,7 @@ const NavBar = () => {
                   textTransform: "uppercase",
                 }}
               >
-                {open ? t("navbar_more") : t("navbar_more_short")}
+                {open ? keyword("navbar_more") : keyword("navbar_more_short")}
               </Typography>
             </ListSubheader>
             {drawerItemsMore.map((item, key) => {
@@ -1693,7 +1692,7 @@ const NavBar = () => {
                           open ? classes.drawerListText : classes.hidden
                         }`}
                       >
-                        {t(item.title)}
+                        {keyword(item.title)}
                       </Typography>
                     }
                   />
@@ -1723,7 +1722,7 @@ const NavBar = () => {
               style={{ alignSelf: "center" }}
               startIcon={!open ? <ChevronRightIcon /> : <ChevronLeftIcon />}
             >
-              {open ? t("navbar_collapse") : ""}
+              {open ? keyword("navbar_collapse") : ""}
             </Button>
             <Box m={1} />
           </div>
@@ -1766,7 +1765,7 @@ const NavBar = () => {
                 horizontal: "center",
               }}
               open={true}
-              message={t("cookies_message")}
+              message={keyword("cookies_message")}
               action={[
                 <Button
                   key={"cookies_decline"}
@@ -1775,7 +1774,7 @@ const NavBar = () => {
                   onClick={() => dispatch(setFalse())}
                 >
                   {" "}
-                  {t("cookies_decline")}{" "}
+                  {keyword("cookies_decline")}{" "}
                 </Button>,
                 <Button
                   key={"cookies_accept"}
@@ -1784,7 +1783,7 @@ const NavBar = () => {
                   onClick={() => dispatch(setTrue())}
                 >
                   {" "}
-                  {t("cookies_accept")}{" "}
+                  {keyword("cookies_accept")}{" "}
                 </Button>,
               ]}
             />
