@@ -9,8 +9,10 @@ import useLoadLanguage from "Hooks/useLoadLanguage";
 import { LinearProgressWithLabel } from "components/Shared/LinearProgressWithLabel/LinearProgressWithLabel";
 import { Help } from "@mui/icons-material";
 import { resetSyntheticImageDetectionImage } from "redux/actions/tools/syntheticImageDetectionActions";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { DetectionProgressBar } from "components/Shared/DetectionProgressBar/DetectionProgressBar";
+import { useTrackEvent } from "Hooks/useAnalytics";
+import { getclientId } from "components/Shared/GoogleAnalytics/MatomoAnalytics";
 
 const SyntheticImageDetectionResults = (props) => {
   const keyword = useLoadLanguage(
@@ -43,7 +45,7 @@ const SyntheticImageDetectionResults = (props) => {
 
   const imgContainerRef = useRef(null);
 
-  const [deepfakeScores, setDeepfakeScores] = useState([]);
+  const [syntheticImageScores, setSyntheticImageScores] = useState([]);
 
   useEffect(() => {
     if (
@@ -68,8 +70,22 @@ const SyntheticImageDetectionResults = (props) => {
       (a, b) => b.predictionScore - a.predictionScore,
     );
 
-    setDeepfakeScores(res);
+    setSyntheticImageScores(res);
   }, [results]);
+
+  const client_id = getclientId();
+  const session = useSelector((state) => state.userSession);
+  const uid = session && session.user ? session.user.email : null;
+
+  useTrackEvent(
+    "submission",
+    "synthetic_image_detection",
+    "synthetic image processing",
+    url,
+    client_id,
+    url,
+    uid,
+  );
 
   const handleClose = () => {
     props.handleClose();
@@ -124,20 +140,20 @@ const SyntheticImageDetectionResults = (props) => {
           </Grid>
           <Grid item sm={12} md={6}>
             <Stack direction="column" p={4} spacing={4}>
-              {deepfakeScores &&
-                deepfakeScores.length > 0 &&
-                deepfakeScores[0].predictionScore &&
-                deepfakeScores[0].predictionScore >= 70 && (
+              {syntheticImageScores &&
+                syntheticImageScores.length > 0 &&
+                syntheticImageScores[0].predictionScore &&
+                syntheticImageScores[0].predictionScore >= 70 && (
                   <Typography variant="h5" sx={{ color: "red" }}>
                     {keyword("synthetic_image_detection_detection_alert") +
                       DeepfakeImageDetectionMethodNames[
-                        deepfakeScores[0].methodName
+                        syntheticImageScores[0].methodName
                       ].name +
                       keyword("synthetic_image_detection_detection_alert_2")}
                   </Typography>
                 )}
-              {deepfakeScores &&
-                deepfakeScores.map((item, key) => {
+              {syntheticImageScores &&
+                syntheticImageScores.map((item, key) => {
                   return (
                     <Stack direction="column" key={key}>
                       <Stack
@@ -167,7 +183,7 @@ const SyntheticImageDetectionResults = (props) => {
                     </Stack>
                   );
                 })}
-              {deepfakeScores && (
+              {syntheticImageScores && (
                 <Stack>
                   <DetectionProgressBar
                     style={{
