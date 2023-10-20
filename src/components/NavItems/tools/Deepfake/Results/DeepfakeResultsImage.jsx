@@ -10,6 +10,7 @@ import { LinearProgressWithLabel } from "../../../../Shared/LinearProgressWithLa
 import { Close, Help } from "@mui/icons-material";
 import { resetDeepfake } from "redux/actions/tools/deepfakeImageActions";
 import { useDispatch } from "react-redux";
+import { DetectionProgressBar } from "components/Shared/DetectionProgressBar/DetectionProgressBar";
 
 const DeepfakeResultsImage = (props) => {
   const classes = useMyStyles();
@@ -280,6 +281,13 @@ const DeepfakeResultsImage = (props) => {
                   <LinearProgressWithLabel
                     value={deepfakeScore.predictionScore}
                   />
+                  <Stack>
+                    <DetectionProgressBar
+                      style={{
+                        height: "8px",
+                      }}
+                    />
+                  </Stack>
                 </Stack>
               )}
             </Stack>

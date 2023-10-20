@@ -243,6 +243,7 @@ export const reverseImageSearchBaidu = (
       // document.body.style.cursor = "default";
     });
 };
+
 export const reverseRemoteGoogleLens = (
   url,
   isRequestFromContextMenu = true,
@@ -565,8 +566,9 @@ const retrieveImgObjectForSearchEngine = async (
 
     // console.log(info);
     // TODO: Error handling for getImgUrl
-    console.log("info ", info);
-    console.log("getiknfo ", getImgUrl(info));
+    //console.log("DEBUG info ", info);
+    //console.log("DEBUG getiknfo ", getImgUrl(info));
+    
     return new ImageObject(getImgUrl(info), IMAGE_FORMATS.URI);
   }
 
@@ -622,7 +624,7 @@ export const reverseImageSearch = async (
   } else if (
     searchEngineName === SEARCH_ENGINE_SETTINGS.GOOGLE_LENS_SEARCH.NAME
   ) {
-    console.log("image ", imageObject);
+    //console.log("DEBUG image ", imageObject);
     if (
       imageObject.imageFormat ==
       SEARCH_ENGINE_SETTINGS.GOOGLE_LENS_SEARCH.IMAGE_FORMAT_LOCAL

@@ -7,22 +7,18 @@ import {
 } from "../../../../../redux/reducers/tools/geolocationReducer";
 import { setError } from "../../../../../redux/actions/errorActions";
 
-const useGeolacate = (url, processURL, keyword) => {
+const useGeolocate = (url, processURL, keyword) => {
   const dispatch = useDispatch();
   const caa_localtion_base_url = process.env.REACT_APP_CAA_LOCATION_URL;
+
   useEffect(() => {
     if (processURL && url !== "") {
       dispatch(setGeolocationLoading(true));
 
       axios
-        .get(
-          caa_localtion_base_url +
-            "geolocate?image_url=" +
-            url +
-            "&use_gradcam=0",
-        )
+        .get(caa_localtion_base_url + "?image_url=" + url + "&use_gradcam=0")
         .then((response) => {
-          console.log(response.data);
+          //console.log("response  ", response);
           if (response.data != null) {
             dispatch(
               setGeolocationResult({
@@ -47,6 +43,6 @@ const useGeolacate = (url, processURL, keyword) => {
       dispatch(setGeolocationLoading(false));
     };
     // eslint-disable-next-line
-  }, [processURL, dispatch, keyword, url]);
+  }, [processURL, url]);
 };
-export default useGeolacate;
+export default useGeolocate;

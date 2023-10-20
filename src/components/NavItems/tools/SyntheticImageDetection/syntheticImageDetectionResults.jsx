@@ -10,6 +10,7 @@ import { LinearProgressWithLabel } from "components/Shared/LinearProgressWithLab
 import { Help } from "@mui/icons-material";
 import { resetSyntheticImageDetectionImage } from "redux/actions/tools/syntheticImageDetectionActions";
 import { useDispatch } from "react-redux";
+import { DetectionProgressBar } from "components/Shared/DetectionProgressBar/DetectionProgressBar";
 
 const SyntheticImageDetectionResults = (props) => {
   const keyword = useLoadLanguage(
@@ -166,6 +167,15 @@ const SyntheticImageDetectionResults = (props) => {
                     </Stack>
                   );
                 })}
+              {deepfakeScores && (
+                <Stack>
+                  <DetectionProgressBar
+                    style={{
+                      height: "8px",
+                    }}
+                  />
+                </Stack>
+              )}
             </Stack>
           </Grid>
         </Grid>
