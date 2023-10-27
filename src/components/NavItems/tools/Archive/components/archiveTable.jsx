@@ -16,9 +16,16 @@ import {
 import FileCopyIcon from "@mui/icons-material/FileCopy";
 import DoneIcon from "@mui/icons-material/Done";
 import { prettifyLargeString } from "../utils";
+import { useTrackEvent } from "Hooks/useAnalytics";
+import { getclientId } from "components/Shared/GoogleAnalytics/MatomoAnalytics";
+import { useSelector } from "react-redux";
 
 export const ArchiveTable = (props) => {
   const [clicks, setClicks] = useState([]);
+
+  const client_id = getclientId();
+  const session = useSelector((state) => state.userSession);
+  const uid = session && session.user ? session.user.email : null;
 
   const handleIconClick = (id) => {
     let result = clicks.includes(id)
@@ -26,6 +33,17 @@ export const ArchiveTable = (props) => {
       : [...clicks, id];
     setClicks(result);
   };
+
+  useTrackEvent(
+    "submission",
+    "archiving",
+    "archiving",
+    props.fileName,
+    client_id,
+    props.fileName,
+    uid,
+  );
+
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">

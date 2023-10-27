@@ -184,13 +184,13 @@ const SyntheticImageDetectionResults = (props) => {
                   );
                 })}
               {syntheticImageScores && (
-                <Stack>
+                <Box pt={2}>
                   <DetectionProgressBar
                     style={{
                       height: "8px",
                     }}
                   />
-                </Stack>
+                </Box>
               )}
             </Stack>
           </Grid>
