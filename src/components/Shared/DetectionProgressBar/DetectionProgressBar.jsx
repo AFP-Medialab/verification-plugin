@@ -25,9 +25,7 @@ export const DetectionProgressBar = (props) => {
   }, []);
 
   return (
-    <div>
-      <Box m={2} />
-
+    <Box mr={"43px"}>
       <CardMedia image={MakoScale} style={style} />
       <Grid
         container
@@ -47,6 +45,6 @@ export const DetectionProgressBar = (props) => {
           </Typography>
         </Grid>
       </Grid>
-    </div>
+    </Box>
   );
 };

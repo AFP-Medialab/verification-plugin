@@ -19,9 +19,9 @@ import ArchiveTable from "./components/archiveTable";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import useAuthenticatedRequest from "../../../Shared/Authentication/useAuthenticatedRequest";
 import { prettifyLargeString } from "./utils";
-import { getclientId } from "components/Shared/GoogleAnalytics/MatomoAnalytics";
-import { useSelector } from "react-redux";
-import { useTrackEvent } from "Hooks/useAnalytics";
+// import { getclientId } from "components/Shared/GoogleAnalytics/MatomoAnalytics";
+// import { useSelector } from "react-redux";
+// import { useTrackEvent } from "Hooks/useAnalytics";
 
 //TODO:UI for long strings
 
@@ -39,10 +39,6 @@ const Archive = () => {
   const [errorMessage, setErrorMessage] = useState("");
 
   const authenticatedRequest = useAuthenticatedRequest();
-
-  const client_id = getclientId();
-  const session = useSelector((state) => state.userSession);
-  const uid = session && session.user ? session.user.email : null;
 
   const isFileAWaczFile = (fileName) => {
     return fileName.split(".").pop() === "wacz";
@@ -137,15 +133,6 @@ const Archive = () => {
       return;
     }
 
-    useTrackEvent(
-      "submission",
-      "archiving",
-      "archiving",
-      fileToUpload.name,
-      client_id,
-      fileToUpload.name,
-      uid,
-    );
     setArchiveLinks(results);
     setIsLoading(false);
     setHasArchiveBeenCreated(true);
@@ -252,7 +239,10 @@ const Archive = () => {
                 ) : (
                   <Fade in={!isLoading} timeout={1000}>
                     <Box>
-                      <ArchiveTable rows={archiveLinks} />
+                      <ArchiveTable
+                        rows={archiveLinks}
+                        fileName={fileToUpload.name}
+                      />
                     </Box>
                   </Fade>
                 )}

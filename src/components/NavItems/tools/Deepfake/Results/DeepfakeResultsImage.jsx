@@ -297,15 +297,15 @@ const DeepfakeResultsImage = (props) => {
                   <LinearProgressWithLabel
                     value={deepfakeScore.predictionScore}
                   />
-                  <Stack>
-                    <DetectionProgressBar
-                      style={{
-                        height: "8px",
-                      }}
-                    />
-                  </Stack>
                 </Stack>
               )}
+              <Box>
+                <DetectionProgressBar
+                  style={{
+                    height: "8px",
+                  }}
+                />
+              </Box>
             </Stack>
           </Grid>
         </Grid>

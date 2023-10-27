@@ -194,7 +194,7 @@ const DeepfakeResultsVideo = (props) => {
             </video>
           </Grid>
           <Grid item xs={6}>
-            <Card sx={{ height: "40vh" }}>
+            <Card>
               <CardHeader title={keyword("deepfake_video_title")} />
               <Stack direction="column" p={4} spacing={4}>
                 {deepfakeScores.map((item, key) => {
