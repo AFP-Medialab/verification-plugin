@@ -17,6 +17,9 @@ import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import Help from "@mui/icons-material/Help";
 import { LinearProgressWithLabel } from "../../../../Shared/LinearProgressWithLabel/LinearProgressWithLabel";
 import { DetectionProgressBar } from "components/Shared/DetectionProgressBar/DetectionProgressBar";
+import { getclientId } from "components/Shared/GoogleAnalytics/MatomoAnalytics";
+import { useSelector } from "react-redux";
+import { useTrackEvent } from "Hooks/useAnalytics";
 
 const DeepfakeResultsVideo = (props) => {
   const keyword = useLoadLanguage(
@@ -47,7 +50,7 @@ const DeepfakeResultsVideo = (props) => {
   });
 
   const results = props.result;
-  //const url = props.url;
+  const url = props.url;
 
   const [shotSelectedKey, setShotSelectedKey] = useState(-1);
   const [shotSelectedValue, setShotSelectedValue] = useState(null);
@@ -64,6 +67,20 @@ const DeepfakeResultsVideo = (props) => {
       videoClip.current.load();
     }
   }
+
+  const client_id = getclientId();
+  const session = useSelector((state) => state.userSession);
+  const uid = session && session.user ? session.user.email : null;
+
+  useTrackEvent(
+    "submission",
+    "deepfake_video",
+    "deepfake video processing",
+    url,
+    client_id,
+    url,
+    uid,
+  );
 
   useEffect(() => {
     var prediction = results.deepfake_video_report.prediction;
@@ -177,7 +194,7 @@ const DeepfakeResultsVideo = (props) => {
             </video>
           </Grid>
           <Grid item xs={6}>
-            <Card sx={{ height: "40vh" }}>
+            <Card>
               <CardHeader title={keyword("deepfake_video_title")} />
               <Stack direction="column" p={4} spacing={4}>
                 {deepfakeScores.map((item, key) => {
