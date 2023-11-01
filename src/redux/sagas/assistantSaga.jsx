@@ -459,7 +459,7 @@ function formatTelegramLink(url) {
   let urlType = matchPattern(url, KNOWN_LINK_PATTERNS);
   if (urlType !== KNOWN_LINKS.TELEGRAM) {
     throw new Error(
-      "formatTelegramLink: Expected telegram link but got " + urlType
+      "formatTelegramLink: Expected telegram link but got " + urlType,
     );
   }
 
@@ -486,6 +486,7 @@ const decideWhetherToScrape = (urlType, contentType) => {
     case KNOWN_LINKS.FACEBOOK:
     case KNOWN_LINKS.TWITTER:
     case KNOWN_LINKS.TELEGRAM:
+    case KNOWN_LINKS.MASTODON:
       return true;
     case KNOWN_LINKS.MISC:
       if (contentType === null) {
