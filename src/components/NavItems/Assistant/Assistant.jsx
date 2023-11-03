@@ -52,6 +52,13 @@ const Assistant = () => {
 
   //third party check states
   const neResult = useSelector((state) => state.assistant.neResultCategory);
+  const newsFramingResult = useSelector(
+    (state) => state.assistant.newsFramingResult
+  );
+  const newsGenreResult = useSelector(
+    (state) => state.assistant.newsGenreResult
+  );
+  const hpResult = useSelector((state) => state.assistant.hpResult);
 
   // source credibility
   const positiveSourCred = useSelector(
@@ -79,6 +86,13 @@ const Assistant = () => {
     (state) => state.assistant.dbkfMediaMatchFail,
   );
   const neFailState = useSelector((state) => state.assistant.neFail);
+  const newsFramingFailState = useSelector(
+    (state) => state.assistant.newsFramingFail
+  );
+  const newsGenreFailState = useSelector(
+    (state) => state.assistant.newsGenreFail
+  );
+  // const mtFailState = useSelector(state => state.assistant.mtFail)
 
   //local state
   const [formInput, setFormInput] = useState(inputUrl);
@@ -163,7 +177,9 @@ const Assistant = () => {
         {scFailState ||
         dbkfTextFailState ||
         dbkfMediaFailState ||
-        neFailState ? (
+        neFailState ||
+        newsFramingFailState ||
+        newsGenreFailState ? (
           <Grid item xs>
             <AssistantCheckStatus />
           </Grid>
@@ -228,7 +244,7 @@ const Assistant = () => {
               ) : null}
 
               {linkList.length !== 0 ? (
-                <Grid item xs={5}>
+                <Grid item xs={6}>
                   <AssistantLinkResult />
                 </Grid>
               ) : null}

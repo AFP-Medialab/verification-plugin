@@ -12,6 +12,9 @@ import {
   setInputSourceCredDetails,
   setInputUrl,
   setNeDetails,
+  setNewsGenreDetails,
+  setNewsTopicDetails,
+  setPersuasionDetails,
   setProcessUrl,
   setProcessUrlActions,
   setScrapedData,
@@ -66,6 +69,18 @@ function* getMediaSimilaritySaga() {
 
 function* getDbkfTextMatchSaga() {
   yield takeLatest(["SET_SCRAPED_DATA", "CLEAN_STATE"], handleDbkfTextCall);
+}
+
+function* getNewsTopicSaga() {
+  yield takeLatest(["SET_SCRAPED_DATA", "CLEAN_STATE"], handleNewsTopicCall);
+}
+
+function* getNewsGenreSaga() {
+  yield takeLatest(["SET_SCRAPED_DATA", "CLEAN_STATE"], handleNewsGenreCall);
+}
+
+function* getPersuasionSaga() {
+  yield takeLatest(["SET_SCRAPED_DATA", "CLEAN_STATE"], handlePersuasionCall);
 }
 
 function* getSourceCredSaga() {
@@ -259,6 +274,57 @@ function* handleDbkfTextCall(action) {
   }
 }
 
+function* handleNewsTopicCall(action) {
+  if (action.type === "CLEAN_STATE") return;
+
+  try {
+    const text = yield select((state) => state.assistant.urlText);
+
+    if (text) {
+      yield put(setNewsTopicDetails(null, true, false, false));
+
+      const result = yield call(assistantApi.callNewsFramingService, text);
+      yield put(setNewsTopicDetails(result, false, true, false));
+    }
+  } catch (error) {
+    yield put(setNewsTopicDetails(null, false, false, true));
+  }
+}
+
+function* handleNewsGenreCall(action) {
+  if (action.type === "CLEAN_STATE") return;
+
+  try {
+    const text = yield select((state) => state.assistant.urlText);
+
+    if (text) {
+      yield put(setNewsGenreDetails(null, true, false, false));
+
+      const result = yield call(assistantApi.callNewsGenreService, text);
+      yield put(setNewsGenreDetails(result, false, true, false));
+    }
+  } catch (error) {
+    yield put(setNewsGenreDetails(null, false, false, true));
+  }
+}
+
+function* handlePersuasionCall(action) {
+  if (action.type === "CLEAN_STATE") return;
+
+  try {
+    const text = yield select((state) => state.assistant.urlText);
+
+    if (text) {
+      yield put(setPersuasionDetails(null, true, false, false));
+
+      const result = yield call(assistantApi.callPersuasionService, text);
+      yield put(setPersuasionDetails(result, false, true, false));
+    }
+  } catch (error) {
+    yield put(setPersuasionDetails(null, false, false, true));
+  }
+}
+
 function* handleNamedEntityCall(action) {
   if (action.type === "CLEAN_STATE") return;
 
@@ -351,6 +417,8 @@ function* handleAssistantScrapeCall(action) {
         filteredSR.linkList,
         filteredSR.imageList,
         filteredSR.videoList,
+        filteredSR.urlTextGenre,
+        filteredSR.urlTextTopic,
       ),
     );
     yield put(setAssistantLoading(false));
@@ -504,6 +572,8 @@ const filterAssistantResults = (
   let imageList = [];
   let linkList = [];
   let urlText = null;
+  let urlTextGenre = null;
+  let urlTextTopic = null;
   let textLang = null;
   switch (urlType) {
     case KNOWN_LINKS.YOUTUBE:
@@ -569,12 +639,16 @@ const filterAssistantResults = (
 
   if (scrapeResult) {
     urlText = scrapeResult.text;
+    urlTextTopic = scrapeResult.text_topic;
+    urlTextGenre = scrapeResult.text_genre;
     textLang = scrapeResult.lang;
     linkList = scrapeResult.links;
   }
 
   return {
     urlText: urlText,
+    urlTextTopic: urlTextTopic,
+    urlTextGenre: urlTextGenre,
     textLang: textLang,
     videoList: videoList,
     imageList: imageList,
@@ -679,5 +753,8 @@ export default function* assistantSaga() {
     fork(getNamedEntitySaga),
     fork(getAssistantScrapeSaga),
     fork(getUploadSaga),
+    fork(getNewsTopicSaga),
+    fork(getNewsGenreSaga),
+    fork(getPersuasionSaga),
   ]);
 }

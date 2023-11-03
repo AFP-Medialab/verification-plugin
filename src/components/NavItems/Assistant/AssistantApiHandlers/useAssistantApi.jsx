@@ -76,6 +76,30 @@ export default function assistantApiCalls() {
     return result.data;
   };
 
+  const callNewsFramingService = async (text) => {
+    const result = await axios.post(
+      assistantEndpoint + "gcloud/news-framing-clfr",
+      { text: text }
+    );
+    return result.data;
+  };
+
+  const callNewsGenreService = async (text) => {
+    const result = await axios.post(
+      assistantEndpoint + "gcloud/news-genre-clfr",
+      { text: text }
+    );
+    return result.data;
+  };
+
+  const callPersuasionService = async (text) => {
+    const result = await axios.post(
+      assistantEndpoint + "gcloud/persuasion-clfr",
+      { text: text }
+    );
+    return result.data;
+  };
+
   const callOcrScriptService = async () => {
     const result = await axios.get(assistantEndpoint + "gcloud/ocr-scripts");
     return result.data;
@@ -87,5 +111,8 @@ export default function assistantApiCalls() {
     callNamedEntityService,
     callOcrService,
     callOcrScriptService,
+    callNewsFramingService,
+    callNewsGenreService,
+    callPersuasionService,
   };
 }

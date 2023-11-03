@@ -39,6 +39,26 @@ const defaultState = {
   neDone: false,
   neFail: false,
 
+  newsFramingResult: null,
+  newsFramingLoading: false,
+  newsFramingDone: false,
+  newsFramingFail: false,
+
+  newsGenreResult: null,
+  newsGenreLoading: false,
+  newsGenreDone: false,
+  newsGenreFail: false,
+
+  persuasionResult: null,
+  persuasionLoading: false,
+  persuasionDone: false,
+  persuasionFail: false,
+
+  mtResult: null,
+  mtLoading: false,
+  mtDone: false,
+  mtFail: false,
+
   loading: false,
   warningExpanded: false,
   assuranceExpanded: false,
@@ -60,6 +80,9 @@ const assistantReducer = (state = defaultState, action) => {
     case "SET_DBKF_IMAGE_MATCH_DETAILS":
     case "SET_DBKF_VIDEO_MATCH_DETAILS":
     case "SET_NE_DETAILS":
+    case "SET_NEWS_TOPIC_DETAILS":
+    case "SET_NEWS_GENRE_DETAILS":
+    case "SET_PERSUASION_DETAILS":
     case "SET_LOADING":
     case "SET_WARNING_EXPANDED":
     case "SET_ASSURANCE_EXPANDED":

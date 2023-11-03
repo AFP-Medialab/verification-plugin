@@ -34,11 +34,29 @@ const AssistantCheckStatus = () => {
   const neTitle = keyword("ne_title");
   const neFailState = useSelector((state) => state.assistant.neFail);
 
+  const newsFramingTitle = "news topic";
+  const newsFramingFailState = useSelector(
+    (state) => state.assistant.newsFramingFail
+  );
+
+  const newsGenreTitle = "news genre";
+  const newsGenreFailState = useSelector(
+    (state) => state.assistant.newsGenreFail
+  );
+
+  const persuasionTitle = "persuasion";
+  const persuasionFailState = useSelector(
+    (state) => state.assistant.persuasionFail
+  );
+
   const failStates = [
     { title: scTitle, failed: scFailState },
     { title: dbkfMediaTitle, failed: dbkfMediaFailState },
     { title: dbkfTextTitle, failed: dbkfTextFailState },
     { title: neTitle, failed: neFailState },
+    { title: newsFramingTitle, failed: newsFramingFailState },
+    { title: newsGenreTitle, failed: newsGenreFailState },
+    { title: persuasionTitle, failed: persuasionFailState },
   ];
 
   return (
