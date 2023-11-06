@@ -11,7 +11,6 @@ import { CacheProvider } from "@emotion/react";
 
 import App from "./App";
 import AppWrapper from "./AppWrapper";
-import "./i18n";
 
 function saveToLocalStorage(state) {
   try {

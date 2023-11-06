@@ -19,16 +19,18 @@ import ArchiveTable from "./components/archiveTable";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import useAuthenticatedRequest from "../../../Shared/Authentication/useAuthenticatedRequest";
 import { prettifyLargeString } from "./utils";
+// import { getclientId } from "components/Shared/GoogleAnalytics/MatomoAnalytics";
+// import { useSelector } from "react-redux";
+// import { useTrackEvent } from "Hooks/useAnalytics";
 
-//TODO: Matomo analytics
-// UI for long strings
+//TODO:UI for long strings
 
 const Archive = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const [input, setInput] = useState("");
 
-  const [fileToUpload, setFileToUpload] = useState();
+  const [fileToUpload, setFileToUpload] = useState(/** @type {File?} */ (null));
 
   const [archiveLinks, setArchiveLinks] = useState([]);
 
@@ -82,7 +84,7 @@ const Archive = () => {
 
     setIsLoading(true);
 
-    if (!isFileAWaczFile(fileToUpload.name)) {
+    if (!fileToUpload || !isFileAWaczFile(fileToUpload.name)) {
       setErrorMessage("File error — The file is not a .wacz file");
       setIsLoading(false);
       setHasArchiveBeenCreated(false);
@@ -122,7 +124,7 @@ const Archive = () => {
       results.push({ archivedUrl, originalUrl });
     }
 
-    if (results === []) {
+    if (results.length === 0) {
       setErrorMessage(
         "Upload error — An error happened wit the upload of the file. Try again or with another file.",
       );
@@ -192,7 +194,7 @@ const Archive = () => {
                       color="primary"
                       onClick={(e) => {
                         e.preventDefault();
-                        handleSubmit(e);
+                        handleSubmit();
                       }}
                     >
                       {"Archive File"}
@@ -203,7 +205,7 @@ const Archive = () => {
               <Box>
                 {errorMessage && (
                   <Box mb={4}>
-                    <Fade in={errorMessage} timeout={750}>
+                    <Fade in={errorMessage ? true : false} timeout={750}>
                       <Alert severity="error">{errorMessage}</Alert>
                     </Fade>
                   </Box>
@@ -237,7 +239,10 @@ const Archive = () => {
                 ) : (
                   <Fade in={!isLoading} timeout={1000}>
                     <Box>
-                      <ArchiveTable rows={archiveLinks} />
+                      <ArchiveTable
+                        rows={archiveLinks}
+                        fileName={fileToUpload.name}
+                      />
                     </Box>
                   </Fade>
                 )}

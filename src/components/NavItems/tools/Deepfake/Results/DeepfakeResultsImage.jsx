@@ -9,8 +9,10 @@ import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
 import { LinearProgressWithLabel } from "../../../../Shared/LinearProgressWithLabel/LinearProgressWithLabel";
 import { Close, Help } from "@mui/icons-material";
 import { resetDeepfake } from "redux/actions/tools/deepfakeImageActions";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { DetectionProgressBar } from "components/Shared/DetectionProgressBar/DetectionProgressBar";
+import { getclientId } from "components/Shared/GoogleAnalytics/MatomoAnalytics";
+import { useTrackEvent } from "Hooks/useAnalytics";
 
 const DeepfakeResultsImage = (props) => {
   const classes = useMyStyles();
@@ -128,6 +130,20 @@ const DeepfakeResultsImage = (props) => {
     setRectangles(rectanglesTemp);
     setRectanglesReady(true);
   };
+
+  const client_id = getclientId();
+  const session = useSelector((state) => state.userSession);
+  const uid = session && session.user ? session.user.email : null;
+
+  useTrackEvent(
+    "submission",
+    "deepfake_image",
+    "deepfake image processing",
+    url,
+    client_id,
+    url,
+    uid,
+  );
 
   useEffect(() => {
     const resizeObserver = new ResizeObserver(() => {
@@ -281,15 +297,15 @@ const DeepfakeResultsImage = (props) => {
                   <LinearProgressWithLabel
                     value={deepfakeScore.predictionScore}
                   />
-                  <Stack>
-                    <DetectionProgressBar
-                      style={{
-                        height: "8px",
-                      }}
-                    />
-                  </Stack>
                 </Stack>
               )}
+              <Box>
+                <DetectionProgressBar
+                  style={{
+                    height: "8px",
+                  }}
+                />
+              </Box>
             </Stack>
           </Grid>
         </Grid>

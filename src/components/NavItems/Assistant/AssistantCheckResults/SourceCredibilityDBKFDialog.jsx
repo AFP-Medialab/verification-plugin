@@ -11,7 +11,6 @@ import ListItem from "@mui/material/ListItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import Link from "@mui/material/Link";
 import LaunchIcon from "@mui/icons-material/Launch";
-import Transition from "react-transition-group/Transition";
 import Typography from "@mui/material/Typography";
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 
@@ -40,12 +39,7 @@ const SourceCredibilityDBKFDialog = (props) => {
   return (
     <div>
       <LaunchIcon onClick={handleClickOpen} />
-      <Dialog
-        onClose={handleClose}
-        maxWidth={"lg"}
-        TransitionComponent={Transition}
-        open={open}
-      >
+      <Dialog onClose={handleClose} maxWidth={"lg"} open={open}>
         <DialogTitle>
           <Typography>
             <IconButton onClick={handleClose}>
