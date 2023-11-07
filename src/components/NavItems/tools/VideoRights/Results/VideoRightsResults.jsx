@@ -18,18 +18,14 @@ import { cleanVideoRightsState } from "../../../../../redux/actions/tools/videoR
 import { useDispatch } from "react-redux";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
-import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
-import tsv from "../../../../../LocalDictionary/components/NavItems/tools/VideoRights.tsv";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import { IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 
 const VideoRightsResults = (props) => {
   const classes = useMyStyles();
   const dispatch = useDispatch();
-  const keyword = useLoadLanguage(
-    "components/NavItems/tools/VideoRights.tsv",
-    tsv,
-  );
+  const keyword = i18nLoadNamespace("components/NavItems/tools/VideoRights");
 
   const result = props.result;
   const permittedList = [];

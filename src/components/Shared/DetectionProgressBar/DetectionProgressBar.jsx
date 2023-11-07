@@ -4,14 +4,10 @@ import CardMedia from "@mui/material/CardMedia";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import MakoScale from "../../NavBar/images/SVG/MakoScale.png";
-import tsv from "../../../LocalDictionary/components/NavItems/tools/Forensic.tsv";
-import useLoadLanguage from "../../../Hooks/useLoadLanguage";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
 export const DetectionProgressBar = (props) => {
-  const keyword = useLoadLanguage(
-    "components/NavItems/tools/Forensic.tsv",
-    tsv,
-  );
+  const keyword = i18nLoadNamespace("components/NavItems/tools/Forensic");
   const [style, setStyle] = useState({
     height: "20px",
     transform: "scale(-1)",

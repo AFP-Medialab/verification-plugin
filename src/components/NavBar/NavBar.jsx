@@ -92,8 +92,6 @@ import DataIcon from "./images/SVG/DataAnalysis/Data_analysis.svg";
 import Gradient from "@mui/icons-material/Gradient";
 
 import { getSupportedBrowserLanguage } from "../Shared/Languages/getSupportedBrowserLanguage";
-import useLoadLanguage from "../../Hooks/useLoadLanguage";
-import tsvWarning from "../../LocalDictionary/components/Shared/OnWarningInfo.tsv";
 
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 

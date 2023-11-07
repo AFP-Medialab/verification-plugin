@@ -7,9 +7,8 @@ import Grid from "@mui/material/Grid";
 import weVerifyLogo from "../Shared/images/logo-we-verify.png";
 import invidLogo from "../Shared/images/InVID-logo.svg?url";
 
-import tsv from "../../LocalDictionary/components/PopUp.tsv";
 import useMyStyles from "../Shared/MaterialUiStyles/useMyStyles";
-import useLoadLanguage from "../../Hooks/useLoadLanguage";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import { changeLanguage } from "../../redux/reducers/languageReducer";
 import { getSupportedBrowserLanguage } from "../Shared/Languages/getSupportedBrowserLanguage";
 
@@ -18,7 +17,7 @@ const navigator = window.browser ? window.browser : window.chrome;
 const PopUp = () => {
   const classes = useMyStyles();
   const dispatch = useDispatch();
-  const keyword = useLoadLanguage("components/PopUp.tsv", tsv);
+  const keyword = i18nLoadNamespace("components/PopUp");
   const currentLang = useSelector((state) => state.language);
   const defaultLanguage = useSelector((state) => state.defaultLanguage);
 

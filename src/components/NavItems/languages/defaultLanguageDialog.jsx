@@ -4,15 +4,10 @@ import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
 import Typography from "@mui/material/Typography";
-
-import useLoadLanguage from "../../../Hooks/useLoadLanguage";
-import tsv from "../../../LocalDictionary/components/NavItems/defaultLanguage.tsv";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
 const DefaultLanguageDialog = (props) => {
-  const keyword = useLoadLanguage(
-    "components/NavItems/defaultLanguage.tsv",
-    tsv,
-  );
+  const keyword = i18nLoadNamespace("components/NavItems/defaultLanguage");
   const { open, onCancel, onClose } = props;
 
   const handleCancel = () => {

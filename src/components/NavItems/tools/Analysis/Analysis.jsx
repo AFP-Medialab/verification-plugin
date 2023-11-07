@@ -14,9 +14,6 @@ import Iframe from "react-iframe";
 import useGenerateApiUrl from "./Hooks/useGenerateApiUrl";
 import AFacebookResults from "./Results/AFacebookResults";
 import FacebookVideoDescription from "./Results/FacebookVideoDescription";
-import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
-import tsv from "../../../../LocalDictionary/components/NavItems/tools/Analysis.tsv";
-import tsvAllTools from "../../../../LocalDictionary/components/NavItems/tools/Alltools.tsv";
 import {
   cleanAnalysisState,
   setAnalysisLoading,
@@ -47,17 +44,9 @@ const Analysis = () => {
   const { url } = useParams();
   const classes = useMyStyles();
   const keyword = i18nLoadNamespace("components/NavItems/tools/Analysis");
-  /*const keyword = useLoadLanguage(
-    "components/NavItems/tools/Analysis.tsv",
-    tsv,
-  );*/
   const keywordAllTools = i18nLoadNamespace(
     "components/NavItems/tools/Alltools",
   );
-  /*const keywordAllTools = useLoadLanguage(
-    "components/NavItems/tools/Alltools.tsv",
-    tsvAllTools,
-  );*/
   const dispatch = useDispatch();
 
   const resultUrl = useSelector((state) => state.analysis.url);

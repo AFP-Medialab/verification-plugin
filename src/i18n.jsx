@@ -29,7 +29,7 @@ i18next
       backendOptions: [
         {
           loadPath:
-            "https://weverify-medialab.afp.com/translate/dictionaries/{{ns}}.tsv?lang={{lng}}&tag=v0.77",
+            "https://weverify-medialab.afp.com/translate/dictionaries/{{ns}}.tsv?lang={{lng}}&tag=v0.78",
           //loadPath: "http://localhost:8080/dictionaries/{{ns}}.tsv?lang={{lng}}",
 
           crossDomain: true,

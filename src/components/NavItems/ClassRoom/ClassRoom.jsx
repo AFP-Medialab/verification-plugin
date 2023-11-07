@@ -15,8 +15,7 @@ import CastForEducationIcon from "@mui/icons-material/CastForEducation";
 import Divider from "@mui/material/Divider";
 import TextField from "@mui/material/TextField";
 import youverifyImage from "./Images/YouVerify_Logo.png";
-import useLoadLanguage from "../../../Hooks/useLoadLanguage";
-import tsv from "../../../LocalDictionary/components/NavItems/ClassRoom.tsv";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -58,7 +57,7 @@ function a11yProps(index) {
 
 const ClassRoom = () => {
   const classes = useMyStyles();
-  const keyword = useLoadLanguage("components/NavItems/ClassRoom.tsv", tsv);
+  const keyword = i18nLoadNamespace("components/NavItems/ClassRoom");
 
   const [value, setValue] = React.useState(0);
 
@@ -73,7 +72,7 @@ const ClassRoom = () => {
   const glossary = () => {
     let res = [];
     let i = 1;
-    while (keyword("glossary_word_" + i) !== "") {
+    while (keyword("glossary_word_" + i) !== "glossary_word_" + i) {
       res.push({
         word: keyword("glossary_word_" + i),
         definition: keyword("glosary_definition_" + i),
@@ -85,7 +84,11 @@ const ClassRoom = () => {
 
   const EducationalResources = () => {
     let res = [];
-    for (let i = 1; keyword("classroom_title_" + i) !== ""; i++) {
+    for (
+      let i = 1;
+      keyword("classroom_title_" + i) !== "classroom_title_" + i;
+      i++
+    ) {
       res.push({
         title: keyword("classroom_title_" + i),
         url: keyword("classroom_url_" + i),

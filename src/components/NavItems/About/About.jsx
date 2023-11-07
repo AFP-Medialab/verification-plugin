@@ -15,8 +15,7 @@ import {
   toggleHumanRightsCheckBox,
   toggleUnlockExplanationCheckBox,
 } from "../../../redux/actions";
-import useLoadLanguage from "../../../Hooks/useLoadLanguage";
-import tsv from "../../../LocalDictionary/components/NavItems/About.tsv";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
 import Link from "@mui/material/Link";
 import Typography from "@mui/material/Typography";
@@ -27,7 +26,7 @@ import {
 
 const About = () => {
   const classes = useMyStyles();
-  const keyword = useLoadLanguage("components/NavItems/About.tsv", tsv);
+  const keyword = i18nLoadNamespace("components/NavItems/About");
   const currentLang = useSelector((state) => state.language);
   const humanRights = useSelector((state) => state.humanRightsCheckBox);
   const interactiveExplanation = useSelector(
@@ -100,7 +99,7 @@ const About = () => {
           <Link target="_blank" href={keyword("info_invid_link_twitter")}>
             {keyword("twitter")}
           </Link>
-          {keyword("info_weverify_part_3")}
+          {/*keyword("info_weverify_part_3")*/}
         </Typography>
         <Typography variant={"body2"} align={"justify"}>
           {keyword("info_invid_part_1")}
@@ -142,7 +141,7 @@ const About = () => {
             {keyword("arij_link_label")}
           </Link>
         </Typography>
-        {additionalDangerousContent().map((value, key) => {
+        {/*additionalDangerousContent().map((value, key) => {
           return (
             <div
               className={"content"}
@@ -150,7 +149,7 @@ const About = () => {
               dangerouslySetInnerHTML={{ __html: value }}
             ></div>
           );
-        })}
+        })*/}
       </Box>
       <Grid
         container

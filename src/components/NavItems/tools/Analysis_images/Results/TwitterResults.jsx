@@ -11,8 +11,7 @@ import { IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { cleanAnalysisState } from "../../../../../redux/actions/tools/image_analysisActions";
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
-import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
-import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Analysis.tsv";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import {
@@ -25,10 +24,7 @@ import AnalysisComments from "../../Analysis/Results/AnalysisComments";
 
 const TwitterResults = (props) => {
   const classes = useMyStyles();
-  const keyword = useLoadLanguage(
-    "components/NavItems/tools/Analysis.tsv",
-    tsv,
-  );
+  const keyword = i18nLoadNamespace("components/NavItems/tools/Analysis");
 
   const dispatch = useDispatch();
   const report = props.report;

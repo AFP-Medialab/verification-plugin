@@ -18,14 +18,10 @@ import {
 } from "@mui/material";
 
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
-import tsvAlltools from "../../../../LocalDictionary/components/NavItems/tools/Alltools.tsv";
-import tsvWarning from "../../../../LocalDictionary/components/Shared/OnWarningInfo.tsv";
-
 import { Gradient } from "@mui/icons-material";
 
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
-import tsv from "../../../../LocalDictionary/components/NavItems/tools/SyntheticImageDetection.tsv";
-import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
 import { isValidUrl } from "../../../Shared/Utils/URLUtils";
 import SyntheticImageDetectionResults from "./syntheticImageDetectionResults";
@@ -36,18 +32,13 @@ import { setError } from "redux/actions/errorActions";
 
 const SyntheticImageDetection = () => {
   const classes = useMyStyles();
-  const keyword = useLoadLanguage(
-    "components/NavItems/tools/SyntheticImageDetection.tsv",
-    tsv,
+  const keyword = i18nLoadNamespace(
+    "components/NavItems/tools/SyntheticImageDetection",
   );
-  const keywordAllTools = useLoadLanguage(
-    "components/NavItems/tools/Alltools.tsv",
-    tsvAlltools,
+  const keywordAllTools = i18nLoadNamespace(
+    "components/NavItems/tools/Alltools",
   );
-  const keywordWarning = useLoadLanguage(
-    "components/Shared/OnWarningInfo.tsv",
-    tsvWarning,
-  );
+  const keywordWarning = i18nLoadNamespace("components/Shared/OnWarningInfo");
 
   const isLoading = useSelector(
     (state) => state.syntheticImageDetection.loading,
