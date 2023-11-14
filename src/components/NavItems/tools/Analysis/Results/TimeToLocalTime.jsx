@@ -2,15 +2,11 @@ import React from "react";
 import Typography from "@mui/material/Typography";
 import Link from "@mui/material/Link";
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
-import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
-import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Analysis.tsv";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
 const TimeToLocalTime = (props) => {
   const classes = useMyStyles();
-  const keyword = useLoadLanguage(
-    "components/NavItems/tools/Analysis.tsv",
-    tsv,
-  );
+  const keyword = i18nLoadNamespace("components/NavItems/tools/Analysis");
   const regex = /(.*), (.*) \(?UTC\)?/;
   let link = undefined;
   if (regex.test(props.time)) {

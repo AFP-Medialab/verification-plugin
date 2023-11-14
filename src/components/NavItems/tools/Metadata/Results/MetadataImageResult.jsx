@@ -14,8 +14,7 @@ import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 import { IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { cleanMetadataState } from "../../../../../redux/reducers/tools/metadataReducer";
-import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
-import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Metadata.tsv";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import OnClickInfo from "../../../../Shared/OnClickInfo/OnClickInfo";
 
 import Card from "@mui/material/Card";
@@ -23,10 +22,7 @@ import CardHeader from "@mui/material/CardHeader";
 
 const MetadataImageResult = (props) => {
   const classes = useMyStyles();
-  const keyword = useLoadLanguage(
-    "components/NavItems/tools/Metadata.tsv",
-    tsv,
-  );
+  const keyword = i18nLoadNamespace("components/NavItems/tools/Metadata");
 
   const report = props["result"];
   const dispatch = useDispatch();

@@ -11,14 +11,13 @@ import TextField from "@mui/material/TextField";
 import Fab from "@mui/material/Fab";
 import CloseIcon from "@mui/icons-material/Close";
 import IconButton from "@mui/material/IconButton";
-import useLoadLanguage from "../../Hooks/useLoadLanguage";
-import tsv from "../../LocalDictionary/components/FeedBack.tsv";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import { Fade } from "@mui/material";
 import Slide from "@mui/material/Slide";
 import LoadingButton from "@mui/lab/LoadingButton";
 
 const Feedback = () => {
-  const keyword = useLoadLanguage("components/FeedBack.tsv", tsv);
+  const keyword = i18nLoadNamespace("components/FeedBack");
   const API_URL = process.env.REACT_APP_MY_WEB_HOOK_URL;
 
   const [isButtonHovered, setIsButtonHovered] = useState(false);

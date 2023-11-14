@@ -9,14 +9,8 @@ import LinearProgress from "@mui/material/LinearProgress";
 import ForensicResults from "./Results/ForensicResult";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import { useParams } from "react-router-dom";
-import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
-import tsv from "../../../../LocalDictionary/components/NavItems/tools/Forensic.tsv";
-import tsvAllTools from "../../../../LocalDictionary/components/NavItems/tools/Alltools.tsv";
-import tsvWarning from "../../../../LocalDictionary/components/Shared/OnWarningInfo.tsv";
-import {
-  //trackEvent,
-  getclientId,
-} from "../../../Shared/GoogleAnalytics/MatomoAnalytics";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+import { getclientId } from "../../../Shared/GoogleAnalytics/MatomoAnalytics";
 import { useTrackEvent } from "../../../../Hooks/useAnalytics";
 import ForensicIcon from "../../../NavBar/images/SVG/Image/Forensic.svg";
 import Grid from "@mui/material/Grid";
@@ -32,18 +26,11 @@ import FolderOpenIcon from "@mui/icons-material/FolderOpen";
 const Forensic = () => {
   const { url } = useParams();
   const classes = useMyStyles();
-  const keyword = useLoadLanguage(
-    "components/NavItems/tools/Forensic.tsv",
-    tsv,
+  const keyword = i18nLoadNamespace("components/NavItems/tools/Forensic");
+  const keywordAllTools = i18nLoadNamespace(
+    "components/NavItems/tools/Alltools",
   );
-  const keywordAllTools = useLoadLanguage(
-    "components/NavItems/tools/Alltools.tsv",
-    tsvAllTools,
-  );
-  const keywordWarning = useLoadLanguage(
-    "components/Shared/OnWarningInfo.tsv",
-    tsvWarning,
-  );
+  const keywordWarning = i18nLoadNamespace("components/Shared/OnWarningInfo");
 
   const theme = createTheme({
     components: {

@@ -2,8 +2,6 @@ import React, { useEffect, useState } from "react";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
-//import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
-//import tsv from "../../../../LocalDictionary/components/NavItems/tools/Analysis.tsv";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import Grid from "@mui/material/Grid";
@@ -11,15 +9,11 @@ import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { Icon } from "leaflet";
 import { CardMedia, Typography } from "@mui/material";
-import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Keyframes.tsv";
-import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
 const GeolocationResults = (props) => {
   const classes = useMyStyles();
-  const keyword = useLoadLanguage(
-    "components/NavItems/tools/Geolocalizer.tsv",
-    tsv,
-  );
+  const keyword = i18nLoadNamespace("components/NavItems/tools/Geolocalizer");
   const results = props.result[0];
   const urlImage = props.urlImage;
 

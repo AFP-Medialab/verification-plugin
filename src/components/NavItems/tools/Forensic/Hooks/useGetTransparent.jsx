@@ -6,15 +6,11 @@ import {
   setForensicMaskGif,
 } from "../../../../../redux/actions/tools/forensicActions";
 import { setError } from "../../../../../redux/actions/errorActions";
-import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
-import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Forensic.tsv";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
 const useGetTransparent = (url, ready) => {
   const envisu4_utils_base_url = process.env.REACT_APP_CAA_ENVISU4_UTILS_URL;
-  const keyword = useLoadLanguage(
-    "components/NavItems/tools/Forensic.tsv",
-    tsv,
-  );
+  const keyword = i18nLoadNamespace("components/NavItems/tools/Forensic");
   const dispatch = useDispatch();
 
   useEffect(() => {

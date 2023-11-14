@@ -12,9 +12,8 @@ const useVideoRightsTreatment = (url, keyword) => {
   const video_url = process.env.REACT_APP_VIDEORIGHT_API;
 
   useEffect(() => {
-    const handleError = (error) => {
-      if (keyword(error) !== "") dispatch(setError(keyword(error)));
-      else dispatch(setError(keyword("keyframes_error_default")));
+    const handleError = () => {
+      dispatch(setError(keyword("keyframes_error_default")));
       dispatch(setVideoRightsLoading(false));
     };
 
@@ -66,8 +65,8 @@ const useVideoRightsTreatment = (url, keyword) => {
           result.RIGHTS_APP = api_url;
           addTermsAndUsers(result);
         })
-        .catch((errors) => {
-          handleError(errors);
+        .catch(() => {
+          handleError();
         });
     }
   }, [url]);

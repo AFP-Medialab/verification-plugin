@@ -5,8 +5,7 @@ import Button from "@mui/material/Button";
 import LinearProgress from "@mui/material/LinearProgress";
 import Box from "@mui/material/Box";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
-import tsvAlltools from "../../../../LocalDictionary/components/NavItems/tools/Alltools.tsv";
-import tsvWarning from "../../../../LocalDictionary/components/Shared/OnWarningInfo.tsv";
+
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import DeepfakeIcon from "../../../NavBar/images/SVG/Image/Deepfake.svg";
@@ -14,25 +13,17 @@ import Grid from "@mui/material/Grid";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import UseGetDeepfake from "./Hooks/useGetDeepfake";
 import DeepfakeResultsImage from "./Results/DeepfakeResultsImage";
-import tsv from "../../../../LocalDictionary/components/NavItems/tools/Deepfake.tsv";
-import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import Alert from "@mui/material/Alert";
 
 const Deepfake = () => {
   //const { url } = useParams();
   const classes = useMyStyles();
-  const keyword = useLoadLanguage(
-    "components/NavItems/tools/Deepfake.tsv",
-    tsv,
+  const keyword = i18nLoadNamespace("components/NavItems/tools/Deepfake");
+  const keywordAllTools = i18nLoadNamespace(
+    "components/NavItems/tools/Alltools",
   );
-  const keywordAllTools = useLoadLanguage(
-    "components/NavItems/tools/Alltools.tsv",
-    tsvAlltools,
-  );
-  const keywordWarning = useLoadLanguage(
-    "components/Shared/OnWarningInfo.tsv",
-    tsvWarning,
-  );
+  const keywordWarning = i18nLoadNamespace("components/Shared/OnWarningInfo");
   //const dispatch = useDispatch();
   const isLoading = useSelector((state) => state.deepfakeImage.loading);
   const result = useSelector((state) => state.deepfakeImage.result);

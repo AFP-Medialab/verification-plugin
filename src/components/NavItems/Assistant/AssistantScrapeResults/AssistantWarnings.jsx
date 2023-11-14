@@ -10,21 +10,15 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Grid from "@mui/material/Grid";
 import { IconButton } from "@mui/material";
 import Typography from "@mui/material/Typography";
-
-import tsv from "../../../../LocalDictionary/components/NavItems/tools/Assistant.tsv";
-
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import { setWarningExpanded } from "../../../../redux/actions/tools/assistantActions";
-import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import DbkfTextResults from "../AssistantCheckResults/DbkfTextResults";
 import DbkfMediaResults from "../AssistantCheckResults/DbkfMediaResults";
 import HpTextResult from "../AssistantCheckResults/HpTextResult";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 
 const AssistantWarnings = () => {
-  const keyword = useLoadLanguage(
-    "components/NavItems/tools/Assistant.tsv",
-    tsv,
-  );
+  const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
   const classes = useMyStyles();
   const dispatch = useDispatch();
 

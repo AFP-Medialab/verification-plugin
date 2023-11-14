@@ -10,9 +10,7 @@ import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
 import IconGif from "../../../NavBar/images/SVG/Image/Gif.svg";
 import DragAndDrop from "./DragAndDrop";
-import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
-import tsv from "../../../../LocalDictionary/components/NavItems/tools/CheckGIF.tsv";
-import tsvAlltools from "../../../../LocalDictionary/components/NavItems/tools/Alltools.tsv";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import LinkIcon from "@mui/icons-material/Link";
 import FileIcon from "@mui/icons-material/InsertDriveFile";
 import TextField from "@mui/material/TextField";
@@ -37,13 +35,9 @@ const CheckGif = () => {
   //Init variables
   //============================================================================================
   const classes = useMyStyles();
-  const keyword = useLoadLanguage(
-    "components/NavItems/tools/CheckGIF.tsv",
-    tsv,
-  );
-  const keywordAllTools = useLoadLanguage(
-    "components/NavItems/tools/Alltools.tsv",
-    tsvAlltools,
+  const keyword = i18nLoadNamespace("components/NavItems/tools/CheckGIF");
+  const keywordAllTools = i18nLoadNamespace(
+    "components/NavItems/tools/Alltools",
   );
   const toolState = useSelector((state) => state.gif.toolState);
   const session = useSelector((state) => state.userSession);

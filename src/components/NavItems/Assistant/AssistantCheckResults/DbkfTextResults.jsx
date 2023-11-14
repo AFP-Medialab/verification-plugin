@@ -8,15 +8,11 @@ import ListItemText from "@mui/material/ListItemText";
 import TextFieldsIcon from "@mui/icons-material/TextFields";
 import Typography from "@mui/material/Typography";
 
-import tsv from "../../../../LocalDictionary/components/NavItems/tools/Assistant.tsv";
 import { useSelector } from "react-redux";
-import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
 const DbkfTextResults = () => {
-  const keyword = useLoadLanguage(
-    "components/NavItems/tools/Assistant.tsv",
-    tsv,
-  );
+  const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
   const dbkfTextMatch = useSelector((state) => state.assistant.dbkfTextMatch);
 
   return (

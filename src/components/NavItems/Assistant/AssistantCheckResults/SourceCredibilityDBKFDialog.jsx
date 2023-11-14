@@ -11,18 +11,12 @@ import ListItem from "@mui/material/ListItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import Link from "@mui/material/Link";
 import LaunchIcon from "@mui/icons-material/Launch";
-import Transition from "react-transition-group/Transition";
 import Typography from "@mui/material/Typography";
-import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
-
-import tsv from "../../../../LocalDictionary/components/NavItems/tools/Assistant.tsv";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
 const SourceCredibilityDBKFDialog = (props) => {
   //central
-  const keyword = useLoadLanguage(
-    "components/NavItems/tools/Assistant.tsv",
-    tsv,
-  );
+  const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
   const [open, setOpen] = useState(false);
 
   // props
@@ -40,12 +34,7 @@ const SourceCredibilityDBKFDialog = (props) => {
   return (
     <div>
       <LaunchIcon onClick={handleClickOpen} />
-      <Dialog
-        onClose={handleClose}
-        maxWidth={"lg"}
-        TransitionComponent={Transition}
-        open={open}
-      >
+      <Dialog onClose={handleClose} maxWidth={"lg"} open={open}>
         <DialogTitle>
           <Typography>
             <IconButton onClick={handleClose}>

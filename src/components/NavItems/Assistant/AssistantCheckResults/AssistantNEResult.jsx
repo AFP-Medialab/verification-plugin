@@ -20,16 +20,11 @@ import { TagCloud } from "react-tagcloud";
 import { select } from "d3-selection";
 import "tippy.js/dist/tippy.css";
 import "tippy.js/animations/scale.css";
-
-import tsv from "../../../../LocalDictionary/components/NavItems/tools/Assistant.tsv";
-import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 
 const AssistantNEResult = () => {
-  const keyword = useLoadLanguage(
-    "components/NavItems/tools/Assistant.tsv",
-    tsv,
-  );
+  const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
   const classes = useMyStyles();
 
   const neResult = useSelector((state) => state.assistant.neResultCategory);

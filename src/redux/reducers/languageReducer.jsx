@@ -17,13 +17,3 @@ export const { changeLanguage } = languageSlice.actions;
 const languageReducer = languageSlice.reducer;
 
 export default languageReducer;
-
-/*const languageReducer = (state = "en", action) => {
-    switch (action.type) {
-        case "CHANGE":
-            return action.payload;
-        default:
-            return state;
-    }
-};
-export default languageReducer;*/

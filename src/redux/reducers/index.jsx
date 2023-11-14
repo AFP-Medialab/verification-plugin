@@ -25,6 +25,7 @@ import cookiesReducer from "./cookiesReducers";
 import ocrReducer from "./tools/ocrReducer";
 import geolocationReducer from "./tools/geolocationReducer";
 import twitterSnaReducer from "./tools/twitterSnaReducer";
+import languageSupportReducer from "./languageSupportReducer";
 
 const allReducers = combineReducers({
   language: languageReducer,
@@ -53,6 +54,7 @@ const allReducers = combineReducers({
   deepfakeImage: deepfakeReducerImage,
   deepfakeVideo: deepfakeReducerVideo,
   geolocation: geolocationReducer,
+  languagesSupport: languageSupportReducer,
 });
 
 export default allReducers;

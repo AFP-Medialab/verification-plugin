@@ -4,8 +4,7 @@ import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import { Grid, Typography, Stack, IconButton, Tooltip } from "@mui/material";
-import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Deepfake.tsv";
-import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import { LinearProgressWithLabel } from "../../../../Shared/LinearProgressWithLabel/LinearProgressWithLabel";
 import { Close, Help } from "@mui/icons-material";
 import { resetDeepfake } from "redux/actions/tools/deepfakeImageActions";
@@ -16,11 +15,8 @@ import { useTrackEvent } from "Hooks/useAnalytics";
 
 const DeepfakeResultsImage = (props) => {
   const classes = useMyStyles();
-  const keyword = useLoadLanguage(
-    "components/NavItems/tools/Deepfake.tsv",
-    tsv,
-  );
-
+  const keyword = i18nLoadNamespace("components/NavItems/tools/Deepfake");
+  
   const dispatch = useDispatch();
   class DeepfakeResult {
     constructor(methodName, predictionScore) {
@@ -89,9 +85,8 @@ const DeepfakeResultsImage = (props) => {
     const imgHeight = imgElement.current.offsetHeight;
     const imgWidth = imgElement.current.offsetWidth;
     const containerWidth = imgContainerRef.current.offsetWidth;
-
     const rectanglesTemp = [];
-
+    
     results.faceswap_report.info.forEach((element) => {
       const rectangleAtributes = element.bbox;
 
