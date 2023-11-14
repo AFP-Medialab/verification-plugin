@@ -207,19 +207,17 @@ const Feedback = () => {
                         <TextField
                           error
                           id="email_error"
-                          autoComplete
                           type="email"
-                          placeholder={"email"}
+                          placeholder={keyword("email")}
                           value={email}
-                          helperText="Please enter a valid email."
+                          helperText={keyword("email_error")}
                           onChange={(e) => setEmail(e.target.value)}
                         />
                       ) : (
                         <TextField
                           id="email"
-                          autoComplete
                           type="email"
-                          placeholder={"email"}
+                          placeholder={keyword("email")}
                           value={email}
                           onChange={(e) => setEmail(e.target.value)}
                         />
