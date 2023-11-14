@@ -22,7 +22,6 @@ import { Gradient } from "@mui/icons-material";
 
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-
 import { isValidUrl } from "../../../Shared/Utils/URLUtils";
 import SyntheticImageDetectionResults from "./syntheticImageDetectionResults";
 

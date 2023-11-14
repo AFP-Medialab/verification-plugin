@@ -16,7 +16,7 @@ import { useTrackEvent } from "Hooks/useAnalytics";
 const DeepfakeResultsImage = (props) => {
   const classes = useMyStyles();
   const keyword = i18nLoadNamespace("components/NavItems/tools/Deepfake");
-
+  
   const dispatch = useDispatch();
   class DeepfakeResult {
     constructor(methodName, predictionScore) {
@@ -85,9 +85,8 @@ const DeepfakeResultsImage = (props) => {
     const imgHeight = imgElement.current.offsetHeight;
     const imgWidth = imgElement.current.offsetWidth;
     const containerWidth = imgContainerRef.current.offsetWidth;
-
     const rectanglesTemp = [];
-
+    
     results.faceswap_report.info.forEach((element) => {
       const rectangleAtributes = element.bbox;
 
