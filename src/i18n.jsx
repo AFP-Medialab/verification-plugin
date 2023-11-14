@@ -10,7 +10,7 @@ i18next
   .use(LanguageDetector)
   .use(ChainedBackend)
   .init({
-    debug: true,
+    //debug: true,
     ns: ["components/PopUp"],
     defaultNS: "components/PopUp",
     fallbackLng: "en",
@@ -28,10 +28,8 @@ i18next
 
       backendOptions: [
         {
-          loadPath:
-            "https://weverify-medialab.afp.com/translate/dictionaries/{{ns}}.tsv?lang={{lng}}&tag=v0.78",
-          //loadPath: "http://localhost:8080/dictionaries/{{ns}}.tsv?lang={{lng}}",
-
+          loadPath: `${process.env.REACT_APP_TRANSLATION_URL}/dictionaries/{{ns}}.tsv?lang={{lng}}&tag=${process.env.REACT_APP_TRANSLATION_TAG}`,
+          // "https://weverify-medialab.afp.com/translate/dictionaries/{{ns}}.tsv?lang={{lng}}&tag=v0.78",
           crossDomain: true,
           requestOptions: {
             // used for fetch, can also be a function (payload) => ({ method: 'GET' })
