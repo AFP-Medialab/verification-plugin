@@ -27,6 +27,12 @@ const Feedback = () => {
 
   const [message, setMessage] = useState("");
 
+  const [email, setEmail] = useState("");
+
+  const [isEmailAddress, setIsEmailAddress] = useState(false);
+
+  const [hasTriedSubmit, setHasTriedSubmit] = useState(false);
+
   const [isFeedbackSending, setIsFeedbackSending] = useState(false);
 
   const [isFeedbackSent, setIsFeedbackSent] = useState(false);
@@ -46,6 +52,17 @@ const Feedback = () => {
             text: "" + messageType + "",
           },
         },
+        ...(email
+          ? [
+              {
+                type: "section",
+                text: {
+                  type: "mrkdwn",
+                  text: "<mailto:" + email + ">",
+                },
+              },
+            ]
+          : []),
         {
           type: "section",
           text: {
@@ -72,12 +89,25 @@ const Feedback = () => {
     return response;
   };
 
+  const validateEmail = (email) => {
+    if (!email) return true; //allow to proceed if the email is empty
+    const re = /\S+@\S+\.\S+/; //match string@string.string
+    return re.test(email);
+  };
+
   const handleChange = (e, messageType) => {
     e.preventDefault();
     setMessageType(messageType);
   };
 
   const handleClick = async (e, message, messageType) => {
+    setHasTriedSubmit(true);
+    const isEmailValid = validateEmail(email);
+
+    setIsEmailAddress(isEmailValid);
+
+    if (!isEmailValid) return;
+
     setIsFeedbackSending(true);
 
     await sendToSlack(message, messageType);
@@ -86,6 +116,7 @@ const Feedback = () => {
 
     setIsFeedbackSending(false);
     setIsFeedbackSent(true);
+    setEmail("");
     setMessage("");
 
     setTimeout(() => {
@@ -177,6 +208,35 @@ const Feedback = () => {
                           </ToggleButton>
                         </ToggleButtonGroup>
                       </Stack>
+                      {hasTriedSubmit && !isEmailAddress ? (
+                        <Stack>
+                          <Typography color="primary">
+                            {keyword("email")}
+                          </Typography>
+                          <TextField
+                            error
+                            id="email_error"
+                            type="email"
+                            placeholder={keyword("email")}
+                            value={email}
+                            helperText={keyword("email_error")}
+                            onChange={(e) => setEmail(e.target.value)}
+                          />
+                        </Stack>
+                      ) : (
+                        <Stack>
+                          <Typography color="primary">
+                            {keyword("email")}
+                          </Typography>
+                          <TextField
+                            id="email"
+                            type="email"
+                            placeholder={"john.doe@example.com"}
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                          />
+                        </Stack>
+                      )}
                       <Stack>
                         <Typography color="primary">
                           {keyword("message")}
