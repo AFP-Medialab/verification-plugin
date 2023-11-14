@@ -209,23 +209,33 @@ const Feedback = () => {
                         </ToggleButtonGroup>
                       </Stack>
                       {hasTriedSubmit && !isEmailAddress ? (
-                        <TextField
-                          error
-                          id="email_error"
-                          type="email"
-                          placeholder={keyword("email")}
-                          value={email}
-                          helperText={keyword("email_error")}
-                          onChange={(e) => setEmail(e.target.value)}
-                        />
+                        <Stack>
+                          <Typography color="primary">
+                            {keyword("email")}
+                          </Typography>
+                          <TextField
+                            error
+                            id="email_error"
+                            type="email"
+                            placeholder={keyword("email")}
+                            value={email}
+                            helperText={keyword("email_error")}
+                            onChange={(e) => setEmail(e.target.value)}
+                          />
+                        </Stack>
                       ) : (
-                        <TextField
-                          id="email"
-                          type="email"
-                          placeholder={keyword("email")}
-                          value={email}
-                          onChange={(e) => setEmail(e.target.value)}
-                        />
+                        <Stack>
+                          <Typography color="primary">
+                            {keyword("email")}
+                          </Typography>
+                          <TextField
+                            id="email"
+                            type="email"
+                            placeholder={"john.doe@example.com"}
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                          />
+                        </Stack>
                       )}
                       <Stack>
                         <Typography color="primary">
