@@ -52,13 +52,17 @@ const Feedback = () => {
             text: "" + messageType + "",
           },
         },
-        {
-          type: "section",
-          text: {
-            type: "mrkdwn",
-            text: "<mailto:" + email + ">",
-          },
-        },
+        ...(email
+          ? [
+              {
+                type: "section",
+                text: {
+                  type: "mrkdwn",
+                  text: "<mailto:" + email + ">",
+                },
+              },
+            ]
+          : []),
         {
           type: "section",
           text: {
@@ -86,6 +90,7 @@ const Feedback = () => {
   };
 
   const validateEmail = (email) => {
+    if (!email) return true; //allow to proceed if the email is empty
     const re = /\S+@\S+\.\S+/; //match string@string.string
     return re.test(email);
   };
