@@ -92,6 +92,10 @@ const DeepfakeResultsImage = (props) => {
 
     const rectanglesTemp = [];
 
+    if (!results || !results.faceswap_report || !results.faceswap_report.info) {
+      return;
+    }
+
     results.faceswap_report.info.forEach((element) => {
       const rectangleAtributes = element.bbox;
 
@@ -152,6 +156,22 @@ const DeepfakeResultsImage = (props) => {
 
     resizeObserver.observe(imgContainerRef.current);
 
+    console.log("logs");
+    console.log(deepfakeScore);
+    console.log(deepfakeScore?.predictionScore);
+    console.log(rectangles);
+    console.log(rectangles?.length);
+    console.log(rectanglesReady);
+    console.log(
+      deepfakeScore &&
+        deepfakeScore.predictionScore &&
+        deepfakeScore.predictionScore > 0 &&
+        rectangles &&
+        rectangles.length > 0 &&
+        rectanglesReady,
+    );
+    console.log("logs");
+
     return () => {
       resizeObserver.disconnect();
     };
@@ -195,10 +215,14 @@ const DeepfakeResultsImage = (props) => {
                 ref={imgContainerRef}
                 p={4}
               >
-                <Grid item>
-                  {rectanglesReady &&
-                    rectangles &&
-                    rectangles.map((valueRectangle, keyRectangle) => {
+                {!!(
+                  deepfakeScore &&
+                  deepfakeScore.predictionScore &&
+                  rectangles &&
+                  rectanglesReady
+                ) && (
+                  <Grid item>
+                    {rectangles.map((valueRectangle, keyRectangle) => {
                       return (
                         <Box
                           key={keyRectangle}
@@ -238,7 +262,8 @@ const DeepfakeResultsImage = (props) => {
                         </Box>
                       );
                     })}
-                </Grid>
+                  </Grid>
+                )}
 
                 <img
                   src={url}
@@ -256,17 +281,24 @@ const DeepfakeResultsImage = (props) => {
           </Grid>
           <Grid item sm={12} md={6}>
             <Stack direction="column" p={4} spacing={4}>
-              {deepfakeScore &&
+              {!!(
+                deepfakeScore &&
                 deepfakeScore.predictionScore &&
-                deepfakeScore.predictionScore >= 70 && (
-                  <Typography variant="h5" sx={{ color: "red" }}>
-                    {keyword("deepfake_image_detection_alert") +
-                      DeepfakeImageDetectionMethodNames[
-                        deepfakeScore.methodName
-                      ].name +
-                      keyword("deepfake_image_detection_alert_2")}
-                  </Typography>
-                )}
+                deepfakeScore.predictionScore >= 70
+              ) && (
+                <Typography variant="h5" sx={{ color: "red" }}>
+                  {keyword("deepfake_image_detection_alert") +
+                    DeepfakeImageDetectionMethodNames[deepfakeScore.methodName]
+                      .name +
+                    keyword("deepfake_image_detection_alert_2")}
+                </Typography>
+              )}
+
+              {(!deepfakeScore || !deepfakeScore.predictionScore) && (
+                <Typography variant="h5" sx={{ color: "red" }}>
+                  No face detected
+                </Typography>
+              )}
               {deepfakeScore && (
                 <Stack direction="column">
                   <Stack
