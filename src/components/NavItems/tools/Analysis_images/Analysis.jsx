@@ -13,13 +13,8 @@ import Iframe from "react-iframe";
 import useGenerateApiUrl from "../Analysis/Hooks/useGenerateApiUrl";
 import AFacebookResults from "../Analysis/Results/AFacebookResults";
 import FacebookImageDescription from "./Results/FacebookImageDescription";
-import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
-import tsv from "../../../../LocalDictionary/components/NavItems/tools/Analysis.tsv";
-import tsvAlltools from "../../../../LocalDictionary/components/NavItems/tools/Alltools.tsv";
-import {
-  // trackEvent,
-  getclientId,
-} from "../../../Shared/GoogleAnalytics/MatomoAnalytics";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+import { getclientId } from "../../../Shared/GoogleAnalytics/MatomoAnalytics";
 import { useTrackEvent } from "../../../../Hooks/useAnalytics";
 import { useParams } from "react-router-dom";
 import { KNOWN_LINKS } from "../../Assistant/AssistantRuleBook";
@@ -41,13 +36,9 @@ const Analysis = () => {
   const caa_analysis_url = process.env.REACT_APP_CAA_ANALYSIS_URL;
   const { url } = useParams();
   const classes = useMyStyles();
-  const keyword = useLoadLanguage(
-    "components/NavItems/tools/Analysis.tsv",
-    tsv,
-  );
-  const keywordAllTools = useLoadLanguage(
-    "components/NavItems/tools/Alltools.tsv",
-    tsvAlltools,
+  const keyword = i18nLoadNamespace("components/NavItems/tools/Analysis");
+  const keywordAllTools = i18nLoadNamespace(
+    "components/NavItems/tools/Alltools",
   );
   const dispatch = useDispatch();
   const resultUrl = useSelector((state) => state.analysisImage.url);

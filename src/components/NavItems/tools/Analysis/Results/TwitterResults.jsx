@@ -12,8 +12,7 @@ import { IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 import OnClickInfo from "../../../../Shared/OnClickInfo/OnClickInfo";
-import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
-import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Analysis.tsv";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 
@@ -33,10 +32,7 @@ import {
 
 const TwitterResults = (props) => {
   const classes = useMyStyles();
-  const keyword = useLoadLanguage(
-    "components/NavItems/tools/Analysis.tsv",
-    tsv,
-  );
+  const keyword = i18nLoadNamespace("components/NavItems/tools/Analysis");
   const reverseSearch = (website) => {
     for (let image of thumbnails) {
       reverseImageSearch(image.url, true, website, false);

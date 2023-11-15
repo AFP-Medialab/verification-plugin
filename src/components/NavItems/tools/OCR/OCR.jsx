@@ -3,8 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 
 import { KNOWN_LINKS } from "../../Assistant/AssistantRuleBook";
-import tsv from "../../../../LocalDictionary/components/NavItems/tools/OCR.tsv";
-import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 
 import {
@@ -37,10 +36,9 @@ const OCR = () => {
   const { url } = useParams();
   const classes = useMyStyles();
   const dispatch = useDispatch();
-  const keyword = useLoadLanguage("components/NavItems/tools/OCR.tsv", tsv);
-  const keywordAllTools = useLoadLanguage(
-    "components/NavItems/tools/Alltools.tsv",
-    tsv,
+  const keyword = i18nLoadNamespace("components/NavItems/tools/OCR");
+  const keywordAllTools = i18nLoadNamespace(
+    "components/NavItems/tools/Alltools",
   );
 
   const ocrInputUrl = useSelector((state) => state.ocr.url);

@@ -10,9 +10,6 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Radio from "@mui/material/Radio";
 import FormControl from "@mui/material/FormControl";
 import DateTime from "../../../Shared/DateTimePicker/DateTime";
-import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
-import tsv from "../../../../LocalDictionary/components/NavItems/tools/TwitterAdvancedSearch.tsv";
-import tsvAllTools from "../../../../LocalDictionary/components/NavItems/tools/Alltools.tsv";
 import useMyStyles, {
   myCardStyles,
 } from "../../../Shared/MaterialUiStyles/useMyStyles";
@@ -25,18 +22,16 @@ import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import TwitterAdvancedSearchIcon from "../../../NavBar/images/SVG/Search/Twitter_search.svg";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
-//import { StylesProvider } from "@mui/material/styles";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
 const TwitterAdvancedSearch = () => {
   const classes = useMyStyles();
   const cardClasses = myCardStyles();
-  const keyword = useLoadLanguage(
-    "components/NavItems/tools/TwitterAdvancedSearch.tsv",
-    tsv,
+  const keyword = i18nLoadNamespace(
+    "components/NavItems/tools/TwitterAdvancedSearch",
   );
-  const keywordAllTools = useLoadLanguage(
-    "components/NavItems/tools/Alltools.tsv",
-    tsvAllTools,
+  const keywordAllTools = i18nLoadNamespace(
+    "components/NavItems/tools/Alltools",
   );
 
   const term = useInput("");

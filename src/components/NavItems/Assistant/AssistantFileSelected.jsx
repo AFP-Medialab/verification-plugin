@@ -18,17 +18,13 @@ import {
   selectCorrectActions,
 } from "./AssistantRuleBook";
 import Divider from "@mui/material/Divider";
-import tsv from "../../../LocalDictionary/components/NavItems/tools/Assistant.tsv";
-import useLoadLanguage from "../../../Hooks/useLoadLanguage";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
 import { useNavigate } from "react-router-dom";
 const AssistantFileSelected = () => {
   const classes = useMyStyles();
   const navigate = useNavigate();
-  const keyword = useLoadLanguage(
-    "components/NavItems/tools/Assistant.tsv",
-    tsv,
-  );
+  const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
 
   const getActionList = (contentType) => {
     let known_link = KNOWN_LINKS.OWN;

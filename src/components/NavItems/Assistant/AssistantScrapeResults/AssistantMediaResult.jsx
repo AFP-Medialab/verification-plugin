@@ -23,8 +23,7 @@ import {
   setProcessUrl,
   setWarningExpanded,
 } from "../../../../redux/actions/tools/assistantActions";
-import tsv from "../../../../LocalDictionary/components/NavItems/tools/Assistant.tsv";
-import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import VideoGridList from "../../../Shared/VideoGridList/VideoGridList";
 import { WarningOutlined } from "@mui/icons-material";
@@ -33,10 +32,7 @@ import LinearProgress from "@mui/material/LinearProgress";
 const AssistantMediaResult = () => {
   const classes = useMyStyles();
   const dispatch = useDispatch();
-  const keyword = useLoadLanguage(
-    "components/NavItems/tools/Assistant.tsv",
-    tsv,
-  );
+  const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
 
   // assistant media states
   const processUrl = useSelector((state) => state.assistant.processUrl);

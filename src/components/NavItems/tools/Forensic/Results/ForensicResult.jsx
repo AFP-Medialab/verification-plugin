@@ -6,9 +6,7 @@ import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
-import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
-import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Forensic.tsv";
-import tsvWarning from "../../../../../LocalDictionary/components/Shared/OnWarningInfo.tsv";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Tabs from "@mui/material/Tabs";
@@ -107,14 +105,8 @@ const ForensicResults = (props) => {
   });
 
   const classes = useMyStyles();
-  const keyword = useLoadLanguage(
-    "components/NavItems/tools/Forensic.tsv",
-    tsv,
-  );
-  const keywordWarning = useLoadLanguage(
-    "components/Shared/OnWarningInfo.tsv",
-    tsvWarning,
-  );
+  const keyword = i18nLoadNamespace("components/NavItems/tools/Forensic");
+  const keywordWarning = i18nLoadNamespace("components/Shared/OnWarningInfo");
   const results = props.result.filters;
   //const masks = props.masksData;
   //console.log(results);

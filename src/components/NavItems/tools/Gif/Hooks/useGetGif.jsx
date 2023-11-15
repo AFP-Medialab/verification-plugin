@@ -1,8 +1,7 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { setError } from "../../../../../redux/actions/errorActions";
-import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
-import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Forensic.tsv";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import {
   setStateDownloading,
   setStateBackResults,
@@ -11,10 +10,7 @@ import { saveAs } from "file-saver";
 import useAuthenticatedRequest from "../../../../Shared/Authentication/useAuthenticatedRequest";
 
 const useGetGif = (images, delayInput, enableDownload, downloadType) => {
-  const keyword = useLoadLanguage(
-    "components/NavItems/tools/Forensic.tsv",
-    tsv,
-  );
+  const keyword = i18nLoadNamespace("components/NavItems/tools/Forensic");
   const dispatch = useDispatch();
   const authenticatedRequest = useAuthenticatedRequest();
   const baseURL = process.env.REACT_APP_BASEURL;

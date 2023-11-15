@@ -10,8 +10,7 @@ import {
   Tooltip,
   IconButton,
 } from "@mui/material";
-import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Keyframes.tsv";
-import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import CloseIcon from "@mui/icons-material/Close";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import Help from "@mui/icons-material/Help";
@@ -22,10 +21,7 @@ import { useSelector } from "react-redux";
 import { useTrackEvent } from "Hooks/useAnalytics";
 
 const DeepfakeResultsVideo = (props) => {
-  const keyword = useLoadLanguage(
-    "components/NavItems/tools/Deepfake.tsv",
-    tsv,
-  );
+  const keyword = i18nLoadNamespace("components/NavItems/tools/Deepfake");
   class DeepfakeResult {
     constructor(methodName, predictionScore) {
       (this.methodName = methodName), (this.predictionScore = predictionScore);

@@ -10,18 +10,14 @@ import ImageIcon from "@mui/icons-material/Image";
 import { IconButton } from "@mui/material";
 import Link from "@mui/material/Link";
 import Tooltip from "@mui/material/Tooltip";
-import tsv from "../../../../LocalDictionary/components/NavItems/tools/Assistant.tsv";
-import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 
 const AssistantImageResult = () => {
   const classes = useMyStyles();
 
   const processUrl = useSelector((state) => state.assistant.processUrl);
-  const keyword = useLoadLanguage(
-    "components/NavItems/tools/Assistant.tsv",
-    tsv,
-  );
+  const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
 
   const copyUrl = () => {
     navigator.clipboard.writeText(processUrl);

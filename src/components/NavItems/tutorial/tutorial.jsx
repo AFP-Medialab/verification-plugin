@@ -4,8 +4,7 @@ import { Paper } from "@mui/material/";
 import Box from "@mui/material//Box";
 import Typography from "@mui/material//Typography";
 import CustomTile from "../../Shared/CustomTitle/CustomTitle";
-import useLoadLanguage from "../../../Hooks/useLoadLanguage";
-import tsv from "../../../LocalDictionary/components/NavItems/Tutorial.tsv";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
 
 import popUpEn from "./images/popUpImage/popUp_EN.png";
@@ -30,7 +29,7 @@ const dangerousDivStyle = {
 
 const Tutorial = () => {
   const classes = useMyStyles();
-  const keyword = useLoadLanguage("components/NavItems/Tutorial.tsv", tsv);
+  const keyword = i18nLoadNamespace("components/NavItems/Tutorial");
   const language = useSelector((state) => state.language);
 
   let popImg;

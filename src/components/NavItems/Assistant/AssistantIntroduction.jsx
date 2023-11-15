@@ -15,8 +15,7 @@ import {
   setImageVideoSelected,
   setUrlMode,
 } from "../../../redux/actions/tools/assistantActions";
-import tsv from "../../../LocalDictionary/components/NavItems/tools/Assistant.tsv";
-import useLoadLanguage from "../../../Hooks/useLoadLanguage";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
 import HeaderTool from "../../Shared/HeaderTool/HeaderTool";
 
@@ -24,10 +23,7 @@ const AssistantIntroduction = (props) => {
   // styles, language, dispatch, params
   const classes = useMyStyles();
   const dispatch = useDispatch();
-  const keyword = useLoadLanguage(
-    "components/NavItems/tools/Assistant.tsv",
-    tsv,
-  );
+  const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
 
   const [classButtonURL, setClassButtonURL] = useState(null);
   const [classButtonLocal, setClassButtonLocal] = useState(null);
@@ -103,7 +99,6 @@ const AssistantIntroduction = (props) => {
                     "assistant_help_3",
                     "assistant_help_4",
                   ]}
-                  keywordFile="components/NavItems/tools/Assistant.tsv"
                 />
               }
             </div>

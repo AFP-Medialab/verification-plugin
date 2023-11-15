@@ -10,8 +10,7 @@ import ListItemAvatar from "@mui/material/ListItemAvatar";
 import ListItemText from "@mui/material/ListItemText";
 import Typography from "@mui/material/Typography";
 
-import tsv from "../../../../LocalDictionary/components/NavItems/tools/Assistant.tsv";
-import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import Divider from "@mui/material/Divider";
 import { KNOWN_LINKS } from "../AssistantRuleBook";
@@ -20,10 +19,7 @@ import { useNavigate } from "react-router-dom";
 const AssistantProcessUrlActions = () => {
   const classes = useMyStyles();
   const navigate = useNavigate();
-  const keyword = useLoadLanguage(
-    "components/NavItems/tools/Assistant.tsv",
-    tsv,
-  );
+  const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
 
   const inputUrl = useSelector((state) => state.assistant.inputUrl);
   const processUrl = useSelector((state) => state.assistant.processUrl);

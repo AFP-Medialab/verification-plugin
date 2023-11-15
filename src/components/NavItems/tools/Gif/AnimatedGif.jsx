@@ -9,16 +9,12 @@ import {
   Button,
 } from "@mui/material";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
-import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
-import tsv from "../../../../LocalDictionary/components/NavItems/tools/CheckGIF.tsv";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import { useState, useEffect } from "react";
 
 const AnimatedGif = ({ toolState, homoImg1, homoImg2, isPopup }) => {
   const classes = useMyStyles();
-  const keyword = useLoadLanguage(
-    "components/NavItems/tools/CheckGIF.tsv",
-    tsv,
-  );
+  const keyword = i18nLoadNamespace("components/NavItems/tools/CheckGIF");
   const [filesForGif, setFilesForGif] = useState(null);
   const [delayGif, setDelayGif] = useState(null);
   const [enableDownload, setEnableDownload] = useState(false);

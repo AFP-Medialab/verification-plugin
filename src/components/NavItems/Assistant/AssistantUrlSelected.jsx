@@ -10,13 +10,11 @@ import Grid from "@mui/material//Grid";
 import LinearProgress from "@mui/material//LinearProgress";
 import Typography from "@mui/material//Typography";
 import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
-import useLoadLanguage from "../../../Hooks/useLoadLanguage";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
 import { KNOWN_LINKS } from "./AssistantRuleBook";
 import { submitInputUrl } from "../../../redux/actions/tools/assistantActions";
-import tsv from "../../../LocalDictionary/components/NavItems/tools/Assistant.tsv";
 
-//import { trackEvent } from "../../Shared/GoogleAnalytics/MatomoAnalytics";
 import { useTrackEvent } from "../../../Hooks/useAnalytics";
 import { useState } from "react";
 
@@ -24,10 +22,7 @@ const AssistantUrlSelected = (props) => {
   // styles, language, dispatch, params
   const classes = useMyStyles();
   const dispatch = useDispatch();
-  const keyword = useLoadLanguage(
-    "components/NavItems/tools/Assistant.tsv",
-    tsv,
-  );
+  const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
 
   //form states
   const inputUrl = useSelector((state) => state.assistant.inputUrl);

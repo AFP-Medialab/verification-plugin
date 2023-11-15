@@ -4,8 +4,7 @@ import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import { Grid, Typography, Stack, IconButton, Tooltip } from "@mui/material";
 import { Close } from "@mui/icons-material";
-import tsv from "../../../../LocalDictionary/components/NavItems/tools/SyntheticImageDetection.tsv";
-import useLoadLanguage from "Hooks/useLoadLanguage";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import { LinearProgressWithLabel } from "components/Shared/LinearProgressWithLabel/LinearProgressWithLabel";
 import { Help } from "@mui/icons-material";
 import { resetSyntheticImageDetectionImage } from "redux/actions/tools/syntheticImageDetectionActions";
@@ -15,9 +14,8 @@ import { useTrackEvent } from "Hooks/useAnalytics";
 import { getclientId } from "components/Shared/GoogleAnalytics/MatomoAnalytics";
 
 const SyntheticImageDetectionResults = (props) => {
-  const keyword = useLoadLanguage(
-    "components/NavItems/tools/SyntheticImageDetection.tsv",
-    tsv,
+  const keyword = i18nLoadNamespace(
+    "components/NavItems/tools/SyntheticImageDetection",
   );
 
   const dispatch = useDispatch();

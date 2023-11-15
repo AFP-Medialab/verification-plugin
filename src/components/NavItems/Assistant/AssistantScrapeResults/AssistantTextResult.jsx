@@ -20,22 +20,14 @@ import TranslateIcon from "@mui/icons-material/Translate";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 import { setWarningExpanded } from "../../../../redux/actions/tools/assistantActions";
-import tsv from "../../../../LocalDictionary/components/NavItems/tools/Assistant.tsv";
-import sharedTsv from "../../../../LocalDictionary/components/Shared/utils.tsv";
-import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import IconButton from "@mui/material/IconButton";
 import FileCopyOutlined from "@mui/icons-material/FileCopy";
 
 const AssistantTextResult = () => {
-  const keyword = useLoadLanguage(
-    "components/NavItems/tools/Assistant.tsv",
-    tsv,
-  );
-  const sharedKeyword = useLoadLanguage(
-    "components/Shared/utils.tsv",
-    sharedTsv,
-  );
+  const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
+  const sharedKeyword = i18nLoadNamespace("components/Shared/utils");
 
   const classes = useMyStyles();
   const dispatch = useDispatch();

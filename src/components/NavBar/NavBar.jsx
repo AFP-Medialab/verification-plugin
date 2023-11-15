@@ -92,9 +92,8 @@ import DataIcon from "./images/SVG/DataAnalysis/Data_analysis.svg";
 import Gradient from "@mui/icons-material/Gradient";
 
 import { getSupportedBrowserLanguage } from "../Shared/Languages/getSupportedBrowserLanguage";
-import useLoadLanguage from "../../Hooks/useLoadLanguage";
-import tsv from "../../LocalDictionary/components/NavBar.tsv";
-import tsvWarning from "../../LocalDictionary/components/Shared/OnWarningInfo.tsv";
+
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
 import { setFalse, setTrue } from "../../redux/reducers/cookiesReducers";
 import { changeLanguage } from "../../redux/reducers/languageReducer";
@@ -192,11 +191,8 @@ const NavBar = () => {
   };
 
   const error = useSelector((state) => state.error);
-  const keyword = useLoadLanguage("components/NavBar.tsv", tsv);
-  const keywordWarning = useLoadLanguage(
-    "components/Shared/OnWarningInfo.tsv",
-    tsvWarning,
-  );
+  const tWarning = i18nLoadNamespace("components/Shared/OnWarningInfo");
+  const keyword = i18nLoadNamespace("components/NavBar");
 
   const [classListHeading, setClassListHeading] = useState(
     classes.drawerListHeadingLeft,
@@ -450,7 +446,7 @@ const NavBar = () => {
             width="45px"
             height="45px"
             style={{ fill: "#4c4c4c" }}
-            title={keyword("navbar_deepfake")}
+            title={keyword("navbar_deepfake_video")}
           />
         ),
       iconColored: (
@@ -458,7 +454,7 @@ const NavBar = () => {
           width="45px"
           height="45px"
           style={{ fill: "#00926c" }}
-          title={keyword("navbar_deepfake")}
+          title={keyword("navbar_deepfake_video")}
         />
       ),
       tsvPrefix: "deepfake",
@@ -726,7 +722,7 @@ const NavBar = () => {
             width="45px"
             height="45px"
             style={{ fill: "#4c4c4c" }}
-            title={keyword("navbar_deepfake")}
+            title={keyword("navbar_deepfake_image")}
           />
         ),
       iconColored: (
@@ -734,7 +730,7 @@ const NavBar = () => {
           width="45px"
           height="45px"
           style={{ fill: "#00926c" }}
-          title={keyword("navbar_deepfake")}
+          title={keyword("navbar_deepfake_image")}
         />
       ),
       tsvPrefix: "deepfake",
@@ -1390,7 +1386,7 @@ const NavBar = () => {
         sx={{ mr: 8 }}
       >
         <Alert onClose={handleCloseAlert} severity="warning">
-          {keywordWarning("warning_advanced_tools")}
+          {tWarning("warning_advanced_tools")}
         </Alert>
       </Snackbar>
       <ThemeProvider theme={themeFab}>

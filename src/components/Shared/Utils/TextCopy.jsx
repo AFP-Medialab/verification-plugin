@@ -3,11 +3,10 @@ import FileCopyOutlined from "@mui/icons-material/FileCopy";
 import Tooltip from "@mui/material/Tooltip";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
-import useLoadLanguage from "../../../Hooks/useLoadLanguage";
-import tsv from "../../../LocalDictionary/components/Shared/utils.tsv";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
 export const TextCopy = ({ text, index, type }) => {
-  const keyword = useLoadLanguage("components/Shared/utils.tsv", tsv);
+  const keyword = i18nLoadNamespace("components/Shared/utils");
   const [tooltipOpen, setTooltipOpen] = useState(false);
   const [tooltipIndex, setTooltipIndex] = useState(0);
 
