@@ -152,22 +152,6 @@ const DeepfakeResultsImage = (props) => {
 
     resizeObserver.observe(imgContainerRef.current);
 
-    console.log("logs");
-    console.log(deepfakeScore);
-    console.log(deepfakeScore?.predictionScore);
-    console.log(rectangles);
-    console.log(rectangles?.length);
-    console.log(rectanglesReady);
-    console.log(
-      deepfakeScore &&
-        deepfakeScore.predictionScore &&
-        deepfakeScore.predictionScore > 0 &&
-        rectangles &&
-        rectangles.length > 0 &&
-        rectanglesReady,
-    );
-    console.log("logs");
-
     return () => {
       resizeObserver.disconnect();
     };

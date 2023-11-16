@@ -142,9 +142,6 @@ const DeepfakeResultsVideo = (props) => {
       );
     }
 
-    console.log(res);
-    console.log(results);
-
     setDeepfakeScores(res);
 
     res = res.sort((a, b) => b.predictionScore - a.predictionScore);
