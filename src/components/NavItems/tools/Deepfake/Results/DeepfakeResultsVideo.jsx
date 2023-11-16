@@ -12,7 +12,6 @@ import {
 } from "@mui/material";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import CloseIcon from "@mui/icons-material/Close";
-import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import Help from "@mui/icons-material/Help";
 import { LinearProgressWithLabel } from "../../../../Shared/LinearProgressWithLabel/LinearProgressWithLabel";
 import { DetectionProgressBar } from "components/Shared/DetectionProgressBar/DetectionProgressBar";
@@ -28,7 +27,6 @@ const DeepfakeResultsVideo = (props) => {
     }
   }
 
-  // todo: move to tsv
   const DeepfakeImageDetectionMethodNames = Object.freeze({
     deepfakeVideoReport: {
       name: keyword("deepfake_video_videoreport_name"),
@@ -144,6 +142,9 @@ const DeepfakeResultsVideo = (props) => {
       );
     }
 
+    console.log(res);
+    console.log(results);
+
     setDeepfakeScores(res);
 
     res = res.sort((a, b) => b.predictionScore - a.predictionScore);
@@ -156,10 +157,6 @@ const DeepfakeResultsVideo = (props) => {
   const [anchorHelp, setAnchorHelp] = React.useState(null);
   const openHelp = Boolean(anchorHelp);
   const help = openHelp ? "simple-popover" : undefined;
-
-  function clickHelp(event) {
-    setAnchorHelp(event.currentTarget);
-  }
 
   function closeHelp() {
     setAnchorHelp(null);
@@ -193,6 +190,12 @@ const DeepfakeResultsVideo = (props) => {
             <Card>
               <CardHeader title={keyword("deepfake_video_title")} />
               <Stack direction="column" p={4} spacing={4}>
+                {deepfakeScores && deepfakeScores.length === 0 && (
+                  <Typography variant="h5" sx={{ color: "red" }}>
+                    {keyword("deepfake_no_face_detection")}
+                  </Typography>
+                )}
+
                 {deepfakeScores.map((item, key) => {
                   return (
                     <Stack direction="column" key={key}>
@@ -235,26 +238,32 @@ const DeepfakeResultsVideo = (props) => {
               </Stack>
             </Card>
           </Grid>
-          <Grid item xs={6} container direction="column">
-            <Typography
-              variant="body1"
-              style={{ color: "#00926c", fontSize: "24px", fontWeight: "500" }}
-            >
-              {keyword("deepfake_clips")}
-            </Typography>
-            <Box m={1} />
+          {!!results.deepfake_video_report.results && (
+            <Grid item xs={6} container direction="column">
+              <Typography
+                variant="body1"
+                style={{
+                  color: "#00926c",
+                  fontSize: "24px",
+                  fontWeight: "500",
+                }}
+              >
+                {keyword("deepfake_clips")}
+              </Typography>
+              <Box m={1} />
 
-            <Grid container spacing={3}>
-              {results.deepfake_video_report.results &&
-                results.deepfake_video_report.results.map(
+              <Grid container spacing={3}>
+                {results.deepfake_video_report.results.map(
                   (valueShot, keyShot) => {
-                    var shotStart = valueShot.shot_start;
-                    var shotEnd = valueShot.shot_end;
+                    const shotStart = valueShot.shot_start;
+                    const shotEnd = valueShot.shot_end;
 
-                    var startMin = ("0" + Math.floor(shotStart / 60)).slice(-2);
-                    var startSec = ("0" + (shotStart % 60)).slice(-2);
-                    var endMin = ("0" + Math.floor(shotEnd / 60)).slice(-2);
-                    var endSec = ("0" + (shotEnd % 60)).slice(-2);
+                    const startMin = ("0" + Math.floor(shotStart / 60)).slice(
+                      -2,
+                    );
+                    const startSec = ("0" + (shotStart % 60)).slice(-2);
+                    const endMin = ("0" + Math.floor(shotEnd / 60)).slice(-2);
+                    const endSec = ("0" + (shotEnd % 60)).slice(-2);
 
                     return (
                       <Grid item xs={12} sm={4} key={keyShot}>
@@ -325,185 +334,187 @@ const DeepfakeResultsVideo = (props) => {
                     );
                   },
                 )}
+              </Grid>
             </Grid>
-          </Grid>
+          )}
         </Grid>
       </Grid>
 
       <Box m={3} />
 
-      <Card style={{ overflow: "visible" }} mb={3}>
-        <CardHeader
-          style={{ borderRadius: "4px 4px 0px 0px" }}
-          title={
-            <Grid
-              container
-              direction="row"
-              justifyContent="space-between"
-              alignItems="center"
-            >
-              <span>{keyword("deepfake_results")}</span>
-              <HelpOutlineIcon
-                style={{ color: "#FFFFFF" }}
-                onClick={clickHelp}
-              />
+      {results &&
+        results.deepfake_video_report &&
+        results.deepfake_video_report.results && (
+          <Card style={{ overflow: "visible" }} mb={3}>
+            <CardHeader
+              style={{ borderRadius: "4px 4px 0px 0px" }}
+              title={
+                <Grid
+                  container
+                  direction="row"
+                  justifyContent="space-between"
+                  alignItems="center"
+                >
+                  <span>{keyword("deepfake_results")}</span>
 
-              <Popover
-                id={help}
-                open={openHelp}
-                anchorEl={anchorHelp}
-                onClose={closeHelp}
-                PaperProps={{
-                  style: {
-                    width: "300px",
-                    fontSize: 14,
-                  },
-                }}
-                anchorOrigin={{
-                  vertical: "bottom",
-                  horizontal: "center",
-                }}
-                transformOrigin={{
-                  vertical: "top",
-                  horizontal: "center",
-                }}
-              >
-                <Box p={3}>
-                  <Grid
-                    container
-                    direction="row"
-                    justifyContent="space-between"
-                    alignItems="stretch"
-                  >
-                    <Typography variant="h6" gutterBottom>
-                      {keyword("deepfake_title_what")}
-                    </Typography>
-
-                    <CloseIcon onClick={closeHelp} />
-                  </Grid>
-                  <Box m={1} />
-                  <Typography variant="body2">
-                    {keyword("deepfake_filters_explanation_video")}
-                  </Typography>
-                </Box>
-              </Popover>
-            </Grid>
-          }
-        />
-        <div>
-          <Box p={3}>
-            {shotSelectedValue === null ? (
-              <Grid
-                container
-                direction="column"
-                justifyContent="center"
-                alignItems="center"
-                style={{ height: "350px" }}
-              >
-                <Box p={4}>
-                  <Typography
-                    variant="h6"
-                    style={{ color: "#C9C9C9" }}
-                    align="center"
-                  >
-                    {keyword("deepfake_select")}
-                  </Typography>
-                </Box>
-              </Grid>
-            ) : (
-              <Grid container direction="row" spacing={4}>
-                <Grid item container direction="column" xs={6}>
-                  <Typography variant="h6">
-                    {keyword("deepfake_clip")}
-                  </Typography>
-
-                  <Box m={1} />
-
-                  <video
-                    ref={videoClip}
-                    height="auto"
-                    controls
-                    key={
-                      results.deepfake_video_report.video_path +
-                      "#t=" +
-                      shotSelectedValue.shot_start +
-                      "," +
-                      shotSelectedValue.shot_end
-                    }
-                    style={{
-                      borderRadius: "10px",
-                      boxShadow:
-                        "0px 2px 1px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%)",
-                      maxHeight: "60vh",
-                      maxWidth: "60vw",
+                  <Popover
+                    id={help}
+                    open={openHelp}
+                    anchorEl={anchorHelp}
+                    onClose={closeHelp}
+                    PaperProps={{
+                      style: {
+                        width: "300px",
+                        fontSize: 14,
+                      },
+                    }}
+                    anchorOrigin={{
+                      vertical: "bottom",
+                      horizontal: "center",
+                    }}
+                    transformOrigin={{
+                      vertical: "top",
+                      horizontal: "center",
                     }}
                   >
-                    <source
-                      src={
-                        results.deepfake_video_report.video_path +
-                        "#t=" +
-                        shotSelectedValue.shot_start +
-                        "," +
-                        shotSelectedValue.shot_end
-                      }
-                      type="video/mp4"
-                    />
-                    {keyword("deepfake_support")}
-                  </video>
+                    <Box p={3}>
+                      <Grid
+                        container
+                        direction="row"
+                        justifyContent="space-between"
+                        alignItems="stretch"
+                      >
+                        <Typography variant="h6" gutterBottom>
+                          {keyword("deepfake_title_what")}
+                        </Typography>
+
+                        <CloseIcon onClick={closeHelp} />
+                      </Grid>
+                      <Box m={1} />
+                      <Typography variant="body2">
+                        {keyword("deepfake_filters_explanation_video")}
+                      </Typography>
+                    </Box>
+                  </Popover>
                 </Grid>
-
-                <Grid item container direction="column" xs={6}>
-                  <Typography variant="h6">
-                    {keyword("deepfake_faces")}
-                  </Typography>
-                  <Box m={1} />
-
-                  <Grid container direction="row" spacing={3}>
-                    {shotSelectedValue.face_image_paths.map(
-                      (valueFace, keyFace) => {
-                        return (
-                          <Grid
-                            item
-                            xs={12}
-                            sm={4}
-                            key={keyFace}
-                            style={{
-                              display: "flex",
-                              flexDirection: "column",
-                              alignItems: "center",
-                            }}
-                          >
-                            <img
-                              alt="face"
-                              key={keyFace}
-                              src={valueFace}
-                              style={{ width: "100%", height: "auto" }}
-                            />
-                            <Box mt={1} />
-                            <Typography variant="h3">
-                              {Math.round(
-                                shotSelectedValue.face_predictions[keyFace] *
-                                  100,
-                              )}
-                              %
-                            </Typography>
-                            <Typography
-                              variant="h6"
-                              style={{ color: "#989898" }}
-                            >
-                              {keyword("deepfake_name")}
-                            </Typography>
-                          </Grid>
-                        );
-                      },
-                    )}
+              }
+            />
+            <div>
+              <Box p={3}>
+                {shotSelectedValue === null ? (
+                  <Grid
+                    container
+                    direction="column"
+                    justifyContent="center"
+                    alignItems="center"
+                    style={{ height: "350px" }}
+                  >
+                    <Box p={4}>
+                      <Typography
+                        variant="h6"
+                        style={{ color: "#C9C9C9" }}
+                        align="center"
+                      >
+                        {keyword("deepfake_select")}
+                      </Typography>
+                    </Box>
                   </Grid>
-                </Grid>
-              </Grid>
-            )}
-          </Box>
-        </div>
-      </Card>
+                ) : (
+                  <Grid container direction="row" spacing={4}>
+                    <Grid item container direction="column" xs={6}>
+                      <Typography variant="h6">
+                        {keyword("deepfake_clip")}
+                      </Typography>
+
+                      <Box m={1} />
+
+                      <video
+                        ref={videoClip}
+                        height="auto"
+                        controls
+                        key={
+                          results.deepfake_video_report.video_path +
+                          "#t=" +
+                          shotSelectedValue.shot_start +
+                          "," +
+                          shotSelectedValue.shot_end
+                        }
+                        style={{
+                          borderRadius: "10px",
+                          boxShadow:
+                            "0px 2px 1px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%)",
+                          maxHeight: "60vh",
+                          maxWidth: "60vw",
+                        }}
+                      >
+                        <source
+                          src={
+                            results.deepfake_video_report.video_path +
+                            "#t=" +
+                            shotSelectedValue.shot_start +
+                            "," +
+                            shotSelectedValue.shot_end
+                          }
+                          type="video/mp4"
+                        />
+                        {keyword("deepfake_support")}
+                      </video>
+                    </Grid>
+
+                    <Grid item container direction="column" xs={6}>
+                      <Typography variant="h6">
+                        {keyword("deepfake_faces")}
+                      </Typography>
+                      <Box m={1} />
+
+                      <Grid container direction="row" spacing={3}>
+                        {shotSelectedValue.face_image_paths.map(
+                          (valueFace, keyFace) => {
+                            return (
+                              <Grid
+                                item
+                                xs={12}
+                                sm={4}
+                                key={keyFace}
+                                style={{
+                                  display: "flex",
+                                  flexDirection: "column",
+                                  alignItems: "center",
+                                }}
+                              >
+                                <img
+                                  alt="face"
+                                  key={keyFace}
+                                  src={valueFace}
+                                  style={{ width: "100%", height: "auto" }}
+                                />
+                                <Box mt={1} />
+                                <Typography variant="h3">
+                                  {Math.round(
+                                    shotSelectedValue.face_predictions[
+                                      keyFace
+                                    ] * 100,
+                                  )}
+                                  %
+                                </Typography>
+                                <Typography
+                                  variant="h6"
+                                  style={{ color: "#989898" }}
+                                >
+                                  {keyword("deepfake_name")}
+                                </Typography>
+                              </Grid>
+                            );
+                          },
+                        )}
+                      </Grid>
+                    </Grid>
+                  </Grid>
+                )}
+              </Box>
+            </div>
+          </Card>
+        )}
     </div>
   );
 };

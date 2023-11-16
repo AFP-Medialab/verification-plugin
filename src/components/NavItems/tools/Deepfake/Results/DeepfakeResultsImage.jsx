@@ -292,7 +292,7 @@ const DeepfakeResultsImage = (props) => {
 
               {(!deepfakeScore || !deepfakeScore.predictionScore) && (
                 <Typography variant="h5" sx={{ color: "red" }}>
-                  No face detected
+                  {keyword("deepfake_no_face_detection")}
                 </Typography>
               )}
               {deepfakeScore && (
