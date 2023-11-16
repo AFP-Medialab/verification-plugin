@@ -16,7 +16,7 @@ import { useTrackEvent } from "Hooks/useAnalytics";
 const DeepfakeResultsImage = (props) => {
   const classes = useMyStyles();
   const keyword = i18nLoadNamespace("components/NavItems/tools/Deepfake");
-  
+
   const dispatch = useDispatch();
   class DeepfakeResult {
     constructor(methodName, predictionScore) {
@@ -85,8 +85,13 @@ const DeepfakeResultsImage = (props) => {
     const imgHeight = imgElement.current.offsetHeight;
     const imgWidth = imgElement.current.offsetWidth;
     const containerWidth = imgContainerRef.current.offsetWidth;
+
     const rectanglesTemp = [];
-    
+
+    if (!results || !results.faceswap_report || !results.faceswap_report.info) {
+      return;
+    }
+
     results.faceswap_report.info.forEach((element) => {
       const rectangleAtributes = element.bbox;
 
@@ -190,10 +195,14 @@ const DeepfakeResultsImage = (props) => {
                 ref={imgContainerRef}
                 p={4}
               >
-                <Grid item>
-                  {rectanglesReady &&
-                    rectangles &&
-                    rectangles.map((valueRectangle, keyRectangle) => {
+                {!!(
+                  deepfakeScore &&
+                  deepfakeScore.predictionScore &&
+                  rectangles &&
+                  rectanglesReady
+                ) && (
+                  <Grid item>
+                    {rectangles.map((valueRectangle, keyRectangle) => {
                       return (
                         <Box
                           key={keyRectangle}
@@ -233,7 +242,8 @@ const DeepfakeResultsImage = (props) => {
                         </Box>
                       );
                     })}
-                </Grid>
+                  </Grid>
+                )}
 
                 <img
                   src={url}
@@ -251,17 +261,24 @@ const DeepfakeResultsImage = (props) => {
           </Grid>
           <Grid item sm={12} md={6}>
             <Stack direction="column" p={4} spacing={4}>
-              {deepfakeScore &&
+              {!!(
+                deepfakeScore &&
                 deepfakeScore.predictionScore &&
-                deepfakeScore.predictionScore >= 70 && (
-                  <Typography variant="h5" sx={{ color: "red" }}>
-                    {keyword("deepfake_image_detection_alert") +
-                      DeepfakeImageDetectionMethodNames[
-                        deepfakeScore.methodName
-                      ].name +
-                      keyword("deepfake_image_detection_alert_2")}
-                  </Typography>
-                )}
+                deepfakeScore.predictionScore >= 70
+              ) && (
+                <Typography variant="h5" sx={{ color: "red" }}>
+                  {keyword("deepfake_image_detection_alert") +
+                    DeepfakeImageDetectionMethodNames[deepfakeScore.methodName]
+                      .name +
+                    keyword("deepfake_image_detection_alert_2")}
+                </Typography>
+              )}
+
+              {(!deepfakeScore || !deepfakeScore.predictionScore) && (
+                <Typography variant="h5" sx={{ color: "red" }}>
+                  {keyword("deepfake_no_face_detection")}
+                </Typography>
+              )}
               {deepfakeScore && (
                 <Stack direction="column">
                   <Stack
