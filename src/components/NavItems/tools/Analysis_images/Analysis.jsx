@@ -128,7 +128,7 @@ const Analysis = () => {
       <Card>
         <CardHeader
           title={keyword("image_card_header")}
-          className={classes.headerUpladedImage}
+          className={classes.headerUploadedImage}
         />
         <div className={classes.root2}>
           <form>

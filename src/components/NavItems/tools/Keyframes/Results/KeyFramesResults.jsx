@@ -273,7 +273,7 @@ const KeyFramesResults = (props) => {
               </Popover>
             </Grid>
           }
-          className={classes.headerUpladedImage}
+          className={classes.headerUploadedImage}
           action={
             <IconButton
               aria-label="close"

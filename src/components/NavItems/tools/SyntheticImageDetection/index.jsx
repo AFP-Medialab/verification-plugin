@@ -171,7 +171,7 @@ const SyntheticImageDetection = () => {
               <span>{keyword("synthetic_image_detection_link")}</span>
             </Grid>
           }
-          className={classes.headerUpladedImage}
+          className={classes.headerUploadedImage}
         />
 
         <Box p={3}>

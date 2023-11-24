@@ -572,7 +572,7 @@ const styles = (theme) => ({
     backgroundSize: "contain",
   },
 
-  headerUpladedImage: {
+  headerUploadedImage: {
     paddingTop: "11px!important",
     paddingBottom: "11px!important",
   },

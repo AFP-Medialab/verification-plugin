@@ -387,7 +387,7 @@ const CheckGif = () => {
               <span>{keyword("cardTitle_source")}</span>
             </Grid>
           }
-          className={classes.headerUpladedImage}
+          className={classes.headerUploadedImage}
         />
 
         <Box m={2}>
@@ -498,7 +498,7 @@ const CheckGif = () => {
                 </Button>
               </Grid>
             }
-            className={classes.headerUpladedImage}
+            className={classes.headerUploadedImage}
           />
 
           <Box p={3}>

@@ -77,7 +77,7 @@ const ForensicResults = (props) => {
           title: {
             color: "white",
             fontSize: 20,
-            fontweight: 500,
+            fontWeight: 500,
           },
         },
       },
@@ -568,7 +568,7 @@ const ForensicResults = (props) => {
                         </Grid>
                       </Grid>
                     }
-                    className={classes.headerUpladedImage}
+                    className={classes.headerUploadedImage}
                   />
 
                   <div className={classes.wrapperImageFilter}>

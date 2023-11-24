@@ -176,7 +176,7 @@ const OCR = () => {
       <Card>
         <CardHeader
           title={keyword("cardheader_source")}
-          className={classes.headerUpladedImage}
+          className={classes.headerUploadedImage}
         />
         <Box p={3}>
           <form>

@@ -83,7 +83,7 @@ const VideoRightsResults = (props) => {
     <Card>
       <CardHeader
         title={keyword("cardheader_results")}
-        className={classes.headerUpladedImage}
+        className={classes.headerUploadedImage}
         action={
           <IconButton
             aria-label="close"
