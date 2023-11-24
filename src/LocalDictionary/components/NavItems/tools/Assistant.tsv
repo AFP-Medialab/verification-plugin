@@ -12,7 +12,7 @@ upload_image	Image	Image	Imagen	Εικόνα	صورة
 assistant_urlbox	URL	Adresse URL	URL	Σύνδεσμος	عنوان URL
 assistant_give_url	Give the URL of the page to analyse	Donnez l'URL de la page pour analyser	Dar la URL de la página a analizar	Δώστε τη διεύθυνση URL της σελίδας για να αναλύσει	ضع عنوان URL للصفحة لتحليها
 assistant_paste_url	Paste the URL here	Coller l'URL ici	Pegar la URL aquí	Επικολλήστε τη διεύθυνση URL εδώ	الصق عنوان URL هنا
-please_give_a_correct_link	Please give a correct link	Donner un lien valide s'il vous plaît	Por favor, dé un enlace válido	Παρακαλώ δώστε έναν σωστό σύνδεσμο	يرجى إعطاء رابط صحيح
+please_give_a_correct_link	The link provided is incorrect or not supported.	Le lien fourni est incorrect ou n'est pas pris en charge.	El enlace proporcionado es incorrecto o no es compatible.	Ο σύνδεσμος που παρέχεται είναι εσφαλμένος ή δεν υποστηρίζεται.	الرابط المقدم غير صحيح أو غير مدعوم.
 button_analyse	Analyse	Analyser	Analizar	Αναλύει	تحليل
 button_clean	Remove	Effacer	Borrar	Αφαιρέστε	إزالة
 save	Save	Enregistrer	Gardar	Αποθήκευση	حفظ
@@ -101,3 +101,5 @@ fact_checker	Fact checker	Fact checker	Chequeador	Ελέγχου	مدقق الم
 warning	Warning	Avertissement	Advertencia	Προειδοποίηση	تحذير
 mentions	Mentions	Mention	Menciones	Αναφέρει	إشارات
 assistant_error_instagram	The assistant has failed to retrieve this instagram post. Please open this URL in a new tab (you may need to log in to instagram), then use the ASSISTANT FOR CURRENT PAGE button to retry.	Temp	Temp	Temp	فشل المساعد في استرداد منشور انستغرام هذا. يرجى فتح عنوان URL هذا في علامة تبويب جديدة (قد تحتاج إلى تسجيل الدخول إلى انستغرام) ، ثم استخدام زر مساعد للصفحة الحالية لإعادة المحاولة.
+assistant_error_server_error	The assistant could not process the link provided due to a problem with the server, please try again later. If the problem persists please contact support.	L'assistant n'a pas pu traiter le lien fourni en raison d'un problème avec le serveur, veuillez réessayer plus tard. Si le problème persiste, veuillez contacter l'assistance.	El asistente no pudo procesar el enlace proporcionado debido a un problema con el servidor, inténtelo nuevamente más tarde. Si el problema persiste, comuníquese con el soporte.	Ο βοηθός δεν μπόρεσε να επεξεργαστεί τον σύνδεσμο που παρέχεται λόγω προβλήματος με τον διακομιστή, δοκιμάστε ξανά αργότερα. Εάν το πρόβλημα παραμένει, επικοινωνήστε με την υποστήριξη.	
+assistant_error_connection_error	The assistant is having issues connecting to the server, please try again later.	L'assistant rencontre des problèmes de connexion au serveur, veuillez réessayer plus tard.	El asistente tiene problemas para conectarse al servidor. Vuelva a intentarlo más tarde.	Ο βοηθός αντιμετωπίζει προβλήματα με τη σύνδεση με τον διακομιστή, δοκιμάστε ξανά αργότερα.	
