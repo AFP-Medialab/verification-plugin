@@ -107,7 +107,7 @@ const ForensicResults = (props) => {
   const classes = useMyStyles();
   const keyword = i18nLoadNamespace("components/NavItems/tools/Forensic");
   const keywordWarning = i18nLoadNamespace("components/Shared/OnWarningInfo");
-  const results = props.result.filters;
+  const results = props.result;
   //const masks = props.masksData;
   //console.log(results);
 
@@ -155,10 +155,8 @@ const ForensicResults = (props) => {
 
   const filters = useRef(
     filtersIDs.map((value) => {
-      var filter;
-      //console.log(results[value]);
-
-      if (results[value] === undefined || !results[value].completed) {
+      let filter;
+      if (!results || !results[value] || !results[value].completed) {
         filter = {
           id: "",
           name: "",
@@ -173,13 +171,13 @@ const ForensicResults = (props) => {
           id: value,
           name: keyword("forensic_title_" + value),
           map: [
-            results[value]["forgery"]["colormap"],
+            results[value]["forgery"],
             //results[value]["votemap"]["colormap"],
           ],
           currentDisplayed: 0,
           arrows: [false, false],
           mask: [
-            results[value]["forgery"]["transparent"],
+            results[value]["forgery"],
             //results[value]["votemap"]["transparent"],
           ],
           popover: false,
@@ -190,10 +188,10 @@ const ForensicResults = (props) => {
         filter = {
           id: value,
           name: keyword("forensic_title_" + value),
-          map: results[value]["colormap"],
+          map: results[value]["maps"],
           currentDisplayed: 0,
           arrows: [false, false],
-          mask: results[value]["transparent"],
+          mask: results[value]["maps"],
           popover: false,
         };
 
@@ -206,14 +204,14 @@ const ForensicResults = (props) => {
             keyword("forensic_title_cagiInversed"),
           ],
           map: [
-            results[value]["cagiNormalReport"]["colormap"],
-            results[value]["cagiInversedReport"]["colormap"],
+            results[value]["cagiNormalReport"]["map"],
+            results[value]["cagiInversedReport"]["map"],
           ],
           currentDisplayed: 0,
           arrows: [false, false],
           mask: [
-            results[value]["cagiNormalReport"]["transparent"],
-            results[value]["cagiInversedReport"]["transparent"],
+            results[value]["cagiNormalReport"]["map"],
+            results[value]["cagiInversedReport"]["map"],
           ],
           popover: false,
         };
@@ -244,8 +242,8 @@ const ForensicResults = (props) => {
         filter = {
           id: value,
           name: keyword("forensic_title_" + value),
-          map: results[value]["colormap"],
-          mask: results[value]["transparent"],
+          map: results[value]["map"],
+          mask: results[value]["map"],
           popover: false,
         };
       }
@@ -253,9 +251,6 @@ const ForensicResults = (props) => {
       return filter;
     }),
   );
-
-  //onsole.log(filters);
-  //console.log(results);
 
   const tabs = [0, 1, 2, 3];
 
