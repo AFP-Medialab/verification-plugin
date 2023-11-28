@@ -23,7 +23,6 @@ import GifIcon from "@mui/icons-material/Gif";
 import Fab from "@mui/material/Fab";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
-import Fade from "@mui/material/Fade";
 import { cleanForensicState } from "../../../../../redux/actions/tools/forensicActions";
 import {
   setStateInit,
@@ -37,6 +36,7 @@ import Alert from "@mui/material/Alert";
 import EmojiObjectsIcon from "@mui/icons-material/EmojiObjects";
 import AnimatedGif from "../../Gif/AnimatedGif";
 import { DetectionProgressBar } from "components/Shared/DetectionProgressBar/DetectionProgressBar";
+import ImageCanvas from "../components/imageCanvas/imageCanvas";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -191,7 +191,7 @@ const ForensicResults = (props) => {
           map: results[value]["maps"],
           currentDisplayed: 0,
           arrows: [false, false],
-          mask: results[value]["maps"],
+          mask: results[value]["arrays"],
           popover: false,
         };
 
@@ -210,8 +210,8 @@ const ForensicResults = (props) => {
           currentDisplayed: 0,
           arrows: [false, false],
           mask: [
-            results[value]["cagiNormalReport"]["map"],
-            results[value]["cagiInversedReport"]["map"],
+            results[value]["cagiNormalReport"]["array"],
+            results[value]["cagiInversedReport"]["array"],
           ],
           popover: false,
         };
@@ -222,7 +222,7 @@ const ForensicResults = (props) => {
           id: value,
           name: keyword("forensic_title_" + value),
           map: results[value].map,
-          mask: results[value].map,
+          mask: results[value].array,
           popover: false,
         };
 
@@ -243,7 +243,7 @@ const ForensicResults = (props) => {
           id: value,
           name: keyword("forensic_title_" + value),
           map: results[value]["map"],
-          mask: results[value]["map"],
+          mask: results[value]["array"],
           popover: false,
         };
       }
@@ -468,6 +468,8 @@ const ForensicResults = (props) => {
     // eslint-disable-next-line
   }, []);
 
+  useEffect(() => {}, []);
+
   const currentLang = useSelector((state) => state.language);
   const isCurrentLanguageLeftToRight = currentLang !== "ar";
 
@@ -578,13 +580,18 @@ const ForensicResults = (props) => {
                       className={classes.imageUploaded}
                       image={imageDisplayed}
                     />
-                    <Fade in={filterHoverEnabled} timeout={300}>
-                      <CardMedia
-                        component="img"
-                        className={classes.filterDisplayedClass}
-                        image={filterHover}
-                      />
-                    </Fade>
+
+                    {/*<Fade in={filterHoverEnabled} timeout={300}>*/}
+                    <ImageCanvas
+                      className={classes.filterDisplayedClass}
+                      imgSrc={filterHoverEnabled ? filterHover : null}
+                    />
+                    {/*<CardMedia*/}
+                    {/*  component="img"*/}
+                    {/*  className={classes.filterDisplayedClass}*/}
+                    {/*  image={filterHover}*/}
+                    {/*/>*/}
+                    {/*</Fade>*/}
                   </div>
                 </Card>
 
