@@ -6,43 +6,47 @@
  */
 export function applyThresholdAndGradient(imageData, threshold) {
   let data = imageData.data;
-  const imgWidth = imageData.width;
-  const imgHeight = imageData.height;
 
-  // Define Mako gradient colors
-  const makoDeepBlue = [42, 99, 145];
-  const makoTeal = [76, 196, 157];
-  const makoLightGreen = [210, 241, 218];
+  const mako0 = [10, 2, 3];
+  const mako12 = [37, 23, 51];
+  const mako30 = [50, 47, 113];
+  const mako50 = [42, 99, 145];
+  const mako70 = [46, 146, 155];
+  const mako88 = [105, 208, 158];
+  const mako100 = [215, 244, 223];
 
-  for (let y = 0; y < imgHeight; y++) {
-    for (let x = 0; x < imgWidth; x++) {
-      const dstOff = (y * imgWidth + x) * 4;
+  const colorScale = [mako0, mako12, mako30, mako50, mako70, mako88, mako100];
 
-      // Calculate grayscale value using a simple average of RGB values
-      const grayscale =
-        (data[dstOff] + data[dstOff + 1] + data[dstOff + 2]) / 3;
+  for (let i = 0; i < data.length; i += 4) {
+    const grayscale = (data[i] + data[i + 1] + data[i + 2]) / 3;
 
-      // Apply the threshold
-      if (grayscale > threshold) {
-        // Calculate the interpolation factor based on the grayscale value
-        const factor = (grayscale - threshold) / (255 - threshold);
+    let closestColorIndex = 0;
 
-        // Interpolate between deep blue, teal and light green
-        for (let i = 0; i < 3; i++) {
-          data[dstOff + i] = Math.round(
-            // makoDeepBlue[i] + factor * (makoLightGreen[i] - makoDeepBlue[i])
-            makoDeepBlue[i] +
-              factor *
-                (makoTeal[i] -
-                  makoDeepBlue[i] +
-                  factor * (makoLightGreen[i] - makoTeal[i])),
-          );
-        }
-      } else {
-        // Set the alpha channel to 0 for pixels below the threshold
-        data[dstOff + 3] = 0;
+    for (let j = 0; j < colorScale.length - 1; j++) {
+      if (
+        grayscale >= (j * 255) / (colorScale.length - 1) &&
+        grayscale <= ((j + 1) * 255) / (colorScale.length - 1)
+      ) {
+        closestColorIndex = j;
+        break;
       }
     }
+
+    // determine the values for each color channel based on linear interpolation
+    let color1 = colorScale[closestColorIndex];
+    let color2 = colorScale[closestColorIndex + 1];
+
+    let factor =
+      (grayscale - (closestColorIndex * 255) / (colorScale.length - 1)) /
+      (255 / (colorScale.length - 1));
+
+    imageData.data[i] = color1[0] + (color2[0] - color1[0]) * factor;
+    imageData.data[i + 1] = color1[1] + (color2[1] - color1[1]) * factor;
+    imageData.data[i + 2] = color1[2] + (color2[2] - color1[2]) * factor;
+
+    // Set the alpha channel based on the threshold value
+    imageData.data[i + 3] = grayscale >= threshold ? 255 : 0;
   }
+
   return data;
 }

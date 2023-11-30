@@ -2,8 +2,19 @@ import React from "react";
 import useImageCanvas from "./useImageCanvas";
 
 const ImageCanvas = (props) => {
-  const { imgSrc, ...args } = props;
-  const canvasRef = useImageCanvas(imgSrc);
+  const {
+    imgSrc,
+    isGrayscaleInverted,
+    applyColorScale,
+    threshold: threshold,
+    ...args
+  } = props;
+  const canvasRef = useImageCanvas(
+    imgSrc,
+    isGrayscaleInverted,
+    applyColorScale,
+    threshold,
+  );
 
   return <canvas ref={canvasRef} {...args} />;
 };

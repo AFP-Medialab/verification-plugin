@@ -4,9 +4,17 @@ import { applyThresholdAndGradient } from "../../utils";
 /**
  * hook to perform the image processing in the canvas
  * @param imgSrc {string} image url
+ * @param isGrayscaleColorInverted {boolean} set to true if working with an inverted grayscale
+ * @param applyColorScale {boolean} set to true if working with a color scale
+ * @param threshold {number} the threshold value between 0 and 255. The detection starts from 50%
  * @returns {React.MutableRefObject<null>}
  */
-const useImageCanvas = (imgSrc) => {
+const useImageCanvas = (
+  imgSrc,
+  isGrayscaleColorInverted,
+  applyColorScale,
+  threshold,
+) => {
   const canvasRef = useRef(null);
 
   useEffect(() => {
@@ -23,6 +31,9 @@ const useImageCanvas = (imgSrc) => {
     image.crossOrigin = "Anonymous";
 
     image.onload = function () {
+      // Invert the grayscale for the inverted filters
+      if (isGrayscaleColorInverted) context.filter = "invert(1)";
+
       context.drawImage(
         image,
         0,
@@ -34,12 +45,13 @@ const useImageCanvas = (imgSrc) => {
         context.canvas.clientWidth,
         context.canvas.clientHeight,
       );
+
       let imageData = context.getImageData(0, 0, canvas.width, canvas.height);
 
-      applyThresholdAndGradient(imageData, 127);
+      if (applyColorScale) applyThresholdAndGradient(imageData, threshold);
       context.putImageData(imageData, 0, 0);
     };
-  }, [imgSrc]);
+  }, [imgSrc, threshold, isGrayscaleColorInverted, applyColorScale]);
 
   /**
    * Resizes the canvas dynamically to its CSS size.

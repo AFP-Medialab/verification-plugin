@@ -568,6 +568,7 @@ const styles = (theme) => ({
 
   imageFilter: {
     height: "13vh",
+    width: "100%",
     backgroundPosition: "center",
     backgroundSize: "contain",
   },
