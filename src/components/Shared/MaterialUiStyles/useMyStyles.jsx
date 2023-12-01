@@ -618,21 +618,21 @@ const styles = (theme) => ({
     backgroundSize: "contain",
     objectFit: "contain",
     objectPosition: "top",
-
     position: "relative",
     top: 0,
     left: 0,
   },
 
   imagesGifFilter: {
-    backgroundPosition: "center",
-    backgroundSize: "contain",
-    objectFit: "contain",
-    objectPosition: "top",
-
     position: "absolute",
+    objectFit: "contain",
+    objectPosition: "center top",
     top: 0,
     left: 0,
+    bottom: 0,
+    right: 0,
+    width: "100%",
+    height: "100%",
   },
 
   sliderClass: {

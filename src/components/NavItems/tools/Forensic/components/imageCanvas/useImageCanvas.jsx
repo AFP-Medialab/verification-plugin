@@ -1,5 +1,5 @@
 import { useRef, useEffect } from "react";
-import { applyThresholdAndGradient } from "../../utils";
+import { applyThresholdAndGradient, preloadImage } from "../../utils";
 
 /**
  * hook to perform the image processing in the canvas
@@ -19,18 +19,15 @@ const useImageCanvas = (
 
   useEffect(() => {
     if (!imgSrc) return;
+    async function loadAndProcessImage(imgSrc) {
+      const image = await preloadImage(imgSrc);
 
-    const canvas = canvasRef.current;
-    const context = canvas.getContext("2d", { willReadFrequently: true });
-    context.clearRect(0, 0, canvas.width, canvas.height);
+      const canvas = canvasRef.current;
+      const context = canvas.getContext("2d", { willReadFrequently: true });
+      context.clearRect(0, 0, canvas.width, canvas.height);
 
-    resizeCanvas(canvas);
+      resizeCanvas(canvas);
 
-    let image = new Image();
-    image.src = imgSrc;
-    image.crossOrigin = "Anonymous";
-
-    image.onload = function () {
       // Invert the grayscale for the inverted filters
       if (isGrayscaleColorInverted) context.filter = "invert(1)";
 
@@ -50,7 +47,9 @@ const useImageCanvas = (
 
       if (applyColorScale) applyThresholdAndGradient(imageData, threshold);
       context.putImageData(imageData, 0, 0);
-    };
+    }
+
+    loadAndProcessImage(imgSrc);
   }, [imgSrc, threshold, isGrayscaleColorInverted, applyColorScale]);
 
   /**
@@ -60,7 +59,8 @@ const useImageCanvas = (
    * @returns {boolean}
    */
   function resizeCanvas(canvas) {
-    const { width, height } = canvas.getBoundingClientRect();
+    const width = canvas.clientWidth;
+    const height = canvas.clientHeight;
 
     if (canvas.width !== width || canvas.height !== height) {
       const { devicePixelRatio: ratio = 1 } = window;

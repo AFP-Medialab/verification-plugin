@@ -11,8 +11,16 @@ import {
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import { useState, useEffect } from "react";
+import ImageCanvas from "../Forensic/components/imageCanvas/imageCanvas";
 
-const AnimatedGif = ({ toolState, homoImg1, homoImg2, isPopup }) => {
+const AnimatedGif = ({
+  toolState,
+  homoImg1,
+  homoImg2,
+  isPopup,
+  isGrayscaleInverted,
+  applyColorScale,
+}) => {
   const classes = useMyStyles();
   const keyword = i18nLoadNamespace("components/NavItems/tools/CheckGIF");
   const [filesForGif, setFilesForGif] = useState(null);
@@ -113,25 +121,21 @@ const AnimatedGif = ({ toolState, homoImg1, homoImg2, isPopup }) => {
       alignItems="flex-start"
     >
       <Grid item xs={8}>
-        <Box
-          justifyContent="center"
-          className={classes.wrapperImageFilter}
-          // style={{ width: "100%" }}
-        >
+        <Box justifyContent="center" className={classes.wrapperImageFilter}>
           <CardMedia
             component="img"
             className={classes.imagesGifImage}
             image={homoImg1}
           />
-          {true && (
-            <CardMedia
-              component="img"
-              className={classes.imagesGifFilter}
-              image={homoImg2}
-              id="gifFilterElement"
-              style={{ position: "absolute", top: 0, left: 0 }}
-            />
-          )}
+
+          <ImageCanvas
+            className={classes.imagesGifFilter}
+            id="gifFilterElement"
+            imgSrc={homoImg2}
+            isGrayscaleInverted={isGrayscaleInverted}
+            applyColorScale={applyColorScale}
+            threshold={127}
+          />
         </Box>
       </Grid>
       <Grid
@@ -154,7 +158,7 @@ const AnimatedGif = ({ toolState, homoImg1, homoImg2, isPopup }) => {
             max={-500}
             scale={(x) => -x}
             onChange={(e, val) => changeSpeed(val)}
-            onChangeCommitted={(e) => commitChangeSpeed(speed)}
+            onChangeCommitted={() => commitChangeSpeed(speed)}
           />
         </Grid>
         <Grid
@@ -170,7 +174,7 @@ const AnimatedGif = ({ toolState, homoImg1, homoImg2, isPopup }) => {
               variant="contained"
               color="primary"
               disabled={toolState === 7}
-              onClick={(e) => handleDownload("gif")}
+              onClick={() => handleDownload("gif")}
             >
               {keyword("button_download")}
             </Button>
@@ -181,7 +185,7 @@ const AnimatedGif = ({ toolState, homoImg1, homoImg2, isPopup }) => {
               variant="contained"
               color="primary"
               disabled={toolState === 7}
-              onClick={(e) => handleDownload("mp4")}
+              onClick={() => handleDownload("mp4")}
             >
               {keyword("button_video")}
             </Button>
@@ -208,14 +212,12 @@ const AnimatedGif = ({ toolState, homoImg1, homoImg2, isPopup }) => {
               className={classes.imagesGifImage}
               image={homoImg1}
             />
-            {true && (
-              <CardMedia
-                component="img"
-                className={classes.imagesGifFilter}
-                image={homoImg2}
-                id="gifFilterElement"
-              />
-            )}
+            <CardMedia
+              component="img"
+              className={classes.imagesGifFilter}
+              image={homoImg2}
+              id="gifFilterElement"
+            />
           </Box>
           <Grid
             container

@@ -50,3 +50,20 @@ export function applyThresholdAndGradient(imageData, threshold) {
 
   return data;
 }
+
+/**
+ * Load an image to canvas asynchronously
+ * @param url {string} The image url
+ * @returns {Promise<HTMLImageElement>} A promise that resolves with the image element
+ */
+export function preloadImage(url) {
+  return new Promise((resolve, reject) => {
+    const image = new Image();
+
+    image.src = url;
+    image.crossOrigin = "Anonymous";
+
+    image.onload = () => resolve(image);
+    image.onerror = () => reject(`Image failed to load: ${url}`);
+  });
+}

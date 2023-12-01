@@ -1238,6 +1238,8 @@ const ForensicResults = (props) => {
                   homoImg1={gifImage}
                   homoImg2={gifFilter}
                   isPopup={true}
+                  isGrayscaleInverted={isHoveredFilterInverted}
+                  applyColorScale={applyColorScale}
                 />
               </Box>
             </Popover>
