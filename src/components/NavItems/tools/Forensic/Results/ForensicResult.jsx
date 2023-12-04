@@ -208,7 +208,15 @@ const ForensicResults = (props) => {
           id: value,
           name: keyword("forensic_title_" + value),
           map: results[value].map,
-          mask: results[value].array,
+          mask: results[value].map,
+          popover: false,
+        };
+      } else if (value === "cmfd_report") {
+        filter = {
+          id: value,
+          name: keyword("forensic_title_" + value),
+          map: results[value].map,
+          mask: results[value].map,
           popover: false,
         };
 
@@ -267,16 +275,26 @@ const ForensicResults = (props) => {
     return filter.id === "cagi_report" && filter.currentDisplayed === 1;
   };
 
+  /**
+   * Returns true if the filter is using a grayscale detection mask for which we need to compute the new color scale
+   * @param filter {object} The filter to verify for
+   * @returns {boolean}
+   */
+  const isFilterUsingColorScale = (filter) => {
+    return filter.id === "ela_report" ||
+      filter.id === "laplacian_report" ||
+      filter.id === "median_report" ||
+      filter.id === "rcmfd_report"
+      ? false
+      : true;
+  };
+
   useEffect(() => {
     if (!filterSelected) return;
 
     setIsHoveredFilterInverted(isFilterUsingAnInvertedScale(filterSelected));
 
-    filterSelected.id === "ela_report" ||
-    filterSelected.id === "laplacian_report" ||
-    filterSelected.id === "median_report"
-      ? setApplyColorScale(false)
-      : setApplyColorScale(true);
+    setApplyColorScale(isFilterUsingColorScale(filterSelected));
   }, [filterSelected]);
 
   function hideFilterHover() {
@@ -485,8 +503,6 @@ const ForensicResults = (props) => {
     };
     // eslint-disable-next-line
   }, []);
-
-  useEffect(() => {}, []);
 
   const currentLang = useSelector((state) => state.language);
   const isCurrentLanguageLeftToRight = currentLang !== "ar";
@@ -701,7 +717,7 @@ const ForensicResults = (props) => {
                                 width="100%"
                                 className={classes.lensesTitles}
                               >
-                                {value.name}
+                                {keyword("forensic_title_" + value.id)}
                                 <IconButton
                                   className={classes.margin}
                                   size="small"
@@ -743,7 +759,7 @@ const ForensicResults = (props) => {
                                       alignItems="stretch"
                                     >
                                       <Typography variant="body1">
-                                        {value.name}
+                                        {keyword("forensic_title_" + value.id)}
                                       </Typography>
 
                                       <CloseIcon
@@ -897,13 +913,6 @@ const ForensicResults = (props) => {
                             ) {
                               arrowsToDisplay(value.id);
                             }
-
-                            /*
-                                                            if (value.id === "ghost_report") {
-                                                                value.mask = ghostMasks;
-                                                            }
-                                                            */
-
                             return (
                               <Grid key={key} item xs={4}>
                                 {value.id === "zero_report" ||
@@ -925,7 +934,9 @@ const ForensicResults = (props) => {
                                       isGrayscaleInverted={isFilterUsingAnInvertedScale(
                                         value,
                                       )}
-                                      applyColorScale={true}
+                                      applyColorScale={isFilterUsingColorScale(
+                                        value,
+                                      )}
                                       threshold={0}
                                     />
                                     <div className={classes.imageOverlay}>
@@ -1016,7 +1027,9 @@ const ForensicResults = (props) => {
                                         className={classes.imageFilter}
                                         imgSrc={value.map}
                                         isGrayscaleInverted={false}
-                                        applyColorScale={true}
+                                        applyColorScale={isFilterUsingColorScale(
+                                          value,
+                                        )}
                                         threshold={0}
                                       />
                                       <div className={classes.imageOverlay}>
@@ -1065,7 +1078,7 @@ const ForensicResults = (props) => {
                                       </Box>
                                     ) : (
                                       <Box align="center" width="100%" pl={1}>
-                                        {value.name}
+                                        {keyword("forensic_title_" + value.id)}
                                         <IconButton
                                           className={classes.margin}
                                           size="small"
@@ -1120,7 +1133,9 @@ const ForensicResults = (props) => {
                                         </Typography>
                                       ) : (
                                         <Typography variant="body1">
-                                          {value.name}
+                                          {keyword(
+                                            "forensic_title_" + value.id,
+                                          )}
                                         </Typography>
                                       )}
 
