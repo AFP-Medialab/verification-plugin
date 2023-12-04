@@ -281,12 +281,12 @@ const ForensicResults = (props) => {
    * @returns {boolean}
    */
   const isFilterUsingColorScale = (filter) => {
-    return filter.id === "ela_report" ||
+    return !(
+      filter.id === "ela_report" ||
       filter.id === "laplacian_report" ||
       filter.id === "median_report" ||
       filter.id === "rcmfd_report"
-      ? false
-      : true;
+    );
   };
 
   useEffect(() => {
