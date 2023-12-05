@@ -387,6 +387,57 @@ const ForensicResults = (props) => {
   const [gifFilter, setGifFilter] = React.useState(displayItem);
   //const gifFilterMask = useSelector(state => state.forensic.maskUrl);
 
+  const [filterDataURL, setFilterDataURL] = React.useState();
+  const [imageDataURL, setImageDataURL] = React.useState();
+  const [imageWidth, setImageWidth] = React.useState();
+  const [imageHeight, setImageHeight] = React.useState();
+
+  useEffect(() => {
+    //console.log(imageWidth);
+    //console.log(imageHeight);
+
+    if (imageWidth && imageHeight) {
+      resizeDataURL(imageDataURL, imageWidth, imageHeight).then((res) => {
+        setImageDataURL(res);
+        //console.log(res);
+      });
+      resizeDataURL(filterDataURL, imageWidth, imageHeight).then((res) => {
+        setFilterDataURL(res);
+        //console.log(res);
+      });
+    }
+  }, [imageWidth, imageHeight, filterDataURL, imageDataURL]);
+
+  // Takes a data URI and returns the Data URI corresponding to the resized image at the wanted size.
+  function resizeDataURL(dataURL, wantedWidth, wantedHeight) {
+    return new Promise(function (resolve) {
+      // We create an image to receive the Data URI
+      let img = document.createElement("img");
+
+      // When the event "onload" is triggered we can resize the image.
+      img.onload = function () {
+        // We create a canvas and get its context.
+        let canvas = document.createElement("canvas");
+        let ctx = canvas.getContext("2d");
+
+        // We set the dimensions at the wanted size.
+        canvas.width = wantedWidth;
+        canvas.height = wantedHeight;
+
+        // We resize the image with the canvas method drawImage();
+        ctx.drawImage(this, 0, 0, wantedWidth, wantedHeight);
+
+        let dataURI = canvas.toDataURL();
+
+        // This is the return of the Promise
+        resolve(dataURI);
+      };
+
+      // We put the Data URI in the image's src attribute
+      img.src = dataURL;
+    });
+  }
+
   //const [interval, setIntervalVar] = React.useState(null);
 
   const gifState = useSelector((state) => state.gif.toolState);
@@ -608,11 +659,22 @@ const ForensicResults = (props) => {
                   />
 
                   <div className={classes.wrapperImageFilter}>
-                    <CardMedia
+                    {/*<CardMedia
+                      ref={imageRef}
                       crossOrigin={"anonymous"}
                       component="img"
                       className={classes.imageUploaded}
                       image={imageDisplayed}
+                    />*/}
+                    <ImageCanvas
+                      className={classes.imageUploaded}
+                      imgSrc={imageDisplayed}
+                      isGrayscaleInverted={false}
+                      applyColorScale={false}
+                      threshold={0}
+                      filterDataURL={setImageDataURL}
+                      imageNaturalWidth={setImageWidth}
+                      imageNaturalHeight={setImageHeight}
                     />
 
                     <Fade in={filterHoverEnabled} timeout={500}>
@@ -623,6 +685,7 @@ const ForensicResults = (props) => {
                           isGrayscaleInverted={isHoveredFilterInverted}
                           applyColorScale={applyColorScale}
                           threshold={127}
+                          filterDataURL={setFilterDataURL}
                         />
                       </Box>
                     </Fade>
@@ -1250,8 +1313,8 @@ const ForensicResults = (props) => {
                 <Box m={2} />
                 <AnimatedGif
                   toolState={gifState}
-                  homoImg1={gifImage}
-                  homoImg2={gifFilter}
+                  homoImg1={imageDataURL}
+                  homoImg2={filterDataURL}
                   isPopup={true}
                   isGrayscaleInverted={isHoveredFilterInverted}
                   applyColorScale={applyColorScale}

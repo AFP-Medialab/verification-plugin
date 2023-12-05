@@ -14,6 +14,9 @@ const useImageCanvas = (
   isGrayscaleColorInverted,
   applyColorScale,
   threshold,
+  filterDataURL,
+  imageNaturalWidth,
+  imageNaturalHeight,
 ) => {
   const canvasRef = useRef(null);
 
@@ -46,7 +49,13 @@ const useImageCanvas = (
       let imageData = context.getImageData(0, 0, canvas.width, canvas.height);
 
       if (applyColorScale) applyThresholdAndGradient(imageData, threshold);
+
       context.putImageData(imageData, 0, 0);
+
+      if (filterDataURL) filterDataURL(canvas.toDataURL());
+
+      if (imageNaturalWidth) imageNaturalWidth(image.naturalWidth);
+      if (imageNaturalHeight) imageNaturalHeight(image.naturalHeight);
     }
 
     loadAndProcessImage(imgSrc);

@@ -91,11 +91,13 @@ const AnimatedGif = ({
   //Function to prepare the files to trigger the download
   const handleDownload = (type) => {
     //console.log(toolState);
-    var files = {
+    let files = {
       image1: homoImg1,
       image2: homoImg2,
     };
 
+    console.log(homoImg1);
+    console.log(homoImg2);
     setFilesForGif(files);
     setDelayGif(speed);
     setEnableDownload(true);

@@ -564,6 +564,8 @@ const styles = (theme) => ({
   imageUploaded: {
     objectFit: "contain",
     objectPosition: "center top",
+    height: "100%",
+    width: "100%",
   },
 
   imageFilter: {
