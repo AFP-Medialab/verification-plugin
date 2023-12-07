@@ -563,7 +563,7 @@ const styles = (theme) => ({
 
   imageUploaded: {
     objectFit: "contain",
-    objectPosition: "center top",
+    objectPosition: "center",
     height: "100%",
     width: "100%",
   },

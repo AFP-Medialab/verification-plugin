@@ -2,6 +2,28 @@ import { useRef, useEffect } from "react";
 import { applyThresholdAndGradient, preloadImage } from "../../utils";
 
 /**
+ * Resizes the canvas dynamically to its CSS size.
+ * Returns true if the canvas was resized.
+ * @param canvas {HTMLCanvasElement}
+ * @returns {boolean}
+ */
+function resizeCanvas(canvas) {
+  const width = canvas.clientWidth;
+  const height = canvas.clientHeight;
+
+  if (canvas.width !== width || canvas.height !== height) {
+    const { devicePixelRatio: ratio = 1 } = window;
+    const context = canvas.getContext("2d", { willReadFrequently: true });
+    canvas.width = width * ratio;
+    canvas.height = height * ratio;
+    context.scale(ratio, ratio);
+    return true;
+  }
+
+  return false;
+}
+
+/**
  * hook to perform the image processing in the canvas
  * @param imgSrc {string} image url
  * @param isGrayscaleColorInverted {boolean} set to true if working with an inverted grayscale
@@ -24,27 +46,55 @@ const useImageCanvas = (
     if (!imgSrc) return;
     async function loadAndProcessImage(imgSrc) {
       const image = await preloadImage(imgSrc);
-
       const canvas = canvasRef.current;
+
+      if (!canvas) return;
+
+      canvas.width = image.naturalWidth;
+      canvas.height = image.naturalHeight;
+
+      resizeCanvas(canvas);
+
+      // if (imageNaturalWidth) canvas.width = imageNaturalWidth;
+      // if (imageNaturalHeight) canvas.height = imageNaturalHeight;
+
       const context = canvas.getContext("2d", { willReadFrequently: true });
       context.clearRect(0, 0, canvas.width, canvas.height);
 
-      resizeCanvas(canvas);
+      function preserveImageRatio() {
+        if (image.width <= 0) {
+          return;
+        }
+        const factor =
+          (canvas.width / image.naturalWidth) * image.naturalHeight >
+          window.innerHeight
+            ? canvas.height / image.naturalHeight
+            : canvas.width / image.naturalWidth;
+        context.drawImage(
+          image,
+          0,
+          0,
+          image.naturalWidth * factor,
+          image.naturalHeight * factor,
+        );
+      }
 
       // Invert the grayscale for the inverted filters
       if (isGrayscaleColorInverted) context.filter = "invert(1)";
 
-      context.drawImage(
-        image,
-        0,
-        0,
-        image.width,
-        image.height,
-        0,
-        0,
-        context.canvas.clientWidth,
-        context.canvas.clientHeight,
-      );
+      // context.drawImage(
+      //   image,
+      //   0,
+      //   0,
+      //   image.naturalWidth,
+      //   image.naturalHeight,
+      //   0,
+      //   0,
+      //   context.canvas.clientWidth,
+      //   context.canvas.clientHeight,
+      // );
+
+      preserveImageRatio();
 
       let imageData = context.getImageData(0, 0, canvas.width, canvas.height);
 
@@ -61,29 +111,7 @@ const useImageCanvas = (
     loadAndProcessImage(imgSrc);
   }, [imgSrc, threshold, isGrayscaleColorInverted, applyColorScale]);
 
-  /**
-   * Resizes the canvas dynamically to its CSS size.
-   * Returns true if the canvas was resized.
-   * @param canvas {HTMLCanvasElement}
-   * @returns {boolean}
-   */
-  function resizeCanvas(canvas) {
-    const width = canvas.clientWidth;
-    const height = canvas.clientHeight;
-
-    if (canvas.width !== width || canvas.height !== height) {
-      const { devicePixelRatio: ratio = 1 } = window;
-      const context = canvas.getContext("2d");
-      canvas.width = width * ratio;
-      canvas.height = height * ratio;
-      context.scale(ratio, ratio);
-      return true;
-    }
-
-    return false;
-  }
-
   return canvasRef;
 };
 
-export default useImageCanvas;
+export { useImageCanvas, resizeCanvas };

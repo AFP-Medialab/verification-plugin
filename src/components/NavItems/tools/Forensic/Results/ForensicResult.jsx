@@ -4,7 +4,6 @@ import React, { useState, useRef, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
-import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
@@ -299,7 +298,6 @@ const ForensicResults = (props) => {
 
   function hideFilterHover() {
     setFilterHoverEnabled(false);
-    setFilterHover(null);
   }
 
   //Button analyze new image
@@ -387,56 +385,96 @@ const ForensicResults = (props) => {
   const [gifFilter, setGifFilter] = React.useState(displayItem);
   //const gifFilterMask = useSelector(state => state.forensic.maskUrl);
 
-  const [filterDataURL, setFilterDataURL] = React.useState();
-  const [imageDataURL, setImageDataURL] = React.useState();
-  const [imageWidth, setImageWidth] = React.useState();
-  const [imageHeight, setImageHeight] = React.useState();
+  // const [filterDataURL, setFilterDataURL] = React.useState();
+  // const [imageDataURL, setImageDataURL] = React.useState();
+  // const [imageWidth, setImageWidth] = React.useState();
+  // const [imageHeight, setImageHeight] = React.useState();
 
-  useEffect(() => {
-    //console.log(imageWidth);
-    //console.log(imageHeight);
-
-    if (imageWidth && imageHeight) {
-      resizeDataURL(imageDataURL, imageWidth, imageHeight).then((res) => {
-        setImageDataURL(res);
-        //console.log(res);
-      });
-      resizeDataURL(filterDataURL, imageWidth, imageHeight).then((res) => {
-        setFilterDataURL(res);
-        //console.log(res);
-      });
-    }
-  }, [imageWidth, imageHeight, filterDataURL, imageDataURL]);
+  // useEffect(() => {
+  //   console.log(filterHover);
+  //   if (imageWidth && imageHeight && filterHover) {
+  //     //   resizeDataURL(imageDisplayed, imageWidth, imageHeight).then((res) => {
+  //     //     setImageDataURL(res);
+  //     //   });
+  //     resizeDataURL(filterDataURL, imageWidth, imageHeight).then((res) => {
+  //       setFilterDataURL(res);
+  //     });
+  //   }
+  // }, [filterHover]);
 
   // Takes a data URI and returns the Data URI corresponding to the resized image at the wanted size.
-  function resizeDataURL(dataURL, wantedWidth, wantedHeight) {
-    return new Promise(function (resolve) {
+  // async function resizeDataURL(dataURL, wantedWidth, wantedHeight) {
+  //   const image = await preloadImage(dataURL);
+  //
+  //   const canvas = document.createElement("canvas");
+  //
+  //   canvas.width = wantedWidth;
+  //   canvas.height = wantedHeight;
+  //
+  //   const context = canvas.getContext("2d", { willReadFrequently: true });
+  //   //context.clearRect(0, 0, canvas.width, canvas.height);
+  //
+  //   // const resizedImage = await pica.resize(image, canvas);
+  //   //
+  //   // return resizedImage.toDataURL();
+  //
+  //   /* canvas.width = wantedWidth;
+  //   canvas.height = wantedHeight;*/
+  //
+  //   /*const { devicePixelRatio: ratio = 1 } = window;
+  //   canvas.width = wantedWidth * ratio;
+  //   canvas.height = wantedHeight * ratio;
+  //   context.scale(ratio, ratio);*/
+  //
+  //   //context.canvas.width = wantedWidth;
+  //   //context.canvas.height = wantedHeight;
+  //
+  //   const factor =
+  //     (canvas.width / image.naturalWidth) * image.naturalHeight >
+  //     window.innerHeight
+  //       ? canvas.height / image.naturalHeight
+  //       : canvas.width / image.naturalWidth;
+  //
+  //   context.drawImage(
+  //     image,
+  //     0,
+  //     0,
+  //     image.naturalWidth * factor,
+  //     image.naturalHeight * factor,
+  //   );
+  //   //
+  //   const dataURI = context.canvas.toDataURL();
+  //   return dataURI;
+
+  /* return new Promise(function (resolve) {
       // We create an image to receive the Data URI
       let img = document.createElement("img");
+
+      // We put the Data URI in the image's src attribute
+      img.src = dataURL;
 
       // When the event "onload" is triggered we can resize the image.
       img.onload = function () {
         // We create a canvas and get its context.
         let canvas = document.createElement("canvas");
+        canvas.width = wantedWidth;
+        canvas.height = wantedHeight;
+
         let ctx = canvas.getContext("2d");
 
         // We set the dimensions at the wanted size.
-        canvas.width = wantedWidth;
-        canvas.height = wantedHeight;
+        ctx.canvas.width = wantedWidth;
+        ctx.canvas.height = wantedHeight;
 
         // We resize the image with the canvas method drawImage();
         ctx.drawImage(this, 0, 0, wantedWidth, wantedHeight);
 
         let dataURI = canvas.toDataURL();
-
         // This is the return of the Promise
         resolve(dataURI);
       };
-
-      // We put the Data URI in the image's src attribute
-      img.src = dataURL;
-    });
-  }
+    });*/
+  // }
 
   //const [interval, setIntervalVar] = React.useState(null);
 
@@ -672,9 +710,9 @@ const ForensicResults = (props) => {
                       isGrayscaleInverted={false}
                       applyColorScale={false}
                       threshold={0}
-                      filterDataURL={setImageDataURL}
-                      imageNaturalWidth={setImageWidth}
-                      imageNaturalHeight={setImageHeight}
+                      // filterDataURL={setImageDataURL}
+                      // imageNaturalWidth={setImageWidth}
+                      // imageNaturalHeight={setImageHeight}
                     />
 
                     <Fade in={filterHoverEnabled} timeout={500}>
@@ -685,7 +723,7 @@ const ForensicResults = (props) => {
                           isGrayscaleInverted={isHoveredFilterInverted}
                           applyColorScale={applyColorScale}
                           threshold={127}
-                          filterDataURL={setFilterDataURL}
+                          // filterDataURL={setFilterDataURL}
                         />
                       </Box>
                     </Fade>
@@ -772,7 +810,7 @@ const ForensicResults = (props) => {
                                 }}
                                 onMouseLeave={() => {
                                   hideFilterHover();
-                                  setFilterSelected(null);
+                                  // setFilterSelected(null);
                                 }}
                               />
                               <Box
@@ -1313,8 +1351,8 @@ const ForensicResults = (props) => {
                 <Box m={2} />
                 <AnimatedGif
                   toolState={gifState}
-                  homoImg1={imageDataURL}
-                  homoImg2={filterDataURL}
+                  homoImg1={imageDisplayed}
+                  homoImg2={gifFilter}
                   isPopup={true}
                   isGrayscaleInverted={isHoveredFilterInverted}
                   applyColorScale={applyColorScale}

@@ -50,12 +50,22 @@ const useGetGif = (images, delayInput, enableDownload, downloadType) => {
 
     if (enableDownload) {
       dispatch(setStateDownloading());
-      var body = {
+      let body = {
         inputURLs: [images.image1, images.image2],
         delay: delayInput,
       };
+
+      body = {
+        delay: delayInput,
+        createVideo: downloadType === "mp4",
+        original: images.image1,
+        maskFilter: images.image2,
+      };
+
       //let endpoint = downloadType === "mp4" ? "/video" : "/animated";
-      let endpoint = downloadType === "mp4" ? "/video" : "/animatedbase64";
+      //let endpoint = downloadType === "mp4" ? "/video" : "/animatedbase64";
+      const endpoint = "/animatedbase64";
+
       const axiosConfig = {
         method: "post",
         url: baseURL + endpoint,

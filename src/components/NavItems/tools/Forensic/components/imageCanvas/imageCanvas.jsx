@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import useImageCanvas from "./useImageCanvas";
+import React from "react";
+import { useImageCanvas } from "./useImageCanvas";
 
 const ImageCanvas = (props) => {
   const {
@@ -21,10 +21,6 @@ const ImageCanvas = (props) => {
     imageNaturalWidth,
     imageNaturalHeight,
   );
-
-  useEffect(() => {
-    console.log(canvasRef.current.toDataURL());
-  }, [canvasRef]);
 
   return <canvas ref={canvasRef} {...args} />;
 };

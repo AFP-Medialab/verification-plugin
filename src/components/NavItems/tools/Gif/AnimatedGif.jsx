@@ -27,6 +27,10 @@ const AnimatedGif = ({
   const [delayGif, setDelayGif] = useState(null);
   const [enableDownload, setEnableDownload] = useState(false);
   const [downloadType, setDownloadType] = useState(null);
+
+  const [imageDataURL, setImageDataURL] = React.useState();
+  const [filterDataURL, setFilterDataURL] = React.useState();
+
   //=== SPEED SLIDER ===
   const [speed, setSpeed] = useState(1100);
 
@@ -91,13 +95,12 @@ const AnimatedGif = ({
   //Function to prepare the files to trigger the download
   const handleDownload = (type) => {
     //console.log(toolState);
+
     let files = {
-      image1: homoImg1,
-      image2: homoImg2,
+      image1: imageDataURL,
+      image2: filterDataURL,
     };
 
-    console.log(homoImg1);
-    console.log(homoImg2);
     setFilesForGif(files);
     setDelayGif(speed);
     setEnableDownload(true);
@@ -124,19 +127,35 @@ const AnimatedGif = ({
     >
       <Grid item xs={8}>
         <Box justifyContent="center" className={classes.wrapperImageFilter}>
-          <CardMedia
-            component="img"
+          {/*<CardMedia*/}
+          {/*  component="img"*/}
+          {/*  className={classes.imagesGifImage}*/}
+          {/*  image={homoImg1}*/}
+          {/*/>*/}
+
+          <ImageCanvas
             className={classes.imagesGifImage}
-            image={homoImg1}
+            style={{
+              objectFit: "contain",
+              objectPosition: "center",
+              height: "100%",
+              width: "100%",
+            }}
+            imgSrc={homoImg1}
+            isGrayscaleInverted={false}
+            applyColorScale={false}
+            threshold={0}
+            filterDataURL={setImageDataURL}
           />
 
           <ImageCanvas
-            className={classes.imagesGifFilter}
+            className={classes.filterDisplayedClass}
             id="gifFilterElement"
             imgSrc={homoImg2}
             isGrayscaleInverted={isGrayscaleInverted}
             applyColorScale={applyColorScale}
             threshold={127}
+            filterDataURL={setFilterDataURL}
           />
         </Box>
       </Grid>
