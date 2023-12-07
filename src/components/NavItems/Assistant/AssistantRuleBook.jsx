@@ -42,7 +42,7 @@ export const TYPE_PATTERNS = [
 export const KNOWN_LINK_PATTERNS = [
   {
     key: KNOWN_LINKS.TWITTER,
-    patterns: ["((https?:/{2})?(www.)?twitter.com/\\w{1,15}/status/\\d*)"],
+    patterns: ["((https?:/{2})?(www.)?(twitter|x).com/\\w{1,15}/status/\\d*)"],
   },
   {
     key: KNOWN_LINKS.TIKTOK,
