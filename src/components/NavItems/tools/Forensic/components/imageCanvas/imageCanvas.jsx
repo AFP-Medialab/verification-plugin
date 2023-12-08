@@ -8,8 +8,6 @@ const ImageCanvas = (props) => {
     applyColorScale,
     threshold: threshold,
     filterDataURL,
-    imageNaturalWidth,
-    imageNaturalHeight,
     ...args
   } = props;
   const canvasRef = useImageCanvas(
@@ -18,8 +16,6 @@ const ImageCanvas = (props) => {
     applyColorScale,
     threshold,
     filterDataURL,
-    imageNaturalWidth,
-    imageNaturalHeight,
   );
 
   return <canvas ref={canvasRef} {...args} />;
