@@ -9,7 +9,13 @@ import {
 import { saveAs } from "file-saver";
 import useAuthenticatedRequest from "../../../../Shared/Authentication/useAuthenticatedRequest";
 
-const useGetGif = (images, delayInput, enableDownload, downloadType) => {
+const useGetGif = (
+  images,
+  delayInput,
+  enableDownload,
+  downloadType,
+  isCanvas,
+) => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Forensic");
   const dispatch = useDispatch();
   const authenticatedRequest = useAuthenticatedRequest();
@@ -52,19 +58,20 @@ const useGetGif = (images, delayInput, enableDownload, downloadType) => {
       dispatch(setStateDownloading());
       let body = {
         inputURLs: [images.image1, images.image2],
-        delay: delayInput,
-      };
-
-      body = {
-        delay: delayInput,
         createVideo: downloadType === "mp4",
-        original: images.image1,
-        maskFilter: images.image2,
+        delay: delayInput,
       };
-
+      if (isCanvas) {
+        body = {
+          delay: delayInput,
+          createVideo: downloadType === "mp4",
+          original: images.image1,
+          maskFilter: images.image2,
+        };
+      }
       //let endpoint = downloadType === "mp4" ? "/video" : "/animated";
       //let endpoint = downloadType === "mp4" ? "/video" : "/animatedbase64";
-      const endpoint = "/animatedbase64";
+      let endpoint = isCanvas ? "/animatedbase64" : "/animated";
 
       const axiosConfig = {
         method: "post",

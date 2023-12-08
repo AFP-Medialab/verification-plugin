@@ -20,6 +20,7 @@ const AnimatedGif = ({
   isPopup,
   isGrayscaleInverted,
   applyColorScale,
+  isCanvas,
 }) => {
   const classes = useMyStyles();
   const keyword = i18nLoadNamespace("components/NavItems/tools/CheckGIF");
@@ -97,8 +98,8 @@ const AnimatedGif = ({
     //console.log(toolState);
 
     let files = {
-      image1: imageDataURL,
-      image2: filterDataURL,
+      image1: isCanvas ? imageDataURL : homoImg1,
+      image2: isCanvas ? filterDataURL : homoImg2,
     };
 
     setFilesForGif(files);
@@ -112,7 +113,7 @@ const AnimatedGif = ({
   //console.log(toolState);
   //Call to the API
 
-  useGetGif(filesForGif, delayGif, enableDownload, downloadType);
+  useGetGif(filesForGif, delayGif, enableDownload, downloadType, isCanvas);
   if (toolState === 7 && enableDownload) {
     setEnableDownload(false);
   }

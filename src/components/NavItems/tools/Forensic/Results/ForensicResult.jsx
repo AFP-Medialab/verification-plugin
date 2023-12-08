@@ -61,7 +61,6 @@ function TabPanel(props) {
 const ForensicResults = (props) => {
   const dispatch = useDispatch();
   const displayItem = useSelector((state) => state.forensic.displayItem);
-
   const theme = createTheme({
     components: {
       MuiCardHeader: {
@@ -1354,6 +1353,7 @@ const ForensicResults = (props) => {
                   homoImg1={imageDisplayed}
                   homoImg2={gifFilter}
                   isPopup={true}
+                  isCanvas={true}
                   isGrayscaleInverted={isHoveredFilterInverted}
                   applyColorScale={applyColorScale}
                 />
