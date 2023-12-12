@@ -59,6 +59,7 @@ const useImageCanvas = (
   applyColorScale,
   threshold,
   filterDataURL,
+  containerRef,
 ) => {
   const canvasRef = useRef();
 
@@ -69,9 +70,16 @@ const useImageCanvas = (
       const canvas = canvasRef.current;
 
       if (!canvas) return;
+
       canvas.width = image.naturalWidth;
       canvas.height = image.naturalHeight;
+
       resizeCanvas(canvas);
+
+      if (containerRef && containerRef.current) {
+        console.log(containerRef.offsetWidth);
+        console.log(containerRef.offsetHeight);
+      }
 
       // if (imageNaturalWidth) canvas.width = imageNaturalWidth;
       // if (imageNaturalHeight) canvas.height = imageNaturalHeight;
@@ -96,7 +104,7 @@ const useImageCanvas = (
         context.canvas.clientHeight,
       );
 
-      //preserveImageRatio(image, canvas, context);
+      preserveImageRatio(image, canvas, context);
 
       let imageData = context.getImageData(
         0,

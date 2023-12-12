@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import useGetGif from "./Hooks/useGetGif";
 import {
   Box,
@@ -37,6 +37,7 @@ const AnimatedGif = ({
 
   const [interval, setIntervalVar] = useState(null);
 
+  const containerRef = useRef();
   function changeSpeed(value) {
     //console.log("Change speed: " + value); //DEBUG
     setSpeed(value * -1);
@@ -127,7 +128,11 @@ const AnimatedGif = ({
       alignItems="flex-start"
     >
       <Grid item xs={8}>
-        <Box justifyContent="center" className={classes.wrapperImageFilter}>
+        <Box
+          justifyContent="center"
+          className={classes.wrapperImageFilter}
+          ref={containerRef}
+        >
           {/*<CardMedia*/}
           {/*  component="img"*/}
           {/*  className={classes.imagesGifImage}*/}
@@ -157,6 +162,7 @@ const AnimatedGif = ({
             applyColorScale={applyColorScale}
             threshold={127}
             filterDataURL={setFilterDataURL}
+            containerRef={containerRef}
           />
         </Box>
       </Grid>
