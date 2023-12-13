@@ -11,11 +11,18 @@ function resizeCanvas(canvas) {
   const width = canvas.clientWidth;
   const height = canvas.clientHeight;
 
+  console.log(canvas);
+  console.log(width);
+  console.log(height);
+
   if (canvas.width !== width || canvas.height !== height) {
     const { devicePixelRatio: ratio = 1 } = window;
+
+    console.log(ratio);
+
     const context = canvas.getContext("2d", { willReadFrequently: true });
-    canvas.width = width * ratio;
-    canvas.height = height * ratio;
+    //canvas.width = width * ratio;
+    //canvas.height = height * ratio;
     context.scale(ratio, ratio);
     console.log("resize ", canvas);
     return true;
@@ -66,33 +73,73 @@ const useImageCanvas = (
   useEffect(() => {
     if (!imgSrc) return;
     async function loadAndProcessImage(imgSrc) {
-      const image = await preloadImage(imgSrc);
       const canvas = canvasRef.current;
 
       if (!canvas) return;
-
-      canvas.width = image.naturalWidth;
-      canvas.height = image.naturalHeight;
-
-      resizeCanvas(canvas);
-
-      if (containerRef && containerRef.current) {
-        console.log(containerRef.offsetWidth);
-        console.log(containerRef.offsetHeight);
-      }
-
-      // if (imageNaturalWidth) canvas.width = imageNaturalWidth;
-      // if (imageNaturalHeight) canvas.height = imageNaturalHeight;
 
       const context = canvas.getContext("2d", {
         willReadFrequently: true,
         desynchronized: true,
       });
-      context.clearRect(0, 0, image.naturalWidth, image.naturalHeight);
+
+      const image = await preloadImage(imgSrc);
+
+      const imageRatio = image.naturalWidth / image.naturalHeight;
+      console.log("-------- ");
+      console.log("image ratio " + imageRatio);
+
+      console.log("offsetWidth " + canvas.offsetWidth);
+
+      canvas.width = canvas.offsetWidth;
+      canvas.height = canvas.offsetWidth / imageRatio;
+      //canvas.width = image.naturalWidth;
+      //canvas.height = image.naturalHeight;
+
+      // canvas.height = (image.naturalHeight / image.naturalWidth) * canvas.width;
+
+      console.log("image.naturalHeight height is " + canvas.height);
+
+      // ------- Resize canvas
+      const width = canvas.clientWidth;
+      const height = canvas.clientHeight;
+
+      console.log(canvas);
+      console.log("canvas client width " + width);
+      console.log("canvas client height " + height);
+      console.log("canvas width " + canvas.width);
+      console.log("canvas height " + canvas.height);
+
+      const clientRatio = width / height;
+      console.log("client ratio " + clientRatio);
+
+      let ratio = 1;
+      if (canvas.width !== width || canvas.height !== height) {
+        ratio = window.devicePixelRatio;
+
+        console.log("device pixel ratio " + ratio);
+
+        //canvas.width = canvas.width * ratio;
+        //canvas.height = canvas.height * ratio;
+        /*console.log("new width " + canvas.width);
+        if (clientRatio !== imageRatio)
+          canvas.height = canvas.width / imageRatio;
+        else canvas.height = height * ratio;*/
+
+        //context.scale(ratio, ratio);
+      }
+      // ------- Resize canvas
+      //resizeCanvas(canvas);
+
+      console.log("-------");
+
+      // if (imageNaturalWidth) canvas.width = imageNaturalWidth;
+      // if (imageNaturalHeight) canvas.height = imageNaturalHeight;
+
+      context.clearRect(0, 0, canvas.width, canvas.height);
 
       // Invert the grayscale for the inverted filters
       if (isGrayscaleColorInverted) context.filter = "invert(1)";
-      context.drawImage(
+      /*context.drawImage(
         image,
         0,
         0,
@@ -102,9 +149,21 @@ const useImageCanvas = (
         0,
         context.canvas.clientWidth,
         context.canvas.clientHeight,
+      );*/
+
+      context.drawImage(
+        image,
+        0,
+        0,
+        image.naturalWidth,
+        image.naturalHeight,
+        0,
+        0,
+        context.canvas.width,
+        context.canvas.height,
       );
 
-      preserveImageRatio(image, canvas, context);
+      // preserveImageRatio(image, canvas, context);
 
       let imageData = context.getImageData(
         0,
@@ -120,7 +179,13 @@ const useImageCanvas = (
       if (filterDataURL) filterDataURL(canvas.toDataURL());
     }
     loadAndProcessImage(imgSrc);
-  }, [imgSrc, threshold, isGrayscaleColorInverted, applyColorScale]);
+  }, [
+    imgSrc,
+    threshold,
+    isGrayscaleColorInverted,
+    applyColorScale,
+    containerRef,
+  ]);
 
   return canvasRef;
 };

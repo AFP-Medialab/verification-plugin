@@ -128,11 +128,7 @@ const AnimatedGif = ({
       alignItems="flex-start"
     >
       <Grid item xs={8}>
-        <Box
-          justifyContent="center"
-          className={classes.wrapperImageFilter}
-          ref={containerRef}
-        >
+        <Box className={classes.wrapperImageFilter}>
           {/*<CardMedia*/}
           {/*  component="img"*/}
           {/*  className={classes.imagesGifImage}*/}
@@ -140,30 +136,25 @@ const AnimatedGif = ({
           {/*/>*/}
 
           <ImageCanvas
-            className={classes.imagesGifImage}
-            style={{
-              objectFit: "contain",
-              objectPosition: "center",
-              height: "100%",
-              width: "100%",
-            }}
+            className={classes.imageUploaded}
             imgSrc={homoImg1}
             isGrayscaleInverted={false}
             applyColorScale={false}
             threshold={0}
             filterDataURL={setImageDataURL}
           />
-
-          <ImageCanvas
-            className={classes.filterDisplayedClass}
-            id="gifFilterElement"
-            imgSrc={homoImg2}
-            isGrayscaleInverted={isGrayscaleInverted}
-            applyColorScale={applyColorScale}
-            threshold={127}
-            filterDataURL={setFilterDataURL}
-            containerRef={containerRef}
-          />
+          <Box className={classes.filterDisplayedClass} ref={containerRef}>
+            <ImageCanvas
+              className={classes.filterDisplayedClass}
+              id="gifFilterElement"
+              imgSrc={homoImg2}
+              isGrayscaleInverted={isGrayscaleInverted}
+              applyColorScale={applyColorScale}
+              threshold={127}
+              filterDataURL={setFilterDataURL}
+              containerRef={containerRef}
+            />
+          </Box>
         </Box>
       </Grid>
       <Grid
