@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useImageCanvas } from "./useImageCanvas";
 
 const ImageCanvas = (props) => {

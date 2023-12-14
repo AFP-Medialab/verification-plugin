@@ -504,23 +504,23 @@ const ForensicResults = (props) => {
   const currentLang = useSelector((state) => state.language);
   const isCurrentLanguageLeftToRight = currentLang !== "ar";
 
-  const imageRef = useRef();
+  const submittedImageRef = useRef();
 
   useEffect(() => {
-    if (!imageRef.current.naturalWidth || !imageRef.current.naturalHeight) {
+    if (
+      !submittedImageRef.current.naturalWidth ||
+      !submittedImageRef.current.naturalHeight
+    ) {
       return;
     }
 
-    console.log(
-      "rasio " + imageRef.current.naturalWidth / imageRef.current.naturalHeight,
-    );
-
     dispatch(
       setForensicImageRatio(
-        imageRef.current.naturalWidth / imageRef.current.naturalHeight,
+        submittedImageRef.current.naturalWidth /
+          submittedImageRef.current.naturalHeight,
       ),
     );
-  }, [imageRef.current]);
+  }, [submittedImageRef.current]);
 
   return (
     <div>
@@ -625,7 +625,7 @@ const ForensicResults = (props) => {
                   <div className={classes.wrapperImageFilter}>
                     {
                       <CardMedia
-                        ref={imageRef}
+                        ref={submittedImageRef}
                         crossOrigin={"anonymous"}
                         component="img"
                         className={classes.imageUploaded}
@@ -870,10 +870,10 @@ const ForensicResults = (props) => {
                   </Tabs>
 
                   {tabs.map((valueTab, keyTab) => {
-                    let filtersTab = [];
-                    let textDescription = "";
-                    let textLook = "";
-                    let textIgnore = "";
+                    let filtersTab;
+                    let textDescription;
+                    let textLook;
+                    let textIgnore;
 
                     if (valueTab === 0) {
                       filtersTab = filters.current.slice(
