@@ -22,7 +22,10 @@ import GifIcon from "@mui/icons-material/Gif";
 import Fab from "@mui/material/Fab";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
-import { cleanForensicState } from "../../../../../redux/actions/tools/forensicActions";
+import {
+  cleanForensicState,
+  setForensicImageRatio,
+} from "../../../../../redux/actions/tools/forensicActions";
 import {
   setStateInit,
   setStateBackResults,
@@ -37,6 +40,7 @@ import AnimatedGif from "../../Gif/AnimatedGif";
 import { DetectionProgressBar } from "components/Shared/DetectionProgressBar/DetectionProgressBar";
 import ImageCanvas from "../components/imageCanvas/imageCanvas";
 import Fade from "@mui/material/Fade";
+import CardMedia from "@mui/material/CardMedia";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -380,100 +384,7 @@ const ForensicResults = (props) => {
   const [anchorGifPopover, setAnchorGifPopover] = React.useState(false);
   const openGifPopover = Boolean(anchorGifPopover);
   const gifPopover = openGifPopover ? "simple-popover" : undefined;
-  const gifImage = displayItem;
   const [gifFilter, setGifFilter] = React.useState(displayItem);
-  //const gifFilterMask = useSelector(state => state.forensic.maskUrl);
-
-  // const [filterDataURL, setFilterDataURL] = React.useState();
-  // const [imageDataURL, setImageDataURL] = React.useState();
-  // const [imageWidth, setImageWidth] = React.useState();
-  // const [imageHeight, setImageHeight] = React.useState();
-
-  // useEffect(() => {
-  //   console.log(filterHover);
-  //   if (imageWidth && imageHeight && filterHover) {
-  //     //   resizeDataURL(imageDisplayed, imageWidth, imageHeight).then((res) => {
-  //     //     setImageDataURL(res);
-  //     //   });
-  //     resizeDataURL(filterDataURL, imageWidth, imageHeight).then((res) => {
-  //       setFilterDataURL(res);
-  //     });
-  //   }
-  // }, [filterHover]);
-
-  // Takes a data URI and returns the Data URI corresponding to the resized image at the wanted size.
-  // async function resizeDataURL(dataURL, wantedWidth, wantedHeight) {
-  //   const image = await preloadImage(dataURL);
-  //
-  //   const canvas = document.createElement("canvas");
-  //
-  //   canvas.width = wantedWidth;
-  //   canvas.height = wantedHeight;
-  //
-  //   const context = canvas.getContext("2d", { willReadFrequently: true });
-  //   //context.clearRect(0, 0, canvas.width, canvas.height);
-  //
-  //   // const resizedImage = await pica.resize(image, canvas);
-  //   //
-  //   // return resizedImage.toDataURL();
-  //
-  //   /* canvas.width = wantedWidth;
-  //   canvas.height = wantedHeight;*/
-  //
-  //   /*const { devicePixelRatio: ratio = 1 } = window;
-  //   canvas.width = wantedWidth * ratio;
-  //   canvas.height = wantedHeight * ratio;
-  //   context.scale(ratio, ratio);*/
-  //
-  //   //context.canvas.width = wantedWidth;
-  //   //context.canvas.height = wantedHeight;
-  //
-  //   const factor =
-  //     (canvas.width / image.naturalWidth) * image.naturalHeight >
-  //     window.innerHeight
-  //       ? canvas.height / image.naturalHeight
-  //       : canvas.width / image.naturalWidth;
-  //
-  //   context.drawImage(
-  //     image,
-  //     0,
-  //     0,
-  //     image.naturalWidth * factor,
-  //     image.naturalHeight * factor,
-  //   );
-  //   //
-  //   const dataURI = context.canvas.toDataURL();
-  //   return dataURI;
-
-  /* return new Promise(function (resolve) {
-      // We create an image to receive the Data URI
-      let img = document.createElement("img");
-
-      // We put the Data URI in the image's src attribute
-      img.src = dataURL;
-
-      // When the event "onload" is triggered we can resize the image.
-      img.onload = function () {
-        // We create a canvas and get its context.
-        let canvas = document.createElement("canvas");
-        canvas.width = wantedWidth;
-        canvas.height = wantedHeight;
-
-        let ctx = canvas.getContext("2d");
-
-        // We set the dimensions at the wanted size.
-        ctx.canvas.width = wantedWidth;
-        ctx.canvas.height = wantedHeight;
-
-        // We resize the image with the canvas method drawImage();
-        ctx.drawImage(this, 0, 0, wantedWidth, wantedHeight);
-
-        let dataURI = canvas.toDataURL();
-        // This is the return of the Promise
-        resolve(dataURI);
-      };
-    });*/
-  // }
 
   //const [interval, setIntervalVar] = React.useState(null);
 
@@ -519,8 +430,6 @@ const ForensicResults = (props) => {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
-
-  //console.log("Downloading: " + downloading);
 
   //Copy url to clipboard
   const [openToast, setOpenToast] = React.useState(false);
@@ -594,6 +503,24 @@ const ForensicResults = (props) => {
 
   const currentLang = useSelector((state) => state.language);
   const isCurrentLanguageLeftToRight = currentLang !== "ar";
+
+  const imageRef = useRef();
+
+  useEffect(() => {
+    if (!imageRef.current.naturalWidth || !imageRef.current.naturalHeight) {
+      return;
+    }
+
+    console.log(
+      "rasio " + imageRef.current.naturalWidth / imageRef.current.naturalHeight,
+    );
+
+    dispatch(
+      setForensicImageRatio(
+        imageRef.current.naturalWidth / imageRef.current.naturalHeight,
+      ),
+    );
+  }, [imageRef.current]);
 
   return (
     <div>
@@ -696,24 +623,15 @@ const ForensicResults = (props) => {
                   />
 
                   <div className={classes.wrapperImageFilter}>
-                    {/*<CardMedia
-                      ref={imageRef}
-                      crossOrigin={"anonymous"}
-                      component="img"
-                      className={classes.imageUploaded}
-                      image={imageDisplayed}
-                    />*/}
-                    <ImageCanvas
-                      className={classes.imageUploaded}
-                      imgSrc={imageDisplayed}
-                      isGrayscaleInverted={false}
-                      applyColorScale={false}
-                      threshold={0}
-                      // filterDataURL={setImageDataURL}
-                      // imageNaturalWidth={setImageWidth}
-                      // imageNaturalHeight={setImageHeight}
-                    />
-
+                    {
+                      <CardMedia
+                        ref={imageRef}
+                        crossOrigin={"anonymous"}
+                        component="img"
+                        className={classes.imageUploaded}
+                        image={imageDisplayed}
+                      />
+                    }
                     <Fade in={filterHoverEnabled} timeout={500}>
                       <Box className={classes.filterDisplayedClass}>
                         <ImageCanvas
@@ -722,7 +640,6 @@ const ForensicResults = (props) => {
                           isGrayscaleInverted={isHoveredFilterInverted}
                           applyColorScale={applyColorScale}
                           threshold={127}
-                          // filterDataURL={setFilterDataURL}
                         />
                       </Box>
                     </Fade>

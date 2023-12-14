@@ -1,5 +1,6 @@
 import { useRef, useEffect } from "react";
 import { applyThresholdAndGradient, preloadImage } from "../../utils";
+import { useSelector } from "react-redux";
 
 /**
  * Resizes the canvas dynamically to its CSS size.
@@ -66,9 +67,11 @@ const useImageCanvas = (
   applyColorScale,
   threshold,
   filterDataURL,
-  containerRef,
 ) => {
   const canvasRef = useRef();
+
+  let imageRatio = useSelector((state) => state.forensic.imageRatio);
+  console.log(imageRatio);
 
   useEffect(() => {
     if (!imgSrc) return;
@@ -84,7 +87,11 @@ const useImageCanvas = (
 
       const image = await preloadImage(imgSrc);
 
-      const imageRatio = image.naturalWidth / image.naturalHeight;
+      if (!imageRatio) {
+        console.log("image ratio undefined");
+        imageRatio = image.naturalWidth / image.naturalHeight;
+      }
+      //const imageRatio = image.naturalWidth / image.naturalHeight;
       console.log("-------- ");
       console.log("image ratio " + imageRatio);
 
@@ -179,13 +186,7 @@ const useImageCanvas = (
       if (filterDataURL) filterDataURL(canvas.toDataURL());
     }
     loadAndProcessImage(imgSrc);
-  }, [
-    imgSrc,
-    threshold,
-    isGrayscaleColorInverted,
-    applyColorScale,
-    containerRef,
-  ]);
+  }, [imgSrc, threshold, isGrayscaleColorInverted, applyColorScale]);
 
   return canvasRef;
 };

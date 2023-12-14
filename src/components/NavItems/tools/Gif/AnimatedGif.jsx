@@ -37,7 +37,6 @@ const AnimatedGif = ({
 
   const [interval, setIntervalVar] = useState(null);
 
-  const containerRef = useRef();
   function changeSpeed(value) {
     //console.log("Change speed: " + value); //DEBUG
     setSpeed(value * -1);
@@ -143,7 +142,7 @@ const AnimatedGif = ({
             threshold={0}
             filterDataURL={setImageDataURL}
           />
-          <Box className={classes.filterDisplayedClass} ref={containerRef}>
+          <Box className={classes.filterDisplayedClass}>
             <ImageCanvas
               className={classes.filterDisplayedClass}
               id="gifFilterElement"
@@ -152,7 +151,6 @@ const AnimatedGif = ({
               applyColorScale={applyColorScale}
               threshold={127}
               filterDataURL={setFilterDataURL}
-              containerRef={containerRef}
             />
           </Box>
         </Box>
