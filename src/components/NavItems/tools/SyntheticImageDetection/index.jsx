@@ -27,8 +27,6 @@ import SyntheticImageDetectionResults from "./syntheticImageDetectionResults";
 
 import { setError } from "redux/actions/errorActions";
 
-//TODO: Matomo analytics
-
 const SyntheticImageDetection = () => {
   const classes = useMyStyles();
   const keyword = i18nLoadNamespace(
@@ -65,8 +63,6 @@ const SyntheticImageDetection = () => {
 
     const baseURL = process.env.REACT_APP_CAA_DEEPFAKE_URL;
 
-    let res;
-
     const handleError = (e) => {
       dispatch(setError(e));
       dispatch(setSyntheticImageDetectionLoading(false));
@@ -76,6 +72,8 @@ const SyntheticImageDetection = () => {
       handleError(keywordWarning("error_invalid_url"));
       return;
     }
+
+    let res;
 
     try {
       res = await axios.post(baseURL + modeURL + "jobs", null, {
@@ -89,12 +87,11 @@ const SyntheticImageDetection = () => {
       let response;
       try {
         response = await axios.get(baseURL + modeURL + "reports/" + id);
-        await axios.get(baseURL + modeURL + "reports/" + id);
       } catch (error) {
         handleError("error_" + error.status);
       }
 
-      if (response.data != null)
+      if (response && response.data != null)
         dispatch(
           setSyntheticImageDetectionResult({ url: url, result: response.data }),
         );
@@ -122,11 +119,7 @@ const SyntheticImageDetection = () => {
       }
     };
 
-    waitUntilFinish(res.data.id);
-  };
-
-  const submitUrl = () => {
-    useGetSyntheticImageScores(input, true, dispatch);
+    await waitUntilFinish(res.data.id);
   };
 
   function sleep(fn, param) {
@@ -199,8 +192,13 @@ const SyntheticImageDetection = () => {
                       type="submit"
                       variant="contained"
                       color="primary"
-                      onClick={(e) => {
-                        e.preventDefault(), submitUrl();
+                      onClick={async (e) => {
+                        e.preventDefault(),
+                          await useGetSyntheticImageScores(
+                            input,
+                            true,
+                            dispatch,
+                          );
                       }}
                       disabled={input === "" || isLoading}
                     >
