@@ -861,6 +861,7 @@ const ForensicResults = (props) => {
 
                   <Tabs
                     value={value}
+                    variant="scrollable"
                     onChange={handleChange}
                     indicatorColor={"primary"}
                   >
