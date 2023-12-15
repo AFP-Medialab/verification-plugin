@@ -51,7 +51,7 @@ const GeolocationResults = (props) => {
             <Card>
               <CardHeader
                 title={"Image"}
-                className={classes.headerUpladedImage}
+                className={classes.headerUploadedImage}
               />
               <div className={classes.root2}>
                 <CardMedia
@@ -71,7 +71,7 @@ const GeolocationResults = (props) => {
               <Card>
                 <CardHeader
                   title={keyword("geo_location")}
-                  className={classes.headerUpladedImage}
+                  className={classes.headerUploadedImage}
                 />
                 <div className={classes.root2}>
                   <Grid
@@ -138,7 +138,7 @@ const GeolocationResults = (props) => {
             <Card>
               <CardHeader
                 title={keyword("geo_map")}
-                className={classes.headerUpladedImage}
+                className={classes.headerUploadedImage}
               />
               <div className={classes.root2}>
                 <div>

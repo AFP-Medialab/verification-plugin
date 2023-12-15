@@ -156,7 +156,7 @@ const TwitterAdvancedSearch = () => {
       <Card className={cardClasses.root}>
         <CardHeader
           title={keyword("cardheader_parameters")}
-          className={classes.headerUpladedImage}
+          className={classes.headerUploadedImage}
         />
         <div className={classes.root2}>
           {largeInputList.map((value, key) => {

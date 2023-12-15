@@ -141,7 +141,7 @@ const Analysis = () => {
       <Card>
         <CardHeader
           title={keyword("video_card_header")}
-          className={classes.headerUpladedImage}
+          className={classes.headerUploadedImage}
         />
         <form className={classes.root2}>
           <Grid container direction="row" spacing={3} alignItems="center">

@@ -171,7 +171,7 @@ const Forensic = () => {
         <Card style={{ display: resultData || loading ? "none" : "block" }}>
           <CardHeader
             title={keyword("cardheader_source")}
-            className={classes.headerUpladedImage}
+            className={classes.headerUploadedImage}
           />
           <Box p={3}>
             <form>

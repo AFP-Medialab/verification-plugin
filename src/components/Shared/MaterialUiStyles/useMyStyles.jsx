@@ -563,16 +563,19 @@ const styles = (theme) => ({
 
   imageUploaded: {
     objectFit: "contain",
-    objectPosition: "center top",
+    objectPosition: "center",
+    height: "100%",
+    width: "100%",
   },
 
   imageFilter: {
     height: "13vh",
+    width: "100%",
     backgroundPosition: "center",
     backgroundSize: "contain",
   },
 
-  headerUpladedImage: {
+  headerUploadedImage: {
     paddingTop: "11px!important",
     paddingBottom: "11px!important",
   },
@@ -604,6 +607,8 @@ const styles = (theme) => ({
     left: 0,
     bottom: 0,
     right: 0,
+    width: "100%",
+    height: "100%",
   },
 
   wrapperImageFilter: {
@@ -615,21 +620,21 @@ const styles = (theme) => ({
     backgroundSize: "contain",
     objectFit: "contain",
     objectPosition: "top",
-
     position: "relative",
     top: 0,
     left: 0,
   },
 
   imagesGifFilter: {
-    backgroundPosition: "center",
-    backgroundSize: "contain",
-    objectFit: "contain",
-    objectPosition: "top",
-
     position: "absolute",
+    objectFit: "contain",
+    objectPosition: "center top",
     top: 0,
     left: 0,
+    bottom: 0,
+    right: 0,
+    width: "100%",
+    height: "100%",
   },
 
   sliderClass: {
