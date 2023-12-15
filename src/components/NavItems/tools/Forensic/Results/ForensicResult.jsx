@@ -287,7 +287,8 @@ const ForensicResults = (props) => {
       filter.id === "ela_report" ||
       filter.id === "laplacian_report" ||
       filter.id === "median_report" ||
-      filter.id === "rcmfd_report"
+      filter.id === "rcmfd_report" ||
+      filter.id === "cmfd_report"
     );
   };
 
