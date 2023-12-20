@@ -108,7 +108,7 @@ const VideoRights = () => {
       <Card>
         <CardHeader
           title={keyword("cardheader_link")}
-          className={classes.headerUpladedImage}
+          className={classes.headerUploadedImage}
         />
         <form className={classes.root2}>
           <Grid container direction="row" spacing={3} alignItems="center">

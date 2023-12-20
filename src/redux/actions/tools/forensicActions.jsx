@@ -92,3 +92,5 @@ export const setForensicInputFile = createAction("SET_FORENSIC_LOCAL_FILE");
         }
     }
 }*/
+
+export const setForensicImageRatio = createAction("SET_FORENSIC_IMAGE_RATIO");

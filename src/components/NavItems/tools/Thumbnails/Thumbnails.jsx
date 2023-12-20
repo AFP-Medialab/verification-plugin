@@ -246,7 +246,7 @@ const Thumbnails = () => {
       <Card>
         <CardHeader
           title={keyword("cardheader_link")}
-          className={classes.headerUpladedImage}
+          className={classes.headerUploadedImage}
         />
         <Box p={3}>
           <form>
@@ -332,7 +332,7 @@ const Thumbnails = () => {
         <Card>
           <CardHeader
             title={keyword("cardheader_results")}
-            className={classes.headerUpladedImage}
+            className={classes.headerUploadedImage}
             action={
               <IconButton
                 aria-label="close"

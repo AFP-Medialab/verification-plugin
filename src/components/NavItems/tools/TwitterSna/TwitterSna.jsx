@@ -546,7 +546,7 @@ const TwitterSna = () => {
         <Card className={cardClasses.root}>
           <CardHeader
             title={keyword("cardheader_parameters")}
-            className={classes.headerUpladedImage}
+            className={classes.headerUploadedImage}
           />
           <Box p={4}>
             <Grid container direction="column">

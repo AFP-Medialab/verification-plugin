@@ -86,7 +86,7 @@ const Deepfake = () => {
               <span>{keyword("deepfake_video_link")}</span>
             </Grid>
           }
-          className={classes.headerUpladedImage}
+          className={classes.headerUploadedImage}
         />
 
         <Box p={3}>

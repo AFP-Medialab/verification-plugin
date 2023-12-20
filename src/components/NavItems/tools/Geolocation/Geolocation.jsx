@@ -61,7 +61,7 @@ const Geolocation = () => {
       <Card>
         <CardHeader
           title={keyword("geo_source")}
-          className={classes.headerUpladedImage}
+          className={classes.headerUploadedImage}
         />
         <form className={classes.root2}>
           <Grid container direction="row" spacing={3} alignItems="center">
