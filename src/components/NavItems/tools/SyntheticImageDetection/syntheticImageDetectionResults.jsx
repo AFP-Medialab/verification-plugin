@@ -199,7 +199,7 @@ const SyntheticImageDetectionResults = (props) => {
                     </Stack>
                   );
                 })}
-              {syntheticImageScores && (
+              {syntheticImageScores?.length > 0 ? (
                 <Box pt={2}>
                   <DetectionProgressBar
                     style={{
@@ -207,6 +207,10 @@ const SyntheticImageDetectionResults = (props) => {
                     }}
                   />
                 </Box>
+              ) : (
+                <Typography variant="h6" sx={{ color: "red" }}>
+                  {keyword("synthetic_image_detection_error_400")}
+                </Typography>
               )}
             </Stack>
           </Grid>
