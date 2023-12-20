@@ -137,7 +137,9 @@ const SyntheticImageDetection = () => {
       }
     };
 
+
     if (!res || !res.data) return;
+
     await waitUntilFinish(res.data.id);
   };
 
