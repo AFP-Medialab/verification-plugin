@@ -15,8 +15,7 @@ import {
 } from "../../../../../redux/actions/tools/magnifierActions";
 import { IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
-import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Magnifier.tsv";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
@@ -62,10 +61,7 @@ const myTheme = {
 
 const ImageResult = () => {
   const classes = useMyStyles();
-  const keyword = useLoadLanguage(
-    "components/NavItems/tools/Magnifier.tsv",
-    tsv,
-  );
+  const keyword = i18nLoadNamespace("components/NavItems/tools/Magnifier");
 
   const original = useSelector((state) => state.magnifier.url);
   const resultImage = useSelector((state) => state.magnifier.result);
@@ -123,7 +119,7 @@ const ImageResult = () => {
     <Card>
       <CardHeader
         title={keyword("cardheader_results")}
-        className={classes.headerUpladedImage}
+        className={classes.headerUploadedImage}
         action={
           <IconButton
             aria-label="close"

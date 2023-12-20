@@ -12,16 +12,12 @@ import List from "@mui/material/List";
 import ListItemText from "@mui/material/ListItemText";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import Typography from "@mui/material/Typography";
-import tsv from "../../../../LocalDictionary/components/NavItems/tools/Assistant.tsv";
-import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 
 const AssistantLinkResult = () => {
   const classes = useMyStyles();
-  const keyword = useLoadLanguage(
-    "components/NavItems/tools/Assistant.tsv",
-    tsv,
-  );
+  const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
 
   const linkList = useSelector((state) => state.assistant.linkList);
 
@@ -33,7 +29,7 @@ const AssistantLinkResult = () => {
           title={
             <Typography variant={"h5"}>
               {" "}
-              {keyword("extracted_urls")} Extracted URLs{" "}
+              {keyword("extracted_urls")}{" "}
             </Typography>
           }
         />

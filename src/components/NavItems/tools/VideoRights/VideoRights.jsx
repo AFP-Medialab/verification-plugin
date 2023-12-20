@@ -8,10 +8,7 @@ import { useEffect, useState } from "react";
 import useVideoRightsTreatment from "./Hooks/useVideoRightsTreatment";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import VideoRightsResults from "./Results/VideoRightsResults";
-import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
-import tsv from "../../../../LocalDictionary/components/NavItems/tools/VideoRights.tsv";
-import tsvAlltools from "../../../../LocalDictionary/components/NavItems/tools/Alltools.tsv";
-//import {submissionEvent} from "../../../Shared/GoogleAnalytics/GoogleAnalytics";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import {
   //trackEvent,
   getclientId,
@@ -31,13 +28,9 @@ import { useTrackEvent } from "../../../../Hooks/useAnalytics";
 const VideoRights = () => {
   const { url } = useParams();
   const classes = useMyStyles();
-  const keyword = useLoadLanguage(
-    "components/NavItems/tools/VideoRights.tsv",
-    tsv,
-  );
-  const keywordAllTools = useLoadLanguage(
-    "components/NavItems/tools/Alltools.tsv",
-    tsvAlltools,
+  const keyword = i18nLoadNamespace("components/NavItems/tools/VideoRights");
+  const keywordAllTools = i18nLoadNamespace(
+    "components/NavItems/tools/Alltools",
   );
 
   const resultUrl = useSelector((state) => state.videoRights.url);
@@ -115,7 +108,7 @@ const VideoRights = () => {
       <Card>
         <CardHeader
           title={keyword("cardheader_link")}
-          className={classes.headerUpladedImage}
+          className={classes.headerUploadedImage}
         />
         <form className={classes.root2}>
           <Grid container direction="row" spacing={3} alignItems="center">

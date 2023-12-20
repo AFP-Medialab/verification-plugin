@@ -9,6 +9,7 @@ const defaultState = {
   displayItem: "",
   errorKey: null,
   localurl: "",
+  imageRatio: null,
 };
 
 const forensicReducer = (state = defaultState, action) => {
@@ -37,6 +38,7 @@ const forensicReducer = (state = defaultState, action) => {
         maskUrl: "",
         displayItem: "",
         errorKey: null,
+        imageRatio: null,
       };
     case "SET_FORENSIC_GIF_HIDE":
       return { ...state, gifAnimation: false };
@@ -46,6 +48,8 @@ const forensicReducer = (state = defaultState, action) => {
       return { ...state, maskUrl: action.payload };
     case "SET_FORENSIC_DISPLAY_ITEM":
       return { ...state, displayItem: action.payload };
+    case "SET_FORENSIC_IMAGE_RATIO":
+      return { ...state, imageRatio: action.payload };
     case "SET_FORENSIC_LOCAL_FILE":
     case "SET_FORENSIC_IMAGE_BINARY":
     case "SET_FORENSIC_ERROR_KEY":

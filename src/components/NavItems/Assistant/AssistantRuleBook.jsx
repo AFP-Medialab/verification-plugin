@@ -23,6 +23,7 @@ export const KNOWN_LINKS = {
   DAILYMOTION: "dailymotion",
   LIVELEAK: "liveleak",
   VIMEO: "vimeo",
+  MASTODON: "mastodon",
   OWN: "own",
   MISC: "general",
 };
@@ -41,7 +42,7 @@ export const TYPE_PATTERNS = [
 export const KNOWN_LINK_PATTERNS = [
   {
     key: KNOWN_LINKS.TWITTER,
-    patterns: ["((https?:/{2})?(www.)?twitter.com/\\w{1,15}/status/\\d*)"],
+    patterns: ["((https?:/{2})?(www.)?(twitter|x).com/\\w{1,15}/status/\\d*)"],
   },
   {
     key: KNOWN_LINKS.TIKTOK,
@@ -78,6 +79,10 @@ export const KNOWN_LINK_PATTERNS = [
   {
     key: KNOWN_LINKS.LIVELEAK,
     patterns: ["^(https?:/{2})?(www.)?liveleak.com/view\\?t=.*"],
+  },
+  {
+    key: KNOWN_LINKS.MASTODON,
+    patterns: ["^(?:https?:/{2})?(www.)?.+..+/@.*/d*"],
   },
   {
     key: KNOWN_LINKS.MISC,

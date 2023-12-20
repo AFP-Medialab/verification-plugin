@@ -3,24 +3,44 @@ import axios from "axios";
 export default function assistantApiCalls() {
   const assistantEndpoint = process.env.REACT_APP_ASSISTANT_URL;
 
+  function handleAssistantError(errorResponse) {
+    if (errorResponse.response) {
+      // If there is a response then it's some kind of server error
+      if (errorResponse.response.data && errorResponse.response.data.message)
+        console.log(
+          "Assistant error:",
+          "Bad HTTP status " + errorResponse.response.status + ":",
+          errorResponse.response.data.message,
+        );
+      throw new Error("assistant_error_server_error");
+    } else if (errorResponse.request) {
+      // Connection issues if no response object
+      throw new Error("assistant_error_connection_error");
+    } else {
+      // Unexpected error
+      throw new Error("assistant_error");
+    }
+  }
+
   const callAssistantScraper = async (urlType, userInput) => {
+    let scrapeResult;
     try {
-      let scrapeResult = await axios.get(
+      scrapeResult = await axios.get(
         assistantEndpoint +
           "scrape/" +
           urlType +
           "?url=" +
           encodeURIComponent(userInput),
       );
-      if (scrapeResult.data.status === "success") {
-        return scrapeResult.data;
-      }
     } catch (error) {
-      if (error.response) {
-        throw new Error(error.response.data.message);
-      } else {
-        throw new Error("assistant_error");
-      }
+      handleAssistantError(error);
+    }
+
+    if (scrapeResult.data.status === "success") {
+      return scrapeResult.data;
+    } else {
+      console.log("Assistant error:", scrapeResult.data.message);
+      throw new Error("assistant_error_server_error");
     }
   };
 
@@ -34,23 +54,21 @@ export default function assistantApiCalls() {
   };
 
   const callAssistantTranslator = async (lang, text) => {
+    let translationResult;
     try {
-      let translationResult = await axios.get(
+      translationResult = await axios.get(
         assistantEndpoint +
           "translate/" +
           lang +
           "?text=" +
           encodeURIComponent(text),
       );
-      if (translationResult.data.status === "success") {
-        return translationResult.data;
-      }
     } catch (error) {
-      if (error.response) {
-        throw new Error(error.response.data.message);
-      } else {
-        throw new Error("assistant_error");
-      }
+      handleAssistantError(error);
+    }
+
+    if (translationResult.data.status === "success") {
+      return translationResult.data;
     }
   };
 

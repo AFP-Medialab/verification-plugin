@@ -16,8 +16,7 @@ import Fab from "@mui/material/Fab";
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
 import ExpandMoreIcon from "@mui/icons-material//ExpandMore";
-import useLoadLanguage from "../../../Hooks/useLoadLanguage";
-import tsv from "../../../LocalDictionary/components/NavItems/Interactive.tsv";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import Link from "@mui/material/Link";
 import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
 import { useNavigate } from "react-router-dom";
@@ -27,7 +26,7 @@ import { reverseImageSearch } from "../../Shared/ReverseSearch/reverseSearchUtil
 const Interactive = () => {
   const classes = useMyStyles();
   const navigate = useNavigate();
-  const keyword = useLoadLanguage("components/NavItems/Interactive.tsv", tsv);
+  const keyword = i18nLoadNamespace("components/NavItems/Interactive");
   const answersAvailable = useSelector((state) => state.interactiveExplanation);
   const currentLang = useSelector((state) => state.language);
 
@@ -36,7 +35,7 @@ const Interactive = () => {
   const carouselItems = () => {
     let res = [];
     let cpt = 1;
-    while (keyword("quiz_item_url_" + cpt) !== "") {
+    while (keyword("quiz_item_url_" + cpt) !== "quiz_item_url_" + cpt) {
       res.push({
         url: keyword("quiz_item_url_" + cpt),
         title: keyword("quiz_item_title_" + cpt),

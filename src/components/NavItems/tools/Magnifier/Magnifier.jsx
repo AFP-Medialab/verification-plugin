@@ -11,12 +11,8 @@ import {
   setMagnifierLoading,
 } from "../../../../redux/actions/tools/magnifierActions";
 import { setError } from "../../../../redux/actions/errorActions";
-import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
-import tsv from "../../../../LocalDictionary/components/NavItems/tools/Magnifier.tsv";
-import {
-  //trackEvent,
-  getclientId,
-} from "../../../Shared/GoogleAnalytics/MatomoAnalytics";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+import { getclientId } from "../../../Shared/GoogleAnalytics/MatomoAnalytics";
 import { useTrackEvent } from "../../../../Hooks/useAnalytics";
 import { KNOWN_LINKS } from "../../Assistant/AssistantRuleBook";
 
@@ -29,13 +25,9 @@ import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 const Magnifier = () => {
   const { url } = useParams();
   const classes = useMyStyles();
-  const keyword = useLoadLanguage(
-    "components/NavItems/tools/Magnifier.tsv",
-    tsv,
-  );
-  const keywordAllTools = useLoadLanguage(
-    "components/NavItems/tools/Alltools.tsv",
-    tsv,
+  const keyword = i18nLoadNamespace("components/NavItems/tools/Magnifier");
+  const keywordAllTools = i18nLoadNamespace(
+    "components/NavItems/tools/Alltools",
   );
 
   const resultUrl = useSelector((state) => state.magnifier.url);
@@ -124,7 +116,7 @@ const Magnifier = () => {
       <Card>
         <CardHeader
           title={keyword("cardheader_source")}
-          className={classes.headerUpladedImage}
+          className={classes.headerUploadedImage}
         />
 
         <Box p={3}>

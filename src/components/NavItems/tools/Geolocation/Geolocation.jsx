@@ -5,9 +5,7 @@ import Button from "@mui/material/Button";
 import LinearProgress from "@mui/material/LinearProgress";
 import Box from "@mui/material/Box";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
-import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
-import tsv from "../../../../LocalDictionary/components/NavItems/tools/Geolocalizer.tsv";
-import tsvAlltools from "../../../../LocalDictionary/components/NavItems/tools/Alltools.tsv";
+
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import GeolocationIcon from "../../../NavBar/images/SVG/Image/Geolocation.svg";
@@ -16,22 +14,16 @@ import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import useGeolocate from "./Hooks/useGeolocate";
 import GeolocationResults from "./Results/GeolocationResults";
 import Alert from "@mui/material/Alert";
-import tsvWarning from "../../../../LocalDictionary/components/Shared/OnWarningInfo.tsv";
 import { resetGeolocation } from "../../../../redux/reducers/tools/geolocationReducer";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+
 const Geolocation = () => {
   const classes = useMyStyles();
-  const keyword = useLoadLanguage(
-    "components/NavItems/tools/Geolocalizer.tsv",
-    tsv,
+  const keyword = i18nLoadNamespace("components/NavItems/tools/Geolocalizer");
+  const keywordAllTools = i18nLoadNamespace(
+    "components/NavItems/tools/Alltools",
   );
-  const keywordAllTools = useLoadLanguage(
-    "components/NavItems/tools/Alltools.tsv",
-    tsvAlltools,
-  );
-  const keywordWarning = useLoadLanguage(
-    "components/Shared/OnWarningInfo.tsv",
-    tsvWarning,
-  );
+  const keywordWarning = i18nLoadNamespace("components/Shared/OnWarningInfo");
   const dispatch = useDispatch();
   const cleanup = () => {
     dispatch(resetGeolocation());
@@ -69,7 +61,7 @@ const Geolocation = () => {
       <Card>
         <CardHeader
           title={keyword("geo_source")}
-          className={classes.headerUpladedImage}
+          className={classes.headerUploadedImage}
         />
         <form className={classes.root2}>
           <Grid container direction="row" spacing={3} alignItems="center">

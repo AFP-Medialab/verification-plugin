@@ -12,8 +12,7 @@ import { IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 import OnClickInfo from "../../../../Shared/OnClickInfo/OnClickInfo";
-import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
-import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Analysis.tsv";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import TimeToLocalTime from "./TimeToLocalTime";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
@@ -32,10 +31,7 @@ import {
 
 const YoutubeResults = (props) => {
   const classes = useMyStyles();
-  const keyword = useLoadLanguage(
-    "components/NavItems/tools/Analysis.tsv",
-    tsv,
-  );
+  const keyword = i18nLoadNamespace("components/NavItems/tools/Analysis");
 
   const reverseSearch = async (website) => {
     for (let image of thumbnails) {
@@ -109,7 +105,7 @@ const YoutubeResults = (props) => {
           <Card>
             <CardHeader
               title={keyword("cardheader_results")}
-              className={classes.headerUpladedImage}
+              className={classes.headerUploadedImage}
               action={
                 <IconButton
                   aria-label="close"

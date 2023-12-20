@@ -8,28 +8,19 @@ import { changeLanguage } from "../../../redux/reducers/languageReducer";
 import { changeDefaultLanguage } from "../../../redux/reducers/defaultLanguageReducer";
 import DefaultLanguageDialog from "./defaultLanguageDialog";
 import { setStorageTrue } from "../../../redux/reducers/cookiesReducers";
-import tsv from "../../../LocalDictionary/components/NavItems/languages.tsv";
-import useLoadLanguage from "../../../Hooks/useLoadLanguage";
 import TranslateIcon from "@mui/icons-material/Translate";
+import { useTranslation } from "react-i18next";
+import useLoadSupportedLanguage from "Hooks/useLoadSupportedLanguages";
 
 const Languages = (props) => {
-  const dictionary = useSelector((state) => state.dictionary);
-  const onlineTsv =
-    process.env.REACT_APP_TRANSLATION_GITHUB +
-    "components/NavItems/languages.tsv";
-  const keyword = useLoadLanguage("components/NavItems/languages.tsv", tsv);
-
+  const { t, i18n } = useTranslation("components/NavItems/languages");
+  useLoadSupportedLanguage();
   const [open, setOpen] = useState(false);
   const [lang, setLang] = useState("en");
   const storeLanguage = useSelector((state) => state.language);
-
-  const keywordByLang = (language) => {
-    return dictionary &&
-      dictionary[onlineTsv] &&
-      dictionary[onlineTsv][language]
-      ? dictionary[onlineTsv][language]["lang_label"]
-      : "";
-  };
+  const languagesSupport = useSelector(
+    (state) => state.languagesSupport.languagesList,
+  );
 
   const dispatch = useDispatch();
 
@@ -42,6 +33,7 @@ const Languages = (props) => {
   const handleCloseItem = (defaultLang) => {
     setAnchorEl(null);
     setOpen(false);
+    i18n.changeLanguage(lang);
     dispatch(changeLanguage(lang));
     if (defaultLang) {
       dispatch(setStorageTrue());
@@ -53,11 +45,6 @@ const Languages = (props) => {
     setOpen(false);
     setAnchorEl(null);
   };
-
-  const language_list =
-    dictionary && dictionary[onlineTsv]
-      ? Object.keys(dictionary[onlineTsv])
-      : [];
 
   return (
     <div>
@@ -71,11 +58,11 @@ const Languages = (props) => {
             marginRight: "2px",
           }}
         >
-          {keywordByLang(storeLanguage)}
+          {languagesSupport[storeLanguage]}
         </span>
       )}
 
-      <Tooltip title={keyword("translations")} placement="bottom">
+      <Tooltip title={t("translations")} placement="bottom">
         <IconButton onClick={handleClick}>
           <TranslateIcon fontSize="medium" style={{ color: "#596977" }} />
         </IconButton>
@@ -88,16 +75,16 @@ const Languages = (props) => {
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
-        {language_list.map((key) => {
+        {Object.keys(languagesSupport).map((lang) => {
           return (
             <MenuItem
-              key={key}
+              key={lang}
               onClick={() => {
                 setOpen(true);
-                setLang(key);
+                setLang(lang);
               }}
             >
-              {keywordByLang(key)}
+              {languagesSupport[lang]}
             </MenuItem>
           );
         })}

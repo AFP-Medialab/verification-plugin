@@ -15,13 +15,8 @@ import MetadataVideoResult from "./Results/MetadataVideoResult";
 import useImageTreatment from "./Hooks/useImageTreatment";
 import useVideoTreatment from "./Hooks/useVideoTreatment";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
-import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
-import tsv from "../../../../LocalDictionary/components/NavItems/tools/Metadata.tsv";
-import tsvAllTools from "../../../../LocalDictionary/components/NavItems/tools/Alltools.tsv";
-import {
-  //trackEvent,
-  getclientId,
-} from "../../../Shared/GoogleAnalytics/MatomoAnalytics";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+import { getclientId } from "../../../Shared/GoogleAnalytics/MatomoAnalytics";
 import { useTrackEvent } from "../../../../Hooks/useAnalytics";
 import { useParams, useLocation } from "react-router-dom";
 
@@ -40,13 +35,9 @@ const Metadata = ({ mediaType }) => {
   const location = useLocation();
 
   const classes = useMyStyles();
-  const keyword = useLoadLanguage(
-    "components/NavItems/tools/Metadata.tsv",
-    tsv,
-  );
-  const keywordAllTools = useLoadLanguage(
-    "components/NavItems/tools/Alltools.tsv",
-    tsvAllTools,
+  const keyword = i18nLoadNamespace("components/NavItems/tools/Metadata");
+  const keywordAllTools = i18nLoadNamespace(
+    "components/NavItems/tools/Alltools",
   );
 
   const resultUrl = useSelector((state) => state.metadata.url);
@@ -175,7 +166,7 @@ const Metadata = ({ mediaType }) => {
       <Card>
         <CardHeader
           title={keyword("cardheader_source")}
-          className={classes.headerUpladedImage}
+          className={classes.headerUploadedImage}
         />
 
         <Box p={3}>

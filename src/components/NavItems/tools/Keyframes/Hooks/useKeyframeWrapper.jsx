@@ -70,7 +70,10 @@ export const useKeyframeWrapper = (url, keyword) => {
             .get(url, { cancelToken: source.token })
             .then((response) => {
               data = response["data"];
-              if (keyword("keyframes_wait_" + data["status"]) !== "") {
+              if (
+                data["status"] !== "SUBSHOT_DETECTION_ANALYSIS_COMPLETED" &&
+                keyword("keyframes_wait_" + data["status"]) !== ""
+              ) {
                 dispatch(
                   setKeyframesMessage(
                     keyword("keyframes_wait_" + data["status"]),

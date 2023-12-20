@@ -19,15 +19,10 @@ import SourceCredibilityResult from "../AssistantCheckResults/SourceCredibilityR
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import Tooltip from "@mui/material/Tooltip";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
-import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
-import tsv from "../../../../LocalDictionary/components/NavItems/tools/Assistant.tsv";
-
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 const AssistantSCResults = () => {
   // central
-  const keyword = useLoadLanguage(
-    "components/NavItems/tools/Assistant.tsv",
-    tsv,
-  );
+  const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
   const dispatch = useDispatch();
   const classes = useMyStyles();
 

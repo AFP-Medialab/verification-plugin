@@ -8,9 +8,7 @@ import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import Transition from "react-transition-group/Transition";
 import { HelpOutline } from "@mui/icons-material";
-
-import useLoadLanguage from "../../../Hooks/useLoadLanguage";
-import tsv from "../../../LocalDictionary/components/NavItems/tools/Assistant.tsv";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
 const HelpDialog = (props) => {
   const [open, setOpen] = useState(false);
@@ -18,8 +16,7 @@ const HelpDialog = (props) => {
   // a list of keywords found in a tsv file. pass in tsv labels and tsv file location
   const title = props.title;
   const paragraphs = props.paragraphs;
-  const keywordFile = props.keywordFile;
-  const keyword = useLoadLanguage(keywordFile, tsv);
+  const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
 
   const handleClickOpen = () => {
     setOpen(true);

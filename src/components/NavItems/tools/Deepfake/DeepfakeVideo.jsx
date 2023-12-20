@@ -5,8 +5,6 @@ import Button from "@mui/material/Button";
 import LinearProgress from "@mui/material/LinearProgress";
 import Box from "@mui/material/Box";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
-import tsvAlltools from "../../../../LocalDictionary/components/NavItems/tools/Alltools.tsv";
-import tsvWarning from "../../../../LocalDictionary/components/Shared/OnWarningInfo.tsv";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import DeepfakeIcon from "../../../NavBar/images/SVG/Image/Deepfake.svg";
@@ -14,26 +12,18 @@ import Grid from "@mui/material/Grid";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import UseGetDeepfake from "./Hooks/useGetDeepfake";
 import DeepfakeResultsVideo from "./Results/DeepfakeResultsVideo";
-import tsv from "../../../../LocalDictionary/components/NavItems/tools/Deepfake.tsv";
-import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import Alert from "@mui/material/Alert";
 import { resetDeepfake } from "../../../../redux/actions/tools/deepfakeVideoActions";
 
 const Deepfake = () => {
   //const { url } = useParams();
   const classes = useMyStyles();
-  const keyword = useLoadLanguage(
-    "components/NavItems/tools/Deepfake.tsv",
-    tsv,
+  const keyword = i18nLoadNamespace("components/NavItems/tools/Deepfake");
+  const keywordAllTools = i18nLoadNamespace(
+    "components/NavItems/tools/Alltools",
   );
-  const keywordAllTools = useLoadLanguage(
-    "components/NavItems/tools/Alltools.tsv",
-    tsvAlltools,
-  );
-  const keywordWarning = useLoadLanguage(
-    "components/Shared/OnWarningInfo.tsv",
-    tsvWarning,
-  );
+  const keywordWarning = i18nLoadNamespace("components/Shared/OnWarningInfo");
 
   const isLoading = useSelector((state) => state.deepfakeVideo.loading);
   const result = useSelector((state) => state.deepfakeVideo.result);
@@ -96,7 +86,7 @@ const Deepfake = () => {
               <span>{keyword("deepfake_video_link")}</span>
             </Grid>
           }
-          className={classes.headerUpladedImage}
+          className={classes.headerUploadedImage}
         />
 
         <Box p={3}>

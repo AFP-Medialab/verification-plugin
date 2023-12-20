@@ -15,15 +15,13 @@ import useAuthenticationAPI from "../../../../Shared/Authentication/useAuthentic
 import { useSelector, useDispatch } from "react-redux";
 import { ERR_AUTH_UNKNOWN_ERROR } from "../../../../Shared/Authentication/authenticationErrors";
 import { setError } from "../../../../../redux/actions/errorActions";
-import tsv from "../../../../../LocalDictionary/components/Shared/Authentication.tsv";
-import tsvAdvTools from "../../../../../LocalDictionary/components/NavItems/AdvancedTools.tsv";
 import IconButton from "@mui/material/IconButton";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import { useForm, Controller } from "react-hook-form";
 import * as yup from "yup";
 import _ from "lodash";
 import MenuItem from "@mui/material/MenuItem";
-import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
 const registrationValidationSchema = yup.object().shape({
   email: yup
@@ -48,10 +46,7 @@ const registrationValidationSchema = yup.object().shape({
 });
 
 const AdvancedTools = () => {
-  const keyword = useLoadLanguage(
-    "components/NavItems/AdvancedTools.tsv",
-    tsvAdvTools,
-  );
+  const keyword = i18nLoadNamespace("components/NavItems/AdvancedTools");
 
   //const classes = useMyStyles();
   // Redux store
@@ -61,9 +56,8 @@ const AdvancedTools = () => {
   );
 
   // i18n
-  const messageI18NResolver = useLoadLanguage(
-    "components/Shared/Authentication.tsv",
-    tsv,
+  const messageI18NResolver = i18nLoadNamespace(
+    "components/Shared/Authentication",
   );
 
   const [dialogState, setDialogState] = React.useState(0);

@@ -1,6 +1,6 @@
 {
-  "name": "we-verify-app-dev-rc-v3-ext",
-  "version": "0.77.2",
+  "name": "weverify-plugin",
+  "version": "0.78.0",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -29,6 +29,10 @@
     "exif-js": "^2.3.0",
     "file-saver": "^2.0.5",
     "history": "^5.3.0",
+    "i18next": "^23.6.0",
+    "i18next-browser-languagedetector": "^7.1.0",
+    "i18next-chained-backend": "^4.5.0",
+    "i18next-http-backend": "^2.3.1",
     "jwt-decode": "^3.1.2",
     "lodash": "^4.17.21",
     "moment": "^2.29.4",
@@ -38,6 +42,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.47.0",
+    "react-i18next": "^13.3.1",
     "react-iframe": "^1.8.5",
     "react-leaflet": "^4.2.1",
     "react-linkify": "^1.0.0-alpha",

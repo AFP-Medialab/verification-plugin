@@ -2,13 +2,12 @@ import useMyStyles from "../MaterialUiStyles/useMyStyles";
 import React, { useEffect, useState } from "react";
 import Typography from "@mui/material/Typography";
 import WbIncandescentIcon from "@mui/icons-material/WbIncandescent";
-import useLoadLanguage from "../../../Hooks/useLoadLanguage";
-import tsv from "../../../LocalDictionary/components/Shared/OnClickInfo.tsv";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import Linkify from "react-linkify";
 
 const OnClickInfo = (props) => {
   const classes = useMyStyles();
-  const keyword = useLoadLanguage("components/Shared/OnClickInfo.tsv", tsv);
+  const keyword = i18nLoadNamespace("components/Shared/OnClickInfo");
 
   const [checked, setChecked] = useState(false);
 
