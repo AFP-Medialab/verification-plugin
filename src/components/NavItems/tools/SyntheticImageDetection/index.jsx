@@ -55,13 +55,28 @@ const SyntheticImageDetection = () => {
 
     dispatch(setSyntheticImageDetectionLoading(true));
     modeURL = "images/";
-    services = "gan,unina";
+    services = "gan,unina,progan_r50_grip,adm_r50_grip";
 
     if (!modeURL) {
       return;
     }
 
     const baseURL = process.env.REACT_APP_CAA_DEEPFAKE_URL;
+
+    const getUserFriendlyError = (error) => {
+      // Default error
+      if (!error) {
+        return keyword("synthetic_image_detection_error_generic");
+      }
+
+      if (
+        error.includes("Received status code 400") ||
+        error.includes("Cannot open image from")
+      )
+        return keyword("synthetic_image_detection_error_400");
+
+      return keyword("synthetic_image_detection_error_generic");
+    };
 
     const handleError = (e) => {
       dispatch(setError(e));
@@ -80,7 +95,10 @@ const SyntheticImageDetection = () => {
         params: { url: url, services: services },
       });
     } catch (error) {
-      handleError("error_" + error.status);
+      const processedError = getUserFriendlyError(
+        error?.response?.data?.message ?? "error_" + error.status,
+      );
+      handleError(processedError);
     }
 
     const getResult = async (id) => {
@@ -119,6 +137,7 @@ const SyntheticImageDetection = () => {
       }
     };
 
+    if (!res || !res.data) return;
     await waitUntilFinish(res.data.id);
   };
 
