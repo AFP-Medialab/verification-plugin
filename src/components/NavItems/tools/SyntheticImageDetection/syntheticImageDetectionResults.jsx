@@ -4,8 +4,7 @@ import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import { Grid, Typography, Stack, IconButton, Tooltip } from "@mui/material";
 import { Close } from "@mui/icons-material";
-import tsv from "../../../../LocalDictionary/components/NavItems/tools/SyntheticImageDetection.tsv";
-import useLoadLanguage from "Hooks/useLoadLanguage";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import { LinearProgressWithLabel } from "components/Shared/LinearProgressWithLabel/LinearProgressWithLabel";
 import { Help } from "@mui/icons-material";
 import { resetSyntheticImageDetectionImage } from "redux/actions/tools/syntheticImageDetectionActions";
@@ -15,9 +14,8 @@ import { useTrackEvent } from "Hooks/useAnalytics";
 import { getclientId } from "components/Shared/GoogleAnalytics/MatomoAnalytics";
 
 const SyntheticImageDetectionResults = (props) => {
-  const keyword = useLoadLanguage(
-    "components/NavItems/tools/SyntheticImageDetection.tsv",
-    tsv,
+  const keyword = i18nLoadNamespace(
+    "components/NavItems/tools/SyntheticImageDetection",
   );
 
   const dispatch = useDispatch();
@@ -37,6 +35,14 @@ const SyntheticImageDetectionResults = (props) => {
     diffusion: {
       name: keyword("synthetic_image_detection_diffusion_name"),
       description: keyword("synthetic_image_detection_diffusion_description"),
+    },
+    progan_r50_grip: {
+      name: keyword("synthetic_image_detection_progan_name"),
+      description: keyword("synthetic_image_detection_progan_description"),
+    },
+    adm_r50_grip: {
+      name: keyword("synthetic_image_detection_adm_name"),
+      description: keyword("synthetic_image_detection_adm_description"),
     },
   };
   const results = props.result;
@@ -66,7 +72,17 @@ const SyntheticImageDetectionResults = (props) => {
       results.gan_report.prediction * 100,
     );
 
-    const res = [diffusionScore, ganScore].sort(
+    const proganScore = new DeepfakeResult(
+      Object.keys(DeepfakeImageDetectionMethodNames)[2],
+      results.progan_r50_grip_report.prediction * 100,
+    );
+
+    const admScore = new DeepfakeResult(
+      Object.keys(DeepfakeImageDetectionMethodNames)[3],
+      results.adm_r50_grip_report.prediction * 100,
+    );
+
+    const res = [diffusionScore, ganScore, proganScore, admScore].sort(
       (a, b) => b.predictionScore - a.predictionScore,
     );
 
@@ -145,11 +161,11 @@ const SyntheticImageDetectionResults = (props) => {
                 syntheticImageScores[0].predictionScore &&
                 syntheticImageScores[0].predictionScore >= 70 && (
                   <Typography variant="h5" sx={{ color: "red" }}>
-                    {keyword("synthetic_image_detection_detection_alert") +
+                    {keyword("synthetic_image_detection_alert") +
                       DeepfakeImageDetectionMethodNames[
                         syntheticImageScores[0].methodName
                       ].name +
-                      keyword("synthetic_image_detection_detection_alert_2")}
+                      keyword("synthetic_image_detection_alert_2")}
                   </Typography>
                 )}
               {syntheticImageScores &&
@@ -183,7 +199,7 @@ const SyntheticImageDetectionResults = (props) => {
                     </Stack>
                   );
                 })}
-              {syntheticImageScores && (
+              {syntheticImageScores?.length > 0 ? (
                 <Box pt={2}>
                   <DetectionProgressBar
                     style={{
@@ -191,6 +207,10 @@ const SyntheticImageDetectionResults = (props) => {
                     }}
                   />
                 </Box>
+              ) : (
+                <Typography variant="h6" sx={{ color: "red" }}>
+                  {keyword("synthetic_image_detection_error_400")}
+                </Typography>
               )}
             </Stack>
           </Grid>

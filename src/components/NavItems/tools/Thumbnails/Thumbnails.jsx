@@ -19,8 +19,6 @@ import {
 import { setError } from "../../../../redux/actions/errorActions";
 import Checkbox from "@mui/material/Checkbox";
 import FormGroup from "@mui/material/FormGroup";
-import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
-import tsv from "../../../../LocalDictionary/components/NavItems/tools/Thumbnails.tsv";
 import {
   //trackEvent,
   getclientId,
@@ -40,18 +38,14 @@ import {
   reverseImageSearchAll,
   SEARCH_ENGINE_SETTINGS,
 } from "../../../Shared/ReverseSearch/reverseSearchUtils";
-
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 const Thumbnails = () => {
   const { url } = useParams();
 
   const classes = useMyStyles();
-  const keyword = useLoadLanguage(
-    "components/NavItems/tools/Thumbnails.tsv",
-    tsv,
-  );
-  const keywordAllTools = useLoadLanguage(
-    "components/NavItems/tools/Alltools.tsv",
-    tsv,
+  const keyword = i18nLoadNamespace("components/NavItems/tools/Thumbnails");
+  const keywordAllTools = i18nLoadNamespace(
+    "components/NavItems/tools/Alltools",
   );
 
   const resultUrl = useSelector((state) => state.thumbnails.url);
@@ -252,7 +246,7 @@ const Thumbnails = () => {
       <Card>
         <CardHeader
           title={keyword("cardheader_link")}
-          className={classes.headerUpladedImage}
+          className={classes.headerUploadedImage}
         />
         <Box p={3}>
           <form>
@@ -338,7 +332,7 @@ const Thumbnails = () => {
         <Card>
           <CardHeader
             title={keyword("cardheader_results")}
-            className={classes.headerUpladedImage}
+            className={classes.headerUploadedImage}
             action={
               <IconButton
                 aria-label="close"

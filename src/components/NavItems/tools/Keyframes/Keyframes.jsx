@@ -12,9 +12,6 @@ import { useKeyframeWrapper } from "./Hooks/useKeyframeWrapper";
 import { useVideoSimilarity } from "./Hooks/useVideoSimilarity";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import { useParams } from "react-router-dom";
-import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
-import tsv from "../../../../LocalDictionary/components/NavItems/tools/Keyframes.tsv";
-import tsvAllTools from "../../../../LocalDictionary/components/NavItems/tools/Alltools.tsv";
 import //trackEvent,
 //getclientId,
 "../../../Shared/GoogleAnalytics/MatomoAnalytics";
@@ -28,18 +25,15 @@ import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import LinkIcon from "@mui/icons-material/Link";
 import FileIcon from "@mui/icons-material/InsertDriveFile";
 import { useTrackEvent } from "../../../../Hooks/useAnalytics";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
 const Keyframes = () => {
   const { url } = useParams();
 
   const classes = useMyStyles();
-  const keyword = useLoadLanguage(
-    "components/NavItems/tools/Keyframes.tsv",
-    tsv,
-  );
-  const keywordAllTools = useLoadLanguage(
-    "components/NavItems/tools/Alltools.tsv",
-    tsvAllTools,
+  const keyword = i18nLoadNamespace("components/NavItems/tools/Keyframes");
+  const keywordAllTools = i18nLoadNamespace(
+    "components/NavItems/tools/Alltools",
   );
 
   // state used to toggle localFile view
@@ -198,7 +192,7 @@ const Keyframes = () => {
       <Card>
         <CardHeader
           title={keyword("cardheader_source")}
-          className={classes.headerUpladedImage}
+          className={classes.headerUploadedImage}
         />
 
         <Box p={3}>

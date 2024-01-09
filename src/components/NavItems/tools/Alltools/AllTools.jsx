@@ -19,8 +19,6 @@ import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import Iframe from "react-iframe";
 import DialogActions from "@mui/material/DialogActions";
 import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
-import tsv from "../../../../LocalDictionary/components/NavItems/tools/Alltools.tsv";
-import tsvWarning from "../../../../LocalDictionary/components/Shared/OnWarningInfo.tsv";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import ToolCard from "./ToolCard";
 import IconImage from "../../../NavBar/images/SVG/Image/Images.svg";
@@ -32,6 +30,7 @@ import LoginHeader from "../../../Shared/LoginHeader/LoginHeader";
 import { useSelector } from "react-redux";
 
 import { useNavigate } from "react-router-dom";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -56,15 +55,9 @@ function TabPanel(props) {
 const AllTools = (props) => {
   const navigate = useNavigate();
   const classes = useMyStyles();
-  const keyword = useLoadLanguage(
-    "components/NavItems/tools/Alltools.tsv",
-    tsv,
-  );
-  const keywordNavbar = useLoadLanguage("components/NavBar.tsv", tsv);
-  const keywordWarning = useLoadLanguage(
-    "components/Shared/OnWarningInfo.tsv",
-    tsvWarning,
-  );
+  const keyword = i18nLoadNamespace("components/NavItems/tools/Alltools");
+  const keywordNavbar = i18nLoadNamespace("components/NavBar");
+  const keywordWarning = i18nLoadNamespace("components/Shared/OnWarningInfo");
 
   const tools = props.tools;
   const [videoUrl, setVideoUrl] = useState(null);

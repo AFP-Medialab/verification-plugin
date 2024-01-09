@@ -8,9 +8,11 @@ import { Provider } from "react-redux";
 import { createRoot } from "react-dom/client";
 import createCache from "@emotion/cache";
 import { CacheProvider } from "@emotion/react";
+import { Suspense } from "react";
 
 import App from "./App";
 import AppWrapper from "./AppWrapper";
+import "./i18n";
 
 function saveToLocalStorage(state) {
   try {
@@ -65,11 +67,13 @@ export const muiCache = createCache({
 });
 
 root.render(
-  <Provider store={store}>
-    <CacheProvider value={muiCache}>
-      <AppWrapper>
-        <App />
-      </AppWrapper>
-    </CacheProvider>
-  </Provider>,
+  <Suspense>
+    <Provider store={store}>
+      <CacheProvider value={muiCache}>
+        <AppWrapper>
+          <App />
+        </AppWrapper>
+      </CacheProvider>
+    </Provider>
+  </Suspense>,
 );

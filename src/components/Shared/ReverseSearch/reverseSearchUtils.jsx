@@ -568,7 +568,6 @@ const retrieveImgObjectForSearchEngine = async (
     // TODO: Error handling for getImgUrl
     //console.log("DEBUG info ", info);
     //console.log("DEBUG getiknfo ", getImgUrl(info));
-    
     return new ImageObject(getImgUrl(info), IMAGE_FORMATS.URI);
   }
 

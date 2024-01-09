@@ -9,8 +9,7 @@ import {
 import { setError } from "../../../../../redux/actions/errorActions";
 
 const useGetImages = (url, type, keyword) => {
-  const envisu4_base_url = process.env.REACT_APP_CAA_ENVISU4_URL;
-  const envisu4_utils_base_url = process.env.REACT_APP_CAA_ENVISU4_UTILS_URL;
+  const forensic_base_url = process.env.REACT_APP_CAA_FORENSICS_URL;
 
   const dispatch = useDispatch();
 
@@ -27,20 +26,10 @@ const useGetImages = (url, type, keyword) => {
       dispatch(setForensicsLoading(false));
     };
 
-    const getResult = (hash) => {
-      //console.log("TEST3");
+    const getResult = (reportId) => {
       axios
-        .get(
-          envisu4_utils_base_url +
-            "process_filters?id=" +
-            hash +
-            "&threshold=" +
-            threshold +
-            "&cmap=" +
-            colormap,
-        )
+        .get(forensic_base_url + "/images/reports/" + reportId)
         .then((response) => {
-          //console.log(response.data);
           if (response.data != null) {
             //getTransparent(response.data.id, url, response.data)
             dispatch(
@@ -65,7 +54,7 @@ const useGetImages = (url, type, keyword) => {
     const waitUntilFinish = (id) => {
       //console.log("TEST2");
       axios
-        .get(envisu4_base_url + "images/jobs/" + id)
+        .get(forensic_base_url + "images/jobs/" + id)
         .then((response) => {
           if (response.data.status === "PROCESSING") {
             setTimeout(function () {
@@ -96,7 +85,7 @@ const useGetImages = (url, type, keyword) => {
 
           return {
             method: "post",
-            url: envisu4_base_url + "images/jobs",
+            url: forensic_base_url + "images/jobs",
             data: bodyFormData,
             headers: {
               "Content-Type": "multipart/form-data",
@@ -106,7 +95,7 @@ const useGetImages = (url, type, keyword) => {
           return {
             method: "post",
             url:
-              envisu4_base_url + "images/jobs?url=" + encodeURIComponent(url),
+              forensic_base_url + "images/jobs?url=" + encodeURIComponent(url),
           };
         default:
           break;

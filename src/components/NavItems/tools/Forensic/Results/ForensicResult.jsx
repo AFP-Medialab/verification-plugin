@@ -1,14 +1,11 @@
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
-import React, { useState, Component, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
-import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
-import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
-import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Forensic.tsv";
-import tsvWarning from "../../../../../LocalDictionary/components/Shared/OnWarningInfo.tsv";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Tabs from "@mui/material/Tabs";
@@ -25,8 +22,10 @@ import GifIcon from "@mui/icons-material/Gif";
 import Fab from "@mui/material/Fab";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
-import Fade from "@mui/material/Fade";
-import { cleanForensicState } from "../../../../../redux/actions/tools/forensicActions";
+import {
+  cleanForensicState,
+  setForensicImageRatio,
+} from "../../../../../redux/actions/tools/forensicActions";
 import {
   setStateInit,
   setStateBackResults,
@@ -39,6 +38,9 @@ import Alert from "@mui/material/Alert";
 import EmojiObjectsIcon from "@mui/icons-material/EmojiObjects";
 import AnimatedGif from "../../Gif/AnimatedGif";
 import { DetectionProgressBar } from "components/Shared/DetectionProgressBar/DetectionProgressBar";
+import ImageCanvas from "../components/imageCanvas/imageCanvas";
+import Fade from "@mui/material/Fade";
+import CardMedia from "@mui/material/CardMedia";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -59,16 +61,10 @@ function TabPanel(props) {
     </div>
   );
 }
-export class Instructions extends Component {
-  render() {
-    return <HelpOutlineIcon />;
-  }
-}
 
 const ForensicResults = (props) => {
   const dispatch = useDispatch();
   const displayItem = useSelector((state) => state.forensic.displayItem);
-
   const theme = createTheme({
     components: {
       MuiCardHeader: {
@@ -79,7 +75,7 @@ const ForensicResults = (props) => {
           title: {
             color: "white",
             fontSize: 20,
-            fontweight: 500,
+            fontWeight: 500,
           },
         },
       },
@@ -107,17 +103,9 @@ const ForensicResults = (props) => {
   });
 
   const classes = useMyStyles();
-  const keyword = useLoadLanguage(
-    "components/NavItems/tools/Forensic.tsv",
-    tsv,
-  );
-  const keywordWarning = useLoadLanguage(
-    "components/Shared/OnWarningInfo.tsv",
-    tsvWarning,
-  );
-  const results = props.result.filters;
-  //const masks = props.masksData;
-  //console.log(results);
+  const keyword = i18nLoadNamespace("components/NavItems/tools/Forensic");
+  const keywordWarning = i18nLoadNamespace("components/Shared/OnWarningInfo");
+  const results = props.result;
 
   const userAuthenticated = useSelector(
     (state) => state.userSession && state.userSession.userAuthenticated,
@@ -159,14 +147,10 @@ const ForensicResults = (props) => {
   const idStartCloning = 11;
   const idStartLenses = 13;
 
-  //console.log(results);
-
   const filters = useRef(
     filtersIDs.map((value) => {
-      var filter;
-      //console.log(results[value]);
-
-      if (results[value] === undefined || !results[value].completed) {
+      let filter;
+      if (!results || !results[value] || !results[value].completed) {
         filter = {
           id: "",
           name: "",
@@ -180,16 +164,10 @@ const ForensicResults = (props) => {
         filter = {
           id: value,
           name: keyword("forensic_title_" + value),
-          map: [
-            results[value]["forgery"]["colormap"],
-            //results[value]["votemap"]["colormap"],
-          ],
+          map: [results[value]["forgery"]],
           currentDisplayed: 0,
           arrows: [false, false],
-          mask: [
-            results[value]["forgery"]["transparent"],
-            //results[value]["votemap"]["transparent"],
-          ],
+          mask: [results[value]["forgery"]],
           popover: false,
         };
 
@@ -198,10 +176,10 @@ const ForensicResults = (props) => {
         filter = {
           id: value,
           name: keyword("forensic_title_" + value),
-          map: results[value]["colormap"],
+          map: results[value]["arrays"],
           currentDisplayed: 0,
           arrows: [false, false],
-          mask: results[value]["transparent"],
+          mask: results[value]["arrays"],
           popover: false,
         };
 
@@ -214,20 +192,28 @@ const ForensicResults = (props) => {
             keyword("forensic_title_cagiInversed"),
           ],
           map: [
-            results[value]["cagiNormalReport"]["colormap"],
-            results[value]["cagiInversedReport"]["colormap"],
+            results[value]["cagiNormalReport"]["array"],
+            results[value]["cagiInversedReport"]["array"],
           ],
           currentDisplayed: 0,
           arrows: [false, false],
           mask: [
-            results[value]["cagiNormalReport"]["transparent"],
-            results[value]["cagiInversedReport"]["transparent"],
+            results[value]["cagiNormalReport"]["array"],
+            results[value]["cagiInversedReport"]["array"],
           ],
           popover: false,
         };
 
         //RCMFD
       } else if (value === "rcmfd_report") {
+        filter = {
+          id: value,
+          name: keyword("forensic_title_" + value),
+          map: results[value].map,
+          mask: results[value].map,
+          popover: false,
+        };
+      } else if (value === "cmfd_report") {
         filter = {
           id: value,
           name: keyword("forensic_title_" + value),
@@ -252,8 +238,8 @@ const ForensicResults = (props) => {
         filter = {
           id: value,
           name: keyword("forensic_title_" + value),
-          map: results[value]["colormap"],
-          mask: results[value]["transparent"],
+          map: results[value]["array"],
+          mask: results[value]["array"],
           popover: false,
         };
       }
@@ -262,24 +248,60 @@ const ForensicResults = (props) => {
     }),
   );
 
-  //onsole.log(filters);
-  //console.log(results);
-
   const tabs = [0, 1, 2, 3];
 
   //Hover effect of the filters
   //============================================================================================
   const [filterHoverEnabled, setFilterHoverEnabled] = React.useState(false);
+  const [filterSelected, setFilterSelected] = useState(null);
   const [filterHover, setFilterHover] = useState(displayItem);
+  const [isHoveredFilterInverted, setIsHoveredFilterInverted] = useState(false);
+
+  const [applyColorScale, setApplyColorScale] = useState(false);
 
   function displayFilterHover(map) {
     setFilterHover(map);
     setFilterHoverEnabled(true);
   }
 
+  /**
+   * Returns true if the given filter is using an inverted grayscale to show detection (black means 100% detection)
+   * @param filter {Object} The filter to verify for
+   * @param filter.id {string} The filter name
+   * @param filter.currentDisplayed {number} The current filter displayed in the UI if the filter has multiple masks
+   * @returns {boolean}
+   */
+  const isFilterUsingAnInvertedScale = (filter) => {
+    if (!filter) return false;
+
+    return filter.id === "cagi_report" && filter.currentDisplayed === 1;
+  };
+
+  /**
+   * Returns true if the filter is using a grayscale detection mask for which we need to compute the new color scale
+   * @param filter {object} The filter to verify for
+   * @returns {boolean}
+   */
+  const isFilterUsingColorScale = (filter) => {
+    return !(
+      filter.id === "ela_report" ||
+      filter.id === "laplacian_report" ||
+      filter.id === "median_report" ||
+      filter.id === "rcmfd_report" ||
+      filter.id === "cmfd_report"
+    );
+  };
+
+  useEffect(() => {
+    if (!filterSelected) return;
+
+    setIsHoveredFilterInverted(isFilterUsingAnInvertedScale(filterSelected));
+
+    setApplyColorScale(isFilterUsingColorScale(filterSelected));
+  }, [filterSelected]);
+
   function hideFilterHover() {
     setFilterHoverEnabled(false);
-    setFilterHover(displayItem);
   }
 
   //Button analyze new image
@@ -322,8 +344,8 @@ const ForensicResults = (props) => {
 
   function arrowsToDisplay(filter) {
     //left, right
-    var arrows = [false, false];
-    var filterData = filters.current.find((x) => x.id === filter);
+    const arrows = [false, false];
+    const filterData = filters.current.find((x) => x.id === filter);
     if (filterData.map.length === 1) {
       return;
     }
@@ -342,7 +364,15 @@ const ForensicResults = (props) => {
 
   function clickArrowFilter(filter, arrow) {
     filters.current.find((x) => x.id === filter).currentDisplayed += arrow;
+
     arrowsToDisplay(filter);
+
+    setFilterSelected(filters.current.find((x) => x.id === filter));
+
+    filterSelected.id === "cagi_report" && filterSelected.currentDisplayed === 1
+      ? setIsHoveredFilterInverted(true)
+      : setIsHoveredFilterInverted(false);
+
     displayFilterHover(
       filters.current.find((x) => x.id === filter).mask[
         filters.current.find((x) => x.id === filter).currentDisplayed
@@ -355,10 +385,7 @@ const ForensicResults = (props) => {
   const [anchorGifPopover, setAnchorGifPopover] = React.useState(false);
   const openGifPopover = Boolean(anchorGifPopover);
   const gifPopover = openGifPopover ? "simple-popover" : undefined;
-  const gifImage = displayItem;
   const [gifFilter, setGifFilter] = React.useState(displayItem);
-  //const gifFilterMask = useSelector(state => state.forensic.maskUrl);
-  //console.log(gifFilterMask);
 
   //const [interval, setIntervalVar] = React.useState(null);
 
@@ -367,22 +394,19 @@ const ForensicResults = (props) => {
 
   function clickGifPopover(event, filter) {
     if (userAuthenticated) {
-      var url;
       if (
         filter === "zero_report" ||
         filter === "ghost_report" ||
         filter === "cagi_report"
       ) {
-        url = filters.current.find((x) => x.id === filter).mask[
+        const url = filters.current.find((x) => x.id === filter).mask[
           filters.current.find((x) => x.id === filter).currentDisplayed
         ];
         setGifFilter(url);
-        //console.log(url);
         //setReadyTransparency(true);
       } else {
-        url = filters.current.find((x) => x.id === filter).mask;
+        const url = filters.current.find((x) => x.id === filter).mask;
         setGifFilter(url);
-        //console.log(url);
         //setReadyTransparency(true);
       }
       dispatch(setStateBackResults());
@@ -408,8 +432,6 @@ const ForensicResults = (props) => {
     setValue(newValue);
   };
 
-  //console.log("Downloading: " + downloading);
-
   //Copy url to clipboard
   const [openToast, setOpenToast] = React.useState(false);
 
@@ -432,7 +454,6 @@ const ForensicResults = (props) => {
   const [filterPopover, setFilterPopover] = React.useState(false);
   const [textCagiPopover, setTextCagiPopover] = React.useState(null);
   const [titleCagiPopover, setTitleCagiPopover] = React.useState(null);
-
   const handleOpenFilterExplanation = (event, filter) => {
     if (filter === "cagi") {
       if (
@@ -483,6 +504,24 @@ const ForensicResults = (props) => {
 
   const currentLang = useSelector((state) => state.language);
   const isCurrentLanguageLeftToRight = currentLang !== "ar";
+
+  const submittedImageRef = useRef();
+
+  useEffect(() => {
+    if (
+      !submittedImageRef.current.naturalWidth ||
+      !submittedImageRef.current.naturalHeight
+    ) {
+      return;
+    }
+
+    dispatch(
+      setForensicImageRatio(
+        submittedImageRef.current.naturalWidth /
+          submittedImageRef.current.naturalHeight,
+      ),
+    );
+  }, [submittedImageRef.current]);
 
   return (
     <div>
@@ -581,22 +620,29 @@ const ForensicResults = (props) => {
                         </Grid>
                       </Grid>
                     }
-                    className={classes.headerUpladedImage}
+                    className={classes.headerUploadedImage}
                   />
 
                   <div className={classes.wrapperImageFilter}>
-                    <CardMedia
-                      crossOrigin={"anonymous"}
-                      component="img"
-                      className={classes.imageUploaded}
-                      image={imageDisplayed}
-                    />
-                    <Fade in={filterHoverEnabled} timeout={300}>
+                    {
                       <CardMedia
+                        ref={submittedImageRef}
+                        crossOrigin={"anonymous"}
                         component="img"
-                        className={classes.filterDisplayedClass}
-                        image={filterHover}
+                        className={classes.imageUploaded}
+                        image={imageDisplayed}
                       />
+                    }
+                    <Fade in={filterHoverEnabled} timeout={500}>
+                      <Box className={classes.filterDisplayedClass}>
+                        <ImageCanvas
+                          className={classes.filterDisplayedClass}
+                          imgSrc={filterHover}
+                          isGrayscaleInverted={isHoveredFilterInverted}
+                          applyColorScale={applyColorScale}
+                          threshold={127}
+                        />
+                      </Box>
                     </Fade>
                   </div>
                 </Card>
@@ -669,20 +715,27 @@ const ForensicResults = (props) => {
                         .map((value, key) => {
                           return (
                             <Grid key={key} item xs={4}>
-                              <CardMedia
+                              <ImageCanvas
                                 className={classes.imageFilter}
-                                image={value.map}
-                                onMouseOver={() =>
-                                  displayFilterHover(value.map)
-                                }
-                                onMouseLeave={hideFilterHover}
+                                imgSrc={value.map}
+                                isGrayscaleInverted={false}
+                                applyColorScale={false}
+                                threshold={0}
+                                onMouseOver={() => {
+                                  displayFilterHover(value.map);
+                                  setFilterSelected(value);
+                                }}
+                                onMouseLeave={() => {
+                                  hideFilterHover();
+                                  // setFilterSelected(null);
+                                }}
                               />
                               <Box
                                 align="center"
                                 width="100%"
                                 className={classes.lensesTitles}
                               >
-                                {value.name}
+                                {keyword("forensic_title_" + value.id)}
                                 <IconButton
                                   className={classes.margin}
                                   size="small"
@@ -724,7 +777,7 @@ const ForensicResults = (props) => {
                                       alignItems="stretch"
                                     >
                                       <Typography variant="body1">
-                                        {value.name}
+                                        {keyword("forensic_title_" + value.id)}
                                       </Typography>
 
                                       <CloseIcon
@@ -808,6 +861,7 @@ const ForensicResults = (props) => {
 
                   <Tabs
                     value={value}
+                    variant="scrollable"
                     onChange={handleChange}
                     indicatorColor={"primary"}
                   >
@@ -818,10 +872,10 @@ const ForensicResults = (props) => {
                   </Tabs>
 
                   {tabs.map((valueTab, keyTab) => {
-                    var filtersTab = [];
-                    var textDescription = "";
-                    var textLook = "";
-                    var textIgnore = "";
+                    let filtersTab;
+                    let textDescription;
+                    let textLook;
+                    let textIgnore;
 
                     if (valueTab === 0) {
                       filtersTab = filters.current.slice(
@@ -878,13 +932,6 @@ const ForensicResults = (props) => {
                             ) {
                               arrowsToDisplay(value.id);
                             }
-
-                            /*
-                                                            if (value.id === "ghost_report") {
-                                                                value.mask = ghostMasks;
-                                                            }
-                                                            */
-
                             return (
                               <Grid key={key} item xs={4}>
                                 {value.id === "zero_report" ||
@@ -892,18 +939,25 @@ const ForensicResults = (props) => {
                                 value.id === "cagi_report" ? (
                                   <div
                                     className={classes.imageOverlayWrapper}
-                                    onMouseOver={() =>
+                                    onMouseOver={() => {
                                       displayFilterHover(
                                         value.mask[value.currentDisplayed],
-                                      )
-                                    }
+                                      );
+                                      setFilterSelected(value);
+                                    }}
                                     onMouseLeave={hideFilterHover}
                                   >
-                                    <CardMedia
+                                    <ImageCanvas
                                       className={classes.imageFilter}
-                                      image={value.map[value.currentDisplayed]}
+                                      imgSrc={value.map[value.currentDisplayed]}
+                                      isGrayscaleInverted={isFilterUsingAnInvertedScale(
+                                        value,
+                                      )}
+                                      applyColorScale={isFilterUsingColorScale(
+                                        value,
+                                      )}
+                                      threshold={0}
                                     />
-
                                     <div className={classes.imageOverlay}>
                                       <Grid
                                         container
@@ -982,16 +1036,21 @@ const ForensicResults = (props) => {
                                   value.id !== "" && (
                                     <div
                                       className={classes.imageOverlayWrapper}
-                                      onMouseOver={() =>
-                                        displayFilterHover(value.mask)
-                                      }
+                                      onMouseOver={() => {
+                                        displayFilterHover(value.mask);
+                                        setFilterSelected(value);
+                                      }}
                                       onMouseLeave={hideFilterHover}
                                     >
-                                      <CardMedia
+                                      <ImageCanvas
                                         className={classes.imageFilter}
-                                        image={value.map}
+                                        imgSrc={value.map}
+                                        isGrayscaleInverted={false}
+                                        applyColorScale={isFilterUsingColorScale(
+                                          value,
+                                        )}
+                                        threshold={0}
                                       />
-
                                       <div className={classes.imageOverlay}>
                                         <Grid
                                           container
@@ -1038,7 +1097,7 @@ const ForensicResults = (props) => {
                                       </Box>
                                     ) : (
                                       <Box align="center" width="100%" pl={1}>
-                                        {value.name}
+                                        {keyword("forensic_title_" + value.id)}
                                         <IconButton
                                           className={classes.margin}
                                           size="small"
@@ -1093,7 +1152,9 @@ const ForensicResults = (props) => {
                                         </Typography>
                                       ) : (
                                         <Typography variant="body1">
-                                          {value.name}
+                                          {keyword(
+                                            "forensic_title_" + value.id,
+                                          )}
                                         </Typography>
                                       )}
 
@@ -1208,9 +1269,12 @@ const ForensicResults = (props) => {
                 <Box m={2} />
                 <AnimatedGif
                   toolState={gifState}
-                  homoImg1={gifImage}
+                  homoImg1={imageDisplayed}
                   homoImg2={gifFilter}
                   isPopup={true}
+                  isCanvas={true}
+                  isGrayscaleInverted={isHoveredFilterInverted}
+                  applyColorScale={applyColorScale}
                 />
               </Box>
             </Popover>

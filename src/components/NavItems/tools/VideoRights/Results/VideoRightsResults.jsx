@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Paper } from "@mui/material";
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 import Typography from "@mui/material/Typography";
@@ -18,18 +18,14 @@ import { cleanVideoRightsState } from "../../../../../redux/actions/tools/videoR
 import { useDispatch } from "react-redux";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
-import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
-import tsv from "../../../../../LocalDictionary/components/NavItems/tools/VideoRights.tsv";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import { IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 
 const VideoRightsResults = (props) => {
   const classes = useMyStyles();
   const dispatch = useDispatch();
-  const keyword = useLoadLanguage(
-    "components/NavItems/tools/VideoRights.tsv",
-    tsv,
-  );
+  const keyword = i18nLoadNamespace("components/NavItems/tools/VideoRights");
 
   const result = props.result;
   const permittedList = [];
@@ -87,7 +83,7 @@ const VideoRightsResults = (props) => {
     <Card>
       <CardHeader
         title={keyword("cardheader_results")}
-        className={classes.headerUpladedImage}
+        className={classes.headerUploadedImage}
         action={
           <IconButton
             aria-label="close"
@@ -102,7 +98,7 @@ const VideoRightsResults = (props) => {
         <Box m={2} />
         {result.kind === "youTubeVideos" && result.license === "youtube" && (
           <Typography variant={"body2"}>
-            {(result.license = "YouTube License Summary")}
+            {"YouTube License Summary"}
             {
               "This video is licensed under the Standard YouTube license, defined in YouTube's "
             }
@@ -126,7 +122,7 @@ const VideoRightsResults = (props) => {
         )}
         {result.license === "creativeCommon" && (
           <Typography variant={"body2"}>
-            {(result.license = "Creative Commons License Summary")}
+            {"Creative Commons License Summary"}
             {
               " This video is licensed under a Creative Commons Attribution license "
             }
@@ -141,7 +137,7 @@ const VideoRightsResults = (props) => {
         )}
         {result.kind === "twitterVideos" && (
           <Typography variant={"body2"}>
-            {(result.license = "Twitter License Summary")}
+            {"Twitter License Summary"}
             {
               " This video is licensed under the Standard Twitter license, defined in Twitter's "
             }
@@ -156,7 +152,7 @@ const VideoRightsResults = (props) => {
         )}
         {result.kind === "facebookVideos" && (
           <Typography variant={"body2"}>
-            {(result.license = "Facebook License Summary")}
+            {"Facebook License Summary"}
             {
               " This video is licensed under the Standard Facebook license, defined in Facebook's "
             }
@@ -172,7 +168,9 @@ const VideoRightsResults = (props) => {
         <Box m={4} />
         <Divider />
         <Box m={4} />
-        <Typography variant={"h5"}>{result.license}</Typography>
+        <Typography variant={"h5"}>
+          {keyword("license_" + result.license)}
+        </Typography>
         <Box m={2} />
         {licenseDetails.map((obj, index) => {
           if (obj.elements.length > 0) {

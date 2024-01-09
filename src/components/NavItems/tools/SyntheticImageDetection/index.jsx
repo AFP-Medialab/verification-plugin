@@ -18,36 +18,24 @@ import {
 } from "@mui/material";
 
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
-import tsvAlltools from "../../../../LocalDictionary/components/NavItems/tools/Alltools.tsv";
-import tsvWarning from "../../../../LocalDictionary/components/Shared/OnWarningInfo.tsv";
-
 import { Gradient } from "@mui/icons-material";
 
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
-import tsv from "../../../../LocalDictionary/components/NavItems/tools/SyntheticImageDetection.tsv";
-import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
-
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import { isValidUrl } from "../../../Shared/Utils/URLUtils";
 import SyntheticImageDetectionResults from "./syntheticImageDetectionResults";
 
 import { setError } from "redux/actions/errorActions";
 
-//TODO: Matomo analytics
-
 const SyntheticImageDetection = () => {
   const classes = useMyStyles();
-  const keyword = useLoadLanguage(
-    "components/NavItems/tools/SyntheticImageDetection.tsv",
-    tsv,
+  const keyword = i18nLoadNamespace(
+    "components/NavItems/tools/SyntheticImageDetection",
   );
-  const keywordAllTools = useLoadLanguage(
-    "components/NavItems/tools/Alltools.tsv",
-    tsvAlltools,
+  const keywordAllTools = i18nLoadNamespace(
+    "components/NavItems/tools/Alltools",
   );
-  const keywordWarning = useLoadLanguage(
-    "components/Shared/OnWarningInfo.tsv",
-    tsvWarning,
-  );
+  const keywordWarning = i18nLoadNamespace("components/Shared/OnWarningInfo");
 
   const isLoading = useSelector(
     (state) => state.syntheticImageDetection.loading,
@@ -67,7 +55,7 @@ const SyntheticImageDetection = () => {
 
     dispatch(setSyntheticImageDetectionLoading(true));
     modeURL = "images/";
-    services = "gan,unina";
+    services = "gan,unina,progan_r50_grip,adm_r50_grip";
 
     if (!modeURL) {
       return;
@@ -75,7 +63,20 @@ const SyntheticImageDetection = () => {
 
     const baseURL = process.env.REACT_APP_CAA_DEEPFAKE_URL;
 
-    let res;
+    const getUserFriendlyError = (error) => {
+      // Default error
+      if (!error) {
+        return keyword("synthetic_image_detection_error_generic");
+      }
+
+      if (
+        error.includes("Received status code 400") ||
+        error.includes("Cannot open image from")
+      )
+        return keyword("synthetic_image_detection_error_400");
+
+      return keyword("synthetic_image_detection_error_generic");
+    };
 
     const handleError = (e) => {
       dispatch(setError(e));
@@ -87,24 +88,28 @@ const SyntheticImageDetection = () => {
       return;
     }
 
+    let res;
+
     try {
       res = await axios.post(baseURL + modeURL + "jobs", null, {
         params: { url: url, services: services },
       });
     } catch (error) {
-      handleError("error_" + error.status);
+      const processedError = getUserFriendlyError(
+        error?.response?.data?.message ?? "error_" + error.status,
+      );
+      handleError(processedError);
     }
 
     const getResult = async (id) => {
       let response;
       try {
         response = await axios.get(baseURL + modeURL + "reports/" + id);
-        await axios.get(baseURL + modeURL + "reports/" + id);
       } catch (error) {
         handleError("error_" + error.status);
       }
 
-      if (response.data != null)
+      if (response && response.data != null)
         dispatch(
           setSyntheticImageDetectionResult({ url: url, result: response.data }),
         );
@@ -132,11 +137,8 @@ const SyntheticImageDetection = () => {
       }
     };
 
-    waitUntilFinish(res.data.id);
-  };
-
-  const submitUrl = () => {
-    useGetSyntheticImageScores(input, true, dispatch);
+    if (!res || !res.data) return;
+    await waitUntilFinish(res.data.id);
   };
 
   function sleep(fn, param) {
@@ -181,7 +183,7 @@ const SyntheticImageDetection = () => {
               <span>{keyword("synthetic_image_detection_link")}</span>
             </Grid>
           }
-          className={classes.headerUpladedImage}
+          className={classes.headerUploadedImage}
         />
 
         <Box p={3}>
@@ -209,8 +211,13 @@ const SyntheticImageDetection = () => {
                       type="submit"
                       variant="contained"
                       color="primary"
-                      onClick={(e) => {
-                        e.preventDefault(), submitUrl();
+                      onClick={async (e) => {
+                        e.preventDefault(),
+                          await useGetSyntheticImageScores(
+                            input,
+                            true,
+                            dispatch,
+                          );
                       }}
                       disabled={input === "" || isLoading}
                     >

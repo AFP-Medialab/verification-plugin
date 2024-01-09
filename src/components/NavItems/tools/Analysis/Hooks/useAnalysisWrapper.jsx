@@ -53,49 +53,45 @@ export const useAnalysisWrapper = (
     axios
       .get(serviceUrl + "/reports/" + id)
       .then((response) => {
-        if (keyword("table_error_" + response.data.status) !== "")
-          handleError("table_error_" + response.data.status.status);
-        else if (response.data.status !== "unavailable") {
-          if (
-            response.data.platform === "facebook" &&
-            _.isUndefined(response.data.video)
-          ) {
-            axios
-              .get(assistantEndpoint + "scrape/facebook?url=" + currentURL)
-              .then((responseImg) => {
-                dispatch(
-                  setAnalysisResult({
-                    url: currentURL,
-                    result: response.data,
-                    notification: false,
-                    loading: processing,
-                    image: responseImg.data.images[0],
-                  }),
-                );
-              })
-              .catch((error) => {
-                console.log("error assistance image scrapping ", error);
-                dispatch(
-                  setAnalysisResult({
-                    url: currentURL,
-                    result: response.data,
-                    notification: false,
-                    loading: processing,
-                    image: null,
-                  }),
-                );
-              });
-          } else {
-            dispatch(
-              setAnalysisResult({
-                url: currentURL,
-                result: response.data,
-                notification: false,
-                loading: processing,
-                image: null,
-              }),
-            );
-          }
+        if (
+          response.data.platform === "facebook" &&
+          _.isUndefined(response.data.video)
+        ) {
+          axios
+            .get(assistantEndpoint + "scrape/facebook?url=" + currentURL)
+            .then((responseImg) => {
+              dispatch(
+                setAnalysisResult({
+                  url: currentURL,
+                  result: response.data,
+                  notification: false,
+                  loading: processing,
+                  image: responseImg.data.images[0],
+                }),
+              );
+            })
+            .catch((error) => {
+              console.log("error assistance image scrapping ", error);
+              dispatch(
+                setAnalysisResult({
+                  url: currentURL,
+                  result: response.data,
+                  notification: false,
+                  loading: processing,
+                  image: null,
+                }),
+              );
+            });
+        } else {
+          dispatch(
+            setAnalysisResult({
+              url: currentURL,
+              result: response.data,
+              notification: false,
+              loading: processing,
+              image: null,
+            }),
+          );
         }
       })
       .catch((errors) => handleError(errors));
@@ -122,13 +118,6 @@ export const useAnalysisWrapper = (
   }, [isLoading, data, cpt]);
 
   useEffect(() => {
-    const handleJob = (data) => {
-      if (keyword("table_error_" + data.status) !== "") {
-        handleError("table_error_" + data.status);
-      } else {
-        setData(data);
-      }
-    };
     if (!apiUrl) return;
     if (apiUrl === "") handleError("table_error_empty_url");
     else if (apiUrl.includes(" ")) handleError("table_error_unavailable");
@@ -137,7 +126,7 @@ export const useAnalysisWrapper = (
       dispatch(setAnalysisLoading(true));
       axios
         .post(apiUrl)
-        .then((response) => handleJob(response["data"]))
+        .then((response) => setData(response["data"]))
         .catch((error) => handleError(error));
     }
     // eslint-disable-next-line

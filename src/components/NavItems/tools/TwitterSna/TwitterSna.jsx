@@ -27,10 +27,7 @@ import DateTime from "../../../Shared/DateTimePicker/DateTime";
 import { convertMomentToGMT } from "../../../Shared/DateTimePicker/convertToGMT";
 import useTwitterSnaRequest from "./Hooks/useTwitterSnaRequest";
 import { replaceAll } from "../TwitterAdvancedSearch/createUrl";
-import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
-import tsv from "../../../../LocalDictionary/components/NavItems/tools/TwitterSna.tsv";
-import tsvAllTools from "../../../../LocalDictionary/components/NavItems/tools/Alltools.tsv";
-//import { submissionEvent } from "../../../Shared/GoogleAnalytics/GoogleAnalytics";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import {
   //trackEvent,
   getclientId,
@@ -114,13 +111,9 @@ const TwitterSna = () => {
 
   const classes = useMyStyles();
   const cardClasses = myCardStyles();
-  const keyword = useLoadLanguage(
-    "components/NavItems/tools/TwitterSna.tsv",
-    tsv,
-  );
-  const keywordAllTools = useLoadLanguage(
-    "components/NavItems/tools/Alltools.tsv",
-    tsvAllTools,
+  const keyword = i18nLoadNamespace("components/NavItems/tools/TwitterSna");
+  const keywordAllTools = i18nLoadNamespace(
+    "components/NavItems/tools/Alltools",
   );
 
   const request = useSelector((state) => state.twitterSna.request);
@@ -553,7 +546,7 @@ const TwitterSna = () => {
         <Card className={cardClasses.root}>
           <CardHeader
             title={keyword("cardheader_parameters")}
-            className={classes.headerUpladedImage}
+            className={classes.headerUploadedImage}
           />
           <Box p={4}>
             <Grid container direction="column">

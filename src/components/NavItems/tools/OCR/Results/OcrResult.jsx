@@ -13,9 +13,8 @@ import LinearProgress from "@mui/material/LinearProgress";
 import MenuItem from "@mui/material/MenuItem";
 import Typography from "@mui/material/Typography";
 import WarningOutlined from "@mui/icons-material/WarningOutlined";
-import tsv from "../../../../../LocalDictionary/components/NavItems/tools/OCR.tsv";
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
-import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import { setError } from "../../../../../redux/actions/errorActions";
 import {
   cleanOcr,
@@ -34,7 +33,7 @@ import {
 const OcrResult = () => {
   const classes = useMyStyles();
   const dispatch = useDispatch();
-  const keyword = useLoadLanguage("components/NavItems/tools/OCR.tsv", tsv);
+  const keyword = i18nLoadNamespace("components/NavItems/tools/OCR");
 
   const inputUrl = useSelector((state) => state.ocr.url);
   const loading = useSelector((state) => state.ocr.loading);

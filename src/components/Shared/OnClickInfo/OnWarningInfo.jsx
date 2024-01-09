@@ -2,14 +2,12 @@ import React, { useEffect, useState } from "react";
 import useMyStyles from "../MaterialUiStyles/useMyStyles";
 import Typography from "@mui/material/Typography";
 import WarningRoundedIcon from "@mui/icons-material/WarningRounded";
-import useLoadLanguage from "../../../Hooks/useLoadLanguage";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import Linkify from "react-linkify";
-
-const tsv = "/localDictionary/components/Shared/OnWarningInfo.tsv";
 
 const OnWarningInfo = (props) => {
   const classes = useMyStyles();
-  const keyword = useLoadLanguage("components/Shared/OnWarningInfo.tsv", tsv);
+  const keyword = i18nLoadNamespace("components/Shared/OnWarningInfo");
 
   const [checked, setChecked] = useState(false);
 

@@ -8,8 +8,7 @@ import Button from "@mui/material/Button";
 import { IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import OnClickInfo from "../../../../Shared/OnClickInfo/OnClickInfo";
-import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
-import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Analysis.tsv";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import axios from "axios";
@@ -28,10 +27,7 @@ const AFacebookResults = (props) => {
   const setAnalysisLinkComments = props.setAnalysisLinkComments;
   const setAnalysisVerifiedComments = props.setAnalysisVerifiedComments;
   const classes = useMyStyles();
-  const keyword = useLoadLanguage(
-    "components/NavItems/tools/Analysis.tsv",
-    tsv,
-  );
+  const keyword = i18nLoadNamespace("components/NavItems/tools/Analysis");
 
   const reverseSearch = async (website) => {
     for (let image of thumbnails) {
@@ -95,7 +91,7 @@ const AFacebookResults = (props) => {
         <Card>
           <CardHeader
             title={keyword("cardheader_results")}
-            className={classes.headerUpladedImage}
+            className={classes.headerUploadedImage}
             action={
               <IconButton
                 aria-label="close"

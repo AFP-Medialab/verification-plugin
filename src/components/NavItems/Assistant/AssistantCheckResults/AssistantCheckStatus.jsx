@@ -7,21 +7,15 @@ import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { IconButton } from "@mui/material";
 import Typography from "@mui/material/Typography";
-
-import tsv from "../../../../LocalDictionary/components/NavItems/tools/Assistant.tsv";
-
 import { setStateExpanded } from "../../../../redux/actions/tools/assistantActions";
-import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 
 const AssistantCheckStatus = () => {
-  const keyword = useLoadLanguage(
-    "components/NavItems/tools/Assistant.tsv",
-    tsv,
-  );
+  const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
   const classes = useMyStyles();
   const dispatch = useDispatch();
   const stateExpanded = useSelector((state) => state.assistant.stateExpanded);

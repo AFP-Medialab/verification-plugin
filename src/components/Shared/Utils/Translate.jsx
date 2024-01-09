@@ -1,12 +1,11 @@
 import React from "react";
 import TranslateIcon from "@mui/icons-material/Translate";
 import Button from "@mui/material/Button";
-import useLoadLanguage from "../../../Hooks/useLoadLanguage";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import IconButton from "@mui/material/IconButton";
-import tsv from "../../../LocalDictionary/components/Shared/utils.tsv";
 
 export const Translate = ({ text, type }) => {
-  const keyword = useLoadLanguage("components/Shared/utils.tsv", tsv);
+  const keyword = i18nLoadNamespace("components/Shared/utils");
   // forward text on to google translate
   const googleTranslate = function (text) {
     let translate_url =

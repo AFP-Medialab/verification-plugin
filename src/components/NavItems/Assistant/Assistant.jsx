@@ -26,8 +26,7 @@ import {
   submitInputUrl,
 } from "../../../redux/actions/tools/assistantActions";
 import { setError } from "../../../redux/actions/errorActions";
-import tsv from "../../../LocalDictionary/components/NavItems/tools/Assistant.tsv";
-import useLoadLanguage from "../../../Hooks/useLoadLanguage";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
 const Assistant = () => {
   // styles, language, dispatch, params
@@ -35,10 +34,7 @@ const Assistant = () => {
   const navigate = useNavigate();
   const classes = useMyStyles();
   const dispatch = useDispatch();
-  const keyword = useLoadLanguage(
-    "components/NavItems/tools/Assistant.tsv",
-    tsv,
-  );
+  const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
 
   //form states
   const inputUrl = useSelector((state) => state.assistant.inputUrl);

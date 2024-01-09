@@ -8,9 +8,7 @@ import { useKeyframes } from "../Hooks/usekeyframes";
 import { IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { cleanKeyframesState } from "../../../../../redux/actions/tools/keyframesActions";
-import useLoadLanguage from "../../../../../Hooks/useLoadLanguage";
-import tsv from "../../../../../LocalDictionary/components/NavItems/tools/Keyframes.tsv";
-import tsv2 from "../../../../../LocalDictionary/components/Shared/OnClickInfo.tsv";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
@@ -41,14 +39,8 @@ import {
 
 const KeyFramesResults = (props) => {
   const classes = useMyStyles();
-  const keyword = useLoadLanguage(
-    "components/NavItems/tools/Keyframes.tsv",
-    tsv,
-  );
-  const keywordHelp = useLoadLanguage(
-    "components/Shared/OnClickInfo.tsv",
-    tsv2,
-  );
+  const keyword = i18nLoadNamespace("components/NavItems/tools/Keyframes");
+  const keywordHelp = i18nLoadNamespace("components/Shared/OnClickInfo");
   const dispatch = useDispatch();
 
   const [detailed, setDetailed] = useState(false);
@@ -281,7 +273,7 @@ const KeyFramesResults = (props) => {
               </Popover>
             </Grid>
           }
-          className={classes.headerUpladedImage}
+          className={classes.headerUploadedImage}
           action={
             <IconButton
               aria-label="close"
