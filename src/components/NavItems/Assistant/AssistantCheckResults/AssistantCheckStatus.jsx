@@ -20,8 +20,6 @@ const AssistantCheckStatus = () => {
   const dispatch = useDispatch();
   const stateExpanded = useSelector((state) => state.assistant.stateExpanded);
 
-  const hpTitle = keyword("hyperpartisan_title");
-  const hpFailState = useSelector((state) => state.assistant.hpFail);
   const scTitle = keyword("source_cred_title");
   const scFailState = useSelector((state) => state.assistant.inputSCFail);
   const dbkfTextTitle = keyword("dbkf_text_title");
@@ -38,7 +36,6 @@ const AssistantCheckStatus = () => {
   const neFailState = useSelector((state) => state.assistant.neFail);
 
   const failStates = [
-    { title: hpTitle, failed: hpFailState },
     { title: scTitle, failed: scFailState },
     { title: dbkfMediaTitle, failed: dbkfMediaFailState },
     { title: dbkfTextTitle, failed: dbkfTextFailState },

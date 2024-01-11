@@ -14,7 +14,6 @@ import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace
 import { setWarningExpanded } from "../../../../redux/actions/tools/assistantActions";
 import DbkfTextResults from "../AssistantCheckResults/DbkfTextResults";
 import DbkfMediaResults from "../AssistantCheckResults/DbkfMediaResults";
-import HpTextResult from "../AssistantCheckResults/HpTextResult";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 
 const AssistantWarnings = () => {
@@ -60,8 +59,6 @@ const AssistantWarnings = () => {
               <DbkfTextResults />
 
               <DbkfMediaResults />
-
-              <HpTextResult />
             </Collapse>
           </Grid>
         </Grid>
