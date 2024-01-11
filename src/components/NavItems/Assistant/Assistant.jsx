@@ -81,7 +81,6 @@ const Assistant = () => {
     (state) => state.assistant.dbkfMediaMatchFail,
   );
   const neFailState = useSelector((state) => state.assistant.neFail);
-  // const mtFailState = useSelector(state => state.assistant.mtFail)
 
   //local state
   const [formInput, setFormInput] = useState(inputUrl);

@@ -35,12 +35,10 @@ const AssistantTextResult = () => {
   // assistant media states
   const text = useSelector((state) => state.assistant.urlText);
   const textLang = useSelector((state) => state.assistant.textLang);
-  const translatedText = useSelector((state) => state.assistant.mtResult);
 
   // third party check states
   const dbkfMatch = useSelector((state) => state.assistant.dbkfTextMatch);
   const hpLoading = useSelector((state) => state.assistant.hpLoading);
-  const mtLoading = useSelector((state) => state.assistant.mtLoading);
   const dbkfMatchLoading = useSelector(
     (state) => state.assistant.dbkfTextMatchLoading,
   );
@@ -61,12 +59,6 @@ const AssistantTextResult = () => {
       setDisplayExpander(true);
     }
   }, [textBox]);
-
-  useEffect(() => {
-    if (translatedText) {
-      setDisplayOrigLang(false);
-    }
-  }, [translatedText]);
 
   return (
     <Grid item xs={12}>
@@ -104,7 +96,7 @@ const AssistantTextResult = () => {
             </div>
           }
         />
-        {dbkfMatchLoading && hpLoading && mtLoading && (
+        {dbkfMatchLoading && hpLoading && (
           <LinearProgress variant={"indeterminate"} color={"secondary"} />
         )}
         <CardContent>
