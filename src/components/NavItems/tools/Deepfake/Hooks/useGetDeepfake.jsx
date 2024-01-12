@@ -76,7 +76,6 @@ async function UseGetDeepfake(
         break;
 
       default:
-        console.log("default");
         res = await axios.post(baseURL + modeURL + "jobs", null, {
           params: { url: url, services: services },
         });
