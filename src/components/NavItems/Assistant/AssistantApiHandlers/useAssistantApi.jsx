@@ -76,28 +76,94 @@ export default function assistantApiCalls() {
     return result.data;
   };
 
+  const MAX_NUM_RETRIES = 3;
+
+  /**
+   * Calls an async function that throws an exception when it fails, will retry for numMaxRetries
+   * @param numMaxRetries Number of times the function will be retried
+   * @param asyncFunc The async function to call
+   * @param errorFunc Called when asyncFunc throws an error when there are additional retries
+   * @returns {Promise<*>} Output of asyncFunc
+   */
+  async function callAsyncWithNumRetries(
+    numMaxRetries,
+    asyncFunc,
+    errorFunc = null,
+  ) {
+    for (let retryCount = 0; retryCount < numMaxRetries; retryCount++) {
+      try {
+        return await asyncFunc();
+      } catch (e) {
+        if (retryCount + 1 >= MAX_NUM_RETRIES) {
+          throw e;
+        } else {
+          if (errorFunc) errorFunc(retryCount, e);
+        }
+      }
+    }
+  }
+
   const callNewsFramingService = async (text) => {
-    const result = await axios.post(
-      assistantEndpoint + "gcloud/news-framing-clfr",
-      { text: text }
+    return await callAsyncWithNumRetries(
+      MAX_NUM_RETRIES,
+      async () => {
+        const result = await axios.post(
+          assistantEndpoint + "gcloud/news-framing-clfr",
+          { text: text },
+        );
+        return result.data;
+      },
+      (numTries) => {
+        console.log(
+          "Could not connect to news framing service, tries " +
+            (numTries + 1) +
+            "/" +
+            MAX_NUM_RETRIES,
+        );
+      },
     );
-    return result.data;
   };
 
   const callNewsGenreService = async (text) => {
-    const result = await axios.post(
-      assistantEndpoint + "gcloud/news-genre-clfr",
-      { text: text }
+    return await callAsyncWithNumRetries(
+      MAX_NUM_RETRIES,
+      async () => {
+        const result = await axios.post(
+          assistantEndpoint + "gcloud/news-genre-clfr",
+          { text: text },
+        );
+        return result.data;
+      },
+      (numTries) => {
+        console.log(
+          "Could not connect to news genre service, tries " +
+            (numTries + 1) +
+            "/" +
+            MAX_NUM_RETRIES,
+        );
+      },
     );
-    return result.data;
   };
 
   const callPersuasionService = async (text) => {
-    const result = await axios.post(
-      assistantEndpoint + "gcloud/persuasion-clfr",
-      { text: text }
+    return await callAsyncWithNumRetries(
+      MAX_NUM_RETRIES,
+      async () => {
+        const result = await axios.post(
+          assistantEndpoint + "gcloud/persuasion-clfr",
+          { text: text },
+        );
+        return result.data;
+      },
+      (numTries) => {
+        console.log(
+          "Could not connect to persuasion service, tries " +
+            (numTries + 1) +
+            "/" +
+            MAX_NUM_RETRIES,
+        );
+      },
     );
-    return result.data;
   };
 
   const callOcrScriptService = async () => {
