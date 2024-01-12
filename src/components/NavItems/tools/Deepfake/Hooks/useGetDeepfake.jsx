@@ -10,7 +10,16 @@ import {
 import { setError } from "../../../../../redux/actions/errorActions";
 import { isValidUrl } from "../../../../Shared/Utils/URLUtils";
 
-async function UseGetDeepfake(url, processURL, mode, dispatch, role, errorMsg) {
+async function UseGetDeepfake(
+  url,
+  processURL,
+  mode,
+  dispatch,
+  role,
+  errorMsg,
+  type,
+  image,
+) {
   if (!processURL || !url) {
     return;
   }
@@ -53,9 +62,26 @@ async function UseGetDeepfake(url, processURL, mode, dispatch, role, errorMsg) {
   }
 
   try {
-    res = await axios.post(baseURL + modeURL + "jobs", null, {
-      params: { url: url, services: services },
-    });
+    switch (type) {
+      case "local":
+        var bodyFormData = new FormData();
+        bodyFormData.append("file", image);
+        res = await axios.post(baseURL + modeURL + "jobs", bodyFormData, {
+          method: "post",
+          params: { services: services },
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+        break;
+
+      default:
+        console.log("default");
+        res = await axios.post(baseURL + modeURL + "jobs", null, {
+          params: { url: url, services: services },
+        });
+        break;
+    }
   } catch (error) {
     handleError("error_" + error.status);
   }

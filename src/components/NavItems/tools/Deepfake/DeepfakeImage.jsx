@@ -15,6 +15,9 @@ import UseGetDeepfake from "./Hooks/useGetDeepfake";
 import DeepfakeResultsImage from "./Results/DeepfakeResultsImage";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import Alert from "@mui/material/Alert";
+import FolderOpenIcon from "@mui/icons-material/FolderOpen";
+import { setError } from "redux/actions/errorActions";
+import { resetDeepfake } from "redux/actions/tools/deepfakeImageActions";
 
 const Deepfake = () => {
   //const { url } = useParams();
@@ -30,6 +33,8 @@ const Deepfake = () => {
   const url = useSelector((state) => state.deepfakeImage.url);
   const role = useSelector((state) => state.userSession.user.roles);
   const [input, setInput] = useState(url ? url : "");
+  const [type, setType] = useState("");
+  const [image, setImage] = useState(undefined);
   //Selecting mode
   //============================================================================================
 
@@ -52,9 +57,20 @@ const Deepfake = () => {
       dispatch,
       role,
       keywordWarning("error_invalid_url"),
+      type,
+      image,
     );
   };
 
+  const handleUploadImg = (file) => {
+    if (file.size >= 6000000) {
+      dispatch(setError(keyword("file_too_big")));
+    } else {
+      setInput(URL.createObjectURL(file));
+      setImage(file);
+      setType("local");
+    }
+  };
   const handleClose = () => {
     setInput("");
   };
@@ -120,6 +136,7 @@ const Deepfake = () => {
                         variant="contained"
                         color="primary"
                         onClick={(e) => {
+                          dispatch(resetDeepfake());
                           e.preventDefault(), submitUrl();
                         }}
                         disabled={
@@ -131,6 +148,21 @@ const Deepfake = () => {
                     </Grid>
                   </Grid>
                 </form>
+                <Box m={2} />
+
+                <Button startIcon={<FolderOpenIcon />}>
+                  <label htmlFor="fileInputSynthetic">
+                    {keyword("button_localfile")}
+                  </label>
+                  <input
+                    id="fileInputSynthetic"
+                    type="file"
+                    hidden={true}
+                    onChange={(e) => {
+                      handleUploadImg(e.target.files[0]);
+                    }}
+                  />
+                </Button>
 
                 {isLoading && (
                   <Box mt={3}>
