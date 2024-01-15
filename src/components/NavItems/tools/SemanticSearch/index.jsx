@@ -15,9 +15,7 @@ const SemanticSearch = () => {
 
   const [input, setInput] = useState("");
 
-  const [errorMessage, setErrorMessage] = useState(
-    "This is a test error message",
-  );
+  const [errorMessage, setErrorMessage] = useState("");
 
   const languagesList = [
     { title: "English" },
@@ -33,92 +31,96 @@ const SemanticSearch = () => {
 
   const handleSubmit = async () => {
     setIsLoading(true);
+    setErrorMessage("");
 
     setTimeout(() => {
       setIsLoading(false);
+      setErrorMessage("This is a test error message");
     }, 5000);
   };
 
   return (
     <Box>
       <Stack direction="column" spacing={4}>
-        <Box>
-          <HeaderTool
-            name={"Fact Check Semantic Search"}
-            description={
-              "Search for semantically related fact checks by providing a paragraph of text (e.g., a social media post). The search is multilingual - input text can be in (almost) any language."
-            }
-            icon={
-              <ManageSearch sx={{ fill: "#00926c", width: 40, height: 40 }} />
-            }
-          />
-          <Card>
-            <Box p={3}>
-              <form>
-                <Stack spacing={6}>
-                  <Stack
-                    direction="row"
-                    spacing={2}
-                    justifyContent="flex-start"
-                    alignItems="center"
+        <HeaderTool
+          name={"Fact Check Semantic Search"}
+          description={
+            "Search for semantically related fact checks by providing a paragraph of text (e.g., a social media post). The search is multilingual - input text can be in (almost) any language."
+          }
+          icon={
+            <ManageSearch sx={{ fill: "#00926c", width: 40, height: 40 }} />
+          }
+        />
+        <Alert severity="info">
+          Tip – this is a semantic search. Use one or more sentences for more
+          accurate results.
+        </Alert>
+        <Card>
+          <Box p={3}>
+            <form>
+              <Stack spacing={6}>
+                <Stack
+                  direction="row"
+                  spacing={2}
+                  justifyContent="flex-start"
+                  alignItems="center"
+                >
+                  <TextField
+                    fullWidth
+                    value={input}
+                    label={"Search for a Fact Check"}
+                    placeholder={"Search for a Fact Check"}
+                    multiline
+                    variant="outlined"
+                    disabled={isLoading}
+                    onChange={(e) => {
+                      setInput(e.target.value);
+                    }}
+                  />
+                  <LoadingButton
+                    type="submit"
+                    variant="contained"
+                    disabled={isLoading}
+                    loading={isLoading}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleSubmit();
+                    }}
                   >
-                    <TextField
-                      fullWidth
-                      value={input}
-                      label={"Search for a Fact Check"}
-                      placeholder={"Search for a Fact Check"}
-                      multiline
-                      variant="outlined"
-                      disabled={isLoading}
-                      onChange={(e) => {
-                        setInput(e.target.value);
-                      }}
-                    />
-                    <LoadingButton
-                      type="submit"
-                      variant="contained"
-                      disabled={isLoading}
-                      loading={isLoading}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        handleSubmit();
-                      }}
-                    >
-                      Submit
-                    </LoadingButton>
-                  </Stack>
-
-                  <Stack direction="row" spacing={2}>
-                    <SelectSmall
-                      items={searchEngineModes}
-                      initialValue={searchEngineModes[0].name}
-                      disabled={isLoading}
-                    />
-                    <DatePicker label="From:" disabled={isLoading} />
-                    <DatePicker label="To:" disabled={isLoading} />
-                    <CheckboxesTags
-                      label="Language filter"
-                      placeholder="Languages"
-                      options={languagesList}
-                      disabled={isLoading}
-                    />
-                    {/*<Button*/}
-                    {/*  type="submit"*/}
-                    {/*  variant="contained"*/}
-                    {/*  color="primary"*/}
-                    {/*  disabled={isLoading}*/}
-                    {/*  onClick={async (e) => {*/}
-                    {/*    e.preventDefault();*/}
-                    {/*  }}*/}
-                    {/*>*/}
-                    {/*  Filter*/}
-                    {/*</Button>*/}
-                  </Stack>
+                    Submit
+                  </LoadingButton>
                 </Stack>
-              </form>
-            </Box>
-          </Card>
-        </Box>
+
+                <Stack direction="row" spacing={2}>
+                  <SelectSmall
+                    items={searchEngineModes}
+                    initialValue={searchEngineModes[0].name}
+                    disabled={isLoading}
+                  />
+                  <DatePicker label="From:" disabled={isLoading} />
+                  <DatePicker label="To:" disabled={isLoading} />
+                  <CheckboxesTags
+                    label="Language filter"
+                    placeholder="Languages"
+                    options={languagesList}
+                    disabled={isLoading}
+                  />
+                  {/*<Button*/}
+                  {/*  type="submit"*/}
+                  {/*  variant="contained"*/}
+                  {/*  color="primary"*/}
+                  {/*  disabled={isLoading}*/}
+                  {/*  onClick={async (e) => {*/}
+                  {/*    e.preventDefault();*/}
+                  {/*  }}*/}
+                  {/*>*/}
+                  {/*  Filter*/}
+                  {/*</Button>*/}
+                </Stack>
+              </Stack>
+            </form>
+          </Box>
+        </Card>
 
         {errorMessage && (
           <Box>

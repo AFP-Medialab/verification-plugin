@@ -1,6 +1,6 @@
 import React from "react";
 import Box from "@mui/material/Box";
-import { Stack } from "@mui/material";
+import { Pagination, Stack } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import Card from "@mui/material/Card";
 import { CallMadeRounded } from "@mui/icons-material";
@@ -25,8 +25,6 @@ const SemanticSearchResults = () => {
               <Typography variant="subtitle2">2022-08-31</Typography>
             </Stack>
 
-            <Box />
-            <Box />
             <Stack direction="row" spacing={4}>
               <Button
                 target="_blank"
@@ -40,6 +38,9 @@ const SemanticSearchResults = () => {
                 <CallMadeRounded />
               </Button>
             </Stack>
+            <Box alignSelf="center">
+              <Pagination count={10} />
+            </Box>
           </Stack>
         </Box>
       </Card>
