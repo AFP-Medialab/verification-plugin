@@ -85,7 +85,6 @@ export default function assistantApiCalls() {
     callAssistantScraper,
     callSourceCredibilityService,
     callNamedEntityService,
-    callAssistantTranslator,
     callOcrService,
     callOcrScriptService,
   };
