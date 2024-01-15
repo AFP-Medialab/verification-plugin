@@ -179,7 +179,7 @@ const SyntheticImageDetection = () => {
   };
   const handleUploadImg = (file) => {
     if (file.size >= 6000000) {
-      dispatch(setError(keyword("file_too_big")));
+      dispatch(setError(keywordWarning("warning_file_too_big")));
     } else {
       setInput(URL.createObjectURL(file));
       setImage(file);
