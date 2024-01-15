@@ -11,7 +11,6 @@ import {
   setImageVideoSelected,
   setInputSourceCredDetails,
   setInputUrl,
-  setMtDetails,
   setNeDetails,
   setProcessUrl,
   setProcessUrlActions,
@@ -78,10 +77,6 @@ function* getSourceCredSaga() {
 
 function* getNamedEntitySaga() {
   yield takeLatest(["SET_SCRAPED_DATA", "CLEAN_STATE"], handleNamedEntityCall);
-}
-
-function* getTranslationSaga() {
-  yield takeLatest(["RUN_TRANSLATION", "CLEAN_STATE"], handleTranslateCall);
 }
 
 /**
@@ -308,24 +303,10 @@ function* handleNamedEntityCall(action) {
   }
 }
 
-function* handleTranslateCall(action) {
-  if (action.type === "CLEAN_STATE") return;
-
-  try {
-    let lang = action.payload.lang;
-    let text = action.payload.text;
-
-    yield put(setMtDetails(null, true, false, false));
-    const result = yield call(assistantApi.callAssistantTranslator, lang, text);
-    let result_text = result.text ? result.text : null;
-    yield put(setMtDetails(result_text, false, true, false));
-  } catch (error) {
-    yield put(setMtDetails(null, false, false, true));
-  }
-}
-
 function* handleAssistantScrapeCall(action) {
   let inputUrl = action.payload.inputUrl;
+
+  inputUrl = cleanInputUrl(inputUrl);
 
   yield put(cleanAssistantState());
   yield put(setUrlMode(true));
@@ -382,6 +363,16 @@ function* handleAssistantScrapeCall(action) {
       yield put(setErrorKey(error.message));
     }
   }
+}
+
+/**
+ * Ensure input url is trimmed of whitespaces, returns ONLY the first link
+ * if there's multiple links separated by whitespaces
+ * @param inputUrl
+ * @returns string
+ */
+function cleanInputUrl(inputUrl) {
+  return inputUrl.trim().split(" ")[0];
 }
 
 function* extractFromLocalStorage(instagram_result, inputUrl, urlType) {
@@ -686,7 +677,6 @@ export default function* assistantSaga() {
     fork(getMediaSimilaritySaga),
     fork(getMediaListSaga),
     fork(getNamedEntitySaga),
-    fork(getTranslationSaga),
     fork(getAssistantScrapeSaga),
     fork(getUploadSaga),
   ]);

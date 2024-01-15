@@ -168,18 +168,6 @@ export const setNeDetails = (
   };
 };
 
-export const setMtDetails = (mtResult, mtLoading, mtDone, mtFail) => {
-  return {
-    type: "SET_MT_DETAILS",
-    payload: {
-      mtResult: mtResult,
-      mtLoading: mtLoading,
-      mtDone: mtDone,
-      mtFail: mtFail,
-    },
-  };
-};
-
 export const setSingleMediaPresent = (singleMediaPresent) => {
   return {
     type: "SET_SINGLE_MEDIA_PRESENT",
@@ -212,16 +200,6 @@ export const setStateExpanded = (stateExpanded) => {
     type: "SET_STATE_EXPANDED",
     payload: {
       stateExpanded: stateExpanded,
-    },
-  };
-};
-
-export const runTranslation = (lang, text) => {
-  return {
-    type: "RUN_TRANSLATION",
-    payload: {
-      lang: lang,
-      text: text,
     },
   };
 };

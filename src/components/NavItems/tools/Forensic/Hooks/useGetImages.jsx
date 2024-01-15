@@ -23,7 +23,7 @@ const useGetImages = (url, type, keyword) => {
 
     const getResult = (reportId) => {
       axios
-        .get(forensic_base_url + "/images/reports/" + reportId)
+        .get(forensic_base_url + "images/reports/" + reportId)
         .then((response) => {
           if (response.data != null) {
             dispatch(
