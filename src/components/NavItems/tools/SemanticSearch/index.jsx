@@ -124,7 +124,7 @@ const SemanticSearch = () => {
 
         {errorMessage && (
           <Box>
-            <Fade in={errorMessage ? true : false} timeout={750}>
+            <Fade in={!!errorMessage} timeout={750}>
               <Alert severity="error">{errorMessage}</Alert>
             </Fade>
           </Box>
