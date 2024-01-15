@@ -33,21 +33,11 @@ const defaultState = {
   dbkfMediaMatchDone: false,
   dbkfMediaMatchFail: false,
 
-  hpResult: null,
-  hpLoading: false,
-  hpDone: false,
-  hpFail: false,
-
   neResultCategory: null,
   neResultCount: null,
   neLoading: false,
   neDone: false,
   neFail: false,
-
-  mtResult: null,
-  mtLoading: false,
-  mtDone: false,
-  mtFail: false,
 
   loading: false,
   warningExpanded: false,
@@ -69,13 +59,11 @@ const assistantReducer = (state = defaultState, action) => {
     case "SET_DBKF_TEXT_MATCH_DETAILS":
     case "SET_DBKF_IMAGE_MATCH_DETAILS":
     case "SET_DBKF_VIDEO_MATCH_DETAILS":
-    case "SET_HP_DETAILS":
     case "SET_NE_DETAILS":
     case "SET_LOADING":
     case "SET_WARNING_EXPANDED":
     case "SET_ASSURANCE_EXPANDED":
     case "SET_STATE_EXPANDED":
-    case "SET_MT_DETAILS":
       return Object.assign({}, state, action.payload);
 
     case "CLEAN_STATE":
@@ -115,21 +103,11 @@ const assistantReducer = (state = defaultState, action) => {
         dbkfMediaMatchDone: false,
         dbkfMediaMatchFail: false,
 
-        hpResult: null,
-        hpLoading: false,
-        hpDone: false,
-        hpFail: false,
-
         neResultCategory: null,
         neResultCount: null,
         neLoading: false,
         neDone: false,
         neFail: false,
-
-        mtResult: null,
-        mtLoading: false,
-        mtDone: false,
-        mtFail: false,
 
         loading: false,
         warningExpanded: false,
