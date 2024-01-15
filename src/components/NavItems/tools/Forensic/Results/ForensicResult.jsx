@@ -539,9 +539,7 @@ const ForensicResults = (props) => {
           {keywordWarning("warning_advanced_tools")}
         </Alert>
       </Snackbar>
-      <Box mt={3} style={{ marginBottom: "50px" }}>
-        <Alert severity="warning">{keywordWarning("warning_forensic")}</Alert>
-      </Box>
+
       <div className={classes.newForensics}>
         <ThemeProvider theme={theme}>
           <Box mt={5} mb={5}>
