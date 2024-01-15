@@ -53,25 +53,6 @@ export default function assistantApiCalls() {
     return namedEntityResult.data;
   };
 
-  const callAssistantTranslator = async (lang, text) => {
-    let translationResult;
-    try {
-      translationResult = await axios.get(
-        assistantEndpoint +
-          "translate/" +
-          lang +
-          "?text=" +
-          encodeURIComponent(text),
-      );
-    } catch (error) {
-      handleAssistantError(error);
-    }
-
-    if (translationResult.data.status === "success") {
-      return translationResult.data;
-    }
-  };
-
   const callSourceCredibilityService = async (urlList) => {
     if (urlList.length === 0) return null;
 
@@ -80,15 +61,6 @@ export default function assistantApiCalls() {
     const result = await axios.post(
       assistantEndpoint + "gcloud/source-credibility",
       { text: urls },
-    );
-
-    return result.data;
-  };
-
-  const callHyperpartisanService = async (text) => {
-    const result = await axios.post(
-      assistantEndpoint + "gcloud/hyperpartisan",
-      { text: text },
     );
 
     return result.data;
@@ -113,8 +85,6 @@ export default function assistantApiCalls() {
     callAssistantScraper,
     callSourceCredibilityService,
     callNamedEntityService,
-    callAssistantTranslator,
-    callHyperpartisanService,
     callOcrService,
     callOcrScriptService,
   };

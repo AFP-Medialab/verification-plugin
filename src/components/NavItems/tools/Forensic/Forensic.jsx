@@ -135,7 +135,7 @@ const Forensic = () => {
 
   const handleUploadImg = (file) => {
     if (file.size >= 6000000) {
-      dispatch(setError(keyword("forensic_too_big")));
+      dispatch(setError(keyword("file_too_big")));
     } else {
       setImage(file);
       setType("local");
