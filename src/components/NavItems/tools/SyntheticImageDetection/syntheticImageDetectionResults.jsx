@@ -91,7 +91,7 @@ const SyntheticImageDetectionResults = (props) => {
 
   const client_id = getclientId();
   const session = useSelector((state) => state.userSession);
-  const uid = session && session.user ? session.user.email : null;
+  const uid = session && session.user ? session.user.id : null;
 
   useTrackEvent(
     "submission",

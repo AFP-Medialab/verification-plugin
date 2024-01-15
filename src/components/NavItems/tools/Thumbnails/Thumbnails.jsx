@@ -52,7 +52,7 @@ const Thumbnails = () => {
   const resultData = useSelector((state) => state.thumbnails.result);
   const isLoading = useSelector((state) => state.thumbnails.loading);
   const session = useSelector((state) => state.userSession);
-  const uid = session && session.user ? session.user.email : null;
+  const uid = session && session.user ? session.user.id : null;
 
   const [height, setHeight] = useState(0);
   const [showResult, setShowResult] = useState(false);
