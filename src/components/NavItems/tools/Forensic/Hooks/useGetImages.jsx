@@ -13,11 +13,6 @@ const useGetImages = (url, type, keyword) => {
 
   const dispatch = useDispatch();
 
-  //const gifTransparencyMasks = [];
-
-  const threshold = 0.4;
-  const colormap = "mako";
-
   useEffect(() => {
     const handleError = (e) => {
       //console.log("error key", e)
@@ -31,7 +26,6 @@ const useGetImages = (url, type, keyword) => {
         .get(forensic_base_url + "images/reports/" + reportId)
         .then((response) => {
           if (response.data != null) {
-            //getTransparent(response.data.id, url, response.data)
             dispatch(
               setForensicsResult({
                 url: type === "local" ? response.data.displayItem : url,
@@ -52,7 +46,6 @@ const useGetImages = (url, type, keyword) => {
     };
 
     const waitUntilFinish = (id) => {
-      //console.log("TEST2");
       axios
         .get(forensic_base_url + "images/jobs/" + id)
         .then((response) => {
@@ -104,7 +97,7 @@ const useGetImages = (url, type, keyword) => {
 
     if (url) {
       dispatch(setForensicsLoading(true));
-      //console.log("TEST1");
+
       axios(configService(type))
         .then((response) => waitUntilFinish(response.data.id))
         .catch((error) => {
@@ -122,7 +115,6 @@ const useGetImages = (url, type, keyword) => {
           }
         });
     }
-    // eslint-disable-next-line
   }, [url]);
 };
 export default useGetImages;

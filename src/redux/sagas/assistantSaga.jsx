@@ -360,6 +360,8 @@ function* handleTranslateCall(action) {
 function* handleAssistantScrapeCall(action) {
   let inputUrl = action.payload.inputUrl;
 
+  inputUrl = cleanInputUrl(inputUrl);
+
   yield put(cleanAssistantState());
   yield put(setUrlMode(true));
   yield put(setAssistantLoading(true));
@@ -415,6 +417,16 @@ function* handleAssistantScrapeCall(action) {
       yield put(setErrorKey(error.message));
     }
   }
+}
+
+/**
+ * Ensure input url is trimmed of whitespaces, returns ONLY the first link
+ * if there's multiple links separated by whitespaces
+ * @param inputUrl
+ * @returns string
+ */
+function cleanInputUrl(inputUrl) {
+  return inputUrl.trim().split(" ")[0];
 }
 
 function* extractFromLocalStorage(instagram_result, inputUrl, urlType) {
