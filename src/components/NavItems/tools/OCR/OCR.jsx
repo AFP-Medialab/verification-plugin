@@ -47,7 +47,7 @@ const OCR = () => {
   const fail = useSelector((state) => state.ocr.fail);
   const errorKey = useSelector((state) => state.ocr.errorKey);
   const session = useSelector((state) => state.userSession);
-  const uid = session && session.user ? session.user.email : null;
+  const uid = session && session.user ? session.user.id : null;
 
   const [userInput, setUserInput] = useState(ocrInputUrl);
   const [eventUrl, setEventUrl] = useState(undefined);

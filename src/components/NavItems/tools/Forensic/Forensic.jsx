@@ -75,7 +75,7 @@ const Forensic = () => {
   const gifAnimationState = useSelector((state) => state.forensic.gifAnimation);
   const masks = useSelector((state) => state.forensic.masks);
   const session = useSelector((state) => state.userSession);
-  const uid = session && session.user ? session.user.email : null;
+  const uid = session && session.user ? session.user.id : null;
 
   const [input, setInput] = useState(resultUrl);
   const [image, setImage] = useState(undefined);
@@ -135,7 +135,7 @@ const Forensic = () => {
 
   const handleUploadImg = (file) => {
     if (file.size >= 6000000) {
-      dispatch(setError(keyword("forensic_too_big")));
+      dispatch(setError(keywordWarning("warning_file_too_big")));
     } else {
       setImage(file);
       setType("local");
@@ -167,7 +167,8 @@ const Forensic = () => {
             />
           }
         />
-
+        <Alert severity="warning">{keywordWarning("warning_forensic")}</Alert>
+        <Box mt={3} />
         <Card style={{ display: resultData || loading ? "none" : "block" }}>
           <CardHeader
             title={keyword("cardheader_source")}
@@ -176,10 +177,6 @@ const Forensic = () => {
           <Box p={3}>
             <form>
               <Box display={"block"}>
-                <Alert severity="warning">
-                  {keywordWarning("warning_forensic")}
-                </Alert>
-                <Box mt={3} />
                 <Grid container direction="row" spacing={3} alignItems="center">
                   <Grid item xs>
                     <TextField
@@ -231,10 +228,6 @@ const Forensic = () => {
 
         {loading && (
           <div>
-            <Alert severity="warning">
-              {keywordWarning("warning_forensic")}
-            </Alert>
-            <Box mt={3} />
             <LinearProgress />
           </div>
         )}

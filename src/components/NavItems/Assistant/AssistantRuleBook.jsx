@@ -50,7 +50,9 @@ export const KNOWN_LINK_PATTERNS = [
   },
   {
     key: KNOWN_LINKS.INSTAGRAM,
-    patterns: ["((https?:\\/{2})?(www.)?instagram.com\\/p\\/.*)"],
+    patterns: [
+      "((https?:\\/{2})?(www.)?instagram.com\\/([A-Za-z0-9\\.]+\\/)?p\\/.*)",
+    ],
   },
   {
     key: KNOWN_LINKS.FACEBOOK,

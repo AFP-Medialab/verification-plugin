@@ -18,6 +18,7 @@ import {
   getclientId,
 } from "../../../Shared/GoogleAnalytics/MatomoAnalytics";
 import { useTrackEvent } from "../../../../Hooks/useAnalytics";
+import Alert from "@mui/material/Alert";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import TwitterAdvancedSearchIcon from "../../../NavBar/images/SVG/Search/Twitter_search.svg";
@@ -99,7 +100,7 @@ const TwitterAdvancedSearch = () => {
   };
 
   const session = useSelector((state) => state.userSession);
-  const uid = session && session.user ? session.user.email : null;
+  const uid = session && session.user ? session.user.id : null;
   const client_id = getclientId();
   const [eventUrl, setEventUrl] = useState(undefined);
 
@@ -152,7 +153,8 @@ const TwitterAdvancedSearch = () => {
           />
         }
       />
-
+      <Alert severity="warning">{keyword("warning_x_search")}</Alert>
+      <Box mt={3} />
       <Card className={cardClasses.root}>
         <CardHeader
           title={keyword("cardheader_parameters")}

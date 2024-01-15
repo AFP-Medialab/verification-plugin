@@ -149,18 +149,6 @@ export const setDbkfVideoMatchDetails = (
   };
 };
 
-export const setHpDetails = (hpResult, hpLoading, hpDone, hpFail) => {
-  return {
-    type: "SET_HP_DETAILS",
-    payload: {
-      hpResult: hpResult,
-      hpLoading: hpLoading,
-      hpDone: hpDone,
-      hpFail: hpFail,
-    },
-  };
-};
-
 export const setNeDetails = (
   neResultCategory,
   neResultCount,
@@ -176,18 +164,6 @@ export const setNeDetails = (
       neLoading: neLoading,
       neDone: neDone,
       neFail: neFail,
-    },
-  };
-};
-
-export const setMtDetails = (mtResult, mtLoading, mtDone, mtFail) => {
-  return {
-    type: "SET_MT_DETAILS",
-    payload: {
-      mtResult: mtResult,
-      mtLoading: mtLoading,
-      mtDone: mtDone,
-      mtFail: mtFail,
     },
   };
 };
@@ -224,16 +200,6 @@ export const setStateExpanded = (stateExpanded) => {
     type: "SET_STATE_EXPANDED",
     payload: {
       stateExpanded: stateExpanded,
-    },
-  };
-};
-
-export const runTranslation = (lang, text) => {
-  return {
-    type: "RUN_TRANSLATION",
-    payload: {
-      lang: lang,
-      text: text,
     },
   };
 };
