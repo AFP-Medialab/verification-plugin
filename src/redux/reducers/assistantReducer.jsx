@@ -33,11 +33,6 @@ const defaultState = {
   dbkfMediaMatchDone: false,
   dbkfMediaMatchFail: false,
 
-  hpResult: null,
-  hpLoading: false,
-  hpDone: false,
-  hpFail: false,
-
   neResultCategory: null,
   neResultCount: null,
   neLoading: false,
@@ -64,7 +59,6 @@ const assistantReducer = (state = defaultState, action) => {
     case "SET_DBKF_TEXT_MATCH_DETAILS":
     case "SET_DBKF_IMAGE_MATCH_DETAILS":
     case "SET_DBKF_VIDEO_MATCH_DETAILS":
-    case "SET_HP_DETAILS":
     case "SET_NE_DETAILS":
     case "SET_LOADING":
     case "SET_WARNING_EXPANDED":
@@ -108,11 +102,6 @@ const assistantReducer = (state = defaultState, action) => {
         dbkfMediaMatchLoading: false,
         dbkfMediaMatchDone: false,
         dbkfMediaMatchFail: false,
-
-        hpResult: null,
-        hpLoading: false,
-        hpDone: false,
-        hpFail: false,
 
         neResultCategory: null,
         neResultCount: null,

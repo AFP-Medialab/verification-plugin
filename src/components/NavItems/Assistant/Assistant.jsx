@@ -52,7 +52,6 @@ const Assistant = () => {
 
   //third party check states
   const neResult = useSelector((state) => state.assistant.neResultCategory);
-  const hpResult = useSelector((state) => state.assistant.hpResult);
 
   // source credibility
   const positiveSourCred = useSelector(
@@ -72,7 +71,6 @@ const Assistant = () => {
   const dbkfVideoMatch = useSelector((state) => state.assistant.dbkfVideoMatch);
 
   //third party fail states
-  const hpFailState = useSelector((state) => state.assistant.hpFail);
   const scFailState = useSelector((state) => state.assistant.inputSCFail);
   const dbkfTextFailState = useSelector(
     (state) => state.assistant.dbkfTextMatchFail,
@@ -145,7 +143,7 @@ const Assistant = () => {
         ) : null}
 
         {/* warnings and api status checks */}
-        {dbkfTextMatch || dbkfImageResult || dbkfVideoMatch || hpResult ? (
+        {dbkfTextMatch || dbkfImageResult || dbkfVideoMatch ? (
           <Grid
             item
             xs
@@ -162,8 +160,7 @@ const Assistant = () => {
           </Grid>
         ) : null}
 
-        {hpFailState ||
-        scFailState ||
+        {scFailState ||
         dbkfTextFailState ||
         dbkfMediaFailState ||
         neFailState ? (

@@ -8,7 +8,6 @@ import {
   setDbkfTextMatchDetails,
   setDbkfVideoMatchDetails,
   setErrorKey,
-  setHpDetails,
   setImageVideoSelected,
   setInputSourceCredDetails,
   setInputUrl,
@@ -67,13 +66,6 @@ function* getMediaSimilaritySaga() {
 
 function* getDbkfTextMatchSaga() {
   yield takeLatest(["SET_SCRAPED_DATA", "CLEAN_STATE"], handleDbkfTextCall);
-}
-
-function* getHyperpartisanSaga() {
-  yield takeLatest(
-    ["SET_SCRAPED_DATA", "CLEAN_STATE"],
-    handleHyperpartisanCall,
-  );
 }
 
 function* getSourceCredSaga() {
@@ -264,31 +256,6 @@ function* handleDbkfTextCall(action) {
   } catch (error) {
     console.log(error);
     yield put(setDbkfTextMatchDetails(null, false, false, true));
-  }
-}
-
-function* handleHyperpartisanCall(action) {
-  if (action.type === "CLEAN_STATE") return;
-
-  try {
-    const text = yield select((state) => state.assistant.urlText);
-    const lang = yield select((state) => state.assistant.textLang);
-
-    if (text && lang === "en") {
-      yield put(setHpDetails(null, true, false, false));
-
-      const result = yield call(assistantApi.callHyperpartisanService, text);
-
-      let hpProb = result.entities.hyperpartisan[0].hyperpartisan_probability;
-      hpProb =
-        parseFloat(hpProb).toFixed(2) > 0.7
-          ? parseFloat(hpProb).toFixed(2)
-          : null;
-
-      yield put(setHpDetails(hpProb, false, true, false));
-    }
-  } catch (error) {
-    yield put(setHpDetails(null, false, false, true));
   }
 }
 
@@ -709,7 +676,6 @@ export default function* assistantSaga() {
     fork(getMediaActionSaga),
     fork(getMediaSimilaritySaga),
     fork(getMediaListSaga),
-    fork(getHyperpartisanSaga),
     fork(getNamedEntitySaga),
     fork(getAssistantScrapeSaga),
     fork(getUploadSaga),

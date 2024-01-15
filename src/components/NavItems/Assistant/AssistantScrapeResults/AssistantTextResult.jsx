@@ -38,7 +38,7 @@ const AssistantTextResult = () => {
 
   // third party check states
   const dbkfMatch = useSelector((state) => state.assistant.dbkfTextMatch);
-  const hpLoading = useSelector((state) => state.assistant.hpLoading);
+  const mtLoading = useSelector((state) => state.assistant.mtLoading);
   const dbkfMatchLoading = useSelector(
     (state) => state.assistant.dbkfTextMatchLoading,
   );
@@ -96,7 +96,7 @@ const AssistantTextResult = () => {
             </div>
           }
         />
-        {dbkfMatchLoading && hpLoading && (
+        {dbkfMatchLoading && mtLoading && (
           <LinearProgress variant={"indeterminate"} color={"secondary"} />
         )}
         <CardContent>

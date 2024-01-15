@@ -149,18 +149,6 @@ export const setDbkfVideoMatchDetails = (
   };
 };
 
-export const setHpDetails = (hpResult, hpLoading, hpDone, hpFail) => {
-  return {
-    type: "SET_HP_DETAILS",
-    payload: {
-      hpResult: hpResult,
-      hpLoading: hpLoading,
-      hpDone: hpDone,
-      hpFail: hpFail,
-    },
-  };
-};
-
 export const setNeDetails = (
   neResultCategory,
   neResultCount,

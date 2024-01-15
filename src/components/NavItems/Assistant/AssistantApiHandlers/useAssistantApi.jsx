@@ -66,15 +66,6 @@ export default function assistantApiCalls() {
     return result.data;
   };
 
-  const callHyperpartisanService = async (text) => {
-    const result = await axios.post(
-      assistantEndpoint + "gcloud/hyperpartisan",
-      { text: text },
-    );
-
-    return result.data;
-  };
-
   const callOcrService = async (data, script, mode) => {
     const result = await axios.post(assistantEndpoint + "gcloud/ocr", {
       text: data,
@@ -94,7 +85,7 @@ export default function assistantApiCalls() {
     callAssistantScraper,
     callSourceCredibilityService,
     callNamedEntityService,
-    callHyperpartisanService,
+    callAssistantTranslator,
     callOcrService,
     callOcrScriptService,
   };
