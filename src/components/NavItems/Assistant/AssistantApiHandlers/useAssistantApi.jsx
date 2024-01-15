@@ -53,25 +53,6 @@ export default function assistantApiCalls() {
     return namedEntityResult.data;
   };
 
-  const callAssistantTranslator = async (lang, text) => {
-    let translationResult;
-    try {
-      translationResult = await axios.get(
-        assistantEndpoint +
-          "translate/" +
-          lang +
-          "?text=" +
-          encodeURIComponent(text),
-      );
-    } catch (error) {
-      handleAssistantError(error);
-    }
-
-    if (translationResult.data.status === "success") {
-      return translationResult.data;
-    }
-  };
-
   const callSourceCredibilityService = async (urlList) => {
     if (urlList.length === 0) return null;
 
@@ -113,7 +94,6 @@ export default function assistantApiCalls() {
     callAssistantScraper,
     callSourceCredibilityService,
     callNamedEntityService,
-    callAssistantTranslator,
     callHyperpartisanService,
     callOcrService,
     callOcrScriptService,
