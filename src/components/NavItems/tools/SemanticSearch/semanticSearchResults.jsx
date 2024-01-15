@@ -3,42 +3,62 @@ import Box from "@mui/material/Box";
 import { Pagination, Stack } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import Card from "@mui/material/Card";
-import { CallMadeRounded } from "@mui/icons-material";
-import Button from "@mui/material/Button";
 import Link from "@mui/material/Link";
+import Avatar from "@mui/material/Avatar";
+import Divider from "@mui/material/Divider";
 
 const SemanticSearchResults = () => {
   return (
     <Box>
       <Card>
         <Box>
-          <Stack direction="column" p={4} spacing={2}>
-            <Typography>
-              A video clip shows the arrest of an Iranian sniper who killed
-              protesters in the Green Zone in Baghdad during the recent clashes.
-            </Typography>
-            <Stack direction="column" spacing={2}>
-              <Link href="" variant="body1">
-                misbar.com
-              </Link>
-              <Typography>Arabic</Typography>
-              <Typography variant="subtitle2">2022-08-31</Typography>
-            </Stack>
-
-            <Stack direction="row" spacing={4}>
-              <Button
-                target="_blank"
-                href={
-                  "https://misbar.com/factcheck/2022/08/31/الفيديو-ليس-للقبص-عل-قناص-إيراني-استهدف-أنصار-التيار-الصدري#fe968568d1fbea4a8fa7249c8984e4f2"
-                }
-                color="primary"
-                variant="contained"
+          <Stack
+            direction="column"
+            spacing={2}
+            p={2}
+            justifyContent="flex-start"
+            alignItems="flex-start"
+          >
+            <Stack
+              direction="row"
+              spacing={2}
+              p={2}
+              justifyContent="flex-start"
+              alignItems="flex-start"
+            >
+              <Avatar
+                src="https://sprawdzam.afp.com/sites/default/files/styles/twitter_card/public/medias/factchecking/g2/2022-09/aa2dc4ac30e8a183448986495b465e19.jpeg?itok=GLOsh8mv"
+                variant="rounded"
+                sx={{ width: 80, height: 80 }}
+              />
+              <Stack
+                direction="column"
+                justifyContent="flex-start"
+                alignItems="flex-start"
+                spacing={2}
               >
-                Open Article
-                <CallMadeRounded />
-              </Button>
+                <Typography>
+                  Claim: A video clip shows the arrest of an Iranian sniper who
+                  killed protesters in the Green Zone in Baghdad during the
+                  recent clashes.
+                </Typography>
+                <Typography>
+                  Title: This clip has been circulating since 2011...
+                </Typography>
+                <Typography>Rating: False</Typography>
+                <Typography variant="subtitle2">
+                  Published on 2022-08-31
+                </Typography>
+              </Stack>
+              <Stack direction="column" spacing={2}>
+                <Link href="" variant="body1">
+                  misbar.com
+                </Link>
+                <Typography>Arabic</Typography>
+              </Stack>
             </Stack>
-            <Box alignSelf="center">
+            <Divider orientation="horizontal" flexItem />
+            <Box alignSelf="center" pt={4}>
               <Pagination count={10} />
             </Box>
           </Stack>
