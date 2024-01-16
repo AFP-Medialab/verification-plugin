@@ -51,7 +51,6 @@ const Keyframes = () => {
   const isLoadingSimilarity = useSelector(
     (state) => state.keyframes.similarityLoading,
   );
-  //const message = useSelector(state => state.keyframes.message);
   const video_id = useSelector((state) => state.keyframes.video_id);
 
   // State used to load images
