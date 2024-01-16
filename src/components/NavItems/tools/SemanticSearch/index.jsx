@@ -24,6 +24,7 @@ const SemanticSearch = () => {
   ];
 
   const searchEngineModes = [
+    { name: "Automatic selection" },
     { name: "Multilingual semantic Search" },
     { name: "English based semantic search" },
     { name: "English based keyword search" },
@@ -71,6 +72,7 @@ const SemanticSearch = () => {
                     label={"Search for a Fact Check"}
                     placeholder={"Search for a Fact Check"}
                     multiline
+                    minRows={2}
                     variant="outlined"
                     disabled={isLoading}
                     onChange={(e) => {
