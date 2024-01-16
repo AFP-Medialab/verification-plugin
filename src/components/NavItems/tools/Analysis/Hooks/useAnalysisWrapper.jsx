@@ -31,9 +31,9 @@ export const useAnalysisWrapper = (
           else {
             handleError("table_error_unavailable");
           }
-        } else if (keyword("table_error_" + response.data.status) !== "") {
+        } /*else if (keyword("table_error_" + response.data.status) !== "") {
           handleError("table_error_" + response.data.status);
-        } else {
+        }*/ else {
           if (cpt % 10 === 1) {
             //Every 10 requests get a report content for temporary display
             getReport(response.data.media_id, true);

@@ -28,12 +28,11 @@ const useGeolocate = (url, processURL, keyword) => {
               }),
             );
           } else {
-            handleError("forensic_error_" + response.data.status);
+            handleError("geo_error_" + response.data.status);
           }
         })
         .catch((error) => {
-          //console.log("ERROR 1");
-          handleError("forensic_error_" + error.status);
+          handleError("geo_error_" + error.response.status);
         });
     }
 

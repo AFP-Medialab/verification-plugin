@@ -38,8 +38,7 @@ const Magnifier = () => {
 
   const [input, setInput] = useState(resultUrl);
 
-  const getErrorText = (error) => {
-    if (keyword(error) !== "") return keyword(error);
+  const getErrorText = () => {
     return keyword("please_give_a_correct_link");
   };
   const [eventUrl, setEventUrl] = useState(undefined);
@@ -82,8 +81,8 @@ const Magnifier = () => {
       );
       canvas.remove();
     };
-    img.onerror = (error) => {
-      dispatch(setError(getErrorText(error)));
+    img.onerror = () => {
+      dispatch(setError(getErrorText()));
     };
     img.src = src;
   };
