@@ -4,7 +4,6 @@ import { useDispatch } from "react-redux";
 import {
   setKeyframesResult,
   setKeyframesLoading,
-  setKeyframesMessage,
   cleanKeyframesState,
 } from "../../../../../redux/actions/tools/keyframesActions";
 import { setError } from "../../../../../redux/actions/errorActions";
@@ -48,51 +47,41 @@ export const useKeyframeWrapper = (url, keyword) => {
     const getUntil = (url, video_id) => {
       let data = null;
       const interval = setInterval(() => {
-        if (data && data["status"].endsWith("COMPLETED")) {
-          lastGet(
-            keyframe_url +
-              "/result/" +
-              //"https://multimedia2.iti.gr/video_analysis/result/" +
-              video_id +
-              "_json",
-            video_id,
-          );
-          clearInterval(interval);
-        } else if (
-          data &&
-          data["status"] !== undefined &&
-          keyword("keyframes_error_" + data["status"]) !== ""
-        ) {
-          handleError("keyframes_error_" + data["status"]);
-          clearInterval(interval);
+        if (data) {
+          switch (data["status"]) {
+            case "VIDEO_WAITING_IN_QUEUE":
+            case "VIDEO_DOWNLOAD_STARTED":
+            case "SUBSHOT_DETECTION_ANALYSIS_STARTED":
+            case "VIDEO_SUBSHOT_SEGMENTATION_STARTED":
+              axios
+                .get(url, { cancelToken: source.token })
+                .then((response) => {
+                  data = response["data"];
+                })
+                .catch((errors) => {
+                  //console.log("Errors ", errors)
+                  handleError("keyframes_error_" + errors);
+                });
+              break;
+            case "VIDEO_SUBSHOT_SEGMENTATION_COMPLETED":
+            case "SUBSHOT_DETECTION_ANALYSIS_COMPLETED":
+              lastGet(keyframe_url + "/result/" + video_id + "_json", video_id);
+              clearInterval(interval);
+              break;
+            default:
+              //console.log("default code ", data["status"])
+              handleError("keyframes_error_" + data["status"]);
+              clearInterval(interval);
+              break;
+          }
         } else {
           axios
             .get(url, { cancelToken: source.token })
             .then((response) => {
               data = response["data"];
-              if (
-                data["status"] !== "SUBSHOT_DETECTION_ANALYSIS_COMPLETED" &&
-                keyword("keyframes_wait_" + data["status"]) !== ""
-              ) {
-                dispatch(
-                  setKeyframesMessage(
-                    keyword("keyframes_wait_" + data["status"]),
-                  ),
-                );
-              } else if (data["status"].endsWith("STARTED")) {
-                dispatch(
-                  setKeyframesMessage(
-                    keyword("keyframes_wait_STARTED") +
-                      data["step"] +
-                      " (" +
-                      data["process"] +
-                      ") " +
-                      (data["progress"] === "N/A" ? "" : data["progress"]),
-                  ),
-                );
-              }
             })
             .catch((errors) => {
+              //console.log("Errors ", errors)
               handleError("keyframes_error_" + errors);
             });
         }
@@ -100,19 +89,11 @@ export const useKeyframeWrapper = (url, keyword) => {
     };
 
     const postUrl = (multimediaUrl, data) => {
-      //console.log("post ", data);
-      /* chrome.runtime.sendMessage({contentScriptQuery: "keyframes", url: multimediaUrl, body: data}, (response) => {
-                console.log("response ", response);
-            })*/
-
       axios
         .post(multimediaUrl, data, { cancelToken: source.token })
         .then((response) => {
           getUntil(
-            keyframe_url +
-              "/status/" +
-              //"https://multimedia2.iti.gr/video_analysis/status/" +
-              response.data.video_id,
+            keyframe_url + "/status/" + response.data.video_id,
             response.data.video_id,
           );
         })
@@ -122,7 +103,6 @@ export const useKeyframeWrapper = (url, keyword) => {
     if (url === undefined || url === "") return;
     dispatch(cleanKeyframesState());
     dispatch(setKeyframesLoading(true));
-    //postUrl("https://multimedia2.iti.gr/video_analysis/subshot", jsonData);
     postUrl(keyframe_url + "/subshot", jsonData);
     return () => {};
   }, [url]);
