@@ -20,9 +20,8 @@ const useImageTreatment = (mediaUrl, keyword) => {
       return true;
     }
 
-    const handleErrors = (error) => {
-      if (keyword(error) !== "") dispatch(setError(keyword(error)));
-      else dispatch(setError(keyword("please_give_a_correct_link")));
+    const handleErrors = () => {
+      dispatch(setError(keyword("please_give_a_correct_link")));
     };
 
     let imageTreatment = () => {
@@ -53,12 +52,11 @@ const useImageTreatment = (mediaUrl, keyword) => {
             );
         });
       };
-      img.onerror = (error) => {
-        handleErrors(error);
+      img.onerror = () => {
+        handleErrors();
       };
     };
     if (!_.isNull(mediaUrl)) {
-      console.log("process");
       imageTreatment();
     }
   }, [mediaUrl]);
