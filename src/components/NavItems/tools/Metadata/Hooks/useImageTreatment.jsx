@@ -58,7 +58,6 @@ const useImageTreatment = (mediaUrl, keyword) => {
       };
     };
     if (!_.isNull(mediaUrl)) {
-      console.log("process");
       imageTreatment();
     }
   }, [mediaUrl]);
