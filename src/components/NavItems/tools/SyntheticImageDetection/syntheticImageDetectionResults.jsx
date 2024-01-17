@@ -209,7 +209,7 @@ const SyntheticImageDetectionResults = (props) => {
                 </Box>
               ) : (
                 <Typography variant="h6" sx={{ color: "red" }}>
-                  {keyword("synthetic_image_detection_error_400")}
+                  {keyword("synthetic_image_detection_not_found")}
                 </Typography>
               )}
             </Stack>
