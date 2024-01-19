@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useDispatch } from "react-redux";
-import { setError } from "../../../../../redux/actions/errorActions";
+import { setError } from "redux/reducers/errorReducer";
 import { useEffect, useState } from "react";
 import _ from "lodash";
 

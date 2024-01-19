@@ -16,7 +16,7 @@ import {
   setThumbnailsResult,
   setThumbnailsLoading,
 } from "../../../../redux/reducers/tools/thumbnailsReducer";
-import { setError } from "../../../../redux/actions/errorActions";
+import { setError } from "redux/reducers/errorReducer";
 import Checkbox from "@mui/material/Checkbox";
 import FormGroup from "@mui/material/FormGroup";
 import {

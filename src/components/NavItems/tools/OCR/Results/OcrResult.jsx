@@ -15,7 +15,7 @@ import Typography from "@mui/material/Typography";
 import WarningOutlined from "@mui/icons-material/WarningOutlined";
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import { setError } from "../../../../../redux/actions/errorActions";
+import { setError } from "redux/reducers/errorReducer";
 import {
   cleanOcr,
   //loadOcrScripts,

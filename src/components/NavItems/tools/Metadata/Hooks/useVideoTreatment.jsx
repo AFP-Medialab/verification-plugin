@@ -5,7 +5,7 @@ import {
   setMetadadaResult,
   setMetadadaLoading,
 } from "../../../../../redux/reducers/tools/metadataReducer";
-import { setError } from "../../../../../redux/actions/errorActions";
+import { setError } from "redux/reducers/errorReducer";
 
 const useVideoTreatment = (mediaUrl, keyword) => {
   const dispatch = useDispatch();

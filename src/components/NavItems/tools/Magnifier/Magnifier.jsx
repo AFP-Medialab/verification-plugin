@@ -10,7 +10,7 @@ import {
   setMagnifierResult,
   setMagnifierLoading,
 } from "../../../../redux/actions/tools/magnifierActions";
-import { setError } from "../../../../redux/actions/errorActions";
+import { setError } from "redux/reducers/errorReducer";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import { getclientId } from "../../../Shared/GoogleAnalytics/MatomoAnalytics";
 import { useTrackEvent } from "../../../../Hooks/useAnalytics";

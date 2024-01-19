@@ -5,7 +5,7 @@ import {
   setGeolocationLoading,
   setGeolocationResult,
 } from "../../../../../redux/reducers/tools/geolocationReducer";
-import { setError } from "../../../../../redux/actions/errorActions";
+import { setError } from "redux/reducers/errorReducer";
 
 const useGeolocate = (url, processURL, keyword) => {
   const dispatch = useDispatch();

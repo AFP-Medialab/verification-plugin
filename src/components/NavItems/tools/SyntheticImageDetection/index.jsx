@@ -27,7 +27,7 @@ import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace
 import { isValidUrl } from "../../../Shared/Utils/URLUtils";
 import SyntheticImageDetectionResults from "./syntheticImageDetectionResults";
 
-import { setError } from "redux/actions/errorActions";
+import { setError } from "redux/reducers/errorReducer";
 
 const SyntheticImageDetection = () => {
   const classes = useMyStyles();
