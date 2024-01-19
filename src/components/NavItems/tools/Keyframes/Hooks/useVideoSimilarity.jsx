@@ -5,22 +5,11 @@ import {
   setKeyframesSimilarityLoading,
   setSimilarity,
 } from "../../../../../redux/actions/tools/keyframesActions";
-//import { setError } from "../../../../../redux/actions/errorActions"
 
 export const useVideoSimilarity = (url, keyword) => {
   const dispatch = useDispatch();
   const similarityAPI = process.env.REACT_APP_DBKF_SIMILARITY_API;
   useEffect(() => {
-    /*
-        const handleError = (e) => {
-            if (keyword(e) !== "")
-                dispatch(setError(keyword(e)));
-            else
-                dispatch(setError(keyword("keyframes_error_default")));
-            dispatch(setKeyframesSimilarityLoading(false));
-        };
-        */
-
     const getData = (dbkfApiUrl) => {
       axios
         .get(dbkfApiUrl)

@@ -5,7 +5,7 @@ import {
   setVideoRightsResult,
   setVideoRightsLoading,
 } from "../../../../../redux/actions/tools/videoRightsActions";
-import { setError } from "../../../../../redux/actions/errorActions";
+import { setError } from "redux/reducers/errorReducer";
 
 const useVideoRightsTreatment = (url, keyword) => {
   const dispatch = useDispatch();

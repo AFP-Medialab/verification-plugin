@@ -29,7 +29,7 @@ import {
   getclientId,
 } from "../../../Shared/GoogleAnalytics/MatomoAnalytics";
 import { useTrackEvent } from "../../../../Hooks/useAnalytics";
-import { setError } from "../../../../redux/actions/errorActions";
+import { setError } from "redux/reducers/errorReducer";
 import _ from "lodash";
 
 const OCR = () => {

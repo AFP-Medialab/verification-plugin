@@ -18,7 +18,6 @@ import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 
 import Iframe from "react-iframe";
 import DialogActions from "@mui/material/DialogActions";
-import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import ToolCard from "./ToolCard";
 import IconImage from "../../../NavBar/images/SVG/Image/Images.svg";

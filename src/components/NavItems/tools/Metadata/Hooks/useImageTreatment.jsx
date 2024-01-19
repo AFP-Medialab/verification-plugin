@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import EXIF from "exif-js/exif";
 import { useDispatch } from "react-redux";
 import { setMetadadaResult } from "../../../../../redux/reducers/tools/metadataReducer";
-import { setError } from "../../../../../redux/actions/errorActions";
+import { setError } from "redux/reducers/errorReducer";
 import _ from "lodash";
 
 const useImageTreatment = (mediaUrl, keyword) => {
