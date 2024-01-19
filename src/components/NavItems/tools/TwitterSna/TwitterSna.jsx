@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setError } from "../../../../redux/actions/errorActions";
+import { setError } from "redux/reducers/errorReducer";
 import dateFormat from "dateformat";
 import _ from "lodash";
 import useMyStyles, {

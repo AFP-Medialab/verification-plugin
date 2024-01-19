@@ -6,7 +6,7 @@ import {
   setKeyframesLoading,
   cleanKeyframesState,
 } from "../../../../../redux/actions/tools/keyframesActions";
-import { setError } from "../../../../../redux/actions/errorActions";
+import { setError } from "redux/reducers/errorReducer";
 
 export const useKeyframeWrapper = (url, keyword) => {
   const dispatch = useDispatch();

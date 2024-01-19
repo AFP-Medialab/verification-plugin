@@ -25,7 +25,7 @@ import {
   setUrlMode,
   submitInputUrl,
 } from "../../../redux/actions/tools/assistantActions";
-import { setError } from "../../../redux/actions/errorActions";
+import { setError } from "redux/reducers/errorReducer";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
 const Assistant = () => {

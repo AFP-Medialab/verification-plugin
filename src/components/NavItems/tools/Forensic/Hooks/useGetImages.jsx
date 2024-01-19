@@ -6,7 +6,7 @@ import {
   setForensicsResult,
   setForensicDisplayItem,
 } from "../../../../../redux/actions/tools/forensicActions";
-import { setError } from "../../../../../redux/actions/errorActions";
+import { setError } from "redux/reducers/errorReducer";
 
 const useGetImages = (url, type, keyword) => {
   const forensic_base_url = process.env.REACT_APP_CAA_FORENSICS_URL;

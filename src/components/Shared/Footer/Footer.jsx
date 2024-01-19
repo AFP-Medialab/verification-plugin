@@ -93,7 +93,7 @@ const Footer = (props) => {
   return (
     <div className={classes.footer}>
       <Typography variant={"body2"}>
-        {provideBy}
+        <span>{provideBy} &nbsp;</span>
         {linkLabel.constructor === Array && link.constructor === Array ? (
           link.map((element, index) => {
             return (

@@ -16,7 +16,7 @@ import DeepfakeResultsImage from "./Results/DeepfakeResultsImage";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import Alert from "@mui/material/Alert";
 import FolderOpenIcon from "@mui/icons-material/FolderOpen";
-import { setError } from "redux/actions/errorActions";
+import { setError } from "redux/reducers/errorReducer";
 import { resetDeepfake } from "redux/actions/tools/deepfakeImageActions";
 
 const Deepfake = () => {

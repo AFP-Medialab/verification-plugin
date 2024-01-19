@@ -20,7 +20,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import Alert from "@mui/material/Alert";
 import { cleanForensicState } from "../../../../redux/actions/tools/forensicActions";
-import { setError } from "../../../../redux/actions/errorActions";
+import { setError } from "redux/reducers/errorReducer";
 import FolderOpenIcon from "@mui/icons-material/FolderOpen";
 
 const Forensic = () => {

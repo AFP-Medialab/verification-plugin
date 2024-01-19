@@ -7,7 +7,7 @@ import {
   setDeepfakeLoadingVideo,
   setDeepfakeResultVideo,
 } from "../../../../../redux/actions/tools/deepfakeVideoActions";
-import { setError } from "../../../../../redux/actions/errorActions";
+import { setError } from "redux/reducers/errorReducer";
 import { isValidUrl } from "../../../../Shared/Utils/URLUtils";
 
 async function UseGetDeepfake(
