@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Box from "@mui/material/Box";
 import { Chip, Pagination, Stack } from "@mui/material";
 import Typography from "@mui/material/Typography";
@@ -9,24 +9,12 @@ import Divider from "@mui/material/Divider";
 import Grid from "@mui/material/Grid";
 
 const SemanticSearchResults = (searchResults) => {
-  searchResults = {
-    claim:
-      "A video clip shows the arrest of an Iranian sniper who killed protesters in the Green Zone in Baghdad during the recent clashes.",
-    title:
-      "This clip has been circulating since 2011, and it does not show an Iranian sniper who was recently arrested in Iraq.",
-    rating: "False",
-    date: "Published on 2022-08-31",
-    website: "misbar.com",
-    language: "Arabic",
-    similarityScore: 0.88,
-    articleUrl:
-      "https://misbar.com/factcheck/2023/11/19/الصورة-قديمة-وليست-لمقتل-قناص-إسرائيلي-عل-يد-المقاومة-في-غزة#a74d408bebaf3eef320fa8bf71817523",
-    domainUrl: "http://misbar.com/",
-  };
-
   const result = (
+    id,
     claim,
     title,
+    claimOriginalLanguage,
+    titleOriginalLanguage,
     rating,
     date,
     website,
@@ -34,9 +22,15 @@ const SemanticSearchResults = (searchResults) => {
     similarityScore,
     articleUrl,
     domainUrl,
+    imageUrl,
   ) => {
+    const [showOriginalClaim, setShowOriginalClaim] = useState(false);
+    const [showOriginalTitle, setShowOriginalTitle] = useState(false);
+
+    console.log(searchResults);
+
     return (
-      <Box width="100%">
+      <Box width="100%" key={id}>
         <Grid container direction="row" p={2} justifyContent="space-between">
           <Grid
             item
@@ -49,7 +43,7 @@ const SemanticSearchResults = (searchResults) => {
           >
             <Grid item>
               <Avatar
-                src="https://sprawdzam.afp.com/sites/default/files/styles/twitter_card/public/medias/factchecking/g2/2022-09/aa2dc4ac30e8a183448986495b465e19.jpeg?itok=GLOsh8mv"
+                src={imageUrl}
                 variant="rounded"
                 sx={{ width: 80, height: 80 }}
               />
@@ -62,20 +56,39 @@ const SemanticSearchResults = (searchResults) => {
                 spacing={2}
               >
                 <Stack direction="column">
-                  <Typography>Claim: {claim}</Typography>
+                  <Typography>
+                    Claim: {showOriginalClaim ? claimOriginalLanguage : claim}
+                  </Typography>
                   <Typography variant="caption">
-                    Translated from {language} •{" "}
-                    <Link sx={{ cursor: "pointer" }}>See Original</Link>
+                    {showOriginalClaim ? "" : `Translated from ${language} • `}
+                    <Link
+                      onClick={() => setShowOriginalClaim((prev) => !prev)}
+                      sx={{ cursor: "pointer" }}
+                    >
+                      {showOriginalClaim
+                        ? "Show English Translation"
+                        : "See Original"}
+                    </Link>
                   </Typography>
                 </Stack>
                 <Stack direction="column">
                   <Typography>
-                    Title: <Link href={articleUrl}>{title}</Link>
+                    Title:{" "}
+                    <Link href={articleUrl}>
+                      {showOriginalTitle ? titleOriginalLanguage : title}
+                    </Link>
                   </Typography>
 
                   <Typography variant="caption">
-                    Translated from {language} •{" "}
-                    <Link sx={{ cursor: "pointer" }}>See Original</Link>
+                    {showOriginalTitle ? "" : `Translated from ${language} • `}
+                    <Link
+                      onClick={() => setShowOriginalTitle((prev) => !prev)}
+                      sx={{ cursor: "pointer" }}
+                    >
+                      {showOriginalTitle
+                        ? "Show English Translation"
+                        : "See Original"}
+                    </Link>
                   </Typography>
                 </Stack>
                 <Typography variant="body2">Rating: {rating}</Typography>
@@ -105,6 +118,8 @@ const SemanticSearchResults = (searchResults) => {
     );
   };
 
+  console.log(searchResults.searchResults);
+
   return (
     <Box>
       <Card>
@@ -116,28 +131,24 @@ const SemanticSearchResults = (searchResults) => {
             justifyContent="flex-start"
             alignItems="flex-start"
           >
-            {result(
-              searchResults.claim,
-              searchResults.title,
-              searchResults.rating,
-              searchResults.date,
-              searchResults.website,
-              searchResults.language,
-              searchResults.similarityScore,
-              searchResults.articleUrl,
-              searchResults.domainUrl,
-            )}
-            {result(
-              searchResults.claim,
-              searchResults.title,
-              searchResults.rating,
-              searchResults.date,
-              searchResults.website,
-              searchResults.language,
-              searchResults.similarityScore,
-              searchResults.articleUrl,
-              searchResults.domainUrl,
-            )}
+            {searchResults.searchResults.map((searchResult) => {
+              return result(
+                searchResult.id,
+                searchResult.claimTranslated,
+                searchResult.titleTranslated,
+                searchResult.claimOriginalLanguage,
+                searchResult.titleOriginalLanguage,
+                searchResult.rating,
+                searchResult.date,
+                searchResult.website,
+                searchResult.language,
+                searchResult.similarityScore,
+                searchResult.articleUrl,
+                searchResult.domainUrl,
+                searchResult.imageUrl,
+              );
+            })}
+
             <Box alignSelf="center" pt={4}>
               <Pagination count={10} color="primary" />
             </Box>

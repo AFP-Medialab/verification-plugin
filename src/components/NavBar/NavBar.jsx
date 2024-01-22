@@ -1,4 +1,4 @@
-import React, { useEffect, memo, useState, createRef } from "react";
+import React, { createRef, memo, useEffect, useState } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
 import Languages from "../NavItems/languages/languages";
@@ -157,9 +157,9 @@ const NavBar = () => {
         if (userAuthenticated) {
           navigate("/app/tools/" + newValue.path);
           /* history.push({
-                        pathname: "/app/tools/" + newValue.path,
-                        state: { media: mediaTool }
-                    })*/
+                                  pathname: "/app/tools/" + newValue.path,
+                                  state: { media: mediaTool }
+                              })*/
         } else {
           setOpenAlert(true);
         }
@@ -180,9 +180,9 @@ const NavBar = () => {
         else {
           navigate("/app/tools/" + newValue.path);
           /*history.push({
-                        pathname: "/app/tools/" + newValue.path,
-                        state: { media: mediaTool }
-                    })*/
+                                  pathname: "/app/tools/" + newValue.path,
+                                  state: { media: mediaTool }
+                              })*/
         }
       }
     } else if (newValueType === "OTHER") {
@@ -842,7 +842,7 @@ const NavBar = () => {
       type: keyword("navbar_category_search"),
       typeId: 3,
       icons: ["experimental", "new", "lock"],
-      toolRestrictions: ["lock", "beta"],
+      toolRestrictions: ["lock"],
     },
     {
       id: 19,
@@ -1116,13 +1116,13 @@ const NavBar = () => {
       typeId: 0,
     },
     /*{
-            title: "navbar_factCheck",
-            icon: (tabValue === 5) ? <FactcheckIcon width="40px" height="40px" style={{ fill: "#00926c" }} />
-                : <FactcheckIcon width="40px" height="40px" style={{ fill: "#4c4c4c" }} />,
-            content: <FactCheck />,
-            path: "factCheck",
-            footer: <Footer type={"afp"} />
-        },*/
+                title: "navbar_factCheck",
+                icon: (tabValue === 5) ? <FactcheckIcon width="40px" height="40px" style={{ fill: "#00926c" }} />
+                    : <FactcheckIcon width="40px" height="40px" style={{ fill: "#4c4c4c" }} />,
+                content: <FactCheck />,
+                path: "factCheck",
+                footer: <Footer type={"afp"} />
+            },*/
     {
       title: "navbar_about",
       icon:
