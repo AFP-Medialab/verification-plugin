@@ -2,14 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
-import {
-  Alert,
-  Grid,
-  IconButton,
-  Stack,
-  Tooltip,
-  Typography,
-} from "@mui/material";
+import { Alert, Grid, IconButton, Stack, Typography } from "@mui/material";
 import { Close } from "@mui/icons-material";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import { resetSyntheticAudioDetectionAudio } from "redux/actions/tools/syntheticAudioDetectionActions";
@@ -17,8 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useTrackEvent } from "Hooks/useAnalytics";
 import { getclientId } from "components/Shared/GoogleAnalytics/MatomoAnalytics";
 import GaugeChart from "react-gauge-chart";
-import DoneIcon from "@mui/icons-material/Done";
-import FileCopyIcon from "@mui/icons-material/FileCopy";
+import CopyButton from "../../../Shared/CopyButton";
 
 const SyntheticAudioDetectionResults = (props) => {
   const keyword = i18nLoadNamespace(
@@ -34,15 +26,6 @@ const SyntheticAudioDetectionResults = (props) => {
   const imgContainerRef = useRef(null);
 
   const [voiceCloningScore, setVoiceCloningScore] = useState(null);
-
-  const [clicks, setClicks] = useState([]);
-
-  const handleIconClick = (id) => {
-    let result = clicks.includes(id)
-      ? clicks.filter((click) => click != id)
-      : [...clicks, id];
-    setClicks(result);
-  };
 
   const DETECTION_THRESHOLD_1 = 10;
   const DETECTION_THRESHOLD_2 = 30;
@@ -149,29 +132,7 @@ const SyntheticAudioDetectionResults = (props) => {
     return (
       <Alert
         severity={alertSettings.severity}
-        action={
-          <Tooltip
-            title={
-              clicks.includes(alertSettings.displayText)
-                ? "Copied!"
-                : "Copy link"
-            }
-          >
-            <IconButton
-              onClick={() => {
-                navigator.clipboard.writeText(alertSettings.displayText);
-                handleIconClick(alertSettings.displayText);
-              }}
-              aria-label="copy url"
-            >
-              {clicks.includes(alertSettings.displayText) ? (
-                <DoneIcon color="success" />
-              ) : (
-                <FileCopyIcon />
-              )}
-            </IconButton>
-          </Tooltip>
-        }
+        action={<CopyButton str={alertSettings.displayText} />}
       >
         {alertSettings.displayText}
       </Alert>
