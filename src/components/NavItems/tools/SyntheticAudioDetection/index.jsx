@@ -276,14 +276,14 @@ const SyntheticAudioDetection = () => {
                       color="primary"
                       onClick={async (e) => {
                         dispatch(resetSyntheticAudioDetectionAudio());
-                        e.preventDefault(),
-                          await useGetVoiceCloningScore(
-                            input,
-                            true,
-                            dispatch,
-                            type,
-                            audioFile,
-                          );
+                        e.preventDefault();
+                        await useGetVoiceCloningScore(
+                          input,
+                          true,
+                          dispatch,
+                          type,
+                          audioFile,
+                        );
                       }}
                       disabled={(input === "" && !audioFile) || isLoading}
                     >
