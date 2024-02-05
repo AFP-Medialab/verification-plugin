@@ -1,4 +1,4 @@
-import React, { useEffect, memo, useState, createRef } from "react";
+import React, { createRef, memo, useEffect, useState } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
 import Languages from "../NavItems/languages/languages";
@@ -98,6 +98,7 @@ import { setFalse, setTrue } from "../../redux/reducers/cookiesReducers";
 import { changeLanguage } from "../../redux/reducers/languageReducer";
 
 import { Link, useNavigate } from "react-router-dom";
+import { AudioFile, Audiotrack } from "@mui/icons-material";
 
 function a11yProps(index) {
   return {
@@ -155,9 +156,9 @@ const NavBar = () => {
         if (userAuthenticated) {
           navigate("/app/tools/" + newValue.path);
           /* history.push({
-                        pathname: "/app/tools/" + newValue.path,
-                        state: { media: mediaTool }
-                    })*/
+                                                                                                                                                                                                            pathname: "/app/tools/" + newValue.path,
+                                                                                                                                                                                                            state: { media: mediaTool }
+                                                                                                                                                                                                        })*/
         } else {
           setOpenAlert(true);
         }
@@ -178,9 +179,9 @@ const NavBar = () => {
         else {
           navigate("/app/tools/" + newValue.path);
           /*history.push({
-                        pathname: "/app/tools/" + newValue.path,
-                        state: { media: mediaTool }
-                    })*/
+                                                                                                                                                                                                            pathname: "/app/tools/" + newValue.path,
+                                                                                                                                                                                                            state: { media: mediaTool }
+                                                                                                                                                                                                        })*/
         }
       }
     } else if (newValueType === "OTHER") {
@@ -499,7 +500,7 @@ const NavBar = () => {
       pathGroup: "TOOL",
       type: keyword("navbar_category_image"),
       typeId: 2,
-      icons: ["new"],
+      icons: [],
       toolRestrictions: [],
     },
     {
@@ -608,7 +609,7 @@ const NavBar = () => {
       pathGroup: "TOOL",
       type: keyword("navbar_category_image"),
       typeId: 2,
-      icons: ["redesigned"],
+      icons: [],
       toolRestrictions: [],
     },
     {
@@ -644,7 +645,7 @@ const NavBar = () => {
       pathGroup: "TOOL",
       type: keyword("navbar_category_image"),
       typeId: 2,
-      icons: ["new"],
+      icons: [],
       toolRestrictions: [],
     },
 
@@ -681,7 +682,7 @@ const NavBar = () => {
       pathGroup: "TOOL",
       type: keyword("navbar_category_image"),
       typeId: 2,
-      icons: ["new", "lock"],
+      icons: ["lock"],
       toolRestrictions: ["lock"],
     },
     {
@@ -777,13 +778,49 @@ const NavBar = () => {
       icons: ["experimental", "lock"],
       toolRestrictions: ["beta"],
     },
-
     {
       id: 17,
+      title: "navbar_loccus",
+      description: "navbar_loccus_description",
+      icon:
+        tabValue === 0 && drawerValue === 16 ? (
+          <AudioFile
+            width="45px"
+            height="45px"
+            style={{ fill: "#00926c" }}
+            title="Loccus"
+          />
+        ) : (
+          <AudioFile
+            width="45px"
+            height="45px"
+            style={{ fill: "#4c4c4c" }}
+            title={keyword("navbar_loccus")}
+          />
+        ),
+      iconColored: (
+        <AudioFile
+          width="45px"
+          height="45px"
+          style={{ fill: "#00926c" }}
+          title={keyword("navbar_loccus")}
+        />
+      ),
+      tsvPrefix: "synthetic_audio_detection",
+      path: "syntheticAudioDetection",
+      pathGroup: "TOOL",
+      type: keyword("navbar_category_audio"),
+      typeId: 3,
+      icons: ["new", "experimental", "lock"],
+      toolRestrictions: ["beta"],
+    },
+
+    {
+      id: 18,
       title: "navbar_twitter",
       description: "navbar_twitter_description",
       icon:
-        tabValue === 0 && drawerValue === 16 ? (
+        tabValue === 0 && drawerValue === 17 ? (
           <TwitterSearchIcon
             width="45px"
             height="45px"
@@ -810,16 +847,16 @@ const NavBar = () => {
       path: "twitter",
       pathGroup: "TOOL",
       type: keyword("navbar_category_search"),
-      typeId: 3,
+      typeId: 4,
       icons: [],
       toolRestrictions: [],
     },
     {
-      id: 18,
+      id: 19,
       title: "navbar_twitter_sna",
       description: "navbar_twitter_sna_description",
       icon:
-        tabValue === 0 && drawerValue === 17 ? (
+        tabValue === 0 && drawerValue === 18 ? (
           <TwitterSnaIcon
             width="45px"
             height="45px"
@@ -846,16 +883,16 @@ const NavBar = () => {
       path: "twitterSna",
       pathGroup: "TOOL",
       type: keyword("navbar_category_data"),
-      typeId: 4,
+      typeId: 5,
       icons: ["lock"],
       toolRestrictions: ["lock"],
     },
     {
-      id: 19,
+      id: 20,
       title: "navbar_archiving",
       description: "navbar_archiving_description",
       icon:
-        tabValue === 0 && drawerValue === 18 ? (
+        tabValue === 0 && drawerValue === 19 ? (
           <ArchiveIcon width="45px" height="45px" style={{ fill: "#00926c" }} />
         ) : (
           <ArchiveIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} />
@@ -867,16 +904,16 @@ const NavBar = () => {
       path: "archive",
       pathGroup: "TOOL",
       type: keyword("navbar_category_other"),
-      typeId: 5,
+      typeId: 6,
       icons: ["experimental", "new", "lock"],
       toolRestrictions: ["lock", "beta"],
     },
     {
-      id: 20,
+      id: 21,
       title: "navbar_twitter_crowdtangle",
       description: "navbar_twitter_crowdtangle_description",
       icon:
-        tabValue === 0 && drawerValue === 19 ? (
+        tabValue === 0 && drawerValue === 20 ? (
           <CsvSnaIcon
             width="45px"
             height="45px"
@@ -902,16 +939,16 @@ const NavBar = () => {
       tsvPrefix: "twitter_crowdtangle",
       pathGroup: "TOOL",
       type: keyword("navbar_category_data"),
-      typeId: 4,
+      typeId: 5,
       icons: [],
       toolRestrictions: [],
     },
     {
-      id: 21,
+      id: 22,
       title: "navbar_covidsearch",
       description: "navbar_covidsearch_description",
       icon:
-        tabValue === 0 && drawerValue === 20 ? (
+        tabValue === 0 && drawerValue === 21 ? (
           <CovidSearchIcon
             width="45px"
             height="45px"
@@ -938,16 +975,16 @@ const NavBar = () => {
       path: "factcheck",
       pathGroup: "TOOL",
       type: keyword("navbar_category_search"),
-      typeId: 3,
-      icons: ["new"],
+      typeId: 4,
+      icons: [],
       toolRestrictions: [],
     },
     {
-      id: 22,
+      id: 23,
       title: "navbar_xnetwork",
       description: "navbar_xnetwork_description",
       icon:
-        tabValue === 0 && drawerValue === 21 ? (
+        tabValue === 0 && drawerValue === 22 ? (
           <XnetworkIcon
             width="45px"
             height="45px"
@@ -974,8 +1011,8 @@ const NavBar = () => {
       path: "xnetwork",
       pathGroup: "TOOL",
       type: keyword("navbar_category_search"),
-      typeId: 3,
-      icons: ["new"],
+      typeId: 4,
+      icons: [],
       toolRestrictions: [],
     },
   ];
@@ -1086,13 +1123,13 @@ const NavBar = () => {
       typeId: 0,
     },
     /*{
-            title: "navbar_factCheck",
-            icon: (tabValue === 5) ? <FactcheckIcon width="40px" height="40px" style={{ fill: "#00926c" }} />
-                : <FactcheckIcon width="40px" height="40px" style={{ fill: "#4c4c4c" }} />,
-            content: <FactCheck />,
-            path: "factCheck",
-            footer: <Footer type={"afp"} />
-        },*/
+                                                                                    title: "navbar_factCheck",
+                                                                                    icon: (tabValue === 5) ? <FactcheckIcon width="40px" height="40px" style={{ fill: "#00926c" }} />
+                                                                                        : <FactcheckIcon width="40px" height="40px" style={{ fill: "#4c4c4c" }} />,
+                                                                                    content: <FactCheck />,
+                                                                                    path: "factCheck",
+                                                                                    footer: <Footer type={"afp"} />
+                                                                                },*/
     {
       title: "navbar_about",
       icon:
@@ -1140,12 +1177,15 @@ const NavBar = () => {
         setOpenListImage(true);
         break;
       case 3:
-        setOpenListSeach(true);
+        setOpenListAudio(true);
         break;
       case 4:
-        setOpenListData(true);
+        setOpenListSeach(true);
         break;
       case 5:
+        setOpenListData(true);
+        break;
+      case 6:
         setOpenListOtherTools(true);
         break;
       default:
@@ -1249,6 +1289,22 @@ const NavBar = () => {
     }
   };
 
+  //Audio items
+  const drawerItemsAudio = drawerItems.filter(
+    (item) => item.type === keyword("navbar_category_audio"),
+  );
+  const [openListAudio, setOpenListAudio] = useState(false);
+  const [classBorderAudio, setClassBorderAudio] = useState(null);
+
+  const handleClickListAudio = () => {
+    setOpenListAudio(!openListAudio);
+    if (!openListAudio) {
+      setClassBorderAudio(classes.drawerCategoryBorder);
+    } else {
+      setClassBorderAudio(null);
+    }
+  };
+
   //Search items
   const drawerItemsSearch = drawerItems.filter(
     (item) => item.type === keyword("navbar_category_search"),
@@ -1324,6 +1380,20 @@ const NavBar = () => {
       setVariableOpen: setOpenListImage,
       functionHandleClick: handleClickListImage,
       classBorder: classBorderImage,
+    },
+    {
+      title: keyword("navbar_category_audio"),
+      icon: (
+        <Audiotrack
+          style={{ fill: "#4c4c4c" }}
+          title={keyword("navbar_category_audio")}
+        />
+      ),
+      list: drawerItemsAudio,
+      variableOpen: openListAudio,
+      setVariableOpen: setOpenListAudio,
+      functionHandleClick: handleClickListAudio,
+      classBorder: classBorderAudio,
     },
     {
       title: keyword("navbar_category_search"),
