@@ -11,6 +11,7 @@ import {
   Alert,
   Box,
   Button,
+  ButtonGroup,
   Card,
   CardHeader,
   Grid,
@@ -31,6 +32,7 @@ import TextField from "@mui/material/TextField";
 import { isValidUrl } from "../../../Shared/Utils/URLUtils";
 
 import { v4 as uuidv4 } from "uuid";
+import CloseIcon from "@mui/icons-material/Close";
 
 const SyntheticAudioDetection = () => {
   const classes = useMyStyles();
@@ -178,6 +180,10 @@ const SyntheticAudioDetection = () => {
     setInput("");
   };
 
+  const handleCloseSelectedFile = () => {
+    setAudioFile(null);
+  };
+
   const audioRef = useRef(null);
   const handleUploadAudio = (file) => {
     const audioURL = URL.createObjectURL(file);
@@ -259,7 +265,7 @@ const SyntheticAudioDetection = () => {
                       fullWidth
                       value={input}
                       variant="outlined"
-                      disabled={isLoading}
+                      disabled={isLoading || audioFile instanceof Blob}
                       onChange={(e) => setInput(e.target.value)}
                     />
                   </Grid>
@@ -286,25 +292,40 @@ const SyntheticAudioDetection = () => {
                   </Grid>
                 </Grid>
                 <Grid item mt={2}>
-                  <Button
+                  <ButtonGroup
                     variant="outlined"
-                    disabled={isLoading}
-                    startIcon={<FolderOpenIcon />}
-                    sx={{ textTransform: "none" }}
+                    disabled={isLoading || input !== ""}
                   >
-                    <label htmlFor="fileInputSynthetic">
-                      {audioFile ? audioFile.name : keyword("button_localfile")}
-                    </label>
-                    <input
-                      id="fileInputSynthetic"
-                      type="file"
-                      accept={"audioFile/*"}
-                      hidden={true}
-                      onChange={(e) => {
-                        handleUploadAudio(e.target.files[0]);
-                      }}
-                    />
-                  </Button>
+                    <Button
+                      startIcon={<FolderOpenIcon />}
+                      sx={{ textTransform: "none" }}
+                    >
+                      <label htmlFor="fileInputSynthetic">
+                        {audioFile
+                          ? audioFile.name
+                          : keyword("button_localfile")}
+                      </label>
+                      <input
+                        id="fileInputSynthetic"
+                        type="file"
+                        accept={"audioFile/*"}
+                        hidden={true}
+                        onChange={(e) => {
+                          handleUploadAudio(e.target.files[0]);
+                          e.target.value = null;
+                        }}
+                      />
+                    </Button>
+                    {audioFile instanceof Blob && (
+                      <Button
+                        size="small"
+                        aria-label="remove selected file"
+                        onClick={handleCloseSelectedFile}
+                      >
+                        <CloseIcon fontSize="small" />
+                      </Button>
+                    )}
+                  </ButtonGroup>
                 </Grid>
               </form>
               <Box m={2} />
