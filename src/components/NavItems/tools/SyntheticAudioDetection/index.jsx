@@ -17,6 +17,7 @@ import {
   Grid,
   LinearProgress,
   Stack,
+  TextField,
 } from "@mui/material";
 import FolderOpenIcon from "@mui/icons-material/FolderOpen";
 
@@ -28,7 +29,6 @@ import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace
 import SyntheticAudioDetectionResults from "./syntheticAudioDetectionResults";
 
 import { setError } from "redux/reducers/errorReducer";
-import TextField from "@mui/material/TextField";
 import { isValidUrl } from "../../../Shared/Utils/URLUtils";
 
 import { v4 as uuidv4 } from "uuid";
@@ -186,6 +186,22 @@ const SyntheticAudioDetection = () => {
 
   const audioRef = useRef(null);
   const handleUploadAudio = (file) => {
+    if (!(file instanceof File)) {
+      dispatch(setError(keyword("error_invalid_file")));
+      return;
+    }
+
+    if (!file.type.includes("audio")) {
+      dispatch(setError(keyword("error_invalid_media_file")));
+      return;
+    }
+
+    // TODO: Use ffmpeg to convert the m4a files if possible
+    if (file.type.includes("m4a")) {
+      dispatch(setError(keyword("error_invalid_audio_file")));
+      return;
+    }
+
     const audioURL = URL.createObjectURL(file);
 
     audioRef.current = new Audio(audioURL);
@@ -250,92 +266,84 @@ const SyntheticAudioDetection = () => {
         />
 
         <Box p={3}>
-          <div>
-            <Box>
-              <form>
-                <Grid container direction="row" spacing={3} alignItems="center">
-                  <Grid item xs>
-                    <TextField
-                      type="url"
-                      id="standard-full-width"
-                      label={keyword("synthetic_audio_detection_link")}
-                      placeholder={keyword(
-                        "synthetic_audio_detection_placeholder",
-                      )}
-                      fullWidth
-                      value={input}
-                      variant="outlined"
-                      disabled={isLoading || audioFile instanceof Blob}
-                      onChange={(e) => setInput(e.target.value)}
-                    />
-                  </Grid>
-                  <Grid item>
-                    <Button
-                      type="submit"
-                      variant="contained"
-                      color="primary"
-                      onClick={async (e) => {
-                        dispatch(resetSyntheticAudioDetectionAudio());
-                        e.preventDefault();
-                        await useGetVoiceCloningScore(
-                          input,
-                          true,
-                          dispatch,
-                          type,
-                          audioFile,
-                        );
-                      }}
-                      disabled={(input === "" && !audioFile) || isLoading}
-                    >
-                      {"Submit"}
-                    </Button>
-                  </Grid>
-                </Grid>
-                <Grid item mt={2}>
-                  <ButtonGroup
-                    variant="outlined"
-                    disabled={isLoading || input !== ""}
+          <form>
+            <Grid container direction="row" spacing={3} alignItems="center">
+              <Grid item xs>
+                <TextField
+                  type="url"
+                  id="standard-full-width"
+                  label={keyword("synthetic_audio_detection_link")}
+                  placeholder={keyword("synthetic_audio_detection_placeholder")}
+                  fullWidth
+                  value={input}
+                  variant="outlined"
+                  disabled={isLoading || audioFile instanceof Blob}
+                  onChange={(e) => setInput(e.target.value)}
+                />
+              </Grid>
+              <Grid item>
+                <Button
+                  type="submit"
+                  variant="contained"
+                  color="primary"
+                  onClick={async (e) => {
+                    dispatch(resetSyntheticAudioDetectionAudio());
+                    e.preventDefault();
+                    await useGetVoiceCloningScore(
+                      input,
+                      true,
+                      dispatch,
+                      type,
+                      audioFile,
+                    );
+                  }}
+                  disabled={(input === "" && !audioFile) || isLoading}
+                >
+                  {"Submit"}
+                </Button>
+              </Grid>
+            </Grid>
+            <Grid item mt={2}>
+              <ButtonGroup
+                variant="outlined"
+                disabled={isLoading || input !== ""}
+              >
+                <Button
+                  startIcon={<FolderOpenIcon />}
+                  sx={{ textTransform: "none" }}
+                >
+                  <label htmlFor="fileInputSynthetic">
+                    {audioFile ? audioFile.name : keyword("button_localfile")}
+                  </label>
+                  <input
+                    id="fileInputSynthetic"
+                    type="file"
+                    accept={"audioFile/*"}
+                    hidden={true}
+                    onChange={(e) => {
+                      handleUploadAudio(e.target.files[0]);
+                      e.target.value = null;
+                    }}
+                  />
+                </Button>
+                {audioFile instanceof Blob && (
+                  <Button
+                    size="small"
+                    aria-label="remove selected file"
+                    onClick={handleCloseSelectedFile}
                   >
-                    <Button
-                      startIcon={<FolderOpenIcon />}
-                      sx={{ textTransform: "none" }}
-                    >
-                      <label htmlFor="fileInputSynthetic">
-                        {audioFile
-                          ? audioFile.name
-                          : keyword("button_localfile")}
-                      </label>
-                      <input
-                        id="fileInputSynthetic"
-                        type="file"
-                        accept={"audioFile/*"}
-                        hidden={true}
-                        onChange={(e) => {
-                          handleUploadAudio(e.target.files[0]);
-                          e.target.value = null;
-                        }}
-                      />
-                    </Button>
-                    {audioFile instanceof Blob && (
-                      <Button
-                        size="small"
-                        aria-label="remove selected file"
-                        onClick={handleCloseSelectedFile}
-                      >
-                        <CloseIcon fontSize="small" />
-                      </Button>
-                    )}
-                  </ButtonGroup>
-                </Grid>
-              </form>
-              <Box m={2} />
-              {isLoading && (
-                <Box mt={3}>
-                  <LinearProgress />
-                </Box>
-              )}
+                    <CloseIcon fontSize="small" />
+                  </Button>
+                )}
+              </ButtonGroup>
+            </Grid>
+          </form>
+          <Box m={2} />
+          {isLoading && (
+            <Box mt={3}>
+              <LinearProgress />
             </Box>
-          </div>
+          )}
         </Box>
       </Card>
 
