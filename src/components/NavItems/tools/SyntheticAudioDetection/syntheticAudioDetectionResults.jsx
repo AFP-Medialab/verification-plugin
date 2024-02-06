@@ -39,6 +39,11 @@ const SyntheticAudioDetectionResults = (props) => {
   const DETECTION_THRESHOLD_2 = 30;
   const DETECTION_THRESHOLD_3 = 60;
 
+  const DETECTION_TYPES = {
+    VOICE_CLONING: "synthetic",
+    VOICE_RECORDING: "replay",
+  };
+
   useEffect(() => {
     if (!result) {
       return;
@@ -83,33 +88,43 @@ const SyntheticAudioDetectionResults = (props) => {
     dispatch(resetSyntheticAudioDetectionAudio());
   };
 
-  function getDisplayTextForCloningScore(voiceCloningScore) {
+  function getDisplayTextForDetectionScore(score, detectionType) {
     let displayText;
 
-    if (
-      typeof voiceCloningScore !== "number" ||
-      voiceCloningScore > 100 ||
-      voiceCloningScore < 0
-    ) {
+    if (typeof score !== "number" || score > 100 || score < 0) {
       //   TODO: Handle Error
       return;
     }
 
-    if (voiceCloningScore >= DETECTION_THRESHOLD_3) {
-      displayText = keyword("loccus_voice_cloning_detection_rating_4");
-    } else if (voiceCloningScore >= DETECTION_THRESHOLD_2) {
-      displayText = keyword("loccus_voice_cloning_detection_rating_3");
-    } else if (voiceCloningScore >= DETECTION_THRESHOLD_1) {
-      displayText = keyword("loccus_voice_cloning_detection_rating_2");
+    if (score >= DETECTION_THRESHOLD_3) {
+      displayText =
+        detectionType === DETECTION_TYPES.VOICE_CLONING
+          ? keyword("loccus_voice_cloning_detection_rating_4")
+          : keyword("loccus_voice_recording_detection_rating_4");
+    } else if (score >= DETECTION_THRESHOLD_2) {
+      displayText =
+        detectionType === DETECTION_TYPES.VOICE_CLONING
+          ? keyword("loccus_voice_cloning_detection_rating_3")
+          : keyword("loccus_voice_recording_detection_rating_3");
+    } else if (score >= DETECTION_THRESHOLD_1) {
+      displayText =
+        detectionType === DETECTION_TYPES.VOICE_CLONING
+          ? keyword("loccus_voice_cloning_detection_rating_2")
+          : keyword("loccus_voice_recording_detection_rating_2");
     } else {
-      displayText = keyword("loccus_voice_cloning_detection_rating_1");
+      displayText =
+        detectionType === DETECTION_TYPES.VOICE_CLONING
+          ? keyword("loccus_voice_cloning_detection_rating_1")
+          : keyword("loccus_voice_recording_detection_rating_1");
     }
 
     return displayText;
   }
 
-  function CustomAlertCloningScore(props) {
-    if (!props.voiceCloningScore) return;
+  function CustomAlertScore(props) {
+    // TODO: handle error
+    if (!props.score || typeof props.score !== "number") return;
+    if (!props.detectionType || typeof props.detectionType !== "string") return;
 
     let alertSettings = {
       displayText: "",
@@ -120,37 +135,27 @@ const SyntheticAudioDetectionResults = (props) => {
     const SEVERITY_WARNING = "warning";
     const SEVERITY_ERROR = "error";
 
-    const voiceCloningScore = props.voiceCloningScore;
+    const score = props.score;
+    const detectionType = props.detectionType;
 
-    if (
-      typeof voiceCloningScore !== "number" ||
-      voiceCloningScore > 100 ||
-      voiceCloningScore < 0
-    ) {
+    if (score > 100 || score < 0) {
       //   TODO: Handle Error
       console.error("Error with the voice cloning score");
       return <></>;
     }
 
-    if (voiceCloningScore >= DETECTION_THRESHOLD_3) {
-      alertSettings.displayText = keyword(
-        "loccus_voice_cloning_detection_rating_4",
-      );
+    alertSettings.displayText = getDisplayTextForDetectionScore(
+      score,
+      detectionType,
+    );
+
+    if (score >= DETECTION_THRESHOLD_3) {
       alertSettings.severity = SEVERITY_ERROR;
-    } else if (voiceCloningScore >= DETECTION_THRESHOLD_2) {
-      alertSettings.displayText = keyword(
-        "loccus_voice_cloning_detection_rating_3",
-      );
+    } else if (score >= DETECTION_THRESHOLD_2) {
       alertSettings.severity = SEVERITY_WARNING;
-    } else if (voiceCloningScore >= DETECTION_THRESHOLD_1) {
-      alertSettings.displayText = keyword(
-        "loccus_voice_cloning_detection_rating_2",
-      );
+    } else if (score >= DETECTION_THRESHOLD_1) {
       alertSettings.severity = SEVERITY_SUCCESS;
     } else {
-      alertSettings.displayText = keyword(
-        "loccus_voice_cloning_detection_rating_1",
-      );
       alertSettings.severity = SEVERITY_SUCCESS;
     }
 
@@ -239,8 +244,9 @@ const SyntheticAudioDetectionResults = (props) => {
                     <Typography variant="subtitle2">Detection</Typography>
                   </Stack>
                 </Stack>
-                <CustomAlertCloningScore
-                  voiceCloningScore={voiceCloningScore}
+                <CustomAlertScore
+                  score={voiceCloningScore}
+                  detectionType={DETECTION_TYPES.VOICE_CLONING}
                 />
                 <Typography>How to interpret these results?</Typography>
               </Stack>
@@ -274,8 +280,9 @@ const SyntheticAudioDetectionResults = (props) => {
                     <Typography variant="subtitle2">Detection</Typography>
                   </Stack>
                 </Stack>
-                <CustomAlertCloningScore
-                  voiceCloningScore={voiceRecordingScore}
+                <CustomAlertScore
+                  score={voiceRecordingScore}
+                  detectionType={DETECTION_TYPES.VOICE_RECORDING}
                 />
                 <Typography>How to interpret these results?</Typography>
               </Stack>
