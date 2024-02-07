@@ -29,7 +29,7 @@ import {
   getclientId,
 } from "../../../Shared/GoogleAnalytics/MatomoAnalytics";
 import { useTrackEvent } from "../../../../Hooks/useAnalytics";
-import { setError } from "../../../../redux/actions/errorActions";
+import { setError } from "redux/reducers/errorReducer";
 import _ from "lodash";
 
 const OCR = () => {
@@ -47,7 +47,7 @@ const OCR = () => {
   const fail = useSelector((state) => state.ocr.fail);
   const errorKey = useSelector((state) => state.ocr.errorKey);
   const session = useSelector((state) => state.userSession);
-  const uid = session && session.user ? session.user.email : null;
+  const uid = session && session.user ? session.user.id : null;
 
   const [userInput, setUserInput] = useState(ocrInputUrl);
   const [eventUrl, setEventUrl] = useState(undefined);

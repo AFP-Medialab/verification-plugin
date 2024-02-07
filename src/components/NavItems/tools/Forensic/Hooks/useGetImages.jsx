@@ -6,7 +6,7 @@ import {
   setForensicsResult,
   setForensicDisplayItem,
 } from "../../../../../redux/actions/tools/forensicActions";
-import { setError } from "../../../../../redux/actions/errorActions";
+import { setError } from "redux/reducers/errorReducer";
 
 const useGetImages = (url, type, keyword) => {
   const forensic_base_url = process.env.REACT_APP_CAA_FORENSICS_URL;
@@ -23,7 +23,7 @@ const useGetImages = (url, type, keyword) => {
 
     const getResult = (reportId) => {
       axios
-        .get(forensic_base_url + "/images/reports/" + reportId)
+        .get(forensic_base_url + "images/reports/" + reportId)
         .then((response) => {
           if (response.data != null) {
             dispatch(

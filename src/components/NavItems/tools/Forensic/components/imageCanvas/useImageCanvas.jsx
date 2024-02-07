@@ -1,4 +1,4 @@
-import { useRef, useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { applyThresholdAndGradient, preloadImage } from "../../utils";
 import { useSelector } from "react-redux";
 
@@ -24,6 +24,7 @@ const useImageCanvas = (
 
   useEffect(() => {
     if (!imgSrc) return;
+
     async function loadAndProcessImage(imgSrc) {
       const canvas = canvasRef.current;
 
@@ -60,6 +61,7 @@ const useImageCanvas = (
         context.canvas.height,
       );
 
+      if (!context.canvas.width || !context.canvas.height) return;
       let imageData = context.getImageData(
         0,
         0,
@@ -73,6 +75,7 @@ const useImageCanvas = (
 
       if (filterDataURL) filterDataURL(canvas.toDataURL());
     }
+
     loadAndProcessImage(imgSrc);
   }, [imgSrc, threshold, isGrayscaleColorInverted, applyColorScale]);
 

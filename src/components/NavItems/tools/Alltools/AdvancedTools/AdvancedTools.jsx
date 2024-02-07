@@ -14,7 +14,7 @@ import LockOpenIcon from "@mui/icons-material/LockOpen";
 import useAuthenticationAPI from "../../../../Shared/Authentication/useAuthenticationAPI";
 import { useSelector, useDispatch } from "react-redux";
 import { ERR_AUTH_UNKNOWN_ERROR } from "../../../../Shared/Authentication/authenticationErrors";
-import { setError } from "../../../../../redux/actions/errorActions";
+import { setError } from "redux/reducers/errorReducer";
 import IconButton from "@mui/material/IconButton";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import { useForm, Controller } from "react-hook-form";

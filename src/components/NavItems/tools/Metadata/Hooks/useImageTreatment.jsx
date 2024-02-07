@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import EXIF from "exif-js/exif";
 import { useDispatch } from "react-redux";
 import { setMetadadaResult } from "../../../../../redux/reducers/tools/metadataReducer";
-import { setError } from "../../../../../redux/actions/errorActions";
+import { setError } from "redux/reducers/errorReducer";
 import _ from "lodash";
 
 const useImageTreatment = (mediaUrl, keyword) => {
@@ -20,9 +20,8 @@ const useImageTreatment = (mediaUrl, keyword) => {
       return true;
     }
 
-    const handleErrors = (error) => {
-      if (keyword(error) !== "") dispatch(setError(keyword(error)));
-      else dispatch(setError(keyword("please_give_a_correct_link")));
+    const handleErrors = () => {
+      dispatch(setError(keyword("please_give_a_correct_link")));
     };
 
     let imageTreatment = () => {
@@ -53,12 +52,11 @@ const useImageTreatment = (mediaUrl, keyword) => {
             );
         });
       };
-      img.onerror = (error) => {
-        handleErrors(error);
+      img.onerror = () => {
+        handleErrors();
       };
     };
     if (!_.isNull(mediaUrl)) {
-      console.log("process");
       imageTreatment();
     }
   }, [mediaUrl]);

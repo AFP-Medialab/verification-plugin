@@ -16,7 +16,7 @@ import {
   setThumbnailsResult,
   setThumbnailsLoading,
 } from "../../../../redux/reducers/tools/thumbnailsReducer";
-import { setError } from "../../../../redux/actions/errorActions";
+import { setError } from "redux/reducers/errorReducer";
 import Checkbox from "@mui/material/Checkbox";
 import FormGroup from "@mui/material/FormGroup";
 import {
@@ -52,7 +52,7 @@ const Thumbnails = () => {
   const resultData = useSelector((state) => state.thumbnails.result);
   const isLoading = useSelector((state) => state.thumbnails.loading);
   const session = useSelector((state) => state.userSession);
-  const uid = session && session.user ? session.user.email : null;
+  const uid = session && session.user ? session.user.id : null;
 
   const [height, setHeight] = useState(0);
   const [showResult, setShowResult] = useState(false);

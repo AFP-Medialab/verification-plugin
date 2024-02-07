@@ -144,7 +144,21 @@ const isBase64 = (str) => {
   return true;
 };
 
-export const b64toBlob = (content, contentType = "", sliceSize = 512) => {
+const b64toBlobde = (base64String, contentType = "") => {
+  let image = base64String.substring(base64String.indexOf(",") + 1);
+  const byteCharacters = atob(image);
+  const byteArrays = [];
+
+  for (let i = 0; i < byteCharacters.length; i++) {
+    byteArrays.push(byteCharacters.charCodeAt(i));
+  }
+
+  const byteArray = new Uint8Array(byteArrays);
+  const blob = new Blob([byteArray], { type: contentType });
+  return new ImageObject(blob, IMAGE_FORMATS.BLOB);
+};
+
+const b64toBlob = (content, contentType = "", sliceSize = 512) => {
   let image = content.substring(content.indexOf(",") + 1);
   const byteCharacters = atob(image);
   const byteArrays = [];
@@ -258,7 +272,7 @@ export const reverseImageSearchGoogleLens = (
 ) => {
   const url = `https://lens.google.com/upload?ep=ccm&s=&st=${Date.now()}`;
   const formData = new FormData();
-
+  //console.log("imgBlob ", imgBlob)
   formData.append("encoded_image", imgBlob);
   fetch(url, {
     referrer: "",
@@ -270,9 +284,10 @@ export const reverseImageSearchGoogleLens = (
       return response.text();
     })
     .then((body) => {
-      const tabUrl = body.match(/<meta .*URL=(https?:\/\/.*)"/)[1];
-
-      const urlObject = { url: tabUrl };
+      var tabUrl = body.match(/(?<=<meta .*url=)(.*)(?=")/)[1];
+      tabUrl = decodeURIComponent(tabUrl.replaceAll("&amp;", "&"));
+      //console.log(tabUrl)
+      const urlObject = { url: "https://lens.google.com" + tabUrl };
 
       openNewTabWithUrl(urlObject, isRequestFromContextMenu);
     })
@@ -496,10 +511,9 @@ export const getBlob = async (info) => {
   ) {
     imgBlob = await fetchImage(info);
   } else if (isImgUrl && !isb64) {
-    // console.log(getImgUrl(info));
     imgBlob = await fetchImage(getImgUrl(info));
   } else if (isb64) {
-    imgBlob = b64toBlob(info);
+    imgBlob = b64toBlob(info, "image/jpeg");
   } else {
     imgBlob = await getLocalImageFromSourcePath(
       getImgUrl(info),
@@ -537,39 +551,16 @@ const getSearchEngineFromName = (searchEngineName) => {
  * @param {string} searchEngineName
  * @returns {Promise<ImageObject>}
  */
-const retrieveImgObjectForSearchEngine = async (
-  info,
-  isImgUrl,
-  searchEngineName,
-  isLocalImg = false,
-) => {
+const retrieveImgObjectForSearchEngine = async (info, searchEngineName) => {
   const searchEngine = getSearchEngineFromName(searchEngineName);
 
-  const imgFormat = isLocalImg
-    ? searchEngine.IMAGE_FORMAT_LOCAL
-    : searchEngine.IMAGE_FORMAT;
-
-  let src;
-
-  try {
-    src = getImgUrl(info);
-  } catch (e) {
-    console.log("Cannot retrieve img src url");
-  }
+  var imgFormat =
+    typeof info === "string" && info.startsWith("http")
+      ? searchEngine.IMAGE_FORMAT
+      : searchEngine.IMAGE_FORMAT_LOCAL;
+  imgFormat = imgFormat === undefined ? searchEngine.IMAGE_FORMAT : imgFormat;
 
   if (imgFormat === IMAGE_FORMATS.URI) {
-    // if (!isImgUrl) {
-    //   throw new Error(
-    //     `[retrieveImgObjectForSearchEngine] Error: info is not URI`
-    //   );
-    // }
-
-    // console.log(info);
-    // TODO: Error handling for getImgUrl
-    //console.log("DEBUG info ", info);
-    //console.log("DEBUG getiknfo ", getImgUrl(info));
-
-
     return new ImageObject(getImgUrl(info), IMAGE_FORMATS.URI);
   }
 
@@ -600,7 +591,6 @@ export const reverseImageSearch = async (
 ) => {
   const imageObject = await retrieveImgObjectForSearchEngine(
     info,
-    isImgUrl,
     searchEngineName,
   );
 
@@ -681,9 +671,7 @@ export const reverseImageSearch = async (
     } else if (imageObject.obj !== "") {
       const b64Img = await retrieveImgObjectForSearchEngine(
         info,
-        isImgUrl,
         searchEngineName,
-        true,
       );
 
       // console.log(b64Img);

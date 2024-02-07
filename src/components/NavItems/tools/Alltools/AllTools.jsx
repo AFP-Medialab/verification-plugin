@@ -18,7 +18,6 @@ import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 
 import Iframe from "react-iframe";
 import DialogActions from "@mui/material/DialogActions";
-import useLoadLanguage from "../../../../Hooks/useLoadLanguage";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import ToolCard from "./ToolCard";
 import IconImage from "../../../NavBar/images/SVG/Image/Images.svg";
@@ -31,6 +30,7 @@ import { useSelector } from "react-redux";
 
 import { useNavigate } from "react-router-dom";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+import { Audiotrack } from "@mui/icons-material";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -90,9 +90,9 @@ const AllTools = (props) => {
     } else {
       navigate("/app/tools/" + path);
       /* history.push({
-                pathname: "/app/tools/" + path,
-                state: { media: mediaTool }
-            })*/
+                                                          pathname: "/app/tools/" + path,
+                                                          state: { media: mediaTool }
+                                                      })*/
     }
   };
 
@@ -100,6 +100,7 @@ const AllTools = (props) => {
 
   const toolsVideo = [];
   const toolsImages = [];
+  const toolsAudio = [];
   const toolsSearch = [];
   const toolsData = [];
   const otherTools = [];
@@ -111,6 +112,10 @@ const AllTools = (props) => {
 
     if (value.type === keywordNavbar("navbar_category_image")) {
       toolsImages.push(value);
+    }
+
+    if (value.type === keywordNavbar("navbar_category_audio")) {
+      toolsAudio.push(value);
     }
 
     if (value.type === keywordNavbar("navbar_category_search")) {
@@ -250,6 +255,39 @@ const AllTools = (props) => {
                   alignItems="center"
                 >
                   <Grid item>
+                    <Audiotrack
+                      width="40px"
+                      height="40px"
+                      style={{ fill: "#596977" }}
+                    />
+                  </Grid>
+
+                  <Grid item>
+                    <Box m={1} />
+                  </Grid>
+
+                  <Grid item>
+                    <Typography
+                      variant="h6"
+                      style={{ color: "#596977", textTransform: "capitalize" }}
+                    >
+                      {keyword("category_audio")}
+                    </Typography>
+                  </Grid>
+                </Grid>
+              </Box>
+            }
+          />
+          <Tab
+            label={
+              <Box mt={1}>
+                <Grid
+                  container
+                  direction="row"
+                  justifyContent="flex-start"
+                  alignItems="center"
+                >
+                  <Grid item>
                     <IconSearch
                       width="40px"
                       height="40px"
@@ -352,7 +390,7 @@ const AllTools = (props) => {
               className={classes.toolCardsContainer}
             >
               {toolsVideo.map((value, key) => {
-                var element = (
+                const element = (
                   <Grid
                     className={classes.toolCardStyle}
                     item
@@ -391,7 +429,7 @@ const AllTools = (props) => {
               className={classes.toolCardsContainer}
             >
               {toolsImages.map((value, key) => {
-                var element = (
+                const element = (
                   <Grid
                     className={classes.toolCardStyle}
                     item
@@ -428,8 +466,46 @@ const AllTools = (props) => {
               spacing={2}
               className={classes.toolCardsContainer}
             >
+              {toolsAudio.map((value, key) => {
+                const element = (
+                  <Grid
+                    className={classes.toolCardStyle}
+                    item
+                    key={key}
+                    onClick={() =>
+                      handleClick(value.path, "audio", value.toolRestrictions)
+                    }
+                  >
+                    <ToolCard
+                      name={keyword(value.title)}
+                      description={keyword(value.description)}
+                      icon={value.iconColored}
+                      iconsAttributes={value.icons}
+                    />
+                  </Grid>
+                );
+                //console.log(value);
+                if (value.toolRestrictions.includes("beta")) {
+                  if (betaTester) {
+                    return element;
+                  } else {
+                    return null;
+                  }
+                } else {
+                  return element;
+                }
+              })}
+            </Grid>
+          </TabPanel>
+          <TabPanel value={value} index={3}>
+            <Grid
+              container
+              justifyContent="flex-start"
+              spacing={2}
+              className={classes.toolCardsContainer}
+            >
               {toolsSearch.map((value, key) => {
-                var element = (
+                const element = (
                   <Grid
                     className={classes.toolCardStyle}
                     item
@@ -458,7 +534,7 @@ const AllTools = (props) => {
               })}
             </Grid>
           </TabPanel>
-          <TabPanel value={value} index={3}>
+          <TabPanel value={value} index={4}>
             <Grid
               container
               justifyContent="flex-start"
@@ -466,7 +542,7 @@ const AllTools = (props) => {
               className={classes.toolCardsContainer}
             >
               {toolsData.map((value, key) => {
-                var element;
+                let element;
                 if (value.title === "navbar_twitter_crowdtangle") {
                   element = (
                     <Grid
@@ -522,7 +598,7 @@ const AllTools = (props) => {
               })}
             </Grid>
           </TabPanel>
-          <TabPanel value={value} index={4}>
+          <TabPanel value={value} index={5}>
             <Grid
               container
               justifyContent="flex-start"

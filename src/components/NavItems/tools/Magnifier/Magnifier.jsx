@@ -10,7 +10,7 @@ import {
   setMagnifierResult,
   setMagnifierLoading,
 } from "../../../../redux/actions/tools/magnifierActions";
-import { setError } from "../../../../redux/actions/errorActions";
+import { setError } from "redux/reducers/errorReducer";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import { getclientId } from "../../../Shared/GoogleAnalytics/MatomoAnalytics";
 import { useTrackEvent } from "../../../../Hooks/useAnalytics";
@@ -33,13 +33,12 @@ const Magnifier = () => {
   const resultUrl = useSelector((state) => state.magnifier.url);
   const resultResult = useSelector((state) => state.magnifier.result);
   const session = useSelector((state) => state.userSession);
-  const uid = session && session.user ? session.user.email : null;
+  const uid = session && session.user ? session.user.id : null;
   const dispatch = useDispatch();
 
   const [input, setInput] = useState(resultUrl);
 
-  const getErrorText = (error) => {
-    if (keyword(error) !== "") return keyword(error);
+  const getErrorText = () => {
     return keyword("please_give_a_correct_link");
   };
   const [eventUrl, setEventUrl] = useState(undefined);
@@ -82,8 +81,8 @@ const Magnifier = () => {
       );
       canvas.remove();
     };
-    img.onerror = (error) => {
-      dispatch(setError(getErrorText(error)));
+    img.onerror = () => {
+      dispatch(setError(getErrorText()));
     };
     img.src = src;
   };
