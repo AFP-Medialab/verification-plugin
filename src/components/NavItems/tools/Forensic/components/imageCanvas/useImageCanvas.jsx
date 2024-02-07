@@ -62,7 +62,6 @@ const useImageCanvas = (
       );
 
       if (!context.canvas.width || !context.canvas.height) return;
-
       let imageData = context.getImageData(
         0,
         0,
