@@ -33,6 +33,7 @@ import { isValidUrl } from "../../../Shared/Utils/URLUtils";
 
 import { v4 as uuidv4 } from "uuid";
 import CloseIcon from "@mui/icons-material/Close";
+import useAuthenticatedRequest from "components/Shared/Authentication/useAuthenticatedRequest";
 
 const SyntheticAudioDetection = () => {
   const classes = useMyStyles();
@@ -49,6 +50,7 @@ const SyntheticAudioDetection = () => {
   );
   const result = useSelector((state) => state.syntheticAudioDetection.result);
   const url = useSelector((state) => state.syntheticAudioDetection.url);
+  const authenticatedRequest = useAuthenticatedRequest();
   const [input, setInput] = useState(url ? url : "");
   const [type, setType] = useState("");
   const [audioFile, setAudioFile] = useState(undefined);
@@ -111,18 +113,17 @@ const SyntheticAudioDetection = () => {
       let config = {
         method: "post",
         maxBodyLength: Infinity,
-        url: "https://api.loccus.ai/v1/spaces/afp/poc/samples",
+        //samples
+        url: process.env.REACT_APP_LOCCUS_URL + "/upload",
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
-          Authorization: `Bearer ${process.env.REACT_APP_LOCCUS_TOKEN}`,
         },
         data: data,
       };
 
       // First, we upload the file to Loccus
-
-      res = await axios.request(config);
+      res = await authenticatedRequest(config);
 
       if (!res || !res.data || res.data.message) {
         //   TODO: handle error
@@ -146,16 +147,16 @@ const SyntheticAudioDetection = () => {
       const config2 = {
         method: "post",
         maxBodyLength: Infinity,
-        url: "https://api.loccus.ai/v1/spaces/afp/poc/verifications/authenticity",
+        ///verifications/authenticity
+        url: process.env.REACT_APP_LOCCUS_URL + "/detection",
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
-          Authorization: `Bearer ${process.env.REACT_APP_LOCCUS_TOKEN}`,
         },
         data: data2,
       };
 
-      const res2 = await axios.request(config2);
+      const res2 = await authenticatedRequest(config2);
 
       if (!res2 || !res2.data || res2.data.message) {
         //   TODO: handle error
