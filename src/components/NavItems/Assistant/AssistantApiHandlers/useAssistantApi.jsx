@@ -150,7 +150,7 @@ export default function assistantApiCalls() {
       MAX_NUM_RETRIES,
       async () => {
         const result = await axios.post(
-          assistantEndpoint + "gcloud/persuasion-clfr",
+          assistantEndpoint + "gcloud/persuasion-span-clfr",
           { text: text },
         );
         return result.data;

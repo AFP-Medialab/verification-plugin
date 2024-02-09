@@ -36,6 +36,7 @@ import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import IconButton from "@mui/material/IconButton";
 import FileCopyOutlined from "@mui/icons-material/FileCopy";
 import AssistantTextClassification from "./AssistantTextClassification";
+import AssistantTextSpanClassification from "./AssistantTextSpanClassification";
 
 const AssistantTextResult = () => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
@@ -49,32 +50,32 @@ const AssistantTextResult = () => {
   const textLang = useSelector((state) => state.assistant.textLang);
 
   const newsGenreResult = useSelector(
-    (state) => state.assistant.newsGenreResult
+    (state) => state.assistant.newsGenreResult,
   );
   const newsGenreLoading = useSelector(
-    (state) => state.assistant.newsGenreLoading
+    (state) => state.assistant.newsGenreLoading,
   );
   const newsGenreDone = useSelector((state) => state.assistant.newsGenreDone);
   const newsGenreFail = useSelector((state) => state.assistant.newsGenreFail);
 
   const newsFramingResult = useSelector(
-    (state) => state.assistant.newsFramingResult
+    (state) => state.assistant.newsFramingResult,
   );
   const newsFramingLoading = useSelector(
-    (state) => state.assistant.newsFramingLoading
+    (state) => state.assistant.newsFramingLoading,
   );
   const newsFramingDone = useSelector(
-    (state) => state.assistant.newsFramingDone
+    (state) => state.assistant.newsFramingDone,
   );
   const newsFramingFail = useSelector(
-    (state) => state.assistant.newsFramingFail
+    (state) => state.assistant.newsFramingFail,
   );
 
   const persuasionResult = useSelector(
-    (state) => state.assistant.persuasionResult
+    (state) => state.assistant.persuasionResult,
   );
   const persuasionLoading = useSelector(
-    (state) => state.assistant.persuasionLoading
+    (state) => state.assistant.persuasionLoading,
   );
   const persuasionDone = useSelector((state) => state.assistant.persuasionDone);
   const persuasionFail = useSelector((state) => state.assistant.persuasionFail);
@@ -102,11 +103,11 @@ const AssistantTextResult = () => {
     setExpanded(true);
   };
 
-  useEffect(() => {
-    if (translatedText) {
-      setDisplayOrigLang(false);
-    }
-  }, [translatedText]);
+  // useEffect(() => {
+  //   if (translatedText) {
+  //     setDisplayOrigLang(false);
+  //   }
+  // }, [translatedText]);
 
   function CustomTabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -229,7 +230,7 @@ const AssistantTextResult = () => {
             <CustomTabPanel value={textTabIndex} index={0}>
               <Typography align={"left"}>
                 <FormatQuoteIcon fontSize={"large"} />
-                {!displayOrigLang && translatedText ? translatedText : text}
+                {text}
               </Typography>
             </CustomTabPanel>
             {/*Persuasion classifier*/}
@@ -239,7 +240,7 @@ const AssistantTextResult = () => {
                 <p>Failed to load persuasion classification.</p>
               )}
               {persuasionDone && persuasionResult && (
-                <AssistantTextClassification
+                <AssistantTextSpanClassification
                   text={text}
                   classification={persuasionResult.entities}
                   configs={persuasionResult.configs}
