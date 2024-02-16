@@ -7,8 +7,23 @@ import Link from "@mui/material/Link";
 import Avatar from "@mui/material/Avatar";
 import Divider from "@mui/material/Divider";
 import Grid from "@mui/material/Grid";
+import LanguageDictionary from "../../../../LocalDictionary/iso-639-1-languages.jsx";
+import SelectSmall from "./components/SelectSmall";
 
 const SemanticSearchResults = (searchResults) => {
+  const sortingModes = [
+    {
+      name: "Most Recent",
+      key: "desc",
+    },
+    {
+      name: "Most relevant",
+      key: "relevant",
+    },
+  ];
+
+  const [sortingMode, setSortingMode] = useState(sortingModes[0]);
+
   const result = (
     id,
     claim,
@@ -102,7 +117,7 @@ const SemanticSearchResults = (searchResults) => {
                 {website}
               </Link>
               <Chip label={language} sx={{ width: "fit-content" }} />
-              <Typography variant="body2">Score: {similarityScore}</Typography>
+              {/*<Typography variant="body2">Score: {similarityScore}</Typography>*/}
             </Stack>
           </Grid>
         </Grid>
@@ -120,6 +135,19 @@ const SemanticSearchResults = (searchResults) => {
 
   console.log(searchResults.searchResults);
 
+  const getLanguageName = (language) => {
+    if (
+      !language ||
+      typeof language !== "string" ||
+      !LanguageDictionary[language] ||
+      typeof LanguageDictionary[language].name !== "string"
+    ) {
+      //TODO: Error handling
+      return language;
+    }
+    return LanguageDictionary[language].name.split(";")[0];
+  };
+
   return (
     <Box>
       <Card>
@@ -131,6 +159,21 @@ const SemanticSearchResults = (searchResults) => {
             justifyContent="flex-start"
             alignItems="flex-start"
           >
+            <Stack
+              direction="row-reverse"
+              spacing={2}
+              justifyContent="space-between"
+              alignItems="flex-end"
+            >
+              <SelectSmall
+                // label="Sorting"
+                items={sortingModes}
+                initialValue={sortingMode.name}
+                onChange={(e) => setSortingMode(e.target.value)}
+                minWidth={120}
+              />
+            </Stack>
+
             {searchResults.searchResults.map((searchResult) => {
               return result(
                 searchResult.id,
@@ -139,9 +182,9 @@ const SemanticSearchResults = (searchResults) => {
                 searchResult.claimOriginalLanguage,
                 searchResult.titleOriginalLanguage,
                 searchResult.rating,
-                searchResult.date,
+                new Date(searchResult.date).toDateString(),
                 searchResult.website,
-                searchResult.language,
+                getLanguageName(searchResult.language),
                 searchResult.similarityScore,
                 searchResult.articleUrl,
                 searchResult.domainUrl,

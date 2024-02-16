@@ -4,13 +4,18 @@ import {
   Alert,
   Box,
   Card,
+  Collapse,
   Fade,
   IconButton,
   Skeleton,
   Stack,
 } from "@mui/material";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
-import { ManageSearch } from "@mui/icons-material";
+import {
+  KeyboardArrowDown,
+  KeyboardArrowUp,
+  ManageSearch,
+} from "@mui/icons-material";
 import TextField from "@mui/material/TextField";
 import SemanticSearchResults from "./semanticSearchResults";
 import CheckboxesTags from "./components/CheckboxesTags";
@@ -23,6 +28,7 @@ import Backdrop from "@mui/material/Backdrop";
 import Typography from "@mui/material/Typography";
 import CloseIcon from "@mui/icons-material/Close";
 import axios from "axios";
+import Button from "@mui/material/Button";
 
 const SemanticSearch = () => {
   const languagesList = [
@@ -133,6 +139,9 @@ const SemanticSearch = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const [errorMessage, setErrorMessage] = useState("");
+
+  const [showAdvancedSettings, setShowAdvancedSettings] = useState(false);
+
   const handleSubmit = async () => {
     setIsLoading(true);
     setErrorMessage("");
@@ -147,8 +156,13 @@ const SemanticSearch = () => {
     const response = await axios.get(baseUrl, { params: params });
     console.log(response.data);
 
+    if (!response.data || !response.data.fact_checks) {
+      //TODO: Error handling
+      return;
+    }
+
     const resArr = [];
-    for (const searchResult of response.data) {
+    for (const searchResult of response.data.fact_checks) {
       const semanticSearchResult = new SemanticSearchResult(
         searchResult.id,
         searchResult.claim_en,
@@ -237,115 +251,144 @@ const SemanticSearch = () => {
                     Submit
                   </LoadingButton>
                 </Stack>
+                <Box>
+                  <Button
+                    variant="outlined"
+                    endIcon={
+                      showAdvancedSettings ? (
+                        <KeyboardArrowUp />
+                      ) : (
+                        <KeyboardArrowDown />
+                      )
+                    }
+                    onClick={() =>
+                      setShowAdvancedSettings((prevState) => !prevState)
+                    }
+                  >
+                    {showAdvancedSettings
+                      ? "Hide Advanced Settings"
+                      : "Show Advanced settings"}
+                  </Button>
+                </Box>
+                <Box>
+                  <Collapse in={showAdvancedSettings}>
+                    <Stack direction="row" spacing={2}>
+                      <Stack direction="column" spacing={1}>
+                        <SelectSmall
+                          label="Search Engine"
+                          items={searchEngineModes}
+                          initialValue={searchEngineMode.name}
+                          onChange={(e) => setSearchEngineMode(e.target.value)}
+                          disabled={isLoading}
+                          minWidth={275}
+                        />
+                        <Link
+                          onClick={handleOpenSearchEngineModal}
+                          sx={{ cursor: "pointer" }}
+                        >
+                          How to choose?
+                        </Link>
+                        <Modal
+                          aria-labelledby="transition-modal-title"
+                          aria-describedby="transition-modal-description"
+                          open={openSearchEngineModal}
+                          onClose={handleCloseSearchEngineModal}
+                          closeAfterTransition
+                          slots={{ backdrop: Backdrop }}
+                          slotProps={{
+                            backdrop: {
+                              timeout: 500,
+                            },
+                          }}
+                        >
+                          <Fade in={openSearchEngineModal}>
+                            <Box sx={searchEngineModalStyle}>
+                              <Stack
+                                direction="row"
+                                justifyContent="space-between"
+                                alignItems="center"
+                                spacing={2}
+                              >
+                                <Typography
+                                  id="transition-modal-title"
+                                  variant="subtitle2"
+                                  component="subtitle2"
+                                  style={{
+                                    color: "#00926c",
+                                    fontSize: "24px",
+                                  }}
+                                >
+                                  How to choose the search engine?
+                                </Typography>
+                                <IconButton
+                                  variant="outlined"
+                                  aria-label="close popup"
+                                  onClick={handleCloseSearchEngineModal}
+                                >
+                                  <CloseIcon />
+                                </IconButton>
+                              </Stack>
 
-                <Stack direction="row" spacing={2}>
-                  <Stack direction="column" spacing={1}>
-                    <SelectSmall
-                      items={searchEngineModes}
-                      initialValue={searchEngineMode.name}
-                      onChange={(e) => setSearchEngineMode(e.target.value)}
-                      disabled={isLoading}
-                    />
-                    <Link
-                      onClick={handleOpenSearchEngineModal}
-                      sx={{ cursor: "pointer" }}
-                    >
-                      How to choose?
-                    </Link>
-                    <Modal
-                      aria-labelledby="transition-modal-title"
-                      aria-describedby="transition-modal-description"
-                      open={openSearchEngineModal}
-                      onClose={handleCloseSearchEngineModal}
-                      closeAfterTransition
-                      slots={{ backdrop: Backdrop }}
-                      slotProps={{
-                        backdrop: {
-                          timeout: 500,
-                        },
-                      }}
-                    >
-                      <Fade in={openSearchEngineModal}>
-                        <Box sx={searchEngineModalStyle}>
-                          <Stack
-                            direction="row"
-                            justifyContent="space-between"
-                            alignItems="center"
-                            spacing={2}
-                          >
-                            <Typography
-                              id="transition-modal-title"
-                              variant="subtitle2"
-                              component="subtitle2"
-                              style={{ color: "#00926c", fontSize: "24px" }}
-                            >
-                              How to choose the search engine?
-                            </Typography>
-                            <IconButton
-                              variant="outlined"
-                              aria-label="close popup"
-                              onClick={handleCloseSearchEngineModal}
-                            >
-                              <CloseIcon />
-                            </IconButton>
-                          </Stack>
+                              <Stack
+                                id="transition-modal-description"
+                                direction="column"
+                                spacing={2}
+                                mt={2}
+                              >
+                                {searchEngineModes.map(
+                                  (searchEngine, index) => {
+                                    return (
+                                      <Stack direction="column" key={index}>
+                                        <Typography variant="subtitle1">
+                                          {searchEngine.name}
+                                        </Typography>
+                                        <Alert severity="info" icon={false}>
+                                          {searchEngine.description}
+                                        </Alert>
+                                      </Stack>
+                                    );
+                                  },
+                                )}
+                              </Stack>
+                            </Box>
+                          </Fade>
+                        </Modal>
+                      </Stack>
 
-                          <Stack
-                            id="transition-modal-description"
-                            direction="column"
-                            spacing={2}
-                            mt={2}
-                          >
-                            {searchEngineModes.map((searchEngine, index) => {
-                              return (
-                                <Stack direction="column" key={index}>
-                                  <Typography variant="subtitle1">
-                                    {searchEngine.name}
-                                  </Typography>
-                                  <Alert severity="info" icon={false}>
-                                    {searchEngine.description}
-                                  </Alert>
-                                </Stack>
-                              );
-                            })}
-                          </Stack>
-                        </Box>
-                      </Fade>
-                    </Modal>
-                  </Stack>
-
-                  <DatePicker
-                    label="From:"
-                    defaultValue={dateFrom}
-                    onChange={(newDate) => setDateFrom(newDate)}
-                    disabled={isLoading}
-                  />
-                  <DatePicker
-                    label="To:"
-                    defaultValue={dateTo}
-                    onChange={(newDate) => {
-                      setDateTo(newDate);
-                    }}
-                    disabled={isLoading}
-                  />
-                  <CheckboxesTags
-                    label="Language filter"
-                    placeholder="Languages"
-                    options={languagesList}
-                    disabled={isLoading}
-                  />
-                  {/*<Button*/}
-                  {/*  type="submit"*/}
-                  {/*  variant="contained"*/}
-                  {/*  color="primary"*/}
-                  {/*  disabled={isLoading}*/}
-                  {/*  onClick={async (e) => {*/}
-                  {/*    e.preventDefault();*/}
-                  {/*  }}*/}
-                  {/*>*/}
-                  {/*  Filter*/}
-                  {/*</Button>*/}
-                </Stack>
+                      <DatePicker
+                        label="From:"
+                        defaultValue={dateFrom}
+                        onChange={(newDate) => setDateFrom(newDate)}
+                        disabled={isLoading}
+                      />
+                      <DatePicker
+                        label="To:"
+                        defaultValue={dateTo}
+                        onChange={(newDate) => {
+                          setDateTo(newDate);
+                        }}
+                        disabled={isLoading}
+                      />
+                      <CheckboxesTags
+                        label="Language filter"
+                        placeholder="Languages"
+                        options={languagesList}
+                        disabled={isLoading}
+                      />
+                      {/*<Button*/}
+                      {/*  type="submit"*/}
+                      {/*  variant="contained"*/}
+                      {/*  color="primary"*/}
+                      {/*  disabled={isLoading}*/}
+                      {/*  onClick={async (e) => {*/}
+                      {/*    e.preventDefault();*/}
+                      {/*  }}*/}
+                      {/*>*/}
+                      {/*  Filter*/}
+                      {/*</Button>*/}
+                    </Stack>
+                  </Collapse>
+                </Box>
               </Stack>
             </form>
           </Box>

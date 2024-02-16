@@ -15,15 +15,17 @@ export default function SelectSmall(props) {
 
   return (
     <FormControl
-      sx={{ m: 1, minWidth: 275 }}
+      sx={{ m: 1, minWidth: props.minWidth }}
       // size="small"
     >
-      <InputLabel id="demo-select-small-label">Search Engine</InputLabel>
+      {props.label && (
+        <InputLabel id="demo-select-small-label">{props.label}</InputLabel>
+      )}
       <Select
         labelId="demo-select-small-label"
         id="demo-select-small"
         value={valueSelected}
-        label="Search Engine"
+        label={props.label ?? ""}
         onChange={handleChange}
         disabled={props.disabled}
       >
