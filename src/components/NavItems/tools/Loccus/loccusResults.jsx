@@ -181,7 +181,7 @@ const LoccusResults = (props) => {
       <Card sx={{ width: "100%" }}>
         <CardHeader
           style={{ borderRadius: "4px 4px 0px 0px" }}
-          title={keyword("synthetic_audio_detection_title")}
+          title={keyword("loccus_title")}
           action={
             <IconButton aria-label="close" onClick={handleClose}>
               <Close sx={{ color: "white" }} />

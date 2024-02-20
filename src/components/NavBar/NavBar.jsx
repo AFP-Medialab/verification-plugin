@@ -156,9 +156,9 @@ const NavBar = () => {
         if (userAuthenticated) {
           navigate("/app/tools/" + newValue.path);
           /* history.push({
-                                                                                                                                                                                                            pathname: "/app/tools/" + newValue.path,
-                                                                                                                                                                                                            state: { media: mediaTool }
-                                                                                                                                                                                                        })*/
+                                                                                                                                                                                                                                pathname: "/app/tools/" + newValue.path,
+                                                                                                                                                                                                                                state: { media: mediaTool }
+                                                                                                                                                                                                                            })*/
         } else {
           setOpenAlert(true);
         }
@@ -179,9 +179,9 @@ const NavBar = () => {
         else {
           navigate("/app/tools/" + newValue.path);
           /*history.push({
-                                                                                                                                                                                                            pathname: "/app/tools/" + newValue.path,
-                                                                                                                                                                                                            state: { media: mediaTool }
-                                                                                                                                                                                                        })*/
+                                                                                                                                                                                                                                pathname: "/app/tools/" + newValue.path,
+                                                                                                                                                                                                                                state: { media: mediaTool }
+                                                                                                                                                                                                                            })*/
         }
       }
     } else if (newValueType === "OTHER") {
@@ -806,8 +806,8 @@ const NavBar = () => {
           title={keyword("navbar_loccus")}
         />
       ),
-      tsvPrefix: "synthetic_audio_detection",
-      path: "syntheticAudioDetection",
+      tsvPrefix: "loccus_detection",
+      path: "loccus",
       pathGroup: "TOOL",
       type: keyword("navbar_category_audio"),
       typeId: 3,
@@ -1123,13 +1123,13 @@ const NavBar = () => {
       typeId: 0,
     },
     /*{
-                                                                                    title: "navbar_factCheck",
-                                                                                    icon: (tabValue === 5) ? <FactcheckIcon width="40px" height="40px" style={{ fill: "#00926c" }} />
-                                                                                        : <FactcheckIcon width="40px" height="40px" style={{ fill: "#4c4c4c" }} />,
-                                                                                    content: <FactCheck />,
-                                                                                    path: "factCheck",
-                                                                                    footer: <Footer type={"afp"} />
-                                                                                },*/
+                                                                                            title: "navbar_factCheck",
+                                                                                            icon: (tabValue === 5) ? <FactcheckIcon width="40px" height="40px" style={{ fill: "#00926c" }} />
+                                                                                                : <FactcheckIcon width="40px" height="40px" style={{ fill: "#4c4c4c" }} />,
+                                                                                            content: <FactCheck />,
+                                                                                            path: "factCheck",
+                                                                                            footer: <Footer type={"afp"} />
+                                                                                        },*/
     {
       title: "navbar_about",
       icon:

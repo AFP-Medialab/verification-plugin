@@ -43,6 +43,8 @@ const Loccus = () => {
   );
   const keywordWarning = i18nLoadNamespace("components/Shared/OnWarningInfo");
 
+  const AUDIO_FILE_DEFAULT_STATE = undefined;
+
   const isLoading = useSelector(
     (state) => state.syntheticAudioDetection.loading,
   );
@@ -51,7 +53,7 @@ const Loccus = () => {
   const authenticatedRequest = useAuthenticatedRequest();
   const [input, setInput] = useState(url ? url : "");
   const [type, setType] = useState("");
-  const [audioFile, setAudioFile] = useState(undefined);
+  const [audioFile, setAudioFile] = useState(AUDIO_FILE_DEFAULT_STATE);
 
   const dispatch = useDispatch();
 
@@ -175,8 +177,13 @@ const Loccus = () => {
     }
   };
 
+  const resetAudioFile = () => {
+    setAudioFile(AUDIO_FILE_DEFAULT_STATE);
+  };
+
   const handleClose = () => {
     setInput("");
+    resetAudioFile();
   };
 
   const handleCloseSelectedFile = () => {
