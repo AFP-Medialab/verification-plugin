@@ -32,7 +32,6 @@ const useImageCanvas = (
 
       const context = canvas.getContext("2d", {
         willReadFrequently: true,
-        desynchronized: true,
       });
 
       const image = await preloadImage(imgSrc);
