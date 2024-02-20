@@ -4,21 +4,21 @@ const defaultState = {
   loading: false,
 };
 
-const syntheticAudioDetectionReducer = (state = defaultState, action) => {
+const loccusReducer = (state = defaultState, action) => {
   switch (action.type) {
-    case "SYNTHETIC_AUDIO_DETECTION_RESET":
+    case "LOCCUS_RESET":
       return {
         ...state,
         url: "",
         result: null,
         loading: false,
       };
-    case "SET_SYNTHETIC_AUDIO_DETECTION_LOADING":
+    case "SET_LOCCUS_LOADING":
       return {
         ...state,
         loading: action.payload,
       };
-    case "SET_SYNTHETIC_AUDIO_DETECTION_RESULT":
+    case "SET_LOCCUS_RESULT":
       return {
         ...state,
         url: action.payload.url,
@@ -29,4 +29,4 @@ const syntheticAudioDetectionReducer = (state = defaultState, action) => {
       return state;
   }
 };
-export default syntheticAudioDetectionReducer;
+export default loccusReducer;

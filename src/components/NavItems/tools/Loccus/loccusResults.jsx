@@ -12,17 +12,15 @@ import {
 } from "@mui/material";
 import { Close } from "@mui/icons-material";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import { resetSyntheticAudioDetectionAudio } from "redux/actions/tools/syntheticAudioDetectionActions";
+import { resetLoccusAudio } from "redux/actions/tools/loccusActions";
 import { useDispatch, useSelector } from "react-redux";
 import { useTrackEvent } from "Hooks/useAnalytics";
 import { getclientId } from "components/Shared/GoogleAnalytics/MatomoAnalytics";
 import GaugeChart from "react-gauge-chart";
 import CopyButton from "../../../Shared/CopyButton";
 
-const SyntheticAudioDetectionResults = (props) => {
-  const keyword = i18nLoadNamespace(
-    "components/NavItems/tools/SyntheticAudioDetection",
-  );
+const LoccusResults = (props) => {
+  const keyword = i18nLoadNamespace("components/NavItems/tools/Loccus");
 
   const dispatch = useDispatch();
 
@@ -85,7 +83,7 @@ const SyntheticAudioDetectionResults = (props) => {
 
   const handleClose = () => {
     props.handleClose();
-    dispatch(resetSyntheticAudioDetectionAudio());
+    dispatch(resetLoccusAudio());
   };
 
   function getDisplayTextForDetectionScore(score, detectionType) {
@@ -96,23 +94,25 @@ const SyntheticAudioDetectionResults = (props) => {
       return;
     }
 
+    displayText = keyword("loccus_voice_cloning_detection_rating");
+
     if (score >= DETECTION_THRESHOLD_3) {
-      displayText =
+      displayText +=
         detectionType === DETECTION_TYPES.VOICE_CLONING
           ? keyword("loccus_voice_cloning_detection_rating_4")
           : keyword("loccus_voice_recording_detection_rating_4");
     } else if (score >= DETECTION_THRESHOLD_2) {
-      displayText =
+      displayText +=
         detectionType === DETECTION_TYPES.VOICE_CLONING
           ? keyword("loccus_voice_cloning_detection_rating_3")
           : keyword("loccus_voice_recording_detection_rating_3");
     } else if (score >= DETECTION_THRESHOLD_1) {
-      displayText =
+      displayText +=
         detectionType === DETECTION_TYPES.VOICE_CLONING
           ? keyword("loccus_voice_cloning_detection_rating_2")
           : keyword("loccus_voice_recording_detection_rating_2");
     } else {
-      displayText =
+      displayText +=
         detectionType === DETECTION_TYPES.VOICE_CLONING
           ? keyword("loccus_voice_cloning_detection_rating_1")
           : keyword("loccus_voice_recording_detection_rating_1");
@@ -294,4 +294,4 @@ const SyntheticAudioDetectionResults = (props) => {
   );
 };
 
-export default SyntheticAudioDetectionResults;
+export default LoccusResults;

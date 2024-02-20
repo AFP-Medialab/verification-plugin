@@ -26,7 +26,7 @@ import ocrReducer from "./tools/ocrReducer";
 import geolocationReducer from "./tools/geolocationReducer";
 import twitterSnaReducer from "./tools/twitterSnaReducer";
 import languageSupportReducer from "./languageSupportReducer";
-import syntheticAudioDetectionReducer from "./tools/syntheticAudioDetectionReducer";
+import loccusReducer from "./tools/loccusReducer";
 
 const allReducers = combineReducers({
   language: languageReducer,
@@ -52,7 +52,7 @@ const allReducers = combineReducers({
   ocr: ocrReducer,
   gif: gifReducer,
   syntheticImageDetection: syntheticImageDetectionReducer,
-  syntheticAudioDetection: syntheticAudioDetectionReducer,
+  syntheticAudioDetection: loccusReducer,
   deepfakeImage: deepfakeReducerImage,
   deepfakeVideo: deepfakeReducerVideo,
   geolocation: geolocationReducer,

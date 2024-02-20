@@ -28,7 +28,7 @@ import AnalysisImg from "../../NavItems/tools/Analysis_images/Analysis";
 import { getclientId } from "../../Shared/GoogleAnalytics/MatomoAnalytics";
 import { useTrackPageView } from "../../../Hooks/useAnalytics";
 import Archive from "../../NavItems/tools/Archive";
-import SyntheticAudioDetection from "../../NavItems/tools/SyntheticAudioDetection";
+import Loccus from "../../NavItems/tools/Loccus";
 
 const DrawerItem = ({ drawerItems }) => {
   const drawerItemsContent = [
@@ -98,7 +98,7 @@ const DrawerItem = ({ drawerItems }) => {
       footer: <Footer type={"afp"} />,
     },
     {
-      content: <SyntheticAudioDetection />,
+      content: <Loccus />,
       footer: <Footer type={"afp"} />,
     },
     {
