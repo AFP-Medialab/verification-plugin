@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setError } from "../../../../redux/actions/errorActions";
+import { setError } from "redux/reducers/errorReducer";
 import dateFormat from "dateformat";
 import _ from "lodash";
 import useMyStyles, {
@@ -333,7 +333,7 @@ const TwitterSna = () => {
   };
 
   const session = useSelector((state) => state.userSession);
-  const uid = session && session.user ? session.user.email : null;
+  const uid = session && session.user ? session.user.id : null;
   const client_id = getclientId();
 
   const onSubmit = () => {

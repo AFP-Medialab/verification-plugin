@@ -5,7 +5,7 @@ import {
   setGeolocationLoading,
   setGeolocationResult,
 } from "../../../../../redux/reducers/tools/geolocationReducer";
-import { setError } from "../../../../../redux/actions/errorActions";
+import { setError } from "redux/reducers/errorReducer";
 
 const useGeolocate = (url, processURL, keyword) => {
   const dispatch = useDispatch();
@@ -28,12 +28,11 @@ const useGeolocate = (url, processURL, keyword) => {
               }),
             );
           } else {
-            handleError("forensic_error_" + response.data.status);
+            handleError("geo_error_" + response.data.status);
           }
         })
         .catch((error) => {
-          //console.log("ERROR 1");
-          handleError("forensic_error_" + error.status);
+          handleError("geo_error_" + error.response.status);
         });
     }
 

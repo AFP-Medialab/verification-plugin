@@ -1,10 +1,15 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { HashRouter, Route, Routes } from "react-router-dom";
-
 import PopUp from "./components/PopUp/PopUp";
 import NavBar from "./components/NavBar/NavBar";
 import useAuthenticationAPI from "./components/Shared/Authentication/useAuthenticationAPI";
+import { useDispatch } from "react-redux";
+import {
+  setErrorNetwork,
+  cleanErrorNetwork,
+} from "redux/reducers/errorReducer";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { useSelector } from "react-redux";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -56,6 +61,24 @@ const theme = createTheme({
 });
 
 const App = () => {
+  const keyword = i18nLoadNamespace("components/Shared/utils");
+  const [isOnline, setOnline] = useState(navigator.onLine);
+  const dispatch = useDispatch();
+  const checkInternetConnection = () => {
+    if (navigator.onLine) {
+      dispatch(cleanErrorNetwork());
+      //console.log("online")
+      if (!isOnline) {
+        window.location.reload(false);
+        setOnline(true);
+      }
+    } else {
+      dispatch(setErrorNetwork(keyword("offline")));
+      setOnline(false);
+      //console.log("offline")
+    }
+  };
+
   const authenticationAPI = useAuthenticationAPI();
   const locationSearchStart = window.location.href.lastIndexOf("?");
   if (locationSearchStart > 0) {
@@ -74,6 +97,16 @@ const App = () => {
   }
 
   const currentLang = useSelector((state) => state.language);
+
+  useEffect(() => {
+    window.addEventListener("online", checkInternetConnection);
+    window.addEventListener("offline", checkInternetConnection);
+    checkInternetConnection();
+    return () => {
+      window.removeEventListener("online", checkInternetConnection);
+      window.removeEventListener("offline", checkInternetConnection);
+    };
+  }, []);
 
   return (
     <HashRouter>

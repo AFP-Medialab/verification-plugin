@@ -27,7 +27,7 @@ import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace
 import { isValidUrl } from "../../../Shared/Utils/URLUtils";
 import SyntheticImageDetectionResults from "./syntheticImageDetectionResults";
 
-import { setError } from "redux/actions/errorActions";
+import { setError } from "redux/reducers/errorReducer";
 
 const SyntheticImageDetection = () => {
   const classes = useMyStyles();
@@ -179,7 +179,7 @@ const SyntheticImageDetection = () => {
   };
   const handleUploadImg = (file) => {
     if (file.size >= 6000000) {
-      dispatch(setError(keyword("file_too_big")));
+      dispatch(setError(keywordWarning("warning_file_too_big")));
     } else {
       setInput(URL.createObjectURL(file));
       setImage(file);

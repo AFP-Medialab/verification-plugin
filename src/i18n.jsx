@@ -29,7 +29,6 @@ i18next
       backendOptions: [
         {
           loadPath: `${process.env.REACT_APP_TRANSLATION_URL}/dictionaries/{{ns}}.tsv?lang={{lng}}&tag=${process.env.REACT_APP_TRANSLATION_TAG}`,
-          // "https://weverify-medialab.afp.com/translate/dictionaries/{{ns}}.tsv?lang={{lng}}&tag=v0.78",
           crossDomain: true,
           requestOptions: {
             // used for fetch, can also be a function (payload) => ({ method: 'GET' })

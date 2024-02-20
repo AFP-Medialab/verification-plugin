@@ -280,26 +280,23 @@ const ImageResult = () => {
               )}`}
             </Button>
           </Grid>
-          {/*  TEMPORARY DISABLE GOOGLE LENS 
-          isImageUrl && (
-            <Grid item>
-              <Button
-                color="primary"
-                variant="contained"
-                onClick={() =>
-                  handleClick(
-                    resultImage,
-                    isImageUrl,
-                    SEARCH_ENGINE_SETTINGS.GOOGLE_LENS_SEARCH.NAME,
-                  )
-                }
-              >
-                {`${SEARCH_ENGINE_SETTINGS.GOOGLE_LENS_SEARCH.NAME} ${keyword(
-                  "reverse_search",
-                )}`}
-              </Button>
-            </Grid>
-                )*/}
+          <Grid item>
+            <Button
+              color="primary"
+              variant="contained"
+              onClick={() =>
+                handleClick(
+                  resultImage,
+                  isImageUrl,
+                  SEARCH_ENGINE_SETTINGS.GOOGLE_LENS_SEARCH.NAME,
+                )
+              }
+            >
+              {`${SEARCH_ENGINE_SETTINGS.GOOGLE_LENS_SEARCH.NAME} ${keyword(
+                "reverse_search",
+              )}`}
+            </Button>
+          </Grid>
           <Grid item>
             <Button
               color="primary"

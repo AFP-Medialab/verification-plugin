@@ -38,8 +38,7 @@ import ExpandMore from "@mui/icons-material/ExpandMore";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
 import ScrollTop from "../Shared/ScrollTop/ScrollTop";
-
-import { cleanError } from "../../redux/actions/errorActions";
+import { cleanError, cleanErrorNetwork } from "redux/reducers/errorReducer";
 import TabItem from "./TabItem/TabItem";
 import ClassRoom from "../NavItems/ClassRoom/ClassRoom";
 import Interactive from "../NavItems/Interactive/Interactive";
@@ -191,7 +190,8 @@ const NavBar = () => {
     }
   };
 
-  const error = useSelector((state) => state.error);
+  const error = useSelector((state) => state.error.tools);
+  const errorNetwork = useSelector((state) => state.error.network);
   const tWarning = i18nLoadNamespace("components/Shared/OnWarningInfo");
   const keyword = i18nLoadNamespace("components/NavBar");
 
@@ -1780,6 +1780,15 @@ const NavBar = () => {
               variant="error"
               message={error}
               onClick={() => dispatch(cleanError())}
+              onClose={() => {}}
+              sx={{ mr: 8 }}
+            />
+          )}
+          {errorNetwork !== null && (
+            <MySnackbar
+              variant="error"
+              message={errorNetwork}
+              onClick={() => dispatch(cleanErrorNetwork())}
               onClose={() => {}}
               sx={{ mr: 8 }}
             />

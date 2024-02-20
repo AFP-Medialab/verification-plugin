@@ -5,7 +5,7 @@ import {
   setStateShow,
   setStateError,
 } from "../../../../../redux/reducers/tools/gifReducer";
-import { setError } from "../../../../../redux/actions/errorActions";
+import { setError } from "redux/reducers/errorReducer";
 import useAuthenticatedRequest from "../../../../Shared/Authentication/useAuthenticatedRequest";
 
 const useGetHomographics = (files, mode, keyword) => {
