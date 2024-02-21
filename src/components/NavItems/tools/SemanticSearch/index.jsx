@@ -68,18 +68,18 @@ const SemanticSearch = () => {
       domainUrl,
       imageUrl,
     ) {
-      (this.id = id),
-        (this.claimTranslated = claimTranslated),
-        (this.titleTranslated = titleTranslated),
-        (this.claimOriginalLanguage = claimOriginalLanguage),
-        (this.titleOriginalLanguage = titleOriginalLanguage),
-        (this.rating = rating),
-        (this.date = date),
-        (this.website = website),
-        (this.language = language),
-        (this.similarityScore = similarityScore),
-        (this.articleUrl = articleUrl),
-        (this.domainUrl = domainUrl);
+      this.id = id;
+      this.claimTranslated = claimTranslated;
+      this.titleTranslated = titleTranslated;
+      this.claimOriginalLanguage = claimOriginalLanguage;
+      this.titleOriginalLanguage = titleOriginalLanguage;
+      this.rating = rating;
+      this.date = date;
+      this.website = website;
+      this.language = language;
+      this.similarityScore = similarityScore;
+      this.articleUrl = articleUrl;
+      this.domainUrl = domainUrl;
       this.imageUrl = imageUrl;
     }
   }
@@ -153,9 +153,9 @@ const SemanticSearch = () => {
   useEffect(() => {
     const haveSettingsChanged =
       !isEqual(searchEngineMode, DEFAULT_SEARCH_ENGINE_MODE) ||
-      dateFrom != DEFAULT_DATE_FROM ||
-      dateTo != DEFAULT_DATE_TO ||
-      languageFilter.length != DEFAULT_LANGUAGE_FILTER.length;
+      dateFrom !== DEFAULT_DATE_FROM ||
+      dateTo !== DEFAULT_DATE_TO ||
+      languageFilter.length !== DEFAULT_LANGUAGE_FILTER.length;
 
     if (haveSettingsChanged) setShowResetAdvancedSettings(true);
   }, [searchEngineMode, dateFrom, dateTo, languageFilter]);
@@ -305,7 +305,7 @@ const SemanticSearch = () => {
                   </LoadingButton>
                 </Stack>
                 <Box>
-                  <Stack direction={"row"} spacing={2}>
+                  <Stack direction="row" spacing={2}>
                     <Button
                       variant="outlined"
                       endIcon={
