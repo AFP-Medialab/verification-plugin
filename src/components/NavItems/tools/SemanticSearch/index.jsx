@@ -29,6 +29,7 @@ import Typography from "@mui/material/Typography";
 import CloseIcon from "@mui/icons-material/Close";
 import axios from "axios";
 import Button from "@mui/material/Button";
+import isEqual from "lodash/isEqual";
 
 const SemanticSearch = () => {
   const languagesList = [
@@ -151,7 +152,7 @@ const SemanticSearch = () => {
 
   useEffect(() => {
     const haveSettingsChanged =
-      !_.isEqual(searchEngineMode, DEFAULT_SEARCH_ENGINE_MODE) ||
+      !isEqual(searchEngineMode, DEFAULT_SEARCH_ENGINE_MODE) ||
       dateFrom != DEFAULT_DATE_FROM ||
       dateTo != DEFAULT_DATE_TO ||
       languageFilter.length != DEFAULT_LANGUAGE_FILTER.length;
