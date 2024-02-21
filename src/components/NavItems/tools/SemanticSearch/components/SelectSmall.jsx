@@ -5,33 +5,22 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 
 export default function SelectSmall(props) {
-  const [valueSelected, setValueSelected] = React.useState(
-    props.initialValue ?? "",
-  );
-
-  const handleChange = (event) => {
-    setValueSelected(event.target.value);
-  };
-
   return (
-    <FormControl
-      sx={{ m: 1, minWidth: props.minWidth }}
-      // size="small"
-    >
+    <FormControl sx={{ m: 1, minWidth: props.minWidth }}>
       {props.label && (
         <InputLabel id="demo-select-small-label">{props.label}</InputLabel>
       )}
       <Select
         labelId="demo-select-small-label"
         id="demo-select-small"
-        value={valueSelected}
+        value={JSON.stringify(props.value)}
         label={props.label ?? ""}
-        onChange={handleChange}
+        onChange={(e) => props.setValue(JSON.parse(e.target.value))}
         disabled={props.disabled}
       >
         {props.items.map((item, index) => {
           return (
-            <MenuItem value={item.name} key={index}>
+            <MenuItem value={JSON.stringify(item)} key={index}>
               {item.name}
             </MenuItem>
           );

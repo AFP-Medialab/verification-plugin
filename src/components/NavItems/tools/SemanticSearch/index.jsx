@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import {
   Alert,
@@ -126,35 +126,85 @@ const SemanticSearch = () => {
     overflow: "auto",
   };
 
+  const DEFAULT_SEARCH_ENGINE_MODE = searchEngineModes[0];
+  const DEFAULT_DATE_FROM = null;
+  const DEFAULT_DATE_TO = null;
+  const DEFAULT_LANGUAGE_FILTER = [];
+
   const [searchString, setSearchString] = useState("");
   const [searchEngineMode, setSearchEngineMode] = useState(
-    searchEngineModes[0],
+    DEFAULT_SEARCH_ENGINE_MODE,
   );
   const [searchResults, setSearchResults] = useState([]);
 
-  const [dateFrom, setDateFrom] = useState(null);
-  const [dateTo, setDateTo] = useState(null);
-  const [languageFilter, setLanguageFilter] = useState(null);
+  const [dateFrom, setDateFrom] = useState(DEFAULT_DATE_FROM);
+  const [dateTo, setDateTo] = useState(DEFAULT_DATE_TO);
+  const [languageFilter, setLanguageFilter] = useState(DEFAULT_LANGUAGE_FILTER);
 
   const [isLoading, setIsLoading] = useState(false);
 
   const [errorMessage, setErrorMessage] = useState("");
 
   const [showAdvancedSettings, setShowAdvancedSettings] = useState(false);
+  const [showResetAdvancedSettings, setShowResetAdvancedSettings] =
+    useState(false);
+
+  useEffect(() => {
+    const haveSettingsChanged =
+      !_.isEqual(searchEngineMode, DEFAULT_SEARCH_ENGINE_MODE) ||
+      dateFrom != DEFAULT_DATE_FROM ||
+      dateTo != DEFAULT_DATE_TO ||
+      languageFilter.length != DEFAULT_LANGUAGE_FILTER.length;
+
+    if (haveSettingsChanged) setShowResetAdvancedSettings(true);
+  }, [searchEngineMode, dateFrom, dateTo, languageFilter]);
 
   const handleSubmit = async () => {
     setIsLoading(true);
     setErrorMessage("");
+
+    let searchResults;
+    try {
+      searchResults = await getFactChecks(searchString, searchEngineMode.key);
+    } catch (e) {
+      //   TODO: Handle Error
+    }
+
+    setSearchResults(searchResults);
+
+    setIsLoading(false);
+    // setTimeout(() => {
+    //   setIsLoading(false);
+    //   setErrorMessage("This is a test error message");
+    // }, 5000);
+  };
+
+  /**
+   * Retrieves the first 1000 fact checks for the chosen query string and parameters
+   * @returns {Promise<SemanticSearchResult[] | Error>}
+   */
+  const getFactChecks = async (searchString, searchMethod) => {
+    if (typeof searchString !== "string") {
+      throw new Error(
+        "[getFactCheck] Error: Invalid type for parameter searchString",
+      );
+    }
+
+    if (typeof searchMethod !== "string") {
+      throw new Error(
+        "[getFactCheck] Error: Invalid type for parameter searchMethod",
+      );
+    }
 
     const baseUrl =
       "https://demo-medialab.afp.com/vera-integration/vera/public/kinit/search/q";
 
     const params = {
       text: searchString,
-      search_method: searchEngineMode.key,
+      search_method: searchMethod,
     };
+
     const response = await axios.get(baseUrl, { params: params });
-    console.log(response.data);
 
     if (!response.data || !response.data.fact_checks) {
       //TODO: Error handling
@@ -181,18 +231,20 @@ const SemanticSearch = () => {
       resArr.push(semanticSearchResult);
     }
 
-    console.log(resArr);
-    setSearchResults(resArr);
+    return resArr;
+  };
 
-    setIsLoading(false);
-    // setTimeout(() => {
-    //   setIsLoading(false);
-    //   setErrorMessage("This is a test error message");
-    // }, 5000);
+  const resetSearchSettings = () => {
+    setSearchEngineMode(DEFAULT_SEARCH_ENGINE_MODE);
+    setDateFrom(DEFAULT_DATE_FROM);
+    setDateTo(DEFAULT_DATE_TO);
+    setLanguageFilter(DEFAULT_LANGUAGE_FILTER);
+    setShowResetAdvancedSettings(false);
   };
 
   const [openSearchEngineModal, setOpenSearchEngineModal] =
     React.useState(false);
+
   const handleOpenSearchEngineModal = () => {
     setOpenSearchEngineModal(true);
   };
@@ -252,23 +304,30 @@ const SemanticSearch = () => {
                   </LoadingButton>
                 </Stack>
                 <Box>
-                  <Button
-                    variant="outlined"
-                    endIcon={
-                      showAdvancedSettings ? (
-                        <KeyboardArrowUp />
-                      ) : (
-                        <KeyboardArrowDown />
-                      )
-                    }
-                    onClick={() =>
-                      setShowAdvancedSettings((prevState) => !prevState)
-                    }
-                  >
-                    {showAdvancedSettings
-                      ? "Hide Advanced Settings"
-                      : "Show Advanced settings"}
-                  </Button>
+                  <Stack direction={"row"} spacing={2}>
+                    <Button
+                      variant="outlined"
+                      endIcon={
+                        showAdvancedSettings ? (
+                          <KeyboardArrowUp />
+                        ) : (
+                          <KeyboardArrowDown />
+                        )
+                      }
+                      onClick={() =>
+                        setShowAdvancedSettings((prevState) => !prevState)
+                      }
+                    >
+                      {showAdvancedSettings
+                        ? "Hide Advanced Settings"
+                        : "Show Advanced settings"}
+                    </Button>
+                    {showResetAdvancedSettings && (
+                      <Button variant="text" onClick={resetSearchSettings}>
+                        Reset search settings
+                      </Button>
+                    )}
+                  </Stack>
                 </Box>
                 <Box>
                   <Collapse in={showAdvancedSettings}>
@@ -277,8 +336,8 @@ const SemanticSearch = () => {
                         <SelectSmall
                           label="Search Engine"
                           items={searchEngineModes}
-                          initialValue={searchEngineMode.name}
-                          onChange={(e) => setSearchEngineMode(e.target.value)}
+                          value={searchEngineMode}
+                          setValue={setSearchEngineMode}
                           disabled={isLoading}
                           minWidth={275}
                         />
@@ -357,13 +416,13 @@ const SemanticSearch = () => {
 
                       <DatePicker
                         label="From:"
-                        defaultValue={dateFrom}
+                        value={dateFrom}
                         onChange={(newDate) => setDateFrom(newDate)}
                         disabled={isLoading}
                       />
                       <DatePicker
                         label="To:"
-                        defaultValue={dateTo}
+                        value={dateTo}
                         onChange={(newDate) => {
                           setDateTo(newDate);
                         }}
@@ -372,20 +431,11 @@ const SemanticSearch = () => {
                       <CheckboxesTags
                         label="Language filter"
                         placeholder="Languages"
+                        value={languageFilter}
+                        setValue={setLanguageFilter}
                         options={languagesList}
                         disabled={isLoading}
                       />
-                      {/*<Button*/}
-                      {/*  type="submit"*/}
-                      {/*  variant="contained"*/}
-                      {/*  color="primary"*/}
-                      {/*  disabled={isLoading}*/}
-                      {/*  onClick={async (e) => {*/}
-                      {/*    e.preventDefault();*/}
-                      {/*  }}*/}
-                      {/*>*/}
-                      {/*  Filter*/}
-                      {/*</Button>*/}
                     </Stack>
                   </Collapse>
                 </Box>

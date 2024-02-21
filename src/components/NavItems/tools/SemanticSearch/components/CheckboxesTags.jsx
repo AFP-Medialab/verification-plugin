@@ -13,7 +13,10 @@ export default function CheckboxesTags(props) {
     <Autocomplete
       multiple
       id="checkboxes-tags-demo"
+      value={props.value}
+      onChange={(event, newValue) => props.setValue(newValue)}
       options={props.options}
+      isOptionEqualToValue={(option, value) => option.title === value.title}
       disabled={props.disabled}
       disableCloseOnSelect
       getOptionLabel={(option) => option.title}
