@@ -99,7 +99,7 @@ const DrawerItem = ({ drawerItems }) => {
     },
     {
       content: <Loccus />,
-      footer: <Footer type={"afp"} />,
+      footer: <Footer type={"loccus"} />,
     },
     {
       content: <TwitterAdvancedSearch />,
