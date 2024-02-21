@@ -9,20 +9,35 @@ import Divider from "@mui/material/Divider";
 import Grid from "@mui/material/Grid";
 import LanguageDictionary from "../../../../LocalDictionary/iso-639-1-languages.jsx";
 import SelectSmall from "./components/SelectSmall";
+import isEqual from "lodash/isEqual";
 
 const SemanticSearchResults = (searchResults) => {
   const sortingModes = [
     {
-      name: "Most Recent",
-      key: "desc",
-    },
-    {
       name: "Most relevant",
       key: "relevant",
     },
+    {
+      name: "Most Recent",
+      key: "desc",
+    },
   ];
 
+  const [results, setResults] = useState(searchResults.searchResults);
+  //setResults(searchResults);
+
   const [sortingMode, setSortingMode] = useState(sortingModes[0]);
+
+  const sortResultsBySortingMode = (sortingMode) => {
+    //relevance
+    if (isEqual(JSON.parse(sortingMode), sortingModes[0])) {
+      setResults(results.sort((a, b) => b.similarityScore - a.similarityScore));
+    }
+    //date desc
+    if (isEqual(JSON.parse(sortingMode), sortingModes[1])) {
+      setResults(results.sort((a, b) => new Date(b.date) - new Date(a.date)));
+    }
+  };
 
   const result = (
     id,
@@ -41,8 +56,6 @@ const SemanticSearchResults = (searchResults) => {
   ) => {
     const [showOriginalClaim, setShowOriginalClaim] = useState(false);
     const [showOriginalTitle, setShowOriginalTitle] = useState(false);
-
-    console.log(searchResults);
 
     return (
       <Box width="100%" key={id}>
@@ -133,8 +146,6 @@ const SemanticSearchResults = (searchResults) => {
     );
   };
 
-  console.log(searchResults.searchResults);
-
   const getLanguageName = (language) => {
     if (
       !language ||
@@ -168,13 +179,16 @@ const SemanticSearchResults = (searchResults) => {
               <SelectSmall
                 // label="Sorting"
                 items={sortingModes}
-                initialValue={sortingMode.name}
-                onChange={(e) => setSortingMode(e.target.value)}
+                value={sortingMode}
+                setValue={setSortingMode}
+                onChange={(value) => {
+                  sortResultsBySortingMode(value);
+                }}
                 minWidth={120}
               />
             </Stack>
 
-            {searchResults.searchResults.map((searchResult) => {
+            {results.map((searchResult) => {
               return result(
                 searchResult.id,
                 searchResult.claimTranslated,

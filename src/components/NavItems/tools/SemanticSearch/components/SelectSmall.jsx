@@ -15,13 +15,16 @@ export default function SelectSmall(props) {
         id="demo-select-small"
         value={JSON.stringify(props.value)}
         label={props.label ?? ""}
-        onChange={(e) => props.setValue(JSON.parse(e.target.value))}
+        onChange={(e) => {
+          props.setValue(JSON.parse(e.target.value));
+          props.onChange(e.target.value);
+        }}
         disabled={props.disabled}
       >
         {props.items.map((item, index) => {
           return (
             <MenuItem value={JSON.stringify(item)} key={index}>
-              {item.name}
+              {item.name ?? item}
             </MenuItem>
           );
         })}

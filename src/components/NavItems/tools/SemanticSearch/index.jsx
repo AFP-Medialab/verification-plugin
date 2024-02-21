@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import {
   Alert,
   Box,
+  Button,
   Card,
   Collapse,
   Fade,
@@ -28,10 +29,63 @@ import Backdrop from "@mui/material/Backdrop";
 import Typography from "@mui/material/Typography";
 import CloseIcon from "@mui/icons-material/Close";
 import axios from "axios";
-import Button from "@mui/material/Button";
 import isEqual from "lodash/isEqual";
+import dayjs from "dayjs";
 
 const SemanticSearch = () => {
+  const supportedLanguages = [
+    "ar",
+    "bg",
+    "bn",
+    "ca",
+    "cs",
+    "cz",
+    "da",
+    "de",
+    "el",
+    "en",
+    "es",
+    "fa",
+    "fi",
+    "fil",
+    "fr",
+    "hi",
+    "hr",
+    "hu",
+    "id",
+    "it",
+    "iw",
+    "ko",
+    "ky",
+    "mk",
+    "ml",
+    "ms",
+    "my",
+    "ne",
+    "nl",
+    "no",
+    "pl",
+    "pt",
+    "ro",
+    "ru",
+    "sk",
+    "sq",
+    "sr",
+    "ta",
+    "te",
+    "th",
+    "tr",
+    "uz",
+    "zh",
+  ];
+
+  const computeLanguageList = () => {
+    const languages = [];
+    for (const lg of supportedLanguages) {
+      languages.push({ title: "" });
+    }
+  };
+
   const languagesList = [
     { title: "English" },
     { title: "French" },
@@ -203,7 +257,16 @@ const SemanticSearch = () => {
     const params = {
       text: searchString,
       search_method: searchMethod,
+      time_decay: true,
     };
+
+    dateFrom &&
+      dayjs(dateFrom).isValid() &&
+      (params.published_date_from = dayjs(dateFrom).format("YYYY-MM-DD"));
+
+    dateTo &&
+      dayjs(dateTo).isValid() &&
+      (params.published_date_to = dayjs(dateTo).format("YYYY-MM-DD"));
 
     const response = await axios.get(baseUrl, { params: params });
 
@@ -372,7 +435,6 @@ const SemanticSearch = () => {
                                 <Typography
                                   id="transition-modal-title"
                                   variant="subtitle2"
-                                  component="subtitle2"
                                   style={{
                                     color: "#00926c",
                                     fontSize: "24px",
