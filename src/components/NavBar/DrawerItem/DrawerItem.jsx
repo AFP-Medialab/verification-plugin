@@ -29,6 +29,7 @@ import { getclientId } from "../../Shared/GoogleAnalytics/MatomoAnalytics";
 import { useTrackPageView } from "../../../Hooks/useAnalytics";
 import Archive from "../../NavItems/tools/Archive";
 import SemanticSearch from "../../NavItems/tools/SemanticSearch";
+import Loccus from "../../NavItems/tools/Loccus";
 
 const DrawerItem = ({ drawerItems }) => {
   const drawerItemsContent = [
@@ -96,6 +97,10 @@ const DrawerItem = ({ drawerItems }) => {
     {
       content: <Geolocation />,
       footer: <Footer type={"afp"} />,
+    },
+    {
+      content: <Loccus />,
+      footer: <Footer type={"loccus"} />,
     },
     {
       content: <TwitterAdvancedSearch />,
