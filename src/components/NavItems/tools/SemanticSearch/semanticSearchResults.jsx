@@ -7,9 +7,9 @@ import Link from "@mui/material/Link";
 import Avatar from "@mui/material/Avatar";
 import Divider from "@mui/material/Divider";
 import Grid from "@mui/material/Grid";
-import LanguageDictionary from "../../../../LocalDictionary/iso-639-1-languages.jsx";
 import SelectSmall from "./components/SelectSmall";
 import isEqual from "lodash/isEqual";
+import { getLanguageName } from "../../../Shared/Utils/languageUtils";
 
 const SemanticSearchResults = (searchResults) => {
   const sortingModes = [
@@ -24,8 +24,7 @@ const SemanticSearchResults = (searchResults) => {
   ];
 
   const [results, setResults] = useState(searchResults.searchResults);
-  //setResults(searchResults);
-
+  console.log(results);
   const [sortingMode, setSortingMode] = useState(sortingModes[0]);
 
   const sortResultsBySortingMode = (sortingMode) => {
@@ -130,7 +129,6 @@ const SemanticSearchResults = (searchResults) => {
                 {website}
               </Link>
               <Chip label={language} sx={{ width: "fit-content" }} />
-              {/*<Typography variant="body2">Score: {similarityScore}</Typography>*/}
             </Stack>
           </Grid>
         </Grid>
@@ -146,17 +144,22 @@ const SemanticSearchResults = (searchResults) => {
     );
   };
 
-  const getLanguageName = (language) => {
-    if (
-      !language ||
-      typeof language !== "string" ||
-      !LanguageDictionary[language] ||
-      typeof LanguageDictionary[language].name !== "string"
-    ) {
-      //TODO: Error handling
-      return language;
-    }
-    return LanguageDictionary[language].name.split(";")[0];
+  const RESULTS_PER_PAGE = 10;
+  const [currentPage, setCurrentPage] = useState(1);
+  const totalNumberOfPages = Math.ceil(results.length / RESULTS_PER_PAGE);
+
+  const getResultsForCurrentPage = () => {
+    const start = (currentPage - 1) * 10;
+    const end = Math.min(start + RESULTS_PER_PAGE, results.length);
+    console.log(start);
+    console.log(end);
+    console.log(results.slice(start, end));
+    return results.slice(start, end);
+  };
+
+  const changePage = (event, value) => {
+    console.log(`Page is ${value}`);
+    setCurrentPage(value);
   };
 
   return (
@@ -177,7 +180,6 @@ const SemanticSearchResults = (searchResults) => {
               alignItems="flex-end"
             >
               <SelectSmall
-                // label="Sorting"
                 items={sortingModes}
                 value={sortingMode}
                 setValue={setSortingMode}
@@ -188,7 +190,8 @@ const SemanticSearchResults = (searchResults) => {
               />
             </Stack>
 
-            {results.map((searchResult) => {
+            {getResultsForCurrentPage().map((searchResult) => {
+              console.log(searchResult);
               return result(
                 searchResult.id,
                 searchResult.claimTranslated,
@@ -207,7 +210,12 @@ const SemanticSearchResults = (searchResults) => {
             })}
 
             <Box alignSelf="center" pt={4}>
-              <Pagination count={10} color="primary" />
+              <Pagination
+                count={totalNumberOfPages}
+                color="primary"
+                onChange={changePage}
+                page={currentPage}
+              />
             </Box>
           </Stack>
         </Box>

@@ -1,4 +1,4 @@
-const languageDictonary = {
+const languageDictionary = {
   ab: {
     name: "Abkhaz",
     nativeName: "аҧсуа",
@@ -729,4 +729,4 @@ const languageDictonary = {
   },
 };
 
-export default languageDictonary;
+export default languageDictionary;

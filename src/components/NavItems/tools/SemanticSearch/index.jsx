@@ -31,6 +31,10 @@ import CloseIcon from "@mui/icons-material/Close";
 import axios from "axios";
 import isEqual from "lodash/isEqual";
 import dayjs from "dayjs";
+import {
+  getLanguageCodeFromName,
+  getLanguageName,
+} from "../../../Shared/Utils/languageUtils";
 
 const SemanticSearch = () => {
   const supportedLanguages = [
@@ -82,15 +86,12 @@ const SemanticSearch = () => {
   const computeLanguageList = () => {
     const languages = [];
     for (const lg of supportedLanguages) {
-      languages.push({ title: "" });
+      languages.push({ title: getLanguageName(lg) });
     }
+    return languages;
   };
 
-  const languagesList = [
-    { title: "English" },
-    { title: "French" },
-    { title: "Arabic" },
-  ];
+  const languagesList = computeLanguageList();
 
   class SemanticSearchResult {
     id;
@@ -254,19 +255,27 @@ const SemanticSearch = () => {
     const baseUrl =
       "https://demo-medialab.afp.com/vera-integration/vera/public/kinit/search/q";
 
-    const params = {
-      text: searchString,
-      search_method: searchMethod,
-      time_decay: true,
-    };
+    const params = new URLSearchParams();
+
+    params.append("text", searchString);
+    params.append("search_method", searchMethod);
+    params.append("time_decay", true);
+    params.append("limit", 100);
+
+    for (const language of languageFilter) {
+      params.append("language", getLanguageCodeFromName(language.title));
+    }
 
     dateFrom &&
       dayjs(dateFrom).isValid() &&
-      (params.published_date_from = dayjs(dateFrom).format("YYYY-MM-DD"));
+      params.append(
+        "published_date_from",
+        dayjs(dateFrom).format("YYYY-MM-DD"),
+      );
 
     dateTo &&
       dayjs(dateTo).isValid() &&
-      (params.published_date_to = dayjs(dateTo).format("YYYY-MM-DD"));
+      params.append("published_date_to", dayjs(dateTo).format("YYYY-MM-DD"));
 
     const response = await axios.get(baseUrl, { params: params });
 
