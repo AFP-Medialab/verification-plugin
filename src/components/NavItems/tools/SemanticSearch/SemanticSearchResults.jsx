@@ -1,21 +1,21 @@
 import React, { useState } from "react";
-import Box from "@mui/material/Box";
-import { Pagination, Stack } from "@mui/material";
-import Typography from "@mui/material/Typography";
-import Card from "@mui/material/Card";
+import { Box, Card, Pagination, Stack, Typography } from "@mui/material";
 import SelectSmall from "./components/SelectSmall";
 import isEqual from "lodash/isEqual";
 import ResultDisplayItem from "./components/ResultDisplayItem";
 import { getLanguageName } from "../../../Shared/Utils/languageUtils";
+import { i18nLoadNamespace } from "../../../Shared/Languages/i18nLoadNamespace";
 
 const SemanticSearchResults = (searchResults) => {
+  const keyword = i18nLoadNamespace("components/NavItems/tools/SemanticSearch");
+
   const sortingModes = [
     {
-      name: "Most relevant",
+      name: keyword("semantic_search_sort_relevant"),
       key: "relevant",
     },
     {
-      name: "Most Recent",
+      name: keyword("semantic_search_sort_desc"),
       key: "desc",
     },
   ];

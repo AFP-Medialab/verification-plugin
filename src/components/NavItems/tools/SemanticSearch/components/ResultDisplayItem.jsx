@@ -9,6 +9,7 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
+import { i18nLoadNamespace } from "../../../../Shared/Languages/i18nLoadNamespace";
 
 const ResultDisplayItem = ({
   id,
@@ -25,6 +26,8 @@ const ResultDisplayItem = ({
   domainUrl,
   imageUrl,
 }) => {
+  const keyword = i18nLoadNamespace("components/NavItems/tools/SemanticSearch");
+
   const [showOriginalClaim, setShowOriginalClaim] = useState(false);
   const [showOriginalTitle, setShowOriginalTitle] = useState(false);
 
@@ -56,41 +59,52 @@ const ResultDisplayItem = ({
             >
               <Stack direction="column">
                 <Typography>
-                  Claim: {showOriginalClaim ? claimOriginalLanguage : claim}
+                  {keyword("semantic_search_result_claim")}{" "}
+                  {showOriginalClaim ? claimOriginalLanguage : claim}
                 </Typography>
                 <Typography variant="caption">
-                  {showOriginalClaim ? "" : `Translated from ${language} • `}
+                  {showOriginalClaim
+                    ? ""
+                    : `${keyword(
+                        "semantic_search_result_translated_from",
+                      )} ${language} • `}
                   <Link
                     onClick={() => setShowOriginalClaim((prev) => !prev)}
                     sx={{ cursor: "pointer" }}
                   >
                     {showOriginalClaim
                       ? "Show English Translation"
-                      : "See Original"}
+                      : keyword("semantic_search_result_see_original")}
                   </Link>
                 </Typography>
               </Stack>
               <Stack direction="column">
                 <Typography>
-                  Title:{" "}
+                  {keyword("semantic_search_result_title")}{" "}
                   <Link href={articleUrl}>
                     {showOriginalTitle ? titleOriginalLanguage : title}
                   </Link>
                 </Typography>
 
                 <Typography variant="caption">
-                  {showOriginalTitle ? "" : `Translated from ${language} • `}
+                  {showOriginalTitle
+                    ? ""
+                    : `${keyword(
+                        "semantic_search_result_translated_from",
+                      )} ${language} • `}
                   <Link
                     onClick={() => setShowOriginalTitle((prev) => !prev)}
                     sx={{ cursor: "pointer" }}
                   >
                     {showOriginalTitle
-                      ? "Show English Translation"
-                      : "See Original"}
+                      ? keyword("semantic_search_result_english_translation")
+                      : keyword("semantic_search_result_see_original")}
                   </Link>
                 </Typography>
               </Stack>
-              <Typography variant="body2">Rating: {rating}</Typography>
+              <Typography variant="body2">
+                {keyword("semantic_search_rating")} {rating}
+              </Typography>
               <Typography variant="subtitle2">{date ?? ""}</Typography>
             </Stack>
           </Grid>

@@ -2,32 +2,33 @@ import React, { useEffect, useState } from "react";
 
 import {
   Alert,
+  Backdrop,
   Box,
   Button,
   Card,
   Collapse,
   Fade,
   IconButton,
+  Link,
+  Modal,
   Skeleton,
   Stack,
+  TextField,
+  Typography,
 } from "@mui/material";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import {
+  Close,
   KeyboardArrowDown,
   KeyboardArrowUp,
   ManageSearch,
 } from "@mui/icons-material";
-import TextField from "@mui/material/TextField";
-import SemanticSearchResults from "./semanticSearchResults";
+import SemanticSearchResults from "./SemanticSearchResults";
 import CheckboxesTags from "./components/CheckboxesTags";
 import { DatePicker } from "@mui/x-date-pickers";
 import SelectSmall from "./components/SelectSmall";
 import LoadingButton from "@mui/lab/LoadingButton";
-import Link from "@mui/material/Link";
-import Modal from "@mui/material/Modal";
-import Backdrop from "@mui/material/Backdrop";
-import Typography from "@mui/material/Typography";
-import CloseIcon from "@mui/icons-material/Close";
+
 import axios from "axios";
 import isEqual from "lodash/isEqual";
 import dayjs from "dayjs";
@@ -35,8 +36,11 @@ import {
   getLanguageCodeFromName,
   getLanguageName,
 } from "../../../Shared/Utils/languageUtils";
+import { i18nLoadNamespace } from "../../../Shared/Languages/i18nLoadNamespace";
 
 const SemanticSearch = () => {
+  const keyword = i18nLoadNamespace("components/NavItems/tools/SemanticSearch");
+
   const supportedLanguages = [
     "ar",
     "bg",
@@ -90,7 +94,7 @@ const SemanticSearch = () => {
     }
     return languages;
   };
-
+  //TODO: change title to code
   const languagesList = computeLanguageList();
 
   class SemanticSearchResult {
@@ -141,27 +145,23 @@ const SemanticSearch = () => {
 
   const searchEngineModes = [
     {
-      name: "Automatic selection",
-      description:
-        "Automatic selection will analyze the provided input and according to its language and length will automatically select the most appropriate search engine.",
+      name: keyword("semantic_search_search_engine_1_name"),
+      description: keyword("semantic_search_search_engine_1_description"),
       key: "auto",
     },
     {
-      name: "English based semantic search",
-      description:
-        "An English-based semantic search, where you can search any piece of text (a sentence, a paragraph or even a whole FB / Telegram / Twitter post) for any matching previously fact-checked claim. The input needs to be in English in this case (it can be translated by you from other languages using automatic translation such as Google Translate - if this model will perform well and we will use it  in the production app, we will add automatic translation later).",
+      name: keyword("semantic_search_search_engine_2_name"),
+      description: keyword("semantic_search_search_engine_2_description"),
       key: "english",
     },
     {
-      name: "Multilingual semantic Search",
-      description:
-        "A Multilingual semantic search, which works the same as the one above, but should be able to work with all common languages, including CEDMO ones, i.e.,  Slovak, Czech, and Polish.",
+      name: keyword("semantic_search_search_engine_3_name"),
+      description: keyword("semantic_search_search_engine_3_description"),
       key: "multilingual",
     },
     {
-      name: "English based keyword search",
-      description:
-        "Finally, a simple English-based keyword-based search (a standard/baseline engine that can provide good results for shorter inputs and can serve for comparison with previous more advanced models).",
+      name: keyword("semantic_search_search_engine_4_name"),
+      description: keyword("semantic_search_search_engine_4_description"),
       key: "keyword_search",
     },
   ];
@@ -328,18 +328,13 @@ const SemanticSearch = () => {
     <Box>
       <Stack direction="column" spacing={4}>
         <HeaderTool
-          name={"Fact Check Semantic Search"}
-          description={
-            "Search for semantically related fact checks by providing a paragraph of text (e.g., a social media post). The search is multilingual - input text can be in (almost) any language."
-          }
+          name={keyword("semantic_search_title")}
+          description={keyword("semantic_search_description")}
           icon={
             <ManageSearch sx={{ fill: "#00926c", width: 40, height: 40 }} />
           }
         />
-        <Alert severity="info">
-          Tip – this is a semantic search. Use one or more sentences for more
-          accurate results.
-        </Alert>
+        <Alert severity="info">{keyword("semantic_search_tip")}</Alert>
         <Card>
           <Box p={3}>
             <form>
@@ -353,8 +348,12 @@ const SemanticSearch = () => {
                   <TextField
                     fullWidth
                     value={searchString}
-                    label={"Search if already fact-checked"}
-                    placeholder={"Search if already fact-checked"}
+                    label={keyword(
+                      "semantic_search_form_textfield_placeholder",
+                    )}
+                    placeholder={keyword(
+                      "semantic_search_form_textfield_placeholder",
+                    )}
                     multiline
                     minRows={2}
                     variant="outlined"
@@ -373,7 +372,7 @@ const SemanticSearch = () => {
                       handleSubmit();
                     }}
                   >
-                    Submit
+                    {keyword("semantic_search_form_submit_button")}
                   </LoadingButton>
                 </Stack>
                 <Box>
@@ -392,12 +391,18 @@ const SemanticSearch = () => {
                       }
                     >
                       {showAdvancedSettings
-                        ? "Hide Advanced Settings"
-                        : "Show Advanced settings"}
+                        ? keyword(
+                            "semantic_search_hide_advanced_settings_button",
+                          )
+                        : keyword(
+                            "semantic_search_show_advanced_settings_button",
+                          )}
                     </Button>
                     {showResetAdvancedSettings && (
                       <Button variant="text" onClick={resetSearchSettings}>
-                        Reset search settings
+                        {keyword(
+                          "semantic_search_reset_search_settings_button",
+                        )}
                       </Button>
                     )}
                   </Stack>
@@ -407,7 +412,9 @@ const SemanticSearch = () => {
                     <Stack direction="row" spacing={2}>
                       <Stack direction="column" spacing={1}>
                         <SelectSmall
-                          label="Search Engine"
+                          label={keyword(
+                            "semantic_search_form_search_engine_placeholder",
+                          )}
                           items={searchEngineModes}
                           value={searchEngineMode}
                           setValue={setSearchEngineMode}
@@ -418,7 +425,9 @@ const SemanticSearch = () => {
                           onClick={handleOpenSearchEngineModal}
                           sx={{ cursor: "pointer" }}
                         >
-                          How to choose?
+                          {keyword(
+                            "semantic_search_search_engine_tip_link_placeholder",
+                          )}
                         </Link>
                         <Modal
                           aria-labelledby="transition-modal-title"
@@ -449,17 +458,18 @@ const SemanticSearch = () => {
                                     fontSize: "24px",
                                   }}
                                 >
-                                  How to choose the search engine?
+                                  {keyword(
+                                    "semantic_search_search_engine_tip_title",
+                                  )}
                                 </Typography>
                                 <IconButton
                                   variant="outlined"
                                   aria-label="close popup"
                                   onClick={handleCloseSearchEngineModal}
                                 >
-                                  <CloseIcon />
+                                  <Close />
                                 </IconButton>
                               </Stack>
-
                               <Stack
                                 id="transition-modal-description"
                                 direction="column"
@@ -487,13 +497,17 @@ const SemanticSearch = () => {
                       </Stack>
 
                       <DatePicker
-                        label="From:"
+                        label={keyword(
+                          "semantic_search_form_date_from_placeholder",
+                        )}
                         value={dateFrom}
                         onChange={(newDate) => setDateFrom(newDate)}
                         disabled={isLoading}
                       />
                       <DatePicker
-                        label="To:"
+                        label={keyword(
+                          "semantic_search_form_date_to_placeholder",
+                        )}
                         value={dateTo}
                         onChange={(newDate) => {
                           setDateTo(newDate);
@@ -501,7 +515,9 @@ const SemanticSearch = () => {
                         disabled={isLoading}
                       />
                       <CheckboxesTags
-                        label="Language filter"
+                        label={keyword(
+                          "semantic_search_form_language_filter_placeholder",
+                        )}
                         placeholder="Languages"
                         value={languageFilter}
                         setValue={setLanguageFilter}
@@ -531,7 +547,8 @@ const SemanticSearch = () => {
               <Skeleton variant="rounded" width={400} height={40} />
             </Stack>
           </Card>
-        ) : searchResults.length === 0 ? (
+        ) : !searchResults || searchResults.length === 0 ? (
+          //TODO: no result or Error
           <></>
         ) : (
           <SemanticSearchResults searchResults={searchResults} />

@@ -844,11 +844,11 @@ const NavBar = () => {
       toolRestrictions: [],
     },
     {
-      id: 18,
-      title: "navbar_kinitSearch",
-      description: "navbar_kinitSearch_description",
+      id: 19,
+      title: "navbar_semantic_search",
+      description: "navbar_semantic_search_description",
       icon:
-        tabValue === 0 && drawerValue === 17 ? (
+        tabValue === 0 && drawerValue === 18 ? (
           <ManageSearch
             width="45px"
             height="45px"
@@ -864,8 +864,8 @@ const NavBar = () => {
       iconColored: (
         <ManageSearch width="45px" height="45px" style={{ fill: "#00926c" }} />
       ),
-      tsvPrefix: "kinitSearch",
-      path: "kinitSearch",
+      tsvPrefix: "semantic_search",
+      path: "semantic_search",
       pathGroup: "TOOL",
       type: keyword("navbar_category_search"),
       typeId: 3,
@@ -873,11 +873,11 @@ const NavBar = () => {
       toolRestrictions: ["lock"],
     },
     {
-      id: 19,
+      id: 20,
       title: "navbar_twitter_sna",
       description: "navbar_twitter_sna_description",
       icon:
-        tabValue === 0 && drawerValue === 18 ? (
+        tabValue === 0 && drawerValue === 19 ? (
           <TwitterSnaIcon
             width="45px"
             height="45px"
@@ -909,11 +909,11 @@ const NavBar = () => {
       toolRestrictions: ["lock"],
     },
     {
-      id: 20,
+      id: 21,
       title: "navbar_archiving",
       description: "navbar_archiving_description",
       icon:
-        tabValue === 0 && drawerValue === 19 ? (
+        tabValue === 0 && drawerValue === 20 ? (
           <ArchiveIcon width="45px" height="45px" style={{ fill: "#00926c" }} />
         ) : (
           <ArchiveIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} />
@@ -930,11 +930,11 @@ const NavBar = () => {
       toolRestrictions: ["lock", "beta"],
     },
     {
-      id: 21,
+      id: 22,
       title: "navbar_twitter_crowdtangle",
       description: "navbar_twitter_crowdtangle_description",
       icon:
-        tabValue === 0 && drawerValue === 20 ? (
+        tabValue === 0 && drawerValue === 21 ? (
           <CsvSnaIcon
             width="45px"
             height="45px"
@@ -965,11 +965,11 @@ const NavBar = () => {
       toolRestrictions: [],
     },
     {
-      id: 22,
+      id: 23,
       title: "navbar_covidsearch",
       description: "navbar_covidsearch_description",
       icon:
-        tabValue === 0 && drawerValue === 21 ? (
+        tabValue === 0 && drawerValue === 22 ? (
           <CovidSearchIcon
             width="45px"
             height="45px"
@@ -1001,11 +1001,11 @@ const NavBar = () => {
       toolRestrictions: [],
     },
     {
-      id: 23,
+      id: 24,
       title: "navbar_xnetwork",
       description: "navbar_xnetwork_description",
       icon:
-        tabValue === 0 && drawerValue === 22 ? (
+        tabValue === 0 && drawerValue === 23 ? (
           <XnetworkIcon
             width="45px"
             height="45px"
