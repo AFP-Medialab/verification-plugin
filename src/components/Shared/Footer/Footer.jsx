@@ -88,6 +88,12 @@ const Footer = (props) => {
       linkLabel = keyword("loccus_link_label");
       contactUs = keyword("afp_part_2");
       break;
+    case "kinit":
+      provideBy = keyword("afp_part_1");
+      link = keyword("kinit_link");
+      linkLabel = keyword("kinit_link_label");
+      contactUs = keyword("afp_part_2");
+      break;
     default:
       provideBy = keyword("afp_part_1");
       link = keyword("afp_link");

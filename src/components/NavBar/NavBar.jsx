@@ -853,22 +853,29 @@ const NavBar = () => {
             width="45px"
             height="45px"
             style={{ fill: "#00926c" }}
+            title={keyword("navbar_semantic_search")}
           />
         ) : (
           <ManageSearch
             width="45px"
             height="45px"
             style={{ fill: "#4c4c4c" }}
+            title={keyword("navbar_semantic_search")}
           />
         ),
       iconColored: (
-        <ManageSearch width="45px" height="45px" style={{ fill: "#00926c" }} />
+        <ManageSearch
+          width="45px"
+          height="45px"
+          style={{ fill: "#00926c" }}
+          title={keyword("navbar_semantic_search")}
+        />
       ),
       tsvPrefix: "semantic_search",
-      path: "semantic_search",
+      path: "semanticSearch",
       pathGroup: "TOOL",
       type: keyword("navbar_category_search"),
-      typeId: 3,
+      typeId: 4,
       icons: ["experimental", "new", "lock"],
       toolRestrictions: ["lock"],
     },
