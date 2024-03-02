@@ -438,6 +438,7 @@ function* handleAssistantScrapeCall(action) {
         filteredSR.linkList,
         filteredSR.imageList,
         filteredSR.videoList,
+        filteredSR.urlTextHtmlMap,
       ),
     );
     yield put(setAssistantLoading(false));
@@ -591,7 +592,9 @@ const filterAssistantResults = (
   let imageList = [];
   let linkList = [];
   let urlText = null;
+  let urlTextHtmlMap = null;
   let textLang = null;
+
   switch (urlType) {
     case KNOWN_LINKS.YOUTUBE:
     case KNOWN_LINKS.LIVELEAK:
@@ -660,6 +663,7 @@ const filterAssistantResults = (
     linkList = scrapeResult.links
       .sort()
       .filter((value, index, array) => array.indexOf(value) === index);
+    urlTextHtmlMap = scrapeResult.text_html_mapping;
   }
 
   return {
@@ -668,6 +672,7 @@ const filterAssistantResults = (
     videoList: videoList,
     imageList: imageList,
     linkList: linkList,
+    urlTextHtmlMap: urlTextHtmlMap,
   };
 };
 
