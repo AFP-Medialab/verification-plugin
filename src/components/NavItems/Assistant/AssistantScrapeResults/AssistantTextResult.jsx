@@ -24,6 +24,7 @@ import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import IconButton from "@mui/material/IconButton";
 import FileCopyOutlined from "@mui/icons-material/FileCopy";
+import { treeMapToElements } from "./assistantUtils";
 
 const AssistantTextResult = () => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
@@ -35,6 +36,8 @@ const AssistantTextResult = () => {
   // assistant media states
   const text = useSelector((state) => state.assistant.urlText);
   const textLang = useSelector((state) => state.assistant.textLang);
+  const textHtmlMap = useSelector((state) => state.assistant.urlTextHtmlMap);
+  const [textHtmlOutput, setTextHtmlOutput] = useState(null);
 
   // third party check states
   const dbkfMatch = useSelector((state) => state.assistant.dbkfTextMatch);
@@ -57,6 +60,10 @@ const AssistantTextResult = () => {
     const elementToCheck = document.getElementById("element-to-check");
     if (elementToCheck.offsetHeight < elementToCheck.scrollHeight) {
       setDisplayExpander(true);
+    }
+
+    if (textHtmlMap !== null) {
+      setTextHtmlOutput(treeMapToElements(text, textHtmlMap));
     }
   }, [textBox]);
 
@@ -102,8 +109,9 @@ const AssistantTextResult = () => {
         <CardContent>
           <Collapse in={expanded} collapsedSize={100} id={"element-to-check"}>
             <Typography align={"left"}>
-              <FormatQuoteIcon fontSize={"large"} />
-              {!displayOrigLang && translatedText ? translatedText : text}
+              {/*{!displayOrigLang && translatedText ? translatedText : text}*/}
+              {textHtmlOutput && textHtmlOutput}
+              {!textHtmlOutput && text}
             </Typography>
           </Collapse>
         </CardContent>
