@@ -17,7 +17,7 @@ export default function SelectSmall(props) {
         label={props.label ?? ""}
         onChange={(e) => {
           props.setValue(JSON.parse(e.target.value));
-          props.onChange(e.target.value);
+          if (props.onChange) props.onChange(e.target.value);
         }}
         disabled={props.disabled}
       >
