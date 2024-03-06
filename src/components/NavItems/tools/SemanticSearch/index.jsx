@@ -188,6 +188,9 @@ const SemanticSearch = () => {
   const DEFAULT_LANGUAGE_FILTER = [];
 
   const [searchString, setSearchString] = useState("");
+
+  const [hasUserSubmittedForm, setHasUserSubmittedForm] = useState(false);
+
   const [searchEngineMode, setSearchEngineMode] = useState(
     DEFAULT_SEARCH_ENGINE_MODE,
   );
@@ -217,6 +220,7 @@ const SemanticSearch = () => {
 
   const handleSubmit = async () => {
     setIsLoading(true);
+    setHasUserSubmittedForm(true);
     setErrorMessage("");
 
     let searchResults;
@@ -224,6 +228,7 @@ const SemanticSearch = () => {
       searchResults = await getFactChecks(searchString, searchEngineMode.key);
     } catch (e) {
       //   TODO: Handle Error
+      setErrorMessage(e.message);
     }
 
     setSearchResults(searchResults);
@@ -252,15 +257,14 @@ const SemanticSearch = () => {
       );
     }
 
-    const baseUrl =
-      "https://demo-medialab.afp.com/vera-integration/vera/public/kinit/search/q";
+    const baseUrl = process.env.REACT_APP_SEMANTIC_SEARCH_URL;
 
     const params = new URLSearchParams();
 
     params.append("text", searchString);
     params.append("search_method", searchMethod);
-    params.append("time_decay", true);
-    params.append("limit", 100);
+    params.append("time_decay", "true");
+    params.append("limit", "100");
 
     for (const language of languageFilter) {
       params.append("language", getLanguageCodeFromName(language.title));
@@ -323,6 +327,34 @@ const SemanticSearch = () => {
   };
 
   const handleCloseSearchEngineModal = () => setOpenSearchEngineModal(false);
+
+  const displaySearchResults = () => {
+    if (isLoading)
+      return (
+        <Card>
+          <Stack direction="column" spacing={4} p={4}>
+            <Skeleton variant="rounded" height={40} />
+            <Skeleton variant="rounded" width={400} height={40} />
+          </Stack>
+        </Card>
+      );
+    else if (errorMessage)
+      return (
+        <Alert severity="error">{"An error happened. Please try again."}</Alert>
+      );
+    else if (
+      hasUserSubmittedForm &&
+      (!searchResults || searchResults.length === 0)
+    )
+      return (
+        <Alert severity="info">
+          {"This search returned no result. Try with different keywords."}
+        </Alert>
+      );
+    else if (searchResults.length > 0)
+      return <SemanticSearchResults searchResults={searchResults} />;
+    else return <></>;
+  };
 
   return (
     <Box>
@@ -417,6 +449,7 @@ const SemanticSearch = () => {
                           )}
                           items={searchEngineModes}
                           value={searchEngineMode}
+                          key={searchEngineMode.key}
                           setValue={setSearchEngineMode}
                           disabled={isLoading}
                           minWidth={275}
@@ -501,7 +534,10 @@ const SemanticSearch = () => {
                           "semantic_search_form_date_from_placeholder",
                         )}
                         value={dateFrom}
-                        onChange={(newDate) => setDateFrom(newDate)}
+                        onChange={(newDate) => setDateFrom(dayjs(newDate))}
+                        slotProps={{
+                          field: { clearable: true },
+                        }}
                         disabled={isLoading}
                       />
                       <DatePicker
@@ -511,6 +547,9 @@ const SemanticSearch = () => {
                         value={dateTo}
                         onChange={(newDate) => {
                           setDateTo(newDate);
+                        }}
+                        slotProps={{
+                          field: { clearable: true },
                         }}
                         disabled={isLoading}
                       />
@@ -539,20 +578,7 @@ const SemanticSearch = () => {
             </Fade>
           </Box>
         )}
-        {/*TODO: Add number of results*/}
-        {isLoading ? (
-          <Card>
-            <Stack direction="column" spacing={4} p={4}>
-              <Skeleton variant="rounded" height={40} />
-              <Skeleton variant="rounded" width={400} height={40} />
-            </Stack>
-          </Card>
-        ) : !searchResults || searchResults.length === 0 ? (
-          //TODO: no result or Error
-          <></>
-        ) : (
-          <SemanticSearchResults searchResults={searchResults} />
-        )}
+        {displaySearchResults()}
       </Stack>
     </Box>
   );

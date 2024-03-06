@@ -112,11 +112,13 @@ const styles = (theme) => ({
     fontWeight: "500",
     fontSize: "14px",
     textAlign: "start",
+    whiteSpace: "pre-wrap",
   },
 
   drawerListTextClosed: {
     fontWeight: "500",
     fontSize: "14px",
+    whiteSpace: "pre-wrap",
     display: "none",
   },
 

@@ -111,7 +111,11 @@ const ResultDisplayItem = ({
         </Grid>
         <Grid item xs={2} pl={4}>
           <Stack direction="column" spacing={2}>
-            <Link href={domainUrl} variant="body1">
+            <Link
+              href={domainUrl}
+              variant="body1"
+              sx={{ wordBreak: "break-all" }}
+            >
               {website}
             </Link>
             <Chip label={language} sx={{ width: "fit-content" }} />

@@ -21,7 +21,7 @@ const SemanticSearchResults = (searchResults) => {
   ];
 
   const [results, setResults] = useState(searchResults.searchResults);
-  console.log(results);
+
   const [sortingMode, setSortingMode] = useState(sortingModes[0]);
 
   const sortResultsBySortingMode = (sortingMode) => {
@@ -52,7 +52,6 @@ const SemanticSearchResults = (searchResults) => {
   };
 
   const changePage = (event, value) => {
-    console.log(`Page is ${value}`);
     setCurrentPage(value);
   };
 
@@ -73,11 +72,14 @@ const SemanticSearchResults = (searchResults) => {
               justifyContent="flex-start"
               alignItems="center"
             >
-              <Typography>{results.length} results</Typography>
+              <Typography>
+                {results.length} {keyword("semantic_search_nb_of_results")}
+              </Typography>
               <SelectSmall
                 items={sortingModes}
                 value={sortingMode}
                 setValue={setSortingMode}
+                key={sortingMode.key}
                 onChange={(value) => {
                   sortResultsBySortingMode(value);
                 }}

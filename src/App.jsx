@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { HashRouter, Route, Routes } from "react-router-dom";
 import PopUp from "./components/PopUp/PopUp";
@@ -6,18 +6,10 @@ import NavBar from "./components/NavBar/NavBar";
 import useAuthenticationAPI from "./components/Shared/Authentication/useAuthenticationAPI";
 import { useDispatch } from "react-redux";
 import {
-  setErrorNetwork,
   cleanErrorNetwork,
+  setErrorNetwork,
 } from "redux/reducers/errorReducer";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { useSelector } from "react-redux";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import "dayjs/locale/en";
-import "dayjs/locale/fr";
-import "dayjs/locale/es";
-import "dayjs/locale/el";
-import "dayjs/locale/ar";
 
 const theme = createTheme({
   palette: {
@@ -96,8 +88,6 @@ const App = () => {
     }
   }
 
-  const currentLang = useSelector((state) => state.language);
-
   useEffect(() => {
     window.addEventListener("online", checkInternetConnection);
     window.addEventListener("offline", checkInternetConnection);
@@ -111,15 +101,10 @@ const App = () => {
   return (
     <HashRouter>
       <ThemeProvider theme={theme}>
-        <LocalizationProvider
-          dateAdapter={AdapterDayjs}
-          adapterLocale={currentLang}
-        >
-          <Routes>
-            <Route index path="/" element={<PopUp />} />
-            <Route path={"/app/*"} element={<NavBar />} />
-          </Routes>
-        </LocalizationProvider>
+        <Routes>
+          <Route index path="/" element={<PopUp />} />
+          <Route path={"/app/*"} element={<NavBar />} />
+        </Routes>
       </ThemeProvider>
     </HashRouter>
   );

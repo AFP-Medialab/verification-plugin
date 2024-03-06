@@ -1597,11 +1597,17 @@ const NavBar = () => {
               component={Link}
               to={"tools"}
             >
-              <ListItemIcon color="primary.main">
+              <ListItemIcon
+                color="primary.main"
+                sx={{
+                  marginRight: "12px",
+                  minWidth: "unset",
+                }}
+              >
                 {
                   <IconButton
                     className={classes.customAllToolsButton}
-                    style={{ width: 24, height: 24 }}
+                    sx={{ width: 24, height: 24 }}
                   >
                     {toolsItem.icon}
                   </IconButton>
@@ -1623,7 +1629,13 @@ const NavBar = () => {
               const element = (
                 <div style={{ margin: "-5px -15px -5px -15px" }}>
                   <ListItem button onClick={item.functionHandleClick}>
-                    <ListItemIcon color="primary.main">
+                    <ListItemIcon
+                      color="primary.main"
+                      sx={{
+                        marginRight: "12px",
+                        minWidth: "unset",
+                      }}
+                    >
                       <IconButton
                         className={classes.customAllToolsButton}
                         style={{ width: 24, height: 24 }}
@@ -1660,6 +1672,10 @@ const NavBar = () => {
                               <ListItemIcon
                                 color="primary.main"
                                 className={classes.drawerListNested}
+                                sx={{
+                                  marginRight: "12px",
+                                  minWidth: "unset",
+                                }}
                               >
                                 {
                                   <IconButton
@@ -1671,7 +1687,13 @@ const NavBar = () => {
                                 }
                               </ListItemIcon>
                             ) : (
-                              <ListItemIcon color="primary.main">
+                              <ListItemIcon
+                                color="primary.main"
+                                sx={{
+                                  marginRight: "12px",
+                                  minWidth: "unset",
+                                }}
+                              >
                                 {
                                   <IconButton
                                     className={classes.customAllToolsButton}
@@ -1761,7 +1783,13 @@ const NavBar = () => {
                   key={key}
                   onClick={() => changeValue(item, "OTHER")}
                 >
-                  <ListItemIcon color="primary.main">
+                  <ListItemIcon
+                    color="primary.main"
+                    sx={{
+                      marginRight: "12px",
+                      minWidth: "unset",
+                    }}
+                  >
                     {
                       <IconButton
                         className={classes.customAllToolsButton}
