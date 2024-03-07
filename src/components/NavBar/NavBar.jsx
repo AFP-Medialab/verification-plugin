@@ -456,7 +456,7 @@ const NavBar = () => {
       type: keyword("navbar_category_video"),
       typeId: 1,
       icons: ["experimental", "lock"],
-      toolRestrictions: ["beta"],
+      toolRestrictions: ["BETA_TESTER"],
     },
 
     {
@@ -696,7 +696,7 @@ const NavBar = () => {
       type: keyword("navbar_category_image"),
       typeId: 2,
       icons: ["new", "experimental", "lock"],
-      toolRestrictions: ["beta"],
+      toolRestrictions: ["BETA_TESTER"],
     },
     {
       id: 15,
@@ -732,7 +732,7 @@ const NavBar = () => {
       type: keyword("navbar_category_image"),
       typeId: 2,
       icons: ["experimental", "lock"],
-      toolRestrictions: ["beta"],
+      toolRestrictions: ["BETA_TESTER"],
     },
     {
       id: 16,
@@ -768,7 +768,7 @@ const NavBar = () => {
       type: keyword("navbar_category_image"),
       typeId: 2,
       icons: ["experimental", "lock"],
-      toolRestrictions: ["beta"],
+      toolRestrictions: ["BETA_TESTER"],
     },
     {
       id: 17,
@@ -804,7 +804,7 @@ const NavBar = () => {
       type: keyword("navbar_category_audio"),
       typeId: 3,
       icons: ["new", "experimental", "lock"],
-      toolRestrictions: ["beta"],
+      toolRestrictions: ["BETA_TESTER"],
     },
 
     {
@@ -934,7 +934,7 @@ const NavBar = () => {
       type: keyword("navbar_category_other"),
       typeId: 6,
       icons: ["experimental", "new", "lock"],
-      toolRestrictions: ["lock", "beta"],
+      toolRestrictions: ["ARCHIVE"],
     },
     {
       id: 22,
@@ -1372,7 +1372,9 @@ const NavBar = () => {
     }
   };
 
-  const listItems = [
+  let listItems = [];
+
+  const tmpListItems = [
     {
       title: keyword("navbar_category_video"),
       icon: (
@@ -1402,20 +1404,6 @@ const NavBar = () => {
       classBorder: classBorderImage,
     },
     {
-      title: keyword("navbar_category_audio"),
-      icon: (
-        <Audiotrack
-          style={{ fill: "#4c4c4c" }}
-          title={keyword("navbar_category_audio")}
-        />
-      ),
-      list: drawerItemsAudio,
-      variableOpen: openListAudio,
-      setVariableOpen: setOpenListAudio,
-      functionHandleClick: handleClickListAudio,
-      classBorder: classBorderAudio,
-    },
-    {
       title: keyword("navbar_category_search"),
       icon: (
         <SearchIcon
@@ -1443,10 +1431,7 @@ const NavBar = () => {
       functionHandleClick: handleClickListData,
       classBorder: classBorderData,
     },
-  ];
-
-  if (role.includes("BETA_TESTER"))
-    listItems.push({
+    {
       title: keyword("navbar_category_other"),
       icon: <MoreHorizIcon style={{ fill: "#4c4c4c" }} />,
       list: drawerItemsOtherTools,
@@ -1454,7 +1439,39 @@ const NavBar = () => {
       setVariableOpen: setOpenListOtherTools,
       functionHandleClick: handleClickListOtherTools,
       classBorder: classBorderOtherTools,
-    });
+    },
+    {
+      title: keyword("navbar_category_audio"),
+      icon: (
+        <Audiotrack
+          style={{ fill: "#4c4c4c" }}
+          title={keyword("navbar_category_audio")}
+        />
+      ),
+      list: drawerItemsAudio,
+      variableOpen: openListAudio,
+      setVariableOpen: setOpenListAudio,
+      functionHandleClick: handleClickListAudio,
+      classBorder: classBorderAudio,
+    },
+  ];
+
+  tmpListItems.map((items) => {
+    const listTools = items.list;
+    for (let i = 0; i < listTools.length; i++) {
+      if (listTools[i].toolRestrictions.length === 0) {
+        listItems.push(items);
+        break;
+      } else if (
+        listTools[i].toolRestrictions.some((restriction) =>
+          role.includes(restriction),
+        )
+      ) {
+        listItems.push(items);
+        break;
+      }
+    }
+  });
 
   const toolsItem = drawerItems.find((data) => data.title === "navbar_tools");
   //const assistantItem = tabItems.find(data => data.title === 'navbar_assistant');
@@ -1656,7 +1673,7 @@ const NavBar = () => {
                       }
                     />
 
-                    {openListVideo ? <ExpandLess /> : <ExpandMore />}
+                    {item.variableOpen ? <ExpandLess /> : <ExpandMore />}
                   </ListItem>
 
                   <Collapse in={item.variableOpen} timeout="auto" unmountOnExit>

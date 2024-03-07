@@ -245,39 +245,44 @@ const AllTools = (props) => {
               </Box>
             }
           />
-          <Tab
-            label={
-              <Box mt={1}>
-                <Grid
-                  container
-                  direction="row"
-                  justifyContent="flex-start"
-                  alignItems="center"
-                >
-                  <Grid item>
-                    <Audiotrack
-                      width="40px"
-                      height="40px"
-                      style={{ fill: "#596977" }}
-                    />
-                  </Grid>
+          {betaTester ? (
+            <Tab
+              label={
+                <Box mt={1}>
+                  <Grid
+                    container
+                    direction="row"
+                    justifyContent="flex-start"
+                    alignItems="center"
+                  >
+                    <Grid item>
+                      <Audiotrack
+                        width="40px"
+                        height="40px"
+                        style={{ fill: "#596977" }}
+                      />
+                    </Grid>
 
-                  <Grid item>
-                    <Box m={1} />
-                  </Grid>
+                    <Grid item>
+                      <Box m={1} />
+                    </Grid>
 
-                  <Grid item>
-                    <Typography
-                      variant="h6"
-                      style={{ color: "#596977", textTransform: "capitalize" }}
-                    >
-                      {keyword("category_audio")}
-                    </Typography>
+                    <Grid item>
+                      <Typography
+                        variant="h6"
+                        style={{
+                          color: "#596977",
+                          textTransform: "capitalize",
+                        }}
+                      >
+                        {keyword("category_audio")}
+                      </Typography>
+                    </Grid>
                   </Grid>
-                </Grid>
-              </Box>
-            }
-          />
+                </Box>
+              }
+            />
+          ) : null}
           <Tab
             label={
               <Box mt={1}>
@@ -344,39 +349,44 @@ const AllTools = (props) => {
               </Box>
             }
           />
-          <Tab
-            label={
-              <Box mt={1}>
-                <Grid
-                  container
-                  direction="row"
-                  justifyContent="flex-start"
-                  alignItems="center"
-                >
-                  <Grid item>
-                    <MoreHorizIcon
-                      width="40px"
-                      height="40px"
-                      style={{ fill: "#596977" }}
-                    />
-                  </Grid>
+          {betaTester ? (
+            <Tab
+              label={
+                <Box mt={1}>
+                  <Grid
+                    container
+                    direction="row"
+                    justifyContent="flex-start"
+                    alignItems="center"
+                  >
+                    <Grid item>
+                      <MoreHorizIcon
+                        width="40px"
+                        height="40px"
+                        style={{ fill: "#596977" }}
+                      />
+                    </Grid>
 
-                  <Grid item>
-                    <Box m={1} />
-                  </Grid>
+                    <Grid item>
+                      <Box m={1} />
+                    </Grid>
 
-                  <Grid item>
-                    <Typography
-                      variant="h6"
-                      style={{ color: "#596977", textTransform: "capitalize" }}
-                    >
-                      {keyword("category_other")}
-                    </Typography>
+                    <Grid item>
+                      <Typography
+                        variant="h6"
+                        style={{
+                          color: "#596977",
+                          textTransform: "capitalize",
+                        }}
+                      >
+                        {keyword("category_other")}
+                      </Typography>
+                    </Grid>
                   </Grid>
-                </Grid>
-              </Box>
-            }
-          />
+                </Box>
+              }
+            />
+          ) : null}
         </Tabs>
 
         <Box m={1} />
