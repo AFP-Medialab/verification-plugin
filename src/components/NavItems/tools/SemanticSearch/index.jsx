@@ -83,11 +83,7 @@ const SemanticSearch = () => {
     }
 
     // order the list from A to Z
-    const languages = [...uniqueLanguages].sort((a, b) =>
-      a.title.localeCompare(b.title),
-    );
-
-    return languages;
+    return [...uniqueLanguages].sort((a, b) => a.title.localeCompare(b.title));
   };
   //TODO: change title to localizedName
   const languagesList = computeLanguageList();
