@@ -193,7 +193,7 @@ const DrawerItemContent = ({ index, drawContent }) => {
             fontSize: 12,
           },
           root: {
-            minWidth: "25%!important",
+            minWidth: "15%!important",
           },
         },
       },

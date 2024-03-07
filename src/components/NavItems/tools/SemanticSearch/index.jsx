@@ -32,69 +32,64 @@ import LoadingButton from "@mui/lab/LoadingButton";
 import axios from "axios";
 import isEqual from "lodash/isEqual";
 import dayjs from "dayjs";
-import {
-  getLanguageCodeFromName,
-  getLanguageName,
-} from "../../../Shared/Utils/languageUtils";
+import { getLanguageName } from "../../../Shared/Utils/languageUtils";
 import { i18nLoadNamespace } from "../../../Shared/Languages/i18nLoadNamespace";
+import languageDictionary from "../../../../LocalDictionary/iso-639-1-languages";
+import { useSelector } from "react-redux";
 
 const SemanticSearch = () => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/SemanticSearch");
 
-  const supportedLanguages = [
-    "ar",
-    "bg",
-    "bn",
-    "ca",
-    "cs",
-    "cz",
-    "da",
-    "de",
-    "el",
-    "en",
-    "es",
-    "fa",
-    "fi",
-    "fil",
-    "fr",
-    "hi",
-    "hr",
-    "hu",
-    "id",
-    "it",
-    "iw",
-    "ko",
-    "ky",
-    "mk",
-    "ml",
-    "ms",
-    "my",
-    "ne",
-    "nl",
-    "no",
-    "pl",
-    "pt",
-    "ro",
-    "ru",
-    "sk",
-    "sq",
-    "sr",
-    "ta",
-    "te",
-    "th",
-    "tr",
-    "uz",
-    "zh",
-  ];
+  const supportedLanguages = Object.keys(languageDictionary);
+
+  const currentLang = useSelector((state) => state.language);
+
+  /**
+   * Helper function to return a list of language keys supported if the localized language is in duplicate keys
+   * @param localizedLanguageName {string} the localized language to search keys for
+   * @param locale {string} the language used
+   * @param languageDictionary the dictionary of language keys - localized language names
+   * @returns {string[]} the array of duplicate language keys
+   */
+  const getAllLanguageKeysForLocalizedLanguage = (
+    localizedLanguageName,
+    locale,
+    languageDictionary,
+  ) => {
+    console.log(
+      Object.keys(languageDictionary).filter(
+        (key) => languageDictionary[key][locale] === localizedLanguageName,
+      ),
+    );
+
+    return Object.keys(languageDictionary).filter(
+      (key) => languageDictionary[key][locale] === localizedLanguageName,
+    );
+  };
 
   const computeLanguageList = () => {
-    const languages = [];
+    let uniqueLanguages = new Set();
+    let uniqueTitles = new Set();
     for (const lg of supportedLanguages) {
-      languages.push({ title: getLanguageName(lg) });
+      const localizedLanguageName = getLanguageName(lg, currentLang);
+
+      //skip duplicate localized language name entries
+      if (uniqueTitles.has(localizedLanguageName)) {
+        continue;
+      }
+
+      uniqueTitles.add(localizedLanguageName);
+      uniqueLanguages.add({ title: localizedLanguageName });
     }
+
+    // order the list from A to Z
+    const languages = [...uniqueLanguages].sort((a, b) =>
+      a.title.localeCompare(b.title),
+    );
+
     return languages;
   };
-  //TODO: change title to code
+  //TODO: change title to localizedName
   const languagesList = computeLanguageList();
 
   class SemanticSearchResult {
@@ -267,7 +262,15 @@ const SemanticSearch = () => {
     params.append("limit", "100");
 
     for (const language of languageFilter) {
-      params.append("language", getLanguageCodeFromName(language.title));
+      const duplicateLanguageKeys = getAllLanguageKeysForLocalizedLanguage(
+        language.title,
+        currentLang,
+        languageDictionary,
+      );
+
+      for (const key of duplicateLanguageKeys) {
+        params.append("language", key);
+      }
     }
 
     dateFrom &&
@@ -370,7 +373,7 @@ const SemanticSearch = () => {
         <Card>
           <Box p={3}>
             <form>
-              <Stack spacing={6}>
+              <Stack spacing={4}>
                 <Stack
                   direction="row"
                   spacing={2}
@@ -439,133 +442,129 @@ const SemanticSearch = () => {
                     )}
                   </Stack>
                 </Box>
-                <Box>
-                  <Collapse in={showAdvancedSettings}>
-                    <Stack direction="row" spacing={2}>
-                      <Stack direction="column" spacing={1}>
-                        <SelectSmall
-                          label={keyword(
-                            "semantic_search_form_search_engine_placeholder",
-                          )}
-                          items={searchEngineModes}
-                          value={searchEngineMode}
-                          key={searchEngineMode.key}
-                          setValue={setSearchEngineMode}
-                          disabled={isLoading}
-                          minWidth={275}
-                        />
-                        <Link
-                          onClick={handleOpenSearchEngineModal}
-                          sx={{ cursor: "pointer" }}
-                        >
-                          {keyword(
-                            "semantic_search_search_engine_tip_link_placeholder",
-                          )}
-                        </Link>
-                        <Modal
-                          aria-labelledby="transition-modal-title"
-                          aria-describedby="transition-modal-description"
-                          open={openSearchEngineModal}
-                          onClose={handleCloseSearchEngineModal}
-                          closeAfterTransition
-                          slots={{ backdrop: Backdrop }}
-                          slotProps={{
-                            backdrop: {
-                              timeout: 500,
-                            },
-                          }}
-                        >
-                          <Fade in={openSearchEngineModal}>
-                            <Box sx={searchEngineModalStyle}>
-                              <Stack
-                                direction="row"
-                                justifyContent="space-between"
-                                alignItems="center"
-                                spacing={2}
+                <Collapse in={showAdvancedSettings} mountOnEnter unmountOnExit>
+                  <Stack direction="row" spacing={1}>
+                    <Stack direction="column" spacing={1}>
+                      <SelectSmall
+                        label={keyword(
+                          "semantic_search_form_search_engine_placeholder",
+                        )}
+                        items={searchEngineModes}
+                        value={searchEngineMode}
+                        key={searchEngineMode.key}
+                        setValue={setSearchEngineMode}
+                        disabled={isLoading}
+                        minWidth={275}
+                      />
+                      <Link
+                        onClick={handleOpenSearchEngineModal}
+                        sx={{ cursor: "pointer" }}
+                      >
+                        {keyword(
+                          "semantic_search_search_engine_tip_link_placeholder",
+                        )}
+                      </Link>
+                      <Modal
+                        aria-labelledby="transition-modal-title"
+                        aria-describedby="transition-modal-description"
+                        open={openSearchEngineModal}
+                        onClose={handleCloseSearchEngineModal}
+                        closeAfterTransition
+                        slots={{ backdrop: Backdrop }}
+                        slotProps={{
+                          backdrop: {
+                            timeout: 500,
+                          },
+                        }}
+                      >
+                        <Fade in={openSearchEngineModal}>
+                          <Box sx={searchEngineModalStyle}>
+                            <Stack
+                              direction="row"
+                              justifyContent="space-between"
+                              alignItems="center"
+                              spacing={2}
+                            >
+                              <Typography
+                                id="transition-modal-title"
+                                variant="subtitle2"
+                                style={{
+                                  color: "#00926c",
+                                  fontSize: "24px",
+                                }}
                               >
-                                <Typography
-                                  id="transition-modal-title"
-                                  variant="subtitle2"
-                                  style={{
-                                    color: "#00926c",
-                                    fontSize: "24px",
-                                  }}
-                                >
-                                  {keyword(
-                                    "semantic_search_search_engine_tip_title",
-                                  )}
-                                </Typography>
-                                <IconButton
-                                  variant="outlined"
-                                  aria-label="close popup"
-                                  onClick={handleCloseSearchEngineModal}
-                                >
-                                  <Close />
-                                </IconButton>
-                              </Stack>
-                              <Stack
-                                id="transition-modal-description"
-                                direction="column"
-                                spacing={2}
-                                mt={2}
-                              >
-                                {searchEngineModes.map(
-                                  (searchEngine, index) => {
-                                    return (
-                                      <Stack direction="column" key={index}>
-                                        <Typography variant="subtitle1">
-                                          {searchEngine.name}
-                                        </Typography>
-                                        <Alert severity="info" icon={false}>
-                                          {searchEngine.description}
-                                        </Alert>
-                                      </Stack>
-                                    );
-                                  },
+                                {keyword(
+                                  "semantic_search_search_engine_tip_title",
                                 )}
-                              </Stack>
-                            </Box>
-                          </Fade>
-                        </Modal>
-                      </Stack>
-
-                      <DatePicker
-                        label={keyword(
-                          "semantic_search_form_date_from_placeholder",
-                        )}
-                        value={dateFrom}
-                        onChange={(newDate) => setDateFrom(dayjs(newDate))}
-                        slotProps={{
-                          field: { clearable: true },
-                        }}
-                        disabled={isLoading}
-                      />
-                      <DatePicker
-                        label={keyword(
-                          "semantic_search_form_date_to_placeholder",
-                        )}
-                        value={dateTo}
-                        onChange={(newDate) => {
-                          setDateTo(newDate);
-                        }}
-                        slotProps={{
-                          field: { clearable: true },
-                        }}
-                        disabled={isLoading}
-                      />
-                      <CheckboxesTags
-                        label={keyword(
-                          "semantic_search_form_language_filter_placeholder",
-                        )}
-                        placeholder="Languages"
-                        value={languageFilter}
-                        setValue={setLanguageFilter}
-                        options={languagesList}
-                        disabled={isLoading}
-                      />
+                              </Typography>
+                              <IconButton
+                                variant="outlined"
+                                aria-label="close popup"
+                                onClick={handleCloseSearchEngineModal}
+                              >
+                                <Close />
+                              </IconButton>
+                            </Stack>
+                            <Stack
+                              id="transition-modal-description"
+                              direction="column"
+                              spacing={2}
+                              mt={2}
+                            >
+                              {searchEngineModes.map((searchEngine, index) => {
+                                return (
+                                  <Stack direction="column" key={index}>
+                                    <Typography variant="subtitle1">
+                                      {searchEngine.name}
+                                    </Typography>
+                                    <Alert severity="info" icon={false}>
+                                      {searchEngine.description}
+                                    </Alert>
+                                  </Stack>
+                                );
+                              })}
+                            </Stack>
+                          </Box>
+                        </Fade>
+                      </Modal>
                     </Stack>
-                  </Collapse>
-                </Box>
+
+                    <DatePicker
+                      label={keyword(
+                        "semantic_search_form_date_from_placeholder",
+                      )}
+                      value={dateFrom}
+                      onChange={(newDate) => setDateFrom(dayjs(newDate))}
+                      slotProps={{
+                        field: { clearable: true },
+                      }}
+                      disabled={isLoading}
+                    />
+                    <DatePicker
+                      label={keyword(
+                        "semantic_search_form_date_to_placeholder",
+                      )}
+                      value={dateTo}
+                      onChange={(newDate) => {
+                        setDateTo(newDate);
+                      }}
+                      slotProps={{
+                        field: { clearable: true },
+                      }}
+                      disabled={isLoading}
+                    />
+                    <CheckboxesTags
+                      label={keyword(
+                        "semantic_search_form_language_filter_placeholder",
+                      )}
+                      placeholder="Languages"
+                      value={languageFilter}
+                      setValue={setLanguageFilter}
+                      options={languagesList}
+                      disabled={isLoading}
+                    />
+                  </Stack>
+                </Collapse>
               </Stack>
             </form>
           </Box>
