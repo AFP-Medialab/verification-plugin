@@ -1673,7 +1673,13 @@ const NavBar = () => {
                       }
                     />
 
-                    {item.variableOpen ? <ExpandLess /> : <ExpandMore />}
+                    {open ? (
+                      item.variableOpen ? (
+                        <ExpandLess />
+                      ) : (
+                        <ExpandMore />
+                      )
+                    ) : null}
                   </ListItem>
 
                   <Collapse in={item.variableOpen} timeout="auto" unmountOnExit>
