@@ -41,8 +41,8 @@ const AppWrapper = ({ children }) => {
     direction: direction,
   });
 
-  if (dayjs().locale() !== currentLang) {
-    dayjs().locale(currentLang);
+  if (dayjs.locale() !== currentLang) {
+    dayjs.locale(currentLang);
   }
 
   return (
