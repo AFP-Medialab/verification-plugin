@@ -8,7 +8,6 @@ export const getLanguageName = (language, locale) => {
     !LanguageDictionary[language] ||
     typeof LanguageDictionary[language][locale] !== "string"
   ) {
-    console.log(LanguageDictionary[language]["en"]);
     //TODO: Error handling
     // console.error(
     //   `Error: the language code ${language} is not ISO-639-1 compatible`,
