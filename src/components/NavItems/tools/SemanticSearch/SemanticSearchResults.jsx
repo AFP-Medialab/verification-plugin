@@ -5,6 +5,9 @@ import isEqual from "lodash/isEqual";
 import ResultDisplayItem from "./components/ResultDisplayItem";
 import { getLanguageName } from "../../../Shared/Utils/languageUtils";
 import { i18nLoadNamespace } from "../../../Shared/Languages/i18nLoadNamespace";
+import dayjs from "dayjs";
+import LocaleData from "dayjs/plugin/localeData";
+import localizedFormat from "dayjs/plugin/localizedFormat";
 
 const SemanticSearchResults = (searchResults) => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/SemanticSearch");
@@ -19,6 +22,10 @@ const SemanticSearchResults = (searchResults) => {
       key: "desc",
     },
   ];
+
+  dayjs.extend(LocaleData);
+  dayjs.extend(localizedFormat);
+  const globalLocaleData = dayjs.localeData();
 
   const [results, setResults] = useState(searchResults.searchResults);
 
@@ -51,8 +58,19 @@ const SemanticSearchResults = (searchResults) => {
     return results.slice(start, end);
   };
 
+  const scrollToTop = (event) => {
+    const anchor = (event.target.ownerDocument || document).querySelector(
+      "#back-to-top-anchor",
+    );
+
+    if (anchor) {
+      anchor.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  };
+
   const changePage = (event, value) => {
     setCurrentPage(value);
+    scrollToTop(event);
   };
 
   return (
@@ -82,6 +100,7 @@ const SemanticSearchResults = (searchResults) => {
                 key={sortingMode.key}
                 onChange={(value) => {
                   sortResultsBySortingMode(value);
+                  setCurrentPage(1);
                 }}
                 minWidth={120}
               />
@@ -97,7 +116,11 @@ const SemanticSearchResults = (searchResults) => {
                   claimOriginalLanguage={resultItem.claimOriginalLanguage}
                   titleOriginalLanguage={resultItem.titleOriginalLanguage}
                   rating={resultItem.rating}
-                  date={new Date(resultItem.date).toDateString() ?? null}
+                  date={
+                    dayjs(resultItem.date).format(
+                      globalLocaleData.longDateFormat("LL"),
+                    ) ?? null
+                  }
                   website={resultItem.website}
                   language={getLanguageName(resultItem.language)}
                   similarityScore={resultItem.similarityScore}
