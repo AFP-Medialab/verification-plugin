@@ -1469,8 +1469,21 @@ const NavBar = () => {
       ) {
         listItems.push(items);
         break;
+      } else if (listTools[i].toolRestrictions.includes("lock")) {
+        listItems.push(items);
+        break;
       }
     }
+  });
+
+  const drawItemPerRole = drawerItems.filter((item) => {
+    if (
+      item.toolRestrictions.length === 0 ||
+      item.toolRestrictions.includes("lock")
+    )
+      return true;
+    if (item.toolRestrictions.some((restriction) => role.includes(restriction)))
+      return true;
   });
 
   const toolsItem = drawerItems.find((data) => data.title === "navbar_tools");
@@ -1743,7 +1756,7 @@ const NavBar = () => {
                           </ListItem>
                         );
 
-                        if (itemList.toolRestrictions.includes("beta")) {
+                        if (itemList.toolRestrictions.includes("BETA_TESTER")) {
                           if (betaTester) {
                             return element;
                           } else {
@@ -1870,7 +1883,7 @@ const NavBar = () => {
           <TabItem
             className={classes.noMargin}
             tabItems={tabItems}
-            drawerItems={drawerItems}
+            drawerItems={drawItemPerRole}
           />
           <ScrollTop
             {...{ isCurrentLanguageLeftToRight: isCurrentLanguageLeftToRight }}
