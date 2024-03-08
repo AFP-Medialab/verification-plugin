@@ -62,21 +62,23 @@ const ResultDisplayItem = ({
                   {keyword("semantic_search_result_claim")}{" "}
                   {showOriginalClaim ? claimOriginalLanguage : claim}
                 </Typography>
-                <Typography variant="caption">
-                  {showOriginalClaim
-                    ? ""
-                    : `${keyword(
-                        "semantic_search_result_translated_from",
-                      )} ${language} • `}
-                  <Link
-                    onClick={() => setShowOriginalClaim((prev) => !prev)}
-                    sx={{ cursor: "pointer" }}
-                  >
+                {language !== "English" && (
+                  <Typography variant="caption">
                     {showOriginalClaim
-                      ? "Show English Translation"
-                      : keyword("semantic_search_result_see_original")}
-                  </Link>
-                </Typography>
+                      ? ""
+                      : `${keyword(
+                          "semantic_search_result_translated_from",
+                        )} ${language} • `}
+                    <Link
+                      onClick={() => setShowOriginalClaim((prev) => !prev)}
+                      sx={{ cursor: "pointer" }}
+                    >
+                      {showOriginalClaim
+                        ? "Show English Translation"
+                        : keyword("semantic_search_result_see_original")}
+                    </Link>
+                  </Typography>
+                )}
               </Stack>
               <Stack direction="column">
                 <Typography>
@@ -85,22 +87,23 @@ const ResultDisplayItem = ({
                     {showOriginalTitle ? titleOriginalLanguage : title}
                   </Link>
                 </Typography>
-
-                <Typography variant="caption">
-                  {showOriginalTitle
-                    ? ""
-                    : `${keyword(
-                        "semantic_search_result_translated_from",
-                      )} ${language} • `}
-                  <Link
-                    onClick={() => setShowOriginalTitle((prev) => !prev)}
-                    sx={{ cursor: "pointer" }}
-                  >
+                {language !== "English" && (
+                  <Typography variant="caption">
                     {showOriginalTitle
-                      ? keyword("semantic_search_result_english_translation")
-                      : keyword("semantic_search_result_see_original")}
-                  </Link>
-                </Typography>
+                      ? ""
+                      : `${keyword(
+                          "semantic_search_result_translated_from",
+                        )} ${language} • `}
+                    <Link
+                      onClick={() => setShowOriginalTitle((prev) => !prev)}
+                      sx={{ cursor: "pointer" }}
+                    >
+                      {showOriginalTitle
+                        ? keyword("semantic_search_result_english_translation")
+                        : keyword("semantic_search_result_see_original")}
+                    </Link>
+                  </Typography>
+                )}
               </Stack>
               <Typography variant="body2">
                 {keyword("semantic_search_rating")} {rating}
