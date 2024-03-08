@@ -60,11 +60,11 @@ const SemanticSearchResults = (searchResults) => {
 
   const scrollToTop = (event) => {
     const anchor = (event.target.ownerDocument || document).querySelector(
-      "#back-to-top-anchor",
+      "#SemanticSearchResults",
     );
 
     if (anchor) {
-      anchor.scrollIntoView({ behavior: "smooth", block: "center" });
+      anchor.scrollIntoView({ behavior: "smooth", block: "start" });
     }
   };
 
@@ -74,7 +74,7 @@ const SemanticSearchResults = (searchResults) => {
   };
 
   return (
-    <Box>
+    <Box id="SemanticSearchResults" sx={{ scrollMargin: "96px" }}>
       <Card>
         <Box>
           <Stack

@@ -81,7 +81,7 @@ const ResultDisplayItem = ({
               <Stack direction="column">
                 <Typography>
                   {keyword("semantic_search_result_title")}{" "}
-                  <Link href={articleUrl}>
+                  <Link href={articleUrl} target="_blank">
                     {showOriginalTitle ? titleOriginalLanguage : title}
                   </Link>
                 </Typography>
@@ -112,9 +112,10 @@ const ResultDisplayItem = ({
         <Grid item xs={2} pl={4}>
           <Stack direction="column" spacing={2}>
             <Link
-              href={domainUrl}
+              href={`https://${domainUrl}`}
               variant="body1"
               sx={{ wordBreak: "break-all" }}
+              target="_blank"
             >
               {website}
             </Link>
