@@ -1404,6 +1404,20 @@ const NavBar = () => {
       classBorder: classBorderImage,
     },
     {
+      title: keyword("navbar_category_audio"),
+      icon: (
+        <Audiotrack
+          style={{ fill: "#4c4c4c" }}
+          title={keyword("navbar_category_audio")}
+        />
+      ),
+      list: drawerItemsAudio,
+      variableOpen: openListAudio,
+      setVariableOpen: setOpenListAudio,
+      functionHandleClick: handleClickListAudio,
+      classBorder: classBorderAudio,
+    },
+    {
       title: keyword("navbar_category_search"),
       icon: (
         <SearchIcon
@@ -1439,20 +1453,6 @@ const NavBar = () => {
       setVariableOpen: setOpenListOtherTools,
       functionHandleClick: handleClickListOtherTools,
       classBorder: classBorderOtherTools,
-    },
-    {
-      title: keyword("navbar_category_audio"),
-      icon: (
-        <Audiotrack
-          style={{ fill: "#4c4c4c" }}
-          title={keyword("navbar_category_audio")}
-        />
-      ),
-      list: drawerItemsAudio,
-      variableOpen: openListAudio,
-      setVariableOpen: setOpenListAudio,
-      functionHandleClick: handleClickListAudio,
-      classBorder: classBorderAudio,
     },
   ];
 
