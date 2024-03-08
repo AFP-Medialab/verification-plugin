@@ -82,15 +82,18 @@ const SyntheticImageDetectionResults = (props) => {
       results.adm_r50_grip_report.prediction * 100,
     );
 
-    const res = [diffusionScore, ganScore, proganScore, admScore].sort(
-      (a, b) => b.predictionScore - a.predictionScore,
-    );
+    const res = (
+      role.includes("EXTRA_FEATURE")
+        ? [diffusionScore, ganScore, proganScore, admScore]
+        : [diffusionScore, ganScore, proganScore]
+    ).sort((a, b) => b.predictionScore - a.predictionScore);
 
     setSyntheticImageScores(res);
   }, [results]);
 
   const client_id = getclientId();
   const session = useSelector((state) => state.userSession);
+  const role = useSelector((state) => state.userSession.user.roles);
   const uid = session && session.user ? session.user.id : null;
 
   useTrackEvent(

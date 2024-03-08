@@ -28,7 +28,8 @@ import AnalysisImg from "../../NavItems/tools/Analysis_images/Analysis";
 import { getclientId } from "../../Shared/GoogleAnalytics/MatomoAnalytics";
 import { useTrackPageView } from "../../../Hooks/useAnalytics";
 import Archive from "../../NavItems/tools/Archive";
-import SyntheticAudioDetection from "../../NavItems/tools/SyntheticAudioDetection";
+import SemanticSearch from "../../NavItems/tools/SemanticSearch";
+import Loccus from "../../NavItems/tools/Loccus";
 
 const DrawerItem = ({ drawerItems }) => {
   const drawerItemsContent = [
@@ -98,12 +99,16 @@ const DrawerItem = ({ drawerItems }) => {
       footer: <Footer type={"afp"} />,
     },
     {
-      content: <SyntheticAudioDetection />,
-      footer: <Footer type={"afp"} />,
+      content: <Loccus />,
+      footer: <Footer type={"loccus"} />,
     },
     {
       content: <TwitterAdvancedSearch />,
       footer: <Footer type={"afp"} />,
+    },
+    {
+      content: <SemanticSearch />,
+      footer: <Footer type={"kinit"} />,
     },
     {
       content: <TwitterSna />,
@@ -188,7 +193,7 @@ const DrawerItemContent = ({ index, drawContent }) => {
             fontSize: 12,
           },
           root: {
-            minWidth: "25%!important",
+            minWidth: "15%!important",
           },
         },
       },

@@ -1,10 +1,10 @@
 import React, { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  resetSyntheticAudioDetectionAudio,
-  setSyntheticAudioDetectionLoading,
-  setSyntheticAudioDetectionResult,
-} from "../../../../redux/actions/tools/syntheticAudioDetectionActions";
+  resetLoccusAudio,
+  setLoccusLoading,
+  setLoccusResult,
+} from "../../../../redux/actions/tools/loccusActions";
 
 import axios from "axios";
 import {
@@ -26,7 +26,7 @@ import { AudioFile } from "@mui/icons-material";
 
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import SyntheticAudioDetectionResults from "./syntheticAudioDetectionResults";
+import LoccusResults from "./loccusResults";
 
 import { setError } from "redux/reducers/errorReducer";
 import { isValidUrl } from "../../../Shared/Utils/URLUtils";
@@ -35,15 +35,15 @@ import { v4 as uuidv4 } from "uuid";
 import CloseIcon from "@mui/icons-material/Close";
 import useAuthenticatedRequest from "components/Shared/Authentication/useAuthenticatedRequest";
 
-const SyntheticAudioDetection = () => {
+const Loccus = () => {
   const classes = useMyStyles();
-  const keyword = i18nLoadNamespace(
-    "components/NavItems/tools/SyntheticAudioDetection",
-  );
+  const keyword = i18nLoadNamespace("components/NavItems/tools/Loccus");
   const keywordAllTools = i18nLoadNamespace(
     "components/NavItems/tools/Alltools",
   );
   const keywordWarning = i18nLoadNamespace("components/Shared/OnWarningInfo");
+
+  const AUDIO_FILE_DEFAULT_STATE = undefined;
 
   const isLoading = useSelector(
     (state) => state.syntheticAudioDetection.loading,
@@ -53,7 +53,7 @@ const SyntheticAudioDetection = () => {
   const authenticatedRequest = useAuthenticatedRequest();
   const [input, setInput] = useState(url ? url : "");
   const [type, setType] = useState("");
-  const [audioFile, setAudioFile] = useState(undefined);
+  const [audioFile, setAudioFile] = useState(AUDIO_FILE_DEFAULT_STATE);
 
   const dispatch = useDispatch();
 
@@ -90,11 +90,11 @@ const SyntheticAudioDetection = () => {
       ? decodeURIComponent(await blobToBase64(blob))
       : await blobToBase64(audioFile);
 
-    dispatch(setSyntheticAudioDetectionLoading(true));
+    dispatch(setLoccusLoading(true));
 
     const handleError = (e) => {
       dispatch(setError(e));
-      dispatch(setSyntheticAudioDetectionLoading(false));
+      dispatch(setLoccusLoading(false));
     };
 
     let res;
@@ -166,7 +166,7 @@ const SyntheticAudioDetection = () => {
       console.log(res2.data);
 
       dispatch(
-        setSyntheticAudioDetectionResult({
+        setLoccusResult({
           url: audioFile ? URL.createObjectURL(audioFile) : url,
           result: res2.data,
         }),
@@ -177,8 +177,13 @@ const SyntheticAudioDetection = () => {
     }
   };
 
+  const resetAudioFile = () => {
+    setAudioFile(AUDIO_FILE_DEFAULT_STATE);
+  };
+
   const handleClose = () => {
     setInput("");
+    resetAudioFile();
   };
 
   const handleCloseSelectedFile = () => {
@@ -260,7 +265,7 @@ const SyntheticAudioDetection = () => {
               justifyContent="space-between"
               alignItems="center"
             >
-              <span>{keyword("synthetic_audio_detection_link")}</span>
+              <span>{keyword("loccus_link")}</span>
             </Grid>
           }
           className={classes.headerUploadedAudio}
@@ -273,8 +278,8 @@ const SyntheticAudioDetection = () => {
                 <TextField
                   type="url"
                   id="standard-full-width"
-                  label={keyword("synthetic_audio_detection_link")}
-                  placeholder={keyword("synthetic_audio_detection_placeholder")}
+                  label={keyword("loccus_link")}
+                  placeholder={keyword("loccus_placeholder")}
                   fullWidth
                   value={input}
                   variant="outlined"
@@ -288,7 +293,7 @@ const SyntheticAudioDetection = () => {
                   variant="contained"
                   color="primary"
                   onClick={async (e) => {
-                    dispatch(resetSyntheticAudioDetectionAudio());
+                    dispatch(resetLoccusAudio());
                     e.preventDefault();
                     await useGetVoiceCloningScore(
                       input,
@@ -351,14 +356,10 @@ const SyntheticAudioDetection = () => {
       <Box m={3} />
 
       {result && (
-        <SyntheticAudioDetectionResults
-          result={result}
-          url={url}
-          handleClose={handleClose}
-        />
+        <LoccusResults result={result} url={url} handleClose={handleClose} />
       )}
     </div>
   );
 };
 
-export default SyntheticAudioDetection;
+export default Loccus;
