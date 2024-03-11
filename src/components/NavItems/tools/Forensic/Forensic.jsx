@@ -22,6 +22,7 @@ import Alert from "@mui/material/Alert";
 import { cleanForensicState } from "../../../../redux/actions/tools/forensicActions";
 import { setError } from "redux/reducers/errorReducer";
 import FolderOpenIcon from "@mui/icons-material/FolderOpen";
+import axios from "axios";
 
 const Forensic = () => {
   const { url } = useParams();
@@ -115,10 +116,21 @@ const Forensic = () => {
 
   useEffect(() => {
     if (url) {
-      dispatch(cleanForensicState());
-      const uri = decodeURIComponent(url);
-      setInput(uri);
-      setUrlDetected(true);
+      if (url.startsWith("http")) {
+        dispatch(cleanForensicState());
+        const uri = decodeURIComponent(url);
+        setInput(uri);
+        setUrlDetected(true);
+      } else {
+        const load = async () => {
+          let blob =
+            (await axios.get(url, { responseType: "blob" })).data ?? null;
+          blob
+            ? handleUploadImg(blob)
+            : dispatch(setError(keywordWarning("error")));
+        };
+        load();
+      }
     }
   }, [url]);
 
@@ -133,7 +145,7 @@ const Forensic = () => {
     setImage(undefined);
   }, [image]);
 
-  const handleUploadImg = (file) => {
+  const handleUploadImg = (/** @type {File} */ file) => {
     if (file.size >= 6000000) {
       dispatch(setError(keywordWarning("warning_file_too_big")));
     } else {
@@ -208,11 +220,11 @@ const Forensic = () => {
                   </Grid>
                   <Box m={2} />
                   <Button startIcon={<FolderOpenIcon />}>
-                    <label htmlFor="fileInputMagnifier">
+                    <label htmlFor="fileInputForensic">
                       {keyword("button_localfile")}
                     </label>
                     <input
-                      id="fileInputMagnifier"
+                      id="fileInputForensic"
                       type="file"
                       hidden={true}
                       onChange={(e) => {
