@@ -129,7 +129,6 @@ const DrawerItem = ({ drawerItems }) => {
         }
       />
       {drawerItems.map((item) => {
-        console.log(item);
         let index = item.id - 1;
         if (item.path) {
           return (
