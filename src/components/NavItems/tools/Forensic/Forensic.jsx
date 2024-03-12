@@ -76,6 +76,8 @@ const Forensic = () => {
   const gifAnimationState = useSelector((state) => state.forensic.gifAnimation);
   const masks = useSelector((state) => state.forensic.masks);
   const session = useSelector((state) => state.userSession);
+  const role = useSelector((state) => state.userSession.user.roles);
+
   const uid = session && session.user ? session.user.id : null;
 
   const [input, setInput] = useState(resultUrl);
@@ -146,7 +148,7 @@ const Forensic = () => {
   }, [image]);
 
   const handleUploadImg = (/** @type {File} */ file) => {
-    if (file.size >= 6000000) {
+    if (!role.includes("EXTRA_FEATURE") && file.size >= 6000000) {
       dispatch(setError(keywordWarning("warning_file_too_big")));
     } else {
       setImage(file);
