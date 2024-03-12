@@ -553,7 +553,13 @@ const SemanticSearch = () => {
                       label={keyword(
                         "semantic_search_form_language_filter_placeholder",
                       )}
-                      placeholder="Languages"
+                      placeholder={
+                        languageFilter.length > 0
+                          ? ""
+                          : keyword(
+                              "semantic_search_form_language_filter_placeholder",
+                            )
+                      }
                       value={languageFilter}
                       setValue={setLanguageFilter}
                       options={languagesList}
