@@ -242,15 +242,21 @@ const LoccusResults = (props) => {
                     alignItems="center"
                     spacing={10}
                   >
-                    <Typography variant="subtitle2">No detection</Typography>
-                    <Typography variant="subtitle2">Detection</Typography>
+                    <Typography variant="subtitle2">
+                      {keyword("loccus_gauge_no_detection")}
+                    </Typography>
+                    <Typography variant="subtitle2">
+                      {keyword("loccus_gauge_detection")}
+                    </Typography>
                   </Stack>
                 </Stack>
                 <CustomAlertScore
                   score={voiceCloningScore}
                   detectionType={DETECTION_TYPES.VOICE_CLONING}
                 />
-                <Typography>How to interpret these results?</Typography>
+                <Typography>
+                  {keyword("loccus_cloning_additional_explanation_text")}
+                </Typography>
               </Stack>
 
               {role.includes("EXTRA_FEATURE") && (
@@ -282,16 +288,17 @@ const LoccusResults = (props) => {
                         spacing={10}
                       >
                         <Typography variant="subtitle2">
-                          No detection
+                          {keyword("loccus_gauge_no_detection")}
                         </Typography>
-                        <Typography variant="subtitle2">Detection</Typography>
+                        <Typography variant="subtitle2">
+                          {keyword("loccus_gauge_detection")}
+                        </Typography>
                       </Stack>
                     </Stack>
                     <CustomAlertScore
                       score={voiceRecordingScore}
                       detectionType={DETECTION_TYPES.VOICE_RECORDING}
                     />
-                    <Typography>How to interpret these results?</Typography>
                   </Stack>
                 </>
               )}

@@ -249,9 +249,7 @@ const Loccus = () => {
         <Alert severity="warning">
           {keywordWarning("warning_beta_loccus")}
         </Alert>
-        <Alert severity="info">
-          The audio file duration should be between 2 seconds and 2 minutes.
-        </Alert>
+        <Alert severity="info">{keyword("loccus_tip")}</Alert>
       </Stack>
 
       <Box m={3} />
