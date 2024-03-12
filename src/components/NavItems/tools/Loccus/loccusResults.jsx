@@ -65,7 +65,7 @@ const LoccusResults = (props) => {
       //   TODO: Error handling
     }
 
-    setVoiceCloningScore((1 - result.subscores.synthetic) * 100);
+    setVoiceCloningScore((1 - result.subscores.synthesis) * 100);
     setVoiceRecordingScore((1 - result.subscores.replay) * 100);
   }, [result]);
 

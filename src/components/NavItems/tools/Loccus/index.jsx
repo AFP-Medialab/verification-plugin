@@ -132,7 +132,7 @@ const Loccus = () => {
 
       console.log(res.data);
 
-      if (!res.data.fileState || res.data.fileState !== "available") {
+      if (!res.data.state || res.data.state !== "available") {
         //   TODO: Handle Error
         return;
       }
@@ -160,6 +160,7 @@ const Loccus = () => {
 
       if (!res2 || !res2.data || res2.data.message) {
         //   TODO: handle error
+        console.log(res2);
         return;
       }
 
@@ -303,7 +304,7 @@ const Loccus = () => {
                   }}
                   disabled={(input === "" && !audioFile) || isLoading}
                 >
-                  {"Submit"}
+                  {keyword("loccus_submit_button")}
                 </Button>
               </Grid>
             </Grid>
