@@ -86,7 +86,7 @@ const imageMagnifier = (info) => {
 
 const imageForensic = (info) => {
   let url = getImgUrl(info);
-  if (url !== "" && url.startsWith("http")) {
+  if (url !== "") {
     openTabs({
       url: page_name + "#/app/tools/forensic/" + encodeURIComponent(url),
     });

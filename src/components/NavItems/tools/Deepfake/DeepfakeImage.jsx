@@ -62,7 +62,7 @@ const Deepfake = () => {
     );
   };
 
-  const handleUploadImg = (file) => {
+  const handleUploadImg = (/** @type {Blob} */ file) => {
     if (file.size >= 6000000) {
       dispatch(setError(keywordWarning("warning_file_too_big")));
     } else {
