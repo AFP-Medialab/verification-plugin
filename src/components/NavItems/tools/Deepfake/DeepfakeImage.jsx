@@ -18,6 +18,7 @@ import Alert from "@mui/material/Alert";
 import FolderOpenIcon from "@mui/icons-material/FolderOpen";
 import { setError } from "redux/reducers/errorReducer";
 import { resetDeepfake } from "redux/actions/tools/deepfakeImageActions";
+import { isImageFileTooLarge } from "../../../Shared/Utils/fileUtils";
 
 const Deepfake = () => {
   //const { url } = useParams();
@@ -63,7 +64,7 @@ const Deepfake = () => {
   };
 
   const handleUploadImg = (/** @type {Blob} */ file) => {
-    if (file.size >= 6000000) {
+    if (isImageFileTooLarge(file, role)) {
       dispatch(setError(keywordWarning("warning_file_too_big")));
     } else {
       setInput(URL.createObjectURL(file));

@@ -34,6 +34,7 @@ import { isValidUrl } from "../../../Shared/Utils/URLUtils";
 import { v4 as uuidv4 } from "uuid";
 import CloseIcon from "@mui/icons-material/Close";
 import useAuthenticatedRequest from "components/Shared/Authentication/useAuthenticatedRequest";
+import { isAudioFileTooLarge } from "../../../Shared/Utils/fileUtils";
 
 const Loccus = () => {
   const classes = useMyStyles();
@@ -45,6 +46,7 @@ const Loccus = () => {
 
   const AUDIO_FILE_DEFAULT_STATE = undefined;
 
+  const role = useSelector((state) => state.userSession.user.roles);
   const isLoading = useSelector(
     (state) => state.syntheticAudioDetection.loading,
   );
@@ -130,8 +132,6 @@ const Loccus = () => {
         return;
       }
 
-      console.log(res.data);
-
       if (!res.data.state || res.data.state !== "available") {
         //   TODO: Handle Error
         return;
@@ -160,11 +160,8 @@ const Loccus = () => {
 
       if (!res2 || !res2.data || res2.data.message) {
         //   TODO: handle error
-        console.log(res2);
         return;
       }
-
-      console.log(res2.data);
 
       dispatch(
         setLoccusResult({
@@ -215,8 +212,6 @@ const Loccus = () => {
 
     audioRef.current.addEventListener("loadedmetadata", () => {
       const durationInSeconds = audioRef.current.duration;
-      console.log(audioRef.current);
-      console.log("Audio Duration:", durationInSeconds);
 
       if (durationInSeconds >= 120) {
         dispatch(setError(keywordWarning("warning_file_too_big")));
@@ -225,11 +220,9 @@ const Loccus = () => {
       }
     });
 
-    if (file.size >= 6000000) {
+    if (isAudioFileTooLarge(file, role)) {
       dispatch(setError(keywordWarning("warning_file_too_big")));
     } else {
-      console.log(file);
-      // setInput(audioURL);
       setAudioFile(file);
       setType("local");
     }
@@ -323,7 +316,7 @@ const Loccus = () => {
                   <input
                     id="fileInputSynthetic"
                     type="file"
-                    accept={"audioFile/*"}
+                    accept={"audio/*"}
                     hidden={true}
                     onChange={(e) => {
                       handleUploadAudio(e.target.files[0]);

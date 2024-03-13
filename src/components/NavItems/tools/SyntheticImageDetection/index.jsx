@@ -1,21 +1,21 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  resetSyntheticImageDetectionImage,
   setSyntheticImageDetectionLoading,
   setSyntheticImageDetectionResult,
-  resetSyntheticImageDetectionImage,
 } from "../../../../redux/actions/tools/syntheticImageDetectionActions";
 
 import axios from "axios";
 import {
+  Alert,
   Box,
-  TextField,
   Button,
-  LinearProgress,
   Card,
   CardHeader,
   Grid,
-  Alert,
+  LinearProgress,
+  TextField,
 } from "@mui/material";
 import FolderOpenIcon from "@mui/icons-material/FolderOpen";
 
@@ -28,6 +28,7 @@ import { isValidUrl } from "../../../Shared/Utils/URLUtils";
 import SyntheticImageDetectionResults from "./syntheticImageDetectionResults";
 
 import { setError } from "redux/reducers/errorReducer";
+import { isImageFileTooLarge } from "../../../Shared/Utils/fileUtils";
 
 const SyntheticImageDetection = () => {
   const classes = useMyStyles();
@@ -38,6 +39,8 @@ const SyntheticImageDetection = () => {
     "components/NavItems/tools/Alltools",
   );
   const keywordWarning = i18nLoadNamespace("components/Shared/OnWarningInfo");
+
+  const role = useSelector((state) => state.userSession.user.roles);
 
   const isLoading = useSelector(
     (state) => state.syntheticImageDetection.loading,
@@ -178,7 +181,7 @@ const SyntheticImageDetection = () => {
     setInput("");
   };
   const handleUploadImg = (file) => {
-    if (file.size >= 6000000) {
+    if (isImageFileTooLarge(file, role)) {
       dispatch(setError(keywordWarning("warning_file_too_big")));
     } else {
       setInput(URL.createObjectURL(file));

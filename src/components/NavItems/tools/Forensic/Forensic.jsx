@@ -1,9 +1,8 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-import { useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import useGetImages from "./Hooks/useGetImages";
 import LinearProgress from "@mui/material/LinearProgress";
 import ForensicResults from "./Results/ForensicResult";
@@ -23,6 +22,7 @@ import { cleanForensicState } from "../../../../redux/actions/tools/forensicActi
 import { setError } from "redux/reducers/errorReducer";
 import FolderOpenIcon from "@mui/icons-material/FolderOpen";
 import axios from "axios";
+import { isImageFileTooLarge } from "../../../Shared/Utils/fileUtils";
 
 const Forensic = () => {
   const { url } = useParams();
@@ -105,13 +105,13 @@ const Forensic = () => {
       setType("url");
       setLoaded(true);
       /*trackEvent(
-        "submission",
-        "forensic",
-        "Forensice analysis assistant",
-        input,
-        client_id,
-        uid
-      );*/
+                    "submission",
+                    "forensic",
+                    "Forensice analysis assistant",
+                    input,
+                    client_id,
+                    uid
+                  );*/
       setImage(input);
     }
   };
@@ -148,7 +148,7 @@ const Forensic = () => {
   }, [image]);
 
   const handleUploadImg = (/** @type {File} */ file) => {
-    if (!role.includes("EXTRA_FEATURE") && file.size >= 6000000) {
+    if (isImageFileTooLarge(file, role)) {
       dispatch(setError(keywordWarning("warning_file_too_big")));
     } else {
       setImage(file);
