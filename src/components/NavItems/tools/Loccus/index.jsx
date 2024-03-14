@@ -241,11 +241,11 @@ const Loccus = () => {
     const durationInSeconds = audioBuffer.duration;
 
     if (durationInSeconds >= 120) {
-      dispatch(setError("error"));
-      return Error("Audio file duration Error");
+      dispatch(setError(keyword("loccus_tip")));
+      return Error(keyword("loccus_tip"));
     } else if (durationInSeconds <= 2) {
-      dispatch(setError("error"));
-      return Error("Audio file duration Error");
+      dispatch(setError(keyword("loccus_tip")));
+      return Error(keyword("loccus_tip"));
     } else {
       return file;
     }
