@@ -122,6 +122,8 @@ const Loccus = () => {
           Accept: "application/json",
         },
         data: data,
+        timeout: 60000,
+        signal: AbortSignal.timeout(60000),
       };
 
       // First, we upload the file to Loccus
@@ -154,6 +156,8 @@ const Loccus = () => {
           Accept: "application/json",
         },
         data: data2,
+        timeout: 180000,
+        signal: AbortSignal.timeout(180000),
       };
 
       const res2 = await authenticatedRequest(config2);
@@ -171,7 +175,11 @@ const Loccus = () => {
       );
     } catch (error) {
       console.log(error);
-      handleError(error.response?.data?.message ?? error.message);
+      if (error.message.includes("canceled")) {
+        handleError(keyword("loccus_error_timeout"));
+      } else {
+        handleError(error.response?.data?.message ?? error.message);
+      }
     }
   };
 
