@@ -28,7 +28,7 @@ import { isValidUrl } from "../../../Shared/Utils/URLUtils";
 import SyntheticImageDetectionResults from "./syntheticImageDetectionResults";
 
 import { setError } from "redux/reducers/errorReducer";
-import { isImageFileTooLarge } from "../../../Shared/Utils/fileUtils";
+import { preprocessFileUpload } from "../../../Shared/Utils/fileUtils";
 
 const SyntheticImageDetection = () => {
   const classes = useMyStyles();
@@ -180,14 +180,15 @@ const SyntheticImageDetection = () => {
   const handleClose = () => {
     setInput("");
   };
-  const handleUploadImg = (file) => {
-    if (isImageFileTooLarge(file, role)) {
-      dispatch(setError(keywordWarning("warning_file_too_big")));
-    } else {
-      setInput(URL.createObjectURL(file));
-      setImage(file);
-      setType("local");
-    }
+
+  const preprocessingSuccess = (file) => {
+    setInput(URL.createObjectURL(file));
+    setImage(file);
+    setType("local");
+  };
+
+  const preprocessingError = () => {
+    dispatch(setError(keywordWarning("warning_file_too_big")));
   };
 
   return (
@@ -279,7 +280,13 @@ const SyntheticImageDetection = () => {
                   type="file"
                   hidden={true}
                   onChange={(e) => {
-                    handleUploadImg(e.target.files[0]);
+                    preprocessFileUpload(
+                      e.target.files[0],
+                      role,
+                      undefined,
+                      preprocessingSuccess,
+                      preprocessingError,
+                    );
                   }}
                 />
               </Button>

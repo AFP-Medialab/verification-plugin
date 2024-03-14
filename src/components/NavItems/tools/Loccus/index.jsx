@@ -34,7 +34,7 @@ import { isValidUrl } from "../../../Shared/Utils/URLUtils";
 import { v4 as uuidv4 } from "uuid";
 import CloseIcon from "@mui/icons-material/Close";
 import useAuthenticatedRequest from "components/Shared/Authentication/useAuthenticatedRequest";
-import { isAudioFileTooLarge } from "../../../Shared/Utils/fileUtils";
+import { preprocessFileUpload } from "../../../Shared/Utils/fileUtils";
 
 const Loccus = () => {
   const classes = useMyStyles();
@@ -186,46 +186,78 @@ const Loccus = () => {
 
   const handleCloseSelectedFile = () => {
     setAudioFile(null);
+    handleClose();
+    dispatch(resetLoccusAudio());
   };
 
   const audioRef = useRef(null);
-  const handleUploadAudio = (file) => {
+
+  const preprocessLoccusUpload = async (file) => {
     if (!(file instanceof File)) {
       dispatch(setError(keyword("error_invalid_file")));
-      return;
+      return Error(keyword("error_invalid_file"));
     }
 
     if (!file.type.includes("audio")) {
       dispatch(setError(keyword("error_invalid_media_file")));
-      return;
+      return Error(keyword("error_invalid_media_file"));
     }
 
     // TODO: Use ffmpeg to convert the m4a files if possible
     if (file.type.includes("m4a")) {
       dispatch(setError(keyword("error_invalid_audio_file")));
-      return;
+      return Error(keyword("error_invalid_audio_file"));
     }
 
     const audioURL = URL.createObjectURL(file);
-
     audioRef.current = new Audio(audioURL);
 
-    audioRef.current.addEventListener("loadedmetadata", () => {
-      const durationInSeconds = audioRef.current.duration;
+    const audioContext = new AudioContext();
+    const fileReader = new FileReader();
 
-      if (durationInSeconds >= 120) {
-        dispatch(setError(keywordWarning("warning_file_too_big")));
-      } else if (durationInSeconds <= 2) {
-        dispatch(setError(keywordWarning("warning_file_too_small")));
-      }
+    // Read the file
+    fileReader.readAsArrayBuffer(file);
+
+    // Decode audio data and use a promise to await for the results
+    const audioBuffer = await new Promise((resolve, reject) => {
+      fileReader.onload = () => {
+        if (typeof fileReader.result === "string") {
+          reject("The result is not of ArrayBuffer type");
+          return Error("The result is not of ArrayBuffer type");
+        }
+
+        audioContext.decodeAudioData(
+          fileReader.result,
+          (buffer) => {
+            resolve(buffer);
+          },
+          (error) => {
+            reject(error);
+          },
+        );
+      };
     });
 
-    if (isAudioFileTooLarge(file, role)) {
-      dispatch(setError(keywordWarning("warning_file_too_big")));
+    const durationInSeconds = audioBuffer.duration;
+
+    if (durationInSeconds >= 120) {
+      dispatch(setError("error"));
+      return Error("Audio file duration Error");
+    } else if (durationInSeconds <= 2) {
+      dispatch(setError("error"));
+      return Error("Audio file duration Error");
     } else {
-      setAudioFile(file);
-      setType("local");
+      return file;
     }
+  };
+
+  const preprocessError = () => {
+    dispatch(setError(keywordWarning("warning_file_too_big")));
+  };
+
+  const preprocessSuccess = (file) => {
+    setAudioFile(file);
+    setType("local");
   };
 
   return (
@@ -318,8 +350,14 @@ const Loccus = () => {
                     type="file"
                     accept={"audio/*"}
                     hidden={true}
-                    onChange={(e) => {
-                      handleUploadAudio(e.target.files[0]);
+                    onChange={async (e) => {
+                      preprocessFileUpload(
+                        e.target.files[0],
+                        role,
+                        await preprocessLoccusUpload(e.target.files[0]),
+                        preprocessSuccess,
+                        preprocessError,
+                      );
                       e.target.value = null;
                     }}
                   />

@@ -22,7 +22,7 @@ import { cleanForensicState } from "../../../../redux/actions/tools/forensicActi
 import { setError } from "redux/reducers/errorReducer";
 import FolderOpenIcon from "@mui/icons-material/FolderOpen";
 import axios from "axios";
-import { isImageFileTooLarge } from "../../../Shared/Utils/fileUtils";
+import { preprocessFileUpload } from "../../../Shared/Utils/fileUtils";
 
 const Forensic = () => {
   const { url } = useParams();
@@ -105,13 +105,13 @@ const Forensic = () => {
       setType("url");
       setLoaded(true);
       /*trackEvent(
-                    "submission",
-                    "forensic",
-                    "Forensice analysis assistant",
-                    input,
-                    client_id,
-                    uid
-                  );*/
+                                                              "submission",
+                                                              "forensic",
+                                                              "Forensice analysis assistant",
+                                                              input,
+                                                              client_id,
+                                                              uid
+                                                            );*/
       setImage(input);
     }
   };
@@ -128,7 +128,13 @@ const Forensic = () => {
           let blob =
             (await axios.get(url, { responseType: "blob" })).data ?? null;
           blob
-            ? handleUploadImg(blob)
+            ? preprocessFileUpload(
+                blob,
+                role,
+                undefined,
+                preprocessingSuccess,
+                preprocessingError,
+              )
             : dispatch(setError(keywordWarning("error")));
         };
         load();
@@ -147,13 +153,13 @@ const Forensic = () => {
     setImage(undefined);
   }, [image]);
 
-  const handleUploadImg = (/** @type {File} */ file) => {
-    if (isImageFileTooLarge(file, role)) {
-      dispatch(setError(keywordWarning("warning_file_too_big")));
-    } else {
-      setImage(file);
-      setType("local");
-    }
+  const preprocessingSuccess = (file) => {
+    setImage(file);
+    setType("local");
+  };
+
+  const preprocessingError = () => {
+    dispatch(setError(keywordWarning("warning_file_too_big")));
   };
 
   const loading = useSelector((state) => state.forensic.loading);
@@ -230,7 +236,13 @@ const Forensic = () => {
                       type="file"
                       hidden={true}
                       onChange={(e) => {
-                        handleUploadImg(e.target.files[0]);
+                        preprocessFileUpload(
+                          e.target.files[0],
+                          role,
+                          undefined,
+                          preprocessingSuccess,
+                          preprocessingError,
+                        );
                       }}
                     />
                   </Button>

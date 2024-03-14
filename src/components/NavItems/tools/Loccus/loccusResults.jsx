@@ -161,8 +161,6 @@ const LoccusResults = (props) => {
       alertSettings.severity = SEVERITY_SUCCESS;
     }
 
-    console.log(alertSettings);
-
     return (
       <Alert
         severity={alertSettings.severity}
