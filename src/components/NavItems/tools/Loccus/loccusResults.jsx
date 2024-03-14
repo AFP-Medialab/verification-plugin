@@ -22,6 +22,8 @@ import CopyButton from "../../../Shared/CopyButton";
 const LoccusResults = (props) => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Loccus");
 
+  const role = useSelector((state) => state.userSession.user.roles);
+
   const dispatch = useDispatch();
 
   const result = props.result;
@@ -63,7 +65,7 @@ const LoccusResults = (props) => {
       //   TODO: Error handling
     }
 
-    setVoiceCloningScore((1 - result.subscores.synthetic) * 100);
+    setVoiceCloningScore((1 - result.subscores.synthesis) * 100);
     setVoiceRecordingScore((1 - result.subscores.replay) * 100);
   }, [result]);
 
@@ -159,8 +161,6 @@ const LoccusResults = (props) => {
       alertSettings.severity = SEVERITY_SUCCESS;
     }
 
-    console.log(alertSettings);
-
     return (
       <Alert
         severity={alertSettings.severity}
@@ -240,52 +240,66 @@ const LoccusResults = (props) => {
                     alignItems="center"
                     spacing={10}
                   >
-                    <Typography variant="subtitle2">No detection</Typography>
-                    <Typography variant="subtitle2">Detection</Typography>
+                    <Typography variant="subtitle2">
+                      {keyword("loccus_gauge_no_detection")}
+                    </Typography>
+                    <Typography variant="subtitle2">
+                      {keyword("loccus_gauge_detection")}
+                    </Typography>
                   </Stack>
                 </Stack>
                 <CustomAlertScore
                   score={voiceCloningScore}
                   detectionType={DETECTION_TYPES.VOICE_CLONING}
                 />
-                <Typography>How to interpret these results?</Typography>
-              </Stack>
-              <Divider />
-              <Stack direction="column" p={4} spacing={2}>
-                <Typography variant="h5">
-                  {keyword("loccus_voice_recording_detection_title")}
+                <Typography>
+                  {keyword("loccus_cloning_additional_explanation_text")}
                 </Typography>
-                <Stack
-                  direction="column"
-                  justifyContent="center"
-                  alignItems="center"
-                  spacing={0}
-                >
-                  <GaugeChart
-                    id={"gauge-chart"}
-                    animate={false}
-                    nrOfLevels={4}
-                    textColor={"black"}
-                    arcsLength={[0.1, 0.2, 0.3, 0.4]}
-                    percent={voiceRecordingScore / 100}
-                    style={{ width: 250 }}
-                  />
-                  <Stack
-                    direction="row"
-                    justifyContent="center"
-                    alignItems="center"
-                    spacing={10}
-                  >
-                    <Typography variant="subtitle2">No detection</Typography>
-                    <Typography variant="subtitle2">Detection</Typography>
-                  </Stack>
-                </Stack>
-                <CustomAlertScore
-                  score={voiceRecordingScore}
-                  detectionType={DETECTION_TYPES.VOICE_RECORDING}
-                />
-                <Typography>How to interpret these results?</Typography>
               </Stack>
+
+              {role.includes("EXTRA_FEATURE") && (
+                <>
+                  <Divider />
+                  <Stack direction="column" p={4} spacing={2}>
+                    <Typography variant="h5">
+                      {keyword("loccus_voice_recording_detection_title")}
+                    </Typography>
+                    <Stack
+                      direction="column"
+                      justifyContent="center"
+                      alignItems="center"
+                      spacing={0}
+                    >
+                      <GaugeChart
+                        id={"gauge-chart"}
+                        animate={false}
+                        nrOfLevels={4}
+                        textColor={"black"}
+                        arcsLength={[0.1, 0.2, 0.3, 0.4]}
+                        percent={voiceRecordingScore / 100}
+                        style={{ width: 250 }}
+                      />
+                      <Stack
+                        direction="row"
+                        justifyContent="center"
+                        alignItems="center"
+                        spacing={10}
+                      >
+                        <Typography variant="subtitle2">
+                          {keyword("loccus_gauge_no_detection")}
+                        </Typography>
+                        <Typography variant="subtitle2">
+                          {keyword("loccus_gauge_detection")}
+                        </Typography>
+                      </Stack>
+                    </Stack>
+                    <CustomAlertScore
+                      score={voiceRecordingScore}
+                      detectionType={DETECTION_TYPES.VOICE_RECORDING}
+                    />
+                  </Stack>
+                </>
+              )}
             </Stack>
           </Grid>
         </Grid>

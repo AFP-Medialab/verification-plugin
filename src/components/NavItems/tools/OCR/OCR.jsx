@@ -8,11 +8,11 @@ import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 
 import {
   cleanOcr,
+  setb64InputFile,
   setOcrBinaryImage,
   setOcrErrorKey,
   setOcrInput,
   setOcrResult,
-  setb64InputFile,
 } from "../../../../redux/actions/tools/ocrActions";
 import OcrResult from "./Results/OcrResult";
 
@@ -24,13 +24,11 @@ import OCRIcon from "../../../NavBar/images/SVG/Image/OCR.svg";
 import Grid from "@mui/material/Grid";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 //import { submissionEvent } from "../../../Shared/GoogleAnalytics/GoogleAnalytics";
-import {
-  //trackEvent,
-  getclientId,
-} from "../../../Shared/GoogleAnalytics/MatomoAnalytics";
+import { getclientId } from "../../../Shared/GoogleAnalytics/MatomoAnalytics";
 import { useTrackEvent } from "../../../../Hooks/useAnalytics";
 import { setError } from "redux/reducers/errorReducer";
 import _ from "lodash";
+import { preprocessFileUpload } from "../../../Shared/Utils/fileUtils";
 
 const OCR = () => {
   const { url } = useParams();
@@ -41,6 +39,7 @@ const OCR = () => {
     "components/NavItems/tools/Alltools",
   );
 
+  const role = useSelector((state) => state.userSession.user.roles);
   const ocrInputUrl = useSelector((state) => state.ocr.url);
   const selectedScript = useSelector((state) => state.ocr.selectedScript);
   const result = useSelector((state) => state.ocr.result);
@@ -65,45 +64,40 @@ const OCR = () => {
 
   const submitUrl = (src) => {
     setEventUrl(src);
-    /*trackEvent(
-      "submission",
-      "ocr",
-      "image ocr processing",
-      src,
-      client_id,
-      uid
-    );*/
-    //submissionEvent(src);
     dispatch(setOcrInput(src, selectedScript));
   };
 
-  const handleUploadImg = (file) => {
-    //console.log("file ", file);
-    if (file.size >= 4000000) {
-      dispatch(setOcrErrorKey("ocr_too_big"));
-      dispatch(setOcrResult(false, true, false, null));
-    } else {
-      let reader = new FileReader();
-      let localurl = URL.createObjectURL(file);
-      setUserInput(localurl);
-      reader.onload = () => {
-        dispatch(setOcrBinaryImage(reader.result));
-      };
-      reader.readAsBinaryString(file);
-      let img = new Image();
-      img.crossOrigin = "anonymous";
-      img.onload = () => {
-        let canvas = document.createElement("canvas");
-        canvas.width = img.width;
-        canvas.height = img.height;
-        canvas.getContext("2d").drawImage(img, 0, 0);
-        dispatch(setb64InputFile(canvas.toDataURL("image/png")));
-        // Get raw image data
-        canvas.remove();
-      };
-      img.src = localurl;
-    }
+  const onLoadImage = (img) => {
+    img.onload = () => {
+      let canvas = document.createElement("canvas");
+      canvas.width = img.width;
+      canvas.height = img.height;
+      canvas.getContext("2d").drawImage(img, 0, 0);
+      dispatch(setb64InputFile(canvas.toDataURL("image/png")));
+      // Get raw image data
+      canvas.remove();
+    };
   };
+
+  const preprocessingSuccess = (file) => {
+    const reader = new FileReader();
+    const localUrl = URL.createObjectURL(file);
+    setUserInput(localUrl);
+    reader.onload = () => {
+      dispatch(setOcrBinaryImage(reader.result));
+    };
+    reader.readAsBinaryString(file);
+    let img = new Image();
+    img.crossOrigin = "anonymous";
+    onLoadImage(img);
+    img.src = localUrl;
+  };
+
+  const preprocessingError = () => {
+    dispatch(setOcrErrorKey("ocr_too_big"));
+    dispatch(setOcrResult(false, true, false, null));
+  };
+
   useEffect(() => {
     let error_message_key = errorKey ? errorKey : "ocr_error";
     if (fail) {
@@ -125,20 +119,12 @@ const OCR = () => {
         let reader = new FileReader();
         reader.readAsBinaryString(blob);
         reader.onloadend = () => {
-          var base64String = reader.result;
+          const base64String = reader.result;
           dispatch(setOcrBinaryImage(base64String));
           submitUrl(url);
         };
       });
-    img.onload = () => {
-      let canvas = document.createElement("canvas");
-      canvas.width = img.width;
-      canvas.height = img.height;
-      canvas.getContext("2d").drawImage(img, 0, 0);
-      // Get raw image data
-      dispatch(setb64InputFile(canvas.toDataURL("image/png")));
-      canvas.remove();
-    };
+    onLoadImage(img);
     img.src = src;
   };
 
@@ -230,7 +216,13 @@ const OCR = () => {
               type="file"
               hidden={true}
               onChange={(e) => {
-                handleUploadImg(e.target.files[0]);
+                preprocessFileUpload(
+                  e.target.files[0],
+                  role,
+                  undefined,
+                  preprocessingSuccess,
+                  preprocessingError,
+                );
               }}
             />
           </Button>

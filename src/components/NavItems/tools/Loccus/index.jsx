@@ -34,6 +34,7 @@ import { isValidUrl } from "../../../Shared/Utils/URLUtils";
 import { v4 as uuidv4 } from "uuid";
 import CloseIcon from "@mui/icons-material/Close";
 import useAuthenticatedRequest from "components/Shared/Authentication/useAuthenticatedRequest";
+import { preprocessFileUpload } from "../../../Shared/Utils/fileUtils";
 
 const Loccus = () => {
   const classes = useMyStyles();
@@ -45,6 +46,7 @@ const Loccus = () => {
 
   const AUDIO_FILE_DEFAULT_STATE = undefined;
 
+  const role = useSelector((state) => state.userSession.user.roles);
   const isLoading = useSelector(
     (state) => state.syntheticAudioDetection.loading,
   );
@@ -120,6 +122,8 @@ const Loccus = () => {
           Accept: "application/json",
         },
         data: data,
+        timeout: 60000,
+        signal: AbortSignal.timeout(60000),
       };
 
       // First, we upload the file to Loccus
@@ -130,9 +134,7 @@ const Loccus = () => {
         return;
       }
 
-      console.log(res.data);
-
-      if (!res.data.fileState || res.data.fileState !== "available") {
+      if (!res.data.state || res.data.state !== "available") {
         //   TODO: Handle Error
         return;
       }
@@ -154,6 +156,8 @@ const Loccus = () => {
           Accept: "application/json",
         },
         data: data2,
+        timeout: 180000,
+        signal: AbortSignal.timeout(180000),
       };
 
       const res2 = await authenticatedRequest(config2);
@@ -163,8 +167,6 @@ const Loccus = () => {
         return;
       }
 
-      console.log(res2.data);
-
       dispatch(
         setLoccusResult({
           url: audioFile ? URL.createObjectURL(audioFile) : url,
@@ -173,7 +175,11 @@ const Loccus = () => {
       );
     } catch (error) {
       console.log(error);
-      handleError(error.response?.data?.message ?? error.message);
+      if (error.message.includes("canceled")) {
+        handleError(keyword("loccus_error_timeout"));
+      } else {
+        handleError(error.response?.data?.message ?? error.message);
+      }
     }
   };
 
@@ -188,50 +194,78 @@ const Loccus = () => {
 
   const handleCloseSelectedFile = () => {
     setAudioFile(null);
+    handleClose();
+    dispatch(resetLoccusAudio());
   };
 
   const audioRef = useRef(null);
-  const handleUploadAudio = (file) => {
+
+  const preprocessLoccusUpload = async (file) => {
     if (!(file instanceof File)) {
       dispatch(setError(keyword("error_invalid_file")));
-      return;
+      return Error(keyword("error_invalid_file"));
     }
 
     if (!file.type.includes("audio")) {
       dispatch(setError(keyword("error_invalid_media_file")));
-      return;
+      return Error(keyword("error_invalid_media_file"));
     }
 
     // TODO: Use ffmpeg to convert the m4a files if possible
     if (file.type.includes("m4a")) {
       dispatch(setError(keyword("error_invalid_audio_file")));
-      return;
+      return Error(keyword("error_invalid_audio_file"));
     }
 
     const audioURL = URL.createObjectURL(file);
-
     audioRef.current = new Audio(audioURL);
 
-    audioRef.current.addEventListener("loadedmetadata", () => {
-      const durationInSeconds = audioRef.current.duration;
-      console.log(audioRef.current);
-      console.log("Audio Duration:", durationInSeconds);
+    const audioContext = new AudioContext();
+    const fileReader = new FileReader();
 
-      if (durationInSeconds >= 120) {
-        dispatch(setError(keywordWarning("warning_file_too_big")));
-      } else if (durationInSeconds <= 2) {
-        dispatch(setError(keywordWarning("warning_file_too_small")));
-      }
+    // Read the file
+    fileReader.readAsArrayBuffer(file);
+
+    // Decode audio data and use a promise to await for the results
+    const audioBuffer = await new Promise((resolve, reject) => {
+      fileReader.onload = () => {
+        if (typeof fileReader.result === "string") {
+          reject("The result is not of ArrayBuffer type");
+          return Error("The result is not of ArrayBuffer type");
+        }
+
+        audioContext.decodeAudioData(
+          fileReader.result,
+          (buffer) => {
+            resolve(buffer);
+          },
+          (error) => {
+            reject(error);
+          },
+        );
+      };
     });
 
-    if (file.size >= 6000000) {
-      dispatch(setError(keywordWarning("warning_file_too_big")));
+    const durationInSeconds = audioBuffer.duration;
+
+    if (durationInSeconds >= 120) {
+      dispatch(setError(keyword("loccus_tip")));
+      return Error(keyword("loccus_tip"));
+    } else if (durationInSeconds <= 2) {
+      dispatch(setError(keyword("loccus_tip")));
+      return Error(keyword("loccus_tip"));
     } else {
-      console.log(file);
-      // setInput(audioURL);
-      setAudioFile(file);
-      setType("local");
+      return file;
     }
+  };
+
+  const preprocessError = () => {
+    dispatch(setError(keywordWarning("warning_file_too_big")));
+  };
+
+  const preprocessSuccess = (file) => {
+    setAudioFile(file);
+    setType("local");
   };
 
   return (
@@ -249,9 +283,7 @@ const Loccus = () => {
         <Alert severity="warning">
           {keywordWarning("warning_beta_loccus")}
         </Alert>
-        <Alert severity="info">
-          The audio file duration should be between 2 seconds and 2 minutes.
-        </Alert>
+        <Alert severity="info">{keyword("loccus_tip")}</Alert>
       </Stack>
 
       <Box m={3} />
@@ -305,7 +337,7 @@ const Loccus = () => {
                   }}
                   disabled={(input === "" && !audioFile) || isLoading}
                 >
-                  {"Submit"}
+                  {keyword("loccus_submit_button")}
                 </Button>
               </Grid>
             </Grid>
@@ -324,10 +356,16 @@ const Loccus = () => {
                   <input
                     id="fileInputSynthetic"
                     type="file"
-                    accept={"audioFile/*"}
+                    accept={"audio/*"}
                     hidden={true}
-                    onChange={(e) => {
-                      handleUploadAudio(e.target.files[0]);
+                    onChange={async (e) => {
+                      preprocessFileUpload(
+                        e.target.files[0],
+                        role,
+                        await preprocessLoccusUpload(e.target.files[0]),
+                        preprocessSuccess,
+                        preprocessError,
+                      );
                       e.target.value = null;
                     }}
                   />

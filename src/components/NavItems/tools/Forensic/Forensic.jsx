@@ -1,9 +1,8 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-import { useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import useGetImages from "./Hooks/useGetImages";
 import LinearProgress from "@mui/material/LinearProgress";
 import ForensicResults from "./Results/ForensicResult";
@@ -22,6 +21,8 @@ import Alert from "@mui/material/Alert";
 import { cleanForensicState } from "../../../../redux/actions/tools/forensicActions";
 import { setError } from "redux/reducers/errorReducer";
 import FolderOpenIcon from "@mui/icons-material/FolderOpen";
+import axios from "axios";
+import { preprocessFileUpload } from "../../../Shared/Utils/fileUtils";
 
 const Forensic = () => {
   const { url } = useParams();
@@ -75,6 +76,8 @@ const Forensic = () => {
   const gifAnimationState = useSelector((state) => state.forensic.gifAnimation);
   const masks = useSelector((state) => state.forensic.masks);
   const session = useSelector((state) => state.userSession);
+  const role = useSelector((state) => state.userSession.user.roles);
+
   const uid = session && session.user ? session.user.id : null;
 
   const [input, setInput] = useState(resultUrl);
@@ -102,23 +105,40 @@ const Forensic = () => {
       setType("url");
       setLoaded(true);
       /*trackEvent(
-        "submission",
-        "forensic",
-        "Forensice analysis assistant",
-        input,
-        client_id,
-        uid
-      );*/
+                                                              "submission",
+                                                              "forensic",
+                                                              "Forensice analysis assistant",
+                                                              input,
+                                                              client_id,
+                                                              uid
+                                                            );*/
       setImage(input);
     }
   };
 
   useEffect(() => {
     if (url) {
-      dispatch(cleanForensicState());
-      const uri = decodeURIComponent(url);
-      setInput(uri);
-      setUrlDetected(true);
+      if (url.startsWith("http")) {
+        dispatch(cleanForensicState());
+        const uri = decodeURIComponent(url);
+        setInput(uri);
+        setUrlDetected(true);
+      } else {
+        const load = async () => {
+          let blob =
+            (await axios.get(url, { responseType: "blob" })).data ?? null;
+          blob
+            ? preprocessFileUpload(
+                blob,
+                role,
+                undefined,
+                preprocessingSuccess,
+                preprocessingError,
+              )
+            : dispatch(setError(keywordWarning("error")));
+        };
+        load();
+      }
     }
   }, [url]);
 
@@ -133,13 +153,13 @@ const Forensic = () => {
     setImage(undefined);
   }, [image]);
 
-  const handleUploadImg = (file) => {
-    if (file.size >= 6000000) {
-      dispatch(setError(keywordWarning("warning_file_too_big")));
-    } else {
-      setImage(file);
-      setType("local");
-    }
+  const preprocessingSuccess = (file) => {
+    setImage(file);
+    setType("local");
+  };
+
+  const preprocessingError = () => {
+    dispatch(setError(keywordWarning("warning_file_too_big")));
   };
 
   const loading = useSelector((state) => state.forensic.loading);
@@ -208,15 +228,21 @@ const Forensic = () => {
                   </Grid>
                   <Box m={2} />
                   <Button startIcon={<FolderOpenIcon />}>
-                    <label htmlFor="fileInputMagnifier">
+                    <label htmlFor="fileInputForensic">
                       {keyword("button_localfile")}
                     </label>
                     <input
-                      id="fileInputMagnifier"
+                      id="fileInputForensic"
                       type="file"
                       hidden={true}
                       onChange={(e) => {
-                        handleUploadImg(e.target.files[0]);
+                        preprocessFileUpload(
+                          e.target.files[0],
+                          role,
+                          undefined,
+                          preprocessingSuccess,
+                          preprocessingError,
+                        );
                       }}
                     />
                   </Button>
