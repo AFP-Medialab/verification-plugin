@@ -21,6 +21,7 @@ import {
   ListItemText,
   ListSubheader,
   Snackbar,
+  Stack,
   Tab,
   Tabs,
   Toolbar,
@@ -99,6 +100,7 @@ import { changeLanguage } from "../../redux/reducers/languageReducer";
 
 import { Link, useNavigate } from "react-router-dom";
 import { AudioFile, Audiotrack, ManageSearch } from "@mui/icons-material";
+import AdvancedTools from "../NavItems/tools/Alltools/AdvancedTools/AdvancedTools";
 
 function a11yProps(index) {
   return {
@@ -1510,74 +1512,105 @@ const NavBar = () => {
         </Alert>
       </Snackbar>
       <ThemeProvider theme={themeFab}>
-        {
-          <AppBar position="fixed">
-            <Toolbar
-              className={classes.toolbar}
-              style={{ borderBottom: "solid 1px #dedbdb" }}
+        <AppBar position="fixed">
+          <Toolbar
+            className={classes.toolbar}
+            style={{ borderBottom: "solid 1px #dedbdb" }}
+          >
+            <Stack
+              direction="row"
+              justifyContent="space-between"
+              alignItems="center"
+              spacing={2}
+              width="100%"
             >
-              <LogoWeVerify2
-                width="100px"
-                height="59px"
-                style={{ height: "35px", width: "auto" }}
-                alt="logo"
-                className={classes.logoLeft}
-                onClick={handleImageClick}
-              />
-
-              <LogoInvid2
-                width="46px"
-                height="26px"
-                style={{ height: "30px", width: "auto" }}
-                alt="logo"
-                className={classes.logoRight}
-                onClick={handleImageClick}
-              />
-
-              <LogoVera
-                style={{ height: "50px", width: "auto" }}
-                alt="logo"
-                className={classes.logoRight}
-                onClick={handleImageClick}
-              />
-
-              <Box m={3}></Box>
-
-              <div className={classes.grow} />
-
-              <Tabs
-                value={tabValue}
-                variant="scrollable"
-                onChange={handleChange}
-                scrollButtons
-                allowScrollButtonsMobile
-                indicatorColor="primary"
-                textColor="primary"
-                aria-label="scrollable force tabs example"
-                style={{ marginRight: "30px" }}
-                TabIndicatorProps={{
-                  style: { display: "none" },
-                }}
+              <Stack
+                direction="row"
+                justifyContent="flex-start"
+                alignItems="center"
+                spacing={2}
               >
-                {tabItems.map((item, index) => {
-                  return (
-                    <Tab
-                      key={index}
-                      label={keyword(item.title)}
-                      icon={item.icon}
-                      className={classes.tab}
-                      {...a11yProps(index)}
-                      to={item.path}
-                      component={Link}
-                    />
-                  );
-                })}
-              </Tabs>
-              <div className={classes.grow} />
-              <Languages />
-            </Toolbar>
-          </AppBar>
-        }
+                <LogoWeVerify2
+                  width="100px"
+                  height="59px"
+                  style={{ height: "35px", width: "auto" }}
+                  alt="logo"
+                  className={classes.logoLeft}
+                  onClick={handleImageClick}
+                />
+                <LogoInvid2
+                  width="46px"
+                  height="26px"
+                  style={{ height: "30px", width: "auto" }}
+                  alt="logo"
+                  className={classes.logoRight}
+                  onClick={handleImageClick}
+                />
+                <LogoVera
+                  style={{ height: "50px", width: "auto" }}
+                  alt="logo"
+                  className={classes.logoRight}
+                  onClick={handleImageClick}
+                />
+                <Tabs
+                  value={tabValue}
+                  variant="scrollable"
+                  onChange={handleChange}
+                  scrollButtons="auto"
+                  allowScrollButtonsMobile
+                  indicatorColor="primary"
+                  textColor="primary"
+                  aria-label="scrollable force tabs example"
+                  TabIndicatorProps={{
+                    style: { display: "none" },
+                  }}
+                  ml={"30px"}
+                  sx={{
+                    "@media (max-width: 768px)": {
+                      maxWidth: "15vw",
+                    },
+                    "@media (max-width: 1024px)": {
+                      maxWidth: "35vw",
+                    },
+                    "@media (max-width: 1200px)": {
+                      maxWidth: "45vw",
+                    },
+                    "@media (min-width: 1200px)": {
+                      maxWidth: "65vw",
+                    },
+
+                    color: "black",
+                  }}
+                >
+                  {tabItems.map((item, index) => {
+                    return (
+                      <Tab
+                        key={index}
+                        label={keyword(item.title)}
+                        icon={item.icon}
+                        // className={classes.tab}
+                        {...a11yProps(index)}
+                        to={item.path}
+                        component={Link}
+                        // sx={{ minWidth: "130px" }}
+                      />
+                    );
+                  })}
+                </Tabs>
+              </Stack>
+
+              <Stack
+                direction="row"
+                justifyContent="flex-end"
+                alignItems="center"
+                spacing={2}
+              >
+                <AdvancedTools />
+                <Languages />
+              </Stack>
+            </Stack>
+          </Toolbar>
+        </AppBar>
 
         <Drawer
           variant="permanent"
