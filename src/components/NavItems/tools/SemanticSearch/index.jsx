@@ -77,9 +77,8 @@ const SemanticSearch = () => {
       if (uniqueTitles.has(localizedLanguageName)) {
         continue;
       }
-
       uniqueTitles.add(localizedLanguageName);
-      uniqueLanguages.add({ title: localizedLanguageName });
+      uniqueLanguages.add({ title: localizedLanguageName, code: lg });
     }
 
     // order the list from A to Z
@@ -156,7 +155,6 @@ const SemanticSearch = () => {
       key: "keyword_search",
     },
   ];
-
   const searchEngineModalStyle = {
     position: "absolute",
     top: "50%",
@@ -173,7 +171,7 @@ const SemanticSearch = () => {
     overflow: "auto",
   };
 
-  const DEFAULT_SEARCH_ENGINE_MODE = searchEngineModes[0];
+  const DEFAULT_SEARCH_ENGINE_MODE = "auto";
   const DEFAULT_DATE_FROM = null;
   const DEFAULT_DATE_TO = null;
   const DEFAULT_LANGUAGE_FILTER = [];
@@ -209,6 +207,17 @@ const SemanticSearch = () => {
     if (haveSettingsChanged) setShowResetAdvancedSettings(true);
   }, [searchEngineMode, dateFrom, dateTo, languageFilter]);
 
+  useEffect(() => {
+    //load languagues list when user change language
+    let loadLanguages = languageFilter.map((lang) => {
+      return {
+        title: getLanguageName(lang.code, currentLang),
+        code: lang.code,
+      };
+    });
+    setLanguageFilter(loadLanguages);
+  }, [currentLang]);
+
   const handleSubmit = async () => {
     setIsLoading(true);
     setHasUserSubmittedForm(true);
@@ -216,7 +225,7 @@ const SemanticSearch = () => {
 
     let searchResults;
     try {
-      searchResults = await getFactChecks(searchString, searchEngineMode.key);
+      searchResults = await getFactChecks(searchString, searchEngineMode);
     } catch (e) {
       //   TODO: Handle Error
       setErrorMessage(e.message);
@@ -447,7 +456,7 @@ const SemanticSearch = () => {
                         )}
                         items={searchEngineModes}
                         value={searchEngineMode}
-                        key={searchEngineMode.key}
+                        key={searchEngineMode}
                         setValue={setSearchEngineMode}
                         disabled={isLoading}
                         minWidth={275}

@@ -29,15 +29,15 @@ const SemanticSearchResults = (searchResults) => {
 
   const [results, setResults] = useState(searchResults.searchResults);
 
-  const [sortingMode, setSortingMode] = useState(sortingModes[0]);
+  const [sortingMode, setSortingMode] = useState("relevant");
 
   const sortResultsBySortingMode = (sortingMode) => {
     //relevance
-    if (isEqual(JSON.parse(sortingMode), sortingModes[0])) {
+    if (isEqual(JSON.parse(sortingMode), "relevant")) {
       setResults(results.sort((a, b) => b.similarityScore - a.similarityScore));
     }
     //date desc
-    if (isEqual(JSON.parse(sortingMode), sortingModes[1])) {
+    if (isEqual(JSON.parse(sortingMode), "desc")) {
       setResults(results.sort((a, b) => new Date(b.date) - new Date(a.date)));
     }
   };
