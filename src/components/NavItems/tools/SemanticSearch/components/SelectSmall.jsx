@@ -13,17 +13,19 @@ export default function SelectSmall(props) {
       <Select
         labelId="demo-select-small-label"
         id="demo-select-small"
-        value={JSON.stringify(props.value)}
+        value={
+          props.items[props.items.findIndex((item) => item.key === props.value)]
+        }
         label={props.label ?? ""}
         onChange={(e) => {
-          props.setValue(JSON.parse(e.target.value));
+          props.setValue(e.target.value.key);
           if (props.onChange) props.onChange(e.target.value);
         }}
         disabled={props.disabled}
       >
         {props.items.map((item, index) => {
           return (
-            <MenuItem value={JSON.stringify(item)} key={index}>
+            <MenuItem value={item} key={index}>
               {item.name ?? item}
             </MenuItem>
           );

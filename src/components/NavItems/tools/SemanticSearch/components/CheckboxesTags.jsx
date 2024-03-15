@@ -14,9 +14,11 @@ export default function CheckboxesTags(props) {
       multiple
       id="checkboxes-tags-demo"
       value={props.value}
-      onChange={(event, newValue) => props.setValue(newValue)}
+      onChange={(event, newValue) => {
+        props.setValue(newValue);
+      }}
       options={props.options}
-      isOptionEqualToValue={(option, value) => option.title === value.title}
+      isOptionEqualToValue={(option, value) => option.code === value.code}
       disabled={props.disabled}
       disableCloseOnSelect
       getOptionLabel={(option) => option.title}
