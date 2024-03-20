@@ -29,7 +29,6 @@ const LoccusResults = (props) => {
 
   const result = props.result;
   const url = props.url;
-  const audioElement = React.useRef(null);
 
   const [voiceCloningScore, setVoiceCloningScore] = useState(null);
   const [voiceRecordingScore, setVoiceRecordingScore] = useState(null);
@@ -179,7 +178,8 @@ const LoccusResults = (props) => {
 
   const audioContainerRef = useRef();
 
-  const { wavesurfer, isReady, isPlaying, currentTime } = useWavesurfer({
+  // Hook to get the audio waveform
+  useWavesurfer({
     container: audioContainerRef,
     url: url,
     waveColor: "#00926c",
