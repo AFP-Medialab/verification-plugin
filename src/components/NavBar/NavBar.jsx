@@ -101,6 +101,7 @@ import { changeLanguage } from "../../redux/reducers/languageReducer";
 import { Link, useNavigate } from "react-router-dom";
 import { AudioFile, Audiotrack, ManageSearch } from "@mui/icons-material";
 import AdvancedTools from "../NavItems/tools/Alltools/AdvancedTools/AdvancedTools";
+import Grid from "@mui/material/Grid";
 
 function a11yProps(index) {
   return {
@@ -1512,46 +1513,58 @@ const NavBar = () => {
         </Alert>
       </Snackbar>
       <ThemeProvider theme={themeFab}>
-        <AppBar position="fixed">
+        <AppBar position="fixed" width={"100%"}>
           <Toolbar
             className={classes.toolbar}
             style={{ borderBottom: "solid 1px #dedbdb" }}
           >
-            <Stack
+            <Grid
+              container
               direction="row"
               justifyContent="space-between"
               alignItems="center"
-              spacing={2}
-              width="100%"
+              spacing={{ sm: 1, md: 2 }}
             >
-              <Stack
-                direction="row"
-                justifyContent="flex-start"
-                alignItems="center"
-                spacing={2}
-              >
-                <LogoWeVerify2
-                  width="100px"
-                  height="59px"
-                  style={{ height: "35px", width: "auto" }}
-                  alt="logo"
-                  className={classes.logoLeft}
-                  onClick={handleImageClick}
-                />
-                <LogoInvid2
-                  width="46px"
-                  height="26px"
-                  style={{ height: "30px", width: "auto" }}
-                  alt="logo"
-                  className={classes.logoRight}
-                  onClick={handleImageClick}
-                />
-                <LogoVera
-                  style={{ height: "50px", width: "auto" }}
-                  alt="logo"
-                  className={classes.logoRight}
-                  onClick={handleImageClick}
-                />
+              <Grid item xs={2}>
+                <Stack
+                  direction="row"
+                  justifyContent="flex-start"
+                  alignItems="center"
+                  spacing={{ sm: 1, md: 2 }}
+                >
+                  <LogoWeVerify2
+                    style={{
+                      height: "auto",
+                      minWidth: "48px",
+                      width: { sm: "48px", md: "80px" },
+                    }}
+                    alt="logo"
+                    className={classes.logoLeft}
+                    onClick={handleImageClick}
+                  />
+                  <LogoInvid2
+                    style={{
+                      height: "auto",
+                      minWidth: "48px",
+                      width: { sm: "48px", md: "80px" },
+                    }}
+                    alt="logo"
+                    className={classes.logoRight}
+                    onClick={handleImageClick}
+                  />
+                  <LogoVera
+                    style={{
+                      height: "auto",
+                      minWidth: "48px",
+                      width: { sm: "48px", md: "80px" },
+                    }}
+                    alt="logo"
+                    className={classes.logoRight}
+                    onClick={handleImageClick}
+                  />
+                </Stack>
+              </Grid>
+              <Grid item xs={7}>
                 <Tabs
                   value={tabValue}
                   variant="scrollable"
@@ -1564,23 +1577,7 @@ const NavBar = () => {
                   TabIndicatorProps={{
                     style: { display: "none" },
                   }}
-                  ml={"30px"}
-                  sx={{
-                    "@media (max-width: 768px)": {
-                      maxWidth: "15vw",
-                    },
-                    "@media (max-width: 1024px)": {
-                      maxWidth: "35vw",
-                    },
-                    "@media (max-width: 1200px)": {
-                      maxWidth: "45vw",
-                    },
-                    "@media (min-width: 1200px)": {
-                      maxWidth: "65vw",
-                    },
-
-                    color: "black",
-                  }}
+                  sx={{ color: "black" }}
                 >
                   {tabItems.map((item, index) => {
                     return (
@@ -1588,27 +1585,22 @@ const NavBar = () => {
                         key={index}
                         label={keyword(item.title)}
                         icon={item.icon}
-                        // className={classes.tab}
                         {...a11yProps(index)}
                         to={item.path}
                         component={Link}
-                        // sx={{ minWidth: "130px" }}
+                        sx={{ minWidth: "130px" }}
                       />
                     );
                   })}
                 </Tabs>
-              </Stack>
-
-              <Stack
-                direction="row"
-                justifyContent="flex-end"
-                alignItems="center"
-                spacing={2}
-              >
+              </Grid>
+              <Grid item xs={2}>
                 <AdvancedTools />
+              </Grid>
+              <Grid item xs={1}>
                 <Languages />
-              </Stack>
-            </Stack>
+              </Grid>
+            </Grid>
           </Toolbar>
         </AppBar>
 

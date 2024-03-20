@@ -21,7 +21,7 @@ import * as yup from "yup";
 import _ from "lodash";
 import MenuItem from "@mui/material/MenuItem";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import { Stack, Tooltip } from "@mui/material";
+import { Stack } from "@mui/material";
 
 const registrationValidationSchema = yup.object().shape({
   email: yup
@@ -222,40 +222,30 @@ const AdvancedTools = () => {
   return (
     <Box>
       <Stack
-        direction="row"
+        direction="column"
         justifyContent="flex-start"
         alignItems="center"
-        spacing={2}
+        spacing={{ xs: 1 }}
       >
+        <Button
+          variant="outlined"
+          color={colorButton}
+          onClick={handleClickOpen}
+        >
+          {userAuthenticated
+            ? messageI18NResolver("LOGUSER_LOGOUT_LABEL")
+            : messageI18NResolver("LOGINFORM_SUBMIT_LABEL")}
+        </Button>
         <Stack
           direction="column"
           justifyContent="center"
           alignItems="flex-start"
         >
-          <Stack direction="row" sx={{ color: "black" }}>
+          <Stack direction={"row"} sx={{ color: "black" }}>
             {iconState}
-            <Typography variant="subtitle2">{keyword("title")}</Typography>
+            <Typography variant="caption">{keyword("title")}</Typography>
           </Stack>
         </Stack>
-
-        <Tooltip
-          title={
-            userAuthenticated
-              ? keyword("text_unlocked")
-              : keyword("text_locked")
-          }
-        >
-          <Button
-            variant="outlined"
-            color={colorButton}
-            onClick={handleClickOpen}
-            style={{ border: "2px solid", heigth: "40px" }}
-          >
-            {userAuthenticated
-              ? messageI18NResolver("LOGUSER_LOGOUT_LABEL")
-              : messageI18NResolver("LOGINFORM_SUBMIT_LABEL")}
-          </Button>
-        </Tooltip>
       </Stack>
       <Dialog
         fullWidth

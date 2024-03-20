@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { useDispatch, useSelector } from "react-redux";
-import Tooltip from "@mui/material/Tooltip";
 import IconButton from "@mui/material/IconButton";
 import { changeLanguage } from "../../../redux/reducers/languageReducer";
 import { changeDefaultLanguage } from "../../../redux/reducers/defaultLanguageReducer";
@@ -11,6 +10,8 @@ import { setStorageTrue } from "../../../redux/reducers/cookiesReducers";
 import TranslateIcon from "@mui/icons-material/Translate";
 import { useTranslation } from "react-i18next";
 import useLoadSupportedLanguage from "Hooks/useLoadSupportedLanguages";
+import Box from "@mui/material/Box";
+import { Stack } from "@mui/material";
 
 const Languages = (props) => {
   const { t, i18n } = useTranslation("components/NavItems/languages");
@@ -47,26 +48,31 @@ const Languages = (props) => {
   };
 
   return (
-    <div>
-      {props.variant !== "notext" && (
-        <span
-          id="language"
-          style={{
-            color: "#596977",
-            fontSize: "14px",
-            fontWeight: "500",
-            marginRight: "2px",
-          }}
-        >
-          {languagesSupport[storeLanguage]}
-        </span>
-      )}
-
-      <Tooltip title={t("translations")} placement="bottom">
+    <Box>
+      <Stack
+        direction="column"
+        spacing={1}
+        height={"100%"}
+        justifyContent="center"
+        alignItems="center"
+      >
         <IconButton onClick={handleClick}>
           <TranslateIcon fontSize="medium" style={{ color: "#596977" }} />
         </IconButton>
-      </Tooltip>
+        {props.variant !== "notext" && (
+          <span
+            id="language"
+            style={{
+              color: "#596977",
+              fontSize: "14px",
+              fontWeight: "500",
+              marginRight: "2px",
+            }}
+          >
+            {languagesSupport[storeLanguage]}
+          </span>
+        )}
+      </Stack>
 
       <Menu
         id="simple-menu"
@@ -94,7 +100,7 @@ const Languages = (props) => {
         onCancel={handleClose}
         onClose={handleCloseItem}
       />
-    </div>
+    </Box>
   );
 };
 
