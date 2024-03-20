@@ -256,6 +256,15 @@ function* handleSourceCredibilityCall(action) {
         }
       }
     }
+    if (links != []) {
+      const batchResult = yield call(
+        assistantApi.callSourceCredibilityService,
+        [links[0]],
+      );
+      if (batchResult.entities.SourceCredibility) {
+        result = result.concat(batchResult.entities.SourceCredibility);
+      }
+    }
 
     const trafficLightColors = {
       positive: "#008000", // green
