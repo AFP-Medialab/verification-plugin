@@ -130,8 +130,7 @@ const ExtractedSourceCredibilityDBKFDialog = ({
                               {renderSource(
                                 keyword,
                                 trafficLightColor,
-                                sourceCredibilityResults[key]
-                                  .credibility_source,
+                                sourceCredibilityResults[key].credibilitySource,
                               )}
                             </AccordionSummary>
 
@@ -140,18 +139,18 @@ const ExtractedSourceCredibilityDBKFDialog = ({
                                 {renderLabels(
                                   keyword,
                                   sourceCredibilityResults[key]
-                                    .credibility_labels,
+                                    .credibilityLabels,
                                 )}
 
                                 {renderDescription(
                                   keyword,
                                   sourceCredibilityResults[key]
-                                    .credibility_description,
+                                    .credibilityDescription,
                                 )}
 
                                 {renderEvidence(
                                   sourceCredibilityResults[key]
-                                    .credibility_evidence,
+                                    .credibilityEvidence,
                                 )}
                               </List>
                             </AccordionDetails>
