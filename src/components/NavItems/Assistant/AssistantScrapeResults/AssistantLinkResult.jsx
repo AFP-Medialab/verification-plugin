@@ -89,13 +89,11 @@ const ExtractedUrlList = (
   const links = extractedLinks ? extractedLinks : linkList ? linkList : null;
   return (
     <div>
-      {links ? (
-        links.map((link, index) =>
-          ExtractedUrl(index, keyword, extractedSourceCred, link),
-        )
-      ) : (
-        <p>Failed to load extracted URLs with URL Domain Analysis. </p>
-      )}
+      {links
+        ? links.map((link, index) =>
+            ExtractedUrl(index, keyword, extractedSourceCred, link),
+          )
+        : keyword("extracted_urls_url_domain_analysis_failed")}
     </div>
   );
 };
@@ -121,10 +119,7 @@ const AssistantLinkResult = () => {
           title={
             <Typography variant={"h5"}>
               {" "}
-              {keyword("extracted_urls") +
-                " with " +
-                keyword("url_domain_analysis") +
-                " "}
+              {keyword("extracted_urls_url_domain_analysis")}{" "}
               {inputSCLoading && <CircularProgress color={"secondary"} />}
             </Typography>
           }
@@ -135,7 +130,7 @@ const AssistantLinkResult = () => {
                 <div
                   className={"content"}
                   dangerouslySetInnerHTML={{
-                    __html: keyword("sc_tooltip"), // needs updating to correct text
+                    __html: keyword("extracted_urls_tooltip"),
                   }}
                 />
               }
