@@ -230,9 +230,6 @@ function* handleSourceCredibilityCall(action) {
     const inputUrl = yield select((state) => state.assistant.inputUrl);
     yield take("SET_SCRAPED_DATA"); // wait until linkList has been created
     const linkList = yield select((state) => state.assistant.linkList);
-    //const uniqueLinkList = linkList.filter(
-    //  (value, index, array) => array.indexOf(value) === index,
-    //);
     const inputUrlUniqueLinkListString = [inputUrl].concat(linkList).join(" ");
 
     const result = yield call(assistantApi.callSourceCredibilityService, [
@@ -278,7 +275,19 @@ function* handleSourceCredibilityCall(action) {
     );
   } catch (error) {
     console.log(error);
-    yield put(setInputSourceCredDetails(null, false, false, true));
+    yield put(
+      setInputSourceCredDetails(
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        false,
+        false,
+        true,
+      ),
+    );
   }
 }
 

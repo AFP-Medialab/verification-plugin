@@ -17,7 +17,7 @@ import ExtractedSourceCredibilityResult from "../AssistantCheckResults/Extracted
 import Tooltip from "@mui/material/Tooltip";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 
-const ExtractedUrl = (keyword, extractedSourceCred, link) => {
+const ExtractedUrl = (index, keyword, extractedSourceCred, link) => {
   let sourceType;
   let Icon;
   let iconColor;
@@ -38,7 +38,7 @@ const ExtractedUrl = (keyword, extractedSourceCred, link) => {
     }
   }
   return (
-    <Grid container wrap="wrap">
+    <Grid container wrap="wrap" key={index}>
       <Grid item xs={1} align="center">
         <LinkIcon />
       </Grid>
@@ -86,18 +86,13 @@ const ExtractedUrlList = (
   extractedLinks,
   extractedSourceCred,
 ) => {
-  console.log(extractedSourceCred);
-  console.log(extractedLinks);
-  console.log(linkList);
-
   const links = extractedLinks ? extractedLinks : linkList ? linkList : null;
-
-  console.log(links);
-
   return (
     <div>
       {links ? (
-        links.map((link) => ExtractedUrl(keyword, extractedSourceCred, link))
+        links.map((link, index) =>
+          ExtractedUrl(index, keyword, extractedSourceCred, link),
+        )
       ) : (
         <p>Failed to load extracted URLs with URL Domain Analysis. </p>
       )}
