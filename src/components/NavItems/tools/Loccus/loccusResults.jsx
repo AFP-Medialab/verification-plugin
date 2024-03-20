@@ -18,6 +18,7 @@ import { useTrackEvent } from "Hooks/useAnalytics";
 import { getclientId } from "components/Shared/GoogleAnalytics/MatomoAnalytics";
 import GaugeChart from "react-gauge-chart";
 import CopyButton from "../../../Shared/CopyButton";
+import { useWavesurfer } from "@wavesurfer/react";
 
 const LoccusResults = (props) => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Loccus");
@@ -29,8 +30,6 @@ const LoccusResults = (props) => {
   const result = props.result;
   const url = props.url;
   const audioElement = React.useRef(null);
-
-  const imgContainerRef = useRef(null);
 
   const [voiceCloningScore, setVoiceCloningScore] = useState(null);
   const [voiceRecordingScore, setVoiceRecordingScore] = useState(null);
@@ -163,13 +162,32 @@ const LoccusResults = (props) => {
 
     return (
       <Alert
+        icon={false}
         severity={alertSettings.severity}
-        action={<CopyButton str={alertSettings.displayText} />}
+        action={
+          <CopyButton
+            strToCopy={alertSettings.displayText}
+            labelBeforeCopy={keyword("loccus_button_copy_text_1")}
+            labelAfterCopy={keyword("loccus_button_copy_text_2")}
+          />
+        }
       >
         {alertSettings.displayText}
       </Alert>
     );
   }
+
+  const audioContainerRef = useRef();
+
+  const { wavesurfer, isReady, isPlaying, currentTime } = useWavesurfer({
+    container: audioContainerRef,
+    url: url,
+    waveColor: "#00926c",
+    progressColor: "#005941",
+    height: 100,
+    backend: "MediaElement",
+    mediaControls: true,
+  });
 
   return (
     <Stack
@@ -198,18 +216,15 @@ const LoccusResults = (props) => {
             <Box sx={{ width: "100%", height: "100%", position: "relative" }}>
               <Grid
                 container
-                direction="row"
+                direction="column"
                 justifyContent="center"
                 alignItems="flex-start"
-                ref={imgContainerRef}
                 p={4}
+                spacing={2}
               >
-                <audio
-                  controls
-                  alt="Displays the uploaded audio"
-                  src={url}
-                  ref={audioElement}
-                />
+                <Grid item width="100%">
+                  <div ref={audioContainerRef} />
+                </Grid>
               </Grid>
             </Box>
           </Grid>
@@ -293,10 +308,6 @@ const LoccusResults = (props) => {
                         </Typography>
                       </Stack>
                     </Stack>
-                    <CustomAlertScore
-                      score={voiceRecordingScore}
-                      detectionType={DETECTION_TYPES.VOICE_RECORDING}
-                    />
                   </Stack>
                 </>
               )}
