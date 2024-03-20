@@ -256,7 +256,7 @@ function* handleSourceCredibilityCall(action) {
         }
       }
     }
-    if (links != []) {
+    if (links.length) {
       const batchResult = yield call(
         assistantApi.callSourceCredibilityService,
         [links[0]],
