@@ -33,11 +33,11 @@ const SemanticSearchResults = (searchResults) => {
 
   const sortResultsBySortingMode = (sortingMode) => {
     //relevance
-    if (isEqual(JSON.parse(sortingMode), "relevant")) {
+    if (sortingMode.key === sortingModes[0].key) {
       setResults(results.sort((a, b) => b.similarityScore - a.similarityScore));
     }
     //date desc
-    if (isEqual(JSON.parse(sortingMode), "desc")) {
+    if (sortingMode.key === sortingModes[1].key) {
       setResults(results.sort((a, b) => new Date(b.date) - new Date(a.date)));
     }
   };
