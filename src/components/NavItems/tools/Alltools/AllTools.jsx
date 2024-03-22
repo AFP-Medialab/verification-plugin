@@ -24,8 +24,6 @@ import IconImage from "../../../NavBar/images/SVG/Image/Images.svg";
 import IconVideo from "../../../NavBar/images/SVG/Video/Video.svg";
 import IconSearch from "../../../NavBar/images/SVG/Search/Search.svg";
 import IconData from "../../../NavBar/images/SVG/DataAnalysis/Data_analysis.svg";
-import IconTools from "../../../NavBar/images/SVG/Navbar/Tools.svg";
-import LoginHeader from "../../../Shared/LoginHeader/LoginHeader";
 import { useSelector } from "react-redux";
 
 import { useNavigate } from "react-router-dom";
@@ -66,7 +64,6 @@ const AllTools = (props) => {
     (state) => state.userSession && state.userSession.userAuthenticated,
   );
   const [openAlert, setOpenAlert] = React.useState(false);
-  const currentLang = useSelector((state) => state.language);
 
   const handleClick = (path, restrictions) => {
     //console.log(type);
@@ -90,9 +87,9 @@ const AllTools = (props) => {
     } else {
       navigate("/app/tools/" + path);
       /* history.push({
-                                                          pathname: "/app/tools/" + path,
-                                                          state: { media: mediaTool }
-                                                      })*/
+                                                                                        pathname: "/app/tools/" + path,
+                                                                                        state: { media: mediaTool }
+                                                                                    })*/
     }
   };
 
@@ -208,14 +205,6 @@ const AllTools = (props) => {
           {keywordWarning("warning_advanced_tools")}
         </Alert>
       </Snackbar>
-
-      <LoginHeader
-        name={keyword("navbar_tools")}
-        icon={
-          <IconTools width="40px" height="40px" style={{ fill: "#00926c" }} />
-        }
-      />
-
       <Card>
         <Tabs
           value={value}
@@ -308,7 +297,6 @@ const AllTools = (props) => {
                 </Grid>
               </TabPanel>
             );
-            // }
           })}
         </div>
       </Card>

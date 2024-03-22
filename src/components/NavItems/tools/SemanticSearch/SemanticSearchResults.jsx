@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Box, Card, Pagination, Stack, Typography } from "@mui/material";
 import SelectSmall from "./components/SelectSmall";
-import isEqual from "lodash/isEqual";
 import ResultDisplayItem from "./components/ResultDisplayItem";
 import { getLanguageName } from "../../../Shared/Utils/languageUtils";
 import { i18nLoadNamespace } from "../../../Shared/Languages/i18nLoadNamespace";
@@ -29,15 +28,15 @@ const SemanticSearchResults = (searchResults) => {
 
   const [results, setResults] = useState(searchResults.searchResults);
 
-  const [sortingMode, setSortingMode] = useState(sortingModes[0]);
+  const [sortingMode, setSortingMode] = useState("relevant");
 
   const sortResultsBySortingMode = (sortingMode) => {
     //relevance
-    if (isEqual(JSON.parse(sortingMode), sortingModes[0])) {
+    if (sortingMode.key === sortingModes[0].key) {
       setResults(results.sort((a, b) => b.similarityScore - a.similarityScore));
     }
     //date desc
-    if (isEqual(JSON.parse(sortingMode), sortingModes[1])) {
+    if (sortingMode.key === sortingModes[1].key) {
       setResults(results.sort((a, b) => new Date(b.date) - new Date(a.date)));
     }
   };
