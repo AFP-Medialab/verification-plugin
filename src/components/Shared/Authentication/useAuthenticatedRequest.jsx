@@ -24,10 +24,11 @@ export default function useAuthenticatedRequest() {
    * @param {*} errorHandler
    * @returns {Promise<Object>} Result as a Promise.
    */
-  const authenticatedRequest = (axiosConfig) => {
+  const authenticatedRequest = async (axiosConfig) => {
     const userSession = store.getState().userSession;
+    // const userSession = store.getState().userSession;
     const userAuthenticated = userSession && userSession.userAuthenticated;
-    const accessToken = userSession && userSession.accessToken;
+    let accessToken = userSession && userSession.accessToken;
     const refreshToken = userSession && userSession.refreshToken;
 
     // If not authenticated, make a std service call
@@ -36,6 +37,17 @@ export default function useAuthenticatedRequest() {
     }
 
     // TODO: check token expiry and refresh if required before making service call?
+
+    const now = new Date();
+    const needsRefresh = 5 * 60 * 1000;
+
+    if (userSession && userSession.accessTokenExpiry) {
+      const diff = new Date(userSession.accessTokenExpiry) - now;
+      if (diff < needsRefresh) {
+        const response = await authenticationAPI.refreshToken(refreshToken);
+        accessToken = response.data.accessToken;
+      }
+    }
 
     // Inject access token
     if (!axiosConfig.headers) {
