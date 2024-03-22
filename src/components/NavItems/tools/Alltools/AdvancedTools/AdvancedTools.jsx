@@ -1,5 +1,4 @@
-import React from "react";
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -12,16 +11,17 @@ import DialogTitle from "@mui/material/DialogTitle";
 import TextField from "@mui/material/TextField";
 import LockOpenIcon from "@mui/icons-material/LockOpen";
 import useAuthenticationAPI from "../../../../Shared/Authentication/useAuthenticationAPI";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { ERR_AUTH_UNKNOWN_ERROR } from "../../../../Shared/Authentication/authenticationErrors";
 import { setError } from "redux/reducers/errorReducer";
 import IconButton from "@mui/material/IconButton";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
-import { useForm, Controller } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import * as yup from "yup";
 import _ from "lodash";
 import MenuItem from "@mui/material/MenuItem";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+import { Stack } from "@mui/material";
 
 const registrationValidationSchema = yup.object().shape({
   email: yup
@@ -152,7 +152,7 @@ const AdvancedTools = () => {
       .requestAccessCode({
         email: emailInput,
       })
-      .then((result) => {
+      .then(() => {
         setDialogState(1);
       })
       .catch((error) => {
@@ -165,7 +165,7 @@ const AdvancedTools = () => {
       .login({
         accessCode: codeInput,
       })
-      .then((result) => {
+      .then(() => {
         setDialogState(2);
       })
       .catch((error) => {
@@ -196,7 +196,7 @@ const AdvancedTools = () => {
         organizationRole: data.organizationRole,
         organizationRoleOther: data.organizationRoleOther,
       })
-      .then((result) => {
+      .then(() => {
         registrationForm.reset();
         setDialogState(4);
       })
@@ -220,60 +220,33 @@ const AdvancedTools = () => {
   };
 
   return (
-    <div>
-      <Grid
-        container
-        direction="row"
+    <Box>
+      <Stack
+        direction="column"
         justifyContent="flex-start"
         alignItems="center"
-        spacing={2}
+        spacing={{ xs: 1 }}
       >
-        <Grid item>
-          <Grid
-            container
-            direction="column"
-            justifyContent="flex-start"
-            alignItems="flex-end"
-          >
-            <Grid
-              item
-              container
-              direction="row"
-              justifyContent="flex-end"
-              alignItems="center"
-              spacing={1}
-            >
-              <Grid item>{iconState}</Grid>
-
-              <Grid item>
-                <Typography variant="subtitle2">{keyword("title")}</Typography>
-              </Grid>
-            </Grid>
-
-            <Grid item>
-              <Typography variant="body2" style={{ color: "#737373" }}>
-                {userAuthenticated
-                  ? keyword("text_unlocked")
-                  : keyword("text_locked")}
-              </Typography>
-            </Grid>
-          </Grid>
-        </Grid>
-
-        <Grid item xs>
-          <Button
-            variant="outlined"
-            color={colorButton}
-            onClick={handleClickOpen}
-            style={{ border: "2px solid", heigth: "40px" }}
-          >
-            {userAuthenticated
-              ? messageI18NResolver("LOGUSER_LOGOUT_LABEL")
-              : messageI18NResolver("LOGINFORM_SUBMIT_LABEL")}
-          </Button>
-        </Grid>
-      </Grid>
-
+        <Button
+          variant="outlined"
+          color={colorButton}
+          onClick={handleClickOpen}
+        >
+          {userAuthenticated
+            ? messageI18NResolver("LOGUSER_LOGOUT_LABEL")
+            : messageI18NResolver("LOGINFORM_SUBMIT_LABEL")}
+        </Button>
+        <Stack
+          direction="column"
+          justifyContent="center"
+          alignItems="flex-start"
+        >
+          <Stack direction={"row"} sx={{ color: "black" }}>
+            {iconState}
+            <Typography variant="caption">{keyword("title")}</Typography>
+          </Stack>
+        </Stack>
+      </Stack>
       <Dialog
         fullWidth
         maxWidth={"xs"}
@@ -849,7 +822,7 @@ const AdvancedTools = () => {
           </Box>
         )}
       </Dialog>
-    </div>
+    </Box>
   );
 };
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { HashRouter, Route, Routes } from "react-router-dom";
 import PopUp from "./components/PopUp/PopUp";
@@ -6,10 +6,11 @@ import NavBar from "./components/NavBar/NavBar";
 import useAuthenticationAPI from "./components/Shared/Authentication/useAuthenticationAPI";
 import { useDispatch } from "react-redux";
 import {
-  setErrorNetwork,
   cleanErrorNetwork,
+  setErrorNetwork,
 } from "redux/reducers/errorReducer";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+
 const theme = createTheme({
   palette: {
     primary: {
@@ -86,6 +87,7 @@ const App = () => {
       }
     }
   }
+
   useEffect(() => {
     window.addEventListener("online", checkInternetConnection);
     window.addEventListener("offline", checkInternetConnection);

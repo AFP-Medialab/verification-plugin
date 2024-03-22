@@ -18,6 +18,7 @@ import Alert from "@mui/material/Alert";
 import FolderOpenIcon from "@mui/icons-material/FolderOpen";
 import { setError } from "redux/reducers/errorReducer";
 import { resetDeepfake } from "redux/actions/tools/deepfakeImageActions";
+import { preprocessFileUpload } from "../../../Shared/Utils/fileUtils";
 
 const Deepfake = () => {
   //const { url } = useParams();
@@ -62,15 +63,16 @@ const Deepfake = () => {
     );
   };
 
-  const handleUploadImg = (file) => {
-    if (file.size >= 6000000) {
-      dispatch(setError(keywordWarning("warning_file_too_big")));
-    } else {
-      setInput(URL.createObjectURL(file));
-      setImage(file);
-      setType("local");
-    }
+  const preprocessingSuccess = (file) => {
+    setInput(URL.createObjectURL(file));
+    setImage(file);
+    setType("local");
   };
+
+  const preprocessingError = () => {
+    dispatch(setError(keywordWarning("warning_file_too_big")));
+  };
+
   const handleClose = () => {
     setInput("");
   };
@@ -159,7 +161,13 @@ const Deepfake = () => {
                     type="file"
                     hidden={true}
                     onChange={(e) => {
-                      handleUploadImg(e.target.files[0]);
+                      preprocessFileUpload(
+                        e.target.files[0],
+                        role,
+                        undefined,
+                        preprocessingSuccess,
+                        preprocessingError,
+                      );
                     }}
                   />
                 </Button>

@@ -253,6 +253,7 @@ const DeepfakeResultsImage = (props) => {
                     maxHeight: "60vh",
                     borderRadius: "10px",
                   }}
+                  crossOrigin={"anonymous"}
                   ref={imgElement}
                   onLoad={drawRectangles}
                 />

@@ -24,12 +24,11 @@ import IconImage from "../../../NavBar/images/SVG/Image/Images.svg";
 import IconVideo from "../../../NavBar/images/SVG/Video/Video.svg";
 import IconSearch from "../../../NavBar/images/SVG/Search/Search.svg";
 import IconData from "../../../NavBar/images/SVG/DataAnalysis/Data_analysis.svg";
-import IconTools from "../../../NavBar/images/SVG/Navbar/Tools.svg";
-import LoginHeader from "../../../Shared/LoginHeader/LoginHeader";
 import { useSelector } from "react-redux";
 
 import { useNavigate } from "react-router-dom";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+import { Audiotrack } from "@mui/icons-material";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -65,33 +64,32 @@ const AllTools = (props) => {
     (state) => state.userSession && state.userSession.userAuthenticated,
   );
   const [openAlert, setOpenAlert] = React.useState(false);
-  const currentLang = useSelector((state) => state.language);
 
-  const handleClick = (path, mediaTool, restrictions) => {
+  const handleClick = (path, restrictions) => {
     //console.log(type);
 
     if (restrictions !== undefined && restrictions.includes("lock")) {
       if (userAuthenticated) {
         //console.log("LOGGED");
-        handlePush(path, mediaTool);
+        handlePush(path);
       } else {
         setOpenAlert(true);
       }
     } else {
       //console.log(path);
-      handlePush(path, mediaTool);
+      handlePush(path);
     }
   };
 
-  const handlePush = (path, mediaTool) => {
+  const handlePush = (path) => {
     if (path === "factcheck" || path === "xnetwork") {
       window.open(process.env.REACT_APP_TSNA_SERVER + path, "_blank");
     } else {
       navigate("/app/tools/" + path);
       /* history.push({
-                pathname: "/app/tools/" + path,
-                state: { media: mediaTool }
-            })*/
+                                                                                        pathname: "/app/tools/" + path,
+                                                                                        state: { media: mediaTool }
+                                                                                    })*/
     }
   };
 
@@ -99,9 +97,53 @@ const AllTools = (props) => {
 
   const toolsVideo = [];
   const toolsImages = [];
+  const toolsAudio = [];
   const toolsSearch = [];
   const toolsData = [];
   const otherTools = [];
+
+  const categories = [
+    {
+      type: keywordNavbar("navbar_category_video"),
+      value: toolsVideo,
+      icon: (
+        <IconVideo width="40px" height="40px" style={{ fill: "#596977" }} />
+      ),
+    },
+    {
+      type: keywordNavbar("navbar_category_image"),
+      value: toolsImages,
+      icon: (
+        <IconImage width="40px" height="40px" style={{ fill: "#596977" }} />
+      ),
+    },
+    {
+      type: keywordNavbar("navbar_category_audio"),
+      value: toolsAudio,
+      icon: (
+        <Audiotrack width="40px" height="40px" style={{ fill: "#596977" }} />
+      ),
+    },
+    {
+      type: keywordNavbar("navbar_category_search"),
+      value: toolsSearch,
+      icon: (
+        <IconSearch width="40px" height="40px" style={{ fill: "#596977" }} />
+      ),
+    },
+    {
+      type: keywordNavbar("navbar_category_data"),
+      value: toolsData,
+      icon: <IconData width="40px" height="40px" style={{ fill: "#596977" }} />,
+    },
+    {
+      type: keywordNavbar("navbar_category_other"),
+      value: otherTools,
+      icon: (
+        <MoreHorizIcon width="40px" height="40px" style={{ fill: "#596977" }} />
+      ),
+    },
+  ];
 
   tools.forEach((value) => {
     if (value.type === keywordNavbar("navbar_category_video")) {
@@ -110,6 +152,10 @@ const AllTools = (props) => {
 
     if (value.type === keywordNavbar("navbar_category_image")) {
       toolsImages.push(value);
+    }
+
+    if (value.type === keywordNavbar("navbar_category_audio")) {
+      toolsAudio.push(value);
     }
 
     if (value.type === keywordNavbar("navbar_category_search")) {
@@ -140,7 +186,9 @@ const AllTools = (props) => {
 
   const role = useSelector((state) => state.userSession.user.roles);
   const betaTester = role.includes("BETA_TESTER");
-
+  const roleCategories = categories.filter(
+    (category) => category.value.length !== 0,
+  );
   return (
     <>
       <Snackbar
@@ -157,14 +205,6 @@ const AllTools = (props) => {
           {keywordWarning("warning_advanced_tools")}
         </Alert>
       </Snackbar>
-
-      <LoginHeader
-        name={keyword("navbar_tools")}
-        icon={
-          <IconTools width="40px" height="40px" style={{ fill: "#00926c" }} />
-        }
-      />
-
       <Card>
         <Tabs
           value={value}
@@ -173,392 +213,91 @@ const AllTools = (props) => {
           variant="scrollable"
           scrollButtons="auto"
         >
-          <Tab
-            label={
-              <Box mt={1}>
-                <Grid
-                  container
-                  direction="row"
-                  justifyContent="flex-start"
-                  alignItems="center"
-                >
-                  <Grid item>
-                    <IconVideo
-                      width="40px"
-                      height="40px"
-                      style={{ fill: "#596977" }}
-                    />
-                  </Grid>
-
-                  <Grid item>
-                    <Box m={1} />
-                  </Grid>
-
-                  <Grid item>
-                    <Typography
-                      variant="h6"
-                      style={{ color: "#596977", textTransform: "capitalize" }}
+          {roleCategories.map((category, index) => {
+            //  if(category.value.length !==0){
+            return (
+              <Tab
+                key={index}
+                label={
+                  <Box mt={1}>
+                    <Grid
+                      container
+                      direction="row"
+                      justifyContent="flex-start"
+                      alignItems="center"
                     >
-                      {keyword("category_video")}
-                    </Typography>
-                  </Grid>
-                </Grid>
-              </Box>
-            }
-          />
-          <Tab
-            label={
-              <Box mt={1}>
-                <Grid
-                  container
-                  direction="row"
-                  justifyContent="flex-start"
-                  alignItems="center"
-                >
-                  <Grid item>
-                    <IconImage
-                      width="40px"
-                      height="40px"
-                      style={{ fill: "#596977" }}
-                    />
-                  </Grid>
+                      <Grid item>{category.icon}</Grid>
 
-                  <Grid item>
-                    <Box m={1} />
-                  </Grid>
+                      <Grid item>
+                        <Box m={1} />
+                      </Grid>
 
-                  <Grid item>
-                    <Typography
-                      variant="h6"
-                      style={{ color: "#596977", textTransform: "capitalize" }}
-                    >
-                      {keyword("category_image")}
-                    </Typography>
-                  </Grid>
-                </Grid>
-              </Box>
-            }
-          />
-          <Tab
-            label={
-              <Box mt={1}>
-                <Grid
-                  container
-                  direction="row"
-                  justifyContent="flex-start"
-                  alignItems="center"
-                >
-                  <Grid item>
-                    <IconSearch
-                      width="40px"
-                      height="40px"
-                      style={{ fill: "#596977" }}
-                    />
-                  </Grid>
-
-                  <Grid item>
-                    <Box m={1} />
-                  </Grid>
-
-                  <Grid item>
-                    <Typography
-                      variant="h6"
-                      style={{ color: "#596977", textTransform: "capitalize" }}
-                    >
-                      {keyword("category_search")}
-                    </Typography>
-                  </Grid>
-                </Grid>
-              </Box>
-            }
-          />
-          <Tab
-            label={
-              <Box mt={1}>
-                <Grid
-                  container
-                  direction="row"
-                  justifyContent="flex-start"
-                  alignItems="center"
-                >
-                  <Grid item>
-                    <IconData
-                      width="40px"
-                      height="40px"
-                      style={{ fill: "#596977" }}
-                    />
-                  </Grid>
-
-                  <Grid item>
-                    <Box m={1} />
-                  </Grid>
-
-                  <Grid item>
-                    <Typography
-                      variant="h6"
-                      style={{ color: "#596977", textTransform: "capitalize" }}
-                    >
-                      {keyword("category_data")}
-                    </Typography>
-                  </Grid>
-                </Grid>
-              </Box>
-            }
-          />
-          <Tab
-            label={
-              <Box mt={1}>
-                <Grid
-                  container
-                  direction="row"
-                  justifyContent="flex-start"
-                  alignItems="center"
-                >
-                  <Grid item>
-                    <MoreHorizIcon
-                      width="40px"
-                      height="40px"
-                      style={{ fill: "#596977" }}
-                    />
-                  </Grid>
-
-                  <Grid item>
-                    <Box m={1} />
-                  </Grid>
-
-                  <Grid item>
-                    <Typography
-                      variant="h6"
-                      style={{ color: "#596977", textTransform: "capitalize" }}
-                    >
-                      {keyword("category_other")}
-                    </Typography>
-                  </Grid>
-                </Grid>
-              </Box>
-            }
-          />
+                      <Grid item>
+                        <Typography
+                          variant="h6"
+                          style={{
+                            color: "#596977",
+                            textTransform: "capitalize",
+                          }}
+                        >
+                          {category.type}
+                        </Typography>
+                      </Grid>
+                    </Grid>
+                  </Box>
+                }
+              />
+            );
+            // }
+          })}
         </Tabs>
 
         <Box m={1} />
 
         <div style={{ minHeight: "340px" }}>
-          <TabPanel value={value} index={0}>
-            <Grid
-              container
-              justifyContent="flex-start"
-              spacing={2}
-              className={classes.toolCardsContainer}
-            >
-              {toolsVideo.map((value, key) => {
-                var element = (
-                  <Grid
-                    className={classes.toolCardStyle}
-                    item
-                    key={key}
-                    onClick={() =>
-                      handleClick(value.path, "video", value.toolRestrictions)
-                    }
-                  >
-                    <ToolCard
-                      name={keyword(value.title)}
-                      description={keyword(value.description)}
-                      icon={value.iconColored}
-                      iconsAttributes={value.icons}
-                      path="../../../NavBar/images/SVG/Image/Gif.svg"
-                    />
-                  </Grid>
-                );
-                //console.log(value);
-                if (value.toolRestrictions.includes("beta")) {
-                  if (betaTester) {
-                    return element;
-                  } else {
-                    return null;
-                  }
-                } else {
-                  return element;
-                }
-              })}
-            </Grid>
-          </TabPanel>
-          <TabPanel value={value} index={1}>
-            <Grid
-              container
-              justifyContent="flex-start"
-              spacing={2}
-              className={classes.toolCardsContainer}
-            >
-              {toolsImages.map((value, key) => {
-                var element = (
-                  <Grid
-                    className={classes.toolCardStyle}
-                    item
-                    key={key}
-                    onClick={() =>
-                      handleClick(value.path, "image", value.toolRestrictions)
-                    }
-                  >
-                    <ToolCard
-                      name={keyword(value.title)}
-                      description={keyword(value.description)}
-                      icon={value.iconColored}
-                      iconsAttributes={value.icons}
-                    />
-                  </Grid>
-                );
-                //console.log(value);
-                if (value.toolRestrictions.includes("beta")) {
-                  if (betaTester) {
-                    return element;
-                  } else {
-                    return null;
-                  }
-                } else {
-                  return element;
-                }
-              })}
-            </Grid>
-          </TabPanel>
-          <TabPanel value={value} index={2}>
-            <Grid
-              container
-              justifyContent="flex-start"
-              spacing={2}
-              className={classes.toolCardsContainer}
-            >
-              {toolsSearch.map((value, key) => {
-                var element = (
-                  <Grid
-                    className={classes.toolCardStyle}
-                    item
-                    key={key}
-                    onClick={() =>
-                      handleClick(value.path, "search", value.toolRestrictions)
-                    }
-                  >
-                    <ToolCard
-                      name={keyword(value.title)}
-                      description={keyword(value.description)}
-                      icon={value.iconColored}
-                      iconsAttributes={value.icons}
-                    />
-                  </Grid>
-                );
-                if (value.toolRestrictions.includes("beta")) {
-                  if (betaTester) {
-                    return element;
-                  } else {
-                    return null;
-                  }
-                } else {
-                  return element;
-                }
-              })}
-            </Grid>
-          </TabPanel>
-          <TabPanel value={value} index={3}>
-            <Grid
-              container
-              justifyContent="flex-start"
-              spacing={2}
-              className={classes.toolCardsContainer}
-            >
-              {toolsData.map((value, key) => {
-                var element;
-                if (value.title === "navbar_twitter_crowdtangle") {
-                  element = (
-                    <Grid
-                      className={classes.toolCardStyle}
-                      item
-                      key={key}
-                      onClick={() =>
-                        window.open(
-                          process.env.REACT_APP_TSNA_SERVER +
-                            "csvSna?lang=" +
-                            currentLang,
-                          "_blank",
-                        )
+          {roleCategories.map((category, index) => {
+            const tools = category.value;
+            //if(tools.length !==0){
+            return (
+              <TabPanel value={value} index={index} key={index}>
+                <Grid
+                  container
+                  justifyContent="flex-start"
+                  spacing={2}
+                  className={classes.toolCardsContainer}
+                >
+                  {tools.map((value, key) => {
+                    const element = (
+                      <Grid
+                        className={classes.toolCardStyle}
+                        item
+                        key={key}
+                        onClick={() =>
+                          handleClick(value.path, value.toolRestrictions)
+                        }
+                      >
+                        <ToolCard
+                          name={keyword(value.title)}
+                          description={keyword(value.description)}
+                          icon={value.iconColored}
+                          iconsAttributes={value.icons}
+                        />
+                      </Grid>
+                    );
+                    if (value.toolRestrictions.includes("BETA_TESTER")) {
+                      if (betaTester) {
+                        return element;
+                      } else {
+                        return null;
                       }
-                    >
-                      <ToolCard
-                        name={keyword(value.title)}
-                        description={keyword(value.description)}
-                        icon={value.iconColored}
-                        iconsAttributes={value.icons}
-                      />
-                    </Grid>
-                  );
-                } else {
-                  element = (
-                    <Grid
-                      className={classes.toolCardStyle}
-                      item
-                      key={key}
-                      onClick={() =>
-                        handleClick(value.path, "data", value.toolRestrictions)
-                      }
-                    >
-                      <ToolCard
-                        name={keyword(value.title)}
-                        description={keyword(value.description)}
-                        icon={value.iconColored}
-                        iconsAttributes={value.icons}
-                      />
-                    </Grid>
-                  );
-                }
-
-                if (value.toolRestrictions.includes("beta")) {
-                  if (betaTester) {
-                    return element;
-                  } else {
-                    return null;
-                  }
-                } else {
-                  return element;
-                }
-              })}
-            </Grid>
-          </TabPanel>
-          <TabPanel value={value} index={4}>
-            <Grid
-              container
-              justifyContent="flex-start"
-              spacing={2}
-              className={classes.toolCardsContainer}
-            >
-              {otherTools.map((value, key) => {
-                const element = (
-                  <Grid
-                    className={classes.toolCardStyle}
-                    item
-                    key={key}
-                    onClick={() =>
-                      handleClick(value.path, "data", value.toolRestrictions)
+                    } else {
+                      return element;
                     }
-                  >
-                    <ToolCard
-                      name={keyword(value.title)}
-                      description={keyword(value.description)}
-                      icon={value.iconColored}
-                      iconsAttributes={value.icons}
-                    />
-                  </Grid>
-                );
-
-                if (value.toolRestrictions.includes("beta")) {
-                  if (betaTester) {
-                    return element;
-                  } else {
-                    return null;
-                  }
-                } else {
-                  return element;
-                }
-              })}
-            </Grid>
-          </TabPanel>
+                  })}
+                </Grid>
+              </TabPanel>
+            );
+          })}
         </div>
       </Card>
 
