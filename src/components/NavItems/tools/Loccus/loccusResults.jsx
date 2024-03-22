@@ -275,7 +275,9 @@ const LoccusResults = (props) => {
                         aria-controls="panel-additional-results-content"
                         id="panel-additional-results"
                       >
-                        <Typography>Additional results</Typography>
+                        <Typography>
+                          {keyword("loccus_additional_results")}
+                        </Typography>
                       </AccordionSummary>
                       <AccordionDetails>
                         <Stack direction="column" spacing={2}>
