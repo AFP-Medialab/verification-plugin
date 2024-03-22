@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Box, Card, Pagination, Stack, Typography } from "@mui/material";
 import SelectSmall from "./components/SelectSmall";
-import isEqual from "lodash/isEqual";
 import ResultDisplayItem from "./components/ResultDisplayItem";
 import { getLanguageName } from "../../../Shared/Utils/languageUtils";
 import { i18nLoadNamespace } from "../../../Shared/Languages/i18nLoadNamespace";
