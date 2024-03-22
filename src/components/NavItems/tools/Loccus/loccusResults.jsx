@@ -131,9 +131,7 @@ const LoccusResults = (props) => {
       severity: "",
     };
 
-    const SEVERITY_SUCCESS = "success";
-    const SEVERITY_WARNING = "warning";
-    const SEVERITY_ERROR = "error";
+    const SEVERITY_INFO = "info";
 
     const score = props.score;
     const detectionType = props.detectionType;
@@ -149,15 +147,7 @@ const LoccusResults = (props) => {
       detectionType,
     );
 
-    if (score >= DETECTION_THRESHOLD_3) {
-      alertSettings.severity = SEVERITY_ERROR;
-    } else if (score >= DETECTION_THRESHOLD_2) {
-      alertSettings.severity = SEVERITY_WARNING;
-    } else if (score >= DETECTION_THRESHOLD_1) {
-      alertSettings.severity = SEVERITY_SUCCESS;
-    } else {
-      alertSettings.severity = SEVERITY_SUCCESS;
-    }
+    alertSettings.severity = SEVERITY_INFO;
 
     return (
       <Alert
