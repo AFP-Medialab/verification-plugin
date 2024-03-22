@@ -112,11 +112,13 @@ const styles = (theme) => ({
     fontWeight: "500",
     fontSize: "14px",
     textAlign: "start",
+    whiteSpace: "pre-wrap",
   },
 
   drawerListTextClosed: {
     fontWeight: "500",
     fontSize: "14px",
+    whiteSpace: "pre-wrap",
     display: "none",
   },
 
@@ -153,13 +155,13 @@ const styles = (theme) => ({
   },
   logoLeft: {
     cursor: "pointer",
-    marginRight: theme.spacing(1),
-    maxHeight: "60px",
+    //marginRight: theme.spacing(1),
+    //maxHeight: "60px",
   },
   logoRight: {
     cursor: "pointer",
-    marginLeft: theme.spacing(1),
-    maxHeight: "70px",
+    //marginLeft: theme.spacing(1),
+    //maxHeight: "70px",
   },
   selectedApp: {
     color: theme.palette.primary.main,

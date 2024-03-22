@@ -1,0 +1,1217 @@
+{
+  "af": {
+    "ar": "أفريكانية",
+    "de": "Afrikaans",
+    "el": "Αφρικανικά",
+    "en": "Afrikaans",
+    "es": "Afrikáans",
+    "fr": "Afrikaans",
+    "it": "Afrikaans"
+  },
+  "ak": {
+    "ar": "توي (أكان)",
+    "de": "Twi (Akan)",
+    "el": "Τούι (Ακαν)",
+    "en": "Twi (Akan)",
+    "es": "Twi (Akan)",
+    "fr": "Twi (Akan)",
+    "it": "Twi (Akan)"
+  },
+  "am": {
+    "ar": "أمهرية",
+    "de": "Amharisch",
+    "el": "Αμαρικά",
+    "en": "Amharic",
+    "es": "Amárico",
+    "fr": "Amharique",
+    "it": "Amarico"
+  },
+  "ar": {
+    "ar": "العربية",
+    "de": "Arabisch",
+    "el": "Αραβικά",
+    "en": "Arabic",
+    "es": "Árabe",
+    "fr": "Arabe",
+    "it": "Arabo"
+  },
+  "as": {
+    "ar": "الأسامية",
+    "de": "Assamesisch",
+    "el": "Ασαμέζικα",
+    "en": "Assamese",
+    "es": "Asamés",
+    "fr": "Assamais",
+    "it": "Assamese"
+  },
+  "ay": {
+    "ar": "الأيمارا",
+    "de": "Aymara",
+    "el": "Αϊμάρα",
+    "en": "Aymara",
+    "es": "Aimara",
+    "fr": "Aymara",
+    "it": "Aymara"
+  },
+  "az": {
+    "ar": "أذربيجاني",
+    "de": "Aserbaidschanisch",
+    "el": "Αζερμπαϊτζανικά",
+    "en": "Azerbaijani",
+    "es": "Azerbaiyano",
+    "fr": "Azéri",
+    "it": "Azero"
+  },
+  "be": {
+    "ar": "بيلاروسي",
+    "de": "Weißrussisch",
+    "el": "Λευκορωσικά",
+    "en": "Belarusian",
+    "es": "Bielorruso",
+    "fr": "Biélorusse",
+    "it": "Bielorusso"
+  },
+  "bg": {
+    "ar": "بلغاري",
+    "de": "Bulgarisch",
+    "el": "Βουλγαρικά",
+    "en": "Bulgarian",
+    "es": "Búlgaro",
+    "fr": "Bulgare",
+    "it": "Bulgaro"
+  },
+  "bho": {
+    "ar": "البهوجبورية",
+    "de": "Bhojpuri",
+    "el": "Μποζπούρι",
+    "en": "Bhojpuri",
+    "es": "Bhojpuri",
+    "fr": "Bhojpouri",
+    "it": "Bhojpuri"
+  },
+  "bm": {
+    "ar": "البامبارا",
+    "de": "Bambara",
+    "el": "Μπαμπάρα",
+    "en": "Bambara",
+    "es": "Bambara",
+    "fr": "Bambara",
+    "it": "Bambara"
+  },
+  "bn": {
+    "ar": "البنغالي",
+    "de": "Bengalisch",
+    "el": "Μπενγκάλι",
+    "en": "Bengali",
+    "es": "Bengalí",
+    "fr": "Bengali",
+    "it": "Bengalese"
+  },
+  "bs": {
+    "ar": "البوسنية",
+    "de": "Bosnisch",
+    "el": "Βοσνιακά",
+    "en": "Bosnian",
+    "es": "Bosnio",
+    "fr": "Bosniaque",
+    "it": "Bosniaco"
+  },
+  "ca": {
+    "ar": "الكاتالونية",
+    "de": "Katalanisch",
+    "el": "Καταλανικά",
+    "en": "Catalan",
+    "es": "Catalán",
+    "fr": "Catalan",
+    "it": "Catalano"
+  },
+  "ceb": {
+    "ar": "السيبوانو",
+    "de": "Cebuano",
+    "el": "Σεμπουάνο",
+    "en": "Cebuano",
+    "es": "Cebuano",
+    "fr": "Cebuano",
+    "it": "Cebuano"
+  },
+  "ckb": {
+    "ar": "الكردية (السورانية)",
+    "de": "Kurdisch (Soranisch)",
+    "el": "Κουρδικά (Σορανί)",
+    "en": "Kurdish (Sorani)",
+    "es": "Kurdo (Sorani)",
+    "fr": "Kurde (Sorani)",
+    "it": "Curdo (Sorani)"
+  },
+  "co": {
+    "ar": "كورسيكي",
+    "de": "Korsisch",
+    "el": "Κορσικανικά",
+    "en": "Corsican",
+    "es": "Corso",
+    "fr": "Corse",
+    "it": "Corso"
+  },
+  "cs": {
+    "ar": "تشيكي",
+    "de": "Tschechisch",
+    "el": "Τσέχικα",
+    "en": "Czech",
+    "es": "Checo",
+    "fr": "Tchèque",
+    "it": "Ceco"
+  },
+  "cy": {
+    "ar": "ويلزي",
+    "de": "Walisisch",
+    "el": "Ουαλικά",
+    "en": "Welsh",
+    "es": "Galés",
+    "fr": "Gallois",
+    "it": "Gallese"
+  },
+  "da": {
+    "ar": "دانماركي",
+    "de": "Dänisch",
+    "el": "Δανικά",
+    "en": "Danish",
+    "es": "Danés",
+    "fr": "Danois",
+    "it": "Danese"
+  },
+  "de": {
+    "ar": "ألمانية",
+    "de": "Deutsch",
+    "el": "Γερμανικά",
+    "en": "German",
+    "es": "Alemán",
+    "fr": "Allemand",
+    "it": "Tedesco"
+  },
+  "doi": {
+    "ar": "دوغري",
+    "de": "Dogri",
+    "el": "Ντόγκρι",
+    "en": "Dogri",
+    "es": "Dogri",
+    "fr": "Dogri",
+    "it": "Dogri"
+  },
+  "dv": {
+    "ar": "المالديفية",
+    "de": "Dhivehi",
+    "el": "Ντιβέχι",
+    "en": "Dhivehi",
+    "es": "Divehi",
+    "fr": "Maldivien",
+    "it": "Divehi"
+  },
+  "ee": {
+    "ar": "الإيوي",
+    "de": "Ewe",
+    "el": "Εβε",
+    "en": "Ewe",
+    "es": "Ewe",
+    "fr": "Éwé",
+    "it": "Ewe"
+  },
+  "el": {
+    "ar": "يوناني",
+    "de": "Griechisch",
+    "el": "Ελληνικά",
+    "en": "Greek",
+    "es": "Griego",
+    "fr": "Grec",
+    "it": "Greco"
+  },
+  "en": {
+    "ar": "إنجليزية",
+    "de": "Englisch",
+    "el": "Αγγλικά",
+    "en": "English",
+    "es": "Inglés",
+    "fr": "Anglais",
+    "it": "Inglese"
+  },
+  "eo": {
+    "ar": "الاسبرانتو",
+    "de": "Esperanto",
+    "el": "Εσπεράντο",
+    "en": "Esperanto",
+    "es": "Esperanto",
+    "fr": "Espéranto",
+    "it": "Esperanto"
+  },
+  "es": {
+    "ar": "إسباني",
+    "de": "Spanisch",
+    "el": "Ισπανικά",
+    "en": "Spanish",
+    "es": "Español",
+    "fr": "Espagnol",
+    "it": "Spagnolo"
+  },
+  "et": {
+    "ar": "الإستونية",
+    "de": "Estnisch",
+    "el": "Εσθονικά",
+    "en": "Estonian",
+    "es": "Estonio",
+    "fr": "Estonien",
+    "it": "Estone"
+  },
+  "eu": {
+    "ar": "باسكي",
+    "de": "Baskisch",
+    "el": "Βασκικά",
+    "en": "Basque",
+    "es": "Vasco",
+    "fr": "Basque",
+    "it": "Basco"
+  },
+  "fa": {
+    "ar": "الفارسية",
+    "de": "Persisch",
+    "el": "Περσικά",
+    "en": "Persian",
+    "es": "Persa",
+    "fr": "Persan",
+    "it": "Persiano"
+  },
+  "fi": {
+    "ar": "فنلندي",
+    "de": "Finnisch",
+    "el": "Φινλανδικά",
+    "en": "Finnish",
+    "es": "Finlandés",
+    "fr": "Finnois",
+    "it": "Finlandese"
+  },
+  "fil": {
+    "ar": "الفلبينية (تاغالوغ)",
+    "de": "Filipino (Tagalog)",
+    "el": "Φιλιππινέζικα (Ταγκαλόγκ)",
+    "en": "Filipino (Tagalog)",
+    "es": "Filipino (Tagalo)",
+    "fr": "Filipino (Tagalog)",
+    "it": "Filippino (Tagalog)"
+  },
+  "fr": {
+    "ar": "فرنسي",
+    "de": "Französisch",
+    "el": "Γαλλικά",
+    "en": "French",
+    "es": "Francés",
+    "fr": "Français",
+    "it": "Francese"
+  },
+  "fy": {
+    "ar": "فريزي",
+    "de": "Friesisch",
+    "el": "Φριζικά",
+    "en": "Frisian",
+    "es": "Frisón",
+    "fr": "Frison",
+    "it": "Frisone"
+  },
+  "ga": {
+    "ar": "أيرلندي",
+    "de": "Irisch",
+    "el": "Ιρλανδικά",
+    "en": "Irish",
+    "es": "Irlandés",
+    "fr": "Irlandais",
+    "it": "Irlandese"
+  },
+  "gd": {
+    "ar": "غيلية اسكتلندية",
+    "de": "Schottisches Gälisch",
+    "el": "Σκωτικά γαελικά",
+    "en": "Scots Gaelic",
+    "es": "Gaélico escocés",
+    "fr": "Gaélique écossais",
+    "it": "Gaelico scozzese"
+  },
+  "gl": {
+    "ar": "غاليكي",
+    "de": "Galizisch",
+    "el": "Γαλικιανά",
+    "en": "Galician",
+    "es": "Gallego",
+    "fr": "Galicien",
+    "it": "Galiziano"
+  },
+  "gn": {
+    "ar": "الجواراني",
+    "de": "Guaraní",
+    "el": "Γκουαρανί",
+    "en": "Guarani",
+    "es": "Guaraní",
+    "fr": "Guarani",
+    "it": "Guaraní"
+  },
+  "gom": {
+    "ar": "الكونكانية",
+    "de": "Konkani",
+    "el": "Κονκάνι",
+    "en": "Konkani",
+    "es": "Konkani",
+    "fr": "Konkani",
+    "it": "Konkani"
+  },
+  "gu": {
+    "ar": "الجوجاراتية",
+    "de": "Gujarati",
+    "el": "Γκουγιαράτι",
+    "en": "Gujarati",
+    "es": "Gujarati",
+    "fr": "Gujarati",
+    "it": "Gujarati"
+  },
+  "ha": {
+    "ar": "هوسا",
+    "de": "Haussa",
+    "el": "Χάουσα",
+    "en": "Hausa",
+    "es": "Hausa",
+    "fr": "Haoussa",
+    "it": "Hausa"
+  },
+  "haw": {
+    "ar": "هاواي",
+    "de": "Hawaiisch",
+    "el": "Χαβαϊκά",
+    "en": "Hawaiian",
+    "es": "Hawaiano",
+    "fr": "Hawaïen",
+    "it": "Hawaiiano"
+  },
+  "he": {
+    "ar": "عبري",
+    "de": "Hebräisch",
+    "el": "Εβραϊκά",
+    "en": "Hebrew",
+    "es": "Hebreo",
+    "fr": "Hébreu",
+    "it": "Ebraico"
+  },
+  "hi": {
+    "ar": "الهندية",
+    "de": "Hindi",
+    "el": "Χίντι",
+    "en": "Hindi",
+    "es": "Hindi",
+    "fr": "Hindi",
+    "it": "Hindi"
+  },
+  "hmn": {
+    "ar": "الهمونغ",
+    "de": "Hmong",
+    "el": "Χμονγκ",
+    "en": "Hmong",
+    "es": "Hmong",
+    "fr": "Hmong",
+    "it": "Hmong"
+  },
+  "hr": {
+    "ar": "كرواتي",
+    "de": "Kroatisch",
+    "el": "Κροατικά",
+    "en": "Croatian",
+    "es": "Croata",
+    "fr": "Croate",
+    "it": "Croato"
+  },
+  "ht": {
+    "ar": "الكريول الهايتي",
+    "de": "Haitianisches Kreol",
+    "el": "Αϊτιανά",
+    "en": "Haitian Creole",
+    "es": "Criollo haitiano",
+    "fr": "Créole haïtien",
+    "it": "Creolo haitiano"
+  },
+  "hu": {
+    "ar": "المجرية",
+    "de": "Ungarisch",
+    "el": "Ουγγρικά",
+    "en": "Hungarian",
+    "es": "Húngaro",
+    "fr": "Hongrois",
+    "it": "Ungherese"
+  },
+  "hy": {
+    "ar": "الأرمينية",
+    "de": "Armenisch",
+    "el": "Αρμενικά",
+    "en": "Armenian",
+    "es": "Armenio",
+    "fr": "Arménien",
+    "it": "Armeno"
+  },
+  "id": {
+    "ar": "الإندونيسية",
+    "de": "Indonesisch",
+    "el": "Ινδονησιακά",
+    "en": "Indonesian",
+    "es": "Indonesio",
+    "fr": "Indonésien",
+    "it": "Indonesiano"
+  },
+  "ig": {
+    "ar": "الإيجبو",
+    "de": "Igbo",
+    "el": "Ίγκμπο",
+    "en": "Igbo",
+    "es": "Igbo",
+    "fr": "Igbo",
+    "it": "Igbo"
+  },
+  "ilo": {
+    "ar": "الإيلوكانو",
+    "de": "Ilokano",
+    "el": "Ιλοκανο",
+    "en": "Ilocano",
+    "es": "Ilocano",
+    "fr": "Ilocano",
+    "it": "Ilocano"
+  },
+  "is": {
+    "ar": "أيسلندي",
+    "de": "Isländisch",
+    "el": "Ισλανδικά",
+    "en": "Icelandic",
+    "es": "Islandés",
+    "fr": "Islandais",
+    "it": "Islandese"
+  },
+  "it": {
+    "ar": "إيطالي",
+    "de": "Italienisch",
+    "el": "Ιταλικά",
+    "en": "Italian",
+    "es": "Italiano",
+    "fr": "Italien",
+    "it": "Italiano"
+  },
+  "iw": {
+    "ar": "عبري",
+    "de": "Hebräisch",
+    "el": "Εβραϊκά",
+    "en": "Hebrew",
+    "es": "Hebreo",
+    "fr": "Hébreu",
+    "it": "Ebraico"
+  },
+  "ja": {
+    "ar": "ياباني",
+    "de": "Japanisch",
+    "el": "Ιαπωνικά",
+    "en": "Japanese",
+    "es": "Japonés",
+    "fr": "Japonais",
+    "it": "Giapponese"
+  },
+  "jv": {
+    "ar": "جاوي",
+    "de": "Javanisch",
+    "el": "Ιαβανικά",
+    "en": "Javanese",
+    "es": "Javanés",
+    "fr": "Javanais",
+    "it": "Giavanese"
+  },
+  "jw": {
+    "ar": "جاوي",
+    "de": "Javanisch",
+    "el": "Ιαβανικά",
+    "en": "Javanese",
+    "es": "Javanés",
+    "fr": "Javanais",
+    "it": "Giavanese"
+  },
+  "ka": {
+    "ar": "جورجي",
+    "de": "Georgisch",
+    "el": "Γεωργιανά",
+    "en": "Georgian",
+    "es": "Georgiano",
+    "fr": "Géorgien",
+    "it": "Georgiano"
+  },
+  "kn": {
+    "ar": "الكانادا",
+    "de": "Kannada",
+    "el": "Κανάντα",
+    "en": "Kannada",
+    "es": "Canarés",
+    "fr": "Kannada",
+    "it": "Kannada"
+  },
+  "ko": {
+    "ar": "كوري",
+    "de": "Koreanisch",
+    "el": "Κορεατικά",
+    "en": "Korean",
+    "es": "Coreano",
+    "fr": "Coréen",
+    "it": "Coreano"
+  },
+  "kri": {
+    "ar": "الكريولية",
+    "de": "Krio",
+    "el": "Κριο",
+    "en": "Krio",
+    "es": "Krio",
+    "fr": "Krio",
+    "it": "Krio"
+  },
+  "ku": {
+    "ar": "كردي",
+    "de": "Kurdisch",
+    "el": "Κουρδικά",
+    "en": "Kurdish",
+    "es": "Kurdo",
+    "fr": "Kurde",
+    "it": "Curdo"
+  },
+  "ky": {
+    "ar": "قيرغيزي",
+    "de": "Kirgisisch",
+    "el": "Κιργιζικά",
+    "en": "Kyrgyz",
+    "es": "Kirguís",
+    "fr": "Kirghize",
+    "it": "Kirghiso"
+  },
+  "la": {
+    "ar": "اللاتينية",
+    "de": "Lateinisch",
+    "el": "Λατινικά",
+    "en": "Latin",
+    "es": "Latín",
+    "fr": "Latin",
+    "it": "Latino"
+  },
+  "lb": {
+    "ar": "لوكسمبرجية",
+    "de": "Luxemburgisch",
+    "el": "Λουξεμβουργιανά",
+    "en": "Luxembourgish",
+    "es": "Luxemburgués",
+    "fr": "Luxembourgeois",
+    "it": "Lussemburghese"
+  },
+  "lg": {
+    "ar": "اللوغاندا",
+    "de": "Luganda",
+    "el": "Λουγκάντα",
+    "en": "Luganda",
+    "es": "Luganda",
+    "fr": "Luganda",
+    "it": "Luganda"
+  },
+  "ln": {
+    "ar": "اللينجالا",
+    "de": "Lingala",
+    "el": "Λινγκαλα",
+    "en": "Lingala",
+    "es": "Lingala",
+    "fr": "Lingala",
+    "it": "Lingala"
+  },
+  "lo": {
+    "ar": "لاو",
+    "de": "Laotisch",
+    "el": "Λάο",
+    "en": "Lao",
+    "es": "Laosiano",
+    "fr": "Laotien",
+    "it": "Lao"
+  },
+  "lt": {
+    "ar": "ليتواني",
+    "de": "Litauisch",
+    "el": "Λιθουανικά",
+    "en": "Lithuanian",
+    "es": "Lituano",
+    "fr": "Lituanien",
+    "it": "Lituano"
+  },
+  "lus": {
+    "ar": "Mizo",
+    "de": "Mizo",
+    "el": "Mizo",
+    "en": "Mizo",
+    "es": "Mizo",
+    "fr": "Mizo",
+    "it": "Mizo"
+  },
+  "lv": {
+    "ar": "لاتفي",
+    "de": "Lettisch",
+    "el": "Λετονικά",
+    "en": "Latvian",
+    "es": "Letón",
+    "fr": "Letton",
+    "it": "Lettone"
+  },
+  "mai": {
+    "ar": "مايثيلي",
+    "de": "Maithili",
+    "el": "Μαϊθιλι",
+    "en": "Maithili",
+    "es": "Maithili",
+    "fr": "Maithili",
+    "it": "Maithili"
+  },
+  "mg": {
+    "ar": "مالغاشي",
+    "de": "Malagasy",
+    "el": "Μαλαγάσι",
+    "en": "Malagasy",
+    "es": "Malgache",
+    "fr": "Malgache",
+    "it": "Malgascio"
+  },
+  "mi": {
+    "ar": "الماوري",
+    "de": "Maori",
+    "el": "Μαορί",
+    "en": "Maori",
+    "es": "Maorí",
+    "fr": "Maori",
+    "it": "Maori"
+  },
+  "mk": {
+    "ar": "المقدونية",
+    "de": "Mazedonisch",
+    "el": "Μακεδονικά",
+    "en": "Macedonian",
+    "es": "Macedonio",
+    "fr": "Macédonien",
+    "it": "Macedone"
+  },
+  "ml": {
+    "ar": "المالايالامية",
+    "de": "Malayalam",
+    "el": "Μαλαγασική γλώσσα",
+    "en": "Malayalam",
+    "es": "Malayalam",
+    "fr": "Malayalam",
+    "it": "Malayalam"
+  },
+  "mn": {
+    "ar": "المغولية",
+    "de": "Mongolisch",
+    "el": "Μογγολικά",
+    "en": "Mongolian",
+    "es": "Mongol",
+    "fr": "Mongol",
+    "it": "Mongolo"
+  },
+  "mni-Mtei": {
+    "ar": "Meiteilon (Manipuri)",
+    "de": "Meiteilon (Manipuri)",
+    "el": "Meiteilon (Manipuri)",
+    "en": "Meiteilon (Manipuri)",
+    "es": "Meiteilon (Manipuri)",
+    "fr": "Meiteilon (Manipuri)",
+    "it": "Meiteilon (Manipuri)"
+  },
+  "mr": {
+    "ar": "المراتي",
+    "de": "Marathi",
+    "el": "Μαραθικά",
+    "en": "Marathi",
+    "es": "Marathi",
+    "fr": "Marathi",
+    "it": "Marathi"
+  },
+  "ms": {
+    "ar": "لغة الملايو",
+    "de": "Malaiisch",
+    "el": "Μαλαισιανός",
+    "en": "Malay",
+    "es": "Malayo",
+    "fr": "Malais",
+    "it": "Malese"
+  },
+  "mt": {
+    "ar": "المالطية",
+    "de": "Maltesisch",
+    "el": "Μαλτέζικα",
+    "en": "Maltese",
+    "es": "Maltés",
+    "fr": "Maltais",
+    "it": "Maltese"
+  },
+  "my": {
+    "ar": "البورمية",
+    "de": "Birmanisch",
+    "el": "Βιρμανός",
+    "en": "Myanmar (Burmese)",
+    "es": "Birmano",
+    "fr": "Birman",
+    "it": "Birmano"
+  },
+  "ne": {
+    "ar": "النيبالية",
+    "de": "Nepalesisch",
+    "el": "Νεπάλι",
+    "en": "Nepali",
+    "es": "Nepalí",
+    "fr": "Népalais",
+    "it": "Nepalese"
+  },
+  "nl": {
+    "ar": "الهولندية",
+    "de": "Niederländisch",
+    "el": "Ολλανδικά",
+    "en": "Dutch",
+    "es": "Holandés",
+    "fr": "Néerlandais",
+    "it": "Olandese"
+  },
+  "no": {
+    "ar": "النرويجية",
+    "de": "Norwegisch",
+    "el": "Νορβηγικά",
+    "en": "Norwegian",
+    "es": "Noruego",
+    "fr": "Norvégien",
+    "it": "Norvegese"
+  },
+  "nso": {
+    "ar": "سيبيدي",
+    "de": "Sepedi",
+    "el": "Σεπέντι",
+    "en": "Sepedi",
+    "es": "Sepedi",
+    "fr": "Sepedi",
+    "it": "Sepedi"
+  },
+  "ny": {
+    "ar": "نيانجا (تشيتشيوا)",
+    "de": "Nyanja (Chichewa)",
+    "el": "Νιαντζα (Τσιτσεβά)",
+    "en": "Nyanja (Chichewa)",
+    "es": "Nyanja (Chichewa)",
+    "fr": "Nyanja (Chichewa)",
+    "it": "Nyanja (Chichewa)"
+  },
+  "om": {
+    "ar": "الأورومو",
+    "de": "Oromo",
+    "el": "Ορόμο",
+    "en": "Oromo",
+    "es": "Oromo",
+    "fr": "Oromo",
+    "it": "Oromo"
+  },
+  "or": {
+    "ar": "Odia (Oriya)",
+    "de": "Odia (Oriya)",
+    "el": "Odia (Oriya)",
+    "en": "Odia (Oriya)",
+    "es": "Odia (Oriya)",
+    "fr": "Odia (Oriya)",
+    "it": "Odia (Oriya)"
+  },
+  "pa": {
+    "ar": "البنجابية",
+    "de": "Punjabi",
+    "el": "Παντζάμπι",
+    "en": "Punjabi",
+    "es": "Panyabí",
+    "fr": "Pendjabi",
+    "it": "Punjabi"
+  },
+  "pl": {
+    "ar": "البولندية",
+    "de": "Polnisch",
+    "el": "Πολωνικά",
+    "en": "Polish",
+    "es": "Polaco",
+    "fr": "Polonais",
+    "it": "Polacco"
+  },
+  "ps": {
+    "ar": "الباشتو",
+    "de": "Paschtu",
+    "el": "Πάστο",
+    "en": "Pashto",
+    "es": "Pastún",
+    "fr": "Pachto",
+    "it": "Pashto"
+  },
+  "pt": {
+    "ar": "البرتغالية (البرتغال، البرازيل)",
+    "de": "Portugiesisch (Portugal, Brasilien)",
+    "el": "Πορτογαλικά (Πορτογαλία, Βραζιλία)",
+    "en": "Portuguese (Portugal, Brazil)",
+    "es": "Portugués (Portugal, Brasil)",
+    "fr": "Portugais (Portugal, Brésil)",
+    "it": "Portoghese (Portogallo, Brasile)"
+  },
+  "qu": {
+    "ar": "الكيشوا",
+    "de": "Quechua",
+    "el": "Κετσούα",
+    "en": "Quechua",
+    "es": "Quechua",
+    "fr": "Quechua",
+    "it": "Quechua"
+  },
+  "ro": {
+    "ar": "الرومانية",
+    "de": "Rumänisch",
+    "el": "Ρουμανικά",
+    "en": "Romanian",
+    "es": "Rumano",
+    "fr": "Roumain",
+    "it": "Rumeno"
+  },
+  "ru": {
+    "ar": "الروسية",
+    "de": "Russisch",
+    "el": "Ρωσικά",
+    "en": "Russian",
+    "es": "Ruso",
+    "fr": "Russe",
+    "it": "Russo"
+  },
+  "rw": {
+    "ar": "الكينيارواندا",
+    "de": "Kinyarwanda",
+    "el": "Κινιαρβάντα",
+    "en": "Kinyarwanda",
+    "es": "Kinyarwanda",
+    "fr": "Kinyarwanda",
+    "it": "Kinyarwanda"
+  },
+  "sa": {
+    "ar": "السنسكريتية",
+    "de": "Sanskrit",
+    "el": "Σανσκριτικά",
+    "en": "Sanskrit",
+    "es": "Sánscrito",
+    "fr": "Sanskrit",
+    "it": "Sanskrit"
+  },
+  "sd": {
+    "ar": "السندية",
+    "de": "Sindhi",
+    "el": "Σίντι",
+    "en": "Sindhi",
+    "es": "Sindhi",
+    "fr": "Sindhi",
+    "it": "Sindhi"
+  },
+  "si": {
+    "ar": "سنهالية (سنهالي)",
+    "de": "Singhalesisch (Singhalesisch)",
+    "el": "Σινχαλα (Σινχαλέζοι)",
+    "en": "Sinhala (Sinhalese)",
+    "es": "Singalés (Cingalés)",
+    "fr": "Sinhala (Cinghalais)",
+    "it": "Singalese (Sinhalese)"
+  },
+  "sk": {
+    "ar": "السلوفاكية",
+    "de": "Slowakisch",
+    "el": "Σλοβακικά",
+    "en": "Slovak",
+    "es": "Eslovaco",
+    "fr": "Slovaque",
+    "it": "Slovacco"
+  },
+  "sl": {
+    "ar": "السلوفينية",
+    "de": "Slowenisch",
+    "el": "Σλοβενικά",
+    "en": "Slovenian",
+    "es": "Esloveno",
+    "fr": "Slovène",
+    "it": "Sloveno"
+  },
+  "sm": {
+    "ar": "ساموا",
+    "de": "Samoanisch",
+    "el": "Σαμοανός",
+    "en": "Samoan",
+    "es": "Samoano",
+    "fr": "Samoan",
+    "it": "Samoano"
+  },
+  "sn": {
+    "ar": "شونا",
+    "de": "Shona",
+    "el": "Σόνα",
+    "en": "Shona",
+    "es": "Shona",
+    "fr": "Shona",
+    "it": "Shona"
+  },
+  "so": {
+    "ar": "الصومالية",
+    "de": "Somalisch",
+    "el": "Σομαλικά",
+    "en": "Somali",
+    "es": "Somalí",
+    "fr": "Somali",
+    "it": "Somalo"
+  },
+  "sq": {
+    "ar": "الألبانية",
+    "de": "Albanisch",
+    "el": "Αλβανικά",
+    "en": "Albanian",
+    "es": "Albanés",
+    "fr": "Albanais",
+    "it": "Albanese"
+  },
+  "sr": {
+    "ar": "الصربية",
+    "de": "Serbisch",
+    "el": "Σερβικά",
+    "en": "Serbian",
+    "es": "Serbio",
+    "fr": "Serbe",
+    "it": "Serbo"
+  },
+  "st": {
+    "ar": "سيسوتو",
+    "de": "Sesotho",
+    "el": "Σεσόθο",
+    "en": "Sesotho",
+    "es": "Sesotho",
+    "fr": "Sesotho",
+    "it": "Sesotho"
+  },
+  "su": {
+    "ar": "السوندانية",
+    "de": "Sundanesisch",
+    "el": "Σουνδανικά",
+    "en": "Sundanese",
+    "es": "Sundanés",
+    "fr": "Soundanais",
+    "it": "Sundanese"
+  },
+  "sv": {
+    "ar": "السويدية",
+    "de": "Schwedisch",
+    "el": "Σουηδικά",
+    "en": "Swedish",
+    "es": "Sueco",
+    "fr": "Suédois",
+    "it": "Svedese"
+  },
+  "sw": {
+    "ar": "السواحيلية",
+    "de": "Swahili",
+    "el": "Σουαχίλι",
+    "en": "Swahili",
+    "es": "Swahili",
+    "fr": "Swahili",
+    "it": "Swahili"
+  },
+  "ta": {
+    "ar": "التاميلية",
+    "de": "Tamilisch",
+    "el": "Ταμίλ",
+    "en": "Tamil",
+    "es": "Tamil",
+    "fr": "Tamoul",
+    "it": "Tamil"
+  },
+  "te": {
+    "ar": "التيلجو",
+    "de": "Telugu",
+    "el": "Τελούγκου",
+    "en": "Telugu",
+    "es": "Telugu",
+    "fr": "Télougou",
+    "it": "Telugu"
+  },
+  "tg": {
+    "ar": "الطاجيكية",
+    "de": "Tadschikisch",
+    "el": "Τατζικικά",
+    "en": "Tajik",
+    "es": "Tayiko",
+    "fr": "Tadjik",
+    "it": "Tagiko"
+  },
+  "th": {
+    "ar": "التايلاندية",
+    "de": "Thailändisch",
+    "el": "Ταϊλανδέζικα",
+    "en": "Thai",
+    "es": "Tailandés",
+    "fr": "Thaï",
+    "it": "Thai"
+  },
+  "ti": {
+    "ar": "التيجرينيا",
+    "de": "Tigrinya",
+    "el": "Τιγκρινικά",
+    "en": "Tigrinya",
+    "es": "Tigriña",
+    "fr": "Tigrigna",
+    "it": "Tigrinya"
+  },
+  "tk": {
+    "ar": "التركمانية",
+    "de": "Turkmenisch",
+    "el": "Τουρκμενικά",
+    "en": "Turkmen",
+    "es": "Turcomano",
+    "fr": "Turkmène",
+    "it": "Turkmeno"
+  },
+  "tl": {
+    "ar": "التاغالوغية (الفلبينية)",
+    "de": "Tagalog (Filipino)",
+    "el": "Τάγκαλογκ (Φιλιππινέζικα)",
+    "en": "Tagalog (Filipino)",
+    "es": "Tagalo (Filipino)",
+    "fr": "Tagalog (Filipino)",
+    "it": "Tagalog (Filippino)"
+  },
+  "tr": {
+    "ar": "التركية",
+    "de": "Türkisch",
+    "el": "Τουρκικά",
+    "en": "Turkish",
+    "es": "Turco",
+    "fr": "Turc",
+    "it": "Turco"
+  },
+  "ts": {
+    "ar": "تسونجا",
+    "de": "Tsonga",
+    "el": "Τσόνγκα",
+    "en": "Tsonga",
+    "es": "Tsonga",
+    "fr": "Tsonga",
+    "it": "Tsonga"
+  },
+  "tt": {
+    "ar": "التتارية",
+    "de": "Tatarisch",
+    "el": "Τατάρ",
+    "en": "Tatar",
+    "es": "Tártaro",
+    "fr": "Tatar",
+    "it": "Tatar"
+  },
+  "ug": {
+    "ar": "الأويغورية",
+    "de": "Uigurisch",
+    "el": "Ουιγκούρ",
+    "en": "Uyghur",
+    "es": "Uigur",
+    "fr": "Ouïghour",
+    "it": "Uiguro"
+  },
+  "uk": {
+    "ar": "الأوكرانية",
+    "de": "Ukrainisch",
+    "el": "Ουκρανικά",
+    "en": "Ukrainian",
+    "es": "Ucraniano",
+    "fr": "Ukrainien",
+    "it": "Ucraino"
+  },
+  "ur": {
+    "ar": "الأردية",
+    "de": "Urdu",
+    "el": "Ουρντού",
+    "en": "Urdu",
+    "es": "Urdu",
+    "fr": "Ourdou",
+    "it": "Urdu"
+  },
+  "uz": {
+    "ar": "الأوزبكية",
+    "de": "Usbekisch",
+    "el": "Ουζμπεκικά",
+    "en": "Uzbek",
+    "es": "Uzbeko",
+    "fr": "Ouzbek",
+    "it": "Uzbeco"
+  },
+  "vi": {
+    "ar": "الفيتنامية",
+    "de": "Vietnamesisch",
+    "el": "Βιετναμέζικα",
+    "en": "Vietnamese",
+    "es": "Vietnamita",
+    "fr": "Vietnamien",
+    "it": "Vietnamita"
+  },
+  "xh": {
+    "ar": "خوسا",
+    "de": "Xhosa",
+    "el": "Κόσα",
+    "en": "Xhosa",
+    "es": "Xhosa",
+    "fr": "Xhosa",
+    "it": "Xhosa"
+  },
+  "yi": {
+    "ar": "اليديشية",
+    "de": "Jiddisch",
+    "el": "Γίντις",
+    "en": "Yiddish",
+    "es": "Yídish",
+    "fr": "Yiddish",
+    "it": "Yiddish"
+  },
+  "yo": {
+    "ar": "اليوروبا",
+    "de": "Yoruba",
+    "el": "Γιορούμπα",
+    "en": "Yoruba",
+    "es": "Yoruba",
+    "fr": "Yoruba",
+    "it": "Yoruba"
+  },
+  "zh": {
+    "ar": "الصينية (المبسطة)",
+    "de": "Chinesisch (vereinfacht)",
+    "el": "Κινεζικά (Απλουστευμένα)",
+    "en": "Chinese (Simplified)",
+    "es": "Chino (simplificado)",
+    "fr": "Chinois (simplifié)",
+    "it": "Cinese (semplificato)"
+  },
+  "zh-CN": {
+    "ar": "الصينية (المبسطة)",
+    "de": "Chinesisch (vereinfacht)",
+    "el": "Κινεζικά (Απλουστευμένα)",
+    "en": "Chinese (Simplified)",
+    "es": "Chino (simplificado)",
+    "fr": "Chinois (simplifié)",
+    "it": "Cinese (semplificato)"
+  },
+  "zh-TW": {
+    "ar": "الصينية (التقليدية)",
+    "de": "Chinesisch (traditionell)",
+    "el": "Κινεζικά (Παραδοσιακά)",
+    "en": "Chinese (Traditional)",
+    "es": "Chino (tradicional)",
+    "fr": "Chinois (traditionnel)",
+    "it": "Cinese (tradizionale)"
+  },
+  "zu": {
+    "ar": "الزولو",
+    "de": "Zulu",
+    "el": "Ζουλού",
+    "en": "Zulu",
+    "es": "Zulú",
+    "fr": "Zoulou",
+    "it": "Zulu"
+  }
+}

@@ -1,4 +1,4 @@
-import React, { useEffect, memo, useState, createRef } from "react";
+import React, { createRef, memo, useEffect, useState } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
 import Languages from "../NavItems/languages/languages";
@@ -21,6 +21,7 @@ import {
   ListItemText,
   ListSubheader,
   Snackbar,
+  Stack,
   Tab,
   Tabs,
   Toolbar,
@@ -98,6 +99,9 @@ import { setFalse, setTrue } from "../../redux/reducers/cookiesReducers";
 import { changeLanguage } from "../../redux/reducers/languageReducer";
 
 import { Link, useNavigate } from "react-router-dom";
+import { AudioFile, Audiotrack, ManageSearch } from "@mui/icons-material";
+import AdvancedTools from "../NavItems/tools/Alltools/AdvancedTools/AdvancedTools";
+import Grid from "@mui/material/Grid";
 
 function a11yProps(index) {
   return {
@@ -154,10 +158,6 @@ const NavBar = () => {
       ) {
         if (userAuthenticated) {
           navigate("/app/tools/" + newValue.path);
-          /* history.push({
-                        pathname: "/app/tools/" + newValue.path,
-                        state: { media: mediaTool }
-                    })*/
         } else {
           setOpenAlert(true);
         }
@@ -177,10 +177,6 @@ const NavBar = () => {
           );
         else {
           navigate("/app/tools/" + newValue.path);
-          /*history.push({
-                        pathname: "/app/tools/" + newValue.path,
-                        state: { media: mediaTool }
-                    })*/
         }
       }
     } else if (newValueType === "OTHER") {
@@ -463,7 +459,7 @@ const NavBar = () => {
       type: keyword("navbar_category_video"),
       typeId: 1,
       icons: ["experimental", "lock"],
-      toolRestrictions: ["beta"],
+      toolRestrictions: ["BETA_TESTER"],
     },
 
     {
@@ -499,7 +495,7 @@ const NavBar = () => {
       pathGroup: "TOOL",
       type: keyword("navbar_category_image"),
       typeId: 2,
-      icons: ["new"],
+      icons: [],
       toolRestrictions: [],
     },
     {
@@ -608,7 +604,7 @@ const NavBar = () => {
       pathGroup: "TOOL",
       type: keyword("navbar_category_image"),
       typeId: 2,
-      icons: ["redesigned"],
+      icons: [],
       toolRestrictions: [],
     },
     {
@@ -644,7 +640,7 @@ const NavBar = () => {
       pathGroup: "TOOL",
       type: keyword("navbar_category_image"),
       typeId: 2,
-      icons: ["new"],
+      icons: [],
       toolRestrictions: [],
     },
 
@@ -681,7 +677,7 @@ const NavBar = () => {
       pathGroup: "TOOL",
       type: keyword("navbar_category_image"),
       typeId: 2,
-      icons: ["new", "lock"],
+      icons: ["lock"],
       toolRestrictions: ["lock"],
     },
     {
@@ -703,7 +699,7 @@ const NavBar = () => {
       type: keyword("navbar_category_image"),
       typeId: 2,
       icons: ["new", "experimental", "lock"],
-      toolRestrictions: ["beta"],
+      toolRestrictions: ["BETA_TESTER"],
     },
     {
       id: 15,
@@ -739,7 +735,7 @@ const NavBar = () => {
       type: keyword("navbar_category_image"),
       typeId: 2,
       icons: ["experimental", "lock"],
-      toolRestrictions: ["beta"],
+      toolRestrictions: ["BETA_TESTER"],
     },
     {
       id: 16,
@@ -775,15 +771,51 @@ const NavBar = () => {
       type: keyword("navbar_category_image"),
       typeId: 2,
       icons: ["experimental", "lock"],
-      toolRestrictions: ["beta"],
+      toolRestrictions: ["BETA_TESTER"],
+    },
+    {
+      id: 17,
+      title: "navbar_loccus",
+      description: "navbar_loccus_description",
+      icon:
+        tabValue === 0 && drawerValue === 16 ? (
+          <AudioFile
+            width="45px"
+            height="45px"
+            style={{ fill: "#00926c" }}
+            title="Loccus"
+          />
+        ) : (
+          <AudioFile
+            width="45px"
+            height="45px"
+            style={{ fill: "#4c4c4c" }}
+            title={keyword("navbar_loccus")}
+          />
+        ),
+      iconColored: (
+        <AudioFile
+          width="45px"
+          height="45px"
+          style={{ fill: "#00926c" }}
+          title={keyword("navbar_loccus")}
+        />
+      ),
+      tsvPrefix: "loccus_detection",
+      path: "loccus",
+      pathGroup: "TOOL",
+      type: keyword("navbar_category_audio"),
+      typeId: 3,
+      icons: ["new", "experimental", "lock"],
+      toolRestrictions: ["BETA_TESTER"],
     },
 
     {
-      id: 17,
+      id: 18,
       title: "navbar_twitter",
       description: "navbar_twitter_description",
       icon:
-        tabValue === 0 && drawerValue === 16 ? (
+        tabValue === 0 && drawerValue === 17 ? (
           <TwitterSearchIcon
             width="45px"
             height="45px"
@@ -810,16 +842,52 @@ const NavBar = () => {
       path: "twitter",
       pathGroup: "TOOL",
       type: keyword("navbar_category_search"),
-      typeId: 3,
+      typeId: 4,
       icons: [],
       toolRestrictions: [],
     },
     {
-      id: 18,
+      id: 19,
+      title: "navbar_semantic_search",
+      description: "navbar_semantic_search_description",
+      icon:
+        tabValue === 0 && drawerValue === 18 ? (
+          <ManageSearch
+            width="45px"
+            height="45px"
+            style={{ fill: "#00926c" }}
+            title={keyword("navbar_semantic_search")}
+          />
+        ) : (
+          <ManageSearch
+            width="45px"
+            height="45px"
+            style={{ fill: "#4c4c4c" }}
+            title={keyword("navbar_semantic_search")}
+          />
+        ),
+      iconColored: (
+        <ManageSearch
+          width="45px"
+          height="45px"
+          style={{ fill: "#00926c" }}
+          title={keyword("navbar_semantic_search")}
+        />
+      ),
+      tsvPrefix: "semantic_search",
+      path: "semanticSearch",
+      pathGroup: "TOOL",
+      type: keyword("navbar_category_search"),
+      typeId: 4,
+      icons: ["experimental", "new", "lock"],
+      toolRestrictions: ["lock"],
+    },
+    {
+      id: 20,
       title: "navbar_twitter_sna",
       description: "navbar_twitter_sna_description",
       icon:
-        tabValue === 0 && drawerValue === 17 ? (
+        tabValue === 0 && drawerValue === 19 ? (
           <TwitterSnaIcon
             width="45px"
             height="45px"
@@ -846,16 +914,16 @@ const NavBar = () => {
       path: "twitterSna",
       pathGroup: "TOOL",
       type: keyword("navbar_category_data"),
-      typeId: 4,
+      typeId: 5,
       icons: ["lock"],
       toolRestrictions: ["lock"],
     },
     {
-      id: 19,
+      id: 21,
       title: "navbar_archiving",
       description: "navbar_archiving_description",
       icon:
-        tabValue === 0 && drawerValue === 18 ? (
+        tabValue === 0 && drawerValue === 20 ? (
           <ArchiveIcon width="45px" height="45px" style={{ fill: "#00926c" }} />
         ) : (
           <ArchiveIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} />
@@ -867,16 +935,16 @@ const NavBar = () => {
       path: "archive",
       pathGroup: "TOOL",
       type: keyword("navbar_category_other"),
-      typeId: 5,
+      typeId: 6,
       icons: ["experimental", "new", "lock"],
-      toolRestrictions: ["lock", "beta"],
+      toolRestrictions: ["ARCHIVE"],
     },
     {
-      id: 20,
+      id: 22,
       title: "navbar_twitter_crowdtangle",
       description: "navbar_twitter_crowdtangle_description",
       icon:
-        tabValue === 0 && drawerValue === 19 ? (
+        tabValue === 0 && drawerValue === 21 ? (
           <CsvSnaIcon
             width="45px"
             height="45px"
@@ -902,16 +970,16 @@ const NavBar = () => {
       tsvPrefix: "twitter_crowdtangle",
       pathGroup: "TOOL",
       type: keyword("navbar_category_data"),
-      typeId: 4,
+      typeId: 5,
       icons: [],
       toolRestrictions: [],
     },
     {
-      id: 21,
+      id: 23,
       title: "navbar_covidsearch",
       description: "navbar_covidsearch_description",
       icon:
-        tabValue === 0 && drawerValue === 20 ? (
+        tabValue === 0 && drawerValue === 22 ? (
           <CovidSearchIcon
             width="45px"
             height="45px"
@@ -938,16 +1006,16 @@ const NavBar = () => {
       path: "factcheck",
       pathGroup: "TOOL",
       type: keyword("navbar_category_search"),
-      typeId: 3,
-      icons: ["new"],
+      typeId: 4,
+      icons: [],
       toolRestrictions: [],
     },
     {
-      id: 22,
+      id: 24,
       title: "navbar_xnetwork",
       description: "navbar_xnetwork_description",
       icon:
-        tabValue === 0 && drawerValue === 21 ? (
+        tabValue === 0 && drawerValue === 23 ? (
           <XnetworkIcon
             width="45px"
             height="45px"
@@ -974,8 +1042,8 @@ const NavBar = () => {
       path: "xnetwork",
       pathGroup: "TOOL",
       type: keyword("navbar_category_search"),
-      typeId: 3,
-      icons: ["new"],
+      typeId: 4,
+      icons: [],
       toolRestrictions: [],
     },
   ];
@@ -1085,14 +1153,6 @@ const NavBar = () => {
       type: keyword("navbar_category_general"),
       typeId: 0,
     },
-    /*{
-            title: "navbar_factCheck",
-            icon: (tabValue === 5) ? <FactcheckIcon width="40px" height="40px" style={{ fill: "#00926c" }} />
-                : <FactcheckIcon width="40px" height="40px" style={{ fill: "#4c4c4c" }} />,
-            content: <FactCheck />,
-            path: "factCheck",
-            footer: <Footer type={"afp"} />
-        },*/
     {
       title: "navbar_about",
       icon:
@@ -1140,12 +1200,15 @@ const NavBar = () => {
         setOpenListImage(true);
         break;
       case 3:
-        setOpenListSeach(true);
+        setOpenListAudio(true);
         break;
       case 4:
-        setOpenListData(true);
+        setOpenListSeach(true);
         break;
       case 5:
+        setOpenListData(true);
+        break;
+      case 6:
         setOpenListOtherTools(true);
         break;
       default:
@@ -1249,6 +1312,22 @@ const NavBar = () => {
     }
   };
 
+  //Audio items
+  const drawerItemsAudio = drawerItems.filter(
+    (item) => item.type === keyword("navbar_category_audio"),
+  );
+  const [openListAudio, setOpenListAudio] = useState(false);
+  const [classBorderAudio, setClassBorderAudio] = useState(null);
+
+  const handleClickListAudio = () => {
+    setOpenListAudio(!openListAudio);
+    if (!openListAudio) {
+      setClassBorderAudio(classes.drawerCategoryBorder);
+    } else {
+      setClassBorderAudio(null);
+    }
+  };
+
   //Search items
   const drawerItemsSearch = drawerItems.filter(
     (item) => item.type === keyword("navbar_category_search"),
@@ -1296,7 +1375,9 @@ const NavBar = () => {
     }
   };
 
-  const listItems = [
+  let listItems = [];
+
+  const tmpListItems = [
     {
       title: keyword("navbar_category_video"),
       icon: (
@@ -1326,6 +1407,20 @@ const NavBar = () => {
       classBorder: classBorderImage,
     },
     {
+      title: keyword("navbar_category_audio"),
+      icon: (
+        <Audiotrack
+          style={{ fill: "#4c4c4c" }}
+          title={keyword("navbar_category_audio")}
+        />
+      ),
+      list: drawerItemsAudio,
+      variableOpen: openListAudio,
+      setVariableOpen: setOpenListAudio,
+      functionHandleClick: handleClickListAudio,
+      classBorder: classBorderAudio,
+    },
+    {
       title: keyword("navbar_category_search"),
       icon: (
         <SearchIcon
@@ -1353,10 +1448,7 @@ const NavBar = () => {
       functionHandleClick: handleClickListData,
       classBorder: classBorderData,
     },
-  ];
-
-  if (role.includes("BETA_TESTER"))
-    listItems.push({
+    {
       title: keyword("navbar_category_other"),
       icon: <MoreHorizIcon style={{ fill: "#4c4c4c" }} />,
       list: drawerItemsOtherTools,
@@ -1364,7 +1456,38 @@ const NavBar = () => {
       setVariableOpen: setOpenListOtherTools,
       functionHandleClick: handleClickListOtherTools,
       classBorder: classBorderOtherTools,
-    });
+    },
+  ];
+
+  tmpListItems.map((items) => {
+    const listTools = items.list;
+    for (let i = 0; i < listTools.length; i++) {
+      if (listTools[i].toolRestrictions.length === 0) {
+        listItems.push(items);
+        break;
+      } else if (
+        listTools[i].toolRestrictions.some((restriction) =>
+          role.includes(restriction),
+        )
+      ) {
+        listItems.push(items);
+        break;
+      } else if (listTools[i].toolRestrictions.includes("lock")) {
+        listItems.push(items);
+        break;
+      }
+    }
+  });
+
+  const drawItemPerRole = drawerItems.filter((item) => {
+    if (
+      item.toolRestrictions.length === 0 ||
+      item.toolRestrictions.includes("lock")
+    )
+      return true;
+    if (item.toolRestrictions.some((restriction) => role.includes(restriction)))
+      return true;
+  });
 
   const toolsItem = drawerItems.find((data) => data.title === "navbar_tools");
   //const assistantItem = tabItems.find(data => data.title === 'navbar_assistant');
@@ -1390,74 +1513,96 @@ const NavBar = () => {
         </Alert>
       </Snackbar>
       <ThemeProvider theme={themeFab}>
-        {
-          <AppBar position="fixed">
-            <Toolbar
-              className={classes.toolbar}
-              style={{ borderBottom: "solid 1px #dedbdb" }}
+        <AppBar position="fixed" width={"100%"}>
+          <Toolbar
+            className={classes.toolbar}
+            style={{ borderBottom: "solid 1px #dedbdb" }}
+          >
+            <Grid
+              container
+              direction="row"
+              justifyContent="space-between"
+              alignItems="center"
+              spacing={{ sm: 1, md: 2 }}
             >
-              <LogoWeVerify2
-                width="100px"
-                height="59px"
-                style={{ height: "35px", width: "auto" }}
-                alt="logo"
-                className={classes.logoLeft}
-                onClick={handleImageClick}
-              />
-
-              <LogoInvid2
-                width="46px"
-                height="26px"
-                style={{ height: "30px", width: "auto" }}
-                alt="logo"
-                className={classes.logoRight}
-                onClick={handleImageClick}
-              />
-
-              <LogoVera
-                style={{ height: "50px", width: "auto" }}
-                alt="logo"
-                className={classes.logoRight}
-                onClick={handleImageClick}
-              />
-
-              <Box m={3}></Box>
-
-              <div className={classes.grow} />
-
-              <Tabs
-                value={tabValue}
-                variant="scrollable"
-                onChange={handleChange}
-                scrollButtons
-                allowScrollButtonsMobile
-                indicatorColor="primary"
-                textColor="primary"
-                aria-label="scrollable force tabs example"
-                style={{ marginRight: "30px" }}
-                TabIndicatorProps={{
-                  style: { display: "none" },
-                }}
-              >
-                {tabItems.map((item, index) => {
-                  return (
-                    <Tab
-                      key={index}
-                      label={keyword(item.title)}
-                      icon={item.icon}
-                      className={classes.tab}
-                      {...a11yProps(index)}
-                      to={item.path}
-                      component={Link}
-                    />
-                  );
-                })}
-              </Tabs>
-              <div className={classes.grow} />
-              <Languages />
-            </Toolbar>
-          </AppBar>
-        }
+              <Grid item xs={2}>
+                <Stack
+                  direction="row"
+                  justifyContent="flex-start"
+                  alignItems="center"
+                  spacing={{ sm: 1, md: 2 }}
+                >
+                  <LogoWeVerify2
+                    style={{
+                      height: "auto",
+                      minWidth: "48px",
+                      width: { sm: "48px", md: "80px" },
+                    }}
+                    alt="logo"
+                    className={classes.logoLeft}
+                    onClick={handleImageClick}
+                  />
+                  <LogoInvid2
+                    style={{
+                      height: "auto",
+                      minWidth: "48px",
+                      width: { sm: "48px", md: "80px" },
+                    }}
+                    alt="logo"
+                    className={classes.logoRight}
+                    onClick={handleImageClick}
+                  />
+                  <LogoVera
+                    style={{
+                      height: "auto",
+                      minWidth: "48px",
+                      width: { sm: "48px", md: "80px" },
+                    }}
+                    alt="logo"
+                    className={classes.logoRight}
+                    onClick={handleImageClick}
+                  />
+                </Stack>
+              </Grid>
+              <Grid item xs={7}>
+                <Tabs
+                  value={tabValue}
+                  variant="scrollable"
+                  onChange={handleChange}
+                  scrollButtons="auto"
+                  allowScrollButtonsMobile
+                  indicatorColor="primary"
+                  textColor="primary"
+                  aria-label="scrollable force tabs example"
+                  TabIndicatorProps={{
+                    style: { display: "none" },
+                  }}
+                  sx={{ color: "black" }}
+                >
+                  {tabItems.map((item, index) => {
+                    return (
+                      <Tab
+                        key={index}
+                        label={keyword(item.title)}
+                        icon={item.icon}
+                        {...a11yProps(index)}
+                        to={item.path}
+                        component={Link}
+                        sx={{ minWidth: "130px" }}
+                      />
+                    );
+                  })}
+                </Tabs>
+              </Grid>
+              <Grid item xs={2}>
+                <AdvancedTools />
+              </Grid>
+              <Grid item xs={1}>
+                <Languages />
+              </Grid>
+            </Grid>
+          </Toolbar>
+        </AppBar>
 
         <Drawer
           variant="permanent"
@@ -1507,11 +1652,17 @@ const NavBar = () => {
               component={Link}
               to={"tools"}
             >
-              <ListItemIcon color="primary.main">
+              <ListItemIcon
+                color="primary.main"
+                sx={{
+                  marginRight: "12px",
+                  minWidth: "unset",
+                }}
+              >
                 {
                   <IconButton
                     className={classes.customAllToolsButton}
-                    style={{ width: 24, height: 24 }}
+                    sx={{ width: 24, height: 24 }}
                   >
                     {toolsItem.icon}
                   </IconButton>
@@ -1533,7 +1684,13 @@ const NavBar = () => {
               const element = (
                 <div style={{ margin: "-5px -15px -5px -15px" }}>
                   <ListItem button onClick={item.functionHandleClick}>
-                    <ListItemIcon color="primary.main">
+                    <ListItemIcon
+                      color="primary.main"
+                      sx={{
+                        marginRight: "12px",
+                        minWidth: "unset",
+                      }}
+                    >
                       <IconButton
                         className={classes.customAllToolsButton}
                         style={{ width: 24, height: 24 }}
@@ -1554,7 +1711,13 @@ const NavBar = () => {
                       }
                     />
 
-                    {openListVideo ? <ExpandLess /> : <ExpandMore />}
+                    {open ? (
+                      item.variableOpen ? (
+                        <ExpandLess />
+                      ) : (
+                        <ExpandMore />
+                      )
+                    ) : null}
                   </ListItem>
 
                   <Collapse in={item.variableOpen} timeout="auto" unmountOnExit>
@@ -1570,6 +1733,10 @@ const NavBar = () => {
                               <ListItemIcon
                                 color="primary.main"
                                 className={classes.drawerListNested}
+                                sx={{
+                                  marginRight: "12px",
+                                  minWidth: "unset",
+                                }}
                               >
                                 {
                                   <IconButton
@@ -1581,7 +1748,13 @@ const NavBar = () => {
                                 }
                               </ListItemIcon>
                             ) : (
-                              <ListItemIcon color="primary.main">
+                              <ListItemIcon
+                                color="primary.main"
+                                sx={{
+                                  marginRight: "12px",
+                                  minWidth: "unset",
+                                }}
+                              >
                                 {
                                   <IconButton
                                     className={classes.customAllToolsButton}
@@ -1608,7 +1781,7 @@ const NavBar = () => {
                           </ListItem>
                         );
 
-                        if (itemList.toolRestrictions.includes("beta")) {
+                        if (itemList.toolRestrictions.includes("BETA_TESTER")) {
                           if (betaTester) {
                             return element;
                           } else {
@@ -1671,7 +1844,13 @@ const NavBar = () => {
                   key={key}
                   onClick={() => changeValue(item, "OTHER")}
                 >
-                  <ListItemIcon color="primary.main">
+                  <ListItemIcon
+                    color="primary.main"
+                    sx={{
+                      marginRight: "12px",
+                      minWidth: "unset",
+                    }}
+                  >
                     {
                       <IconButton
                         className={classes.customAllToolsButton}
@@ -1729,7 +1908,7 @@ const NavBar = () => {
           <TabItem
             className={classes.noMargin}
             tabItems={tabItems}
-            drawerItems={drawerItems}
+            drawerItems={drawItemPerRole}
           />
           <ScrollTop
             {...{ isCurrentLanguageLeftToRight: isCurrentLanguageLeftToRight }}

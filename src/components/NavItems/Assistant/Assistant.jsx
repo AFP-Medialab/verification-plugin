@@ -54,7 +54,7 @@ const Assistant = () => {
   const neResult = useSelector((state) => state.assistant.neResultCategory);
 
   // source credibility
-  const positiveSourCred = useSelector(
+  const positiveSourceCred = useSelector(
     (state) => state.assistant.positiveSourceCred,
   );
   const cautionSourceCred = useSelector(
@@ -154,7 +154,7 @@ const Assistant = () => {
           </Grid>
         ) : null}
 
-        {positiveSourCred || cautionSourceCred || mixedSourceCred ? (
+        {positiveSourceCred || cautionSourceCred || mixedSourceCred ? (
           <Grid item xs>
             <AssistantSCResults />
           </Grid>
@@ -228,7 +228,7 @@ const Assistant = () => {
               ) : null}
 
               {linkList.length !== 0 ? (
-                <Grid item xs={5}>
+                <Grid item xs={12}>
                   <AssistantLinkResult />
                 </Grid>
               ) : null}

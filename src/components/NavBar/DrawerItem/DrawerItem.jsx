@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import { Container } from "@mui/material";
 import Fade from "@mui/material/Fade";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { selectTool } from "../../../redux/reducers/tools/toolReducer";
 import AllTools from "../../NavItems/tools/Alltools/AllTools";
 import Analysis from "../../NavItems/tools/Analysis/Analysis";
@@ -25,12 +25,11 @@ import Geolocation from "../../NavItems/tools/Geolocation/Geolocation";
 import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import AnalysisImg from "../../NavItems/tools/Analysis_images/Analysis";
-import {
-  //trackPageView,
-  getclientId,
-} from "../../Shared/GoogleAnalytics/MatomoAnalytics";
+import { getclientId } from "../../Shared/GoogleAnalytics/MatomoAnalytics";
 import { useTrackPageView } from "../../../Hooks/useAnalytics";
 import Archive from "../../NavItems/tools/Archive";
+import SemanticSearch from "../../NavItems/tools/SemanticSearch";
+import Loccus from "../../NavItems/tools/Loccus";
 
 const DrawerItem = ({ drawerItems }) => {
   const drawerItemsContent = [
@@ -100,8 +99,16 @@ const DrawerItem = ({ drawerItems }) => {
       footer: <Footer type={"afp"} />,
     },
     {
+      content: <Loccus />,
+      footer: <Footer type={"loccus"} />,
+    },
+    {
       content: <TwitterAdvancedSearch />,
       footer: <Footer type={"afp"} />,
+    },
+    {
+      content: <SemanticSearch />,
+      footer: <Footer type={"kinit"} />,
     },
     {
       content: <TwitterSna />,
@@ -121,7 +128,8 @@ const DrawerItem = ({ drawerItems }) => {
           <DrawerItemContent index={0} drawContent={drawerItemsContent} />
         }
       />
-      {drawerItems.map((item, index) => {
+      {drawerItems.map((item) => {
+        let index = item.id - 1;
         if (item.path) {
           return (
             <Route path={item.path} key={index}>
@@ -186,7 +194,7 @@ const DrawerItemContent = ({ index, drawContent }) => {
             fontSize: 12,
           },
           root: {
-            minWidth: "25%!important",
+            minWidth: "15%!important",
           },
         },
       },

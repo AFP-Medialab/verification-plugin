@@ -5,7 +5,7 @@ import Typography from "@mui/material/Typography";
 import FiberNewIcon from "@mui/icons-material/FiberNew";
 import AuthenticationIcon from "./AdvancedTools/AuthenticationIcon";
 import ImprovedIcon from "../../../NavBar/images/SVG/Improved.svg";
-import BugReportIcon from "@mui/icons-material/BugReport";
+import ScienceIcon from "@mui/icons-material/Science";
 
 export class ToolCard extends Component {
   constructor(props) {
@@ -96,7 +96,7 @@ export class ToolCard extends Component {
 
               {showExperimental && (
                 <Grid item style={{ marginLeft: "auto", color: "#F44336" }}>
-                  <BugReportIcon />
+                  <ScienceIcon />
                 </Grid>
               )}
 

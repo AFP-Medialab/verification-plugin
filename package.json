@@ -1,6 +1,6 @@
 {
   "name": "weverify-plugin",
-  "version": "0.78.1",
+  "version": "0.79.0",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -23,9 +23,11 @@
     "@mui/material": "^5.14.12",
     "@mui/x-date-pickers": "^6.16.1",
     "@reduxjs/toolkit": "^1.9.7",
+    "@wavesurfer/react": "^1.0.4",
     "axios": "^1.5.1",
     "d3-selection": "^3.0.0",
     "dateformat": "^5.0.3",
+    "dayjs": "^1.11.10",
     "exif-js": "^2.3.0",
     "file-saver": "^2.0.5",
     "history": "^5.3.0",
@@ -41,6 +43,7 @@
     "prop-types": "^15.8.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-gauge-chart": "^0.4.1",
     "react-hook-form": "^7.47.0",
     "react-i18next": "^13.3.1",
     "react-iframe": "^1.8.5",
@@ -56,7 +59,8 @@
     "stylis-plugin-rtl": "^2.1.1",
     "tippy.js": "^6.3.7",
     "tui-image-editor": "^3.15.3",
-    "uuidv4": "^6.2.13",
+    "uuid": "^9.0.1",
+    "wavesurfer.js": "^7.7.5",
     "yup": "^1.3.2"
   },
   "devDependencies": {
