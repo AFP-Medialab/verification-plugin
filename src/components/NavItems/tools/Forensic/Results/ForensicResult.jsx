@@ -1,6 +1,6 @@
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
-import React, { useState, useRef, useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
@@ -27,8 +27,8 @@ import {
   setForensicImageRatio,
 } from "../../../../../redux/actions/tools/forensicActions";
 import {
-  setStateInit,
   setStateBackResults,
+  setStateInit,
 } from "../../../../../redux/reducers/tools/gifReducer";
 import LinkIcon from "@mui/icons-material/Link";
 import IconButton from "@mui/material/IconButton";
@@ -164,10 +164,10 @@ const ForensicResults = (props) => {
         filter = {
           id: value,
           name: keyword("forensic_title_" + value),
-          map: [results[value]["forgery"]],
+          map: [results[value]["forgery_array"]],
           currentDisplayed: 0,
           arrows: [false, false],
-          mask: [results[value]["forgery"]],
+          mask: [results[value]["forgery_array"]],
           popover: false,
         };
 
@@ -390,6 +390,7 @@ const ForensicResults = (props) => {
   //const [interval, setIntervalVar] = React.useState(null);
 
   const gifState = useSelector((state) => state.gif.toolState);
+
   //const [gifToolState, setgifToolState] = useState(1)
 
   function clickGifPopover(event, filter) {
