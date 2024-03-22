@@ -1,5 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
   Alert,
   Box,
   Card,
@@ -10,7 +13,7 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { Close } from "@mui/icons-material";
+import { Close, ExpandMore } from "@mui/icons-material";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import { resetLoccusAudio } from "redux/actions/tools/loccusActions";
 import { useDispatch, useSelector } from "react-redux";
@@ -265,40 +268,53 @@ const LoccusResults = (props) => {
               {role.includes("EXTRA_FEATURE") && (
                 <>
                   <Divider />
-                  <Stack direction="column" p={4} spacing={2}>
-                    <Typography variant="h5">
-                      {keyword("loccus_voice_recording_detection_title")}
-                    </Typography>
-                    <Stack
-                      direction="column"
-                      justifyContent="center"
-                      alignItems="center"
-                      spacing={0}
-                    >
-                      <GaugeChart
-                        id={"gauge-chart"}
-                        animate={false}
-                        nrOfLevels={4}
-                        textColor={"black"}
-                        arcsLength={[0.1, 0.2, 0.3, 0.4]}
-                        percent={voiceRecordingScore / 100}
-                        style={{ width: 250 }}
-                      />
-                      <Stack
-                        direction="row"
-                        justifyContent="center"
-                        alignItems="center"
-                        spacing={10}
+                  <Box pb={4} pr={4}>
+                    <Accordion>
+                      <AccordionSummary
+                        expandIcon={<ExpandMore />}
+                        aria-controls="panel-additional-results-content"
+                        id="panel-additional-results"
                       >
-                        <Typography variant="subtitle2">
-                          {keyword("loccus_gauge_no_detection")}
-                        </Typography>
-                        <Typography variant="subtitle2">
-                          {keyword("loccus_gauge_detection")}
-                        </Typography>
-                      </Stack>
-                    </Stack>
-                  </Stack>
+                        <Typography>Additional results</Typography>
+                      </AccordionSummary>
+                      <AccordionDetails>
+                        <Stack direction="column" spacing={2}>
+                          <Typography variant="h5">
+                            {keyword("loccus_voice_recording_detection_title")}
+                          </Typography>
+                          <Stack
+                            direction="column"
+                            justifyContent="center"
+                            alignItems="center"
+                            spacing={0}
+                          >
+                            <GaugeChart
+                              id={"gauge-chart"}
+                              animate={false}
+                              nrOfLevels={4}
+                              textColor={"black"}
+                              arcsLength={[0.1, 0.2, 0.3, 0.4]}
+                              percent={voiceRecordingScore / 100}
+                              style={{ width: 250 }}
+                            />
+                            <Stack
+                              direction="row"
+                              justifyContent="center"
+                              alignItems="center"
+                              spacing={10}
+                            >
+                              <Typography variant="subtitle2">
+                                {keyword("loccus_gauge_no_detection")}
+                              </Typography>
+                              <Typography variant="subtitle2">
+                                {keyword("loccus_gauge_detection")}
+                              </Typography>
+                            </Stack>
+                          </Stack>
+                        </Stack>
+                      </AccordionDetails>
+                    </Accordion>
+                  </Box>
                 </>
               )}
             </Stack>
