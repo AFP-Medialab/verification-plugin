@@ -265,6 +265,9 @@ function* handleSourceCredibilityCall(action) {
         result = result.concat(batchResult.entities.SourceCredibility);
       }
     }
+    if (!result.length) {
+      result = null;
+    }
 
     const trafficLightColors = {
       positive: "#008000", // green
@@ -403,6 +406,9 @@ function* handleAssistantScrapeCall(action) {
   let contentType = matchPattern(inputUrl, TYPE_PATTERNS);
   let instagram_local = window.localStorage.getItem("instagram_result");
 
+  if (urlType === KNOWN_LINKS.INSTAGRAM) {
+    console.log(urlType);
+  }
   if (urlType === KNOWN_LINKS.INSTAGRAM && instagram_local) {
     yield call(extractFromLocalStorage, instagram_local, inputUrl, urlType);
     return;
