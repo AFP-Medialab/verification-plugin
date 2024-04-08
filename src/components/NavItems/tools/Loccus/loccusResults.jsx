@@ -180,6 +180,7 @@ const LoccusResults = (props) => {
     height: 100,
     backend: "MediaElement",
     mediaControls: true,
+    dragToSeek: true,
   });
 
   return (

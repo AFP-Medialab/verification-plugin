@@ -10,16 +10,12 @@ import axios from "axios";
 import {
   Alert,
   Box,
-  Button,
-  ButtonGroup,
   Card,
   CardHeader,
   Grid,
   LinearProgress,
   Stack,
-  TextField,
 } from "@mui/material";
-import FolderOpenIcon from "@mui/icons-material/FolderOpen";
 
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import { AudioFile } from "@mui/icons-material";
@@ -32,8 +28,8 @@ import { setError } from "redux/reducers/errorReducer";
 import { isValidUrl } from "../../../Shared/Utils/URLUtils";
 
 import { v4 as uuidv4 } from "uuid";
-import CloseIcon from "@mui/icons-material/Close";
 import useAuthenticatedRequest from "components/Shared/Authentication/useAuthenticatedRequest";
+import StringFileUploadField from "../../../Shared/StringFileUploadField";
 import { preprocessFileUpload } from "../../../Shared/Utils/fileUtils";
 
 const Loccus = () => {
@@ -54,7 +50,6 @@ const Loccus = () => {
   const url = useSelector((state) => state.syntheticAudioDetection.url);
   const authenticatedRequest = useAuthenticatedRequest();
   const [input, setInput] = useState(url ? url : "");
-  const [type, setType] = useState("");
   const [audioFile, setAudioFile] = useState(AUDIO_FILE_DEFAULT_STATE);
 
   const dispatch = useDispatch();
@@ -265,8 +260,18 @@ const Loccus = () => {
 
   const preprocessSuccess = (file) => {
     setAudioFile(file);
-    setType("local");
   };
+
+  async function preprocessLocalFile(fileSelected) {
+    console.log(fileSelected);
+    return preprocessFileUpload(
+      fileSelected,
+      role,
+      await preprocessLoccusUpload(fileSelected),
+      preprocessSuccess,
+      preprocessError,
+    );
+  }
 
   return (
     <div>
@@ -305,82 +310,21 @@ const Loccus = () => {
 
         <Box p={3}>
           <form>
-            <Grid container direction="row" spacing={3} alignItems="center">
-              <Grid item xs>
-                <TextField
-                  type="url"
-                  id="standard-full-width"
-                  label={keyword("loccus_link")}
-                  placeholder={keyword("loccus_placeholder")}
-                  fullWidth
-                  value={input}
-                  variant="outlined"
-                  disabled={isLoading || audioFile instanceof Blob}
-                  onChange={(e) => setInput(e.target.value)}
-                />
-              </Grid>
-              <Grid item>
-                <Button
-                  type="submit"
-                  variant="contained"
-                  color="primary"
-                  onClick={async (e) => {
-                    dispatch(resetLoccusAudio());
-                    e.preventDefault();
-                    await useGetVoiceCloningScore(
-                      input,
-                      true,
-                      dispatch,
-                      type,
-                      audioFile,
-                    );
-                  }}
-                  disabled={(input === "" && !audioFile) || isLoading}
-                >
-                  {keyword("loccus_submit_button")}
-                </Button>
-              </Grid>
-            </Grid>
-            <Grid item mt={2}>
-              <ButtonGroup
-                variant="outlined"
-                disabled={isLoading || input !== ""}
-              >
-                <Button
-                  startIcon={<FolderOpenIcon />}
-                  sx={{ textTransform: "none" }}
-                >
-                  <label htmlFor="fileInputSynthetic">
-                    {audioFile ? audioFile.name : keyword("button_localfile")}
-                  </label>
-                  <input
-                    id="fileInputSynthetic"
-                    type="file"
-                    accept={"audio/*"}
-                    hidden={true}
-                    onChange={async (e) => {
-                      preprocessFileUpload(
-                        e.target.files[0],
-                        role,
-                        await preprocessLoccusUpload(e.target.files[0]),
-                        preprocessSuccess,
-                        preprocessError,
-                      );
-                      e.target.value = null;
-                    }}
-                  />
-                </Button>
-                {audioFile instanceof Blob && (
-                  <Button
-                    size="small"
-                    aria-label="remove selected file"
-                    onClick={handleCloseSelectedFile}
-                  >
-                    <CloseIcon fontSize="small" />
-                  </Button>
-                )}
-              </ButtonGroup>
-            </Grid>
+            <StringFileUploadField
+              labelKeyword={keyword("loccus_link")}
+              placeholderKeyword={keyword("loccus_placeholder")}
+              submitButtonKeyword={keyword("loccus_submit_button")}
+              localFileKeyword={keyword("button_localfile")}
+              urlInput={input}
+              setUrlInput={setInput}
+              handleSubmit={async () => {
+                dispatch(resetLoccusAudio());
+                await useGetVoiceCloningScore(input, true, dispatch);
+              }}
+              fileInputTypesAccepted={"audio/*"}
+              handleCloseSelectedFile={handleCloseSelectedFile}
+              preprocessLocalFile={preprocessLocalFile}
+            />
           </form>
           <Box m={2} />
           {isLoading && (
