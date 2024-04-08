@@ -1,4 +1,4 @@
-import React, { useState, createRef } from "react";
+import React, { createRef, useState } from "react";
 import Loop from "./Loop";
 import Box from "@mui/material/Box";
 import { useDispatch, useSelector } from "react-redux";
@@ -9,10 +9,7 @@ import Fade from "@mui/material/Fade";
 import Modal from "@mui/material/Modal";
 import Backdrop from "@mui/material/Backdrop";
 import Grid from "@mui/material/Grid";
-import {
-  cleanMagnifierState,
-  setMagnifierResult,
-} from "../../../../../redux/actions/tools/magnifierActions";
+import { setMagnifierResult } from "../../../../../redux/actions/tools/magnifierActions";
 import { IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
@@ -59,7 +56,7 @@ const myTheme = {
   "submenu.activeLabel.fontWeight": "bold",
 };
 
-const ImageResult = () => {
+const ImageResult = ({ handleCloseResults }) => {
   const classes = useMyStyles();
   const keyword = i18nLoadNamespace("components/NavItems/tools/Magnifier");
 
@@ -121,10 +118,7 @@ const ImageResult = () => {
         title={keyword("cardheader_results")}
         className={classes.headerUploadedImage}
         action={
-          <IconButton
-            aria-label="close"
-            onClick={() => dispatch(cleanMagnifierState())}
-          >
+          <IconButton aria-label="close" onClick={handleCloseResults}>
             <CloseIcon sx={{ color: "white" }} />
           </IconButton>
         }

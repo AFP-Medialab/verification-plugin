@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   resetLoccusAudio,
@@ -178,22 +178,11 @@ const Loccus = () => {
     }
   };
 
-  const resetAudioFile = () => {
-    setAudioFile(AUDIO_FILE_DEFAULT_STATE);
-  };
-
   const handleClose = () => {
     setInput("");
-    resetAudioFile();
-  };
-
-  const handleCloseSelectedFile = () => {
-    setAudioFile(null);
-    handleClose();
+    setAudioFile(AUDIO_FILE_DEFAULT_STATE);
     dispatch(resetLoccusAudio());
   };
-
-  const audioRef = useRef(null);
 
   const preprocessLoccusUpload = async (file) => {
     if (!(file instanceof File)) {
@@ -211,9 +200,6 @@ const Loccus = () => {
       dispatch(setError(keyword("error_invalid_audio_file")));
       return Error(keyword("error_invalid_audio_file"));
     }
-
-    const audioURL = URL.createObjectURL(file);
-    audioRef.current = new Audio(audioURL);
 
     const audioContext = new AudioContext();
     const fileReader = new FileReader();
@@ -273,6 +259,11 @@ const Loccus = () => {
     );
   }
 
+  const handleSubmit = async () => {
+    dispatch(resetLoccusAudio());
+    await useGetVoiceCloningScore(input, true, dispatch);
+  };
+
   return (
     <div>
       <HeaderTool
@@ -317,12 +308,11 @@ const Loccus = () => {
               localFileKeyword={keyword("button_localfile")}
               urlInput={input}
               setUrlInput={setInput}
-              handleSubmit={async () => {
-                dispatch(resetLoccusAudio());
-                await useGetVoiceCloningScore(input, true, dispatch);
-              }}
+              fileInput={audioFile}
+              setFileInput={setAudioFile}
+              handleSubmit={handleSubmit}
               fileInputTypesAccepted={"audio/*"}
-              handleCloseSelectedFile={handleCloseSelectedFile}
+              handleCloseSelectedFile={handleClose}
               preprocessLocalFile={preprocessLocalFile}
             />
           </form>

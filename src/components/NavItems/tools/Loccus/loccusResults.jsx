@@ -15,8 +15,7 @@ import {
 } from "@mui/material";
 import { Close, ExpandMore } from "@mui/icons-material";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import { resetLoccusAudio } from "redux/actions/tools/loccusActions";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { useTrackEvent } from "Hooks/useAnalytics";
 import { getclientId } from "components/Shared/GoogleAnalytics/MatomoAnalytics";
 import GaugeChart from "react-gauge-chart";
@@ -27,8 +26,6 @@ const LoccusResults = (props) => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Loccus");
 
   const role = useSelector((state) => state.userSession.user.roles);
-
-  const dispatch = useDispatch();
 
   const result = props.result;
   const url = props.url;
@@ -83,11 +80,6 @@ const LoccusResults = (props) => {
     url,
     uid,
   );
-
-  const handleClose = () => {
-    props.handleClose();
-    dispatch(resetLoccusAudio());
-  };
 
   function getDisplayTextForDetectionScore(score, detectionType) {
     let displayText;
@@ -195,7 +187,7 @@ const LoccusResults = (props) => {
           style={{ borderRadius: "4px 4px 0px 0px" }}
           title={keyword("loccus_title")}
           action={
-            <IconButton aria-label="close" onClick={handleClose}>
+            <IconButton aria-label="close" onClick={props.handleClose}>
               <Close sx={{ color: "white" }} />
             </IconButton>
           }

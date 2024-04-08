@@ -5,7 +5,7 @@ import FolderOpenIcon from "@mui/icons-material/FolderOpen";
 import CloseIcon from "@mui/icons-material/Close";
 
 /**
- * A reusable form component with a textfield or a local file with optional processing
+ * A reusable form component with a textfield and a local file with optional processing
  *
  * @param labelKeyword {String} The translation for the Textfield label
  * @param placeholderKeyword {String} The translation for the Textfield placeholder
@@ -14,6 +14,8 @@ import CloseIcon from "@mui/icons-material/Close";
  * @param localFileKeyword {String} The translation for the Local File Button text
  * @param urlInput {String} The value of the url string in the Textfield
  * @param setUrlInput Function to call when the url input changes
+ * @param fileInput {File} The File selected
+ * @param setFileInput Function to call when the File selected changes
  * @param fileInputTypesAccepted Accepted file input types for upload control
  * @param handleCloseSelectedFile An optional handler function to execute when clearing the file selected
  * @param preprocessLocalFile Optional preprocessing function to process a local file
@@ -27,13 +29,14 @@ const StringFileUploadField = ({
   localFileKeyword,
   urlInput,
   setUrlInput,
+  fileInput,
+  setFileInput,
   handleSubmit,
   fileInputTypesAccepted,
   handleCloseSelectedFile,
   preprocessLocalFile,
 }) => {
   const fileRef = useRef(null);
-  const [file, setFile] = useState(null);
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -49,7 +52,7 @@ const StringFileUploadField = ({
             fullWidth
             value={urlInput}
             variant="outlined"
-            disabled={isLoading || file instanceof Blob}
+            disabled={isLoading || fileInput instanceof Blob}
             onChange={(e) => setUrlInput(e.target.value)}
           />
         </Grid>
@@ -64,7 +67,7 @@ const StringFileUploadField = ({
               urlInput ? await handleSubmit(urlInput) : await handleSubmit(e);
               setIsLoading(false);
             }}
-            disabled={(urlInput === "" && !file) || isLoading}
+            disabled={(urlInput === "" && !fileInput) || isLoading}
           >
             {submitButtonKeyword}
           </Button>
@@ -73,7 +76,9 @@ const StringFileUploadField = ({
       <Grid item mt={2}>
         <ButtonGroup variant="outlined" disabled={isLoading || urlInput !== ""}>
           <Button startIcon={<FolderOpenIcon />} sx={{ textTransform: "none" }}>
-            <label htmlFor="file">{file ? file.name : localFileKeyword}</label>
+            <label htmlFor="file">
+              {fileInput ? fileInput.name : localFileKeyword}
+            </label>
             <input
               id="file"
               name="file"
@@ -88,11 +93,11 @@ const StringFileUploadField = ({
                   ? await preprocessLocalFile(e.target.files[0])
                   : e.target.files[0];
                 console.log(newFile);
-                setFile(newFile);
+                setFileInput(newFile);
               }}
             />
           </Button>
-          {file instanceof Blob && (
+          {fileInput instanceof Blob && (
             <Button
               size="small"
               aria-label="remove selected file"
@@ -100,7 +105,7 @@ const StringFileUploadField = ({
                 e.preventDefault();
                 handleCloseSelectedFile();
                 fileRef.current.value = null;
-                setFile(null);
+                setFileInput(null);
               }}
             >
               <CloseIcon fontSize="small" />
