@@ -23,7 +23,7 @@ import Fab from "@mui/material/Fab";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
 import {
-  cleanForensicState,
+  resetForensicState,
   setForensicImageRatio,
 } from "../../../../../redux/actions/tools/forensicActions";
 import {
@@ -307,7 +307,7 @@ const ForensicResults = (props) => {
   //Button analyze new image
   //============================================================================================
   function newImage() {
-    dispatch(cleanForensicState());
+    dispatch(resetForensicState());
     props.resetImage();
   }
 

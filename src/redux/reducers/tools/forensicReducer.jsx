@@ -27,7 +27,7 @@ const forensicReducer = (state = defaultState, action) => {
       return { ...state, masks: action.payload };
     case "SET_FORENSIC_LOADING":
       return { ...state, loading: action.payload };
-    case "FORENSIC_CLEAN_STATE":
+    case "RESET_FORENSIC_STATE":
       return {
         ...state,
         notification: false,

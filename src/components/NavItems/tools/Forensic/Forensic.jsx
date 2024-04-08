@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
 import { useDispatch, useSelector } from "react-redux";
 import useGetImages from "./Hooks/useGetImages";
 import LinearProgress from "@mui/material/LinearProgress";
@@ -12,17 +10,16 @@ import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace
 import { getclientId } from "../../../Shared/GoogleAnalytics/MatomoAnalytics";
 import { useTrackEvent } from "../../../../Hooks/useAnalytics";
 import ForensicIcon from "../../../NavBar/images/SVG/Image/Forensic.svg";
-import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import Alert from "@mui/material/Alert";
-import { cleanForensicState } from "../../../../redux/actions/tools/forensicActions";
+import { resetForensicState } from "../../../../redux/actions/tools/forensicActions";
 import { setError } from "redux/reducers/errorReducer";
-import FolderOpenIcon from "@mui/icons-material/FolderOpen";
 import axios from "axios";
 import { preprocessFileUpload } from "../../../Shared/Utils/fileUtils";
+import StringFileUploadField from "../../../Shared/StringFileUploadField";
 
 const Forensic = () => {
   const { url } = useParams();
@@ -81,12 +78,12 @@ const Forensic = () => {
   const uid = session && session.user ? session.user.id : null;
 
   const [input, setInput] = useState(resultUrl);
-  const [image, setImage] = useState(undefined);
+  const [imageFile, setImageFile] = useState(undefined);
   const [urlDetected, setUrlDetected] = useState(false);
   const [loaded, setLoaded] = useState(false);
   const [type, setType] = useState("");
 
-  useGetImages(image, type, keyword);
+  useGetImages(imageFile, type, keyword);
 
   const dispatch = useDispatch();
 
@@ -97,29 +94,22 @@ const Forensic = () => {
     "Forensice analysis assistant",
     input,
     client_id,
-    image,
+    imageFile,
     uid,
   );
   const submitUrl = () => {
-    if (input && input !== "") {
-      setType("url");
-      setLoaded(true);
-      /*trackEvent(
-                                                              "submission",
-                                                              "forensic",
-                                                              "Forensice analysis assistant",
-                                                              input,
-                                                              client_id,
-                                                              uid
-                                                            );*/
-      setImage(input);
-    }
+    const fileUrl = imageFile ? URL.createObjectURL(imageFile) : input;
+
+    setType("url");
+    setLoaded(true);
+
+    setImageFile(fileUrl);
   };
 
   useEffect(() => {
     if (url) {
       if (url.startsWith("http")) {
-        dispatch(cleanForensicState());
+        dispatch(resetForensicState());
         const uri = decodeURIComponent(url);
         setInput(uri);
         setUrlDetected(true);
@@ -150,11 +140,11 @@ const Forensic = () => {
   }, [urlDetected]);
 
   useEffect(() => {
-    setImage(undefined);
-  }, [image]);
+    setImageFile(undefined);
+  }, [imageFile]);
 
   const preprocessingSuccess = (file) => {
-    setImage(file);
+    setImageFile(file);
     setType("local");
   };
 
@@ -167,6 +157,22 @@ const Forensic = () => {
   const resetImage = () => {
     setLoaded(false);
     setInput("");
+  };
+
+  const preprocessImage = (file) => {
+    return preprocessFileUpload(
+      file,
+      role,
+      undefined,
+      preprocessingSuccess,
+      preprocessingError,
+    );
+  };
+
+  const handleCloseSelectedFile = () => {
+    setImageFile(undefined);
+    setInput("");
+    dispatch(resetForensicState());
   };
 
   return (
@@ -196,58 +202,20 @@ const Forensic = () => {
           />
           <Box p={3}>
             <form>
-              <Box display={"block"}>
-                <Grid container direction="row" spacing={3} alignItems="center">
-                  <Grid item xs>
-                    <TextField
-                      value={input}
-                      id="standard-full-width"
-                      label={keyword("forensic_input")}
-                      placeholder={keyword("forensic_input_placeholder")}
-                      fullWidth
-                      variant="outlined"
-                      disabled={isLoading}
-                      onChange={(e) => {
-                        setInput(e.target.value);
-                      }}
-                    />
-                  </Grid>
-                  <Grid item>
-                    <Button
-                      type="submit"
-                      variant="contained"
-                      color="primary"
-                      onClick={(e) => {
-                        e.preventDefault(), submitUrl();
-                      }}
-                      disabled={isLoading}
-                      style={{ height: "50px" }}
-                    >
-                      {keyword("button_submit")}
-                    </Button>
-                  </Grid>
-                  <Box m={2} />
-                  <Button startIcon={<FolderOpenIcon />}>
-                    <label htmlFor="fileInputForensic">
-                      {keyword("button_localfile")}
-                    </label>
-                    <input
-                      id="fileInputForensic"
-                      type="file"
-                      hidden={true}
-                      onChange={(e) => {
-                        preprocessFileUpload(
-                          e.target.files[0],
-                          role,
-                          undefined,
-                          preprocessingSuccess,
-                          preprocessingError,
-                        );
-                      }}
-                    />
-                  </Button>
-                </Grid>
-              </Box>
+              <StringFileUploadField
+                labelKeyword={keyword("forensic_input")}
+                placeholderKeyword={keyword("forensic_input_placeholder")}
+                submitButtonKeyword={keyword("button_submit")}
+                localFileKeyword={keyword("button_localfile")}
+                urlInput={input}
+                setUrlInput={setInput}
+                fileInput={imageFile}
+                setFileInput={setImageFile}
+                handleSubmit={submitUrl}
+                fileInputTypesAccepted={"image/*"}
+                handleCloseSelectedFile={handleCloseSelectedFile}
+                preprocessLocalFile={preprocessImage}
+              />
             </form>
           </Box>
         </Card>
