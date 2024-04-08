@@ -88,12 +88,11 @@ const StringFileUploadField = ({
               ref={fileRef}
               onChange={async (e) => {
                 e.preventDefault();
-                console.log(e.target);
                 const newFile = preprocessLocalFile
                   ? await preprocessLocalFile(e.target.files[0])
                   : e.target.files[0];
-                console.log(newFile);
                 setFileInput(newFile);
+                e.target.value = null;
               }}
             />
           </Button>

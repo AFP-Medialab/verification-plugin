@@ -249,7 +249,6 @@ const Loccus = () => {
   };
 
   async function preprocessLocalFile(fileSelected) {
-    console.log(fileSelected);
     return preprocessFileUpload(
       fileSelected,
       role,

@@ -106,7 +106,7 @@ const Magnifier = () => {
   };
 
   const handleCloseSelectedFile = () => {
-    setImageFile(null);
+    setImageFile(undefined);
     setInput("");
     dispatch(resetMagnifierState());
   };
