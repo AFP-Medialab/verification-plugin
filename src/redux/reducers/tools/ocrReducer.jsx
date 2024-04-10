@@ -26,7 +26,7 @@ const ocrReducer = (state = defaultState, action) => {
     case "SET_REPROCESS_LOADING":
     case "SET_REPROCESS_OPEN":
       return Object.assign({}, state, action.payload);
-    case "OCR_CLEAN_STATE":
+    case "RESET_OCR_STATE":
       return {
         ...state,
         url: undefined,
