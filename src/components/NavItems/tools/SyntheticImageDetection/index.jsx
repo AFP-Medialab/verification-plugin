@@ -177,7 +177,7 @@ const SyntheticImageDetection = () => {
 
   const handleClose = () => {
     setInput("");
-    setImageFile("");
+    setImageFile(undefined);
     dispatch(resetSyntheticImageDetectionImage());
   };
 
