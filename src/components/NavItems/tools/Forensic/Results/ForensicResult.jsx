@@ -129,24 +129,26 @@ const ForensicResults = (props) => {
     //DEEP LEARNING
     "mantranet_report", //9
     "fusion_report", //10
-    "adq2_report", //11
+    "mmfusion_report", //11
+    "trufor_report", //12
+    "omgfuser_report", //13
 
     //CLONING
-    "cmfd_report", //12
-    "rcmfd_report", //13
+    "cmfd_report", //14
+    "rcmfd_report", //15
 
     //LENSES
 
-    "ela_report", //14
-    "laplacian_report", //15
-    "median_report", //16
+    "ela_report", //16
+    "laplacian_report", //17
+    "median_report", //18
   ];
 
   const idStartCompression = 0;
   const idStartNoise = 6;
   const idStartDeepLearning = 9;
-  const idStartCloning = 12;
-  const idStartLenses = 14;
+  const idStartCloning = 14;
+  const idStartLenses = 16;
 
   const filters = useRef(
     filtersIDs.map((value) => {
