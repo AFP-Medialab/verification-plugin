@@ -237,6 +237,15 @@ const ForensicResults = (props) => {
           map: results[value].map,
           popover: false,
         };
+      } else if (value === "trufor_report" || value === "omgfuser_report") {
+        filter = {
+          id: value,
+          name: keyword("forensic_title_" + value),
+          map: results[value]["array"],
+          mask: results[value]["array"],
+          popover: false,
+          score: results[value]["score"],
+        };
       } else {
         filter = {
           id: value,
@@ -1112,6 +1121,14 @@ const ForensicResults = (props) => {
                                         >
                                           <HelpOutlineIcon fontSize="inherit" />
                                         </IconButton>
+                                      </Box>
+                                    )}
+                                    {value.score && (
+                                      <Box align="center" width="100%" pl={1}>
+                                        {keyword("forensic_score") +
+                                          ": " +
+                                          (value.score * 100).toPrecision(2) +
+                                          " %"}
                                       </Box>
                                     )}
                                   </div>
