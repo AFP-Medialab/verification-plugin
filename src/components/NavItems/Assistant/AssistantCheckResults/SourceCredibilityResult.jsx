@@ -37,7 +37,7 @@ const SourceCredibilityResult = (props) => {
                       color={"textPrimary"}
                     >
                       {keyword("source_credibility_warning")}{" "}
-                      {value.credibility_source}
+                      {value.credibilitySource}
                     </Typography>
                     <Box mb={0.5} />
                   </div>
@@ -48,25 +48,25 @@ const SourceCredibilityResult = (props) => {
                     component={"div"}
                     color={"textSecondary"}
                   >
-                    {value.credibility_labels ? (
+                    {value.credibilityLabels ? (
                       <Typography variant={"subtitle2"}>
                         {` ${keyword("labelled_as")} ${
-                          value.credibility_labels
+                          value.credibilityLabels
                         } `}
                       </Typography>
                     ) : null}
-                    {value.credibility_description ? (
+                    {value.credibilityDescription ? (
                       <Typography variant={"subtitle2"}>
                         {` ${keyword("commented_as")} ${
-                          value.credibility_description
+                          value.credibilityDescription
                         } `}
                       </Typography>
                     ) : null}
-                    {value.credibility_evidence.length > 0 ? (
+                    {value.credibilityEvidence.length > 0 ? (
                       <ListItemSecondaryAction>
                         <SourceCredibilityDBKFDialog
-                          evidence={value.credibility_evidence}
-                          source={value.credibility_source}
+                          evidence={value.credibilityEvidence}
+                          source={value.credibilitySource}
                         />
                       </ListItemSecondaryAction>
                     ) : null}

@@ -55,7 +55,14 @@ export const setProcessUrl = (processUrl, processUrlType) => {
   };
 };
 
-export const setScrapedData = (text, lang, links, images, videos) => {
+export const setScrapedData = (
+  text,
+  lang,
+  links,
+  images,
+  videos,
+  textHtmlMap,
+) => {
   return {
     type: "SET_SCRAPED_DATA",
     payload: {
@@ -64,6 +71,7 @@ export const setScrapedData = (text, lang, links, images, videos) => {
       linkList: links,
       imageList: images,
       videoList: videos,
+      urlTextHtmlMap: textHtmlMap,
     },
   };
 };
@@ -72,6 +80,9 @@ export const setInputSourceCredDetails = (
   positiveSC,
   cautionSC,
   mixedSC,
+  extractedSC,
+  trafficLights,
+  extractedLks,
   inputSCLoading,
   inputSCDone,
   inputSCFail,
@@ -82,6 +93,9 @@ export const setInputSourceCredDetails = (
       positiveSourceCred: positiveSC,
       cautionSourceCred: cautionSC,
       mixedSourceCred: mixedSC,
+      extractedSourceCred: extractedSC,
+      trafficLightColors: trafficLights,
+      extractedLinks: extractedLks,
       inputSCLoading: inputSCLoading,
       inputSCDone: inputSCDone,
       inputSCFail: inputSCFail,
