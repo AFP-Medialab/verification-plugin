@@ -22,10 +22,7 @@ import GifIcon from "@mui/icons-material/Gif";
 import Fab from "@mui/material/Fab";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
-import {
-  resetForensicState,
-  setForensicImageRatio,
-} from "../../../../../redux/actions/tools/forensicActions";
+import { setForensicImageRatio } from "../../../../../redux/actions/tools/forensicActions";
 import {
   setStateBackResults,
   setStateInit,
@@ -319,8 +316,7 @@ const ForensicResults = (props) => {
   //Button analyze new image
   //============================================================================================
   function newImage() {
-    dispatch(resetForensicState());
-    props.resetImage();
+    props.onClose();
   }
 
   //Help of the lenses

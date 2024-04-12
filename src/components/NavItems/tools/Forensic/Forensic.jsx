@@ -235,6 +235,7 @@ const Forensic = () => {
             gifAnimation={gifAnimationState}
             resetImage={resetImage}
             masksData={masks}
+            onClose={handleCloseSelectedFile}
           />
         )}
       </ThemeProvider>
