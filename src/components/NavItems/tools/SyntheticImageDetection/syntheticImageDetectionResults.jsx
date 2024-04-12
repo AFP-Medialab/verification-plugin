@@ -1,14 +1,12 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
-import { Grid, Typography, Stack, IconButton, Tooltip } from "@mui/material";
-import { Close } from "@mui/icons-material";
+import { Grid, IconButton, Stack, Tooltip, Typography } from "@mui/material";
+import { Close, Help } from "@mui/icons-material";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import { LinearProgressWithLabel } from "components/Shared/LinearProgressWithLabel/LinearProgressWithLabel";
-import { Help } from "@mui/icons-material";
-import { resetSyntheticImageDetectionImage } from "redux/actions/tools/syntheticImageDetectionActions";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { DetectionProgressBar } from "components/Shared/DetectionProgressBar/DetectionProgressBar";
 import { useTrackEvent } from "Hooks/useAnalytics";
 import { getclientId } from "components/Shared/GoogleAnalytics/MatomoAnalytics";
@@ -17,8 +15,6 @@ const SyntheticImageDetectionResults = (props) => {
   const keyword = i18nLoadNamespace(
     "components/NavItems/tools/SyntheticImageDetection",
   );
-
-  const dispatch = useDispatch();
 
   class DeepfakeResult {
     constructor(methodName, predictionScore) {
@@ -108,7 +104,6 @@ const SyntheticImageDetectionResults = (props) => {
 
   const handleClose = () => {
     props.handleClose();
-    dispatch(resetSyntheticImageDetectionImage());
   };
 
   return (

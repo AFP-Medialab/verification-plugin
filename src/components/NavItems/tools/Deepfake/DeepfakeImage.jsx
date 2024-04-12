@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
 import LinearProgress from "@mui/material/LinearProgress";
 import Box from "@mui/material/Box";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
@@ -15,9 +13,9 @@ import UseGetDeepfake from "./Hooks/useGetDeepfake";
 import DeepfakeResultsImage from "./Results/DeepfakeResultsImage";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import Alert from "@mui/material/Alert";
-import FolderOpenIcon from "@mui/icons-material/FolderOpen";
 import { setError } from "redux/reducers/errorReducer";
-import { resetDeepfake } from "redux/actions/tools/deepfakeImageActions";
+import StringFileUploadField from "../../../Shared/StringFileUploadField";
+import { resetDeepfake } from "../../../../redux/actions/tools/deepfakeImageActions";
 import { preprocessFileUpload } from "../../../Shared/Utils/fileUtils";
 
 const Deepfake = () => {
@@ -35,7 +33,7 @@ const Deepfake = () => {
   const role = useSelector((state) => state.userSession.user.roles);
   const [input, setInput] = useState(url ? url : "");
   const [type, setType] = useState("");
-  const [image, setImage] = useState(undefined);
+  const [imageFile, setImageFile] = useState(undefined);
   //Selecting mode
   //============================================================================================
 
@@ -59,22 +57,39 @@ const Deepfake = () => {
       role,
       keywordWarning("error_invalid_url"),
       type,
-      image,
+      imageFile,
     );
   };
 
   const preprocessingSuccess = (file) => {
-    setInput(URL.createObjectURL(file));
-    setImage(file);
+    setImageFile(file);
     setType("local");
+    return file;
   };
 
   const preprocessingError = () => {
     dispatch(setError(keywordWarning("warning_file_too_big")));
   };
 
+  const preprocessImage = (file) => {
+    return preprocessFileUpload(
+      file,
+      role,
+      undefined,
+      preprocessingSuccess,
+      preprocessingError,
+    );
+  };
+
+  const handleSubmit = () => {
+    dispatch(resetDeepfake());
+    submitUrl();
+  };
+
   const handleClose = () => {
     setInput("");
+    setImageFile(undefined);
+    dispatch(resetDeepfake());
   };
 
   return (
@@ -113,65 +128,22 @@ const Deepfake = () => {
             <div>
               <Box>
                 <form>
-                  <Grid
-                    container
-                    direction="row"
-                    spacing={3}
-                    alignItems="center"
-                  >
-                    <Grid item xs>
-                      <TextField
-                        type="url"
-                        id="standard-full-width"
-                        label={keyword("deepfake_image_link")}
-                        placeholder={keyword("deepfake_placeholder")}
-                        fullWidth
-                        value={input}
-                        variant="outlined"
-                        disabled={selectedMode === "" || isLoading}
-                        onChange={(e) => setInput(e.target.value)}
-                      />
-                    </Grid>
-                    <Grid item>
-                      <Button
-                        type="submit"
-                        variant="contained"
-                        color="primary"
-                        onClick={(e) => {
-                          dispatch(resetDeepfake());
-                          e.preventDefault(), submitUrl();
-                        }}
-                        disabled={
-                          selectedMode === "" || input === "" || isLoading
-                        }
-                      >
-                        {"Submit"}
-                      </Button>
-                    </Grid>
-                  </Grid>
+                  <StringFileUploadField
+                    labelKeyword={keyword("deepfake_image_link")}
+                    placeholderKeyword={keyword("deepfake_placeholder")}
+                    submitButtonKeyword={keyword("submit_button")}
+                    localFileKeyword={keyword("button_localfile")}
+                    urlInput={input}
+                    setUrlInput={setInput}
+                    fileInput={imageFile}
+                    setFileInput={setImageFile}
+                    handleSubmit={handleSubmit}
+                    fileInputTypesAccepted={"imageFile/*"}
+                    handleCloseSelectedFile={handleClose}
+                    preprocessLocalFile={preprocessImage}
+                  />
                 </form>
                 <Box m={2} />
-
-                <Button startIcon={<FolderOpenIcon />}>
-                  <label htmlFor="fileInputSynthetic">
-                    {keyword("button_localfile")}
-                  </label>
-                  <input
-                    id="fileInputSynthetic"
-                    type="file"
-                    hidden={true}
-                    onChange={(e) => {
-                      preprocessFileUpload(
-                        e.target.files[0],
-                        role,
-                        undefined,
-                        preprocessingSuccess,
-                        preprocessingError,
-                      );
-                    }}
-                  />
-                </Button>
-
                 {isLoading && (
                   <Box mt={3}>
                     <LinearProgress />

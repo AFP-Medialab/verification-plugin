@@ -1,14 +1,16 @@
-import { Box, TextField, Button } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+
+import { Box, Card, CardHeader, LinearProgress } from "@mui/material";
+
 import "tui-image-editor/dist/tui-image-editor.css";
 import ImageResult from "./Results/ImageResult";
-import FolderOpenIcon from "@mui/icons-material/FolderOpen";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import { useParams } from "react-router-dom";
 import {
-  setMagnifierResult,
+  resetMagnifierState,
   setMagnifierLoading,
+  setMagnifierResult,
 } from "../../../../redux/actions/tools/magnifierActions";
 import { setError } from "redux/reducers/errorReducer";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
@@ -16,11 +18,9 @@ import { getclientId } from "../../../Shared/GoogleAnalytics/MatomoAnalytics";
 import { useTrackEvent } from "../../../../Hooks/useAnalytics";
 import { KNOWN_LINKS } from "../../Assistant/AssistantRuleBook";
 
-import Card from "@mui/material/Card";
-import CardHeader from "@mui/material/CardHeader";
 import MagnifierIcon from "../../../NavBar/images/SVG/Image/Magnifier.svg";
-import Grid from "@mui/material/Grid";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
+import StringFileUploadField from "../../../Shared/StringFileUploadField";
 
 const Magnifier = () => {
   const { url } = useParams();
@@ -31,12 +31,15 @@ const Magnifier = () => {
   );
 
   const resultUrl = useSelector((state) => state.magnifier.url);
-  const resultResult = useSelector((state) => state.magnifier.result);
+  const magnifierResult = useSelector((state) => state.magnifier.result);
   const session = useSelector((state) => state.userSession);
+  const isLoading = useSelector((state) => state.magnifier.loading);
   const uid = session && session.user ? session.user.id : null;
   const dispatch = useDispatch();
 
   const [input, setInput] = useState(resultUrl);
+
+  const [imageFile, setImageFile] = useState(undefined);
 
   const getErrorText = () => {
     return keyword("please_give_a_correct_link");
@@ -53,15 +56,12 @@ const Magnifier = () => {
     uid,
   );
   const submitUrl = (src) => {
-    setEventUrl(src);
-    /*trackEvent(
-      "submission",
-      "magnifier",
-      "image magnifier caa analysis",
-      src,
-      client_id,
-      uid
-    );*/
+    dispatch(setMagnifierLoading(true));
+
+    const fileUrl = imageFile ? URL.createObjectURL(imageFile) : src;
+
+    setEventUrl(fileUrl);
+
     let img = new Image();
     img.crossOrigin = "anonymous";
     img.onload = () => {
@@ -73,7 +73,7 @@ const Magnifier = () => {
       // Get raw image data
       dispatch(
         setMagnifierResult({
-          url: src,
+          url: fileUrl,
           result: canvas.toDataURL("image/png"),
           notification: false,
           loading: false,
@@ -84,7 +84,9 @@ const Magnifier = () => {
     img.onerror = () => {
       dispatch(setError(getErrorText()));
     };
-    img.src = src;
+    img.src = fileUrl;
+
+    dispatch(setMagnifierLoading(false));
   };
 
   useEffect(() => {
@@ -97,6 +99,17 @@ const Magnifier = () => {
       }
     }
   }, [url]);
+
+  const preprocessImage = (file) => {
+    setImageFile(file);
+    return file;
+  };
+
+  const handleCloseSelectedFile = () => {
+    setImageFile(undefined);
+    setInput("");
+    dispatch(resetMagnifierState());
+  };
 
   return (
     <div>
@@ -120,55 +133,35 @@ const Magnifier = () => {
 
         <Box p={3}>
           <form>
-            <Grid container direction="row" spacing={3} alignItems="center">
-              <Grid item xs>
-                <TextField
-                  id="standard-full-width"
-                  label={keyword("magnifier_urlbox")}
-                  placeholder={keyword("magnifier_urlbox_placeholder")}
-                  fullWidth
-                  value={input}
-                  variant="outlined"
-                  onChange={(e) => setInput(e.target.value)}
-                />
-              </Grid>
-
-              <Grid item>
-                <Button
-                  type="submit"
-                  variant="contained"
-                  color="primary"
-                  onClick={(e) => {
-                    e.preventDefault(), submitUrl(input);
-                  }}
-                >
-                  {keyword("button_submit") || ""}
-                </Button>
-              </Grid>
-            </Grid>
+            <StringFileUploadField
+              labelKeyword={keyword("magnifier_urlbox")}
+              placeholderKeyword={keyword("magnifier_urlbox_placeholder")}
+              submitButtonKeyword={keyword("button_submit")}
+              localFileKeyword={keyword("button_localfile")}
+              urlInput={input}
+              setUrlInput={setInput}
+              fileInput={imageFile}
+              setFileInput={setImageFile}
+              handleSubmit={submitUrl}
+              fileInputTypesAccepted={"image/*"}
+              handleCloseSelectedFile={handleCloseSelectedFile}
+              preprocessLocalFile={preprocessImage}
+            />
           </form>
 
-          <Box m={2} />
-
-          <Button startIcon={<FolderOpenIcon />}>
-            <label htmlFor="fileInputMagnifier">
-              {keyword("button_localfile")}
-            </label>
-            <input
-              id="fileInputMagnifier"
-              type="file"
-              hidden={true}
-              onChange={(e) => {
-                setInput(URL.createObjectURL(e.target.files[0]));
-              }}
-            />
-          </Button>
+          {isLoading && (
+            <Box mt={3}>
+              <LinearProgress />
+            </Box>
+          )}
         </Box>
       </Card>
 
       <Box m={3} />
 
-      {resultResult && resultResult !== "" && <ImageResult />}
+      {magnifierResult && (
+        <ImageResult handleCloseResults={handleCloseSelectedFile} />
+      )}
     </div>
   );
 };
