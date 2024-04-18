@@ -3,7 +3,6 @@ import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
-  Alert,
   Box,
   Card,
   CardHeader,
@@ -19,8 +18,8 @@ import { useSelector } from "react-redux";
 import { useTrackEvent } from "Hooks/useAnalytics";
 import { getclientId } from "components/Shared/GoogleAnalytics/MatomoAnalytics";
 import GaugeChart from "react-gauge-chart";
-import CopyButton from "../../../Shared/CopyButton";
 import { useWavesurfer } from "@wavesurfer/react";
+import CustomAlertScore from "../../../Shared/CustomAlertScore";
 
 const LoccusResults = (props) => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Loccus");
@@ -32,10 +31,6 @@ const LoccusResults = (props) => {
 
   const [voiceCloningScore, setVoiceCloningScore] = useState(null);
   const [voiceRecordingScore, setVoiceRecordingScore] = useState(null);
-
-  const DETECTION_THRESHOLD_1 = 10;
-  const DETECTION_THRESHOLD_2 = 30;
-  const DETECTION_THRESHOLD_3 = 60;
 
   const DETECTION_TYPES = {
     VOICE_CLONING: "synthetic",
@@ -80,86 +75,6 @@ const LoccusResults = (props) => {
     url,
     uid,
   );
-
-  function getDisplayTextForDetectionScore(score, detectionType) {
-    let displayText;
-
-    if (typeof score !== "number" || score > 100 || score < 0) {
-      //   TODO: Handle Error
-      return;
-    }
-
-    displayText = keyword("loccus_voice_cloning_detection_rating");
-
-    if (score >= DETECTION_THRESHOLD_3) {
-      displayText +=
-        detectionType === DETECTION_TYPES.VOICE_CLONING
-          ? keyword("loccus_voice_cloning_detection_rating_4")
-          : keyword("loccus_voice_recording_detection_rating_4");
-    } else if (score >= DETECTION_THRESHOLD_2) {
-      displayText +=
-        detectionType === DETECTION_TYPES.VOICE_CLONING
-          ? keyword("loccus_voice_cloning_detection_rating_3")
-          : keyword("loccus_voice_recording_detection_rating_3");
-    } else if (score >= DETECTION_THRESHOLD_1) {
-      displayText +=
-        detectionType === DETECTION_TYPES.VOICE_CLONING
-          ? keyword("loccus_voice_cloning_detection_rating_2")
-          : keyword("loccus_voice_recording_detection_rating_2");
-    } else {
-      displayText +=
-        detectionType === DETECTION_TYPES.VOICE_CLONING
-          ? keyword("loccus_voice_cloning_detection_rating_1")
-          : keyword("loccus_voice_recording_detection_rating_1");
-    }
-
-    return displayText;
-  }
-
-  function CustomAlertScore(props) {
-    // TODO: handle error
-    if (!props.score || typeof props.score !== "number") return;
-    if (!props.detectionType || typeof props.detectionType !== "string") return;
-
-    let alertSettings = {
-      displayText: "",
-      severity: "",
-    };
-
-    const SEVERITY_INFO = "info";
-
-    const score = props.score;
-    const detectionType = props.detectionType;
-
-    if (score > 100 || score < 0) {
-      //   TODO: Handle Error
-      console.error("Error with the voice cloning score");
-      return <></>;
-    }
-
-    alertSettings.displayText = getDisplayTextForDetectionScore(
-      score,
-      detectionType,
-    );
-
-    alertSettings.severity = SEVERITY_INFO;
-
-    return (
-      <Alert
-        icon={false}
-        severity={alertSettings.severity}
-        action={
-          <CopyButton
-            strToCopy={alertSettings.displayText}
-            labelBeforeCopy={keyword("loccus_button_copy_text_1")}
-            labelAfterCopy={keyword("loccus_button_copy_text_2")}
-          />
-        }
-      >
-        {alertSettings.displayText}
-      </Alert>
-    );
-  }
 
   const audioContainerRef = useRef();
 
@@ -252,6 +167,7 @@ const LoccusResults = (props) => {
                 <CustomAlertScore
                   score={voiceCloningScore}
                   detectionType={DETECTION_TYPES.VOICE_CLONING}
+                  toolName={"Loccus"}
                 />
                 <Typography>
                   {keyword("loccus_cloning_additional_explanation_text")}
