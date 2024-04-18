@@ -2,14 +2,25 @@ import React, { useEffect, useRef, useState } from "react";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
-import { Grid, IconButton, Stack, Tooltip, Typography } from "@mui/material";
-import { Close, Help } from "@mui/icons-material";
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Chip,
+  Divider,
+  Grid,
+  IconButton,
+  Stack,
+  Typography,
+} from "@mui/material";
+import { Close } from "@mui/icons-material";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import { LinearProgressWithLabel } from "components/Shared/LinearProgressWithLabel/LinearProgressWithLabel";
 import { useSelector } from "react-redux";
-import { DetectionProgressBar } from "components/Shared/DetectionProgressBar/DetectionProgressBar";
 import { useTrackEvent } from "Hooks/useAnalytics";
 import { getclientId } from "components/Shared/GoogleAnalytics/MatomoAnalytics";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import CustomAlertScore from "../../../Shared/CustomAlertScore";
+import GaugeChart from "react-gauge-chart";
 
 const SyntheticImageDetectionResults = (props) => {
   const keyword = i18nLoadNamespace(
@@ -49,6 +60,8 @@ const SyntheticImageDetectionResults = (props) => {
 
   const [syntheticImageScores, setSyntheticImageScores] = useState([]);
 
+  const [maxScore, setMaxScore] = useState(0);
+
   useEffect(() => {
     if (
       !results ||
@@ -85,6 +98,16 @@ const SyntheticImageDetectionResults = (props) => {
     ).sort((a, b) => b.predictionScore - a.predictionScore);
 
     setSyntheticImageScores(res);
+
+    setMaxScore(
+      Math.round(
+        Math.max(
+          ...res.map(
+            (syntheticImageScore) => syntheticImageScore.predictionScore,
+          ),
+        ),
+      ),
+    );
   }, [results]);
 
   const client_id = getclientId();
@@ -104,6 +127,47 @@ const SyntheticImageDetectionResults = (props) => {
 
   const handleClose = () => {
     props.handleClose();
+  };
+
+  const SYNTHETIC_IMAGE_DETECTION_THRESHOLD_1 = 10;
+  const SYNTHETIC_IMAGE_DETECTION_THRESHOLD_2 = 30;
+  const SYNTHETIC_IMAGE_DETECTION_THRESHOLD_3 = 60;
+
+  const getPercentageColorCode = (n) => {
+    if (n >= SYNTHETIC_IMAGE_DETECTION_THRESHOLD_3) {
+      return "#FF0000";
+    } else if (n >= SYNTHETIC_IMAGE_DETECTION_THRESHOLD_2) {
+      return "#FFAA00";
+    } else {
+      return "green";
+    }
+  };
+
+  /**
+   * Returns the alert color code for the given percentage n
+   * @param n {number}
+   * @returns {"error" | "warning" | "success"}
+   */
+  const getAlertColor = (n) => {
+    if (n >= SYNTHETIC_IMAGE_DETECTION_THRESHOLD_3) {
+      return "error";
+    } else if (n >= SYNTHETIC_IMAGE_DETECTION_THRESHOLD_2) {
+      return "warning";
+    } else {
+      return "success";
+    }
+  };
+
+  const getAlertLabel = (n) => {
+    if (n >= SYNTHETIC_IMAGE_DETECTION_THRESHOLD_3) {
+      return keyword("synthetic_image_detection_alert_label_4");
+    } else if (n >= SYNTHETIC_IMAGE_DETECTION_THRESHOLD_2) {
+      return keyword("synthetic_image_detection_alert_label_3");
+    } else if (n >= SYNTHETIC_IMAGE_DETECTION_THRESHOLD_1) {
+      return keyword("synthetic_image_detection_alert_label_2");
+    } else {
+      return keyword("synthetic_image_detection_alert_label_1");
+    }
   };
 
   return (
@@ -154,63 +218,145 @@ const SyntheticImageDetectionResults = (props) => {
             </Box>
           </Grid>
           <Grid item sm={12} md={6}>
-            <Stack direction="column" p={4} spacing={4}>
-              {syntheticImageScores &&
-                syntheticImageScores.length > 0 &&
-                syntheticImageScores[0].predictionScore &&
-                syntheticImageScores[0].predictionScore >= 70 && (
-                  <Typography variant="h5" sx={{ color: "red" }}>
-                    {keyword("synthetic_image_detection_alert") +
-                      DeepfakeImageDetectionMethodNames[
-                        syntheticImageScores[0].methodName
-                      ].name +
-                      keyword("synthetic_image_detection_alert_2")}
+            <Stack
+              direction="column"
+              p={4}
+              justifyContent="flex-start"
+              alignItems="flex-start"
+              spacing={4}
+              width="100%"
+              sx={{ boxSizing: "border-box" }}
+            >
+              <Stack
+                direction="column"
+                justifyContent="center"
+                alignItems="center"
+                spacing={0}
+                width="100%"
+              >
+                <GaugeChart
+                  id={"gauge-chart"}
+                  animate={false}
+                  nrOfLevels={4}
+                  textColor={"black"}
+                  arcsLength={[0.1, 0.2, 0.3, 0.4]}
+                  percent={syntheticImageScores ? maxScore / 100 : 0}
+                  style={{ width: 250 }}
+                />
+                <Stack
+                  direction="row"
+                  justifyContent="center"
+                  alignItems="center"
+                  spacing={10}
+                >
+                  <Typography variant="subtitle2">
+                    {keyword("synthetic_image_detection_gauge_no_detection")}
                   </Typography>
+                  <Typography variant="subtitle2">
+                    {keyword("synthetic_image_detection_gauge_detection")}
+                  </Typography>
+                </Stack>
+              </Stack>
+              <CustomAlertScore
+                score={syntheticImageScores ? maxScore : 0}
+                detectionType={undefined}
+                toolName={"SyntheticImageDetection"}
+              />
+              <Typography>
+                {keyword(
+                  "synthetic_image_detection_additional_explanation_text",
                 )}
-              {syntheticImageScores &&
-                syntheticImageScores.map((item, key) => {
-                  return (
-                    <Stack direction="column" key={key}>
-                      <Stack
-                        direction="row"
-                        justifyContent="flex-start"
-                        alignItems="center"
-                        spacing={2}
-                      >
-                        <Typography variant="h6">
-                          {
-                            DeepfakeImageDetectionMethodNames[item.methodName]
-                              .name
-                          }
-                        </Typography>
-                        <Tooltip
-                          title={
-                            DeepfakeImageDetectionMethodNames[item.methodName]
-                              .description
-                          }
-                        >
-                          <IconButton>
-                            <Help />
-                          </IconButton>
-                        </Tooltip>
-                      </Stack>
-                      <LinearProgressWithLabel value={item.predictionScore} />
+              </Typography>
+              <Box sx={{ width: "100%" }}>
+                <Accordion>
+                  <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                    <Typography>
+                      {keyword("synthetic_image_detection_additional_results")}
+                    </Typography>
+                  </AccordionSummary>
+                  <AccordionDetails>
+                    <Stack direction={"column"} spacing={4}>
+                      {syntheticImageScores &&
+                        syntheticImageScores.map((item, key) => {
+                          const predictionScore = Math.round(
+                            item.predictionScore,
+                          );
+                          return (
+                            <Stack direction="column" spacing={4} key={key}>
+                              <Stack direction="column" spacing={2}>
+                                <Stack
+                                  direction="row"
+                                  alignItems="flex-start"
+                                  justifyContent="space-between"
+                                >
+                                  <Box>
+                                    <Typography
+                                      variant={"h6"}
+                                      sx={{ fontWeight: "bold" }}
+                                    >
+                                      {
+                                        DeepfakeImageDetectionMethodNames[
+                                          item.methodName
+                                        ].name
+                                      }
+                                    </Typography>
+                                    <Stack
+                                      direction="row"
+                                      spacing={2}
+                                      alignItems="center"
+                                    >
+                                      <Stack direction="row" spacing={1}>
+                                        <Typography>
+                                          {keyword(
+                                            "synthetic_image_detection_probability_text",
+                                          )}{" "}
+                                        </Typography>
+                                        <Typography
+                                          sx={{
+                                            color:
+                                              getPercentageColorCode(
+                                                predictionScore,
+                                              ),
+                                          }}
+                                        >
+                                          {predictionScore}%
+                                        </Typography>
+                                      </Stack>
+                                      <Chip
+                                        label={getAlertLabel(predictionScore)}
+                                        color={getAlertColor(predictionScore)}
+                                      />
+                                    </Stack>
+                                  </Box>
+                                  <Stack>
+                                    {/*<Button>Read paper</Button>*/}
+                                  </Stack>
+                                </Stack>
+
+                                <Box
+                                  p={2}
+                                  sx={{ backgroundColor: "#FAFAFA" }}
+                                  mb={2}
+                                >
+                                  <Typography>
+                                    {
+                                      DeepfakeImageDetectionMethodNames[
+                                        item.methodName
+                                      ].description
+                                    }
+                                  </Typography>
+                                </Box>
+                              </Stack>
+                              {syntheticImageScores.length > key + 1 && (
+                                <Divider />
+                              )}
+                            </Stack>
+                          );
+                        })}
                     </Stack>
-                  );
-                })}
-              {syntheticImageScores?.length > 0 ? (
-                <Box pt={2}>
-                  <DetectionProgressBar
-                    style={{
-                      height: "8px",
-                    }}
-                  />
-                </Box>
-              ) : (
-                <Typography variant="h6" sx={{ color: "red" }}>
-                  {keyword("synthetic_image_detection_not_found")}
-                </Typography>
-              )}
+                  </AccordionDetails>
+                </Accordion>
+              </Box>
             </Stack>
           </Grid>
         </Grid>
