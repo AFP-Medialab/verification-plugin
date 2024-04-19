@@ -6,6 +6,7 @@ import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
+  Alert,
   Chip,
   Divider,
   Grid,
@@ -247,66 +248,68 @@ const SyntheticImageDetectionResults = (props) => {
             </Box>
           </Grid>
           <Grid item sm={12} md={6}>
-            <Stack
-              direction="column"
-              p={4}
-              justifyContent="flex-start"
-              alignItems="flex-start"
-              spacing={4}
-              width="100%"
-              sx={{ boxSizing: "border-box" }}
-            >
+            {syntheticImageScores.length > 0 ? (
               <Stack
                 direction="column"
-                justifyContent="center"
-                alignItems="center"
-                spacing={0}
+                p={4}
+                justifyContent="flex-start"
+                alignItems="flex-start"
+                spacing={4}
                 width="100%"
+                sx={{ boxSizing: "border-box" }}
               >
-                <GaugeChart
-                  id={"gauge-chart"}
-                  animate={false}
-                  nrOfLevels={4}
-                  textColor={"black"}
-                  arcsLength={[0.1, 0.2, 0.3, 0.4]}
-                  percent={syntheticImageScores ? maxScore / 100 : 0}
-                  style={{ width: 250 }}
-                />
                 <Stack
-                  direction="row"
+                  direction="column"
                   justifyContent="center"
                   alignItems="center"
-                  spacing={10}
+                  spacing={0}
+                  width="100%"
                 >
-                  <Typography variant="subtitle2">
-                    {keyword("synthetic_image_detection_gauge_no_detection")}
-                  </Typography>
-                  <Typography variant="subtitle2">
-                    {keyword("synthetic_image_detection_gauge_detection")}
-                  </Typography>
-                </Stack>
-              </Stack>
-              <CustomAlertScore
-                score={syntheticImageScores ? maxScore : 0}
-                detectionType={undefined}
-                toolName={"SyntheticImageDetection"}
-              />
-              <Typography>
-                {keyword(
-                  "synthetic_image_detection_additional_explanation_text",
-                )}
-              </Typography>
-              <Box sx={{ width: "100%" }}>
-                <Accordion>
-                  <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                    <Typography>
-                      {keyword("synthetic_image_detection_additional_results")}
+                  <GaugeChart
+                    id={"gauge-chart"}
+                    animate={false}
+                    nrOfLevels={4}
+                    textColor={"black"}
+                    arcsLength={[0.1, 0.2, 0.3, 0.4]}
+                    percent={syntheticImageScores ? maxScore / 100 : 0}
+                    style={{ width: 250 }}
+                  />
+                  <Stack
+                    direction="row"
+                    justifyContent="center"
+                    alignItems="center"
+                    spacing={10}
+                  >
+                    <Typography variant="subtitle2">
+                      {keyword("synthetic_image_detection_gauge_no_detection")}
                     </Typography>
-                  </AccordionSummary>
-                  <AccordionDetails>
-                    <Stack direction={"column"} spacing={4}>
-                      {syntheticImageScores &&
-                        syntheticImageScores.map((item, key) => {
+                    <Typography variant="subtitle2">
+                      {keyword("synthetic_image_detection_gauge_detection")}
+                    </Typography>
+                  </Stack>
+                </Stack>
+                <CustomAlertScore
+                  score={syntheticImageScores ? maxScore : 0}
+                  detectionType={undefined}
+                  toolName={"SyntheticImageDetection"}
+                />
+                <Typography>
+                  {keyword(
+                    "synthetic_image_detection_additional_explanation_text",
+                  )}
+                </Typography>
+                <Box sx={{ width: "100%" }}>
+                  <Accordion>
+                    <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                      <Typography>
+                        {keyword(
+                          "synthetic_image_detection_additional_results",
+                        )}
+                      </Typography>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                      <Stack direction={"column"} spacing={4}>
+                        {syntheticImageScores.map((item, key) => {
                           const predictionScore = Math.round(
                             item.predictionScore,
                           );
@@ -382,11 +385,26 @@ const SyntheticImageDetectionResults = (props) => {
                             </Stack>
                           );
                         })}
-                    </Stack>
-                  </AccordionDetails>
-                </Accordion>
-              </Box>
-            </Stack>
+                      </Stack>
+                    </AccordionDetails>
+                  </Accordion>
+                </Box>
+              </Stack>
+            ) : (
+              <Stack
+                direction="column"
+                p={4}
+                justifyContent="flex-start"
+                alignItems="flex-start"
+                spacing={4}
+                width="100%"
+                sx={{ boxSizing: "border-box" }}
+              >
+                <Alert severity="error">
+                  {keyword("synthetic_image_detection_error_generic")}
+                </Alert>
+              </Stack>
+            )}
           </Grid>
         </Grid>
       </Card>
