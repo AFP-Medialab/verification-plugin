@@ -51,6 +51,18 @@ const SyntheticImageDetectionResults = (props) => {
       name: keyword("synthetic_image_detection_adm_name"),
       description: keyword("synthetic_image_detection_adm_description"),
     },
+    progan_rine_mever: {
+      name: keyword("synthetic_image_detection_progan_rine_mever_name"),
+      description: keyword(
+        "synthetic_image_detection_progan_rine_mever_description",
+      ),
+    },
+    ldm_rine_mever: {
+      name: keyword("synthetic_image_detection_ldm_rine_mever_name"),
+      description: keyword(
+        "synthetic_image_detection_ldm_rine_mever_description",
+      ),
+    },
   };
   const results = props.result;
   const url = props.url;
@@ -91,9 +103,26 @@ const SyntheticImageDetectionResults = (props) => {
       results.adm_r50_grip_report.prediction * 100,
     );
 
+    const proganRineScore = new DeepfakeResult(
+      Object.keys(DeepfakeImageDetectionMethodNames)[4],
+      results.progan_rine_mever_report.prediction * 100,
+    );
+
+    const ldmRineScore = new DeepfakeResult(
+      Object.keys(DeepfakeImageDetectionMethodNames)[5],
+      results.ldm_rine_mever_report.prediction * 100,
+    );
+
     const res = (
       role.includes("EXTRA_FEATURE")
-        ? [diffusionScore, ganScore, proganScore, admScore]
+        ? [
+            diffusionScore,
+            ganScore,
+            proganScore,
+            admScore,
+            proganRineScore,
+            ldmRineScore,
+          ]
         : [diffusionScore, ganScore, proganScore]
     ).sort((a, b) => b.predictionScore - a.predictionScore);
 

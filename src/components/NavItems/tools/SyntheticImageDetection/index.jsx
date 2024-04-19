@@ -64,7 +64,8 @@ const SyntheticImageDetection = () => {
 
     dispatch(setSyntheticImageDetectionLoading(true));
     const modeURL = "images/";
-    const services = "gan,unina,progan_r50_grip,adm_r50_grip";
+    const services =
+      "gan,unina,progan_r50_grip,adm_r50_grip,progan_rine_mever,ldm_rine_mever";
 
     if (!modeURL) {
       return;
