@@ -47,9 +47,13 @@ const SyntheticImageDetection = () => {
   const url = useSelector((state) => state.syntheticImageDetection.url);
   const [input, setInput] = useState(url ? url : "");
   const [imageFile, setImageFile] = useState(undefined);
-  const [type, setType] = useState("");
 
   const dispatch = useDispatch();
+
+  const IMAGE_FROM = {
+    URL: "url",
+    UPLOAD: "local",
+  };
 
   const getSyntheticImageScores = async (
     url,
@@ -66,10 +70,6 @@ const SyntheticImageDetection = () => {
     const modeURL = "images/";
     const services =
       "gan,unina,progan_r50_grip,adm_r50_grip,progan_rine_mever,ldm_rine_mever";
-
-    if (!modeURL) {
-      return;
-    }
 
     const baseURL = process.env.REACT_APP_CAA_DEEPFAKE_URL;
 
@@ -103,7 +103,7 @@ const SyntheticImageDetection = () => {
 
     try {
       switch (type) {
-        case "local":
+        case IMAGE_FROM.UPLOAD:
           bodyFormData.append("file", image);
           res = await axios.post(baseURL + modeURL + "jobs", bodyFormData, {
             method: "post",
@@ -184,7 +184,6 @@ const SyntheticImageDetection = () => {
 
   const preprocessingSuccess = (file) => {
     setImageFile(file);
-    setType("local");
     return file;
   };
 
@@ -204,6 +203,10 @@ const SyntheticImageDetection = () => {
 
   const handleSubmit = async () => {
     dispatch(resetSyntheticImageDetectionImage());
+
+    const type =
+      input && typeof input === "string" ? IMAGE_FROM.URL : IMAGE_FROM.UPLOAD;
+
     await getSyntheticImageScores(input, true, dispatch, type, imageFile);
   };
 
