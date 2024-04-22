@@ -130,7 +130,7 @@ const SyntheticImageDetectionResults = (props) => {
     setSyntheticImageScores(res);
 
     setMaxScore(
-      Math.round(
+      sanitizeDetectionPercentage(
         Math.max(
           ...res.map(
             (syntheticImageScore) => syntheticImageScore.predictionScore,
@@ -159,9 +159,9 @@ const SyntheticImageDetectionResults = (props) => {
     props.handleClose();
   };
 
-  const SYNTHETIC_IMAGE_DETECTION_THRESHOLD_1 = 10;
-  const SYNTHETIC_IMAGE_DETECTION_THRESHOLD_2 = 30;
-  const SYNTHETIC_IMAGE_DETECTION_THRESHOLD_3 = 60;
+  const SYNTHETIC_IMAGE_DETECTION_THRESHOLD_1 = 50;
+  const SYNTHETIC_IMAGE_DETECTION_THRESHOLD_2 = 70;
+  const SYNTHETIC_IMAGE_DETECTION_THRESHOLD_3 = 90;
 
   const getPercentageColorCode = (n) => {
     if (n >= SYNTHETIC_IMAGE_DETECTION_THRESHOLD_3) {
@@ -198,6 +198,16 @@ const SyntheticImageDetectionResults = (props) => {
     } else {
       return keyword("synthetic_image_detection_alert_label_1");
     }
+  };
+
+  /**
+   * Returns a percentage between 0 and 99 for display purposes. We exclude 0 and 100 values.
+   * @param percentage {number}
+   * @returns {number}
+   */
+  const sanitizeDetectionPercentage = (percentage) => {
+    const floor = Math.floor(percentage);
+    return floor === 0 ? 1 : floor;
   };
 
   return (
@@ -270,7 +280,16 @@ const SyntheticImageDetectionResults = (props) => {
                     animate={false}
                     nrOfLevels={4}
                     textColor={"black"}
-                    arcsLength={[0.1, 0.2, 0.3, 0.4]}
+                    arcsLength={[
+                      (100 - SYNTHETIC_IMAGE_DETECTION_THRESHOLD_1) / 100,
+                      (SYNTHETIC_IMAGE_DETECTION_THRESHOLD_2 -
+                        SYNTHETIC_IMAGE_DETECTION_THRESHOLD_1) /
+                        100,
+                      (SYNTHETIC_IMAGE_DETECTION_THRESHOLD_3 -
+                        SYNTHETIC_IMAGE_DETECTION_THRESHOLD_2) /
+                        100,
+                      (100 - SYNTHETIC_IMAGE_DETECTION_THRESHOLD_3) / 100,
+                    ]}
                     percent={syntheticImageScores ? maxScore / 100 : 0}
                     style={{ width: 250 }}
                   />
@@ -310,7 +329,7 @@ const SyntheticImageDetectionResults = (props) => {
                     <AccordionDetails>
                       <Stack direction={"column"} spacing={4}>
                         {syntheticImageScores.map((item, key) => {
-                          const predictionScore = Math.round(
+                          const predictionScore = sanitizeDetectionPercentage(
                             item.predictionScore,
                           );
                           return (
