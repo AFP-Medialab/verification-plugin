@@ -12,6 +12,9 @@ import {
   setInputSourceCredDetails,
   setInputUrl,
   setNeDetails,
+  setNewsGenreDetails,
+  setNewsTopicDetails,
+  setPersuasionDetails,
   setProcessUrl,
   setProcessUrlActions,
   setScrapedData,
@@ -74,6 +77,18 @@ function* getMediaSimilaritySaga() {
 
 function* getDbkfTextMatchSaga() {
   yield takeLatest(["SET_SCRAPED_DATA", "CLEAN_STATE"], handleDbkfTextCall);
+}
+
+function* getNewsTopicSaga() {
+  yield takeLatest(["SET_SCRAPED_DATA", "CLEAN_STATE"], handleNewsTopicCall);
+}
+
+function* getNewsGenreSaga() {
+  yield takeLatest(["SET_SCRAPED_DATA", "CLEAN_STATE"], handleNewsGenreCall);
+}
+
+function* getPersuasionSaga() {
+  yield takeLatest(["SET_SCRAPED_DATA", "CLEAN_STATE"], handlePersuasionCall);
 }
 
 function* getSourceCredSaga() {
@@ -343,6 +358,57 @@ function* handleDbkfTextCall(action) {
   } catch (error) {
     console.log(error);
     yield put(setDbkfTextMatchDetails(null, false, false, true));
+  }
+}
+
+function* handleNewsTopicCall(action) {
+  if (action.type === "CLEAN_STATE") return;
+
+  try {
+    const text = yield select((state) => state.assistant.urlText);
+
+    if (text) {
+      yield put(setNewsTopicDetails(null, true, false, false));
+
+      const result = yield call(assistantApi.callNewsFramingService, text);
+      yield put(setNewsTopicDetails(result, false, true, false));
+    }
+  } catch (error) {
+    yield put(setNewsTopicDetails(null, false, false, true));
+  }
+}
+
+function* handleNewsGenreCall(action) {
+  if (action.type === "CLEAN_STATE") return;
+
+  try {
+    const text = yield select((state) => state.assistant.urlText);
+
+    if (text) {
+      yield put(setNewsGenreDetails(null, true, false, false));
+
+      const result = yield call(assistantApi.callNewsGenreService, text);
+      yield put(setNewsGenreDetails(result, false, true, false));
+    }
+  } catch (error) {
+    yield put(setNewsGenreDetails(null, false, false, true));
+  }
+}
+
+function* handlePersuasionCall(action) {
+  if (action.type === "CLEAN_STATE") return;
+
+  try {
+    const text = yield select((state) => state.assistant.urlText);
+
+    if (text) {
+      yield put(setPersuasionDetails(null, true, false, false));
+
+      const result = yield call(assistantApi.callPersuasionService, text);
+      yield put(setPersuasionDetails(result, false, true, false));
+    }
+  } catch (error) {
+    yield put(setPersuasionDetails(null, false, false, true));
   }
 }
 
@@ -862,5 +928,8 @@ export default function* assistantSaga() {
     fork(getNamedEntitySaga),
     fork(getAssistantScrapeSaga),
     fork(getUploadSaga),
+    fork(getNewsTopicSaga),
+    fork(getNewsGenreSaga),
+    fork(getPersuasionSaga),
   ]);
 }

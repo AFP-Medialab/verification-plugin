@@ -163,6 +163,59 @@ export const setDbkfVideoMatchDetails = (
   };
 };
 
+export const setHpDetails = (hpResult, hpLoading, hpDone, hpFail) => {
+  return {
+    type: "SET_HP_DETAILS",
+    payload: {
+      hpResult: hpResult,
+      hpLoading: hpLoading,
+      hpDone: hpDone,
+      hpFail: hpFail,
+    },
+  };
+};
+
+export const setNewsTopicDetails = (ntResult, ntLoading, ntDone, ntFail) => {
+  return {
+    type: "SET_NEWS_TOPIC_DETAILS",
+    payload: {
+      newsFramingResult: ntResult,
+      newsFramingLoading: ntLoading,
+      newsFramingDone: ntDone,
+      newsFramingFail: ntFail,
+    },
+  };
+};
+
+export const setNewsGenreDetails = (ngResult, ngLoading, ngDone, ngFail) => {
+  return {
+    type: "SET_NEWS_GENRE_DETAILS",
+    payload: {
+      newsGenreResult: ngResult,
+      newsGenreLoading: ngLoading,
+      newsGenreDone: ngDone,
+      newsGenreFail: ngFail,
+    },
+  };
+};
+
+export const setPersuasionDetails = (
+  perResult,
+  perLoading,
+  perDone,
+  perFail
+) => {
+  return {
+    type: "SET_NEWS_GENRE_DETAILS",
+    payload: {
+      persuasionResult: perResult,
+      persuasionLoading: perLoading,
+      persuasionDone: perDone,
+      persuasionFail: perFail,
+    },
+  };
+};
+
 export const setNeDetails = (
   neResultCategory,
   neResultCount,
