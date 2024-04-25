@@ -30,6 +30,8 @@ import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import { useDispatch } from "react-redux";
 import { setMetadataMediaType } from "../../../../redux/reducers/tools/metadataReducer";
 
+import { Alert, Stack } from "@mui/material";
+
 const Metadata = ({ mediaType }) => {
   const { url, type } = useParams();
   const location = useLocation();
@@ -162,6 +164,11 @@ const Metadata = ({ mediaType }) => {
           />
         }
       />
+      <Stack direction={"column"} spacing={2}>
+        <Alert severity="info">{keyword("description_limitations")}</Alert>
+      </Stack>
+
+      <Box m={3} />
 
       <Card>
         <CardHeader
@@ -228,12 +235,6 @@ const Metadata = ({ mediaType }) => {
             spacing={1}
             alignItems="flex-start"
           >
-            <Grid item xs>
-              <Typography variant="body1">
-                * {keyword("description_limitations")}
-              </Typography>
-            </Grid>
-
             <Grid item>
               <Button startIcon={<FolderOpenIcon />}>
                 <label htmlFor="fileInputMetadata">
