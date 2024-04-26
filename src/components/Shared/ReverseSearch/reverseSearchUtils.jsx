@@ -528,7 +528,7 @@ const getSearchEngineFromName = (searchEngineName) => {
 
 /**
  * Description
- * @param {any} info
+ * @param {chrome.contextMenus.OnClickData} info
  * @param {boolean} isImgUrl
  * @param {string} searchEngineName
  * @returns {Promise<ImageObject>}
@@ -536,10 +536,18 @@ const getSearchEngineFromName = (searchEngineName) => {
 const retrieveImgObjectForSearchEngine = async (info, searchEngineName) => {
   const searchEngine = getSearchEngineFromName(searchEngineName);
 
-  let imgFormat =
-    typeof info === "string" && info.startsWith("http")
-      ? searchEngine.IMAGE_FORMAT
-      : searchEngine.IMAGE_FORMAT_LOCAL;
+  let imgFormat;
+
+  if (info && info.srcUrl) {
+    imgFormat = IMAGE_FORMATS.URI;
+  } else {
+    //TODO: Use URL.canParse()
+    imgFormat =
+      typeof info === "string" && info.startsWith("http")
+        ? searchEngine.IMAGE_FORMAT
+        : searchEngine.IMAGE_FORMAT_LOCAL;
+  }
+
   imgFormat = imgFormat === undefined ? searchEngine.IMAGE_FORMAT : imgFormat;
 
   if (imgFormat === IMAGE_FORMATS.URI) {
@@ -554,8 +562,9 @@ const retrieveImgObjectForSearchEngine = async (info, searchEngineName) => {
     if (isBase64(info)) {
       return new ImageObject(info, IMAGE_FORMATS.B64);
     } else {
-      if (src) return await getLocalImageFromSourcePath(src, IMAGE_FORMATS.B64);
-      else return await getLocalImageFromSourcePath(info, IMAGE_FORMATS.B64);
+      // if (src) return await getLocalImageFromSourcePath(src, IMAGE_FORMATS.B64);
+      // else
+      return await getLocalImageFromSourcePath(info, IMAGE_FORMATS.B64);
     }
     // TODO: local image
   }
@@ -636,17 +645,15 @@ export const reverseImageSearch = async (
     }
 
     // TODO: move all the logic in a single function
-    const search_url = "https://www.bing.com/images/search?q=imgurl:";
+    const search_url =
+      "https://www.bing.com/images/searchbyimage?cbir=ssbi&imgurl=";
 
     if (
       typeof imageObject.obj === "string" &&
       imageObject.obj !== "" &&
       imageObject.obj.startsWith("http")
     ) {
-      const url =
-        search_url +
-        encodeURIComponent(imageObject.obj) +
-        "&view=detailv2&iss=sbi";
+      const url = search_url + encodeURIComponent(imageObject.obj);
 
       const urlObject = { url: url };
       openNewTabWithUrl(urlObject, isRequestFromContextMenu);
