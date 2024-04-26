@@ -48,9 +48,6 @@ const Metadata = ({ mediaType }) => {
   const session = useSelector((state) => state.userSession);
   const uid = session && session.user ? session.user.id : null;
 
-  const [radioImage, setRadioImage] = useState(
-    mediaType === "video" ? false : true,
-  );
   const [input, setInput] = useState(resultUrl ? resultUrl : "");
   const [imageUrl, setImageurl] = useState(null);
   const [videoUrl, setVideoUrl] = useState(null);
@@ -88,7 +85,7 @@ const Metadata = ({ mediaType }) => {
         client_id,
         uid
       );*/
-      if (radioImage) {
+      if (mediaType === "image") {
         setImageurl(input);
       } else {
         setVideoUrl(input);
@@ -119,10 +116,8 @@ const Metadata = ({ mediaType }) => {
     if (location.state != null) {
       if (location.state.media === "image") {
         dispatch(setMetadataMediaType("image"));
-        setRadioImage(true);
       } else if (location.state.media === "video") {
         dispatch(setMetadataMediaType("video"));
-        setRadioImage(false);
       }
     } else {
       // console.log(mediaType);
@@ -131,15 +126,6 @@ const Metadata = ({ mediaType }) => {
   }
 
   useEffect(() => {
-    if (type) {
-      let content_type = decodeURIComponent(type);
-      if (content_type === CONTENT_TYPE.VIDEO) {
-        setRadioImage(false);
-      } else if (content_type === CONTENT_TYPE.IMAGE) {
-        setRadioImage(true);
-      }
-    }
-
     if (url && url !== KNOWN_LINKS.OWN) {
       let uri = decodeURIComponent(url);
       setInput(uri);
@@ -154,8 +140,16 @@ const Metadata = ({ mediaType }) => {
   return (
     <div>
       <HeaderTool
-        name={keywordAllTools("navbar_metadata")}
-        description={keywordAllTools("navbar_metadata_description")}
+        name={
+          mediaType === "video"
+            ? keywordAllTools("navbar_metadata_video")
+            : keywordAllTools("navbar_metadata_image")
+        }
+        description={
+          mediaType === "video"
+            ? keywordAllTools("navbar_metadata_video_description")
+            : keywordAllTools("navbar_metadata_image_description")
+        }
         icon={
           <MetadataIcon
             style={{ fill: "#00926c" }}
@@ -165,14 +159,22 @@ const Metadata = ({ mediaType }) => {
         }
       />
       <Stack direction={"column"} spacing={2}>
-        <Alert severity="info">{keyword("description_limitations")}</Alert>
+        <Alert severity="info">
+          {mediaType === "video"
+            ? keyword("description_video_limitations")
+            : keyword("description_image_limitations")}
+        </Alert>
       </Stack>
 
       <Box m={3} />
 
       <Card>
         <CardHeader
-          title={keyword("cardheader_source")}
+          title={
+            mediaType === "video"
+              ? keyword("cardheader_source_video")
+              : keyword("cardheader_source_image")
+          }
           className={classes.headerUploadedImage}
         />
 
@@ -183,34 +185,20 @@ const Metadata = ({ mediaType }) => {
                 <TextField
                   value={input}
                   id="standard-full-width"
-                  label={keyword("metadata_content_input")}
-                  placeholder={keyword("metadata_content_input_placeholder")}
+                  label={
+                    mediaType === "video"
+                      ? keyword("metadata_video_input")
+                      : keyword("metadata_image_input")
+                  }
+                  placeholder={
+                    mediaType === "video"
+                      ? keyword("metadata_video_input_placeholder")
+                      : keyword("metadata_image_input_placeholder")
+                  }
                   fullWidth
                   variant="outlined"
                   onChange={(e) => setInput(e.target.value)}
                 />
-              </Grid>
-              <Grid item>
-                <RadioGroup
-                  aria-label="position"
-                  name="position"
-                  value={radioImage}
-                  onChange={() => setRadioImage(!radioImage)}
-                  row
-                >
-                  <FormControlLabel
-                    value={true}
-                    control={<Radio color="primary" />}
-                    label={keyword("metadata_radio_image")}
-                    labelPlacement="end"
-                  />
-                  <FormControlLabel
-                    value={false}
-                    control={<Radio color="primary" />}
-                    label={keyword("metadata_radio_video")}
-                    labelPlacement="end"
-                  />
-                </RadioGroup>
               </Grid>
               <Grid item>
                 <Button
@@ -260,17 +248,19 @@ const Metadata = ({ mediaType }) => {
       <Box m={3} />
       {resultData ? (
         resultIsImage ? (
-          <MetadataImageResult
-            result={resultData}
-            image={resultUrl}
-            closeResult={handleCloseResult}
-          />
-        ) : (
+          mediaType === "image" ? (
+            <MetadataImageResult
+              result={resultData}
+              image={resultUrl}
+              closeResult={handleCloseResult}
+            />
+          ) : null
+        ) : mediaType === "video" ? (
           <MetadataVideoResult
             result={resultData}
             closeResult={handleCloseResult}
           />
-        )
+        ) : null
       ) : null}
     </div>
   );
