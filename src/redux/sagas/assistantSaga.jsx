@@ -265,6 +265,9 @@ function* handleSourceCredibilityCall(action) {
         result = result.concat(batchResult.entities.SourceCredibility);
       }
     }
+    if (!result.length) {
+      result = null;
+    }
 
     const trafficLightColors = {
       positive: "#008000", // green

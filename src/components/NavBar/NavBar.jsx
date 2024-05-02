@@ -162,12 +162,11 @@ const NavBar = () => {
           setOpenAlert(true);
         }
       } else {
-        if (newValue.title === "navbar_twitter_crowdtangle")
-          window.open(
-            process.env.REACT_APP_TSNA_SERVER + "csvSna?lang=" + currentLang,
-            "_blank",
-          );
-        else if (newValue.path === "factcheck" || newValue.path === "xnetwork")
+        if (
+          newValue.path === "csvSna" ||
+          newValue.path === "factcheck" ||
+          newValue.path === "xnetwork"
+        )
           window.open(
             process.env.REACT_APP_TSNA_SERVER +
               newValue.path +
@@ -968,6 +967,7 @@ const NavBar = () => {
         />
       ),
       tsvPrefix: "twitter_crowdtangle",
+      path: "csvSna",
       pathGroup: "TOOL",
       type: keyword("navbar_category_data"),
       typeId: 5,

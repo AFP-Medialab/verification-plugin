@@ -70,9 +70,9 @@ export const setSelectedScript = (script) => {
   };
 };
 
-export const cleanOcr = () => {
+export const resetOcrState = () => {
   return {
-    type: "OCR_CLEAN_STATE",
+    type: "RESET_OCR_STATE",
   };
 };
 
