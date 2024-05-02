@@ -81,7 +81,11 @@ const SyntheticImageDetectionResults = (props) => {
 
   const [maxScore, setMaxScore] = useState(0);
 
+  const [resultsHaveErrors, setResultsHaveErrors] = useState(false);
+
   useEffect(() => {
+    setResultsHaveErrors(false);
+
     const diffusionScore = new SyntheticImageDetectionAlgorithmResult(
       Object.keys(DeepfakeImageDetectionMethodNames)[1],
       !results.unina_report.prediction
@@ -140,6 +144,14 @@ const SyntheticImageDetectionResults = (props) => {
         : [diffusionScore, ganScore, proganScore]
     ).sort((a, b) => b.predictionScore - a.predictionScore);
 
+    const hasResultError = () => {
+      for (const algorithm of res) {
+        if (algorithm.isError) return true;
+      }
+      return false;
+    };
+
+    setResultsHaveErrors(hasResultError);
     setSyntheticImageScores(res);
 
     setMaxScore(
@@ -330,6 +342,11 @@ const SyntheticImageDetectionResults = (props) => {
                     "synthetic_image_detection_additional_explanation_text",
                   )}
                 </Typography>
+                {resultsHaveErrors && (
+                  <Alert severity="error">
+                    {keyword("synthetic_image_detection_algorithms_errors")}
+                  </Alert>
+                )}
                 <Box sx={{ width: "100%" }}>
                   <Accordion>
                     <AccordionSummary expandIcon={<ExpandMore />}>
