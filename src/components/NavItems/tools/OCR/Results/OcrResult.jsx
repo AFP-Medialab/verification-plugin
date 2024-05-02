@@ -17,8 +17,7 @@ import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import { setError } from "redux/reducers/errorReducer";
 import {
-  cleanOcr,
-  //loadOcrScripts,
+  resetOcrState,
   setOcrReprocess,
   setReprocessOpen,
   setSelectedScript,
@@ -62,8 +61,8 @@ const OcrResult = () => {
   const mainImageId = "ocrMainImageId";
 
   /* if (!scripts) {
-        dispatch(loadOcrScripts())
-    }*/
+              dispatch(loadOcrScripts())
+          }*/
 
   const handleScriptChange = (event) => {
     dispatch(setSelectedScript(event.target.value));
@@ -165,7 +164,7 @@ const OcrResult = () => {
     let error_message_key = errorKey ? errorKey : "ocr_error";
     if (fail) {
       dispatch(setError(keyword(error_message_key)));
-      dispatch(cleanOcr());
+      dispatch(resetOcrState());
     }
   }, [fail, errorKey]);
   var ro = new ResizeObserver(() => {

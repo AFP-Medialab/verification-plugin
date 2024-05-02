@@ -90,13 +90,6 @@ export const SEARCH_ENGINE_SETTINGS = {
     URI: "https://www.tineye.com/search?url=",
     IMAGE_FORMAT: IMAGE_FORMATS.URI,
   },
-  REDDIT_SEARCH: {
-    NAME: "Reddit",
-    CONTEXT_MENU_ID: "reverse_search_reddit",
-    CONTEXT_MENU_TITLE: "Image Reverse Search - Reddit",
-    URI: "http://karmadecay.com/search?kdtoolver=b1&q=",
-    IMAGE_FORMAT: IMAGE_FORMATS.URI,
-  },
 };
 
 const fetchImage = async (url) => {
@@ -108,7 +101,7 @@ const fetchImage = async (url) => {
 
 /**
  * Wrapper function to open a new tab from the context menus or from the app
- * @param {} url The url object
+ * @param url The url object
  * @param {boolean} isRequestFromContextMenu
  */
 const openNewTabWithUrl = async (url, isRequestFromContextMenu) => {
@@ -144,6 +137,7 @@ const isBase64 = (str) => {
   return true;
 };
 
+// eslint-disable-next-line no-unused-vars
 const b64toBlobde = (base64String, contentType = "") => {
   let image = base64String.substring(base64String.indexOf(",") + 1);
   const byteCharacters = atob(image);
@@ -291,7 +285,7 @@ export const reverseImageSearchGoogleLens = (
 
       openNewTabWithUrl(urlObject, isRequestFromContextMenu);
     })
-    .catch((error) => {
+    .catch(() => {
       //console.error(error);
     })
     .finally(() => {
@@ -331,7 +325,7 @@ export const reverseImageSearchYandex = (
 
       openNewTabWithUrl(urlObject, isRequestFromContextMenu);
     })
-    .catch((error) => {
+    .catch(() => {
       //console.error(error);
     })
     .finally(() => {
@@ -363,7 +357,7 @@ export const reverseImageSearchGoogle = (
 
       openNewTabWithUrl(urlObject, isRequestFromContextMenu);
     })
-    .catch((error) => {
+    .catch(() => {
       //console.error(error);
     });
   // .finally(() => {
@@ -397,7 +391,7 @@ export const reverseImageSearchBing = async (
 
       openNewTabWithUrl(urlObject, isRequestFromContextMenu);
     })
-    .catch((error) => {
+    .catch(() => {
       //console.error(error);
     })
     .finally(() => {
@@ -412,18 +406,6 @@ const reverseImageSearchTineye = (
   const urlObject = {
     url:
       SEARCH_ENGINE_SETTINGS.TINEYE_SEARCH.URI + encodeURIComponent(imageUrl),
-  };
-
-  openNewTabWithUrl(urlObject, isRequestFromContextMenu);
-};
-
-const reverseImageSearchReddit = (
-  imageUrl,
-  isRequestFromContextMenu = true,
-) => {
-  const urlObject = {
-    url:
-      SEARCH_ENGINE_SETTINGS.REDDIT_SEARCH.URI + encodeURIComponent(imageUrl),
   };
 
   openNewTabWithUrl(urlObject, isRequestFromContextMenu);
@@ -546,7 +528,7 @@ const getSearchEngineFromName = (searchEngineName) => {
 
 /**
  * Description
- * @param {any} info
+ * @param {chrome.contextMenus.OnClickData} info
  * @param {boolean} isImgUrl
  * @param {string} searchEngineName
  * @returns {Promise<ImageObject>}
@@ -554,10 +536,18 @@ const getSearchEngineFromName = (searchEngineName) => {
 const retrieveImgObjectForSearchEngine = async (info, searchEngineName) => {
   const searchEngine = getSearchEngineFromName(searchEngineName);
 
-  var imgFormat =
-    typeof info === "string" && info.startsWith("http")
-      ? searchEngine.IMAGE_FORMAT
-      : searchEngine.IMAGE_FORMAT_LOCAL;
+  let imgFormat;
+
+  if (info && info.srcUrl) {
+    imgFormat = IMAGE_FORMATS.URI;
+  } else {
+    //TODO: Use URL.canParse()
+    imgFormat =
+      typeof info === "string" && info.startsWith("http")
+        ? searchEngine.IMAGE_FORMAT
+        : searchEngine.IMAGE_FORMAT_LOCAL;
+  }
+
   imgFormat = imgFormat === undefined ? searchEngine.IMAGE_FORMAT : imgFormat;
 
   if (imgFormat === IMAGE_FORMATS.URI) {
@@ -572,8 +562,9 @@ const retrieveImgObjectForSearchEngine = async (info, searchEngineName) => {
     if (isBase64(info)) {
       return new ImageObject(info, IMAGE_FORMATS.B64);
     } else {
-      if (src) return await getLocalImageFromSourcePath(src, IMAGE_FORMATS.B64);
-      else return await getLocalImageFromSourcePath(info, IMAGE_FORMATS.B64);
+      // if (src) return await getLocalImageFromSourcePath(src, IMAGE_FORMATS.B64);
+      // else
+      return await getLocalImageFromSourcePath(info, IMAGE_FORMATS.B64);
     }
     // TODO: local image
   }
@@ -617,12 +608,12 @@ export const reverseImageSearch = async (
   ) {
     //console.log("DEBUG image ", imageObject);
     if (
-      imageObject.imageFormat ==
+      imageObject.imageFormat ===
       SEARCH_ENGINE_SETTINGS.GOOGLE_LENS_SEARCH.IMAGE_FORMAT_LOCAL
     )
       reverseImageSearchGoogleLens(imageObject.obj, isRequestFromContextMenu);
     else if (
-      imageObject.imageFormat ==
+      imageObject.imageFormat ===
       SEARCH_ENGINE_SETTINGS.GOOGLE_LENS_SEARCH.IMAGE_FORMAT
     ) {
       reverseRemoteGoogleLens(imageObject.obj, isRequestFromContextMenu);
@@ -654,17 +645,15 @@ export const reverseImageSearch = async (
     }
 
     // TODO: move all the logic in a single function
-    const search_url = "https://www.bing.com/images/search?q=imgurl:";
+    const search_url =
+      "https://www.bing.com/images/searchbyimage?cbir=ssbi&imgurl=";
 
     if (
       typeof imageObject.obj === "string" &&
       imageObject.obj !== "" &&
       imageObject.obj.startsWith("http")
     ) {
-      const url =
-        search_url +
-        encodeURIComponent(imageObject.obj) +
-        "&view=detailv2&iss=sbi";
+      const url = search_url + encodeURIComponent(imageObject.obj);
 
       const urlObject = { url: url };
       openNewTabWithUrl(urlObject, isRequestFromContextMenu);
@@ -689,19 +678,10 @@ export const reverseImageSearch = async (
         .then((response) => {
           openTabsSearch({ url: response.url });
         })
-        .catch((error) => {
+        .catch(() => {
           //console.error(error);
         });
     }
-  } else if (searchEngineName === SEARCH_ENGINE_SETTINGS.REDDIT_SEARCH.NAME) {
-    if (
-      imageObject.imageFormat !==
-      SEARCH_ENGINE_SETTINGS.REDDIT_SEARCH.IMAGE_FORMAT
-    ) {
-      throw new Error(`[reverseImageSearch] Error: invalid image format`);
-    }
-
-    reverseImageSearchReddit(imageObject.obj, isRequestFromContextMenu);
   } else if (searchEngineName === SEARCH_ENGINE_SETTINGS.TINEYE_SEARCH.NAME) {
     if (
       imageObject.imageFormat !==
