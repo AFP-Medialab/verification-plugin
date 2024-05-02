@@ -10,14 +10,11 @@ import axios from "axios";
 import {
   Alert,
   Box,
-  Button,
   Card,
   CardHeader,
   Grid,
   LinearProgress,
-  TextField,
 } from "@mui/material";
-import FolderOpenIcon from "@mui/icons-material/FolderOpen";
 
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import { Gradient } from "@mui/icons-material";
@@ -28,6 +25,7 @@ import { isValidUrl } from "../../../Shared/Utils/URLUtils";
 import SyntheticImageDetectionResults from "./syntheticImageDetectionResults";
 
 import { setError } from "redux/reducers/errorReducer";
+import StringFileUploadField from "../../../Shared/StringFileUploadField";
 import { preprocessFileUpload } from "../../../Shared/Utils/fileUtils";
 
 const SyntheticImageDetection = () => {
@@ -48,32 +46,30 @@ const SyntheticImageDetection = () => {
   const result = useSelector((state) => state.syntheticImageDetection.result);
   const url = useSelector((state) => state.syntheticImageDetection.url);
   const [input, setInput] = useState(url ? url : "");
-  const [type, setType] = useState("");
-  const [image, setImage] = useState(undefined);
+  const [imageFile, setImageFile] = useState(undefined);
 
   const dispatch = useDispatch();
 
-  const useGetSyntheticImageScores = async (
+  const IMAGE_FROM = {
+    URL: "url",
+    UPLOAD: "local",
+  };
+
+  const getSyntheticImageScores = async (
     url,
     processURL,
     dispatch,
     type,
     image,
   ) => {
-    if (!processURL || !url) {
+    if (!processURL || (!url && !image)) {
       return;
     }
-
-    let modeURL = "";
-    let services = "";
 
     dispatch(setSyntheticImageDetectionLoading(true));
-    modeURL = "images/";
-    services = "gan,unina,progan_r50_grip,adm_r50_grip";
-
-    if (!modeURL) {
-      return;
-    }
+    const modeURL = "images/";
+    const services =
+      "gan,unina,progan_r50_grip,adm_r50_grip,progan_rine_mever,ldm_rine_mever";
 
     const baseURL = process.env.REACT_APP_CAA_DEEPFAKE_URL;
 
@@ -97,17 +93,17 @@ const SyntheticImageDetection = () => {
       dispatch(setSyntheticImageDetectionLoading(false));
     };
 
-    if (!isValidUrl(url)) {
+    if (!isValidUrl(url) && !image) {
       handleError(keywordWarning("error_invalid_url"));
       return;
     }
 
     let res;
+    const bodyFormData = new FormData();
 
     try {
       switch (type) {
-        case "local":
-          var bodyFormData = new FormData();
+        case IMAGE_FROM.UPLOAD:
           bodyFormData.append("file", image);
           res = await axios.post(baseURL + modeURL + "jobs", bodyFormData, {
             method: "post",
@@ -141,7 +137,10 @@ const SyntheticImageDetection = () => {
 
       if (response && response.data != null)
         dispatch(
-          setSyntheticImageDetectionResult({ url: url, result: response.data }),
+          setSyntheticImageDetectionResult({
+            url: image ? URL.createObjectURL(image) : url,
+            result: response.data,
+          }),
         );
     };
 
@@ -179,16 +178,36 @@ const SyntheticImageDetection = () => {
 
   const handleClose = () => {
     setInput("");
+    setImageFile(undefined);
+    dispatch(resetSyntheticImageDetectionImage());
   };
 
   const preprocessingSuccess = (file) => {
-    setInput(URL.createObjectURL(file));
-    setImage(file);
-    setType("local");
+    setImageFile(file);
+    return file;
   };
 
   const preprocessingError = () => {
     dispatch(setError(keywordWarning("warning_file_too_big")));
+  };
+
+  const preprocessImage = (file) => {
+    return preprocessFileUpload(
+      file,
+      role,
+      undefined,
+      preprocessingSuccess,
+      preprocessingError,
+    );
+  };
+
+  const handleSubmit = async () => {
+    dispatch(resetSyntheticImageDetectionImage());
+
+    const type =
+      input && typeof input === "string" ? IMAGE_FROM.URL : IMAGE_FROM.UPLOAD;
+
+    await getSyntheticImageScores(input, true, dispatch, type, imageFile);
   };
 
   return (
@@ -227,77 +246,30 @@ const SyntheticImageDetection = () => {
         />
 
         <Box p={3}>
-          <div>
-            <Box>
-              <form>
-                <Grid container direction="row" spacing={3} alignItems="center">
-                  <Grid item xs>
-                    <TextField
-                      type="url"
-                      id="standard-full-width"
-                      label={keyword("synthetic_image_detection_link")}
-                      placeholder={keyword(
-                        "synthetic_image_detection_placeholder",
-                      )}
-                      fullWidth
-                      value={input}
-                      variant="outlined"
-                      disabled={isLoading}
-                      onChange={(e) => setInput(e.target.value)}
-                    />
-                  </Grid>
-                  <Grid item>
-                    <Button
-                      type="submit"
-                      variant="contained"
-                      color="primary"
-                      onClick={async (e) => {
-                        dispatch(resetSyntheticImageDetectionImage());
-                        e.preventDefault(),
-                          await useGetSyntheticImageScores(
-                            input,
-                            true,
-                            dispatch,
-                            type,
-                            image,
-                          );
-                      }}
-                      disabled={input === "" || isLoading}
-                    >
-                      {"Submit"}
-                    </Button>
-                  </Grid>
-                </Grid>
-              </form>
-              <Box m={2} />
-
-              <Button startIcon={<FolderOpenIcon />}>
-                <label htmlFor="fileInputSynthetic">
-                  {keyword("button_localfile")}
-                </label>
-                <input
-                  id="fileInputSynthetic"
-                  type="file"
-                  hidden={true}
-                  onChange={(e) => {
-                    preprocessFileUpload(
-                      e.target.files[0],
-                      role,
-                      undefined,
-                      preprocessingSuccess,
-                      preprocessingError,
-                    );
-                  }}
-                />
-              </Button>
-
-              {isLoading && (
-                <Box mt={3}>
-                  <LinearProgress />
-                </Box>
+          <form>
+            <StringFileUploadField
+              labelKeyword={keyword("synthetic_image_detection_link")}
+              placeholderKeyword={keyword(
+                "synthetic_image_detection_placeholder",
               )}
+              submitButtonKeyword={keyword("submit_button")}
+              localFileKeyword={keyword("button_localfile")}
+              urlInput={input}
+              setUrlInput={setInput}
+              fileInput={imageFile}
+              setFileInput={setImageFile}
+              handleSubmit={handleSubmit}
+              fileInputTypesAccepted={"image/*"}
+              handleCloseSelectedFile={handleClose}
+              preprocessLocalFile={preprocessImage}
+            />
+          </form>
+
+          {isLoading && (
+            <Box mt={3}>
+              <LinearProgress />
             </Box>
-          </div>
+          )}
         </Box>
       </Card>
 

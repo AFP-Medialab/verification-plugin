@@ -71,6 +71,8 @@ const useGetImages = (url, type, keyword) => {
     };
 
     const configService = (type) => {
+      const services =
+        "adq1,blk,cagi,cfa,cmfd,dct,ela,fusion,ghost,laplacian,mantranet,median,rcmfd,splicebuster,wavelet,zero,mmfusion,trufor,omgfuser";
       switch (type) {
         case "local":
           var bodyFormData = new FormData();
@@ -78,7 +80,7 @@ const useGetImages = (url, type, keyword) => {
 
           return {
             method: "post",
-            url: forensic_base_url + "images/jobs",
+            url: forensic_base_url + "images/jobs?services=" + services,
             data: bodyFormData,
             headers: {
               "Content-Type": "multipart/form-data",
@@ -88,7 +90,11 @@ const useGetImages = (url, type, keyword) => {
           return {
             method: "post",
             url:
-              forensic_base_url + "images/jobs?url=" + encodeURIComponent(url),
+              forensic_base_url +
+              "images/jobs?url=" +
+              encodeURIComponent(url) +
+              "&services=" +
+              services,
           };
         default:
           break;

@@ -20,7 +20,7 @@ async function UseGetDeepfake(
   type,
   image,
 ) {
-  if (!processURL || !url) {
+  if (!processURL || (!url && !image)) {
     return;
   }
 
@@ -56,7 +56,7 @@ async function UseGetDeepfake(
     }
   };
 
-  if (!isValidUrl(url)) {
+  if (!isValidUrl(url) && !image) {
     handleError(errorMsg);
     return;
   }
@@ -95,7 +95,12 @@ async function UseGetDeepfake(
 
     if (response.data != null) {
       if (mode === "IMAGE") {
-        dispatch(setDeepfakeResultImage({ url: url, result: response.data }));
+        dispatch(
+          setDeepfakeResultImage({
+            url: image ? URL.createObjectURL(image) : url,
+            result: response.data,
+          }),
+        );
       } else if (mode === "VIDEO") {
         dispatch(setDeepfakeResultVideo({ url: url, result: response.data }));
       }

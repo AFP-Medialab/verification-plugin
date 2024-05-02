@@ -22,10 +22,7 @@ import GifIcon from "@mui/icons-material/Gif";
 import Fab from "@mui/material/Fab";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
-import {
-  cleanForensicState,
-  setForensicImageRatio,
-} from "../../../../../redux/actions/tools/forensicActions";
+import { setForensicImageRatio } from "../../../../../redux/actions/tools/forensicActions";
 import {
   setStateBackResults,
   setStateInit,
@@ -129,23 +126,26 @@ const ForensicResults = (props) => {
     //DEEP LEARNING
     "mantranet_report", //9
     "fusion_report", //10
+    "mmfusion_report", //11
+    "trufor_report", //12
+    "omgfuser_report", //13
 
     //CLONING
-    "cmfd_report", //11
-    "rcmfd_report", //12
+    "cmfd_report", //14
+    "rcmfd_report", //15
 
     //LENSES
 
-    "ela_report", //13
-    "laplacian_report", //14
-    "median_report", //15
+    "ela_report", //16
+    "laplacian_report", //17
+    "median_report", //18
   ];
 
   const idStartCompression = 0;
   const idStartNoise = 6;
   const idStartDeepLearning = 9;
-  const idStartCloning = 11;
-  const idStartLenses = 13;
+  const idStartCloning = 14;
+  const idStartLenses = 16;
 
   const filters = useRef(
     filtersIDs.map((value) => {
@@ -234,6 +234,15 @@ const ForensicResults = (props) => {
           map: results[value].map,
           popover: false,
         };
+      } else if (value === "trufor_report" || value === "omgfuser_report") {
+        filter = {
+          id: value,
+          name: keyword("forensic_title_" + value),
+          map: results[value]["array"],
+          mask: results[value]["array"],
+          popover: false,
+          score: results[value]["score"],
+        };
       } else {
         filter = {
           id: value,
@@ -307,8 +316,7 @@ const ForensicResults = (props) => {
   //Button analyze new image
   //============================================================================================
   function newImage() {
-    dispatch(cleanForensicState());
-    props.resetImage();
+    props.onClose();
   }
 
   //Help of the lenses
@@ -1109,6 +1117,14 @@ const ForensicResults = (props) => {
                                         >
                                           <HelpOutlineIcon fontSize="inherit" />
                                         </IconButton>
+                                      </Box>
+                                    )}
+                                    {value.score && (
+                                      <Box align="center" width="100%" pl={1}>
+                                        {keyword("forensic_score") +
+                                          ": " +
+                                          (value.score * 100).toPrecision(2) +
+                                          " %"}
                                       </Box>
                                     )}
                                   </div>

@@ -82,14 +82,14 @@ const AllTools = (props) => {
   };
 
   const handlePush = (path) => {
-    if (path === "factcheck" || path === "xnetwork") {
+    if (path === "csvSna" || path === "factcheck" || path === "xnetwork") {
       window.open(process.env.REACT_APP_TSNA_SERVER + path, "_blank");
     } else {
       navigate("/app/tools/" + path);
       /* history.push({
-                                                                                        pathname: "/app/tools/" + path,
-                                                                                        state: { media: mediaTool }
-                                                                                    })*/
+                                                                                                                pathname: "/app/tools/" + path,
+                                                                                                                state: { media: mediaTool }
+                                                                                                            })*/
     }
   };
 
