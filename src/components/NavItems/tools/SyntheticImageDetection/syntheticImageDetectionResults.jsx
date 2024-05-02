@@ -1,12 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
-import Box from "@mui/material/Box";
-import Card from "@mui/material/Card";
-import CardHeader from "@mui/material/CardHeader";
 import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
   Alert,
+  Box,
+  Card,
+  CardHeader,
   Chip,
   Divider,
   Grid,
@@ -14,12 +14,11 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { Close } from "@mui/icons-material";
+import { Close, ExpandMore } from "@mui/icons-material";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import { useSelector } from "react-redux";
 import { useTrackEvent } from "Hooks/useAnalytics";
 import { getclientId } from "components/Shared/GoogleAnalytics/MatomoAnalytics";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import CustomAlertScore from "../../../Shared/CustomAlertScore";
 import GaugeChart from "react-gauge-chart";
 
@@ -28,9 +27,17 @@ const SyntheticImageDetectionResults = (props) => {
     "components/NavItems/tools/SyntheticImageDetection",
   );
 
-  class DeepfakeResult {
-    constructor(methodName, predictionScore) {
-      (this.methodName = methodName), (this.predictionScore = predictionScore);
+  class SyntheticImageDetectionAlgorithmResult {
+    /**
+     *
+     * @param methodName {string}
+     * @param predictionScore {number}
+     * @param isError {boolean}
+     */
+    constructor(methodName, predictionScore, isError) {
+      (this.methodName = methodName),
+        (this.predictionScore = predictionScore),
+        (this.isError = isError);
     }
   }
 
@@ -39,7 +46,6 @@ const SyntheticImageDetectionResults = (props) => {
       name: keyword("synthetic_image_detection_gan_name"),
       description: keyword("synthetic_image_detection_gan_description"),
     },
-
     diffusion: {
       name: keyword("synthetic_image_detection_diffusion_name"),
       description: keyword("synthetic_image_detection_diffusion_description"),
@@ -76,42 +82,49 @@ const SyntheticImageDetectionResults = (props) => {
   const [maxScore, setMaxScore] = useState(0);
 
   useEffect(() => {
-    if (
-      !results ||
-      !results.unina_report ||
-      !results.unina_report.prediction ||
-      !results.gan_report ||
-      !results.gan_report.prediction
-    ) {
-      return;
-    }
-    const diffusionScore = new DeepfakeResult(
+    const diffusionScore = new SyntheticImageDetectionAlgorithmResult(
       Object.keys(DeepfakeImageDetectionMethodNames)[1],
-      results.unina_report.prediction * 100,
+      !results.unina_report.prediction
+        ? 0
+        : results.unina_report.prediction * 100,
+      !results.unina_report.prediction,
     );
-    const ganScore = new DeepfakeResult(
+    const ganScore = new SyntheticImageDetectionAlgorithmResult(
       Object.keys(DeepfakeImageDetectionMethodNames)[0],
-      results.gan_report.prediction * 100,
+      !results.gan_report.prediction ? 0 : results.gan_report.prediction * 100,
+      !results.gan_report.prediction,
     );
 
-    const proganScore = new DeepfakeResult(
+    const proganScore = new SyntheticImageDetectionAlgorithmResult(
       Object.keys(DeepfakeImageDetectionMethodNames)[2],
-      results.progan_r50_grip_report.prediction * 100,
+      !results.progan_r50_grip_report.prediction
+        ? 0
+        : results.progan_r50_grip_report.prediction * 100,
+      !results.progan_r50_grip_report.prediction,
     );
 
-    const admScore = new DeepfakeResult(
+    const admScore = new SyntheticImageDetectionAlgorithmResult(
       Object.keys(DeepfakeImageDetectionMethodNames)[3],
-      results.adm_r50_grip_report.prediction * 100,
+      !results.adm_r50_grip_report.prediction
+        ? 0
+        : results.adm_r50_grip_report.prediction * 100,
+      !results.adm_r50_grip_report.prediction,
     );
 
-    const proganRineScore = new DeepfakeResult(
+    const proganRineScore = new SyntheticImageDetectionAlgorithmResult(
       Object.keys(DeepfakeImageDetectionMethodNames)[4],
-      results.progan_rine_mever_report.prediction * 100,
+      !results.progan_rine_mever_report.prediction
+        ? 0
+        : results.progan_rine_mever_report.prediction * 100,
+      !results.progan_rine_mever_report.prediction,
     );
 
-    const ldmRineScore = new DeepfakeResult(
+    const ldmRineScore = new SyntheticImageDetectionAlgorithmResult(
       Object.keys(DeepfakeImageDetectionMethodNames)[5],
-      results.ldm_rine_mever_report.prediction * 100,
+      !results.ldm_rine_mever_report.prediction
+        ? 0
+        : results.ldm_rine_mever_report.prediction * 100,
+      !results.ldm_rine_mever_report.prediction,
     );
 
     const res = (
@@ -319,7 +332,7 @@ const SyntheticImageDetectionResults = (props) => {
                 </Typography>
                 <Box sx={{ width: "100%" }}>
                   <Accordion>
-                    <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                    <AccordionSummary expandIcon={<ExpandMore />}>
                       <Typography>
                         {keyword(
                           "synthetic_image_detection_additional_results",
@@ -329,9 +342,14 @@ const SyntheticImageDetectionResults = (props) => {
                     <AccordionDetails>
                       <Stack direction={"column"} spacing={4}>
                         {syntheticImageScores.map((item, key) => {
-                          const predictionScore = sanitizeDetectionPercentage(
-                            item.predictionScore,
-                          );
+                          let predictionScore;
+
+                          if (item.predictionScore) {
+                            predictionScore = sanitizeDetectionPercentage(
+                              item.predictionScore,
+                            );
+                          }
+
                           return (
                             <Stack direction="column" spacing={4} key={key}>
                               <Stack direction="column" spacing={2}>
@@ -357,30 +375,52 @@ const SyntheticImageDetectionResults = (props) => {
                                       alignItems="center"
                                     >
                                       <Stack direction="row" spacing={1}>
-                                        <Typography>
-                                          {keyword(
-                                            "synthetic_image_detection_probability_text",
-                                          )}{" "}
-                                        </Typography>
-                                        <Typography
-                                          sx={{
-                                            color:
-                                              getPercentageColorCode(
-                                                predictionScore,
-                                              ),
-                                          }}
-                                        >
-                                          {predictionScore}%
-                                        </Typography>
+                                        {item.isError ? (
+                                          <Alert severity="error">
+                                            {keyword(
+                                              "synthetic_image_detection_error_generic",
+                                            )}
+                                          </Alert>
+                                        ) : (
+                                          <>
+                                            <Typography>
+                                              {keyword(
+                                                "synthetic_image_detection_probability_text",
+                                              )}{" "}
+                                            </Typography>
+                                            <Typography
+                                              sx={{
+                                                color:
+                                                  getPercentageColorCode(
+                                                    predictionScore,
+                                                  ),
+                                              }}
+                                            >
+                                              {predictionScore}%
+                                            </Typography>
+                                          </>
+                                        )}
                                       </Stack>
-                                      <Chip
-                                        label={getAlertLabel(predictionScore)}
-                                        color={getAlertColor(predictionScore)}
-                                      />
+                                      {!item.isError && (
+                                        <Chip
+                                          label={getAlertLabel(predictionScore)}
+                                          color={getAlertColor(predictionScore)}
+                                        />
+                                      )}
                                     </Stack>
                                   </Box>
                                   <Stack>
-                                    {/*<Button>Read paper</Button>*/}
+                                    {/*<Button*/}
+                                    {/*  href={*/}
+                                    {/*    DeepfakeImageDetectionMethodNames[*/}
+                                    {/*      item.methodName*/}
+                                    {/*    ].modelCardUrl*/}
+                                    {/*  }*/}
+                                    {/*>*/}
+                                    {/*  {keyword(*/}
+                                    {/*    "synthetic_image_detection_model_card",*/}
+                                    {/*  )}*/}
+                                    {/*</Button>*/}
                                   </Stack>
                                 </Stack>
 
