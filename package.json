@@ -1,6 +1,6 @@
 {
   "name": "weverify-plugin",
-  "version": "0.79.0",
+  "version": "0.79.1",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -23,6 +23,7 @@
     "@mui/material": "^5.14.12",
     "@mui/x-date-pickers": "^6.16.1",
     "@reduxjs/toolkit": "^1.9.7",
+    "@types/chrome": "^0.0.266",
     "@wavesurfer/react": "^1.0.4",
     "axios": "^1.5.1",
     "d3-selection": "^3.0.0",
