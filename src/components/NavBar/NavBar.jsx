@@ -81,7 +81,7 @@ import AssistantIcon from "./images/SVG/Navbar/Assistant.svg";
 import GuideIcon from "./images/SVG/Navbar/Guide.svg";
 
 import LogoVera from "./images/SVG/Navbar/vera-logo_black.svg";
-import LogoInVidWeverify from "./images/SVG/NavBar/invid_weverify.svg";
+import LogoInVidWeverify from "./images/SVG/Navbar/invid_weverify.svg";
 
 import VideoIcon from "./images/SVG/Video/Video.svg";
 import ImageIcon from "./images/SVG/Image/Images.svg";

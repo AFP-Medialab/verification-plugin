@@ -4,9 +4,8 @@ import { useDispatch, useSelector } from "react-redux";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
-import LogoEuCom from "../NavBar/images/SVG/Navbar/ep-logo.svg?url";
 import LogoVera from "../NavBar/images/SVG/Navbar/vera-logo_black.svg?url";
-import LogoInVidWeverify from "../NavBar/images/SVG/NavBar/invid_weverify.svg?url";
+import LogoInVidWeverify from "../NavBar/images/SVG/Navbar/invid_weverify.svg?url";
 
 import useMyStyles from "../Shared/MaterialUiStyles/useMyStyles";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
