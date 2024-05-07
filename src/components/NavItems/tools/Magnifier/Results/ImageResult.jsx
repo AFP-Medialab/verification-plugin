@@ -327,23 +327,6 @@ const ImageResult = ({ handleCloseResults }) => {
                   )}`}
                 </Button>
               </Grid>
-              <Grid item>
-                <Button
-                  color="primary"
-                  variant="contained"
-                  onClick={() =>
-                    handleClick(
-                      original,
-                      isImageUrl,
-                      SEARCH_ENGINE_SETTINGS.REDDIT_SEARCH.NAME,
-                    )
-                  }
-                >
-                  {`${SEARCH_ENGINE_SETTINGS.REDDIT_SEARCH.NAME} ${keyword(
-                    "reverse_search",
-                  )}`}
-                </Button>
-              </Grid>
             </>
           ) : null}
         </Grid>

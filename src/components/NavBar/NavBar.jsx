@@ -80,9 +80,9 @@ import AboutIcon from "./images/SVG/Navbar/About.svg";
 import AssistantIcon from "./images/SVG/Navbar/Assistant.svg";
 import GuideIcon from "./images/SVG/Navbar/Guide.svg";
 
-import LogoInvid2 from "./images/SVG/Navbar/InVID.svg";
-import LogoWeVerify2 from "./images/SVG/Navbar/WeVerify.svg";
 import LogoVera from "./images/SVG/Navbar/vera-logo_black.svg";
+import LogoEuCom from "./images/SVG/NavBar/ep-logo.svg";
+import LogoInVidWeverify from "./images/SVG/NavBar/invid_weverify.svg";
 
 import VideoIcon from "./images/SVG/Video/Video.svg";
 import ImageIcon from "./images/SVG/Image/Images.svg";
@@ -1532,7 +1532,7 @@ const NavBar = () => {
                   alignItems="center"
                   spacing={{ sm: 1, md: 2 }}
                 >
-                  <LogoWeVerify2
+                  <LogoEuCom
                     style={{
                       height: "auto",
                       minWidth: "48px",
@@ -1540,16 +1540,6 @@ const NavBar = () => {
                     }}
                     alt="logo"
                     className={classes.logoLeft}
-                    onClick={handleImageClick}
-                  />
-                  <LogoInvid2
-                    style={{
-                      height: "auto",
-                      minWidth: "48px",
-                      width: { sm: "48px", md: "80px" },
-                    }}
-                    alt="logo"
-                    className={classes.logoRight}
                     onClick={handleImageClick}
                   />
                   <LogoVera
