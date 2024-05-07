@@ -5,6 +5,7 @@ const IMAGE_FORMATS = {
   BLOB: "BLOB",
   URI: "URI",
   B64: "B64",
+  UNKNOW: "UNKNOW",
 };
 
 class ImageObject {
@@ -43,6 +44,7 @@ export const SEARCH_ENGINE_SETTINGS = {
     CONTEXT_MENU_TITLE: "Image Reverse Search - DBKF (beta)",
     URI: "http://weverify-demo.ontotext.com/#!/similaritySearchResults&type=Images&params=",
     IMAGE_FORMAT: IMAGE_FORMATS.URI,
+    SUPPORTED_IMAGE_FORMAT: [IMAGE_FORMATS.URI],
   },
   GOOGLE_SEARCH: {
     NAME: "Google",
@@ -50,6 +52,7 @@ export const SEARCH_ENGINE_SETTINGS = {
     CONTEXT_MENU_TITLE: "Image Reverse Search - Google",
     URI: "https://www.google.com/searchbyimage/upload",
     IMAGE_FORMAT: IMAGE_FORMATS.BLOB,
+    SUPPORTED_IMAGE_FORMAT: [IMAGE_FORMATS.BLOB],
   },
   GOOGLE_LENS_SEARCH: {
     NAME: "Google Lens",
@@ -58,6 +61,7 @@ export const SEARCH_ENGINE_SETTINGS = {
     URI: `https://lens.google.com/upload?ep=ccm&s=&st=${Date.now()}`,
     IMAGE_FORMAT: IMAGE_FORMATS.URI,
     IMAGE_FORMAT_LOCAL: IMAGE_FORMATS.BLOB,
+    SUPPORTED_IMAGE_FORMAT: [IMAGE_FORMATS.URI, IMAGE_FORMATS.BLOB],
   },
   BAIDU_SEARCH: {
     NAME: "Baidu",
@@ -65,13 +69,16 @@ export const SEARCH_ENGINE_SETTINGS = {
     CONTEXT_MENU_TITLE: "Image Reverse Search - Baidu",
     URI: "https://graph.baidu.com/upload",
     IMAGE_FORMAT: IMAGE_FORMATS.BLOB,
+    SUPPORTED_IMAGE_FORMAT: [IMAGE_FORMATS.BLOB],
   },
   YANDEX_SEARCH: {
     NAME: "Yandex",
     CONTEXT_MENU_ID: "reverse_search_yandex",
     CONTEXT_MENU_TITLE: "Image Reverse Search - Yandex",
     URI: 'https://yandex.com/images/touch/search?rpt=imageview&format=json&request={"blocks":[{"block":"cbir-uploader__get-cbir-id"}]}',
-    IMAGE_FORMAT: IMAGE_FORMATS.BLOB,
+    IMAGE_FORMAT: IMAGE_FORMATS.URI,
+    IMAGE_FORMAT_LOCAL: IMAGE_FORMATS.BLOB,
+    SUPPORTED_IMAGE_FORMAT: [IMAGE_FORMATS.URI, IMAGE_FORMATS.BLOB],
   },
   BING_SEARCH: {
     NAME: "Bing",
@@ -82,6 +89,7 @@ export const SEARCH_ENGINE_SETTINGS = {
       "https://www.bing.com/images/search?view=detailv2&iss=sbiupload&FORM=SBIHMP&sbifnm=weverify-local-file",
     IMAGE_FORMAT: IMAGE_FORMATS.URI,
     IMAGE_FORMAT_LOCAL: IMAGE_FORMATS.B64,
+    SUPPORTED_IMAGE_FORMAT: [IMAGE_FORMATS.URI, IMAGE_FORMATS.B64],
   },
   TINEYE_SEARCH: {
     NAME: "Tineye",
@@ -89,6 +97,7 @@ export const SEARCH_ENGINE_SETTINGS = {
     CONTEXT_MENU_TITLE: "Image Reverse Search - Tineye",
     URI: "https://www.tineye.com/search?url=",
     IMAGE_FORMAT: IMAGE_FORMATS.URI,
+    SUPPORTED_IMAGE_FORMAT: [IMAGE_FORMATS.URI],
   },
 };
 
@@ -292,13 +301,20 @@ export const reverseImageSearchGoogleLens = (
       // document.body.style.cursor = "default";
     });
 };
+export const reverseImageSearchYandexURI = (
+  imgUrl,
+  isRequestFromContextMenu = true,
+) => {
+  const tabUrl = `https://yandex.com/images/search?url=${imgUrl}&rpt=imageview`;
+  const urlObject = { url: tabUrl };
+  openNewTabWithUrl(urlObject, isRequestFromContextMenu);
+};
 
 export const reverseImageSearchYandex = (
   imgBlob,
   isRequestFromContextMenu = true,
 ) => {
-  const url =
-    'https://yandex.com/images/touch/search?rpt=imageview&format=json&request={"blocks":[{"block":"cbir-uploader__get-cbir-id"}]}';
+  const url = `https://yandex.com/images/touch/search?rpt=imageview&format=json&request={"blocks":[{"block":"cbir-uploader__get-cbir-id"}]}`;
 
   const formData = new FormData();
 
@@ -535,30 +551,52 @@ const getSearchEngineFromName = (searchEngineName) => {
  */
 const retrieveImgObjectForSearchEngine = async (info, searchEngineName) => {
   const searchEngine = getSearchEngineFromName(searchEngineName);
+  //console.log("search engine ", searchEngine)
+  //console.log("info ", info)
+  // get incoming format
+  // check if engine supported format
+  // if not convert to supported if possible
 
-  let imgFormat;
+  let inputFormat;
 
   if (info && info.srcUrl) {
-    imgFormat = IMAGE_FORMATS.URI;
+    inputFormat = IMAGE_FORMATS.URI;
   } else {
     //TODO: Use URL.canParse()
-    imgFormat =
-      typeof info === "string" && info.startsWith("http")
-        ? searchEngine.IMAGE_FORMAT
-        : searchEngine.IMAGE_FORMAT_LOCAL;
+    inputFormat =
+      typeof info === "string" &&
+      (info.startsWith("http") || info.startsWith("file"))
+        ? IMAGE_FORMATS.URI
+        : IMAGE_FORMATS.UNKNOW;
   }
+  let engineSupportedFormat = searchEngine.SUPPORTED_IMAGE_FORMAT;
 
-  imgFormat = imgFormat === undefined ? searchEngine.IMAGE_FORMAT : imgFormat;
+  if (engineSupportedFormat.includes(inputFormat)) {
+    if (inputFormat === IMAGE_FORMATS.URI) {
+      return new ImageObject(getImgUrl(info), IMAGE_FORMATS.URI);
+    }
 
-  if (imgFormat === IMAGE_FORMATS.URI) {
-    return new ImageObject(getImgUrl(info), IMAGE_FORMATS.URI);
-  }
+    if (inputFormat === IMAGE_FORMATS.BLOB) {
+      return await getBlob(info);
+    }
 
-  if (imgFormat === IMAGE_FORMATS.BLOB) {
+    if (inputFormat === IMAGE_FORMATS.B64) {
+      if (isBase64(info)) {
+        return new ImageObject(info, IMAGE_FORMATS.B64);
+      } else {
+        return await getLocalImageFromSourcePath(info, IMAGE_FORMATS.B64);
+      }
+      // TODO: local image
+    }
+  } else if (
+    inputFormat === IMAGE_FORMATS.URI &&
+    engineSupportedFormat.includes(IMAGE_FORMATS.BLOB)
+  ) {
     return await getBlob(info);
-  }
-
-  if (imgFormat === IMAGE_FORMATS.B64) {
+  } else if (
+    inputFormat === IMAGE_FORMATS.URI &&
+    engineSupportedFormat.includes(IMAGE_FORMATS.B64)
+  ) {
     if (isBase64(info)) {
       return new ImageObject(info, IMAGE_FORMATS.B64);
     } else {
@@ -566,7 +604,9 @@ const retrieveImgObjectForSearchEngine = async (info, searchEngineName) => {
       // else
       return await getLocalImageFromSourcePath(info, IMAGE_FORMATS.B64);
     }
-    // TODO: local image
+  } else {
+    // UNKNOW => LOCAL
+    return await getBlob(info);
   }
 
   throw new Error(
@@ -584,7 +624,6 @@ export const reverseImageSearch = async (
     info,
     searchEngineName,
   );
-
   if (searchEngineName === SEARCH_ENGINE_SETTINGS.DBKF_SEARCH.NAME) {
     if (
       imageObject.imageFormat !==
@@ -620,13 +659,18 @@ export const reverseImageSearch = async (
     }
   } else if (searchEngineName === SEARCH_ENGINE_SETTINGS.YANDEX_SEARCH.NAME) {
     if (
-      imageObject.imageFormat !==
+      imageObject.imageFormat ===
       SEARCH_ENGINE_SETTINGS.YANDEX_SEARCH.IMAGE_FORMAT
     ) {
+      reverseImageSearchYandexURI(imageObject.obj, isRequestFromContextMenu);
+    } else if (
+      imageObject.imageFormat ===
+      SEARCH_ENGINE_SETTINGS.YANDEX_SEARCH.IMAGE_FORMAT_LOCAL
+    ) {
+      reverseImageSearchYandex(imageObject.obj, isRequestFromContextMenu);
+    } else {
       throw new Error(`[reverseImageSearch] Error: invalid image format`);
     }
-
-    reverseImageSearchYandex(imageObject.obj, isRequestFromContextMenu);
   } else if (searchEngineName === SEARCH_ENGINE_SETTINGS.BAIDU_SEARCH.NAME) {
     if (
       imageObject.imageFormat !==
