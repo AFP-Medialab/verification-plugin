@@ -156,13 +156,6 @@ function contextClick(info) {
     case SEARCH_ENGINE_SETTINGS.BAIDU_SEARCH.CONTEXT_MENU_ID:
       reverseImageSearch(info, false, SEARCH_ENGINE_SETTINGS.BAIDU_SEARCH.NAME);
       break;
-    case SEARCH_ENGINE_SETTINGS.REDDIT_SEARCH.CONTEXT_MENU_ID:
-      reverseImageSearch(
-        info,
-        false,
-        SEARCH_ENGINE_SETTINGS.REDDIT_SEARCH.NAME,
-      );
-      break;
     default:
       break;
   }
@@ -250,11 +243,6 @@ chrome.runtime.onInstalled.addListener(() => {
   chrome.contextMenus.create({
     id: SEARCH_ENGINE_SETTINGS.BAIDU_SEARCH.CONTEXT_MENU_ID,
     title: SEARCH_ENGINE_SETTINGS.BAIDU_SEARCH.CONTEXT_MENU_TITLE,
-    contexts: ["image"],
-  });
-  chrome.contextMenus.create({
-    id: SEARCH_ENGINE_SETTINGS.REDDIT_SEARCH.CONTEXT_MENU_ID,
-    title: SEARCH_ENGINE_SETTINGS.REDDIT_SEARCH.CONTEXT_MENU_TITLE,
     contexts: ["image"],
   });
 });
