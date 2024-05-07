@@ -83,14 +83,10 @@ const PopUp = () => {
   return (
     <div className={classes.popUp}>
       <Grid container>
-        <Grid item xs={7} container alignItems="center" justifyContent="center">
-          <img
-            src={LogoInVidWeverify}
-            alt={LogoInVidWeverify}
-            style={{ width: "150px" }}
-          />
+        <Grid item xs={6} container alignItems="center" justifyContent="center">
+          <img src={LogoEuCom} alt={LogoEuCom} style={{ width: "100px" }} />
         </Grid>
-        <Grid item xs={5}>
+        <Grid item xs={6}>
           <img src={LogoVera} alt={LogoVera} style={{ width: "100px" }} />
         </Grid>
         <Box m={1} />
