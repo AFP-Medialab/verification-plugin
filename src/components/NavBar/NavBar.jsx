@@ -81,7 +81,7 @@ import AssistantIcon from "./images/SVG/Navbar/Assistant.svg";
 import GuideIcon from "./images/SVG/Navbar/Guide.svg";
 
 import LogoVera from "./images/SVG/Navbar/vera-logo_black.svg";
-import LogoInVidWeverify from "./images/SVG/Navbar/invid_weverify.svg";
+import LogoEuCom from "./images/SVG/NavBar/ep-logo.svg";
 
 import VideoIcon from "./images/SVG/Video/Video.svg";
 import ImageIcon from "./images/SVG/Image/Images.svg";
@@ -108,6 +108,7 @@ function a11yProps(index) {
     "aria-controls": `scrollable-force-tabpanel-${index}`,
   };
 }
+
 const NavBar = () => {
   const classes = useMyStyles();
   const navigate = useNavigate();
@@ -1530,11 +1531,11 @@ const NavBar = () => {
                   alignItems="center"
                   spacing={{ sm: 1, md: 2 }}
                 >
-                  <LogoInVidWeverify
+                  <LogoEuCom
                     style={{
                       height: "auto",
-                      minWidth: "96px",
-                      width: { sm: "96px", md: "96px" },
+                      minWidth: "48px",
+                      width: { sm: "48px", md: "80px" },
                     }}
                     alt="logo"
                     className={classes.logoLeft}
