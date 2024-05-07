@@ -4,8 +4,8 @@ import { useDispatch, useSelector } from "react-redux";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
-import weVerifyLogo from "../Shared/images/logo-we-verify.png";
-import invidLogo from "../Shared/images/InVID-logo.svg?url";
+import LogoVera from "../NavBar/images/SVG/Navbar/vera-logo_black.svg?url";
+import LogoInVidWeverify from "../NavBar/images/SVG/Navbar/invid_weverify.svg?url";
 
 import useMyStyles from "../Shared/MaterialUiStyles/useMyStyles";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
@@ -82,16 +82,17 @@ const PopUp = () => {
   return (
     <div className={classes.popUp}>
       <Grid container>
-        <Grid item xs={6}>
-          <img src={invidLogo} alt={invidLogo} style={{ width: "100px" }} />
-        </Grid>
-        <Grid item xs={6}>
+        <Grid item xs={7} container alignItems="center" justifyContent="center">
           <img
-            src={weVerifyLogo}
-            alt={weVerifyLogo}
-            style={{ width: "100px" }}
+            src={LogoInVidWeverify}
+            alt={LogoInVidWeverify}
+            style={{ width: "150px" }}
           />
         </Grid>
+        <Grid item xs={5}>
+          <img src={LogoVera} alt={LogoVera} style={{ width: "100px" }} />
+        </Grid>
+        <Box m={1} />
         <Grid item xs={12}>
           <Button
             variant="outlined"

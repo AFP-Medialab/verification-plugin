@@ -80,9 +80,8 @@ import AboutIcon from "./images/SVG/Navbar/About.svg";
 import AssistantIcon from "./images/SVG/Navbar/Assistant.svg";
 import GuideIcon from "./images/SVG/Navbar/Guide.svg";
 
-import LogoInvid2 from "./images/SVG/Navbar/InVID.svg";
-import LogoWeVerify2 from "./images/SVG/Navbar/WeVerify.svg";
 import LogoVera from "./images/SVG/Navbar/vera-logo_black.svg";
+import LogoInVidWeverify from "./images/SVG/Navbar/invid_weverify.svg";
 
 import VideoIcon from "./images/SVG/Video/Video.svg";
 import ImageIcon from "./images/SVG/Image/Images.svg";
@@ -1532,24 +1531,14 @@ const NavBar = () => {
                   alignItems="center"
                   spacing={{ sm: 1, md: 2 }}
                 >
-                  <LogoWeVerify2
+                  <LogoInVidWeverify
                     style={{
                       height: "auto",
-                      minWidth: "48px",
-                      width: { sm: "48px", md: "80px" },
+                      minWidth: "96px",
+                      width: { sm: "96px", md: "96px" },
                     }}
                     alt="logo"
                     className={classes.logoLeft}
-                    onClick={handleImageClick}
-                  />
-                  <LogoInvid2
-                    style={{
-                      height: "auto",
-                      minWidth: "48px",
-                      width: { sm: "48px", md: "80px" },
-                    }}
-                    alt="logo"
-                    className={classes.logoRight}
                     onClick={handleImageClick}
                   />
                   <LogoVera
