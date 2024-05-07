@@ -81,7 +81,7 @@ import AssistantIcon from "./images/SVG/Navbar/Assistant.svg";
 import GuideIcon from "./images/SVG/Navbar/Guide.svg";
 
 import LogoVera from "./images/SVG/Navbar/vera-logo_black.svg";
-import LogoEuCom from "./images/SVG/NavBar/ep-logo.svg";
+import LogoEuCom from "./images/SVG/Navbar/ep-logo.svg";
 
 import VideoIcon from "./images/SVG/Video/Video.svg";
 import ImageIcon from "./images/SVG/Image/Images.svg";
