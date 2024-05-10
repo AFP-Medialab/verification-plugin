@@ -526,6 +526,7 @@ function formatTelegramLink(url) {
 const decideWhetherToScrape = (urlType, contentType) => {
   switch (urlType) {
     case KNOWN_LINKS.YOUTUBE:
+    case KNOWN_LINKS.YOUTUBESHORTS:
     case KNOWN_LINKS.LIVELEAK:
     case KNOWN_LINKS.VIMEO:
     case KNOWN_LINKS.DAILYMOTION:
@@ -600,6 +601,7 @@ const filterAssistantResults = (
 
   switch (urlType) {
     case KNOWN_LINKS.YOUTUBE:
+    case KNOWN_LINKS.YOUTUBESHORTS:
     case KNOWN_LINKS.LIVELEAK:
     case KNOWN_LINKS.VIMEO:
     case KNOWN_LINKS.DAILYMOTION:

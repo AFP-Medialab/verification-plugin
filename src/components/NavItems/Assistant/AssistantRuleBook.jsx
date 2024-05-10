@@ -20,6 +20,7 @@ export const KNOWN_LINKS = {
   TIKTOK: "tiktok",
   TELEGRAM: "telegram",
   YOUTUBE: "youtube",
+  YOUTUBESHORTS: "youtubeshorts",
   DAILYMOTION: "dailymotion",
   LIVELEAK: "liveleak",
   VIMEO: "vimeo",
@@ -68,6 +69,12 @@ export const KNOWN_LINK_PATTERNS = [
     key: KNOWN_LINKS.YOUTUBE,
     patterns: [
       "(https?:\\/{2})?(www.)?((youtube.com\\/watch\\?v=)|youtu.be\\/)([a-zA-Z0-9_-]{11})",
+    ],
+  },
+  {
+    key: KNOWN_LINKS.YOUTUBESHORTS,
+    patterns: [
+      "(https?:\\/{2})?(www.)?((youtube.com\\/shorts\\/))([a-zA-Z0-9_-]{11})",
     ],
   },
   {
@@ -131,6 +138,7 @@ export const ASSISTANT_ACTIONS = [
       KNOWN_LINKS.DAILYMOTION,
       KNOWN_LINKS.VIMEO,
       KNOWN_LINKS.YOUTUBE,
+      KNOWN_LINKS.YOUTUBESHORTS,
       KNOWN_LINKS.LIVELEAK,
       KNOWN_LINKS.OWN,
       KNOWN_LINKS.TELEGRAM,
@@ -218,14 +226,14 @@ export const ASSISTANT_ACTIONS = [
 
 export const selectCorrectActions = (
   contentType,
-  inputUrlTYpe,
+  inputUrlType,
   processUrlType,
   processUrl,
 ) => {
   let possibleActions = ASSISTANT_ACTIONS.filter(
     (action) =>
       ((action.useInputUrl &&
-        action.linksAccepted.includes(inputUrlTYpe) &&
+        action.linksAccepted.includes(inputUrlType) &&
         action.cTypes.includes(contentType)) ||
         (!action.useInputUrl &&
           action.linksAccepted.includes(processUrlType) &&
