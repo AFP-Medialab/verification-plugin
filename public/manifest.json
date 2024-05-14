@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Fake news debunker by InVID & WeVerify",
-  "version": "0.79.1",
+  "version": "0.80",
   "description": "InVID WeVerify extension",
   "short_name": "Verification Plugin",
   "action": {
