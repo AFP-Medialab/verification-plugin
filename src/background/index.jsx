@@ -2,11 +2,11 @@ import { trackEvent } from "../components/Shared/GoogleAnalytics/MatomoAnalytics
 import {
   SEARCH_ENGINE_SETTINGS,
   reverseImageSearch,
-  getImgUrl,
   reverseImageSearchAll,
   openTabs,
 } from "../components/Shared/ReverseSearch/reverseSearchUtils";
 
+import { getImgUrl } from "components/Shared/ReverseSearch/utils/searchUtils";
 const page_name = "popup.html";
 
 const mediaAssistant = (info) => {
@@ -126,9 +126,6 @@ function contextClick(info) {
     case SEARCH_ENGINE_SETTINGS.DBKF_SEARCH.CONTEXT_MENU_ID:
       reverseImageSearch(info, false, SEARCH_ENGINE_SETTINGS.DBKF_SEARCH.NAME);
       break;
-    case SEARCH_ENGINE_SETTINGS.GOOGLE_SEARCH.CONTEXT_MENU_ID:
-      reverseImageSearch(info, true, SEARCH_ENGINE_SETTINGS.GOOGLE_SEARCH.NAME);
-      break;
     case SEARCH_ENGINE_SETTINGS.GOOGLE_LENS_SEARCH.CONTEXT_MENU_ID:
       reverseImageSearch(
         info,
@@ -213,11 +210,6 @@ chrome.runtime.onInstalled.addListener(() => {
   chrome.contextMenus.create({
     id: SEARCH_ENGINE_SETTINGS.DBKF_SEARCH.CONTEXT_MENU_ID,
     title: SEARCH_ENGINE_SETTINGS.DBKF_SEARCH.CONTEXT_MENU_TITLE,
-    contexts: ["image"],
-  });
-  chrome.contextMenus.create({
-    id: SEARCH_ENGINE_SETTINGS.GOOGLE_SEARCH.CONTEXT_MENU_ID,
-    title: SEARCH_ENGINE_SETTINGS.GOOGLE_SEARCH.CONTEXT_MENU_TITLE,
     contexts: ["image"],
   });
   chrome.contextMenus.create({
