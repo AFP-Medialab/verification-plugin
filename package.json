@@ -1,13 +1,12 @@
 {
   "name": "weverify-plugin",
-  "version": "0.79.1",
+  "version": "0.80",
   "description": "",
   "main": "index.js",
   "scripts": {
     "srv_dev": "webpack serve --config webpack.dev.js",
     "dev": "webpack --watch --config webpack.dev.js",
     "build": "webpack --config webpack.prod.js",
-    "cypress:open": "concurrently --kill-others 'npm run srv_dev' 'cypress open'",
     "prepare": "husky install",
     "test": "test-ct && test-e2e",
     "test-cu": "rm -rf playwright/.cache && playwright test -c playwright-ct.config.js",
