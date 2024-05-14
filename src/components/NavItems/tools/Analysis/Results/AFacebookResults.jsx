@@ -174,7 +174,7 @@ const AFacebookResults = (props) => {
                   color={"primary"}
                   onClick={async () =>
                     await reverseSearch(
-                      SEARCH_ENGINE_SETTINGS.GOOGLE_SEARCH.NAME,
+                      SEARCH_ENGINE_SETTINGS.GOOGLE_LENS_SEARCH.NAME,
                     )
                   }
                 >

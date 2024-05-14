@@ -446,7 +446,9 @@ const TwitterResults = (props) => {
                     variant="contained"
                     color={"primary"}
                     onClick={() =>
-                      reverseSearch(SEARCH_ENGINE_SETTINGS.GOOGLE_SEARCH.NAME)
+                      reverseSearch(
+                        SEARCH_ENGINE_SETTINGS.GOOGLE_LENS_SEARCH.NAME,
+                      )
                     }
                   >
                     {keyword("button_reverse_google")}

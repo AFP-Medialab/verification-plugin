@@ -221,23 +221,6 @@ const ImageResult = ({ handleCloseResults }) => {
           spacing={3}
         >
           {/* TODO: Iterate through the search engine settings variable instead // get rid of isURL ternary operators */}
-          <Grid item>
-            <Button
-              color="primary"
-              variant="contained"
-              onClick={() =>
-                handleClick(
-                  resultImage,
-                  isImageUrl,
-                  SEARCH_ENGINE_SETTINGS.GOOGLE_SEARCH.NAME,
-                )
-              }
-            >
-              {`${SEARCH_ENGINE_SETTINGS.GOOGLE_SEARCH.NAME} ${keyword(
-                "reverse_search",
-              )}`}
-            </Button>
-          </Grid>
           {isImageUrl ? (
             <Grid item>
               <Button

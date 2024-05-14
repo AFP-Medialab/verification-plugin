@@ -74,7 +74,7 @@ const Thumbnails = () => {
     let selectedList = {};
 
     for (const searchEngine of Object.values(SEARCH_ENGINE_SETTINGS)) {
-      if (searchEngine.NAME === SEARCH_ENGINE_SETTINGS.GOOGLE_SEARCH.NAME)
+      if (searchEngine.NAME === SEARCH_ENGINE_SETTINGS.GOOGLE_LENS_SEARCH.NAME)
         selectedList[searchEngine.NAME] = true;
       else selectedList[searchEngine.NAME] = false;
     }
