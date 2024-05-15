@@ -15,13 +15,13 @@ import {
   reverseImageSearchYandexURI,
   reverseImageSearchYandex,
 } from "./engines/yandex";
-import { reverseImageSearchGoogle } from "./engines/google";
 import {
   reverseImageSearchBingURI,
   reverseImageSearchBing,
 } from "./engines/bing";
 import { reverseImageSearchTineye } from "./engines/tineye";
 import { ImageObject, IMAGE_FORMATS } from "./utils/searchUtils";
+import { reverseImageSearchGoogleFactCheck } from "./engines/google-factcheck";
 
 export const SEARCH_ENGINE_SETTINGS = {
   // To open all search engines at once
@@ -44,7 +44,6 @@ export const SEARCH_ENGINE_SETTINGS = {
     CONTEXT_MENU_TITLE: "Image Reverse Search - Google Lens",
     URI: `https://lens.google.com/upload?ep=ccm&s=&st=${Date.now()}`,
     IMAGE_FORMAT: IMAGE_FORMATS.URI,
-    IMAGE_FORMAT_LOCAL: IMAGE_FORMATS.BLOB,
     SUPPORTED_IMAGE_FORMAT: [
       IMAGE_FORMATS.URI,
       IMAGE_FORMATS.BLOB,
@@ -65,7 +64,6 @@ export const SEARCH_ENGINE_SETTINGS = {
     CONTEXT_MENU_TITLE: "Image Reverse Search - Yandex",
     URI: 'https://yandex.com/images/touch/search?rpt=imageview&format=json&request={"blocks":[{"block":"cbir-uploader__get-cbir-id"}]}',
     IMAGE_FORMAT: IMAGE_FORMATS.URI,
-    IMAGE_FORMAT_LOCAL: IMAGE_FORMATS.BLOB,
     SUPPORTED_IMAGE_FORMAT: [
       IMAGE_FORMATS.URI,
       IMAGE_FORMATS.BLOB,
@@ -80,7 +78,6 @@ export const SEARCH_ENGINE_SETTINGS = {
     URI_LOCAL:
       "https://www.bing.com/images/search?view=detailv2&iss=sbiupload&FORM=SBIHMP&sbifnm=weverify-local-file",
     IMAGE_FORMAT: IMAGE_FORMATS.URI,
-    IMAGE_FORMAT_LOCAL: IMAGE_FORMATS.B64,
     SUPPORTED_IMAGE_FORMAT: [
       IMAGE_FORMATS.URI,
       IMAGE_FORMATS.B64,
@@ -93,6 +90,13 @@ export const SEARCH_ENGINE_SETTINGS = {
     CONTEXT_MENU_ID: "reverse_search_tineye",
     CONTEXT_MENU_TITLE: "Image Reverse Search - Tineye",
     URI: "https://www.tineye.com/search?url=",
+    IMAGE_FORMAT: IMAGE_FORMATS.URI,
+    SUPPORTED_IMAGE_FORMAT: [IMAGE_FORMATS.URI],
+  },
+  GOOGLE_FACT_CHECK: {
+    NAME: "Google Fact Check",
+    CONTEXT_MENU_ID: "reverse_google_factcheck",
+    CONTEXT_MENU_TITLE: "Image Reverse Search - Google Factcheck",
     IMAGE_FORMAT: IMAGE_FORMATS.URI,
     SUPPORTED_IMAGE_FORMAT: [IMAGE_FORMATS.URI],
   },
@@ -274,7 +278,6 @@ export const reverseImageSearch = async (
 
     reverseImageSearchBaidu(imageObject.obj, isRequestFromContextMenu);
   } else if (searchEngineName === SEARCH_ENGINE_SETTINGS.BING_SEARCH.NAME) {
-    console.log(" BING imageObject ", imageObject);
     if (
       SEARCH_ENGINE_SETTINGS.BING_SEARCH.SUPPORTED_IMAGE_FORMAT.includes(
         imageObject.imageFormat,
@@ -297,6 +300,20 @@ export const reverseImageSearch = async (
     }
 
     reverseImageSearchTineye(imageObject.obj, isRequestFromContextMenu);
+  } else if (
+    searchEngineName === SEARCH_ENGINE_SETTINGS.GOOGLE_FACT_CHECK.NAME
+  ) {
+    if (
+      imageObject.imageFormat !==
+      SEARCH_ENGINE_SETTINGS.GOOGLE_FACT_CHECK.IMAGE_FORMAT
+    ) {
+      throw new Error(`[reverseImageSearch] Error: invalid image format`);
+    }
+
+    reverseImageSearchGoogleFactCheck(
+      imageObject.obj,
+      isRequestFromContextMenu,
+    );
   } else {
     throw new Error("[reverseImageSearch] Error: Search Engine not supported");
   }
