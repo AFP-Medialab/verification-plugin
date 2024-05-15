@@ -29,6 +29,7 @@ import {
   SEARCH_ENGINE_SETTINGS,
   reverseImageSearch,
 } from "../../../../Shared/ReverseSearch/reverseSearchUtils";
+import { ReverseSearchButtons } from "./ReverseSearch";
 
 const TwitterResults = (props) => {
   const classes = useMyStyles();
@@ -441,38 +442,12 @@ const TwitterResults = (props) => {
                     />
                   </div>
                   <Box m={2} />
-                  <Button
-                    className={classes.button}
-                    variant="contained"
-                    color={"primary"}
-                    onClick={() =>
-                      reverseSearch(
-                        SEARCH_ENGINE_SETTINGS.GOOGLE_LENS_SEARCH.NAME,
-                      )
-                    }
-                  >
-                    {keyword("button_reverse_google")}
-                  </Button>
-                  <Button
-                    className={classes.button}
-                    variant="contained"
-                    color={"primary"}
-                    onClick={() =>
-                      reverseSearch(SEARCH_ENGINE_SETTINGS.YANDEX_SEARCH.NAME)
-                    }
-                  >
-                    {keyword("button_reverse_yandex")}
-                  </Button>
-                  <Button
-                    className={classes.button}
-                    variant="contained"
-                    color={"primary"}
-                    onClick={() =>
-                      reverseSearch(SEARCH_ENGINE_SETTINGS.TINEYE_SEARCH.NAME)
-                    }
-                  >
-                    {keyword("button_reverse_tineye")}
-                  </Button>
+                  <ReverseSearchButtons
+                    keyword={keyword}
+                    reverseSearch={reverseSearch}
+                    report={report}
+                    disableTwitter={true}
+                  />
                 </div>
               )}
             </div>

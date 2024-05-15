@@ -1,10 +1,25 @@
-import { openNewTabWithUrl } from "../reverseSearchUtils";
+import { openNewTabWithUrl } from "../utils/openTabUtils";
 import {
   IMAGE_FORMATS,
   isBase64,
   getLocalImageFromSourcePath,
 } from "../utils/searchUtils";
 
+export const bingReverseSearch = (imageObject, isRequestFromContextMenu) => {
+  switch (imageObject.imageFormat) {
+    case IMAGE_FORMATS.URI:
+      reverseImageSearchBingURI(imageObject.obj, isRequestFromContextMenu);
+      break;
+    case IMAGE_FORMATS.BLOB:
+    case IMAGE_FORMATS.B64:
+      reverseImageSearchBing(imageObject.obj, isRequestFromContextMenu);
+      break;
+    default:
+      throw new Error(
+        `[reverseImageSearchBing] Error: invalid image format ${imageObject.imageFormat}`,
+      );
+  }
+};
 export const reverseImageSearchBingURI = async (
   url,
   isRequestFromContextMenu = true,

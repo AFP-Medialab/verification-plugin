@@ -3,10 +3,10 @@ import {
   SEARCH_ENGINE_SETTINGS,
   reverseImageSearch,
   reverseImageSearchAll,
-  openTabs,
 } from "../components/Shared/ReverseSearch/reverseSearchUtils";
-
+import { openTabs } from "components/Shared/ReverseSearch/utils/openTabUtils";
 import { getImgUrl } from "components/Shared/ReverseSearch/utils/searchUtils";
+
 const page_name = "popup.html";
 
 const mediaAssistant = (info) => {
@@ -218,6 +218,7 @@ chrome.runtime.onInstalled.addListener(() => {
     id: SEARCH_ENGINE_SETTINGS.DBKF_SEARCH.CONTEXT_MENU_ID,
     title: SEARCH_ENGINE_SETTINGS.DBKF_SEARCH.CONTEXT_MENU_TITLE,
     contexts: ["image"],
+    targetUrlPatterns: ["http://*:*/*", "https://*:*/*"],
   });
   chrome.contextMenus.create({
     id: SEARCH_ENGINE_SETTINGS.GOOGLE_LENS_SEARCH.CONTEXT_MENU_ID,
@@ -233,11 +234,13 @@ chrome.runtime.onInstalled.addListener(() => {
     id: SEARCH_ENGINE_SETTINGS.BING_SEARCH.CONTEXT_MENU_ID,
     title: SEARCH_ENGINE_SETTINGS.BING_SEARCH.CONTEXT_MENU_TITLE,
     contexts: ["image"],
+    targetUrlPatterns: ["http://*:*/*", "https://*:*/*"],
   });
   chrome.contextMenus.create({
     id: SEARCH_ENGINE_SETTINGS.TINEYE_SEARCH.CONTEXT_MENU_ID,
     title: SEARCH_ENGINE_SETTINGS.TINEYE_SEARCH.CONTEXT_MENU_TITLE,
     contexts: ["image"],
+    targetUrlPatterns: ["http://*:*/*", "https://*:*/*"],
   });
   chrome.contextMenus.create({
     id: SEARCH_ENGINE_SETTINGS.BAIDU_SEARCH.CONTEXT_MENU_ID,

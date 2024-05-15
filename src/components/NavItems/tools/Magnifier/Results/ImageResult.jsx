@@ -246,7 +246,7 @@ const ImageResult = ({ handleCloseResults }) => {
               variant="contained"
               onClick={() =>
                 handleClick(
-                  resultImage,
+                  isImageUrl ? original : resultImage,
                   isImageUrl,
                   SEARCH_ENGINE_SETTINGS.YANDEX_SEARCH.NAME,
                 )
@@ -263,7 +263,7 @@ const ImageResult = ({ handleCloseResults }) => {
               variant="contained"
               onClick={() =>
                 handleClick(
-                  resultImage,
+                  isImageUrl ? original : resultImage,
                   isImageUrl,
                   SEARCH_ENGINE_SETTINGS.GOOGLE_LENS_SEARCH.NAME,
                 )
@@ -280,7 +280,7 @@ const ImageResult = ({ handleCloseResults }) => {
               variant="contained"
               onClick={() =>
                 handleClick(
-                  resultImage,
+                  isImageUrl ? original : resultImage,
                   isImageUrl,
                   SEARCH_ENGINE_SETTINGS.BAIDU_SEARCH.NAME,
                 )
@@ -312,6 +312,23 @@ const ImageResult = ({ handleCloseResults }) => {
               </Grid>
             </>
           ) : null}
+          <Grid item>
+            <Button
+              color="primary"
+              variant="contained"
+              onClick={() =>
+                handleClick(
+                  isImageUrl ? original : resultImage,
+                  isImageUrl,
+                  SEARCH_ENGINE_SETTINGS.GOOGLE_FACT_CHECK.NAME,
+                )
+              }
+            >
+              {`${SEARCH_ENGINE_SETTINGS.GOOGLE_FACT_CHECK.NAME} ${keyword(
+                "reverse_search",
+              )}`}
+            </Button>
+          </Grid>
         </Grid>
       </div>
     </Card>

@@ -1,4 +1,23 @@
-import { openNewTabWithUrl } from "../reverseSearchUtils";
+import { openNewTabWithUrl } from "../utils/openTabUtils";
+import { IMAGE_FORMATS } from "../utils/searchUtils";
+
+export const googleLensReversearch = (
+  imageObject,
+  isRequestFromContextMenu,
+) => {
+  switch (imageObject.imageFormat) {
+    case IMAGE_FORMATS.URI:
+      reverseRemoteGoogleLens(imageObject.obj, isRequestFromContextMenu);
+      break;
+    case IMAGE_FORMATS.BLOB:
+      reverseImageSearchGoogleLens(imageObject.obj, isRequestFromContextMenu);
+      break;
+    default:
+      throw new Error(
+        `[reverseImageSearchGoogleLens] Error: invalid image format  ${imageObject.imageFormat}`,
+      );
+  }
+};
 
 export const reverseRemoteGoogleLens = (
   url,

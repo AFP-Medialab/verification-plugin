@@ -1,4 +1,20 @@
-import { openNewTabWithUrl } from "../reverseSearchUtils";
+import { openNewTabWithUrl } from "../utils/openTabUtils";
+import { IMAGE_FORMATS } from "../utils/searchUtils";
+
+export const yandexReverseSearch = (imageObject, isRequestFromContextMenu) => {
+  switch (imageObject.imageFormat) {
+    case IMAGE_FORMATS.URI:
+      reverseImageSearchYandexURI(imageObject.obj, isRequestFromContextMenu);
+      break;
+    case IMAGE_FORMATS.BLOB:
+      reverseImageSearchYandex(imageObject.obj, isRequestFromContextMenu);
+      break;
+    default:
+      throw new Error(
+        `[reverseImageSearchYandex] Error: invalid image format  ${imageObject.imageFormat}`,
+      );
+  }
+};
 
 export const reverseImageSearchYandexURI = (
   imgUrl,

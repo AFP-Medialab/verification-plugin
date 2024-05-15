@@ -1,15 +1,24 @@
-import {
-  openNewTabWithUrl,
-  SEARCH_ENGINE_SETTINGS,
-} from "../reverseSearchUtils";
+import { openNewTabWithUrl } from "../utils/openTabUtils";
+import { IMAGE_FORMATS } from "../utils/searchUtils";
+
+export const tineyeReverseSearch = (imageObject, isRequestFromContextMenu) => {
+  switch (imageObject.imageFormat) {
+    case IMAGE_FORMATS.URI:
+      reverseImageSearchTineye(imageObject.obj, isRequestFromContextMenu);
+      break;
+    default:
+      throw new Error(
+        `[reverseImageSearchTineye] Error: invalid image format  ${imageObject.imageFormat}`,
+      );
+  }
+};
 
 export const reverseImageSearchTineye = (
   imageUrl,
   isRequestFromContextMenu = true,
 ) => {
   const urlObject = {
-    url:
-      SEARCH_ENGINE_SETTINGS.TINEYE_SEARCH.URI + encodeURIComponent(imageUrl),
+    url: "https://www.tineye.com/search?url=" + encodeURIComponent(imageUrl),
   };
 
   openNewTabWithUrl(urlObject, isRequestFromContextMenu);

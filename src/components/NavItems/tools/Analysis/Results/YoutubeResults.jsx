@@ -28,6 +28,7 @@ import {
   SEARCH_ENGINE_SETTINGS,
   reverseImageSearch,
 } from "../../../../Shared/ReverseSearch/reverseSearchUtils";
+import { ReverseSearchButtons } from "./ReverseSearch";
 
 const YoutubeResults = (props) => {
   const classes = useMyStyles();
@@ -232,58 +233,11 @@ const YoutubeResults = (props) => {
                   <Box m={2} />
 
                   {/* TODO: Loop through all search engines */}
-
-                  <Button
-                    className={classes.button}
-                    variant="contained"
-                    color={"primary"}
-                    onClick={async () =>
-                      await reverseSearch(
-                        SEARCH_ENGINE_SETTINGS.GOOGLE_LENS_SEARCH.NAME,
-                      )
-                    }
-                  >
-                    {keyword("button_reverse_google")}
-                  </Button>
-                  <Button
-                    className={classes.button}
-                    variant="contained"
-                    color={"primary"}
-                    onClick={async () =>
-                      await reverseSearch(
-                        SEARCH_ENGINE_SETTINGS.YANDEX_SEARCH.NAME,
-                      )
-                    }
-                  >
-                    {keyword("button_reverse_yandex")}
-                  </Button>
-                  <Button
-                    className={classes.button}
-                    variant="contained"
-                    color={"primary"}
-                    onClick={async () =>
-                      await reverseSearch(
-                        SEARCH_ENGINE_SETTINGS.TINEYE_SEARCH.NAME,
-                      )
-                    }
-                  >
-                    {keyword("button_reverse_tineye")}
-                  </Button>
-                  {report["verification_cues"] &&
-                    report["verification_cues"]["twitter_search_url"] && (
-                      <Button
-                        className={classes.button}
-                        variant="contained"
-                        color={"primary"}
-                        onClick={() =>
-                          window.open(
-                            report["verification_cues"]["twitter_search_url"],
-                          )
-                        }
-                      >
-                        {keyword("button_reverse_twitter")}
-                      </Button>
-                    )}
+                  <ReverseSearchButtons
+                    keyword={keyword}
+                    reverseSearch={reverseSearch}
+                    report={report}
+                  />
                 </div>
               )}
             </div>
