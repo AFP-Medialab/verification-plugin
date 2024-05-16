@@ -235,6 +235,16 @@ const SyntheticImageDetectionResults = (props) => {
     const floor = Math.floor(percentage);
     return floor === 0 ? 1 : floor;
   };
+  const [detailsPanelMessage, setDetailsPanelMessage] = useState(
+    "synthetic_image_detection_additional_results_hide",
+  );
+  const handleDetailsChange = () => {
+    detailsPanelMessage === "synthetic_image_detection_additional_results_hide"
+      ? setDetailsPanelMessage("synthetic_image_detection_additional_results")
+      : setDetailsPanelMessage(
+          "synthetic_image_detection_additional_results_hide",
+        );
+  };
 
   return (
     <Stack
@@ -350,13 +360,9 @@ const SyntheticImageDetectionResults = (props) => {
                   </Alert>
                 )}
                 <Box sx={{ width: "100%" }}>
-                  <Accordion>
+                  <Accordion defaultExpanded onChange={handleDetailsChange}>
                     <AccordionSummary expandIcon={<ExpandMore />}>
-                      <Typography>
-                        {keyword(
-                          "synthetic_image_detection_additional_results",
-                        )}
-                      </Typography>
+                      <Typography>{keyword(detailsPanelMessage)}</Typography>
                     </AccordionSummary>
                     <AccordionDetails>
                       <Stack direction={"column"} spacing={4}>
