@@ -8,7 +8,7 @@ const Loop = (props) => {
         {
           <ImageMagnifier
             src={props.src}
-            zoomLevel={"2"}
+            zoomLevel={2}
             magnifieWidth={200}
             magnifierHeight={200}
           />

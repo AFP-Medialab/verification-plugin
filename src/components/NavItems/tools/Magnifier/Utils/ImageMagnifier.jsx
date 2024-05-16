@@ -3,11 +3,11 @@ import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 
 export const ImageMagnifier = ({
   src,
-  width,
-  height,
-  zoomLevel,
-  magnifieWidth,
-  magnifierHeight,
+  width = "100%",
+  height = "auto",
+  zoomLevel = 1.5,
+  magnifieWidth = 150,
+  magnifierHeight = 150,
 }) => {
   const [showMagnifier, setShowMagnifier] = useState(false);
   const [[x, y], setXY] = useState([0, 0]);
@@ -80,13 +80,4 @@ export const ImageMagnifier = ({
       ></div>
     </div>
   );
-};
-
-ImageMagnifier.defaultProps = {
-  src: "",
-  width: "100%",
-  height: "auto",
-  zoomLevel: 1.5,
-  magnifieWidth: 150,
-  magnifierHeight: 150,
 };
