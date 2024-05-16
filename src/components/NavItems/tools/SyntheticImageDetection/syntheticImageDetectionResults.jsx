@@ -183,15 +183,16 @@ const SyntheticImageDetectionResults = (props) => {
   const handleClose = () => {
     props.handleClose();
   };
-
-  const SYNTHETIC_IMAGE_DETECTION_THRESHOLD_1 = 50;
-  const SYNTHETIC_IMAGE_DETECTION_THRESHOLD_2 = 70;
-  const SYNTHETIC_IMAGE_DETECTION_THRESHOLD_3 = 90;
+  const DETECTION_THRESHOLDS = {
+    THRESHOLD_1: 50,
+    THRESHOLD_2: 70,
+    THRESHOLD_3: 90,
+  };
 
   const getPercentageColorCode = (n) => {
-    if (n >= SYNTHETIC_IMAGE_DETECTION_THRESHOLD_3) {
+    if (n >= DETECTION_THRESHOLDS.THRESHOLD_3) {
       return "#FF0000";
-    } else if (n >= SYNTHETIC_IMAGE_DETECTION_THRESHOLD_2) {
+    } else if (n >= DETECTION_THRESHOLDS.THRESHOLD_2) {
       return "#FFAA00";
     } else {
       return "green";
@@ -204,9 +205,9 @@ const SyntheticImageDetectionResults = (props) => {
    * @returns {"error" | "warning" | "success"}
    */
   const getAlertColor = (n) => {
-    if (n >= SYNTHETIC_IMAGE_DETECTION_THRESHOLD_3) {
+    if (n >= DETECTION_THRESHOLDS.THRESHOLD_3) {
       return "error";
-    } else if (n >= SYNTHETIC_IMAGE_DETECTION_THRESHOLD_2) {
+    } else if (n >= DETECTION_THRESHOLDS.THRESHOLD_2) {
       return "warning";
     } else {
       return "success";
@@ -214,11 +215,11 @@ const SyntheticImageDetectionResults = (props) => {
   };
 
   const getAlertLabel = (n) => {
-    if (n >= SYNTHETIC_IMAGE_DETECTION_THRESHOLD_3) {
+    if (n >= DETECTION_THRESHOLDS.THRESHOLD_3) {
       return keyword("synthetic_image_detection_alert_label_4");
-    } else if (n >= SYNTHETIC_IMAGE_DETECTION_THRESHOLD_2) {
+    } else if (n >= DETECTION_THRESHOLDS.THRESHOLD_2) {
       return keyword("synthetic_image_detection_alert_label_3");
-    } else if (n >= SYNTHETIC_IMAGE_DETECTION_THRESHOLD_1) {
+    } else if (n >= DETECTION_THRESHOLDS.THRESHOLD_1) {
       return keyword("synthetic_image_detection_alert_label_2");
     } else {
       return keyword("synthetic_image_detection_alert_label_1");
@@ -306,14 +307,14 @@ const SyntheticImageDetectionResults = (props) => {
                     nrOfLevels={4}
                     textColor={"black"}
                     arcsLength={[
-                      (100 - SYNTHETIC_IMAGE_DETECTION_THRESHOLD_1) / 100,
-                      (SYNTHETIC_IMAGE_DETECTION_THRESHOLD_2 -
-                        SYNTHETIC_IMAGE_DETECTION_THRESHOLD_1) /
+                      (100 - DETECTION_THRESHOLDS.THRESHOLD_1) / 100,
+                      (DETECTION_THRESHOLDS.THRESHOLD_2 -
+                        DETECTION_THRESHOLDS.THRESHOLD_1) /
                         100,
-                      (SYNTHETIC_IMAGE_DETECTION_THRESHOLD_3 -
-                        SYNTHETIC_IMAGE_DETECTION_THRESHOLD_2) /
+                      (DETECTION_THRESHOLDS.THRESHOLD_3 -
+                        DETECTION_THRESHOLDS.THRESHOLD_2) /
                         100,
-                      (100 - SYNTHETIC_IMAGE_DETECTION_THRESHOLD_3) / 100,
+                      (100 - DETECTION_THRESHOLDS.THRESHOLD_3) / 100,
                     ]}
                     percent={syntheticImageScores ? maxScore / 100 : 0}
                     style={{ width: 250 }}
@@ -336,6 +337,7 @@ const SyntheticImageDetectionResults = (props) => {
                   score={syntheticImageScores ? maxScore : 0}
                   detectionType={undefined}
                   toolName={"SyntheticImageDetection"}
+                  thresholds={DETECTION_THRESHOLDS}
                 />
                 <Typography>
                   {keyword(
