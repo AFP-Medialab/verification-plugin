@@ -114,7 +114,7 @@ const Thumbnails = () => {
 
   const get_images = (url) => {
     let video_id = getYtIdFromUrlString(url);
-    let img_url = "http://img.youtube.com/vi/%s/%d.jpg";
+    let img_url = "https://img.youtube.com/vi/%s/%d.jpg";
     let img_arr = [];
     for (let count = 0; count < 4; count++) {
       img_arr.push(img_url.replace("%s", video_id).replace("%d", count));
