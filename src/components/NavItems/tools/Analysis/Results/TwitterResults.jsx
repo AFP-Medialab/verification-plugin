@@ -26,7 +26,7 @@ import {
 import ImageUrlGridList from "../../../../Shared/ImageGridList/ImageUrlGridList";
 import AnalysisComments from "./AnalysisComments";
 import { reverseImageSearch } from "../../../../Shared/ReverseSearch/reverseSearchUtils";
-import { ReverseSearchButtons } from "./ReverseSearch";
+import { ReverseSearchButtons } from "../../../../Shared/ReverseSearch/ReverseSearchButtons";
 
 const TwitterResults = (props) => {
   const classes = useMyStyles();
@@ -439,12 +439,7 @@ const TwitterResults = (props) => {
                     />
                   </div>
                   <Box m={2} />
-                  <ReverseSearchButtons
-                    keyword={keyword}
-                    reverseSearch={reverseSearch}
-                    report={report}
-                    disableTwitter={true}
-                  />
+                  <ReverseSearchButtons reverseSearch={reverseSearch} />
                 </div>
               )}
             </div>

@@ -8,7 +8,7 @@ import TableBody from "@mui/material/TableBody";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
 import Button from "@mui/material/Button";
-import { IconButton } from "@mui/material";
+import { Grid, IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 import OnClickInfo from "../../../../Shared/OnClickInfo/OnClickInfo";
@@ -25,7 +25,7 @@ import {
 import ImageUrlGridList from "../../../../Shared/ImageGridList/ImageUrlGridList";
 import AnalysisComments from "./AnalysisComments";
 import { reverseImageSearch } from "../../../../Shared/ReverseSearch/reverseSearchUtils";
-import { ReverseSearchButtons } from "./ReverseSearch";
+import { ReverseSearchButtons } from "../../../../Shared/ReverseSearch/ReverseSearchButtons";
 
 const YoutubeResults = (props) => {
   const classes = useMyStyles();
@@ -228,13 +228,27 @@ const YoutubeResults = (props) => {
                     />
                   </div>
                   <Box m={2} />
-
-                  {/* TODO: Loop through all search engines */}
-                  <ReverseSearchButtons
-                    keyword={keyword}
-                    reverseSearch={reverseSearch}
-                    report={report}
-                  />
+                  <ReverseSearchButtons reverseSearch={reverseSearch}>
+                    {report["verification_cues"] &&
+                      report["verification_cues"]["twitter_search_url"] && (
+                        <Grid item>
+                          <Button
+                            className={classes.button}
+                            variant="contained"
+                            color={"primary"}
+                            onClick={() =>
+                              window.open(
+                                report["verification_cues"][
+                                  "twitter_search_url"
+                                ],
+                              )
+                            }
+                          >
+                            {keyword("button_reverse_twitter")}
+                          </Button>
+                        </Grid>
+                      )}
+                  </ReverseSearchButtons>
                 </div>
               )}
             </div>

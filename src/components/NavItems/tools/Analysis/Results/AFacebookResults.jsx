@@ -17,7 +17,7 @@ import { submissionEvent } from "../../../../Shared/GoogleAnalytics/GoogleAnalyt
 import _ from "lodash";
 import AnalysisComments from "./AnalysisComments";
 import { reverseImageSearch } from "../../../../Shared/ReverseSearch/reverseSearchUtils";
-import { ReverseSearchButtons } from "./ReverseSearch";
+import { ReverseSearchButtons } from "../../../../Shared/ReverseSearch/ReverseSearchButtons";
 
 const AFacebookResults = (props) => {
   const cleanAnalysisState = props.cleanAnalysisState;
@@ -166,11 +166,25 @@ const AFacebookResults = (props) => {
                   />
                 </div>
                 <Box m={2} />
-                <ReverseSearchButtons
-                  keyword={keyword}
-                  reverseSearch={reverseSearch}
-                  report={report}
-                />
+                <ReverseSearchButtons reverseSearch={reverseSearch}>
+                  {report["verification_cues"] &&
+                    report["verification_cues"]["twitter_search_url"] && (
+                      <Grid item>
+                        <Button
+                          className={classes.button}
+                          variant="contained"
+                          color={"primary"}
+                          onClick={() =>
+                            window.open(
+                              report["verification_cues"]["twitter_search_url"],
+                            )
+                          }
+                        >
+                          {keyword("button_reverse_twitter")}
+                        </Button>
+                      </Grid>
+                    )}
+                </ReverseSearchButtons>
               </div>
             )}
           </div>
