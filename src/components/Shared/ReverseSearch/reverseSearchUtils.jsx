@@ -121,7 +121,8 @@ const retrieveImgObjectForSearchEngine = async (info, searchEngineName) => {
   if (info && info.srcUrl) {
     //info is object
     let srcURL = info.srcUrl;
-    if (srcURL.startsWith("file")) inputFormat = IMAGE_FORMATS.LOCAL;
+    if (srcURL.startsWith("file") || srcURL.startsWith("data:"))
+      inputFormat = IMAGE_FORMATS.LOCAL;
     else inputFormat = IMAGE_FORMATS.URI;
   } else if (typeof info === "string") {
     //is String
