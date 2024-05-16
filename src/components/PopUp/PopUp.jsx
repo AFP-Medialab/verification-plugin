@@ -7,7 +7,6 @@ import Grid from "@mui/material/Grid";
 import LogoVera from "../NavBar/images/SVG/Navbar/vera-logo_black.svg?url";
 import LogoInVidWeverify from "../NavBar/images/SVG/Navbar/invid_weverify.svg?url";
 import LogoEuCom from "../NavBar/images/SVG/Navbar/ep-logo.svg?url";
-
 import useMyStyles from "../Shared/MaterialUiStyles/useMyStyles";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import { changeLanguage } from "../../redux/reducers/languageReducer";

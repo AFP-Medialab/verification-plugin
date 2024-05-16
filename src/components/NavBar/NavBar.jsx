@@ -82,6 +82,7 @@ import GuideIcon from "./images/SVG/Navbar/Guide.svg";
 
 import LogoVera from "./images/SVG/Navbar/vera-logo_black.svg";
 import LogoInVidWeverify from "./images/SVG/Navbar/invid_weverify.svg";
+
 import LogoEuCom from "./images/SVG/Navbar/ep-logo.svg";
 
 import VideoIcon from "./images/SVG/Video/Video.svg";
