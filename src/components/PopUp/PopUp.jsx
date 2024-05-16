@@ -6,6 +6,7 @@ import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
 import LogoVera from "../NavBar/images/SVG/Navbar/vera-logo_black.svg?url";
 import LogoInVidWeverify from "../NavBar/images/SVG/Navbar/invid_weverify.svg?url";
+import LogoEuCom from "../NavBar/images/SVG/Navbar/ep-logo.svg?url";
 
 import useMyStyles from "../Shared/MaterialUiStyles/useMyStyles";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
@@ -20,6 +21,7 @@ const PopUp = () => {
   const keyword = i18nLoadNamespace("components/PopUp");
   const currentLang = useSelector((state) => state.language);
   const defaultLanguage = useSelector((state) => state.defaultLanguage);
+  const LOGO_EU = process.env.REACT_APP_LOGO_EU;
 
   const [pageUrl, setPageUrl] = useState(null);
 
@@ -82,23 +84,47 @@ const PopUp = () => {
   return (
     <div className={classes.popUp}>
       <Grid container>
-        <Grid item xs={7} container alignItems="center" justifyContent="center">
-          <img
-            src={LogoInVidWeverify}
-            alt={LogoInVidWeverify}
-            style={{ width: "150px" }}
-          />
-        </Grid>
-        <Grid item xs={5}>
-          <img src={LogoVera} alt={LogoVera} style={{ width: "100px" }} />
-        </Grid>
+        {LOGO_EU ? (
+          <>
+            <Grid
+              item
+              xs={6}
+              container
+              alignItems="center"
+              justifyContent="center"
+            >
+              <img src={LogoEuCom} alt={LogoEuCom} style={{ width: "100px" }} />
+            </Grid>
+            <Grid item xs={6}>
+              <img src={LogoVera} alt={LogoVera} style={{ width: "100px" }} />
+            </Grid>
+          </>
+        ) : (
+          <>
+            <Grid
+              item
+              xs={7}
+              container
+              alignItems="center"
+              justifyContent="center"
+            >
+              <img
+                src={LogoInVidWeverify}
+                alt={LogoInVidWeverify}
+                style={{ width: "150px" }}
+              />
+            </Grid>
+            <Grid item xs={5}>
+              <img src={LogoVera} alt={LogoVera} style={{ width: "100px" }} />
+            </Grid>
+          </>
+        )}
         <Box m={1} />
         <Grid item xs={12}>
           <Button
             variant="outlined"
             color="primary"
             fullWidth={true}
-            width={"100%"}
             onClick={() => window.open("/popup.html#/app/tools/all")}
           >
             {keyword("open_website")}
@@ -110,7 +136,6 @@ const PopUp = () => {
             variant="outlined"
             color="primary"
             fullWidth={true}
-            width={"100%"}
             onClick={() => window.open("/popup.html#/app/assistant/")}
           >
             {keyword("open_assistant")}
@@ -122,7 +147,6 @@ const PopUp = () => {
             variant="outlined"
             color="primary"
             fullWidth={true}
-            width={"100%"}
             onMouseOver={() => loadData()}
             onClick={() => urlOpenAssistant()}
           >
@@ -135,7 +159,6 @@ const PopUp = () => {
             variant="outlined"
             color="primary"
             fullWidth={true}
-            width={"100%"}
             onClick={() => window.open("/popup.html#/app/classroom/")}
           >
             {keyword("open_classroom")}
