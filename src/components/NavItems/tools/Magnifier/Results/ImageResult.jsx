@@ -108,8 +108,11 @@ const ImageResult = ({ handleCloseResults }) => {
     return image_name.substring(0, image_name.lastIndexOf("."));
   };
 
-  const handleClick = (img, isImgUrl, searchEngineName) => {
-    reverseImageSearch(img, isImgUrl, searchEngineName, false);
+  const handleClick = (
+    /** @type {any} */ img,
+    /** @type {string} */ searchEngineName,
+  ) => {
+    reverseImageSearch(img, searchEngineName, false);
   };
 
   return (
@@ -227,11 +230,7 @@ const ImageResult = ({ handleCloseResults }) => {
                 color="primary"
                 variant="contained"
                 onClick={() =>
-                  handleClick(
-                    original,
-                    isImageUrl,
-                    SEARCH_ENGINE_SETTINGS.BING_SEARCH.NAME,
-                  )
+                  handleClick(original, SEARCH_ENGINE_SETTINGS.BING_SEARCH.NAME)
                 }
               >
                 {`${SEARCH_ENGINE_SETTINGS.BING_SEARCH.NAME} ${keyword(
@@ -247,7 +246,6 @@ const ImageResult = ({ handleCloseResults }) => {
               onClick={() =>
                 handleClick(
                   isImageUrl ? original : resultImage,
-                  isImageUrl,
                   SEARCH_ENGINE_SETTINGS.YANDEX_SEARCH.NAME,
                 )
               }
@@ -264,7 +262,6 @@ const ImageResult = ({ handleCloseResults }) => {
               onClick={() =>
                 handleClick(
                   isImageUrl ? original : resultImage,
-                  isImageUrl,
                   SEARCH_ENGINE_SETTINGS.GOOGLE_LENS_SEARCH.NAME,
                 )
               }
@@ -281,7 +278,6 @@ const ImageResult = ({ handleCloseResults }) => {
               onClick={() =>
                 handleClick(
                   isImageUrl ? original : resultImage,
-                  isImageUrl,
                   SEARCH_ENGINE_SETTINGS.BAIDU_SEARCH.NAME,
                 )
               }
@@ -300,7 +296,6 @@ const ImageResult = ({ handleCloseResults }) => {
                   onClick={() =>
                     handleClick(
                       original,
-                      isImageUrl,
                       SEARCH_ENGINE_SETTINGS.TINEYE_SEARCH.NAME,
                     )
                   }
@@ -319,7 +314,6 @@ const ImageResult = ({ handleCloseResults }) => {
               onClick={() =>
                 handleClick(
                   isImageUrl ? original : resultImage,
-                  isImageUrl,
                   SEARCH_ENGINE_SETTINGS.GOOGLE_FACT_CHECK.NAME,
                 )
               }

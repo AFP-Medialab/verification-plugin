@@ -101,14 +101,14 @@ const getSearchEngineFromName = (searchEngineName) => {
 
 /**
  * Description
- * @param {chrome.contextMenus.OnClickData} info
+ * @param {any} info
  * @param {string} searchEngineName
  * @returns {Promise<ImageObject>}
  */
 const retrieveImgObjectForSearchEngine = async (info, searchEngineName) => {
   const searchEngine = getSearchEngineFromName(searchEngineName);
   //console.log("search engine ", searchEngine)
-  console.log("content incoming ", info);
+  //console.log("content incoming ", info);
   // get incoming format
   // Can be :
   // - Object
@@ -139,8 +139,8 @@ const retrieveImgObjectForSearchEngine = async (info, searchEngineName) => {
     inputFormat = IMAGE_FORMATS.UNKNOW;
   }
   let engineSupportedFormat = searchEngine.SUPPORTED_IMAGE_FORMAT;
-  console.log("inputFormat  after", inputFormat);
-  console.log("engineSupportedFormat  after", engineSupportedFormat);
+  //console.log("inputFormat  after", inputFormat);
+  //console.log("engineSupportedFormat  after", engineSupportedFormat);
   if (engineSupportedFormat.includes(inputFormat)) {
     if (inputFormat === IMAGE_FORMATS.URI) {
       return new ImageObject(getImgUrl(info), IMAGE_FORMATS.URI);
@@ -159,29 +159,12 @@ const retrieveImgObjectForSearchEngine = async (info, searchEngineName) => {
       // TODO: local image
     }
     if (inputFormat === IMAGE_FORMATS.LOCAL) {
-      console.log("local ", info);
-      //return await getLocalImageFromSourcePath(info.srcUrl, IMAGE_FORMATS.B64);
+      //console.log("local ", info);
       return await getBlob(info);
     }
-  } /*else if (
-    inputFormat === IMAGE_FORMATS.URI &&
-    engineSupportedFormat.includes(IMAGE_FORMATS.BLOB)
-  ) {
-    return await getBlob(info);
-  } else if (
-    inputFormat === IMAGE_FORMATS.URI &&
-    engineSupportedFormat.includes(IMAGE_FORMATS.B64)
-  ) {
-    if (isBase64(info)) {
-      return new ImageObject(info, IMAGE_FORMATS.B64);
-    } else {
-      // if (src) return await getLocalImageFromSourcePath(src, IMAGE_FORMATS.B64);
-      // else
-      return await getLocalImageFromSourcePath(info, IMAGE_FORMATS.B64);
-    }
-  } */ else {
+  } else {
     // UNKNOW => LOCAL
-    console.log("unknow ", info);
+    //console.log("unknow ", info);
     return await getBlob(info);
   }
 
@@ -191,9 +174,8 @@ const retrieveImgObjectForSearchEngine = async (info, searchEngineName) => {
 };
 
 export const reverseImageSearch = async (
-  content,
-  isImgUrl,
-  searchEngineName,
+  /** @type {any} */ content,
+  /** @type {string} */ searchEngineName,
   isRequestFromContextMenu = true,
 ) => {
   const imageObject = await retrieveImgObjectForSearchEngine(
@@ -235,8 +217,7 @@ export const reverseImageSearch = async (
 };
 
 export const reverseImageSearchAll = async (
-  info,
-  isImageUrl,
+  /** @type {any} */ content,
   isRequestFromContextMenu = true,
 ) => {
   let promises = [];
@@ -247,8 +228,7 @@ export const reverseImageSearchAll = async (
     }
     promises.push(
       reverseImageSearch(
-        info,
-        isImageUrl,
+        content,
         searchEngineSetting.NAME,
         isRequestFromContextMenu,
       ),

@@ -24,10 +24,7 @@ import {
 } from "../../../../../redux/actions/tools/analysisActions";
 import ImageUrlGridList from "../../../../Shared/ImageGridList/ImageUrlGridList";
 import AnalysisComments from "./AnalysisComments";
-import {
-  SEARCH_ENGINE_SETTINGS,
-  reverseImageSearch,
-} from "../../../../Shared/ReverseSearch/reverseSearchUtils";
+import { reverseImageSearch } from "../../../../Shared/ReverseSearch/reverseSearchUtils";
 import { ReverseSearchButtons } from "./ReverseSearch";
 
 const YoutubeResults = (props) => {
@@ -36,7 +33,7 @@ const YoutubeResults = (props) => {
 
   const reverseSearch = async (website) => {
     for (let image of thumbnails) {
-      await reverseImageSearch(image.url, true, website, false);
+      await reverseImageSearch(image.url, website, false);
     }
   };
 

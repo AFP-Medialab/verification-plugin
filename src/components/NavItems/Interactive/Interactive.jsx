@@ -93,9 +93,9 @@ const Interactive = () => {
                   />
                 ) : (
                   <Iframe
-                    frameBorder="0"
+                    frameBorder={0}
                     src={obj.url}
-                    width="80%"
+                    width={"80%"}
                     height={window.innerHeight / 2}
                   />
                 )}
@@ -146,13 +146,11 @@ const Interactive = () => {
                 >
                   <Grid item>
                     <Button
-                      p={3}
                       variant="contained"
                       color="primary"
                       onClick={() => {
                         reverseImageSearch(
                           obj.url,
-                          true,
                           SEARCH_ENGINE_SETTINGS.GOOGLE_LENS_SEARCH.NAME,
                           false,
                         );
@@ -164,7 +162,6 @@ const Interactive = () => {
                   <Grid item>
                     <Button
                       data-testid="interactive-forensic"
-                      p={3}
                       variant="contained"
                       color="primary"
                       onClick={() => {
@@ -180,7 +177,6 @@ const Interactive = () => {
                 </Grid>
               ) : (
                 <Button
-                  p={3}
                   variant="contained"
                   color="primary"
                   onClick={() => {

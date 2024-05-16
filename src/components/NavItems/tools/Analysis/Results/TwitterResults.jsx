@@ -25,10 +25,7 @@ import {
 
 import ImageUrlGridList from "../../../../Shared/ImageGridList/ImageUrlGridList";
 import AnalysisComments from "./AnalysisComments";
-import {
-  SEARCH_ENGINE_SETTINGS,
-  reverseImageSearch,
-} from "../../../../Shared/ReverseSearch/reverseSearchUtils";
+import { reverseImageSearch } from "../../../../Shared/ReverseSearch/reverseSearchUtils";
 import { ReverseSearchButtons } from "./ReverseSearch";
 
 const TwitterResults = (props) => {
@@ -36,7 +33,7 @@ const TwitterResults = (props) => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Analysis");
   const reverseSearch = (website) => {
     for (let image of thumbnails) {
-      reverseImageSearch(image.url, true, website, false);
+      reverseImageSearch(image.url, website, false);
     }
   };
 

@@ -64,7 +64,7 @@ export const isBase64 = (str) => {
  * @returns {Promise<ImageObject>}
  */
 export const getBlob = async (info) => {
-  console.log("Blob  ", info);
+  //console.log("Blob  ", info);
   if (!info) {
     throw new Error(`[getBlob] Error : bad parameter`);
   }
@@ -72,8 +72,8 @@ export const getBlob = async (info) => {
   const isImgUrl = typeof getImgUrl(info) === "string";
 
   const isb64 = isBase64(info);
-  console.log("isImgUrl ", isImgUrl);
-  console.log("isb64 ", isb64);
+  //console.log("isImgUrl ", isImgUrl);
+  //console.log("isb64 ", isb64);
   let imgBlob;
 
   if (
@@ -105,7 +105,7 @@ export const getLocalImageFromSourcePath = async (src, imgFormat) => {
       `[getLocalImageFromSourcePath] Error: Image format ${imgFormat} not supported`,
     );
   }
-  console.log("local image file ", src);
+  //console.log("local image file ", src);
   let img = new Image();
   img.crossOrigin = "anonymous";
   // console.log(src);

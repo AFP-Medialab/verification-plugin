@@ -53,16 +53,14 @@ const localImageSearch = (blob, isRequestFromContextMenu) => {
   };
   fetch(url, initPost)
     .then((response) => {
-      console.log("response ", response);
       return response.headers;
     })
     .then((headers) => {
       const uploadURL = headers.get("X-Goog-Upload-URL");
-      console.log("headers ", uploadURL);
+      //console.log("headers ", uploadURL);
       fetch(uploadURL, uploadPost)
         .then((response) => response.text())
         .then((result) => {
-          console.log("result ", result);
           const redirectURL = `https://toolbox.google.com/factcheck/explorer/search/${result};hl=`;
           const urlObject = { url: redirectURL };
           openNewTabWithUrl(urlObject, isRequestFromContextMenu);
