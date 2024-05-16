@@ -62,12 +62,7 @@ export const SEARCH_ENGINE_SETTINGS = {
     NAME: "Bing",
     CONTEXT_MENU_ID: "reverse_search_bing",
     CONTEXT_MENU_TITLE: "Image Reverse Search - Bing",
-    SUPPORTED_IMAGE_FORMAT: [
-      IMAGE_FORMATS.URI,
-      IMAGE_FORMATS.B64,
-      IMAGE_FORMATS.LOCAL,
-      IMAGE_FORMATS.BLOB,
-    ],
+    SUPPORTED_IMAGE_FORMAT: [IMAGE_FORMATS.URI],
   },
   TINEYE_SEARCH: {
     NAME: "Tineye",
@@ -79,7 +74,11 @@ export const SEARCH_ENGINE_SETTINGS = {
     NAME: "Google Fact Check",
     CONTEXT_MENU_ID: "reverse_google_factcheck",
     CONTEXT_MENU_TITLE: "Image Reverse Search - Google Factcheck",
-    SUPPORTED_IMAGE_FORMAT: [IMAGE_FORMATS.URI, IMAGE_FORMATS.BLOB],
+    SUPPORTED_IMAGE_FORMAT: [
+      IMAGE_FORMATS.URI,
+      IMAGE_FORMATS.BLOB,
+      IMAGE_FORMATS.LOCAL,
+    ],
   },
 };
 

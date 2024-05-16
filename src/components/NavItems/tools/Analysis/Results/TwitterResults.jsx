@@ -439,7 +439,9 @@ const TwitterResults = (props) => {
                     />
                   </div>
                   <Box m={2} />
-                  <ReverseSearchButtons reverseSearch={reverseSearch} />
+                  <ReverseSearchButtons reverseSearch={reverseSearch}>
+                    <></>
+                  </ReverseSearchButtons>
                 </div>
               )}
             </div>
