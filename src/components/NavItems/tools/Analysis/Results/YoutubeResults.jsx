@@ -8,7 +8,7 @@ import TableBody from "@mui/material/TableBody";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
 import Button from "@mui/material/Button";
-import { IconButton } from "@mui/material";
+import { Grid, IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 import OnClickInfo from "../../../../Shared/OnClickInfo/OnClickInfo";
@@ -24,10 +24,8 @@ import {
 } from "../../../../../redux/actions/tools/analysisActions";
 import ImageUrlGridList from "../../../../Shared/ImageGridList/ImageUrlGridList";
 import AnalysisComments from "./AnalysisComments";
-import {
-  SEARCH_ENGINE_SETTINGS,
-  reverseImageSearch,
-} from "../../../../Shared/ReverseSearch/reverseSearchUtils";
+import { reverseImageSearch } from "../../../../Shared/ReverseSearch/reverseSearchUtils";
+import { ReverseSearchButtons } from "../../../../Shared/ReverseSearch/ReverseSearchButtons";
 
 const YoutubeResults = (props) => {
   const classes = useMyStyles();
@@ -35,7 +33,7 @@ const YoutubeResults = (props) => {
 
   const reverseSearch = async (website) => {
     for (let image of thumbnails) {
-      await reverseImageSearch(image.url, true, website, false);
+      await reverseImageSearch(image.url, website, false);
     }
   };
 
@@ -230,60 +228,27 @@ const YoutubeResults = (props) => {
                     />
                   </div>
                   <Box m={2} />
-
-                  {/* TODO: Loop through all search engines */}
-
-                  <Button
-                    className={classes.button}
-                    variant="contained"
-                    color={"primary"}
-                    onClick={async () =>
-                      await reverseSearch(
-                        SEARCH_ENGINE_SETTINGS.GOOGLE_SEARCH.NAME,
-                      )
-                    }
-                  >
-                    {keyword("button_reverse_google")}
-                  </Button>
-                  <Button
-                    className={classes.button}
-                    variant="contained"
-                    color={"primary"}
-                    onClick={async () =>
-                      await reverseSearch(
-                        SEARCH_ENGINE_SETTINGS.YANDEX_SEARCH.NAME,
-                      )
-                    }
-                  >
-                    {keyword("button_reverse_yandex")}
-                  </Button>
-                  <Button
-                    className={classes.button}
-                    variant="contained"
-                    color={"primary"}
-                    onClick={async () =>
-                      await reverseSearch(
-                        SEARCH_ENGINE_SETTINGS.TINEYE_SEARCH.NAME,
-                      )
-                    }
-                  >
-                    {keyword("button_reverse_tineye")}
-                  </Button>
-                  {report["verification_cues"] &&
-                    report["verification_cues"]["twitter_search_url"] && (
-                      <Button
-                        className={classes.button}
-                        variant="contained"
-                        color={"primary"}
-                        onClick={() =>
-                          window.open(
-                            report["verification_cues"]["twitter_search_url"],
-                          )
-                        }
-                      >
-                        {keyword("button_reverse_twitter")}
-                      </Button>
-                    )}
+                  <ReverseSearchButtons reverseSearch={reverseSearch}>
+                    {report["verification_cues"] &&
+                      report["verification_cues"]["twitter_search_url"] && (
+                        <Grid item>
+                          <Button
+                            className={classes.button}
+                            variant="contained"
+                            color={"primary"}
+                            onClick={() =>
+                              window.open(
+                                report["verification_cues"][
+                                  "twitter_search_url"
+                                ],
+                              )
+                            }
+                          >
+                            {keyword("button_reverse_twitter")}
+                          </Button>
+                        </Grid>
+                      )}
+                  </ReverseSearchButtons>
                 </div>
               )}
             </div>

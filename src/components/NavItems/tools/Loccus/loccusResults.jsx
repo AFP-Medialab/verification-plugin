@@ -36,6 +36,11 @@ const LoccusResults = (props) => {
     VOICE_CLONING: "synthetic",
     VOICE_RECORDING: "replay",
   };
+  const DETECTION_THRESHOLDS = {
+    THRESHOLD_1: 10,
+    THRESHOLD_2: 30,
+    THRESHOLD_3: 60,
+  };
 
   useEffect(() => {
     if (!result) {
@@ -168,6 +173,7 @@ const LoccusResults = (props) => {
                   score={voiceCloningScore}
                   detectionType={DETECTION_TYPES.VOICE_CLONING}
                   toolName={"Loccus"}
+                  thresholds={DETECTION_THRESHOLDS}
                 />
                 <Typography>
                   {keyword("loccus_cloning_additional_explanation_text")}

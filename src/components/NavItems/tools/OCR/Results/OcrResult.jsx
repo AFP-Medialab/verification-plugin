@@ -225,7 +225,6 @@ const OcrResult = () => {
                       onClick={() =>
                         reverseImageSearch(
                           inputUrl,
-                          imageIsUrl,
                           SEARCH_ENGINE_SETTINGS.YANDEX_SEARCH.NAME,
                           false,
                         )
@@ -243,7 +242,6 @@ const OcrResult = () => {
                         onClick={() => {
                           reverseImageSearch(
                             inputUrl,
-                            imageIsUrl,
                             SEARCH_ENGINE_SETTINGS.BING_SEARCH.NAME,
                             false,
                           );
@@ -261,7 +259,6 @@ const OcrResult = () => {
                       onClick={() => {
                         reverseImageSearch(
                           inputUrl,
-                          imageIsUrl,
                           SEARCH_ENGINE_SETTINGS.GOOGLE_LENS_SEARCH.NAME,
                           false,
                         );
