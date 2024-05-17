@@ -32,12 +32,15 @@ import { setMetadataMediaType } from "../../../../redux/reducers/tools/metadataR
 
 import { Alert, Stack } from "@mui/material";
 
+import StringFileUploadField from "../../../Shared/StringFileUploadField";
+
 const Metadata = ({ mediaType }) => {
   const { url, type } = useParams();
   const location = useLocation();
 
   const classes = useMyStyles();
   const keyword = i18nLoadNamespace("components/NavItems/tools/Metadata");
+  console.log(keyword("metadata_video_input"));
   const keywordAllTools = i18nLoadNamespace(
     "components/NavItems/tools/Alltools",
   );
@@ -52,6 +55,9 @@ const Metadata = ({ mediaType }) => {
   const [imageUrl, setImageurl] = useState(null);
   const [videoUrl, setVideoUrl] = useState(null);
   const [urlDetected, setUrlDetected] = useState(false);
+  const [imageFile, setImageFile] = useState(null);
+  const [videoFile, setVideoFile] = useState(null);
+  const [fileInput, setFileInput] = useState(null);
 
   useVideoTreatment(videoUrl, keyword);
   useImageTreatment(imageUrl, keyword);
@@ -88,8 +94,25 @@ const Metadata = ({ mediaType }) => {
       if (mediaType === "image") {
         setImageurl(input);
       } else {
+        console.log("setting video url result");
         setVideoUrl(input);
       }
+    } else if (fileInput) {
+      let url = URL.createObjectURL(imageFile);
+    } else if (imageFile) {
+      setImageurl(URL.createObjectURL(imageFile));
+    } else if (videoFile) {
+      setVideoUrl(URL.createObjectURL(videoFile));
+    }
+  };
+
+  const preprocessLocalFile = (file) => {
+    if (mediaType === "video") {
+      setVideoFile(file);
+      return file;
+    } else {
+      setImageFile(file);
+      return file;
     }
   };
 
@@ -126,6 +149,14 @@ const Metadata = ({ mediaType }) => {
   }
 
   useEffect(() => {
+    if (type) {
+      let content_type = decodeURIComponent(type);
+      if (content_type === CONTENT_TYPE.VIDEO) {
+        dispatch(setMetadataMediaType("video"));
+      } else if (content_type === CONTENT_TYPE.IMAGE) {
+        dispatch(setMetadataMediaType("video"));
+      }
+    }
     if (url && url !== KNOWN_LINKS.OWN) {
       let uri = decodeURIComponent(url);
       setInput(uri);
@@ -135,6 +166,8 @@ const Metadata = ({ mediaType }) => {
 
   const handleCloseResult = () => {
     setInput("");
+    setVideoFile(null);
+    setImageFile(null);
   };
 
   return (
@@ -179,8 +212,7 @@ const Metadata = ({ mediaType }) => {
         />
 
         <Box p={3}>
-          <form>
-            <Grid container direction="row" spacing={3} alignItems="center">
+          {/* <Grid container direction="row" spacing={3} alignItems="center">
               <Grid item xs>
                 <TextField
                   value={input}
@@ -212,10 +244,44 @@ const Metadata = ({ mediaType }) => {
                   {keyword("button_submit")}
                 </Button>
               </Grid>
-            </Grid>
-          </form>
+            </Grid> */}
+          {mediaType === "video" ? (
+            <form>
+              <StringFileUploadField
+                labelKeyword={keyword("metadata_video_input")}
+                placeholderKeyword={keyword("metadata_video_input_placeholder")}
+                submitButtonKeyword={keyword("button_submit")}
+                localFileKeyword={keyword("button_localfile")}
+                urlInput={input}
+                setUrlInput={setInput}
+                fileInput={fileInput}
+                setFileInput={setFileInput}
+                handleSubmit={submitUrl}
+                fileInputTypesAccepted={"video/*, image/*"}
+                handleCloseSelectedFile={handleCloseResult}
+                preprocessLocalFile={preprocessLocalFile}
+              />
+            </form>
+          ) : (
+            <form>
+              <StringFileUploadField
+                labelKeyword={keyword("metadata_image_input")}
+                placeholderKeyword={keyword("metadata_image_input_placeholder")}
+                submitButtonKeyword={keyword("button_submit")}
+                localFileKeyword={keyword("button_localfile")}
+                urlInput={input}
+                setUrlInput={setInput}
+                fileInput={imageFile}
+                setFileInput={setImageFile}
+                handleSubmit={submitUrl}
+                fileInputTypesAccepted={"image/*"}
+                handleCloseSelectedFile={handleCloseResult}
+                preprocessLocalFile={preprocessLocalFile}
+              />
+            </form>
+          )}
 
-          <Box m={1} />
+          {/* <Box m={1} />
 
           <Grid
             container
@@ -242,7 +308,7 @@ const Metadata = ({ mediaType }) => {
                 />
               </Button>
             </Grid>
-          </Grid>
+          </Grid> */}
         </Box>
       </Card>
       <Box m={3} />
