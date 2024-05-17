@@ -89,6 +89,7 @@ const Deepfake = () => {
   const handleClose = () => {
     setInput("");
     setImageFile(undefined);
+    setType("");
     dispatch(resetDeepfake());
   };
 
@@ -138,7 +139,7 @@ const Deepfake = () => {
                     fileInput={imageFile}
                     setFileInput={setImageFile}
                     handleSubmit={handleSubmit}
-                    fileInputTypesAccepted={"imageFile/*"}
+                    fileInputTypesAccepted={"image/*"}
                     handleCloseSelectedFile={handleClose}
                     preprocessLocalFile={preprocessImage}
                   />

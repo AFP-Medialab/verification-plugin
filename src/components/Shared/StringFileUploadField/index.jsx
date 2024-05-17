@@ -13,14 +13,15 @@ import CloseIcon from "@mui/icons-material/Close";
  * @param localFileKeyword {String} The translation for the Local File Button text
  * @param localFileKeyword {String} The translation for the Local File Button text
  * @param urlInput {String} The value of the url string in the Textfield
- * @param setUrlInput Function to call when the url input changes
+ * @param setUrlInput {any} Function to call when the url input changes
  * @param fileInput {File} The File selected
- * @param setFileInput Function to call when the File selected changes
- * @param fileInputTypesAccepted Accepted file input types for upload control
- * @param handleCloseSelectedFile An optional handler function to execute when clearing the file selected
- * @param preprocessLocalFile Optional preprocessing function to process a local file
- * @returns {Element}
- * @constructor
+ * @param setFileInput {any} Function to call when the File selected changes
+ * @param fileInputTypesAccepted {string} Accepted file input types for upload control
+ * @param handleSubmit {any}
+ * @param handleCloseSelectedFile {any} An optional handler function to execute when clearing the file selected
+ * @param preprocessLocalFile {any} Optional preprocessing function to process a local file
+
+
  */
 const StringFileUploadField = ({
   labelKeyword,

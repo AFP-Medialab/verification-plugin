@@ -159,7 +159,6 @@ const DeepfakeResultsImage = (props) => {
 
   const handleClose = () => {
     props.handleClose();
-    dispatch(resetDeepfake());
   };
 
   return (
@@ -268,10 +267,11 @@ const DeepfakeResultsImage = (props) => {
                 deepfakeScore.predictionScore >= 70
               ) && (
                 <Typography variant="h5" sx={{ color: "red" }}>
-                  {keyword("deepfake_image_detection_alert") +
-                    DeepfakeImageDetectionMethodNames[deepfakeScore.methodName]
-                      .name +
-                    keyword("deepfake_image_detection_alert_2")}
+                  {`${keyword("deepfake_image_detection_alert")} ` +
+                    `${DeepfakeImageDetectionMethodNames[
+                      deepfakeScore.methodName
+                    ].name.toLowerCase()} ` +
+                    `${keyword("deepfake_image_detection_alert_2")}`}
                 </Typography>
               )}
 
