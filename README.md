@@ -342,3 +342,87 @@ return (
     );
 }
 ```
+
+## Testing
+
+The [playwright](https://playwright.dev/) framework is used for e2e, component and unit testing. All tests are located in the `tests` folder with the following structure:
+
+```
+tests
+!- component_unit - Component and unit testing
+|- e2e - End to end testing
+-- examples - Examples to serve as a reference only 
+```
+
+**Note: Before running all (or just e2e) tests, the extension must first be built. See End-to-end (e2e) testing section
+for more details**
+
+All tests (e2e, component & unit) can be run using the command:
+
+```
+npm run test
+```
+
+
+### Component and Unit testing
+
+Component and unit testing are run together using the following command:
+
+```
+npm run test-cu
+```
+
+Playwright configurations of the component and unit tests can be found in `/playwright-ct.config.js`
+
+Component and unit testing uses the experimental [playwright component testing module](https://playwright.dev/docs/test-components).
+When running tests, the browser loads the page in `./playwright/index.html` and any resources in `./playwright/index.jsx`.
+Tests can then mount a component directly on the page and run tests similar to e2e testing.
+Transpiling and bundling of assets are done on the fly using [vitejs](https://vitejs.dev/) instead
+of webpack.
+
+Note: Component testing is best done on components that can be easily isolated. Ones that rely on redux or routing 
+are likely to be more suitable for e2e testing.
+
+Note: Playwright/vite generates cache files at `/playwright/.cache` which sometimes does not get updated properly
+when `.jsx` files changes, so currently the command `npm run test-cu` deletes the cache directory before running the tests.
+
+### End-to-end (e2e) testing
+
+E2E testing can be run using the following command:
+
+```
+npm run test-e2e
+```
+
+Playwright configurations of the e2e tests can be found in `/playwright.config.ts`. 
+
+Before running all (or just e2e) tests, the extension must first be built using `npm run build`. 
+
+The compiled Weverify extension in the `./build` directory can be loaded into the browser by using the fixture code in 
+`/tests/e2e/fixtures.ts`. All e2e tests of the extension should import the overridden `test` and `expect` functions in
+the `fixtures.ts` file.    
+
+The overridden `test` function provides an additional `extensionId` variable in the handler function which is
+needed to navigate to the location of the extension. 
+
+The following code shows how we can navigate to the root page of the extension: 
+
+```javascript
+import { test, expect } from './fixtures';
+
+test('Example extension test', async ({ page, extensionId }) => {
+  // Navigates to the root page of the plugin 
+  await page.goto(`chrome-extension://${extensionId}/popup.html`);
+  // ... test whatever functions
+});
+```
+
+#### E2E UI mode
+
+UI mode is for e2e test can be run using:
+
+```
+npm run test-e2e-ui
+```
+
+This will open a browser with interactive testing environment which can be useful for debugging.

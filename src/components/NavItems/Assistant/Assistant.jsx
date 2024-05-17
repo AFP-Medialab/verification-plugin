@@ -181,6 +181,7 @@ const Assistant = () => {
                 !imageList.length &&
                 !videoList.length)
             }
+            data-testid="url-media-results"
           >
             <Grid container spacing={2}>
               <Grid item xs={12}>

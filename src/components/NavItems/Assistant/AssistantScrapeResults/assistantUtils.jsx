@@ -84,6 +84,15 @@ function treeMapToElementsRecursive(
   return React.createElement(treeElem.tag, null, childElems);
 }
 
+/**
+ * Combines text and html tree to generate dynamic DOM elements. A handler function can be provided in order to
+ * insert dynamic elements around each text span.
+ * @param text
+ * @param mapping
+ * @param spanHighlightIndices Indices of text spans that should be wrapped, in the format of [{indices: [start, end]}, ...]
+ * @param wrapFunc Called for each span indices in spanHighlightIndices the function should take the form of: (text, spanInfo): Element => {}
+ * @returns {React.DetailedReactHTMLElement<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>|*}
+ */
 export const treeMapToElements = (
   text,
   mapping,
