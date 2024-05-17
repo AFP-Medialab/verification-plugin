@@ -48,6 +48,7 @@ const Deepfake = () => {
 
   const submitUrl = () => {
     UseGetDeepfake(
+      keyword,
       input,
       true,
       selectedMode,
