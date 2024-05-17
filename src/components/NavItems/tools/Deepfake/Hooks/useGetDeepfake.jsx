@@ -11,6 +11,7 @@ import { setError } from "redux/reducers/errorReducer";
 import { isValidUrl } from "../../../../Shared/Utils/URLUtils";
 
 async function UseGetDeepfake(
+  keyword,
   url,
   processURL,
   mode,
@@ -48,7 +49,7 @@ async function UseGetDeepfake(
   let res;
 
   const handleError = (e) => {
-    dispatch(setError(e));
+    dispatch(setError(keyword(e)));
     if (mode === "IMAGE") {
       dispatch(setDeepfakeLoadingImage(false));
     } else if (mode === "VIDEO") {
@@ -82,7 +83,7 @@ async function UseGetDeepfake(
         break;
     }
   } catch (error) {
-    handleError("error_" + error.status);
+    handleError("deepfake_error_" + error.response.status);
   }
 
   const getResult = async (id) => {
@@ -90,7 +91,7 @@ async function UseGetDeepfake(
     try {
       response = await axios.get(baseURL + modeURL + "reports/" + id);
     } catch (error) {
-      handleError("error_" + error.status);
+      handleError("deepfake_error_" + error.status);
     }
 
     if (response.data != null) {
@@ -115,7 +116,7 @@ async function UseGetDeepfake(
     try {
       response = await axios.get(baseURL + modeURL + "jobs/" + id);
     } catch (error) {
-      handleError("error_" + error.status);
+      handleError("deepfake_error_" + error.status);
     }
 
     if (response && response.data && response.data.status === "PROCESSING") {
@@ -127,11 +128,11 @@ async function UseGetDeepfake(
     ) {
       await getResult(id);
     } else {
-      handleError("error_" + response.data.status);
+      handleError("deepfake_error_" + response.data.status);
     }
   };
 
-  waitUntilFinish(res.data.id);
+  res ? waitUntilFinish(res.data.id) : null;
 }
 
 function sleep(fn, param) {
