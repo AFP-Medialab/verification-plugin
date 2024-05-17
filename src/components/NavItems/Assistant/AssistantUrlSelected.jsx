@@ -99,6 +99,7 @@ const AssistantUrlSelected = (props) => {
                   fullWidth
                   value={formInput || ""}
                   onChange={(e) => setFormInput(e.target.value)}
+                  data-testid="assistant-url-selected-input"
                 />
               </Grid>
               <Grid item xs={2}>
@@ -108,6 +109,7 @@ const AssistantUrlSelected = (props) => {
                       type="submit"
                       variant="contained"
                       color="primary"
+                      data-testid="assistant-url-selected-analyse-btn"
                       onClick={(e) => {
                         e.preventDefault(), handleSubmissionURL();
                       }}

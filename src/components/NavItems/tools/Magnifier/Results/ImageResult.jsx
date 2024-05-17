@@ -20,6 +20,7 @@ import {
   reverseImageSearch,
   SEARCH_ENGINE_SETTINGS,
 } from "../../../../Shared/ReverseSearch/reverseSearchUtils";
+import { ReverseSearchButtons } from "components/Shared/ReverseSearch/ReverseSearchButtons";
 
 const myTheme = {
   "loadButton.backgroundColor": "#151515",
@@ -108,8 +109,19 @@ const ImageResult = ({ handleCloseResults }) => {
     return image_name.substring(0, image_name.lastIndexOf("."));
   };
 
-  const handleClick = (img, isImgUrl, searchEngineName) => {
-    reverseImageSearch(img, isImgUrl, searchEngineName, false);
+  const handleClick = (
+    /** @type {any} */ img,
+    /** @type {string} */ searchEngineName,
+  ) => {
+    reverseImageSearch(img, searchEngineName, false);
+  };
+
+  const reverseSearch = (searchEngineName) => {
+    reverseImageSearch(
+      isImageUrl ? original : resultImage,
+      searchEngineName,
+      false,
+    );
   };
 
   return (
@@ -213,123 +225,12 @@ const ImageResult = ({ handleCloseResults }) => {
         <Box m={2} />
         <Loop src={resultImage} />
         <Box m={2} />
-        <Grid
-          container
-          direction="row"
-          justifyContent="center"
-          alignItems="center"
-          spacing={3}
+        <ReverseSearchButtons
+          isimageUrl={isImageUrl}
+          reverseSearch={reverseSearch}
         >
-          {/* TODO: Iterate through the search engine settings variable instead // get rid of isURL ternary operators */}
-          <Grid item>
-            <Button
-              color="primary"
-              variant="contained"
-              onClick={() =>
-                handleClick(
-                  resultImage,
-                  isImageUrl,
-                  SEARCH_ENGINE_SETTINGS.GOOGLE_SEARCH.NAME,
-                )
-              }
-            >
-              {`${SEARCH_ENGINE_SETTINGS.GOOGLE_SEARCH.NAME} ${keyword(
-                "reverse_search",
-              )}`}
-            </Button>
-          </Grid>
-          {isImageUrl ? (
-            <Grid item>
-              <Button
-                color="primary"
-                variant="contained"
-                onClick={() =>
-                  handleClick(
-                    original,
-                    isImageUrl,
-                    SEARCH_ENGINE_SETTINGS.BING_SEARCH.NAME,
-                  )
-                }
-              >
-                {`${SEARCH_ENGINE_SETTINGS.BING_SEARCH.NAME} ${keyword(
-                  "reverse_search",
-                )}`}
-              </Button>
-            </Grid>
-          ) : null}
-          <Grid item>
-            <Button
-              color="primary"
-              variant="contained"
-              onClick={() =>
-                handleClick(
-                  resultImage,
-                  isImageUrl,
-                  SEARCH_ENGINE_SETTINGS.YANDEX_SEARCH.NAME,
-                )
-              }
-            >
-              {`${SEARCH_ENGINE_SETTINGS.YANDEX_SEARCH.NAME} ${keyword(
-                "reverse_search",
-              )}`}
-            </Button>
-          </Grid>
-          <Grid item>
-            <Button
-              color="primary"
-              variant="contained"
-              onClick={() =>
-                handleClick(
-                  resultImage,
-                  isImageUrl,
-                  SEARCH_ENGINE_SETTINGS.GOOGLE_LENS_SEARCH.NAME,
-                )
-              }
-            >
-              {`${SEARCH_ENGINE_SETTINGS.GOOGLE_LENS_SEARCH.NAME} ${keyword(
-                "reverse_search",
-              )}`}
-            </Button>
-          </Grid>
-          <Grid item>
-            <Button
-              color="primary"
-              variant="contained"
-              onClick={() =>
-                handleClick(
-                  resultImage,
-                  isImageUrl,
-                  SEARCH_ENGINE_SETTINGS.BAIDU_SEARCH.NAME,
-                )
-              }
-            >
-              {`${SEARCH_ENGINE_SETTINGS.BAIDU_SEARCH.NAME} ${keyword(
-                "reverse_search",
-              )}`}
-            </Button>
-          </Grid>
-          {isImageUrl ? (
-            <>
-              <Grid item>
-                <Button
-                  color="primary"
-                  variant="contained"
-                  onClick={() =>
-                    handleClick(
-                      original,
-                      isImageUrl,
-                      SEARCH_ENGINE_SETTINGS.TINEYE_SEARCH.NAME,
-                    )
-                  }
-                >
-                  {`${SEARCH_ENGINE_SETTINGS.TINEYE_SEARCH.NAME} ${keyword(
-                    "reverse_search",
-                  )}`}
-                </Button>
-              </Grid>
-            </>
-          ) : null}
-        </Grid>
+          <></>
+        </ReverseSearchButtons>
       </div>
     </Card>
   );

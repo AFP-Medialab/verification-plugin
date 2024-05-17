@@ -25,17 +25,15 @@ import {
 
 import ImageUrlGridList from "../../../../Shared/ImageGridList/ImageUrlGridList";
 import AnalysisComments from "./AnalysisComments";
-import {
-  SEARCH_ENGINE_SETTINGS,
-  reverseImageSearch,
-} from "../../../../Shared/ReverseSearch/reverseSearchUtils";
+import { reverseImageSearch } from "../../../../Shared/ReverseSearch/reverseSearchUtils";
+import { ReverseSearchButtons } from "../../../../Shared/ReverseSearch/ReverseSearchButtons";
 
 const TwitterResults = (props) => {
   const classes = useMyStyles();
   const keyword = i18nLoadNamespace("components/NavItems/tools/Analysis");
   const reverseSearch = (website) => {
     for (let image of thumbnails) {
-      reverseImageSearch(image.url, true, website, false);
+      reverseImageSearch(image.url, website, false);
     }
   };
 
@@ -441,36 +439,9 @@ const TwitterResults = (props) => {
                     />
                   </div>
                   <Box m={2} />
-                  <Button
-                    className={classes.button}
-                    variant="contained"
-                    color={"primary"}
-                    onClick={() =>
-                      reverseSearch(SEARCH_ENGINE_SETTINGS.GOOGLE_SEARCH.NAME)
-                    }
-                  >
-                    {keyword("button_reverse_google")}
-                  </Button>
-                  <Button
-                    className={classes.button}
-                    variant="contained"
-                    color={"primary"}
-                    onClick={() =>
-                      reverseSearch(SEARCH_ENGINE_SETTINGS.YANDEX_SEARCH.NAME)
-                    }
-                  >
-                    {keyword("button_reverse_yandex")}
-                  </Button>
-                  <Button
-                    className={classes.button}
-                    variant="contained"
-                    color={"primary"}
-                    onClick={() =>
-                      reverseSearch(SEARCH_ENGINE_SETTINGS.TINEYE_SEARCH.NAME)
-                    }
-                  >
-                    {keyword("button_reverse_tineye")}
-                  </Button>
+                  <ReverseSearchButtons reverseSearch={reverseSearch}>
+                    <></>
+                  </ReverseSearchButtons>
                 </div>
               )}
             </div>

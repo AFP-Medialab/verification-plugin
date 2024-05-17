@@ -2,10 +2,10 @@ import { trackEvent } from "../components/Shared/GoogleAnalytics/MatomoAnalytics
 import {
   SEARCH_ENGINE_SETTINGS,
   reverseImageSearch,
-  getImgUrl,
   reverseImageSearchAll,
-  openTabs,
 } from "../components/Shared/ReverseSearch/reverseSearchUtils";
+import { openTabs } from "components/Shared/ReverseSearch/utils/openTabUtils";
+import { getImgUrl } from "components/Shared/ReverseSearch/utils/searchUtils";
 
 const page_name = "popup.html";
 
@@ -121,40 +121,28 @@ function contextClick(info) {
       imageForensic(info);
       break;
     case SEARCH_ENGINE_SETTINGS.ALL.CONTEXT_MENU_ID:
-      reverseImageSearchAll(info, false);
+      reverseImageSearchAll(info);
       break;
     case SEARCH_ENGINE_SETTINGS.DBKF_SEARCH.CONTEXT_MENU_ID:
-      reverseImageSearch(info, false, SEARCH_ENGINE_SETTINGS.DBKF_SEARCH.NAME);
-      break;
-    case SEARCH_ENGINE_SETTINGS.GOOGLE_SEARCH.CONTEXT_MENU_ID:
-      reverseImageSearch(info, true, SEARCH_ENGINE_SETTINGS.GOOGLE_SEARCH.NAME);
+      reverseImageSearch(info, SEARCH_ENGINE_SETTINGS.DBKF_SEARCH.NAME);
       break;
     case SEARCH_ENGINE_SETTINGS.GOOGLE_LENS_SEARCH.CONTEXT_MENU_ID:
-      reverseImageSearch(
-        info,
-        false,
-        SEARCH_ENGINE_SETTINGS.GOOGLE_LENS_SEARCH.NAME,
-      );
+      reverseImageSearch(info, SEARCH_ENGINE_SETTINGS.GOOGLE_LENS_SEARCH.NAME);
       break;
     case SEARCH_ENGINE_SETTINGS.YANDEX_SEARCH.CONTEXT_MENU_ID:
-      reverseImageSearch(
-        info,
-        false,
-        SEARCH_ENGINE_SETTINGS.YANDEX_SEARCH.NAME,
-      );
+      reverseImageSearch(info, SEARCH_ENGINE_SETTINGS.YANDEX_SEARCH.NAME);
       break;
     case SEARCH_ENGINE_SETTINGS.BING_SEARCH.CONTEXT_MENU_ID:
-      reverseImageSearch(info, false, SEARCH_ENGINE_SETTINGS.BING_SEARCH.NAME);
+      reverseImageSearch(info, SEARCH_ENGINE_SETTINGS.BING_SEARCH.NAME);
       break;
     case SEARCH_ENGINE_SETTINGS.TINEYE_SEARCH.CONTEXT_MENU_ID:
-      reverseImageSearch(
-        info,
-        false,
-        SEARCH_ENGINE_SETTINGS.TINEYE_SEARCH.NAME,
-      );
+      reverseImageSearch(info, SEARCH_ENGINE_SETTINGS.TINEYE_SEARCH.NAME);
       break;
     case SEARCH_ENGINE_SETTINGS.BAIDU_SEARCH.CONTEXT_MENU_ID:
-      reverseImageSearch(info, false, SEARCH_ENGINE_SETTINGS.BAIDU_SEARCH.NAME);
+      reverseImageSearch(info, SEARCH_ENGINE_SETTINGS.BAIDU_SEARCH.NAME);
+      break;
+    case SEARCH_ENGINE_SETTINGS.GOOGLE_FACT_CHECK.CONTEXT_MENU_ID:
+      reverseImageSearch(info, SEARCH_ENGINE_SETTINGS.GOOGLE_FACT_CHECK.NAME);
       break;
     default:
       break;
@@ -214,11 +202,7 @@ chrome.runtime.onInstalled.addListener(() => {
     id: SEARCH_ENGINE_SETTINGS.DBKF_SEARCH.CONTEXT_MENU_ID,
     title: SEARCH_ENGINE_SETTINGS.DBKF_SEARCH.CONTEXT_MENU_TITLE,
     contexts: ["image"],
-  });
-  chrome.contextMenus.create({
-    id: SEARCH_ENGINE_SETTINGS.GOOGLE_SEARCH.CONTEXT_MENU_ID,
-    title: SEARCH_ENGINE_SETTINGS.GOOGLE_SEARCH.CONTEXT_MENU_TITLE,
-    contexts: ["image"],
+    targetUrlPatterns: ["http://*:*/*", "https://*:*/*"],
   });
   chrome.contextMenus.create({
     id: SEARCH_ENGINE_SETTINGS.GOOGLE_LENS_SEARCH.CONTEXT_MENU_ID,
@@ -234,15 +218,22 @@ chrome.runtime.onInstalled.addListener(() => {
     id: SEARCH_ENGINE_SETTINGS.BING_SEARCH.CONTEXT_MENU_ID,
     title: SEARCH_ENGINE_SETTINGS.BING_SEARCH.CONTEXT_MENU_TITLE,
     contexts: ["image"],
+    targetUrlPatterns: ["http://*:*/*", "https://*:*/*"],
   });
   chrome.contextMenus.create({
     id: SEARCH_ENGINE_SETTINGS.TINEYE_SEARCH.CONTEXT_MENU_ID,
     title: SEARCH_ENGINE_SETTINGS.TINEYE_SEARCH.CONTEXT_MENU_TITLE,
     contexts: ["image"],
+    targetUrlPatterns: ["http://*:*/*", "https://*:*/*"],
   });
   chrome.contextMenus.create({
     id: SEARCH_ENGINE_SETTINGS.BAIDU_SEARCH.CONTEXT_MENU_ID,
     title: SEARCH_ENGINE_SETTINGS.BAIDU_SEARCH.CONTEXT_MENU_TITLE,
+    contexts: ["image"],
+  });
+  chrome.contextMenus.create({
+    id: SEARCH_ENGINE_SETTINGS.GOOGLE_FACT_CHECK.CONTEXT_MENU_ID,
+    title: SEARCH_ENGINE_SETTINGS.GOOGLE_FACT_CHECK.CONTEXT_MENU_TITLE,
     contexts: ["image"],
   });
 });

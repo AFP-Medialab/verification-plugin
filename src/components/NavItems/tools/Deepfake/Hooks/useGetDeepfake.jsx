@@ -18,9 +18,9 @@ async function UseGetDeepfake(
   role,
   errorMsg,
   type,
-  image,
+  mediaFile,
 ) {
-  if (!processURL || (!url && !image)) {
+  if (!processURL || (!url && !mediaFile)) {
     return;
   }
 
@@ -56,7 +56,7 @@ async function UseGetDeepfake(
     }
   };
 
-  if (!isValidUrl(url) && !image) {
+  if (!isValidUrl(url) && !mediaFile) {
     handleError(errorMsg);
     return;
   }
@@ -65,7 +65,7 @@ async function UseGetDeepfake(
     switch (type) {
       case "local":
         var bodyFormData = new FormData();
-        bodyFormData.append("file", image);
+        bodyFormData.append("file", mediaFile);
         res = await axios.post(baseURL + modeURL + "jobs", bodyFormData, {
           method: "post",
           params: { services: services },
@@ -97,7 +97,7 @@ async function UseGetDeepfake(
       if (mode === "IMAGE") {
         dispatch(
           setDeepfakeResultImage({
-            url: image ? URL.createObjectURL(image) : url,
+            url: mediaFile ? URL.createObjectURL(mediaFile) : url,
             result: response.data,
           }),
         );
