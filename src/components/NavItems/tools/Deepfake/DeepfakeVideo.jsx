@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
 import LinearProgress from "@mui/material/LinearProgress";
 import Box from "@mui/material/Box";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
@@ -15,6 +13,9 @@ import DeepfakeResultsVideo from "./Results/DeepfakeResultsVideo";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import Alert from "@mui/material/Alert";
 import { resetDeepfake } from "../../../../redux/actions/tools/deepfakeVideoActions";
+import { preprocessFileUpload } from "components/Shared/Utils/fileUtils";
+import { setError } from "redux/reducers/errorReducer";
+import StringFileUploadField from "components/Shared/StringFileUploadField";
 
 const Deepfake = () => {
   //const { url } = useParams();
@@ -30,6 +31,8 @@ const Deepfake = () => {
   const url = useSelector((state) => state.deepfakeVideo.url);
   const role = useSelector((state) => state.userSession.user.roles);
   const [input, setInput] = useState(url ? url : "");
+  const [type, setType] = useState("");
+  const [videoFile, setVideoFile] = useState(undefined);
   //Selecting mode
   //============================================================================================
   const [selectedMode, setSelectedMode] = useState("");
@@ -43,10 +46,6 @@ const Deepfake = () => {
 
   const dispatch = useDispatch();
 
-  const cleanup = () => {
-    dispatch(resetDeepfake());
-    setInput("");
-  };
   const submitUrl = () => {
     UseGetDeepfake(
       input,
@@ -55,7 +54,39 @@ const Deepfake = () => {
       dispatch,
       role,
       keywordWarning("error_invalid_url"),
+      type,
+      videoFile,
     );
+  };
+
+  const preprocessingSuccess = (file) => {
+    setVideoFile(file);
+    setType("local");
+    return file;
+  };
+
+  const preprocessingError = () => {
+    dispatch(setError(keywordWarning("warning_file_too_big")));
+  };
+  const preprocessVideo = (file) => {
+    return preprocessFileUpload(
+      file,
+      role,
+      undefined,
+      preprocessingSuccess,
+      preprocessingError,
+    );
+  };
+  const handleSubmit = () => {
+    dispatch(resetDeepfake());
+    submitUrl();
+  };
+
+  const handleClose = () => {
+    setInput("");
+    setVideoFile(undefined);
+    setType("");
+    dispatch(resetDeepfake());
   };
 
   return (
@@ -91,66 +122,45 @@ const Deepfake = () => {
 
         <Box p={3}>
           {selectedMode !== "" && (
-            <form>
+            <div>
               <Box>
-                <Grid container direction="row" spacing={3} alignItems="center">
-                  <Grid item xs>
-                    <TextField
-                      id="standard-full-width"
-                      label={keyword("deepfake_video_link")}
-                      placeholder={keyword("deepfake_placeholder")}
-                      fullWidth
-                      type="url"
-                      value={input}
-                      variant="outlined"
-                      disabled={selectedMode === "" || isLoading}
-                      onChange={(e) => setInput(e.target.value)}
-                    />
-                  </Grid>
-
-                  <Grid item>
-                    {!result ? (
-                      <Button
-                        type="submit"
-                        variant="contained"
-                        color="primary"
-                        onClick={(e) => {
-                          e.preventDefault(), submitUrl();
-                        }}
-                        disabled={
-                          selectedMode === "" || input === "" || isLoading
-                        }
-                      >
-                        {"Submit"}
-                      </Button>
-                    ) : (
-                      <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={(e) => {
-                          e.preventDefault(), cleanup();
-                        }}
-                      >
-                        {keyword("button_remove")}
-                      </Button>
-                    )}
-                  </Grid>
-                </Grid>
-
+                <form>
+                  <StringFileUploadField
+                    labelKeyword={keyword("deepfake_video_link")}
+                    placeholderKeyword={keyword("deepfake_placeholder")}
+                    submitButtonKeyword={keyword("submit_button")}
+                    localFileKeyword={keyword("button_localfile")}
+                    urlInput={input}
+                    setUrlInput={setInput}
+                    fileInput={videoFile}
+                    setFileInput={setVideoFile}
+                    handleSubmit={handleSubmit}
+                    fileInputTypesAccepted={"video/*"}
+                    handleCloseSelectedFile={handleClose}
+                    preprocessLocalFile={preprocessVideo}
+                  />
+                </form>
+                <Box m={2} />
                 {isLoading && (
                   <Box mt={3}>
                     <LinearProgress />
                   </Box>
                 )}
               </Box>
-            </form>
+            </div>
           )}
         </Box>
       </Card>
 
       <Box m={3} />
 
-      {result && <DeepfakeResultsVideo result={result} url={url} />}
+      {result && (
+        <DeepfakeResultsVideo
+          result={result}
+          url={url}
+          handleClose={handleClose}
+        />
+      )}
     </div>
   );
 };

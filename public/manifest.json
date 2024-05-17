@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "Fake news debunker by InVID & WeVerify - BETA",
+  "name": "Fake news debunker by InVID & WeVerify BETA",
   "version": "0.80",
-  "description": "InVID WeVerify extension - THIS EXTENSION IS FOR BÊTA TESTING",
+  "description": "InVID WeVerify extension THIS EXTENSION IS FOR BÊTA TESTING",
   "short_name": "Verification Plugin",
   "action": {
     "default_title": "InVID WeVerify",
