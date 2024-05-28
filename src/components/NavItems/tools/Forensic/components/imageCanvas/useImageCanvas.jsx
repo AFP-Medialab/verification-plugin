@@ -9,6 +9,7 @@ import { useSelector } from "react-redux";
  * @param applyColorScale {boolean} set to true if working with a color scale
  * @param threshold {number} the threshold value between 0 and 255. The detection starts from 50%
  * @param filterDataUrl {function(string)} function to retrieve the DataUrl computed by the component
+ * @param text {string} text added on top of the image
  * @returns {React.MutableRefObject<null>}
  */
 const useImageCanvas = (
@@ -17,6 +18,7 @@ const useImageCanvas = (
   applyColorScale,
   threshold,
   filterDataURL,
+  text,
 ) => {
   const canvasRef = useRef();
 
@@ -60,6 +62,12 @@ const useImageCanvas = (
         context.canvas.height,
       );
 
+      if (text) {
+        context.font = "30px Arial";
+        context.fillStyle = "red";
+        context.fillText(text, 60, 80);
+      }
+
       if (!context.canvas.width || !context.canvas.height) return;
       let imageData = context.getImageData(
         0,
@@ -76,7 +84,7 @@ const useImageCanvas = (
     }
 
     loadAndProcessImage(imgSrc);
-  }, [imgSrc, threshold, isGrayscaleColorInverted, applyColorScale]);
+  }, [imgSrc, threshold, isGrayscaleColorInverted, applyColorScale, text]);
 
   return canvasRef;
 };

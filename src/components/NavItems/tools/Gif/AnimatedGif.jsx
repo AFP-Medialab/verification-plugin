@@ -7,11 +7,14 @@ import {
   CardMedia,
   Slider,
   Button,
+  Card,
+  CardContent,
 } from "@mui/material";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import { useState, useEffect } from "react";
 import ImageCanvas from "../Forensic/components/imageCanvas/imageCanvas";
+import TextImageCanvas from "./Components/TextImageCanvas";
 
 const AnimatedGif = ({
   toolState,
@@ -95,8 +98,6 @@ const AnimatedGif = ({
   }, []);
   //Function to prepare the files to trigger the download
   const handleDownload = (type) => {
-    //console.log(toolState);
-
     let files = {
       image1: isCanvas ? imageDataURL : homoImg1,
       image2: isCanvas ? filterDataURL : homoImg2,
@@ -224,17 +225,31 @@ const AnimatedGif = ({
             {keyword("title_preview")}
           </Typography>
           <Box justifyContent="center" className={classes.wrapperImageFilter}>
-            <CardMedia
-              component="img"
+            <ImageCanvas
               className={classes.imagesGifImage}
-              image={homoImg1}
+              imgSrc={homoImg1}
+              isGrayscaleInverted={false}
+              applyColorScale={false}
+              threshold={0}
+              filterDataURL={setImageDataURL}
+              text={"Fake"}
             />
-            <CardMedia
-              component="img"
+
+            <ImageCanvas
               className={classes.imagesGifFilter}
-              image={homoImg2}
               id="gifFilterElement"
+              imgSrc={homoImg2}
+              isGrayscaleInverted={false}
+              applyColorScale={false}
+              threshold={127}
+              filterDataURL={setFilterDataURL}
             />
+            {/* <Box>
+            <TextImageCanvas image = {homoImg1}/>
+          </Box>
+          <Box id="gifFilterElement">
+            <TextImageCanvas image = {homoImg2} />
+          </Box> */}
           </Box>
           <Grid
             container
