@@ -28,7 +28,7 @@ const AssistantVideoResult = () => {
   const input_url_type = useSelector((state) => state.assistant.inputUrlType);
 
   const useIframe = () => {
-    switch (process_url_type) {
+    switch (input_url_type) {
       case KNOWN_LINKS.YOUTUBE:
       case KNOWN_LINKS.VIMEO:
       case KNOWN_LINKS.DAILYMOTION:
@@ -48,7 +48,7 @@ const AssistantVideoResult = () => {
     let stringToMatch = "";
     let positionOne = 0;
 
-    switch (process_url_type) {
+    switch (input_url_type) {
       case KNOWN_LINKS.YOUTUBE:
         if (!embedURL.includes("/embed/")) {
           let ids = embedURL.match("(?<=v=|youtu.be/)([a-zA-Z0-9_-]+)[&|?]?");
@@ -56,6 +56,9 @@ const AssistantVideoResult = () => {
             embedURL = "http://www.youtube.com/embed/" + ids[0];
           }
         }
+        break;
+      case KNOWN_LINKS.YOUTUBESHORTS:
+        embedURL = null; // Null as youtube shorts does not support embedding
         break;
       case KNOWN_LINKS.VIMEO:
         stringToMatch = "vimeo.com/";
@@ -89,7 +92,7 @@ const AssistantVideoResult = () => {
   return (
     <Card variant={"outlined"}>
       <CardMedia>
-        {useIframe() ? (
+        {useIframe() && preprocessLinkForEmbed(processUrl) && (
           <Iframe
             hidden={downloadVideoFound()}
             frameBorder="0"
@@ -98,7 +101,8 @@ const AssistantVideoResult = () => {
             height="400"
             width="100%"
           />
-        ) : (
+        )}
+        {!useIframe() && preprocessLinkForEmbed(processUrl) && (
           <video
             hidden={downloadVideoFound()}
             src={preprocessLinkForEmbed(processUrl)}
@@ -106,6 +110,19 @@ const AssistantVideoResult = () => {
             height="400"
             width="100%"
           />
+        )}
+        {!preprocessLinkForEmbed(processUrl) && (
+          <div
+            style={{
+              width: "100%",
+              height: "400px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <div>{keyword("embedding_not_supported")}</div>
+          </div>
         )}
       </CardMedia>
       <CardMedia hidden={!downloadVideoFound()}>
