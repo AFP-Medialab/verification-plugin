@@ -35,6 +35,28 @@ const AnimatedGif = ({
   const [imageDataURL, setImageDataURL] = React.useState();
   const [filterDataURL, setFilterDataURL] = React.useState();
 
+  //=== PAUSE BUTTON ===
+
+  const [paused, setPaused] = useState(false);
+
+  //
+  /**
+   * Pauses the animation or starts it again
+   * @param {boolean | ((prevState: boolean) => boolean)} newPauseValue
+   */
+  function pauseUnpause(newPauseValue) {
+    if (!newPauseValue) {
+      setIntervalVar(setInterval(() => animateImages(), speed));
+    } else {
+      console.log("pausing animation");
+      setIntervalVar(null);
+      var x = document.getElementById("gifFilterElement");
+      x.style.display = "none";
+    }
+
+    setPaused(newPauseValue);
+  }
+
   //=== SPEED SLIDER ===
   const [speed, setSpeed] = useState(1100);
 
@@ -47,7 +69,7 @@ const AnimatedGif = ({
   function commitChangeSpeed(value) {
     //console.log("Commit change speed: " + value); //DEBUG
     //clearInterval(interval);
-    setIntervalVar(setInterval(() => animateImages(), value));
+    if (!paused) setIntervalVar(setInterval(() => animateImages(), value));
   }
   //Loop function
   function animateImages() {
@@ -74,7 +96,11 @@ const AnimatedGif = ({
   //=== TRIGGER AND CLOSE ANIMATION ===
   useEffect(() => {
     //console.log("toolState ", toolState)
-    if (toolState === 5 && (interval === null || interval === undefined)) {
+    if (
+      toolState === 5 &&
+      (interval === null || interval === undefined) &&
+      !paused
+    ) {
       setIntervalVar(setInterval(() => animateImages(), speed));
     }
     return () => {
@@ -225,7 +251,7 @@ const AnimatedGif = ({
             {keyword("title_preview")}
           </Typography>
           <Box justifyContent="center" className={classes.wrapperImageFilter}>
-            <ImageCanvas
+            {/* <ImageCanvas
               className={classes.imagesGifImage}
               imgSrc={homoImg1}
               isGrayscaleInverted={false}
@@ -243,13 +269,30 @@ const AnimatedGif = ({
               applyColorScale={false}
               threshold={127}
               filterDataURL={setFilterDataURL}
-            />
-            {/* <Box>
-            <TextImageCanvas image = {homoImg1}/>
-          </Box>
-          <Box id="gifFilterElement">
-            <TextImageCanvas image = {homoImg2} />
-          </Box> */}
+            /> */}
+            <Box className={classes.imagesGifImage}>
+              <TextImageCanvas
+                imgSrc={homoImg1}
+                text="Fake"
+                filterDataURL={setImageDataURL}
+              />
+            </Box>
+            <Box id="gifFilterElement" className={classes.imagesGifFilter}>
+              <TextImageCanvas
+                imgSrc={homoImg2}
+                filterDataURL={setFilterDataURL}
+                text={null}
+              />
+            </Box>
+            <Box m={3} />
+            <Button
+              variant="contained"
+              color="primary"
+              disabled={toolState === 7}
+              onClick={() => pauseUnpause(!paused)}
+            >
+              {paused ? keyword("button_unpause") : keyword("button_pause")}
+            </Button>
           </Box>
           <Grid
             container
@@ -257,7 +300,7 @@ const AnimatedGif = ({
             justifyContent="center"
             alignItems="center"
           >
-            <Box m={4} />
+            <Box m={3} />
 
             <Typography gutterBottom>{keyword("slider_title")}</Typography>
 
