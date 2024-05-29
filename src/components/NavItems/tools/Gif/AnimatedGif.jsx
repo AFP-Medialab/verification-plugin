@@ -9,6 +9,7 @@ import {
   Button,
   Card,
   CardContent,
+  Alert,
 } from "@mui/material";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
@@ -274,6 +275,7 @@ const AnimatedGif = ({
                 imgSrc={homoImg1}
                 text="Fake"
                 filterDataURL={setImageDataURL}
+                paused={paused}
               />
             </Box>
             <Box id="gifFilterElement" className={classes.imagesGifFilter}>
@@ -281,6 +283,7 @@ const AnimatedGif = ({
                 imgSrc={homoImg2}
                 filterDataURL={setFilterDataURL}
                 text={null}
+                paused={false}
               />
             </Box>
             <Box m={3} />
@@ -292,6 +295,10 @@ const AnimatedGif = ({
             >
               {paused ? keyword("button_unpause") : keyword("button_pause")}
             </Button>
+            <Alert severity="info">
+              GIF can be paused to add a "Fake" annotation to the altered image.
+              The text can be dragged to a more suitable position.
+            </Alert>
           </Box>
           <Grid
             container

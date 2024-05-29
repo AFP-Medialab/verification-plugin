@@ -15,7 +15,7 @@ import {
   Typography,
 } from "@mui/material";
 
-const TextImageCanvas = ({ imgSrc, text, filterDataURL }) => {
+const TextImageCanvas = ({ imgSrc, text, filterDataURL, paused }) => {
   const stageRef = React.useRef(null);
   const [img, setImg] = useState(null);
   const [textColor, setTextColor] = useState("red");
@@ -76,7 +76,7 @@ const TextImageCanvas = ({ imgSrc, text, filterDataURL }) => {
           <Box m={2} />
         </Grid>
         <Grid item>
-          {text && (
+          {paused && (
             <Fragment>
               <Grid container direction="column">
                 <Grid item>
