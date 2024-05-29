@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Image, Layer, Stage, Text } from "react-konva";
+import { Image, Layer, Rect, Stage, Text } from "react-konva";
 import { preloadImage } from "../../Forensic/utils";
 
 const TextImageCanvas = ({ imgSrc, text, filterDataURL }) => {
@@ -11,6 +11,8 @@ const TextImageCanvas = ({ imgSrc, text, filterDataURL }) => {
     const uri = stageRef.current.toDataURL();
     filterDataURL(uri);
   };
+
+  const textBackground = () => {};
 
   useEffect(() => {
     async function loadAndPreloadImage() {
@@ -33,11 +35,9 @@ const TextImageCanvas = ({ imgSrc, text, filterDataURL }) => {
           <Image image={img} width={width} height={height} />
           <Text
             text={text}
-            fontSize={30}
+            fontSize={40}
             draggable
             fill="red"
-            stroke="black"
-            strokeWidth={1}
             onDragEnd={handleExport}
           />
         </Layer>
