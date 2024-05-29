@@ -33,7 +33,7 @@ const TextImageCanvas = ({ imgSrc, text, filterDataURL }) => {
           <Image image={img} width={width} height={height} />
           <Text
             text={text}
-            fontSize={40}
+            fontSize={30}
             draggable
             fill="red"
             stroke="black"

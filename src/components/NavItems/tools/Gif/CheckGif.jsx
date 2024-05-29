@@ -745,9 +745,7 @@ const CheckGif = () => {
                     homoImg1={homoImg1}
                     homoImg2={homoImg2}
                     isCanvas={true}
-                  >
-                    {console.log("drawing animated gif")}
-                  </AnimatedGif>
+                  ></AnimatedGif>
                 )}
               </Grid>
             </Grid>

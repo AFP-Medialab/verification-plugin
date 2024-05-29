@@ -48,7 +48,6 @@ const AnimatedGif = ({
     if (!newPauseValue) {
       setIntervalVar(setInterval(() => animateImages(), speed));
     } else {
-      console.log("pausing animation");
       setIntervalVar(null);
       var x = document.getElementById("gifFilterElement");
       x.style.display = "none";
