@@ -14,6 +14,7 @@ import {
   CardHeader,
   Grid,
   LinearProgress,
+  Stack,
 } from "@mui/material";
 
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
@@ -211,7 +212,7 @@ const SyntheticImageDetection = () => {
   };
 
   return (
-    <div>
+    <Box>
       <HeaderTool
         name={keywordAllTools("navbar_synthetic_image_detection")}
         description={keywordAllTools(
@@ -224,11 +225,11 @@ const SyntheticImageDetection = () => {
         }
       />
 
-      <Alert severity="warning">
-        {keywordWarning("warning_beta_synthetic_image_detection")}
-      </Alert>
-
-      <Box m={3} />
+      <Stack direction="column" spacing={2} mb={4}>
+        <Alert severity="warning">
+          {keywordWarning("warning_beta_synthetic_image_detection")}
+        </Alert>
+      </Stack>
 
       <Card>
         <CardHeader
@@ -282,7 +283,7 @@ const SyntheticImageDetection = () => {
           handleClose={handleClose}
         />
       )}
-    </div>
+    </Box>
   );
 };
 
