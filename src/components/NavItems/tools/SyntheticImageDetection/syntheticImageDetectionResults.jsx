@@ -4,23 +4,29 @@ import {
   AccordionDetails,
   AccordionSummary,
   Alert,
+  Backdrop,
   Box,
   Card,
   CardHeader,
   Chip,
   Divider,
+  Fade,
   Grid,
   IconButton,
+  Link,
+  Modal,
   Stack,
   Typography,
 } from "@mui/material";
-import { Close, ExpandMore } from "@mui/icons-material";
+import { Close, Download, ExpandMore, Square } from "@mui/icons-material";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import { useSelector } from "react-redux";
 import { useTrackEvent } from "Hooks/useAnalytics";
 import { getclientId } from "components/Shared/GoogleAnalytics/MatomoAnalytics";
 import CustomAlertScore from "../../../Shared/CustomAlertScore";
 import GaugeChart from "react-gauge-chart";
+import Tooltip from "@mui/material/Tooltip";
+import html2canvas from "html2canvas";
 
 const SyntheticImageDetectionResults = (props) => {
   const keyword = i18nLoadNamespace(
@@ -82,6 +88,10 @@ const SyntheticImageDetectionResults = (props) => {
   const [maxScore, setMaxScore] = useState(0);
 
   const [resultsHaveErrors, setResultsHaveErrors] = useState(false);
+
+  const [openGaugeColorsModal, setOpenGaugeColorsModal] = React.useState(false);
+
+  const gaugeChartRef = useRef(null);
 
   useEffect(() => {
     setResultsHaveErrors(false);
@@ -246,6 +256,45 @@ const SyntheticImageDetectionResults = (props) => {
         );
   };
 
+  const handleOpenGaugeColorsModal = () => {
+    setOpenGaugeColorsModal(true);
+  };
+
+  const handleCloseGaugeColorsModal = () => setOpenGaugeColorsModal(false);
+
+  const gaugeColorsModalStyle = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    minWidth: "400px",
+    width: "30vw",
+    backgroundColor: "background.paper",
+    outline: "unset",
+    borderRadius: "10px",
+    boxShadow: 24,
+    p: 4,
+    maxHeight: "60vh",
+    overflow: "auto",
+  };
+
+  const downloadGaugeChartAsPng = async () => {
+    const canvas = await html2canvas(gaugeChartRef.current).catch((e) =>
+      console.log(e),
+    );
+    console.log(canvas);
+    console.log(gaugeChartRef.current);
+    const img = canvas.toDataURL("image/jpeg", 1.0);
+    const link = document.createElement("a");
+    link.style.display = "none";
+    link.download = "gaugeChart";
+    link.href = img;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    link.remove();
+  };
+
   return (
     <Stack
       direction="row"
@@ -303,57 +352,194 @@ const SyntheticImageDetectionResults = (props) => {
                 spacing={4}
                 width="100%"
                 sx={{ boxSizing: "border-box" }}
+                position="relative"
               >
                 <Stack
-                  direction="column"
+                  direction={{ sm: "column", md: "row" }}
+                  alignItems={{ sm: "start", md: "center" }}
                   justifyContent="center"
-                  alignItems="center"
-                  spacing={0}
                   width="100%"
                 >
-                  <GaugeChart
-                    id={"gauge-chart"}
-                    animate={false}
-                    nrOfLevels={4}
-                    textColor={"black"}
-                    arcsLength={[
-                      (100 - DETECTION_THRESHOLDS.THRESHOLD_1) / 100,
-                      (DETECTION_THRESHOLDS.THRESHOLD_2 -
-                        DETECTION_THRESHOLDS.THRESHOLD_1) /
-                        100,
-                      (DETECTION_THRESHOLDS.THRESHOLD_3 -
-                        DETECTION_THRESHOLDS.THRESHOLD_2) /
-                        100,
-                      (100 - DETECTION_THRESHOLDS.THRESHOLD_3) / 100,
-                    ]}
-                    percent={syntheticImageScores ? maxScore / 100 : 0}
-                    style={{ width: 250 }}
-                  />
+                  <Box m={2}></Box>
                   <Stack
-                    direction="row"
+                    direction="column"
                     justifyContent="center"
                     alignItems="center"
-                    spacing={10}
+                    spacing={2}
+                    ref={gaugeChartRef}
+                    p={2}
                   >
-                    <Typography variant="subtitle2">
-                      {keyword("synthetic_image_detection_gauge_no_detection")}
-                    </Typography>
-                    <Typography variant="subtitle2">
-                      {keyword("synthetic_image_detection_gauge_detection")}
-                    </Typography>
+                    {maxScore > DETECTION_THRESHOLDS.THRESHOLD_2 && (
+                      <Typography
+                        variant="h5"
+                        align="center"
+                        alignSelf="center"
+                        sx={{ color: "red" }}
+                      >
+                        {keyword(
+                          "synthetic_image_detection_generic_detection_text",
+                        )}
+                      </Typography>
+                    )}
+                    <Stack
+                      direction="column"
+                      justifyContent="center"
+                      alignItems="center"
+                    >
+                      <GaugeChart
+                        id={"gauge-chart"}
+                        animate={false}
+                        nrOfLevels={4}
+                        textColor={"black"}
+                        arcsLength={[
+                          (100 - DETECTION_THRESHOLDS.THRESHOLD_1) / 100,
+                          (DETECTION_THRESHOLDS.THRESHOLD_2 -
+                            DETECTION_THRESHOLDS.THRESHOLD_1) /
+                            100,
+                          (DETECTION_THRESHOLDS.THRESHOLD_3 -
+                            DETECTION_THRESHOLDS.THRESHOLD_2) /
+                            100,
+                          (100 - DETECTION_THRESHOLDS.THRESHOLD_3) / 100,
+                        ]}
+                        percent={syntheticImageScores ? maxScore / 100 : 0}
+                        style={{
+                          minWidth: "250px",
+                          width: "50%",
+                          maxWidth: "500px",
+                        }}
+                      />
+
+                      <Stack
+                        direction="row"
+                        justifyContent="center"
+                        alignItems="center"
+                        spacing={10}
+                      >
+                        <Typography variant="subtitle2">
+                          {keyword(
+                            "synthetic_image_detection_gauge_no_detection",
+                          )}
+                        </Typography>
+                        <Typography variant="subtitle2">
+                          {keyword("synthetic_image_detection_gauge_detection")}
+                        </Typography>
+                      </Stack>
+                    </Stack>
                   </Stack>
+                  <Box alignSelf={{ sm: "flex-start", md: "flex-end" }}>
+                    <Tooltip
+                      title={keyword(
+                        "synthetic_image_detection_download_gauge_button",
+                      )}
+                    >
+                      <IconButton
+                        color="primary"
+                        aria-label="download chart"
+                        onClick={downloadGaugeChartAsPng}
+                      >
+                        <Download />
+                      </IconButton>
+                    </Tooltip>
+                  </Box>
                 </Stack>
+
+                <Link
+                  onClick={handleOpenGaugeColorsModal}
+                  sx={{ cursor: "pointer" }}
+                  variant={"body1"}
+                >
+                  {keyword("synthetic_image_detection_scale_explanation_link")}
+                </Link>
+                <Modal
+                  aria-labelledby="transition-modal-title"
+                  aria-describedby="transition-modal-description"
+                  open={openGaugeColorsModal}
+                  onClose={handleCloseGaugeColorsModal}
+                  closeAfterTransition
+                  slots={{ backdrop: Backdrop }}
+                  slotProps={{
+                    backdrop: {
+                      timeout: 500,
+                    },
+                  }}
+                >
+                  <Fade in={openGaugeColorsModal}>
+                    <Box sx={gaugeColorsModalStyle}>
+                      <Stack
+                        direction="row"
+                        justifyContent="space-between"
+                        alignItems="center"
+                        spacing={2}
+                      >
+                        <Typography
+                          id="transition-modal-title"
+                          variant="subtitle2"
+                          style={{
+                            color: "#00926c",
+                            fontSize: "24px",
+                          }}
+                        >
+                          {keyword(
+                            "synthetic_image_detection_scale_modal_explanation_title",
+                          )}
+                        </Typography>
+                        <IconButton
+                          variant="outlined"
+                          aria-label="close popup"
+                          onClick={handleCloseGaugeColorsModal}
+                        >
+                          <Close />
+                        </IconButton>
+                      </Stack>
+                      <Stack
+                        id="transition-modal-description"
+                        direction="column"
+                        spacing={2}
+                        mt={2}
+                      >
+                        <Stack direction="row" alignItems="center" spacing={1}>
+                          <Square fontSize="large" sx={{ color: "#00FF00" }} />
+                          <Typography>
+                            {keyword(
+                              "synthetic_image_detection_scale_modal_explanation_rating_1",
+                            )}
+                          </Typography>
+                        </Stack>
+                        <Stack direction="row" alignItems="center" spacing={1}>
+                          <Square fontSize="large" sx={{ color: "#AAFF03" }} />
+                          <Typography>
+                            {keyword(
+                              "synthetic_image_detection_scale_modal_explanation_rating_2",
+                            )}
+                          </Typography>
+                        </Stack>
+
+                        <Stack direction="row" alignItems="center" spacing={1}>
+                          <Square fontSize="large" sx={{ color: "#FFA903" }} />
+                          <Typography>
+                            {keyword(
+                              "synthetic_image_detection_scale_modal_explanation_rating_3",
+                            )}
+                          </Typography>
+                        </Stack>
+                        <Stack direction="row" alignItems="center" spacing={1}>
+                          <Square fontSize="large" sx={{ color: "#FF0000" }} />
+                          <Typography>
+                            {keyword(
+                              "synthetic_image_detection_scale_modal_explanation_rating_4",
+                            )}
+                          </Typography>
+                        </Stack>
+                      </Stack>
+                    </Box>
+                  </Fade>
+                </Modal>
                 <CustomAlertScore
                   score={syntheticImageScores ? maxScore : 0}
                   detectionType={undefined}
                   toolName={"SyntheticImageDetection"}
                   thresholds={DETECTION_THRESHOLDS}
                 />
-                <Typography>
-                  {keyword(
-                    "synthetic_image_detection_additional_explanation_text",
-                  )}
-                </Typography>
                 {resultsHaveErrors && (
                   <Alert severity="error">
                     {keyword("synthetic_image_detection_algorithms_errors")}
@@ -395,7 +581,7 @@ const SyntheticImageDetectionResults = (props) => {
                                       }
                                     </Typography>
                                     <Stack
-                                      direction="row"
+                                      direction={{ lg: "row", md: "column" }}
                                       spacing={2}
                                       alignItems="center"
                                     >
