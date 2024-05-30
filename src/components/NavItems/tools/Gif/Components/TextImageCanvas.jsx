@@ -1,4 +1,4 @@
-import React, { useEffect, useState, Fragment } from "react";
+import React, { useEffect, useState } from "react";
 import { Image, Layer, Stage, Text } from "react-konva";
 import { preloadImage } from "../../Forensic/utils";
 import {
@@ -85,7 +85,7 @@ const TextImageCanvas = ({
         </Grid>
         <Grid item>
           {paused && (
-            <Fragment>
+            <>
               <Grid container direction="column">
                 <Grid item>
                   <Box m={3} />
@@ -126,7 +126,10 @@ const TextImageCanvas = ({
                       step={5}
                       min={25}
                       max={95}
-                      onChange={(_e, val) => setTextSize(val)}
+                      onChange={(_e, val) => {
+                        if (typeof val !== "number") return;
+                        setTextSize(val);
+                      }}
                       className={classes.sliderClass}
                     />
                   </Grid>
@@ -137,7 +140,7 @@ const TextImageCanvas = ({
                   <Box m={3} />
                 </Grid>
               </Grid>
-            </Fragment>
+            </>
           )}
         </Grid>
       </Grid>

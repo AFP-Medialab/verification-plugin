@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React from "react";
 import useGetGif from "./Hooks/useGetGif";
 import {
   Box,
@@ -282,7 +282,7 @@ const AnimatedGif = ({
             </Box>
             <Box m={3} />
             {(annotation || paused) && (
-              <Fragment>
+              <>
                 <Button
                   variant="outlined"
                   color="primary"
@@ -293,7 +293,7 @@ const AnimatedGif = ({
                   {paused ? keyword("button_play") : keyword("button_modify")}
                 </Button>
                 <Box m={1} />
-              </Fragment>
+              </>
             )}
             <Button
               variant="outlined"
