@@ -319,7 +319,7 @@ const SyntheticImageDetectionResults = (props) => {
           alignItems="flex-start"
         >
           <Grid item sm={12} md={6}>
-            <Box sx={{ width: "100%", height: "100%", position: "relative" }}>
+            <Box sx={{ width: "100%", height: "100%" }}>
               <Grid
                 container
                 direction="row"
