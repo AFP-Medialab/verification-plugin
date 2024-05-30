@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 import useGetGif from "./Hooks/useGetGif";
 import {
   Box,
@@ -16,6 +16,7 @@ import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace
 import { useState, useEffect } from "react";
 import ImageCanvas from "../Forensic/components/imageCanvas/imageCanvas";
 import TextImageCanvas from "./Components/TextImageCanvas";
+import { Edit, PlayArrow } from "@mui/icons-material";
 
 const AnimatedGif = ({
   toolState,
@@ -39,6 +40,7 @@ const AnimatedGif = ({
   //=== PAUSE BUTTON ===
 
   const [paused, setPaused] = useState(false);
+  const [annotation, setAnnotation] = useState(false);
 
   //
   /**
@@ -55,6 +57,15 @@ const AnimatedGif = ({
     }
 
     setPaused(newPauseValue);
+  }
+
+  /**
+   *
+   * @param {boolean | ((prevState: boolean) => boolean)} newAnnotation
+   */
+  function addRemoveAnnotation(newAnnotation) {
+    pauseUnpause(!paused);
+    setAnnotation(newAnnotation);
   }
 
   //=== SPEED SLIDER ===
@@ -193,7 +204,6 @@ const AnimatedGif = ({
         <Grid item>
           <Typography gutterBottom>{keyword("slider_title")}</Typography>
           <Slider
-            p={6}
             defaultValue={-1100}
             aria-labelledby="discrete-slider"
             step={300}
@@ -250,6 +260,7 @@ const AnimatedGif = ({
           <Typography variant="h6" className={classes.headingGif}>
             {keyword("title_preview")}
           </Typography>
+
           <Box justifyContent="center" className={classes.wrapperImageFilter}>
             {/* <ImageCanvas
               className={classes.imagesGifImage}
@@ -276,6 +287,7 @@ const AnimatedGif = ({
                 text="Fake"
                 filterDataURL={setImageDataURL}
                 paused={paused}
+                annotation={annotation}
               />
             </Box>
             <Box id="gifFilterElement" className={classes.imagesGifFilter}>
@@ -284,20 +296,35 @@ const AnimatedGif = ({
                 filterDataURL={setFilterDataURL}
                 text={null}
                 paused={false}
+                annotation={false}
               />
             </Box>
             <Box m={3} />
+            {(annotation || paused) && (
+              <Fragment>
+                <Button
+                  variant="outlined"
+                  color="primary"
+                  disabled={toolState === 7}
+                  onClick={() => pauseUnpause(!paused)}
+                  startIcon={paused ? <PlayArrow /> : <Edit />}
+                >
+                  {paused ? "play gif" : "modify annotation"}
+                </Button>
+                <Box m={1} />
+              </Fragment>
+            )}
             <Button
-              variant="contained"
-              color="primary"
+              variant="outlined"
+              color={annotation ? "error" : "primary"}
               disabled={toolState === 7}
-              onClick={() => pauseUnpause(!paused)}
+              onClick={() => addRemoveAnnotation(!annotation)}
             >
-              {paused ? keyword("button_unpause") : keyword("button_pause")}
+              {annotation ? "Remove annotation" : "Add annotation"}
             </Button>
+            <Box m={1} />
             <Alert severity="info">
-              GIF can be paused to add a "Fake" annotation to the altered image.
-              The text can be dragged to a more suitable position.
+              "Fake" annotation can be added to the altered image.
             </Alert>
           </Box>
           <Grid

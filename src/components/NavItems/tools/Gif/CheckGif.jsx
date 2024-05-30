@@ -505,7 +505,7 @@ const CheckGif = () => {
             <Grid container spacing={3}>
               <Grid
                 item
-                xs={6}
+                xs={5}
                 style={{ borderRight: "0.1em solid #ECECEC", padding: "0.5em" }}
               >
                 <Box p={2}>
@@ -705,7 +705,7 @@ const CheckGif = () => {
                 </Box>
               </Grid>
 
-              <Grid item xs={6} style={{ padding: "0.5em" }}>
+              <Grid item xs={7} style={{ padding: "0.5em" }}>
                 {(toolState === 21 || toolState === 22 || toolState === 3) && (
                   <Grid
                     container
