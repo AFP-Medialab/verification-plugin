@@ -17,6 +17,7 @@ import {
   Typography,
 } from "@mui/material";
 import useMyStyles from "components/Shared/MaterialUiStyles/useMyStyles";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
 const TextImageCanvas = ({
   imgSrc,
@@ -26,6 +27,7 @@ const TextImageCanvas = ({
   annotation,
 }) => {
   const classes = useMyStyles();
+  const keyword = i18nLoadNamespace("components/NavItems/tools/CheckGIF");
 
   const stageRef = React.useRef(null);
   const [img, setImg] = useState(null);
@@ -100,7 +102,7 @@ const TextImageCanvas = ({
                   <Box m={2} />
                   <FormControl>
                     <InputLabel id="demo-simple-select-label">
-                      Colour
+                      {keyword("colour_label")}
                     </InputLabel>
                     <Select
                       labelId="demo-simple-select-label"
@@ -109,9 +111,13 @@ const TextImageCanvas = ({
                       label="Age"
                       onChange={changeColor}
                     >
-                      <MenuItem value={"red"}>Red</MenuItem>
-                      <MenuItem value={"blue"}>Blue</MenuItem>
-                      <MenuItem value={"white"}>White</MenuItem>
+                      <MenuItem value={"red"}>{keyword("colour_red")}</MenuItem>
+                      <MenuItem value={"blue"}>
+                        {keyword("colour_blue")}
+                      </MenuItem>
+                      <MenuItem value={"white"}>
+                        {keyword("colour_white")}
+                      </MenuItem>
                     </Select>
                   </FormControl>
                   <Box m={2} />
@@ -124,7 +130,9 @@ const TextImageCanvas = ({
                     alignItems="center"
                     padding={1}
                   >
-                    <Typography gutterBottom>Text size</Typography>
+                    <Typography gutterBottom>
+                      {keyword("text_size_label")}
+                    </Typography>
                     <Slider
                       defaultValue={70}
                       aria-labelledby="discrete-slider"
@@ -138,9 +146,7 @@ const TextImageCanvas = ({
                 </Grid>
                 <Grid item>
                   <Box m={1} />
-                  <Alert severity="info">
-                    The text can be dragged to a more suitable position.
-                  </Alert>
+                  <Alert severity="info">{keyword("draggable_text_tip")}</Alert>
                 </Grid>
                 {/* <Grid item>
                   <Box m={1}/>

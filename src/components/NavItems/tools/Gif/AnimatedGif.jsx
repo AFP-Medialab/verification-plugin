@@ -309,7 +309,7 @@ const AnimatedGif = ({
                   onClick={() => pauseUnpause(!paused)}
                   startIcon={paused ? <PlayArrow /> : <Edit />}
                 >
-                  {paused ? "play gif" : "modify annotation"}
+                  {paused ? keyword("button_play") : keyword("button_modify")}
                 </Button>
                 <Box m={1} />
               </Fragment>
@@ -320,12 +320,10 @@ const AnimatedGif = ({
               disabled={toolState === 7}
               onClick={() => addRemoveAnnotation(!annotation)}
             >
-              {annotation ? "Remove annotation" : "Add annotation"}
+              {annotation ? keyword("button_remove") : keyword("button_add")}
             </Button>
             <Box m={1} />
-            <Alert severity="info">
-              "Fake" annotation can be added to the altered image.
-            </Alert>
+            <Alert severity="info">{keyword("fake_annotation_tip")}</Alert>
           </Box>
           <Grid
             container
