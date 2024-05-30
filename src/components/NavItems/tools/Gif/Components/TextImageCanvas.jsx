@@ -53,6 +53,7 @@ const TextImageCanvas = ({
 
   if (img) {
     //calculates width and height used for the canvas, to have the same proportions as the image
+    //gifs have a default width of 600 pixels
     const imgRatio = img.naturalWidth / img.naturalHeight;
     const width = 600;
     const height = 600 / imgRatio;
