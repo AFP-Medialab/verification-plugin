@@ -54,8 +54,8 @@ const TextImageCanvas = ({
   if (img) {
     //calculates width and height used for the canvas, to have the same proportions as the image
     const imgRatio = img.naturalWidth / img.naturalHeight;
-    const width = 300;
-    const height = 300 / imgRatio;
+    const width = 600;
+    const height = 600 / imgRatio;
 
     return (
       <Grid
@@ -82,12 +82,12 @@ const TextImageCanvas = ({
             </Layer>
           </Stage>
         </Grid>
-        <Grid item padding={2}>
+        <Grid item>
           {paused && (
             <Fragment>
               <Grid container direction="column">
                 <Grid item>
-                  <Box m={2} />
+                  <Box m={3} />
                   <FormControl>
                     <InputLabel id="demo-simple-select-label">
                       {keyword("colour_label")}
@@ -108,7 +108,6 @@ const TextImageCanvas = ({
                       </MenuItem>
                     </Select>
                   </FormControl>
-                  <Box m={2} />
                 </Grid>
                 <Grid item>
                   <Grid
@@ -116,13 +115,12 @@ const TextImageCanvas = ({
                     direction="column"
                     justifyContent="center"
                     alignItems="center"
-                    padding={1}
                   >
                     <Typography gutterBottom>
                       {keyword("text_size_label")}
                     </Typography>
                     <Slider
-                      defaultValue={70}
+                      defaultValue={60}
                       aria-labelledby="discrete-slider"
                       step={5}
                       min={25}
@@ -135,6 +133,7 @@ const TextImageCanvas = ({
                 <Grid item>
                   <Box m={1} />
                   <Alert severity="info">{keyword("draggable_text_tip")}</Alert>
+                  <Box m={3} />
                 </Grid>
               </Grid>
             </Fragment>
