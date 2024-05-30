@@ -37,7 +37,7 @@ const AnimatedGif = ({
   const [imageDataURL, setImageDataURL] = React.useState();
   const [filterDataURL, setFilterDataURL] = React.useState();
 
-  //=== PAUSE BUTTON ===
+  //=== PAUSE AND ANNOTATION BUTTONS ===
 
   const [paused, setPaused] = useState(false);
   const [annotation, setAnnotation] = useState(false);
@@ -60,7 +60,7 @@ const AnimatedGif = ({
   }
 
   /**
-   *
+   * Function that adds or removes "Fake" annotation and pauses the gif when added
    * @param {boolean | ((prevState: boolean) => boolean)} newAnnotation
    */
   function addRemoveAnnotation(newAnnotation) {
@@ -262,25 +262,6 @@ const AnimatedGif = ({
           </Typography>
 
           <Box justifyContent="center" className={classes.wrapperImageFilter}>
-            {/* <ImageCanvas
-              className={classes.imagesGifImage}
-              imgSrc={homoImg1}
-              isGrayscaleInverted={false}
-              applyColorScale={false}
-              threshold={0}
-              filterDataURL={setImageDataURL}
-              text={"Fake"}
-            />
-
-            <ImageCanvas
-              className={classes.imagesGifFilter}
-              id="gifFilterElement"
-              imgSrc={homoImg2}
-              isGrayscaleInverted={false}
-              applyColorScale={false}
-              threshold={127}
-              filterDataURL={setFilterDataURL}
-            /> */}
             <Box className={classes.imagesGifImage}>
               <TextImageCanvas
                 imgSrc={homoImg1}

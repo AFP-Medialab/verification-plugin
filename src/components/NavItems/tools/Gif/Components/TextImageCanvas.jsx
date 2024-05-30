@@ -1,17 +1,13 @@
 import React, { useEffect, useState, Fragment } from "react";
-import { Image, Layer, Rect, Stage, Text } from "react-konva";
+import { Image, Layer, Stage, Text } from "react-konva";
 import { preloadImage } from "../../Forensic/utils";
 import {
   Alert,
   Box,
-  Button,
   FormControl,
-  FormControlLabel,
   Grid,
   InputLabel,
   MenuItem,
-  Radio,
-  RadioGroup,
   Select,
   Slider,
   Typography,
@@ -32,7 +28,6 @@ const TextImageCanvas = ({
   const stageRef = React.useRef(null);
   const [img, setImg] = useState(null);
   const [textColor, setTextColor] = useState("red");
-  const [textActivated, setTextActivated] = useState(annotation);
   const [textSize, setTextSize] = useState(35);
 
   const handleExport = () => {
@@ -45,10 +40,7 @@ const TextImageCanvas = ({
     setTextColor(event.target.value);
   };
 
-  const handleTextVisibility = () => {
-    setTextActivated(!textActivated);
-  };
-
+  // loads image
   useEffect(() => {
     async function loadAndPreloadImage() {
       const loadedImg = await preloadImage(imgSrc);
@@ -60,6 +52,7 @@ const TextImageCanvas = ({
   }, [imgSrc, img]);
 
   if (img) {
+    //calculates width and height used for the canvas, to have the same proportions as the image
     const imgRatio = img.naturalWidth / img.naturalHeight;
     const width = 300;
     const height = 300 / imgRatio;
@@ -93,11 +86,6 @@ const TextImageCanvas = ({
           {paused && (
             <Fragment>
               <Grid container direction="column">
-                {/* <Grid item>
-                    <Box m={1} />
-                    <Typography>Add or remove annotation to altered image:</Typography>
-                </Grid> */}
-
                 <Grid item>
                   <Box m={2} />
                   <FormControl>
@@ -148,15 +136,6 @@ const TextImageCanvas = ({
                   <Box m={1} />
                   <Alert severity="info">{keyword("draggable_text_tip")}</Alert>
                 </Grid>
-                {/* <Grid item>
-                  <Box m={1}/>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={handleTextVisibility}>
-                    {textActivated? "Remove annotation" : "Add annotation"}
-                  </Button>
-                </Grid> */}
               </Grid>
             </Fragment>
           )}
