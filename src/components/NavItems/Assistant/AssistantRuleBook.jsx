@@ -5,6 +5,7 @@ import magnifierIconOff from "../../NavBar/images/tools/magnifierOff.png";
 import metadataIconOff from "../../NavBar/images/tools/metadataOff.png";
 import videoRightsIconOff from "../../NavBar/images/tools/copyrightOff.png";
 import forensicIconOff from "../../NavBar/images/tools/forensic_logoOff.png";
+import videoIconOff from "../../NavBar/images/tools/video_logoOff.png";
 
 export const NE_SUPPORTED_LANGS = ["en", "pt", "fr", "de", "el", "es", "it"];
 
@@ -20,11 +21,13 @@ export const KNOWN_LINKS = {
   TIKTOK: "tiktok",
   TELEGRAM: "telegram",
   YOUTUBE: "youtube",
+  YOUTUBESHORTS: "youtubeshorts",
   DAILYMOTION: "dailymotion",
   LIVELEAK: "liveleak",
   VIMEO: "vimeo",
   MASTODON: "mastodon",
   OWN: "own",
+  VK: "vk",
   MISC: "general",
 };
 
@@ -71,6 +74,12 @@ export const KNOWN_LINK_PATTERNS = [
     ],
   },
   {
+    key: KNOWN_LINKS.YOUTUBESHORTS,
+    patterns: [
+      "(https?:\\/{2})?(www.)?((youtube.com\\/shorts\\/))([a-zA-Z0-9_-]{11})",
+    ],
+  },
+  {
     key: KNOWN_LINKS.VIMEO,
     patterns: ["^(https?:/{2})?(www.)?vimeo.com/\\d*"],
   },
@@ -85,6 +94,12 @@ export const KNOWN_LINK_PATTERNS = [
   {
     key: KNOWN_LINKS.MASTODON,
     patterns: ["^(?:https?:/{2})?(www.)?.+..+/@.*/d*"],
+  },
+  {
+    key: KNOWN_LINKS.VK,
+    patterns: [
+      "(https?:\\/{2})?(www.)?vk.com\\/(wall|video)(-?)\\d*_\\d*(\\??)",
+    ],
   },
   {
     key: KNOWN_LINKS.MISC,
@@ -131,9 +146,10 @@ export const ASSISTANT_ACTIONS = [
       KNOWN_LINKS.DAILYMOTION,
       KNOWN_LINKS.VIMEO,
       KNOWN_LINKS.YOUTUBE,
+      KNOWN_LINKS.YOUTUBESHORTS,
       KNOWN_LINKS.LIVELEAK,
       KNOWN_LINKS.OWN,
-      KNOWN_LINKS.TELEGRAM,
+      KNOWN_LINKS.INSTAGRAM,
     ],
     cTypes: [CONTENT_TYPE.VIDEO],
     exceptions: [],
@@ -214,18 +230,29 @@ export const ASSISTANT_ACTIONS = [
     tsvPrefix: "ocr",
     path: "tools/ocr",
   },
+  {
+    title: "assistant_video_download_action",
+    icon: videoIconOff,
+    linksAccepted: [KNOWN_LINKS.TELEGRAM, KNOWN_LINKS.MISC],
+    cTypes: [CONTENT_TYPE.VIDEO],
+    exceptions: [],
+    useInputUrl: false,
+    text: "assistant_video_download_action_description",
+    tsvPrefix: "assistant_video",
+    download: true,
+  },
 ];
 
 export const selectCorrectActions = (
   contentType,
-  inputUrlTYpe,
+  inputUrlType,
   processUrlType,
   processUrl,
 ) => {
   let possibleActions = ASSISTANT_ACTIONS.filter(
     (action) =>
       ((action.useInputUrl &&
-        action.linksAccepted.includes(inputUrlTYpe) &&
+        action.linksAccepted.includes(inputUrlType) &&
         action.cTypes.includes(contentType)) ||
         (!action.useInputUrl &&
           action.linksAccepted.includes(processUrlType) &&
