@@ -265,6 +265,9 @@ function* handleSourceCredibilityCall(action) {
         result = result.concat(batchResult.entities.SourceCredibility);
       }
     }
+    if (!result.length) {
+      result = null;
+    }
 
     const trafficLightColors = {
       positive: "#008000", // green
@@ -523,6 +526,7 @@ function formatTelegramLink(url) {
 const decideWhetherToScrape = (urlType, contentType) => {
   switch (urlType) {
     case KNOWN_LINKS.YOUTUBE:
+    case KNOWN_LINKS.YOUTUBESHORTS:
     case KNOWN_LINKS.LIVELEAK:
     case KNOWN_LINKS.VIMEO:
     case KNOWN_LINKS.DAILYMOTION:
@@ -533,6 +537,7 @@ const decideWhetherToScrape = (urlType, contentType) => {
     case KNOWN_LINKS.TWITTER:
     case KNOWN_LINKS.TELEGRAM:
     case KNOWN_LINKS.MASTODON:
+    case KNOWN_LINKS.VK:
       return true;
     case KNOWN_LINKS.MISC:
       if (contentType === null) {
@@ -597,6 +602,7 @@ const filterAssistantResults = (
 
   switch (urlType) {
     case KNOWN_LINKS.YOUTUBE:
+    case KNOWN_LINKS.YOUTUBESHORTS:
     case KNOWN_LINKS.LIVELEAK:
     case KNOWN_LINKS.VIMEO:
     case KNOWN_LINKS.DAILYMOTION:
@@ -632,6 +638,7 @@ const filterAssistantResults = (
       }
       break;
     case KNOWN_LINKS.TELEGRAM:
+    case KNOWN_LINKS.VK:
       if (scrapeResult.images.length > 0) {
         imageList = scrapeResult.images;
       }
@@ -682,11 +689,9 @@ const filterSourceCredibilityResults = (
   linkList,
   trafficLightColors,
 ) => {
-  //if (!originalResult.entities.SourceCredibility) {
-  if (!originalResult) {
+  if (!originalResult.length) {
     return [null, null, null, null];
   }
-  //let sourceCredibility = originalResult.entities.SourceCredibility;
   let sourceCredibility = originalResult;
 
   sourceCredibility.forEach((dc) => {

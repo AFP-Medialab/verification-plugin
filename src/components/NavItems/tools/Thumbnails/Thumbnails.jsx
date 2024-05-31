@@ -74,7 +74,7 @@ const Thumbnails = () => {
     let selectedList = {};
 
     for (const searchEngine of Object.values(SEARCH_ENGINE_SETTINGS)) {
-      if (searchEngine.NAME === SEARCH_ENGINE_SETTINGS.GOOGLE_SEARCH.NAME)
+      if (searchEngine.NAME === SEARCH_ENGINE_SETTINGS.GOOGLE_LENS_SEARCH.NAME)
         selectedList[searchEngine.NAME] = true;
       else selectedList[searchEngine.NAME] = false;
     }
@@ -114,7 +114,7 @@ const Thumbnails = () => {
 
   const get_images = (url) => {
     let video_id = getYtIdFromUrlString(url);
-    let img_url = "http://img.youtube.com/vi/%s/%d.jpg";
+    let img_url = "https://img.youtube.com/vi/%s/%d.jpg";
     let img_arr = [];
     for (let count = 0; count < 4; count++) {
       img_arr.push(img_url.replace("%s", video_id).replace("%d", count));
@@ -177,8 +177,8 @@ const Thumbnails = () => {
 
       if (isSearchEngineSelected) {
         if (searchEngineName === SEARCH_ENGINE_SETTINGS.ALL.NAME)
-          reverseImageSearchAll(url, true, false);
-        else reverseImageSearch(url, true, searchEngineName, false);
+          reverseImageSearchAll(url, false);
+        else reverseImageSearch(url, searchEngineName, false);
       }
     }
   };

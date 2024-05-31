@@ -1,8 +1,13 @@
-import { MAX_AUDIO_FILE_SIZE, MAX_IMAGE_FILE_SIZE } from "../../../config";
+import {
+  MAX_AUDIO_FILE_SIZE,
+  MAX_IMAGE_FILE_SIZE,
+  MAX_VIDEO_FILE_SIZE,
+} from "../../../config";
 
 export const FILE_TYPES = {
   image: "image",
   audio: "audio",
+  video: "video",
 };
 
 /**
@@ -19,6 +24,23 @@ export const isImageFileTooLarge = (imageFile, userRole) => {
   return (
     (!userRole || !userRole.includes("EXTRA_FEATURE")) &&
     imageFile.size >= MAX_IMAGE_FILE_SIZE
+  );
+};
+
+/**
+ * Helper function to check if a video file is too large to be processed.
+ * @param videoFile {File} The image file to check
+ * @param userRole The user role
+ * @returns {boolean} True if the file is too large
+ */
+export const isVideoFileTooLarge = (videoFile, userRole) => {
+  if (!videoFile.type.includes("video")) {
+    throw new Error("Invalid file type. This file is not an image.");
+  }
+
+  return (
+    (!userRole || !userRole.includes("EXTRA_FEATURE")) &&
+    videoFile.size >= MAX_VIDEO_FILE_SIZE
   );
 };
 
@@ -64,9 +86,16 @@ export const preprocessFileUpload = (
   } else if (fileType === FILE_TYPES.audio && isAudioFileTooLarge(file, role)) {
     onError();
     return undefined;
+  } else if (fileType === FILE_TYPES.video && isVideoFileTooLarge(file, role)) {
+    onError();
+    return undefined;
   }
   //Check if file type is not supported
-  else if (fileType !== FILE_TYPES.image && fileType !== FILE_TYPES.audio) {
+  else if (
+    fileType !== FILE_TYPES.image &&
+    fileType !== FILE_TYPES.audio &&
+    fileType !== FILE_TYPES.video
+  ) {
     console.error("File error: type not supported");
     onError();
     return undefined;

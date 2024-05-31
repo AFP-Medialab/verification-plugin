@@ -89,8 +89,7 @@ const KeyFramesResults = (props) => {
     if (url !== "")
       reverseImageSearch(
         url,
-        true,
-        SEARCH_ENGINE_SETTINGS.GOOGLE_SEARCH.NAME,
+        SEARCH_ENGINE_SETTINGS.GOOGLE_LENS_SEARCH.NAME,
         false,
       );
   };

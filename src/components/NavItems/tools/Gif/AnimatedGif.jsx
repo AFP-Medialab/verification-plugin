@@ -7,11 +7,16 @@ import {
   CardMedia,
   Slider,
   Button,
+  Card,
+  CardContent,
+  Alert,
 } from "@mui/material";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import { useState, useEffect } from "react";
 import ImageCanvas from "../Forensic/components/imageCanvas/imageCanvas";
+import TextImageCanvas from "./Components/TextImageCanvas";
+import { Edit, PlayArrow } from "@mui/icons-material";
 
 const AnimatedGif = ({
   toolState,
@@ -32,6 +37,37 @@ const AnimatedGif = ({
   const [imageDataURL, setImageDataURL] = React.useState();
   const [filterDataURL, setFilterDataURL] = React.useState();
 
+  //=== PAUSE AND ANNOTATION BUTTONS ===
+
+  const [paused, setPaused] = useState(false);
+  const [annotation, setAnnotation] = useState(false);
+
+  //
+  /**
+   * Pauses the animation or starts it again
+   * @param {boolean | ((prevState: boolean) => boolean)} newPauseValue
+   */
+  function pauseUnpause(newPauseValue) {
+    if (!newPauseValue) {
+      setIntervalVar(setInterval(() => animateImages(), speed));
+    } else {
+      setIntervalVar(null);
+      var x = document.getElementById("gifFilterElement");
+      x.style.display = "none";
+    }
+
+    setPaused(newPauseValue);
+  }
+
+  /**
+   * Function that adds or removes "Fake" annotation and pauses the gif when added
+   * @param {boolean | ((prevState: boolean) => boolean)} newAnnotation
+   */
+  function addRemoveAnnotation(newAnnotation) {
+    pauseUnpause(!paused);
+    setAnnotation(newAnnotation);
+  }
+
   //=== SPEED SLIDER ===
   const [speed, setSpeed] = useState(1100);
 
@@ -44,7 +80,7 @@ const AnimatedGif = ({
   function commitChangeSpeed(value) {
     //console.log("Commit change speed: " + value); //DEBUG
     //clearInterval(interval);
-    setIntervalVar(setInterval(() => animateImages(), value));
+    if (!paused) setIntervalVar(setInterval(() => animateImages(), value));
   }
   //Loop function
   function animateImages() {
@@ -71,7 +107,11 @@ const AnimatedGif = ({
   //=== TRIGGER AND CLOSE ANIMATION ===
   useEffect(() => {
     //console.log("toolState ", toolState)
-    if (toolState === 5 && (interval === null || interval === undefined)) {
+    if (
+      toolState === 5 &&
+      (interval === null || interval === undefined) &&
+      !paused
+    ) {
       setIntervalVar(setInterval(() => animateImages(), speed));
     }
     return () => {
@@ -95,8 +135,6 @@ const AnimatedGif = ({
   }, []);
   //Function to prepare the files to trigger the download
   const handleDownload = (type) => {
-    //console.log(toolState);
-
     let files = {
       image1: isCanvas ? imageDataURL : homoImg1,
       image2: isCanvas ? filterDataURL : homoImg2,
@@ -166,7 +204,6 @@ const AnimatedGif = ({
         <Grid item>
           <Typography gutterBottom>{keyword("slider_title")}</Typography>
           <Slider
-            p={6}
             defaultValue={-1100}
             aria-labelledby="discrete-slider"
             step={300}
@@ -223,18 +260,51 @@ const AnimatedGif = ({
           <Typography variant="h6" className={classes.headingGif}>
             {keyword("title_preview")}
           </Typography>
+
           <Box justifyContent="center" className={classes.wrapperImageFilter}>
-            <CardMedia
-              component="img"
-              className={classes.imagesGifImage}
-              image={homoImg1}
-            />
-            <CardMedia
-              component="img"
-              className={classes.imagesGifFilter}
-              image={homoImg2}
-              id="gifFilterElement"
-            />
+            <Box className={classes.imagesGifImage}>
+              <TextImageCanvas
+                imgSrc={homoImg1}
+                text="Fake"
+                filterDataURL={setImageDataURL}
+                paused={paused}
+                annotation={annotation}
+              />
+            </Box>
+            <Box id="gifFilterElement" className={classes.imagesGifFilter}>
+              <TextImageCanvas
+                imgSrc={homoImg2}
+                filterDataURL={setFilterDataURL}
+                text={null}
+                paused={false}
+                annotation={false}
+              />
+            </Box>
+            <Box m={3} />
+            {(annotation || paused) && (
+              <>
+                <Button
+                  variant="outlined"
+                  color="primary"
+                  disabled={toolState === 7}
+                  onClick={() => pauseUnpause(!paused)}
+                  startIcon={paused ? <PlayArrow /> : <Edit />}
+                >
+                  {paused ? keyword("button_play") : keyword("button_modify")}
+                </Button>
+                <Box m={1} />
+              </>
+            )}
+            <Button
+              variant="outlined"
+              color={annotation ? "error" : "primary"}
+              disabled={toolState === 7}
+              onClick={() => addRemoveAnnotation(!annotation)}
+            >
+              {annotation ? keyword("button_remove") : keyword("button_add")}
+            </Button>
+            <Box m={1} />
+            <Alert severity="info">{keyword("fake_annotation_tip")}</Alert>
           </Box>
           <Grid
             container
@@ -242,7 +312,7 @@ const AnimatedGif = ({
             justifyContent="center"
             alignItems="center"
           >
-            <Box m={4} />
+            <Box m={3} />
 
             <Typography gutterBottom>{keyword("slider_title")}</Typography>
 

@@ -80,9 +80,10 @@ import AboutIcon from "./images/SVG/Navbar/About.svg";
 import AssistantIcon from "./images/SVG/Navbar/Assistant.svg";
 import GuideIcon from "./images/SVG/Navbar/Guide.svg";
 
-import LogoInvid2 from "./images/SVG/Navbar/InVID.svg";
-import LogoWeVerify2 from "./images/SVG/Navbar/WeVerify.svg";
 import LogoVera from "./images/SVG/Navbar/vera-logo_black.svg";
+import LogoInVidWeverify from "./images/SVG/Navbar/invid_weverify.svg";
+
+import LogoEuCom from "./images/SVG/Navbar/ep-logo.svg";
 
 import VideoIcon from "./images/SVG/Video/Video.svg";
 import ImageIcon from "./images/SVG/Image/Images.svg";
@@ -117,7 +118,7 @@ const NavBar = () => {
   const [classWidthToolbar, setClassWidthToolbar] = useState(
     classes.drawerWidth,
   );
-
+  const LOGO_EU = process.env.REACT_APP_LOGO_EU;
   const tabValue = useSelector((state) => state.nav);
 
   const drawerValue = useSelector((state) => state.tool.selected);
@@ -162,12 +163,11 @@ const NavBar = () => {
           setOpenAlert(true);
         }
       } else {
-        if (newValue.title === "navbar_twitter_crowdtangle")
-          window.open(
-            process.env.REACT_APP_TSNA_SERVER + "csvSna?lang=" + currentLang,
-            "_blank",
-          );
-        else if (newValue.path === "factcheck" || newValue.path === "xnetwork")
+        if (
+          newValue.path === "csvSna" ||
+          newValue.path === "factcheck" ||
+          newValue.path === "xnetwork"
+        )
           window.open(
             process.env.REACT_APP_TSNA_SERVER +
               newValue.path +
@@ -968,6 +968,7 @@ const NavBar = () => {
         />
       ),
       tsvPrefix: "twitter_crowdtangle",
+      path: "csvSna",
       pathGroup: "TOOL",
       type: keyword("navbar_category_data"),
       typeId: 5,
@@ -1532,26 +1533,29 @@ const NavBar = () => {
                   alignItems="center"
                   spacing={{ sm: 1, md: 2 }}
                 >
-                  <LogoWeVerify2
-                    style={{
-                      height: "auto",
-                      minWidth: "48px",
-                      width: { sm: "48px", md: "80px" },
-                    }}
-                    alt="logo"
-                    className={classes.logoLeft}
-                    onClick={handleImageClick}
-                  />
-                  <LogoInvid2
-                    style={{
-                      height: "auto",
-                      minWidth: "48px",
-                      width: { sm: "48px", md: "80px" },
-                    }}
-                    alt="logo"
-                    className={classes.logoRight}
-                    onClick={handleImageClick}
-                  />
+                  {LOGO_EU ? (
+                    <LogoEuCom
+                      style={{
+                        height: "auto",
+                        minWidth: "48px",
+                        width: { sm: "48px", md: "80px" },
+                      }}
+                      alt="logo"
+                      className={classes.logoLeft}
+                      onClick={handleImageClick}
+                    />
+                  ) : (
+                    <LogoInVidWeverify
+                      style={{
+                        height: "auto",
+                        minWidth: "96px",
+                        width: { sm: "96px", md: "96px" },
+                      }}
+                      alt="logo"
+                      className={classes.logoLeft}
+                      onClick={handleImageClick}
+                    />
+                  )}
                   <LogoVera
                     style={{
                       height: "auto",

@@ -2,8 +2,9 @@ import React from "react";
 import { Alert } from "@mui/material";
 import CopyButton from "../CopyButton";
 import { i18nLoadNamespace } from "../Languages/i18nLoadNamespace";
+import Typography from "@mui/material/Typography";
 
-const CustomAlertScore = ({ score, detectionType, toolName }) => {
+const CustomAlertScore = ({ score, detectionType, toolName, thresholds }) => {
   const keyword = i18nLoadNamespace(`components/NavItems/tools/${toolName}`);
 
   // TODO: handle error
@@ -30,9 +31,9 @@ const CustomAlertScore = ({ score, detectionType, toolName }) => {
     .replace(/([a-z])([A-Z])/g, "$1_$2")
     .toLowerCase();
 
-  const DETECTION_THRESHOLD_1 = 10;
-  const DETECTION_THRESHOLD_2 = 30;
-  const DETECTION_THRESHOLD_3 = 60;
+  const DETECTION_THRESHOLD_1 = thresholds.THRESHOLD_1;
+  const DETECTION_THRESHOLD_2 = thresholds.THRESHOLD_2;
+  const DETECTION_THRESHOLD_3 = thresholds.THRESHOLD_3;
 
   const SEVERITY_INFO = "info";
 
@@ -103,7 +104,7 @@ const CustomAlertScore = ({ score, detectionType, toolName }) => {
         />
       }
     >
-      {alertSettings.displayText}
+      <Typography variant="body1">{alertSettings.displayText}</Typography>
     </Alert>
   );
 };

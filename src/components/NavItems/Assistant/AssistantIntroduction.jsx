@@ -110,6 +110,7 @@ const AssistantIntroduction = (props) => {
             <Grid container spacing={3} alignItems="flex-start">
               <Grid item xs={6}>
                 <Box
+                  data-testid="assistant-webpage-link"
                   p={3}
                   className={classButtonURL}
                   onClick={() => {
