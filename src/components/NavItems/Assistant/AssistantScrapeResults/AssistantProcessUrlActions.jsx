@@ -28,20 +28,29 @@ const AssistantProcessUrlActions = () => {
     (state) => state.assistant.processUrlActions,
   );
 
-  const handleClick = (path, resultUrl) => {
-    if (resultUrl != null) {
+  const handleClick = (action) => {
+    const resultUrl = action.useInputUrl ? inputUrl : processUrl;
+    if (action.download) {
+      // Creates an A tag for downloading the video
+      let dl = document.createElement("a");
+      dl.setAttribute("href", resultUrl);
+      dl.setAttribute("download", "");
+      dl.click();
+    } else if (resultUrl != null) {
       navigate(
         "/app/" +
-          path +
+          action.path +
           "/" +
           encodeURIComponent(resultUrl) +
           "/" +
           contentType,
       );
-      //history.push("/app/" + path + "/" + encodeURIComponent(resultUrl) + "/" + contentType)
+      //history.push("/app/" + action.path + "/" + encodeURIComponent(resultUrl) + "/" + contentType)
     } else {
-      navigate("/app/" + path + "/" + KNOWN_LINKS.OWN + "/" + contentType);
-      //history.push("/app/" + path + "/" + KNOWN_LINKS.OWN + "/" + contentType)
+      navigate(
+        "/app/" + action.path + "/" + KNOWN_LINKS.OWN + "/" + contentType,
+      );
+      //history.push("/app/" + action.path + "/" + KNOWN_LINKS.OWN + "/" + contentType)
     }
   };
 
@@ -57,16 +66,9 @@ const AssistantProcessUrlActions = () => {
       <List>
         {processUrlActions.map((action, index) => {
           return (
-            <Box m={2} key={index}>
+            <Box m={2} key={index} style={{ cursor: "pointer" }}>
               <Card className={classes.assistantHover} variant={"outlined"}>
-                <ListItem
-                  onClick={() =>
-                    handleClick(
-                      action.path,
-                      action.useInputUrl ? inputUrl : processUrl,
-                    )
-                  }
-                >
+                <ListItem onClick={() => handleClick(action)}>
                   <ListItemAvatar>
                     <Avatar variant={"square"} src={action.icon} />
                   </ListItemAvatar>

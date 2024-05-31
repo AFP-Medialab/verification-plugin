@@ -2,6 +2,7 @@ import React from "react";
 import { Alert } from "@mui/material";
 import CopyButton from "../CopyButton";
 import { i18nLoadNamespace } from "../Languages/i18nLoadNamespace";
+import Typography from "@mui/material/Typography";
 
 const CustomAlertScore = ({ score, detectionType, toolName, thresholds }) => {
   const keyword = i18nLoadNamespace(`components/NavItems/tools/${toolName}`);
@@ -103,7 +104,7 @@ const CustomAlertScore = ({ score, detectionType, toolName, thresholds }) => {
         />
       }
     >
-      {alertSettings.displayText}
+      <Typography variant="body1">{alertSettings.displayText}</Typography>
     </Alert>
   );
 };
