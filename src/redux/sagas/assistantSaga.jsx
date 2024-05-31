@@ -537,6 +537,7 @@ const decideWhetherToScrape = (urlType, contentType) => {
     case KNOWN_LINKS.TWITTER:
     case KNOWN_LINKS.TELEGRAM:
     case KNOWN_LINKS.MASTODON:
+    case KNOWN_LINKS.VK:
       return true;
     case KNOWN_LINKS.MISC:
       if (contentType === null) {
@@ -637,6 +638,7 @@ const filterAssistantResults = (
       }
       break;
     case KNOWN_LINKS.TELEGRAM:
+    case KNOWN_LINKS.VK:
       if (scrapeResult.images.length > 0) {
         imageList = scrapeResult.images;
       }
@@ -687,11 +689,9 @@ const filterSourceCredibilityResults = (
   linkList,
   trafficLightColors,
 ) => {
-  //if (!originalResult.entities.SourceCredibility) {
-  if (!originalResult) {
+  if (!originalResult.length) {
     return [null, null, null, null];
   }
-  //let sourceCredibility = originalResult.entities.SourceCredibility;
   let sourceCredibility = originalResult;
 
   sourceCredibility.forEach((dc) => {

@@ -58,7 +58,8 @@ const AssistantVideoResult = () => {
         }
         break;
       case KNOWN_LINKS.YOUTUBESHORTS:
-        embedURL = null; // Null as youtube shorts does not support embedding
+      case KNOWN_LINKS.VK:
+        embedURL = null; // Null as youtube shorts and vk do not support embedding
         break;
       case KNOWN_LINKS.VIMEO:
         stringToMatch = "vimeo.com/";

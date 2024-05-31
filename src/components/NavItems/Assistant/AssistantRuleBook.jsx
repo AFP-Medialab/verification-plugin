@@ -26,6 +26,7 @@ export const KNOWN_LINKS = {
   VIMEO: "vimeo",
   MASTODON: "mastodon",
   OWN: "own",
+  VK: "vk",
   MISC: "general",
 };
 
@@ -92,6 +93,12 @@ export const KNOWN_LINK_PATTERNS = [
   {
     key: KNOWN_LINKS.MASTODON,
     patterns: ["^(?:https?:/{2})?(www.)?.+..+/@.*/d*"],
+  },
+  {
+    key: KNOWN_LINKS.VK,
+    patterns: [
+      "(https?:\\/{2})?(www.)?vk.com\\/(wall|video)(-?)\\d*_\\d*(\\??)",
+    ],
   },
   {
     key: KNOWN_LINKS.MISC,
