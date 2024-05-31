@@ -128,8 +128,7 @@ const DrawerItem = ({ drawerItems }) => {
           <DrawerItemContent index={0} drawContent={drawerItemsContent} />
         }
       />
-      {drawerItems.map((item) => {
-        let index = item.id - 1;
+      {drawerItems.map((item, index) => {
         if (item.path) {
           return (
             <Route path={item.path} key={index}>

@@ -22,6 +22,7 @@ import {
   ListSubheader,
   Snackbar,
   Stack,
+  SvgIcon,
   Tab,
   Tabs,
   Toolbar,
@@ -103,6 +104,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { AudioFile, Audiotrack, ManageSearch } from "@mui/icons-material";
 import AdvancedTools from "../NavItems/tools/Alltools/AdvancedTools/AdvancedTools";
 import Grid from "@mui/material/Grid";
+import { createSvgIcon } from "@mui/material/utils";
 
 function a11yProps(index) {
   return {
@@ -155,7 +157,7 @@ const NavBar = () => {
     if (newValueType === "TOOL") {
       if (
         newValue.toolRestrictions !== undefined &&
-        newValue.toolRestrictions.includes("lock")
+        newValue.toolRestrictions.includes(TOOL_STATUS_ICON.LOCK)
       ) {
         if (userAuthenticated) {
           navigate("/app/tools/" + newValue.path);
@@ -211,8 +213,86 @@ const NavBar = () => {
   const role = useSelector((state) => state.userSession.user.roles);
   const betaTester = role.includes("BETA_TESTER");
 
-  //console.log("Role", role);
-  //console.log("Beta", betaTester);
+  const TOOLS_CATEGORIES = {
+    VIDEO: keyword("navbar_category_video"),
+    IMAGE: keyword("navbar_category_image"),
+    AUDIO: keyword("navbar_category_audio"),
+    SEARCH: keyword("navbar_category_search"),
+    DATA_ANALYSIS: keyword("navbar_category_data"),
+    OTHER: keyword("navbar_category_other"),
+
+    // Used to display the home page
+    ALL: keyword("navbar_category_general"),
+  };
+
+  const TOOL_STATUS_ICON = {
+    EXPERIMENTAL: "experimental",
+    NEW: "new",
+    LOCK: "lock",
+  };
+
+  const TOOL_RESTRICTIONS = {
+    ARCHIVE: "ARCHIVE",
+    BETA_TESTER: "BETA_TESTER",
+    LOCK: "lock",
+  };
+
+  const ToolsSvgIcon = createSvgIcon(ToolsIcon, "ToolsIcon");
+
+  /**
+   *  Class representing a tool in the drawer
+   */
+  class DrawerItem {
+    /**
+     * @param title {string}
+     * @param description {string}
+     * @param icon {SvgIcon}
+     * @param path {string}
+     * @param type {}
+     * @param typeId
+     * @param statusIcons
+     * @param restrictions
+     */
+    constructor(
+      title,
+      description,
+      icon,
+      path,
+      type,
+      statusIcons,
+      restrictions,
+    ) {
+      // TODO: First check that the values assigned are supported
+
+      const validTypes = Object.values(TOOLS_CATEGORIES);
+
+      console.log(validTypes[6]);
+      console.log(type);
+
+      if (!validTypes.includes(type)) {
+        throw new Error("The type '" + type + "' is not valid.");
+      }
+
+      this.title = title;
+      this.icon = icon;
+      this.path = path;
+      this.type = type;
+      this.statusIcons = statusIcons;
+      this.restrictions = restrictions;
+    }
+  }
+
+  // const items = [
+  //   new DrawerItem(
+  //     1,
+  //     "navbar_tools",
+  //     ToolsSvgIcon,
+  //     "all",
+  //     TOOLS_CATEGORIES.ALL.toString(),
+  //     [],
+  //     [],
+  //   ),
+  // ];
 
   const drawerItems = [
     {
@@ -234,11 +314,9 @@ const NavBar = () => {
             title={keyword("navbar_tools")}
           />
         ),
-      tsvPrefix: "all",
       path: "all",
-      pathGroup: "TOOL",
-      type: keyword("navbar_category_general"),
-      typeId: 0,
+      type: TOOLS_CATEGORIES.ALL,
+
       icons: [],
       toolRestrictions: [],
     },
@@ -271,11 +349,8 @@ const NavBar = () => {
           title={keyword("navbar_analysis_video")}
         />
       ),
-      tsvPrefix: "api",
       path: "analysis",
-      pathGroup: "TOOL",
-      type: keyword("navbar_category_video"),
-      typeId: 1,
+      type: TOOLS_CATEGORIES.VIDEO,
       icons: [],
       toolRestrictions: [],
     },
@@ -307,11 +382,10 @@ const NavBar = () => {
           title={keyword("navbar_keyframes")}
         />
       ),
-      tsvPrefix: "keyframes",
+
       path: "keyframes",
-      pathGroup: "TOOL",
-      type: keyword("navbar_category_video"),
-      typeId: 1,
+      type: TOOLS_CATEGORIES.VIDEO,
+
       icons: [],
       toolRestrictions: [],
     },
@@ -343,11 +417,10 @@ const NavBar = () => {
           title={keyword("navbar_thumbnails")}
         />
       ),
-      tsvPrefix: "thumbnails",
+
       path: "thumbnails",
-      pathGroup: "TOOL",
-      type: keyword("navbar_category_video"),
-      typeId: 1,
+      type: TOOLS_CATEGORIES.VIDEO,
+
       icons: [],
       toolRestrictions: [],
     },
@@ -379,11 +452,10 @@ const NavBar = () => {
           title={keyword("navbar_rights")}
         />
       ),
-      tsvPrefix: "copyright",
+
       path: "copyright",
-      pathGroup: "TOOL",
-      type: keyword("navbar_category_video"),
-      typeId: 1,
+      type: TOOLS_CATEGORIES.VIDEO,
+
       icons: [],
       toolRestrictions: [],
     },
@@ -416,11 +488,10 @@ const NavBar = () => {
           title={keyword("navbar_metadata")}
         />
       ),
-      tsvPrefix: "metadata",
+
       path: "metadata",
-      pathGroup: "TOOL",
-      type: keyword("navbar_category_video"),
-      typeId: 1,
+      type: TOOLS_CATEGORIES.VIDEO,
+
       icons: [],
       toolRestrictions: [],
     },
@@ -453,13 +524,12 @@ const NavBar = () => {
           title={keyword("navbar_deepfake_video")}
         />
       ),
-      tsvPrefix: "deepfake",
+
       path: "deepfakeVideo",
-      pathGroup: "TOOL",
-      type: keyword("navbar_category_video"),
-      typeId: 1,
-      icons: ["experimental", "lock"],
-      toolRestrictions: ["BETA_TESTER"],
+      type: TOOLS_CATEGORIES.VIDEO,
+
+      icons: [TOOL_STATUS_ICON.EXPERIMENTAL, TOOL_STATUS_ICON.LOCK],
+      toolRestrictions: [TOOL_RESTRICTIONS.BETA_TESTER],
     },
 
     {
@@ -490,11 +560,10 @@ const NavBar = () => {
           title={keyword("navbar_analysis_image")}
         />
       ),
-      tsvPrefix: "api",
+
       path: "analysisImage",
-      pathGroup: "TOOL",
-      type: keyword("navbar_category_image"),
-      typeId: 2,
+      type: TOOLS_CATEGORIES.IMAGE,
+
       icons: [],
       toolRestrictions: [],
     },
@@ -526,11 +595,10 @@ const NavBar = () => {
           title={keyword("navbar_magnifier")}
         />
       ),
-      tsvPrefix: "magnifier",
+
       path: "magnifier",
-      pathGroup: "TOOL",
-      type: keyword("navbar_category_image"),
-      typeId: 2,
+      type: TOOLS_CATEGORIES.IMAGE,
+
       icons: [],
       toolRestrictions: [],
     },
@@ -562,11 +630,10 @@ const NavBar = () => {
           title={keyword("navbar_metadata")}
         />
       ),
-      tsvPrefix: "metadata",
+
       path: "metadata_image",
-      pathGroup: "TOOL",
-      type: keyword("navbar_category_image"),
-      typeId: 2,
+      type: TOOLS_CATEGORIES.IMAGE,
+
       icons: [],
       toolRestrictions: [],
     },
@@ -599,11 +666,10 @@ const NavBar = () => {
           title={keyword("navbar_forensic")}
         />
       ),
-      tsvPrefix: "forensic",
+
       path: "forensic",
-      pathGroup: "TOOL",
-      type: keyword("navbar_category_image"),
-      typeId: 2,
+      type: TOOLS_CATEGORIES.IMAGE,
+
       icons: [],
       toolRestrictions: [],
     },
@@ -635,11 +701,10 @@ const NavBar = () => {
           title={keyword("navbar_ocr")}
         />
       ),
-      tsvPrefix: "ocr",
+
       path: "ocr",
-      pathGroup: "TOOL",
-      type: keyword("navbar_category_image"),
-      typeId: 2,
+      type: TOOLS_CATEGORIES.IMAGE,
+
       icons: [],
       toolRestrictions: [],
     },
@@ -672,13 +737,12 @@ const NavBar = () => {
           title={keyword("navbar_gif")}
         />
       ),
-      tsvPrefix: "gif",
+
       path: "gif",
-      pathGroup: "TOOL",
-      type: keyword("navbar_category_image"),
-      typeId: 2,
-      icons: ["lock"],
-      toolRestrictions: ["lock"],
+      type: TOOLS_CATEGORIES.IMAGE,
+
+      icons: [TOOL_STATUS_ICON.LOCK],
+      toolRestrictions: [TOOL_RESTRICTIONS.LOCK],
     },
     {
       id: 14,
@@ -693,13 +757,16 @@ const NavBar = () => {
       iconColored: (
         <Gradient width="45px" height="45px" style={{ fill: "#00926c" }} />
       ),
-      tsvPrefix: "synthetic_image_detection",
+
       path: "syntheticImageDetection",
-      pathGroup: "TOOL",
-      type: keyword("navbar_category_image"),
-      typeId: 2,
-      icons: ["new", "experimental", "lock"],
-      toolRestrictions: ["BETA_TESTER"],
+      type: TOOLS_CATEGORIES.IMAGE,
+
+      icons: [
+        TOOL_STATUS_ICON.NEW,
+        TOOL_STATUS_ICON.EXPERIMENTAL,
+        TOOL_STATUS_ICON.LOCK,
+      ],
+      toolRestrictions: [TOOL_RESTRICTIONS.BETA_TESTER],
     },
     {
       id: 15,
@@ -729,13 +796,12 @@ const NavBar = () => {
           title={keyword("navbar_deepfake_image")}
         />
       ),
-      tsvPrefix: "deepfake",
+
       path: "deepfakeImage",
-      pathGroup: "TOOL",
-      type: keyword("navbar_category_image"),
-      typeId: 2,
-      icons: ["experimental", "lock"],
-      toolRestrictions: ["BETA_TESTER"],
+      type: TOOLS_CATEGORIES.IMAGE,
+
+      icons: [TOOL_STATUS_ICON.EXPERIMENTAL, TOOL_STATUS_ICON.LOCK],
+      toolRestrictions: [TOOL_RESTRICTIONS.BETA_TESTER],
     },
     {
       id: 16,
@@ -765,13 +831,12 @@ const NavBar = () => {
           title={keyword("navbar_geolocation")}
         />
       ),
-      tsvPrefix: "geolocation",
+
       path: "geolocation",
-      pathGroup: "TOOL",
-      type: keyword("navbar_category_image"),
-      typeId: 2,
-      icons: ["experimental", "lock"],
-      toolRestrictions: ["BETA_TESTER"],
+      type: TOOLS_CATEGORIES.IMAGE,
+
+      icons: [TOOL_STATUS_ICON.EXPERIMENTAL, TOOL_STATUS_ICON.LOCK],
+      toolRestrictions: [TOOL_RESTRICTIONS.BETA_TESTER],
     },
     {
       id: 17,
@@ -801,13 +866,16 @@ const NavBar = () => {
           title={keyword("navbar_loccus")}
         />
       ),
-      tsvPrefix: "loccus_detection",
+
       path: "loccus",
-      pathGroup: "TOOL",
-      type: keyword("navbar_category_audio"),
-      typeId: 3,
-      icons: ["new", "experimental", "lock"],
-      toolRestrictions: ["BETA_TESTER"],
+      type: TOOLS_CATEGORIES.AUDIO,
+
+      icons: [
+        TOOL_STATUS_ICON.NEW,
+        TOOL_STATUS_ICON.EXPERIMENTAL,
+        TOOL_STATUS_ICON.LOCK,
+      ],
+      toolRestrictions: [TOOL_RESTRICTIONS.BETA_TESTER],
     },
 
     {
@@ -838,11 +906,10 @@ const NavBar = () => {
           title={keyword("navbar_twitter")}
         />
       ),
-      tsvPrefix: "twitter",
+
       path: "twitter",
-      pathGroup: "TOOL",
-      type: keyword("navbar_category_search"),
-      typeId: 4,
+      type: TOOLS_CATEGORIES.SEARCH,
+
       icons: [],
       toolRestrictions: [],
     },
@@ -874,13 +941,16 @@ const NavBar = () => {
           title={keyword("navbar_semantic_search")}
         />
       ),
-      tsvPrefix: "semantic_search",
+
       path: "semanticSearch",
-      pathGroup: "TOOL",
-      type: keyword("navbar_category_search"),
-      typeId: 4,
-      icons: ["experimental", "new", "lock"],
-      toolRestrictions: ["lock"],
+      type: TOOLS_CATEGORIES.SEARCH,
+
+      icons: [
+        TOOL_STATUS_ICON.EXPERIMENTAL,
+        TOOL_STATUS_ICON.NEW,
+        TOOL_STATUS_ICON.LOCK,
+      ],
+      toolRestrictions: [TOOL_RESTRICTIONS.LOCK],
     },
     {
       id: 20,
@@ -910,13 +980,12 @@ const NavBar = () => {
           title={keyword("navbar_twitter_sna")}
         />
       ),
-      tsvPrefix: "twitter_sna",
+
       path: "twitterSna",
-      pathGroup: "TOOL",
-      type: keyword("navbar_category_data"),
-      typeId: 5,
-      icons: ["lock"],
-      toolRestrictions: ["lock"],
+      type: TOOLS_CATEGORIES.DATA_ANALYSIS,
+
+      icons: [TOOL_STATUS_ICON.LOCK],
+      toolRestrictions: [TOOL_RESTRICTIONS.LOCK],
     },
     {
       id: 21,
@@ -931,13 +1000,16 @@ const NavBar = () => {
       iconColored: (
         <ArchiveIcon width="45px" height="45px" style={{ fill: "#00926c" }} />
       ),
-      tsvPrefix: "archiving",
+
       path: "archive",
-      pathGroup: "TOOL",
-      type: keyword("navbar_category_other"),
-      typeId: 6,
-      icons: ["experimental", "new", "lock"],
-      toolRestrictions: ["ARCHIVE"],
+      type: TOOLS_CATEGORIES.OTHER,
+
+      icons: [
+        TOOL_STATUS_ICON.EXPERIMENTAL,
+        TOOL_STATUS_ICON.NEW,
+        TOOL_STATUS_ICON.LOCK,
+      ],
+      toolRestrictions: [TOOL_RESTRICTIONS.ARCHIVE],
     },
     {
       id: 22,
@@ -967,11 +1039,10 @@ const NavBar = () => {
           title={keyword("navbar_twitter_crowdtangle")}
         />
       ),
-      tsvPrefix: "twitter_crowdtangle",
+
       path: "csvSna",
-      pathGroup: "TOOL",
-      type: keyword("navbar_category_data"),
-      typeId: 5,
+      type: TOOLS_CATEGORIES.DATA_ANALYSIS,
+
       icons: [],
       toolRestrictions: [],
     },
@@ -1003,11 +1074,10 @@ const NavBar = () => {
           title={keyword("navbar_covidsearch")}
         />
       ),
-      tsvPrefix: "covidsearch",
+
       path: "factcheck",
-      pathGroup: "TOOL",
-      type: keyword("navbar_category_search"),
-      typeId: 4,
+      type: TOOLS_CATEGORIES.SEARCH,
+
       icons: [],
       toolRestrictions: [],
     },
@@ -1039,11 +1109,10 @@ const NavBar = () => {
           title={keyword("navbar_xnetwork")}
         />
       ),
-      tsvPrefix: "xnetwork",
+
       path: "xnetwork",
-      pathGroup: "TOOL",
-      type: keyword("navbar_category_search"),
-      typeId: 4,
+      type: TOOLS_CATEGORIES.SEARCH,
+
       icons: [],
       toolRestrictions: [],
     },
@@ -1054,17 +1123,19 @@ const NavBar = () => {
       title: "navbar_tools",
       icon:
         tabValue === 0 && drawerValue === 0 ? (
-          <ToolsIcon width="30px" height="30px" style={{ fill: "#00926c" }} />
+          <SvgIcon>
+            <ToolsIcon width="30px" height="30px" style={{ fill: "#00926c" }} />
+          </SvgIcon>
         ) : (
-          <ToolsIcon width="30px" height="30px" style={{ fill: "#4c4c4c" }} />
+          <SvgIcon>
+            <ToolsIcon width="30px" height="30px" style={{ fill: "#4c4c4c" }} />
+          </SvgIcon>
         ),
       content: <div />,
       path: "tools",
-      pathGroup: "OTHER",
       footer: <div />,
       typeTab: "verification",
-      type: keyword("navbar_category_general"),
-      typeId: 0,
+      type: TOOLS_CATEGORIES.ALL,
     },
     {
       title: "navbar_assistant",
@@ -1084,11 +1155,9 @@ const NavBar = () => {
         ),
       content: <Assistant />,
       path: "assistant",
-      pathGroup: "OTHER",
       footer: <Footer type={"usfd"} />,
       typeTab: "verification",
-      type: keyword("navbar_category_general"),
-      typeId: 0,
+      type: TOOLS_CATEGORIES.ALL,
     },
     {
       title: "navbar_tuto",
@@ -1100,11 +1169,9 @@ const NavBar = () => {
         ),
       content: <Tutorial />,
       path: "tutorial",
-      pathGroup: "OTHER",
       footer: <Footer type={"afp"} />,
       typeTab: "learning",
-      type: keyword("navbar_category_general"),
-      typeId: 0,
+      type: TOOLS_CATEGORIES.ALL,
     },
     {
       title: "navbar_quiz",
@@ -1124,11 +1191,9 @@ const NavBar = () => {
         ),
       content: <Interactive />,
       path: "interactive",
-      pathGroup: "OTHER",
       footer: <Footer type={"afp"} />,
       typeTab: "learning",
-      type: keyword("navbar_category_general"),
-      typeId: 0,
+      type: TOOLS_CATEGORIES.ALL,
     },
     {
       title: "navbar_classroom",
@@ -1148,11 +1213,9 @@ const NavBar = () => {
         ),
       content: <ClassRoom />,
       path: "classroom",
-      pathGroup: "OTHER",
       footer: <Footer type={"afp"} />,
       typeTab: "learning",
-      type: keyword("navbar_category_general"),
-      typeId: 0,
+      type: TOOLS_CATEGORIES.ALL,
     },
     {
       title: "navbar_about",
@@ -1164,10 +1227,8 @@ const NavBar = () => {
         ),
       content: <About />,
       path: "about",
-      pathGroup: "OTHER",
       footer: <Footer type={"afp"} />,
       typeTab: "more",
-      typeId: 0,
     },
   ];
 
@@ -1193,11 +1254,11 @@ const NavBar = () => {
 
   useEffect(() => {
     //select tool category
-    switch (drawerItems[drawerValue].typeId) {
-      case 1:
+    switch (drawerItems[drawerValue].type) {
+      case TOOLS_CATEGORIES.VIDEO:
         setOpenListVideo(true);
         break;
-      case 2:
+      case TOOLS_CATEGORIES.IMAGE:
         setOpenListImage(true);
         break;
       case 3:
@@ -1283,7 +1344,7 @@ const NavBar = () => {
 
   //Video items
   const drawerItemsVideo = drawerItems.filter(
-    (item) => item.type === keyword("navbar_category_video"),
+    (item) => item.type === TOOLS_CATEGORIES.VIDEO,
   );
   const [openListVideo, setOpenListVideo] = useState(false);
   const [classBorderVideo, setClassBorderVideo] = useState(null);
@@ -1299,7 +1360,7 @@ const NavBar = () => {
 
   //Image items
   const drawerItemsImage = drawerItems.filter(
-    (item) => item.type === keyword("navbar_category_image"),
+    (item) => item.type === TOOLS_CATEGORIES.IMAGE,
   );
   const [openListImage, setOpenListImage] = useState(false);
   const [classBorderImage, setClassBorderImage] = useState(null);
@@ -1315,7 +1376,7 @@ const NavBar = () => {
 
   //Audio items
   const drawerItemsAudio = drawerItems.filter(
-    (item) => item.type === keyword("navbar_category_audio"),
+    (item) => item.type === TOOLS_CATEGORIES.AUDIO,
   );
   const [openListAudio, setOpenListAudio] = useState(false);
   const [classBorderAudio, setClassBorderAudio] = useState(null);
@@ -1331,7 +1392,7 @@ const NavBar = () => {
 
   //Search items
   const drawerItemsSearch = drawerItems.filter(
-    (item) => item.type === keyword("navbar_category_search"),
+    (item) => item.type === TOOLS_CATEGORIES.SEARCH,
   );
   const [openListSeach, setOpenListSeach] = useState(false);
   const [classBorderSearch, setClassBorderSearch] = useState(null);
@@ -1347,7 +1408,7 @@ const NavBar = () => {
 
   //Data items
   const drawerItemsData = drawerItems.filter(
-    (item) => item.type === keyword("navbar_category_data"),
+    (item) => item.type === TOOLS_CATEGORIES.DATA_ANALYSIS,
   );
   const [openListData, setOpenListData] = useState(false);
   const [classBorderData, setClassBorderData] = useState(null);
@@ -1362,7 +1423,7 @@ const NavBar = () => {
   };
 
   const drawerItemsOtherTools = drawerItems.filter(
-    (item) => item.type === keyword("navbar_category_other"),
+    (item) => item.type === TOOLS_CATEGORIES.OTHER,
   );
   const [openListOtherTools, setOpenListOtherTools] = useState(false);
   const [classBorderOtherTools, setClassBorderOtherTools] = useState(null);
@@ -1380,12 +1441,9 @@ const NavBar = () => {
 
   const tmpListItems = [
     {
-      title: keyword("navbar_category_video"),
+      title: TOOLS_CATEGORIES.VIDEO,
       icon: (
-        <VideoIcon
-          style={{ fill: "#4c4c4c" }}
-          title={keyword("navbar_category_video")}
-        />
+        <VideoIcon style={{ fill: "#4c4c4c" }} title={TOOLS_CATEGORIES.VIDEO} />
       ),
       list: drawerItemsVideo,
       variableOpen: openListVideo,
@@ -1394,12 +1452,9 @@ const NavBar = () => {
       classBorder: classBorderVideo,
     },
     {
-      title: keyword("navbar_category_image"),
+      title: TOOLS_CATEGORIES.IMAGE,
       icon: (
-        <ImageIcon
-          style={{ fill: "#4c4c4c" }}
-          title={keyword("navbar_category_image")}
-        />
+        <ImageIcon style={{ fill: "#4c4c4c" }} title={TOOLS_CATEGORIES.IMAGE} />
       ),
       list: drawerItemsImage,
       variableOpen: openListImage,
@@ -1408,11 +1463,11 @@ const NavBar = () => {
       classBorder: classBorderImage,
     },
     {
-      title: keyword("navbar_category_audio"),
+      title: TOOLS_CATEGORIES.AUDIO,
       icon: (
         <Audiotrack
           style={{ fill: "#4c4c4c" }}
-          title={keyword("navbar_category_audio")}
+          title={TOOLS_CATEGORIES.AUDIO}
         />
       ),
       list: drawerItemsAudio,
@@ -1422,11 +1477,11 @@ const NavBar = () => {
       classBorder: classBorderAudio,
     },
     {
-      title: keyword("navbar_category_search"),
+      title: TOOLS_CATEGORIES.SEARCH,
       icon: (
         <SearchIcon
           style={{ fill: "#4c4c4c" }}
-          title={keyword("navbar_category_search")}
+          title={TOOLS_CATEGORIES.SEARCH}
         />
       ),
       list: drawerItemsSearch,
@@ -1436,11 +1491,11 @@ const NavBar = () => {
       classBorder: classBorderSearch,
     },
     {
-      title: keyword("navbar_category_data"),
+      title: TOOLS_CATEGORIES.DATA_ANALYSIS,
       icon: (
         <DataIcon
           style={{ fill: "#4c4c4c" }}
-          title={keyword("navbar_category_data")}
+          title={TOOLS_CATEGORIES.DATA_ANALYSIS}
         />
       ),
       list: drawerItemsData,
@@ -1450,7 +1505,7 @@ const NavBar = () => {
       classBorder: classBorderData,
     },
     {
-      title: keyword("navbar_category_other"),
+      title: TOOLS_CATEGORIES.OTHER,
       icon: <MoreHorizIcon style={{ fill: "#4c4c4c" }} />,
       list: drawerItemsOtherTools,
       variableOpen: openListOtherTools,
@@ -1473,7 +1528,9 @@ const NavBar = () => {
       ) {
         listItems.push(items);
         break;
-      } else if (listTools[i].toolRestrictions.includes("lock")) {
+      } else if (
+        listTools[i].toolRestrictions.includes(TOOL_STATUS_ICON.LOCK)
+      ) {
         listItems.push(items);
         break;
       }
@@ -1483,7 +1540,7 @@ const NavBar = () => {
   const drawItemPerRole = drawerItems.filter((item) => {
     if (
       item.toolRestrictions.length === 0 ||
-      item.toolRestrictions.includes("lock")
+      item.toolRestrictions.includes(TOOL_STATUS_ICON.LOCK)
     )
       return true;
     if (item.toolRestrictions.some((restriction) => role.includes(restriction)))
@@ -1668,7 +1725,7 @@ const NavBar = () => {
                     className={classes.customAllToolsButton}
                     sx={{ width: 24, height: 24 }}
                   >
-                    {toolsItem.icon}
+                    <SvgIcon>{toolsItem.icon}</SvgIcon>
                   </IconButton>
                 }
               </ListItemIcon>
