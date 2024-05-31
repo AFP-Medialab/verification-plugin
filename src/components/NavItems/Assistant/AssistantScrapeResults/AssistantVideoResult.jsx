@@ -40,7 +40,10 @@ const AssistantVideoResult = () => {
   };
 
   const downloadVideoFound = () => {
-    return input_url_type === KNOWN_LINKS.INSTAGRAM;
+    switch (input_url_type) {
+      default:
+        return false;
+    }
   };
 
   const preprocessLinkForEmbed = (processUrl) => {

@@ -5,6 +5,7 @@ import magnifierIconOff from "../../NavBar/images/tools/magnifierOff.png";
 import metadataIconOff from "../../NavBar/images/tools/metadataOff.png";
 import videoRightsIconOff from "../../NavBar/images/tools/copyrightOff.png";
 import forensicIconOff from "../../NavBar/images/tools/forensic_logoOff.png";
+import videoIconOff from "../../NavBar/images/tools/video_logoOff.png";
 
 export const NE_SUPPORTED_LANGS = ["en", "pt", "fr", "de", "el", "es", "it"];
 
@@ -148,7 +149,7 @@ export const ASSISTANT_ACTIONS = [
       KNOWN_LINKS.YOUTUBESHORTS,
       KNOWN_LINKS.LIVELEAK,
       KNOWN_LINKS.OWN,
-      KNOWN_LINKS.TELEGRAM,
+      KNOWN_LINKS.INSTAGRAM,
     ],
     cTypes: [CONTENT_TYPE.VIDEO],
     exceptions: [],
@@ -228,6 +229,17 @@ export const ASSISTANT_ACTIONS = [
     text: "ocr_text",
     tsvPrefix: "ocr",
     path: "tools/ocr",
+  },
+  {
+    title: "assistant_video_download_action",
+    icon: videoIconOff,
+    linksAccepted: [KNOWN_LINKS.TELEGRAM, KNOWN_LINKS.MISC],
+    cTypes: [CONTENT_TYPE.VIDEO],
+    exceptions: [],
+    useInputUrl: false,
+    text: "assistant_video_download_action_description",
+    tsvPrefix: "assistant_video",
+    download: true,
   },
 ];
 
