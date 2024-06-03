@@ -31,6 +31,7 @@ import { useDispatch } from "react-redux";
 import { setMetadataMediaType } from "../../../../redux/reducers/tools/metadataReducer";
 
 import { Alert, Stack } from "@mui/material";
+import StringFileUploadField from "components/Shared/StringFileUploadField";
 
 const Metadata = ({ mediaType }) => {
   const { url, type } = useParams();
@@ -52,6 +53,7 @@ const Metadata = ({ mediaType }) => {
     mediaType === "video" ? false : true,
   );
   const [input, setInput] = useState(resultUrl ? resultUrl : "");
+  const [fileInput, setFileInput] = useState(null);
   const [imageUrl, setImageurl] = useState(null);
   const [videoUrl, setVideoUrl] = useState(null);
   const [urlDetected, setUrlDetected] = useState(false);
@@ -92,6 +94,12 @@ const Metadata = ({ mediaType }) => {
         setImageurl(input);
       } else {
         setVideoUrl(input);
+      }
+    } else if (fileInput) {
+      if (radioImage) {
+        setImageurl(URL.createObjectURL(fileInput));
+      } else {
+        setVideoUrl(URL.createObjectURL(fileInput));
       }
     }
   };
@@ -151,6 +159,10 @@ const Metadata = ({ mediaType }) => {
     setInput("");
   };
 
+  const handleCloseFile = () => {
+    setFileInput(null);
+  };
+
   return (
     <div>
       <HeaderTool
@@ -177,7 +189,45 @@ const Metadata = ({ mediaType }) => {
         />
 
         <Box p={3}>
-          <form>
+          <RadioGroup
+            aria-label="position"
+            name="position"
+            value={radioImage}
+            onChange={() => setRadioImage(!radioImage)}
+            row
+          >
+            <FormControlLabel
+              value={true}
+              control={<Radio color="primary" />}
+              label={keyword("metadata_radio_image")}
+              labelPlacement="end"
+            />
+            <FormControlLabel
+              value={false}
+              control={<Radio color="primary" />}
+              label={keyword("metadata_radio_video")}
+              labelPlacement="end"
+            />
+          </RadioGroup>
+
+          <Box m={2} />
+
+          <StringFileUploadField
+            labelKeyword={keyword("metadata_content_input")}
+            placeholderKeyword={keyword("metadata_content_input_placeholder")}
+            submitButtonKeyword={keyword("button_submit")}
+            localFileKeyword={keyword("button_localfile")}
+            urlInput={input}
+            setUrlInput={setInput}
+            fileInput={fileInput}
+            setFileInput={setFileInput}
+            handleSubmit={submitUrl}
+            fileInputTypesAccepted={"image/*, video/*"}
+            handleCloseSelectedFile={handleCloseFile}
+            //preprocessLocalFile={URL.createObjectURL}
+          />
+
+          {/* <form>
             <Grid container direction="row" spacing={3} alignItems="center">
               <Grid item xs>
                 <TextField
@@ -191,26 +241,7 @@ const Metadata = ({ mediaType }) => {
                 />
               </Grid>
               <Grid item>
-                <RadioGroup
-                  aria-label="position"
-                  name="position"
-                  value={radioImage}
-                  onChange={() => setRadioImage(!radioImage)}
-                  row
-                >
-                  <FormControlLabel
-                    value={true}
-                    control={<Radio color="primary" />}
-                    label={keyword("metadata_radio_image")}
-                    labelPlacement="end"
-                  />
-                  <FormControlLabel
-                    value={false}
-                    control={<Radio color="primary" />}
-                    label={keyword("metadata_radio_video")}
-                    labelPlacement="end"
-                  />
-                </RadioGroup>
+                
               </Grid>
               <Grid item>
                 <Button
@@ -254,7 +285,7 @@ const Metadata = ({ mediaType }) => {
                 />
               </Button>
             </Grid>
-          </Grid>
+          </Grid> */}
         </Box>
       </Card>
       <Box m={3} />
