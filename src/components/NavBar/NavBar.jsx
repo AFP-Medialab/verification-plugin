@@ -1121,16 +1121,18 @@ const NavBar = () => {
   const tabItems = [
     {
       title: "navbar_tools",
-      icon:
-        tabValue === 0 && drawerValue === 0 ? (
-          <SvgIcon>
-            <ToolsIcon width="30px" height="30px" style={{ fill: "#00926c" }} />
-          </SvgIcon>
-        ) : (
-          <SvgIcon>
-            <ToolsIcon width="30px" height="30px" style={{ fill: "#4c4c4c" }} />
-          </SvgIcon>
-        ),
+      icon: (
+        <SvgIcon
+          sx={{
+            fill: tabValue === 0 && drawerValue === 0 ? "#00926c" : "#4c4c4c",
+            width: "30px",
+            height: "30px",
+            fontSize: 12,
+          }}
+        >
+          <ToolsIcon width="30px" height="30px" />
+        </SvgIcon>
+      ),
       content: <div />,
       path: "tools",
       footer: <div />,
@@ -1784,7 +1786,7 @@ const NavBar = () => {
                   <Collapse in={item.variableOpen} timeout="auto" unmountOnExit>
                     <List component="div" disablePadding>
                       {item.list.map((itemList, keyList) => {
-                        var element = (
+                        let element = (
                           <ListItem
                             button
                             key={keyList}
