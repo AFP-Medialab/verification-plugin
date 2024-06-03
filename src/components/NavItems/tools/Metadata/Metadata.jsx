@@ -1,15 +1,10 @@
 import React, { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import { useSelector } from "react-redux";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
 //import 'tui-image-editor/dist/tui-image-editor.css'
-import FolderOpenIcon from "@mui/icons-material/FolderOpen";
-import Typography from "@mui/material/Typography";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
-import Grid from "@mui/material/Grid";
 import MetadataImageResult from "./Results/MetadataImageResult";
 import MetadataVideoResult from "./Results/MetadataVideoResult";
 import useImageTreatment from "./Hooks/useImageTreatment";
@@ -224,68 +219,7 @@ const Metadata = ({ mediaType }) => {
             handleSubmit={submitUrl}
             fileInputTypesAccepted={"image/*, video/*"}
             handleCloseSelectedFile={handleCloseFile}
-            //preprocessLocalFile={URL.createObjectURL}
           />
-
-          {/* <form>
-            <Grid container direction="row" spacing={3} alignItems="center">
-              <Grid item xs>
-                <TextField
-                  value={input}
-                  id="standard-full-width"
-                  label={keyword("metadata_content_input")}
-                  placeholder={keyword("metadata_content_input_placeholder")}
-                  fullWidth
-                  variant="outlined"
-                  onChange={(e) => setInput(e.target.value)}
-                />
-              </Grid>
-              <Grid item>
-                
-              </Grid>
-              <Grid item>
-                <Button
-                  type="submit"
-                  variant="contained"
-                  color="primary"
-                  onClick={(e) => {
-                    e.preventDefault(), submitUrl();
-                  }}
-                >
-                  {keyword("button_submit")}
-                </Button>
-              </Grid>
-            </Grid>
-          </form>
-
-          <Box m={1} />
-
-          <Grid
-            container
-            direction="column"
-            spacing={1}
-            alignItems="flex-start"
-          >
-            <Grid item>
-              <Button startIcon={<FolderOpenIcon />}>
-                <label htmlFor="fileInputMetadata">
-                  {keyword("button_localfile")}
-                </label>
-                <input
-                  id="fileInputMetadata"
-                  type="file"
-                  hidden={true}
-                  onChange={(e) => {
-                    if (e.target.files[0]) {
-                      setInput(URL.createObjectURL(e.target.files[0]));
-                      // reset value
-                      e.target.value = null;
-                    }
-                  }}
-                />
-              </Button>
-            </Grid>
-          </Grid> */}
         </Box>
       </Card>
       <Box m={3} />
