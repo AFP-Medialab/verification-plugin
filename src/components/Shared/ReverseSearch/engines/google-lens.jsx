@@ -23,7 +23,9 @@ export const reverseRemoteGoogleLens = (
   url,
   isRequestFromContextMenu = true,
 ) => {
-  const tabUrl = `https://lens.google.com/uploadbyurl?url=${url}`;
+  const tabUrl = `https://lens.google.com/uploadbyurl?url=${encodeURIComponent(
+    url,
+  )}`;
   const urlObject = { url: tabUrl };
   openNewTabWithUrl(urlObject, isRequestFromContextMenu);
 };

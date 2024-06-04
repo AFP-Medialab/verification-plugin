@@ -69,7 +69,6 @@ const Forensic = () => {
 
   const resultUrl = useSelector((state) => state.forensic.url);
   const resultData = useSelector((state) => state.forensic.result);
-  const isLoading = useSelector((state) => state.forensic.loading);
   const gifAnimationState = useSelector((state) => state.forensic.gifAnimation);
   const masks = useSelector((state) => state.forensic.masks);
   const session = useSelector((state) => state.userSession);
