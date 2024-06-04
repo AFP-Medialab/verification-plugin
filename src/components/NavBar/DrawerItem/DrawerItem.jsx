@@ -14,7 +14,7 @@ import Metadata from "../../NavItems/tools/Metadata/Metadata";
 import VideoRights from "../../NavItems/tools/VideoRights/VideoRights";
 import Forensic from "../../NavItems/tools/Forensic/Forensic";
 import { Route, Routes, useLocation } from "react-router-dom";
-import Footer from "../../Shared/Footer/Footer";
+import { Footer, FOOTER_TYPES } from "../../Shared/Footer/Footer";
 import TwitterSna from "../../NavItems/tools/TwitterSna/TwitterSna";
 import OCR from "../../NavItems/tools/OCR/OCR";
 import CheckGif from "../../NavItems/tools/Gif/CheckGif";
@@ -39,84 +39,84 @@ const DrawerItem = ({ drawerItems }) => {
     },
     {
       content: <Analysis />,
-      footer: <Footer type={"iti"} />,
+      footer: <Footer type={FOOTER_TYPES.ITI} />,
     },
     {
       content: <Keyframes />,
-      footer: <Footer type={"iti"} />,
+      footer: <Footer type={FOOTER_TYPES.ITI} />,
     },
     {
       content: <Thumbnails />,
-      footer: <Footer type={"afp"} />,
+      footer: <Footer type={FOOTER_TYPES.AFP} />,
     },
     {
       content: <VideoRights />,
-      footer: <Footer type={"GRIHO"} />,
+      footer: <Footer type={FOOTER_TYPES.GRIHO} />,
     },
     {
       content: <Metadata mediaType={"video"} />,
-      footer: <Footer type={"afp"} />,
+      footer: <Footer type={FOOTER_TYPES.AFP} />,
     },
     {
       content: <DeepfakeVideo />,
-      footer: <Footer type={"iti"} />,
+      footer: <Footer type={FOOTER_TYPES.ITI} />,
     },
     {
       content: <AnalysisImg />,
-      footer: <Footer type={"iti"} />,
+      footer: <Footer type={FOOTER_TYPES.ITI} />,
     },
     {
       content: <Magnifier />,
-      footer: <Footer type={"afp"} />,
+      footer: <Footer type={FOOTER_TYPES.AFP} />,
     },
     {
       content: <Metadata mediaType={"image"} />,
-      footer: <Footer type={"afp"} />,
+      footer: <Footer type={FOOTER_TYPES.AFP} />,
     },
 
     {
       content: <Forensic />,
-      footer: <Footer type={"iti-borelli-afp"} />,
+      footer: <Footer type={FOOTER_TYPES.ITI_BORELLI_AFP} />,
     },
     {
       content: <OCR />,
-      footer: <Footer type={"usfd"} />,
+      footer: <Footer type={FOOTER_TYPES.USFD} />,
     },
     {
       content: <CheckGif />,
-      footer: <Footer type={"borelli-afp"} />,
+      footer: <Footer type={FOOTER_TYPES.BORELLI_AFP} />,
     },
     {
       content: <SyntheticImageDetection />,
-      footer: <Footer type={"iti-unina"} />,
+      footer: <Footer type={FOOTER_TYPES.ITI_UNINA} />,
     },
     {
       content: <DeepfakeImage />,
-      footer: <Footer type={"iti"} />,
+      footer: <Footer type={FOOTER_TYPES.ITI} />,
     },
     {
       content: <Geolocation />,
-      footer: <Footer type={"afp"} />,
+      footer: <Footer type={FOOTER_TYPES.AFP} />,
     },
     {
       content: <Loccus />,
-      footer: <Footer type={"loccus"} />,
+      footer: <Footer type={FOOTER_TYPES.LOCCUS} />,
     },
     {
       content: <TwitterAdvancedSearch />,
-      footer: <Footer type={"afp"} />,
+      footer: <Footer type={FOOTER_TYPES.AFP} />,
     },
     {
       content: <SemanticSearch />,
-      footer: <Footer type={"kinit"} />,
+      footer: <Footer type={FOOTER_TYPES.KINIT} />,
     },
     {
       content: <TwitterSna />,
-      footer: <Footer type={"afp-usfd-eudisinfolab"} />,
+      footer: <Footer type={FOOTER_TYPES.USFD_AFP_EU_DISINFOLAB} />,
     },
     {
       content: <Archive />,
-      footer: <Footer type={"afp"} />,
+      footer: <Footer type={FOOTER_TYPES.AFP} />,
     },
   ];
 
@@ -223,6 +223,9 @@ const DrawerItemContent = ({ index, drawContent }) => {
   useTrackPageView(path, client_id, uid, index);
   useEffect(() => {
     //trackPageView(path, client_id, uid);
+    console.log(drawContent[index].content);
+    // console.log(drawContent[index].content?.type?.type?.name);
+    console.log(index);
     dispatch(selectTool(index));
   }, [index]);
 

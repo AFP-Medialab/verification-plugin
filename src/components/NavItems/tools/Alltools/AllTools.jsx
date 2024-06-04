@@ -9,9 +9,9 @@ import {
   DialogContent,
   Grid,
   Snackbar,
+  SvgIcon,
   Tab,
   Tabs,
-  Typography,
 } from "@mui/material";
 
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
@@ -20,15 +20,16 @@ import Iframe from "react-iframe";
 import DialogActions from "@mui/material/DialogActions";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import ToolCard from "./ToolCard";
-import IconImage from "../../../NavBar/images/SVG/Image/Images.svg";
-import IconVideo from "../../../NavBar/images/SVG/Video/Video.svg";
-import IconSearch from "../../../NavBar/images/SVG/Search/Search.svg";
-import IconData from "../../../NavBar/images/SVG/DataAnalysis/Data_analysis.svg";
+import ImageIcon from "../../../NavBar/images/SVG/Image/Images.svg";
+import VideoIcon from "../../../NavBar/images/SVG/Video/Video.svg";
+import SearchIcon from "../../../NavBar/images/SVG/Search/Search.svg";
+import DataIcon from "../../../NavBar/images/SVG/DataAnalysis/Data_analysis.svg";
 import { useSelector } from "react-redux";
 
 import { useNavigate } from "react-router-dom";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import { Audiotrack } from "@mui/icons-material";
+import Typography from "@mui/material/Typography";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -87,9 +88,9 @@ const AllTools = (props) => {
     } else {
       navigate("/app/tools/" + path);
       /* history.push({
-                                                                                                                pathname: "/app/tools/" + path,
-                                                                                                                state: { media: mediaTool }
-                                                                                                            })*/
+                                                                                                                                                    pathname: "/app/tools/" + path,
+                                                                                                                                                    state: { media: mediaTool }
+                                                                                                                                                })*/
     }
   };
 
@@ -107,41 +108,63 @@ const AllTools = (props) => {
       type: keywordNavbar("navbar_category_video"),
       value: toolsVideo,
       icon: (
-        <IconVideo width="40px" height="40px" style={{ fill: "#596977" }} />
+        <SvgIcon
+          component={VideoIcon}
+          sx={{
+            fontSize: "40px",
+          }}
+          inheritViewBox
+        />
       ),
     },
     {
       type: keywordNavbar("navbar_category_image"),
       value: toolsImages,
       icon: (
-        <IconImage width="40px" height="40px" style={{ fill: "#596977" }} />
+        <SvgIcon
+          component={ImageIcon}
+          sx={{
+            fontSize: "40px",
+          }}
+          inheritViewBox
+        />
       ),
     },
     {
       type: keywordNavbar("navbar_category_audio"),
       value: toolsAudio,
-      icon: (
-        <Audiotrack width="40px" height="40px" style={{ fill: "#596977" }} />
-      ),
+      icon: <Audiotrack width="40px" height="40px" />,
     },
     {
       type: keywordNavbar("navbar_category_search"),
       value: toolsSearch,
       icon: (
-        <IconSearch width="40px" height="40px" style={{ fill: "#596977" }} />
+        <SvgIcon
+          component={SearchIcon}
+          sx={{
+            fontSize: "40px",
+          }}
+          inheritViewBox
+        />
       ),
     },
     {
       type: keywordNavbar("navbar_category_data"),
       value: toolsData,
-      icon: <IconData width="40px" height="40px" style={{ fill: "#596977" }} />,
+      icon: (
+        <SvgIcon
+          component={DataIcon}
+          sx={{
+            fontSize: "40px",
+          }}
+          inheritViewBox
+        />
+      ),
     },
     {
       type: keywordNavbar("navbar_category_other"),
       value: otherTools,
-      icon: (
-        <MoreHorizIcon width="40px" height="40px" style={{ fill: "#596977" }} />
-      ),
+      icon: <MoreHorizIcon width="40px" height="40px" />,
     },
   ];
 
@@ -218,33 +241,17 @@ const AllTools = (props) => {
             return (
               <Tab
                 key={index}
+                icon={category.icon}
+                iconPosition="start"
                 label={
-                  <Box mt={1}>
-                    <Grid
-                      container
-                      direction="row"
-                      justifyContent="flex-start"
-                      alignItems="center"
-                    >
-                      <Grid item>{category.icon}</Grid>
-
-                      <Grid item>
-                        <Box m={1} />
-                      </Grid>
-
-                      <Grid item>
-                        <Typography
-                          variant="h6"
-                          style={{
-                            color: "#596977",
-                            textTransform: "capitalize",
-                          }}
-                        >
-                          {category.type}
-                        </Typography>
-                      </Grid>
-                    </Grid>
-                  </Box>
+                  <Typography
+                    variant="h6"
+                    style={{
+                      textTransform: "capitalize",
+                    }}
+                  >
+                    {category.type}
+                  </Typography>
                 }
               />
             );
