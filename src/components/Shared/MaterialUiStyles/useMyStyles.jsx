@@ -142,16 +142,16 @@ const styles = (theme) => ({
 
   toolbar: {
     //...theme.mixins.toolbar,
-    height: "70px",
+    height: "120px",
     paddingBottom: "10px",
   },
   content: {
     flexGrow: 1,
     paddingLeft: theme.spacing(3),
     paddingRight: theme.spacing(3),
-    paddingTop: "50px",
     backgroundColor: "#fafafa",
-    minHeight: "97vh",
+    minHeight: "100vh",
+    overflow: "hidden",
   },
   logoLeft: {
     cursor: "pointer",
