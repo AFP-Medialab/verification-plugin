@@ -44,9 +44,13 @@ export const reverseImageSearchGoogleLens = (
     body: formData,
   })
     .then((response) => {
-      return response.text();
+      //API change
+      const targetUrl = response.url;
+      const urlObject = { url: targetUrl };
+      openNewTabWithUrl(urlObject, isRequestFromContextMenu);
+      //return response.text();
     })
-    .then((body) => {
+    /*.then((body) => {
       var tabUrl = body.match(/(?<=<meta .*url=)(.*)(?=")/)[1];
       // @ts-ignore
       tabUrl = decodeURIComponent(tabUrl.replaceAll("&amp;", "&"));
@@ -54,9 +58,9 @@ export const reverseImageSearchGoogleLens = (
       const urlObject = { url: "https://lens.google.com" + tabUrl };
 
       openNewTabWithUrl(urlObject, isRequestFromContextMenu);
-    })
-    .catch(() => {
-      //console.error(error);
+    })*/
+    .catch((error) => {
+      console.error(error);
     })
     .finally(() => {
       // document.body.style.cursor = "default";
