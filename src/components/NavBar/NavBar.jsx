@@ -250,58 +250,6 @@ const NavBar = () => {
     LOCK: "lock",
   };
 
-  /**
-   *  Class representing a tool in the drawer
-   */
-  // class DrawerItem {
-  //   /**
-  //    * @param title {string}
-  //    * @param description {string}
-  //    * @param icon {SvgIcon}
-  //    * @param path {string}
-  //    * @param type {}
-  //    * @param typeId
-  //    * @param statusIcons
-  //    * @param restrictions
-  //    */
-  //   constructor(
-  //     title,
-  //     description,
-  //     icon,
-  //     path,
-  //     type,
-  //     statusIcons,
-  //     restrictions,
-  //   ) {
-  //     // TODO: First check that the values assigned are supported
-  //
-  //     const validTypes = Object.values(TOOLS_CATEGORIES);
-  //
-  //     if (!validTypes.includes(type)) {
-  //       throw new Error("The type '" + type + "' is not valid.");
-  //     }
-  //
-  //     this.title = title;
-  //     this.icon = icon;
-  //     this.path = path;
-  //     this.type = type;
-  //     this.statusIcons = statusIcons;
-  //     this.restrictions = restrictions;
-  //   }
-  // }
-
-  // const items = [
-  //   new DrawerItem(
-  //     1,
-  //     "navbar_tools",
-  //     ToolsSvgIcon,
-  //     "all",
-  //     TOOLS_CATEGORIES.ALL.toString(),
-  //     [],
-  //     [],
-  //   ),
-  // ];
-
   const sideMenuItems = [
     {
       id: 1,
