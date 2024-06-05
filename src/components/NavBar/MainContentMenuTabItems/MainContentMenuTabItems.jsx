@@ -7,11 +7,19 @@ import { useDispatch, useSelector } from "react-redux";
 import { selectPage } from "../../../redux/reducers/navReducer";
 import { useTrackPageView } from "../../../Hooks/useAnalytics";
 
-const TabItem = (props) => {
-  if (!props.tabItems || props.tabItems.length === 0) return null;
+/**
+ * Represents the group of tools to display and their tabs in the MainContentMenu
+ *
+ * @param tabItems {} An array with the list of tools categories
+ * @param toolsList {[]} An array with the list of tools
+ * @returns {React.JSX.Element|null}
+ *
+ */
+const MainContentMenuTabItems = ({ tabItems, toolsList }) => {
+  if (!tabItems || tabItems.length === 0) return null;
   return (
     <Routes>
-      {props.tabItems.map((item, index) => {
+      {tabItems.map((item, index) => {
         return (
           <Route
             key={index}
@@ -20,8 +28,8 @@ const TabItem = (props) => {
               <TabContent
                 index={index}
                 path={item.path}
-                tabItems={props.tabItems}
-                drawerItems={props.drawerItems}
+                tabItems={tabItems}
+                toolsList={toolsList}
               />
             }
           />
@@ -31,7 +39,7 @@ const TabItem = (props) => {
   );
 };
 
-const TabContent = ({ index, path, drawerItems, tabItems }) => {
+const TabContent = ({ index, path, toolsList, tabItems }) => {
   //console.log("path .... ", path);
   const dispatch = useDispatch();
   useEffect(() => {
@@ -40,7 +48,7 @@ const TabContent = ({ index, path, drawerItems, tabItems }) => {
 
   switch (path) {
     case "tools":
-      return <DrawerItem drawerItems={drawerItems} />;
+      return <DrawerItem toolsList={toolsList} />;
     case "assistant":
       return (
         <Routes>
@@ -87,4 +95,4 @@ const ContentContainer = ({ tabItems, index }) => {
   );
 };
 
-export default TabItem;
+export default MainContentMenuTabItems;

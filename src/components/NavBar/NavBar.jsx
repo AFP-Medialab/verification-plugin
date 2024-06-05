@@ -47,7 +47,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 
 import ScrollTop from "../Shared/ScrollTop/ScrollTop";
 import { cleanError, cleanErrorNetwork } from "redux/reducers/errorReducer";
-import TabItem from "./TabItem/TabItem";
+import MainContentMenuTabItems from "./MainContentMenuTabItems/MainContentMenuTabItems";
 import ClassRoom from "../NavItems/ClassRoom/ClassRoom";
 import Interactive from "../NavItems/Interactive/Interactive";
 import About from "../NavItems/About/About";
@@ -1914,7 +1914,7 @@ const NavBar = () => {
 
         <main className={classes.content}>
           <div className={classes.toolbar} id="back-to-top-anchor" />
-          <TabItem
+          <MainContentMenuTabItems
             className={classes.noMargin}
             tabItems={topMenuItems}
             drawerItems={drawItemPerRole}
