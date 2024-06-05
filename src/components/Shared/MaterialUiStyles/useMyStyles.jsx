@@ -132,7 +132,7 @@ const styles = (theme) => ({
   },
 
   drawerListNested: {
-    paddingLeft: theme.spacing(4),
+    paddingInlineStart: theme.spacing(4),
   },
 
   drawerListIcons: {
