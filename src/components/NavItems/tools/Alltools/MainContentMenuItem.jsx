@@ -7,7 +7,7 @@ import AuthenticationIcon from "./AdvancedTools/AuthenticationIcon";
 import ImprovedIcon from "../../../NavBar/images/SVG/Improved.svg";
 import ScienceIcon from "@mui/icons-material/Science";
 
-export class ToolCard extends Component {
+export class MainContentMenuItem extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -24,10 +24,10 @@ export class ToolCard extends Component {
   };
 
   render() {
-    var showNew = false;
-    var showRedesign = false;
-    var showLock = false;
-    var showExperimental = false;
+    let showNew = false;
+    let showRedesign = false;
+    let showLock = false;
+    let showExperimental = false;
 
     //console.log(this.props);
 
@@ -79,7 +79,7 @@ export class ToolCard extends Component {
               </Grid>
 
               <Grid item xs>
-                <Typography variant="h6">{this.props.name}</Typography>
+                <Typography letiant="h6">{this.props.name}</Typography>
               </Grid>
 
               {showRedesign && (
@@ -125,4 +125,4 @@ export class ToolCard extends Component {
   }
 }
 
-export default ToolCard;
+export default MainContentMenuItem;

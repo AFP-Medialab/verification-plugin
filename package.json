@@ -29,6 +29,7 @@
     "@types/chrome": "^0.0.266",
     "@wavesurfer/react": "^1.0.4",
     "axios": "^1.5.1",
+    "clsx": "^2.1.1",
     "d3-selection": "^3.0.0",
     "dateformat": "^5.0.3",
     "dayjs": "^1.11.10",
