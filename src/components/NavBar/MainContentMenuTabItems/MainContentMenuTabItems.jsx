@@ -10,7 +10,7 @@ import { useTrackPageView } from "../../../Hooks/useAnalytics";
 /**
  * Represents the group of tools to display and their tabs in the MainContentMenu
  *
- * @param tabItems {} An array with the list of tools categories
+ * @param tabItems An array with the list of tools categories
  * @param toolsList {[]} An array with the list of tools
  * @returns {React.JSX.Element|null}
  *
