@@ -133,6 +133,9 @@ const NavBar = () => {
 
   const drawerRef = createRef();
 
+  // Set UI dicrection based on language reading direction
+  const direction = currentLang !== "ar" ? "ltr" : "rtl";
+
   const handleTopMenuChange = (event, newValue) => {
     let path = sideMenuItems[newValue].path;
 
@@ -1882,13 +1885,29 @@ const NavBar = () => {
             <Box p={1}>
               <Divider />
             </Box>
+
             <Button
               onClick={toggleSideMenu}
               style={{ alignSelf: "center" }}
-              startIcon={isSideMenuOpen ? <ChevronLeft /> : null}
+              startIcon={
+                isSideMenuOpen ? (
+                  direction === "ltr" ? (
+                    <ChevronLeft />
+                  ) : (
+                    <ChevronRight />
+                  )
+                ) : null
+              }
             >
-              {isSideMenuOpen ? keyword("navbar_collapse") : <ChevronRight />}
+              {isSideMenuOpen ? (
+                keyword("navbar_collapse")
+              ) : direction === "ltr" ? (
+                <ChevronRight />
+              ) : (
+                <ChevronLeft />
+              )}
             </Button>
+
             <Box m={1} />
           </Box>
         </Drawer>
