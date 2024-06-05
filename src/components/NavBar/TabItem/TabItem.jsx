@@ -30,6 +30,7 @@ const TabItem = (props) => {
     </Routes>
   );
 };
+
 const TabContent = ({ index, path, drawerItems, tabItems }) => {
   //console.log("path .... ", path);
   const dispatch = useDispatch();
@@ -61,7 +62,7 @@ const TabContent = ({ index, path, drawerItems, tabItems }) => {
 };
 
 const ContentContainer = ({ tabItems, index }) => {
-  var path = useLocation();
+  let path = useLocation();
   // const cookies = useSelector((state) => state.cookies);
   // const clientId = cookies !== null ? cookies.id : null;
 

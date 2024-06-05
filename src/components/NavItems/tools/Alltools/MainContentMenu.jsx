@@ -19,7 +19,7 @@ import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import Iframe from "react-iframe";
 import DialogActions from "@mui/material/DialogActions";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
-import ToolCard from "./ToolCard";
+import MainContentMenuItem from "./MainContentMenuItem";
 import ImageIcon from "../../../NavBar/images/SVG/Image/Images.svg";
 import VideoIcon from "../../../NavBar/images/SVG/Video/Video.svg";
 import SearchIcon from "../../../NavBar/images/SVG/Search/Search.svg";
@@ -51,7 +51,7 @@ function TabPanel(props) {
   );
 }
 
-const AllTools = (props) => {
+const MainContentMenu = (props) => {
   const navigate = useNavigate();
   const classes = useMyStyles();
   const keyword = i18nLoadNamespace("components/NavItems/tools/Alltools");
@@ -88,9 +88,9 @@ const AllTools = (props) => {
     } else {
       navigate("/app/tools/" + path);
       /* history.push({
-                                                                                                                                                    pathname: "/app/tools/" + path,
-                                                                                                                                                    state: { media: mediaTool }
-                                                                                                                                                })*/
+                                                                                                                                                                      pathname: "/app/tools/" + path,
+                                                                                                                                                                      state: { media: mediaTool }
+                                                                                                                                                                  })*/
     }
   };
 
@@ -209,7 +209,7 @@ const AllTools = (props) => {
 
   const role = useSelector((state) => state.userSession.user.roles);
   const betaTester = role.includes("BETA_TESTER");
-  const roleCategories = categories.filter(
+  const categoriesAllowedForUser = categories.filter(
     (category) => category.value.length !== 0,
   );
   return (
@@ -236,7 +236,7 @@ const AllTools = (props) => {
           variant="scrollable"
           scrollButtons="auto"
         >
-          {roleCategories.map((category, index) => {
+          {categoriesAllowedForUser.map((category, index) => {
             //  if(category.value.length !==0){
             return (
               <Tab
@@ -262,7 +262,7 @@ const AllTools = (props) => {
         <Box m={1} />
 
         <div style={{ minHeight: "340px" }}>
-          {roleCategories.map((category, index) => {
+          {categoriesAllowedForUser.map((category, index) => {
             const tools = category.value;
             //if(tools.length !==0){
             return (
@@ -283,7 +283,7 @@ const AllTools = (props) => {
                           handleClick(value.path, value.toolRestrictions)
                         }
                       >
-                        <ToolCard
+                        <MainContentMenuItem
                           name={keyword(value.title)}
                           description={keyword(value.description)}
                           icon={value.iconColored}
@@ -338,4 +338,4 @@ const AllTools = (props) => {
     </>
   );
 };
-export default AllTools;
+export default MainContentMenu;

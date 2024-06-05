@@ -117,14 +117,14 @@ function a11yProps(index) {
 const NavBar = () => {
   const classes = useMyStyles();
   const navigate = useNavigate();
-  const [open, setOpen] = useState(true);
+  const [isSideMenuOpen, setIsSideMenuOpen] = useState(true);
   const [classWidthToolbar, setClassWidthToolbar] = useState(
     classes.drawerWidth,
   );
   const LOGO_EU = process.env.REACT_APP_LOGO_EU;
-  const tabValue = useSelector((state) => state.nav);
+  const topMenuItemSelectedId = useSelector((state) => state.nav);
 
-  const drawerValue = useSelector((state) => state.tool.selected);
+  const sideMenuItemSelectedId = useSelector((state) => state.tool.selected);
   const cookiesUsage = useSelector((state) => state.cookies);
   const currentLang = useSelector((state) => state.language);
   const defaultLanguage = useSelector((state) => state.defaultLanguage);
@@ -133,12 +133,13 @@ const NavBar = () => {
 
   const drawerRef = createRef();
 
-  const handleChange = (event, newValue) => {
-    let path = drawerItems[newValue].path;
-    if (tabItems[newValue].path === "tools") navigate("/app/tools/" + path);
+  const handleTopMenuChange = (event, newValue) => {
+    let path = sideMenuItems[newValue].path;
+
+    if (topMenuItems[newValue].path === "tools") navigate("/app/tools/" + path);
     //history.push("/app/tools/" + path);
-    else navigate("/app/" + tabItems[newValue].path);
-    //history.push("/app/" + tabItems[newValue].path)
+    else navigate("/app/" + topMenuItems[newValue].path);
+    //history.push("/app/" + topMenuItems[newValue].path)
   };
 
   const [openAlert, setOpenAlert] = useState(false);
@@ -193,21 +194,14 @@ const NavBar = () => {
   const tWarning = i18nLoadNamespace("components/Shared/OnWarningInfo");
   const keyword = i18nLoadNamespace("components/NavBar");
 
-  const [classListHeading, setClassListHeading] = useState(
-    classes.drawerListHeadingLeft,
-  );
-
-  const handleDrawerToggle = () => {
-    setOpen(!open);
+  const toggleSideMenu = () => {
+    setIsSideMenuOpen(!isSideMenuOpen);
 
     if (classWidthToolbar === classes.drawerWidth) {
       setClassWidthToolbar(classes.drawerWidthClose);
-      setTimeout(function () {
-        setClassListHeading(classes.drawerListHeadingCenter);
-      }, 194);
+      setTimeout(function () {}, 194);
     } else {
       setClassWidthToolbar(classes.drawerWidth);
-      setClassListHeading(classes.drawerListHeadingLeft);
     }
   };
 
@@ -241,45 +235,42 @@ const NavBar = () => {
   /**
    *  Class representing a tool in the drawer
    */
-  class DrawerItem {
-    /**
-     * @param title {string}
-     * @param description {string}
-     * @param icon {SvgIcon}
-     * @param path {string}
-     * @param type {}
-     * @param typeId
-     * @param statusIcons
-     * @param restrictions
-     */
-    constructor(
-      title,
-      description,
-      icon,
-      path,
-      type,
-      statusIcons,
-      restrictions,
-    ) {
-      // TODO: First check that the values assigned are supported
-
-      const validTypes = Object.values(TOOLS_CATEGORIES);
-
-      console.log(validTypes[6]);
-      console.log(type);
-
-      if (!validTypes.includes(type)) {
-        throw new Error("The type '" + type + "' is not valid.");
-      }
-
-      this.title = title;
-      this.icon = icon;
-      this.path = path;
-      this.type = type;
-      this.statusIcons = statusIcons;
-      this.restrictions = restrictions;
-    }
-  }
+  // class DrawerItem {
+  //   /**
+  //    * @param title {string}
+  //    * @param description {string}
+  //    * @param icon {SvgIcon}
+  //    * @param path {string}
+  //    * @param type {}
+  //    * @param typeId
+  //    * @param statusIcons
+  //    * @param restrictions
+  //    */
+  //   constructor(
+  //     title,
+  //     description,
+  //     icon,
+  //     path,
+  //     type,
+  //     statusIcons,
+  //     restrictions,
+  //   ) {
+  //     // TODO: First check that the values assigned are supported
+  //
+  //     const validTypes = Object.values(TOOLS_CATEGORIES);
+  //
+  //     if (!validTypes.includes(type)) {
+  //       throw new Error("The type '" + type + "' is not valid.");
+  //     }
+  //
+  //     this.title = title;
+  //     this.icon = icon;
+  //     this.path = path;
+  //     this.type = type;
+  //     this.statusIcons = statusIcons;
+  //     this.restrictions = restrictions;
+  //   }
+  // }
 
   // const items = [
   //   new DrawerItem(
@@ -293,7 +284,7 @@ const NavBar = () => {
   //   ),
   // ];
 
-  const drawerItems = [
+  const sideMenuItems = [
     {
       id: 1,
       title: "navbar_tools",
@@ -301,7 +292,10 @@ const NavBar = () => {
         <SvgIcon
           component={ToolsIcon}
           sx={{
-            fill: tabValue === 0 && drawerValue === 0 ? "#00926c" : "#4c4c4c",
+            fill:
+              topMenuItemSelectedId === 0 && sideMenuItemSelectedId === 0
+                ? "#00926c"
+                : "#4c4c4c",
             fontSize: "24px",
           }}
           inheritViewBox
@@ -322,7 +316,10 @@ const NavBar = () => {
         <SvgIcon
           component={AnalysisIcon}
           sx={{
-            fill: tabValue === 0 && drawerValue === 1 ? "#00926c" : "#4c4c4c",
+            fill:
+              topMenuItemSelectedId === 0 && sideMenuItemSelectedId === 1
+                ? "#00926c"
+                : "#4c4c4c",
             fontSize: "24px",
           }}
           inheritViewBox
@@ -349,7 +346,10 @@ const NavBar = () => {
         <SvgIcon
           component={KeyframesIcon}
           sx={{
-            fill: tabValue === 0 && drawerValue === 2 ? "#00926c" : "#4c4c4c",
+            fill:
+              topMenuItemSelectedId === 0 && sideMenuItemSelectedId === 2
+                ? "#00926c"
+                : "#4c4c4c",
             fontSize: "24px",
           }}
           inheritViewBox
@@ -378,7 +378,10 @@ const NavBar = () => {
         <SvgIcon
           component={ThumbnailsIcon}
           sx={{
-            fill: tabValue === 0 && drawerValue === 3 ? "#00926c" : "#4c4c4c",
+            fill:
+              topMenuItemSelectedId === 0 && sideMenuItemSelectedId === 3
+                ? "#00926c"
+                : "#4c4c4c",
             fontSize: "24px",
           }}
           inheritViewBox
@@ -407,7 +410,10 @@ const NavBar = () => {
         <SvgIcon
           component={VideoRightsIcon}
           sx={{
-            fill: tabValue === 0 && drawerValue === 4 ? "#00926c" : "#4c4c4c",
+            fill:
+              topMenuItemSelectedId === 0 && sideMenuItemSelectedId === 4
+                ? "#00926c"
+                : "#4c4c4c",
             fontSize: "24px",
           }}
           inheritViewBox
@@ -437,7 +443,10 @@ const NavBar = () => {
         <SvgIcon
           component={MetadataIcon}
           sx={{
-            fill: tabValue === 0 && drawerValue === 5 ? "#00926c" : "#4c4c4c",
+            fill:
+              topMenuItemSelectedId === 0 && sideMenuItemSelectedId === 5
+                ? "#00926c"
+                : "#4c4c4c",
             fontSize: "24px",
           }}
           inheritViewBox
@@ -467,7 +476,10 @@ const NavBar = () => {
         <SvgIcon
           component={DeepfakeIcon}
           sx={{
-            fill: tabValue === 0 && drawerValue === 6 ? "#00926c" : "#4c4c4c",
+            fill:
+              topMenuItemSelectedId === 0 && sideMenuItemSelectedId === 6
+                ? "#00926c"
+                : "#4c4c4c",
             fontSize: "24px",
           }}
           inheritViewBox
@@ -497,7 +509,10 @@ const NavBar = () => {
         <SvgIcon
           component={AnalysisIconImage}
           sx={{
-            fill: tabValue === 0 && drawerValue === 7 ? "#00926c" : "#4c4c4c",
+            fill:
+              topMenuItemSelectedId === 0 && sideMenuItemSelectedId === 7
+                ? "#00926c"
+                : "#4c4c4c",
             fontSize: "24px",
           }}
           inheritViewBox
@@ -527,7 +542,10 @@ const NavBar = () => {
         <SvgIcon
           component={MagnifierIcon}
           sx={{
-            fill: tabValue === 0 && drawerValue === 8 ? "#00926c" : "#4c4c4c",
+            fill:
+              topMenuItemSelectedId === 0 && sideMenuItemSelectedId === 8
+                ? "#00926c"
+                : "#4c4c4c",
             fontSize: "24px",
           }}
           inheritViewBox
@@ -557,7 +575,10 @@ const NavBar = () => {
         <SvgIcon
           component={MetadataIcon}
           sx={{
-            fill: tabValue === 0 && drawerValue === 9 ? "#00926c" : "#4c4c4c",
+            fill:
+              topMenuItemSelectedId === 0 && sideMenuItemSelectedId === 9
+                ? "#00926c"
+                : "#4c4c4c",
             fontSize: "24px",
           }}
           inheritViewBox
@@ -588,7 +609,10 @@ const NavBar = () => {
         <SvgIcon
           component={ForensicIcon}
           sx={{
-            fill: tabValue === 0 && drawerValue === 10 ? "#00926c" : "#4c4c4c",
+            fill:
+              topMenuItemSelectedId === 0 && sideMenuItemSelectedId === 10
+                ? "#00926c"
+                : "#4c4c4c",
             fontSize: "24px",
           }}
           inheritViewBox
@@ -617,7 +641,10 @@ const NavBar = () => {
         <SvgIcon
           component={OcrIcon}
           sx={{
-            fill: tabValue === 0 && drawerValue === 11 ? "#00926c" : "#4c4c4c",
+            fill:
+              topMenuItemSelectedId === 0 && sideMenuItemSelectedId === 11
+                ? "#00926c"
+                : "#4c4c4c",
             fontSize: "24px",
           }}
           inheritViewBox
@@ -647,7 +674,10 @@ const NavBar = () => {
         <SvgIcon
           component={GifIcon}
           sx={{
-            fill: tabValue === 0 && drawerValue === 12 ? "#00926c" : "#4c4c4c",
+            fill:
+              topMenuItemSelectedId === 0 && sideMenuItemSelectedId === 12
+                ? "#00926c"
+                : "#4c4c4c",
             fontSize: "24px",
           }}
           inheritViewBox
@@ -675,7 +705,10 @@ const NavBar = () => {
       icon: (
         <Gradient
           style={{
-            fill: tabValue === 0 && drawerValue === 13 ? "#00926c" : "#4c4c4c",
+            fill:
+              topMenuItemSelectedId === 0 && sideMenuItemSelectedId === 13
+                ? "#00926c"
+                : "#4c4c4c",
           }}
         />
       ),
@@ -699,7 +732,10 @@ const NavBar = () => {
         <SvgIcon
           component={DeepfakeIcon}
           sx={{
-            fill: tabValue === 0 && drawerValue === 14 ? "#00926c" : "#4c4c4c",
+            fill:
+              topMenuItemSelectedId === 0 && sideMenuItemSelectedId === 14
+                ? "#00926c"
+                : "#4c4c4c",
             fontSize: "24px",
           }}
           inheritViewBox
@@ -728,7 +764,10 @@ const NavBar = () => {
         <SvgIcon
           component={GeolocationIcon}
           sx={{
-            fill: tabValue === 0 && drawerValue === 15 ? "#00926c" : "#4c4c4c",
+            fill:
+              topMenuItemSelectedId === 0 && sideMenuItemSelectedId === 15
+                ? "#00926c"
+                : "#4c4c4c",
             fontSize: "24px",
           }}
           inheritViewBox
@@ -756,7 +795,10 @@ const NavBar = () => {
       icon: (
         <AudioFile
           style={{
-            fill: tabValue === 0 && drawerValue === 16 ? "#00926c" : "#4c4c4c",
+            fill:
+              topMenuItemSelectedId === 0 && sideMenuItemSelectedId === 16
+                ? "#00926c"
+                : "#4c4c4c",
           }}
           title={keyword("navbar_loccus")}
         />
@@ -787,7 +829,10 @@ const NavBar = () => {
         <SvgIcon
           component={TwitterSearchIcon}
           sx={{
-            fill: tabValue === 0 && drawerValue === 17 ? "#00926c" : "#4c4c4c",
+            fill:
+              topMenuItemSelectedId === 0 && sideMenuItemSelectedId === 17
+                ? "#00926c"
+                : "#4c4c4c",
             fontSize: "24px",
           }}
           inheritViewBox
@@ -816,7 +861,10 @@ const NavBar = () => {
       icon: (
         <ManageSearch
           style={{
-            fill: tabValue === 0 && drawerValue === 18 ? "#00926c" : "#4c4c4c",
+            fill:
+              topMenuItemSelectedId === 0 && sideMenuItemSelectedId === 18
+                ? "#00926c"
+                : "#4c4c4c",
           }}
           title={keyword("navbar_semantic_search")}
         />
@@ -848,7 +896,10 @@ const NavBar = () => {
         <SvgIcon
           component={TwitterSnaIcon}
           sx={{
-            fill: tabValue === 0 && drawerValue === 19 ? "#00926c" : "#4c4c4c",
+            fill:
+              topMenuItemSelectedId === 0 && sideMenuItemSelectedId === 19
+                ? "#00926c"
+                : "#4c4c4c",
             fontSize: "24px",
           }}
           inheritViewBox
@@ -876,7 +927,10 @@ const NavBar = () => {
       icon: (
         <Archive
           style={{
-            fill: tabValue === 0 && drawerValue === 20 ? "#00926c" : "#4c4c4c",
+            fill:
+              topMenuItemSelectedId === 0 && sideMenuItemSelectedId === 20
+                ? "#00926c"
+                : "#4c4c4c",
           }}
         />
       ),
@@ -901,7 +955,10 @@ const NavBar = () => {
         <SvgIcon
           component={CsvSnaIcon}
           sx={{
-            fill: tabValue === 0 && drawerValue === 21 ? "#00926c" : "#4c4c4c",
+            fill:
+              topMenuItemSelectedId === 0 && sideMenuItemSelectedId === 21
+                ? "#00926c"
+                : "#4c4c4c",
             fontSize: "24px",
           }}
           inheritViewBox
@@ -930,7 +987,10 @@ const NavBar = () => {
         <SvgIcon
           component={CovidSearchIcon}
           sx={{
-            fill: tabValue === 0 && drawerValue === 22 ? "#00926c" : "#4c4c4c",
+            fill:
+              topMenuItemSelectedId === 0 && sideMenuItemSelectedId === 22
+                ? "#00926c"
+                : "#4c4c4c",
             fontSize: "24px",
           }}
           inheritViewBox
@@ -959,7 +1019,10 @@ const NavBar = () => {
         <SvgIcon
           component={XnetworkIcon}
           sx={{
-            fill: tabValue === 0 && drawerValue === 23 ? "#00926c" : "#4c4c4c",
+            fill:
+              topMenuItemSelectedId === 0 && sideMenuItemSelectedId === 23
+                ? "#00926c"
+                : "#4c4c4c",
             fontSize: "24px",
           }}
           inheritViewBox
@@ -982,14 +1045,14 @@ const NavBar = () => {
     },
   ];
 
-  const tabItems = [
+  const topMenuItems = [
     {
       title: "navbar_tools",
       icon: (
         <SvgIcon
           component={ToolsIcon}
           sx={{
-            fill: tabValue === 0 ? "#00926c" : "#4c4c4c",
+            fill: topMenuItemSelectedId === 0 ? "#00926c" : "#4c4c4c",
             fontSize: "24px",
           }}
           inheritViewBox
@@ -1007,7 +1070,7 @@ const NavBar = () => {
         <SvgIcon
           component={AssistantIcon}
           sx={{
-            fill: tabValue === 1 ? "#00926c" : "#4c4c4c",
+            fill: topMenuItemSelectedId === 1 ? "#00926c" : "#4c4c4c",
             fontSize: "24px",
           }}
           inheritViewBox
@@ -1026,7 +1089,7 @@ const NavBar = () => {
         <SvgIcon
           component={GuideIcon}
           sx={{
-            fill: tabValue === 2 ? "#00926c" : "#4c4c4c",
+            fill: topMenuItemSelectedId === 2 ? "#00926c" : "#4c4c4c",
             fontSize: "24px",
           }}
           inheritViewBox
@@ -1044,7 +1107,7 @@ const NavBar = () => {
         <SvgIcon
           component={InteractiveIcon}
           sx={{
-            fill: tabValue === 3 ? "#00926c" : "#4c4c4c",
+            fill: topMenuItemSelectedId === 3 ? "#00926c" : "#4c4c4c",
             fontSize: "24px",
           }}
           inheritViewBox
@@ -1062,7 +1125,7 @@ const NavBar = () => {
         <SvgIcon
           component={ClassroomIcon}
           sx={{
-            fill: tabValue === 4 ? "#00926c" : "#4c4c4c",
+            fill: topMenuItemSelectedId === 4 ? "#00926c" : "#4c4c4c",
             fontSize: "24px",
           }}
           inheritViewBox
@@ -1080,7 +1143,7 @@ const NavBar = () => {
         <SvgIcon
           component={AboutIcon}
           sx={{
-            fill: tabValue === 5 ? "#00926c" : "#4c4c4c",
+            fill: topMenuItemSelectedId === 5 ? "#00926c" : "#4c4c4c",
             fontSize: "24px",
           }}
           inheritViewBox
@@ -1115,7 +1178,7 @@ const NavBar = () => {
 
   useEffect(() => {
     //select tool category
-    switch (drawerItems[drawerValue].type) {
+    switch (sideMenuItems[sideMenuItemSelectedId].type) {
       case TOOLS_CATEGORIES.VIDEO:
         setOpenListVideo(true);
         break;
@@ -1137,7 +1200,7 @@ const NavBar = () => {
       default:
         break;
     }
-  }, [drawerValue]);
+  }, [sideMenuItemSelectedId]);
 
   const themeFab = createTheme({
     palette: {
@@ -1204,7 +1267,7 @@ const NavBar = () => {
   });
 
   //Video items
-  const drawerItemsVideo = drawerItems.filter(
+  const drawerItemsVideo = sideMenuItems.filter(
     (item) => item.type === TOOLS_CATEGORIES.VIDEO,
   );
   const [openListVideo, setOpenListVideo] = useState(false);
@@ -1220,7 +1283,7 @@ const NavBar = () => {
   };
 
   //Image items
-  const drawerItemsImage = drawerItems.filter(
+  const drawerItemsImage = sideMenuItems.filter(
     (item) => item.type === TOOLS_CATEGORIES.IMAGE,
   );
   const [openListImage, setOpenListImage] = useState(false);
@@ -1236,7 +1299,7 @@ const NavBar = () => {
   };
 
   //Audio items
-  const drawerItemsAudio = drawerItems.filter(
+  const drawerItemsAudio = sideMenuItems.filter(
     (item) => item.type === TOOLS_CATEGORIES.AUDIO,
   );
   const [openListAudio, setOpenListAudio] = useState(false);
@@ -1252,7 +1315,7 @@ const NavBar = () => {
   };
 
   //Search items
-  const drawerItemsSearch = drawerItems.filter(
+  const drawerItemsSearch = sideMenuItems.filter(
     (item) => item.type === TOOLS_CATEGORIES.SEARCH,
   );
   const [openListSeach, setOpenListSeach] = useState(false);
@@ -1268,7 +1331,7 @@ const NavBar = () => {
   };
 
   //Data items
-  const drawerItemsData = drawerItems.filter(
+  const drawerItemsData = sideMenuItems.filter(
     (item) => item.type === TOOLS_CATEGORIES.DATA_ANALYSIS,
   );
   const [openListData, setOpenListData] = useState(false);
@@ -1283,7 +1346,7 @@ const NavBar = () => {
     }
   };
 
-  const drawerItemsOtherTools = drawerItems.filter(
+  const drawerItemsOtherTools = sideMenuItems.filter(
     (item) => item.type === TOOLS_CATEGORIES.OTHER,
   );
   const [openListOtherTools, setOpenListOtherTools] = useState(false);
@@ -1414,7 +1477,7 @@ const NavBar = () => {
     }
   });
 
-  const drawItemPerRole = drawerItems.filter((item) => {
+  const drawItemPerRole = sideMenuItems.filter((item) => {
     if (
       item.toolRestrictions.length === 0 ||
       item.toolRestrictions.includes(TOOL_STATUS_ICON.LOCK)
@@ -1424,10 +1487,12 @@ const NavBar = () => {
       return true;
   });
 
-  const toolsItem = drawerItems.find((data) => data.title === "navbar_tools");
-  //const assistantItem = tabItems.find(data => data.title === 'navbar_assistant');
-  //const drawerItemsLearning = tabItems.filter(item => item.typeTab === "learning");
-  const drawerItemsMore = tabItems.filter((item) => item.typeTab === "more");
+  const toolsItem = sideMenuItems.find((data) => data.title === "navbar_tools");
+  //const assistantItem = topMenuItems.find(data => data.title === 'navbar_assistant');
+  //const drawerItemsLearning = topMenuItems.filter(item => item.typeTab === "learning");
+  const drawerItemsMore = topMenuItems.filter(
+    (item) => item.typeTab === "more",
+  );
 
   //const [value, setValue] = useState(null);
 
@@ -1504,9 +1569,9 @@ const NavBar = () => {
               </Grid>
               <Grid item xs={7}>
                 <Tabs
-                  value={tabValue}
+                  value={topMenuItemSelectedId}
                   variant="scrollable"
-                  onChange={handleChange}
+                  onChange={handleTopMenuChange}
                   scrollButtons="auto"
                   allowScrollButtonsMobile
                   indicatorColor="primary"
@@ -1517,7 +1582,7 @@ const NavBar = () => {
                   }}
                   sx={{ color: "black" }}
                 >
-                  {tabItems.map((item, index) => {
+                  {topMenuItems.map((item, index) => {
                     return (
                       <Tab
                         key={index}
@@ -1545,17 +1610,17 @@ const NavBar = () => {
         <Drawer
           variant="permanent"
           className={clsx(classes.drawer, {
-            [classes.drawerOpen]: open,
-            [classes.drawerClose]: !open,
+            [classes.drawerOpen]: isSideMenuOpen,
+            [classes.drawerClose]: !isSideMenuOpen,
           })}
           classes={{
             paper: clsx({
-              [classes.drawerOpen]: open,
-              [classes.drawerClose]: !open,
+              [classes.drawerOpen]: isSideMenuOpen,
+              [classes.drawerClose]: !isSideMenuOpen,
             }),
           }}
           ref={drawerRef}
-          open={open}
+          open={isSideMenuOpen}
         >
           <List
             style={{
@@ -1578,18 +1643,20 @@ const NavBar = () => {
                   textTransform: "uppercase",
                 }}
               >
-                {open
+                {isSideMenuOpen
                   ? keyword("navbar_verification")
                   : keyword("navbar_verification_short")}
               </Typography>
             </ListSubheader>
             <ListItemButton
-              selected={tabValue === 0 && drawerValue === 0}
+              selected={
+                topMenuItemSelectedId === 0 && sideMenuItemSelectedId === 0
+              }
               onClick={() => changeValue(toolsItem, "TOOL")}
               component={Link}
               to={"tools"}
             >
-              {open ? (
+              {isSideMenuOpen ? (
                 <>
                   <ListItemIcon
                     sx={{
@@ -1603,10 +1670,15 @@ const NavBar = () => {
                     primary={
                       <Typography
                         color={
-                          tabValue === 0 && drawerValue === 0 ? "primary" : ""
+                          topMenuItemSelectedId === 0 &&
+                          sideMenuItemSelectedId === 0
+                            ? "primary"
+                            : ""
                         }
                         className={`${
-                          open ? classes.drawerListText : classes.hidden
+                          isSideMenuOpen
+                            ? classes.drawerListText
+                            : classes.hidden
                         }`}
                       >
                         {keyword(toolsItem.title)}
@@ -1643,7 +1715,9 @@ const NavBar = () => {
                       primary={
                         <Typography
                           className={`${
-                            open ? classes.drawerListText : classes.hidden
+                            isSideMenuOpen
+                              ? classes.drawerListText
+                              : classes.hidden
                           }`}
                         >
                           {item.title}
@@ -1651,7 +1725,7 @@ const NavBar = () => {
                       }
                     />
 
-                    {open ? (
+                    {isSideMenuOpen ? (
                       item.variableOpen ? (
                         <ExpandLess />
                       ) : (
@@ -1666,12 +1740,13 @@ const NavBar = () => {
                         let element = (
                           <ListItemButton
                             selected={
-                              tabValue === 0 && drawerValue + 1 === itemList.id
+                              topMenuItemSelectedId === 0 &&
+                              sideMenuItemSelectedId + 1 === itemList.id
                             }
                             key={keyList}
                             onClick={() => changeValue(itemList, "TOOL")}
                           >
-                            {open ? (
+                            {isSideMenuOpen ? (
                               <ListItemIcon
                                 color="primary.main"
                                 className={classes.drawerListNested}
@@ -1697,13 +1772,13 @@ const NavBar = () => {
                               primary={
                                 <Typography
                                   color={
-                                    tabValue === 0 &&
-                                    drawerValue + 1 === itemList.id
+                                    topMenuItemSelectedId === 0 &&
+                                    sideMenuItemSelectedId + 1 === itemList.id
                                       ? "primary"
                                       : ""
                                   }
                                   className={`${
-                                    open
+                                    isSideMenuOpen
                                       ? classes.drawerListText
                                       : classes.hidden
                                   }`}
@@ -1735,7 +1810,6 @@ const NavBar = () => {
             <Box m={2} />
             <ListSubheader
               style={{ paddingTop: "16px", paddingBottom: "16px" }}
-              className={classListHeading}
             >
               <Typography
                 style={{
@@ -1745,13 +1819,15 @@ const NavBar = () => {
                   textTransform: "uppercase",
                 }}
               >
-                {open ? keyword("navbar_more") : keyword("navbar_more_short")}
+                {isSideMenuOpen
+                  ? keyword("navbar_more")
+                  : keyword("navbar_more_short")}
               </Typography>
             </ListSubheader>
             {drawerItemsMore.map((item, key) => {
               return (
                 <ListItemButton
-                  selected={tabValue === 5}
+                  selected={topMenuItemSelectedId === 5}
                   key={key}
                   onClick={() => changeValue(item, "OTHER")}
                 >
@@ -1767,9 +1843,11 @@ const NavBar = () => {
                   <ListItemText
                     primary={
                       <Typography
-                        color={tabValue === 5 ? "primary" : ""}
+                        color={topMenuItemSelectedId === 5 ? "primary" : ""}
                         className={`${
-                          open ? classes.drawerListText : classes.hidden
+                          isSideMenuOpen
+                            ? classes.drawerListText
+                            : classes.hidden
                         }`}
                       >
                         {keyword(item.title)}
@@ -1798,11 +1876,11 @@ const NavBar = () => {
               <Divider />
             </Box>
             <Button
-              onClick={handleDrawerToggle}
+              onClick={toggleSideMenu}
               style={{ alignSelf: "center" }}
-              startIcon={open ? <ChevronLeft /> : null}
+              startIcon={isSideMenuOpen ? <ChevronLeft /> : null}
             >
-              {open ? keyword("navbar_collapse") : <ChevronRight />}
+              {isSideMenuOpen ? keyword("navbar_collapse") : <ChevronRight />}
             </Button>
             <Box m={1} />
           </Box>
@@ -1812,7 +1890,7 @@ const NavBar = () => {
           <div className={classes.toolbar} id="back-to-top-anchor" />
           <TabItem
             className={classes.noMargin}
-            tabItems={tabItems}
+            tabItems={topMenuItems}
             drawerItems={drawItemPerRole}
           />
           <ScrollTop

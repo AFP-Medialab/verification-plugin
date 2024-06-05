@@ -4,7 +4,7 @@ import { Container } from "@mui/material";
 import Fade from "@mui/material/Fade";
 import { useDispatch, useSelector } from "react-redux";
 import { selectTool } from "../../../redux/reducers/tools/toolReducer";
-import AllTools from "../../NavItems/tools/Alltools/AllTools";
+import MainContentMenu from "../../NavItems/tools/Alltools/MainContentMenu";
 import Analysis from "../../NavItems/tools/Analysis/Analysis";
 import Keyframes from "../../NavItems/tools/Keyframes/Keyframes";
 import Thumbnails from "../../NavItems/tools/Thumbnails/Thumbnails";
@@ -34,7 +34,7 @@ import Loccus from "../../NavItems/tools/Loccus";
 const DrawerItem = ({ drawerItems }) => {
   const drawerItemsContent = [
     {
-      content: <AllTools tools={drawerItems} />,
+      content: <MainContentMenu tools={drawerItems} />,
       footer: <div />,
     },
     {
