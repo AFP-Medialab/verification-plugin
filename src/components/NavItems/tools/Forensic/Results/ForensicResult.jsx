@@ -107,48 +107,91 @@ const ForensicResults = (props) => {
   const userAuthenticated = useSelector(
     (state) => state.userSession && state.userSession.userAuthenticated,
   );
+  const role = useSelector((state) => state.userSession.user.roles);
   const [openAlert, setOpenAlert] = React.useState(false);
 
-  const filtersIDs = [
-    //COMPRESSION
-    "zero_report", //0
-    "ghost_report", //1
-    "cagi_report", //2
-    "adq1_report", //3
-    "dct_report", //4
-    "blk_report", //5
+  const defaultFilterProps = {
+    filtersIDs: [
+      //COMPRESSION
+      "zero_report", //0
+      "ghost_report", //1
+      "cagi_report", //2
+      "adq1_report", //3
+      "dct_report", //4
+      "blk_report", //5
 
-    //NOISE
-    "splicebuster_report", //6
-    "wavelet_report", //7
-    "cfa_report", //8
+      //NOISE
+      "splicebuster_report", //6
+      "wavelet_report", //7
+      "cfa_report", //8
 
-    //DEEP LEARNING
-    "mantranet_report", //9
-    "fusion_report", //10
-    "mmfusion_report", //11
-    "trufor_report", //12
-    "omgfuser_report", //13
+      //DEEP LEARNING
+      "mantranet_report", //9
+      "fusion_report", //10
 
-    //CLONING
-    "cmfd_report", //14
-    "rcmfd_report", //15
+      //CLONING
+      "cmfd_report", //11
+      "rcmfd_report", //12
 
-    //LENSES
+      //LENSES
 
-    "ela_report", //16
-    "laplacian_report", //17
-    "median_report", //18
-  ];
+      "ela_report", //13
+      "laplacian_report", //14
+      "median_report", //15
+    ],
+    idStartCompression: 0,
+    idStartNoise: 6,
+    idStartDeepLearning: 9,
+    idStartCloning: 11,
+    idStartLenses: 13,
+  };
 
-  const idStartCompression = 0;
-  const idStartNoise = 6;
-  const idStartDeepLearning = 9;
-  const idStartCloning = 14;
-  const idStartLenses = 16;
+  const extraFeaturesFilterProps = {
+    filtersIDs: [
+      //COMPRESSION
+      "zero_report", //0
+      "ghost_report", //1
+      "cagi_report", //2
+      "adq1_report", //3
+      "dct_report", //4
+      "blk_report", //5
+
+      //NOISE
+      "splicebuster_report", //6
+      "wavelet_report", //7
+      "cfa_report", //8
+
+      //DEEP LEARNING
+      "mantranet_report", //9
+      "fusion_report", //10
+      "mmfusion_report", //11
+      "trufor_report", //12
+      "omgfuser_report", //13
+
+      //CLONING
+      "cmfd_report", //14
+      "rcmfd_report", //15
+
+      //LENSES
+
+      "ela_report", //16
+      "laplacian_report", //17
+      "median_report", //18
+    ],
+    idStartCompression: 0,
+    idStartNoise: 6,
+    idStartDeepLearning: 9,
+    idStartCloning: 14,
+    idStartLenses: 16,
+  };
+
+  //SHOULD BE REWRITE
+  const filtersProp = role.includes("EXTRA_FEATURE")
+    ? extraFeaturesFilterProps
+    : defaultFilterProps;
 
   const filters = useRef(
-    filtersIDs.map((value) => {
+    filtersProp.filtersIDs.map((value) => {
       let filter;
       if (!results || !results[value] || !results[value].completed) {
         filter = {
@@ -256,7 +299,6 @@ const ForensicResults = (props) => {
       return filter;
     }),
   );
-
   const tabs = [0, 1, 2, 3];
 
   //Hover effect of the filters
@@ -718,7 +760,7 @@ const ForensicResults = (props) => {
                   <Box p={3}>
                     <Grid container spacing={3}>
                       {filters.current
-                        .slice(idStartLenses)
+                        .slice(filtersProp.idStartLenses)
                         .map((value, key) => {
                           return (
                             <Grid key={key} item xs={4}>
@@ -886,8 +928,8 @@ const ForensicResults = (props) => {
 
                     if (valueTab === 0) {
                       filtersTab = filters.current.slice(
-                        idStartCompression,
-                        idStartNoise,
+                        filtersProp.idStartCompression,
+                        filtersProp.idStartNoise,
                       );
                       textDescription = keyword(
                         "forensic_family_compression_description",
@@ -898,8 +940,8 @@ const ForensicResults = (props) => {
                       );
                     } else if (valueTab === 1) {
                       filtersTab = filters.current.slice(
-                        idStartNoise,
-                        idStartDeepLearning,
+                        filtersProp.idStartNoise,
+                        filtersProp.idStartDeepLearning,
                       );
                       textDescription = keyword(
                         "forensic_family_noise_description",
@@ -908,8 +950,8 @@ const ForensicResults = (props) => {
                       textIgnore = keyword("forensic_family_noise_ignore");
                     } else if (valueTab === 2) {
                       filtersTab = filters.current.slice(
-                        idStartDeepLearning,
-                        idStartCloning,
+                        filtersProp.idStartDeepLearning,
+                        filtersProp.idStartCloning,
                       );
                       textDescription = keyword(
                         "forensic_family_ai_description",
@@ -918,8 +960,8 @@ const ForensicResults = (props) => {
                       textIgnore = keyword("forensic_family_ai_ignore");
                     } else {
                       filtersTab = filters.current.slice(
-                        idStartCloning,
-                        idStartLenses,
+                        filtersProp.idStartCloning,
+                        filtersProp.idStartLenses,
                       );
                       textDescription = keyword(
                         "forensic_family_cloning_description",
