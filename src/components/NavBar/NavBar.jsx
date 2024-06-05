@@ -1701,37 +1701,35 @@ const NavBar = () => {
               const element = (
                 <Box>
                   <ListItemButton onClick={item.functionHandleClick}>
-                    <ListItemIcon
-                      color="primary.main"
-                      sx={{
-                        marginRight: "12px",
-                        minWidth: "unset",
-                      }}
-                    >
-                      {item.icon}
-                    </ListItemIcon>
-
-                    <ListItemText
-                      primary={
-                        <Typography
-                          className={`${
-                            isSideMenuOpen
-                              ? classes.drawerListText
-                              : classes.hidden
-                          }`}
-                        >
-                          {item.title}
-                        </Typography>
-                      }
-                    />
-
                     {isSideMenuOpen ? (
-                      item.variableOpen ? (
-                        <ExpandLess />
-                      ) : (
-                        <ExpandMore />
-                      )
-                    ) : null}
+                      <>
+                        <ListItemIcon
+                          sx={{
+                            marginRight: "12px",
+                            minWidth: "unset",
+                          }}
+                        >
+                          {item.icon}
+                        </ListItemIcon>
+                        <ListItemText
+                          primary={
+                            <Typography className={classes.drawerListText}>
+                              {keyword(item.title)}
+                            </Typography>
+                          }
+                        />
+                        {item.variableOpen ? <ExpandLess /> : <ExpandMore />}
+                      </>
+                    ) : (
+                      <Stack
+                        direction="row"
+                        alignItems="center"
+                        justifyContent="center"
+                        width="100%"
+                      >
+                        {item.icon}
+                      </Stack>
+                    )}
                   </ListItemButton>
 
                   <Collapse in={item.variableOpen} timeout="auto" unmountOnExit>
@@ -1747,46 +1745,43 @@ const NavBar = () => {
                             onClick={() => changeValue(itemList, "TOOL")}
                           >
                             {isSideMenuOpen ? (
-                              <ListItemIcon
-                                color="primary.main"
-                                className={classes.drawerListNested}
-                                sx={{
-                                  marginRight: "12px",
-                                  minWidth: "unset",
-                                }}
-                              >
-                                {itemList.icon}
-                              </ListItemIcon>
-                            ) : (
-                              <ListItemIcon
-                                color="primary.main"
-                                sx={{
-                                  marginRight: "12px",
-                                  minWidth: "unset",
-                                }}
-                              >
-                                {itemList.icon}
-                              </ListItemIcon>
-                            )}
-                            <ListItemText
-                              primary={
-                                <Typography
-                                  color={
-                                    topMenuItemSelectedId === 0 &&
-                                    sideMenuItemSelectedId + 1 === itemList.id
-                                      ? "primary"
-                                      : ""
-                                  }
-                                  className={`${
-                                    isSideMenuOpen
-                                      ? classes.drawerListText
-                                      : classes.hidden
-                                  }`}
+                              <>
+                                <ListItemIcon
+                                  className={classes.drawerListNested}
+                                  sx={{
+                                    marginRight: "12px",
+                                    minWidth: "unset",
+                                  }}
                                 >
-                                  {keyword(itemList.title)}
-                                </Typography>
-                              }
-                            />
+                                  {itemList.icon}
+                                </ListItemIcon>
+                                <ListItemText
+                                  primary={
+                                    <Typography
+                                      color={
+                                        topMenuItemSelectedId === 0 &&
+                                        sideMenuItemSelectedId + 1 ===
+                                          itemList.id
+                                          ? "primary"
+                                          : ""
+                                      }
+                                      className={classes.drawerListText}
+                                    >
+                                      {keyword(itemList.title)}
+                                    </Typography>
+                                  }
+                                />
+                              </>
+                            ) : (
+                              <Stack
+                                direction="row"
+                                alignItems="center"
+                                justifyContent="center"
+                                width="100%"
+                              >
+                                {itemList.icon}
+                              </Stack>
+                            )}
                           </ListItemButton>
                         );
 
@@ -1831,29 +1826,41 @@ const NavBar = () => {
                   key={key}
                   onClick={() => changeValue(item, "OTHER")}
                 >
-                  <ListItemIcon
-                    color="primary.main"
-                    sx={{
-                      marginRight: "12px",
-                      minWidth: "unset",
-                    }}
-                  >
-                    {item.icon}
-                  </ListItemIcon>
-                  <ListItemText
-                    primary={
-                      <Typography
-                        color={topMenuItemSelectedId === 5 ? "primary" : ""}
-                        className={`${
-                          isSideMenuOpen
-                            ? classes.drawerListText
-                            : classes.hidden
-                        }`}
+                  {isSideMenuOpen ? (
+                    <>
+                      <ListItemIcon
+                        sx={{
+                          marginRight: "12px",
+                          minWidth: "unset",
+                        }}
                       >
-                        {keyword(item.title)}
-                      </Typography>
-                    }
-                  />
+                        {item.icon}
+                      </ListItemIcon>
+                      <ListItemText
+                        primary={
+                          <Typography
+                            color={topMenuItemSelectedId === 5 ? "primary" : ""}
+                            className={`${
+                              isSideMenuOpen
+                                ? classes.drawerListText
+                                : classes.hidden
+                            }`}
+                          >
+                            {keyword(item.title)}
+                          </Typography>
+                        }
+                      />
+                    </>
+                  ) : (
+                    <Stack
+                      direction="row"
+                      alignItems="center"
+                      justifyContent="center"
+                      width="100%"
+                    >
+                      {item.icon}
+                    </Stack>
+                  )}
                 </ListItemButton>
               );
             })}
