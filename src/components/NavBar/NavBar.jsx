@@ -1880,7 +1880,7 @@ const NavBar = () => {
           <MainContentMenuTabItems
             className={classes.noMargin}
             tabItems={topMenuItems}
-            drawerItems={drawItemPerRole}
+            toolsList={drawItemPerRole}
           />
           <ScrollTop
             {...{ isCurrentLanguageLeftToRight: isCurrentLanguageLeftToRight }}

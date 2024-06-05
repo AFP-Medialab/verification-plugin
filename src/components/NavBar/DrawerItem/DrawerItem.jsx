@@ -31,10 +31,10 @@ import Archive from "../../NavItems/tools/Archive";
 import SemanticSearch from "../../NavItems/tools/SemanticSearch";
 import Loccus from "../../NavItems/tools/Loccus";
 
-const DrawerItem = ({ drawerItems }) => {
+const DrawerItem = ({ toolsList }) => {
   const drawerItemsContent = [
     {
-      content: <MainContentMenu tools={drawerItems} />,
+      content: <MainContentMenu tools={toolsList} />,
       footer: <div />,
     },
     {
@@ -128,7 +128,7 @@ const DrawerItem = ({ drawerItems }) => {
           <DrawerItemContent index={0} drawContent={drawerItemsContent} />
         }
       />
-      {drawerItems.map((item, index) => {
+      {toolsList.map((item, index) => {
         if (item.path) {
           return (
             <Route path={item.path} key={index}>
@@ -244,7 +244,7 @@ const DrawerItemContent = ({ index, drawContent }) => {
 };
 
 DrawerItem.propTypes = {
-  drawerItems: PropTypes.any,
+  toolsList: PropTypes.any,
 };
 
 DrawerItemContent.propTypes = {
