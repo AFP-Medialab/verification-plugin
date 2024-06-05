@@ -211,6 +211,10 @@ const NavBar = () => {
   const role = useSelector((state) => state.userSession.user.roles);
   const betaTester = role.includes("BETA_TESTER");
 
+  /**
+   * Represents the categories to which the tools belong
+   *
+   */
   const TOOLS_CATEGORIES = {
     VIDEO: keyword("navbar_category_video"),
     IMAGE: keyword("navbar_category_image"),
@@ -223,12 +227,23 @@ const NavBar = () => {
     ALL: keyword("navbar_category_general"),
   };
 
+  /**
+   * Represents the possible temporary states of the tools:
+   * - An experimental tool is not ready for production, and available to beta testers
+   * - A new tool is an experimental tool that was released to everyone
+   * - A locked tool is a tool available to registered users
+   * @type {{NEW: string, LOCK: string, EXPERIMENTAL: string}}
+   */
   const TOOL_STATUS_ICON = {
     EXPERIMENTAL: "experimental",
     NEW: "new",
     LOCK: "lock",
   };
 
+  /**
+   * Represents the user roles that can be needed to access a given tool
+   * @type {{BETA_TESTER: string, ARCHIVE: string, LOCK: string}}
+   */
   const TOOL_RESTRICTIONS = {
     ARCHIVE: "ARCHIVE",
     BETA_TESTER: "BETA_TESTER",
