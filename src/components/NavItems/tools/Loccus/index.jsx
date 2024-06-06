@@ -27,7 +27,6 @@ import LoccusResults from "./loccusResults";
 import { setError } from "redux/reducers/errorReducer";
 import { isValidUrl } from "../../../Shared/Utils/URLUtils";
 
-import { v4 as uuidv4 } from "uuid";
 import useAuthenticatedRequest from "components/Shared/Authentication/useAuthenticatedRequest";
 import StringFileUploadField from "../../../Shared/StringFileUploadField";
 import { preprocessFileUpload } from "../../../Shared/Utils/fileUtils";
@@ -99,11 +98,9 @@ const Loccus = () => {
     try {
       // unique identifier for the file to process
       // TODO: provide a view on previous file uploads by the user
-      const uid = uuidv4();
 
       let data = JSON.stringify({
         file: b64InputFile,
-        handle: uid,
         alias: "test",
       });
 
@@ -138,7 +135,7 @@ const Loccus = () => {
 
       const data2 = JSON.stringify({
         model: "default",
-        sample: uid,
+        sample: res.data.handle,
       });
 
       const config2 = {
