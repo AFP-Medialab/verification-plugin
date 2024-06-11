@@ -51,6 +51,8 @@ const Loccus = () => {
   const [input, setInput] = useState(url ? url : "");
   const [audioFile, setAudioFile] = useState(AUDIO_FILE_DEFAULT_STATE);
 
+  const [chunks, setChunks] = useState([]);
+
   const dispatch = useDispatch();
 
   const useGetVoiceCloningScore = async (url, processURL, dispatch) => {
@@ -158,6 +160,28 @@ const Loccus = () => {
         //   TODO: handle error
         return;
       }
+
+      const config3 = {
+        method: "get",
+        maxBodyLength: Infinity,
+        ///verifications/authenticity
+        url:
+          process.env.REACT_APP_LOCCUS_URL +
+          `/detection/${res2.data.handle}/chunks?page-size=1000`,
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        data: data2,
+        timeout: 180000,
+        signal: AbortSignal.timeout(180000),
+      };
+
+      const res3 = await authenticatedRequest(config3);
+
+      console.log(res3.data);
+
+      setChunks(res3.data);
 
       dispatch(
         setLoccusResult({
@@ -324,7 +348,12 @@ const Loccus = () => {
       <Box m={3} />
 
       {result && (
-        <LoccusResults result={result} url={url} handleClose={handleClose} />
+        <LoccusResults
+          result={result}
+          url={url}
+          handleClose={handleClose}
+          chunks={chunks}
+        />
       )}
     </div>
   );
