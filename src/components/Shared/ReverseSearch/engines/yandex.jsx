@@ -16,11 +16,39 @@ export const yandexReverseSearch = (imageObject, isRequestFromContextMenu) => {
   }
 };
 
+export const reverseImageSearchYandexURIV2 = (
+  imgUrl,
+  isRequestFromContextMenu = true,
+) => {
+  const url = `https://yandex.com/images-apphost/image-download?url=${encodeURIComponent(
+    imgUrl,
+  )}&images_avatars_size=preview&cbird=111&images_avatars_namespace=images-cbir`;
+  fetch(url, {
+    method: "GET",
+    headers: {
+      "X-Requested-With": "XMLHttpRequest",
+      Accept: "application/json, text/javascript, */*; q=0.01",
+    },
+  })
+    .then((response) => {
+      return response.json();
+    })
+    .then((json) => {
+      const cbirId = json.cbir_id;
+      const fullUrl = `https://yandex.com/images/search?cbir_id=${cbirId}&rpt=imageview`;
+      const urlObject = { url: fullUrl };
+
+      openNewTabWithUrl(urlObject, isRequestFromContextMenu);
+    });
+};
+
 export const reverseImageSearchYandexURI = (
   imgUrl,
   isRequestFromContextMenu = true,
 ) => {
-  const tabUrl = `https://yandex.com/images/search?url=${imgUrl}&rpt=imageview`;
+  const tabUrl = `https://yandex.com/images/search?url=${encodeURIComponent(
+    imgUrl,
+  )}&rpt=imageview`;
   const urlObject = { url: tabUrl };
   openNewTabWithUrl(urlObject, isRequestFromContextMenu);
 };
