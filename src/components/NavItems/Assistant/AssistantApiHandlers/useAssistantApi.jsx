@@ -76,9 +76,153 @@ export default function assistantApiCalls() {
     return result.data;
   };
 
+  const MAX_NUM_RETRIES = 3;
+
+  /**
+   * Calls an async function that throws an exception when it fails, will retry for numMaxRetries
+   * @param numMaxRetries Number of times the function will be retried
+   * @param asyncFunc The async function to call
+   * @param errorFunc Called when asyncFunc throws an error when there are additional retries
+   * @returns {Promise<*>} Output of asyncFunc
+   */
+  async function callAsyncWithNumRetries(
+    numMaxRetries,
+    asyncFunc,
+    errorFunc = null,
+  ) {
+    for (let retryCount = 0; retryCount < numMaxRetries; retryCount++) {
+      try {
+        return await asyncFunc();
+      } catch (e) {
+        if (retryCount + 1 >= MAX_NUM_RETRIES) {
+          throw e;
+        } else {
+          if (errorFunc) errorFunc(retryCount, e);
+        }
+      }
+    }
+  }
+
+  const callNewsFramingService = async (text) => {
+    return await callAsyncWithNumRetries(
+      MAX_NUM_RETRIES,
+      async () => {
+        const result = await axios.post(
+          assistantEndpoint + "gcloud/news-framing-clfr",
+          { text: text },
+        );
+        return result.data;
+      },
+      (numTries) => {
+        console.log(
+          "Could not connect to news framing service, tries " +
+            (numTries + 1) +
+            "/" +
+            MAX_NUM_RETRIES,
+        );
+      },
+    );
+  };
+
+  const callNewsGenreService = async (text) => {
+    return await callAsyncWithNumRetries(
+      MAX_NUM_RETRIES,
+      async () => {
+        const result = await axios.post(
+          assistantEndpoint + "gcloud/news-genre-clfr",
+          { text: text },
+        );
+        return result.data;
+      },
+      (numTries) => {
+        console.log(
+          "Could not connect to news genre service, tries " +
+            (numTries + 1) +
+            "/" +
+            MAX_NUM_RETRIES,
+        );
+      },
+    );
+  };
+
+  const callPersuasionService = async (text) => {
+    return await callAsyncWithNumRetries(
+      MAX_NUM_RETRIES,
+      async () => {
+        const result = await axios.post(
+          assistantEndpoint + "gcloud/persuasion-span-clfr",
+          { text: text },
+        );
+        return result.data;
+      },
+      (numTries) => {
+        console.log(
+          "Could not connect to persuasion service, tries " +
+            (numTries + 1) +
+            "/" +
+            MAX_NUM_RETRIES,
+        );
+      },
+    );
+  };
+
   const callOcrScriptService = async () => {
     const result = await axios.get(assistantEndpoint + "gcloud/ocr-scripts");
     return result.data;
+  };
+
+  const callSubjectivityService = async (text) => {
+    const result = await axios.post(assistantEndpoint + "dw/subjectivity", {
+      content: text,
+    });
+
+    return result.data;
+  };
+
+  const callPrevFactChecksService = async (text) => {
+    return await callAsyncWithNumRetries(
+      MAX_NUM_RETRIES,
+      async () => {
+        const result = await axios.get(
+          assistantEndpoint +
+            "kinit/prev-fact-checks" +
+            "?text=" +
+            encodeURIComponent(text), // max URL length is 2048 characters
+        );
+        return result.data;
+      },
+      (numTries) => {
+        console.log(
+          "Could not connect to previous fact checks service, tries " +
+            (numTries + 1) +
+            "/" +
+            MAX_NUM_RETRIES,
+        );
+      },
+    );
+  };
+
+  const callMachineGeneratedTextService = async (text) => {
+    return await callAsyncWithNumRetries(
+      MAX_NUM_RETRIES,
+      async () => {
+        const result = await axios.get(
+          assistantEndpoint +
+            "kinit/machine-generated-text" +
+            "?text=" +
+            encodeURIComponent(text), // max URL length is 2048 characters
+        );
+        return result.data;
+      },
+      (numTries) => {
+        console.log(
+          "Could not connect to machine generated text service, tries " +
+            (numTries + 1) +
+            "/" +
+            MAX_NUM_RETRIES,
+        );
+      },
+    );
   };
 
   return {
@@ -87,5 +231,11 @@ export default function assistantApiCalls() {
     callNamedEntityService,
     callOcrService,
     callOcrScriptService,
+    callNewsFramingService,
+    callNewsGenreService,
+    callPersuasionService,
+    callSubjectivityService,
+    callPrevFactChecksService,
+    callMachineGeneratedTextService,
   };
 }
