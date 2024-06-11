@@ -67,6 +67,7 @@ function authenticationReducer(state = defaultState, action) {
 
     case AUTH_USER_LOGIN:
       // State user as logged in and add user authentication information.
+      console.log(action.payload);
       return {
         ...state,
         userLoginLoading: false,
@@ -74,7 +75,7 @@ function authenticationReducer(state = defaultState, action) {
         accessToken: action.payload.accessToken,
         accessTokenExpiry: action.payload.accessTokenExpiry,
         refreshToken: action.payload.refreshToken,
-        user: action.payload.user,
+        user: Object.assign({}, action.payload.user),
       };
 
     case AUTH_USER_LOGOUT:

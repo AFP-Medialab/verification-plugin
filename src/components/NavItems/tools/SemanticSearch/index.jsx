@@ -226,7 +226,7 @@ const SemanticSearch = () => {
     //takes in text parameter from url
     if (url) {
       const uri = url !== null ? decodeURIComponent(url) : undefined;
-      if (uri === "textFromAssistant") {
+      if (uri === "assistantText" && text) {
         setSearchString(text);
         handleSubmit();
       }

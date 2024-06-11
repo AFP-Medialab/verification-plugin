@@ -1,15 +1,9 @@
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
-import {
-  CardHeader,
-  CircularProgress,
-  Link,
-  Stack,
-  styled,
-} from "@mui/material";
+import { CardHeader, CircularProgress, Link, styled } from "@mui/material";
 import CardContent from "@mui/material/CardContent";
 import Grid from "@mui/material/Grid";
 import Accordion from "@mui/material/Accordion";
@@ -32,7 +26,6 @@ import Collapse from "@mui/material/Collapse";
 import Divider from "@mui/material/Divider";
 import {
   ExpandLessOutlined,
-  ExpandMore,
   ExpandMoreOutlined,
   Remove,
 } from "@mui/icons-material";
@@ -42,6 +35,14 @@ import FileCopyOutlined from "@mui/icons-material/FileCopy";
 
 import { useNavigate } from "react-router-dom";
 import { getLanguageName } from "../../../Shared/Utils/languageUtils";
+
+const getExpandIcon = (loading, fail, extra = null) => {
+  if (loading || fail || extra) {
+    return <Remove />;
+  } else {
+    return <ExpandMoreIcon />;
+  }
+};
 
 const renderEntityKeys = (entities) => {
   // tidy array into readable string
@@ -198,7 +199,7 @@ const renderCollapsePrevFactChecks = (
 ) => {
   const handleClick = (path) => {
     // instead need to set variable then load in from SemanticSearch/index.jsx
-    navigate("/app/" + path + "/textFromAssistant");
+    navigate("/app/" + path + "/assistantText");
   };
 
   return (
@@ -248,6 +249,11 @@ const renderCollapsePrevFactChecks = (
 const AssistantCredSignals = () => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
   const sharedKeyword = i18nLoadNamespace("components/Shared/utils");
+
+  // const dispatch = useDispatch();
+  // if (!role.includes("BETA_TESTER")) {
+
+  // }
 
   const classes = useMyStyles();
 
@@ -346,26 +352,20 @@ const AssistantCredSignals = () => {
     (state) => state.assistant.machineGeneratedTextFail,
   );
 
-  const newsFramingTitle = "Topic";
+  const newsFramingTitle = keyword("news_framing"); //"Topic";
   const newsGenreTitle = "Genre";
   const persuasionTitle = "Persuasion Techniques";
   const subjectivityTitle = "Subjectivity";
   const prevFactChecksTitle = "Previous Fact-Checks";
   const machineGeneratedTextTitle = "Machine Generated Text";
 
-  //   const StyledAccordion = styled(Accordion)(({ theme }) => ({
-  //     "&.Mui-disabled": {
-  //       opacity: 1,
-  //       background: "white",
-  //       pointerEvents: "auto",
-  //       text: "primary",
-  //       "&:hover": {
-  //         cursor: "auto",
-  // //        background: "skyblue",
-  //         pointerEvents: "auto",
-  //       },
-  //     },
-  //   }));
+  //https://stackoverflow.com/questions/56843818/override-mui-disabled-or-other-pseudo-classes-states-from-the-theme-mui-v4-1
+  const StyledAccordion = styled(Accordion)(({ theme }) => ({
+    ".Mui-disabled": {
+      opacity: "1 !important",
+      background: "white",
+    },
+  }));
 
   return (
     <Grid item xs={12}>
@@ -386,7 +386,38 @@ const AssistantCredSignals = () => {
                 <div
                   className={"content"}
                   dangerouslySetInnerHTML={{
-                    __html: keyword("credibility_signals_tooltip"),
+                    __html:
+                      keyword("credibility_signals_tooltip") +
+                      "<br><br>" +
+                      "<b>" +
+                      keyword("news_framing") +
+                      "</b><br>" +
+                      keyword("news_framing_tooltip") +
+                      "<br><br>" +
+                      "<b>" +
+                      keyword("news_genre") +
+                      "</b><br>" +
+                      keyword("news_genre_tooltip") +
+                      "<br><br>" +
+                      "<b>" +
+                      keyword("persuasion_techniques") +
+                      "</b><br>" +
+                      keyword("persuasion_techniques_tooltip") +
+                      "<br><br>" +
+                      "<b>" +
+                      keyword("subjectivity") +
+                      "</b><br>" +
+                      keyword("subjectivity_tooltip") +
+                      "<br><br>" +
+                      "<b>" +
+                      keyword("previous_fact_checks") +
+                      "</b><br>" +
+                      keyword("previous_fact_checks_tooltip") +
+                      "<br><br>" +
+                      "<b>" +
+                      keyword("machine_generated_text") +
+                      "</b><br>" +
+                      keyword("machine_generated_text_tooltip"),
                   }}
                 />
               }
@@ -404,13 +435,20 @@ const AssistantCredSignals = () => {
             overflowX: "hidden",
           }}
         >
+          {/* <Grid container wrap="wrap">
+           <Grid item xs={1}>{renderTooltip(keyword("news_framing_tooltip"), classes)}</Grid>
+          <Grid item xs={11}> */}
+
           {/* News Framing/Topic */}
-          <Accordion
+          <StyledAccordion
             expanded={expandedAccordion === newsFramingTitle}
             onChange={handleChange(newsFramingTitle)}
-            //disabled={newsFramingLoading || newsFramingFail}
+            disabled={newsFramingLoading || newsFramingFail}
+            disableGutters
           >
-            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+            <AccordionSummary
+              expandIcon={getExpandIcon(newsFramingLoading, newsFramingFail)}
+            >
               <Grid container wrap="wrap">
                 <Grid item xs={4} align="left">
                   <Typography
@@ -418,7 +456,7 @@ const AssistantCredSignals = () => {
                     sx={{ flexShrink: 0, align: "left" }}
                   >
                     {newsFramingTitle}
-                    {renderTooltip(keyword("news_framing_tooltip"), classes)}
+                    {/* {renderTooltip(keyword("news_framing_tooltip"), classes)} */}
                   </Typography>
                 </Grid>
                 <Grid item xs={8} align="left">
@@ -472,15 +510,18 @@ const AssistantCredSignals = () => {
                 </div>
               )}
             </AccordionDetails>
-          </Accordion>
+          </StyledAccordion>
 
           {/* News Genre */}
-          <Accordion
+          <StyledAccordion
             expanded={expandedAccordion === newsGenreTitle}
             onChange={handleChange(newsGenreTitle)}
-            //disabled={newsGenreLoading || newsGenreFail}
+            disabled={newsGenreLoading || newsGenreFail}
+            disableGutters
           >
-            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+            <AccordionSummary
+              expandIcon={getExpandIcon(newsGenreLoading, newsGenreFail)}
+            >
               <Grid container wrap="wrap">
                 <Grid item xs={4} align="left">
                   <Typography
@@ -488,7 +529,7 @@ const AssistantCredSignals = () => {
                     sx={{ flexShrink: 0, align: "left" }}
                   >
                     {newsGenreTitle}
-                    {renderTooltip(keyword("news_genre_tooltip"), classes)}
+                    {/* {renderTooltip(keyword("news_genre_tooltip"), classes)} */}
                   </Typography>
                 </Grid>
                 <Grid item xs={8} align="left">
@@ -540,15 +581,18 @@ const AssistantCredSignals = () => {
                 </div>
               )}
             </AccordionDetails>
-          </Accordion>
+          </StyledAccordion>
 
           {/* Persuasion Techniques */}
-          <Accordion
+          <StyledAccordion
             expanded={expandedAccordion === persuasionTitle}
             onChange={handleChange(persuasionTitle)}
-            //disabled={persuasionLoading || persuasionFail}
+            disabled={persuasionLoading || persuasionFail}
+            disableGutters
           >
-            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+            <AccordionSummary
+              expandIcon={getExpandIcon(persuasionLoading, persuasionFail)}
+            >
               <Grid container wrap="wrap">
                 <Grid item xs={4} align="left">
                   <Typography
@@ -556,10 +600,10 @@ const AssistantCredSignals = () => {
                     sx={{ flexShrink: 0, align: "left" }}
                   >
                     {persuasionTitle}
-                    {renderTooltip(
+                    {/* {renderTooltip(
                       keyword("persuasion_techniques_tooltip"),
                       classes,
-                    )}
+                    )} */}
                   </Typography>
                 </Grid>
                 <Grid item xs={8} align="left">
@@ -612,20 +656,23 @@ const AssistantCredSignals = () => {
                 </div>
               )}
             </AccordionDetails>
-          </Accordion>
+          </StyledAccordion>
 
           {/* Subjectivity */}
-          <Accordion
+          <StyledAccordion
             expanded={expandedAccordion === subjectivityTitle}
             onChange={handleChange(subjectivityTitle)}
-            //disabled={subjectivityLoading || subjectivityFail}
+            disabled={subjectivityLoading || subjectivityFail}
+            disableGutters
           >
-            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+            <AccordionSummary
+              expandIcon={getExpandIcon(subjectivityLoading, subjectivityFail)}
+            >
               <Grid container wrap="wrap">
                 <Grid item xs={4} align="left">
                   <Typography sx={{ flexShrink: 0, align: "left" }}>
                     {subjectivityTitle}
-                    {renderTooltip(keyword("subjectivity_tooltip"), classes)}
+                    {/* {renderTooltip(keyword("subjectivity_tooltip"), classes)} */}
                   </Typography>
                 </Grid>
                 <Grid item xs={8} align="left">
@@ -656,8 +703,7 @@ const AssistantCredSignals = () => {
                     id={"element-to-check3"}
                   >
                     <AssistantTextClassification
-                      //text={subjectivityResult.text}
-                      text={subjectivityResult.text}
+                      text={text}
                       classification={subjectivityResult.entities}
                       configs={subjectivityResult.configs}
                       titleText={subjectivityTitle}
@@ -681,15 +727,21 @@ const AssistantCredSignals = () => {
                 </div>
               )}
             </AccordionDetails>
-          </Accordion>
+          </StyledAccordion>
 
           {/* Previous fact-checks */}
-          <Accordion
+          <StyledAccordion
             expanded={expandedAccordion === prevFactChecksTitle}
             onChange={handleChange(prevFactChecksTitle)}
-            //disabled={prevFactChecksLoading || prevFactChecksFail}
+            disabled={prevFactChecksLoading || prevFactChecksFail}
+            disableGutters
           >
-            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+            <AccordionSummary
+              expandIcon={getExpandIcon(
+                prevFactChecksLoading,
+                prevFactChecksFail,
+              )}
+            >
               <Grid container wrap="wrap">
                 <Grid item xs={4} align="left">
                   <Typography
@@ -697,10 +749,10 @@ const AssistantCredSignals = () => {
                     sx={{ flexShrink: 0, align: "left" }}
                   >
                     {prevFactChecksTitle}
-                    {renderTooltip(
+                    {/* {renderTooltip(
                       keyword("previous_fact_checks_tooltip"),
                       classes,
-                    )}
+                    )} */}
                   </Typography>
                 </Grid>
 
@@ -793,15 +845,26 @@ const AssistantCredSignals = () => {
                 </div>
               )}
             </AccordionDetails>
-          </Accordion>
+          </StyledAccordion>
 
           {/* Machine Generated Text */}
-          <Accordion
+          <StyledAccordion
             expanded={expandedAccordion === machineGeneratedTextTitle}
             onChange={handleChange(machineGeneratedTextTitle)}
-            //disabled={machineGeneratedTextLoading || machineGeneratedTextFail}
+            disabled={
+              machineGeneratedTextLoading ||
+              machineGeneratedTextFail ||
+              machineGeneratedTextDone
+            }
+            disableGutters
           >
-            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+            <AccordionSummary
+              expandIcon={getExpandIcon(
+                machineGeneratedTextLoading,
+                machineGeneratedTextFail,
+                machineGeneratedTextDone,
+              )}
+            >
               <Grid container wrap="wrap">
                 <Grid item xs={4} align="left">
                   <Typography
@@ -809,10 +872,10 @@ const AssistantCredSignals = () => {
                     sx={{ flexShrink: 0, align: "left" }}
                   >
                     {machineGeneratedTextTitle}
-                    {renderTooltip(
+                    {/* {renderTooltip(
                       keyword("machine_generated_text_tooltip"),
                       classes,
-                    )}
+                    )} */}
                   </Typography>
                 </Grid>
 
@@ -846,7 +909,7 @@ const AssistantCredSignals = () => {
                         sx={{ color: "text.secondary", align: "left" }}
                       >
                         {keyword("reanalyse_url")}
-                        {/* NEED TO CALL SERVICE AGAIN */}
+                        {/* {dispatch()} */}
                       </Typography>
                     )}
                   {!role.includes("BETA_TESTER") && (
@@ -857,7 +920,9 @@ const AssistantCredSignals = () => {
                 </Grid>
               </Grid>
             </AccordionSummary>
-          </Accordion>
+          </StyledAccordion>
+
+          {/*           </Grid></Grid> */}
         </CardContent>
       </Card>
     </Grid>

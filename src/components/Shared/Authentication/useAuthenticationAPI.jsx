@@ -240,6 +240,9 @@ export default function useAuthenticationAPI() {
                 userInfo,
               ),
             );
+            //
+            // check for user and role and then dispatch the correct action for pfc and mgt
+            //
             return Promise.resolve({
               status: response.status,
               data: {
