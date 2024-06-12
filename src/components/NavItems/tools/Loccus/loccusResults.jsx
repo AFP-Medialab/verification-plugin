@@ -24,7 +24,6 @@ import CustomAlertScore from "../../../Shared/CustomAlertScore";
 import {
   CategoryScale,
   Chart as ChartJS,
-  ChartArea,
   Legend,
   LinearScale,
   LineElement,
@@ -145,8 +144,8 @@ const LoccusResults = (props) => {
 
   /**
    * Returns a CanvasGradient to stylize the chart with the given scale
-   * @param ctx {CanvasRenderingContext2D}
-   * @param chartArea {ChartArea}
+   * @param {CanvasRenderingContext2D} ctx
+   * @param chartArea
    * @returns {CanvasGradient}
    */
   const getChartGradient = (ctx, chartArea) => {
