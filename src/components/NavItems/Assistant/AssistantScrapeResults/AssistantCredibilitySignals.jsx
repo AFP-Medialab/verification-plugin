@@ -780,7 +780,7 @@ const AssistantCredSignals = () => {
                         sx={{ color: "text.secondary", align: "left" }}
                       >
                         {keyword("reanalyse_url")}
-                        {/* NEED TO CALL SERVICE AGAIN */}
+                        {/* should now be obselete as saga is re run */}
                       </Typography>
                     )}
                   {!role.includes("BETA_TESTER") && (
@@ -908,6 +908,7 @@ const AssistantCredSignals = () => {
                         sx={{ color: "text.secondary", align: "left" }}
                       >
                         {keyword("reanalyse_url")}
+                        {/* should now be obselete as saga is re run */}
                       </Typography>
                     )}
                   {!role.includes("BETA_TESTER") && (
