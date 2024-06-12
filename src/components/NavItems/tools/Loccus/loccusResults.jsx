@@ -131,7 +131,7 @@ const LoccusResults = (props) => {
             return printDurationInMinutesWithoutModulo(val);
           },
         },
-        reverse: isCurrentLanguageLeftToRight ? false : true,
+        reverse: !isCurrentLanguageLeftToRight,
       },
       y: {
         beginAtZero: true,
