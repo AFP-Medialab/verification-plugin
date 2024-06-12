@@ -843,7 +843,7 @@ const filterSourceCredibilityResults = (
   linkList,
   trafficLightColors,
 ) => {
-  if (!originalResult.length) {
+  if (!originalResult) {
     return [null, null, null, null];
   }
   let sourceCredibility = originalResult;

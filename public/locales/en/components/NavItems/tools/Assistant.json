@@ -132,5 +132,6 @@
   "semantic_search_result_translated_from": "Translated from",
   "semantic_search_result_see_original": "See original",
   "semantic_search_result_english_translation": "Show English Translation",
-  "semantic_search_rating": "Rating:"
+  "semantic_search_rating": "Rating:",
+  "embedding_not_supported":"The Assistant could not display this video content."
 }
