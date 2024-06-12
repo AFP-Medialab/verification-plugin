@@ -250,17 +250,12 @@ const Assistant = () => {
                   <AssistantLinkResult />
                 </Grid>
               ) : null}
-            </Grid>
-          </Card>
-        </Grid>
 
-        {/* Credibility Signals*/}
-        <Grid item xs width={"inherit"}>
-          <Card className={classes.root} hidden={text === null}>
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <AssistantCredSignals />
-              </Grid>
+              {text ? (
+                <Grid item xs={12}>
+                  <AssistantCredSignals />
+                </Grid>
+              ) : null}
             </Grid>
           </Card>
         </Grid>
