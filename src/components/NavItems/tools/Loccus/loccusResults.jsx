@@ -141,6 +141,8 @@ const LoccusResults = (props) => {
     },
   };
 
+  let width, height, gradient;
+
   /**
    * Returns a CanvasGradient to stylize the chart with the given scale
    * @param ctx {CanvasRenderingContext2D}
@@ -148,7 +150,6 @@ const LoccusResults = (props) => {
    * @returns {CanvasGradient}
    */
   const getChartGradient = (ctx, chartArea) => {
-    let width, height, gradient;
     const chartWidth = chartArea.right - chartArea.left;
     const chartHeight = chartArea.bottom - chartArea.top;
     if (!gradient || width !== chartWidth || height !== chartHeight) {
