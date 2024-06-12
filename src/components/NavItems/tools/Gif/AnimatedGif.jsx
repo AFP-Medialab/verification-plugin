@@ -265,7 +265,7 @@ const AnimatedGif = ({
             <Box className={classes.imagesGifImage}>
               <TextImageCanvas
                 imgSrc={homoImg1}
-                text="Fake"
+                text={keyword("fake_annotation")}
                 filterDataURL={setImageDataURL}
                 paused={paused}
                 annotation={annotation}

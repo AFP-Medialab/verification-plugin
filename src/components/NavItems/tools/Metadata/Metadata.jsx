@@ -1,15 +1,10 @@
 import React, { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import { useSelector } from "react-redux";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
 //import 'tui-image-editor/dist/tui-image-editor.css'
-import FolderOpenIcon from "@mui/icons-material/FolderOpen";
-import Typography from "@mui/material/Typography";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
-import Grid from "@mui/material/Grid";
 import MetadataImageResult from "./Results/MetadataImageResult";
 import MetadataVideoResult from "./Results/MetadataVideoResult";
 import useImageTreatment from "./Hooks/useImageTreatment";
@@ -29,6 +24,9 @@ import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 
 import { useDispatch } from "react-redux";
 import { setMetadataMediaType } from "../../../../redux/reducers/tools/metadataReducer";
+
+import { Alert, Stack } from "@mui/material";
+import StringFileUploadField from "components/Shared/StringFileUploadField";
 
 const Metadata = ({ mediaType }) => {
   const { url, type } = useParams();
@@ -50,6 +48,7 @@ const Metadata = ({ mediaType }) => {
     mediaType === "video" ? false : true,
   );
   const [input, setInput] = useState(resultUrl ? resultUrl : "");
+  const [fileInput, setFileInput] = useState(null);
   const [imageUrl, setImageurl] = useState(null);
   const [videoUrl, setVideoUrl] = useState(null);
   const [urlDetected, setUrlDetected] = useState(false);
@@ -90,6 +89,12 @@ const Metadata = ({ mediaType }) => {
         setImageurl(input);
       } else {
         setVideoUrl(input);
+      }
+    } else if (fileInput) {
+      if (radioImage) {
+        setImageurl(URL.createObjectURL(fileInput));
+      } else {
+        setVideoUrl(URL.createObjectURL(fileInput));
       }
     }
   };
@@ -149,6 +154,10 @@ const Metadata = ({ mediaType }) => {
     setInput("");
   };
 
+  const handleCloseFile = () => {
+    setFileInput(null);
+  };
+
   return (
     <div>
       <HeaderTool
@@ -162,6 +171,11 @@ const Metadata = ({ mediaType }) => {
           />
         }
       />
+      <Stack direction={"column"} spacing={2}>
+        <Alert severity="info">{keyword("description_limitations")}</Alert>
+      </Stack>
+
+      <Box m={3} />
 
       <Card>
         <CardHeader
@@ -170,90 +184,42 @@ const Metadata = ({ mediaType }) => {
         />
 
         <Box p={3}>
-          <form>
-            <Grid container direction="row" spacing={3} alignItems="center">
-              <Grid item xs>
-                <TextField
-                  value={input}
-                  id="standard-full-width"
-                  label={keyword("metadata_content_input")}
-                  placeholder={keyword("metadata_content_input_placeholder")}
-                  fullWidth
-                  variant="outlined"
-                  onChange={(e) => setInput(e.target.value)}
-                />
-              </Grid>
-              <Grid item>
-                <RadioGroup
-                  aria-label="position"
-                  name="position"
-                  value={radioImage}
-                  onChange={() => setRadioImage(!radioImage)}
-                  row
-                >
-                  <FormControlLabel
-                    value={true}
-                    control={<Radio color="primary" />}
-                    label={keyword("metadata_radio_image")}
-                    labelPlacement="end"
-                  />
-                  <FormControlLabel
-                    value={false}
-                    control={<Radio color="primary" />}
-                    label={keyword("metadata_radio_video")}
-                    labelPlacement="end"
-                  />
-                </RadioGroup>
-              </Grid>
-              <Grid item>
-                <Button
-                  type="submit"
-                  variant="contained"
-                  color="primary"
-                  onClick={(e) => {
-                    e.preventDefault(), submitUrl();
-                  }}
-                >
-                  {keyword("button_submit")}
-                </Button>
-              </Grid>
-            </Grid>
-          </form>
-
-          <Box m={1} />
-
-          <Grid
-            container
-            direction="column"
-            spacing={1}
-            alignItems="flex-start"
+          <RadioGroup
+            aria-label="position"
+            name="position"
+            value={radioImage}
+            onChange={() => setRadioImage(!radioImage)}
+            row
           >
-            <Grid item xs>
-              <Typography variant="body1">
-                * {keyword("description_limitations")}
-              </Typography>
-            </Grid>
+            <FormControlLabel
+              value={true}
+              control={<Radio color="primary" />}
+              label={keyword("metadata_radio_image")}
+              labelPlacement="end"
+            />
+            <FormControlLabel
+              value={false}
+              control={<Radio color="primary" />}
+              label={keyword("metadata_radio_video")}
+              labelPlacement="end"
+            />
+          </RadioGroup>
 
-            <Grid item>
-              <Button startIcon={<FolderOpenIcon />}>
-                <label htmlFor="fileInputMetadata">
-                  {keyword("button_localfile")}
-                </label>
-                <input
-                  id="fileInputMetadata"
-                  type="file"
-                  hidden={true}
-                  onChange={(e) => {
-                    if (e.target.files[0]) {
-                      setInput(URL.createObjectURL(e.target.files[0]));
-                      // reset value
-                      e.target.value = null;
-                    }
-                  }}
-                />
-              </Button>
-            </Grid>
-          </Grid>
+          <Box m={2} />
+
+          <StringFileUploadField
+            labelKeyword={keyword("metadata_content_input")}
+            placeholderKeyword={keyword("metadata_content_input_placeholder")}
+            submitButtonKeyword={keyword("button_submit")}
+            localFileKeyword={keyword("button_localfile")}
+            urlInput={input}
+            setUrlInput={setInput}
+            fileInput={fileInput}
+            setFileInput={setFileInput}
+            handleSubmit={submitUrl}
+            fileInputTypesAccepted={"image/*, video/*"}
+            handleCloseSelectedFile={handleCloseFile}
+          />
         </Box>
       </Card>
       <Box m={3} />
