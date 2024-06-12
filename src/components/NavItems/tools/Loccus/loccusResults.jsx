@@ -26,6 +26,7 @@ import {
   Chart as ChartJS,
   Legend,
   LinearScale,
+  LineController,
   LineElement,
   PointElement,
   TimeSeriesScale,
@@ -79,6 +80,7 @@ const LoccusResults = (props) => {
     CategoryScale,
     LinearScale,
     PointElement,
+    LineController,
     LineElement,
     Title,
     Tooltip,
@@ -129,7 +131,7 @@ const LoccusResults = (props) => {
             return printDurationInMinutesWithoutModulo(val);
           },
         },
-        reverse: isCurrentLanguageLeftToRight ? false : true,
+        reverse: !isCurrentLanguageLeftToRight,
       },
       y: {
         beginAtZero: true,
