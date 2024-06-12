@@ -42,6 +42,9 @@ const LoccusResults = (props) => {
 
   const keyword = i18nLoadNamespace("components/NavItems/tools/Loccus");
 
+  const currentLang = useSelector((state) => state.language);
+  const isCurrentLanguageLeftToRight = currentLang !== "ar";
+
   const role = useSelector((state) => state.userSession.user.roles);
 
   const result = props.result;
@@ -100,7 +103,7 @@ const LoccusResults = (props) => {
       },
       title: {
         display: true,
-        text: "Detection percentage over time",
+        text: keyword("loccus_chart_title"),
       },
       tooltip: {
         callbacks: {
@@ -126,6 +129,7 @@ const LoccusResults = (props) => {
             return printDurationInMinutesWithoutModulo(val);
           },
         },
+        reverse: isCurrentLanguageLeftToRight ? false : true,
       },
       y: {
         beginAtZero: true,
@@ -136,6 +140,7 @@ const LoccusResults = (props) => {
             return value + "%";
           },
         },
+        position: isCurrentLanguageLeftToRight ? "left" : "right",
       },
     },
   };
