@@ -4,7 +4,7 @@ import { Container } from "@mui/material";
 import Fade from "@mui/material/Fade";
 import { useDispatch, useSelector } from "react-redux";
 import { selectTool } from "../../../redux/reducers/tools/toolReducer";
-import AllTools from "../../NavItems/tools/Alltools/AllTools";
+import MainContentMenu from "../../NavItems/tools/Alltools/MainContentMenu";
 import Analysis from "../../NavItems/tools/Analysis/Analysis";
 import Keyframes from "../../NavItems/tools/Keyframes/Keyframes";
 import Thumbnails from "../../NavItems/tools/Thumbnails/Thumbnails";
@@ -14,7 +14,7 @@ import Metadata from "../../NavItems/tools/Metadata/Metadata";
 import VideoRights from "../../NavItems/tools/VideoRights/VideoRights";
 import Forensic from "../../NavItems/tools/Forensic/Forensic";
 import { Route, Routes, useLocation } from "react-router-dom";
-import Footer from "../../Shared/Footer/Footer";
+import { Footer, FOOTER_TYPES } from "../../Shared/Footer/Footer";
 import TwitterSna from "../../NavItems/tools/TwitterSna/TwitterSna";
 import OCR from "../../NavItems/tools/OCR/OCR";
 import CheckGif from "../../NavItems/tools/Gif/CheckGif";
@@ -31,92 +31,92 @@ import Archive from "../../NavItems/tools/Archive";
 import SemanticSearch from "../../NavItems/tools/SemanticSearch";
 import Loccus from "../../NavItems/tools/Loccus";
 
-const DrawerItem = ({ drawerItems }) => {
+const DrawerItem = ({ toolsList }) => {
   const drawerItemsContent = [
     {
-      content: <AllTools tools={drawerItems} />,
+      content: <MainContentMenu tools={toolsList} />,
       footer: <div />,
     },
     {
       content: <Analysis />,
-      footer: <Footer type={"iti"} />,
+      footer: <Footer type={FOOTER_TYPES.ITI} />,
     },
     {
       content: <Keyframes />,
-      footer: <Footer type={"iti"} />,
+      footer: <Footer type={FOOTER_TYPES.ITI} />,
     },
     {
       content: <Thumbnails />,
-      footer: <Footer type={"afp"} />,
+      footer: <Footer type={FOOTER_TYPES.AFP} />,
     },
     {
       content: <VideoRights />,
-      footer: <Footer type={"GRIHO"} />,
+      footer: <Footer type={FOOTER_TYPES.GRIHO} />,
     },
     {
       content: <Metadata mediaType={"video"} />,
-      footer: <Footer type={"afp"} />,
+      footer: <Footer type={FOOTER_TYPES.AFP} />,
     },
     {
       content: <DeepfakeVideo />,
-      footer: <Footer type={"iti"} />,
+      footer: <Footer type={FOOTER_TYPES.ITI} />,
     },
     {
       content: <AnalysisImg />,
-      footer: <Footer type={"iti"} />,
+      footer: <Footer type={FOOTER_TYPES.ITI} />,
     },
     {
       content: <Magnifier />,
-      footer: <Footer type={"afp"} />,
+      footer: <Footer type={FOOTER_TYPES.AFP} />,
     },
     {
       content: <Metadata mediaType={"image"} />,
-      footer: <Footer type={"afp"} />,
+      footer: <Footer type={FOOTER_TYPES.AFP} />,
     },
 
     {
       content: <Forensic />,
-      footer: <Footer type={"iti-borelli-afp"} />,
+      footer: <Footer type={FOOTER_TYPES.ITI_BORELLI_AFP} />,
     },
     {
       content: <OCR />,
-      footer: <Footer type={"usfd"} />,
+      footer: <Footer type={FOOTER_TYPES.USFD} />,
     },
     {
       content: <CheckGif />,
-      footer: <Footer type={"borelli-afp"} />,
+      footer: <Footer type={FOOTER_TYPES.BORELLI_AFP} />,
     },
     {
       content: <SyntheticImageDetection />,
-      footer: <Footer type={"iti-unina"} />,
+      footer: <Footer type={FOOTER_TYPES.ITI_UNINA} />,
     },
     {
       content: <DeepfakeImage />,
-      footer: <Footer type={"iti"} />,
+      footer: <Footer type={FOOTER_TYPES.ITI} />,
     },
     {
       content: <Geolocation />,
-      footer: <Footer type={"afp"} />,
+      footer: <Footer type={FOOTER_TYPES.AFP} />,
     },
     {
       content: <Loccus />,
-      footer: <Footer type={"loccus"} />,
+      footer: <Footer type={FOOTER_TYPES.LOCCUS} />,
     },
     {
       content: <TwitterAdvancedSearch />,
-      footer: <Footer type={"afp"} />,
+      footer: <Footer type={FOOTER_TYPES.AFP} />,
     },
     {
       content: <SemanticSearch />,
-      footer: <Footer type={"kinit"} />,
+      footer: <Footer type={FOOTER_TYPES.KINIT} />,
     },
     {
       content: <TwitterSna />,
-      footer: <Footer type={"afp-usfd-eudisinfolab"} />,
+      footer: <Footer type={FOOTER_TYPES.USFD_AFP_EU_DISINFOLAB} />,
     },
     {
       content: <Archive />,
-      footer: <Footer type={"afp"} />,
+      footer: <Footer type={FOOTER_TYPES.AFP} />,
     },
   ];
 
@@ -128,8 +128,7 @@ const DrawerItem = ({ drawerItems }) => {
           <DrawerItemContent index={0} drawContent={drawerItemsContent} />
         }
       />
-      {drawerItems.map((item) => {
-        let index = item.id - 1;
+      {toolsList.map((item, index) => {
         if (item.path) {
           return (
             <Route path={item.path} key={index}>
@@ -242,7 +241,7 @@ const DrawerItemContent = ({ index, drawContent }) => {
 };
 
 DrawerItem.propTypes = {
-  drawerItems: PropTypes.any,
+  toolsList: PropTypes.any,
 };
 
 DrawerItemContent.propTypes = {
