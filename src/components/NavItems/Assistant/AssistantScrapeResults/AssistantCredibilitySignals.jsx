@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
@@ -35,14 +35,6 @@ import FileCopyOutlined from "@mui/icons-material/FileCopy";
 
 import { useNavigate } from "react-router-dom";
 import { getLanguageName } from "../../../Shared/Utils/languageUtils";
-
-const getExpandIcon = (loading, fail, done = null, role = null) => {
-  if (loading || fail || done || (role && !role.includes("BETA_TESTER"))) {
-    return <Remove />;
-  } else {
-    return <ExpandMoreIcon />;
-  }
-};
 
 const renderEntityKeys = (entities) => {
   // tidy array into readable string
@@ -91,29 +83,37 @@ const calculateSubjectivity = (sentences) => {
     .replaceAll(",", "");
 };
 
-const renderTooltip = (tooltipText, classes) => {
-  return (
-    <Typography
-      display="inline"
-      sx={{ color: "text.secondary", align: "left" }}
-    >
-      <Tooltip
-        interactive={"true"}
-        title={
-          <div
-            className={"content"}
-            dangerouslySetInnerHTML={{
-              __html: tooltipText,
-            }}
-          />
-        }
-        classes={{ tooltip: classes.assistantTooltip }}
-      >
-        <HelpOutlineOutlinedIcon className={classes.toolTipIcon} />
-      </Tooltip>
-    </Typography>
-  );
+const getExpandIcon = (loading, fail, done = null, role = null) => {
+  if (loading || fail || done || (role && !role.includes("BETA_TESTER"))) {
+    return <Remove />;
+  } else {
+    return <ExpandMoreIcon />;
+  }
 };
+
+// const renderTooltip = (tooltipText, classes) => {
+//   return (
+//     <Typography
+//       display="inline"
+//       sx={{ color: "text.secondary", align: "left" }}
+//     >
+//       <Tooltip
+//         interactive={"true"}
+//         title={
+//           <div
+//             className={"content"}
+//             dangerouslySetInnerHTML={{
+//               __html: tooltipText,
+//             }}
+//           />
+//         }
+//         classes={{ tooltip: classes.assistantTooltip }}
+//       >
+//         <HelpOutlineOutlinedIcon className={classes.toolTipIcon} />
+//       </Tooltip>
+//     </Typography>
+//   );
+// };
 
 const renderCollapse = (
   classes,
@@ -343,7 +343,7 @@ const AssistantCredSignals = () => {
   );
   // checking if user logged in
   const role = useSelector((state) => state.userSession.user.roles);
-  // data information
+  // date information
   dayjs.extend(LocaleData);
   dayjs.extend(localizedFormat);
   const globalLocaleData = dayjs.localeData();
@@ -386,33 +386,27 @@ const AssistantCredSignals = () => {
                   dangerouslySetInnerHTML={{
                     __html:
                       keyword("credibility_signals_tooltip") +
-                      "<br><br>" +
-                      "<b>" +
+                      "<br><br><b>" +
                       keyword("news_framing") +
                       "</b><br>" +
                       keyword("news_framing_tooltip") +
-                      "<br><br>" +
-                      "<b>" +
+                      "<br><br><b>" +
                       keyword("news_genre") +
                       "</b><br>" +
                       keyword("news_genre_tooltip") +
-                      "<br><br>" +
-                      "<b>" +
+                      "<br><br><b>" +
                       keyword("persuasion_techniques") +
                       "</b><br>" +
                       keyword("persuasion_techniques_tooltip") +
-                      "<br><br>" +
-                      "<b>" +
+                      "<br><br><b>" +
                       keyword("subjectivity") +
                       "</b><br>" +
                       keyword("subjectivity_tooltip") +
-                      "<br><br>" +
-                      "<b>" +
+                      "<br><br><b>" +
                       keyword("previous_fact_checks") +
                       "</b><br>" +
                       keyword("previous_fact_checks_tooltip") +
-                      "<br><br>" +
-                      "<b>" +
+                      "<br><br><b>" +
                       keyword("machine_generated_text") +
                       "</b><br>" +
                       keyword("machine_generated_text_tooltip"),
