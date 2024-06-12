@@ -111,14 +111,14 @@ function* getSubjectivitySaga() {
 
 function* getPrevFactChecksSaga() {
   yield takeLatest(
-    ["SET_SCRAPED_DATA", "CLEAN_STATE"],
+    ["SET_SCRAPED_DATA", "AUTH_USER_LOGIN", "CLEAN_STATE"],
     handlePrevFactChecksCall,
   );
 }
 
 function* getMachineGeneratedTextSaga() {
   yield takeLatest(
-    ["SET_SCRAPED_DATA", "CLEAN_STATE"],
+    ["SET_SCRAPED_DATA", "AUTH_USER_LOGIN", "CLEAN_STATE"],
     handleMachineGeneratedTextCall,
   );
 }

@@ -75,7 +75,7 @@ function authenticationReducer(state = defaultState, action) {
         accessToken: action.payload.accessToken,
         accessTokenExpiry: action.payload.accessTokenExpiry,
         refreshToken: action.payload.refreshToken,
-        user: Object.assign({}, action.payload.user),
+        user: action.payload.user,
       };
 
     case AUTH_USER_LOGOUT:

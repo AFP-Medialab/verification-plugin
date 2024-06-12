@@ -36,8 +36,8 @@ import FileCopyOutlined from "@mui/icons-material/FileCopy";
 import { useNavigate } from "react-router-dom";
 import { getLanguageName } from "../../../Shared/Utils/languageUtils";
 
-const getExpandIcon = (loading, fail, extra = null) => {
-  if (loading || fail || extra) {
+const getExpandIcon = (loading, fail, done = null, role = null) => {
+  if (loading || fail || done || (role && !role.includes("BETA_TESTER"))) {
     return <Remove />;
   } else {
     return <ExpandMoreIcon />;
@@ -198,7 +198,7 @@ const renderCollapsePrevFactChecks = (
   navigate,
 ) => {
   const handleClick = (path) => {
-    // instead need to set variable then load in from SemanticSearch/index.jsx
+    // instead need to set parameter then load text in SemanticSearch/index.jsx
     navigate("/app/" + path + "/assistantText");
   };
 
@@ -249,12 +249,6 @@ const renderCollapsePrevFactChecks = (
 const AssistantCredSignals = () => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
   const sharedKeyword = i18nLoadNamespace("components/Shared/utils");
-
-  // const dispatch = useDispatch();
-  // if (!role.includes("BETA_TESTER")) {
-
-  // }
-
   const classes = useMyStyles();
 
   // displaying expanded text in AccordionDetails
@@ -268,27 +262,21 @@ const AssistantCredSignals = () => {
     setExpandedAccordion(newExpanded ? panel : false);
   };
 
-  // previous fact checks
-  dayjs.extend(LocaleData);
-  dayjs.extend(localizedFormat);
-  const globalLocaleData = dayjs.localeData();
-  // checking if user logged in
-  const role = useSelector((state) => state.userSession.user.roles);
+  //style disabled accordion
+  const StyledAccordion = styled(Accordion)(({ theme }) => ({
+    ".Mui-disabled": {
+      opacity: "1 !important",
+      background: "white",
+    },
+  }));
 
   // assistant media states
   const text = useSelector((state) => state.assistant.urlText);
   const textLang = useSelector((state) => state.assistant.textLang);
   const textHtmlMap = useSelector((state) => state.assistant.urlTextHtmlMap);
 
-  const newsGenreResult = useSelector(
-    (state) => state.assistant.newsGenreResult,
-  );
-  const newsGenreLoading = useSelector(
-    (state) => state.assistant.newsGenreLoading,
-  );
-  const newsGenreDone = useSelector((state) => state.assistant.newsGenreDone);
-  const newsGenreFail = useSelector((state) => state.assistant.newsGenreFail);
-
+  // news framing (topic)
+  const newsFramingTitle = keyword("news_framing");
   const newsFramingResult = useSelector(
     (state) => state.assistant.newsFramingResult,
   );
@@ -302,6 +290,19 @@ const AssistantCredSignals = () => {
     (state) => state.assistant.newsFramingFail,
   );
 
+  // news genre
+  const newsGenreTitle = keyword("news_genre");
+  const newsGenreResult = useSelector(
+    (state) => state.assistant.newsGenreResult,
+  );
+  const newsGenreLoading = useSelector(
+    (state) => state.assistant.newsGenreLoading,
+  );
+  const newsGenreDone = useSelector((state) => state.assistant.newsGenreDone);
+  const newsGenreFail = useSelector((state) => state.assistant.newsGenreFail);
+
+  // persuasion techniques
+  const persuasionTitle = keyword("persuasion_techniques");
   const persuasionResult = useSelector(
     (state) => state.assistant.persuasionResult,
   );
@@ -311,6 +312,8 @@ const AssistantCredSignals = () => {
   const persuasionDone = useSelector((state) => state.assistant.persuasionDone);
   const persuasionFail = useSelector((state) => state.assistant.persuasionFail);
 
+  // subjectivity
+  const subjectivityTitle = keyword("subjectivity");
   const subjectivityResult = useSelector(
     (state) => state.assistant.subjectivityResult,
   );
@@ -324,6 +327,8 @@ const AssistantCredSignals = () => {
     (state) => state.assistant.subjectivityFail,
   );
 
+  // previous fact checks
+  const prevFactChecksTitle = keyword("previous_fact_checks");
   const prevFactChecksResult = useSelector(
     (state) => state.assistant.prevFactChecksResult,
   );
@@ -336,9 +341,17 @@ const AssistantCredSignals = () => {
   const prevFactChecksFail = useSelector(
     (state) => state.assistant.prevFactChecksFail,
   );
+  // checking if user logged in
+  const role = useSelector((state) => state.userSession.user.roles);
+  // data information
+  dayjs.extend(LocaleData);
+  dayjs.extend(localizedFormat);
+  const globalLocaleData = dayjs.localeData();
   // for navigating to Semantic Search with text
   const navigate = useNavigate();
 
+  // machine generated text
+  const machineGeneratedTextTitle = keyword("machine_generated_text");
   const machineGeneratedTextResult = useSelector(
     (state) => state.assistant.machineGeneratedTextResult,
   );
@@ -351,21 +364,6 @@ const AssistantCredSignals = () => {
   const machineGeneratedTextFail = useSelector(
     (state) => state.assistant.machineGeneratedTextFail,
   );
-
-  const newsFramingTitle = keyword("news_framing"); //"Topic";
-  const newsGenreTitle = "Genre";
-  const persuasionTitle = "Persuasion Techniques";
-  const subjectivityTitle = "Subjectivity";
-  const prevFactChecksTitle = "Previous Fact-Checks";
-  const machineGeneratedTextTitle = "Machine Generated Text";
-
-  //https://stackoverflow.com/questions/56843818/override-mui-disabled-or-other-pseudo-classes-states-from-the-theme-mui-v4-1
-  const StyledAccordion = styled(Accordion)(({ theme }) => ({
-    ".Mui-disabled": {
-      opacity: "1 !important",
-      background: "white",
-    },
-  }));
 
   return (
     <Grid item xs={12}>
@@ -435,10 +433,6 @@ const AssistantCredSignals = () => {
             overflowX: "hidden",
           }}
         >
-          {/* <Grid container wrap="wrap">
-           <Grid item xs={1}>{renderTooltip(keyword("news_framing_tooltip"), classes)}</Grid>
-          <Grid item xs={11}> */}
-
           {/* News Framing/Topic */}
           <StyledAccordion
             expanded={expandedAccordion === newsFramingTitle}
@@ -733,13 +727,22 @@ const AssistantCredSignals = () => {
           <StyledAccordion
             expanded={expandedAccordion === prevFactChecksTitle}
             onChange={handleChange(prevFactChecksTitle)}
-            disabled={prevFactChecksLoading || prevFactChecksFail}
+            disabled={
+              prevFactChecksLoading ||
+              prevFactChecksFail ||
+              (!prevFactChecksLoading &&
+                !prevFactChecksFail &&
+                !prevFactChecksDone) ||
+              !role.includes("BETA_TESTER")
+            }
             disableGutters
           >
             <AccordionSummary
               expandIcon={getExpandIcon(
                 prevFactChecksLoading,
                 prevFactChecksFail,
+                null,
+                role,
               )}
             >
               <Grid container wrap="wrap">
@@ -854,7 +857,8 @@ const AssistantCredSignals = () => {
             disabled={
               machineGeneratedTextLoading ||
               machineGeneratedTextFail ||
-              machineGeneratedTextDone
+              machineGeneratedTextDone ||
+              !role.includes("BETA_TESTER")
             }
             disableGutters
           >
@@ -863,6 +867,7 @@ const AssistantCredSignals = () => {
                 machineGeneratedTextLoading,
                 machineGeneratedTextFail,
                 machineGeneratedTextDone,
+                role,
               )}
             >
               <Grid container wrap="wrap">
@@ -909,7 +914,6 @@ const AssistantCredSignals = () => {
                         sx={{ color: "text.secondary", align: "left" }}
                       >
                         {keyword("reanalyse_url")}
-                        {/* {dispatch()} */}
                       </Typography>
                     )}
                   {!role.includes("BETA_TESTER") && (
@@ -921,8 +925,6 @@ const AssistantCredSignals = () => {
               </Grid>
             </AccordionSummary>
           </StyledAccordion>
-
-          {/*           </Grid></Grid> */}
         </CardContent>
       </Card>
     </Grid>
