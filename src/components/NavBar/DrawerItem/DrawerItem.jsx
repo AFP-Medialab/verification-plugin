@@ -223,9 +223,6 @@ const DrawerItemContent = ({ index, drawContent }) => {
   useTrackPageView(path, client_id, uid, index);
   useEffect(() => {
     //trackPageView(path, client_id, uid);
-    console.log(drawContent[index].content);
-    // console.log(drawContent[index].content?.type?.type?.name);
-    console.log(index);
     dispatch(selectTool(index));
   }, [index]);
 
