@@ -24,6 +24,7 @@ import CustomAlertScore from "../../../Shared/CustomAlertScore";
 import {
   CategoryScale,
   Chart as ChartJS,
+  ChartArea,
   Legend,
   LinearScale,
   LineElement,
@@ -140,6 +141,36 @@ const LoccusResults = (props) => {
     },
   };
 
+  /**
+   * Returns a CanvasGradient to stylize the chart with the given scale
+   * @param ctx {CanvasRenderingContext2D}
+   * @param chartArea {ChartArea}
+   * @returns {CanvasGradient}
+   */
+  const getChartGradient = (ctx, chartArea) => {
+    let width, height, gradient;
+    const chartWidth = chartArea.right - chartArea.left;
+    const chartHeight = chartArea.bottom - chartArea.top;
+    if (!gradient || width !== chartWidth || height !== chartHeight) {
+      // Create the gradient because this is either the first render
+      // or the size of the chart has changed
+      width = chartWidth;
+      height = chartHeight;
+      gradient = ctx.createLinearGradient(
+        0,
+        chartArea.bottom,
+        0,
+        chartArea.top,
+      );
+      gradient.addColorStop(0, "#00FF00");
+      gradient.addColorStop(DETECTION_THRESHOLDS.THRESHOLD_1 / 100, "#82FF82");
+      gradient.addColorStop(DETECTION_THRESHOLDS.THRESHOLD_2 / 100, "#FFB800");
+      gradient.addColorStop(DETECTION_THRESHOLDS.THRESHOLD_3 / 100, "#FF0000");
+    }
+
+    return gradient;
+  };
+
   const getChartDataFromChunks = (chunks) => {
     let labels = [];
     const datasetData = [];
@@ -158,7 +189,15 @@ const LoccusResults = (props) => {
         {
           data: datasetData,
           fill: false,
-          borderColor: "#00926c",
+          borderColor: (context) => {
+            const chart = context.chart;
+            const { ctx, chartArea } = chart;
+
+            // Initial chart load
+            if (!chartArea) return;
+
+            return getChartGradient(ctx, chartArea);
+          },
           stepped: true,
           tension: 0,
         },
