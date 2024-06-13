@@ -70,7 +70,7 @@ const SyntheticImageDetection = () => {
     dispatch(setSyntheticImageDetectionLoading(true));
     const modeURL = "images/";
     const services =
-      "gan,unina,progan_r50_grip,adm_r50_grip,progan_rine_mever,ldm_rine_mever";
+      "gan_r50_mever,ldm_r50_grip,progan_r50_grip,adm_r50_grip,ldm_r50_mever,progan_rine_mever,ldm_rine_mever";
 
     const baseURL = process.env.REACT_APP_CAA_DEEPFAKE_URL;
 

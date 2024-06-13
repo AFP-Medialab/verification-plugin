@@ -30,7 +30,7 @@ import { useNavigate } from "react-router-dom";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import { Audiotrack } from "@mui/icons-material";
 import Typography from "@mui/material/Typography";
-
+import { TOOLS_CATEGORIES } from "components/NavBar/NavBar";
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -105,7 +105,8 @@ const MainContentMenu = (props) => {
 
   const categories = [
     {
-      type: keywordNavbar("navbar_category_video"),
+      type: TOOLS_CATEGORIES.VIDEO,
+      name: keywordNavbar(TOOLS_CATEGORIES.VIDEO),
       value: toolsVideo,
       icon: (
         <SvgIcon
@@ -118,7 +119,8 @@ const MainContentMenu = (props) => {
       ),
     },
     {
-      type: keywordNavbar("navbar_category_image"),
+      type: TOOLS_CATEGORIES.IMAGE,
+      name: keywordNavbar(TOOLS_CATEGORIES.IMAGE),
       value: toolsImages,
       icon: (
         <SvgIcon
@@ -131,12 +133,14 @@ const MainContentMenu = (props) => {
       ),
     },
     {
-      type: keywordNavbar("navbar_category_audio"),
+      type: TOOLS_CATEGORIES.AUDIO,
+      name: keywordNavbar(TOOLS_CATEGORIES.AUDIO),
       value: toolsAudio,
       icon: <Audiotrack width="40px" height="40px" />,
     },
     {
-      type: keywordNavbar("navbar_category_search"),
+      type: TOOLS_CATEGORIES.SEARCH,
+      name: keywordNavbar(TOOLS_CATEGORIES.SEARCH),
       value: toolsSearch,
       icon: (
         <SvgIcon
@@ -149,7 +153,8 @@ const MainContentMenu = (props) => {
       ),
     },
     {
-      type: keywordNavbar("navbar_category_data"),
+      type: TOOLS_CATEGORIES.DATA_ANALYSIS,
+      name: keywordNavbar(TOOLS_CATEGORIES.DATA_ANALYSIS),
       value: toolsData,
       icon: (
         <SvgIcon
@@ -162,34 +167,35 @@ const MainContentMenu = (props) => {
       ),
     },
     {
-      type: keywordNavbar("navbar_category_other"),
+      type: TOOLS_CATEGORIES.OTHER,
+      name: keywordNavbar(TOOLS_CATEGORIES.OTHER),
       value: otherTools,
       icon: <MoreHorizIcon width="40px" height="40px" />,
     },
   ];
 
   tools.forEach((value) => {
-    if (value.type === keywordNavbar("navbar_category_video")) {
+    if (value.type === TOOLS_CATEGORIES.VIDEO) {
       toolsVideo.push(value);
     }
 
-    if (value.type === keywordNavbar("navbar_category_image")) {
+    if (value.type === TOOLS_CATEGORIES.IMAGE) {
       toolsImages.push(value);
     }
 
-    if (value.type === keywordNavbar("navbar_category_audio")) {
+    if (value.type === TOOLS_CATEGORIES.AUDIO) {
       toolsAudio.push(value);
     }
 
-    if (value.type === keywordNavbar("navbar_category_search")) {
+    if (value.type === TOOLS_CATEGORIES.SEARCH) {
       toolsSearch.push(value);
     }
 
-    if (value.type === keywordNavbar("navbar_category_data")) {
+    if (value.type === TOOLS_CATEGORIES.DATA_ANALYSIS) {
       toolsData.push(value);
     }
 
-    if (value.type === keywordNavbar("navbar_category_other")) {
+    if (value.type === TOOLS_CATEGORIES.OTHER) {
       otherTools.push(value);
     }
   });
@@ -250,7 +256,7 @@ const MainContentMenu = (props) => {
                       textTransform: "capitalize",
                     }}
                   >
-                    {category.type}
+                    {category.name}
                   </Typography>
                 }
               />
