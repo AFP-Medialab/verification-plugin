@@ -5,7 +5,8 @@ import { Box, CardHeader } from "@mui/material";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Grid from "@mui/material/Grid";
-import HelpDialog from "../../Shared/HelpDialog/HelpDialog";
+import Tooltip from "@mui/material/Tooltip";
+import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
 import LinkIcon from "@mui/icons-material/Link";
 import Typography from "@mui/material/Typography";
@@ -89,20 +90,24 @@ const AssistantIntroduction = (props) => {
             </Typography>
           }
           action={
-            <div style={{ display: "flex", marginTop: 10 }}>
-              {
-                <HelpDialog
-                  title={"assistant_help_title"}
-                  paragraphs={[
-                    "assistant_help_1",
-                    "assistant_help_2",
-                    "assistant_help_3",
-                    "assistant_help_4",
-                  ]}
+            <Tooltip
+              interactive={"true"}
+              title={
+                <div
+                  className={"content"}
+                  dangerouslySetInnerHTML={{
+                    __html: keyword("assistant_help_title") + 
+                            keyword("assistant_help_1") +
+                            keyword("assistant_help_2") +
+                            keyword("assistant_help_3") +
+                            keyword( "assistant_help_4")
+                  }}
                 />
               }
-            </div>
-          }
+              classes={{ tooltip: classes.assistantTooltip }}
+            >
+              <HelpOutlineOutlinedIcon className={classes.toolTipIcon} />
+            </Tooltip>
         />
 
         <CardContent>
