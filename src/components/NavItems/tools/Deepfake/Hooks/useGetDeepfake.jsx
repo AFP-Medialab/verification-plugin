@@ -31,7 +31,7 @@ async function UseGetDeepfake(
   if (mode === "IMAGE") {
     dispatch(setDeepfakeLoadingImage(true));
     modeURL = "images/";
-    services = "faceswap";
+    services = "faceswap_ens_mever";
   } else if (mode === "VIDEO") {
     dispatch(setDeepfakeLoadingVideo(true));
     modeURL = "videos/";

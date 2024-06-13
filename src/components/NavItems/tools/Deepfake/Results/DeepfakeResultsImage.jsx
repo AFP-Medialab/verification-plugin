@@ -7,8 +7,7 @@ import { Grid, Typography, Stack, IconButton, Tooltip } from "@mui/material";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import { LinearProgressWithLabel } from "../../../../Shared/LinearProgressWithLabel/LinearProgressWithLabel";
 import { Close, Help } from "@mui/icons-material";
-import { resetDeepfake } from "redux/actions/tools/deepfakeImageActions";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { DetectionProgressBar } from "components/Shared/DetectionProgressBar/DetectionProgressBar";
 import { getclientId } from "components/Shared/GoogleAnalytics/MatomoAnalytics";
 import { useTrackEvent } from "Hooks/useAnalytics";
@@ -16,8 +15,6 @@ import { useTrackEvent } from "Hooks/useAnalytics";
 const DeepfakeResultsImage = (props) => {
   const classes = useMyStyles();
   const keyword = i18nLoadNamespace("components/NavItems/tools/Deepfake");
-
-  const dispatch = useDispatch();
   class DeepfakeResult {
     constructor(methodName, predictionScore) {
       (this.methodName = methodName), (this.predictionScore = predictionScore);
@@ -43,13 +40,16 @@ const DeepfakeResultsImage = (props) => {
   const [deepfakeScore, setDeepfakeScores] = useState(undefined);
 
   useEffect(() => {
-    if (!results || !results.faceswap_report) {
+    if (!results || !results.faceswap_ens_mever_report) {
       return;
     }
 
     let faceswapScore;
 
-    if (!results.faceswap_report || !results.faceswap_report.prediction) {
+    if (
+      !results.faceswap_ens_mever_report ||
+      !results.faceswap_ens_mever_report.prediction
+    ) {
       faceswapScore = new DeepfakeResult(
         Object.keys(DeepfakeImageDetectionMethodNames)[0],
         0,
@@ -57,7 +57,7 @@ const DeepfakeResultsImage = (props) => {
     } else {
       faceswapScore = new DeepfakeResult(
         Object.keys(DeepfakeImageDetectionMethodNames)[0],
-        results.faceswap_report.prediction * 100,
+        results.faceswap_ens_mever_report.prediction * 100,
       );
     }
 
@@ -88,11 +88,15 @@ const DeepfakeResultsImage = (props) => {
 
     const rectanglesTemp = [];
 
-    if (!results || !results.faceswap_report || !results.faceswap_report.info) {
+    if (
+      !results ||
+      !results.faceswap_ens_mever_report ||
+      !results.faceswap_ens_mever_report.info
+    ) {
       return;
     }
 
-    results.faceswap_report.info.forEach((element) => {
+    results.faceswap_ens_mever_report.info.forEach((element) => {
       const rectangleAtributes = element.bbox;
 
       const elementTop = Math.round(rectangleAtributes.top * imgHeight);
