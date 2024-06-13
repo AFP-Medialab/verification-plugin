@@ -96,11 +96,12 @@ const AssistantIntroduction = (props) => {
                 <div
                   className={"content"}
                   dangerouslySetInnerHTML={{
-                    __html: keyword("assistant_help_title") + 
-                            keyword("assistant_help_1") +
-                            keyword("assistant_help_2") +
-                            keyword("assistant_help_3") +
-                            keyword( "assistant_help_4")
+                    __html:
+                      keyword("assistant_help_title") +
+                      keyword("assistant_help_1") +
+                      keyword("assistant_help_2") +
+                      keyword("assistant_help_3") +
+                      keyword("assistant_help_4"),
                   }}
                 />
               }
@@ -108,6 +109,7 @@ const AssistantIntroduction = (props) => {
             >
               <HelpOutlineOutlinedIcon className={classes.toolTipIcon} />
             </Tooltip>
+          }
         />
 
         <CardContent>
