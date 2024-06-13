@@ -113,6 +113,17 @@ function a11yProps(index) {
     "aria-controls": `scrollable-force-tabpanel-${index}`,
   };
 }
+export const TOOLS_CATEGORIES = {
+  VIDEO: "navbar_category_video",
+  IMAGE: "navbar_category_image",
+  AUDIO: "navbar_category_audio",
+  SEARCH: "navbar_category_search",
+  DATA_ANALYSIS: "navbar_category_data",
+  OTHER: "navbar_category_other",
+
+  // Used to display the home page
+  ALL: "navbar_category_general",
+};
 
 const NavBar = () => {
   const classes = useMyStyles();
@@ -215,17 +226,6 @@ const NavBar = () => {
    * Represents the categories to which the tools belong
    *
    */
-  const TOOLS_CATEGORIES = {
-    VIDEO: keyword("navbar_category_video"),
-    IMAGE: keyword("navbar_category_image"),
-    AUDIO: keyword("navbar_category_audio"),
-    SEARCH: keyword("navbar_category_search"),
-    DATA_ANALYSIS: keyword("navbar_category_data"),
-    OTHER: keyword("navbar_category_other"),
-
-    // Used to display the home page
-    ALL: keyword("navbar_category_general"),
-  };
 
   /**
    * Represents the possible temporary states of the tools:
