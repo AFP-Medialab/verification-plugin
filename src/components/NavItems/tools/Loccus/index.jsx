@@ -179,8 +179,6 @@ const Loccus = () => {
 
       const res3 = await authenticatedRequest(config3);
 
-      console.log(res3.data);
-
       setChunks(res3.data);
 
       dispatch(
