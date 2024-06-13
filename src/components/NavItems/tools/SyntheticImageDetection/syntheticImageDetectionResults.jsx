@@ -97,16 +97,20 @@ const SyntheticImageDetectionResults = (props) => {
     setResultsHaveErrors(false);
 
     const diffusionScore = new SyntheticImageDetectionAlgorithmResult(
+      //previously unina_report
       Object.keys(DeepfakeImageDetectionMethodNames)[1],
-      !results.unina_report.prediction
+      !results.ldm_r50_grip_report.prediction
         ? 0
-        : results.unina_report.prediction * 100,
-      !results.unina_report.prediction,
+        : results.ldm_r50_grip_report.prediction * 100,
+      !results.ldm_r50_grip_report.prediction,
     );
     const ganScore = new SyntheticImageDetectionAlgorithmResult(
+      //previously gan_report
       Object.keys(DeepfakeImageDetectionMethodNames)[0],
-      !results.gan_report.prediction ? 0 : results.gan_report.prediction * 100,
-      !results.gan_report.prediction,
+      !results.gan_r50_mever_report.prediction
+        ? 0
+        : results.gan_r50_mever_report.prediction * 100,
+      !results.gan_r50_mever_report.prediction,
     );
 
     const proganScore = new SyntheticImageDetectionAlgorithmResult(
