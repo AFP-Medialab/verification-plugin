@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Backdrop,
   Box,
@@ -14,10 +14,7 @@ import { Close, Square } from "@mui/icons-material";
 /**
  *
  * @param keyword The translation i18n function
- * @param handleOpen Function to handle opening the modal
- * @param handleClose Function to handle closing the modal
- * @param isOpen {boolean} Open / Close state of the modal
- * @param keywords {Array<string>} The translation keywords for each range of the scale
+ * @param keywordsArr {Array<string>} The translation keywordsArr for each range of the scale
  * @param keywordLink {string} The translation string for the link that opens the modal
  * @param keywordModalTitle {string} The translation string for the modal title
  * @param colors {Array<string>} Array with hexadecimal colors used in the scale
@@ -26,10 +23,7 @@ import { Close, Square } from "@mui/icons-material";
  */
 const GaugeChartModalExplanation = ({
   keyword,
-  handleOpen,
-  handleClose,
-  isOpen,
-  keywords,
+  keywordsArr,
   keywordLink,
   keywordModalTitle,
   colors,
@@ -50,28 +44,32 @@ const GaugeChartModalExplanation = ({
     overflow: "auto",
   };
 
-  if (keywords.length !== colors.length) {
+  if (keywordsArr.length !== colors.length) {
     throw new Error(
       `[GaugeChartModalExplanation][Error] The keywords array and the colors array do not have the same length`,
     );
   }
 
-  if (keywords.length === 0 || colors.length === 0) {
+  if (keywordsArr.length === 0 || colors.length === 0) {
     throw new Error(
       `[GaugeChartModalExplanation][Error] The keywords array and the colors array should not be empty`,
     );
   }
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const toggleModal = () => setIsModalOpen((prev) => !prev);
+
   return (
     <>
-      <Link onClick={handleOpen} sx={{ cursor: "pointer" }} variant={"body1"}>
+      <Link onClick={toggleModal} sx={{ cursor: "pointer" }} variant={"body1"}>
         {keyword(keywordLink)}
       </Link>
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
-        open={isOpen}
-        onClose={handleClose}
+        open={isModalOpen}
+        onClose={toggleModal}
         closeAfterTransition
         slots={{ backdrop: Backdrop }}
         slotProps={{
@@ -80,7 +78,7 @@ const GaugeChartModalExplanation = ({
           },
         }}
       >
-        <Fade in={isOpen}>
+        <Fade in={isModalOpen}>
           <Box sx={gaugeColorsModalStyle}>
             <Stack
               direction="row"
@@ -101,7 +99,7 @@ const GaugeChartModalExplanation = ({
               <IconButton
                 variant="outlined"
                 aria-label="close popup"
-                onClick={handleClose}
+                onClick={toggleModal}
               >
                 <Close />
               </IconButton>
@@ -112,7 +110,7 @@ const GaugeChartModalExplanation = ({
               spacing={2}
               mt={2}
             >
-              {keywords.map((translation, index) => {
+              {keywordsArr.map((translation, index) => {
                 return (
                   <Stack
                     key={index}

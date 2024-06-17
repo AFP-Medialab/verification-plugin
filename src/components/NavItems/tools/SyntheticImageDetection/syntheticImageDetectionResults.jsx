@@ -86,8 +86,6 @@ const SyntheticImageDetectionResults = (props) => {
 
   const [resultsHaveErrors, setResultsHaveErrors] = useState(false);
 
-  const [openGaugeColorsModal, setOpenGaugeColorsModal] = React.useState(false);
-
   const gaugeChartRef = useRef(null);
 
   useEffect(() => {
@@ -257,12 +255,6 @@ const SyntheticImageDetectionResults = (props) => {
         );
   };
 
-  const handleOpenGaugeColorsModal = () => {
-    setOpenGaugeColorsModal(true);
-  };
-
-  const handleCloseGaugeColorsModal = () => setOpenGaugeColorsModal(false);
-
   const keywords = [
     "synthetic_image_detection_scale_modal_explanation_rating_1",
     "synthetic_image_detection_scale_modal_explanation_rating_2",
@@ -426,10 +418,7 @@ const SyntheticImageDetectionResults = (props) => {
 
                 <GaugeChartModalExplanation
                   keyword={keyword}
-                  handleOpen={handleOpenGaugeColorsModal}
-                  handleClose={handleCloseGaugeColorsModal}
-                  isOpen={openGaugeColorsModal}
-                  keywords={keywords}
+                  keywordsArr={keywords}
                   keywordLink={
                     "synthetic_image_detection_scale_explanation_link"
                   }

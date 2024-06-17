@@ -57,8 +57,6 @@ const LoccusResults = (props) => {
   const [voiceCloningScore, setVoiceCloningScore] = useState(null);
   const [voiceRecordingScore, setVoiceRecordingScore] = useState(null);
 
-  const [openGaugeColorsModal, setOpenGaugeColorsModal] = React.useState(false);
-
   const gaugeChartRef = useRef(null);
   const chunksChartRef = useRef(null);
 
@@ -277,12 +275,6 @@ const LoccusResults = (props) => {
     dragToSeek: true,
   });
 
-  const handleOpenGaugeColorsModal = () => {
-    setOpenGaugeColorsModal(true);
-  };
-
-  const handleCloseGaugeColorsModal = () => setOpenGaugeColorsModal(false);
-
   const keywords = [
     "loccus_scale_modal_explanation_rating_1",
     "loccus_scale_modal_explanation_rating_2",
@@ -416,10 +408,7 @@ const LoccusResults = (props) => {
 
                 <GaugeChartModalExplanation
                   keyword={keyword}
-                  handleOpen={handleOpenGaugeColorsModal}
-                  handleClose={handleCloseGaugeColorsModal}
-                  isOpen={openGaugeColorsModal}
-                  keywords={keywords}
+                  keywordsArr={keywords}
                   keywordLink={"loccus_scale_explanation_link"}
                   keywordModalTitle={"loccus_scale_modal_explanation_title"}
                   colors={colors}
