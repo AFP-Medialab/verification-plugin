@@ -47,11 +47,10 @@ const Loccus = () => {
   );
   const result = useSelector((state) => state.syntheticAudioDetection.result);
   const url = useSelector((state) => state.syntheticAudioDetection.url);
+  const chunks = useSelector((state) => state.syntheticAudioDetection.chunks);
   const authenticatedRequest = useAuthenticatedRequest();
   const [input, setInput] = useState(url ? url : "");
   const [audioFile, setAudioFile] = useState(AUDIO_FILE_DEFAULT_STATE);
-
-  const [chunks, setChunks] = useState([]);
 
   const dispatch = useDispatch();
 
@@ -179,12 +178,11 @@ const Loccus = () => {
 
       const res3 = await authenticatedRequest(config3);
 
-      setChunks(res3.data);
-
       dispatch(
         setLoccusResult({
           url: audioFile ? URL.createObjectURL(audioFile) : url,
           result: res2.data,
+          chunks: res3.data,
         }),
       );
     } catch (error) {

@@ -1,6 +1,7 @@
 const defaultState = {
   url: "",
   result: null,
+  chunks: [],
   loading: false,
 };
 
@@ -11,6 +12,7 @@ const loccusReducer = (state = defaultState, action) => {
         ...state,
         url: "",
         result: null,
+        chunks: [],
         loading: false,
       };
     case "SET_LOCCUS_LOADING":
@@ -23,6 +25,7 @@ const loccusReducer = (state = defaultState, action) => {
         ...state,
         url: action.payload.url,
         result: action.payload.result,
+        chunks: action.payload.chunks,
         loading: false,
       };
     default:

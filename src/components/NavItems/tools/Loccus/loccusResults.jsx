@@ -10,9 +10,10 @@ import {
   Grid,
   IconButton,
   Stack,
+  Tooltip,
   Typography,
 } from "@mui/material";
-import { Close, ExpandMore } from "@mui/icons-material";
+import { Close, Download, ExpandMore } from "@mui/icons-material";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import { useSelector } from "react-redux";
 import { useTrackEvent } from "Hooks/useAnalytics";
@@ -31,12 +32,14 @@ import {
   PointElement,
   TimeSeriesScale,
   Title,
-  Tooltip,
+  Tooltip as ChartTooltip,
 } from "chart.js";
 import { Chart } from "react-chartjs-2";
 import "chartjs-adapter-dayjs-4/dist/chartjs-adapter-dayjs-4.esm";
 import dayjs from "dayjs";
 import duration from "dayjs/plugin/duration";
+import { exportReactElementAsJpg } from "../../../Shared/Utils/htmlUtils";
+import GaugeChartModalExplanation from "../../../Shared/GaugeChartModalExplanation";
 
 const LoccusResults = (props) => {
   dayjs.extend(duration);
@@ -53,6 +56,11 @@ const LoccusResults = (props) => {
 
   const [voiceCloningScore, setVoiceCloningScore] = useState(null);
   const [voiceRecordingScore, setVoiceRecordingScore] = useState(null);
+
+  const [openGaugeColorsModal, setOpenGaugeColorsModal] = React.useState(false);
+
+  const gaugeChartRef = useRef(null);
+  const chunksChartRef = useRef(null);
 
   const DETECTION_TYPES = {
     VOICE_CLONING: "synthetic",
@@ -83,7 +91,7 @@ const LoccusResults = (props) => {
     LineController,
     LineElement,
     Title,
-    Tooltip,
+    ChartTooltip,
     Legend,
     TimeSeriesScale,
   );
@@ -121,7 +129,6 @@ const LoccusResults = (props) => {
     scales: {
       x: {
         type: "time",
-        beginAtZero: true,
         time: {
           unit: "second",
         },
@@ -270,6 +277,20 @@ const LoccusResults = (props) => {
     dragToSeek: true,
   });
 
+  const handleOpenGaugeColorsModal = () => {
+    setOpenGaugeColorsModal(true);
+  };
+
+  const handleCloseGaugeColorsModal = () => setOpenGaugeColorsModal(false);
+
+  const keywords = [
+    "loccus_scale_modal_explanation_rating_1",
+    "loccus_scale_modal_explanation_rating_2",
+    "loccus_scale_modal_explanation_rating_3",
+    "loccus_scale_modal_explanation_rating_4",
+  ];
+  const colors = ["#00FF00", "#AAFF03", "#FFA903", "#FF0000"];
+
   return (
     <Stack
       direction="row"
@@ -279,7 +300,7 @@ const LoccusResults = (props) => {
     >
       <Card sx={{ width: "100%" }}>
         <CardHeader
-          style={{ borderRadius: "4px 4px 0px 0px" }}
+          style={{ borderRadius: "4px 4p x 0px 0px" }}
           title={keyword("loccus_title")}
           action={
             <IconButton aria-label="close" onClick={props.handleClose}>
@@ -305,51 +326,105 @@ const LoccusResults = (props) => {
                 <Grid item width="100%">
                   <div ref={audioContainerRef} />
                 </Grid>
-                <Grid item width="100%" height="300px">
+                <Grid item ref={chunksChartRef} width="100%" height="300px">
                   <Chart
                     type={"line"}
                     data={getChartDataFromChunks(props.chunks)}
                     options={chartConfig}
                   />
                 </Grid>
+                <Grid item>
+                  <Tooltip
+                    title={keyword("loccus_download_chunks_chart_button")}
+                  >
+                    <IconButton
+                      color="primary"
+                      aria-label="download chart"
+                      onClick={async () =>
+                        await exportReactElementAsJpg(
+                          chunksChartRef,
+                          "loccus_detection_chart",
+                        )
+                      }
+                    >
+                      <Download />
+                    </IconButton>
+                  </Tooltip>
+                </Grid>
               </Grid>
             </Box>
           </Grid>
           <Grid item sm={12} md={6}>
             <Stack direction="column" spacing={4}>
-              <Stack direction="column" p={4} spacing={2}>
+              <Stack direction="column" p={4} spacing={4}>
                 <Typography variant="h5">
                   {keyword("loccus_voice_cloning_detection_title")}
                 </Typography>
                 <Stack
-                  direction="column"
+                  direction={{ sm: "column", md: "row" }}
+                  alignItems={{ sm: "start", md: "center" }}
                   justifyContent="center"
-                  alignItems="center"
-                  spacing={0}
+                  width="100%"
                 >
-                  <GaugeChart
-                    id={"gauge-chart"}
-                    animate={false}
-                    nrOfLevels={4}
-                    textColor={"black"}
-                    arcsLength={[0.1, 0.2, 0.3, 0.4]}
-                    percent={voiceCloningScore / 100}
-                    style={{ width: 250 }}
-                  />
                   <Stack
-                    direction="row"
+                    direction="column"
                     justifyContent="center"
                     alignItems="center"
-                    spacing={10}
+                    spacing={0}
+                    ref={gaugeChartRef}
                   >
-                    <Typography variant="subtitle2">
-                      {keyword("loccus_gauge_no_detection")}
-                    </Typography>
-                    <Typography variant="subtitle2">
-                      {keyword("loccus_gauge_detection")}
-                    </Typography>
+                    <GaugeChart
+                      id={"gauge-chart"}
+                      animate={false}
+                      nrOfLevels={4}
+                      textColor={"black"}
+                      arcsLength={[0.1, 0.2, 0.3, 0.4]}
+                      percent={voiceCloningScore / 100}
+                      style={{ width: 250 }}
+                    />
+                    <Stack
+                      direction="row"
+                      justifyContent="center"
+                      alignItems="center"
+                      spacing={10}
+                    >
+                      <Typography variant="subtitle2">
+                        {keyword("loccus_gauge_no_detection")}
+                      </Typography>
+                      <Typography variant="subtitle2">
+                        {keyword("loccus_gauge_detection")}
+                      </Typography>
+                    </Stack>
                   </Stack>
+                  <Box alignSelf={{ sm: "flex-start", md: "flex-end" }}>
+                    <Tooltip title={keyword("loccus_download_gauge_button")}>
+                      <IconButton
+                        color="primary"
+                        aria-label="download chart"
+                        onClick={async () =>
+                          await exportReactElementAsJpg(
+                            gaugeChartRef,
+                            "gauge_chart",
+                          )
+                        }
+                      >
+                        <Download />
+                      </IconButton>
+                    </Tooltip>
+                  </Box>
                 </Stack>
+
+                <GaugeChartModalExplanation
+                  keyword={keyword}
+                  handleOpen={handleOpenGaugeColorsModal}
+                  handleClose={handleCloseGaugeColorsModal}
+                  isOpen={openGaugeColorsModal}
+                  keywords={keywords}
+                  keywordLink={"loccus_scale_explanation_link"}
+                  keywordModalTitle={"loccus_scale_modal_explanation_title"}
+                  colors={colors}
+                />
+
                 <CustomAlertScore
                   score={voiceCloningScore}
                   detectionType={DETECTION_TYPES.VOICE_CLONING}
@@ -395,6 +470,7 @@ const LoccusResults = (props) => {
                               percent={voiceRecordingScore / 100}
                               style={{ width: 250 }}
                             />
+
                             <Stack
                               direction="row"
                               justifyContent="center"
