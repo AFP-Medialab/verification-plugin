@@ -47,6 +47,7 @@ const Loccus = () => {
   );
   const result = useSelector((state) => state.syntheticAudioDetection.result);
   const url = useSelector((state) => state.syntheticAudioDetection.url);
+  const chunks = useSelector((state) => state.syntheticAudioDetection.chunks);
   const authenticatedRequest = useAuthenticatedRequest();
   const [input, setInput] = useState(url ? url : "");
   const [audioFile, setAudioFile] = useState(AUDIO_FILE_DEFAULT_STATE);
@@ -159,10 +160,29 @@ const Loccus = () => {
         return;
       }
 
+      const config3 = {
+        method: "get",
+        maxBodyLength: Infinity,
+        ///verifications/authenticity
+        url:
+          process.env.REACT_APP_LOCCUS_URL +
+          `/detection/${res2.data.handle}/chunks?page-size=1000`,
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        data: data2,
+        timeout: 180000,
+        signal: AbortSignal.timeout(180000),
+      };
+
+      const res3 = await authenticatedRequest(config3);
+
       dispatch(
         setLoccusResult({
           url: audioFile ? URL.createObjectURL(audioFile) : url,
           result: res2.data,
+          chunks: res3.data,
         }),
       );
     } catch (error) {
@@ -184,17 +204,27 @@ const Loccus = () => {
   const preprocessLoccusUpload = async (file) => {
     if (!(file instanceof File)) {
       dispatch(setError(keyword("error_invalid_file")));
-      return Error(keyword("error_invalid_file"));
+      return new Error(keyword("error_invalid_file"));
     }
 
     if (!file.type.includes("audio")) {
       dispatch(setError(keyword("error_invalid_media_file")));
-      return Error(keyword("error_invalid_media_file"));
+      return new Error(keyword("error_invalid_media_file"));
     }
 
+    const isChromium = !!window.chrome;
+
     // TODO: Use ffmpeg to convert the m4a files if possible
-    if (file.type.includes("m4a")) {
+    if (
+      isChromium &&
+      (file.type.includes("m4a") ||
+        file.type.includes("basic") ||
+        file.type.includes("aiff"))
+    ) {
       dispatch(setError(keyword("error_invalid_audio_file")));
+
+      handleClose();
+
       return Error(keyword("error_invalid_audio_file"));
     }
 
@@ -222,7 +252,15 @@ const Loccus = () => {
           },
         );
       };
+    }).catch((error) => {
+      console.log(error);
+      dispatch(setError(keyword("loccus_error_unable_to_read_file")));
+      return Error(error);
     });
+
+    if (!(audioBuffer instanceof AudioBuffer)) {
+      return audioBuffer;
+    }
 
     const durationInSeconds = audioBuffer.duration;
 
@@ -324,7 +362,12 @@ const Loccus = () => {
       <Box m={3} />
 
       {result && (
-        <LoccusResults result={result} url={url} handleClose={handleClose} />
+        <LoccusResults
+          result={result}
+          url={url}
+          handleClose={handleClose}
+          chunks={chunks}
+        />
       )}
     </div>
   );

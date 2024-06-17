@@ -14,40 +14,47 @@ import {
   Divider,
   Drawer,
   Fab,
-  IconButton,
+  Grid,
   List,
-  ListItem,
+  ListItemButton,
   ListItemIcon,
   ListItemText,
   ListSubheader,
   Snackbar,
   Stack,
+  SvgIcon,
   Tab,
   Tabs,
   Toolbar,
   Typography,
 } from "@mui/material";
 
-import ArchiveIcon from "@mui/icons-material/Archive";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
-import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
-import ExpandLess from "@mui/icons-material/ExpandLess";
-import ExpandMore from "@mui/icons-material/ExpandMore";
+import {
+  Archive,
+  AudioFile,
+  Audiotrack,
+  ChevronLeft,
+  ChevronRight,
+  ExpandLess,
+  ExpandMore,
+  Gradient,
+  KeyboardArrowUp,
+  ManageSearch,
+  MoreHoriz,
+} from "@mui/icons-material";
 
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
 import ScrollTop from "../Shared/ScrollTop/ScrollTop";
 import { cleanError, cleanErrorNetwork } from "redux/reducers/errorReducer";
-import TabItem from "./TabItem/TabItem";
+import MainContentMenuTabItems from "./MainContentMenuTabItems/MainContentMenuTabItems";
 import ClassRoom from "../NavItems/ClassRoom/ClassRoom";
 import Interactive from "../NavItems/Interactive/Interactive";
 import About from "../NavItems/About/About";
 import Assistant from "../NavItems/Assistant/Assistant";
 import MySnackbar from "../MySnackbar/MySnackbar";
 import useMyStyles from "../Shared/MaterialUiStyles/useMyStyles";
-import Footer from "../Shared/Footer/Footer";
+import { Footer, FOOTER_TYPES } from "../Shared/Footer/Footer";
 import Feedback from "../Feedback/Feedback";
 
 import AnalysisIcon from "./images/SVG/Video/Video_analysis.svg";
@@ -70,7 +77,7 @@ import XnetworkIcon from "./images/SVG/Search/Xnetwork.svg";
 import TwitterSnaIcon from "./images/SVG/DataAnalysis/Twitter_sna.svg";
 import CsvSnaIcon from "./images/SVG/DataAnalysis/CSV_SNA.svg";
 import DeepfakeIcon from "./images/SVG/Image/Deepfake.svg";
-import GeolactionIcon from "./images/SVG/Image/Geolocation.svg";
+import GeolocationIcon from "./images/SVG/Image/Geolocation.svg";
 
 import ToolsIcon from "./images/SVG/Navbar/Tools.svg";
 import ClassroomIcon from "./images/SVG/Navbar/Classroom.svg";
@@ -90,8 +97,6 @@ import ImageIcon from "./images/SVG/Image/Images.svg";
 import SearchIcon from "./images/SVG/Search/Search.svg";
 import DataIcon from "./images/SVG/DataAnalysis/Data_analysis.svg";
 
-import Gradient from "@mui/icons-material/Gradient";
-
 import { getSupportedBrowserLanguage } from "../Shared/Languages/getSupportedBrowserLanguage";
 
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
@@ -100,9 +105,7 @@ import { setFalse, setTrue } from "../../redux/reducers/cookiesReducers";
 import { changeLanguage } from "../../redux/reducers/languageReducer";
 
 import { Link, useNavigate } from "react-router-dom";
-import { AudioFile, Audiotrack, ManageSearch } from "@mui/icons-material";
 import AdvancedTools from "../NavItems/tools/Alltools/AdvancedTools/AdvancedTools";
-import Grid from "@mui/material/Grid";
 
 function a11yProps(index) {
   return {
@@ -110,18 +113,29 @@ function a11yProps(index) {
     "aria-controls": `scrollable-force-tabpanel-${index}`,
   };
 }
+export const TOOLS_CATEGORIES = {
+  VIDEO: "navbar_category_video",
+  IMAGE: "navbar_category_image",
+  AUDIO: "navbar_category_audio",
+  SEARCH: "navbar_category_search",
+  DATA_ANALYSIS: "navbar_category_data",
+  OTHER: "navbar_category_other",
+
+  // Used to display the home page
+  ALL: "navbar_category_general",
+};
 
 const NavBar = () => {
   const classes = useMyStyles();
   const navigate = useNavigate();
-  const [open, setOpen] = useState(true);
+  const [isSideMenuOpen, setIsSideMenuOpen] = useState(true);
   const [classWidthToolbar, setClassWidthToolbar] = useState(
     classes.drawerWidth,
   );
   const LOGO_EU = process.env.REACT_APP_LOGO_EU;
-  const tabValue = useSelector((state) => state.nav);
+  const topMenuItemSelectedId = useSelector((state) => state.nav);
 
-  const drawerValue = useSelector((state) => state.tool.selected);
+  const sideMenuItemSelectedId = useSelector((state) => state.tool.selected);
   const cookiesUsage = useSelector((state) => state.cookies);
   const currentLang = useSelector((state) => state.language);
   const defaultLanguage = useSelector((state) => state.defaultLanguage);
@@ -130,12 +144,16 @@ const NavBar = () => {
 
   const drawerRef = createRef();
 
-  const handleChange = (event, newValue) => {
-    let path = drawerItems[newValue].path;
-    if (tabItems[newValue].path === "tools") navigate("/app/tools/" + path);
+  // Set UI dicrection based on language reading direction
+  const direction = currentLang !== "ar" ? "ltr" : "rtl";
+
+  const handleTopMenuChange = (event, newValue) => {
+    let path = sideMenuItems[newValue].path;
+
+    if (topMenuItems[newValue].path === "tools") navigate("/app/tools/" + path);
     //history.push("/app/tools/" + path);
-    else navigate("/app/" + tabItems[newValue].path);
-    //history.push("/app/" + tabItems[newValue].path)
+    else navigate("/app/" + topMenuItems[newValue].path);
+    //history.push("/app/" + topMenuItems[newValue].path)
   };
 
   const [openAlert, setOpenAlert] = useState(false);
@@ -155,7 +173,7 @@ const NavBar = () => {
     if (newValueType === "TOOL") {
       if (
         newValue.toolRestrictions !== undefined &&
-        newValue.toolRestrictions.includes("lock")
+        newValue.toolRestrictions.includes(TOOL_STATUS_ICON.LOCK)
       ) {
         if (userAuthenticated) {
           navigate("/app/tools/" + newValue.path);
@@ -190,55 +208,68 @@ const NavBar = () => {
   const tWarning = i18nLoadNamespace("components/Shared/OnWarningInfo");
   const keyword = i18nLoadNamespace("components/NavBar");
 
-  const [classListHeading, setClassListHeading] = useState(
-    classes.drawerListHeadingLeft,
-  );
-
-  const handleDrawerToggle = () => {
-    setOpen(!open);
+  const toggleSideMenu = () => {
+    setIsSideMenuOpen(!isSideMenuOpen);
 
     if (classWidthToolbar === classes.drawerWidth) {
       setClassWidthToolbar(classes.drawerWidthClose);
-      setTimeout(function () {
-        setClassListHeading(classes.drawerListHeadingCenter);
-      }, 194);
+      setTimeout(function () {}, 194);
     } else {
       setClassWidthToolbar(classes.drawerWidth);
-      setClassListHeading(classes.drawerListHeadingLeft);
     }
   };
 
   const role = useSelector((state) => state.userSession.user.roles);
   const betaTester = role.includes("BETA_TESTER");
 
-  //console.log("Role", role);
-  //console.log("Beta", betaTester);
+  /**
+   * Represents the categories to which the tools belong
+   *
+   */
 
-  const drawerItems = [
+  /**
+   * Represents the possible temporary states of the tools:
+   * - An experimental tool is not ready for production, and available to beta testers
+   * - A new tool is an experimental tool that was released to everyone
+   * - A locked tool is a tool available to registered users
+   * @type {{NEW: string, LOCK: string, EXPERIMENTAL: string}}
+   */
+  const TOOL_STATUS_ICON = {
+    EXPERIMENTAL: "experimental",
+    NEW: "new",
+    LOCK: "lock",
+  };
+
+  /**
+   * Represents the user roles that can be needed to access a given tool
+   * @type {{BETA_TESTER: string, ARCHIVE: string, LOCK: string}}
+   */
+  const TOOL_RESTRICTIONS = {
+    ARCHIVE: "ARCHIVE",
+    BETA_TESTER: "BETA_TESTER",
+    LOCK: "lock",
+  };
+
+  const sideMenuItems = [
     {
       id: 1,
       title: "navbar_tools",
-      icon:
-        tabValue === 0 && drawerValue === 0 ? (
-          <ToolsIcon
-            width="40px"
-            height="40px"
-            style={{ fill: "#00926c" }}
-            title={keyword("navbar_tools")}
-          />
-        ) : (
-          <ToolsIcon
-            width="40px"
-            height="40px"
-            style={{ fill: "#4c4c4c" }}
-            title={keyword("navbar_tools")}
-          />
-        ),
-      tsvPrefix: "all",
+      icon: (
+        <SvgIcon
+          component={ToolsIcon}
+          sx={{
+            fill:
+              topMenuItemSelectedId === 0 && sideMenuItemSelectedId === 0
+                ? "#00926c"
+                : "#4c4c4c",
+            fontSize: "24px",
+          }}
+          inheritViewBox
+        />
+      ),
       path: "all",
-      pathGroup: "TOOL",
-      type: keyword("navbar_category_general"),
-      typeId: 0,
+      type: TOOLS_CATEGORIES.ALL,
+
       icons: [],
       toolRestrictions: [],
     },
@@ -247,22 +278,19 @@ const NavBar = () => {
       id: 2,
       title: "navbar_analysis_video",
       description: "navbar_analysis_description",
-      icon:
-        tabValue === 0 && drawerValue === 1 ? (
-          <AnalysisIcon
-            width="45px"
-            height="45px"
-            style={{ fill: "#00926c" }}
-            title="Video analysis"
-          />
-        ) : (
-          <AnalysisIcon
-            width="45px"
-            height="45px"
-            style={{ fill: "#4c4c4c" }}
-            title={keyword("navbar_analysis_video")}
-          />
-        ),
+      icon: (
+        <SvgIcon
+          component={AnalysisIcon}
+          sx={{
+            fill:
+              topMenuItemSelectedId === 0 && sideMenuItemSelectedId === 1
+                ? "#00926c"
+                : "#4c4c4c",
+            fontSize: "24px",
+          }}
+          inheritViewBox
+        />
+      ),
       iconColored: (
         <AnalysisIcon
           width="45px"
@@ -271,11 +299,8 @@ const NavBar = () => {
           title={keyword("navbar_analysis_video")}
         />
       ),
-      tsvPrefix: "api",
       path: "analysis",
-      pathGroup: "TOOL",
-      type: keyword("navbar_category_video"),
-      typeId: 1,
+      type: TOOLS_CATEGORIES.VIDEO,
       icons: [],
       toolRestrictions: [],
     },
@@ -283,22 +308,19 @@ const NavBar = () => {
       id: 3,
       title: "navbar_keyframes",
       description: "navbar_keyframes_description",
-      icon:
-        tabValue === 0 && drawerValue === 2 ? (
-          <KeyframesIcon
-            width="45px"
-            height="45px"
-            style={{ fill: "#00926c" }}
-            title="Keyframes"
-          />
-        ) : (
-          <KeyframesIcon
-            width="45px"
-            height="45px"
-            style={{ fill: "#4c4c4c" }}
-            title={keyword("navbar_keyframes")}
-          />
-        ),
+      icon: (
+        <SvgIcon
+          component={KeyframesIcon}
+          sx={{
+            fill:
+              topMenuItemSelectedId === 0 && sideMenuItemSelectedId === 2
+                ? "#00926c"
+                : "#4c4c4c",
+            fontSize: "24px",
+          }}
+          inheritViewBox
+        />
+      ),
       iconColored: (
         <KeyframesIcon
           width="45px"
@@ -307,11 +329,10 @@ const NavBar = () => {
           title={keyword("navbar_keyframes")}
         />
       ),
-      tsvPrefix: "keyframes",
+
       path: "keyframes",
-      pathGroup: "TOOL",
-      type: keyword("navbar_category_video"),
-      typeId: 1,
+      type: TOOLS_CATEGORIES.VIDEO,
+
       icons: [],
       toolRestrictions: [],
     },
@@ -319,22 +340,19 @@ const NavBar = () => {
       id: 4,
       title: "navbar_thumbnails",
       description: "navbar_thumbnails_description",
-      icon:
-        tabValue === 0 && drawerValue === 3 ? (
-          <ThumbnailsIcon
-            width="45px"
-            height="45px"
-            style={{ fill: "#00926c" }}
-            title="Thumbnails"
-          />
-        ) : (
-          <ThumbnailsIcon
-            width="45px"
-            height="45px"
-            style={{ fill: "#4c4c4c" }}
-            title={keyword("navbar_thumbnails")}
-          />
-        ),
+      icon: (
+        <SvgIcon
+          component={ThumbnailsIcon}
+          sx={{
+            fill:
+              topMenuItemSelectedId === 0 && sideMenuItemSelectedId === 3
+                ? "#00926c"
+                : "#4c4c4c",
+            fontSize: "24px",
+          }}
+          inheritViewBox
+        />
+      ),
       iconColored: (
         <ThumbnailsIcon
           width="45px"
@@ -343,11 +361,10 @@ const NavBar = () => {
           title={keyword("navbar_thumbnails")}
         />
       ),
-      tsvPrefix: "thumbnails",
+
       path: "thumbnails",
-      pathGroup: "TOOL",
-      type: keyword("navbar_category_video"),
-      typeId: 1,
+      type: TOOLS_CATEGORIES.VIDEO,
+
       icons: [],
       toolRestrictions: [],
     },
@@ -355,22 +372,19 @@ const NavBar = () => {
       id: 5,
       title: "navbar_rights",
       description: "navbar_rights_description",
-      icon:
-        tabValue === 0 && drawerValue === 4 ? (
-          <VideoRightsIcon
-            width="45px"
-            height="45px"
-            style={{ fill: "#00926c" }}
-            title="Video rights"
-          />
-        ) : (
-          <VideoRightsIcon
-            width="45px"
-            height="45px"
-            style={{ fill: "#4c4c4c" }}
-            title={keyword("navbar_rights")}
-          />
-        ),
+      icon: (
+        <SvgIcon
+          component={VideoRightsIcon}
+          sx={{
+            fill:
+              topMenuItemSelectedId === 0 && sideMenuItemSelectedId === 4
+                ? "#00926c"
+                : "#4c4c4c",
+            fontSize: "24px",
+          }}
+          inheritViewBox
+        />
+      ),
       iconColored: (
         <VideoRightsIcon
           width="45px"
@@ -379,11 +393,10 @@ const NavBar = () => {
           title={keyword("navbar_rights")}
         />
       ),
-      tsvPrefix: "copyright",
+
       path: "copyright",
-      pathGroup: "TOOL",
-      type: keyword("navbar_category_video"),
-      typeId: 1,
+      type: TOOLS_CATEGORIES.VIDEO,
+
       icons: [],
       toolRestrictions: [],
     },
@@ -392,22 +405,19 @@ const NavBar = () => {
       id: 6,
       title: "navbar_metadata",
       description: "navbar_metadata_description",
-      icon:
-        tabValue === 0 && drawerValue === 5 ? (
-          <MetadataIcon
-            width="45px"
-            height="45px"
-            style={{ fill: "#00926c" }}
-            title="Metadata"
-          />
-        ) : (
-          <MetadataIcon
-            width="45px"
-            height="45px"
-            style={{ fill: "#4c4c4c" }}
-            title={keyword("navbar_metadata")}
-          />
-        ),
+      icon: (
+        <SvgIcon
+          component={MetadataIcon}
+          sx={{
+            fill:
+              topMenuItemSelectedId === 0 && sideMenuItemSelectedId === 5
+                ? "#00926c"
+                : "#4c4c4c",
+            fontSize: "24px",
+          }}
+          inheritViewBox
+        />
+      ),
       iconColored: (
         <MetadataIcon
           width="45px"
@@ -416,11 +426,10 @@ const NavBar = () => {
           title={keyword("navbar_metadata")}
         />
       ),
-      tsvPrefix: "metadata",
+
       path: "metadata",
-      pathGroup: "TOOL",
-      type: keyword("navbar_category_video"),
-      typeId: 1,
+      type: TOOLS_CATEGORIES.VIDEO,
+
       icons: [],
       toolRestrictions: [],
     },
@@ -429,22 +438,19 @@ const NavBar = () => {
       id: 7,
       title: "navbar_deepfake_video",
       description: "navbar_deepfake_video_description",
-      icon:
-        tabValue === 0 && drawerValue === 6 ? (
-          <DeepfakeIcon
-            width="45px"
-            height="45px"
-            style={{ fill: "#00926c" }}
-            title="Twitter SNA"
-          />
-        ) : (
-          <DeepfakeIcon
-            width="45px"
-            height="45px"
-            style={{ fill: "#4c4c4c" }}
-            title={keyword("navbar_deepfake_video")}
-          />
-        ),
+      icon: (
+        <SvgIcon
+          component={DeepfakeIcon}
+          sx={{
+            fill:
+              topMenuItemSelectedId === 0 && sideMenuItemSelectedId === 6
+                ? "#00926c"
+                : "#4c4c4c",
+            fontSize: "24px",
+          }}
+          inheritViewBox
+        />
+      ),
       iconColored: (
         <DeepfakeIcon
           width="45px"
@@ -453,35 +459,32 @@ const NavBar = () => {
           title={keyword("navbar_deepfake_video")}
         />
       ),
-      tsvPrefix: "deepfake",
+
       path: "deepfakeVideo",
-      pathGroup: "TOOL",
-      type: keyword("navbar_category_video"),
-      typeId: 1,
-      icons: ["experimental", "lock"],
-      toolRestrictions: ["BETA_TESTER"],
+      type: TOOLS_CATEGORIES.VIDEO,
+
+      icons: [TOOL_STATUS_ICON.EXPERIMENTAL, TOOL_STATUS_ICON.LOCK],
+      toolRestrictions: [TOOL_RESTRICTIONS.BETA_TESTER],
     },
 
     {
       id: 8,
       title: "navbar_analysis_image",
       description: "navbar_analysis_image_description",
-      icon:
-        tabValue === 0 && drawerValue === 7 ? (
-          <AnalysisIconImage
-            width="45px"
-            height="45px"
-            style={{ fill: "#00926c" }}
-            title="Image analysis"
-          />
-        ) : (
-          <AnalysisIconImage
-            width="45px"
-            height="45px"
-            style={{ fill: "#4c4c4c" }}
-            title={keyword("navbar_analysis_image")}
-          />
-        ),
+      icon: (
+        <SvgIcon
+          component={AnalysisIconImage}
+          sx={{
+            fill:
+              topMenuItemSelectedId === 0 && sideMenuItemSelectedId === 7
+                ? "#00926c"
+                : "#4c4c4c",
+            fontSize: "24px",
+          }}
+          inheritViewBox
+        />
+      ),
+
       iconColored: (
         <AnalysisIconImage
           width="45px"
@@ -490,11 +493,10 @@ const NavBar = () => {
           title={keyword("navbar_analysis_image")}
         />
       ),
-      tsvPrefix: "api",
+
       path: "analysisImage",
-      pathGroup: "TOOL",
-      type: keyword("navbar_category_image"),
-      typeId: 2,
+      type: TOOLS_CATEGORIES.IMAGE,
+
       icons: [],
       toolRestrictions: [],
     },
@@ -502,22 +504,20 @@ const NavBar = () => {
       id: 9,
       title: "navbar_magnifier",
       description: "navbar_magnifier_description",
-      icon:
-        tabValue === 0 && drawerValue === 8 ? (
-          <MagnifierIcon
-            width="45px"
-            height="45px"
-            style={{ fill: "#00926c" }}
-            title="Magnifier"
-          />
-        ) : (
-          <MagnifierIcon
-            width="45px"
-            height="45px"
-            style={{ fill: "#4c4c4c" }}
-            title={keyword("navbar_magnifier")}
-          />
-        ),
+      icon: (
+        <SvgIcon
+          component={MagnifierIcon}
+          sx={{
+            fill:
+              topMenuItemSelectedId === 0 && sideMenuItemSelectedId === 8
+                ? "#00926c"
+                : "#4c4c4c",
+            fontSize: "24px",
+          }}
+          inheritViewBox
+        />
+      ),
+
       iconColored: (
         <MagnifierIcon
           width="45px"
@@ -526,11 +526,10 @@ const NavBar = () => {
           title={keyword("navbar_magnifier")}
         />
       ),
-      tsvPrefix: "magnifier",
+
       path: "magnifier",
-      pathGroup: "TOOL",
-      type: keyword("navbar_category_image"),
-      typeId: 2,
+      type: TOOLS_CATEGORIES.IMAGE,
+
       icons: [],
       toolRestrictions: [],
     },
@@ -538,22 +537,20 @@ const NavBar = () => {
       id: 10,
       title: "navbar_metadata",
       description: "navbar_metadata_description",
-      icon:
-        tabValue === 0 && drawerValue === 9 ? (
-          <MetadataIcon
-            width="45px"
-            height="45px"
-            style={{ fill: "#00926c" }}
-            title="Metadata"
-          />
-        ) : (
-          <MetadataIcon
-            width="45px"
-            height="45px"
-            style={{ fill: "#4c4c4c" }}
-            title={keyword("navbar_metadata")}
-          />
-        ),
+      icon: (
+        <SvgIcon
+          component={MetadataIcon}
+          sx={{
+            fill:
+              topMenuItemSelectedId === 0 && sideMenuItemSelectedId === 9
+                ? "#00926c"
+                : "#4c4c4c",
+            fontSize: "24px",
+          }}
+          inheritViewBox
+        />
+      ),
+
       iconColored: (
         <MetadataIcon
           width="45px"
@@ -562,11 +559,10 @@ const NavBar = () => {
           title={keyword("navbar_metadata")}
         />
       ),
-      tsvPrefix: "metadata",
+
       path: "metadata_image",
-      pathGroup: "TOOL",
-      type: keyword("navbar_category_image"),
-      typeId: 2,
+      type: TOOLS_CATEGORIES.IMAGE,
+
       icons: [],
       toolRestrictions: [],
     },
@@ -575,22 +571,19 @@ const NavBar = () => {
       id: 11,
       title: "navbar_forensic",
       description: "navbar_forensic_description",
-      icon:
-        tabValue === 0 && drawerValue === 10 ? (
-          <ForensicIcon
-            width="45px"
-            height="45px"
-            style={{ fill: "#00926c" }}
-            title="Forensic"
-          />
-        ) : (
-          <ForensicIcon
-            width="45px"
-            height="45px"
-            style={{ fill: "#4c4c4c" }}
-            title={keyword("navbar_forensic")}
-          />
-        ),
+      icon: (
+        <SvgIcon
+          component={ForensicIcon}
+          sx={{
+            fill:
+              topMenuItemSelectedId === 0 && sideMenuItemSelectedId === 10
+                ? "#00926c"
+                : "#4c4c4c",
+            fontSize: "24px",
+          }}
+          inheritViewBox
+        />
+      ),
       iconColored: (
         <ForensicIcon
           width="45px"
@@ -599,11 +592,10 @@ const NavBar = () => {
           title={keyword("navbar_forensic")}
         />
       ),
-      tsvPrefix: "forensic",
+
       path: "forensic",
-      pathGroup: "TOOL",
-      type: keyword("navbar_category_image"),
-      typeId: 2,
+      type: TOOLS_CATEGORIES.IMAGE,
+
       icons: [],
       toolRestrictions: [],
     },
@@ -611,22 +603,19 @@ const NavBar = () => {
       id: 12,
       title: "navbar_ocr",
       description: "navbar_ocr_description",
-      icon:
-        tabValue === 0 && drawerValue === 11 ? (
-          <OcrIcon
-            width="45px"
-            height="45px"
-            style={{ fill: "#00926c" }}
-            title="OCR"
-          />
-        ) : (
-          <OcrIcon
-            width="45px"
-            height="45px"
-            style={{ fill: "#4c4c4c" }}
-            title={keyword("navbar_ocr")}
-          />
-        ),
+      icon: (
+        <SvgIcon
+          component={OcrIcon}
+          sx={{
+            fill:
+              topMenuItemSelectedId === 0 && sideMenuItemSelectedId === 11
+                ? "#00926c"
+                : "#4c4c4c",
+            fontSize: "24px",
+          }}
+          inheritViewBox
+        />
+      ),
       iconColored: (
         <OcrIcon
           width="45px"
@@ -635,11 +624,10 @@ const NavBar = () => {
           title={keyword("navbar_ocr")}
         />
       ),
-      tsvPrefix: "ocr",
+
       path: "ocr",
-      pathGroup: "TOOL",
-      type: keyword("navbar_category_image"),
-      typeId: 2,
+      type: TOOLS_CATEGORIES.IMAGE,
+
       icons: [],
       toolRestrictions: [],
     },
@@ -648,22 +636,19 @@ const NavBar = () => {
       id: 13,
       title: "navbar_gif",
       description: "navbar_gif_description",
-      icon:
-        tabValue === 0 && drawerValue === 12 ? (
-          <GifIcon
-            width="45px"
-            height="45px"
-            style={{ fill: "#00926c" }}
-            title="CheckGIF"
-          />
-        ) : (
-          <GifIcon
-            width="45px"
-            height="45px"
-            style={{ fill: "#4c4c4c" }}
-            title={keyword("navbar_gif")}
-          />
-        ),
+      icon: (
+        <SvgIcon
+          component={GifIcon}
+          sx={{
+            fill:
+              topMenuItemSelectedId === 0 && sideMenuItemSelectedId === 12
+                ? "#00926c"
+                : "#4c4c4c",
+            fontSize: "24px",
+          }}
+          inheritViewBox
+        />
+      ),
       iconColored: (
         <GifIcon
           width="45px"
@@ -672,55 +657,56 @@ const NavBar = () => {
           title={keyword("navbar_gif")}
         />
       ),
-      tsvPrefix: "gif",
+
       path: "gif",
-      pathGroup: "TOOL",
-      type: keyword("navbar_category_image"),
-      typeId: 2,
-      icons: ["lock"],
-      toolRestrictions: ["lock"],
+      type: TOOLS_CATEGORIES.IMAGE,
+
+      icons: [TOOL_STATUS_ICON.LOCK],
+      toolRestrictions: [TOOL_RESTRICTIONS.LOCK],
     },
     {
       id: 14,
       title: "navbar_synthetic_image_detection",
       description: "navbar_synthetic_image_detection_description",
-      icon:
-        tabValue === 0 && drawerValue === 13 ? (
-          <Gradient width="45px" height="45px" style={{ fill: "#00926c" }} />
-        ) : (
-          <Gradient width="45px" height="45px" style={{ fill: "#4c4c4c" }} />
-        ),
-      iconColored: (
-        <Gradient width="45px" height="45px" style={{ fill: "#00926c" }} />
+      icon: (
+        <Gradient
+          style={{
+            fill:
+              topMenuItemSelectedId === 0 && sideMenuItemSelectedId === 13
+                ? "#00926c"
+                : "#4c4c4c",
+          }}
+        />
       ),
-      tsvPrefix: "synthetic_image_detection",
+      iconColored: <Gradient style={{ fill: "#00926c" }} />,
+
       path: "syntheticImageDetection",
-      pathGroup: "TOOL",
-      type: keyword("navbar_category_image"),
-      typeId: 2,
-      icons: ["new", "experimental", "lock"],
-      toolRestrictions: ["BETA_TESTER"],
+      type: TOOLS_CATEGORIES.IMAGE,
+
+      icons: [
+        TOOL_STATUS_ICON.NEW,
+        TOOL_STATUS_ICON.EXPERIMENTAL,
+        TOOL_STATUS_ICON.LOCK,
+      ],
+      toolRestrictions: [TOOL_RESTRICTIONS.BETA_TESTER],
     },
     {
       id: 15,
       title: "navbar_deepfake_image",
       description: "navbar_deepfake_image_description",
-      icon:
-        tabValue === 0 && drawerValue === 14 ? (
-          <DeepfakeIcon
-            width="45px"
-            height="45px"
-            style={{ fill: "#00926c" }}
-            title="Twitter SNA"
-          />
-        ) : (
-          <DeepfakeIcon
-            width="45px"
-            height="45px"
-            style={{ fill: "#4c4c4c" }}
-            title={keyword("navbar_deepfake_image")}
-          />
-        ),
+      icon: (
+        <SvgIcon
+          component={DeepfakeIcon}
+          sx={{
+            fill:
+              topMenuItemSelectedId === 0 && sideMenuItemSelectedId === 14
+                ? "#00926c"
+                : "#4c4c4c",
+            fontSize: "24px",
+          }}
+          inheritViewBox
+        />
+      ),
       iconColored: (
         <DeepfakeIcon
           width="45px"
@@ -729,107 +715,96 @@ const NavBar = () => {
           title={keyword("navbar_deepfake_image")}
         />
       ),
-      tsvPrefix: "deepfake",
+
       path: "deepfakeImage",
-      pathGroup: "TOOL",
-      type: keyword("navbar_category_image"),
-      typeId: 2,
-      icons: ["experimental", "lock"],
-      toolRestrictions: ["BETA_TESTER"],
+      type: TOOLS_CATEGORIES.IMAGE,
+
+      icons: [TOOL_STATUS_ICON.EXPERIMENTAL, TOOL_STATUS_ICON.LOCK],
+      toolRestrictions: [TOOL_RESTRICTIONS.BETA_TESTER],
     },
     {
       id: 16,
       title: "navbar_geolocation",
       description: "navbar_geolocation_description",
-      icon:
-        tabValue === 0 && drawerValue === 15 ? (
-          <GeolactionIcon
-            width="45px"
-            height="45px"
-            style={{ fill: "#00926c" }}
-            title="Twitter SNA"
-          />
-        ) : (
-          <GeolactionIcon
-            width="45px"
-            height="45px"
-            style={{ fill: "#4c4c4c" }}
-            title={keyword("navbar_geolocation")}
-          />
-        ),
+      icon: (
+        <SvgIcon
+          component={GeolocationIcon}
+          sx={{
+            fill:
+              topMenuItemSelectedId === 0 && sideMenuItemSelectedId === 15
+                ? "#00926c"
+                : "#4c4c4c",
+            fontSize: "24px",
+          }}
+          inheritViewBox
+        />
+      ),
       iconColored: (
-        <GeolactionIcon
+        <GeolocationIcon
           width="45px"
           height="45px"
           style={{ fill: "#00926c" }}
           title={keyword("navbar_geolocation")}
         />
       ),
-      tsvPrefix: "geolocation",
+
       path: "geolocation",
-      pathGroup: "TOOL",
-      type: keyword("navbar_category_image"),
-      typeId: 2,
-      icons: ["experimental", "lock"],
-      toolRestrictions: ["BETA_TESTER"],
+      type: TOOLS_CATEGORIES.IMAGE,
+
+      icons: [TOOL_STATUS_ICON.EXPERIMENTAL, TOOL_STATUS_ICON.LOCK],
+      toolRestrictions: [TOOL_RESTRICTIONS.BETA_TESTER],
     },
     {
       id: 17,
       title: "navbar_loccus",
       description: "navbar_loccus_description",
-      icon:
-        tabValue === 0 && drawerValue === 16 ? (
-          <AudioFile
-            width="45px"
-            height="45px"
-            style={{ fill: "#00926c" }}
-            title="Loccus"
-          />
-        ) : (
-          <AudioFile
-            width="45px"
-            height="45px"
-            style={{ fill: "#4c4c4c" }}
-            title={keyword("navbar_loccus")}
-          />
-        ),
+      icon: (
+        <AudioFile
+          style={{
+            fill:
+              topMenuItemSelectedId === 0 && sideMenuItemSelectedId === 16
+                ? "#00926c"
+                : "#4c4c4c",
+          }}
+          title={keyword("navbar_loccus")}
+        />
+      ),
       iconColored: (
         <AudioFile
-          width="45px"
-          height="45px"
           style={{ fill: "#00926c" }}
           title={keyword("navbar_loccus")}
         />
       ),
-      tsvPrefix: "loccus_detection",
+
       path: "loccus",
-      pathGroup: "TOOL",
-      type: keyword("navbar_category_audio"),
-      typeId: 3,
-      icons: ["new", "experimental", "lock"],
-      toolRestrictions: ["BETA_TESTER"],
+      type: TOOLS_CATEGORIES.AUDIO,
+
+      icons: [
+        TOOL_STATUS_ICON.NEW,
+        TOOL_STATUS_ICON.EXPERIMENTAL,
+        TOOL_STATUS_ICON.LOCK,
+      ],
+      toolRestrictions: [TOOL_RESTRICTIONS.BETA_TESTER],
     },
 
     {
       id: 18,
       title: "navbar_twitter",
       description: "navbar_twitter_description",
-      icon:
-        tabValue === 0 && drawerValue === 17 ? (
-          <TwitterSearchIcon
-            width="45px"
-            height="45px"
-            style={{ fill: "#00926c" }}
-            title="Twitter search"
-          />
-        ) : (
-          <TwitterSearchIcon
-            width="45px"
-            height="45px"
-            style={{ fill: "#4c4c4c" }}
-            title={keyword("navbar_twitter")}
-          />
-        ),
+      icon: (
+        <SvgIcon
+          component={TwitterSearchIcon}
+          sx={{
+            fill:
+              topMenuItemSelectedId === 0 && sideMenuItemSelectedId === 17
+                ? "#00926c"
+                : "#4c4c4c",
+            fontSize: "24px",
+          }}
+          inheritViewBox
+        />
+      ),
+
       iconColored: (
         <TwitterSearchIcon
           width="45px"
@@ -838,11 +813,10 @@ const NavBar = () => {
           title={keyword("navbar_twitter")}
         />
       ),
-      tsvPrefix: "twitter",
+
       path: "twitter",
-      pathGroup: "TOOL",
-      type: keyword("navbar_category_search"),
-      typeId: 4,
+      type: TOOLS_CATEGORIES.SEARCH,
+
       icons: [],
       toolRestrictions: [],
     },
@@ -850,22 +824,17 @@ const NavBar = () => {
       id: 19,
       title: "navbar_semantic_search",
       description: "navbar_semantic_search_description",
-      icon:
-        tabValue === 0 && drawerValue === 18 ? (
-          <ManageSearch
-            width="45px"
-            height="45px"
-            style={{ fill: "#00926c" }}
-            title={keyword("navbar_semantic_search")}
-          />
-        ) : (
-          <ManageSearch
-            width="45px"
-            height="45px"
-            style={{ fill: "#4c4c4c" }}
-            title={keyword("navbar_semantic_search")}
-          />
-        ),
+      icon: (
+        <ManageSearch
+          style={{
+            fill:
+              topMenuItemSelectedId === 0 && sideMenuItemSelectedId === 18
+                ? "#00926c"
+                : "#4c4c4c",
+          }}
+          title={keyword("navbar_semantic_search")}
+        />
+      ),
       iconColored: (
         <ManageSearch
           width="45px"
@@ -874,34 +843,34 @@ const NavBar = () => {
           title={keyword("navbar_semantic_search")}
         />
       ),
-      tsvPrefix: "semantic_search",
+
       path: "semanticSearch",
-      pathGroup: "TOOL",
-      type: keyword("navbar_category_search"),
-      typeId: 4,
-      icons: ["experimental", "new", "lock"],
-      toolRestrictions: ["lock"],
+      type: TOOLS_CATEGORIES.SEARCH,
+
+      icons: [
+        TOOL_STATUS_ICON.EXPERIMENTAL,
+        TOOL_STATUS_ICON.NEW,
+        TOOL_STATUS_ICON.LOCK,
+      ],
+      toolRestrictions: [TOOL_RESTRICTIONS.LOCK],
     },
     {
       id: 20,
       title: "navbar_twitter_sna",
       description: "navbar_twitter_sna_description",
-      icon:
-        tabValue === 0 && drawerValue === 19 ? (
-          <TwitterSnaIcon
-            width="45px"
-            height="45px"
-            style={{ fill: "#00926c" }}
-            title="Twitter SNA"
-          />
-        ) : (
-          <TwitterSnaIcon
-            width="45px"
-            height="45px"
-            style={{ fill: "#4c4c4c" }}
-            title={keyword("navbar_twitter_sna")}
-          />
-        ),
+      icon: (
+        <SvgIcon
+          component={TwitterSnaIcon}
+          sx={{
+            fill:
+              topMenuItemSelectedId === 0 && sideMenuItemSelectedId === 19
+                ? "#00926c"
+                : "#4c4c4c",
+            fontSize: "24px",
+          }}
+          inheritViewBox
+        />
+      ),
       iconColored: (
         <TwitterSnaIcon
           width="45px"
@@ -910,55 +879,57 @@ const NavBar = () => {
           title={keyword("navbar_twitter_sna")}
         />
       ),
-      tsvPrefix: "twitter_sna",
+
       path: "twitterSna",
-      pathGroup: "TOOL",
-      type: keyword("navbar_category_data"),
-      typeId: 5,
-      icons: ["lock"],
-      toolRestrictions: ["lock"],
+      type: TOOLS_CATEGORIES.DATA_ANALYSIS,
+
+      icons: [TOOL_STATUS_ICON.LOCK],
+      toolRestrictions: [TOOL_RESTRICTIONS.LOCK],
     },
     {
       id: 21,
       title: "navbar_archiving",
       description: "navbar_archiving_description",
-      icon:
-        tabValue === 0 && drawerValue === 20 ? (
-          <ArchiveIcon width="45px" height="45px" style={{ fill: "#00926c" }} />
-        ) : (
-          <ArchiveIcon width="45px" height="45px" style={{ fill: "#4c4c4c" }} />
-        ),
-      iconColored: (
-        <ArchiveIcon width="45px" height="45px" style={{ fill: "#00926c" }} />
+      icon: (
+        <Archive
+          style={{
+            fill:
+              topMenuItemSelectedId === 0 && sideMenuItemSelectedId === 20
+                ? "#00926c"
+                : "#4c4c4c",
+          }}
+        />
       ),
-      tsvPrefix: "archiving",
+
+      iconColored: <Archive style={{ fill: "#00926c" }} />,
+
       path: "archive",
-      pathGroup: "TOOL",
-      type: keyword("navbar_category_other"),
-      typeId: 6,
-      icons: ["experimental", "new", "lock"],
-      toolRestrictions: ["ARCHIVE"],
+      type: TOOLS_CATEGORIES.OTHER,
+
+      icons: [
+        TOOL_STATUS_ICON.EXPERIMENTAL,
+        TOOL_STATUS_ICON.NEW,
+        TOOL_STATUS_ICON.LOCK,
+      ],
+      toolRestrictions: [TOOL_RESTRICTIONS.ARCHIVE],
     },
     {
       id: 22,
       title: "navbar_twitter_crowdtangle",
       description: "navbar_twitter_crowdtangle_description",
-      icon:
-        tabValue === 0 && drawerValue === 21 ? (
-          <CsvSnaIcon
-            width="45px"
-            height="45px"
-            style={{ fill: "#00926c" }}
-            title="Twitter SNA"
-          />
-        ) : (
-          <CsvSnaIcon
-            width="45px"
-            height="45px"
-            style={{ fill: "#4c4c4c" }}
-            title={keyword("navbar_twitter_crowdtangle")}
-          />
-        ),
+      icon: (
+        <SvgIcon
+          component={CsvSnaIcon}
+          sx={{
+            fill:
+              topMenuItemSelectedId === 0 && sideMenuItemSelectedId === 21
+                ? "#00926c"
+                : "#4c4c4c",
+            fontSize: "24px",
+          }}
+          inheritViewBox
+        />
+      ),
       iconColored: (
         <CsvSnaIcon
           width="45px"
@@ -967,11 +938,10 @@ const NavBar = () => {
           title={keyword("navbar_twitter_crowdtangle")}
         />
       ),
-      tsvPrefix: "twitter_crowdtangle",
+
       path: "csvSna",
-      pathGroup: "TOOL",
-      type: keyword("navbar_category_data"),
-      typeId: 5,
+      type: TOOLS_CATEGORIES.DATA_ANALYSIS,
+
       icons: [],
       toolRestrictions: [],
     },
@@ -979,22 +949,19 @@ const NavBar = () => {
       id: 23,
       title: "navbar_covidsearch",
       description: "navbar_covidsearch_description",
-      icon:
-        tabValue === 0 && drawerValue === 22 ? (
-          <CovidSearchIcon
-            width="45px"
-            height="45px"
-            style={{ fill: "#00926c" }}
-            title="Covid search"
-          />
-        ) : (
-          <CovidSearchIcon
-            width="45px"
-            height="45px"
-            style={{ fill: "#4c4c4c" }}
-            title={keyword("navbar_covidsearch")}
-          />
-        ),
+      icon: (
+        <SvgIcon
+          component={CovidSearchIcon}
+          sx={{
+            fill:
+              topMenuItemSelectedId === 0 && sideMenuItemSelectedId === 22
+                ? "#00926c"
+                : "#4c4c4c",
+            fontSize: "24px",
+          }}
+          inheritViewBox
+        />
+      ),
       iconColored: (
         <CovidSearchIcon
           width="45px"
@@ -1003,11 +970,10 @@ const NavBar = () => {
           title={keyword("navbar_covidsearch")}
         />
       ),
-      tsvPrefix: "covidsearch",
+
       path: "factcheck",
-      pathGroup: "TOOL",
-      type: keyword("navbar_category_search"),
-      typeId: 4,
+      type: TOOLS_CATEGORIES.SEARCH,
+
       icons: [],
       toolRestrictions: [],
     },
@@ -1015,22 +981,19 @@ const NavBar = () => {
       id: 24,
       title: "navbar_xnetwork",
       description: "navbar_xnetwork_description",
-      icon:
-        tabValue === 0 && drawerValue === 23 ? (
-          <XnetworkIcon
-            width="45px"
-            height="45px"
-            style={{ fill: "#00926c" }}
-            title="Xnetwork"
-          />
-        ) : (
-          <XnetworkIcon
-            width="45px"
-            height="45px"
-            style={{ fill: "#4c4c4c" }}
-            title={keyword("navbar_xnetwork")}
-          />
-        ),
+      icon: (
+        <SvgIcon
+          component={XnetworkIcon}
+          sx={{
+            fill:
+              topMenuItemSelectedId === 0 && sideMenuItemSelectedId === 23
+                ? "#00926c"
+                : "#4c4c4c",
+            fontSize: "24px",
+          }}
+          inheritViewBox
+        />
+      ),
       iconColored: (
         <XnetworkIcon
           width="45px"
@@ -1039,135 +1002,123 @@ const NavBar = () => {
           title={keyword("navbar_xnetwork")}
         />
       ),
-      tsvPrefix: "xnetwork",
+
       path: "xnetwork",
-      pathGroup: "TOOL",
-      type: keyword("navbar_category_search"),
-      typeId: 4,
+      type: TOOLS_CATEGORIES.SEARCH,
+
       icons: [],
       toolRestrictions: [],
     },
   ];
 
-  const tabItems = [
+  const topMenuItems = [
     {
       title: "navbar_tools",
-      icon:
-        tabValue === 0 && drawerValue === 0 ? (
-          <ToolsIcon width="30px" height="30px" style={{ fill: "#00926c" }} />
-        ) : (
-          <ToolsIcon width="30px" height="30px" style={{ fill: "#4c4c4c" }} />
-        ),
-      content: <div />,
+      icon: (
+        <SvgIcon
+          component={ToolsIcon}
+          sx={{
+            fill: topMenuItemSelectedId === 0 ? "#00926c" : "#4c4c4c",
+            fontSize: "24px",
+          }}
+          inheritViewBox
+        />
+      ),
+      content: <Box />,
       path: "tools",
-      pathGroup: "OTHER",
-      footer: <div />,
+      footer: <Box />,
       typeTab: "verification",
-      type: keyword("navbar_category_general"),
-      typeId: 0,
+      type: TOOLS_CATEGORIES.ALL,
     },
     {
       title: "navbar_assistant",
-      icon:
-        tabValue === 1 ? (
-          <AssistantIcon
-            width="30px"
-            height="30px"
-            style={{ fill: "#00926c" }}
-          />
-        ) : (
-          <AssistantIcon
-            width="30px"
-            height="30px"
-            style={{ fill: "#4c4c4c" }}
-          />
-        ),
+      icon: (
+        <SvgIcon
+          component={AssistantIcon}
+          sx={{
+            fill: topMenuItemSelectedId === 1 ? "#00926c" : "#4c4c4c",
+            fontSize: "24px",
+          }}
+          inheritViewBox
+        />
+      ),
+
       content: <Assistant />,
       path: "assistant",
-      pathGroup: "OTHER",
-      footer: <Footer type={"usfd"} />,
+      footer: <Footer type={FOOTER_TYPES.USFD} />,
       typeTab: "verification",
-      type: keyword("navbar_category_general"),
-      typeId: 0,
+      type: TOOLS_CATEGORIES.ALL,
     },
     {
       title: "navbar_tuto",
-      icon:
-        tabValue === 2 ? (
-          <GuideIcon width="30px" height="30px" style={{ fill: "#00926c" }} />
-        ) : (
-          <GuideIcon width="30px" height="30px" style={{ fill: "#4c4c4c" }} />
-        ),
+      icon: (
+        <SvgIcon
+          component={GuideIcon}
+          sx={{
+            fill: topMenuItemSelectedId === 2 ? "#00926c" : "#4c4c4c",
+            fontSize: "24px",
+          }}
+          inheritViewBox
+        />
+      ),
       content: <Tutorial />,
       path: "tutorial",
-      pathGroup: "OTHER",
-      footer: <Footer type={"afp"} />,
+      footer: <Footer type={FOOTER_TYPES.AFP} />,
       typeTab: "learning",
-      type: keyword("navbar_category_general"),
-      typeId: 0,
+      type: TOOLS_CATEGORIES.ALL,
     },
     {
       title: "navbar_quiz",
-      icon:
-        tabValue === 3 ? (
-          <InteractiveIcon
-            width="30px"
-            height="30px"
-            style={{ fill: "#00926c" }}
-          />
-        ) : (
-          <InteractiveIcon
-            width="30px"
-            height="30px"
-            style={{ fill: "#4c4c4c" }}
-          />
-        ),
+      icon: (
+        <SvgIcon
+          component={InteractiveIcon}
+          sx={{
+            fill: topMenuItemSelectedId === 3 ? "#00926c" : "#4c4c4c",
+            fontSize: "24px",
+          }}
+          inheritViewBox
+        />
+      ),
       content: <Interactive />,
       path: "interactive",
-      pathGroup: "OTHER",
-      footer: <Footer type={"afp"} />,
+      footer: <Footer type={FOOTER_TYPES.AFP} />,
       typeTab: "learning",
-      type: keyword("navbar_category_general"),
-      typeId: 0,
+      type: TOOLS_CATEGORIES.ALL,
     },
     {
       title: "navbar_classroom",
-      icon:
-        tabValue === 4 ? (
-          <ClassroomIcon
-            width="30px"
-            height="30px"
-            style={{ fill: "#00926c" }}
-          />
-        ) : (
-          <ClassroomIcon
-            width="30px"
-            height="30px"
-            style={{ fill: "#4c4c4c" }}
-          />
-        ),
+      icon: (
+        <SvgIcon
+          component={ClassroomIcon}
+          sx={{
+            fill: topMenuItemSelectedId === 4 ? "#00926c" : "#4c4c4c",
+            fontSize: "24px",
+          }}
+          inheritViewBox
+        />
+      ),
       content: <ClassRoom />,
       path: "classroom",
-      pathGroup: "OTHER",
-      footer: <Footer type={"afp"} />,
+      footer: <Footer type={FOOTER_TYPES.AFP} />,
       typeTab: "learning",
-      type: keyword("navbar_category_general"),
-      typeId: 0,
+      type: TOOLS_CATEGORIES.ALL,
     },
     {
       title: "navbar_about",
-      icon:
-        tabValue === 5 ? (
-          <AboutIcon width="30px" height="30px" style={{ fill: "#00926c" }} />
-        ) : (
-          <AboutIcon width="30px" height="30px" style={{ fill: "#4c4c4c" }} />
-        ),
+      icon: (
+        <SvgIcon
+          component={AboutIcon}
+          sx={{
+            fill: topMenuItemSelectedId === 5 ? "#00926c" : "#4c4c4c",
+            fontSize: "24px",
+          }}
+          inheritViewBox
+        />
+      ),
       content: <About />,
       path: "about",
-      pathGroup: "OTHER",
-      footer: <Footer type={"afp"} />,
+      footer: <Footer type={FOOTER_TYPES.AFP} />,
       typeTab: "more",
-      typeId: 0,
     },
   ];
 
@@ -1193,29 +1144,29 @@ const NavBar = () => {
 
   useEffect(() => {
     //select tool category
-    switch (drawerItems[drawerValue].typeId) {
-      case 1:
+    switch (sideMenuItems[sideMenuItemSelectedId].type) {
+      case TOOLS_CATEGORIES.VIDEO:
         setOpenListVideo(true);
         break;
-      case 2:
+      case TOOLS_CATEGORIES.IMAGE:
         setOpenListImage(true);
         break;
-      case 3:
+      case TOOLS_CATEGORIES.AUDIO:
         setOpenListAudio(true);
         break;
-      case 4:
+      case TOOLS_CATEGORIES.SEARCH:
         setOpenListSeach(true);
         break;
-      case 5:
+      case TOOLS_CATEGORIES.DATA_ANALYSIS:
         setOpenListData(true);
         break;
-      case 6:
+      case TOOLS_CATEGORIES.OTHER:
         setOpenListOtherTools(true);
         break;
       default:
         break;
     }
-  }, [drawerValue]);
+  }, [sideMenuItemSelectedId]);
 
   const themeFab = createTheme({
     palette: {
@@ -1282,8 +1233,8 @@ const NavBar = () => {
   });
 
   //Video items
-  const drawerItemsVideo = drawerItems.filter(
-    (item) => item.type === keyword("navbar_category_video"),
+  const drawerItemsVideo = sideMenuItems.filter(
+    (item) => item.type === TOOLS_CATEGORIES.VIDEO,
   );
   const [openListVideo, setOpenListVideo] = useState(false);
   const [classBorderVideo, setClassBorderVideo] = useState(null);
@@ -1298,8 +1249,8 @@ const NavBar = () => {
   };
 
   //Image items
-  const drawerItemsImage = drawerItems.filter(
-    (item) => item.type === keyword("navbar_category_image"),
+  const drawerItemsImage = sideMenuItems.filter(
+    (item) => item.type === TOOLS_CATEGORIES.IMAGE,
   );
   const [openListImage, setOpenListImage] = useState(false);
   const [classBorderImage, setClassBorderImage] = useState(null);
@@ -1314,8 +1265,8 @@ const NavBar = () => {
   };
 
   //Audio items
-  const drawerItemsAudio = drawerItems.filter(
-    (item) => item.type === keyword("navbar_category_audio"),
+  const drawerItemsAudio = sideMenuItems.filter(
+    (item) => item.type === TOOLS_CATEGORIES.AUDIO,
   );
   const [openListAudio, setOpenListAudio] = useState(false);
   const [classBorderAudio, setClassBorderAudio] = useState(null);
@@ -1330,8 +1281,8 @@ const NavBar = () => {
   };
 
   //Search items
-  const drawerItemsSearch = drawerItems.filter(
-    (item) => item.type === keyword("navbar_category_search"),
+  const drawerItemsSearch = sideMenuItems.filter(
+    (item) => item.type === TOOLS_CATEGORIES.SEARCH,
   );
   const [openListSeach, setOpenListSeach] = useState(false);
   const [classBorderSearch, setClassBorderSearch] = useState(null);
@@ -1346,8 +1297,8 @@ const NavBar = () => {
   };
 
   //Data items
-  const drawerItemsData = drawerItems.filter(
-    (item) => item.type === keyword("navbar_category_data"),
+  const drawerItemsData = sideMenuItems.filter(
+    (item) => item.type === TOOLS_CATEGORIES.DATA_ANALYSIS,
   );
   const [openListData, setOpenListData] = useState(false);
   const [classBorderData, setClassBorderData] = useState(null);
@@ -1361,8 +1312,8 @@ const NavBar = () => {
     }
   };
 
-  const drawerItemsOtherTools = drawerItems.filter(
-    (item) => item.type === keyword("navbar_category_other"),
+  const drawerItemsOtherTools = sideMenuItems.filter(
+    (item) => item.type === TOOLS_CATEGORIES.OTHER,
   );
   const [openListOtherTools, setOpenListOtherTools] = useState(false);
   const [classBorderOtherTools, setClassBorderOtherTools] = useState(null);
@@ -1380,11 +1331,13 @@ const NavBar = () => {
 
   const tmpListItems = [
     {
-      title: keyword("navbar_category_video"),
+      title: TOOLS_CATEGORIES.VIDEO,
       icon: (
         <VideoIcon
+          width="24px"
+          height="24px"
           style={{ fill: "#4c4c4c" }}
-          title={keyword("navbar_category_video")}
+          title={TOOLS_CATEGORIES.VIDEO}
         />
       ),
       list: drawerItemsVideo,
@@ -1394,11 +1347,13 @@ const NavBar = () => {
       classBorder: classBorderVideo,
     },
     {
-      title: keyword("navbar_category_image"),
+      title: TOOLS_CATEGORIES.IMAGE,
       icon: (
         <ImageIcon
+          width="24px"
+          height="24px"
           style={{ fill: "#4c4c4c" }}
-          title={keyword("navbar_category_image")}
+          title={TOOLS_CATEGORIES.IMAGE}
         />
       ),
       list: drawerItemsImage,
@@ -1408,11 +1363,13 @@ const NavBar = () => {
       classBorder: classBorderImage,
     },
     {
-      title: keyword("navbar_category_audio"),
+      title: TOOLS_CATEGORIES.AUDIO,
       icon: (
         <Audiotrack
+          width="24px"
+          height="24px"
           style={{ fill: "#4c4c4c" }}
-          title={keyword("navbar_category_audio")}
+          title={TOOLS_CATEGORIES.AUDIO}
         />
       ),
       list: drawerItemsAudio,
@@ -1422,11 +1379,13 @@ const NavBar = () => {
       classBorder: classBorderAudio,
     },
     {
-      title: keyword("navbar_category_search"),
+      title: TOOLS_CATEGORIES.SEARCH,
       icon: (
         <SearchIcon
+          width="24px"
+          height="24px"
           style={{ fill: "#4c4c4c" }}
-          title={keyword("navbar_category_search")}
+          title={TOOLS_CATEGORIES.SEARCH}
         />
       ),
       list: drawerItemsSearch,
@@ -1436,11 +1395,13 @@ const NavBar = () => {
       classBorder: classBorderSearch,
     },
     {
-      title: keyword("navbar_category_data"),
+      title: TOOLS_CATEGORIES.DATA_ANALYSIS,
       icon: (
         <DataIcon
+          width="24px"
+          height="24px"
           style={{ fill: "#4c4c4c" }}
-          title={keyword("navbar_category_data")}
+          title={TOOLS_CATEGORIES.DATA_ANALYSIS}
         />
       ),
       list: drawerItemsData,
@@ -1450,8 +1411,8 @@ const NavBar = () => {
       classBorder: classBorderData,
     },
     {
-      title: keyword("navbar_category_other"),
-      icon: <MoreHorizIcon style={{ fill: "#4c4c4c" }} />,
+      title: TOOLS_CATEGORIES.OTHER,
+      icon: <MoreHoriz style={{ fill: "#4c4c4c" }} />,
       list: drawerItemsOtherTools,
       variableOpen: openListOtherTools,
       setVariableOpen: setOpenListOtherTools,
@@ -1473,27 +1434,31 @@ const NavBar = () => {
       ) {
         listItems.push(items);
         break;
-      } else if (listTools[i].toolRestrictions.includes("lock")) {
+      } else if (
+        listTools[i].toolRestrictions.includes(TOOL_STATUS_ICON.LOCK)
+      ) {
         listItems.push(items);
         break;
       }
     }
   });
 
-  const drawItemPerRole = drawerItems.filter((item) => {
+  const drawItemPerRole = sideMenuItems.filter((item) => {
     if (
       item.toolRestrictions.length === 0 ||
-      item.toolRestrictions.includes("lock")
+      item.toolRestrictions.includes(TOOL_STATUS_ICON.LOCK)
     )
       return true;
     if (item.toolRestrictions.some((restriction) => role.includes(restriction)))
       return true;
   });
 
-  const toolsItem = drawerItems.find((data) => data.title === "navbar_tools");
-  //const assistantItem = tabItems.find(data => data.title === 'navbar_assistant');
-  //const drawerItemsLearning = tabItems.filter(item => item.typeTab === "learning");
-  const drawerItemsMore = tabItems.filter((item) => item.typeTab === "more");
+  const toolsItem = sideMenuItems.find((data) => data.title === "navbar_tools");
+  //const assistantItem = topMenuItems.find(data => data.title === 'navbar_assistant');
+  //const drawerItemsLearning = topMenuItems.filter(item => item.typeTab === "learning");
+  const drawerItemsMore = topMenuItems.filter(
+    (item) => item.typeTab === "more",
+  );
 
   //const [value, setValue] = useState(null);
 
@@ -1570,9 +1535,9 @@ const NavBar = () => {
               </Grid>
               <Grid item xs={7}>
                 <Tabs
-                  value={tabValue}
+                  value={topMenuItemSelectedId}
                   variant="scrollable"
-                  onChange={handleChange}
+                  onChange={handleTopMenuChange}
                   scrollButtons="auto"
                   allowScrollButtonsMobile
                   indicatorColor="primary"
@@ -1583,7 +1548,7 @@ const NavBar = () => {
                   }}
                   sx={{ color: "black" }}
                 >
-                  {tabItems.map((item, index) => {
+                  {topMenuItems.map((item, index) => {
                     return (
                       <Tab
                         key={index}
@@ -1611,22 +1576,21 @@ const NavBar = () => {
         <Drawer
           variant="permanent"
           className={clsx(classes.drawer, {
-            [classes.drawerOpen]: open,
-            [classes.drawerClose]: !open,
+            [classes.drawerOpen]: isSideMenuOpen,
+            [classes.drawerClose]: !isSideMenuOpen,
           })}
           classes={{
             paper: clsx({
-              [classes.drawerOpen]: open,
-              [classes.drawerClose]: !open,
+              [classes.drawerOpen]: isSideMenuOpen,
+              [classes.drawerClose]: !isSideMenuOpen,
             }),
           }}
           ref={drawerRef}
-          open={open}
+          open={isSideMenuOpen}
         >
           <List
             style={{
               marginTop: "80px",
-              paddingLeft: "4px",
             }}
           >
             <ListSubheader
@@ -1645,144 +1609,146 @@ const NavBar = () => {
                   textTransform: "uppercase",
                 }}
               >
-                {open
+                {isSideMenuOpen
                   ? keyword("navbar_verification")
                   : keyword("navbar_verification_short")}
               </Typography>
             </ListSubheader>
-            <ListItem
-              button
+            <ListItemButton
+              selected={
+                topMenuItemSelectedId === 0 && sideMenuItemSelectedId === 0
+              }
               onClick={() => changeValue(toolsItem, "TOOL")}
               component={Link}
               to={"tools"}
             >
-              <ListItemIcon
-                color="primary.main"
-                sx={{
-                  marginRight: "12px",
-                  minWidth: "unset",
-                }}
-              >
-                {
-                  <IconButton
-                    className={classes.customAllToolsButton}
-                    sx={{ width: 24, height: 24 }}
+              {isSideMenuOpen ? (
+                <>
+                  <ListItemIcon
+                    sx={{
+                      marginRight: "12px",
+                      minWidth: "unset",
+                    }}
                   >
                     {toolsItem.icon}
-                  </IconButton>
-                }
-              </ListItemIcon>
-              <ListItemText
-                primary={
-                  <Typography
-                    className={`${
-                      open ? classes.drawerListText : classes.hidden
-                    }`}
-                  >
-                    {keyword(toolsItem.title)}
-                  </Typography>
-                }
-              />
-            </ListItem>
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={
+                      <Typography
+                        color={
+                          topMenuItemSelectedId === 0 &&
+                          sideMenuItemSelectedId === 0
+                            ? "primary"
+                            : ""
+                        }
+                        className={`${
+                          isSideMenuOpen
+                            ? classes.drawerListText
+                            : classes.hidden
+                        }`}
+                      >
+                        {keyword(toolsItem.title)}
+                      </Typography>
+                    }
+                  />
+                </>
+              ) : (
+                <Stack
+                  direction="row"
+                  alignItems="center"
+                  justifyContent="center"
+                  width="100%"
+                >
+                  {toolsItem.icon}
+                </Stack>
+              )}
+            </ListItemButton>
             {listItems.map((item, key) => {
               const element = (
-                <div style={{ margin: "-5px -15px -5px -15px" }}>
-                  <ListItem button onClick={item.functionHandleClick}>
-                    <ListItemIcon
-                      color="primary.main"
-                      sx={{
-                        marginRight: "12px",
-                        minWidth: "unset",
-                      }}
-                    >
-                      <IconButton
-                        className={classes.customAllToolsButton}
-                        style={{ width: 24, height: 24 }}
+                <Box>
+                  <ListItemButton onClick={item.functionHandleClick}>
+                    {isSideMenuOpen ? (
+                      <>
+                        <ListItemIcon
+                          sx={{
+                            marginRight: "12px",
+                            minWidth: "unset",
+                          }}
+                        >
+                          {item.icon}
+                        </ListItemIcon>
+                        <ListItemText
+                          primary={
+                            <Typography className={classes.drawerListText}>
+                              {keyword(item.title)}
+                            </Typography>
+                          }
+                        />
+                        {item.variableOpen ? <ExpandLess /> : <ExpandMore />}
+                      </>
+                    ) : (
+                      <Stack
+                        direction="row"
+                        alignItems="center"
+                        justifyContent="center"
+                        width="100%"
                       >
                         {item.icon}
-                      </IconButton>
-                    </ListItemIcon>
-
-                    <ListItemText
-                      primary={
-                        <Typography
-                          className={`${
-                            open ? classes.drawerListText : classes.hidden
-                          }`}
-                        >
-                          {item.title}
-                        </Typography>
-                      }
-                    />
-
-                    {open ? (
-                      item.variableOpen ? (
-                        <ExpandLess />
-                      ) : (
-                        <ExpandMore />
-                      )
-                    ) : null}
-                  </ListItem>
+                      </Stack>
+                    )}
+                  </ListItemButton>
 
                   <Collapse in={item.variableOpen} timeout="auto" unmountOnExit>
                     <List component="div" disablePadding>
                       {item.list.map((itemList, keyList) => {
-                        var element = (
-                          <ListItem
-                            button
+                        let element = (
+                          <ListItemButton
+                            selected={
+                              topMenuItemSelectedId === 0 &&
+                              sideMenuItemSelectedId + 1 === itemList.id
+                            }
                             key={keyList}
                             onClick={() => changeValue(itemList, "TOOL")}
                           >
-                            {open ? (
-                              <ListItemIcon
-                                color="primary.main"
-                                className={classes.drawerListNested}
-                                sx={{
-                                  marginRight: "12px",
-                                  minWidth: "unset",
-                                }}
-                              >
-                                {
-                                  <IconButton
-                                    className={classes.customAllToolsButton}
-                                    style={{ width: 24, height: 24 }}
-                                  >
-                                    {itemList.icon}
-                                  </IconButton>
-                                }
-                              </ListItemIcon>
-                            ) : (
-                              <ListItemIcon
-                                color="primary.main"
-                                sx={{
-                                  marginRight: "12px",
-                                  minWidth: "unset",
-                                }}
-                              >
-                                {
-                                  <IconButton
-                                    className={classes.customAllToolsButton}
-                                    style={{ width: 24, height: 24 }}
-                                  >
-                                    {itemList.icon}
-                                  </IconButton>
-                                }
-                              </ListItemIcon>
-                            )}
-                            <ListItemText
-                              primary={
-                                <Typography
-                                  className={`${
-                                    open
-                                      ? classes.drawerListText
-                                      : classes.hidden
-                                  }`}
+                            {isSideMenuOpen ? (
+                              <>
+                                <ListItemIcon
+                                  className={classes.drawerListNested}
+                                  sx={{
+                                    marginRight: "12px",
+                                    minWidth: "unset",
+                                  }}
                                 >
-                                  {keyword(itemList.title)}
-                                </Typography>
-                              }
-                            />
-                          </ListItem>
+                                  {itemList.icon}
+                                </ListItemIcon>
+                                <ListItemText
+                                  primary={
+                                    <Typography
+                                      color={
+                                        topMenuItemSelectedId === 0 &&
+                                        sideMenuItemSelectedId + 1 ===
+                                          itemList.id
+                                          ? "primary"
+                                          : ""
+                                      }
+                                      className={classes.drawerListText}
+                                    >
+                                      {keyword(itemList.title)}
+                                    </Typography>
+                                  }
+                                />
+                              </>
+                            ) : (
+                              <Stack
+                                direction="row"
+                                alignItems="center"
+                                justifyContent="center"
+                                width="100%"
+                              >
+                                {itemList.icon}
+                              </Stack>
+                            )}
+                          </ListItemButton>
                         );
 
                         if (itemList.toolRestrictions.includes("BETA_TESTER")) {
@@ -1797,38 +1763,14 @@ const NavBar = () => {
                       })}
                     </List>
                   </Collapse>
-                </div>
+                </Box>
               );
 
-              return (
-                <div key={key}>
-                  {open ? (
-                    <div
-                      style={{
-                        margin: "5px 18px 5px 14px",
-                        borderRadius: "10px",
-                      }}
-                    >
-                      {element}
-                    </div>
-                  ) : (
-                    <div
-                      style={{
-                        margin: "14px 18px 14px 14px",
-                        borderRadius: "10px",
-                      }}
-                      className={item.classBorder}
-                    >
-                      {element}
-                    </div>
-                  )}
-                </div>
-              );
+              return <Box key={key}>{element}</Box>;
             })}
             <Box m={2} />
             <ListSubheader
               style={{ paddingTop: "16px", paddingBottom: "16px" }}
-              className={classListHeading}
             >
               <Typography
                 style={{
@@ -1838,51 +1780,61 @@ const NavBar = () => {
                   textTransform: "uppercase",
                 }}
               >
-                {open ? keyword("navbar_more") : keyword("navbar_more_short")}
+                {isSideMenuOpen
+                  ? keyword("navbar_more")
+                  : keyword("navbar_more_short")}
               </Typography>
             </ListSubheader>
             {drawerItemsMore.map((item, key) => {
               return (
-                <ListItem
-                  button
+                <ListItemButton
+                  selected={topMenuItemSelectedId === 5}
                   key={key}
                   onClick={() => changeValue(item, "OTHER")}
                 >
-                  <ListItemIcon
-                    color="primary.main"
-                    sx={{
-                      marginRight: "12px",
-                      minWidth: "unset",
-                    }}
-                  >
-                    {
-                      <IconButton
-                        className={classes.customAllToolsButton}
-                        style={{ width: 24, height: 24 }}
+                  {isSideMenuOpen ? (
+                    <>
+                      <ListItemIcon
+                        sx={{
+                          marginRight: "12px",
+                          minWidth: "unset",
+                        }}
                       >
                         {item.icon}
-                      </IconButton>
-                    }
-                  </ListItemIcon>
-                  <ListItemText
-                    primary={
-                      <Typography
-                        className={`${
-                          open ? classes.drawerListText : classes.hidden
-                        }`}
-                      >
-                        {keyword(item.title)}
-                      </Typography>
-                    }
-                  />
-                </ListItem>
+                      </ListItemIcon>
+                      <ListItemText
+                        primary={
+                          <Typography
+                            color={topMenuItemSelectedId === 5 ? "primary" : ""}
+                            className={`${
+                              isSideMenuOpen
+                                ? classes.drawerListText
+                                : classes.hidden
+                            }`}
+                          >
+                            {keyword(item.title)}
+                          </Typography>
+                        }
+                      />
+                    </>
+                  ) : (
+                    <Stack
+                      direction="row"
+                      alignItems="center"
+                      justifyContent="center"
+                      width="100%"
+                    >
+                      {item.icon}
+                    </Stack>
+                  )}
+                </ListItemButton>
               );
             })}
           </List>
 
           <div className={classes.grow} />
 
-          <div
+          <Box
             style={{
               display: "flex",
               flexDirection: "column",
@@ -1896,23 +1848,39 @@ const NavBar = () => {
             <Box p={1}>
               <Divider />
             </Box>
+
             <Button
-              onClick={handleDrawerToggle}
+              onClick={toggleSideMenu}
               style={{ alignSelf: "center" }}
-              startIcon={!open ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+              startIcon={
+                isSideMenuOpen ? (
+                  direction === "ltr" ? (
+                    <ChevronLeft />
+                  ) : (
+                    <ChevronRight />
+                  )
+                ) : null
+              }
             >
-              {open ? keyword("navbar_collapse") : ""}
+              {isSideMenuOpen ? (
+                keyword("navbar_collapse")
+              ) : direction === "ltr" ? (
+                <ChevronRight />
+              ) : (
+                <ChevronLeft />
+              )}
             </Button>
+
             <Box m={1} />
-          </div>
+          </Box>
         </Drawer>
 
         <main className={classes.content}>
           <div className={classes.toolbar} id="back-to-top-anchor" />
-          <TabItem
+          <MainContentMenuTabItems
             className={classes.noMargin}
-            tabItems={tabItems}
-            drawerItems={drawItemPerRole}
+            tabItems={topMenuItems}
+            toolsList={drawItemPerRole}
           />
           <ScrollTop
             {...{ isCurrentLanguageLeftToRight: isCurrentLanguageLeftToRight }}
@@ -1924,7 +1892,7 @@ const NavBar = () => {
                 aria-label="scroll back to top"
                 className={classes.fabTop}
               >
-                <KeyboardArrowUpIcon />
+                <KeyboardArrowUp />
               </Fab>
             </ThemeProvider>
           </ScrollTop>
