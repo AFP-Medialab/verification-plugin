@@ -4,20 +4,33 @@ import Link from "@mui/material/Link";
 import Typography from "@mui/material/Typography";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
-const Footer = (props) => {
+export const FOOTER_TYPES = {
+  ITI: "iti",
+  ITI_UNINA: "iti-unina",
+  ITI_BORELLI_AFP: "iti-borelli-afp",
+  BORELLI_AFP: "borelli-afp",
+  GRIHO: "GRIHO",
+  USFD: "usfd",
+  USFD_AFP_EU_DISINFOLAB: "afp-usfd-eu-disinfolab",
+  LOCCUS: "loccus",
+  KINIT: "kinit",
+  AFP: "afp",
+};
+
+export const Footer = (props) => {
   const classes = useMyStyles();
   const keyword = i18nLoadNamespace("components/Shared/Footer");
 
   let provideBy, link, linkLabel, contactUs;
 
   switch (props.type) {
-    case "iti":
+    case FOOTER_TYPES.ITI:
       provideBy = keyword("iti_part_1");
       link = keyword("iti_link");
       linkLabel = keyword("iti_link_label");
       contactUs = keyword("iti_part_2");
       break;
-    case "iti-unina":
+    case FOOTER_TYPES.ITI_UNINA:
       provideBy = keyword("iti_part_1");
       link = [keyword("iti_link"), keyword("unina_link")];
       linkLabel = keyword("iti_link_label");
@@ -27,7 +40,7 @@ const Footer = (props) => {
       ];
       contactUs = keyword("iti_part_2");
       break;
-    case "GRIHO":
+    case FOOTER_TYPES.GRIHO:
       return (
         <div className={classes.footer}>
           <Typography variant={"body2"}>{keyword("GRIHO_part_1")}</Typography>
@@ -39,13 +52,13 @@ const Footer = (props) => {
           </Typography>
         </div>
       );
-    case "usfd":
+    case FOOTER_TYPES.USFD:
       provideBy = keyword("usfd_part_1");
       link = keyword("usfd_link");
       linkLabel = keyword("usfd_link_label");
       contactUs = keyword("usfd_part_2");
       break;
-    case "afp-usfd-eudisinfolab":
+    case FOOTER_TYPES.USFD_AFP_EU_DISINFOLAB:
       provideBy = keyword("afp_part_1");
       link = [
         keyword("afp_link"),
@@ -59,7 +72,7 @@ const Footer = (props) => {
       ];
       contactUs = keyword("afp_part_2");
       break;
-    case "iti-borelli-afp":
+    case FOOTER_TYPES.ITI_BORELLI_AFP:
       provideBy = keyword("iti_part_1");
       link = [
         keyword("iti_link"),
@@ -73,7 +86,7 @@ const Footer = (props) => {
       ];
       contactUs = keyword("afp_part_2");
       break;
-    case "borelli-afp":
+    case FOOTER_TYPES.BORELLI_AFP:
       provideBy = keyword("borelli_part_1");
       link = [keyword("borelli_link"), keyword("afp_link")];
       linkLabel = [
@@ -82,13 +95,13 @@ const Footer = (props) => {
       ];
       contactUs = keyword("afp_part_2");
       break;
-    case "loccus":
+    case FOOTER_TYPES.LOCCUS:
       provideBy = keyword("afp_part_1");
       link = keyword("loccus_link");
       linkLabel = keyword("loccus_link_label");
       contactUs = keyword("afp_part_2");
       break;
-    case "kinit":
+    case FOOTER_TYPES.KINIT:
       provideBy = keyword("afp_part_1");
       link = keyword("kinit_link");
       linkLabel = keyword("kinit_link_label");
@@ -104,7 +117,7 @@ const Footer = (props) => {
 
   return (
     <div className={classes.footer}>
-      <Typography variant={"body2"}>
+      <Typography variant="body2">
         <span>{provideBy} &nbsp;</span>
         {linkLabel.constructor === Array && link.constructor === Array ? (
           link.map((element, index) => {
@@ -125,4 +138,3 @@ const Footer = (props) => {
     </div>
   );
 };
-export default Footer;

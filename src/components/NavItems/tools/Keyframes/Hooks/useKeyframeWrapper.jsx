@@ -97,7 +97,10 @@ export const useKeyframeWrapper = (url, keyword) => {
             response.data.video_id,
           );
         })
-        .catch((errors) => handleError(errors));
+        .catch((errors) => {
+          const error_code = errors.code ? errors.code : "default";
+          handleError("keyframes_error_" + error_code);
+        });
     };
 
     if (url === undefined || url === "") return;

@@ -1,6 +1,6 @@
 {
   "name": "weverify-plugin",
-  "version": "0.80",
+  "version": "0.81",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -29,6 +29,9 @@
     "@types/chrome": "^0.0.266",
     "@wavesurfer/react": "^1.0.4",
     "axios": "^1.5.1",
+    "chart.js": "^4.4.3",
+    "chartjs-adapter-dayjs-4": "^1.0.4",
+    "clsx": "^2.1.1",
     "d3-selection": "^3.0.0",
     "dateformat": "^5.0.3",
     "dayjs": "^1.11.10",
@@ -48,6 +51,7 @@
     "mp4box": "^0.5.2",
     "prop-types": "^15.8.1",
     "react": "^18.2.0",
+    "react-chartjs-2": "^5.2.0",
     "react-dom": "^18.2.0",
     "react-gauge-chart": "^0.5.1",
     "react-hook-form": "^7.47.0",

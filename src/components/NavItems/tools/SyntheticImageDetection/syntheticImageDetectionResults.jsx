@@ -4,21 +4,17 @@ import {
   AccordionDetails,
   AccordionSummary,
   Alert,
-  Backdrop,
   Box,
   Card,
   CardHeader,
   Chip,
   Divider,
-  Fade,
   Grid,
   IconButton,
-  Link,
-  Modal,
   Stack,
   Typography,
 } from "@mui/material";
-import { Close, Download, ExpandMore, Square } from "@mui/icons-material";
+import { Close, Download, ExpandMore } from "@mui/icons-material";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import { useSelector } from "react-redux";
 import { useTrackEvent } from "Hooks/useAnalytics";
@@ -26,7 +22,8 @@ import { getclientId } from "components/Shared/GoogleAnalytics/MatomoAnalytics";
 import CustomAlertScore from "../../../Shared/CustomAlertScore";
 import GaugeChart from "react-gauge-chart";
 import Tooltip from "@mui/material/Tooltip";
-import html2canvas from "html2canvas";
+import { exportReactElementAsJpg } from "../../../Shared/Utils/htmlUtils";
+import GaugeChartModalExplanation from "../../../Shared/GaugeChartModalExplanation";
 
 const SyntheticImageDetectionResults = (props) => {
   const keyword = i18nLoadNamespace(
@@ -89,24 +86,26 @@ const SyntheticImageDetectionResults = (props) => {
 
   const [resultsHaveErrors, setResultsHaveErrors] = useState(false);
 
-  const [openGaugeColorsModal, setOpenGaugeColorsModal] = React.useState(false);
-
   const gaugeChartRef = useRef(null);
 
   useEffect(() => {
     setResultsHaveErrors(false);
 
     const diffusionScore = new SyntheticImageDetectionAlgorithmResult(
+      //previously unina_report
       Object.keys(DeepfakeImageDetectionMethodNames)[1],
-      !results.unina_report.prediction
+      !results.ldm_r50_grip_report.prediction
         ? 0
-        : results.unina_report.prediction * 100,
-      !results.unina_report.prediction,
+        : results.ldm_r50_grip_report.prediction * 100,
+      !results.ldm_r50_grip_report.prediction,
     );
     const ganScore = new SyntheticImageDetectionAlgorithmResult(
+      //previously gan_report
       Object.keys(DeepfakeImageDetectionMethodNames)[0],
-      !results.gan_report.prediction ? 0 : results.gan_report.prediction * 100,
-      !results.gan_report.prediction,
+      !results.gan_r50_mever_report.prediction
+        ? 0
+        : results.gan_r50_mever_report.prediction * 100,
+      !results.gan_r50_mever_report.prediction,
     );
 
     const proganScore = new SyntheticImageDetectionAlgorithmResult(
@@ -256,44 +255,13 @@ const SyntheticImageDetectionResults = (props) => {
         );
   };
 
-  const handleOpenGaugeColorsModal = () => {
-    setOpenGaugeColorsModal(true);
-  };
-
-  const handleCloseGaugeColorsModal = () => setOpenGaugeColorsModal(false);
-
-  const gaugeColorsModalStyle = {
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    minWidth: "400px",
-    width: "30vw",
-    backgroundColor: "background.paper",
-    outline: "unset",
-    borderRadius: "10px",
-    boxShadow: 24,
-    p: 4,
-    maxHeight: "60vh",
-    overflow: "auto",
-  };
-
-  const downloadGaugeChartAsPng = async () => {
-    const canvas = await html2canvas(gaugeChartRef.current).catch((e) =>
-      console.log(e),
-    );
-    console.log(canvas);
-    console.log(gaugeChartRef.current);
-    const img = canvas.toDataURL("image/jpeg", 1.0);
-    const link = document.createElement("a");
-    link.style.display = "none";
-    link.download = "gaugeChart";
-    link.href = img;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    link.remove();
-  };
+  const keywords = [
+    "synthetic_image_detection_scale_modal_explanation_rating_1",
+    "synthetic_image_detection_scale_modal_explanation_rating_2",
+    "synthetic_image_detection_scale_modal_explanation_rating_3",
+    "synthetic_image_detection_scale_modal_explanation_rating_4",
+  ];
+  const colors = ["#00FF00", "#AAFF03", "#FFA903", "#FF0000"];
 
   return (
     <Stack
@@ -435,7 +403,12 @@ const SyntheticImageDetectionResults = (props) => {
                       <IconButton
                         color="primary"
                         aria-label="download chart"
-                        onClick={downloadGaugeChartAsPng}
+                        onClick={async () =>
+                          await exportReactElementAsJpg(
+                            gaugeChartRef,
+                            "gauge_chart",
+                          )
+                        }
                       >
                         <Download />
                       </IconButton>
@@ -443,97 +416,18 @@ const SyntheticImageDetectionResults = (props) => {
                   </Box>
                 </Stack>
 
-                <Link
-                  onClick={handleOpenGaugeColorsModal}
-                  sx={{ cursor: "pointer" }}
-                  variant={"body1"}
-                >
-                  {keyword("synthetic_image_detection_scale_explanation_link")}
-                </Link>
-                <Modal
-                  aria-labelledby="transition-modal-title"
-                  aria-describedby="transition-modal-description"
-                  open={openGaugeColorsModal}
-                  onClose={handleCloseGaugeColorsModal}
-                  closeAfterTransition
-                  slots={{ backdrop: Backdrop }}
-                  slotProps={{
-                    backdrop: {
-                      timeout: 500,
-                    },
-                  }}
-                >
-                  <Fade in={openGaugeColorsModal}>
-                    <Box sx={gaugeColorsModalStyle}>
-                      <Stack
-                        direction="row"
-                        justifyContent="space-between"
-                        alignItems="center"
-                        spacing={2}
-                      >
-                        <Typography
-                          id="transition-modal-title"
-                          variant="subtitle2"
-                          style={{
-                            color: "#00926c",
-                            fontSize: "24px",
-                          }}
-                        >
-                          {keyword(
-                            "synthetic_image_detection_scale_modal_explanation_title",
-                          )}
-                        </Typography>
-                        <IconButton
-                          variant="outlined"
-                          aria-label="close popup"
-                          onClick={handleCloseGaugeColorsModal}
-                        >
-                          <Close />
-                        </IconButton>
-                      </Stack>
-                      <Stack
-                        id="transition-modal-description"
-                        direction="column"
-                        spacing={2}
-                        mt={2}
-                      >
-                        <Stack direction="row" alignItems="center" spacing={1}>
-                          <Square fontSize="large" sx={{ color: "#00FF00" }} />
-                          <Typography>
-                            {keyword(
-                              "synthetic_image_detection_scale_modal_explanation_rating_1",
-                            )}
-                          </Typography>
-                        </Stack>
-                        <Stack direction="row" alignItems="center" spacing={1}>
-                          <Square fontSize="large" sx={{ color: "#AAFF03" }} />
-                          <Typography>
-                            {keyword(
-                              "synthetic_image_detection_scale_modal_explanation_rating_2",
-                            )}
-                          </Typography>
-                        </Stack>
+                <GaugeChartModalExplanation
+                  keyword={keyword}
+                  keywordsArr={keywords}
+                  keywordLink={
+                    "synthetic_image_detection_scale_explanation_link"
+                  }
+                  keywordModalTitle={
+                    "synthetic_image_detection_scale_modal_explanation_title"
+                  }
+                  colors={colors}
+                />
 
-                        <Stack direction="row" alignItems="center" spacing={1}>
-                          <Square fontSize="large" sx={{ color: "#FFA903" }} />
-                          <Typography>
-                            {keyword(
-                              "synthetic_image_detection_scale_modal_explanation_rating_3",
-                            )}
-                          </Typography>
-                        </Stack>
-                        <Stack direction="row" alignItems="center" spacing={1}>
-                          <Square fontSize="large" sx={{ color: "#FF0000" }} />
-                          <Typography>
-                            {keyword(
-                              "synthetic_image_detection_scale_modal_explanation_rating_4",
-                            )}
-                          </Typography>
-                        </Stack>
-                      </Stack>
-                    </Box>
-                  </Fade>
-                </Modal>
                 <CustomAlertScore
                   score={syntheticImageScores ? maxScore : 0}
                   detectionType={undefined}
