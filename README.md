@@ -33,9 +33,16 @@ tort or otherwise, arising from, out of or in connection with the software or th
 
 The Verification plugin is a browser based plugin built with React and Redux.
 
-1. To install the dependencies run `npm install` or `yarn install`
+1. To install the dependencies run
+   ```
+   npm install
+   ```
+   or
+   ```
+   yarn install
+   ```
 
-2. Add an `.env` file at the root containing
+3. Add an `.env` file at the root containing
    ```
    REACT_APP_ELK_URL=<ELK-URL>/twinttweets/_search
    REACT_APP_TWINT_WRAPPER_URL=<TWINT-WRAPPER-URL>
@@ -51,15 +58,25 @@ The Verification plugin is a browser based plugin built with React and Redux.
 ## Build the project
 
 - Run the `dev` script to build the React app in development mode
-- Run the `build` to build the React app for production
+  ```
+  npm run dev
+  ```
 
-## Run the plugin on the browser
+- Run the `build` to build the React app for production
+  ```
+  npm run build
+  ```
+
+
+## Load the extension on the browser
 
 #### Google Chrome / Chromium-based browsers
 
-- Open a new tab with [chrome://extensions/](chrome://extensions/)
-- Toggle `Developer mode` at the top right
-- Click on `Load Unpacked` on the top left and go inside the `build` folder
+[Chrome for Developers documentation](https://developer.chrome.com/docs/extensions/get-started/tutorial/hello-world#load-unpacked)
+
+- Go to the Extensions page by entering [chrome://extensions/](chrome://extensions/) in a new tab.  
+- Enable **Developer Mode** by clicking the toggle switch next to Developer mode.
+- Click the **Load unpacked** button and select the extension directory (go inside the `build` folder).
 
 #### Firefox ( ⚠️ deprecated)
 
