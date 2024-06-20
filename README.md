@@ -1,6 +1,6 @@
 # Fake news debunker by InVID, WeVerify and vera.ai
 
-This plugin has been designed as a verification “Swiss army knife” helping journalists to save time and be more
+This plugin is a verification “Swiss army knife” helping journalists to save time and be more
 efficient in their fact-checking and debunking tasks on social networks especially when verifying videos and images.
 
 The provided tools allow you to quickly get contextual information on Facebook and YouTube videos, perform a reverse
@@ -12,7 +12,8 @@ to apply forensic filters on still images.
 For further details about the tool and the already released versions, please visit the plugin page on our latest
 project [website](https://www.veraai.eu/category/verification-plugin/).
 
-For any feedback (bugs, enhancement, suggestions), please use the feedback tool within the plugin (on the bottom right).
+**For any feedback (bugs, enhancement, suggestions), please use the feedback tool within the plugin (on the bottom
+right) or file an issue on GitHub.**
 
 This plugin was initially developed by the InVID European project (2016-2018), a Horizon 2020 Innovation Action funded
 by the European Union under Grant Agreement 687786. It has been enhanced by the WeVerify European project (2018-2021), a
