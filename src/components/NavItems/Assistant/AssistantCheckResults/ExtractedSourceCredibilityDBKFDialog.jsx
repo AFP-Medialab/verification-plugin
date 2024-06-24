@@ -30,6 +30,18 @@ const renderSource = (keyword, trafficLightColor, source) => {
   );
 };
 
+const renderScope = (keyword, scope) => {
+  return (
+    <ListItem>
+      {scope ? (
+        <Typography variant={"subtitle2"}>
+          {` ${keyword("domain_account")} ${scope} `}
+        </Typography>
+      ) : null}
+    </ListItem>
+  );
+};
+
 const renderLabels = (keyword, labels) => {
   return (
     <ListItem>
@@ -136,6 +148,12 @@ const ExtractedSourceCredibilityDBKFDialog = ({
 
                             <AccordionDetails>
                               <List key={key}>
+                                {renderScope(
+                                  keyword,
+                                  sourceCredibilityResults[key]
+                                    .credibilityScope,
+                                )}
+
                                 {renderLabels(
                                   keyword,
                                   sourceCredibilityResults[key]

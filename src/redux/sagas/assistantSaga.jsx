@@ -814,6 +814,7 @@ const addToRelevantSourceCred = (sourceCredList, result) => {
     credibilityLabels: result["labels"],
     credibilityDescription: result["description"],
     credibilityEvidence: resultEvidence,
+    credibilityScope: result["credibility-scope"],
   });
 };
 

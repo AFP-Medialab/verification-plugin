@@ -48,6 +48,13 @@ const SourceCredibilityResult = (props) => {
                     component={"div"}
                     color={"textSecondary"}
                   >
+                    {value.credibilityScope ? (
+                      <Typography variant={"subtitle2"}>
+                        {` ${keyword("domain_account")} ${
+                          value.credibilityScope
+                        } `}
+                      </Typography>
+                    ) : null}
                     {value.credibilityLabels ? (
                       <Typography variant={"subtitle2"}>
                         {` ${keyword("labelled_as")} ${
