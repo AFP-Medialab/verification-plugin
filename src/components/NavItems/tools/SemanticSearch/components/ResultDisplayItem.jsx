@@ -29,7 +29,7 @@ const ResultDisplayItem = ({
 }) => {
   const path = useLocation();
   let keyword;
-  if (path.pathname === "/app/assistant") {
+  if (path.pathname.includes("/app/assistant")) {
     keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
   } else {
     keyword = i18nLoadNamespace("components/NavItems/tools/SemanticSearch");
