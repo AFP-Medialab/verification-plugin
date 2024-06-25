@@ -36,8 +36,19 @@ const SourceCredibilityResult = (props) => {
                       align={"left"}
                       color={"textPrimary"}
                     >
-                      {keyword("source_credibility_warning")}{" "}
-                      {value.credibilitySource}
+                      {value.credibilityScope.includes("/") ? (
+                        <Typography>
+                          {` ${keyword(
+                            "source_credibility_warning_account",
+                          )} ${" "}${value.credibilitySource}`}
+                        </Typography>
+                      ) : value.credibilityScope ? (
+                        <Typography>
+                          {` ${keyword(
+                            "source_credibility_warning_domain",
+                          )} ${" "}${value.credibilitySource}`}
+                        </Typography>
+                      ) : null}
                     </Typography>
                     <Box mb={0.5} />
                   </div>
@@ -48,9 +59,15 @@ const SourceCredibilityResult = (props) => {
                     component={"div"}
                     color={"textSecondary"}
                   >
-                    {value.credibilityScope ? (
+                    {value.credibilityScope.includes("/") ? (
                       <Typography variant={"subtitle2"}>
-                        {` ${keyword("domain_account")} ${
+                        {` ${keyword("account_scope")} ${
+                          value.credibilityScope
+                        } `}
+                      </Typography>
+                    ) : value.credibilityScope ? (
+                      <Typography variant={"subtitle2"}>
+                        {` ${keyword("domain_scope")} ${
                           value.credibilityScope
                         } `}
                       </Typography>

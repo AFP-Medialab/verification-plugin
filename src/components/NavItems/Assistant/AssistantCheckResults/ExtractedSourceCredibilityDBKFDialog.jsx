@@ -22,20 +22,30 @@ import Tooltip from "@mui/material/Tooltip";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 
-const renderSource = (keyword, trafficLightColor, source) => {
-  return (
-    <Typography color={trafficLightColor}>
-      {keyword("source_cred_popup_header")} {source}
-    </Typography>
-  );
-};
+// const renderSource = (keyword, trafficLightColor, source, scope) => {
+//   return (
+//     {scope.includes("/") ? (
+//       <Typography color={trafficLightColor}>
+//         {` ${keyword("source_cred_popup_header_account")} ${source} `}`
+//       </Typography>
+//     ) : scope ? (
+//       <Typography color={trafficLightColor}>
+//         {` ${keyword("source_cred_popup_header_domain")} ${source} `}
+//       </Typography>
+//     ) : null }
+//   );
+// };
 
 const renderScope = (keyword, scope) => {
   return (
     <ListItem>
-      {scope ? (
+      {scope.includes("/") ? (
         <Typography variant={"subtitle2"}>
-          {` ${keyword("domain_account")} ${scope} `}
+          {` ${keyword("account_scope")} ${scope} `}
+        </Typography>
+      ) : scope ? (
+        <Typography variant={"subtitle2"}>
+          {` ${keyword("domain_scope")} ${scope} `}
         </Typography>
       ) : null}
     </ListItem>
@@ -139,11 +149,35 @@ const ExtractedSourceCredibilityDBKFDialog = ({
                       ? sourceCredibilityResults.map((value, key) => (
                           <Accordion key={key}>
                             <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                              {renderSource(
+                              {/* {renderSource(
                                 keyword,
                                 trafficLightColor,
                                 sourceCredibilityResults[key].credibilitySource,
-                              )}
+                                sourceCredibilityResults[key].credibilityScope,
+                              )} */}
+                              {sourceCredibilityResults[
+                                key
+                              ].credibilityScope.includes("/") ? (
+                                <Typography color={trafficLightColor}>
+                                  {` ${keyword(
+                                    "source_cred_popup_header_account",
+                                  )} ${
+                                    sourceCredibilityResults[key]
+                                      .credibilitySource
+                                  } `}
+                                  `
+                                </Typography>
+                              ) : sourceCredibilityResults[key]
+                                  .credibilityScope ? (
+                                <Typography color={trafficLightColor}>
+                                  {` ${keyword(
+                                    "source_cred_popup_header_domain",
+                                  )} ${
+                                    sourceCredibilityResults[key]
+                                      .credibilitySource
+                                  } `}
+                                </Typography>
+                              ) : null}
                             </AccordionSummary>
 
                             <AccordionDetails>
