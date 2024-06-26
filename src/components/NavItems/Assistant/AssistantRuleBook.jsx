@@ -113,11 +113,7 @@ export const ASSISTANT_ACTIONS = [
   {
     title: "navbar_analysis_video",
     icon: analysisIconOff,
-    linksAccepted: [
-      KNOWN_LINKS.YOUTUBE,
-      KNOWN_LINKS.FACEBOOK,
-      KNOWN_LINKS.TWITTER,
-    ],
+    linksAccepted: [KNOWN_LINKS.YOUTUBE, KNOWN_LINKS.FACEBOOK],
     cTypes: [CONTENT_TYPE.VIDEO],
     exceptions: [],
     useInputUrl: true,
@@ -142,7 +138,6 @@ export const ASSISTANT_ACTIONS = [
     linksAccepted: [
       KNOWN_LINKS.YOUTUBE,
       KNOWN_LINKS.FACEBOOK,
-      KNOWN_LINKS.TWITTER,
       KNOWN_LINKS.DAILYMOTION,
       KNOWN_LINKS.VIMEO,
       KNOWN_LINKS.YOUTUBE,
@@ -196,11 +191,7 @@ export const ASSISTANT_ACTIONS = [
   {
     title: "navbar_rights",
     icon: videoRightsIconOff,
-    linksAccepted: [
-      KNOWN_LINKS.YOUTUBE,
-      KNOWN_LINKS.FACEBOOK,
-      KNOWN_LINKS.TWITTER,
-    ],
+    linksAccepted: [KNOWN_LINKS.YOUTUBE, KNOWN_LINKS.FACEBOOK],
     cTypes: [CONTENT_TYPE.VIDEO],
     exceptions: [],
     useInputUrl: true,
