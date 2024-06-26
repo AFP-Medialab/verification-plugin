@@ -9,95 +9,12 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { getclientId } from "../../Shared/GoogleAnalytics/MatomoAnalytics";
 import { useTrackPageView } from "../../../Hooks/useAnalytics";
 
+/**
+ *
+ * @param toolsList {Tool[]}
+ * @returns {Element}
+ */
 const DrawerItem = ({ toolsList }) => {
-  // const drawerItemsContent = [
-  //   {
-  //     content: <ToolsMenu tools={toolsList} />,
-  //     footer: <div />,
-  //   },
-  //   {
-  //     content: <Analysis />,
-  //     footer: <Footer type={FOOTER_TYPES.ITI} />,
-  //   },
-  //   {
-  //     content: <Keyframes />,
-  //     footer: <Footer type={FOOTER_TYPES.ITI} />,
-  //   },
-  //   {
-  //     content: <Thumbnails />,
-  //     footer: <Footer type={FOOTER_TYPES.AFP} />,
-  //   },
-  //   {
-  //     content: <VideoRights />,
-  //     footer: <Footer type={FOOTER_TYPES.GRIHO} />,
-  //   },
-  //   {
-  //     content: <Metadata mediaType={"video"} />,
-  //     footer: <Footer type={FOOTER_TYPES.AFP} />,
-  //   },
-  //   {
-  //     content: <DeepfakeVideo />,
-  //     footer: <Footer type={FOOTER_TYPES.ITI} />,
-  //   },
-  //   {
-  //     content: <AnalysisImg />,
-  //     footer: <Footer type={FOOTER_TYPES.ITI} />,
-  //   },
-  //   {
-  //     content: <Magnifier />,
-  //     footer: <Footer type={FOOTER_TYPES.AFP} />,
-  //   },
-  //   {
-  //     content: <Metadata mediaType={"image"} />,
-  //     footer: <Footer type={FOOTER_TYPES.AFP} />,
-  //   },
-  //
-  //   {
-  //     content: <Forensic />,
-  //     footer: <Footer type={FOOTER_TYPES.ITI_BORELLI_AFP} />,
-  //   },
-  //   {
-  //     content: <OCR />,
-  //     footer: <Footer type={FOOTER_TYPES.USFD} />,
-  //   },
-  //   {
-  //     content: <CheckGif />,
-  //     footer: <Footer type={FOOTER_TYPES.BORELLI_AFP} />,
-  //   },
-  //   {
-  //     content: <SyntheticImageDetection />,
-  //     footer: <Footer type={FOOTER_TYPES.ITI_UNINA} />,
-  //   },
-  //   {
-  //     content: <DeepfakeImage />,
-  //     footer: <Footer type={FOOTER_TYPES.ITI} />,
-  //   },
-  //   {
-  //     content: <Geolocation />,
-  //     footer: <Footer type={FOOTER_TYPES.AFP} />,
-  //   },
-  //   {
-  //     content: <Loccus />,
-  //     footer: <Footer type={FOOTER_TYPES.LOCCUS} />,
-  //   },
-  //   {
-  //     content: <TwitterAdvancedSearch />,
-  //     footer: <Footer type={FOOTER_TYPES.AFP} />,
-  //   },
-  //   {
-  //     content: <SemanticSearch />,
-  //     footer: <Footer type={FOOTER_TYPES.KINIT} />,
-  //   },
-  //   {
-  //     content: <TwitterSna />,
-  //     footer: <Footer type={FOOTER_TYPES.USFD_AFP_EU_DISINFOLAB} />,
-  //   },
-  //   {
-  //     content: <Archive />,
-  //     footer: <Footer type={FOOTER_TYPES.AFP} />,
-  //   },
-  // ];
-
   return (
     <Routes>
       {toolsList.map((tool, index) => {
