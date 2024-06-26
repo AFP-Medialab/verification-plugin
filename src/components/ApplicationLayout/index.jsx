@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import { Box } from "@mui/material";
 import NotificationSnackbar from "../NotificationSnackbar";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import TopMenu from "../TopMenu";
 import { TOP_MENU_ITEMS } from "../../constants/topMenuItems";
 import SideMenu from "../SideMenu";
 import { tools } from "../../constants/tools";
+import MainContentMenu from "../MainContentMenu";
+import useMyStyles from "../Shared/MaterialUiStyles/useMyStyles";
 
 const ApplicationLayout = () => {
   const theme = createTheme({
@@ -75,15 +76,17 @@ const ApplicationLayout = () => {
   // Used to display warning messages
   const [openAlert, setOpenAlert] = useState(false);
 
+  const classes = useMyStyles();
+
   return (
-    <Box>
+    <div className={classes.flex}>
       <NotificationSnackbar openAlert={openAlert} setOpenAlert={setOpenAlert} />
       <ThemeProvider theme={theme}>
         <SideMenu tools={tools} setOpenAlert={setOpenAlert} />
         <TopMenu topMenuItems={TOP_MENU_ITEMS} />
-        {/*<MainContentMenu />*/}
+        <MainContentMenu tools={tools} />
       </ThemeProvider>
-    </Box>
+    </div>
   );
 };
 

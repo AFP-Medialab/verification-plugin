@@ -362,264 +362,117 @@ const SideMenu = ({ tools, setOpenAlert }) => {
   };
 
   return (
-    <div>
-      <Drawer
-        variant="permanent"
-        className={clsx(classes.drawer, {
+    <Drawer
+      variant="permanent"
+      className={clsx(classes.drawer, {
+        [classes.drawerOpen]: isSideMenuOpen,
+        [classes.drawerClose]: !isSideMenuOpen,
+      })}
+      classes={{
+        paper: clsx({
           [classes.drawerOpen]: isSideMenuOpen,
           [classes.drawerClose]: !isSideMenuOpen,
-        })}
-        classes={{
-          paper: clsx({
-            [classes.drawerOpen]: isSideMenuOpen,
-            [classes.drawerClose]: !isSideMenuOpen,
-          }),
+        }),
+      }}
+      ref={drawerRef}
+      open={isSideMenuOpen}
+    >
+      <List
+        style={{
+          marginTop: "80px",
         }}
-        ref={drawerRef}
-        open={isSideMenuOpen}
       >
-        <List
+        <ListSubheader
           style={{
-            marginTop: "80px",
+            paddingTop: "16px",
+            paddingBottom: "16px",
+            backgroundColor: "#ffffff",
+            textAlign: "start",
           }}
         >
-          <ListSubheader
+          <Typography
             style={{
-              paddingTop: "16px",
-              paddingBottom: "16px",
-              backgroundColor: "#ffffff",
-              textAlign: "start",
+              fontWeight: "500",
+              fontSize: "10px",
+              color: "#B0B0B0",
+              textTransform: "uppercase",
             }}
           >
-            <Typography
-              style={{
-                fontWeight: "500",
-                fontSize: "10px",
-                color: "#B0B0B0",
-                textTransform: "uppercase",
-              }}
-            >
-              {isSideMenuOpen
-                ? keyword("navbar_verification")
-                : keyword("navbar_verification_short")}
-            </Typography>
-          </ListSubheader>
-          <ListItemButton
-            selected={
-              topMenuItemSelected === toolsItem.titleKeyword &&
-              selectedToolTitleKeyword === toolsItem.titleKeyword
-            }
-            onClick={() => handleSideMenuToolClick(toolsItem)}
-            component={Link}
-            to={toolsItem.path}
-          >
-            {isSideMenuOpen ? (
-              <>
-                <ListItemIcon
-                  sx={{
-                    marginRight: "12px",
-                    minWidth: "unset",
-                  }}
-                >
-                  <toolsItem.icon sx={iconConditionalStyling(toolsItem)} />
-                </ListItemIcon>
-                <ListItemText
-                  primary={
-                    <Typography
-                      color={
-                        topMenuItemSelected === toolsItem.titleKeyword &&
-                        selectedToolTitleKeyword === toolsItem.titleKeyword
-                          ? "primary"
-                          : ""
-                      }
-                      className={`${
-                        isSideMenuOpen ? classes.drawerListText : classes.hidden
-                      }`}
-                    >
-                      {keyword(toolsItem.titleKeyword)}
-                    </Typography>
-                  }
-                />
-              </>
-            ) : (
-              <Stack
-                direction="row"
-                alignItems="center"
-                justifyContent="center"
-                width="100%"
+            {isSideMenuOpen
+              ? keyword("navbar_verification")
+              : keyword("navbar_verification_short")}
+          </Typography>
+        </ListSubheader>
+        <ListItemButton
+          selected={
+            topMenuItemSelected === toolsItem.titleKeyword &&
+            selectedToolTitleKeyword === toolsItem.titleKeyword
+          }
+          onClick={() => handleSideMenuToolClick(toolsItem)}
+          component={Link}
+          to={toolsItem.path}
+        >
+          {isSideMenuOpen ? (
+            <>
+              <ListItemIcon
+                sx={{
+                  marginRight: "12px",
+                  minWidth: "unset",
+                }}
               >
                 <toolsItem.icon sx={iconConditionalStyling(toolsItem)} />
-              </Stack>
-            )}
-          </ListItemButton>
-          {listItems.map((item, key) => {
-            const element = (
-              <Box>
-                <ListItemButton onClick={item.functionHandleClick}>
-                  {isSideMenuOpen ? (
-                    <>
-                      <ListItemIcon
-                        sx={{
-                          marginRight: "12px",
-                          minWidth: "unset",
-                        }}
-                      >
-                        {item.icon}
-                      </ListItemIcon>
-                      <ListItemText
-                        primary={
-                          <Typography className={classes.drawerListText}>
-                            {keyword(item.titleKeyword)}
-                          </Typography>
-                        }
-                      />
-                      {item.variableOpen ? <ExpandLess /> : <ExpandMore />}
-                    </>
-                  ) : (
-                    <Stack
-                      direction="row"
-                      alignItems="center"
-                      justifyContent="center"
-                      width="100%"
-                    >
-                      {item.icon}
-                    </Stack>
-                  )}
-                </ListItemButton>
-
-                <Collapse in={item.variableOpen} timeout="auto" unmountOnExit>
-                  <List component="div" disablePadding>
-                    {item.list.map((itemList, keyList) => {
-                      let element = (
-                        <ListItemButton
-                          selected={
-                            topMenuItemSelected === toolsItem.titleKeyword &&
-                            selectedToolTitleKeyword === itemList.titleKeyword
-                          }
-                          key={keyList}
-                          onClick={() => handleSideMenuToolClick(itemList)}
-                        >
-                          {isSideMenuOpen ? (
-                            <>
-                              <ListItemIcon
-                                className={classes.drawerListNested}
-                                sx={{
-                                  marginRight: "12px",
-                                  minWidth: "unset",
-                                  ...iconConditionalStyling(itemList),
-                                }}
-                              >
-                                {itemList.icon}
-                              </ListItemIcon>
-                              <ListItemText
-                                primary={
-                                  <Typography
-                                    color={
-                                      topMenuItemSelected ===
-                                        toolsItem.titleKeyword &&
-                                      selectedToolTitleKeyword ===
-                                        itemList.titleKeyword
-                                        ? "primary"
-                                        : ""
-                                    }
-                                    className={classes.drawerListText}
-                                  >
-                                    {keyword(itemList.titleKeyword)}
-                                  </Typography>
-                                }
-                              />
-                            </>
-                          ) : (
-                            <Stack
-                              direction="row"
-                              alignItems="center"
-                              justifyContent="center"
-                              width="100%"
-                              sx={{
-                                ...iconConditionalStyling(itemList),
-                              }}
-                            >
-                              {itemList.icon}
-                            </Stack>
-                          )}
-                        </ListItemButton>
-                      );
-
-                      if (
-                        itemList.rolesNeeded &&
-                        itemList.rolesNeeded.includes("BETA_TESTER")
-                      ) {
-                        if (betaTester) {
-                          return element;
-                        } else {
-                          return null;
-                        }
-                      } else {
-                        return element;
-                      }
-                    })}
-                  </List>
-                </Collapse>
-              </Box>
-            );
-
-            return <Box key={key}>{element}</Box>;
-          })}
-          <Box m={2} />
-          <ListSubheader style={{ paddingTop: "16px", paddingBottom: "16px" }}>
-            <Typography
-              style={{
-                fontWeight: "500",
-                fontSize: "10px",
-                color: "#B0B0B0",
-                textTransform: "uppercase",
-              }}
-            >
-              {isSideMenuOpen
-                ? keyword("navbar_more")
-                : keyword("navbar_more_short")}
-            </Typography>
-          </ListSubheader>
-          {drawerItemsMore.map((item, key) => {
-            return (
-              <ListItemButton
-                selected={
-                  topMenuItemSelected === item.titleKeyword ||
-                  selectedToolTitleKeyword === item.titleKeyword
+              </ListItemIcon>
+              <ListItemText
+                primary={
+                  <Typography
+                    color={
+                      topMenuItemSelected === toolsItem.titleKeyword &&
+                      selectedToolTitleKeyword === toolsItem.titleKeyword
+                        ? "primary"
+                        : ""
+                    }
+                    className={`${
+                      isSideMenuOpen ? classes.drawerListText : classes.hidden
+                    }`}
+                  >
+                    {keyword(toolsItem.titleKeyword)}
+                  </Typography>
                 }
-                key={key}
-                onClick={() => handleSideMenuToolClick(item)}
-              >
+              />
+            </>
+          ) : (
+            <Stack
+              direction="row"
+              alignItems="center"
+              justifyContent="center"
+              width="100%"
+            >
+              <toolsItem.icon sx={iconConditionalStyling(toolsItem)} />
+            </Stack>
+          )}
+        </ListItemButton>
+        {listItems.map((item, key) => {
+          const element = (
+            <Box>
+              <ListItemButton onClick={item.functionHandleClick}>
                 {isSideMenuOpen ? (
                   <>
                     <ListItemIcon
                       sx={{
                         marginRight: "12px",
                         minWidth: "unset",
-                        ...iconConditionalStyling(item),
                       }}
                     >
                       {item.icon}
                     </ListItemIcon>
                     <ListItemText
                       primary={
-                        <Typography
-                          color={
-                            topMenuItemSelected === item.titleKeyword ||
-                            selectedToolTitleKeyword === item.titleKeyword
-                              ? "primary"
-                              : ""
-                          }
-                          className={`${
-                            isSideMenuOpen
-                              ? classes.drawerListText
-                              : classes.hidden
-                          }`}
-                        >
+                        <Typography className={classes.drawerListText}>
                           {keyword(item.titleKeyword)}
                         </Typography>
                       }
                     />
+                    {item.variableOpen ? <ExpandLess /> : <ExpandMore />}
                   </>
                 ) : (
                   <Stack
@@ -627,61 +480,206 @@ const SideMenu = ({ tools, setOpenAlert }) => {
                     alignItems="center"
                     justifyContent="center"
                     width="100%"
-                    sx={{
-                      ...iconConditionalStyling(item),
-                    }}
                   >
                     {item.icon}
                   </Stack>
                 )}
               </ListItemButton>
-            );
-          })}
-        </List>
 
-        <div className={classes.grow} />
+              <Collapse in={item.variableOpen} timeout="auto" unmountOnExit>
+                <List component="div" disablePadding>
+                  {item.list.map((itemList, keyList) => {
+                    let element = (
+                      <ListItemButton
+                        selected={
+                          topMenuItemSelected === toolsItem.titleKeyword &&
+                          selectedToolTitleKeyword === itemList.titleKeyword
+                        }
+                        key={keyList}
+                        onClick={() => handleSideMenuToolClick(itemList)}
+                      >
+                        {isSideMenuOpen ? (
+                          <>
+                            <ListItemIcon
+                              className={classes.drawerListNested}
+                              sx={{
+                                marginRight: "12px",
+                                minWidth: "unset",
+                                ...iconConditionalStyling(itemList),
+                              }}
+                            >
+                              {itemList.icon}
+                            </ListItemIcon>
+                            <ListItemText
+                              primary={
+                                <Typography
+                                  color={
+                                    topMenuItemSelected ===
+                                      toolsItem.titleKeyword &&
+                                    selectedToolTitleKeyword ===
+                                      itemList.titleKeyword
+                                      ? "primary"
+                                      : ""
+                                  }
+                                  className={classes.drawerListText}
+                                >
+                                  {keyword(itemList.titleKeyword)}
+                                </Typography>
+                              }
+                            />
+                          </>
+                        ) : (
+                          <Stack
+                            direction="row"
+                            alignItems="center"
+                            justifyContent="center"
+                            width="100%"
+                            sx={{
+                              ...iconConditionalStyling(itemList),
+                            }}
+                          >
+                            {itemList.icon}
+                          </Stack>
+                        )}
+                      </ListItemButton>
+                    );
 
-        <Box
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "stretch",
-            position: "sticky",
-            bottom: "0px",
-            backgroundColor: "#ffffff",
-            zIndex: "9",
-          }}
-        >
-          <Box p={1}>
-            <Divider />
-          </Box>
+                    if (
+                      itemList.rolesNeeded &&
+                      itemList.rolesNeeded.includes("BETA_TESTER")
+                    ) {
+                      if (betaTester) {
+                        return element;
+                      } else {
+                        return null;
+                      }
+                    } else {
+                      return element;
+                    }
+                  })}
+                </List>
+              </Collapse>
+            </Box>
+          );
 
-          <Button
-            onClick={toggleSideMenu}
-            style={{ alignSelf: "center" }}
-            startIcon={
-              isSideMenuOpen ? (
-                direction === "ltr" ? (
-                  <ChevronLeft />
-                ) : (
-                  <ChevronRight />
-                )
-              ) : null
-            }
+          return <Box key={key}>{element}</Box>;
+        })}
+        <Box m={2} />
+        <ListSubheader style={{ paddingTop: "16px", paddingBottom: "16px" }}>
+          <Typography
+            style={{
+              fontWeight: "500",
+              fontSize: "10px",
+              color: "#B0B0B0",
+              textTransform: "uppercase",
+            }}
           >
-            {isSideMenuOpen ? (
-              keyword("navbar_collapse")
-            ) : direction === "ltr" ? (
-              <ChevronRight />
-            ) : (
-              <ChevronLeft />
-            )}
-          </Button>
+            {isSideMenuOpen
+              ? keyword("navbar_more")
+              : keyword("navbar_more_short")}
+          </Typography>
+        </ListSubheader>
+        {drawerItemsMore.map((item, key) => {
+          return (
+            <ListItemButton
+              selected={
+                topMenuItemSelected === item.titleKeyword ||
+                selectedToolTitleKeyword === item.titleKeyword
+              }
+              key={key}
+              onClick={() => handleSideMenuToolClick(item)}
+            >
+              {isSideMenuOpen ? (
+                <>
+                  <ListItemIcon
+                    sx={{
+                      marginRight: "12px",
+                      minWidth: "unset",
+                      ...iconConditionalStyling(item),
+                    }}
+                  >
+                    {item.icon}
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={
+                      <Typography
+                        color={
+                          topMenuItemSelected === item.titleKeyword ||
+                          selectedToolTitleKeyword === item.titleKeyword
+                            ? "primary"
+                            : ""
+                        }
+                        className={`${
+                          isSideMenuOpen
+                            ? classes.drawerListText
+                            : classes.hidden
+                        }`}
+                      >
+                        {keyword(item.titleKeyword)}
+                      </Typography>
+                    }
+                  />
+                </>
+              ) : (
+                <Stack
+                  direction="row"
+                  alignItems="center"
+                  justifyContent="center"
+                  width="100%"
+                  sx={{
+                    ...iconConditionalStyling(item),
+                  }}
+                >
+                  {item.icon}
+                </Stack>
+              )}
+            </ListItemButton>
+          );
+        })}
+      </List>
 
-          <Box m={1} />
+      <div className={classes.grow} />
+
+      <Box
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "stretch",
+          position: "sticky",
+          bottom: "0px",
+          backgroundColor: "#ffffff",
+          zIndex: "9",
+        }}
+      >
+        <Box p={1}>
+          <Divider />
         </Box>
-      </Drawer>
-    </div>
+
+        <Button
+          onClick={toggleSideMenu}
+          style={{ alignSelf: "center" }}
+          startIcon={
+            isSideMenuOpen ? (
+              direction === "ltr" ? (
+                <ChevronLeft />
+              ) : (
+                <ChevronRight />
+              )
+            ) : null
+          }
+        >
+          {isSideMenuOpen ? (
+            keyword("navbar_collapse")
+          ) : direction === "ltr" ? (
+            <ChevronRight />
+          ) : (
+            <ChevronLeft />
+          )}
+        </Button>
+
+        <Box m={1} />
+      </Box>
+    </Drawer>
   );
 };
 

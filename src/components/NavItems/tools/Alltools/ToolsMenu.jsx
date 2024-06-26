@@ -19,7 +19,7 @@ import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import Iframe from "react-iframe";
 import DialogActions from "@mui/material/DialogActions";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
-import MainContentMenuItem from "./MainContentMenuItem";
+import ToolsMenuItem from "./ToolsMenuItem";
 import ImageIcon from "../../../NavBar/images/SVG/Image/Images.svg";
 import VideoIcon from "../../../NavBar/images/SVG/Video/Video.svg";
 import SearchIcon from "../../../NavBar/images/SVG/Search/Search.svg";
@@ -58,7 +58,7 @@ function TabPanel(props) {
  * @returns {Element}
  * @constructor
  */
-const MainContentMenu = ({ tools }) => {
+const ToolsMenu = ({ tools }) => {
   const navigate = useNavigate();
   const classes = useMyStyles();
   const keyword = i18nLoadNamespace("components/NavItems/tools/Alltools");
@@ -94,9 +94,9 @@ const MainContentMenu = ({ tools }) => {
     } else {
       navigate("/app/tools/" + path);
       /* history.push({
-                                                                                                                                                                                                    pathname: "/app/tools/" + path,
-                                                                                                                                                                                                    state: { media: mediaTool }
-                                                                                                                                                                                                })*/
+                                                                                                                                                                                                          pathname: "/app/tools/" + path,
+                                                                                                                                                                                                          state: { media: mediaTool }
+                                                                                                                                                                                                      })*/
     }
   };
 
@@ -295,7 +295,7 @@ const MainContentMenu = ({ tools }) => {
                           handleClick(value.path, value.rolesNeeded)
                         }
                       >
-                        <MainContentMenuItem
+                        <ToolsMenuItem
                           name={keyword(value.title)}
                           description={keyword(value.description)}
                           icon={value.iconColored}
@@ -350,4 +350,4 @@ const MainContentMenu = ({ tools }) => {
     </>
   );
 };
-export default MainContentMenu;
+export default ToolsMenu;

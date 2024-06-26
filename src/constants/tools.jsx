@@ -26,6 +26,26 @@ import XnetworkIcon from "../components/NavBar/images/SVG/Search/Xnetwork.svg";
 import TwitterSnaIcon from "../components/NavBar/images/SVG/DataAnalysis/Twitter_sna.svg";
 import CsvSnaIcon from "../components/NavBar/images/SVG/DataAnalysis/CSV_SNA.svg";
 import AboutIcon from "../components/NavBar/images/SVG/Navbar/About.svg";
+import ToolsMenu from "../components/NavItems/tools/Alltools/ToolsMenu";
+import Analysis from "../components/NavItems/tools/Analysis/Analysis";
+import { Footer, FOOTER_TYPES } from "../components/Shared/Footer/Footer";
+import Keyframes from "../components/NavItems/tools/Keyframes/Keyframes";
+import Thumbnails from "../components/NavItems/tools/Thumbnails/Thumbnails";
+import VideoRights from "../components/NavItems/tools/VideoRights/VideoRights";
+import Metadata from "../components/NavItems/tools/Metadata/Metadata";
+import DeepfakeVideo from "../components/NavItems/tools/Deepfake/DeepfakeVideo";
+import AnalysisImg from "../components/NavItems/tools/Analysis_images/Analysis";
+import Magnifier from "../components/NavItems/tools/Magnifier/Magnifier";
+import Forensic from "../components/NavItems/tools/Forensic/Forensic";
+import OCR from "../components/NavItems/tools/OCR/OCR";
+import CheckGif from "../components/NavItems/tools/Gif/CheckGif";
+import SyntheticImageDetection from "../components/NavItems/tools/SyntheticImageDetection";
+import DeepfakeImage from "../components/NavItems/tools/Deepfake/DeepfakeImage";
+import Geolocation from "../components/NavItems/tools/Geolocation/Geolocation";
+import Loccus from "../components/NavItems/tools/Loccus";
+import TwitterAdvancedSearch from "../components/NavItems/tools/TwitterAdvancedSearch/TwitterAdvancedSearch";
+import SemanticSearch from "../components/NavItems/tools/SemanticSearch";
+import TwitterSna from "../components/NavItems/tools/TwitterSna/TwitterSna";
 
 /**
  * Represents the categories to which the tools belong
@@ -97,6 +117,8 @@ class Tool {
    * @param rolesNeeded {?Array<Roles>} Role(s) needed to access the tool
    * @param path {string} The url path to the tool
    * @param toolGroup {ToolGroups} The group to which the tool belongs
+   * @param content The React Element to display for the tool
+   * @param footer The React element to display at the bottom of the tool React Element
    */
   constructor(
     titleKeyword,
@@ -107,6 +129,8 @@ class Tool {
     rolesNeeded,
     path,
     toolGroup,
+    content,
+    footer,
   ) {
     this.titleKeyword = titleKeyword;
     this.descriptionKeyword = descriptionKeyword;
@@ -116,6 +140,8 @@ class Tool {
     this.rolesNeeded = rolesNeeded;
     this.path = path;
     this.toolGroup = toolGroup;
+    this.content = content;
+    this.footer = footer;
   }
 }
 
@@ -136,6 +162,8 @@ const toolsHome = new Tool(
   null,
   "all",
   TOOL_GROUPS.VERIFICATION,
+  <ToolsMenu tools={tools} />,
+  <div />,
 );
 
 /**
@@ -151,6 +179,8 @@ const videoAnalysis = new Tool(
   null,
   "analysis",
   TOOL_GROUPS.VERIFICATION,
+  <Analysis />,
+  <Footer type={FOOTER_TYPES.ITI} />,
 );
 
 const keyframes = new Tool(
@@ -162,6 +192,8 @@ const keyframes = new Tool(
   null,
   "keyframes",
   TOOL_GROUPS.VERIFICATION,
+  <Keyframes />,
+  <Footer type={FOOTER_TYPES.ITI} />,
 );
 
 const thumbnails = new Tool(
@@ -173,6 +205,8 @@ const thumbnails = new Tool(
   null,
   "thumbnails",
   TOOL_GROUPS.VERIFICATION,
+  <Thumbnails />,
+  <Footer type={FOOTER_TYPES.AFP} />,
 );
 
 const videoRights = new Tool(
@@ -184,6 +218,8 @@ const videoRights = new Tool(
   null,
   "copyright",
   TOOL_GROUPS.VERIFICATION,
+  <VideoRights />,
+  <Footer type={FOOTER_TYPES.GRIHO} />,
 );
 
 const videoMetadata = new Tool(
@@ -195,6 +231,8 @@ const videoMetadata = new Tool(
   null,
   "metadata",
   TOOL_GROUPS.VERIFICATION,
+  <Metadata mediaType={"video"} />,
+  <Footer type={FOOTER_TYPES.AFP} />,
 );
 
 const videoDeepfake = new Tool(
@@ -206,6 +244,8 @@ const videoDeepfake = new Tool(
   [ROLES.BETA_TESTER],
   "deepfakeVideo",
   TOOL_GROUPS.VERIFICATION,
+  <DeepfakeVideo />,
+  <Footer type={FOOTER_TYPES.ITI} />,
 );
 
 /**
@@ -221,6 +261,8 @@ const imageAnalysis = new Tool(
   [],
   "analysisImage",
   TOOL_GROUPS.VERIFICATION,
+  <AnalysisImg />,
+  <Footer type={FOOTER_TYPES.ITI} />,
 );
 
 const imageMagnifier = new Tool(
@@ -232,6 +274,8 @@ const imageMagnifier = new Tool(
   [],
   "magnifier",
   TOOL_GROUPS.VERIFICATION,
+  <Magnifier />,
+  <Footer type={FOOTER_TYPES.AFP} />,
 );
 
 const imageMetadata = new Tool(
@@ -243,6 +287,8 @@ const imageMetadata = new Tool(
   [],
   "metadata_image",
   TOOL_GROUPS.VERIFICATION,
+  <Metadata mediaType={"image"} />,
+  <Footer type={FOOTER_TYPES.AFP} />,
 );
 
 const imageForensic = new Tool(
@@ -254,6 +300,8 @@ const imageForensic = new Tool(
   [],
   "forensic",
   TOOL_GROUPS.VERIFICATION,
+  <Forensic />,
+  <Footer type={FOOTER_TYPES.ITI_BORELLI_AFP} />,
 );
 
 const imageOcr = new Tool(
@@ -265,6 +313,8 @@ const imageOcr = new Tool(
   [],
   "ocr",
   TOOL_GROUPS.VERIFICATION,
+  <OCR />,
+  <Footer type={FOOTER_TYPES.USFD} />,
 );
 
 const imageGif = new Tool(
@@ -276,6 +326,8 @@ const imageGif = new Tool(
   [ROLES.LOCK],
   "gif",
   TOOL_GROUPS.VERIFICATION,
+  <CheckGif />,
+  <Footer type={FOOTER_TYPES.BORELLI_AFP} />,
 );
 
 const imageSyntheticDetection = new Tool(
@@ -287,6 +339,8 @@ const imageSyntheticDetection = new Tool(
   [ROLES.BETA_TESTER],
   "syntheticImageDetection",
   TOOL_GROUPS.VERIFICATION,
+  <SyntheticImageDetection />,
+  <Footer type={FOOTER_TYPES.ITI_UNINA} />,
 );
 
 const imageDeepfake = new Tool(
@@ -298,6 +352,8 @@ const imageDeepfake = new Tool(
   [ROLES.BETA_TESTER],
   "deepfakeImage",
   TOOL_GROUPS.VERIFICATION,
+  <DeepfakeImage />,
+  <Footer type={FOOTER_TYPES.ITI} />,
 );
 
 const imageGeolocation = new Tool(
@@ -309,6 +365,8 @@ const imageGeolocation = new Tool(
   [ROLES.BETA_TESTER],
   "geolocation",
   TOOL_GROUPS.VERIFICATION,
+  <Geolocation />,
+  <Footer type={FOOTER_TYPES.AFP} />,
 );
 
 /**
@@ -324,6 +382,8 @@ const audioLoccus = new Tool(
   [ROLES.BETA_TESTER],
   "loccus",
   TOOL_GROUPS.VERIFICATION,
+  <Loccus />,
+  <Footer type={FOOTER_TYPES.LOCCUS} />,
 );
 
 /**
@@ -339,6 +399,8 @@ const searchTwitter = new Tool(
   null,
   "twitter",
   TOOL_GROUPS.VERIFICATION,
+  <TwitterAdvancedSearch />,
+  <Footer type={FOOTER_TYPES.AFP} />,
 );
 
 const searchSemantic = new Tool(
@@ -350,6 +412,8 @@ const searchSemantic = new Tool(
   [ROLES.LOCK],
   "semanticSearch",
   TOOL_GROUPS.VERIFICATION,
+  <SemanticSearch />,
+  <Footer type={FOOTER_TYPES.KINIT} />,
 );
 
 const searchCovid = new Tool(
@@ -361,6 +425,8 @@ const searchCovid = new Tool(
   [],
   "factcheck",
   TOOL_GROUPS.VERIFICATION,
+  null,
+  null,
 );
 
 const searchXnetwork = new Tool(
@@ -372,6 +438,8 @@ const searchXnetwork = new Tool(
   [],
   "xnetwork",
   TOOL_GROUPS.VERIFICATION,
+  null,
+  null,
 );
 
 /**
@@ -387,6 +455,8 @@ const dataAnalysisSna = new Tool(
   [ROLES.LOCK],
   "twitterSna",
   TOOL_GROUPS.VERIFICATION,
+  <TwitterSna />,
+  <Footer type={FOOTER_TYPES.USFD_AFP_EU_DISINFOLAB} />,
 );
 
 const dataAnalysisCrowdtangle = new Tool(
@@ -398,6 +468,8 @@ const dataAnalysisCrowdtangle = new Tool(
   [],
   "csvSna",
   TOOL_GROUPS.VERIFICATION,
+  <Archive />,
+  <Footer type={FOOTER_TYPES.AFP} />,
 );
 
 /**
@@ -428,6 +500,8 @@ const about = new Tool(
   null,
   "about",
   TOOL_GROUPS.MORE,
+  null,
+  null,
 );
 
 export const tools = [

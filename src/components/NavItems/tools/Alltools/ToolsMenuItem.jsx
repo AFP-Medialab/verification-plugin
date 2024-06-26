@@ -7,7 +7,7 @@ import AuthenticationIcon from "./AdvancedTools/AuthenticationIcon";
 import ImprovedIcon from "../../../NavBar/images/SVG/Improved.svg";
 import ScienceIcon from "@mui/icons-material/Science";
 
-export class MainContentMenuItem extends Component {
+export class ToolsMenuItem extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -125,4 +125,4 @@ export class MainContentMenuItem extends Component {
   }
 }
 
-export default MainContentMenuItem;
+export default ToolsMenuItem;

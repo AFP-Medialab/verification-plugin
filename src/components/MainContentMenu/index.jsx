@@ -12,11 +12,18 @@ import {
 import { setFalse, setTrue } from "../../redux/reducers/cookiesReducers";
 import Feedback from "../Feedback/Feedback";
 import useMyStyles from "../Shared/MaterialUiStyles/useMyStyles";
-import { TOOL_STATUS_ICON, tools } from "../../constants/tools";
+import { TOOL_STATUS_ICON } from "../../constants/tools";
 import { useDispatch, useSelector } from "react-redux";
 import { i18nLoadNamespace } from "../Shared/Languages/i18nLoadNamespace";
+import { TOP_MENU_ITEMS } from "../../constants/topMenuItems";
 
-const MainContentMenu = () => {
+/**
+ *
+ * @param tools {Tool[]}
+ * @returns {Element}
+ * @constructor
+ */
+const MainContentMenu = ({ tools }) => {
   const classes = useMyStyles();
 
   const keyword = i18nLoadNamespace("components/NavBar");
@@ -35,14 +42,12 @@ const MainContentMenu = () => {
 
   const drawItemPerRole = tools.filter((tool) => {
     if (
-      !tools.rolesNeeded ||
+      !tool.rolesNeeded ||
       tool.rolesNeeded.length === 0 ||
       tool.rolesNeeded.includes(TOOL_STATUS_ICON.LOCK)
     )
       return true;
-    else if (
-      tools.rolesNeeded.some((restriction) => role.includes(restriction))
-    )
+    else if (tool.rolesNeeded.some((restriction) => role.includes(restriction)))
       return true;
     else return false;
   });
@@ -116,7 +121,7 @@ const MainContentMenu = () => {
       <div className={classes.toolbar} id="back-to-top-anchor" />
       <MainContentMenuTabItems
         className={classes.noMargin}
-        tabItems={tools}
+        tabItems={TOP_MENU_ITEMS}
         toolsList={drawItemPerRole}
       />
       <ScrollTop

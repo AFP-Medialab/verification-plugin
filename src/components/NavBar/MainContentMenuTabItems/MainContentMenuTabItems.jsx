@@ -3,12 +3,11 @@ import { Container } from "@mui/material";
 import Fade from "@mui/material/Fade";
 import React, { useEffect } from "react";
 import DrawerItem from "../DrawerItem/DrawerItem";
-import { useDispatch, useSelector } from "react-redux";
-import { selectPage } from "../../../redux/reducers/navReducer";
+import { useSelector } from "react-redux";
 import { useTrackPageView } from "../../../Hooks/useAnalytics";
 
 /**
- * Represents the group of tools to display and their tabs in the MainContentMenu
+ * Represents the group of tools to display and their tabs in the ToolsMenu
  *
  * @param tabItems An array with the list of tools categories
  * @param toolsList {[]} An array with the list of tools
@@ -31,7 +30,7 @@ const MainContentMenuTabItems = ({ tabItems, toolsList }) => {
             element={
               <TabContent
                 index={index}
-                path={item.path}
+                tool={item}
                 tabItems={tabItems}
                 toolsList={toolsList}
               />
@@ -43,14 +42,14 @@ const MainContentMenuTabItems = ({ tabItems, toolsList }) => {
   );
 };
 
-const TabContent = ({ index, path, toolsList, tabItems }) => {
+const TabContent = ({ index, tool, toolsList, tabItems }) => {
   //console.log("path .... ", path);
-  const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(selectPage(index));
-  }, [index]);
+  // const dispatch = useDispatch();
+  // useEffect(() => {
+  //   dispatch(selectPage(tool.titleKeyword));
+  // }, [tool]);
 
-  switch (path) {
+  switch (tool.path) {
     case "tools":
       return <DrawerItem toolsList={toolsList} />;
     case "assistant":
@@ -79,6 +78,9 @@ const ContentContainer = ({ tabItems, index }) => {
   // const clientId = cookies !== null ? cookies.id : null;
 
   const session = useSelector((state) => state.userSession);
+
+  console.log(tabItems);
+  console.log(tabItems[index].content);
 
   const uid = session && session.user ? session.user.id : null;
   const clientId = uid;
