@@ -191,7 +191,7 @@ export const ASSISTANT_ACTIONS = [
   {
     title: "navbar_rights",
     icon: videoRightsIconOff,
-    linksAccepted: [KNOWN_LINKS.YOUTUBE, KNOWN_LINKS.FACEBOOK],
+    linksAccepted: [KNOWN_LINKS.YOUTUBE],
     cTypes: [CONTENT_TYPE.VIDEO],
     exceptions: [],
     useInputUrl: true,
