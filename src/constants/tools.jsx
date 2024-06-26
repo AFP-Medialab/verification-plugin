@@ -160,9 +160,9 @@ const toolsHome = new Tool(
   TOOLS_CATEGORIES.ALL,
   null,
   null,
-  "all",
+  "tools",
   TOOL_GROUPS.VERIFICATION,
-  <ToolsMenu tools={tools} />,
+  <ToolsMenu />,
   <div />,
 );
 

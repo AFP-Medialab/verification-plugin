@@ -1348,8 +1348,6 @@ const NavBar = () => {
 
   tmpListItems.map((items) => {
     const listTools = items.list;
-    console.log(listTools);
-    console.log(role);
 
     for (let i = 0; i < listTools.length; i++) {
       if (!listTools[i].rolesNeeded || listTools[i].rolesNeeded.length === 0) {

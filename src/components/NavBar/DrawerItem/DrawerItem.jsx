@@ -101,7 +101,7 @@ const DrawerItem = ({ toolsList }) => {
   return (
     <Routes>
       {toolsList.map((tool, index) => {
-        if (tool.path === "all") {
+        if (tool.path === "tools") {
           return (
             <Route
               path={"*"}

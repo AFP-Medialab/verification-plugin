@@ -30,7 +30,7 @@ import { useNavigate } from "react-router-dom";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import { Audiotrack } from "@mui/icons-material";
 import Typography from "@mui/material/Typography";
-import { TOOLS_CATEGORIES } from "../../../../constants/tools";
+import { tools, TOOLS_CATEGORIES } from "../../../../constants/tools";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -54,11 +54,10 @@ function TabPanel(props) {
 
 /**
  *
- * @param tools {Tool[]}
  * @returns {Element}
  * @constructor
  */
-const ToolsMenu = ({ tools }) => {
+const ToolsMenu = () => {
   const navigate = useNavigate();
   const classes = useMyStyles();
   const keyword = i18nLoadNamespace("components/NavItems/tools/Alltools");
@@ -72,10 +71,10 @@ const ToolsMenu = ({ tools }) => {
   );
   const [openAlert, setOpenAlert] = React.useState(false);
 
-  const handleClick = (path, restrictions) => {
+  const handleClick = (path, rolesNeeded) => {
     //console.log(type);
 
-    if (restrictions !== undefined && restrictions.includes("lock")) {
+    if (rolesNeeded && rolesNeeded.includes("lock")) {
       if (userAuthenticated) {
         //console.log("LOGGED");
         handlePush(path);
@@ -94,9 +93,9 @@ const ToolsMenu = ({ tools }) => {
     } else {
       navigate("/app/tools/" + path);
       /* history.push({
-                                                                                                                                                                                                          pathname: "/app/tools/" + path,
-                                                                                                                                                                                                          state: { media: mediaTool }
-                                                                                                                                                                                                      })*/
+                                                                                                                                                                                                                                              pathname: "/app/tools/" + path,
+                                                                                                                                                                                                                                              state: { media: mediaTool }
+                                                                                                                                                                                                                                          })*/
     }
   };
 
@@ -277,6 +276,7 @@ const ToolsMenu = ({ tools }) => {
           {categoriesAllowedForUser.map((category, index) => {
             const tools = category.value;
             //if(tools.length !==0){
+
             return (
               <TabPanel value={value} index={index} key={index}>
                 <Grid
@@ -285,25 +285,26 @@ const ToolsMenu = ({ tools }) => {
                   spacing={2}
                   className={classes.toolCardsContainer}
                 >
-                  {tools.map((value, key) => {
+                  {tools.map((tool, key) => {
                     const element = (
                       <Grid
                         className={classes.toolCardStyle}
                         item
                         key={key}
-                        onClick={() =>
-                          handleClick(value.path, value.rolesNeeded)
-                        }
+                        onClick={() => handleClick(tool.path, tool.rolesNeeded)}
                       >
                         <ToolsMenuItem
-                          name={keyword(value.title)}
-                          description={keyword(value.description)}
-                          icon={value.iconColored}
-                          iconsAttributes={value.icons}
+                          name={keyword(tool.titleKeyword)}
+                          description={keyword(tool.descriptionKeyword)}
+                          icon={tool.icon}
+                          iconsAttributes={tool.icons}
                         />
                       </Grid>
                     );
-                    if (value.rolesNeeded.includes("BETA_TESTER")) {
+                    if (
+                      tool.rolesNeeded &&
+                      tool.rolesNeeded.includes("BETA_TESTER")
+                    ) {
                       if (betaTester) {
                         return element;
                       } else {

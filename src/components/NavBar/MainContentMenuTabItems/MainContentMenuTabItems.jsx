@@ -17,9 +17,6 @@ import { useTrackPageView } from "../../../Hooks/useAnalytics";
 const MainContentMenuTabItems = ({ tabItems, toolsList }) => {
   if (!tabItems || tabItems.length === 0) return null;
 
-  console.log(tabItems);
-  console.log(toolsList);
-
   return (
     <Routes>
       {tabItems.map((item, index) => {
