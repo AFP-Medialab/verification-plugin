@@ -76,9 +76,6 @@ const ContentContainer = ({ tabItems, index }) => {
 
   const session = useSelector((state) => state.userSession);
 
-  console.log(tabItems);
-  console.log(tabItems[index].content);
-
   const uid = session && session.user ? session.user.id : null;
   const clientId = uid;
   useTrackPageView(path, clientId, uid);
