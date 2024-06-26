@@ -23,7 +23,7 @@ import { TOP_MENU_ITEMS } from "../../constants/topMenuItems";
  * @returns {Element}
  * @constructor
  */
-const MainContentMenu = ({ tools }) => {
+const MainContent = ({ tools }) => {
   const classes = useMyStyles();
 
   const keyword = i18nLoadNamespace("components/NavBar");
@@ -191,4 +191,4 @@ const MainContentMenu = ({ tools }) => {
   );
 };
 
-export default MainContentMenu;
+export default MainContent;

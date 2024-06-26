@@ -5,7 +5,7 @@ import TopMenu from "../TopMenu";
 import { TOP_MENU_ITEMS } from "../../constants/topMenuItems";
 import SideMenu from "../SideMenu";
 import { tools } from "../../constants/tools";
-import MainContentMenu from "../MainContentMenu";
+import MainContent from "../MainContent";
 import useMyStyles from "../Shared/MaterialUiStyles/useMyStyles";
 
 const ApplicationLayout = () => {
@@ -84,7 +84,7 @@ const ApplicationLayout = () => {
       <ThemeProvider theme={theme}>
         <SideMenu tools={tools} setOpenAlert={setOpenAlert} />
         <TopMenu topMenuItems={TOP_MENU_ITEMS} />
-        <MainContentMenu tools={tools} />
+        <MainContent tools={tools} />
       </ThemeProvider>
     </div>
   );
