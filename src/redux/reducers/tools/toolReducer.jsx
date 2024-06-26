@@ -1,14 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  selected: 0,
+  toolName: "navbar_tools",
 };
 const toolSlice = createSlice({
   name: "tools",
   initialState,
   reducers: {
     selectTool(state, action) {
-      state.selected = action.payload;
+      state.toolName = action.payload;
     },
     cleanTool() {
       return initialState;
@@ -19,15 +19,4 @@ const toolSlice = createSlice({
 export const { selectTool, cleanTool } = toolSlice.actions;
 const toolReducer = toolSlice.reducer;
 
-/*const toolReducer = (state = defaultState, action) => {
-    switch (action.type) {
-        case "SELECT_TOOL":
-            console.log("selected ", action.payload)
-            return {...state, selected:action.payload};
-        case "CLEAN_STATE":
-            return defaultState;
-        default:
-            return state;
-    }
-};*/
 export default toolReducer;

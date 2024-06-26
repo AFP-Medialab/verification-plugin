@@ -167,7 +167,7 @@ const DrawerItem = ({ toolsList }) => {
     </Routes>
   );
 };
-const DrawerItemContent = ({ index, drawContent }) => {
+const DrawerItemContent = ({ toolName, drawContent }) => {
   const dispatch = useDispatch();
 
   //Style elements
@@ -220,19 +220,19 @@ const DrawerItemContent = ({ index, drawContent }) => {
 
   const session = useSelector((state) => state.userSession);
   const uid = session && session.user ? session.user.id : null;
-  useTrackPageView(path, client_id, uid, index);
+  useTrackPageView(path, client_id, uid, toolName);
   useEffect(() => {
     //trackPageView(path, client_id, uid);
-    dispatch(selectTool(index));
-  }, [index]);
+    dispatch(selectTool(toolName));
+  }, [toolName]);
 
   return (
-    <Container key={index} className={classes.noMargin} maxWidth={false}>
+    <Container key={toolName} className={classes.noMargin} maxWidth={false}>
       <Fade in={true}>
         <div>
           <ThemeProvider theme={theme}>
-            {drawContent[index].content}
-            {drawContent[index].footer}
+            {drawContent[toolName].content}
+            {drawContent[toolName].footer}
           </ThemeProvider>
         </div>
       </Fade>

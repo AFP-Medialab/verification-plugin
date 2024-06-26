@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { HashRouter, Route, Routes } from "react-router-dom";
 import PopUp from "./components/PopUp/PopUp";
-import NavBar from "./components/NavBar/NavBar";
 import useAuthenticationAPI from "./components/Shared/Authentication/useAuthenticationAPI";
 import { useDispatch } from "react-redux";
 import {
@@ -10,6 +9,7 @@ import {
   setErrorNetwork,
 } from "redux/reducers/errorReducer";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+import ApplicationLayout from "./components/ApplicationLayout";
 
 const theme = createTheme({
   palette: {
@@ -103,7 +103,7 @@ const App = () => {
       <ThemeProvider theme={theme}>
         <Routes>
           <Route index path="/" element={<PopUp />} />
-          <Route path={"/app/*"} element={<NavBar />} />
+          <Route path={"/app/*"} element={<ApplicationLayout />} />
         </Routes>
       </ThemeProvider>
     </HashRouter>

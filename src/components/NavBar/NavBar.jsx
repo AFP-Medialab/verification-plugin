@@ -1,20 +1,16 @@
 import React, { createRef, memo, useEffect, useState } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
-import Languages from "../NavItems/languages/languages";
 import Tutorial from "../NavItems/tutorial/tutorial";
 import clsx from "clsx";
 
 import {
-  Alert,
-  AppBar,
   Box,
   Button,
   Collapse,
   Divider,
   Drawer,
   Fab,
-  Grid,
   List,
   ListItemButton,
   ListItemIcon,
@@ -23,23 +19,16 @@ import {
   Snackbar,
   Stack,
   SvgIcon,
-  Tab,
-  Tabs,
-  Toolbar,
   Typography,
 } from "@mui/material";
 
 import {
-  Archive,
-  AudioFile,
   Audiotrack,
   ChevronLeft,
   ChevronRight,
   ExpandLess,
   ExpandMore,
-  Gradient,
   KeyboardArrowUp,
-  ManageSearch,
   MoreHoriz,
 } from "@mui/icons-material";
 
@@ -57,28 +46,6 @@ import useMyStyles from "../Shared/MaterialUiStyles/useMyStyles";
 import { Footer, FOOTER_TYPES } from "../Shared/Footer/Footer";
 import Feedback from "../Feedback/Feedback";
 
-import AnalysisIcon from "./images/SVG/Video/Video_analysis.svg";
-import KeyframesIcon from "./images/SVG/Video/Keyframes.svg";
-import ThumbnailsIcon from "./images/SVG/Video/Thumbnails.svg";
-import VideoRightsIcon from "./images/SVG/Video/Video_rights.svg";
-
-import MetadataIcon from "./images/SVG/Image/Metadata.svg";
-import MagnifierIcon from "./images/SVG/Image/Magnifier.svg";
-import ForensicIcon from "./images/SVG/Image/Forensic.svg";
-import GifIcon from "./images/SVG/Image/Gif.svg";
-import OcrIcon from "./images/SVG/Image/OCR.svg";
-
-import AnalysisIconImage from "./images/SVG/Image/Image_analysis.svg";
-
-import TwitterSearchIcon from "./images/SVG/Search/Twitter_search.svg";
-import CovidSearchIcon from "./images/SVG/Search/Covid19.svg";
-import XnetworkIcon from "./images/SVG/Search/Xnetwork.svg";
-
-import TwitterSnaIcon from "./images/SVG/DataAnalysis/Twitter_sna.svg";
-import CsvSnaIcon from "./images/SVG/DataAnalysis/CSV_SNA.svg";
-import DeepfakeIcon from "./images/SVG/Image/Deepfake.svg";
-import GeolocationIcon from "./images/SVG/Image/Geolocation.svg";
-
 import ToolsIcon from "./images/SVG/Navbar/Tools.svg";
 import ClassroomIcon from "./images/SVG/Navbar/Classroom.svg";
 import InteractiveIcon from "./images/SVG/Navbar/Interactive.svg";
@@ -86,11 +53,6 @@ import InteractiveIcon from "./images/SVG/Navbar/Interactive.svg";
 import AboutIcon from "./images/SVG/Navbar/About.svg";
 import AssistantIcon from "./images/SVG/Navbar/Assistant.svg";
 import GuideIcon from "./images/SVG/Navbar/Guide.svg";
-
-import LogoVera from "./images/SVG/Navbar/vera-logo_black.svg";
-import LogoInVidWeverify from "./images/SVG/Navbar/invid_weverify.svg";
-
-import LogoEuCom from "./images/SVG/Navbar/ep-logo.svg";
 
 import VideoIcon from "./images/SVG/Video/Video.svg";
 import ImageIcon from "./images/SVG/Image/Images.svg";
@@ -105,25 +67,14 @@ import { setFalse, setTrue } from "../../redux/reducers/cookiesReducers";
 import { changeLanguage } from "../../redux/reducers/languageReducer";
 
 import { Link, useNavigate } from "react-router-dom";
-import AdvancedTools from "../NavItems/tools/Alltools/AdvancedTools/AdvancedTools";
+import { ROLES, TOOL_STATUS_ICON, tools, TOOLS_CATEGORIES } from "./Tools";
 
-function a11yProps(index) {
-  return {
-    id: `scrollable-force-tab-${index}`,
-    "aria-controls": `scrollable-force-tabpanel-${index}`,
-  };
-}
-export const TOOLS_CATEGORIES = {
-  VIDEO: "navbar_category_video",
-  IMAGE: "navbar_category_image",
-  AUDIO: "navbar_category_audio",
-  SEARCH: "navbar_category_search",
-  DATA_ANALYSIS: "navbar_category_data",
-  OTHER: "navbar_category_other",
-
-  // Used to display the home page
-  ALL: "navbar_category_general",
-};
+// function a11yProps(index) {
+//   return {
+//     id: `scrollable-force-tab-${index}`,
+//     "aria-controls": `scrollable-force-tabpanel-${index}`,
+//   };
+// }
 
 const NavBar = () => {
   const classes = useMyStyles();
@@ -132,10 +83,10 @@ const NavBar = () => {
   const [classWidthToolbar, setClassWidthToolbar] = useState(
     classes.drawerWidth,
   );
-  const LOGO_EU = process.env.REACT_APP_LOGO_EU;
+  // const LOGO_EU = process.env.REACT_APP_LOGO_EU;
   const topMenuItemSelectedId = useSelector((state) => state.nav);
 
-  const sideMenuItemSelectedId = useSelector((state) => state.tool.selected);
+  const selectedToolTitleKeyword = useSelector((state) => state.tool.selected);
   const cookiesUsage = useSelector((state) => state.cookies);
   const currentLang = useSelector((state) => state.language);
   const defaultLanguage = useSelector((state) => state.defaultLanguage);
@@ -144,26 +95,27 @@ const NavBar = () => {
 
   const drawerRef = createRef();
 
-  // Set UI dicrection based on language reading direction
+  // Set UI direction based on language reading direction
   const direction = currentLang !== "ar" ? "ltr" : "rtl";
 
-  const handleTopMenuChange = (event, newValue) => {
-    let path = sideMenuItems[newValue].path;
+  // const handleTopMenuChange = (event, newValue) => {
+  //   console.log(newValue);
+  //   let path = tools[newValue].path;
+  //
+  //   if (topMenuItems[newValue].path === "tools") navigate("/app/tools/" + path);
+  //   //history.push("/app/tools/" + path);
+  //   else navigate("/app/" + topMenuItems[newValue].path);
+  //   //history.push("/app/" + topMenuItems[newValue].path)
+  // };
 
-    if (topMenuItems[newValue].path === "tools") navigate("/app/tools/" + path);
-    //history.push("/app/tools/" + path);
-    else navigate("/app/" + topMenuItems[newValue].path);
-    //history.push("/app/" + topMenuItems[newValue].path)
-  };
-
-  const [openAlert, setOpenAlert] = useState(false);
-
-  const handleCloseAlert = (event, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
-    setOpenAlert(false);
-  };
+  // const [openAlert, setOpenAlert] = useState(false);
+  //
+  // const handleCloseAlert = (event, reason) => {
+  //   if (reason === "clickaway") {
+  //     return;
+  //   }
+  //   setOpenAlert(false);
+  // };
 
   const userAuthenticated = useSelector(
     (state) => state.userSession && state.userSession.userAuthenticated,
@@ -172,8 +124,8 @@ const NavBar = () => {
   const changeValue = (newValue, newValueType) => {
     if (newValueType === "TOOL") {
       if (
-        newValue.toolRestrictions !== undefined &&
-        newValue.toolRestrictions.includes(TOOL_STATUS_ICON.LOCK)
+        newValue.rolesNeeded !== undefined &&
+        newValue.rolesNeeded.includes(ROLES.LOCK)
       ) {
         if (userAuthenticated) {
           navigate("/app/tools/" + newValue.path);
@@ -222,794 +174,766 @@ const NavBar = () => {
   const role = useSelector((state) => state.userSession.user.roles);
   const betaTester = role.includes("BETA_TESTER");
 
-  /**
-   * Represents the categories to which the tools belong
-   *
-   */
-
-  /**
-   * Represents the possible temporary states of the tools:
-   * - An experimental tool is not ready for production, and available to beta testers
-   * - A new tool is an experimental tool that was released to everyone
-   * - A locked tool is a tool available to registered users
-   * @type {{NEW: string, LOCK: string, EXPERIMENTAL: string}}
-   */
-  const TOOL_STATUS_ICON = {
-    EXPERIMENTAL: "experimental",
-    NEW: "new",
-    LOCK: "lock",
-  };
-
-  /**
-   * Represents the user roles that can be needed to access a given tool
-   * @type {{BETA_TESTER: string, ARCHIVE: string, LOCK: string}}
-   */
-  const TOOL_RESTRICTIONS = {
-    ARCHIVE: "ARCHIVE",
-    BETA_TESTER: "BETA_TESTER",
-    LOCK: "lock",
-  };
-
-  const sideMenuItems = [
-    {
-      id: 1,
-      title: "navbar_tools",
-      icon: (
-        <SvgIcon
-          component={ToolsIcon}
-          sx={{
-            fill:
-              topMenuItemSelectedId === 0 && sideMenuItemSelectedId === 0
-                ? "#00926c"
-                : "#4c4c4c",
-            fontSize: "24px",
-          }}
-          inheritViewBox
-        />
-      ),
-      path: "all",
-      type: TOOLS_CATEGORIES.ALL,
-
-      icons: [],
-      toolRestrictions: [],
-    },
-
-    {
-      id: 2,
-      title: "navbar_analysis_video",
-      description: "navbar_analysis_description",
-      icon: (
-        <SvgIcon
-          component={AnalysisIcon}
-          sx={{
-            fill:
-              topMenuItemSelectedId === 0 && sideMenuItemSelectedId === 1
-                ? "#00926c"
-                : "#4c4c4c",
-            fontSize: "24px",
-          }}
-          inheritViewBox
-        />
-      ),
-      iconColored: (
-        <AnalysisIcon
-          width="45px"
-          height="45px"
-          style={{ fill: "#00926c" }}
-          title={keyword("navbar_analysis_video")}
-        />
-      ),
-      path: "analysis",
-      type: TOOLS_CATEGORIES.VIDEO,
-      icons: [],
-      toolRestrictions: [],
-    },
-    {
-      id: 3,
-      title: "navbar_keyframes",
-      description: "navbar_keyframes_description",
-      icon: (
-        <SvgIcon
-          component={KeyframesIcon}
-          sx={{
-            fill:
-              topMenuItemSelectedId === 0 && sideMenuItemSelectedId === 2
-                ? "#00926c"
-                : "#4c4c4c",
-            fontSize: "24px",
-          }}
-          inheritViewBox
-        />
-      ),
-      iconColored: (
-        <KeyframesIcon
-          width="45px"
-          height="45px"
-          style={{ fill: "#00926c" }}
-          title={keyword("navbar_keyframes")}
-        />
-      ),
-
-      path: "keyframes",
-      type: TOOLS_CATEGORIES.VIDEO,
-
-      icons: [],
-      toolRestrictions: [],
-    },
-    {
-      id: 4,
-      title: "navbar_thumbnails",
-      description: "navbar_thumbnails_description",
-      icon: (
-        <SvgIcon
-          component={ThumbnailsIcon}
-          sx={{
-            fill:
-              topMenuItemSelectedId === 0 && sideMenuItemSelectedId === 3
-                ? "#00926c"
-                : "#4c4c4c",
-            fontSize: "24px",
-          }}
-          inheritViewBox
-        />
-      ),
-      iconColored: (
-        <ThumbnailsIcon
-          width="45px"
-          height="45px"
-          style={{ fill: "#00926c" }}
-          title={keyword("navbar_thumbnails")}
-        />
-      ),
-
-      path: "thumbnails",
-      type: TOOLS_CATEGORIES.VIDEO,
-
-      icons: [],
-      toolRestrictions: [],
-    },
-    {
-      id: 5,
-      title: "navbar_rights",
-      description: "navbar_rights_description",
-      icon: (
-        <SvgIcon
-          component={VideoRightsIcon}
-          sx={{
-            fill:
-              topMenuItemSelectedId === 0 && sideMenuItemSelectedId === 4
-                ? "#00926c"
-                : "#4c4c4c",
-            fontSize: "24px",
-          }}
-          inheritViewBox
-        />
-      ),
-      iconColored: (
-        <VideoRightsIcon
-          width="45px"
-          height="45px"
-          style={{ fill: "#00926c" }}
-          title={keyword("navbar_rights")}
-        />
-      ),
-
-      path: "copyright",
-      type: TOOLS_CATEGORIES.VIDEO,
-
-      icons: [],
-      toolRestrictions: [],
-    },
-
-    {
-      id: 6,
-      title: "navbar_metadata",
-      description: "navbar_metadata_description",
-      icon: (
-        <SvgIcon
-          component={MetadataIcon}
-          sx={{
-            fill:
-              topMenuItemSelectedId === 0 && sideMenuItemSelectedId === 5
-                ? "#00926c"
-                : "#4c4c4c",
-            fontSize: "24px",
-          }}
-          inheritViewBox
-        />
-      ),
-      iconColored: (
-        <MetadataIcon
-          width="45px"
-          height="45px"
-          style={{ fill: "#00926c" }}
-          title={keyword("navbar_metadata")}
-        />
-      ),
-
-      path: "metadata",
-      type: TOOLS_CATEGORIES.VIDEO,
-
-      icons: [],
-      toolRestrictions: [],
-    },
-
-    {
-      id: 7,
-      title: "navbar_deepfake_video",
-      description: "navbar_deepfake_video_description",
-      icon: (
-        <SvgIcon
-          component={DeepfakeIcon}
-          sx={{
-            fill:
-              topMenuItemSelectedId === 0 && sideMenuItemSelectedId === 6
-                ? "#00926c"
-                : "#4c4c4c",
-            fontSize: "24px",
-          }}
-          inheritViewBox
-        />
-      ),
-      iconColored: (
-        <DeepfakeIcon
-          width="45px"
-          height="45px"
-          style={{ fill: "#00926c" }}
-          title={keyword("navbar_deepfake_video")}
-        />
-      ),
-
-      path: "deepfakeVideo",
-      type: TOOLS_CATEGORIES.VIDEO,
-
-      icons: [TOOL_STATUS_ICON.EXPERIMENTAL, TOOL_STATUS_ICON.LOCK],
-      toolRestrictions: [TOOL_RESTRICTIONS.BETA_TESTER],
-    },
-
-    {
-      id: 8,
-      title: "navbar_analysis_image",
-      description: "navbar_analysis_image_description",
-      icon: (
-        <SvgIcon
-          component={AnalysisIconImage}
-          sx={{
-            fill:
-              topMenuItemSelectedId === 0 && sideMenuItemSelectedId === 7
-                ? "#00926c"
-                : "#4c4c4c",
-            fontSize: "24px",
-          }}
-          inheritViewBox
-        />
-      ),
-
-      iconColored: (
-        <AnalysisIconImage
-          width="45px"
-          height="45px"
-          style={{ fill: "#00926c" }}
-          title={keyword("navbar_analysis_image")}
-        />
-      ),
-
-      path: "analysisImage",
-      type: TOOLS_CATEGORIES.IMAGE,
-
-      icons: [],
-      toolRestrictions: [],
-    },
-    {
-      id: 9,
-      title: "navbar_magnifier",
-      description: "navbar_magnifier_description",
-      icon: (
-        <SvgIcon
-          component={MagnifierIcon}
-          sx={{
-            fill:
-              topMenuItemSelectedId === 0 && sideMenuItemSelectedId === 8
-                ? "#00926c"
-                : "#4c4c4c",
-            fontSize: "24px",
-          }}
-          inheritViewBox
-        />
-      ),
-
-      iconColored: (
-        <MagnifierIcon
-          width="45px"
-          height="45px"
-          style={{ fill: "#00926c" }}
-          title={keyword("navbar_magnifier")}
-        />
-      ),
-
-      path: "magnifier",
-      type: TOOLS_CATEGORIES.IMAGE,
-
-      icons: [],
-      toolRestrictions: [],
-    },
-    {
-      id: 10,
-      title: "navbar_metadata",
-      description: "navbar_metadata_description",
-      icon: (
-        <SvgIcon
-          component={MetadataIcon}
-          sx={{
-            fill:
-              topMenuItemSelectedId === 0 && sideMenuItemSelectedId === 9
-                ? "#00926c"
-                : "#4c4c4c",
-            fontSize: "24px",
-          }}
-          inheritViewBox
-        />
-      ),
-
-      iconColored: (
-        <MetadataIcon
-          width="45px"
-          height="45px"
-          style={{ fill: "#00926c" }}
-          title={keyword("navbar_metadata")}
-        />
-      ),
-
-      path: "metadata_image",
-      type: TOOLS_CATEGORIES.IMAGE,
-
-      icons: [],
-      toolRestrictions: [],
-    },
-
-    {
-      id: 11,
-      title: "navbar_forensic",
-      description: "navbar_forensic_description",
-      icon: (
-        <SvgIcon
-          component={ForensicIcon}
-          sx={{
-            fill:
-              topMenuItemSelectedId === 0 && sideMenuItemSelectedId === 10
-                ? "#00926c"
-                : "#4c4c4c",
-            fontSize: "24px",
-          }}
-          inheritViewBox
-        />
-      ),
-      iconColored: (
-        <ForensicIcon
-          width="45px"
-          height="45px"
-          style={{ fill: "#00926c" }}
-          title={keyword("navbar_forensic")}
-        />
-      ),
-
-      path: "forensic",
-      type: TOOLS_CATEGORIES.IMAGE,
-
-      icons: [],
-      toolRestrictions: [],
-    },
-    {
-      id: 12,
-      title: "navbar_ocr",
-      description: "navbar_ocr_description",
-      icon: (
-        <SvgIcon
-          component={OcrIcon}
-          sx={{
-            fill:
-              topMenuItemSelectedId === 0 && sideMenuItemSelectedId === 11
-                ? "#00926c"
-                : "#4c4c4c",
-            fontSize: "24px",
-          }}
-          inheritViewBox
-        />
-      ),
-      iconColored: (
-        <OcrIcon
-          width="45px"
-          height="45px"
-          style={{ fill: "#00926c" }}
-          title={keyword("navbar_ocr")}
-        />
-      ),
-
-      path: "ocr",
-      type: TOOLS_CATEGORIES.IMAGE,
-
-      icons: [],
-      toolRestrictions: [],
-    },
-
-    {
-      id: 13,
-      title: "navbar_gif",
-      description: "navbar_gif_description",
-      icon: (
-        <SvgIcon
-          component={GifIcon}
-          sx={{
-            fill:
-              topMenuItemSelectedId === 0 && sideMenuItemSelectedId === 12
-                ? "#00926c"
-                : "#4c4c4c",
-            fontSize: "24px",
-          }}
-          inheritViewBox
-        />
-      ),
-      iconColored: (
-        <GifIcon
-          width="45px"
-          height="45px"
-          style={{ fill: "#00926c" }}
-          title={keyword("navbar_gif")}
-        />
-      ),
-
-      path: "gif",
-      type: TOOLS_CATEGORIES.IMAGE,
-
-      icons: [TOOL_STATUS_ICON.LOCK],
-      toolRestrictions: [TOOL_RESTRICTIONS.LOCK],
-    },
-    {
-      id: 14,
-      title: "navbar_synthetic_image_detection",
-      description: "navbar_synthetic_image_detection_description",
-      icon: (
-        <Gradient
-          style={{
-            fill:
-              topMenuItemSelectedId === 0 && sideMenuItemSelectedId === 13
-                ? "#00926c"
-                : "#4c4c4c",
-          }}
-        />
-      ),
-      iconColored: <Gradient style={{ fill: "#00926c" }} />,
-
-      path: "syntheticImageDetection",
-      type: TOOLS_CATEGORIES.IMAGE,
-
-      icons: [
-        TOOL_STATUS_ICON.NEW,
-        TOOL_STATUS_ICON.EXPERIMENTAL,
-        TOOL_STATUS_ICON.LOCK,
-      ],
-      toolRestrictions: [TOOL_RESTRICTIONS.BETA_TESTER],
-    },
-    {
-      id: 15,
-      title: "navbar_deepfake_image",
-      description: "navbar_deepfake_image_description",
-      icon: (
-        <SvgIcon
-          component={DeepfakeIcon}
-          sx={{
-            fill:
-              topMenuItemSelectedId === 0 && sideMenuItemSelectedId === 14
-                ? "#00926c"
-                : "#4c4c4c",
-            fontSize: "24px",
-          }}
-          inheritViewBox
-        />
-      ),
-      iconColored: (
-        <DeepfakeIcon
-          width="45px"
-          height="45px"
-          style={{ fill: "#00926c" }}
-          title={keyword("navbar_deepfake_image")}
-        />
-      ),
-
-      path: "deepfakeImage",
-      type: TOOLS_CATEGORIES.IMAGE,
-
-      icons: [TOOL_STATUS_ICON.EXPERIMENTAL, TOOL_STATUS_ICON.LOCK],
-      toolRestrictions: [TOOL_RESTRICTIONS.BETA_TESTER],
-    },
-    {
-      id: 16,
-      title: "navbar_geolocation",
-      description: "navbar_geolocation_description",
-      icon: (
-        <SvgIcon
-          component={GeolocationIcon}
-          sx={{
-            fill:
-              topMenuItemSelectedId === 0 && sideMenuItemSelectedId === 15
-                ? "#00926c"
-                : "#4c4c4c",
-            fontSize: "24px",
-          }}
-          inheritViewBox
-        />
-      ),
-      iconColored: (
-        <GeolocationIcon
-          width="45px"
-          height="45px"
-          style={{ fill: "#00926c" }}
-          title={keyword("navbar_geolocation")}
-        />
-      ),
-
-      path: "geolocation",
-      type: TOOLS_CATEGORIES.IMAGE,
-
-      icons: [TOOL_STATUS_ICON.EXPERIMENTAL, TOOL_STATUS_ICON.LOCK],
-      toolRestrictions: [TOOL_RESTRICTIONS.BETA_TESTER],
-    },
-    {
-      id: 17,
-      title: "navbar_loccus",
-      description: "navbar_loccus_description",
-      icon: (
-        <AudioFile
-          style={{
-            fill:
-              topMenuItemSelectedId === 0 && sideMenuItemSelectedId === 16
-                ? "#00926c"
-                : "#4c4c4c",
-          }}
-          title={keyword("navbar_loccus")}
-        />
-      ),
-      iconColored: (
-        <AudioFile
-          style={{ fill: "#00926c" }}
-          title={keyword("navbar_loccus")}
-        />
-      ),
-
-      path: "loccus",
-      type: TOOLS_CATEGORIES.AUDIO,
-
-      icons: [
-        TOOL_STATUS_ICON.NEW,
-        TOOL_STATUS_ICON.EXPERIMENTAL,
-        TOOL_STATUS_ICON.LOCK,
-      ],
-      toolRestrictions: [TOOL_RESTRICTIONS.BETA_TESTER],
-    },
-
-    {
-      id: 18,
-      title: "navbar_twitter",
-      description: "navbar_twitter_description",
-      icon: (
-        <SvgIcon
-          component={TwitterSearchIcon}
-          sx={{
-            fill:
-              topMenuItemSelectedId === 0 && sideMenuItemSelectedId === 17
-                ? "#00926c"
-                : "#4c4c4c",
-            fontSize: "24px",
-          }}
-          inheritViewBox
-        />
-      ),
-
-      iconColored: (
-        <TwitterSearchIcon
-          width="45px"
-          height="45px"
-          style={{ fill: "#00926c" }}
-          title={keyword("navbar_twitter")}
-        />
-      ),
-
-      path: "twitter",
-      type: TOOLS_CATEGORIES.SEARCH,
-
-      icons: [],
-      toolRestrictions: [],
-    },
-    {
-      id: 19,
-      title: "navbar_semantic_search",
-      description: "navbar_semantic_search_description",
-      icon: (
-        <ManageSearch
-          style={{
-            fill:
-              topMenuItemSelectedId === 0 && sideMenuItemSelectedId === 18
-                ? "#00926c"
-                : "#4c4c4c",
-          }}
-          title={keyword("navbar_semantic_search")}
-        />
-      ),
-      iconColored: (
-        <ManageSearch
-          width="45px"
-          height="45px"
-          style={{ fill: "#00926c" }}
-          title={keyword("navbar_semantic_search")}
-        />
-      ),
-
-      path: "semanticSearch",
-      type: TOOLS_CATEGORIES.SEARCH,
-
-      icons: [
-        TOOL_STATUS_ICON.EXPERIMENTAL,
-        TOOL_STATUS_ICON.NEW,
-        TOOL_STATUS_ICON.LOCK,
-      ],
-      toolRestrictions: [TOOL_RESTRICTIONS.LOCK],
-    },
-    {
-      id: 20,
-      title: "navbar_twitter_sna",
-      description: "navbar_twitter_sna_description",
-      icon: (
-        <SvgIcon
-          component={TwitterSnaIcon}
-          sx={{
-            fill:
-              topMenuItemSelectedId === 0 && sideMenuItemSelectedId === 19
-                ? "#00926c"
-                : "#4c4c4c",
-            fontSize: "24px",
-          }}
-          inheritViewBox
-        />
-      ),
-      iconColored: (
-        <TwitterSnaIcon
-          width="45px"
-          height="45px"
-          style={{ fill: "#00926c" }}
-          title={keyword("navbar_twitter_sna")}
-        />
-      ),
-
-      path: "twitterSna",
-      type: TOOLS_CATEGORIES.DATA_ANALYSIS,
-
-      icons: [TOOL_STATUS_ICON.LOCK],
-      toolRestrictions: [TOOL_RESTRICTIONS.LOCK],
-    },
-    {
-      id: 21,
-      title: "navbar_archiving",
-      description: "navbar_archiving_description",
-      icon: (
-        <Archive
-          style={{
-            fill:
-              topMenuItemSelectedId === 0 && sideMenuItemSelectedId === 20
-                ? "#00926c"
-                : "#4c4c4c",
-          }}
-        />
-      ),
-
-      iconColored: <Archive style={{ fill: "#00926c" }} />,
-
-      path: "archive",
-      type: TOOLS_CATEGORIES.OTHER,
-
-      icons: [
-        TOOL_STATUS_ICON.EXPERIMENTAL,
-        TOOL_STATUS_ICON.NEW,
-        TOOL_STATUS_ICON.LOCK,
-      ],
-      toolRestrictions: [TOOL_RESTRICTIONS.ARCHIVE],
-    },
-    {
-      id: 22,
-      title: "navbar_twitter_crowdtangle",
-      description: "navbar_twitter_crowdtangle_description",
-      icon: (
-        <SvgIcon
-          component={CsvSnaIcon}
-          sx={{
-            fill:
-              topMenuItemSelectedId === 0 && sideMenuItemSelectedId === 21
-                ? "#00926c"
-                : "#4c4c4c",
-            fontSize: "24px",
-          }}
-          inheritViewBox
-        />
-      ),
-      iconColored: (
-        <CsvSnaIcon
-          width="45px"
-          height="45px"
-          style={{ fill: "#00926c" }}
-          title={keyword("navbar_twitter_crowdtangle")}
-        />
-      ),
-
-      path: "csvSna",
-      type: TOOLS_CATEGORIES.DATA_ANALYSIS,
-
-      icons: [],
-      toolRestrictions: [],
-    },
-    {
-      id: 23,
-      title: "navbar_covidsearch",
-      description: "navbar_covidsearch_description",
-      icon: (
-        <SvgIcon
-          component={CovidSearchIcon}
-          sx={{
-            fill:
-              topMenuItemSelectedId === 0 && sideMenuItemSelectedId === 22
-                ? "#00926c"
-                : "#4c4c4c",
-            fontSize: "24px",
-          }}
-          inheritViewBox
-        />
-      ),
-      iconColored: (
-        <CovidSearchIcon
-          width="45px"
-          height="45px"
-          style={{ fill: "#00926c" }}
-          title={keyword("navbar_covidsearch")}
-        />
-      ),
-
-      path: "factcheck",
-      type: TOOLS_CATEGORIES.SEARCH,
-
-      icons: [],
-      toolRestrictions: [],
-    },
-    {
-      id: 24,
-      title: "navbar_xnetwork",
-      description: "navbar_xnetwork_description",
-      icon: (
-        <SvgIcon
-          component={XnetworkIcon}
-          sx={{
-            fill:
-              topMenuItemSelectedId === 0 && sideMenuItemSelectedId === 23
-                ? "#00926c"
-                : "#4c4c4c",
-            fontSize: "24px",
-          }}
-          inheritViewBox
-        />
-      ),
-      iconColored: (
-        <XnetworkIcon
-          width="45px"
-          height="45px"
-          style={{ fill: "#00926c" }}
-          title={keyword("navbar_xnetwork")}
-        />
-      ),
-
-      path: "xnetwork",
-      type: TOOLS_CATEGORIES.SEARCH,
-
-      icons: [],
-      toolRestrictions: [],
-    },
-  ];
+  // const sideMenuItems = [
+  //   {
+  //     id: 1,
+  //     title: "navbar_tools",
+  //     icon: (
+  //       <SvgIcon
+  //         component={ToolsIcon}
+  //         sx={{
+  //           fill:
+  //             topMenuItemSelectedId === 0 && selectedToolTitleKeyword === 0
+  //               ? "#00926c"
+  //               : "#4c4c4c",
+  //           fontSize: "24px",
+  //         }}
+  //         inheritViewBox
+  //       />
+  //     ),
+  //     path: "all",
+  //     type: TOOLS_CATEGORIES.ALL,
+  //
+  //     icons: [],
+  //     rolesNeeded: [],
+  //   },
+  //
+  //   {
+  //     id: 2,
+  //     title: "navbar_analysis_video",
+  //     description: "navbar_analysis_description",
+  //     icon: (
+  //       <SvgIcon
+  //         component={AnalysisIcon}
+  //         sx={{
+  //           fill:
+  //             topMenuItemSelectedId === 0 && selectedToolTitleKeyword === 1
+  //               ? "#00926c"
+  //               : "#4c4c4c",
+  //           fontSize: "24px",
+  //         }}
+  //         inheritViewBox
+  //       />
+  //     ),
+  //     iconColored: (
+  //       <AnalysisIcon
+  //         width="45px"
+  //         height="45px"
+  //         style={{ fill: "#00926c" }}
+  //         title={keyword("navbar_analysis_video")}
+  //       />
+  //     ),
+  //     path: "analysis",
+  //     type: TOOLS_CATEGORIES.VIDEO,
+  //     icons: [],
+  //     rolesNeeded: [],
+  //   },
+  //   {
+  //     id: 3,
+  //     title: "navbar_keyframes",
+  //     description: "navbar_keyframes_description",
+  //     icon: (
+  //       <SvgIcon
+  //         component={KeyframesIcon}
+  //         sx={{
+  //           fill:
+  //             topMenuItemSelectedId === 0 && selectedToolTitleKeyword === 2
+  //               ? "#00926c"
+  //               : "#4c4c4c",
+  //           fontSize: "24px",
+  //         }}
+  //         inheritViewBox
+  //       />
+  //     ),
+  //     iconColored: (
+  //       <KeyframesIcon
+  //         width="45px"
+  //         height="45px"
+  //         style={{ fill: "#00926c" }}
+  //         title={keyword("navbar_keyframes")}
+  //       />
+  //     ),
+  //
+  //     path: "keyframes",
+  //     type: TOOLS_CATEGORIES.VIDEO,
+  //
+  //     icons: [],
+  //     rolesNeeded: [],
+  //   },
+  //   {
+  //     id: 4,
+  //     title: "navbar_thumbnails",
+  //     description: "navbar_thumbnails_description",
+  //     icon: (
+  //       <SvgIcon
+  //         component={ThumbnailsIcon}
+  //         sx={{
+  //           fill:
+  //             topMenuItemSelectedId === 0 && selectedToolTitleKeyword === 3
+  //               ? "#00926c"
+  //               : "#4c4c4c",
+  //           fontSize: "24px",
+  //         }}
+  //         inheritViewBox
+  //       />
+  //     ),
+  //     iconColored: (
+  //       <ThumbnailsIcon
+  //         width="45px"
+  //         height="45px"
+  //         style={{ fill: "#00926c" }}
+  //         title={keyword("navbar_thumbnails")}
+  //       />
+  //     ),
+  //
+  //     path: "thumbnails",
+  //     type: TOOLS_CATEGORIES.VIDEO,
+  //
+  //     icons: [],
+  //     rolesNeeded: [],
+  //   },
+  //   {
+  //     id: 5,
+  //     title: "navbar_rights",
+  //     description: "navbar_rights_description",
+  //     icon: (
+  //       <SvgIcon
+  //         component={VideoRightsIcon}
+  //         sx={{
+  //           fill:
+  //             topMenuItemSelectedId === 0 && selectedToolTitleKeyword === 4
+  //               ? "#00926c"
+  //               : "#4c4c4c",
+  //           fontSize: "24px",
+  //         }}
+  //         inheritViewBox
+  //       />
+  //     ),
+  //     iconColored: (
+  //       <VideoRightsIcon
+  //         width="45px"
+  //         height="45px"
+  //         style={{ fill: "#00926c" }}
+  //         title={keyword("navbar_rights")}
+  //       />
+  //     ),
+  //
+  //     path: "copyright",
+  //     type: TOOLS_CATEGORIES.VIDEO,
+  //
+  //     icons: [],
+  //     rolesNeeded: [],
+  //   },
+  //
+  //   {
+  //     id: 6,
+  //     title: "navbar_metadata",
+  //     description: "navbar_metadata_description",
+  //     icon: (
+  //       <SvgIcon
+  //         component={MetadataIcon}
+  //         sx={{
+  //           fill:
+  //             topMenuItemSelectedId === 0 && selectedToolTitleKeyword === 5
+  //               ? "#00926c"
+  //               : "#4c4c4c",
+  //           fontSize: "24px",
+  //         }}
+  //         inheritViewBox
+  //       />
+  //     ),
+  //     iconColored: (
+  //       <MetadataIcon
+  //         width="45px"
+  //         height="45px"
+  //         style={{ fill: "#00926c" }}
+  //         title={keyword("navbar_metadata")}
+  //       />
+  //     ),
+  //
+  //     path: "metadata",
+  //     type: TOOLS_CATEGORIES.VIDEO,
+  //
+  //     icons: [],
+  //     rolesNeeded: [],
+  //   },
+  //
+  //   {
+  //     id: 7,
+  //     title: "navbar_deepfake_video",
+  //     description: "navbar_deepfake_video_description",
+  //     icon: (
+  //       <SvgIcon
+  //         component={DeepfakeIcon}
+  //         sx={{
+  //           fill:
+  //             topMenuItemSelectedId === 0 && selectedToolTitleKeyword === 6
+  //               ? "#00926c"
+  //               : "#4c4c4c",
+  //           fontSize: "24px",
+  //         }}
+  //         inheritViewBox
+  //       />
+  //     ),
+  //     iconColored: (
+  //       <DeepfakeIcon
+  //         width="45px"
+  //         height="45px"
+  //         style={{ fill: "#00926c" }}
+  //         title={keyword("navbar_deepfake_video")}
+  //       />
+  //     ),
+  //
+  //     path: "deepfakeVideo",
+  //     type: TOOLS_CATEGORIES.VIDEO,
+  //
+  //     icons: [TOOL_STATUS_ICON.EXPERIMENTAL],
+  //     rolesNeeded: [ROLES.BETA_TESTER],
+  //   },
+  //
+  //   {
+  //     id: 8,
+  //     title: "navbar_analysis_image",
+  //     description: "navbar_analysis_image_description",
+  //     icon: (
+  //       <SvgIcon
+  //         component={AnalysisIconImage}
+  //         sx={{
+  //           fill:
+  //             topMenuItemSelectedId === 0 && selectedToolTitleKeyword === 7
+  //               ? "#00926c"
+  //               : "#4c4c4c",
+  //           fontSize: "24px",
+  //         }}
+  //         inheritViewBox
+  //       />
+  //     ),
+  //
+  //     iconColored: (
+  //       <AnalysisIconImage
+  //         width="45px"
+  //         height="45px"
+  //         style={{ fill: "#00926c" }}
+  //         title={keyword("navbar_analysis_image")}
+  //       />
+  //     ),
+  //
+  //     path: "analysisImage",
+  //     type: TOOLS_CATEGORIES.IMAGE,
+  //
+  //     icons: [],
+  //     rolesNeeded: [],
+  //   },
+  //   {
+  //     id: 9,
+  //     title: "navbar_magnifier",
+  //     description: "navbar_magnifier_description",
+  //     icon: (
+  //       <SvgIcon
+  //         component={MagnifierIcon}
+  //         sx={{
+  //           fill:
+  //             topMenuItemSelectedId === 0 && selectedToolTitleKeyword === 8
+  //               ? "#00926c"
+  //               : "#4c4c4c",
+  //           fontSize: "24px",
+  //         }}
+  //         inheritViewBox
+  //       />
+  //     ),
+  //
+  //     iconColored: (
+  //       <MagnifierIcon
+  //         width="45px"
+  //         height="45px"
+  //         style={{ fill: "#00926c" }}
+  //         title={keyword("navbar_magnifier")}
+  //       />
+  //     ),
+  //
+  //     path: "magnifier",
+  //     type: TOOLS_CATEGORIES.IMAGE,
+  //
+  //     icons: [],
+  //     rolesNeeded: [],
+  //   },
+  //   {
+  //     id: 10,
+  //     title: "navbar_metadata",
+  //     description: "navbar_metadata_description",
+  //     icon: (
+  //       <SvgIcon
+  //         component={MetadataIcon}
+  //         sx={{
+  //           fill:
+  //             topMenuItemSelectedId === 0 && selectedToolTitleKeyword === 9
+  //               ? "#00926c"
+  //               : "#4c4c4c",
+  //           fontSize: "24px",
+  //         }}
+  //         inheritViewBox
+  //       />
+  //     ),
+  //
+  //     iconColored: (
+  //       <MetadataIcon
+  //         width="45px"
+  //         height="45px"
+  //         style={{ fill: "#00926c" }}
+  //         title={keyword("navbar_metadata")}
+  //       />
+  //     ),
+  //
+  //     path: "metadata_image",
+  //     type: TOOLS_CATEGORIES.IMAGE,
+  //
+  //     icons: [],
+  //     rolesNeeded: [],
+  //   },
+  //
+  //   {
+  //     id: 11,
+  //     title: "navbar_forensic",
+  //     description: "navbar_forensic_description",
+  //     icon: (
+  //       <SvgIcon
+  //         component={ForensicIcon}
+  //         sx={{
+  //           fill:
+  //             topMenuItemSelectedId === 0 && selectedToolTitleKeyword === 10
+  //               ? "#00926c"
+  //               : "#4c4c4c",
+  //           fontSize: "24px",
+  //         }}
+  //         inheritViewBox
+  //       />
+  //     ),
+  //     iconColored: (
+  //       <ForensicIcon
+  //         width="45px"
+  //         height="45px"
+  //         style={{ fill: "#00926c" }}
+  //         title={keyword("navbar_forensic")}
+  //       />
+  //     ),
+  //
+  //     path: "forensic",
+  //     type: TOOLS_CATEGORIES.IMAGE,
+  //
+  //     icons: [],
+  //     rolesNeeded: [],
+  //   },
+  //   {
+  //     id: 12,
+  //     title: "navbar_ocr",
+  //     description: "navbar_ocr_description",
+  //     icon: (
+  //       <SvgIcon
+  //         component={OcrIcon}
+  //         sx={{
+  //           fill:
+  //             topMenuItemSelectedId === 0 && selectedToolTitleKeyword === 11
+  //               ? "#00926c"
+  //               : "#4c4c4c",
+  //           fontSize: "24px",
+  //         }}
+  //         inheritViewBox
+  //       />
+  //     ),
+  //     iconColored: (
+  //       <OcrIcon
+  //         width="45px"
+  //         height="45px"
+  //         style={{ fill: "#00926c" }}
+  //         title={keyword("navbar_ocr")}
+  //       />
+  //     ),
+  //
+  //     path: "ocr",
+  //     type: TOOLS_CATEGORIES.IMAGE,
+  //
+  //     icons: [],
+  //     rolesNeeded: [],
+  //   },
+  //
+  //   {
+  //     id: 13,
+  //     title: "navbar_gif",
+  //     description: "navbar_gif_description",
+  //     icon: (
+  //       <SvgIcon
+  //         component={GifIcon}
+  //         sx={{
+  //           fill:
+  //             topMenuItemSelectedId === 0 && selectedToolTitleKeyword === 12
+  //               ? "#00926c"
+  //               : "#4c4c4c",
+  //           fontSize: "24px",
+  //         }}
+  //         inheritViewBox
+  //       />
+  //     ),
+  //     iconColored: (
+  //       <GifIcon
+  //         width="45px"
+  //         height="45px"
+  //         style={{ fill: "#00926c" }}
+  //         title={keyword("navbar_gif")}
+  //       />
+  //     ),
+  //
+  //     path: "gif",
+  //     type: TOOLS_CATEGORIES.IMAGE,
+  //
+  //     icons: [TOOL_STATUS_ICON.LOCK],
+  //     rolesNeeded: [ROLES.LOCK],
+  //   },
+  //   {
+  //     id: 14,
+  //     title: "navbar_synthetic_image_detection",
+  //     description: "navbar_synthetic_image_detection_description",
+  //     icon: (
+  //       <Gradient
+  //         style={{
+  //           fill:
+  //             topMenuItemSelectedId === 0 && selectedToolTitleKeyword === 13
+  //               ? "#00926c"
+  //               : "#4c4c4c",
+  //         }}
+  //       />
+  //     ),
+  //     iconColored: <Gradient style={{ fill: "#00926c" }} />,
+  //
+  //     path: "syntheticImageDetection",
+  //     type: TOOLS_CATEGORIES.IMAGE,
+  //
+  //     icons: [
+  //       TOOL_STATUS_ICON.NEW,
+  //       TOOL_STATUS_ICON.EXPERIMENTAL,
+  //       TOOL_STATUS_ICON.LOCK,
+  //     ],
+  //     rolesNeeded: [ROLES.BETA_TESTER],
+  //   },
+  //   {
+  //     id: 15,
+  //     title: "navbar_deepfake_image",
+  //     description: "navbar_deepfake_image_description",
+  //     icon: (
+  //       <SvgIcon
+  //         component={DeepfakeIcon}
+  //         sx={{
+  //           fill:
+  //             topMenuItemSelectedId === 0 && selectedToolTitleKeyword === 14
+  //               ? "#00926c"
+  //               : "#4c4c4c",
+  //           fontSize: "24px",
+  //         }}
+  //         inheritViewBox
+  //       />
+  //     ),
+  //     iconColored: (
+  //       <DeepfakeIcon
+  //         width="45px"
+  //         height="45px"
+  //         style={{ fill: "#00926c" }}
+  //         title={keyword("navbar_deepfake_image")}
+  //       />
+  //     ),
+  //
+  //     path: "deepfakeImage",
+  //     type: TOOLS_CATEGORIES.IMAGE,
+  //
+  //     icons: [TOOL_STATUS_ICON.EXPERIMENTAL, TOOL_STATUS_ICON.LOCK],
+  //     rolesNeeded: [ROLES.BETA_TESTER],
+  //   },
+  //   {
+  //     id: 16,
+  //     title: "navbar_geolocation",
+  //     description: "navbar_geolocation_description",
+  //     icon: (
+  //       <SvgIcon
+  //         component={GeolocationIcon}
+  //         sx={{
+  //           fill:
+  //             topMenuItemSelectedId === 0 && selectedToolTitleKeyword === 15
+  //               ? "#00926c"
+  //               : "#4c4c4c",
+  //           fontSize: "24px",
+  //         }}
+  //         inheritViewBox
+  //       />
+  //     ),
+  //     iconColored: (
+  //       <GeolocationIcon
+  //         width="45px"
+  //         height="45px"
+  //         style={{ fill: "#00926c" }}
+  //         title={keyword("navbar_geolocation")}
+  //       />
+  //     ),
+  //
+  //     path: "geolocation",
+  //     type: TOOLS_CATEGORIES.IMAGE,
+  //
+  //     icons: [TOOL_STATUS_ICON.EXPERIMENTAL, TOOL_STATUS_ICON.LOCK],
+  //     rolesNeeded: [ROLES.BETA_TESTER],
+  //   },
+  //   {
+  //     id: 17,
+  //     title: "navbar_loccus",
+  //     description: "navbar_loccus_description",
+  //     icon: (
+  //       <AudioFile
+  //         style={{
+  //           fill:
+  //             topMenuItemSelectedId === 0 && selectedToolTitleKeyword === 16
+  //               ? "#00926c"
+  //               : "#4c4c4c",
+  //         }}
+  //         title={keyword("navbar_loccus")}
+  //       />
+  //     ),
+  //     iconColored: (
+  //       <AudioFile
+  //         style={{ fill: "#00926c" }}
+  //         title={keyword("navbar_loccus")}
+  //       />
+  //     ),
+  //
+  //     path: "loccus",
+  //     type: TOOLS_CATEGORIES.AUDIO,
+  //
+  //     icons: [
+  //       TOOL_STATUS_ICON.NEW,
+  //       TOOL_STATUS_ICON.EXPERIMENTAL,
+  //       TOOL_STATUS_ICON.LOCK,
+  //     ],
+  //     rolesNeeded: [ROLES.BETA_TESTER],
+  //   },
+  //
+  //   {
+  //     id: 18,
+  //     title: "navbar_twitter",
+  //     description: "navbar_twitter_description",
+  //     icon: (
+  //       <SvgIcon
+  //         component={TwitterSearchIcon}
+  //         sx={{
+  //           fill:
+  //             topMenuItemSelectedId === 0 && selectedToolTitleKeyword === 17
+  //               ? "#00926c"
+  //               : "#4c4c4c",
+  //           fontSize: "24px",
+  //         }}
+  //         inheritViewBox
+  //       />
+  //     ),
+  //
+  //     iconColored: (
+  //       <TwitterSearchIcon
+  //         width="45px"
+  //         height="45px"
+  //         style={{ fill: "#00926c" }}
+  //         title={keyword("navbar_twitter")}
+  //       />
+  //     ),
+  //
+  //     path: "twitter",
+  //     type: TOOLS_CATEGORIES.SEARCH,
+  //
+  //     icons: [],
+  //     rolesNeeded: [],
+  //   },
+  //   {
+  //     id: 19,
+  //     title: "navbar_semantic_search",
+  //     description: "navbar_semantic_search_description",
+  //     icon: (
+  //       <ManageSearch
+  //         style={{
+  //           fill:
+  //             topMenuItemSelectedId === 0 && selectedToolTitleKeyword === 18
+  //               ? "#00926c"
+  //               : "#4c4c4c",
+  //         }}
+  //         title={keyword("navbar_semantic_search")}
+  //       />
+  //     ),
+  //     iconColored: (
+  //       <ManageSearch
+  //         width="45px"
+  //         height="45px"
+  //         style={{ fill: "#00926c" }}
+  //         title={keyword("navbar_semantic_search")}
+  //       />
+  //     ),
+  //
+  //     path: "semanticSearch",
+  //     type: TOOLS_CATEGORIES.SEARCH,
+  //
+  //     icons: [
+  //       TOOL_STATUS_ICON.EXPERIMENTAL,
+  //       TOOL_STATUS_ICON.NEW,
+  //       TOOL_STATUS_ICON.LOCK,
+  //     ],
+  //     rolesNeeded: [ROLES.LOCK],
+  //   },
+  //   {
+  //     id: 20,
+  //     title: "navbar_twitter_sna",
+  //     description: "navbar_twitter_sna_description",
+  //     icon: (
+  //       <SvgIcon
+  //         component={TwitterSnaIcon}
+  //         sx={{
+  //           fill:
+  //             topMenuItemSelectedId === 0 && selectedToolTitleKeyword === 19
+  //               ? "#00926c"
+  //               : "#4c4c4c",
+  //           fontSize: "24px",
+  //         }}
+  //         inheritViewBox
+  //       />
+  //     ),
+  //     iconColored: (
+  //       <TwitterSnaIcon
+  //         width="45px"
+  //         height="45px"
+  //         style={{ fill: "#00926c" }}
+  //         title={keyword("navbar_twitter_sna")}
+  //       />
+  //     ),
+  //
+  //     path: "twitterSna",
+  //     type: TOOLS_CATEGORIES.DATA_ANALYSIS,
+  //
+  //     icons: [TOOL_STATUS_ICON.LOCK],
+  //     rolesNeeded: [ROLES.LOCK],
+  //   },
+  //   {
+  //     id: 21,
+  //     title: "navbar_archiving",
+  //     description: "navbar_archiving_description",
+  //     icon: (
+  //       <Archive
+  //         style={{
+  //           fill:
+  //             topMenuItemSelectedId === 0 && selectedToolTitleKeyword === 20
+  //               ? "#00926c"
+  //               : "#4c4c4c",
+  //         }}
+  //       />
+  //     ),
+  //
+  //     iconColored: <Archive style={{ fill: "#00926c" }} />,
+  //
+  //     path: "archive",
+  //     type: TOOLS_CATEGORIES.OTHER,
+  //
+  //     icons: [
+  //       TOOL_STATUS_ICON.EXPERIMENTAL,
+  //       TOOL_STATUS_ICON.NEW,
+  //       TOOL_STATUS_ICON.LOCK,
+  //     ],
+  //     rolesNeeded: [ROLES.ARCHIVE],
+  //   },
+  //   {
+  //     id: 22,
+  //     title: "navbar_twitter_crowdtangle",
+  //     description: "navbar_twitter_crowdtangle_description",
+  //     icon: (
+  //       <SvgIcon
+  //         component={CsvSnaIcon}
+  //         sx={{
+  //           fill:
+  //             topMenuItemSelectedId === 0 && selectedToolTitleKeyword === 21
+  //               ? "#00926c"
+  //               : "#4c4c4c",
+  //           fontSize: "24px",
+  //         }}
+  //         inheritViewBox
+  //       />
+  //     ),
+  //     iconColored: (
+  //       <CsvSnaIcon
+  //         width="45px"
+  //         height="45px"
+  //         style={{ fill: "#00926c" }}
+  //         title={keyword("navbar_twitter_crowdtangle")}
+  //       />
+  //     ),
+  //
+  //     path: "csvSna",
+  //     type: TOOLS_CATEGORIES.DATA_ANALYSIS,
+  //
+  //     icons: [],
+  //     rolesNeeded: [],
+  //   },
+  //   {
+  //     id: 23,
+  //     title: "navbar_covidsearch",
+  //     description: "navbar_covidsearch_description",
+  //     icon: (
+  //       <SvgIcon
+  //         component={CovidSearchIcon}
+  //         sx={{
+  //           fill:
+  //             topMenuItemSelectedId === 0 && selectedToolTitleKeyword === 22
+  //               ? "#00926c"
+  //               : "#4c4c4c",
+  //           fontSize: "24px",
+  //         }}
+  //         inheritViewBox
+  //       />
+  //     ),
+  //     iconColored: (
+  //       <CovidSearchIcon
+  //         width="45px"
+  //         height="45px"
+  //         style={{ fill: "#00926c" }}
+  //         title={keyword("navbar_covidsearch")}
+  //       />
+  //     ),
+  //
+  //     path: "factcheck",
+  //     type: TOOLS_CATEGORIES.SEARCH,
+  //
+  //     icons: [],
+  //     rolesNeeded: [],
+  //   },
+  //   {
+  //     id: 24,
+  //     title: "navbar_xnetwork",
+  //     description: "navbar_xnetwork_description",
+  //     icon: (
+  //       <SvgIcon
+  //         component={XnetworkIcon}
+  //         sx={{
+  //           fill:
+  //             topMenuItemSelectedId === 0 && selectedToolTitleKeyword === 23
+  //               ? "#00926c"
+  //               : "#4c4c4c",
+  //           fontSize: "24px",
+  //         }}
+  //         inheritViewBox
+  //       />
+  //     ),
+  //     iconColored: (
+  //       <XnetworkIcon
+  //         width="45px"
+  //         height="45px"
+  //         style={{ fill: "#00926c" }}
+  //         title={keyword("navbar_xnetwork")}
+  //       />
+  //     ),
+  //
+  //     path: "xnetwork",
+  //     type: TOOLS_CATEGORIES.SEARCH,
+  //
+  //     icons: [],
+  //     rolesNeeded: [],
+  //   },
+  // ];
 
   const topMenuItems = [
     {
@@ -1144,7 +1068,7 @@ const NavBar = () => {
 
   useEffect(() => {
     //select tool category
-    switch (sideMenuItems[sideMenuItemSelectedId].type) {
+    switch (tools[selectedToolTitleKeyword].category) {
       case TOOLS_CATEGORIES.VIDEO:
         setOpenListVideo(true);
         break;
@@ -1166,7 +1090,7 @@ const NavBar = () => {
       default:
         break;
     }
-  }, [sideMenuItemSelectedId]);
+  }, [selectedToolTitleKeyword]);
 
   const themeFab = createTheme({
     palette: {
@@ -1233,8 +1157,8 @@ const NavBar = () => {
   });
 
   //Video items
-  const drawerItemsVideo = sideMenuItems.filter(
-    (item) => item.type === TOOLS_CATEGORIES.VIDEO,
+  const drawerItemsVideo = tools.filter(
+    (tool) => tool.category === TOOLS_CATEGORIES.VIDEO,
   );
   const [openListVideo, setOpenListVideo] = useState(false);
   const [classBorderVideo, setClassBorderVideo] = useState(null);
@@ -1249,8 +1173,8 @@ const NavBar = () => {
   };
 
   //Image items
-  const drawerItemsImage = sideMenuItems.filter(
-    (item) => item.type === TOOLS_CATEGORIES.IMAGE,
+  const drawerItemsImage = tools.filter(
+    (tool) => tool.category === TOOLS_CATEGORIES.IMAGE,
   );
   const [openListImage, setOpenListImage] = useState(false);
   const [classBorderImage, setClassBorderImage] = useState(null);
@@ -1265,8 +1189,8 @@ const NavBar = () => {
   };
 
   //Audio items
-  const drawerItemsAudio = sideMenuItems.filter(
-    (item) => item.type === TOOLS_CATEGORIES.AUDIO,
+  const drawerItemsAudio = tools.filter(
+    (tool) => tool.category === TOOLS_CATEGORIES.AUDIO,
   );
   const [openListAudio, setOpenListAudio] = useState(false);
   const [classBorderAudio, setClassBorderAudio] = useState(null);
@@ -1281,8 +1205,8 @@ const NavBar = () => {
   };
 
   //Search items
-  const drawerItemsSearch = sideMenuItems.filter(
-    (item) => item.type === TOOLS_CATEGORIES.SEARCH,
+  const drawerItemsSearch = tools.filter(
+    (tool) => tool.category === TOOLS_CATEGORIES.SEARCH,
   );
   const [openListSeach, setOpenListSeach] = useState(false);
   const [classBorderSearch, setClassBorderSearch] = useState(null);
@@ -1297,9 +1221,10 @@ const NavBar = () => {
   };
 
   //Data items
-  const drawerItemsData = sideMenuItems.filter(
-    (item) => item.type === TOOLS_CATEGORIES.DATA_ANALYSIS,
+  const drawerItemsData = tools.filter(
+    (tool) => tool.category === TOOLS_CATEGORIES.DATA_ANALYSIS,
   );
+
   const [openListData, setOpenListData] = useState(false);
   const [classBorderData, setClassBorderData] = useState(null);
 
@@ -1312,8 +1237,8 @@ const NavBar = () => {
     }
   };
 
-  const drawerItemsOtherTools = sideMenuItems.filter(
-    (item) => item.type === TOOLS_CATEGORIES.OTHER,
+  const drawerItemsOtherTools = tools.filter(
+    (tool) => tool.category === TOOLS_CATEGORIES.OTHER,
   );
   const [openListOtherTools, setOpenListOtherTools] = useState(false);
   const [classBorderOtherTools, setClassBorderOtherTools] = useState(null);
@@ -1423,37 +1348,43 @@ const NavBar = () => {
 
   tmpListItems.map((items) => {
     const listTools = items.list;
+    console.log(listTools);
+    console.log(role);
+
     for (let i = 0; i < listTools.length; i++) {
-      if (listTools[i].toolRestrictions.length === 0) {
+      if (!listTools[i].rolesNeeded || listTools[i].rolesNeeded.length === 0) {
         listItems.push(items);
         break;
       } else if (
-        listTools[i].toolRestrictions.some((restriction) =>
-          role.includes(restriction),
-        )
+        listTools[i].rolesNeeded.some((roles) => role.includes(roles))
       ) {
+        console.log(items);
         listItems.push(items);
         break;
-      } else if (
-        listTools[i].toolRestrictions.includes(TOOL_STATUS_ICON.LOCK)
-      ) {
+      } else if (listTools[i].rolesNeeded.includes(TOOL_STATUS_ICON.LOCK)) {
         listItems.push(items);
         break;
       }
     }
   });
 
-  const drawItemPerRole = sideMenuItems.filter((item) => {
+  console.log(listItems);
+
+  const drawItemPerRole = tools.filter((tool) => {
     if (
-      item.toolRestrictions.length === 0 ||
-      item.toolRestrictions.includes(TOOL_STATUS_ICON.LOCK)
+      !tools.rolesNeeded ||
+      tool.rolesNeeded.length === 0 ||
+      tool.rolesNeeded.includes(TOOL_STATUS_ICON.LOCK)
     )
       return true;
-    if (item.toolRestrictions.some((restriction) => role.includes(restriction)))
+    else if (
+      tools.rolesNeeded.some((restriction) => role.includes(restriction))
+    )
       return true;
+    else return false;
   });
 
-  const toolsItem = sideMenuItems.find((data) => data.title === "navbar_tools");
+  const toolsItem = tools.find((tool) => tool.titleKeyword === "navbar_tools");
   //const assistantItem = topMenuItems.find(data => data.title === 'navbar_assistant');
   //const drawerItemsLearning = topMenuItems.filter(item => item.typeTab === "learning");
   const drawerItemsMore = topMenuItems.filter(
@@ -1464,114 +1395,114 @@ const NavBar = () => {
 
   return (
     <div className={classes.flex}>
-      <Snackbar
-        open={openAlert}
-        autoHideDuration={6000}
-        onClose={handleCloseAlert}
-        anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "right",
-        }}
-        sx={{ mr: 8 }}
-      >
-        <Alert onClose={handleCloseAlert} severity="warning">
-          {tWarning("warning_advanced_tools")}
-        </Alert>
-      </Snackbar>
+      {/*<Snackbar*/}
+      {/*  open={openAlert}*/}
+      {/*  autoHideDuration={6000}*/}
+      {/*  onClose={handleCloseAlert}*/}
+      {/*  anchorOrigin={{*/}
+      {/*    vertical: "bottom",*/}
+      {/*    horizontal: "right",*/}
+      {/*  }}*/}
+      {/*  sx={{ mr: 8 }}*/}
+      {/*>*/}
+      {/*  <Alert onClose={handleCloseAlert} severity="warning">*/}
+      {/*    {tWarning("warning_advanced_tools")}*/}
+      {/*  </Alert>*/}
+      {/*</Snackbar>*/}
       <ThemeProvider theme={themeFab}>
-        <AppBar position="fixed" width={"100%"}>
-          <Toolbar
-            className={classes.toolbar}
-            style={{ borderBottom: "solid 1px #dedbdb" }}
-          >
-            <Grid
-              container
-              direction="row"
-              justifyContent="space-between"
-              alignItems="center"
-              spacing={{ sm: 1, md: 2 }}
-            >
-              <Grid item xs={2}>
-                <Stack
-                  direction="row"
-                  justifyContent="flex-start"
-                  alignItems="center"
-                  spacing={{ sm: 1, md: 2 }}
-                >
-                  {LOGO_EU ? (
-                    <LogoEuCom
-                      style={{
-                        height: "auto",
-                        minWidth: "48px",
-                        width: { sm: "48px", md: "80px" },
-                      }}
-                      alt="logo"
-                      className={classes.logoLeft}
-                      onClick={handleImageClick}
-                    />
-                  ) : (
-                    <LogoInVidWeverify
-                      style={{
-                        height: "auto",
-                        minWidth: "96px",
-                        width: { sm: "96px", md: "96px" },
-                      }}
-                      alt="logo"
-                      className={classes.logoLeft}
-                      onClick={handleImageClick}
-                    />
-                  )}
-                  <LogoVera
-                    style={{
-                      height: "auto",
-                      minWidth: "48px",
-                      width: { sm: "48px", md: "80px" },
-                    }}
-                    alt="logo"
-                    className={classes.logoRight}
-                    onClick={handleImageClick}
-                  />
-                </Stack>
-              </Grid>
-              <Grid item xs={7}>
-                <Tabs
-                  value={topMenuItemSelectedId}
-                  variant="scrollable"
-                  onChange={handleTopMenuChange}
-                  scrollButtons="auto"
-                  allowScrollButtonsMobile
-                  indicatorColor="primary"
-                  textColor="primary"
-                  aria-label="scrollable force tabs example"
-                  TabIndicatorProps={{
-                    style: { display: "none" },
-                  }}
-                  sx={{ color: "black" }}
-                >
-                  {topMenuItems.map((item, index) => {
-                    return (
-                      <Tab
-                        key={index}
-                        label={keyword(item.title)}
-                        icon={item.icon}
-                        {...a11yProps(index)}
-                        to={item.path}
-                        component={Link}
-                        sx={{ minWidth: "130px" }}
-                      />
-                    );
-                  })}
-                </Tabs>
-              </Grid>
-              <Grid item xs={2}>
-                <AdvancedTools />
-              </Grid>
-              <Grid item xs={1}>
-                <Languages />
-              </Grid>
-            </Grid>
-          </Toolbar>
-        </AppBar>
+        {/*<AppBar position="fixed" width={"100%"}>*/}
+        {/*  <Toolbar*/}
+        {/*    className={classes.toolbar}*/}
+        {/*    style={{ borderBottom: "solid 1px #dedbdb" }}*/}
+        {/*  >*/}
+        {/*    <Grid*/}
+        {/*      container*/}
+        {/*      direction="row"*/}
+        {/*      justifyContent="space-between"*/}
+        {/*      alignItems="center"*/}
+        {/*      spacing={{ sm: 1, md: 2 }}*/}
+        {/*    >*/}
+        {/*      <Grid item xs={2}>*/}
+        {/*        <Stack*/}
+        {/*          direction="row"*/}
+        {/*          justifyContent="flex-start"*/}
+        {/*          alignItems="center"*/}
+        {/*          spacing={{ sm: 1, md: 2 }}*/}
+        {/*        >*/}
+        {/*          {LOGO_EU ? (*/}
+        {/*            <LogoEuCom*/}
+        {/*              style={{*/}
+        {/*                height: "auto",*/}
+        {/*                minWidth: "48px",*/}
+        {/*                width: { sm: "48px", md: "80px" },*/}
+        {/*              }}*/}
+        {/*              alt="logo"*/}
+        {/*              className={classes.logoLeft}*/}
+        {/*              onClick={handleImageClick}*/}
+        {/*            />*/}
+        {/*          ) : (*/}
+        {/*            <LogoInVidWeverify*/}
+        {/*              style={{*/}
+        {/*                height: "auto",*/}
+        {/*                minWidth: "96px",*/}
+        {/*                width: { sm: "96px", md: "96px" },*/}
+        {/*              }}*/}
+        {/*              alt="logo"*/}
+        {/*              className={classes.logoLeft}*/}
+        {/*              onClick={handleImageClick}*/}
+        {/*            />*/}
+        {/*          )}*/}
+        {/*          <LogoVera*/}
+        {/*            style={{*/}
+        {/*              height: "auto",*/}
+        {/*              minWidth: "48px",*/}
+        {/*              width: { sm: "48px", md: "80px" },*/}
+        {/*            }}*/}
+        {/*            alt="logo"*/}
+        {/*            className={classes.logoRight}*/}
+        {/*            onClick={handleImageClick}*/}
+        {/*          />*/}
+        {/*        </Stack>*/}
+        {/*      </Grid>*/}
+        {/*      <Grid item xs={7}>*/}
+        {/*        <Tabs*/}
+        {/*          value={topMenuItemSelectedId}*/}
+        {/*          variant="scrollable"*/}
+        {/*          onChange={handleTopMenuChange}*/}
+        {/*          scrollButtons="auto"*/}
+        {/*          allowScrollButtonsMobile*/}
+        {/*          indicatorColor="primary"*/}
+        {/*          textColor="primary"*/}
+        {/*          aria-label="scrollable force tabs example"*/}
+        {/*          TabIndicatorProps={{*/}
+        {/*            style: { display: "none" },*/}
+        {/*          }}*/}
+        {/*          sx={{ color: "black" }}*/}
+        {/*        >*/}
+        {/*          {topMenuItems.map((item, index) => {*/}
+        {/*            return (*/}
+        {/*              <Tab*/}
+        {/*                key={index}*/}
+        {/*                label={keyword(item.title)}*/}
+        {/*                icon={item.icon}*/}
+        {/*                {...a11yProps(index)}*/}
+        {/*                to={item.path}*/}
+        {/*                component={Link}*/}
+        {/*                sx={{ minWidth: "130px" }}*/}
+        {/*              />*/}
+        {/*            );*/}
+        {/*          })}*/}
+        {/*        </Tabs>*/}
+        {/*      </Grid>*/}
+        {/*      <Grid item xs={2}>*/}
+        {/*        <AdvancedTools />*/}
+        {/*      </Grid>*/}
+        {/*      <Grid item xs={1}>*/}
+        {/*        <Languages />*/}
+        {/*      </Grid>*/}
+        {/*    </Grid>*/}
+        {/*  </Toolbar>*/}
+        {/*</AppBar>*/}
 
         <Drawer
           variant="permanent"
@@ -1616,7 +1547,7 @@ const NavBar = () => {
             </ListSubheader>
             <ListItemButton
               selected={
-                topMenuItemSelectedId === 0 && sideMenuItemSelectedId === 0
+                topMenuItemSelectedId === 0 && selectedToolTitleKeyword === 0
               }
               onClick={() => changeValue(toolsItem, "TOOL")}
               component={Link}
@@ -1637,7 +1568,7 @@ const NavBar = () => {
                       <Typography
                         color={
                           topMenuItemSelectedId === 0 &&
-                          sideMenuItemSelectedId === 0
+                          selectedToolTitleKeyword === 0
                             ? "primary"
                             : ""
                         }
@@ -1705,7 +1636,7 @@ const NavBar = () => {
                           <ListItemButton
                             selected={
                               topMenuItemSelectedId === 0 &&
-                              sideMenuItemSelectedId + 1 === itemList.id
+                              selectedToolTitleKeyword === itemList.titleKeyword
                             }
                             key={keyList}
                             onClick={() => changeValue(itemList, "TOOL")}
@@ -1726,7 +1657,7 @@ const NavBar = () => {
                                     <Typography
                                       color={
                                         topMenuItemSelectedId === 0 &&
-                                        sideMenuItemSelectedId + 1 ===
+                                        selectedToolTitleKeyword + 1 ===
                                           itemList.id
                                           ? "primary"
                                           : ""
@@ -1751,7 +1682,10 @@ const NavBar = () => {
                           </ListItemButton>
                         );
 
-                        if (itemList.toolRestrictions.includes("BETA_TESTER")) {
+                        if (
+                          itemList.rolesNeeded &&
+                          itemList.rolesNeeded.includes("BETA_TESTER")
+                        ) {
                           if (betaTester) {
                             return element;
                           } else {

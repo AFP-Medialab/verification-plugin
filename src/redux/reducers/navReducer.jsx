@@ -1,5 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
-const initialState = 0;
+import { TOP_MENU_ITEMS } from "../../constants/topMenuItems";
+
+const initialState = TOP_MENU_ITEMS[0].title;
 
 const navSlice = createSlice({
   name: "nav",
