@@ -83,6 +83,9 @@ const AssistantVideoResult = () => {
           "embed/" +
           embedURL.slice(positionOne);
         break;
+      case KNOWN_LINKS.TIKTOK:
+        embedURL = null;
+        break;
       default:
         return embedURL;
     }
