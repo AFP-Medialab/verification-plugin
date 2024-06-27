@@ -30,14 +30,12 @@ const ToolsMenuItem = ({ tool }) => {
     setIsHovered(false);
   };
 
-  const showNew =
-    tool.rolesIcons && tool.rolesIcons.includes("new") ? true : false;
-  let showRedesign =
-    tool.rolesIcons && tool.rolesIcons.includes("redesigned") ? true : false;
-  let showLock =
-    tool.rolesIcons && tool.rolesIcons.includes("lock") ? true : false;
-  let showExperimental =
-    tool.rolesIcons && tool.rolesIcons.includes("experimental") ? true : false;
+  const showNew = tool.rolesIcons && tool.rolesIcons.includes("new");
+  const showRedesign =
+    tool.rolesIcons && tool.rolesIcons.includes("redesigned");
+  const showLock = tool.rolesIcons && tool.rolesIcons.includes("lock");
+  const showExperimental =
+    tool.rolesIcons && tool.rolesIcons.includes("experimental");
 
   const styleCard = isHovered
     ? {
