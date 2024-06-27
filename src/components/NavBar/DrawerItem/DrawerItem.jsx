@@ -2,12 +2,15 @@ import React, { useEffect } from "react";
 import { Container } from "@mui/material";
 import Fade from "@mui/material/Fade";
 import { useDispatch, useSelector } from "react-redux";
-import { selectTool } from "../../../redux/reducers/tools/toolReducer";
 import { Route, Routes, useLocation } from "react-router-dom";
 import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { getclientId } from "../../Shared/GoogleAnalytics/MatomoAnalytics";
 import { useTrackPageView } from "../../../Hooks/useAnalytics";
+import { selectPage } from "../../../redux/reducers/navReducer";
+import { TOP_MENU_ITEMS } from "../../../constants/topMenuItems";
+import { selectTool } from "../../../redux/reducers/tools/toolReducer";
+import { TOOL_GROUPS } from "../../../constants/tools";
 
 /**
  *
@@ -99,10 +102,21 @@ const DrawerItemContent = ({ tool }) => {
 
   const session = useSelector((state) => state.userSession);
   const uid = session && session.user ? session.user.id : null;
+
+  const handleToolChange = (tool) => {
+    if (tool.toolGroup === TOOL_GROUPS.VERIFICATION)
+      dispatch(selectPage(TOP_MENU_ITEMS[0].title));
+
+    if (tool.toolGroup === TOOL_GROUPS.MORE)
+      dispatch(selectPage(TOP_MENU_ITEMS[5].title));
+
+    dispatch(selectTool(tool.titleKeyword));
+  };
+
   useTrackPageView(path, client_id, uid, tool);
   useEffect(() => {
     //trackPageView(path, client_id, uid);
-    dispatch(selectTool(tool.titleKeyword));
+    handleToolChange(tool);
   }, [tool]);
 
   return (

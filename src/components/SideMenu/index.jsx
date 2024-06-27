@@ -36,6 +36,8 @@ import {
   TOOL_STATUS_ICON,
   TOOLS_CATEGORIES,
 } from "../../constants/tools";
+import { selectPage } from "../../redux/reducers/navReducer";
+import { TOP_MENU_ITEMS } from "../../constants/topMenuItems";
 import { selectTool } from "../../redux/reducers/tools/toolReducer";
 
 const SideMenu = ({ tools, setOpenAlert }) => {
@@ -46,6 +48,16 @@ const SideMenu = ({ tools, setOpenAlert }) => {
   const selectedToolTitleKeyword = useSelector((state) => state.tool.toolName);
 
   const dispatch = useDispatch();
+
+  const handleToolChange = (tool) => {
+    if (tool.toolGroup === TOOL_GROUPS.VERIFICATION)
+      dispatch(selectPage(TOP_MENU_ITEMS[0].title));
+
+    if (tool.toolGroup === TOOL_GROUPS.MORE)
+      dispatch(selectPage(TOP_MENU_ITEMS[5].title));
+
+    dispatch(selectTool(tool.titleKeyword));
+  };
 
   const currentLang = useSelector((state) => state.language);
   const userAuthenticated = useSelector(
@@ -85,7 +97,7 @@ const SideMenu = ({ tools, setOpenAlert }) => {
   const handleSideMenuToolClick = (tool) => {
     if (tool.category === TOOLS_CATEGORIES.OTHER) {
       navigate("/app/" + tool.path);
-      dispatch(selectTool(tool.titleKeyword));
+      handleToolChange(tool);
       return;
     }
 
@@ -110,8 +122,11 @@ const SideMenu = ({ tools, setOpenAlert }) => {
       return;
     }
 
-    navigate("/app/tools/" + tool.path);
-    dispatch(selectTool(tool.titleKeyword));
+    tool.toolGroup === TOOL_GROUPS.MORE
+      ? navigate("/app/" + tool.path)
+      : navigate("/app/tools/" + tool.path);
+
+    handleToolChange(tool);
   };
 
   const toolsItem = tools.find((tool) => tool.titleKeyword === "navbar_tools");

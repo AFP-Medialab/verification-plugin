@@ -12,6 +12,7 @@ import {
   SvgIcon,
   Tab,
   Tabs,
+  Typography,
 } from "@mui/material";
 
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
@@ -29,8 +30,7 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import { Audiotrack } from "@mui/icons-material";
-import Typography from "@mui/material/Typography";
-import { tools, TOOLS_CATEGORIES } from "../../../../constants/tools";
+import { ROLES, tools, TOOLS_CATEGORIES } from "../../../../constants/tools";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -69,20 +69,20 @@ const ToolsMenu = () => {
   const userAuthenticated = useSelector(
     (state) => state.userSession && state.userSession.userAuthenticated,
   );
+
+  const role = useSelector((state) => state.userSession.user.roles);
+  const betaTester = role.includes("BETA_TESTER");
+
   const [openAlert, setOpenAlert] = React.useState(false);
 
   const handleClick = (path, rolesNeeded) => {
-    //console.log(type);
-
     if (rolesNeeded && rolesNeeded.includes("lock")) {
       if (userAuthenticated) {
-        //console.log("LOGGED");
         handlePush(path);
       } else {
         setOpenAlert(true);
       }
     } else {
-      //console.log(path);
       handlePush(path);
     }
   };
@@ -92,20 +92,45 @@ const ToolsMenu = () => {
       window.open(process.env.REACT_APP_TSNA_SERVER + path, "_blank");
     } else {
       navigate("/app/tools/" + path);
-      /* history.push({
-                                                                                                                                                                                                                                              pathname: "/app/tools/" + path,
-                                                                                                                                                                                                                                              state: { media: mediaTool }
-                                                                                                                                                                                                                                          })*/
     }
   };
 
-  //console.log(tools);
+  //TODO: Move this code somewhere else so that the component is easier to reuse
 
+  /**
+   *
+   * @type {Tool[]}
+   */
   const toolsVideo = [];
+
+  /**
+   *
+   * @type {Tool[]}
+   */
   const toolsImages = [];
+
+  /**
+   *
+   * @type {Tool[]}
+   */
   const toolsAudio = [];
+
+  /**
+   *
+   * @type {Tool[]}
+   */
   const toolsSearch = [];
+
+  /**
+   *
+   * @type {Tool[]}
+   */
   const toolsData = [];
+
+  /**
+   *
+   * @type {Tool[]}
+   */
   const otherTools = [];
 
   const categories = [
@@ -179,28 +204,39 @@ const ToolsMenu = () => {
     },
   ];
 
+  const canUserSeeTool = (tool) => {
+    return (
+      !tool.rolesNeeded ||
+      (role && tool.rolesNeeded && role.includes(...tool.rolesNeeded)) ||
+      tool.rolesNeeded.includes(ROLES.LOCK)
+    );
+  };
+
   tools.forEach((tool) => {
-    if (tool.category === TOOLS_CATEGORIES.VIDEO) {
+    if (tool.category === TOOLS_CATEGORIES.VIDEO && canUserSeeTool(tool)) {
       toolsVideo.push(tool);
     }
 
-    if (tool.category === TOOLS_CATEGORIES.IMAGE) {
+    if (tool.category === TOOLS_CATEGORIES.IMAGE && canUserSeeTool(tool)) {
       toolsImages.push(tool);
     }
 
-    if (tool.category === TOOLS_CATEGORIES.AUDIO) {
+    if (tool.category === TOOLS_CATEGORIES.AUDIO && canUserSeeTool(tool)) {
       toolsAudio.push(tool);
     }
 
-    if (tool.category === TOOLS_CATEGORIES.SEARCH) {
+    if (tool.category === TOOLS_CATEGORIES.SEARCH && canUserSeeTool(tool)) {
       toolsSearch.push(tool);
     }
 
-    if (tool.category === TOOLS_CATEGORIES.DATA_ANALYSIS) {
+    if (
+      tool.category === TOOLS_CATEGORIES.DATA_ANALYSIS &&
+      canUserSeeTool(tool)
+    ) {
       toolsData.push(tool);
     }
 
-    if (tool.category === TOOLS_CATEGORIES.OTHER) {
+    if (tool.category === TOOLS_CATEGORIES.OTHER && canUserSeeTool(tool)) {
       otherTools.push(tool);
     }
   });
@@ -218,8 +254,6 @@ const ToolsMenu = () => {
     setValue(newValue);
   };
 
-  const role = useSelector((state) => state.userSession.user.roles);
-  const betaTester = role.includes("BETA_TESTER");
   const categoriesAllowedForUser = categories.filter(
     (category) => category.value.length !== 0,
   );
@@ -293,12 +327,7 @@ const ToolsMenu = () => {
                         key={key}
                         onClick={() => handleClick(tool.path, tool.rolesNeeded)}
                       >
-                        <ToolsMenuItem
-                          name={keyword(tool.titleKeyword)}
-                          description={keyword(tool.descriptionKeyword)}
-                          icon={tool.icon}
-                          iconsAttributes={tool.icons}
-                        />
+                        <ToolsMenuItem tool={tool} />
                       </Grid>
                     );
                     if (

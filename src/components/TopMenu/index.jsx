@@ -10,6 +10,7 @@ import useMyStyles from "../Shared/MaterialUiStyles/useMyStyles";
 import { useDispatch, useSelector } from "react-redux";
 import { i18nLoadNamespace } from "../Shared/Languages/i18nLoadNamespace";
 import { selectPage } from "../../redux/reducers/navReducer";
+import { toolsHome } from "../../constants/tools";
 
 const TopMenu = ({ topMenuItems }) => {
   const classes = useMyStyles();
@@ -28,14 +29,14 @@ const TopMenu = ({ topMenuItems }) => {
     dispatch(selectPage(newValue));
 
     if (newValue === "tools") {
-      navigate("/app/tools/");
+      navigate("/app/" + toolsHome.path);
     } else {
       navigate("/app/" + "assistant");
     }
   };
 
   const handleHomeIconClick = () => {
-    navigate("/app/tools/all");
+    navigate("/app/" + toolsHome.path);
   };
 
   const iconConditionalStyling = (toolName) => {

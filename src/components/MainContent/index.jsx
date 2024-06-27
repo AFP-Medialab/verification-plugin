@@ -40,7 +40,7 @@ const MainContent = ({ tools }) => {
 
   const role = useSelector((state) => state.userSession.user.roles);
 
-  const drawItemPerRole = tools.filter((tool) => {
+  const toolsAllowedForRole = tools.filter((tool) => {
     if (
       !tool.rolesNeeded ||
       tool.rolesNeeded.length === 0 ||
@@ -122,7 +122,7 @@ const MainContent = ({ tools }) => {
       <MainContentMenuTabItems
         className={classes.noMargin}
         tabItems={TOP_MENU_ITEMS}
-        toolsList={drawItemPerRole}
+        toolsList={toolsAllowedForRole}
       />
       <ScrollTop
         {...{ isCurrentLanguageLeftToRight: isCurrentLanguageLeftToRight }}
