@@ -144,7 +144,6 @@ export const ASSISTANT_ACTIONS = [
       KNOWN_LINKS.YOUTUBESHORTS,
       KNOWN_LINKS.LIVELEAK,
       KNOWN_LINKS.OWN,
-      KNOWN_LINKS.INSTAGRAM,
     ],
     cTypes: [CONTENT_TYPE.VIDEO],
     exceptions: [],

@@ -75,7 +75,10 @@ const AssistantProcessUrlActions = () => {
                   <ListItemText
                     primary={
                       <Typography component={"span"}>
-                        <Box fontWeight="fontWeightBold">
+                        <Box
+                          fontWeight="fontWeightBold"
+                          data-testid={action.title}
+                        >
                           {keyword(action.title)}
                         </Box>
                       </Typography>

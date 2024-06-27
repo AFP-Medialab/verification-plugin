@@ -51,6 +51,11 @@ const AssistantVideoResult = () => {
     let stringToMatch = "";
     let positionOne = 0;
 
+    // Don't embed blob links, they are url for cached in-memory video
+    if (embedURL.startsWith("blob:")) {
+      return null;
+    }
+
     switch (input_url_type) {
       case KNOWN_LINKS.YOUTUBE:
         if (!embedURL.includes("/embed/")) {
@@ -98,7 +103,7 @@ const AssistantVideoResult = () => {
 
   return (
     <Card variant={"outlined"}>
-      <CardMedia>
+      <CardMedia data-testid="assistant-video-container">
         {useIframe() && preprocessLinkForEmbed(processUrl) && (
           <Iframe
             hidden={downloadVideoFound()}
@@ -107,6 +112,7 @@ const AssistantVideoResult = () => {
             allow="fullscreen"
             height="400"
             width="100%"
+            data-testid="assistant-video-iframe"
           />
         )}
         {!useIframe() && preprocessLinkForEmbed(processUrl) && (
@@ -116,6 +122,7 @@ const AssistantVideoResult = () => {
             controls={true}
             height="400"
             width="100%"
+            data-testid="assistant-video-tag"
           />
         )}
         {!preprocessLinkForEmbed(processUrl) && (
@@ -128,7 +135,9 @@ const AssistantVideoResult = () => {
               justifyContent: "center",
             }}
           >
-            <div>{keyword("embedding_not_supported")}</div>
+            <div data-testid="assistant-video-noembed">
+              {keyword("embedding_not_supported")}
+            </div>
           </div>
         )}
       </CardMedia>
@@ -141,7 +150,6 @@ const AssistantVideoResult = () => {
           {keyword("download_video")}
         </Typography>
       </CardMedia>
-
       <CardActions>
         <ImageIcon color={"action"} />
         <Link
