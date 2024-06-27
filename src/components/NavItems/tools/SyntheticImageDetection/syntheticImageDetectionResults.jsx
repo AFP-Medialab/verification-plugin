@@ -23,7 +23,8 @@ import CustomAlertScore from "../../../Shared/CustomAlertScore";
 import GaugeChart from "react-gauge-chart";
 import Tooltip from "@mui/material/Tooltip";
 import { exportReactElementAsJpg } from "../../../Shared/Utils/htmlUtils";
-import GaugeChartModalExplanation from "../../../Shared/GaugeChartModalExplanation";
+import GaugeChartModalExplanation from "../../../Shared/GaugeChartResults/GaugeChartModalExplanation";
+import GaugeChartResult from "components/Shared/GaugeChartResults/GaugeChartResult";
 
 const SyntheticImageDetectionResults = (props) => {
   const keyword = i18nLoadNamespace(
@@ -256,10 +257,10 @@ const SyntheticImageDetectionResults = (props) => {
   };
 
   const keywords = [
-    "synthetic_image_detection_scale_modal_explanation_rating_1",
-    "synthetic_image_detection_scale_modal_explanation_rating_2",
-    "synthetic_image_detection_scale_modal_explanation_rating_3",
-    "synthetic_image_detection_scale_modal_explanation_rating_4",
+    "gauge_detection_scale_modal_explanation_rating_1",
+    "gauge_detection_scale_modal_explanation_rating_2",
+    "gauge_detection_scale_modal_explanation_rating_3",
+    "gauge_detection_scale_modal_explanation_rating_4",
   ];
   const colors = ["#00FF00", "#AAFF03", "#FFA903", "#FF0000"];
 
@@ -312,7 +313,7 @@ const SyntheticImageDetectionResults = (props) => {
           </Grid>
           <Grid item sm={12} md={6}>
             {syntheticImageScores.length > 0 ? (
-              <Stack
+              /* <Stack
                 direction="column"
                 p={4}
                 justifyContent="flex-start"
@@ -515,17 +516,7 @@ const SyntheticImageDetectionResults = (props) => {
                                     </Stack>
                                   </Box>
                                   <Stack>
-                                    {/*<Button*/}
-                                    {/*  href={*/}
-                                    {/*    DeepfakeImageDetectionMethodNames[*/}
-                                    {/*      item.methodName*/}
-                                    {/*    ].modelCardUrl*/}
-                                    {/*  }*/}
-                                    {/*>*/}
-                                    {/*  {keyword(*/}
-                                    {/*    "synthetic_image_detection_model_card",*/}
-                                    {/*  )}*/}
-                                    {/*</Button>*/}
+                                    // removed troublesome comment
                                   </Stack>
                                 </Stack>
 
@@ -553,7 +544,17 @@ const SyntheticImageDetectionResults = (props) => {
                     </AccordionDetails>
                   </Accordion>
                 </Box>
-              </Stack>
+              </Stack> */
+              <GaugeChartResult
+                keyword={keyword}
+                scores={syntheticImageScores}
+                methodNames={DeepfakeImageDetectionMethodNames}
+                detectionThresholds={DETECTION_THRESHOLDS}
+                resultsHaveErrors={resultsHaveErrors}
+                sanitizeDetectionPercentage={sanitizeDetectionPercentage}
+                gaugeExplanation={{ colors: colors, keywords: keywords }}
+                toolName={"SyntheticImageDetection"}
+              />
             ) : (
               <Stack
                 direction="column"
