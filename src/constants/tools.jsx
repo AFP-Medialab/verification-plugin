@@ -1,7 +1,12 @@
 import React from "react";
 
 import { SvgIcon } from "@mui/material";
-import { Archive, AudioFile } from "@mui/icons-material";
+import {
+  Archive,
+  AudioFile,
+  Gradient,
+  ManageSearch,
+} from "@mui/icons-material";
 
 import ToolsIcon from "../components/NavBar/images/SVG/Navbar/Tools.svg";
 
@@ -149,6 +154,94 @@ const ToolsSvgIcon = (props) => {
   return <SvgIcon component={ToolsIcon} inheritViewBox {...props} />;
 };
 
+const AnalysisSvgIcon = (props) => {
+  return <SvgIcon component={AnalysisIcon} inheritViewBox {...props} />;
+};
+
+const KeyframesSvgIcon = (props) => {
+  return <SvgIcon component={KeyframesIcon} inheritViewBox {...props} />;
+};
+
+const thumbnailsSvgIcon = (props) => {
+  return <SvgIcon component={ThumbnailsIcon} inheritViewBox {...props} />;
+};
+
+const videoRightsSvgIcon = (props) => {
+  return <SvgIcon component={VideoRightsIcon} inheritViewBox {...props} />;
+};
+
+const metadataSvgIcon = (props) => {
+  return <SvgIcon component={MetadataIcon} inheritViewBox {...props} />;
+};
+
+const deepfakeSvgIcon = (props) => {
+  return <SvgIcon component={DeepfakeIcon} inheritViewBox {...props} />;
+};
+
+const imageAnalysisSvgIcon = (props) => {
+  return <SvgIcon component={ImageAnalysisIcon} inheritViewBox {...props} />;
+};
+
+const magnifierSvgIcon = (props) => {
+  return <SvgIcon component={MagnifierIcon} inheritViewBox {...props} />;
+};
+
+const forensicSvgIcon = (props) => {
+  return <SvgIcon component={ForensicIcon} inheritViewBox {...props} />;
+};
+
+const ocrSvgIcon = (props) => {
+  return <SvgIcon component={OcrIcon} inheritViewBox {...props} />;
+};
+
+const gifSvgIcon = (props) => {
+  return <SvgIcon component={GifIcon} inheritViewBox {...props} />;
+};
+
+const syntheticImageSvgIcon = (props) => {
+  return <Gradient inheritViewBox {...props} />;
+};
+
+const geolocationSvgIcon = (props) => {
+  return <SvgIcon component={GeolocationIcon} inheritViewBox {...props} />;
+};
+
+const audioFileSvgIcon = (props) => {
+  return <AudioFile inheritViewBox {...props} />;
+};
+
+const twitterSearchSvgIcon = (props) => {
+  return <SvgIcon component={TwitterSearchIcon} inheritViewBox {...props} />;
+};
+
+const manageSearchSvgIcon = (props) => {
+  return <ManageSearch inheritViewBox {...props} />;
+};
+
+const covidSearchSvgIcon = (props) => {
+  return <SvgIcon component={CovidSearchIcon} inheritViewBox {...props} />;
+};
+
+const xnetworkSvgIcon = (props) => {
+  return <SvgIcon component={XnetworkIcon} inheritViewBox {...props} />;
+};
+
+const twitterSnaSvgIcon = (props) => {
+  return <SvgIcon component={TwitterSnaIcon} inheritViewBox {...props} />;
+};
+
+const csvSnaSvgIcon = (props) => {
+  return <SvgIcon component={CsvSnaIcon} inheritViewBox {...props} />;
+};
+
+const archiveSvgIcon = (props) => {
+  return <Archive inheritViewBox {...props} />;
+};
+
+const aboutSvgIcon = (props) => {
+  return <SvgIcon component={AboutIcon} inheritViewBox {...props} />;
+};
+
 /**
  * The Homepage that lists all the tools available
  * @type {Tool}
@@ -173,7 +266,7 @@ export const toolsHome = new Tool(
 const videoAnalysis = new Tool(
   "navbar_analysis_video",
   "navbar_analysis_description",
-  <SvgIcon component={AnalysisIcon} inheritViewBox />,
+  AnalysisSvgIcon,
   TOOLS_CATEGORIES.VIDEO,
   null,
   null,
@@ -186,7 +279,7 @@ const videoAnalysis = new Tool(
 const keyframes = new Tool(
   "navbar_keyframes",
   "navbar_keyframes_description",
-  <SvgIcon component={KeyframesIcon} inheritViewBox />,
+  KeyframesSvgIcon,
   TOOLS_CATEGORIES.VIDEO,
   null,
   null,
@@ -199,7 +292,7 @@ const keyframes = new Tool(
 const thumbnails = new Tool(
   "navbar_thumbnails",
   "navbar_thumbnails_description",
-  <SvgIcon component={ThumbnailsIcon} inheritViewBox />,
+  thumbnailsSvgIcon,
   TOOLS_CATEGORIES.VIDEO,
   null,
   null,
@@ -212,7 +305,7 @@ const thumbnails = new Tool(
 const videoRights = new Tool(
   "navbar_rights",
   "navbar_rights_description",
-  <SvgIcon component={VideoRightsIcon} inheritViewBox />,
+  videoRightsSvgIcon,
   TOOLS_CATEGORIES.VIDEO,
   null,
   null,
@@ -225,7 +318,7 @@ const videoRights = new Tool(
 const videoMetadata = new Tool(
   "navbar_metadata_video",
   "navbar_metadata_description",
-  <SvgIcon component={MetadataIcon} inheritViewBox />,
+  metadataSvgIcon,
   TOOLS_CATEGORIES.VIDEO,
   null,
   null,
@@ -238,7 +331,7 @@ const videoMetadata = new Tool(
 const videoDeepfake = new Tool(
   "navbar_deepfake_video",
   "navbar_deepfake_video_description",
-  <SvgIcon component={DeepfakeIcon} inheritViewBox />,
+  deepfakeSvgIcon,
   TOOLS_CATEGORIES.VIDEO,
   [TOOL_STATUS_ICON.EXPERIMENTAL],
   [ROLES.BETA_TESTER],
@@ -255,7 +348,7 @@ const videoDeepfake = new Tool(
 const imageAnalysis = new Tool(
   "navbar_analysis_image",
   "navbar_analysis_image_description",
-  <SvgIcon component={ImageAnalysisIcon} inheritViewBox />,
+  imageAnalysisSvgIcon,
   TOOLS_CATEGORIES.IMAGE,
   null,
   null,
@@ -268,7 +361,7 @@ const imageAnalysis = new Tool(
 const imageMagnifier = new Tool(
   "navbar_magnifier",
   "navbar_magnifier_description",
-  <SvgIcon component={MagnifierIcon} inheritViewBox />,
+  magnifierSvgIcon,
   TOOLS_CATEGORIES.IMAGE,
   null,
   null,
@@ -281,7 +374,7 @@ const imageMagnifier = new Tool(
 const imageMetadata = new Tool(
   "navbar_metadata_image",
   "navbar_metadata_description",
-  <SvgIcon component={MetadataIcon} inheritViewBox />,
+  metadataSvgIcon,
   TOOLS_CATEGORIES.IMAGE,
   null,
   null,
@@ -294,7 +387,7 @@ const imageMetadata = new Tool(
 const imageForensic = new Tool(
   "navbar_forensic",
   "navbar_forensic_description",
-  <SvgIcon component={ForensicIcon} inheritViewBox />,
+  forensicSvgIcon,
   TOOLS_CATEGORIES.IMAGE,
   null,
   null,
@@ -307,7 +400,7 @@ const imageForensic = new Tool(
 const imageOcr = new Tool(
   "navbar_ocr",
   "navbar_ocr_description",
-  <SvgIcon component={OcrIcon} inheritViewBox />,
+  ocrSvgIcon,
   TOOLS_CATEGORIES.IMAGE,
   null,
   null,
@@ -320,7 +413,7 @@ const imageOcr = new Tool(
 const imageGif = new Tool(
   "navbar_gif",
   "navbar_gif_description",
-  <SvgIcon component={GifIcon} inheritViewBox />,
+  gifSvgIcon,
   TOOLS_CATEGORIES.IMAGE,
   [TOOL_STATUS_ICON.LOCK],
   [ROLES.LOCK],
@@ -333,7 +426,7 @@ const imageGif = new Tool(
 const imageSyntheticDetection = new Tool(
   "navbar_synthetic_image_detection",
   "navbar_synthetic_image_detection_description",
-  <SvgIcon component={GifIcon} inheritViewBox />,
+  syntheticImageSvgIcon,
   TOOLS_CATEGORIES.IMAGE,
   [TOOL_STATUS_ICON.NEW, TOOL_STATUS_ICON.EXPERIMENTAL, TOOL_STATUS_ICON.LOCK],
   [ROLES.BETA_TESTER],
@@ -346,7 +439,7 @@ const imageSyntheticDetection = new Tool(
 const imageDeepfake = new Tool(
   "navbar_deepfake_image",
   "navbar_deepfake_image_description",
-  <SvgIcon component={DeepfakeIcon} inheritViewBox />,
+  deepfakeSvgIcon,
   TOOLS_CATEGORIES.IMAGE,
   [TOOL_STATUS_ICON.EXPERIMENTAL, TOOL_STATUS_ICON.LOCK],
   [ROLES.BETA_TESTER],
@@ -359,7 +452,7 @@ const imageDeepfake = new Tool(
 const imageGeolocation = new Tool(
   "navbar_geolocation",
   "navbar_geolocation_description",
-  <SvgIcon component={GeolocationIcon} inheritViewBox />,
+  geolocationSvgIcon,
   TOOLS_CATEGORIES.IMAGE,
   [TOOL_STATUS_ICON.EXPERIMENTAL, TOOL_STATUS_ICON.LOCK],
   [ROLES.BETA_TESTER],
@@ -376,7 +469,7 @@ const imageGeolocation = new Tool(
 const audioLoccus = new Tool(
   "navbar_loccus",
   "navbar_loccus_description",
-  <AudioFile />,
+  audioFileSvgIcon,
   TOOLS_CATEGORIES.AUDIO,
   [TOOL_STATUS_ICON.NEW, TOOL_STATUS_ICON.EXPERIMENTAL, TOOL_STATUS_ICON.LOCK],
   [ROLES.BETA_TESTER],
@@ -393,7 +486,7 @@ const audioLoccus = new Tool(
 const searchTwitter = new Tool(
   "navbar_twitter",
   "navbar_twitter_description",
-  <SvgIcon component={TwitterSearchIcon} inheritViewBox />,
+  twitterSearchSvgIcon,
   TOOLS_CATEGORIES.SEARCH,
   null,
   null,
@@ -406,7 +499,7 @@ const searchTwitter = new Tool(
 const searchSemantic = new Tool(
   "navbar_semantic_search",
   "navbar_semantic_search_description",
-  <AudioFile />,
+  manageSearchSvgIcon,
   TOOLS_CATEGORIES.SEARCH,
   [TOOL_STATUS_ICON.EXPERIMENTAL, TOOL_STATUS_ICON.NEW, TOOL_STATUS_ICON.LOCK],
   [ROLES.LOCK],
@@ -419,7 +512,7 @@ const searchSemantic = new Tool(
 const searchCovid = new Tool(
   "navbar_covidsearch",
   "navbar_covidsearch_description",
-  <SvgIcon component={CovidSearchIcon} inheritViewBox />,
+  covidSearchSvgIcon,
   TOOLS_CATEGORIES.SEARCH,
   null,
   null,
@@ -432,7 +525,7 @@ const searchCovid = new Tool(
 const searchXnetwork = new Tool(
   "navbar_xnetwork",
   "navbar_xnetwork_description",
-  <SvgIcon component={XnetworkIcon} inheritViewBox />,
+  xnetworkSvgIcon,
   TOOLS_CATEGORIES.SEARCH,
   null,
   null,
@@ -449,7 +542,7 @@ const searchXnetwork = new Tool(
 const dataAnalysisSna = new Tool(
   "navbar_twitter_sna",
   "navbar_twitter_sna_description",
-  <SvgIcon component={TwitterSnaIcon} inheritViewBox />,
+  twitterSnaSvgIcon,
   TOOLS_CATEGORIES.DATA_ANALYSIS,
   [TOOL_STATUS_ICON.LOCK],
   [ROLES.LOCK],
@@ -462,7 +555,7 @@ const dataAnalysisSna = new Tool(
 const dataAnalysisCrowdtangle = new Tool(
   "navbar_twitter_crowdtangle",
   "navbar_twitter_crowdtangle_description",
-  <SvgIcon component={CsvSnaIcon} inheritViewBox />,
+  csvSnaSvgIcon,
   TOOLS_CATEGORIES.DATA_ANALYSIS,
   null,
   null,
@@ -479,7 +572,7 @@ const dataAnalysisCrowdtangle = new Tool(
 const archiving = new Tool(
   "navbar_archiving",
   "navbar_archiving_description",
-  <Archive />,
+  archiveSvgIcon,
   TOOLS_CATEGORIES.OTHER,
   [TOOL_STATUS_ICON.EXPERIMENTAL, TOOL_STATUS_ICON.NEW, TOOL_STATUS_ICON.LOCK],
   [ROLES.ARCHIVE],
@@ -494,7 +587,7 @@ const archiving = new Tool(
 const about = new Tool(
   "navbar_about",
   "",
-  <SvgIcon component={AboutIcon} inheritViewBox />,
+  aboutSvgIcon,
   null,
   null,
   null,

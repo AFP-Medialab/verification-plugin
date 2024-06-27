@@ -520,10 +520,11 @@ const SideMenu = ({ tools, setOpenAlert }) => {
                               sx={{
                                 marginRight: "12px",
                                 minWidth: "unset",
-                                ...iconConditionalStyling(itemList),
                               }}
                             >
-                              {itemList.icon}
+                              <itemList.icon
+                                sx={iconConditionalStyling(itemList)}
+                              />
                             </ListItemIcon>
                             <ListItemText
                               primary={
@@ -549,11 +550,10 @@ const SideMenu = ({ tools, setOpenAlert }) => {
                             alignItems="center"
                             justifyContent="center"
                             width="100%"
-                            sx={{
-                              ...iconConditionalStyling(itemList),
-                            }}
                           >
-                            {itemList.icon}
+                            <itemList.icon
+                              sx={iconConditionalStyling(itemList)}
+                            />
                           </Stack>
                         )}
                       </ListItemButton>
@@ -610,10 +610,9 @@ const SideMenu = ({ tools, setOpenAlert }) => {
                     sx={{
                       marginRight: "12px",
                       minWidth: "unset",
-                      ...iconConditionalStyling(item),
                     }}
                   >
-                    {item.icon}
+                    <item.icon sx={iconConditionalStyling(item)} />
                   </ListItemIcon>
                   <ListItemText
                     primary={

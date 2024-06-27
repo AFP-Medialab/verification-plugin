@@ -60,7 +60,9 @@ const ToolsMenuItem = ({ tool }) => {
       <Box p={2}>
         <Box mr={1}>
           <Grid container direction="row" alignItems="center">
-            <Grid item>{tool.icon}</Grid>
+            <Grid item>
+              <tool.icon sx={{ color: "#00926c" }} />
+            </Grid>
             <Grid item>
               <Box ml={1} />
             </Grid>
