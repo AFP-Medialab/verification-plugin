@@ -10,7 +10,7 @@ import { useTrackPageView } from "../../../Hooks/useAnalytics";
 import { selectTopMenuItem } from "../../../redux/reducers/navReducer";
 import { TOP_MENU_ITEMS } from "../../../constants/topMenuItems";
 import { selectTool } from "../../../redux/reducers/tools/toolReducer";
-import { TOOL_GROUPS } from "../../../constants/tools";
+import { TOOL_GROUPS, toolsHome } from "../../../constants/tools";
 
 /**
  *
@@ -21,7 +21,7 @@ const DrawerItem = ({ toolsList }) => {
   return (
     <Routes>
       {toolsList.map((tool, index) => {
-        if (tool.path === "tools") {
+        if (tool.path === toolsHome.path) {
           return (
             <Route
               path={"*"}

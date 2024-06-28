@@ -49,6 +49,8 @@ const SideMenu = ({ tools, setOpenAlert }) => {
 
   const dispatch = useDispatch();
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     //Set the redux state if the tool was opened from URL
     const pathArr = window.location.href.split("/");
@@ -70,10 +72,10 @@ const SideMenu = ({ tools, setOpenAlert }) => {
       );
 
       if (toolFromPath) {
-        toolFromPath.handleOpenCategoryDrawer();
+        toolFromPath.handleOpenCategoryDrawer(true);
       }
     }
-  }, []);
+  }, [navigate]);
 
   const handleToolChange = (tool) => {
     if (tool.toolGroup === TOOL_GROUPS.VERIFICATION)
@@ -98,8 +100,6 @@ const SideMenu = ({ tools, setOpenAlert }) => {
   const [isSideMenuOpen, setIsSideMenuOpen] = useState(true);
 
   const drawerRef = useRef(null);
-
-  const navigate = useNavigate();
 
   const [classWidthToolbar, setClassWidthToolbar] = useState(
     classes.drawerWidth,
@@ -172,8 +172,9 @@ const SideMenu = ({ tools, setOpenAlert }) => {
   });
   const [classBorderVideo, setClassBorderVideo] = useState(null);
 
-  const handleClickListVideo = () => {
-    setOpenListVideo((prevState) => !prevState);
+  const handleClickListVideo = (setOpen) => {
+    if (setOpen) setOpenListVideo(setOpen);
+    else setOpenListVideo((prevState) => !prevState);
     if (!classBorderVideo) {
       setClassBorderVideo(classes.drawerCategoryBorder);
     } else {
@@ -188,8 +189,9 @@ const SideMenu = ({ tools, setOpenAlert }) => {
   const [openListImage, setOpenListImage] = useState(false);
   const [classBorderImage, setClassBorderImage] = useState(null);
 
-  const handleClickListImage = () => {
-    setOpenListImage(!openListImage);
+  const handleClickListImage = (setOpen) => {
+    if (setOpen) setOpenListImage(setOpen);
+    else setOpenListImage((prev) => !prev);
     if (!openListImage) {
       setClassBorderImage(classes.drawerCategoryBorder);
     } else {
@@ -204,8 +206,9 @@ const SideMenu = ({ tools, setOpenAlert }) => {
   const [openListAudio, setOpenListAudio] = useState(false);
   const [classBorderAudio, setClassBorderAudio] = useState(null);
 
-  const handleClickListAudio = () => {
-    setOpenListAudio(!openListAudio);
+  const handleClickListAudio = (setOpen) => {
+    if (setOpen) setOpenListAudio(setOpen);
+    else setOpenListAudio((prevState) => !prevState);
     if (!openListAudio) {
       setClassBorderAudio(classes.drawerCategoryBorder);
     } else {
@@ -220,8 +223,9 @@ const SideMenu = ({ tools, setOpenAlert }) => {
   const [openListSearch, setOpenListSearch] = useState(false);
   const [classBorderSearch, setClassBorderSearch] = useState(null);
 
-  const handleClickListSearch = () => {
-    setOpenListSearch(!openListSearch);
+  const handleClickListSearch = (setOpen) => {
+    if (setOpen) setOpenListSearch(setOpen);
+    else setOpenListSearch((prevState) => !prevState);
     if (!openListSearch) {
       setClassBorderSearch(classes.drawerCategoryBorder);
     } else {
@@ -237,8 +241,9 @@ const SideMenu = ({ tools, setOpenAlert }) => {
   const [openListData, setOpenListData] = useState(false);
   const [classBorderData, setClassBorderData] = useState(null);
 
-  const handleClickListData = () => {
-    setOpenListData(!openListData);
+  const handleClickListData = (setOpen) => {
+    if (setOpen) setOpenListData(setOpen);
+    else setOpenListData((prevState) => !prevState);
     if (!openListData) {
       setClassBorderData(classes.drawerCategoryBorder);
     } else {
@@ -252,8 +257,9 @@ const SideMenu = ({ tools, setOpenAlert }) => {
   const [openListOtherTools, setOpenListOtherTools] = useState(false);
   const [classBorderOtherTools, setClassBorderOtherTools] = useState(null);
 
-  const handleClickListOtherTools = () => {
-    setOpenListOtherTools(!openListOtherTools);
+  const handleClickListOtherTools = (setOpen) => {
+    if (setOpen) setOpenListOtherTools(setOpen);
+    else setOpenListOtherTools((prevState) => !prevState);
     if (!openListOtherTools) {
       setClassBorderOtherTools(classes.drawerCategoryBorder);
     } else {
