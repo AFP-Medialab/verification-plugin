@@ -103,17 +103,18 @@ const AssistantVideoResult = () => {
 
   return (
     <Card variant={"outlined"}>
-      <CardMedia data-testid="assistant-video-container">
+      <CardMedia data-testid="assistant-media-video-container">
         {useIframe() && preprocessLinkForEmbed(processUrl) && (
-          <Iframe
-            hidden={downloadVideoFound()}
-            frameBorder="0"
-            url={preprocessLinkForEmbed(processUrl)}
-            allow="fullscreen"
-            height="400"
-            width="100%"
-            data-testid="assistant-video-iframe"
-          />
+          <div data-testid="assistant-media-video-iframe">
+            <Iframe
+              hidden={downloadVideoFound()}
+              frameBorder="0"
+              url={preprocessLinkForEmbed(processUrl)}
+              allow="fullscreen"
+              height="400"
+              width="100%"
+            />
+          </div>
         )}
         {!useIframe() && preprocessLinkForEmbed(processUrl) && (
           <video
@@ -122,7 +123,7 @@ const AssistantVideoResult = () => {
             controls={true}
             height="400"
             width="100%"
-            data-testid="assistant-video-tag"
+            data-testid="assistant-media-video-tag"
           />
         )}
         {!preprocessLinkForEmbed(processUrl) && (
@@ -135,7 +136,7 @@ const AssistantVideoResult = () => {
               justifyContent: "center",
             }}
           >
-            <div data-testid="assistant-video-noembed">
+            <div data-testid="assistant-media-video-noembed">
               {keyword("embedding_not_supported")}
             </div>
           </div>
