@@ -52,17 +52,28 @@ const SideMenu = ({ tools, setOpenAlert }) => {
   useEffect(() => {
     //Set the redux state if the tool was opened from URL
     const pathArr = window.location.href.split("/");
-    const path = pathArr[pathArr.length - 1].split("?")[0];
+
+    const lastNonEmptyPath = pathArr[pathArr.length - 1]
+      ? pathArr[pathArr.length - 1]
+      : pathArr[pathArr.length - 2];
+
+    const path = lastNonEmptyPath.split("?")[0];
+
     const toolWithPath = tools.find((tool) => tool.path === path);
 
-    if (toolWithPath) dispatch(selectTool(toolWithPath.titleKeyword));
+    if (toolWithPath) {
+      dispatch(selectTool(toolWithPath.titleKeyword));
+      console.log(toolWithPath);
 
-    //Now we open the drawer for the tool selected
-    const openDrawerForTool = listItems.find(
-      (i) => i.titleKeyword === toolWithPath.category,
-    ).handleOpenCategoryDrawer;
+      //Now we open the drawer for the tool selected
+      const toolFromPath = listItems.find(
+        (i) => i.titleKeyword === toolWithPath.category,
+      );
 
-    openDrawerForTool();
+      if (toolFromPath) {
+        toolFromPath.handleOpenCategoryDrawer();
+      }
+    }
   }, []);
 
   const handleToolChange = (tool) => {
@@ -661,11 +672,8 @@ const SideMenu = ({ tools, setOpenAlert }) => {
                   alignItems="center"
                   justifyContent="center"
                   width="100%"
-                  sx={{
-                    ...iconConditionalStyling(item),
-                  }}
                 >
-                  {item.icon}
+                  <item.icon sx={iconConditionalStyling(item)} />
                 </Stack>
               )}
             </ListItemButton>
