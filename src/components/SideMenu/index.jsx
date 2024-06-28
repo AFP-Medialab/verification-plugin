@@ -63,7 +63,6 @@ const SideMenu = ({ tools, setOpenAlert }) => {
 
     if (toolWithPath) {
       dispatch(selectTool(toolWithPath.titleKeyword));
-      console.log(toolWithPath);
 
       //Now we open the drawer for the tool selected
       const toolFromPath = listItems.find(
