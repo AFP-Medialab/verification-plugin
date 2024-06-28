@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Box,
   Button,
@@ -36,7 +36,7 @@ import {
   TOOL_STATUS_ICON,
   TOOLS_CATEGORIES,
 } from "../../constants/tools";
-import { selectPage } from "../../redux/reducers/navReducer";
+import { selectTopMenuItem } from "../../redux/reducers/navReducer";
 import { TOP_MENU_ITEMS } from "../../constants/topMenuItems";
 import { selectTool } from "../../redux/reducers/tools/toolReducer";
 
@@ -49,12 +49,28 @@ const SideMenu = ({ tools, setOpenAlert }) => {
 
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    //Set the redux state if the tool was opened from URL
+    const pathArr = window.location.href.split("/");
+    const path = pathArr[pathArr.length - 1].split("?")[0];
+    const toolWithPath = tools.find((tool) => tool.path === path);
+
+    if (toolWithPath) dispatch(selectTool(toolWithPath.titleKeyword));
+
+    //Now we open the drawer for the tool selected
+    const openDrawerForTool = listItems.find(
+      (i) => i.titleKeyword === toolWithPath.category,
+    ).handleOpenCategoryDrawer;
+
+    openDrawerForTool();
+  }, []);
+
   const handleToolChange = (tool) => {
     if (tool.toolGroup === TOOL_GROUPS.VERIFICATION)
-      dispatch(selectPage(TOP_MENU_ITEMS[0].title));
+      dispatch(selectTopMenuItem(TOP_MENU_ITEMS[0].title));
 
     if (tool.toolGroup === TOOL_GROUPS.MORE)
-      dispatch(selectPage(TOP_MENU_ITEMS[5].title));
+      dispatch(selectTopMenuItem(TOP_MENU_ITEMS[5].title));
 
     dispatch(selectTool(tool.titleKeyword));
   };
@@ -91,7 +107,7 @@ const SideMenu = ({ tools, setOpenAlert }) => {
   };
 
   /**
-   * Fires when the user clicks on a tool
+   * Fires when the user clicks on a topMenuItem
    * @param tool {Tool}
    */
   const handleSideMenuToolClick = (tool) => {
@@ -138,11 +154,16 @@ const SideMenu = ({ tools, setOpenAlert }) => {
   const drawerItemsVideo = tools.filter(
     (tool) => tool.category === TOOLS_CATEGORIES.VIDEO,
   );
-  const [openListVideo, setOpenListVideo] = useState(false);
+  const [openListVideo, setOpenListVideo] = useState(() => {
+    const tool = tools.filter(
+      (tool) => tool.titleKeyword === selectedToolTitleKeyword,
+    )[0];
+    return tool.category === TOOLS_CATEGORIES.VIDEO;
+  });
   const [classBorderVideo, setClassBorderVideo] = useState(null);
 
   const handleClickListVideo = () => {
-    setOpenListVideo(!openListVideo);
+    setOpenListVideo((prevState) => !prevState);
     if (!classBorderVideo) {
       setClassBorderVideo(classes.drawerCategoryBorder);
     } else {
@@ -246,7 +267,7 @@ const SideMenu = ({ tools, setOpenAlert }) => {
       list: drawerItemsVideo,
       variableOpen: openListVideo,
       setVariableOpen: setOpenListVideo,
-      functionHandleClick: handleClickListVideo,
+      handleOpenCategoryDrawer: handleClickListVideo,
       classBorder: classBorderVideo,
     },
     {
@@ -262,7 +283,7 @@ const SideMenu = ({ tools, setOpenAlert }) => {
       list: drawerItemsImage,
       variableOpen: openListImage,
       setVariableOpen: setOpenListImage,
-      functionHandleClick: handleClickListImage,
+      handleOpenCategoryDrawer: handleClickListImage,
       classBorder: classBorderImage,
     },
     {
@@ -278,7 +299,7 @@ const SideMenu = ({ tools, setOpenAlert }) => {
       list: drawerItemsAudio,
       variableOpen: openListAudio,
       setVariableOpen: setOpenListAudio,
-      functionHandleClick: handleClickListAudio,
+      handleOpenCategoryDrawer: handleClickListAudio,
       classBorder: classBorderAudio,
     },
     {
@@ -294,7 +315,7 @@ const SideMenu = ({ tools, setOpenAlert }) => {
       list: drawerItemsSearch,
       variableOpen: openListSearch,
       setVariableOpen: setOpenListSearch,
-      functionHandleClick: handleClickListSearch,
+      handleOpenCategoryDrawer: handleClickListSearch,
       classBorder: classBorderSearch,
     },
     {
@@ -310,7 +331,7 @@ const SideMenu = ({ tools, setOpenAlert }) => {
       list: drawerItemsData,
       variableOpen: openListData,
       setVariableOpen: setOpenListData,
-      functionHandleClick: handleClickListData,
+      handleOpenCategoryDrawer: handleClickListData,
       classBorder: classBorderData,
     },
     {
@@ -319,7 +340,7 @@ const SideMenu = ({ tools, setOpenAlert }) => {
       list: drawerItemsOtherTools,
       variableOpen: openListOtherTools,
       setVariableOpen: setOpenListOtherTools,
-      functionHandleClick: handleClickListOtherTools,
+      handleOpenCategoryDrawer: handleClickListOtherTools,
       classBorder: classBorderOtherTools,
     },
   ];
@@ -344,7 +365,7 @@ const SideMenu = ({ tools, setOpenAlert }) => {
   });
 
   /**
-   * Changes the color of the icon dynamically if the tool is selected
+   * Changes the color of the icon dynamically if the topMenuItem is selected
    * @param tool {Tool}
    * @returns {{fontSize: string, fill: (string)}|{fontSize: string}}
    */
@@ -356,7 +377,7 @@ const SideMenu = ({ tools, setOpenAlert }) => {
 
     let isSelected;
 
-    // Case for the about tool
+    // Case for the about topMenuItem
     if (!tool.category) {
       isSelected =
         selectedToolTitleKeyword === tool.titleKeyword ||
@@ -469,7 +490,7 @@ const SideMenu = ({ tools, setOpenAlert }) => {
         {listItems.map((item, key) => {
           const element = (
             <Box>
-              <ListItemButton onClick={item.functionHandleClick}>
+              <ListItemButton onClick={item.handleOpenCategoryDrawer}>
                 {isSideMenuOpen ? (
                   <>
                     <ListItemIcon

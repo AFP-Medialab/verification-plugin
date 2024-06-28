@@ -1,5 +1,5 @@
 import React from "react";
-import MainContentMenuTabItems from "../NavBar/MainContentMenuTabItems/MainContentMenuTabItems";
+import MainContentMenuTopMenuItems from "../NavBar/MainContentMenuTabItems/MainContentMenuTopMenuItems";
 import ScrollTop from "../Shared/ScrollTop/ScrollTop";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Button, Fab, Snackbar } from "@mui/material";
@@ -119,10 +119,10 @@ const MainContent = ({ tools }) => {
   return (
     <main className={classes.content}>
       <div className={classes.toolbar} id="back-to-top-anchor" />
-      <MainContentMenuTabItems
+      <MainContentMenuTopMenuItems
         className={classes.noMargin}
-        tabItems={TOP_MENU_ITEMS}
-        toolsList={toolsAllowedForRole}
+        topMenuItems={TOP_MENU_ITEMS}
+        tools={toolsAllowedForRole}
       />
       <ScrollTop
         {...{ isCurrentLanguageLeftToRight: isCurrentLanguageLeftToRight }}

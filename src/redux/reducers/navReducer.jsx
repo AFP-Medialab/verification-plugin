@@ -7,12 +7,12 @@ const navSlice = createSlice({
   name: "nav",
   initialState,
   reducers: {
-    selectPage(state, action) {
+    selectTopMenuItem(state, action) {
       return action.payload;
     },
   },
 });
-export const { selectPage } = navSlice.actions;
+export const { selectTopMenuItem } = navSlice.actions;
 const navReducer = navSlice.reducer;
 
 export default navReducer;

@@ -27,7 +27,7 @@ export const addDictionary = (label, json) => {
 };
 
 //DEPRECATED
-//export const selectPage = createAction("SELECT_PAGE")
+//export const selectTopMenuItem = createAction("SELECT_PAGE")
 
 //DEPRECATED
 //export const selectTool = createAction("SELECT_TOOL")

@@ -46,7 +46,7 @@ const AssistantMediaResult = () => {
   const imageList = useSelector((state) => state.assistant.imageList);
   const videoList = useSelector((state) => state.assistant.videoList);
 
-  // third party tool states
+  // third party topMenuItem states
   //const ocrLoading = useSelector(state=>state.assistant.ocrLoading)
   const dbkfMediaMatchLoading = useSelector(
     (state) => state.assistant.dbkfMediaMatchLoading,

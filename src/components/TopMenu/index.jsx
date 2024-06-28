@@ -9,7 +9,7 @@ import Languages from "../NavItems/languages/languages";
 import useMyStyles from "../Shared/MaterialUiStyles/useMyStyles";
 import { useDispatch, useSelector } from "react-redux";
 import { i18nLoadNamespace } from "../Shared/Languages/i18nLoadNamespace";
-import { selectPage } from "../../redux/reducers/navReducer";
+import { selectTopMenuItem } from "../../redux/reducers/navReducer";
 import { toolsHome } from "../../constants/tools";
 
 const TopMenu = ({ topMenuItems }) => {
@@ -26,7 +26,7 @@ const TopMenu = ({ topMenuItems }) => {
   const topMenuItemSelected = useSelector((state) => state.nav);
 
   const handleTopMenuChange = (event, newValue) => {
-    dispatch(selectPage(newValue));
+    dispatch(selectTopMenuItem(newValue));
 
     if (newValue === "tools") {
       navigate("/app/" + toolsHome.path);
@@ -42,7 +42,7 @@ const TopMenu = ({ topMenuItems }) => {
   const iconConditionalStyling = (toolName) => {
     return {
       fill: topMenuItemSelected === toolName ? "#00926c" : "#4c4c4c",
-      fontSize: "30px",
+      fontSize: "24px",
     };
   };
 

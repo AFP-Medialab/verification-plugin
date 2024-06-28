@@ -7,7 +7,7 @@ import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { getclientId } from "../../Shared/GoogleAnalytics/MatomoAnalytics";
 import { useTrackPageView } from "../../../Hooks/useAnalytics";
-import { selectPage } from "../../../redux/reducers/navReducer";
+import { selectTopMenuItem } from "../../../redux/reducers/navReducer";
 import { TOP_MENU_ITEMS } from "../../../constants/topMenuItems";
 import { selectTool } from "../../../redux/reducers/tools/toolReducer";
 import { TOOL_GROUPS } from "../../../constants/tools";
@@ -105,10 +105,10 @@ const DrawerItemContent = ({ tool }) => {
 
   const handleToolChange = (tool) => {
     if (tool.toolGroup === TOOL_GROUPS.VERIFICATION)
-      dispatch(selectPage(TOP_MENU_ITEMS[0].title));
+      dispatch(selectTopMenuItem(TOP_MENU_ITEMS[0].title));
 
     if (tool.toolGroup === TOOL_GROUPS.MORE)
-      dispatch(selectPage(TOP_MENU_ITEMS[5].title));
+      dispatch(selectTopMenuItem(TOP_MENU_ITEMS[5].title));
 
     dispatch(selectTool(tool.titleKeyword));
   };

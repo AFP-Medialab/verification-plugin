@@ -71,9 +71,9 @@ export const TOOLS_CATEGORIES = {
 
 /**
  * Represents the possible temporary states of the tools:
- * - An experimental tool is not ready for production, and available to beta testers
- * - A new tool is an experimental tool that was released to everyone
- * - A locked tool is a tool available to registered users
+ * - An experimental topMenuItem is not ready for production, and available to beta testers
+ * - A new topMenuItem is an experimental topMenuItem that was released to everyone
+ * - A locked topMenuItem is a topMenuItem available to registered users
  * @typedef ToolsStatusIcon
  * @type {{NEW: string, LOCK: string, EXPERIMENTAL: string}}
  */
@@ -98,7 +98,7 @@ export const TOOL_GROUPS = {
 };
 
 /**
- * Represents the user roles that can be needed to access a given tool
+ * Represents the user roles that can be needed to access a given topMenuItem
  * @typedef Roles
  * @type {{BETA_TESTER: string, ARCHIVE: string, LOCK: string}}
  */
@@ -109,21 +109,21 @@ export const ROLES = {
 };
 
 /**
- * Represents a tool that can be used by users
+ * Represents a topMenuItem that can be used by users
  */
 class Tool {
   /**
    *
-   * @param titleKeyword {string} The keyword for the name of the tool
-   * @param descriptionKeyword {string=} The keyword for the tool description
-   * @param icon {SvgIconComponent | React.JSX.Element} The tool's icon
-   * @param category {ToolsCategories} The tool's category
-   * @param rolesIcons {?Array<ToolsStatusIcon>} Icons representing the development status of the tool
-   * @param rolesNeeded {?Array<Roles>} Role(s) needed to access the tool
-   * @param path {string} The url path to the tool
-   * @param toolGroup {ToolGroups} The group to which the tool belongs
-   * @param content The React Element to display for the tool
-   * @param footer The React element to display at the bottom of the tool React Element
+   * @param titleKeyword {string} The keyword for the name of the topMenuItem
+   * @param descriptionKeyword {string=} The keyword for the topMenuItem description
+   * @param icon {SvgIconComponent | React.JSX.Element} The topMenuItem's icon
+   * @param category {ToolsCategories} The topMenuItem's category
+   * @param rolesIcons {?Array<ToolsStatusIcon>} Icons representing the development status of the topMenuItem
+   * @param rolesNeeded {?Array<Roles>} Role(s) needed to access the topMenuItem
+   * @param path {string} The url path to the topMenuItem
+   * @param toolGroup {ToolGroups} The group to which the topMenuItem belongs
+   * @param content The React Element to display for the topMenuItem
+   * @param footer The React element to display at the bottom of the topMenuItem React Element
    */
   constructor(
     titleKeyword,
@@ -597,7 +597,7 @@ const about = new Tool(
   null,
 );
 
-export const tools = [
+export const tools = Object.freeze([
   toolsHome,
   videoAnalysis,
   keyframes,
@@ -623,4 +623,4 @@ export const tools = [
   dataAnalysisCrowdtangle,
   archiving,
   about,
-];
+]);
