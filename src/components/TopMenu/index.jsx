@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { i18nLoadNamespace } from "../Shared/Languages/i18nLoadNamespace";
 import { selectTopMenuItem } from "../../redux/reducers/navReducer";
 import { toolsHome } from "../../constants/tools";
+import { resetToolSelected } from "../../redux/reducers/tools/toolReducer";
 
 const TopMenu = ({ topMenuItems }) => {
   const classes = useMyStyles();
@@ -28,10 +29,8 @@ const TopMenu = ({ topMenuItems }) => {
   const handleTopMenuChange = (event, newValue) => {
     dispatch(selectTopMenuItem(newValue));
 
-    if (newValue === "tools") {
-      navigate("/app/" + toolsHome.path);
-    } else {
-      navigate("/app/" + "assistant");
+    if (newValue !== toolsHome.titleKeyword) {
+      dispatch(resetToolSelected());
     }
   };
 

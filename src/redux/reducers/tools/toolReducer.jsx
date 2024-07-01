@@ -10,13 +10,13 @@ const toolSlice = createSlice({
     selectTool(state, action) {
       state.toolName = action.payload;
     },
-    cleanTool() {
+    resetToolSelected() {
       return initialState;
     },
   },
 });
 
-export const { selectTool, cleanTool } = toolSlice.actions;
+export const { selectTool, resetToolSelected } = toolSlice.actions;
 const toolReducer = toolSlice.reducer;
 
 export default toolReducer;
