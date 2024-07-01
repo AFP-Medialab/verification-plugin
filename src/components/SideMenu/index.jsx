@@ -506,7 +506,7 @@ const SideMenu = ({ tools, setOpenAlert }) => {
         {listItems.map((item, key) => {
           const element = (
             <Box>
-              <ListItemButton onClick={item.handleOpenCategoryDrawer}>
+              <ListItemButton onClick={() => item.handleOpenCategoryDrawer()}>
                 {isSideMenuOpen ? (
                   <>
                     <ListItemIcon
