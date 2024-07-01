@@ -126,7 +126,7 @@ export default function AssistantTextSpanClassification({
           classification={filteredClassification}
           currentLabel={currentLabel}
           highlightSpan={doHighlightSentence}
-          tooltipText={helpDescription}
+          tooltipText={""}
           thresholdLowText={tooltipTextLowThreshold}
           thresholdHighText={tooltipTextHighThresoled}
           thresholdLow={configs.confidenceThresholdLow}
