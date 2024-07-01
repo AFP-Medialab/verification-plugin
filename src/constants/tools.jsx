@@ -2,7 +2,7 @@ import React from "react";
 
 import { SvgIcon } from "@mui/material";
 import {
-  Archive,
+  Archive as ArchiveIcon,
   AudioFile,
   Gradient,
   ManageSearch,
@@ -51,6 +51,8 @@ import Loccus from "../components/NavItems/tools/Loccus";
 import TwitterAdvancedSearch from "../components/NavItems/tools/TwitterAdvancedSearch/TwitterAdvancedSearch";
 import SemanticSearch from "../components/NavItems/tools/SemanticSearch";
 import TwitterSna from "../components/NavItems/tools/TwitterSna/TwitterSna";
+import Archive from "../components/NavItems/tools/Archive";
+import About from "../components/NavItems/About/About";
 
 /**
  * Represents the categories to which the tools belong
@@ -235,7 +237,7 @@ const csvSnaSvgIcon = (props) => {
 };
 
 const archiveSvgIcon = (props) => {
-  return <Archive inheritViewBox {...props} />;
+  return <ArchiveIcon inheritViewBox {...props} />;
 };
 
 const aboutSvgIcon = (props) => {
@@ -561,8 +563,8 @@ const dataAnalysisCrowdtangle = new Tool(
   null,
   "csvSna",
   TOOL_GROUPS.VERIFICATION,
-  <Archive />,
-  <Footer type={FOOTER_TYPES.AFP} />,
+  null,
+  null,
 );
 
 /**
@@ -578,6 +580,8 @@ const archiving = new Tool(
   [ROLES.ARCHIVE],
   "archive",
   TOOL_GROUPS.VERIFICATION,
+  <Archive />,
+  <Footer type={FOOTER_TYPES.AFP} />,
 );
 
 /**
@@ -593,7 +597,7 @@ const about = new Tool(
   null,
   "about",
   TOOL_GROUPS.MORE,
-  null,
+  <About />,
   null,
 );
 

@@ -121,12 +121,6 @@ const SideMenu = ({ tools, setOpenAlert }) => {
    * @param tool {Tool}
    */
   const handleSideMenuToolClick = (tool) => {
-    if (tool.category === TOOLS_CATEGORIES.OTHER) {
-      navigate("/app/" + tool.path);
-      handleToolChange(tool);
-      return;
-    }
-
     if (
       !userAuthenticated &&
       tool.rolesNeeded &&
@@ -145,6 +139,12 @@ const SideMenu = ({ tools, setOpenAlert }) => {
         process.env.REACT_APP_TSNA_SERVER + tool.path + "?lang=" + currentLang,
         "_blank",
       );
+      return;
+    }
+
+    if (tool.category === TOOLS_CATEGORIES.OTHER) {
+      navigate("/app/tools/" + tool.path);
+      handleToolChange(tool);
       return;
     }
 

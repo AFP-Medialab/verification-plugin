@@ -17,10 +17,10 @@ import { TOOL_GROUPS, toolsHome } from "../../../constants/tools";
  * @param toolsList {Tool[]}
  * @returns {Element}
  */
-const DrawerItem = ({ toolsList }) => {
+const DrawerItem = ({ tools }) => {
   return (
     <Routes>
-      {toolsList.map((tool, index) => {
+      {tools.map((tool, index) => {
         if (tool.path === toolsHome.path) {
           return (
             <Route

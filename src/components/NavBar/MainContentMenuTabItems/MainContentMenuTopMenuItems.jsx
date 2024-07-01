@@ -55,7 +55,7 @@ const TabContent = ({ index, topMenuItem, tools, topMenuItems }) => {
 
   switch (topMenuItem.path) {
     case toolsHome.path:
-      return <DrawerItem toolsList={tools} />;
+      return <DrawerItem tools={tools} />;
     case "assistant":
       return (
         <Routes>
