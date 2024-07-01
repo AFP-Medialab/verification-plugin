@@ -39,8 +39,6 @@ const GaugeChartResult = ({
     ? sanitizeDetectionPercentage(previsionalScore)
     : previsionalScore;
 
-  console.log("maxScore: ", maxScore);
-
   const getPercentageColorCode = (n) => {
     if (n >= detectionThresholds.THRESHOLD_3) {
       return "#FF0000";
@@ -63,13 +61,13 @@ const GaugeChartResult = ({
 
   const getAlertLabel = (n) => {
     if (n >= detectionThresholds.THRESHOLD_3) {
-      return keyword("gauge_detection_alert_label_4");
+      return keyword("gauge_alert_label_4");
     } else if (n >= detectionThresholds.THRESHOLD_2) {
-      return keyword("gauge_detection_alert_label_3");
+      return keyword("gauge_alert_label_3");
     } else if (n >= detectionThresholds.THRESHOLD_1) {
-      return keyword("gauge_detection_alert_label_2");
+      return keyword("gauge_alert_label_2");
     } else {
-      return keyword("gauge_detection_alert_label_1");
+      return keyword("gauge_alert_label_1");
     }
   };
 
@@ -117,7 +115,7 @@ const GaugeChartResult = ({
                 alignSelf="center"
                 sx={{ color: "red" }}
               >
-                {keyword("gauge_detection_generic_detection_text")}
+                {keyword("gauge_generic_detection_text")}
               </Typography>
             )}
             <Stack
@@ -164,7 +162,7 @@ const GaugeChartResult = ({
             </Stack>
           </Stack>
           <Box alignSelf={{ sm: "flex-start", md: "flex-end" }}>
-            <Tooltip title={keyword("gauge_detection_download_gauge_button")}>
+            <Tooltip title={keyword("gauge_download_gauge_button")}>
               <IconButton
                 color="primary"
                 aria-label="download chart"
@@ -181,8 +179,8 @@ const GaugeChartResult = ({
         <GaugeChartModalExplanation
           keyword={keyword}
           keywordsArr={gaugeExplanation.keywords}
-          keywordLink={"gauge_detection_scale_explanation_link"}
-          keywordModalTitle={"gauge_detection_scale_modal_explanation_title"}
+          keywordLink={"gauge_scale_explanation_link"}
+          keywordModalTitle={"gauge_scale_modal_explanation_title"}
           colors={gaugeExplanation.colors}
         />
 
@@ -193,9 +191,7 @@ const GaugeChartResult = ({
           thresholds={detectionThresholds}
         />
         {resultsHaveErrors && (
-          <Alert severity="error">
-            {keyword("gauge_detection_algorithms_errors")}
-          </Alert>
+          <Alert severity="error">{keyword("gauge_algorithms_errors")}</Alert>
         )}
         <Box sx={{ width: "100%" }}>
           <Accordion defaultExpanded onChange={handleDetailsChange}>
@@ -236,14 +232,12 @@ const GaugeChartResult = ({
                               <Stack direction="row" spacing={1}>
                                 {item.isError ? (
                                   <Alert severity="error">
-                                    {keyword("gauge_detection_error_generic")}
+                                    {keyword("gauge_error_generic")}
                                   </Alert>
                                 ) : (
                                   <>
                                     <Typography>
-                                      {keyword(
-                                        "gauge_detection_probability_text",
-                                      )}{" "}
+                                      {keyword("gauge_probability_text")}{" "}
                                     </Typography>
                                     <Typography
                                       sx={{

@@ -55,10 +55,10 @@ const DeepfakeResultsVideo = (props) => {
   // const gaugeChartRef = useRef(null);
 
   const keywords = [
-    "synthetic_image_detection_scale_modal_explanation_rating_1",
-    "synthetic_image_detection_scale_modal_explanation_rating_2",
-    "synthetic_image_detection_scale_modal_explanation_rating_3",
-    "synthetic_image_detection_scale_modal_explanation_rating_4",
+    "gauge_scale_modal_explanation_rating_1",
+    "gauge_scale_modal_explanation_rating_2",
+    "gauge_scale_modal_explanation_rating_3",
+    "gauge_scale_modal_explanation_rating_4",
   ];
   const colors = ["#00FF00", "#AAFF03", "#FFA903", "#FF0000"];
 
@@ -334,12 +334,12 @@ const DeepfakeResultsVideo = (props) => {
                     methodNames={DeepfakeImageDetectionMethodNames}
                     detectionThresholds={DETECTION_THRESHOLDS}
                     resultsHaveErrors={false}
-                    sanitizeDetectionPercentage={(n) => n}
+                    sanitizeDetectionPercentage={(n) => Math.round(n)}
                     gaugeExplanation={{ keywords: keywords, colors: colors }}
                     toolName={"Deepfake"}
                   />
                 )}
-                {deepfakeScores.map((item, key) => {
+                {/* {deepfakeScores.map((item, key) => {
                   return (
                     <Stack direction="column" key={key}>
                       <Stack
@@ -368,8 +368,8 @@ const DeepfakeResultsVideo = (props) => {
                       <LinearProgressWithLabel value={item.predictionScore} />
                     </Stack>
                   );
-                })}
-                {deepfakeScores && (
+                })} */}
+                {/* {deepfakeScores && (
                   <Stack>
                     <DetectionProgressBar
                       style={{
@@ -377,7 +377,7 @@ const DeepfakeResultsVideo = (props) => {
                       }}
                     />
                   </Stack>
-                )}
+                )} */}
               </Stack>
             </Card>
           </Grid>

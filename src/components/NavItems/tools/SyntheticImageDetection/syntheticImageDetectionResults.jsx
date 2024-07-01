@@ -257,10 +257,10 @@ const SyntheticImageDetectionResults = (props) => {
   };
 
   const keywords = [
-    "gauge_detection_scale_modal_explanation_rating_1",
-    "gauge_detection_scale_modal_explanation_rating_2",
-    "gauge_detection_scale_modal_explanation_rating_3",
-    "gauge_detection_scale_modal_explanation_rating_4",
+    "gauge_scale_modal_explanation_rating_1",
+    "gauge_scale_modal_explanation_rating_2",
+    "gauge_scale_modal_explanation_rating_3",
+    "gauge_scale_modal_explanation_rating_4",
   ];
   const colors = ["#00FF00", "#AAFF03", "#FFA903", "#FF0000"];
 
