@@ -10,7 +10,7 @@ import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import Link from "@mui/material/Link";
-import LaunchIcon from "@mui/icons-material/Launch";
+import ListAltOutlinedIcon from "@mui/icons-material/ListAltOutlined";
 import Typography from "@mui/material/Typography";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
@@ -33,7 +33,10 @@ const SourceCredibilityDBKFDialog = (props) => {
 
   return (
     <div>
-      <LaunchIcon onClick={handleClickOpen} />
+      <ListAltOutlinedIcon
+        style={{ cursor: "pointer" }}
+        onClick={handleClickOpen}
+      />
       <Dialog onClose={handleClose} maxWidth={"lg"} open={open}>
         <DialogTitle>
           <Typography>
