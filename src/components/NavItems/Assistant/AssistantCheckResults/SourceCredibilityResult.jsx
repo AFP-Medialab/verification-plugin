@@ -45,6 +45,9 @@ const SourceCredibilityResult = (props) => {
                     >
                       {value.credibilityScope.includes("/") ? (
                         <Typography>
+                          {inputUrlType
+                            ? capitaliseFirstLetter(inputUrlType)
+                            : null}
                           {` ${keyword(
                             "source_credibility_warning_account",
                           )} ${" "}${value.credibilitySource}`}
@@ -68,9 +71,9 @@ const SourceCredibilityResult = (props) => {
                   >
                     {value.credibilityScope.includes("/") ? (
                       <Typography variant={"subtitle2"}>
-                        {inputUrlType
+                        {/* {inputUrlType
                           ? capitaliseFirstLetter(inputUrlType)
-                          : null}
+                          : null} */}
                         {` ${" "} ${keyword("account_scope")} ${
                           value.credibilityScope
                         } `}
