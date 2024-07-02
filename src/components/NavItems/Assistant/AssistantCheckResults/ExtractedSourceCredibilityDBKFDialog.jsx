@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
 
 import ArrowRightIcon from "@mui/icons-material/ArrowRight";
 import CloseIcon from "@mui/icons-material/Close";
@@ -22,6 +23,10 @@ import Tooltip from "@mui/material/Tooltip";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 
+function capitaliseFirstLetter(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
 // const renderSource = (keyword, trafficLightColor, source, scope) => {
 //   return (
 //     {scope.includes("/") ? (
@@ -36,11 +41,12 @@ import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 //   );
 // };
 
-const renderScope = (keyword, scope) => {
+const renderScope = (keyword, scope, inputUrlType) => {
   return (
     <ListItem>
       {scope.includes("/") ? (
         <Typography variant={"subtitle2"}>
+          {inputUrlType ? capitaliseFirstLetter(inputUrlType) : null}
           {` ${keyword("account_scope")} ${scope} `}
         </Typography>
       ) : scope ? (
@@ -118,6 +124,8 @@ const ExtractedSourceCredibilityDBKFDialog = ({
     setOpen(false);
   };
 
+  const inputUrlType = useSelector((state) => state.assistant.inputUrlType);
+
   return (
     <div>
       <LaunchIcon style={{ cursor: "pointer" }} onClick={handleClickOpen} />
@@ -186,6 +194,7 @@ const ExtractedSourceCredibilityDBKFDialog = ({
                                   keyword,
                                   sourceCredibilityResults[key]
                                     .credibilityScope,
+                                  inputUrlType,
                                 )}
 
                                 {renderLabels(

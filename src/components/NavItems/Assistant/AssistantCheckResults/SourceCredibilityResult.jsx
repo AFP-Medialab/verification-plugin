@@ -1,4 +1,5 @@
 import React from "react";
+import { useSelector } from "react-redux";
 
 import Box from "@mui/material/Box";
 import List from "@mui/material/List";
@@ -10,6 +11,10 @@ import SourceCredibilityDBKFDialog from "./SourceCredibilityDBKFDialog";
 import Typography from "@mui/material/Typography";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
+function capitaliseFirstLetter(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
 const SourceCredibilityResult = (props) => {
   // central
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
@@ -18,6 +23,8 @@ const SourceCredibilityResult = (props) => {
   const sourceCredibilityResults = props.scResultFiltered;
   const Icon = props.icon;
   const iconColor = props.iconColor;
+
+  const inputUrlType = useSelector((state) => state.assistant.inputUrlType);
 
   return (
     <List disablePadding={true}>
@@ -61,7 +68,10 @@ const SourceCredibilityResult = (props) => {
                   >
                     {value.credibilityScope.includes("/") ? (
                       <Typography variant={"subtitle2"}>
-                        {` ${keyword("account_scope")} ${
+                        {inputUrlType
+                          ? capitaliseFirstLetter(inputUrlType)
+                          : null}
+                        {` ${" "} ${keyword("account_scope")} ${
                           value.credibilityScope
                         } `}
                       </Typography>
