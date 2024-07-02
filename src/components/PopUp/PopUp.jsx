@@ -124,7 +124,7 @@ const PopUp = () => {
             variant="outlined"
             color="primary"
             fullWidth={true}
-            onClick={() => window.open("/popup.html#/app/tools/all")}
+            onClick={() => window.open("/popup.html#/app/tools")}
           >
             {keyword("open_website")}
           </Button>

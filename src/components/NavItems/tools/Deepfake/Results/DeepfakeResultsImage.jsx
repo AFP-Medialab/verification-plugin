@@ -1,9 +1,9 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Box from "@mui/material/Box";
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
-import { Grid, Typography, Stack, IconButton, Tooltip } from "@mui/material";
+import { Grid, IconButton, Stack, Tooltip, Typography } from "@mui/material";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import { LinearProgressWithLabel } from "../../../../Shared/LinearProgressWithLabel/LinearProgressWithLabel";
 import { Close, Help } from "@mui/icons-material";
@@ -15,6 +15,7 @@ import { useTrackEvent } from "Hooks/useAnalytics";
 const DeepfakeResultsImage = (props) => {
   const classes = useMyStyles();
   const keyword = i18nLoadNamespace("components/NavItems/tools/Deepfake");
+
   class DeepfakeResult {
     constructor(methodName, predictionScore) {
       (this.methodName = methodName), (this.predictionScore = predictionScore);
@@ -250,7 +251,7 @@ const DeepfakeResultsImage = (props) => {
 
                 <img
                   src={url}
-                  alt={"Displays the results of the deepfake tool"}
+                  alt={"Displays the results of the deepfake topMenuItem"}
                   style={{
                     maxWidth: "100%",
                     maxHeight: "60vh",
