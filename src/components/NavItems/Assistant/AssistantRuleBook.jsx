@@ -6,6 +6,7 @@ import metadataIconOff from "../../NavBar/images/tools/metadataOff.png";
 import videoRightsIconOff from "../../NavBar/images/tools/copyrightOff.png";
 import forensicIconOff from "../../NavBar/images/tools/forensic_logoOff.png";
 import videoIconOff from "../../NavBar/images/tools/video_logoOff.png";
+import downloadIconOff from "../../NavBar/images/tools/fileDownload.png";
 
 export const NE_SUPPORTED_LANGS = ["en", "pt", "fr", "de", "el", "es", "it"];
 
@@ -138,8 +139,6 @@ export const ASSISTANT_ACTIONS = [
     linksAccepted: [
       KNOWN_LINKS.YOUTUBE,
       KNOWN_LINKS.FACEBOOK,
-      KNOWN_LINKS.DAILYMOTION,
-      KNOWN_LINKS.VIMEO,
       KNOWN_LINKS.YOUTUBE,
       KNOWN_LINKS.YOUTUBESHORTS,
       KNOWN_LINKS.LIVELEAK,
@@ -223,13 +222,47 @@ export const ASSISTANT_ACTIONS = [
   {
     title: "assistant_video_download_action",
     icon: videoIconOff,
-    linksAccepted: [KNOWN_LINKS.TELEGRAM, KNOWN_LINKS.FACEBOOK],
+    linksAccepted: [
+      KNOWN_LINKS.TELEGRAM,
+      KNOWN_LINKS.FACEBOOK,
+      KNOWN_LINKS.TWITTER,
+    ],
     cTypes: [CONTENT_TYPE.VIDEO],
     exceptions: [],
     useInputUrl: false,
     text: "assistant_video_download_action_description",
     tsvPrefix: "assistant_video",
     download: true,
+  },
+  {
+    title: "assistant_video_download_generic",
+    icon: downloadIconOff,
+    linksAccepted: [
+      KNOWN_LINKS.YOUTUBESHORTS,
+      KNOWN_LINKS.INSTAGRAM,
+      KNOWN_LINKS.FACEBOOK,
+      KNOWN_LINKS.VK,
+      KNOWN_LINKS.VIMEO,
+      KNOWN_LINKS.LIVELEAK,
+      KNOWN_LINKS.DAILYMOTION,
+    ],
+    cTypes: [CONTENT_TYPE.VIDEO],
+    exceptions: [],
+    useInputUrl: false,
+    text: "assistant_video_download_generic_description",
+    tsvPrefix: "assistant_video",
+    path: null,
+  },
+  {
+    title: "assistant_video_download_tiktok",
+    icon: downloadIconOff,
+    linksAccepted: [KNOWN_LINKS.TIKTOK],
+    cTypes: [CONTENT_TYPE.VIDEO],
+    exceptions: [],
+    useInputUrl: false,
+    text: "assistant_video_download_tiktok_description",
+    tsvPrefix: "assistant_video",
+    path: null,
   },
 ];
 

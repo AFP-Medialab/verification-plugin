@@ -36,7 +36,9 @@ const AssistantProcessUrlActions = () => {
       dl.setAttribute("href", resultUrl);
       dl.setAttribute("download", "");
       dl.click();
-    } else if (resultUrl != null) {
+    } else if (action.path === null) {
+      return; // Do nothing if path is null
+    } else if (resultUrl !== null) {
       navigate(
         "/app/" +
           action.path +
@@ -85,7 +87,13 @@ const AssistantProcessUrlActions = () => {
                     }
                     secondary={
                       <Typography color={"textSecondary"} component={"span"}>
-                        <Box fontStyle="italic">{keyword(action.text)}</Box>
+                        <Box fontStyle="italic">
+                          <div
+                            dangerouslySetInnerHTML={{
+                              __html: keyword(action.text),
+                            }}
+                          ></div>
+                        </Box>
                       </Typography>
                     }
                   />
