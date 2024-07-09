@@ -53,6 +53,7 @@ import SemanticSearch from "../components/NavItems/tools/SemanticSearch";
 import TwitterSna from "../components/NavItems/tools/TwitterSna/TwitterSna";
 import Archive from "../components/NavItems/tools/Archive";
 import About from "../components/NavItems/About/About";
+import C2paData from "components/NavItems/tools/C2pa/C2pa";
 
 /**
  * Represents the categories to which the tools belong
@@ -242,6 +243,10 @@ const archiveSvgIcon = (props) => {
 
 const aboutSvgIcon = (props) => {
   return <SvgIcon component={AboutIcon} inheritViewBox {...props} />;
+};
+
+const c2paIcon = (props) => {
+  return <SvgIcon component={MetadataIcon} inheritViewBox {...props} />;
 };
 
 /**
@@ -601,6 +606,19 @@ const about = new Tool(
   null,
 );
 
+const c2paData = new Tool(
+  "navbar_c2pa",
+  "",
+  c2paIcon,
+  TOOLS_CATEGORIES.IMAGE,
+  null,
+  null,
+  "c2pa",
+  TOOL_GROUPS.VERIFICATION,
+  <C2paData />,
+  null,
+);
+
 export const tools = Object.freeze([
   toolsHome,
   videoAnalysis,
@@ -627,4 +645,5 @@ export const tools = Object.freeze([
   dataAnalysisCrowdtangle,
   archiving,
   about,
+  c2paData,
 ]);
