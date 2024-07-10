@@ -43,7 +43,7 @@ const SourceCredibilityDBKFDialog = (props) => {
             <IconButton onClick={handleClose}>
               <CloseIcon />
             </IconButton>
-            {keyword("source_cred_popup_header")} {source}
+            {keyword("source_cred_popup_header_domain")} {source}
           </Typography>
         </DialogTitle>
         <DialogContent dividers>
