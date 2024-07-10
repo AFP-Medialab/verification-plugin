@@ -2,15 +2,31 @@ import { Box, Card, CardHeader, Grid } from "@mui/material";
 import HeaderTool from "components/Shared/HeaderTool/HeaderTool";
 import useMyStyles from "components/Shared/MaterialUiStyles/useMyStyles";
 import StringFileUploadField from "components/Shared/StringFileUploadField";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import getC2paData from "./Hooks/useGetC2paData";
 
 const C2paData = () => {
-  const [input, setInput] = useState();
-  const [imageFile, setImageFile] = useState();
+  const [input, setInput] = useState("");
+  const [imageFile, setImageFile] = useState(undefined);
   const handleClose = () => null;
   const preprocessImage = (image) => image;
-  const handleSubmit = () => null;
+
   const classes = useMyStyles();
+
+  //   const loadImage = (sampleImage) => {
+
+  //     try {
+  //         const { manifestStore } = await c2pa.read(sampleImage);
+  //         console.log('manifestStore', manifestStore);
+  //       } catch (err) {
+  //         console.error('Error reading image:', err);
+  //       }
+  //   }
+  const handleSubmit = () => {
+    if (imageFile) {
+      getC2paData(imageFile);
+    }
+  };
 
   return (
     <Box>
