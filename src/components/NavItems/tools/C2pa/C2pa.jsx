@@ -1,15 +1,22 @@
-import { Box, Card, CardHeader, Grid } from "@mui/material";
+import { Box, Card, CardHeader, Grid, LinearProgress } from "@mui/material";
 import HeaderTool from "components/Shared/HeaderTool/HeaderTool";
 import useMyStyles from "components/Shared/MaterialUiStyles/useMyStyles";
 import StringFileUploadField from "components/Shared/StringFileUploadField";
 import { useEffect, useState } from "react";
 import getC2paData from "./Hooks/useGetC2paData";
+import { useDispatch, useSelector } from "react-redux";
+import C2paResults from "./Results/C2paResults";
 
 const C2paData = () => {
+  const isLoading = useSelector((state) => state.c2pa.loading);
+  const results = useSelector((state) => state.c2pa.results);
+  const url = useSelector((state) => state.c2pa.url);
+
   const [input, setInput] = useState("");
   const [imageFile, setImageFile] = useState(undefined);
   const handleClose = () => null;
-  const preprocessImage = (image) => image;
+
+  const dispatch = useDispatch();
 
   const classes = useMyStyles();
 
@@ -24,7 +31,7 @@ const C2paData = () => {
   //   }
   const handleSubmit = () => {
     if (imageFile) {
-      getC2paData(imageFile);
+      getC2paData(imageFile, dispatch);
     }
   };
 
@@ -60,11 +67,19 @@ const C2paData = () => {
               handleSubmit={handleSubmit}
               fileInputTypesAccepted={"image/*"}
               handleCloseSelectedFile={handleClose}
-              preprocessLocalFile={preprocessImage}
             />
           </form>
         </Box>
+
+        <Box m={2} />
+        {isLoading && (
+          <Box mt={3}>
+            <LinearProgress />
+          </Box>
+        )}
       </Card>
+      <Box m={3} />
+      {results && <C2paResults result={results} image={url} />}
     </Box>
   );
 };
