@@ -10,10 +10,11 @@ import {
 
 const exifData = (assertions) => {
   console.log("assertions: ", assertions);
-  const captureInfo = {};
+  let captureInfo = null;
 
   for (let i = 0; i < assertions.length; i++) {
     if (assertions[i].label === "stds.exif") {
+      captureInfo = {};
       if (assertions[i]["data"]["EXIF:Make"]) {
         captureInfo.make = assertions[i]["data"]["EXIF:Make"];
       }
@@ -25,7 +26,7 @@ const exifData = (assertions) => {
       }
     }
   }
-  return captureInfo !== {} ? captureInfo : null;
+  return captureInfo;
 };
 
 async function getC2paData(image, dispatch) {
@@ -61,7 +62,11 @@ async function getC2paData(image, dispatch) {
         if (editsAndActivity) res.editsAndActivity = editsAndActivity;
 
         const captureInfo = exifData(activeManifest.assertions.data);
-        if (captureInfo) res.captureInfo = captureInfo;
+
+        if (captureInfo) {
+          console.log(captureInfo);
+          res.captureInfo = captureInfo;
+        }
 
         if (manifestStore.validationStatus.length > 0) {
           res.validationIssues = true;

@@ -31,8 +31,10 @@ const C2paResults = (props) => {
         </Grid>
         <Grid item xs p={2}>
           <Card p={1}>
-            <CardHeader title={"C2pa Info"} />
+            {/* <CardHeader title={"C2pa Info"}/> */}
             <CardContent>
+              <Typography variant="h4">{"C2pa Info"}</Typography>
+              <Box m={1} />
               {!result.c2paInfo ? (
                 <Alert severity="info">{"No c2pa info for this image"}</Alert>
               ) : result.validationIssues ? (
@@ -69,6 +71,23 @@ const C2paResults = (props) => {
                         <Typography variant="h6">
                           {"Capture Information"}
                         </Typography>
+                        {result.captureInfo ? (
+                          <>
+                            <Typography>
+                              {"Make: " + result.captureInfo.make}
+                            </Typography>
+                            <Typography>
+                              {"Model: " + result.captureInfo.model}
+                            </Typography>
+                            <Typography>
+                              {"Capture date: " + result.captureInfo.dateTime}
+                            </Typography>
+                          </>
+                        ) : (
+                          <Alert severity="info">
+                            {"No capture information available."}
+                          </Alert>
+                        )}
                       </Stack>
                     </CardContent>
                   </Card>
