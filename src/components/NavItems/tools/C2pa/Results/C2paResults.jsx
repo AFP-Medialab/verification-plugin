@@ -33,7 +33,7 @@ const C2paResults = (props) => {
           <Card p={1}>
             {/* <CardHeader title={"C2pa Info"}/> */}
             <CardContent>
-              <Typography variant="h4">{"C2pa Info"}</Typography>
+              <Typography variant="h5">{"C2pa Info"}</Typography>
               <Box m={1} />
               {!result.c2paInfo ? (
                 <Alert severity="info">{"No c2pa info for this image"}</Alert>
@@ -45,32 +45,46 @@ const C2paResults = (props) => {
                 <Stack>
                   <Typography>{result.title}</Typography>
                   <Box m={1} />
-                  <Card>
-                    <CardContent>
-                      <Stack>
-                        <Typography variant="h6">
-                          {"Content Credentials"}
+                  <Box p={1}>
+                    {/* <CardContent> */}
+                    <Stack>
+                      <Typography variant="h6">
+                        {"Content Credentials"}
+                      </Typography>
+
+                      <Box p={1}>
+                        <Typography>
+                          {"Issuer: " + result.signatureInfo.issuer}
                         </Typography>
-                        <Typography>{result.signatureInfo.issuer}</Typography>
-                        <Typography>{result.signatureInfo.time}</Typography>
-                      </Stack>
-                    </CardContent>
-                  </Card>
-                  <Box m={1} />
-                  <Card>
-                    <CardContent>
-                      <Stack>
-                        <Typography variant="h6">{"Credit"}</Typography>
-                      </Stack>
-                    </CardContent>
-                  </Card>
-                  <Box m={1} />
-                  <Card>
-                    <CardContent>
-                      <Stack>
-                        <Typography variant="h6">
-                          {"Capture Information"}
+                        <Typography>
+                          {"Date issued: " + result.signatureInfo.time}
                         </Typography>
+                      </Box>
+                    </Stack>
+                    {/* </CardContent> */}
+                    <Box m={1} />
+                    <Divider m={1} />
+                  </Box>
+                  {/* <Box m={1} /> */}
+
+                  <Box p={1}>
+                    {/* <CardContent> */}
+                    <Stack>
+                      <Typography variant="h6">{"Credit"}</Typography>
+                      <Box p={1}></Box>
+                    </Stack>
+                    {/* </CardContent> */}
+                    <Box m={1} />
+                    <Divider m={1} />
+                  </Box>
+
+                  <Box p={1}>
+                    {/* <CardContent> */}
+                    <Stack>
+                      <Typography variant="h6">
+                        {"Capture Information"}
+                      </Typography>
+                      <Box p={1}>
                         {result.captureInfo ? (
                           <>
                             <Typography>
@@ -88,14 +102,19 @@ const C2paResults = (props) => {
                             {"No capture information available."}
                           </Alert>
                         )}
-                      </Stack>
-                    </CardContent>
-                  </Card>
-                  <Box m={1} />
-                  <Card>
-                    <CardContent>
-                      <Stack>
-                        <Typography variant="h6">{"Process"}</Typography>
+                      </Box>
+                    </Stack>
+                    <Box m={1} />
+                    <Divider />
+                    {/* </CardContent> */}
+                  </Box>
+
+                  <Box p={1}>
+                    {/* <CardContent> */}
+                    <Stack>
+                      <Typography variant="h6">{"Process"}</Typography>
+
+                      <Box p={1}>
                         {result.editsAndActivity ? (
                           result.editsAndActivity.map((obj, key) => {
                             return (
@@ -107,9 +126,10 @@ const C2paResults = (props) => {
                         ) : (
                           <></>
                         )}
-                      </Stack>
-                    </CardContent>
-                  </Card>
+                      </Box>
+                    </Stack>
+                    {/* </CardContent> */}
+                  </Box>
                 </Stack>
               )}
             </CardContent>
