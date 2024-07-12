@@ -72,7 +72,10 @@ const AssistantProcessUrlActions = () => {
               <Card className={classes.assistantHover} variant={"outlined"}>
                 <ListItem onClick={() => handleClick(action)}>
                   <ListItemAvatar>
-                    <Avatar variant={"square"} src={action.icon} />
+                    {typeof action.icon === "string" && (
+                      <Avatar variant={"square"} src={action.icon} />
+                    )}
+                    {typeof action.icon !== "string" && action.icon}
                   </ListItemAvatar>
                   <ListItemText
                     primary={

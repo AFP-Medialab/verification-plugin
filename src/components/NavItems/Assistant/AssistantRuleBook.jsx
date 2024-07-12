@@ -1,3 +1,4 @@
+import React from "react";
 import analysisIconOff from "../../NavBar/images/tools/video_logoOff.png";
 import keyframesIconOff from "../../NavBar/images/tools/keyframesOff.png";
 import thumbnailsIconOff from "../../NavBar/images/tools/youtubeOff.png";
@@ -6,7 +7,7 @@ import metadataIconOff from "../../NavBar/images/tools/metadataOff.png";
 import videoRightsIconOff from "../../NavBar/images/tools/copyrightOff.png";
 import forensicIconOff from "../../NavBar/images/tools/forensic_logoOff.png";
 import videoIconOff from "../../NavBar/images/tools/video_logoOff.png";
-import downloadIconOff from "../../NavBar/images/tools/fileDownload.png";
+import DownloadIcon from "@mui/icons-material/Download";
 
 export const NE_SUPPORTED_LANGS = ["en", "pt", "fr", "de", "el", "es", "it"];
 
@@ -236,7 +237,7 @@ export const ASSISTANT_ACTIONS = [
   },
   {
     title: "assistant_video_download_generic",
-    icon: downloadIconOff,
+    icon: <DownloadIcon color="disabled" fontSize="large" />,
     linksAccepted: [
       KNOWN_LINKS.YOUTUBESHORTS,
       KNOWN_LINKS.INSTAGRAM,
@@ -255,7 +256,7 @@ export const ASSISTANT_ACTIONS = [
   },
   {
     title: "assistant_video_download_tiktok",
-    icon: downloadIconOff,
+    icon: <DownloadIcon color="disabled" fontSize="large" />,
     linksAccepted: [KNOWN_LINKS.TIKTOK],
     cTypes: [CONTENT_TYPE.VIDEO],
     exceptions: [],
