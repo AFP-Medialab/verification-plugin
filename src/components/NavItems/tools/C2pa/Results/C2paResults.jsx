@@ -96,6 +96,17 @@ const C2paResults = (props) => {
                     <CardContent>
                       <Stack>
                         <Typography variant="h6">{"Process"}</Typography>
+                        {result.editsAndActivity ? (
+                          result.editsAndActivity.map((obj, key) => {
+                            return (
+                              <Typography key={key}>
+                                {obj.label + ": " + obj.description}
+                              </Typography>
+                            );
+                          })
+                        ) : (
+                          <></>
+                        )}
                       </Stack>
                     </CardContent>
                   </Card>

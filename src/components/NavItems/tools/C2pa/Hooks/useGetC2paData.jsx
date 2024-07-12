@@ -58,7 +58,7 @@ async function getC2paData(image, dispatch) {
         };
 
         const editsAndActivity = await selectEditsAndActivity(activeManifest);
-        //console.log("edits and activity: ", editsAndActivity);
+        console.log("edits and activity: ", editsAndActivity);
         if (editsAndActivity) res.editsAndActivity = editsAndActivity;
 
         const captureInfo = exifData(activeManifest.assertions.data);
