@@ -6,6 +6,7 @@ import {
   Alert,
   Box,
   Card,
+  CardContent,
   CardHeader,
   Chip,
   Divider,
@@ -24,58 +25,98 @@ import GaugeChart from "react-gauge-chart";
 import Tooltip from "@mui/material/Tooltip";
 import { exportReactElementAsJpg } from "../../../Shared/Utils/htmlUtils";
 import GaugeChartModalExplanation from "../../../Shared/GaugeChartModalExplanation";
+import NddDatagrid from "./NddDatagrid";
+import {
+  admR50Grip,
+  DETECTION_THRESHOLDS,
+  ganR50Mever,
+  ldmR50Grip,
+  ldmRineMever,
+  proGanR50Grip,
+  proGanRineMever,
+  SyntheticImageDetectionAlgorithm,
+} from "./SyntheticImageDetectionAlgorithms";
 
-const SyntheticImageDetectionResults = (props) => {
+/**
+ * Returns the alert color code for the given percentage n
+ * @param n {number}
+ * @returns {"error" | "warning" | "success"}
+ */
+export const getAlertColor = (n) => {
+  if (n >= DETECTION_THRESHOLDS.THRESHOLD_3) {
+    return "error";
+  } else if (n >= DETECTION_THRESHOLDS.THRESHOLD_2) {
+    return "warning";
+  } else {
+    return "success";
+  }
+};
+
+export const getAlertLabel = (n, keyword) => {
+  if (n >= DETECTION_THRESHOLDS.THRESHOLD_3) {
+    return keyword("synthetic_image_detection_alert_label_4");
+  } else if (n >= DETECTION_THRESHOLDS.THRESHOLD_2) {
+    return keyword("synthetic_image_detection_alert_label_3");
+  } else if (n >= DETECTION_THRESHOLDS.THRESHOLD_1) {
+    return keyword("synthetic_image_detection_alert_label_2");
+  } else {
+    return keyword("synthetic_image_detection_alert_label_1");
+  }
+};
+
+export const getPercentageColorCode = (n) => {
+  if (n >= DETECTION_THRESHOLDS.THRESHOLD_3) {
+    return "#FF0000";
+  } else if (n >= DETECTION_THRESHOLDS.THRESHOLD_2) {
+    return "#FFAA00";
+  } else {
+    return "green";
+  }
+};
+
+class NddResult {
+  /**
+   *
+   * @param id {number}
+   * @param image {string}
+   * @param archiveUrl {string}
+   * @param imageUrls {string}
+   * @param detectionRate1 {number}
+   * @param algorithmName {string}
+   */
+  constructor(id, image, archiveUrl, imageUrls, detectionRate1, algorithmName) {
+    this.id = id;
+    this.image = image;
+    this.archiveUrl = archiveUrl;
+    this.imageUrls = imageUrls;
+    this.detectionRate1 = detectionRate1;
+    this.algorithmName = algorithmName;
+  }
+}
+
+const SyntheticImageDetectionResults = ({ results, url, handleClose, nd }) => {
   const keyword = i18nLoadNamespace(
     "components/NavItems/tools/SyntheticImageDetection",
   );
 
-  class SyntheticImageDetectionAlgorithmResult {
+  class SyntheticImageDetectionAlgorithmResult extends SyntheticImageDetectionAlgorithm {
     /**
      *
-     * @param methodName {string}
+     * @param syntheticImageDetectionAlgorithm {SyntheticImageDetectionAlgorithm}
      * @param predictionScore {number}
      * @param isError {boolean}
      */
-    constructor(methodName, predictionScore, isError) {
-      (this.methodName = methodName),
-        (this.predictionScore = predictionScore),
-        (this.isError = isError);
+    constructor(syntheticImageDetectionAlgorithm, predictionScore, isError) {
+      super(
+        syntheticImageDetectionAlgorithm.apiServiceName,
+        syntheticImageDetectionAlgorithm.name,
+        syntheticImageDetectionAlgorithm.description,
+        syntheticImageDetectionAlgorithm.roleNeeded,
+      );
+      (this.predictionScore = predictionScore), (this.isError = isError);
     }
   }
 
-  const DeepfakeImageDetectionMethodNames = {
-    gan: {
-      name: keyword("synthetic_image_detection_gan_name"),
-      description: keyword("synthetic_image_detection_gan_description"),
-    },
-    diffusion: {
-      name: keyword("synthetic_image_detection_diffusion_name"),
-      description: keyword("synthetic_image_detection_diffusion_description"),
-    },
-    progan_r50_grip: {
-      name: keyword("synthetic_image_detection_progan_name"),
-      description: keyword("synthetic_image_detection_progan_description"),
-    },
-    adm_r50_grip: {
-      name: keyword("synthetic_image_detection_adm_name"),
-      description: keyword("synthetic_image_detection_adm_description"),
-    },
-    progan_rine_mever: {
-      name: keyword("synthetic_image_detection_progan_rine_mever_name"),
-      description: keyword(
-        "synthetic_image_detection_progan_rine_mever_description",
-      ),
-    },
-    ldm_rine_mever: {
-      name: keyword("synthetic_image_detection_ldm_rine_mever_name"),
-      description: keyword(
-        "synthetic_image_detection_ldm_rine_mever_description",
-      ),
-    },
-  };
-  const results = props.result;
-  const url = props.url;
   const imgElement = React.useRef(null);
 
   const imgContainerRef = useRef(null);
@@ -90,68 +131,81 @@ const SyntheticImageDetectionResults = (props) => {
 
   useEffect(() => {
     setResultsHaveErrors(false);
+    let diffusionScore;
 
-    const diffusionScore = new SyntheticImageDetectionAlgorithmResult(
-      //previously unina_report
-      Object.keys(DeepfakeImageDetectionMethodNames)[1],
-      !results.ldm_r50_grip_report.prediction
-        ? 0
-        : results.ldm_r50_grip_report.prediction * 100,
-      !results.ldm_r50_grip_report.prediction,
-    );
-    const ganScore = new SyntheticImageDetectionAlgorithmResult(
-      //previously gan_report
-      Object.keys(DeepfakeImageDetectionMethodNames)[0],
-      !results.gan_r50_mever_report.prediction
-        ? 0
-        : results.gan_r50_mever_report.prediction * 100,
-      !results.gan_r50_mever_report.prediction,
-    );
+    if (results.ldm_r50_grip_report)
+      diffusionScore = new SyntheticImageDetectionAlgorithmResult(
+        //previously unina_report
+        ldmR50Grip,
+        !results.ldm_r50_grip_report.prediction
+          ? 0
+          : results.ldm_r50_grip_report.prediction * 100,
+        !results.ldm_r50_grip_report.prediction,
+      );
 
-    const proganScore = new SyntheticImageDetectionAlgorithmResult(
-      Object.keys(DeepfakeImageDetectionMethodNames)[2],
-      !results.progan_r50_grip_report.prediction
-        ? 0
-        : results.progan_r50_grip_report.prediction * 100,
-      !results.progan_r50_grip_report.prediction,
-    );
+    let ganScore;
 
-    const admScore = new SyntheticImageDetectionAlgorithmResult(
-      Object.keys(DeepfakeImageDetectionMethodNames)[3],
-      !results.adm_r50_grip_report.prediction
-        ? 0
-        : results.adm_r50_grip_report.prediction * 100,
-      !results.adm_r50_grip_report.prediction,
-    );
+    if (results.gan_r50_mever_report)
+      ganScore = new SyntheticImageDetectionAlgorithmResult(
+        //previously gan_report
+        ganR50Mever,
+        !results.gan_r50_mever_report.prediction
+          ? 0
+          : results.gan_r50_mever_report.prediction * 100,
+        !results.gan_r50_mever_report.prediction,
+      );
 
-    const proganRineScore = new SyntheticImageDetectionAlgorithmResult(
-      Object.keys(DeepfakeImageDetectionMethodNames)[4],
-      !results.progan_rine_mever_report.prediction
-        ? 0
-        : results.progan_rine_mever_report.prediction * 100,
-      !results.progan_rine_mever_report.prediction,
-    );
+    let proganScore;
 
-    const ldmRineScore = new SyntheticImageDetectionAlgorithmResult(
-      Object.keys(DeepfakeImageDetectionMethodNames)[5],
-      !results.ldm_rine_mever_report.prediction
-        ? 0
-        : results.ldm_rine_mever_report.prediction * 100,
-      !results.ldm_rine_mever_report.prediction,
-    );
+    if (results.progan_r50_grip_report)
+      proganScore = new SyntheticImageDetectionAlgorithmResult(
+        proGanR50Grip,
+        !results.progan_r50_grip_report.prediction
+          ? 0
+          : results.progan_r50_grip_report.prediction * 100,
+        !results.progan_r50_grip_report.prediction,
+      );
 
-    const res = (
-      role.includes("EXTRA_FEATURE")
-        ? [
-            diffusionScore,
-            ganScore,
-            proganScore,
-            admScore,
-            proganRineScore,
-            ldmRineScore,
-          ]
-        : [diffusionScore, ganScore, proganScore]
-    ).sort((a, b) => b.predictionScore - a.predictionScore);
+    let admScore;
+    if (results.adm_r50_grip_report)
+      admScore = new SyntheticImageDetectionAlgorithmResult(
+        admR50Grip,
+        !results.adm_r50_grip_report.prediction
+          ? 0
+          : results.adm_r50_grip_report.prediction * 100,
+        !results.adm_r50_grip_report.prediction,
+      );
+
+    let proganRineScore;
+    if (results.progan_rine_mever_report)
+      proganRineScore = new SyntheticImageDetectionAlgorithmResult(
+        proGanRineMever,
+        !results.progan_rine_mever_report.prediction
+          ? 0
+          : results.progan_rine_mever_report.prediction * 100,
+        !results.progan_rine_mever_report.prediction,
+      );
+
+    let ldmRineScore;
+    if (results.ldm_rine_mever_report)
+      ldmRineScore = new SyntheticImageDetectionAlgorithmResult(
+        ldmRineMever,
+        !results.ldm_rine_mever_report.prediction
+          ? 0
+          : results.ldm_rine_mever_report.prediction * 100,
+        !results.ldm_rine_mever_report.prediction,
+      );
+
+    const res = [
+      diffusionScore,
+      ganScore,
+      proganScore,
+      admScore,
+      proganRineScore,
+      ldmRineScore,
+    ]
+      .filter((i) => i !== undefined)
+      .sort((a, b) => b.predictionScore - a.predictionScore);
 
     const hasResultError = () => {
       for (const algorithm of res) {
@@ -176,7 +230,6 @@ const SyntheticImageDetectionResults = (props) => {
 
   const client_id = getclientId();
   const session = useSelector((state) => state.userSession);
-  const role = useSelector((state) => state.userSession.user.roles);
   const uid = session && session.user ? session.user.id : null;
 
   useTrackEvent(
@@ -188,52 +241,6 @@ const SyntheticImageDetectionResults = (props) => {
     url,
     uid,
   );
-
-  const handleClose = () => {
-    props.handleClose();
-  };
-  const DETECTION_THRESHOLDS = {
-    THRESHOLD_1: 50,
-    THRESHOLD_2: 70,
-    THRESHOLD_3: 90,
-  };
-
-  const getPercentageColorCode = (n) => {
-    if (n >= DETECTION_THRESHOLDS.THRESHOLD_3) {
-      return "#FF0000";
-    } else if (n >= DETECTION_THRESHOLDS.THRESHOLD_2) {
-      return "#FFAA00";
-    } else {
-      return "green";
-    }
-  };
-
-  /**
-   * Returns the alert color code for the given percentage n
-   * @param n {number}
-   * @returns {"error" | "warning" | "success"}
-   */
-  const getAlertColor = (n) => {
-    if (n >= DETECTION_THRESHOLDS.THRESHOLD_3) {
-      return "error";
-    } else if (n >= DETECTION_THRESHOLDS.THRESHOLD_2) {
-      return "warning";
-    } else {
-      return "success";
-    }
-  };
-
-  const getAlertLabel = (n) => {
-    if (n >= DETECTION_THRESHOLDS.THRESHOLD_3) {
-      return keyword("synthetic_image_detection_alert_label_4");
-    } else if (n >= DETECTION_THRESHOLDS.THRESHOLD_2) {
-      return keyword("synthetic_image_detection_alert_label_3");
-    } else if (n >= DETECTION_THRESHOLDS.THRESHOLD_1) {
-      return keyword("synthetic_image_detection_alert_label_2");
-    } else {
-      return keyword("synthetic_image_detection_alert_label_1");
-    }
-  };
 
   /**
    * Returns a percentage between 0 and 99 for display purposes. We exclude 0 and 100 values.
@@ -255,6 +262,20 @@ const SyntheticImageDetectionResults = (props) => {
         );
   };
 
+  const [nddDetailsPanelMessage, setNddDetailsPanelMessage] = useState(
+    "synthetic_image_detection_ndd_additional_results_hide",
+  );
+  const handleNddDetailsChange = () => {
+    nddDetailsPanelMessage ===
+    "synthetic_image_detection_ndd_additional_results_hide"
+      ? setNddDetailsPanelMessage(
+          "synthetic_image_detection_ndd_additional_results",
+        )
+      : setNddDetailsPanelMessage(
+          "synthetic_image_detection_ndd_additional_results_hide",
+        );
+  };
+
   const keywords = [
     "synthetic_image_detection_scale_modal_explanation_rating_1",
     "synthetic_image_detection_scale_modal_explanation_rating_2",
@@ -263,52 +284,90 @@ const SyntheticImageDetectionResults = (props) => {
   ];
   const colors = ["#00FF00", "#AAFF03", "#FFA903", "#FF0000"];
 
+  const getNddRows = (nddResults) => {
+    let rows = [];
+    for (let i = 0; i < nddResults.length; i += 1) {
+      const res = nddResults[i];
+      rows.push(
+        new NddResult(
+          i + 1,
+          res.archive_url,
+          res.archive_url,
+          res.origin_urls,
+          sanitizeDetectionPercentage(
+            res.detections[Object.keys(res.detections)[0]] * 100,
+          ),
+          Object.keys(res.detections)[0],
+        ),
+      );
+    }
+    return rows;
+  };
+
+  if (nd) {
+    console.log(getNddRows(nd.similar_media));
+  }
+
   return (
-    <Stack
-      direction="row"
-      justifyContent="flex-start"
-      alignItems="flex-start"
-      spacing={2}
-    >
-      <Card sx={{ width: "100%" }}>
-        <CardHeader
-          style={{ borderRadius: "4px 4px 0px 0px" }}
-          title={keyword("synthetic_image_detection_title")}
-          action={
-            <IconButton aria-label="close" onClick={handleClose}>
-              <Close sx={{ color: "white" }} />
-            </IconButton>
-          }
-        />
+    <Card sx={{ width: "100%" }}>
+      <CardHeader
+        style={{ borderRadius: "4px 4px 0px 0px" }}
+        title={keyword("synthetic_image_detection_title")}
+        action={
+          <IconButton aria-label="close" onClick={handleClose}>
+            <Close sx={{ color: "white" }} />
+          </IconButton>
+        }
+      />
+      <CardContent sx={{ flex: "1 0 auto" }}>
         <Grid
           container
           direction="row"
           justifyContent="space-evenly"
           alignItems="flex-start"
+          spacing={2}
         >
-          <Grid item sm={12} md={6}>
-            <Box sx={{ width: "100%", height: "100%" }}>
-              <Grid
-                container
-                direction="row"
-                justifyContent="center"
-                alignItems="flex-start"
-                ref={imgContainerRef}
-                p={4}
-              >
-                <img
-                  src={url}
-                  alt={"Displays the results of the deepfake topMenuItem"}
-                  style={{
+          <Grid
+            item
+            container
+            direction="column"
+            justifyContent="flex-start"
+            sm={12}
+            md={6}
+            spacing={4}
+          >
+            <Grid
+              item
+              sx={{
+                maxWidth: "100%",
+              }}
+            >
+              <Box sx={{ width: "100%", height: "100%" }}>
+                <Grid
+                  container
+                  direction="row"
+                  justifyContent="center"
+                  alignItems="flex-start"
+                  ref={imgContainerRef}
+                  p={4}
+                  sx={{
                     maxWidth: "100%",
-                    maxHeight: "60vh",
-                    borderRadius: "10px",
                   }}
-                  crossOrigin={"anonymous"}
-                  ref={imgElement}
-                />
-              </Grid>
-            </Box>
+                >
+                  <img
+                    src={url}
+                    alt={"Displays the results of the deepfake topMenuItem"}
+                    style={{
+                      maxWidth: "100%",
+                      maxHeight: "60vh",
+                      borderRadius: "10px",
+                    }}
+                    crossOrigin={"anonymous"}
+                    ref={imgElement}
+                  />
+                </Grid>
+              </Box>
+            </Grid>
           </Grid>
           <Grid item sm={12} md={6}>
             {syntheticImageScores.length > 0 ? (
@@ -434,6 +493,16 @@ const SyntheticImageDetectionResults = (props) => {
                   toolName={"SyntheticImageDetection"}
                   thresholds={DETECTION_THRESHOLDS}
                 />
+
+                {nd && nd.similar_media && nd.similar_media.length > 0 && (
+                  <Alert icon={false} severity="info">
+                    <Typography variant="body1">
+                      Similar images were detected as synthetic. See detection
+                      details for similar images below.
+                    </Typography>
+                  </Alert>
+                )}
+
                 {resultsHaveErrors && (
                   <Alert severity="error">
                     {keyword("synthetic_image_detection_algorithms_errors")}
@@ -468,11 +537,7 @@ const SyntheticImageDetectionResults = (props) => {
                                       variant={"h6"}
                                       sx={{ fontWeight: "bold" }}
                                     >
-                                      {
-                                        DeepfakeImageDetectionMethodNames[
-                                          item.methodName
-                                        ].name
-                                      }
+                                      {keyword(item.name)}
                                     </Typography>
                                     <Stack
                                       direction={{ lg: "row", md: "column" }}
@@ -508,7 +573,10 @@ const SyntheticImageDetectionResults = (props) => {
                                       </Stack>
                                       {!item.isError && (
                                         <Chip
-                                          label={getAlertLabel(predictionScore)}
+                                          label={getAlertLabel(
+                                            predictionScore,
+                                            keyword,
+                                          )}
                                           color={getAlertColor(predictionScore)}
                                         />
                                       )}
@@ -517,7 +585,7 @@ const SyntheticImageDetectionResults = (props) => {
                                   <Stack>
                                     {/*<Button*/}
                                     {/*  href={*/}
-                                    {/*    DeepfakeImageDetectionMethodNames[*/}
+                                    {/*    deepfakeImageDetectionMethodNames(keyword)[*/}
                                     {/*      item.methodName*/}
                                     {/*    ].modelCardUrl*/}
                                     {/*  }*/}
@@ -535,11 +603,7 @@ const SyntheticImageDetectionResults = (props) => {
                                   mb={2}
                                 >
                                   <Typography>
-                                    {
-                                      DeepfakeImageDetectionMethodNames[
-                                        item.methodName
-                                      ].description
-                                    }
+                                    {keyword(item.description)}
                                   </Typography>
                                 </Box>
                               </Stack>
@@ -570,9 +634,139 @@ const SyntheticImageDetectionResults = (props) => {
               </Stack>
             )}
           </Grid>
+          <Grid item container xs={12}>
+            {nd && nd.similar_media && nd.similar_media.length > 0 && (
+              <Grid
+                item
+                p={4}
+                sx={{
+                  width: "100%",
+                  maxWidth: "100% !important",
+                }}
+              >
+                <Accordion defaultExpanded onChange={handleNddDetailsChange}>
+                  <AccordionSummary expandIcon={<ExpandMore />}>
+                    <Typography>{keyword(nddDetailsPanelMessage)}</Typography>
+                  </AccordionSummary>
+                  <AccordionDetails>
+                    <Stack direction={"column"} spacing={4}>
+                      <NddDatagrid rows={getNddRows(nd.similar_media)} />
+                      {/*{nd.similar_media.map((similarMedia, key) => (*/}
+                      {/*  <Stack direction="column" key={key} spacing={2}>*/}
+                      {/*    {similarMedia &&*/}
+                      {/*      similarMedia.detections &&*/}
+                      {/*      Object.keys(similarMedia.detections).map(*/}
+                      {/*        (detectionAlgorithm, i) => {*/}
+                      {/*          const detectionPercentageNdImage =*/}
+                      {/*            sanitizeDetectionPercentage(*/}
+                      {/*              similarMedia.detections[*/}
+                      {/*                detectionAlgorithm*/}
+                      {/*              ] * 100,*/}
+                      {/*            );*/}
+                      {/*          return (*/}
+                      {/*            <Stack direction="column" key={i} spacing={2}>*/}
+                      {/*              <Stack*/}
+                      {/*                direction="row"*/}
+                      {/*                alignItems="flex-start"*/}
+                      {/*                justifyContent="space-between"*/}
+                      {/*              >*/}
+                      {/*                <Box>*/}
+                      {/*                  <Typography*/}
+                      {/*                    variant={"h6"}*/}
+                      {/*                    sx={{ fontWeight: "bold" }}*/}
+                      {/*                  >*/}
+                      {/*                    {*/}
+                      {/*                      deepfakeImageDetectionMethodNames(keyword)[*/}
+                      {/*                        detectionAlgorithm*/}
+                      {/*                      ].name*/}
+                      {/*                    }*/}
+                      {/*                  </Typography>*/}
+                      {/*                  <Stack*/}
+                      {/*                    direction={{*/}
+                      {/*                      lg: "row",*/}
+                      {/*                      md: "column",*/}
+                      {/*                    }}*/}
+                      {/*                    spacing={2}*/}
+                      {/*                    alignItems="center"*/}
+                      {/*                  >*/}
+                      {/*                    <Stack direction="row" spacing={1}>*/}
+                      {/*                      <>*/}
+                      {/*                        <Typography>*/}
+                      {/*                          {keyword(*/}
+                      {/*                            "synthetic_image_detection_probability_text",*/}
+                      {/*                          )}{" "}*/}
+                      {/*                        </Typography>*/}
+                      {/*                        <Typography*/}
+                      {/*                          sx={{*/}
+                      {/*                            color: getPercentageColorCode(*/}
+                      {/*                              detectionPercentageNdImage,*/}
+                      {/*                            ),*/}
+                      {/*                          }}*/}
+                      {/*                        >*/}
+                      {/*                          {detectionPercentageNdImage}%*/}
+                      {/*                        </Typography>*/}
+                      {/*                      </>*/}
+                      {/*                    </Stack>*/}
+                      {/*                    <Chip*/}
+                      {/*                      label={getAlertLabel(*/}
+                      {/*                        detectionPercentageNdImage,*/}
+                      {/*                        keyword,*/}
+                      {/*                      )}*/}
+                      {/*                      color={getAlertColor(*/}
+                      {/*                        detectionPercentageNdImage,*/}
+                      {/*                      )}*/}
+                      {/*                    />*/}
+                      {/*                  </Stack>*/}
+                      {/*                </Box>*/}
+                      {/*                <Stack></Stack>*/}
+                      {/*              </Stack>*/}
+                      {/*            </Stack>*/}
+                      {/*          );*/}
+                      {/*        },*/}
+                      {/*      )}*/}
+                      {/*    <Grid*/}
+                      {/*      container*/}
+                      {/*      direction="row"*/}
+                      {/*      justifyContent="flex-start"*/}
+                      {/*      alignItems="center"*/}
+                      {/*      spacing={2}*/}
+                      {/*    >*/}
+                      {/*      <Grid item>*/}
+                      {/*        <Typography>{"Links:"}</Typography>*/}
+                      {/*      </Grid>*/}
+
+                      {/*      {similarMedia.origin_urls &&*/}
+                      {/*        similarMedia.origin_urls.length > 0 &&*/}
+                      {/*        similarMedia.origin_urls.map(*/}
+                      {/*          (originUrl, index) => (*/}
+                      {/*            <Grid item key={index}>*/}
+                      {/*              <Link*/}
+                      {/*                href={originUrl}*/}
+                      {/*                target="_blank"*/}
+                      {/*                rel="noopener noreferrer"*/}
+                      {/*              >*/}
+                      {/*                <Typography>{`#${index + 1}`}</Typography>*/}
+                      {/*              </Link>*/}
+                      {/*            </Grid>*/}
+                      {/*          ),*/}
+                      {/*        )}*/}
+                      {/*    </Grid>*/}
+                      {/*    <Link href={similarMedia.archive_url}>*/}
+                      {/*      <Typography>{"Archive"}</Typography>*/}
+                      {/*    </Link>*/}
+                      {/*    <Divider />*/}
+                      {/*  </Stack>*/}
+                      {/*))}*/}
+                    </Stack>
+                  </AccordionDetails>
+                </Accordion>
+                {/*</Box>*/}
+              </Grid>
+            )}
+          </Grid>
         </Grid>
-      </Card>
-    </Stack>
+      </CardContent>
+    </Card>
   );
 };
 

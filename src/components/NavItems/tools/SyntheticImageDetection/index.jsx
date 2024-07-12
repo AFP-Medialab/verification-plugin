@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   resetSyntheticImageDetectionImage,
   setSyntheticImageDetectionLoading,
+  setSyntheticImageDetectionNearDuplicates,
   setSyntheticImageDetectionResult,
 } from "../../../../redux/actions/tools/syntheticImageDetectionActions";
 
@@ -28,6 +29,7 @@ import SyntheticImageDetectionResults from "./syntheticImageDetectionResults";
 import { setError } from "redux/reducers/errorReducer";
 import StringFileUploadField from "../../../Shared/StringFileUploadField";
 import { preprocessFileUpload } from "../../../Shared/Utils/fileUtils";
+import { getSyntheticImageDetectionAlgorithmsForRoles } from "./SyntheticImageDetectionAlgorithms";
 
 const SyntheticImageDetection = () => {
   const classes = useMyStyles();
@@ -46,6 +48,7 @@ const SyntheticImageDetection = () => {
   );
   const result = useSelector((state) => state.syntheticImageDetection.result);
   const url = useSelector((state) => state.syntheticImageDetection.url);
+  const nd = useSelector((state) => state.syntheticImageDetection.duplicates);
   const [input, setInput] = useState(url ? url : "");
   const [imageFile, setImageFile] = useState(undefined);
 
@@ -69,8 +72,10 @@ const SyntheticImageDetection = () => {
 
     dispatch(setSyntheticImageDetectionLoading(true));
     const modeURL = "images/";
-    const services =
-      "gan_r50_mever,ldm_r50_grip,progan_r50_grip,adm_r50_grip,ldm_r50_mever,progan_rine_mever,ldm_rine_mever";
+
+    const services = getSyntheticImageDetectionAlgorithmsForRoles(role)
+      .map((algorithm) => algorithm.apiServiceName)
+      .join(",");
 
     const baseURL = process.env.REACT_APP_CAA_DEEPFAKE_URL;
 
@@ -108,7 +113,7 @@ const SyntheticImageDetection = () => {
           bodyFormData.append("file", image);
           res = await axios.post(baseURL + modeURL + "jobs", bodyFormData, {
             method: "post",
-            params: { services: services },
+            params: { services: services, search_similar: true },
             headers: {
               "Content-Type": "multipart/form-data",
             },
@@ -117,7 +122,7 @@ const SyntheticImageDetection = () => {
 
         default:
           res = await axios.post(baseURL + modeURL + "jobs", null, {
-            params: { url: url, services: services },
+            params: { url: url, services: services, search_similar: true },
           });
           break;
       }
@@ -136,13 +141,42 @@ const SyntheticImageDetection = () => {
         handleError("error_" + error.status);
       }
 
-      if (response && response.data != null)
+      if (response && response.data != null) {
+        console.log(response.data);
         dispatch(
           setSyntheticImageDetectionResult({
             url: image ? URL.createObjectURL(image) : url,
             result: response.data,
           }),
         );
+      }
+
+      if (
+        response &&
+        response.data &&
+        response.data.similar_images &&
+        response.data.similar_images.completed
+      ) {
+        let imgSimilarRes;
+
+        try {
+          imgSimilarRes = await axios.get(baseURL + modeURL + "similar/" + id);
+        } catch (error) {
+          handleError("error_" + error.status);
+        }
+
+        console.log(imgSimilarRes.data);
+
+        if (
+          !imgSimilarRes.data ||
+          !imgSimilarRes.data.similar_media ||
+          imgSimilarRes.data.similar_media.length === 0
+        ) {
+          dispatch(setSyntheticImageDetectionNearDuplicates(null));
+        }
+
+        dispatch(setSyntheticImageDetectionNearDuplicates(imgSimilarRes.data));
+      }
     };
 
     const waitUntilFinish = async (id) => {
@@ -278,9 +312,10 @@ const SyntheticImageDetection = () => {
 
       {result && (
         <SyntheticImageDetectionResults
-          result={result}
+          results={result}
           url={url}
           handleClose={handleClose}
+          nd={nd}
         />
       )}
     </Box>
