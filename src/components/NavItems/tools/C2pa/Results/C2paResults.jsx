@@ -71,7 +71,17 @@ const C2paResults = (props) => {
                     {/* <CardContent> */}
                     <Stack>
                       <Typography variant="h6">{"Credit"}</Typography>
-                      <Box p={1}></Box>
+                      <Box p={1}>
+                        {result.producer ? (
+                          <Typography>
+                            {"Produced by: " + result.producer}
+                          </Typography>
+                        ) : (
+                          <Alert severity="info">
+                            {"No info on the producer of this image."}
+                          </Alert>
+                        )}
+                      </Box>
                     </Stack>
                     {/* </CardContent> */}
                     <Box m={1} />
@@ -133,6 +143,21 @@ const C2paResults = (props) => {
                           <></>
                         )}
                       </Box>
+
+                      {/* <Box p={1}>
+                        {result.ingredients ? (
+                          <>
+                            {result.ingredients.map((obj) =>{
+                              return (
+                                <>
+                                  <Typography>{obj.title}</Typography>
+                                  <img src={obj.thumbnail.blob}/>
+                                </>
+                              )
+                            })}
+                          </>
+                        ) : (<></>)}
+                      </Box> */}
                     </Stack>
                     {/* </CardContent> */}
                   </Box>

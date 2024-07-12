@@ -72,6 +72,19 @@ async function getC2paData(image, dispatch) {
         if (manifestStore.validationStatus.length > 0) {
           res.validationIssues = true;
         }
+        // if(activeManifest.ingredients.length > 0) {
+
+        //   let ingredients = [];
+        //   for (let i = 0; i < activeManifest.ingredients.length; i ++) {
+        //     ingredients.push({title: activeManifest.ingredients[i].title, thumbnail: activeManifest.ingredients[i].thumbnail});
+        //   }
+        //   res.ingredients = ingredients;
+        //   //console.log(ingredients);
+        // }
+
+        const producer = selectProducer(activeManifest);
+        console.log("producer: ", producer);
+        if (producer) res.producer = producer.name;
 
         dispatch(c2paResultsSet(res));
       } else {
