@@ -14,7 +14,7 @@ const exifData = (assertions) => {
 
   for (let i = 0; i < assertions.length; i++) {
     if (assertions[i].label === "stds.exif") {
-      captureInfo = {};
+      if (!captureInfo) captureInfo = {};
       if (assertions[i]["data"]["EXIF:Make"]) {
         captureInfo.make = assertions[i]["data"]["EXIF:Make"];
       }
@@ -26,6 +26,7 @@ const exifData = (assertions) => {
       }
     }
   }
+
   return captureInfo;
 };
 

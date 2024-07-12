@@ -87,15 +87,21 @@ const C2paResults = (props) => {
                       <Box p={1}>
                         {result.captureInfo ? (
                           <>
-                            <Typography>
-                              {"Make: " + result.captureInfo.make}
-                            </Typography>
-                            <Typography>
-                              {"Model: " + result.captureInfo.model}
-                            </Typography>
-                            <Typography>
-                              {"Capture date: " + result.captureInfo.dateTime}
-                            </Typography>
+                            {result.captureInfo.make ? (
+                              <Typography>
+                                {"Make: " + result.captureInfo.make}
+                              </Typography>
+                            ) : null}
+                            {result.captureInfo.model ? (
+                              <Typography>
+                                {"Model: " + result.captureInfo.model}
+                              </Typography>
+                            ) : null}
+                            {result.captureInfo.dateTime ? (
+                              <Typography>
+                                {"Capture date: " + result.captureInfo.dateTime}
+                              </Typography>
+                            ) : null}
                           </>
                         ) : (
                           <Alert severity="info">
