@@ -12,8 +12,7 @@ const c2paSlice = createSlice({
   reducers: {
     c2paResultsSet(state, action) {
       if (!state.results) state.results = {};
-      state.results.title = action.payload.title;
-      state.results.signatureIssuer = action.payload.signatureIssuer;
+      state.results = action.payload;
     },
     c2paUrlSet(state, action) {
       state.url = action.payload;

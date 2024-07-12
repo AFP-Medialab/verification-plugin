@@ -26,9 +26,19 @@ async function getC2paData(image, dispatch) {
     if (activeManifest) {
       const res = {
         title: activeManifest.title,
-        signatureIssuer: activeManifest.signatureInfo.issuer,
+        signatureInfo: {
+          issuer: activeManifest.signatureInfo.issuer,
+          time: activeManifest.signatureInfo.time,
+        },
       };
+
+      if (manifestStore.validationStatus.length > 0) {
+        res.validationIssues = true;
+      }
+
       dispatch(c2paResultsSet(res));
+    } else {
+      console.log("no active manifest");
     }
     dispatch(c2paUrlSet(URL.createObjectURL(image)));
     dispatch(c2paLoadingSet(false));

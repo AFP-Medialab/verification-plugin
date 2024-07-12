@@ -1,9 +1,11 @@
 import {
   Box,
   Card,
+  CardContent,
   CardHeader,
   Divider,
   Grid,
+  Stack,
   Typography,
 } from "@mui/material";
 
@@ -12,11 +14,11 @@ const C2paResults = (props) => {
   const img = props.image;
   console.log("resultss", result);
   return (
-    <>
+    <Card>
       <CardHeader title={"Reuslts"} />
       <Box m={2} />
-      <Grid container direction="row" spacing={4}>
-        <Grid item xs>
+      <Grid container direction="row" spacing={3}>
+        <Grid item xs p={2}>
           <img
             src={img}
             style={{
@@ -26,19 +28,56 @@ const C2paResults = (props) => {
             }}
           />
         </Grid>
-        <Grid container item direction="column" xs>
-          <Card>
-            <Typography> {"C2pa Info"} </Typography>
-            <Box>{result.title}</Box>
-            <Box>
-              {result.signatureIssuer
-                ? result.signatureIssuer
-                : "no signature issuer"}
-            </Box>
+        <Grid item xs p={2}>
+          <Card p={1}>
+            <CardHeader title={"C2pa Info"} />
+            <CardContent>
+              <Stack>
+                <Typography>{result.title}</Typography>
+                <Box m={1} />
+                <Card>
+                  <CardContent>
+                    <Stack>
+                      <Typography variant="h6">
+                        {"Content Credentials"}
+                      </Typography>
+                      <Typography>{result.signatureInfo.issuer}</Typography>
+                      <Typography>{result.signatureInfo.time}</Typography>
+                    </Stack>
+                  </CardContent>
+                </Card>
+                <Box m={1} />
+                <Card>
+                  <CardContent>
+                    <Stack>
+                      <Typography variant="h6">{"Credit"}</Typography>
+                    </Stack>
+                  </CardContent>
+                </Card>
+                <Box m={1} />
+                <Card>
+                  <CardContent>
+                    <Stack>
+                      <Typography variant="h6">
+                        {"Capture Information"}
+                      </Typography>
+                    </Stack>
+                  </CardContent>
+                </Card>
+                <Box m={1} />
+                <Card>
+                  <CardContent>
+                    <Stack>
+                      <Typography variant="h6">{"Process"}</Typography>
+                    </Stack>
+                  </CardContent>
+                </Card>
+              </Stack>
+            </CardContent>
           </Card>
         </Grid>
       </Grid>
-    </>
+    </Card>
   );
 };
 
