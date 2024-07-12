@@ -1,4 +1,5 @@
 import {
+  Alert,
   Box,
   Card,
   CardContent,
@@ -32,47 +33,55 @@ const C2paResults = (props) => {
           <Card p={1}>
             <CardHeader title={"C2pa Info"} />
             <CardContent>
-              <Stack>
-                <Typography>{result.title}</Typography>
-                <Box m={1} />
-                <Card>
-                  <CardContent>
-                    <Stack>
-                      <Typography variant="h6">
-                        {"Content Credentials"}
-                      </Typography>
-                      <Typography>{result.signatureInfo.issuer}</Typography>
-                      <Typography>{result.signatureInfo.time}</Typography>
-                    </Stack>
-                  </CardContent>
-                </Card>
-                <Box m={1} />
-                <Card>
-                  <CardContent>
-                    <Stack>
-                      <Typography variant="h6">{"Credit"}</Typography>
-                    </Stack>
-                  </CardContent>
-                </Card>
-                <Box m={1} />
-                <Card>
-                  <CardContent>
-                    <Stack>
-                      <Typography variant="h6">
-                        {"Capture Information"}
-                      </Typography>
-                    </Stack>
-                  </CardContent>
-                </Card>
-                <Box m={1} />
-                <Card>
-                  <CardContent>
-                    <Stack>
-                      <Typography variant="h6">{"Process"}</Typography>
-                    </Stack>
-                  </CardContent>
-                </Card>
-              </Stack>
+              {!result.c2paInfo ? (
+                <Alert severity="info">{"No c2pa info for this image"}</Alert>
+              ) : result.validationIssues ? (
+                <Alert severity="error">
+                  {"Content credentials could not be verified for this image"}
+                </Alert>
+              ) : (
+                <Stack>
+                  <Typography>{result.title}</Typography>
+                  <Box m={1} />
+                  <Card>
+                    <CardContent>
+                      <Stack>
+                        <Typography variant="h6">
+                          {"Content Credentials"}
+                        </Typography>
+                        <Typography>{result.signatureInfo.issuer}</Typography>
+                        <Typography>{result.signatureInfo.time}</Typography>
+                      </Stack>
+                    </CardContent>
+                  </Card>
+                  <Box m={1} />
+                  <Card>
+                    <CardContent>
+                      <Stack>
+                        <Typography variant="h6">{"Credit"}</Typography>
+                      </Stack>
+                    </CardContent>
+                  </Card>
+                  <Box m={1} />
+                  <Card>
+                    <CardContent>
+                      <Stack>
+                        <Typography variant="h6">
+                          {"Capture Information"}
+                        </Typography>
+                      </Stack>
+                    </CardContent>
+                  </Card>
+                  <Box m={1} />
+                  <Card>
+                    <CardContent>
+                      <Stack>
+                        <Typography variant="h6">{"Process"}</Typography>
+                      </Stack>
+                    </CardContent>
+                  </Card>
+                </Stack>
+              )}
             </CardContent>
           </Card>
         </Grid>

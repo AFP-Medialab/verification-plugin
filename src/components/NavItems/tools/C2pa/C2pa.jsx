@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import getC2paData from "./Hooks/useGetC2paData";
 import { useDispatch, useSelector } from "react-redux";
 import C2paResults from "./Results/C2paResults";
+import { c2paStateCleaned } from "redux/reducers/tools/c2paReducer";
 
 const C2paData = () => {
   const isLoading = useSelector((state) => state.c2pa.loading);
@@ -31,6 +32,7 @@ const C2paData = () => {
   //   }
   const handleSubmit = () => {
     if (imageFile) {
+      dispatch(c2paStateCleaned());
       getC2paData(imageFile, dispatch);
     }
   };
