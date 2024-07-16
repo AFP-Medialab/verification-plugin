@@ -144,20 +144,22 @@ const C2paResults = (props) => {
                         )}
                       </Box>
 
-                      {/* <Box p={1}>
+                      <Box p={1}>
                         {result.ingredients ? (
                           <>
-                            {result.ingredients.map((obj) =>{
+                            {result.ingredients.map((obj) => {
                               return (
                                 <>
                                   <Typography>{obj.title}</Typography>
-                                  <img src={obj.thumbnail.blob}/>
+                                  <img src={obj.url} />
                                 </>
-                              )
+                              );
                             })}
                           </>
-                        ) : (<></>)}
-                      </Box> */}
+                        ) : (
+                          <></>
+                        )}
+                      </Box>
                     </Stack>
                     {/* </CardContent> */}
                   </Box>

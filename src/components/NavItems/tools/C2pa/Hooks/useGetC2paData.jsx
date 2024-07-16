@@ -34,7 +34,9 @@ const getIngredients = (ingredients) => {
   let ingredientThumbnails = [];
   for (let i = 0; i < ingredients.length; i++) {
     let thumbnail = ingredients[i].thumbnail;
-    ingredientThumbnails.push({ title: ingredients[i].title });
+    let url = thumbnail.getUrl();
+    console.log("url: ", url.url);
+    ingredientThumbnails.push({ title: ingredients[i].title, url: url.url });
   }
   return ingredientThumbnails;
 };
