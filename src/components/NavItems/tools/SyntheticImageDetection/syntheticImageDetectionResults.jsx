@@ -299,7 +299,7 @@ const SyntheticImageDetectionResults = (props) => {
               >
                 <img
                   src={url}
-                  alt={"Displays the results of the deepfake tool"}
+                  alt={"Displays the results of the deepfake topMenuItem"}
                   style={{
                     maxWidth: "100%",
                     maxHeight: "60vh",

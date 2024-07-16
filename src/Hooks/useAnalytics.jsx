@@ -1,14 +1,14 @@
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
 import {
-  trackPageView,
-  trackPageViewAnonymous,
   trackEvent,
   trackEventAnonymous,
+  trackPageView,
+  trackPageViewAnonymous,
 } from "../components/Shared/GoogleAnalytics/MatomoAnalytics";
 import { history } from "../components/Shared/History/History";
 
-export const useTrackPageView = (path, client_id, uid, index) => {
+export const useTrackPageView = (path, client_id, uid, toolName) => {
   const analytics = useSelector((state) => state.cookies.analytics);
   useEffect(() => {
     //console.log("general page view");
@@ -18,7 +18,7 @@ export const useTrackPageView = (path, client_id, uid, index) => {
     } else {
       trackPageViewAnonymous(path, history);
     }
-  }, [index]);
+  }, [toolName]);
 };
 
 export const useTrackEvent = (

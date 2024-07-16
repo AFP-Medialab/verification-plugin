@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Box from "@mui/material/Box";
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 import Card from "@mui/material/Card";
@@ -29,6 +29,7 @@ import GaugeChartResult from "components/Shared/GaugeChartResults/GaugeChartResu
 const DeepfakeResultsImage = (props) => {
   const classes = useMyStyles();
   const keyword = i18nLoadNamespace("components/NavItems/tools/Deepfake");
+
   class DeepfakeResult {
     constructor(methodName, predictionScore) {
       (this.methodName = methodName), (this.predictionScore = predictionScore);
@@ -280,7 +281,7 @@ const DeepfakeResultsImage = (props) => {
 
                 <img
                   src={url}
-                  alt={"Displays the results of the deepfake tool"}
+                  alt={"Displays the results of the deepfake topMenuItem"}
                   style={{
                     maxWidth: "100%",
                     maxHeight: "60vh",
