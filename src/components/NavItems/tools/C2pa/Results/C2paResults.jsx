@@ -16,10 +16,10 @@ const C2paResults = (props) => {
   console.log("resultss", result);
   return (
     <Card>
-      <CardHeader title={"Reuslts"} />
+      <CardHeader title={"Results"} />
       <Box m={2} />
-      <Grid container direction="row" spacing={3}>
-        <Grid item xs p={2}>
+      <Grid container direction="row" spacing={3} p={4}>
+        <Grid item xs>
           <img
             src={img}
             style={{
@@ -29,7 +29,7 @@ const C2paResults = (props) => {
             }}
           />
         </Grid>
-        <Grid item xs p={2}>
+        <Grid item xs>
           <Card p={1}>
             {/* <CardHeader title={"C2pa Info"}/> */}
             <CardContent>
@@ -147,12 +147,19 @@ const C2paResults = (props) => {
                       <Box p={1}>
                         {result.ingredients ? (
                           <>
-                            {result.ingredients.map((obj) => {
+                            {result.ingredients.map((obj, key) => {
                               return (
-                                <>
+                                <Box key={key}>
                                   <Typography>{obj.title}</Typography>
-                                  <img src={obj.url} />
-                                </>
+                                  <img
+                                    src={obj.url}
+                                    style={{
+                                      maxWidth: "100%",
+                                      maxHeight: "60vh",
+                                      borderRadius: "10px",
+                                    }}
+                                  />
+                                </Box>
                               );
                             })}
                           </>
