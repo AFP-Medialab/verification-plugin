@@ -340,45 +340,6 @@ const DeepfakeResultsVideo = (props) => {
                     detectionType={"video"}
                   />
                 )}
-                {/* {deepfakeScores.map((item, key) => {
-                  return (
-                    <Stack direction="column" key={key}>
-                      <Stack
-                        direction="row"
-                        justifyContent="flex-start"
-                        alignItems="center"
-                        spacing={2}
-                      >
-                        <Typography variant="h6">
-                          {
-                            DeepfakeImageDetectionMethodNames[item.methodName]
-                              .name
-                          }
-                        </Typography>
-                        <Tooltip
-                          title={
-                            DeepfakeImageDetectionMethodNames[item.methodName]
-                              .description
-                          }
-                        >
-                          <IconButton>
-                            <Help />
-                          </IconButton>
-                        </Tooltip>
-                      </Stack>
-                      <LinearProgressWithLabel value={item.predictionScore} />
-                    </Stack>
-                  );
-                })} */}
-                {/* {deepfakeScores && (
-                  <Stack>
-                    <DetectionProgressBar
-                      style={{
-                        height: "8px",
-                      }}
-                    />
-                  </Stack>
-                )} */}
               </Stack>
             </Card>
           </Grid>
