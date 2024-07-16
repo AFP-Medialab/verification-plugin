@@ -21,7 +21,7 @@ const c2paSlice = createSlice({
       state.loading = action.payload;
     },
     c2paStateCleaned(state, action) {
-      state.result = null;
+      state.results = null;
       state.url = null;
     },
   },

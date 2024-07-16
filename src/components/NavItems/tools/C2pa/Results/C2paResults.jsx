@@ -8,15 +8,30 @@ import {
   Grid,
   Stack,
   Typography,
+  IconButton,
 } from "@mui/material";
+
+import { Close } from "@mui/icons-material";
 
 const C2paResults = (props) => {
   const result = props.result;
   const img = props.image;
   console.log("resultss", result);
+
+  const handleClose = () => {
+    props.handleClose();
+  };
+
   return (
     <Card>
-      <CardHeader title={"Results"} />
+      <CardHeader
+        title={"Results"}
+        action={
+          <IconButton aria-label="close" onClick={handleClose}>
+            <Close sx={{ color: "white" }} />
+          </IconButton>
+        }
+      />
       <Box m={2} />
       <Grid container direction="row" spacing={3} p={4}>
         <Grid item xs>

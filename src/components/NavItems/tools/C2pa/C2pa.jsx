@@ -15,7 +15,6 @@ const C2paData = () => {
 
   const [input, setInput] = useState("");
   const [imageFile, setImageFile] = useState(undefined);
-  const handleClose = () => null;
 
   const dispatch = useDispatch();
 
@@ -35,6 +34,11 @@ const C2paData = () => {
       dispatch(c2paStateCleaned());
       getC2paData(imageFile, dispatch);
     }
+  };
+
+  const handleClose = () => {
+    setImageFile(undefined);
+    dispatch(c2paStateCleaned());
   };
 
   return (
@@ -81,7 +85,9 @@ const C2paData = () => {
         )}
       </Card>
       <Box m={3} />
-      {results && <C2paResults result={results} image={url} />}
+      {results && (
+        <C2paResults result={results} image={url} handleClose={handleClose} />
+      )}
     </Box>
   );
 };
