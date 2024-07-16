@@ -30,6 +30,15 @@ const exifData = (assertions) => {
   return captureInfo;
 };
 
+const getIngredients = (ingredients) => {
+  let ingredientThumbnails = [];
+  for (let i = 0; i < ingredients.length; i++) {
+    let thumbnail = ingredients[i].thumbnail;
+    ingredientThumbnails.push({ title: ingredients[i].title });
+  }
+  return ingredientThumbnails;
+};
+
 async function getC2paData(image, dispatch) {
   const c2pa = await createC2pa({
     wasmSrc: "./c2paAssets/toolkit_bg.wasm",
@@ -72,15 +81,10 @@ async function getC2paData(image, dispatch) {
         if (manifestStore.validationStatus.length > 0) {
           res.validationIssues = true;
         }
-        // if(activeManifest.ingredients.length > 0) {
-
-        //   let ingredients = [];
-        //   for (let i = 0; i < activeManifest.ingredients.length; i ++) {
-        //     ingredients.push({title: activeManifest.ingredients[i].title, thumbnail: activeManifest.ingredients[i].thumbnail});
-        //   }
-        //   res.ingredients = ingredients;
-        //   //console.log(ingredients);
-        // }
+        if (activeManifest.ingredients.length > 0) {
+          res.ingredients = getIngredients(activeManifest.ingredients);
+          //console.log(ingredients);
+        }
 
         const producer = selectProducer(activeManifest);
         console.log("producer: ", producer);
