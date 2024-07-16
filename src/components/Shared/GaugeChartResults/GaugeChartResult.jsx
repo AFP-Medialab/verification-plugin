@@ -18,6 +18,21 @@ import GaugeChartModalExplanation from "./GaugeChartModalExplanation";
 import CustomAlertScore from "../CustomAlertScore";
 import { exportReactElementAsJpg } from "../Utils/htmlUtils";
 
+/**
+ *
+ * @param keyword The translation i18n function
+ * @param scores {Array<Object>} The results of the analysis
+ * @param methodNames {Object} Objet containing the information on the different methods used
+ * @param detectionThresholds {Object} Object containing the detection thresholds
+ * @param resultsHaveErrors {boolean}
+ * @param sanitizeDetectionPercentage {(arg: number) => number} Function
+ * @param gaugeExplanation {Object} Object containing the explainations for the colors of the gauge
+ * @param toolName {string} The name of the tool
+ * @param detectionType {string=} String differentiating between video and image for tools used in both categories
+ * @returns {Element}
+ * @constructor
+ */
+
 const GaugeChartResult = ({
   keyword,
   scores,
@@ -27,6 +42,7 @@ const GaugeChartResult = ({
   sanitizeDetectionPercentage,
   gaugeExplanation,
   toolName,
+  detectionType,
 }) => {
   //const keyword = (word) => "hi";
   const gaugeChartRef = useRef(null);
@@ -186,7 +202,7 @@ const GaugeChartResult = ({
 
         <CustomAlertScore
           score={scores ? maxScore : 0}
-          detectionType={undefined}
+          detectionType={detectionType ? detectionType : undefined}
           toolName={toolName}
           thresholds={detectionThresholds}
         />

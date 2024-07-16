@@ -323,6 +323,7 @@ const DeepfakeResultsImage = (props) => {
                   sanitizeDetectionPercentage={(n) => Math.round(n)}
                   gaugeExplanation={{ colors: colors, keywords: keywords }}
                   toolName={"Deepfake"}
+                  detectionType={"image"}
                 />
               )}
             </Stack>

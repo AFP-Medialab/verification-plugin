@@ -337,6 +337,7 @@ const DeepfakeResultsVideo = (props) => {
                     sanitizeDetectionPercentage={(n) => Math.round(n)}
                     gaugeExplanation={{ keywords: keywords, colors: colors }}
                     toolName={"Deepfake"}
+                    detectionType={"video"}
                   />
                 )}
                 {/* {deepfakeScores.map((item, key) => {
