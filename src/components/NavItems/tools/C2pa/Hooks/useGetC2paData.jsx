@@ -41,6 +41,32 @@ const getIngredients = (ingredients) => {
   return ingredientThumbnails;
 };
 
+async function readManifest(manifest) {
+  const res = {
+    title: manifest.title,
+    signatureInfo: {
+      issuer: manifest.signatureInfo.issuer,
+      time: manifest.signatureInfo.time,
+    },
+  };
+
+  if (manifestStore.validationStatus.length > 0) res.validationIssues = true;
+
+  const editsAndActivity = await selectEditsAndActivity(manifest);
+  if (editsAndActivity) res.editsAndActivity = editsAndActivity;
+
+  const captureInfo = exifData(activeManifest.assertions.data);
+  if (captureInfo) res.captureInfo = captureInfo;
+
+  if (manifest.ingredients.length > 0)
+    res.ingredients = getIngredients(manifest.ingredients);
+
+  const producer = selectProducer(activeManifest);
+  if (producer) res.producer = producer.name;
+
+  return res;
+}
+
 async function getC2paData(image, dispatch) {
   const c2pa = await createC2pa({
     wasmSrc: "./c2paAssets/toolkit_bg.wasm",

@@ -16,7 +16,7 @@ import { Close } from "@mui/icons-material";
 const C2paResults = (props) => {
   const result = props.result;
   const img = props.image;
-  console.log("resultss", result);
+  console.log("results", result);
 
   const handleClose = () => {
     props.handleClose();
@@ -147,13 +147,19 @@ const C2paResults = (props) => {
 
                       <Box p={1}>
                         {result.editsAndActivity ? (
-                          result.editsAndActivity.map((obj, key) => {
-                            return (
-                              <Typography key={key}>
-                                {obj.label + ": " + obj.description}
-                              </Typography>
-                            );
-                          })
+                          <>
+                            <Typography fontSize={18}>{"Edits"}</Typography>
+                            <Box m={1} />
+                            <Box paddingLeft={2}>
+                              {result.editsAndActivity.map((obj, key) => {
+                                return (
+                                  <Typography key={key}>
+                                    {obj.label + ": " + obj.description}
+                                  </Typography>
+                                );
+                              })}
+                            </Box>
+                          </>
                         ) : (
                           <></>
                         )}
@@ -162,18 +168,24 @@ const C2paResults = (props) => {
                       <Box p={1}>
                         {result.ingredients ? (
                           <>
+                            <Typography fontSize={18}>
+                              {"Ingredients"}
+                            </Typography>
+                            <Box m={1} />
                             {result.ingredients.map((obj, key) => {
                               return (
-                                <Box key={key}>
-                                  <Typography>{obj.title}</Typography>
+                                <Box key={key} p={1}>
                                   <img
                                     src={obj.url}
                                     style={{
-                                      maxWidth: "100%",
+                                      maxWidth: "150px",
                                       maxHeight: "60vh",
                                       borderRadius: "10px",
                                     }}
                                   />
+                                  <Typography fontSize={12}>
+                                    {obj.title}
+                                  </Typography>
                                 </Box>
                               );
                             })}
