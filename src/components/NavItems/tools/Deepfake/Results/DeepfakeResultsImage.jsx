@@ -14,16 +14,10 @@ import {
   AccordionDetails,
 } from "@mui/material";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import { LinearProgressWithLabel } from "../../../../Shared/LinearProgressWithLabel/LinearProgressWithLabel";
-import { Close, Download, ExpandMore, Help } from "@mui/icons-material";
+import { Close } from "@mui/icons-material";
 import { useSelector } from "react-redux";
-import { DetectionProgressBar } from "components/Shared/DetectionProgressBar/DetectionProgressBar";
 import { getclientId } from "components/Shared/GoogleAnalytics/MatomoAnalytics";
 import { useTrackEvent } from "Hooks/useAnalytics";
-import GaugeChart from "react-gauge-chart";
-import GaugeChartModalExplanation from "components/Shared/GaugeChartResults/GaugeChartModalExplanation";
-import { exportReactElementAsJpg } from "components/Shared/Utils/htmlUtils";
-import CustomAlertScore from "components/Shared/CustomAlertScore";
 import GaugeChartResult from "components/Shared/GaugeChartResults/GaugeChartResult";
 
 const DeepfakeResultsImage = (props) => {

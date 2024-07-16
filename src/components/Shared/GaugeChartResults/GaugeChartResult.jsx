@@ -276,19 +276,6 @@ const GaugeChartResult = ({
                               )}
                             </Stack>
                           </Box>
-                          <Stack>
-                            {/*<Button*/}
-                            {/*  href={*/}
-                            {/*    DeepfakeImageDetectionMethodNames[*/}
-                            {/*      item.methodName*/}
-                            {/*    ].modelCardUrl*/}
-                            {/*  }*/}
-                            {/*>*/}
-                            {/*  {keyword(*/}
-                            {/*    "synthetic_image_detection_model_card",*/}
-                            {/*  )}*/}
-                            {/*</Button>*/}
-                          </Stack>
                         </Stack>
 
                         <Box p={2} sx={{ backgroundColor: "#FAFAFA" }} mb={2}>
