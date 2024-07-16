@@ -27,14 +27,10 @@ import { exportReactElementAsJpg } from "../../../Shared/Utils/htmlUtils";
 import GaugeChartModalExplanation from "../../../Shared/GaugeChartModalExplanation";
 import NddDatagrid from "./NddDatagrid";
 import {
-  admR50Grip,
   DETECTION_THRESHOLDS,
-  ganR50Mever,
-  ldmR50Grip,
-  ldmRineMever,
-  proGanR50Grip,
-  proGanRineMever,
+  getSyntheticImageDetectionAlgorithmFromApiName,
   SyntheticImageDetectionAlgorithm,
+  syntheticImageDetectionAlgorithms,
 } from "./SyntheticImageDetectionAlgorithms";
 
 /**
@@ -81,16 +77,14 @@ class NddResult {
    * @param image {string}
    * @param archiveUrl {string}
    * @param imageUrls {string}
-   * @param detectionRate1 {number}
-   * @param algorithmName {string}
+   * @param detectionResults {SyntheticImageDetectionAlgorithmResult[]}
    */
-  constructor(id, image, archiveUrl, imageUrls, detectionRate1, algorithmName) {
+  constructor(id, image, archiveUrl, imageUrls, detectionResults) {
     this.id = id;
     this.image = image;
     this.archiveUrl = archiveUrl;
     this.imageUrls = imageUrls;
-    this.detectionRate1 = detectionRate1;
-    this.algorithmName = algorithmName;
+    this.detectionResults = detectionResults;
   }
 }
 
@@ -131,79 +125,23 @@ const SyntheticImageDetectionResults = ({ results, url, handleClose, nd }) => {
 
   useEffect(() => {
     setResultsHaveErrors(false);
-    let diffusionScore;
+    let res = [];
 
-    if (results.ldm_r50_grip_report)
-      diffusionScore = new SyntheticImageDetectionAlgorithmResult(
-        //previously unina_report
-        ldmR50Grip,
-        !results.ldm_r50_grip_report.prediction
-          ? 0
-          : results.ldm_r50_grip_report.prediction * 100,
-        !results.ldm_r50_grip_report.prediction,
-      );
+    for (const algorithm of syntheticImageDetectionAlgorithms) {
+      const algorithmReport = results[algorithm.apiServiceName + "_report"];
 
-    let ganScore;
+      if (algorithmReport) {
+        res.push(
+          new SyntheticImageDetectionAlgorithmResult(
+            algorithm,
+            !algorithmReport.prediction ? 0 : algorithmReport.prediction * 100,
+            algorithmReport.prediction === undefined,
+          ),
+        );
+      }
+    }
 
-    if (results.gan_r50_mever_report)
-      ganScore = new SyntheticImageDetectionAlgorithmResult(
-        //previously gan_report
-        ganR50Mever,
-        !results.gan_r50_mever_report.prediction
-          ? 0
-          : results.gan_r50_mever_report.prediction * 100,
-        !results.gan_r50_mever_report.prediction,
-      );
-
-    let proganScore;
-
-    if (results.progan_r50_grip_report)
-      proganScore = new SyntheticImageDetectionAlgorithmResult(
-        proGanR50Grip,
-        !results.progan_r50_grip_report.prediction
-          ? 0
-          : results.progan_r50_grip_report.prediction * 100,
-        !results.progan_r50_grip_report.prediction,
-      );
-
-    let admScore;
-    if (results.adm_r50_grip_report)
-      admScore = new SyntheticImageDetectionAlgorithmResult(
-        admR50Grip,
-        !results.adm_r50_grip_report.prediction
-          ? 0
-          : results.adm_r50_grip_report.prediction * 100,
-        !results.adm_r50_grip_report.prediction,
-      );
-
-    let proganRineScore;
-    if (results.progan_rine_mever_report)
-      proganRineScore = new SyntheticImageDetectionAlgorithmResult(
-        proGanRineMever,
-        !results.progan_rine_mever_report.prediction
-          ? 0
-          : results.progan_rine_mever_report.prediction * 100,
-        !results.progan_rine_mever_report.prediction,
-      );
-
-    let ldmRineScore;
-    if (results.ldm_rine_mever_report)
-      ldmRineScore = new SyntheticImageDetectionAlgorithmResult(
-        ldmRineMever,
-        !results.ldm_rine_mever_report.prediction
-          ? 0
-          : results.ldm_rine_mever_report.prediction * 100,
-        !results.ldm_rine_mever_report.prediction,
-      );
-
-    const res = [
-      diffusionScore,
-      ganScore,
-      proganScore,
-      admScore,
-      proganRineScore,
-      ldmRineScore,
-    ]
+    res = res
       .filter((i) => i !== undefined)
       .sort((a, b) => b.predictionScore - a.predictionScore);
 
@@ -284,20 +222,33 @@ const SyntheticImageDetectionResults = ({ results, url, handleClose, nd }) => {
   ];
   const colors = ["#00FF00", "#AAFF03", "#FFA903", "#FF0000"];
 
+  /**
+   *
+   * @param nddResults
+   * @returns {NddResult[]}
+   */
   const getNddRows = (nddResults) => {
     let rows = [];
     for (let i = 0; i < nddResults.length; i += 1) {
       const res = nddResults[i];
+      let detectionResults = [];
+      for (const detection of Object.keys(res.detections)) {
+        const d = new SyntheticImageDetectionAlgorithmResult(
+          getSyntheticImageDetectionAlgorithmFromApiName(detection),
+          sanitizeDetectionPercentage(res.detections[detection] * 100),
+          false,
+        );
+
+        detectionResults.push(d);
+      }
+
       rows.push(
         new NddResult(
           i + 1,
           res.archive_url,
           res.archive_url,
           res.origin_urls,
-          sanitizeDetectionPercentage(
-            res.detections[Object.keys(res.detections)[0]] * 100,
-          ),
-          Object.keys(res.detections)[0],
+          detectionResults,
         ),
       );
     }
@@ -368,6 +319,17 @@ const SyntheticImageDetectionResults = ({ results, url, handleClose, nd }) => {
                 </Grid>
               </Box>
             </Grid>
+
+            {nd && nd.similar_media && nd.similar_media.length > 0 && (
+              <Grid item>
+                <Alert icon={false} severity="error">
+                  <Typography variant="body1">
+                    Similar images were detected as synthetic. See detection
+                    details for similar images below.
+                  </Typography>
+                </Alert>
+              </Grid>
+            )}
           </Grid>
           <Grid item sm={12} md={6}>
             {syntheticImageScores.length > 0 ? (
@@ -493,15 +455,6 @@ const SyntheticImageDetectionResults = ({ results, url, handleClose, nd }) => {
                   toolName={"SyntheticImageDetection"}
                   thresholds={DETECTION_THRESHOLDS}
                 />
-
-                {nd && nd.similar_media && nd.similar_media.length > 0 && (
-                  <Alert icon={false} severity="info">
-                    <Typography variant="body1">
-                      Similar images were detected as synthetic. See detection
-                      details for similar images below.
-                    </Typography>
-                  </Alert>
-                )}
 
                 {resultsHaveErrors && (
                   <Alert severity="error">

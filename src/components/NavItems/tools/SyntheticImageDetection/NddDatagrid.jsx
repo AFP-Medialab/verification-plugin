@@ -3,13 +3,12 @@ import Box from "@mui/material/Box";
 import { DataGrid, useGridApiRef } from "@mui/x-data-grid";
 import Link from "@mui/material/Link";
 import { Chip, Grid, Stack, Typography } from "@mui/material";
+import { i18nLoadNamespace } from "../../../Shared/Languages/i18nLoadNamespace";
 import {
   getAlertColor,
   getAlertLabel,
   getPercentageColorCode,
 } from "./syntheticImageDetectionResults";
-import { i18nLoadNamespace } from "../../../Shared/Languages/i18nLoadNamespace";
-import { syntheticImageDetectionAlgorithms } from "./SyntheticImageDetectionAlgorithms";
 
 const NddDataGrid = ({ rows }) => {
   const keyword = i18nLoadNamespace(
@@ -38,18 +37,14 @@ const NddDataGrid = ({ rows }) => {
   //   resizeData();
   // }, [resizeData]);
 
-  const detectionRateStack = (row) => {
-    const detectionPercentageNdImage = row.detectionRate1;
+  const detectionRateStack = (row, index) => {
+    if (!row.detectionResults[index]) return null;
 
-    const algorithm = syntheticImageDetectionAlgorithms.find(
-      (algo) => (algo.apiServiceName = row.algorithmName),
-    );
+    const detectionPercentageNdImage =
+      row.detectionResults[index].predictionScore;
 
     return (
       <Stack direction="column" spacing={2} alignItems="start">
-        <Typography variant={"h6"} sx={{ fontWeight: "bold" }}>
-          {keyword(algorithm.name)}
-        </Typography>
         <Stack direction="row" spacing={1}>
           <>
             <Typography>
@@ -93,6 +88,58 @@ const NddDataGrid = ({ rows }) => {
     );
   };
 
+  /**
+   * Computes the JSX element to display for the algorithm name cell
+   * @param params
+   * @param index {number} The array position
+   * @returns {React.JSX.Element|null} The JSX element if applicable else null
+   */
+  const renderAlgorithmName = (params, index) => {
+    if (!params.row.detectionResults[index]) {
+      return null;
+    }
+
+    return (
+      <Typography variant={"h6"} sx={{ fontWeight: "bold" }}>
+        {keyword(params.row.detectionResults[index].name)}
+      </Typography>
+    );
+  };
+
+  /**
+   * A helper function to compute the detection rows as not all the NDD results have the same number of algorithms for detections
+   * @returns {*[]}
+   */
+  const detectionDetailsRows = () => {
+    const maxSizeAlgorithm = Math.max(
+      ...rows.map((row) => row.detectionResults.length),
+    );
+
+    let algorithmsRows = [];
+
+    for (let i = 0; i < maxSizeAlgorithm; i++) {
+      algorithmsRows.push({
+        field: `detectionName${i + 1}`,
+        headerName: `Algorithm #${i + 1}`,
+        type: "string",
+        // minWidth: 300,
+        flex: 1,
+        renderCell: (params) => renderAlgorithmName(params, i),
+      });
+
+      algorithmsRows.push({
+        field: `detectionRate${i + 1}`,
+        headerName: `Score #${i + 1}`,
+        type: "number",
+        // minWidth: 300,
+        flex: 1,
+        renderCell: (params) => detectionRateStack(params.row, i),
+      });
+    }
+
+    return algorithmsRows;
+  };
+
   const columns = [
     {
       field: "id",
@@ -113,14 +160,7 @@ const NddDataGrid = ({ rows }) => {
         />
       ),
     },
-    {
-      field: "detectionRate1",
-      headerName: "Detection Rate #1",
-      type: "number",
-      // minWidth: 300,
-      flex: 1,
-      renderCell: (params) => detectionRateStack(params.row),
-    },
+    ...detectionDetailsRows(),
     {
       field: "archiveUrl",
       headerName: "Archive URL",
@@ -142,7 +182,7 @@ const NddDataGrid = ({ rows }) => {
   return (
     <Box
       sx={{
-        height: 1000,
+        height: "65vh",
         // minHeight: 500,
         // width: 500,
       }}

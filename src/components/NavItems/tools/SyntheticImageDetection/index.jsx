@@ -29,7 +29,7 @@ import SyntheticImageDetectionResults from "./syntheticImageDetectionResults";
 import { setError } from "redux/reducers/errorReducer";
 import StringFileUploadField from "../../../Shared/StringFileUploadField";
 import { preprocessFileUpload } from "../../../Shared/Utils/fileUtils";
-import { getSyntheticImageDetectionAlgorithmsForRoles } from "./SyntheticImageDetectionAlgorithms";
+import { syntheticImageDetectionAlgorithms } from "./SyntheticImageDetectionAlgorithms";
 
 const SyntheticImageDetection = () => {
   const classes = useMyStyles();
@@ -73,7 +73,7 @@ const SyntheticImageDetection = () => {
     dispatch(setSyntheticImageDetectionLoading(true));
     const modeURL = "images/";
 
-    const services = getSyntheticImageDetectionAlgorithmsForRoles(role)
+    const services = syntheticImageDetectionAlgorithms
       .map((algorithm) => algorithm.apiServiceName)
       .join(",");
 
@@ -142,7 +142,6 @@ const SyntheticImageDetection = () => {
       }
 
       if (response && response.data != null) {
-        console.log(response.data);
         dispatch(
           setSyntheticImageDetectionResult({
             url: image ? URL.createObjectURL(image) : url,
@@ -170,6 +169,7 @@ const SyntheticImageDetection = () => {
         if (
           !imgSimilarRes.data ||
           !imgSimilarRes.data.similar_media ||
+          !Array.isArray(imgSimilarRes.data.similar_media) ||
           imgSimilarRes.data.similar_media.length === 0
         ) {
           dispatch(setSyntheticImageDetectionNearDuplicates(null));

@@ -35,7 +35,14 @@ export const ganR50Mever = new SyntheticImageDetectionAlgorithm(
   "gan_r50_mever",
   "synthetic_image_detection_gan_name",
   "synthetic_image_detection_gan_description",
-  ROLES.BETA_TESTER ?? null,
+  ROLES.BETA_TESTER,
+);
+
+export const proGanR50Grip = new SyntheticImageDetectionAlgorithm(
+  "progan_r50_grip",
+  "synthetic_image_detection_progan_name",
+  "synthetic_image_detection_progan_description",
+  ROLES.BETA_TESTER,
 );
 
 export const ldmR50Grip = new SyntheticImageDetectionAlgorithm(
@@ -44,12 +51,28 @@ export const ldmR50Grip = new SyntheticImageDetectionAlgorithm(
   "synthetic_image_detection_diffusion_description",
   ROLES.BETA_TESTER,
 );
-export const proGanR50Grip = new SyntheticImageDetectionAlgorithm(
-  "progan_r50_grip",
-  "synthetic_image_detection_progan_name",
-  "synthetic_image_detection_progan_description",
-  ROLES.BETA_TESTER,
+
+export const proGanWebpR50Grip = new SyntheticImageDetectionAlgorithm(
+  "progan-webp_r50_grip",
+  "synthetic_image_detection_progan-webp_r50_grip_name",
+  "synthetic_image_detection_progan-webp_r50_grip_description",
+  ROLES.EXTRA_FEATURE,
 );
+
+export const ldmWebpR50Grip = new SyntheticImageDetectionAlgorithm(
+  "ldm-webp_r50_grip",
+  "synthetic_image_detection_ldm-webp_r50_grip_name",
+  "synthetic_image_detection_ldm-webp_r50_grip_description",
+  ROLES.EXTRA_FEATURE,
+);
+
+export const gigaGanWebpR50Grip = new SyntheticImageDetectionAlgorithm(
+  "gigagan-webp_r50_grip",
+  "synthetic_image_detection_gigagan-webp_r50_grip_name",
+  "synthetic_image_detection_gigagan-webp_r50_grip_description",
+  ROLES.EXTRA_FEATURE,
+);
+
 export const admR50Grip = new SyntheticImageDetectionAlgorithm(
   "adm_r50_grip",
   "synthetic_image_detection_adm_name",
@@ -70,23 +93,27 @@ export const ldmRineMever = new SyntheticImageDetectionAlgorithm(
 );
 export const ldmR50Mever = new SyntheticImageDetectionAlgorithm(
   "ldm_r50_mever",
-  "synthetic_image_detection_ldm_rine_mever_name",
-  "synthetic_image_detection_ldm_rine_mever_description",
+  "synthetic_image_detection_ldm_r50_mever_name",
+  "synthetic_image_detection_ldm_r50_mever_description",
   ROLES.EXTRA_FEATURE,
 );
 
 /**
  * The list of the synthetic image detection algorithms
+ * TODO:Use SET
  * @type {SyntheticImageDetectionAlgorithm[]}
  */
 export const syntheticImageDetectionAlgorithms = [
-  ganR50Mever,
-  ldmR50Grip,
   proGanR50Grip,
+  ldmR50Grip,
   admR50Grip,
+  proGanWebpR50Grip,
+  ldmWebpR50Grip,
+  gigaGanWebpR50Grip,
+  ganR50Mever,
+  ldmR50Mever,
   proGanRineMever,
   ldmRineMever,
-  ldmR50Mever,
 ];
 
 /**
@@ -97,5 +124,16 @@ export const syntheticImageDetectionAlgorithms = [
 export const getSyntheticImageDetectionAlgorithmsForRoles = (roles) => {
   return syntheticImageDetectionAlgorithms.filter((algorithm) =>
     roles.includes(algorithm.roleNeeded),
+  );
+};
+
+/**
+ * Returns the Synthetic Image Detection Algorithm Object from the given APi Service Name
+ * @param apiName {string}
+ * @returns {SyntheticImageDetectionAlgorithm}
+ */
+export const getSyntheticImageDetectionAlgorithmFromApiName = (apiName) => {
+  return syntheticImageDetectionAlgorithms.find(
+    (algorithm) => algorithm.apiServiceName === apiName,
   );
 };

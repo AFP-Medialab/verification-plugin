@@ -9,11 +9,7 @@ const syntheticImageDetectionReducer = (state = defaultState, action) => {
   switch (action.type) {
     case "SYNTHETIC_IMAGE_DETECTION_RESET":
       return {
-        ...state,
-        url: "",
-        result: null,
-        loading: false,
-        duplicates: null,
+        ...defaultState,
       };
     case "SET_SYNTHETIC_IMAGE_DETECTION_LOADING":
       return {
