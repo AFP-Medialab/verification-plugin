@@ -199,14 +199,10 @@ const C2paResults = (props) => {
                               {"Ingredients"}
                             </Typography>
                             <Box m={1} />
-                            <Grid
-                              container
-                              direction="row"
-                              justifyContent="flex-start"
-                            >
+                            <Stack direction="row" spacing={1} p={1}>
                               {manifestData.children.map((obj, key) => {
                                 return (
-                                  <Grid element key={key} p={1}>
+                                  <Box key={key}>
                                     <img
                                       src={result[obj].url}
                                       style={{
@@ -218,13 +214,13 @@ const C2paResults = (props) => {
                                         onIngredientClick(obj);
                                       }}
                                     />
-                                    <Typography fontSize={12}>
+                                    {/* <Typography fontSize={12}>
                                       {obj.title}
-                                    </Typography>
-                                  </Grid>
+                                    </Typography> */}
+                                  </Box>
                                 );
                               })}
-                            </Grid>
+                            </Stack>
                           </>
                         ) : (
                           <></>
