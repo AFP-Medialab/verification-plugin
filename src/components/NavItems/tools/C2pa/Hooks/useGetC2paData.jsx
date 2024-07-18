@@ -1,10 +1,14 @@
 import { createC2pa, selectEditsAndActivity, selectProducer } from "c2pa";
 import {
+  c2paCurrentImageIdSet,
   c2paLoadingSet,
-  c2paResultsSet,
+  c2paMainImageIdSet,
+  c2paResultSet,
   c2paStateCleaned,
   c2paUrlSet,
+  c2paValidationIssuesSet,
 } from "redux/reducers/tools/c2paReducer";
+import { getIn } from "yup";
 //import wasmSrc from "./public/c2paAssets/toolkit_bg.wasm"
 //import workerSrc from "./c2paAssets/c2pa_worker_min.js";
 
@@ -31,40 +35,87 @@ const exifData = (assertions) => {
 };
 
 const getIngredients = (ingredients) => {
-  let ingredientThumbnails = [];
+  let ingredientInfo = [];
   for (let i = 0; i < ingredients.length; i++) {
     let thumbnail = ingredients[i].thumbnail;
     let url = thumbnail.getUrl();
     console.log("url: ", url.url);
-    ingredientThumbnails.push({ title: ingredients[i].title, url: url.url });
+    let ingredientManifest = ingredients[i].manifest
+      ? ingredients[i].manifest
+      : null;
+    ingredientInfo.push({
+      title: ingredients[i].title,
+      url: url.url,
+      manifest: ingredientManifest,
+    });
   }
-  return ingredientThumbnails;
+  return ingredientInfo;
 };
 
-async function readManifest(manifest) {
+export async function readManifest(manifest, parent, result, url, depth) {
+  console.log("url: ", url);
   const res = {
-    title: manifest.title,
-    signatureInfo: {
-      issuer: manifest.signatureInfo.issuer,
-      time: manifest.signatureInfo.time,
-    },
+    url: url,
+    parent: parent,
   };
 
-  if (manifestStore.validationStatus.length > 0) res.validationIssues = true;
+  if (manifest) {
+    const manifestId = manifest.instanceId;
 
-  const editsAndActivity = await selectEditsAndActivity(manifest);
-  if (editsAndActivity) res.editsAndActivity = editsAndActivity;
+    const manifestData = {};
 
-  const captureInfo = exifData(activeManifest.assertions.data);
-  if (captureInfo) res.captureInfo = captureInfo;
+    manifestData.title = manifest.title;
+    manifestData.signatureInfo = {
+      issuer: manifest.signatureInfo.issuer,
+      time: manifest.signatureInfo.time,
+    };
 
-  if (manifest.ingredients.length > 0)
-    res.ingredients = getIngredients(manifest.ingredients);
+    const editsAndActivity = await selectEditsAndActivity(manifest);
+    if (editsAndActivity) manifestData.editsAndActivity = editsAndActivity;
 
-  const producer = selectProducer(activeManifest);
-  if (producer) res.producer = producer.name;
+    const captureInfo = exifData(manifest.assertions.data);
+    if (captureInfo) manifestData.captureInfo = captureInfo;
 
-  return res;
+    if (manifest.ingredients.length > 0) {
+      let children = [];
+
+      for (let i = 0; i < manifest.ingredients.length; i++) {
+        let thumbnail = manifest.ingredients[i].thumbnail;
+        let ingredientUrl = thumbnail.getUrl();
+        //console.log("url: ", url.url);
+        let ingredientId;
+        if (depth < 5 && manifest.ingredients[i].manifest) {
+          let { id, data } = await readManifest(
+            manifest.ingredients[i].manifest,
+            manifestId,
+            result,
+            ingredientUrl.url,
+            depth + 1,
+          );
+          ingredientId = id;
+          result = data;
+        } else {
+          ingredientId = manifest.ingredients[i].instanceId;
+          result[ingredientId] = { url: ingredientUrl, parent: manifestId };
+        }
+        children.push(ingredientId);
+        manifestData.children = children;
+      }
+    }
+    //res.ingredients = getIngredients(manifest.ingredients);
+
+    const producer = selectProducer(manifest);
+    if (producer) manifestData.producer = producer.name;
+
+    console.log(manifestData);
+    res.manifestData = manifestData;
+
+    result[manifestId] = res;
+
+    return { id: manifestId, data: result };
+  } else {
+    console.log("no data");
+  }
 }
 
 async function getC2paData(image, dispatch) {
@@ -74,7 +125,8 @@ async function getC2paData(image, dispatch) {
   });
 
   dispatch(c2paLoadingSet(true));
-  dispatch(c2paUrlSet(URL.createObjectURL(image)));
+  const url = URL.createObjectURL(image);
+  dispatch(c2paUrlSet(url));
 
   try {
     const { manifestStore } = await c2pa.read(image);
@@ -85,45 +137,62 @@ async function getC2paData(image, dispatch) {
         ? manifestStore.activeManifest
         : null;
 
+      if (manifestStore.validationStatus.length > 0)
+        dispatch(c2paValidationIssuesSet(true));
+
       if (activeManifest) {
-        const res = {
-          c2paInfo: true,
-          title: activeManifest.title,
-          signatureInfo: {
-            issuer: activeManifest.signatureInfo.issuer,
-            time: activeManifest.signatureInfo.time,
-          },
-        };
+        console.log("active: ", activeManifest);
 
-        const editsAndActivity = await selectEditsAndActivity(activeManifest);
-        console.log("edits and activity: ", editsAndActivity);
-        if (editsAndActivity) res.editsAndActivity = editsAndActivity;
+        const { id, data } = await readManifest(
+          activeManifest,
+          null,
+          {},
+          url,
+          0,
+        );
+        console.log("res", data);
+        dispatch(c2paResultSet(data));
+        dispatch(c2paCurrentImageIdSet(id));
+        dispatch(c2paMainImageIdSet(id));
+        console.log("dispatched");
+        // const res = {
+        //   c2paInfo: true,
+        //   title: activeManifest.title,
+        //   signatureInfo: {
+        //     issuer: activeManifest.signatureInfo.issuer,
+        //     time: activeManifest.signatureInfo.time,
+        //   },
+        // };
 
-        const captureInfo = exifData(activeManifest.assertions.data);
+        // const editsAndActivity = await selectEditsAndActivity(activeManifest);
+        // console.log("edits and activity: ", editsAndActivity);
+        // if (editsAndActivity) res.editsAndActivity = editsAndActivity;
 
-        if (captureInfo) {
-          console.log(captureInfo);
-          res.captureInfo = captureInfo;
-        }
+        // const captureInfo = exifData(activeManifest.assertions.data);
 
-        if (manifestStore.validationStatus.length > 0) {
-          res.validationIssues = true;
-        }
-        if (activeManifest.ingredients.length > 0) {
-          res.ingredients = getIngredients(activeManifest.ingredients);
-          //console.log(ingredients);
-        }
+        // if (captureInfo) {
+        //   console.log(captureInfo);
+        //   res.captureInfo = captureInfo;
+        // }
 
-        const producer = selectProducer(activeManifest);
-        console.log("producer: ", producer);
-        if (producer) res.producer = producer.name;
+        // if (manifestStore.validationStatus.length > 0) {
+        //   res.validationIssues = true;
+        // }
+        // if (activeManifest.ingredients.length > 0) {
+        //   res.ingredients = getIngredients(activeManifest.ingredients);
+        //   //console.log(ingredients);
+        // }
 
-        dispatch(c2paResultsSet(res));
+        // const producer = selectProducer(activeManifest);
+        // console.log("producer: ", producer);
+        // if (producer) res.producer = producer.name;
+
+        //dispatch(c2paResultsSet(res));
       } else {
         console.log("no active manifest");
       }
     } else {
-      dispatch(c2paResultsSet({ c2paInfo: false }));
+      dispatch(c2paResultSet(null));
     }
     dispatch(c2paLoadingSet(false));
   } catch (err) {

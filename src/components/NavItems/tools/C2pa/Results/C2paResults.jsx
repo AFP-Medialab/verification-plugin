@@ -9,17 +9,35 @@ import {
   Stack,
   Typography,
   IconButton,
+  Button,
 } from "@mui/material";
 
 import { Close } from "@mui/icons-material";
 
 const C2paResults = (props) => {
+  //console.log("manifest: ", props.result);
+  const currentImageId = props.currentImageId;
+  console.log("currentImageId", currentImageId);
+  console.log("all results: ", props.result);
   const result = props.result;
-  const img = props.image;
-  console.log("results", result);
+  //
+  console.log("readable results: ", result);
+  const img = result[currentImageId].url;
+  const parent = result[currentImageId].parent;
+  const manifestData = result[currentImageId].manifestData;
+  //console.log("results", result);
+  const isIngredient = props.isIngredient;
 
   const handleClose = () => {
     props.handleClose();
+  };
+
+  const onIngredientClick = (ingredient) => {
+    props.openIngredient(ingredient);
+  };
+
+  const returnToMain = () => {
+    props.returnToMain();
   };
 
   return (
@@ -48,17 +66,25 @@ const C2paResults = (props) => {
           <Card p={1}>
             {/* <CardHeader title={"C2pa Info"}/> */}
             <CardContent>
+              {isIngredient ? (
+                <Box>
+                  <Button onClick={returnToMain}>
+                    {"Return to first image"}
+                  </Button>
+                  <Box m={1} />
+                </Box>
+              ) : null}
               <Typography variant="h5">{"C2pa Info"}</Typography>
               <Box m={1} />
-              {!result.c2paInfo ? (
+              {!manifestData ? (
                 <Alert severity="info">{"No c2pa info for this image"}</Alert>
-              ) : result.validationIssues ? (
+              ) : manifestData.validationIssues ? (
                 <Alert severity="error">
                   {"Content credentials could not be verified for this image"}
                 </Alert>
               ) : (
                 <Stack>
-                  <Typography>{result.title}</Typography>
+                  <Typography>{manifestData.title}</Typography>
                   <Box m={1} />
                   <Box p={1}>
                     {/* <CardContent> */}
@@ -69,10 +95,10 @@ const C2paResults = (props) => {
 
                       <Box p={1}>
                         <Typography>
-                          {"Issuer: " + result.signatureInfo.issuer}
+                          {"Issuer: " + manifestData.signatureInfo.issuer}
                         </Typography>
                         <Typography>
-                          {"Date issued: " + result.signatureInfo.time}
+                          {"Date issued: " + manifestData.signatureInfo.time}
                         </Typography>
                       </Box>
                     </Stack>
@@ -87,9 +113,9 @@ const C2paResults = (props) => {
                     <Stack>
                       <Typography variant="h6">{"Credit"}</Typography>
                       <Box p={1}>
-                        {result.producer ? (
+                        {manifestData.producer ? (
                           <Typography>
-                            {"Produced by: " + result.producer}
+                            {"Produced by: " + manifestData.producer}
                           </Typography>
                         ) : (
                           <Alert severity="info">
@@ -110,21 +136,22 @@ const C2paResults = (props) => {
                         {"Capture Information"}
                       </Typography>
                       <Box p={1}>
-                        {result.captureInfo ? (
+                        {manifestData.captureInfo ? (
                           <>
-                            {result.captureInfo.make ? (
+                            {manifestData.captureInfo.make ? (
                               <Typography>
-                                {"Make: " + result.captureInfo.make}
+                                {"Make: " + manifestData.captureInfo.make}
                               </Typography>
                             ) : null}
-                            {result.captureInfo.model ? (
+                            {manifestData.captureInfo.model ? (
                               <Typography>
-                                {"Model: " + result.captureInfo.model}
+                                {"Model: " + manifestData.captureInfo.model}
                               </Typography>
                             ) : null}
-                            {result.captureInfo.dateTime ? (
+                            {manifestData.captureInfo.dateTime ? (
                               <Typography>
-                                {"Capture date: " + result.captureInfo.dateTime}
+                                {"Capture date: " +
+                                  manifestData.captureInfo.dateTime}
                               </Typography>
                             ) : null}
                           </>
@@ -146,12 +173,12 @@ const C2paResults = (props) => {
                       <Typography variant="h6">{"Process"}</Typography>
 
                       <Box p={1}>
-                        {result.editsAndActivity ? (
+                        {manifestData.editsAndActivity ? (
                           <>
                             <Typography fontSize={18}>{"Edits"}</Typography>
                             <Box m={1} />
                             <Box paddingLeft={2}>
-                              {result.editsAndActivity.map((obj, key) => {
+                              {manifestData.editsAndActivity.map((obj, key) => {
                                 return (
                                   <Typography key={key}>
                                     {obj.label + ": " + obj.description}
@@ -166,29 +193,38 @@ const C2paResults = (props) => {
                       </Box>
 
                       <Box p={1}>
-                        {result.ingredients ? (
+                        {manifestData.children ? (
                           <>
                             <Typography fontSize={18}>
                               {"Ingredients"}
                             </Typography>
                             <Box m={1} />
-                            {result.ingredients.map((obj, key) => {
-                              return (
-                                <Box key={key} p={1}>
-                                  <img
-                                    src={obj.url}
-                                    style={{
-                                      maxWidth: "150px",
-                                      maxHeight: "60vh",
-                                      borderRadius: "10px",
-                                    }}
-                                  />
-                                  <Typography fontSize={12}>
-                                    {obj.title}
-                                  </Typography>
-                                </Box>
-                              );
-                            })}
+                            <Grid
+                              container
+                              direction="row"
+                              justifyContent="flex-start"
+                            >
+                              {manifestData.children.map((obj, key) => {
+                                return (
+                                  <Grid element key={key} p={1}>
+                                    <img
+                                      src={result[obj].url}
+                                      style={{
+                                        maxWidth: "150px",
+                                        maxHeight: "60vh",
+                                        borderRadius: "10px",
+                                      }}
+                                      onClick={() => {
+                                        onIngredientClick(obj);
+                                      }}
+                                    />
+                                    <Typography fontSize={12}>
+                                      {obj.title}
+                                    </Typography>
+                                  </Grid>
+                                );
+                              })}
+                            </Grid>
                           </>
                         ) : (
                           <></>

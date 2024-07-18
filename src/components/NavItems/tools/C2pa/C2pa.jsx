@@ -3,15 +3,26 @@ import HeaderTool from "components/Shared/HeaderTool/HeaderTool";
 import useMyStyles from "components/Shared/MaterialUiStyles/useMyStyles";
 import StringFileUploadField from "components/Shared/StringFileUploadField";
 import { useEffect, useState } from "react";
-import getC2paData from "./Hooks/useGetC2paData";
+import getC2paData, { readManifest } from "./Hooks/useGetC2paData";
 import { useDispatch, useSelector } from "react-redux";
 import C2paResults from "./Results/C2paResults";
-import { c2paStateCleaned } from "redux/reducers/tools/c2paReducer";
+import {
+  c2paCurrentImageIdSet,
+  c2paStateCleaned,
+} from "redux/reducers/tools/c2paReducer";
 
 const C2paData = () => {
   const isLoading = useSelector((state) => state.c2pa.loading);
-  const results = useSelector((state) => state.c2pa.results);
+  const [isIngredient, setIsIngredient] = useState(false);
+  const result = useSelector((state) => state.c2pa.result);
+  const currentImageId = useSelector((state) => state.c2pa.currentImageId);
+  const mainImageId = useSelector((state) => state.c2pa.mainImageId);
   const url = useSelector((state) => state.c2pa.url);
+  const [displayResult, setDisplayResult] = useState();
+  const [displayUrl, setDisplayUrl] = useState();
+  const currentManifest = useSelector((state) => state.c2pa.currentManifest);
+
+  const ingredientResult = useSelector((state) => state.c2pa.ingredientResult);
 
   const [input, setInput] = useState("");
   const [imageFile, setImageFile] = useState(undefined);
@@ -36,9 +47,27 @@ const C2paData = () => {
     }
   };
 
+  const openIngredient = (ingredientId) => {
+    //const ingredientResult = readManifest(ingredient.manifest);
+
+    // dispatch(c2paIngredientResultsCleaned());
+    // dispatch(c2paIngredientResultsSet({result: ingredient.manifest, url: ingredient.url}));
+    //dispatch(c2paCurrentManifestSet({result: ingredient.manifest, url: ingredient.url}));
+    //setDisplayUrl(ingredient.url);
+    dispatch(c2paCurrentImageIdSet(ingredientId));
+    setIsIngredient(true);
+  };
+
   const handleClose = () => {
     setImageFile(undefined);
+    setIsIngredient(false);
     dispatch(c2paStateCleaned());
+  };
+
+  const returnToMain = () => {
+    // dispatch(c2paCurrentManifestSet({result: result, url: url}));
+    dispatch(c2paCurrentImageIdSet(mainImageId));
+    setIsIngredient(false);
   };
 
   return (
@@ -85,8 +114,15 @@ const C2paData = () => {
         )}
       </Card>
       <Box m={3} />
-      {results && (
-        <C2paResults result={results} image={url} handleClose={handleClose} />
+      {result && (
+        <C2paResults
+          result={result}
+          currentImageId={currentImageId}
+          handleClose={handleClose}
+          openIngredient={openIngredient}
+          isIngredient={isIngredient}
+          returnToMain={returnToMain}
+        />
       )}
     </Box>
   );
