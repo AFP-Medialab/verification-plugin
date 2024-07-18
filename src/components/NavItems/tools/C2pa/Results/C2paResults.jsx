@@ -24,8 +24,14 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { c2paCurrentImageIdSet } from "redux/reducers/tools/c2paReducer";
 
-const C2paResults = (props) => {
-  //console.log("manifest: ", props.result);
+/**
+ *
+ * @param result {Object} Object containing the parsed c2pa information for this image
+ * @param handleClose {function} Closes the result
+ * @returns {React.JSX.Element}
+ */
+
+const C2paResults = (props = { result, handleClose }) => {
   const currentImageId = useSelector((state) => state.c2pa.currentImageId);
   const mainImageId = useSelector((state) => state.c2pa.mainImageId);
   const validationIssues = useSelector((state) => state.c2pa.validationIssues);

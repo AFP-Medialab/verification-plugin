@@ -609,7 +609,7 @@ const about = new Tool(
 
 const c2paData = new Tool(
   "navbar_c2pa",
-  "",
+  "navbar_c2pa_description",
   c2paSvgIcon,
   TOOLS_CATEGORIES.IMAGE,
   null,

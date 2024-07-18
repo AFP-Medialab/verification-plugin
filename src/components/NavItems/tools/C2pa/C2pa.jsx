@@ -31,7 +31,6 @@ const C2paData = () => {
 
   const handleClose = () => {
     setImageFile(undefined);
-    setIsIngredient(false);
     dispatch(c2paStateCleaned());
   };
 

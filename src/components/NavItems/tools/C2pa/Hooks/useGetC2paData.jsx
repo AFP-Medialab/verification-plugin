@@ -4,16 +4,10 @@ import {
   c2paLoadingSet,
   c2paMainImageIdSet,
   c2paResultSet,
-  c2paStateCleaned,
-  c2paUrlSet,
   c2paValidationIssuesSet,
 } from "redux/reducers/tools/c2paReducer";
-import { getIn } from "yup";
-//import wasmSrc from "./public/c2paAssets/toolkit_bg.wasm"
-//import workerSrc from "./c2paAssets/c2pa_worker_min.js";
 
 const exifData = (assertions) => {
-  console.log("assertions: ", assertions);
   let captureInfo = null;
 
   for (let i = 0; i < assertions.length; i++) {
@@ -34,26 +28,25 @@ const exifData = (assertions) => {
   return captureInfo;
 };
 
-const getIngredients = (ingredients) => {
-  let ingredientInfo = [];
-  for (let i = 0; i < ingredients.length; i++) {
-    let thumbnail = ingredients[i].thumbnail;
-    let url = thumbnail.getUrl();
-    console.log("url: ", url.url);
-    let ingredientManifest = ingredients[i].manifest
-      ? ingredients[i].manifest
-      : null;
-    ingredientInfo.push({
-      title: ingredients[i].title,
-      url: url.url,
-      manifest: ingredientManifest,
-    });
-  }
-  return ingredientInfo;
-};
+// const getIngredients = (ingredients) => {
+//   let ingredientInfo = [];
+//   for (let i = 0; i < ingredients.length; i++) {
+//     let thumbnail = ingredients[i].thumbnail;
+//     let url = thumbnail.getUrl();
+//     console.log("url: ", url.url);
+//     let ingredientManifest = ingredients[i].manifest
+//       ? ingredients[i].manifest
+//       : null;
+//     ingredientInfo.push({
+//       title: ingredients[i].title,
+//       url: url.url,
+//       manifest: ingredientManifest,
+//     });
+//   }
+//   return ingredientInfo;
+// };
 
 export async function readManifest(manifest, parent, result, url, depth) {
-  console.log("url: ", url);
   const res = {
     url: url,
     parent: parent,
@@ -82,7 +75,6 @@ export async function readManifest(manifest, parent, result, url, depth) {
       for (let i = 0; i < manifest.ingredients.length; i++) {
         let thumbnail = manifest.ingredients[i].thumbnail;
         let ingredientUrl = thumbnail.getUrl();
-        //console.log("url: ", url.url);
         let ingredientId;
         if (depth < 5 && manifest.ingredients[i].manifest) {
           let { id, data } = await readManifest(
@@ -102,12 +94,10 @@ export async function readManifest(manifest, parent, result, url, depth) {
         manifestData.children = children;
       }
     }
-    //res.ingredients = getIngredients(manifest.ingredients);
 
     const producer = selectProducer(manifest);
     if (producer) manifestData.producer = producer.name;
 
-    console.log(manifestData);
     res.manifestData = manifestData;
 
     result[manifestId] = res;
@@ -130,7 +120,6 @@ async function getC2paData(image, dispatch) {
 
   try {
     const { manifestStore } = await c2pa.read(image);
-    console.log("manifestStore", manifestStore);
 
     if (manifestStore) {
       const activeManifest = manifestStore.activeManifest
@@ -143,8 +132,6 @@ async function getC2paData(image, dispatch) {
         dispatch(c2paMainImageIdSet("photo"));
         dispatch(c2paCurrentImageIdSet("photo"));
       } else if (activeManifest) {
-        console.log("active: ", activeManifest);
-
         const { id, data } = await readManifest(
           activeManifest,
           null,
@@ -152,11 +139,9 @@ async function getC2paData(image, dispatch) {
           url,
           0,
         );
-        console.log("res", data);
         dispatch(c2paResultSet(data));
         dispatch(c2paCurrentImageIdSet(id));
         dispatch(c2paMainImageIdSet(id));
-        console.log("dispatched");
         // const res = {
         //   c2paInfo: true,
         //   title: activeManifest.title,
