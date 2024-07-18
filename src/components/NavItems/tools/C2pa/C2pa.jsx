@@ -13,16 +13,7 @@ import {
 
 const C2paData = () => {
   const isLoading = useSelector((state) => state.c2pa.loading);
-  const [isIngredient, setIsIngredient] = useState(false);
   const result = useSelector((state) => state.c2pa.result);
-  const currentImageId = useSelector((state) => state.c2pa.currentImageId);
-  const mainImageId = useSelector((state) => state.c2pa.mainImageId);
-  const url = useSelector((state) => state.c2pa.url);
-  const [displayResult, setDisplayResult] = useState();
-  const [displayUrl, setDisplayUrl] = useState();
-  const currentManifest = useSelector((state) => state.c2pa.currentManifest);
-
-  const ingredientResult = useSelector((state) => state.c2pa.ingredientResult);
 
   const [input, setInput] = useState("");
   const [imageFile, setImageFile] = useState(undefined);
@@ -31,15 +22,6 @@ const C2paData = () => {
 
   const classes = useMyStyles();
 
-  //   const loadImage = (sampleImage) => {
-
-  //     try {
-  //         const { manifestStore } = await c2pa.read(sampleImage);
-  //         console.log('manifestStore', manifestStore);
-  //       } catch (err) {
-  //         console.error('Error reading image:', err);
-  //       }
-  //   }
   const handleSubmit = () => {
     if (imageFile) {
       dispatch(c2paStateCleaned());
@@ -51,12 +33,6 @@ const C2paData = () => {
     setImageFile(undefined);
     setIsIngredient(false);
     dispatch(c2paStateCleaned());
-  };
-
-  const returnToMain = () => {
-    // dispatch(c2paCurrentManifestSet({result: result, url: url}));
-    dispatch(c2paCurrentImageIdSet(mainImageId));
-    setIsIngredient(false);
   };
 
   return (
@@ -103,13 +79,7 @@ const C2paData = () => {
         )}
       </Card>
       <Box m={3} />
-      {result && (
-        <C2paResults
-          result={result}
-          handleClose={handleClose}
-          returnToMain={returnToMain}
-        />
-      )}
+      {result && <C2paResults result={result} handleClose={handleClose} />}
     </Box>
   );
 };

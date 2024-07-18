@@ -23,6 +23,7 @@ import ForensicIcon from "../components/NavBar/images/SVG/Image/Forensic.svg";
 import OcrIcon from "../components/NavBar/images/SVG/Image/OCR.svg";
 import GifIcon from "../components/NavBar/images/SVG/Image/Gif.svg";
 import GeolocationIcon from "../components/NavBar/images/SVG/Image/Geolocation.svg";
+import C2paIcon from "../components/NavBar/images/SVG/Image/C2pa.svg";
 
 import TwitterSearchIcon from "../components/NavBar/images/SVG/Search/Twitter_search.svg";
 import CovidSearchIcon from "../components/NavBar/images/SVG/Search/Covid19.svg";
@@ -245,8 +246,8 @@ const aboutSvgIcon = (props) => {
   return <SvgIcon component={AboutIcon} inheritViewBox {...props} />;
 };
 
-const c2paIcon = (props) => {
-  return <SvgIcon component={MetadataIcon} inheritViewBox {...props} />;
+const c2paSvgIcon = (props) => {
+  return <SvgIcon component={C2paIcon} inheritViewBox {...props} />;
 };
 
 /**
@@ -609,7 +610,7 @@ const about = new Tool(
 const c2paData = new Tool(
   "navbar_c2pa",
   "",
-  c2paIcon,
+  c2paSvgIcon,
   TOOLS_CATEGORIES.IMAGE,
   null,
   null,
