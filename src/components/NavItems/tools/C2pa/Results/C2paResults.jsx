@@ -37,12 +37,9 @@ const C2paResults = (props = { result, handleClose }) => {
   const validationIssues = useSelector((state) => state.c2pa.validationIssues);
   const result = props.result;
 
-  console.log(result);
-  console.log(currentImageId);
   const img = result[currentImageId].url;
   const parentId = result[currentImageId].parent;
   const manifestData = result[currentImageId].manifestData;
-  //console.log("results", result);
   const isIngredient = props.isIngredient;
 
   const dispatch = useDispatch();
@@ -249,6 +246,7 @@ const C2paResults = (props = { result, handleClose }) => {
                   <Button
                     onClick={() => setImage(parentId)}
                     startIcon={<KeyboardArrowLeft />}
+                    variant="contained"
                   >
                     {"Previous image"}
                   </Button>
@@ -257,6 +255,7 @@ const C2paResults = (props = { result, handleClose }) => {
                     <Button
                       onClick={() => setImage(mainImageId)}
                       startIcon={<KeyboardDoubleArrowLeft />}
+                      variant="contained"
                     >
                       {"First image"}
                     </Button>
