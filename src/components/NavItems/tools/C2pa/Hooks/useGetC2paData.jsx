@@ -96,7 +96,7 @@ export async function readManifest(manifest, parent, result, url, depth) {
           result = data;
         } else {
           ingredientId = manifest.ingredients[i].instanceId;
-          result[ingredientId] = { url: ingredientUrl, parent: manifestId };
+          result[ingredientId] = { url: ingredientUrl.url, parent: manifestId };
         }
         children.push(ingredientId);
         manifestData.children = children;

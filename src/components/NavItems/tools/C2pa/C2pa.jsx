@@ -117,7 +117,6 @@ const C2paData = () => {
       {result && (
         <C2paResults
           result={result}
-          currentImageId={currentImageId}
           handleClose={handleClose}
           openIngredient={openIngredient}
           isIngredient={isIngredient}

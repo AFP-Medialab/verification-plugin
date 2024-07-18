@@ -12,28 +12,39 @@ import {
   Button,
 } from "@mui/material";
 
-import { Close } from "@mui/icons-material";
+import {
+  ArrowLeft,
+  ChevronLeft,
+  Close,
+  FastRewind,
+  FirstPage,
+  KeyboardArrowLeft,
+  KeyboardDoubleArrowLeft,
+} from "@mui/icons-material";
+import { useDispatch, useSelector } from "react-redux";
+import { c2paCurrentImageIdSet } from "redux/reducers/tools/c2paReducer";
 
 const C2paResults = (props) => {
   //console.log("manifest: ", props.result);
-  const currentImageId = props.currentImageId;
-  console.log("currentImageId", currentImageId);
-  console.log("all results: ", props.result);
+  const currentImageId = useSelector((state) => state.c2pa.currentImageId);
+  const mainImageId = useSelector((state) => state.c2pa.mainImageId);
   const result = props.result;
-  //
-  console.log("readable results: ", result);
+
   const img = result[currentImageId].url;
-  const parent = result[currentImageId].parent;
+  const parentId = result[currentImageId].parent;
   const manifestData = result[currentImageId].manifestData;
   //console.log("results", result);
   const isIngredient = props.isIngredient;
+
+  const dispatch = useDispatch();
 
   const handleClose = () => {
     props.handleClose();
   };
 
-  const onIngredientClick = (ingredient) => {
-    props.openIngredient(ingredient);
+  const setImage = (ingredientId) => {
+    //props.openIngredient(ingredient);
+    dispatch(c2paCurrentImageIdSet(ingredientId));
   };
 
   const returnToMain = () => {
@@ -66,14 +77,6 @@ const C2paResults = (props) => {
           <Card p={1}>
             {/* <CardHeader title={"C2pa Info"}/> */}
             <CardContent>
-              {isIngredient ? (
-                <Box>
-                  <Button onClick={returnToMain}>
-                    {"Return to first image"}
-                  </Button>
-                  <Box m={1} />
-                </Box>
-              ) : null}
               <Typography variant="h5">{"C2pa Info"}</Typography>
               <Box m={1} />
               {!manifestData ? (
@@ -209,9 +212,10 @@ const C2paResults = (props) => {
                                         maxWidth: "150px",
                                         maxHeight: "60vh",
                                         borderRadius: "10px",
+                                        cursor: "pointer",
                                       }}
                                       onClick={() => {
-                                        onIngredientClick(obj);
+                                        setImage(obj);
                                       }}
                                     />
                                     {/* <Typography fontSize={12}>
@@ -231,6 +235,25 @@ const C2paResults = (props) => {
                   </Box>
                 </Stack>
               )}
+              {parentId ? (
+                <Box maxWidth="fit-content" marginInline="auto">
+                  <Button
+                    onClick={() => setImage(parentId)}
+                    startIcon={<KeyboardArrowLeft />}
+                  >
+                    {"Previous image"}
+                  </Button>
+                  <Box m={0.5} />
+                  {parentId !== mainImageId ? (
+                    <Button
+                      onClick={() => setImage(mainImageId)}
+                      startIcon={<KeyboardDoubleArrowLeft />}
+                    >
+                      {"First image"}
+                    </Button>
+                  ) : null}
+                </Box>
+              ) : null}
             </CardContent>
           </Card>
         </Grid>
