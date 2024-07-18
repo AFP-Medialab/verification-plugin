@@ -47,17 +47,6 @@ const C2paData = () => {
     }
   };
 
-  const openIngredient = (ingredientId) => {
-    //const ingredientResult = readManifest(ingredient.manifest);
-
-    // dispatch(c2paIngredientResultsCleaned());
-    // dispatch(c2paIngredientResultsSet({result: ingredient.manifest, url: ingredient.url}));
-    //dispatch(c2paCurrentManifestSet({result: ingredient.manifest, url: ingredient.url}));
-    //setDisplayUrl(ingredient.url);
-    dispatch(c2paCurrentImageIdSet(ingredientId));
-    setIsIngredient(true);
-  };
-
   const handleClose = () => {
     setImageFile(undefined);
     setIsIngredient(false);
@@ -118,8 +107,6 @@ const C2paData = () => {
         <C2paResults
           result={result}
           handleClose={handleClose}
-          openIngredient={openIngredient}
-          isIngredient={isIngredient}
           returnToMain={returnToMain}
         />
       )}

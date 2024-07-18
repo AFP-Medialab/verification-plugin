@@ -33,6 +33,7 @@ const c2paSlice = createSlice({
       state.result = null;
       state.url = null;
       state.currentManifest = null;
+      state.validationIssues = false;
     },
     c2paIngredientResultCleaned(state, action) {
       state.ingredientResult = null;

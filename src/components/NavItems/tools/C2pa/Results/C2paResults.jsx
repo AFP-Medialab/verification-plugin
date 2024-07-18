@@ -28,8 +28,11 @@ const C2paResults = (props) => {
   //console.log("manifest: ", props.result);
   const currentImageId = useSelector((state) => state.c2pa.currentImageId);
   const mainImageId = useSelector((state) => state.c2pa.mainImageId);
+  const validationIssues = useSelector((state) => state.c2pa.validationIssues);
   const result = props.result;
 
+  console.log(result);
+  console.log(currentImageId);
   const img = result[currentImageId].url;
   const parentId = result[currentImageId].parent;
   const manifestData = result[currentImageId].manifestData;
@@ -79,12 +82,12 @@ const C2paResults = (props) => {
             <CardContent>
               <Typography variant="h5">{"C2pa Info"}</Typography>
               <Box m={1} />
-              {!manifestData ? (
-                <Alert severity="info">{"No c2pa info for this image"}</Alert>
-              ) : manifestData.validationIssues ? (
+              {validationIssues ? (
                 <Alert severity="error">
                   {"Content credentials could not be verified for this image"}
                 </Alert>
+              ) : !manifestData ? (
+                <Alert severity="info">{"No c2pa info for this image"}</Alert>
               ) : (
                 <Stack>
                   <Typography>{manifestData.title}</Typography>

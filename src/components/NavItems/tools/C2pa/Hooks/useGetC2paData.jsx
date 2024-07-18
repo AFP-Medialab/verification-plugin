@@ -126,7 +126,7 @@ async function getC2paData(image, dispatch) {
 
   dispatch(c2paLoadingSet(true));
   const url = URL.createObjectURL(image);
-  dispatch(c2paUrlSet(url));
+  // dispatch(c2paUrlSet(url));
 
   try {
     const { manifestStore } = await c2pa.read(image);
@@ -137,10 +137,12 @@ async function getC2paData(image, dispatch) {
         ? manifestStore.activeManifest
         : null;
 
-      if (manifestStore.validationStatus.length > 0)
+      if (manifestStore.validationStatus.length > 0) {
         dispatch(c2paValidationIssuesSet(true));
-
-      if (activeManifest) {
+        dispatch(c2paResultSet({ photo: { url: url } }));
+        dispatch(c2paMainImageIdSet("photo"));
+        dispatch(c2paCurrentImageIdSet("photo"));
+      } else if (activeManifest) {
         console.log("active: ", activeManifest);
 
         const { id, data } = await readManifest(
