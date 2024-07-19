@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   resetSyntheticImageDetectionImage,
@@ -30,8 +30,13 @@ import { setError } from "redux/reducers/errorReducer";
 import StringFileUploadField from "../../../Shared/StringFileUploadField";
 import { preprocessFileUpload } from "../../../Shared/Utils/fileUtils";
 import { syntheticImageDetectionAlgorithms } from "./SyntheticImageDetectionAlgorithms";
+import { useLocation } from "react-router-dom";
 
 const SyntheticImageDetection = () => {
+  const location = useLocation();
+  const urlParams = new URLSearchParams(location.search);
+  const urlParam = urlParams.get("url");
+
   const classes = useMyStyles();
   const keyword = i18nLoadNamespace(
     "components/NavItems/tools/SyntheticImageDetection",
@@ -236,14 +241,28 @@ const SyntheticImageDetection = () => {
     );
   };
 
-  const handleSubmit = async () => {
+  /**
+   *
+   * @param url {string}
+   * @returns {Promise<void>}
+   */
+  const handleSubmit = async (url) => {
     dispatch(resetSyntheticImageDetectionImage());
-
+    const urlInput = url ? url : input;
     const type =
-      input && typeof input === "string" ? IMAGE_FROM.URL : IMAGE_FROM.UPLOAD;
+      urlInput && typeof urlInput === "string"
+        ? IMAGE_FROM.URL
+        : IMAGE_FROM.UPLOAD;
 
-    await getSyntheticImageScores(input, true, dispatch, type, imageFile);
+    await getSyntheticImageScores(urlInput, true, dispatch, type, imageFile);
   };
+
+  useEffect(() => {
+    if (urlParam) {
+      setInput(urlParam);
+      handleSubmit(urlParam);
+    }
+  }, []);
 
   return (
     <Box>
@@ -297,6 +316,7 @@ const SyntheticImageDetection = () => {
               fileInputTypesAccepted={"image/*"}
               handleCloseSelectedFile={handleClose}
               preprocessLocalFile={preprocessImage}
+              isParentLoading={isLoading}
             />
           </form>
 

@@ -1,6 +1,6 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
-import { DataGrid, useGridApiRef } from "@mui/x-data-grid";
+import { DataGrid, GridActionsCellItem, useGridApiRef } from "@mui/x-data-grid";
 import Link from "@mui/material/Link";
 import { Chip, Grid, Stack, Typography } from "@mui/material";
 import { i18nLoadNamespace } from "../../../Shared/Languages/i18nLoadNamespace";
@@ -9,6 +9,7 @@ import {
   getAlertLabel,
   getPercentageColorCode,
 } from "./syntheticImageDetectionResults";
+import { OpenInNew } from "@mui/icons-material";
 
 const NddDataGrid = ({ rows }) => {
   const keyword = i18nLoadNamespace(
@@ -100,7 +101,7 @@ const NddDataGrid = ({ rows }) => {
     }
 
     return (
-      <Typography variant={"h6"} sx={{ fontWeight: "bold" }}>
+      <Typography variant="body1">
         {keyword(params.row.detectionResults[index].name)}
       </Typography>
     );
@@ -122,8 +123,8 @@ const NddDataGrid = ({ rows }) => {
         field: `detectionName${i + 1}`,
         headerName: `Algorithm #${i + 1}`,
         type: "string",
-        // minWidth: 300,
-        flex: 1,
+        minWidth: 120,
+        // flex: 1,
         renderCell: (params) => renderAlgorithmName(params, i),
       });
 
@@ -131,8 +132,8 @@ const NddDataGrid = ({ rows }) => {
         field: `detectionRate${i + 1}`,
         headerName: `Score #${i + 1}`,
         type: "number",
-        // minWidth: 300,
-        flex: 1,
+        minWidth: 180,
+        // flex: 1,
         renderCell: (params) => detectionRateStack(params.row, i),
       });
     }
@@ -174,8 +175,27 @@ const NddDataGrid = ({ rows }) => {
     {
       field: "imageUrls",
       headerName: "Image URLs",
-      flex: 1,
+      // minWidth: 100,
       renderCell: (params) => imageUrlsCell(params.value),
+    },
+    {
+      field: "actions",
+      type: "actions",
+      width: 80,
+      getActions: (params) => {
+        console.log(params);
+        const url = new URL(
+          window.location.href + "?url=" + params.row.archiveUrl,
+        );
+        return [
+          // eslint-disable-next-line react/jsx-key
+          <GridActionsCellItem
+            icon={<OpenInNew />}
+            onClick={() => window.open(url, "_blank", "noopener noreferrer")}
+            label="Open Analysis"
+          />,
+        ];
+      },
     },
   ];
 
@@ -200,11 +220,13 @@ const NddDataGrid = ({ rows }) => {
             },
           },
         }}
+        autosizeOnMount={true}
         autosizeOptions={{
           includeHeaders: true,
           includeOutliers: true,
-          columns: ["image", "detectionRate1"],
+          // columns: ["image", "detectionRate1"],
           expand: true,
+          outliersFactor: 20,
         }}
         pageSizeOptions={[5]}
         disableRowSelectionOnClick

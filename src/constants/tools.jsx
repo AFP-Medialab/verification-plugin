@@ -415,7 +415,7 @@ const imageGif = new Tool(
   <Footer type={FOOTER_TYPES.BORELLI_AFP} />,
 );
 
-const imageSyntheticDetection = new Tool(
+export const imageSyntheticDetection = new Tool(
   "navbar_synthetic_image_detection",
   "navbar_synthetic_image_detection_description",
   syntheticImageSvgIcon,

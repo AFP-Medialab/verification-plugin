@@ -255,10 +255,6 @@ const SyntheticImageDetectionResults = ({ results, url, handleClose, nd }) => {
     return rows;
   };
 
-  if (nd) {
-    console.log(getNddRows(nd.similar_media));
-  }
-
   return (
     <Card sx={{ width: "100%" }}>
       <CardHeader
