@@ -23,6 +23,7 @@ import {
 } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
 import { c2paCurrentImageIdSet } from "redux/reducers/tools/c2paReducer";
+import moment from "moment";
 
 /**
  *
@@ -40,7 +41,6 @@ const C2paResults = (props = { result, handleClose }) => {
   const img = result[currentImageId].url;
   const parentId = result[currentImageId].parent;
   const manifestData = result[currentImageId].manifestData;
-  const isIngredient = props.isIngredient;
 
   const dispatch = useDispatch();
 
@@ -49,7 +49,6 @@ const C2paResults = (props = { result, handleClose }) => {
   };
 
   const setImage = (ingredientId) => {
-    //props.openIngredient(ingredient);
     dispatch(c2paCurrentImageIdSet(ingredientId));
   };
 
@@ -107,7 +106,10 @@ const C2paResults = (props = { result, handleClose }) => {
                           {"Issuer: " + manifestData.signatureInfo.issuer}
                         </Typography>
                         <Typography>
-                          {"Date issued: " + manifestData.signatureInfo.time}
+                          {"Date issued: " +
+                            moment(manifestData.signatureInfo.time).format(
+                              "D.MM.yyyy",
+                            )}
                         </Typography>
                       </Box>
                     </Stack>
@@ -160,7 +162,9 @@ const C2paResults = (props = { result, handleClose }) => {
                             {manifestData.captureInfo.dateTime ? (
                               <Typography>
                                 {"Capture date: " +
-                                  manifestData.captureInfo.dateTime}
+                                  moment(
+                                    manifestData.captureInfo.dateTime,
+                                  ).format("D.MM.yyyy")}
                               </Typography>
                             ) : null}
                           </>
@@ -178,65 +182,73 @@ const C2paResults = (props = { result, handleClose }) => {
 
                   <Box p={1}>
                     {/* <CardContent> */}
-                    <Stack>
-                      <Typography variant="h6">{"Process"}</Typography>
+                    {manifestData.editsAndActivity || manifestData.children ? (
+                      <Stack>
+                        <Typography variant="h6">{"Process"}</Typography>
 
-                      <Box p={1}>
-                        {manifestData.editsAndActivity ? (
-                          <>
-                            <Typography fontSize={18}>{"Edits"}</Typography>
-                            <Box m={1} />
-                            <Box paddingLeft={2}>
-                              {manifestData.editsAndActivity.map((obj, key) => {
-                                return (
-                                  <Typography key={key}>
-                                    {obj.label + ": " + obj.description}
-                                  </Typography>
-                                );
-                              })}
-                            </Box>
-                          </>
-                        ) : (
-                          <></>
-                        )}
-                      </Box>
+                        <Box p={1}>
+                          {manifestData.editsAndActivity ? (
+                            <>
+                              <Typography fontSize={18}>{"Edits"}</Typography>
+                              <Box m={1} />
+                              <Box paddingLeft={2}>
+                                {manifestData.editsAndActivity.map(
+                                  (obj, key) => {
+                                    return (
+                                      <Typography key={key}>
+                                        {obj.label + ": " + obj.description}
+                                      </Typography>
+                                    );
+                                  },
+                                )}
+                              </Box>
+                            </>
+                          ) : (
+                            <></>
+                          )}
+                        </Box>
 
-                      <Box p={1}>
-                        {manifestData.children ? (
-                          <>
-                            <Typography fontSize={18}>
-                              {"Ingredients"}
-                            </Typography>
-                            <Box m={1} />
-                            <Stack direction="row" spacing={1} p={1}>
-                              {manifestData.children.map((obj, key) => {
-                                return (
-                                  <Box key={key}>
-                                    <img
-                                      src={result[obj].url}
-                                      style={{
-                                        maxWidth: "150px",
-                                        maxHeight: "60vh",
-                                        borderRadius: "10px",
-                                        cursor: "pointer",
-                                      }}
-                                      onClick={() => {
-                                        setImage(obj);
-                                      }}
-                                    />
-                                    {/* <Typography fontSize={12}>
+                        <Box p={1}>
+                          {manifestData.children ? (
+                            <>
+                              <Typography fontSize={18}>
+                                {"Ingredients"}
+                              </Typography>
+                              <Box m={1} />
+                              <Stack direction="row" spacing={1} p={1}>
+                                {manifestData.children.map((obj, key) => {
+                                  return (
+                                    <Box key={key}>
+                                      <img
+                                        src={result[obj].url}
+                                        style={{
+                                          maxWidth: "150px",
+                                          maxHeight: "60vh",
+                                          borderRadius: "10px",
+                                          cursor: "pointer",
+                                        }}
+                                        onClick={() => {
+                                          setImage(obj);
+                                        }}
+                                      />
+                                      {/* <Typography fontSize={12}>
                                       {obj.title}
                                     </Typography> */}
-                                  </Box>
-                                );
-                              })}
-                            </Stack>
-                          </>
-                        ) : (
-                          <></>
-                        )}
-                      </Box>
-                    </Stack>
+                                    </Box>
+                                  );
+                                })}
+                              </Stack>
+                            </>
+                          ) : (
+                            <></>
+                          )}
+                        </Box>
+                      </Stack>
+                    ) : (
+                      <Alert security="info">
+                        {"No process information for this image."}
+                      </Alert>
+                    )}
                     {/* </CardContent> */}
                   </Box>
                 </Stack>
