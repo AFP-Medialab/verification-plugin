@@ -75,7 +75,11 @@ export async function readManifest(manifest, parent, result, url, depth) {
       for (let i = 0; i < manifest.ingredients.length; i++) {
         let thumbnail = manifest.ingredients[i].thumbnail;
         let ingredientUrl = thumbnail.getUrl();
+        let validationIssues = getValidationIssues(
+          manifest.ingredients[i].validationStatus,
+        );
         let ingredientId;
+
         if (depth < 5 && manifest.ingredients[i].manifest) {
           let { id, data } = await readManifest(
             manifest.ingredients[i].manifest,
@@ -86,6 +90,7 @@ export async function readManifest(manifest, parent, result, url, depth) {
           );
           ingredientId = id;
           result = data;
+          result[id].validationIssues = validationIssues;
         } else {
           ingredientId = manifest.ingredients[i].instanceId;
           result[ingredientId] = { url: ingredientUrl.url, parent: manifestId };
@@ -108,7 +113,50 @@ export async function readManifest(manifest, parent, result, url, depth) {
   }
 }
 
+function getValidationIssues(validationStatus) {
+  if (validationStatus.length > 0) {
+    let errorMessages = [];
+    let trustedSourceIssue = false;
+
+    for (let i = 0; i < validationStatus.length; i++) {
+      if (validationStatus[i].code === "signingCredential.untrusted") {
+        trustedSourceIssue = true;
+      }
+      errorMessages.push(validationStatus[i].explanation);
+    }
+    return { trustedSourceIssue, errorMessages };
+  } else {
+    return null;
+  }
+}
+
+async function loadTrustResource(file) {
+  const res = await fetch(`https://contentcredentials.org/trust/${file}`);
+
+  return res.text();
+}
+
+async function getToolkitSettings() {
+  const [trustAnchors, allowedList, trustConfig] = await Promise.all(
+    ["anchors.pem", "allowed.sha256.txt", "store.cfg"].map(loadTrustResource),
+  );
+
+  return {
+    trust: {
+      trustConfig,
+      trustAnchors,
+      allowedList,
+    },
+    verify: {
+      verifyTrust: true,
+    },
+  };
+}
+
 async function getC2paData(image, dispatch) {
+  const settings = await getToolkitSettings();
+  console.log(settings);
+
   const c2pa = await createC2pa({
     wasmSrc: "./c2paAssets/toolkit_bg.wasm",
     workerSrc: "./c2paAssets/c2pa_worker_min.js",
@@ -119,26 +167,28 @@ async function getC2paData(image, dispatch) {
   // dispatch(c2paUrlSet(url));
 
   try {
-    const { manifestStore } = await c2pa.read(image);
+    const { manifestStore } = await c2pa.read(image, {
+      settings: settings,
+    });
 
     if (manifestStore) {
+      console.log(manifestStore);
+
       const activeManifest = manifestStore.activeManifest
         ? manifestStore.activeManifest
         : null;
 
+      let validationIssues = null;
       if (manifestStore.validationStatus.length > 0) {
-        dispatch(c2paValidationIssuesSet(true));
-        dispatch(c2paResultSet({ photo: { url: url } }));
-        dispatch(c2paMainImageIdSet("photo"));
-        dispatch(c2paCurrentImageIdSet("photo"));
-      } else if (activeManifest) {
-        const { id, data } = await readManifest(
-          activeManifest,
-          null,
-          {},
-          url,
-          0,
-        );
+        validationIssues = getValidationIssues(manifestStore.validationStatus);
+        // dispatch(c2paValidationIssuesSet(true));
+        // dispatch(c2paResultSet({ photo: { url: url } }));
+        // dispatch(c2paMainImageIdSet("photo"));
+        // dispatch(c2paCurrentImageIdSet("photo"));
+      }
+      if (activeManifest) {
+        let { id, data } = await readManifest(activeManifest, null, {}, url, 0);
+        data[id].validationIssues = validationIssues;
         dispatch(c2paResultSet(data));
         dispatch(c2paCurrentImageIdSet(id));
         dispatch(c2paMainImageIdSet(id));
