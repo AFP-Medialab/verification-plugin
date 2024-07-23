@@ -93,6 +93,8 @@ const SyntheticImageDetectionResults = ({ results, url, handleClose, nd }) => {
     "components/NavItems/tools/SyntheticImageDetection",
   );
 
+  const role = useSelector((state) => state.userSession.user.roles);
+
   class SyntheticImageDetectionAlgorithmResult extends SyntheticImageDetectionAlgorithm {
     /**
      *
@@ -128,6 +130,13 @@ const SyntheticImageDetectionResults = ({ results, url, handleClose, nd }) => {
     let res = [];
 
     for (const algorithm of syntheticImageDetectionAlgorithms) {
+      if (
+        !role.includes(algorithm.roleNeeded) &&
+        algorithm.roleNeeded.length > 0
+      ) {
+        continue;
+      }
+
       const algorithmReport = results[algorithm.apiServiceName + "_report"];
 
       if (algorithmReport) {
@@ -239,7 +248,13 @@ const SyntheticImageDetectionResults = ({ results, url, handleClose, nd }) => {
           false,
         );
 
-        detectionResults.push(d);
+        // Display iff the user has the permissions to see the content
+        if (role.includes(d.roleNeeded) || !d.roleNeeded)
+          detectionResults.push(d);
+      }
+
+      if (detectionResults.length === 0) {
+        continue;
       }
 
       rows.push(
