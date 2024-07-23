@@ -163,6 +163,110 @@ export const setDbkfVideoMatchDetails = (
   };
 };
 
+export const setHpDetails = (hpResult, hpLoading, hpDone, hpFail) => {
+  return {
+    type: "SET_HP_DETAILS",
+    payload: {
+      hpResult: hpResult,
+      hpLoading: hpLoading,
+      hpDone: hpDone,
+      hpFail: hpFail,
+    },
+  };
+};
+
+export const setNewsTopicDetails = (ntResult, ntLoading, ntDone, ntFail) => {
+  return {
+    type: "SET_NEWS_TOPIC_DETAILS",
+    payload: {
+      newsFramingResult: ntResult,
+      newsFramingLoading: ntLoading,
+      newsFramingDone: ntDone,
+      newsFramingFail: ntFail,
+    },
+  };
+};
+
+export const setNewsGenreDetails = (ngResult, ngLoading, ngDone, ngFail) => {
+  return {
+    type: "SET_NEWS_GENRE_DETAILS",
+    payload: {
+      newsGenreResult: ngResult,
+      newsGenreLoading: ngLoading,
+      newsGenreDone: ngDone,
+      newsGenreFail: ngFail,
+    },
+  };
+};
+
+export const setPersuasionDetails = (
+  perResult,
+  perLoading,
+  perDone,
+  perFail,
+) => {
+  return {
+    type: "SET_PERSUASION_DETAILS",
+    payload: {
+      persuasionResult: perResult,
+      persuasionLoading: perLoading,
+      persuasionDone: perDone,
+      persuasionFail: perFail,
+    },
+  };
+};
+
+export const setSubjectivityDetails = (
+  subResult,
+  subLoading,
+  subDone,
+  subFail,
+) => {
+  return {
+    type: "SET_SUBJECTIVITY_DETAILS",
+    payload: {
+      subjectivityResult: subResult,
+      subjectivityLoading: subLoading,
+      subjectivityDone: subDone,
+      subjectivityFail: subFail,
+    },
+  };
+};
+
+export const setPrevFactChecksDetails = (
+  pfcResult,
+  pfcLoading,
+  pfcDone,
+  pfcFail,
+) => {
+  return {
+    type: "SET_PREV_FACT_CHECKS_DETAILS",
+    payload: {
+      prevFactChecksResult: pfcResult,
+      prevFactChecksLoading: pfcLoading,
+      prevFactChecksDone: pfcDone,
+      prevFactChecksFail: pfcFail,
+    },
+  };
+};
+
+export const setMachineGeneratedTextDetails = (
+  mgtResult,
+  mgtLoading,
+  mgtDone,
+  mgtFail,
+) => {
+  return {
+    type: "SET_MACHINE_GENERATED_TEXT_DETAILS",
+    payload: {
+      machineGeneratedTextResult: mgtResult,
+      machineGeneratedTextLoading: mgtLoading,
+      machineGeneratedTextDone: mgtDone,
+      machineGeneratedTextFail: mgtFail,
+    },
+  };
+};
+
 export const setNeDetails = (
   neResultCategory,
   neResultCount,
