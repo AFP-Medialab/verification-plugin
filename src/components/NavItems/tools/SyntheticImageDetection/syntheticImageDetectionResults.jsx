@@ -335,8 +335,7 @@ const SyntheticImageDetectionResults = ({ results, url, handleClose, nd }) => {
               <Grid item>
                 <Alert icon={false} severity="error">
                   <Typography variant="body1">
-                    Similar images were detected as synthetic. See detection
-                    details for similar images below.
+                    {keyword("synthetic_image_detection_ndd_info")}
                   </Typography>
                 </Alert>
               </Grid>
@@ -546,19 +545,6 @@ const SyntheticImageDetectionResults = ({ results, url, handleClose, nd }) => {
                                       )}
                                     </Stack>
                                   </Box>
-                                  <Stack>
-                                    {/*<Button*/}
-                                    {/*  href={*/}
-                                    {/*    deepfakeImageDetectionMethodNames(keyword)[*/}
-                                    {/*      item.methodName*/}
-                                    {/*    ].modelCardUrl*/}
-                                    {/*  }*/}
-                                    {/*>*/}
-                                    {/*  {keyword(*/}
-                                    {/*    "synthetic_image_detection_model_card",*/}
-                                    {/*  )}*/}
-                                    {/*</Button>*/}
-                                  </Stack>
                                 </Stack>
 
                                 <Box
@@ -615,116 +601,9 @@ const SyntheticImageDetectionResults = ({ results, url, handleClose, nd }) => {
                   <AccordionDetails>
                     <Stack direction={"column"} spacing={4}>
                       <NddDatagrid rows={getNddRows(nd.similar_media)} />
-                      {/*{nd.similar_media.map((similarMedia, key) => (*/}
-                      {/*  <Stack direction="column" key={key} spacing={2}>*/}
-                      {/*    {similarMedia &&*/}
-                      {/*      similarMedia.detections &&*/}
-                      {/*      Object.keys(similarMedia.detections).map(*/}
-                      {/*        (detectionAlgorithm, i) => {*/}
-                      {/*          const detectionPercentageNdImage =*/}
-                      {/*            sanitizeDetectionPercentage(*/}
-                      {/*              similarMedia.detections[*/}
-                      {/*                detectionAlgorithm*/}
-                      {/*              ] * 100,*/}
-                      {/*            );*/}
-                      {/*          return (*/}
-                      {/*            <Stack direction="column" key={i} spacing={2}>*/}
-                      {/*              <Stack*/}
-                      {/*                direction="row"*/}
-                      {/*                alignItems="flex-start"*/}
-                      {/*                justifyContent="space-between"*/}
-                      {/*              >*/}
-                      {/*                <Box>*/}
-                      {/*                  <Typography*/}
-                      {/*                    variant={"h6"}*/}
-                      {/*                    sx={{ fontWeight: "bold" }}*/}
-                      {/*                  >*/}
-                      {/*                    {*/}
-                      {/*                      deepfakeImageDetectionMethodNames(keyword)[*/}
-                      {/*                        detectionAlgorithm*/}
-                      {/*                      ].name*/}
-                      {/*                    }*/}
-                      {/*                  </Typography>*/}
-                      {/*                  <Stack*/}
-                      {/*                    direction={{*/}
-                      {/*                      lg: "row",*/}
-                      {/*                      md: "column",*/}
-                      {/*                    }}*/}
-                      {/*                    spacing={2}*/}
-                      {/*                    alignItems="center"*/}
-                      {/*                  >*/}
-                      {/*                    <Stack direction="row" spacing={1}>*/}
-                      {/*                      <>*/}
-                      {/*                        <Typography>*/}
-                      {/*                          {keyword(*/}
-                      {/*                            "synthetic_image_detection_probability_text",*/}
-                      {/*                          )}{" "}*/}
-                      {/*                        </Typography>*/}
-                      {/*                        <Typography*/}
-                      {/*                          sx={{*/}
-                      {/*                            color: getPercentageColorCode(*/}
-                      {/*                              detectionPercentageNdImage,*/}
-                      {/*                            ),*/}
-                      {/*                          }}*/}
-                      {/*                        >*/}
-                      {/*                          {detectionPercentageNdImage}%*/}
-                      {/*                        </Typography>*/}
-                      {/*                      </>*/}
-                      {/*                    </Stack>*/}
-                      {/*                    <Chip*/}
-                      {/*                      label={getAlertLabel(*/}
-                      {/*                        detectionPercentageNdImage,*/}
-                      {/*                        keyword,*/}
-                      {/*                      )}*/}
-                      {/*                      color={getAlertColor(*/}
-                      {/*                        detectionPercentageNdImage,*/}
-                      {/*                      )}*/}
-                      {/*                    />*/}
-                      {/*                  </Stack>*/}
-                      {/*                </Box>*/}
-                      {/*                <Stack></Stack>*/}
-                      {/*              </Stack>*/}
-                      {/*            </Stack>*/}
-                      {/*          );*/}
-                      {/*        },*/}
-                      {/*      )}*/}
-                      {/*    <Grid*/}
-                      {/*      container*/}
-                      {/*      direction="row"*/}
-                      {/*      justifyContent="flex-start"*/}
-                      {/*      alignItems="center"*/}
-                      {/*      spacing={2}*/}
-                      {/*    >*/}
-                      {/*      <Grid item>*/}
-                      {/*        <Typography>{"Links:"}</Typography>*/}
-                      {/*      </Grid>*/}
-
-                      {/*      {similarMedia.origin_urls &&*/}
-                      {/*        similarMedia.origin_urls.length > 0 &&*/}
-                      {/*        similarMedia.origin_urls.map(*/}
-                      {/*          (originUrl, index) => (*/}
-                      {/*            <Grid item key={index}>*/}
-                      {/*              <Link*/}
-                      {/*                href={originUrl}*/}
-                      {/*                target="_blank"*/}
-                      {/*                rel="noopener noreferrer"*/}
-                      {/*              >*/}
-                      {/*                <Typography>{`#${index + 1}`}</Typography>*/}
-                      {/*              </Link>*/}
-                      {/*            </Grid>*/}
-                      {/*          ),*/}
-                      {/*        )}*/}
-                      {/*    </Grid>*/}
-                      {/*    <Link href={similarMedia.archive_url}>*/}
-                      {/*      <Typography>{"Archive"}</Typography>*/}
-                      {/*    </Link>*/}
-                      {/*    <Divider />*/}
-                      {/*  </Stack>*/}
-                      {/*))}*/}
                     </Stack>
                   </AccordionDetails>
                 </Accordion>
-                {/*</Box>*/}
               </Grid>
             )}
           </Grid>
