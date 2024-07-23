@@ -1,6 +1,6 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
-import { DataGrid, GridActionsCellItem, useGridApiRef } from "@mui/x-data-grid";
+import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
 import Link from "@mui/material/Link";
 import { Chip, Grid, Stack, Typography } from "@mui/material";
 import { i18nLoadNamespace } from "../../../Shared/Languages/i18nLoadNamespace";
@@ -10,33 +10,39 @@ import {
   getPercentageColorCode,
 } from "./syntheticImageDetectionResults";
 import { OpenInNew } from "@mui/icons-material";
+import { useSelector } from "react-redux";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+
+import {
+  arSD,
+  deDE,
+  elGR,
+  enUS,
+  esES,
+  frFR,
+  itIT,
+} from "@mui/x-data-grid/locales";
+
+const languages = {
+  en: enUS,
+  fr: frFR,
+  es: esES,
+  el: elGR,
+  it: itIT,
+  ar: arSD,
+  de: deDE,
+};
 
 const NddDataGrid = ({ rows }) => {
   const keyword = i18nLoadNamespace(
     "components/NavItems/tools/SyntheticImageDetection",
   );
 
-  const apiRef = useGridApiRef();
-  // const [isLoading, setIsLoading] = useState(false);
+  const currentLang = useSelector((state) => state.language);
+  const isCurrentLanguageLeftToRight = currentLang !== "ar";
 
-  // const resizeData = useCallback(() => {
-  //   setIsLoading(true);
-  //
-  //   if (!rows) return;
-  //
-  //   apiRef.current
-  //     .autosizeColumns({
-  //       includeHeaders: true,
-  //       includeOutliers: true,
-  //     })
-  //     .then(() => {
-  //       if (rows) setIsLoading(false);
-  //     });
-  // }, [apiRef, rows]);
-  //
-  // useEffect(() => {
-  //   resizeData();
-  // }, [resizeData]);
+  //Retrieves the localization for the Datagrid
+  const datagridLanguage = languages[currentLang] || languages["en"];
 
   const detectionRateStack = (row, index) => {
     if (!row.detectionResults[index]) return null;
@@ -124,7 +130,7 @@ const NddDataGrid = ({ rows }) => {
         headerName: `Algorithm #${i + 1}`,
         type: "string",
         minWidth: 120,
-        // flex: 1,
+        valueGetter: (value, row) => row?.detectionResults[i]?.name,
         renderCell: (params) => renderAlgorithmName(params, i),
       });
 
@@ -133,7 +139,7 @@ const NddDataGrid = ({ rows }) => {
         headerName: `Score #${i + 1}`,
         type: "number",
         minWidth: 180,
-        // flex: 1,
+        valueGetter: (value, row) => row?.detectionResults[i]?.predictionScore,
         renderCell: (params) => detectionRateStack(params.row, i),
       });
     }
@@ -151,21 +157,14 @@ const NddDataGrid = ({ rows }) => {
       field: "image",
       headerName: "Image",
       minWidth: 150,
-      // flex: 1,
-
-      renderCell: (params) => (
-        <img
-          src={params.value}
-          height={150}
-          // width={"auto"}
-        />
-      ),
+      sortable: false,
+      renderCell: (params) => <img src={params.value} height={150} />,
     },
     ...detectionDetailsRows(),
     {
       field: "archiveUrl",
       headerName: "Archive URL",
-      // width: 150,
+      sortable: false,
       renderCell: (params) => (
         <Link href={params.value} target="_blank">
           {params.value}
@@ -175,15 +174,15 @@ const NddDataGrid = ({ rows }) => {
     {
       field: "imageUrls",
       headerName: "Image URLs",
-      // minWidth: 100,
+      sortable: false,
       renderCell: (params) => imageUrlsCell(params.value),
     },
     {
+      headerName: "Open analysis",
       field: "actions",
       type: "actions",
-      width: 80,
+      width: 120,
       getActions: (params) => {
-        console.log(params);
         const url = new URL(
           window.location.href + "?url=" + params.row.archiveUrl,
         );
@@ -199,39 +198,55 @@ const NddDataGrid = ({ rows }) => {
     },
   ];
 
+  /* This is needed to fix the pagination arrows for RTL languages
+   * See https://mui.com/x/react-data-grid/localization/#rtl-support
+   */
+  const theme = createTheme(
+    {
+      direction: isCurrentLanguageLeftToRight ? "ltr" : "rtl",
+      palette: {
+        primary: {
+          light: "#00926c",
+          main: "#00926c",
+          dark: "#00926c",
+          contrastText: "#fff",
+        },
+      },
+    },
+    datagridLanguage,
+  );
+
   return (
-    <Box
-      sx={{
-        height: "65vh",
-        // minHeight: 500,
-        // width: 500,
-      }}
-    >
-      <DataGrid
-        apiRef={apiRef}
-        // loading={isLoading}
-        getRowHeight={() => "auto"}
-        rows={rows}
-        columns={columns}
-        initialState={{
-          pagination: {
-            paginationModel: {
-              pageSize: 5,
+    <ThemeProvider theme={theme}>
+      <Box
+        dir={isCurrentLanguageLeftToRight ? "ltr" : "rtl"}
+        sx={{
+          height: "65vh",
+        }}
+      >
+        <DataGrid
+          getRowHeight={() => "auto"}
+          rows={rows}
+          columns={columns}
+          initialState={{
+            pagination: {
+              paginationModel: {
+                pageSize: 5,
+              },
             },
-          },
-        }}
-        autosizeOnMount={true}
-        autosizeOptions={{
-          includeHeaders: true,
-          includeOutliers: true,
-          // columns: ["image", "detectionRate1"],
-          expand: true,
-          outliersFactor: 20,
-        }}
-        pageSizeOptions={[5]}
-        disableRowSelectionOnClick
-      />
-    </Box>
+          }}
+          autosizeOnMount={true}
+          autosizeOptions={{
+            includeHeaders: true,
+            includeOutliers: true,
+            expand: true,
+            outliersFactor: 20,
+          }}
+          pageSizeOptions={[5]}
+          disableRowSelectionOnClick
+        />
+      </Box>
+    </ThemeProvider>
   );
 };
 
