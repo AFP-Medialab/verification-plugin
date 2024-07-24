@@ -115,10 +115,10 @@ export default function AssistantTextSpanClassification({
 
   // Classification variable is a map of categories where each one has a list of classified spans, we
   // have to invert that so that we have a list of spans that contains all categories in that span
-  let mergedSpanIndices = mergeSpanIndices(filteredClassification);
+  //let mergedSpanIndices = mergeSpanIndices(filteredClassification);
 
   let categories = {};
-  let countWrapSentences = 0;
+  //let countWrapSentences = 0;
   let output = text;
 
   //function renderOnce(mergedSpanIndices) {
@@ -134,13 +134,13 @@ export default function AssistantTextSpanClassification({
       const techniqueScore = spanInfo.techniques[persuasionTechnique];
 
       // collect category information for highlighted spans
-      countWrapSentences += 1;
+      //countWrapSentences += 1;
       if (categories[persuasionTechnique]) {
         categories[persuasionTechnique].push({
           indices: [spanStart, spandEnd],
           score: techniqueScore,
         });
-        console.log("OLD categories (", countWrapSentences, ")=", categories);
+        //console.log("OLD categories (", countWrapSentences, ")=", categories);
       } else {
         categories[persuasionTechnique] = [
           {
@@ -148,7 +148,7 @@ export default function AssistantTextSpanClassification({
             score: techniqueScore,
           },
         ];
-        console.log("NEW categories (", countWrapSentences, ")=", categories);
+        //console.log("NEW categories (", countWrapSentences, ")=", categories);
       }
 
       let techniqueBackgroundRgb = interpRgb(
@@ -205,32 +205,34 @@ export default function AssistantTextSpanClassification({
     );
   }
 
-  if (doHighlightSentence && mergedSpanIndices.length > 0) {
-    if (textHtmlMap) {
-      // Text formatted & highlighted
-      output = treeMapToElements(
-        text,
-        textHtmlMap,
-        mergedSpanIndices,
-        wrapHighlightedText,
-      );
-    } else {
-      // Plaintex & highlighted
-      output = wrapPlainTextSpan(text, mergedSpanIndices, wrapHighlightedText);
-    }
-  } else if (textHtmlMap) {
-    // Text formatted but not highlighted
-    output = treeMapToElements(text, textHtmlMap);
-  }
+  // if (doHighlightSentence && mergedSpanIndices.length > 0) {
+  //   if (textHtmlMap) {
+  //     // Text formatted & highlighted
+  //     output = treeMapToElements(
+  //       text,
+  //       textHtmlMap,
+  //       mergedSpanIndices,
+  //       wrapHighlightedText,
+  //     );
+  //   } else {
+  //     // Plaintex & highlighted
+  //     output = wrapPlainTextSpan(text, mergedSpanIndices, wrapHighlightedText);
+  //   }
+  // } else if (textHtmlMap) {
+  //   // Text formatted but not highlighted
+  //   output = treeMapToElements(text, textHtmlMap);
+  // }
+
+  console.log("categories(parent)=", categories);
 
   return (
     <Grid container>
       <Grid item xs={9} sx={{ paddingRight: "1em" }}>
         <MultiCategoryClassifiedText
           text={output}
-          // classification={filteredClassification}
-          // currentLabel={currentLabel}
-          // highlightSpan={doHighlightSentence}
+          classification={filteredClassification}
+          currentLabel={currentLabel}
+          highlightSpan={doHighlightSentence}
           // tooltipText={keyword("confidence_tooltip_technique")}
           // thresholdLowText={tooltipTextLowThreshold}
           // thresholdHighText={tooltipTextHighThreshold}
@@ -239,12 +241,14 @@ export default function AssistantTextSpanClassification({
           // rgbLow={configs.confidenceRgbLow}
           // rgbHigh={configs.confidenceRgbHigh}
           // detectedTechniquesText={keyword("detected_techniques")}
-          // textHtmlMap={textHtmlMap}
+          textHtmlMap={textHtmlMap}
           //childToParent={childToParent}
           //categories={categories}
+          wrapHighlightedText={wrapHighlightedText}
         />
       </Grid>
       <Grid item xs={3}>
+        {console.log("categories(between childs)=", categories)}
         <Card>
           <CardHeader
             className={classes.assistantCardHeader}
@@ -312,6 +316,8 @@ export function CategoriesListToggle({
   }
 
   for (const category in categories) {
+    console.log("category=", category);
+
     if (index > 0) {
       output.push(<Divider />);
     }
@@ -355,6 +361,7 @@ export function CategoriesListToggle({
     );
     index++;
   }
+  console.log(output);
   return <List>{output}</List>;
 }
 
@@ -364,9 +371,9 @@ export function CategoriesListToggle({
 
 export function MultiCategoryClassifiedText({
   text,
-  // classification,
-  // currentLabel,
-  // highlightSpan,
+  classification,
+  currentLabel,
+  highlightSpan,
   // tooltipText,
   // thresholdLowText,
   // thresholdHighText,
@@ -375,21 +382,22 @@ export function MultiCategoryClassifiedText({
   // rgbLow,
   // rgbHigh,
   // detectedTechniquesText,
-  // textHtmlMap = null,
+  textHtmlMap = null,
+  wrapHighlightedText,
   //childToParent,
   //categories,
 }) {
   let output = text; //Defaults to text output
 
-  // // Filter for selecting all labels (currentLabel == null) or just a single label
-  // const filteredClassification =
-  // currentLabel !== null && currentLabel in classification
-  //   ? { [currentLabel]: classification[currentLabel] }
-  //   : classification;
+  // Filter for selecting all labels (currentLabel == null) or just a single label
+  const filteredClassification =
+    currentLabel !== null && currentLabel in classification
+      ? { [currentLabel]: classification[currentLabel] }
+      : classification;
 
   // // Classification variable is a map of categories where each one has a list of classified spans, we
   // // have to invert that so that we have a list of spans that contains all categories in that span
-  // let mergedSpanIndices = mergeSpanIndices(filteredClassification);
+  let mergedSpanIndices = mergeSpanIndices(filteredClassification);
 
   // //function renderOnce(mergedSpanIndices) {
   //   function wrapHighlightedText(spanText, spanInfo, spanStart, spandEnd) {
@@ -475,27 +483,23 @@ export function MultiCategoryClassifiedText({
   //     );
   //   }
 
-  //   if (highlightSpan && mergedSpanIndices.length > 0) {
-  //     if (textHtmlMap) {
-  //       // Text formatted & highlighted
-  //       output = treeMapToElements(
-  //         text,
-  //         textHtmlMap,
-  //         mergedSpanIndices,
-  //         wrapHighlightedText,
-  //       );
-  //     } else {
-  //       // Plaintex & highlighted
-  //       output = wrapPlainTextSpan(
-  //         text,
-  //         mergedSpanIndices,
-  //         wrapHighlightedText,
-  //       );
-  //     }
-  //   } else if (textHtmlMap) {
-  //     // Text formatted but not highlighted
-  //     output = treeMapToElements(text, textHtmlMap);
-  //   }
+  if (highlightSpan && mergedSpanIndices.length > 0) {
+    if (textHtmlMap) {
+      // Text formatted & highlighted
+      output = treeMapToElements(
+        text,
+        textHtmlMap,
+        mergedSpanIndices,
+        wrapHighlightedText,
+      );
+    } else {
+      // Plaintex & highlighted
+      output = wrapPlainTextSpan(text, mergedSpanIndices, wrapHighlightedText);
+    }
+  } else if (textHtmlMap) {
+    // Text formatted but not highlighted
+    output = treeMapToElements(text, textHtmlMap);
+  }
 
   //  return [output, categories];
   //}
