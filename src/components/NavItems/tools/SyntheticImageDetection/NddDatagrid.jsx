@@ -127,7 +127,9 @@ const NddDataGrid = ({ rows }) => {
     for (let i = 0; i < maxSizeAlgorithm; i++) {
       algorithmsRows.push({
         field: `detectionName${i + 1}`,
-        headerName: `Algorithm #${i + 1}`,
+        headerName: `${keyword(
+          "synthetic_image_detection_ndd_table_header_3",
+        )}${i + 1}`,
         type: "string",
         minWidth: 120,
         valueGetter: (value, row) => row?.detectionResults[i]?.name,
@@ -136,7 +138,9 @@ const NddDataGrid = ({ rows }) => {
 
       algorithmsRows.push({
         field: `detectionRate${i + 1}`,
-        headerName: `Score #${i + 1}`,
+        headerName: `${keyword(
+          "synthetic_image_detection_ndd_table_header_4",
+        )}${i + 1}`,
         type: "number",
         minWidth: 180,
         valueGetter: (value, row) => row?.detectionResults[i]?.predictionScore,
@@ -150,12 +154,12 @@ const NddDataGrid = ({ rows }) => {
   const columns = [
     {
       field: "id",
-      headerName: "ID",
+      headerName: keyword("synthetic_image_detection_ndd_table_header_1"),
       width: 10,
     },
     {
       field: "image",
-      headerName: "Image",
+      headerName: keyword("synthetic_image_detection_ndd_table_header_2"),
       minWidth: 150,
       sortable: false,
       renderCell: (params) => <img src={params.value} height={150} />,
@@ -163,7 +167,7 @@ const NddDataGrid = ({ rows }) => {
     ...detectionDetailsRows(),
     {
       field: "archiveUrl",
-      headerName: "Archive URL",
+      headerName: keyword("synthetic_image_detection_ndd_table_header_5"),
       sortable: false,
       renderCell: (params) => (
         <Link href={params.value} target="_blank">
@@ -173,12 +177,12 @@ const NddDataGrid = ({ rows }) => {
     },
     {
       field: "imageUrls",
-      headerName: "Image URLs",
+      headerName: keyword("synthetic_image_detection_ndd_table_header_6"),
       sortable: false,
       renderCell: (params) => imageUrlsCell(params.value),
     },
     {
-      headerName: "Open analysis",
+      headerName: keyword("synthetic_image_detection_ndd_table_header_7"),
       field: "actions",
       type: "actions",
       width: 120,
