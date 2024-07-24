@@ -53,27 +53,31 @@ export default function AssistantTextClassification({
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
 
   // subjectivity or not
-  let importanceToolipText;
-  let textLow;
-  let textHigh;
+  let toolipText;
+  let textLow, textHigh;
+  let rgbLow, rgbHigh;
   if (subjectivity) {
-    importanceToolipText = <p>{keyword("confidence_tooltip_sentence")}</p>;
+    toolipText = <p>{keyword("confidence_tooltip_sentence")}</p>;
     textLow = keyword("low_confidence");
     textHigh = keyword("high_confidence");
+    rgbLow = configs.confidenceRgbLow;
+    rgbHigh = configs.confidenceRgbHigh;
   } else {
-    importanceToolipText = <p>{keyword("importance_tooltip")}</p>;
+    toolipText = <p>{keyword("importance_tooltip")}</p>;
     textLow = keyword("low_importance");
     textHigh = keyword("high_importance");
+    rgbLow = configs.importanceRgbLow;
+    rgbHigh = configs.importanceRgbHigh;
   }
 
   const importanceTooltipContent = (
     <ColourGradientTooltipContent
-      description={importanceToolipText}
+      description={toolipText}
       colourScaleText={keyword("colour_scale")}
       textLow={textLow}
       textHigh={textHigh}
-      rgbLow={configs.importanceRgbLow}
-      rgbHigh={configs.importanceRgbHigh}
+      rgbLow={rgbLow}
+      rgbHigh={rgbHigh}
     />
   );
   const confidenceTooltipContent = (
@@ -130,8 +134,8 @@ export default function AssistantTextClassification({
           tooltipText={importanceTooltipContent}
           thresholdLow={configs.importanceThresholdLow}
           thresholdHigh={configs.importanceThresholdHigh}
-          rgbLow={configs.importanceRgbLow}
-          rgbHigh={configs.importanceRgbHigh}
+          rgbLow={rgbLow}
+          rgbHigh={rgbHigh}
           textHtmlMap={textHtmlMap}
         />
       </Grid>

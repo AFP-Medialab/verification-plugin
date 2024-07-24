@@ -621,8 +621,6 @@ const AssistantCredSignals = () => {
             </AccordionDetails>
           </StyledAccordion>
 
-          {console.log("sub=", subjectivityResult)}
-
           {/* Subjectivity */}
           <StyledAccordion
             expanded={expandedAccordion === subjectivityTitle}
