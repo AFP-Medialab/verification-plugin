@@ -39,7 +39,7 @@ import "chartjs-adapter-dayjs-4/dist/chartjs-adapter-dayjs-4.esm";
 import dayjs from "dayjs";
 import duration from "dayjs/plugin/duration";
 import { exportReactElementAsJpg } from "../../../Shared/Utils/htmlUtils";
-import GaugeChartModalExplanation from "../../../Shared/GaugeChartModalExplanation";
+import GaugeChartModalExplanation from "../../../Shared/GaugeChartResults/GaugeChartModalExplanation";
 
 const LoccusResults = (props) => {
   dayjs.extend(duration);

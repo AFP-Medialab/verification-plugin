@@ -1,21 +1,15 @@
 import React, { useEffect, useRef, useState } from "react";
 import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
   Alert,
   Box,
   Card,
   CardContent,
   CardHeader,
-  Chip,
-  Divider,
   Grid,
   IconButton,
   Stack,
-  Typography,
 } from "@mui/material";
-import { Close, Download, ExpandMore } from "@mui/icons-material";
+import { Close } from "@mui/icons-material";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import { useSelector } from "react-redux";
 import { useTrackEvent } from "Hooks/useAnalytics";
@@ -224,10 +218,10 @@ const SyntheticImageDetectionResults = ({ results, url, handleClose, nd }) => {
   };
 
   const keywords = [
-    "synthetic_image_detection_scale_modal_explanation_rating_1",
-    "synthetic_image_detection_scale_modal_explanation_rating_2",
-    "synthetic_image_detection_scale_modal_explanation_rating_3",
-    "synthetic_image_detection_scale_modal_explanation_rating_4",
+    "gauge_scale_modal_explanation_rating_1",
+    "gauge_scale_modal_explanation_rating_2",
+    "gauge_scale_modal_explanation_rating_3",
+    "gauge_scale_modal_explanation_rating_4",
   ];
   const colors = ["#00FF00", "#AAFF03", "#FFA903", "#FF0000"];
 
