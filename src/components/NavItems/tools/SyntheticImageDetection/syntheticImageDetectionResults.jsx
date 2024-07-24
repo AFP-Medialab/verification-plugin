@@ -1,15 +1,19 @@
 import React, { useEffect, useRef, useState } from "react";
 import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
   Alert,
   Box,
   Card,
   CardContent,
   CardHeader,
+  Chip,
   Grid,
   IconButton,
   Stack,
 } from "@mui/material";
-import { Close } from "@mui/icons-material";
+import { Close, Download, ExpandMore } from "@mui/icons-material";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import { useSelector } from "react-redux";
 import { useTrackEvent } from "Hooks/useAnalytics";
@@ -18,7 +22,6 @@ import CustomAlertScore from "../../../Shared/CustomAlertScore";
 import GaugeChart from "react-gauge-chart";
 import Tooltip from "@mui/material/Tooltip";
 import { exportReactElementAsJpg } from "../../../Shared/Utils/htmlUtils";
-import GaugeChartModalExplanation from "../../../Shared/GaugeChartModalExplanation";
 import NddDatagrid from "./NddDatagrid";
 import {
   DETECTION_THRESHOLDS,
@@ -26,6 +29,9 @@ import {
   SyntheticImageDetectionAlgorithm,
   syntheticImageDetectionAlgorithms,
 } from "./SyntheticImageDetectionAlgorithms";
+import GaugeChartModalExplanation from "../../../Shared/GaugeChartResults/GaugeChartModalExplanation";
+import Typography from "@mui/material/Typography";
+import Divider from "@mui/material/Divider";
 
 /**
  * Returns the alert color code for the given percentage n
