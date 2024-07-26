@@ -8,39 +8,25 @@ function treeMapToElementsRecursive(
 ) {
   let childElems = [];
   if ("span" in treeElem) {
+    // If there's text in the node
+
     const span = treeElem.span;
     if (spanHighlightIndices === null) {
-      // console.log("No span highlight: ", text.substring(span.start, span.end));
       childElems.push(text.substring(span.start, span.end));
     } else {
-      // console.log("Span highlight: ", text.substring(span.start, span.end));
+      // If text span matches with indices for highlighting
+      // then try to wrap them in wrapFunc()
       let currentIndex = span.start;
       for (let i = 0; i < spanHighlightIndices.length; i++) {
         const hSpan = spanHighlightIndices[i];
-        // console.log(
-        //   "Matching span",
-        //   span.start,
-        //   span.end,
-        //   hSpan.indices[0],
-        //   hSpan.indices[1],
-        // );
         const hSpanStart = hSpan.indices[0];
         const hSpanEnd = hSpan.indices[1];
         if (
           (span.start <= hSpanStart && hSpanStart <= span.end) ||
           (span.start <= hSpanEnd && hSpanEnd <= span.end)
         ) {
-          //If there's an overlap
-          // console.log(
-          //   "Found lapping span ",
-          //   span.start,
-          //   span.end,
-          //   hSpanStart,
-          //   hSpanEnd,
-          // );
-
-          // If span doesn't start before the current index
           if (hSpanStart > currentIndex) {
+            // If span doesn't start before the current index, add unlighlighted text
             childElems.push(text.substring(currentIndex, hSpanStart));
           }
 
@@ -48,15 +34,12 @@ function treeMapToElementsRecursive(
             hSpanStart < span.start ? span.start : hSpanStart;
           const boundedEnd = hSpanEnd > span.end ? span.end : hSpanEnd;
           if (wrapFunc) {
-            // console.log("Wrapping: ", text.substring(boundedStart, boundedEnd));
+            // Add parts of text that needs to be wrapped in wrapFunc()
             childElems.push(
               wrapFunc(text.substring(boundedStart, boundedEnd), hSpan),
             );
           } else {
-            // console.log(
-            //   "Not wrapping: ",
-            //   text.substring(boundedStart, boundedEnd),
-            // );
+            // No wrapFunc(), inserting plaintext
             childElems.push(text.substring(boundedStart, boundedEnd));
           }
 
@@ -81,7 +64,14 @@ function treeMapToElementsRecursive(
       ),
     );
   }
-  return React.createElement(treeElem.tag, null, childElems);
+
+  //Collect attributes
+  let attributes = {};
+  if (treeElem.attributes) {
+    attributes = treeElem.attributes;
+  }
+
+  return React.createElement(treeElem.tag, attributes, childElems);
 }
 
 /**
