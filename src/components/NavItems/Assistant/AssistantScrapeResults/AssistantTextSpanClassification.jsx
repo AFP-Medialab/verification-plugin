@@ -97,31 +97,11 @@ export default function AssistantTextSpanClassification({
     setCurrentLabel(categoryKey);
   }
 
-  // // collecting categories from MultiCategoryClassifiedText to pass to CategoriesListToggle
-  // let [categories, setCategories] = useState({});
-  // const childToParent = (childdata) => {
-  //   setCategories(childdata);
-  //   console.log("setting chdildata through childToParent()=", childdata);
-  // };
-
-  // instead of calculating within the Text child and passing to Category child, lift state up to parent
-  // do all calculations here and children only render
-
-  // // Filter for selecting all labels (currentLabel == null) or just a single label
-  // const filteredClassification =
-  // currentLabel !== null && currentLabel in classification
-  //   ? { [currentLabel]: classification[currentLabel] }
-  //   : classification;
-
-  // Classification variable is a map of categories where each one has a list of classified spans, we
-  // have to invert that so that we have a list of spans that contains all categories in that span
-  //let mergedSpanIndices = mergeSpanIndices(filteredClassification);
-
+  // finding categories and their spans with scores, and the text for each category
   let categories = {};
-  //let countWrapSentences = 0;
-  let output = text;
+  let categoriesText = {};
 
-  //function renderOnce(mergedSpanIndices) {
+  // wrap function for calculating spanhighlights and categories
   function wrapHighlightedText(spanText, spanInfo, spanStart, spandEnd) {
     let backgroundRgb = [210, 210, 210];
     let backgroundRgbHover = [255, 100, 100];
@@ -134,13 +114,12 @@ export default function AssistantTextSpanClassification({
       const techniqueScore = spanInfo.techniques[persuasionTechnique];
 
       // collect category information for highlighted spans
-      //countWrapSentences += 1;
+      let span = {
+        indices: [spanStart, spandEnd],
+        score: techniqueScore,
+      };
       if (categories[persuasionTechnique]) {
-        categories[persuasionTechnique].push({
-          indices: [spanStart, spandEnd],
-          score: techniqueScore,
-        });
-        //console.log("OLD categories (", countWrapSentences, ")=", categories);
+        categories[persuasionTechnique].push(span);
       } else {
         categories[persuasionTechnique] = [
           {
@@ -148,7 +127,6 @@ export default function AssistantTextSpanClassification({
             score: techniqueScore,
           },
         ];
-        //console.log("NEW categories (", countWrapSentences, ")=", categories);
       }
 
       let techniqueBackgroundRgb = interpRgb(
@@ -205,50 +183,67 @@ export default function AssistantTextSpanClassification({
     );
   }
 
-  // if (doHighlightSentence && mergedSpanIndices.length > 0) {
-  //   if (textHtmlMap) {
-  //     // Text formatted & highlighted
-  //     output = treeMapToElements(
-  //       text,
-  //       textHtmlMap,
-  //       mergedSpanIndices,
-  //       wrapHighlightedText,
-  //     );
-  //   } else {
-  //     // Plaintex & highlighted
-  //     output = wrapPlainTextSpan(text, mergedSpanIndices, wrapHighlightedText);
-  //   }
-  // } else if (textHtmlMap) {
-  //   // Text formatted but not highlighted
-  //   output = treeMapToElements(text, textHtmlMap);
-  // }
+  // combine all sentences for an overall category
+  let collectFilteredClassification = {};
+  for (let category in filteredClassification) {
+    collectFilteredClassification[category] = {
+      [category]: filteredClassification[category],
+    };
+  }
+  const allCategoriesLabel = "all";
+  collectFilteredClassification[allCategoriesLabel] = filteredClassification;
 
-  console.log("categories(parent)=", categories);
+  console.log("filteredClassification=", filteredClassification);
+  console.log("collectFilteredClassification=", collectFilteredClassification);
+
+  // find the highlighted spans for each category and overall category
+  for (let collection in collectFilteredClassification) {
+    let output;
+
+    // Classification variable is a map of categories where each one has a list of classified spans, we
+    // have to invert that so that we have a list of spans that contains all categories in that span
+    let mergedSpanIndices = mergeSpanIndices(
+      collectFilteredClassification[collection],
+    );
+
+    if (doHighlightSentence && mergedSpanIndices.length > 0) {
+      if (textHtmlMap) {
+        // Text formatted & highlighted
+        output = treeMapToElements(
+          text,
+          textHtmlMap,
+          mergedSpanIndices,
+          wrapHighlightedText,
+        );
+      } else {
+        // Plaintex & highlighted
+        output = wrapPlainTextSpan(
+          text,
+          mergedSpanIndices,
+          wrapHighlightedText,
+        );
+      }
+    } else if (textHtmlMap) {
+      // Text formatted but not highlighted
+      output = treeMapToElements(text, textHtmlMap);
+    }
+
+    //categoriesText[category] = output;
+    categoriesText[collection] = output;
+  }
+
+  console.log("categories=", categories);
 
   return (
     <Grid container>
       <Grid item xs={9} sx={{ paddingRight: "1em" }}>
         <MultiCategoryClassifiedText
-          text={output}
-          classification={filteredClassification}
+          categoriesText={categoriesText}
           currentLabel={currentLabel}
-          highlightSpan={doHighlightSentence}
-          // tooltipText={keyword("confidence_tooltip_technique")}
-          // thresholdLowText={tooltipTextLowThreshold}
-          // thresholdHighText={tooltipTextHighThreshold}
-          // thresholdLow={configs.confidenceThresholdLow}
-          // thresholdHigh={configs.confidenceThresholdHigh}
-          // rgbLow={configs.confidenceRgbLow}
-          // rgbHigh={configs.confidenceRgbHigh}
-          // detectedTechniquesText={keyword("detected_techniques")}
-          textHtmlMap={textHtmlMap}
-          //childToParent={childToParent}
-          //categories={categories}
-          wrapHighlightedText={wrapHighlightedText}
+          allCategoriesLabel={allCategoriesLabel}
         />
       </Grid>
       <Grid item xs={3}>
-        {console.log("categories(between childs)=", categories)}
         <Card>
           <CardHeader
             className={classes.assistantCardHeader}
@@ -273,6 +268,7 @@ export default function AssistantTextSpanClassification({
               rgbLow={configs.confidenceRgbLow}
               rgbHigh={configs.confidenceRgbHigh}
               noCategoriesText={keyword("no_detected_categories")}
+              allCategoriesLabel={allCategoriesLabel}
               onCategoryChange={handleCategorySelect}
             />
           </CardContent>
@@ -289,6 +285,7 @@ export function CategoriesListToggle({
   rgbLow,
   rgbHigh,
   noCategoriesText,
+  allCategoriesLabel,
   onCategoryChange = () => {},
 }) {
   if (categories.length < 1) return <p>{noCategoriesText}</p>;
@@ -316,7 +313,10 @@ export function CategoriesListToggle({
   }
 
   for (const category in categories) {
-    console.log("category=", category);
+    // don't display overall category
+    if (category == allCategoriesLabel) {
+      continue;
+    }
 
     if (index > 0) {
       output.push(<Divider />);
@@ -335,7 +335,8 @@ export function CategoriesListToggle({
 
     const itemText = category.replaceAll("_", " ");
     const itemChip = (
-      <Chip color="primary" label={categories[category].length} />
+      // length is divided by 2 because of overall category duplicating the results
+      <Chip color="primary" label={categories[category].length / 2} />
     );
 
     output.push(
@@ -361,158 +362,22 @@ export function CategoriesListToggle({
     );
     index++;
   }
-  console.log(output);
+
   return <List>{output}</List>;
 }
 
-// // Had to create a custom styled span as the default style attribute does not support
-// // :hover metaclass
-// const StyledSpan = styled("span")();
-
 export function MultiCategoryClassifiedText({
-  text,
-  classification,
+  categoriesText,
   currentLabel,
-  highlightSpan,
-  // tooltipText,
-  // thresholdLowText,
-  // thresholdHighText,
-  // thresholdLow,
-  // thresholdHigh,
-  // rgbLow,
-  // rgbHigh,
-  // detectedTechniquesText,
-  textHtmlMap = null,
-  wrapHighlightedText,
-  //childToParent,
-  //categories,
+  allCategoriesLabel,
 }) {
-  let output = text; //Defaults to text output
-
   // Filter for selecting all labels (currentLabel == null) or just a single label
-  const filteredClassification =
-    currentLabel !== null && currentLabel in classification
-      ? { [currentLabel]: classification[currentLabel] }
-      : classification;
+  const category =
+    currentLabel !== null && currentLabel in categoriesText
+      ? currentLabel
+      : allCategoriesLabel;
 
-  // // Classification variable is a map of categories where each one has a list of classified spans, we
-  // // have to invert that so that we have a list of spans that contains all categories in that span
-  let mergedSpanIndices = mergeSpanIndices(filteredClassification);
-
-  // //function renderOnce(mergedSpanIndices) {
-  //   function wrapHighlightedText(spanText, spanInfo, spanStart, spandEnd) {
-  //     let backgroundRgb = [210, 210, 210];
-  //     let backgroundRgbHover = [255, 100, 100];
-  //     let textColour = "black";
-
-  //     let techniqueContent = [];
-  //     techniqueContent.push(<h2>{detectedTechniquesText}</h2>);
-
-  //     for (let persuasionTechnique in spanInfo.techniques) {
-  //       const techniqueScore = spanInfo.techniques[persuasionTechnique];
-
-  //       // collect category information for highlighted spans
-  //       countWrapSentences += 1;
-  //       if (categories[persuasionTechnique]) {
-  //         categories[persuasionTechnique].push({
-  //           indices: [spanStart, spandEnd],
-  //           score: techniqueScore,
-  //         });
-  //         console.log("OLD categories (", countWrapSentences, ")=", categories);
-  //       } else {
-  //         categories[persuasionTechnique] = [
-  //           {
-  //             indices: [spanStart, spandEnd],
-  //             score: techniqueScore,
-  //           },
-  //         ];
-  //         console.log("NEW categories (", countWrapSentences, ")=", categories);
-  //       }
-
-  //       let techniqueBackgroundRgb = interpRgb(
-  //         techniqueScore,
-  //         thresholdLow,
-  //         thresholdHigh,
-  //         rgbLow,
-  //         rgbHigh,
-  //       );
-  //       let bgLuminance = rgbToLuminance(techniqueBackgroundRgb);
-  //       let techniqueTextColour = "white";
-  //       if (bgLuminance > 0.7) techniqueTextColour = "black";
-  //       techniqueContent.push(
-  //         <div
-  //           style={{
-  //             background: rgbToString(techniqueBackgroundRgb),
-  //             color: rgbToString(techniqueTextColour),
-  //             marginTop: "0.5em",
-  //             marginBottom: "0.5em",
-  //             padding: "0.5em",
-  //           }}
-  //         >
-  //           {persuasionTechnique.replaceAll("_", " ")}
-  //         </div>,
-  //       );
-  //     }
-  //     techniqueContent.push(tooltipText);
-
-  //     let techniquesTooltip = (
-  //       <ColourGradientTooltipContent
-  //         description={techniqueContent}
-  //         textLow={thresholdLowText}
-  //         textHigh={thresholdHighText}
-  //         rgbLow={rgbLow}
-  //         rgbHigh={rgbHigh}
-  //       />
-  //     );
-
-  //     // Append highlighted text
-  //     return (
-  //       <Tooltip title={techniquesTooltip}>
-  //         <StyledSpan
-  //           sx={{
-  //             background: rgbToString(backgroundRgb),
-  //             color: textColour,
-  //             ":hover": {
-  //               background: rgbToString(backgroundRgbHover),
-  //             },
-  //           }}
-  //         >
-  //           {spanText}
-  //         </StyledSpan>
-  //       </Tooltip>
-  //     );
-  //   }
-
-  if (highlightSpan && mergedSpanIndices.length > 0) {
-    if (textHtmlMap) {
-      // Text formatted & highlighted
-      output = treeMapToElements(
-        text,
-        textHtmlMap,
-        mergedSpanIndices,
-        wrapHighlightedText,
-      );
-    } else {
-      // Plaintex & highlighted
-      output = wrapPlainTextSpan(text, mergedSpanIndices, wrapHighlightedText);
-    }
-  } else if (textHtmlMap) {
-    // Text formatted but not highlighted
-    output = treeMapToElements(text, textHtmlMap);
-  }
-
-  //  return [output, categories];
-  //}
-
-  // console.log("mergedSpanIndices=", mergedSpanIndices);
-  //console.log("filteredClassification=", filteredClassification);
-
-  //let categories = {};
-  // added
-  //[output, categories] = renderOnce(mergedSpanIndices);
-  // need to do this only once
-  //console.log("categories=", categories);
-  //childToParent(categories); //it's infinitely looping
+  let output = categoriesText[category];
 
   return <Typography align={"left"}>{output}</Typography>;
 }

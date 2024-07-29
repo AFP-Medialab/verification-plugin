@@ -548,8 +548,6 @@ const AssistantCredSignals = () => {
             </AccordionDetails>
           </StyledAccordion>
 
-          {console.log("per=", persuasionResult)}
-
           {/* Persuasion Techniques */}
           <StyledAccordion
             expanded={expandedAccordion === persuasionTitle}
