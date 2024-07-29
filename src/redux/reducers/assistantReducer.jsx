@@ -153,21 +153,6 @@ const assistantReducer = (state = defaultState, action) => {
         neDone: false,
         neFail: false,
 
-        // subjectivityResult: null,
-        // subjectivityLoading: false,
-        // subjectivityTextDone: false,
-        // subjectivityTextFail: false,
-
-        // prevFactChecksResult: null,
-        // prevFactChecksLoading: false,
-        // prevFactChecksDone: false,
-        // prevFactChecksFail: false,
-
-        // machineGeneratedTextResult: null,
-        // machineGeneratedTextLoading: false,
-        // machineGeneratedTextDone: false,
-        // machineGeneratedTextFail: false,
-
         loading: false,
         warningExpanded: false,
         assuranceExpanded: false,
