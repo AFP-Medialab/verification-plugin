@@ -78,7 +78,7 @@ const calculateSubjectivity = (sentences) => {
 
 const getExpandIcon = (loading, fail, done = null, role = null) => {
   if (loading || fail || done || (role && !role.includes("BETA_TESTER"))) {
-    // "done" is for when subjectivityDone = true but subjectivityResult.entities = {}
+    // "done" is for when subjectivityDone = true and subjectivityResult.entities.length
     return <Remove />;
   } else {
     return <ExpandMoreIcon />;
@@ -610,27 +610,23 @@ const AssistantCredSignals = () => {
           </StyledAccordion>
 
           {/* Subjectivity */}
-          {console.log(
-            subjectivityLoading,
-            subjectivityFail,
-            subjectivityDone,
-            subjectivityResult,
-          )}
           <StyledAccordion
             expanded={expandedAccordion === subjectivityTitle}
             onChange={handleChange(subjectivityTitle)}
             disabled={
               subjectivityLoading ||
               subjectivityFail ||
-              (subjectivityDone && subjectivityResult.entities.length == 0)
-            } //|| !subjectivityResult.entities.length}
+              (subjectivityDone &&
+                Object.keys(subjectivityResult.entities).length < 1)
+            }
             disableGutters
           >
             <AccordionSummary
               expandIcon={getExpandIcon(
                 subjectivityLoading,
                 subjectivityFail,
-                //subjectivityResult ? (subjectivityResult.entities ? (subjectivityResult.entities.length ? null : true) : null) : null,
+                subjectivityDone &&
+                  Object.keys(subjectivityResult.entities).length < 1,
               )}
             >
               <Grid container wrap="wrap">
