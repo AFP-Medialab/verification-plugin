@@ -188,7 +188,7 @@ const renderCollapsePrevFactChecks = (
               sx={{ cursor: "pointer" }}
               onClick={() => handleClick("tools/semanticSearch")}
             >
-              {keyword("fact_check_semantic_search")}
+              {keyword("semantic_search_title")}
             </Link>
           </Typography>
         </Grid>
