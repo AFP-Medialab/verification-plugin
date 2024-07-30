@@ -193,9 +193,6 @@ export default function AssistantTextSpanClassification({
   const allCategoriesLabel = "all";
   collectFilteredClassification[allCategoriesLabel] = filteredClassification;
 
-  console.log("filteredClassification=", filteredClassification);
-  console.log("collectFilteredClassification=", collectFilteredClassification);
-
   // find the highlighted spans for each category and overall category
   for (let collection in collectFilteredClassification) {
     let output;
@@ -231,8 +228,6 @@ export default function AssistantTextSpanClassification({
     //categoriesText[category] = output;
     categoriesText[collection] = output;
   }
-
-  console.log("categories=", categories);
 
   return (
     <Grid container>
