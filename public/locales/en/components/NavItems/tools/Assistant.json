@@ -140,6 +140,8 @@
   "no_subjective_sentences_detected": "No subjective sentences detected",
   "previous_fact_checks": "Previous Fact-Checks",
   "previous_fact_checks_tooltip": "The Fact Check Semantic Search tool identifies whether the extracted text has previously been detected in a fact check database. It displays the most recent matches, up to a maximum of 5. This tool is currently only accessible to beta users.",
+  "more_details": "For more details see",
+  "fact_check_semantic_search": "Fact Check Semantic Search",
   "machine_generated_text": "Machine Generated Text",
   "machine_generated_text_tooltip": "Determine whether the extracted text has been written by human or machine. This tool is currently only accessible to beta users.",
   "failed_to_load": "Failed to load",

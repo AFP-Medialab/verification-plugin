@@ -67,21 +67,10 @@ const calculateSubjectivity = (sentences) => {
       scoresSUBJ.push(Number(sentences[i].score));
     }
   }
-  //const scoresSumSUBJ = scoresSUBJ.reduce((partialSum, a) => partialSum + a, 0);
-  //const scoresSumSUBJPercent = (scoresSumSUBJ / sentences.length) * 100.0;
 
-  //let dp = 2;
   return [
     scoresSUBJ.length,
-    [
-      //round(scoresSumSUBJPercent, dp),
-      //"% (",
-      " (",
-      scoresSUBJ.length,
-      "/",
-      sentences.length,
-      ")",
-    ]
+    [" (", scoresSUBJ.length, "/", sentences.length, ")"]
       .toString()
       .replaceAll(",", ""),
   ];
@@ -89,6 +78,7 @@ const calculateSubjectivity = (sentences) => {
 
 const getExpandIcon = (loading, fail, done = null, role = null) => {
   if (loading || fail || done || (role && !role.includes("BETA_TESTER"))) {
+    // "done" is for when subjectivityDone = true but subjectivityResult.entities = {}
     return <Remove />;
   } else {
     return <ExpandMoreIcon />;
@@ -176,6 +166,7 @@ const renderCollapsePrevFactChecks = (
   expanded,
   setExpanded,
   navigate,
+  keyword,
 ) => {
   const handleClick = (path) => {
     // instead need to set parameter then load text in SemanticSearch/index.jsx
@@ -192,14 +183,13 @@ const renderCollapsePrevFactChecks = (
         <Grid item xs={6} align={"left"}>
           <Typography sx={{ color: "text.secondary", align: "left" }}>
             <p></p>
-            For more details see{" "}
+            {keyword("more_details")}{" "}
             <Link
               sx={{ cursor: "pointer" }}
               onClick={() => handleClick("tools/semanticSearch")}
             >
-              Fact Check Semantic Search
-            </Link>{" "}
-            tool.
+              {keyword("fact_check_semantic_search")}
+            </Link>
           </Typography>
         </Grid>
         <Grid item xs={2} align={"right"}>
@@ -620,10 +610,20 @@ const AssistantCredSignals = () => {
           </StyledAccordion>
 
           {/* Subjectivity */}
+          {console.log(
+            subjectivityLoading,
+            subjectivityFail,
+            subjectivityDone,
+            subjectivityResult,
+          )}
           <StyledAccordion
             expanded={expandedAccordion === subjectivityTitle}
             onChange={handleChange(subjectivityTitle)}
-            disabled={subjectivityLoading || subjectivityFail} //|| !subjectivityResult.entities.length}
+            disabled={
+              subjectivityLoading ||
+              subjectivityFail ||
+              (subjectivityDone && subjectivityResult.entities.length == 0)
+            } //|| !subjectivityResult.entities.length}
             disableGutters
           >
             <AccordionSummary
@@ -813,6 +813,7 @@ const AssistantCredSignals = () => {
                     expanded,
                     setExpanded,
                     navigate,
+                    keyword,
                   )}
                 </div>
               )}

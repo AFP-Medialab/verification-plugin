@@ -101,6 +101,16 @@ export default function AssistantTextSpanClassification({
   let categories = {};
   let categoriesText = {};
 
+  // combine all sentences for an overall category
+  let collectFilteredClassification = {};
+  for (let category in filteredClassification) {
+    collectFilteredClassification[category] = {
+      [category]: filteredClassification[category],
+    };
+  }
+  const allCategoriesLabel = "all";
+  collectFilteredClassification[allCategoriesLabel] = filteredClassification;
+
   // wrap function for calculating spanhighlights and categories
   function wrapHighlightedText(spanText, spanInfo, spanStart, spandEnd) {
     let backgroundRgb = [210, 210, 210];
@@ -114,12 +124,15 @@ export default function AssistantTextSpanClassification({
       const techniqueScore = spanInfo.techniques[persuasionTechnique];
 
       // collect category information for highlighted spans
-      let span = {
-        indices: [spanStart, spandEnd],
-        score: techniqueScore,
-      };
+      // let span = {
+      //   indices: [spanStart, spandEnd],
+      //   score: techniqueScore,
+      // };
       if (categories[persuasionTechnique]) {
-        categories[persuasionTechnique].push(span);
+        categories[persuasionTechnique].push({
+          indices: [spanStart, spandEnd],
+          score: techniqueScore,
+        });
       } else {
         categories[persuasionTechnique] = [
           {
@@ -183,16 +196,6 @@ export default function AssistantTextSpanClassification({
     );
   }
 
-  // combine all sentences for an overall category
-  let collectFilteredClassification = {};
-  for (let category in filteredClassification) {
-    collectFilteredClassification[category] = {
-      [category]: filteredClassification[category],
-    };
-  }
-  const allCategoriesLabel = "all";
-  collectFilteredClassification[allCategoriesLabel] = filteredClassification;
-
   // find the highlighted spans for each category and overall category
   for (let collection in collectFilteredClassification) {
     let output;
@@ -225,9 +228,28 @@ export default function AssistantTextSpanClassification({
       output = treeMapToElements(text, textHtmlMap);
     }
 
-    //categoriesText[category] = output;
     categoriesText[collection] = output;
   }
+
+  // console.log("categories=", categories);
+  // console.log("categoriesText=", categoriesText);
+
+  // remove duplicate spans from array of categories
+  // duplicates occur as categories are counted then repeated for category allCategoriesLabel
+  let uniqueCategories = {};
+  for (let cat in categories) {
+    uniqueCategories[cat] = categories[cat].filter((value, index) => {
+      const _value = JSON.stringify(value);
+      return (
+        index ===
+        categories[cat].findIndex((obj) => {
+          return JSON.stringify(obj) === _value;
+        })
+      );
+    });
+  }
+
+  // console.log("uniqueCategories=", uniqueCategories);
 
   return (
     <Grid container>
@@ -257,7 +279,7 @@ export default function AssistantTextSpanClassification({
           />
           <CardContent>
             <CategoriesListToggle
-              categories={categories}
+              categories={uniqueCategories}
               thresholdLow={configs.confidenceThresholdLow}
               thresholdHigh={configs.confidenceThresholdHigh}
               rgbLow={configs.confidenceRgbLow}
@@ -330,8 +352,7 @@ export function CategoriesListToggle({
 
     const itemText = category.replaceAll("_", " ");
     const itemChip = (
-      // length is divided by 2 because of overall category duplicating the results
-      <Chip color="primary" label={categories[category].length / 2} />
+      <Chip color="primary" label={categories[category].length} />
     );
 
     output.push(

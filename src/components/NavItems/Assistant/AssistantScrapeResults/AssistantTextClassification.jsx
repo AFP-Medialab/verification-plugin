@@ -253,7 +253,6 @@ export function ClassifiedText({
       rgbLow,
       rgbHigh,
     );
-    //console.log(spanText, spanInfo, backgroundRgb);
     let bgLuminance = rgbToLuminance(backgroundRgb);
     let textColour = "white";
     if (bgLuminance > 0.7) textColour = "black";
