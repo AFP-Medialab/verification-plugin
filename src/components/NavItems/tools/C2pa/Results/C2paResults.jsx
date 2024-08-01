@@ -10,6 +10,7 @@ import {
   Typography,
   IconButton,
   Button,
+  Icon,
 } from "@mui/material";
 
 import {
@@ -24,6 +25,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { c2paCurrentImageIdSet } from "redux/reducers/tools/c2paReducer";
 import moment from "moment";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
 /**
  *
@@ -44,6 +46,8 @@ const C2paResults = (props = { result, handleClose }) => {
   const validationIssues = result[currentImageId].validationIssues;
 
   const dispatch = useDispatch();
+
+  const keyword = i18nLoadNamespace("components/NavItems/tools/C2pa");
 
   const handleClose = () => {
     props.handleClose();
@@ -152,9 +156,29 @@ const C2paResults = (props = { result, handleClose }) => {
                         <Typography variant="h6">{"Credit"}</Typography>
                         <Box p={1}>
                           {manifestData.producer ? (
-                            <Typography>
-                              {"Produced by: " + manifestData.producer}
-                            </Typography>
+                            <>
+                              <Typography>
+                                {manifestData.producer.name
+                                  ? "Produced by: " + manifestData.producer.name
+                                  : ""}
+                              </Typography>
+                              {manifestData.producer.socials ? (
+                                <>
+                                  <Typography>{"Socials: "}</Typography>
+                                  <Stack>
+                                    {manifestData.producer.socials.map(
+                                      (obj, key) => {
+                                        return (
+                                          <Typography key={key}>
+                                            {obj["@id"]}
+                                          </Typography>
+                                        );
+                                      },
+                                    )}
+                                  </Stack>
+                                </>
+                              ) : null}
+                            </>
                           ) : (
                             <Alert severity="info">
                               {"No info on the producer of this image."}
@@ -222,10 +246,22 @@ const C2paResults = (props = { result, handleClose }) => {
                                 <Box paddingLeft={2}>
                                   {manifestData.editsAndActivity.map(
                                     (obj, key) => {
+                                      {
+                                        console.log(obj);
+                                      }
                                       return (
-                                        <Typography key={key}>
-                                          {obj.label + ": " + obj.description}
-                                        </Typography>
+                                        <Stack key={key}>
+                                          <Stack direction="row">
+                                            <img src={obj.icon} />
+                                            <Typography paddingLeft={1}>
+                                              {obj.label + ":"}
+                                            </Typography>
+                                          </Stack>
+                                          <Typography paddingLeft={1}>
+                                            {obj.description}
+                                          </Typography>
+                                          <Box m={0.5} />
+                                        </Stack>
                                       );
                                     },
                                   )}

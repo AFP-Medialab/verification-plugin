@@ -1,4 +1,9 @@
-import { createC2pa, selectEditsAndActivity, selectProducer } from "c2pa";
+import {
+  createC2pa,
+  selectEditsAndActivity,
+  selectProducer,
+  selectSocialAccounts,
+} from "c2pa";
 import {
   c2paCurrentImageIdSet,
   c2paLoadingSet,
@@ -101,7 +106,15 @@ export async function readManifest(manifest, parent, result, url, depth) {
     }
 
     const producer = selectProducer(manifest);
-    if (producer) manifestData.producer = producer.name;
+    if (producer) manifestData.producer = { name: producer.name };
+
+    const producerSocials = selectSocialAccounts(manifest);
+    console.log("socials: ", producerSocials);
+    if (producerSocials && producerSocials.length > 0) {
+      manifestData.producer
+        ? (manifestData.producer.socials = producerSocials)
+        : (manifestData.producer = { socials: producerSocials.name });
+    }
 
     res.manifestData = manifestData;
 
