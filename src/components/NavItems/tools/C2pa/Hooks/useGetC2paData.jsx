@@ -14,6 +14,7 @@ import {
 
 const exifData = (assertions) => {
   let captureInfo = null;
+  let allCaptureInfo = null;
 
   for (let i = 0; i < assertions.length; i++) {
     if (assertions[i].label === "stds.exif") {
@@ -21,15 +22,39 @@ const exifData = (assertions) => {
       if (assertions[i]["data"]["EXIF:Make"]) {
         captureInfo.make = assertions[i]["data"]["EXIF:Make"];
       }
+      if (assertions[i]["data"]["exif:Make"]) {
+        captureInfo.make = assertions[i]["data"]["exif:Make"];
+      }
       if (assertions[i]["data"]["EXIF:Model"]) {
         captureInfo.model = assertions[i]["data"]["EXIF:Model"];
+      }
+      if (assertions[i]["data"]["exif:Model"]) {
+        captureInfo.model = assertions[i]["data"]["exif:Model"];
       }
       if (assertions[i]["data"]["EXIF:DateTimeOriginal"]) {
         captureInfo.dateTime = assertions[i]["data"]["EXIF:DateTimeOriginal"];
       }
+      if (assertions[i]["data"]["exif:DateTimeOriginal"]) {
+        captureInfo.dateTime = assertions[i]["data"]["exif:DateTimeOriginal"];
+      }
+      if (assertions[i]["data"]["EXIF:GPSLatitude"]) {
+        captureInfo.latitude = assertions[i]["data"]["EXIF:GPSLatitude"];
+      }
+      if (assertions[i]["data"]["exif:GPSLatitude"]) {
+        captureInfo.latitude = assertions[i]["data"]["exif:GPSLatitude"];
+      }
+      if (assertions[i]["data"]["EXIF:GPSLongitude"]) {
+        captureInfo.longitude = assertions[i]["data"]["EXIF:GPSLongitude"];
+      }
+      if (assertions[i]["data"]["exif:GPSLongitude"]) {
+        captureInfo.longitude = assertions[i]["data"]["exif:GPSLongitude"];
+      }
+
+      if (!allCaptureInfo) allCaptureInfo = [];
+      allCaptureInfo.push(assertions[i]);
     }
   }
-
+  if (captureInfo) captureInfo.allCaptureInfo = allCaptureInfo;
   return captureInfo;
 };
 

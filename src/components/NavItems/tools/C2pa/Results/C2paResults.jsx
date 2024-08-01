@@ -11,12 +11,16 @@ import {
   IconButton,
   Button,
   Icon,
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
 } from "@mui/material";
 
 import {
   ArrowLeft,
   ChevronLeft,
   Close,
+  ExpandMore,
   FastRewind,
   FirstPage,
   KeyboardArrowLeft,
@@ -217,6 +221,57 @@ const C2paResults = (props = { result, handleClose }) => {
                                       manifestData.captureInfo.dateTime,
                                     ).format("D.MM.yyyy")}
                                 </Typography>
+                              ) : null}
+                              {manifestData.captureInfo.latitude ? (
+                                <Typography>
+                                  {"Latitude: " +
+                                    manifestData.captureInfo.latitude}
+                                </Typography>
+                              ) : null}
+                              {manifestData.captureInfo.longitude ? (
+                                <Typography>
+                                  {"Longitude: " +
+                                    manifestData.captureInfo.longitude}
+                                </Typography>
+                              ) : null}
+                              {manifestData.captureInfo.allCaptureInfo ? (
+                                <Accordion>
+                                  <AccordionSummary expandIcon={<ExpandMore />}>
+                                    <Typography>
+                                      {"See more results"}
+                                    </Typography>
+                                  </AccordionSummary>
+                                  <AccordionDetails>
+                                    {manifestData.captureInfo.allCaptureInfo.map(
+                                      (obj, key) => {
+                                        return (
+                                          <Stack key={key}>
+                                            {console.log(obj.data)}
+                                            {Object.keys(obj.data).map(
+                                              (objKey, index) => {
+                                                console.log(obj.data[objKey]);
+                                                if (
+                                                  typeof obj.data[objKey] ===
+                                                  "string"
+                                                ) {
+                                                  return (
+                                                    <Typography key={index}>
+                                                      {objKey +
+                                                        ": " +
+                                                        obj.data[objKey]}
+                                                    </Typography>
+                                                  );
+                                                } else {
+                                                  return null;
+                                                }
+                                              },
+                                            )}
+                                          </Stack>
+                                        );
+                                      },
+                                    )}
+                                  </AccordionDetails>
+                                </Accordion>
                               ) : null}
                             </>
                           ) : (
