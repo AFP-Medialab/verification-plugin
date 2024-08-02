@@ -10,7 +10,6 @@ import {
   Typography,
   IconButton,
   Button,
-  Icon,
   Accordion,
   AccordionDetails,
   AccordionSummary,
@@ -32,7 +31,6 @@ import moment from "moment";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import { Icon as GeoIcon } from "leaflet";
-import { useEffect, useState } from "react";
 
 /**
  *
@@ -52,12 +50,14 @@ const C2paResults = (props = { result, handleClose }) => {
   const manifestData = result[currentImageId].manifestData;
   const validationIssues = result[currentImageId].validationIssues;
 
-  const latitude = manifestData.captureInfo
-    ? manifestData.captureInfo.latitude
-    : null;
-  const longitude = manifestData.captureInfo
-    ? manifestData.captureInfo.longitude
-    : null;
+  const latitude =
+    manifestData && manifestData.captureInfo
+      ? manifestData.captureInfo.latitude
+      : null;
+  const longitude =
+    manifestData && manifestData.captureInfo
+      ? manifestData.captureInfo.longitude
+      : null;
 
   const dispatch = useDispatch();
 
@@ -110,15 +110,17 @@ const C2paResults = (props = { result, handleClose }) => {
       />
       <Box m={2} />
       <Grid container direction="row" spacing={3} p={4}>
-        <Grid item xs>
-          <img
-            src={img}
-            style={{
-              maxWidth: "100%",
-              maxHeight: "60vh",
-              borderRadius: "10px",
-            }}
-          />
+        <Grid item container justifyContent="center" xs>
+          <Grid item>
+            <img
+              src={img}
+              style={{
+                maxWidth: "100%",
+                maxHeight: "60vh",
+                borderRadius: "10px",
+              }}
+            />
+          </Grid>
         </Grid>
         <Grid item xs>
           <Card p={1}>
@@ -140,6 +142,7 @@ const C2paResults = (props = { result, handleClose }) => {
                   <Alert severity="info" m={1}>
                     {keyword("no_c2pa_info")}
                   </Alert>
+                  <Box m={2} />
                 </Box>
               ) : (
                 <>
@@ -362,14 +365,15 @@ const C2paResults = (props = { result, handleClose }) => {
 
                     <Box p={1}>
                       {/* <CardContent> */}
-                      {manifestData.editsAndActivity ||
-                      manifestData.children ? (
-                        <Stack>
-                          <Typography variant="h6">
-                            {keyword("process_title")}
-                          </Typography>
 
-                          <Box p={1}>
+                      <Typography variant="h6">
+                        {keyword("process_title")}
+                      </Typography>
+                      <Box p={1}>
+                        {manifestData.editsAndActivity ||
+                        manifestData.children ? (
+                          <Stack>
+                            {/* <Box p={1}> */}
                             {manifestData.editsAndActivity ? (
                               <>
                                 <Typography fontSize={18}>
@@ -400,12 +404,10 @@ const C2paResults = (props = { result, handleClose }) => {
                                   )}
                                 </Box>
                               </>
-                            ) : (
-                              <></>
-                            )}
-                          </Box>
+                            ) : null}
+                            {/* </Box> */}
 
-                          <Box p={1}>
+                            {/* <Box p={1}> */}
                             {manifestData.children ? (
                               <>
                                 <Typography fontSize={18}>
@@ -436,16 +438,15 @@ const C2paResults = (props = { result, handleClose }) => {
                                   })}
                                 </Stack>
                               </>
-                            ) : (
-                              <></>
-                            )}
-                          </Box>
-                        </Stack>
-                      ) : (
-                        <Alert severity="info">
-                          {keyword("process_no_info")}
-                        </Alert>
-                      )}
+                            ) : null}
+                            {/* </Box> */}
+                          </Stack>
+                        ) : (
+                          <Alert severity="info">
+                            {keyword("process_no_info")}
+                          </Alert>
+                        )}
+                      </Box>
                       {/* </CardContent> */}
                     </Box>
                   </Stack>
