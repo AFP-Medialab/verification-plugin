@@ -30,6 +30,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { c2paCurrentImageIdSet } from "redux/reducers/tools/c2paReducer";
 import moment from "moment";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
+import { Icon as GeoIcon } from "leaflet";
+import { useEffect, useState } from "react";
 
 /**
  *
@@ -48,6 +51,13 @@ const C2paResults = (props = { result, handleClose }) => {
   const parentId = result[currentImageId].parent;
   const manifestData = result[currentImageId].manifestData;
   const validationIssues = result[currentImageId].validationIssues;
+
+  const latitude = manifestData.captureInfo
+    ? manifestData.captureInfo.latitude
+    : null;
+  const longitude = manifestData.captureInfo
+    ? manifestData.captureInfo.longitude
+    : null;
 
   const dispatch = useDispatch();
 
@@ -78,6 +88,15 @@ const C2paResults = (props = { result, handleClose }) => {
       return keyword("content_credentials_invalid");
     }
   };
+
+  function ConvertDMSToDD(degrees, minutes, seconds, direction) {
+    var dd = degrees + minutes / 60 + seconds / (60 * 60);
+
+    if (direction == "S" || direction == "W") {
+      dd = dd * -1;
+    }
+    return dd;
+  }
 
   return (
     <Card>
@@ -229,55 +248,104 @@ const C2paResults = (props = { result, handleClose }) => {
                                 </Typography>
                               ) : null}
                               {manifestData.captureInfo.latitude ? (
-                                <Typography>
-                                  {keyword("capture_info_latitude") +
-                                    manifestData.captureInfo.latitude}
-                                </Typography>
+                                <>
+                                  <Typography>
+                                    {keyword("capture_info_latitude") +
+                                      manifestData.captureInfo.latitude}
+                                  </Typography>
+                                  {/* {setLatitude(manifestData.captureInfo.latitude)} */}
+                                </>
                               ) : null}
                               {manifestData.captureInfo.longitude ? (
-                                <Typography>
-                                  {keyword("capture_info_longitude") +
-                                    manifestData.captureInfo.longitude}
-                                </Typography>
+                                <>
+                                  <Typography>
+                                    {keyword("capture_info_longitude") +
+                                      manifestData.captureInfo.longitude}
+                                  </Typography>
+                                  {/* {setLongitude(manifestData.captureInfo.longitude)} */}
+                                </>
+                              ) : null}
+                              {console.log(isNaN(latitude))}
+                              {console.log(isNaN(longitude))}
+                              {console.log(
+                                longitude &&
+                                  latitude &&
+                                  !isNaN(longitude) &&
+                                  !isNaN(latitude),
+                              )}
+                              {longitude &&
+                              latitude &&
+                              !isNaN(longitude) &&
+                              !isNaN(latitude) ? (
+                                <Box p={3}>
+                                  {console.log("hi")}
+                                  <MapContainer
+                                    center={[latitude, longitude]}
+                                    zoom={13}
+                                    scrollWheelZoom={false}
+                                    style={{ width: "100%", height: "200px" }}
+                                  >
+                                    <TileLayer
+                                      attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                                      url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                                    />
+                                    <Marker
+                                      position={[latitude, longitude]}
+                                      icon={
+                                        new GeoIcon({
+                                          iconUrl: "img/marker_location.svg",
+                                          iconSize: [60, 60],
+                                          iconAnchor: [30, 0],
+                                        })
+                                      }
+                                    >
+                                      <Popup>{"hi"}</Popup>
+                                    </Marker>
+                                  </MapContainer>
+                                </Box>
                               ) : null}
                               {manifestData.captureInfo.allCaptureInfo ? (
-                                <Accordion>
-                                  <AccordionSummary expandIcon={<ExpandMore />}>
-                                    <Typography>
-                                      {keyword("capture_info_more_results")}
-                                    </Typography>
-                                  </AccordionSummary>
-                                  <AccordionDetails>
-                                    {manifestData.captureInfo.allCaptureInfo.map(
-                                      (obj, key) => {
-                                        return (
-                                          <Stack key={key}>
-                                            {console.log(obj.data)}
-                                            {Object.keys(obj.data).map(
-                                              (objKey, index) => {
-                                                console.log(obj.data[objKey]);
-                                                if (
-                                                  typeof obj.data[objKey] ===
-                                                  "string"
-                                                ) {
-                                                  return (
-                                                    <Typography key={index}>
-                                                      {objKey +
-                                                        ": " +
-                                                        obj.data[objKey]}
-                                                    </Typography>
-                                                  );
-                                                } else {
-                                                  return null;
-                                                }
-                                              },
-                                            )}
-                                          </Stack>
-                                        );
-                                      },
-                                    )}
-                                  </AccordionDetails>
-                                </Accordion>
+                                <Box p={1}>
+                                  <Accordion>
+                                    <AccordionSummary
+                                      expandIcon={<ExpandMore />}
+                                    >
+                                      <Typography>
+                                        {keyword("capture_info_more_results")}
+                                      </Typography>
+                                    </AccordionSummary>
+                                    <AccordionDetails>
+                                      {manifestData.captureInfo.allCaptureInfo.map(
+                                        (obj, key) => {
+                                          return (
+                                            <Stack key={key}>
+                                              {/* {console.log(obj.data)} */}
+                                              {Object.keys(obj.data).map(
+                                                (objKey, index) => {
+                                                  // console.log(obj.data[objKey]);
+                                                  if (
+                                                    typeof obj.data[objKey] ===
+                                                    "string"
+                                                  ) {
+                                                    return (
+                                                      <Typography key={index}>
+                                                        {objKey +
+                                                          ": " +
+                                                          obj.data[objKey]}
+                                                      </Typography>
+                                                    );
+                                                  } else {
+                                                    return null;
+                                                  }
+                                                },
+                                              )}
+                                            </Stack>
+                                          );
+                                        },
+                                      )}
+                                    </AccordionDetails>
+                                  </Accordion>
+                                </Box>
                               ) : null}
                             </>
                           ) : (
