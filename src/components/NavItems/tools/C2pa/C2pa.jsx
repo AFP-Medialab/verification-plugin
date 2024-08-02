@@ -10,6 +10,7 @@ import {
   c2paCurrentImageIdSet,
   c2paStateCleaned,
 } from "redux/reducers/tools/c2paReducer";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
 const C2paData = () => {
   const isLoading = useSelector((state) => state.c2pa.loading);
@@ -21,6 +22,8 @@ const C2paData = () => {
   const dispatch = useDispatch();
 
   const classes = useMyStyles();
+
+  const keyword = i18nLoadNamespace("components/NavItems/tools/C2pa");
 
   const handleSubmit = () => {
     if (imageFile) {
@@ -36,7 +39,10 @@ const C2paData = () => {
 
   return (
     <Box>
-      <HeaderTool name={"C2pa data"} description={"c2pa description"} />
+      <HeaderTool
+        name={keyword("c2pa_title")}
+        description={"c2pa description"}
+      />
       <Card>
         <CardHeader
           title={

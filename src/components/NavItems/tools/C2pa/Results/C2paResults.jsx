@@ -61,10 +61,6 @@ const C2paResults = (props = { result, handleClose }) => {
     dispatch(c2paCurrentImageIdSet(ingredientId));
   };
 
-  const returnToMain = () => {
-    props.returnToMain();
-  };
-
   const title = (title, information) => {
     return (
       <Grid container direction="row">
@@ -77,16 +73,16 @@ const C2paResults = (props = { result, handleClose }) => {
 
   const validationMessage = (issues) => {
     if (issues.trustedSourceIssue && issues.errorMessages.length <= 2) {
-      return "This content credential was issued by an unkown source.";
+      return keyword("content_credentials_unknown_source");
     } else {
-      return "This content credential is not valid, meaning anyone could have modified this image's c2pa information.";
+      return keyword("content_credentials_invalid");
     }
   };
 
   return (
     <Card>
       <CardHeader
-        title={"Results"}
+        title={keyword("c2pa_results_title")}
         action={
           <IconButton aria-label="close" onClick={handleClose}>
             <Close sx={{ color: "white" }} />
@@ -116,12 +112,14 @@ const C2paResults = (props = { result, handleClose }) => {
                   </Alert>
                 </Box>
               ) : null}
-              <Typography variant="h5">{"C2pa Info"}</Typography>
+              <Typography variant="h5">
+                {keyword("c2pa_information")}
+              </Typography>
               <Box m={1} />
               {!manifestData ? (
                 <Box m={1}>
                   <Alert severity="info" m={1}>
-                    {"No c2pa info for this image"}
+                    {keyword("no_c2pa_info")}
                   </Alert>
                 </Box>
               ) : (
@@ -133,15 +131,16 @@ const C2paResults = (props = { result, handleClose }) => {
                       {/* <CardContent> */}
                       <Stack>
                         <Typography variant="h6">
-                          {"Content Credentials"}
+                          {keyword("content_credentials_title")}
                         </Typography>
 
                         <Box p={1}>
                           <Typography>
-                            {"Issuer: " + manifestData.signatureInfo.issuer}
+                            {keyword("content_credentials_issuer") +
+                              manifestData.signatureInfo.issuer}
                           </Typography>
                           <Typography>
-                            {"Date issued: " +
+                            {keyword("content_credentials_date_issued") +
                               moment(manifestData.signatureInfo.time).format(
                                 "D.MM.yyyy",
                               )}
@@ -157,18 +156,23 @@ const C2paResults = (props = { result, handleClose }) => {
                     <Box p={1}>
                       {/* <CardContent> */}
                       <Stack>
-                        <Typography variant="h6">{"Credit"}</Typography>
+                        <Typography variant="h6">
+                          {keyword("credit_title")}
+                        </Typography>
                         <Box p={1}>
                           {manifestData.producer ? (
                             <>
                               <Typography>
                                 {manifestData.producer.name
-                                  ? "Produced by: " + manifestData.producer.name
+                                  ? keyword("credit_producer") +
+                                    manifestData.producer.name
                                   : ""}
                               </Typography>
                               {manifestData.producer.socials ? (
                                 <>
-                                  <Typography>{"Socials: "}</Typography>
+                                  <Typography>
+                                    {keyword("credit_social")}
+                                  </Typography>
                                   <Stack>
                                     {manifestData.producer.socials.map(
                                       (obj, key) => {
@@ -185,7 +189,7 @@ const C2paResults = (props = { result, handleClose }) => {
                             </>
                           ) : (
                             <Alert severity="info">
-                              {"No info on the producer of this image."}
+                              {keyword("credit_no_info")}
                             </Alert>
                           )}
                         </Box>
@@ -199,24 +203,26 @@ const C2paResults = (props = { result, handleClose }) => {
                       {/* <CardContent> */}
                       <Stack>
                         <Typography variant="h6">
-                          {"Capture Information"}
+                          {keyword("capture_info_title")}
                         </Typography>
                         <Box p={1}>
                           {manifestData.captureInfo ? (
                             <>
                               {manifestData.captureInfo.make ? (
                                 <Typography>
-                                  {"Make: " + manifestData.captureInfo.make}
+                                  {keyword("capture_info_make") +
+                                    manifestData.captureInfo.make}
                                 </Typography>
                               ) : null}
                               {manifestData.captureInfo.model ? (
                                 <Typography>
-                                  {"Model: " + manifestData.captureInfo.model}
+                                  {keyword("capture_info_model") +
+                                    manifestData.captureInfo.model}
                                 </Typography>
                               ) : null}
                               {manifestData.captureInfo.dateTime ? (
                                 <Typography>
-                                  {"Capture date: " +
+                                  {keyword("capture_info_date") +
                                     moment(
                                       manifestData.captureInfo.dateTime,
                                     ).format("D.MM.yyyy")}
@@ -224,13 +230,13 @@ const C2paResults = (props = { result, handleClose }) => {
                               ) : null}
                               {manifestData.captureInfo.latitude ? (
                                 <Typography>
-                                  {"Latitude: " +
+                                  {keyword("capture_info_latitude") +
                                     manifestData.captureInfo.latitude}
                                 </Typography>
                               ) : null}
                               {manifestData.captureInfo.longitude ? (
                                 <Typography>
-                                  {"Longitude: " +
+                                  {keyword("capture_info_longitude") +
                                     manifestData.captureInfo.longitude}
                                 </Typography>
                               ) : null}
@@ -238,7 +244,7 @@ const C2paResults = (props = { result, handleClose }) => {
                                 <Accordion>
                                   <AccordionSummary expandIcon={<ExpandMore />}>
                                     <Typography>
-                                      {"See more results"}
+                                      {keyword("capture_info_more_results")}
                                     </Typography>
                                   </AccordionSummary>
                                   <AccordionDetails>
@@ -276,7 +282,7 @@ const C2paResults = (props = { result, handleClose }) => {
                             </>
                           ) : (
                             <Alert severity="warning">
-                              {"No capture information available."}
+                              {keyword("capture_no_info")}
                             </Alert>
                           )}
                         </Box>
@@ -291,12 +297,16 @@ const C2paResults = (props = { result, handleClose }) => {
                       {manifestData.editsAndActivity ||
                       manifestData.children ? (
                         <Stack>
-                          <Typography variant="h6">{"Process"}</Typography>
+                          <Typography variant="h6">
+                            {keyword("process_title")}
+                          </Typography>
 
                           <Box p={1}>
                             {manifestData.editsAndActivity ? (
                               <>
-                                <Typography fontSize={18}>{"Edits"}</Typography>
+                                <Typography fontSize={18}>
+                                  {keyword("process_edits")}
+                                </Typography>
                                 <Box m={1} />
                                 <Box paddingLeft={2}>
                                   {manifestData.editsAndActivity.map(
@@ -331,7 +341,7 @@ const C2paResults = (props = { result, handleClose }) => {
                             {manifestData.children ? (
                               <>
                                 <Typography fontSize={18}>
-                                  {"Ingredients"}
+                                  {keyword("process_ingredients")}
                                 </Typography>
                                 <Box m={1} />
                                 <Stack direction="row" spacing={1} p={1}>
@@ -365,7 +375,7 @@ const C2paResults = (props = { result, handleClose }) => {
                         </Stack>
                       ) : (
                         <Alert severity="info">
-                          {"No process information for this image."}
+                          {keyword("process_no_info")}
                         </Alert>
                       )}
                       {/* </CardContent> */}
@@ -380,7 +390,7 @@ const C2paResults = (props = { result, handleClose }) => {
                     startIcon={<KeyboardArrowLeft />}
                     variant="contained"
                   >
-                    {"Previous image"}
+                    {keyword("previous_image")}
                   </Button>
                   <Box m={0.5} />
                   {parentId !== mainImageId ? (
@@ -389,7 +399,7 @@ const C2paResults = (props = { result, handleClose }) => {
                       startIcon={<KeyboardDoubleArrowLeft />}
                       variant="contained"
                     >
-                      {"First image"}
+                      {keyword("first_image")}
                     </Button>
                   ) : null}
                 </Box>
