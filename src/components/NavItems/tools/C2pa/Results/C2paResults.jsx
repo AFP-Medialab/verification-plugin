@@ -13,6 +13,10 @@ import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
+  Link,
+  Modal,
+  Fade,
+  Backdrop,
 } from "@mui/material";
 
 import {
@@ -31,6 +35,7 @@ import moment from "moment";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import { Icon as GeoIcon } from "leaflet";
+import { useState } from "react";
 
 /**
  *
@@ -72,10 +77,62 @@ const C2paResults = (props = { result, handleClose }) => {
   };
 
   const title = (title, information) => {
+    const modalStyle = {
+      position: "absolute",
+      top: "50%",
+      left: "50%",
+      transform: "translate(-50%, -50%)",
+      minWidth: "400px",
+      width: "30vw",
+      backgroundColor: "background.paper",
+      outline: "unset",
+      borderRadius: "10px",
+      boxShadow: 24,
+      p: 4,
+      maxHeight: "60vh",
+      overflow: "auto",
+    };
+
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const toggleModal = () => setIsModalOpen((prev) => !prev);
+
     return (
-      <Grid container direction="row">
+      <Grid
+        container
+        direction="row"
+        justifyContent="space-between"
+        alignItems="center"
+      >
         <Grid item>
-          <Typography variant="h6">{title}</Typography>
+          <Typography variant="h6">{keyword(title)}</Typography>
+        </Grid>
+        <Grid item>
+          <Link
+            onClick={toggleModal}
+            sx={{ cursor: "pointer" }}
+            variant={"body1"}
+          >
+            {"info"}
+          </Link>
+          <Modal
+            aria-labelledby="transition-modal-title"
+            aria-describedby="transition-modal-description"
+            open={isModalOpen}
+            onClose={toggleModal}
+            closeAfterTransition
+            slots={{ backdrop: Backdrop }}
+            slotProps={{
+              backdrop: {
+                timeout: 500,
+              },
+            }}
+          >
+            <Fade in={isModalOpen}>
+              <Box sx={modalStyle}>
+                <Typography>{keyword(information)}</Typography>
+              </Box>
+            </Fade>
+          </Modal>
         </Grid>
       </Grid>
     );
@@ -152,9 +209,13 @@ const C2paResults = (props = { result, handleClose }) => {
                     <Box p={1}>
                       {/* <CardContent> */}
                       <Stack>
-                        <Typography variant="h6">
+                        {/* <Typography variant="h6">
                           {keyword("content_credentials_title")}
-                        </Typography>
+                        </Typography> */}
+                        {title(
+                          "content_credentials_title",
+                          "content_credentials_info",
+                        )}
 
                         <Box p={1}>
                           <Typography>
