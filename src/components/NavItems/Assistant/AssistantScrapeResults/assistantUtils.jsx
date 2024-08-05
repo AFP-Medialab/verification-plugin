@@ -92,13 +92,6 @@ function treeMapToElementsRecursive(
       let currentIndex = span.start;
       for (let i = 0; i < spanHighlightIndices.length; i++) {
         const hSpan = spanHighlightIndices[i];
-        // console.log(
-        //   "Matching span",
-        //   span.start,
-        //   span.end,
-        //   hSpan.indices[0],
-        //   hSpan.indices[1],
-        // );
         const hSpanStart = hSpan.indices[0];
         const hSpanEnd = hSpan.indices[1];
         if (
@@ -115,7 +108,6 @@ function treeMapToElementsRecursive(
             hSpanStart < span.start ? span.start : hSpanStart;
           const boundedEnd = hSpanEnd > span.end ? span.end : hSpanEnd;
           if (wrapFunc) {
-            // console.log("Wrapping: ", text.substring(boundedStart, boundedEnd));
             childElems.push(
               wrapFunc(
                 text.substring(boundedStart, boundedEnd),
