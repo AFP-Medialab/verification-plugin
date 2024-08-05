@@ -19,6 +19,7 @@ import AssistantSCResults from "./AssistantScrapeResults/AssistantSCResults";
 import AssistantTextResult from "./AssistantScrapeResults/AssistantTextResult";
 import AssistantUrlSelected from "./AssistantUrlSelected";
 import AssistantWarnings from "./AssistantScrapeResults/AssistantWarnings";
+import AssistantCredSignals from "./AssistantScrapeResults/AssistantCredibilitySignals";
 
 import {
   cleanAssistantState,
@@ -52,6 +53,13 @@ const Assistant = () => {
 
   //third party check states
   const neResult = useSelector((state) => state.assistant.neResultCategory);
+  const newsFramingResult = useSelector(
+    (state) => state.assistant.newsFramingResult,
+  );
+  const newsGenreResult = useSelector(
+    (state) => state.assistant.newsGenreResult,
+  );
+  const hpResult = useSelector((state) => state.assistant.hpResult);
 
   // source credibility
   const positiveSourceCred = useSelector(
@@ -79,6 +87,13 @@ const Assistant = () => {
     (state) => state.assistant.dbkfMediaMatchFail,
   );
   const neFailState = useSelector((state) => state.assistant.neFail);
+  const newsFramingFailState = useSelector(
+    (state) => state.assistant.newsFramingFail,
+  );
+  const newsGenreFailState = useSelector(
+    (state) => state.assistant.newsGenreFail,
+  );
+  // const mtFailState = useSelector(state => state.assistant.mtFail)
 
   //local state
   const [formInput, setFormInput] = useState(inputUrl);
@@ -163,7 +178,9 @@ const Assistant = () => {
         {scFailState ||
         dbkfTextFailState ||
         dbkfMediaFailState ||
-        neFailState ? (
+        neFailState ||
+        newsFramingFailState ||
+        newsGenreFailState ? (
           <Grid item xs>
             <AssistantCheckStatus />
           </Grid>
@@ -233,6 +250,12 @@ const Assistant = () => {
                   <AssistantLinkResult />
                 </Grid>
               ) : null}
+
+              {text ? (
+                <Grid item xs={12}>
+                  <AssistantCredSignals />
+                </Grid>
+              ) : null}
             </Grid>
           </Card>
         </Grid>
@@ -240,5 +263,4 @@ const Assistant = () => {
     </div>
   );
 };
-
 export default Assistant;

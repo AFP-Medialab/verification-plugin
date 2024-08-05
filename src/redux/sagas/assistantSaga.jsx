@@ -12,6 +12,12 @@ import {
   setInputSourceCredDetails,
   setInputUrl,
   setNeDetails,
+  setNewsGenreDetails,
+  setNewsTopicDetails,
+  setPersuasionDetails,
+  setSubjectivityDetails,
+  setPrevFactChecksDetails,
+  setMachineGeneratedTextDetails,
   setProcessUrl,
   setProcessUrlActions,
   setScrapedData,
@@ -76,6 +82,18 @@ function* getDbkfTextMatchSaga() {
   yield takeLatest(["SET_SCRAPED_DATA", "CLEAN_STATE"], handleDbkfTextCall);
 }
 
+function* getNewsTopicSaga() {
+  yield takeLatest(["SET_SCRAPED_DATA", "CLEAN_STATE"], handleNewsTopicCall);
+}
+
+function* getNewsGenreSaga() {
+  yield takeLatest(["SET_SCRAPED_DATA", "CLEAN_STATE"], handleNewsGenreCall);
+}
+
+function* getPersuasionSaga() {
+  yield takeLatest(["SET_SCRAPED_DATA", "CLEAN_STATE"], handlePersuasionCall);
+}
+
 function* getSourceCredSaga() {
   yield takeLatest(
     ["SET_INPUT_URL", "CLEAN_STATE"],
@@ -85,6 +103,24 @@ function* getSourceCredSaga() {
 
 function* getNamedEntitySaga() {
   yield takeLatest(["SET_SCRAPED_DATA", "CLEAN_STATE"], handleNamedEntityCall);
+}
+
+function* getSubjectivitySaga() {
+  yield takeLatest(["SET_SCRAPED_DATA", "CLEAN_STATE"], handleSubjectivityCall);
+}
+
+function* getPrevFactChecksSaga() {
+  yield takeLatest(
+    ["SET_SCRAPED_DATA", "AUTH_USER_LOGIN", "CLEAN_STATE"],
+    handlePrevFactChecksCall,
+  );
+}
+
+function* getMachineGeneratedTextSaga() {
+  yield takeLatest(
+    ["SET_SCRAPED_DATA", "AUTH_USER_LOGIN", "CLEAN_STATE"],
+    handleMachineGeneratedTextCall,
+  );
 }
 
 /**
@@ -346,6 +382,124 @@ function* handleDbkfTextCall(action) {
   } catch (error) {
     console.log(error);
     yield put(setDbkfTextMatchDetails(null, false, false, true));
+  }
+}
+
+function* handleNewsTopicCall(action) {
+  if (action.type === "CLEAN_STATE") return;
+
+  try {
+    const text = yield select((state) => state.assistant.urlText);
+
+    if (text) {
+      yield put(setNewsTopicDetails(null, true, false, false));
+
+      const result = yield call(assistantApi.callNewsFramingService, text);
+      yield put(setNewsTopicDetails(result, false, true, false));
+    }
+  } catch (error) {
+    yield put(setNewsTopicDetails(null, false, false, true));
+  }
+}
+
+function* handleNewsGenreCall(action) {
+  if (action.type === "CLEAN_STATE") return;
+
+  try {
+    const text = yield select((state) => state.assistant.urlText);
+
+    if (text) {
+      yield put(setNewsGenreDetails(null, true, false, false));
+
+      const result = yield call(assistantApi.callNewsGenreService, text);
+      yield put(setNewsGenreDetails(result, false, true, false));
+    }
+  } catch (error) {
+    yield put(setNewsGenreDetails(null, false, false, true));
+  }
+}
+
+function* handlePersuasionCall(action) {
+  if (action.type === "CLEAN_STATE") return;
+
+  try {
+    const text = yield select((state) => state.assistant.urlText);
+
+    if (text) {
+      yield put(setPersuasionDetails(null, true, false, false));
+
+      const result = yield call(assistantApi.callPersuasionService, text);
+      yield put(setPersuasionDetails(result, false, true, false));
+    }
+  } catch (error) {
+    yield put(setPersuasionDetails(null, false, false, true));
+  }
+}
+
+function* handleSubjectivityCall(action) {
+  if (action.type === "CLEAN_STATE") return;
+
+  try {
+    const text = yield select((state) => state.assistant.urlText);
+
+    if (text) {
+      yield put(setSubjectivityDetails(null, true, false, false));
+
+      const result = yield call(assistantApi.callSubjectivityService, text);
+
+      yield put(setSubjectivityDetails(result, false, true, false));
+    }
+  } catch (error) {
+    yield put(setSubjectivityDetails(null, false, false, true));
+  }
+}
+
+function* handlePrevFactChecksCall(action) {
+  if (action.type === "CLEAN_STATE") return;
+
+  try {
+    const text = yield select((state) => state.assistant.urlText);
+
+    // this prevents the call from happening if not correct user status
+    const role = yield select((state) => state.userSession.user.roles);
+
+    if (text && role.includes("BETA_TESTER")) {
+      yield put(setPrevFactChecksDetails(null, true, false, false));
+
+      const result = yield call(assistantApi.callPrevFactChecksService, text);
+
+      yield put(
+        setPrevFactChecksDetails(result.fact_checks, false, true, false),
+      );
+    }
+  } catch (error) {
+    yield put(setPrevFactChecksDetails(null, false, false, true));
+  }
+}
+
+function* handleMachineGeneratedTextCall(action) {
+  if (action.type === "CLEAN_STATE") return;
+
+  try {
+    const text = yield select((state) => state.assistant.urlText);
+
+    // this prevents the call from happening if not correct user status
+
+    //yield take("SET_SCRAPED_DATA"); // wait until linkList has been created
+    const role = yield select((state) => state.userSession.user.roles);
+
+    if (text && role.includes("BETA_TESTER")) {
+      yield put(setMachineGeneratedTextDetails(null, true, false, false));
+
+      const result = yield call(
+        assistantApi.callMachineGeneratedTextService,
+        text,
+      );
+
+      yield put(setMachineGeneratedTextDetails(result, false, true, false));
+    }
+  } catch (error) {
+    yield put(setMachineGeneratedTextDetails(null, false, false, true));
   }
 }
 
@@ -689,7 +843,7 @@ const filterSourceCredibilityResults = (
   linkList,
   trafficLightColors,
 ) => {
-  if (!originalResult.length) {
+  if (!originalResult) {
     return [null, null, null, null];
   }
   let sourceCredibility = originalResult;
@@ -868,5 +1022,11 @@ export default function* assistantSaga() {
     fork(getNamedEntitySaga),
     fork(getAssistantScrapeSaga),
     fork(getUploadSaga),
+    fork(getNewsTopicSaga),
+    fork(getNewsGenreSaga),
+    fork(getPersuasionSaga),
+    fork(getSubjectivitySaga),
+    fork(getPrevFactChecksSaga),
+    fork(getMachineGeneratedTextSaga),
   ]);
 }
