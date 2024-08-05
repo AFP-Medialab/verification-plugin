@@ -105,14 +105,6 @@ function treeMapToElementsRecursive(
           (span.start <= hSpanStart && hSpanStart <= span.end) ||
           (span.start <= hSpanEnd && hSpanEnd <= span.end)
         ) {
-          // //If there's an overlap
-          // console.log(
-          //   "Found lapping span ",
-          //   span.start,
-          //   span.end,
-          //   hSpanStart,
-          //   hSpanEnd,
-          // );
 
           // If span doesn't start before the current index
           if (hSpanStart > currentIndex) {
@@ -133,10 +125,6 @@ function treeMapToElementsRecursive(
               ),
             );
           } else {
-            // console.log(
-            //   "Not wrapping: ",
-            //   text.substring(boundedStart, boundedEnd),
-            // );
             childElems.push(text.substring(boundedStart, boundedEnd));
           }
 
