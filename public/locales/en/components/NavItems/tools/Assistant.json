@@ -142,8 +142,6 @@
   "previous_fact_checks_tooltip": "The Fact Check Semantic Search tool identifies whether the extracted text has previously been detected in a fact check database. It displays the most recent matches, up to a maximum of 5. This tool is currently only accessible to beta users.",
   "more_details": "For more details see",
   "semantic_search_title": "Fact Check Semantic Search",
-  "machine_generated_text": "Machine Generated Text",
-  "machine_generated_text_tooltip": "Determine whether the extracted text has been written by human or machine. This tool is currently only accessible to beta users.",
   "failed_to_load": "Failed to load",
   "previous_fact_checks_found": "Top 5 previous fact-checks found",
   "login_required": "Please log in as a beta user to see results",
@@ -153,5 +151,11 @@
   "semantic_search_result_translated_from": "Translated from",
   "semantic_search_result_see_original": "See original",
   "semantic_search_result_english_translation": "Show English Translation",
-  "semantic_search_rating": "Rating:"
+  "semantic_search_rating": "Rating:",
+  "machine_generated_text": "Machine Generated Text",
+  "machine_generated_text_tooltip": "Determine whether the extracted text has been written by human or machine. This tool is currently only accessible to beta users.",
+  "highly_likely_human": "Highly likely human written with score ",
+  "likely_human": "Likely human written with score ",
+  "likely_machine": "Likely machine generated with score ",
+  "highly_likely_machine": "Highly likely machine generated with score "
   }

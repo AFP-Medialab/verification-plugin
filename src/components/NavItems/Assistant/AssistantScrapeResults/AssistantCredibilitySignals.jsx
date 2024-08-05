@@ -862,8 +862,7 @@ const AssistantCredSignals = () => {
                       <Typography
                         sx={{ color: "text.secondary", align: "left" }}
                       >
-                        {machineGeneratedTextResult.pred}
-                        {" with score "}
+                        {keyword(machineGeneratedTextResult.pred)}
                         {round(machineGeneratedTextResult.score, 4)}
                       </Typography>
                     )}
