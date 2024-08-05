@@ -172,11 +172,23 @@ export default function assistantApiCalls() {
   };
 
   const callSubjectivityService = async (text) => {
-    const result = await axios.post(assistantEndpoint + "dw/subjectivity", {
-      content: text,
-    });
-
-    return result.data;
+    return await callAsyncWithNumRetries(
+      MAX_NUM_RETRIES,
+      async () => {
+        const result = await axios.post(assistantEndpoint + "dw/subjectivity", {
+          content: text,
+        });
+        return result.data;
+      },
+      (numTries) => {
+        console.log(
+          "Could not connect to previous fact checks service, tries " +
+            (numTries + 1) +
+            "/" +
+            MAX_NUM_RETRIES,
+        );
+      },
+    );
   };
 
   const callPrevFactChecksService = async (text) => {
