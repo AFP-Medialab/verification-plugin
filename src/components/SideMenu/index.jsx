@@ -31,11 +31,11 @@ import ImageIcon from "../NavBar/images/SVG/Image/Images.svg";
 import SearchIcon from "../NavBar/images/SVG/Search/Search.svg";
 import DataIcon from "../NavBar/images/SVG/DataAnalysis/Data_analysis.svg";
 import {
-  ROLES,
   TOOL_GROUPS,
   TOOL_STATUS_ICON,
   TOOLS_CATEGORIES,
 } from "../../constants/tools";
+import { ROLES } from "../../constants/roles";
 import { selectTopMenuItem } from "../../redux/reducers/navReducer";
 import { TOP_MENU_ITEMS } from "../../constants/topMenuItems";
 import { selectTool } from "../../redux/reducers/tools/toolReducer";
