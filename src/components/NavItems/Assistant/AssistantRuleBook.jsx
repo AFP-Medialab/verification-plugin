@@ -1,3 +1,4 @@
+import React from "react";
 import analysisIconOff from "../../NavBar/images/tools/video_logoOff.png";
 import keyframesIconOff from "../../NavBar/images/tools/keyframesOff.png";
 import thumbnailsIconOff from "../../NavBar/images/tools/youtubeOff.png";
@@ -6,6 +7,7 @@ import metadataIconOff from "../../NavBar/images/tools/metadataOff.png";
 import videoRightsIconOff from "../../NavBar/images/tools/copyrightOff.png";
 import forensicIconOff from "../../NavBar/images/tools/forensic_logoOff.png";
 import videoIconOff from "../../NavBar/images/tools/video_logoOff.png";
+import DownloadIcon from "@mui/icons-material/Download";
 
 export const NE_SUPPORTED_LANGS = ["en", "pt", "fr", "de", "el", "es", "it"];
 
@@ -113,11 +115,7 @@ export const ASSISTANT_ACTIONS = [
   {
     title: "navbar_analysis_video",
     icon: analysisIconOff,
-    linksAccepted: [
-      KNOWN_LINKS.YOUTUBE,
-      KNOWN_LINKS.FACEBOOK,
-      KNOWN_LINKS.TWITTER,
-    ],
+    linksAccepted: [KNOWN_LINKS.YOUTUBE, KNOWN_LINKS.FACEBOOK],
     cTypes: [CONTENT_TYPE.VIDEO],
     exceptions: [],
     useInputUrl: true,
@@ -142,14 +140,10 @@ export const ASSISTANT_ACTIONS = [
     linksAccepted: [
       KNOWN_LINKS.YOUTUBE,
       KNOWN_LINKS.FACEBOOK,
-      KNOWN_LINKS.TWITTER,
-      KNOWN_LINKS.DAILYMOTION,
-      KNOWN_LINKS.VIMEO,
       KNOWN_LINKS.YOUTUBE,
       KNOWN_LINKS.YOUTUBESHORTS,
       KNOWN_LINKS.LIVELEAK,
       KNOWN_LINKS.OWN,
-      KNOWN_LINKS.INSTAGRAM,
     ],
     cTypes: [CONTENT_TYPE.VIDEO],
     exceptions: [],
@@ -172,7 +166,7 @@ export const ASSISTANT_ACTIONS = [
   {
     title: "navbar_magnifier",
     icon: magnifierIconOff,
-    linksAccepted: [KNOWN_LINKS.MISC, KNOWN_LINKS.OWN],
+    processLinksAccepted: [KNOWN_LINKS.MISC, KNOWN_LINKS.OWN],
     cTypes: [CONTENT_TYPE.IMAGE],
     exceptions: [],
     useInputUrl: false,
@@ -183,7 +177,7 @@ export const ASSISTANT_ACTIONS = [
   {
     title: "navbar_metadata",
     icon: metadataIconOff,
-    linksAccepted: [KNOWN_LINKS.MISC, KNOWN_LINKS.OWN],
+    processLinksAccepted: [KNOWN_LINKS.MISC, KNOWN_LINKS.OWN],
     cTypes: [CONTENT_TYPE.IMAGE, CONTENT_TYPE.VIDEO],
     exceptions: [
       /(pbs.twimg.com)|(youtu.be|youtube)|(instagram)|(fbcdn.net)|(vimeo)|(tiktok.com)/,
@@ -196,11 +190,7 @@ export const ASSISTANT_ACTIONS = [
   {
     title: "navbar_rights",
     icon: videoRightsIconOff,
-    linksAccepted: [
-      KNOWN_LINKS.YOUTUBE,
-      KNOWN_LINKS.FACEBOOK,
-      KNOWN_LINKS.TWITTER,
-    ],
+    linksAccepted: [KNOWN_LINKS.YOUTUBE],
     cTypes: [CONTENT_TYPE.VIDEO],
     exceptions: [],
     useInputUrl: true,
@@ -211,7 +201,7 @@ export const ASSISTANT_ACTIONS = [
   {
     title: "navbar_forensic",
     icon: forensicIconOff,
-    linksAccepted: [KNOWN_LINKS.MISC, KNOWN_LINKS.OWN],
+    processLinksAccepted: [KNOWN_LINKS.MISC, KNOWN_LINKS.OWN],
     cTypes: [CONTENT_TYPE.IMAGE],
     exceptions: [],
     useInputUrl: false,
@@ -222,7 +212,7 @@ export const ASSISTANT_ACTIONS = [
   {
     title: "navbar_ocr",
     icon: forensicIconOff,
-    linksAccepted: [KNOWN_LINKS.MISC, KNOWN_LINKS.OWN],
+    processLinksAccepted: [KNOWN_LINKS.MISC, KNOWN_LINKS.OWN],
     cTypes: [CONTENT_TYPE.IMAGE],
     exceptions: [],
     useInputUrl: false,
@@ -233,13 +223,47 @@ export const ASSISTANT_ACTIONS = [
   {
     title: "assistant_video_download_action",
     icon: videoIconOff,
-    linksAccepted: [KNOWN_LINKS.TELEGRAM, KNOWN_LINKS.MISC],
+    linksAccepted: [
+      KNOWN_LINKS.TELEGRAM,
+      KNOWN_LINKS.FACEBOOK,
+      KNOWN_LINKS.TWITTER,
+    ],
     cTypes: [CONTENT_TYPE.VIDEO],
     exceptions: [],
     useInputUrl: false,
     text: "assistant_video_download_action_description",
     tsvPrefix: "assistant_video",
     download: true,
+  },
+  {
+    title: "assistant_video_download_generic",
+    icon: <DownloadIcon color="disabled" fontSize="large" />,
+    linksAccepted: [
+      KNOWN_LINKS.YOUTUBESHORTS,
+      KNOWN_LINKS.INSTAGRAM,
+      KNOWN_LINKS.FACEBOOK,
+      KNOWN_LINKS.VK,
+      KNOWN_LINKS.VIMEO,
+      KNOWN_LINKS.LIVELEAK,
+      KNOWN_LINKS.DAILYMOTION,
+    ],
+    cTypes: [CONTENT_TYPE.VIDEO],
+    exceptions: [],
+    useInputUrl: false,
+    text: "assistant_video_download_generic_description",
+    tsvPrefix: "assistant_video",
+    path: null,
+  },
+  {
+    title: "assistant_video_download_tiktok",
+    icon: <DownloadIcon color="disabled" fontSize="large" />,
+    linksAccepted: [KNOWN_LINKS.TIKTOK],
+    cTypes: [CONTENT_TYPE.VIDEO],
+    exceptions: [],
+    useInputUrl: false,
+    text: "assistant_video_download_tiktok_description",
+    tsvPrefix: "assistant_video",
+    path: null,
   },
 ];
 
@@ -251,12 +275,10 @@ export const selectCorrectActions = (
 ) => {
   let possibleActions = ASSISTANT_ACTIONS.filter(
     (action) =>
-      ((action.useInputUrl &&
-        action.linksAccepted.includes(inputUrlType) &&
-        action.cTypes.includes(contentType)) ||
-        (!action.useInputUrl &&
-          action.linksAccepted.includes(processUrlType) &&
-          action.cTypes.includes(contentType))) &&
+      (!action.linksAccepted || action.linksAccepted.includes(inputUrlType)) &&
+      (!action.processLinksAccepted ||
+        action.processLinksAccepted.includes(processUrlType)) &&
+      action.cTypes.includes(contentType) &&
       (action.exceptions.length === 0 || !processUrl.match(action.exceptions)),
   );
   return possibleActions;
