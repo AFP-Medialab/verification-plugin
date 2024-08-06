@@ -45,6 +45,8 @@ import { useState } from "react";
  */
 
 const C2paResults = (props = { result, handleClose }) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const currentImageId = useSelector((state) => state.c2pa.currentImageId);
   const mainImageId = useSelector((state) => state.c2pa.mainImageId);
   //const validationIssues = useSelector((state) => state.c2pa.validationIssues);
@@ -76,6 +78,8 @@ const C2paResults = (props = { result, handleClose }) => {
     dispatch(c2paCurrentImageIdSet(ingredientId));
   };
 
+  const toggleModal = () => setIsModalOpen((prev) => !prev);
+
   const title = (title, information) => {
     const modalStyle = {
       position: "absolute",
@@ -92,9 +96,6 @@ const C2paResults = (props = { result, handleClose }) => {
       maxHeight: "60vh",
       overflow: "auto",
     };
-
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const toggleModal = () => setIsModalOpen((prev) => !prev);
 
     return (
       <Grid
