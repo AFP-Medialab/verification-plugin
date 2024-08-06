@@ -34,7 +34,6 @@ export default function AssistantTextSpanClassification({
   text,
   classification,
   titleText = "Detected Class",
-  importantSentenceKey = "Important_Sentence",
   helpDescription = "",
   configs = {
     confidenceThresholdLow: 0.8,
