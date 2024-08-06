@@ -49,7 +49,6 @@ export default function AssistantTextClassification({
   subjectivity = false,
 }) {
   const classes = useMyStyles();
-  const dispatch = useDispatch();
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
 
   // subjectivity or not

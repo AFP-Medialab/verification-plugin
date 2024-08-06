@@ -34,7 +34,6 @@ export default function AssistantTextSpanClassification({
   text,
   classification,
   titleText = "Detected Class",
-  importantSentenceKey = "Important_Sentence",
   helpDescription = "",
   configs = {
     confidenceThresholdLow: 0.8,
@@ -49,7 +48,6 @@ export default function AssistantTextSpanClassification({
   textHtmlMap = null,
 }) {
   const classes = useMyStyles();
-  const dispatch = useDispatch();
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
   const tooltipTextLowThreshold = keyword("low_confidence");
   const tooltipTextHighThreshold = keyword("high_confidence");
