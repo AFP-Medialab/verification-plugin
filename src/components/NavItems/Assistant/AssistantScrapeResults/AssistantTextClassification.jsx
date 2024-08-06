@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
-
 import Card from "@mui/material/Card";
 import {
   CardHeader,
@@ -22,10 +20,10 @@ import {
   interpRgb,
   rgbToString,
   rgbToLuminance,
-  rgbListToGradient,
   treeMapToElements,
   wrapPlainTextSpan,
 } from "./assistantUtils";
+import ColourGradientTooltipContent from "./ColourGradientTooltipContent";
 
 import "./assistantTextResultStyle.css";
 
@@ -289,51 +287,4 @@ export function ClassifiedText({
   }
 
   return <Typography align={"left"}>{output}</Typography>;
-}
-
-export function ColourGradientScale({ textLow, textHigh, rgbList }) {
-  return (
-    <>
-      <Grid container>
-        <Grid item xs={6}>
-          <Typography align="left" fontSize="small" fontWeight="bold">
-            {textLow}
-          </Typography>
-        </Grid>
-        <Grid item xs={6}>
-          <Typography align="right" fontSize="small" fontWeight="bold">
-            {textHigh}
-          </Typography>
-        </Grid>
-      </Grid>
-      <div
-        style={{
-          width: "100%",
-          height: "1em",
-          background: rgbListToGradient(rgbList),
-        }}
-      />
-    </>
-  );
-}
-
-export function ColourGradientTooltipContent({
-  description = "",
-  colourScaleText,
-  textLow = "Low",
-  textHigh = "High",
-  rgbLow = [0, 0, 0],
-  rgbHigh = [255, 255, 255],
-}) {
-  return (
-    <div className={"content"}>
-      {description}
-      <p>{colourScaleText}</p>
-      <ColourGradientScale
-        textLow={textLow}
-        textHigh={textHigh}
-        rgbList={[rgbLow, rgbHigh]}
-      />
-    </div>
-  );
 }

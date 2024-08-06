@@ -53,13 +53,6 @@ const Assistant = () => {
 
   //third party check states
   const neResult = useSelector((state) => state.assistant.neResultCategory);
-  const newsFramingResult = useSelector(
-    (state) => state.assistant.newsFramingResult,
-  );
-  const newsGenreResult = useSelector(
-    (state) => state.assistant.newsGenreResult,
-  );
-  const hpResult = useSelector((state) => state.assistant.hpResult);
 
   // source credibility
   const positiveSourceCred = useSelector(

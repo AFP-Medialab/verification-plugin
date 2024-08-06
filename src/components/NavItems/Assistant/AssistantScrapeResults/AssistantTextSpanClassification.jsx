@@ -1,7 +1,4 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
-
-import { Button } from "@mui/material";
 
 import Card from "@mui/material/Card";
 import { CardHeader, Chip, List, ListItem, ListItemText } from "@mui/material";
@@ -23,7 +20,7 @@ import {
   mergeSpanIndices,
   wrapPlainTextSpan,
 } from "./assistantUtils";
-import { ColourGradientTooltipContent } from "./AssistantTextClassification";
+import ColourGradientTooltipContent from "./ColourGradientTooltipContent";
 import { styled } from "@mui/system";
 
 // Had to create a custom styled span as the default style attribute does not support
