@@ -36,6 +36,7 @@ const ImageImageList = (props) => {
                   onClick={() => props.handleClick(props.list[index])}
                   onLoad={props.setLoading}
                   style={{ width: "100%", height: "auto" }}
+                  data-testid={"assistant-media-grid-image-" + index}
                 />
               ) : (
                 <img
@@ -43,6 +44,7 @@ const ImageImageList = (props) => {
                   alt={tile}
                   onClick={() => props.handleClick(props.list[index])}
                   style={{ width: "100%", height: "auto" }}
+                  data-testid={"assistant-media-grid-image-" + index}
                 />
               )}
             </Grid>
