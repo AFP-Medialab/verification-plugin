@@ -36,6 +36,7 @@ import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import { Icon as GeoIcon } from "leaflet";
 import { useState } from "react";
+import MapIcon from "@mui/icons-material/Map";
 
 /**
  *
@@ -291,35 +292,56 @@ const C2paResults = (props = { result, handleClose }) => {
                                   !isNaN(longitude) &&
                                   !isNaN(latitude),
                               )}
-                              {longitude &&
-                              latitude &&
-                              !isNaN(longitude) &&
-                              !isNaN(latitude) ? (
+                              {longitude && latitude ? (
                                 <Box p={3}>
-                                  {console.log("hi")}
-                                  <MapContainer
-                                    center={[latitude, longitude]}
-                                    zoom={13}
-                                    scrollWheelZoom={false}
-                                    style={{ width: "100%", height: "200px" }}
+                                  {!isNaN(longitude) && !isNaN(latitude) ? (
+                                    <>
+                                      <MapContainer
+                                        center={[latitude, longitude]}
+                                        zoom={13}
+                                        scrollWheelZoom={false}
+                                        style={{
+                                          width: "100%",
+                                          height: "200px",
+                                        }}
+                                      >
+                                        <TileLayer
+                                          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                                          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                                        />
+                                        <Marker
+                                          position={[latitude, longitude]}
+                                          icon={
+                                            new GeoIcon({
+                                              iconUrl:
+                                                "img/marker_location.svg",
+                                              iconSize: [60, 60],
+                                              iconAnchor: [30, 0],
+                                            })
+                                          }
+                                        ></Marker>
+                                      </MapContainer>
+                                      <Box m={1} />
+                                    </>
+                                  ) : null}
+
+                                  <Button
+                                    variant="contained"
+                                    color="primary"
+                                    fullWidth
+                                    onClick={() =>
+                                      window.open(
+                                        "http://www.google.com/maps/place/" +
+                                          latitude +
+                                          "," +
+                                          longitude,
+                                        "_blank ",
+                                      )
+                                    }
                                   >
-                                    <TileLayer
-                                      attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                                      url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                                    />
-                                    <Marker
-                                      position={[latitude, longitude]}
-                                      icon={
-                                        new GeoIcon({
-                                          iconUrl: "img/marker_location.svg",
-                                          iconSize: [60, 60],
-                                          iconAnchor: [30, 0],
-                                        })
-                                      }
-                                    >
-                                      <Popup>{"hi"}</Popup>
-                                    </Marker>
-                                  </MapContainer>
+                                    <MapIcon />
+                                    {keyword("geo_maps")}
+                                  </Button>
                                 </Box>
                               ) : null}
                               {manifestData.captureInfo.allCaptureInfo ? (
