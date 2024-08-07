@@ -232,14 +232,14 @@ async function getC2paData(image, dispatch) {
       if (activeManifest) {
         let { id, data } = await readManifest(activeManifest, null, {}, url, 0);
         data[id].validationIssues = validationIssues;
-        dispatch(c2paResultSet(data));
+        dispatch(c2paResultSet({ data: data, image: null }));
         dispatch(c2paCurrentImageIdSet(id));
         dispatch(c2paMainImageIdSet(id));
       } else {
         console.log("no active manifest");
       }
     } else {
-      dispatch(c2paResultSet(null));
+      dispatch(c2paResultSet({ data: null, image: url }));
     }
     dispatch(c2paLoadingSet(false));
   } catch (err) {

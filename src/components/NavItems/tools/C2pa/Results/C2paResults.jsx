@@ -41,21 +41,33 @@ const C2paResults = (props = { result, handleClose }) => {
   const currentImageId = useSelector((state) => state.c2pa.currentImageId);
   const mainImageId = useSelector((state) => state.c2pa.mainImageId);
 
-  const result = props.result;
+  var data;
+  var img;
+  var parentId;
+  var manifestData;
+  var validationIssues;
+  var latitude;
+  var longitude;
 
-  const img = result[currentImageId].url;
-  const parentId = result[currentImageId].parent;
-  const manifestData = result[currentImageId].manifestData;
-  const validationIssues = result[currentImageId].validationIssues;
+  if (props.result.data) {
+    data = props.result.data;
 
-  const latitude =
-    manifestData && manifestData.captureInfo
-      ? manifestData.captureInfo.latitude
-      : null;
-  const longitude =
-    manifestData && manifestData.captureInfo
-      ? manifestData.captureInfo.longitude
-      : null;
+    img = data[currentImageId].url;
+    parentId = data[currentImageId].parent;
+    manifestData = data[currentImageId].manifestData;
+    validationIssues = data[currentImageId].validationIssues;
+
+    latitude =
+      manifestData && manifestData.captureInfo
+        ? manifestData.captureInfo.latitude
+        : null;
+    longitude =
+      manifestData && manifestData.captureInfo
+        ? manifestData.captureInfo.longitude
+        : null;
+  } else {
+    img = props.result.image;
+  }
 
   const dispatch = useDispatch();
 
@@ -122,28 +134,27 @@ const C2paResults = (props = { result, handleClose }) => {
         </Grid>
         <Grid item xs>
           <Card p={1}>
-            {/* <CardHeader title={"C2pa Info"}/> */}
             <CardContent>
-              {validationIssues ? (
-                <Box m={1}>
-                  <Alert severity="error" m={1}>
-                    {validationMessage(validationIssues)}
-                  </Alert>
-                </Box>
-              ) : null}
-              <Typography variant="h5">
-                {keyword("c2pa_information")}
-              </Typography>
-              <Box m={1} />
-              {!manifestData ? (
+              {!data ? (
                 <Box m={1}>
                   <Alert severity="info" m={1}>
                     {keyword("no_c2pa_info")}
                   </Alert>
-                  <Box m={2} />
                 </Box>
               ) : (
                 <>
+                  {validationIssues ? (
+                    <Box m={1}>
+                      <Alert severity="error" m={1}>
+                        {validationMessage(validationIssues)}
+                      </Alert>
+                      <Box m={2} />
+                    </Box>
+                  ) : null}
+                  <Typography variant="h5">
+                    {keyword("c2pa_information")}
+                  </Typography>
+                  <Box m={1} />
                   <Stack>
                     <Typography>{manifestData.title}</Typography>
                     <Box m={1} />
@@ -409,7 +420,7 @@ const C2paResults = (props = { result, handleClose }) => {
                                     return (
                                       <Box key={key}>
                                         <img
-                                          src={result[obj].url}
+                                          src={data[obj].url}
                                           style={{
                                             maxWidth: "150px",
                                             maxHeight: "60vh",
