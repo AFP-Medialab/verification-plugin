@@ -81,59 +81,13 @@ const C2paResults = (props = { result, handleClose }) => {
   const toggleModal = () => setIsModalOpen((prev) => !prev);
 
   const title = (title, information) => {
-    const modalStyle = {
-      position: "absolute",
-      top: "50%",
-      left: "50%",
-      transform: "translate(-50%, -50%)",
-      minWidth: "400px",
-      width: "30vw",
-      backgroundColor: "background.paper",
-      outline: "unset",
-      borderRadius: "10px",
-      boxShadow: 24,
-      p: 4,
-      maxHeight: "60vh",
-      overflow: "auto",
-    };
-
     return (
-      <Grid
-        container
-        direction="row"
-        justifyContent="space-between"
-        alignItems="center"
-      >
+      <Grid container direction="column">
         <Grid item>
           <Typography variant="h6">{keyword(title)}</Typography>
         </Grid>
-        <Grid item>
-          <Link
-            onClick={toggleModal}
-            sx={{ cursor: "pointer" }}
-            variant={"body1"}
-          >
-            {"info"}
-          </Link>
-          <Modal
-            aria-labelledby="transition-modal-title"
-            aria-describedby="transition-modal-description"
-            open={isModalOpen}
-            onClose={toggleModal}
-            closeAfterTransition
-            slots={{ backdrop: Backdrop }}
-            slotProps={{
-              backdrop: {
-                timeout: 500,
-              },
-            }}
-          >
-            <Fade in={isModalOpen}>
-              <Box sx={modalStyle}>
-                <Typography>{keyword(information)}</Typography>
-              </Box>
-            </Fade>
-          </Modal>
+        <Grid item p={1}>
+          <Alert severity="info">{keyword(information)}</Alert>
         </Grid>
       </Grid>
     );
@@ -215,7 +169,7 @@ const C2paResults = (props = { result, handleClose }) => {
                         </Typography> */}
                         {title(
                           "content_credentials_title",
-                          "content_credentials_info",
+                          "content_credential_explanation",
                         )}
 
                         <Box p={1}>
@@ -240,9 +194,7 @@ const C2paResults = (props = { result, handleClose }) => {
                     <Box p={1}>
                       {/* <CardContent> */}
                       <Stack>
-                        <Typography variant="h6">
-                          {keyword("credit_title")}
-                        </Typography>
+                        {title("credit_title", "credit_explanation")}
                         <Box p={1}>
                           {manifestData.producer ? (
                             <>
@@ -286,9 +238,10 @@ const C2paResults = (props = { result, handleClose }) => {
                     <Box p={1}>
                       {/* <CardContent> */}
                       <Stack>
-                        <Typography variant="h6">
-                          {keyword("capture_info_title")}
-                        </Typography>
+                        {title(
+                          "capture_info_title",
+                          "capture_info_explanation",
+                        )}
                         <Box p={1}>
                           {manifestData.captureInfo ? (
                             <>
@@ -428,9 +381,7 @@ const C2paResults = (props = { result, handleClose }) => {
                     <Box p={1}>
                       {/* <CardContent> */}
 
-                      <Typography variant="h6">
-                        {keyword("process_title")}
-                      </Typography>
+                      {title("process_title", "process_explanation")}
                       <Box p={1}>
                         {manifestData.editsAndActivity ||
                         manifestData.children ? (
