@@ -2,14 +2,11 @@ import { Box, Card, CardHeader, Grid, LinearProgress } from "@mui/material";
 import HeaderTool from "components/Shared/HeaderTool/HeaderTool";
 import useMyStyles from "components/Shared/MaterialUiStyles/useMyStyles";
 import StringFileUploadField from "components/Shared/StringFileUploadField";
-import { useEffect, useState } from "react";
-import getC2paData, { readManifest } from "./Hooks/useGetC2paData";
+import { useState } from "react";
+import getC2paData from "./Hooks/useGetC2paData";
 import { useDispatch, useSelector } from "react-redux";
 import C2paResults from "./Results/C2paResults";
-import {
-  c2paCurrentImageIdSet,
-  c2paStateCleaned,
-} from "redux/reducers/tools/c2paReducer";
+import { c2paStateCleaned } from "redux/reducers/tools/c2paReducer";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
 const C2paData = () => {

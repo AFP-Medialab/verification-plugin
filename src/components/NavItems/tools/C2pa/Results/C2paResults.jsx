@@ -13,19 +13,11 @@ import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
-  Link,
-  Modal,
-  Fade,
-  Backdrop,
 } from "@mui/material";
 
 import {
-  ArrowLeft,
-  ChevronLeft,
   Close,
   ExpandMore,
-  FastRewind,
-  FirstPage,
   KeyboardArrowLeft,
   KeyboardDoubleArrowLeft,
 } from "@mui/icons-material";
@@ -40,17 +32,15 @@ import MapIcon from "@mui/icons-material/Map";
 
 /**
  *
- * @param result {Object} Object containing the parsed c2pa information for this image
- * @param handleClose {function} Closes the result
+ * @param {Object} result  Object containing the parsed c2pa information for this image
+ * @param {function} handleClose  Closes the result
  * @returns {React.JSX.Element}
  */
 
 const C2paResults = (props = { result, handleClose }) => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
   const currentImageId = useSelector((state) => state.c2pa.currentImageId);
   const mainImageId = useSelector((state) => state.c2pa.mainImageId);
-  //const validationIssues = useSelector((state) => state.c2pa.validationIssues);
+
   const result = props.result;
 
   const img = result[currentImageId].url;
@@ -79,8 +69,12 @@ const C2paResults = (props = { result, handleClose }) => {
     dispatch(c2paCurrentImageIdSet(ingredientId));
   };
 
-  const toggleModal = () => setIsModalOpen((prev) => !prev);
-
+  /**
+   *
+   * @param {String} title the keywoed for the title
+   * @param {String} information the keyword for the title description
+   * @returns {React.JSX.Element}
+   */
   const title = (title, information) => {
     return (
       <Grid container direction="column">
@@ -101,15 +95,6 @@ const C2paResults = (props = { result, handleClose }) => {
       return keyword("content_credentials_invalid");
     }
   };
-
-  function ConvertDMSToDD(degrees, minutes, seconds, direction) {
-    var dd = degrees + minutes / 60 + seconds / (60 * 60);
-
-    if (direction == "S" || direction == "W") {
-      dd = dd * -1;
-    }
-    return dd;
-  }
 
   return (
     <Card>
@@ -163,11 +148,7 @@ const C2paResults = (props = { result, handleClose }) => {
                     <Typography>{manifestData.title}</Typography>
                     <Box m={1} />
                     <Box p={1}>
-                      {/* <CardContent> */}
                       <Stack>
-                        {/* <Typography variant="h6">
-                          {keyword("content_credentials_title")}
-                        </Typography> */}
                         {title(
                           "content_credentials_title",
                           "content_credential_explanation",
@@ -186,14 +167,11 @@ const C2paResults = (props = { result, handleClose }) => {
                           </Typography>
                         </Box>
                       </Stack>
-                      {/* </CardContent> */}
                       <Box m={1} />
                       <Divider m={1} />
                     </Box>
-                    {/* <Box m={1} /> */}
 
                     <Box p={1}>
-                      {/* <CardContent> */}
                       <Stack>
                         {title("credit_title", "credit_explanation")}
                         <Box p={1}>
@@ -231,13 +209,11 @@ const C2paResults = (props = { result, handleClose }) => {
                           )}
                         </Box>
                       </Stack>
-                      {/* </CardContent> */}
                       <Box m={1} />
                       <Divider m={1} />
                     </Box>
 
                     <Box p={1}>
-                      {/* <CardContent> */}
                       <Stack>
                         {title(
                           "capture_info_title",
@@ -272,7 +248,6 @@ const C2paResults = (props = { result, handleClose }) => {
                                     {keyword("capture_info_latitude") +
                                       manifestData.captureInfo.latitude}
                                   </Typography>
-                                  {/* {setLatitude(manifestData.captureInfo.latitude)} */}
                                 </>
                               ) : null}
                               {manifestData.captureInfo.longitude ? (
@@ -281,17 +256,8 @@ const C2paResults = (props = { result, handleClose }) => {
                                     {keyword("capture_info_longitude") +
                                       manifestData.captureInfo.longitude}
                                   </Typography>
-                                  {/* {setLongitude(manifestData.captureInfo.longitude)} */}
                                 </>
                               ) : null}
-                              {console.log(isNaN(latitude))}
-                              {console.log(isNaN(longitude))}
-                              {console.log(
-                                longitude &&
-                                  latitude &&
-                                  !isNaN(longitude) &&
-                                  !isNaN(latitude),
-                              )}
                               {longitude && latitude ? (
                                 <Box p={3}>
                                   {!isNaN(longitude) && !isNaN(latitude) ? (
@@ -359,10 +325,8 @@ const C2paResults = (props = { result, handleClose }) => {
                                         (obj, key) => {
                                           return (
                                             <Stack key={key}>
-                                              {/* {console.log(obj.data)} */}
                                               {Object.keys(obj.data).map(
                                                 (objKey, index) => {
-                                                  // console.log(obj.data[objKey]);
                                                   if (
                                                     typeof obj.data[objKey] ===
                                                     "string"
@@ -397,18 +361,14 @@ const C2paResults = (props = { result, handleClose }) => {
                       </Stack>
                       <Box m={1} />
                       <Divider />
-                      {/* </CardContent> */}
                     </Box>
 
                     <Box p={1}>
-                      {/* <CardContent> */}
-
                       {title("process_title", "process_explanation")}
                       <Box p={1}>
                         {manifestData.editsAndActivity ||
                         manifestData.children ? (
                           <Stack>
-                            {/* <Box p={1}> */}
                             {manifestData.editsAndActivity ? (
                               <>
                                 <Typography fontSize={18}>
@@ -418,9 +378,6 @@ const C2paResults = (props = { result, handleClose }) => {
                                 <Box paddingLeft={2}>
                                   {manifestData.editsAndActivity.map(
                                     (obj, key) => {
-                                      {
-                                        console.log(obj);
-                                      }
                                       return (
                                         <Stack key={key}>
                                           <Stack direction="row">
@@ -440,9 +397,7 @@ const C2paResults = (props = { result, handleClose }) => {
                                 </Box>
                               </>
                             ) : null}
-                            {/* </Box> */}
 
-                            {/* <Box p={1}> */}
                             {manifestData.children ? (
                               <>
                                 <Typography fontSize={18}>
@@ -465,16 +420,12 @@ const C2paResults = (props = { result, handleClose }) => {
                                             setImage(obj);
                                           }}
                                         />
-                                        {/* <Typography fontSize={12}>
-                                      {obj.title}
-                                    </Typography> */}
                                       </Box>
                                     );
                                   })}
                                 </Stack>
                               </>
                             ) : null}
-                            {/* </Box> */}
                           </Stack>
                         ) : (
                           <Alert severity="info">
@@ -482,7 +433,6 @@ const C2paResults = (props = { result, handleClose }) => {
                           </Alert>
                         )}
                       </Box>
-                      {/* </CardContent> */}
                     </Box>
                   </Stack>
                 </>

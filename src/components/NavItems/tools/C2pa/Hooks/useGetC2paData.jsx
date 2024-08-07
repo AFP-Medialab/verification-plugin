@@ -9,9 +9,13 @@ import {
   c2paLoadingSet,
   c2paMainImageIdSet,
   c2paResultSet,
-  c2paValidationIssuesSet,
 } from "redux/reducers/tools/c2paReducer";
 
+/**
+ *
+ * @param {Array} assertions array containing the assertions of a manifest
+ * @returns {Object} parsed capture information
+ */
 const exifData = (assertions) => {
   let captureInfo = null;
   let allCaptureInfo = null;
@@ -58,25 +62,17 @@ const exifData = (assertions) => {
   return captureInfo;
 };
 
-// const getIngredients = (ingredients) => {
-//   let ingredientInfo = [];
-//   for (let i = 0; i < ingredients.length; i++) {
-//     let thumbnail = ingredients[i].thumbnail;
-//     let url = thumbnail.getUrl();
-//     console.log("url: ", url.url);
-//     let ingredientManifest = ingredients[i].manifest
-//       ? ingredients[i].manifest
-//       : null;
-//     ingredientInfo.push({
-//       title: ingredients[i].title,
-//       url: url.url,
-//       manifest: ingredientManifest,
-//     });
-//   }
-//   return ingredientInfo;
-// };
-
-export async function readManifest(manifest, parent, result, url, depth) {
+/**
+ *
+ * @param {Object} manifest the c2pa manifest to be read
+ * @param {string=} parent id of manifest parent if there is one
+ * @param {Object} result Object containing the data for the manifests that have already been read
+ * @param {*} url image corresponding with the manifest
+ * @param {*} depth nunber of ancestors of the manifest already read, used to avoid having a result object that is too large if a manifest has many descendants
+ * @returns
+ */
+async function readManifest(manifest, parent, result, url, depth) {
+  // the object that will contain
   const res = {
     url: url,
     parent: parent,
@@ -134,7 +130,6 @@ export async function readManifest(manifest, parent, result, url, depth) {
     if (producer) manifestData.producer = { name: producer.name };
 
     const producerSocials = selectSocialAccounts(manifest);
-    console.log("socials: ", producerSocials);
     if (producerSocials && producerSocials.length > 0) {
       manifestData.producer
         ? (manifestData.producer.socials = producerSocials)
@@ -146,11 +141,14 @@ export async function readManifest(manifest, parent, result, url, depth) {
     result[manifestId] = res;
 
     return { id: manifestId, data: result };
-  } else {
-    console.log("no data");
   }
 }
 
+/**
+ *
+ * @param {Array} validationStatus Array containing validation issues if there are any
+ * @returns {Object} contains a boolean determining wheter or not the issues are do to trust in a source, as well as the messages for the issues
+ */
 function getValidationIssues(validationStatus) {
   if (validationStatus.length > 0) {
     let errorMessages = [];
@@ -168,12 +166,21 @@ function getValidationIssues(validationStatus) {
   }
 }
 
+/**
+ *
+ * @param {string} file
+ * @returns
+ */
 async function loadTrustResource(file) {
   const res = await fetch(`https://contentcredentials.org/trust/${file}`);
 
   return res.text();
 }
 
+/**
+ *
+ * @returns {Object} settings allowing the c2pa.read function to determine if the source of the Content Credentials is on adobe's trusted list
+ */
 async function getToolkitSettings() {
   const [trustAnchors, allowedList, trustConfig] = await Promise.all(
     ["anchors.pem", "allowed.sha256.txt", "store.cfg"].map(loadTrustResource),
@@ -191,9 +198,14 @@ async function getToolkitSettings() {
   };
 }
 
+/**
+ *
+ * @param {Object} image the image containing c2pa data
+ * @param {function} dispatch
+ */
+
 async function getC2paData(image, dispatch) {
   const settings = await getToolkitSettings();
-  console.log(settings);
 
   const c2pa = await createC2pa({
     wasmSrc: "./c2paAssets/toolkit_bg.wasm",
@@ -202,7 +214,6 @@ async function getC2paData(image, dispatch) {
 
   dispatch(c2paLoadingSet(true));
   const url = URL.createObjectURL(image);
-  // dispatch(c2paUrlSet(url));
 
   try {
     const { manifestStore } = await c2pa.read(image, {
@@ -210,8 +221,6 @@ async function getC2paData(image, dispatch) {
     });
 
     if (manifestStore) {
-      console.log(manifestStore);
-
       const activeManifest = manifestStore.activeManifest
         ? manifestStore.activeManifest
         : null;
@@ -219,10 +228,6 @@ async function getC2paData(image, dispatch) {
       let validationIssues = null;
       if (manifestStore.validationStatus.length > 0) {
         validationIssues = getValidationIssues(manifestStore.validationStatus);
-        // dispatch(c2paValidationIssuesSet(true));
-        // dispatch(c2paResultSet({ photo: { url: url } }));
-        // dispatch(c2paMainImageIdSet("photo"));
-        // dispatch(c2paCurrentImageIdSet("photo"));
       }
       if (activeManifest) {
         let { id, data } = await readManifest(activeManifest, null, {}, url, 0);
@@ -230,39 +235,6 @@ async function getC2paData(image, dispatch) {
         dispatch(c2paResultSet(data));
         dispatch(c2paCurrentImageIdSet(id));
         dispatch(c2paMainImageIdSet(id));
-        // const res = {
-        //   c2paInfo: true,
-        //   title: activeManifest.title,
-        //   signatureInfo: {
-        //     issuer: activeManifest.signatureInfo.issuer,
-        //     time: activeManifest.signatureInfo.time,
-        //   },
-        // };
-
-        // const editsAndActivity = await selectEditsAndActivity(activeManifest);
-        // console.log("edits and activity: ", editsAndActivity);
-        // if (editsAndActivity) res.editsAndActivity = editsAndActivity;
-
-        // const captureInfo = exifData(activeManifest.assertions.data);
-
-        // if (captureInfo) {
-        //   console.log(captureInfo);
-        //   res.captureInfo = captureInfo;
-        // }
-
-        // if (manifestStore.validationStatus.length > 0) {
-        //   res.validationIssues = true;
-        // }
-        // if (activeManifest.ingredients.length > 0) {
-        //   res.ingredients = getIngredients(activeManifest.ingredients);
-        //   //console.log(ingredients);
-        // }
-
-        // const producer = selectProducer(activeManifest);
-        // console.log("producer: ", producer);
-        // if (producer) res.producer = producer.name;
-
-        //dispatch(c2paResultsSet(res));
       } else {
         console.log("no active manifest");
       }
