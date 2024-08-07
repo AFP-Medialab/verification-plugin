@@ -137,7 +137,7 @@
   "subjectivity": "Subjectivity",
   "subjectivity_tooltip": "Identify the subjective sentences of the extracted text.",
   "subjective_sentences_detected": "Subjective sentences detected",
-  "no_subjective_sentences_detected": "No subjective sentences detected",
+  "none_detected": "None detected",
   "previous_fact_checks": "Previous Fact-Checks",
   "previous_fact_checks_tooltip": "The Fact Check Semantic Search tool identifies whether the extracted text has previously been detected in a fact check database. It displays the most recent matches, up to a maximum of 5. This tool is currently only accessible to beta users.",
   "more_details": "For more details see",

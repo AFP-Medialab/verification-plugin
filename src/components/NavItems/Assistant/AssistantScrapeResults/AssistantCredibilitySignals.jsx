@@ -68,17 +68,18 @@ const calculateSubjectivity = (sentences) => {
     }
   }
 
-  return [
+  return (
+    " (",
     scoresSUBJ.length,
-    [" (", scoresSUBJ.length, "/", sentences.length, ")"]
-      .toString()
-      .replaceAll(",", ""),
-  ];
+    "/",
+    sentences.length,
+    ")".toString().replaceAll(",", "")
+  );
 };
 
 const getExpandIcon = (loading, fail, done = null, role = null) => {
   if (loading || fail || done || (role && !role.includes("BETA_TESTER"))) {
-    // "done" is for when subjectivityDone = true and subjectivityResult.entities.length
+    // "done" is for when subjectivityDone = true and Object.keys(result.entities).length < 1
     return <Remove />;
   } else {
     return <ExpandMoreIcon />;
@@ -542,11 +543,21 @@ const AssistantCredSignals = () => {
           <StyledAccordion
             expanded={expandedAccordion === persuasionTitle}
             onChange={handleChange(persuasionTitle)}
-            disabled={persuasionLoading || persuasionFail}
+            disabled={
+              persuasionLoading ||
+              persuasionFail ||
+              (persuasionDone &&
+                Object.keys(persuasionResult.entities).length < 1)
+            }
             disableGutters
           >
             <AccordionSummary
-              expandIcon={getExpandIcon(persuasionLoading, persuasionFail)}
+              expandIcon={getExpandIcon(
+                persuasionLoading,
+                persuasionFail,
+                persuasionDone &&
+                  Object.keys(persuasionResult.entities).length < 1,
+              )}
             >
               <Grid container wrap="wrap">
                 <Grid item xs={4} align="left">
@@ -571,6 +582,14 @@ const AssistantCredSignals = () => {
                       {renderEntityKeys(persuasionResult.entities)}
                     </Typography>
                   )}
+                  {persuasionDone &&
+                    Object.keys(persuasionResult.entities).length < 1 && (
+                      <Typography
+                        sx={{ color: "text.secondary", align: "left" }}
+                      >
+                        {keyword("none_detected")}
+                      </Typography>
+                    )}
                 </Grid>
               </Grid>
             </AccordionSummary>
@@ -646,13 +665,18 @@ const AssistantCredSignals = () => {
                   )}
                   {subjectivityDone && (
                     <Typography sx={{ color: "text.secondary", align: "left" }}>
-                      {calculateSubjectivity(subjectivityResult.sentences)[0] !=
-                      0
-                        ? keyword("subjective_sentences_detected") +
-                          calculateSubjectivity(subjectivityResult.sentences)[1]
-                        : keyword("no_subjective_sentences_detected")}
+                      {keyword("subjective_sentences_detected")}{" "}
+                      {calculateSubjectivity(subjectivityResult.sentences)}
                     </Typography>
                   )}
+                  {subjectivityDone &&
+                    Object.keys(subjectivityResult.entities).length < 1 && (
+                      <Typography
+                        sx={{ color: "text.secondary", align: "left" }}
+                      >
+                        {keyword("none_detected")}
+                      </Typography>
+                    )}
                 </Grid>
               </Grid>
             </AccordionSummary>
