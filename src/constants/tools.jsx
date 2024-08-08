@@ -54,6 +54,7 @@ import SemanticSearch from "../components/NavItems/tools/SemanticSearch";
 import TwitterSna from "../components/NavItems/tools/TwitterSna/TwitterSna";
 import Archive from "../components/NavItems/tools/Archive";
 import About from "../components/NavItems/About/About";
+import { ROLES } from "./roles";
 import C2paData from "components/NavItems/tools/C2pa/C2pa";
 
 /**
@@ -99,17 +100,6 @@ export const TOOL_GROUPS = {
   VERIFICATION: "verification",
   LEARNING: "learning",
   MORE: "more",
-};
-
-/**
- * Represents the user roles that can be needed to access a given topMenuItem
- * @typedef Roles
- * @type {{BETA_TESTER: string, ARCHIVE: string, LOCK: string}}
- */
-export const ROLES = {
-  ARCHIVE: "ARCHIVE",
-  BETA_TESTER: "BETA_TESTER",
-  LOCK: "lock",
 };
 
 /**
@@ -431,7 +421,7 @@ const imageGif = new Tool(
   <Footer type={FOOTER_TYPES.BORELLI_AFP} />,
 );
 
-const imageSyntheticDetection = new Tool(
+export const imageSyntheticDetection = new Tool(
   "navbar_synthetic_image_detection",
   "navbar_synthetic_image_detection_description",
   syntheticImageSvgIcon,

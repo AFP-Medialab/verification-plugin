@@ -1,8 +1,9 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Box from "@mui/material/Box";
 import { Button, ButtonGroup, Grid, TextField } from "@mui/material";
 import FolderOpenIcon from "@mui/icons-material/FolderOpen";
 import CloseIcon from "@mui/icons-material/Close";
+import LoadingButton from "@mui/lab/LoadingButton";
 
 /**
  * A reusable form component with a textfield and a local file with optional processing
@@ -20,7 +21,7 @@ import CloseIcon from "@mui/icons-material/Close";
  * @param handleSubmit {any}
  * @param handleCloseSelectedFile {any} An optional handler function to execute when clearing the file selected
  * @param preprocessLocalFile {any} Optional preprocessing function to process a local file
-
+ * @param isParentLoading {?Boolean | undefined} Optional boolean to change the loading state of the component from a parent component
 
  */
 const StringFileUploadField = ({
@@ -36,10 +37,19 @@ const StringFileUploadField = ({
   fileInputTypesAccepted,
   handleCloseSelectedFile,
   preprocessLocalFile,
+  isParentLoading,
 }) => {
   const fileRef = useRef(null);
 
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(
+    isParentLoading !== undefined ? isParentLoading : false,
+  );
+
+  useEffect(() => {
+    if (isParentLoading !== undefined && isLoading !== isParentLoading) {
+      setIsLoading(isParentLoading);
+    }
+  }, [isParentLoading]);
 
   return (
     <Box>
@@ -58,7 +68,7 @@ const StringFileUploadField = ({
           />
         </Grid>
         <Grid item>
-          <Button
+          <LoadingButton
             type="submit"
             variant="contained"
             color="primary"
@@ -68,10 +78,11 @@ const StringFileUploadField = ({
               urlInput ? await handleSubmit(urlInput) : await handleSubmit(e);
               setIsLoading(false);
             }}
+            loading={isLoading}
             disabled={(urlInput === "" && !fileInput) || isLoading}
           >
             {submitButtonKeyword}
-          </Button>
+          </LoadingButton>
         </Grid>
       </Grid>
       <Grid item mt={2}>

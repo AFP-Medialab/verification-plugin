@@ -30,7 +30,8 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import { Audiotrack } from "@mui/icons-material";
-import { ROLES, tools, TOOLS_CATEGORIES } from "../../../../constants/tools";
+import { tools, TOOLS_CATEGORIES } from "../../../../constants/tools";
+import { ROLES } from "../../../../constants/roles";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
