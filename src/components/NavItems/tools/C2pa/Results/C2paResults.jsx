@@ -135,11 +135,12 @@ const C2paResults = (props = { result, handleClose }) => {
         <Grid item xs>
           <Card p={1}>
             <CardContent>
-              {!data ? (
+              {!data || !manifestData ? (
                 <Box m={1}>
                   <Alert severity="info" m={1}>
                     {keyword("no_c2pa_info")}
                   </Alert>
+                  <Box m={1} />
                 </Box>
               ) : (
                 <>

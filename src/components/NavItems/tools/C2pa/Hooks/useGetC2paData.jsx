@@ -65,11 +65,11 @@ const exifData = (assertions) => {
 /**
  *
  * @param {Object} manifest the c2pa manifest to be read
- * @param {string=} parent id of manifest parent if there is one
+ * @param {string=} parent id of manifest's parent if there is one
  * @param {Object} result Object containing the data for the manifests that have already been read
- * @param {*} url image corresponding with the manifest
- * @param {*} depth nunber of ancestors of the manifest already read, used to avoid having a result object that is too large if a manifest has many descendants
- * @returns
+ * @param {string} url image corresponding with the manifest
+ * @param {number} depth nunber of ancestors of the manifest already read, used to avoid having a result object that is too large if a manifest has many descendants
+ * @returns {Object} contains the id of the manifest that was just read, as well as the updated results
  */
 async function readManifest(manifest, parent, result, url, depth) {
   // the object that will contain
@@ -233,6 +233,10 @@ async function getC2paData(image, dispatch) {
         let { id, data } = await readManifest(activeManifest, null, {}, url, 0);
         data[id].validationIssues = validationIssues;
         dispatch(c2paResultSet({ data: data, image: null }));
+
+        // each manifest has an id. The current image id determines which image's data is displayed
+        // and the main image id is used to return to the first image if a child image is being displayed
+
         dispatch(c2paCurrentImageIdSet(id));
         dispatch(c2paMainImageIdSet(id));
       } else {
