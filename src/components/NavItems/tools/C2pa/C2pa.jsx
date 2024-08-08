@@ -42,7 +42,7 @@ const C2paData = () => {
     <Box>
       <HeaderTool
         name={keyword("c2pa_title")}
-        description={"c2pa description"}
+        description={keyword("c2pa_description")}
       />
       <Card>
         <CardHeader
@@ -53,7 +53,7 @@ const C2paData = () => {
               justifyContent="space-between"
               alignItems="center"
             >
-              <span>{"C2pa data"}</span>
+              <span>{keyword("image_link")}</span>
             </Grid>
           }
           className={classes.headerUploadedImage}
@@ -62,10 +62,10 @@ const C2paData = () => {
         <Box p={3}>
           <form>
             <StringFileUploadField
-              labelKeyword={""}
-              placeholderKeyword={""}
-              submitButtonKeyword={"submit"}
-              localFileKeyword={"local file"}
+              labelKeyword={keyword("image_link")}
+              placeholderKeyword={keyword("placeholder")}
+              submitButtonKeyword={keyword("submit_button")}
+              localFileKeyword={keyword("button_localfile")}
               urlInput={input}
               setUrlInput={setInput}
               fileInput={imageFile}
