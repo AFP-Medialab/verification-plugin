@@ -23,9 +23,13 @@ const C2paData = () => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/C2pa");
 
   const handleSubmit = () => {
+    dispatch(c2paStateCleaned());
+
     if (imageFile) {
-      dispatch(c2paStateCleaned());
-      getC2paData(imageFile, dispatch);
+      const url = URL.createObjectURL(imageFile);
+      getC2paData(url, dispatch);
+    } else if (input) {
+      getC2paData(input, dispatch);
     }
   };
 

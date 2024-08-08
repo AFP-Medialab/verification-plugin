@@ -213,11 +213,11 @@ async function getToolkitSettings() {
 
 /**
  *
- * @param {Object} image the image containing c2pa data
+ * @param {Object} url the url of the image containing c2pa data
  * @param {function} dispatch
  */
 
-async function getC2paData(image, dispatch) {
+async function getC2paData(url, dispatch) {
   const settings = await getToolkitSettings();
 
   const c2pa = await createC2pa({
@@ -226,10 +226,10 @@ async function getC2paData(image, dispatch) {
   });
 
   dispatch(c2paLoadingSet(true));
-  const url = URL.createObjectURL(image);
+  // const url = URL.createObjectURL(image);
 
   try {
-    const { manifestStore } = await c2pa.read(image, {
+    const { manifestStore } = await c2pa.read(url, {
       settings: settings,
     });
 
