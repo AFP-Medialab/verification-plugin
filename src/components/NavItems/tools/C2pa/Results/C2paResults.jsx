@@ -41,33 +41,23 @@ const C2paResults = (props = { result, handleClose }) => {
   const currentImageId = useSelector((state) => state.c2pa.currentImageId);
   const mainImageId = useSelector((state) => state.c2pa.mainImageId);
 
-  var data;
-  var img;
-  var parentId;
-  var manifestData;
-  var validationIssues;
-  var latitude;
-  var longitude;
+  const data = props.result;
 
-  if (props.result.data) {
-    data = props.result.data;
+  const img = data[currentImageId].url;
+  const parentId = data[currentImageId].parent;
+  const manifestData = data[currentImageId].manifestData;
+  const validationIssues = data[currentImageId].validationIssues;
 
-    img = data[currentImageId].url;
-    parentId = data[currentImageId].parent;
-    manifestData = data[currentImageId].manifestData;
-    validationIssues = data[currentImageId].validationIssues;
+  const latitude =
+    manifestData && manifestData.captureInfo
+      ? manifestData.captureInfo.latitude
+      : null;
+  const longitude =
+    manifestData && manifestData.captureInfo
+      ? manifestData.captureInfo.longitude
+      : null;
 
-    latitude =
-      manifestData && manifestData.captureInfo
-        ? manifestData.captureInfo.latitude
-        : null;
-    longitude =
-      manifestData && manifestData.captureInfo
-        ? manifestData.captureInfo.longitude
-        : null;
-  } else {
-    img = props.result.image;
-  }
+  const depthExceeded = data[currentImageId].depthExceeded;
 
   const dispatch = useDispatch();
 
@@ -135,11 +125,15 @@ const C2paResults = (props = { result, handleClose }) => {
         <Grid item xs>
           <Card p={1}>
             <CardContent>
-              {!data || !manifestData ? (
+              {!manifestData ? (
                 <Box m={1}>
-                  <Alert severity="info" m={1}>
-                    {keyword("no_c2pa_info")}
-                  </Alert>
+                  {depthExceeded ? (
+                    <Alert>{keyword("child_depth_exceeded")}</Alert>
+                  ) : (
+                    <Alert severity="info" m={1}>
+                      {keyword("no_c2pa_info")}
+                    </Alert>
+                  )}
                   <Box m={1} />
                 </Box>
               ) : (

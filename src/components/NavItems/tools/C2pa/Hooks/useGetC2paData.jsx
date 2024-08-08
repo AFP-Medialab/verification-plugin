@@ -12,7 +12,7 @@ import {
 } from "redux/reducers/tools/c2paReducer";
 
 /**
- *
+ * This function reads the image's capture information from the assertions
  * @param {Array} assertions array containing the assertions of a manifest
  * @returns {Object} parsed capture information
  */
@@ -63,7 +63,7 @@ const exifData = (assertions) => {
 };
 
 /**
- *
+ * This function will recursively parse de data from a c2pa manifest and its children, and add it all to the result object
  * @param {Object} manifest the c2pa manifest to be read
  * @param {string=} parent id of manifest's parent if there is one
  * @param {Object} result Object containing the data for the manifests that have already been read
@@ -72,7 +72,7 @@ const exifData = (assertions) => {
  * @returns {Object} contains the id of the manifest that was just read, as well as the updated results
  */
 async function readManifest(manifest, parent, result, url, depth) {
-  // the object that will contain
+  // the object that will contain the data from this manifest, as well as the parent it
   const res = {
     url: url,
     parent: parent,
@@ -106,20 +106,33 @@ async function readManifest(manifest, parent, result, url, depth) {
         );
         let ingredientId;
 
-        if (depth < 5 && manifest.ingredients[i].manifest) {
-          let { id, data } = await readManifest(
-            manifest.ingredients[i].manifest,
-            manifestId,
-            result,
-            ingredientUrl.url,
-            depth + 1,
-          );
-          ingredientId = id;
-          result = data;
-          result[id].validationIssues = validationIssues;
+        // if a child has more than 5 ancestors, c2pa data will not be shown.
+        if (depth < 5) {
+          if (manifest.ingredients[i].manifest) {
+            let { id, data } = await readManifest(
+              manifest.ingredients[i].manifest,
+              manifestId,
+              result,
+              ingredientUrl.url,
+              depth + 1,
+            );
+            ingredientId = id;
+            result = data;
+            result[id].validationIssues = validationIssues;
+          } else {
+            ingredientId = manifest.ingredients[i].instanceId;
+            result[ingredientId] = {
+              url: ingredientUrl.url,
+              parent: manifestId,
+            };
+          }
         } else {
           ingredientId = manifest.ingredients[i].instanceId;
-          result[ingredientId] = { url: ingredientUrl.url, parent: manifestId };
+          result[ingredientId] = {
+            url: ingredientUrl.url,
+            parent: manifestId,
+            depthExceeded: true,
+          };
         }
         children.push(ingredientId);
         manifestData.children = children;
@@ -232,7 +245,7 @@ async function getC2paData(image, dispatch) {
       if (activeManifest) {
         let { id, data } = await readManifest(activeManifest, null, {}, url, 0);
         data[id].validationIssues = validationIssues;
-        dispatch(c2paResultSet({ data: data, image: null }));
+        dispatch(c2paResultSet(data));
 
         // each manifest has an id. The current image id determines which image's data is displayed
         // and the main image id is used to return to the first image if a child image is being displayed
@@ -243,7 +256,12 @@ async function getC2paData(image, dispatch) {
         console.log("no active manifest");
       }
     } else {
-      dispatch(c2paResultSet({ data: null, image: url }));
+      // if there is no manifest store, the only data saved for an image is its url
+      const data = {};
+      data["id"] = { url: url };
+      dispatch(c2paResultSet(data));
+      dispatch(c2paCurrentImageIdSet("id"));
+      dispatch(c2paMainImageIdSet("id"));
     }
     dispatch(c2paLoadingSet(false));
   } catch (err) {
