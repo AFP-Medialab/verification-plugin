@@ -253,12 +253,14 @@ const SyntheticImageDetectionResults = ({
     return floor === 0 ? 1 : floor;
   };
   const [detailsPanelMessage, setDetailsPanelMessage] = useState(
-    "synthetic_image_detection_additional_results_hide",
+    "synthetic_image_detection_additional_results",
   );
   const handleDetailsChange = () => {
     detailsPanelMessage === "synthetic_image_detection_additional_results_hide"
       ? setDetailsPanelMessage("synthetic_image_detection_additional_results")
-      : setDetailsPanelMessage("synthetic_image_detection_additional_results");
+      : setDetailsPanelMessage(
+          "synthetic_image_detection_additional_results_hide",
+        );
   };
 
   const [nddDetailsPanelMessage, setNddDetailsPanelMessage] = useState(
