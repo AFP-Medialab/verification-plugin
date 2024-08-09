@@ -227,6 +227,7 @@ export const ASSISTANT_ACTIONS = [
       KNOWN_LINKS.TELEGRAM,
       KNOWN_LINKS.FACEBOOK,
       KNOWN_LINKS.TWITTER,
+      KNOWN_LINKS.MASTODON,
     ],
     cTypes: [CONTENT_TYPE.VIDEO],
     exceptions: [],

@@ -3,7 +3,8 @@ import { test, expect } from './fixtures';
 
 const MediaType = {
   video: "video",
-  image: "image"
+  image: "image",
+  none: "none",
 };
 
 const MediaVideoStatus = {
@@ -26,6 +27,8 @@ const MediaServices = {
   videoDownloadGeneric: "assistant_video_download_generic",
   videoDownloadTiktok: "assistant_video_download_tiktok",
 };
+
+
 
 [
   // Twitter image post
@@ -125,22 +128,21 @@ const MediaServices = {
     mediaStatus: MediaVideoStatus.iframe,
     services: [MediaServices.videoDownloadGeneric]
   },
-  // Mastodon issues will be addressed very soon!
-  // // Mastodon link with youtube video link
-  // {
-  //   url: "https://mstdn.social/@BBC/105203076554056414",
-  //   mediaType: MediaType.video,
-  //   mediaStatus: MediaVideoStatus.video,
-  //   services: []
-  // },
-  // // Mastodon link with embedded video
-  // {
-  //   url: "https://mstdn.social/@dtnsshow/112728823075224415",
-  //   mediaType: MediaType.video,
-  //   mediaStatus: MediaVideoStatus.video,
-  //   services: []
-  // },
-].forEach(({url, videoGridIndex, imageGridIndex, mediaType, mediaStatus, services}) => {
+  // Mastodon link with youtube video link
+  {
+    url: "https://mstdn.social/@BBC/105203076554056414",
+    mediaType: MediaType.video,
+    mediaStatus: MediaVideoStatus.video,
+    services: []
+  },
+  // Mastodon link with embedded video
+  {
+    url: "https://mstdn.social/@dtnsshow/112728823075224415",
+    mediaType: MediaType.video,
+    mediaStatus: MediaVideoStatus.video,
+    services: [MediaServices.videoDownload, MediaServices.metadata]
+  },
+].forEach(({url, videoGridIndex, imageGridIndex, mediaType, mediaStatus, services, hasScrapedText = true}) => {
     test(`Test assistant media services for url: ${url}`, async ({ page, extensionId }) => {
 
       // Navigate to the assistant page
@@ -166,43 +168,58 @@ const MediaServices = {
       if(Number.isInteger(imageGridIndex))
         await page.getByTestId("assistant-media-grid-image-"+imageGridIndex).click();
 
-      // If expecting an image, check that the image is shown
-      if(mediaType === MediaType.image){
-        await expect(page.getByTestId("assistant-media-image")).toBeVisible();
-      }
 
-      if(mediaType === MediaType.video){
-        await expect(page.getByTestId("assistant-media-video-container")).toBeVisible();
-        if(mediaStatus !== null && mediaStatus !== undefined){
-          switch (mediaStatus) {
-            case MediaVideoStatus.iframe:
-              await expect(page.getByTestId("assistant-media-video-iframe")).toBeVisible();
-              break;
-            case MediaVideoStatus.video:
-              await expect(page.getByTestId("assistant-media-video-tag")).toBeVisible();
-              break;
-            case MediaVideoStatus.noEmbed:
-              await expect(page.getByTestId("assistant-media-video-noembed")).toBeVisible();
-              break;
+      // Check that media exists for image and video posts and that all expected services are shown
+      switch(mediaType){
+        case MediaType.image:
+          await expect(page.getByTestId("assistant-media-image")).toBeVisible();
+          await checkMediaServices(page, services)
+          break;
+        case MediaType.video:
+          await expect(page.getByTestId("assistant-media-video-container")).toBeVisible();
+          if(mediaStatus !== null && mediaStatus !== undefined){
+            switch (mediaStatus) {
+              case MediaVideoStatus.iframe:
+                await expect(page.getByTestId("assistant-media-video-iframe")).toBeVisible();
+                break;
+              case MediaVideoStatus.video:
+                await expect(page.getByTestId("assistant-media-video-tag")).toBeVisible();
+                break;
+              case MediaVideoStatus.noEmbed:
+                await expect(page.getByTestId("assistant-media-video-noembed")).toBeVisible();
+                break;
 
+            }
           }
-        }
+          await checkMediaServices(page, services)
+          break;
+        case MediaType.none:
+          await expect(page.getByTestId("assistant-media-video-container")).not.toBeVisible();
+          break;
       }
 
-      // Checks that expected services are shown
-      for( const serviceId of services){
-        await expect(page.getByTestId(serviceId)).toBeVisible();
+      if(hasScrapedText){
+        await expect(page.getByTestId("assistant-text-scraped-text")).toBeVisible();
       }
 
-      // Ensure disabled services are not showing
-      for( const serviceKey in MediaServices){
-        const serviceId = MediaServices[serviceKey];
-        if(!services.includes(serviceId))
-          await expect(page.getByTestId(serviceId)).not.toBeVisible();
-      }
 
     });
   }
 );
+
+async function checkMediaServices(page, availableServices){
+  // Checks that expected services are shown
+  for( const serviceId of availableServices){
+    await expect(page.getByTestId(serviceId)).toBeVisible();
+  }
+
+  // Ensure disabled services are not showing
+  for( const serviceKey in MediaServices){
+    const serviceId = MediaServices[serviceKey];
+    if(!availableServices.includes(serviceId))
+      await expect(page.getByTestId(serviceId)).not.toBeVisible();
+  }
+
+}
 
 

@@ -79,7 +79,7 @@
     "@babel/core": "^7.23.0",
     "@babel/preset-env": "^7.22.20",
     "@babel/preset-react": "^7.22.15",
-    "@playwright/experimental-ct-react": "^1.43.1",
+    "@playwright/experimental-ct-react": "^1.45.3",
     "@playwright/test": "^1.43.1",
     "@svgr/webpack": "^8.1.0",
     "@types/node": "^18.18.4",
