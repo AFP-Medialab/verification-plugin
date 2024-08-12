@@ -68,13 +68,9 @@ const calculateSubjectivity = (sentences) => {
     }
   }
 
-  return (
-    " (",
-    scoresSUBJ.length,
-    "/",
-    sentences.length,
-    ")".toString().replaceAll(",", "")
-  );
+  return [" (", scoresSUBJ.length, "/", sentences.length, ")"]
+    .toString()
+    .replaceAll(",", "");
 };
 
 const getExpandIcon = (loading, fail, done = null, role = null) => {
