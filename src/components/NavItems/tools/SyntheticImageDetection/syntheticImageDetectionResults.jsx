@@ -164,8 +164,6 @@ const SyntheticImageDetectionResults = ({
       if (algorithmReport) {
         // Display iff the user has the permissions to see the content
 
-        console.log(imageType);
-
         if (
           imageType &&
           imageType === "image/webp" &&
@@ -306,8 +304,6 @@ const SyntheticImageDetectionResults = ({
         if (d.roleNeeded && !role.includes(d.roleNeeded)) {
           continue;
         }
-
-        console.log(imageType);
 
         if (
           imageType &&

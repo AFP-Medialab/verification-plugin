@@ -171,7 +171,7 @@ const SyntheticImageDetection = () => {
           handleError("error_" + error.status);
         }
 
-        console.log(imgSimilarRes.data);
+        //console.log(imgSimilarRes.data);
 
         if (
           !imgSimilarRes.data ||
