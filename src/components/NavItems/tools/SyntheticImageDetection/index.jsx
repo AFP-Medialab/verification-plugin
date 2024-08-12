@@ -57,6 +57,8 @@ const SyntheticImageDetection = () => {
   const [input, setInput] = useState(url ? url : "");
   const [imageFile, setImageFile] = useState(undefined);
 
+  const [imageType, setImageType] = useState(undefined);
+
   const dispatch = useDispatch();
 
   const IMAGE_FROM = {
@@ -169,7 +171,7 @@ const SyntheticImageDetection = () => {
           handleError("error_" + error.status);
         }
 
-        console.log(imgSimilarRes.data);
+        //console.log(imgSimilarRes.data);
 
         if (
           !imgSimilarRes.data ||
@@ -264,6 +266,38 @@ const SyntheticImageDetection = () => {
     }
   }, []);
 
+  useEffect(() => {
+    if (!result) return;
+
+    if (imageFile && imageFile instanceof File) {
+      setImageType(imageFile.type);
+    }
+
+    if (
+      input &&
+      typeof input === "string" &&
+      input !== "" &&
+      URL.canParse(input)
+    ) {
+      try {
+        fetch(input, {
+          method: "GET",
+          headers: {
+            "User-Agent":
+              "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36",
+            Accept: "image/webp,image/apng,image/*,*/*;q=0.8",
+          },
+        }).then(async (response) => {
+          //console.log(response.headers.get("Content-Type"));
+          const mimeType = (await response.blob()).type;
+          setImageType(mimeType);
+        });
+      } catch (e) {
+        console.error(e);
+      }
+    }
+  }, [imageFile, input, result]);
+
   return (
     <Box>
       <HeaderTool
@@ -336,6 +370,7 @@ const SyntheticImageDetection = () => {
           url={url}
           handleClose={handleClose}
           nd={nd}
+          imageType={imageType}
         />
       )}
     </Box>
