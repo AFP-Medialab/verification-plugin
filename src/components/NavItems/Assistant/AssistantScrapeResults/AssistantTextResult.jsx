@@ -73,7 +73,7 @@ const AssistantTextResult = () => {
 
   return (
     <Grid item xs={12}>
-      <Card>
+      <Card data-testid="assistant-text-scraped-text">
         <CardHeader
           className={classes.assistantCardHeader}
           title={keyword("text_title")}

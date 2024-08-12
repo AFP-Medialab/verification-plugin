@@ -791,6 +791,7 @@ const filterAssistantResults = (
         videoList = scrapeResult.videos;
       }
       break;
+    case KNOWN_LINKS.MASTODON:
     case KNOWN_LINKS.TELEGRAM:
     case KNOWN_LINKS.VK:
       if (scrapeResult.images.length > 0) {
