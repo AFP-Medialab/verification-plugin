@@ -174,11 +174,11 @@ const renderCollapsePrevFactChecks = (
     <Box mb={1.5}>
       <Divider />
       <Grid container>
-        <Grid item xs={4} align={"left"}>
+        <Grid item xs={4} align={"start"}>
           <></>
         </Grid>
-        <Grid item xs={6} align={"left"}>
-          <Typography sx={{ color: "text.secondary", align: "left" }}>
+        <Grid item xs={6} align={"start"}>
+          <Typography sx={{ color: "text.secondary", align: "start" }}>
             <p></p>
             {keyword("more_details")}{" "}
             <Link
@@ -189,7 +189,7 @@ const renderCollapsePrevFactChecks = (
             </Link>
           </Typography>
         </Grid>
-        <Grid item xs={2} align={"right"}>
+        <Grid item xs={2} align={"start"}>
           {displayExpander ? (
             expanded ? (
               <ExpandLessOutlined
@@ -405,25 +405,29 @@ const AssistantCredSignals = () => {
               expandIcon={getExpandIcon(newsFramingLoading, newsFramingFail)}
             >
               <Grid container wrap="wrap">
-                <Grid item xs={4} align="left">
+                <Grid item xs={4} align="start">
                   <Typography
                     display="inline"
-                    sx={{ flexShrink: 0, align: "left" }}
+                    sx={{ flexShrink: 0, align: "start" }}
                   >
                     {newsFramingTitle}
                   </Typography>
                 </Grid>
-                <Grid item xs={8} align="left">
+                <Grid item xs={8} align="start">
                   {newsFramingLoading && (
                     <CircularProgress color={"secondary"} />
                   )}
                   {newsFramingFail && (
-                    <Typography sx={{ color: "text.secondary", align: "left" }}>
+                    <Typography
+                      sx={{ color: "text.secondary", align: "start" }}
+                    >
                       {keyword("failed_to_load")}
                     </Typography>
                   )}
                   {newsFramingDone && (
-                    <Typography sx={{ color: "text.secondary", align: "left" }}>
+                    <Typography
+                      sx={{ color: "text.secondary", align: "start" }}
+                    >
                       {renderEntityKeys(newsFramingResult.entities)}
                     </Typography>
                   )}
@@ -476,23 +480,27 @@ const AssistantCredSignals = () => {
               expandIcon={getExpandIcon(newsGenreLoading, newsGenreFail)}
             >
               <Grid container wrap="wrap">
-                <Grid item xs={4} align="left">
+                <Grid item xs={4} align="start">
                   <Typography
                     display="inline"
-                    sx={{ flexShrink: 0, align: "left" }}
+                    sx={{ flexShrink: 0, align: "start" }}
                   >
                     {newsGenreTitle}
                   </Typography>
                 </Grid>
-                <Grid item xs={8} align="left">
+                <Grid item xs={8} align="start">
                   {newsGenreLoading && <CircularProgress color={"secondary"} />}
                   {newsGenreFail && (
-                    <Typography sx={{ color: "text.secondary", align: "left" }}>
+                    <Typography
+                      sx={{ color: "text.secondary", align: "start" }}
+                    >
                       {keyword("failed_to_load")}
                     </Typography>
                   )}
                   {newsGenreDone && (
-                    <Typography sx={{ color: "text.secondary", align: "left" }}>
+                    <Typography
+                      sx={{ color: "text.secondary", align: "start" }}
+                    >
                       {renderEntityKeys(newsGenreResult.entities)}
                     </Typography>
                   )}
@@ -556,32 +564,36 @@ const AssistantCredSignals = () => {
               )}
             >
               <Grid container wrap="wrap">
-                <Grid item xs={4} align="left">
+                <Grid item xs={4} align="start">
                   <Typography
                     display="inline"
-                    sx={{ flexShrink: 0, align: "left" }}
+                    sx={{ flexShrink: 0, align: "start" }}
                   >
                     {persuasionTitle}
                   </Typography>
                 </Grid>
-                <Grid item xs={8} align="left">
+                <Grid item xs={8} align="start">
                   {persuasionLoading && (
                     <CircularProgress color={"secondary"} />
                   )}
                   {persuasionFail && (
-                    <Typography sx={{ color: "text.secondary", align: "left" }}>
+                    <Typography
+                      sx={{ color: "text.secondary", align: "start" }}
+                    >
                       {keyword("failed_to_load")}
                     </Typography>
                   )}
                   {persuasionDone && (
-                    <Typography sx={{ color: "text.secondary", align: "left" }}>
+                    <Typography
+                      sx={{ color: "text.secondary", align: "start" }}
+                    >
                       {renderEntityKeys(persuasionResult.entities)}
                     </Typography>
                   )}
                   {persuasionDone &&
                     Object.keys(persuasionResult.entities).length < 1 && (
                       <Typography
-                        sx={{ color: "text.secondary", align: "left" }}
+                        sx={{ color: "text.secondary", align: "start" }}
                       >
                         {keyword("none_detected")}
                       </Typography>
@@ -645,22 +657,26 @@ const AssistantCredSignals = () => {
               )}
             >
               <Grid container wrap="wrap">
-                <Grid item xs={4} align="left">
-                  <Typography sx={{ flexShrink: 0, align: "left" }}>
+                <Grid item xs={4} align="start">
+                  <Typography sx={{ flexShrink: 0, align: "start" }}>
                     {subjectivityTitle}
                   </Typography>
                 </Grid>
-                <Grid item xs={8} align="left">
+                <Grid item xs={8} align="start">
                   {subjectivityLoading && (
                     <CircularProgress color={"secondary"} />
                   )}
                   {subjectivityFail && (
-                    <Typography sx={{ color: "text.secondary", align: "left" }}>
+                    <Typography
+                      sx={{ color: "text.secondary", align: "start" }}
+                    >
                       {keyword("failed_to_load")}
                     </Typography>
                   )}
                   {subjectivityDone && (
-                    <Typography sx={{ color: "text.secondary", align: "left" }}>
+                    <Typography
+                      sx={{ color: "text.secondary", align: "start" }}
+                    >
                       {keyword("subjective_sentences_detected")}{" "}
                       {calculateSubjectivity(subjectivityResult.sentences)}
                     </Typography>
@@ -668,7 +684,7 @@ const AssistantCredSignals = () => {
                   {subjectivityDone &&
                     Object.keys(subjectivityResult.entities).length < 1 && (
                       <Typography
-                        sx={{ color: "text.secondary", align: "left" }}
+                        sx={{ color: "text.secondary", align: "start" }}
                       >
                         {keyword("none_detected")}
                       </Typography>
@@ -735,21 +751,23 @@ const AssistantCredSignals = () => {
               )}
             >
               <Grid container wrap="wrap">
-                <Grid item xs={4} align="left">
+                <Grid item xs={4} align="start">
                   <Typography
                     display="inline"
-                    sx={{ flexShrink: 0, align: "left" }}
+                    sx={{ flexShrink: 0, align: "start" }}
                   >
                     {prevFactChecksTitle}
                   </Typography>
                 </Grid>
 
-                <Grid item xs={8} align="left">
+                <Grid item xs={8} align="start">
                   {role.includes("BETA_TESTER") && prevFactChecksLoading && (
                     <CircularProgress color={"secondary"} />
                   )}
                   {role.includes("BETA_TESTER") && prevFactChecksFail && (
-                    <Typography sx={{ color: "text.secondary", align: "left" }}>
+                    <Typography
+                      sx={{ color: "text.secondary", align: "start" }}
+                    >
                       {keyword("failed_to_load")}
                     </Typography>
                   )}
@@ -757,7 +775,7 @@ const AssistantCredSignals = () => {
                     prevFactChecksDone &&
                     prevFactChecksResult && (
                       <Typography
-                        sx={{ color: "text.secondary", align: "left" }}
+                        sx={{ color: "text.secondary", align: "start" }}
                       >
                         {keyword("previous_fact_checks_found")}
                       </Typography>
@@ -768,14 +786,16 @@ const AssistantCredSignals = () => {
                     !prevFactChecksFail &&
                     !prevFactChecksResult && (
                       <Typography
-                        sx={{ color: "text.secondary", align: "left" }}
+                        sx={{ color: "text.secondary", align: "start" }}
                       >
                         {keyword("reanalyse_url")}
                         {/* should now be obselete as saga is re run */}
                       </Typography>
                     )}
                   {!role.includes("BETA_TESTER") && (
-                    <Typography sx={{ color: "text.secondary", align: "left" }}>
+                    <Typography
+                      sx={{ color: "text.secondary", align: "start" }}
+                    >
                       {keyword("login_required")}
                     </Typography>
                   )}
@@ -857,22 +877,24 @@ const AssistantCredSignals = () => {
               )}
             >
               <Grid container wrap="wrap">
-                <Grid item xs={4} align="left">
+                <Grid item xs={4} align="start">
                   <Typography
                     display="inline"
-                    sx={{ flexShrink: 0, align: "left" }}
+                    sx={{ flexShrink: 0, align: "start" }}
                   >
                     {machineGeneratedTextTitle}
                   </Typography>
                 </Grid>
 
-                <Grid item xs={8} align="left">
+                <Grid item xs={8} align="start">
                   {role.includes("BETA_TESTER") &&
                     machineGeneratedTextLoading && (
                       <CircularProgress color={"secondary"} />
                     )}
                   {role.includes("BETA_TESTER") && machineGeneratedTextFail && (
-                    <Typography sx={{ color: "text.secondary", align: "left" }}>
+                    <Typography
+                      sx={{ color: "text.secondary", align: "start" }}
+                    >
                       {keyword("failed_to_load")}
                     </Typography>
                   )}
@@ -880,7 +902,7 @@ const AssistantCredSignals = () => {
                     machineGeneratedTextDone &&
                     machineGeneratedTextResult && (
                       <Typography
-                        sx={{ color: "text.secondary", align: "left" }}
+                        sx={{ color: "text.secondary", align: "start" }}
                       >
                         {keyword(machineGeneratedTextResult.pred)}
                         {round(machineGeneratedTextResult.score, 4)}
@@ -892,14 +914,16 @@ const AssistantCredSignals = () => {
                     !machineGeneratedTextFail &&
                     !machineGeneratedTextResult && (
                       <Typography
-                        sx={{ color: "text.secondary", align: "left" }}
+                        sx={{ color: "text.secondary", align: "start" }}
                       >
                         {keyword("reanalyse_url")}
                         {/* should now be obselete as saga is re run */}
                       </Typography>
                     )}
                   {!role.includes("BETA_TESTER") && (
-                    <Typography sx={{ color: "text.secondary", align: "left" }}>
+                    <Typography
+                      sx={{ color: "text.secondary", align: "start" }}
+                    >
                       {keyword("login_required")}
                     </Typography>
                   )}
