@@ -44,7 +44,7 @@ const SemanticSearch = () => {
 
   const currentLang = useSelector((state) => state.language);
 
-  const text = useSelector((state) => state.assistant.urlText);
+  let text = useSelector((state) => state.assistant.urlText);
 
   const { url } = useParams();
 
@@ -227,20 +227,23 @@ const SemanticSearch = () => {
     if (url) {
       const uri = url !== null ? decodeURIComponent(url) : undefined;
       if (uri === "assistantText" && text) {
+        text = text.replaceAll("\n", " ");
         setSearchString(text);
-        handleSubmit();
+        handleSubmit(text);
       }
     }
-  }, [url]);
+  }, [url, text]);
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (text) => {
     setIsLoading(true);
     setHasUserSubmittedForm(true);
     setErrorMessage("");
 
+    const urlText = searchString ? text : text;
+
     let searchResults;
     try {
-      searchResults = await getFactChecks(searchString, searchEngineMode);
+      searchResults = await getFactChecks(urlText, searchEngineMode);
     } catch (e) {
       //   TODO: Handle Error
       setErrorMessage(e.message);
