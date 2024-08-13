@@ -36,24 +36,15 @@ import FileCopyOutlined from "@mui/icons-material/FileCopy";
 import { useNavigate } from "react-router-dom";
 import { getLanguageName } from "../../../Shared/Utils/languageUtils";
 
-const renderEntityKeys = (entities) => {
-  // tidy array into readable string
-  let entitiesString = Object.keys(entities)
-    .toString()
-    .replace("Important_Sentence", "")
-    .replaceAll(",", ", ")
-    .replaceAll("_", " ")
-    .trim();
-
-  // remove beginning and last hanging commas
-  if (entitiesString.slice(0, 2) === ", ") {
-    entitiesString = entitiesString.substring(2, entitiesString.length);
-  }
-  if (entitiesString.slice(-1) === ",") {
-    entitiesString = entitiesString.substring(0, entitiesString.length - 1);
-  }
-
-  return entitiesString;
+const renderEntityKeys = (entities, keyword) => {
+  // translate array into readable string
+  let translatedEntities = [];
+  Object.keys(entities).map((entity, index) =>
+    entity != "Important_Sentence"
+      ? translatedEntities.push(keyword(entity))
+      : null,
+  );
+  return translatedEntities.join("; ");
 };
 
 const round = (number, decimalPlaces) => {
@@ -428,7 +419,8 @@ const AssistantCredSignals = () => {
                     <Typography
                       sx={{ color: "text.secondary", align: "start" }}
                     >
-                      {renderEntityKeys(newsFramingResult.entities)}
+                      {console.log("top=", newsFramingResult.entities)}
+                      {renderEntityKeys(newsFramingResult.entities, keyword)}
                     </Typography>
                   )}
                 </Grid>
@@ -501,7 +493,8 @@ const AssistantCredSignals = () => {
                     <Typography
                       sx={{ color: "text.secondary", align: "start" }}
                     >
-                      {renderEntityKeys(newsGenreResult.entities)}
+                      {console.log("gen=", newsGenreResult)}
+                      {renderEntityKeys(newsGenreResult.entities, keyword)}
                     </Typography>
                   )}
                 </Grid>
@@ -587,7 +580,8 @@ const AssistantCredSignals = () => {
                     <Typography
                       sx={{ color: "text.secondary", align: "start" }}
                     >
-                      {renderEntityKeys(persuasionResult.entities)}
+                      {console.log("per=", persuasionResult.entities)}
+                      {renderEntityKeys(persuasionResult.entities, keyword)}
                     </Typography>
                   )}
                   {persuasionDone &&

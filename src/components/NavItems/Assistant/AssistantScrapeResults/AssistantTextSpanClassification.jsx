@@ -282,6 +282,7 @@ export default function AssistantTextSpanClassification({
               noCategoriesText={keyword("no_detected_categories")}
               allCategoriesLabel={allCategoriesLabel}
               onCategoryChange={handleCategorySelect}
+              keyword={keyword}
             />
           </CardContent>
         </Card>
@@ -299,6 +300,7 @@ export function CategoriesListToggle({
   noCategoriesText,
   allCategoriesLabel,
   onCategoryChange = () => {},
+  keyword,
 }) {
   if (categories.length < 1) return <p>{noCategoriesText}</p>;
 
@@ -345,7 +347,7 @@ export function CategoriesListToggle({
     let textColour = "white";
     if (bgLuminance > 0.7) textColour = "black";
 
-    const itemText = category.replaceAll("_", " ");
+    const itemText = keyword(category);
     const itemChip = (
       <Chip color="primary" label={categories[category].length} />
     );

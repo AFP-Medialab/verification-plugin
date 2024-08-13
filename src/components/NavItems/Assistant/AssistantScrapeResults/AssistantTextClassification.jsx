@@ -162,6 +162,7 @@ export default function AssistantTextClassification({
                 thresholdHigh={configs.confidenceThresholdHigh}
                 rgbLow={configs.confidenceRgbLow}
                 rgbHigh={configs.confidenceRgbHigh}
+                keyword={keyword}
               />
               {filteredSentences.length > 0 ? (
                 <FormControlLabel
@@ -189,6 +190,7 @@ export function CategoriesList({
   thresholdHigh,
   rgbLow,
   rgbHigh,
+  keyword,
 }) {
   if (categories.length < 1) return <p>{noCategoriesText}</p>;
 
@@ -217,7 +219,7 @@ export function CategoriesList({
           color: textColour,
         }}
       >
-        <ListItemText primary={category.replaceAll("_", " ")} />
+        <ListItemText primary={keyword(category)} />
       </ListItem>,
     );
     index++;
