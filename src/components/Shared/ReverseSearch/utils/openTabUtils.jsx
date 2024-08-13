@@ -61,6 +61,6 @@ const openTabsSearch = (url) => {
 };
 
 function ns(url) {
-  let domain = new URL(url);
-  return domain.hostname.replace("www.", "");
+  if (!url || typeof url !== "string") return;
+  return new URL(url).hostname.replace("www.", "");
 }
