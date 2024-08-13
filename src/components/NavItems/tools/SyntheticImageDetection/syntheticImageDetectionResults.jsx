@@ -389,27 +389,29 @@ const SyntheticImageDetectionResults = ({
                     maxWidth: "100%",
                   }}
                 >
-                  <img
-                    src={url}
-                    alt={"Displays the results of the deepfake topMenuItem"}
-                    style={{
-                      maxWidth: "100%",
-                      maxHeight: "60vh",
-                      borderRadius: "10px",
-                    }}
-                    crossOrigin={"anonymous"}
-                    ref={imgElement}
-                  />
-                  <List dense={true}>
-                    <ListItem>
-                      <ListItemText
-                        primary={keyword(
-                          "synthetic_image_detection_image_type",
-                        )}
-                        secondary={imageType}
-                      />
-                    </ListItem>
-                  </List>
+                  <Stack direction="column">
+                    <img
+                      src={url}
+                      alt={"Displays the results of the deepfake topMenuItem"}
+                      style={{
+                        maxWidth: "100%",
+                        maxHeight: "60vh",
+                        borderRadius: "10px",
+                      }}
+                      crossOrigin={"anonymous"}
+                      ref={imgElement}
+                    />
+                    <List dense={true}>
+                      <ListItem>
+                        <ListItemText
+                          primary={keyword(
+                            "synthetic_image_detection_image_type",
+                          )}
+                          secondary={imageType}
+                        />
+                      </ListItem>
+                    </List>
+                  </Stack>
                 </Grid>
               </Box>
             </Grid>
@@ -450,6 +452,19 @@ const SyntheticImageDetectionResults = ({
                       >
                         {keyword(
                           "synthetic_image_detection_generic_detection_text",
+                        )}
+                      </Typography>
+                    )}
+
+                    {nd && nd.similar_media && nd.similar_media.length > 0 && (
+                      <Typography
+                        variant="h5"
+                        align="center"
+                        alignSelf="center"
+                        sx={{ color: "red" }}
+                      >
+                        {keyword(
+                          "synthetic_image_detection_generic_detection_text_ndd",
                         )}
                       </Typography>
                     )}
@@ -569,9 +584,31 @@ const SyntheticImageDetectionResults = ({
               </Stack>
             )}
           </Grid>
-          <Grid item container xs={12}>
-            <Grid item p={4}>
-              <Box sx={{ width: "100%" }}>
+          <Grid item container xs={12} spacing={4}>
+            {nd && nd.similar_media && nd.similar_media.length > 0 && (
+              <Grid
+                item
+                sx={{
+                  width: "100%",
+                }}
+              >
+                <Box pl={4} pr={4}>
+                  <Accordion defaultExpanded onChange={handleNddDetailsChange}>
+                    <AccordionSummary expandIcon={<ExpandMore />}>
+                      <Typography>{keyword(nddDetailsPanelMessage)}</Typography>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                      <Stack direction={"column"} spacing={4}>
+                        <NddDatagrid rows={getNddRows(nd.similar_media)} />
+                      </Stack>
+                    </AccordionDetails>
+                  </Accordion>
+                </Box>
+              </Grid>
+            )}
+
+            <Grid item sx={{ width: "100%" }}>
+              <Box pl={4} pr={4}>
                 <Accordion
                   defaultExpanded={false}
                   onChange={handleDetailsChange}
@@ -671,28 +708,6 @@ const SyntheticImageDetectionResults = ({
                 </Accordion>
               </Box>
             </Grid>
-
-            {nd && nd.similar_media && nd.similar_media.length > 0 && (
-              <Grid
-                item
-                p={4}
-                sx={{
-                  width: "100%",
-                  maxWidth: "100% !important",
-                }}
-              >
-                <Accordion defaultExpanded onChange={handleNddDetailsChange}>
-                  <AccordionSummary expandIcon={<ExpandMore />}>
-                    <Typography>{keyword(nddDetailsPanelMessage)}</Typography>
-                  </AccordionSummary>
-                  <AccordionDetails>
-                    <Stack direction={"column"} spacing={4}>
-                      <NddDatagrid rows={getNddRows(nd.similar_media)} />
-                    </Stack>
-                  </AccordionDetails>
-                </Accordion>
-              </Grid>
-            )}
           </Grid>
         </Grid>
       </CardContent>
