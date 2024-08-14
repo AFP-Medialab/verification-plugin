@@ -198,7 +198,7 @@ export function CategoriesList({
   let index = 0;
   for (const category in categories) {
     if (index > 0) {
-      output.push(<Divider />);
+      output.push(<Divider key={index} />);
     }
     let backgroundRgb = interpRgb(
       categories[category][0].score,
