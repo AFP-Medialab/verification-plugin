@@ -419,7 +419,6 @@ const AssistantCredSignals = () => {
                     <Typography
                       sx={{ color: "text.secondary", align: "start" }}
                     >
-                      {console.log("top=", newsFramingResult.entities)}
                       {renderEntityKeys(newsFramingResult.entities, keyword)}
                     </Typography>
                   )}
@@ -493,7 +492,6 @@ const AssistantCredSignals = () => {
                     <Typography
                       sx={{ color: "text.secondary", align: "start" }}
                     >
-                      {console.log("gen=", newsGenreResult)}
                       {renderEntityKeys(newsGenreResult.entities, keyword)}
                     </Typography>
                   )}
@@ -580,7 +578,6 @@ const AssistantCredSignals = () => {
                     <Typography
                       sx={{ color: "text.secondary", align: "start" }}
                     >
-                      {console.log("per=", persuasionResult.entities)}
                       {renderEntityKeys(persuasionResult.entities, keyword)}
                     </Typography>
                   )}
