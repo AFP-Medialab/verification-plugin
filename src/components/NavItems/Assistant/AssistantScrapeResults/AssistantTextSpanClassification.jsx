@@ -392,5 +392,9 @@ export function MultiCategoryClassifiedText({
 
   let output = categoriesText[category];
 
-  return <Typography align={"left"}>{output}</Typography>;
+  return (
+    <Typography component={"div"} sx={{ textAlign: "start" }}>
+      {output}
+    </Typography>
+  );
 }

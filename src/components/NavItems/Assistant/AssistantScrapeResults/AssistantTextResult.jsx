@@ -112,7 +112,7 @@ const AssistantTextResult = () => {
         )}
         <CardContent>
           <Collapse in={expanded} collapsedSize={100} id={"element-to-check"}>
-            <Typography align={"left"}>
+            <Typography component={"div"} sx={{ textAlign: "start" }}>
               {/*{!displayOrigLang && translatedText ? translatedText : text}*/}
               {textHtmlOutput && textHtmlOutput}
               {!textHtmlOutput && text}

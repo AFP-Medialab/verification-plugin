@@ -288,5 +288,9 @@ export function ClassifiedText({
     output = treeMapToElements(text, textHtmlMap);
   }
 
-  return <Typography align={"left"}>{output}</Typography>;
+  return (
+    <Typography component={"div"} sx={{ textAlign: "start" }}>
+      {output}
+    </Typography>
+  );
 }

@@ -65,7 +65,7 @@ const ResultDisplayItem = ({
               spacing={2}
             >
               <Stack direction="column">
-                <Typography align="start">
+                <Typography sx={{ textAlign: "start" }}>
                   {keyword("semantic_search_result_claim")}{" "}
                   {showOriginalClaim ? claimOriginalLanguage : claim}
                 </Typography>
@@ -88,7 +88,7 @@ const ResultDisplayItem = ({
                 )}
               </Stack>
               <Stack direction="column">
-                <Typography align="start">
+                <Typography sx={{ textAlign: "start" }}>
                   {keyword("semantic_search_result_title")}{" "}
                   <Link href={articleUrl} target="_blank">
                     {showOriginalTitle ? titleOriginalLanguage : title}

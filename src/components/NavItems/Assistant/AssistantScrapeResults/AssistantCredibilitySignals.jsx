@@ -169,7 +169,10 @@ const renderCollapsePrevFactChecks = (
           <></>
         </Grid>
         <Grid item xs={6} align={"start"}>
-          <Typography sx={{ color: "text.secondary", align: "start" }}>
+          <Typography
+            component={"div"}
+            sx={{ color: "text.secondary", align: "start" }}
+          >
             <p></p>
             {keyword("more_details")}{" "}
             <Link
