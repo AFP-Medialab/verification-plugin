@@ -1,5 +1,6 @@
 import React from "react";
 import _ from "lodash";
+import { v4 as uuidv4 } from "uuid";
 
 /**
  * Interpolate RGB between an arbitrary range
@@ -145,7 +146,7 @@ function treeMapToElementsRecursive(
   //Collect attributes
   let attributes = {};
   if (treeElem.attributes) {
-    attributes = treeElem.attributes;
+    attributes = { ...treeElem.attributes, key: uuidv4() };
   }
 
   return React.createElement(treeElem.tag, attributes, childElems);
