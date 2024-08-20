@@ -22,6 +22,7 @@ import {
 } from "./assistantUtils";
 import ColourGradientTooltipContent from "./ColourGradientTooltipContent";
 import { styled } from "@mui/system";
+import { v4 as uuidv4 } from "uuid";
 
 // Had to create a custom styled span as the default style attribute does not support
 // :hover metaclass
@@ -51,9 +52,17 @@ export default function AssistantTextSpanClassification({
   const tooltipTextLowThreshold = keyword("low_confidence");
   const tooltipTextHighThreshold = keyword("high_confidence");
 
+  // console.log("keyword(helpDescription)=", keyword(helpDescription));
+  // console.log("keyword(\"colour_scale\")=", keyword("colour_scale"));
+  // console.log("tooltipTextLowThreshold=", tooltipTextLowThreshold);
+  // console.log("tooltipTextHighThreshold=", tooltipTextHighThreshold);
+  // console.log("configs.confidenceRgbLow=", configs.confidenceRgbLow);
+  // console.log("configs.confidenceRgbHigh=", configs.confidenceRgbHigh);
+
   const confidenceTooltipContent = (
     <ColourGradientTooltipContent
       description={keyword(helpDescription)}
+      colourScaleText={keyword("colour_scale")}
       textLow={tooltipTextLowThreshold}
       textHigh={tooltipTextHighThreshold}
       rgbLow={configs.confidenceRgbLow}
@@ -115,7 +124,9 @@ export default function AssistantTextSpanClassification({
     let textColour = "black";
 
     let techniqueContent = [];
-    techniqueContent.push(<h2>{keyword("detected_techniques")}</h2>);
+    techniqueContent.push(
+      <h2 key={uuidv4()}>{keyword("detected_techniques")}</h2>,
+    );
 
     for (let persuasionTechnique in spanInfo.techniques) {
       const techniqueScore = spanInfo.techniques[persuasionTechnique];
@@ -168,6 +179,7 @@ export default function AssistantTextSpanClassification({
     let techniquesTooltip = (
       <ColourGradientTooltipContent
         description={techniqueContent}
+        colourScaleText={keyword("colour_scale")}
         textLow={tooltipTextLowThreshold}
         textHigh={tooltipTextHighThreshold}
         rgbLow={configs.confidenceRgbLow}
@@ -177,7 +189,7 @@ export default function AssistantTextSpanClassification({
 
     // Append highlighted text
     return (
-      <Tooltip title={techniquesTooltip}>
+      <Tooltip key={uuidv4()} title={techniquesTooltip}>
         <StyledSpan
           sx={{
             background: rgbToString(backgroundRgb),

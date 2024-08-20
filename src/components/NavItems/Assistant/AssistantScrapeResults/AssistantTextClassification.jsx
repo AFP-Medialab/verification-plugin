@@ -24,6 +24,7 @@ import {
   wrapPlainTextSpan,
 } from "./assistantUtils";
 import ColourGradientTooltipContent from "./ColourGradientTooltipContent";
+import { v4 as uuidv4 } from "uuid";
 
 import "./assistantTextResultStyle.css";
 
@@ -257,7 +258,7 @@ export function ClassifiedText({
     if (bgLuminance > 0.7) textColour = "black";
 
     return (
-      <Tooltip title={tooltipText}>
+      <Tooltip key={uuidv4()} title={tooltipText}>
         <span
           style={{
             background: rgbToString(backgroundRgb),
