@@ -25,7 +25,9 @@ import { styled } from "@mui/system";
 
 // Had to create a custom styled span as the default style attribute does not support
 // :hover metaclass
-const StyledSpan = styled("span")();
+const StyledSpan = styled("span")(({ theme }) => ({
+  ...theme,
+}));
 
 export default function AssistantTextSpanClassification({
   text,
