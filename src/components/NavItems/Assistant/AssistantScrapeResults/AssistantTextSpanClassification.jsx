@@ -162,6 +162,7 @@ export default function AssistantTextSpanClassification({
       if (bgLuminance > 0.7) techniqueTextColour = "black";
       techniqueContent.push(
         <div
+          key={persuasionTechnique}
           style={{
             background: rgbToString(techniqueBackgroundRgb),
             color: rgbToString(techniqueTextColour),
