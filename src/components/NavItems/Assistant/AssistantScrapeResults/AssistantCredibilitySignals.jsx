@@ -667,14 +667,15 @@ const AssistantCredSignals = () => {
                       {keyword("failed_to_load")}
                     </Typography>
                   )}
-                  {subjectivityDone && (
-                    <Typography
-                      sx={{ color: "text.secondary", align: "start" }}
-                    >
-                      {keyword("subjective_sentences_detected")}{" "}
-                      {calculateSubjectivity(subjectivityResult.sentences)}
-                    </Typography>
-                  )}
+                  {subjectivityDone &&
+                    Object.keys(subjectivityResult.entities).length >= 1 && (
+                      <Typography
+                        sx={{ color: "text.secondary", align: "start" }}
+                      >
+                        {keyword("subjective_sentences_detected")}{" "}
+                        {calculateSubjectivity(subjectivityResult.sentences)}
+                      </Typography>
+                    )}
                   {subjectivityDone &&
                     Object.keys(subjectivityResult.entities).length < 1 && (
                       <Typography
