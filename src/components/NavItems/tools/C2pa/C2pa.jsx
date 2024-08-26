@@ -72,7 +72,7 @@ const C2paData = () => {
               fileInput={imageFile}
               setFileInput={setImageFile}
               handleSubmit={handleSubmit}
-              fileInputTypesAccepted={"image/*"}
+              fileInputTypesAccepted={"image/*, video/*"}
               handleCloseSelectedFile={handleClose}
             />
           </form>

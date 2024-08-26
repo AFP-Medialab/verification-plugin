@@ -43,7 +43,7 @@ const C2paResults = (props = { result, handleClose }) => {
 
   const data = props.result;
 
-  const img = data[currentImageId].url;
+  const url = data[currentImageId].url;
   const parentId = data[currentImageId].parent;
   const manifestData = data[currentImageId].manifestData;
   const validationIssues = data[currentImageId].validationIssues;
@@ -83,9 +83,9 @@ const C2paResults = (props = { result, handleClose }) => {
         <Grid item>
           <Typography variant="h6">{keyword(title)}</Typography>
         </Grid>
-        <Grid item p={1}>
+        {/* <Grid item p={1}>
           <Alert severity="info">{keyword(information)}</Alert>
-        </Grid>
+        </Grid> */}
       </Grid>
     );
   };
@@ -113,7 +113,7 @@ const C2paResults = (props = { result, handleClose }) => {
         <Grid item container justifyContent="center" xs>
           <Grid item>
             <img
-              src={img}
+              src={url}
               style={{
                 maxWidth: "100%",
                 maxHeight: "60vh",
