@@ -139,9 +139,7 @@ const ExtractedSourceCredibilityDBKFDialog = ({
                       ? sourceCredibilityResults.map((value, key) => (
                           <Accordion key={key}>
                             <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                              {sourceCredibilityResults[
-                                key
-                              ].credibilityScope.includes("/") ? (
+                              {value.credibilityScope.includes("/") ? (
                                 <Typography color={trafficLightColor}>
                                   {` ${keyword("this")}`}
                                   {getUrlTypeFromCredScope(
@@ -151,15 +149,11 @@ const ExtractedSourceCredibilityDBKFDialog = ({
                                     "source_credibility_warning_account",
                                   )} ${" "}${value.credibilitySource}`}
                                 </Typography>
-                              ) : sourceCredibilityResults[key]
-                                  .credibilityScope ? (
+                              ) : value.credibilityScope ? (
                                 <Typography color={trafficLightColor}>
                                   {` ${keyword(
                                     "source_cred_popup_header_domain",
-                                  )} ${
-                                    sourceCredibilityResults[key]
-                                      .credibilitySource
-                                  } `}
+                                  )} ${value.credibilitySource} `}
                                 </Typography>
                               ) : null}
                             </AccordionSummary>
