@@ -13,6 +13,7 @@ import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
+  Tooltip,
 } from "@mui/material";
 
 import {
@@ -29,6 +30,7 @@ import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import { Icon as GeoIcon } from "leaflet";
 import { useState } from "react";
 import MapIcon from "@mui/icons-material/Map";
+import HelpIcon from "@mui/icons-material/Help";
 
 /**
  *
@@ -79,13 +81,14 @@ const C2paResults = (props = { result, handleClose }) => {
    */
   const title = (title, information) => {
     return (
-      <Grid container direction="column">
+      <Grid container direction="row" alignItems="center">
         <Grid item>
           <Typography variant="h6">{keyword(title)}</Typography>
         </Grid>
-        {/* <Grid item p={1}>
-          <Alert severity="info">{keyword(information)}</Alert>
-        </Grid> */}
+        <Grid item m={2} />
+        <Tooltip title={<h3>{keyword(information)}</h3>}>
+          <HelpIcon />
+        </Tooltip>
       </Grid>
     );
   };
