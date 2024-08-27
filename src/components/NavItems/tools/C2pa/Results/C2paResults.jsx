@@ -75,79 +75,78 @@ const C2paResults = (props = { result, handleClose }) => {
     dispatch(c2paCurrentImageIdSet(ingredientId));
   };
 
-  const displayMedia = (url) => {
-    var media;
-    var testImage = new Image();
-    testImage.src = url;
-    testImage.onload = () => {
-      console.log("loaded");
+  // const displayMedia = (url) => {
+  //   var media;
+  //   var testImage = new Image();
+  //   testImage.src = url;
+  //   testImage.onload = () => {
+  //     console.log("loaded");
 
-      media = (
-        <>
-          <img
-            src={url}
-            style={{
-              maxWidth: "100%",
-              maxHeight: "60vh",
-              borderRadius: "10px",
-            }}
-          />
-        </>
-      );
-    };
-    testImage.onerror = () => {
-      media = (
-        <>
-          <video
-            style={{
-              maxWidth: "100%",
-              maxHeight: "60vh",
-              borderRadius: "10px",
-            }}
-            controls
-            key={url}
-          >
-            <source src={url} />
-          </video>
-        </>
-      );
-    };
-    return media;
+  //     media = (
+  //       <>
+  //         <img
+  //           src={url}
+  //           style={{
+  //             maxWidth: "100%",
+  //             maxHeight: "60vh",
+  //             borderRadius: "10px",
+  //           }}
+  //         />
+  //       </>
+  //     );
+  //   };
+  //   testImage.onerror = () => {
+  //     media = (
+  //       <>
+  //         <video
+  //           style={{
+  //             maxWidth: "100%",
+  //             maxHeight: "60vh",
+  //             borderRadius: "10px",
+  //           }}
+  //           controls
+  //           key={url}
+  //         >
+  //           <source src={url} />
+  //         </video>
+  //       </>
+  //     );
+  //   };
+  //   return media;
 
-    // if(media.width !== 0) {
-    //   console.log(media.width);
-    //   return (
-    //     <>
-    //       <img
-    //           src={url}
-    //           style={{
-    //             maxWidth: "100%",
-    //             maxHeight: "60vh",
-    //             borderRadius: "10px",
-    //           }}
-    //         />
-    //     </>)
-    // }
-    // else {
-    //   console.log("displaying video");
-    //   return (
-    //     <>
-    //       <video
-    //         style={{
-    //           maxWidth: "100%",
-    //           maxHeight: "60vh",
-    //           borderRadius: "10px",
-    //         }}
-    //         controls
-    //         key={url}
-    //         >
-    //           <source
-    //             src={url}
-    //           />
-    //       </video>
-    //     </>)
-    // }
-  };
+  // if(media.width !== 0) {
+  //   console.log(media.width);
+  //   return (
+  //     <>
+  //       <img
+  //           src={url}
+  //           style={{
+  //             maxWidth: "100%",
+  //             maxHeight: "60vh",
+  //             borderRadius: "10px",
+  //           }}
+  //         />
+  //     </>)
+  // }
+  // else {
+  //   console.log("displaying video");
+  //   return (
+  //     <>
+  //       <video
+  //         style={{
+  //           maxWidth: "100%",
+  //           maxHeight: "60vh",
+  //           borderRadius: "10px",
+  //         }}
+  //         controls
+  //         key={url}
+  //         >
+  //           <source
+  //             src={url}
+  //           />
+  //       </video>
+  //     </>)
+  // }
 
   // function isImgUrl(url) {
   //   return fetch(url, {method: 'HEAD'}).then(res => {
@@ -238,10 +237,16 @@ const C2paResults = (props = { result, handleClose }) => {
               {!manifestData ? (
                 <Box m={1}>
                   {depthExceeded ? (
-                    <Alert>{keyword("child_depth_exceeded")}</Alert>
+                    <Alert>
+                      {isImage
+                        ? keyword("child_depth_exceeded_image")
+                        : keyword("child_depth_exceeded_video")}
+                    </Alert>
                   ) : (
                     <Alert severity="info" m={1}>
-                      {keyword("no_c2pa_info")}
+                      {isImage
+                        ? keyword("no_c2pa_info_image")
+                        : keyword("no_c2pa_info_video")}
                     </Alert>
                   )}
                   <Box m={1} />
@@ -320,7 +325,9 @@ const C2paResults = (props = { result, handleClose }) => {
                             </>
                           ) : (
                             <Alert severity="info">
-                              {keyword("credit_no_info")}
+                              {isImage
+                                ? keyword("credit_no_info_image")
+                                : keyword("credit_no_info_video")}
                             </Alert>
                           )}
                         </Box>
@@ -545,7 +552,9 @@ const C2paResults = (props = { result, handleClose }) => {
                           </Stack>
                         ) : (
                           <Alert severity="info">
-                            {keyword("process_no_info")}
+                            {isImage
+                              ? keyword("process_no_info_image")
+                              : keyword("process_no_info_video")}
                           </Alert>
                         )}
                       </Box>
