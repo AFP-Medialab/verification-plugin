@@ -28,7 +28,7 @@ import moment from "moment";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import { Icon as GeoIcon } from "leaflet";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import MapIcon from "@mui/icons-material/Map";
 import HelpIcon from "@mui/icons-material/Help";
 
@@ -61,6 +61,8 @@ const C2paResults = (props = { result, handleClose }) => {
 
   const depthExceeded = data[currentImageId].depthExceeded;
 
+  const [isImage, setIsImage] = useState(true);
+
   const dispatch = useDispatch();
 
   const keyword = i18nLoadNamespace("components/NavItems/tools/C2pa");
@@ -72,6 +74,97 @@ const C2paResults = (props = { result, handleClose }) => {
   const setImage = (ingredientId) => {
     dispatch(c2paCurrentImageIdSet(ingredientId));
   };
+
+  const displayMedia = (url) => {
+    var media;
+    var testImage = new Image();
+    testImage.src = url;
+    testImage.onload = () => {
+      console.log("loaded");
+
+      media = (
+        <>
+          <img
+            src={url}
+            style={{
+              maxWidth: "100%",
+              maxHeight: "60vh",
+              borderRadius: "10px",
+            }}
+          />
+        </>
+      );
+    };
+    testImage.onerror = () => {
+      media = (
+        <>
+          <video
+            style={{
+              maxWidth: "100%",
+              maxHeight: "60vh",
+              borderRadius: "10px",
+            }}
+            controls
+            key={url}
+          >
+            <source src={url} />
+          </video>
+        </>
+      );
+    };
+    return media;
+
+    // if(media.width !== 0) {
+    //   console.log(media.width);
+    //   return (
+    //     <>
+    //       <img
+    //           src={url}
+    //           style={{
+    //             maxWidth: "100%",
+    //             maxHeight: "60vh",
+    //             borderRadius: "10px",
+    //           }}
+    //         />
+    //     </>)
+    // }
+    // else {
+    //   console.log("displaying video");
+    //   return (
+    //     <>
+    //       <video
+    //         style={{
+    //           maxWidth: "100%",
+    //           maxHeight: "60vh",
+    //           borderRadius: "10px",
+    //         }}
+    //         controls
+    //         key={url}
+    //         >
+    //           <source
+    //             src={url}
+    //           />
+    //       </video>
+    //     </>)
+    // }
+  };
+
+  // function isImgUrl(url) {
+  //   return fetch(url, {method: 'HEAD'}).then(res => {
+  //     return res.headers.get('Content-Type').startsWith('image')
+  //   })
+  // }
+
+  useEffect(() => {
+    var testImage = new Image();
+    testImage.src = url;
+    testImage.onload = function () {
+      setIsImage(true);
+    };
+    testImage.onerror = function () {
+      setIsImage(false);
+    };
+  }, []);
 
   /**
    *
@@ -115,14 +208,28 @@ const C2paResults = (props = { result, handleClose }) => {
       <Grid container direction="row" spacing={3} p={4}>
         <Grid item container justifyContent="center" xs>
           <Grid item>
-            <img
-              src={url}
-              style={{
-                maxWidth: "100%",
-                maxHeight: "60vh",
-                borderRadius: "10px",
-              }}
-            />
+            {isImage ? (
+              <img
+                src={url}
+                style={{
+                  maxWidth: "100%",
+                  maxHeight: "60vh",
+                  borderRadius: "10px",
+                }}
+              />
+            ) : (
+              <video
+                style={{
+                  maxWidth: "100%",
+                  maxHeight: "60vh",
+                  borderRadius: "10px",
+                }}
+                controls
+                key={url}
+              >
+                <source src={url} />
+              </video>
+            )}
           </Grid>
         </Grid>
         <Grid item xs>
