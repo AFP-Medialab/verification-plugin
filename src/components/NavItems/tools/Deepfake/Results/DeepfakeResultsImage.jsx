@@ -1,20 +1,29 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Box from "@mui/material/Box";
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
-import { Grid, Typography, Stack, IconButton, Tooltip } from "@mui/material";
+import {
+  Grid,
+  Typography,
+  Stack,
+  IconButton,
+  Tooltip,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+} from "@mui/material";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import { LinearProgressWithLabel } from "../../../../Shared/LinearProgressWithLabel/LinearProgressWithLabel";
-import { Close, Help } from "@mui/icons-material";
+import { Close } from "@mui/icons-material";
 import { useSelector } from "react-redux";
-import { DetectionProgressBar } from "components/Shared/DetectionProgressBar/DetectionProgressBar";
 import { getclientId } from "components/Shared/GoogleAnalytics/MatomoAnalytics";
 import { useTrackEvent } from "Hooks/useAnalytics";
+import GaugeChartResult from "components/Shared/GaugeChartResults/GaugeChartResult";
 
 const DeepfakeResultsImage = (props) => {
   const classes = useMyStyles();
   const keyword = i18nLoadNamespace("components/NavItems/tools/Deepfake");
+
   class DeepfakeResult {
     constructor(methodName, predictionScore) {
       (this.methodName = methodName), (this.predictionScore = predictionScore);
@@ -38,6 +47,22 @@ const DeepfakeResultsImage = (props) => {
   const imgContainerRef = useRef(null);
 
   const [deepfakeScore, setDeepfakeScores] = useState(undefined);
+
+  const DETECTION_THRESHOLDS = {
+    THRESHOLD_1: 50,
+    THRESHOLD_2: 70,
+    THRESHOLD_3: 90,
+  };
+
+  // const gaugeChartRef = useRef(null);
+
+  const keywords = [
+    "gauge_scale_modal_explanation_rating_1",
+    "gauge_scale_modal_explanation_rating_2",
+    "gauge_scale_modal_explanation_rating_3",
+    "gauge_scale_modal_explanation_rating_4",
+  ];
+  const colors = ["#00FF00", "#AAFF03", "#FFA903", "#FF0000"];
 
   useEffect(() => {
     if (!results || !results.faceswap_ens_mever_report) {
@@ -250,7 +275,7 @@ const DeepfakeResultsImage = (props) => {
 
                 <img
                   src={url}
-                  alt={"Displays the results of the deepfake tool"}
+                  alt={"Displays the results of the deepfake topMenuItem"}
                   style={{
                     maxWidth: "100%",
                     maxHeight: "60vh",
@@ -278,51 +303,24 @@ const DeepfakeResultsImage = (props) => {
                     `${keyword("deepfake_image_detection_alert_2")}`}
                 </Typography>
               )}
-
               {(!deepfakeScore || !deepfakeScore.predictionScore) && (
                 <Typography variant="h5" sx={{ color: "red" }}>
                   {keyword("deepfake_no_face_detection")}
                 </Typography>
               )}
               {deepfakeScore && (
-                <Stack direction="column">
-                  <Stack
-                    direction="row"
-                    justifyContent="flex-start"
-                    alignItems="center"
-                    spacing={2}
-                  >
-                    <Typography variant="h6">
-                      {
-                        DeepfakeImageDetectionMethodNames[
-                          deepfakeScore.methodName
-                        ].name
-                      }
-                    </Typography>
-                    <Tooltip
-                      title={
-                        DeepfakeImageDetectionMethodNames[
-                          deepfakeScore.methodName
-                        ].description
-                      }
-                    >
-                      <IconButton>
-                        <Help />
-                      </IconButton>
-                    </Tooltip>
-                  </Stack>
-                  <LinearProgressWithLabel
-                    value={deepfakeScore.predictionScore}
-                  />
-                </Stack>
-              )}
-              <Box>
-                <DetectionProgressBar
-                  style={{
-                    height: "8px",
-                  }}
+                <GaugeChartResult
+                  keyword={keyword}
+                  scores={[deepfakeScore]}
+                  methodNames={DeepfakeImageDetectionMethodNames}
+                  detectionThresholds={DETECTION_THRESHOLDS}
+                  resultsHaveErrors={false}
+                  sanitizeDetectionPercentage={(n) => Math.round(n)}
+                  gaugeExplanation={{ colors: colors, keywords: keywords }}
+                  toolName={"Deepfake"}
+                  detectionType={"image"}
                 />
-              </Box>
+              )}
             </Stack>
           </Grid>
         </Grid>

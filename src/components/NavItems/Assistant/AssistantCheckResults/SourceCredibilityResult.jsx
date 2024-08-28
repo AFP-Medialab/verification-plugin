@@ -9,6 +9,7 @@ import ListItemSecondaryAction from "@mui/material/ListItemSecondaryAction";
 import SourceCredibilityDBKFDialog from "./SourceCredibilityDBKFDialog";
 import Typography from "@mui/material/Typography";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+import { getUrlTypeFromCredScope } from "./assistantUtils";
 
 const SourceCredibilityResult = (props) => {
   // central
@@ -36,8 +37,21 @@ const SourceCredibilityResult = (props) => {
                       align={"left"}
                       color={"textPrimary"}
                     >
-                      {keyword("source_credibility_warning")}{" "}
-                      {value.credibilitySource}
+                      {value.credibilityScope.includes("/") ? (
+                        <Typography>
+                          {` ${keyword("this")}`}
+                          {getUrlTypeFromCredScope(value.credibilityScope)}
+                          {` ${keyword(
+                            "source_credibility_warning_account",
+                          )} ${" "}${value.credibilitySource}`}
+                        </Typography>
+                      ) : value.credibilityScope ? (
+                        <Typography>
+                          {` ${keyword(
+                            "source_credibility_warning_domain",
+                          )} ${" "}${value.credibilitySource}`}
+                        </Typography>
+                      ) : null}
                     </Typography>
                     <Box mb={0.5} />
                   </div>
@@ -48,6 +62,19 @@ const SourceCredibilityResult = (props) => {
                     component={"div"}
                     color={"textSecondary"}
                   >
+                    {value.credibilityScope.includes("/") ? (
+                      <Typography variant={"subtitle2"}>
+                        {` ${" "} ${keyword("account_scope")} ${
+                          value.credibilityScope
+                        } `}
+                      </Typography>
+                    ) : value.credibilityScope ? (
+                      <Typography variant={"subtitle2"}>
+                        {` ${keyword("domain_scope")} ${
+                          value.credibilityScope
+                        } `}
+                      </Typography>
+                    ) : null}
                     {value.credibilityLabels ? (
                       <Typography variant={"subtitle2"}>
                         {` ${keyword("labelled_as")} ${
