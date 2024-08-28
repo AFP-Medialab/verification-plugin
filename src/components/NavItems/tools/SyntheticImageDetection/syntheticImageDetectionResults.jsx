@@ -443,18 +443,20 @@ const SyntheticImageDetectionResults = ({
                     ref={gaugeChartRef}
                     p={2}
                   >
-                    {maxScore > DETECTION_THRESHOLDS.THRESHOLD_2 && (
-                      <Typography
-                        variant="h5"
-                        align="center"
-                        alignSelf="center"
-                        sx={{ color: "red" }}
-                      >
-                        {keyword(
-                          "synthetic_image_detection_generic_detection_text",
-                        )}
-                      </Typography>
-                    )}
+                    <Typography
+                      variant="h5"
+                      align="center"
+                      alignSelf="center"
+                      sx={{ color: "red" }}
+                    >
+                      {maxScore > DETECTION_THRESHOLDS.THRESHOLD_2
+                        ? keyword(
+                            "synthetic_image_detection_generic_detection_text",
+                          )
+                        : keyword(
+                            "synthetic_image_detection_generic_inconclusive_text",
+                          )}
+                    </Typography>
 
                     {nd && nd.similar_media && nd.similar_media.length > 0 && (
                       <Typography
