@@ -36,17 +36,17 @@ const AssistantCheckStatus = () => {
 
   const newsFramingTitle = "news topic";
   const newsFramingFailState = useSelector(
-    (state) => state.assistant.newsFramingFail
+    (state) => state.assistant.newsFramingFail,
   );
 
   const newsGenreTitle = "news genre";
   const newsGenreFailState = useSelector(
-    (state) => state.assistant.newsGenreFail
+    (state) => state.assistant.newsGenreFail,
   );
 
   const persuasionTitle = "persuasion";
   const persuasionFailState = useSelector(
-    (state) => state.assistant.persuasionFail
+    (state) => state.assistant.persuasionFail,
   );
 
   const failStates = [
