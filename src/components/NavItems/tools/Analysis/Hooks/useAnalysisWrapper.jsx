@@ -127,7 +127,10 @@ export const useAnalysisWrapper = (
       axios
         .post(apiUrl)
         .then((response) => setData(response["data"]))
-        .catch((error) => handleError(error));
+        .catch((error) => {
+          console.log("error", error);
+          handleError("analysis_service_error");
+        });
     }
     // eslint-disable-next-line
   }, [apiUrl, processUrl]);

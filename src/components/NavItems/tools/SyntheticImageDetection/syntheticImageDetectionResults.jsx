@@ -6,13 +6,12 @@ import {
   Alert,
   Box,
   Card,
+  CardContent,
   CardHeader,
   Chip,
-  Divider,
   Grid,
   IconButton,
   Stack,
-  Typography,
 } from "@mui/material";
 import { Close, Download, ExpandMore } from "@mui/icons-material";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
@@ -23,59 +22,119 @@ import CustomAlertScore from "../../../Shared/CustomAlertScore";
 import GaugeChart from "react-gauge-chart";
 import Tooltip from "@mui/material/Tooltip";
 import { exportReactElementAsJpg } from "../../../Shared/Utils/htmlUtils";
-import GaugeChartModalExplanation from "../../../Shared/GaugeChartModalExplanation";
+import NddDatagrid from "./NddDatagrid";
+import {
+  DETECTION_THRESHOLDS,
+  getSyntheticImageDetectionAlgorithmFromApiName,
+  gigaGanWebpR50Grip,
+  ldmWebpR50Grip,
+  proGanWebpR50Grip,
+  SyntheticImageDetectionAlgorithm,
+  syntheticImageDetectionAlgorithms,
+} from "./SyntheticImageDetectionAlgorithms";
+import GaugeChartModalExplanation from "../../../Shared/GaugeChartResults/GaugeChartModalExplanation";
+import Typography from "@mui/material/Typography";
+import Divider from "@mui/material/Divider";
+import ListItem from "@mui/material/ListItem";
+import ListItemText from "@mui/material/ListItemText";
+import List from "@mui/material/List";
 
-const SyntheticImageDetectionResults = (props) => {
+/**
+ * Returns the alert color code for the given percentage n
+ * @param n {number}
+ * @returns {"error" | "warning" | "success"}
+ */
+export const getAlertColor = (n) => {
+  if (n >= DETECTION_THRESHOLDS.THRESHOLD_3) {
+    return "error";
+  } else if (n >= DETECTION_THRESHOLDS.THRESHOLD_2) {
+    return "warning";
+  } else {
+    return "success";
+  }
+};
+
+export const getAlertLabel = (n, keyword) => {
+  if (n >= DETECTION_THRESHOLDS.THRESHOLD_3) {
+    return keyword("synthetic_image_detection_alert_label_4");
+  } else if (n >= DETECTION_THRESHOLDS.THRESHOLD_2) {
+    return keyword("synthetic_image_detection_alert_label_3");
+  } else if (n >= DETECTION_THRESHOLDS.THRESHOLD_1) {
+    return keyword("synthetic_image_detection_alert_label_2");
+  } else {
+    return keyword("synthetic_image_detection_alert_label_1");
+  }
+};
+
+export const getPercentageColorCode = (n) => {
+  if (n >= DETECTION_THRESHOLDS.THRESHOLD_3) {
+    return "#FF0000";
+  } else if (n >= DETECTION_THRESHOLDS.THRESHOLD_2) {
+    return "#FFAA00";
+  } else {
+    return "green";
+  }
+};
+
+class NddResult {
+  /**
+   *
+   * @param id {number}
+   * @param image {string}
+   * @param archiveUrl {string}
+   * @param imageUrls {string}
+   * @param detectionResults {SyntheticImageDetectionAlgorithmResult[]}
+   */
+  constructor(id, image, archiveUrl, imageUrls, detectionResults) {
+    this.id = id;
+    this.image = image;
+    this.archiveUrl = archiveUrl;
+    this.imageUrls = imageUrls;
+    this.detectionResults = detectionResults;
+  }
+}
+
+/**
+ *
+ * @param results
+ * @param url
+ * @param handleClose
+ * @param nd
+ * @param imageType {Blob.type}
+ * @returns {Element}
+ * @constructor
+ */
+const SyntheticImageDetectionResults = ({
+  results,
+  url,
+  handleClose,
+  nd,
+  imageType,
+}) => {
   const keyword = i18nLoadNamespace(
     "components/NavItems/tools/SyntheticImageDetection",
   );
 
-  class SyntheticImageDetectionAlgorithmResult {
+  const role = useSelector((state) => state.userSession.user.roles);
+
+  class SyntheticImageDetectionAlgorithmResult extends SyntheticImageDetectionAlgorithm {
     /**
      *
-     * @param methodName {string}
+     * @param syntheticImageDetectionAlgorithm {SyntheticImageDetectionAlgorithm}
      * @param predictionScore {number}
      * @param isError {boolean}
      */
-    constructor(methodName, predictionScore, isError) {
-      (this.methodName = methodName),
-        (this.predictionScore = predictionScore),
-        (this.isError = isError);
+    constructor(syntheticImageDetectionAlgorithm, predictionScore, isError) {
+      super(
+        syntheticImageDetectionAlgorithm.apiServiceName,
+        syntheticImageDetectionAlgorithm.name,
+        syntheticImageDetectionAlgorithm.description,
+        syntheticImageDetectionAlgorithm.roleNeeded,
+      );
+      (this.predictionScore = predictionScore), (this.isError = isError);
     }
   }
 
-  const DeepfakeImageDetectionMethodNames = {
-    gan: {
-      name: keyword("synthetic_image_detection_gan_name"),
-      description: keyword("synthetic_image_detection_gan_description"),
-    },
-    diffusion: {
-      name: keyword("synthetic_image_detection_diffusion_name"),
-      description: keyword("synthetic_image_detection_diffusion_description"),
-    },
-    progan_r50_grip: {
-      name: keyword("synthetic_image_detection_progan_name"),
-      description: keyword("synthetic_image_detection_progan_description"),
-    },
-    adm_r50_grip: {
-      name: keyword("synthetic_image_detection_adm_name"),
-      description: keyword("synthetic_image_detection_adm_description"),
-    },
-    progan_rine_mever: {
-      name: keyword("synthetic_image_detection_progan_rine_mever_name"),
-      description: keyword(
-        "synthetic_image_detection_progan_rine_mever_description",
-      ),
-    },
-    ldm_rine_mever: {
-      name: keyword("synthetic_image_detection_ldm_rine_mever_name"),
-      description: keyword(
-        "synthetic_image_detection_ldm_rine_mever_description",
-      ),
-    },
-  };
-  const results = props.result;
-  const url = props.url;
   const imgElement = React.useRef(null);
 
   const imgContainerRef = useRef(null);
@@ -90,68 +149,62 @@ const SyntheticImageDetectionResults = (props) => {
 
   useEffect(() => {
     setResultsHaveErrors(false);
+    let res = [];
 
-    const diffusionScore = new SyntheticImageDetectionAlgorithmResult(
-      //previously unina_report
-      Object.keys(DeepfakeImageDetectionMethodNames)[1],
-      !results.ldm_r50_grip_report.prediction
-        ? 0
-        : results.ldm_r50_grip_report.prediction * 100,
-      !results.ldm_r50_grip_report.prediction,
-    );
-    const ganScore = new SyntheticImageDetectionAlgorithmResult(
-      //previously gan_report
-      Object.keys(DeepfakeImageDetectionMethodNames)[0],
-      !results.gan_r50_mever_report.prediction
-        ? 0
-        : results.gan_r50_mever_report.prediction * 100,
-      !results.gan_r50_mever_report.prediction,
-    );
+    for (const algorithm of syntheticImageDetectionAlgorithms) {
+      if (
+        !role.includes(algorithm.roleNeeded) &&
+        algorithm.roleNeeded.length > 0
+      ) {
+        continue;
+      }
 
-    const proganScore = new SyntheticImageDetectionAlgorithmResult(
-      Object.keys(DeepfakeImageDetectionMethodNames)[2],
-      !results.progan_r50_grip_report.prediction
-        ? 0
-        : results.progan_r50_grip_report.prediction * 100,
-      !results.progan_r50_grip_report.prediction,
-    );
+      const algorithmReport = results[algorithm.apiServiceName + "_report"];
 
-    const admScore = new SyntheticImageDetectionAlgorithmResult(
-      Object.keys(DeepfakeImageDetectionMethodNames)[3],
-      !results.adm_r50_grip_report.prediction
-        ? 0
-        : results.adm_r50_grip_report.prediction * 100,
-      !results.adm_r50_grip_report.prediction,
-    );
+      if (algorithmReport) {
+        // Display iff the user has the permissions to see the content
 
-    const proganRineScore = new SyntheticImageDetectionAlgorithmResult(
-      Object.keys(DeepfakeImageDetectionMethodNames)[4],
-      !results.progan_rine_mever_report.prediction
-        ? 0
-        : results.progan_rine_mever_report.prediction * 100,
-      !results.progan_rine_mever_report.prediction,
-    );
+        if (
+          imageType &&
+          imageType === "image/webp" &&
+          (algorithm.apiServiceName === ldmWebpR50Grip.apiServiceName ||
+            algorithm.apiServiceName === proGanWebpR50Grip.apiServiceName ||
+            algorithm.apiServiceName === gigaGanWebpR50Grip.apiServiceName)
+        ) {
+          res.push(
+            new SyntheticImageDetectionAlgorithmResult(
+              algorithm,
+              !algorithmReport.prediction
+                ? 0
+                : algorithmReport.prediction * 100,
+              algorithmReport.prediction === undefined,
+            ),
+          );
+        } else if (
+          imageType &&
+          imageType !== "image/webp" &&
+          (algorithm.apiServiceName === ldmWebpR50Grip.apiServiceName ||
+            algorithm.apiServiceName === proGanWebpR50Grip.apiServiceName ||
+            algorithm.apiServiceName === gigaGanWebpR50Grip.apiServiceName)
+        ) {
+          continue;
+        } else {
+          res.push(
+            new SyntheticImageDetectionAlgorithmResult(
+              algorithm,
+              !algorithmReport.prediction
+                ? 0
+                : algorithmReport.prediction * 100,
+              algorithmReport.prediction === undefined,
+            ),
+          );
+        }
+      }
+    }
 
-    const ldmRineScore = new SyntheticImageDetectionAlgorithmResult(
-      Object.keys(DeepfakeImageDetectionMethodNames)[5],
-      !results.ldm_rine_mever_report.prediction
-        ? 0
-        : results.ldm_rine_mever_report.prediction * 100,
-      !results.ldm_rine_mever_report.prediction,
-    );
-
-    const res = (
-      role.includes("EXTRA_FEATURE")
-        ? [
-            diffusionScore,
-            ganScore,
-            proganScore,
-            admScore,
-            proganRineScore,
-            ldmRineScore,
-          ]
-        : [diffusionScore, ganScore, proganScore]
-    ).sort((a, b) => b.predictionScore - a.predictionScore);
+    res = res
+      .filter((i) => i !== undefined)
+      .sort((a, b) => b.predictionScore - a.predictionScore);
 
     const hasResultError = () => {
       for (const algorithm of res) {
@@ -172,11 +225,10 @@ const SyntheticImageDetectionResults = (props) => {
         ),
       ),
     );
-  }, [results]);
+  }, [results, imageType]);
 
   const client_id = getclientId();
   const session = useSelector((state) => state.userSession);
-  const role = useSelector((state) => state.userSession.user.roles);
   const uid = session && session.user ? session.user.id : null;
 
   useTrackEvent(
@@ -189,52 +241,6 @@ const SyntheticImageDetectionResults = (props) => {
     uid,
   );
 
-  const handleClose = () => {
-    props.handleClose();
-  };
-  const DETECTION_THRESHOLDS = {
-    THRESHOLD_1: 50,
-    THRESHOLD_2: 70,
-    THRESHOLD_3: 90,
-  };
-
-  const getPercentageColorCode = (n) => {
-    if (n >= DETECTION_THRESHOLDS.THRESHOLD_3) {
-      return "#FF0000";
-    } else if (n >= DETECTION_THRESHOLDS.THRESHOLD_2) {
-      return "#FFAA00";
-    } else {
-      return "green";
-    }
-  };
-
-  /**
-   * Returns the alert color code for the given percentage n
-   * @param n {number}
-   * @returns {"error" | "warning" | "success"}
-   */
-  const getAlertColor = (n) => {
-    if (n >= DETECTION_THRESHOLDS.THRESHOLD_3) {
-      return "error";
-    } else if (n >= DETECTION_THRESHOLDS.THRESHOLD_2) {
-      return "warning";
-    } else {
-      return "success";
-    }
-  };
-
-  const getAlertLabel = (n) => {
-    if (n >= DETECTION_THRESHOLDS.THRESHOLD_3) {
-      return keyword("synthetic_image_detection_alert_label_4");
-    } else if (n >= DETECTION_THRESHOLDS.THRESHOLD_2) {
-      return keyword("synthetic_image_detection_alert_label_3");
-    } else if (n >= DETECTION_THRESHOLDS.THRESHOLD_1) {
-      return keyword("synthetic_image_detection_alert_label_2");
-    } else {
-      return keyword("synthetic_image_detection_alert_label_1");
-    }
-  };
-
   /**
    * Returns a percentage between 0 and 99 for display purposes. We exclude 0 and 100 values.
    * @param percentage {number}
@@ -245,7 +251,7 @@ const SyntheticImageDetectionResults = (props) => {
     return floor === 0 ? 1 : floor;
   };
   const [detailsPanelMessage, setDetailsPanelMessage] = useState(
-    "synthetic_image_detection_additional_results_hide",
+    "synthetic_image_detection_additional_results",
   );
   const handleDetailsChange = () => {
     detailsPanelMessage === "synthetic_image_detection_additional_results_hide"
@@ -255,60 +261,160 @@ const SyntheticImageDetectionResults = (props) => {
         );
   };
 
+  const [nddDetailsPanelMessage, setNddDetailsPanelMessage] = useState(
+    "synthetic_image_detection_ndd_additional_results_hide",
+  );
+  const handleNddDetailsChange = () => {
+    nddDetailsPanelMessage ===
+    "synthetic_image_detection_ndd_additional_results_hide"
+      ? setNddDetailsPanelMessage(
+          "synthetic_image_detection_ndd_additional_results",
+        )
+      : setNddDetailsPanelMessage(
+          "synthetic_image_detection_ndd_additional_results_hide",
+        );
+  };
+
   const keywords = [
-    "synthetic_image_detection_scale_modal_explanation_rating_1",
-    "synthetic_image_detection_scale_modal_explanation_rating_2",
-    "synthetic_image_detection_scale_modal_explanation_rating_3",
-    "synthetic_image_detection_scale_modal_explanation_rating_4",
+    "gauge_scale_modal_explanation_rating_1",
+    "gauge_scale_modal_explanation_rating_2",
+    "gauge_scale_modal_explanation_rating_3",
+    "gauge_scale_modal_explanation_rating_4",
   ];
   const colors = ["#00FF00", "#AAFF03", "#FFA903", "#FF0000"];
 
+  /**
+   *
+   * @param nddResults
+   * @returns {NddResult[]}
+   */
+  const getNddRows = (nddResults) => {
+    let rows = [];
+    for (let i = 0; i < nddResults.length; i += 1) {
+      const res = nddResults[i];
+      let detectionResults = [];
+      for (const detection of Object.keys(res.detections)) {
+        const d = new SyntheticImageDetectionAlgorithmResult(
+          getSyntheticImageDetectionAlgorithmFromApiName(detection),
+          sanitizeDetectionPercentage(res.detections[detection] * 100),
+          false,
+        );
+
+        // Display iff the user has the permissions to see the content
+        if (d.roleNeeded && !role.includes(d.roleNeeded)) {
+          continue;
+        }
+
+        if (
+          imageType &&
+          imageType === "image/webp" &&
+          (d.apiServiceName === ldmWebpR50Grip.apiServiceName ||
+            d.apiServiceName === proGanWebpR50Grip.apiServiceName ||
+            d.apiServiceName === gigaGanWebpR50Grip.apiServiceName)
+        ) {
+          detectionResults.push(d);
+        } else if (
+          imageType &&
+          imageType !== "image/webp" &&
+          (d.apiServiceName === ldmWebpR50Grip.apiServiceName ||
+            d.apiServiceName === proGanWebpR50Grip.apiServiceName ||
+            d.apiServiceName === gigaGanWebpR50Grip.apiServiceName)
+        ) {
+          continue;
+        } else {
+          detectionResults.push(d);
+        }
+      }
+
+      if (detectionResults.length === 0) {
+        continue;
+      }
+
+      rows.push(
+        new NddResult(
+          i + 1,
+          res.archive_url,
+          res.archive_url,
+          res.origin_urls,
+          detectionResults,
+        ),
+      );
+    }
+    return rows;
+  };
+
   return (
-    <Stack
-      direction="row"
-      justifyContent="flex-start"
-      alignItems="flex-start"
-      spacing={2}
-    >
-      <Card sx={{ width: "100%" }}>
-        <CardHeader
-          style={{ borderRadius: "4px 4px 0px 0px" }}
-          title={keyword("synthetic_image_detection_title")}
-          action={
-            <IconButton aria-label="close" onClick={handleClose}>
-              <Close sx={{ color: "white" }} />
-            </IconButton>
-          }
-        />
+    <Card sx={{ width: "100%" }}>
+      <CardHeader
+        style={{ borderRadius: "4px 4px 0px 0px" }}
+        title={keyword("synthetic_image_detection_title")}
+        action={
+          <IconButton aria-label="close" onClick={handleClose}>
+            <Close sx={{ color: "white" }} />
+          </IconButton>
+        }
+      />
+      <CardContent sx={{ flex: "1 0 auto" }}>
         <Grid
           container
           direction="row"
           justifyContent="space-evenly"
           alignItems="flex-start"
+          spacing={2}
         >
-          <Grid item sm={12} md={6}>
-            <Box sx={{ width: "100%", height: "100%" }}>
-              <Grid
-                container
-                direction="row"
-                justifyContent="center"
-                alignItems="flex-start"
-                ref={imgContainerRef}
-                p={4}
-              >
-                <img
-                  src={url}
-                  alt={"Displays the results of the deepfake tool"}
-                  style={{
+          <Grid
+            item
+            container
+            direction="column"
+            justifyContent="flex-start"
+            sm={12}
+            md={6}
+            spacing={4}
+          >
+            <Grid
+              item
+              sx={{
+                maxWidth: "100%",
+              }}
+            >
+              <Box sx={{ width: "100%", height: "100%" }}>
+                <Grid
+                  container
+                  direction="row"
+                  justifyContent="flex-start"
+                  alignItems="flex-start"
+                  ref={imgContainerRef}
+                  p={4}
+                  sx={{
                     maxWidth: "100%",
-                    maxHeight: "60vh",
-                    borderRadius: "10px",
                   }}
-                  crossOrigin={"anonymous"}
-                  ref={imgElement}
-                />
-              </Grid>
-            </Box>
+                >
+                  <Stack direction="column">
+                    <img
+                      src={url}
+                      alt={"Displays the results of the deepfake topMenuItem"}
+                      style={{
+                        maxWidth: "100%",
+                        maxHeight: "60vh",
+                        borderRadius: "10px",
+                      }}
+                      crossOrigin={"anonymous"}
+                      ref={imgElement}
+                    />
+                    <List dense={true}>
+                      <ListItem>
+                        <ListItemText
+                          primary={keyword(
+                            "synthetic_image_detection_image_type",
+                          )}
+                          secondary={imageType}
+                        />
+                      </ListItem>
+                    </List>
+                  </Stack>
+                </Grid>
+              </Box>
+            </Grid>
           </Grid>
           <Grid item sm={12} md={6}>
             {syntheticImageScores.length > 0 ? (
@@ -337,7 +443,22 @@ const SyntheticImageDetectionResults = (props) => {
                     ref={gaugeChartRef}
                     p={2}
                   >
-                    {maxScore > DETECTION_THRESHOLDS.THRESHOLD_2 && (
+                    <Typography
+                      variant="h5"
+                      align="center"
+                      alignSelf="center"
+                      sx={{ color: "red" }}
+                    >
+                      {maxScore > DETECTION_THRESHOLDS.THRESHOLD_2
+                        ? keyword(
+                            "synthetic_image_detection_generic_detection_text",
+                          )
+                        : keyword(
+                            "synthetic_image_detection_generic_inconclusive_text",
+                          )}
+                    </Typography>
+
+                    {nd && nd.similar_media && nd.similar_media.length > 0 && (
                       <Typography
                         variant="h5"
                         align="center"
@@ -345,7 +466,7 @@ const SyntheticImageDetectionResults = (props) => {
                         sx={{ color: "red" }}
                       >
                         {keyword(
-                          "synthetic_image_detection_generic_detection_text",
+                          "synthetic_image_detection_generic_detection_text_ndd",
                         )}
                       </Typography>
                     )}
@@ -434,125 +555,20 @@ const SyntheticImageDetectionResults = (props) => {
                   toolName={"SyntheticImageDetection"}
                   thresholds={DETECTION_THRESHOLDS}
                 />
+
                 {resultsHaveErrors && (
                   <Alert severity="error">
                     {keyword("synthetic_image_detection_algorithms_errors")}
                   </Alert>
                 )}
-                <Box sx={{ width: "100%" }}>
-                  <Accordion defaultExpanded onChange={handleDetailsChange}>
-                    <AccordionSummary expandIcon={<ExpandMore />}>
-                      <Typography>{keyword(detailsPanelMessage)}</Typography>
-                    </AccordionSummary>
-                    <AccordionDetails>
-                      <Stack direction={"column"} spacing={4}>
-                        {syntheticImageScores.map((item, key) => {
-                          let predictionScore;
 
-                          if (item.predictionScore) {
-                            predictionScore = sanitizeDetectionPercentage(
-                              item.predictionScore,
-                            );
-                          }
-
-                          return (
-                            <Stack direction="column" spacing={4} key={key}>
-                              <Stack direction="column" spacing={2}>
-                                <Stack
-                                  direction="row"
-                                  alignItems="flex-start"
-                                  justifyContent="space-between"
-                                >
-                                  <Box>
-                                    <Typography
-                                      variant={"h6"}
-                                      sx={{ fontWeight: "bold" }}
-                                    >
-                                      {
-                                        DeepfakeImageDetectionMethodNames[
-                                          item.methodName
-                                        ].name
-                                      }
-                                    </Typography>
-                                    <Stack
-                                      direction={{ lg: "row", md: "column" }}
-                                      spacing={2}
-                                      alignItems="center"
-                                    >
-                                      <Stack direction="row" spacing={1}>
-                                        {item.isError ? (
-                                          <Alert severity="error">
-                                            {keyword(
-                                              "synthetic_image_detection_error_generic",
-                                            )}
-                                          </Alert>
-                                        ) : (
-                                          <>
-                                            <Typography>
-                                              {keyword(
-                                                "synthetic_image_detection_probability_text",
-                                              )}{" "}
-                                            </Typography>
-                                            <Typography
-                                              sx={{
-                                                color:
-                                                  getPercentageColorCode(
-                                                    predictionScore,
-                                                  ),
-                                              }}
-                                            >
-                                              {predictionScore}%
-                                            </Typography>
-                                          </>
-                                        )}
-                                      </Stack>
-                                      {!item.isError && (
-                                        <Chip
-                                          label={getAlertLabel(predictionScore)}
-                                          color={getAlertColor(predictionScore)}
-                                        />
-                                      )}
-                                    </Stack>
-                                  </Box>
-                                  <Stack>
-                                    {/*<Button*/}
-                                    {/*  href={*/}
-                                    {/*    DeepfakeImageDetectionMethodNames[*/}
-                                    {/*      item.methodName*/}
-                                    {/*    ].modelCardUrl*/}
-                                    {/*  }*/}
-                                    {/*>*/}
-                                    {/*  {keyword(*/}
-                                    {/*    "synthetic_image_detection_model_card",*/}
-                                    {/*  )}*/}
-                                    {/*</Button>*/}
-                                  </Stack>
-                                </Stack>
-
-                                <Box
-                                  p={2}
-                                  sx={{ backgroundColor: "#FAFAFA" }}
-                                  mb={2}
-                                >
-                                  <Typography>
-                                    {
-                                      DeepfakeImageDetectionMethodNames[
-                                        item.methodName
-                                      ].description
-                                    }
-                                  </Typography>
-                                </Box>
-                              </Stack>
-                              {syntheticImageScores.length > key + 1 && (
-                                <Divider />
-                              )}
-                            </Stack>
-                          );
-                        })}
-                      </Stack>
-                    </AccordionDetails>
-                  </Accordion>
-                </Box>
+                {nd && nd.similar_media && nd.similar_media.length > 0 && (
+                  <Alert icon={false} severity="error">
+                    <Typography variant="body1">
+                      {keyword("synthetic_image_detection_ndd_info")}
+                    </Typography>
+                  </Alert>
+                )}
               </Stack>
             ) : (
               <Stack
@@ -570,9 +586,134 @@ const SyntheticImageDetectionResults = (props) => {
               </Stack>
             )}
           </Grid>
+          <Grid item container xs={12} spacing={4}>
+            {nd && nd.similar_media && nd.similar_media.length > 0 && (
+              <Grid
+                item
+                sx={{
+                  width: "100%",
+                }}
+              >
+                <Box pl={4} pr={4}>
+                  <Accordion defaultExpanded onChange={handleNddDetailsChange}>
+                    <AccordionSummary expandIcon={<ExpandMore />}>
+                      <Typography>{keyword(nddDetailsPanelMessage)}</Typography>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                      <Stack direction={"column"} spacing={4}>
+                        <NddDatagrid rows={getNddRows(nd.similar_media)} />
+                      </Stack>
+                    </AccordionDetails>
+                  </Accordion>
+                </Box>
+              </Grid>
+            )}
+
+            <Grid item sx={{ width: "100%" }}>
+              <Box pl={4} pr={4}>
+                <Accordion
+                  defaultExpanded={false}
+                  onChange={handleDetailsChange}
+                >
+                  <AccordionSummary expandIcon={<ExpandMore />}>
+                    <Typography>{keyword(detailsPanelMessage)}</Typography>
+                  </AccordionSummary>
+                  <AccordionDetails>
+                    <Stack direction={"column"} spacing={4}>
+                      {syntheticImageScores.map((item, key) => {
+                        let predictionScore;
+
+                        if (item.predictionScore) {
+                          predictionScore = sanitizeDetectionPercentage(
+                            item.predictionScore,
+                          );
+                        }
+
+                        return (
+                          <Stack direction="column" spacing={4} key={key}>
+                            <Stack direction="column" spacing={2}>
+                              <Stack
+                                direction="row"
+                                alignItems="flex-start"
+                                justifyContent="space-between"
+                              >
+                                <Box>
+                                  <Typography
+                                    variant={"h6"}
+                                    sx={{ fontWeight: "bold" }}
+                                  >
+                                    {keyword(item.name)}
+                                  </Typography>
+                                  <Stack
+                                    direction={{ lg: "row", md: "column" }}
+                                    spacing={2}
+                                    alignItems="center"
+                                  >
+                                    <Stack direction="row" spacing={1}>
+                                      {item.isError ? (
+                                        <Alert severity="error">
+                                          {keyword(
+                                            "synthetic_image_detection_error_generic",
+                                          )}
+                                        </Alert>
+                                      ) : (
+                                        <>
+                                          <Typography>
+                                            {keyword(
+                                              "synthetic_image_detection_probability_text",
+                                            )}{" "}
+                                          </Typography>
+                                          <Typography
+                                            sx={{
+                                              color:
+                                                getPercentageColorCode(
+                                                  predictionScore,
+                                                ),
+                                            }}
+                                          >
+                                            {predictionScore}%
+                                          </Typography>
+                                        </>
+                                      )}
+                                    </Stack>
+                                    {!item.isError && (
+                                      <Chip
+                                        label={getAlertLabel(
+                                          predictionScore,
+                                          keyword,
+                                        )}
+                                        color={getAlertColor(predictionScore)}
+                                      />
+                                    )}
+                                  </Stack>
+                                </Box>
+                              </Stack>
+
+                              <Box
+                                p={2}
+                                sx={{ backgroundColor: "#FAFAFA" }}
+                                mb={2}
+                              >
+                                <Typography>
+                                  {keyword(item.description)}
+                                </Typography>
+                              </Box>
+                            </Stack>
+                            {syntheticImageScores.length > key + 1 && (
+                              <Divider />
+                            )}
+                          </Stack>
+                        );
+                      })}
+                    </Stack>
+                  </AccordionDetails>
+                </Accordion>
+              </Box>
+            </Grid>
+          </Grid>
         </Grid>
-      </Card>
-    </Stack>
+      </CardContent>
+    </Card>
   );
 };
 

@@ -32,6 +32,7 @@ const AssistantImageResult = () => {
           height={"100%"}
           alt={processUrl}
           width={"100%"}
+          data-testid="assistant-media-image"
         />
       </CardMedia>
       <CardActions>

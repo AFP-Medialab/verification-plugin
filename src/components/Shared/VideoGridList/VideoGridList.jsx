@@ -41,6 +41,7 @@ const VideoImageList = (props) => {
               onClick={() => {
                 props.handleClick(tile);
               }}
+              data-testid={"assistant-media-grid-video-" + index}
             >
               {tile}
             </Link>
