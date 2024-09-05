@@ -56,7 +56,7 @@ export const resizeImage = async (imageData) => {
     newWidth = newHeight * aspectRatio;
   }
 
-  // Resize the image using an OffscreenCanvas (or fallback to regular canvas)
+  // Resize the image using an OffscreenCanvas
   const resizedImageData = await resizeUsingCanvas(
     imageBitmap,
     newWidth,
@@ -72,22 +72,10 @@ export const resizeImage = async (imageData) => {
 
 // Helper function to resize the image using a canvas
 const resizeUsingCanvas = async (imageBitmap, newWidth, newHeight) => {
-  // Check if OffscreenCanvas is available
-  if (typeof OffscreenCanvas !== "undefined") {
-    const offscreenCanvas = new OffscreenCanvas(newWidth, newHeight);
-    const context = offscreenCanvas.getContext("2d");
-    context.drawImage(imageBitmap, 0, 0, newWidth, newHeight);
+  const offscreenCanvas = new OffscreenCanvas(newWidth, newHeight);
+  const context = offscreenCanvas.getContext("2d");
+  context.drawImage(imageBitmap, 0, 0, newWidth, newHeight);
 
-    // Get ImageData from the OffscreenCanvas
-    return context.getImageData(0, 0, newWidth, newHeight);
-  } else {
-    // Fallback to regular canvas (only necessary in rare cases)
-    const canvas = document.createElement("canvas");
-    canvas.width = newWidth;
-    canvas.height = newHeight;
-    const context = canvas.getContext("2d");
-    context.drawImage(imageBitmap, 0, 0, newWidth, newHeight);
-
-    return context.getImageData(0, 0, newWidth, newHeight);
-  }
+  // Get ImageData from the OffscreenCanvas
+  return context.getImageData(0, 0, newWidth, newHeight);
 };
