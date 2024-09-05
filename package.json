@@ -1,6 +1,6 @@
 {
   "name": "weverify-plugin",
-  "version": "0.81",
+  "version": "0.82",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -21,10 +21,10 @@
     "@emotion/css": "^11.11.2",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
-    "@mui/icons-material": "^5.14.12",
-    "@mui/lab": "^5.0.0-alpha.147",
-    "@mui/material": "^5.14.12",
-    "@mui/x-date-pickers": "^6.16.1",
+    "@mui/icons-material": "^6.0.2",
+    "@mui/lab": "^6.0.0-beta.9",
+    "@mui/material": "^6.0.2",
+    "@mui/x-date-pickers": "^7.15.0",
     "@reduxjs/toolkit": "^1.9.7",
     "@types/chrome": "^0.0.266",
     "@wavesurfer/react": "^1.0.4",
