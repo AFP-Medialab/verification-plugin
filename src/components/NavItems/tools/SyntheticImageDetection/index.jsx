@@ -431,7 +431,7 @@ const SyntheticImageDetection = () => {
                       disabled={isLoading}
                     />
                   }
-                  label="Auto resize local image if too large"
+                  label="Auto-Resize"
                 />
               </FormGroup>
             )}
