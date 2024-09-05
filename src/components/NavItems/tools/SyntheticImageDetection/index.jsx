@@ -13,6 +13,8 @@ import {
   Box,
   Card,
   CardHeader,
+  FormControlLabel,
+  FormGroup,
   Grid,
   LinearProgress,
   Stack,
@@ -32,10 +34,7 @@ import StringFileUploadField from "../../../Shared/StringFileUploadField";
 import { preprocessFileUpload } from "../../../Shared/Utils/fileUtils";
 import { syntheticImageDetectionAlgorithms } from "./SyntheticImageDetectionAlgorithms";
 import { useLocation } from "react-router-dom";
-import FormGroup from "@mui/material/FormGroup";
-import FormControlLabel from "@mui/material/FormControlLabel";
 import { ROLES } from "../../../../constants/roles";
-// import worker from "../../../../workers/resizeImageWorker";
 
 const SyntheticImageDetection = () => {
   const location = useLocation();
@@ -72,7 +71,6 @@ const SyntheticImageDetection = () => {
     URL: "url",
     UPLOAD: "local",
   };
-  // const worker = new Worker("../../../../workers/resizeImageWorker.js");
 
   const workerRef = useRef(null);
 
@@ -97,20 +95,15 @@ const SyntheticImageDetection = () => {
       );
       workerInstance.postMessage(image);
 
-      //let res;
-
       workerInstance.onerror = function (e) {
         reject(e.error);
       };
 
       workerInstance.onmessage = function (e) {
-        console.log(e);
+        // console.log(e);
         resolve(e.data);
-        // res = e.data;
       };
     });
-
-    // return res;
   };
 
   const getSyntheticImageScores = async (
