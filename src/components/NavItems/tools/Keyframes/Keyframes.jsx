@@ -38,10 +38,10 @@ const Keyframes = () => {
   const [localFile, setLocalFile] = useState(false);
 
   /*
-        const toggleLocal = () => {
-            setLocalFile(!localFile);
-        };
-        */
+          const toggleLocal = () => {
+              setLocalFile(!localFile);
+          };
+          */
 
   const resultUrl = useSelector((state) => state.keyframes.url);
   const resultData = useSelector((state) => state.keyframes.result);
@@ -85,21 +85,21 @@ const Keyframes = () => {
   //const client_id = getclientId();
   const submitUrl = () => {
     /*trackEvent(
-              "submission",
-              "keyframe",
-              "video key frame analysis",
-              input.trim()
-            );*/
+                  "submission",
+                  "keyframe",
+                  "video key frame analysis",
+                  input.trim()
+                );*/
     setSubmittedUrl(input);
   };
 
   /*useEffect(()=>{
-            console.log("detected");
-            if (urlDetected) {
-                submitUrl()
-            }
-            // eslint-disable-next-line react-hooks/exhaustive-deps
-        }, [urlDetected])*/
+              console.log("detected");
+              if (urlDetected) {
+                  submitUrl()
+              }
+              // eslint-disable-next-line react-hooks/exhaustive-deps
+          }, [urlDetected])*/
 
   useEffect(() => {
     if (url) {
@@ -300,7 +300,8 @@ const Keyframes = () => {
                     variant="contained"
                     color="primary"
                     onClick={(e) => {
-                      e.preventDefault(), submitUrl();
+                      e.preventDefault();
+                      submitUrl();
                     }}
                     disabled={isLoading || isLoadingSimilarity}
                   >

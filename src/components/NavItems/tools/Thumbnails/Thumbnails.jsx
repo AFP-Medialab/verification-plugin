@@ -6,7 +6,7 @@ import ImageGridList from "../../../Shared/ImageGridList/ImageGridList";
 import { useDispatch, useSelector } from "react-redux";
 import FormControl from "@mui/material/FormControl";
 import FormControlLabel from "@mui/material/FormControlLabel";
-import { IconButton } from "@mui/material";
+import { Grid2, IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import { loadImageSize, useLoading } from "../../../../Hooks/useInput";
@@ -26,7 +26,6 @@ import { useParams } from "react-router-dom";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import ThumbnailsIcon from "../../../NavBar/images/SVG/Video/Thumbnails.svg";
-import { Grid2 } from "@mui/material";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import LinearProgress from "@mui/material/LinearProgress";
 import {
@@ -142,13 +141,13 @@ const Thumbnails = () => {
     if (url !== null && url !== "" && isYtUrl(url)) {
       setEventUrl(url);
       /*trackEvent(
-              "submission",
-              "thumbnails",
-              "youtube thumbnail",
-              url,
-              client_id,
-              uid
-            );*/
+                    "submission",
+                    "thumbnails",
+                    "youtube thumbnail",
+                    url,
+                    client_id,
+                    uid
+                  );*/
       let images = get_images(url);
       dispatch(
         setThumbnailsResult({
@@ -281,7 +280,8 @@ const Thumbnails = () => {
                   variant="contained"
                   color="primary"
                   onClick={(e) => {
-                    e.preventDefault(), submitForm();
+                    e.preventDefault();
+                    submitForm();
                   }}
                 >
                   {keyword("button_submit")}

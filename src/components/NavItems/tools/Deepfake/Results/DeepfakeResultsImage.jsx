@@ -17,7 +17,8 @@ const DeepfakeResultsImage = (props) => {
 
   class DeepfakeResult {
     constructor(methodName, predictionScore) {
-      (this.methodName = methodName), (this.predictionScore = predictionScore);
+      this.methodName = methodName;
+      this.predictionScore = predictionScore;
     }
   }
 

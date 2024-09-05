@@ -329,7 +329,8 @@ const AdvancedTools = () => {
                           fullWidth
                           disabled={stateGetCode}
                           onClick={(e) => {
-                            e.preventDefault(), handleGetCode();
+                            e.preventDefault();
+                            handleGetCode();
                           }}
                         >
                           {messageI18NResolver("ACCESSCODEFORM_SUBMIT_LABEL")}
@@ -449,7 +450,8 @@ const AdvancedTools = () => {
                   variant="contained"
                   color="primary"
                   onClick={(e) => {
-                    e.preventDefault(), handleClickUnlock();
+                    e.preventDefault();
+                    handleClickUnlock();
                   }}
                   fullWidth
                   disabled={stateUnlockTools}

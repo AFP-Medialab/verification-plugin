@@ -30,7 +30,7 @@ const Archive = () => {
 
   const [input, setInput] = useState("");
 
-  const [fileToUpload, setFileToUpload] = useState(/** @type {File?} */ (null));
+  const [fileToUpload, setFileToUpload] = useState(/** @type {File?} */ null);
 
   const [archiveLinks, setArchiveLinks] = useState([]);
 

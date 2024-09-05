@@ -80,12 +80,12 @@ const Analysis = () => {
   );
   const submitForm = () => {
     /*trackEvent(
-          "submission",
-          "analysis",
-          "image caa analysis",
-          input.trim(),
-          client_id
-        );*/
+              "submission",
+              "analysis",
+              "image caa analysis",
+              input.trim(),
+              client_id
+            );*/
     setSubmittedUrl(input.trim());
     dispatch(cleanAnalysisState());
   };
@@ -168,7 +168,8 @@ const Analysis = () => {
                   color="primary"
                   disabled={isLoading}
                   onClick={(e) => {
-                    e.preventDefault(), submitForm();
+                    e.preventDefault();
+                    submitForm();
                   }}
                 >
                   {keyword("button_submit")}

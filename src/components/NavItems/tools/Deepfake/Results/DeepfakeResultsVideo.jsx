@@ -245,13 +245,7 @@ const DeepfakeResultsVideo = (props) => {
                       const endSec = ("0" + (shotEnd % 60)).slice(-2);
 
                       return (
-                        <Grid2
-                          size={{ xs: 12 }}
-                          key={keyShot}
-                          size={{
-                            sm: 4,
-                          }}
-                        >
+                        <Grid2 size={{ sm: 4, xs: 12 }} key={keyShot}>
                           {keyShot === shotSelectedKey ? (
                             <Box
                               onClick={() => clickShot(valueShot, keyShot)}

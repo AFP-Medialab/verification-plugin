@@ -93,7 +93,8 @@ const Geolocation = () => {
                   variant="contained"
                   color="primary"
                   onClick={(e) => {
-                    e.preventDefault(), cleanup();
+                    e.preventDefault();
+                    cleanup();
                   }}
                 >
                   {keyword("button_remove")}

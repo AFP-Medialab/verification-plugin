@@ -131,7 +131,8 @@ const SyntheticImageDetectionResults = ({
         syntheticImageDetectionAlgorithm.description,
         syntheticImageDetectionAlgorithm.roleNeeded,
       );
-      (this.predictionScore = predictionScore), (this.isError = isError);
+      this.predictionScore = predictionScore;
+      this.isError = isError;
     }
   }
 
