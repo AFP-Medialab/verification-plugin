@@ -28,7 +28,7 @@ const ImageUrlGridList = (props) => {
       <Grid2 container spacing={1}>
         {props.list.map((tile, index) => {
           return (
-            <Grid2 key={index} xs={12 / props.cols}>
+            <Grid2 key={index} size={{ xs: 12 / props.cols }}>
               {index === props.list.length - 1 && props.setLoading !== null ? (
                 <img
                   src={tile.url}
