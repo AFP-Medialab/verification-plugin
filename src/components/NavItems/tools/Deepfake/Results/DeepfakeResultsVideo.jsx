@@ -475,15 +475,12 @@ const DeepfakeResultsVideo = (props) => {
                             (valueFace, keyFace) => {
                               return (
                                 <Grid2
-                                  size={{ xs: 12 }}
+                                  size={{ sm: 4, xs: 12 }}
                                   key={keyFace}
                                   style={{
                                     display: "flex",
                                     flexDirection: "column",
                                     alignItems: "center",
-                                  }}
-                                  size={{
-                                    sm: 4,
                                   }}
                                 >
                                   <img
