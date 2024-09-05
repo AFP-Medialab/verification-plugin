@@ -22,9 +22,7 @@ const imageDataToFile = async (imageData, fileName, imageType) => {
   }
 
   //3. Convert the Blob to a File
-  const file = new File([blob], fileName, { type: blob.type }, imageType);
-
-  return file;
+  return new File([blob], fileName, { type: blob.type }, imageType);
 };
 
 /**
