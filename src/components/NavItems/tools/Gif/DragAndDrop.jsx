@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import Grid from "@mui/material/Grid";
+import { Grid2 } from "@mui/material";
 
 class DragAndDrop extends Component {
   state = {
@@ -39,6 +39,7 @@ class DragAndDrop extends Component {
       this.dragCounter = 0;
     }
   };
+
   componentDidMount() {
     let div = this.dropRef.current;
     div.addEventListener("dragenter", this.handleDragIn);
@@ -46,6 +47,7 @@ class DragAndDrop extends Component {
     div.addEventListener("dragover", this.handleDrag);
     div.addEventListener("drop", this.handleDrop);
   }
+
   componentWillUnmount() {
     let div = this.dropRef.current;
     div.removeEventListener("dragenter", this.handleDragIn);
@@ -53,6 +55,7 @@ class DragAndDrop extends Component {
     div.removeEventListener("dragover", this.handleDrag);
     div.removeEventListener("drop", this.handleDrop);
   }
+
   render() {
     return (
       <div
@@ -64,7 +67,7 @@ class DragAndDrop extends Component {
         ref={this.dropRef}
       >
         {this.state.drag && (
-          <Grid
+          <Grid2
             container
             spacing={0}
             direction="column"
@@ -82,8 +85,7 @@ class DragAndDrop extends Component {
               zIndex: 9999,
             }}
           >
-            <Grid
-              item
+            <Grid2
               style={{
                 textAlign: "center",
                 color: "grey",
@@ -91,12 +93,13 @@ class DragAndDrop extends Component {
               }}
             >
               <div>Drop the image here</div>
-            </Grid>
-          </Grid>
+            </Grid2>
+          </Grid2>
         )}
         {this.props.children}
       </div>
     );
   }
 }
+
 export default DragAndDrop;

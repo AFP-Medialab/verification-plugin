@@ -3,9 +3,14 @@ import { useSelector } from "react-redux";
 
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
-import { CardHeader, CircularProgress, Link, styled } from "@mui/material";
+import {
+  CardHeader,
+  CircularProgress,
+  Grid2,
+  Link,
+  styled,
+} from "@mui/material";
 import CardContent from "@mui/material/CardContent";
-import Grid from "@mui/material/Grid";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
@@ -88,8 +93,8 @@ const renderCollapse = (
   return (
     <Box mb={1.5}>
       <Divider />
-      <Grid container>
-        <Grid item xs={6} style={{ display: "flex" }}>
+      <Grid2 container>
+        <Grid2 size={{ xs: 6 }} style={{ display: "flex" }}>
           <Typography
             className={classes.toolTipIcon}
             onClick={() => setDisplayOrigLang(!displayOrigLang)}
@@ -123,8 +128,8 @@ const renderCollapse = (
               </IconButton>
             </Tooltip>
           ) : null}
-        </Grid>
-        <Grid item xs={6} align={"right"}>
+        </Grid2>
+        <Grid2 size={{ xs: 6 }} align={"right"}>
           {displayExpander ? (
             expanded ? (
               <ExpandLessOutlined
@@ -142,8 +147,8 @@ const renderCollapse = (
               />
             )
           ) : null}
-        </Grid>
-      </Grid>
+        </Grid2>
+      </Grid2>
     </Box>
   );
 };
@@ -164,11 +169,11 @@ const renderCollapsePrevFactChecks = (
   return (
     <Box mb={1.5}>
       <Divider />
-      <Grid container>
-        <Grid item xs={4} align={"start"}>
+      <Grid2 container>
+        <Grid2 size={{ xs: 4 }} align={"start"}>
           <></>
-        </Grid>
-        <Grid item xs={6} align={"start"}>
+        </Grid2>
+        <Grid2 size={{ xs: 6 }} align={"start"}>
           <Typography
             component={"div"}
             sx={{ color: "text.secondary", align: "start" }}
@@ -182,8 +187,8 @@ const renderCollapsePrevFactChecks = (
               {keyword("semantic_search_title")}
             </Link>
           </Typography>
-        </Grid>
-        <Grid item xs={2} align={"start"}>
+        </Grid2>
+        <Grid2 size={{ xs: 2 }} align={"start"}>
           {displayExpander ? (
             expanded ? (
               <ExpandLessOutlined
@@ -201,8 +206,8 @@ const renderCollapsePrevFactChecks = (
               />
             )
           ) : null}
-        </Grid>
-      </Grid>
+        </Grid2>
+      </Grid2>
     </Box>
   );
 };
@@ -327,7 +332,7 @@ const AssistantCredSignals = () => {
   );
 
   return (
-    <Grid item xs={12}>
+    <Grid2 size={{ xs: 12 }}>
       <Card>
         <CardHeader
           className={classes.assistantCardHeader}
@@ -398,16 +403,16 @@ const AssistantCredSignals = () => {
             <AccordionSummary
               expandIcon={getExpandIcon(newsFramingLoading, newsFramingFail)}
             >
-              <Grid container wrap="wrap">
-                <Grid item xs={4} align="start">
+              <Grid2 container wrap="wrap">
+                <Grid2 size={{ xs: 4 }} align="start">
                   <Typography
                     display="inline"
                     sx={{ flexShrink: 0, align: "start" }}
                   >
                     {newsFramingTitle}
                   </Typography>
-                </Grid>
-                <Grid item xs={8} align="start">
+                </Grid2>
+                <Grid2 size={{ xs: 8 }} align="start">
                   {newsFramingLoading && (
                     <CircularProgress color={"secondary"} />
                   )}
@@ -425,8 +430,8 @@ const AssistantCredSignals = () => {
                       {renderEntityKeys(newsFramingResult.entities, keyword)}
                     </Typography>
                   )}
-                </Grid>
-              </Grid>
+                </Grid2>
+              </Grid2>
             </AccordionSummary>
 
             <AccordionDetails>
@@ -473,16 +478,16 @@ const AssistantCredSignals = () => {
             <AccordionSummary
               expandIcon={getExpandIcon(newsGenreLoading, newsGenreFail)}
             >
-              <Grid container wrap="wrap">
-                <Grid item xs={4} align="start">
+              <Grid2 container wrap="wrap">
+                <Grid2 size={{ xs: 4 }} align="start">
                   <Typography
                     display="inline"
                     sx={{ flexShrink: 0, align: "start" }}
                   >
                     {newsGenreTitle}
                   </Typography>
-                </Grid>
-                <Grid item xs={8} align="start">
+                </Grid2>
+                <Grid2 size={{ xs: 8 }} align="start">
                   {newsGenreLoading && <CircularProgress color={"secondary"} />}
                   {newsGenreFail && (
                     <Typography
@@ -498,8 +503,8 @@ const AssistantCredSignals = () => {
                       {renderEntityKeys(newsGenreResult.entities, keyword)}
                     </Typography>
                   )}
-                </Grid>
-              </Grid>
+                </Grid2>
+              </Grid2>
             </AccordionSummary>
 
             <AccordionDetails>
@@ -557,16 +562,16 @@ const AssistantCredSignals = () => {
                   Object.keys(persuasionResult.entities).length < 1,
               )}
             >
-              <Grid container wrap="wrap">
-                <Grid item xs={4} align="start">
+              <Grid2 container wrap="wrap">
+                <Grid2 size={{ xs: 4 }} align="start">
                   <Typography
                     display="inline"
                     sx={{ flexShrink: 0, align: "start" }}
                   >
                     {persuasionTitle}
                   </Typography>
-                </Grid>
-                <Grid item xs={8} align="start">
+                </Grid2>
+                <Grid2 size={{ xs: 8 }} align="start">
                   {persuasionLoading && (
                     <CircularProgress color={"secondary"} />
                   )}
@@ -592,8 +597,8 @@ const AssistantCredSignals = () => {
                         {keyword("none_detected")}
                       </Typography>
                     )}
-                </Grid>
-              </Grid>
+                </Grid2>
+              </Grid2>
             </AccordionSummary>
 
             <AccordionDetails>
@@ -650,13 +655,13 @@ const AssistantCredSignals = () => {
                   Object.keys(subjectivityResult.entities).length < 1,
               )}
             >
-              <Grid container wrap="wrap">
-                <Grid item xs={4} align="start">
+              <Grid2 container wrap="wrap">
+                <Grid2 size={{ xs: 4 }} align="start">
                   <Typography sx={{ flexShrink: 0, align: "start" }}>
                     {subjectivityTitle}
                   </Typography>
-                </Grid>
-                <Grid item xs={8} align="start">
+                </Grid2>
+                <Grid2 size={{ xs: 8 }} align="start">
                   {subjectivityLoading && (
                     <CircularProgress color={"secondary"} />
                   )}
@@ -684,8 +689,8 @@ const AssistantCredSignals = () => {
                         {keyword("none_detected")}
                       </Typography>
                     )}
-                </Grid>
-              </Grid>
+                </Grid2>
+              </Grid2>
             </AccordionSummary>
 
             <AccordionDetails>
@@ -745,17 +750,17 @@ const AssistantCredSignals = () => {
                 role,
               )}
             >
-              <Grid container wrap="wrap">
-                <Grid item xs={4} align="start">
+              <Grid2 container wrap="wrap">
+                <Grid2 size={{ xs: 4 }} align="start">
                   <Typography
                     display="inline"
                     sx={{ flexShrink: 0, align: "start" }}
                   >
                     {prevFactChecksTitle}
                   </Typography>
-                </Grid>
+                </Grid2>
 
-                <Grid item xs={8} align="start">
+                <Grid2 size={{ xs: 8 }} align="start">
                   {role.includes("BETA_TESTER") && prevFactChecksLoading && (
                     <CircularProgress color={"secondary"} />
                   )}
@@ -794,8 +799,8 @@ const AssistantCredSignals = () => {
                       {keyword("login_required")}
                     </Typography>
                   )}
-                </Grid>
-              </Grid>
+                </Grid2>
+              </Grid2>
             </AccordionSummary>
 
             <AccordionDetails>
@@ -871,17 +876,17 @@ const AssistantCredSignals = () => {
                 role,
               )}
             >
-              <Grid container wrap="wrap">
-                <Grid item xs={4} align="start">
+              <Grid2 container wrap="wrap">
+                <Grid2 size={{ xs: 4 }} align="start">
                   <Typography
                     display="inline"
                     sx={{ flexShrink: 0, align: "start" }}
                   >
                     {machineGeneratedTextTitle}
                   </Typography>
-                </Grid>
+                </Grid2>
 
-                <Grid item xs={8} align="start">
+                <Grid2 size={{ xs: 8 }} align="start">
                   {role.includes("BETA_TESTER") &&
                     machineGeneratedTextLoading && (
                       <CircularProgress color={"secondary"} />
@@ -922,13 +927,13 @@ const AssistantCredSignals = () => {
                       {keyword("login_required")}
                     </Typography>
                   )}
-                </Grid>
-              </Grid>
+                </Grid2>
+              </Grid2>
             </AccordionSummary>
           </StyledAccordion>
         </CardContent>
       </Card>
-    </Grid>
+    </Grid2>
   );
 };
 export default AssistantCredSignals;

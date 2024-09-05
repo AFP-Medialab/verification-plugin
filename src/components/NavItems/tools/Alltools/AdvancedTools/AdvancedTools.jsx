@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import Grid from "@mui/material/Grid";
+import { Grid2, Stack } from "@mui/material";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
@@ -21,7 +21,6 @@ import * as yup from "yup";
 import _ from "lodash";
 import MenuItem from "@mui/material/MenuItem";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import { Stack } from "@mui/material";
 
 const registrationValidationSchema = yup.object().shape({
   email: yup
@@ -255,7 +254,7 @@ const AdvancedTools = () => {
         aria-labelledby="max-width-dialog-title"
       >
         {dialogState === 0 && (
-          <Grid
+          <Grid2
             container
             direction="column"
             justifyContent="flex-start"
@@ -263,45 +262,43 @@ const AdvancedTools = () => {
             p={2}
           >
             <form>
-              <Grid item>
+              <Grid2>
                 <DialogTitle id="max-width-dialog-title">
                   <Typography style={{ color: "#00926c", fontSize: "24px" }}>
                     {keyword("title")}
                   </Typography>
                 </DialogTitle>
-              </Grid>
-              <Grid item>
+              </Grid2>
+              <Grid2>
                 <DialogContent sx={{ overflow: "hidden" }}>
-                  <Grid
+                  <Grid2
                     container
-                    item
                     direction="column"
                     justifyContent="flex-start"
                     alignItems="stretch"
                     spacing={2}
                   >
-                    <Grid
+                    <Grid2
                       container
-                      item
                       direction="column"
                       justifyContent="flex-start"
                       alignItems="stretch"
                       spacing={2}
                     >
-                      <Grid item>
+                      <Grid2>
                         <Typography variant="body2">
                           {keyword("text_general")}
                         </Typography>
-                      </Grid>
-                      <Grid item mt={2}>
+                      </Grid2>
+                      <Grid2 mt={2}>
                         <Typography
                           variant="body2"
                           style={{ color: "#818B95" }}
                         >
                           {messageI18NResolver("ACCESSCODEFORM_TITLE")}
                         </Typography>
-                      </Grid>
-                      <Grid item>
+                      </Grid2>
+                      <Grid2>
                         <TextField
                           label={"Email"}
                           value={email}
@@ -323,8 +320,8 @@ const AdvancedTools = () => {
                             }
                           }}
                         />
-                      </Grid>
-                      <Grid item>
+                      </Grid2>
+                      <Grid2>
                         <Button
                           type="submit"
                           variant="contained"
@@ -337,8 +334,8 @@ const AdvancedTools = () => {
                         >
                           {messageI18NResolver("ACCESSCODEFORM_SUBMIT_LABEL")}
                         </Button>
-                      </Grid>
-                      <Grid item>
+                      </Grid2>
+                      <Grid2>
                         <Typography
                           variant="body2"
                           style={{ color: "#818B95", textAlign: "start" }}
@@ -356,14 +353,14 @@ const AdvancedTools = () => {
                             {keyword("text_clickhere")}
                           </span>
                         </Typography>
-                      </Grid>
-                    </Grid>
-                    <Grid item mt={6}>
+                      </Grid2>
+                    </Grid2>
+                    <Grid2 mt={6}>
                       <Typography variant="body2" style={{ color: "#818B95" }}>
                         {messageI18NResolver("REGISTRATIONFORM_TITLE")}
                       </Typography>
-                    </Grid>
-                    <Grid item>
+                    </Grid2>
+                    <Grid2>
                       <Button
                         variant="outlined"
                         color="primary"
@@ -373,25 +370,25 @@ const AdvancedTools = () => {
                       >
                         {messageI18NResolver("REGISTRATIONFORM_SUBMIT_LABEL")}
                       </Button>
-                    </Grid>
-                  </Grid>
+                    </Grid2>
+                  </Grid2>
                 </DialogContent>
-              </Grid>
+              </Grid2>
             </form>
-          </Grid>
+          </Grid2>
         )}
         {dialogState === 1 && (
           <Box p={2}>
             <form>
               <DialogTitle id="max-width-dialog-title">
-                <Grid
+                <Grid2
                   container
                   direction="row"
                   justifyContent="flex-start"
                   alignItems="center"
                   style={{ width: "100%" }}
                 >
-                  <Grid item>
+                  <Grid2>
                     <IconButton
                       color="primary"
                       onClick={handleClickBack}
@@ -399,14 +396,14 @@ const AdvancedTools = () => {
                     >
                       <ArrowBackIosIcon />
                     </IconButton>
-                  </Grid>
+                  </Grid2>
 
-                  <Grid item>
+                  <Grid2>
                     <Typography style={{ color: "#00926c", fontSize: "24px" }}>
                       {messageI18NResolver("ACCESSCODEFORM_EMAIL_CHECK")}
                     </Typography>
-                  </Grid>
-                </Grid>
+                  </Grid2>
+                </Grid2>
               </DialogTitle>
               <DialogContent style={{ height: "300px" }}>
                 <Typography variant="body2">
@@ -508,8 +505,8 @@ const AdvancedTools = () => {
               <form
                 onSubmit={registrationForm.handleSubmit(registrationOnSubmit)}
               >
-                <Grid container justifyContent="center" spacing={2}>
-                  <Grid item xs={12}>
+                <Grid2 container justifyContent="center" spacing={2}>
+                  <Grid2 size={{ xs: 12 }}>
                     <Controller
                       name="email"
                       render={({ field }) => (
@@ -553,8 +550,8 @@ const AdvancedTools = () => {
                       }}
                       control={registrationForm.control}
                     />
-                  </Grid>
-                  <Grid item xs={12}>
+                  </Grid2>
+                  <Grid2 size={{ xs: 12 }}>
                     <Controller
                       name="firstName"
                       render={({ field }) => (
@@ -593,8 +590,8 @@ const AdvancedTools = () => {
                       }}
                       control={registrationForm.control}
                     />
-                  </Grid>
-                  <Grid item xs={12}>
+                  </Grid2>
+                  <Grid2 size={{ xs: 12 }}>
                     <Controller
                       name="lastName"
                       render={({ field }) => (
@@ -633,8 +630,8 @@ const AdvancedTools = () => {
                       }}
                       control={registrationForm.control}
                     />
-                  </Grid>
-                  <Grid item xs={12}>
+                  </Grid2>
+                  <Grid2 size={{ xs: 12 }}>
                     <Controller
                       name="organization"
                       render={({ field }) => (
@@ -673,8 +670,8 @@ const AdvancedTools = () => {
                       }}
                       control={registrationForm.control}
                     />
-                  </Grid>
-                  <Grid item xs={12}>
+                  </Grid2>
+                  <Grid2 size={{ xs: 12 }}>
                     <Controller
                       name="organizationRole"
                       render={({ field }) => (
@@ -734,9 +731,9 @@ const AdvancedTools = () => {
                       }}
                       control={registrationForm.control}
                     />
-                  </Grid>
+                  </Grid2>
 
-                  <Grid item xs={12}>
+                  <Grid2 size={{ xs: 12 }}>
                     <Controller
                       name="organizationRoleOther"
                       render={({ field }) => (
@@ -773,9 +770,9 @@ const AdvancedTools = () => {
                       )}
                       control={registrationForm.control}
                     />
-                  </Grid>
+                  </Grid2>
 
-                  <Grid item xs={12}>
+                  <Grid2 size={{ xs: 12 }}>
                     <Box mt={2}>
                       <Button
                         variant="contained"
@@ -786,8 +783,8 @@ const AdvancedTools = () => {
                         {messageI18NResolver("REGISTRATIONFORM_SUBMIT_LABEL")}
                       </Button>
                     </Box>
-                  </Grid>
-                </Grid>
+                  </Grid2>
+                </Grid2>
               </form>
             </DialogContent>
             <DialogActions></DialogActions>

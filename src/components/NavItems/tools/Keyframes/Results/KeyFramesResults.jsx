@@ -1,26 +1,26 @@
-import React, { useState, memo } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import React, { memo, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import ImageGridList from "../../../../Shared/ImageGridList/ImageGridList";
 import Box from "@mui/material/Box";
 import Divider from "@mui/material/Divider";
 import Button from "@mui/material/Button";
 import { useKeyframes } from "../Hooks/usekeyframes";
-import { IconButton } from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
-import { cleanKeyframesState } from "../../../../../redux/actions/tools/keyframesActions";
-import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import Grid from "@mui/material/Grid";
-import Card from "@mui/material/Card";
-import CardHeader from "@mui/material/CardHeader";
-import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 //import { useLoading, loadImageSize } from "../../../../../Hooks/useInput"
 import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
   CircularProgress,
+  Grid2,
+  IconButton,
   Typography,
 } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+import { cleanKeyframesState } from "../../../../../redux/actions/tools/keyframesActions";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+import Card from "@mui/material/Card";
+import CardHeader from "@mui/material/CardHeader";
+import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ReportProblemOutlinedIcon from "@mui/icons-material/ReportProblemOutlined";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
@@ -33,8 +33,8 @@ import ZoomOutIcon from "@mui/icons-material/ZoomOut";
 import DetailedIcon from "@mui/icons-material/ViewComfyRounded";
 import SimpleIcon from "@mui/icons-material/ViewStreamRounded";
 import {
-  SEARCH_ENGINE_SETTINGS,
   reverseImageSearch,
+  SEARCH_ENGINE_SETTINGS,
 } from "../../../../Shared/ReverseSearch/reverseSearchUtils";
 
 const KeyFramesResults = (props) => {
@@ -212,13 +212,11 @@ const KeyFramesResults = (props) => {
             </Box>
           )}
       </Card>
-
       <Box m={3} />
-
       <Card>
         <CardHeader
           title={
-            <Grid
+            <Grid2
               container
               direction="row"
               justifyContent="space-between"
@@ -251,7 +249,7 @@ const KeyFramesResults = (props) => {
                 }}
               >
                 <Box p={3}>
-                  <Grid
+                  <Grid2
                     container
                     direction="row"
                     justifyContent="space-between"
@@ -262,7 +260,7 @@ const KeyFramesResults = (props) => {
                     </Typography>
 
                     <CloseIcon onClick={closeHelp} />
-                  </Grid>
+                  </Grid2>
 
                   <Box m={1} />
                   <Typography variant="body2">
@@ -270,7 +268,7 @@ const KeyFramesResults = (props) => {
                   </Typography>
                 </Box>
               </Popover>
-            </Grid>
+            </Grid2>
           }
           className={classes.headerUploadedImage}
           action={
@@ -287,13 +285,13 @@ const KeyFramesResults = (props) => {
         />
 
         <div className={classes.root2}>
-          <Grid
+          <Grid2
             container
             justifyContent="space-between"
             spacing={2}
             alignContent={"center"}
           >
-            <Grid item>
+            <Grid2>
               {!detailed ? (
                 <Button
                   color={"primary"}
@@ -311,18 +309,18 @@ const KeyFramesResults = (props) => {
                   {keyword("keyframe_title_get_simple")}
                 </Button>
               )}
-            </Grid>
-            <Grid item xs style={{ textAlign: "end" }}>
+            </Grid2>
+            <Grid2 size="grow" style={{ textAlign: "end" }}>
               <Button onClick={() => zoom(-1)} endIcon={<ZoomOutIcon />}>
                 {keyword("zoom_out")}
               </Button>
-            </Grid>
-            <Grid item>
+            </Grid2>
+            <Grid2>
               <Button onClick={() => zoom(1)} endIcon={<ZoomInIcon />}>
                 {keyword("zoom_in")}
               </Button>
-            </Grid>
-          </Grid>
+            </Grid2>
+          </Grid2>
           <Box m={2} />
           <Divider />
 

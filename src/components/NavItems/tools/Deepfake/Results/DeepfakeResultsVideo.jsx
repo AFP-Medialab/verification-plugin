@@ -1,15 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import {
-  Grid,
-  Popover,
-  Typography,
-  Stack,
-  Tooltip,
-  IconButton,
   CardContent,
+  Grid2,
+  IconButton,
+  Popover,
+  Stack,
+  Typography,
 } from "@mui/material";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import CloseIcon from "@mui/icons-material/Close";
@@ -21,6 +20,7 @@ import GaugeChartResult from "components/Shared/GaugeChartResults/GaugeChartResu
 
 const DeepfakeResultsVideo = (props) => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/Deepfake");
+
   class DeepfakeResult {
     constructor(methodName, predictionScore) {
       (this.methodName = methodName), (this.predictionScore = predictionScore);
@@ -174,6 +174,7 @@ const DeepfakeResultsVideo = (props) => {
   function closeHelp() {
     setAnchorHelp(null);
   }
+
   const handleClose = () => {
     props.handleClose();
   };
@@ -190,14 +191,14 @@ const DeepfakeResultsVideo = (props) => {
         }
       />
       <CardContent>
-        <Grid
+        <Grid2
           container
           direction="row"
           justifyContent="space-evenly"
           alignItems="flex-start"
         >
-          <Grid item xs={6} container direction="column" spacing={3}>
-            <Grid item xs={6} container direction="column">
+          <Grid2 size={{ xs: 6 }} container direction="column" spacing={3}>
+            <Grid2 size={{ xs: 6 }} container direction="column">
               <video
                 width="100%"
                 height="auto"
@@ -215,9 +216,9 @@ const DeepfakeResultsVideo = (props) => {
                 />
                 {keyword("deepfake_support")}
               </video>
-            </Grid>
+            </Grid2>
             {!!results.deepfake_video_report.results && (
-              <Grid item xs={6} container direction="column">
+              <Grid2 size={{ xs: 6 }} container direction="column">
                 <Typography
                   variant="body1"
                   style={{
@@ -230,7 +231,7 @@ const DeepfakeResultsVideo = (props) => {
                 </Typography>
                 <Box m={1} />
 
-                <Grid container spacing={3}>
+                <Grid2 container spacing={3}>
                   {results.deepfake_video_report.results.map(
                     (valueShot, keyShot) => {
                       const shotStart = valueShot.shot_start;
@@ -244,7 +245,13 @@ const DeepfakeResultsVideo = (props) => {
                       const endSec = ("0" + (shotEnd % 60)).slice(-2);
 
                       return (
-                        <Grid item xs={12} sm={4} key={keyShot}>
+                        <Grid2
+                          size={{ xs: 12 }}
+                          key={keyShot}
+                          size={{
+                            sm: 4,
+                          }}
+                        >
                           {keyShot === shotSelectedKey ? (
                             <Box
                               onClick={() => clickShot(valueShot, keyShot)}
@@ -308,15 +315,15 @@ const DeepfakeResultsVideo = (props) => {
                               <Box mt={1} />
                             </Box>
                           )}
-                        </Grid>
+                        </Grid2>
                       );
                     },
                   )}
-                </Grid>
-              </Grid>
+                </Grid2>
+              </Grid2>
             )}
-          </Grid>
-          <Grid item xs={6} p={2}>
+          </Grid2>
+          <Grid2 size={{ xs: 6 }} p={2}>
             <Card>
               <Stack direction="column" p={4} spacing={4}>
                 {deepfakeScores && deepfakeScores.length === 0 && (
@@ -339,8 +346,8 @@ const DeepfakeResultsVideo = (props) => {
                 )}
               </Stack>
             </Card>
-          </Grid>
-        </Grid>
+          </Grid2>
+        </Grid2>
 
         <Box m={3} />
 
@@ -351,7 +358,7 @@ const DeepfakeResultsVideo = (props) => {
               <CardHeader
                 style={{ borderRadius: "4px 4px 0px 0px" }}
                 title={
-                  <Grid
+                  <Grid2
                     container
                     direction="row"
                     justifyContent="space-between"
@@ -380,7 +387,7 @@ const DeepfakeResultsVideo = (props) => {
                       }}
                     >
                       <Box p={3}>
-                        <Grid
+                        <Grid2
                           container
                           direction="row"
                           justifyContent="space-between"
@@ -391,20 +398,20 @@ const DeepfakeResultsVideo = (props) => {
                           </Typography>
 
                           <CloseIcon onClick={closeHelp} />
-                        </Grid>
+                        </Grid2>
                         <Box m={1} />
                         <Typography variant="body2">
                           {keyword("deepfake_filters_explanation_video")}
                         </Typography>
                       </Box>
                     </Popover>
-                  </Grid>
+                  </Grid2>
                 }
               />
               <div>
                 <Box p={3}>
                   {shotSelectedValue === null ? (
-                    <Grid
+                    <Grid2
                       container
                       direction="column"
                       justifyContent="center"
@@ -420,10 +427,10 @@ const DeepfakeResultsVideo = (props) => {
                           {keyword("deepfake_select")}
                         </Typography>
                       </Box>
-                    </Grid>
+                    </Grid2>
                   ) : (
-                    <Grid container direction="row" spacing={4}>
-                      <Grid item container direction="column" xs={6}>
+                    <Grid2 container direction="row" spacing={4}>
+                      <Grid2 container direction="column" size={{ xs: 6 }}>
                         <Typography variant="h6">
                           {keyword("deepfake_clip")}
                         </Typography>
@@ -461,27 +468,28 @@ const DeepfakeResultsVideo = (props) => {
                           />
                           {keyword("deepfake_support")}
                         </video>
-                      </Grid>
+                      </Grid2>
 
-                      <Grid item container direction="column" xs={6}>
+                      <Grid2 container direction="column" size={{ xs: 6 }}>
                         <Typography variant="h6">
                           {keyword("deepfake_faces")}
                         </Typography>
                         <Box m={1} />
 
-                        <Grid container direction="row" spacing={3}>
+                        <Grid2 container direction="row" spacing={3}>
                           {shotSelectedValue.face_image_paths.map(
                             (valueFace, keyFace) => {
                               return (
-                                <Grid
-                                  item
-                                  xs={12}
-                                  sm={4}
+                                <Grid2
+                                  size={{ xs: 12 }}
                                   key={keyFace}
                                   style={{
                                     display: "flex",
                                     flexDirection: "column",
                                     alignItems: "center",
+                                  }}
+                                  size={{
+                                    sm: 4,
                                   }}
                                 >
                                   <img
@@ -505,13 +513,13 @@ const DeepfakeResultsVideo = (props) => {
                                   >
                                     {keyword("deepfake_name")}
                                   </Typography>
-                                </Grid>
+                                </Grid2>
                               );
                             },
                           )}
-                        </Grid>
-                      </Grid>
-                    </Grid>
+                        </Grid2>
+                      </Grid2>
+                    </Grid2>
                   )}
                 </Box>
               </div>

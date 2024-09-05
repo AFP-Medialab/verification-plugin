@@ -5,7 +5,7 @@ import {
   Alert,
   Box,
   FormControl,
-  Grid,
+  Grid2,
   InputLabel,
   MenuItem,
   Select,
@@ -59,13 +59,13 @@ const TextImageCanvas = ({
     const height = 600 / imgRatio;
 
     return (
-      <Grid
+      <Grid2
         container
         direction="row"
         justifyContent="flex-start"
         alignItems="center"
       >
-        <Grid item>
+        <Grid2>
           <Stage width={width} height={height}>
             <Layer ref={stageRef}>
               <Image image={img} width={width} height={height} />
@@ -82,12 +82,12 @@ const TextImageCanvas = ({
               )}
             </Layer>
           </Stage>
-        </Grid>
-        <Grid item>
+        </Grid2>
+        <Grid2>
           {paused && (
             <>
-              <Grid container direction="column">
-                <Grid item>
+              <Grid2 container direction="column">
+                <Grid2>
                   <Box m={3} />
                   <FormControl>
                     <InputLabel id="demo-simple-select-label">
@@ -109,9 +109,9 @@ const TextImageCanvas = ({
                       </MenuItem>
                     </Select>
                   </FormControl>
-                </Grid>
-                <Grid item>
-                  <Grid
+                </Grid2>
+                <Grid2>
+                  <Grid2
                     container
                     direction="column"
                     justifyContent="center"
@@ -132,18 +132,18 @@ const TextImageCanvas = ({
                       }}
                       className={classes.sliderClass}
                     />
-                  </Grid>
-                </Grid>
-                <Grid item>
+                  </Grid2>
+                </Grid2>
+                <Grid2>
                   <Box m={1} />
                   <Alert severity="info">{keyword("draggable_text_tip")}</Alert>
                   <Box m={3} />
-                </Grid>
-              </Grid>
+                </Grid2>
+              </Grid2>
             </>
           )}
-        </Grid>
-      </Grid>
+        </Grid2>
+      </Grid2>
     );
   } else {
     return;

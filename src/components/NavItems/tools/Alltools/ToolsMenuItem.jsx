@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Box, Grid, Typography } from "@mui/material/";
+import { Box, Grid2, Typography } from "@mui/material/";
 import FiberNewIcon from "@mui/icons-material/FiberNew";
 import AuthenticationIcon from "./AdvancedTools/AuthenticationIcon";
 import ImprovedIcon from "../../../NavBar/images/SVG/Improved.svg";
@@ -59,44 +59,44 @@ const ToolsMenuItem = ({ tool }) => {
     >
       <Box p={2}>
         <Box mr={1}>
-          <Grid container direction="row" alignItems="center">
-            <Grid item>
+          <Grid2 container direction="row" alignItems="center">
+            <Grid2>
               <tool.icon sx={{ color: "#00926c" }} />
-            </Grid>
-            <Grid item>
+            </Grid2>
+            <Grid2>
               <Box ml={1} />
-            </Grid>
+            </Grid2>
 
-            <Grid item xs>
+            <Grid2 size="grow">
               <Typography letiant="h6">{keyword(tool.titleKeyword)}</Typography>
-            </Grid>
+            </Grid2>
 
             {showRedesign && (
-              <Grid item style={{ marginLeft: "auto", color: "#F44336" }}>
+              <Grid2 style={{ marginLeft: "auto", color: "#F44336" }}>
                 <ImprovedIcon title="Upgraded" width="40px" height="40px" />
-              </Grid>
+              </Grid2>
             )}
 
             {showNew && (
-              <Grid item style={{ marginLeft: "auto", color: "#F44336" }}>
+              <Grid2 style={{ marginLeft: "auto", color: "#F44336" }}>
                 <FiberNewIcon />
-              </Grid>
+              </Grid2>
             )}
 
             {showExperimental && (
-              <Grid item style={{ marginLeft: "auto", color: "#F44336" }}>
+              <Grid2 style={{ marginLeft: "auto", color: "#F44336" }}>
                 <ScienceIcon />
-              </Grid>
+              </Grid2>
             )}
 
             {showLock && !userAuthenticated && (
-              <Grid item style={{ marginLeft: "auto" }}>
+              <Grid2 style={{ marginLeft: "auto" }}>
                 <Box ml={2}>
                   <AuthenticationIcon />
                 </Box>
-              </Grid>
+              </Grid2>
             )}
-          </Grid>
+          </Grid2>
         </Box>
 
         <Box m={1} />

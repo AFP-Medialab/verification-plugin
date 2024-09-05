@@ -7,7 +7,7 @@ import {
   Card,
   Dialog,
   DialogContent,
-  Grid,
+  Grid2,
   Snackbar,
   SvgIcon,
   Tab,
@@ -314,7 +314,7 @@ const ToolsMenu = () => {
 
             return (
               <TabPanel value={value} index={index} key={index}>
-                <Grid
+                <Grid2
                   container
                   justifyContent="flex-start"
                   spacing={2}
@@ -322,14 +322,13 @@ const ToolsMenu = () => {
                 >
                   {tools.map((tool, key) => {
                     const element = (
-                      <Grid
+                      <Grid2
                         className={classes.toolCardStyle}
-                        item
                         key={key}
                         onClick={() => handleClick(tool.path, tool.rolesNeeded)}
                       >
                         <ToolsMenuItem tool={tool} />
-                      </Grid>
+                      </Grid2>
                     );
                     if (
                       tool.rolesNeeded &&
@@ -344,7 +343,7 @@ const ToolsMenu = () => {
                       return element;
                     }
                   })}
-                </Grid>
+                </Grid2>
               </TabPanel>
             );
           })}

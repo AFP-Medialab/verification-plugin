@@ -2,7 +2,7 @@ import * as React from "react";
 import Box from "@mui/material/Box";
 import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
 import Link from "@mui/material/Link";
-import { Chip, Grid, Stack, Typography } from "@mui/material";
+import { Chip, Grid2, Stack, Typography } from "@mui/material";
 import { i18nLoadNamespace } from "../../../Shared/Languages/i18nLoadNamespace";
 import {
   getAlertColor,
@@ -78,20 +78,20 @@ const NddDataGrid = ({ rows }) => {
     if (!urls || !Array.isArray(urls) || urls.length === 0) return <></>;
 
     return (
-      <Grid
+      <Grid2
         container
         justifyContent="flex-start"
         alignItems="center"
         spacing={2}
       >
         {urls.map((url, index) => (
-          <Grid item key={index}>
+          <Grid2 key={index}>
             <Link href={url} target="_blank" rel="noopener noreferrer">
               <Typography>{`#${index + 1}`}</Typography>
             </Link>
-          </Grid>
+          </Grid2>
         ))}
-      </Grid>
+      </Grid2>
     );
   };
 

@@ -1,5 +1,5 @@
-import React, { useEffect, useState, memo } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import React, { memo, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import TextField from "@mui/material/TextField";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
@@ -21,15 +21,15 @@ import { KNOWN_LINKS } from "../../Assistant/AssistantRuleBook";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import AnalysisIconImage from "../../../NavBar/images/SVG/Image/Image_analysis.svg";
-import Grid from "@mui/material/Grid";
+import { Grid2 } from "@mui/material";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import {
+  cleanAnalysisState,
   setAnalysisComments,
   setAnalysisLinkComments,
-  setAnalysisVerifiedComments,
-  cleanAnalysisState,
   setAnalysisLoading,
   setAnalysisResult,
+  setAnalysisVerifiedComments,
 } from "../../../../redux/actions/tools/image_analysisActions";
 
 const Analysis = () => {
@@ -80,12 +80,12 @@ const Analysis = () => {
   );
   const submitForm = () => {
     /*trackEvent(
-      "submission",
-      "analysis",
-      "image caa analysis",
-      input.trim(),
-      client_id
-    );*/
+          "submission",
+          "analysis",
+          "image caa analysis",
+          input.trim(),
+          client_id
+        );*/
     setSubmittedUrl(input.trim());
     dispatch(cleanAnalysisState());
   };
@@ -132,8 +132,8 @@ const Analysis = () => {
         />
         <div className={classes.root2}>
           <form>
-            <Grid container direction="row" spacing={3} alignItems="center">
-              <Grid item xs>
+            <Grid2 container direction="row" spacing={3} alignItems="center">
+              <Grid2 size="grow">
                 <TextField
                   id="standard-full-width"
                   label={keyword("api_input_image")}
@@ -144,9 +144,9 @@ const Analysis = () => {
                   variant="outlined"
                   onChange={(e) => setInput(e.target.value)}
                 />
-              </Grid>
+              </Grid2>
 
-              <Grid item>
+              <Grid2>
                 <FormControlLabel
                   control={
                     <Checkbox
@@ -159,9 +159,9 @@ const Analysis = () => {
                   }
                   label={keyword("api_repro")}
                 />
-              </Grid>
+              </Grid2>
 
-              <Grid item>
+              <Grid2>
                 <Button
                   type="submit"
                   variant="contained"
@@ -173,10 +173,10 @@ const Analysis = () => {
                 >
                   {keyword("button_submit")}
                 </Button>
-              </Grid>
+              </Grid2>
 
               <Box m={1} />
-            </Grid>
+            </Grid2>
           </form>
         </div>
         {isLoading && <LinearProgress />}

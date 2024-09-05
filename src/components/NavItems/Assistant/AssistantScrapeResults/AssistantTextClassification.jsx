@@ -4,13 +4,13 @@ import {
   CardHeader,
   Checkbox,
   FormControlLabel,
+  Grid2,
   List,
   ListItem,
   ListItemText,
 } from "@mui/material";
 import CardContent from "@mui/material/CardContent";
 import Divider from "@mui/material/Divider";
-import Grid from "@mui/material/Grid";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
@@ -18,8 +18,8 @@ import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import {
   interpRgb,
-  rgbToString,
   rgbToLuminance,
+  rgbToString,
   treeMapToElements,
   wrapPlainTextSpan,
 } from "./assistantUtils";
@@ -123,8 +123,8 @@ export default function AssistantTextClassification({
   }
 
   return (
-    <Grid container>
-      <Grid item xs={width} sx={{ paddingRight: "1em" }}>
+    <Grid2 container>
+      <Grid2 sx={{ paddingRight: "1em" }} size={width}>
         <ClassifiedText
           text={text}
           spanIndices={filteredSentences}
@@ -136,9 +136,9 @@ export default function AssistantTextClassification({
           rgbHigh={rgbHigh}
           textHtmlMap={textHtmlMap}
         />
-      </Grid>
+      </Grid2>
       {!subjectivity ? (
-        <Grid item xs={3}>
+        <Grid2 size={{ xs: 3 }}>
           <Card>
             <CardHeader
               className={classes.assistantCardHeader}
@@ -178,9 +178,9 @@ export default function AssistantTextClassification({
               ) : null}
             </CardContent>
           </Card>
-        </Grid>
+        </Grid2>
       ) : null}
-    </Grid>
+    </Grid2>
   );
 }
 

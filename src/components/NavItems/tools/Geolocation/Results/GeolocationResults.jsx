@@ -4,11 +4,10 @@ import Box from "@mui/material/Box";
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
-import Grid from "@mui/material/Grid";
+import { CardMedia, Grid2, Typography } from "@mui/material";
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { Icon } from "leaflet";
-import { CardMedia, Typography } from "@mui/material";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
 const GeolocationResults = (props) => {
@@ -30,7 +29,7 @@ const GeolocationResults = (props) => {
 
   return (
     <div>
-      <Grid
+      <Grid2
         container
         direction="row"
         justifyContent="space-between"
@@ -38,16 +37,15 @@ const GeolocationResults = (props) => {
         style={{ flexWrap: "nowrap" }}
         spacing={3}
       >
-        <Grid
-          item
-          xs
+        <Grid2
           container
           direction="column"
           justifyContent="flex-start"
           alignItems="flex-start"
           spacing={3}
+          size="grow"
         >
-          <Grid item xs style={{ width: "100%" }}>
+          <Grid2 size="grow" style={{ width: "100%" }}>
             <Card>
               <CardHeader
                 title={"Image"}
@@ -64,17 +62,17 @@ const GeolocationResults = (props) => {
                 />
               </div>
             </Card>
-          </Grid>
+          </Grid2>
 
           {position && (
-            <Grid item xs style={{ width: "100%" }}>
+            <Grid2 size="grow" style={{ width: "100%" }}>
               <Card>
                 <CardHeader
                   title={keyword("geo_location")}
                   className={classes.headerUploadedImage}
                 />
                 <div className={classes.root2}>
-                  <Grid
+                  <Grid2
                     container
                     direction="row"
                     justifyContent="space-between"
@@ -82,7 +80,7 @@ const GeolocationResults = (props) => {
                     style={{ flexWrap: "nowrap" }}
                     spacing={1}
                   >
-                    <Grid
+                    <Grid2
                       container
                       direction="column"
                       justifyContent="flex-start"
@@ -93,9 +91,9 @@ const GeolocationResults = (props) => {
                       </Typography>
 
                       <Typography variant="h5">{position[0]}</Typography>
-                    </Grid>
+                    </Grid2>
 
-                    <Grid
+                    <Grid2
                       container
                       direction="column"
                       justifyContent="flex-start"
@@ -106,8 +104,8 @@ const GeolocationResults = (props) => {
                       </Typography>
 
                       <Typography variant="h5">{position[1]}</Typography>
-                    </Grid>
-                  </Grid>
+                    </Grid2>
+                  </Grid2>
 
                   <Box m={4} />
 
@@ -129,12 +127,12 @@ const GeolocationResults = (props) => {
                   </Button>
                 </div>
               </Card>
-            </Grid>
+            </Grid2>
           )}
-        </Grid>
+        </Grid2>
 
         {position && (
-          <Grid item xs>
+          <Grid2 size="grow">
             <Card>
               <CardHeader
                 title={keyword("geo_map")}
@@ -168,9 +166,9 @@ const GeolocationResults = (props) => {
                 </div>
               </div>
             </Card>
-          </Grid>
+          </Grid2>
         )}
-      </Grid>
+      </Grid2>
     </div>
   );
 };

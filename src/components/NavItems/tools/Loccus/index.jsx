@@ -12,7 +12,7 @@ import {
   Box,
   Card,
   CardHeader,
-  Grid,
+  Grid2,
   LinearProgress,
   Stack,
 } from "@mui/material";
@@ -321,14 +321,14 @@ const Loccus = () => {
       <Card>
         <CardHeader
           title={
-            <Grid
+            <Grid2
               container
               direction="row"
               justifyContent="space-between"
               alignItems="center"
             >
               <span>{keyword("loccus_link")}</span>
-            </Grid>
+            </Grid2>
           }
           className={classes.headerUploadedAudio}
         />

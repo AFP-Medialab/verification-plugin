@@ -2,9 +2,8 @@ import React from "react";
 import { useSelector } from "react-redux";
 
 import Card from "@mui/material/Card";
-import { CardHeader, CircularProgress } from "@mui/material";
+import { CardHeader, CircularProgress, Grid2 } from "@mui/material";
 import CardContent from "@mui/material/CardContent";
-import Grid from "@mui/material/Grid";
 import Link from "@mui/material/Link";
 import LinkIcon from "@mui/icons-material/Link";
 import Typography from "@mui/material/Typography";
@@ -38,12 +37,12 @@ const ExtractedUrl = (index, keyword, extractedSourceCred, link) => {
     }
   }
   return (
-    <Grid container wrap="wrap" key={index}>
-      <Grid item xs={1} align="center">
+    <Grid2 container wrap="wrap" key={index}>
+      <Grid2 size={{ xs: 1 }} align="center">
         <LinkIcon />
-      </Grid>
+      </Grid2>
 
-      <Grid item xs={10} align="left">
+      <Grid2 size={{ xs: 10 }} align="left">
         <Typography>
           <Link
             color={
@@ -62,10 +61,13 @@ const ExtractedUrl = (index, keyword, extractedSourceCred, link) => {
               : link}
           </Link>
         </Typography>
-      </Grid>
+      </Grid2>
 
       {sourceType ? (
-        <Grid item xs={1} style={{ display: "flex", alignItems: "center" }}>
+        <Grid2
+          size={{ xs: 1 }}
+          style={{ display: "flex", alignItems: "center" }}
+        >
           <ExtractedSourceCredibilityResult
             extractedSourceCredibilityResults={extractedSourceCred[link]}
             sourceType={sourceType}
@@ -74,9 +76,9 @@ const ExtractedUrl = (index, keyword, extractedSourceCred, link) => {
             url={extractedSourceCred[link].resolvedLink}
             urlColor={extractedSourceCred[link].urlColor}
           />
-        </Grid>
+        </Grid2>
       ) : null}
-    </Grid>
+    </Grid2>
   );
 };
 
@@ -112,7 +114,7 @@ const AssistantLinkResult = () => {
   const inputSCFail = useSelector((state) => state.assistant.inputSCFail);
 
   return (
-    <Grid item xs={12}>
+    <Grid2 size={{ xs: 12 }}>
       <Card>
         <CardHeader
           className={classes.assistantCardHeader}
@@ -171,7 +173,7 @@ const AssistantLinkResult = () => {
             )}
         </CardContent>
       </Card>
-    </Grid>
+    </Grid2>
   );
 };
 export default AssistantLinkResult;

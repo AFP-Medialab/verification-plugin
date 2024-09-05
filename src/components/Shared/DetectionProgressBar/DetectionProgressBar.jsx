@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Box from "@mui/material/Box";
 import CardMedia from "@mui/material/CardMedia";
-import Grid from "@mui/material/Grid";
+import { Grid2 } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import MakoScale from "../../NavBar/images/SVG/MakoScale.png";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
@@ -23,24 +23,24 @@ export const DetectionProgressBar = (props) => {
   return (
     <Box mr={"43px"}>
       <CardMedia image={MakoScale} style={style} />
-      <Grid
+      <Grid2
         container
         direction="row"
         justifyContent="space-between"
         alignItems="center"
       >
-        <Grid item>
+        <Grid2>
           <Typography variant="body1">
             {keyword("forensic_text_nodetection")}
           </Typography>
-        </Grid>
+        </Grid2>
 
-        <Grid item>
+        <Grid2>
           <Typography variant="body1">
             {keyword("forensic_text_detection")}
           </Typography>
-        </Grid>
-      </Grid>
+        </Grid2>
+      </Grid2>
     </Box>
   );
 };

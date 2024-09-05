@@ -5,10 +5,9 @@ import CardActions from "@mui/material/CardActions";
 import Collapse from "@mui/material/Collapse";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
-import { CardHeader } from "@mui/material";
+import { CardHeader, Grid2 } from "@mui/material";
 import Divider from "@mui/material/Divider";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import Grid from "@mui/material/Grid";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
@@ -76,8 +75,8 @@ const AssistantMediaResult = () => {
     dispatch(setProcessUrl(url, cType));
   };
   return (
-    <Grid container spacing={2}>
-      <Grid item xs={6} hidden={!urlMode}>
+    <Grid2 container spacing={2}>
+      <Grid2 size={{ xs: 6 }} hidden={!urlMode}>
         <Card>
           <CardHeader
             className={classes.assistantCardHeader}
@@ -167,12 +166,12 @@ const AssistantMediaResult = () => {
             </div>
           ) : null}
         </Card>
-      </Grid>
+      </Grid2>
 
-      <Grid item xs={6}>
+      <Grid2 size={{ xs: 6 }}>
         <AssistantProcessUrlActions />
-      </Grid>
-    </Grid>
+      </Grid2>
+    </Grid2>
   );
 };
 export default AssistantMediaResult;

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, memo } from "react";
+import React, { memo, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
@@ -12,15 +12,13 @@ import { useKeyframeWrapper } from "./Hooks/useKeyframeWrapper";
 import { useVideoSimilarity } from "./Hooks/useVideoSimilarity";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import { useParams } from "react-router-dom";
-import //trackEvent,
-//getclientId,
-"../../../Shared/GoogleAnalytics/MatomoAnalytics";
+import "../../../Shared/GoogleAnalytics/MatomoAnalytics";
 import { KNOWN_LINKS } from "../../Assistant/AssistantRuleBook";
 
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import KeyframesIcon from "../../../NavBar/images/SVG/Video/Keyframes.svg";
-import Grid from "@mui/material/Grid";
+import { Grid2 } from "@mui/material";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import LinkIcon from "@mui/icons-material/Link";
 import FileIcon from "@mui/icons-material/InsertDriveFile";
@@ -40,10 +38,10 @@ const Keyframes = () => {
   const [localFile, setLocalFile] = useState(false);
 
   /*
-    const toggleLocal = () => {
-        setLocalFile(!localFile);
-    };
-    */
+        const toggleLocal = () => {
+            setLocalFile(!localFile);
+        };
+        */
 
   const resultUrl = useSelector((state) => state.keyframes.url);
   const resultData = useSelector((state) => state.keyframes.result);
@@ -87,21 +85,21 @@ const Keyframes = () => {
   //const client_id = getclientId();
   const submitUrl = () => {
     /*trackEvent(
-      "submission",
-      "keyframe",
-      "video key frame analysis",
-      input.trim()
-    );*/
+              "submission",
+              "keyframe",
+              "video key frame analysis",
+              input.trim()
+            );*/
     setSubmittedUrl(input);
   };
 
   /*useEffect(()=>{
-        console.log("detected");
-        if (urlDetected) {
-            submitUrl()
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [urlDetected])*/
+            console.log("detected");
+            if (urlDetected) {
+                submitUrl()
+            }
+            // eslint-disable-next-line react-hooks/exhaustive-deps
+        }, [urlDetected])*/
 
   useEffect(() => {
     if (url) {
@@ -195,85 +193,85 @@ const Keyframes = () => {
         />
 
         <Box p={3}>
-          <Grid container spacing={3} alignItems="center">
-            <Grid item xs={6}>
+          <Grid2 container spacing={3} alignItems="center">
+            <Grid2 size={{ xs: 6 }}>
               <Box p={3} className={classButtonURL} onClick={clickURL}>
-                <Grid
+                <Grid2
                   container
                   direction="row"
                   alignItems="center"
                   className={classes.bigButtonResponsive}
                 >
-                  <Grid item>
+                  <Grid2>
                     <Box ml={1} mr={2}>
                       <LinkIcon className={classIconURL} />
                     </Box>
-                  </Grid>
-                  <Grid item>
-                    <Grid
+                  </Grid2>
+                  <Grid2>
+                    <Grid2
                       container
                       direction="column"
                       justifyContent="flex-start"
                       alignItems="flex-start"
                     >
-                      <Grid item>
+                      <Grid2>
                         <Typography variant="body1" style={{ fontWeight: 600 }}>
                           {keyword("linkmode_title")}
                         </Typography>
-                      </Grid>
+                      </Grid2>
 
                       <Box mt={1} />
 
-                      <Grid item>
+                      <Grid2>
                         <Typography variant="body1">
                           {keyword("linkmode_description")}
                         </Typography>
-                      </Grid>
-                    </Grid>
-                  </Grid>
-                </Grid>
+                      </Grid2>
+                    </Grid2>
+                  </Grid2>
+                </Grid2>
               </Box>
-            </Grid>
-            <Grid item xs={6}>
+            </Grid2>
+            <Grid2 size={{ xs: 6 }}>
               <Box p={3} className={classButtonLocal} onClick={clickLocal}>
-                <Grid
+                <Grid2
                   container
                   direction="row"
                   alignItems="center"
                   className={classes.bigButtonResponsive}
                 >
-                  <Grid item>
+                  <Grid2>
                     <Box ml={1} mr={2}>
                       <FileIcon className={classIconLocal} />
                     </Box>
-                  </Grid>
+                  </Grid2>
 
-                  <Grid item>
-                    <Grid
+                  <Grid2>
+                    <Grid2
                       container
                       direction="column"
                       justifyContent="flex-start"
                       alignItems="flex-start"
                     >
-                      <Grid item>
+                      <Grid2>
                         <Typography variant="body1" style={{ fontWeight: 600 }}>
                           {keyword("filemode_title")}
                         </Typography>
-                      </Grid>
+                      </Grid2>
 
                       <Box mt={1} />
 
-                      <Grid item>
+                      <Grid2>
                         <Typography variant="body1">
                           {keyword("filemode_description")}
                         </Typography>
-                      </Grid>
-                    </Grid>
-                  </Grid>
-                </Grid>
+                      </Grid2>
+                    </Grid2>
+                  </Grid2>
+                </Grid2>
               </Box>
-            </Grid>
-          </Grid>
+            </Grid2>
+          </Grid2>
 
           <Box mt={4} mb={4}>
             <Divider />
@@ -282,8 +280,8 @@ const Keyframes = () => {
           <Box m={1} />
           <Box display={localFile ? "none" : "block"}>
             <form>
-              <Grid container direction="row" spacing={3} alignItems="center">
-                <Grid item xs>
+              <Grid2 container direction="row" spacing={3} alignItems="center">
+                <Grid2 size="grow">
                   <TextField
                     id="standard-full-width"
                     label={keyword("keyframes_input")}
@@ -294,9 +292,9 @@ const Keyframes = () => {
                     variant="outlined"
                     onChange={(e) => setInput(e.target.value)}
                   />
-                </Grid>
+                </Grid2>
 
-                <Grid item>
+                <Grid2>
                   <Button
                     type="submit"
                     variant="contained"
@@ -308,8 +306,8 @@ const Keyframes = () => {
                   >
                     {keyword("button_submit")}
                   </Button>
-                </Grid>
-              </Grid>
+                </Grid2>
+              </Grid2>
             </form>
             {isLoading && (
               <>

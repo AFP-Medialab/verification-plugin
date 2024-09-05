@@ -1,6 +1,5 @@
 import React from "react";
-import Typography from "@mui/material/Typography";
-import Grid from "@mui/material/Grid";
+import { Grid2, Typography } from "@mui/material";
 
 const HeaderTool = (props) => {
   const name = props.name;
@@ -8,11 +7,10 @@ const HeaderTool = (props) => {
   const icon = props.icon;
 
   return (
-    <Grid container direction="column" alignItems="start" mb={3}>
-      <Grid item xs>
-        <Grid
+    <Grid2 container direction="column" alignItems="start" mb={3}>
+      <Grid2 size="grow">
+        <Grid2
           container
-          item
           direction="row"
           justifyContent="flex-start"
           alignItems="center"
@@ -21,12 +19,12 @@ const HeaderTool = (props) => {
           <Typography variant="h4" color={"primary"}>
             {name}
           </Typography>
-        </Grid>
-      </Grid>
-      <Grid item xs textAlign="start">
+        </Grid2>
+      </Grid2>
+      <Grid2 size="grow" textAlign="start">
         <Typography>{description}</Typography>
-      </Grid>
-    </Grid>
+      </Grid2>
+    </Grid2>
   );
 };
 export default HeaderTool;

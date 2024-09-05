@@ -5,7 +5,7 @@ import {
   Box,
   Chip,
   Divider,
-  Grid,
+  Grid2,
   Link,
   Stack,
   Typography,
@@ -40,24 +40,23 @@ const ResultDisplayItem = ({
 
   return (
     <Box width="100%" key={id}>
-      <Grid container direction="row" p={2} justifyContent="space-between">
-        <Grid
-          item
+      <Grid2 container direction="row" p={2} justifyContent="space-between">
+        <Grid2
           container
           direction="row"
-          xs={10}
+          size={{ xs: 10 }}
           spacing={2}
           justifyContent="flex-start"
           alignItems="flex-start"
         >
-          <Grid item>
+          <Grid2>
             <Avatar
               src={imageUrl}
               variant="rounded"
               sx={{ width: 80, height: 80 }}
             />
-          </Grid>
-          <Grid item xs>
+          </Grid2>
+          <Grid2 size="grow">
             <Stack
               direction="column"
               justifyContent="flex-start"
@@ -117,9 +116,9 @@ const ResultDisplayItem = ({
               </Typography>
               <Typography variant="subtitle2">{date ?? ""}</Typography>
             </Stack>
-          </Grid>
-        </Grid>
-        <Grid item xs={2} pl={4}>
+          </Grid2>
+        </Grid2>
+        <Grid2 size={{ xs: 2 }} pl={4}>
           <Stack direction="column" spacing={2}>
             <Link
               href={`https://${domainUrl}`}
@@ -131,8 +130,8 @@ const ResultDisplayItem = ({
             </Link>
             <Chip label={language} sx={{ width: "fit-content" }} />
           </Stack>
-        </Grid>
-      </Grid>
+        </Grid2>
+      </Grid2>
       <Stack
         direction="row"
         spacing={2}

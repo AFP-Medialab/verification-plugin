@@ -1,26 +1,32 @@
 import React, { useState } from "react";
-import { Card, createTheme, ThemeProvider } from "@mui/material";
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import Tabs from "@mui/material/Tabs";
-import Tab from "@mui/material/Tab";
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Box,
+  Button,
+  Card,
+  createTheme,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  Divider,
+  Grid2,
+  Tab,
+  Tabs,
+  TextField,
+  ThemeProvider,
+  Typography,
+} from "@mui/material";
+
+import { CastForEducation, ExpandMore } from "@mui/icons-material";
+
 import PropTypes from "prop-types";
-import Grid from "@mui/material/Grid";
-import Dialog from "@mui/material/Dialog";
-import DialogContent from "@mui/material/DialogContent";
+
 import Iframe from "react-iframe";
-import DialogActions from "@mui/material/DialogActions";
-import Button from "@mui/material/Button";
-import CastForEducationIcon from "@mui/icons-material/CastForEducation";
-import Divider from "@mui/material/Divider";
-import TextField from "@mui/material/TextField";
 import youverifyImage from "./Images/YouVerify_Logo.png";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
-import AccordionSummary from "@mui/material/AccordionSummary";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import AccordionDetails from "@mui/material/AccordionDetails";
-import Accordion from "@mui/material/Accordion";
 import { changeTabEvent } from "../../Shared/GoogleAnalytics/GoogleAnalytics";
 import HeaderTool from "../../Shared/HeaderTool/HeaderTool";
 import IconClassRoom from "../../NavBar/images/SVG/Navbar/Classroom.svg";
@@ -121,7 +127,7 @@ const ClassRoom = () => {
       case 4:
         return keyword("classroom_gamification");
       /*case 5:
-                    return keyword("classroom_gamification_2");*/
+                                            return keyword("classroom_gamification_2");*/
       case 5:
         return keyword("user_resources_title");
       case 6:
@@ -193,7 +199,7 @@ const ClassRoom = () => {
                 return (
                   <Accordion key={index}>
                     <AccordionSummary
-                      expandIcon={<ExpandMoreIcon />}
+                      expandIcon={<ExpandMore />}
                       aria-controls="panel1a-content"
                       id="panel1a-header"
                     >
@@ -223,30 +229,29 @@ const ClassRoom = () => {
                 return (
                   <div key={index}>
                     <Box m={1} />
-                    <Grid
+                    <Grid2
                       key={index}
                       container
                       direction="row"
                       justifyContent="space-between"
                       spacing={2}
                     >
-                      <Grid
+                      <Grid2
                         container
                         direction="row"
-                        item
-                        xs={10}
+                        size={{ xs: 10 }}
                         justifyContent="flex-start"
                         alignItems="flex-start"
                         spacing={2}
                       >
-                        <Grid item xs={1}>
-                          <CastForEducationIcon fontSize={"large"} />
-                        </Grid>
-                        <Grid item xs>
+                        <Grid2 size={{ xs: 1 }}>
+                          <CastForEducation fontSize={"large"} />
+                        </Grid2>
+                        <Grid2 size="grow">
                           <Typography variant={"h6"}>{value.title}</Typography>
-                        </Grid>
-                      </Grid>
-                      <Grid item xs>
+                        </Grid2>
+                      </Grid2>
+                      <Grid2 size="grow">
                         <Button
                           variant="contained"
                           color="primary"
@@ -254,8 +259,8 @@ const ClassRoom = () => {
                         >
                           {keyword("display")}
                         </Button>
-                      </Grid>
-                    </Grid>
+                      </Grid2>
+                    </Grid2>
                     <Divider />
                   </div>
                 );
@@ -289,18 +294,18 @@ const ClassRoom = () => {
                                 />
                             </TabPanel>*/}
             <TabPanel value={value} index={5}>
-              <Grid container direction="column" spacing={2}>
-                <Grid item mb={2}>
+              <Grid2 container direction="column" spacing={2}>
+                <Grid2 mb={2}>
                   <Typography variant={"h5"}>
                     {keyword("user_resources_intro")}
                   </Typography>
-                </Grid>
-                <Grid item>
+                </Grid2>
+                <Grid2>
                   <Typography variant="body1" align={"justify"}>
                     {keyword("user_resources_intro_remote")}
                   </Typography>
-                </Grid>
-                <Grid item>
+                </Grid2>
+                <Grid2>
                   <TextField
                     inputRef={(ref) => setInputRef(ref)}
                     id="standard-full-width"
@@ -308,8 +313,8 @@ const ClassRoom = () => {
                     placeholder="URL"
                     fullWidth
                   />
-                </Grid>
-                <Grid item>
+                </Grid2>
+                <Grid2>
                   <Button
                     variant="contained"
                     color="primary"
@@ -317,8 +322,8 @@ const ClassRoom = () => {
                   >
                     {keyword("display")}
                   </Button>
-                </Grid>
-                <Grid item mt={4}>
+                </Grid2>
+                <Grid2 mt={4}>
                   <Typography variant="body1">{keyword("examples")}</Typography>
                   <Typography variant="body1">
                     {keyword("youtube_example")}
@@ -329,8 +334,8 @@ const ClassRoom = () => {
                   <Typography variant="body1">
                     {keyword("website_example")}
                   </Typography>
-                </Grid>
-              </Grid>
+                </Grid2>
+              </Grid2>
             </TabPanel>
             <TabPanel value={value} index={6}>
               {glossary().map((obj, key) => {

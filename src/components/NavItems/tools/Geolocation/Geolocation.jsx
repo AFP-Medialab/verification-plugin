@@ -9,7 +9,7 @@ import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import GeolocationIcon from "../../../NavBar/images/SVG/Image/Geolocation.svg";
-import Grid from "@mui/material/Grid";
+import { Grid2 } from "@mui/material";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import useGeolocate from "./Hooks/useGeolocate";
 import GeolocationResults from "./Results/GeolocationResults";
@@ -64,8 +64,8 @@ const Geolocation = () => {
           className={classes.headerUploadedImage}
         />
         <form className={classes.root2}>
-          <Grid container direction="row" spacing={3} alignItems="center">
-            <Grid item xs>
+          <Grid2 container direction="row" spacing={3} alignItems="center">
+            <Grid2 size="grow">
               <TextField
                 id="standard-full-width"
                 label={keyword("geo_link")}
@@ -76,8 +76,8 @@ const Geolocation = () => {
                 variant="outlined"
                 onChange={(e) => setInput(e.target.value)}
               />
-            </Grid>
-            <Grid item>
+            </Grid2>
+            <Grid2>
               {!result ? (
                 <Button
                   type="submit"
@@ -99,9 +99,9 @@ const Geolocation = () => {
                   {keyword("button_remove")}
                 </Button>
               )}
-            </Grid>
+            </Grid2>
             <Box m={1} />
-          </Grid>
+          </Grid2>
         </form>
         {isLoading && <LinearProgress />}
       </Card>

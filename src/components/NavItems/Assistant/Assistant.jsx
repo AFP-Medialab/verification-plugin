@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
-import { useParams, useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import Divider from "@mui/material/Divider";
-import Grid from "@mui/material/Grid";
+import { Grid2 } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import Card from "@mui/material/Card";
 import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
@@ -119,7 +119,7 @@ const Assistant = () => {
 
   return (
     <div>
-      <Grid
+      <Grid2
         container
         spacing={4}
         direction="column"
@@ -128,44 +128,43 @@ const Assistant = () => {
         className={classes.root}
       >
         {/* introduction */}
-        <Grid item xs width={"inherit"}>
+        <Grid2 size="grow" width={"inherit"}>
           <AssistantIntroduction cleanAssistant={cleanAssistant} />
-        </Grid>
+        </Grid2>
 
         {/* url entry field */}
         {urlMode ? (
-          <Grid item xs width={"inherit"}>
+          <Grid2 size="grow" width={"inherit"}>
             <AssistantUrlSelected
               formInput={formInput}
               setFormInput={setFormInput}
               cleanAssistant={cleanAssistant}
             />
-          </Grid>
+          </Grid2>
         ) : null}
 
         {/* local file selection field */}
         {imageVideoSelected ? (
-          <Grid item xs width={"inherit"}>
+          <Grid2 size="grow" width={"inherit"}>
             <AssistantFileSelected />
-          </Grid>
+          </Grid2>
         ) : null}
 
         {/* warnings and api status checks */}
         {dbkfTextMatch || dbkfImageResult || dbkfVideoMatch ? (
-          <Grid
-            item
-            xs
+          <Grid2
+            size="grow"
             className={classes.assistantGrid}
             hidden={urlMode === null || urlMode === false}
           >
             <AssistantWarnings />
-          </Grid>
+          </Grid2>
         ) : null}
 
         {positiveSourceCred || cautionSourceCred || mixedSourceCred ? (
-          <Grid item xs>
+          <Grid2 size="grow">
             <AssistantSCResults />
-          </Grid>
+          </Grid2>
         ) : null}
 
         {scFailState ||
@@ -174,13 +173,13 @@ const Assistant = () => {
         neFailState ||
         newsFramingFailState ||
         newsGenreFailState ? (
-          <Grid item xs>
+          <Grid2 size="grow">
             <AssistantCheckStatus />
-          </Grid>
+          </Grid2>
         ) : null}
 
         {/* media results */}
-        <Grid item xs width={"inherit"}>
+        <Grid2 size="grow" width={"inherit"}>
           <Card
             className={classes.root}
             hidden={
@@ -193,66 +192,66 @@ const Assistant = () => {
             }
             data-testid="url-media-results"
           >
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
+            <Grid2 container spacing={2}>
+              <Grid2 size={{ xs: 12 }}>
                 <Typography variant={"h5"} align={"left"}>
                   {keyword("url_media")}
                 </Typography>
                 <Divider />
-              </Grid>
+              </Grid2>
 
               {imageList.length > 0 ||
               videoList.length > 0 ||
               imageVideoSelected ? (
-                <Grid item xs={12}>
+                <Grid2 size={{ xs: 12 }}>
                   <AssistantMediaResult />
-                </Grid>
+                </Grid2>
               ) : null}
-            </Grid>
+            </Grid2>
           </Card>
-        </Grid>
+        </Grid2>
 
         {/* text results */}
-        <Grid item xs width={"inherit"}>
+        <Grid2 size="grow" width={"inherit"}>
           <Card
             className={classes.root}
             hidden={linkList.length === 0 && text === null && neResult === null}
           >
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
+            <Grid2 container spacing={2}>
+              <Grid2 size={{ xs: 12 }}>
                 <Typography variant={"h5"} align={"left"}>
                   {keyword("url_text")}
                 </Typography>
                 <Divider />
-              </Grid>
+              </Grid2>
 
               {text ? (
-                <Grid item xs={12}>
+                <Grid2 size={{ xs: 12 }}>
                   <AssistantTextResult />
-                </Grid>
+                </Grid2>
               ) : null}
 
               {neResult ? (
-                <Grid item xs={12}>
+                <Grid2 size={{ xs: 12 }}>
                   <AssistantNEResult />
-                </Grid>
+                </Grid2>
               ) : null}
 
               {linkList.length !== 0 ? (
-                <Grid item xs={12}>
+                <Grid2 size={{ xs: 12 }}>
                   <AssistantLinkResult />
-                </Grid>
+                </Grid2>
               ) : null}
 
               {text ? (
-                <Grid item xs={12}>
+                <Grid2 size={{ xs: 12 }}>
                   <AssistantCredSignals />
-                </Grid>
+                </Grid2>
               ) : null}
-            </Grid>
+            </Grid2>
           </Card>
-        </Grid>
-      </Grid>
+        </Grid2>
+      </Grid2>
     </div>
   );
 };
