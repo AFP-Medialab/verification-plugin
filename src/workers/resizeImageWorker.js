@@ -6,7 +6,6 @@ self.onmessage = async function (e) {
   // console.log(e);
   const result = await resizeImage(data);
   // console.log(result);
-  //const result = data;
 
   // Send the result back to the main thread
   self.postMessage(result);
