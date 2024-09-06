@@ -23,6 +23,7 @@ import ForensicIcon from "../components/NavBar/images/SVG/Image/Forensic.svg";
 import OcrIcon from "../components/NavBar/images/SVG/Image/OCR.svg";
 import GifIcon from "../components/NavBar/images/SVG/Image/Gif.svg";
 import GeolocationIcon from "../components/NavBar/images/SVG/Image/Geolocation.svg";
+import C2paIcon from "../components/NavBar/images/SVG/Image/C2pa.svg";
 
 import TwitterSearchIcon from "../components/NavBar/images/SVG/Search/Twitter_search.svg";
 import CovidSearchIcon from "../components/NavBar/images/SVG/Search/Covid19.svg";
@@ -54,6 +55,7 @@ import TwitterSna from "../components/NavItems/tools/TwitterSna/TwitterSna";
 import Archive from "../components/NavItems/tools/Archive";
 import About from "../components/NavItems/About/About";
 import { ROLES } from "./roles";
+import C2paData from "components/NavItems/tools/C2pa/C2pa";
 
 /**
  * Represents the categories to which the tools belong
@@ -232,6 +234,10 @@ const archiveSvgIcon = (props) => {
 
 const aboutSvgIcon = (props) => {
   return <SvgIcon component={AboutIcon} inheritViewBox {...props} />;
+};
+
+const c2paSvgIcon = (props) => {
+  return <SvgIcon component={C2paIcon} inheritViewBox {...props} />;
 };
 
 /**
@@ -591,6 +597,19 @@ const about = new Tool(
   null,
 );
 
+const c2paData = new Tool(
+  "navbar_c2pa",
+  "navbar_c2pa_description",
+  c2paSvgIcon,
+  TOOLS_CATEGORIES.IMAGE,
+  [TOOL_STATUS_ICON.NEW, TOOL_STATUS_ICON.LOCK],
+  [ROLES.BETA_TESTER],
+  "c2pa",
+  TOOL_GROUPS.VERIFICATION,
+  <C2paData />,
+  null,
+);
+
 export const tools = Object.freeze([
   toolsHome,
   videoAnalysis,
@@ -617,4 +636,5 @@ export const tools = Object.freeze([
   dataAnalysisCrowdtangle,
   archiving,
   about,
+  c2paData,
 ]);

@@ -27,6 +27,7 @@ import geolocationReducer from "./tools/geolocationReducer";
 import twitterSnaReducer from "./tools/twitterSnaReducer";
 import languageSupportReducer from "./languageSupportReducer";
 import loccusReducer from "./tools/loccusReducer";
+import c2paReducer from "./tools/c2paReducer";
 
 const allReducers = combineReducers({
   language: languageReducer,
@@ -57,6 +58,7 @@ const allReducers = combineReducers({
   deepfakeVideo: deepfakeReducerVideo,
   geolocation: geolocationReducer,
   languagesSupport: languageSupportReducer,
+  c2pa: c2paReducer,
 });
 
 export default allReducers;
