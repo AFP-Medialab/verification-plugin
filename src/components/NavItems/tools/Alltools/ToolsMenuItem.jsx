@@ -56,6 +56,7 @@ const ToolsMenuItem = ({ tool }) => {
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
       style={styleCard}
+      // minWidth="250px"
     >
       <Box p={2}>
         <Box mr={1}>

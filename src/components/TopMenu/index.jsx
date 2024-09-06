@@ -57,6 +57,7 @@ const TopMenu = ({ topMenuItems }) => {
           justifyContent="space-between"
           alignItems="center"
           spacing={{ sm: 1, md: 2 }}
+          width="100%"
         >
           <Grid2 size={{ xs: 2 }}>
             <Stack
@@ -100,7 +101,7 @@ const TopMenu = ({ topMenuItems }) => {
               />
             </Stack>
           </Grid2>
-          <Grid2 size={{ xs: 7 }}>
+          <Grid2 size={{ xs: 2, sm: 7 }}>
             <Tabs
               value={topMenuItemSelected}
               variant="scrollable"
@@ -123,7 +124,7 @@ const TopMenu = ({ topMenuItems }) => {
                     to={item.path}
                     component={Link}
                     sx={{
-                      minWidth: "120px",
+                      minWidth: "100px",
                     }}
                     value={item.title}
                   />
