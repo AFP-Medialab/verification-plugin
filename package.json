@@ -30,6 +30,7 @@
     "@types/chrome": "^0.0.266",
     "@wavesurfer/react": "^1.0.4",
     "axios": "^1.7.3",
+    "c2pa": "^0.22.1",
     "chart.js": "^4.4.3",
     "chartjs-adapter-dayjs-4": "^1.0.4",
     "clsx": "^2.1.1",
