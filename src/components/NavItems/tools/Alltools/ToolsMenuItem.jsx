@@ -56,16 +56,15 @@ const ToolsMenuItem = ({ tool }) => {
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
       style={styleCard}
-      // minWidth="250px"
     >
-      <Box p={2}>
-        <Box mr={1}>
+      <Box sx={{ p: 2 }}>
+        <Box sx={{ mr: 1 }}>
           <Grid2 container direction="row" alignItems="center">
             <Grid2>
               <tool.icon sx={{ color: "#00926c" }} />
             </Grid2>
             <Grid2>
-              <Box ml={1} />
+              <Box sx={{ ml: 1 }} />
             </Grid2>
 
             <Grid2 size="grow">
@@ -92,7 +91,7 @@ const ToolsMenuItem = ({ tool }) => {
 
             {showLock && !userAuthenticated && (
               <Grid2 style={{ marginLeft: "auto" }}>
-                <Box ml={2}>
+                <Box sx={{ ml: 2 }}>
                   <AuthenticationIcon />
                 </Box>
               </Grid2>
@@ -100,7 +99,7 @@ const ToolsMenuItem = ({ tool }) => {
           </Grid2>
         </Box>
 
-        <Box m={1} />
+        <Box sx={{ m: 1 }} />
 
         <div style={{ minHeight: "45px" }}>
           <span style={{ fontSize: "10px" }}>

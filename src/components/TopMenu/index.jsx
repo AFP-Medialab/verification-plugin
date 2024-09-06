@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { AppBar, Grid2, Stack, Tab, Tabs, Toolbar } from "@mui/material";
 import LogoEuCom from "../NavBar/images/SVG/Navbar/ep-logo.svg";
 import LogoInVidWeverify from "../NavBar/images/SVG/Navbar/invid_weverify.svg";
@@ -44,6 +44,16 @@ const TopMenu = ({ topMenuItems }) => {
       fontSize: "24px",
     };
   };
+
+  const [matchesSmallWidth, setMatchesSmallWidth] = useState(
+    window.matchMedia("(max-width: 800px)").matches,
+  );
+
+  useEffect(() => {
+    window
+      .matchMedia("(max-width: 800px)")
+      .addEventListener("change", (e) => setMatchesSmallWidth(e.matches));
+  }, []);
 
   return (
     <AppBar position="fixed" width={"100%"}>
@@ -113,7 +123,14 @@ const TopMenu = ({ topMenuItems }) => {
               TabIndicatorProps={{
                 style: { display: "none" },
               }}
-              sx={{ color: "black" }}
+              sx={
+                matchesSmallWidth
+                  ? {
+                      color: "black",
+                      maxWidth: "33vw",
+                    }
+                  : { color: "black" }
+              }
             >
               {topMenuItems.map((item, index) => {
                 return (

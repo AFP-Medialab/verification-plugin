@@ -45,7 +45,7 @@ function TabPanel(props) {
       {...other}
     >
       {value === index && (
-        <Box p={3}>
+        <Box sx={{ p: 3 }}>
           <div>{children}</div>
         </Box>
       )}
@@ -305,7 +305,7 @@ const ToolsMenu = () => {
           })}
         </Tabs>
 
-        <Box m={1} />
+        <Box sx={{ m: 1 }} />
 
         <div style={{ minHeight: "340px" }}>
           {categoriesAllowedForUser.map((category, index) => {
@@ -326,6 +326,7 @@ const ToolsMenu = () => {
                         className={classes.toolCardStyle}
                         key={key}
                         onClick={() => handleClick(tool.path, tool.rolesNeeded)}
+                        minWidth="250px"
                       >
                         <ToolsMenuItem tool={tool} />
                       </Grid2>
@@ -350,9 +351,9 @@ const ToolsMenu = () => {
         </div>
       </Card>
 
-      <Box m={3} />
+      <Box sx={{ m: 3 }} />
 
-      <Box m={4} />
+      <Box sx={{ m: 4 }} />
 
       <Dialog
         height={"400px"}
