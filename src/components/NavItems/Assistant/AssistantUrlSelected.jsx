@@ -86,7 +86,7 @@ const AssistantUrlSelected = (props) => {
       {loading && <LinearProgress color={"secondary"} />}
 
       <CardContent>
-        <Box mr={2}>
+        <Box sx={{ mr: 2 }}>
           <form>
             <Grid2 container>
               <Grid2 size={{ xs: 10 }}>
@@ -102,7 +102,7 @@ const AssistantUrlSelected = (props) => {
                 />
               </Grid2>
               <Grid2 size={{ xs: 2 }}>
-                <Box mt={2} ml={6}>
+                <Box sx={{ mt: 2, ml: 6 }}>
                   {inputUrl === null ? (
                     <Button
                       type="submit"
@@ -128,7 +128,7 @@ const AssistantUrlSelected = (props) => {
               </Grid2>
               {inputUrl === null ? null : (
                 <Grid2 size={{ xs: 1 }}>
-                  <Box ml={1}>
+                  <Box sx={{ ml: 1 }}>
                     <Button
                       onClick={() => handleArchive()}
                       startIcon={<ArchiveOutlinedIcon />}

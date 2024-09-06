@@ -128,13 +128,13 @@ const Assistant = () => {
         className={classes.root}
       >
         {/* introduction */}
-        <Grid2 size="grow" width={"inherit"}>
+        <Grid2 size="grow" width="100%">
           <AssistantIntroduction cleanAssistant={cleanAssistant} />
         </Grid2>
 
         {/* url entry field */}
         {urlMode ? (
-          <Grid2 size="grow" width={"inherit"}>
+          <Grid2 size="grow" width="100%">
             <AssistantUrlSelected
               formInput={formInput}
               setFormInput={setFormInput}
@@ -145,7 +145,7 @@ const Assistant = () => {
 
         {/* local file selection field */}
         {imageVideoSelected ? (
-          <Grid2 size="grow" width={"inherit"}>
+          <Grid2 size="grow" width="100%">
             <AssistantFileSelected />
           </Grid2>
         ) : null}
@@ -179,7 +179,7 @@ const Assistant = () => {
         ) : null}
 
         {/* media results */}
-        <Grid2 size="grow" width={"inherit"}>
+        <Grid2 size="grow" width="100%">
           <Card
             className={classes.root}
             hidden={
@@ -212,7 +212,7 @@ const Assistant = () => {
         </Grid2>
 
         {/* text results */}
-        <Grid2 size="grow" width={"inherit"}>
+        <Grid2 size="grow" width="100%">
           <Card
             className={classes.root}
             hidden={linkList.length === 0 && text === null && neResult === null}
