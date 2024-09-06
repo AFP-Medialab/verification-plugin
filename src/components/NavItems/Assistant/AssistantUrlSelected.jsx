@@ -110,7 +110,8 @@ const AssistantUrlSelected = (props) => {
                       color="primary"
                       data-testid="assistant-url-selected-analyse-btn"
                       onClick={(e) => {
-                        e.preventDefault(), handleSubmissionURL();
+                        e.preventDefault();
+                        handleSubmissionURL();
                       }}
                     >
                       {keyword("button_analyse")}
