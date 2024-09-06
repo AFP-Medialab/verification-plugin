@@ -239,7 +239,7 @@ const SemanticSearch = () => {
     setHasUserSubmittedForm(true);
     setErrorMessage("");
 
-    const urlText = searchString ? text : text;
+    const urlText = searchString ? searchString : text;
 
     let searchResults;
     try {
