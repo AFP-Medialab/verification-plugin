@@ -1011,6 +1011,7 @@ const ForensicResults = (props) => {
                                         direction="row"
                                         justifyContent="space-around"
                                         alignItems="center"
+                                        width="100%"
                                       >
                                         {value.arrows[0] ? (
                                           <Fab
@@ -1104,6 +1105,7 @@ const ForensicResults = (props) => {
                                           direction="row"
                                           justifyContent="space-around"
                                           alignItems="center"
+                                          width="100%"
                                         >
                                           <Fab
                                             size="medium"
