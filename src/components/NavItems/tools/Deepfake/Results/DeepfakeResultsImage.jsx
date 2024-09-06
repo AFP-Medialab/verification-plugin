@@ -3,16 +3,7 @@ import Box from "@mui/material/Box";
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
-import {
-  Grid,
-  Typography,
-  Stack,
-  IconButton,
-  Tooltip,
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
-} from "@mui/material";
+import { Grid2, IconButton, Stack, Typography } from "@mui/material";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import { Close } from "@mui/icons-material";
 import { useSelector } from "react-redux";
@@ -26,7 +17,8 @@ const DeepfakeResultsImage = (props) => {
 
   class DeepfakeResult {
     constructor(methodName, predictionScore) {
-      (this.methodName = methodName), (this.predictionScore = predictionScore);
+      this.methodName = methodName;
+      this.predictionScore = predictionScore;
     }
   }
 
@@ -207,15 +199,20 @@ const DeepfakeResultsImage = (props) => {
             </IconButton>
           }
         />
-        <Grid
+        <Grid2
           container
           direction="row"
           justifyContent="space-evenly"
           alignItems="flex-start"
         >
-          <Grid item sm={12} md={6}>
+          <Grid2
+            size={{
+              sm: 12,
+              md: 6,
+            }}
+          >
             <Box sx={{ width: "100%", height: "100%", position: "relative" }}>
-              <Grid
+              <Grid2
                 container
                 direction="row"
                 justifyContent="center"
@@ -229,7 +226,7 @@ const DeepfakeResultsImage = (props) => {
                   rectangles &&
                   rectanglesReady
                 ) && (
-                  <Grid item>
+                  <Grid2>
                     {rectangles.map((valueRectangle, keyRectangle) => {
                       return (
                         <Box
@@ -270,7 +267,7 @@ const DeepfakeResultsImage = (props) => {
                         </Box>
                       );
                     })}
-                  </Grid>
+                  </Grid2>
                 )}
 
                 <img
@@ -285,10 +282,15 @@ const DeepfakeResultsImage = (props) => {
                   ref={imgElement}
                   onLoad={drawRectangles}
                 />
-              </Grid>
+              </Grid2>
             </Box>
-          </Grid>
-          <Grid item sm={12} md={6}>
+          </Grid2>
+          <Grid2
+            size={{
+              sm: 12,
+              md: 6,
+            }}
+          >
             <Stack direction="column" p={4} spacing={4}>
               {!!(
                 deepfakeScore &&
@@ -322,8 +324,8 @@ const DeepfakeResultsImage = (props) => {
                 />
               )}
             </Stack>
-          </Grid>
-        </Grid>
+          </Grid2>
+        </Grid2>
       </Card>
     </Stack>
   );

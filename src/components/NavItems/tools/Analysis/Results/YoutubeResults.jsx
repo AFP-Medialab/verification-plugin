@@ -8,7 +8,7 @@ import TableBody from "@mui/material/TableBody";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
 import Button from "@mui/material/Button";
-import { Grid, IconButton } from "@mui/material";
+import { Grid2, IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 import OnClickInfo from "../../../../Shared/OnClickInfo/OnClickInfo";
@@ -231,7 +231,7 @@ const YoutubeResults = (props) => {
                   <ReverseSearchButtons reverseSearch={reverseSearch}>
                     {report["verification_cues"] &&
                       report["verification_cues"]["twitter_search_url"] && (
-                        <Grid item>
+                        <Grid2>
                           <Button
                             className={classes.button}
                             variant="contained"
@@ -246,7 +246,7 @@ const YoutubeResults = (props) => {
                           >
                             {keyword("button_reverse_twitter")}
                           </Button>
-                        </Grid>
+                        </Grid2>
                       )}
                   </ReverseSearchButtons>
                 </div>

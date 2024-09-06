@@ -1,5 +1,5 @@
 import React from "react";
-import Grid from "@mui/material/Grid";
+import { Grid2 } from "@mui/material";
 import Typography from "@mui/material/Typography";
 
 import { rgbListToGradient } from "./assistantUtils";
@@ -7,18 +7,18 @@ import { rgbListToGradient } from "./assistantUtils";
 export function ColourGradientScale({ textLow, textHigh, rgbList }) {
   return (
     <>
-      <Grid container>
-        <Grid item xs={6}>
+      <Grid2 container>
+        <Grid2 size={{ xs: 6 }}>
           <Typography align="left" fontSize="small" fontWeight="bold">
             {textLow}
           </Typography>
-        </Grid>
-        <Grid item xs={6}>
+        </Grid2>
+        <Grid2 size={{ xs: 6 }}>
           <Typography align="right" fontSize="small" fontWeight="bold">
             {textHigh}
           </Typography>
-        </Grid>
-      </Grid>
+        </Grid2>
+      </Grid2>
       <div
         style={{
           width: "100%",

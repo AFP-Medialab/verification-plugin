@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
-import { CardHeader } from "@mui/material";
+import { CardHeader, Grid2 } from "@mui/material";
 import CardContent from "@mui/material/CardContent";
 import Collapse from "@mui/material/Collapse";
 import Divider from "@mui/material/Divider";
@@ -13,7 +13,6 @@ import {
   ExpandMoreOutlined,
   WarningOutlined,
 } from "@mui/icons-material";
-import Grid from "@mui/material/Grid";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import LinearProgress from "@mui/material/LinearProgress";
 import TranslateIcon from "@mui/icons-material/Translate";
@@ -72,7 +71,7 @@ const AssistantTextResult = () => {
   }, [textBox]);
 
   return (
-    <Grid item xs={12}>
+    <Grid2 size={{ xs: 12 }}>
       <Card data-testid="assistant-text-scraped-text">
         <CardHeader
           className={classes.assistantCardHeader}
@@ -121,8 +120,8 @@ const AssistantTextResult = () => {
 
         <Box mb={1.5}>
           <Divider />
-          <Grid container>
-            <Grid item xs={6} style={{ display: "flex" }}>
+          <Grid2 container>
+            <Grid2 size={{ xs: 6 }} style={{ display: "flex" }}>
               <Typography
                 className={classes.toolTipIcon}
                 onClick={() => setDisplayOrigLang(!displayOrigLang)}
@@ -156,8 +155,8 @@ const AssistantTextResult = () => {
                   </IconButton>
                 </Tooltip>
               ) : null}
-            </Grid>
-            <Grid item xs={6} align={"right"}>
+            </Grid2>
+            <Grid2 size={{ xs: 6 }} align={"right"}>
               {displayExpander ? (
                 expanded ? (
                   <ExpandLessOutlined
@@ -175,11 +174,11 @@ const AssistantTextResult = () => {
                   />
                 )
               ) : null}
-            </Grid>
-          </Grid>
+            </Grid2>
+          </Grid2>
         </Box>
       </Card>
-    </Grid>
+    </Grid2>
   );
 };
 export default AssistantTextResult;

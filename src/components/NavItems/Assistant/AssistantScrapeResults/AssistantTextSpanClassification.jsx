@@ -1,11 +1,16 @@
 import React, { useState } from "react";
 
 import Card from "@mui/material/Card";
-import { CardHeader, Chip, List, ListItem, ListItemText } from "@mui/material";
+import {
+  CardHeader,
+  Chip,
+  Grid2,
+  List,
+  ListItem,
+  ListItemText,
+} from "@mui/material";
 import CardContent from "@mui/material/CardContent";
 import Divider from "@mui/material/Divider";
-
-import Grid from "@mui/material/Grid";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
@@ -14,10 +19,10 @@ import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace
 
 import {
   interpRgb,
-  rgbToString,
-  rgbToLuminance,
-  treeMapToElements,
   mergeSpanIndices,
+  rgbToLuminance,
+  rgbToString,
+  treeMapToElements,
   wrapPlainTextSpan,
 } from "./assistantUtils";
 import ColourGradientTooltipContent from "./ColourGradientTooltipContent";
@@ -262,15 +267,15 @@ export default function AssistantTextSpanClassification({
   // console.log("uniqueCategories=", uniqueCategories);
 
   return (
-    <Grid container>
-      <Grid item xs={9} sx={{ paddingRight: "1em" }}>
+    <Grid2 container>
+      <Grid2 size={{ xs: 9 }} sx={{ paddingRight: "1em" }}>
         <MultiCategoryClassifiedText
           categoriesText={categoriesText}
           currentLabel={currentLabel}
           allCategoriesLabel={allCategoriesLabel}
         />
-      </Grid>
-      <Grid item xs={3}>
+      </Grid2>
+      <Grid2 size={{ xs: 3 }}>
         <Card>
           <CardHeader
             className={classes.assistantCardHeader}
@@ -301,8 +306,8 @@ export default function AssistantTextSpanClassification({
             />
           </CardContent>
         </Card>
-      </Grid>
-    </Grid>
+      </Grid2>
+    </Grid2>
   );
 }
 

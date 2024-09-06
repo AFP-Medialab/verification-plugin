@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import Box from "@mui/material/Box";
-import { Button, ButtonGroup, Grid, TextField } from "@mui/material";
+import { Button, ButtonGroup, Grid2, TextField } from "@mui/material";
 import FolderOpenIcon from "@mui/icons-material/FolderOpen";
 import CloseIcon from "@mui/icons-material/Close";
 import LoadingButton from "@mui/lab/LoadingButton";
@@ -53,8 +53,8 @@ const StringFileUploadField = ({
 
   return (
     <Box>
-      <Grid container direction="row" spacing={3} alignItems="center">
-        <Grid item xs>
+      <Grid2 container direction="row" spacing={3} alignItems="center">
+        <Grid2 size="grow">
           <TextField
             type="url"
             id="standard-full-width"
@@ -66,8 +66,8 @@ const StringFileUploadField = ({
             disabled={isLoading || fileInput instanceof Blob}
             onChange={(e) => setUrlInput(e.target.value)}
           />
-        </Grid>
-        <Grid item>
+        </Grid2>
+        <Grid2>
           <LoadingButton
             type="submit"
             variant="contained"
@@ -83,9 +83,9 @@ const StringFileUploadField = ({
           >
             {submitButtonKeyword}
           </LoadingButton>
-        </Grid>
-      </Grid>
-      <Grid item mt={2}>
+        </Grid2>
+      </Grid2>
+      <Grid2 mt={2}>
         <ButtonGroup variant="outlined" disabled={isLoading || urlInput !== ""}>
           <Button startIcon={<FolderOpenIcon />} sx={{ textTransform: "none" }}>
             <label htmlFor="file">
@@ -123,7 +123,7 @@ const StringFileUploadField = ({
             </Button>
           )}
         </ButtonGroup>
-      </Grid>
+      </Grid2>
     </Box>
   );
 };

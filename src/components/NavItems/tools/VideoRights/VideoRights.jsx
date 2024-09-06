@@ -1,18 +1,14 @@
-import React from "react";
-import { useSelector, useDispatch } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import LinearProgress from "@mui/material/LinearProgress";
-import { useEffect, useState } from "react";
 import useVideoRightsTreatment from "./Hooks/useVideoRightsTreatment";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import VideoRightsResults from "./Results/VideoRightsResults";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import {
-  //trackEvent,
-  getclientId,
-} from "../../../Shared/GoogleAnalytics/MatomoAnalytics";
+import { getclientId } from "../../../Shared/GoogleAnalytics/MatomoAnalytics";
 //import { useTrackEvent } from "../../../../Hooks/useAnalytics";
 import { useParams } from "react-router-dom";
 import { KNOWN_LINKS } from "../../Assistant/AssistantRuleBook";
@@ -22,7 +18,7 @@ import CardHeader from "@mui/material/CardHeader";
 import VideoRightsIcon from "../../../NavBar/images/SVG/Video/Video_rights.svg";
 import { setVideoRightsLoading } from "../../../../redux/actions/tools/videoRightsActions";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
-import Grid from "@mui/material/Grid";
+import { Grid2 } from "@mui/material";
 import { useTrackEvent } from "../../../../Hooks/useAnalytics";
 
 const VideoRights = () => {
@@ -60,13 +56,13 @@ const VideoRights = () => {
   const submitForm = () => {
     if (!isLoading) {
       /*trackEvent(
-        "submission",
-        "videorights",
-        "video rights",
-        input,
-        client_id,
-        uid
-      );*/
+              "submission",
+              "videorights",
+              "video rights",
+              input,
+              client_id,
+              uid
+            );*/
       setSubmitted(input);
       dispatch(setVideoRightsLoading(true));
     }
@@ -111,8 +107,8 @@ const VideoRights = () => {
           className={classes.headerUploadedImage}
         />
         <form className={classes.root2}>
-          <Grid container direction="row" spacing={3} alignItems="center">
-            <Grid item xs>
+          <Grid2 container direction="row" spacing={3} alignItems="center">
+            <Grid2 size="grow">
               <TextField
                 value={input}
                 id="standard-full-width"
@@ -123,8 +119,8 @@ const VideoRights = () => {
                 variant="outlined"
                 onChange={(e) => setInput(e.target.value)}
               />
-            </Grid>
-            <Grid item>
+            </Grid2>
+            <Grid2>
               <Button
                 type="submit"
                 variant="contained"
@@ -134,8 +130,8 @@ const VideoRights = () => {
               >
                 {keyword("button_submit")}
               </Button>
-            </Grid>
-          </Grid>
+            </Grid2>
+          </Grid2>
           {isLoading && (
             <>
               <Box m={3} />

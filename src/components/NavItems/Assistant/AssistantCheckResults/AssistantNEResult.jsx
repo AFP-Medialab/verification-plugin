@@ -3,12 +3,11 @@ import { useSelector } from "react-redux";
 
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
-import { CardHeader } from "@mui/material";
+import { CardHeader, Grid2 } from "@mui/material";
 import CardContent from "@mui/material/CardContent";
 import Collapse from "@mui/material/Collapse";
 import Divider from "@mui/material/Divider";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
-import Grid from "@mui/material/Grid";
 import LinearProgress from "@mui/material/LinearProgress";
 import Typography from "@mui/material/Typography";
 import Link from "@mui/material/Link";
@@ -84,6 +83,7 @@ const AssistantNEResult = () => {
     onWordMouseOut: getCallback("onWordMouseOut"),
     onWordMouseOver: getCallback("onWordMouseOver"),
   };
+
   function getWordColor(tag) {
     switch (tag.category) {
       case "Person":
@@ -100,6 +100,7 @@ const AssistantNEResult = () => {
         return "black";
     }
   }
+
   const styles = {
     margin: "0px 3px",
     verticalAlign: "middle",
@@ -129,7 +130,7 @@ const AssistantNEResult = () => {
   };
 
   return (
-    <Grid item xs={12}>
+    <Grid2 size={{ xs: 12 }}>
       <Card>
         <CardHeader
           className={classes.assistantCardHeader}
@@ -137,8 +138,11 @@ const AssistantNEResult = () => {
         />
         {neLoading && <LinearProgress />}
         <CardContent>
-          <Grid container>
-            <Grid item xs={4} style={{ maxHeight: 300, overflowY: "auto" }}>
+          <Grid2 container>
+            <Grid2
+              size={{ xs: 4 }}
+              style={{ maxHeight: 300, overflowY: "auto" }}
+            >
               <List>
                 {neResult.map((value, index) => (
                   <Box key={index}>
@@ -185,11 +189,11 @@ const AssistantNEResult = () => {
                   </Box>
                 ))}
               </List>
-            </Grid>
-            <Grid item xs={1} align={"center"}>
+            </Grid2>
+            <Grid2 size={{ xs: 1 }} align={"center"}>
               <Divider orientation="vertical" />
-            </Grid>
-            <Grid item xs={7} align={"center"}>
+            </Grid2>
+            <Grid2 size={{ xs: 7 }} align={"center"}>
               {/*<ReactWordcloud words={neResultCount} callbacks={callbacks} options={options}/>*/}
               <TagCloud
                 tags={neResultCount}
@@ -197,11 +201,11 @@ const AssistantNEResult = () => {
                 maxSize={45}
                 renderer={customRenderer}
               />
-            </Grid>
-          </Grid>
+            </Grid2>
+          </Grid2>
         </CardContent>
       </Card>
-    </Grid>
+    </Grid2>
   );
 };
 

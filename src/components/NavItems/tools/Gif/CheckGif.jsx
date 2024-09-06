@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import Box from "@mui/material/Box";
 import useGetHomographics from "./Hooks/useGetHomographics";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import Typography from "@mui/material/Typography";
-import Grid from "@mui/material/Grid";
+import { Grid2 } from "@mui/material";
 import Button from "@mui/material/Button";
 import IconGif from "../../../NavBar/images/SVG/Image/Gif.svg";
 import DragAndDrop from "./DragAndDrop";
@@ -16,18 +16,15 @@ import FileIcon from "@mui/icons-material/InsertDriveFile";
 import TextField from "@mui/material/TextField";
 import CircularProgress from "@mui/material/CircularProgress";
 import {
+  setStateInit,
+  setStateReady,
   setStateSelectingLocal,
   setStateSelectingUrl,
-  setStateReady,
-  setStateInit,
 } from "../../../../redux/reducers/tools/gifReducer";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import IconButton from "@mui/material/IconButton";
-import {
-  //trackEvent,
-  getclientId,
-} from "../../../Shared/GoogleAnalytics/MatomoAnalytics";
+import { getclientId } from "../../../Shared/GoogleAnalytics/MatomoAnalytics";
 import { useTrackEvent } from "../../../../Hooks/useAnalytics";
 import AnimatedGif from "./AnimatedGif";
 
@@ -185,15 +182,15 @@ const CheckGif = () => {
 
   //Code to enable the button to upload the images
   /* if (toolState === 22 && imageURL1 !== "" && imageURL2 !== "") {
-        //console.log("Ready to send"); //DEBUG
-        dispatch(setStateReady());
-    }*/
+                      //console.log("Ready to send"); //DEBUG
+                      dispatch(setStateReady());
+                  }*/
 
   //Code to enable the button to upload the images
   /* if (toolState === 21 && imageDropped1 !== null && imageDropped2 !== null) {
-        //console.log("Ready to send"); //DEBUG
-        dispatch(setStateReady());
-    }*/
+                      //console.log("Ready to send"); //DEBUG
+                      dispatch(setStateReady());
+                  }*/
 
   useEffect(() => {
     if (toolState === 22 && imageURL1 !== "" && imageURL2 !== "") {
@@ -245,23 +242,23 @@ const CheckGif = () => {
     setEventUrl2(imageURL2);
     setEventUrlType2("url original image");
     /*trackEvent(
-      "submission",
-      "checkgif",
-      "url fake image",
-      imageURL1,
-      client_id,
-      uid
-    );
-    trackEvent(
-      "submission",
-      "checkgif",
-      "url original image",
-      imageURL2,
-      client_id,
-      uid
-    );*/
+                                  "submission",
+                                  "checkgif",
+                                  "url fake image",
+                                  imageURL1,
+                                  client_id,
+                                  uid
+                                );
+                                trackEvent(
+                                  "submission",
+                                  "checkgif",
+                                  "url original image",
+                                  imageURL2,
+                                  client_id,
+                                  uid
+                                );*/
     /*submissionEvent(imageURL1);
-        submissionEvent(imageURL2);*/
+                                    submissionEvent(imageURL2);*/
     const files = {
       url_0: imageURL1,
       url_1: imageURL2,
@@ -276,23 +273,23 @@ const CheckGif = () => {
     setEventUrl2(selectedFile2);
     setEventUrlType2("file original image");
     /* trackEvent(
-      "submission",
-      "checkgif",
-      "file fake image",
-      selectedFile1,
-      client_id,
-      uid
-    );
-    trackEvent(
-      "submission",
-      "checkgif",
-      "file original image",
-      selectedFile2,
-      client_id,
-      uid
-    );*/
+                                  "submission",
+                                  "checkgif",
+                                  "file fake image",
+                                  selectedFile1,
+                                  client_id,
+                                  uid
+                                );
+                                trackEvent(
+                                  "submission",
+                                  "checkgif",
+                                  "file original image",
+                                  selectedFile2,
+                                  client_id,
+                                  uid
+                                );*/
     /*submissionEvent(selectedFile1);
-        submissionEvent(selectedFile2);*/
+                                    submissionEvent(selectedFile2);*/
     const files = {
       file1: selectedFile1,
       file2: selectedFile2,
@@ -378,39 +375,39 @@ const CheckGif = () => {
       <Card>
         <CardHeader
           title={
-            <Grid
+            <Grid2
               container
               direction="row"
               justifyContent="space-between"
               alignItems="center"
             >
               <span>{keyword("cardTitle_source")}</span>
-            </Grid>
+            </Grid2>
           }
           className={classes.headerUploadedImage}
         />
 
         <Box m={2}>
-          <Grid container spacing={3} alignItems="flex-start">
-            <Grid item xs={6}>
+          <Grid2 container spacing={3} alignItems="flex-start">
+            <Grid2 size={{ xs: 6 }}>
               <Box p={3} className={classButtonURL} onClick={clickURL}>
-                <Grid
+                <Grid2
                   container
                   direction="row"
                   style={{ flexWrap: "nowrap" }}
                   spacing={2}
                 >
-                  <Grid item xs={1}>
+                  <Grid2 size={{ xs: 1 }}>
                     <LinkIcon className={classIconURL} />
-                  </Grid>
-                  <Grid item>
-                    <Grid
+                  </Grid2>
+                  <Grid2>
+                    <Grid2
                       container
                       direction="column"
                       justifyContent="flex-start"
                       alignItems="flex-start"
                     >
-                      <Grid item>
+                      <Grid2>
                         <Typography
                           variant="body1"
                           style={{ fontWeight: 600 }}
@@ -418,41 +415,41 @@ const CheckGif = () => {
                         >
                           {keyword("title_URL")}
                         </Typography>
-                      </Grid>
+                      </Grid2>
 
                       <Box mt={1} />
 
-                      <Grid item>
+                      <Grid2>
                         <Typography variant="body1" textAlign={"start"}>
                           {keyword("description_URL")}
                         </Typography>
-                      </Grid>
-                    </Grid>
-                  </Grid>
-                </Grid>
+                      </Grid2>
+                    </Grid2>
+                  </Grid2>
+                </Grid2>
               </Box>
-            </Grid>
-            <Grid item xs={6}>
+            </Grid2>
+            <Grid2 size={{ xs: 6 }}>
               <Box p={3} className={classButtonLocal} onClick={clickLocal}>
-                <Grid
+                <Grid2
                   container
                   direction="row"
                   style={{ flexWrap: "nowrap" }}
                   spacing={2}
                 >
-                  <Grid item xs={1}>
+                  <Grid2 size={{ xs: 1 }}>
                     <FileIcon className={classIconLocal} />
-                  </Grid>
+                  </Grid2>
 
-                  <Grid item>
-                    <Grid
+                  <Grid2>
+                    <Grid2
                       container
                       direction="column"
                       justifyContent="flex-start"
                       alignItems="flex-start"
                       spacing={1}
                     >
-                      <Grid item xs={12}>
+                      <Grid2 size={{ xs: 12 }}>
                         <Typography
                           variant="body1"
                           style={{ fontWeight: 600 }}
@@ -460,18 +457,18 @@ const CheckGif = () => {
                         >
                           {keyword("title_local")}
                         </Typography>
-                      </Grid>
-                      <Grid item xs={12}>
+                      </Grid2>
+                      <Grid2 size={{ xs: 12 }}>
                         <Typography variant="body1" textAlign={"start"}>
                           {keyword("description_local")}
                         </Typography>
-                      </Grid>
-                    </Grid>
-                  </Grid>
-                </Grid>
+                      </Grid2>
+                    </Grid2>
+                  </Grid2>
+                </Grid2>
               </Box>
-            </Grid>
-          </Grid>
+            </Grid2>
+          </Grid2>
         </Box>
       </Card>
 
@@ -481,7 +478,7 @@ const CheckGif = () => {
         <Card>
           <CardHeader
             title={
-              <Grid
+              <Grid2
                 container
                 direction="row"
                 justifyContent="space-between"
@@ -496,16 +493,15 @@ const CheckGif = () => {
                 >
                   {keyword("button_new")}
                 </Button>
-              </Grid>
+              </Grid2>
             }
             className={classes.headerUploadedImage}
           />
 
           <Box p={3}>
-            <Grid container spacing={3}>
-              <Grid
-                item
-                xs={5}
+            <Grid2 container spacing={3}>
+              <Grid2
+                size={{ xs: 5 }}
                 style={{ borderRight: "0.1em solid #ECECEC", padding: "0.5em" }}
               >
                 <Box p={2}>
@@ -518,7 +514,7 @@ const CheckGif = () => {
                       <Box m={2} />
 
                       {!showDropZone1 && (
-                        <Grid
+                        <Grid2
                           container
                           spacing={1}
                           direction="row"
@@ -533,12 +529,12 @@ const CheckGif = () => {
                           <IconButton onClick={removeImage1}>
                             <DeleteOutlineIcon fontSize="small" />
                           </IconButton>
-                        </Grid>
+                        </Grid2>
                       )}
 
                       {showDropZone1 && (
                         <DragAndDrop handleDrop={(files) => handleDrop(files)}>
-                          <Grid
+                          <Grid2
                             container
                             spacing={0}
                             direction="column"
@@ -546,7 +542,7 @@ const CheckGif = () => {
                             justifyContent="center"
                             className={classes.dropZone}
                           >
-                            <Grid item className={classes.inputContainer}>
+                            <Grid2 className={classes.inputContainer}>
                               <input
                                 accept="image/*"
                                 className={classes.input}
@@ -566,8 +562,8 @@ const CheckGif = () => {
                                   </label>
                                 </Box>
                               </div>
-                            </Grid>
-                          </Grid>
+                            </Grid2>
+                          </Grid2>
                         </DragAndDrop>
                       )}
 
@@ -580,7 +576,7 @@ const CheckGif = () => {
                       <Box m={2} />
 
                       {!showDropZone2 && (
-                        <Grid
+                        <Grid2
                           container
                           spacing={1}
                           direction="row"
@@ -595,12 +591,12 @@ const CheckGif = () => {
                           <IconButton onClick={removeImage2}>
                             <DeleteOutlineIcon fontSize="small" />
                           </IconButton>
-                        </Grid>
+                        </Grid2>
                       )}
 
                       {showDropZone2 && (
                         <DragAndDrop handleDrop={(files) => handleDrop2(files)}>
-                          <Grid
+                          <Grid2
                             container
                             spacing={0}
                             direction="column"
@@ -608,7 +604,7 @@ const CheckGif = () => {
                             justifyContent="center"
                             className={classes.dropZone}
                           >
-                            <Grid item className={classes.inputContainer}>
+                            <Grid2 className={classes.inputContainer}>
                               <input
                                 accept="image/*"
                                 className={classes.input}
@@ -628,8 +624,8 @@ const CheckGif = () => {
                                   </label>
                                 </Box>
                               </div>
-                            </Grid>
-                          </Grid>
+                            </Grid2>
+                          </Grid2>
                         </DragAndDrop>
                       )}
 
@@ -703,11 +699,11 @@ const CheckGif = () => {
                     </div>
                   )}
                 </Box>
-              </Grid>
+              </Grid2>
 
-              <Grid item xs={7} style={{ padding: "0.5em" }}>
+              <Grid2 size={{ xs: 7 }} style={{ padding: "0.5em" }}>
                 {(toolState === 21 || toolState === 22 || toolState === 3) && (
-                  <Grid
+                  <Grid2
                     container
                     direction="column"
                     justifyContent="center"
@@ -724,11 +720,11 @@ const CheckGif = () => {
                         {keyword("text_preview")}
                       </Typography>
                     </Box>
-                  </Grid>
+                  </Grid2>
                 )}
 
                 {toolState === 4 && (
-                  <Grid
+                  <Grid2
                     container
                     direction="column"
                     justifyContent="center"
@@ -736,7 +732,7 @@ const CheckGif = () => {
                     className={classes.height100}
                   >
                     <CircularProgress />
-                  </Grid>
+                  </Grid2>
                 )}
 
                 {(toolState === 5 || toolState === 7) && (
@@ -747,8 +743,8 @@ const CheckGif = () => {
                     isCanvas={true}
                   ></AnimatedGif>
                 )}
-              </Grid>
-            </Grid>
+              </Grid2>
+            </Grid2>
           </Box>
         </Card>
       )}

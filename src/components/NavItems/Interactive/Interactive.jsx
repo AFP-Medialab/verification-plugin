@@ -13,7 +13,7 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import NavigateBeforeIcon from "@mui/icons-material//NavigateBefore";
 import NavigateNextIcon from "@mui/icons-material//NavigateNext";
 import Fab from "@mui/material/Fab";
-import Grid from "@mui/material/Grid";
+import { Grid2 } from "@mui/material";
 import Button from "@mui/material/Button";
 import ExpandMoreIcon from "@mui/icons-material//ExpandMore";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
@@ -100,13 +100,13 @@ const Interactive = () => {
                   />
                 )}
               </div>
-              <Grid
+              <Grid2
                 container
                 justifyContent="space-between"
                 spacing={2}
                 alignContent={"center"}
               >
-                <Grid item>
+                <Grid2>
                   <Fab color={"primary"} onClick={previous}>
                     {isCurrentLanguageLeftToRight ? (
                       <NavigateBeforeIcon
@@ -120,8 +120,8 @@ const Interactive = () => {
                       />
                     )}
                   </Fab>
-                </Grid>
-                <Grid item>
+                </Grid2>
+                <Grid2>
                   <Fab color={"primary"} onClick={next}>
                     {isCurrentLanguageLeftToRight ? (
                       <NavigateNextIcon
@@ -135,16 +135,16 @@ const Interactive = () => {
                       />
                     )}
                   </Fab>
-                </Grid>
-              </Grid>
+                </Grid2>
+              </Grid2>
               {isImage ? (
-                <Grid
+                <Grid2
                   container
                   justifyContent="center"
                   spacing={2}
                   alignContent={"center"}
                 >
-                  <Grid item>
+                  <Grid2>
                     <Button
                       variant="contained"
                       color="primary"
@@ -158,8 +158,8 @@ const Interactive = () => {
                     >
                       {keyword("quiz_similarity")}
                     </Button>
-                  </Grid>
-                  <Grid item>
+                  </Grid2>
+                  <Grid2>
                     <Button
                       data-testid="interactive-forensic"
                       variant="contained"
@@ -173,8 +173,8 @@ const Interactive = () => {
                     >
                       {keyword("quiz_forensic")}
                     </Button>
-                  </Grid>
-                </Grid>
+                  </Grid2>
+                </Grid2>
               ) : (
                 <Button
                   variant="contained"
@@ -198,25 +198,25 @@ const Interactive = () => {
                   aria-controls="panel4bh-content"
                   id="panel4bh-header"
                 >
-                  <Grid
+                  <Grid2
                     container
                     justifyContent="space-between"
                     spacing={2}
                     alignContent={"center"}
                   >
-                    <Grid item>
+                    <Grid2>
                       <Typography className={classes.heading} align={"justify"}>
                         {keyword("quiz_explanations")}
                       </Typography>
-                    </Grid>
-                    <Grid item>
+                    </Grid2>
+                    <Grid2>
                       {answersAvailable ? (
                         <LockOpenIcon />
                       ) : (
                         <LockOutlinedIcon />
                       )}
-                    </Grid>
-                  </Grid>
+                    </Grid2>
+                  </Grid2>
                 </AccordionSummary>
                 <AccordionDetails>
                   <Typography align={"justify"}>

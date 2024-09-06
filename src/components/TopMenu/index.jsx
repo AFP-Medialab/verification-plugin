@@ -1,5 +1,5 @@
-import React from "react";
-import { AppBar, Grid, Stack, Tab, Tabs, Toolbar } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { AppBar, Grid2, Stack, Tab, Tabs, Toolbar } from "@mui/material";
 import LogoEuCom from "../NavBar/images/SVG/Navbar/ep-logo.svg";
 import LogoInVidWeverify from "../NavBar/images/SVG/Navbar/invid_weverify.svg";
 import LogoVera from "../NavBar/images/SVG/Navbar/vera-logo_black.svg";
@@ -45,20 +45,31 @@ const TopMenu = ({ topMenuItems }) => {
     };
   };
 
+  const [matchesSmallWidth, setMatchesSmallWidth] = useState(
+    window.matchMedia("(max-width: 800px)").matches,
+  );
+
+  useEffect(() => {
+    window
+      .matchMedia("(max-width: 800px)")
+      .addEventListener("change", (e) => setMatchesSmallWidth(e.matches));
+  }, []);
+
   return (
     <AppBar position="fixed" width={"100%"}>
       <Toolbar
         className={classes.toolbar}
         style={{ borderBottom: "solid 1px #dedbdb" }}
       >
-        <Grid
+        <Grid2
           container
           direction="row"
           justifyContent="space-between"
           alignItems="center"
           spacing={{ sm: 1, md: 2 }}
+          width="100%"
         >
-          <Grid item xs={2}>
+          <Grid2 size={{ xs: 2 }}>
             <Stack
               direction="row"
               justifyContent="flex-start"
@@ -99,8 +110,8 @@ const TopMenu = ({ topMenuItems }) => {
                 onClick={handleHomeIconClick}
               />
             </Stack>
-          </Grid>
-          <Grid item xs={7}>
+          </Grid2>
+          <Grid2 size={{ xs: 2, sm: 7 }}>
             <Tabs
               value={topMenuItemSelected}
               variant="scrollable"
@@ -112,7 +123,14 @@ const TopMenu = ({ topMenuItems }) => {
               TabIndicatorProps={{
                 style: { display: "none" },
               }}
-              sx={{ color: "black" }}
+              sx={
+                matchesSmallWidth
+                  ? {
+                      color: "black",
+                      maxWidth: "33vw",
+                    }
+                  : { color: "black" }
+              }
             >
               {topMenuItems.map((item, index) => {
                 return (
@@ -123,21 +141,21 @@ const TopMenu = ({ topMenuItems }) => {
                     to={item.path}
                     component={Link}
                     sx={{
-                      minWidth: "120px",
+                      minWidth: "100px",
                     }}
                     value={item.title}
                   />
                 );
               })}
             </Tabs>
-          </Grid>
-          <Grid item xs={2}>
+          </Grid2>
+          <Grid2 size={{ xs: 2 }}>
             <AdvancedTools />
-          </Grid>
-          <Grid item xs={1}>
+          </Grid2>
+          <Grid2 size={{ xs: 1 }}>
             <Languages />
-          </Grid>
-        </Grid>
+          </Grid2>
+        </Grid2>
       </Toolbar>
     </AppBar>
   );

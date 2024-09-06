@@ -3,9 +3,8 @@ import React from "react";
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
-import { CardHeader } from "@mui/material";
+import { CardHeader, Grid2 } from "@mui/material";
 import CardContent from "@mui/material/CardContent";
-import Grid from "@mui/material/Grid";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
@@ -21,6 +20,7 @@ import Divider from "@mui/material/Divider";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
 import { useNavigate } from "react-router-dom";
+
 const AssistantFileSelected = () => {
   const classes = useMyStyles();
   const navigate = useNavigate();
@@ -41,7 +41,7 @@ const AssistantFileSelected = () => {
 
   const generateList = (title, cType, actionList) => {
     return (
-      <Grid item xs={6}>
+      <Grid2 size={{ xs: 6 }}>
         <Box mx={2} my={0.5}>
           <Typography
             textAlign={"start"}
@@ -88,7 +88,7 @@ const AssistantFileSelected = () => {
             );
           })}
         </List>
-      </Grid>
+      </Grid2>
     );
   };
 
@@ -103,7 +103,7 @@ const AssistantFileSelected = () => {
         }
       />
       <CardContent>
-        <Grid container spacing={3}>
+        <Grid2 container spacing={3}>
           {generateList(
             keyword("upload_image"),
             CONTENT_TYPE.IMAGE,
@@ -119,7 +119,7 @@ const AssistantFileSelected = () => {
             CONTENT_TYPE.VIDEO,
             videoActions,
           )}
-        </Grid>
+        </Grid2>
       </CardContent>
     </Card>
   );

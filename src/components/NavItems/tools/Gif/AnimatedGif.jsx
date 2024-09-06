@@ -1,19 +1,8 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import useGetGif from "./Hooks/useGetGif";
-import {
-  Box,
-  Grid,
-  Typography,
-  CardMedia,
-  Slider,
-  Button,
-  Card,
-  CardContent,
-  Alert,
-} from "@mui/material";
+import { Alert, Box, Button, Grid2, Slider, Typography } from "@mui/material";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import { useState, useEffect } from "react";
 import ImageCanvas from "../Forensic/components/imageCanvas/imageCanvas";
 import TextImageCanvas from "./Components/TextImageCanvas";
 import { Edit, PlayArrow } from "@mui/icons-material";
@@ -77,11 +66,13 @@ const AnimatedGif = ({
     //console.log("Change speed: " + value); //DEBUG
     setSpeed(value * -1);
   }
+
   function commitChangeSpeed(value) {
     //console.log("Commit change speed: " + value); //DEBUG
     //clearInterval(interval);
     if (!paused) setIntervalVar(setInterval(() => animateImages(), value));
   }
+
   //Loop function
   function animateImages() {
     //console.log("Loop function" + interval); //DEBUG
@@ -94,6 +85,7 @@ const AnimatedGif = ({
       x.style.display = "none";
     }
   }
+
   const marks = [
     {
       value: -1700,
@@ -157,14 +149,14 @@ const AnimatedGif = ({
   }
 
   return isPopup ? (
-    <Grid
+    <Grid2
       container
       spacing={4}
       direction="row"
       justifyContent="flex-start"
       alignItems="flex-start"
     >
-      <Grid item xs={8}>
+      <Grid2 size={{ xs: 8 }}>
         <Box className={classes.wrapperImageFilter}>
           {/*<CardMedia*/}
           {/*  component="img"*/}
@@ -192,16 +184,15 @@ const AnimatedGif = ({
             />
           </Box>
         </Box>
-      </Grid>
-      <Grid
-        item
-        xs={4}
+      </Grid2>
+      <Grid2
+        size={{ xs: 4 }}
         container
         spacing={6}
         direction="column"
         justifyContent="flex-start"
       >
-        <Grid item>
+        <Grid2>
           <Typography gutterBottom>{keyword("slider_title")}</Typography>
           <Slider
             defaultValue={-1100}
@@ -214,15 +205,14 @@ const AnimatedGif = ({
             onChange={(e, val) => changeSpeed(val)}
             onChangeCommitted={() => commitChangeSpeed(speed)}
           />
-        </Grid>
-        <Grid
-          item
+        </Grid2>
+        <Grid2
           container
           spacing={2}
           justifyContent="flex-start"
           alignItems="stretch"
         >
-          <Grid item xs={12}>
+          <Grid2 size={{ xs: 12 }}>
             <Button
               fullWidth={true}
               variant="contained"
@@ -232,8 +222,8 @@ const AnimatedGif = ({
             >
               {keyword("button_download")}
             </Button>
-          </Grid>
-          <Grid item xs={12}>
+          </Grid2>
+          <Grid2 size={{ xs: 12 }}>
             <Button
               fullWidth={true}
               variant="contained"
@@ -243,14 +233,14 @@ const AnimatedGif = ({
             >
               {keyword("button_video")}
             </Button>
-          </Grid>
-        </Grid>
-      </Grid>
-    </Grid>
+          </Grid2>
+        </Grid2>
+      </Grid2>
+    </Grid2>
   ) : (
     <div>
       <Box p={2} className={classes.height100}>
-        <Grid
+        <Grid2
           container
           direction="column"
           justifyContent="space-between"
@@ -306,7 +296,7 @@ const AnimatedGif = ({
             <Box m={1} />
             <Alert severity="info">{keyword("fake_annotation_tip")}</Alert>
           </Box>
-          <Grid
+          <Grid2
             container
             direction="column"
             justifyContent="center"
@@ -331,8 +321,8 @@ const AnimatedGif = ({
 
             <Box m={2} />
 
-            <Grid item container spacing={3} justifyContent="space-evenly">
-              <Grid item>
+            <Grid2 container spacing={3} justifyContent="space-evenly">
+              <Grid2>
                 <Button
                   variant="contained"
                   color="primary"
@@ -341,8 +331,8 @@ const AnimatedGif = ({
                 >
                   {keyword("button_download")}
                 </Button>
-              </Grid>
-              <Grid item>
+              </Grid2>
+              <Grid2>
                 <Button
                   variant="contained"
                   color="primary"
@@ -351,12 +341,12 @@ const AnimatedGif = ({
                 >
                   {keyword("button_video")}
                 </Button>
-              </Grid>
-            </Grid>
+              </Grid2>
+            </Grid2>
 
             <Box m={2} />
-          </Grid>
-        </Grid>
+          </Grid2>
+        </Grid2>
       </Box>
     </div>
   );

@@ -47,9 +47,8 @@ const MainContent = ({ tools }) => {
       tool.rolesNeeded.includes(TOOL_STATUS_ICON.LOCK)
     )
       return true;
-    else if (tool.rolesNeeded.some((restriction) => role.includes(restriction)))
-      return true;
-    else return false;
+    else
+      return tool.rolesNeeded.some((restriction) => role.includes(restriction));
   });
 
   const themeFab = createTheme({
