@@ -40,9 +40,6 @@ const SourceCredibilityResult = (props) => {
                       {value.credibilityScope.includes("/") ? (
                         <Typography>
                           {` ${keyword("this")}`}
-                          {/* {inputUrlType
-                            ? capitaliseFirstLetter(inputUrlType)
-                            : null} */}
                           {getUrlTypeFromCredScope(value.credibilityScope)}
                           {` ${keyword(
                             "source_credibility_warning_account",

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useLocation } from "react-router-dom";
 import {
   Avatar,
   Box,
@@ -26,7 +27,13 @@ const ResultDisplayItem = ({
   domainUrl,
   imageUrl,
 }) => {
-  const keyword = i18nLoadNamespace("components/NavItems/tools/SemanticSearch");
+  const path = useLocation();
+  let keyword;
+  if (path.pathname.includes("/app/assistant")) {
+    keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
+  } else {
+    keyword = i18nLoadNamespace("components/NavItems/tools/SemanticSearch");
+  }
 
   const [showOriginalClaim, setShowOriginalClaim] = useState(false);
   const [showOriginalTitle, setShowOriginalTitle] = useState(false);
@@ -58,7 +65,7 @@ const ResultDisplayItem = ({
               spacing={2}
             >
               <Stack direction="column">
-                <Typography>
+                <Typography sx={{ textAlign: "start" }}>
                   {keyword("semantic_search_result_claim")}{" "}
                   {showOriginalClaim ? claimOriginalLanguage : claim}
                 </Typography>
@@ -81,7 +88,7 @@ const ResultDisplayItem = ({
                 )}
               </Stack>
               <Stack direction="column">
-                <Typography>
+                <Typography sx={{ textAlign: "start" }}>
                   {keyword("semantic_search_result_title")}{" "}
                   <Link href={articleUrl} target="_blank">
                     {showOriginalTitle ? titleOriginalLanguage : title}
