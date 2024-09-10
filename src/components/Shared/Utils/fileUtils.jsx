@@ -3,6 +3,7 @@ import {
   MAX_IMAGE_FILE_SIZE,
   MAX_VIDEO_FILE_SIZE,
 } from "../../../config";
+import { ROLES } from "../../../constants/roles";
 
 export const FILE_TYPES = {
   image: "image",
@@ -22,7 +23,7 @@ export const isImageFileTooLarge = (imageFile, userRole) => {
   }
 
   return (
-    (!userRole || !userRole.includes("EXTRA_FEATURE")) &&
+    (!userRole || !userRole.includes(ROLES.EXTRA_FEATURE)) &&
     imageFile.size >= MAX_IMAGE_FILE_SIZE
   );
 };
@@ -39,7 +40,7 @@ export const isVideoFileTooLarge = (videoFile, userRole) => {
   }
 
   return (
-    (!userRole || !userRole.includes("EXTRA_FEATURE")) &&
+    (!userRole || !userRole.includes(ROLES.EXTRA_FEATURE)) &&
     videoFile.size >= MAX_VIDEO_FILE_SIZE
   );
 };
@@ -56,7 +57,7 @@ export const isAudioFileTooLarge = (audioFile, userRole) => {
   }
 
   return (
-    (!userRole || !userRole.includes("EXTRA_FEATURE")) &&
+    (!userRole || !userRole.includes(ROLES.EXTRA_FEATURE)) &&
     audioFile.size >= MAX_AUDIO_FILE_SIZE
   );
 };

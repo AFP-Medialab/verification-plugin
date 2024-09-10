@@ -23,7 +23,8 @@ const DeepfakeResultsVideo = (props) => {
 
   class DeepfakeResult {
     constructor(methodName, predictionScore) {
-      (this.methodName = methodName), (this.predictionScore = predictionScore);
+      this.methodName = methodName;
+      this.predictionScore = predictionScore;
     }
   }
 
@@ -93,8 +94,8 @@ const DeepfakeResultsVideo = (props) => {
   );
 
   useEffect(() => {
-    var prediction = results.deepfake_video_report.prediction;
-    var shot = -1;
+    const prediction = results.deepfake_video_report.prediction;
+    let shot = -1;
 
     if (
       !results ||
@@ -447,7 +448,7 @@ const DeepfakeResultsVideo = (props) => {
                             boxShadow:
                               "0px 2px 1px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%)",
                             maxHeight: "60vh",
-                            maxWidth: "60vw",
+                            maxWidth: "100%",
                           }}
                         >
                           <source

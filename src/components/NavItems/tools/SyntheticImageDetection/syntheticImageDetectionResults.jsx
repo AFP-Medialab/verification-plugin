@@ -24,6 +24,7 @@ import Tooltip from "@mui/material/Tooltip";
 import { exportReactElementAsJpg } from "../../../Shared/Utils/htmlUtils";
 import NddDatagrid from "./NddDatagrid";
 import {
+  canUserDisplayAlgorithmResults,
   DETECTION_THRESHOLDS,
   getSyntheticImageDetectionAlgorithmFromApiName,
   gigaGanWebpR50Grip,
@@ -129,7 +130,7 @@ const SyntheticImageDetectionResults = ({
         syntheticImageDetectionAlgorithm.apiServiceName,
         syntheticImageDetectionAlgorithm.name,
         syntheticImageDetectionAlgorithm.description,
-        syntheticImageDetectionAlgorithm.roleNeeded,
+        syntheticImageDetectionAlgorithm.rolesNeeded,
       );
       this.predictionScore = predictionScore;
       this.isError = isError;
@@ -153,12 +154,7 @@ const SyntheticImageDetectionResults = ({
     let res = [];
 
     for (const algorithm of syntheticImageDetectionAlgorithms) {
-      if (
-        !role.includes(algorithm.roleNeeded) &&
-        algorithm.roleNeeded.length > 0
-      ) {
-        continue;
-      }
+      if (!canUserDisplayAlgorithmResults(role, algorithm)) continue;
 
       const algorithmReport = results[algorithm.apiServiceName + "_report"];
 
@@ -302,9 +298,7 @@ const SyntheticImageDetectionResults = ({
         );
 
         // Display iff the user has the permissions to see the content
-        if (d.roleNeeded && !role.includes(d.roleNeeded)) {
-          continue;
-        }
+        if (!canUserDisplayAlgorithmResults(role, d)) continue;
 
         if (
           imageType &&
