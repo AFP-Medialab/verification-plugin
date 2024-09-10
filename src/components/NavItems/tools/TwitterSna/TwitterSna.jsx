@@ -796,7 +796,7 @@ const TwitterSna = () => {
 
               <Accordion>
                 <AccordionSummary
-                  expandIcon={<ExpandMoreIcon style={{ color: "#17717e" }} />}
+                  expandIcon={<ExpandMoreIcon style={{ color: "#00926c" }} />}
                   aria-controls="panel1a-content"
                   id="panel1a-header"
                 >
@@ -804,7 +804,7 @@ const TwitterSna = () => {
                     <Typography
                       variant="h6"
                       align="left"
-                      style={{ color: "#17717e" }}
+                      style={{ color: "#00926c" }}
                     >
                       {keyword("twittersna_title_optional")}
                     </Typography>
