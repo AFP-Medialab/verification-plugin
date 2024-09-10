@@ -148,7 +148,7 @@ const AssistantNEResult = () => {
                   <Box key={index}>
                     <ListItem
                       key={index}
-                      button
+                      button="true"
                       onClick={() => handleCollapse(index)}
                     >
                       <ListItemText
