@@ -40,6 +40,7 @@ import dayjs from "dayjs";
 import duration from "dayjs/plugin/duration";
 import { exportReactElementAsJpg } from "../../../Shared/Utils/htmlUtils";
 import GaugeChartModalExplanation from "../../../Shared/GaugeChartResults/GaugeChartModalExplanation";
+import { ROLES } from "../../../../constants/roles";
 
 const LoccusResults = (props) => {
   dayjs.extend(duration);
@@ -436,7 +437,7 @@ const LoccusResults = (props) => {
                 </Typography>
               </Stack>
 
-              {role.includes("EXTRA_FEATURE") && (
+              {role.includes(ROLES.EXTRA_FEATURE) && (
                 <>
                   <Divider />
                   <Box pb={4} pr={4}>
