@@ -64,9 +64,10 @@ async function UseGetDeepfake(
   }
 
   try {
+    let bodyFormData;
     switch (type) {
       case "local":
-        var bodyFormData = new FormData();
+        bodyFormData = new FormData();
         bodyFormData.append("file", mediaFile);
         res = await axios.post(baseURL + modeURL + "jobs", bodyFormData, {
           method: "post",

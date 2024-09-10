@@ -106,7 +106,7 @@ const DeepfakeResultsVideo = (props) => {
     }
 
     for (
-      var i = 0;
+      let i = 0;
       i < results.deepfake_video_report.results.length && shot === -1;
       i++
     ) {

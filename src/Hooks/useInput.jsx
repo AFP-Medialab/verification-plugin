@@ -27,7 +27,7 @@ export const loadImageSize = (resultData, cols) => {
     setTimeout(() => {
       let colsWidth = 1180 / cols;
       if (Array.isArray(resultData) && resultData.length) {
-        let img = new Image();
+        const img = new Image();
         img.src = resultData[0];
         const height = (colsWidth * img.height) / img.width;
         if (img.width !== 0 && img.height !== 0) {

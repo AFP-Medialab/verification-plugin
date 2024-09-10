@@ -28,13 +28,13 @@ const PopUp = () => {
 
   const createScript = () => {
     let script =
-      'var images = document.getElementsByTagName("img")\n' +
-      "var image_meta = document.querySelector('meta[property=\"og:image\"]') \n" +
-      "var video_meta = document.querySelector('meta[property=\"og:video\"]') \n" +
-      "var text_meta = document.querySelector('meta[property=\"og:title\"]') \n" +
-      'var text_found = text_meta ? text_meta.content : ""\n' +
-      'var video_found = video_meta ?  video_meta.content : ""\n' +
-      'var image = image_meta ?  image_meta.content : ""\n' +
+      'const images = document.getElementsByTagName("img")\n' +
+      "const image_meta = document.querySelector('meta[property=\"og:image\"]') \n" +
+      "const video_meta = document.querySelector('meta[property=\"og:video\"]') \n" +
+      "const text_meta = document.querySelector('meta[property=\"og:title\"]') \n" +
+      'const text_found = text_meta ? text_meta.content : ""\n' +
+      'const video_found = video_meta ?  video_meta.content : ""\n' +
+      'const image = image_meta ?  image_meta.content : ""\n' +
       "results;\n";
     return script;
   };

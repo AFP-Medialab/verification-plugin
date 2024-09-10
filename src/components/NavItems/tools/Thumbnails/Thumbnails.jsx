@@ -54,7 +54,7 @@ const Thumbnails = () => {
   const [showResult, setShowResult] = useState(false);
   const [input, setInput] = useState(resultUrl);
   const [urlDetected, setUrlDetected] = useState(false);
-  var cols = 3;
+  const cols = 3;
 
   const dispatch = useDispatch();
 
@@ -141,13 +141,13 @@ const Thumbnails = () => {
     if (url !== null && url !== "" && isYtUrl(url)) {
       setEventUrl(url);
       /*trackEvent(
-                    "submission",
-                    "thumbnails",
-                    "youtube thumbnail",
-                    url,
-                    client_id,
-                    uid
-                  );*/
+                          "submission",
+                          "thumbnails",
+                          "youtube thumbnail",
+                          url,
+                          client_id,
+                          uid
+                        );*/
       let images = get_images(url);
       dispatch(
         setThumbnailsResult({

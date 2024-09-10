@@ -56,6 +56,8 @@ const AssistantVideoResult = () => {
       return null;
     }
 
+    let positionTwo;
+
     switch (input_url_type) {
       case KNOWN_LINKS.YOUTUBE:
         if (!embedURL.includes("/embed/")) {
@@ -72,7 +74,7 @@ const AssistantVideoResult = () => {
       case KNOWN_LINKS.VIMEO:
         stringToMatch = "vimeo.com/";
         positionOne = processUrl.indexOf(stringToMatch);
-        var positionTwo = positionOne + stringToMatch.length;
+        positionTwo = positionOne + stringToMatch.length;
         embedURL =
           embedURL.slice(0, positionOne) +
           "player." +

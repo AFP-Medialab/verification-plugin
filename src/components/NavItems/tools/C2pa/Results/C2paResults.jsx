@@ -1,19 +1,19 @@
 import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
   Alert,
   Box,
+  Button,
   Card,
   CardContent,
   CardHeader,
   Divider,
   Grid,
-  Stack,
-  Typography,
   IconButton,
-  Button,
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
+  Stack,
   Tooltip,
+  Typography,
 } from "@mui/material";
 
 import {
@@ -26,7 +26,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { c2paCurrentImageIdSet } from "redux/reducers/tools/c2paReducer";
 import moment from "moment";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
+import { MapContainer, Marker, TileLayer } from "react-leaflet";
 import { Icon as GeoIcon } from "leaflet";
 import { useEffect, useState } from "react";
 import MapIcon from "@mui/icons-material/Map";
@@ -76,7 +76,7 @@ const C2paResults = (props = { result, handleClose }) => {
   };
 
   useEffect(() => {
-    var testImage = new Image();
+    const testImage = new Image();
     testImage.src = url;
     testImage.onload = function () {
       setIsImage(true);
