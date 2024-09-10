@@ -41,7 +41,7 @@ const AnimatedGif = ({
       setIntervalVar(setInterval(() => animateImages(), speed));
     } else {
       setIntervalVar(null);
-      var x = document.getElementById("gifFilterElement");
+      const x = document.getElementById("gifFilterElement");
       x.style.display = "none";
     }
 
@@ -77,7 +77,7 @@ const AnimatedGif = ({
   function animateImages() {
     //console.log("Loop function" + interval); //DEBUG
     //console.log(interval); //DEBUG
-    var x = document.getElementById("gifFilterElement");
+    const x = document.getElementById("gifFilterElement");
 
     if (x.style.display === "none") {
       x.style.display = "block";

@@ -60,8 +60,8 @@ const OcrResult = () => {
   const mainImageId = "ocrMainImageId";
 
   /* if (!scripts) {
-                      dispatch(loadOcrScripts())
-                  }*/
+                        dispatch(loadOcrScripts())
+                    }*/
 
   const handleScriptChange = (event) => {
     dispatch(setSelectedScript(event.target.value));
@@ -166,7 +166,7 @@ const OcrResult = () => {
       dispatch(resetOcrState());
     }
   }, [fail, errorKey]);
-  var ro = new ResizeObserver(() => {
+  const ro = new ResizeObserver(() => {
     handleImageResizing();
   });
   // when the result comes in, draw the bounding boxes and add the event listener for changes to image size

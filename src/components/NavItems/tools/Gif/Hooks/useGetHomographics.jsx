@@ -1,9 +1,9 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  setStateError,
   setStateLoading,
   setStateShow,
-  setStateError,
 } from "../../../../../redux/reducers/tools/gifReducer";
 import { setError } from "redux/reducers/errorReducer";
 import useAuthenticatedRequest from "../../../../Shared/Authentication/useAuthenticatedRequest";
@@ -50,8 +50,8 @@ const useGetHomographics = (files, mode, keyword) => {
           handleError("error_server");
         }
       } else {
-        var homoImage1 = baseURL + response.data.results.output0;
-        var homoImage2 = baseURL + response.data.results.output1;
+        const homoImage1 = baseURL + response.data.results.output0;
+        const homoImage2 = baseURL + response.data.results.output1;
 
         dispatch(
           setStateShow({
@@ -70,7 +70,7 @@ const useGetHomographics = (files, mode, keyword) => {
       //console.log(files.file1);
       //console.log(files.file2);
 
-      var bodyFormData = new FormData();
+      const bodyFormData = new FormData();
       bodyFormData.append("file_0", files.file1);
       bodyFormData.append("file_1", files.file2);
 
@@ -97,7 +97,7 @@ const useGetHomographics = (files, mode, keyword) => {
       //console.log(files.file1);
       //console.log(files.file2);
 
-      var bodyUrlFormData = new URLSearchParams();
+      const bodyUrlFormData = new URLSearchParams();
       bodyUrlFormData.append("url_0", files.url_0);
       bodyUrlFormData.append("url_1", files.url_1);
 

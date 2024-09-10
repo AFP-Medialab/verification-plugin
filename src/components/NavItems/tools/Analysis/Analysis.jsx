@@ -70,7 +70,7 @@ const Analysis = () => {
     isLoading,
   );
 
-  var [warning, setWarning] = useState(false);
+  const [warning, setWarning] = useState(false);
 
   const reprocessToggle = () => {
     setReprocess(!reprocess);
@@ -86,12 +86,12 @@ const Analysis = () => {
   );
   const submitForm = () => {
     /*trackEvent(
-              "submission",
-              "analysis",
-              "video caa analysis",
-              input.trim(),
-              client_id
-            );*/
+                      "submission",
+                      "analysis",
+                      "video caa analysis",
+                      input.trim(),
+                      client_id
+                    );*/
     setSubmittedUrl(input.trim());
     dispatch(cleanAnalysisState());
   };
@@ -155,8 +155,8 @@ const Analysis = () => {
                   setInput(e.target.value);
                   const regex = /fb.watch\//g;
                   //const regex1 = /www.facebook.com\/watch\//g;
-                  var found = e.target.value.match(regex);
-                  //var found1 =e.target.value.match(regex1);
+                  const found = e.target.value.match(regex);
+                  //const found1 =e.target.value.match(regex1);
                   //if(found!==null || found1!==null ){
                   if (found !== null) {
                     setWarning(true);
