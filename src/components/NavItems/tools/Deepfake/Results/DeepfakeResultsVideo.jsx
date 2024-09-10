@@ -23,7 +23,8 @@ const DeepfakeResultsVideo = (props) => {
 
   class DeepfakeResult {
     constructor(methodName, predictionScore) {
-      (this.methodName = methodName), (this.predictionScore = predictionScore);
+      this.methodName = methodName;
+      this.predictionScore = predictionScore;
     }
   }
 
@@ -158,9 +159,9 @@ const DeepfakeResultsVideo = (props) => {
       );
     }
 
-    setDeepfakeScores(res);
-
     res = res.sort((a, b) => b.predictionScore - a.predictionScore);
+
+    setDeepfakeScores(res);
   }, [results]);
 
   //console.log("Rectangles: ", rectangles);
@@ -325,7 +326,7 @@ const DeepfakeResultsVideo = (props) => {
                     {keyword("deepfake_no_face_detection")}
                   </Typography>
                 )}
-                {deepfakeScores && deepfakeScores.length != 0 && (
+                {deepfakeScores && deepfakeScores.length !== 0 && (
                   <GaugeChartResult
                     keyword={keyword}
                     scores={deepfakeScores}
@@ -447,7 +448,7 @@ const DeepfakeResultsVideo = (props) => {
                             boxShadow:
                               "0px 2px 1px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%)",
                             maxHeight: "60vh",
-                            maxWidth: "60vw",
+                            maxWidth: "100%",
                           }}
                         >
                           <source

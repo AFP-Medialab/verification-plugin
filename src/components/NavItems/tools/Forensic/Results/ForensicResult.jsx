@@ -37,6 +37,7 @@ import { DetectionProgressBar } from "components/Shared/DetectionProgressBar/Det
 import ImageCanvas from "../components/imageCanvas/imageCanvas";
 import Fade from "@mui/material/Fade";
 import CardMedia from "@mui/material/CardMedia";
+import { ROLES } from "../../../../../constants/roles";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -185,9 +186,10 @@ const ForensicResults = (props) => {
   };
 
   //SHOULD BE REWRITE
-  const filtersProp = role.includes("EXTRA_FEATURE")
-    ? extraFeaturesFilterProps
-    : defaultFilterProps;
+  const filtersProp =
+    role.includes(ROLES.EXTRA_FEATURE) || role.includes(ROLES.EVALUATION)
+      ? extraFeaturesFilterProps
+      : defaultFilterProps;
 
   const filters = useRef(
     filtersProp.filtersIDs.map((value) => {
