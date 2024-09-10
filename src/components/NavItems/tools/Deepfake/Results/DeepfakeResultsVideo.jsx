@@ -159,9 +159,9 @@ const DeepfakeResultsVideo = (props) => {
       );
     }
 
-    setDeepfakeScores(res);
-
     res = res.sort((a, b) => b.predictionScore - a.predictionScore);
+
+    setDeepfakeScores(res);
   }, [results]);
 
   //console.log("Rectangles: ", rectangles);
@@ -326,7 +326,7 @@ const DeepfakeResultsVideo = (props) => {
                     {keyword("deepfake_no_face_detection")}
                   </Typography>
                 )}
-                {deepfakeScores && deepfakeScores.length != 0 && (
+                {deepfakeScores && deepfakeScores.length !== 0 && (
                   <GaugeChartResult
                     keyword={keyword}
                     scores={deepfakeScores}
