@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
-import { CardHeader, Grid2 } from "@mui/material";
+import { CardHeader, Grid2, ListItemButton } from "@mui/material";
 import CardContent from "@mui/material/CardContent";
 import Collapse from "@mui/material/Collapse";
 import Divider from "@mui/material/Divider";
@@ -146,9 +146,8 @@ const AssistantNEResult = () => {
               <List>
                 {neResult.map((value, index) => (
                   <Box key={index}>
-                    <ListItem
+                    <ListItemButton
                       key={index}
-                      button="true"
                       onClick={() => handleCollapse(index)}
                     >
                       <ListItemText
@@ -165,7 +164,7 @@ const AssistantNEResult = () => {
                       ) : (
                         <ExpandMore />
                       )}
-                    </ListItem>
+                    </ListItemButton>
                     <Collapse in={index === selectedIndex}>
                       <List component="div" disablePadding>
                         {value["words"].map((v, k) => (
