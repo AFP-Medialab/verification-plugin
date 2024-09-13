@@ -12,19 +12,22 @@ const DateAndTimePicker = ({
   handleUntilChange,
 }) => {
   const checkIfDateSince = (e) => {
-    console.log("check if date since: " + e);
-    moment.locale("en-gb");
-    if (moment.isMoment(e)) {
-      console.log("is moment");
-      handleSinceChange(e);
-    } else handleSinceChange(null);
+    // console.log(e);
+    // console.log("check if date since: " + e);
+    // moment.locale("en-gb");
+    // if (moment.isMoment(e)) {
+    //   console.log("is moment");
+    //   handleSinceChange(e);
+    // } else handleSinceChange(null);
+    handleSinceChange(e);
   };
 
   const checkIfDateUntil = (e) => {
-    moment.locale("en-gb");
-    if (moment.isMoment(e)) {
-      handleUntilChange(e);
-    } else handleUntilChange(null);
+    // moment.locale("en-gb");
+    // if (moment.isMoment(e)) {
+    //   handleUntilChange(e);
+    // } else handleUntilChange(null);
+    handleUntilChange(e);
   };
 
   const pastDate = (currentDate) => {
@@ -45,7 +48,6 @@ const DateAndTimePicker = ({
             dateFormat={"YYYY-MM-DD"}
             timeFormat={"HH:mm:ss"}
             value={fromValue}
-            handleChange={handleSinceChange}
             ampm={false}
           ></DateTimePicker>
           <DateTimePicker
@@ -56,7 +58,6 @@ const DateAndTimePicker = ({
             dateFormat={"YYYY-MM-DD"}
             timeFormat={"HH:mm:ss"}
             value={untilValue}
-            handleChange={handleUntilChange}
             ampm={false}
             shouldDisableDate={pastDate}
           ></DateTimePicker>

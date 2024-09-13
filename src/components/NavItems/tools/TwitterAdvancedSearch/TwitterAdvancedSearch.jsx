@@ -24,6 +24,7 @@ import CardHeader from "@mui/material/CardHeader";
 import TwitterAdvancedSearchIcon from "../../../NavBar/images/SVG/Search/Twitter_search.svg";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+import DateAndTimePicker from "components/Shared/DateTimePicker/DateAndTimePicker";
 
 const TwitterAdvancedSearch = () => {
   const classes = useMyStyles();
@@ -175,7 +176,7 @@ const TwitterAdvancedSearch = () => {
             );
           })}
           <div>
-            <DateTime
+            {/* <DateTime
               input={true}
               label={keyword("twitter_from_date")}
               dateFormat={"YYYY-MM-DD"}
@@ -183,9 +184,19 @@ const TwitterAdvancedSearch = () => {
               handleChange={handleFromDateChange}
               error={fromDateError}
               value={fromDate}
+            /> */}
+            <DateAndTimePicker
+              time={true}
+              searchFormDisabled={false}
+              keywordFromDate={keyword("twitter_from_date")}
+              keywordUntilDate={keyword("twitter_to_date")}
+              fromValue={fromDate}
+              untilValue={toDate}
+              handleSinceChange={handleFromDateChange}
+              handleUntilChange={handleToDateChange}
             />
           </div>
-          <div>
+          {/* <div>
             <DateTime
               input={true}
               label={keyword("twitter_to_date")}
@@ -196,7 +207,7 @@ const TwitterAdvancedSearch = () => {
               value={toDate}
               shouldDisableDate={pastDate}
             />
-          </div>
+          </div> */}
 
           <FormControl component="fieldset">
             <RadioGroup
