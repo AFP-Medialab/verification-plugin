@@ -51,6 +51,7 @@ import LaptopIcon from "@mui/icons-material/Laptop";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import DateAndTimePicker from "components/Shared/DateTimePicker/DateAndTimePicker";
 
 const TwitterSna = () => {
   const theme = createTheme({
@@ -314,6 +315,8 @@ const TwitterSna = () => {
   };
 
   const handleSinceDateChange = (date) => {
+    console.log("handle since change");
+    console.log(date);
     setSinceError(date === null);
     if (until && date >= until) setSinceError(true);
     setSince(date);
@@ -659,7 +662,7 @@ const TwitterSna = () => {
               <Box m={1} />
 
               <Grid2 container spacing={4} alignItems="center">
-                <Grid2 size={{ xs: 4 }}>
+                {/* <Grid2 size={{ xs: 4 }}>
                   <DateTime
                     id="standard-full-width-since"
                     disabled={searchFormDisabled}
@@ -689,6 +692,20 @@ const TwitterSna = () => {
                     placeholder={keyword("twitter_sna_selectdate")}
                     shouldDisableDate={pastDate}
                   />
+                </Grid2> */}
+                <Grid2 size={{ xs: 8 }}>
+                  <DateAndTimePicker
+                    time={true}
+                    searchFormDisabled={searchFormDisabled}
+                    keywordFromDate={keyword("twitter_sna_from_date")}
+                    keywordUntilDate={keyword("twitter_sna_until_date")}
+                    fromValue={since}
+                    untilValue={until}
+                    handleSinceChange={handleSinceDateChange}
+                    handleUntilChange={handleUntilDateChange}
+                  />
+                  {console.log("since: " + since)}
+                  {console.log("until: " + until)}
                 </Grid2>
 
                 <Grid2
