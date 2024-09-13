@@ -3,7 +3,7 @@ import moment from "moment-timezone";
 
 const DateAndTimePicker = ({
   time,
-  searchFormDisabled,
+  disabled,
   keywordFromDate,
   keywordUntilDate,
   fromValue,
@@ -42,17 +42,17 @@ const DateAndTimePicker = ({
         <>
           <DateTimePicker
             onChange={checkIfDateSince}
-            disbled={searchFormDisabled}
+            disbled={disabled}
             input={true}
             label={"*  " + keywordFromDate}
             dateFormat={"YYYY-MM-DD"}
             timeFormat={"HH:mm:ss"}
             value={fromValue}
             ampm={false}
-          ></DateTimePicker>
+          />
           <DateTimePicker
             onChange={checkIfDateUntil}
-            disbled={searchFormDisabled}
+            disbled={disabled}
             input={true}
             label={"*  " + keywordUntilDate}
             dateFormat={"YYYY-MM-DD"}
@@ -60,12 +60,28 @@ const DateAndTimePicker = ({
             value={untilValue}
             ampm={false}
             shouldDisableDate={pastDate}
-          ></DateTimePicker>
+          />
         </>
       ) : (
         <>
-          <DatePicker></DatePicker>
-          <DatePicker></DatePicker>
+          <DatePicker
+            label={"*  " + keywordFromDate}
+            value={fromValue}
+            onChange={checkIfDateSince}
+            slotProps={{
+              field: { clearable: true },
+            }}
+            disabled={disabled}
+          />
+          <DatePicker
+            label={"*  " + keywordUntilDate}
+            value={untilValue}
+            onChange={checkIfDateUntil}
+            slotProps={{
+              field: { clearable: true },
+            }}
+            disabled={disabled}
+          />
         </>
       )}
     </>

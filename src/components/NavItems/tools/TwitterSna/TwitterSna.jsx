@@ -696,7 +696,7 @@ const TwitterSna = () => {
                 <Grid2 size={{ xs: 8 }}>
                   <DateAndTimePicker
                     time={true}
-                    searchFormDisabled={searchFormDisabled}
+                    disabled={searchFormDisabled}
                     keywordFromDate={keyword("twitter_sna_from_date")}
                     keywordUntilDate={keyword("twitter_sna_until_date")}
                     fromValue={since}

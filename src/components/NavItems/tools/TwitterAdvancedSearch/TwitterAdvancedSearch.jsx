@@ -187,7 +187,7 @@ const TwitterAdvancedSearch = () => {
             /> */}
             <DateAndTimePicker
               time={true}
-              searchFormDisabled={false}
+              disabled={false}
               keywordFromDate={keyword("twitter_from_date")}
               keywordUntilDate={keyword("twitter_to_date")}
               fromValue={fromDate}

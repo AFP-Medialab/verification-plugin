@@ -36,6 +36,7 @@ import { getLanguageName } from "../../../Shared/Utils/languageUtils";
 import { i18nLoadNamespace } from "../../../Shared/Languages/i18nLoadNamespace";
 import languageDictionary from "../../../../LocalDictionary/iso-639-1-languages";
 import { useSelector } from "react-redux";
+import DateAndTimePicker from "components/Shared/DateTimePicker/DateAndTimePicker";
 
 const SemanticSearch = () => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/SemanticSearch");
@@ -552,7 +553,7 @@ const SemanticSearch = () => {
                       </Modal>
                     </Stack>
 
-                    <DatePicker
+                    {/* <DatePicker
                       label={keyword(
                         "semantic_search_form_date_from_placeholder",
                       )}
@@ -575,6 +576,22 @@ const SemanticSearch = () => {
                         field: { clearable: true },
                       }}
                       disabled={isLoading}
+                    /> */}
+                    <DateAndTimePicker
+                      time={false}
+                      disabled={isLoading}
+                      keywordFromDate={keyword(
+                        "semantic_search_form_date_from_placeholder",
+                      )}
+                      keywordUntilDate={keyword(
+                        "semantic_search_form_date_to_placeholder",
+                      )}
+                      fromValue={dateFrom}
+                      untilValue={dateTo}
+                      handleSinceChange={(newDate) =>
+                        setDateFrom(dayjs(newDate))
+                      }
+                      handleUntilChange={(newDate) => setDateTo(newDate)}
                     />
                     <CheckboxesTags
                       label={keyword(
