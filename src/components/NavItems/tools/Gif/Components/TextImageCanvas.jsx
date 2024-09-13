@@ -42,14 +42,12 @@ const TextImageCanvas = ({
 
   // loads image
   useEffect(() => {
-    async function loadAndPreloadImage() {
-      const loadedImg = await preloadImage(imgSrc);
-      setImg(loadedImg);
-    }
+    preloadImage(imgSrc).then(setImg);
+  }, [imgSrc]);
 
-    loadAndPreloadImage();
+  useEffect(() => {
     if (img) handleExport();
-  }, [imgSrc, img]);
+  }, [img]);
 
   if (img) {
     //calculates width and height used for the canvas, to have the same proportions as the image
