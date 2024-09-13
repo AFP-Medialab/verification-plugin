@@ -3,17 +3,16 @@ import { useDispatch, useSelector } from "react-redux";
 
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
-import { CardHeader } from "@mui/material";
+import { CardHeader, Grid2 } from "@mui/material";
 import CardContent from "@mui/material/CardContent";
 import Collapse from "@mui/material/Collapse";
 import Divider from "@mui/material/Divider";
+
 import {
   ExpandLessOutlined,
   ExpandMoreOutlined,
   WarningOutlined,
 } from "@mui/icons-material";
-import FormatQuoteIcon from "@mui/icons-material/FormatQuote";
-import Grid from "@mui/material/Grid";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import LinearProgress from "@mui/material/LinearProgress";
 import TranslateIcon from "@mui/icons-material/Translate";
@@ -53,23 +52,27 @@ const AssistantTextResult = () => {
   const textBox = document.getElementById("element-to-check");
   const [expanded, setExpanded] = useState(false);
   const [displayOrigLang, setDisplayOrigLang] = useState(true);
-  const [displayExpander, setDisplayExpander] = useState(false);
+  const [displayExpander, setDisplayExpander] = useState(true);
 
-  // figure out if component displaying text needs collapse icon
   useEffect(() => {
+    // if (translatedText) {
+    //   setDisplayOrigLang(false);
+    // }
     const elementToCheck = document.getElementById("element-to-check");
     if (elementToCheck.offsetHeight < elementToCheck.scrollHeight) {
       setDisplayExpander(true);
     }
 
     if (textHtmlMap !== null) {
+      // HTML text is contained in an xml document, we need to parse it and
+      // extract all contents in the <main> node#
       setTextHtmlOutput(treeMapToElements(text, textHtmlMap));
     }
   }, [textBox]);
 
   return (
-    <Grid item xs={12}>
-      <Card>
+    <Grid2 size={{ xs: 12 }}>
+      <Card data-testid="assistant-text-scraped-text">
         <CardHeader
           className={classes.assistantCardHeader}
           title={keyword("text_title")}
@@ -108,18 +111,17 @@ const AssistantTextResult = () => {
         )}
         <CardContent>
           <Collapse in={expanded} collapsedSize={100} id={"element-to-check"}>
-            <Typography align={"left"}>
+            <Typography component={"div"} sx={{ textAlign: "start" }}>
               {/*{!displayOrigLang && translatedText ? translatedText : text}*/}
-              {textHtmlOutput && textHtmlOutput}
-              {!textHtmlOutput && text}
+              {textHtmlOutput ?? text}
             </Typography>
           </Collapse>
         </CardContent>
 
         <Box mb={1.5}>
           <Divider />
-          <Grid container>
-            <Grid item xs={6} style={{ display: "flex" }}>
+          <Grid2 container>
+            <Grid2 size={{ xs: 6 }} style={{ display: "flex" }}>
               <Typography
                 className={classes.toolTipIcon}
                 onClick={() => setDisplayOrigLang(!displayOrigLang)}
@@ -153,8 +155,8 @@ const AssistantTextResult = () => {
                   </IconButton>
                 </Tooltip>
               ) : null}
-            </Grid>
-            <Grid item xs={6} align={"right"}>
+            </Grid2>
+            <Grid2 size={{ xs: 6 }} align={"right"}>
               {displayExpander ? (
                 expanded ? (
                   <ExpandLessOutlined
@@ -172,11 +174,11 @@ const AssistantTextResult = () => {
                   />
                 )
               ) : null}
-            </Grid>
-          </Grid>
+            </Grid2>
+          </Grid2>
         </Box>
       </Card>
-    </Grid>
+    </Grid2>
   );
 };
 export default AssistantTextResult;

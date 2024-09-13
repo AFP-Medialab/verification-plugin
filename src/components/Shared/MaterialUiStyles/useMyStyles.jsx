@@ -734,7 +734,7 @@ const styles = (theme) => ({
   },
 
   toolCardStyle: {
-    width: "33%",
+    width: "32%",
     maxWidth: "400px",
     minWidth: "250px",
   },

@@ -7,8 +7,7 @@ import CardMedia from "@mui/material/CardMedia";
 import Collapse from "@mui/material/Collapse";
 import FindInPageIcon from "@mui/icons-material/FindInPage";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import Grid from "@mui/material/Grid";
-import { IconButton } from "@mui/material";
+import { Grid2, IconButton } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import ErrorOutlineOutlinedIcon from "@mui/icons-material/ErrorOutlineOutlined";
@@ -20,6 +19,7 @@ import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import Tooltip from "@mui/material/Tooltip";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+
 const AssistantSCResults = () => {
   // central
   const keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
@@ -43,8 +43,8 @@ const AssistantSCResults = () => {
   return (
     <Box mb={2} pl={1}>
       <Card variant={"outlined"} className={classes.sourceCredibilityBorder}>
-        <Grid container>
-          <Grid item xs={12} className={classes.displayFlex}>
+        <Grid2 container>
+          <Grid2 size={{ xs: 12 }} className={classes.displayFlex}>
             <CardMedia>
               <Box m={1}>
                 <FindInPageIcon fontSize={"large"} color={"primary"} />
@@ -65,9 +65,9 @@ const AssistantSCResults = () => {
             >
               <ExpandMoreIcon color={"primary"} />
             </IconButton>
-          </Grid>
+          </Grid2>
 
-          <Grid item xs={12}>
+          <Grid2 size={{ xs: 12 }}>
             <Collapse
               in={assuranceExpanded}
               className={classes.assistantBackground}
@@ -141,8 +141,8 @@ const AssistantSCResults = () => {
                 </Box>
               </Box>
             </Collapse>
-          </Grid>
-        </Grid>
+          </Grid2>
+        </Grid2>
       </Card>
     </Box>
   );

@@ -25,6 +25,8 @@ const CustomAlertScore = ({ score, detectionType, toolName, thresholds }) => {
   const DETECTION_TYPES = {
     VOICE_CLONING: "synthetic",
     VOICE_RECORDING: "replay",
+    IMAGE: "image",
+    VIDEO: "video",
   };
 
   const toolNameSnakeCase = toolName
@@ -52,6 +54,10 @@ const CustomAlertScore = ({ score, detectionType, toolName, thresholds }) => {
           return "_voice_cloning_detection";
         } else if (detectionType === DETECTION_TYPES.VOICE_RECORDING) {
           return "_voice_recording_detection";
+        } else if (detectionType === DETECTION_TYPES.IMAGE) {
+          return "_image";
+        } else if (detectionType === DETECTION_TYPES.VIDEO) {
+          return "_video";
         } else return "";
       }
     };
@@ -62,22 +68,34 @@ const CustomAlertScore = ({ score, detectionType, toolName, thresholds }) => {
 
     if (score >= DETECTION_THRESHOLD_3) {
       displayText +=
-        !detectionType || detectionType === DETECTION_TYPES.VOICE_CLONING
+        !detectionType ||
+        detectionType === DETECTION_TYPES.VOICE_CLONING ||
+        detectionType === DETECTION_TYPES.VIDEO ||
+        detectionType === DETECTION_TYPES.IMAGE
           ? keyword(`${toolNameSnakeCase}${detectionTranslation}_rating_4`)
           : keyword(`loccus_voice_recording_detection_rating_4`);
     } else if (score >= DETECTION_THRESHOLD_2) {
       displayText +=
-        !detectionType || detectionType === DETECTION_TYPES.VOICE_CLONING
+        !detectionType ||
+        detectionType === DETECTION_TYPES.VOICE_CLONING ||
+        detectionType === DETECTION_TYPES.VIDEO ||
+        detectionType === DETECTION_TYPES.IMAGE
           ? keyword(`${toolNameSnakeCase}${detectionTranslation}_rating_3`)
           : keyword(`loccus_voice_recording_detection_rating_3`);
     } else if (score >= DETECTION_THRESHOLD_1) {
       displayText +=
-        !detectionType || detectionType === DETECTION_TYPES.VOICE_CLONING
+        !detectionType ||
+        detectionType === DETECTION_TYPES.VOICE_CLONING ||
+        detectionType === DETECTION_TYPES.VIDEO ||
+        detectionType === DETECTION_TYPES.IMAGE
           ? keyword(`${toolNameSnakeCase}${detectionTranslation}_rating_2`)
           : keyword(`loccus_voice_recording_detection_rating_2`);
     } else {
       displayText +=
-        !detectionType || detectionType === DETECTION_TYPES.VOICE_CLONING
+        !detectionType ||
+        detectionType === DETECTION_TYPES.VOICE_CLONING ||
+        detectionType === DETECTION_TYPES.VIDEO ||
+        detectionType === DETECTION_TYPES.IMAGE
           ? keyword(`${toolNameSnakeCase}${detectionTranslation}_rating_1`)
           : keyword(`loccus_voice_recording_detection_rating_1`);
     }

@@ -32,19 +32,19 @@ const CommentsPanel = (props) => {
 
   const classes = props.classes;
   const keyword = props.keyword;
-  var nextPage = props.report.pagination.next;
-  var totalPage = Math.ceil(props.nb_comments / 10);
+  const nextPage = props.report.pagination.next;
+  const totalPage = Math.ceil(props.nb_comments / 10);
   const url = useState(nextPage);
-  var last_page_all_comments;
+  let last_page_all_comments;
   if (props.nb_comments !== 0) {
     last_page_all_comments = totalPage;
   } else {
     last_page_all_comments = 1;
   }
-  var index = 0;
-  var real;
+  let index = 0;
+  let real;
 
-  for (var i = 0; i < url[0].length; i++) {
+  for (let i = 0; i < url[0].length; i++) {
     if (url[0][i] === "=") {
       index = index + 1;
       if (index === 2) {
@@ -53,22 +53,22 @@ const CommentsPanel = (props) => {
       }
     }
   }
-  var next_page_comments =
+  const next_page_comments =
     url[0].substring(0, real + 1) +
     (count_comments + 1) +
     "&type=" +
     props.com_type;
-  var previous_page_comments =
+  const previous_page_comments =
     url[0].substring(0, real + 1) +
     (count_comments - 1) +
     "&type=" +
     props.com_type;
-  var last_page_all_comments1 =
+  const last_page_all_comments1 =
     url[0].substring(0, real + 1) +
     last_page_all_comments +
     "&type=" +
     props.com_type;
-  var first_page_all_comments1 =
+  const first_page_all_comments1 =
     url[0].substring(0, real + 1) + 1 + "&type=" + props.com_type;
 
   const handleClick_first_page = () => {

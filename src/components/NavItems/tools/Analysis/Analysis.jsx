@@ -1,5 +1,5 @@
-import React, { useEffect, useState, memo } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import React, { memo, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import TextField from "@mui/material/TextField";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
@@ -16,10 +16,10 @@ import AFacebookResults from "./Results/AFacebookResults";
 import FacebookVideoDescription from "./Results/FacebookVideoDescription";
 import {
   cleanAnalysisState,
-  setAnalysisLoading,
-  setAnalysisResult,
   setAnalysisComments,
   setAnalysisLinkComments,
+  setAnalysisLoading,
+  setAnalysisResult,
   setAnalysisVerifiedComments,
 } from "../../../../redux/actions/tools/analysisActions";
 import { useParams } from "react-router-dom";
@@ -27,15 +27,12 @@ import { KNOWN_LINKS } from "../../Assistant/AssistantRuleBook";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import AnalysisIcon from "../../../NavBar/images/SVG/Video/Video_analysis.svg";
-import Grid from "@mui/material/Grid";
+import { Grid2 } from "@mui/material";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import styles from "./Results/layout.module.css";
 import Alert from "@mui/material/Alert";
 import _ from "lodash";
-import {
-  //trackEvent,
-  getclientId,
-} from "../../../Shared/GoogleAnalytics/MatomoAnalytics";
+import { getclientId } from "../../../Shared/GoogleAnalytics/MatomoAnalytics";
 import { useTrackEvent } from "../../../../Hooks/useAnalytics";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
@@ -73,7 +70,7 @@ const Analysis = () => {
     isLoading,
   );
 
-  var [warning, setWarning] = useState(false);
+  const [warning, setWarning] = useState(false);
 
   const reprocessToggle = () => {
     setReprocess(!reprocess);
@@ -89,12 +86,12 @@ const Analysis = () => {
   );
   const submitForm = () => {
     /*trackEvent(
-      "submission",
-      "analysis",
-      "video caa analysis",
-      input.trim(),
-      client_id
-    );*/
+                      "submission",
+                      "analysis",
+                      "video caa analysis",
+                      input.trim(),
+                      client_id
+                    );*/
     setSubmittedUrl(input.trim());
     dispatch(cleanAnalysisState());
   };
@@ -137,15 +134,14 @@ const Analysis = () => {
           />
         }
       />
-
       <Card>
         <CardHeader
           title={keyword("video_card_header")}
           className={classes.headerUploadedImage}
         />
         <form className={classes.root2}>
-          <Grid container direction="row" spacing={3} alignItems="center">
-            <Grid item xs>
+          <Grid2 container direction="row" spacing={3} alignItems="center">
+            <Grid2 size="grow">
               <TextField
                 id="standard-full-width"
                 data-testid="analysis_video_input"
@@ -159,8 +155,8 @@ const Analysis = () => {
                   setInput(e.target.value);
                   const regex = /fb.watch\//g;
                   //const regex1 = /www.facebook.com\/watch\//g;
-                  var found = e.target.value.match(regex);
-                  //var found1 =e.target.value.match(regex1);
+                  const found = e.target.value.match(regex);
+                  //const found1 =e.target.value.match(regex1);
                   //if(found!==null || found1!==null ){
                   if (found !== null) {
                     setWarning(true);
@@ -169,8 +165,8 @@ const Analysis = () => {
                   }
                 }}
               />
-            </Grid>
-            <Grid item>
+            </Grid2>
+            <Grid2>
               <FormControlLabel
                 control={
                   <Checkbox
@@ -183,9 +179,9 @@ const Analysis = () => {
                 }
                 label={keyword("api_repro")}
               />
-            </Grid>
+            </Grid2>
 
-            <Grid item>
+            <Grid2>
               <Button
                 type="submit"
                 data-testid="analysis_video_submit"
@@ -193,19 +189,19 @@ const Analysis = () => {
                 color="primary"
                 disabled={isLoading}
                 onClick={(e) => {
-                  e.preventDefault(), submitForm();
+                  e.preventDefault();
+                  submitForm();
                 }}
               >
                 {keyword("button_submit")}
               </Button>
-            </Grid>
+            </Grid2>
             <Box m={1} />
-          </Grid>
+          </Grid2>
         </form>
         {isLoading ? <LinearProgress hidden={!isLoading} /> : null}
       </Card>
       <Box m={3} />
-
       {showFacebookIframe && (
         <Box m={4}>
           <Iframe
@@ -238,7 +234,6 @@ const Analysis = () => {
           />
         </AFacebookResults>
       ) : null}
-
       {warning === true && (
         <Alert className={styles.margin1} variant="outlined" severity="warning">
           {keyword("facebook_tip")}

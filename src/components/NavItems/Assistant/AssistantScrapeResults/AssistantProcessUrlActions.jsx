@@ -36,7 +36,9 @@ const AssistantProcessUrlActions = () => {
       dl.setAttribute("href", resultUrl);
       dl.setAttribute("download", "");
       dl.click();
-    } else if (resultUrl != null) {
+    } else if (action.path === null) {
+      return; // Do nothing if path is null
+    } else if (resultUrl !== null) {
       navigate(
         "/app/" +
           action.path +
@@ -70,19 +72,31 @@ const AssistantProcessUrlActions = () => {
               <Card className={classes.assistantHover} variant={"outlined"}>
                 <ListItem onClick={() => handleClick(action)}>
                   <ListItemAvatar>
-                    <Avatar variant={"square"} src={action.icon} />
+                    {typeof action.icon === "string" && (
+                      <Avatar variant={"square"} src={action.icon} />
+                    )}
+                    {typeof action.icon !== "string" && action.icon}
                   </ListItemAvatar>
                   <ListItemText
                     primary={
                       <Typography component={"span"}>
-                        <Box fontWeight="fontWeightBold">
+                        <Box
+                          fontWeight="fontWeightBold"
+                          data-testid={action.title}
+                        >
                           {keyword(action.title)}
                         </Box>
                       </Typography>
                     }
                     secondary={
                       <Typography color={"textSecondary"} component={"span"}>
-                        <Box fontStyle="italic">{keyword(action.text)}</Box>
+                        <Box fontStyle="italic">
+                          <div
+                            dangerouslySetInnerHTML={{
+                              __html: keyword(action.text),
+                            }}
+                          ></div>
+                        </Box>
                       </Typography>
                     }
                   />

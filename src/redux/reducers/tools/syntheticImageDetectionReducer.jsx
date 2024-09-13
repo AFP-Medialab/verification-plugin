@@ -2,16 +2,14 @@ const defaultState = {
   url: "",
   result: null,
   loading: false,
+  duplicates: null,
 };
 
 const syntheticImageDetectionReducer = (state = defaultState, action) => {
   switch (action.type) {
     case "SYNTHETIC_IMAGE_DETECTION_RESET":
       return {
-        ...state,
-        url: "",
-        result: null,
-        loading: false,
+        ...defaultState,
       };
     case "SET_SYNTHETIC_IMAGE_DETECTION_LOADING":
       return {
@@ -23,6 +21,12 @@ const syntheticImageDetectionReducer = (state = defaultState, action) => {
         ...state,
         url: action.payload.url,
         result: action.payload.result,
+        loading: false,
+      };
+    case "SET_SYNTHETIC_IMAGE_DETECTION_NEAR_DUPLICATES":
+      return {
+        ...state,
+        duplicates: action.payload,
         loading: false,
       };
     default:

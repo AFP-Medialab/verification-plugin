@@ -1,7 +1,7 @@
 import { history } from "../History/History";
 
 export function submissionEvent(payload) {
-  var pathname = history.location.pathname;
+  const pathname = history.location.pathname;
   console.log("pathname ", pathname);
   let events = [
     {
@@ -27,10 +27,10 @@ export function submissionEvent(payload) {
   };
   matomoCall(actions);
   /*ReactGA.event({
-        category: 'Submission',
-        action: 'Submitted from ' + history.location.pathname,
-        label: payload
-    });*/
+          category: 'Submission',
+          action: 'Submitted from ' + history.location.pathname,
+          label: payload
+      });*/
 }
 
 export function reverseSearchClick() {
@@ -45,15 +45,16 @@ export function reverseSearchClick() {
   //   },
   // ];
   /* ReactGA.event({
-        category: 'Reverse search',
-        action: 'Reverse search ' + history.location.pathname + " for " + payload,
-        label: payload
-    });*/
+          category: 'Reverse search',
+          action: 'Reverse search ' + history.location.pathname + " for " + payload,
+          label: payload
+      });*/
   return true;
 }
+
 export function loadPage(path) {
   history.push(path.pathname);
-  var pathname = history.location.pathname;
+  const pathname = history.location.pathname;
   console.log(path);
   console.log(pathname);
 

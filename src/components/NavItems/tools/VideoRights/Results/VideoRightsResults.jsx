@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { Paper } from "@mui/material";
+import React from "react";
+import { IconButton, Paper } from "@mui/material";
 import useMyStyles from "../../../../Shared/MaterialUiStyles/useMyStyles";
 import Typography from "@mui/material/Typography";
 import BlockIcon from "@mui/icons-material/Block";
@@ -13,13 +13,12 @@ import FacebookIcon from "@mui/icons-material/Facebook";
 import Divider from "@mui/material/Divider";
 import invidLogo from "../images/InVID-logo.svg?url";
 import Icon from "@mui/material/Icon";
-import Grid from "@mui/material/Grid";
+import { Grid2 } from "@mui/material";
 import { cleanVideoRightsState } from "../../../../../redux/actions/tools/videoRightsActions";
 import { useDispatch } from "react-redux";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
-import { IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 
 const VideoRightsResults = (props) => {
@@ -208,8 +207,8 @@ const VideoRightsResults = (props) => {
         <div className={classes.listRoot}>
           {result.user !== undefined && (
             <Paper className={classes.listItem}>
-              <Grid container wrap="nowrap" spacing={2} alignItems={"center"}>
-                <Grid item>
+              <Grid2 container wrap="nowrap" spacing={2} alignItems={"center"}>
+                <Grid2>
                   {result.kind === "youTubeVideos" && (
                     <YouTubeIcon color={"primary"} fontSize={"large"} />
                   )}
@@ -219,8 +218,8 @@ const VideoRightsResults = (props) => {
                   {result.kind === "twitterVideos" && (
                     <TwitterIcon color={"primary"} fontSize={"large"} />
                   )}
-                </Grid>
-                <Grid item xs>
+                </Grid2>
+                <Grid2 size="grow">
                   <a
                     href={result.user.url}
                     target="_blank"
@@ -229,13 +228,13 @@ const VideoRightsResults = (props) => {
                     {" "}
                     {result.user.name}
                   </a>
-                </Grid>
-              </Grid>
+                </Grid2>
+              </Grid2>
             </Paper>
           )}
           <Paper className={classes.listItem}>
-            <Grid container wrap="nowrap" spacing={2} alignItems={"center"}>
-              <Grid item>
+            <Grid2 container wrap="nowrap" spacing={2} alignItems={"center"}>
+              <Grid2>
                 <Icon classes={{ root: classes.iconRoot }}>
                   <img
                     className={classes.imageIcon}
@@ -243,8 +242,8 @@ const VideoRightsResults = (props) => {
                     alt={invidLogo}
                   />
                 </Icon>
-              </Grid>
-              <Grid item xs>
+              </Grid2>
+              <Grid2 size="grow">
                 Or try:{" "}
                 <a
                   href={result.RIGHTS_APP + "/" + result.id}
@@ -254,8 +253,8 @@ const VideoRightsResults = (props) => {
                   InVID Rights Management Tool
                 </a>
                 .
-              </Grid>
-            </Grid>
+              </Grid2>
+            </Grid2>
           </Paper>
         </div>
         <Box m={4} />

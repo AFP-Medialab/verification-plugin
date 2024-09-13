@@ -51,14 +51,14 @@ export const reverseImageSearchGoogleLens = (
       //return response.text();
     })
     /*.then((body) => {
-      var tabUrl = body.match(/(?<=<meta .*url=)(.*)(?=")/)[1];
-      // @ts-ignore
-      tabUrl = decodeURIComponent(tabUrl.replaceAll("&amp;", "&"));
-      //console.log(tabUrl)
-      const urlObject = { url: "https://lens.google.com" + tabUrl };
-
-      openNewTabWithUrl(urlObject, isRequestFromContextMenu);
-    })*/
+          let tabUrl = body.match(/(?<=<meta .*url=)(.*)(?=")/)[1];
+          // @ts-ignore
+          tabUrl = decodeURIComponent(tabUrl.replaceAll("&amp;", "&"));
+          //console.log(tabUrl)
+          const urlObject = { url: "https://lens.google.com" + tabUrl };
+    
+          openNewTabWithUrl(urlObject, isRequestFromContextMenu);
+        })*/
     .catch((error) => {
       console.error(error);
     })
