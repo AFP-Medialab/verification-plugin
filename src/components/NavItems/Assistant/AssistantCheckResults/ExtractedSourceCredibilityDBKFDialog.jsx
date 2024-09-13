@@ -26,7 +26,7 @@ import { getUrlTypeFromCredScope } from "./assistantUtils";
 const renderScope = (keyword, scope) => {
   return (
     <ListItem>
-      {scope.includes("/") ? (
+      {scope && scope.includes("/") ? (
         <Typography variant={"subtitle2"}>
           {` ${keyword("account_scope")} ${scope} `}
         </Typography>
@@ -139,7 +139,8 @@ const ExtractedSourceCredibilityDBKFDialog = ({
                       ? sourceCredibilityResults.map((value, key) => (
                           <Accordion key={key}>
                             <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                              {value.credibilityScope.includes("/") ? (
+                              {value.credibilityScope &&
+                              value.credibilityScope.includes("/") ? (
                                 <Typography color={trafficLightColor}>
                                   {` ${keyword("this")}`}
                                   {getUrlTypeFromCredScope(

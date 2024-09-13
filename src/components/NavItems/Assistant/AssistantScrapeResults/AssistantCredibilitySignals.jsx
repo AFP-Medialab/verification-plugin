@@ -29,11 +29,7 @@ import localizedFormat from "dayjs/plugin/localizedFormat";
 
 import Collapse from "@mui/material/Collapse";
 import Divider from "@mui/material/Divider";
-import {
-  ExpandLessOutlined,
-  ExpandMoreOutlined,
-  Remove,
-} from "@mui/icons-material";
+import { UnfoldMore, Remove } from "@mui/icons-material";
 import TranslateIcon from "@mui/icons-material/Translate";
 import IconButton from "@mui/material/IconButton";
 import FileCopyOutlined from "@mui/icons-material/FileCopy";
@@ -94,7 +90,7 @@ const renderCollapse = (
     <Box mb={1.5}>
       <Divider />
       <Grid2 container>
-        <Grid2 size={{ xs: 6 }} style={{ display: "flex" }}>
+        <Grid2 size={{ xs: 11 }} style={{ display: "flex" }}>
           <Typography
             className={classes.toolTipIcon}
             onClick={() => setDisplayOrigLang(!displayOrigLang)}
@@ -129,23 +125,15 @@ const renderCollapse = (
             </Tooltip>
           ) : null}
         </Grid2>
-        <Grid2 size={{ xs: 6 }} align={"right"}>
+        <Grid2 size={1} align={"right"}>
           {displayExpander ? (
-            expanded ? (
-              <ExpandLessOutlined
-                className={classes.toolTipIcon}
-                onClick={() => {
-                  setExpanded(!expanded);
-                }}
-              />
-            ) : (
-              <ExpandMoreOutlined
-                className={classes.toolTipIcon}
-                onClick={() => {
-                  setExpanded(!expanded);
-                }}
-              />
-            )
+            // expanded ?  required here if using different icons for expanded and closed
+            <UnfoldMore
+              className={classes.toolTipIcon}
+              onClick={() => {
+                setExpanded(!expanded);
+              }}
+            />
           ) : null}
         </Grid2>
       </Grid2>
@@ -170,10 +158,10 @@ const renderCollapsePrevFactChecks = (
     <Box mb={1.5}>
       <Divider />
       <Grid2 container>
-        <Grid2 size={{ xs: 4 }} align={"start"}>
+        <Grid2 size={{ xs: 1 }} align={"start"}>
           <></>
         </Grid2>
-        <Grid2 size={{ xs: 6 }} align={"start"}>
+        <Grid2 size={{ xs: 10 }} align={"center"}>
           <Typography
             component={"div"}
             sx={{ color: "text.secondary", align: "start" }}
@@ -188,23 +176,14 @@ const renderCollapsePrevFactChecks = (
             </Link>
           </Typography>
         </Grid2>
-        <Grid2 size={{ xs: 2 }} align={"start"}>
+        <Grid2 size={1} align={"right"}>
           {displayExpander ? (
-            expanded ? (
-              <ExpandLessOutlined
-                className={classes.toolTipIcon}
-                onClick={() => {
-                  setExpanded(!expanded);
-                }}
-              />
-            ) : (
-              <ExpandMoreOutlined
-                className={classes.toolTipIcon}
-                onClick={() => {
-                  setExpanded(!expanded);
-                }}
-              />
-            )
+            <UnfoldMore
+              className={classes.toolTipIcon}
+              onClick={() => {
+                setExpanded(!expanded);
+              }}
+            />
           ) : null}
         </Grid2>
       </Grid2>
@@ -332,608 +311,589 @@ const AssistantCredSignals = () => {
   );
 
   return (
-    <Grid2 size={{ xs: 12 }}>
-      <Card>
-        <CardHeader
-          className={classes.assistantCardHeader}
-          // title
-          title={
-            <Typography variant={"h5"}>
-              {keyword("credibility_signals")}
-            </Typography>
-          }
-          action={
-            // tooltip
-            <Tooltip
-              interactive={"true"}
-              title={
-                <div
-                  className={"content"}
-                  dangerouslySetInnerHTML={{
-                    __html:
-                      keyword("credibility_signals_tooltip") +
-                      "<br><br><b>" +
-                      keyword("news_framing") +
-                      "</b><br>" +
-                      keyword("news_framing_tooltip") +
-                      "<br><br><b>" +
-                      keyword("news_genre") +
-                      "</b><br>" +
-                      keyword("news_genre_tooltip") +
-                      "<br><br><b>" +
-                      keyword("persuasion_techniques") +
-                      "</b><br>" +
-                      keyword("persuasion_techniques_tooltip") +
-                      "<br><br><b>" +
-                      keyword("subjectivity") +
-                      "</b><br>" +
-                      keyword("subjectivity_tooltip") +
-                      "<br><br><b>" +
-                      keyword("previous_fact_checks") +
-                      "</b><br>" +
-                      keyword("previous_fact_checks_tooltip") +
-                      "<br><br><b>" +
-                      keyword("machine_generated_text") +
-                      "</b><br>" +
-                      keyword("machine_generated_text_tooltip"),
-                  }}
-                />
-              }
-              classes={{ tooltip: classes.assistantTooltip }}
-            >
-              <HelpOutlineOutlinedIcon className={classes.toolTipIcon} />
-            </Tooltip>
-          }
-        />
+    <Card>
+      <CardHeader
+        className={classes.assistantCardHeader}
+        // title
+        title={
+          <Typography variant={"h5"}>
+            {keyword("credibility_signals")}
+          </Typography>
+        }
+        action={
+          // tooltip
+          <Tooltip
+            interactive={"true"}
+            title={
+              <div
+                className={"content"}
+                dangerouslySetInnerHTML={{
+                  __html:
+                    keyword("credibility_signals_tooltip") +
+                    "<br><br><b>" +
+                    keyword("news_framing") +
+                    "</b><br>" +
+                    keyword("news_framing_tooltip") +
+                    "<br><br><b>" +
+                    keyword("news_genre") +
+                    "</b><br>" +
+                    keyword("news_genre_tooltip") +
+                    "<br><br><b>" +
+                    keyword("persuasion_techniques") +
+                    "</b><br>" +
+                    keyword("persuasion_techniques_tooltip") +
+                    "<br><br><b>" +
+                    keyword("subjectivity") +
+                    "</b><br>" +
+                    keyword("subjectivity_tooltip") +
+                    "<br><br><b>" +
+                    keyword("previous_fact_checks") +
+                    "</b><br>" +
+                    keyword("previous_fact_checks_tooltip") +
+                    "<br><br><b>" +
+                    keyword("machine_generated_text") +
+                    "</b><br>" +
+                    keyword("machine_generated_text_tooltip"),
+                }}
+              />
+            }
+            classes={{ tooltip: classes.assistantTooltip }}
+          >
+            <HelpOutlineOutlinedIcon className={classes.toolTipIcon} />
+          </Tooltip>
+        }
+      />
 
-        <CardContent
-          style={{
-            wordBreak: "break-word",
-            overflowY: "auto",
-            overflowX: "hidden",
-          }}
+      <CardContent
+        style={{
+          wordBreak: "break-word",
+          overflowY: "auto",
+          overflowX: "hidden",
+        }}
+      >
+        {/* News Framing/Topic */}
+        <StyledAccordion
+          expanded={expandedAccordion === newsFramingTitle}
+          onChange={handleChange(newsFramingTitle)}
+          disabled={newsFramingLoading || newsFramingFail}
+          disableGutters
         >
-          {/* News Framing/Topic */}
-          <StyledAccordion
-            expanded={expandedAccordion === newsFramingTitle}
-            onChange={handleChange(newsFramingTitle)}
-            disabled={newsFramingLoading || newsFramingFail}
-            disableGutters
+          <AccordionSummary
+            expandIcon={getExpandIcon(newsFramingLoading, newsFramingFail)}
           >
-            <AccordionSummary
-              expandIcon={getExpandIcon(newsFramingLoading, newsFramingFail)}
-            >
-              <Grid2 container wrap="wrap">
-                <Grid2 size={{ xs: 4 }} align="start">
-                  <Typography
-                    display="inline"
-                    sx={{ flexShrink: 0, align: "start" }}
-                  >
-                    {newsFramingTitle}
+            <Grid2 container spacing={1} wrap="wrap" width="100%">
+              <Grid2 size={{ xs: 4 }} align="start">
+                <Typography
+                  display="inline"
+                  sx={{ flexShrink: 0, align: "start" }}
+                >
+                  {newsFramingTitle}
+                </Typography>
+              </Grid2>
+              <Grid2 size={{ xs: 8 }} align="start">
+                {newsFramingLoading && <CircularProgress color={"secondary"} />}
+                {newsFramingFail && (
+                  <Typography sx={{ color: "text.secondary", align: "start" }}>
+                    {keyword("failed_to_load")}
                   </Typography>
-                </Grid2>
-                <Grid2 size={{ xs: 8 }} align="start">
-                  {newsFramingLoading && (
+                )}
+                {newsFramingDone && (
+                  <Typography sx={{ color: "text.secondary", align: "start" }}>
+                    {renderEntityKeys(newsFramingResult.entities, keyword)}
+                  </Typography>
+                )}
+              </Grid2>
+            </Grid2>
+          </AccordionSummary>
+
+          <AccordionDetails>
+            {newsFramingDone && (
+              <div>
+                <Collapse
+                  in={expanded}
+                  collapsedSize={150}
+                  id={"element-to-check0"}
+                >
+                  <AssistantTextClassification
+                    text={text}
+                    classification={newsFramingResult.entities}
+                    configs={newsFramingResult.configs}
+                    titleText={newsFramingTitle}
+                    helpDescription={"news_framing_tooltip"}
+                    textHtmlMap={textHtmlMap}
+                  />
+                </Collapse>
+                {renderCollapse(
+                  classes,
+                  setDisplayOrigLang,
+                  displayOrigLang,
+                  textLang,
+                  sharedKeyword,
+                  keyword,
+                  text,
+                  displayExpander,
+                  expanded,
+                  setExpanded,
+                )}
+              </div>
+            )}
+          </AccordionDetails>
+        </StyledAccordion>
+
+        {/* News Genre */}
+        <StyledAccordion
+          expanded={expandedAccordion === newsGenreTitle}
+          onChange={handleChange(newsGenreTitle)}
+          disabled={newsGenreLoading || newsGenreFail}
+          disableGutters
+        >
+          <AccordionSummary
+            expandIcon={getExpandIcon(newsGenreLoading, newsGenreFail)}
+          >
+            <Grid2 container spacing={1} wrap="wrap" width="100%">
+              <Grid2 size={{ xs: 4 }} align="start">
+                <Typography
+                  display="inline"
+                  sx={{ flexShrink: 0, align: "start" }}
+                >
+                  {newsGenreTitle}
+                </Typography>
+              </Grid2>
+              <Grid2 size={{ xs: 8 }} align="start">
+                {newsGenreLoading && <CircularProgress color={"secondary"} />}
+                {newsGenreFail && (
+                  <Typography sx={{ color: "text.secondary", align: "start" }}>
+                    {keyword("failed_to_load")}
+                  </Typography>
+                )}
+                {newsGenreDone && (
+                  <Typography sx={{ color: "text.secondary", align: "start" }}>
+                    {renderEntityKeys(newsGenreResult.entities, keyword)}
+                  </Typography>
+                )}
+              </Grid2>
+            </Grid2>
+          </AccordionSummary>
+
+          <AccordionDetails>
+            {newsGenreDone && (
+              <div>
+                <Collapse
+                  in={expanded}
+                  collapsedSize={150}
+                  id={"element-to-check1"}
+                >
+                  <AssistantTextClassification
+                    text={text}
+                    classification={newsGenreResult.entities}
+                    configs={newsGenreResult.configs}
+                    titleText={newsGenreTitle}
+                    helpDescription={"news_genre_tooltip"}
+                    textHtmlMap={textHtmlMap}
+                    displayBox="true"
+                  />
+                </Collapse>
+                {renderCollapse(
+                  classes,
+                  setDisplayOrigLang,
+                  displayOrigLang,
+                  textLang,
+                  sharedKeyword,
+                  keyword,
+                  text,
+                  displayExpander,
+                  expanded,
+                  setExpanded,
+                )}
+              </div>
+            )}
+          </AccordionDetails>
+        </StyledAccordion>
+
+        {/* Persuasion Techniques */}
+        <StyledAccordion
+          expanded={expandedAccordion === persuasionTitle}
+          onChange={handleChange(persuasionTitle)}
+          disabled={
+            persuasionLoading ||
+            persuasionFail ||
+            (persuasionDone &&
+              Object.keys(persuasionResult.entities).length < 1)
+          }
+          disableGutters
+        >
+          <AccordionSummary
+            expandIcon={getExpandIcon(
+              persuasionLoading,
+              persuasionFail,
+              persuasionDone &&
+                Object.keys(persuasionResult.entities).length < 1,
+            )}
+          >
+            <Grid2 container spacing={1} wrap="wrap" width="100%">
+              <Grid2 size={{ xs: 4 }} align="start">
+                <Typography
+                  display="inline"
+                  sx={{ flexShrink: 0, align: "start" }}
+                >
+                  {persuasionTitle}
+                </Typography>
+              </Grid2>
+              <Grid2 size={{ xs: 8 }} align="start">
+                {persuasionLoading && <CircularProgress color={"secondary"} />}
+                {persuasionFail && (
+                  <Typography sx={{ color: "text.secondary", align: "start" }}>
+                    {keyword("failed_to_load")}
+                  </Typography>
+                )}
+                {persuasionDone && (
+                  <Typography sx={{ color: "text.secondary", align: "start" }}>
+                    {renderEntityKeys(persuasionResult.entities, keyword)}
+                  </Typography>
+                )}
+                {persuasionDone &&
+                  Object.keys(persuasionResult.entities).length < 1 && (
+                    <Typography
+                      sx={{ color: "text.secondary", align: "start" }}
+                    >
+                      {keyword("none_detected")}
+                    </Typography>
+                  )}
+              </Grid2>
+            </Grid2>
+          </AccordionSummary>
+
+          <AccordionDetails>
+            {persuasionDone && (
+              <div>
+                <Collapse
+                  in={expanded}
+                  collapsedSize={150}
+                  id={"element-to-check2"}
+                >
+                  <AssistantTextSpanClassification
+                    text={text}
+                    classification={persuasionResult.entities}
+                    configs={persuasionResult.configs}
+                    titleText={persuasionTitle}
+                    helpDescription={"persuasion_techniques_tooltip"}
+                    textHtmlMap={textHtmlMap}
+                  />
+                </Collapse>
+                {renderCollapse(
+                  classes,
+                  setDisplayOrigLang,
+                  displayOrigLang,
+                  textLang,
+                  sharedKeyword,
+                  keyword,
+                  text,
+                  displayExpander,
+                  expanded,
+                  setExpanded,
+                )}
+              </div>
+            )}
+          </AccordionDetails>
+        </StyledAccordion>
+
+        {/* Subjectivity */}
+        <StyledAccordion
+          expanded={expandedAccordion === subjectivityTitle}
+          onChange={handleChange(subjectivityTitle)}
+          disabled={
+            subjectivityLoading ||
+            subjectivityFail ||
+            (subjectivityDone &&
+              Object.keys(subjectivityResult.entities).length < 1)
+          }
+          disableGutters
+        >
+          <AccordionSummary
+            expandIcon={getExpandIcon(
+              subjectivityLoading,
+              subjectivityFail,
+              subjectivityDone &&
+                Object.keys(subjectivityResult.entities).length < 1,
+            )}
+          >
+            <Grid2 container spacing={1} wrap="wrap" width="100%">
+              <Grid2 size={{ xs: 4 }} align="start">
+                <Typography sx={{ flexShrink: 0, align: "start" }}>
+                  {subjectivityTitle}
+                </Typography>
+              </Grid2>
+              <Grid2 size={{ xs: 8 }} align="start">
+                {subjectivityLoading && (
+                  <CircularProgress color={"secondary"} />
+                )}
+                {subjectivityFail && (
+                  <Typography sx={{ color: "text.secondary", align: "start" }}>
+                    {keyword("failed_to_load")}
+                  </Typography>
+                )}
+                {subjectivityDone &&
+                  Object.keys(subjectivityResult.entities).length >= 1 && (
+                    <Typography
+                      sx={{ color: "text.secondary", align: "start" }}
+                    >
+                      {keyword("subjective_sentences_detected")}{" "}
+                      {calculateSubjectivity(subjectivityResult.sentences)}
+                    </Typography>
+                  )}
+                {subjectivityDone &&
+                  Object.keys(subjectivityResult.entities).length < 1 && (
+                    <Typography
+                      sx={{ color: "text.secondary", align: "start" }}
+                    >
+                      {keyword("none_detected")}
+                    </Typography>
+                  )}
+              </Grid2>
+            </Grid2>
+          </AccordionSummary>
+
+          <AccordionDetails>
+            {subjectivityDone && (
+              <div>
+                <Collapse
+                  in={expanded}
+                  collapsedSize={150}
+                  id={"element-to-check3"}
+                >
+                  <AssistantTextClassification
+                    text={text}
+                    classification={subjectivityResult.entities}
+                    configs={subjectivityResult.configs}
+                    titleText={subjectivityTitle}
+                    helpDescription={"subjectivity_tooltip"}
+                    textHtmlMap={textHtmlMap}
+                    subjectivity="true"
+                  />
+                </Collapse>
+                {renderCollapse(
+                  classes,
+                  setDisplayOrigLang,
+                  displayOrigLang,
+                  textLang,
+                  sharedKeyword,
+                  keyword,
+                  text,
+                  displayExpander,
+                  expanded,
+                  setExpanded,
+                )}
+              </div>
+            )}
+          </AccordionDetails>
+        </StyledAccordion>
+
+        {/* Previous fact-checks */}
+        <StyledAccordion
+          expanded={expandedAccordion === prevFactChecksTitle}
+          onChange={handleChange(prevFactChecksTitle)}
+          disabled={
+            prevFactChecksLoading ||
+            prevFactChecksFail ||
+            (!prevFactChecksLoading &&
+              !prevFactChecksFail &&
+              !prevFactChecksDone) ||
+            !role.includes("BETA_TESTER")
+          }
+          disableGutters
+        >
+          <AccordionSummary
+            expandIcon={getExpandIcon(
+              prevFactChecksLoading,
+              prevFactChecksFail,
+              null,
+              role,
+            )}
+          >
+            <Grid2 container spacing={1} wrap="wrap" width="100%">
+              <Grid2 size={{ xs: 4 }} align="start">
+                <Typography
+                  display="inline"
+                  sx={{ flexShrink: 0, align: "start" }}
+                >
+                  {prevFactChecksTitle}
+                </Typography>
+              </Grid2>
+
+              <Grid2 size={{ xs: 8 }} align="start">
+                {role.includes("BETA_TESTER") && prevFactChecksLoading && (
+                  <CircularProgress color={"secondary"} />
+                )}
+                {role.includes("BETA_TESTER") && prevFactChecksFail && (
+                  <Typography sx={{ color: "text.secondary", align: "start" }}>
+                    {keyword("failed_to_load")}
+                  </Typography>
+                )}
+                {role.includes("BETA_TESTER") &&
+                  prevFactChecksDone &&
+                  prevFactChecksResult && (
+                    <Typography
+                      sx={{ color: "text.secondary", align: "start" }}
+                    >
+                      {keyword("previous_fact_checks_found")}
+                    </Typography>
+                  )}
+                {role.includes("BETA_TESTER") &&
+                  !prevFactChecksDone &&
+                  !prevFactChecksLoading &&
+                  !prevFactChecksFail &&
+                  !prevFactChecksResult && (
+                    <Typography
+                      sx={{ color: "text.secondary", align: "start" }}
+                    >
+                      {keyword("reanalyse_url")}
+                      {/* should now be obselete as saga is re run */}
+                    </Typography>
+                  )}
+                {!role.includes("BETA_TESTER") && (
+                  <Typography sx={{ color: "text.secondary", align: "start" }}>
+                    {keyword("login_required")}
+                  </Typography>
+                )}
+                {prevFactChecksDone &&
+                  prevFactChecksResult &&
+                  Object.keys(prevFactChecksResult).length < 1 && (
+                    <Typography
+                      sx={{ color: "text.secondary", align: "start" }}
+                    >
+                      {keyword("none_detected")}
+                    </Typography>
+                  )}
+              </Grid2>
+            </Grid2>
+          </AccordionSummary>
+
+          <AccordionDetails>
+            {prevFactChecksDone && role.includes("BETA_TESTER") && (
+              <div>
+                <Collapse
+                  in={expanded}
+                  collapsedSize={150}
+                  id={"element-to-check4"}
+                >
+                  {prevFactChecksResult
+                    ? prevFactChecksResult.map((resultItem) => {
+                        // date in correct format
+                        const date = resultItem.published_at.slice(0, 10);
+
+                        return (
+                          <ResultDisplayItem
+                            key={resultItem.id}
+                            id={resultItem.id}
+                            claim={resultItem.claim_en}
+                            title={resultItem.title_en}
+                            claimOriginalLanguage={resultItem.claim}
+                            titleOriginalLanguage={resultItem.title}
+                            rating={resultItem.rating}
+                            date={
+                              dayjs(date).format(
+                                globalLocaleData.longDateFormat("LL"),
+                              ) ?? null
+                            }
+                            website={resultItem.website}
+                            language={getLanguageName(
+                              resultItem.source_language,
+                            )}
+                            similarityScore={resultItem.score}
+                            articleUrl={resultItem.url}
+                            domainUrl={resultItem.source_name}
+                            imageUrl={resultItem.image_url}
+                          />
+                        );
+                      })
+                    : null}
+                </Collapse>
+                {renderCollapsePrevFactChecks(
+                  classes,
+                  displayExpander,
+                  expanded,
+                  setExpanded,
+                  navigate,
+                  keyword,
+                )}
+              </div>
+            )}
+          </AccordionDetails>
+        </StyledAccordion>
+
+        {/* Machine Generated Text */}
+        <StyledAccordion
+          expanded={expandedAccordion === machineGeneratedTextTitle}
+          onChange={handleChange(machineGeneratedTextTitle)}
+          disabled={
+            machineGeneratedTextLoading ||
+            machineGeneratedTextFail ||
+            machineGeneratedTextDone ||
+            !role.includes("BETA_TESTER")
+          }
+          disableGutters
+        >
+          <AccordionSummary
+            expandIcon={getExpandIcon(
+              machineGeneratedTextLoading,
+              machineGeneratedTextFail,
+              machineGeneratedTextDone,
+              role,
+            )}
+          >
+            <Grid2 container spacing={1} wrap="wrap" width="100%">
+              <Grid2 size={{ xs: 4 }} align="start">
+                <Typography
+                  display="inline"
+                  sx={{ flexShrink: 0, align: "start" }}
+                >
+                  {machineGeneratedTextTitle}
+                </Typography>
+              </Grid2>
+
+              <Grid2 size={{ xs: 8 }} align="start">
+                {role.includes("BETA_TESTER") &&
+                  machineGeneratedTextLoading && (
                     <CircularProgress color={"secondary"} />
                   )}
-                  {newsFramingFail && (
-                    <Typography
-                      sx={{ color: "text.secondary", align: "start" }}
-                    >
-                      {keyword("failed_to_load")}
-                    </Typography>
-                  )}
-                  {newsFramingDone && (
-                    <Typography
-                      sx={{ color: "text.secondary", align: "start" }}
-                    >
-                      {renderEntityKeys(newsFramingResult.entities, keyword)}
-                    </Typography>
-                  )}
-                </Grid2>
-              </Grid2>
-            </AccordionSummary>
-
-            <AccordionDetails>
-              {newsFramingDone && (
-                <div>
-                  <Collapse
-                    in={expanded}
-                    collapsedSize={150}
-                    id={"element-to-check0"}
-                  >
-                    <AssistantTextClassification
-                      text={text}
-                      classification={newsFramingResult.entities}
-                      configs={newsFramingResult.configs}
-                      titleText={newsFramingTitle}
-                      helpDescription={"news_framing_tooltip"}
-                      textHtmlMap={textHtmlMap}
-                    />
-                  </Collapse>
-                  {renderCollapse(
-                    classes,
-                    setDisplayOrigLang,
-                    displayOrigLang,
-                    textLang,
-                    sharedKeyword,
-                    keyword,
-                    text,
-                    displayExpander,
-                    expanded,
-                    setExpanded,
-                  )}
-                </div>
-              )}
-            </AccordionDetails>
-          </StyledAccordion>
-
-          {/* News Genre */}
-          <StyledAccordion
-            expanded={expandedAccordion === newsGenreTitle}
-            onChange={handleChange(newsGenreTitle)}
-            disabled={newsGenreLoading || newsGenreFail}
-            disableGutters
-          >
-            <AccordionSummary
-              expandIcon={getExpandIcon(newsGenreLoading, newsGenreFail)}
-            >
-              <Grid2 container wrap="wrap">
-                <Grid2 size={{ xs: 4 }} align="start">
-                  <Typography
-                    display="inline"
-                    sx={{ flexShrink: 0, align: "start" }}
-                  >
-                    {newsGenreTitle}
+                {role.includes("BETA_TESTER") && machineGeneratedTextFail && (
+                  <Typography sx={{ color: "text.secondary", align: "start" }}>
+                    {keyword("failed_to_load")}
                   </Typography>
-                </Grid2>
-                <Grid2 size={{ xs: 8 }} align="start">
-                  {newsGenreLoading && <CircularProgress color={"secondary"} />}
-                  {newsGenreFail && (
+                )}
+                {role.includes("BETA_TESTER") &&
+                  machineGeneratedTextDone &&
+                  machineGeneratedTextResult && (
                     <Typography
                       sx={{ color: "text.secondary", align: "start" }}
                     >
-                      {keyword("failed_to_load")}
+                      {keyword(machineGeneratedTextResult.pred)}
+                      {round(machineGeneratedTextResult.score, 4)}
                     </Typography>
                   )}
-                  {newsGenreDone && (
+                {role.includes("BETA_TESTER") &&
+                  !machineGeneratedTextDone &&
+                  !machineGeneratedTextLoading &&
+                  !machineGeneratedTextFail &&
+                  !machineGeneratedTextResult && (
                     <Typography
                       sx={{ color: "text.secondary", align: "start" }}
                     >
-                      {renderEntityKeys(newsGenreResult.entities, keyword)}
+                      {keyword("reanalyse_url")}
+                      {/* should now be obselete as saga is re run */}
                     </Typography>
                   )}
-                </Grid2>
-              </Grid2>
-            </AccordionSummary>
-
-            <AccordionDetails>
-              {newsGenreDone && (
-                <div>
-                  <Collapse
-                    in={expanded}
-                    collapsedSize={150}
-                    id={"element-to-check1"}
-                  >
-                    <AssistantTextClassification
-                      text={text}
-                      classification={newsGenreResult.entities}
-                      configs={newsGenreResult.configs}
-                      titleText={newsGenreTitle}
-                      helpDescription={"news_genre_tooltip"}
-                      textHtmlMap={textHtmlMap}
-                      displayBox="true"
-                    />
-                  </Collapse>
-                  {renderCollapse(
-                    classes,
-                    setDisplayOrigLang,
-                    displayOrigLang,
-                    textLang,
-                    sharedKeyword,
-                    keyword,
-                    text,
-                    displayExpander,
-                    expanded,
-                    setExpanded,
-                  )}
-                </div>
-              )}
-            </AccordionDetails>
-          </StyledAccordion>
-
-          {/* Persuasion Techniques */}
-          <StyledAccordion
-            expanded={expandedAccordion === persuasionTitle}
-            onChange={handleChange(persuasionTitle)}
-            disabled={
-              persuasionLoading ||
-              persuasionFail ||
-              (persuasionDone &&
-                Object.keys(persuasionResult.entities).length < 1)
-            }
-            disableGutters
-          >
-            <AccordionSummary
-              expandIcon={getExpandIcon(
-                persuasionLoading,
-                persuasionFail,
-                persuasionDone &&
-                  Object.keys(persuasionResult.entities).length < 1,
-              )}
-            >
-              <Grid2 container wrap="wrap">
-                <Grid2 size={{ xs: 4 }} align="start">
-                  <Typography
-                    display="inline"
-                    sx={{ flexShrink: 0, align: "start" }}
-                  >
-                    {persuasionTitle}
+                {!role.includes("BETA_TESTER") && (
+                  <Typography sx={{ color: "text.secondary", align: "start" }}>
+                    {keyword("login_required")}
                   </Typography>
-                </Grid2>
-                <Grid2 size={{ xs: 8 }} align="start">
-                  {persuasionLoading && (
-                    <CircularProgress color={"secondary"} />
-                  )}
-                  {persuasionFail && (
-                    <Typography
-                      sx={{ color: "text.secondary", align: "start" }}
-                    >
-                      {keyword("failed_to_load")}
-                    </Typography>
-                  )}
-                  {persuasionDone && (
-                    <Typography
-                      sx={{ color: "text.secondary", align: "start" }}
-                    >
-                      {renderEntityKeys(persuasionResult.entities, keyword)}
-                    </Typography>
-                  )}
-                  {persuasionDone &&
-                    Object.keys(persuasionResult.entities).length < 1 && (
-                      <Typography
-                        sx={{ color: "text.secondary", align: "start" }}
-                      >
-                        {keyword("none_detected")}
-                      </Typography>
-                    )}
-                </Grid2>
+                )}
               </Grid2>
-            </AccordionSummary>
-
-            <AccordionDetails>
-              {persuasionDone && (
-                <div>
-                  <Collapse
-                    in={expanded}
-                    collapsedSize={150}
-                    id={"element-to-check2"}
-                  >
-                    <AssistantTextSpanClassification
-                      text={text}
-                      classification={persuasionResult.entities}
-                      configs={persuasionResult.configs}
-                      titleText={persuasionTitle}
-                      helpDescription={"persuasion_techniques_tooltip"}
-                      textHtmlMap={textHtmlMap}
-                    />
-                  </Collapse>
-                  {renderCollapse(
-                    classes,
-                    setDisplayOrigLang,
-                    displayOrigLang,
-                    textLang,
-                    sharedKeyword,
-                    keyword,
-                    text,
-                    displayExpander,
-                    expanded,
-                    setExpanded,
-                  )}
-                </div>
-              )}
-            </AccordionDetails>
-          </StyledAccordion>
-
-          {/* Subjectivity */}
-          <StyledAccordion
-            expanded={expandedAccordion === subjectivityTitle}
-            onChange={handleChange(subjectivityTitle)}
-            disabled={
-              subjectivityLoading ||
-              subjectivityFail ||
-              (subjectivityDone &&
-                Object.keys(subjectivityResult.entities).length < 1)
-            }
-            disableGutters
-          >
-            <AccordionSummary
-              expandIcon={getExpandIcon(
-                subjectivityLoading,
-                subjectivityFail,
-                subjectivityDone &&
-                  Object.keys(subjectivityResult.entities).length < 1,
-              )}
-            >
-              <Grid2 container wrap="wrap">
-                <Grid2 size={{ xs: 4 }} align="start">
-                  <Typography sx={{ flexShrink: 0, align: "start" }}>
-                    {subjectivityTitle}
-                  </Typography>
-                </Grid2>
-                <Grid2 size={{ xs: 8 }} align="start">
-                  {subjectivityLoading && (
-                    <CircularProgress color={"secondary"} />
-                  )}
-                  {subjectivityFail && (
-                    <Typography
-                      sx={{ color: "text.secondary", align: "start" }}
-                    >
-                      {keyword("failed_to_load")}
-                    </Typography>
-                  )}
-                  {subjectivityDone &&
-                    Object.keys(subjectivityResult.entities).length >= 1 && (
-                      <Typography
-                        sx={{ color: "text.secondary", align: "start" }}
-                      >
-                        {keyword("subjective_sentences_detected")}{" "}
-                        {calculateSubjectivity(subjectivityResult.sentences)}
-                      </Typography>
-                    )}
-                  {subjectivityDone &&
-                    Object.keys(subjectivityResult.entities).length < 1 && (
-                      <Typography
-                        sx={{ color: "text.secondary", align: "start" }}
-                      >
-                        {keyword("none_detected")}
-                      </Typography>
-                    )}
-                </Grid2>
-              </Grid2>
-            </AccordionSummary>
-
-            <AccordionDetails>
-              {subjectivityDone && (
-                <div>
-                  <Collapse
-                    in={expanded}
-                    collapsedSize={150}
-                    id={"element-to-check3"}
-                  >
-                    <AssistantTextClassification
-                      text={text}
-                      classification={subjectivityResult.entities}
-                      configs={subjectivityResult.configs}
-                      titleText={subjectivityTitle}
-                      helpDescription={"subjectivity_tooltip"}
-                      textHtmlMap={textHtmlMap}
-                      subjectivity="true"
-                    />
-                  </Collapse>
-                  {renderCollapse(
-                    classes,
-                    setDisplayOrigLang,
-                    displayOrigLang,
-                    textLang,
-                    sharedKeyword,
-                    keyword,
-                    text,
-                    displayExpander,
-                    expanded,
-                    setExpanded,
-                  )}
-                </div>
-              )}
-            </AccordionDetails>
-          </StyledAccordion>
-
-          {/* Previous fact-checks */}
-          <StyledAccordion
-            expanded={expandedAccordion === prevFactChecksTitle}
-            onChange={handleChange(prevFactChecksTitle)}
-            disabled={
-              prevFactChecksLoading ||
-              prevFactChecksFail ||
-              (!prevFactChecksLoading &&
-                !prevFactChecksFail &&
-                !prevFactChecksDone) ||
-              !role.includes("BETA_TESTER")
-            }
-            disableGutters
-          >
-            <AccordionSummary
-              expandIcon={getExpandIcon(
-                prevFactChecksLoading,
-                prevFactChecksFail,
-                null,
-                role,
-              )}
-            >
-              <Grid2 container wrap="wrap">
-                <Grid2 size={{ xs: 4 }} align="start">
-                  <Typography
-                    display="inline"
-                    sx={{ flexShrink: 0, align: "start" }}
-                  >
-                    {prevFactChecksTitle}
-                  </Typography>
-                </Grid2>
-
-                <Grid2 size={{ xs: 8 }} align="start">
-                  {role.includes("BETA_TESTER") && prevFactChecksLoading && (
-                    <CircularProgress color={"secondary"} />
-                  )}
-                  {role.includes("BETA_TESTER") && prevFactChecksFail && (
-                    <Typography
-                      sx={{ color: "text.secondary", align: "start" }}
-                    >
-                      {keyword("failed_to_load")}
-                    </Typography>
-                  )}
-                  {role.includes("BETA_TESTER") &&
-                    prevFactChecksDone &&
-                    prevFactChecksResult && (
-                      <Typography
-                        sx={{ color: "text.secondary", align: "start" }}
-                      >
-                        {keyword("previous_fact_checks_found")}
-                      </Typography>
-                    )}
-                  {role.includes("BETA_TESTER") &&
-                    !prevFactChecksDone &&
-                    !prevFactChecksLoading &&
-                    !prevFactChecksFail &&
-                    !prevFactChecksResult && (
-                      <Typography
-                        sx={{ color: "text.secondary", align: "start" }}
-                      >
-                        {keyword("reanalyse_url")}
-                        {/* should now be obselete as saga is re run */}
-                      </Typography>
-                    )}
-                  {!role.includes("BETA_TESTER") && (
-                    <Typography
-                      sx={{ color: "text.secondary", align: "start" }}
-                    >
-                      {keyword("login_required")}
-                    </Typography>
-                  )}
-                </Grid2>
-              </Grid2>
-            </AccordionSummary>
-
-            <AccordionDetails>
-              {prevFactChecksDone && role.includes("BETA_TESTER") && (
-                <div>
-                  <Collapse
-                    in={expanded}
-                    collapsedSize={150}
-                    id={"element-to-check4"}
-                  >
-                    {prevFactChecksResult
-                      ? prevFactChecksResult.map((resultItem) => {
-                          // date in correct format
-                          const date = resultItem.published_at.slice(0, 10);
-
-                          return (
-                            <ResultDisplayItem
-                              key={resultItem.id}
-                              id={resultItem.id}
-                              claim={resultItem.claim_en}
-                              title={resultItem.title_en}
-                              claimOriginalLanguage={resultItem.claim}
-                              titleOriginalLanguage={resultItem.title}
-                              rating={resultItem.rating}
-                              date={
-                                dayjs(date).format(
-                                  globalLocaleData.longDateFormat("LL"),
-                                ) ?? null
-                              }
-                              website={resultItem.website}
-                              language={getLanguageName(
-                                resultItem.source_language,
-                              )}
-                              similarityScore={resultItem.score}
-                              articleUrl={resultItem.url}
-                              domainUrl={resultItem.source_name}
-                              imageUrl={resultItem.image_url}
-                            />
-                          );
-                        })
-                      : null}
-                  </Collapse>
-                  {renderCollapsePrevFactChecks(
-                    classes,
-                    displayExpander,
-                    expanded,
-                    setExpanded,
-                    navigate,
-                    keyword,
-                  )}
-                </div>
-              )}
-            </AccordionDetails>
-          </StyledAccordion>
-
-          {/* Machine Generated Text */}
-          <StyledAccordion
-            expanded={expandedAccordion === machineGeneratedTextTitle}
-            onChange={handleChange(machineGeneratedTextTitle)}
-            disabled={
-              machineGeneratedTextLoading ||
-              machineGeneratedTextFail ||
-              machineGeneratedTextDone ||
-              !role.includes("BETA_TESTER")
-            }
-            disableGutters
-          >
-            <AccordionSummary
-              expandIcon={getExpandIcon(
-                machineGeneratedTextLoading,
-                machineGeneratedTextFail,
-                machineGeneratedTextDone,
-                role,
-              )}
-            >
-              <Grid2 container wrap="wrap">
-                <Grid2 size={{ xs: 4 }} align="start">
-                  <Typography
-                    display="inline"
-                    sx={{ flexShrink: 0, align: "start" }}
-                  >
-                    {machineGeneratedTextTitle}
-                  </Typography>
-                </Grid2>
-
-                <Grid2 size={{ xs: 8 }} align="start">
-                  {role.includes("BETA_TESTER") &&
-                    machineGeneratedTextLoading && (
-                      <CircularProgress color={"secondary"} />
-                    )}
-                  {role.includes("BETA_TESTER") && machineGeneratedTextFail && (
-                    <Typography
-                      sx={{ color: "text.secondary", align: "start" }}
-                    >
-                      {keyword("failed_to_load")}
-                    </Typography>
-                  )}
-                  {role.includes("BETA_TESTER") &&
-                    machineGeneratedTextDone &&
-                    machineGeneratedTextResult && (
-                      <Typography
-                        sx={{ color: "text.secondary", align: "start" }}
-                      >
-                        {keyword(machineGeneratedTextResult.pred)}
-                        {round(machineGeneratedTextResult.score, 4)}
-                      </Typography>
-                    )}
-                  {role.includes("BETA_TESTER") &&
-                    !machineGeneratedTextDone &&
-                    !machineGeneratedTextLoading &&
-                    !machineGeneratedTextFail &&
-                    !machineGeneratedTextResult && (
-                      <Typography
-                        sx={{ color: "text.secondary", align: "start" }}
-                      >
-                        {keyword("reanalyse_url")}
-                        {/* should now be obselete as saga is re run */}
-                      </Typography>
-                    )}
-                  {!role.includes("BETA_TESTER") && (
-                    <Typography
-                      sx={{ color: "text.secondary", align: "start" }}
-                    >
-                      {keyword("login_required")}
-                    </Typography>
-                  )}
-                </Grid2>
-              </Grid2>
-            </AccordionSummary>
-          </StyledAccordion>
-        </CardContent>
-      </Card>
-    </Grid2>
+            </Grid2>
+          </AccordionSummary>
+        </StyledAccordion>
+      </CardContent>
+    </Card>
   );
 };
 export default AssistantCredSignals;

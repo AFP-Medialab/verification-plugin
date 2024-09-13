@@ -37,7 +37,8 @@ const SourceCredibilityResult = (props) => {
                       align={"left"}
                       color={"textPrimary"}
                     >
-                      {value.credibilityScope.includes("/") ? (
+                      {value.credibilityScope &&
+                      value.credibilityScope.includes("/") ? (
                         <Typography>
                           {` ${keyword("this")}`}
                           {getUrlTypeFromCredScope(value.credibilityScope)}
