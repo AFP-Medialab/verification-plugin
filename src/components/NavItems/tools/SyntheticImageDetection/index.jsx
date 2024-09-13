@@ -63,7 +63,7 @@ const SyntheticImageDetection = () => {
 
   const [imageType, setImageType] = useState(undefined);
 
-  const [autoResizeLocalFile, setAutoResizeLocalFile] = useState(true);
+  const [autoResizeLocalFile, setAutoResizeLocalFile] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -289,9 +289,10 @@ const SyntheticImageDetection = () => {
    * @returns {Promise<void>}
    */
   const handleSubmit = async (url) => {
-    const processedFile = autoResizeLocalFile
-      ? await resizeImageWithWorker(imageFile)
-      : imageFile;
+    const processedFile =
+      autoResizeLocalFile && imageFile
+        ? await resizeImageWithWorker(imageFile)
+        : imageFile;
 
     if (autoResizeLocalFile && processedFile) {
       setImageFile(processedFile);
@@ -413,8 +414,9 @@ const SyntheticImageDetection = () => {
               />
             </form>
 
-            {role.includes(ROLES.EXTRA_FEATURE) ||
-              (role.includes(ROLES.EVALUATION) && (
+            {(role.includes(ROLES.EXTRA_FEATURE) ||
+              role.includes(ROLES.EVALUATION)) &&
+              imageFile && (
                 <FormGroup>
                   <FormControlLabel
                     control={
@@ -428,7 +430,7 @@ const SyntheticImageDetection = () => {
                     label="Auto-Resize"
                   />
                 </FormGroup>
-              ))}
+              )}
 
             {isLoading && (
               <Box mt={3}>
