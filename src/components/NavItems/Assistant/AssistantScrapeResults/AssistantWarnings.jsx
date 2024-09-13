@@ -7,8 +7,7 @@ import CardMedia from "@mui/material/CardMedia";
 import Collapse from "@mui/material/Collapse";
 import ErrorOutlineOutlinedIcon from "@mui/icons-material/ErrorOutlineOutlined";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import Grid from "@mui/material/Grid";
-import { IconButton } from "@mui/material";
+import { Grid2, IconButton } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import { setWarningExpanded } from "../../../../redux/actions/tools/assistantActions";
@@ -28,8 +27,8 @@ const AssistantWarnings = () => {
   return (
     <Box mb={2} pl={1}>
       <Card variant={"outlined"} className={classes.assistantWarningBorder}>
-        <Grid container>
-          <Grid item xs={12} style={{ display: "flex" }}>
+        <Grid2 container>
+          <Grid2 size={{ xs: 12 }} style={{ display: "flex" }}>
             <CardMedia>
               <Box m={1}>
                 <ErrorOutlineOutlinedIcon color={"error"} fontSize={"large"} />
@@ -49,8 +48,8 @@ const AssistantWarnings = () => {
             >
               <ExpandMoreIcon style={{ color: "red" }} />
             </IconButton>
-          </Grid>
-          <Grid item xs={12}>
+          </Grid2>
+          <Grid2 size={{ xs: 12 }}>
             <Collapse
               in={warningExpanded}
               className={classes.assistantBackground}
@@ -60,8 +59,8 @@ const AssistantWarnings = () => {
 
               <DbkfMediaResults />
             </Collapse>
-          </Grid>
-        </Grid>
+          </Grid2>
+        </Grid2>
       </Card>
     </Box>
   );

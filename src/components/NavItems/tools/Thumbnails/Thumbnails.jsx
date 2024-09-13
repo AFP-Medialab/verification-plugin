@@ -1,28 +1,24 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import { useEffect, useState } from "react";
 import ImageGridList from "../../../Shared/ImageGridList/ImageGridList";
 import { useDispatch, useSelector } from "react-redux";
 import FormControl from "@mui/material/FormControl";
 import FormControlLabel from "@mui/material/FormControlLabel";
-import { IconButton } from "@mui/material";
+import { Grid2, IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import { loadImageSize, useLoading } from "../../../../Hooks/useInput";
 import {
   cleanThumbnailsState,
-  setThumbnailsResult,
   setThumbnailsLoading,
+  setThumbnailsResult,
 } from "../../../../redux/reducers/tools/thumbnailsReducer";
 import { setError } from "redux/reducers/errorReducer";
 import Checkbox from "@mui/material/Checkbox";
 import FormGroup from "@mui/material/FormGroup";
-import {
-  //trackEvent,
-  getclientId,
-} from "../../../Shared/GoogleAnalytics/MatomoAnalytics";
+import { getclientId } from "../../../Shared/GoogleAnalytics/MatomoAnalytics";
 import { useTrackEvent } from "../../../../Hooks/useAnalytics";
 import OnClickInfo from "../../../Shared/OnClickInfo/OnClickInfo";
 import { useParams } from "react-router-dom";
@@ -30,7 +26,6 @@ import { useParams } from "react-router-dom";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import ThumbnailsIcon from "../../../NavBar/images/SVG/Video/Thumbnails.svg";
-import Grid from "@mui/material/Grid";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import LinearProgress from "@mui/material/LinearProgress";
 import {
@@ -39,6 +34,7 @@ import {
   SEARCH_ENGINE_SETTINGS,
 } from "../../../Shared/ReverseSearch/reverseSearchUtils";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
+
 const Thumbnails = () => {
   const { url } = useParams();
 
@@ -58,7 +54,7 @@ const Thumbnails = () => {
   const [showResult, setShowResult] = useState(false);
   const [input, setInput] = useState(resultUrl);
   const [urlDetected, setUrlDetected] = useState(false);
-  var cols = 3;
+  const cols = 3;
 
   const dispatch = useDispatch();
 
@@ -145,13 +141,13 @@ const Thumbnails = () => {
     if (url !== null && url !== "" && isYtUrl(url)) {
       setEventUrl(url);
       /*trackEvent(
-        "submission",
-        "thumbnails",
-        "youtube thumbnail",
-        url,
-        client_id,
-        uid
-      );*/
+                          "submission",
+                          "thumbnails",
+                          "youtube thumbnail",
+                          url,
+                          client_id,
+                          uid
+                        );*/
       let images = get_images(url);
       dispatch(
         setThumbnailsResult({
@@ -250,8 +246,8 @@ const Thumbnails = () => {
         />
         <Box p={3}>
           <form>
-            <Grid container direction="row" spacing={3} alignItems="center">
-              <Grid item xs>
+            <Grid2 container direction="row" spacing={3} alignItems="center">
+              <Grid2 size="grow">
                 <TextField
                   id="standard-full-width"
                   label={keyword("youtube_input")}
@@ -261,8 +257,8 @@ const Thumbnails = () => {
                   onChange={(e) => handleChangeValue(e)}
                   value={input}
                 />
-              </Grid>
-              <Grid item>
+              </Grid2>
+              <Grid2>
                 {
                   <FormControlLabel
                     control={
@@ -277,20 +273,21 @@ const Thumbnails = () => {
                     labelPlacement="end"
                   />
                 }
-              </Grid>
-              <Grid item>
+              </Grid2>
+              <Grid2>
                 <Button
                   type="submit"
                   variant="contained"
                   color="primary"
                   onClick={(e) => {
-                    e.preventDefault(), submitForm();
+                    e.preventDefault();
+                    submitForm();
                   }}
                 >
                   {keyword("button_submit")}
                 </Button>
-              </Grid>
-            </Grid>
+              </Grid2>
+            </Grid2>
           </form>
 
           <Box m={2} />

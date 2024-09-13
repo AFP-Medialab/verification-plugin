@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-
+import { useParams } from "react-router-dom";
 import {
   Alert,
   Backdrop,
@@ -43,6 +43,10 @@ const SemanticSearch = () => {
   const supportedLanguages = Object.keys(languageDictionary);
 
   const currentLang = useSelector((state) => state.language);
+
+  let text = useSelector((state) => state.assistant.urlText);
+
+  const { url } = useParams();
 
   /**
    * Helper function to return a list of language keys supported if the localized language is in duplicate keys
@@ -218,14 +222,28 @@ const SemanticSearch = () => {
     setLanguageFilter(loadLanguages);
   }, [currentLang]);
 
-  const handleSubmit = async () => {
+  useEffect(() => {
+    //takes in text parameter from url
+    if (url) {
+      const uri = url !== null ? decodeURIComponent(url) : undefined;
+      if (uri === "assistantText" && text) {
+        text = text.replaceAll("\n", " ");
+        setSearchString(text);
+        handleSubmit(text);
+      }
+    }
+  }, [url, text]);
+
+  const handleSubmit = async (text) => {
     setIsLoading(true);
     setHasUserSubmittedForm(true);
     setErrorMessage("");
 
+    const urlText = searchString ? searchString : text;
+
     let searchResults;
     try {
-      searchResults = await getFactChecks(searchString, searchEngineMode);
+      searchResults = await getFactChecks(urlText, searchEngineMode);
     } catch (e) {
       //   TODO: Handle Error
       setErrorMessage(e.message);

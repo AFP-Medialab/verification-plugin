@@ -7,11 +7,12 @@ import {
   Card,
   Dialog,
   DialogContent,
-  Grid,
+  Grid2,
   Snackbar,
   SvgIcon,
   Tab,
   Tabs,
+  Typography,
 } from "@mui/material";
 
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
@@ -19,7 +20,7 @@ import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import Iframe from "react-iframe";
 import DialogActions from "@mui/material/DialogActions";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
-import MainContentMenuItem from "./MainContentMenuItem";
+import ToolsMenuItem from "./ToolsMenuItem";
 import ImageIcon from "../../../NavBar/images/SVG/Image/Images.svg";
 import VideoIcon from "../../../NavBar/images/SVG/Video/Video.svg";
 import SearchIcon from "../../../NavBar/images/SVG/Search/Search.svg";
@@ -29,8 +30,9 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import { Audiotrack } from "@mui/icons-material";
-import Typography from "@mui/material/Typography";
-import { TOOLS_CATEGORIES } from "components/NavBar/NavBar";
+import { tools, TOOLS_CATEGORIES } from "../../../../constants/tools";
+import { ROLES } from "../../../../constants/roles";
+
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -43,7 +45,7 @@ function TabPanel(props) {
       {...other}
     >
       {value === index && (
-        <Box p={3}>
+        <Box sx={{ p: 3 }}>
           <div>{children}</div>
         </Box>
       )}
@@ -51,33 +53,37 @@ function TabPanel(props) {
   );
 }
 
-const MainContentMenu = (props) => {
+/**
+ *
+ * @returns {Element}
+ * @constructor
+ */
+const ToolsMenu = () => {
   const navigate = useNavigate();
   const classes = useMyStyles();
   const keyword = i18nLoadNamespace("components/NavItems/tools/Alltools");
   const keywordNavbar = i18nLoadNamespace("components/NavBar");
   const keywordWarning = i18nLoadNamespace("components/Shared/OnWarningInfo");
 
-  const tools = props.tools;
   const [videoUrl, setVideoUrl] = useState(null);
 
   const userAuthenticated = useSelector(
     (state) => state.userSession && state.userSession.userAuthenticated,
   );
+
+  const role = useSelector((state) => state.userSession.user.roles);
+  const betaTester = role.includes("BETA_TESTER");
+
   const [openAlert, setOpenAlert] = React.useState(false);
 
-  const handleClick = (path, restrictions) => {
-    //console.log(type);
-
-    if (restrictions !== undefined && restrictions.includes("lock")) {
+  const handleClick = (path, rolesNeeded) => {
+    if (rolesNeeded && rolesNeeded.includes("lock")) {
       if (userAuthenticated) {
-        //console.log("LOGGED");
         handlePush(path);
       } else {
         setOpenAlert(true);
       }
     } else {
-      //console.log(path);
       handlePush(path);
     }
   };
@@ -87,20 +93,45 @@ const MainContentMenu = (props) => {
       window.open(process.env.REACT_APP_TSNA_SERVER + path, "_blank");
     } else {
       navigate("/app/tools/" + path);
-      /* history.push({
-                                                                                                                                                                      pathname: "/app/tools/" + path,
-                                                                                                                                                                      state: { media: mediaTool }
-                                                                                                                                                                  })*/
     }
   };
 
-  //console.log(tools);
+  //TODO: Move this code somewhere else so that the component is easier to reuse
 
+  /**
+   *
+   * @type {Tool[]}
+   */
   const toolsVideo = [];
+
+  /**
+   *
+   * @type {Tool[]}
+   */
   const toolsImages = [];
+
+  /**
+   *
+   * @type {Tool[]}
+   */
   const toolsAudio = [];
+
+  /**
+   *
+   * @type {Tool[]}
+   */
   const toolsSearch = [];
+
+  /**
+   *
+   * @type {Tool[]}
+   */
   const toolsData = [];
+
+  /**
+   *
+   * @type {Tool[]}
+   */
   const otherTools = [];
 
   const categories = [
@@ -174,29 +205,40 @@ const MainContentMenu = (props) => {
     },
   ];
 
-  tools.forEach((value) => {
-    if (value.type === TOOLS_CATEGORIES.VIDEO) {
-      toolsVideo.push(value);
+  const canUserSeeTool = (tool) => {
+    return (
+      !tool.rolesNeeded ||
+      (role && tool.rolesNeeded && role.includes(...tool.rolesNeeded)) ||
+      tool.rolesNeeded.includes(ROLES.LOCK)
+    );
+  };
+
+  tools.forEach((tool) => {
+    if (tool.category === TOOLS_CATEGORIES.VIDEO && canUserSeeTool(tool)) {
+      toolsVideo.push(tool);
     }
 
-    if (value.type === TOOLS_CATEGORIES.IMAGE) {
-      toolsImages.push(value);
+    if (tool.category === TOOLS_CATEGORIES.IMAGE && canUserSeeTool(tool)) {
+      toolsImages.push(tool);
     }
 
-    if (value.type === TOOLS_CATEGORIES.AUDIO) {
-      toolsAudio.push(value);
+    if (tool.category === TOOLS_CATEGORIES.AUDIO && canUserSeeTool(tool)) {
+      toolsAudio.push(tool);
     }
 
-    if (value.type === TOOLS_CATEGORIES.SEARCH) {
-      toolsSearch.push(value);
+    if (tool.category === TOOLS_CATEGORIES.SEARCH && canUserSeeTool(tool)) {
+      toolsSearch.push(tool);
     }
 
-    if (value.type === TOOLS_CATEGORIES.DATA_ANALYSIS) {
-      toolsData.push(value);
+    if (
+      tool.category === TOOLS_CATEGORIES.DATA_ANALYSIS &&
+      canUserSeeTool(tool)
+    ) {
+      toolsData.push(tool);
     }
 
-    if (value.type === TOOLS_CATEGORIES.OTHER) {
-      otherTools.push(value);
+    if (tool.category === TOOLS_CATEGORIES.OTHER && canUserSeeTool(tool)) {
+      otherTools.push(tool);
     }
   });
 
@@ -213,8 +255,6 @@ const MainContentMenu = (props) => {
     setValue(newValue);
   };
 
-  const role = useSelector((state) => state.userSession.user.roles);
-  const betaTester = role.includes("BETA_TESTER");
   const categoriesAllowedForUser = categories.filter(
     (category) => category.value.length !== 0,
   );
@@ -265,39 +305,36 @@ const MainContentMenu = (props) => {
           })}
         </Tabs>
 
-        <Box m={1} />
+        <Box sx={{ m: 1 }} />
 
         <div style={{ minHeight: "340px" }}>
           {categoriesAllowedForUser.map((category, index) => {
             const tools = category.value;
             //if(tools.length !==0){
+
             return (
               <TabPanel value={value} index={index} key={index}>
-                <Grid
+                <Grid2
                   container
                   justifyContent="flex-start"
                   spacing={2}
                   className={classes.toolCardsContainer}
                 >
-                  {tools.map((value, key) => {
+                  {tools.map((tool, key) => {
                     const element = (
-                      <Grid
+                      <Grid2
                         className={classes.toolCardStyle}
-                        item
                         key={key}
-                        onClick={() =>
-                          handleClick(value.path, value.toolRestrictions)
-                        }
+                        onClick={() => handleClick(tool.path, tool.rolesNeeded)}
+                        minWidth="250px"
                       >
-                        <MainContentMenuItem
-                          name={keyword(value.title)}
-                          description={keyword(value.description)}
-                          icon={value.iconColored}
-                          iconsAttributes={value.icons}
-                        />
-                      </Grid>
+                        <ToolsMenuItem tool={tool} />
+                      </Grid2>
                     );
-                    if (value.toolRestrictions.includes("BETA_TESTER")) {
+                    if (
+                      tool.rolesNeeded &&
+                      tool.rolesNeeded.includes("BETA_TESTER")
+                    ) {
                       if (betaTester) {
                         return element;
                       } else {
@@ -307,16 +344,16 @@ const MainContentMenu = (props) => {
                       return element;
                     }
                   })}
-                </Grid>
+                </Grid2>
               </TabPanel>
             );
           })}
         </div>
       </Card>
 
-      <Box m={3} />
+      <Box sx={{ m: 3 }} />
 
-      <Box m={4} />
+      <Box sx={{ m: 4 }} />
 
       <Dialog
         height={"400px"}
@@ -344,4 +381,4 @@ const MainContentMenu = (props) => {
     </>
   );
 };
-export default MainContentMenu;
+export default ToolsMenu;

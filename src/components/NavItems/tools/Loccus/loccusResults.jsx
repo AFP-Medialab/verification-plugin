@@ -7,7 +7,7 @@ import {
   Card,
   CardHeader,
   Divider,
-  Grid,
+  Grid2,
   IconButton,
   Stack,
   Tooltip,
@@ -39,7 +39,8 @@ import "chartjs-adapter-dayjs-4/dist/chartjs-adapter-dayjs-4.esm";
 import dayjs from "dayjs";
 import duration from "dayjs/plugin/duration";
 import { exportReactElementAsJpg } from "../../../Shared/Utils/htmlUtils";
-import GaugeChartModalExplanation from "../../../Shared/GaugeChartModalExplanation";
+import GaugeChartModalExplanation from "../../../Shared/GaugeChartResults/GaugeChartModalExplanation";
+import { ROLES } from "../../../../constants/roles";
 
 const LoccusResults = (props) => {
   dayjs.extend(duration);
@@ -300,32 +301,38 @@ const LoccusResults = (props) => {
             </IconButton>
           }
         />
-        <Grid
+        <Grid2
           container
           direction="row"
           justifyContent="space-evenly"
           alignItems="flex-start"
         >
-          <Grid item sm={12} md={6} p={4}>
+          <Grid2
+            p={4}
+            size={{
+              sm: 12,
+              md: 6,
+            }}
+          >
             <Box sx={{ width: "100%", position: "relative" }}>
-              <Grid
+              <Grid2
                 container
                 direction="column"
                 justifyContent="center"
                 alignItems="flex-start"
                 spacing={4}
               >
-                <Grid item width="100%">
+                <Grid2 width="100%">
                   <div ref={audioContainerRef} />
-                </Grid>
-                <Grid item ref={chunksChartRef} width="100%" height="300px">
+                </Grid2>
+                <Grid2 ref={chunksChartRef} width="100%" height="300px">
                   <Chart
                     type={"line"}
                     data={getChartDataFromChunks(props.chunks)}
                     options={chartConfig}
                   />
-                </Grid>
-                <Grid item>
+                </Grid2>
+                <Grid2>
                   <Tooltip
                     title={keyword("loccus_download_chunks_chart_button")}
                   >
@@ -342,11 +349,16 @@ const LoccusResults = (props) => {
                       <Download />
                     </IconButton>
                   </Tooltip>
-                </Grid>
-              </Grid>
+                </Grid2>
+              </Grid2>
             </Box>
-          </Grid>
-          <Grid item sm={12} md={6}>
+          </Grid2>
+          <Grid2
+            size={{
+              sm: 12,
+              md: 6,
+            }}
+          >
             <Stack direction="column" spacing={4}>
               <Stack direction="column" p={4} spacing={4}>
                 <Typography variant="h5">
@@ -425,7 +437,7 @@ const LoccusResults = (props) => {
                 </Typography>
               </Stack>
 
-              {role.includes("EXTRA_FEATURE") && (
+              {role.includes(ROLES.EXTRA_FEATURE) && (
                 <>
                   <Divider />
                   <Box pb={4} pr={4}>
@@ -481,8 +493,8 @@ const LoccusResults = (props) => {
                 </>
               )}
             </Stack>
-          </Grid>
-        </Grid>
+          </Grid2>
+        </Grid2>
       </Card>
     </Stack>
   );

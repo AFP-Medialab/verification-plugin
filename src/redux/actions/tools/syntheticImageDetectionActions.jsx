@@ -11,3 +11,7 @@ export const setSyntheticImageDetectionLoading = createAction(
 export const setSyntheticImageDetectionResult = createAction(
   "SET_SYNTHETIC_IMAGE_DETECTION_RESULT",
 );
+
+export const setSyntheticImageDetectionNearDuplicates = createAction(
+  "SET_SYNTHETIC_IMAGE_DETECTION_NEAR_DUPLICATES",
+);

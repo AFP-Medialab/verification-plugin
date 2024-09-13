@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import ArchiveOutlinedIcon from "@mui/icons-material/ArchiveOutlined";
@@ -6,7 +6,6 @@ import { Box, CardHeader, TextField } from "@mui/material/";
 import Button from "@mui/material//Button";
 import Card from "@mui/material//Card";
 import CardContent from "@mui/material//CardContent";
-import Grid from "@mui/material//Grid";
 import LinearProgress from "@mui/material//LinearProgress";
 import Typography from "@mui/material//Typography";
 import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
@@ -16,7 +15,7 @@ import { KNOWN_LINKS } from "./AssistantRuleBook";
 import { submitInputUrl } from "../../../redux/actions/tools/assistantActions";
 
 import { useTrackEvent } from "../../../Hooks/useAnalytics";
-import { useState } from "react";
+import { Grid2 } from "@mui/material";
 
 const AssistantUrlSelected = (props) => {
   // styles, language, dispatch, params
@@ -87,10 +86,10 @@ const AssistantUrlSelected = (props) => {
       {loading && <LinearProgress color={"secondary"} />}
 
       <CardContent>
-        <Box mr={2}>
+        <Box sx={{ mr: 2 }}>
           <form>
-            <Grid container>
-              <Grid item xs={10}>
+            <Grid2 container>
+              <Grid2 size={{ xs: 10 }}>
                 <TextField
                   variant="outlined"
                   label={keyword("assistant_paste_url")}
@@ -101,9 +100,9 @@ const AssistantUrlSelected = (props) => {
                   onChange={(e) => setFormInput(e.target.value)}
                   data-testid="assistant-url-selected-input"
                 />
-              </Grid>
-              <Grid item xs={2}>
-                <Box mt={2} ml={6}>
+              </Grid2>
+              <Grid2 size={{ xs: 2 }}>
+                <Box sx={{ mt: 2, ml: 6 }}>
                   {inputUrl === null ? (
                     <Button
                       type="submit"
@@ -111,7 +110,8 @@ const AssistantUrlSelected = (props) => {
                       color="primary"
                       data-testid="assistant-url-selected-analyse-btn"
                       onClick={(e) => {
-                        e.preventDefault(), handleSubmissionURL();
+                        e.preventDefault();
+                        handleSubmissionURL();
                       }}
                     >
                       {keyword("button_analyse")}
@@ -126,10 +126,10 @@ const AssistantUrlSelected = (props) => {
                     </Button>
                   )}
                 </Box>
-              </Grid>
+              </Grid2>
               {inputUrl === null ? null : (
-                <Grid item xs={1}>
-                  <Box ml={1}>
+                <Grid2 size={{ xs: 1 }}>
+                  <Box sx={{ ml: 1 }}>
                     <Button
                       onClick={() => handleArchive()}
                       startIcon={<ArchiveOutlinedIcon />}
@@ -137,9 +137,9 @@ const AssistantUrlSelected = (props) => {
                       <label>{keyword("archive_link")}</label>
                     </Button>
                   </Box>
-                </Grid>
+                </Grid2>
               )}
-            </Grid>
+            </Grid2>
           </form>
         </Box>
       </CardContent>

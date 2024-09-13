@@ -20,6 +20,7 @@ import { setError } from "redux/reducers/errorReducer";
 import axios from "axios";
 import { preprocessFileUpload } from "../../../Shared/Utils/fileUtils";
 import StringFileUploadField from "../../../Shared/StringFileUploadField";
+import { Stack } from "@mui/material";
 
 const Forensic = () => {
   const { url } = useParams();
@@ -177,66 +178,65 @@ const Forensic = () => {
   return (
     <div>
       <ThemeProvider theme={theme}>
-        {
-          //=== Title ===
-        }
-
-        <HeaderTool
-          name={keywordAllTools("navbar_forensic")}
-          description={keywordAllTools("navbar_forensic_description")}
-          icon={
-            <ForensicIcon
-              style={{ fill: "#00926c" }}
-              width="40px"
-              height="40px"
-            />
-          }
-        />
-        <Alert severity="warning">{keywordWarning("warning_forensic")}</Alert>
-        <Box mt={3} />
-        <Card style={{ display: resultData || loading ? "none" : "block" }}>
-          <CardHeader
-            title={keyword("cardheader_source")}
-            className={classes.headerUploadedImage}
-          />
-          <Box p={3}>
-            <form>
-              <StringFileUploadField
-                labelKeyword={keyword("forensic_input")}
-                placeholderKeyword={keyword("forensic_input_placeholder")}
-                submitButtonKeyword={keyword("button_submit")}
-                localFileKeyword={keyword("button_localfile")}
-                urlInput={input}
-                setUrlInput={setInput}
-                fileInput={imageFile}
-                setFileInput={setImageFile}
-                handleSubmit={submitUrl}
-                fileInputTypesAccepted={"image/*"}
-                handleCloseSelectedFile={handleCloseSelectedFile}
-                preprocessLocalFile={preprocessImage}
+        <Stack direction="column" spacing={2}>
+          <HeaderTool
+            name={keywordAllTools("navbar_forensic")}
+            description={keywordAllTools("navbar_forensic_description")}
+            icon={
+              <ForensicIcon
+                style={{ fill: "#00926c" }}
+                width="40px"
+                height="40px"
               />
-            </form>
-          </Box>
-        </Card>
-
-        {loading && (
-          <div>
-            <LinearProgress />
-          </div>
-        )}
-
-        {resultData && (
-          <ForensicResults
-            result={resultData}
-            url={resultUrl}
-            type={type}
-            loaded={loaded}
-            gifAnimation={gifAnimationState}
-            resetImage={resetImage}
-            masksData={masks}
-            onClose={handleCloseSelectedFile}
+            }
           />
-        )}
+
+          <Alert severity="warning">{keywordWarning("warning_forensic")}</Alert>
+
+          <Card style={{ display: resultData || loading ? "none" : "block" }}>
+            <CardHeader
+              title={keyword("cardheader_source")}
+              className={classes.headerUploadedImage}
+            />
+            <Box p={3}>
+              <form>
+                <StringFileUploadField
+                  labelKeyword={keyword("forensic_input")}
+                  placeholderKeyword={keyword("forensic_input_placeholder")}
+                  submitButtonKeyword={keyword("button_submit")}
+                  localFileKeyword={keyword("button_localfile")}
+                  urlInput={input}
+                  setUrlInput={setInput}
+                  fileInput={imageFile}
+                  setFileInput={setImageFile}
+                  handleSubmit={submitUrl}
+                  fileInputTypesAccepted={"image/*"}
+                  handleCloseSelectedFile={handleCloseSelectedFile}
+                  preprocessLocalFile={preprocessImage}
+                />
+              </form>
+            </Box>
+          </Card>
+
+          {loading && (
+            <div>
+              <LinearProgress />
+            </div>
+          )}
+
+          {resultData && (
+            <ForensicResults
+              result={resultData}
+              url={resultUrl}
+              type={type}
+              loaded={loaded}
+              gifAnimation={gifAnimationState}
+              resetImage={resetImage}
+              masksData={masks}
+              onClose={handleCloseSelectedFile}
+            />
+          )}
+        </Stack>
       </ThemeProvider>
     </div>
   );

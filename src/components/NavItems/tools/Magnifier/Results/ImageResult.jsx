@@ -8,7 +8,7 @@ import ImageEditor from "../Utils/ImageEditor";
 import Fade from "@mui/material/Fade";
 import Modal from "@mui/material/Modal";
 import Backdrop from "@mui/material/Backdrop";
-import Grid from "@mui/material/Grid";
+import { Grid2 } from "@mui/material";
 import { setMagnifierResult } from "../../../../../redux/actions/tools/magnifierActions";
 import { IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
@@ -198,19 +198,19 @@ const ImageResult = ({ handleCloseResults }) => {
         </Modal>
 
         <Box m={1} />
-        <Grid
+        <Grid2
           container
           direction="row"
           justifyContent="center"
           alignItems="center"
           spacing={3}
         >
-          <Grid item>
+          <Grid2>
             <Button color="primary" variant="contained" onClick={handleOpen}>
               {keyword("edit_image")}
             </Button>
-          </Grid>
-          <Grid item>
+          </Grid2>
+          <Grid2>
             <a
               style={{ textDecoration: "none" }}
               href={resultImage}
@@ -220,8 +220,8 @@ const ImageResult = ({ handleCloseResults }) => {
                 {keyword("download")}
               </Button>
             </a>
-          </Grid>
-        </Grid>
+          </Grid2>
+        </Grid2>
         <Box m={2} />
         <Loop src={resultImage} />
         <Box m={2} />

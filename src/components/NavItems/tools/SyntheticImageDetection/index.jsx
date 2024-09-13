@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   resetSyntheticImageDetectionImage,
   setSyntheticImageDetectionLoading,
+  setSyntheticImageDetectionNearDuplicates,
   setSyntheticImageDetectionResult,
 } from "../../../../redux/actions/tools/syntheticImageDetectionActions";
 
@@ -12,9 +13,12 @@ import {
   Box,
   Card,
   CardHeader,
-  Grid,
+  FormControlLabel,
+  FormGroup,
+  Grid2,
   LinearProgress,
   Stack,
+  Switch,
 } from "@mui/material";
 
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
@@ -28,8 +32,15 @@ import SyntheticImageDetectionResults from "./syntheticImageDetectionResults";
 import { setError } from "redux/reducers/errorReducer";
 import StringFileUploadField from "../../../Shared/StringFileUploadField";
 import { preprocessFileUpload } from "../../../Shared/Utils/fileUtils";
+import { syntheticImageDetectionAlgorithms } from "./SyntheticImageDetectionAlgorithms";
+import { useLocation } from "react-router-dom";
+import { ROLES } from "../../../../constants/roles";
 
 const SyntheticImageDetection = () => {
+  const location = useLocation();
+  const urlParams = new URLSearchParams(location.search);
+  const urlParam = urlParams.get("url");
+
   const classes = useMyStyles();
   const keyword = i18nLoadNamespace(
     "components/NavItems/tools/SyntheticImageDetection",
@@ -46,14 +57,53 @@ const SyntheticImageDetection = () => {
   );
   const result = useSelector((state) => state.syntheticImageDetection.result);
   const url = useSelector((state) => state.syntheticImageDetection.url);
+  const nd = useSelector((state) => state.syntheticImageDetection.duplicates);
   const [input, setInput] = useState(url ? url : "");
   const [imageFile, setImageFile] = useState(undefined);
+
+  const [imageType, setImageType] = useState(undefined);
+
+  const [autoResizeLocalFile, setAutoResizeLocalFile] = useState(false);
 
   const dispatch = useDispatch();
 
   const IMAGE_FROM = {
     URL: "url",
     UPLOAD: "local",
+  };
+
+  const workerRef = useRef(null);
+
+  useEffect(() => {
+    workerRef.current = new Worker(
+      new URL("../../../../workers/resizeImageWorker", import.meta.url),
+    );
+
+    return () => {
+      workerRef.current.terminate();
+    };
+  }, []);
+
+  /**
+   *
+   * @param image
+   */
+  const resizeImageWithWorker = (image) => {
+    return new Promise((resolve, reject) => {
+      const workerInstance = new Worker(
+        new URL("../../../../workers/resizeImageWorker", import.meta.url),
+      );
+      workerInstance.postMessage(image);
+
+      workerInstance.onerror = function (e) {
+        reject(e.error);
+      };
+
+      workerInstance.onmessage = function (e) {
+        // console.log(e);
+        resolve(e.data);
+      };
+    });
   };
 
   const getSyntheticImageScores = async (
@@ -69,8 +119,10 @@ const SyntheticImageDetection = () => {
 
     dispatch(setSyntheticImageDetectionLoading(true));
     const modeURL = "images/";
-    const services =
-      "gan_r50_mever,ldm_r50_grip,progan_r50_grip,adm_r50_grip,ldm_r50_mever,progan_rine_mever,ldm_rine_mever";
+
+    const services = syntheticImageDetectionAlgorithms
+      .map((algorithm) => algorithm.apiServiceName)
+      .join(",");
 
     const baseURL = process.env.REACT_APP_CAA_DEEPFAKE_URL;
 
@@ -108,7 +160,7 @@ const SyntheticImageDetection = () => {
           bodyFormData.append("file", image);
           res = await axios.post(baseURL + modeURL + "jobs", bodyFormData, {
             method: "post",
-            params: { services: services },
+            params: { services: services, search_similar: true },
             headers: {
               "Content-Type": "multipart/form-data",
             },
@@ -117,7 +169,7 @@ const SyntheticImageDetection = () => {
 
         default:
           res = await axios.post(baseURL + modeURL + "jobs", null, {
-            params: { url: url, services: services },
+            params: { url: url, services: services, search_similar: true },
           });
           break;
       }
@@ -136,13 +188,42 @@ const SyntheticImageDetection = () => {
         handleError("error_" + error.status);
       }
 
-      if (response && response.data != null)
+      if (response && response.data != null) {
         dispatch(
           setSyntheticImageDetectionResult({
             url: image ? URL.createObjectURL(image) : url,
             result: response.data,
           }),
         );
+      }
+
+      if (
+        response &&
+        response.data &&
+        response.data.similar_images &&
+        response.data.similar_images.completed
+      ) {
+        let imgSimilarRes;
+
+        try {
+          imgSimilarRes = await axios.get(baseURL + modeURL + "similar/" + id);
+        } catch (error) {
+          handleError("error_" + error.status);
+        }
+
+        //console.log(imgSimilarRes.data);
+
+        if (
+          !imgSimilarRes.data ||
+          !imgSimilarRes.data.similar_media ||
+          !Array.isArray(imgSimilarRes.data.similar_media) ||
+          imgSimilarRes.data.similar_media.length === 0
+        ) {
+          dispatch(setSyntheticImageDetectionNearDuplicates(null));
+        }
+
+        dispatch(setSyntheticImageDetectionNearDuplicates(imgSimilarRes.data));
+      }
     };
 
     const waitUntilFinish = async (id) => {
@@ -202,13 +283,78 @@ const SyntheticImageDetection = () => {
     );
   };
 
-  const handleSubmit = async () => {
+  /**
+   *
+   * @param url {string}
+   * @returns {Promise<void>}
+   */
+  const handleSubmit = async (url) => {
+    const processedFile =
+      autoResizeLocalFile && imageFile
+        ? await resizeImageWithWorker(imageFile)
+        : imageFile;
+
+    if (autoResizeLocalFile && processedFile) {
+      setImageFile(processedFile);
+    }
+
     dispatch(resetSyntheticImageDetectionImage());
-
+    const urlInput = url ? url : input;
     const type =
-      input && typeof input === "string" ? IMAGE_FROM.URL : IMAGE_FROM.UPLOAD;
+      urlInput && typeof urlInput === "string"
+        ? IMAGE_FROM.URL
+        : IMAGE_FROM.UPLOAD;
 
-    await getSyntheticImageScores(input, true, dispatch, type, imageFile);
+    await getSyntheticImageScores(
+      urlInput,
+      true,
+      dispatch,
+      type,
+      processedFile,
+    );
+  };
+
+  useEffect(() => {
+    if (urlParam) {
+      setInput(urlParam);
+      handleSubmit(urlParam);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!result) return;
+
+    if (imageFile && imageFile instanceof File) {
+      setImageType(imageFile.type);
+    }
+
+    if (
+      input &&
+      typeof input === "string" &&
+      input !== "" &&
+      URL.canParse(input)
+    ) {
+      try {
+        fetch(input, {
+          method: "GET",
+          headers: {
+            "User-Agent":
+              "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36",
+            Accept: "image/webp,image/apng,image/*,*/*;q=0.8",
+          },
+        }).then(async (response) => {
+          //console.log(response.headers.get("Content-Type"));
+          const mimeType = (await response.blob()).type;
+          setImageType(mimeType);
+        });
+      } catch (e) {
+        console.error(e);
+      }
+    }
+  }, [imageFile, input, result]);
+
+  const toggleAutoResizeLocalFile = () => {
+    setAutoResizeLocalFile((prev) => !prev);
   };
 
   return (
@@ -234,43 +380,64 @@ const SyntheticImageDetection = () => {
       <Card>
         <CardHeader
           title={
-            <Grid
+            <Grid2
               container
               direction="row"
               justifyContent="space-between"
               alignItems="center"
             >
               <span>{keyword("synthetic_image_detection_link")}</span>
-            </Grid>
+            </Grid2>
           }
           className={classes.headerUploadedImage}
         />
 
         <Box p={3}>
-          <form>
-            <StringFileUploadField
-              labelKeyword={keyword("synthetic_image_detection_link")}
-              placeholderKeyword={keyword(
-                "synthetic_image_detection_placeholder",
-              )}
-              submitButtonKeyword={keyword("submit_button")}
-              localFileKeyword={keyword("button_localfile")}
-              urlInput={input}
-              setUrlInput={setInput}
-              fileInput={imageFile}
-              setFileInput={setImageFile}
-              handleSubmit={handleSubmit}
-              fileInputTypesAccepted={"image/*"}
-              handleCloseSelectedFile={handleClose}
-              preprocessLocalFile={preprocessImage}
-            />
-          </form>
+          <Stack direction="column" spacing={2}>
+            <form>
+              <StringFileUploadField
+                labelKeyword={keyword("synthetic_image_detection_link")}
+                placeholderKeyword={keyword(
+                  "synthetic_image_detection_placeholder",
+                )}
+                submitButtonKeyword={keyword("submit_button")}
+                localFileKeyword={keyword("button_localfile")}
+                urlInput={input}
+                setUrlInput={setInput}
+                fileInput={imageFile}
+                setFileInput={setImageFile}
+                handleSubmit={handleSubmit}
+                fileInputTypesAccepted={"image/*"}
+                handleCloseSelectedFile={handleClose}
+                preprocessLocalFile={preprocessImage}
+                isParentLoading={isLoading}
+              />
+            </form>
 
-          {isLoading && (
-            <Box mt={3}>
-              <LinearProgress />
-            </Box>
-          )}
+            {(role.includes(ROLES.EXTRA_FEATURE) ||
+              role.includes(ROLES.EVALUATION)) &&
+              imageFile && (
+                <FormGroup>
+                  <FormControlLabel
+                    control={
+                      <Switch
+                        checked={autoResizeLocalFile}
+                        onChange={toggleAutoResizeLocalFile}
+                        size="small"
+                        disabled={isLoading}
+                      />
+                    }
+                    label="Auto-Resize"
+                  />
+                </FormGroup>
+              )}
+
+            {isLoading && (
+              <Box mt={3}>
+                <LinearProgress />
+              </Box>
+            )}
+          </Stack>
         </Box>
       </Card>
 
@@ -278,9 +445,11 @@ const SyntheticImageDetection = () => {
 
       {result && (
         <SyntheticImageDetectionResults
-          result={result}
+          results={result}
           url={url}
           handleClose={handleClose}
+          nd={nd}
+          imageType={imageType}
         />
       )}
     </Box>

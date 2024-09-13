@@ -13,7 +13,6 @@ module.exports = {
     path: path.resolve(__dirname, "build"),
     filename: "[name].js",
     iife: false,
-   
   },
   // optimization: {
   //   runtimeChunk: 'single',
@@ -25,8 +24,7 @@ module.exports = {
     rules: [
       {
         test: /\.(js|jsx)$/,
-        //include: path.resolve(__dirname, 'src'),
-        exclude: "/node/node_modules",
+        exclude: /node_modules/,
         use: {
           loader: "babel-loader",
           options: {
@@ -44,17 +42,11 @@ module.exports = {
       },
       {
         test: /\.css$/i,
-        //include: path.resolve(__dirname, 'src'),
-        exclude: "/node_modules/",
         use: [MiniCssExtractPlugin.loader, "css-loader"],
       },
       {
         test: /\.(png|jpe?g|gif|tsv)$/i,
-        use: [
-          {
-            loader: "file-loader",
-          },
-        ],
+        type: "asset/resource",
       },
       {
         test: /\.svg$/i,
@@ -78,6 +70,11 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: "./src/popup.html",
       filename: "popup.html",
+      chunks: ["popup"],
+    }),
+    new HtmlWebpackPlugin({
+      filename: "background.html",
+      chunks: ["background"],
     }),
     new CopyPlugin({
       patterns: [{ from: "public" }],
@@ -92,4 +89,7 @@ module.exports = {
     extensions: [".js", ".jsx"],
     modules: ["node_modules", "src"],
   },
+  experiments: {
+    asyncWebAssembly: true,
+  }
 };

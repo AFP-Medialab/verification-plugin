@@ -1,6 +1,6 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Paper } from "@mui/material";
+import { Grid2, Paper } from "@mui/material";
 import Box from "@mui/material/Box";
 import CustomTile from "../../Shared/CustomTitle/CustomTitle";
 import europeImage from "./images/logo_EUh2020_horizontal.png";
@@ -9,7 +9,6 @@ import afpImage from "./images/Logo-AFP-384.png";
 import afcnLogo from "./images/afcn_logo.png";
 import arijLogo from "./images/arij_logo.png";
 import Checkbox from "@mui/material/Checkbox";
-import Grid from "@mui/material/Grid";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import {
   toggleHumanRightsCheckBox,
@@ -20,8 +19,8 @@ import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
 import Link from "@mui/material/Link";
 import Typography from "@mui/material/Typography";
 import {
-  toggleState,
   toggleAnalyticsCheckBox,
+  toggleState,
 } from "../../../redux/reducers/cookiesReducers";
 
 const About = () => {
@@ -151,7 +150,7 @@ const About = () => {
           );
         })*/}
       </Box>
-      <Grid
+      <Grid2
         container
         direction="row"
         spacing={2}
@@ -159,38 +158,38 @@ const About = () => {
         alignItems="center"
         mb={4}
       >
-        <Grid item xs={12}>
+        <Grid2 size={{ xs: 12 }}>
           <img className={classes.AboutMedia} src={afpImage} alt={afpImage} />
-        </Grid>
-        <Grid item>
+        </Grid2>
+        <Grid2>
           <img className={classes.AboutMedia} src={itiImage} alt={itiImage} />
-        </Grid>
-        <Grid item>
+        </Grid2>
+        <Grid2>
           <img
             className={classes.AboutMedia}
             src={europeImage}
             alt={europeImage}
           />
-        </Grid>
+        </Grid2>
         {currentLang === "ar" ? (
           <>
-            <Grid item xs={6}>
+            <Grid2 size={{ xs: 6 }}>
               <img
                 className={classes.AboutMediaSmall}
                 src={afcnLogo}
                 alt={afcnLogo}
               />
-            </Grid>
-            <Grid item xs={6}>
+            </Grid2>
+            <Grid2 size={{ xs: 6 }}>
               <img
                 className={classes.AboutMediaSmall}
                 src={arijLogo}
                 alt={arijLogo}
               />
-            </Grid>
+            </Grid2>
           </>
         ) : null}
-      </Grid>
+      </Grid2>
       <FormControlLabel
         control={
           <Checkbox

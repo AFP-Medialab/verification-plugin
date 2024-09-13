@@ -7,7 +7,7 @@ import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import DeepfakeIcon from "../../../NavBar/images/SVG/Image/Deepfake.svg";
-import Grid from "@mui/material/Grid";
+import { Grid2 } from "@mui/material";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import UseGetDeepfake from "./Hooks/useGetDeepfake";
 import DeepfakeResultsImage from "./Results/DeepfakeResultsImage";
@@ -113,14 +113,14 @@ const Deepfake = () => {
       <Card>
         <CardHeader
           title={
-            <Grid
+            <Grid2
               container
               direction="row"
               justifyContent="space-between"
               alignItems="center"
             >
               <span>{keyword("deepfake_image_link")}</span>
-            </Grid>
+            </Grid2>
           }
           className={classes.headerUploadedImage}
         />

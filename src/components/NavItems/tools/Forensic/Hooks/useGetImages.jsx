@@ -2,9 +2,9 @@ import { useEffect } from "react";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import {
+  setForensicDisplayItem,
   setForensicsLoading,
   setForensicsResult,
-  setForensicDisplayItem,
 } from "../../../../../redux/actions/tools/forensicActions";
 import { setError } from "redux/reducers/errorReducer";
 
@@ -73,9 +73,12 @@ const useGetImages = (url, type, keyword) => {
     const configService = (type) => {
       const services =
         "adq1,blk,cagi,cfa,cmfd,dct,ela,fusion,ghost,laplacian,mantranet,median,rcmfd,splicebuster,wavelet,zero,mmfusion,trufor,omgfuser";
+
+      let bodyFormData;
+
       switch (type) {
         case "local":
-          var bodyFormData = new FormData();
+          bodyFormData = new FormData();
           bodyFormData.append("file", url);
 
           return {

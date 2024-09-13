@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import Grid from "@mui/material/Grid";
+import { Box, Button, Grid2 } from "@mui/material";
 import LogoVera from "../NavBar/images/SVG/Navbar/vera-logo_black.svg?url";
 import LogoInVidWeverify from "../NavBar/images/SVG/Navbar/invid_weverify.svg?url";
 import LogoEuCom from "../NavBar/images/SVG/Navbar/ep-logo.svg?url";
@@ -30,13 +28,13 @@ const PopUp = () => {
 
   const createScript = () => {
     let script =
-      'var images = document.getElementsByTagName("img")\n' +
-      "var image_meta = document.querySelector('meta[property=\"og:image\"]') \n" +
-      "var video_meta = document.querySelector('meta[property=\"og:video\"]') \n" +
-      "var text_meta = document.querySelector('meta[property=\"og:title\"]') \n" +
-      'var text_found = text_meta ? text_meta.content : ""\n' +
-      'var video_found = video_meta ?  video_meta.content : ""\n' +
-      'var image = image_meta ?  image_meta.content : ""\n' +
+      'const images = document.getElementsByTagName("img")\n' +
+      "const image_meta = document.querySelector('meta[property=\"og:image\"]') \n" +
+      "const video_meta = document.querySelector('meta[property=\"og:video\"]') \n" +
+      "const text_meta = document.querySelector('meta[property=\"og:title\"]') \n" +
+      'const text_found = text_meta ? text_meta.content : ""\n' +
+      'const video_found = video_meta ?  video_meta.content : ""\n' +
+      'const image = image_meta ?  image_meta.content : ""\n' +
       "results;\n";
     return script;
   };
@@ -82,27 +80,25 @@ const PopUp = () => {
 
   return (
     <div className={classes.popUp}>
-      <Grid container>
+      <Grid2 container>
         {LOGO_EU ? (
           <>
-            <Grid
-              item
-              xs={6}
+            <Grid2
+              size={{ xs: 6 }}
               container
               alignItems="center"
               justifyContent="center"
             >
               <img src={LogoEuCom} alt={LogoEuCom} style={{ width: "100px" }} />
-            </Grid>
-            <Grid item xs={6}>
+            </Grid2>
+            <Grid2 size={{ xs: 6 }}>
               <img src={LogoVera} alt={LogoVera} style={{ width: "100px" }} />
-            </Grid>
+            </Grid2>
           </>
         ) : (
           <>
-            <Grid
-              item
-              xs={7}
+            <Grid2
+              size={{ xs: 7 }}
               container
               alignItems="center"
               justifyContent="center"
@@ -112,25 +108,25 @@ const PopUp = () => {
                 alt={LogoInVidWeverify}
                 style={{ width: "150px" }}
               />
-            </Grid>
-            <Grid item xs={5}>
+            </Grid2>
+            <Grid2 size={{ xs: 5 }}>
               <img src={LogoVera} alt={LogoVera} style={{ width: "100px" }} />
-            </Grid>
+            </Grid2>
           </>
         )}
         <Box m={1} />
-        <Grid item xs={12}>
+        <Grid2 size={{ xs: 12 }}>
           <Button
             variant="outlined"
             color="primary"
             fullWidth={true}
-            onClick={() => window.open("/popup.html#/app/tools/all")}
+            onClick={() => window.open("/popup.html#/app/tools")}
           >
             {keyword("open_website")}
           </Button>
-        </Grid>
+        </Grid2>
         <Box m={1} />
-        <Grid item xs={12}>
+        <Grid2 size={{ xs: 12 }}>
           <Button
             variant="outlined"
             color="primary"
@@ -139,9 +135,9 @@ const PopUp = () => {
           >
             {keyword("open_assistant")}
           </Button>
-        </Grid>
+        </Grid2>
         <Box m={1} />
-        <Grid item xs={12}>
+        <Grid2 size={{ xs: 12 }}>
           <Button
             variant="outlined"
             color="primary"
@@ -151,9 +147,9 @@ const PopUp = () => {
           >
             {keyword("open_assistant_on_page")}
           </Button>
-        </Grid>
+        </Grid2>
         <Box m={1} />
-        <Grid item xs={12}>
+        <Grid2 size={{ xs: 12 }}>
           <Button
             variant="outlined"
             color="primary"
@@ -162,8 +158,8 @@ const PopUp = () => {
           >
             {keyword("open_classroom")}
           </Button>
-        </Grid>
-      </Grid>
+        </Grid2>
+      </Grid2>
 
       <Box m={1} />
     </div>

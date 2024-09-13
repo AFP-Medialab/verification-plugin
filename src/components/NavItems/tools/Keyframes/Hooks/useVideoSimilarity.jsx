@@ -15,7 +15,7 @@ export const useVideoSimilarity = (url, keyword) => {
         .get(dbkfApiUrl)
         .then((response) => {
           //console.log(response);
-          var resultData = [];
+          const resultData = [];
 
           Object.values(response.data).forEach((value) => {
             resultData.push(value);

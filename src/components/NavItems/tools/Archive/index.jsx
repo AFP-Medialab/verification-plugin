@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 
 import {
-  Box,
-  Card,
-  Grid,
-  Stack,
-  Skeleton,
   Alert,
-  Fade,
+  Box,
   Button,
+  Card,
+  Fade,
+  Grid2,
+  Skeleton,
+  Stack,
 } from "@mui/material";
 
 import LoadingButton from "@mui/lab/LoadingButton";
@@ -30,7 +30,7 @@ const Archive = () => {
 
   const [input, setInput] = useState("");
 
-  const [fileToUpload, setFileToUpload] = useState(/** @type {File?} */ (null));
+  const [fileToUpload, setFileToUpload] = useState(/** @type {File?} */ null);
 
   const [archiveLinks, setArchiveLinks] = useState([]);
 
@@ -151,8 +151,8 @@ const Archive = () => {
         <Box p={3}>
           <form>
             <Stack spacing={4}>
-              <Grid container direction="row" spacing={3} alignItems="start">
-                {/* <Grid item>
+              <Grid2 container direction="row" spacing={3} alignItems="start">
+                {/* <Grid2  >
                   <TextField
                     disabled={isLoading}
                     id="standard-full-width"
@@ -163,9 +163,9 @@ const Archive = () => {
                     variant="outlined"
                     onChange={(e) => setInput(e.target.value)}
                   />
-                </Grid> */}
+                </Grid2> */}
 
-                <Grid item>
+                <Grid2>
                   <Stack
                     direction="column"
                     spacing={2}
@@ -200,8 +200,8 @@ const Archive = () => {
                       {"Archive File"}
                     </LoadingButton>
                   </Stack>
-                </Grid>
-              </Grid>
+                </Grid2>
+              </Grid2>
               <Box>
                 {errorMessage && (
                   <Box mb={4}>

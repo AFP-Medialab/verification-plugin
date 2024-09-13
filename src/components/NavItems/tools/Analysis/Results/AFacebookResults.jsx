@@ -5,7 +5,7 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Divider from "@mui/material/Divider";
 import Button from "@mui/material/Button";
-import { Grid, IconButton } from "@mui/material";
+import { Grid2, IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import OnClickInfo from "../../../../Shared/OnClickInfo/OnClickInfo";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
@@ -169,7 +169,7 @@ const AFacebookResults = (props) => {
                 <ReverseSearchButtons reverseSearch={reverseSearch}>
                   {report["verification_cues"] &&
                     report["verification_cues"]["twitter_search_url"] && (
-                      <Grid item>
+                      <Grid2>
                         <Button
                           className={classes.button}
                           variant="contained"
@@ -182,7 +182,7 @@ const AFacebookResults = (props) => {
                         >
                           {keyword("button_reverse_twitter")}
                         </Button>
-                      </Grid>
+                      </Grid2>
                     )}
                 </ReverseSearchButtons>
               </div>

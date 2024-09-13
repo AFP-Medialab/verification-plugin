@@ -9,6 +9,7 @@ import {
 } from "../../../../../redux/actions/tools/deepfakeVideoActions";
 import { setError } from "redux/reducers/errorReducer";
 import { isValidUrl } from "../../../../Shared/Utils/URLUtils";
+import { ROLES } from "../../../../../constants/roles";
 
 async function UseGetDeepfake(
   keyword,
@@ -37,7 +38,7 @@ async function UseGetDeepfake(
     modeURL = "videos/";
     // services = "deepfake_video,ftcn,face_reenact";
     services = "deepfake_video";
-    if (role.includes("EXTRA_FEATURE")) services += ",ftcn";
+    if (role.includes(ROLES.EXTRA_FEATURE)) services += ",ftcn";
   }
 
   if (!modeURL) {
@@ -63,9 +64,10 @@ async function UseGetDeepfake(
   }
 
   try {
+    let bodyFormData;
     switch (type) {
       case "local":
-        var bodyFormData = new FormData();
+        bodyFormData = new FormData();
         bodyFormData.append("file", mediaFile);
         res = await axios.post(baseURL + modeURL + "jobs", bodyFormData, {
           method: "post",

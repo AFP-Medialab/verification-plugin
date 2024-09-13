@@ -1,10 +1,11 @@
 import React, { useState } from "react";
+import { useLocation } from "react-router-dom";
 import {
   Avatar,
   Box,
   Chip,
   Divider,
-  Grid,
+  Grid2,
   Link,
   Stack,
   Typography,
@@ -26,31 +27,36 @@ const ResultDisplayItem = ({
   domainUrl,
   imageUrl,
 }) => {
-  const keyword = i18nLoadNamespace("components/NavItems/tools/SemanticSearch");
+  const path = useLocation();
+  let keyword;
+  if (path.pathname.includes("/app/assistant")) {
+    keyword = i18nLoadNamespace("components/NavItems/tools/Assistant");
+  } else {
+    keyword = i18nLoadNamespace("components/NavItems/tools/SemanticSearch");
+  }
 
   const [showOriginalClaim, setShowOriginalClaim] = useState(false);
   const [showOriginalTitle, setShowOriginalTitle] = useState(false);
 
   return (
     <Box width="100%" key={id}>
-      <Grid container direction="row" p={2} justifyContent="space-between">
-        <Grid
-          item
+      <Grid2 container direction="row" p={2} justifyContent="space-between">
+        <Grid2
           container
           direction="row"
-          xs={10}
+          size={{ xs: 10 }}
           spacing={2}
           justifyContent="flex-start"
           alignItems="flex-start"
         >
-          <Grid item>
+          <Grid2>
             <Avatar
               src={imageUrl}
               variant="rounded"
               sx={{ width: 80, height: 80 }}
             />
-          </Grid>
-          <Grid item xs>
+          </Grid2>
+          <Grid2 size="grow">
             <Stack
               direction="column"
               justifyContent="flex-start"
@@ -58,7 +64,7 @@ const ResultDisplayItem = ({
               spacing={2}
             >
               <Stack direction="column">
-                <Typography>
+                <Typography sx={{ textAlign: "start" }}>
                   {keyword("semantic_search_result_claim")}{" "}
                   {showOriginalClaim ? claimOriginalLanguage : claim}
                 </Typography>
@@ -81,7 +87,7 @@ const ResultDisplayItem = ({
                 )}
               </Stack>
               <Stack direction="column">
-                <Typography>
+                <Typography sx={{ textAlign: "start" }}>
                   {keyword("semantic_search_result_title")}{" "}
                   <Link href={articleUrl} target="_blank">
                     {showOriginalTitle ? titleOriginalLanguage : title}
@@ -110,9 +116,9 @@ const ResultDisplayItem = ({
               </Typography>
               <Typography variant="subtitle2">{date ?? ""}</Typography>
             </Stack>
-          </Grid>
-        </Grid>
-        <Grid item xs={2} pl={4}>
+          </Grid2>
+        </Grid2>
+        <Grid2 size={{ xs: 2 }} pl={4}>
           <Stack direction="column" spacing={2}>
             <Link
               href={`https://${domainUrl}`}
@@ -124,8 +130,8 @@ const ResultDisplayItem = ({
             </Link>
             <Chip label={language} sx={{ width: "fit-content" }} />
           </Stack>
-        </Grid>
-      </Grid>
+        </Grid2>
+      </Grid2>
       <Stack
         direction="row"
         spacing={2}
