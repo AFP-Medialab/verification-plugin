@@ -36,6 +36,12 @@ const DateAndTimePicker = ({
     return false;
   };
 
+  const futureDate = (currentDate) => {
+    const itemDate = currentDate.toDate();
+    if (untilValue) return untilValue < itemDate;
+    return false;
+  };
+
   return (
     <>
       {time ? (
@@ -49,6 +55,7 @@ const DateAndTimePicker = ({
             timeFormat={"HH:mm:ss"}
             value={fromValue}
             ampm={false}
+            shouldDisableDate={futureDate}
           />
           <DateTimePicker
             onChange={checkIfDateUntil}
@@ -72,6 +79,7 @@ const DateAndTimePicker = ({
               field: { clearable: true },
             }}
             disabled={disabled}
+            shouldDisableDate={futureDate}
           />
           <DatePicker
             label={"*  " + keywordUntilDate}

@@ -552,31 +552,6 @@ const SemanticSearch = () => {
                         </Fade>
                       </Modal>
                     </Stack>
-
-                    {/* <DatePicker
-                      label={keyword(
-                        "semantic_search_form_date_from_placeholder",
-                      )}
-                      value={dateFrom}
-                      onChange={(newDate) => setDateFrom(dayjs(newDate))}
-                      slotProps={{
-                        field: { clearable: true },
-                      }}
-                      disabled={isLoading}
-                    />
-                    <DatePicker
-                      label={keyword(
-                        "semantic_search_form_date_to_placeholder",
-                      )}
-                      value={dateTo}
-                      onChange={(newDate) => {
-                        setDateTo(newDate);
-                      }}
-                      slotProps={{
-                        field: { clearable: true },
-                      }}
-                      disabled={isLoading}
-                    /> */}
                     <DateAndTimePicker
                       time={false}
                       disabled={isLoading}
