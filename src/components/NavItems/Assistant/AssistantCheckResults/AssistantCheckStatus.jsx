@@ -34,19 +34,34 @@ const AssistantCheckStatus = () => {
   const neTitle = keyword("ne_title");
   const neFailState = useSelector((state) => state.assistant.neFail);
 
-  const newsFramingTitle = "news topic";
+  const newsFramingTitle = keyword("news_framing_title");
   const newsFramingFailState = useSelector(
     (state) => state.assistant.newsFramingFail,
   );
 
-  const newsGenreTitle = "news genre";
+  const newsGenreTitle = keyword("news_genre_title");
   const newsGenreFailState = useSelector(
     (state) => state.assistant.newsGenreFail,
   );
 
-  const persuasionTitle = "persuasion";
+  const persuasionTitle = keyword("persuasion_techniques");
   const persuasionFailState = useSelector(
     (state) => state.assistant.persuasionFail,
+  );
+
+  const subjectivityTitle = keyword("subjectivity");
+  const subjectivityFailState = useSelector(
+    (state) => state.assistant.subjectivityFail,
+  );
+
+  const prevFactChecksTitle = keyword("previous_fact_checks");
+  const prevFactChecksFailState = useSelector(
+    (state) => state.assistant.prevFactChecksFail,
+  );
+
+  const machineGeneratedTextTitle = keyword("machine_generated_text");
+  const machineGeneratedTextFailState = useSelector(
+    (state) => state.assistant.machineGeneratedTextFail,
   );
 
   const failStates = [
@@ -57,6 +72,9 @@ const AssistantCheckStatus = () => {
     { title: newsFramingTitle, failed: newsFramingFailState },
     { title: newsGenreTitle, failed: newsGenreFailState },
     { title: persuasionTitle, failed: persuasionFailState },
+    { title: subjectivityTitle, failed: subjectivityFailState },
+    { title: prevFactChecksTitle, failed: prevFactChecksFailState },
+    { title: machineGeneratedTextTitle, failed: machineGeneratedTextFailState },
   ];
 
   return (
