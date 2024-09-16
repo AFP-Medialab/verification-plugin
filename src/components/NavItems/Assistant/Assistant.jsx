@@ -118,141 +118,116 @@ const Assistant = () => {
   }, [url]);
 
   return (
-    <div>
+    <Grid2
+      container
+      spacing={4}
+      direction="column"
+      justifyContent="flex-start"
+      alignItems="center"
+      className={classes.root}
+    >
+      {/* introduction */}
+      <Grid2 size="grow" width="100%">
+        <AssistantIntroduction cleanAssistant={cleanAssistant} />
+      </Grid2>
+
+      {/* url entry field */}
+      {urlMode ? (
+        <Grid2 size="grow" width="100%">
+          <AssistantUrlSelected
+            formInput={formInput}
+            setFormInput={setFormInput}
+            cleanAssistant={cleanAssistant}
+          />
+        </Grid2>
+      ) : null}
+
+      {/* local file selection field */}
+      {imageVideoSelected ? (
+        <Grid2 size="grow" width="100%">
+          <AssistantFileSelected />
+        </Grid2>
+      ) : null}
+
+      {/* warnings and api status checks */}
+      {dbkfTextMatch || dbkfImageResult || dbkfVideoMatch ? (
+        <Grid2
+          size="grow"
+          className={classes.assistantGrid}
+          hidden={urlMode === null || urlMode === false}
+        >
+          <AssistantWarnings />
+        </Grid2>
+      ) : null}
+
+      {/* source crediblity//URL domain analysis results */}
+      {positiveSourceCred || cautionSourceCred || mixedSourceCred ? (
+        <Grid2 size="grow">
+          <AssistantSCResults />
+        </Grid2>
+      ) : null}
+
+      {/* assistant status */}
+      {scFailState ||
+      dbkfTextFailState ||
+      dbkfMediaFailState ||
+      neFailState ||
+      newsFramingFailState ||
+      newsGenreFailState ? (
+        <Grid2 size="grow">
+          <AssistantCheckStatus />
+        </Grid2>
+      ) : null}
+
+      {/* media results */}
       <Grid2
         container
-        spacing={4}
-        direction="column"
-        justifyContent="flex-start"
-        alignItems="center"
-        className={classes.root}
+        hidden={
+          !urlMode ||
+          (urlMode && inputUrl === null) ||
+          (urlMode &&
+            inputUrl !== null &&
+            !imageList.length &&
+            !videoList.length)
+        }
       >
-        {/* introduction */}
-        <Grid2 size="grow" width="100%">
-          <AssistantIntroduction cleanAssistant={cleanAssistant} />
-        </Grid2>
-
-        {/* url entry field */}
-        {urlMode ? (
-          <Grid2 size="grow" width="100%">
-            <AssistantUrlSelected
-              formInput={formInput}
-              setFormInput={setFormInput}
-              cleanAssistant={cleanAssistant}
-            />
+        {imageList.length > 0 || videoList.length > 0 || imageVideoSelected ? (
+          <Grid2 size={{ xs: 12 }}>
+            <AssistantMediaResult />
           </Grid2>
         ) : null}
-
-        {/* local file selection field */}
-        {imageVideoSelected ? (
-          <Grid2 size="grow" width="100%">
-            <AssistantFileSelected />
-          </Grid2>
-        ) : null}
-
-        {/* warnings and api status checks */}
-        {dbkfTextMatch || dbkfImageResult || dbkfVideoMatch ? (
-          <Grid2
-            size="grow"
-            className={classes.assistantGrid}
-            hidden={urlMode === null || urlMode === false}
-          >
-            <AssistantWarnings />
-          </Grid2>
-        ) : null}
-
-        {positiveSourceCred || cautionSourceCred || mixedSourceCred ? (
-          <Grid2 size="grow">
-            <AssistantSCResults />
-          </Grid2>
-        ) : null}
-
-        {scFailState ||
-        dbkfTextFailState ||
-        dbkfMediaFailState ||
-        neFailState ||
-        newsFramingFailState ||
-        newsGenreFailState ? (
-          <Grid2 size="grow">
-            <AssistantCheckStatus />
-          </Grid2>
-        ) : null}
-
-        {/* media results */}
-        <Grid2 size="grow" width="100%">
-          <Card
-            className={classes.root}
-            hidden={
-              !urlMode ||
-              (urlMode && inputUrl === null) ||
-              (urlMode &&
-                inputUrl !== null &&
-                !imageList.length &&
-                !videoList.length)
-            }
-            data-testid="url-media-results"
-          >
-            <Grid2 container spacing={2}>
-              <Grid2 size={{ xs: 12 }}>
-                <Typography variant={"h5"} align={"left"}>
-                  {keyword("url_media")}
-                </Typography>
-                <Divider />
-              </Grid2>
-
-              {imageList.length > 0 ||
-              videoList.length > 0 ||
-              imageVideoSelected ? (
-                <Grid2 size={{ xs: 12 }}>
-                  <AssistantMediaResult />
-                </Grid2>
-              ) : null}
-            </Grid2>
-          </Card>
-        </Grid2>
-
-        {/* text results */}
-        <Grid2 size="grow" width="100%">
-          <Card
-            className={classes.root}
-            hidden={linkList.length === 0 && text === null && neResult === null}
-          >
-            <Grid2 container spacing={2}>
-              <Grid2 size={{ xs: 12 }}>
-                <Typography variant={"h5"} align={"left"}>
-                  {keyword("url_text")}
-                </Typography>
-                <Divider />
-              </Grid2>
-
-              {text ? (
-                <Grid2 size={{ xs: 12 }}>
-                  <AssistantTextResult />
-                </Grid2>
-              ) : null}
-
-              {neResult ? (
-                <Grid2 size={{ xs: 12 }}>
-                  <AssistantNEResult />
-                </Grid2>
-              ) : null}
-
-              {linkList.length !== 0 ? (
-                <Grid2 size={{ xs: 12 }}>
-                  <AssistantLinkResult />
-                </Grid2>
-              ) : null}
-
-              {text ? (
-                <Grid2 size={{ xs: 12 }}>
-                  <AssistantCredSignals />
-                </Grid2>
-              ) : null}
-            </Grid2>
-          </Card>
-        </Grid2>
       </Grid2>
-    </div>
+
+      {/* text results */}
+      <Grid2
+        container
+        hidden={linkList.length === 0 && text === null && neResult === null}
+      >
+        {text ? (
+          <Grid2 size={{ xs: 12 }}>
+            <AssistantTextResult />
+          </Grid2>
+        ) : null}
+
+        {neResult ? (
+          <Grid2 size={{ xs: 12 }}>
+            <AssistantNEResult />
+          </Grid2>
+        ) : null}
+
+        {linkList.length !== 0 ? (
+          <Grid2 size={{ xs: 12 }}>
+            <AssistantLinkResult />
+          </Grid2>
+        ) : null}
+
+        {text ? (
+          <Grid2 size={{ xs: 12 }}>
+            <AssistantCredSignals />
+          </Grid2>
+        ) : null}
+      </Grid2>
+    </Grid2>
   );
 };
 export default Assistant;

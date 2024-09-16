@@ -77,7 +77,7 @@ const AssistantMediaResult = () => {
   return (
     <Grid2 container spacing={2}>
       <Grid2 size={{ xs: 6 }} hidden={!urlMode}>
-        <Card>
+        <Card data-testid="url-media-results">
           <CardHeader
             className={classes.assistantCardHeader}
             title={keyword("media_title")}
