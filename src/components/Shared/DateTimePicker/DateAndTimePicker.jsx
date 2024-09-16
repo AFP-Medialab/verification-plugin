@@ -81,6 +81,7 @@ const DateAndTimePicker = ({
               field: { clearable: true },
             }}
             disabled={disabled}
+            shouldDisableDate={pastDate}
           />
         </>
       )}
