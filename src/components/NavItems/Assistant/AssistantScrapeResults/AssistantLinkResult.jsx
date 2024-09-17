@@ -45,6 +45,8 @@ const ExtractedUrl = (index, keyword, extractedSourceCred, link) => {
       <Grid2 size={{ xs: 10 }} align="left">
         <Typography>
           <Link
+            rel="noopener noreferrer"
+            target="_blank"
             color={
               extractedSourceCred
                 ? extractedSourceCred[link].urlColor
