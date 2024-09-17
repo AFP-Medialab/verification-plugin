@@ -10,6 +10,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
+import { IconButton } from "@mui/material";
 
 import { CONTENT_TYPE } from "../AssistantRuleBook";
 import AssistantImageResult from "./AssistantImageResult";
