@@ -566,7 +566,7 @@ const SemanticSearch = () => {
                       handleSinceChange={(newDate) =>
                         setDateFrom(dayjs(newDate))
                       }
-                      handleUntilChange={(newDate) => setDateTo(newDate)}
+                      handleUntilChange={(newDate) => setDateTo(dayjs(newDate))}
                     />
                     <CheckboxesTags
                       label={keyword(

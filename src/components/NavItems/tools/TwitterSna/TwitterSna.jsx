@@ -52,6 +52,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import DateAndTimePicker from "components/Shared/DateTimePicker/DateAndTimePicker";
+import dayjs from "dayjs";
 
 const TwitterSna = () => {
   const theme = createTheme({
@@ -319,13 +320,13 @@ const TwitterSna = () => {
     console.log(date);
     setSinceError(date === null);
     if (until && date >= until) setSinceError(true);
-    setSince(date);
+    setSince(dayjs(date));
   };
 
   const handleUntilDateChange = (date) => {
     setUntilError(date === null);
     if (since && date < since) setUntilError(true);
-    setUntil(date);
+    setUntil(dayjs(date));
   };
   const pastDate = (currentDate) => {
     const itemDate = currentDate.toDate();

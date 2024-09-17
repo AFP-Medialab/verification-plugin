@@ -25,6 +25,7 @@ import TwitterAdvancedSearchIcon from "../../../NavBar/images/SVG/Search/Twitter
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import DateAndTimePicker from "components/Shared/DateTimePicker/DateAndTimePicker";
+import dayjs from "dayjs";
 
 const TwitterAdvancedSearch = () => {
   const classes = useMyStyles();
@@ -85,13 +86,13 @@ const TwitterAdvancedSearch = () => {
   const handleFromDateChange = (date) => {
     setSelectedFromDateError(date === null);
     if (toDate && date > toDate) setSelectedFromDateError(true);
-    setSelectedFromDate(date);
+    setSelectedFromDate(dayjs(date));
   };
 
   const handleToDateChange = (date) => {
     setSelectedToDateError(date === null);
     if (fromDate && date < fromDate) setSelectedToDateError(true);
-    setSelectedToDate(date);
+    setSelectedToDate(dayjs(date));
   };
 
   const pastDate = (currentDate) => {
