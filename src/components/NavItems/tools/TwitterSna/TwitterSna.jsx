@@ -29,7 +29,6 @@ import {
 
 import OnWarningInfo from "../../../Shared/OnClickInfo/OnWarningInfo";
 import SearchIcon from "@mui/icons-material/Search";
-import DateTime from "../../../Shared/DateTimePicker/DateTime";
 import { convertMomentToGMT } from "../../../Shared/DateTimePicker/convertToGMT";
 import useTwitterSnaRequest from "./Hooks/useTwitterSnaRequest";
 import { replaceAll } from "../TwitterAdvancedSearch/createUrl";
@@ -672,6 +671,7 @@ const TwitterSna = () => {
                     handleSinceChange={handleSinceDateChange}
                     handleUntilChange={handleUntilDateChange}
                   />
+                  {console.log(since)}
                 </Grid2>
 
                 <Grid2

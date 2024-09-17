@@ -1,4 +1,5 @@
 import { DatePicker, DateTimePicker } from "@mui/x-date-pickers";
+import dayjs from "dayjs";
 import moment from "moment-timezone";
 
 /**
@@ -13,7 +14,7 @@ import moment from "moment-timezone";
  * @param {function} handleUntilChange
  * @returns
  */
-const DateAndTimePicker = (
+const DateAndTimePicker = ({
   time,
   disabled,
   keywordFromDate,
@@ -22,16 +23,16 @@ const DateAndTimePicker = (
   untilValue,
   handleSinceChange,
   handleUntilChange,
-) => {
+}) => {
   const pastDate = (currentDate) => {
-    const itemDate = currentDate.toDate();
-    if (fromValue) return fromValue > itemDate;
+    const itemDate = dayjs(currentDate);
+    if (fromValue) return itemDate.isBefore(fromValue);
     return false;
   };
 
   const futureDate = (currentDate) => {
-    const itemDate = currentDate.toDate();
-    if (untilValue) return untilValue < itemDate;
+    const itemDate = dayjs(currentDate);
+    if (untilValue) return untilValue.isBefore(itemDate);
     return false;
   };
 
