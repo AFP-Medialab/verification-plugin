@@ -316,8 +316,6 @@ const TwitterSna = () => {
   };
 
   const handleSinceDateChange = (date) => {
-    console.log("handle since change");
-    console.log(date);
     setSinceError(date === null);
     if (until && date >= until) setSinceError(true);
     setSince(dayjs(date));
@@ -663,37 +661,6 @@ const TwitterSna = () => {
               <Box m={1} />
 
               <Grid2 container spacing={4} alignItems="center">
-                {/* <Grid2 size={{ xs: 4 }}>
-                  <DateTime
-                    id="standard-full-width-since"
-                    disabled={searchFormDisabled}
-                    input={true}
-                    label={"*  " + keyword("twitter_sna_from_date")}
-                    className={classes.neededField}
-                    dateFormat={"YYYY-MM-DD"}
-                    timeFormat={"HH:mm:ss"}
-                    value={since}
-                    handleChange={handleSinceDateChange}
-                    error={sinceError}
-                    placeholder={keyword("twitter_sna_selectdate")}
-                  />
-                </Grid2>
-                <Grid2 size={{ xs: 4 }}>
-                  <DateTime
-                    id="standard-full-width-until"
-                    disabled={searchFormDisabled}
-                    input={true}
-                    label={"*  " + keyword("twitter_sna_until_date")}
-                    className={classes.neededField}
-                    dateFormat={"YYYY-MM-DD"}
-                    timeFormat={"HH:mm:ss"}
-                    value={until}
-                    handleChange={handleUntilDateChange}
-                    error={untilError}
-                    placeholder={keyword("twitter_sna_selectdate")}
-                    shouldDisableDate={pastDate}
-                  />
-                </Grid2> */}
                 <Grid2 size={{ xs: 8 }}>
                   <DateAndTimePicker
                     time={true}
@@ -705,8 +672,6 @@ const TwitterSna = () => {
                     handleSinceChange={handleSinceDateChange}
                     handleUntilChange={handleUntilDateChange}
                   />
-                  {console.log("since: " + since)}
-                  {console.log("until: " + until)}
                 </Grid2>
 
                 <Grid2

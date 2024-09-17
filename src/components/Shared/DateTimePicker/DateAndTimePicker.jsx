@@ -1,7 +1,19 @@
 import { DatePicker, DateTimePicker } from "@mui/x-date-pickers";
 import moment from "moment-timezone";
 
-const DateAndTimePicker = ({
+/**
+ * date and time picjer or just date picker, with a first and a second date
+ * @param {boolean} time determines wheter or not the user also picks the time
+ * @param {boolean} disabled
+ * @param {string} keywordFromDate
+ * @param {string} keywordUntilDate
+ * @param {object} fromValue
+ * @param {object} untilValue
+ * @param {function} handleSinceChange
+ * @param {function} handleUntilChange
+ * @returns
+ */
+const DateAndTimePicker = (
   time,
   disabled,
   keywordFromDate,
@@ -10,26 +22,7 @@ const DateAndTimePicker = ({
   untilValue,
   handleSinceChange,
   handleUntilChange,
-}) => {
-  const checkIfDateSince = (e) => {
-    // console.log(e);
-    // console.log("check if date since: " + e);
-    // moment.locale("en-gb");
-    // if (moment.isMoment(e)) {
-    //   console.log("is moment");
-    //   handleSinceChange(e);
-    // } else handleSinceChange(null);
-    handleSinceChange(e);
-  };
-
-  const checkIfDateUntil = (e) => {
-    // moment.locale("en-gb");
-    // if (moment.isMoment(e)) {
-    //   handleUntilChange(e);
-    // } else handleUntilChange(null);
-    handleUntilChange(e);
-  };
-
+) => {
   const pastDate = (currentDate) => {
     const itemDate = currentDate.toDate();
     if (fromValue) return fromValue > itemDate;
@@ -47,7 +40,7 @@ const DateAndTimePicker = ({
       {time ? (
         <>
           <DateTimePicker
-            onChange={checkIfDateSince}
+            onChange={handleSinceChange}
             disbled={disabled}
             input={true}
             label={"*  " + keywordFromDate}
@@ -58,7 +51,7 @@ const DateAndTimePicker = ({
             shouldDisableDate={futureDate}
           />
           <DateTimePicker
-            onChange={checkIfDateUntil}
+            onChange={handleUntilChange}
             disbled={disabled}
             input={true}
             label={"*  " + keywordUntilDate}
@@ -74,7 +67,7 @@ const DateAndTimePicker = ({
           <DatePicker
             label={"*  " + keywordFromDate}
             value={fromValue}
-            onChange={checkIfDateSince}
+            onChange={handleSinceChange}
             slotProps={{
               field: { clearable: true },
             }}
@@ -84,7 +77,7 @@ const DateAndTimePicker = ({
           <DatePicker
             label={"*  " + keywordUntilDate}
             value={untilValue}
-            onChange={checkIfDateUntil}
+            onChange={handleUntilChange}
             slotProps={{
               field: { clearable: true },
             }}

@@ -177,15 +177,6 @@ const TwitterAdvancedSearch = () => {
             );
           })}
           <div>
-            {/* <DateTime
-              input={true}
-              label={keyword("twitter_from_date")}
-              dateFormat={"YYYY-MM-DD"}
-              timeFormat={"HH:mm:ss"}
-              handleChange={handleFromDateChange}
-              error={fromDateError}
-              value={fromDate}
-            /> */}
             <DateAndTimePicker
               time={true}
               disabled={false}
@@ -197,18 +188,6 @@ const TwitterAdvancedSearch = () => {
               handleUntilChange={handleToDateChange}
             />
           </div>
-          {/* <div>
-            <DateTime
-              input={true}
-              label={keyword("twitter_to_date")}
-              dateFormat={"YYYY-MM-DD"}
-              timeFormat={"HH:mm:ss"}
-              handleChange={handleToDateChange}
-              error={toDateError}
-              value={toDate}
-              shouldDisableDate={pastDate}
-            />
-          </div> */}
 
           <FormControl component="fieldset">
             <RadioGroup
