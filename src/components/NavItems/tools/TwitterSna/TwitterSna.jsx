@@ -671,7 +671,6 @@ const TwitterSna = () => {
                     handleSinceChange={handleSinceDateChange}
                     handleUntilChange={handleUntilDateChange}
                   />
-                  {console.log(since)}
                 </Grid2>
 
                 <Grid2
