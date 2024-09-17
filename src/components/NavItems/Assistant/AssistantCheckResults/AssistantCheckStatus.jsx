@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 
 import Box from "@mui/material/Box";
 import Collapse from "@mui/material/Collapse";
-import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { IconButton } from "@mui/material";
 import Typography from "@mui/material/Typography";
@@ -12,6 +11,7 @@ import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
+import { Alert } from "@mui/material";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
 
 const AssistantCheckStatus = () => {
@@ -78,7 +78,7 @@ const AssistantCheckStatus = () => {
   ];
 
   return (
-    <Box pl={1}>
+    <Alert severity="warning">
       <Typography component={"span"}>
         <Box color={"orange"} fontStyle="italic">
           {keyword("status_subtitle")}
@@ -96,16 +96,13 @@ const AssistantCheckStatus = () => {
           {failStates.map((value, key) =>
             value.failed ? (
               <ListItem key={key}>
-                <IconButton>
-                  <ErrorOutlineIcon color={"error"} />
-                </IconButton>
                 <ListItemText primary={value.title} />
               </ListItem>
             ) : null,
           )}
         </List>
       </Collapse>
-    </Box>
+    </Alert>
   );
 };
 export default AssistantCheckStatus;

@@ -3,10 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 
-import Divider from "@mui/material/Divider";
 import { Grid2 } from "@mui/material";
-import Typography from "@mui/material/Typography";
-import Card from "@mui/material/Card";
 import useMyStyles from "../../Shared/MaterialUiStyles/useMyStyles";
 
 import AssistantCheckStatus from "./AssistantCheckResults/AssistantCheckStatus";
@@ -85,6 +82,18 @@ const Assistant = () => {
   );
   const newsGenreFailState = useSelector(
     (state) => state.assistant.newsGenreFail,
+  );
+  const persuasionFailState = useSelector(
+    (state) => state.assistant.persuasionFail,
+  );
+  const previousFactChecksFailState = useSelector(
+    (state) => state.assistant.previousFactChecksFail,
+  );
+  const subjectivityFailState = useSelector(
+    (state) => state.assistant.subjectivityFail,
+  );
+  const machineGeneratedTextFailState = useSelector(
+    (state) => state.assistant.machineGeneratedTextFail,
   );
   // const mtFailState = useSelector(state => state.assistant.mtFail)
 
@@ -173,7 +182,11 @@ const Assistant = () => {
       dbkfMediaFailState ||
       neFailState ||
       newsFramingFailState ||
-      newsGenreFailState ? (
+      newsGenreFailState ||
+      persuasionFailState ||
+      subjectivityFailState ||
+      previousFactChecksFailState ||
+      machineGeneratedTextFailState ? (
         <Grid2 size="grow">
           <AssistantCheckStatus />
         </Grid2>
