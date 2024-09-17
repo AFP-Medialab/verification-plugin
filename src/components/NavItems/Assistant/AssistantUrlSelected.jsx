@@ -103,28 +103,28 @@ const AssistantUrlSelected = (props) => {
               </Grid2>
               <Grid2 size={{ xs: 2 }}>
                 <Box sx={{ mt: 2, ml: 6 }}>
-                  {inputUrl === null ? (
-                    <Button
-                      type="submit"
-                      variant="contained"
-                      color="primary"
-                      data-testid="assistant-url-selected-analyse-btn"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        handleSubmissionURL();
-                      }}
-                    >
-                      {keyword("button_analyse")}
-                    </Button>
-                  ) : (
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      onClick={() => cleanAssistant()}
-                    >
-                      {keyword("button_clean")}
-                    </Button>
-                  )}
+                  {/* {inputUrl === null ? ( */}
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    color="primary"
+                    data-testid="assistant-url-selected-analyse-btn"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleSubmissionURL();
+                    }}
+                  >
+                    {keyword("button_submit")}
+                  </Button>
+                  {/* // ) : (
+                  //   <Button
+                  //     variant="contained"
+                  //     color="primary"
+                  //     onClick={() => cleanAssistant()}
+                  //   >
+                  //     {keyword("button_clean")}
+                  //   </Button>
+                  //</Grid2>)} */}
                 </Box>
               </Grid2>
               {inputUrl === null ? null : (

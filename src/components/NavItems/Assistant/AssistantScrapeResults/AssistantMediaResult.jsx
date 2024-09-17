@@ -6,10 +6,8 @@ import Collapse from "@mui/material/Collapse";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import { CardHeader, Grid2 } from "@mui/material";
-import Divider from "@mui/material/Divider";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
-import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 
@@ -76,7 +74,7 @@ const AssistantMediaResult = () => {
   };
   return (
     <Grid2 container spacing={2}>
-      <Grid2 size={{ xs: 6 }} hidden={!urlMode}>
+      <Grid2 size={{ xs: 12 }} hidden={!urlMode}>
         <Card data-testid="url-media-results">
           <CardHeader
             className={classes.assistantCardHeader}
@@ -129,7 +127,6 @@ const AssistantMediaResult = () => {
               )
             ) : null}
           </CardContent>
-          <Divider m={1.5} />
           {!singleMediaPresent ? (
             <div>
               <CardActions disableSpacing>
@@ -153,7 +150,6 @@ const AssistantMediaResult = () => {
                     }}
                   />
                 </CardContent>
-                <Divider m={1.5} />
                 <CardContent>
                   <VideoGridList
                     list={videoList}
