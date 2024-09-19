@@ -64,13 +64,12 @@ const PopUp = () => {
     });
   };
 
-  const loadDataArchiving = () => {
-    navigator.tabs.query({ active: true, lastFocusedWindow: true }, (tabs) => {
-      let url = tabs[0].url;
-      if (url) return url;
-      return "";
+  useEffect(() => {
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      const currentTab = tabs[0];
+      setPageUrl(currentTab.url);
     });
-  };
+  }, []);
 
   useEffect(() => {
     let supportedBrowserLang = getSupportedBrowserLanguage();
@@ -174,9 +173,8 @@ const PopUp = () => {
             color="primary"
             fullWidth={true}
             onClick={() => {
-              const url = loadDataArchiving();
               window.open(
-                "/popup.html#/app/tools/archive/" + encodeURIComponent(url),
+                "/popup.html#/app/tools/archive/" + encodeURIComponent(pageUrl),
               );
             }}
           >

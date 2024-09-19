@@ -28,7 +28,8 @@ import { useParams } from "react-router-dom";
 //TODO:UI for long strings
 
 const Archive = () => {
-  const { paramUrl } = useParams();
+  const { url } = useParams();
+  console.log(url);
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -153,7 +154,7 @@ const Archive = () => {
       />
       <Card>
         <Box p={3}>
-          <Typography>{paramUrl}</Typography>
+          <Typography>{url}</Typography>
         </Box>
         <Box p={3}>
           <form>
