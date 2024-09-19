@@ -28,6 +28,8 @@ import useAuthenticatedRequest from "../../../Shared/Authentication/useAuthentic
 import { prettifyLargeString } from "./utils";
 import { useParams } from "react-router-dom";
 import UrlArchive from "./components/urlArchive";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+
 // import { getclientId } from "components/Shared/GoogleAnalytics/MatomoAnalytics";
 // import { useSelector } from "react-redux";
 // import { useTrackEvent } from "Hooks/useAnalytics";
@@ -231,7 +233,9 @@ const Archive = () => {
       <Box p={2} />
       <Card>
         <Accordion>
-          <AccordionSummary></AccordionSummary>
+          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+            <Typography>{"Archive a .wacz file"}</Typography>
+          </AccordionSummary>
           <AccordionDetails>
             <Box p={3}>
               <form>
