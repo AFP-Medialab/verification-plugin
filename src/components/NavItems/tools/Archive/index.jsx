@@ -29,6 +29,11 @@ import { prettifyLargeString } from "./utils";
 import { useParams } from "react-router-dom";
 import UrlArchive from "./components/urlArchive";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import {
+  archiveStateCleaned,
+  archiveUrlSet,
+} from "redux/reducers/tools/archiveReducer";
+import { useDispatch, useSelector } from "react-redux";
 
 // import { getclientId } from "components/Shared/GoogleAnalytics/MatomoAnalytics";
 // import { useSelector } from "react-redux";
@@ -38,6 +43,9 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 const Archive = () => {
   const { url } = useParams();
+
+  const dispatch = useDispatch();
+  const mainUrl = useSelector((state) => state.archive.mainUrl);
   const [urlInput, setUrlInput] = useState("");
   const [urlResults, setUrlResults] = useState(false);
   const [openLinks, setOpenLinks] = useState(false);
@@ -57,12 +65,27 @@ const Archive = () => {
   const authenticatedRequest = useAuthenticatedRequest();
 
   useEffect(() => {
-    if (url) {
-      console.log(url);
-      setUrlInput(url);
+    if (mainUrl) {
       setUrlResults(true);
+      setUrlInput(mainUrl);
+    } else if (url) {
+      console.log(url);
+      setUrlResults(true);
+      setUrlInput(mainUrl);
+      archiveUrlSet(url);
     }
   }, []);
+
+  const handleCloseUrl = () => {
+    setUrlResults(false);
+    dispatch(archiveStateCleaned());
+    setUrlInput("");
+  };
+
+  const handleSubmitUrl = () => {
+    setUrlResults(true);
+    dispatch(archiveUrlSet(urlInput));
+  };
 
   const isFileAWaczFile = (fileName) => {
     return fileName.split(".").pop() === "wacz";
@@ -202,9 +225,7 @@ const Archive = () => {
               variant="contained"
               color="primary"
               disabled={urlResults || urlInput === ""}
-              onClick={() => {
-                setUrlResults(true);
-              }}
+              onClick={handleSubmitUrl}
             >
               {"submit"}
             </Button>
@@ -212,19 +233,14 @@ const Archive = () => {
               variant="outlined"
               color="error"
               disabled={!urlResults}
-              onClick={() => {
-                setUrlInput("");
-                setUrlResults(false);
-              }}
+              onClick={handleCloseUrl}
             >
               {"clear"}
             </Button>
           </Stack>
-          {console.log("hi" + urlInput)}
           {urlResults && urlInput !== "" ? (
             <>
               {console.log("urlResults: " + urlResults)}
-              {console.log("urlInput: " + urlInput)}
               <UrlArchive url={urlInput} openLinks={openLinks}></UrlArchive>
             </>
           ) : null}

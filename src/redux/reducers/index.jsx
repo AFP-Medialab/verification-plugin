@@ -28,7 +28,7 @@ import twitterSnaReducer from "./tools/twitterSnaReducer";
 import languageSupportReducer from "./languageSupportReducer";
 import loccusReducer from "./tools/loccusReducer";
 import c2paReducer from "./tools/c2paReducer";
-import archivingTricksReducer from "./tools/archivingTricksReducer";
+import archiveReducer from "./tools/archiveReducer";
 
 const allReducers = combineReducers({
   language: languageReducer,
@@ -60,7 +60,7 @@ const allReducers = combineReducers({
   geolocation: geolocationReducer,
   languagesSupport: languageSupportReducer,
   c2pa: c2paReducer,
-  archivingTricks: archivingTricksReducer,
+  archive: archiveReducer,
 });
 
 export default allReducers;
