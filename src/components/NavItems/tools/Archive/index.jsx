@@ -1,14 +1,20 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
   Alert,
   Box,
   Button,
   Card,
+  Checkbox,
   Fade,
+  FormControlLabel,
   Grid2,
   Skeleton,
   Stack,
+  TextField,
   Typography,
 } from "@mui/material";
 
@@ -21,6 +27,7 @@ import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import useAuthenticatedRequest from "../../../Shared/Authentication/useAuthenticatedRequest";
 import { prettifyLargeString } from "./utils";
 import { useParams } from "react-router-dom";
+import UrlArchive from "./components/urlArchive";
 // import { getclientId } from "components/Shared/GoogleAnalytics/MatomoAnalytics";
 // import { useSelector } from "react-redux";
 // import { useTrackEvent } from "Hooks/useAnalytics";
@@ -29,7 +36,9 @@ import { useParams } from "react-router-dom";
 
 const Archive = () => {
   const { url } = useParams();
-  console.log(url);
+  const [urlInput, setUrlInput] = useState("");
+  const [urlResults, setUrlResults] = useState(false);
+  const [openLinks, setOpenLinks] = useState(false);
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -44,6 +53,14 @@ const Archive = () => {
   const [errorMessage, setErrorMessage] = useState("");
 
   const authenticatedRequest = useAuthenticatedRequest();
+
+  useEffect(() => {
+    if (url) {
+      console.log(url);
+      setUrlInput(url);
+      setUrlResults(true);
+    }
+  }, []);
 
   const isFileAWaczFile = (fileName) => {
     return fileName.split(".").pop() === "wacz";
@@ -154,13 +171,78 @@ const Archive = () => {
       />
       <Card>
         <Box p={3}>
-          <Typography>{url}</Typography>
+          <Stack direction="row" spacing={2}>
+            <TextField
+              type="url"
+              id="standard-full-width"
+              label={""}
+              placeholder={""}
+              value={urlInput}
+              variant="outlined"
+              disabled={urlResults}
+              onChange={(e) => {
+                setUrlInput(e.target.value);
+              }}
+              fullWidth
+            />
+            {/* <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={openLinks}
+                      onChange={() => {setOpenLinks(!openLinks)}}
+                      value="checkedBox"
+                      color="primary"
+                    />
+                  }
+                  label={"open links"}
+                /> */}
+            <Button
+              variant="contained"
+              color="primary"
+              disabled={urlResults || urlInput === ""}
+              onClick={() => {
+                setUrlResults(true);
+              }}
+            >
+              {"submit"}
+            </Button>
+            <Button
+              variant="outlined"
+              color="error"
+              disabled={!urlResults}
+              onClick={() => {
+                setUrlInput("");
+                setUrlResults(false);
+              }}
+            >
+              {"clear"}
+            </Button>
+          </Stack>
+          {console.log("hi" + urlInput)}
+          {urlResults && urlInput !== "" ? (
+            <>
+              {console.log("urlResults: " + urlResults)}
+              {console.log("urlInput: " + urlInput)}
+              <UrlArchive url={urlInput} openLinks={openLinks}></UrlArchive>
+            </>
+          ) : null}
         </Box>
-        <Box p={3}>
-          <form>
-            <Stack spacing={4}>
-              <Grid2 container direction="row" spacing={3} alignItems="start">
-                {/* <Grid2  >
+      </Card>
+      <Box p={2} />
+      <Card>
+        <Accordion>
+          <AccordionSummary></AccordionSummary>
+          <AccordionDetails>
+            <Box p={3}>
+              <form>
+                <Stack spacing={4}>
+                  <Grid2
+                    container
+                    direction="row"
+                    spacing={3}
+                    alignItems="start"
+                  >
+                    {/* <Grid2  >
                   <TextField
                     disabled={isLoading}
                     id="standard-full-width"
@@ -173,91 +255,98 @@ const Archive = () => {
                   />
                 </Grid2> */}
 
-                <Grid2>
-                  <Stack
-                    direction="column"
-                    spacing={2}
-                    justifyContent="flex-start"
-                    alignItems="flex-start"
-                  >
-                    <Button variant="outlined" startIcon={<FolderOpenIcon />}>
-                      <label htmlFor="fileInputMagnifier">
-                        {input !== "" ? input : "Select a .wacz file"}
-                      </label>
-                      <input
-                        id="fileInputMagnifier"
-                        type="file"
-                        hidden={true}
-                        onChange={(e) => {
-                          setInput(prettifyLargeString(e.target.files[0].name));
-                          setFileToUpload(e.target.files[0]);
-                        }}
-                      />
-                    </Button>
-                    <LoadingButton
-                      loading={isLoading}
-                      disabled={!input}
-                      type="submit"
-                      variant="contained"
-                      color="primary"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        handleSubmit();
-                      }}
-                    >
-                      {"Archive File"}
-                    </LoadingButton>
-                  </Stack>
-                </Grid2>
-              </Grid2>
-              <Box>
-                {errorMessage && (
-                  <Box mb={4}>
-                    <Fade in={errorMessage ? true : false} timeout={750}>
-                      <Alert severity="error">{errorMessage}</Alert>
-                    </Fade>
-                  </Box>
-                )}
+                    <Grid2>
+                      <Stack
+                        direction="column"
+                        spacing={2}
+                        justifyContent="flex-start"
+                        alignItems="flex-start"
+                      >
+                        <Button
+                          variant="outlined"
+                          startIcon={<FolderOpenIcon />}
+                        >
+                          <label htmlFor="fileInputMagnifier">
+                            {input !== "" ? input : "Select a .wacz file"}
+                          </label>
+                          <input
+                            id="fileInputMagnifier"
+                            type="file"
+                            hidden={true}
+                            onChange={(e) => {
+                              setInput(
+                                prettifyLargeString(e.target.files[0].name),
+                              );
+                              setFileToUpload(e.target.files[0]);
+                            }}
+                          />
+                        </Button>
+                        <LoadingButton
+                          loading={isLoading}
+                          disabled={!input}
+                          type="submit"
+                          variant="contained"
+                          color="primary"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            handleSubmit();
+                          }}
+                        >
+                          {"Archive File"}
+                        </LoadingButton>
+                      </Stack>
+                    </Grid2>
+                  </Grid2>
+                  <Box>
+                    {errorMessage && (
+                      <Box mb={4}>
+                        <Fade in={errorMessage ? true : false} timeout={750}>
+                          <Alert severity="error">{errorMessage}</Alert>
+                        </Fade>
+                      </Box>
+                    )}
 
-                {hasArchiveBeenCreated && (
-                  <Box mb={4}>
-                    <Fade in={hasArchiveBeenCreated} timeout={750}>
-                      <Alert severity="success">
-                        The archive was created successfully!
-                      </Alert>
-                    </Fade>
-                  </Box>
-                )}
-                {isLoading || archiveLinks.length === 0 ? (
-                  <>
-                    {isLoading && (
-                      <Fade in={isLoading} timeout={750}>
-                        <Box>
-                          <Alert severity="info">
-                            Loading... This can take up to a few minutes
+                    {hasArchiveBeenCreated && (
+                      <Box mb={4}>
+                        <Fade in={hasArchiveBeenCreated} timeout={750}>
+                          <Alert severity="success">
+                            The archive was created successfully!
                           </Alert>
-                          <Box>
-                            <Skeleton variant="text" height={40} />
-                            <Skeleton variant="text" height={40} />
-                          </Box>
+                        </Fade>
+                      </Box>
+                    )}
+                    {isLoading || archiveLinks.length === 0 ? (
+                      <>
+                        {isLoading && (
+                          <Fade in={isLoading} timeout={750}>
+                            <Box>
+                              <Alert severity="info">
+                                Loading... This can take up to a few minutes
+                              </Alert>
+                              <Box>
+                                <Skeleton variant="text" height={40} />
+                                <Skeleton variant="text" height={40} />
+                              </Box>
+                            </Box>
+                          </Fade>
+                        )}
+                      </>
+                    ) : (
+                      <Fade in={!isLoading} timeout={1000}>
+                        <Box>
+                          <ArchiveTable
+                            rows={archiveLinks}
+                            fileName={fileToUpload.name}
+                          />
                         </Box>
                       </Fade>
                     )}
-                  </>
-                ) : (
-                  <Fade in={!isLoading} timeout={1000}>
-                    <Box>
-                      <ArchiveTable
-                        rows={archiveLinks}
-                        fileName={fileToUpload.name}
-                      />
-                    </Box>
-                  </Fade>
-                )}
-              </Box>
-            </Stack>
-          </form>
-        </Box>
+                  </Box>
+                </Stack>
+              </form>
+            </Box>
+          </AccordionDetails>
+        </Accordion>
       </Card>
     </div>
   );
