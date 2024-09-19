@@ -9,6 +9,7 @@ import {
   Grid2,
   Skeleton,
   Stack,
+  Typography,
 } from "@mui/material";
 
 import LoadingButton from "@mui/lab/LoadingButton";
@@ -19,6 +20,7 @@ import ArchiveTable from "./components/archiveTable";
 import HeaderTool from "../../../Shared/HeaderTool/HeaderTool";
 import useAuthenticatedRequest from "../../../Shared/Authentication/useAuthenticatedRequest";
 import { prettifyLargeString } from "./utils";
+import { useParams } from "react-router-dom";
 // import { getclientId } from "components/Shared/GoogleAnalytics/MatomoAnalytics";
 // import { useSelector } from "react-redux";
 // import { useTrackEvent } from "Hooks/useAnalytics";
@@ -26,6 +28,8 @@ import { prettifyLargeString } from "./utils";
 //TODO:UI for long strings
 
 const Archive = () => {
+  const { paramUrl } = useParams();
+
   const [isLoading, setIsLoading] = useState(false);
 
   const [input, setInput] = useState("");
@@ -148,6 +152,9 @@ const Archive = () => {
         icon={<ArchiveIcon sx={{ fill: "#00926c", width: 40, height: 40 }} />}
       />
       <Card>
+        <Box p={3}>
+          <Typography>{paramUrl}</Typography>
+        </Box>
         <Box p={3}>
           <form>
             <Stack spacing={4}>

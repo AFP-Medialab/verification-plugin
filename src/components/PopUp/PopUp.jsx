@@ -64,6 +64,14 @@ const PopUp = () => {
     });
   };
 
+  const loadDataArchiving = () => {
+    navigator.tabs.query({ active: true, lastFocusedWindow: true }, (tabs) => {
+      let url = tabs[0].url;
+      if (url) return url;
+      return "";
+    });
+  };
+
   useEffect(() => {
     let supportedBrowserLang = getSupportedBrowserLanguage();
 
@@ -157,6 +165,22 @@ const PopUp = () => {
             onClick={() => window.open("/popup.html#/app/classroom/")}
           >
             {keyword("open_classroom")}
+          </Button>
+        </Grid2>
+        <Box m={1} />
+        <Grid2 size={{ xs: 12 }}>
+          <Button
+            variant="outlined"
+            color="primary"
+            fullWidth={true}
+            onClick={() => {
+              const url = loadDataArchiving();
+              window.open(
+                "/popup.html#/app/tools/archive/" + encodeURIComponent(url),
+              );
+            }}
+          >
+            {keyword("archiving_tricks")}
           </Button>
         </Grid2>
       </Grid2>
