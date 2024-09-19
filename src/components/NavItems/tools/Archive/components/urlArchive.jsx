@@ -9,6 +9,8 @@ const UrlArchive = ({ url, openLinks }) => {
   useEffect(() => {
     if (url && url.includes("facebook")) {
       setPlatform("facebook");
+    } else if (url && url.includes("youtube")) {
+      setPlatform("youtube");
     }
   }, [url]);
 
@@ -27,6 +29,9 @@ const UrlArchive = ({ url, openLinks }) => {
         )}`,
       ];
       setUrls(facebookUrls);
+    } else if (platform === "youtube") {
+      const youtubeUrls = [url.replace("/watch?v=", "/embed/")];
+      setUrls(youtubeUrls);
     }
   }, [platform]);
 
@@ -67,7 +72,16 @@ const UrlArchive = ({ url, openLinks }) => {
           </>
         ) : (
           <>
-            <Typography>{"Platform not yet supported."}</Typography>
+            {platform === "youtube" ? (
+              <>
+                <Typography>{"Embed Link:"}</Typography>
+                <Link href={urls[0]} pl={2}>
+                  {urls[0]}
+                </Link>
+              </>
+            ) : (
+              <Typography>{"Platform not yet supported."}</Typography>
+            )}
           </>
         )}
       </Stack>
