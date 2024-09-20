@@ -68,10 +68,10 @@ const Archive = () => {
     if (mainUrl) {
       setUrlResults(true);
       setUrlInput(mainUrl);
-    } else if (url) {
+    } else if (url && url !== "") {
       console.log(url);
       setUrlResults(true);
-      setUrlInput(mainUrl);
+      setUrlInput(url);
       archiveUrlSet(url);
     }
   }, []);

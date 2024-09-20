@@ -178,7 +178,7 @@ const PopUp = () => {
               );
             }}
           >
-            {keyword("archiving_tricks")}
+            {keyword("archive_this")}
           </Button>
         </Grid2>
       </Grid2>
