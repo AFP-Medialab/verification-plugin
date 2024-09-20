@@ -72,7 +72,6 @@ const Archive = () => {
       setUrlResults(true);
       setUrlInput(mainUrl);
     } else if (url && url !== "") {
-      console.log(url);
       setUrlResults(true);
       setUrlInput(url);
       archiveUrlSet(url);
@@ -232,7 +231,6 @@ const Archive = () => {
           </Stack>
           {urlResults && urlInput !== "" ? (
             <>
-              {console.log("urlResults: " + urlResults)}
               <UrlArchive url={urlInput} openLinks={openLinks}></UrlArchive>
             </>
           ) : null}
