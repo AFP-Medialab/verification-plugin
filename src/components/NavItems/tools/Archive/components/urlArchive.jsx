@@ -1,6 +1,17 @@
-import { Box, Button, Grid2, Link, Stack, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Grid2,
+  Icon,
+  Link,
+  Stack,
+  Tooltip,
+  Typography,
+} from "@mui/material";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import { useEffect, useState } from "react";
+import IconPermaCC from "../../../../NavBar/images/SVG/Others/perma-cc-icon.svg";
+import IconInternetArchive from "../../../../NavBar/images/SVG/Others/archive-icon.svg";
 
 const UrlArchive = ({ url, openLinks }) => {
   const [platform, setPlatform] = useState(null);
@@ -43,6 +54,35 @@ const UrlArchive = ({ url, openLinks }) => {
     }
   }, [platform]);
 
+  const saveToInternetArchive = (link) => {
+    console.log("opening window");
+    window.open("https://web.archive.org/save/" + link, "_blank");
+  };
+
+  const ArchiveLink = ({ link, link_type_keyword }) => {
+    return (
+      <>
+        <Grid2 container>
+          <Typography>{keyword(link_type_keyword)}</Typography>
+          <Box p={1} />
+          <Tooltip title="Archive link using Perma CC. Not yet available.">
+            <Button>
+              <IconPermaCC />
+            </Button>
+          </Tooltip>
+          <Tooltip title="Archive link using Internet Archive.">
+            <Button onClick={() => saveToInternetArchive(link)}>
+              <IconInternetArchive />
+            </Button>
+          </Tooltip>
+        </Grid2>
+        <Link href={link} pl={2}>
+          {link}
+        </Link>
+      </>
+    );
+  };
+
   return (
     <>
       <Stack p={2} spacing={1}>
@@ -82,16 +122,30 @@ const UrlArchive = ({ url, openLinks }) => {
           <>
             {platform === "youtube" ? (
               <>
-                <Typography>{"Embed Link:"}</Typography>
+                {/* <Grid2 container>
+                  <Typography>{keyword("embed_link")}</Typography>
+                  <Box p={1}/>
+                  <Tooltip title="Archive link with Perma CC">
+                    <Button>
+                      <IconPermaCC />
+                    </Button>
+                  </Tooltip>
+                  <Tooltip title="Archive link with Internet Archive">
+                    <Button>
+                      <IconInternetArchive/>
+                    </Button>
+                  </Tooltip>
+                </Grid2>
                 <Link href={urls[0]} pl={2}>
                   {urls[0]}
-                </Link>
+                </Link> */}
+                <ArchiveLink link={urls[0]} link_type_keyword={"embed_link"} />
               </>
             ) : (
               <>
                 {platform === "instagram" ? (
                   <>
-                    <Typography>{"Embed Link:"}</Typography>
+                    <Typography>{keyword("embed_link")}</Typography>
                     <Link href={urls[0]} pl={2}>
                       {urls[0]}
                     </Link>
