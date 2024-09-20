@@ -11,6 +11,8 @@ const UrlArchive = ({ url, openLinks }) => {
       setPlatform("facebook");
     } else if (url && url.includes("youtube")) {
       setPlatform("youtube");
+    } else if (url && url.includes("instagram")) {
+      setPlatform("instagram");
     }
   }, [url]);
 
@@ -32,6 +34,9 @@ const UrlArchive = ({ url, openLinks }) => {
     } else if (platform === "youtube") {
       const youtubeUrls = [url.replace("/watch?v=", "/embed/")];
       setUrls(youtubeUrls);
+    } else if (platform === "instagram") {
+      const instagramUrls = [url + "embed/captioned"];
+      setUrls(instagramUrls);
     }
   }, [platform]);
 
@@ -80,7 +85,18 @@ const UrlArchive = ({ url, openLinks }) => {
                 </Link>
               </>
             ) : (
-              <Typography>{"Platform not yet supported."}</Typography>
+              <>
+                {platform === "instagram" ? (
+                  <>
+                    <Typography>{"Embed Link:"}</Typography>
+                    <Link href={urls[0]} pl={2}>
+                      {urls[0]}
+                    </Link>
+                  </>
+                ) : (
+                  <Typography>{"Platform not yet supported."}</Typography>
+                )}
+              </>
             )}
           </>
         )}
