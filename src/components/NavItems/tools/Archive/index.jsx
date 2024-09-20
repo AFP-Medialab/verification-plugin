@@ -34,6 +34,7 @@ import {
   archiveUrlSet,
 } from "redux/reducers/tools/archiveReducer";
 import { useDispatch, useSelector } from "react-redux";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 
 // import { getclientId } from "components/Shared/GoogleAnalytics/MatomoAnalytics";
 // import { useSelector } from "react-redux";
@@ -63,6 +64,8 @@ const Archive = () => {
   const [errorMessage, setErrorMessage] = useState("");
 
   const authenticatedRequest = useAuthenticatedRequest();
+
+  const keyword = i18nLoadNamespace("components/NavItems/tools/Archive");
 
   useEffect(() => {
     if (mainUrl) {
@@ -190,7 +193,7 @@ const Archive = () => {
   return (
     <div>
       <HeaderTool
-        name={"Archiving"}
+        name={keyword("archive_name")}
         description={"Archive a .wacz file with Web Archive (Wayback Machine)"}
         icon={<ArchiveIcon sx={{ fill: "#00926c", width: 40, height: 40 }} />}
       />
@@ -227,7 +230,7 @@ const Archive = () => {
               disabled={urlResults || urlInput === ""}
               onClick={handleSubmitUrl}
             >
-              {"submit"}
+              {keyword("submit_button")}
             </Button>
             <Button
               variant="outlined"
@@ -235,7 +238,7 @@ const Archive = () => {
               disabled={!urlResults}
               onClick={handleCloseUrl}
             >
-              {"clear"}
+              {keyword("clear_button")}
             </Button>
           </Stack>
           {urlResults && urlInput !== "" ? (
@@ -250,7 +253,7 @@ const Archive = () => {
       <Card>
         <Accordion>
           <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-            <Typography>{"Archive a .wacz file"}</Typography>
+            <Typography>{keyword("archive_wacz_accordion")}</Typography>
           </AccordionSummary>
           <AccordionDetails>
             <Box p={3}>
@@ -312,7 +315,7 @@ const Archive = () => {
                             handleSubmit();
                           }}
                         >
-                          {"Archive File"}
+                          {keyword("archive_file")}
                         </LoadingButton>
                       </Stack>
                     </Grid2>

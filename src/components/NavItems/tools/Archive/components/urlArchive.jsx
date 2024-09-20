@@ -1,10 +1,13 @@
 import { Box, Button, Grid2, Link, Stack, Typography } from "@mui/material";
+import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import { useEffect, useState } from "react";
 
 const UrlArchive = ({ url, openLinks }) => {
   const [platform, setPlatform] = useState(null);
   const [urls, setUrls] = useState([]);
   console.log(url);
+
+  const keyword = i18nLoadNamespace("components/NavItems/tools/Archive");
 
   useEffect(() => {
     if (url && url.includes("facebook")) {
@@ -56,21 +59,21 @@ const UrlArchive = ({ url, openLinks }) => {
                   });
                 }}
               >
-                {"Open all links"}
+                {keyword("open_links_button")}
               </Button>
             </Grid2>
             <Box m={1} />
-            <Typography>{"Embed Link:"}</Typography>
+            <Typography>{keyword("embed_link")}</Typography>
             <Link href={urls[0]} pl={2}>
               {urls[0]}
             </Link>
             <Box m={1} />
-            <Typography>{"Android Link:"}</Typography>
+            <Typography>{keyword("android_link")}</Typography>
             <Link href={urls[1]} pl={2}>
               {urls[1]}
             </Link>
             <Box m={1} />
-            <Typography>{"Mobile Link:"}</Typography>
+            <Typography>{keyword("mobile_link")}</Typography>
             <Link href={urls[2]} pl={2}>
               {urls[2]}
             </Link>
@@ -94,7 +97,7 @@ const UrlArchive = ({ url, openLinks }) => {
                     </Link>
                   </>
                 ) : (
-                  <Typography>{"Platform not yet supported."}</Typography>
+                  <Typography>{keyword("unsupported_platform")}</Typography>
                 )}
               </>
             )}
