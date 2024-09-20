@@ -9,6 +9,7 @@ import useMyStyles from "../Shared/MaterialUiStyles/useMyStyles";
 import { i18nLoadNamespace } from "components/Shared/Languages/i18nLoadNamespace";
 import { changeLanguage } from "../../redux/reducers/languageReducer";
 import { getSupportedBrowserLanguage } from "../Shared/Languages/getSupportedBrowserLanguage";
+import { ROLES } from "constants/roles";
 
 const navigator = window.browser ? window.browser : window.chrome;
 
@@ -25,6 +26,12 @@ const PopUp = () => {
   const urlOpenAssistant = () => {
     window.open("/popup.html#/app/assistant/" + encodeURIComponent(pageUrl));
   };
+
+  const userAuthenticated = useSelector(
+    (state) => state.userSession && state.userSession.userAuthenticated,
+  );
+  console.log(userAuthenticated);
+  const userRoles = useSelector((state) => state.userSession.user.roles);
 
   const createScript = () => {
     let script =
@@ -167,20 +174,23 @@ const PopUp = () => {
           </Button>
         </Grid2>
         <Box m={1} />
-        <Grid2 size={{ xs: 12 }}>
-          <Button
-            variant="outlined"
-            color="primary"
-            fullWidth={true}
-            onClick={() => {
-              window.open(
-                "/popup.html#/app/tools/archive/" + encodeURIComponent(pageUrl),
-              );
-            }}
-          >
-            {keyword("archive_this")}
-          </Button>
-        </Grid2>
+        {userRoles.includes(ROLES.ARCHIVE) ? (
+          <Grid2 size={{ xs: 12 }}>
+            <Button
+              variant="outlined"
+              color="primary"
+              fullWidth={true}
+              onClick={() => {
+                window.open(
+                  "/popup.html#/app/tools/archive/" +
+                    encodeURIComponent(pageUrl),
+                );
+              }}
+            >
+              {keyword("archive_this")}
+            </Button>
+          </Grid2>
+        ) : null}
       </Grid2>
 
       <Box m={1} />

@@ -213,17 +213,6 @@ const Archive = () => {
               }}
               fullWidth
             />
-            {/* <FormControlLabel
-                  control={
-                    <Checkbox
-                      checked={openLinks}
-                      onChange={() => {setOpenLinks(!openLinks)}}
-                      value="checkedBox"
-                      color="primary"
-                    />
-                  }
-                  label={"open links"}
-                /> */}
             <Button
               variant="contained"
               color="primary"
