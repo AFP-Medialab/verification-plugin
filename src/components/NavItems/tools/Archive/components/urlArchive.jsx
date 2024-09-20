@@ -103,20 +103,23 @@ const UrlArchive = ({ url, openLinks }) => {
               </Button>
             </Grid2>
             <Box m={1} />
-            <Typography>{keyword("embed_link")}</Typography>
+            {/* <Typography>{keyword("embed_link")}</Typography>
             <Link href={urls[0]} pl={2}>
               {urls[0]}
-            </Link>
+            </Link> */}
+            <ArchiveLink link={urls[0]} link_type_keyword={"embed_link"} />
             <Box m={1} />
-            <Typography>{keyword("android_link")}</Typography>
+            {/* <Typography>{keyword("android_link")}</Typography>
             <Link href={urls[1]} pl={2}>
               {urls[1]}
-            </Link>
+            </Link> */}
+            <ArchiveLink link={urls[1]} link_type_keyword={"android_link"} />
             <Box m={1} />
-            <Typography>{keyword("mobile_link")}</Typography>
+            {/* <Typography>{keyword("mobile_link")}</Typography>
             <Link href={urls[2]} pl={2}>
               {urls[2]}
-            </Link>
+            </Link> */}
+            <ArchiveLink link={urls[2]} link_type_keyword={"mobile_link"} />
           </>
         ) : (
           <>
@@ -145,10 +148,14 @@ const UrlArchive = ({ url, openLinks }) => {
               <>
                 {platform === "instagram" ? (
                   <>
-                    <Typography>{keyword("embed_link")}</Typography>
+                    {/* <Typography>{keyword("embed_link")}</Typography>
                     <Link href={urls[0]} pl={2}>
                       {urls[0]}
-                    </Link>
+                    </Link> */}
+                    <ArchiveLink
+                      link={urls[0]}
+                      link_type_keyword={"embed_link"}
+                    />
                   </>
                 ) : (
                   <Typography>{keyword("unsupported_platform")}</Typography>
