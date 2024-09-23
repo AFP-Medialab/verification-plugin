@@ -63,12 +63,12 @@ const UrlArchive = ({ url, openLinks }) => {
         <Grid2 container>
           <Typography>{keyword(link_type_keyword)}</Typography>
           <Box p={1} />
-          <Tooltip title="Archive link using Perma CC. Not yet available.">
+          <Tooltip title={keyword("permacc_button")}>
             <Button>
               <IconPermaCC />
             </Button>
           </Tooltip>
-          <Tooltip title="Archive link using Internet Archive.">
+          <Tooltip title={keyword("internet_archive_button")}>
             <Button onClick={() => saveToInternetArchive(link)}>
               <IconInternetArchive />
             </Button>
