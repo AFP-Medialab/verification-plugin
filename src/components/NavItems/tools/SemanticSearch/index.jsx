@@ -36,6 +36,7 @@ import { getLanguageName } from "../../../Shared/Utils/languageUtils";
 import { i18nLoadNamespace } from "../../../Shared/Languages/i18nLoadNamespace";
 import languageDictionary from "../../../../LocalDictionary/iso-639-1-languages";
 import { useSelector } from "react-redux";
+import DateAndTimePicker from "components/Shared/DateTimePicker/DateAndTimePicker";
 
 const SemanticSearch = () => {
   const keyword = i18nLoadNamespace("components/NavItems/tools/SemanticSearch");
@@ -551,30 +552,21 @@ const SemanticSearch = () => {
                         </Fade>
                       </Modal>
                     </Stack>
-
-                    <DatePicker
-                      label={keyword(
+                    <DateAndTimePicker
+                      time={false}
+                      disabled={isLoading}
+                      keywordFromDate={keyword(
                         "semantic_search_form_date_from_placeholder",
                       )}
-                      value={dateFrom}
-                      onChange={(newDate) => setDateFrom(dayjs(newDate))}
-                      slotProps={{
-                        field: { clearable: true },
-                      }}
-                      disabled={isLoading}
-                    />
-                    <DatePicker
-                      label={keyword(
+                      keywordUntilDate={keyword(
                         "semantic_search_form_date_to_placeholder",
                       )}
-                      value={dateTo}
-                      onChange={(newDate) => {
-                        setDateTo(newDate);
-                      }}
-                      slotProps={{
-                        field: { clearable: true },
-                      }}
-                      disabled={isLoading}
+                      fromValue={dateFrom}
+                      untilValue={dateTo}
+                      handleSinceChange={(newDate) =>
+                        setDateFrom(dayjs(newDate))
+                      }
+                      handleUntilChange={(newDate) => setDateTo(dayjs(newDate))}
                     />
                     <CheckboxesTags
                       label={keyword(

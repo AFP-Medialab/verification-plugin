@@ -26,7 +26,7 @@ const styles = (theme) => ({
   },
   neededField: {
     "& label": {
-      color: "rgb(0,170,180)",
+      color: "#00926c",
     },
   },
   buttonSuccess: {
