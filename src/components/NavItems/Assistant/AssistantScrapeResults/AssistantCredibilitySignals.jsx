@@ -463,18 +463,18 @@ const AssistantCredSignals = () => {
                     helpDescription={"persuasion_techniques_tooltip"}
                     textHtmlMap={textHtmlMap}
                   />
-                  {/* footer */}
-                  <TextFooter
-                    classes={classes}
-                    setDisplayOrigLang={setDisplayOrigLang}
-                    displayOrigLang={displayOrigLang}
-                    textLang={textLang}
-                    expandMinimiseText={expandMinimiseText}
-                    text={text}
-                    setExpanded={setExpanded}
-                    expanded={expanded}
-                  />
                 </Collapse>
+                {/* footer */}
+                <TextFooter
+                  classes={classes}
+                  setDisplayOrigLang={setDisplayOrigLang}
+                  displayOrigLang={displayOrigLang}
+                  textLang={textLang}
+                  expandMinimiseText={expandMinimiseText}
+                  text={text}
+                  setExpanded={setExpanded}
+                  expanded={expanded}
+                />
               </div>
             )}
           </AccordionDetails>
@@ -560,9 +560,7 @@ const AssistantCredSignals = () => {
                   setDisplayOrigLang={setDisplayOrigLang}
                   displayOrigLang={displayOrigLang}
                   textLang={textLang}
-                  textLangLong={getLanguageName(textLang)}
-                  keyword={keyword}
-                  sharedKeyword={sharedKeyword}
+                  expandMinimiseText={expandMinimiseText}
                   text={text}
                   setExpanded={setExpanded}
                   expanded={expanded}

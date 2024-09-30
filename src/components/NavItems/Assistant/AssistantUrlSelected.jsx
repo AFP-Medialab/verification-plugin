@@ -15,7 +15,7 @@ import { KNOWN_LINKS } from "./AssistantRuleBook";
 import { submitInputUrl } from "../../../redux/actions/tools/assistantActions";
 
 import { useTrackEvent } from "../../../Hooks/useAnalytics";
-import { Grid2 } from "@mui/material";
+import Stack from "@mui/material/Stack";
 
 const AssistantUrlSelected = (props) => {
   // styles, language, dispatch, params
@@ -83,13 +83,20 @@ const AssistantUrlSelected = (props) => {
         }
       />
 
+      {/* loading */}
       {loading && <LinearProgress color={"secondary"} />}
 
       <CardContent>
         <Box sx={{ mr: 2 }}>
           <form>
-            <Grid2 container>
-              <Grid2 size={{ xs: 10 }}>
+            <Stack>
+              <Stack
+                direction="row"
+                spacing={2}
+                justifyContent="flex-start"
+                alignItems="center"
+              >
+                {/* text box */}
                 <TextField
                   variant="outlined"
                   label={keyword("assistant_paste_url")}
@@ -100,46 +107,38 @@ const AssistantUrlSelected = (props) => {
                   onChange={(e) => setFormInput(e.target.value)}
                   data-testid="assistant-url-selected-input"
                 />
-              </Grid2>
-              <Grid2 size={{ xs: 2 }}>
-                <Box sx={{ mt: 2, ml: 6 }}>
-                  {/* {inputUrl === null ? ( */}
-                  <Button
-                    type="submit"
-                    variant="contained"
-                    color="primary"
-                    data-testid="assistant-url-selected-analyse-btn"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      handleSubmissionURL();
-                    }}
-                  >
-                    {keyword("button_submit")}
-                  </Button>
-                  {/* // ) : (
-                  //   <Button
-                  //     variant="contained"
-                  //     color="primary"
-                  //     onClick={() => cleanAssistant()}
-                  //   >
-                  //     {keyword("button_clean")}
-                  //   </Button>
-                  //</Grid2>)} */}
-                </Box>
-              </Grid2>
+
+                {/* submit button */}
+                <Button
+                  type="submit"
+                  variant="contained"
+                  color="primary"
+                  data-testid="assistant-url-selected-analyse-btn"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleSubmissionURL();
+                  }}
+                >
+                  {keyword("button_submit")}
+                </Button>
+              </Stack>
+
+              {/* archive */}
               {inputUrl === null ? null : (
-                <Grid2 size={{ xs: 1 }}>
-                  <Box sx={{ ml: 1 }}>
-                    <Button
-                      onClick={() => handleArchive()}
-                      startIcon={<ArchiveOutlinedIcon />}
-                    >
-                      <label>{keyword("archive_link")}</label>
-                    </Button>
-                  </Box>
-                </Grid2>
+                <Stack
+                  direction="row"
+                  justifyContent="flex-start"
+                  alignItems="left"
+                >
+                  <Button
+                    onClick={() => handleArchive()}
+                    startIcon={<ArchiveOutlinedIcon />}
+                  >
+                    <label>{keyword("archive_link")}</label>
+                  </Button>
+                </Stack>
               )}
-            </Grid2>
+            </Stack>
           </form>
         </Box>
       </CardContent>
