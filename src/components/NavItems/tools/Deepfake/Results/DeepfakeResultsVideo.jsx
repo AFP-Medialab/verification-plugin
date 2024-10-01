@@ -319,28 +319,26 @@ const DeepfakeResultsVideo = (props) => {
             )}
           </Grid2>
           <Grid2 size={{ xs: 6 }} p={2}>
-            <Card>
-              <Stack direction="column" p={4} spacing={4}>
-                {deepfakeScores && deepfakeScores.length === 0 && (
-                  <Typography variant="h5" sx={{ color: "red" }}>
-                    {keyword("deepfake_no_face_detection")}
-                  </Typography>
-                )}
-                {deepfakeScores && deepfakeScores.length !== 0 && (
-                  <GaugeChartResult
-                    keyword={keyword}
-                    scores={deepfakeScores}
-                    methodNames={DeepfakeImageDetectionMethodNames}
-                    detectionThresholds={DETECTION_THRESHOLDS}
-                    resultsHaveErrors={false}
-                    sanitizeDetectionPercentage={(n) => Math.round(n)}
-                    gaugeExplanation={{ keywords: keywords, colors: colors }}
-                    toolName={"Deepfake"}
-                    detectionType={"video"}
-                  />
-                )}
-              </Stack>
-            </Card>
+            <Stack direction="column" p={4} spacing={4}>
+              {deepfakeScores && deepfakeScores.length === 0 && (
+                <Typography variant="h5" sx={{ color: "red" }}>
+                  {keyword("deepfake_no_face_detection")}
+                </Typography>
+              )}
+              {deepfakeScores && deepfakeScores.length !== 0 && (
+                <GaugeChartResult
+                  keyword={keyword}
+                  scores={deepfakeScores}
+                  methodNames={DeepfakeImageDetectionMethodNames}
+                  detectionThresholds={DETECTION_THRESHOLDS}
+                  resultsHaveErrors={false}
+                  sanitizeDetectionPercentage={(n) => Math.round(n)}
+                  gaugeExplanation={{ keywords: keywords, colors: colors }}
+                  toolName={"Deepfake"}
+                  detectionType={"video"}
+                />
+              )}
+            </Stack>
           </Grid2>
         </Grid2>
 
