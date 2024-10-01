@@ -199,7 +199,7 @@ const DeepfakeResultsVideo = (props) => {
           alignItems="flex-start"
         >
           <Grid2 size={{ xs: 6 }} container direction="column" spacing={3}>
-            <Grid2 size={{ xs: 6 }} container direction="column">
+            <Grid2 width="100%" size={{ xs: 6 }} container direction="column">
               <video
                 width="100%"
                 height="auto"
@@ -219,7 +219,7 @@ const DeepfakeResultsVideo = (props) => {
               </video>
             </Grid2>
             {!!results.deepfake_video_report.results && (
-              <Grid2 size={{ xs: 6 }} container direction="column">
+              <Grid2 size={{ xs: 6 }} container width="100%" direction="column">
                 <Typography
                   variant="body1"
                   style={{
