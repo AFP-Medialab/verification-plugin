@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef } from "react";
 import Box from "@mui/material/Box";
 import { Button, ButtonGroup, Grid2, TextField } from "@mui/material";
 import FolderOpenIcon from "@mui/icons-material/FolderOpen";
@@ -41,16 +41,6 @@ const StringFileUploadField = ({
 }) => {
   const fileRef = useRef(null);
 
-  const [isLoading, setIsLoading] = useState(
-    isParentLoading !== undefined ? isParentLoading : false,
-  );
-
-  useEffect(() => {
-    if (isParentLoading !== undefined && isLoading !== isParentLoading) {
-      setIsLoading(isParentLoading);
-    }
-  }, [isParentLoading]);
-
   return (
     <Box>
       <Grid2 container direction="row" spacing={3} alignItems="center">
@@ -63,7 +53,7 @@ const StringFileUploadField = ({
             fullWidth
             value={urlInput}
             variant="outlined"
-            disabled={isLoading || fileInput instanceof Blob}
+            disabled={isParentLoading || fileInput instanceof Blob}
             onChange={(e) => setUrlInput(e.target.value)}
           />
         </Grid2>
@@ -74,19 +64,20 @@ const StringFileUploadField = ({
             color="primary"
             onClick={async (e) => {
               e.preventDefault();
-              setIsLoading(true);
               urlInput ? await handleSubmit(urlInput) : await handleSubmit(e);
-              setIsLoading(false);
             }}
-            loading={isLoading}
-            disabled={(urlInput === "" && !fileInput) || isLoading}
+            loading={isParentLoading}
+            disabled={(urlInput === "" && !fileInput) || isParentLoading}
           >
             {submitButtonKeyword}
           </LoadingButton>
         </Grid2>
       </Grid2>
       <Grid2 mt={2}>
-        <ButtonGroup variant="outlined" disabled={isLoading || urlInput !== ""}>
+        <ButtonGroup
+          variant="outlined"
+          disabled={isParentLoading || urlInput !== ""}
+        >
           <Button startIcon={<FolderOpenIcon />} sx={{ textTransform: "none" }}>
             <label htmlFor="file">
               {fileInput ? fileInput.name : localFileKeyword}
