@@ -222,7 +222,7 @@ async function getC2paData(url, dispatch) {
 
   const c2pa = await createC2pa({
     wasmSrc: "./c2paAssets/toolkit_bg.wasm",
-    workerSrc: "./c2paAssets/c2pa_worker_min.js",
+    workerSrc: "./c2paAssets/c2pa.worker.min.js",
   });
 
   dispatch(c2paLoadingSet(true));
