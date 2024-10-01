@@ -59,11 +59,11 @@ const AssistantProcessUrlActions = () => {
   return processUrlActions.length > 0 ? (
     <div>
       <Typography align={"left"} variant={"h5"}>
-        {keyword("things_you_can_do_header")}
+        {keyword("recommended_tools")}
       </Typography>
-      <Typography align={"left"} variant={"subtitle2"}>
+      {/* <Typography align={"left"} variant={"subtitle2"}>
         {keyword("things_you_can_do")}
-      </Typography>
+      </Typography> */}
       <Divider />
       <List>
         {processUrlActions.map((action, index) => {
