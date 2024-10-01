@@ -287,6 +287,7 @@ const SyntheticImageDetectionResults = ({
    */
   const getNddRows = (nddResults) => {
     let rows = [];
+    let newIndex = 0;
     for (let i = 0; i < nddResults.length; i += 1) {
       const res = nddResults[i];
       let detectionResults = [];
@@ -325,9 +326,11 @@ const SyntheticImageDetectionResults = ({
         continue;
       }
 
+      newIndex++;
+
       rows.push(
         new NddResult(
-          i + 1,
+          newIndex,
           res.archive_url,
           res.archive_url,
           res.origin_urls,
