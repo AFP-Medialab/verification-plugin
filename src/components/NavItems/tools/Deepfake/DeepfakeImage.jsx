@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
 import LinearProgress from "@mui/material/LinearProgress";
 import Box from "@mui/material/Box";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
@@ -29,7 +30,8 @@ const Deepfake = () => {
   //const dispatch = useDispatch();
   const isLoading = useSelector((state) => state.deepfakeImage.loading);
   const result = useSelector((state) => state.deepfakeImage.result);
-  const url = useSelector((state) => state.deepfakeImage.url);
+  //const url = useSelector((state) => state.deepfakeImage.url);
+  const { url } = useParams();
   const role = useSelector((state) => state.userSession.user.roles);
   const [input, setInput] = useState(url ? url : "");
   const [type, setType] = useState("");
@@ -81,6 +83,16 @@ const Deepfake = () => {
       preprocessingError,
     );
   };
+
+  // automatically run if url param in current page url
+  useEffect(() => {
+    if (url) {
+      const uri = url !== null ? decodeURIComponent(url) : undefined;
+      setInput(uri);
+      setImageFile(uri);
+      handleSubmit(uri);
+    }
+  }, [url]);
 
   const handleSubmit = () => {
     dispatch(resetDeepfake());

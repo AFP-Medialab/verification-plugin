@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
 import LinearProgress from "@mui/material/LinearProgress";
 import Box from "@mui/material/Box";
 import useMyStyles from "../../../Shared/MaterialUiStyles/useMyStyles";
@@ -18,7 +19,6 @@ import { setError } from "redux/reducers/errorReducer";
 import StringFileUploadField from "components/Shared/StringFileUploadField";
 
 const Deepfake = () => {
-  //const { url } = useParams();
   const classes = useMyStyles();
   const keyword = i18nLoadNamespace("components/NavItems/tools/Deepfake");
   const keywordAllTools = i18nLoadNamespace(
@@ -28,7 +28,8 @@ const Deepfake = () => {
 
   const isLoading = useSelector((state) => state.deepfakeVideo.loading);
   const result = useSelector((state) => state.deepfakeVideo.result);
-  const url = useSelector((state) => state.deepfakeVideo.url);
+  //const url = useSelector((state) => state.deepfakeVideo.url);
+  const { url } = useParams();
   const role = useSelector((state) => state.userSession.user.roles);
   const [input, setInput] = useState(url ? url : "");
   const [type, setType] = useState("");
@@ -78,6 +79,17 @@ const Deepfake = () => {
       preprocessingError,
     );
   };
+
+  // automatically run if url param in current page url
+  useEffect(() => {
+    if (url) {
+      const uri = url !== null ? decodeURIComponent(url) : undefined;
+      setInput(uri);
+      setVideoFile(uri);
+      handleSubmit();
+    }
+  }, [url]);
+
   const handleSubmit = async () => {
     dispatch(resetDeepfake());
     await submitUrl();

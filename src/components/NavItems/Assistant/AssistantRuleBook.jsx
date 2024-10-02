@@ -241,7 +241,7 @@ export const ASSISTANT_ACTIONS = [
     processLinksAccepted: [KNOWN_LINKS.MISC, KNOWN_LINKS.OWN],
     cTypes: [CONTENT_TYPE.IMAGE],
     exceptions: [],
-    useInputUrl: true,
+    useInputUrl: false,
     text: "synthetic_image_detection_text",
     tsvPrefix: "synthetic_image_detection",
     path: "tools/syntheticImageDetection",
@@ -260,10 +260,29 @@ export const ASSISTANT_ACTIONS = [
     processLinksAccepted: [KNOWN_LINKS.MISC, KNOWN_LINKS.OWN],
     cTypes: [CONTENT_TYPE.IMAGE],
     exceptions: [],
-    useInputUrl: true,
+    useInputUrl: false,
     text: "deepfake_image_text",
     tsvPrefix: "deepfakeImage",
     path: "tools/deepfakeImage",
+    betaTester: true,
+  },
+  {
+    title: "navbar_deepfake_video",
+    icon: (
+      <SvgIcon
+        component={DeepfakeIcon}
+        sx={{ ml: 0.25 }}
+        fontSize="large"
+        inheritViewBox
+      />
+    ),
+    processLinksAccepted: [KNOWN_LINKS.MISC, KNOWN_LINKS.OWN],
+    cTypes: [CONTENT_TYPE.VIDEO],
+    exceptions: [],
+    useInputUrl: false,
+    text: "deepfake_video_text",
+    tsvPrefix: "deepfakeVideo",
+    path: "tools/deepfakeVideo",
     betaTester: true,
   },
   {

@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
 import {
   resetSyntheticImageDetectionImage,
   setSyntheticImageDetectionLoading,
@@ -56,7 +57,8 @@ const SyntheticImageDetection = () => {
     (state) => state.syntheticImageDetection.loading,
   );
   const result = useSelector((state) => state.syntheticImageDetection.result);
-  const url = useSelector((state) => state.syntheticImageDetection.url);
+  //const url = useSelector((state) => state.syntheticImageDetection.url);
+  const { url } = useParams();
   const nd = useSelector((state) => state.syntheticImageDetection.duplicates);
   const [input, setInput] = useState(url ? url : "");
   const [imageFile, setImageFile] = useState(undefined);
@@ -282,6 +284,15 @@ const SyntheticImageDetection = () => {
       preprocessingError,
     );
   };
+
+  // automatically run if url param in current page url
+  useEffect(() => {
+    if (url) {
+      const uri = url !== null ? decodeURIComponent(url) : undefined;
+      setInput(uri);
+      handleSubmit(uri);
+    }
+  }, [url]);
 
   /**
    *
