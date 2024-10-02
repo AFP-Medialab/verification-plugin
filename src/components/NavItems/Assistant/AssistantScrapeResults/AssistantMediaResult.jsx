@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
-import { CardHeader, Grid2, Skeleton } from "@mui/material";
+import { CardHeader, Grid2, LinearProgress, Skeleton } from "@mui/material";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
@@ -78,11 +78,7 @@ const AssistantMediaResult = () => {
         title={keyword("media_title")}
         action={
           <div style={{ display: "flex" }}>
-            <div
-            //hidden={dbkfImageMatch === null && dbkfVideoMatch === null}
-            >
-              {console.log("dbkfMediaMatchLoading=", dbkfMediaMatchLoading)}
-              {dbkfMediaMatchLoading && <Skeleton variant="circular" />}
+            <div>
               {(dbkfImageMatch || dbkfVideoMatch) && (
                 <Tooltip title={keyword("image_warning")}>
                   <WarningAmber
@@ -115,6 +111,12 @@ const AssistantMediaResult = () => {
           </div>
         }
       />
+
+      {dbkfMediaMatchLoading ? (
+        <div>
+          <LinearProgress />
+        </div>
+      ) : null}
 
       {/* selected image with recommended tools */}
       <CardContent>

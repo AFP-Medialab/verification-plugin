@@ -43,6 +43,7 @@ const AssistantUrlSelected = (props) => {
   );
 
   const handleSubmissionURL = () => {
+    cleanAssistant();
     setUrl(formInput);
     dispatch(submitInputUrl(formInput));
     //trackEvent("submission", "assistant", "page assistant", formInput);

@@ -7,7 +7,7 @@ import CardMedia from "@mui/material/CardMedia";
 import Collapse from "@mui/material/Collapse";
 import FindInPageIcon from "@mui/icons-material/FindInPage";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { Grid2, IconButton, Skeleton, Stack } from "@mui/material";
+import { Grid2, IconButton } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import ErrorOutlineOutlinedIcon from "@mui/icons-material/ErrorOutlineOutlined";
@@ -39,128 +39,110 @@ const AssistantSCResults = () => {
   const mixedSourceCred = useSelector(
     (state) => state.assistant.mixedSourceCred,
   );
-  const inputSCLoading = useSelector(
-    (state) => state.assistant.inputSCLoading,
-  );
-
-  // currently not working
-  console.log("1 inputSCLoading=", inputSCLoading);
-  if (inputSCLoading) {
-    console.log("2 inputSCLoading=", inputSCLoading);
-    return (
-      <Card variant={"outlined"} sx={{ mt: 4 }}>
-        <Stack direction="column" spacing={4} p={4}>
-          <Skeleton variant="rounded" height={40} />
-        </Stack>
-      </Card>
-    );
-  }
 
   return (
-    // <Box>
-      <Card variant={"outlined"} className={classes.sourceCredibilityBorder}>
-        <Grid2 container>
-          <Grid2 size={{ xs: 12 }} className={classes.displayFlex}>
-            <CardMedia>
-              <Box m={1}>
-                <FindInPageIcon fontSize={"large"} color={"primary"} />
-              </Box>
-            </CardMedia>
-
-            <Box m={1} />
-
-            <Box mt={1.5}>
-              <Typography component={"span"} variant={"h6"}>
-                {keyword("url_domain_analysis")}
-              </Typography>
+    <Card variant={"outlined"} className={classes.sourceCredibilityBorder}>
+      <Grid2 container>
+        <Grid2 size={{ xs: 12 }} className={classes.displayFlex}>
+          <CardMedia>
+            <Box m={1}>
+              <FindInPageIcon fontSize={"large"} color={"primary"} />
             </Box>
+          </CardMedia>
 
-            <IconButton
-              className={classes.assistantIconRight}
-              onClick={() => dispatch(setAssuranceExpanded(!assuranceExpanded))}
-            >
-              <ExpandMoreIcon color={"primary"} />
-            </IconButton>
-          </Grid2>
+          <Box m={1} />
 
-          <Grid2 size={{ xs: 12 }}>
-            <Collapse
-              in={assuranceExpanded}
-              className={classes.assistantBackground}
-            >
-              <Box mt={3} ml={2}>
-                {positiveSourCred ? (
-                  <div>
-                    <Typography
-                      variant={"subtitle1"}
-                      className={classes.fontBold}
-                    >
-                      {keyword("fact_checker")}
-                    </Typography>
-                    <SourceCredibilityResult
-                      scResultFiltered={positiveSourCred}
-                      icon={CheckCircleOutlineIcon}
-                      iconColor="primary"
-                    />
-                  </div>
-                ) : null}
+          <Box mt={1.5}>
+            <Typography component={"span"} variant={"h6"}>
+              {keyword("url_domain_analysis")}
+            </Typography>
+          </Box>
 
-                {cautionSourceCred ? (
-                  <div>
-                    <Typography
-                      variant={"subtitle1"}
-                      className={classes.fontBold}
-                    >
-                      {keyword("warning_title")}
-                    </Typography>
-                    <SourceCredibilityResult
-                      scResultFiltered={cautionSourceCred}
-                      icon={ErrorOutlineOutlinedIcon}
-                      iconColor="error"
-                    />
-                  </div>
-                ) : null}
-
-                {mixedSourceCred ? (
-                  <div>
-                    <Typography
-                      variant={"subtitle1"}
-                      className={classes.fontBold}
-                    >
-                      {keyword("mentions")}
-                    </Typography>
-                    <SourceCredibilityResult
-                      scResultFiltered={mixedSourceCred}
-                      icon={SentimentSatisfied}
-                      iconColor="action"
-                    />
-                  </div>
-                ) : null}
-
-                <Box mr={2} mb={1}>
-                  <Tooltip
-                    interactive={"true"}
-                    leaveDelay={50}
-                    style={{ display: "flex", marginLeft: "auto" }}
-                    title={
-                      <div
-                        className={"content"}
-                        dangerouslySetInnerHTML={{
-                          __html: keyword("sc_tooltip"),
-                        }}
-                      />
-                    }
-                    classes={{ tooltip: classes.assistantTooltip }}
-                  >
-                    <HelpOutlineOutlinedIcon color={"action"} />
-                  </Tooltip>
-                </Box>
-              </Box>
-            </Collapse>
-          </Grid2>
+          <IconButton
+            className={classes.assistantIconRight}
+            onClick={() => dispatch(setAssuranceExpanded(!assuranceExpanded))}
+          >
+            <ExpandMoreIcon color={"primary"} />
+          </IconButton>
         </Grid2>
-      </Card>
 
+        <Grid2 size={{ xs: 12 }}>
+          <Collapse
+            in={assuranceExpanded}
+            className={classes.assistantBackground}
+          >
+            <Box mt={3} ml={2}>
+              {positiveSourCred ? (
+                <div>
+                  <Typography
+                    variant={"subtitle1"}
+                    className={classes.fontBold}
+                  >
+                    {keyword("fact_checker")}
+                  </Typography>
+                  <SourceCredibilityResult
+                    scResultFiltered={positiveSourCred}
+                    icon={CheckCircleOutlineIcon}
+                    iconColor="primary"
+                  />
+                </div>
+              ) : null}
+
+              {cautionSourceCred ? (
+                <div>
+                  <Typography
+                    variant={"subtitle1"}
+                    className={classes.fontBold}
+                  >
+                    {keyword("warning_title")}
+                  </Typography>
+                  <SourceCredibilityResult
+                    scResultFiltered={cautionSourceCred}
+                    icon={ErrorOutlineOutlinedIcon}
+                    iconColor="error"
+                  />
+                </div>
+              ) : null}
+
+              {mixedSourceCred ? (
+                <div>
+                  <Typography
+                    variant={"subtitle1"}
+                    className={classes.fontBold}
+                  >
+                    {keyword("mentions")}
+                  </Typography>
+                  <SourceCredibilityResult
+                    scResultFiltered={mixedSourceCred}
+                    icon={SentimentSatisfied}
+                    iconColor="action"
+                  />
+                </div>
+              ) : null}
+
+              <Box mr={2} mb={1}>
+                <Tooltip
+                  interactive={"true"}
+                  leaveDelay={50}
+                  style={{ display: "flex", marginLeft: "auto" }}
+                  title={
+                    <div
+                      className={"content"}
+                      dangerouslySetInnerHTML={{
+                        __html: keyword("sc_tooltip"),
+                      }}
+                    />
+                  }
+                  classes={{ tooltip: classes.assistantTooltip }}
+                >
+                  <HelpOutlineOutlinedIcon color={"action"} />
+                </Tooltip>
+              </Box>
+            </Box>
+          </Collapse>
+        </Grid2>
+      </Grid2>
+    </Card>
   );
 };
 export default AssistantSCResults;
