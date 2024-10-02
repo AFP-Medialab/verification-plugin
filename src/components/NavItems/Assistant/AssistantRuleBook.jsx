@@ -1,12 +1,17 @@
 import React from "react";
-import analysisIconOff from "../../NavBar/images/tools/video_logoOff.png";
-import keyframesIconOff from "../../NavBar/images/tools/keyframesOff.png";
-import thumbnailsIconOff from "../../NavBar/images/tools/youtubeOff.png";
-import magnifierIconOff from "../../NavBar/images/tools/magnifierOff.png";
-import metadataIconOff from "../../NavBar/images/tools/metadataOff.png";
-import videoRightsIconOff from "../../NavBar/images/tools/copyrightOff.png";
-import forensicIconOff from "../../NavBar/images/tools/forensic_logoOff.png";
-import videoIconOff from "../../NavBar/images/tools/video_logoOff.png";
+import { SvgIcon } from "@mui/material";
+
+import AnalysisIcon from "../../NavBar/images/SVG/Video/Video_analysis.svg";
+import KeyframesIcon from "../../NavBar/images/SVG/Video/Keyframes.svg";
+import ThumbnailsIcon from "../../NavBar/images/SVG/Video/Thumbnails.svg";
+import VideoRightsIcon from "../../NavBar/images/SVG/Video/Video_rights.svg";
+import ImageAnalysisIcon from "../../NavBar/images/SVG/Image/Image_analysis.svg";
+import MagnifierIcon from "../../NavBar/images/SVG/Image/Magnifier.svg";
+import MetadataIcon from "../../NavBar/images/SVG/Image/Metadata.svg";
+import ForensicIcon from "../../NavBar/images/SVG/Image/Forensic.svg";
+import OcrIcon from "../../NavBar/images/SVG/Image/OCR.svg";
+import Gradient from "@mui/icons-material/Gradient";
+import DeepfakeIcon from "../../NavBar/images/SVG/Image/Deepfake.svg";
 import DownloadIcon from "@mui/icons-material/Download";
 
 export const NE_SUPPORTED_LANGS = ["en", "pt", "fr", "de", "el", "es", "it"];
@@ -114,7 +119,7 @@ export const KNOWN_LINK_PATTERNS = [
 export const ASSISTANT_ACTIONS = [
   {
     title: "navbar_analysis_video",
-    icon: analysisIconOff,
+    icon: <SvgIcon component={AnalysisIcon} fontSize="large" inheritViewBox />,
     linksAccepted: [KNOWN_LINKS.YOUTUBE, KNOWN_LINKS.FACEBOOK],
     cTypes: [CONTENT_TYPE.VIDEO],
     exceptions: [],
@@ -125,7 +130,9 @@ export const ASSISTANT_ACTIONS = [
   },
   {
     title: "navbar_analysis_image",
-    icon: analysisIconOff,
+    icon: (
+      <SvgIcon component={ImageAnalysisIcon} fontSize="large" inheritViewBox />
+    ),
     linksAccepted: [KNOWN_LINKS.FACEBOOK, KNOWN_LINKS.TWITTER],
     cTypes: [CONTENT_TYPE.IMAGE],
     exceptions: [],
@@ -136,7 +143,7 @@ export const ASSISTANT_ACTIONS = [
   },
   {
     title: "navbar_keyframes",
-    icon: keyframesIconOff,
+    icon: <SvgIcon component={KeyframesIcon} fontSize="large" inheritViewBox />,
     linksAccepted: [
       KNOWN_LINKS.YOUTUBE,
       KNOWN_LINKS.FACEBOOK,
@@ -154,7 +161,9 @@ export const ASSISTANT_ACTIONS = [
   },
   {
     title: "navbar_thumbnails",
-    icon: thumbnailsIconOff,
+    icon: (
+      <SvgIcon component={ThumbnailsIcon} fontSize="large" inheritViewBox />
+    ),
     linksAccepted: [KNOWN_LINKS.YOUTUBE],
     cTypes: [CONTENT_TYPE.VIDEO],
     exceptions: [],
@@ -165,7 +174,7 @@ export const ASSISTANT_ACTIONS = [
   },
   {
     title: "navbar_magnifier",
-    icon: magnifierIconOff,
+    icon: <SvgIcon component={MagnifierIcon} fontSize="large" inheritViewBox />,
     processLinksAccepted: [KNOWN_LINKS.MISC, KNOWN_LINKS.OWN],
     cTypes: [CONTENT_TYPE.IMAGE],
     exceptions: [],
@@ -176,7 +185,7 @@ export const ASSISTANT_ACTIONS = [
   },
   {
     title: "navbar_metadata",
-    icon: metadataIconOff,
+    icon: <SvgIcon component={MetadataIcon} fontSize="large" inheritViewBox />,
     processLinksAccepted: [KNOWN_LINKS.MISC, KNOWN_LINKS.OWN],
     cTypes: [CONTENT_TYPE.IMAGE, CONTENT_TYPE.VIDEO],
     exceptions: [
@@ -189,7 +198,9 @@ export const ASSISTANT_ACTIONS = [
   },
   {
     title: "navbar_rights",
-    icon: videoRightsIconOff,
+    icon: (
+      <SvgIcon component={VideoRightsIcon} fontSize="large" inheritViewBox />
+    ),
     linksAccepted: [KNOWN_LINKS.YOUTUBE],
     cTypes: [CONTENT_TYPE.VIDEO],
     exceptions: [],
@@ -200,7 +211,7 @@ export const ASSISTANT_ACTIONS = [
   },
   {
     title: "navbar_forensic",
-    icon: forensicIconOff,
+    icon: <SvgIcon component={ForensicIcon} fontSize="large" inheritViewBox />,
     processLinksAccepted: [KNOWN_LINKS.MISC, KNOWN_LINKS.OWN],
     cTypes: [CONTENT_TYPE.IMAGE],
     exceptions: [],
@@ -211,7 +222,7 @@ export const ASSISTANT_ACTIONS = [
   },
   {
     title: "navbar_ocr",
-    icon: forensicIconOff,
+    icon: <SvgIcon component={OcrIcon} fontSize="large" inheritViewBox />,
     processLinksAccepted: [KNOWN_LINKS.MISC, KNOWN_LINKS.OWN],
     cTypes: [CONTENT_TYPE.IMAGE],
     exceptions: [],
@@ -221,8 +232,37 @@ export const ASSISTANT_ACTIONS = [
     path: "tools/ocr",
   },
   {
+    title: "navbar_synthetic_image_detection",
+    icon: <Gradient fontSize="large" sx={{ ml: 0.75 }} inheritViewBox />,
+    processLinksAccepted: [KNOWN_LINKS.MISC, KNOWN_LINKS.OWN],
+    cTypes: [CONTENT_TYPE.IMAGE],
+    exceptions: [],
+    useInputUrl: false,
+    text: "synthetic_image_detection_text",
+    tsvPrefix: "synthetic_image_detection",
+    path: "tools/syntheticImageDetection",
+  },
+  {
+    title: "navbar_deepfake_image",
+    icon: (
+      <SvgIcon
+        component={DeepfakeIcon}
+        sx={{ ml: 0.25 }}
+        fontSize="large"
+        inheritViewBox
+      />
+    ),
+    processLinksAccepted: [KNOWN_LINKS.MISC, KNOWN_LINKS.OWN],
+    cTypes: [CONTENT_TYPE.IMAGE],
+    exceptions: [],
+    useInputUrl: false,
+    text: "deepfake_image_text",
+    tsvPrefix: "deepfakeImage",
+    path: "tools/deepfakeImage",
+  },
+  {
     title: "assistant_video_download_action",
-    icon: videoIconOff,
+    icon: <DownloadIcon color="disabled" fontSize="large" />,
     linksAccepted: [
       KNOWN_LINKS.TELEGRAM,
       KNOWN_LINKS.FACEBOOK,

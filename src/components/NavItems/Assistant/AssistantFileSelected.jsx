@@ -61,9 +61,7 @@ const AssistantFileSelected = () => {
                       handleClick(action.path, cType);
                     }}
                   >
-                    <ListItemAvatar>
-                      <Avatar variant={"square"} src={action.icon} />
-                    </ListItemAvatar>
+                    <ListItemAvatar>{action.icon}</ListItemAvatar>
                     <ListItemText
                       primary={
                         <Typography textAlign={"start"} component={"span"}>
